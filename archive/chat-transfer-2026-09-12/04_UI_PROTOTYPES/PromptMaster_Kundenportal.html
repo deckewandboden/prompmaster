@@ -1,0 +1,229 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>PromptMaster – Kundenportal & netstyle Backend</title>
+<style>
+:root{
+  --nav:#06192c;--nav2:#0b2743;--bg:#f4f7fb;--panel:#fff;--line:#dfe7ef;
+  --text:#13263d;--muted:#66788a;--blue:#0969f5;--cyan:#13c9e8;--purple:#6d4aff;
+  --green:#20b779;--yellow:#f4a62a;--red:#ef4f5f;--gray:#91a0ae;
+  --radius:16px;--shadow:0 10px 28px rgba(5,32,58,.08);
+}
+*{box-sizing:border-box} body{margin:0;font-family:Inter,Segoe UI,Arial,sans-serif;background:var(--bg);color:var(--text)}
+button,input,select,textarea{font:inherit} button{cursor:pointer}
+.app{min-height:100vh;display:grid;grid-template-columns:250px 1fr}
+.sidebar{height:100vh;position:sticky;top:0;background:linear-gradient(180deg,var(--nav),#03111f);color:#fff;padding:18px 14px;overflow:auto}
+.brand{display:flex;gap:10px;align-items:center;font-weight:800;letter-spacing:.4px;margin-bottom:22px}.brand small{display:block;font-size:9px;letter-spacing:1.3px;font-weight:500;opacity:.7}
+.mark{width:30px;height:30px;position:relative}.mark:before,.mark:after{content:"";position:absolute;border-style:solid}.mark:before{border-width:15px 0 15px 24px;border-color:transparent transparent transparent var(--cyan)}.mark:after{border-width:9px 0 9px 15px;border-color:transparent transparent transparent var(--blue);left:2px;top:6px}
+.nav a{display:flex;gap:10px;align-items:center;color:#d9e5f1;text-decoration:none;padding:10px 12px;border-radius:10px;margin:4px 0;font-size:14px}.nav a.active,.nav a:hover{background:linear-gradient(90deg,#0b65e8,#11bddc);color:#fff}.nav .ico{width:18px;text-align:center}.side-footer{margin-top:24px;padding-top:14px;border-top:1px solid rgba(255,255,255,.11);font-size:11px;color:#9eb3c7}
+.main{min-width:0}.topbar{height:66px;background:#fff;border-bottom:1px solid var(--line);display:flex;align-items:center;padding:0 24px;gap:14px;position:sticky;top:0;z-index:10}
+.search{flex:1;max-width:650px}.search input{width:100%;padding:11px 14px;border:1px solid var(--line);border-radius:10px;background:#f8fbfd}
+.userbox{margin-left:auto;display:flex;align-items:center;gap:10px}.avatar{width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,var(--blue),var(--purple));color:#fff;display:grid;place-items:center;font-weight:800;font-size:12px}.role{font-size:11px;color:var(--muted)}
+.content{max-width:1600px;margin:0 auto;padding:24px}.page-head{display:flex;justify-content:space-between;gap:16px;align-items:flex-start;margin-bottom:18px}
+h1{margin:0;font-size:30px}h2{margin:0 0 12px;font-size:20px}h3{margin:0 0 8px;font-size:16px}.sub{color:var(--muted);margin-top:5px}
+.grid{display:grid;gap:14px}.kpis{grid-template-columns:repeat(4,minmax(0,1fr))}.two{grid-template-columns:1.25fr .75fr}.three{grid-template-columns:repeat(3,minmax(0,1fr))}.four{grid-template-columns:repeat(4,minmax(0,1fr))}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow);padding:17px}.card.purple{background:linear-gradient(135deg,#27206f,#6f37d9);color:#fff}.card.dark{background:linear-gradient(180deg,#0b2947,#071d33);color:#fff}
+.kpi .value{font-size:30px;font-weight:900;margin:8px 0 2px}.delta{font-size:12px;color:var(--green);font-weight:800}.muted{color:var(--muted)}.small{font-size:12px}.tiny{font-size:11px}.strong{font-weight:800}
+.btn{border:0;border-radius:10px;padding:10px 14px;font-weight:750}.btn.primary{background:linear-gradient(90deg,var(--blue),var(--cyan));color:#fff}.btn.secondary{background:#fff;border:1px solid var(--line);color:var(--text)}.btn.danger{background:#fff0f2;border:1px solid #ffd4db;color:var(--red)}.btn.sm{padding:7px 10px;font-size:12px}
+.badge{display:inline-flex;align-items:center;gap:5px;padding:5px 9px;border-radius:999px;font-size:12px;font-weight:800}.green{background:#e9f9f2;color:#168756}.yellow{background:#fff4db;color:#aa6800}.red{background:#ffeaee;color:#c63949}.blue{background:#eaf3ff;color:#165db8}.purple{background:#f0ecff;color:#6345d3}.gray{background:#eef2f6;color:#607080}
+.alert{display:flex;gap:11px;border:1px solid;border-radius:12px;padding:13px 14px}.alert.warn{background:#fff9eb;border-color:#ffe2a6}.alert.info{background:#eef7ff;border-color:#cfe6ff}.alert.ok{background:#edfaf4;border-color:#caefdf}.alert.danger{background:#fff0f2;border-color:#ffd4db}
+.toolbar{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin:12px 0}.toolbar input,.toolbar select,.form input,.form select,.form textarea{border:1px solid var(--line);border-radius:9px;padding:10px 11px;background:#fff}.toolbar input{min-width:230px}.tab{border:1px solid var(--line);background:#fff;border-radius:9px;padding:8px 11px}.tab.active{background:var(--blue);border-color:var(--blue);color:#fff}
+.tablewrap{overflow:auto;border:1px solid var(--line);border-radius:12px;background:#fff}table{width:100%;border-collapse:collapse;font-size:13px}th,td{padding:11px 12px;border-bottom:1px solid #edf2f6;white-space:nowrap;text-align:left}th{background:#f8fbfd;color:#6a7d90;font-size:11px;text-transform:uppercase}tr:last-child td{border-bottom:0}
+.person{display:flex;align-items:center;gap:9px}.mini{width:30px;height:30px;border-radius:50%;background:#e9f0ff;color:#2b4bd6;display:grid;place-items:center;font-size:11px;font-weight:800}
+.progress{height:8px;background:#e8eef4;border-radius:99px;overflow:hidden}.progress span{display:block;height:100%;background:linear-gradient(90deg,var(--blue),var(--cyan))}
+.form{display:grid;gap:12px}.form .row{display:grid;grid-template-columns:1fr 1fr;gap:12px}.form label{display:grid;gap:6px;font-size:12px;font-weight:800}.form textarea{min-height:120px}
+.statusrow{display:flex;justify-content:space-between;gap:12px;padding:9px 0;border-bottom:1px solid #edf2f6}.statusrow:last-child{border:0}
+.license-item{display:grid;grid-template-columns:1.1fr .9fr .7fr .6fr auto;gap:12px;align-items:center;padding:14px;border:1px solid var(--line);border-radius:14px;background:#fff}.list{display:grid;gap:10px}
+.device{display:grid;grid-template-columns:auto 1fr auto;gap:14px;align-items:center}.devico{width:48px;height:48px;border-radius:12px;background:#eaf3ff;color:#1766cb;display:grid;place-items:center;font-size:24px}
+.pricecard{border:1px solid var(--line);border-radius:18px;padding:18px;background:#fff}.pricecard.featured{border:2px solid var(--purple);box-shadow:0 10px 28px rgba(109,74,255,.14)}.price{font-size:34px;font-weight:900}.features{display:grid;gap:8px;margin:14px 0}.features div:before{content:"✓";color:var(--green);font-weight:900;margin-right:8px}
+.chart{height:210px;border-radius:12px;background:linear-gradient(to top,rgba(9,105,245,.12),transparent 70%),repeating-linear-gradient(to right,#e9f0f6 0 1px,transparent 1px 20%),repeating-linear-gradient(to top,#e9f0f6 0 1px,transparent 1px 25%);position:relative}.chart:after{content:"";position:absolute;left:6%;right:5%;bottom:18%;height:3px;background:var(--blue);transform:skewY(-7deg);box-shadow:70px -28px 0 var(--blue),140px -8px 0 var(--blue),210px -56px 0 var(--blue),280px -31px 0 var(--blue)}
+.donut{width:168px;height:168px;margin:auto;border-radius:50%;background:conic-gradient(var(--purple) 0 55%,var(--cyan) 55% 95%,var(--yellow) 95%);position:relative}.donut:after{content:"4.892\A Lizenzen";white-space:pre;position:absolute;inset:34px;background:#fff;border-radius:50%;display:grid;place-items:center;text-align:center;font-weight:900}
+.modalbg{display:none;position:fixed;inset:0;background:rgba(1,15,30,.58);z-index:50;align-items:center;justify-content:center;padding:20px}.modalbg.open{display:flex}.modal{background:#fff;border-radius:18px;padding:20px;max-width:580px;width:100%;box-shadow:0 30px 80px rgba(0,0,0,.28)}.modalhead{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px}.x{border:0;background:transparent;font-size:22px}
+.mobileTop,.mobileBottom,.mobileCards{display:none}
+@media(max-width:1100px){
+  .app{grid-template-columns:76px 1fr}.sidebar .txt,.side-footer,.brand .word{display:none}.sidebar{padding:14px 9px}.nav a{justify-content:center;padding:12px}.kpis,.four{grid-template-columns:repeat(2,1fr)}.two,.three{grid-template-columns:1fr}.content{padding:18px}
+}
+@media(max-width:700px){
+  .sidebar,.topbar{display:none}.app{display:block}.mobileTop{display:flex;background:var(--nav);color:#fff;align-items:center;gap:10px;padding:10px 12px;position:sticky;top:0;z-index:20}.mobileTop .brand{margin:0;font-size:14px}.mobileTop .avatar{margin-left:auto;width:30px;height:30px}
+  .content{padding:12px 12px 82px}.page-head{align-items:center}.page-head h1{font-size:23px}.page-head .btn{padding:9px 10px}.kpis,.four{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}.card{padding:13px;border-radius:13px}.kpi .value{font-size:24px}
+  .desktopTable{display:none}.mobileCards{display:grid;gap:9px}.mobileCard{background:#fff;border:1px solid var(--line);border-radius:13px;padding:12px}
+  .form .row{grid-template-columns:1fr}.toolbar input{min-width:0;width:100%}.toolbar>*{flex:1}.license-item{grid-template-columns:1fr}.device{grid-template-columns:auto 1fr}.device>:last-child{grid-column:1/-1}
+  .mobileBottom{display:grid;grid-template-columns:repeat(4,1fr);position:fixed;left:0;right:0;bottom:0;background:#fff;border-top:1px solid var(--line);z-index:30;padding:7px 4px max(7px,env(safe-area-inset-bottom))}.mobileBottom button{border:0;background:#fff;color:#52677b;display:grid;place-items:center;gap:2px;font-size:10px}.mobileBottom button b{font-size:18px}.mobileBottom button.active{color:var(--blue)}
+}
+</style>
+</head>
+<body>
+<div id="root"></div>
+<div class="modalbg" id="modal"><div class="modal" id="modalInner"></div></div>
+<script>
+const S={
+ mode:'customer', c:'dashboard', a:'overview',
+ users:[
+  {n:'Max Mustermann',e:'max@mustergmbh.de',lic:'Pro',dev:'2 / 2',st:'Aktiv',last:'Heute, 08:21'},
+  {n:'Anna Müller',e:'anna@mustergmbh.de',lic:'Pro',dev:'1 / 2',st:'Aktiv',last:'Gestern, 14:32'},
+  {n:'Tom Becker',e:'tom@mustergmbh.de',lic:'Keine Lizenz',dev:'–',st:'Aktiv',last:'08.09.2026'},
+  {n:'Lisa Wagner',e:'lisa@mustergmbh.de',lic:'Pro',dev:'2 / 2',st:'Aktiv',last:'11.09.2026'},
+  {n:'Markus Klein',e:'markus@mustergmbh.de',lic:'Keine Lizenz',dev:'–',st:'Eingeladen',last:'Einladung offen'}
+ ],
+ licenses:[
+  {id:'PM-PRO-00421',u:'Max Mustermann',from:'01.09.2026',to:'01.09.2027',days:355,st:'Aktiv'},
+  {id:'PM-PRO-00422',u:'Anna Müller',from:'01.09.2026',to:'01.09.2027',days:355,st:'Aktiv'},
+  {id:'PM-PRO-00423',u:'Nicht vergeben',from:'01.09.2026',to:'01.09.2027',days:355,st:'Frei'},
+  {id:'PM-PRO-00591',u:'Lisa Wagner',from:'10.12.2025',to:'10.12.2026',days:90,st:'Aktiv'},
+  {id:'PM-PRO-00614',u:'Nicht vergeben',from:'10.10.2025',to:'10.10.2026',days:29,st:'T-30'}
+ ],
+ customers:[
+  {n:'Muster GmbH',t:'Firma',admin:'Max Mustermann',e:'max@mustergmbh.de',l:5,s:'Aktiv'},
+  {n:'Meier KG',t:'Firma',admin:'Anna Müller',e:'anna@meier.de',l:2,s:'Aktiv'},
+  {n:'Schmidt GmbH',t:'Firma',admin:'Tom Becker',e:'tom@schmidt.de',l:1,s:'Zahlung offen'},
+  {n:'Julia Sommer',t:'Privat',admin:'Julia Sommer',e:'julia@example.de',l:1,s:'Aktiv'}
+ ]
+}
+const cNav=[['dashboard','⌂','Dashboard'],['team','♙','Mein Team'],['licenses','▣','Lizenzen'],['buy','＋','Weitere Lizenzen kaufen'],['devices','▤','Geräte'],['orders','▧','Bestellungen & Zahlungen'],['company','▥','Unternehmen'],['settings','⚙','Einstellungen'],['help','?','Hilfe & Kontakt']]
+const aNav=[['overview','⌂','Übersicht'],['customers','♙','Kunden'],['adminlicenses','▣','Lizenzen'],['adminorders','▧','Bestellungen & Zahlungen'],['products','◈','Produkte & Preise'],['email','✉','E-Mail'],['mollie','◉','Mollie'],['stats','▥','Statistiken'],['ops','⚙','System & Betrieb'],['api','◇','API & Integrationen'],['legal','♢','Datenschutz & Recht'],['audit','▤','Protokolle'],['roles','♙','Benutzer & Rollen'],['adminsettings','⚙','Einstellungen']]
+const B=(s)=>{let m={Aktiv:'green',Frei:'blue','T-30':'yellow',Eingeladen:'blue',Bezahlt:'green',Fehlgeschlagen:'red',Offen:'yellow',Healthy:'green',OK:'green','Zahlung offen':'yellow',Gesperrt:'red'};return `<span class="badge ${m[s]||'gray'}">${s}</span>`}
+const head=(t,s,a='')=>`<div class="page-head"><div><h1>${t}</h1><div class="sub">${s}</div></div>${a}</div>`
+function mobileTop(){return `<div class="mobileTop"><div class="brand"><span class="mark"></span><span class="word">PROMPTMASTER<small>${S.mode==='customer'?'KUNDENPORTAL':'NETSTYLE ADMIN'}</small></span></div><span>🔔</span><span class="avatar">${S.mode==='customer'?'MM':'MW'}</span></div>`}
+function shell(body){
+ const nav=S.mode==='customer'?cNav:aNav,route=S.mode==='customer'?S.c:S.a;
+ return `${mobileTop()}<div class="app"><aside class="sidebar"><div class="brand"><span class="mark"></span><span class="word">PROMPTMASTER<small>${S.mode==='customer'?'KI. EINFACH. BESSER.':'ADMIN'}</small></span></div><nav class="nav">${nav.map(x=>`<a href="#" data-route="${x[0]}" class="${route===x[0]?'active':''}"><span class="ico">${x[1]}</span><span class="txt">${x[2]}</span></a>`).join('')}</nav><div class="side-footer">${S.mode==='customer'?'Muster GmbH · Firmen-Admin':'netstyle Admin-Backend · Staging'}</div></aside><main class="main"><div class="topbar"><div class="search"><input placeholder="${S.mode==='customer'?'Benutzer, E-Mail oder Lizenz suchen …':'Kunde, Benutzer, Lizenz-ID, E-Mail suchen …'}"></div><div class="userbox"><span>🔔</span><span class="avatar">${S.mode==='customer'?'MM':'MW'}</span><div><strong>${S.mode==='customer'?'Max Mustermann':'Markus Wacker'}</strong><div class="role">${S.mode==='customer'?'Unternehmensadministrator':'Superadmin'}</div></div></div></div><div class="content">${body}</div></main></div>${mobileBottom(nav,route)}`
+}
+function mobileBottom(nav,route){
+ let items=S.mode==='customer'?nav.slice(0,4):[['overview','⌂','Home'],['customers','♙','Kunden'],['ops','⚙','System'],['roles','⋯','Mehr']]
+ return `<div class="mobileBottom">${items.map(x=>`<button data-route="${x[0]}" class="${route===x[0]?'active':''}"><b>${x[1]}</b>${x[2]}</button>`).join('')}</div>`
+}
+function userTable(){
+ return `<div class="tablewrap desktopTable"><table><thead><tr><th>Name</th><th>E-Mail</th><th>Lizenz</th><th>Geräte</th><th>Status</th><th>Zuletzt aktiv</th><th></th></tr></thead><tbody>${S.users.map((u,i)=>`<tr><td><div class="person"><span class="mini">${u.n.split(' ').map(z=>z[0]).join('')}</span><strong>${u.n}</strong></div></td><td>${u.e}</td><td>${u.lic==='Pro'?'<span class="badge purple">Pro</span>':'<span class="badge gray">Keine Lizenz</span>'}</td><td>${u.dev}</td><td>${B(u.st)}</td><td>${u.last}</td><td><button class="btn secondary sm" data-user="${i}">⋮</button></td></tr>`).join('')}</tbody></table></div><div class="mobileCards">${S.users.map((u,i)=>`<div class="mobileCard"><div style="display:flex;justify-content:space-between"><div class="person"><span class="mini">${u.n.split(' ').map(z=>z[0]).join('')}</span><div><strong>${u.n}</strong><div class="tiny muted">${u.lic} · ${u.dev} Geräte</div></div></div>${B(u.st)}</div><div class="tiny muted" style="margin-top:7px">${u.e}<br>${u.last}</div><button class="btn secondary sm" style="margin-top:8px" data-user="${i}">Verwalten</button></div>`).join('')}</div>`
+}
+function dashboard(){
+ return head('Guten Morgen, Max','Muster GmbH · Unternehmensadministrator','<button class="btn primary">PromptMaster Pro starten →</button>')+
+ `<div class="grid kpis"><div class="card purple kpi"><div>PROMPTMASTER PRO</div><div class="value">5</div><div>Lizenzen insgesamt</div><div style="margin-top:10px">4 vergeben · 1 verfügbar</div></div><div class="card kpi"><div>Lizenzstatus</div><div class="value">4</div><div>aktiv</div><div class="delta">1 frei · 1 läuft bald ab</div></div><div class="card kpi"><div>Geräte</div><div class="value">5 / 8</div><div>registriert</div><div class="progress" style="margin-top:12px"><span style="width:62%"></span></div></div><div class="card kpi"><div>Nächster Ablauf</div><div class="value">29</div><div>Tage</div><div class="delta" style="color:var(--yellow)">PM-PRO-00614</div></div></div>
+ <div class="grid two" style="margin-top:14px"><div class="alert warn"><div>⚠️</div><div><strong>Eine Pro-Lizenz läuft in 29 Tagen ab.</strong><div class="muted small">PM-PRO-00614 · nicht vergeben · 10.10.2026</div><button class="btn primary sm" style="margin-top:8px">Jetzt verlängern</button></div></div><div class="alert info"><div>👥</div><div><strong>1 freie Pro-Lizenz.</strong><div class="muted small">Sie kann einem Team-Mitglied zugewiesen werden.</div></div></div></div>
+ <div class="card" style="margin-top:14px"><div style="display:flex;justify-content:space-between;align-items:center"><h2>Mein Team</h2><button class="btn primary" id="invite">+ Benutzer hinzufügen</button></div>${userTable()}</div>`
+}
+function team(){
+ return head('Mein Team','Benutzer, Einladungen, Lizenzen und Geräte verwalten.','<button class="btn primary" id="invite">+ Benutzer hinzufügen</button>')+
+ `<div class="grid kpis"><div class="card kpi"><div>Team-Mitglieder</div><div class="value">5</div></div><div class="card kpi"><div>Mit Pro</div><div class="value">3</div></div><div class="card kpi"><div>Freie Lizenzen</div><div class="value">1</div></div><div class="card kpi"><div>Geräte</div><div class="value">5 / 8</div></div></div>
+ <div class="toolbar"><button class="tab active">Alle (5)</button><button class="tab">Mit Pro</button><button class="tab">Ohne Lizenz</button><button class="tab">Eingeladen</button><input placeholder="Team-Mitglied suchen …"><button class="btn secondary">Filter</button></div>${userTable()}`
+}
+function licenses(){
+ return head('Lizenzen','Jeder Seat läuft 365 Tage ab erfolgreicher Zahlung.','<button class="btn primary" data-route="buy">+ Lizenz kaufen</button>')+
+ `<div class="grid kpis"><div class="card kpi"><div>Gesamt</div><div class="value">5</div></div><div class="card kpi"><div>Zugewiesen</div><div class="value">3</div></div><div class="card kpi"><div>Frei</div><div class="value">2</div></div><div class="card kpi"><div>≤30 Tage</div><div class="value">1</div></div></div>
+ <div class="toolbar"><button class="tab active">Alle</button><button class="tab">Frei</button><button class="tab">Zugewiesen</button><button class="tab">T−60</button><button class="tab">T−30</button><input placeholder="Lizenz-ID oder Benutzer …"></div>
+ <div class="list">${S.licenses.map(l=>`<div class="license-item"><div><strong>${l.id}</strong><div class="tiny muted">${l.u}</div></div><div><div class="tiny muted">Laufzeit</div>${l.from} – ${l.to}</div><div><div class="tiny muted">Rest</div><strong>${l.days} Tage</strong></div><div>${B(l.st)}</div><div><button class="btn secondary sm">Details</button> <button class="btn primary sm">Verlängern</button></div></div>`).join('')}</div>`
+}
+function devices(){
+ let D=[['Max Mustermann','Büro-PC','Windows 11 · Edge','Heute, 08:21'],['Max Mustermann','Notebook','Windows 11 · Chrome','Gestern, 17:11'],['Anna Müller','Notebook Anna','Windows 11 · Edge','Gestern, 14:32']]
+ return head('Geräte','Maximal 2 Geräte je Pro-Benutzer.')+`<div class="alert info"><div>ℹ️</div><div><strong>Gerätewechsel nur über Firmen-Admin oder netstyle.</strong><div class="muted small">Normale Benutzer können Slots nicht selbst freigeben.</div></div></div><div class="grid" style="margin-top:14px">${D.map(d=>`<div class="card device"><div class="devico">▣</div><div><strong>${d[1]}</strong><div class="muted">${d[0]} · ${d[2]}</div><div class="tiny muted">Zuletzt ${d[3]}</div></div><div>${B('Aktiv')}<br><button class="btn danger sm" style="margin-top:8px">Gerät entfernen</button></div></div>`).join('')}</div>`
+}
+function buy(){
+ return head('Weitere Lizenzen kaufen','Jede neue Lizenz hat eine eigene 365-Tage-Laufzeit.')+
+ `<div class="grid three"><div class="pricecard featured"><span class="badge purple">PRO</span><h2 style="margin-top:12px">PromptMaster Pro</h2><div class="price">35,88 €</div><div class="muted">inkl. MwSt. · 365 Tage</div><div class="features"><div>2 Geräte je Benutzer</div><div>Updates während Laufzeit</div><div>Team- und Lizenzverwaltung</div></div></div>
+ <div class="card"><h2>Anzahl</h2><div style="display:flex;gap:10px;align-items:center"><button class="btn secondary">−</button><strong style="font-size:28px">2</strong><button class="btn secondary">+</button></div><div class="statusrow" style="margin-top:14px"><span>2 × 35,88 €</span><strong>71,76 €</strong></div><div class="statusrow"><span>inkl. MwSt.</span><span>enthalten</span></div></div>
+ <div class="card"><h2>Checkout</h2><div class="form"><label>Kundentyp<select><option>Unternehmen</option><option>Privat</option></select></label><label>Firma<input value="Muster GmbH"></label><label>Land<select><option>Deutschland</option></select></label><label><span><input type="checkbox" checked> AGB akzeptieren</span></label><button class="btn primary">Weiter zu Mollie →</button></div></div></div>`
+}
+function orders(){
+ let R=[['11.09.2026','PM-O-10991','Pro','5','179,40 €','Bezahlt'],['10.09.2026','PM-O-10982','Pro','2','71,76 €','Bezahlt'],['09.09.2026','PM-O-10975','Pro','1','35,88 €','Fehlgeschlagen']]
+ return head('Bestellungen & Zahlungen','Mollie übernimmt die Zahlungsabwicklung.')+
+ `<div class="tablewrap desktopTable"><table><thead><tr><th>Datum</th><th>Bestellung</th><th>Produkt</th><th>Anzahl</th><th>Betrag</th><th>Status</th></tr></thead><tbody>${R.map(r=>`<tr>${r.slice(0,5).map(x=>`<td>${x}</td>`).join('')}<td>${B(r[5])}</td></tr>`).join('')}</tbody></table></div><div class="mobileCards">${R.map(r=>`<div class="mobileCard"><div style="display:flex;justify-content:space-between"><strong>${r[1]}</strong>${B(r[5])}</div><div class="tiny muted">${r[0]} · ${r[2]}</div><div style="margin-top:7px">${r[3]} Lizenz(en) · <strong>${r[4]}</strong></div></div>`).join('')}</div>`
+}
+function company(){
+ return head('Unternehmen','Stammdaten, Steuerdaten und Firmen-Administrator.')+
+ `<div class="grid two"><div class="card"><h2>Unternehmensdaten</h2><div class="form"><div class="row"><label>Firmenname<input value="Muster GmbH"></label><label>Rechtsform<input value="GmbH"></label></div><label>Straße / Hausnummer<input value="Musterstraße 10"></label><div class="row"><label>PLZ<input value="57072"></label><label>Ort<input value="Siegen"></label></div><label>Land<select><option>Deutschland</option></select></label><div class="row"><label>USt-IdNr.<input value="DE123456789"></label><label>Steuernummer<input></label></div><button class="btn primary">Speichern</button></div></div><div class="card"><h2>Firmen-Administrator</h2><div class="person"><span class="mini">MM</span><div><strong>Max Mustermann</strong><div class="muted">max@mustergmbh.de</div></div></div><div class="alert info" style="margin-top:14px">V1: exakt 1 aktiver Firmen-Admin. Datenmodell bleibt erweiterbar.</div><button class="btn secondary" style="margin-top:12px">Administrator übertragen</button></div></div>`
+}
+function settings(){
+ return head('Einstellungen','Profil, Passwort, 2FA und Recovery-Codes.')+
+ `<div class="grid two"><div class="card"><h2>Profil</h2><div class="form"><div class="row"><label>Vorname<input value="Max"></label><label>Nachname<input value="Mustermann"></label></div><label>E-Mail<input value="max@mustergmbh.de"></label><button class="btn primary">Speichern</button></div></div><div class="card"><h2>Sicherheit</h2><div class="statusrow"><span>Zwei-Faktor-Authentifizierung</span>${B('Aktiv')}</div><div class="statusrow"><span>Passwort</span><button class="btn secondary sm">Ändern</button></div><div class="statusrow"><span>Recovery Codes</span><button class="btn secondary sm">Neu erzeugen</button></div></div></div>`
+}
+function help(){
+ return head('Hilfe & Kontakt','Direkter Kontakt zu netstyle – kein Ticketsystem.')+
+ `<div class="grid two"><div class="card"><h2>Kontaktformular</h2><div class="form"><label>Thema<select><option>Lizenz</option><option>Zahlung</option><option>Benutzer</option><option>Gerät</option><option>Technisches Problem</option><option>Datenschutz</option><option>Sonstiges</option></select></label><label>Betreff<input placeholder="Kurzer Betreff"></label><label>Nachricht<textarea placeholder="Wie können wir helfen?"></textarea></label><button class="btn primary">Nachricht senden</button></div></div><div class="card dark"><h2>Automatisch mitgesendet</h2><div class="statusrow"><span>Kundennummer</span><strong>PM-10024</strong></div><div class="statusrow"><span>Unternehmen</span><strong>Muster GmbH</strong></div><div class="statusrow"><span>Benutzer</span><strong>Max Mustermann</strong></div><div class="small" style="color:#aec4d6;margin-top:14px">Eingangsbestätigung per E-Mail.</div></div></div>`
+}
+function adminOverview(){
+ return head('Dashboard','Geschäft, Handlungsbedarf und Systemstatus auf einen Blick.')+
+ `<div class="grid kpis"><div class="card kpi"><div>Kunden gesamt</div><div class="value">1.248</div><div class="delta">↑12 %</div></div><div class="card kpi"><div>Aktive Lizenzen</div><div class="value">4.892</div><div class="delta">↑8 %</div></div><div class="card kpi"><div>Ablauf &lt;30 Tage</div><div class="value">17</div><div class="delta" style="color:var(--yellow)">42 &lt;60 Tage</div></div><div class="card kpi"><div>Umsatz 30 Tage</div><div class="value">12.384 €</div><div class="delta">↑18 %</div></div></div>
+ <div class="grid three" style="margin-top:14px"><div class="card"><h2>Umsatzentwicklung</h2><div class="chart"></div></div><div class="card"><h2>Lizenzen nach Produkt</h2><div class="donut"></div></div><div class="card"><h2>Handlungsbedarf</h2><div class="statusrow"><span>⚠ 5 Lizenzen &lt;30 Tage</span><strong>→</strong></div><div class="statusrow"><span>⛔ 2 Zahlungen fehlgeschlagen</span><strong>→</strong></div><div class="statusrow"><span>⚠ 1 Chargeback prüfen</span><strong>→</strong></div><div class="statusrow"><span>⚠ 1 Backup-Warnung</span><strong>→</strong></div></div></div>
+ <div class="grid two" style="margin-top:14px"><div class="card"><h2>Letzte Bestellungen</h2>${miniOrders()}</div><div class="card"><h2>Nächste Lizenzabläufe</h2>${miniExpiry()}</div></div><div class="card" style="margin-top:14px"><h2>System & Betrieb</h2>${opsSummary()}</div>`
+}
+function miniOrders(){return `<div class="tablewrap"><table><thead><tr><th>Datum</th><th>Kunde</th><th>Betrag</th><th>Status</th></tr></thead><tbody><tr><td>11.09.</td><td>Muster GmbH</td><td>179,40 €</td><td>${B('Bezahlt')}</td></tr><tr><td>10.09.</td><td>Meier KG</td><td>71,76 €</td><td>${B('Bezahlt')}</td></tr></tbody></table></div>`}
+function miniExpiry(){return `<div class="tablewrap"><table><thead><tr><th>Kunde</th><th>Benutzer</th><th>Ablauf</th><th>Rest</th></tr></thead><tbody><tr><td>Muster GmbH</td><td>Max Mustermann</td><td>29.09.26</td><td>${B('T-30')}</td></tr><tr><td>Meier GmbH</td><td>Anna Müller</td><td>08.10.26</td><td>27 Tage</td></tr></tbody></table></div>`}
+function opsSummary(){return `<div class="grid four"><div><strong>CPU</strong><div class="value">18 %</div></div><div><strong>RAM</strong><div class="value">5,2 / 16 GB</div></div><div><strong>Storage</strong><div class="value">87 / 240 GB</div></div><div><strong>Datenbank</strong><div class="value">1,42 GB</div></div></div><div class="statusrow"><span>Django · PostgreSQL · Worker · Caddy</span>${B('Healthy')}</div><div class="statusrow"><span>Backup heute 02:00 · Restore-Test 01.09.2026</span>${B('OK')}</div><div class="statusrow"><span>Mollie · Mail · Operations API</span>${B('OK')}</div>`}
+function customers(){
+ return head('Kunden','Privat- und Firmenkunden verwalten.','<button class="btn primary">+ Kunde anlegen</button>')+
+ `<div class="toolbar"><input placeholder="Firma, Name, E-Mail, Kundennummer …"><select><option>Alle Typen</option><option>Firma</option><option>Privat</option></select><select><option>Alle Status</option><option>Aktiv</option><option>Zahlung offen</option></select></div><div class="tablewrap desktopTable"><table><thead><tr><th>Kunde</th><th>Typ</th><th>Admin</th><th>E-Mail</th><th>Lizenzen</th><th>Status</th></tr></thead><tbody>${S.customers.map(c=>`<tr><td><strong>${c.n}</strong></td><td>${c.t}</td><td>${c.admin}</td><td>${c.e}</td><td>${c.l}</td><td>${B(c.s)}</td></tr>`).join('')}</tbody></table></div><div class="mobileCards">${S.customers.map(c=>`<div class="mobileCard"><div style="display:flex;justify-content:space-between"><strong>${c.n}</strong>${B(c.s)}</div><div class="tiny muted">${c.t} · ${c.admin}</div><div style="margin-top:7px">${c.l} Lizenz(en)</div></div>`).join('')}</div>`
+}
+function adminLicenses(){
+ return head('Lizenzverwaltung','Globale Sicht auf Status, Laufzeiten und Zuweisungen.')+
+ `<div class="toolbar"><button class="tab active">Alle</button><button class="tab">Aktiv</button><button class="tab">Frei</button><button class="tab">T−60</button><button class="tab">T−30</button><button class="tab">Gesperrt</button><input placeholder="Lizenz-ID, Kunde, Benutzer …"></div><div class="tablewrap"><table><thead><tr><th>Lizenz-ID</th><th>Kunde</th><th>Benutzer</th><th>Produkt</th><th>Ablauf</th><th>Status</th></tr></thead><tbody>${S.licenses.map(l=>`<tr><td><strong>${l.id}</strong></td><td>Muster GmbH</td><td>${l.u}</td><td><span class="badge purple">Pro</span></td><td>${l.to}</td><td>${B(l.st)}</td></tr>`).join('')}</tbody></table></div>`
+}
+function adminOrders(){
+ return head('Bestellungen & Zahlungen','Mollie Payments, Refunds und Chargebacks.')+
+ `<div class="grid kpis"><div class="card kpi"><div>Bezahlt</div><div class="value">412</div></div><div class="card kpi"><div>Offen</div><div class="value">7</div></div><div class="card kpi"><div>Fehlgeschlagen</div><div class="value">2</div></div><div class="card kpi"><div>Chargebacks</div><div class="value">1</div></div></div><div style="margin-top:14px">${orders()}</div>`
+}
+function products(){
+ return head('Produkte & Preise','Produkte, Preise, Laufzeiten und Entitlements ohne Codeumbau.','<button class="btn primary" id="product">+ Produkt</button>')+
+ `<div class="grid three"><div class="pricecard"><span class="badge blue">AKTIV</span><h2 style="margin-top:12px">PromptMaster Free</h2><div class="price">0 €</div><div class="muted">ohne Konto</div><div class="features"><div>Direkt nutzbar</div><div>Keine Gerätebindung</div></div><button class="btn secondary">Bearbeiten</button></div><div class="pricecard featured"><span class="badge purple">AKTIV</span><h2 style="margin-top:12px">PromptMaster Pro</h2><div class="price">35,88 €</div><div class="muted">Neukauf · 365 Tage</div><div class="features"><div>Verlängerung 35,88 €</div><div>2 Geräte</div><div>T−60 / T−30</div></div><button class="btn primary" id="product">Bearbeiten</button></div><div class="pricecard"><span class="badge gray">ERWEITERBAR</span><h2 style="margin-top:12px">Neues Produkt</h2><div class="muted">Ultra, Premium, Team oder weitere Software später ohne Umbau.</div><button class="btn secondary" id="product" style="margin-top:20px">Konfigurieren</button></div></div>`
+}
+function email(){
+ return head('E-Mail & Reminder','Vorlagen, Versandstatus und automatisierte Fristen.')+
+ `<div class="grid two"><div class="card"><h2>Vorlagen</h2>${['Einladung','Zahlung bestätigt','T−60 Reminder','T−30 Reminder','Lizenz abgelaufen','Kontaktbestätigung'].map(x=>`<div class="statusrow"><span>${x}</span><span>${B('Aktiv')} <button class="btn secondary sm">Bearbeiten</button></span></div>`).join('')}</div><div class="card"><h2>Mail-System</h2><div class="statusrow"><span>Staging</span><strong>Mailpit</strong></div><div class="statusrow"><span>Produktion</span><strong>Microsoft 365 / Graph vorbereitet</strong></div><div class="statusrow"><span>Letzter Versand</span>${B('OK')}</div><div class="statusrow"><span>Fehler heute</span><strong>0</strong></div></div></div>`
+}
+function mollie(){
+ return head('Mollie','Konfiguration, Webhooks und Verbindungstest.')+
+ `<div class="grid two"><div class="card"><h2>Konfiguration</h2><div class="form"><label>Modus<select><option>Test</option><option>Live</option></select></label><label>Profile ID<input value="pfl_xxxxxxxxxx"></label><label>Test API Key<input type="password" value="test_xxxxxxxxxxxxxxxxx"></label><label>Live API Key<input type="password" value="live_xxxxxxxxxxxxxxxxx"></label><button class="btn primary">Verbindung testen</button></div></div><div class="card"><h2>Webhook-Status</h2><div class="statusrow"><span>Webhook</span>${B('OK')}</div><div class="statusrow"><span>URL</span><strong>/api/webhooks/mollie/</strong></div><div class="statusrow"><span>Letztes Event</span><strong>vor 3 Minuten</strong></div><div class="statusrow"><span>Fehler 24 h</span><strong>0</strong></div><div class="alert info" style="margin-top:12px">Secrets werden nicht im Klartext angezeigt oder geloggt.</div></div></div>`
+}
+function stats(){
+ return head('Statistiken','Kunden, Produkte, Umsatz und Verlängerungen.')+
+ `<div class="grid kpis"><div class="card kpi"><div>Neue Kunden</div><div class="value">+42</div></div><div class="card kpi"><div>Verlängerungsquote</div><div class="value">81 %</div></div><div class="card kpi"><div>Refund-Quote</div><div class="value">1,3 %</div></div><div class="card kpi"><div>Ø Lizenzen / Firma</div><div class="value">3,9</div></div></div><div class="grid two" style="margin-top:14px"><div class="card"><h2>Umsatz</h2><div class="chart"></div></div><div class="card"><h2>Produktmix</h2><div class="donut"></div></div></div>`
+}
+function ops(){
+ return head('System & Betrieb','Server, Docker, Datenbank, Backup, Restore und Monitoring.','<span class="badge green">● System gesund</span>')+
+ `<div class="grid four"><div class="card kpi"><div>CPU</div><div class="value">18 %</div><div class="muted tiny">10-Min-Ø 24 %</div></div><div class="card kpi"><div>RAM</div><div class="value">5,2 / 16 GB</div><div class="progress"><span style="width:33%"></span></div></div><div class="card kpi"><div>Storage</div><div class="value">87 / 240 GB</div><div class="progress"><span style="width:36%"></span></div></div><div class="card kpi"><div>Datenbank</div><div class="value">1,42 GB</div><div class="muted tiny">11 / 100 Verbindungen</div></div></div>
+ <div class="grid two" style="margin-top:14px"><div class="card"><h2>Dienste</h2>${['Django','PostgreSQL','Worker','Caddy','Operations API'].map(x=>`<div class="statusrow"><span>${x}</span>${B('Healthy')}</div>`).join('')}</div><div class="card"><h2>Backup & Restore</h2><div class="statusrow"><span>Letztes Backup</span><strong>heute 02:00</strong></div><div class="statusrow"><span>Größe</span><strong>1,82 GB</strong></div><div class="statusrow"><span>Restore-Test</span>${B('OK')}</div><div class="statusrow"><span>Letzter Restore-Test</span><strong>01.09.2026</strong></div></div></div>
+ <div class="card" style="margin-top:14px"><h2>Warnschwellen</h2><div class="grid three"><div>Disk Warnung <strong>80 %</strong><br>Kritisch <strong>90 %</strong></div><div>RAM Warnung <strong>80 %</strong><br>Kritisch <strong>90 %</strong></div><div>Backup Warnung <strong>&gt;8 h</strong><br>Kritisch <strong>&gt;24 h</strong></div></div></div>`
+}
+function api(){
+ return head('API & Integrationen','Operations API und vorbereiteter Techniker-Dashboard-Connector.')+
+ `<div class="grid two"><div class="card"><h2>Operations API</h2>${['/api/v1/ops/health','/api/v1/ops/system','/api/v1/ops/storage','/api/v1/ops/database','/api/v1/ops/backups','/api/v1/ops/maintenance-snapshot'].map(x=>`<div class="statusrow"><code>${x}</code>${B('Aktiv')}</div>`).join('')}</div><div class="card"><h2>Service Account</h2><div class="statusrow"><span>Name</span><strong>technikerportal-maintenance</strong></div><div class="statusrow"><span>Scope</span><strong>ops.read</strong></div><div class="statusrow"><span>Status</span>${B('Aktiv')}</div><div class="alert info">Keine Kunden-, Zahlungs- oder Schreibrechte.</div><button class="btn secondary" style="margin-top:12px">Credential rotieren</button></div></div>`
+}
+function legal(){
+ return head('Datenschutz & Recht','Versionierte Dokumente, Zustimmungen, Retention und Löschprozesse.')+
+ `<div class="grid two"><div class="card"><h2>Rechtsdokumente</h2>${['AGB 1.0','Datenschutz 1.0','Widerruf 1.0'].map(x=>`<div class="statusrow"><span>${x}</span><span>${B('Aktiv')} <button class="btn secondary sm">Öffnen</button></span></div>`).join('')}</div><div class="card"><h2>Retention</h2><div class="statusrow"><span>Session-/Device-Daten</span><strong>regelbasiert</strong></div><div class="statusrow"><span>Gerätedaten nach Löschung</span><strong>löschen</strong></div><div class="statusrow"><span>gesetzlich erforderliche Daten</span><strong>separat aufbewahren</strong></div><div class="statusrow"><span>Löschanfragen offen</span><strong>0</strong></div></div></div>`
+}
+function audit(){
+ return head('Protokolle','Auditlog für administrative und geschäftskritische Änderungen.')+
+ `<div class="tablewrap"><table><thead><tr><th>Zeit</th><th>Benutzer</th><th>Rolle</th><th>Aktion</th><th>Objekt</th><th>Änderung</th></tr></thead><tbody><tr><td>11.09.26 09:43</td><td>Markus Wacker</td><td>Superadmin</td><td>Preis geändert</td><td>PromptMaster Pro</td><td>35,88 € → 39,88 €</td></tr><tr><td>11.09.26 08:22</td><td>Support User</td><td>Vertrieb/Support</td><td>Gerät entfernt</td><td>Max Mustermann</td><td>Büro-PC</td></tr></tbody></table></div>`
+}
+function roles(){
+ return head('Benutzer & Rollen','Superadmin, Vertrieb/Support und Technik/Operations mit 2FA-Pflicht.','<button class="btn primary">+ netstyle Benutzer</button>')+
+ `<div class="grid three"><div class="card"><h2>Superadmin</h2><div class="features"><div>Produkte & Preise</div><div>Mollie</div><div>System & Backup</div><div>Benutzer & Rollen</div></div>${B('2FA Pflicht')}</div><div class="card"><h2>Vertrieb / Support</h2><div class="features"><div>Kunden</div><div>Lizenzen & Geräte</div><div>Bestellungen</div><div>Kontaktanfragen</div></div>${B('2FA Pflicht')}</div><div class="card"><h2>Technik / Operations</h2><div class="features"><div>Monitoring</div><div>Backups</div><div>API & Logs</div><div>Systemstatus</div></div>${B('2FA Pflicht')}</div></div>`
+}
+function adminSettings(){
+ return head('Einstellungen','Globale PromptMaster-Systemeinstellungen.')+
+ `<div class="grid two"><div class="card"><h2>Lizenz-Defaults</h2><div class="form"><label>Laufzeit (Tage)<input value="365"></label><label>Geräte je Benutzer<input value="2"></label><label>Einladungslink (Stunden)<input value="24"></label><label>Reminder 1 (Tage)<input value="60"></label><label>Reminder 2 (Tage)<input value="30"></label><button class="btn primary">Speichern</button></div></div><div class="card"><h2>Support</h2><div class="form"><label>Empfängeradresse<input value="promptmaster@netstyle.de"></label><label>Eingangsbestätigung<select><option>Aktiv</option></select></label><button class="btn primary">Speichern</button></div></div></div>`
+}
+function content(){
+ if(S.mode==='customer') return ({dashboard,team,licenses,buy,devices,orders,company,settings,help}[S.c]||dashboard)()
+ return ({overview:adminOverview,customers,adminlicenses:adminLicenses,adminorders:adminOrders,products,email,mollie,stats,ops,api,legal,audit,roles,adminsettings}[S.a]||adminOverview)()
+}
+function render(){document.getElementById('root').innerHTML=shell(content());bind()}
+function bind(){
+ document.querySelectorAll('[data-route]').forEach(el=>el.onclick=e=>{e.preventDefault();let r=el.dataset.route;if(S.mode==='customer'&&cNav.some(x=>x[0]===r))S.c=r;else if(S.mode==='admin'&&aNav.some(x=>x[0]===r))S.a=r;render()})
+ document.getElementById('switch')?.addEventListener('click',()=>{S.mode=S.mode==='customer'?'admin':'customer';render()})
+ document.getElementById('mobileSwitch')?.addEventListener('click',()=>{S.mode=S.mode==='customer'?'admin':'customer';render()})
+ document.querySelectorAll('#invite').forEach(x=>x.onclick=openInvite)
+ document.querySelectorAll('#product').forEach(x=>x.onclick=openProduct)
+ document.querySelectorAll('[data-user]').forEach(x=>x.onclick=()=>openUser(+x.dataset.user))
+}
+function modal(html){document.getElementById('modalInner').innerHTML=html;document.getElementById('modal').classList.add('open');document.querySelectorAll('[data-close]').forEach(x=>x.onclick=close)}
+function close(){document.getElementById('modal').classList.remove('open')}
+function openInvite(){modal(`<div class="modalhead"><h2>Benutzer hinzufügen</h2><button class="x" data-close>×</button></div><div class="form"><div class="row"><label>Vorname<input value="Julia"></label><label>Nachname<input value="Sommer"></label></div><label>E-Mail<input value="julia@mustergmbh.de"></label><div class="alert info">Einladung ist 24 Stunden gültig und nur einmal verwendbar.</div><div style="display:flex;justify-content:flex-end;gap:8px"><button class="btn secondary" data-close>Abbrechen</button><button class="btn primary" data-close>Einladung senden</button></div></div>`)}
+function openUser(i){let u=S.users[i];modal(`<div class="modalhead"><h2>${u.n}</h2><button class="x" data-close>×</button></div><div class="muted">${u.e}</div><div class="statusrow"><span>Lizenz</span><strong>${u.lic}</strong></div><div class="statusrow"><span>Geräte</span><strong>${u.dev}</strong></div><div class="statusrow"><span>Status</span>${B(u.st)}</div><div style="display:grid;gap:8px;margin-top:14px"><button class="btn secondary">Lizenz ${u.lic==='Pro'?'freigeben':'zuweisen'}</button><button class="btn secondary">Geräte verwalten</button><button class="btn danger">Benutzer deaktivieren</button></div>`)}
+function openProduct(){modal(`<div class="modalhead"><h2>Produkt bearbeiten</h2><button class="x" data-close>×</button></div><div class="form"><div class="row"><label>Name<input value="PromptMaster Pro"></label><label>Code<input value="PRO"></label></div><div class="row"><label>Neukaufpreis<input value="35,88"></label><label>Verlängerungspreis<input value="35,88"></label></div><div class="row"><label>Laufzeit<input value="365"></label><label>Geräte-Limit<input value="2"></label></div><div class="row"><label>Reminder 1<input value="60"></label><label>Reminder 2<input value="30"></label></div><button class="btn primary" data-close>Speichern</button></div>`)}
+document.getElementById('modal').onclick=e=>{if(e.target.id==='modal')close()}
+render()
+</script>
+</body>
+</html>

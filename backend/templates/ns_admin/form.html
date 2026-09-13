@@ -1,0 +1,4 @@
+{% extends 'ns_admin/base.html' %}{% block content %}
+<div class="page-head"><div><h1>{{ title }}</h1><div class="sub">Änderungen werden serverseitig validiert und – sofern sicherheits- oder geschäftskritisch – protokolliert.</div></div></div>
+<div class="card form-card"><form method="post" class="form">{% csrf_token %}{{ form.non_field_errors }}{{ form.as_p }}<div class="form-actions"><a class="btn secondary" href="javascript:history.back()">Abbrechen</a><button class="btn primary" type="submit">Speichern</button></div></form></div>
+{% endblock %}

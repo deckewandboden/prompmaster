@@ -1,0 +1,166 @@
+{
+  "source": "promptmaster_free.html",
+  "source_sha256": "aada4fbb3461d3758c48ed808bf018716a53aa33baf81efb058412e63535b0a8",
+  "tasks": [
+    {
+      "legacy_id": "chat_sum",
+      "app_code": "chat",
+      "app_name": "Copilot Chat",
+      "title": "Inhalt zusammenfassen",
+      "copy": "Text oder bereitgestellte Inhalte kompakt zusammenfassen.",
+      "tier": "free",
+      "output_label": "Zusammenfassung",
+      "area": "Allgemein"
+    },
+    {
+      "legacy_id": "chat_write",
+      "app_code": "chat",
+      "app_name": "Copilot Chat",
+      "title": "Text erstellen",
+      "copy": "Einen geschäftlichen Text aus Vorgaben erzeugen.",
+      "tier": "free",
+      "output_label": "Textentwurf",
+      "area": "Allgemein"
+    },
+    {
+      "legacy_id": "out_reply",
+      "app_code": "outlook",
+      "app_name": "Outlook",
+      "title": "E-Mail-Antwort vorbereiten",
+      "copy": "Professionellen Antwortentwurf erzeugen.",
+      "tier": "free",
+      "output_label": "Antwortentwurf",
+      "area": "E-Mail"
+    },
+    {
+      "legacy_id": "out_improve",
+      "app_code": "outlook",
+      "app_name": "Outlook",
+      "title": "E-Mail verbessern",
+      "copy": "Entwurf klarer und professioneller formulieren.",
+      "tier": "free",
+      "output_label": "Überarbeitung",
+      "area": "E-Mail"
+    },
+    {
+      "legacy_id": "out_cal_next",
+      "app_code": "outlook",
+      "app_name": "Outlook",
+      "title": "Nächsten Termin prüfen",
+      "copy": "Den nächsten Kalendertermin anhand von Person, Kunde, Projekt oder Thema gezielt finden.",
+      "tier": "free",
+      "output_label": "Terminprüfung",
+      "area": "Kalender"
+    },
+    {
+      "legacy_id": "out_cal_schedule",
+      "app_code": "outlook",
+      "app_name": "Outlook",
+      "title": "Termin planen",
+      "copy": "Besprechung mit Zweck, Teilnehmern, Zeitraum und Dauer konkret vorbereiten.",
+      "tier": "free",
+      "output_label": "Terminplanung",
+      "area": "Kalender"
+    },
+    {
+      "legacy_id": "out_todo_create",
+      "app_code": "outlook",
+      "app_name": "Outlook",
+      "title": "Aufgabenliste erstellen",
+      "copy": "Aus einem konkret benannten Thema oder Vorgang klare To-dos ableiten.",
+      "tier": "free",
+      "output_label": "Aufgabenliste",
+      "area": "To Do"
+    },
+    {
+      "legacy_id": "out_todo_prioritize",
+      "app_code": "outlook",
+      "app_name": "Outlook",
+      "title": "Aufgaben priorisieren",
+      "copy": "Eine eingegebene Aufgabenliste nach Dringlichkeit, Auswirkung und Abhängigkeiten priorisieren.",
+      "tier": "free",
+      "output_label": "Priorisierung",
+      "area": "To Do"
+    },
+    {
+      "legacy_id": "teams_notes",
+      "app_code": "teams",
+      "app_name": "Teams",
+      "title": "Nachbereitung formulieren",
+      "copy": "Aus Notizen eine saubere Nachbereitung erstellen.",
+      "tier": "free",
+      "output_label": "Nachbereitung",
+      "area": "Meeting"
+    },
+    {
+      "legacy_id": "teams_chat",
+      "app_code": "teams",
+      "app_name": "Teams",
+      "title": "Chat zusammenfassen",
+      "copy": "Chatverlauf kurz und verständlich zusammenfassen.",
+      "tier": "free",
+      "output_label": "Zusammenfassung",
+      "area": "Chat"
+    },
+    {
+      "legacy_id": "word_rewrite",
+      "app_code": "word",
+      "app_name": "Word",
+      "title": "Text verbessern",
+      "copy": "Text klarer und professioneller formulieren.",
+      "tier": "free",
+      "output_label": "Überarbeitung",
+      "area": "Text"
+    },
+    {
+      "legacy_id": "word_sum",
+      "app_code": "word",
+      "app_name": "Word",
+      "title": "Dokument zusammenfassen",
+      "copy": "Inhalte strukturiert auf Kernaussagen reduzieren.",
+      "tier": "free",
+      "output_label": "Zusammenfassung",
+      "area": "Dokument"
+    },
+    {
+      "legacy_id": "excel_explain",
+      "app_code": "excel",
+      "app_name": "Excel",
+      "title": "Daten erklären",
+      "copy": "Tabellenwerte verständlich beschreiben.",
+      "tier": "free",
+      "output_label": "Datenanalyse",
+      "area": "Daten"
+    },
+    {
+      "legacy_id": "excel_compare",
+      "app_code": "excel",
+      "app_name": "Excel",
+      "title": "Werte vergleichen",
+      "copy": "Unterschiede zwischen Zahlen oder Zeiträumen herausarbeiten.",
+      "tier": "free",
+      "output_label": "Vergleich",
+      "area": "Daten"
+    },
+    {
+      "legacy_id": "ppt_outline",
+      "app_code": "powerpoint",
+      "app_name": "PowerPoint",
+      "title": "Folieninhalt vorbereiten",
+      "copy": "Klare Folienstruktur und Kernaussagen erzeugen.",
+      "tier": "free",
+      "output_label": "Folienstruktur",
+      "area": "Inhalt"
+    },
+    {
+      "legacy_id": "ppt_rewrite",
+      "app_code": "powerpoint",
+      "app_name": "PowerPoint",
+      "title": "Folientext verbessern",
+      "copy": "Text kürzen und präsentationstauglich formulieren.",
+      "tier": "free",
+      "output_label": "Folienüberarbeitung",
+      "area": "Inhalt"
+    }
+  ]
+}

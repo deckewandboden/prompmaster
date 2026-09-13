@@ -1,0 +1,29 @@
+{% extends 'app_shell.html' %}
+{% block title %}PromptMaster Kundenportal{% endblock %}
+{% block home_url %}{% url 'portal:dashboard' %}{% endblock %}
+{% block nav %}
+<a href="{% url 'portal:dashboard' %}"><span class="ico">⌂</span><span class="label">Dashboard</span></a>
+{% if current_membership and current_membership.role == 'admin' %}
+<a href="{% url 'portal:team' %}"><span class="ico">♙</span><span class="label">Mein Team</span></a>
+{% endif %}
+<a href="{% url 'portal:licenses' %}"><span class="ico">▣</span><span class="label">Lizenzen</span></a>
+{% if current_membership and current_membership.role == 'admin' or not current_membership %}
+<a href="{% url 'portal:buy' %}"><span class="ico">＋</span><span class="label">Weitere Lizenzen kaufen</span></a>
+{% endif %}
+<a href="{% url 'portal:devices' %}"><span class="ico">▤</span><span class="label">Geräte</span></a>
+{% if current_membership and current_membership.role == 'admin' or not current_membership %}<a href="{% url 'portal:orders' %}"><span class="ico">▧</span><span class="label">Bestellungen &amp; Zahlungen</span></a>{% endif %}
+{% if current_membership and current_membership.role == 'admin' %}
+<a href="{% url 'portal:company' %}"><span class="ico">▥</span><span class="label">Unternehmen</span></a>
+{% endif %}
+<a href="{% url 'portal:profile' %}"><span class="ico">⚙</span><span class="label">Einstellungen</span></a>
+<a href="{% url 'portal:help' %}"><span class="ico">?</span><span class="label">Hilfe &amp; Kontakt</span></a>
+<a href="{% url 'accounts:logout' %}"><span class="ico">↪</span><span class="label">Abmelden</span></a>
+{% endblock %}
+{% block mobile %}
+<div class="mobile-menu">
+<a href="{% url 'portal:dashboard' %}"><b>⌂</b>Home</a>
+{% if current_membership and current_membership.role == 'admin' %}<a href="{% url 'portal:team' %}"><b>♙</b>Team</a>{% else %}<a href="{% url 'portal:profile' %}"><b>⚙</b>Einstellungen</a>{% endif %}
+<a href="{% url 'portal:licenses' %}"><b>▣</b>Lizenzen</a>
+<a href="{% url 'portal:devices' %}"><b>▤</b>Geräte</a>
+</div>
+{% endblock %}

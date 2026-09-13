@@ -1,0 +1,4 @@
+{% extends 'ns_admin/base.html' %}{% block content %}
+<div class="page-head"><div><h1>Testfall · {{ version.definition.task_id }} v{{ version.version }}</h1><div class="sub">Deterministischer Composer-Test ohne Speicherung des erzeugten Prompttexts.</div></div></div>
+<div class="card"><form method="post" class="form">{% csrf_token %}{{ form.non_field_errors }}{{ form.as_p }}<div class="page-actions"><a class="btn secondary" href="{% url 'prompt_studio:version' version.pk %}">Abbrechen</a><button class="btn primary" type="submit">Testfall speichern</button></div></form></div>
+{% endblock %}

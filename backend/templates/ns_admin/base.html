@@ -1,0 +1,19 @@
+{% extends 'app_shell.html' %}{% load pm %}{% block title %}PromptMaster · netstyle Admin{% endblock %}{% block home_url %}{% url 'ns_admin:dashboard' %}{% endblock %}{% block search_action %}{% url 'ns_admin:search' %}{% endblock %}{% block nav %}
+<a class="{% nav_class request 'dashboard' %}" href="{% url 'ns_admin:dashboard' %}"><span class="ico">⌂</span><span class="label">Übersicht</span></a>
+<a class="{% nav_class request 'customers,customer' %}" href="{% url 'ns_admin:customers' %}"><span class="ico">♙</span><span class="label">Kunden</span></a>
+<a class="{% nav_class request 'licenses,license' %}" href="{% url 'ns_admin:licenses' %}"><span class="ico">▣</span><span class="label">Lizenzen</span></a>
+<a class="{% nav_class request 'orders,order,payments,payment' %}" href="{% url 'ns_admin:orders' %}"><span class="ico">▧</span><span class="label">Bestellungen & Zahlungen</span></a>
+<a class="{% nav_class request 'products,product' %}" href="{% url 'ns_admin:products' %}"><span class="ico">◈</span><span class="label">Produkte & Preise</span></a>
+<a class="{% nav_class request 'prompt-studio' %}" href="{% url 'prompt_studio:index' %}"><span class="ico">✦</span><span class="label">Prompt Studio</span></a>
+<a class="{% nav_class request 'content' %}" href="{% url 'content_admin:faqs' %}"><span class="ico">≡</span><span class="label">FAQ & Inhalte</span></a>
+<a class="{% nav_class request 'email' %}" href="{% url 'ns_admin:email' %}"><span class="ico">✉</span><span class="label">E-Mail</span></a>
+<a class="{% nav_class request 'mollie' %}" href="{% url 'ns_admin:mollie' %}"><span class="ico">◉</span><span class="label">Mollie</span></a>
+<a class="{% nav_class request 'stats' %}" href="{% url 'ns_admin:stats' %}"><span class="ico">▥</span><span class="label">Statistiken</span></a>
+<a class="{% nav_class request 'ops' %}" href="{% url 'ns_admin:ops' %}"><span class="ico">⚙</span><span class="label">System & Betrieb</span></a>
+<a class="{% nav_class request 'api' %}" href="{% url 'ns_admin:api' %}"><span class="ico">◇</span><span class="label">API & Integrationen</span></a>
+<a class="{% nav_class request 'legal,retention,deletion' %}" href="{% url 'ns_admin:legal' %}"><span class="ico">♢</span><span class="label">Datenschutz & Recht</span></a>
+<a class="{% nav_class request 'support' %}" href="{% url 'ns_admin:support_requests' %}"><span class="ico">?</span><span class="label">Kontaktanfragen</span></a>
+<a class="{% nav_class request 'audit' %}" href="{% url 'ns_admin:audit' %}"><span class="ico">▤</span><span class="label">Protokolle</span></a>
+<a class="{% nav_class request 'roles,role,staff' %}" href="{% url 'ns_admin:roles' %}"><span class="ico">♙</span><span class="label">Benutzer & Rollen</span></a>
+<a class="{% nav_class request 'settings' %}" href="{% url 'ns_admin:settings' %}"><span class="ico">⚙</span><span class="label">Einstellungen</span></a>
+{% endblock %}{% block mobile %}<div class="mobile-menu"><a href="{% url 'ns_admin:dashboard' %}"><b>⌂</b>Home</a><a href="{% url 'ns_admin:customers' %}"><b>♙</b>Kunden</a><a href="{% url 'ns_admin:ops' %}"><b>⚙</b>System</a><a href="{% url 'ns_admin:audit' %}"><b>▤</b>Logs</a></div>{% endblock %}

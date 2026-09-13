@@ -1,0 +1,5 @@
+import uuid
+from django.db import migrations, models
+class Migration(migrations.Migration):
+ initial=True; dependencies=[]
+ operations=[migrations.CreateModel(name='IntegrationSecret',fields=[('id',models.UUIDField(default=uuid.uuid4,editable=False,primary_key=True,serialize=False)),('created_at',models.DateTimeField(auto_now_add=True,db_index=True)),('updated_at',models.DateTimeField(auto_now=True)),('code',models.CharField(max_length=80,unique=True)),('encrypted_value',models.TextField()),('active',models.BooleanField(default=True))]),migrations.CreateModel(name='ServiceAccount',fields=[('id',models.UUIDField(default=uuid.uuid4,editable=False,primary_key=True,serialize=False)),('created_at',models.DateTimeField(auto_now_add=True,db_index=True)),('updated_at',models.DateTimeField(auto_now=True)),('name',models.CharField(max_length=120,unique=True)),('token_hash',models.CharField(max_length=64,unique=True)),('scopes',models.JSONField(default=list)),('active',models.BooleanField(default=True)),('expires_at',models.DateTimeField(blank=True,null=True)),('last_used_at',models.DateTimeField(blank=True,null=True))])]

@@ -1,0 +1,6 @@
+{% extends 'portal/base.html' %}
+{% block title %}Gerät registrieren · PromptMaster{% endblock %}
+{% block content %}
+<div class="page-head"><div><h1>Gerät registrieren</h1><div class="sub">PromptMaster Pro erlaubt {{ device_limit }} aktive Geräte pro Benutzer.</div></div></div>
+<div class="card narrow-card"><form method="post" class="form">{% csrf_token %}{{ form.as_p }}<button class="btn primary" type="submit">Gerät registrieren und PromptMaster Pro öffnen</button></form><p class="muted small">Wenn alle Geräteslots belegt sind, muss Ihr Firmenadministrator oder netstyle zuerst ein altes Gerät freigeben.</p></div>
+{% endblock %}

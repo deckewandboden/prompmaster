@@ -1,0 +1,9 @@
+{% extends 'ns_admin/base.html' %}{% block content %}<div class="page-head"><div><h1>Globale Suche</h1><div class="sub">Ergebnisse für „{{ q }}“</div></div></div>
+<div class="grid two">
+<div class="card"><h2>Unternehmen</h2>{% for x in results.customers %}<div class="statusrow"><span>{{ x.name }} · {{ x.customer_number }}</span><a class="btn secondary sm" href="{% url 'ns_admin:customer_detail' x.id %}">Öffnen</a></div>{% empty %}<p class="muted">Keine Treffer.</p>{% endfor %}</div>
+<div class="card"><h2>Privatkunden</h2>{% for x in results.private_customers %}<div class="statusrow"><span>{{ x.user.full_name }} · {{ x.customer_number }}</span><a class="btn secondary sm" href="{% url 'ns_admin:private_customer_detail' x.id %}">Öffnen</a></div>{% empty %}<p class="muted">Keine Treffer.</p>{% endfor %}</div>
+<div class="card"><h2>Benutzer</h2>{% for x in results.users %}<div class="statusrow"><span>{{ x.full_name }} · {{ x.email }}</span><strong>{% if x.is_active %}Aktiv{% else %}Inaktiv{% endif %}</strong></div>{% empty %}<p class="muted">Keine Treffer.</p>{% endfor %}</div>
+<div class="card"><h2>Lizenzen</h2>{% for x in results.licenses %}<div class="statusrow"><span>{{ x.license_number }}</span><a class="btn secondary sm" href="{% url 'ns_admin:license_detail' x.id %}">Öffnen</a></div>{% empty %}<p class="muted">Keine Treffer.</p>{% endfor %}</div>
+<div class="card"><h2>Bestellungen</h2>{% for x in results.orders %}<div class="statusrow"><span>{{ x.order_number }}</span><a class="btn secondary sm" href="{% url 'ns_admin:order_detail' x.id %}">Öffnen</a></div>{% empty %}<p class="muted">Keine Treffer.</p>{% endfor %}</div>
+<div class="card"><h2>Zahlungen</h2>{% for x in results.payments %}<div class="statusrow"><span>{{ x.provider_payment_id }}</span><a class="btn secondary sm" href="{% url 'ns_admin:order_detail' x.order_id %}">Bestellung</a></div>{% empty %}<p class="muted">Keine Treffer.</p>{% endfor %}</div>
+</div>{% endblock %}

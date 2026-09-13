@@ -1,0 +1,1 @@
+{% extends 'portal/base.html' %}{% block content %}<h1>Sicherheit</h1><div class="card"><div class="statusrow"><span>Zwei-Faktor-Authentifizierung</span>{% if request.user.totp_secret_enc %}<span class="badge ok">Aktiv</span>{% else %}<a class="btn primary sm" href="{% url 'accounts:two_factor_setup' %}">Einrichten</a>{% endif %}</div></div>{% endblock %}

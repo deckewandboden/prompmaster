@@ -1,0 +1,144 @@
+name: promptmaster
+services:
+  postgres:
+    image: postgres:18-alpine
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks: [data]
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+  redis:
+    image: redis:7-alpine
+    command: ["redis-server","--appendonly","yes"]
+    volumes: ["redis_data:/data"]
+    networks: [data]
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+  web:
+    build: .
+    env_file: .env
+    depends_on:
+      postgres: {condition: service_healthy}
+      redis: {condition: service_healthy}
+    volumes:
+      - static_data:/app/staticfiles
+      - media_data:/app/media
+      - backup_status:/var/run/promptmaster-backup:ro
+    networks: [edge, app, data, monitor]
+    healthcheck:
+      test: ["CMD-SHELL", "curl -fsS http://localhost:8000/health/live/ || exit 1"]
+      interval: 15s
+      timeout: 5s
+      retries: 10
+  worker:
+    build: .
+    command: ["celery","-A","config","worker","-l","INFO","--concurrency=2"]
+    env_file: .env
+    depends_on:
+      postgres: {condition: service_healthy}
+      redis: {condition: service_healthy}
+    networks: [app, data, monitor]
+  beat:
+    build: .
+    command: ["celery","-A","config","beat","-l","INFO"]
+    env_file: .env
+    depends_on:
+      postgres: {condition: service_healthy}
+      redis: {condition: service_healthy}
+    networks: [app, data]
+  caddy:
+    image: caddy:2-alpine
+    env_file: .env
+    ports: ["80:80","443:443"]
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile:ro
+      - caddy_data:/data
+      - caddy_config:/config
+      - static_data:/srv/static:ro
+      - media_data:/srv/media:ro
+    depends_on:
+      web: {condition: service_healthy}
+    networks: [edge]
+  prometheus:
+    image: prom/prometheus:latest
+    command: ["--config.file=/etc/prometheus/prometheus.yml","--storage.tsdb.retention.time=30d"]
+    volumes:
+      - ./monitoring/prometheus.yml:/etc/prometheus/prometheus.yml:ro
+      - prometheus_data:/prometheus
+    networks: [monitor]
+  node-exporter:
+    image: prom/node-exporter:latest
+    command: ["--path.rootfs=/host"]
+    pid: host
+    volumes: ["/:/host:ro,rslave"]
+    networks: [monitor]
+  cadvisor:
+    image: gcr.io/cadvisor/cadvisor:latest
+    privileged: true
+    volumes:
+      - /:/rootfs:ro
+      - /var/run:/var/run:ro
+      - /sys:/sys:ro
+      - /var/lib/docker/:/var/lib/docker:ro
+      - /dev/disk/:/dev/disk:ro
+    networks: [monitor]
+  postgres-exporter:
+    image: prometheuscommunity/postgres-exporter:latest
+    environment:
+      DATA_SOURCE_NAME: postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@postgres:5432/${POSTGRES_DB}?sslmode=disable
+    depends_on:
+      postgres: {condition: service_healthy}
+    networks: [data, monitor]
+  backup:
+    build: ./backup
+    env_file: .env
+    environment:
+      POSTGRES_HOST: postgres
+      POSTGRES_PORT: 5432
+      BACKUP_INTERVAL_SECONDS: 21600
+    depends_on:
+      postgres: {condition: service_healthy}
+    volumes:
+      - backup_status:/status
+      - restore_test_data:/restore
+    networks: [app, data]
+    restart: unless-stopped
+  restore-postgres:
+    image: postgres:18-alpine
+    profiles: ['tools']
+    environment:
+      POSTGRES_DB: restoretest
+      POSTGRES_USER: restoretest
+      POSTGRES_PASSWORD: restoretest
+    tmpfs:
+      - /var/lib/postgresql/data
+    volumes:
+      - restore_test_data:/restore:ro
+    networks: [data]
+volumes:
+  postgres_data:
+  redis_data:
+  static_data:
+  media_data:
+  caddy_data:
+  caddy_config:
+  prometheus_data:
+  backup_status:
+  restore_test_data:
+networks:
+  edge:
+  app:
+  data:
+    internal: true
+  monitor:
+    internal: true

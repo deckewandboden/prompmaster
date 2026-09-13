@@ -1,0 +1,19 @@
+{% extends 'portal/base.html' %}
+{% block content %}
+<div class="page-head"><div><h1>Guten Morgen, {{ request.user.first_name }}</h1><div class="sub">{% if company %}{{ company.name }}{% else %}Privatkonto{% endif %}</div></div>{% if can_start_pro %}<a class="btn primary" href="{% url 'proaccess:launch' %}">PromptMaster Pro starten</a>{% endif %}</div>
+<div class="grid kpis">
+  <div class="card"><div>Lizenzen</div><div class="value">{{ license_total }}</div><div class="small muted">gesamt</div></div>
+  <div class="card"><div>Aktiv</div><div class="value">{{ license_active }}</div><div class="small muted">{{ license_free }} frei</div></div>
+  <div class="card"><div>Ablauf ≤30 Tage</div><div class="value">{{ expiring_30 }}</div></div>
+  <div class="card"><div>Sicherheit</div><div class="value">{% if request.user.totp_secret_enc %}2FA{% else %}–{% endif %}</div></div>
+</div>
+{% if pro_expiry and pro_expiry.level != 'none' %}
+<div class="alert {% if pro_expiry.level == 'critical' %}danger{% elif pro_expiry.level == 'warning' %}warn{% else %}info{% endif %}" style="margin-top:14px">
+  <strong>PromptMaster Pro: noch {{ pro_expiry.days_remaining }} Tag{% if pro_expiry.days_remaining != 1 %}e{% endif %}.</strong>
+  Deine Lizenz läuft am {{ pro_expiry.valid_until|date:"d.m.Y" }} ab.
+  {% if pro_expiry.level == 'critical' %}<strong>Bitte jetzt verlängern, damit der Zugriff nicht unterbrochen wird.</strong>{% else %}Eine Verlängerung kann bereits jetzt durchgeführt werden; Restlaufzeit bleibt vollständig erhalten.{% endif %}
+  <a href="{% url 'portal:licenses' %}">Lizenz ansehen</a>
+</div>
+{% endif %}
+{% if not can_start_pro %}<div class="alert info" style="margin-top:14px"><strong>Kein Pro-Zugriff für dieses Benutzerkonto.</strong> {% if membership and membership.role == 'admin' %}Als Firmenadministrator können Sie eine freie Lizenz über „Mein Team“ auch sich selbst zuweisen.{% elif membership %}{% if pending_upgrade %}Ihre Pro-Anfrage ist bereits offen.{% else %}Sie können die Zuweisung einer PromptMaster-Pro-Lizenz bei Ihrem Firmenadministrator anfragen. <form method="post" action="{% url 'portal:request_pro_upgrade' %}" style="display:inline">{% csrf_token %}<button class="btn primary sm" type="submit">Pro anfragen</button></form>{% endif %}{% else %}Für den Pro-Zugriff benötigen Sie eine aktive PromptMaster-Pro-Lizenz.{% endif %}</div>{% endif %}
+{% endblock %}

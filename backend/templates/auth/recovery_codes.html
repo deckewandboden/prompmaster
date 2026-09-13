@@ -1,0 +1,2 @@
+{% extends 'portal/base.html' %}{% block content %}<h1>Recovery Codes</h1><div class="alert">Einmalig speichern. Diese Codes werden nicht erneut angezeigt.</div><div class="card"><pre>{% for code in codes %}{{ code }}
+{% endfor %}</pre></div>{% endblock %}

@@ -1,0 +1,69 @@
+from django import forms
+
+from apps.catalog.models import TaxRule
+from .models import Company, PrivateCustomerProfile
+
+
+class InviteForm(forms.Form):
+    first_name = forms.CharField(max_length=120)
+    last_name = forms.CharField(max_length=120)
+    email = forms.EmailField()
+
+    def clean_email(self):
+        return self.cleaned_data['email'].strip().lower()
+
+
+class CompanyForm(forms.ModelForm):
+    class Meta:
+        model = Company
+        fields = [
+            'name',
+            'legal_form',
+            'email',
+            'phone',
+            'street',
+            'house_number',
+            'postal_code',
+            'city',
+            'country',
+            'vat_id',
+            'tax_number',
+        ]
+
+    def clean(self):
+        data = super().clean()
+        country = (data.get('country') or '').upper()
+        rule = TaxRule.objects.filter(country=country, customer_type='company', active=True).first()
+        if rule:
+            if rule.require_vat_id and not data.get('vat_id'):
+                self.add_error('vat_id', 'USt-IdNr. ist für diese Steuerregel erforderlich.')
+            if rule.require_tax_number and not data.get('tax_number'):
+                self.add_error('tax_number', 'Steuernummer ist für diese Steuerregel erforderlich.')
+        return data
+
+
+class PrivateCustomerForm(forms.ModelForm):
+    class Meta:
+        model = PrivateCustomerProfile
+        fields = ['street', 'house_number', 'postal_code', 'city', 'country']
+
+
+class SupportForm(forms.Form):
+    category = forms.ChoiceField(
+        choices=[
+            ('license', 'Lizenz'),
+            ('payment', 'Zahlung'),
+            ('user', 'Benutzer'),
+            ('device', 'Gerät'),
+            ('technical', 'Technisches Problem'),
+            ('privacy', 'Datenschutz'),
+            ('other', 'Sonstiges'),
+        ]
+    )
+    subject = forms.CharField(max_length=180)
+    message = forms.CharField(widget=forms.Textarea, max_length=5000)
+
+
+class UserProfileForm(forms.Form):
+    first_name = forms.CharField(max_length=120, label='Vorname')
+    last_name = forms.CharField(max_length=120, label='Nachname')

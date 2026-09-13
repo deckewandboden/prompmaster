@@ -1,0 +1,4 @@
+{% extends 'ns_admin/base.html' %}{% block content %}
+<div class="page-head"><div><h1>Qualitätsschwellen</h1><div class="sub">Konfigurierbare Schwellen für Recent Average und Drop-Erkennung.</div></div></div>
+<div class="card"><form method="post" class="form">{% csrf_token %}{{ form.non_field_errors }}{{ form.as_p }}<div class="page-actions"><a class="btn secondary" href="{% url 'prompt_studio:quality' %}">Abbrechen</a><button class="btn primary" type="submit">Speichern</button></div></form></div>
+{% endblock %}

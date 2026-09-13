@@ -1,0 +1,7 @@
+Infinite, 3D Head Scan by Lee Perry-Smith / Infinite Realities.
+Licensed under Creative Commons Attribution 3.0 Unported:
+https://creativecommons.org/licenses/by/3.0/
+Source: https://threejs.org/examples/models/gltf/LeePerrySmith/LeePerrySmith.glb
+Based on work at https://www.triplegangers.com/
+License attribution also documented by Pixar: https://renderman.pixar.com/photorealistic-head
+Adaptation: scaled and centered surface, blue point-cloud rendering and interactive wireframe by PromptMaster Commercial. No endorsement implied.

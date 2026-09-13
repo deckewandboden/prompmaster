@@ -1,0 +1,593 @@
+# Vollständiges Datei-Inventar — PromptMaster RC14
+
+Erfasst: **524 Dateien** (Manifest-/Inventardateien selbst ausgenommen), **43,333,880 Byte**.
+
+Maschinenlesbar: `FILE_MANIFEST.tsv` und `MANIFEST.json`.
+
+## active-backend
+
+294 Dateien.
+
+| Pfad | Größe | SHA256 |
+|---|---:|---|
+| `backend/apps/__init__.py` | 0 | `e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855` |
+| `backend/apps/accounts/__init__.py` | 0 | `e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855` |
+| `backend/apps/accounts/admin.py` | 244 | `19b991fc1d5296b1ac3bb658ad3cbbe9ccec4b98dd79a5f19b80cd7d6a1b12ac` |
+| `backend/apps/accounts/apps.py` | 147 | `d43a7d7232a19f1920f89ab8875302d1a49fda2bc6f4c17aa326974ea9fbf618` |
+| `backend/apps/accounts/forms.py` | 3230 | `46fb507f77a1376418d9dba1248eae7b586b0958baeeccd49d0bde9a1fef4363` |
+| `backend/apps/accounts/management/__init__.py` | 0 | `e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855` |
+| `backend/apps/accounts/management/commands/__init__.py` | 0 | `e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855` |
+| `backend/apps/accounts/management/commands/bootstrap_admin.py` | 2469 | `beda1486a8706bbfd03dd6ccb0a0fd4c8401055d710eebcee5c099431f598491` |
+| `backend/apps/accounts/middleware.py` | 2281 | `affc81dd62236d834bdd5d016074ce33041b81a189c126a07f650effc429e8cf` |
+| `backend/apps/accounts/migrations/0001_initial.py` | 4839 | `c8aaa69f090ff7177c3d8e4af18cacf0bb6d8bc9605f5cee9f4b766262fb16af` |
+| `backend/apps/accounts/migrations/__init__.py` | 0 | `e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855` |
+| `backend/apps/accounts/models.py` | 2569 | `3feb7368013a8ff4093bda8d024a1972e8ce423771884865e4f5a6502ada8415` |
+| `backend/apps/accounts/security.py` | 828 | `843f80e8f16a463ebf3a1c9de19cb74519ab935d3e0ce50ed27bfe049dc84084` |
+| `backend/apps/accounts/tests.py` | 356 | `a3d9928c67add4d28170f4384d066621ddccf692c77c4ce73e8c2eab6b42d1a6` |
+| `backend/apps/accounts/totp.py` | 556 | `bec2d0f87a066ab92d3ad712f62065e418e2ad9afebd621881a9618163d9e647` |
+| `backend/apps/accounts/urls.py` | 822 | `ee957faaef55e00f47be4f3b924f2a7f28c679d58bb0548b22f7467f14e81e50` |
+| `backend/apps/accounts/views.py` | 16626 | `d4381db130c0ad2a1fc8f3d7df65d55d4d4ae3a61594e89a89322a897fdaaed0` |
+| `backend/apps/audit/__init__.py` | 0 | `e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855` |
+| `backend/apps/audit/admin.py` | 96 | `840c78e634dfea6e8e93fa79c11af0432688849b96bb2445c58cc498b2964746` |
+| `backend/apps/audit/apps.py` | 141 | `551f61840d27e0878f76e8aa61886a68e5449efd00876a498c27bbec21443cab` |
+| `backend/apps/audit/migrations/0001_initial.py` | 1261 | `f948c18fe71b4559eab97228d63ee8d6dd068c0ff6a8a433d420042bee557b6c` |
+| `backend/apps/audit/migrations/__init__.py` | 0 | `e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855` |
+| `backend/apps/audit/models.py` | 1546 | `da5d07757c646e8854bd3f23e1bfa0d66b1ce6ed39861746940c6df3641d4858` |
+| `backend/apps/audit/services.py` | 1345 | `54cfa0ce73116b07d142c5f9cbdf162bcf2776780e0561a639f0e7b214d51f46` |
+| `backend/apps/catalog/__init__.py` | 0 | `e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855` |
+| `backend/apps/catalog/admin.py` | 270 | `5434cd9f980e5f76517ca912c8cbfe2894c1475a8983185c4ca84a3dcfc13ac5` |
+| `backend/apps/catalog/apps.py` | 145 | `57944591d8628419ff3620659dcb3ceea6c9ddd40c72dae76538d5cb6bf22881` |
+| `backend/apps/catalog/migrations/0001_initial.py` | 4403 | `4030a6cce8a2332b66c0a5e438c38b1c491a1828f588f67868eb778b032d6fe3` |
+| `backend/apps/catalog/migrations/__init__.py` | 0 | `e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855` |
+| `backend/apps/catalog/models.py` | 4711 | `9ec3cfb9e7628225e8bf73355b9cc64cb11f02cce50ed788728a2bc23e3920c9` |
+| `backend/apps/catalog/services.py` | 1800 | `eb4d01361831e084702d564652e454013523551c7c2b05c03eaa10004efce53e` |
+| `backend/apps/companies/__init__.py` | 0 | `e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855` |
+| `backend/apps/companies/admin.py` | 243 | `e67cb19682ffe70255d2d6ef3c27286fba6c2ca687453ce834c78fc744794f43` |
+| `backend/apps/companies/apps.py` | 149 | `dd30f96e5884b78b90b57b3668b6e0639b05189356a3032d0602c4467bfa68ab` |
+| `backend/apps/companies/forms.py` | 2133 | `aa2bee39bec6c440e6a94fea3bd85ef307ae2091d4146beafe0d0546b3f97dff` |
+| `backend/apps/companies/migrations/0001_initial.py` | 4658 | `dbe6eb88e69b61ef149fd5d7ba88aebf540b10e5e53a94eb106d033327b23cbc` |
+| `backend/apps/companies/migrations/__init__.py` | 0 | `e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855` |
+| `backend/apps/companies/models.py` | 4477 | `5f8f0ebd6de05ff721fdad27ba1a5fa7f0525b7802a429b24bbeaefe0f2cac2d` |
+| `backend/apps/companies/portal.py` | 35401 | `88f3928576b8462ebe7f241781091ee6af55693a2df9a6a0c43af4218df84cad` |
+| `backend/apps/companies/portal_urls.py` | 1878 | `1712c9fd387d5c61d7be16a6ee211bcb60cd6deb3c8049c8b91a0296ecb32970` |
+| `backend/apps/companies/services.py` | 3187 | `a536c08fac5295beb1eb70cc08eb5cc980dec2152dc3c1485b237849774ed394` |
+| `backend/apps/contenthub/__init__.py` | 0 | `e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855` |
+| `backend/apps/contenthub/admin_urls.py` | 329 | `e85cc9b995e5b209ee021364bf0d2e64b5261a28bff3d61612cf033a269ebf91` |
+| `backend/apps/contenthub/admin_views.py` | 2363 | `4f7870777062ab1ecddebb84c07d9884ea2886c4ee432dfb99ca5c44d34d96db` |
+| `backend/apps/contenthub/api.py` | 828 | `8a131b12c29948a1658b968024040a477a7d97d6bea6adf0f9ffda16b655fb22` |
+| `backend/apps/contenthub/api_urls.py` | 131 | `d29d503fa2b8f55fcc6c852c284c74f4c5764acdfc2da38c28f61a033b7dc1b8` |
+| `backend/apps/contenthub/apps.py` | 195 | `dd818a1c243083309d4eec56c2c0b6a0ada2bff6f515d4dfb4b2ea7c621d3b39` |
+| `backend/apps/contenthub/forms.py` | 282 | `b8dea318fb464711df2e62a380a30c634d8c3defc5271aba3b71d97a0c3035c9` |
+| `backend/apps/contenthub/management/__init__.py` | 0 | `e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855` |
+| `backend/apps/contenthub/management/commands/__init__.py` | 0 | `e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855` |
+| `backend/apps/contenthub/management/commands/seed_faqs.py` | 1763 | `4ea238f79d1093bd1a6b3b0b4053a48ba3c8a56970008b60f9533288105bdd57` |
+| `backend/apps/contenthub/migrations/0001_initial.py` | 1299 | `08542bb32bc29b2b97c2faa57911b684f075bc87e6b29121317908c7fb6fa991` |
+| `backend/apps/contenthub/migrations/__init__.py` | 0 | `e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855` |
+| `backend/apps/contenthub/models.py` | 787 | `341ec2e071492af1f244b388de1cf126289a7b5517ffaf3c271353b6f6327379` |
+| `backend/apps/contenthub/tests.py` | 996 | `8c4a85b8fc2517d0d8909d2cd2fe047210be2db23b3d08313469425b8a08c347` |
+| `backend/apps/core/__init__.py` | 0 | `e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855` |
+| `backend/apps/core/admin_forms.py` | 8687 | `b839e61b9a1fe19d172ff99d4032b44089ea5276bc230e631dbd4ed031744977` |
+| `backend/apps/core/admin_urls.py` | 5638 | `79e4f0b5bbd1188a89e525c7a38d440dc582dffb8e222099ca0406387fcf14a7` |
+| `backend/apps/core/admin_views.py` | 51736 | `3fdcf7c9a28a4a1351d03da936835649ff19856cc2e2368d8f31d0543e6e4bde` |
+| `backend/apps/core/apps.py` | 210 | `8134ed07155edcd5917919300abfbad09d504b9390c59be5733a5c4132c57b24` |
+| `backend/apps/core/checks.py` | 1150 | `ac8bc9a61a89a3bb5b1cac9436885b4c77aa99d98e95f78742ae025a1fedf6ab` |
+| `backend/apps/core/context_processors.py` | 747 | `09659e56cf02408ea2d27de161700bbb995b72863389b5a096adab884356bbb5` |
+| `backend/apps/core/crypto.py` | 558 | `3b3ddd3e5c6e4cf64d0969ff7726f3062a8641e6281cd2bb239b0ce0d0042f16` |
+| `backend/apps/core/datagrid.py` | 5063 | `a84d1ae2dfa0c58f7d6c457f052c81ff78b259486ac21be91a6d8c0ffedd3b6c` |
+| `backend/apps/core/management/__init__.py` | 0 | `e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855` |
+| `backend/apps/core/management/commands/__init__.py` | 0 | `e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855` |
+| `backend/apps/core/management/commands/seed_defaults.py` | 5183 | `2fa34881682f6e782b892a5fbf719394d3f185606b2e9212f668ef9f0467b534` |
+| `backend/apps/core/middleware.py` | 542 | `a1ce3fd282c526d386befef8eb4a32890a8ca7fafc02ec3ecd1e569cbdc08f02` |
+| `backend/apps/core/migrations/0001_initial.py` | 752 | `30baa368b096bb6360a19ff9cc37b667aa5e16b97164c4720d06003c0dd172a8` |
+| `backend/apps/core/migrations/0002_search_indexes.py` | 2232 | `7f2f26d9214308e9f5d06a6d772f1d6e71411c35c340bd3c36f18f155d27b86b` |
+| `backend/apps/core/migrations/__init__.py` | 0 | `e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855` |
+| `backend/apps/core/models.py` | 579 | `3a308554de512d5c8a0cca800fc3755448414c2098c2db896b850a4a58adf80d` |
+| `backend/apps/core/permissions.py` | 586 | `b6d893523a3ed9c5e51fc76779a189edf8929c4dd611e01d7f94a99fecce0427` |
+| `backend/apps/core/security.py` | 1791 | `609ec63d549b50302588696904a0095d039028824631963f29b3b29ab34e51bd` |
+| `backend/apps/core/settings_store.py` | 389 | `84e6673b306c3fb15add41f9cc461cdc626d2e22858b88869464d10c72cc2500` |
+| `backend/apps/core/templatetags/__init__.py` | 0 | `e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855` |
+| `backend/apps/core/templatetags/pm.py` | 2473 | `e05d823315a4cc8054ee82cb56714afaa0d50fb21fe2de18d36601df8974d297` |
+| `backend/apps/core/tests.py` | 256 | `11c33a31813610e01e5e78295e19072944481eb02ba5cde6616af474d62f5487` |
+| `backend/apps/core/tests_marketing_integration.py` | 2204 | `b3c651dfe1b75096004c4fe78738723cb5d4bc5f8de99e6d45fede4cfa6359e8` |
+| `backend/apps/core/tests_release_rules.py` | 10568 | `125cfd2ee21d9662d0e0ae811b0f01a2be4427980fd830e9cc731feda1395f42` |
+| `backend/apps/core/views.py` | 4155 | `f9d224673242716285a6b504385202028563797f427e048f1d2eeb996a8af839` |
+| `backend/apps/devices/__init__.py` | 0 | `e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855` |
+| `backend/apps/devices/admin.py` | 112 | `a1bf059a584a2d74f1983220170352703a4e63fcb1ddf2756a8a18c94baef4a9` |
+| `backend/apps/devices/apps.py` | 145 | `4e70ac9688181358f0dc1c81a8a4ab6f3899886547ec127c52cdec24131299bc` |
+| `backend/apps/devices/migrations/0001_initial.py` | 1243 | `5d3673ec735416f044d7726bd8030112df33e19c412e89cc843c9a6eabd7d1ce` |
+| `backend/apps/devices/migrations/__init__.py` | 0 | `e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855` |
+| `backend/apps/devices/models.py` | 745 | `0d07904e9838650423ca62cfb2aa8e47eac8d976f56858d14bd41de618b45366` |
+| `backend/apps/devices/services.py` | 3147 | `dfbe9ba3ff51606109e3d97c9d816b27c123522806cef81d5d43bbe47d49c73f` |
+| `backend/apps/integrations/__init__.py` | 0 | `e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855` |
+| `backend/apps/integrations/admin.py` | 161 | `f2fc21da8eb5def558e6e874c3a1f0cc0e3b6fed8c0ce7ad36916ac51a6fb21a` |
+| `backend/apps/integrations/apps.py` | 155 | `8d8ca8738003d4c566c7d994ab935b850aa49350eaac370ce1fae3cb03e81f3e` |
+| `backend/apps/integrations/migrations/0001_initial.py` | 1129 | `f364f3d88237a8f4b240d1e1d08fdc1497a573412a21753c61bdd551ad3f0c77` |
+| `backend/apps/integrations/migrations/__init__.py` | 0 | `e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855` |
+| `backend/apps/integrations/models.py` | 592 | `2eb2f62b6b7636091c8bfc7dbd2d4616dad66cbf5fb8b0c9f40f3e4cae981560` |
+| `backend/apps/integrations/services.py` | 472 | `91e3b275b022acad626e98cf96f3f9bee480e9f99bbcf0981754f0b184bf3e69` |
+| `backend/apps/legal/__init__.py` | 0 | `e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855` |
+| `backend/apps/legal/admin.py` | 261 | `e6a27fd2f26857faeab92437d7490e08cf0134bcd857b6c64519797ad9a285cf` |
+| `backend/apps/legal/apps.py` | 141 | `4156c63f9edf981faf3e68b7ce523f34fdfb98dfc0edb2205c3b419ec156d667` |
+| `backend/apps/legal/migrations/0001_initial.py` | 3147 | `0a5dacd95c41a5dc885452ce4d9274cf732f6ca8c381bfe68fde243e31e31220` |
+| `backend/apps/legal/migrations/__init__.py` | 0 | `e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855` |
+| `backend/apps/legal/models.py` | 2371 | `334cf9c92285259865fe4c1178e215dd88b4398bd176628c4997679dd9e9ff08` |
+| `backend/apps/legal/services.py` | 4078 | `d2eaf3ed81a668f7bd58b11b5a54e76d07e3f0f550b4e944f2abfea4b9ce5701` |
+| `backend/apps/legal/tasks.py` | 2827 | `ac053a7e42a3f0fc773495e62b980d2cb002c92a6c353a8ae519fed02a6a8209` |
+| `backend/apps/licenses/__init__.py` | 0 | `e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855` |
+| `backend/apps/licenses/admin.py` | 245 | `ec7978ebb2e4242113c42472236b8d630a94805bf5348c7d11a6d992019abdbe` |
+| `backend/apps/licenses/apps.py` | 147 | `5613381f28d547f39fd46b2bef8057da7f915e41f99f7abc213c3b20bc849f8f` |
+| `backend/apps/licenses/migrations/0001_initial.py` | 3835 | `43478baed265d8b10e8ac50c85bf421fe40d530ad8360d946c9eb2d808bd5299` |
+| `backend/apps/licenses/migrations/0002_licenseterm.py` | 1324 | `bfdfeae64c8a3fbccebe94fdcb5685898a1beb8ab37df3df64fce5703378f41b` |
+| `backend/apps/licenses/migrations/0003_licenseupgraderequest.py` | 2481 | `3a50c753eb0aec821b88325fc529dda465bf78e21e0207969d654d2c1cd686c1` |
+| `backend/apps/licenses/migrations/0004_licenseassignmentlink.py` | 2227 | `34982b2538e4d68cb6410540afa939c4a04435e5a401cdf6e21fb0b215d7ae19` |
+| `backend/apps/licenses/migrations/__init__.py` | 0 | `e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855` |
+| `backend/apps/licenses/models.py` | 8247 | `fb2fae27424315e4b2f93bbe658c4feb6fafb12e12f0ffae016c4c5e3856cae6` |
+| `backend/apps/licenses/services.py` | 10581 | `eeee948e4b3b7822869c3b37ede6de7278da3b37a46549ea2113c3ffb12daced` |
+| `backend/apps/mcp_internal/__init__.py` | 0 | `e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855` |
+| `backend/apps/mcp_internal/apps.py` | 205 | `03c3075359518bcf0458759fae83ab456cf2819613756c3a6abe30b543f86170` |
+| `backend/apps/mcp_internal/tests.py` | 3247 | `a4d594dce5adb457b25e4160637f2e0515e470425ed5a1675787f9f31f5b8dfd` |
+| `backend/apps/mcp_internal/urls.py` | 192 | `b9c7456c9ed1b97b8fba1c7ab178db134b7bf6beb60410d082f33ebddf3f26cb` |
+| `backend/apps/mcp_internal/views.py` | 10292 | `064c46d8d2db500a56e19527a7245e61df6756f454c77dd853c28701e76327d1` |
+| `backend/apps/notifications/__init__.py` | 0 | `e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855` |
+| `backend/apps/notifications/admin.py` | 149 | `e7bc8c0fd4f090ebf2e31288805dd7ad574104bfb94d1bb7382915e11f6fba2f` |
+| `backend/apps/notifications/apps.py` | 157 | `5c64dfd8bf36240013fc6cb20d7977f8bfed4d3553ffcd6a45dc7d83ab7cff4a` |
+| `backend/apps/notifications/migrations/0001_initial.py` | 1494 | `3093ca30120c6d8d6b2178168a12234cecfb791426dce94b6a15fdd3bf210a92` |
+| `backend/apps/notifications/migrations/__init__.py` | 0 | `e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855` |
+| `backend/apps/notifications/models.py` | 857 | `7c0db142317e5765bf04bad9342d72f344406f8e860348f935fc17473c4490f5` |
+| `backend/apps/notifications/services.py` | 3637 | `c148be61c8e7f6fda2d59dea479b7419ed30b1fef7c5d8972189486d94622a98` |
+| `backend/apps/notifications/tasks.py` | 6852 | `82b984307f22d22f6266aed9aa25439ba076eafa2dca196ad587b6a28bd825b3` |
+| `backend/apps/ops/__init__.py` | 0 | `e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855` |
+| `backend/apps/ops/admin.py` | 337 | `6b8ade16956ad808c190a01d1ca813fd7869b5993d56b416437eb9ac871f20e2` |
+| `backend/apps/ops/api.py` | 7924 | `eb1851f5396078aa538ffa7b9432b713a7b64daf100499a87e569539733b6215` |
+| `backend/apps/ops/api_urls.py` | 541 | `625387664fd7d0b80426ec90268c6f7f9df30b119a7ed4adaac04991d6d6734b` |
+| `backend/apps/ops/apps.py` | 882 | `d7b4046ba08e2e0c3124270bef961c830b3b6bbe637a8c963bedb5c07f8dd9c0` |
+| `backend/apps/ops/auth.py` | 956 | `c15eecc673649962b3a930284059ceafc4b4320adb19a74aa1c5598d5f782273` |
+| `backend/apps/ops/metrics.py` | 5581 | `d62ebef201c20b475b4c16e3a4a8dc4cf7ac376359076853f1a74fbde55c893b` |
+| `backend/apps/ops/migrations/0001_initial.py` | 3091 | `029a74079262e84810d75c82a1524b47adddae62ef6bb549552197bb2a8d1a1d` |
+| `backend/apps/ops/migrations/0002_beatheartbeat.py` | 774 | `ab33f4fe125cedab58f52027716cb0538697e1a4f19de0765e7b8972a598ad4b` |
+| `backend/apps/ops/migrations/__init__.py` | 0 | `e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855` |
+| `backend/apps/ops/models.py` | 2687 | `90acff0d1215941be9a6d5f5c7bd544a5a99fa64daceda5d4fc6c8d2766cc07e` |
+| `backend/apps/ops/tasks.py` | 9146 | `6b50041955d96366b489310d39dcdf615107e24c666d39da4b562b2f562693c6` |
+| `backend/apps/orders/__init__.py` | 0 | `e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855` |
+| `backend/apps/orders/admin.py` | 127 | `c8c44d049b39b63c75d696bab2261c8b5c5191da028671225d4a8c4666530dbd` |
+| `backend/apps/orders/apps.py` | 143 | `f669fdeb427d9873fed2994f70dcc640d3dab9b317e424cb7184898492697c9b` |
+| `backend/apps/orders/forms.py` | 1349 | `3ec02e3e6edc929907e32e6f21a72923b841866ce894286b21decf2452486275` |
+| `backend/apps/orders/migrations/0001_initial.py` | 3309 | `6392d15d9b966ddf8c2cb679806f6fe02b7ce75c0cd6c470fff4d63b261ab1e4` |
+| `backend/apps/orders/migrations/__init__.py` | 0 | `e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855` |
+| `backend/apps/orders/models.py` | 3103 | `f18b7a3d9a02ed3ca75cdc1fb05dd80290045bdbc80ff8e28b9ec36f1403e858` |
+| `backend/apps/orders/services.py` | 6255 | `3826f480ad50523c38632af682ecd90568767ea8ec409bffb45b54637e182f88` |
+| `backend/apps/payments/__init__.py` | 0 | `e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855` |
+| `backend/apps/payments/admin.py` | 170 | `4441fb905b4d1eb410cf42aac13d3cc417f1973330ad7679f51b8982f28c5974` |
+| `backend/apps/payments/apps.py` | 147 | `a072f13e0b0c2d525a49e75f6865e1ab061ac3d3631d0f4d52fd6b73c9ca66a2` |
+| `backend/apps/payments/migrations/0001_initial.py` | 2696 | `a5f8cfb69ddf07d9f17c9db94ccf95de405bb4234aa4e68611a5969fb7dff796` |
+| `backend/apps/payments/migrations/__init__.py` | 0 | `e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855` |
+| `backend/apps/payments/models.py` | 2204 | `da7dca5eace363e39060737f7f9f6b979ca14343b04f61c5b71e791bce318528` |
+| `backend/apps/payments/mollie.py` | 2395 | `1c9a23ef59ff4db3f912b898cb4eb6b8afe1a20f8b661e1647b8369173b415e8` |
+| `backend/apps/payments/services.py` | 18711 | `0a14dda4a948668b7cbb1833e565b92ba4f917985b3960daf5b2713eb7a21059` |
+| `backend/apps/payments/tests.py` | 890 | `3fe40b15b3be011e5a6505034dea199a2e83e404338f88768503f3a6996fb6c7` |
+| `backend/apps/payments/views.py` | 1141 | `5a90adb3f87198aa493c69afad8bfebe94cb305f6637b5291712f25900db3ca2` |
+| `backend/apps/payments/webhook_urls.py` | 150 | `d0b0d70de61d8953de7df7f4e156bc16a9420db662c5ca7e7e77f7a6db709393` |
+| `backend/apps/proaccess/__init__.py` | 0 | `e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855` |
+| `backend/apps/proaccess/apps.py` | 155 | `f9abea8bfe267f836de988c6ac74df37ec46c54cd4e1de9fb598bbd789e8edfd` |
+| `backend/apps/proaccess/assets.py` | 925 | `458a0d67a6266a1bc7358982726f3f3af220fecdcdd45e880f5ee14d10acaa34` |
+| `backend/apps/proaccess/forms.py` | 141 | `db3bea15dd783d540c2fe2203f3af5d3761307bc78d28b818492a5dfefe4bea0` |
+| `backend/apps/proaccess/services.py` | 1980 | `e61252c55a60b98077c7af12937ee7ba84bdf6ad655da72a4b9d946fd52d3ef8` |
+| `backend/apps/proaccess/tests.py` | 779 | `c0edf4c1449ec0586d386372b2e5ecd98a80a19afe1bbca331e475ba09c59ea1` |
+| `backend/apps/proaccess/urls.py` | 342 | `a2d116fdb431956a07347fab0018fae54b9f32a2573259411bd8b37831c63037` |
+| `backend/apps/proaccess/views.py` | 6907 | `036cdcdb1ed9135b1092a864a44b2dd0736c5a6cf1a8ce0f41202bc221082cd6` |
+| `backend/apps/prompts/__init__.py` | 0 | `e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855` |
+| `backend/apps/prompts/admin.py` | 488 | `3bbbd50b2bd2f976cfde1fe3329789aa78a289c08bf9c39645613120907293ea` |
+| `backend/apps/prompts/api.py` | 7264 | `1f371e57acea47b005bbd669c78f25b1172b7fd4a49fb1e04503812adef7b3be` |
+| `backend/apps/prompts/api_urls.py` | 309 | `877b24fd4742e85fa01da4bb1b9e236e7fd8f4d506f2b3f2bd161d1f0b7ee872` |
+| `backend/apps/prompts/apps.py` | 186 | `e854562f7d46cee776c8680a37f1713ede2e069061797b158ccc6bfd8517812b` |
+| `backend/apps/prompts/composer_core.py` | 10103 | `e3d0477acb8ef367ead84e66056f010725248b430b31e072257d3a6cae37279e` |
+| `backend/apps/prompts/data/free_legacy_tasks.json` | 5008 | `0558ab5ba433a8d48bb8025b76bbc3d957aa9cb202258fc6a30f67fef1cce4f9` |
+| `backend/apps/prompts/data/pm20_golden_logic.json` | 267826 | `5d8783a0b576aec96b4b994d4b958560c93d8493b46b8641780e07587a8fc0e5` |
+| `backend/apps/prompts/forms.py` | 7703 | `0ed67147a3802f3ac56c9b5c211624c93ddeb58734bb7423c7d1b325beda0462` |
+| `backend/apps/prompts/lifecycle.py` | 7577 | `a56ec75e476d7bc598f5f4c08af216fee302de7627319516ec16a381d887b4e0` |
+| `backend/apps/prompts/management/__init__.py` | 0 | `e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855` |
+| `backend/apps/prompts/management/commands/__init__.py` | 0 | `e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855` |
+| `backend/apps/prompts/management/commands/seed_prompt_catalog.py` | 15638 | `f1a45533cc5341816a81e416519a92ee4ba2655da0a321dac75c7cd6807153c7` |
+| `backend/apps/prompts/management/commands/validate_prompt_runtime.py` | 3784 | `fe1873b7d4c2b4ff42cb1dc4df8e7c289bb535af04cd152daeec493ea7f28d88` |
+| `backend/apps/prompts/migrations/0001_initial.py` | 12817 | `6d32b17ca051143ce77c97b24666205136bbdbcf15f267d11053c0465b68963d` |
+| `backend/apps/prompts/migrations/0002_studio_quality.py` | 7780 | `86a58ea9a75175aa4cc2f96077819c4830df5a2af0752a52c124bb9d1d14e1ec` |
+| `backend/apps/prompts/migrations/__init__.py` | 0 | `e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855` |
+| `backend/apps/prompts/models.py` | 14484 | `eb46bcd7b3652214f5c6f4a5255e07dbf4604edf36936a49975f3ae46018a98d` |
+| `backend/apps/prompts/quality.py` | 4187 | `b0ba04e7381cd73a15f656414d8571560aee84b6331c1fbf8cc848c74af00ccf` |
+| `backend/apps/prompts/services.py` | 12830 | `2c3e460695af3e21ae01795560cde7eff2878b565fbf262d87a3808f1f44ff93` |
+| `backend/apps/prompts/studio_urls.py` | 1057 | `0727c47b1c4a4310990f10543966eab5205504a6c88e4f5379933c6554bb523f` |
+| `backend/apps/prompts/studio_views.py` | 12349 | `15bfdc1eb92510b75516c8186f850e70ddf9f6a8f3d782c4b56039806e51f6c9` |
+| `backend/apps/prompts/tasks.py` | 263 | `b7e07bacf9b0f37f7f8cb9e0aec876e76fe9a7da95cb0efee00e9dc436d72427` |
+| `backend/apps/prompts/tests.py` | 15577 | `13b3fb67ab2f19b097584ceca1efaccdbaf50cf4ce9129af52139f95e1bc5fe6` |
+| `backend/apps/support/__init__.py` | 0 | `e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855` |
+| `backend/apps/support/admin.py` | 104 | `6541ed7ee16442bf6f0d8d59d78025d7ed97f594fbd6bacc8cf2183b45fc0626` |
+| `backend/apps/support/apps.py` | 145 | `0d63a14248ef6efbe33464ad1359e4308add42966a0b5927e4b08e7e7eb6b1ea` |
+| `backend/apps/support/migrations/0001_initial.py` | 1214 | `0f26ed01e27179024544bcb5dd4e2f8d5e4d617f5b76c54220d6de1d5baea1fa` |
+| `backend/apps/support/migrations/__init__.py` | 0 | `e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855` |
+| `backend/apps/support/models.py` | 1000 | `23bfbf54b582411daecfc1dc747416ca44ab961e587904e1198ea5e4419a9439` |
+| `backend/config/__init__.py` | 64 | `40e9457320576e0813c9ec166611e979252a367aede83677fe5626398648cedc` |
+| `backend/config/asgi.py` | 161 | `e66806d324f24440dc47c97b9a870686dc47e2f5879aa61d1df7bb1c028bf25b` |
+| `backend/config/celery.py` | 221 | `99c9d65218b5b7ec9416eed0fb746644ca7aa90fe27223f166df94cea3fd6982` |
+| `backend/config/settings.py` | 7943 | `1de65026182e7f66fa180f91a123d7e245b27a050abae457e2bbbe6fdc674057` |
+| `backend/config/urls.py` | 1689 | `391594b133ccc7b9edef4edfc1c170a9d0d057a1e73c8a192ff4541914da0054` |
+| `backend/config/wsgi.py` | 161 | `25d3ac3de67e7a1e20c9cfed54bf208a378c7e634f426239c36c63cbabc22f36` |
+| `backend/manage.py` | 239 | `9bba94f103ecf4d96b7bb92b4efd737352b65e003b6d0d5dc20c2a97cb62e13f` |
+| `backend/private_assets/README.md` | 303 | `260b610cc91d48508721f57752adabf25a442b8ab111bbee54a111a751d8ab16` |
+| `backend/private_assets/promptmaster_free_reference.html` | 110812 | `aada4fbb3461d3758c48ed808bf018716a53aa33baf81efb058412e63535b0a8` |
+| `backend/private_assets/promptmaster_pro.html` | 233404 | `aa7b2da53ba3cbcf9874b9b6f7381ea4c3e86ee1f9c09db186cbec6876a3c9cf` |
+| `backend/private_assets/promptmaster_pro_runtime.html` | 248805 | `29da4bb38b121ef585d07711e4e30966f1ae37089ffc01be048de7a2e821ebba` |
+| `backend/static/brand/promptmaster-logo-reference.png` | 17905 | `5848c7bc83fa903f9eb2de1b8a3c8443a9dca937cf3659494d2db2d5a26ff231` |
+| `backend/static/css/app.css` | 9727 | `a0a74b3b25428c383c9c288be594e764e76319b27bfc74f2a7de9e165e4f5c7e` |
+| `backend/templates/app_shell.html` | 1062 | `7f7c3ebacd4e8c15a621656c8dc4ca2fe760c63833079836dd6d54dd279bcbe6` |
+| `backend/templates/auth/accept_invitation.html` | 1216 | `6f8563b0a815f54c31141767dc52c295dd67d7f47eebd1f875e61d4a9b976082` |
+| `backend/templates/auth/invite_result.html` | 268 | `4a0c8067765cc7dd1dd144b51826f911038b0432dc2580822d38cb3e2310d8a8` |
+| `backend/templates/auth/login.html` | 502 | `c90d0d08f57ed08b875e612e59f2358ebdf58542292e7edb52e4d1861e93f275` |
+| `backend/templates/auth/logout_confirm.html` | 489 | `4de1f83a1c245ef9c04e713c414da7bb7626a58c04fccb933a20f8ae0387b10d` |
+| `backend/templates/auth/password_confirm.html` | 293 | `9280d3960a97fee353bba0c08e3236f3ba724dbbcc33b4552677bcf890a6be0e` |
+| `backend/templates/auth/password_reset_confirm.html` | 279 | `3d7d9c82a49d74ce5bdf2459c9ec9b581dbe3429fd956bbb58d09f96fd5b8522` |
+| `backend/templates/auth/password_reset_request.html` | 510 | `789b3d3ffb67e407cdf3e01899f76ea176f907f3507a5c6d93594e1adb34c57a` |
+| `backend/templates/auth/password_reset_result.html` | 429 | `11559ba77c0ac6837e6074bc5f41718b6b5fae3cde4053566f75840e95947965` |
+| `backend/templates/auth/password_reset_sent.html` | 321 | `9e77a17951127ba8fbe277551e8510086192efb5b504827119db8e87c8b92092` |
+| `backend/templates/auth/recovery_codes.html` | 256 | `3c5dd07c266cfe421b684cb631dda7f21a0dfa98ef679dd004720f6b56ae74a1` |
+| `backend/templates/auth/register.html` | 728 | `494d047563a651234c1b4a995a0e2767e792a830a5ca2e151173d67da5e09506` |
+| `backend/templates/auth/two_factor.html` | 436 | `8df0a762298070836fc3cbc44fe6a54e2c801d0f93aebf6fe14c79afde6fe8ab` |
+| `backend/templates/auth/two_factor_setup.html` | 466 | `dd7dd8aeeda9d75adde1104c689153361fd1de3c9327f014a3baaca4f3dbe065` |
+| `backend/templates/auth/verify_result.html` | 277 | `15ecb7f25910ed26c56abd056118b2772091126769f3eb645ce8ad9edb19a6cf` |
+| `backend/templates/base.html` | 316 | `be126fd05da864270df4661737e8707015f3724acc52fcba18f3944bb4da2616` |
+| `backend/templates/includes/grid_toolbar.html` | 2391 | `da53bad0adffef400100582b26f9d8795da8016ed9bd0edf6850d60b2378023a` |
+| `backend/templates/includes/pagination.html` | 865 | `ab8612bb290fdf8f4f4e33998c114f57088eb7f35b8f3cf09bf98ad90d01bcba` |
+| `backend/templates/legal_public.html` | 484 | `77e09fc30e13b6a4bfa42d1b3c4f439952dec2a043a5e2597139233f59c2712e` |
+| `backend/templates/ns_admin/api.html` | 334 | `f0bf7909d22ae88388f8981762488f37542015c5482fa209efb4e2681b02534d` |
+| `backend/templates/ns_admin/audit.html` | 1194 | `62a98a5a3e95d8c815cc32044118bd27b88b3617aa962433dc77973c812abe44` |
+| `backend/templates/ns_admin/base.html` | 3248 | `293485cc7d3ceb03b9336ec78950226353b38a6b2963dc29b8de4146f0429a29` |
+| `backend/templates/ns_admin/content/faq_edit.html` | 468 | `cfbd88dc11210f15d48778ef91efe1965611cc47e86ed4248fa2ed3e4a4342a5` |
+| `backend/templates/ns_admin/content/faq_list.html` | 1650 | `5e1b7f19a30e31b0233989f39dcf99378a4e41c9ed341096ea2b77c1eee633b6` |
+| `backend/templates/ns_admin/customer_detail.html` | 1276 | `c447edb5398d4db1af239643e473d57fb01876ae20869dc74cb04a309231d1f1` |
+| `backend/templates/ns_admin/customer_grid.html` | 7826 | `b9989a5fb0e82f4d06f6e13d054cfc782a1a41301826ba4edb5eaa83d71e3433` |
+| `backend/templates/ns_admin/customer_portal_preview.html` | 1904 | `06f7afffc8869a92833fcad58bbcea141a1f14a292a09ece6141abad0948e46c` |
+| `backend/templates/ns_admin/dashboard.html` | 2998 | `08c053576776c6532d5d4f53e16ac6746e505bf02d351f4b9ce35912f940e9b0` |
+| `backend/templates/ns_admin/email.html` | 500 | `78883c95cb8a2076f9d400723180fe87cc234c41c2e1bee095f2fca27dab9c7c` |
+| `backend/templates/ns_admin/email_log.html` | 1421 | `524c18f58bebbb519e7aaa3c0c46fd01bc3eb20ec9678bb5eaf2900f98f73734` |
+| `backend/templates/ns_admin/features.html` | 1027 | `5c339c80180e86b7e22989fcc827bf4d85f83fe1708af54d7c85e19beea6dcaa` |
+| `backend/templates/ns_admin/form.html` | 561 | `3eb75184c1434e04911ea40e06444a944366743e7a2f89f8b4a0a7c1ebe1b761` |
+| `backend/templates/ns_admin/grid.html` | 1721 | `30978da22e3552583f1339c61d5a1dafbead7b28c7b059abecc10d802e5cff69` |
+| `backend/templates/ns_admin/includes_customer_nav.html` | 1351 | `6b8690bd75aabafd00d178771ce88a0d8048ad99c04aaa5b7cdf56df8299d7bb` |
+| `backend/templates/ns_admin/includes_private_customer_nav.html` | 1289 | `611b88f41e1d8ea0e3b748e251a16ac9213a366b3024d781e56811970dde62ea` |
+| `backend/templates/ns_admin/legal.html` | 365 | `f10b4c0a5860944b8cbf3cbf85978c3943758a804230e92b7f928a65ab68f712` |
+| `backend/templates/ns_admin/legal_deletions.html` | 1557 | `8104d623a6176611fc6b31d1c8d1179e1e035a90757746fa92aa1c4316c79fea` |
+| `backend/templates/ns_admin/legal_documents.html` | 1367 | `ce793472a05f970719a6eb86880c0ce0d8d79b0fdc86a2c20ed7f5b248407034` |
+| `backend/templates/ns_admin/legal_retention.html` | 1239 | `85f3639791fd975a64aaa03da1f99796e62cffe97146b8f0017ae4197a5944d9` |
+| `backend/templates/ns_admin/license_detail.html` | 2338 | `0de8081c3b366456aa8eb24840659b654e1619cd1a6e27317bd0158cf29b5792` |
+| `backend/templates/ns_admin/mollie.html` | 492 | `c52b282e9f7f77d91a793408f52e5fc782decafcf0fb738d78af16830281d0e9` |
+| `backend/templates/ns_admin/mollie_events.html` | 1367 | `28ddd06ef6e64d6106beffd6b2af7462d3ec02c3d143183bde38691ac46d6d97` |
+| `backend/templates/ns_admin/ops.html` | 1242 | `624156d3d2758a0c6c87d7f4e27409e63ca50c954456823c488ebc3d4676dfc4` |
+| `backend/templates/ns_admin/ops_database.html` | 719 | `66b21e4cc755b6983feb2355d4f38e17f042fba6e1790483239bf4046474445d` |
+| `backend/templates/ns_admin/ops_grid.html` | 2538 | `b44d102cb063326d2408bdaa797245df9dbf95c9d842c8b8c5d9658e56ba86cf` |
+| `backend/templates/ns_admin/ops_services.html` | 2107 | `d6ee418c30bb07f30bda981f9be96c14edba0eb60d412761cc31db2fc560014b` |
+| `backend/templates/ns_admin/order_detail.html` | 1576 | `191158be7ee888026b789a79c1f80ca7acfad9893b62e857dde28a36095cd36a` |
+| `backend/templates/ns_admin/payments.html` | 1490 | `762c465a1363048b7e207a895323e25396e021df7ea89871a106a8468708fbab` |
+| `backend/templates/ns_admin/private_customer_detail.html` | 1356 | `c596cc6c8dd43b73dce52467cf327de2176eeb78c9fbdf2b2693241194c2b962` |
+| `backend/templates/ns_admin/private_customer_grid.html` | 4506 | `ebad656ac23a92ce463c74e857d3aad9e80909c0bfe7c7147d9d449302e2e1e4` |
+| `backend/templates/ns_admin/product_edit.html` | 858 | `4c1da90c3448e459c73ca78fef31fd544cb4e6de9a7b89f777128a570c8f6dcb` |
+| `backend/templates/ns_admin/products.html` | 1551 | `1999d0fa1b62064500e3366076cf36b0db3452c243d77550d92bbec8de5fb7f2` |
+| `backend/templates/ns_admin/prompt_studio/definition_detail.html` | 1855 | `19ed6a7dce037c2d69d8988a068cce7bfb8b6b808ae0fb154e2c22e8fe3bdb00` |
+| `backend/templates/ns_admin/prompt_studio/index.html` | 2000 | `76b3f926a00bbef948d8d5949373b5489f649325dae364d607edefb93e95bb8d` |
+| `backend/templates/ns_admin/prompt_studio/quality.html` | 1987 | `afd7ca1155696684187749c1cdae534a38bf8fbf6c523aedb3b9cc4840dd81c9` |
+| `backend/templates/ns_admin/prompt_studio/quality_policy.html` | 520 | `fbf1ec1fff1d3ae377a33cb6c0e06baa854a1f3cd083f4e5130239d23f8d725a` |
+| `backend/templates/ns_admin/prompt_studio/testcase_edit.html` | 598 | `f6f5cc90167a9e5f18f1c8e2f4e428791dc0b1a82354b12a6ba3a182469c7b51` |
+| `backend/templates/ns_admin/prompt_studio/version_detail.html` | 6641 | `e32b0d395804416017188bfc09e9a642a085b52dd62f481fd79abe128e3defb3` |
+| `backend/templates/ns_admin/prompt_studio/version_edit.html` | 587 | `eaf47adc22768040903083b7c932f5ea447dea3558185a681f2324a31d8674c7` |
+| `backend/templates/ns_admin/roles.html` | 2083 | `b0d7e9441073a2e9646d02580172278d29e8ebaa912a254bb608fdd072d47cff` |
+| `backend/templates/ns_admin/search.html` | 1978 | `01c2ef1534e69e2de878fc4dabea55d31a6a5a8e66a878daedddd4a7be901d4b` |
+| `backend/templates/ns_admin/service_account_token.html` | 506 | `0fcf67bc080a5764e875c13260366a88a326e905c9180f28f5079e8a18979909` |
+| `backend/templates/ns_admin/settings.html` | 419 | `ec9a7f2c59f6ebcdee585acf956e0024e44e76ef23ce57145b7073175fd21af5` |
+| `backend/templates/ns_admin/stats.html` | 714 | `fb045f17096046ce9cf6ada192a6663a3e518f00c1f0d39480a15ee8871c9187` |
+| `backend/templates/ns_admin/support.html` | 1408 | `df6d343d153690fdadd84ff3b748a99223571b5f8242cd6bf7d6d1e963f4d1df` |
+| `backend/templates/ns_admin/support_detail.html` | 1510 | `bbea642f49787c7d5bbbca93497ca5524b079cb8e3471db3876f953547266dd6` |
+| `backend/templates/portal/assignment_link_claim.html` | 566 | `a39bbeda37b510cb314f250526dc9f0a124ef84ee5fb4bf1a666c09969d66cb4` |
+| `backend/templates/portal/assignment_link_created.html` | 680 | `565668800add9f18cec7b761eb345926e3d7f130001d6977eb3b9d460422c4be` |
+| `backend/templates/portal/base.html` | 2093 | `b516c0d8dcdb6b13a993911784481a6bfa1454f44d610f5e23d2f656f2ee5699` |
+| `backend/templates/portal/buy.html` | 900 | `f1335e7d9e4419e389f2bd430c6f8a7365c8ba48e633f46a81d8bf2ea24bb2dd` |
+| `backend/templates/portal/company.html` | 316 | `3d06e7f4815076397a242fb19dbbb82b93da4f24488c5e082df1651e9f97fcb4` |
+| `backend/templates/portal/dashboard.html` | 2417 | `c501cded809039460ffed35fc3c020f1f505c4ee22d652a22487e80e2c9f2836` |
+| `backend/templates/portal/devices.html` | 1697 | `568c397fb7b70263c41bdb7c8ce8b612461275d77bd52accd46916730014e54e` |
+| `backend/templates/portal/form.html` | 226 | `6da7e44a5e00b6421ea15a531563f5f2f51734890126400e237db99399fe2f0d` |
+| `backend/templates/portal/help.html` | 1077 | `8d1bef9f32b29f8a7794d83cc6feb02d2079e165913cdeb7834b753d1b7863d0` |
+| `backend/templates/portal/invitations.html` | 1831 | `e3fc15c9a9534b26410cffb8742abd740dbf235e351a25d0b827072319a634f5` |
+| `backend/templates/portal/licenses.html` | 1879 | `21b04e50a7c05a201beec24560361368fd635f8d022e72cc5f829f0b4894b71a` |
+| `backend/templates/portal/orders.html` | 1642 | `86bcd1b171a94e8716b9ba0e6e3039990301faa21943c7248e0e04b120c9876e` |
+| `backend/templates/portal/profile.html` | 1236 | `9c6cc4140034bdf0c6c8bcb81f3f9c5220f9a34b67e794e050c5b86075bd0275` |
+| `backend/templates/portal/renew.html` | 788 | `cdf24527050777f927ee446e11eb5e4139303a69a792f03cf59c7ba860ac6a31` |
+| `backend/templates/portal/security.html` | 357 | `ab26737e33f2d55622e372bc6220610c044464d29fe6004f5bd8cbc99f282df1` |
+| `backend/templates/portal/team.html` | 2393 | `52bd8ad5cc77b3310e497b20ab2b67d3191cf84aaabc9407acee29d2858d0500` |
+| `backend/templates/portal/team_member.html` | 1975 | `dd31bc5dd1a93c66dd6e8d6e339a16353845b1ac9df2dff79932e1eb3aee0d5e` |
+| `backend/templates/proaccess/asset_missing.html` | 485 | `d121523831ca1d8bdc79af3146e94626b3aa02aa47545c07e2a7e66bc3306138` |
+| `backend/templates/proaccess/register_device.html` | 646 | `95847c5740866f0c13fb8cc9d455c740cf222bff19797d950a4e643db14d737e` |
+| `backend/templates/proaccess/renewal_warning.html` | 1145 | `e7e3cc0e6d84654fc9e30d8100479dbf5c4e21ab0c6bcfdecef32b71b3eb26f4` |
+
+## active-ci
+
+1 Dateien.
+
+| Pfad | Größe | SHA256 |
+|---|---:|---|
+| `.github/workflows/ci.yml` | 4369 | `3a5dde0ac61b42678607efc950cfc6bd91151fee4a3ace581d87c723038c0d84` |
+
+## active-marketing
+
+127 Dateien.
+
+| Pfad | Größe | SHA256 |
+|---|---:|---|
+| `marketing/.gitignore` | 384 | `14c2d4b7781dcd266e563c4f08880637ae620c7e8a182246a23b138e5f791e8e` |
+| `marketing/.openai/hosting.json` | 128 | `f0edf586980b4bf42be68c4d7f4d8da814e74fdcbd08ca034113d989b247f57d` |
+| `marketing/.oxfmtrc.json` | 260 | `0962fdddb1840a06b5afb918ff3f2ff56bce346082651ec5c3567c01dd809f17` |
+| `marketing/.oxlintrc.json` | 1370 | `1a7aa1c7d83b05939e4e697eed9316224caea8958c4ad12837f8be740c13a47d` |
+| `marketing/INTEGRATION.md` | 1209 | `46dd7ebdf99e5481e2e39aa807ada646a2133c9cc3376580004fbb573db024da` |
+| `marketing/README.md` | 4310 | `42c11ae422f35b9bcd4acbca2b2841cf8e61d054aeac71b6f9f1e9ff6e8de455` |
+| `marketing/components/ui/accordion.tsx` | 2664 | `33e1c60ba503f4eb36f9a8b1f68b236174b11656d8efea6bac65abddda2f9019` |
+| `marketing/components/ui/alert-dialog.tsx` | 5301 | `ed0f1fc432bca4c72f9dd8741ae2268a00d2d3429ff1149bf463c4271b13d8e9` |
+| `marketing/components/ui/alert.tsx` | 2060 | `e760c470414c9e617d7292094146d906352fee3b1526b790a611d4a118e79196` |
+| `marketing/components/ui/aspect-ratio.tsx` | 406 | `b7fb499905e441a0602392ce118828425ad059079060109694d01f9fac00ad20` |
+| `marketing/components/ui/attachment.tsx` | 6132 | `dcb9e899f1322158f016d75c400fa8cce9b797ea49bec65528bac686cee2ec5c` |
+| `marketing/components/ui/avatar.tsx` | 3056 | `342f32b683937b826cdff2999d5e3057836d459aa43eadb0c3538b818d195b9a` |
+| `marketing/components/ui/badge.tsx` | 1934 | `5706189b86e8670499fb33f37147dd6f65c39d59eef5211e34157f2952c35e32` |
+| `marketing/components/ui/breadcrumb.tsx` | 2602 | `b28b76d6f8d0feafbbeff2220cf83f9a6b03d8c81f0145b3af4c7d19933ab2c0` |
+| `marketing/components/ui/bubble.tsx` | 4828 | `dfb9f52ae3b89e4a419b336c3893ab6fb658fc324fb402759d878d54e3b2db5a` |
+| `marketing/components/ui/button-group.tsx` | 2494 | `79ad8fb6644a775cc49131c1aa737ca26cae6a563beec0fa52ef6e8d85202fab` |
+| `marketing/components/ui/button.tsx` | 3247 | `081d2a1cb4f3aec636a6894d9eff4e90d476d5db85b82d0399c1f4d18517112e` |
+| `marketing/components/ui/calendar.tsx` | 8503 | `e7bc682eff8f2215e6b0aab40d1afb7ee927c5f5bef348ccff207631b9261658` |
+| `marketing/components/ui/card.tsx` | 2645 | `625fce5e16577a45108a86d7afcd70b8931cb2032abe0d6a3faf1010f666d672` |
+| `marketing/components/ui/carousel.tsx` | 5727 | `7444126492d4e0b85b1270f0d83a0955350fa95b3d3fb7b88edc2a5c2b4e5d14` |
+| `marketing/components/ui/chart.tsx` | 10581 | `56ab0e0b41f0cc7902414e046ea4f710bdbf0b756028672ea8c7e5137a278f2b` |
+| `marketing/components/ui/checkbox.tsx` | 1538 | `56b2869e5478f38238e6a3d8aefabfbe8af565b38b2ffad06466487b3eacf154` |
+| `marketing/components/ui/collapsible.tsx` | 664 | `3fdf7ef1ca89c4d85de5ecbb25813d0f572003a53b021baf43c5f3523e48ec97` |
+| `marketing/components/ui/combobox.tsx` | 9135 | `282041e2e8c52cc12e7bbc717bbd3f8c9c5ba18e7fa75b97053bc79687e1181e` |
+| `marketing/components/ui/command.tsx` | 5029 | `9c1eae65aa105935a34c6b736f673b71a2ef939dde53dce29d986221edbf1f9f` |
+| `marketing/components/ui/context-menu.tsx` | 8166 | `05c3646b452f5e3b9eb952eeba3d90657606d2b0875cb77652cdb5eadba0eb5c` |
+| `marketing/components/ui/dialog.tsx` | 4087 | `8bc85def62538b4e62e8530c6b0ba167a192c38519c05f104bf6e10de73b811f` |
+| `marketing/components/ui/direction.tsx` | 105 | `2dea8a95accb1723db2454ccc858697d5b1f1454568cf4da5e8fcbd0cf7cc1ee` |
+| `marketing/components/ui/drawer.tsx` | 11396 | `b7ac53d0e5d1fed25fc3f2ac5f5a36e247ca684c677ac376829fa8a7c039b79e` |
+| `marketing/components/ui/dropdown-menu.tsx` | 8809 | `efc088f3d79f64cf96e222701ae23dcf385b53947b3cd57ffb7be6f5dadcbfe2` |
+| `marketing/components/ui/empty.tsx` | 2415 | `bf54bac4881b79f6a53f55e70c18640f58a058add88aed763c71be35c4f64f59` |
+| `marketing/components/ui/field.tsx` | 6303 | `79023ca89aae39f9cffa83a9483c9c672099b4547cc821486283db61c6ae9327` |
+| `marketing/components/ui/hover-card.tsx` | 1863 | `d8cb7270c5893213fc00b5f270f9bc461e2d7ce5b81f77b8778253a1aeda6a2c` |
+| `marketing/components/ui/input-group.tsx` | 5289 | `2e65ddecb4401220be374cc6cfc42344538266cafeb2e590b3c760c7ed6b490a` |
+| `marketing/components/ui/input-otp.tsx` | 2558 | `867f568259caac95f682d128d72e681b3fe7c31701a396eacc9284401d917a6a` |
+| `marketing/components/ui/input.tsx` | 1046 | `6763c86c34c1c07826386d376f5da8fe2e41585bff3615716d5da88915e088d8` |
+| `marketing/components/ui/item.tsx` | 4888 | `9c5e45e6c4aae5b9c4c1304e1f1208d32681ab616a6e0de9de6e0d6b22690592` |
+| `marketing/components/ui/kbd.tsx` | 842 | `bdfb38a4f7b9b604e196b5cee0d86f12311dae72946f0dbf5928c8ad0638178f` |
+| `marketing/components/ui/label.tsx` | 524 | `e4a6fb662c44a44c468d16d79d02b3a3e5bf7b77bd50aef1e586c4d9613df0f6` |
+| `marketing/components/ui/marker.tsx` | 1962 | `cd1e872384cf5001e48b4dc3cc2bb011eba9700561d41c83a89e872b60baf175` |
+| `marketing/components/ui/menubar.tsx` | 8315 | `a3715f8e8b78261f5784929c532e100759c58e831c91e842438730797bc9a124` |
+| `marketing/components/ui/message-scroller.tsx` | 4070 | `9512c586d1b0885cf3ae4f1c3dd4281cbdfec7428fe98ff48a66b4ba2a7319f4` |
+| `marketing/components/ui/message.tsx` | 2246 | `2fedcc64ed8563a44f6697615e77574d96f819fe6e5e2fa8a555e30f8ed6bbd7` |
+| `marketing/components/ui/native-select.tsx` | 2133 | `3aafb74b98c039dae4eb2c64c47ec6f5d61fdc888c057de47550346f702f434b` |
+| `marketing/components/ui/navigation-menu.tsx` | 7436 | `c8e64bf5241145b512ae18f1062da8275691edf927736496a3860bec76ad6fa1` |
+| `marketing/components/ui/pagination.tsx` | 2928 | `1f3c1713e8824cca7c3c0edacf9da7b0114bfda58640771b8fe0bc6179b370ce` |
+| `marketing/components/ui/popover.tsx` | 2586 | `7376624438588e2d64b6e0c5cdf82cbc5fd4530bbcf1f0235c5f3ee08d12e877` |
+| `marketing/components/ui/progress.tsx` | 1751 | `0d8ddec9731940e104b851cf3ac67d2fa8589b289824317a9e8f326e090ba65a` |
+| `marketing/components/ui/radio-group.tsx` | 1843 | `43f2d6c2f5bdd4a26c57d93e6f141be20472f9bb8777d9a0d61cd8a5e281a999` |
+| `marketing/components/ui/resizable.tsx` | 1681 | `ea7b85817d4dc70866e0bcf15264e7e1bd7e1893eb4404261fbc23a4d6ff9029` |
+| `marketing/components/ui/scroll-area.tsx` | 1632 | `730c4cc49f8f1b705eb1389cd32c774056a0a2a7a48a9b092cbe44c608be3a0b` |
+| `marketing/components/ui/select.tsx` | 6700 | `45489c502a21fdd5271481d64ad8f762181c9653d8d26bdc6f75450b78c3c852` |
+| `marketing/components/ui/separator.tsx` | 551 | `92ad5065f03d7edc98f367e729f3ec84ece1d99ee8cd0d3a8137f266d4ab3d8a` |
+| `marketing/components/ui/sheet.tsx` | 4446 | `adb432b6f9d7a4733caa45ba8bf510a8a7ff0f6d0dd3aa1f013959fb61268234` |
+| `marketing/components/ui/sidebar.tsx` | 21779 | `aa3322ca63f098aa1d2abf750f9d097da07362fce25939357f2cefc9b6a03988` |
+| `marketing/components/ui/skeleton.tsx` | 278 | `4c342102b2bbf5bd8c04fa151fe5c13c42faee2f9587a3586c27322020ca35d1` |
+| `marketing/components/ui/slider.tsx` | 1879 | `af657e73d672f4dd205f19abf151d21a172cf36abfdca49fd7014a20e12367a9` |
+| `marketing/components/ui/spinner.tsx` | 360 | `8ddbb330e5564a1f53026da36c2322ed4b027687e91a88f63348ab10f26ae0cb` |
+| `marketing/components/ui/switch.tsx` | 1818 | `04b085443a1c6a72d408e6eb7dd45df881ca27814415b81b39f614806b52c8fc` |
+| `marketing/components/ui/table.tsx` | 2418 | `88f2ba7877eea7f34a5da18b7fa096eb2c7bed602677ce54f5494b494c5afc2e` |
+| `marketing/components/ui/tabs.tsx` | 3510 | `dd914d769bc223b5d5ea56839a7752e534eb475f8d2897d5675606c368bbca1f` |
+| `marketing/components/ui/textarea.tsx` | 847 | `7ae7f0f5d907be24658652c771fee1685193102bf3200aafbf578d144d379fbf` |
+| `marketing/components/ui/toast.tsx` | 7353 | `9126b09f47f0b117bf748cf19aaa4987a1f72d0813d10bfc4b4b0128e6439e48` |
+| `marketing/components/ui/toggle-group.tsx` | 3201 | `9b006523be0fe3230cd75f7adf78a501829d594fd3506c56c55bb38211ff1850` |
+| `marketing/components/ui/toggle.tsx` | 1770 | `6bf41d6f6ffe602c3e28274a82ac029e6ee1331ba3c670a6d814048e1823cc28` |
+| `marketing/components/ui/tooltip.tsx` | 2855 | `b86e51969931c3d62e88d0bdacd1cd8219105dc6d6b6a588a80011bf92e987cd` |
+| `marketing/components.json` | 516 | `9928283696d86836422959a2c520df83a718d31ffbcab533a14ca8dca2c8d475` |
+| `marketing/dist/404.html` | 2986 | `7836077da7c210a3b1ee0c92d21a0eebca23313fe345412e1ce7243d0ee07981` |
+| `marketing/dist/_headers` | 185 | `b3e7ff8ece08e3d772948ba64d60c939858d94e3ea087dacec48193b5cab4756` |
+| `marketing/dist/agb/index.html` | 3120 | `6590d5b933849aa563758b24ec08002b362ed31160966b32092f77aa58660313` |
+| `marketing/dist/app/pro/index.html` | 3120 | `6590d5b933849aa563758b24ec08002b362ed31160966b32092f77aa58660313` |
+| `marketing/dist/assets/head-ClEywaux.js` | 609404 | `f3299795fc13f9464cad583f2358838ad1d4e50f53b4dceab8289dcc798acc9d` |
+| `marketing/dist/assets/index-B5VcnuTb.js` | 25986 | `6a1582c5ab2eab975ba912ab873e80aa2ff9fe3c9bdc6055be7613b046d9c689` |
+| `marketing/dist/assets/index-CTlQCzBS.css` | 22734 | `973994132165e3d8813105149b3e7804704325171330fdf6b79aafbe818a7079` |
+| `marketing/dist/brand/design-reference.jpeg` | 238669 | `2bfb44f2d888e463e7f9e9b581b02d775d59506146aa1d6b5b027e8bef889340` |
+| `marketing/dist/catalog.json` | 297 | `7b8ccc92bc3b74efd64fec82c9b6669908cc83cd8f3a6f8972ce8e9a59badcb3` |
+| `marketing/dist/checkout/index.html` | 3120 | `6590d5b933849aa563758b24ec08002b362ed31160966b32092f77aa58660313` |
+| `marketing/dist/datenschutz/index.html` | 3120 | `6590d5b933849aa563758b24ec08002b362ed31160966b32092f77aa58660313` |
+| `marketing/dist/favicon.svg` | 276 | `ac387f455ca1a1724da9e92a8dd71c20cec454c80fa9476f65da4a08667ad0a8` |
+| `marketing/dist/free/index.html` | 3120 | `6590d5b933849aa563758b24ec08002b362ed31160966b32092f77aa58660313` |
+| `marketing/dist/impressum/index.html` | 3120 | `6590d5b933849aa563758b24ec08002b362ed31160966b32092f77aa58660313` |
+| `marketing/dist/index.html` | 25381 | `b2f5cf22e83fbf5cd026e97580be5f9e86dee1b38056f1312c692d42d6bfb10a` |
+| `marketing/dist/integration-patch.js` | 2672 | `342afd2b3f10199e7078bd2e50a1f3a0e8caeb67eb72ced90cd6282cbf2b5908` |
+| `marketing/dist/kontakt/index.html` | 3120 | `6590d5b933849aa563758b24ec08002b362ed31160966b32092f77aa58660313` |
+| `marketing/dist/lizenzbedingungen/index.html` | 3120 | `6590d5b933849aa563758b24ec08002b362ed31160966b32092f77aa58660313` |
+| `marketing/dist/login/index.html` | 3120 | `6590d5b933849aa563758b24ec08002b362ed31160966b32092f77aa58660313` |
+| `marketing/dist/models/ATTRIBUTION.txt` | 536 | `c7703919fd81cc92c73c6f947cadb242e66e54e50f68e8f921b09139f083e864` |
+| `marketing/dist/models/head.glb` | 404976 | `402b8a8ac9f03232e6d64b5962929703a069daf99d3c49ac8eb0e48bedc9c576` |
+| `marketing/dist/models/night-landscape.png` | 1823026 | `8f05bcac2709089321e59d57dac4dbbe0d6295a6ed5b550c930ea9d530bb274a` |
+| `marketing/dist/portal/index.html` | 3120 | `6590d5b933849aa563758b24ec08002b362ed31160966b32092f77aa58660313` |
+| `marketing/dist/preise/index.html` | 25381 | `b2f5cf22e83fbf5cd026e97580be5f9e86dee1b38056f1312c692d42d6bfb10a` |
+| `marketing/dist/pro/index.html` | 25381 | `b2f5cf22e83fbf5cd026e97580be5f9e86dee1b38056f1312c692d42d6bfb10a` |
+| `marketing/dist/robots.txt` | 26 | `331ea9090db0c9f6f597bd9840fd5b171830f6e0b3ba1cb24dfa91f0c95aedc1` |
+| `marketing/dist/unternehmen/index.html` | 3120 | `6590d5b933849aa563758b24ec08002b362ed31160966b32092f77aa58660313` |
+| `marketing/dist/vergleich/index.html` | 25381 | `b2f5cf22e83fbf5cd026e97580be5f9e86dee1b38056f1312c692d42d6bfb10a` |
+| `marketing/docs/design-corrections.md` | 2339 | `a510a474cb54738bc2b53018382c37abd5dbb4ebcf80e036e676d087b12868bd` |
+| `marketing/docs/validation.md` | 1720 | `a0d0ea74a2a95594726168f1629b3c3c420db666fae4562180ca5c8627fba496` |
+| `marketing/hooks/use-mobile.ts` | 585 | `82bff42ff087bd5dc90a5d17609cc428b8688de92d1333073a839af5ad3c9cbd` |
+| `marketing/index.html` | 4161 | `ca540a7c36893b89f4d31600daad12badadb9f306d6f56e2daa009aa83c4f1d5` |
+| `marketing/lib/utils.ts` | 169 | `9304a861c8673bee09e0f12de31773abbde503b02e59dfd74763ddec2e37cf05` |
+| `marketing/next.config.ts` | 104 | `d063bebef3a4878ae82f9f9547c2c9675b8b6945ab23702932dcb63a011a9fc9` |
+| `marketing/package-lock.json` | 347285 | `e742e43c1184fdbd3566241ac582c54f899cfddbbd0cc29db09e7f89e1521887` |
+| `marketing/package.json` | 1668 | `53f28ed51b220ae668f5b06fc14cfbcfe121e5a7973d6a990b3a48daf67db3b2` |
+| `marketing/public/_headers` | 185 | `b3e7ff8ece08e3d772948ba64d60c939858d94e3ea087dacec48193b5cab4756` |
+| `marketing/public/brand/design-reference.jpeg` | 238669 | `2bfb44f2d888e463e7f9e9b581b02d775d59506146aa1d6b5b027e8bef889340` |
+| `marketing/public/catalog.json` | 297 | `7b8ccc92bc3b74efd64fec82c9b6669908cc83cd8f3a6f8972ce8e9a59badcb3` |
+| `marketing/public/favicon.svg` | 276 | `ac387f455ca1a1724da9e92a8dd71c20cec454c80fa9476f65da4a08667ad0a8` |
+| `marketing/public/integration-patch.js` | 2672 | `342afd2b3f10199e7078bd2e50a1f3a0e8caeb67eb72ced90cd6282cbf2b5908` |
+| `marketing/public/models/ATTRIBUTION.txt` | 536 | `c7703919fd81cc92c73c6f947cadb242e66e54e50f68e8f921b09139f083e864` |
+| `marketing/public/models/head.glb` | 404976 | `402b8a8ac9f03232e6d64b5962929703a069daf99d3c49ac8eb0e48bedc9c576` |
+| `marketing/public/models/night-landscape.png` | 1823026 | `8f05bcac2709089321e59d57dac4dbbe0d6295a6ed5b550c930ea9d530bb274a` |
+| `marketing/public/robots.txt` | 26 | `331ea9090db0c9f6f597bd9840fd5b171830f6e0b3ba1cb24dfa91f0c95aedc1` |
+| `marketing/scripts/finalize.mjs` | 1634 | `145249076356484d516e998abe59aeea6e1eb7f6c3313160d44982fdc03c8024` |
+| `marketing/scripts/redesign.mjs` | 5273 | `51a9424cf1ad8255166fc6702a7255a938a9aa65cc1ce5c94c0852b3dfa48ded` |
+| `marketing/scripts/verify-golden-master.mjs` | 539 | `6032f8feb0a6a841d2b9ecd051bf0f75c43ccbb06ccfca05e93716ccd26d4409` |
+| `marketing/src/content.js` | 13670 | `3134994be96e0c6fc754eb816736807ed83f230cbd240db57cdf361fe722ff22` |
+| `marketing/src/faq.json` | 4883 | `3e0b3cd9431cb78039ad2e0c831f1e2814ad04a71b102c570af3b5b4f117e66e` |
+| `marketing/src/head.js` | 10732 | `e8d0828c440925b530237840c1ca5b25e6cf14cb1554582caa1ffc2b053536f5` |
+| `marketing/src/immersive.css` | 11719 | `a8ae454f459e60cd49caf0d63fbef27fff2d1c3caa8acab0f282840c390d83df` |
+| `marketing/src/main.js` | 7135 | `4e7384af847fe93c63adbb80b8127984093a3dc64c2631b2aefe49df0d33e0de` |
+| `marketing/src/pricing.js` | 1282 | `9fc3a5c2d5b3cf3c77a6d9134a9f793c4a4e2cb335525ef9143ae79a79f1a595` |
+| `marketing/src/style.css` | 12405 | `3d988513866d314d8dbe2f3ea7bd36a2bf2da343cf2eaf32517c1b7c4621b3bc` |
+| `marketing/tests/content.test.mjs` | 2108 | `736ad916eed9b003aa8c80934415d10e440785b59890c9bfdf468b86eb0ac23a` |
+| `marketing/tests/pricing.test.mjs` | 1751 | `4116dfe61d2d27a6199392a4d11368e1b5cffdbdedfd98c33ac602c3b537ec59` |
+| `marketing/tsconfig.json` | 671 | `81aca06cd76be09d9b65c7dff6a031c38664263b506ea792a28f36b17be25f2a` |
+| `marketing/vite.config.ts` | 1807 | `3c028e727dde6c92022197ba7241a424ccd1e3d335f1f46cc9bbf91a8a3a968c` |
+| `marketing/vite.marketing.config.js` | 147 | `a22333fbc3ff592a131ef4e2d9028cec3699059f4d185b38e657d3be58b4d04e` |
+
+## active-operations
+
+27 Dateien.
+
+| Pfad | Größe | SHA256 |
+|---|---:|---|
+| `backup/Dockerfile` | 210 | `ef22a3784a2b0f212c384c90511abcf545463f1012e6e4617eaf10cd44e2d43a` |
+| `backup/backup.sh` | 4663 | `0bd99d4c12eb0e12b8214b0a742e7dce6d45706df01463ed608791efd81d5570` |
+| `monitoring/prometheus.yml` | 383 | `db1365580edfdbfcc703ca7921e623078111e3794a291de81ec1458f39f4fdb2` |
+| `scripts/backup.sh` | 147 | `cc1f10ae86c448fddce11c3e1059368f85133463aedffd3573b76ad1ee1e1d14` |
+| `scripts/bootstrap.sh` | 2154 | `497111c1d25b5e5cd480a3c8b3091af6e80ea2d29e425a13d3ba8e46c4c38f90` |
+| `scripts/browser_marketing_smoke.py` | 4590 | `faf6638591f1aee495efa685bb344d8f1f81a9ec9a85ffca09bd551a2f12831f` |
+| `scripts/browser_runtime_smoke.py` | 7502 | `1802d41cd48ed94611036c4463cf89c18941f172ad7bcb5ae2f2936161287d72` |
+| `scripts/build_pro_runtime.py` | 1829 | `b7ec105e2e04c868c172a89c7ed9661a7aff6f6c5bae809f766474998b5dc9b4` |
+| `scripts/deploy.sh` | 1728 | `313e749dad62cf147a5c1ec9286a18283ff12bd36b85d5d120650bf03f974681` |
+| `scripts/diagnose.sh` | 137 | `86b08add1d4a6baa7b65e86be9ff9d193f1ba16e1e8f965297953d8bfeb127f5` |
+| `scripts/generate_file_manifest.py` | 3183 | `74c64e3a2c7c84ff5011e56ceadeb0315e0a0bb5faa892cdd1ea93805012bfaf` |
+| `scripts/github_preflight.py` | 1743 | `47cb7f3c9453c28bd0b07f76ab8ea4d529fbdff29826d010a61ab3b707845954` |
+| `scripts/github_prepare.sh` | 859 | `b3ba2e8d6107c0d965252660f542d9a551422ad605f73ab67daf9e3c79d7e7cc` |
+| `scripts/prepare_env.py` | 4319 | `1f509fa0d8c62a46bf3f11f1d0f1cbaf9d6ca27938c1134cfe6ce50dfd219350` |
+| `scripts/restore-test.sh` | 1017 | `73a537bc855d33ba896337fe147b2dd07fa1f58a0621a374e174a1d828ec2854` |
+| `scripts/runtime_validate.sh` | 4994 | `0c4a23599508855aa8f88c1b4a5b559daaded248b2bac8d944290224cf74e976` |
+| `scripts/update.sh` | 102 | `75036bf3dc461ba0d307d05faa1d1ad3317c8657071ea532a3b9bc5dfbe2a786` |
+| `scripts/validate_env.py` | 5909 | `fb52eb72749c7ad402885a0ab8ee5f87bc5e0d96f002e3b6318d3b099f391ec1` |
+| `scripts/validate_manifest.py` | 1833 | `ab19a7fab67c3a21c6fd5d979b85716820a66d3550b4412ce3e356ed86c2602f` |
+| `scripts/validate_marketing.py` | 2832 | `1b38181beab072008432474fbf71189f34583f1f4c4f9e17c97487285522fc15` |
+| `scripts/validate_prompt_assets.py` | 2333 | `20bb772ad5f002feea80c4df34bc776b0904d329399eed9d26891fce335bb924` |
+| `scripts/validate_prompt_domain.py` | 12994 | `1eb0def7f86cdf439a3ebe1562c64b1cb2add41cb9cc49a6ec5e9aedd45437ae` |
+| `scripts/validate_python_syntax.py` | 678 | `b926acbde0950f5bb3af7abb3b4cff18e1806ec06113c96cef4f015da44cc222` |
+| `scripts/validate_repo.py` | 3487 | `3fafd265b911c5e83527b0dc68478123008aab3e0d7ff78830386b97dcf11f03` |
+| `scripts/validate_runtime_catalog.py` | 3117 | `83302c1578475251124ffb03abc35ee927de86d762c7d336e8772884b05201d6` |
+| `scripts/validate_static.py` | 22281 | `13e134096521ed213c085b11d3c69acd9d8f01f053d6a49d0685d2abc393cc87` |
+| `scripts/verify_golden_extraction.py` | 3748 | `1aa625fab07622a8a78caf15a574038243ab1d1c621b6baa706dcb4fbaa76c7f` |
+
+## active-product
+
+4 Dateien.
+
+| Pfad | Größe | SHA256 |
+|---|---:|---|
+| `product/golden_masters/SHA256SUMS.txt` | 177 | `b33327f70e01297aa8bf29058651f9bb4a3349731c50533d7415eb0a46bde6ac` |
+| `product/golden_masters/promptmaster_free.html` | 110812 | `aada4fbb3461d3758c48ed808bf018716a53aa33baf81efb058412e63535b0a8` |
+| `product/golden_masters/promptmaster_pro.html` | 233404 | `aa7b2da53ba3cbcf9874b9b6f7381ea4c3e86ee1f9c09db186cbec6876a3c9cf` |
+| `product/runtime/pro_server_bridge.js` | 15382 | `8637cb60a75f7bcf965492d1f7f0876abde37156c957d7289857a54543fe99fb` |
+
+## documentation
+
+19 Dateien.
+
+| Pfad | Größe | SHA256 |
+|---|---:|---|
+| `docs/CHANGE_RC11_PROMPT_DOMAIN.md` | 3180 | `7d97a90f8fca3fc9bb6d6ca9929a9488272ed3bc0db6229e071437004b3f9a97` |
+| `docs/CHANGE_RC12_STUDIO_MCP_CONTENT.md` | 1081 | `bb540eec17e653a6d8ac4ba5cf328561cbc2b667d6b8132ea0a297eba0c87738` |
+| `docs/CHANGE_RC13_RUNTIME_CATALOG_GITHUB.md` | 2158 | `9c83d3fecc1b4c9a7c1e275e3528a72ed8436678a7d91d29997b816a74757490` |
+| `docs/COMPLETE_PROJECT_SUMMARY.md` | 6781 | `41cd168018d66b6d8f383b89c1546506a1b84deab2acfefa2d88bdc8becf48f0` |
+| `docs/FREE_LEGACY_MAPPING_STATUS.md` | 1149 | `82366c94b3f9fef0c66608c8c1fd7787af322d0880f6fe2a91ca4605cf092ab7` |
+| `docs/GITHUB_READY_STATUS.md` | 2484 | `bf7aaa5bf0395e1b8730b163d3654e831385dfddf0bf0a201a7659ce0e29f366` |
+| `docs/GITHUB_TRANSFER.md` | 1010 | `101072d2565c77b4d27c430cda9680476bf836d3e85ed788413bbed69fd66333` |
+| `docs/MERGE_PROVENANCE.md` | 2070 | `7c7f4dcf463bf76697836014550098a37b58c50bb8d43ac99af3a2e386946ee6` |
+| `docs/PRIVACY_DATA_FLOW.md` | 1661 | `9522d161deeb2c9bfd7f3da1cc177d380adb68b08d5da4ef8185edf7cc4dc859` |
+| `docs/PROJECT_CHAT_FORENSICS_V3.md` | 937 | `b716908c1c311afec8d531b34e6706294eb8ae2af13db4004530af3ba7549ab1` |
+| `docs/PROMPT_DOMAIN_AND_COMPOSER.md` | 5754 | `61ff2dbd21ff70f2d74a2ddab6408517f28e79ad3abc2205daf97665739d641e` |
+| `docs/RELEASE_GATES.md` | 2323 | `86508aad791e67d02628c1ff840f681674990e656a83fdbcbe9730e342a77b8a` |
+| `docs/REQUIREMENTS_STATUS_V3.md` | 1387 | `c8a00e1af07c6032f7b45c679f88defc7693e5a6650330dfb5ac2595e2237123` |
+| `docs/SOURCE_OF_TRUTH.md` | 2059 | `01408c2217b1cffe1e4e45ba5418882416f491a466272da55dbb6a27942d63ae` |
+| `docs/recovery/NEW_INPUTS_FORENSIC_ANALYSIS.md` | 40159 | `45a9827be5be654f9fa22533721f72d0a784c3c2ae062db001ca5a58d09f928f` |
+| `docs/recovery/PromptMaster_FORENSIC_LIBRARY_AND_ARCHIVE_SCAN_2026-09-12.md` | 6852 | `15c9e8e9f0cbc4fe7c5dfe0f3e2e872ccdd9e8379059000dda5fdaba32495326` |
+| `docs/recovery/marketing-2026-09-06/content-freeze-reference.md` | 21028 | `b98b8b68ef2acdb8754e20ae195c718526c4b65d3866fed7925cf64310a53058` |
+| `docs/recovery/marketing-2026-09-06/free-live-reference.html` | 71799 | `a7586690d84ad4a549ac7e1498fdd0333b36c9c024ab5b7a98044a2b689b7f52` |
+| `docs/recovery/marketing-2026-09-06/pflichtenheft-reference.md` | 21194 | `8a5e4efcd698eba9f49ea70c76da09765dc5ac30420e7d82e653c7e5ae5a4b5e` |
+
+## historical-reference
+
+36 Dateien.
+
+| Pfad | Größe | SHA256 |
+|---|---:|---|
+| `archive/chat-transfer-2026-09-12/00_START_HERE.md` | 5905 | `88a9eab348c83438fc1ef9fcb05f403d2d1077d9e1c7c2625dd2c77f795083e3` |
+| `archive/chat-transfer-2026-09-12/01_MASTER_SPEC/PromptMaster_MASTER_SPEC_V1.0.md` | 46369 | `e5e6491322fc8d75c5086cc737743cbb55d0e7dcf806e515e5d62a8791d248fc` |
+| `archive/chat-transfer-2026-09-12/02_LATEST_RC8_DOCUMENTATION/AGENTS.md` | 1011 | `144753b64981cac6fb351dfe33cd967a934b2fc6a6ee1b08fa3aecab88a07421` |
+| `archive/chat-transfer-2026-09-12/02_LATEST_RC8_DOCUMENTATION/README.md` | 1145 | `bfb965c00257cb0b5127f9cc10c233fc5dbeea2c2d88b968b7eb89fcbae82336` |
+| `archive/chat-transfer-2026-09-12/02_LATEST_RC8_DOCUMENTATION/SPEC.md` | 46369 | `e5e6491322fc8d75c5086cc737743cbb55d0e7dcf806e515e5d62a8791d248fc` |
+| `archive/chat-transfer-2026-09-12/03_PHASE2_ACTUAL_CODE_BASELINE/PromptMaster_V1_Phase2/AGENTS.md` | 1011 | `144753b64981cac6fb351dfe33cd967a934b2fc6a6ee1b08fa3aecab88a07421` |
+| `archive/chat-transfer-2026-09-12/03_PHASE2_ACTUAL_CODE_BASELINE/PromptMaster_V1_Phase2/Dockerfile` | 481 | `cd5af0352839ad99545a628d5a10cc91ad072fd16ed34f65878f8b579f9948f7` |
+| `archive/chat-transfer-2026-09-12/03_PHASE2_ACTUAL_CODE_BASELINE/PromptMaster_V1_Phase2/README.md` | 3009 | `8f48b1e20e46d013b2455fa0115ac2d026afcead8baf4c820281ec5f0a12be5d` |
+| `archive/chat-transfer-2026-09-12/03_PHASE2_ACTUAL_CODE_BASELINE/PromptMaster_V1_Phase2/SPEC.md` | 46369 | `e5e6491322fc8d75c5086cc737743cbb55d0e7dcf806e515e5d62a8791d248fc` |
+| `archive/chat-transfer-2026-09-12/03_PHASE2_ACTUAL_CODE_BASELINE/PromptMaster_V1_Phase2/compose.staging.yaml` | 430 | `5e80346f0e3e5cd261a1da73b582278fbb84bbe3f085ab0763a074037748c0ab` |
+| `archive/chat-transfer-2026-09-12/03_PHASE2_ACTUAL_CODE_BASELINE/PromptMaster_V1_Phase2/compose.yaml` | 3907 | `291f894c3a805963999662d99d6a50ea92e3e5f1a0ed3675dbd164aa5cfa06b0` |
+| `archive/chat-transfer-2026-09-12/03_PHASE2_ACTUAL_CODE_BASELINE/PromptMaster_V1_Phase2/scripts/bootstrap.sh` | 2677 | `904dcb6ee5a859558ee8eea06fdfff1532bf2c3e7f42c30b0aa4b010437f7f34` |
+| `archive/chat-transfer-2026-09-12/04_UI_PROTOTYPES/PromptMaster_Kundenportal.html` | 42660 | `8472907d76febc0698b82db2fef3b6a8ef73163941152ff98ed415a7f80404be` |
+| `archive/chat-transfer-2026-09-12/04_UI_PROTOTYPES/PromptMaster_UI_Prototype_V1_1_FIXED.zip` | 16023 | `40fed976399b97a7c7d058aa028a257f285407d198acc15f31d9a61490122caa` |
+| `archive/chat-transfer-2026-09-12/04_UI_PROTOTYPES/PromptMaster_netstyle_Admin_V2.html` | 21426 | `75b547934f2166560acc3cd4687cba10b1f061e050e743121ff72584aea6dd42` |
+| `archive/chat-transfer-2026-09-12/04_UI_PROTOTYPES/promptmaster-prototype-v1/README.md` | 1164 | `de2ba8b9407d9b1cebf37b87982a3f12f67e3575f63492fed738d4a4b147bf25` |
+| `archive/chat-transfer-2026-09-12/04_UI_PROTOTYPES/promptmaster-prototype-v1/SPEC.md` | 1371 | `831bc744acfe383312227ccd072fc6b11f75eacd434a9480efc0f8a0b9e40c3d` |
+| `archive/chat-transfer-2026-09-12/04_UI_PROTOTYPES/promptmaster-prototype-v1/app.html` | 42956 | `5092fd0ae3ee0c2a97a41df90587282db6bbfced9cbea4c7803d2e71ea4c1b82` |
+| `archive/chat-transfer-2026-09-12/04_UI_PROTOTYPES/promptmaster-prototype-v1/index.html` | 3088 | `58284c1532110e78a61e76d780b8ebfa04d8e3d0d48fff170145c228bf8ee3d4` |
+| `archive/chat-transfer-2026-09-12/04_UI_PROTOTYPES/promptmaster-prototype-v1/kundenportal.html` | 188 | `fa8c1a28bf28f022ce17510ee5d56979ad3e6b46cf0e5fd7c5935a7c5256684e` |
+| `archive/chat-transfer-2026-09-12/04_UI_PROTOTYPES/promptmaster-prototype-v1/netstyle-admin.html` | 202 | `105251479d81fd8937acd680668e28dcd0da2a29d297c603c0fd82dc4a247d66` |
+| `archive/chat-transfer-2026-09-12/05_DESIGN_REFERENCES/1000279014.png` | 440658 | `afeba547d12ae353dfdb84111473100aa4b680139eaa2eb7fc3689616d849714` |
+| `archive/chat-transfer-2026-09-12/05_DESIGN_REFERENCES/a_detailed_infographic_style_project_plan_and_ui_u.png` | 1905661 | `07589b65f55ff6386edaa6f075c92c41626bbb3e719f8e4438952f3e58ba652d` |
+| `archive/chat-transfer-2026-09-12/05_DESIGN_REFERENCES/a_detailed_ui_design_mockup_image_showing_a_saas_a.png` | 1519230 | `4fd621f222148dc242a0f74bcba251ce2c983a3a5a5ceddee3b0c18b756a12df` |
+| `archive/chat-transfer-2026-09-12/05_DESIGN_REFERENCES/a_large_clean_modern_ui_ux_design_presentation_b.png` | 1888314 | `d3694fe7ecc82688d036ec0065782a0fe91aaef7c87ff1835a36519df34adc49` |
+| `archive/chat-transfer-2026-09-12/05_DESIGN_REFERENCES/a_large_high_resolution_ui_ux_presentation_board.png` | 1989353 | `324d1925c1f28e1081322f2c0b56a83d0d842138e771dee01b00b5362757815a` |
+| `archive/chat-transfer-2026-09-12/05_DESIGN_REFERENCES/a_large_multi_panel_ui_ux_design_presentation_post.png` | 1871105 | `44435260466d04ab52a194ecd6bfa6c48a5d87bc25317276bd11fca6ebcf34a0` |
+| `archive/chat-transfer-2026-09-12/05_DESIGN_REFERENCES/a_wide_high_resolution_infographic_dashboard_ui_u.png` | 1963359 | `87847e3255c3b934cce0a67508851a5a515dcac5e16bfdd74a58ddac904641d7` |
+| `archive/chat-transfer-2026-09-12/05_DESIGN_REFERENCES/logo_crop_final.png` | 27864 | `2224b72940ec799322fe635c9604034e98ad90022c21d79da9f820e4ab40ed0e` |
+| `archive/chat-transfer-2026-09-12/05_DESIGN_REFERENCES/promptmaster_admin_dashboard_auf_desktop_und_mobil.png` | 1528049 | `5b6e3b36d5e56b530965094a8b78b7d7f26c55395b3b33e8539ccb5e34bf00be` |
+| `archive/chat-transfer-2026-09-12/05_DESIGN_REFERENCES/wide_clean_high_tech_ui_dashboard_mockup_collage.png` | 1639712 | `353153fac0b7c6961789988751f374572d20e8c6f0c44982364a5fa233271389` |
+| `archive/chat-transfer-2026-09-12/FILE_INVENTORY.md` | 2491 | `08545951cfbd0a1ad6a51451a52fbd63125aa1f5bf3290a3796d928a9fb5831a` |
+| `archive/chat-transfer-2026-09-12/MANIFEST.json` | 6452 | `95a4c7b9edb6e28df25cf068c45d58b3f3335e92ae5779c0e9814368f656567f` |
+| `archive/chat-transfer-2026-09-12/SHA256SUMS.txt` | 3946 | `6b320c6ace63dc1d724b6fcd69e589230e5b8dffa0bdafb636243b03a40cbeef` |
+| `archive/source-packages/PromptMaster-Commercial-Sicherung-2026-09-06.zip` | 5168035 | `196220ab78971cf86b9e391c3abcd3ebcfa761bd24b1408cfb0d3c7e7d715b3d` |
+| `archive/source-packages/PromptMaster_CHAT_TRANSFER_LATEST_2026-09-12.zip` | 14411033 | `fcf33456e75fb9064ff9fdd01b7ae8307675717f5d57391c7b2981d8c8ee710d` |
+
+## recovery-tool
+
+3 Dateien.
+
+| Pfad | Größe | SHA256 |
+|---|---:|---|
+| `tools/recovery/v13-exact-exporter/PromptMaster_v13_EXAKT_exportieren.cmd` | 289 | `7aad8a18566ddae8bfe9b6fb39fc4a4c9b981474da45e69ad0c3ae56b39843d7` |
+| `tools/recovery/v13-exact-exporter/PromptMaster_v13_EXAKT_exportieren.ps1` | 7330 | `5c4eb8e92cce0c90f7e7df7d920ede7a5fd23c03a2844c2d5679aeaca6871c3a` |
+| `tools/recovery/v13-exact-exporter/README.txt` | 492 | `98d56838c1fd5cef19098eb1c52ecda42e2f4bdb2c9a355f736e961e4975d660` |
+
+## repository-root
+
+13 Dateien.
+
+| Pfad | Größe | SHA256 |
+|---|---:|---|
+| `.dockerignore` | 170 | `597cfecc39c86d5e456fa5acc18a496ca3b9110b0d0ffeb4b0ac6c1093f0b9a1` |
+| `.env.example` | 1156 | `bf18b1efc79ed9573e49a57c5a5b06ac3f9b50502636ff8ed10712b17a9f408e` |
+| `.gitignore` | 253 | `a09cdc3edf945b4b36f8718be7eea84e4eb584f972f9e50f1304f5a6fbe8335d` |
+| `AGENTS.md` | 1887 | `6b0f2950044806d7960ab4fad453a6b6507ef4121a96dbb587da10e08b43e9aa` |
+| `Caddyfile` | 2162 | `77dc0138f4065ec74ac4eeff5da26d6dde7f16e5ffb594f6b9c1b4064059a519` |
+| `Dockerfile` | 632 | `78cdedfea4434d0e4a88d8d7c98796f9d465ca7b8ee4f38d717d3ab972bbf08b` |
+| `Dockerfile.caddy` | 281 | `3222f69f1bd3a6537a6ec6d5d537f8ae5ab7112cc7a7a55a4949fbe8afb5001c` |
+| `README.md` | 6011 | `d8ffbf46bb7cc79061ed383bfd75e81bb21389fc13e32c3974fa08d928ab0c92` |
+| `SPEC.md` | 46369 | `e5e6491322fc8d75c5086cc737743cbb55d0e7dcf806e515e5d62a8791d248fc` |
+| `compose.production.yaml` | 149 | `892d9a05cb62b80de558541dc45b5804a72a39b4541fc23c6a63b0d5801f8f1c` |
+| `compose.staging.yaml` | 654 | `45328bdb64d1d4dc2dc46abe30f54f84c589d56e516c00fb5fd1d5a492b4737b` |
+| `compose.yaml` | 3998 | `5fec5bd964eb764b0f973a06e47206d34016c8b42ef0b7b6c7aa3adeeb2e162d` |
+| `requirements.txt` | 191 | `23117a2335b255385b99fda6ec768badceb54454972b51c91cc5dd05a3053c44` |
+

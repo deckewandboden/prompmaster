@@ -1,0 +1,4 @@
+{% extends 'ns_admin/base.html' %}{% block content %}
+<div class="page-head"><div><h1>{{ product.name }}</h1><div class="sub">Produktcode {{ product.code }}</div></div><a class="btn primary" href="{% url 'ns_admin:product_price_add' product.id %}">+ Preisversion anlegen</a></div>
+<div class="grid two"><div class="card"><h2>Produktkonfiguration</h2><form method="post" class="form">{% csrf_token %}{{ form.as_p }}<div class="form-actions"><button class="btn primary" type="submit">Speichern</button></div></form></div><div class="card"><h2>Preisversionen</h2>{% for price in prices %}<div class="statusrow"><span>{{ price.get_price_type_display }} · ab {{ price.valid_from|date:'d.m.Y' }}</span><strong>{{ price.gross_amount }} {{ price.currency }}</strong></div>{% empty %}<p class="muted">Keine Preisversionen.</p>{% endfor %}</div></div>
+{% endblock %}

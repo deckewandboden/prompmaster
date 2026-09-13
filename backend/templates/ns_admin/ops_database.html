@@ -1,0 +1,3 @@
+{% extends 'ns_admin/base.html' %}{% block content %}
+<div class="page-head"><div><h1>Datenbank</h1><div class="sub">Read-only PostgreSQL-Betriebsdaten.</div></div><a class="btn secondary" href="{% url 'ns_admin:ops' %}">Systemübersicht</a></div><div class="card"><div class="statusrow"><span>Status</span><strong>{{ database.status }}</strong></div><div class="statusrow"><span>Version</span><strong class="wrap-value">{{ database.version|default:'–' }}</strong></div><div class="statusrow"><span>DB-Größe</span><strong>{{ database.size_bytes|default:'–' }} Bytes</strong></div><div class="statusrow"><span>Verbindungen</span><strong>{{ database.connections|default:'–' }}</strong></div></div>
+{% endblock %}

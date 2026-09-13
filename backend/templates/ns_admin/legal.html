@@ -1,0 +1,1 @@
+{% extends 'ns_admin/base.html' %}{% block content %}<h1>Datenschutz & Recht</h1><div class="card">{% for d in documents %}<div class="statusrow"><span>{{ d.doc_type }} · {{ d.version }}</span><strong>{% if d.active %}Aktiv{% else %}Inaktiv{% endif %}</strong></div>{% empty %}<p class="muted">Noch keine Rechtstexte hinterlegt.</p>{% endfor %}</div>{% endblock %}

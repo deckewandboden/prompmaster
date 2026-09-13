@@ -1,0 +1,20 @@
+services:
+  mailpit:
+    image: axllent/mailpit:latest
+    ports: ["127.0.0.1:8025:8025"]
+    networks: [app]
+  web:
+    volumes:
+      - ./backend:/app
+      - static_data:/app/staticfiles
+      - media_data:/app/media
+      - backup_status:/var/run/promptmaster-backup:ro
+    depends_on:
+      mailpit:
+        condition: service_started
+  worker:
+    volumes:
+      - ./backend:/app
+  beat:
+    volumes:
+      - ./backend:/app

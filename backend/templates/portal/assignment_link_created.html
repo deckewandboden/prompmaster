@@ -1,0 +1,4 @@
+{% extends 'portal/base.html' %}{% block content %}
+<div class="page-head"><div><h1>Zuordnungslink erzeugt</h1><div class="sub">{{ member.user.full_name }} · {{ license.license_number }}</div></div></div>
+<div class="card"><div class="alert ok"><strong>Der Link wurde per E-Mail versendet.</strong></div><p>Gültig bis {{ expires_at|date:"d.m.Y H:i" }}. Der Link ist tenantgebunden, für genau diesen Benutzer bestimmt und nur einmal verwendbar.</p><label class="form"><span>Link zur Kontrolle</span><input readonly value="{{ claim_url }}"></label><p><a class="btn secondary" href="{% url 'portal:team_member' member.user_id %}">Zurück zum Benutzer</a></p></div>
+{% endblock %}

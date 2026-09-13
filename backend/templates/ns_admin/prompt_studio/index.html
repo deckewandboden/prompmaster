@@ -1,0 +1,14 @@
+{% extends 'ns_admin/base.html' %}{% block content %}
+<div class="page-head"><div><h1>Prompt Studio</h1><div class="sub">Zentrale Prompt-Domain · 34 Apps · 194 PM20-Aufgaben · versioniert und serverseitig komponiert.</div></div><div class="page-actions"><a class="btn secondary" href="{% url 'prompt_studio:quality' %}">Qualität</a></div></div>
+<form method="get" class="toolbar"><input name="q" value="{{ q }}" placeholder="Task-ID, App oder Titel suchen …"><button class="btn primary" type="submit">Suchen</button>{% if q %}<a class="btn secondary" href="{% url 'prompt_studio:index' %}">Zurücksetzen</a>{% endif %}</form>
+<div class="tablewrap"><table><thead><tr><th>Task</th><th>Anwendung</th><th>Veröffentlicht</th><th>Offene Versionen</th><th>Qualität</th><th>Aktion</th></tr></thead><tbody>
+{% for row in rows %}<tr>
+<td data-label="Task"><strong>{{ row.definition.task_id }}</strong>{% if row.published %}<div class="small muted">{{ row.published.title }}</div>{% endif %}</td>
+<td data-label="Anwendung">{{ row.definition.application.name }}</td>
+<td data-label="Veröffentlicht">{% if row.published %}<span class="badge ok">v{{ row.published.version }} · PUBLISHED</span>{% else %}<span class="badge bad">keine</span>{% endif %}</td>
+<td data-label="Offene Versionen">{{ row.draft_count }}</td>
+<td data-label="Qualität">{% if row.quality %}<span class="badge {% if row.quality.status == 'OK' %}ok{% elif row.quality.status == 'WATCH' %}info{% elif row.quality.status == 'WARN' %}warn{% else %}bad{% endif %}">{{ row.quality.status }}{% if row.quality.recent_average %} · {{ row.quality.recent_average }}★{% endif %}</span>{% else %}<span class="badge info">noch keine Daten</span>{% endif %}</td>
+<td data-label="Aktion"><a class="btn secondary sm" href="{% url 'prompt_studio:definition' row.definition.task_id %}">Öffnen</a></td>
+</tr>{% empty %}<tr><td colspan="6" class="empty">Keine Prompt-Aufgaben gefunden.</td></tr>{% endfor %}
+</tbody></table></div>
+{% endblock %}

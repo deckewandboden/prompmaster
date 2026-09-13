@@ -1,0 +1,15 @@
+{% extends 'ns_admin/base.html' %}{% load pm %}{% block content %}
+<div class="page-head"><div><h1>{{ title }}</h1><div class="sub">Serverseitige Suche, Filter, Sortierung und Pagination.</div></div></div>
+{% if customer_tabs %}<nav class="subnav" aria-label="Kundentyp"><a class="{% if customer_type == 'company' %}active{% endif %}" href="{% url 'ns_admin:customers' %}">Unternehmen</a><a class="{% if customer_type == 'private' %}active{% endif %}" href="{% url 'ns_admin:private_customers' %}">Privatkunden</a></nav>{% endif %}
+{% include 'includes/grid_toolbar.html' %}
+<div class="tablewrap"><table><thead><tr>
+{% for key,label,sortkey in columns %}{% col_visible request key as visible %}{% if visible %}<th scope="col">{% if sortkey %}{% sort_url request sortkey grid.sort grid.direction as su %}<a href="{{ su }}">{{ label }}{% if grid.sort == sortkey %} <span aria-label="{% if grid.direction == 'asc' %}aufsteigend{% else %}absteigend{% endif %}">{% if grid.direction == 'asc' %}↑{% else %}↓{% endif %}</span>{% endif %}</a>{% else %}{{ label }}{% endif %}</th>{% endif %}{% endfor %}
+{% if detail_route %}<th scope="col">Aktion</th>{% endif %}
+</tr></thead><tbody>
+{% for row in grid.page %}<tr>
+  {% for key,label,sortkey in columns %}{% col_visible request key as visible %}{% if visible %}<td data-label="{{ label }}">{{ row|attr:key }}</td>{% endif %}{% endfor %}
+  {% if detail_route %}<td data-label="Aktion"><a class="btn secondary sm" href="{% url detail_route row.pk %}">Öffnen</a></td>{% endif %}
+</tr>{% empty %}<tr><td colspan="99" class="empty">Keine Datensätze für die aktuelle Auswahl.</td></tr>{% endfor %}
+</tbody></table></div>
+{% include 'includes/pagination.html' %}
+{% endblock %}

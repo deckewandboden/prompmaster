@@ -1,0 +1,4 @@
+{% extends 'portal/base.html' %}{% block content %}
+<div class="page-head"><div><h1>Lizenzzuordnung bestätigen</h1><div class="sub">Sicherer PromptMaster-Zuordnungslink.</div></div></div>
+<div class="card"><p>Die vorbereitete Lizenz wird Ihrem aktuell angemeldeten Benutzerkonto zugeordnet. Der Link kann anschließend nicht erneut verwendet werden.</p><form method="post">{% csrf_token %}<button class="btn primary" type="submit">Lizenz jetzt zuordnen</button> <a class="btn secondary" href="{% url 'portal:dashboard' %}">Abbrechen</a></form></div>
+{% endblock %}

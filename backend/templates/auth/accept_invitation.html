@@ -1,0 +1,13 @@
+{% extends 'base.html' %}{% load static %}{% block body %}
+<div class="login-wrap"><div class="login-card">
+<div class="login-logo"><img src="{% static 'brand/promptmaster-logo-reference.png' %}" width="239" height="47" alt="PromptMaster by netstyle"></div>
+<h1>Einladung annehmen</h1><p class="muted">{{ invitation.company.name }} lädt Sie zu PromptMaster ein.</p>
+<form method="post" class="form">{% csrf_token %}
+{{ form.non_field_errors }}
+<label>Vorname{{ form.first_name }}{{ form.first_name.errors }}</label>
+<label>Nachname{{ form.last_name }}{{ form.last_name.errors }}</label>
+<label>Passwort{{ form.password }}{{ form.password.errors }}</label>
+<label class="check-row">{{ form.accept_terms }} <span>Ich akzeptiere die <a href="{% url 'legal_public' 'terms' %}" target="_blank" rel="noopener">AGB</a>.</span></label>{{ form.accept_terms.errors }}
+<label class="check-row">{{ form.accept_privacy }} <span>Ich habe die <a href="{% url 'legal_public' 'privacy' %}" target="_blank" rel="noopener">Datenschutzerklärung</a> zur Kenntnis genommen.</span></label>{{ form.accept_privacy.errors }}
+<button class="btn primary" type="submit">Konto anlegen &amp; beitreten</button>
+</form></div></div>{% endblock %}

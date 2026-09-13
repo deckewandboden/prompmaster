@@ -1,0 +1,1 @@
+{% extends 'ns_admin/base.html' %}{% block content %}<h1>API & Integrationen</h1><div class="card"><h2>Service Accounts</h2>{% for a in accounts %}<div class="statusrow"><span>{{ a.name }}</span><strong>{{ a.scopes|join:', ' }}</strong></div>{% empty %}<p class="muted">Noch keine Service Accounts.</p>{% endfor %}</div>{% endblock %}

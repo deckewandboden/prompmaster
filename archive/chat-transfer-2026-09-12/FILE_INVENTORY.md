@@ -1,0 +1,35 @@
+# Datei-Inventar
+
+- `00_START_HERE.md` — 5905 Byte
+- `01_MASTER_SPEC/PromptMaster_MASTER_SPEC_V1.0.md` — 46369 Byte
+- `02_LATEST_RC8_DOCUMENTATION/AGENTS.md` — 1011 Byte
+- `02_LATEST_RC8_DOCUMENTATION/README.md` — 1145 Byte
+- `02_LATEST_RC8_DOCUMENTATION/SPEC.md` — 46369 Byte
+- `03_PHASE2_ACTUAL_CODE_BASELINE/PromptMaster_V1_Phase2/AGENTS.md` — 1011 Byte
+- `03_PHASE2_ACTUAL_CODE_BASELINE/PromptMaster_V1_Phase2/Dockerfile` — 481 Byte
+- `03_PHASE2_ACTUAL_CODE_BASELINE/PromptMaster_V1_Phase2/README.md` — 3009 Byte
+- `03_PHASE2_ACTUAL_CODE_BASELINE/PromptMaster_V1_Phase2/SPEC.md` — 46369 Byte
+- `03_PHASE2_ACTUAL_CODE_BASELINE/PromptMaster_V1_Phase2/compose.staging.yaml` — 430 Byte
+- `03_PHASE2_ACTUAL_CODE_BASELINE/PromptMaster_V1_Phase2/compose.yaml` — 3907 Byte
+- `03_PHASE2_ACTUAL_CODE_BASELINE/PromptMaster_V1_Phase2/scripts/bootstrap.sh` — 2677 Byte
+- `04_UI_PROTOTYPES/PromptMaster_Kundenportal.html` — 42660 Byte
+- `04_UI_PROTOTYPES/PromptMaster_UI_Prototype_V1_1_FIXED.zip` — 16023 Byte
+- `04_UI_PROTOTYPES/PromptMaster_netstyle_Admin_V2.html` — 21426 Byte
+- `04_UI_PROTOTYPES/promptmaster-prototype-v1/README.md` — 1164 Byte
+- `04_UI_PROTOTYPES/promptmaster-prototype-v1/SPEC.md` — 1371 Byte
+- `04_UI_PROTOTYPES/promptmaster-prototype-v1/app.html` — 42956 Byte
+- `04_UI_PROTOTYPES/promptmaster-prototype-v1/index.html` — 3088 Byte
+- `04_UI_PROTOTYPES/promptmaster-prototype-v1/kundenportal.html` — 188 Byte
+- `04_UI_PROTOTYPES/promptmaster-prototype-v1/netstyle-admin.html` — 202 Byte
+- `05_DESIGN_REFERENCES/1000279014.png` — 440658 Byte
+- `05_DESIGN_REFERENCES/a_detailed_infographic_style_project_plan_and_ui_u.png` — 1905661 Byte
+- `05_DESIGN_REFERENCES/a_detailed_ui_design_mockup_image_showing_a_saas_a.png` — 1519230 Byte
+- `05_DESIGN_REFERENCES/a_large_clean_modern_ui_ux_design_presentation_b.png` — 1888314 Byte
+- `05_DESIGN_REFERENCES/a_large_high_resolution_ui_ux_presentation_board.png` — 1989353 Byte
+- `05_DESIGN_REFERENCES/a_large_multi_panel_ui_ux_design_presentation_post.png` — 1871105 Byte
+- `05_DESIGN_REFERENCES/a_wide_high_resolution_infographic_dashboard_ui_u.png` — 1963359 Byte
+- `05_DESIGN_REFERENCES/logo_crop_final.png` — 27864 Byte
+- `05_DESIGN_REFERENCES/promptmaster_admin_dashboard_auf_desktop_und_mobil.png` — 1528049 Byte
+- `05_DESIGN_REFERENCES/wide_clean_high_tech_ui_dashboard_mockup_collage.png` — 1639712 Byte
+- `MANIFEST.json` — 6452 Byte
+- `SHA256SUMS.txt` — 3946 Byte

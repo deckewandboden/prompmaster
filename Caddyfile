@@ -1,0 +1,78 @@
+{
+    admin off
+}
+
+# Internal-only health listener. It isn't published to a host port; Django and
+# other containers on the edge network can probe Caddy without Docker socket access.
+:8081 {
+    respond /healthz 200
+}
+
+{$CADDY_DOMAIN} {
+    encode zstd gzip
+    header {
+        -Server
+        X-Content-Type-Options nosniff
+        Referrer-Policy strict-origin-when-cross-origin
+        X-Frame-Options DENY
+        Permissions-Policy "camera=(), microphone=(), geolocation=()"
+        Strict-Transport-Security "max-age=31536000; includeSubDomains"
+    }
+    request_body {
+        max_size 10MB
+    }
+
+    # Compatibility routes from the recovered marketing frontend to the
+    # canonical Django application routes.
+    handle /login* {
+        redir /auth/login/ 302
+    }
+    handle /checkout* {
+        redir /portal/licenses/buy/ 302
+    }
+    handle /app/pro* {
+        redir /pro/ 302
+    }
+    handle /portal {
+        redir /portal/dashboard/ 302
+    }
+    handle /portal/ {
+        redir /portal/dashboard/ 302
+    }
+
+    handle /catalog.json {
+        reverse_proxy web:8000
+    }
+
+    # Prometheus scrapes the web container directly. Never proxy internal
+    # metrics from the public virtual host.
+    handle /metrics/internal/* {
+        respond 404
+    }
+
+    # Django collected static files.
+    handle_path /static/* {
+        root * /srv/static
+        file_server
+        header Cache-Control "public, max-age=31536000, immutable"
+    }
+
+    # Server-side application surfaces. These routes are intentionally handled
+    # before the static marketing fallback so authentication/licensing can
+    # never be bypassed by a stale HTML file in marketing/dist.
+    @django {
+        path /auth /auth/* /free /free/* /pro /pro/* /portal/* /ns-admin /ns-admin/* /api /api/* /health/* /legal/*
+    }
+    handle @django {
+        reverse_proxy web:8000
+    }
+
+    # Public Marketing-/Vertriebsfrontend. marketing/dist is committed as a
+    # deployable artifact and independently reproducible from marketing/src.
+    handle {
+        root * /srv/marketing
+        try_files {path} {path}/index.html /index.html
+        file_server
+    }
+    log
+}

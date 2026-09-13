@@ -1,0 +1,48 @@
+{% extends 'ns_admin/base.html' %}{% load pm %}{% block content %}
+<div class="page-head"><div><h1>{{ customer.name }}</h1><div class="sub">{{ customer.customer_number }} · {{ title }}</div></div><a class="btn secondary" href="{% url 'ns_admin:customers' %}">Zur Kundenliste</a></div>
+{% include 'ns_admin/includes_customer_nav.html' %}
+{% include 'includes/grid_toolbar.html' %}
+<div class="tablewrap"><table><thead><tr>
+{% if kind == 'users' %}
+  {% sort_url request 'name' grid.sort grid.direction as s_name %}<th><a href="{{ s_name }}">Name{% if grid.sort == 'name' %} {% if grid.direction == 'asc' %}↑{% else %}↓{% endif %}{% endif %}</a></th>
+  {% sort_url request 'email' grid.sort grid.direction as s_email %}<th><a href="{{ s_email }}">E-Mail{% if grid.sort == 'email' %} {% if grid.direction == 'asc' %}↑{% else %}↓{% endif %}{% endif %}</a></th>
+  {% sort_url request 'role' grid.sort grid.direction as s_role %}<th><a href="{{ s_role }}">Rolle{% if grid.sort == 'role' %} {% if grid.direction == 'asc' %}↑{% else %}↓{% endif %}{% endif %}</a></th><th>Status</th>
+{% elif kind == 'licenses' %}
+  {% sort_url request 'number' grid.sort grid.direction as s_number %}<th><a href="{{ s_number }}">Lizenz-ID{% if grid.sort == 'number' %} {% if grid.direction == 'asc' %}↑{% else %}↓{% endif %}{% endif %}</a></th><th>Produkt</th>
+  {% sort_url request 'expiry' grid.sort grid.direction as s_expiry %}<th><a href="{{ s_expiry }}">Ablauf{% if grid.sort == 'expiry' %} {% if grid.direction == 'asc' %}↑{% else %}↓{% endif %}{% endif %}</a></th>
+  {% sort_url request 'status' grid.sort grid.direction as s_status %}<th><a href="{{ s_status }}">Status{% if grid.sort == 'status' %} {% if grid.direction == 'asc' %}↑{% else %}↓{% endif %}{% endif %}</a></th><th>Aktion</th>
+{% elif kind == 'devices' %}
+  {% sort_url request 'device' grid.sort grid.direction as s_device %}<th><a href="{{ s_device }}">Gerät{% if grid.sort == 'device' %} {% if grid.direction == 'asc' %}↑{% else %}↓{% endif %}{% endif %}</a></th>
+  {% sort_url request 'user' grid.sort grid.direction as s_user %}<th><a href="{{ s_user }}">Benutzer{% if grid.sort == 'user' %} {% if grid.direction == 'asc' %}↑{% else %}↓{% endif %}{% endif %}</a></th><th>System</th>
+  {% sort_url request 'last' grid.sort grid.direction as s_last %}<th><a href="{{ s_last }}">Zuletzt{% if grid.sort == 'last' %} {% if grid.direction == 'asc' %}↑{% else %}↓{% endif %}{% endif %}</a></th>
+{% elif kind == 'orders' %}
+  {% sort_url request 'number' grid.sort grid.direction as s_number %}<th><a href="{{ s_number }}">Bestellung{% if grid.sort == 'number' %} {% if grid.direction == 'asc' %}↑{% else %}↓{% endif %}{% endif %}</a></th>
+  {% sort_url request 'date' grid.sort grid.direction as s_date %}<th><a href="{{ s_date }}">Datum{% if grid.sort == 'date' %} {% if grid.direction == 'asc' %}↑{% else %}↓{% endif %}{% endif %}</a></th>
+  {% sort_url request 'amount' grid.sort grid.direction as s_amount %}<th><a href="{{ s_amount }}">Betrag{% if grid.sort == 'amount' %} {% if grid.direction == 'asc' %}↑{% else %}↓{% endif %}{% endif %}</a></th>
+  {% sort_url request 'status' grid.sort grid.direction as s_status %}<th><a href="{{ s_status }}">Status{% if grid.sort == 'status' %} {% if grid.direction == 'asc' %}↑{% else %}↓{% endif %}{% endif %}</a></th><th>Aktion</th>
+{% elif kind == 'payments' %}
+  {% sort_url request 'date' grid.sort grid.direction as s_date %}<th><a href="{{ s_date }}">Datum{% if grid.sort == 'date' %} {% if grid.direction == 'asc' %}↑{% else %}↓{% endif %}{% endif %}</a></th><th>Payment-ID</th><th>Bestellung</th>
+  {% sort_url request 'amount' grid.sort grid.direction as s_amount %}<th><a href="{{ s_amount }}">Betrag{% if grid.sort == 'amount' %} {% if grid.direction == 'asc' %}↑{% else %}↓{% endif %}{% endif %}</a></th>
+  {% sort_url request 'status' grid.sort grid.direction as s_status %}<th><a href="{{ s_status }}">Status{% if grid.sort == 'status' %} {% if grid.direction == 'asc' %}↑{% else %}↓{% endif %}{% endif %}</a></th>
+{% elif kind == 'emails' %}
+  {% sort_url request 'date' grid.sort grid.direction as s_date %}<th><a href="{{ s_date }}">Datum{% if grid.sort == 'date' %} {% if grid.direction == 'asc' %}↑{% else %}↓{% endif %}{% endif %}</a></th>
+  {% sort_url request 'recipient' grid.sort grid.direction as s_recipient %}<th><a href="{{ s_recipient }}">Empfänger{% if grid.sort == 'recipient' %} {% if grid.direction == 'asc' %}↑{% else %}↓{% endif %}{% endif %}</a></th><th>Betreff</th>
+  {% sort_url request 'status' grid.sort grid.direction as s_status %}<th><a href="{{ s_status }}">Status{% if grid.sort == 'status' %} {% if grid.direction == 'asc' %}↑{% else %}↓{% endif %}{% endif %}</a></th>
+{% elif kind == 'audit' %}
+  {% sort_url request 'time' grid.sort grid.direction as s_time %}<th><a href="{{ s_time }}">Zeit{% if grid.sort == 'time' %} {% if grid.direction == 'asc' %}↑{% else %}↓{% endif %}{% endif %}</a></th><th>Akteur</th>
+  {% sort_url request 'action' grid.sort grid.direction as s_action %}<th><a href="{{ s_action }}">Aktion{% if grid.sort == 'action' %} {% if grid.direction == 'asc' %}↑{% else %}↓{% endif %}{% endif %}</a></th><th>Objekt</th>
+{% endif %}
+</tr></thead><tbody>
+{% for row in grid.page %}<tr>
+{% if kind == 'users' %}<td data-label="Name">{{ row.user.full_name }}</td><td data-label="E-Mail">{{ row.user.email }}</td><td data-label="Rolle">{{ row.get_role_display }}</td><td data-label="Status">{% if row.active %}<span class="badge ok">Aktiv</span>{% else %}<span class="badge bad">Inaktiv</span>{% endif %}</td>
+{% elif kind == 'licenses' %}<td data-label="Lizenz-ID"><strong>{{ row.license_number }}</strong></td><td data-label="Produkt">{{ row.product.name }}</td><td data-label="Ablauf">{{ row.valid_until|date:'d.m.Y H:i' }}</td><td data-label="Status">{{ row.get_status_display }}</td><td data-label="Aktion"><a class="btn secondary sm" href="{% url 'ns_admin:license_detail' row.id %}">Öffnen</a></td>
+{% elif kind == 'devices' %}<td data-label="Gerät">{{ row.display_name }}</td><td data-label="Benutzer">{{ row.user.email }}</td><td data-label="System">{{ row.os_family }} · {{ row.browser_family }}</td><td data-label="Zuletzt">{{ row.last_seen_at|date:'d.m.Y H:i' }}</td>
+{% elif kind == 'orders' %}<td data-label="Bestellung">{{ row.order_number }}</td><td data-label="Datum">{{ row.created_at|date:'d.m.Y H:i' }}</td><td data-label="Betrag">{{ row.gross_total }} {{ row.currency }}</td><td data-label="Status">{{ row.get_status_display }}</td><td data-label="Aktion"><a class="btn secondary sm" href="{% url 'ns_admin:order_detail' row.id %}">Öffnen</a></td>
+{% elif kind == 'payments' %}<td data-label="Datum">{{ row.created_at|date:'d.m.Y H:i' }}</td><td data-label="Payment-ID">{{ row.provider_payment_id }}</td><td data-label="Bestellung"><a href="{% url 'ns_admin:order_detail' row.order_id %}">{{ row.order.order_number }}</a></td><td data-label="Betrag">{{ row.amount }} {{ row.currency }}</td><td data-label="Status">{{ row.status }}</td>
+{% elif kind == 'emails' %}<td data-label="Datum">{{ row.created_at|date:'d.m.Y H:i' }}</td><td data-label="Empfänger">{{ row.recipient }}</td><td data-label="Betreff">{{ row.subject }}</td><td data-label="Status">{{ row.status }}</td>
+{% elif kind == 'audit' %}<td data-label="Zeit">{{ row.created_at|date:'d.m.Y H:i:s' }}</td><td data-label="Akteur">{{ row.actor.email|default:'System' }}</td><td data-label="Aktion">{{ row.action }}</td><td data-label="Objekt">{{ row.object_type }} · {{ row.object_id }}</td>
+{% endif %}
+</tr>{% empty %}<tr><td colspan="99" class="empty">Keine Datensätze für die aktuelle Auswahl.</td></tr>{% endfor %}
+</tbody></table></div>
+{% include 'includes/pagination.html' %}
+{% endblock %}

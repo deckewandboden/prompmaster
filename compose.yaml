@@ -1,0 +1,142 @@
+name: promptmaster
+services:
+  postgres:
+    image: postgres:18-alpine
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    volumes: [postgres_data:/var/lib/postgresql/data]
+    networks: [data]
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+    restart: unless-stopped
+  redis:
+    image: redis:7-alpine
+    command: ["redis-server","--appendonly","yes","--save","60","1000"]
+    volumes: [redis_data:/data]
+    networks: [data]
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+    restart: unless-stopped
+  web:
+    build: .
+    env_file: .env
+    depends_on:
+      postgres: {condition: service_healthy}
+      redis: {condition: service_healthy}
+    volumes:
+      - static_data:/app/staticfiles
+      - backup_status:/var/run/promptmaster-backup:ro
+    networks: [edge, app, data, monitor]
+    healthcheck:
+      test: ["CMD-SHELL", "curl -fsS http://localhost:8000/health/live/ || exit 1"]
+      interval: 15s
+      timeout: 5s
+      retries: 10
+    restart: unless-stopped
+  worker:
+    build: .
+    command: ["celery","-A","config","worker","-l","INFO","--concurrency=2"]
+    env_file: .env
+    depends_on:
+      postgres: {condition: service_healthy}
+      redis: {condition: service_healthy}
+    volumes:
+      - backup_status:/var/run/promptmaster-backup:ro
+    networks: [app, data, monitor]
+    restart: unless-stopped
+  beat:
+    build: .
+    command: ["celery","-A","config","beat","-l","INFO"]
+    env_file: .env
+    depends_on:
+      postgres: {condition: service_healthy}
+      redis: {condition: service_healthy}
+    networks: [app, data]
+    restart: unless-stopped
+  caddy:
+    build:
+      context: .
+      dockerfile: Dockerfile.caddy
+    env_file: .env
+    ports: ["80:80","443:443"]
+    volumes:
+      - caddy_data:/data
+      - caddy_config:/config
+      - static_data:/srv/static:ro
+    depends_on:
+      web: {condition: service_healthy}
+    networks: [edge, monitor]
+    restart: unless-stopped
+  prometheus:
+    image: prom/prometheus:v3.13.3
+    command: ["--config.file=/etc/prometheus/prometheus.yml","--storage.tsdb.retention.time=30d"]
+    volumes:
+      - ./monitoring/prometheus.yml:/etc/prometheus/prometheus.yml:ro
+      - prometheus_data:/prometheus
+    networks: [monitor]
+    restart: unless-stopped
+  node-exporter:
+    image: prom/node-exporter:v1.12.1
+    command: ["--path.rootfs=/host"]
+    pid: host
+    volumes: ["/:/host:ro,rslave"]
+    networks: [monitor]
+    restart: unless-stopped
+  cadvisor:
+    image: gcr.io/cadvisor/cadvisor:v0.60.5
+    privileged: true
+    volumes:
+      - /:/rootfs:ro
+      - /var/run:/var/run:ro
+      - /sys:/sys:ro
+      - /var/lib/docker/:/var/lib/docker:ro
+      - /dev/disk/:/dev/disk:ro
+    networks: [monitor]
+    restart: unless-stopped
+  postgres-exporter:
+    image: prometheuscommunity/postgres-exporter:v0.20.1
+    environment:
+      DATA_SOURCE_NAME: postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@postgres:5432/${POSTGRES_DB}?sslmode=disable
+    depends_on:
+      postgres: {condition: service_healthy}
+    networks: [data, monitor]
+    restart: unless-stopped
+  backup:
+    build: ./backup
+    env_file: .env
+    environment:
+      PGHOST: postgres
+      PGPORT: 5432
+      PGDATABASE: ${POSTGRES_DB}
+      PGUSER: ${POSTGRES_USER}
+      PGPASSWORD: ${POSTGRES_PASSWORD}
+      BACKUP_INTERVAL_SECONDS: 21600
+      PRUNE_INTERVAL_SECONDS: 86400
+      RESTORE_TEST_INTERVAL_SECONDS: 2592000
+    depends_on:
+      postgres: {condition: service_healthy}
+    volumes:
+      - backup_status:/status
+    networks: [app, data]
+    restart: unless-stopped
+volumes:
+  postgres_data:
+  redis_data:
+  static_data:
+  caddy_data:
+  caddy_config:
+  prometheus_data:
+  backup_status:
+networks:
+  edge:
+  app:
+  data: {internal: true}
+  monitor: {internal: true}

@@ -1,0 +1,10 @@
+FROM node:22-alpine AS marketing-build
+WORKDIR /src
+COPY marketing/package.json marketing/package-lock.json ./
+RUN npm ci
+COPY marketing/ ./
+RUN npm test && npm run build
+
+FROM caddy:2-alpine
+COPY Caddyfile /etc/caddy/Caddyfile
+COPY --from=marketing-build /src/dist /srv/marketing

@@ -1,0 +1,1 @@
+{% extends 'portal/base.html' %}{% block content %}<h1>{{ title }}</h1><div class="card"><form method="post" class="form">{% csrf_token %}{{ form.as_p }}<button class="btn primary">Speichern</button></form></div>{% endblock %}

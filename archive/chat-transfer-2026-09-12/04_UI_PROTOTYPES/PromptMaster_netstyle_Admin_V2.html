@@ -1,0 +1,289 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>PromptMaster – netstyle Admin-Backend</title>
+<style>
+:root{
+ --nav:#06192c;--nav2:#0a2a49;--bg:#f4f7fb;--panel:#fff;--line:#dde7f0;
+ --text:#13263d;--muted:#6b7d90;--blue:#0b6df6;--cyan:#16cae8;--purple:#6d4aff;
+ --green:#20b779;--yellow:#f3a72b;--red:#ef4f5f;--shadow:0 10px 28px rgba(5,32,58,.08)
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;font-family:Segoe UI,Arial,sans-serif;background:var(--bg);color:var(--text)}
+a{color:inherit}
+.layout{display:grid;grid-template-columns:255px minmax(0,1fr);min-height:100vh}
+aside{background:linear-gradient(180deg,var(--nav),#03111f);color:white;padding:18px 14px;position:sticky;top:0;height:100vh;overflow:auto}
+.brand{display:flex;gap:11px;align-items:center;font-size:19px;font-weight:800;margin-bottom:22px}
+.mark{width:30px;height:30px;position:relative}
+.mark:before,.mark:after{content:"";position:absolute;border-style:solid}
+.mark:before{border-width:15px 0 15px 24px;border-color:transparent transparent transparent var(--cyan)}
+.mark:after{border-width:9px 0 9px 15px;border-color:transparent transparent transparent var(--blue);left:2px;top:6px}
+.brand small{display:block;font-size:9px;letter-spacing:1.3px;font-weight:500;opacity:.72}
+nav a{display:flex;gap:10px;align-items:center;text-decoration:none;color:#dce8f3;padding:10px 12px;border-radius:10px;margin:4px 0;font-size:14px}
+nav a:hover,nav a:first-child{background:linear-gradient(90deg,#0c65e6,#12bddc);color:#fff}
+.ico{width:19px;text-align:center}
+.side-foot{border-top:1px solid rgba(255,255,255,.12);padding-top:15px;margin-top:24px;color:#9eb4c8;font-size:11px}
+main{min-width:0}
+.top{height:68px;background:white;border-bottom:1px solid var(--line);display:flex;align-items:center;gap:14px;padding:0 24px;position:sticky;top:0;z-index:5}
+.search{flex:1;max-width:700px;background:#f8fbfd;border:1px solid var(--line);border-radius:10px;padding:11px 14px;color:#718397}
+.profile{margin-left:auto;display:flex;gap:10px;align-items:center}
+.avatar{width:38px;height:38px;border-radius:50%;display:grid;place-items:center;background:linear-gradient(135deg,var(--blue),var(--purple));color:white;font-weight:800}
+.role{font-size:11px;color:var(--muted)}
+.content{max-width:1540px;margin:auto;padding:24px}
+section{scroll-margin-top:85px;margin-bottom:22px}
+.head{display:flex;justify-content:space-between;gap:16px;align-items:flex-start;margin-bottom:16px}
+h1{margin:0;font-size:30px} h2{margin:0 0 12px;font-size:20px} h3{margin:0 0 8px}
+.sub{color:var(--muted);margin-top:5px}
+.grid{display:grid;gap:14px}
+.kpis{grid-template-columns:repeat(4,minmax(0,1fr))}
+.two{grid-template-columns:1.25fr .75fr}
+.three{grid-template-columns:repeat(3,minmax(0,1fr))}
+.four{grid-template-columns:repeat(4,minmax(0,1fr))}
+.card{background:white;border:1px solid var(--line);border-radius:16px;box-shadow:var(--shadow);padding:17px}
+.value{font-size:30px;font-weight:900;margin:7px 0 2px}
+.delta{font-size:12px;color:var(--green);font-weight:800}
+.muted{color:var(--muted)} .small{font-size:12px}
+.badge{display:inline-flex;padding:5px 9px;border-radius:999px;font-size:12px;font-weight:800}
+.ok{background:#e9f9f2;color:#168756}.warn{background:#fff4dc;color:#a96800}.bad{background:#ffeaee;color:#c63949}.info{background:#eaf3ff;color:#165db8}.pro{background:#f0ecff;color:#6243d2}
+.alert{border:1px solid #ffe0a1;background:#fff8e8;padding:12px 14px;border-radius:12px;margin-bottom:9px}
+.tablewrap{overflow:auto;border:1px solid var(--line);border-radius:12px;background:white}
+table{width:100%;border-collapse:collapse;font-size:13px}
+th,td{padding:11px 12px;border-bottom:1px solid #edf2f6;text-align:left;white-space:nowrap}
+th{background:#f8fbfd;color:#6b7d90;font-size:11px;text-transform:uppercase}
+tr:last-child td{border-bottom:0}
+.statusrow{display:flex;justify-content:space-between;gap:12px;padding:9px 0;border-bottom:1px solid #edf2f6}.statusrow:last-child{border-bottom:0}
+.chart{height:210px;border-radius:12px;background:
+linear-gradient(to top,rgba(11,109,246,.12),transparent 70%),
+repeating-linear-gradient(to right,#eaf0f6 0 1px,transparent 1px 20%),
+repeating-linear-gradient(to top,#eaf0f6 0 1px,transparent 1px 25%);
+position:relative}
+.chart:after{content:"";position:absolute;left:6%;right:5%;bottom:18%;height:3px;background:var(--blue);transform:skewY(-7deg);box-shadow:70px -28px 0 var(--blue),140px -8px 0 var(--blue),210px -56px 0 var(--blue),280px -31px 0 var(--blue)}
+.donut{width:165px;height:165px;margin:auto;border-radius:50%;background:conic-gradient(var(--purple) 0 55%,var(--cyan) 55% 95%,var(--yellow) 95%);position:relative}
+.donut:after{content:"4.892\A Lizenzen";white-space:pre;position:absolute;inset:34px;background:white;border-radius:50%;display:grid;place-items:center;text-align:center;font-weight:900}
+.bar{height:8px;background:#e8eef4;border-radius:99px;overflow:hidden;margin-top:7px}.bar span{display:block;height:100%;background:linear-gradient(90deg,var(--blue),var(--cyan))}
+.pill{border:1px solid var(--line);border-radius:10px;padding:9px 11px;background:#f8fbfd}
+.module-title{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px}
+.anchor-note{font-size:11px;color:var(--muted)}
+footer{text-align:center;color:#718397;padding:20px}
+.mobile-title{display:none}
+
+@media(max-width:1100px){
+ .layout{grid-template-columns:78px 1fr}
+ aside{padding:14px 9px}
+ .brand span:last-child, nav a span:last-child, .side-foot{display:none}
+ nav a{justify-content:center;padding:12px}
+ .kpis,.four{grid-template-columns:repeat(2,1fr)}
+ .two,.three{grid-template-columns:1fr}
+}
+@media(max-width:700px){
+ .layout{display:block}
+ aside{display:none}
+ .top{height:auto;padding:10px 12px;background:var(--nav);color:white}
+ .search,.profile .meta{display:none}
+ .mobile-title{display:block;font-weight:800}
+ .profile{margin-left:auto}
+ .content{padding:12px}
+ .kpis,.four{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+ .card{padding:13px;border-radius:13px}
+ .value{font-size:24px}
+ h1{font-size:24px}
+ .head{align-items:center}
+ table{font-size:12px}
+ th,td{padding:9px}
+}
+</style>
+</head>
+<body>
+<div class="layout">
+<aside>
+  <div class="brand"><span class="mark"></span><span>PROMPTMASTER<small>NETSTYLE ADMIN</small></span></div>
+  <nav>
+    <a href="#dashboard"><span class="ico">⌂</span><span>Übersicht</span></a>
+    <a href="#kunden"><span class="ico">♙</span><span>Kunden</span></a>
+    <a href="#lizenzen"><span class="ico">▣</span><span>Lizenzen</span></a>
+    <a href="#zahlungen"><span class="ico">▧</span><span>Bestellungen & Zahlungen</span></a>
+    <a href="#produkte"><span class="ico">◈</span><span>Produkte & Preise</span></a>
+    <a href="#email"><span class="ico">✉</span><span>E-Mail / Reminder</span></a>
+    <a href="#mollie"><span class="ico">◉</span><span>Mollie</span></a>
+    <a href="#statistik"><span class="ico">▥</span><span>Statistiken</span></a>
+    <a href="#betrieb"><span class="ico">⚙</span><span>System & Betrieb</span></a>
+    <a href="#api"><span class="ico">◇</span><span>API & Integrationen</span></a>
+    <a href="#recht"><span class="ico">♢</span><span>Datenschutz & Recht</span></a>
+    <a href="#protokolle"><span class="ico">▤</span><span>Protokolle</span></a>
+    <a href="#rollen"><span class="ico">♙</span><span>Benutzer & Rollen</span></a>
+    <a href="#einstellungen"><span class="ico">⚙</span><span>Einstellungen</span></a>
+  </nav>
+  <div class="side-foot">netstyle Admin-Backend<br>statischer UI-Prototyp V2</div>
+</aside>
+
+<main>
+<div class="top">
+  <div class="mobile-title">PROMPTMASTER ADMIN</div>
+  <div class="search">🔍 Kunde, Benutzer, Lizenz-ID oder E-Mail suchen …</div>
+  <div class="profile"><span>🔔</span><span class="avatar">MW</span><div class="meta"><strong>Markus Wacker</strong><div class="role">Superadmin</div></div></div>
+</div>
+
+<div class="content">
+
+<section id="dashboard">
+ <div class="head"><div><h1>Dashboard</h1><div class="sub">Geschäft, Handlungsbedarf und Systemstatus auf einen Blick.</div></div><span class="badge ok">● System gesund</span></div>
+ <div class="grid kpis">
+  <div class="card"><div>Kunden gesamt</div><div class="value">1.248</div><div class="delta">↑ 12 %</div></div>
+  <div class="card"><div>Aktive Lizenzen</div><div class="value">4.892</div><div class="delta">↑ 8 %</div></div>
+  <div class="card"><div>Ablauf &lt;30 Tage</div><div class="value">17</div><div class="small muted">42 laufen &lt;60 Tage ab</div></div>
+  <div class="card"><div>Umsatz 30 Tage</div><div class="value">12.384 €</div><div class="delta">↑ 18 %</div></div>
+ </div>
+ <div class="grid three" style="margin-top:14px">
+   <div class="card"><h2>Umsatzentwicklung</h2><div class="chart"></div></div>
+   <div class="card"><h2>Lizenzen nach Produkt</h2><div class="donut"></div></div>
+   <div class="card"><h2>Handlungsbedarf</h2>
+    <div class="alert">⚠ 5 Lizenzen laufen in weniger als 30 Tagen ab</div>
+    <div class="alert">⚠ 2 Mollie-Zahlungen fehlgeschlagen</div>
+    <div class="alert">⚠ 1 Chargeback muss geprüft werden</div>
+    <div class="alert">⚠ 1 Backup-Warnung</div>
+   </div>
+ </div>
+ <div class="grid two" style="margin-top:14px">
+  <div class="card"><h2>Letzte Bestellungen</h2>
+   <div class="tablewrap"><table><thead><tr><th>Datum</th><th>Kunde</th><th>Produkt</th><th>Betrag</th><th>Status</th></tr></thead>
+   <tbody><tr><td>11.09.2026</td><td>Muster GmbH</td><td>5 × Pro</td><td>179,40 €</td><td><span class="badge ok">Bezahlt</span></td></tr>
+   <tr><td>10.09.2026</td><td>Meier KG</td><td>2 × Pro</td><td>71,76 €</td><td><span class="badge ok">Bezahlt</span></td></tr>
+   <tr><td>10.09.2026</td><td>Schmidt GmbH</td><td>1 × Pro</td><td>35,88 €</td><td><span class="badge bad">Fehlgeschlagen</span></td></tr></tbody></table></div>
+  </div>
+  <div class="card"><h2>Nächste Lizenzabläufe</h2>
+   <div class="tablewrap"><table><thead><tr><th>Kunde</th><th>Benutzer</th><th>Ablauf</th><th>Status</th></tr></thead>
+   <tbody><tr><td>Muster GmbH</td><td>Max Mustermann</td><td>29.09.2026</td><td><span class="badge warn">18 Tage</span></td></tr>
+   <tr><td>Meier GmbH</td><td>Anna Müller</td><td>08.10.2026</td><td><span class="badge warn">27 Tage</span></td></tr></tbody></table></div>
+  </div>
+ </div>
+</section>
+
+<section id="kunden">
+ <div class="module-title"><div><h2>Kunden</h2><div class="sub">Privat- und Firmenkunden, Administratoren, Benutzer und Historie.</div></div><span class="anchor-note">Kundenverwaltung</span></div>
+ <div class="card tablewrap"><table><thead><tr><th>Kunde</th><th>Typ</th><th>Firmen-Admin</th><th>E-Mail</th><th>Lizenzen</th><th>Status</th></tr></thead>
+ <tbody>
+ <tr><td><strong>Muster GmbH</strong></td><td>Firma</td><td>Max Mustermann</td><td>max@mustergmbh.de</td><td>5</td><td><span class="badge ok">Aktiv</span></td></tr>
+ <tr><td><strong>Meier KG</strong></td><td>Firma</td><td>Anna Müller</td><td>anna@meier.de</td><td>2</td><td><span class="badge ok">Aktiv</span></td></tr>
+ <tr><td><strong>Schmidt GmbH</strong></td><td>Firma</td><td>Tom Becker</td><td>tom@schmidt.de</td><td>1</td><td><span class="badge warn">Zahlung offen</span></td></tr>
+ <tr><td><strong>Julia Sommer</strong></td><td>Privat</td><td>–</td><td>julia@example.de</td><td>1</td><td><span class="badge ok">Aktiv</span></td></tr>
+ </tbody></table></div>
+</section>
+
+<section id="lizenzen">
+ <div class="module-title"><div><h2>Lizenzverwaltung</h2><div class="sub">Alle Seats mit individuellen 365-Tage-Laufzeiten.</div></div></div>
+ <div class="card tablewrap"><table><thead><tr><th>Lizenz-ID</th><th>Kunde</th><th>Benutzer</th><th>Produkt</th><th>Ablauf</th><th>Status</th></tr></thead>
+ <tbody>
+ <tr><td><strong>PM-PRO-00421</strong></td><td>Muster GmbH</td><td>Max Mustermann</td><td><span class="badge pro">Pro</span></td><td>01.09.2027</td><td><span class="badge ok">Aktiv</span></td></tr>
+ <tr><td><strong>PM-PRO-00423</strong></td><td>Muster GmbH</td><td>Nicht vergeben</td><td><span class="badge pro">Pro</span></td><td>01.09.2027</td><td><span class="badge info">Frei</span></td></tr>
+ <tr><td><strong>PM-PRO-00614</strong></td><td>Muster GmbH</td><td>Nicht vergeben</td><td><span class="badge pro">Pro</span></td><td>10.10.2026</td><td><span class="badge warn">T−30</span></td></tr>
+ </tbody></table></div>
+</section>
+
+<section id="zahlungen">
+ <div class="module-title"><div><h2>Bestellungen & Zahlungen</h2><div class="sub">Mollie Payments, Refunds und Chargebacks.</div></div></div>
+ <div class="grid four">
+  <div class="card"><div>Bezahlt</div><div class="value">412</div></div>
+  <div class="card"><div>Offen</div><div class="value">7</div></div>
+  <div class="card"><div>Fehlgeschlagen</div><div class="value">2</div></div>
+  <div class="card"><div>Chargebacks</div><div class="value">1</div></div>
+ </div>
+</section>
+
+<section id="produkte">
+ <div class="module-title"><div><h2>Produkte & Preise</h2><div class="sub">Heute Free/Pro, später beliebig erweiterbar.</div></div></div>
+ <div class="grid three">
+  <div class="card"><span class="badge info">AKTIV</span><h3 style="margin-top:12px">PromptMaster Free</h3><div class="value">0 €</div><div class="muted">ohne Konto</div></div>
+  <div class="card"><span class="badge pro">AKTIV</span><h3 style="margin-top:12px">PromptMaster Pro</h3><div class="value">35,88 €</div><div class="statusrow"><span>Verlängerung</span><strong>35,88 €</strong></div><div class="statusrow"><span>Laufzeit</span><strong>365 Tage</strong></div><div class="statusrow"><span>Geräte</span><strong>2</strong></div><div class="statusrow"><span>Reminder</span><strong>T−60 / T−30</strong></div></div>
+  <div class="card"><span class="badge info">ERWEITERBAR</span><h3 style="margin-top:12px">Weitere Produkte</h3><p class="muted">Ultra, Premium, Team oder andere Software später ohne Umbau der Lizenzengine.</p></div>
+ </div>
+</section>
+
+<section id="email">
+ <h2>E-Mail / Reminder</h2>
+ <div class="grid two">
+  <div class="card"><h3>Vorlagen</h3><div class="statusrow"><span>Einladung</span><span class="badge ok">Aktiv</span></div><div class="statusrow"><span>T−60 Reminder</span><span class="badge ok">Aktiv</span></div><div class="statusrow"><span>T−30 Reminder</span><span class="badge ok">Aktiv</span></div><div class="statusrow"><span>Lizenz abgelaufen</span><span class="badge ok">Aktiv</span></div></div>
+  <div class="card"><h3>Mail-System</h3><div class="statusrow"><span>Staging</span><strong>Mailpit</strong></div><div class="statusrow"><span>Produktion</span><strong>Microsoft 365 / Graph vorgesehen</strong></div><div class="statusrow"><span>Letzter Versand</span><span class="badge ok">OK</span></div></div>
+ </div>
+</section>
+
+<section id="mollie">
+ <h2>Mollie</h2>
+ <div class="grid two">
+  <div class="card"><h3>Konfiguration</h3><div class="statusrow"><span>Modus</span><strong>TEST</strong></div><div class="statusrow"><span>Profile ID</span><strong>pfl_••••••••</strong></div><div class="statusrow"><span>Test API Key</span><strong>••••••••••••</strong></div><div class="statusrow"><span>Live API Key</span><strong>nicht gesetzt</strong></div></div>
+  <div class="card"><h3>Webhook</h3><div class="statusrow"><span>Status</span><span class="badge ok">OK</span></div><div class="statusrow"><span>Endpoint</span><strong>/api/webhooks/mollie/</strong></div><div class="statusrow"><span>Letztes Event</span><strong>vor 3 Minuten</strong></div></div>
+ </div>
+</section>
+
+<section id="statistik">
+ <h2>Statistiken</h2>
+ <div class="grid four">
+  <div class="card"><div>Neue Kunden</div><div class="value">+42</div></div>
+  <div class="card"><div>Verlängerungsquote</div><div class="value">81 %</div></div>
+  <div class="card"><div>Refund-Quote</div><div class="value">1,3 %</div></div>
+  <div class="card"><div>Ø Lizenzen / Firma</div><div class="value">3,9</div></div>
+ </div>
+</section>
+
+<section id="betrieb">
+ <div class="head"><div><h2>System & Betrieb</h2><div class="sub">Operations-Dashboard für Technik und Wartung.</div></div><span class="badge ok">● System gesund</span></div>
+ <div class="grid four">
+  <div class="card"><div>CPU</div><div class="value">18 %</div><div class="muted small">10-Min-Ø 24 %</div></div>
+  <div class="card"><div>RAM</div><div class="value">5,2 / 16 GB</div><div class="bar"><span style="width:33%"></span></div></div>
+  <div class="card"><div>Storage</div><div class="value">87 / 240 GB</div><div class="bar"><span style="width:36%"></span></div></div>
+  <div class="card"><div>Datenbank</div><div class="value">1,42 GB</div><div class="muted small">11 / 100 Verbindungen</div></div>
+ </div>
+ <div class="grid two" style="margin-top:14px">
+  <div class="card"><h3>Dienste</h3><div class="statusrow"><span>Django</span><span class="badge ok">Healthy</span></div><div class="statusrow"><span>PostgreSQL</span><span class="badge ok">Healthy</span></div><div class="statusrow"><span>Worker</span><span class="badge ok">Healthy</span></div><div class="statusrow"><span>Caddy</span><span class="badge ok">Healthy</span></div><div class="statusrow"><span>Operations API</span><span class="badge ok">Healthy</span></div></div>
+  <div class="card"><h3>Backup & Restore</h3><div class="statusrow"><span>Letztes Backup</span><strong>heute 02:00</strong></div><div class="statusrow"><span>Größe</span><strong>1,82 GB</strong></div><div class="statusrow"><span>Restore-Test</span><span class="badge ok">OK</span></div><div class="statusrow"><span>Letzter Restore-Test</span><strong>01.09.2026</strong></div></div>
+ </div>
+</section>
+
+<section id="api">
+ <h2>API & Integrationen</h2>
+ <div class="grid two">
+  <div class="card"><h3>Operations API</h3><div class="statusrow"><span>/api/v1/ops/health</span><span class="badge ok">Aktiv</span></div><div class="statusrow"><span>/api/v1/ops/system</span><span class="badge ok">Aktiv</span></div><div class="statusrow"><span>/api/v1/ops/database</span><span class="badge ok">Aktiv</span></div><div class="statusrow"><span>/api/v1/ops/backups</span><span class="badge ok">Aktiv</span></div><div class="statusrow"><span>/api/v1/ops/maintenance-snapshot</span><span class="badge ok">Aktiv</span></div></div>
+  <div class="card"><h3>Techniker-Dashboard Connector</h3><div class="statusrow"><span>Service Account</span><strong>technikerportal-maintenance</strong></div><div class="statusrow"><span>Scope</span><strong>ops.read</strong></div><p class="muted small">Nur Betriebsdaten. Keine Kunden-, Zahlungs- oder Schreibrechte.</p></div>
+ </div>
+</section>
+
+<section id="recht">
+ <h2>Datenschutz & Recht</h2>
+ <div class="grid two">
+  <div class="card"><h3>Rechtsdokumente</h3><div class="statusrow"><span>AGB 1.0</span><span class="badge ok">Aktiv</span></div><div class="statusrow"><span>Datenschutz 1.0</span><span class="badge ok">Aktiv</span></div><div class="statusrow"><span>Widerruf 1.0</span><span class="badge ok">Aktiv</span></div></div>
+  <div class="card"><h3>Retention / Löschung</h3><div class="statusrow"><span>Gerätedaten nach Löschung</span><strong>löschen</strong></div><div class="statusrow"><span>gesetzlich erforderliche Daten</span><strong>separat aufbewahren</strong></div><div class="statusrow"><span>Löschanfragen offen</span><strong>0</strong></div></div>
+ </div>
+</section>
+
+<section id="protokolle">
+ <h2>Protokolle / Auditlog</h2>
+ <div class="card tablewrap"><table><thead><tr><th>Zeit</th><th>Benutzer</th><th>Rolle</th><th>Aktion</th><th>Objekt</th><th>Änderung</th></tr></thead>
+ <tbody><tr><td>11.09.2026 09:43</td><td>Markus Wacker</td><td>Superadmin</td><td>Preis geändert</td><td>PromptMaster Pro</td><td>35,88 € → 39,88 €</td></tr>
+ <tr><td>11.09.2026 08:22</td><td>Support User</td><td>Vertrieb/Support</td><td>Gerät entfernt</td><td>Max Mustermann</td><td>Büro-PC</td></tr></tbody></table></div>
+</section>
+
+<section id="rollen">
+ <h2>Benutzer & Rollen</h2>
+ <div class="grid three">
+  <div class="card"><h3>Superadmin</h3><p>Uneingeschränkte Rechte.</p><span class="badge warn">2FA Pflicht</span></div>
+  <div class="card"><h3>Vertrieb / Support</h3><p>Kunden, Lizenzen, Geräte, Zahlungen und Support.</p><span class="badge warn">2FA Pflicht</span></div>
+  <div class="card"><h3>Technik / Operations</h3><p>Monitoring, Backups, API, Logs und Systemstatus.</p><span class="badge warn">2FA Pflicht</span></div>
+ </div>
+</section>
+
+<section id="einstellungen">
+ <h2>Einstellungen</h2>
+ <div class="grid two">
+  <div class="card"><h3>Lizenz-Defaults</h3><div class="statusrow"><span>Laufzeit</span><strong>365 Tage</strong></div><div class="statusrow"><span>Geräte je Benutzer</span><strong>2</strong></div><div class="statusrow"><span>Einladung</span><strong>24 Stunden</strong></div><div class="statusrow"><span>Reminder</span><strong>T−60 / T−30</strong></div></div>
+  <div class="card"><h3>Support</h3><div class="statusrow"><span>Kontaktformular</span><span class="badge ok">Aktiv</span></div><div class="statusrow"><span>Empfänger</span><strong>promptmaster@netstyle.de</strong></div><div class="statusrow"><span>Eingangsbestätigung</span><span class="badge ok">Aktiv</span></div></div>
+ </div>
+</section>
+
+</div>
+<footer>PromptMaster · netstyle Admin-Backend · statischer UI-Prototyp V2</footer>
+</main>
+</div>
+</body>
+</html>

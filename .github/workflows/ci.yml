@@ -1,0 +1,149 @@
+name: PromptMaster CI
+
+on:
+  push:
+    branches: ['**']
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    services:
+      postgres:
+        image: postgres:18
+        env:
+          POSTGRES_DB: promptmaster
+          POSTGRES_USER: promptmaster
+          POSTGRES_PASSWORD: testpass1234567890
+        ports: ['5432:5432']
+        options: >-
+          --health-cmd "pg_isready -U promptmaster -d promptmaster"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+      redis:
+        image: redis:7
+        ports: ['6379:6379']
+        options: >-
+          --health-cmd "redis-cli ping"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+    env:
+      ENVIRONMENT: development
+      DJANGO_SECRET_KEY: ci-only-secret-key-ci-only-secret-key-ci-only
+      APP_ENCRYPTION_KEY: 3fDltyLLocPcNedSN3wwVTiyNlFCsVyTcdi-pP-WiJY=
+      POSTGRES_DB: promptmaster
+      POSTGRES_USER: promptmaster
+      POSTGRES_PASSWORD: testpass1234567890
+      POSTGRES_HOST: 127.0.0.1
+      REDIS_URL: redis://127.0.0.1:6379/0
+      ALLOWED_HOSTS: localhost,127.0.0.1,testserver
+      SECURE_SSL_REDIRECT: 0
+      SESSION_COOKIE_SECURE: 0
+      CSRF_COOKIE_SECURE: 0
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+          cache: pip
+
+      - name: Set up Node for runtime JS syntax guard
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Static repository guards
+        run: python scripts/github_preflight.py
+
+      - name: Marketing tests, lint and build
+        working-directory: marketing
+        run: |
+          npm ci
+          npm test
+          npm run lint
+          npm run build
+
+      - name: Install Python dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+          pip check
+
+      - name: Check migration drift
+        working-directory: backend
+        run: python manage.py makemigrations --check --dry-run
+
+      - name: Migrate and seed
+        working-directory: backend
+        run: |
+          python manage.py migrate --noinput
+          python manage.py seed_defaults
+          python manage.py seed_prompt_catalog
+          python manage.py seed_faqs
+
+      - name: Prompt platform runtime sanity
+        working-directory: backend
+        run: python manage.py validate_prompt_runtime
+
+      - name: Django checks and tests
+        working-directory: backend
+        run: |
+          python manage.py check
+          python manage.py test --verbosity 2
+
+      - name: Compose configuration
+        env:
+          CADDY_DOMAIN: localhost
+          CSRF_TRUSTED_ORIGINS: http://localhost
+          INITIAL_ADMIN_EMAIL: admin@local.invalid
+          INITIAL_ADMIN_PASSWORD: ci-only-admin-password-12345
+          RESTIC_REPOSITORY: /tmp/promptmaster-restic
+          RESTIC_PASSWORD: ci-only-restic-password-12345
+        run: |
+          cp .env.example .env
+          docker compose -f compose.yaml -f compose.staging.yaml config >/dev/null
+
+      - name: Collect static
+        working-directory: backend
+        run: python manage.py collectstatic --noinput
+
+      - name: Docker builds
+        run: |
+          docker build -t promptmaster-ci:${{ github.sha }} .
+          docker build -f Dockerfile.caddy -t promptmaster-caddy-ci:${{ github.sha }} .
+
+  browser-smoke:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Build marketing
+        working-directory: marketing
+        run: |
+          npm ci
+          npm run build
+      - name: Install Playwright
+        run: |
+          python -m pip install --upgrade pip
+          pip install "playwright>=1.50,<2"
+          python -m playwright install --with-deps chromium
+      - name: Pro runtime browser smoke
+        run: python scripts/browser_runtime_smoke.py
+      - name: Marketing browser smoke
+        run: python scripts/browser_marketing_smoke.py

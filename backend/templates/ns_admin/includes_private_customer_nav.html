@@ -1,0 +1,9 @@
+<nav class="subnav" aria-label="Privatkundenbereiche">
+<a class="{% if request.resolver_match.url_name == 'private_customer_detail' %}active{% endif %}" href="{% url 'ns_admin:private_customer_detail' profile.id %}">Übersicht</a>
+<a class="{% if request.resolver_match.url_name == 'private_customer_licenses' %}active{% endif %}" href="{% url 'ns_admin:private_customer_licenses' profile.id %}">Lizenzen</a>
+<a class="{% if request.resolver_match.url_name == 'private_customer_devices' %}active{% endif %}" href="{% url 'ns_admin:private_customer_devices' profile.id %}">Geräte</a>
+<a class="{% if request.resolver_match.url_name == 'private_customer_orders' %}active{% endif %}" href="{% url 'ns_admin:private_customer_orders' profile.id %}">Bestellungen</a>
+<a class="{% if request.resolver_match.url_name == 'private_customer_payments' %}active{% endif %}" href="{% url 'ns_admin:private_customer_payments' profile.id %}">Zahlungen</a>
+<a class="{% if request.resolver_match.url_name == 'private_customer_emails' %}active{% endif %}" href="{% url 'ns_admin:private_customer_emails' profile.id %}">E-Mail</a>
+<a class="{% if request.resolver_match.url_name == 'private_customer_audit' %}active{% endif %}" href="{% url 'ns_admin:private_customer_audit' profile.id %}">Audit</a>
+</nav>

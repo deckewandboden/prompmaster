@@ -1,0 +1,82 @@
+[
+  {
+    "question": "Was ist PromptMaster?",
+    "answer": "PromptMaster ist ein strukturierter Prompt-Assistent für Microsoft Copilot. Du wählst Anwendung, Aufgabe und weitere Anforderungen aus. PromptMaster erstellt daraus einen vollständigen Prompt, den du anschließend in Microsoft Copilot verwenden kannst."
+  },
+  {
+    "question": "Ist PromptMaster selbst eine KI?",
+    "answer": "Nein.\nPromptMaster verwendet keine eigene KI, um deine Aufgabe auszuführen. Die Prompts werden regel- und bausteinbasiert erstellt.\nDie eigentliche KI-Ausführung erfolgt anschließend in Microsoft Copilot."
+  },
+  {
+    "question": "Benötige ich Microsoft Copilot?",
+    "answer": "Ja.\nPromptMaster erstellt den Prompt. Für dessen Ausführung benötigst du einen passenden Zugang zu Microsoft Copilot.\nPromptMaster enthält keine Microsoft-Copilot-Lizenz."
+  },
+  {
+    "question": "Funktioniert PromptMaster mit Copilot Chat?",
+    "answer": "Ja.\nPromptMaster berücksichtigt sowohl Anwendungsfälle für Copilot Chat als auch Funktionen, die eine entsprechende Microsoft-365-Copilot-Umgebung voraussetzen."
+  },
+  {
+    "question": "Was kostet PromptMaster Free?",
+    "answer": "PromptMaster Free ist kostenlos."
+  },
+  {
+    "question": "Was kostet PromptMaster Pro?",
+    "answer": "PromptMaster Pro kostet 2,99 € inklusive MwSt. pro Benutzer und Monat bei zwölf Monaten Laufzeit.\nDie Abrechnung erfolgt jährlich im Voraus: 35,88 € inklusive MwSt. pro Benutzer und Jahr."
+  },
+  {
+    "question": "Wird monatlich abgebucht?",
+    "answer": "Nein.\nDer monatliche Preis dient als transparente Preisangabe.\nDie Abrechnung erfolgt für die vollständige zwölfmonatige Lizenzperiode."
+  },
+  {
+    "question": "Verlängert sich PromptMaster Pro automatisch?",
+    "answer": "In der ersten Version nein.\nVor Ablauf erhält der zuständige Administrator Erinnerungen und kann die Lizenz aktiv um weitere zwölf Monate verlängern."
+  },
+  {
+    "question": "Was passiert, wenn ich nicht verlängere?",
+    "answer": "Nach Ablauf wird der Zugriff auf PromptMaster Pro gesperrt.\nDein Kundenkonto bleibt bestehen, sodass du die Lizenz auch später erneut verlängern kannst."
+  },
+  {
+    "question": "Kann ich später weitere Lizenzen kaufen?",
+    "answer": "Ja.\nZusätzliche Pro-Lizenzen können jederzeit über das bestehende Kundenportal erworben werden."
+  },
+  {
+    "question": "Muss ich dafür meine Firma erneut registrieren?",
+    "answer": "Nein.\nZusätzliche Lizenzen werden deinem bestehenden Unternehmenskonto hinzugefügt."
+  },
+  {
+    "question": "Kann ich Lizenzen unterschiedlichen Mitarbeitern zuweisen?",
+    "answer": "Ja.\nDer Unternehmensadministrator verwaltet die gekauften Pro-Lizenzen und weist sie den gewünschten Benutzern zu."
+  },
+  {
+    "question": "Was passiert, wenn ein Mitarbeiter das Unternehmen verlässt?",
+    "answer": "Die zugewiesene Lizenz kann dem Benutzer entzogen und anschließend einem anderen Mitarbeiter zugewiesen werden."
+  },
+  {
+    "question": "Kann ich PromptMaster auf mehreren Geräten benutzen?",
+    "answer": "PromptMaster Pro verwendet ein Benutzer- und Gerätemodell.\nDie konkret zulässige Anzahl registrierter Geräte wird in den Lizenzbedingungen festgelegt und kann zentral administriert werden."
+  },
+  {
+    "question": "Muss PromptMaster installiert werden?",
+    "answer": "Nein.\nPromptMaster wird als Webanwendung im Browser genutzt."
+  },
+  {
+    "question": "Werden meine Prompts auf einem PromptMaster-KI-Server analysiert?",
+    "answer": "Nein.\nPromptMaster verwendet kein eigenes KI-Modell für die Ausführung deiner Aufgabe.\nDie KI-Verarbeitung erfolgt erst in der von dir verwendeten Microsoft-Copilot-Umgebung."
+  },
+  {
+    "question": "Werden meine Zahlungsdaten bei PromptMaster gespeichert?",
+    "answer": "Sensible Zahlungsinformationen wie Kreditkartendaten werden nicht von PromptMaster selbst verarbeitet oder gespeichert.\nDie Zahlungsabwicklung erfolgt über einen spezialisierten Payment-Anbieter."
+  },
+  {
+    "question": "Gibt es zukünftig weitere PromptMaster-Versionen?",
+    "answer": "Die PromptMaster-Plattform ist technisch für zusätzliche Produktvarianten vorbereitet.\nWelche weiteren Editionen angeboten werden, wird abhängig von der weiteren Produktentwicklung entschieden."
+  },
+  {
+    "question": "Kann netstyle den Preis später ändern?",
+    "answer": "Preise können für zukünftige Käufe angepasst werden.\nEine bereits abgeschlossene Bestellung behält selbstverständlich den für diese Bestellung dokumentierten Preis."
+  },
+  {
+    "question": "Was unterscheidet PromptMaster Pro von Free?",
+    "answer": "Pro erweitert PromptMaster insbesondere um zusätzliche Microsoft-Anwendungen, umfangreichere Aufgaben, zusätzliche Zielgruppen, erweiterte Schwerpunkte, professionelle Ausgabeformate und app-spezifische Business-Prompts."
+  }
+]
