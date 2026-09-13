@@ -2,7 +2,7 @@
   "project": "PromptMaster Commercial RC14 Full Repository",
   "generated_at": "2026-09-13T10:50:38.124747+00:00",
   "file_count_excluding_manifest_files": 540,
-  "total_bytes_excluding_manifest_files": 43362551,
+  "total_bytes_excluding_manifest_files": 43362775,
   "roles": {
     "active-backend": 304,
     "active-ci": 1,
@@ -2153,8 +2153,8 @@
     },
     {
       "path": "compose.yaml",
-      "size": 4096,
-      "sha256": "2818cb5ae4dbe428c0339bb4c05f007faf8af90e0c3f5df5e35cc52dc746c2a0",
+      "size": 4095,
+      "sha256": "44acc78438124f6acb1e30db2a558e2de1eb66012ad903650843dc8c171e6306",
       "role": "repository-root"
     },
     {
@@ -2177,8 +2177,8 @@
     },
     {
       "path": "docs/CHANGE_RUNTIME_HARDENING_01.md",
-      "size": 3340,
-      "sha256": "f36f2ad5b0ed914f50f79898c79cb0b408b4f7c48cec6345c7d8e8e6aeccc6dd",
+      "size": 3565,
+      "sha256": "0ff8f2247ded2cbf6ad37af52f1f14fbbfee623c8d691739bb20e65ac285dc60",
       "role": "documentation"
     },
     {

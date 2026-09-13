@@ -37,6 +37,10 @@ frischen static_data-Volume nach. Das Backend-Image legt /app/staticfiles nun
 vor dem Benutzerwechsel mit app-Ownership an; Docker übernimmt diese Rechte
 bei der erstmaligen Volume-Befüllung. collectstatic läuft weiterhin als app.
 
+Der anschließende vollständige Pull wies die ungültige alte cAdvisor-Registry
+nach. Version 0.60.5 bleibt unverändert; die Quelle ist jetzt
+ghcr.io/google/cadvisor:v0.60.5 gemäß der offiziellen cAdvisor-Dokumentation.
+
 `github_preflight.py` prüft nun auch den versionierten Backup-Kontext und die
 PostgreSQL-/Beat-Konfiguration sowie sechs negative/positive Regressionstests.
 Die CI validiert Staging- und Production-Compose und baut alle drei Images.
