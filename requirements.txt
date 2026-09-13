@@ -8,3 +8,4 @@ prometheus-client>=0.22,<1
 gunicorn>=26,<27
 pyotp>=2.10,<3
 whitenoise>=6.9,<7
+PyYAML>=6.0,<7
