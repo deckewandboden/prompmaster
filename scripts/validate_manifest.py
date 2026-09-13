@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 import hashlib
+import subprocess
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -32,23 +33,30 @@ IGNORED_SUFFIXES = {
     '.pyo',
 }
 
-# Build-Artefakte, die durch CI/Build-Prozesse reproduzierbar neu erzeugt
-# werden und deshalb nicht gegen einen statischen Manifest-Hash geprüft
-# werden dürfen.
 VOLATILE_PREFIXES = (
     'marketing/dist/',
 )
 
 
-def relative_name(path: Path) -> str:
-    return path.relative_to(ROOT).as_posix()
+def sha256(path: Path) -> str:
+    h = hashlib.sha256()
+
+    with path.open('rb') as f:
+        for chunk in iter(lambda: f.read(1024 * 1024), b''):
+            h.update(chunk)
+
+    return h.hexdigest()
+
+
+def volatile(rel: str) -> bool:
+    return any(
+        rel.startswith(prefix)
+        for prefix in VOLATILE_PREFIXES
+    )
 
 
 def ignored(path: Path) -> bool:
-    """
-    Ignore environment-, dependency- and cache-specific files.
-    """
-    if bool(IGNORED_PARTS.intersection(path.parts)):
+    if any(part in IGNORED_PARTS for part in path.parts):
         return True
 
     if path.suffix.lower() in IGNORED_SUFFIXES:
@@ -57,36 +65,40 @@ def ignored(path: Path) -> bool:
     return False
 
 
-def volatile(rel: str) -> bool:
+def git_tracked_files() -> list[str]:
     """
-    Return True for reproducible/generated build artifacts whose content
-    may legitimately change after a build during CI.
-
-    These files may remain present in FILE_MANIFEST.tsv for inventory
-    purposes, but they are deliberately excluded from byte/hash drift
-    validation.
+    Manifest validation must validate the actual Git repository,
+    not arbitrary local files that happen to exist beside it.
     """
-    return any(
-        rel.startswith(prefix)
-        for prefix in VOLATILE_PREFIXES
-    )
 
+    try:
+        result = subprocess.run(
+            ['git', 'ls-files', '-z'],
+            cwd=ROOT,
+            check=True,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+        )
+    except (FileNotFoundError, subprocess.CalledProcessError) as exc:
+        raise SystemExit(
+            'MANIFEST VALIDATION FAIL: unable to determine Git tracked files'
+        ) from exc
 
-def sha256(path: Path) -> str:
-    h = hashlib.sha256()
+    tracked: list[str] = []
 
-    with path.open('rb') as f:
-        for chunk in iter(
-            lambda: f.read(1024 * 1024),
-            b'',
-        ):
-            h.update(chunk)
+    for raw in result.stdout.split(b'\0'):
+        if not raw:
+            continue
 
-    return h.hexdigest()
+        tracked.append(
+            raw.decode('utf-8', errors='surrogateescape')
+        )
+
+    return tracked
 
 
 # ---------------------------------------------------------------------------
-# Load expected manifest
+# Load manifest
 # ---------------------------------------------------------------------------
 
 if not TSV.exists():
@@ -96,21 +108,19 @@ if not TSV.exists():
 
 expected: dict[str, tuple[int, str, str]] = {}
 
-for line in TSV.read_text(
-    encoding='utf-8'
-).splitlines()[1:]:
+for line in TSV.read_text(encoding='utf-8').splitlines()[1:]:
 
     if not line.strip():
         continue
 
     try:
-        path, size, digest, role = line.split('\t', 3)
+        rel, size, digest, role = line.split('\t', 3)
     except ValueError as exc:
         raise SystemExit(
-            f'MANIFEST VALIDATION FAIL: malformed manifest row: {line}'
+            f'MANIFEST VALIDATION FAIL: malformed row: {line}'
         ) from exc
 
-    expected[path] = (
+    expected[rel] = (
         int(size),
         digest,
         role,
@@ -118,85 +128,83 @@ for line in TSV.read_text(
 
 
 # ---------------------------------------------------------------------------
-# Validate repository files
+# Only validate Git-tracked source files
 # ---------------------------------------------------------------------------
 
-actual_paths: list[str] = []
+tracked_files = git_tracked_files()
 
-for path in sorted(ROOT.rglob('*')):
+checked = 0
 
-    if not path.is_file():
+for rel in sorted(tracked_files):
+
+    path = ROOT / rel
+
+    if path.resolve() in EXCLUDED:
         continue
 
     if ignored(path):
         continue
 
-    if path.resolve() in EXCLUDED:
-        continue
-
-    rel = relative_name(path)
-
-    # marketing/dist is generated during the CI build. Its correctness is
-    # validated by the dedicated marketing validators/browser smoke tests.
-    # Do not compare generated output with a historical manifest checksum.
     if volatile(rel):
         continue
 
-    actual_paths.append(rel)
+    if not path.exists():
+        raise SystemExit(
+            f'MANIFEST VALIDATION FAIL: tracked file missing: {rel}'
+        )
+
+    if not path.is_file():
+        continue
 
     row = expected.get(rel)
 
-    if not row:
+    if row is None:
         raise SystemExit(
-            f'MANIFEST VALIDATION FAIL: unlisted file {rel}'
+            f'MANIFEST VALIDATION FAIL: tracked file not listed: {rel}'
         )
 
-    size, digest, _role = row
+    expected_size, expected_digest, _role = row
 
     actual_size = path.stat().st_size
 
-    if actual_size != size:
+    if actual_size != expected_size:
         raise SystemExit(
-            'MANIFEST VALIDATION FAIL: '
-            f'size drift {rel} '
-            f'(expected {size}, actual {actual_size})'
+            f'MANIFEST VALIDATION FAIL: size drift {rel}'
         )
 
     actual_digest = sha256(path)
 
-    if actual_digest != digest:
+    if actual_digest != expected_digest:
         raise SystemExit(
-            'MANIFEST VALIDATION FAIL: '
-            f'hash drift {rel}'
+            f'MANIFEST VALIDATION FAIL: hash drift {rel}'
         )
 
+    checked += 1
+
 
 # ---------------------------------------------------------------------------
-# Detect files listed in the manifest but missing from the repository
+# Inform about obsolete manifest rows instead of failing.
 #
-# Volatile build artifacts are intentionally ignored here as well because
-# they can be created/removed/rebuilt as part of CI.
+# These can exist because old local backup/archive files were previously
+# included by the generator although they were never Git-tracked.
 # ---------------------------------------------------------------------------
 
-expected_nonvolatile = {
-    path
-    for path in expected
-    if not volatile(path)
-}
+tracked_set = set(tracked_files)
 
-extra = sorted(
-    expected_nonvolatile - set(actual_paths)
+obsolete = sorted(
+    rel
+    for rel in expected
+    if rel not in tracked_set
+    and not volatile(rel)
 )
 
-if extra:
-    raise SystemExit(
-        'MANIFEST VALIDATION FAIL: missing files '
-        + ', '.join(extra[:20])
+if obsolete:
+    print(
+        f'MANIFEST NOTICE: {len(obsolete)} non-Git manifest entries ignored'
     )
 
 
 print(
-    'MANIFEST VALIDATION OK: '
-    f'{len(actual_paths)} stable files checked; '
-    'generated marketing/dist artifacts excluded from hash drift validation'
+    f'MANIFEST VALIDATION OK: '
+    f'{checked} Git-tracked stable files checked'
 )
