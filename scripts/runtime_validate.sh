@@ -28,7 +28,13 @@ docker compose "${FILES[@]}" exec -T caddy caddy validate --config /etc/caddy/Ca
 docker compose "${FILES[@]}" exec -T caddy sh -c "test -s /srv/marketing/index.html && test -s /srv/marketing/models/head.glb && test -s /srv/marketing/integration-patch.js" || fail "Marketing-Artefakte fehlen im Caddy-Container"
 docker compose "${FILES[@]}" exec -T web sh -c "curl -fsS http://127.0.0.1:8000/catalog.json | python -c 'import json,sys; d=json.load(sys.stdin); assert d[\"proApplicationCount\"]==34; p=next(x for x in d[\"products\"] if x[\"id\"]==\"PROMPTMASTER_PRO\"); assert p[\"annualGrossCents\"]==3588'" || fail "Öffentlicher Marketing-Katalog ist nicht synchron"
 docker compose "${FILES[@]}" exec -T web python manage.py shell -c "from apps.prompts.models import PromptApplication,PromptDefinition,PromptLegacyContract; a=PromptApplication.objects.filter(active=True).count(); t=PromptDefinition.objects.filter(active=True).count(); f=PromptLegacyContract.objects.filter(source='FREE_1_2_4').count(); print(f'PROMPT_DOMAIN:{a}:{t}:{f}'); raise SystemExit(0 if (a,t,f)==(34,194,16) else 1)"
-docker compose "${FILES[@]}" exec -T web celery -A config inspect ping --timeout 3 | grep -q pong || fail "Kein Celery Worker antwortet"
+# Consume the full CLI output: grep -q can close the pipe early and make
+# Celery fail with SIGPIPE under pipefail even after a successful pong.
+for i in $(seq 1 10); do
+  WORKER_REPLY="$(docker compose "${FILES[@]}" exec -T web celery -A config inspect ping --timeout 3 2>&1)" && [[ "$WORKER_REPLY" == *pong* ]] && break
+  [[ "$i" -lt 10 ]] || { printf '%s\n' "$WORKER_REPLY"; fail "Kein Celery Worker antwortet"; }
+  sleep 2
+done
 for i in $(seq 1 20); do BEAT_OK="$(docker compose "${FILES[@]}" exec -T web python manage.py shell -c "from datetime import timedelta; from django.utils import timezone; from apps.ops.models import BeatHeartbeat; h=BeatHeartbeat.objects.filter(name='default').first(); print('1' if h and h.last_seen_at >= timezone.now()-timedelta(minutes=3) else '0')" 2>/dev/null | tail -n1 | tr -d '\r')"; [[ "$BEAT_OK" == 1 ]] && break; [[ "$i" -lt 20 ]] || fail "Celery Beat-Heartbeat blieb rot"; sleep 5; done
 docker compose "${FILES[@]}" ps
 docker compose "${FILES[@]}" exec -T web python manage.py shell -c "from pathlib import Path; import hashlib; from django.conf import settings; p=Path(settings.PRO_GOLDEN_MASTER_PATH); expected='aa7b2da53ba3cbcf9874b9b6f7381ea4c3e86ee1f9c09db186cbec6876a3c9cf'; actual=hashlib.sha256(p.read_bytes()).hexdigest() if p.is_file() else ''; print('PRO_GOLDEN_MASTER_OK' if actual==expected else f'PRO_GOLDEN_MASTER_FAIL:{actual}'); raise SystemExit(0 if actual==expected else 1)"

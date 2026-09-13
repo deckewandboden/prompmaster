@@ -2,7 +2,7 @@
   "project": "PromptMaster Commercial RC14 Full Repository",
   "generated_at": "2026-09-13T10:50:38.124747+00:00",
   "file_count_excluding_manifest_files": 540,
-  "total_bytes_excluding_manifest_files": 43362775,
+  "total_bytes_excluding_manifest_files": 43363316,
   "roles": {
     "active-backend": 304,
     "active-ci": 1,
@@ -2177,8 +2177,8 @@
     },
     {
       "path": "docs/CHANGE_RUNTIME_HARDENING_01.md",
-      "size": 3565,
-      "sha256": "0ff8f2247ded2cbf6ad37af52f1f14fbbfee623c8d691739bb20e65ac285dc60",
+      "size": 3811,
+      "sha256": "5423e1b6007e3d96136acf8b908110b160505a62c8024837a4c20e7ee1c4c79f",
       "role": "documentation"
     },
     {
@@ -3149,8 +3149,8 @@
     },
     {
       "path": "scripts/runtime_validate.sh",
-      "size": 5406,
-      "sha256": "604f6102e141f49e25d9bf52a473d6f04fb763f7e2c9b3c66718277d5460f112",
+      "size": 5701,
+      "sha256": "437ec9a379f05f68f68c906fa27c6446e46525ed442debd5fbd63cc24726ad8e",
       "role": "active-operations"
     },
     {

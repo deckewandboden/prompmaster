@@ -41,6 +41,11 @@ Der anschließende vollständige Pull wies die ungültige alte cAdvisor-Registry
 nach. Version 0.60.5 bleibt unverändert; die Quelle ist jetzt
 ghcr.io/google/cadvisor:v0.60.5 gemäß der offiziellen cAdvisor-Dokumentation.
 
+Die Worker-Ping-Prüfung liest die vollständige CLI-Antwort und wiederholt
+begrenzt während des Starts. Damit kann grep -q unter pipefail nicht mehr
+eine bereits erfolgreiche Antwort durch vorzeitiges Schließen der Pipe
+als Fehler behandeln.
+
 `github_preflight.py` prüft nun auch den versionierten Backup-Kontext und die
 PostgreSQL-/Beat-Konfiguration sowie sechs negative/positive Regressionstests.
 Die CI validiert Staging- und Production-Compose und baut alle drei Images.
