@@ -6,6 +6,9 @@ fail(){ echo "[FAIL] $*" >&2; exit 1; }
 command -v docker >/dev/null 2>&1 || fail "docker fehlt auf diesem Host"; docker compose version >/dev/null 2>&1 || fail "docker compose ist nicht verfügbar"; [[ -f .env ]] || fail ".env fehlt"
 python3 scripts/github_preflight.py; python3 scripts/validate_env.py --environment staging
 FILES=(-f compose.yaml -f compose.staging.yaml)
+docker compose -f compose.yaml -f compose.production.yaml config >/dev/null
+# Exercise production filesystem restrictions with safe staging integrations.
+if [[ "${PM_VALIDATE_READ_ONLY:-0}" == 1 ]]; then FILES+=(-f compose.production.yaml); fi
 docker compose "${FILES[@]}" config >/dev/null; docker compose "${FILES[@]}" build; docker compose "${FILES[@]}" up -d postgres redis mailpit
 docker compose "${FILES[@]}" run --rm web python manage.py makemigrations --check --dry-run
 docker compose "${FILES[@]}" run --rm web python manage.py check
@@ -17,7 +20,9 @@ docker compose "${FILES[@]}" run --rm web python manage.py seed_faqs
 docker compose "${FILES[@]}" run --rm web python manage.py validate_prompt_runtime
 docker compose "${FILES[@]}" run --rm web python manage.py test --verbosity 2
 docker compose "${FILES[@]}" run --rm web python manage.py check --deploy
-docker compose "${FILES[@]}" up -d web worker beat caddy prometheus postgres-exporter backup
+docker compose "${FILES[@]}" run --rm web python manage.py collectstatic --noinput
+docker compose "${FILES[@]}" up -d
+docker compose "${FILES[@]}" exec -T beat sh -c 'test -w /tmp/celerybeat && touch /tmp/celerybeat/write-test && rm /tmp/celerybeat/write-test'
 for i in $(seq 1 30); do docker compose "${FILES[@]}" exec -T web curl -fsS http://127.0.0.1:8000/health/ready/ >/dev/null 2>&1 && break; [[ "$i" -lt 30 ]] || fail "Django ready health blieb rot"; sleep 2; done
 docker compose "${FILES[@]}" exec -T caddy caddy validate --config /etc/caddy/Caddyfile >/dev/null
 docker compose "${FILES[@]}" exec -T caddy sh -c "test -s /srv/marketing/index.html && test -s /srv/marketing/models/head.glb && test -s /srv/marketing/integration-patch.js" || fail "Marketing-Artefakte fehlen im Caddy-Container"
