@@ -2,7 +2,7 @@
   "project": "PromptMaster Commercial RC14 Full Repository",
   "generated_at": "2026-09-13T10:50:38.124747+00:00",
   "file_count_excluding_manifest_files": 540,
-  "total_bytes_excluding_manifest_files": 43362211,
+  "total_bytes_excluding_manifest_files": 43362551,
   "roles": {
     "active-backend": 304,
     "active-ci": 1,
@@ -59,8 +59,8 @@
     },
     {
       "path": "Dockerfile",
-      "size": 632,
-      "sha256": "78cdedfea4434d0e4a88d8d7c98796f9d465ca7b8ee4f38d717d3ab972bbf08b",
+      "size": 661,
+      "sha256": "744478651b5b8eaa55bb9e0450db0c71c8a5c0f53a4ccef4801a6a292a343484",
       "role": "repository-root"
     },
     {
@@ -2177,8 +2177,8 @@
     },
     {
       "path": "docs/CHANGE_RUNTIME_HARDENING_01.md",
-      "size": 3029,
-      "sha256": "8d631a9d1e9c214ac4dcc91c5e6c3c3a4c266a47b23cbf6b955fffbb21e8b27d",
+      "size": 3340,
+      "sha256": "f36f2ad5b0ed914f50f79898c79cb0b408b4f7c48cec6345c7d8e8e6aeccc6dd",
       "role": "documentation"
     },
     {

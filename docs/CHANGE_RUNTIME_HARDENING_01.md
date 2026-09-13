@@ -32,6 +32,11 @@ Lizenz-, Zahlungs- oder PromptDomain-Logik und keinen Golden Mastern.
 
 ## Prüfungen
 
+Der erste vollständige CI-Start wies zusätzlich fehlende Schreibrechte im
+frischen static_data-Volume nach. Das Backend-Image legt /app/staticfiles nun
+vor dem Benutzerwechsel mit app-Ownership an; Docker übernimmt diese Rechte
+bei der erstmaligen Volume-Befüllung. collectstatic läuft weiterhin als app.
+
 `github_preflight.py` prüft nun auch den versionierten Backup-Kontext und die
 PostgreSQL-/Beat-Konfiguration sowie sechs negative/positive Regressionstests.
 Die CI validiert Staging- und Production-Compose und baut alle drei Images.
