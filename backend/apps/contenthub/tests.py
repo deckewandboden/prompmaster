@@ -21,6 +21,12 @@ class FaqTests(TestCase):
 
     def test_admin_can_open_faq_management(self):
         client = Client()
+        self.admin.two_factor_required = False
+        self.admin.save(update_fields=["two_factor_required"])
         client.force_login(self.admin)
+        session = client.session
+        session["security_version"] = self.admin.security_version
+        session["two_factor_ok"] = True
+        session.save()
         response = client.get('/ns-admin/content/faqs/')
         self.assertEqual(response.status_code, 200)

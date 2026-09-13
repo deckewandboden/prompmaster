@@ -1,8 +1,8 @@
 {
   "project": "PromptMaster Commercial RC14 Full Repository",
-  "generated_at": "2026-09-13T10:33:09.697869+00:00",
-  "file_count_excluding_manifest_files": 535,
-  "total_bytes_excluding_manifest_files": 43350033,
+  "generated_at": "2026-09-13T10:42:39.780735+00:00",
+  "file_count_excluding_manifest_files": 536,
+  "total_bytes_excluding_manifest_files": 43476328,
   "roles": {
     "active-backend": 304,
     "active-ci": 1,
@@ -12,7 +12,7 @@
     "documentation": 19,
     "historical-reference": 36,
     "recovery-tool": 3,
-    "repository-root": 14
+    "repository-root": 15
   },
   "files": [
     {
@@ -623,8 +623,8 @@
     },
     {
       "path": "backend/apps/contenthub/tests.py",
-      "size": 996,
-      "sha256": "8c4a85b8fc2517d0d8909d2cd2fe047210be2db23b3d08313469425b8a08c347",
+      "size": 1268,
+      "sha256": "7cda88a698efe4ac07a8c2ea66f60eb51e5f890516e20f09463fbb7f05558b90",
       "role": "active-backend"
     },
     {
@@ -1457,8 +1457,8 @@
     },
     {
       "path": "backend/apps/prompts/tests.py",
-      "size": 15577,
-      "sha256": "13b3fb67ab2f19b097584ceca1efaccdbaf50cf4ce9129af52139f95e1bc5fe6",
+      "size": 15851,
+      "sha256": "495e4786d75f1f3cf9df7638b0c2ffa48cbcd698ed2b951179ffaed9369345a4",
       "role": "active-backend"
     },
     {
@@ -3049,6 +3049,12 @@
       "path": "README.md",
       "size": 6011,
       "sha256": "d8ffbf46bb7cc79061ed383bfd75e81bb21389fc13e32c3974fa08d928ab0c92",
+      "role": "repository-root"
+    },
+    {
+      "path": "redirect_diagnose.txt",
+      "size": 125749,
+      "sha256": "2ab3d4289f2b53359ecad694848036e95e81414d3ad97ce9126df0197a60b80d",
       "role": "repository-root"
     },
     {

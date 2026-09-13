@@ -1,6 +1,6 @@
 # Vollständiges Datei-Inventar — PromptMaster RC14
 
-Erfasst: **535 Dateien** (Manifest-/Inventardateien selbst ausgenommen), **43,350,033 Byte**.
+Erfasst: **536 Dateien** (Manifest-/Inventardateien selbst ausgenommen), **43,476,328 Byte**.
 
 Maschinenlesbar: `FILE_MANIFEST.tsv` und `MANIFEST.json`.
 
@@ -69,7 +69,7 @@ Maschinenlesbar: `FILE_MANIFEST.tsv` und `MANIFEST.json`.
 | `backend/apps/contenthub/migrations/0002_rename_contenthub_f_audienc_46b102_idx_contenthub__audienc_bc5020_idx.py` | 425 | `42a6b11d38ae91e85a7366e76f4d0d733544bfc38b832176ad21e16527a9e7ba` |
 | `backend/apps/contenthub/migrations/__init__.py` | 0 | `e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855` |
 | `backend/apps/contenthub/models.py` | 787 | `341ec2e071492af1f244b388de1cf126289a7b5517ffaf3c271353b6f6327379` |
-| `backend/apps/contenthub/tests.py` | 996 | `8c4a85b8fc2517d0d8909d2cd2fe047210be2db23b3d08313469425b8a08c347` |
+| `backend/apps/contenthub/tests.py` | 1268 | `7cda88a698efe4ac07a8c2ea66f60eb51e5f890516e20f09463fbb7f05558b90` |
 | `backend/apps/core/__init__.py` | 0 | `e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855` |
 | `backend/apps/core/admin_forms.py` | 8687 | `b839e61b9a1fe19d172ff99d4032b44089ea5276bc230e631dbd4ed031744977` |
 | `backend/apps/core/admin_urls.py` | 5638 | `79e4f0b5bbd1188a89e525c7a38d440dc582dffb8e222099ca0406387fcf14a7` |
@@ -208,7 +208,7 @@ Maschinenlesbar: `FILE_MANIFEST.tsv` und `MANIFEST.json`.
 | `backend/apps/prompts/studio_urls.py` | 1057 | `0727c47b1c4a4310990f10543966eab5205504a6c88e4f5379933c6554bb523f` |
 | `backend/apps/prompts/studio_views.py` | 12349 | `15bfdc1eb92510b75516c8186f850e70ddf9f6a8f3d782c4b56039806e51f6c9` |
 | `backend/apps/prompts/tasks.py` | 263 | `b7e07bacf9b0f37f7f8cb9e0aec876e76fe9a7da95cb0efee00e9dc436d72427` |
-| `backend/apps/prompts/tests.py` | 15577 | `13b3fb67ab2f19b097584ceca1efaccdbaf50cf4ce9129af52139f95e1bc5fe6` |
+| `backend/apps/prompts/tests.py` | 15851 | `495e4786d75f1f3cf9df7638b0c2ffa48cbcd698ed2b951179ffaed9369345a4` |
 | `backend/apps/support/__init__.py` | 0 | `e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855` |
 | `backend/apps/support/admin.py` | 104 | `6541ed7ee16442bf6f0d8d59d78025d7ed97f594fbd6bacc8cf2183b45fc0626` |
 | `backend/apps/support/apps.py` | 145 | `0d63a14248ef6efbe33464ad1359e4308add42966a0b5927e4b08e7e7eb6b1ea` |
@@ -583,7 +583,7 @@ Maschinenlesbar: `FILE_MANIFEST.tsv` und `MANIFEST.json`.
 
 ## repository-root
 
-14 Dateien.
+15 Dateien.
 
 | Pfad | Größe | SHA256 |
 |---|---:|---|
@@ -599,6 +599,7 @@ Maschinenlesbar: `FILE_MANIFEST.tsv` und `MANIFEST.json`.
 | `Dockerfile` | 632 | `78cdedfea4434d0e4a88d8d7c98796f9d465ca7b8ee4f38d717d3ab972bbf08b` |
 | `Dockerfile.caddy` | 281 | `3222f69f1bd3a6537a6ec6d5d537f8ae5ab7112cc7a7a55a4949fbe8afb5001c` |
 | `README.md` | 6011 | `d8ffbf46bb7cc79061ed383bfd75e81bb21389fc13e32c3974fa08d928ab0c92` |
+| `redirect_diagnose.txt` | 125749 | `2ab3d4289f2b53359ecad694848036e95e81414d3ad97ce9126df0197a60b80d` |
 | `requirements.txt` | 206 | `ceb986bad2b3fbe439d43e758686454954b00e4f39b438903eb2dfe864abfb0c` |
 | `SPEC.md` | 46369 | `e5e6491322fc8d75c5086cc737743cbb55d0e7dcf806e515e5d62a8791d248fc` |
 

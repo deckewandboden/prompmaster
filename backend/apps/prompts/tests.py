@@ -258,7 +258,13 @@ class PromptApiTests(TestCase):
 
     def setUp(self):
         self.client = Client()
+        self.user.two_factor_required = False
+        self.user.save(update_fields=["two_factor_required"])
         self.client.force_login(self.user)
+        session = self.client.session
+        session["security_version"] = self.user.security_version
+        session["two_factor_ok"] = True
+        session.save()
 
     @patch('apps.prompts.api._require_pro_access')
     def test_pro_catalog_api_returns_central_catalog(self, access):
