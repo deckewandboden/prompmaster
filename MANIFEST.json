@@ -1,15 +1,15 @@
 {
   "project": "PromptMaster Commercial RC14 Full Repository",
-  "generated_at": "2026-09-13T10:50:38.124747+00:00",
-  "file_count_excluding_manifest_files": 540,
-  "total_bytes_excluding_manifest_files": 43363316,
+  "generated_at": "2026-09-13T19:13:15.367585+00:00",
+  "file_count_excluding_manifest_files": 547,
+  "total_bytes_excluding_manifest_files": 43386541,
   "roles": {
-    "active-backend": 304,
+    "active-backend": 310,
     "active-ci": 1,
     "active-marketing": 127,
     "active-operations": 31,
     "active-product": 4,
-    "documentation": 20,
+    "documentation": 21,
     "historical-reference": 36,
     "recovery-tool": 3,
     "repository-root": 14
@@ -23,8 +23,8 @@
     },
     {
       "path": ".env.example",
-      "size": 1156,
-      "sha256": "bf18b1efc79ed9573e49a57c5a5b06ac3f9b50502636ff8ed10712b17a9f408e",
+      "size": 1182,
+      "sha256": "63f66cdeaff4d270c83aa4f631b4ef943178670dd9436e95e987769912e7ce49",
       "role": "repository-root"
     },
     {
@@ -53,8 +53,8 @@
     },
     {
       "path": "Caddyfile",
-      "size": 2162,
-      "sha256": "77dc0138f4065ec74ac4eeff5da26d6dde7f16e5ffb594f6b9c1b4064059a519",
+      "size": 2214,
+      "sha256": "5f174bc381c9b6dbd93a626e8d6caa02e6089a2afe77027dfcf669b2d36eeba8",
       "role": "repository-root"
     },
     {
@@ -347,8 +347,8 @@
     },
     {
       "path": "backend/apps/accounts/middleware.py",
-      "size": 2281,
-      "sha256": "affc81dd62236d834bdd5d016074ce33041b81a189c126a07f650effc429e8cf",
+      "size": 2977,
+      "sha256": "fc602a8ab52d2419d27dfc9cc68d5a7b8b73f5795ce1719c67d5c3935abfc463",
       "role": "active-backend"
     },
     {
@@ -364,6 +364,12 @@
       "role": "active-backend"
     },
     {
+      "path": "backend/apps/accounts/migrations/0003_totp_replay_protection.py",
+      "size": 412,
+      "sha256": "e1b073675b352b3af1875ed5a91beaffe3143239b100103f595c6530509fb58f",
+      "role": "active-backend"
+    },
+    {
       "path": "backend/apps/accounts/migrations/__init__.py",
       "size": 0,
       "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
@@ -371,14 +377,14 @@
     },
     {
       "path": "backend/apps/accounts/models.py",
-      "size": 2569,
-      "sha256": "3feb7368013a8ff4093bda8d024a1972e8ce423771884865e4f5a6502ada8415",
+      "size": 2623,
+      "sha256": "78f6480cac68070e3fdd5e89e5c22aa45403ae94d2f20511ce03961d3b1b6b63",
       "role": "active-backend"
     },
     {
       "path": "backend/apps/accounts/security.py",
-      "size": 828,
-      "sha256": "843f80e8f16a463ebf3a1c9de19cb74519ab935d3e0ce50ed27bfe049dc84084",
+      "size": 1935,
+      "sha256": "2b7c82f9c5cda7c9d1594e740e42379e38fd30fe70455710537ba3cac84afe1f",
       "role": "active-backend"
     },
     {
@@ -388,9 +394,15 @@
       "role": "active-backend"
     },
     {
+      "path": "backend/apps/accounts/tests_security.py",
+      "size": 3169,
+      "sha256": "23d44379716c3418679375c73c4d7b8195d39c51b00e0b8596cb1962b67f5c7a",
+      "role": "active-backend"
+    },
+    {
       "path": "backend/apps/accounts/totp.py",
-      "size": 556,
-      "sha256": "bec2d0f87a066ab92d3ad712f62065e418e2ad9afebd621881a9618163d9e647",
+      "size": 906,
+      "sha256": "100b45dbb78aa2a3cbf9025ace81348bf8059a304b41eb305677f9dfca3e502a",
       "role": "active-backend"
     },
     {
@@ -401,8 +413,8 @@
     },
     {
       "path": "backend/apps/accounts/views.py",
-      "size": 16626,
-      "sha256": "d4381db130c0ad2a1fc8f3d7df65d55d4d4ae3a61594e89a89322a897fdaaed0",
+      "size": 18265,
+      "sha256": "b2ff5b756a6f20432a07eb5d3611cbee5a384a0c081f2f4a029972adb109d1f4",
       "role": "active-backend"
     },
     {
@@ -436,6 +448,12 @@
       "role": "active-backend"
     },
     {
+      "path": "backend/apps/audit/migrations/0003_remove_historical_prompt_content.py",
+      "size": 955,
+      "sha256": "c3d6cb1d4f4f365211266e73ca3c1e48a4b4d63f2e80b1211aa92726caf5565a",
+      "role": "active-backend"
+    },
+    {
       "path": "backend/apps/audit/migrations/__init__.py",
       "size": 0,
       "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
@@ -449,8 +467,8 @@
     },
     {
       "path": "backend/apps/audit/services.py",
-      "size": 1345,
-      "sha256": "54cfa0ce73116b07d142c5f9cbdf162bcf2776780e0561a639f0e7b214d51f46",
+      "size": 1442,
+      "sha256": "1d3dfd36ff3b4d30cf13cd15364fe1a59e0d7afc4727b9483eff27bc43ab795e",
       "role": "active-backend"
     },
     {
@@ -551,8 +569,8 @@
     },
     {
       "path": "backend/apps/companies/portal.py",
-      "size": 35401,
-      "sha256": "88f3928576b8462ebe7f241781091ee6af55693a2df9a6a0c43af4218df84cad",
+      "size": 35529,
+      "sha256": "cd88f35c713cb39ea9287e3b45e38e1aa26218283f493d4bb80320fb54acd99b",
       "role": "active-backend"
     },
     {
@@ -677,8 +695,8 @@
     },
     {
       "path": "backend/apps/core/admin_views.py",
-      "size": 51736,
-      "sha256": "3fdcf7c9a28a4a1351d03da936835649ff19856cc2e2368d8f31d0543e6e4bde",
+      "size": 52449,
+      "sha256": "8849a8ba2971468759aaf25facd0ec6797b8f13e05451dffbd59d20e6383e93b",
       "role": "active-backend"
     },
     {
@@ -799,6 +817,12 @@
       "path": "backend/apps/core/tests_marketing_integration.py",
       "size": 2204,
       "sha256": "b3c651dfe1b75096004c4fe78738723cb5d4bc5f8de99e6d45fede4cfa6359e8",
+      "role": "active-backend"
+    },
+    {
+      "path": "backend/apps/core/tests_permissions.py",
+      "size": 1872,
+      "sha256": "a8ebca460fc07a95e4e3e75e5e26cf4fa000d8713e8251cebe21e9d6893d13a2",
       "role": "active-backend"
     },
     {
@@ -1031,8 +1055,8 @@
     },
     {
       "path": "backend/apps/mcp_internal/tests.py",
-      "size": 3247,
-      "sha256": "a4d594dce5adb457b25e4160637f2e0515e470425ed5a1675787f9f31f5b8dfd",
+      "size": 4562,
+      "sha256": "9457b70e801d4a50029a7e1b42a26a43e17ded7c5994270505f81cc285c09964",
       "role": "active-backend"
     },
     {
@@ -1043,8 +1067,8 @@
     },
     {
       "path": "backend/apps/mcp_internal/views.py",
-      "size": 10292,
-      "sha256": "064c46d8d2db500a56e19527a7245e61df6756f454c77dd853c28701e76327d1",
+      "size": 10553,
+      "sha256": "500f38a174a41832b432995c10127181f3d468f04f1e3e4e1a31e180fff70342",
       "role": "active-backend"
     },
     {
@@ -1319,14 +1343,20 @@
     },
     {
       "path": "backend/apps/proaccess/services.py",
-      "size": 1980,
-      "sha256": "e61252c55a60b98077c7af12937ee7ba84bdf6ad655da72a4b9d946fd52d3ef8",
+      "size": 2407,
+      "sha256": "c17beb5373789e85261364949bb62d7339d05f4f89538d052664e62925b01075",
       "role": "active-backend"
     },
     {
       "path": "backend/apps/proaccess/tests.py",
       "size": 779,
       "sha256": "c0edf4c1449ec0586d386372b2e5ecd98a80a19afe1bbca331e475ba09c59ea1",
+      "role": "active-backend"
+    },
+    {
+      "path": "backend/apps/proaccess/tests_integration.py",
+      "size": 5991,
+      "sha256": "fc5828dbaedb8045c746d76cc4cd7fdea2e51616954144094eede1952d077bb2",
       "role": "active-backend"
     },
     {
@@ -1337,8 +1367,8 @@
     },
     {
       "path": "backend/apps/proaccess/views.py",
-      "size": 6907,
-      "sha256": "036cdcdb1ed9135b1092a864a44b2dd0736c5a6cf1a8ce0f41202bc221082cd6",
+      "size": 7178,
+      "sha256": "30a8700bf9aaf5e23ba61516742b76e1820d2f0b699a80690194c5f046e23014",
       "role": "active-backend"
     },
     {
@@ -1355,8 +1385,8 @@
     },
     {
       "path": "backend/apps/prompts/api.py",
-      "size": 7264,
-      "sha256": "1f371e57acea47b005bbd669c78f25b1172b7fd4a49fb1e04503812adef7b3be",
+      "size": 7887,
+      "sha256": "efe0bfe857a81bfcf04bfb1b4ead9b89959f4e21fff5b0a03b3a50d1d298e8c7",
       "role": "active-backend"
     },
     {
@@ -1547,8 +1577,8 @@
     },
     {
       "path": "backend/config/settings.py",
-      "size": 8055,
-      "sha256": "0a20f98b37cfa8309b82602e13d7d86237acc64aeb741b7179c120cf445361ad",
+      "size": 8125,
+      "sha256": "863ee938fe761f8a87691959b39c1ab9cee0bc81d90dce1b56d0fe323df6b809",
       "role": "active-backend"
     },
     {
@@ -1615,6 +1645,12 @@
       "path": "backend/templates/auth/accept_invitation.html",
       "size": 1216,
       "sha256": "6f8563b0a815f54c31141767dc52c295dd67d7f47eebd1f875e61d4a9b976082",
+      "role": "active-backend"
+    },
+    {
+      "path": "backend/templates/auth/invite_confirm.html",
+      "size": 277,
+      "sha256": "5514292903234fb8a518488eaf7c57a55d9ee77e923e08b35e258565af93e17c",
       "role": "active-backend"
     },
     {
@@ -1769,8 +1805,8 @@
     },
     {
       "path": "backend/templates/ns_admin/dashboard.html",
-      "size": 2998,
-      "sha256": "08c053576776c6532d5d4f53e16ac6746e505bf02d351f4b9ce35912f940e9b0",
+      "size": 3383,
+      "sha256": "3bd3e49bdc5158d51094d65c939051ba8ae93e324fd16b12f023d2090d76f97c",
       "role": "active-backend"
     },
     {
@@ -2156,6 +2192,12 @@
       "size": 4095,
       "sha256": "44acc78438124f6acb1e30db2a558e2de1eb66012ad903650843dc8c171e6306",
       "role": "repository-root"
+    },
+    {
+      "path": "docs/CHANGE_PRODUCT_SECURITY_02.md",
+      "size": 2335,
+      "sha256": "67c81ba5ea9fc5da286ae7e973d506f0c843cda850fbc74c47dab11a868e5fc4",
+      "role": "documentation"
     },
     {
       "path": "docs/CHANGE_RC11_PROMPT_DOMAIN.md",

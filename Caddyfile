@@ -49,6 +49,9 @@
     handle /metrics/internal/* {
         respond 404
     }
+    handle /api/v1/mcp* {
+        respond 404
+    }
 
     # Django collected static files.
     handle_path /static/* {

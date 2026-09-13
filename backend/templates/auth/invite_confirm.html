@@ -1,0 +1,4 @@
+{% extends 'base.html' %}{% block body %}
+<div class="card"><h1>Einladung annehmen</h1><p>Sie wurden zu {{ invitation.company.name }} eingeladen.</p>
+<form method="post">{% csrf_token %}<button class="btn" type="submit">Firma beitreten</button></form></div>
+{% endblock %}

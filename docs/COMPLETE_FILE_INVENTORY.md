@@ -619,3 +619,32 @@ Maschinenlesbar: `FILE_MANIFEST.tsv` und `MANIFEST.json`.
 | `scripts/test_backup_restore.sh` | 1531 | `0541a5ebc0184231bd1439793cfc4a41b4a26817cfdb005c9f36534050af88a1` |
 | `scripts/test_runtime_config.py` | 1666 | `342993a4ef369f3e2810f4691cd3e65a6d1ebf6e2fbb5f9381b1ed9eae85afe7` |
 | `scripts/validate_runtime_config.py` | 2729 | `dd774712781c97d31459756545eaf75ebcd6c095556e006597e1228a1d5bb770` |
+
+## Produktzugriff und Kontosicherheit 02
+
+Aktualisierte Dateien und Prüfsummen stehen in MANIFEST.json und FILE_MANIFEST.tsv.
+
+- `.env.example`
+- `Caddyfile`
+- `backend/apps/accounts/middleware.py`
+- `backend/apps/accounts/migrations/0003_totp_replay_protection.py`
+- `backend/apps/accounts/models.py`
+- `backend/apps/accounts/security.py`
+- `backend/apps/accounts/tests_security.py`
+- `backend/apps/accounts/totp.py`
+- `backend/apps/accounts/views.py`
+- `backend/apps/audit/migrations/0003_remove_historical_prompt_content.py`
+- `backend/apps/audit/services.py`
+- `backend/apps/companies/portal.py`
+- `backend/apps/core/admin_views.py`
+- `backend/apps/core/tests_permissions.py`
+- `backend/apps/mcp_internal/tests.py`
+- `backend/apps/mcp_internal/views.py`
+- `backend/apps/proaccess/services.py`
+- `backend/apps/proaccess/tests_integration.py`
+- `backend/apps/proaccess/views.py`
+- `backend/apps/prompts/api.py`
+- `backend/config/settings.py`
+- `backend/templates/auth/invite_confirm.html`
+- `backend/templates/ns_admin/dashboard.html`
+- `docs/CHANGE_PRODUCT_SECURITY_02.md`

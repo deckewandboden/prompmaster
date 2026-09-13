@@ -3,9 +3,16 @@ from django.utils import timezone
 from apps.licenses.models import LicenseAssignment
 from apps.licenses.services import has_current_term
 
+DEVICE_COOKIE = 'pm_device_v2'
+LEGACY_DEVICE_COOKIE = 'pm_device'
+
 
 def active_product_assignment(user, product_code='PRO'):
     """Return the one assignment that currently grants product access."""
+    if not user.is_active or not user.email_verified_at:
+        return None
+    from apps.companies.models import Membership
+
     now = timezone.now()
     candidates = (
         LicenseAssignment.objects.select_related('license__product')
@@ -19,6 +26,11 @@ def active_product_assignment(user, product_code='PRO'):
         .order_by('-assigned_at')
     )
     for assignment in candidates:
+        if assignment.license.company_id and not Membership.objects.filter(
+            company_id=assignment.license.company_id, user=user, active=True,
+            company__status='active',
+        ).exists():
+            continue
         if has_current_term(assignment.license, now):
             return assignment
     return None

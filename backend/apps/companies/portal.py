@@ -42,6 +42,8 @@ def _ctx(request):
         .select_related('company')
         .first()
     )
+    if membership and membership.company.status != 'active':
+        raise PermissionDenied('Das Unternehmen ist deaktiviert.')
     return (membership.company if membership else None, membership)
 
 

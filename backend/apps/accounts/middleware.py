@@ -3,6 +3,8 @@ from urllib.parse import urlencode
 from django.contrib.auth import logout
 from django.shortcuts import redirect
 from django.urls import reverse
+from django.conf import settings
+from django.utils import timezone
 
 
 class TwoFactorEnforcementMiddleware:
@@ -38,13 +40,24 @@ class TwoFactorEnforcementMiddleware:
             next_url = request.get_full_path()
             logout(request)
             return redirect(f"{reverse('accounts:login')}?{urlencode({'next': next_url})}")
-        if int(session_version) != int(user.security_version):
+        try:
+            valid_version = int(session_version) == int(user.security_version)
+            now = timezone.now().timestamp()
+            started = float(request.session.get('authenticated_at', now))
+            activity = float(request.session.get('last_activity_at', now))
+            valid_time = (now - started <= settings.SESSION_COOKIE_AGE and now - activity <= settings.SESSION_IDLE_TIMEOUT)
+        except (ValueError, TypeError):
+            valid_version = valid_time = False
+        if not valid_version or not valid_time:
             next_url = request.get_full_path()
             logout(request)
             return redirect(f"{reverse('accounts:login')}?{urlencode({'next': next_url})}")
 
+        request.session.setdefault('authenticated_at', now)
+        request.session['last_activity_at'] = now
+
         if user.two_factor_required and not user.totp_secret_enc:
-            if not request.path.startswith('/auth/2fa/setup/'):
+            if not request.path.startswith(('/auth/2fa/setup/', '/auth/logout/', '/auth/verify/')):
                 request.session['post_2fa_next'] = request.get_full_path()
                 return redirect(reverse('accounts:two_factor_setup'))
 
