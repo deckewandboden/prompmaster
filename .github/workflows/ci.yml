@@ -67,9 +67,16 @@ jobs:
         with:
           node-version: '22'
 
-      # Wichtig:
-      # Der Marketing-Build muss VOR github_preflight.py laufen,
-      # weil der Preflight Dateien unter marketing/dist/ validiert.
+      # Python-Abhängigkeiten müssen vor allen Python-Prüfskripten
+      # installiert sein. validate_static.py benötigt u. a. PyYAML.
+      - name: Install Python dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+          pip check
+
+      # Marketing muss vor github_preflight.py gebaut werden,
+      # da der Preflight Dateien unter marketing/dist/ validiert.
       - name: Marketing tests, lint and build
         working-directory: marketing
         run: |
@@ -80,12 +87,6 @@ jobs:
 
       - name: Static repository guards
         run: python scripts/github_preflight.py
-
-      - name: Install Python dependencies
-        run: |
-          python -m pip install --upgrade pip
-          pip install -r requirements.txt
-          pip check
 
       - name: Check migration drift
         working-directory: backend
