@@ -1,10 +1,10 @@
 {
   "project": "PromptMaster Commercial RC14 Full Repository",
-  "generated_at": "2026-09-13T09:46:06.399139+00:00",
-  "file_count_excluding_manifest_files": 524,
-  "total_bytes_excluding_manifest_files": 43341831,
+  "generated_at": "2026-09-13T09:59:21.459017+00:00",
+  "file_count_excluding_manifest_files": 534,
+  "total_bytes_excluding_manifest_files": 43348826,
   "roles": {
-    "active-backend": 294,
+    "active-backend": 304,
     "active-ci": 1,
     "active-marketing": 127,
     "active-operations": 27,
@@ -322,6 +322,12 @@
       "role": "active-backend"
     },
     {
+      "path": "backend/apps/accounts/migrations/0002_alter_user_groups.py",
+      "size": 659,
+      "sha256": "21e00b0a4309ad6403d340493ac5c94a19713548bed8bb443c1974d8e0e6c04c",
+      "role": "active-backend"
+    },
+    {
       "path": "backend/apps/accounts/migrations/__init__.py",
       "size": 0,
       "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
@@ -388,6 +394,12 @@
       "role": "active-backend"
     },
     {
+      "path": "backend/apps/audit/migrations/0002_rename_audit_a_action_idx_audit_audit_action_0c0ad1_idx_and_more.py",
+      "size": 591,
+      "sha256": "698c2dd55eefc43e4eb88833c0fa29ad36b04143c213a9eaff5d55a1369395b5",
+      "role": "active-backend"
+    },
+    {
       "path": "backend/apps/audit/migrations/__init__.py",
       "size": 0,
       "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
@@ -427,6 +439,12 @@
       "path": "backend/apps/catalog/migrations/0001_initial.py",
       "size": 4403,
       "sha256": "4030a6cce8a2332b66c0a5e438c38b1c491a1828f588f67868eb778b032d6fe3",
+      "role": "active-backend"
+    },
+    {
+      "path": "backend/apps/catalog/migrations/0002_rename_catalog_pp_stream_idx_catalog_pro_product_2e5f65_idx.py",
+      "size": 416,
+      "sha256": "8815c93c936b17d527f0754ca53f5ef3faa5afab23e6f9da41d73b27f20ce813",
       "role": "active-backend"
     },
     {
@@ -475,6 +493,12 @@
       "path": "backend/apps/companies/migrations/0001_initial.py",
       "size": 4658,
       "sha256": "dbe6eb88e69b61ef149fd5d7ba88aebf540b10e5e53a94eb106d033327b23cbc",
+      "role": "active-backend"
+    },
+    {
+      "path": "backend/apps/companies/migrations/0002_rename_companies_c_name_idx_companies_c_name_2d8260_idx_and_more.py",
+      "size": 968,
+      "sha256": "097e29d3628113221ed6fe381a100bb1e232e05cf42713d76484242d931a1a8a",
       "role": "active-backend"
     },
     {
@@ -571,6 +595,12 @@
       "path": "backend/apps/contenthub/migrations/0001_initial.py",
       "size": 1299,
       "sha256": "08542bb32bc29b2b97c2faa57911b684f075bc87e6b29121317908c7fb6fa991",
+      "role": "active-backend"
+    },
+    {
+      "path": "backend/apps/contenthub/migrations/0002_rename_contenthub_f_audienc_46b102_idx_contenthub__audienc_bc5020_idx.py",
+      "size": 425,
+      "sha256": "42a6b11d38ae91e85a7366e76f4d0d733544bfc38b832176ad21e16527a9e7ba",
       "role": "active-backend"
     },
     {
@@ -701,8 +731,8 @@
     },
     {
       "path": "backend/apps/core/security.py",
-      "size": 1791,
-      "sha256": "609ec63d549b50302588696904a0095d039028824631963f29b3b29ab34e51bd",
+      "size": 1848,
+      "sha256": "50d23b6013ab3879ce733bc0c98dc641f868f736c130686ec74251503b48c4d3",
       "role": "active-backend"
     },
     {
@@ -769,6 +799,12 @@
       "path": "backend/apps/devices/migrations/0001_initial.py",
       "size": 1243,
       "sha256": "5d3673ec735416f044d7726bd8030112df33e19c412e89cc843c9a6eabd7d1ce",
+      "role": "active-backend"
+    },
+    {
+      "path": "backend/apps/devices/migrations/0002_rename_devices_d_user_idx_devices_dev_user_id_40cac7_idx.py",
+      "size": 419,
+      "sha256": "58e0a3ac000a37ddf92c376198a336b2c19631789303a4f9ff37076ca581775d",
       "role": "active-backend"
     },
     {
@@ -922,6 +958,12 @@
       "role": "active-backend"
     },
     {
+      "path": "backend/apps/licenses/migrations/0005_rename_licenses_l_status_idx_licenses_li_status_3263d5_idx_and_more.py",
+      "size": 1213,
+      "sha256": "53579ecb0d8518aed8e7c55f18e5635fb1a27be1fcfd87ced9942a0aace1cf44",
+      "role": "active-backend"
+    },
+    {
       "path": "backend/apps/licenses/migrations/__init__.py",
       "size": 0,
       "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
@@ -1072,6 +1114,12 @@
       "role": "active-backend"
     },
     {
+      "path": "backend/apps/ops/migrations/0003_rename_ops_alert_state_idx_ops_systema_active_99d084_idx_and_more.py",
+      "size": 602,
+      "sha256": "f94cb6bf3c249878b48b7258ff88fa55c6d0308db6ada3a76093c0ce933a7fa1",
+      "role": "active-backend"
+    },
+    {
       "path": "backend/apps/ops/migrations/__init__.py",
       "size": 0,
       "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
@@ -1117,6 +1165,12 @@
       "path": "backend/apps/orders/migrations/0001_initial.py",
       "size": 3309,
       "sha256": "6392d15d9b966ddf8c2cb679806f6fe02b7ce75c0cd6c470fff4d63b261ab1e4",
+      "role": "active-backend"
+    },
+    {
+      "path": "backend/apps/orders/migrations/0002_rename_orders_o_status_idx_orders_orde_status_25e057_idx.py",
+      "size": 405,
+      "sha256": "2872f42faba0919a250c003dfeae6120fda1121380dee60ed01a30de4992db9c",
       "role": "active-backend"
     },
     {
@@ -1345,6 +1399,12 @@
       "path": "backend/apps/prompts/migrations/0002_studio_quality.py",
       "size": 7780,
       "sha256": "86a58ea9a75175aa4cc2f96077819c4830df5a2af0752a52c124bb9d1d14e1ec",
+      "role": "active-backend"
+    },
+    {
+      "path": "backend/apps/prompts/migrations/0003_rename_prompts_pro_applica_e75f93_idx_prompts_pro_applica_997686_idx_and_more.py",
+      "size": 1240,
+      "sha256": "5016cee23b2fecb21741fa19aec410f5ebbde25e9718cc6aa5788e5f167930a0",
       "role": "active-backend"
     },
     {

@@ -4,7 +4,10 @@ import secrets
 
 from django.core.cache import cache
 from django.core.exceptions import PermissionDenied
-from django.http import HttpResponseTooManyRequests
+from django.http import HttpResponse
+
+class HttpResponseTooManyRequests(HttpResponse):
+    status_code = 429
 
 
 def token_pair(bytes_len=32):
