@@ -602,3 +602,20 @@ Maschinenlesbar: `FILE_MANIFEST.tsv` und `MANIFEST.json`.
 | `requirements.txt` | 206 | `ceb986bad2b3fbe439d43e758686454954b00e4f39b438903eb2dfe864abfb0c` |
 | `SPEC.md` | 46369 | `e5e6491322fc8d75c5086cc737743cbb55d0e7dcf806e515e5d62a8791d248fc` |
 
+
+## Runtime hardening 01 — aktualisierte Dateien
+
+| Pfad | Größe | SHA256 |
+|---|---:|---|
+| `.github/workflows/ci.yml` | 6305 | `6069fe207e86ee71c73550a76aab66e59b279ce922a77b4190e4f6fed0fbda0a` |
+| `.gitignore` | 518 | `d9966f1696a6c4eed5184d5c1f81604b4361eba693c813d5a26620001764f3d3` |
+| `backup/.dockerignore` | 41 | `50001e1195c744f428d6c4bd3dcce2455cc1c84618a2fd412c10f48a7e2036be` |
+| `backup/Dockerfile` | 210 | `ef22a3784a2b0f212c384c90511abcf545463f1012e6e4617eaf10cd44e2d43a` |
+| `backup/backup.sh` | 4890 | `d15a8465b599877b4926603401000d7ea2bbc082fdc20177cb199e5293e748fb` |
+| `compose.yaml` | 4096 | `2818cb5ae4dbe428c0339bb4c05f007faf8af90e0c3f5df5e35cc52dc746c2a0` |
+| `docs/CHANGE_RUNTIME_HARDENING_01.md` | 3029 | `8d631a9d1e9c214ac4dcc91c5e6c3c3a4c266a47b23cbf6b955fffbb21e8b27d` |
+| `scripts/github_preflight.py` | 3409 | `729b71a25077472e72193e916476fb6ca791235c84683cac0cfb65c091866e7e` |
+| `scripts/runtime_validate.sh` | 5406 | `604f6102e141f49e25d9bf52a473d6f04fb763f7e2c9b3c66718277d5460f112` |
+| `scripts/test_backup_restore.sh` | 1531 | `0541a5ebc0184231bd1439793cfc4a41b4a26817cfdb005c9f36534050af88a1` |
+| `scripts/test_runtime_config.py` | 1666 | `342993a4ef369f3e2810f4691cd3e65a6d1ebf6e2fbb5f9381b1ed9eae85afe7` |
+| `scripts/validate_runtime_config.py` | 2729 | `dd774712781c97d31459756545eaf75ebcd6c095556e006597e1228a1d5bb770` |
