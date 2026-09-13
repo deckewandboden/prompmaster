@@ -1,6 +1,6 @@
 # Vollständiges Datei-Inventar — PromptMaster RC14
 
-Erfasst: **524 Dateien** (Manifest-/Inventardateien selbst ausgenommen), **43,341,899 Byte**.
+Erfasst: **524 Dateien** (Manifest-/Inventardateien selbst ausgenommen), **43,341,831 Byte**.
 
 Maschinenlesbar: `FILE_MANIFEST.tsv` und `MANIFEST.json`.
 
@@ -471,7 +471,7 @@ Maschinenlesbar: `FILE_MANIFEST.tsv` und `MANIFEST.json`.
 | `scripts/runtime_validate.sh` | 4994 | `0c4a23599508855aa8f88c1b4a5b559daaded248b2bac8d944290224cf74e976` |
 | `scripts/update.sh` | 102 | `75036bf3dc461ba0d307d05faa1d1ad3317c8657071ea532a3b9bc5dfbe2a786` |
 | `scripts/validate_env.py` | 5909 | `fb52eb72749c7ad402885a0ab8ee5f87bc5e0d96f002e3b6318d3b099f391ec1` |
-| `scripts/validate_manifest.py` | 4625 | `c7657c2ac84258209dbf4a5178188ba47798cb3fe6e20c39e9459bbd60e12b0c` |
+| `scripts/validate_manifest.py` | 4557 | `9a9c8812a148da19a04b995431bb593b8f7ac9f26a0cf73906ffd07cfe59a2ee` |
 | `scripts/validate_marketing.py` | 2832 | `1b38181beab072008432474fbf71189f34583f1f4c4f9e17c97487285522fc15` |
 | `scripts/validate_prompt_assets.py` | 2333 | `20bb772ad5f002feea80c4df34bc776b0904d329399eed9d26891fce335bb924` |
 | `scripts/validate_prompt_domain.py` | 12994 | `1eb0def7f86cdf439a3ebe1562c64b1cb2add41cb9cc49a6ec5e9aedd45437ae` |
