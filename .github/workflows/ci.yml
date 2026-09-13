@@ -12,6 +12,7 @@ jobs:
   test:
     runs-on: ubuntu-latest
     timeout-minutes: 30
+
     services:
       postgres:
         image: postgres:18
@@ -19,20 +20,24 @@ jobs:
           POSTGRES_DB: promptmaster
           POSTGRES_USER: promptmaster
           POSTGRES_PASSWORD: testpass1234567890
-        ports: ['5432:5432']
+        ports:
+          - '5432:5432'
         options: >-
           --health-cmd "pg_isready -U promptmaster -d promptmaster"
           --health-interval 10s
           --health-timeout 5s
           --health-retries 5
+
       redis:
         image: redis:7
-        ports: ['6379:6379']
+        ports:
+          - '6379:6379'
         options: >-
           --health-cmd "redis-cli ping"
           --health-interval 10s
           --health-timeout 5s
           --health-retries 5
+
     env:
       ENVIRONMENT: development
       DJANGO_SECRET_KEY: ci-only-secret-key-ci-only-secret-key-ci-only
@@ -46,8 +51,10 @@ jobs:
       SECURE_SSL_REDIRECT: 0
       SESSION_COOKIE_SECURE: 0
       CSRF_COOKIE_SECURE: 0
+
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout repository
+        uses: actions/checkout@v4
 
       - name: Set up Python
         uses: actions/setup-python@v5
@@ -55,14 +62,14 @@ jobs:
           python-version: '3.13'
           cache: pip
 
-      - name: Set up Node for runtime JS syntax guard
+      - name: Set up Node
         uses: actions/setup-node@v4
         with:
           node-version: '22'
 
-      - name: Static repository guards
-        run: python scripts/github_preflight.py
-
+      # Wichtig:
+      # Der Marketing-Build muss VOR github_preflight.py laufen,
+      # weil der Preflight Dateien unter marketing/dist/ validiert.
       - name: Marketing tests, lint and build
         working-directory: marketing
         run: |
@@ -70,6 +77,9 @@ jobs:
           npm test
           npm run lint
           npm run build
+
+      - name: Static repository guards
+        run: python scripts/github_preflight.py
 
       - name: Install Python dependencies
         run: |
@@ -123,27 +133,35 @@ jobs:
   browser-smoke:
     runs-on: ubuntu-latest
     timeout-minutes: 20
+
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
           python-version: '3.13'
+
       - name: Set up Node
         uses: actions/setup-node@v4
         with:
           node-version: '22'
+
       - name: Build marketing
         working-directory: marketing
         run: |
           npm ci
           npm run build
+
       - name: Install Playwright
         run: |
           python -m pip install --upgrade pip
           pip install "playwright>=1.50,<2"
           python -m playwright install --with-deps chromium
+
       - name: Pro runtime browser smoke
         run: python scripts/browser_runtime_smoke.py
+
       - name: Marketing browser smoke
         run: python scripts/browser_marketing_smoke.py
