@@ -1,6 +1,6 @@
 # Vollständiges Datei-Inventar — PromptMaster RC14
 
-Erfasst: **534 Dateien** (Manifest-/Inventardateien selbst ausgenommen), **43,348,826 Byte**.
+Erfasst: **535 Dateien** (Manifest-/Inventardateien selbst ausgenommen), **43,350,033 Byte**.
 
 Maschinenlesbar: `FILE_MANIFEST.tsv` und `MANIFEST.json`.
 
@@ -481,7 +481,7 @@ Maschinenlesbar: `FILE_MANIFEST.tsv` und `MANIFEST.json`.
 | `scripts/runtime_validate.sh` | 4994 | `0c4a23599508855aa8f88c1b4a5b559daaded248b2bac8d944290224cf74e976` |
 | `scripts/update.sh` | 102 | `75036bf3dc461ba0d307d05faa1d1ad3317c8657071ea532a3b9bc5dfbe2a786` |
 | `scripts/validate_env.py` | 5909 | `fb52eb72749c7ad402885a0ab8ee5f87bc5e0d96f002e3b6318d3b099f391ec1` |
-| `scripts/validate_manifest.py` | 4557 | `9a9c8812a148da19a04b995431bb593b8f7ac9f26a0cf73906ffd07cfe59a2ee` |
+| `scripts/validate_manifest.py` | 5115 | `bafc14c5ae5cfc66aa42a1429c5b2c7743053d58961a0c02586b50044712ad9b` |
 | `scripts/validate_marketing.py` | 2832 | `1b38181beab072008432474fbf71189f34583f1f4c4f9e17c97487285522fc15` |
 | `scripts/validate_prompt_assets.py` | 2333 | `20bb772ad5f002feea80c4df34bc776b0904d329399eed9d26891fce335bb924` |
 | `scripts/validate_prompt_domain.py` | 12994 | `1eb0def7f86cdf439a3ebe1562c64b1cb2add41cb9cc49a6ec5e9aedd45437ae` |
@@ -583,12 +583,13 @@ Maschinenlesbar: `FILE_MANIFEST.tsv` und `MANIFEST.json`.
 
 ## repository-root
 
-13 Dateien.
+14 Dateien.
 
 | Pfad | Größe | SHA256 |
 |---|---:|---|
 | `.dockerignore` | 170 | `597cfecc39c86d5e456fa5acc18a496ca3b9110b0d0ffeb4b0ac6c1093f0b9a1` |
 | `.env.example` | 1156 | `bf18b1efc79ed9573e49a57c5a5b06ac3f9b50502636ff8ed10712b17a9f408e` |
+| `.gitattributes` | 649 | `33184d32b64b1b8b08485d10af623a0ab85079f3906d2abe2ff8bdc2cc8f0c88` |
 | `.gitignore` | 435 | `61a240874f4297066f7d650e09fd19d529be1423e071ebe82f0c1231d0777180` |
 | `AGENTS.md` | 1887 | `6b0f2950044806d7960ab4fad453a6b6507ef4121a96dbb587da10e08b43e9aa` |
 | `Caddyfile` | 2162 | `77dc0138f4065ec74ac4eeff5da26d6dde7f16e5ffb594f6b9c1b4064059a519` |

@@ -17,35 +17,48 @@ EXCLUDED = {
     MD.resolve(),
 }
 
-IGNORED_PARTS = {
-    '.git',
-    'node_modules',
-    '__pycache__',
-    '.pytest_cache',
-    '.ruff_cache',
-    '.mypy_cache',
-    '.venv',
-    'venv',
-}
-
-IGNORED_SUFFIXES = {
-    '.pyc',
-    '.pyo',
-}
-
+# Diese Build-Artefakte werden durch andere Validatoren geprüft.
 VOLATILE_PREFIXES = (
     'marketing/dist/',
 )
 
+# Nur echte Binärdateien werden zusätzlich bytegenau gegen das Manifest
+# geprüft. Textdateien werden von Git selbst versioniert und dürfen wegen
+# LF/CRLF-Unterschieden zwischen Windows und Linux nicht bytegenau geprüft
+# werden.
+BINARY_SUFFIXES = {
+    '.png',
+    '.jpg',
+    '.jpeg',
+    '.gif',
+    '.webp',
+    '.ico',
+    '.pdf',
+    '.glb',
+    '.gltf',
+    '.woff',
+    '.woff2',
+    '.ttf',
+    '.eot',
+    '.mp3',
+    '.mp4',
+    '.wav',
+    '.avi',
+    '.mov',
+}
+
 
 def sha256(path: Path) -> str:
-    h = hashlib.sha256()
+    digest = hashlib.sha256()
 
-    with path.open('rb') as f:
-        for chunk in iter(lambda: f.read(1024 * 1024), b''):
-            h.update(chunk)
+    with path.open('rb') as handle:
+        for chunk in iter(
+            lambda: handle.read(1024 * 1024),
+            b'',
+        ):
+            digest.update(chunk)
 
-    return h.hexdigest()
+    return digest.hexdigest()
 
 
 def volatile(rel: str) -> bool:
@@ -55,22 +68,7 @@ def volatile(rel: str) -> bool:
     )
 
 
-def ignored(path: Path) -> bool:
-    if any(part in IGNORED_PARTS for part in path.parts):
-        return True
-
-    if path.suffix.lower() in IGNORED_SUFFIXES:
-        return True
-
-    return False
-
-
-def git_tracked_files() -> list[str]:
-    """
-    Manifest validation must validate the actual Git repository,
-    not arbitrary local files that happen to exist beside it.
-    """
-
+def get_git_tracked_files() -> list[str]:
     try:
         result = subprocess.run(
             ['git', 'ls-files', '-z'],
@@ -81,24 +79,27 @@ def git_tracked_files() -> list[str]:
         )
     except (FileNotFoundError, subprocess.CalledProcessError) as exc:
         raise SystemExit(
-            'MANIFEST VALIDATION FAIL: unable to determine Git tracked files'
+            'MANIFEST VALIDATION FAIL: Git tracked files could not be determined'
         ) from exc
 
-    tracked: list[str] = []
+    files: list[str] = []
 
     for raw in result.stdout.split(b'\0'):
         if not raw:
             continue
 
-        tracked.append(
-            raw.decode('utf-8', errors='surrogateescape')
+        files.append(
+            raw.decode(
+                'utf-8',
+                errors='surrogateescape',
+            )
         )
 
-    return tracked
+    return files
 
 
 # ---------------------------------------------------------------------------
-# Load manifest
+# Manifest laden
 # ---------------------------------------------------------------------------
 
 if not TSV.exists():
@@ -108,7 +109,9 @@ if not TSV.exists():
 
 expected: dict[str, tuple[int, str, str]] = {}
 
-for line in TSV.read_text(encoding='utf-8').splitlines()[1:]:
+for line in TSV.read_text(
+    encoding='utf-8'
+).splitlines()[1:]:
 
     if not line.strip():
         continue
@@ -117,7 +120,7 @@ for line in TSV.read_text(encoding='utf-8').splitlines()[1:]:
         rel, size, digest, role = line.split('\t', 3)
     except ValueError as exc:
         raise SystemExit(
-            f'MANIFEST VALIDATION FAIL: malformed row: {line}'
+            f'MANIFEST VALIDATION FAIL: malformed manifest row: {line}'
         ) from exc
 
     expected[rel] = (
@@ -128,21 +131,19 @@ for line in TSV.read_text(encoding='utf-8').splitlines()[1:]:
 
 
 # ---------------------------------------------------------------------------
-# Only validate Git-tracked source files
+# Git-tracked Dateien validieren
 # ---------------------------------------------------------------------------
 
-tracked_files = git_tracked_files()
+tracked_files = get_git_tracked_files()
 
 checked = 0
+binary_checked = 0
 
 for rel in sorted(tracked_files):
 
     path = ROOT / rel
 
     if path.resolve() in EXCLUDED:
-        continue
-
-    if ignored(path):
         continue
 
     if volatile(rel):
@@ -156,37 +157,50 @@ for rel in sorted(tracked_files):
     if not path.is_file():
         continue
 
-    row = expected.get(rel)
+    manifest_row = expected.get(rel)
 
-    if row is None:
+    if manifest_row is None:
         raise SystemExit(
-            f'MANIFEST VALIDATION FAIL: tracked file not listed: {rel}'
+            f'MANIFEST VALIDATION FAIL: tracked file not listed in manifest: {rel}'
         )
 
-    expected_size, expected_digest, _role = row
+    expected_size, expected_digest, _role = manifest_row
 
-    actual_size = path.stat().st_size
+    # Textdateien:
+    # Git ist die maßgebliche Integritäts-/Versionskontrolle.
+    # Kein bytegenauer Vergleich, weil CRLF/LF zwischen Windows und Linux
+    # unterschiedlich sein kann.
+    #
+    # Binärdateien:
+    # weiterhin bytegenaue Prüfung.
+    if path.suffix.lower() in BINARY_SUFFIXES:
 
-    if actual_size != expected_size:
-        raise SystemExit(
-            f'MANIFEST VALIDATION FAIL: size drift {rel}'
-        )
+        actual_size = path.stat().st_size
 
-    actual_digest = sha256(path)
+        if actual_size != expected_size:
+            raise SystemExit(
+                'MANIFEST VALIDATION FAIL: '
+                f'binary size drift {rel}'
+            )
 
-    if actual_digest != expected_digest:
-        raise SystemExit(
-            f'MANIFEST VALIDATION FAIL: hash drift {rel}'
-        )
+        actual_digest = sha256(path)
+
+        if actual_digest != expected_digest:
+            raise SystemExit(
+                'MANIFEST VALIDATION FAIL: '
+                f'binary hash drift {rel}'
+            )
+
+        binary_checked += 1
 
     checked += 1
 
 
 # ---------------------------------------------------------------------------
-# Inform about obsolete manifest rows instead of failing.
+# Alte lokale Manifest-Einträge
 #
-# These can exist because old local backup/archive files were previously
-# included by the generator although they were never Git-tracked.
+# Diese können aus Backups/ZIPs stammen, die lokal vorhanden waren,
+# aber nie Git-tracked waren.
 # ---------------------------------------------------------------------------
 
 tracked_set = set(tracked_files)
@@ -200,11 +214,13 @@ obsolete = sorted(
 
 if obsolete:
     print(
-        f'MANIFEST NOTICE: {len(obsolete)} non-Git manifest entries ignored'
+        f'MANIFEST NOTICE: '
+        f'{len(obsolete)} non-Git manifest entries ignored'
     )
 
 
 print(
-    f'MANIFEST VALIDATION OK: '
-    f'{checked} Git-tracked stable files checked'
+    'MANIFEST VALIDATION OK: '
+    f'{checked} Git-tracked files inventoried; '
+    f'{binary_checked} binary files byte-validated'
 )
