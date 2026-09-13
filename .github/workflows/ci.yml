@@ -121,6 +121,7 @@ jobs:
         run: |
           cp .env.example .env
           docker compose -f compose.yaml -f compose.staging.yaml config >/dev/null
+          docker compose -f compose.yaml -f compose.production.yaml config >/dev/null
 
       - name: Collect static
         working-directory: backend
@@ -130,6 +131,45 @@ jobs:
         run: |
           docker build -t promptmaster-ci:${{ github.sha }} .
           docker build -f Dockerfile.caddy -t promptmaster-caddy-ci:${{ github.sha }} .
+          docker build -t promptmaster-backup-ci:${{ github.sha }} ./backup
+
+  full-stack:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install validation dependencies
+        run: pip install -r requirements.txt
+      - name: Build marketing for repository validation
+        working-directory: marketing
+        run: |
+          npm ci
+          npm run build
+      - name: Generate isolated staging configuration
+        env:
+          PM_DOMAIN: localhost
+        run: python scripts/prepare_env.py
+      - name: Start and validate full stack with production filesystem restrictions
+        env:
+          PM_VALIDATE_READ_ONLY: '1'
+        run: bash scripts/runtime_validate.sh
+      - name: Test restore failure propagation and recovery
+        run: bash scripts/test_backup_restore.sh
+      - name: Container status
+        if: always()
+        run: docker compose -f compose.yaml -f compose.staging.yaml -f compose.production.yaml ps -a
+      - name: Container diagnostics on failure
+        if: failure()
+        run: docker compose -f compose.yaml -f compose.staging.yaml -f compose.production.yaml logs --tail=100
+      - name: Stop isolated CI stack
+        if: always()
+        run: docker compose -f compose.yaml -f compose.staging.yaml -f compose.production.yaml down
 
   browser-smoke:
     runs-on: ubuntu-latest

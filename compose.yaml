@@ -6,7 +6,7 @@ services:
       POSTGRES_DB: ${POSTGRES_DB}
       POSTGRES_USER: ${POSTGRES_USER}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
-    volumes: [postgres_data:/var/lib/postgresql/data]
+    volumes: [postgres_data:/var/lib/postgresql]
     networks: [data]
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}"]
@@ -54,7 +54,9 @@ services:
     restart: unless-stopped
   beat:
     build: .
-    command: ["celery","-A","config","beat","-l","INFO"]
+    command: ["celery","-A","config","beat","-l","INFO","--schedule=/tmp/celerybeat/celerybeat-schedule"]
+    tmpfs:
+      - /tmp/celerybeat:mode=1777,size=16m
     env_file: .env
     depends_on:
       postgres: {condition: service_healthy}
@@ -91,7 +93,7 @@ services:
     networks: [monitor]
     restart: unless-stopped
   cadvisor:
-    image: gcr.io/cadvisor/cadvisor:v0.60.5
+    image: ghcr.io/google/cadvisor:v0.60.5
     privileged: true
     volumes:
       - /:/rootfs:ro
