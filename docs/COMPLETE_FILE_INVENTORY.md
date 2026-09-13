@@ -1,6 +1,6 @@
 # Vollständiges Datei-Inventar — PromptMaster RC14
 
-Erfasst: **524 Dateien** (Manifest-/Inventardateien selbst ausgenommen), **43,333,880 Byte**.
+Erfasst: **524 Dateien** (Manifest-/Inventardateien selbst ausgenommen), **43,337,546 Byte**.
 
 Maschinenlesbar: `FILE_MANIFEST.tsv` und `MANIFEST.json`.
 
@@ -212,10 +212,10 @@ Maschinenlesbar: `FILE_MANIFEST.tsv` und `MANIFEST.json`.
 | `backend/config/urls.py` | 1689 | `391594b133ccc7b9edef4edfc1c170a9d0d057a1e73c8a192ff4541914da0054` |
 | `backend/config/wsgi.py` | 161 | `25d3ac3de67e7a1e20c9cfed54bf208a378c7e634f426239c36c63cbabc22f36` |
 | `backend/manage.py` | 239 | `9bba94f103ecf4d96b7bb92b4efd737352b65e003b6d0d5dc20c2a97cb62e13f` |
-| `backend/private_assets/README.md` | 303 | `260b610cc91d48508721f57752adabf25a442b8ab111bbee54a111a751d8ab16` |
 | `backend/private_assets/promptmaster_free_reference.html` | 110812 | `aada4fbb3461d3758c48ed808bf018716a53aa33baf81efb058412e63535b0a8` |
 | `backend/private_assets/promptmaster_pro.html` | 233404 | `aa7b2da53ba3cbcf9874b9b6f7381ea4c3e86ee1f9c09db186cbec6876a3c9cf` |
 | `backend/private_assets/promptmaster_pro_runtime.html` | 248805 | `29da4bb38b121ef585d07711e4e30966f1ae37089ffc01be048de7a2e821ebba` |
+| `backend/private_assets/README.md` | 303 | `260b610cc91d48508721f57752adabf25a442b8ab111bbee54a111a751d8ab16` |
 | `backend/static/brand/promptmaster-logo-reference.png` | 17905 | `5848c7bc83fa903f9eb2de1b8a3c8443a9dca937cf3659494d2db2d5a26ff231` |
 | `backend/static/css/app.css` | 9727 | `a0a74b3b25428c383c9c288be594e764e76319b27bfc74f2a7de9e165e4f5c7e` |
 | `backend/templates/app_shell.html` | 1062 | `7f7c3ebacd4e8c15a621656c8dc4ca2fe760c63833079836dd6d54dd279bcbe6` |
@@ -311,7 +311,7 @@ Maschinenlesbar: `FILE_MANIFEST.tsv` und `MANIFEST.json`.
 
 | Pfad | Größe | SHA256 |
 |---|---:|---|
-| `.github/workflows/ci.yml` | 4369 | `3a5dde0ac61b42678607efc950cfc6bd91151fee4a3ace581d87c723038c0d84` |
+| `.github/workflows/ci.yml` | 4706 | `4c3f50033300188b774fa804759557144b5201fd2840136969cdea4df94660c0` |
 
 ## active-marketing
 
@@ -323,8 +323,6 @@ Maschinenlesbar: `FILE_MANIFEST.tsv` und `MANIFEST.json`.
 | `marketing/.openai/hosting.json` | 128 | `f0edf586980b4bf42be68c4d7f4d8da814e74fdcbd08ca034113d989b247f57d` |
 | `marketing/.oxfmtrc.json` | 260 | `0962fdddb1840a06b5afb918ff3f2ff56bce346082651ec5c3567c01dd809f17` |
 | `marketing/.oxlintrc.json` | 1370 | `1a7aa1c7d83b05939e4e697eed9316224caea8958c4ad12837f8be740c13a47d` |
-| `marketing/INTEGRATION.md` | 1209 | `46dd7ebdf99e5481e2e39aa807ada646a2133c9cc3376580004fbb573db024da` |
-| `marketing/README.md` | 4310 | `42c11ae422f35b9bcd4acbca2b2841cf8e61d054aeac71b6f9f1e9ff6e8de455` |
 | `marketing/components/ui/accordion.tsx` | 2664 | `33e1c60ba503f4eb36f9a8b1f68b236174b11656d8efea6bac65abddda2f9019` |
 | `marketing/components/ui/alert-dialog.tsx` | 5301 | `ed0f1fc432bca4c72f9dd8741ae2268a00d2d3429ff1149bf463c4271b13d8e9` |
 | `marketing/components/ui/alert.tsx` | 2060 | `e760c470414c9e617d7292094146d906352fee3b1526b790a611d4a118e79196` |
@@ -418,6 +416,7 @@ Maschinenlesbar: `FILE_MANIFEST.tsv` und `MANIFEST.json`.
 | `marketing/docs/validation.md` | 1720 | `a0d0ea74a2a95594726168f1629b3c3c420db666fae4562180ca5c8627fba496` |
 | `marketing/hooks/use-mobile.ts` | 585 | `82bff42ff087bd5dc90a5d17609cc428b8688de92d1333073a839af5ad3c9cbd` |
 | `marketing/index.html` | 4161 | `ca540a7c36893b89f4d31600daad12badadb9f306d6f56e2daa009aa83c4f1d5` |
+| `marketing/INTEGRATION.md` | 1209 | `46dd7ebdf99e5481e2e39aa807ada646a2133c9cc3376580004fbb573db024da` |
 | `marketing/lib/utils.ts` | 169 | `9304a861c8673bee09e0f12de31773abbde503b02e59dfd74763ddec2e37cf05` |
 | `marketing/next.config.ts` | 104 | `d063bebef3a4878ae82f9f9547c2c9675b8b6945ab23702932dcb63a011a9fc9` |
 | `marketing/package-lock.json` | 347285 | `e742e43c1184fdbd3566241ac582c54f899cfddbbd0cc29db09e7f89e1521887` |
@@ -431,6 +430,7 @@ Maschinenlesbar: `FILE_MANIFEST.tsv` und `MANIFEST.json`.
 | `marketing/public/models/head.glb` | 404976 | `402b8a8ac9f03232e6d64b5962929703a069daf99d3c49ac8eb0e48bedc9c576` |
 | `marketing/public/models/night-landscape.png` | 1823026 | `8f05bcac2709089321e59d57dac4dbbe0d6295a6ed5b550c930ea9d530bb274a` |
 | `marketing/public/robots.txt` | 26 | `331ea9090db0c9f6f597bd9840fd5b171830f6e0b3ba1cb24dfa91f0c95aedc1` |
+| `marketing/README.md` | 4310 | `42c11ae422f35b9bcd4acbca2b2841cf8e61d054aeac71b6f9f1e9ff6e8de455` |
 | `marketing/scripts/finalize.mjs` | 1634 | `145249076356484d516e998abe59aeea6e1eb7f6c3313160d44982fdc03c8024` |
 | `marketing/scripts/redesign.mjs` | 5273 | `51a9424cf1ad8255166fc6702a7255a938a9aa65cc1ce5c94c0852b3dfa48ded` |
 | `marketing/scripts/verify-golden-master.mjs` | 539 | `6032f8feb0a6a841d2b9ecd051bf0f75c43ccbb06ccfca05e93716ccd26d4409` |
@@ -453,8 +453,8 @@ Maschinenlesbar: `FILE_MANIFEST.tsv` und `MANIFEST.json`.
 
 | Pfad | Größe | SHA256 |
 |---|---:|---|
-| `backup/Dockerfile` | 210 | `ef22a3784a2b0f212c384c90511abcf545463f1012e6e4617eaf10cd44e2d43a` |
 | `backup/backup.sh` | 4663 | `0bd99d4c12eb0e12b8214b0a742e7dce6d45706df01463ed608791efd81d5570` |
+| `backup/Dockerfile` | 210 | `ef22a3784a2b0f212c384c90511abcf545463f1012e6e4617eaf10cd44e2d43a` |
 | `monitoring/prometheus.yml` | 383 | `db1365580edfdbfcc703ca7921e623078111e3794a291de81ec1458f39f4fdb2` |
 | `scripts/backup.sh` | 147 | `cc1f10ae86c448fddce11c3e1059368f85133463aedffd3573b76ad1ee1e1d14` |
 | `scripts/bootstrap.sh` | 2154 | `497111c1d25b5e5cd480a3c8b3091af6e80ea2d29e425a13d3ba8e46c4c38f90` |
@@ -476,7 +476,7 @@ Maschinenlesbar: `FILE_MANIFEST.tsv` und `MANIFEST.json`.
 | `scripts/validate_prompt_assets.py` | 2333 | `20bb772ad5f002feea80c4df34bc776b0904d329399eed9d26891fce335bb924` |
 | `scripts/validate_prompt_domain.py` | 12994 | `1eb0def7f86cdf439a3ebe1562c64b1cb2add41cb9cc49a6ec5e9aedd45437ae` |
 | `scripts/validate_python_syntax.py` | 678 | `b926acbde0950f5bb3af7abb3b4cff18e1806ec06113c96cef4f015da44cc222` |
-| `scripts/validate_repo.py` | 3487 | `3fafd265b911c5e83527b0dc68478123008aab3e0d7ff78830386b97dcf11f03` |
+| `scripts/validate_repo.py` | 6619 | `a4338dbcc5b73d3df8958a7a412c16cab948431c898355d113ae6821ac3fa302` |
 | `scripts/validate_runtime_catalog.py` | 3117 | `83302c1578475251124ffb03abc35ee927de86d762c7d336e8772884b05201d6` |
 | `scripts/validate_static.py` | 22281 | `13e134096521ed213c085b11d3c69acd9d8f01f053d6a49d0685d2abc393cc87` |
 | `scripts/verify_golden_extraction.py` | 3748 | `1aa625fab07622a8a78caf15a574038243ab1d1c621b6baa706dcb4fbaa76c7f` |
@@ -487,9 +487,9 @@ Maschinenlesbar: `FILE_MANIFEST.tsv` und `MANIFEST.json`.
 
 | Pfad | Größe | SHA256 |
 |---|---:|---|
-| `product/golden_masters/SHA256SUMS.txt` | 177 | `b33327f70e01297aa8bf29058651f9bb4a3349731c50533d7415eb0a46bde6ac` |
 | `product/golden_masters/promptmaster_free.html` | 110812 | `aada4fbb3461d3758c48ed808bf018716a53aa33baf81efb058412e63535b0a8` |
 | `product/golden_masters/promptmaster_pro.html` | 233404 | `aa7b2da53ba3cbcf9874b9b6f7381ea4c3e86ee1f9c09db186cbec6876a3c9cf` |
+| `product/golden_masters/SHA256SUMS.txt` | 177 | `b33327f70e01297aa8bf29058651f9bb4a3349731c50533d7415eb0a46bde6ac` |
 | `product/runtime/pro_server_bridge.js` | 15382 | `8637cb60a75f7bcf965492d1f7f0876abde37156c957d7289857a54543fe99fb` |
 
 ## documentation
@@ -509,14 +509,14 @@ Maschinenlesbar: `FILE_MANIFEST.tsv` und `MANIFEST.json`.
 | `docs/PRIVACY_DATA_FLOW.md` | 1661 | `9522d161deeb2c9bfd7f3da1cc177d380adb68b08d5da4ef8185edf7cc4dc859` |
 | `docs/PROJECT_CHAT_FORENSICS_V3.md` | 937 | `b716908c1c311afec8d531b34e6706294eb8ae2af13db4004530af3ba7549ab1` |
 | `docs/PROMPT_DOMAIN_AND_COMPOSER.md` | 5754 | `61ff2dbd21ff70f2d74a2ddab6408517f28e79ad3abc2205daf97665739d641e` |
-| `docs/RELEASE_GATES.md` | 2323 | `86508aad791e67d02628c1ff840f681674990e656a83fdbcbe9730e342a77b8a` |
-| `docs/REQUIREMENTS_STATUS_V3.md` | 1387 | `c8a00e1af07c6032f7b45c679f88defc7693e5a6650330dfb5ac2595e2237123` |
-| `docs/SOURCE_OF_TRUTH.md` | 2059 | `01408c2217b1cffe1e4e45ba5418882416f491a466272da55dbb6a27942d63ae` |
-| `docs/recovery/NEW_INPUTS_FORENSIC_ANALYSIS.md` | 40159 | `45a9827be5be654f9fa22533721f72d0a784c3c2ae062db001ca5a58d09f928f` |
-| `docs/recovery/PromptMaster_FORENSIC_LIBRARY_AND_ARCHIVE_SCAN_2026-09-12.md` | 6852 | `15c9e8e9f0cbc4fe7c5dfe0f3e2e872ccdd9e8379059000dda5fdaba32495326` |
 | `docs/recovery/marketing-2026-09-06/content-freeze-reference.md` | 21028 | `b98b8b68ef2acdb8754e20ae195c718526c4b65d3866fed7925cf64310a53058` |
 | `docs/recovery/marketing-2026-09-06/free-live-reference.html` | 71799 | `a7586690d84ad4a549ac7e1498fdd0333b36c9c024ab5b7a98044a2b689b7f52` |
 | `docs/recovery/marketing-2026-09-06/pflichtenheft-reference.md` | 21194 | `8a5e4efcd698eba9f49ea70c76da09765dc5ac30420e7d82e653c7e5ae5a4b5e` |
+| `docs/recovery/NEW_INPUTS_FORENSIC_ANALYSIS.md` | 40159 | `45a9827be5be654f9fa22533721f72d0a784c3c2ae062db001ca5a58d09f928f` |
+| `docs/recovery/PromptMaster_FORENSIC_LIBRARY_AND_ARCHIVE_SCAN_2026-09-12.md` | 6852 | `15c9e8e9f0cbc4fe7c5dfe0f3e2e872ccdd9e8379059000dda5fdaba32495326` |
+| `docs/RELEASE_GATES.md` | 2323 | `86508aad791e67d02628c1ff840f681674990e656a83fdbcbe9730e342a77b8a` |
+| `docs/REQUIREMENTS_STATUS_V3.md` | 1387 | `c8a00e1af07c6032f7b45c679f88defc7693e5a6650330dfb5ac2595e2237123` |
+| `docs/SOURCE_OF_TRUTH.md` | 2059 | `01408c2217b1cffe1e4e45ba5418882416f491a466272da55dbb6a27942d63ae` |
 
 ## historical-reference
 
@@ -530,21 +530,21 @@ Maschinenlesbar: `FILE_MANIFEST.tsv` und `MANIFEST.json`.
 | `archive/chat-transfer-2026-09-12/02_LATEST_RC8_DOCUMENTATION/README.md` | 1145 | `bfb965c00257cb0b5127f9cc10c233fc5dbeea2c2d88b968b7eb89fcbae82336` |
 | `archive/chat-transfer-2026-09-12/02_LATEST_RC8_DOCUMENTATION/SPEC.md` | 46369 | `e5e6491322fc8d75c5086cc737743cbb55d0e7dcf806e515e5d62a8791d248fc` |
 | `archive/chat-transfer-2026-09-12/03_PHASE2_ACTUAL_CODE_BASELINE/PromptMaster_V1_Phase2/AGENTS.md` | 1011 | `144753b64981cac6fb351dfe33cd967a934b2fc6a6ee1b08fa3aecab88a07421` |
-| `archive/chat-transfer-2026-09-12/03_PHASE2_ACTUAL_CODE_BASELINE/PromptMaster_V1_Phase2/Dockerfile` | 481 | `cd5af0352839ad99545a628d5a10cc91ad072fd16ed34f65878f8b579f9948f7` |
-| `archive/chat-transfer-2026-09-12/03_PHASE2_ACTUAL_CODE_BASELINE/PromptMaster_V1_Phase2/README.md` | 3009 | `8f48b1e20e46d013b2455fa0115ac2d026afcead8baf4c820281ec5f0a12be5d` |
-| `archive/chat-transfer-2026-09-12/03_PHASE2_ACTUAL_CODE_BASELINE/PromptMaster_V1_Phase2/SPEC.md` | 46369 | `e5e6491322fc8d75c5086cc737743cbb55d0e7dcf806e515e5d62a8791d248fc` |
 | `archive/chat-transfer-2026-09-12/03_PHASE2_ACTUAL_CODE_BASELINE/PromptMaster_V1_Phase2/compose.staging.yaml` | 430 | `5e80346f0e3e5cd261a1da73b582278fbb84bbe3f085ab0763a074037748c0ab` |
 | `archive/chat-transfer-2026-09-12/03_PHASE2_ACTUAL_CODE_BASELINE/PromptMaster_V1_Phase2/compose.yaml` | 3907 | `291f894c3a805963999662d99d6a50ea92e3e5f1a0ed3675dbd164aa5cfa06b0` |
+| `archive/chat-transfer-2026-09-12/03_PHASE2_ACTUAL_CODE_BASELINE/PromptMaster_V1_Phase2/Dockerfile` | 481 | `cd5af0352839ad99545a628d5a10cc91ad072fd16ed34f65878f8b579f9948f7` |
+| `archive/chat-transfer-2026-09-12/03_PHASE2_ACTUAL_CODE_BASELINE/PromptMaster_V1_Phase2/README.md` | 3009 | `8f48b1e20e46d013b2455fa0115ac2d026afcead8baf4c820281ec5f0a12be5d` |
 | `archive/chat-transfer-2026-09-12/03_PHASE2_ACTUAL_CODE_BASELINE/PromptMaster_V1_Phase2/scripts/bootstrap.sh` | 2677 | `904dcb6ee5a859558ee8eea06fdfff1532bf2c3e7f42c30b0aa4b010437f7f34` |
-| `archive/chat-transfer-2026-09-12/04_UI_PROTOTYPES/PromptMaster_Kundenportal.html` | 42660 | `8472907d76febc0698b82db2fef3b6a8ef73163941152ff98ed415a7f80404be` |
-| `archive/chat-transfer-2026-09-12/04_UI_PROTOTYPES/PromptMaster_UI_Prototype_V1_1_FIXED.zip` | 16023 | `40fed976399b97a7c7d058aa028a257f285407d198acc15f31d9a61490122caa` |
-| `archive/chat-transfer-2026-09-12/04_UI_PROTOTYPES/PromptMaster_netstyle_Admin_V2.html` | 21426 | `75b547934f2166560acc3cd4687cba10b1f061e050e743121ff72584aea6dd42` |
-| `archive/chat-transfer-2026-09-12/04_UI_PROTOTYPES/promptmaster-prototype-v1/README.md` | 1164 | `de2ba8b9407d9b1cebf37b87982a3f12f67e3575f63492fed738d4a4b147bf25` |
-| `archive/chat-transfer-2026-09-12/04_UI_PROTOTYPES/promptmaster-prototype-v1/SPEC.md` | 1371 | `831bc744acfe383312227ccd072fc6b11f75eacd434a9480efc0f8a0b9e40c3d` |
+| `archive/chat-transfer-2026-09-12/03_PHASE2_ACTUAL_CODE_BASELINE/PromptMaster_V1_Phase2/SPEC.md` | 46369 | `e5e6491322fc8d75c5086cc737743cbb55d0e7dcf806e515e5d62a8791d248fc` |
 | `archive/chat-transfer-2026-09-12/04_UI_PROTOTYPES/promptmaster-prototype-v1/app.html` | 42956 | `5092fd0ae3ee0c2a97a41df90587282db6bbfced9cbea4c7803d2e71ea4c1b82` |
 | `archive/chat-transfer-2026-09-12/04_UI_PROTOTYPES/promptmaster-prototype-v1/index.html` | 3088 | `58284c1532110e78a61e76d780b8ebfa04d8e3d0d48fff170145c228bf8ee3d4` |
 | `archive/chat-transfer-2026-09-12/04_UI_PROTOTYPES/promptmaster-prototype-v1/kundenportal.html` | 188 | `fa8c1a28bf28f022ce17510ee5d56979ad3e6b46cf0e5fd7c5935a7c5256684e` |
 | `archive/chat-transfer-2026-09-12/04_UI_PROTOTYPES/promptmaster-prototype-v1/netstyle-admin.html` | 202 | `105251479d81fd8937acd680668e28dcd0da2a29d297c603c0fd82dc4a247d66` |
+| `archive/chat-transfer-2026-09-12/04_UI_PROTOTYPES/promptmaster-prototype-v1/README.md` | 1164 | `de2ba8b9407d9b1cebf37b87982a3f12f67e3575f63492fed738d4a4b147bf25` |
+| `archive/chat-transfer-2026-09-12/04_UI_PROTOTYPES/promptmaster-prototype-v1/SPEC.md` | 1371 | `831bc744acfe383312227ccd072fc6b11f75eacd434a9480efc0f8a0b9e40c3d` |
+| `archive/chat-transfer-2026-09-12/04_UI_PROTOTYPES/PromptMaster_Kundenportal.html` | 42660 | `8472907d76febc0698b82db2fef3b6a8ef73163941152ff98ed415a7f80404be` |
+| `archive/chat-transfer-2026-09-12/04_UI_PROTOTYPES/PromptMaster_netstyle_Admin_V2.html` | 21426 | `75b547934f2166560acc3cd4687cba10b1f061e050e743121ff72584aea6dd42` |
+| `archive/chat-transfer-2026-09-12/04_UI_PROTOTYPES/PromptMaster_UI_Prototype_V1_1_FIXED.zip` | 16023 | `40fed976399b97a7c7d058aa028a257f285407d198acc15f31d9a61490122caa` |
 | `archive/chat-transfer-2026-09-12/05_DESIGN_REFERENCES/1000279014.png` | 440658 | `afeba547d12ae353dfdb84111473100aa4b680139eaa2eb7fc3689616d849714` |
 | `archive/chat-transfer-2026-09-12/05_DESIGN_REFERENCES/a_detailed_infographic_style_project_plan_and_ui_u.png` | 1905661 | `07589b65f55ff6386edaa6f075c92c41626bbb3e719f8e4438952f3e58ba652d` |
 | `archive/chat-transfer-2026-09-12/05_DESIGN_REFERENCES/a_detailed_ui_design_mockup_image_showing_a_saas_a.png` | 1519230 | `4fd621f222148dc242a0f74bcba251ce2c983a3a5a5ceddee3b0c18b756a12df` |
@@ -579,15 +579,15 @@ Maschinenlesbar: `FILE_MANIFEST.tsv` und `MANIFEST.json`.
 |---|---:|---|
 | `.dockerignore` | 170 | `597cfecc39c86d5e456fa5acc18a496ca3b9110b0d0ffeb4b0ac6c1093f0b9a1` |
 | `.env.example` | 1156 | `bf18b1efc79ed9573e49a57c5a5b06ac3f9b50502636ff8ed10712b17a9f408e` |
-| `.gitignore` | 253 | `a09cdc3edf945b4b36f8718be7eea84e4eb584f972f9e50f1304f5a6fbe8335d` |
+| `.gitignore` | 435 | `61a240874f4297066f7d650e09fd19d529be1423e071ebe82f0c1231d0777180` |
 | `AGENTS.md` | 1887 | `6b0f2950044806d7960ab4fad453a6b6507ef4121a96dbb587da10e08b43e9aa` |
 | `Caddyfile` | 2162 | `77dc0138f4065ec74ac4eeff5da26d6dde7f16e5ffb594f6b9c1b4064059a519` |
-| `Dockerfile` | 632 | `78cdedfea4434d0e4a88d8d7c98796f9d465ca7b8ee4f38d717d3ab972bbf08b` |
-| `Dockerfile.caddy` | 281 | `3222f69f1bd3a6537a6ec6d5d537f8ae5ab7112cc7a7a55a4949fbe8afb5001c` |
-| `README.md` | 6011 | `d8ffbf46bb7cc79061ed383bfd75e81bb21389fc13e32c3974fa08d928ab0c92` |
-| `SPEC.md` | 46369 | `e5e6491322fc8d75c5086cc737743cbb55d0e7dcf806e515e5d62a8791d248fc` |
 | `compose.production.yaml` | 149 | `892d9a05cb62b80de558541dc45b5804a72a39b4541fc23c6a63b0d5801f8f1c` |
 | `compose.staging.yaml` | 654 | `45328bdb64d1d4dc2dc46abe30f54f84c589d56e516c00fb5fd1d5a492b4737b` |
 | `compose.yaml` | 3998 | `5fec5bd964eb764b0f973a06e47206d34016c8b42ef0b7b6c7aa3adeeb2e162d` |
-| `requirements.txt` | 191 | `23117a2335b255385b99fda6ec768badceb54454972b51c91cc5dd05a3053c44` |
+| `Dockerfile` | 632 | `78cdedfea4434d0e4a88d8d7c98796f9d465ca7b8ee4f38d717d3ab972bbf08b` |
+| `Dockerfile.caddy` | 281 | `3222f69f1bd3a6537a6ec6d5d537f8ae5ab7112cc7a7a55a4949fbe8afb5001c` |
+| `README.md` | 6011 | `d8ffbf46bb7cc79061ed383bfd75e81bb21389fc13e32c3974fa08d928ab0c92` |
+| `requirements.txt` | 206 | `ceb986bad2b3fbe439d43e758686454954b00e4f39b438903eb2dfe864abfb0c` |
+| `SPEC.md` | 46369 | `e5e6491322fc8d75c5086cc737743cbb55d0e7dcf806e515e5d62a8791d248fc` |
 
