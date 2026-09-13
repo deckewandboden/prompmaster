@@ -1,6 +1,6 @@
 # Vollständiges Datei-Inventar — PromptMaster RC14
 
-Erfasst: **524 Dateien** (Manifest-/Inventardateien selbst ausgenommen), **43,337,546 Byte**.
+Erfasst: **524 Dateien** (Manifest-/Inventardateien selbst ausgenommen), **43,341,899 Byte**.
 
 Maschinenlesbar: `FILE_MANIFEST.tsv` und `MANIFEST.json`.
 
@@ -464,14 +464,14 @@ Maschinenlesbar: `FILE_MANIFEST.tsv` und `MANIFEST.json`.
 | `scripts/deploy.sh` | 1728 | `313e749dad62cf147a5c1ec9286a18283ff12bd36b85d5d120650bf03f974681` |
 | `scripts/diagnose.sh` | 137 | `86b08add1d4a6baa7b65e86be9ff9d193f1ba16e1e8f965297953d8bfeb127f5` |
 | `scripts/generate_file_manifest.py` | 3183 | `74c64e3a2c7c84ff5011e56ceadeb0315e0a0bb5faa892cdd1ea93805012bfaf` |
-| `scripts/github_preflight.py` | 1743 | `47cb7f3c9453c28bd0b07f76ab8ea4d529fbdff29826d010a61ab3b707845954` |
+| `scripts/github_preflight.py` | 3304 | `78fa9a5e7e61c5f8615f4ccbbb310e485d86b46fb29f27777656ec33b454b466` |
 | `scripts/github_prepare.sh` | 859 | `b3ba2e8d6107c0d965252660f542d9a551422ad605f73ab67daf9e3c79d7e7cc` |
 | `scripts/prepare_env.py` | 4319 | `1f509fa0d8c62a46bf3f11f1d0f1cbaf9d6ca27938c1134cfe6ce50dfd219350` |
 | `scripts/restore-test.sh` | 1017 | `73a537bc855d33ba896337fe147b2dd07fa1f58a0621a374e174a1d828ec2854` |
 | `scripts/runtime_validate.sh` | 4994 | `0c4a23599508855aa8f88c1b4a5b559daaded248b2bac8d944290224cf74e976` |
 | `scripts/update.sh` | 102 | `75036bf3dc461ba0d307d05faa1d1ad3317c8657071ea532a3b9bc5dfbe2a786` |
 | `scripts/validate_env.py` | 5909 | `fb52eb72749c7ad402885a0ab8ee5f87bc5e0d96f002e3b6318d3b099f391ec1` |
-| `scripts/validate_manifest.py` | 1833 | `ab19a7fab67c3a21c6fd5d979b85716820a66d3550b4412ce3e356ed86c2602f` |
+| `scripts/validate_manifest.py` | 4625 | `c7657c2ac84258209dbf4a5178188ba47798cb3fe6e20c39e9459bbd60e12b0c` |
 | `scripts/validate_marketing.py` | 2832 | `1b38181beab072008432474fbf71189f34583f1f4c4f9e17c97487285522fc15` |
 | `scripts/validate_prompt_assets.py` | 2333 | `20bb772ad5f002feea80c4df34bc776b0904d329399eed9d26891fce335bb924` |
 | `scripts/validate_prompt_domain.py` | 12994 | `1eb0def7f86cdf439a3ebe1562c64b1cb2add41cb9cc49a6ec5e9aedd45437ae` |

@@ -1,8 +1,8 @@
 {
   "project": "PromptMaster Commercial RC14 Full Repository",
-  "generated_at": "2026-09-13T09:17:19.875872+00:00",
+  "generated_at": "2026-09-13T09:35:50.308712+00:00",
   "file_count_excluding_manifest_files": 524,
-  "total_bytes_excluding_manifest_files": 43337546,
+  "total_bytes_excluding_manifest_files": 43341899,
   "roles": {
     "active-backend": 294,
     "active-ci": 1,
@@ -3041,8 +3041,8 @@
     },
     {
       "path": "scripts/github_preflight.py",
-      "size": 1743,
-      "sha256": "47cb7f3c9453c28bd0b07f76ab8ea4d529fbdff29826d010a61ab3b707845954",
+      "size": 3304,
+      "sha256": "78fa9a5e7e61c5f8615f4ccbbb310e485d86b46fb29f27777656ec33b454b466",
       "role": "active-operations"
     },
     {
@@ -3083,8 +3083,8 @@
     },
     {
       "path": "scripts/validate_manifest.py",
-      "size": 1833,
-      "sha256": "ab19a7fab67c3a21c6fd5d979b85716820a66d3550b4412ce3e356ed86c2602f",
+      "size": 4625,
+      "sha256": "c7657c2ac84258209dbf4a5178188ba47798cb3fe6e20c39e9459bbd60e12b0c",
       "role": "active-operations"
     },
     {
