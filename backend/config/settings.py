@@ -1,9 +1,11 @@
 from pathlib import Path
 import os
+import sys
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 ENVIRONMENT = os.getenv('ENVIRONMENT', 'development').strip().lower()
 DEBUG = ENVIRONMENT == 'development'
+TESTING = 'test' in sys.argv
 SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY', 'unsafe-development-only')
 
 ALLOWED_HOSTS = [x.strip() for x in os.getenv('ALLOWED_HOSTS', 'localhost,127.0.0.1').split(',') if x.strip()]
@@ -102,7 +104,7 @@ STATIC_URL = '/static/'
 STATIC_ROOT = BASE_DIR / 'staticfiles'
 STATICFILES_DIRS = [BASE_DIR / 'static']
 STORAGES = {
-    'staticfiles': {'BACKEND': 'whitenoise.storage.CompressedManifestStaticFilesStorage'},
+    'staticfiles': {'BACKEND': 'django.contrib.staticfiles.storage.StaticFilesStorage' if TESTING else 'whitenoise.storage.CompressedManifestStaticFilesStorage'},
     'default': {'BACKEND': 'django.core.files.storage.FileSystemStorage'},
 }
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'

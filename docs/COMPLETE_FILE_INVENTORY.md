@@ -1,6 +1,6 @@
 # Vollständiges Datei-Inventar — PromptMaster RC14
 
-Erfasst: **536 Dateien** (Manifest-/Inventardateien selbst ausgenommen), **43,476,328 Byte**.
+Erfasst: **535 Dateien** (Manifest-/Inventardateien selbst ausgenommen), **43,350,714 Byte**.
 
 Maschinenlesbar: `FILE_MANIFEST.tsv` und `MANIFEST.json`.
 
@@ -218,7 +218,7 @@ Maschinenlesbar: `FILE_MANIFEST.tsv` und `MANIFEST.json`.
 | `backend/config/__init__.py` | 64 | `40e9457320576e0813c9ec166611e979252a367aede83677fe5626398648cedc` |
 | `backend/config/asgi.py` | 161 | `e66806d324f24440dc47c97b9a870686dc47e2f5879aa61d1df7bb1c028bf25b` |
 | `backend/config/celery.py` | 221 | `99c9d65218b5b7ec9416eed0fb746644ca7aa90fe27223f166df94cea3fd6982` |
-| `backend/config/settings.py` | 7943 | `1de65026182e7f66fa180f91a123d7e245b27a050abae457e2bbbe6fdc674057` |
+| `backend/config/settings.py` | 8055 | `0a20f98b37cfa8309b82602e13d7d86237acc64aeb741b7179c120cf445361ad` |
 | `backend/config/urls.py` | 1689 | `391594b133ccc7b9edef4edfc1c170a9d0d057a1e73c8a192ff4541914da0054` |
 | `backend/config/wsgi.py` | 161 | `25d3ac3de67e7a1e20c9cfed54bf208a378c7e634f426239c36c63cbabc22f36` |
 | `backend/manage.py` | 239 | `9bba94f103ecf4d96b7bb92b4efd737352b65e003b6d0d5dc20c2a97cb62e13f` |
@@ -583,14 +583,14 @@ Maschinenlesbar: `FILE_MANIFEST.tsv` und `MANIFEST.json`.
 
 ## repository-root
 
-15 Dateien.
+14 Dateien.
 
 | Pfad | Größe | SHA256 |
 |---|---:|---|
 | `.dockerignore` | 170 | `597cfecc39c86d5e456fa5acc18a496ca3b9110b0d0ffeb4b0ac6c1093f0b9a1` |
 | `.env.example` | 1156 | `bf18b1efc79ed9573e49a57c5a5b06ac3f9b50502636ff8ed10712b17a9f408e` |
 | `.gitattributes` | 649 | `33184d32b64b1b8b08485d10af623a0ab85079f3906d2abe2ff8bdc2cc8f0c88` |
-| `.gitignore` | 435 | `61a240874f4297066f7d650e09fd19d529be1423e071ebe82f0c1231d0777180` |
+| `.gitignore` | 458 | `d80d523a6dbc20b0b2f0f8baf73d79c2051aaa91c410a6016b2ec8b88618ac80` |
 | `AGENTS.md` | 1887 | `6b0f2950044806d7960ab4fad453a6b6507ef4121a96dbb587da10e08b43e9aa` |
 | `Caddyfile` | 2162 | `77dc0138f4065ec74ac4eeff5da26d6dde7f16e5ffb594f6b9c1b4064059a519` |
 | `compose.production.yaml` | 149 | `892d9a05cb62b80de558541dc45b5804a72a39b4541fc23c6a63b0d5801f8f1c` |
@@ -599,7 +599,6 @@ Maschinenlesbar: `FILE_MANIFEST.tsv` und `MANIFEST.json`.
 | `Dockerfile` | 632 | `78cdedfea4434d0e4a88d8d7c98796f9d465ca7b8ee4f38d717d3ab972bbf08b` |
 | `Dockerfile.caddy` | 281 | `3222f69f1bd3a6537a6ec6d5d537f8ae5ab7112cc7a7a55a4949fbe8afb5001c` |
 | `README.md` | 6011 | `d8ffbf46bb7cc79061ed383bfd75e81bb21389fc13e32c3974fa08d928ab0c92` |
-| `redirect_diagnose.txt` | 125749 | `2ab3d4289f2b53359ecad694848036e95e81414d3ad97ce9126df0197a60b80d` |
 | `requirements.txt` | 206 | `ceb986bad2b3fbe439d43e758686454954b00e4f39b438903eb2dfe864abfb0c` |
 | `SPEC.md` | 46369 | `e5e6491322fc8d75c5086cc737743cbb55d0e7dcf806e515e5d62a8791d248fc` |
 

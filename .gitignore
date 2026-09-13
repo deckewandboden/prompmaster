@@ -53,3 +53,4 @@ backup/
 # Temp
 *.tmp
 *.temp
+redirect_diagnose.txt
