@@ -583,4 +583,3 @@ Maschinenlesbar: `FILE_MANIFEST.tsv` und `MANIFEST.json`.
 | `README.md` | 6011 | `d8ffbf46bb7cc79061ed383bfd75e81bb21389fc13e32c3974fa08d928ab0c92` |
 | `requirements.txt` | 206 | `ceb986bad2b3fbe439d43e758686454954b00e4f39b438903eb2dfe864abfb0c` |
 | `SPEC.md` | 46369 | `e5e6491322fc8d75c5086cc737743cbb55d0e7dcf806e515e5d62a8791d248fc` |
-
