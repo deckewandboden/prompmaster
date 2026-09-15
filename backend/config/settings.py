@@ -13,6 +13,7 @@ CSRF_TRUSTED_ORIGINS = [x.strip() for x in os.getenv('CSRF_TRUSTED_ORIGINS', '')
 CADDY_DOMAIN = os.getenv('CADDY_DOMAIN', '').strip()
 APP_VERSION = os.getenv('APP_VERSION', 'development')
 GIT_SHA = os.getenv('GIT_SHA', '')
+DEPLOYED_AT = os.getenv('DEPLOYED_AT', '')
 
 INSTALLED_APPS = [
     'django.contrib.admin',
