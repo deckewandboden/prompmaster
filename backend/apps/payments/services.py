@@ -10,6 +10,7 @@ from django.utils.dateparse import parse_datetime
 from apps.audit.services import audit
 from apps.devices.models import DeviceRegistration
 from apps.licenses.models import License, LicenseAssignment, LicenseTerm
+from apps.orders.models import Order
 from .models import MollieEvent, Payment, Refund
 from .mollie import MollieClient
 
@@ -88,7 +89,13 @@ def _license_state_from_assignments(license_obj, now):
 
 @transaction.atomic
 def process_provider_state(payment_id, payload):
-    payment = Payment.objects.select_for_update().select_related('order__private_user', 'order__company').get(provider_payment_id=payment_id)
+    # Lock only the payment row. Joining nullable order owners here would make
+    # PostgreSQL apply FOR UPDATE to the nullable side of LEFT OUTER JOINs,
+    # which PostgreSQL rejects. Related order/customer data is read separately;
+    # _activate_order obtains its own row lock before mutating the order.
+    payment = Payment.objects.select_for_update().get(provider_payment_id=payment_id)
+    order = Order.objects.select_related('private_user', 'company').get(pk=payment.order_id)
+    payment.order = order
     provider_amount, provider_currency = _provider_amount(payload)
     if provider_amount != payment.amount.quantize(CENT) or provider_currency != payment.currency.upper():
         raise ValidationError('Mollie-Betrag oder Währung stimmen nicht mit der Bestellung überein.')
