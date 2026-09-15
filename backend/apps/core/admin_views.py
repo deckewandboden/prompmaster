@@ -112,6 +112,19 @@ def _send_staff_setup_email(request, user):
 
 def _grid_export(request, grid, columns, filename):
     if request.GET.get('export') == 'csv':
+        # Export actions can contain customer, license, payment or audit data.
+        # Record the operation without persisting the user's raw search text.
+        write_audit(
+            request.user,
+            'datagrid.exported',
+            request.user,
+            {
+                'filename': filename,
+                'rows': grid.page.paginator.count,
+                'filtered': bool(grid.query or grid.filters),
+            },
+            request=request,
+        )
         return csv_response(grid.queryset, columns, filename)
     return None
 
