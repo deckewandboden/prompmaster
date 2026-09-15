@@ -87,6 +87,21 @@ def _license_state_from_assignments(license_obj, now):
     return 'active' if assigned else 'free'
 
 
+def _locked_order_licenses(order, *, active_terms_only=False):
+    """Lock licenses touched by an order without FOR UPDATE + DISTINCT.
+
+    PostgreSQL rejects SELECT DISTINCT ... FOR UPDATE. Resolve the unique
+    license IDs first, then lock the concrete License rows in a second query.
+    """
+    terms = LicenseTerm.objects.filter(order_item__order=order)
+    if active_terms_only:
+        terms = terms.filter(status='active')
+    license_ids = list(terms.values_list('license_id', flat=True).distinct())
+    if not license_ids:
+        return License.objects.none()
+    return License.objects.select_for_update().filter(pk__in=license_ids).order_by('pk')
+
+
 @transaction.atomic
 def process_provider_state(payment_id, payload):
     # Lock only the payment row. Joining nullable order owners here would make
@@ -146,7 +161,7 @@ def process_provider_state(payment_id, payload):
             # reversal. Re-enable only licenses that still have paid active
             # terms; refunded terms remain excluded.
             now = timezone.now()
-            for license_obj in License.objects.select_for_update().filter(terms__order_item__order=payment.order).distinct():
+            for license_obj in _locked_order_licenses(payment.order):
                 has_terms = license_obj.terms.filter(status='active', valid_until__gt=now).exists()
                 if has_terms and license_obj.status == 'payment_review':
                     license_obj.status = _license_state_from_assignments(license_obj, now)
@@ -162,7 +177,7 @@ def process_provider_state(payment_id, payload):
     elif base_status == 'charged_back':
         if previous_status != 'charged_back':
             _queue_after_commit('chargeback_review', _order_recipient(payment.order), {'order': payment.order.order_number})
-        for license_obj in License.objects.select_for_update().filter(terms__order_item__order=payment.order, terms__status='active').distinct():
+        for license_obj in _locked_order_licenses(payment.order, active_terms_only=True):
             if license_obj.status != 'payment_review':
                 license_obj.status = 'payment_review'
                 license_obj.save(update_fields=['status', 'updated_at'])
