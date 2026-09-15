@@ -22,7 +22,7 @@ from apps.core.datagrid import DataGrid
 from apps.devices.models import DeviceRegistration
 from apps.devices.services import revoke_device
 from apps.legal.models import DeletionRequest, LegalAcceptance, LegalDocument
-from apps.licenses.models import License, LicenseAssignment, LicenseUpgradeRequest
+from apps.licenses.models import License, LicenseAssignment, LicenseReminder, LicenseUpgradeRequest
 from apps.licenses.services import assign_license, release_license, request_product_upgrade, resolve_product_upgrade, create_assignment_link, consume_assignment_link
 from apps.notifications.services import queue_email
 from apps.orders.models import Order
@@ -334,6 +334,62 @@ def licenses(request):
             'is_admin': bool(membership and membership.role == 'admin'),
             'can_manage': bool(not company or (membership and membership.role == 'admin')),
             'filter_options': [('status', 'Status', License.STATUS), ('product', 'Produkt', products)],
+        },
+    )
+
+
+@login_required
+def license_detail(request, pk):
+    company_obj, membership = _ctx(request)
+    if company_obj and membership and membership.role == 'admin':
+        queryset = License.objects.filter(company=company_obj)
+    elif company_obj:
+        queryset = License.objects.filter(
+            company=company_obj,
+            assignments__user=request.user,
+            assignments__ended_at__isnull=True,
+        ).distinct()
+    else:
+        queryset = License.objects.filter(owner_user=request.user)
+
+    license_obj = get_object_or_404(
+        queryset.select_related('product'),
+        pk=pk,
+    )
+    assignment = (
+        LicenseAssignment.objects.filter(
+            license=license_obj,
+            ended_at__isnull=True,
+        )
+        .select_related('user')
+        .first()
+    )
+    reminders = LicenseReminder.objects.filter(
+        license=license_obj,
+        target_valid_until=license_obj.valid_until,
+    ).order_by('kind')
+    now = timezone.now()
+    remaining_days = max(
+        (timezone.localtime(license_obj.valid_until).date() - timezone.localdate(now)).days,
+        0,
+    ) if license_obj.valid_until else 0
+    can_manage = bool(
+        license_obj.owner_user_id == request.user.id
+        or (company_obj and membership and membership.role == 'admin')
+    )
+    return render(
+        request,
+        'portal/license_detail.html',
+        {
+            'license': license_obj,
+            'assignment': assignment,
+            'reminders': reminders,
+            'devices': DeviceRegistration.objects.filter(
+                license=license_obj,
+                revoked_at__isnull=True,
+            ).select_related('user').order_by('-last_seen_at'),
+            'remaining_days': remaining_days,
+            'can_manage': can_manage,
         },
     )
 
