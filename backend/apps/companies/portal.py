@@ -1163,7 +1163,7 @@ def transfer_admin_view(request, user_id):
             raise PermissionDenied
         else:
             try:
-                transfer_admin(company_obj, request.user, new_member.user)
+                transfer_admin(company_obj, request.user, new_member.user, actor=request.user, request=request)
             except ValidationError as exc:
                 form.add_error(None, exc.messages[0])
             else:
