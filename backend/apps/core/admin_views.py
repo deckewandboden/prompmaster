@@ -34,6 +34,7 @@ from apps.payments.models import MollieEvent, Payment
 from apps.payments.services import calculate_refund, create_refund_request, submit_refund
 from apps.support.models import SupportRequest
 from .admin_forms import (
+    AdminCompanyForm,
     EmailTemplateForm,
     FeatureForm,
     GeneralSettingsForm,
@@ -343,6 +344,47 @@ def customer_detail(request, pk):
             'license_count': customer.licenses.count(),
             'order_count': customer.orders.count(),
         },
+    )
+
+
+@staff_perm('customers.read')
+def customer_company(request, pk):
+    customer = _customer(request, pk)
+    can_write = has_perm(request.user, 'customers.write')
+    if request.method == 'POST' and not can_write:
+        raise PermissionDenied
+
+    before = {
+        field: getattr(customer, field)
+        for field in AdminCompanyForm.Meta.fields
+    }
+    form = AdminCompanyForm(request.POST or None, instance=customer)
+    if request.method == 'POST' and form.is_valid():
+        saved = form.save()
+        after = {
+            field: getattr(saved, field)
+            for field in AdminCompanyForm.Meta.fields
+        }
+        changes = {
+            field: {'before': str(before[field]), 'after': str(after[field])}
+            for field in after
+            if before[field] != after[field]
+        }
+        if changes:
+            write_audit(
+                request.user,
+                'company.updated',
+                saved,
+                {'changes': changes},
+                request=request,
+            )
+        messages.success(request, 'Unternehmensdaten gespeichert.')
+        return redirect('ns_admin:customer_company', pk=saved.pk)
+
+    return render(
+        request,
+        'ns_admin/customer_company.html',
+        {'customer': customer, 'form': form, 'can_write': can_write},
     )
 
 
