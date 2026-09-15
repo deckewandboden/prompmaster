@@ -1,4 +1,4 @@
-# Vollständiges Datei-Inventar — PromptMaster RC14
+| `backend/templates/ns_admin/service_account_token.html` | 603 | `e925718eca563cf3199d428f3e858c216e6823838923b4bc0a287ca1d276a954` || `backend/templates/ns_admin/api.html` | 1235 | `da72eb8c5979e8f13c9c6331a2aaf4cfce6dee86fb352ff7fb393c77e67d04fc` || `backend/apps/core/tests.py` | 3016 | `efd1dedc79f28c218c293efd02dfc873e6a5a84c96439d899f2f7d49edbeac09` || `backend/apps/core/admin_urls.py` | 5747 | `f3afd6ff08bf2ade33780e2d03528ba102104411b379f98b604ab44433a5b158` || `backend/apps/core/admin_views.py` | 53537 | `231f1575f0ad49e973ce1218f3723a8ab3f3d3119c9cac5db3aa431cd3f17481` |# Vollständiges Datei-Inventar — PromptMaster RC14
 
 Erfasst: **517 Dateien** (Manifest-/Inventardateien selbst ausgenommen), **20,537,871 Byte**.
 
