@@ -20,3 +20,38 @@ a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,te
 @media(max-width:700px){.staff-row{align-items:flex-start;flex-direction:column}.staff-row>.page-actions{width:100%}}
 
 .message-box{margin-top:14px;padding:14px;border:1px solid var(--line);border-radius:10px;background:#f8fbfd;white-space:normal;overflow-wrap:anywhere;line-height:1.55}
+
+
+/* Prototype fidelity variants
+   Kundenportal: PromptMaster_Kundenportal.html
+   netstyle Admin: PromptMaster_netstyle_Admin_V2.html */
+.four{grid-template-columns:repeat(4,minmax(0,1fr))}
+.portal-shell{
+  --line:#dfe7ef;--muted:#66788a;--blue:#0969f5;--cyan:#13c9e8;--yellow:#f4a62a;
+  grid-template-columns:250px minmax(0,1fr)
+}
+.admin-shell{
+  --line:#dde7f0;--muted:#6b7d90;--blue:#0b6df6;--cyan:#16cae8;--yellow:#f3a72b;
+  grid-template-columns:255px minmax(0,1fr);font-family:"Segoe UI",Arial,sans-serif
+}
+.portal-shell .sidebar,.admin-shell .sidebar{padding:18px 14px}
+.portal-shell .content{max-width:1600px}
+.admin-shell .content{max-width:1540px}
+.portal-shell .topbar{height:66px}
+.admin-shell .topbar{height:68px}
+.portal-shell .search{max-width:650px}
+.admin-shell .search{max-width:700px}
+.portal-shell .avatar{width:36px;height:36px}
+.admin-shell .avatar{width:38px;height:38px}
+.portal-shell .two,.admin-shell .two{grid-template-columns:1.25fr .75fr}
+.portal-shell .toolbar input{min-width:230px}
+@media(max-width:1100px){
+  .portal-shell{grid-template-columns:76px minmax(0,1fr)}
+  .admin-shell{grid-template-columns:78px minmax(0,1fr)}
+  .four{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .portal-shell .two,.admin-shell .two{grid-template-columns:1fr}
+}
+@media(max-width:700px){
+  .portal-shell,.admin-shell{display:block}
+  .four{grid-template-columns:repeat(2,minmax(0,1fr))}
+}

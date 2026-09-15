@@ -1,5 +1,6 @@
 {% extends 'app_shell.html' %}
 {% block title %}PromptMaster Kundenportal{% endblock %}
+{% block shell_class %}portal-shell{% endblock %}
 {% block home_url %}{% url 'portal:dashboard' %}{% endblock %}
 {% block nav %}
 <a href="{% url 'portal:dashboard' %}"><span class="ico">⌂</span><span class="label">Dashboard</span></a>

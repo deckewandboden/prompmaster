@@ -1,5 +1,6 @@
 {% extends 'app_shell.html' %}{% load pm %}
 {% block title %}PromptMaster · netstyle Admin{% endblock %}
+{% block shell_class %}admin-shell{% endblock %}
 {% block home_url %}{% url 'ns_admin:dashboard' %}{% endblock %}
 {% block search_action %}{% url 'ns_admin:search' %}{% endblock %}
 {% block nav %}
