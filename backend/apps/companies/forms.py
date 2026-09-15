@@ -1,6 +1,7 @@
 from django import forms
 
 from apps.catalog.models import TaxRule
+from apps.licenses.models import License
 from .models import Company, PrivateCustomerProfile
 
 
@@ -60,8 +61,20 @@ class SupportForm(forms.Form):
             ('other', 'Sonstiges'),
         ]
     )
+    license = forms.ModelChoiceField(
+        queryset=License.objects.none(),
+        required=False,
+        label='Lizenz (optional)',
+        empty_label='Keine konkrete Lizenz',
+    )
     subject = forms.CharField(max_length=180)
     message = forms.CharField(widget=forms.Textarea, max_length=5000)
+
+    def __init__(self, *args, license_queryset=None, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['license'].queryset = (
+            license_queryset if license_queryset is not None else License.objects.none()
+        )
 
 
 class UserProfileForm(forms.Form):
