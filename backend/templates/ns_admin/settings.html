@@ -1,1 +1,10 @@
-{% extends 'ns_admin/base.html' %}{% block content %}<h1>Einstellungen</h1><div class="grid two"><div class="card"><h2>Lizenz-Defaults</h2><p class="muted">Produktbezogene Werte werden unter Produkte & Preise gepflegt.</p></div><div class="card"><h2>Sicherheit</h2><p class="muted">Secrets werden ausschließlich über Umgebungsvariablen bzw. verschlüsselte Integrationswerte gespeichert.</p></div></div>{% endblock %}
+{% extends 'ns_admin/base.html' %}{% block content %}
+<div class="page-head"><div><h1>Einstellungen</h1><div class="sub">Support-Empfänger und Betriebswarnschwellen.</div></div></div>
+<form method="post" class="form">{% csrf_token %}{{ form.non_field_errors }}
+<div class="grid two">
+  <div class="card"><h2>Support</h2><p class="muted">Empfänger des Kundenportal-Kontaktformulars.</p><label>{{ form.support_email.label }}{{ form.support_email }}{{ form.support_email.errors }}</label><h2 style="margin-top:20px">CPU</h2><label>CPU Warnung in %{{ form.cpu_warning }}{{ form.cpu_warning.errors }}</label></div>
+  <div class="card"><h2>System &amp; Betrieb</h2><div class="form"><div class="row"><label>Disk Warnung %{{ form.disk_warning }}{{ form.disk_warning.errors }}</label><label>Disk kritisch %{{ form.disk_critical }}{{ form.disk_critical.errors }}</label></div><div class="row"><label>RAM Warnung %{{ form.ram_warning }}{{ form.ram_warning.errors }}</label><label>RAM kritisch %{{ form.ram_critical }}{{ form.ram_critical.errors }}</label></div><div class="row"><label>Backup Warnung Stunden{{ form.backup_warning_hours }}{{ form.backup_warning_hours.errors }}</label><label>Backup kritisch Stunden{{ form.backup_critical_hours }}{{ form.backup_critical_hours.errors }}</label></div><label>Restore-Test Warnung Tage{{ form.restore_warning_days }}{{ form.restore_warning_days.errors }}</label></div></div>
+</div>
+{% if can_write %}<div class="page-actions" style="margin-top:14px"><button class="btn primary" type="submit">Einstellungen speichern</button></div>{% else %}<div class="alert info" style="margin-top:14px">Sie besitzen Leserechte, aber keine Berechtigung zum Ändern dieser Einstellungen.</div>{% endif %}
+</form>
+{% endblock %}
