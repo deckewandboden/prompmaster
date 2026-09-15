@@ -20,6 +20,7 @@ from apps.audit.services import audit as write_audit
 from apps.catalog.models import Feature, Product
 from apps.catalog.services import create_price_version
 from apps.companies.models import Company, Membership, PrivateCustomerProfile
+from apps.companies.services import transfer_admin
 from apps.devices.models import DeviceRegistration
 from apps.devices.services import revoke_device
 from apps.integrations.models import ServiceAccount
@@ -49,6 +50,7 @@ from .admin_forms import (
     ServiceAccountForm,
     StaffUserCreateForm,
     StaffUserRoleForm,
+    SupportAdminTransferForm,
 )
 from .datagrid import DataGrid, csv_response
 from .permissions import has_perm
@@ -463,7 +465,73 @@ def customer_users(request, pk):
         default_sort='user__last_name',
         filters={'role': 'role', 'active': 'active'},
     ).build()
-    return render(request, 'ns_admin/customer_grid.html', {'customer': customer, 'title': 'Benutzer', 'grid': grid, 'kind': 'users', 'filter_options': [('role', 'Rolle', Membership.ROLE), ('active', 'Status', [('True', 'Aktiv'), ('False', 'Inaktiv')])]})
+    return render(
+        request,
+        'ns_admin/customer_grid.html',
+        {
+            'customer': customer,
+            'title': 'Benutzer',
+            'grid': grid,
+            'kind': 'users',
+            'filter_options': [
+                ('role', 'Rolle', Membership.ROLE),
+                ('active', 'Status', [('True', 'Aktiv'), ('False', 'Inaktiv')]),
+            ],
+            'can_manage_users': has_perm(request.user, 'customers.write'),
+        },
+    )
+
+
+@staff_perm('customers.write')
+def customer_admin_transfer(request, pk, user_id):
+    customer = _customer(request, pk)
+    target = get_object_or_404(
+        Membership.objects.select_related('user'),
+        company=customer,
+        user_id=user_id,
+        active=True,
+    )
+    current_admin = get_object_or_404(
+        Membership.objects.select_related('user'),
+        company=customer,
+        role='admin',
+        active=True,
+    )
+    if target.pk == current_admin.pk:
+        messages.info(request, 'Dieser Benutzer ist bereits Firmenadministrator.')
+        return redirect('ns_admin:customer_users', pk=customer.pk)
+
+    form = SupportAdminTransferForm(request.POST or None)
+    if request.method == 'POST' and form.is_valid():
+        try:
+            transfer_admin(
+                customer,
+                current_admin.user,
+                target.user,
+                actor=request.user,
+                request=request,
+                audit_context={
+                    'identity_verified': True,
+                    'verification_note_present': bool(form.cleaned_data.get('note')),
+                },
+            )
+        except ValidationError as exc:
+            form.add_error(None, exc.messages[0])
+        else:
+            messages.success(
+                request,
+                f'Firmenadministrator wurde auf {target.user.email} übertragen.',
+            )
+            return redirect('ns_admin:customer_users', pk=customer.pk)
+
+    return render(
+        request,
+        'ns_admin/form.html',
+        {
+            'title': f'Firmenadministrator übertragen · {target.user.email}',
+            'form': form,
+        },
+    )
 
 
 @staff_perm('customers.read')
