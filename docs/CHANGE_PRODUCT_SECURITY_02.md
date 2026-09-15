@@ -34,3 +34,21 @@ Mail-Outbox, weitere Admin-/Portal-/Studio-Funktionen, Frontend-Integration,
 Produktionskonfiguration und abschließende End-to-End-Prüfungen bleiben Teil
 des laufenden Gesamtauftrags. Externe Providerzugänge und echtes Deployment
 sind hiermit nicht produktiv validiert.
+
+## Ergänzende Einladungsprüfung (15.09.2026)
+
+`apps.accounts.tests_invitation_http.InvitationHTTPTests` startet einen echten
+Django-HTTP-Server mit vollständigem Middleware-Stack und meldet den eingeladenen
+Bestandsbenutzer über das Loginformular an. Die Tests erzeugen eine gültige
+Einladung über den Einladungsservice und prüfen den gerenderten, HTML-escaped
+Firmennamen, POST-Formular, CSRF-Feld und expliziten Bestätigungsbutton.
+GET und HEAD ändern keine Mitgliedschaft. POST ohne CSRF bzw. mit ungültigem
+CSRF wird mit 403 abgelehnt. Nur der bestätigte POST erstellt die Mitgliedschaft
+und verbraucht den Token. Wiederverwendung, ungültige Tokens und Ablauf zwischen
+Formularanzeige und POST werden abgelehnt und verändern keine Mitgliedschaft.
+
+Alle drei Regressionstests wurden lokal über TCP/HTTP mit PostgreSQL 18.6 und
+sämtlichen Repository-Migrationen erfolgreich ausgeführt. Der vorhandene
+CI-Schritt `python manage.py test` entdeckt sie automatisch. Die Vorlage wurde
+nicht als lokale HTML-Datei bewertet. Der HTTP-Nachweis ersetzt keine visuelle
+Responsive-Abnahme und keine externen Release-Gates.
