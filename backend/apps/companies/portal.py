@@ -20,7 +20,7 @@ from apps.audit.services import audit
 from apps.core.datagrid import DataGrid
 from apps.devices.models import DeviceRegistration
 from apps.devices.services import revoke_device
-from apps.legal.models import LegalAcceptance, LegalDocument
+from apps.legal.models import DeletionRequest, LegalAcceptance, LegalDocument
 from apps.licenses.models import License, LicenseAssignment, LicenseUpgradeRequest
 from apps.licenses.services import assign_license, release_license, request_product_upgrade, resolve_product_upgrade, create_assignment_link, consume_assignment_link
 from apps.notifications.services import queue_email
@@ -428,7 +428,23 @@ def profile(request):
             private_form.save()
         messages.success(request, 'Profil gespeichert.')
         return redirect('portal:profile')
-    return render(request, 'portal/profile.html', {'form': form, 'private_form': private_form})
+    pending_deletion = (
+        DeletionRequest.objects.filter(
+            user=request.user,
+            status__in=['open', 'processing'],
+        )
+        .order_by('-created_at')
+        .first()
+    )
+    return render(
+        request,
+        'portal/profile.html',
+        {
+            'form': form,
+            'private_form': private_form,
+            'pending_deletion': pending_deletion,
+        },
+    )
 
 
 @login_required
@@ -461,6 +477,41 @@ def help_view(request):
     else:
         history = SupportRequest.objects.filter(user=request.user)
     return render(request, 'portal/help.html', {'form': form, 'support_history': history.order_by('-created_at')[:100]})
+
+
+@login_required
+@transaction.atomic
+def privacy_delete_request(request):
+    if request.method != 'POST':
+        raise PermissionDenied
+    if request.POST.get('confirm') != '1':
+        messages.error(request, 'Bitte bestätigen Sie die Löschanfrage ausdrücklich.')
+        return redirect('portal:profile')
+
+    # Serialize requests per identity so double-clicks/concurrent POSTs cannot
+    # create duplicate open deletion workflows.
+    type(request.user).objects.select_for_update().get(pk=request.user.pk)
+    pending = (
+        DeletionRequest.objects.select_for_update()
+        .filter(user=request.user, status__in=['open', 'processing'])
+        .order_by('-created_at')
+        .first()
+    )
+    if pending:
+        messages.info(request, 'Für Ihr Konto besteht bereits eine offene Löschanfrage.')
+        return redirect('portal:profile')
+
+    deletion = DeletionRequest.objects.create(user=request.user, status='open')
+    audit(request.user, 'privacy.deletion_requested', deletion, {}, request=request)
+    if request.user.company_memberships.filter(active=True, role='admin').exists():
+        messages.warning(
+            request,
+            'Löschanfrage erfasst. Vor der Verarbeitung muss die Firmenadministration '
+            'an ein anderes aktives Mitglied übertragen werden.',
+        )
+    else:
+        messages.success(request, 'Löschanfrage wurde erfasst und wird geprüft.')
+    return redirect('portal:profile')
 
 
 @login_required
