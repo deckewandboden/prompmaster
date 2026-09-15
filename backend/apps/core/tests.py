@@ -1,17 +1,21 @@
 import json
+import os
 import logging
 from types import SimpleNamespace
 from unittest.mock import Mock, patch
 
 from django.http import HttpResponse
 from django.test import RequestFactory, SimpleTestCase, TestCase
+from unittest import skipUnless
 from django.utils import timezone
 
 from apps.accounts.models import User
 from apps.audit.models import AuditEvent
 from apps.integrations.models import ServiceAccount
+from apps.companies.models import Company
 from apps.legal.models import DeletionRequest
 from .middleware import CorrelationIdMiddleware, JsonLogFormatter
+from .datagrid import DataGrid, csv_response
 from .security import token_hash, token_pair
 
 
@@ -311,3 +315,118 @@ class NotificationReleaseTests(TestCase):
         args = queue_email_mock.call_args.args
         self.assertEqual(args[0], 't60')
         self.assertEqual(args[1], user.email)
+
+class DataGridAcceptanceTests(TestCase):
+    def _companies(self, count):
+        Company.objects.bulk_create(
+            [
+                Company(
+                    customer_number=f'DG-{i:06d}',
+                    name=f'Company {i:06d}',
+                    email=f'company-{i}@example.test',
+                    status='active' if i % 2 == 0 else 'inactive',
+                )
+                for i in range(count)
+            ],
+            batch_size=1000,
+        )
+
+    def _grid(self, params=None):
+        request = RequestFactory().get('/ns-admin/customers/', params or {})
+        return DataGrid(
+            request,
+            Company.objects.all(),
+            search_fields=('customer_number', 'name', 'email'),
+            sort_fields={'name': 'name', 'number': 'customer_number'},
+            default_sort='customer_number',
+            filters={'status': 'status'},
+        ).build()
+
+    def test_default_pagination_boundaries_0_1_49_50_51(self):
+        for count, pages, first_page_count in [
+            (0, 1, 0),
+            (1, 1, 1),
+            (49, 1, 49),
+            (50, 1, 50),
+            (51, 2, 50),
+        ]:
+            Company.objects.all().delete()
+            self._companies(count)
+            grid = self._grid()
+            self.assertEqual(grid.page.paginator.count, count)
+            self.assertEqual(grid.page.paginator.num_pages, pages)
+            self.assertEqual(len(grid.page.object_list), first_page_count)
+            self.assertEqual(grid.page_size, 50)
+            self.assertTrue(
+                any(item['current'] and item['number'] == 1 for item in grid.navigation)
+            )
+
+    def test_page_size_search_filter_sort_and_deep_link_state(self):
+        self._companies(120)
+        grid = self._grid(
+            {
+                'q': 'Company',
+                'status': 'active',
+                'sort': 'name',
+                'dir': 'desc',
+                'page': '2',
+                'page_size': '25',
+            }
+        )
+        self.assertEqual(grid.page_size, 25)
+        self.assertEqual(grid.page.number, 2)
+        self.assertEqual(grid.page.paginator.count, 60)
+        self.assertEqual(grid.sort, 'name')
+        self.assertEqual(grid.direction, 'desc')
+        self.assertTrue(grid.has_state)
+        names = [row.name for row in grid.page.object_list]
+        self.assertEqual(names, sorted(names, reverse=True))
+
+    def test_invalid_page_size_and_sort_fail_closed_to_defaults(self):
+        self._companies(3)
+        grid = self._grid({'page_size': '999999', 'sort': 'not-a-column', 'dir': 'desc'})
+        self.assertEqual(grid.page_size, 50)
+        self.assertEqual(grid.sort, '')
+        self.assertEqual(grid.direction, 'asc')
+        numbers = [row.customer_number for row in grid.page.object_list]
+        self.assertEqual(numbers, sorted(numbers))
+
+    def test_filtered_csv_export_is_bounded_and_formula_safe(self):
+        Company.objects.create(
+            customer_number='DG-CSV-1',
+            name='=2+2',
+            email='csv@example.test',
+            status='active',
+        )
+        grid = self._grid({'status': 'active'})
+        response = csv_response(
+            grid.queryset,
+            [('customer_number', 'Kundennummer'), ('name', 'Name')],
+            'customers.csv',
+        )
+        body = b''.join(response.streaming_content).decode('utf-8')
+        self.assertIn('DG-CSV-1', body)
+        self.assertIn("'=2+2", body)
+        self.assertEqual(response['X-Content-Type-Options'], 'nosniff')
+
+    def test_5000_rows_remain_server_paginated(self):
+        self._companies(5000)
+        grid = self._grid({'page': '100', 'page_size': '50'})
+        self.assertEqual(grid.page.paginator.count, 5000)
+        self.assertEqual(grid.page.paginator.num_pages, 100)
+        self.assertEqual(grid.page.number, 100)
+        self.assertEqual(len(grid.page.object_list), 50)
+
+
+@skipUnless(
+    os.environ.get('RUN_100K_DATAGRID_ACCEPTANCE') == '1',
+    '100k DataGrid acceptance is an explicit staging/performance gate.',
+)
+class DataGrid100kAcceptanceTests(DataGridAcceptanceTests):
+    def test_100000_rows_paginate_without_unbounded_result_materialization(self):
+        self._companies(100000)
+        grid = self._grid({'page': '2000', 'page_size': '50'})
+        self.assertEqual(grid.page.paginator.count, 100000)
+        self.assertEqual(grid.page.paginator.num_pages, 2000)
+        self.assertEqual(len(grid.page.object_list), 50)
+
