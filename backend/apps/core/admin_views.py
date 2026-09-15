@@ -294,8 +294,40 @@ def private_customer_licenses(request, pk):
 @staff_perm('customers.read')
 def private_customer_devices(request, pk):
     profile = _private_customer(request, pk)
-    grid = DataGrid(request, profile.user.devices.select_related('license'), search_fields=('display_name','os_family','browser_family'), sort_fields={'device':'display_name','last':'last_seen_at'}, default_sort='-last_seen_at').build()
-    return render(request, 'ns_admin/private_customer_grid.html', {'profile': profile, 'title':'Geräte', 'kind':'devices', 'grid':grid, 'filter_options':[]})
+    grid = DataGrid(
+        request,
+        profile.user.devices.select_related('license'),
+        search_fields=('display_name', 'os_family', 'browser_family'),
+        sort_fields={'device': 'display_name', 'last': 'last_seen_at'},
+        default_sort='-last_seen_at',
+    ).build()
+    return render(
+        request,
+        'ns_admin/private_customer_grid.html',
+        {
+            'profile': profile,
+            'title': 'Geräte',
+            'kind': 'devices',
+            'grid': grid,
+            'filter_options': [],
+            'can_revoke_devices': has_perm(request.user, 'devices.write'),
+        },
+    )
+
+
+@staff_perm('devices.write')
+def private_customer_device_revoke(request, pk, device_id):
+    if request.method != 'POST' or not has_perm(request.user, 'customers.read'):
+        raise PermissionDenied
+    profile = _private_customer(request, pk)
+    device = get_object_or_404(
+        DeviceRegistration.objects.select_related('user', 'license'),
+        pk=device_id,
+        user=profile.user,
+    )
+    revoke_device(device, request.user, request=request)
+    messages.success(request, 'Gerät wurde widerrufen.')
+    return redirect('ns_admin:private_customer_devices', pk=profile.pk)
 
 
 @staff_perm('orders.read')
