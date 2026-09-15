@@ -91,3 +91,10 @@ def human_bytes(value):
             return f'{number:.1f} {unit}' if unit != 'B' else f'{int(number)} B'
         number /= 1024
     return f'{number:.1f} PB'
+
+
+@register.simple_tag
+def user_has_perm(user, code):
+    from apps.core.permissions import has_perm
+
+    return bool(user and getattr(user, 'is_authenticated', False) and has_perm(user, code))
