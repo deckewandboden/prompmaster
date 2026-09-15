@@ -609,3 +609,90 @@ class NetstyleDeviceRevokeTests(TestCase):
             ).exists()
         )
 
+
+    def test_authorized_staff_can_revoke_private_device_but_not_other_private_customer(self):
+        now = timezone.now()
+        private_user = User.objects.create_user(
+            'private-device@example.test',
+            'Device-Password-42!',
+            first_name='Private',
+            last_name='Device',
+            email_verified_at=now,
+        )
+        other_private = User.objects.create_user(
+            'other-private-device@example.test',
+            'Device-Password-42!',
+            first_name='Other',
+            last_name='Private',
+            email_verified_at=now,
+        )
+        profile = PrivateCustomerProfile.objects.create(
+            user=private_user,
+            customer_number='PM-P-DEV-A',
+            street='Testweg',
+            house_number='1',
+            postal_code='57000',
+            city='Siegen',
+            country='DE',
+        )
+        other_profile = PrivateCustomerProfile.objects.create(
+            user=other_private,
+            customer_number='PM-P-DEV-B',
+            street='Testweg',
+            house_number='2',
+            postal_code='57000',
+            city='Siegen',
+            country='DE',
+        )
+        private_license = License.objects.create(
+            owner_user=private_user,
+            product=self.product,
+            status='active',
+            valid_from=now - timedelta(days=1),
+            valid_until=now + timedelta(days=364),
+        )
+        other_license = License.objects.create(
+            owner_user=other_private,
+            product=self.product,
+            status='active',
+            valid_from=now - timedelta(days=1),
+            valid_until=now + timedelta(days=364),
+        )
+        private_device = DeviceRegistration.objects.create(
+            user=private_user,
+            license=private_license,
+            token_hash='c' * 64,
+            display_name='Private device',
+            last_seen_at=now,
+        )
+        other_device = DeviceRegistration.objects.create(
+            user=other_private,
+            license=other_license,
+            token_hash='d' * 64,
+            display_name='Other private device',
+            last_seen_at=now,
+        )
+
+        foreign_url = (
+            f'/ns-admin/customers/private/{profile.id}/devices/'
+            f'{other_device.id}/revoke/'
+        )
+        self.assertEqual(self.client.post(foreign_url).status_code, 404)
+        other_device.refresh_from_db()
+        self.assertIsNone(other_device.revoked_at)
+
+        own_url = (
+            f'/ns-admin/customers/private/{profile.id}/devices/'
+            f'{private_device.id}/revoke/'
+        )
+        response = self.client.post(own_url)
+        self.assertEqual(response.status_code, 302)
+        private_device.refresh_from_db()
+        self.assertIsNotNone(private_device.revoked_at)
+        self.assertTrue(
+            AuditEvent.objects.filter(
+                action='device.revoked',
+                object_id=str(private_device.id),
+            ).exists()
+        )
+
