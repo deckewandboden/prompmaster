@@ -781,8 +781,33 @@ def stats(request):
 
 @staff_perm('ops.read')
 def ops(request):
-    domain = __import__('django.conf', fromlist=['settings']).settings.CADDY_DOMAIN
-    return render(request, 'ns_admin/ops.html', {'ops': snapshot(), 'alerts': SystemAlert.objects.filter(active=True), 'backups': BackupRecord.objects.order_by('-created_at')[:10], 'restores': RestoreTest.objects.order_by('-started_at')[:10], 'caddy_ok': caddy_health(), 'certificate': certificate_status(domain.split(':', 1)[0] if domain else '')})
+    from apps.ops.api import _database_payload, _integration_payload, _service_payload
+
+    domain = settings.CADDY_DOMAIN
+    metrics = snapshot()
+    backups = BackupRecord.objects.order_by('-finished_at', '-created_at')[:10]
+    restores = RestoreTest.objects.order_by('-started_at')[:10]
+    return render(
+        request,
+        'ns_admin/ops.html',
+        {
+            'ops': metrics,
+            'alerts': SystemAlert.objects.filter(active=True).order_by('severity', '-created_at')[:20],
+            'backups': backups,
+            'restores': restores,
+            'latest_backup': backups[0] if backups else None,
+            'latest_restore': restores[0] if restores else None,
+            'caddy_ok': caddy_health(),
+            'certificate': certificate_status(domain.split(':', 1)[0] if domain else ''),
+            'database': _database_payload(safe=True),
+            'services': _service_payload(),
+            'integrations': _integration_payload(),
+            'app_version': settings.APP_VERSION,
+            'git_sha': settings.GIT_SHA,
+            'deployed_at': getattr(settings, 'DEPLOYED_AT', ''),
+            'environment': settings.ENVIRONMENT,
+        },
+    )
 
 
 @staff_perm('ops.read')
