@@ -219,6 +219,16 @@ def dashboard(request):
     )
     pro_assignment = active_product_assignment(request.user, 'PRO')
     pro_expiry = assignment_expiry_context(pro_assignment, now) if pro_assignment else None
+    next_expiring = (
+        licenses.filter(valid_until__gt=now)
+        .select_related('product')
+        .order_by('valid_until')
+        .first()
+    )
+    next_expiring_days = (
+        max((timezone.localtime(next_expiring.valid_until).date() - timezone.localdate(now)).days, 0)
+        if next_expiring and next_expiring.valid_until else None
+    )
     return render(
         request,
         'portal/dashboard.html',
@@ -246,6 +256,8 @@ def dashboard(request):
             'company_missing_fields': company_missing_fields,
             'can_start_pro': bool(pro_assignment),
             'pro_expiry': pro_expiry,
+            'next_expiring': next_expiring,
+            'next_expiring_days': next_expiring_days,
             'pending_upgrade': LicenseUpgradeRequest.objects.filter(
                 user=request.user,
                 status='pending',
@@ -267,12 +279,38 @@ def team(request):
         default_sort='user__last_name',
         filters={'role': 'role', 'active': 'active'},
     ).build()
+    now = timezone.now()
+    active_assignments = list(
+        LicenseAssignment.objects.filter(
+            license__company=company,
+            ended_at__isnull=True,
+            license__status='active',
+            license__valid_until__gt=now,
+        ).select_related('license__product')
+    )
     return render(
         request,
         'portal/team.html',
         {
             'company': company,
             'grid': grid,
+            'team_count': Membership.objects.filter(company=company, active=True).count(),
+            'pro_count': LicenseAssignment.objects.filter(
+                user__company_memberships__company=company,
+                user__company_memberships__active=True,
+                license__company=company,
+                license__product__code='PRO',
+                license__status='active',
+                license__valid_until__gt=now,
+                ended_at__isnull=True,
+            ).values('user_id').distinct().count(),
+            'free_license_count': License.objects.filter(company=company, status='free', valid_until__gt=now).count(),
+            'device_count': DeviceRegistration.objects.filter(
+                user__company_memberships__company=company,
+                user__company_memberships__active=True,
+                revoked_at__isnull=True,
+            ).distinct().count(),
+            'device_capacity': sum(row.license.product.default_device_limit for row in active_assignments),
             'upgrade_requests': LicenseUpgradeRequest.objects.filter(company=company, status='pending').select_related('user', 'product').order_by('created_at'),
             'filter_options': [
                 ('role', 'Rolle', Membership.ROLE),
@@ -399,11 +437,19 @@ def licenses(request):
         filters={'status': 'status', 'product': 'product__code'},
     ).build()
     products = sorted({(row.product.code, row.product.name) for row in queryset.select_related('product')})
+    now = timezone.now()
     return render(
         request,
         'portal/licenses.html',
         {
             'grid': grid,
+            'license_total': queryset.distinct().count(),
+            'license_assigned': queryset.filter(assignments__ended_at__isnull=True).distinct().count(),
+            'license_free': queryset.filter(status='free', valid_until__gt=now).distinct().count(),
+            'license_expiring_30': queryset.filter(
+                valid_until__gt=now,
+                valid_until__lte=now + timedelta(days=30),
+            ).distinct().count(),
             'is_admin': bool(membership and membership.role == 'admin'),
             'can_manage': bool(not company or (membership and membership.role == 'admin')),
             'filter_options': [('status', 'Status', License.STATUS), ('product', 'Produkt', products)],
@@ -546,7 +592,16 @@ def company(request):
         audit(request.user, 'company.updated', saved, {'before': before}, request=request)
         messages.success(request, 'Unternehmensdaten gespeichert.')
         return redirect('portal:company')
-    return render(request, 'portal/company.html', {'form': form, 'company': company_obj})
+    current_admin = (
+        Membership.objects.filter(company=company_obj, active=True, role='admin')
+        .select_related('user')
+        .first()
+    )
+    return render(
+        request,
+        'portal/company.html',
+        {'form': form, 'company': company_obj, 'current_admin': current_admin},
+    )
 
 
 @login_required
@@ -814,6 +869,7 @@ def buy(request):
         return redirect('portal:dashboard')
 
     from apps.catalog.models import Product
+    from apps.catalog.services import current_price
     from apps.orders.forms import PurchaseForm
     from apps.orders.services import create_order
 
@@ -844,7 +900,17 @@ def buy(request):
         except Exception:
             logger.exception('Checkout failed before provider redirect')
             form.add_error(None, 'Checkout konnte nicht vorbereitet werden.')
-    return render(request, 'portal/buy.html', {'form': form, 'product': product})
+    price = current_price(product, 'new')
+    return render(
+        request,
+        'portal/buy.html',
+        {
+            'form': form,
+            'product': product,
+            'price': price,
+            'unit_price_cents': int(price.gross_amount * 100) if price else None,
+        },
+    )
 
 
 @login_required
