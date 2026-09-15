@@ -28,6 +28,10 @@ services:
   web:
     build: .
     env_file: .env
+    environment:
+      APP_VERSION: ${APP_VERSION:-development}
+      GIT_SHA: ${GIT_SHA:-}
+      DEPLOYED_AT: ${DEPLOYED_AT:-}
     depends_on:
       postgres: {condition: service_healthy}
       redis: {condition: service_healthy}
