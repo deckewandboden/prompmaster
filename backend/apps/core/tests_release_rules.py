@@ -301,3 +301,82 @@ class CompanyAdminTransferTests(TestCase):
             'admin',
         )
 
+class PortalLicenseDetailIsolationTests(TestCase):
+    def setUp(self):
+        self.now = timezone.now()
+        self.product = Product.objects.create(
+            code='PORTAL-DETAIL-PRO',
+            name='Portal Detail Pro',
+            default_license_days=365,
+            default_device_limit=2,
+            reminder_1_days=60,
+            reminder_2_days=30,
+            critical_warning_days=7,
+        )
+        self.company = Company.objects.create(
+            customer_number='PM-C-DETAIL-A',
+            name='Detail A GmbH',
+            email='detail-a@example.test',
+        )
+        self.other_company = Company.objects.create(
+            customer_number='PM-C-DETAIL-B',
+            name='Detail B GmbH',
+            email='detail-b@example.test',
+        )
+        self.member = User.objects.create_user(
+            'detail-member@example.test',
+            'Detail-Password-42!',
+            first_name='Detail',
+            last_name='Member',
+            email_verified_at=self.now,
+        )
+        Membership.objects.create(
+            company=self.company,
+            user=self.member,
+            role='member',
+            active=True,
+        )
+        self.assigned = License.objects.create(
+            company=self.company,
+            product=self.product,
+            status='active',
+            valid_from=self.now - timedelta(days=1),
+            valid_until=self.now + timedelta(days=364),
+        )
+        LicenseAssignment.objects.create(license=self.assigned, user=self.member)
+        self.unassigned_same_tenant = License.objects.create(
+            company=self.company,
+            product=self.product,
+            status='free',
+            valid_from=self.now - timedelta(days=1),
+            valid_until=self.now + timedelta(days=364),
+        )
+        self.foreign = License.objects.create(
+            company=self.other_company,
+            product=self.product,
+            status='free',
+            valid_from=self.now - timedelta(days=1),
+            valid_until=self.now + timedelta(days=364),
+        )
+        self.client.force_login(self.member)
+        session = self.client.session
+        session['security_version'] = self.member.security_version
+        session['two_factor_ok'] = True
+        session.save()
+
+    def test_member_can_open_only_own_assigned_license(self):
+        response = self.client.get(f'/portal/licenses/{self.assigned.id}/')
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, self.assigned.license_number)
+
+        self.assertEqual(
+            self.client.get(
+                f'/portal/licenses/{self.unassigned_same_tenant.id}/'
+            ).status_code,
+            404,
+        )
+        self.assertEqual(
+            self.client.get(f'/portal/licenses/{self.foreign.id}/').status_code,
+            404,
+        )
+
