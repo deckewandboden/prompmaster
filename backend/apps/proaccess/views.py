@@ -13,10 +13,23 @@ from django.views.decorators.clickjacking import xframe_options_sameorigin
 from apps.devices.services import register_device, validate_device_token
 from .assets import GoldenMasterIntegrityError, read_verified_asset
 from .forms import DeviceRegistrationForm
-from .services import active_product_assignment, assignment_expiry_context
+from .services import active_product_assignment, assignment_expiry_context, DEVICE_COOKIE, LEGACY_DEVICE_COOKIE
 
-DEVICE_COOKIE = 'pm_device'
 logger = logging.getLogger(__name__)
+
+
+def _device_cookie(request):
+    return request.COOKIES.get(DEVICE_COOKIE) or request.COOKIES.get(LEGACY_DEVICE_COOKIE, '')
+
+
+def _set_device_cookie(response, raw):
+    response.set_cookie(
+        DEVICE_COOKIE, raw, max_age=400 * 24 * 60 * 60,
+        secure=settings.SESSION_COOKIE_SECURE, httponly=True,
+        samesite='Lax', path='/',
+    )
+    response.delete_cookie(LEGACY_DEVICE_COOKIE, path='/pro/', samesite='Lax')
+    return response
 
 
 def _user_agent_families(request):
@@ -51,7 +64,7 @@ def _access(request):
     assignment = active_product_assignment(request.user, 'PRO')
     if not assignment:
         return None, None
-    token = request.COOKIES.get(DEVICE_COOKIE, '')
+    token = _device_cookie(request)
     device = validate_device_token(request.user, token, product_code='PRO')
     if device and device.license_id != assignment.license_id:
         # License reassignment should already revoke the old credential. Treat
@@ -81,7 +94,7 @@ def register_device_view(request):
     assignment = active_product_assignment(request.user, 'PRO')
     if not assignment:
         raise PermissionDenied
-    current = validate_device_token(request.user, request.COOKIES.get(DEVICE_COOKIE, ''), product_code='PRO')
+    current = validate_device_token(request.user, _device_cookie(request), product_code='PRO')
     if current and current.license_id == assignment.license_id:
         return redirect('proaccess:content')
 
@@ -101,16 +114,7 @@ def register_device_view(request):
             form.add_error(None, exc.messages[0])
         else:
             response = redirect('proaccess:content')
-            response.set_cookie(
-                DEVICE_COOKIE,
-                raw,
-                max_age=400 * 24 * 60 * 60,
-                secure=settings.SESSION_COOKIE_SECURE,
-                httponly=True,
-                samesite='Lax',
-                path='/pro/',
-            )
-            return response
+            return _set_device_cookie(response, raw)
     return render(
         request,
         'proaccess/register_device.html',
@@ -164,6 +168,8 @@ def content(request):
     data = data.replace(marker, csrf_token.encode('ascii'))
     response = HttpResponse(data, content_type='text/html; charset=utf-8')
     response['Cache-Control'] = 'private, no-store'
+    if not request.COOKIES.get(DEVICE_COOKIE):
+        _set_device_cookie(response, _device_cookie(request))
     return response
 
 

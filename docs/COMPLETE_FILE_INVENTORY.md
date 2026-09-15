@@ -1,12 +1,12 @@
 # Vollständiges Datei-Inventar — PromptMaster RC14
 
-Erfasst: **535 Dateien** (Manifest-/Inventardateien selbst ausgenommen), **43,350,714 Byte**.
+Erfasst: **517 Dateien** (Manifest-/Inventardateien selbst ausgenommen), **20,537,871 Byte**.
 
 Maschinenlesbar: `FILE_MANIFEST.tsv` und `MANIFEST.json`.
 
 ## active-backend
 
-304 Dateien.
+311 Dateien.
 
 | Pfad | Größe | SHA256 |
 |---|---:|---|
@@ -18,29 +18,33 @@ Maschinenlesbar: `FILE_MANIFEST.tsv` und `MANIFEST.json`.
 | `backend/apps/accounts/management/__init__.py` | 0 | `e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855` |
 | `backend/apps/accounts/management/commands/__init__.py` | 0 | `e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855` |
 | `backend/apps/accounts/management/commands/bootstrap_admin.py` | 2469 | `beda1486a8706bbfd03dd6ccb0a0fd4c8401055d710eebcee5c099431f598491` |
-| `backend/apps/accounts/middleware.py` | 2281 | `affc81dd62236d834bdd5d016074ce33041b81a189c126a07f650effc429e8cf` |
+| `backend/apps/accounts/middleware.py` | 2977 | `fc602a8ab52d2419d27dfc9cc68d5a7b8b73f5795ce1719c67d5c3935abfc463` |
 | `backend/apps/accounts/migrations/0001_initial.py` | 4839 | `c8aaa69f090ff7177c3d8e4af18cacf0bb6d8bc9605f5cee9f4b766262fb16af` |
-| `backend/apps/accounts/migrations/0002_alter_user_groups.py` | 659 | `21e00b0a4309ad6403d340493ac5c94a19713548bed8bb443c1974d8e0e6c04c` |
+| `backend/apps/accounts/migrations/0002_alter_user_groups.py` | 640 | `26856437e9b50145c1ea7f650b8c365247541a76a392348dbf5b6fd76f4d6971` |
+| `backend/apps/accounts/migrations/0003_totp_replay_protection.py` | 394 | `a74505922a8023fa5f30b5cc9d8d5e86f0f623b2402f6627f3645f77f7382a3b` |
 | `backend/apps/accounts/migrations/__init__.py` | 0 | `e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855` |
-| `backend/apps/accounts/models.py` | 2569 | `3feb7368013a8ff4093bda8d024a1972e8ce423771884865e4f5a6502ada8415` |
-| `backend/apps/accounts/security.py` | 828 | `843f80e8f16a463ebf3a1c9de19cb74519ab935d3e0ce50ed27bfe049dc84084` |
+| `backend/apps/accounts/models.py` | 2623 | `78f6480cac68070e3fdd5e89e5c22aa45403ae94d2f20511ce03961d3b1b6b63` |
+| `backend/apps/accounts/security.py` | 1935 | `2b7c82f9c5cda7c9d1594e740e42379e38fd30fe70455710537ba3cac84afe1f` |
 | `backend/apps/accounts/tests.py` | 356 | `a3d9928c67add4d28170f4384d066621ddccf692c77c4ce73e8c2eab6b42d1a6` |
-| `backend/apps/accounts/totp.py` | 556 | `bec2d0f87a066ab92d3ad712f62065e418e2ad9afebd621881a9618163d9e647` |
+| `backend/apps/accounts/tests_invitation_http.py` | 5689 | `d4bb306fa3054f5e82fd1379ba4f92ff24ac40dbf0ef72bc5b7a8b589cb2c00e` |
+| `backend/apps/accounts/tests_security.py` | 3169 | `23d44379716c3418679375c73c4d7b8195d39c51b00e0b8596cb1962b67f5c7a` |
+| `backend/apps/accounts/totp.py` | 906 | `100b45dbb78aa2a3cbf9025ace81348bf8059a304b41eb305677f9dfca3e502a` |
 | `backend/apps/accounts/urls.py` | 822 | `ee957faaef55e00f47be4f3b924f2a7f28c679d58bb0548b22f7467f14e81e50` |
-| `backend/apps/accounts/views.py` | 16626 | `d4381db130c0ad2a1fc8f3d7df65d55d4d4ae3a61594e89a89322a897fdaaed0` |
+| `backend/apps/accounts/views.py` | 17888 | `22fef67aeeb11f2e849e9aafe0cddef7330312ad29e0512b7cab992b66aae172` |
 | `backend/apps/audit/__init__.py` | 0 | `e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855` |
 | `backend/apps/audit/admin.py` | 96 | `840c78e634dfea6e8e93fa79c11af0432688849b96bb2445c58cc498b2964746` |
 | `backend/apps/audit/apps.py` | 141 | `551f61840d27e0878f76e8aa61886a68e5449efd00876a498c27bbec21443cab` |
 | `backend/apps/audit/migrations/0001_initial.py` | 1261 | `f948c18fe71b4559eab97228d63ee8d6dd068c0ff6a8a433d420042bee557b6c` |
-| `backend/apps/audit/migrations/0002_rename_audit_a_action_idx_audit_audit_action_0c0ad1_idx_and_more.py` | 591 | `698c2dd55eefc43e4eb88833c0fa29ad36b04143c213a9eaff5d55a1369395b5` |
+| `backend/apps/audit/migrations/0002_rename_audit_a_action_idx_audit_audit_action_0c0ad1_idx_and_more.py` | 568 | `54d0b70aaeee725abdfca857091d62f67b374c0912f4534b6b369c6549d20c66` |
+| `backend/apps/audit/migrations/0003_remove_historical_prompt_content.py` | 955 | `c3d6cb1d4f4f365211266e73ca3c1e48a4b4d63f2e80b1211aa92726caf5565a` |
 | `backend/apps/audit/migrations/__init__.py` | 0 | `e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855` |
 | `backend/apps/audit/models.py` | 1546 | `da5d07757c646e8854bd3f23e1bfa0d66b1ce6ed39861746940c6df3641d4858` |
-| `backend/apps/audit/services.py` | 1345 | `54cfa0ce73116b07d142c5f9cbdf162bcf2776780e0561a639f0e7b214d51f46` |
+| `backend/apps/audit/services.py` | 1442 | `1d3dfd36ff3b4d30cf13cd15364fe1a59e0d7afc4727b9483eff27bc43ab795e` |
 | `backend/apps/catalog/__init__.py` | 0 | `e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855` |
 | `backend/apps/catalog/admin.py` | 270 | `5434cd9f980e5f76517ca912c8cbfe2894c1475a8983185c4ca84a3dcfc13ac5` |
 | `backend/apps/catalog/apps.py` | 145 | `57944591d8628419ff3620659dcb3ceea6c9ddd40c72dae76538d5cb6bf22881` |
 | `backend/apps/catalog/migrations/0001_initial.py` | 4403 | `4030a6cce8a2332b66c0a5e438c38b1c491a1828f588f67868eb778b032d6fe3` |
-| `backend/apps/catalog/migrations/0002_rename_catalog_pp_stream_idx_catalog_pro_product_2e5f65_idx.py` | 416 | `8815c93c936b17d527f0754ca53f5ef3faa5afab23e6f9da41d73b27f20ce813` |
+| `backend/apps/catalog/migrations/0002_rename_catalog_pp_stream_idx_catalog_pro_product_2e5f65_idx.py` | 398 | `6057623d904e5279af6eb8322505f79460e63f6ad8b94616ca46ec36845fe5d3` |
 | `backend/apps/catalog/migrations/__init__.py` | 0 | `e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855` |
 | `backend/apps/catalog/models.py` | 4711 | `9ec3cfb9e7628225e8bf73355b9cc64cb11f02cce50ed788728a2bc23e3920c9` |
 | `backend/apps/catalog/services.py` | 1800 | `eb4d01361831e084702d564652e454013523551c7c2b05c03eaa10004efce53e` |
@@ -49,10 +53,10 @@ Maschinenlesbar: `FILE_MANIFEST.tsv` und `MANIFEST.json`.
 | `backend/apps/companies/apps.py` | 149 | `dd30f96e5884b78b90b57b3668b6e0639b05189356a3032d0602c4467bfa68ab` |
 | `backend/apps/companies/forms.py` | 2133 | `aa2bee39bec6c440e6a94fea3bd85ef307ae2091d4146beafe0d0546b3f97dff` |
 | `backend/apps/companies/migrations/0001_initial.py` | 4658 | `dbe6eb88e69b61ef149fd5d7ba88aebf540b10e5e53a94eb106d033327b23cbc` |
-| `backend/apps/companies/migrations/0002_rename_companies_c_name_idx_companies_c_name_2d8260_idx_and_more.py` | 968 | `097e29d3628113221ed6fe381a100bb1e232e05cf42713d76484242d931a1a8a` |
+| `backend/apps/companies/migrations/0002_rename_companies_c_name_idx_companies_c_name_2d8260_idx_and_more.py` | 935 | `61214c81793e1edee3cc7a76394549eaaf762019611dd2c2943b728b2d48509c` |
 | `backend/apps/companies/migrations/__init__.py` | 0 | `e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855` |
 | `backend/apps/companies/models.py` | 4477 | `5f8f0ebd6de05ff721fdad27ba1a5fa7f0525b7802a429b24bbeaefe0f2cac2d` |
-| `backend/apps/companies/portal.py` | 35401 | `88f3928576b8462ebe7f241781091ee6af55693a2df9a6a0c43af4218df84cad` |
+| `backend/apps/companies/portal.py` | 35529 | `cd88f35c713cb39ea9287e3b45e38e1aa26218283f493d4bb80320fb54acd99b` |
 | `backend/apps/companies/portal_urls.py` | 1878 | `1712c9fd387d5c61d7be16a6ee211bcb60cd6deb3c8049c8b91a0296ecb32970` |
 | `backend/apps/companies/services.py` | 3187 | `a536c08fac5295beb1eb70cc08eb5cc980dec2152dc3c1485b237849774ed394` |
 | `backend/apps/contenthub/__init__.py` | 0 | `e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855` |
@@ -66,14 +70,14 @@ Maschinenlesbar: `FILE_MANIFEST.tsv` und `MANIFEST.json`.
 | `backend/apps/contenthub/management/commands/__init__.py` | 0 | `e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855` |
 | `backend/apps/contenthub/management/commands/seed_faqs.py` | 1763 | `4ea238f79d1093bd1a6b3b0b4053a48ba3c8a56970008b60f9533288105bdd57` |
 | `backend/apps/contenthub/migrations/0001_initial.py` | 1299 | `08542bb32bc29b2b97c2faa57911b684f075bc87e6b29121317908c7fb6fa991` |
-| `backend/apps/contenthub/migrations/0002_rename_contenthub_f_audienc_46b102_idx_contenthub__audienc_bc5020_idx.py` | 425 | `42a6b11d38ae91e85a7366e76f4d0d733544bfc38b832176ad21e16527a9e7ba` |
+| `backend/apps/contenthub/migrations/0002_rename_contenthub_f_audienc_46b102_idx_contenthub__audienc_bc5020_idx.py` | 407 | `4749fa093905438cefb6193f58df0589f9723ec62cbd31eed32fd93da3975bf7` |
 | `backend/apps/contenthub/migrations/__init__.py` | 0 | `e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855` |
 | `backend/apps/contenthub/models.py` | 787 | `341ec2e071492af1f244b388de1cf126289a7b5517ffaf3c271353b6f6327379` |
 | `backend/apps/contenthub/tests.py` | 1268 | `7cda88a698efe4ac07a8c2ea66f60eb51e5f890516e20f09463fbb7f05558b90` |
 | `backend/apps/core/__init__.py` | 0 | `e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855` |
 | `backend/apps/core/admin_forms.py` | 8687 | `b839e61b9a1fe19d172ff99d4032b44089ea5276bc230e631dbd4ed031744977` |
 | `backend/apps/core/admin_urls.py` | 5638 | `79e4f0b5bbd1188a89e525c7a38d440dc582dffb8e222099ca0406387fcf14a7` |
-| `backend/apps/core/admin_views.py` | 51736 | `3fdcf7c9a28a4a1351d03da936835649ff19856cc2e2368d8f31d0543e6e4bde` |
+| `backend/apps/core/admin_views.py` | 52449 | `8849a8ba2971468759aaf25facd0ec6797b8f13e05451dffbd59d20e6383e93b` |
 | `backend/apps/core/apps.py` | 210 | `8134ed07155edcd5917919300abfbad09d504b9390c59be5733a5c4132c57b24` |
 | `backend/apps/core/checks.py` | 1150 | `ac8bc9a61a89a3bb5b1cac9436885b4c77aa99d98e95f78742ae025a1fedf6ab` |
 | `backend/apps/core/context_processors.py` | 747 | `09659e56cf02408ea2d27de161700bbb995b72863389b5a096adab884356bbb5` |
@@ -94,13 +98,14 @@ Maschinenlesbar: `FILE_MANIFEST.tsv` und `MANIFEST.json`.
 | `backend/apps/core/templatetags/pm.py` | 2473 | `e05d823315a4cc8054ee82cb56714afaa0d50fb21fe2de18d36601df8974d297` |
 | `backend/apps/core/tests.py` | 256 | `11c33a31813610e01e5e78295e19072944481eb02ba5cde6616af474d62f5487` |
 | `backend/apps/core/tests_marketing_integration.py` | 2204 | `b3c651dfe1b75096004c4fe78738723cb5d4bc5f8de99e6d45fede4cfa6359e8` |
+| `backend/apps/core/tests_permissions.py` | 1872 | `a8ebca460fc07a95e4e3e75e5e26cf4fa000d8713e8251cebe21e9d6893d13a2` |
 | `backend/apps/core/tests_release_rules.py` | 10568 | `125cfd2ee21d9662d0e0ae811b0f01a2be4427980fd830e9cc731feda1395f42` |
 | `backend/apps/core/views.py` | 4155 | `f9d224673242716285a6b504385202028563797f427e048f1d2eeb996a8af839` |
 | `backend/apps/devices/__init__.py` | 0 | `e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855` |
 | `backend/apps/devices/admin.py` | 112 | `a1bf059a584a2d74f1983220170352703a4e63fcb1ddf2756a8a18c94baef4a9` |
 | `backend/apps/devices/apps.py` | 145 | `4e70ac9688181358f0dc1c81a8a4ab6f3899886547ec127c52cdec24131299bc` |
 | `backend/apps/devices/migrations/0001_initial.py` | 1243 | `5d3673ec735416f044d7726bd8030112df33e19c412e89cc843c9a6eabd7d1ce` |
-| `backend/apps/devices/migrations/0002_rename_devices_d_user_idx_devices_dev_user_id_40cac7_idx.py` | 419 | `58e0a3ac000a37ddf92c376198a336b2c19631789303a4f9ff37076ca581775d` |
+| `backend/apps/devices/migrations/0002_rename_devices_d_user_idx_devices_dev_user_id_40cac7_idx.py` | 401 | `e204f796510bbd73024e90da9e4491505401aa20694be04e542906144104d474` |
 | `backend/apps/devices/migrations/__init__.py` | 0 | `e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855` |
 | `backend/apps/devices/models.py` | 745 | `0d07904e9838650423ca62cfb2aa8e47eac8d976f56858d14bd41de618b45366` |
 | `backend/apps/devices/services.py` | 3147 | `dfbe9ba3ff51606109e3d97c9d816b27c123522806cef81d5d43bbe47d49c73f` |
@@ -126,15 +131,15 @@ Maschinenlesbar: `FILE_MANIFEST.tsv` und `MANIFEST.json`.
 | `backend/apps/licenses/migrations/0002_licenseterm.py` | 1324 | `bfdfeae64c8a3fbccebe94fdcb5685898a1beb8ab37df3df64fce5703378f41b` |
 | `backend/apps/licenses/migrations/0003_licenseupgraderequest.py` | 2481 | `3a50c753eb0aec821b88325fc529dda465bf78e21e0207969d654d2c1cd686c1` |
 | `backend/apps/licenses/migrations/0004_licenseassignmentlink.py` | 2227 | `34982b2538e4d68cb6410540afa939c4a04435e5a401cdf6e21fb0b215d7ae19` |
-| `backend/apps/licenses/migrations/0005_rename_licenses_l_status_idx_licenses_li_status_3263d5_idx_and_more.py` | 1213 | `53579ecb0d8518aed8e7c55f18e5635fb1a27be1fcfd87ced9942a0aace1cf44` |
+| `backend/apps/licenses/migrations/0005_rename_licenses_l_status_idx_licenses_li_status_3263d5_idx_and_more.py` | 1175 | `8daa3556c128041fa2c4b6ef7a92cebfd67dd7f89de70268d526c65c1f6376bb` |
 | `backend/apps/licenses/migrations/__init__.py` | 0 | `e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855` |
 | `backend/apps/licenses/models.py` | 8247 | `fb2fae27424315e4b2f93bbe658c4feb6fafb12e12f0ffae016c4c5e3856cae6` |
 | `backend/apps/licenses/services.py` | 10581 | `eeee948e4b3b7822869c3b37ede6de7278da3b37a46549ea2113c3ffb12daced` |
 | `backend/apps/mcp_internal/__init__.py` | 0 | `e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855` |
 | `backend/apps/mcp_internal/apps.py` | 205 | `03c3075359518bcf0458759fae83ab456cf2819613756c3a6abe30b543f86170` |
-| `backend/apps/mcp_internal/tests.py` | 3247 | `a4d594dce5adb457b25e4160637f2e0515e470425ed5a1675787f9f31f5b8dfd` |
+| `backend/apps/mcp_internal/tests.py` | 4562 | `9457b70e801d4a50029a7e1b42a26a43e17ded7c5994270505f81cc285c09964` |
 | `backend/apps/mcp_internal/urls.py` | 192 | `b9c7456c9ed1b97b8fba1c7ab178db134b7bf6beb60410d082f33ebddf3f26cb` |
-| `backend/apps/mcp_internal/views.py` | 10292 | `064c46d8d2db500a56e19527a7245e61df6756f454c77dd853c28701e76327d1` |
+| `backend/apps/mcp_internal/views.py` | 10553 | `500f38a174a41832b432995c10127181f3d468f04f1e3e4e1a31e180fff70342` |
 | `backend/apps/notifications/__init__.py` | 0 | `e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855` |
 | `backend/apps/notifications/admin.py` | 149 | `e7bc8c0fd4f090ebf2e31288805dd7ad574104bfb94d1bb7382915e11f6fba2f` |
 | `backend/apps/notifications/apps.py` | 157 | `5c64dfd8bf36240013fc6cb20d7977f8bfed4d3553ffcd6a45dc7d83ab7cff4a` |
@@ -152,7 +157,7 @@ Maschinenlesbar: `FILE_MANIFEST.tsv` und `MANIFEST.json`.
 | `backend/apps/ops/metrics.py` | 5581 | `d62ebef201c20b475b4c16e3a4a8dc4cf7ac376359076853f1a74fbde55c893b` |
 | `backend/apps/ops/migrations/0001_initial.py` | 3091 | `029a74079262e84810d75c82a1524b47adddae62ef6bb549552197bb2a8d1a1d` |
 | `backend/apps/ops/migrations/0002_beatheartbeat.py` | 774 | `ab33f4fe125cedab58f52027716cb0538697e1a4f19de0765e7b8972a598ad4b` |
-| `backend/apps/ops/migrations/0003_rename_ops_alert_state_idx_ops_systema_active_99d084_idx_and_more.py` | 602 | `f94cb6bf3c249878b48b7258ff88fa55c6d0308db6ada3a76093c0ce933a7fa1` |
+| `backend/apps/ops/migrations/0003_rename_ops_alert_state_idx_ops_systema_active_99d084_idx_and_more.py` | 579 | `a7b51d9e779da89e8ecb5f53f18a1597efbae2be6110802d7738827e3e23ff54` |
 | `backend/apps/ops/migrations/__init__.py` | 0 | `e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855` |
 | `backend/apps/ops/models.py` | 2687 | `90acff0d1215941be9a6d5f5c7bd544a5a99fa64daceda5d4fc6c8d2766cc07e` |
 | `backend/apps/ops/tasks.py` | 9146 | `6b50041955d96366b489310d39dcdf615107e24c666d39da4b562b2f562693c6` |
@@ -161,7 +166,7 @@ Maschinenlesbar: `FILE_MANIFEST.tsv` und `MANIFEST.json`.
 | `backend/apps/orders/apps.py` | 143 | `f669fdeb427d9873fed2994f70dcc640d3dab9b317e424cb7184898492697c9b` |
 | `backend/apps/orders/forms.py` | 1349 | `3ec02e3e6edc929907e32e6f21a72923b841866ce894286b21decf2452486275` |
 | `backend/apps/orders/migrations/0001_initial.py` | 3309 | `6392d15d9b966ddf8c2cb679806f6fe02b7ce75c0cd6c470fff4d63b261ab1e4` |
-| `backend/apps/orders/migrations/0002_rename_orders_o_status_idx_orders_orde_status_25e057_idx.py` | 405 | `2872f42faba0919a250c003dfeae6120fda1121380dee60ed01a30de4992db9c` |
+| `backend/apps/orders/migrations/0002_rename_orders_o_status_idx_orders_orde_status_25e057_idx.py` | 387 | `2ca9912178b3adaf6d70e816c5610e11e363ce94f485fdc5ebf16275bc78b582` |
 | `backend/apps/orders/migrations/__init__.py` | 0 | `e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855` |
 | `backend/apps/orders/models.py` | 3103 | `f18b7a3d9a02ed3ca75cdc1fb05dd80290045bdbc80ff8e28b9ec36f1403e858` |
 | `backend/apps/orders/services.py` | 6255 | `3826f480ad50523c38632af682ecd90568767ea8ec409bffb45b54637e182f88` |
@@ -180,13 +185,14 @@ Maschinenlesbar: `FILE_MANIFEST.tsv` und `MANIFEST.json`.
 | `backend/apps/proaccess/apps.py` | 155 | `f9abea8bfe267f836de988c6ac74df37ec46c54cd4e1de9fb598bbd789e8edfd` |
 | `backend/apps/proaccess/assets.py` | 925 | `458a0d67a6266a1bc7358982726f3f3af220fecdcdd45e880f5ee14d10acaa34` |
 | `backend/apps/proaccess/forms.py` | 141 | `db3bea15dd783d540c2fe2203f3af5d3761307bc78d28b818492a5dfefe4bea0` |
-| `backend/apps/proaccess/services.py` | 1980 | `e61252c55a60b98077c7af12937ee7ba84bdf6ad655da72a4b9d946fd52d3ef8` |
+| `backend/apps/proaccess/services.py` | 2407 | `c17beb5373789e85261364949bb62d7339d05f4f89538d052664e62925b01075` |
 | `backend/apps/proaccess/tests.py` | 779 | `c0edf4c1449ec0586d386372b2e5ecd98a80a19afe1bbca331e475ba09c59ea1` |
+| `backend/apps/proaccess/tests_integration.py` | 5991 | `fc5828dbaedb8045c746d76cc4cd7fdea2e51616954144094eede1952d077bb2` |
 | `backend/apps/proaccess/urls.py` | 342 | `a2d116fdb431956a07347fab0018fae54b9f32a2573259411bd8b37831c63037` |
-| `backend/apps/proaccess/views.py` | 6907 | `036cdcdb1ed9135b1092a864a44b2dd0736c5a6cf1a8ce0f41202bc221082cd6` |
+| `backend/apps/proaccess/views.py` | 7178 | `30a8700bf9aaf5e23ba61516742b76e1820d2f0b699a80690194c5f046e23014` |
 | `backend/apps/prompts/__init__.py` | 0 | `e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855` |
 | `backend/apps/prompts/admin.py` | 488 | `3bbbd50b2bd2f976cfde1fe3329789aa78a289c08bf9c39645613120907293ea` |
-| `backend/apps/prompts/api.py` | 7264 | `1f371e57acea47b005bbd669c78f25b1172b7fd4a49fb1e04503812adef7b3be` |
+| `backend/apps/prompts/api.py` | 7695 | `9943c76df9b488dc82df935a7a0ec972b4fb168b3c9e956d74c3e4f90fe50fd9` |
 | `backend/apps/prompts/api_urls.py` | 309 | `877b24fd4742e85fa01da4bb1b9e236e7fd8f4d506f2b3f2bd161d1f0b7ee872` |
 | `backend/apps/prompts/apps.py` | 186 | `e854562f7d46cee776c8680a37f1713ede2e069061797b158ccc6bfd8517812b` |
 | `backend/apps/prompts/composer_core.py` | 10103 | `e3d0477acb8ef367ead84e66056f010725248b430b31e072257d3a6cae37279e` |
@@ -200,7 +206,7 @@ Maschinenlesbar: `FILE_MANIFEST.tsv` und `MANIFEST.json`.
 | `backend/apps/prompts/management/commands/validate_prompt_runtime.py` | 3784 | `fe1873b7d4c2b4ff42cb1dc4df8e7c289bb535af04cd152daeec493ea7f28d88` |
 | `backend/apps/prompts/migrations/0001_initial.py` | 12817 | `6d32b17ca051143ce77c97b24666205136bbdbcf15f267d11053c0465b68963d` |
 | `backend/apps/prompts/migrations/0002_studio_quality.py` | 7780 | `86a58ea9a75175aa4cc2f96077819c4830df5a2af0752a52c124bb9d1d14e1ec` |
-| `backend/apps/prompts/migrations/0003_rename_prompts_pro_applica_e75f93_idx_prompts_pro_applica_997686_idx_and_more.py` | 1240 | `5016cee23b2fecb21741fa19aec410f5ebbde25e9718cc6aa5788e5f167930a0` |
+| `backend/apps/prompts/migrations/0003_rename_prompts_pro_applica_e75f93_idx_prompts_pro_applica_997686_idx_and_more.py` | 1202 | `753f7f86d257d3cfdb922cca6d6a468f7970754d65bec170fabeca943dc72342` |
 | `backend/apps/prompts/migrations/__init__.py` | 0 | `e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855` |
 | `backend/apps/prompts/models.py` | 14484 | `eb46bcd7b3652214f5c6f4a5255e07dbf4604edf36936a49975f3ae46018a98d` |
 | `backend/apps/prompts/quality.py` | 4187 | `b0ba04e7381cd73a15f656414d8571560aee84b6331c1fbf8cc848c74af00ccf` |
@@ -218,7 +224,7 @@ Maschinenlesbar: `FILE_MANIFEST.tsv` und `MANIFEST.json`.
 | `backend/config/__init__.py` | 64 | `40e9457320576e0813c9ec166611e979252a367aede83677fe5626398648cedc` |
 | `backend/config/asgi.py` | 161 | `e66806d324f24440dc47c97b9a870686dc47e2f5879aa61d1df7bb1c028bf25b` |
 | `backend/config/celery.py` | 221 | `99c9d65218b5b7ec9416eed0fb746644ca7aa90fe27223f166df94cea3fd6982` |
-| `backend/config/settings.py` | 8055 | `0a20f98b37cfa8309b82602e13d7d86237acc64aeb741b7179c120cf445361ad` |
+| `backend/config/settings.py` | 8125 | `863ee938fe761f8a87691959b39c1ab9cee0bc81d90dce1b56d0fe323df6b809` |
 | `backend/config/urls.py` | 1689 | `391594b133ccc7b9edef4edfc1c170a9d0d057a1e73c8a192ff4541914da0054` |
 | `backend/config/wsgi.py` | 161 | `25d3ac3de67e7a1e20c9cfed54bf208a378c7e634f426239c36c63cbabc22f36` |
 | `backend/manage.py` | 239 | `9bba94f103ecf4d96b7bb92b4efd737352b65e003b6d0d5dc20c2a97cb62e13f` |
@@ -230,6 +236,7 @@ Maschinenlesbar: `FILE_MANIFEST.tsv` und `MANIFEST.json`.
 | `backend/static/css/app.css` | 9727 | `a0a74b3b25428c383c9c288be594e764e76319b27bfc74f2a7de9e165e4f5c7e` |
 | `backend/templates/app_shell.html` | 1062 | `7f7c3ebacd4e8c15a621656c8dc4ca2fe760c63833079836dd6d54dd279bcbe6` |
 | `backend/templates/auth/accept_invitation.html` | 1216 | `6f8563b0a815f54c31141767dc52c295dd67d7f47eebd1f875e61d4a9b976082` |
+| `backend/templates/auth/invite_confirm.html` | 273 | `c094a5b3981e2ef64b55cd1964cf3b3379c1aefef9dc3a2a221faca4f70f7036` |
 | `backend/templates/auth/invite_result.html` | 268 | `4a0c8067765cc7dd1dd144b51826f911038b0432dc2580822d38cb3e2310d8a8` |
 | `backend/templates/auth/login.html` | 502 | `c90d0d08f57ed08b875e612e59f2358ebdf58542292e7edb52e4d1861e93f275` |
 | `backend/templates/auth/logout_confirm.html` | 489 | `4de1f83a1c245ef9c04e713c414da7bb7626a58c04fccb933a20f8ae0387b10d` |
@@ -255,7 +262,7 @@ Maschinenlesbar: `FILE_MANIFEST.tsv` und `MANIFEST.json`.
 | `backend/templates/ns_admin/customer_detail.html` | 1276 | `c447edb5398d4db1af239643e473d57fb01876ae20869dc74cb04a309231d1f1` |
 | `backend/templates/ns_admin/customer_grid.html` | 7826 | `b9989a5fb0e82f4d06f6e13d054cfc782a1a41301826ba4edb5eaa83d71e3433` |
 | `backend/templates/ns_admin/customer_portal_preview.html` | 1904 | `06f7afffc8869a92833fcad58bbcea141a1f14a292a09ece6141abad0948e46c` |
-| `backend/templates/ns_admin/dashboard.html` | 2998 | `08c053576776c6532d5d4f53e16ac6746e505bf02d351f4b9ce35912f940e9b0` |
+| `backend/templates/ns_admin/dashboard.html` | 3377 | `c59fd7493bced652dddbf357eafd43a87575bfd12a811606f32942f25d8ad9bd` |
 | `backend/templates/ns_admin/email.html` | 500 | `78883c95cb8a2076f9d400723180fe87cc234c41c2e1bee095f2fca27dab9c7c` |
 | `backend/templates/ns_admin/email_log.html` | 1421 | `524c18f58bebbb519e7aaa3c0c46fd01bc3eb20ec9678bb5eaf2900f98f73734` |
 | `backend/templates/ns_admin/features.html` | 1027 | `5c339c80180e86b7e22989fcc827bf4d85f83fe1708af54d7c85e19beea6dcaa` |
@@ -321,107 +328,79 @@ Maschinenlesbar: `FILE_MANIFEST.tsv` und `MANIFEST.json`.
 
 | Pfad | Größe | SHA256 |
 |---|---:|---|
-| `.github/workflows/ci.yml` | 4706 | `4c3f50033300188b774fa804759557144b5201fd2840136969cdea4df94660c0` |
+| `.github/workflows/ci.yml` | 6305 | `6069fe207e86ee71c73550a76aab66e59b279ce922a77b4190e4f6fed0fbda0a` |
 
 ## active-marketing
 
-127 Dateien.
+99 Dateien.
 
 | Pfad | Größe | SHA256 |
 |---|---:|---|
-| `marketing/.gitignore` | 384 | `14c2d4b7781dcd266e563c4f08880637ae620c7e8a182246a23b138e5f791e8e` |
+| `marketing/.gitignore` | 422 | `693206ff1889de27cfb858e5db0b6bb8b583e8a67da04ba5fe9fe01481d7e940` |
 | `marketing/.openai/hosting.json` | 128 | `f0edf586980b4bf42be68c4d7f4d8da814e74fdcbd08ca034113d989b247f57d` |
 | `marketing/.oxfmtrc.json` | 260 | `0962fdddb1840a06b5afb918ff3f2ff56bce346082651ec5c3567c01dd809f17` |
 | `marketing/.oxlintrc.json` | 1370 | `1a7aa1c7d83b05939e4e697eed9316224caea8958c4ad12837f8be740c13a47d` |
-| `marketing/components/ui/accordion.tsx` | 2664 | `33e1c60ba503f4eb36f9a8b1f68b236174b11656d8efea6bac65abddda2f9019` |
-| `marketing/components/ui/alert-dialog.tsx` | 5301 | `ed0f1fc432bca4c72f9dd8741ae2268a00d2d3429ff1149bf463c4271b13d8e9` |
-| `marketing/components/ui/alert.tsx` | 2060 | `e760c470414c9e617d7292094146d906352fee3b1526b790a611d4a118e79196` |
-| `marketing/components/ui/aspect-ratio.tsx` | 406 | `b7fb499905e441a0602392ce118828425ad059079060109694d01f9fac00ad20` |
-| `marketing/components/ui/attachment.tsx` | 6132 | `dcb9e899f1322158f016d75c400fa8cce9b797ea49bec65528bac686cee2ec5c` |
-| `marketing/components/ui/avatar.tsx` | 3056 | `342f32b683937b826cdff2999d5e3057836d459aa43eadb0c3538b818d195b9a` |
-| `marketing/components/ui/badge.tsx` | 1934 | `5706189b86e8670499fb33f37147dd6f65c39d59eef5211e34157f2952c35e32` |
-| `marketing/components/ui/breadcrumb.tsx` | 2602 | `b28b76d6f8d0feafbbeff2220cf83f9a6b03d8c81f0145b3af4c7d19933ab2c0` |
-| `marketing/components/ui/bubble.tsx` | 4828 | `dfb9f52ae3b89e4a419b336c3893ab6fb658fc324fb402759d878d54e3b2db5a` |
-| `marketing/components/ui/button-group.tsx` | 2494 | `79ad8fb6644a775cc49131c1aa737ca26cae6a563beec0fa52ef6e8d85202fab` |
-| `marketing/components/ui/button.tsx` | 3247 | `081d2a1cb4f3aec636a6894d9eff4e90d476d5db85b82d0399c1f4d18517112e` |
-| `marketing/components/ui/calendar.tsx` | 8503 | `e7bc682eff8f2215e6b0aab40d1afb7ee927c5f5bef348ccff207631b9261658` |
-| `marketing/components/ui/card.tsx` | 2645 | `625fce5e16577a45108a86d7afcd70b8931cb2032abe0d6a3faf1010f666d672` |
-| `marketing/components/ui/carousel.tsx` | 5727 | `7444126492d4e0b85b1270f0d83a0955350fa95b3d3fb7b88edc2a5c2b4e5d14` |
-| `marketing/components/ui/chart.tsx` | 10581 | `56ab0e0b41f0cc7902414e046ea4f710bdbf0b756028672ea8c7e5137a278f2b` |
-| `marketing/components/ui/checkbox.tsx` | 1538 | `56b2869e5478f38238e6a3d8aefabfbe8af565b38b2ffad06466487b3eacf154` |
-| `marketing/components/ui/collapsible.tsx` | 664 | `3fdf7ef1ca89c4d85de5ecbb25813d0f572003a53b021baf43c5f3523e48ec97` |
-| `marketing/components/ui/combobox.tsx` | 9135 | `282041e2e8c52cc12e7bbc717bbd3f8c9c5ba18e7fa75b97053bc79687e1181e` |
-| `marketing/components/ui/command.tsx` | 5029 | `9c1eae65aa105935a34c6b736f673b71a2ef939dde53dce29d986221edbf1f9f` |
-| `marketing/components/ui/context-menu.tsx` | 8166 | `05c3646b452f5e3b9eb952eeba3d90657606d2b0875cb77652cdb5eadba0eb5c` |
-| `marketing/components/ui/dialog.tsx` | 4087 | `8bc85def62538b4e62e8530c6b0ba167a192c38519c05f104bf6e10de73b811f` |
-| `marketing/components/ui/direction.tsx` | 105 | `2dea8a95accb1723db2454ccc858697d5b1f1454568cf4da5e8fcbd0cf7cc1ee` |
-| `marketing/components/ui/drawer.tsx` | 11396 | `b7ac53d0e5d1fed25fc3f2ac5f5a36e247ca684c677ac376829fa8a7c039b79e` |
-| `marketing/components/ui/dropdown-menu.tsx` | 8809 | `efc088f3d79f64cf96e222701ae23dcf385b53947b3cd57ffb7be6f5dadcbfe2` |
-| `marketing/components/ui/empty.tsx` | 2415 | `bf54bac4881b79f6a53f55e70c18640f58a058add88aed763c71be35c4f64f59` |
-| `marketing/components/ui/field.tsx` | 6303 | `79023ca89aae39f9cffa83a9483c9c672099b4547cc821486283db61c6ae9327` |
-| `marketing/components/ui/hover-card.tsx` | 1863 | `d8cb7270c5893213fc00b5f270f9bc461e2d7ce5b81f77b8778253a1aeda6a2c` |
-| `marketing/components/ui/input-group.tsx` | 5289 | `2e65ddecb4401220be374cc6cfc42344538266cafeb2e590b3c760c7ed6b490a` |
-| `marketing/components/ui/input-otp.tsx` | 2558 | `867f568259caac95f682d128d72e681b3fe7c31701a396eacc9284401d917a6a` |
-| `marketing/components/ui/input.tsx` | 1046 | `6763c86c34c1c07826386d376f5da8fe2e41585bff3615716d5da88915e088d8` |
-| `marketing/components/ui/item.tsx` | 4888 | `9c5e45e6c4aae5b9c4c1304e1f1208d32681ab616a6e0de9de6e0d6b22690592` |
-| `marketing/components/ui/kbd.tsx` | 842 | `bdfb38a4f7b9b604e196b5cee0d86f12311dae72946f0dbf5928c8ad0638178f` |
-| `marketing/components/ui/label.tsx` | 524 | `e4a6fb662c44a44c468d16d79d02b3a3e5bf7b77bd50aef1e586c4d9613df0f6` |
-| `marketing/components/ui/marker.tsx` | 1962 | `cd1e872384cf5001e48b4dc3cc2bb011eba9700561d41c83a89e872b60baf175` |
-| `marketing/components/ui/menubar.tsx` | 8315 | `a3715f8e8b78261f5784929c532e100759c58e831c91e842438730797bc9a124` |
-| `marketing/components/ui/message-scroller.tsx` | 4070 | `9512c586d1b0885cf3ae4f1c3dd4281cbdfec7428fe98ff48a66b4ba2a7319f4` |
-| `marketing/components/ui/message.tsx` | 2246 | `2fedcc64ed8563a44f6697615e77574d96f819fe6e5e2fa8a555e30f8ed6bbd7` |
-| `marketing/components/ui/native-select.tsx` | 2133 | `3aafb74b98c039dae4eb2c64c47ec6f5d61fdc888c057de47550346f702f434b` |
-| `marketing/components/ui/navigation-menu.tsx` | 7436 | `c8e64bf5241145b512ae18f1062da8275691edf927736496a3860bec76ad6fa1` |
-| `marketing/components/ui/pagination.tsx` | 2928 | `1f3c1713e8824cca7c3c0edacf9da7b0114bfda58640771b8fe0bc6179b370ce` |
-| `marketing/components/ui/popover.tsx` | 2586 | `7376624438588e2d64b6e0c5cdf82cbc5fd4530bbcf1f0235c5f3ee08d12e877` |
-| `marketing/components/ui/progress.tsx` | 1751 | `0d8ddec9731940e104b851cf3ac67d2fa8589b289824317a9e8f326e090ba65a` |
-| `marketing/components/ui/radio-group.tsx` | 1843 | `43f2d6c2f5bdd4a26c57d93e6f141be20472f9bb8777d9a0d61cd8a5e281a999` |
-| `marketing/components/ui/resizable.tsx` | 1681 | `ea7b85817d4dc70866e0bcf15264e7e1bd7e1893eb4404261fbc23a4d6ff9029` |
-| `marketing/components/ui/scroll-area.tsx` | 1632 | `730c4cc49f8f1b705eb1389cd32c774056a0a2a7a48a9b092cbe44c608be3a0b` |
-| `marketing/components/ui/select.tsx` | 6700 | `45489c502a21fdd5271481d64ad8f762181c9653d8d26bdc6f75450b78c3c852` |
-| `marketing/components/ui/separator.tsx` | 551 | `92ad5065f03d7edc98f367e729f3ec84ece1d99ee8cd0d3a8137f266d4ab3d8a` |
-| `marketing/components/ui/sheet.tsx` | 4446 | `adb432b6f9d7a4733caa45ba8bf510a8a7ff0f6d0dd3aa1f013959fb61268234` |
-| `marketing/components/ui/sidebar.tsx` | 21779 | `aa3322ca63f098aa1d2abf750f9d097da07362fce25939357f2cefc9b6a03988` |
-| `marketing/components/ui/skeleton.tsx` | 278 | `4c342102b2bbf5bd8c04fa151fe5c13c42faee2f9587a3586c27322020ca35d1` |
-| `marketing/components/ui/slider.tsx` | 1879 | `af657e73d672f4dd205f19abf151d21a172cf36abfdca49fd7014a20e12367a9` |
-| `marketing/components/ui/spinner.tsx` | 360 | `8ddbb330e5564a1f53026da36c2322ed4b027687e91a88f63348ab10f26ae0cb` |
-| `marketing/components/ui/switch.tsx` | 1818 | `04b085443a1c6a72d408e6eb7dd45df881ca27814415b81b39f614806b52c8fc` |
-| `marketing/components/ui/table.tsx` | 2418 | `88f2ba7877eea7f34a5da18b7fa096eb2c7bed602677ce54f5494b494c5afc2e` |
-| `marketing/components/ui/tabs.tsx` | 3510 | `dd914d769bc223b5d5ea56839a7752e534eb475f8d2897d5675606c368bbca1f` |
-| `marketing/components/ui/textarea.tsx` | 847 | `7ae7f0f5d907be24658652c771fee1685193102bf3200aafbf578d144d379fbf` |
-| `marketing/components/ui/toast.tsx` | 7353 | `9126b09f47f0b117bf748cf19aaa4987a1f72d0813d10bfc4b4b0128e6439e48` |
-| `marketing/components/ui/toggle-group.tsx` | 3201 | `9b006523be0fe3230cd75f7adf78a501829d594fd3506c56c55bb38211ff1850` |
-| `marketing/components/ui/toggle.tsx` | 1770 | `6bf41d6f6ffe602c3e28274a82ac029e6ee1331ba3c670a6d814048e1823cc28` |
-| `marketing/components/ui/tooltip.tsx` | 2855 | `b86e51969931c3d62e88d0bdacd1cd8219105dc6d6b6a588a80011bf92e987cd` |
+| `marketing/components/ui/accordion.tsx` | 2742 | `20df8ccd965c317376fd70c39479b3ddca376ebff40f08ab6f684f51a2afedb4` |
+| `marketing/components/ui/alert-dialog.tsx` | 5488 | `b78e7cf80ba49b90e9f69184eaa7090026d9783eaa7761060c693a945a502d4f` |
+| `marketing/components/ui/alert.tsx` | 2136 | `f1f30d8da19c09ef99054886461c82143f168bbde04009a6f16b609f8af93f04` |
+| `marketing/components/ui/aspect-ratio.tsx` | 428 | `fd7999d9474e909cc9272f6c633c1266df0da86613985db1dc724f3371f8b4dd` |
+| `marketing/components/ui/attachment.tsx` | 6339 | `20f4518e6dde10e1ef09b681d8f60a07fb9af80c76b9153b644725b2553cbdb7` |
+| `marketing/components/ui/avatar.tsx` | 3165 | `5f701c7947c299126ddab74167e9bfee29c0369ca8ffc2815da48b69874eecf1` |
+| `marketing/components/ui/badge.tsx` | 1986 | `052b4c0fbcd05b23eae84f124b8a868d79f97ee934e16e8546a60a392601814c` |
+| `marketing/components/ui/breadcrumb.tsx` | 2724 | `e68407a81a9ec90bb24ad4189fd2d6284ad07d8c86e474c28686174d01326a88` |
+| `marketing/components/ui/bubble.tsx` | 4956 | `32b8effc1af0751877bbed4653db9d9b056a08ed241aeb9d3ac662879bac6e2f` |
+| `marketing/components/ui/button-group.tsx` | 2581 | `6d4c96965656a8de32c00a6d4eccb3ba9904a2a4ebd04c4b849f3085fb379f27` |
+| `marketing/components/ui/button.tsx` | 3305 | `3bdad93ebda47079beeee08aa9068455ed7792e4f595e66ddc47f66af6f133b1` |
+| `marketing/components/ui/calendar.tsx` | 8734 | `63d2ec465a37a791692d50448e9f2315fcf16ef686452f99bd2931604fdb4063` |
+| `marketing/components/ui/card.tsx` | 2748 | `92bf70bdd72e77c121d76af37ce356c70cf175395fd7762e8556343988670955` |
+| `marketing/components/ui/carousel.tsx` | 5969 | `d00e374d1a5f514798a95c45d9cf5867169bd2662456d5a9855c0651a1bc93d2` |
+| `marketing/components/ui/chart.tsx` | 10954 | `972d198a105b3063a7226f79bbecc455ea44f31fb1e64be9f8bde1cbf1451371` |
+| `marketing/components/ui/checkbox.tsx` | 1566 | `3215e1b81f76f6473faf8ee45ff2004cc458bbc216213707d1ddaccefb17d009` |
+| `marketing/components/ui/collapsible.tsx` | 685 | `3eb3ee736aaaef892aebbf51d9d676c89f8642d278b3f46fad6760e22cceb5fa` |
+| `marketing/components/ui/combobox.tsx` | 9435 | `8cb5fd7d7ad0c39c8dbf9457ead815396bc6e907250ef8a56fb097b9a2fb05f0` |
+| `marketing/components/ui/command.tsx` | 5222 | `b421fa62b0013f4dc4baeb04bbddeb841406cbca8c9df4804aba83e55e11640c` |
+| `marketing/components/ui/context-menu.tsx` | 8438 | `2d15c8755aebca4ec661c3a8b0437c7f9a1ba6c304337edd9f69a9aee38361de` |
+| `marketing/components/ui/dialog.tsx` | 4246 | `f732b9a008dd9ffda5c6377d07f1846e063a5fa21854a0a648df102b715c58f5` |
+| `marketing/components/ui/direction.tsx` | 111 | `678a0fcddf8a404ca74374ad7d08151fbd0ae64bd758906cb231bb21c6829553` |
+| `marketing/components/ui/drawer.tsx` | 11624 | `f5053cf5f354e184de33ecef4038498d15b279176c45c5a071c92d315520094b` |
+| `marketing/components/ui/dropdown-menu.tsx` | 9081 | `dc5603c124190132b0034e212ee7e28279a8f6f2c5aa02b2052cf2a937502bf4` |
+| `marketing/components/ui/empty.tsx` | 2519 | `2300d1409ebb5dcd440d7d9ed7608fff54340026825d3fb044097a526f8474a1` |
+| `marketing/components/ui/field.tsx` | 6541 | `f5bd4e8d824d9c14bb6bbe2a4415e1c752506a9b672da86e7d47ebd664f1813e` |
+| `marketing/components/ui/hover-card.tsx` | 1914 | `d6b7c9e5ed51a17c45f376fe5945d4d2c48727d2a6491cf218660503923596de` |
+| `marketing/components/ui/input-group.tsx` | 5447 | `a135a094cf93fd94a8c5bd062c182078137e0a59b2af944dc6af5e5a51a8a3c8` |
+| `marketing/components/ui/input-otp.tsx` | 2644 | `b847456b73ae795b55bc8f23a2d2c25bb637d9d435444d11101f9f41ae61fbb4` |
+| `marketing/components/ui/input.tsx` | 1066 | `9ba5a924b7b430dcd88a3ddad591854a467299e833d7046927e0bf74c78c6ea8` |
+| `marketing/components/ui/item.tsx` | 5089 | `94ffd641acef671d225d5e345766ac34c684fc6042bb7b447af669ee82610423` |
+| `marketing/components/ui/kbd.tsx` | 868 | `b9b9eadd3b2510d88e0c2442bd07bd6aaec477dbd07a2a0375abd9714f9f8919` |
+| `marketing/components/ui/label.tsx` | 544 | `dd56d728bc68f25e0f2d3d484139a0fa9479e5ceec76410a7505c36745fff494` |
+| `marketing/components/ui/marker.tsx` | 2033 | `8c393f64a0434cccb527c6338903da7eb34015e0d8431e0a0c4f6a72051962b8` |
+| `marketing/components/ui/menubar.tsx` | 8599 | `1cabede602d38da170766297b39da60d686caafee021ff5d37714d11b3b474d9` |
+| `marketing/components/ui/message-scroller.tsx` | 4200 | `250b38e09a6459037db02209671d855eea2955d7d1d5765c489a0f18566a8ba5` |
+| `marketing/components/ui/message.tsx` | 2338 | `7b9ae2dacc508d421036a5490d6d75c6da975e05578c91389c272e5f7dfc584b` |
+| `marketing/components/ui/native-select.tsx` | 2198 | `adc7e4ce047d7e619e9f3161eca2e4dc197399429d8f474a948f2a957a603971` |
+| `marketing/components/ui/navigation-menu.tsx` | 7607 | `042d5b109dac67727565aa465118cac76c80805856cc633aa6c312409168e346` |
+| `marketing/components/ui/pagination.tsx` | 3061 | `837976b6d017f66459b5adf83977e2a9ada3bc100a0ecde76a6e74dac47802b3` |
+| `marketing/components/ui/popover.tsx` | 2676 | `27a4e51e2695645ba20f2cf113625136e9490cdba4f2470a042388279fd02c56` |
+| `marketing/components/ui/progress.tsx` | 1834 | `bcc086c23be7e9a4cfe8a65444b8f5d949e29ff9ca38e1bb522b34d68f04035f` |
+| `marketing/components/ui/radio-group.tsx` | 1881 | `1d14450bd2792430076a0e85c9b5d85adb51bceebcd7e236554076884a1c3dd1` |
+| `marketing/components/ui/resizable.tsx` | 1731 | `e79b3499dbc4e4c67ebb5174334ce099ab2c9e8d76e0d3e907d4388b7b3490e5` |
+| `marketing/components/ui/scroll-area.tsx` | 1687 | `e628b4da20e27815310ab4d6a525ce56e959cc4f18a34f98ae47563d81f03cd2` |
+| `marketing/components/ui/select.tsx` | 6902 | `73ee89922eb71a384a579df681c1d512d92038d156590377b2485369566284f9` |
+| `marketing/components/ui/separator.tsx` | 576 | `bb831d9511be1f318d4e058db0692399727ab56d88f6650977377ebacbc93b0f` |
+| `marketing/components/ui/sheet.tsx` | 4583 | `3c46175017296d486e6e5538a489c011f9977e60b67e37e1682a956b502865be` |
+| `marketing/components/ui/sidebar.tsx` | 22502 | `b4c1061287417b4665ca44c1b9b51d53025dd9f4b2a26b4c994dfd6d4865c7a0` |
+| `marketing/components/ui/skeleton.tsx` | 291 | `7e213f989652eb736739dfcf5248335504547a594eeb7869c55e8c0621fc6966` |
+| `marketing/components/ui/slider.tsx` | 1931 | `f76dd9625b6453c9c761f651890d0324cd9b6bd181ac6b6b4a385bafd13fb61d` |
+| `marketing/components/ui/spinner.tsx` | 376 | `bc1b1480fb37227bc66c69eed050585113fc37ce9e0c4e16c42db9f98b6994db` |
+| `marketing/components/ui/switch.tsx` | 1850 | `cda57e3b380185d3ffe4195856bc533f595eccbd01b103a2bb1d9a0635d6c51a` |
+| `marketing/components/ui/table.tsx` | 2534 | `0dba4e4cc69b8ca88c106096d16a6b7a20308a314b997b26b4b1266a202591ff` |
+| `marketing/components/ui/tabs.tsx` | 3592 | `e9e02515c9212cfd5fa149f67668c4117a0b1b961c9752eaa4d7547e829da998` |
+| `marketing/components/ui/textarea.tsx` | 865 | `bd2878c7058d27bca7d97a01cc4dd4868e097184005ebf8b4176db93b2f3e22b` |
+| `marketing/components/ui/toast.tsx` | 7582 | `078c918d7a63cfc2de51c7b5ad8510b2182bbb4b21f16d9cb6b7f11bfee9e8f8` |
+| `marketing/components/ui/toggle-group.tsx` | 3290 | `6a84a2acf3ab88692c568a62be8198a26c0c5a58084bdbf19d17b1efa3f68726` |
+| `marketing/components/ui/toggle.tsx` | 1815 | `4cec25dd824d7534b1f79c68c27455136fcae594a4df2c3b43fde0b6a2035b82` |
+| `marketing/components/ui/tooltip.tsx` | 2921 | `7667acc0cbb79b9daad94af6bb694fb6840b5bd1395e7e60c68c0fb63af9c4bd` |
 | `marketing/components.json` | 516 | `9928283696d86836422959a2c520df83a718d31ffbcab533a14ca8dca2c8d475` |
-| `marketing/dist/404.html` | 2986 | `7836077da7c210a3b1ee0c92d21a0eebca23313fe345412e1ce7243d0ee07981` |
-| `marketing/dist/_headers` | 185 | `b3e7ff8ece08e3d772948ba64d60c939858d94e3ea087dacec48193b5cab4756` |
-| `marketing/dist/agb/index.html` | 3120 | `6590d5b933849aa563758b24ec08002b362ed31160966b32092f77aa58660313` |
-| `marketing/dist/app/pro/index.html` | 3120 | `6590d5b933849aa563758b24ec08002b362ed31160966b32092f77aa58660313` |
-| `marketing/dist/assets/head-ClEywaux.js` | 609404 | `f3299795fc13f9464cad583f2358838ad1d4e50f53b4dceab8289dcc798acc9d` |
-| `marketing/dist/assets/index-B5VcnuTb.js` | 25986 | `6a1582c5ab2eab975ba912ab873e80aa2ff9fe3c9bdc6055be7613b046d9c689` |
-| `marketing/dist/assets/index-CTlQCzBS.css` | 22734 | `973994132165e3d8813105149b3e7804704325171330fdf6b79aafbe818a7079` |
-| `marketing/dist/brand/design-reference.jpeg` | 238669 | `2bfb44f2d888e463e7f9e9b581b02d775d59506146aa1d6b5b027e8bef889340` |
-| `marketing/dist/catalog.json` | 297 | `7b8ccc92bc3b74efd64fec82c9b6669908cc83cd8f3a6f8972ce8e9a59badcb3` |
-| `marketing/dist/checkout/index.html` | 3120 | `6590d5b933849aa563758b24ec08002b362ed31160966b32092f77aa58660313` |
-| `marketing/dist/datenschutz/index.html` | 3120 | `6590d5b933849aa563758b24ec08002b362ed31160966b32092f77aa58660313` |
-| `marketing/dist/favicon.svg` | 276 | `ac387f455ca1a1724da9e92a8dd71c20cec454c80fa9476f65da4a08667ad0a8` |
-| `marketing/dist/free/index.html` | 3120 | `6590d5b933849aa563758b24ec08002b362ed31160966b32092f77aa58660313` |
-| `marketing/dist/impressum/index.html` | 3120 | `6590d5b933849aa563758b24ec08002b362ed31160966b32092f77aa58660313` |
-| `marketing/dist/index.html` | 25381 | `b2f5cf22e83fbf5cd026e97580be5f9e86dee1b38056f1312c692d42d6bfb10a` |
-| `marketing/dist/integration-patch.js` | 2672 | `342afd2b3f10199e7078bd2e50a1f3a0e8caeb67eb72ced90cd6282cbf2b5908` |
-| `marketing/dist/kontakt/index.html` | 3120 | `6590d5b933849aa563758b24ec08002b362ed31160966b32092f77aa58660313` |
-| `marketing/dist/lizenzbedingungen/index.html` | 3120 | `6590d5b933849aa563758b24ec08002b362ed31160966b32092f77aa58660313` |
-| `marketing/dist/login/index.html` | 3120 | `6590d5b933849aa563758b24ec08002b362ed31160966b32092f77aa58660313` |
-| `marketing/dist/models/ATTRIBUTION.txt` | 536 | `c7703919fd81cc92c73c6f947cadb242e66e54e50f68e8f921b09139f083e864` |
-| `marketing/dist/models/head.glb` | 404976 | `402b8a8ac9f03232e6d64b5962929703a069daf99d3c49ac8eb0e48bedc9c576` |
-| `marketing/dist/models/night-landscape.png` | 1823026 | `8f05bcac2709089321e59d57dac4dbbe0d6295a6ed5b550c930ea9d530bb274a` |
-| `marketing/dist/portal/index.html` | 3120 | `6590d5b933849aa563758b24ec08002b362ed31160966b32092f77aa58660313` |
-| `marketing/dist/preise/index.html` | 25381 | `b2f5cf22e83fbf5cd026e97580be5f9e86dee1b38056f1312c692d42d6bfb10a` |
-| `marketing/dist/pro/index.html` | 25381 | `b2f5cf22e83fbf5cd026e97580be5f9e86dee1b38056f1312c692d42d6bfb10a` |
-| `marketing/dist/robots.txt` | 26 | `331ea9090db0c9f6f597bd9840fd5b171830f6e0b3ba1cb24dfa91f0c95aedc1` |
-| `marketing/dist/unternehmen/index.html` | 3120 | `6590d5b933849aa563758b24ec08002b362ed31160966b32092f77aa58660313` |
-| `marketing/dist/vergleich/index.html` | 25381 | `b2f5cf22e83fbf5cd026e97580be5f9e86dee1b38056f1312c692d42d6bfb10a` |
 | `marketing/docs/design-corrections.md` | 2339 | `a510a474cb54738bc2b53018382c37abd5dbb4ebcf80e036e676d087b12868bd` |
 | `marketing/docs/validation.md` | 1720 | `a0d0ea74a2a95594726168f1629b3c3c420db666fae4562180ca5c8627fba496` |
 | `marketing/hooks/use-mobile.ts` | 585 | `82bff42ff087bd5dc90a5d17609cc428b8688de92d1333073a839af5ad3c9cbd` |
@@ -431,7 +410,7 @@ Maschinenlesbar: `FILE_MANIFEST.tsv` und `MANIFEST.json`.
 | `marketing/next.config.ts` | 104 | `d063bebef3a4878ae82f9f9547c2c9675b8b6945ab23702932dcb63a011a9fc9` |
 | `marketing/package-lock.json` | 347285 | `e742e43c1184fdbd3566241ac582c54f899cfddbbd0cc29db09e7f89e1521887` |
 | `marketing/package.json` | 1668 | `53f28ed51b220ae668f5b06fc14cfbcfe121e5a7973d6a990b3a48daf67db3b2` |
-| `marketing/public/_headers` | 185 | `b3e7ff8ece08e3d772948ba64d60c939858d94e3ea087dacec48193b5cab4756` |
+| `marketing/public/_headers` | 190 | `b9201f6a9456864da5620b1a6828b9894171d960f123da891f97f6ea81410e94` |
 | `marketing/public/brand/design-reference.jpeg` | 238669 | `2bfb44f2d888e463e7f9e9b581b02d775d59506146aa1d6b5b027e8bef889340` |
 | `marketing/public/catalog.json` | 297 | `7b8ccc92bc3b74efd64fec82c9b6669908cc83cd8f3a6f8972ce8e9a59badcb3` |
 | `marketing/public/favicon.svg` | 276 | `ac387f455ca1a1724da9e92a8dd71c20cec454c80fa9476f65da4a08667ad0a8` |
@@ -459,12 +438,13 @@ Maschinenlesbar: `FILE_MANIFEST.tsv` und `MANIFEST.json`.
 
 ## active-operations
 
-27 Dateien.
+31 Dateien.
 
 | Pfad | Größe | SHA256 |
 |---|---:|---|
-| `backup/backup.sh` | 4663 | `0bd99d4c12eb0e12b8214b0a742e7dce6d45706df01463ed608791efd81d5570` |
-| `backup/Dockerfile` | 210 | `ef22a3784a2b0f212c384c90511abcf545463f1012e6e4617eaf10cd44e2d43a` |
+| `backup/.dockerignore` | 45 | `84303944760859bc8461474d428cb1d985333a2f2b748f664bb096211d06442b` |
+| `backup/backup.sh` | 4890 | `d15a8465b599877b4926603401000d7ea2bbc082fdc20177cb199e5293e748fb` |
+| `backup/Dockerfile` | 215 | `0ae4e8693318177d9f902536467330e879e8fa2fd576c8031fc785d880083c2b` |
 | `monitoring/prometheus.yml` | 383 | `db1365580edfdbfcc703ca7921e623078111e3794a291de81ec1458f39f4fdb2` |
 | `scripts/backup.sh` | 147 | `cc1f10ae86c448fddce11c3e1059368f85133463aedffd3573b76ad1ee1e1d14` |
 | `scripts/bootstrap.sh` | 2154 | `497111c1d25b5e5cd480a3c8b3091af6e80ea2d29e425a13d3ba8e46c4c38f90` |
@@ -474,11 +454,13 @@ Maschinenlesbar: `FILE_MANIFEST.tsv` und `MANIFEST.json`.
 | `scripts/deploy.sh` | 1728 | `313e749dad62cf147a5c1ec9286a18283ff12bd36b85d5d120650bf03f974681` |
 | `scripts/diagnose.sh` | 137 | `86b08add1d4a6baa7b65e86be9ff9d193f1ba16e1e8f965297953d8bfeb127f5` |
 | `scripts/generate_file_manifest.py` | 3183 | `74c64e3a2c7c84ff5011e56ceadeb0315e0a0bb5faa892cdd1ea93805012bfaf` |
-| `scripts/github_preflight.py` | 3304 | `78fa9a5e7e61c5f8615f4ccbbb310e485d86b46fb29f27777656ec33b454b466` |
+| `scripts/github_preflight.py` | 3409 | `729b71a25077472e72193e916476fb6ca791235c84683cac0cfb65c091866e7e` |
 | `scripts/github_prepare.sh` | 859 | `b3ba2e8d6107c0d965252660f542d9a551422ad605f73ab67daf9e3c79d7e7cc` |
 | `scripts/prepare_env.py` | 4319 | `1f509fa0d8c62a46bf3f11f1d0f1cbaf9d6ca27938c1134cfe6ce50dfd219350` |
 | `scripts/restore-test.sh` | 1017 | `73a537bc855d33ba896337fe147b2dd07fa1f58a0621a374e174a1d828ec2854` |
-| `scripts/runtime_validate.sh` | 4994 | `0c4a23599508855aa8f88c1b4a5b559daaded248b2bac8d944290224cf74e976` |
+| `scripts/runtime_validate.sh` | 5701 | `437ec9a379f05f68f68c906fa27c6446e46525ed442debd5fbd63cc24726ad8e` |
+| `scripts/test_backup_restore.sh` | 1531 | `0541a5ebc0184231bd1439793cfc4a41b4a26817cfdb005c9f36534050af88a1` |
+| `scripts/test_runtime_config.py` | 1666 | `342993a4ef369f3e2810f4691cd3e65a6d1ebf6e2fbb5f9381b1ed9eae85afe7` |
 | `scripts/update.sh` | 102 | `75036bf3dc461ba0d307d05faa1d1ad3317c8657071ea532a3b9bc5dfbe2a786` |
 | `scripts/validate_env.py` | 5909 | `fb52eb72749c7ad402885a0ab8ee5f87bc5e0d96f002e3b6318d3b099f391ec1` |
 | `scripts/validate_manifest.py` | 5115 | `bafc14c5ae5cfc66aa42a1429c5b2c7743053d58961a0c02586b50044712ad9b` |
@@ -488,6 +470,7 @@ Maschinenlesbar: `FILE_MANIFEST.tsv` und `MANIFEST.json`.
 | `scripts/validate_python_syntax.py` | 678 | `b926acbde0950f5bb3af7abb3b4cff18e1806ec06113c96cef4f015da44cc222` |
 | `scripts/validate_repo.py` | 6619 | `a4338dbcc5b73d3df8958a7a412c16cab948431c898355d113ae6821ac3fa302` |
 | `scripts/validate_runtime_catalog.py` | 3117 | `83302c1578475251124ffb03abc35ee927de86d762c7d336e8772884b05201d6` |
+| `scripts/validate_runtime_config.py` | 2729 | `dd774712781c97d31459756545eaf75ebcd6c095556e006597e1228a1d5bb770` |
 | `scripts/validate_static.py` | 22281 | `13e134096521ed213c085b11d3c69acd9d8f01f053d6a49d0685d2abc393cc87` |
 | `scripts/verify_golden_extraction.py` | 3748 | `1aa625fab07622a8a78caf15a574038243ab1d1c621b6baa706dcb4fbaa76c7f` |
 
@@ -504,13 +487,15 @@ Maschinenlesbar: `FILE_MANIFEST.tsv` und `MANIFEST.json`.
 
 ## documentation
 
-19 Dateien.
+21 Dateien.
 
 | Pfad | Größe | SHA256 |
 |---|---:|---|
+| `docs/CHANGE_PRODUCT_SECURITY_02.md` | 3466 | `527a01e882c47d102fee6a52346dd8da435e5a7afb48d54dd09143c81767fa5a` |
 | `docs/CHANGE_RC11_PROMPT_DOMAIN.md` | 3180 | `7d97a90f8fca3fc9bb6d6ca9929a9488272ed3bc0db6229e071437004b3f9a97` |
 | `docs/CHANGE_RC12_STUDIO_MCP_CONTENT.md` | 1081 | `bb540eec17e653a6d8ac4ba5cf328561cbc2b667d6b8132ea0a297eba0c87738` |
 | `docs/CHANGE_RC13_RUNTIME_CATALOG_GITHUB.md` | 2158 | `9c83d3fecc1b4c9a7c1e275e3528a72ed8436678a7d91d29997b816a74757490` |
+| `docs/CHANGE_RUNTIME_HARDENING_01.md` | 3811 | `5423e1b6007e3d96136acf8b908110b160505a62c8024837a4c20e7ee1c4c79f` |
 | `docs/COMPLETE_PROJECT_SUMMARY.md` | 6781 | `41cd168018d66b6d8f383b89c1546506a1b84deab2acfefa2d88bdc8becf48f0` |
 | `docs/FREE_LEGACY_MAPPING_STATUS.md` | 1149 | `82366c94b3f9fef0c66608c8c1fd7787af322d0880f6fe2a91ca4605cf092ab7` |
 | `docs/GITHUB_READY_STATUS.md` | 2484 | `bf7aaa5bf0395e1b8730b163d3654e831385dfddf0bf0a201a7659ce0e29f366` |
@@ -530,7 +515,7 @@ Maschinenlesbar: `FILE_MANIFEST.tsv` und `MANIFEST.json`.
 
 ## historical-reference
 
-36 Dateien.
+33 Dateien.
 
 | Pfad | Größe | SHA256 |
 |---|---:|---|
@@ -542,7 +527,7 @@ Maschinenlesbar: `FILE_MANIFEST.tsv` und `MANIFEST.json`.
 | `archive/chat-transfer-2026-09-12/03_PHASE2_ACTUAL_CODE_BASELINE/PromptMaster_V1_Phase2/AGENTS.md` | 1011 | `144753b64981cac6fb351dfe33cd967a934b2fc6a6ee1b08fa3aecab88a07421` |
 | `archive/chat-transfer-2026-09-12/03_PHASE2_ACTUAL_CODE_BASELINE/PromptMaster_V1_Phase2/compose.staging.yaml` | 430 | `5e80346f0e3e5cd261a1da73b582278fbb84bbe3f085ab0763a074037748c0ab` |
 | `archive/chat-transfer-2026-09-12/03_PHASE2_ACTUAL_CODE_BASELINE/PromptMaster_V1_Phase2/compose.yaml` | 3907 | `291f894c3a805963999662d99d6a50ea92e3e5f1a0ed3675dbd164aa5cfa06b0` |
-| `archive/chat-transfer-2026-09-12/03_PHASE2_ACTUAL_CODE_BASELINE/PromptMaster_V1_Phase2/Dockerfile` | 481 | `cd5af0352839ad99545a628d5a10cc91ad072fd16ed34f65878f8b579f9948f7` |
+| `archive/chat-transfer-2026-09-12/03_PHASE2_ACTUAL_CODE_BASELINE/PromptMaster_V1_Phase2/Dockerfile` | 490 | `1d3799eab29c85db8070d9a23413f16141fba23784b28a3ccf8c8d9f381fc3b4` |
 | `archive/chat-transfer-2026-09-12/03_PHASE2_ACTUAL_CODE_BASELINE/PromptMaster_V1_Phase2/README.md` | 3009 | `8f48b1e20e46d013b2455fa0115ac2d026afcead8baf4c820281ec5f0a12be5d` |
 | `archive/chat-transfer-2026-09-12/03_PHASE2_ACTUAL_CODE_BASELINE/PromptMaster_V1_Phase2/scripts/bootstrap.sh` | 2677 | `904dcb6ee5a859558ee8eea06fdfff1532bf2c3e7f42c30b0aa4b010437f7f34` |
 | `archive/chat-transfer-2026-09-12/03_PHASE2_ACTUAL_CODE_BASELINE/PromptMaster_V1_Phase2/SPEC.md` | 46369 | `e5e6491322fc8d75c5086cc737743cbb55d0e7dcf806e515e5d62a8791d248fc` |
@@ -554,7 +539,6 @@ Maschinenlesbar: `FILE_MANIFEST.tsv` und `MANIFEST.json`.
 | `archive/chat-transfer-2026-09-12/04_UI_PROTOTYPES/promptmaster-prototype-v1/SPEC.md` | 1371 | `831bc744acfe383312227ccd072fc6b11f75eacd434a9480efc0f8a0b9e40c3d` |
 | `archive/chat-transfer-2026-09-12/04_UI_PROTOTYPES/PromptMaster_Kundenportal.html` | 42660 | `8472907d76febc0698b82db2fef3b6a8ef73163941152ff98ed415a7f80404be` |
 | `archive/chat-transfer-2026-09-12/04_UI_PROTOTYPES/PromptMaster_netstyle_Admin_V2.html` | 21426 | `75b547934f2166560acc3cd4687cba10b1f061e050e743121ff72584aea6dd42` |
-| `archive/chat-transfer-2026-09-12/04_UI_PROTOTYPES/PromptMaster_UI_Prototype_V1_1_FIXED.zip` | 16023 | `40fed976399b97a7c7d058aa028a257f285407d198acc15f31d9a61490122caa` |
 | `archive/chat-transfer-2026-09-12/05_DESIGN_REFERENCES/1000279014.png` | 440658 | `afeba547d12ae353dfdb84111473100aa4b680139eaa2eb7fc3689616d849714` |
 | `archive/chat-transfer-2026-09-12/05_DESIGN_REFERENCES/a_detailed_infographic_style_project_plan_and_ui_u.png` | 1905661 | `07589b65f55ff6386edaa6f075c92c41626bbb3e719f8e4438952f3e58ba652d` |
 | `archive/chat-transfer-2026-09-12/05_DESIGN_REFERENCES/a_detailed_ui_design_mockup_image_showing_a_saas_a.png` | 1519230 | `4fd621f222148dc242a0f74bcba251ce2c983a3a5a5ceddee3b0c18b756a12df` |
@@ -568,8 +552,6 @@ Maschinenlesbar: `FILE_MANIFEST.tsv` und `MANIFEST.json`.
 | `archive/chat-transfer-2026-09-12/FILE_INVENTORY.md` | 2491 | `08545951cfbd0a1ad6a51451a52fbd63125aa1f5bf3290a3796d928a9fb5831a` |
 | `archive/chat-transfer-2026-09-12/MANIFEST.json` | 6452 | `95a4c7b9edb6e28df25cf068c45d58b3f3335e92ae5779c0e9814368f656567f` |
 | `archive/chat-transfer-2026-09-12/SHA256SUMS.txt` | 3946 | `6b320c6ace63dc1d724b6fcd69e589230e5b8dffa0bdafb636243b03a40cbeef` |
-| `archive/source-packages/PromptMaster-Commercial-Sicherung-2026-09-06.zip` | 5168035 | `196220ab78971cf86b9e391c3abcd3ebcfa761bd24b1408cfb0d3c7e7d715b3d` |
-| `archive/source-packages/PromptMaster_CHAT_TRANSFER_LATEST_2026-09-12.zip` | 14411033 | `fcf33456e75fb9064ff9fdd01b7ae8307675717f5d57391c7b2981d8c8ee710d` |
 
 ## recovery-tool
 
@@ -577,8 +559,8 @@ Maschinenlesbar: `FILE_MANIFEST.tsv` und `MANIFEST.json`.
 
 | Pfad | Größe | SHA256 |
 |---|---:|---|
-| `tools/recovery/v13-exact-exporter/PromptMaster_v13_EXAKT_exportieren.cmd` | 289 | `7aad8a18566ddae8bfe9b6fb39fc4a4c9b981474da45e69ad0c3ae56b39843d7` |
-| `tools/recovery/v13-exact-exporter/PromptMaster_v13_EXAKT_exportieren.ps1` | 7330 | `5c4eb8e92cce0c90f7e7df7d920ede7a5fd23c03a2844c2d5679aeaca6871c3a` |
+| `tools/recovery/v13-exact-exporter/PromptMaster_v13_EXAKT_exportieren.cmd` | 298 | `ccef1271973a6381439d13384f0b787bbde4314c0763e705750002c00c7f331e` |
+| `tools/recovery/v13-exact-exporter/PromptMaster_v13_EXAKT_exportieren.ps1` | 7538 | `357e641b945e63ea473617dc58ac7b8c83167723509d04cae06c5104d3f52321` |
 | `tools/recovery/v13-exact-exporter/README.txt` | 492 | `98d56838c1fd5cef19098eb1c52ecda42e2f4bdb2c9a355f736e961e4975d660` |
 
 ## repository-root
@@ -587,35 +569,17 @@ Maschinenlesbar: `FILE_MANIFEST.tsv` und `MANIFEST.json`.
 
 | Pfad | Größe | SHA256 |
 |---|---:|---|
-| `.dockerignore` | 170 | `597cfecc39c86d5e456fa5acc18a496ca3b9110b0d0ffeb4b0ac6c1093f0b9a1` |
-| `.env.example` | 1156 | `bf18b1efc79ed9573e49a57c5a5b06ac3f9b50502636ff8ed10712b17a9f408e` |
+| `.dockerignore` | 189 | `d1e11cf30ff73c035b25c1aa91ed529be6bd3bcc668ef1713269a87efcc5f68c` |
+| `.env.example` | 1220 | `ad9dfaed230c7e03051045377f1cf0664759a7492ca74ea2e460b8b3895733c5` |
 | `.gitattributes` | 649 | `33184d32b64b1b8b08485d10af623a0ab85079f3906d2abe2ff8bdc2cc8f0c88` |
-| `.gitignore` | 458 | `d80d523a6dbc20b0b2f0f8baf73d79c2051aaa91c410a6016b2ec8b88618ac80` |
+| `.gitignore` | 577 | `57447265512dbd59676dc89e554ec772558e543470d932f13b7e76e3854791b1` |
 | `AGENTS.md` | 1887 | `6b0f2950044806d7960ab4fad453a6b6507ef4121a96dbb587da10e08b43e9aa` |
-| `Caddyfile` | 2162 | `77dc0138f4065ec74ac4eeff5da26d6dde7f16e5ffb594f6b9c1b4064059a519` |
+| `Caddyfile` | 2295 | `2474d0474498c02a1fe8d3661119e12c48e6ebc0b6550677619cda93944b2da9` |
 | `compose.production.yaml` | 149 | `892d9a05cb62b80de558541dc45b5804a72a39b4541fc23c6a63b0d5801f8f1c` |
 | `compose.staging.yaml` | 654 | `45328bdb64d1d4dc2dc46abe30f54f84c589d56e516c00fb5fd1d5a492b4737b` |
-| `compose.yaml` | 3998 | `5fec5bd964eb764b0f973a06e47206d34016c8b42ef0b7b6c7aa3adeeb2e162d` |
-| `Dockerfile` | 632 | `78cdedfea4434d0e4a88d8d7c98796f9d465ca7b8ee4f38d717d3ab972bbf08b` |
-| `Dockerfile.caddy` | 281 | `3222f69f1bd3a6537a6ec6d5d537f8ae5ab7112cc7a7a55a4949fbe8afb5001c` |
+| `compose.yaml` | 4095 | `44acc78438124f6acb1e30db2a558e2de1eb66012ad903650843dc8c171e6306` |
+| `Dockerfile` | 672 | `f7d131ec42cb4503cba4775915838c477b43e4c8f1727289b8849fde04b11494` |
+| `Dockerfile.caddy` | 291 | `547c367f14227de8814c43d7ea32a1ba85982a58af55d8e04b1a4875b5bbd809` |
 | `README.md` | 6011 | `d8ffbf46bb7cc79061ed383bfd75e81bb21389fc13e32c3974fa08d928ab0c92` |
 | `requirements.txt` | 206 | `ceb986bad2b3fbe439d43e758686454954b00e4f39b438903eb2dfe864abfb0c` |
 | `SPEC.md` | 46369 | `e5e6491322fc8d75c5086cc737743cbb55d0e7dcf806e515e5d62a8791d248fc` |
-
-
-## Runtime hardening 01 — aktualisierte Dateien
-
-| Pfad | Größe | SHA256 |
-|---|---:|---|
-| `.github/workflows/ci.yml` | 6305 | `6069fe207e86ee71c73550a76aab66e59b279ce922a77b4190e4f6fed0fbda0a` |
-| `.gitignore` | 518 | `d9966f1696a6c4eed5184d5c1f81604b4361eba693c813d5a26620001764f3d3` |
-| `backup/.dockerignore` | 41 | `50001e1195c744f428d6c4bd3dcce2455cc1c84618a2fd412c10f48a7e2036be` |
-| `backup/Dockerfile` | 210 | `ef22a3784a2b0f212c384c90511abcf545463f1012e6e4617eaf10cd44e2d43a` |
-| `backup/backup.sh` | 4890 | `d15a8465b599877b4926603401000d7ea2bbc082fdc20177cb199e5293e748fb` |
-| `compose.yaml` | 4096 | `2818cb5ae4dbe428c0339bb4c05f007faf8af90e0c3f5df5e35cc52dc746c2a0` |
-| `docs/CHANGE_RUNTIME_HARDENING_01.md` | 3029 | `8d631a9d1e9c214ac4dcc91c5e6c3c3a4c266a47b23cbf6b955fffbb21e8b27d` |
-| `scripts/github_preflight.py` | 3409 | `729b71a25077472e72193e916476fb6ca791235c84683cac0cfb65c091866e7e` |
-| `scripts/runtime_validate.sh` | 5406 | `604f6102e141f49e25d9bf52a473d6f04fb763f7e2c9b3c66718277d5460f112` |
-| `scripts/test_backup_restore.sh` | 1531 | `0541a5ebc0184231bd1439793cfc4a41b4a26817cfdb005c9f36534050af88a1` |
-| `scripts/test_runtime_config.py` | 1666 | `342993a4ef369f3e2810f4691cd3e65a6d1ebf6e2fbb5f9381b1ed9eae85afe7` |
-| `scripts/validate_runtime_config.py` | 2729 | `dd774712781c97d31459756545eaf75ebcd6c095556e006597e1228a1d5bb770` |

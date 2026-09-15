@@ -20,3 +20,13 @@ def verify(secret, value, window=1, at=None):
     totp = pyotp.TOTP(secret)
     when = time.time() if at is None else at
     return bool(totp.verify(value, for_time=when, valid_window=window))
+
+
+def matching_step(secret, value, at=None):
+    """Return the accepted step so callers can atomically reject replay."""
+    when = time.time() if at is None else at
+    step = int(when) // 30
+    for candidate in (step, step - 1, step + 1):
+        if verify(secret, value, window=0, at=candidate * 30):
+            return candidate
+    return None

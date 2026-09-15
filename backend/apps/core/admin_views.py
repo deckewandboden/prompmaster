@@ -114,18 +114,20 @@ def _grid_export(request, grid, columns, filename):
 @staff_perm()
 def dashboard(request):
     now = timezone.now()
+    rights = {name: has_perm(request.user, f'{name}.read') for name in ('customers', 'licenses', 'orders', 'ops', 'support')}
     context = {
-        'customers': Company.objects.count() + PrivateCustomerProfile.objects.count(),
-        'licenses': License.objects.filter(valid_until__gt=now, status__in=['active', 'free']).count(),
-        'expiring30': License.objects.filter(valid_until__gt=now, valid_until__lte=now + timedelta(days=30)).count(),
-        'expiring60': License.objects.filter(valid_until__gt=now, valid_until__lte=now + timedelta(days=60)).count(),
-        'orders30': Order.objects.filter(created_at__gte=now - timedelta(days=30)).count(),
-        'revenue30': Order.objects.filter(status='paid', created_at__gte=now - timedelta(days=30)).aggregate(v=Sum('gross_total'))['v'] or 0,
-        'alerts': SystemAlert.objects.filter(active=True)[:8],
-        'open_support_count': SupportRequest.objects.exclude(status='closed').count(),
-        'ops': snapshot(),
-        'recent_orders': Order.objects.select_related('company', 'private_user').order_by('-created_at')[:8],
-        'expiring': License.objects.select_related('company', 'owner_user', 'product').filter(valid_until__gt=now).order_by('valid_until')[:8],
+        'rights': rights,
+        'customers': Company.objects.count() + PrivateCustomerProfile.objects.count() if rights['customers'] else None,
+        'licenses': License.objects.filter(valid_until__gt=now, status__in=['active', 'free']).count() if rights['licenses'] else None,
+        'expiring30': License.objects.filter(valid_until__gt=now, valid_until__lte=now + timedelta(days=30)).count() if rights['licenses'] else None,
+        'expiring60': License.objects.filter(valid_until__gt=now, valid_until__lte=now + timedelta(days=60)).count() if rights['licenses'] else None,
+        'orders30': Order.objects.filter(created_at__gte=now - timedelta(days=30)).count() if rights['orders'] else None,
+        'revenue30': (Order.objects.filter(status='paid', created_at__gte=now - timedelta(days=30)).aggregate(v=Sum('gross_total'))['v'] or 0) if rights['orders'] else None,
+        'alerts': SystemAlert.objects.filter(active=True)[:8] if rights['ops'] else [],
+        'open_support_count': SupportRequest.objects.exclude(status='closed').count() if rights['support'] else None,
+        'ops': snapshot() if rights['ops'] else {},
+        'recent_orders': Order.objects.select_related('company', 'private_user').order_by('-created_at')[:8] if rights['orders'] else [],
+        'expiring': License.objects.select_related('company', 'owner_user', 'product').filter(valid_until__gt=now).order_by('valid_until')[:8] if rights['licenses'] else [],
     }
     return render(request, 'ns_admin/dashboard.html', context)
 
@@ -992,10 +994,14 @@ def global_search(request):
     query = request.GET.get('q', '').strip()[:200]
     results = {'customers': [], 'private_customers': [], 'users': [], 'licenses': [], 'orders': [], 'payments': []}
     if len(query) >= 2:
-        results['customers'] = Company.objects.filter(Q(name__icontains=query) | Q(customer_number__icontains=query) | Q(email__icontains=query))[:10]
-        results['private_customers'] = PrivateCustomerProfile.objects.filter(Q(customer_number__icontains=query) | Q(user__email__icontains=query) | Q(user__first_name__icontains=query) | Q(user__last_name__icontains=query)).select_related('user')[:10]
-        results['users'] = User.objects.filter(Q(email__icontains=query) | Q(first_name__icontains=query) | Q(last_name__icontains=query))[:10]
-        results['licenses'] = License.objects.filter(license_number__icontains=query).select_related('company', 'owner_user')[:10]
-        results['orders'] = Order.objects.filter(order_number__icontains=query)[:10]
-        results['payments'] = Payment.objects.filter(provider_payment_id__icontains=query)[:10]
+        if has_perm(request.user, 'customers.read'):
+            results['customers'] = Company.objects.filter(Q(name__icontains=query) | Q(customer_number__icontains=query) | Q(email__icontains=query))[:10]
+            results['private_customers'] = PrivateCustomerProfile.objects.filter(Q(customer_number__icontains=query) | Q(user__email__icontains=query) | Q(user__first_name__icontains=query) | Q(user__last_name__icontains=query)).select_related('user')[:10]
+            results['users'] = User.objects.filter(Q(email__icontains=query) | Q(first_name__icontains=query) | Q(last_name__icontains=query))[:10]
+        if has_perm(request.user, 'licenses.read'):
+            results['licenses'] = License.objects.filter(license_number__icontains=query).select_related('company', 'owner_user')[:10]
+        if has_perm(request.user, 'orders.read'):
+            results['orders'] = Order.objects.filter(order_number__icontains=query)[:10]
+        if has_perm(request.user, 'payments.read'):
+            results['payments'] = Payment.objects.filter(provider_payment_id__icontains=query)[:10]
     return render(request, 'ns_admin/search.html', {'q': query, 'results': results})

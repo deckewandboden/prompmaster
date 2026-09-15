@@ -3,12 +3,13 @@ from apps.core.security import client_ip
 from .models import AuditEvent
 
 SENSITIVE = {'password', 'secret', 'token', 'key', 'api_key', 'authorization', 'cookie'}
+CONTENT_KEYS = {'prompt', 'input', 'inputs', 'fields', 'payload'}
 
 
 def redact(value):
     if isinstance(value, dict):
         return {
-            key: ('[REDACTED]' if any(part in key.lower() for part in SENSITIVE) else redact(item))
+            key: ('[REDACTED]' if key.lower() in CONTENT_KEYS or any(part in key.lower() for part in SENSITIVE) else redact(item))
             for key, item in value.items()
         }
     if isinstance(value, list):

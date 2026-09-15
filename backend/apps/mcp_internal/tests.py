@@ -6,6 +6,7 @@ from django.test import Client, TestCase
 from apps.core.security import token_pair
 from apps.integrations.models import ServiceAccount
 from apps.prompts.models import PromptVersion
+from apps.audit.models import AuditEvent
 
 
 class InternalMcpTests(TestCase):
@@ -39,6 +40,27 @@ class InternalMcpTests(TestCase):
         self.assertEqual(response.json()['result']['protocolVersion'], '2025-03-26')
         tools = self.rpc('tools/list').json()['result']['tools']
         self.assertEqual({tool['name'] for tool in tools}, {'prompt.read', 'prompt.draft', 'prompt.test'})
+
+    def test_non_object_json_is_rejected(self):
+        for body in ('[]', 'null', '"text"', '123'):
+            response = self.client.post('/api/v1/mcp/', data=body, content_type='application/json')
+            self.assertEqual(response.status_code, 400)
+
+    def test_preview_does_not_store_input_or_prompt_in_audit(self):
+        version = PromptVersion.objects.get(definition__task_id='PM20-001', lifecycle='PUBLISHED')
+        payload = dict(version.test_cases.first().input_payload['payload'])
+        payload['fields'] = dict(payload.get('fields', {}), Fragestellung='MCP-PRIVATE-INPUT-42')
+        response = self.rpc('tools/call', {'name': 'prompt.test', 'arguments': {
+            'version_id': str(version.id), 'microsoft_tier': 'premium', 'payload': payload,
+        }})
+        self.assertEqual(response.status_code, 200)
+        result = json.loads(response.json()['result']['content'][0]['text'])
+        self.assertTrue(result['ok'], result)
+        self.assertIn('MCP-PRIVATE-INPUT-42', result['prompt'])
+        event = AuditEvent.objects.get(action='mcp.prompt.test')
+        self.assertEqual(event.changes['mode'], 'preview')
+        self.assertNotIn('prompt', event.changes)
+        self.assertNotIn('MCP-PRIVATE-INPUT-42', json.dumps(event.changes))
 
     def test_sse_transport_is_supported(self):
         response = self.rpc('ping', HTTP_ACCEPT='text/event-stream')

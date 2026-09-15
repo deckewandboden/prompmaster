@@ -4,7 +4,7 @@ from urllib.parse import quote, urlsplit
 from django.contrib import messages
 from django.contrib.auth import login, logout
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth.hashers import check_password, make_password
+from django.contrib.auth.hashers import make_password
 from django.core import signing
 from django.db import IntegrityError, transaction
 from django.shortcuts import redirect, render
@@ -26,8 +26,9 @@ from .forms import (
     RegistrationForm,
 )
 from .models import RecoveryCode, User
-from .security import bind_security_session, bump_security_version
-from .totp import new_secret, verify
+from .security import bind_security_session, bump_security_version, consume_second_factor
+from .totp import new_secret, matching_step
+from apps.audit.services import audit
 
 EMAIL_VERIFY_SALT = 'pm-email-verify'
 PASSWORD_RESET_SALT = 'pm-password-reset'
@@ -41,7 +42,9 @@ def _safe_next(request, value=None):
     return ''
 
 
+@transaction.atomic
 def _new_recovery_codes(user):
+    type(user).objects.select_for_update().get(pk=user.pk)
     user.recovery_codes.all().delete()
     codes = [secrets.token_urlsafe(9) for _ in range(10)]
     RecoveryCode.objects.bulk_create(
@@ -59,6 +62,8 @@ def login_view(request):
         login(request, form.user)
         request.session.cycle_key()
         bind_security_session(request, form.user, two_factor_ok=not form.user.two_factor_required)
+        request.session['authenticated_at'] = timezone.now().timestamp()
+        audit(form.user, 'auth.login', form.user, {'second_factor_pending': form.user.two_factor_required}, request=request)
         next_url = _safe_next(request)
         if form.user.two_factor_required:
             request.session['post_2fa_next'] = next_url or reverse('home')
@@ -101,34 +106,35 @@ def register(request):
             form.add_error('email', 'E-Mail-Adresse bereits registriert.')
         else:
             try:
-                user = User.objects.create_user(
-                    email=data['email'],
-                    password=data['password'],
-                    first_name=data['first_name'].strip(),
-                    last_name=data['last_name'].strip(),
-                    two_factor_required=(data['customer_type'] == 'company'),
-                )
-                if data['customer_type'] == 'company':
-                    company = Company.objects.create(
-                        customer_number=f'C-{user.id.hex[:24].upper()}',
-                        name=data['company_name'].strip(),
-                        email=user.email,
+                with transaction.atomic():
+                    user = User.objects.create_user(
+                        email=data['email'],
+                        password=data['password'],
+                        first_name=data['first_name'].strip(),
+                        last_name=data['last_name'].strip(),
+                        two_factor_required=(data['customer_type'] == 'company'),
                     )
-                    Membership.objects.create(company=company, user=user, role='admin', active=True)
-                else:
-                    PrivateCustomerProfile.objects.create(
-                        user=user,
-                        customer_number=f'P-{user.id.hex[:24].upper()}',
-                    )
-                evidence = {
-                    'ip': client_ip(request),
-                    'user_agent': request.META.get('HTTP_USER_AGENT', '')[:300],
-                    'source': 'registration',
-                }
-                for document in legal_documents.values():
-                    LegalAcceptance.objects.create(
-                        user=user, document=document, order=None, evidence=evidence
-                    )
+                    if data['customer_type'] == 'company':
+                        company = Company.objects.create(
+                            customer_number=f'C-{user.id.hex[:24].upper()}',
+                            name=data['company_name'].strip(),
+                            email=user.email,
+                        )
+                        Membership.objects.create(company=company, user=user, role='admin', active=True)
+                    else:
+                        PrivateCustomerProfile.objects.create(
+                            user=user,
+                            customer_number=f'P-{user.id.hex[:24].upper()}',
+                        )
+                    evidence = {
+                        'ip': client_ip(request),
+                        'user_agent': request.META.get('HTTP_USER_AGENT', '')[:300],
+                        'source': 'registration',
+                    }
+                    for document in legal_documents.values():
+                        LegalAcceptance.objects.create(
+                            user=user, document=document, order=None, evidence=evidence
+                        )
             except IntegrityError:
                 form.add_error('email', 'Konto konnte nicht angelegt werden. Bitte erneut versuchen.')
             else:
@@ -172,21 +178,14 @@ def two_factor(request):
     error = ''
     if request.method == 'POST' and form.is_valid():
         value = form.cleaned_data['code'].strip()
-        ok = False
         try:
-            ok = verify(decrypt(request.user.totp_secret_enc), value)
+            ok = consume_second_factor(request.user, value)
         except Exception:
             ok = False
-        if not ok:
-            for recovery in request.user.recovery_codes.filter(used_at__isnull=True):
-                if check_password(value, recovery.code_hash):
-                    recovery.used_at = timezone.now()
-                    recovery.save(update_fields=['used_at'])
-                    ok = True
-                    break
         if ok:
             request.session.cycle_key()
             bind_security_session(request, request.user, two_factor_ok=True)
+            audit(request.user, 'auth.second_factor', request.user, {}, request=request)
             next_url = _safe_next(request, request.session.pop('post_2fa_next', ''))
             return redirect(next_url or 'home')
         error = 'Code ungültig.'
@@ -194,25 +193,32 @@ def two_factor(request):
 
 
 @login_required
+@transaction.atomic
 def two_factor_setup(request):
+    request.user = User.objects.select_for_update().get(pk=request.user.pk)
     if request.user.totp_secret_enc:
         return redirect('portal:security')
-    secret = request.session.get('pending_totp') or new_secret()
-    request.session['pending_totp'] = secret
+    request.session.pop('pending_totp', None)
+    pending = request.session.get('pending_totp_enc')
+    secret = decrypt(pending) if pending else new_secret()
+    request.session['pending_totp_enc'] = encrypt(secret)
     if request.method == 'POST':
         limited = check_rate(request, f'2fa-setup:{request.user.pk}', 10, 300)
         if limited:
             return limited
         value = request.POST.get('code', '')
-        if verify(secret, value):
+        step = matching_step(secret, value)
+        if step is not None:
             request.user.totp_secret_enc = encrypt(secret)
             request.user.two_factor_required = True
-            request.user.save(update_fields=['totp_secret_enc', 'two_factor_required', 'updated_at'])
+            request.user.last_totp_step = step
+            request.user.save(update_fields=['totp_secret_enc', 'two_factor_required', 'last_totp_step', 'updated_at'])
             bump_security_version(request.user)
             codes = _new_recovery_codes(request.user)
-            request.session.pop('pending_totp', None)
+            request.session.pop('pending_totp_enc', None)
             request.session.cycle_key()
             bind_security_session(request, request.user, two_factor_ok=True)
+            audit(request.user, 'auth.second_factor_enabled', request.user, {}, request=request)
             return render(request, 'auth/recovery_codes.html', {'codes': codes})
         messages.error(request, 'Code ungültig.')
     label = quote(f'PromptMaster:{request.user.email}', safe='')
@@ -221,7 +227,9 @@ def two_factor_setup(request):
 
 
 @login_required
+@transaction.atomic
 def regenerate_recovery_codes(request):
+    request.user = User.objects.select_for_update().get(pk=request.user.pk)
     if not request.user.totp_secret_enc or not request.session.get('two_factor_ok'):
         return redirect('accounts:two_factor')
     form = RecoveryCodesRegenerateForm(request.POST or None)
@@ -232,6 +240,7 @@ def regenerate_recovery_codes(request):
             codes = _new_recovery_codes(request.user)
             bump_security_version(request.user)
             bind_security_session(request, request.user, two_factor_ok=True)
+            audit(request.user, 'auth.recovery_regenerated', request.user, {}, request=request)
             return render(request, 'auth/recovery_codes.html', {'codes': codes})
     return render(request, 'auth/password_confirm.html', {'form': form, 'title': 'Recovery-Codes neu erzeugen'})
 
@@ -252,10 +261,11 @@ def password_reset_request(request):
     return render(request, 'auth/password_reset_request.html', {'form': form})
 
 
+@transaction.atomic
 def password_reset_confirm(request, token):
     try:
         data = signing.loads(token, salt=PASSWORD_RESET_SALT, max_age=3600)
-        user = User.objects.get(pk=data['uid'], email=data['email'], is_active=True)
+        user = User.objects.select_for_update().get(pk=data['uid'], email=data['email'], is_active=True)
         if int(data['sv']) != int(user.security_version):
             raise KeyError('password reset token already used or invalidated')
     except (signing.BadSignature, signing.SignatureExpired, User.DoesNotExist, KeyError, ValueError, TypeError):
@@ -270,6 +280,7 @@ def password_reset_confirm(request, token):
             update_fields.append('email_verified_at')
         user.save(update_fields=update_fields)
         bump_security_version(user)
+        audit(user, 'auth.password_reset', user, {}, request=request)
         return render(request, 'auth/password_reset_result.html', {'ok': True})
     return render(request, 'auth/password_reset_confirm.html', {'form': form})
 
@@ -294,9 +305,12 @@ def accept_invitation(request, token):
             return render(request, 'auth/invite_result.html', {'ok': False, 'reason': 'customer_type_conflict'})
         if existing.company_memberships.filter(active=True).exclude(company=invitation.company).exists():
             return render(request, 'auth/invite_result.html', {'ok': False})
+        if request.method != 'POST':
+            return render(request, 'auth/invite_confirm.html', {'invitation': invitation})
         with transaction.atomic():
+            existing = User.objects.select_for_update().get(pk=existing.pk)
             invitation = Invitation.objects.select_for_update().get(pk=invitation.pk)
-            if not invitation.is_valid():
+            if not invitation.is_valid() or not invitation.company.status == 'active' or existing.company_memberships.filter(active=True).exclude(company=invitation.company).exists():
                 return render(request, 'auth/invite_result.html', {'ok': False})
             Membership.objects.update_or_create(
                 company=invitation.company,

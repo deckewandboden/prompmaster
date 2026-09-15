@@ -130,6 +130,8 @@ def endpoint(request):
     except (UnicodeDecodeError, json.JSONDecodeError):
         return _json_rpc(error=_error(-32700, 'Parse error'), request_id=None, status=400, request=request)
 
+    if not isinstance(payload, dict):
+        return _json_rpc(error=_error(-32600, 'Invalid Request'), status=400, request=request)
     request_id = payload.get('id')
     method = payload.get('method')
     params = payload.get('params') or {}
@@ -252,5 +254,8 @@ def _call_tool(name, args, account, request):
             'failed': summary.failed,
             'errors': summary.errors,
         }
-    audit(None, 'mcp.prompt.test', account, {**payload, 'service_account': str(account.id)}, request=request)
+    audit(None, 'mcp.prompt.test', account, {
+        key: payload[key] for key in ('ok', 'mode', 'task_id', 'version', 'total', 'passed', 'failed')
+        if key in payload
+    } | {'service_account': str(account.id)}, request=request)
     return payload

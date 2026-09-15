@@ -6,13 +6,11 @@ from django.http import JsonResponse
 from django.views.decorators.http import require_GET, require_POST
 
 from apps.devices.services import validate_device_token
-from apps.proaccess.services import active_product_assignment
+from apps.proaccess.services import active_product_assignment, DEVICE_COOKIE
 
 from .composer_core import PromptValidationError
 from .services import build_spec, catalog_snapshot, compose_task, published_version, task_entitled
 from .quality import save_rating
-
-DEVICE_COOKIE = 'pm_device'
 
 
 def _error(exc: PromptValidationError, status: int = 400):
@@ -25,6 +23,8 @@ def _error(exc: PromptValidationError, status: int = 400):
 def _require_pro_access(request):
     if not request.user.is_authenticated:
         raise PromptValidationError('Anmeldung erforderlich.', code='authentication_required')
+    if not request.user.email_verified_at:
+        raise PromptValidationError('Bitte E-Mail-Adresse bestätigen.', code='email_verification_required')
     assignment = active_product_assignment(request.user, 'PRO')
     if not assignment:
         raise PromptValidationError('Aktive PromptMaster-Pro-Lizenz erforderlich.', code='license_required')
@@ -100,6 +100,8 @@ def compose(request):
         body = json.loads(request.body.decode('utf-8') or '{}')
     except (UnicodeDecodeError, json.JSONDecodeError):
         return _error(PromptValidationError('Ungültiges JSON.', code='invalid_json'))
+    if not isinstance(body, dict):
+        return _error(PromptValidationError('JSON muss ein Objekt sein.', code='invalid_json'))
 
     product = str(body.get('product') or 'PRO').upper()
     if product != 'PRO':
@@ -124,7 +126,7 @@ def compose(request):
             raise PromptValidationError('input muss ein Objekt sein.', field='input')
         result = compose_task(task_id=task_id, microsoft_tier=tier, payload=payload, product_code='PRO')
     except PromptValidationError as exc:
-        status = 403 if exc.code in {'license_required', 'device_required', 'entitlement_required', 'tier_required'} else 400
+        status = 403 if exc.code in {'email_verification_required', 'license_required', 'device_required', 'entitlement_required', 'tier_required'} else 400
         if exc.code == 'authentication_required':
             status = 401
         if exc.code == 'not_found':
@@ -160,6 +162,8 @@ def rate(request, task_id):
         body = json.loads(request.body.decode('utf-8') or '{}')
     except (UnicodeDecodeError, json.JSONDecodeError):
         return _error(PromptValidationError('Ungültiges JSON.', code='invalid_json'))
+    if not isinstance(body, dict):
+        return _error(PromptValidationError('JSON muss ein Objekt sein.', code='invalid_json'))
     try:
         version = published_version(task_id)
         stars = int(body.get('stars'))
