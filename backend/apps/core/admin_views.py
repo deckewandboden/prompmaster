@@ -22,7 +22,7 @@ from apps.catalog.services import create_price_version
 from apps.companies.models import Company, Membership, PrivateCustomerProfile
 from apps.devices.models import DeviceRegistration
 from apps.integrations.models import ServiceAccount
-from apps.legal.models import DeletionRequest, LegalDocument, RetentionPolicy
+from apps.legal.models import DeletionRequest, LegalAcceptance, LegalDocument, RetentionPolicy
 from apps.licenses.models import License, LicenseTerm
 from apps.licenses.services import block_license, unblock_license
 from apps.notifications.models import EmailMessage, EmailTemplate
@@ -447,6 +447,35 @@ def customer_emails(request, pk):
         filters={'status': 'status'},
     ).build()
     return render(request, 'ns_admin/customer_grid.html', {'customer': customer, 'title': 'E-Mail-Historie', 'grid': grid, 'kind': 'emails', 'filter_options': [('status','Status',EMAIL_STATUS_CHOICES)]})
+
+
+@staff_perm('legal.read')
+def customer_privacy(request, pk):
+    customer = _customer(request, pk)
+    user_ids = list(
+        customer.memberships.values_list('user_id', flat=True)
+    )
+    acceptances = (
+        LegalAcceptance.objects.filter(user_id__in=user_ids)
+        .select_related('user', 'document', 'order')
+        .order_by('-accepted_at')[:30]
+    )
+    deletions = (
+        DeletionRequest.objects.filter(user_id__in=user_ids)
+        .select_related('user')
+        .order_by('-requested_at')[:30]
+    )
+    return render(
+        request,
+        'ns_admin/customer_privacy.html',
+        {
+            'customer': customer,
+            'acceptances': acceptances,
+            'deletions': deletions,
+            'acceptance_count': LegalAcceptance.objects.filter(user_id__in=user_ids).count(),
+            'deletion_count': DeletionRequest.objects.filter(user_id__in=user_ids).count(),
+        },
+    )
 
 
 @staff_perm('audit.read')
