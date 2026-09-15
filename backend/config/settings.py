@@ -185,10 +185,15 @@ LOGGING = {
     'version': 1,
     'disable_existing_loggers': False,
     'formatters': {
-        'standard': {
-            'format': '%(asctime)s %(levelname)s %(name)s %(message)s',
-        }
+        'json': {
+            '()': 'apps.core.middleware.JsonLogFormatter',
+        },
     },
-    'handlers': {'console': {'class': 'logging.StreamHandler', 'formatter': 'standard'}},
+    'handlers': {
+        'console': {
+            'class': 'logging.StreamHandler',
+            'formatter': 'json',
+        },
+    },
     'root': {'handlers': ['console'], 'level': os.getenv('LOG_LEVEL', 'INFO')},
 }
