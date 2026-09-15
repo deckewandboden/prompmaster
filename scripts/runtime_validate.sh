@@ -4,7 +4,7 @@ cd "$(dirname "$0")/.."
 STAMP="$(date -u +%Y%m%dT%H%M%SZ)"; ARTIFACT_DIR="${PM_VALIDATION_ARTIFACT_DIR:-artifacts/runtime-validation}"; mkdir -p "$ARTIFACT_DIR"; LOG="$ARTIFACT_DIR/runtime-validation-${STAMP}.log"; exec > >(tee -a "$LOG") 2>&1
 fail(){ echo "[FAIL] $*" >&2; exit 1; }
 command -v docker >/dev/null 2>&1 || fail "docker fehlt auf diesem Host"; docker compose version >/dev/null 2>&1 || fail "docker compose ist nicht verfügbar"; [[ -f .env ]] || fail ".env fehlt"
-python3 scripts/github_preflight.py; python3 scripts/validate_env.py --environment staging
+bash scripts/run_repo_preflight.sh staging
 FILES=(-f compose.yaml -f compose.staging.yaml)
 docker compose -f compose.yaml -f compose.production.yaml config >/dev/null
 # Exercise production filesystem restrictions with safe staging integrations.
