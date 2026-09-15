@@ -82,3 +82,50 @@ def transfer_admin(company, old_admin, new_user, *, actor=None, request=None, au
         request=request,
     )
     return new_membership
+
+
+@transaction.atomic
+def deactivate_company_member(*, company, member, actor, request=None):
+    """Deactivate a non-admin company member and release tenant resources."""
+    from apps.devices.models import DeviceRegistration
+    from apps.licenses.models import LicenseAssignment
+    from apps.licenses.services import release_license
+
+    locked = (
+        Membership.objects.select_for_update()
+        .select_related('user')
+        .get(pk=member.pk, company=company, active=True)
+    )
+    if locked.role == 'admin':
+        raise ValidationError('Firmenadministrator zuerst übertragen.')
+
+    assignments = list(
+        LicenseAssignment.objects.select_for_update()
+        .filter(
+            user=locked.user,
+            license__company=company,
+            ended_at__isnull=True,
+        )
+        .select_related('license')
+    )
+    for row in assignments:
+        release_license(row.license, actor)
+
+    DeviceRegistration.objects.filter(
+        user=locked.user,
+        license__company=company,
+        revoked_at__isnull=True,
+    ).update(revoked_at=timezone.now())
+    locked.active = False
+    locked.save(update_fields=['active', 'updated_at'])
+    locked.user.is_active = False
+    locked.user.save(update_fields=['is_active', 'updated_at'])
+    bump_security_version(locked.user)
+    audit(
+        actor,
+        'company.member_deactivated',
+        locked,
+        {'user': str(locked.user_id), 'company': str(company.id)},
+        request=request,
+    )
+    return locked
