@@ -17,3 +17,5 @@ staticfiles
 .DS_Store
 archive
 .git
+marketing/node_modules
+marketing/dist
