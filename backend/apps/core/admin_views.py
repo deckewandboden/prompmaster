@@ -655,7 +655,14 @@ def ops_alerts(request):
 
 @staff_perm('api.read')
 def api(request):
-    return render(request, 'ns_admin/api.html', {'accounts': ServiceAccount.objects.order_by('name')})
+    return render(
+        request,
+        'ns_admin/api.html',
+        {
+            'accounts': ServiceAccount.objects.order_by('name'),
+            'can_write': has_perm(request.user, 'api.write'),
+        },
+    )
 
 
 @staff_perm('api.write')
@@ -663,10 +670,40 @@ def service_account_create(request):
     form = ServiceAccountForm(request.POST or None)
     if request.method == 'POST' and form.is_valid():
         raw, hashed = token_pair()
-        account = ServiceAccount.objects.create(name=form.cleaned_data['name'], token_hash=hashed, scopes=form.cleaned_data['scopes'], expires_at=form.cleaned_data['expires_at'])
+        account = ServiceAccount.objects.create(
+            name=form.cleaned_data['name'],
+            token_hash=hashed,
+            scopes=form.cleaned_data['scopes'],
+            expires_at=form.cleaned_data['expires_at'],
+        )
         write_audit(request.user, 'service_account.created', account, {'scopes': account.scopes}, request=request)
-        return render(request, 'ns_admin/service_account_token.html', {'account': account, 'token': raw})
+        return render(
+            request,
+            'ns_admin/service_account_token.html',
+            {'account': account, 'token': raw, 'token_action': 'erstellt'},
+        )
     return render(request, 'ns_admin/form.html', {'title': 'Service Account anlegen', 'form': form})
+
+
+@staff_perm('api.write')
+@transaction.atomic
+def service_account_rotate(request, pk):
+    if request.method != 'POST':
+        raise PermissionDenied
+    account = get_object_or_404(ServiceAccount.objects.select_for_update(), pk=pk)
+    if not account.active:
+        messages.error(request, 'Ein gesperrter Service Account kann nicht rotiert werden.')
+        return redirect('ns_admin:api')
+    raw, hashed = token_pair()
+    account.token_hash = hashed
+    account.last_used_at = None
+    account.save(update_fields=['token_hash', 'last_used_at', 'updated_at'])
+    write_audit(request.user, 'service_account.rotated', account, {'scopes': account.scopes}, request=request)
+    return render(
+        request,
+        'ns_admin/service_account_token.html',
+        {'account': account, 'token': raw, 'token_action': 'rotiert'},
+    )
 
 
 @staff_perm('api.write')
