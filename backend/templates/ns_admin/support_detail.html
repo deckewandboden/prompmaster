@@ -1,1 +1,33 @@
-{% extends 'ns_admin/base.html' %}{% block content %}<div class="page-head"><div><h1>{{ support_request.subject }}</h1><div class="sub">{{ support_request.get_category_display }} · {{ support_request.created_at|date:'d.m.Y H:i' }}</div></div><a class="btn secondary" href="{% url 'ns_admin:support_requests' %}">Zurück</a></div><div class="grid two"><div class="card"><h2>Anfrage</h2><div class="statusrow"><span>Kunde</span><strong>{% if support_request.company %}{{ support_request.company.name }}{% else %}{{ support_request.user.full_name }}{% endif %}</strong></div><div class="statusrow"><span>E-Mail</span><strong>{{ support_request.user.email }}</strong></div><div class="statusrow"><span>Status</span><strong>{{ support_request.get_status_display }}</strong></div><div class="message-box">{{ support_request.message|linebreaksbr }}</div></div>{% if can_write %}<div class="card"><h2>Status ändern</h2><form method="post" action="{% url 'ns_admin:support_request_status' support_request.id %}" class="form">{% csrf_token %}<label>Status<select name="status"><option value="new" {% if support_request.status == 'new' %}selected{% endif %}>Neu</option><option value="in_progress" {% if support_request.status == 'in_progress' %}selected{% endif %}>In Bearbeitung</option><option value="closed" {% if support_request.status == 'closed' %}selected{% endif %}>Abgeschlossen</option></select></label><button class="btn primary" type="submit">Speichern</button></form></div>{% endif %}</div>{% endblock %}
+{% extends 'ns_admin/base.html' %}{% block content %}
+<div class="page-head">
+  <div><h1>{{ support_request.subject }}</h1><div class="sub">{{ support_request.get_category_display }} · {{ support_request.created_at|date:'d.m.Y H:i' }}</div></div>
+  <a class="btn secondary" href="{% url 'ns_admin:support_requests' %}">Zurück</a>
+</div>
+<div class="grid two">
+  <div class="card">
+    <h2>Anfrage</h2>
+    <div class="statusrow"><span>Kunde</span><strong>{% if support_request.company %}{{ support_request.company.name }}{% else %}{{ support_request.user.full_name }}{% endif %}</strong></div>
+    <div class="statusrow"><span>Benutzer-ID</span><strong>{{ support_request.user_id }}</strong></div>
+    <div class="statusrow"><span>E-Mail</span><strong>{{ support_request.user.email }}</strong></div>
+    <div class="statusrow"><span>Lizenz</span><strong>{% if support_request.license %}{{ support_request.license.license_number }} · {{ support_request.license.product.name }}{% else %}–{% endif %}</strong></div>
+    <div class="statusrow"><span>Status</span><strong>{{ support_request.get_status_display }}</strong></div>
+    <div class="message-box">{{ support_request.message|linebreaksbr }}</div>
+  </div>
+  {% if can_write %}
+  <div class="card">
+    <h2>Status ändern</h2>
+    <form method="post" action="{% url 'ns_admin:support_request_status' support_request.id %}" class="form">
+      {% csrf_token %}
+      <label>Status
+        <select name="status">
+          <option value="new" {% if support_request.status == 'new' %}selected{% endif %}>Neu</option>
+          <option value="in_progress" {% if support_request.status == 'in_progress' %}selected{% endif %}>In Bearbeitung</option>
+          <option value="closed" {% if support_request.status == 'closed' %}selected{% endif %}>Abgeschlossen</option>
+        </select>
+      </label>
+      <button class="btn primary" type="submit">Speichern</button>
+    </form>
+  </div>
+  {% endif %}
+</div>
+{% endblock %}
