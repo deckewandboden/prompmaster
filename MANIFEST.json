@@ -2,7 +2,7 @@
   "project": "PromptMaster Commercial RC14 Full Repository",
   "generated_at": "2026-09-15T17:09:08.547879+00:00",
   "file_count_excluding_manifest_files": 517,
-  "total_bytes_excluding_manifest_files": 20551061,
+  "total_bytes_excluding_manifest_files": 20556957,
   "roles": {
     "active-backend": 311,
     "active-ci": 1,
@@ -1259,8 +1259,8 @@
     },
     {
       "path": "backend/apps/payments/tests.py",
-      "size": 890,
-      "sha256": "3fe40b15b3be011e5a6505034dea199a2e83e404338f88768503f3a6996fb6c7",
+      "size": 6786,
+      "sha256": "5722ad184daa7e791dd53b434f86b569c0945b58e3d64a159e7d4a3710913adf",
       "role": "active-backend"
     },
     {
