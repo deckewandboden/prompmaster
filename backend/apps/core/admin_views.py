@@ -20,7 +20,7 @@ from apps.audit.services import audit as write_audit
 from apps.catalog.models import Feature, Product
 from apps.catalog.services import create_price_version
 from apps.companies.models import Company, Membership, PrivateCustomerProfile
-from apps.companies.services import transfer_admin
+from apps.companies.services import deactivate_company_member, transfer_admin
 from apps.devices.models import DeviceRegistration
 from apps.devices.services import revoke_device
 from apps.integrations.models import ServiceAccount
@@ -532,6 +532,34 @@ def customer_admin_transfer(request, pk, user_id):
             'form': form,
         },
     )
+
+
+@staff_perm('customers.write')
+def customer_user_deactivate(request, pk, user_id):
+    if request.method != 'POST':
+        raise PermissionDenied
+    customer = _customer(request, pk)
+    member = get_object_or_404(
+        Membership.objects.select_related('user'),
+        company=customer,
+        user_id=user_id,
+        active=True,
+    )
+    try:
+        deactivate_company_member(
+            company=customer,
+            member=member,
+            actor=request.user,
+            request=request,
+        )
+    except ValidationError as exc:
+        messages.error(request, exc.messages[0])
+    else:
+        messages.success(
+            request,
+            'Benutzer deaktiviert; Lizenz- und Gerätezugänge wurden freigegeben.',
+        )
+    return redirect('ns_admin:customer_users', pk=customer.pk)
 
 
 @staff_perm('customers.read')
