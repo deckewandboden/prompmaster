@@ -761,6 +761,7 @@ def license_detail(request, pk):
             'eligible_members': eligible_members,
             'refund_preview': refund_preview,
             'can_write': has_perm(request.user, 'licenses.write'),
+            'can_refund': has_perm(request.user, 'payments.refund'),
         },
     )
 
