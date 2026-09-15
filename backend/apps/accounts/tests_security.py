@@ -2,6 +2,7 @@ from datetime import timedelta
 from unittest.mock import patch
 
 from django.contrib.auth.hashers import make_password
+from django.core.cache import cache
 from django.test import TestCase, override_settings
 from django.utils import timezone
 
@@ -64,3 +65,37 @@ class SecondFactorTests(TestCase):
         session.save()
         self.assertEqual(self.client.get('/portal/dashboard/').status_code, 302)
         self.assertNotIn('_auth_user_id', self.client.session)
+
+class LoginRateLimitTests(TestCase):
+    def setUp(self):
+        cache.clear()
+
+    def tearDown(self):
+        cache.clear()
+
+    def test_login_is_temporarily_throttled_and_security_event_is_logged(self):
+        payload = {
+            'email': 'unknown@example.test',
+            'password': 'Definitely-Wrong-Password-42!',
+        }
+        for _ in range(10):
+            response = self.client.post(
+                '/auth/login/',
+                payload,
+                REMOTE_ADDR='203.0.113.40',
+            )
+            self.assertEqual(response.status_code, 200)
+
+        with self.assertLogs('apps.core.security', level='WARNING') as captured:
+            response = self.client.post(
+                '/auth/login/',
+                payload,
+                REMOTE_ADDR='203.0.113.40',
+            )
+
+        self.assertEqual(response.status_code, 429)
+        self.assertEqual(response['Retry-After'], '300')
+        self.assertTrue(
+            any('Rate limit exceeded for scope=login' in row for row in captured.output)
+        )
+
