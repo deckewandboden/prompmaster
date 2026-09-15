@@ -773,10 +773,39 @@ def mollie_events(request):
     return render(request, 'ns_admin/mollie_events.html', {'grid': grid, 'filter_options': [('provider_status','Status',MOLLIE_STATUS_CHOICES)]})
 
 
-@staff_perm('customers.read')
+@staff_perm()
 def stats(request):
     now = timezone.now()
-    return render(request, 'ns_admin/stats.html', {'customers': Company.objects.count() + PrivateCustomerProfile.objects.count(), 'licenses': License.objects.count(), 'orders': Order.objects.count(), 'renewals': LicenseTerm.objects.filter(order_item__target_license__isnull=False).count(), 'revenue30': Order.objects.filter(status='paid', created_at__gte=now - timedelta(days=30)).aggregate(v=Sum('gross_total'))['v'] or 0})
+    rights = {
+        'customers': has_perm(request.user, 'customers.read'),
+        'licenses': has_perm(request.user, 'licenses.read'),
+        'orders': has_perm(request.user, 'orders.read'),
+    }
+    if not any(rights.values()):
+        raise PermissionDenied
+    return render(
+        request,
+        'ns_admin/stats.html',
+        {
+            'rights': rights,
+            'customers': (
+                Company.objects.count() + PrivateCustomerProfile.objects.count()
+                if rights['customers'] else None
+            ),
+            'licenses': License.objects.count() if rights['licenses'] else None,
+            'orders': Order.objects.count() if rights['orders'] else None,
+            'renewals': (
+                LicenseTerm.objects.filter(order_item__target_license__isnull=False).count()
+                if rights['licenses'] else None
+            ),
+            'revenue30': (
+                Order.objects.filter(
+                    status='paid',
+                    created_at__gte=now - timedelta(days=30),
+                ).aggregate(v=Sum('gross_total'))['v'] or 0
+            ) if rights['orders'] else None,
+        },
+    )
 
 
 @staff_perm('ops.read')
