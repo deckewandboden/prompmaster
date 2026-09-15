@@ -158,12 +158,29 @@ def main() -> int:
                           e => e.textContent.trim() === 'MIT PRO ZUSÄTZLICH'
                             && e.nextElementSibling?.children.length === 28
                         ),
+                        overflowers: [...document.querySelectorAll('body *')]
+                          .map(e => {
+                            const r = e.getBoundingClientRect();
+                            return {
+                              tag: e.tagName.toLowerCase(),
+                              cls: typeof e.className === 'string' ? e.className.slice(0, 90) : '',
+                              left: Math.round(r.left),
+                              right: Math.round(r.right),
+                              width: Math.round(r.width),
+                            };
+                          })
+                          .filter(x => x.right > innerWidth + 1 || x.left < -1)
+                          .sort((a, b) => (b.right - innerWidth) - (a.right - innerWidth))
+                          .slice(0, 8),
                       };
                     }"""
                 )
 
                 if metrics['scrollWidth'] > metrics['innerWidth'] + 1:
-                    fail(f'{width}px: horizontaler Overflow {metrics["scrollWidth"]} > {metrics["innerWidth"]}')
+                    fail(
+                        f'{width}px: horizontaler Overflow {metrics["scrollWidth"]} > '
+                        f'{metrics["innerWidth"]}; Elemente: {metrics["overflowers"]}'
+                    )
                 if metrics['productCount'] != 2:
                     fail(f'{width}px: Free/Pro-Karten fehlen')
                 if abs(metrics['freeHeight'] - metrics['proHeight']) > 4:
