@@ -1,10 +1,14 @@
 import hashlib
+import logging
 import ipaddress
 import secrets
 
 from django.core.cache import cache
 from django.core.exceptions import PermissionDenied
 from django.http import HttpResponse
+
+logger = logging.getLogger(__name__)
+
 
 class HttpResponseTooManyRequests(HttpResponse):
     status_code = 429
@@ -51,6 +55,12 @@ def check_rate(request, scope, limit=8, window=300):
             cache.set(key, 1, window)
             n = 1
         if n > limit:
+            logger.warning(
+                'Rate limit exceeded for scope=%s ip=%s',
+                scope,
+                ip,
+                extra={'event_code': 'security.rate_limited'},
+            )
             response = HttpResponseTooManyRequests('Zu viele Versuche. Bitte später erneut versuchen.')
             response['Retry-After'] = str(window)
             return response
