@@ -491,6 +491,113 @@ class SupportContextIsolationTests(TestCase):
             ).exists()
         )
 
+class NetstyleSupportAdminTransferTests(TestCase):
+    def setUp(self):
+        now = timezone.now()
+        self.company = Company.objects.create(
+            customer_number='PM-C-SUPPORT-TRANSFER',
+            name='Support Transfer GmbH',
+            email='support-transfer@example.test',
+        )
+        self.old_admin = User.objects.create_user(
+            'company-admin@example.test',
+            'Transfer-Password-42!',
+            first_name='Company',
+            last_name='Admin',
+            email_verified_at=now,
+            two_factor_required=True,
+            totp_secret_enc='configured-admin-factor',
+        )
+        self.target = User.objects.create_user(
+            'company-target@example.test',
+            'Transfer-Password-42!',
+            first_name='Company',
+            last_name='Target',
+            email_verified_at=now,
+        )
+        Membership.objects.create(
+            company=self.company,
+            user=self.old_admin,
+            role='admin',
+            active=True,
+        )
+        Membership.objects.create(
+            company=self.company,
+            user=self.target,
+            role='member',
+            active=True,
+        )
+        self.staff = User.objects.create_user(
+            'support-transfer@example.test',
+            'Transfer-Password-42!',
+            first_name='Support',
+            last_name='Transfer',
+            email_verified_at=now,
+            is_staff=True,
+            two_factor_required=True,
+            totp_secret_enc='configured-support-factor',
+        )
+        role = Role.objects.create(code='support-transfer-test', name='Support Transfer Test')
+        customers_read, _ = Permission.objects.get_or_create(
+            code='customers.read',
+            defaults={'name': 'customers.read'},
+        )
+        customers_write, _ = Permission.objects.get_or_create(
+            code='customers.write',
+            defaults={'name': 'customers.write'},
+        )
+        role.permissions.set([customers_read, customers_write])
+        UserRole.objects.create(user=self.staff, role=role)
+        self.client.force_login(self.staff)
+        session = self.client.session
+        session['security_version'] = self.staff.security_version
+        session['two_factor_ok'] = True
+        session.save()
+
+    def test_support_transfer_requires_identity_verification_and_audits_actor(self):
+        url = (
+            f'/ns-admin/customers/{self.company.id}/users/'
+            f'{self.target.id}/transfer-admin/'
+        )
+        response = self.client.post(url, {'note': 'verified by phone'})
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(
+            Membership.objects.get(company=self.company, user=self.old_admin).role,
+            'admin',
+        )
+
+        old_version = self.old_admin.security_version
+        target_version = self.target.security_version
+        response = self.client.post(
+            url,
+            {
+                'identity_verified': 'on',
+                'note': 'verified by phone',
+            },
+        )
+        self.assertEqual(response.status_code, 302)
+        self.assertEqual(
+            Membership.objects.get(company=self.company, user=self.old_admin).role,
+            'member',
+        )
+        self.assertEqual(
+            Membership.objects.get(company=self.company, user=self.target).role,
+            'admin',
+        )
+        self.old_admin.refresh_from_db()
+        self.target.refresh_from_db()
+        self.assertGreater(self.old_admin.security_version, old_version)
+        self.assertGreater(self.target.security_version, target_version)
+        event = AuditEvent.objects.filter(
+            action='company.admin_transferred',
+            object_id=str(self.company.id),
+        ).latest('created_at')
+        self.assertEqual(event.actor, self.staff)
+        self.assertEqual(event.metadata.get('old_admin'), str(self.old_admin.id))
+        self.assertEqual(event.metadata.get('new_admin'), str(self.target.id))
+        self.assertTrue(event.metadata.get('identity_verified'))
+
+
 class NetstyleDeviceRevokeTests(TestCase):
     def setUp(self):
         now = timezone.now()
