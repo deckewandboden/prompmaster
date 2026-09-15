@@ -6,6 +6,9 @@ command -v docker >/dev/null || fail "Docker fehlt"
 docker compose version >/dev/null 2>&1 || fail "Docker Compose Plugin fehlt"
 python3 scripts/prepare_env.py
 set -a; source .env; set +a
+export GIT_SHA="${GIT_SHA:-$(git rev-parse HEAD)}"
+export APP_VERSION="${APP_VERSION:-$(git describe --tags --always 2>/dev/null || git rev-parse --short HEAD)}"
+export DEPLOYED_AT="${DEPLOYED_AT:-$(date -u +%Y-%m-%dT%H:%M:%SZ)}"
 [[ ${DJANGO_SECRET_KEY:-} != CHANGE_ME && ${#DJANGO_SECRET_KEY} -ge 40 ]] || fail "DJANGO_SECRET_KEY sicher setzen (>=40 Zeichen)"
 [[ ${POSTGRES_PASSWORD:-} != CHANGE_ME && ${#POSTGRES_PASSWORD} -ge 20 ]] || fail "POSTGRES_PASSWORD sicher setzen"
 [[ ${APP_ENCRYPTION_KEY:-} != GENERATE_WITH_FERNET && -n ${APP_ENCRYPTION_KEY:-} ]] || fail "APP_ENCRYPTION_KEY setzen"
