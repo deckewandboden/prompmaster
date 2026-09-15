@@ -593,9 +593,9 @@ class NetstyleSupportAdminTransferTests(TestCase):
             object_id=str(self.company.id),
         ).latest('created_at')
         self.assertEqual(event.actor, self.staff)
-        self.assertEqual(event.metadata.get('old_admin'), str(self.old_admin.id))
-        self.assertEqual(event.metadata.get('new_admin'), str(self.target.id))
-        self.assertTrue(event.metadata.get('identity_verified'))
+        self.assertEqual(event.changes.get('old_admin'), str(self.old_admin.id))
+        self.assertEqual(event.changes.get('new_admin'), str(self.target.id))
+        self.assertTrue(event.changes.get('identity_verified'))
 
     def test_support_can_deactivate_member_and_revoke_tenant_access(self):
         now = timezone.now()
