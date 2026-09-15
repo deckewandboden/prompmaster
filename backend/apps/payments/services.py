@@ -323,8 +323,12 @@ def _recalculate_license_after_refund(license_obj, now):
     active_terms = license_obj.terms.filter(status='active')
     bounds = active_terms.aggregate(start=Min('valid_from'), end=Max('valid_until'))
     if not bounds['end']:
+        # No active paid period remains. Keep the historical dates on
+        # LicenseTerm rows and clear the denormalised current window together;
+        # the License constraint only permits both null or a strictly ordered
+        # valid_from/valid_until pair.
         license_obj.valid_from = None
-        license_obj.valid_until = now
+        license_obj.valid_until = None
         license_obj.status = 'refunded'
         _terminate_license_access(license_obj, now)
     else:
