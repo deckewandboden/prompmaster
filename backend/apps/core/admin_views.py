@@ -2,11 +2,13 @@ from datetime import timedelta
 from functools import wraps
 
 from django.contrib import messages
+from django.conf import settings
 from django.contrib.auth.decorators import login_required
 from django.core import signing
 from django.core.exceptions import PermissionDenied, ValidationError
 from django.db import transaction
-from django.db.models import Q, Sum
+from django.db.models import Count, Q, Sum
+from django.db.models.functions import TruncMonth
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse
 from django.utils import timezone
@@ -115,7 +117,12 @@ def _grid_export(request, grid, columns, filename):
 @staff_perm()
 def dashboard(request):
     now = timezone.now()
-    rights = {name: has_perm(request.user, f'{name}.read') for name in ('customers', 'licenses', 'orders', 'ops', 'support')}
+    rights = {
+        name: has_perm(request.user, f'{name}.read')
+        for name in ('customers', 'licenses', 'orders', 'ops', 'support')
+    }
+    paid_orders = Order.objects.filter(status='paid')
+    revenue_since = now - timedelta(days=185)
     context = {
         'rights': rights,
         'customers': Company.objects.count() + PrivateCustomerProfile.objects.count() if rights['customers'] else None,
@@ -123,10 +130,39 @@ def dashboard(request):
         'expiring30': License.objects.filter(valid_until__gt=now, valid_until__lte=now + timedelta(days=30)).count() if rights['licenses'] else None,
         'expiring60': License.objects.filter(valid_until__gt=now, valid_until__lte=now + timedelta(days=60)).count() if rights['licenses'] else None,
         'orders30': Order.objects.filter(created_at__gte=now - timedelta(days=30)).count() if rights['orders'] else None,
-        'revenue30': (Order.objects.filter(status='paid', created_at__gte=now - timedelta(days=30)).aggregate(v=Sum('gross_total'))['v'] or 0) if rights['orders'] else None,
+        'revenue30': (
+            paid_orders.filter(created_at__gte=now - timedelta(days=30))
+            .aggregate(v=Sum('gross_total'))['v'] or 0
+        ) if rights['orders'] else None,
+        'product_mix': list(
+            License.objects.values('product__name')
+            .annotate(total=Count('id'))
+            .order_by('-total', 'product__name')[:8]
+        ) if rights['licenses'] else [],
+        'revenue_months': list(
+            paid_orders.filter(created_at__gte=revenue_since)
+            .annotate(month=TruncMonth('created_at'))
+            .values('month')
+            .annotate(total=Sum('gross_total'), orders=Count('id'))
+            .order_by('month')
+        ) if rights['orders'] else [],
+        'failed_payment_count': Payment.objects.filter(status='failed').count() if rights['orders'] else None,
+        'chargeback_count': Payment.objects.filter(status='chargeback').count() if rights['orders'] else None,
         'alerts': SystemAlert.objects.filter(active=True)[:8] if rights['ops'] else [],
         'open_support_count': SupportRequest.objects.exclude(status='closed').count() if rights['support'] else None,
         'ops': snapshot() if rights['ops'] else {},
+        'backup': BackupRecord.objects.order_by('-finished_at', '-created_at').first() if rights['ops'] else None,
+        'restore': RestoreTest.objects.order_by('-started_at').first() if rights['ops'] else None,
+        'integration_status': {
+            'mollie': bool(get_setting('mollie_profile_id', '') or settings.MOLLIE_PROFILE_ID),
+            'mail_provider': settings.EMAIL_PROVIDER,
+            'graph_configured': bool(
+                settings.GRAPH_TENANT_ID
+                and settings.GRAPH_CLIENT_ID
+                and settings.GRAPH_CLIENT_SECRET
+                and settings.GRAPH_SENDER
+            ),
+        } if rights['ops'] else {},
         'recent_orders': Order.objects.select_related('company', 'private_user').order_by('-created_at')[:8] if rights['orders'] else [],
         'expiring': License.objects.select_related('company', 'owner_user', 'product').filter(valid_until__gt=now).order_by('valid_until')[:8] if rights['licenses'] else [],
     }
