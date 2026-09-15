@@ -12,6 +12,7 @@ class Payment(TimeStampedModel):
     currency = models.CharField(max_length=3, default='EUR')
     method = models.CharField(max_length=50, blank=True)
     paid_at = models.DateTimeField(null=True, blank=True)
+    failed_at = models.DateTimeField(null=True, blank=True)
     processed_paid = models.BooleanField(default=False)
     last_provider_payload = models.JSONField(default=dict)
 
