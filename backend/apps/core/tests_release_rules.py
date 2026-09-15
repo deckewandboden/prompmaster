@@ -16,6 +16,7 @@ from apps.devices.services import register_device
 from apps.licenses.models import License, LicenseAssignment
 from apps.licenses.services import assign_license, block_license, unblock_license
 from apps.orders.models import Order, OrderItem
+from apps.support.models import SupportRequest
 from apps.payments.services import _activate_order
 
 class ReleaseRuleFixture(TestCase):
@@ -378,5 +379,111 @@ class PortalLicenseDetailIsolationTests(TestCase):
         self.assertEqual(
             self.client.get(f'/portal/licenses/{self.foreign.id}/').status_code,
             404,
+        )
+
+class SupportContextIsolationTests(TestCase):
+    def setUp(self):
+        self.now = timezone.now()
+        self.product = Product.objects.create(
+            code='SUPPORT-CONTEXT-PRO',
+            name='Support Context Pro',
+            default_license_days=365,
+            default_device_limit=2,
+            reminder_1_days=60,
+            reminder_2_days=30,
+            critical_warning_days=7,
+        )
+        self.company = Company.objects.create(
+            customer_number='PM-C-SUPPORT-A',
+            name='Support A GmbH',
+            email='support-a@example.test',
+        )
+        self.other_company = Company.objects.create(
+            customer_number='PM-C-SUPPORT-B',
+            name='Support B GmbH',
+            email='support-b@example.test',
+        )
+        self.member = User.objects.create_user(
+            'support-member@example.test',
+            'Support-Password-42!',
+            first_name='Support',
+            last_name='Member',
+            email_verified_at=self.now,
+        )
+        Membership.objects.create(
+            company=self.company,
+            user=self.member,
+            role='member',
+            active=True,
+        )
+        self.assigned = License.objects.create(
+            company=self.company,
+            product=self.product,
+            status='active',
+            valid_from=self.now - timedelta(days=1),
+            valid_until=self.now + timedelta(days=364),
+        )
+        LicenseAssignment.objects.create(license=self.assigned, user=self.member)
+        self.unassigned = License.objects.create(
+            company=self.company,
+            product=self.product,
+            status='free',
+            valid_from=self.now - timedelta(days=1),
+            valid_until=self.now + timedelta(days=364),
+        )
+        self.foreign = License.objects.create(
+            company=self.other_company,
+            product=self.product,
+            status='free',
+            valid_from=self.now - timedelta(days=1),
+            valid_until=self.now + timedelta(days=364),
+        )
+        self.client.force_login(self.member)
+        session = self.client.session
+        session['security_version'] = self.member.security_version
+        session['two_factor_ok'] = True
+        session.save()
+
+    def test_support_license_choices_are_tenant_and_assignment_scoped(self):
+        response = self.client.get('/portal/help/')
+        self.assertEqual(response.status_code, 200)
+        choices = list(response.context['form'].fields['license'].queryset)
+        self.assertEqual([row.pk for row in choices], [self.assigned.pk])
+
+    def test_foreign_or_unassigned_license_cannot_be_injected_into_support_request(self):
+        for license_obj in (self.unassigned, self.foreign):
+            response = self.client.post(
+                '/portal/help/',
+                {
+                    'category': 'license',
+                    'license': str(license_obj.pk),
+                    'subject': 'Lizenzfrage',
+                    'message': 'Bitte prüfen.',
+                },
+            )
+            self.assertEqual(response.status_code, 200)
+            self.assertIn('license', response.context['form'].errors)
+        self.assertFalse(SupportRequest.objects.filter(user=self.member).exists())
+
+    @patch('apps.companies.portal.queue_email')
+    def test_visible_license_context_is_persisted_and_audited(self, _queue_email):
+        response = self.client.post(
+            '/portal/help/',
+            {
+                'category': 'license',
+                'license': str(self.assigned.pk),
+                'subject': 'Lizenzfrage',
+                'message': 'Bitte prüfen.',
+            },
+        )
+        self.assertEqual(response.status_code, 302)
+        row = SupportRequest.objects.get(user=self.member)
+        self.assertEqual(row.company, self.company)
+        self.assertEqual(row.license, self.assigned)
+        self.assertTrue(
+            AuditEvent.objects.filter(
+                action='support.created',
+                object_id=str(row.id),
+            ).exists()
         )
 
