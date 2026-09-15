@@ -4,14 +4,23 @@ cd "$(dirname "$0")/.."
 F=(-f compose.yaml -f compose.production.yaml)
 log(){ printf '[PromptMaster deploy] %s\n' "$*"; }
 
-export GIT_SHA="${GIT_SHA:-$(git rev-parse HEAD)}"
+if [[ -z "${GIT_SHA:-}" ]]; then
+  if command -v git >/dev/null 2>&1 && git rev-parse HEAD >/dev/null 2>&1; then
+    export GIT_SHA="$(git rev-parse HEAD)"
+  else
+    export GIT_SHA="source-archive"
+  fi
+fi
 if [[ -z "${APP_VERSION:-}" || "${APP_VERSION}" == "development" ]]; then
-  export APP_VERSION="$(git describe --tags --always 2>/dev/null || git rev-parse --short HEAD)"
+  if command -v git >/dev/null 2>&1 && git describe --tags --always >/dev/null 2>&1; then
+    export APP_VERSION="$(git describe --tags --always)"
+  else
+    export APP_VERSION="${GIT_SHA:0:12}"
+  fi
 fi
 export DEPLOYED_AT="${DEPLOYED_AT:-$(date -u +%Y-%m-%dT%H:%M:%SZ)}"
 
-python3 scripts/github_preflight.py
-python3 scripts/validate_env.py --environment production
+bash scripts/run_repo_preflight.sh production
 log "Compose-Konfiguration prüfen"
 docker compose "${F[@]}" config >/dev/null
 log "Images bauen"
