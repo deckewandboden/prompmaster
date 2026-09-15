@@ -166,27 +166,17 @@ jobs:
 
   full-stack:
     runs-on: ubuntu-latest
-    timeout-minutes: 30
+    timeout-minutes: 45
     steps:
       - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
-        with:
-          python-version: '3.13'
-      - uses: actions/setup-node@v4
-        with:
-          node-version: '22'
-      - name: Install validation dependencies
-        run: pip install -r requirements.txt
-      - name: Build marketing for repository validation
-        working-directory: marketing
-        run: |
-          npm ci
-          npm run build
-      - name: Generate isolated staging configuration
+      - name: Clean bootstrap installation
         env:
           PM_DOMAIN: localhost
-        run: python scripts/prepare_env.py
-      - name: Start and validate full stack with production filesystem restrictions
+        run: |
+          rm -rf marketing/dist marketing/node_modules
+          rm -f .env .bootstrap-credentials
+          bash scripts/bootstrap.sh
+      - name: Validate full stack with production filesystem restrictions
         env:
           PM_VALIDATE_READ_ONLY: '1'
         run: bash scripts/runtime_validate.sh
