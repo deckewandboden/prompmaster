@@ -26,7 +26,7 @@ from apps.devices.services import revoke_device
 from apps.integrations.models import ServiceAccount
 from apps.legal.models import DeletionRequest, LegalAcceptance, LegalDocument, RetentionPolicy
 from apps.licenses.models import License, LicenseTerm
-from apps.licenses.services import block_license, unblock_license
+from apps.licenses.services import assign_license, block_license, release_license, unblock_license
 from apps.notifications.models import EmailMessage, EmailTemplate
 from apps.ops.metrics import caddy_health, certificate_status, snapshot
 from apps.ops.models import BackupRecord, RestoreTest, SystemAlert
@@ -724,8 +724,29 @@ def licenses(request):
 
 @staff_perm('licenses.read')
 def license_detail(request, pk):
-    license_obj = get_object_or_404(License.objects.select_related('company', 'owner_user', 'product'), pk=pk)
-    terms = list(license_obj.terms.select_related('order_item__order').order_by('-valid_until'))
+    license_obj = get_object_or_404(
+        License.objects.select_related('company', 'owner_user', 'product'),
+        pk=pk,
+    )
+    terms = list(
+        license_obj.terms.select_related('order_item__order').order_by('-valid_until')
+    )
+    active_assignment = (
+        license_obj.assignments.filter(ended_at__isnull=True)
+        .select_related('user')
+        .first()
+    )
+    eligible_members = []
+    if license_obj.company_id:
+        eligible_members = list(
+            Membership.objects.filter(
+                company=license_obj.company,
+                active=True,
+                user__is_active=True,
+            )
+            .select_related('user')
+            .order_by('user__last_name', 'user__first_name', 'user__email')
+        )
     refund_preview = {}
     for term in terms:
         if term.status == 'active':
@@ -736,10 +757,51 @@ def license_detail(request, pk):
         {
             'license': license_obj,
             'terms': terms,
+            'active_assignment': active_assignment,
+            'eligible_members': eligible_members,
             'refund_preview': refund_preview,
             'can_write': has_perm(request.user, 'licenses.write'),
         },
     )
+
+
+@staff_perm('licenses.write')
+def license_assign(request, pk):
+    if request.method != 'POST':
+        raise PermissionDenied
+    license_obj = get_object_or_404(
+        License.objects.select_related('company', 'product'),
+        pk=pk,
+    )
+    if not license_obj.company_id:
+        raise PermissionDenied
+    member = get_object_or_404(
+        Membership.objects.select_related('user'),
+        company=license_obj.company,
+        user_id=request.POST.get('user_id'),
+        active=True,
+        user__is_active=True,
+    )
+    try:
+        assign_license(license_obj, member.user, request.user)
+    except ValidationError as exc:
+        messages.error(request, exc.messages[0])
+    else:
+        messages.success(request, f'Lizenz wurde {member.user.email} zugewiesen.')
+    return redirect('ns_admin:license_detail', pk=license_obj.pk)
+
+
+@staff_perm('licenses.write')
+def license_release(request, pk):
+    if request.method != 'POST':
+        raise PermissionDenied
+    license_obj = get_object_or_404(License, pk=pk)
+    if not license_obj.assignments.filter(ended_at__isnull=True).exists():
+        messages.info(request, 'Die Lizenz ist bereits frei.')
+        return redirect('ns_admin:license_detail', pk=license_obj.pk)
+    release_license(license_obj, request.user)
+    messages.success(request, 'Lizenzzuweisung wurde freigegeben.')
+    return redirect('ns_admin:license_detail', pk=license_obj.pk)
 
 
 @staff_perm('licenses.write')
