@@ -1,33 +1,7 @@
 {% extends 'ns_admin/base.html' %}{% block content %}
-<div class="page-head">
-  <div><h1>E-Mail</h1><div class="sub">Vorlagen und Versandstatus.</div></div>
-  <a class="btn secondary" href="{% url 'ns_admin:email_log' %}">Versandprotokoll öffnen</a>
-</div>
+<div class="page-head"><div><h1>E-Mail</h1><div class="sub">Vorlagen, Versandstatus und Provider-Konfiguration.</div></div><a class="btn secondary" href="{% url 'ns_admin:email_log' %}">Versandprotokoll öffnen</a></div>
 <div class="grid two">
-  <div class="card">
-    <h2>Vorlagen</h2>
-    {% for t in templates %}
-      <div class="statusrow">
-        <span><strong>{{ t.code }}</strong></span>
-        <span>
-          <span class="badge {% if t.active %}ok{% else %}warn{% endif %}">{% if t.active %}Aktiv{% else %}Inaktiv{% endif %}</span>
-          <a class="btn secondary sm" href="{% url 'ns_admin:email_template_edit' t.id %}">Bearbeiten</a>
-        </span>
-      </div>
-    {% empty %}
-      <p class="muted">Keine E-Mail-Vorlagen vorhanden.</p>
-    {% endfor %}
-  </div>
-  <div class="card">
-    <h2>Letzte Versandvorgänge</h2>
-    {% for m in recent %}
-      <div class="statusrow">
-        <span>{{ m.recipient }}<div class="tiny muted">{{ m.subject }}</div></span>
-        <strong>{{ m.status }}</strong>
-      </div>
-    {% empty %}
-      <p class="muted">Noch keine Versandvorgänge.</p>
-    {% endfor %}
-  </div>
+  <div class="card"><h2>Vorlagen</h2>{% for t in templates %}<div class="statusrow"><span><strong>{{ t.code }}</strong></span><span><span class="badge {% if t.active %}ok{% else %}warn{% endif %}">{% if t.active %}Aktiv{% else %}Inaktiv{% endif %}</span> <a class="btn secondary sm" href="{% url 'ns_admin:email_template_edit' t.id %}">Bearbeiten</a></span></div>{% empty %}<p class="muted">Keine E-Mail-Vorlagen vorhanden.</p>{% endfor %}</div>
+  <div class="card"><h2>Mail-System</h2><div class="statusrow"><span>Provider</span><strong>{{ provider }}</strong></div><div class="statusrow"><span>Status</span><span class="badge {% if provider_configured %}ok{% else %}warn{% endif %}">{% if provider_configured %}Konfiguriert{% else %}Unvollständig{% endif %}</span></div>{% if graph_sender %}<div class="statusrow"><span>Graph Absender</span><strong>{{ graph_sender }}</strong></div>{% endif %}<h3 style="margin-top:16px">Letzte Versandvorgänge</h3>{% for m in recent %}<div class="statusrow"><span>{{ m.recipient }}<div class="tiny muted">{{ m.subject }}</div></span><strong>{{ m.status }}</strong></div>{% empty %}<p class="muted">Noch keine Versandvorgänge.</p>{% endfor %}</div>
 </div>
 {% endblock %}
