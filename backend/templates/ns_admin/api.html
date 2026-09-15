@@ -1,1 +1,17 @@
-{% extends 'ns_admin/base.html' %}{% block content %}<h1>API & Integrationen</h1><div class="card"><h2>Service Accounts</h2>{% for a in accounts %}<div class="statusrow"><span>{{ a.name }}</span><strong>{{ a.scopes|join:', ' }}</strong></div>{% empty %}<p class="muted">Noch keine Service Accounts.</p>{% endfor %}</div>{% endblock %}
+{% extends 'ns_admin/base.html' %}{% block content %}
+<div class="page-head"><div><h1>API & Integrationen</h1><div class="sub">Service Accounts und interne API-Zugänge</div></div>{% if can_write %}<a class="btn primary" href="{% url 'ns_admin:service_account_create' %}">+ Service Account anlegen</a>{% endif %}</div>
+<div class="card"><h2>Service Accounts</h2>
+{% for a in accounts %}
+<div class="statusrow">
+  <span><strong>{{ a.name }}</strong><br><small class="muted">{{ a.scopes|join:', ' }}{% if a.expires_at %} · Ablauf {{ a.expires_at }}{% endif %}</small></span>
+  <span>
+    {% if a.active %}<span class="badge ok">Aktiv</span>{% else %}<span class="badge">Gesperrt</span>{% endif %}
+    {% if can_write and a.active %}
+      <form method="post" action="{% url 'ns_admin:service_account_rotate' a.id %}" style="display:inline">{% csrf_token %}<button class="btn sm" type="submit">Token rotieren</button></form>
+      <form method="post" action="{% url 'ns_admin:service_account_revoke' a.id %}" style="display:inline">{% csrf_token %}<button class="btn sm" type="submit">Sperren</button></form>
+    {% endif %}
+  </span>
+</div>
+{% empty %}<p class="muted">Noch keine Service Accounts.</p>{% endfor %}
+</div>
+{% endblock %}
