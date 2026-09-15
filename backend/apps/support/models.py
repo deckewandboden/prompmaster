@@ -18,6 +18,7 @@ class SupportRequest(TimeStampedModel):
 
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.PROTECT)
     company = models.ForeignKey('companies.Company', null=True, blank=True, on_delete=models.PROTECT)
+    license = models.ForeignKey('licenses.License', null=True, blank=True, on_delete=models.PROTECT, related_name='support_requests')
     category = models.CharField(max_length=40, choices=CATEGORY)
     subject = models.CharField(max_length=180)
     message = models.TextField()
