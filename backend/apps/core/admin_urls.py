@@ -20,6 +20,7 @@ urlpatterns = [
     path('customers/<uuid:pk>/users/', v.customer_users, name='customer_users'),
     path('customers/<uuid:pk>/licenses/', v.customer_licenses, name='customer_licenses'),
     path('customers/<uuid:pk>/devices/', v.customer_devices, name='customer_devices'),
+    path('customers/<uuid:pk>/devices/<uuid:device_id>/revoke/', v.customer_device_revoke, name='customer_device_revoke'),
     path('customers/<uuid:pk>/orders/', v.customer_orders, name='customer_orders'),
     path('customers/<uuid:pk>/payments/', v.customer_payments, name='customer_payments'),
     path('customers/<uuid:pk>/emails/', v.customer_emails, name='customer_emails'),
