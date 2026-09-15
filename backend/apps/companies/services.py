@@ -38,7 +38,7 @@ def create_invitation(*, company, actor, email, first_name='', last_name=''):
 
 
 @transaction.atomic
-def transfer_admin(company, old_admin, new_user):
+def transfer_admin(company, old_admin, new_user, *, actor=None, request=None, audit_context=None):
     if old_admin.pk == new_user.pk:
         raise ValidationError('Der Benutzer ist bereits Firmenadministrator.')
 
@@ -68,5 +68,17 @@ def transfer_admin(company, old_admin, new_user):
     bump_security_version(old_admin)
     bump_security_version(new_user)
 
-    audit(old_admin, 'company.admin_transferred', company, {'new_admin': str(new_user.id)})
+    event_context = {
+        'old_admin': str(old_admin.id),
+        'new_admin': str(new_user.id),
+    }
+    if audit_context:
+        event_context.update(audit_context)
+    audit(
+        actor or old_admin,
+        'company.admin_transferred',
+        company,
+        event_context,
+        request=request,
+    )
     return new_membership
