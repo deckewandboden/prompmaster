@@ -7,7 +7,7 @@ from django.db import IntegrityError, transaction
 from django.test import TestCase
 from django.utils import timezone
 
-from apps.accounts.models import User
+from apps.accounts.models import Permission, Role, User, UserRole
 from apps.audit.models import AuditEvent
 from apps.catalog.models import Product, ProductPrice
 from apps.catalog.services import create_price_version, current_price
@@ -485,6 +485,115 @@ class SupportContextIsolationTests(TestCase):
             AuditEvent.objects.filter(
                 action='support.created',
                 object_id=str(row.id),
+            ).exists()
+        )
+
+class NetstyleDeviceRevokeTests(TestCase):
+    def setUp(self):
+        now = timezone.now()
+        self.product = Product.objects.create(
+            code='DEVICE-REVOKE-PRO',
+            name='Device Revoke Pro',
+            default_license_days=365,
+            default_device_limit=2,
+            reminder_1_days=60,
+            reminder_2_days=30,
+            critical_warning_days=7,
+        )
+        self.company = Company.objects.create(
+            customer_number='PM-C-DEV-A',
+            name='Device A GmbH',
+            email='device-a@example.test',
+        )
+        self.other_company = Company.objects.create(
+            customer_number='PM-C-DEV-B',
+            name='Device B GmbH',
+            email='device-b@example.test',
+        )
+        self.member = User.objects.create_user(
+            'device-member@example.test',
+            'Device-Password-42!',
+            first_name='Device',
+            last_name='Member',
+            email_verified_at=now,
+        )
+        self.other_member = User.objects.create_user(
+            'device-other@example.test',
+            'Device-Password-42!',
+            first_name='Other',
+            last_name='Member',
+            email_verified_at=now,
+        )
+        Membership.objects.create(company=self.company, user=self.member, role='member')
+        Membership.objects.create(company=self.other_company, user=self.other_member, role='member')
+        self.license = License.objects.create(
+            company=self.company,
+            product=self.product,
+            status='active',
+            valid_from=now - timedelta(days=1),
+            valid_until=now + timedelta(days=364),
+        )
+        self.foreign_license = License.objects.create(
+            company=self.other_company,
+            product=self.product,
+            status='active',
+            valid_from=now - timedelta(days=1),
+            valid_until=now + timedelta(days=364),
+        )
+        LicenseAssignment.objects.create(license=self.license, user=self.member)
+        LicenseAssignment.objects.create(license=self.foreign_license, user=self.other_member)
+        self.device, _ = register_device(self.member, self.license, 'Managed device')
+        self.foreign_device, _ = register_device(
+            self.other_member,
+            self.foreign_license,
+            'Foreign device',
+        )
+
+        self.staff = User.objects.create_user(
+            'support-device@example.test',
+            'Device-Password-42!',
+            first_name='Support',
+            last_name='Agent',
+            is_staff=True,
+            two_factor_required=True,
+            email_verified_at=now,
+        )
+        role = Role.objects.create(code='device-support-test', name='Device Support')
+        role.permissions.add(
+            Permission.objects.create(code='customers.read.device-test', name='Customer read alias')
+        )
+        # Use the canonical permission codes expected by the view.
+        customers_read, _ = Permission.objects.get_or_create(code='customers.read', defaults={'name': 'customers.read'})
+        devices_write, _ = Permission.objects.get_or_create(code='devices.write', defaults={'name': 'devices.write'})
+        role.permissions.set([customers_read, devices_write])
+        UserRole.objects.create(user=self.staff, role=role)
+        self.client.force_login(self.staff)
+        session = self.client.session
+        session['security_version'] = self.staff.security_version
+        session['two_factor_ok'] = True
+        session.save()
+
+    def test_authorized_staff_can_revoke_tenant_device_but_not_cross_tenant(self):
+        foreign_url = (
+            f'/ns-admin/customers/{self.company.id}/devices/'
+            f'{self.foreign_device.id}/revoke/'
+        )
+        self.assertEqual(self.client.post(foreign_url).status_code, 404)
+        self.foreign_device.refresh_from_db()
+        self.assertIsNone(self.foreign_device.revoked_at)
+
+        url = (
+            f'/ns-admin/customers/{self.company.id}/devices/'
+            f'{self.device.id}/revoke/'
+        )
+        response = self.client.post(url)
+        self.assertEqual(response.status_code, 302)
+        self.device.refresh_from_db()
+        self.assertIsNotNone(self.device.revoked_at)
+        self.assertTrue(
+            AuditEvent.objects.filter(
+                action='device.revoked',
+                object_id=str(self.device.id),
             ).exists()
         )
 
