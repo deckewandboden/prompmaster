@@ -4,6 +4,7 @@ from django.utils import timezone
 from apps.accounts.models import User
 from apps.audit.models import AuditEvent
 from apps.integrations.models import ServiceAccount
+from apps.legal.models import DeletionRequest
 from .security import token_hash, token_pair
 
 
@@ -84,3 +85,55 @@ class ServiceAccountRotationTests(TestCase):
         self.assertEqual(response.status_code, 302)
         self.account.refresh_from_db()
         self.assertEqual(self.account.token_hash, token_hash(self.old_token))
+
+
+class PrivacyDeletionRequestTests(TestCase):
+    def setUp(self):
+        self.user = User.objects.create_user(
+            'privacy-user@example.test',
+            None,
+            two_factor_required=False,
+            email_verified_at=timezone.now(),
+        )
+        self.client.force_login(self.user)
+        session = self.client.session
+        session['security_version'] = self.user.security_version
+        session['two_factor_ok'] = True
+        session.save()
+
+    def test_deletion_request_is_post_only_and_idempotent(self):
+        self.assertEqual(
+            self.client.get('/portal/privacy/deletion-request/').status_code,
+            403,
+        )
+        response = self.client.post(
+            '/portal/privacy/deletion-request/',
+            {'confirm': '1'},
+        )
+        self.assertEqual(response.status_code, 302)
+        self.assertEqual(
+            DeletionRequest.objects.filter(
+                user=self.user,
+                status__in=['open', 'processing'],
+            ).count(),
+            1,
+        )
+        request_row = DeletionRequest.objects.get(user=self.user)
+        self.assertTrue(
+            AuditEvent.objects.filter(
+                action='privacy.deletion_requested',
+                object_id=str(request_row.id),
+            ).exists()
+        )
+
+        response = self.client.post(
+            '/portal/privacy/deletion-request/',
+            {'confirm': '1'},
+        )
+        self.assertEqual(response.status_code, 302)
+        self.assertEqual(DeletionRequest.objects.filter(user=self.user).count(), 1)
+
+    def test_explicit_confirmation_is_required(self):
+        response = self.client.post('/portal/privacy/deletion-request/', {})
+        self.assertEqual(response.status_code, 302)
+        self.assertFalse(DeletionRequest.objects.filter(user=self.user).exists())
