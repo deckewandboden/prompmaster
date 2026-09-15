@@ -1,10 +1,16 @@
-from django.test import SimpleTestCase, TestCase
+import json
+import logging
+from types import SimpleNamespace
+
+from django.http import HttpResponse
+from django.test import RequestFactory, SimpleTestCase, TestCase
 from django.utils import timezone
 
 from apps.accounts.models import User
 from apps.audit.models import AuditEvent
 from apps.integrations.models import ServiceAccount
 from apps.legal.models import DeletionRequest
+from .middleware import CorrelationIdMiddleware, JsonLogFormatter
 from .security import token_hash, token_pair
 
 
@@ -137,3 +143,41 @@ class PrivacyDeletionRequestTests(TestCase):
         response = self.client.post('/portal/privacy/deletion-request/', {})
         self.assertEqual(response.status_code, 302)
         self.assertFalse(DeletionRequest.objects.filter(user=self.user).exists())
+
+
+class StructuredLoggingTests(SimpleTestCase):
+    def test_formatter_receives_request_correlation_and_user_context(self):
+        captured = {}
+
+        def view(request):
+            record = logging.LogRecord(
+                'promptmaster.test',
+                logging.INFO,
+                __file__,
+                1,
+                'hello %s',
+                ('world',),
+                None,
+            )
+            captured['payload'] = json.loads(JsonLogFormatter().format(record))
+            return HttpResponse('ok')
+
+        request = RequestFactory().get('/', HTTP_X_CORRELATION_ID='corr-123')
+        request.user = SimpleNamespace(is_authenticated=True, pk='user-1')
+        response = CorrelationIdMiddleware(view)(request)
+
+        self.assertEqual(response['X-Correlation-ID'], 'corr-123')
+        self.assertEqual(captured['payload']['correlation_id'], 'corr-123')
+        self.assertEqual(captured['payload']['user_id'], 'user-1')
+        self.assertEqual(captured['payload']['service'], 'promptmaster.test')
+        self.assertEqual(captured['payload']['message'], 'hello world')
+        self.assertEqual(captured['payload']['level'], 'INFO')
+        self.assertIn('timestamp', captured['payload'])
+        self.assertIn('event_code', captured['payload'])
+
+    def test_invalid_correlation_id_is_replaced(self):
+        request = RequestFactory().get('/', HTTP_X_CORRELATION_ID='bad value')
+        request.user = SimpleNamespace(is_authenticated=False)
+        response = CorrelationIdMiddleware(lambda request: HttpResponse('ok'))(request)
+        self.assertNotEqual(response['X-Correlation-ID'], 'bad value')
+        self.assertTrue(response['X-Correlation-ID'])
