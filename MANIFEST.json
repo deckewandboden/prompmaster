@@ -2,7 +2,7 @@
   "project": "PromptMaster Commercial RC14 Full Repository",
   "generated_at": "2026-09-15T17:09:08.547879+00:00",
   "file_count_excluding_manifest_files": 517,
-  "total_bytes_excluding_manifest_files": 20537871,
+  "total_bytes_excluding_manifest_files": 20542826,
   "roles": {
     "active-backend": 311,
     "active-ci": 1,
@@ -647,14 +647,14 @@
     },
     {
       "path": "backend/apps/core/admin_urls.py",
-      "size": 5638,
-      "sha256": "79e4f0b5bbd1188a89e525c7a38d440dc582dffb8e222099ca0406387fcf14a7",
+      "size": 5747,
+      "sha256": "f3afd6ff08bf2ade33780e2d03528ba102104411b379f98b604ab44433a5b158",
       "role": "active-backend"
     },
     {
       "path": "backend/apps/core/admin_views.py",
-      "size": 52449,
-      "sha256": "8849a8ba2971468759aaf25facd0ec6797b8f13e05451dffbd59d20e6383e93b",
+      "size": 53537,
+      "sha256": "231f1575f0ad49e973ce1218f3723a8ab3f3d3119c9cac5db3aa431cd3f17481",
       "role": "active-backend"
     },
     {
@@ -767,8 +767,8 @@
     },
     {
       "path": "backend/apps/core/tests.py",
-      "size": 256,
-      "sha256": "11c33a31813610e01e5e78295e19072944481eb02ba5cde6616af474d62f5487",
+      "size": 3016,
+      "sha256": "efd1dedc79f28c218c293efd02dfc873e6a5a84c96439d899f2f7d49edbeac09",
       "role": "active-backend"
     },
     {
@@ -1715,8 +1715,8 @@
     },
     {
       "path": "backend/templates/ns_admin/api.html",
-      "size": 334,
-      "sha256": "f0bf7909d22ae88388f8981762488f37542015c5482fa209efb4e2681b02534d",
+      "size": 1235,
+      "sha256": "da72eb8c5979e8f13c9c6331a2aaf4cfce6dee86fb352ff7fb393c77e67d04fc",
       "role": "active-backend"
     },
     {
@@ -1967,8 +1967,8 @@
     },
     {
       "path": "backend/templates/ns_admin/service_account_token.html",
-      "size": 506,
-      "sha256": "0fcf67bc080a5764e875c13260366a88a326e905c9180f28f5079e8a18979909",
+      "size": 603,
+      "sha256": "e925718eca563cf3199d428f3e858c216e6823838923b4bc0a287ca1d276a954",
       "role": "active-backend"
     },
     {
