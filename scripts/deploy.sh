@@ -5,7 +5,9 @@ F=(-f compose.yaml -f compose.production.yaml)
 log(){ printf '[PromptMaster deploy] %s\n' "$*"; }
 
 export GIT_SHA="${GIT_SHA:-$(git rev-parse HEAD)}"
-export APP_VERSION="${APP_VERSION:-$(git describe --tags --always 2>/dev/null || git rev-parse --short HEAD)}"
+if [[ -z "${APP_VERSION:-}" || "${APP_VERSION}" == "development" ]]; then
+  export APP_VERSION="$(git describe --tags --always 2>/dev/null || git rev-parse --short HEAD)"
+fi
 export DEPLOYED_AT="${DEPLOYED_AT:-$(date -u +%Y-%m-%dT%H:%M:%SZ)}"
 
 python3 scripts/github_preflight.py
