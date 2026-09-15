@@ -34,7 +34,7 @@ from apps.payments.mollie import MollieClient, MollieError
 from apps.support.models import SupportRequest
 from .forms import CompanyForm, InviteForm, PrivateCustomerForm, SupportForm, UserProfileForm
 from .models import Invitation, Membership
-from .services import create_invitation, transfer_admin
+from .services import create_invitation, deactivate_company_member, transfer_admin
 
 logger = logging.getLogger(__name__)
 
@@ -1074,30 +1074,16 @@ def member_deactivate(request, user_id):
         user_id=user_id,
         active=True,
     )
-    if member.role == 'admin':
-        messages.error(request, 'Firmenadministrator zuerst übertragen.')
-        return redirect('portal:team_member', user_id=user_id)
-
-    with transaction.atomic():
-        member = Membership.objects.select_for_update().select_related('user').get(pk=member.pk)
-        assignment_rows = list(
-            LicenseAssignment.objects.select_for_update()
-            .filter(
-                user=member.user,
-                license__company=company_obj,
-                ended_at__isnull=True,
-            )
-            .select_related('license')
+    try:
+        deactivate_company_member(
+            company=company_obj,
+            member=member,
+            actor=request.user,
+            request=request,
         )
-        for row in assignment_rows:
-            release_license(row.license, request.user)
-        DeviceRegistration.objects.filter(user=member.user, revoked_at__isnull=True).update(revoked_at=timezone.now())
-        member.active = False
-        member.save(update_fields=['active', 'updated_at'])
-        member.user.is_active = False
-        member.user.save(update_fields=['is_active', 'updated_at'])
-        bump_security_version(member.user)
-        audit(request.user, 'company.member_deactivated', member, {'user': str(member.user_id)}, request=request)
+    except ValidationError as exc:
+        messages.error(request, exc.messages[0])
+        return redirect('portal:team_member', user_id=user_id)
 
     messages.success(request, 'Benutzer deaktiviert; Lizenz und Geräteslots freigegeben.')
     return redirect('portal:team')
