@@ -1,6 +1,7 @@
 import json
 import logging
 from types import SimpleNamespace
+from unittest.mock import Mock, patch
 
 from django.http import HttpResponse
 from django.test import RequestFactory, SimpleTestCase, TestCase
@@ -92,6 +93,26 @@ class ServiceAccountRotationTests(TestCase):
         self.account.refresh_from_db()
         self.assertEqual(self.account.token_hash, token_hash(self.old_token))
 
+    def test_ops_api_requires_scope_and_is_get_only(self):
+        raw, hashed = token_pair()
+        account = ServiceAccount.objects.create(
+            name='wrong-scope', token_hash=hashed, scopes=['api.read'], active=True
+        )
+        self.assertEqual(
+            self.client.get('/api/v1/ops/health', HTTP_AUTHORIZATION=f'Bearer {raw}').status_code,
+            401,
+        )
+        account.scopes = ['ops.read']
+        account.save(update_fields=['scopes', 'updated_at'])
+        self.assertEqual(
+            self.client.post('/api/v1/ops/health', HTTP_AUTHORIZATION=f'Bearer {raw}').status_code,
+            405,
+        )
+        response = self.client.get('/api/v1/ops/health', HTTP_AUTHORIZATION=f'Bearer {raw}')
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.json()['status'], 'ok')
+        self.assertEqual(response['Cache-Control'], 'no-store')
+
 
 class PrivacyDeletionRequestTests(TestCase):
     def setUp(self):
@@ -181,3 +202,112 @@ class StructuredLoggingTests(SimpleTestCase):
         response = CorrelationIdMiddleware(lambda request: HttpResponse('ok'))(request)
         self.assertNotEqual(response['X-Correlation-ID'], 'bad value')
         self.assertTrue(response['X-Correlation-ID'])
+
+
+class NotificationReleaseTests(TestCase):
+    def setUp(self):
+        from apps.notifications.models import EmailTemplate
+
+        self.template = EmailTemplate.objects.create(
+            code='completion-test',
+            subject='Status {value}',
+            body_text='Text {value}',
+            active=True,
+        )
+
+    @patch('apps.notifications.tasks.send_email_message.delay')
+    def test_queue_is_persisted_before_task_and_normalizes_recipient(self, delay):
+        from apps.notifications.services import queue_email
+
+        with self.captureOnCommitCallbacks(execute=True):
+            message = queue_email(
+                'completion-test',
+                '  USER@Example.TEST ',
+                {'value': 'OK'},
+            )
+        message.refresh_from_db()
+        self.assertEqual(message.recipient, 'user@example.test')
+        self.assertEqual(message.status, 'queued')
+        self.assertEqual(message.subject, 'Status OK')
+        delay.assert_called_once_with(str(message.id))
+
+    @patch('apps.notifications.services.requests.post')
+    def test_graph_provider_uses_client_credentials_and_records_request_id(self, post):
+        from apps.notifications.models import EmailMessage
+        from apps.notifications.services import send_now
+
+        token_response = Mock()
+        token_response.raise_for_status.return_value = None
+        token_response.json.return_value = {'access_token': 'access-token'}
+        send_response = Mock()
+        send_response.raise_for_status.return_value = None
+        send_response.headers = {'request-id': 'graph-request-42'}
+        post.side_effect = [token_response, send_response]
+
+        message = EmailMessage.objects.create(
+            template=self.template,
+            recipient='user@example.test',
+            subject='Status OK',
+            context={'value': 'OK'},
+        )
+        with self.settings(
+            EMAIL_PROVIDER='graph',
+            GRAPH_TENANT_ID='tenant',
+            GRAPH_CLIENT_ID='client',
+            GRAPH_CLIENT_SECRET='secret',
+            GRAPH_SENDER='sender@example.test',
+        ):
+            send_now(message)
+
+        message.refresh_from_db()
+        self.assertEqual(message.status, 'sent')
+        self.assertIsNotNone(message.sent_at)
+        self.assertEqual(message.provider_reference, 'graph-request-42')
+        self.assertEqual(post.call_count, 2)
+        token_call, send_call = post.call_args_list
+        self.assertIn('tenant/oauth2/v2.0/token', token_call.args[0])
+        self.assertEqual(token_call.kwargs['data']['client_secret'], 'secret')
+        self.assertIn('/users/sender@example.test/sendMail', send_call.args[0])
+        self.assertEqual(send_call.kwargs['headers']['Authorization'], 'Bearer access-token')
+        self.assertNotIn('secret', json.dumps(send_call.kwargs['json']))
+
+    @patch('apps.notifications.tasks.queue_email')
+    def test_license_reminder_is_idempotent_for_same_expiry(self, queue_email_mock):
+        from datetime import timedelta
+        from apps.catalog.models import Product
+        from apps.licenses.models import License, LicenseAssignment, LicenseReminder
+        from apps.notifications.tasks import schedule_license_reminders
+
+        user = User.objects.create_user(
+            'reminder@example.test', None, email_verified_at=timezone.now()
+        )
+        product = Product.objects.create(
+            code='REMINDER-TEST',
+            name='Reminder Test',
+            default_license_days=365,
+            default_device_limit=2,
+            reminder_1_days=60,
+            reminder_2_days=30,
+            critical_warning_days=7,
+        )
+        now = timezone.now()
+        license_obj = License.objects.create(
+            owner_user=user,
+            product=product,
+            status='active',
+            valid_from=now - timedelta(days=305),
+            valid_until=now + timedelta(days=60),
+        )
+        LicenseAssignment.objects.create(license=license_obj, user=user)
+
+        first = schedule_license_reminders.run()
+        second = schedule_license_reminders.run()
+
+        self.assertEqual(first, 1)
+        self.assertEqual(second, 0)
+        reminder = LicenseReminder.objects.get(license=license_obj, kind='t60')
+        self.assertEqual(reminder.status, 'queued')
+        self.assertEqual(queue_email_mock.call_count, 1)
+        args = queue_email_mock.call_args.args
+        self.assertEqual(args[0], 't60')
+        self.assertEqual(args[1], user.email)
