@@ -21,6 +21,7 @@ from apps.catalog.models import Feature, Product
 from apps.catalog.services import create_price_version
 from apps.companies.models import Company, Membership, PrivateCustomerProfile
 from apps.devices.models import DeviceRegistration
+from apps.devices.services import revoke_device
 from apps.integrations.models import ServiceAccount
 from apps.legal.models import DeletionRequest, LegalAcceptance, LegalDocument, RetentionPolicy
 from apps.licenses.models import License, LicenseTerm
@@ -402,7 +403,34 @@ def customer_devices(request, pk):
         sort_fields={'device': 'display_name', 'last': 'last_seen_at', 'user': 'user__email'},
         default_sort='-last_seen_at',
     ).build()
-    return render(request, 'ns_admin/customer_grid.html', {'customer': customer, 'title': 'Geräte', 'grid': grid, 'kind': 'devices', 'filter_options': []})
+    return render(
+        request,
+        'ns_admin/customer_grid.html',
+        {
+            'customer': customer,
+            'title': 'Geräte',
+            'grid': grid,
+            'kind': 'devices',
+            'filter_options': [],
+            'can_revoke_devices': has_perm(request.user, 'devices.write'),
+        },
+    )
+
+
+@staff_perm('devices.write')
+def customer_device_revoke(request, pk, device_id):
+    if request.method != 'POST':
+        raise PermissionDenied
+    customer = _customer(request, pk)
+    device = get_object_or_404(
+        DeviceRegistration.objects.select_related('user', 'license'),
+        pk=device_id,
+        user__company_memberships__company=customer,
+        user__company_memberships__active=True,
+    )
+    revoke_device(device, request.user, request=request)
+    messages.success(request, 'Gerät wurde widerrufen.')
+    return redirect('ns_admin:customer_devices', pk=customer.pk)
 
 
 @staff_perm('orders.read')
