@@ -597,6 +597,61 @@ class NetstyleSupportAdminTransferTests(TestCase):
         self.assertEqual(event.metadata.get('new_admin'), str(self.target.id))
         self.assertTrue(event.metadata.get('identity_verified'))
 
+    def test_support_can_deactivate_member_and_revoke_tenant_access(self):
+        now = timezone.now()
+        product = Product.objects.create(
+            code='SUPPORT-DEACTIVATE-PRO',
+            name='Support Deactivate Pro',
+            default_license_days=365,
+            default_device_limit=2,
+            reminder_1_days=60,
+            reminder_2_days=30,
+            critical_warning_days=7,
+        )
+        license_obj = License.objects.create(
+            company=self.company,
+            product=product,
+            status='active',
+            valid_from=now - timedelta(days=1),
+            valid_until=now + timedelta(days=364),
+        )
+        assignment = LicenseAssignment.objects.create(
+            license=license_obj,
+            user=self.target,
+        )
+        device = DeviceRegistration.objects.create(
+            user=self.target,
+            license=license_obj,
+            token_hash='e' * 64,
+            display_name='Support-managed device',
+            last_seen_at=now,
+        )
+        before_version = self.target.security_version
+
+        url = (
+            f'/ns-admin/customers/{self.company.id}/users/'
+            f'{self.target.id}/deactivate/'
+        )
+        response = self.client.post(url)
+        self.assertEqual(response.status_code, 302)
+
+        membership = Membership.objects.get(company=self.company, user=self.target)
+        self.assertFalse(membership.active)
+        self.target.refresh_from_db()
+        self.assertFalse(self.target.is_active)
+        self.assertGreater(self.target.security_version, before_version)
+        assignment.refresh_from_db()
+        self.assertIsNotNone(assignment.ended_at)
+        device.refresh_from_db()
+        self.assertIsNotNone(device.revoked_at)
+        self.assertTrue(
+            AuditEvent.objects.filter(
+                action='company.member_deactivated',
+                object_id=str(membership.id),
+                actor=self.staff,
+            ).exists()
+        )
+
 
 class NetstyleDeviceRevokeTests(TestCase):
     def setUp(self):
