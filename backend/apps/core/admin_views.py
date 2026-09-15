@@ -22,6 +22,7 @@ from apps.devices.models import DeviceRegistration
 from apps.integrations.models import ServiceAccount
 from apps.legal.models import DeletionRequest, LegalDocument, RetentionPolicy
 from apps.licenses.models import License, LicenseTerm
+from apps.licenses.services import block_license, unblock_license
 from apps.notifications.models import EmailMessage, EmailTemplate
 from apps.ops.metrics import caddy_health, certificate_status, snapshot
 from apps.ops.models import BackupRecord, RestoreTest, SystemAlert
@@ -453,7 +454,33 @@ def license_detail(request, pk):
     for term in terms:
         if term.status == 'active':
             refund_preview[str(term.id)] = calculate_refund(term)
-    return render(request, 'ns_admin/license_detail.html', {'license': license_obj, 'terms': terms, 'refund_preview': refund_preview})
+    return render(
+        request,
+        'ns_admin/license_detail.html',
+        {
+            'license': license_obj,
+            'terms': terms,
+            'refund_preview': refund_preview,
+            'can_write': has_perm(request.user, 'licenses.write'),
+        },
+    )
+
+
+@staff_perm('licenses.write')
+def license_block_toggle(request, pk):
+    if request.method != 'POST':
+        raise PermissionDenied
+    license_obj = get_object_or_404(License, pk=pk)
+    try:
+        if license_obj.status == 'blocked':
+            unblock_license(license_obj, request.user, request=request)
+            messages.success(request, 'Lizenz wurde entsperrt.')
+        else:
+            block_license(license_obj, request.user, request=request)
+            messages.success(request, 'Lizenz wurde gesperrt; vorhandene Gerätezugänge wurden widerrufen.')
+    except ValidationError as exc:
+        messages.error(request, exc.messages[0])
+    return redirect('ns_admin:license_detail', pk=pk)
 
 
 @staff_perm('payments.refund')

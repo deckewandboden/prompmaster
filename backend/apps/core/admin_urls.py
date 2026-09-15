@@ -26,6 +26,7 @@ urlpatterns = [
     path('customers/<uuid:pk>/audit/', v.customer_audit, name='customer_audit'),
     path('licenses/', v.licenses, name='licenses'),
     path('licenses/<uuid:pk>/', v.license_detail, name='license_detail'),
+    path('licenses/<uuid:pk>/block-toggle/', v.license_block_toggle, name='license_block_toggle'),
     path('licenses/<uuid:pk>/terms/<uuid:term_id>/refund/', v.license_refund, name='license_refund'),
     path('orders/', v.orders, name='orders'),
     path('orders/<uuid:pk>/', v.order_detail, name='order_detail'),

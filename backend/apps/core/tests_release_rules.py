@@ -6,12 +6,13 @@ from django.test import TestCase
 from django.utils import timezone
 
 from apps.accounts.models import User
+from apps.audit.models import AuditEvent
 from apps.catalog.models import Product, ProductPrice
 from apps.companies.models import Company, Invitation, Membership, PrivateCustomerProfile
 from apps.companies.services import create_invitation
 from apps.devices.services import register_device
 from apps.licenses.models import License, LicenseAssignment
-from apps.licenses.services import assign_license
+from apps.licenses.services import assign_license, block_license, unblock_license
 from apps.orders.models import Order, OrderItem
 from apps.payments.services import _activate_order
 
@@ -36,6 +37,35 @@ class LicenseLifetimeTests(ReleaseRuleFixture):
         lic=License.objects.create(owner_user=self.user,product=self.product,status='expired',valid_from=self.now-timedelta(days=500),valid_until=self.now-timedelta(days=10)); _activate_order(self.make_order(target_license=lic,suffix='renew-after'),self.now); lic.refresh_from_db(); self.assertEqual(lic.valid_until,self.now+timedelta(days=365))
     def test_paid_activation_is_idempotent(self):
         order=self.make_order(quantity=2,suffix='idempotent'); _activate_order(order,self.now); n=License.objects.filter(owner_user=self.user).count(); _activate_order(order,self.now+timedelta(seconds=5)); self.assertEqual(License.objects.filter(owner_user=self.user).count(),n)
+
+class LicenseBlockTests(ReleaseRuleFixture):
+    def test_block_revokes_devices_and_unblock_restores_active_state(self):
+        order = self.make_order(suffix='block')
+        _activate_order(order, self.now)
+        license_obj = License.objects.get(owner_user=self.user)
+        device, _raw = register_device(self.user, license_obj, 'Browser')
+
+        block_license(license_obj, self.user)
+        license_obj.refresh_from_db()
+        device.refresh_from_db()
+        self.assertEqual(license_obj.status, 'blocked')
+        self.assertIsNotNone(device.revoked_at)
+        self.assertTrue(AuditEvent.objects.filter(action='license.blocked', object_id=str(license_obj.id)).exists())
+
+        unblock_license(license_obj, self.user)
+        license_obj.refresh_from_db()
+        self.assertEqual(license_obj.status, 'active')
+        self.assertTrue(AuditEvent.objects.filter(action='license.unblocked', object_id=str(license_obj.id)).exists())
+
+    def test_payment_review_cannot_be_overridden_by_manual_block(self):
+        order = self.make_order(suffix='payment-review')
+        _activate_order(order, self.now)
+        license_obj = License.objects.get(owner_user=self.user)
+        license_obj.status = 'payment_review'
+        license_obj.save(update_fields=['status', 'updated_at'])
+        with self.assertRaises(ValidationError):
+            block_license(license_obj, self.user)
+
 
 class DeviceLimitTests(ReleaseRuleFixture):
     def test_third_device_is_blocked(self):

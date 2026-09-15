@@ -97,6 +97,46 @@ def release_license(license, actor):
 
 
 @transaction.atomic
+def block_license(license_obj, actor, request=None):
+    """Block a license immediately without destroying paid term history."""
+    from apps.devices.models import DeviceRegistration
+
+    lic = License.objects.select_for_update().get(pk=license_obj.pk)
+    if lic.status == 'blocked':
+        return lic
+    if lic.status in {'payment_review', 'refunded'}:
+        raise ValidationError('Diese Lizenz kann in ihrem aktuellen Status nicht manuell gesperrt werden.')
+
+    previous = lic.status
+    DeviceRegistration.objects.filter(license=lic, revoked_at__isnull=True).update(revoked_at=timezone.now())
+    lic.status = 'blocked'
+    lic.save(update_fields=['status', 'updated_at'])
+    audit(actor, 'license.blocked', lic, {'before': previous, 'after': 'blocked'}, request=request)
+    return lic
+
+
+@transaction.atomic
+def unblock_license(license_obj, actor, request=None):
+    """Remove a manual block and derive the safe current license state."""
+    lic = License.objects.select_for_update().get(pk=license_obj.pk)
+    if lic.status != 'blocked':
+        raise ValidationError('Nur manuell gesperrte Lizenzen können entsperrt werden.')
+
+    now = timezone.now()
+    if not has_current_term(lic, now):
+        desired = 'expired'
+    elif LicenseAssignment.objects.filter(license=lic, ended_at__isnull=True).exists():
+        desired = 'active'
+    else:
+        desired = 'free'
+
+    lic.status = desired
+    lic.save(update_fields=['status', 'updated_at'])
+    audit(actor, 'license.unblocked', lic, {'before': 'blocked', 'after': desired}, request=request)
+    return lic
+
+
+@transaction.atomic
 def request_product_upgrade(*, user, company, product, note='', request=None):
     from .models import LicenseUpgradeRequest
 

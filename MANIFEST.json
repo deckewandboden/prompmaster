@@ -2,7 +2,7 @@
   "project": "PromptMaster Commercial RC14 Full Repository",
   "generated_at": "2026-09-15T17:09:08.547879+00:00",
   "file_count_excluding_manifest_files": 517,
-  "total_bytes_excluding_manifest_files": 20556957,
+  "total_bytes_excluding_manifest_files": 20561476,
   "roles": {
     "active-backend": 311,
     "active-ci": 1,
@@ -647,14 +647,14 @@
     },
     {
       "path": "backend/apps/core/admin_urls.py",
-      "size": 5747,
-      "sha256": "f3afd6ff08bf2ade33780e2d03528ba102104411b379f98b604ab44433a5b158",
+      "size": 5846,
+      "sha256": "c06689e8b4a809e5e8513c8f80269c2d7aad6a914e2a80d0d369f796e9789ee9",
       "role": "active-backend"
     },
     {
       "path": "backend/apps/core/admin_views.py",
-      "size": 53537,
-      "sha256": "231f1575f0ad49e973ce1218f3723a8ab3f3d3119c9cac5db3aa431cd3f17481",
+      "size": 54457,
+      "sha256": "1ed8a0b89d68d4a9a9f95017a3175aca0a46a0a6d61f56743ee59ba57a6bec04",
       "role": "active-backend"
     },
     {
@@ -785,8 +785,8 @@
     },
     {
       "path": "backend/apps/core/tests_release_rules.py",
-      "size": 10568,
-      "sha256": "125cfd2ee21d9662d0e0ae811b0f01a2be4427980fd830e9cc731feda1395f42",
+      "size": 12036,
+      "sha256": "d063b54804c4d75338c3894b7f3e3a49866210a8dbfd912208f971ebad66b990",
       "role": "active-backend"
     },
     {
@@ -995,8 +995,8 @@
     },
     {
       "path": "backend/apps/licenses/services.py",
-      "size": 10581,
-      "sha256": "eeee948e4b3b7822869c3b37ede6de7278da3b37a46549ea2113c3ffb12daced",
+      "size": 12182,
+      "sha256": "8ac0a3ef910cc342343649bc2f49a04ae6da9b51dbe07b122bdfa53fe79ff50d",
       "role": "active-backend"
     },
     {
@@ -1835,8 +1835,8 @@
     },
     {
       "path": "backend/templates/ns_admin/license_detail.html",
-      "size": 2338,
-      "sha256": "0de8081c3b366456aa8eb24840659b654e1619cd1a6e27317bd0158cf29b5792",
+      "size": 2769,
+      "sha256": "edd1ad58b4c12db088cc9b9b36df81cc8cfa6083ec58ea2c57922fdc5ca9526e",
       "role": "active-backend"
     },
     {
