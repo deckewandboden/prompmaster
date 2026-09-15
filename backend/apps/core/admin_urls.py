@@ -16,6 +16,7 @@ urlpatterns = [
     path('customers/private/<uuid:pk>/emails/', v.private_customer_emails, name='private_customer_emails'),
     path('customers/private/<uuid:pk>/audit/', v.private_customer_audit, name='private_customer_audit'),
     path('customers/<uuid:pk>/', v.customer_detail, name='customer_detail'),
+    path('customers/<uuid:pk>/company/', v.customer_company, name='customer_company'),
     path('customers/<uuid:pk>/portal-preview/', v.customer_portal_preview, name='customer_portal_preview'),
     path('customers/<uuid:pk>/users/', v.customer_users, name='customer_users'),
     path('customers/<uuid:pk>/licenses/', v.customer_licenses, name='customer_licenses'),
