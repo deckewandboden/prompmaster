@@ -929,7 +929,33 @@ def product_price_add(request, pk):
 
 @staff_perm('email.read')
 def email(request):
-    return render(request, 'ns_admin/email.html', {'templates': EmailTemplate.objects.order_by('code'), 'recent': EmailMessage.objects.select_related('template').order_by('-created_at')[:20]})
+    provider = settings.EMAIL_PROVIDER.lower().strip()
+    graph_configured = all(
+        [
+            settings.GRAPH_TENANT_ID,
+            settings.GRAPH_CLIENT_ID,
+            settings.GRAPH_CLIENT_SECRET,
+            settings.GRAPH_SENDER,
+        ]
+    )
+    provider_configured = (
+        bool(settings.EMAIL_HOST)
+        if provider in {'smtp', 'mailpit'}
+        else graph_configured
+        if provider in {'graph', 'microsoft_graph'}
+        else False
+    )
+    return render(
+        request,
+        'ns_admin/email.html',
+        {
+            'templates': EmailTemplate.objects.order_by('code'),
+            'recent': EmailMessage.objects.select_related('template').order_by('-created_at')[:20],
+            'provider': provider,
+            'provider_configured': provider_configured,
+            'graph_sender': settings.GRAPH_SENDER,
+        },
+    )
 
 
 @staff_perm('email.write')
@@ -952,8 +978,31 @@ def email_log(request):
 
 @staff_perm('payments.read')
 def mollie(request):
-    profile = get_setting('mollie_profile_id', '')
-    return render(request, 'ns_admin/mollie.html', {'profile_id': profile, 'payments': Payment.objects.order_by('-created_at')[:20], 'events': MollieEvent.objects.order_by('-created_at')[:20]})
+    from apps.integrations.services import get_secret
+
+    profile = get_setting('mollie_profile_id', settings.MOLLIE_PROFILE_ID)
+    api_key = get_secret('mollie_api_key', settings.MOLLIE_API_KEY)
+    if api_key.startswith('live_'):
+        mode = 'LIVE'
+    elif api_key:
+        mode = 'TEST'
+    else:
+        mode = 'NICHT KONFIGURIERT'
+    events = MollieEvent.objects.order_by('-created_at')[:20]
+    return render(
+        request,
+        'ns_admin/mollie.html',
+        {
+            'profile_id': profile,
+            'configured': bool(api_key and profile),
+            'mode': mode,
+            'webhook_base': settings.MOLLIE_WEBHOOK_BASE,
+            'payments': Payment.objects.order_by('-created_at')[:20],
+            'events': events,
+            'last_event': events[0] if events else None,
+            'can_configure': has_perm(request.user, 'settings.write'),
+        },
+    )
 
 
 @staff_perm('settings.write')
