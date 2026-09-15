@@ -1,0 +1,29 @@
+{% extends 'ns_admin/base.html' %}{% block content %}
+<div class="page-head">
+  <div><h1>{{ customer.name }}</h1><div class="sub">{{ customer.customer_number }} · Unternehmen</div></div>
+  <a class="btn secondary" href="{% url 'ns_admin:customers' %}">Zur Kundenliste</a>
+</div>
+{% include 'ns_admin/includes_customer_nav.html' %}
+<div class="grid two">
+  <div class="card">
+    <h2>Stammdaten</h2>
+    {% if can_write %}
+      <form method="post" class="form">{% csrf_token %}{{ form.as_p }}<button class="btn primary" type="submit">Unternehmensdaten speichern</button></form>
+    {% else %}
+      <div class="statusrow"><span>Firma</span><strong>{{ customer.name }}</strong></div>
+      <div class="statusrow"><span>Rechtsform</span><strong>{{ customer.legal_form|default:'–' }}</strong></div>
+      <div class="statusrow"><span>E-Mail</span><strong>{{ customer.email }}</strong></div>
+      <div class="statusrow"><span>Telefon</span><strong>{{ customer.phone|default:'–' }}</strong></div>
+      <div class="statusrow"><span>Adresse</span><strong>{{ customer.street }} {{ customer.house_number }} · {{ customer.postal_code }} {{ customer.city }}</strong></div>
+      <div class="statusrow"><span>Land</span><strong>{{ customer.country }}</strong></div>
+      <div class="statusrow"><span>USt-IdNr.</span><strong>{{ customer.vat_id|default:'–' }}</strong></div>
+      <div class="statusrow"><span>Steuernummer</span><strong>{{ customer.tax_number|default:'–' }}</strong></div>
+      <div class="statusrow"><span>Status</span><strong>{{ customer.get_status_display }}</strong></div>
+    {% endif %}
+  </div>
+  <div class="card">
+    <h2>Hinweis</h2>
+    <p class="muted">Änderungen erfolgen serverseitig mit Berechtigungsprüfung und werden im Audit protokolliert. Steuerfelder werden anhand der aktiven Steuerregel für Land und Kundentyp validiert.</p>
+  </div>
+</div>
+{% endblock %}
