@@ -2,14 +2,16 @@ from datetime import timedelta
 from decimal import Decimal
 
 from django.core.exceptions import ValidationError
+from django.db import IntegrityError, transaction
 from django.test import TestCase
 from django.utils import timezone
 
 from apps.accounts.models import User
 from apps.audit.models import AuditEvent
 from apps.catalog.models import Product, ProductPrice
+from apps.catalog.services import create_price_version, current_price
 from apps.companies.models import Company, Invitation, Membership, PrivateCustomerProfile
-from apps.companies.services import create_invitation
+from apps.companies.services import create_invitation, transfer_admin
 from apps.devices.services import register_device
 from apps.licenses.models import License, LicenseAssignment
 from apps.licenses.services import assign_license, block_license, unblock_license
@@ -141,3 +143,161 @@ class UpgradeAndDeepLinkTests(TestCase):
         self.assertIsNotNone(link.used_at)
         with self.assertRaises(ValidationError):
             consume_assignment_link(raw_token=raw, user=self.member)
+
+class PriceVersioningTests(TestCase):
+    def setUp(self):
+        self.product = Product.objects.create(
+            code='PRICE-VERSION-TEST',
+            name='Price Version Test',
+            default_license_days=365,
+            default_device_limit=2,
+            reminder_1_days=60,
+            reminder_2_days=30,
+            critical_warning_days=7,
+        )
+        self.start = timezone.now().replace(microsecond=0)
+
+    def test_new_price_closes_previous_stream_and_time_lookup_is_stable(self):
+        first = create_price_version(
+            product=self.product,
+            price_type='new',
+            gross_amount=Decimal('35.88'),
+            valid_from=self.start,
+        )
+        second_start = self.start + timedelta(days=30)
+        second = create_price_version(
+            product=self.product,
+            price_type='new',
+            gross_amount=Decimal('39.90'),
+            valid_from=second_start,
+        )
+
+        first.refresh_from_db()
+        self.assertEqual(first.valid_until, second_start)
+        self.assertEqual(
+            current_price(self.product, 'new', self.start + timedelta(days=1)).pk,
+            first.pk,
+        )
+        self.assertEqual(
+            current_price(self.product, 'new', second_start + timedelta(seconds=1)).pk,
+            second.pk,
+        )
+
+    def test_backdated_overlapping_price_version_is_rejected(self):
+        create_price_version(
+            product=self.product,
+            price_type='new',
+            gross_amount=Decimal('35.88'),
+            valid_from=self.start,
+        )
+        create_price_version(
+            product=self.product,
+            price_type='new',
+            gross_amount=Decimal('39.90'),
+            valid_from=self.start + timedelta(days=30),
+        )
+        with self.assertRaises(ValidationError):
+            create_price_version(
+                product=self.product,
+                price_type='new',
+                gross_amount=Decimal('37.50'),
+                valid_from=self.start + timedelta(days=15),
+            )
+
+
+class CompanyAdminTransferTests(TestCase):
+    def setUp(self):
+        self.company = Company.objects.create(
+            customer_number='PM-C-ADMIN-XFER',
+            name='Admin Transfer GmbH',
+            email='company@example.test',
+            country='DE',
+        )
+        self.old_admin = User.objects.create_user(
+            'old-admin@example.test',
+            'Transfer-Password-42!',
+            first_name='Old',
+            last_name='Admin',
+            two_factor_required=True,
+        )
+        self.new_admin = User.objects.create_user(
+            'new-admin@example.test',
+            'Transfer-Password-42!',
+            first_name='New',
+            last_name='Admin',
+            two_factor_required=False,
+        )
+        Membership.objects.create(
+            company=self.company, user=self.old_admin, role='admin', active=True
+        )
+        Membership.objects.create(
+            company=self.company, user=self.new_admin, role='member', active=True
+        )
+
+    def test_transfer_keeps_exactly_one_admin_and_invalidates_both_security_sessions(self):
+        old_version = self.old_admin.security_version
+        new_version = self.new_admin.security_version
+
+        transfer_admin(self.company, self.old_admin, self.new_admin)
+
+        old_link = Membership.objects.get(company=self.company, user=self.old_admin)
+        new_link = Membership.objects.get(company=self.company, user=self.new_admin)
+        self.old_admin.refresh_from_db()
+        self.new_admin.refresh_from_db()
+
+        self.assertEqual(old_link.role, 'member')
+        self.assertEqual(new_link.role, 'admin')
+        self.assertTrue(self.new_admin.two_factor_required)
+        self.assertGreater(self.old_admin.security_version, old_version)
+        self.assertGreater(self.new_admin.security_version, new_version)
+        self.assertEqual(
+            Membership.objects.filter(
+                company=self.company, role='admin', active=True
+            ).count(),
+            1,
+        )
+
+        with self.assertRaises(IntegrityError):
+            with transaction.atomic():
+                Membership.objects.create(
+                    company=self.company,
+                    user=User.objects.create_user(
+                        'third-admin@example.test',
+                        'Transfer-Password-42!',
+                        first_name='Third',
+                        last_name='Admin',
+                    ),
+                    role='admin',
+                    active=True,
+                )
+
+    def test_transfer_view_requires_password_and_completed_second_factor(self):
+        self.client.force_login(self.old_admin)
+        session = self.client.session
+        session['security_version'] = self.old_admin.security_version
+        session['two_factor_ok'] = False
+        session.save()
+
+        url = f'/portal/team/{self.new_admin.id}/transfer-admin/'
+        response = self.client.post(url, {'password': 'Transfer-Password-42!'})
+        self.assertEqual(response.status_code, 403)
+        self.assertEqual(
+            Membership.objects.get(company=self.company, user=self.old_admin).role,
+            'admin',
+        )
+
+        session = self.client.session
+        session['two_factor_ok'] = True
+        session.save()
+        response = self.client.post(url, {'password': 'Transfer-Password-42!'})
+        self.assertEqual(response.status_code, 302)
+
+        self.assertEqual(
+            Membership.objects.get(company=self.company, user=self.old_admin).role,
+            'member',
+        )
+        self.assertEqual(
+            Membership.objects.get(company=self.company, user=self.new_admin).role,
+            'admin',
+        )
+
