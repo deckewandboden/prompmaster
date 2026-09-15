@@ -567,6 +567,7 @@ class NetstyleDeviceRevokeTests(TestCase):
             last_name='Agent',
             is_staff=True,
             two_factor_required=True,
+            totp_secret_enc='configured-for-middleware-test',
             email_verified_at=now,
         )
         role = Role.objects.create(code='device-support-test', name='Device Support')
