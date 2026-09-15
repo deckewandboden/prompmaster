@@ -419,7 +419,7 @@ def customer_devices(request, pk):
 
 @staff_perm('devices.write')
 def customer_device_revoke(request, pk, device_id):
-    if request.method != 'POST':
+    if request.method != 'POST' or not has_perm(request.user, 'customers.read'):
         raise PermissionDenied
     customer = _customer(request, pk)
     device = get_object_or_404(
