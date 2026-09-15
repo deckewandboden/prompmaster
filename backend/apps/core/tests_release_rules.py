@@ -13,6 +13,7 @@ from apps.catalog.models import Product, ProductPrice
 from apps.catalog.services import create_price_version, current_price
 from apps.companies.models import Company, Invitation, Membership, PrivateCustomerProfile
 from apps.companies.services import create_invitation, transfer_admin
+from apps.devices.models import DeviceRegistration
 from apps.devices.services import register_device
 from apps.licenses.models import License, LicenseAssignment
 from apps.licenses.services import assign_license, block_license, unblock_license
@@ -221,6 +222,7 @@ class CompanyAdminTransferTests(TestCase):
             first_name='Old',
             last_name='Admin',
             two_factor_required=True,
+            totp_secret_enc='configured-for-middleware-test',
         )
         self.new_admin = User.objects.create_user(
             'new-admin@example.test',
@@ -282,7 +284,8 @@ class CompanyAdminTransferTests(TestCase):
 
         url = f'/portal/team/{self.new_admin.id}/transfer-admin/'
         response = self.client.post(url, {'password': 'Transfer-Password-42!'})
-        self.assertEqual(response.status_code, 403)
+        self.assertEqual(response.status_code, 302)
+        self.assertTrue(response['Location'].startswith('/auth/2fa/'))
         self.assertEqual(
             Membership.objects.get(company=self.company, user=self.old_admin).role,
             'admin',
@@ -542,11 +545,19 @@ class NetstyleDeviceRevokeTests(TestCase):
         )
         LicenseAssignment.objects.create(license=self.license, user=self.member)
         LicenseAssignment.objects.create(license=self.foreign_license, user=self.other_member)
-        self.device, _ = register_device(self.member, self.license, 'Managed device')
-        self.foreign_device, _ = register_device(
-            self.other_member,
-            self.foreign_license,
-            'Foreign device',
+        self.device = DeviceRegistration.objects.create(
+            user=self.member,
+            license=self.license,
+            token_hash='a' * 64,
+            display_name='Managed device',
+            last_seen_at=now,
+        )
+        self.foreign_device = DeviceRegistration.objects.create(
+            user=self.other_member,
+            license=self.foreign_license,
+            token_hash='b' * 64,
+            display_name='Foreign device',
+            last_seen_at=now,
         )
 
         self.staff = User.objects.create_user(
