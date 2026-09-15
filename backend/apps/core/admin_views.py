@@ -859,7 +859,7 @@ def deletion_request_reject(request, pk):
 def support_requests(request):
     grid = DataGrid(
         request,
-        SupportRequest.objects.select_related('user', 'company'),
+        SupportRequest.objects.select_related('user', 'company', 'license', 'license__product'),
         search_fields=('subject', 'message', 'user__email', 'company__name'),
         sort_fields={'date':'created_at','status':'status','category':'category','subject':'subject'},
         default_sort='-created_at',
@@ -873,7 +873,7 @@ def support_requests(request):
 
 @staff_perm('support.read')
 def support_request_detail(request, pk):
-    support_request = get_object_or_404(SupportRequest.objects.select_related('user','company'), pk=pk)
+    support_request = get_object_or_404(SupportRequest.objects.select_related('user','company','license','license__product'), pk=pk)
     return render(request, 'ns_admin/support_detail.html', {'support_request': support_request, 'can_write': has_perm(request.user, 'support.write')})
 
 
