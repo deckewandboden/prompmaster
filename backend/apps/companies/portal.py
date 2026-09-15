@@ -592,29 +592,69 @@ def security(request):
 
 @login_required
 def help_view(request):
-    company_obj, _ = _ctx(request)
-    form = SupportForm(request.POST or None)
+    company_obj, membership = _ctx(request)
+    if company_obj and membership and membership.role == 'admin':
+        visible_licenses = License.objects.filter(company=company_obj).select_related('product')
+    elif company_obj:
+        visible_licenses = License.objects.filter(
+            company=company_obj,
+            assignments__user=request.user,
+            assignments__ended_at__isnull=True,
+        ).select_related('product').distinct()
+    else:
+        visible_licenses = License.objects.filter(owner_user=request.user).select_related('product')
+
+    form = SupportForm(
+        request.POST or None,
+        license_queryset=visible_licenses.order_by('license_number'),
+    )
     if request.method == 'POST' and form.is_valid():
-        support_request = SupportRequest.objects.create(user=request.user, company=company_obj, **form.cleaned_data)
-        queue_email('support_confirmation', request.user.email, {'subject': form.cleaned_data['subject']})
+        support_request = SupportRequest.objects.create(
+            user=request.user,
+            company=company_obj,
+            **form.cleaned_data,
+        )
+        queue_email(
+            'support_confirmation',
+            request.user.email,
+            {'subject': form.cleaned_data['subject']},
+        )
         from apps.core.settings_store import get_setting
         support_email = get_setting('support_email', 'promptmaster@netstyle.de')
         queue_email('support_notification', support_email, {
             'subject': form.cleaned_data['subject'],
-            'category': support_request.get_category_display() if hasattr(support_request, 'get_category_display') else form.cleaned_data['category'],
+            'category': support_request.get_category_display(),
             'customer': company_obj.name if company_obj else request.user.full_name,
             'email': request.user.email,
             'message': form.cleaned_data['message'],
+            'license': support_request.license.license_number if support_request.license else '–',
         })
-        audit(request.user, 'support.created', support_request, {'category': support_request.category}, request=request)
+        audit(
+            request.user,
+            'support.created',
+            support_request,
+            {
+                'category': support_request.category,
+                'license': str(support_request.license_id or ''),
+            },
+            request=request,
+        )
         messages.success(request, 'Nachricht wurde übermittelt.')
         return redirect('portal:help')
-    if company_obj:
-        membership = Membership.objects.filter(user=request.user, company=company_obj, active=True).first()
-        history = SupportRequest.objects.filter(company=company_obj) if membership and membership.role == 'admin' else SupportRequest.objects.filter(user=request.user)
+
+    if company_obj and membership and membership.role == 'admin':
+        history = SupportRequest.objects.filter(company=company_obj)
     else:
         history = SupportRequest.objects.filter(user=request.user)
-    return render(request, 'portal/help.html', {'form': form, 'support_history': history.order_by('-created_at')[:100]})
+    history = history.select_related('license', 'license__product')
+    return render(
+        request,
+        'portal/help.html',
+        {
+            'form': form,
+            'support_history': history.order_by('-created_at')[:100],
+        },
+    )
 
 
 @login_required
