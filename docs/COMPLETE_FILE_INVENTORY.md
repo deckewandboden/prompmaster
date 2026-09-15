@@ -1,4 +1,4 @@
-| `backend/templates/ns_admin/service_account_token.html` | 603 | `e925718eca563cf3199d428f3e858c216e6823838923b4bc0a287ca1d276a954` || `backend/templates/ns_admin/api.html` | 1235 | `da72eb8c5979e8f13c9c6331a2aaf4cfce6dee86fb352ff7fb393c77e67d04fc` || `backend/apps/core/tests.py` | 4907 | `f4d8d785fa5d4c946029c5c44089efc6e3dda76d2e6f5f6d725879196e6c36bc` || `backend/apps/core/admin_urls.py` | 5747 | `f3afd6ff08bf2ade33780e2d03528ba102104411b379f98b604ab44433a5b158` || `backend/apps/core/admin_views.py` | 53537 | `231f1575f0ad49e973ce1218f3723a8ab3f3d3119c9cac5db3aa431cd3f17481` |# Vollständiges Datei-Inventar — PromptMaster RC14
+| `backend/templates/ns_admin/service_account_token.html` | 603 | `e925718eca563cf3199d428f3e858c216e6823838923b4bc0a287ca1d276a954` || `backend/templates/ns_admin/api.html` | 1235 | `da72eb8c5979e8f13c9c6331a2aaf4cfce6dee86fb352ff7fb393c77e67d04fc` || `backend/apps/core/tests.py` | 6784 | `124513218876c4455b00a8d63fdaee52f2d9573dd365e74cfff09508fb106975` || `backend/apps/core/admin_urls.py` | 5747 | `f3afd6ff08bf2ade33780e2d03528ba102104411b379f98b604ab44433a5b158` || `backend/apps/core/admin_views.py` | 53537 | `231f1575f0ad49e973ce1218f3723a8ab3f3d3119c9cac5db3aa431cd3f17481` |# Vollständiges Datei-Inventar — PromptMaster RC14
 
 Erfasst: **517 Dateien** (Manifest-/Inventardateien selbst ausgenommen), **20,537,871 Byte**.
 
@@ -86,7 +86,7 @@ Maschinenlesbar: `FILE_MANIFEST.tsv` und `MANIFEST.json`.
 | `backend/apps/core/management/__init__.py` | 0 | `e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855` |
 | `backend/apps/core/management/commands/__init__.py` | 0 | `e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855` |
 | `backend/apps/core/management/commands/seed_defaults.py` | 5183 | `2fa34881682f6e782b892a5fbf719394d3f185606b2e9212f668ef9f0467b534` |
-| `backend/apps/core/middleware.py` | 542 | `a1ce3fd282c526d386befef8eb4a32890a8ca7fafc02ec3ecd1e569cbdc08f02` |
+| `backend/apps/core/middleware.py` | 2190 | `d42f1a76084aa03e3ed0cf3be48b7dc927720f0e64acddf76d8fce1c70777fc8` |
 | `backend/apps/core/migrations/0001_initial.py` | 752 | `30baa368b096bb6360a19ff9cc37b667aa5e16b97164c4720d06003c0dd172a8` |
 | `backend/apps/core/migrations/0002_search_indexes.py` | 2232 | `7f2f26d9214308e9f5d06a6d772f1d6e71411c35c340bd3c36f18f155d27b86b` |
 | `backend/apps/core/migrations/__init__.py` | 0 | `e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855` |
@@ -224,7 +224,7 @@ Maschinenlesbar: `FILE_MANIFEST.tsv` und `MANIFEST.json`.
 | `backend/config/__init__.py` | 64 | `40e9457320576e0813c9ec166611e979252a367aede83677fe5626398648cedc` |
 | `backend/config/asgi.py` | 161 | `e66806d324f24440dc47c97b9a870686dc47e2f5879aa61d1df7bb1c028bf25b` |
 | `backend/config/celery.py` | 221 | `99c9d65218b5b7ec9416eed0fb746644ca7aa90fe27223f166df94cea3fd6982` |
-| `backend/config/settings.py` | 8125 | `863ee938fe761f8a87691959b39c1ab9cee0bc81d90dce1b56d0fe323df6b809` |
+| `backend/config/settings.py` | 8155 | `8b57aa8b8900f829b1954dcd026f55024765ed7123433ac07fce7a9ef0c9fe79` |
 | `backend/config/urls.py` | 1689 | `391594b133ccc7b9edef4edfc1c170a9d0d057a1e73c8a192ff4541914da0054` |
 | `backend/config/wsgi.py` | 161 | `25d3ac3de67e7a1e20c9cfed54bf208a378c7e634f426239c36c63cbabc22f36` |
 | `backend/manage.py` | 239 | `9bba94f103ecf4d96b7bb92b4efd737352b65e003b6d0d5dc20c2a97cb62e13f` |
