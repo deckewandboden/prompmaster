@@ -7,6 +7,7 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.core.exceptions import PermissionDenied, ValidationError
 from django.db import transaction
+from django.db.models import Prefetch
 from django.shortcuts import get_object_or_404, redirect, render
 from django.http import HttpResponse
 from django.core.serializers.json import DjangoJSONEncoder
@@ -22,6 +23,7 @@ from apps.core.datagrid import DataGrid
 from apps.devices.models import DeviceRegistration
 from apps.devices.services import revoke_device
 from apps.legal.models import DeletionRequest, LegalAcceptance, LegalDocument
+from apps.legal.services import process_deletion_request
 from apps.licenses.models import License, LicenseAssignment, LicenseReminder, LicenseUpgradeRequest
 from apps.licenses.services import assign_license, release_license, request_product_upgrade, resolve_product_upgrade, create_assignment_link, consume_assignment_link
 from apps.notifications.services import queue_email
@@ -151,17 +153,70 @@ def _start_mollie_checkout(request, order, description, metadata):
 @login_required
 def dashboard(request):
     company, membership = _ctx(request)
-    if company and membership and membership.role == 'admin':
+    is_company_admin = bool(company and membership and membership.role == 'admin')
+    if is_company_admin:
         licenses = License.objects.filter(company=company)
+        device_queryset = DeviceRegistration.objects.filter(
+            user__company_memberships__company=company,
+            user__company_memberships__active=True,
+            revoked_at__isnull=True,
+        ).distinct()
+        team_shortlist = (
+            Membership.objects.filter(company=company, active=True)
+            .select_related('user')
+            .order_by('user__last_name', 'user__first_name')[:5]
+        )
+        payment_issues = (
+            Payment.objects.filter(order__company=company, status__in=['failed', 'chargeback'])
+            .select_related('order')
+            .order_by('-updated_at')[:5]
+        )
+        required_company_fields = {
+            'name': 'Firmenname',
+            'email': 'E-Mail',
+            'street': 'Straße',
+            'postal_code': 'PLZ',
+            'city': 'Ort',
+            'country': 'Land',
+        }
+        company_missing_fields = [
+            label for field, label in required_company_fields.items()
+            if not str(getattr(company, field, '') or '').strip()
+        ]
     elif company:
         licenses = License.objects.filter(
             company=company,
             assignments__user=request.user,
             assignments__ended_at__isnull=True,
         ).distinct()
+        device_queryset = DeviceRegistration.objects.filter(
+            user=request.user,
+            revoked_at__isnull=True,
+        )
+        team_shortlist = []
+        payment_issues = []
+        company_missing_fields = []
     else:
         licenses = License.objects.filter(owner_user=request.user)
+        device_queryset = DeviceRegistration.objects.filter(
+            user=request.user,
+            revoked_at__isnull=True,
+        )
+        team_shortlist = []
+        payment_issues = (
+            Payment.objects.filter(
+                order__private_user=request.user,
+                status__in=['failed', 'chargeback'],
+            )
+            .select_related('order')
+            .order_by('-updated_at')[:5]
+        )
+        company_missing_fields = []
+
     now = timezone.now()
+    active_licenses = list(
+        licenses.filter(status='active', valid_until__gt=now).select_related('product')
+    )
     pro_assignment = active_product_assignment(request.user, 'PRO')
     pro_expiry = assignment_expiry_context(pro_assignment, now) if pro_assignment else None
     return render(
@@ -173,11 +228,29 @@ def dashboard(request):
             'licenses': licenses.select_related('product'),
             'license_total': licenses.count(),
             'license_free': licenses.filter(status='free', valid_until__gt=now).count(),
-            'license_active': licenses.filter(status='active', valid_until__gt=now).count(),
-            'expiring_30': licenses.filter(valid_until__gt=now, valid_until__lte=now + timedelta(days=30)).count(),
+            'license_active': len(active_licenses),
+            'license_assigned': licenses.filter(
+                assignments__ended_at__isnull=True,
+            ).distinct().count(),
+            'expiring_30': licenses.filter(
+                valid_until__gt=now,
+                valid_until__lte=now + timedelta(days=30),
+            ).count(),
+            'device_count': device_queryset.count(),
+            'device_capacity': sum(
+                license_obj.product.default_device_limit
+                for license_obj in active_licenses
+            ),
+            'team_shortlist': team_shortlist,
+            'payment_issues': payment_issues,
+            'company_missing_fields': company_missing_fields,
             'can_start_pro': bool(pro_assignment),
             'pro_expiry': pro_expiry,
-            'pending_upgrade': LicenseUpgradeRequest.objects.filter(user=request.user, status='pending', product__code='PRO').exists(),
+            'pending_upgrade': LicenseUpgradeRequest.objects.filter(
+                user=request.user,
+                status='pending',
+                product__code='PRO',
+            ).exists(),
             'now': now,
         },
     )
@@ -439,7 +512,15 @@ def orders(request):
     company, membership = _ctx(request)
     if company and (not membership or membership.role != 'admin'):
         raise PermissionDenied
-    queryset = Order.objects.filter(company=company) if company else Order.objects.filter(private_user=request.user)
+    queryset = (
+        Order.objects.filter(company=company)
+        if company
+        else Order.objects.filter(private_user=request.user)
+    )
+    queryset = queryset.prefetch_related(
+        'items__license_terms__license',
+        'payments',
+    )
     grid = DataGrid(
         request,
         queryset,
@@ -770,6 +851,30 @@ def renew(request, pk):
 
 
 @login_required
+def renew_index(request):
+    company_obj, membership = _ctx(request)
+    queryset = License.objects.select_related('product')
+    if company_obj and membership and membership.role == 'admin':
+        queryset = queryset.filter(company=company_obj)
+    elif company_obj:
+        queryset = queryset.filter(
+            company=company_obj,
+            assignments__user=request.user,
+            assignments__ended_at__isnull=True,
+        ).distinct()
+    else:
+        queryset = queryset.filter(owner_user=request.user)
+    queryset = queryset.exclude(
+        status__in=['refunded', 'payment_review', 'blocked']
+    ).order_by('valid_until', 'license_number')
+    return render(
+        request,
+        'portal/renew_index.html',
+        {'licenses': queryset},
+    )
+
+
+@login_required
 def invitation_revoke(request, pk):
     company_obj, _ = _admin(request)
     if request.method != 'POST':
@@ -955,6 +1060,49 @@ def member_deactivate(request, user_id):
         audit(request.user, 'company.member_deactivated', member, {'user': str(member.user_id)}, request=request)
 
     messages.success(request, 'Benutzer deaktiviert; Lizenz und Geräteslots freigegeben.')
+    return redirect('portal:team')
+
+
+@login_required
+def member_delete(request, user_id):
+    company_obj, _ = _admin(request)
+    if request.method != 'POST':
+        raise PermissionDenied
+    if request.POST.get('confirm') != '1':
+        messages.error(request, 'Benutzerlöschung muss ausdrücklich bestätigt werden.')
+        return redirect('portal:team_member', user_id=user_id)
+
+    member = get_object_or_404(
+        Membership.objects.select_related('user'),
+        company=company_obj,
+        user_id=user_id,
+        active=True,
+    )
+    if member.role == 'admin':
+        messages.error(request, 'Firmenadministrator zuerst übertragen.')
+        return redirect('portal:team_member', user_id=user_id)
+
+    with transaction.atomic():
+        member = (
+            Membership.objects.select_for_update()
+            .select_related('user')
+            .get(pk=member.pk)
+        )
+        deletion = DeletionRequest.objects.create(
+            user=member.user,
+            status='processing',
+            notes=f'Durch Firmenadministrator {request.user.id} ausgelöst.',
+        )
+        process_deletion_request(
+            deletion,
+            actor=request.user,
+            request=request,
+        )
+
+    messages.success(
+        request,
+        'Benutzer gelöscht/anonymisiert; Lizenzen und Gerätezugänge wurden beendet.',
+    )
     return redirect('portal:team')
 
 
