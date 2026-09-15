@@ -15,6 +15,7 @@ from django.urls import reverse
 from django.utils import timezone
 
 from apps.accounts.forms import TransferAdminForm
+from apps.accounts.models import User
 from apps.accounts.security import bump_security_version
 from apps.audit.services import audit
 from apps.core.datagrid import DataGrid
@@ -490,7 +491,7 @@ def privacy_delete_request(request):
 
     # Serialize requests per identity so double-clicks/concurrent POSTs cannot
     # create duplicate open deletion workflows.
-    type(request.user).objects.select_for_update().get(pk=request.user.pk)
+    User.objects.select_for_update().get(pk=request.user.pk)
     pending = (
         DeletionRequest.objects.select_for_update()
         .filter(user=request.user, status__in=['open', 'processing'])

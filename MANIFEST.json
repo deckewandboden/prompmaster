@@ -2,7 +2,7 @@
   "project": "PromptMaster Commercial RC14 Full Repository",
   "generated_at": "2026-09-15T17:09:08.547879+00:00",
   "file_count_excluding_manifest_files": 517,
-  "total_bytes_excluding_manifest_files": 20561476,
+  "total_bytes_excluding_manifest_files": 20561500,
   "roles": {
     "active-backend": 311,
     "active-ci": 1,
@@ -527,8 +527,8 @@
     },
     {
       "path": "backend/apps/companies/portal.py",
-      "size": 37327,
-      "sha256": "8cd51bfb95b6a58417f57e09b16c1f7565bb29a7e45cbb8f6ce1fe59fca36390",
+      "size": 37351,
+      "sha256": "b32d0b48422b830ce1db6f3ddc139d7789bbe219b97cc31e2ca70814f950359b",
       "role": "active-backend"
     },
     {

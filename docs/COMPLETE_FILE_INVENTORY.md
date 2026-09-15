@@ -56,7 +56,7 @@ Maschinenlesbar: `FILE_MANIFEST.tsv` und `MANIFEST.json`.
 | `backend/apps/companies/migrations/0002_rename_companies_c_name_idx_companies_c_name_2d8260_idx_and_more.py` | 935 | `61214c81793e1edee3cc7a76394549eaaf762019611dd2c2943b728b2d48509c` |
 | `backend/apps/companies/migrations/__init__.py` | 0 | `e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855` |
 | `backend/apps/companies/models.py` | 4477 | `5f8f0ebd6de05ff721fdad27ba1a5fa7f0525b7802a429b24bbeaefe0f2cac2d` |
-| `backend/apps/companies/portal.py` | 37327 | `8cd51bfb95b6a58417f57e09b16c1f7565bb29a7e45cbb8f6ce1fe59fca36390` |
+| `backend/apps/companies/portal.py` | 37351 | `b32d0b48422b830ce1db6f3ddc139d7789bbe219b97cc31e2ca70814f950359b` |
 | `backend/apps/companies/portal_urls.py` | 1972 | `bb8de83592080cc9610465cedc11c23013f263e5835d253db3e1a7482a59a755` |
 | `backend/apps/companies/services.py` | 3187 | `a536c08fac5295beb1eb70cc08eb5cc980dec2152dc3c1485b237849774ed394` |
 | `backend/apps/contenthub/__init__.py` | 0 | `e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855` |
