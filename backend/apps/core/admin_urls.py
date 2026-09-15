@@ -52,6 +52,7 @@ urlpatterns = [
     path('ops/alerts/', v.ops_alerts, name='ops_alerts'),
     path('api/', v.api, name='api'),
     path('api/service-accounts/new/', v.service_account_create, name='service_account_create'),
+    path('api/service-accounts/<uuid:pk>/rotate/', v.service_account_rotate, name='service_account_rotate'),
     path('api/service-accounts/<uuid:pk>/revoke/', v.service_account_revoke, name='service_account_revoke'),
     path('legal/', v.legal, name='legal'),
     path('legal/documents/', v.legal_documents, name='legal_documents'),
