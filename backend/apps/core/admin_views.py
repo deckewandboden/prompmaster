@@ -224,7 +224,7 @@ def private_customer_detail(request, pk):
         'customer_user': user,
         'license_count': user.owned_licenses.count(),
         'order_count': user.private_orders.count(),
-        'device_count': user.devices.filter(revoked_at__isnull=True).count(),
+        'device_count': user.devices.filter(license__owner_user=user, revoked_at__isnull=True).count(),
     })
 
 
@@ -241,11 +241,12 @@ def private_customer_portal_preview(request, pk):
         'license_free': licenses.filter(status='free', valid_until__gt=now).count(),
         'license_active': licenses.filter(status='active', valid_until__gt=now).count(),
         'expiring_30': licenses.filter(valid_until__gt=now, valid_until__lte=now + timedelta(days=30)).count(),
-        'device_count': user.devices.filter(revoked_at__isnull=True).count(), 'order_count': user.private_orders.count(),
+        'device_count': user.devices.filter(license__owner_user=user, revoked_at__isnull=True).count(), 'order_count': user.private_orders.count(),
         'member_count': 1, 'back_route': 'ns_admin:private_customer_detail', 'back_pk': profile.pk,
     })
 
 
+@staff_perm('customers.read')
 @staff_perm('licenses.read')
 def private_customer_licenses(request, pk):
     profile = _private_customer(request, pk)
@@ -256,10 +257,11 @@ def private_customer_licenses(request, pk):
 @staff_perm('customers.read')
 def private_customer_devices(request, pk):
     profile = _private_customer(request, pk)
-    grid = DataGrid(request, profile.user.devices.select_related('license'), search_fields=('display_name','os_family','browser_family'), sort_fields={'device':'display_name','last':'last_seen_at'}, default_sort='-last_seen_at').build()
+    grid = DataGrid(request, profile.user.devices.filter(license__owner_user=profile.user).select_related('license'), search_fields=('display_name','os_family','browser_family'), sort_fields={'device':'display_name','last':'last_seen_at'}, default_sort='-last_seen_at').build()
     return render(request, 'ns_admin/private_customer_grid.html', {'profile': profile, 'title':'Geräte', 'kind':'devices', 'grid':grid, 'filter_options':[]})
 
 
+@staff_perm('customers.read')
 @staff_perm('orders.read')
 def private_customer_orders(request, pk):
     profile = _private_customer(request, pk)
@@ -267,6 +269,7 @@ def private_customer_orders(request, pk):
     return render(request, 'ns_admin/private_customer_grid.html', {'profile': profile, 'title':'Bestellungen', 'kind':'orders', 'grid':grid, 'filter_options':[('status','Status',Order.STATUS)]})
 
 
+@staff_perm('customers.read')
 @staff_perm('payments.read')
 def private_customer_payments(request, pk):
     profile = _private_customer(request, pk)
@@ -274,6 +277,7 @@ def private_customer_payments(request, pk):
     return render(request, 'ns_admin/private_customer_grid.html', {'profile': profile, 'title':'Zahlungen', 'kind':'payments', 'grid':grid, 'filter_options':[('status','Status',PAYMENT_STATUS_CHOICES)]})
 
 
+@staff_perm('customers.read')
 @staff_perm('email.read')
 def private_customer_emails(request, pk):
     profile = _private_customer(request, pk)
@@ -281,6 +285,7 @@ def private_customer_emails(request, pk):
     return render(request, 'ns_admin/private_customer_grid.html', {'profile': profile, 'title':'E-Mail-Historie', 'kind':'emails', 'grid':grid, 'filter_options':[('status','Status',EMAIL_STATUS_CHOICES)]})
 
 
+@staff_perm('customers.read')
 @staff_perm('audit.read')
 def private_customer_audit(request, pk):
     profile = _private_customer(request, pk)
@@ -322,7 +327,7 @@ def customer_portal_preview(request, pk):
         'license_total': licenses.count(), 'license_free': licenses.filter(status='free', valid_until__gt=now).count(),
         'license_active': licenses.filter(status='active', valid_until__gt=now).count(),
         'expiring_30': licenses.filter(valid_until__gt=now, valid_until__lte=now + timedelta(days=30)).count(),
-        'device_count': DeviceRegistration.objects.filter(user__company_memberships__company=customer, user__company_memberships__active=True, revoked_at__isnull=True).distinct().count(),
+        'device_count': DeviceRegistration.objects.filter(license__company=customer, user__company_memberships__company=customer, user__company_memberships__active=True, revoked_at__isnull=True).distinct().count(),
         'order_count': customer.orders.count(), 'member_count': customer.memberships.filter(active=True).count(),
         'back_route': 'ns_admin:customer_detail', 'back_pk': customer.pk,
     })
@@ -343,6 +348,7 @@ def customer_users(request, pk):
 
 
 @staff_perm('customers.read')
+@staff_perm('licenses.read')
 def customer_licenses(request, pk):
     customer = _customer(request, pk)
     grid = DataGrid(
@@ -361,7 +367,7 @@ def customer_devices(request, pk):
     customer = _customer(request, pk)
     grid = DataGrid(
         request,
-        DeviceRegistration.objects.filter(user__company_memberships__company=customer).select_related('user', 'license'),
+        DeviceRegistration.objects.filter(license__company=customer).select_related('user', 'license'),
         search_fields=('display_name', 'user__email'),
         sort_fields={'device': 'display_name', 'last': 'last_seen_at', 'user': 'user__email'},
         default_sort='-last_seen_at',
@@ -369,6 +375,7 @@ def customer_devices(request, pk):
     return render(request, 'ns_admin/customer_grid.html', {'customer': customer, 'title': 'Geräte', 'grid': grid, 'kind': 'devices', 'filter_options': []})
 
 
+@staff_perm('customers.read')
 @staff_perm('orders.read')
 def customer_orders(request, pk):
     customer = _customer(request, pk)
@@ -383,6 +390,7 @@ def customer_orders(request, pk):
     return render(request, 'ns_admin/customer_grid.html', {'customer': customer, 'title': 'Bestellungen', 'grid': grid, 'kind': 'orders', 'filter_options': [('status', 'Status', Order.STATUS)]})
 
 
+@staff_perm('customers.read')
 @staff_perm('payments.read')
 def customer_payments(request, pk):
     customer = _customer(request, pk)
@@ -397,6 +405,7 @@ def customer_payments(request, pk):
     return render(request, 'ns_admin/customer_grid.html', {'customer': customer, 'title': 'Zahlungen', 'grid': grid, 'kind': 'payments', 'filter_options': [('status','Status',PAYMENT_STATUS_CHOICES)]})
 
 
+@staff_perm('customers.read')
 @staff_perm('email.read')
 def customer_emails(request, pk):
     customer = _customer(request, pk)
@@ -413,6 +422,7 @@ def customer_emails(request, pk):
     return render(request, 'ns_admin/customer_grid.html', {'customer': customer, 'title': 'E-Mail-Historie', 'grid': grid, 'kind': 'emails', 'filter_options': [('status','Status',EMAIL_STATUS_CHOICES)]})
 
 
+@staff_perm('customers.read')
 @staff_perm('audit.read')
 def customer_audit(request, pk):
     customer = _customer(request, pk)
