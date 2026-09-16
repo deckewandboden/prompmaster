@@ -1,4 +1,5 @@
 from datetime import timedelta
+from unittest.mock import patch
 from decimal import Decimal
 
 from django.core.exceptions import ValidationError
@@ -11,10 +12,12 @@ from apps.catalog.models import Product, ProductPrice
 from apps.companies.models import Company, Invitation, Membership, PrivateCustomerProfile
 from apps.companies.services import create_invitation
 from apps.devices.services import register_device
-from apps.licenses.models import License, LicenseAssignment
+from apps.licenses.models import License, LicenseAssignment, LicenseReminder
 from apps.licenses.services import assign_license, block_license, unblock_license
 from apps.orders.models import Order, OrderItem
 from apps.payments.services import _activate_order
+from apps.notifications.models import EmailMessage, EmailTemplate
+from apps.notifications.tasks import _sync_reminder_delivery, schedule_license_reminders
 
 class ReleaseRuleFixture(TestCase):
     def setUp(self):
@@ -79,6 +82,183 @@ class InvitationRulesTests(TestCase):
         before=timezone.now(); inv,raw=create_invitation(company=self.company,actor=self.admin,email='neu@example.test'); after=timezone.now(); self.assertTrue(raw); self.assertGreaterEqual(inv.expires_at,before+timedelta(hours=24)); self.assertLessEqual(inv.expires_at,after+timedelta(hours=24,seconds=1)); self.assertTrue(inv.is_valid())
     def test_new_invitation_revokes_previous(self):
         first,_=create_invitation(company=self.company,actor=self.admin,email='neu@example.test'); second,_=create_invitation(company=self.company,actor=self.admin,email='neu@example.test'); first.refresh_from_db(); self.assertIsNotNone(first.revoked_at); self.assertIsNone(second.revoked_at); self.assertEqual(Invitation.objects.filter(company=self.company,email='neu@example.test',accepted_at__isnull=True,revoked_at__isnull=True).count(),1)
+
+
+class ReminderContractTests(TestCase):
+    def setUp(self):
+        self.now = timezone.now()
+        self.product = Product.objects.create(
+            code='PRO-REMINDER',
+            name='PromptMaster Pro Reminder Test',
+            default_license_days=365,
+            default_device_limit=2,
+            reminder_1_days=60,
+            reminder_2_days=30,
+            critical_warning_days=7,
+        )
+        self.company = Company.objects.create(
+            customer_number='PM-C-REMINDER',
+            name='Reminder GmbH',
+            email='reminder@example.test',
+            country='DE',
+        )
+        self.admin = User.objects.create_user(
+            'reminder-admin@example.test',
+            'Reminder-Admin-Password-42!',
+            first_name='Reminder',
+            last_name='Admin',
+        )
+        self.member = User.objects.create_user(
+            'reminder-member@example.test',
+            'Reminder-Member-Password-42!',
+            first_name='Reminder',
+            last_name='Member',
+        )
+        Membership.objects.create(company=self.company, user=self.admin, role='admin', active=True)
+        Membership.objects.create(company=self.company, user=self.member, role='member', active=True)
+        self.license = License.objects.create(
+            company=self.company,
+            product=self.product,
+            status='active',
+            valid_from=self.now - timedelta(days=320),
+            valid_until=self.now + timedelta(days=45),
+        )
+        LicenseAssignment.objects.create(license=self.license, user=self.member)
+        self.template = EmailTemplate.objects.create(
+            code='t60',
+            subject='Lizenz {license} läuft aus',
+            body_text='Ablauf: {expiry}',
+            active=True,
+        )
+
+    def test_partial_failure_reuses_same_message_rows_without_duplicate_recipient_mail(self):
+        reminder = LicenseReminder.objects.create(
+            license=self.license,
+            kind='t60',
+            target_valid_until=self.license.valid_until,
+            status='error',
+            error='Teilfehler',
+        )
+        sent = EmailMessage.objects.create(
+            template=self.template,
+            recipient=self.admin.email,
+            subject='Admin reminder',
+            status='sent',
+            sent_at=self.now,
+            context={'reminder_id': str(reminder.id)},
+        )
+        failed = EmailMessage.objects.create(
+            template=self.template,
+            recipient=self.member.email,
+            subject='Member reminder',
+            status='failed',
+            error='SMTP temporary failure',
+            context={'reminder_id': str(reminder.id)},
+        )
+
+        with patch('apps.notifications.tasks.send_email_message.delay') as delay:
+            with self.captureOnCommitCallbacks(execute=True):
+                queued = schedule_license_reminders.run()
+
+        self.assertEqual(queued, 1)
+        self.assertEqual(
+            EmailMessage.objects.filter(context__reminder_id=str(reminder.id)).count(),
+            2,
+        )
+        sent.refresh_from_db()
+        failed.refresh_from_db()
+        reminder.refresh_from_db()
+        self.assertEqual(sent.status, 'sent')
+        self.assertEqual(failed.status, 'queued')
+        self.assertEqual(reminder.status, 'queued')
+        delay.assert_called_once_with(str(failed.id))
+
+        with patch('apps.notifications.tasks.send_email_message.delay') as delay:
+            with self.captureOnCommitCallbacks(execute=True):
+                queued_again = schedule_license_reminders.run()
+        self.assertEqual(queued_again, 0)
+        self.assertEqual(
+            EmailMessage.objects.filter(context__reminder_id=str(reminder.id)).count(),
+            2,
+        )
+        delay.assert_not_called()
+
+    def test_delivery_sync_tolerates_historical_duplicate_failure_after_success(self):
+        reminder = LicenseReminder.objects.create(
+            license=self.license,
+            kind='t60',
+            target_valid_until=self.license.valid_until,
+            status='error',
+        )
+        admin_sent = EmailMessage.objects.create(
+            template=self.template,
+            recipient=self.admin.email,
+            subject='Admin reminder',
+            status='sent',
+            sent_at=self.now,
+            context={'reminder_id': str(reminder.id)},
+        )
+        EmailMessage.objects.create(
+            template=self.template,
+            recipient=self.admin.email,
+            subject='Legacy duplicate',
+            status='failed',
+            error='legacy duplicate',
+            context={'reminder_id': str(reminder.id)},
+        )
+        EmailMessage.objects.create(
+            template=self.template,
+            recipient=self.member.email,
+            subject='Member reminder',
+            status='sent',
+            sent_at=self.now,
+            context={'reminder_id': str(reminder.id)},
+        )
+
+        _sync_reminder_delivery(admin_sent)
+
+        reminder.refresh_from_db()
+        self.assertEqual(reminder.status, 'sent')
+        self.assertIsNotNone(reminder.sent_at)
+        self.assertEqual(reminder.error, '')
+
+    def test_product_configured_reminder_windows_drive_t60_and_t30(self):
+        self.product.reminder_1_days = 45
+        self.product.reminder_2_days = 15
+        self.product.save(update_fields=['reminder_1_days', 'reminder_2_days', 'updated_at'])
+        self.license.valid_until = self.now + timedelta(days=45)
+        self.license.save(update_fields=['valid_until', 'updated_at'])
+        EmailTemplate.objects.create(
+            code='t30',
+            subject='T30 {license}',
+            body_text='Ablauf: {expiry}',
+            active=True,
+        )
+
+        with patch('apps.notifications.tasks.send_email_message.delay'):
+            with self.captureOnCommitCallbacks(execute=True):
+                schedule_license_reminders.run()
+        self.assertTrue(
+            LicenseReminder.objects.filter(
+                license=self.license,
+                kind='t60',
+                target_valid_until=self.license.valid_until,
+            ).exists()
+        )
+
+        self.license.valid_until = timezone.now() + timedelta(days=15)
+        self.license.save(update_fields=['valid_until', 'updated_at'])
+        with patch('apps.notifications.tasks.send_email_message.delay'):
+            with self.captureOnCommitCallbacks(execute=True):
+                schedule_license_reminders.run()
+        self.assertTrue(
+            LicenseReminder.objects.filter(
+                license=self.license,
+                kind='t30',
+                target_valid_until=self.license.valid_until,
+            ).exists()
+        )
+
 
 class TenantIsolationTests(TestCase):
     def test_company_license_cannot_be_assigned_cross_tenant(self):
