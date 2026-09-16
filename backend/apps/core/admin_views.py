@@ -17,17 +17,17 @@ from apps.audit.models import AuditEvent
 from apps.audit.services import audit as write_audit
 from apps.catalog.models import Feature, Product
 from apps.catalog.services import create_price_version
-from apps.companies.models import Company, Membership, PrivateCustomerProfile
+from apps.companies.models import Company, Invitation, Membership, PrivateCustomerProfile
 from apps.devices.models import DeviceRegistration
 from apps.integrations.models import ServiceAccount
 from apps.legal.models import DeletionRequest, LegalDocument, RetentionPolicy
-from apps.licenses.models import License, LicenseTerm
+from apps.licenses.models import License, LicenseAssignmentLink, LicenseTerm, LicenseUpgradeRequest
 from apps.licenses.services import block_license, unblock_license
 from apps.notifications.models import EmailMessage, EmailTemplate
 from apps.ops.metrics import caddy_health, certificate_status, snapshot
 from apps.ops.models import BackupRecord, RestoreTest, SystemAlert
 from apps.orders.models import Order
-from apps.payments.models import MollieEvent, Payment
+from apps.payments.models import MollieEvent, Payment, Refund
 from apps.payments.services import calculate_refund, create_refund_request, submit_refund
 from apps.support.models import SupportRequest
 from .admin_forms import (
@@ -298,10 +298,41 @@ def private_customer_emails(request, pk):
 @staff_perm('audit.read')
 def private_customer_audit(request, pk):
     profile = _private_customer(request, pk)
-    object_ids = {str(profile.id), str(profile.user_id)}
-    object_ids.update(str(v) for v in profile.user.owned_licenses.values_list('id', flat=True))
-    grid = DataGrid(request, AuditEvent.objects.filter(object_id__in=object_ids).select_related('actor'), search_fields=('action','object_type','object_id','actor__email'), sort_fields={'time':'created_at','action':'action'}, default_sort='-created_at').build()
-    return render(request, 'ns_admin/private_customer_grid.html', {'profile': profile, 'title':'Audit', 'kind':'audit', 'grid':grid, 'filter_options':[]})
+    user = profile.user
+    license_ids = user.owned_licenses.values_list('id', flat=True)
+    device_ids = DeviceRegistration.objects.filter(
+        user=user,
+        license__owner_user=user,
+    ).values_list('id', flat=True)
+    order_ids = user.private_orders.values_list('id', flat=True)
+    payment_ids = Payment.objects.filter(
+        order__private_user=user,
+    ).values_list('id', flat=True)
+    refund_ids = Refund.objects.filter(
+        payment__order__private_user=user,
+    ).values_list('id', flat=True)
+
+    audit_scope = (
+        Q(object_type='PrivateCustomerProfile', object_id=str(profile.id))
+        | Q(object_type='User', object_id=str(user.id))
+        | Q(object_type='License', object_id__in=license_ids)
+        | Q(object_type='DeviceRegistration', object_id__in=device_ids)
+        | Q(object_type='Order', object_id__in=order_ids)
+        | Q(object_type='Payment', object_id__in=payment_ids)
+        | Q(object_type='Refund', object_id__in=refund_ids)
+    )
+    grid = DataGrid(
+        request,
+        AuditEvent.objects.filter(audit_scope).select_related('actor'),
+        search_fields=('action', 'object_type', 'object_id', 'actor__email'),
+        sort_fields={'time': 'created_at', 'action': 'action'},
+        default_sort='-created_at',
+    ).build()
+    return render(
+        request,
+        'ns_admin/private_customer_grid.html',
+        {'profile': profile, 'title': 'Audit', 'kind': 'audit', 'grid': grid, 'filter_options': []},
+    )
 
 
 def _customer(request, pk):
@@ -444,17 +475,54 @@ def customer_emails(request, pk):
 @staff_perm('audit.read')
 def customer_audit(request, pk):
     customer = _customer(request, pk)
-    object_ids = {str(customer.id)}
-    object_ids.update(str(value) for value in customer.memberships.values_list('user_id', flat=True))
-    object_ids.update(str(value) for value in customer.licenses.values_list('id', flat=True))
+    membership_ids = customer.memberships.values_list('id', flat=True)
+    invitation_ids = customer.invitations.values_list('id', flat=True)
+    license_ids = customer.licenses.values_list('id', flat=True)
+    device_ids = DeviceRegistration.objects.filter(
+        license__company=customer,
+    ).values_list('id', flat=True)
+    order_ids = customer.orders.values_list('id', flat=True)
+    payment_ids = Payment.objects.filter(
+        order__company=customer,
+    ).values_list('id', flat=True)
+    refund_ids = Refund.objects.filter(
+        payment__order__company=customer,
+    ).values_list('id', flat=True)
+    support_ids = SupportRequest.objects.filter(
+        company=customer,
+    ).values_list('id', flat=True)
+    upgrade_ids = LicenseUpgradeRequest.objects.filter(
+        company=customer,
+    ).values_list('id', flat=True)
+    assignment_link_ids = LicenseAssignmentLink.objects.filter(
+        company=customer,
+    ).values_list('id', flat=True)
+
+    audit_scope = (
+        Q(object_type='Company', object_id=str(customer.id))
+        | Q(object_type='Membership', object_id__in=membership_ids)
+        | Q(object_type='Invitation', object_id__in=invitation_ids)
+        | Q(object_type='License', object_id__in=license_ids)
+        | Q(object_type='DeviceRegistration', object_id__in=device_ids)
+        | Q(object_type='Order', object_id__in=order_ids)
+        | Q(object_type='Payment', object_id__in=payment_ids)
+        | Q(object_type='Refund', object_id__in=refund_ids)
+        | Q(object_type='SupportRequest', object_id__in=support_ids)
+        | Q(object_type='LicenseUpgradeRequest', object_id__in=upgrade_ids)
+        | Q(object_type='LicenseAssignmentLink', object_id__in=assignment_link_ids)
+    )
     grid = DataGrid(
         request,
-        AuditEvent.objects.filter(object_id__in=object_ids).select_related('actor'),
+        AuditEvent.objects.filter(audit_scope).select_related('actor'),
         search_fields=('action', 'object_type', 'object_id', 'actor__email'),
         sort_fields={'time': 'created_at', 'action': 'action'},
         default_sort='-created_at',
     ).build()
-    return render(request, 'ns_admin/customer_grid.html', {'customer': customer, 'title': 'Audit', 'grid': grid, 'kind': 'audit', 'filter_options': []})
+    return render(
+        request,
+        'ns_admin/customer_grid.html',
+        {'customer': customer, 'title': 'Audit', 'grid': grid, 'kind': 'audit', 'filter_options': []},
+    )
 
 
 @staff_perm('licenses.read')
