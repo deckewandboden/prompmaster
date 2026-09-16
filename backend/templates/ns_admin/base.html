@@ -1,6 +1,10 @@
 {% extends 'app_shell.html' %}{% load pm %}
 {% block title %}PromptMaster · netstyle Admin{% endblock %}
 {% block shell_class %}admin-shell{% endblock %}
+{% block mobile_title %}PROMPTMASTER<small>ADMIN</small>{% endblock %}
+{% block search_placeholder %}Kunde, Benutzer, Lizenz-ID oder E-Mail suchen …{% endblock %}
+{% block user_meta %}{% if request.user.is_superuser %}Superadmin{% else %}netstyle Benutzer{% endif %}{% endblock %}
+{% block side_footer %}netstyle Admin-Backend{% endblock %}
 {% block home_url %}{% url 'ns_admin:dashboard' %}{% endblock %}
 {% block search_action %}{% url 'ns_admin:search' %}{% endblock %}
 {% block nav %}

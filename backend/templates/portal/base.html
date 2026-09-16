@@ -2,6 +2,10 @@
 {% load pm %}
 {% block title %}PromptMaster Kundenportal{% endblock %}
 {% block shell_class %}portal-shell{% endblock %}
+{% block mobile_title %}PROMPTMASTER<small>KUNDENPORTAL</small>{% endblock %}
+{% block search_placeholder %}Benutzer, E-Mail oder Lizenz suchen …{% endblock %}
+{% block user_meta %}{% if current_membership %}{{ current_membership.get_role_display }}{% else %}Privatkunde{% endif %}{% endblock %}
+{% block side_footer %}{% if current_membership %}{{ current_membership.company.name }}<br>{{ current_membership.get_role_display }}{% else %}PromptMaster Kundenportal{% endif %}{% endblock %}
 {% block home_url %}{% url 'portal:dashboard' %}{% endblock %}
 {% block nav %}
 <a class="{% nav_class request 'dashboard' %}" href="{% url 'portal:dashboard' %}"><span class="ico">⌂</span><span class="label">Dashboard</span></a>
