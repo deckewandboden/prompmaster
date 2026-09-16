@@ -785,8 +785,8 @@
     },
     {
       "path": "backend/apps/core/tests_release_rules.py",
-      "size": 12036,
-      "sha256": "d063b54804c4d75338c3894b7f3e3a49866210a8dbfd912208f971ebad66b990",
+      "size": 18362,
+      "sha256": "5589fca12f64c46d5fa1806eb92ecdec36e3d0f5178602e2a7d73bbc5eb88e49",
       "role": "active-backend"
     },
     {
