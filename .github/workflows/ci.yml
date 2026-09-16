@@ -86,7 +86,18 @@ jobs:
           npm run build
 
       - name: Static repository guards
-        run: python scripts/github_preflight.py
+        run: |
+          set -o pipefail
+          python scripts/github_preflight.py 2>&1 | tee ci-preflight.log
+
+      - name: Upload test diagnostics
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-diagnostics
+          path: |
+            ci-preflight.log
+          if-no-files-found: ignore
 
       - name: Check migration drift
         working-directory: backend
@@ -154,15 +165,27 @@ jobs:
 
       - name: Python dependency vulnerability audit
         run: |
+          set -o pipefail
           python -m pip install --upgrade pip
           pip install "pip-audit>=2.7,<3"
-          pip-audit -r requirements.txt --progress-spinner off
+          pip-audit -r requirements.txt --progress-spinner off 2>&1 | tee security-pip-audit.log
 
       - name: Marketing production dependency vulnerability audit
         working-directory: marketing
         run: |
+          set -o pipefail
           npm ci
-          npm audit --omit=dev --audit-level=high
+          npm audit --omit=dev --audit-level=high 2>&1 | tee ../security-npm-audit.log
+
+      - name: Upload security diagnostics
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: security-diagnostics
+          path: |
+            security-pip-audit.log
+            security-npm-audit.log
+          if-no-files-found: ignore
 
   full-stack:
     runs-on: ubuntu-latest
@@ -274,7 +297,21 @@ jobs:
           python manage.py check
 
       - name: Pro runtime and Django backend browser smoke
-        run: python scripts/browser_runtime_smoke.py
+        run: |
+          set -o pipefail
+          python scripts/browser_runtime_smoke.py 2>&1 | tee browser-runtime-smoke.log
 
       - name: Marketing browser smoke
-        run: python scripts/browser_marketing_smoke.py
+        run: |
+          set -o pipefail
+          python scripts/browser_marketing_smoke.py 2>&1 | tee browser-marketing-smoke.log
+
+      - name: Upload browser diagnostics
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: browser-diagnostics
+          path: |
+            browser-runtime-smoke.log
+            browser-marketing-smoke.log
+          if-no-files-found: ignore
