@@ -2,6 +2,7 @@ from django.test import TestCase
 from apps.accounts.models import User, Role, Permission, UserRole
 from apps.audit.models import AuditEvent
 from apps.companies.models import Company, Membership, PrivateCustomerProfile
+from apps.notifications.models import EmailMessage
 
 
 class AdminDataVisibilityTests(TestCase):
@@ -201,4 +202,54 @@ class AdminDataVisibilityTests(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, 'MEMBERSHIP-TENANT-MARKER')
         self.assertNotContains(response, 'AUTH-GLOBAL-MARKER')
+
+    def test_customer_email_history_uses_explicit_scope(self):
+        other_company = Company.objects.create(
+            name='OTHER-CUSTOMER-42',
+            customer_number='OTHER-42',
+            email='other@example.test',
+        )
+        shared_recipient = 'shared-recipient@example.test'
+        EmailMessage.objects.create(
+            recipient=shared_recipient,
+            subject='COMPANY-SCOPE-MARKER',
+            context={'pm_scope_company_id': str(self.company.id)},
+        )
+        EmailMessage.objects.create(
+            recipient=shared_recipient,
+            subject='OTHER-COMPANY-MARKER',
+            context={'pm_scope_company_id': str(other_company.id)},
+        )
+        EmailMessage.objects.create(
+            recipient=shared_recipient,
+            subject='UNSCOPED-MARKER',
+            context={},
+        )
+        EmailMessage.objects.create(
+            recipient=self.private_user.email,
+            subject='PRIVATE-SCOPE-MARKER',
+            context={'pm_scope_user_id': str(self.private_user.id)},
+        )
+        EmailMessage.objects.create(
+            recipient=self.private_user.email,
+            subject='WRONG-PRIVATE-SCOPE-MARKER',
+            context={'pm_scope_user_id': str(self.user.id)},
+        )
+
+        self._reset_permissions('customers.read', 'email.read')
+
+        company_response = self.client.get(
+            f'/ns-admin/customers/{self.company.id}/emails/'
+        )
+        self.assertEqual(company_response.status_code, 200)
+        self.assertContains(company_response, 'COMPANY-SCOPE-MARKER')
+        self.assertNotContains(company_response, 'OTHER-COMPANY-MARKER')
+        self.assertNotContains(company_response, 'UNSCOPED-MARKER')
+
+        private_response = self.client.get(
+            f'/ns-admin/customers/private/{self.private_profile.id}/emails/'
+        )
+        self.assertEqual(private_response.status_code, 200)
+        self.assertContains(private_response, 'PRIVATE-SCOPE-MARKER')
+        self.assertNotContains(private_response, 'WRONG-PRIVATE-SCOPE-MARKER')
 
