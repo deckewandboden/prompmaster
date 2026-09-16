@@ -1,1 +1,7 @@
-{% extends 'portal/base.html' %}{% block content %}<h1>Sicherheit</h1><div class="card"><div class="statusrow"><span>Zwei-Faktor-Authentifizierung</span>{% if request.user.totp_secret_enc %}<span class="badge ok">Aktiv</span>{% else %}<a class="btn primary sm" href="{% url 'accounts:two_factor_setup' %}">Einrichten</a>{% endif %}</div></div>{% endblock %}
+{% extends 'portal/base.html' %}{% block content %}
+<div class="page-head"><div><h1>Sicherheit</h1><div class="sub">Zwei-Faktor-Authentifizierung und Recovery-Codes verwalten.</div></div><a class="btn secondary" href="{% url 'portal:profile' %}">Zurück zu Einstellungen</a></div>
+<div class="grid two">
+  <div class="card"><h2>Zwei-Faktor-Authentifizierung</h2><div class="statusrow"><span>Status</span>{% if request.user.totp_secret_enc %}<span class="badge ok">Aktiv</span>{% else %}<span class="badge warn">Nicht eingerichtet</span>{% endif %}</div><p class="small muted">2FA schützt den Zugriff mit einem zusätzlichen zeitbasierten Einmalcode.</p><div class="security-actions">{% if not request.user.totp_secret_enc %}<a class="btn primary" href="{% url 'accounts:two_factor_setup' %}">2FA einrichten</a>{% else %}<a class="btn secondary" href="{% url 'accounts:recovery_regenerate' %}">Recovery-Codes neu erzeugen</a>{% endif %}</div></div>
+  <div class="card"><h2>Passwort</h2><p class="muted">Ein Passwortwechsel erfolgt über einen zeitlich begrenzten, einmal verwendbaren Link an Ihre hinterlegte E-Mail-Adresse.</p><div class="security-actions"><a class="btn secondary" href="{% url 'accounts:password_reset' %}">Passwort zurücksetzen</a></div></div>
+</div>
+{% endblock %}

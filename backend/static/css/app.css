@@ -114,3 +114,15 @@ a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,te
   .detail-list>div{grid-template-columns:1fr;gap:3px}
   .row-line{grid-template-columns:1fr;gap:4px}
 }
+
+
+/* Secondary card/result page primitives */
+.alert.ok{border-color:#caefdf;background:#edfaf4;color:#168756}
+.narrow-card,.form-card{max-width:760px}
+.narrow-card{margin-right:auto}
+.login-card .result-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:16px}
+.security-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}
+@media(max-width:700px){
+  .narrow-card,.form-card{max-width:none}
+  .security-actions .btn,.login-card .result-actions .btn{flex:1}
+}
