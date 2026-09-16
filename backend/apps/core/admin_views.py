@@ -19,6 +19,7 @@ from apps.catalog.models import Feature, Product
 from apps.catalog.services import create_price_version
 from apps.companies.models import Company, Membership, PrivateCustomerProfile
 from apps.devices.models import DeviceRegistration
+from apps.devices.services import revoke_device
 from apps.integrations.models import ServiceAccount
 from apps.legal.models import DeletionRequest, LegalDocument, RetentionPolicy
 from apps.licenses.models import License, LicenseTerm
@@ -257,7 +258,23 @@ def private_customer_licenses(request, pk):
 def private_customer_devices(request, pk):
     profile = _private_customer(request, pk)
     grid = DataGrid(request, profile.user.devices.select_related('license'), search_fields=('display_name','os_family','browser_family'), sort_fields={'device':'display_name','last':'last_seen_at'}, default_sort='-last_seen_at').build()
-    return render(request, 'ns_admin/private_customer_grid.html', {'profile': profile, 'title':'Geräte', 'kind':'devices', 'grid':grid, 'filter_options':[]})
+    return render(request, 'ns_admin/private_customer_grid.html', {'profile': profile, 'title':'Geräte', 'kind':'devices', 'grid':grid, 'can_write': has_perm(request.user, 'devices.write'), 'filter_options':[]})
+
+
+@staff_perm('devices.write')
+def private_customer_device_revoke(request, pk, device_id):
+    if request.method != 'POST':
+        raise PermissionDenied
+    profile = _private_customer(request, pk)
+    device = get_object_or_404(
+        DeviceRegistration.objects.select_related('user', 'license'),
+        pk=device_id,
+        user=profile.user,
+        license__owner_user=profile.user,
+    )
+    revoke_device(device, request.user, request=request)
+    messages.success(request, 'Gerät wurde durch netstyle zurückgesetzt.')
+    return redirect('ns_admin:private_customer_devices', pk=profile.pk)
 
 
 @staff_perm('orders.read')
@@ -366,7 +383,25 @@ def customer_devices(request, pk):
         sort_fields={'device': 'display_name', 'last': 'last_seen_at', 'user': 'user__email'},
         default_sort='-last_seen_at',
     ).build()
-    return render(request, 'ns_admin/customer_grid.html', {'customer': customer, 'title': 'Geräte', 'grid': grid, 'kind': 'devices', 'filter_options': []})
+    return render(request, 'ns_admin/customer_grid.html', {'customer': customer, 'title': 'Geräte', 'grid': grid, 'kind': 'devices', 'can_write': has_perm(request.user, 'devices.write'), 'filter_options': []})
+
+
+@staff_perm('devices.write')
+def customer_device_revoke(request, pk, device_id):
+    if request.method != 'POST':
+        raise PermissionDenied
+    customer = _customer(request, pk)
+    device = get_object_or_404(
+        DeviceRegistration.objects.select_related('user', 'license').filter(
+            license__company=customer,
+            user__company_memberships__company=customer,
+            user__company_memberships__active=True,
+        ).distinct(),
+        pk=device_id,
+    )
+    revoke_device(device, request.user, request=request)
+    messages.success(request, 'Gerät wurde durch netstyle zurückgesetzt.')
+    return redirect('ns_admin:customer_devices', pk=customer.pk)
 
 
 @staff_perm('orders.read')

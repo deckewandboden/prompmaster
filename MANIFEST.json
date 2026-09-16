@@ -647,14 +647,14 @@
     },
     {
       "path": "backend/apps/core/admin_urls.py",
-      "size": 5846,
-      "sha256": "c06689e8b4a809e5e8513c8f80269c2d7aad6a914e2a80d0d369f796e9789ee9",
+      "size": 6116,
+      "sha256": "0b1e0ef8c71bf44ff457c3c9f2d705e94bfad295f7dc68bb2c9b30c57696a859",
       "role": "active-backend"
     },
     {
       "path": "backend/apps/core/admin_views.py",
-      "size": 54457,
-      "sha256": "1ed8a0b89d68d4a9a9f95017a3175aca0a46a0a6d61f56743ee59ba57a6bec04",
+      "size": 55909,
+      "sha256": "ebd538e1081962ecbe7391af7eb44727eedac0d8c23c730b7f187b66f96ccc9c",
       "role": "active-backend"
     },
     {
@@ -785,8 +785,8 @@
     },
     {
       "path": "backend/apps/core/tests_release_rules.py",
-      "size": 12036,
-      "sha256": "d063b54804c4d75338c3894b7f3e3a49866210a8dbfd912208f971ebad66b990",
+      "size": 20519,
+      "sha256": "58d61e5988ad60e191ef5c0a13eb5dccabae22de770c892f5b2f975b963da246",
       "role": "active-backend"
     },
     {
@@ -1751,8 +1751,8 @@
     },
     {
       "path": "backend/templates/ns_admin/customer_grid.html",
-      "size": 7826,
-      "sha256": "b9989a5fb0e82f4d06f6e13d054cfc782a1a41301826ba4edb5eaa83d71e3433",
+      "size": 8207,
+      "sha256": "a706d4abbdb357aa13ccdc4feedd2a084a35d3f087144745f6d04d726cdc259a",
       "role": "active-backend"
     },
     {
@@ -1895,8 +1895,8 @@
     },
     {
       "path": "backend/templates/ns_admin/private_customer_grid.html",
-      "size": 4506,
-      "sha256": "ebad656ac23a92ce463c74e857d3aad9e80909c0bfe7c7147d9d449302e2e1e4",
+      "size": 4894,
+      "sha256": "a159803238a40c93bf18d043ced203fe3c03d4fb0ca33794ab7296cea2d05da6",
       "role": "active-backend"
     },
     {

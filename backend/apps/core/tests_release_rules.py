@@ -3,9 +3,10 @@ from decimal import Decimal
 
 from django.core.exceptions import ValidationError
 from django.test import TestCase
+from django.urls import reverse
 from django.utils import timezone
 
-from apps.accounts.models import User
+from apps.accounts.models import Permission, Role, User, UserRole
 from apps.audit.models import AuditEvent
 from apps.catalog.models import Product, ProductPrice
 from apps.companies.models import Company, Invitation, Membership, PrivateCustomerProfile
@@ -71,6 +72,223 @@ class DeviceLimitTests(ReleaseRuleFixture):
     def test_third_device_is_blocked(self):
         order=self.make_order(suffix='device'); _activate_order(order,self.now); lic=License.objects.get(owner_user=self.user); register_device(self.user,lic,'Gerät 1'); register_device(self.user,lic,'Gerät 2')
         with self.assertRaises(ValidationError): register_device(self.user,lic,'Gerät 3')
+
+
+class DeviceAdminRevokeContractTests(TestCase):
+    def setUp(self):
+        self.now = timezone.now()
+        self.product = Product.objects.create(
+            code='PRO-DEVICE-ADMIN',
+            name='PromptMaster Pro Device Admin',
+            default_license_days=365,
+            default_device_limit=2,
+            reminder_1_days=60,
+            reminder_2_days=30,
+            critical_warning_days=7,
+        )
+        self.price = ProductPrice.objects.create(
+            product=self.product,
+            price_type='new',
+            gross_amount=Decimal('35.88'),
+            currency='EUR',
+            valid_from=self.now - timedelta(days=1),
+        )
+        self.company = Company.objects.create(
+            customer_number='PM-C-DEVICE',
+            name='Device GmbH',
+            email='device@example.test',
+            country='DE',
+        )
+        self.company_admin = User.objects.create_user(
+            'device-admin@example.test',
+            'Device-Admin-Password-42!',
+            first_name='Device',
+            last_name='Admin',
+        )
+        self.member = User.objects.create_user(
+            'device-member@example.test',
+            'Device-Member-Password-42!',
+            first_name='Device',
+            last_name='Member',
+            email_verified_at=self.now,
+        )
+        Membership.objects.create(company=self.company, user=self.company_admin, role='admin', active=True)
+        Membership.objects.create(company=self.company, user=self.member, role='member', active=True)
+        order = Order.objects.create(
+            order_number='PM-O-DEVICE-COMPANY',
+            company=self.company,
+            status='draft',
+            currency='EUR',
+            gross_total=Decimal('35.88'),
+            tax_total=Decimal('5.73'),
+            billing_snapshot={},
+            idempotency_key='device-company',
+        )
+        OrderItem.objects.create(
+            order=order,
+            product=self.product,
+            price_version=self.price,
+            quantity=1,
+            unit_gross=Decimal('35.88'),
+            unit_net=Decimal('30.15'),
+            tax_rate=Decimal('19.00'),
+            product_name_snapshot=self.product.name,
+        )
+        _activate_order(order, self.now)
+        self.company_license = License.objects.get(company=self.company)
+        assign_license(self.company_license, self.member, self.company_admin)
+        self.company_device, _raw = register_device(
+            self.member,
+            self.company_license,
+            'Firmen-Notebook',
+        )
+
+        self.private_user = User.objects.create_user(
+            'device-private@example.test',
+            'Device-Private-Password-42!',
+            first_name='Private',
+            last_name='User',
+            email_verified_at=self.now,
+        )
+        self.private_profile = PrivateCustomerProfile.objects.create(
+            user=self.private_user,
+            customer_number='PM-P-DEVICE',
+            street='Testweg',
+            house_number='1',
+            postal_code='57000',
+            city='Siegen',
+            country='DE',
+        )
+        private_order = Order.objects.create(
+            order_number='PM-O-DEVICE-PRIVATE',
+            private_user=self.private_user,
+            status='draft',
+            currency='EUR',
+            gross_total=Decimal('35.88'),
+            tax_total=Decimal('5.73'),
+            billing_snapshot={},
+            idempotency_key='device-private',
+        )
+        OrderItem.objects.create(
+            order=private_order,
+            product=self.product,
+            price_version=self.price,
+            quantity=1,
+            unit_gross=Decimal('35.88'),
+            unit_net=Decimal('30.15'),
+            tax_rate=Decimal('19.00'),
+            product_name_snapshot=self.product.name,
+        )
+        _activate_order(private_order, self.now)
+        self.private_license = License.objects.get(owner_user=self.private_user)
+        self.private_device, _raw = register_device(
+            self.private_user,
+            self.private_license,
+            'Privat-Browser',
+        )
+
+        self.staff = User.objects.create_user(
+            'device-support@example.test',
+            'Device-Support-Password-42!',
+            is_staff=True,
+        )
+        role = Role.objects.create(code='device-support-test', name='Device Support Test')
+        customers_read = Permission.objects.create(code='customers.read', name='Customers read')
+        devices_write = Permission.objects.create(code='devices.write', name='Devices write')
+        role.permissions.set([customers_read, devices_write])
+        UserRole.objects.create(user=self.staff, role=role)
+        self._login(self.staff)
+
+    def _login(self, user):
+        self.client.force_login(user)
+        session = self.client.session
+        session['security_version'] = user.security_version
+        session['two_factor_ok'] = True
+        session.save()
+
+    def test_support_revoke_is_post_only_audited_and_tenant_scoped(self):
+        url = reverse(
+            'ns_admin:customer_device_revoke',
+            args=[self.company.id, self.company_device.id],
+        )
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 403)
+        self.company_device.refresh_from_db()
+        self.assertIsNone(self.company_device.revoked_at)
+
+        response = self.client.post(url)
+        self.assertRedirects(
+            response,
+            reverse('ns_admin:customer_devices', args=[self.company.id]),
+        )
+        self.company_device.refresh_from_db()
+        self.assertIsNotNone(self.company_device.revoked_at)
+        self.assertTrue(
+            AuditEvent.objects.filter(
+                action='device.revoked',
+                object_id=str(self.company_device.id),
+                actor=self.staff,
+            ).exists()
+        )
+
+    def test_support_can_revoke_private_customer_device(self):
+        url = reverse(
+            'ns_admin:private_customer_device_revoke',
+            args=[self.private_profile.id, self.private_device.id],
+        )
+        response = self.client.post(url)
+        self.assertRedirects(
+            response,
+            reverse('ns_admin:private_customer_devices', args=[self.private_profile.id]),
+        )
+        self.private_device.refresh_from_db()
+        self.assertIsNotNone(self.private_device.revoked_at)
+
+    def test_cross_customer_device_revoke_is_rejected(self):
+        url = reverse(
+            'ns_admin:customer_device_revoke',
+            args=[self.company.id, self.private_device.id],
+        )
+        response = self.client.post(url)
+        self.assertEqual(response.status_code, 404)
+        self.private_device.refresh_from_db()
+        self.assertIsNone(self.private_device.revoked_at)
+
+    def test_read_only_staff_has_no_revoke_action_and_route_is_denied(self):
+        reader = User.objects.create_user(
+            'device-reader@example.test',
+            'Device-Reader-Password-42!',
+            is_staff=True,
+        )
+        role = Role.objects.create(code='device-reader-test', name='Device Reader Test')
+        role.permissions.add(Permission.objects.get(code='customers.read'))
+        UserRole.objects.create(user=reader, role=role)
+        self._login(reader)
+        list_url = reverse('ns_admin:customer_devices', args=[self.company.id])
+        revoke_url = reverse(
+            'ns_admin:customer_device_revoke',
+            args=[self.company.id, self.company_device.id],
+        )
+        response = self.client.get(list_url)
+        self.assertEqual(response.status_code, 200)
+        self.assertNotContains(response, revoke_url)
+        response = self.client.post(revoke_url)
+        self.assertEqual(response.status_code, 403)
+        self.company_device.refresh_from_db()
+        self.assertIsNone(self.company_device.revoked_at)
+
+    def test_normal_company_member_cannot_reset_device(self):
+        self._login(self.member)
+        response = self.client.get(reverse('portal:devices'))
+        self.assertEqual(response.status_code, 200)
+        self.assertNotContains(response, 'Gerät entfernen')
+        response = self.client.post(
+            reverse('portal:device_revoke', args=[self.company_device.id])
+        )
+        self.assertEqual(response.status_code, 403)
+        self.company_device.refresh_from_db()
+        self.assertIsNone(self.company_device.revoked_at)
+
 
 class InvitationRulesTests(TestCase):
     def setUp(self):
