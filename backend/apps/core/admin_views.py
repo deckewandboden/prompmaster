@@ -58,14 +58,17 @@ from .security import token_pair
 from .settings_store import get_setting, set_setting
 
 
-def staff_perm(code=None):
+def staff_perm(*codes):
+    """Require a staff account and every supplied domain permission."""
+    required = tuple(code for code in codes if code)
+
     def decorator(view):
         @wraps(view)
         @login_required
         def wrapped(request, *args, **kwargs):
             if not request.user.is_staff:
                 raise PermissionDenied
-            if code and not has_perm(request.user, code):
+            if any(not has_perm(request.user, code) for code in required):
                 raise PermissionDenied
             return view(request, *args, **kwargs)
 
@@ -328,7 +331,7 @@ def private_customer_portal_preview(request, pk):
     })
 
 
-@staff_perm('licenses.read')
+@staff_perm('customers.read', 'licenses.read')
 def private_customer_licenses(request, pk):
     profile = _private_customer(request, pk)
     grid = DataGrid(request, profile.user.owned_licenses.select_related('product'), search_fields=('license_number', 'product__name'), sort_fields={'number':'license_number','expiry':'valid_until','status':'status'}, default_sort='valid_until', filters={'status':'status'}).build()
@@ -374,28 +377,28 @@ def private_customer_device_revoke(request, pk, device_id):
     return redirect('ns_admin:private_customer_devices', pk=profile.pk)
 
 
-@staff_perm('orders.read')
+@staff_perm('customers.read', 'orders.read')
 def private_customer_orders(request, pk):
     profile = _private_customer(request, pk)
     grid = DataGrid(request, profile.user.private_orders.all(), search_fields=('order_number',), sort_fields={'number':'order_number','date':'created_at','amount':'gross_total','status':'status'}, default_sort='-created_at', filters={'status':'status'}).build()
     return render(request, 'ns_admin/private_customer_grid.html', {'profile': profile, 'title':'Bestellungen', 'kind':'orders', 'grid':grid, 'filter_options':[('status','Status',Order.STATUS)]})
 
 
-@staff_perm('payments.read')
+@staff_perm('customers.read', 'payments.read')
 def private_customer_payments(request, pk):
     profile = _private_customer(request, pk)
     grid = DataGrid(request, Payment.objects.filter(order__private_user=profile.user).select_related('order'), search_fields=('provider_payment_id','order__order_number'), sort_fields={'date':'created_at','amount':'amount','status':'status'}, default_sort='-created_at', filters={'status':'status'}).build()
     return render(request, 'ns_admin/private_customer_grid.html', {'profile': profile, 'title':'Zahlungen', 'kind':'payments', 'grid':grid, 'filter_options':[('status','Status',PAYMENT_STATUS_CHOICES)]})
 
 
-@staff_perm('email.read')
+@staff_perm('customers.read', 'email.read')
 def private_customer_emails(request, pk):
     profile = _private_customer(request, pk)
     grid = DataGrid(request, EmailMessage.objects.filter(recipient=profile.user.email).select_related('template'), search_fields=('recipient','subject'), sort_fields={'date':'created_at','status':'status'}, default_sort='-created_at', filters={'status':'status'}).build()
     return render(request, 'ns_admin/private_customer_grid.html', {'profile': profile, 'title':'E-Mail-Historie', 'kind':'emails', 'grid':grid, 'filter_options':[('status','Status',EMAIL_STATUS_CHOICES)]})
 
 
-@staff_perm('audit.read')
+@staff_perm('customers.read', 'audit.read')
 def private_customer_audit(request, pk):
     profile = _private_customer(request, pk)
     object_ids = {str(profile.id), str(profile.user_id)}
@@ -592,7 +595,7 @@ def customer_user_deactivate(request, pk, user_id):
     return redirect('ns_admin:customer_users', pk=customer.pk)
 
 
-@staff_perm('customers.read')
+@staff_perm('customers.read', 'licenses.read')
 def customer_licenses(request, pk):
     customer = _customer(request, pk)
     grid = DataGrid(
@@ -646,7 +649,7 @@ def customer_device_revoke(request, pk, device_id):
     return redirect('ns_admin:customer_devices', pk=customer.pk)
 
 
-@staff_perm('orders.read')
+@staff_perm('customers.read', 'orders.read')
 def customer_orders(request, pk):
     customer = _customer(request, pk)
     grid = DataGrid(
@@ -660,7 +663,7 @@ def customer_orders(request, pk):
     return render(request, 'ns_admin/customer_grid.html', {'customer': customer, 'title': 'Bestellungen', 'grid': grid, 'kind': 'orders', 'filter_options': [('status', 'Status', Order.STATUS)]})
 
 
-@staff_perm('payments.read')
+@staff_perm('customers.read', 'payments.read')
 def customer_payments(request, pk):
     customer = _customer(request, pk)
     grid = DataGrid(
@@ -674,7 +677,7 @@ def customer_payments(request, pk):
     return render(request, 'ns_admin/customer_grid.html', {'customer': customer, 'title': 'Zahlungen', 'grid': grid, 'kind': 'payments', 'filter_options': [('status','Status',PAYMENT_STATUS_CHOICES)]})
 
 
-@staff_perm('email.read')
+@staff_perm('customers.read', 'email.read')
 def customer_emails(request, pk):
     customer = _customer(request, pk)
     recipients = list(customer.memberships.values_list('user__email', flat=True))
@@ -690,7 +693,7 @@ def customer_emails(request, pk):
     return render(request, 'ns_admin/customer_grid.html', {'customer': customer, 'title': 'E-Mail-Historie', 'grid': grid, 'kind': 'emails', 'filter_options': [('status','Status',EMAIL_STATUS_CHOICES)]})
 
 
-@staff_perm('legal.read')
+@staff_perm('customers.read', 'legal.read')
 def customer_privacy(request, pk):
     customer = _customer(request, pk)
     user_ids = list(
@@ -719,7 +722,7 @@ def customer_privacy(request, pk):
     )
 
 
-@staff_perm('audit.read')
+@staff_perm('customers.read', 'audit.read')
 def customer_audit(request, pk):
     customer = _customer(request, pk)
     object_ids = {str(customer.id)}

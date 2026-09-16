@@ -1,6 +1,6 @@
 from django.test import TestCase
 from apps.accounts.models import User, Role, Permission, UserRole
-from apps.companies.models import Company
+from apps.companies.models import Company, PrivateCustomerProfile
 
 
 class AdminDataVisibilityTests(TestCase):
@@ -9,6 +9,16 @@ class AdminDataVisibilityTests(TestCase):
         self.role = Role.objects.create(code='restricted', name='Restricted')
         UserRole.objects.create(user=self.user, role=self.role)
         self.company = Company.objects.create(name='PRIVATE-CUSTOMER-42', customer_number='PRIVATE-42', email='private@example.test')
+        self.private_user = User.objects.create_user('private-customer@example.test', 'Secure-Private-Password-42!')
+        self.private_profile = PrivateCustomerProfile.objects.create(
+            user=self.private_user,
+            customer_number='PM-P-PERM-001',
+            street='Testweg',
+            house_number='1',
+            postal_code='57072',
+            city='Siegen',
+            country='DE',
+        )
         self.client.force_login(self.user)
         session = self.client.session
         session['security_version'] = self.user.security_version
@@ -78,6 +88,65 @@ class AdminDataVisibilityTests(TestCase):
         self.assertContains(response, f'/ns-admin/customers/{self.company.id}/licenses/')
         self.assertContains(response, f'/ns-admin/customers/{self.company.id}/payments/')
         self.assertContains(response, f'/ns-admin/customers/{self.company.id}/audit/')
+
+    def test_customer_scoped_domain_routes_require_both_permissions(self):
+        customers = self.grant('customers.read')
+        routes = {
+            'licenses.read': f'/ns-admin/customers/{self.company.id}/licenses/',
+            'orders.read': f'/ns-admin/customers/{self.company.id}/orders/',
+            'payments.read': f'/ns-admin/customers/{self.company.id}/payments/',
+            'email.read': f'/ns-admin/customers/{self.company.id}/emails/',
+            'legal.read': f'/ns-admin/customers/{self.company.id}/privacy/',
+            'audit.read': f'/ns-admin/customers/{self.company.id}/audit/',
+        }
+        for code, url in routes.items():
+            with self.subTest(code=code, phase='missing-domain'):
+                self.assertEqual(self.client.get(url).status_code, 403)
+            permission = self.grant(code)
+            with self.subTest(code=code, phase='both'):
+                self.assertEqual(self.client.get(url).status_code, 200)
+            self.role.permissions.remove(permission)
+
+        self.assertEqual(
+            self.client.get(f'/ns-admin/customers/{self.company.id}/devices/').status_code,
+            200,
+        )
+
+        self.role.permissions.remove(customers)
+        self.grant('licenses.read')
+        self.assertEqual(
+            self.client.get(f'/ns-admin/customers/{self.company.id}/licenses/').status_code,
+            403,
+        )
+
+    def test_private_customer_scoped_domain_routes_require_both_permissions(self):
+        customers = self.grant('customers.read')
+        routes = {
+            'licenses.read': f'/ns-admin/customers/private/{self.private_profile.id}/licenses/',
+            'orders.read': f'/ns-admin/customers/private/{self.private_profile.id}/orders/',
+            'payments.read': f'/ns-admin/customers/private/{self.private_profile.id}/payments/',
+            'email.read': f'/ns-admin/customers/private/{self.private_profile.id}/emails/',
+            'audit.read': f'/ns-admin/customers/private/{self.private_profile.id}/audit/',
+        }
+        for code, url in routes.items():
+            with self.subTest(code=code, phase='missing-domain'):
+                self.assertEqual(self.client.get(url).status_code, 403)
+            permission = self.grant(code)
+            with self.subTest(code=code, phase='both'):
+                self.assertEqual(self.client.get(url).status_code, 200)
+            self.role.permissions.remove(permission)
+
+        self.assertEqual(
+            self.client.get(f'/ns-admin/customers/private/{self.private_profile.id}/devices/').status_code,
+            200,
+        )
+
+        self.role.permissions.remove(customers)
+        self.grant('payments.read')
+        self.assertEqual(
+            self.client.get(f'/ns-admin/customers/private/{self.private_profile.id}/payments/').status_code,
+            403,
+        )
 
     def test_company_update_requires_customers_write_and_is_audited(self):
         self.grant('customers.read')
