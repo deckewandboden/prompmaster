@@ -347,8 +347,8 @@
     },
     {
       "path": "backend/apps/accounts/tests_invitation_http.py",
-      "size": 5817,
-      "sha256": "c0c2e7dcbabf42d179dd4ab53169faa33acf2f6fa58199ec73f5fad6574a3b30",
+      "size": 5881,
+      "sha256": "baf0745c8571ddd1f418104f77fab762a4af49b017a67bcbdfe0e36d0ba14b24",
       "role": "active-backend"
     },
     {

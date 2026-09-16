@@ -97,7 +97,6 @@ class InvitationHTTPTests(LiveServerTestCase):
                 'csrfmiddlewaretoken': form.csrf}, timeout=10)
             self.assertIn('Einladung ungültig oder abgelaufen', response.text)
             self.assertIn('Firmenadministrator', response.text)
-            self.assertIn('Firmenadministrator', response.text)
             self.assertNotIn('Einladung angenommen', response.text)
         self.invitation.refresh_from_db()
         self.assertEqual(self.invitation.accepted_at, accepted_at)
@@ -110,6 +109,7 @@ class InvitationHTTPTests(LiveServerTestCase):
                 data={'csrfmiddlewaretoken': csrf}, timeout=10)
             self.assertEqual(response.status_code, 200)
             self.assertIn('Einladung ungültig oder abgelaufen', response.text)
+            self.assertIn('Firmenadministrator', response.text)
             self.assert_not_joined()
 
     def test_token_expired_after_confirmation_page_cannot_join(self):
@@ -121,4 +121,5 @@ class InvitationHTTPTests(LiveServerTestCase):
                 data={'csrfmiddlewaretoken': csrf}, timeout=10)
             self.assertEqual(response.status_code, 200)
             self.assertIn('Einladung ungültig oder abgelaufen', response.text)
+            self.assertIn('Firmenadministrator', response.text)
             self.assert_not_joined()
