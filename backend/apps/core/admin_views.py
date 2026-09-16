@@ -290,7 +290,16 @@ def private_customer_payments(request, pk):
 @staff_perm('email.read')
 def private_customer_emails(request, pk):
     profile = _private_customer(request, pk)
-    grid = DataGrid(request, EmailMessage.objects.filter(recipient=profile.user.email).select_related('template'), search_fields=('recipient','subject'), sort_fields={'date':'created_at','status':'status'}, default_sort='-created_at', filters={'status':'status'}).build()
+    grid = DataGrid(
+        request,
+        EmailMessage.objects.filter(
+            context__pm_scope_user_id=str(profile.user_id),
+        ).select_related('template'),
+        search_fields=('recipient', 'subject'),
+        sort_fields={'date': 'created_at', 'status': 'status'},
+        default_sort='-created_at',
+        filters={'status': 'status'},
+    ).build()
     return render(request, 'ns_admin/private_customer_grid.html', {'profile': profile, 'title':'E-Mail-Historie', 'kind':'emails', 'grid':grid, 'filter_options':[('status','Status',EMAIL_STATUS_CHOICES)]})
 
 
@@ -458,11 +467,11 @@ def customer_payments(request, pk):
 @staff_perm('email.read')
 def customer_emails(request, pk):
     customer = _customer(request, pk)
-    recipients = list(customer.memberships.values_list('user__email', flat=True))
-    recipients.append(customer.email)
     grid = DataGrid(
         request,
-        EmailMessage.objects.filter(recipient__in=set(recipients)).select_related('template'),
+        EmailMessage.objects.filter(
+            context__pm_scope_company_id=str(customer.id),
+        ).select_related('template'),
         search_fields=('recipient', 'subject'),
         sort_fields={'date': 'created_at', 'status': 'status', 'recipient': 'recipient'},
         default_sort='-created_at',
