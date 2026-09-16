@@ -239,6 +239,24 @@ class NotificationReleaseTests(TestCase):
         self.assertEqual(message.subject, 'Status OK')
         delay.assert_called_once_with(str(message.id))
 
+    @patch('apps.notifications.tasks.send_email_message.delay')
+    def test_queue_persists_explicit_customer_scope(self, delay):
+        from apps.notifications.services import queue_email
+
+        with self.captureOnCommitCallbacks(execute=True):
+            message = queue_email(
+                'completion-test',
+                'scope@example.test',
+                {'value': 'Scoped'},
+                scope_company='company-42',
+                scope_user='user-42',
+            )
+        message.refresh_from_db()
+        self.assertEqual(message.context['pm_scope_company_id'], 'company-42')
+        self.assertEqual(message.context['pm_scope_user_id'], 'user-42')
+        self.assertEqual(message.subject, 'Status Scoped')
+        delay.assert_called_once_with(str(message.id))
+
     @patch('apps.notifications.services.requests.post')
     def test_graph_provider_uses_client_credentials_and_records_request_id(self, post):
         from apps.notifications.models import EmailMessage
