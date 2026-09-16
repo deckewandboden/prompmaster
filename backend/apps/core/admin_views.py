@@ -18,7 +18,7 @@ from apps.accounts.security import bump_security_version
 from apps.audit.models import AuditEvent
 from apps.audit.services import audit as write_audit
 from apps.catalog.models import Feature, Product
-from apps.catalog.services import create_price_version
+from apps.catalog.services import create_price_version, current_price
 from apps.companies.models import Company, Membership, PrivateCustomerProfile
 from apps.companies.services import INVITATION_TTL_HOURS, deactivate_company_member, transfer_admin
 from apps.devices.models import DeviceRegistration
@@ -910,7 +910,13 @@ def payments(request):
 
 @staff_perm('products.read')
 def products(request):
-    return render(request, 'ns_admin/products.html', {'products': Product.objects.prefetch_related('prices', 'entitlements__feature').order_by('name')})
+    product_rows = list(
+        Product.objects.prefetch_related('prices', 'entitlements__feature').order_by('name')
+    )
+    for product in product_rows:
+        product.current_new_price = current_price(product, 'new')
+        product.current_renewal_price = current_price(product, 'renewal')
+    return render(request, 'ns_admin/products.html', {'products': product_rows})
 
 
 @staff_perm('products.write')
