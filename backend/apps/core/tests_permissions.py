@@ -1,6 +1,7 @@
 from django.test import TestCase
 from apps.accounts.models import User, Role, Permission, UserRole
-from apps.companies.models import Company, PrivateCustomerProfile
+from apps.audit.models import AuditEvent
+from apps.companies.models import Company, Membership, PrivateCustomerProfile
 
 
 class AdminDataVisibilityTests(TestCase):
@@ -168,4 +169,36 @@ class AdminDataVisibilityTests(TestCase):
             self.assertContains(response, 'Aktive Lizenzen')
             self.assertContains(response, 'Freie Lizenzen')
             self.assertContains(response, 'Bestellungen')
+
+    def test_company_audit_excludes_identity_global_events(self):
+        company_member = User.objects.create_user(
+            'company-audit-member@example.test',
+            'Secure-Test-Password-42!',
+        )
+        membership = Membership.objects.create(
+            company=self.company,
+            user=company_member,
+            role='member',
+            active=True,
+        )
+        AuditEvent.objects.create(
+            actor=company_member,
+            action='AUTH-GLOBAL-MARKER',
+            object_type='User',
+            object_id=str(company_member.id),
+            changes={},
+        )
+        AuditEvent.objects.create(
+            actor=self.user,
+            action='MEMBERSHIP-TENANT-MARKER',
+            object_type='Membership',
+            object_id=str(membership.id),
+            changes={},
+        )
+
+        self._reset_permissions('customers.read', 'audit.read')
+        response = self.client.get(f'/ns-admin/customers/{self.company.id}/audit/')
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, 'MEMBERSHIP-TENANT-MARKER')
+        self.assertNotContains(response, 'AUTH-GLOBAL-MARKER')
 
