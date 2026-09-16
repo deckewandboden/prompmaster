@@ -170,6 +170,24 @@ for template in sorted((ROOT/'backend/templates').rglob('*.html')):
         if closing < 0 or '{% csrf_token %}' not in text[match.end():closing]:
             fail(f'{template.relative_to(ROOT)} has POST form without csrf_token')
 
+
+# 10b) Responsive tables collapse into cards below 700px. Every real data
+# cell therefore needs its own label once THEAD is hidden. Colspan-only empty
+# state rows are exempt.
+for template in sorted((ROOT/'backend/templates').rglob('*.html')):
+    text = template.read_text(encoding='utf-8')
+    if '<table' not in text:
+        continue
+    for match in re.finditer(r'<td\b([^>]*)>', text, flags=re.I):
+        attrs = match.group(1)
+        if 'data-label=' in attrs or 'colspan=' in attrs:
+            continue
+        line = text.count('\n', 0, match.start()) + 1
+        fail(
+            f'{template.relative_to(ROOT)}:{line} table cell lacks data-label '
+            'required by mobile card layout'
+        )
+
 # 11) Security-critical implementation guards.
 checks = {
  'backend/apps/accounts/models.py': ('security_version=models.PositiveBigIntegerField(default=1)',),
