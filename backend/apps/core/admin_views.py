@@ -140,6 +140,38 @@ def dashboard(request):
     }
     paid_orders = Order.objects.filter(status='paid')
     revenue_since = now - timedelta(days=185)
+
+    product_mix = (
+        list(
+            License.objects.values('product__name')
+            .annotate(total=Count('id'))
+            .order_by('-total', 'product__name')[:8]
+        )
+        if rights['licenses'] else []
+    )
+    product_total = sum(row['total'] for row in product_mix)
+    for row in product_mix:
+        row['percent'] = round((row['total'] / product_total) * 100, 1) if product_total else 0
+
+    revenue_months = (
+        list(
+            paid_orders.filter(created_at__gte=revenue_since)
+            .annotate(month=TruncMonth('created_at'))
+            .values('month')
+            .annotate(total=Sum('gross_total'), orders=Count('id'))
+            .order_by('month')
+        )
+        if rights['orders'] else []
+    )
+    revenue_peak = max((float(row['total'] or 0) for row in revenue_months), default=0)
+    for row in revenue_months:
+        row['percent'] = round((float(row['total'] or 0) / revenue_peak) * 100, 1) if revenue_peak else 0
+
+    failed_payment_count = Payment.objects.filter(status='failed').count() if rights['orders'] else None
+    chargeback_count = Payment.objects.filter(status='chargeback').count() if rights['orders'] else None
+    active_alerts = list(SystemAlert.objects.filter(active=True)[:8]) if rights['ops'] else []
+    open_support_count = SupportRequest.objects.exclude(status='closed').count() if rights['support'] else None
+
     context = {
         'rights': rights,
         'customers': Company.objects.count() + PrivateCustomerProfile.objects.count() if rights['customers'] else None,
@@ -151,22 +183,19 @@ def dashboard(request):
             paid_orders.filter(created_at__gte=now - timedelta(days=30))
             .aggregate(v=Sum('gross_total'))['v'] or 0
         ) if rights['orders'] else None,
-        'product_mix': list(
-            License.objects.values('product__name')
-            .annotate(total=Count('id'))
-            .order_by('-total', 'product__name')[:8]
-        ) if rights['licenses'] else [],
-        'revenue_months': list(
-            paid_orders.filter(created_at__gte=revenue_since)
-            .annotate(month=TruncMonth('created_at'))
-            .values('month')
-            .annotate(total=Sum('gross_total'), orders=Count('id'))
-            .order_by('month')
-        ) if rights['orders'] else [],
-        'failed_payment_count': Payment.objects.filter(status='failed').count() if rights['orders'] else None,
-        'chargeback_count': Payment.objects.filter(status='chargeback').count() if rights['orders'] else None,
-        'alerts': SystemAlert.objects.filter(active=True)[:8] if rights['ops'] else [],
-        'open_support_count': SupportRequest.objects.exclude(status='closed').count() if rights['support'] else None,
+        'product_mix': product_mix,
+        'product_total': product_total,
+        'revenue_months': revenue_months,
+        'failed_payment_count': failed_payment_count,
+        'chargeback_count': chargeback_count,
+        'alerts': active_alerts,
+        'open_support_count': open_support_count,
+        'system_healthy': bool(
+            rights['ops']
+            and not active_alerts
+            and not (failed_payment_count or 0)
+            and not (chargeback_count or 0)
+        ),
         'ops': snapshot() if rights['ops'] else {},
         'backup': BackupRecord.objects.order_by('-finished_at', '-created_at').first() if rights['ops'] else None,
         'restore': RestoreTest.objects.order_by('-started_at').first() if rights['ops'] else None,

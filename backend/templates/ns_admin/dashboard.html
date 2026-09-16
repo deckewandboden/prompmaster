@@ -1,82 +1,64 @@
 {% extends 'ns_admin/base.html' %}{% load pm %}{% block content %}
 <div class="page-head">
   <div><h1>Dashboard</h1><div class="sub">Geschäft, Handlungsbedarf und Systemstatus auf einen Blick.</div></div>
-  {% if rights.ops %}<a class="btn secondary" href="{% url 'ns_admin:ops' %}">System &amp; Betrieb</a>{% endif %}
+  <div class="page-actions">
+    {% if rights.ops %}<span class="badge {% if system_healthy %}ok{% else %}warn{% endif %}">● {% if system_healthy %}System gesund{% else %}Prüfung erforderlich{% endif %}</span><a class="btn secondary" href="{% url 'ns_admin:ops' %}">System &amp; Betrieb</a>{% endif %}
+  </div>
 </div>
 
 <div class="grid kpis">
-  {% if rights.customers %}<div class="card"><div>Kunden gesamt</div><div class="value">{{ customers }}</div></div>{% endif %}
-  {% if rights.licenses %}<div class="card"><div>Aktive Lizenzen</div><div class="value">{{ licenses }}</div></div>{% endif %}
-  {% if rights.licenses %}<div class="card"><div>Ablauf ≤30 Tage</div><div class="value">{{ expiring30 }}</div><div class="small muted">{{ expiring60 }} ≤60 Tage</div></div>{% endif %}
-  {% if rights.orders %}<div class="card"><div>Umsatz 30 Tage</div><div class="value">{{ revenue30|floatformat:2 }} €</div><div class="small muted">{{ orders30 }} Bestellungen</div></div>{% endif %}
+  {% if rights.customers %}<div class="card kpi"><div>Kunden gesamt</div><div class="value">{{ customers }}</div></div>{% endif %}
+  {% if rights.licenses %}<div class="card kpi"><div>Aktive Lizenzen</div><div class="value">{{ licenses }}</div></div>{% endif %}
+  {% if rights.licenses %}<div class="card kpi"><div>Ablauf &lt;30 Tage</div><div class="value">{{ expiring30 }}</div><div class="small muted">{{ expiring60 }} laufen &lt;60 Tage ab</div></div>{% endif %}
+  {% if rights.orders %}<div class="card kpi"><div>Umsatz 30 Tage</div><div class="value">{{ revenue30|floatformat:2 }} €</div><div class="small muted">{{ orders30 }} Bestellungen</div></div>{% endif %}
 </div>
 
-<div class="grid two" style="margin-top:14px">
-  {% if rights.ops or rights.support or rights.orders %}
-  <div class="card">
-    <h2>Handlungsbedarf</h2>
-    {% if rights.support %}<div class="statusrow"><span>Offene Kontaktanfragen</span><strong><a href="{% url 'ns_admin:support_requests' %}">{{ open_support_count }}</a></strong></div>{% endif %}
-    {% if rights.orders %}
-      <div class="statusrow"><span>Fehlgeschlagene Zahlungen</span><strong><a href="{% url 'ns_admin:payments' %}?status=failed">{{ failed_payment_count }}</a></strong></div>
-      <div class="statusrow"><span>Chargebacks</span><strong><a href="{% url 'ns_admin:payments' %}?status=chargeback">{{ chargeback_count }}</a></strong></div>
-    {% endif %}
-    {% if rights.ops %}
-      {% for a in alerts %}<div class="statusrow"><span>{{ a.message }}</span><span class="badge {% if a.severity == 'critical' %}bad{% else %}warn{% endif %}">{{ a.severity }}</span></div>
-      {% empty %}<div class="alert">Keine aktiven Systemwarnungen.</div>{% endfor %}
-    {% endif %}
-  </div>
-  {% endif %}
-
-  {% if rights.ops %}
-  <div class="card">
-    <h2>System &amp; Betrieb</h2>
-    <div class="statusrow"><span>CPU (10-Min.-Mittel)</span><strong>{% if ops.cpu_percent != None %}{{ ops.cpu_percent|floatformat:1 }} %{% else %}nicht verfügbar{% endif %}</strong></div>
-    <div class="statusrow"><span>RAM frei</span><strong>{{ ops.memory_available|human_bytes }}</strong></div>
-    <div class="statusrow"><span>Disk frei</span><strong>{{ ops.disk_available|human_bytes }}</strong></div>
-    <div class="statusrow"><span>Uptime</span><strong>{% if ops.uptime_seconds != None %}{{ ops.uptime_seconds|floatformat:0 }} s{% else %}nicht verfügbar{% endif %}</strong></div>
-    <div class="statusrow"><span>Backup</span><strong>{% if backup %}{{ backup.status }} · {{ backup.finished_at|date:'d.m.Y H:i' }}{% else %}nicht protokolliert{% endif %}</strong></div>
-    <div class="statusrow"><span>Restore-Test</span><strong>{% if restore %}{{ restore.status }} · {{ restore.started_at|date:'d.m.Y' }}{% else %}nicht protokolliert{% endif %}</strong></div>
-    <div class="statusrow"><span>Mollie</span><span class="badge {% if integration_status.mollie %}ok{% else %}warn{% endif %}">{% if integration_status.mollie %}konfiguriert{% else %}nicht konfiguriert{% endif %}</span></div>
-    <div class="statusrow"><span>E-Mail</span><strong>{{ integration_status.mail_provider }}{% if integration_status.mail_provider == 'graph' or integration_status.mail_provider == 'microsoft_graph' %} · {% if integration_status.graph_configured %}konfiguriert{% else %}unvollständig{% endif %}{% endif %}</strong></div>
-  </div>
-  {% endif %}
-</div>
-
-<div class="grid two" style="margin-top:14px">
+<div class="grid three" style="margin-top:14px">
   {% if rights.orders %}
   <div class="card">
     <h2>Umsatzentwicklung</h2>
-    {% for row in revenue_months %}
-      <div class="statusrow"><span>{{ row.month|date:'m/Y' }} · {{ row.orders }} Bestellungen</span><strong>{{ row.total|floatformat:2 }} €</strong></div>
-    {% empty %}<p class="muted">Noch keine bezahlten Bestellungen im Auswertungszeitraum.</p>{% endfor %}
+    {% if revenue_months %}
+    <div class="revenue-chart" aria-label="Umsatzentwicklung der letzten Monate">
+      {% for row in revenue_months %}
+      <div class="revenue-column" title="{{ row.month|date:'m/Y' }} · {{ row.total|floatformat:2 }} € · {{ row.orders }} Bestellungen">
+        <div class="revenue-track"><span class="revenue-bar" style="height:{{ row.percent }}%"></span></div>
+        <div class="tiny muted">{{ row.month|date:'m/y' }}</div>
+      </div>
+      {% endfor %}
+    </div>
+    {% else %}<p class="muted">Noch keine bezahlten Bestellungen im Auswertungszeitraum.</p>{% endif %}
   </div>
   {% endif %}
+
   {% if rights.licenses %}
   <div class="card">
-    <h2>Produktmix</h2>
-    {% for row in product_mix %}
-      <div class="statusrow"><span>{{ row.product__name }}</span><strong>{{ row.total }}</strong></div>
-    {% empty %}<p class="muted">Noch keine Lizenzen.</p>{% endfor %}
+    <h2>Lizenzen nach Produkt</h2>
+    {% if product_mix %}
+      <div class="donut-live" style="--share:{{ product_mix.0.percent }}%"><div><strong>{{ product_total }}</strong><span>Lizenzen</span></div></div>
+      <div class="mix-list">{% for row in product_mix %}<div><span>{{ row.product__name }}</span><strong>{{ row.total }} · {{ row.percent }}%</strong></div>{% endfor %}</div>
+    {% else %}<p class="muted">Noch keine Lizenzen.</p>{% endif %}
+  </div>
+  {% endif %}
+
+  {% if rights.ops or rights.support or rights.orders or rights.licenses %}
+  <div class="card">
+    <h2>Handlungsbedarf</h2>
+    {% if rights.licenses and expiring30 %}<div class="alert warn">⚠ {{ expiring30 }} Lizenz{% if expiring30 != 1 %}en{% endif %} läuft/laufen in weniger als 30 Tagen ab.</div>{% endif %}
+    {% if rights.orders and failed_payment_count %}<div class="alert warn">⚠ <a href="{% url 'ns_admin:payments' %}?status=failed">{{ failed_payment_count }} fehlgeschlagene Zahlung{% if failed_payment_count != 1 %}en{% endif %}</a></div>{% endif %}
+    {% if rights.orders and chargeback_count %}<div class="alert danger">⚠ <a href="{% url 'ns_admin:payments' %}?status=chargeback">{{ chargeback_count }} Chargeback{% if chargeback_count != 1 %}s{% endif %}</a></div>{% endif %}
+    {% if rights.support and open_support_count %}<div class="alert info">● <a href="{% url 'ns_admin:support_requests' %}">{{ open_support_count }} offene Kontaktanfrage{% if open_support_count != 1 %}n{% endif %}</a></div>{% endif %}
+    {% if rights.ops %}{% for a in alerts %}<div class="alert {% if a.severity == 'critical' %}danger{% else %}warn{% endif %}">⚠ {{ a.message }}</div>{% endfor %}{% endif %}
+    {% if not expiring30 and not failed_payment_count and not chargeback_count and not open_support_count and not alerts %}<div class="alert ok">Kein aktueller Handlungsbedarf.</div>{% endif %}
   </div>
   {% endif %}
 </div>
 
 <div class="grid two" style="margin-top:14px">
   {% if rights.orders %}
-  <div class="card">
-    <h2>Letzte Bestellungen</h2>
-    {% for o in recent_orders %}<div class="statusrow"><span><a href="{% url 'ns_admin:order_detail' o.id %}">{{ o.order_number }}</a> · {% if o.company %}{{ o.company.name }}{% else %}{{ o.private_user.email }}{% endif %}</span><strong>{{ o.gross_total }} {{ o.currency }}</strong></div>
-    {% empty %}<p class="muted">Keine Bestellungen.</p>{% endfor %}
-    <a class="btn secondary sm" href="{% url 'ns_admin:orders' %}">Alle Bestellungen</a>
-  </div>
+  <div class="card"><h2>Letzte Bestellungen</h2>{% for o in recent_orders %}<div class="statusrow"><span><a href="{% url 'ns_admin:order_detail' o.id %}">{{ o.order_number }}</a> · {% if o.company %}{{ o.company.name }}{% else %}{{ o.private_user.email }}{% endif %}</span><strong>{{ o.gross_total }} {{ o.currency }}</strong></div>{% empty %}<p class="muted">Keine Bestellungen.</p>{% endfor %}<a class="btn secondary sm" href="{% url 'ns_admin:orders' %}">Alle Bestellungen</a></div>
   {% endif %}
   {% if rights.licenses %}
-  <div class="card">
-    <h2>Nächste Lizenzabläufe</h2>
-    {% for l in expiring %}<div class="statusrow"><span><a href="{% url 'ns_admin:license_detail' l.id %}">{{ l.license_number }}</a> · {% if l.company %}{{ l.company.name }}{% else %}{{ l.owner_user.email }}{% endif %}</span><strong>{{ l.valid_until|date:'d.m.Y' }}</strong></div>
-    {% empty %}<p class="muted">Keine bevorstehenden Abläufe.</p>{% endfor %}
-    <a class="btn secondary sm" href="{% url 'ns_admin:licenses' %}">Alle Lizenzen</a>
-  </div>
+  <div class="card"><h2>Nächste Lizenzabläufe</h2>{% for l in expiring %}<div class="statusrow"><span><a href="{% url 'ns_admin:license_detail' l.id %}">{{ l.license_number }}</a> · {% if l.company %}{{ l.company.name }}{% else %}{{ l.owner_user.email }}{% endif %}</span><strong>{{ l.valid_until|date:'d.m.Y' }}</strong></div>{% empty %}<p class="muted">Keine bevorstehenden Abläufe.</p>{% endfor %}<a class="btn secondary sm" href="{% url 'ns_admin:licenses' %}">Alle Lizenzen</a></div>
   {% endif %}
 </div>
 {% endblock %}
