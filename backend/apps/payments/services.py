@@ -71,12 +71,21 @@ def _order_recipient(order):
     return ''
 
 
-def _queue_after_commit(code, recipient, context):
+def _queue_after_commit(code, recipient, context, *, order=None):
     if not recipient:
         return
+
     def send():
         from apps.notifications.services import queue_email
-        queue_email(code, recipient, context)
+
+        queue_email(
+            code,
+            recipient,
+            context,
+            scope_company=(order.company_id if order and order.company_id else None),
+            scope_user=(order.private_user_id if order and order.private_user_id else None),
+        )
+
     transaction.on_commit(send, robust=True)
 
 
@@ -149,13 +158,13 @@ def process_provider_state(payment_id, payload):
                 'order': payment.order.order_number,
                 'amount': f'{payment.amount:.2f}',
                 'currency': payment.currency,
-            })
+            }, order=payment.order)
             for item in payment.order.items.select_related('target_license').filter(target_license__isnull=False):
                 target = item.target_license
                 _queue_after_commit('license_renewed', recipient, {
                     'license': target.license_number,
                     'expiry': timezone.localtime(target.valid_until).strftime('%d.%m.%Y'),
-                })
+                }, order=payment.order)
         else:
             # A previously charged-back payment may become paid again after a
             # reversal. Re-enable only licenses that still have paid active
@@ -173,10 +182,15 @@ def process_provider_state(payment_id, payload):
         if previous_status != status:
             _queue_after_commit('payment_failed', _order_recipient(payment.order), {
                 'order': payment.order.order_number, 'status': base_status,
-            })
+            }, order=payment.order)
     elif base_status == 'charged_back':
         if previous_status != 'charged_back':
-            _queue_after_commit('chargeback_review', _order_recipient(payment.order), {'order': payment.order.order_number})
+            _queue_after_commit(
+                'chargeback_review',
+                _order_recipient(payment.order),
+                {'order': payment.order.order_number},
+                order=payment.order,
+            )
         for license_obj in _locked_order_licenses(payment.order, active_terms_only=True):
             if license_obj.status != 'payment_review':
                 license_obj.status = 'payment_review'
@@ -407,7 +421,7 @@ def mark_refund_success(refund, provider_id):
     order = row.payment.order
     _queue_after_commit('refund_confirmed', _order_recipient(order), {
         'amount': f'{row.amount:.2f}', 'currency': row.payment.currency, 'license': license_obj.license_number,
-    })
+    }, order=order)
     return row
 
 
