@@ -480,7 +480,12 @@ def customer_portal_preview(request, pk):
         'license_total': licenses.count(), 'license_free': licenses.filter(status='free', valid_until__gt=now).count(),
         'license_active': licenses.filter(status='active', valid_until__gt=now).count(),
         'expiring_30': licenses.filter(valid_until__gt=now, valid_until__lte=now + timedelta(days=30)).count(),
-        'device_count': DeviceRegistration.objects.filter(user__company_memberships__company=customer, user__company_memberships__active=True, revoked_at__isnull=True).distinct().count(),
+        'device_count': DeviceRegistration.objects.filter(
+            user__company_memberships__company=customer,
+            user__company_memberships__active=True,
+            license__company=customer,
+            revoked_at__isnull=True,
+        ).distinct().count(),
         'order_count': customer.orders.count(), 'member_count': customer.memberships.filter(active=True).count(),
         'back_route': 'ns_admin:customer_detail', 'back_pk': customer.pk,
     })
@@ -614,7 +619,11 @@ def customer_devices(request, pk):
     customer = _customer(request, pk)
     grid = DataGrid(
         request,
-        DeviceRegistration.objects.filter(user__company_memberships__company=customer).select_related('user', 'license'),
+        DeviceRegistration.objects.filter(
+            user__company_memberships__company=customer,
+            user__company_memberships__active=True,
+            license__company=customer,
+        ).select_related('user', 'license'),
         search_fields=('display_name', 'user__email'),
         sort_fields={'device': 'display_name', 'last': 'last_seen_at', 'user': 'user__email'},
         default_sort='-last_seen_at',
@@ -643,6 +652,7 @@ def customer_device_revoke(request, pk, device_id):
         pk=device_id,
         user__company_memberships__company=customer,
         user__company_memberships__active=True,
+        license__company=customer,
     )
     revoke_device(device, request.user, request=request)
     messages.success(request, 'Gerät wurde widerrufen.')

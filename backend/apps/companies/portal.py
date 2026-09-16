@@ -159,6 +159,7 @@ def dashboard(request):
         device_queryset = DeviceRegistration.objects.filter(
             user__company_memberships__company=company,
             user__company_memberships__active=True,
+            license__company=company,
             revoked_at__isnull=True,
         ).distinct()
         team_shortlist = (
@@ -191,6 +192,7 @@ def dashboard(request):
         ).distinct()
         device_queryset = DeviceRegistration.objects.filter(
             user=request.user,
+            license__company=company,
             revoked_at__isnull=True,
         )
         team_shortlist = []
@@ -308,6 +310,7 @@ def team(request):
             'device_count': DeviceRegistration.objects.filter(
                 user__company_memberships__company=company,
                 user__company_memberships__active=True,
+                license__company=company,
                 revoked_at__isnull=True,
             ).distinct().count(),
             'device_capacity': sum(row.license.product.default_device_limit for row in active_assignments),
@@ -520,6 +523,12 @@ def devices(request):
         queryset = DeviceRegistration.objects.filter(
             user__company_memberships__company=company,
             user__company_memberships__active=True,
+            license__company=company,
+        )
+    elif company:
+        queryset = DeviceRegistration.objects.filter(
+            user=request.user,
+            license__company=company,
         )
     else:
         queryset = DeviceRegistration.objects.filter(user=request.user)
@@ -547,6 +556,7 @@ def revoke_device_view(request, pk):
         pk=pk,
         user__company_memberships__company=company,
         user__company_memberships__active=True,
+        license__company=company,
     )
     revoke_device(device, request.user, request=request)
     messages.success(request, 'Gerät entfernt.')
@@ -918,16 +928,18 @@ def renew(request, pk):
     from apps.orders.forms import RenewalForm
     from apps.orders.services import create_order
 
-    license_obj = get_object_or_404(License.objects.select_related('product'), pk=pk)
     company_obj, membership = _ctx(request)
-    allowed = license_obj.owner_user_id == request.user.id or (
-        company_obj
-        and membership
-        and membership.role == 'admin'
-        and license_obj.company_id == company_obj.id
-    )
-    if not allowed:
-        raise PermissionDenied
+    if company_obj and membership and membership.role == 'admin':
+        visible = License.objects.filter(company=company_obj)
+    elif company_obj:
+        visible = License.objects.filter(
+            company=company_obj,
+            assignments__user=request.user,
+            assignments__ended_at__isnull=True,
+        ).distinct()
+    else:
+        visible = License.objects.filter(owner_user=request.user)
+    license_obj = get_object_or_404(visible.select_related('product'), pk=pk)
     if license_obj.status in {'refunded', 'payment_review', 'blocked'}:
         raise PermissionDenied
 
@@ -1046,7 +1058,10 @@ def team_member(request, user_id):
             'member': member,
             'free_licenses': free,
             'assignments': assignments,
-            'devices': member.user.devices.filter(revoked_at__isnull=True).select_related('license'),
+            'devices': member.user.devices.filter(
+                license__company=company_obj,
+                revoked_at__isnull=True,
+            ).select_related('license'),
         },
     )
 
