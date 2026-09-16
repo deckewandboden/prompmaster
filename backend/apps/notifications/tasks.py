@@ -131,7 +131,13 @@ def schedule_license_reminders():
                         'reminder_id': str(reminder.id),
                     }
                     for recipient in recipients:
-                        queue_email(template_code, recipient, context)
+                        queue_email(
+                            template_code,
+                            recipient,
+                            context,
+                            scope_company=license_obj.company_id,
+                            scope_user=license_obj.owner_user_id,
+                        )
                     reminder.status = 'queued'
                     reminder.queued_at = timezone.now()
                     reminder.error = ''
