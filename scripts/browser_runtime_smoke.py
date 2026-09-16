@@ -451,14 +451,15 @@ def _check_backend_page(page, base: str, path: str, width: int, label: str) -> N
             raise AssertionError(f'{label} {width}px: mobile title visible outside mobile breakpoint')
 
 
-def run_backend_ui_smoke(browser) -> None:
+def run_backend_ui_smoke(browser, fixture=None) -> None:
     if os.getenv('BACKEND_UI_BROWSER_SMOKE') != '1':
         return
+    if fixture is None:
+        raise AssertionError('Backend browser fixture was not prepared before Playwright startup')
 
     import subprocess
     import sys
 
-    fixture = _backend_fixture()
     port = _free_port()
     base = f'http://127.0.0.1:{port}/'
     env = os.environ.copy()
@@ -564,6 +565,7 @@ def main() -> int:
     except ImportError as exc:
         raise SystemExit(f'BROWSER SMOKE SKIPPED: playwright fehlt ({exc})')
     executable = os.getenv('CHROMIUM_PATH') or shutil.which('chromium') or shutil.which('chromium-browser') or shutil.which('google-chrome')
+    backend_fixture = _backend_fixture() if os.getenv('BACKEND_UI_BROWSER_SMOKE') == '1' else None
     catalog = mock_catalog()
     if (catalog['application_count'], catalog['task_count']) != (34, 194):
         raise SystemExit('BROWSER SMOKE FAIL: catalog count drift')
@@ -607,7 +609,7 @@ def main() -> int:
         if not ratings or ratings[-1].get('feedback') != 'Mehr Kontext wäre hilfreich.':
             raise AssertionError('optional low-rating feedback was not sent')
 
-        run_backend_ui_smoke(browser)
+        run_backend_ui_smoke(browser, backend_fixture)
         browser.close()
 
     print('BROWSER RUNTIME SMOKE OK: 34-app central catalog + compose + rating/feedback bridge + authenticated backend UI gate')
