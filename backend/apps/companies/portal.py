@@ -347,8 +347,16 @@ def devices(request):
             user__company_memberships__company=company,
             user__company_memberships__active=True,
         )
+    elif company:
+        queryset = DeviceRegistration.objects.filter(
+            user=request.user,
+            license__company=company,
+        )
     else:
-        queryset = DeviceRegistration.objects.filter(user=request.user)
+        queryset = DeviceRegistration.objects.filter(
+            user=request.user,
+            license__owner_user=request.user,
+        )
     grid = DataGrid(
         request,
         queryset.select_related('user', 'license'),
