@@ -91,3 +91,10 @@ def human_bytes(value):
             return f'{number:.1f} {unit}' if unit != 'B' else f'{int(number)} B'
         number /= 1024
     return f'{number:.1f} PB'
+
+
+@register.simple_tag
+def pm_has_perm(user, code):
+    """Expose PromptMaster's custom role permission check to templates."""
+    from apps.core.permissions import has_perm
+    return has_perm(user, code)
