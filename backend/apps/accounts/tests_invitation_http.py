@@ -96,6 +96,8 @@ class InvitationHTTPTests(LiveServerTestCase):
             response = self.http.request(method, self.url(), data={
                 'csrfmiddlewaretoken': form.csrf}, timeout=10)
             self.assertIn('Einladung ungültig oder abgelaufen', response.text)
+            self.assertIn('Firmenadministrator', response.text)
+            self.assertIn('Firmenadministrator', response.text)
             self.assertNotIn('Einladung angenommen', response.text)
         self.invitation.refresh_from_db()
         self.assertEqual(self.invitation.accepted_at, accepted_at)

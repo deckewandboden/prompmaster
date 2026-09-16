@@ -1,8 +1,10 @@
 from datetime import timedelta
+from unittest.mock import patch
 from decimal import Decimal
 
 from django.core.exceptions import ValidationError
 from django.test import TestCase
+from django.urls import reverse
 from django.utils import timezone
 
 from apps.accounts.models import User
@@ -11,6 +13,7 @@ from apps.catalog.models import Product, ProductPrice
 from apps.companies.models import Company, Invitation, Membership, PrivateCustomerProfile
 from apps.companies.services import create_invitation
 from apps.devices.services import register_device
+from apps.core.security import token_hash
 from apps.licenses.models import License, LicenseAssignment
 from apps.licenses.services import assign_license, block_license, unblock_license
 from apps.orders.models import Order, OrderItem
@@ -75,10 +78,80 @@ class DeviceLimitTests(ReleaseRuleFixture):
 class InvitationRulesTests(TestCase):
     def setUp(self):
         self.admin=User.objects.create_user('admin@example.test','ReleaseRulePassword-123!',first_name='Ada',last_name='Admin'); self.company=Company.objects.create(customer_number='PM-C-TEST-001',name='Test GmbH',email='firma@example.test',country='DE'); Membership.objects.create(company=self.company,user=self.admin,role='admin',active=True)
+
+    def _login_admin(self):
+        self.client.force_login(self.admin)
+        session = self.client.session
+        session['security_version'] = self.admin.security_version
+        session['two_factor_ok'] = True
+        session.save()
+
     def test_invitation_is_valid_for_24_hours(self):
         before=timezone.now(); inv,raw=create_invitation(company=self.company,actor=self.admin,email='neu@example.test'); after=timezone.now(); self.assertTrue(raw); self.assertGreaterEqual(inv.expires_at,before+timedelta(hours=24)); self.assertLessEqual(inv.expires_at,after+timedelta(hours=24,seconds=1)); self.assertTrue(inv.is_valid())
+
+    def test_raw_invitation_token_is_not_stored(self):
+        inv, raw = create_invitation(company=self.company, actor=self.admin, email='hash-only@example.test')
+        self.assertNotEqual(inv.token_hash, raw)
+        self.assertEqual(inv.token_hash, token_hash(raw))
+        self.assertFalse(hasattr(inv, 'token'))
+
     def test_new_invitation_revokes_previous(self):
         first,_=create_invitation(company=self.company,actor=self.admin,email='neu@example.test'); second,_=create_invitation(company=self.company,actor=self.admin,email='neu@example.test'); first.refresh_from_db(); self.assertIsNotNone(first.revoked_at); self.assertIsNone(second.revoked_at); self.assertEqual(Invitation.objects.filter(company=self.company,email='neu@example.test',accepted_at__isnull=True,revoked_at__isnull=True).count(),1)
+
+    def test_revoke_and_resend_are_post_only_and_resend_rotates_token(self):
+        self._login_admin()
+        invitation, _raw = create_invitation(
+            company=self.company,
+            actor=self.admin,
+            email='resend@example.test',
+            first_name='Re',
+            last_name='Send',
+        )
+        revoke_url = reverse('portal:invitation_revoke', args=[invitation.id])
+        resend_url = reverse('portal:invitation_resend', args=[invitation.id])
+
+        response = self.client.get(revoke_url)
+        self.assertEqual(response.status_code, 403)
+        invitation.refresh_from_db()
+        self.assertIsNone(invitation.revoked_at)
+
+        response = self.client.get(resend_url)
+        self.assertEqual(response.status_code, 403)
+        invitation.refresh_from_db()
+        self.assertIsNone(invitation.revoked_at)
+
+        with patch('apps.companies.portal.queue_email') as queue_email:
+            response = self.client.post(resend_url)
+        self.assertRedirects(response, reverse('portal:invitations'))
+        invitation.refresh_from_db()
+        self.assertIsNotNone(invitation.revoked_at)
+        replacement = Invitation.objects.get(
+            company=self.company,
+            email='resend@example.test',
+            accepted_at__isnull=True,
+            revoked_at__isnull=True,
+        )
+        self.assertNotEqual(replacement.pk, invitation.pk)
+        self.assertNotEqual(replacement.token_hash, invitation.token_hash)
+        queue_email.assert_called_once()
+
+        response = self.client.post(revoke_url)
+        self.assertRedirects(response, reverse('portal:invitations'))
+        replacement.refresh_from_db()
+        self.assertIsNone(replacement.revoked_at)
+
+        replacement_revoke_url = reverse('portal:invitation_revoke', args=[replacement.id])
+        response = self.client.post(replacement_revoke_url)
+        self.assertRedirects(response, reverse('portal:invitations'))
+        replacement.refresh_from_db()
+        self.assertIsNotNone(replacement.revoked_at)
+        self.assertTrue(
+            AuditEvent.objects.filter(
+                action='invitation.revoked',
+                object_id=str(replacement.id),
+                actor=self.admin,
+            ).exists()
+        )
 
 class TenantIsolationTests(TestCase):
     def test_company_license_cannot_be_assigned_cross_tenant(self):

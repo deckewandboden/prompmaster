@@ -347,8 +347,8 @@
     },
     {
       "path": "backend/apps/accounts/tests_invitation_http.py",
-      "size": 5689,
-      "sha256": "d4bb306fa3054f5e82fd1379ba4f92ff24ac40dbf0ef72bc5b7a8b589cb2c00e",
+      "size": 5817,
+      "sha256": "c0c2e7dcbabf42d179dd4ab53169faa33acf2f6fa58199ec73f5fad6574a3b30",
       "role": "active-backend"
     },
     {
@@ -785,8 +785,8 @@
     },
     {
       "path": "backend/apps/core/tests_release_rules.py",
-      "size": 12036,
-      "sha256": "d063b54804c4d75338c3894b7f3e3a49866210a8dbfd912208f971ebad66b990",
+      "size": 14969,
+      "sha256": "4e325d2826c1142eeaa054bb1ad52934551e199550c38e48b6dc28ff06c02b68",
       "role": "active-backend"
     },
     {
@@ -1613,8 +1613,8 @@
     },
     {
       "path": "backend/templates/auth/invite_result.html",
-      "size": 268,
-      "sha256": "4a0c8067765cc7dd1dd144b51826f911038b0432dc2580822d38cb3e2310d8a8",
+      "size": 433,
+      "sha256": "54af862912375318eaef6de4bc5f1718f4ae0914001882b7ba76b5ae6c7960c9",
       "role": "active-backend"
     },
     {
