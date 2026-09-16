@@ -46,9 +46,9 @@
 {% user_has_perm request.user 'ops.read' as mobile_ops %}
 {% user_has_perm request.user 'audit.read' as mobile_audit %}
 <div class="mobile-menu">
-  <a href="{% url 'ns_admin:dashboard' %}"><b>⌂</b>Home</a>
-  {% if mobile_customers %}<a href="{% url 'ns_admin:customers' %}"><b>♙</b>Kunden</a>{% endif %}
-  {% if mobile_ops %}<a href="{% url 'ns_admin:ops' %}"><b>⚙</b>System</a>{% endif %}
-  {% if mobile_audit %}<a href="{% url 'ns_admin:audit' %}"><b>▤</b>Logs</a>{% endif %}
+  <a class="{% nav_class request 'dashboard' %}" href="{% url 'ns_admin:dashboard' %}"><b>⌂</b>Home</a>
+  {% if mobile_customers %}<a class="{% nav_class request 'customers,customer' %}" href="{% url 'ns_admin:customers' %}"><b>♙</b>Kunden</a>{% endif %}
+  {% if mobile_ops %}<a class="{% nav_class request 'ops' %}" href="{% url 'ns_admin:ops' %}"><b>⚙</b>System</a>{% endif %}
+  {% if mobile_audit %}<a class="{% nav_class request 'audit' %}" href="{% url 'ns_admin:audit' %}"><b>▤</b>Logs</a>{% endif %}
 </div>
 {% endblock %}
