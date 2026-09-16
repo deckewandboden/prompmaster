@@ -133,3 +133,39 @@ class AdminDataVisibilityTests(TestCase):
             f'/ns-admin/customers/private/{self.private_profile.id}/licenses/',
         )
 
+    def test_customer_summaries_do_not_leak_ungranted_domains(self):
+        self._reset_permissions('customers.read')
+
+        responses = (
+            self.client.get(f'/ns-admin/customers/{self.company.id}/'),
+            self.client.get(f'/ns-admin/customers/{self.company.id}/portal-preview/'),
+            self.client.get(f'/ns-admin/customers/private/{self.private_profile.id}/'),
+            self.client.get(f'/ns-admin/customers/private/{self.private_profile.id}/portal-preview/'),
+        )
+        for response in responses:
+            self.assertEqual(response.status_code, 200)
+            self.assertNotContains(response, '>Lizenzen<', html=False)
+            self.assertNotContains(response, '>Bestellungen<', html=False)
+            self.assertNotContains(response, '>Aktive Lizenzen<', html=False)
+            self.assertNotContains(response, '>Freie Lizenzen<', html=False)
+
+        self._grant('licenses.read', 'orders.read')
+        company_detail = self.client.get(f'/ns-admin/customers/{self.company.id}/')
+        private_detail = self.client.get(
+            f'/ns-admin/customers/private/{self.private_profile.id}/'
+        )
+        company_preview = self.client.get(
+            f'/ns-admin/customers/{self.company.id}/portal-preview/'
+        )
+        private_preview = self.client.get(
+            f'/ns-admin/customers/private/{self.private_profile.id}/portal-preview/'
+        )
+
+        for response in (company_detail, private_detail):
+            self.assertContains(response, 'Lizenzen')
+            self.assertContains(response, 'Bestellungen')
+        for response in (company_preview, private_preview):
+            self.assertContains(response, 'Aktive Lizenzen')
+            self.assertContains(response, 'Freie Lizenzen')
+            self.assertContains(response, 'Bestellungen')
+
