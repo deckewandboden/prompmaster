@@ -325,7 +325,11 @@ def licenses(request):
         default_sort='valid_until',
         filters={'status': 'status', 'product': 'product__code'},
     ).build()
-    products = sorted({(row.product.code, row.product.name) for row in queryset.select_related('product')})
+    products = list(
+        queryset.values_list('product__code', 'product__name')
+        .distinct()
+        .order_by('product__name', 'product__code')
+    )
     return render(
         request,
         'portal/licenses.html',
