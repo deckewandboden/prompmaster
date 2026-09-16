@@ -7,6 +7,7 @@ from django.db.models import Max, Min, Sum
 from django.utils import timezone
 from django.utils.dateparse import parse_datetime
 
+from apps.accounts.security import bump_security_version
 from apps.audit.services import audit
 from apps.devices.models import DeviceRegistration
 from apps.licenses.models import License, LicenseAssignment, LicenseTerm
@@ -295,6 +296,97 @@ def calculate_refund(term, today=None):
     return remaining, amount
 
 
+
+def _refund_preview_for_term(term, now):
+    if term.status != 'active':
+        raise ValidationError('Diese Lizenzperiode wurde bereits beendet oder refundiert.')
+    if term.license.status in {'blocked', 'payment_review', 'refunded'}:
+        raise ValidationError('Diese Lizenz kann derzeit nicht erstattet werden.')
+
+    latest = term.license.terms.filter(status='active').order_by('-valid_until').first()
+    if latest and latest.pk != term.pk:
+        raise ValidationError('Zuerst muss die zuletzt gekaufte Lizenzperiode refundiert werden.')
+
+    remaining_days, amount = calculate_refund(term, today=timezone.localdate(now))
+    if remaining_days <= 0 or amount <= 0:
+        raise ValidationError('Für diese Lizenzperiode besteht kein erstattungsfähiger Restzeitraum.')
+
+    payment = (
+        Payment.objects.filter(
+            order=term.order_item.order,
+            status__in=['paid', 'refunded_partial', 'chargeback_reversed'],
+        )
+        .order_by('-paid_at', '-created_at')
+        .first()
+    )
+    if not payment:
+        raise ValidationError('Keine bestätigte Mollie-Zahlung für diese Lizenzperiode gefunden.')
+
+    total_days = min(
+        max(
+            (
+                timezone.localtime(term.valid_until).date()
+                - timezone.localtime(term.valid_from).date()
+            ).days,
+            0,
+        ),
+        365,
+    )
+    used_days = max(0, total_days - remaining_days)
+    other_terms = term.license.terms.filter(status='active').exclude(pk=term.pk)
+    if not other_terms.exists():
+        resulting_status = 'refunded'
+    elif other_terms.filter(valid_from__lte=now, valid_until__gt=now).exists():
+        assigned = LicenseAssignment.objects.filter(
+            license=term.license,
+            ended_at__isnull=True,
+        ).exists()
+        resulting_status = 'active' if assigned else 'free'
+    else:
+        resulting_status = 'expired'
+
+    return {
+        'license': term.license,
+        'term': term,
+        'payment': payment,
+        'purchase_at': payment.paid_at or term.order_item.order.created_at,
+        'license_start': term.valid_from,
+        'current_at': now,
+        'used_days': used_days,
+        'remaining_days': remaining_days,
+        'paid_gross_amount': term.paid_gross_amount,
+        'refund_amount': amount,
+        'resulting_status': resulting_status,
+        'resulting_status_label': dict(License.STATUS).get(resulting_status, resulting_status),
+    }
+
+
+def refund_preview(term, now=None):
+    now = now or timezone.now()
+    row = LicenseTerm.objects.select_related(
+        'license',
+        'order_item__order',
+    ).get(pk=term.pk)
+    return _refund_preview_for_term(row, now)
+
+
+def _revoke_refunded_access(license_obj, now):
+    assignments = list(
+        LicenseAssignment.objects.select_for_update()
+        .filter(license=license_obj, ended_at__isnull=True)
+        .select_related('user')
+    )
+    for assignment in assignments:
+        assignment.ended_at = now
+        assignment.save(update_fields=['ended_at'])
+    DeviceRegistration.objects.filter(
+        license=license_obj,
+        revoked_at__isnull=True,
+    ).update(revoked_at=now)
+    for assignment in assignments:
+        bump_security_version(assignment.user)
+
+
 def _recalculate_license_after_refund(license_obj, now):
     active_terms = license_obj.terms.filter(status='active')
     bounds = active_terms.aggregate(start=Min('valid_from'), end=Max('valid_until'))
@@ -302,8 +394,7 @@ def _recalculate_license_after_refund(license_obj, now):
         license_obj.valid_from = None
         license_obj.valid_until = now
         license_obj.status = 'refunded'
-        LicenseAssignment.objects.filter(license=license_obj, ended_at__isnull=True).update(ended_at=now)
-        DeviceRegistration.objects.filter(license=license_obj, revoked_at__isnull=True).update(revoked_at=now)
+        _revoke_refunded_access(license_obj, now)
     else:
         license_obj.valid_from = bounds['start']
         license_obj.valid_until = bounds['end']
@@ -314,8 +405,7 @@ def _recalculate_license_after_refund(license_obj, now):
             license_obj.status = 'expired'
             # A future prepaid term may remain. Access stays off until its
             # valid_from date; no term dates are silently shifted.
-            LicenseAssignment.objects.filter(license=license_obj, ended_at__isnull=True).update(ended_at=now)
-            DeviceRegistration.objects.filter(license=license_obj, revoked_at__isnull=True).update(revoked_at=now)
+            _revoke_refunded_access(license_obj, now)
     license_obj.save(update_fields=['valid_from', 'valid_until', 'status', 'updated_at'])
 
 
@@ -324,26 +414,10 @@ def create_refund_request(*, term, actor, reason=''):
     locked = LicenseTerm.objects.select_for_update().select_related(
         'license', 'order_item__order'
     ).get(pk=term.pk)
-    if locked.status != 'active':
-        raise ValidationError('Diese Lizenzperiode wurde bereits beendet oder refundiert.')
-    if locked.license.status in {'blocked', 'payment_review', 'refunded'}:
-        raise ValidationError('Diese Lizenz kann derzeit nicht erstattet werden.')
-
-    latest = locked.license.terms.filter(status='active').order_by('-valid_until').first()
-    if latest and latest.pk != locked.pk:
-        raise ValidationError('Zuerst muss die zuletzt gekaufte Lizenzperiode refundiert werden.')
-
-    remaining_days, amount = calculate_refund(locked)
-    if remaining_days <= 0 or amount <= 0:
-        raise ValidationError('Für diese Lizenzperiode besteht kein erstattungsfähiger Restzeitraum.')
-
-    payment = (
-        Payment.objects.filter(order=locked.order_item.order, status__in=['paid', 'refunded_partial'])
-        .order_by('-paid_at', '-created_at')
-        .first()
-    )
-    if not payment:
-        raise ValidationError('Keine bestätigte Mollie-Zahlung für diese Lizenzperiode gefunden.')
+    preview = _refund_preview_for_term(locked, timezone.now())
+    remaining_days = preview['remaining_days']
+    amount = preview['refund_amount']
+    payment = preview['payment']
 
     refund, created = Refund.objects.get_or_create(
         term=locked,
@@ -389,7 +463,7 @@ def mark_refund_success(refund, provider_id):
 
     payment = Payment.objects.select_for_update().get(pk=row.payment_id)
     refunded_total = payment.refunds.filter(status='succeeded').aggregate(total=Sum('amount'))['total'] or Decimal('0.00')
-    if payment.status != 'charged_back':
+    if payment.status not in {'charged_back', 'chargeback'}:
         desired_payment_status = 'refunded_full' if refunded_total >= payment.amount else 'refunded_partial'
         if payment.status != desired_payment_status:
             payment.status = desired_payment_status

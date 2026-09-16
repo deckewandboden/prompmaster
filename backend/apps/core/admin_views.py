@@ -28,7 +28,7 @@ from apps.ops.metrics import caddy_health, certificate_status, snapshot
 from apps.ops.models import BackupRecord, RestoreTest, SystemAlert
 from apps.orders.models import Order
 from apps.payments.models import MollieEvent, Payment
-from apps.payments.services import calculate_refund, create_refund_request, submit_refund
+from apps.payments.services import create_refund_request, refund_preview, submit_refund
 from apps.support.models import SupportRequest
 from .admin_forms import (
     EmailTemplateForm,
@@ -450,18 +450,14 @@ def licenses(request):
 def license_detail(request, pk):
     license_obj = get_object_or_404(License.objects.select_related('company', 'owner_user', 'product'), pk=pk)
     terms = list(license_obj.terms.select_related('order_item__order').order_by('-valid_until'))
-    refund_preview = {}
-    for term in terms:
-        if term.status == 'active':
-            refund_preview[str(term.id)] = calculate_refund(term)
     return render(
         request,
         'ns_admin/license_detail.html',
         {
             'license': license_obj,
             'terms': terms,
-            'refund_preview': refund_preview,
             'can_write': has_perm(request.user, 'licenses.write'),
+            'can_refund': has_perm(request.user, 'payments.refund'),
         },
     )
 
@@ -485,24 +481,49 @@ def license_block_toggle(request, pk):
 
 @staff_perm('payments.refund')
 def license_refund(request, pk, term_id):
-    if request.method != 'POST':
-        raise PermissionDenied
     license_obj = get_object_or_404(License, pk=pk)
-    term = get_object_or_404(LicenseTerm, pk=term_id, license=license_obj)
-    form = RefundForm(request.POST)
-    if form.is_valid():
+    term = get_object_or_404(
+        LicenseTerm.objects.select_related('license', 'order_item__order'),
+        pk=term_id,
+        license=license_obj,
+    )
+    try:
+        preview = refund_preview(term)
+    except ValidationError as exc:
+        messages.error(request, exc.messages[0])
+        return redirect('ns_admin:license_detail', pk=pk)
+
+    form = RefundForm(request.POST or None)
+    if request.method == 'POST' and form.is_valid():
         try:
-            refund = create_refund_request(term=term, actor=request.user, reason=form.cleaned_data['reason'])
+            refund = create_refund_request(
+                term=term,
+                actor=request.user,
+                reason=form.cleaned_data['reason'],
+            )
             submit_refund(refund)
-        except (ValidationError, Exception) as exc:
-            # Provider errors are intentionally surfaced as a safe generic UI
-            # message while detailed stack traces remain in server logs.
-            messages.error(request, str(exc) if isinstance(exc, ValidationError) else 'Erstattung konnte nicht an Mollie übermittelt werden.')
+        except ValidationError as exc:
+            form.add_error(None, exc.messages[0])
+        except Exception:
+            form.add_error(None, 'Erstattung konnte nicht an Mollie übermittelt werden.')
         else:
-            messages.success(request, 'Erstattung wurde an Mollie übermittelt.')
-    else:
-        messages.error(request, 'Bestätigung für die Erstattung fehlt.')
-    return redirect('ns_admin:license_detail', pk=pk)
+            messages.success(
+                request,
+                'Erstattung wurde bestätigt.' if refund.status == 'succeeded'
+                else 'Erstattung wurde an Mollie übermittelt.',
+            )
+            return redirect('ns_admin:license_detail', pk=pk)
+
+    return render(
+        request,
+        'ns_admin/refund_preview.html',
+        {
+            'license': license_obj,
+            'term': term,
+            'preview': preview,
+            'form': form,
+        },
+    )
 
 
 @staff_perm('orders.read')

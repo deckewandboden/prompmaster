@@ -1,0 +1,33 @@
+{% extends 'ns_admin/base.html' %}{% block content %}
+<div class="page-head">
+  <div><h1>Erstattung prüfen</h1><div class="sub">{{ license.license_number }} · {{ license.product.name }}</div></div>
+  <a class="btn secondary" href="{% url 'ns_admin:license_detail' license.id %}">Abbrechen</a>
+</div>
+<div class="grid two">
+  <div class="card">
+    <h2>Refund-Vorschau</h2>
+    <div class="statusrow"><span>Lizenz</span><strong>{{ license.license_number }}</strong></div>
+    <div class="statusrow"><span>Kaufdatum</span><strong>{{ preview.purchase_at|date:'d.m.Y H:i' }}</strong></div>
+    <div class="statusrow"><span>Lizenzstart</span><strong>{{ preview.license_start|date:'d.m.Y H:i' }}</strong></div>
+    <div class="statusrow"><span>Aktueller Zeitpunkt</span><strong>{{ preview.current_at|date:'d.m.Y H:i' }}</strong></div>
+    <div class="statusrow"><span>Genutzte Tage</span><strong>{{ preview.used_days }}</strong></div>
+    <div class="statusrow"><span>Resttage</span><strong>{{ preview.remaining_days }}</strong></div>
+    <div class="statusrow"><span>Bezahlter Preis</span><strong>{{ preview.paid_gross_amount }} €</strong></div>
+    <div class="statusrow"><span>Berechnete Erstattung</span><strong>{{ preview.refund_amount }} €</strong></div>
+    <div class="statusrow"><span>Status nach Bestätigung</span><strong>{{ preview.resulting_status_label }}</strong></div>
+  </div>
+  <div class="card form-card">
+    <h2>Verbindlich auslösen</h2>
+    <p class="sub">Die Erstattung wird erst nach Ihrer Bestätigung an Mollie übermittelt. Ein Begründungstext ist optional.</p>
+    <form method="post" class="form">
+      {% csrf_token %}
+      {{ form.non_field_errors }}
+      {{ form.as_p }}
+      <div class="form-actions">
+        <a class="btn secondary" href="{% url 'ns_admin:license_detail' license.id %}">Abbrechen</a>
+        <button class="btn danger" type="submit">Verbindlich über Mollie erstatten</button>
+      </div>
+    </form>
+  </div>
+</div>
+{% endblock %}
