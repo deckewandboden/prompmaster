@@ -2,7 +2,7 @@
   "project": "PromptMaster Commercial RC14 Full Repository",
   "generated_at": "2026-09-15T17:09:08.547879+00:00",
   "file_count_excluding_manifest_files": 517,
-  "total_bytes_excluding_manifest_files": 20561500,
+  "total_bytes_excluding_manifest_files": 20563211,
   "roles": {
     "active-backend": 311,
     "active-ci": 1,
@@ -653,8 +653,8 @@
     },
     {
       "path": "backend/apps/core/admin_views.py",
-      "size": 54457,
-      "sha256": "1ed8a0b89d68d4a9a9f95017a3175aca0a46a0a6d61f56743ee59ba57a6bec04",
+      "size": 54578,
+      "sha256": "6e0a4aa3990bd34f6d12143307edc028e7efe1250a4f6508cc2f7b49c722417b",
       "role": "active-backend"
     },
     {
@@ -1259,8 +1259,8 @@
     },
     {
       "path": "backend/apps/payments/tests.py",
-      "size": 6786,
-      "sha256": "5722ad184daa7e791dd53b434f86b569c0945b58e3d64a159e7d4a3710913adf",
+      "size": 8118,
+      "sha256": "d6aaa49a9b6231ab060da451ed1f02be426ea85e9471e977cc7dd04051e62476",
       "role": "active-backend"
     },
     {
@@ -1763,8 +1763,8 @@
     },
     {
       "path": "backend/templates/ns_admin/dashboard.html",
-      "size": 3377,
-      "sha256": "c59fd7493bced652dddbf357eafd43a87575bfd12a811606f32942f25d8ad9bd",
+      "size": 3635,
+      "sha256": "3873cb2487e2dbec02b7bacc07606b2da40750360b51b0926e52dbc06981b48f",
       "role": "active-backend"
     },
     {

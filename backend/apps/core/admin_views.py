@@ -120,6 +120,7 @@ def dashboard(request):
         'rights': rights,
         'customers': Company.objects.count() + PrivateCustomerProfile.objects.count() if rights['customers'] else None,
         'licenses': License.objects.filter(valid_until__gt=now, status__in=['active', 'free']).count() if rights['licenses'] else None,
+        'payment_review_count': License.objects.filter(status='payment_review').count() if rights['licenses'] else None,
         'expiring30': License.objects.filter(valid_until__gt=now, valid_until__lte=now + timedelta(days=30)).count() if rights['licenses'] else None,
         'expiring60': License.objects.filter(valid_until__gt=now, valid_until__lte=now + timedelta(days=60)).count() if rights['licenses'] else None,
         'orders30': Order.objects.filter(created_at__gte=now - timedelta(days=30)).count() if rights['orders'] else None,

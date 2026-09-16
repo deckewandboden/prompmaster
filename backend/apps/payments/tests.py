@@ -6,7 +6,7 @@ from unittest.mock import patch
 from django.test import SimpleTestCase, TestCase
 from django.utils import timezone
 
-from apps.accounts.models import User
+from apps.accounts.models import Permission, Role, User, UserRole
 from apps.catalog.models import Product, ProductPrice
 from apps.licenses.models import License, LicenseTerm
 from apps.orders.models import Order, OrderItem
@@ -157,6 +157,35 @@ class MollieStateIntegrationTests(TestCase):
                 provider_status='charged_back',
             ).exists()
         )
+
+
+    @patch('apps.payments.services._queue_after_commit')
+    def test_chargeback_payment_review_is_visible_on_netstyle_dashboard(self, _mail):
+        process_provider_state(self.payment.provider_payment_id, self.payload('paid'))
+        process_provider_state(self.payment.provider_payment_id, self.payload('charged_back'))
+
+        staff = User.objects.create_user(
+            'chargeback-dashboard@example.test',
+            'Chargeback-Dashboard-Password-42!',
+            is_staff=True,
+        )
+        role = Role.objects.create(code='chargeback-dashboard-test', name='Chargeback Dashboard Test')
+        permission = Permission.objects.create(code='licenses.read', name='Licenses read')
+        role.permissions.add(permission)
+        UserRole.objects.create(user=staff, role=role)
+        self.client.force_login(staff)
+        session = self.client.session
+        session['security_version'] = staff.security_version
+        session['two_factor_ok'] = True
+        session.save()
+
+        response = self.client.get('/ns-admin/')
+
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.context['payment_review_count'], 1)
+        self.assertContains(response, 'Chargeback / Zahlung prüfen')
+        self.assertContains(response, '?status=payment_review')
+
 
     @patch('apps.payments.services._queue_after_commit')
     def test_provider_amount_or_currency_mismatch_is_rejected(self, _mail):
