@@ -1,10 +1,13 @@
 import json
 import logging
+from datetime import timedelta
 from types import SimpleNamespace
 from unittest.mock import Mock, patch
 
+from django.db import connection
 from django.http import HttpResponse
-from django.test import RequestFactory, SimpleTestCase, TestCase
+from django.test import RequestFactory, SimpleTestCase, TestCase, tag
+from django.test.utils import CaptureQueriesContext
 from django.utils import timezone
 
 from apps.accounts.models import User
@@ -15,6 +18,7 @@ from apps.licenses.models import License, LicenseAssignment
 from apps.audit.models import AuditEvent
 from apps.integrations.models import ServiceAccount
 from apps.legal.models import DeletionRequest
+from .datagrid import DataGrid
 from .middleware import CorrelationIdMiddleware, JsonLogFormatter
 from .security import token_hash, token_pair
 
@@ -391,8 +395,8 @@ class PortalTenantIsolationHttpTests(TestCase):
             company=self.company_b,
             product=self.product,
             status='active',
-            valid_from=self.now - timezone.timedelta(days=1),
-            valid_until=self.now + timezone.timedelta(days=364),
+            valid_from=self.now - timedelta(days=1),
+            valid_until=self.now + timedelta(days=364),
         )
         LicenseAssignment.objects.create(
             license=self.foreign_license,
@@ -431,6 +435,12 @@ class PortalTenantIsolationHttpTests(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertNotContains(response, self.foreign_device.display_name)
 
+    def test_company_member_device_list_hides_foreign_tenant_device(self):
+        self._login(self.member_a)
+        response = self.client.get('/portal/devices/')
+        self.assertEqual(response.status_code, 200)
+        self.assertNotContains(response, self.foreign_device.display_name)
+
     def test_company_admin_cannot_revoke_foreign_tenant_device(self):
         response = self.client.post(f'/portal/devices/{self.foreign_device.id}/revoke/')
         self.assertEqual(response.status_code, 404)
@@ -456,5 +466,61 @@ class PortalTenantIsolationHttpTests(TestCase):
         self.assertEqual(
             self.client.post(f'/portal/team/{self.admin_a.id}/deactivate/').status_code,
             403,
+        )
+
+@tag('datagrid_100k')
+class DataGridLargeDatasetGateTests(TestCase):
+    ROW_COUNT = 100_000
+    BATCH_SIZE = 1_000
+
+    def test_last_page_uses_bounded_queries_and_sql_limit_offset(self):
+        for start in range(0, self.ROW_COUNT, self.BATCH_SIZE):
+            Company.objects.bulk_create(
+                [
+                    Company(
+                        customer_number=f'LOAD-{index:06d}',
+                        name=f'Lasttest {index:06d}',
+                        email='load-test@example.test',
+                        country='DE',
+                    )
+                    for index in range(start, start + self.BATCH_SIZE)
+                ],
+                batch_size=self.BATCH_SIZE,
+            )
+
+        request = RequestFactory().get(
+            '/ns-admin/customers/',
+            {'page': '2000', 'page_size': '50'},
+        )
+
+        with CaptureQueriesContext(connection) as queries:
+            grid = DataGrid(
+                request,
+                Company.objects.all(),
+                sort_fields={'number': 'customer_number'},
+                default_sort='customer_number',
+            ).build()
+            rows = list(grid.page.object_list)
+
+        self.assertEqual(grid.page.paginator.count, self.ROW_COUNT)
+        self.assertEqual(grid.page.number, 2000)
+        self.assertEqual(len(rows), 50)
+        self.assertLessEqual(
+            len(queries.captured_queries),
+            3,
+            queries.captured_queries,
+        )
+
+        sql = [
+            query['sql'].upper().replace('\n', ' ')
+            for query in queries.captured_queries
+        ]
+        self.assertTrue(
+            any(
+                'LIMIT 50' in statement
+                and 'OFFSET 99950' in statement
+                for statement in sql
+            ),
+            sql,
         )
 
