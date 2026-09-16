@@ -143,3 +143,5 @@ a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,te
 @media(max-width:700px){.revenue-chart{height:180px}.donut-live{width:145px;height:145px}.donut-live:after{inset:30px}}
 
 @media(max-width:700px){.statusrow{align-items:flex-start;flex-wrap:wrap}.statusrow>strong,.statusrow>.badge{margin-left:auto}.statusrow .page-actions{width:auto}}
+
+.token-card code{display:block;max-width:100%;padding:12px 14px;border:1px solid var(--line);border-radius:10px;background:#f8fbfd;white-space:pre-wrap;overflow-wrap:anywhere;word-break:break-all;font-family:ui-monospace,SFMono-Regular,Consolas,monospace;font-size:13px;line-height:1.5}

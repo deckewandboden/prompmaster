@@ -559,6 +559,7 @@ def customer_admin_transfer(request, pk, user_id):
         {
             'title': f'Firmenadministrator übertragen · {target.user.email}',
             'form': form,
+            'cancel_url': reverse('ns_admin:customer_users', args=[customer.pk]),
         },
     )
 
@@ -927,7 +928,7 @@ def product_new(request):
         write_audit(request.user, 'product.created', saved, {'code': saved.code}, request=request)
         messages.success(request, 'Produkt angelegt. Legen Sie anschließend Preisversionen an.')
         return redirect('ns_admin:product_edit', pk=saved.pk)
-    return render(request, 'ns_admin/form.html', {'title': 'Produkt anlegen', 'form': form})
+    return render(request, 'ns_admin/form.html', {'title': 'Produkt anlegen', 'form': form, 'cancel_url': reverse('ns_admin:products')})
 
 
 @staff_perm('products.read')
@@ -945,7 +946,7 @@ def feature_edit(request, pk=None):
         write_audit(request.user, 'feature.saved', saved, {'code': saved.code}, request=request)
         messages.success(request, 'Feature gespeichert.')
         return redirect('ns_admin:features')
-    return render(request, 'ns_admin/form.html', {'title':'Feature bearbeiten' if feature else 'Feature anlegen', 'form':form})
+    return render(request, 'ns_admin/form.html', {'title':'Feature bearbeiten' if feature else 'Feature anlegen', 'form':form, 'cancel_url': reverse('ns_admin:features')})
 
 
 @staff_perm('products.write')
@@ -973,7 +974,7 @@ def product_price_add(request, pk):
             write_audit(request.user, 'product.price_created', price, {'gross_amount': str(price.gross_amount), 'type': price.price_type}, request=request)
             messages.success(request, 'Neue Preisversion angelegt.')
             return redirect('ns_admin:product_edit', pk=pk)
-    return render(request, 'ns_admin/form.html', {'title': f'Preisversion · {product.name}', 'form': form})
+    return render(request, 'ns_admin/form.html', {'title': f'Preisversion · {product.name}', 'form': form, 'cancel_url': reverse('ns_admin:product_edit', args=[product.pk])})
 
 
 @staff_perm('email.read')
@@ -1016,7 +1017,7 @@ def email_template_edit(request, pk):
         write_audit(request.user, 'email_template.updated', saved, {'fields': list(form.changed_data)}, request=request)
         messages.success(request, 'E-Mail-Vorlage gespeichert.')
         return redirect('ns_admin:email')
-    return render(request, 'ns_admin/form.html', {'title': f'E-Mail-Vorlage · {template.code}', 'form': form})
+    return render(request, 'ns_admin/form.html', {'title': f'E-Mail-Vorlage · {template.code}', 'form': form, 'cancel_url': reverse('ns_admin:email')})
 
 
 @staff_perm('email.read')
@@ -1066,7 +1067,7 @@ def mollie_config(request):
         write_audit(request.user, 'mollie.configuration_updated', request.user, {'profile_id': form.cleaned_data['profile_id'], 'api_key': '[REDACTED]' if form.cleaned_data['api_key'] else 'unchanged'}, request=request)
         messages.success(request, 'Mollie-Konfiguration gespeichert.')
         return redirect('ns_admin:mollie')
-    return render(request, 'ns_admin/form.html', {'title': 'Mollie konfigurieren', 'form': form})
+    return render(request, 'ns_admin/form.html', {'title': 'Mollie konfigurieren', 'form': form, 'cancel_url': reverse('ns_admin:mollie')})
 
 
 @staff_perm('payments.read')
@@ -1220,7 +1221,7 @@ def service_account_create(request):
             'ns_admin/service_account_token.html',
             {'account': account, 'token': raw, 'token_action': 'erstellt'},
         )
-    return render(request, 'ns_admin/form.html', {'title': 'Service Account anlegen', 'form': form})
+    return render(request, 'ns_admin/form.html', {'title': 'Service Account anlegen', 'form': form, 'cancel_url': reverse('ns_admin:api')})
 
 
 @staff_perm('api.write')
@@ -1294,7 +1295,7 @@ def legal_document_edit(request, pk=None):
         write_audit(request.user, 'legal_document.saved', saved, {'version': saved.version, 'active': saved.active}, request=request)
         messages.success(request, 'Rechtsdokument gespeichert.')
         return redirect('ns_admin:legal_documents')
-    return render(request, 'ns_admin/form.html', {'title': 'Rechtsdokument bearbeiten' if document else 'Rechtsdokument anlegen', 'form': form})
+    return render(request, 'ns_admin/form.html', {'title': 'Rechtsdokument bearbeiten' if document else 'Rechtsdokument anlegen', 'form': form, 'cancel_url': reverse('ns_admin:legal_documents')})
 
 
 @staff_perm('legal.read')
@@ -1319,7 +1320,7 @@ def retention_policy_edit(request, pk=None):
         write_audit(request.user, 'retention_policy.saved', saved, {'data_class': saved.data_class, 'retain_days': saved.retain_days, 'active': saved.active}, request=request)
         messages.success(request, 'Retention-Policy gespeichert.')
         return redirect('ns_admin:retention_policies')
-    return render(request, 'ns_admin/form.html', {'title': 'Retention-Policy bearbeiten' if policy else 'Retention-Policy anlegen', 'form': form})
+    return render(request, 'ns_admin/form.html', {'title': 'Retention-Policy bearbeiten' if policy else 'Retention-Policy anlegen', 'form': form, 'cancel_url': reverse('ns_admin:retention_policies')})
 
 
 @staff_perm('legal.read')
@@ -1363,7 +1364,7 @@ def deletion_request_reject(request, pk):
         else:
             messages.success(request, 'Löschanfrage abgelehnt.')
             return redirect('ns_admin:deletion_requests')
-    return render(request, 'ns_admin/form.html', {'title': 'Löschanfrage ablehnen', 'form': form})
+    return render(request, 'ns_admin/form.html', {'title': 'Löschanfrage ablehnen', 'form': form, 'cancel_url': reverse('ns_admin:deletion_requests')})
 
 
 @staff_perm('support.read')
@@ -1454,7 +1455,7 @@ def staff_user_create(request):
             transaction.on_commit(lambda: _send_staff_setup_email(request, user), robust=True)
         messages.success(request, 'netstyle Benutzer angelegt; Einrichtungslink wurde per E-Mail versendet.')
         return redirect('ns_admin:roles')
-    return render(request, 'ns_admin/form.html', {'title': 'netstyle Benutzer anlegen', 'form': form})
+    return render(request, 'ns_admin/form.html', {'title': 'netstyle Benutzer anlegen', 'form': form, 'cancel_url': reverse('ns_admin:roles')})
 
 
 @staff_perm('roles.write')
@@ -1503,12 +1504,12 @@ def role_edit(request, pk):
     if request.method == 'POST' and form.is_valid():
         if role.code == 'superadmin' and not form.cleaned_data.get('active') and _active_superadmin_count() <= 1:
             form.add_error('active', 'Der letzte aktive Superadmin darf nicht deaktiviert werden.')
-            return render(request, 'ns_admin/form.html', {'title': f'Rolle · {role.name}', 'form': form})
+            return render(request, 'ns_admin/form.html', {'title': f'Rolle · {role.name}', 'form': form, 'cancel_url': reverse('ns_admin:roles')})
         saved = form.save()
         write_audit(request.user, 'role.updated', saved, {'fields': list(form.changed_data)}, request=request)
         messages.success(request, 'Rolle gespeichert.')
         return redirect('ns_admin:roles')
-    return render(request, 'ns_admin/form.html', {'title': f'Rolle · {role.name}', 'form': form})
+    return render(request, 'ns_admin/form.html', {'title': f'Rolle · {role.name}', 'form': form, 'cancel_url': reverse('ns_admin:roles')})
 
 
 @staff_perm('roles.write')
@@ -1525,7 +1526,7 @@ def user_role_assign(request):
         write_audit(request.user, 'user_role.assigned', link, {'user': str(link.user_id), 'role': link.role.code}, request=request)
         messages.success(request, 'Rolle zugewiesen.')
         return redirect('ns_admin:roles')
-    return render(request, 'ns_admin/form.html', {'title': 'netstyle Rolle zuweisen', 'form': form})
+    return render(request, 'ns_admin/form.html', {'title': 'netstyle Rolle zuweisen', 'form': form, 'cancel_url': reverse('ns_admin:roles')})
 
 
 @staff_perm('roles.write')
