@@ -24,7 +24,7 @@ STATUS_MAP = {
     'failed': 'failed',
     'canceled': 'canceled',
     'expired': 'expired',
-    'charged_back': 'charged_back',
+    'charged_back': 'chargeback',
 }
 
 
@@ -125,10 +125,16 @@ def process_provider_state(payment_id, payload):
     status = base_status
     if base_status == 'paid' and refunded_amount > 0:
         status = 'refunded_full' if refunded_amount >= payment.amount.quantize(CENT) else 'refunded_partial'
-    # Include the previous canonical state so a chargeback reversal back to
-    # paid is preserved as its own transition rather than overwriting the
-    # original paid event. Repeated identical deliveries still deduplicate.
-    event_key = f'{payment_id}:{previous_status}->{status}:{refunded}:{remaining}'[:180]
+    elif base_status == 'paid' and previous_status in {'chargeback', 'charged_back', 'chargeback_reversed'}:
+        # Mollie's payment endpoint returns to a paid state after a reversed
+        # chargeback. Preserve that business transition as its own internal
+        # state and keep it stable across duplicate webhook deliveries.
+        status = 'chargeback_reversed'
+
+    # Canonical provider/business state plus refund amounts is the idempotency
+    # key. Including previous_status would create one extra event on the first
+    # duplicate delivery after every legitimate transition.
+    event_key = f'{payment_id}:{status}:{refunded}:{remaining}'[:180]
     event, _ = MollieEvent.objects.get_or_create(
         payment=payment,
         event_key=event_key,
@@ -174,8 +180,8 @@ def process_provider_state(payment_id, payload):
             _queue_after_commit('payment_failed', _order_recipient(payment.order), {
                 'order': payment.order.order_number, 'status': base_status,
             })
-    elif base_status == 'charged_back':
-        if previous_status != 'charged_back':
+    elif base_status == 'chargeback':
+        if previous_status not in {'chargeback', 'charged_back'}:
             _queue_after_commit('chargeback_review', _order_recipient(payment.order), {'order': payment.order.order_number})
         for license_obj in _locked_order_licenses(payment.order, active_terms_only=True):
             if license_obj.status != 'payment_review':
@@ -389,7 +395,7 @@ def mark_refund_success(refund, provider_id):
 
     payment = Payment.objects.select_for_update().get(pk=row.payment_id)
     refunded_total = payment.refunds.filter(status='succeeded').aggregate(total=Sum('amount'))['total'] or Decimal('0.00')
-    if payment.status != 'charged_back':
+    if payment.status not in {'chargeback', 'charged_back'}:
         desired_payment_status = 'refunded_full' if refunded_total >= payment.amount else 'refunded_partial'
         if payment.status != desired_payment_status:
             payment.status = desired_payment_status

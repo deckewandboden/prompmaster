@@ -74,7 +74,7 @@ PAYMENT_STATUS_CHOICES = [
     ('authorized', 'Autorisiert'), ('paid', 'Bezahlt'), ('failed', 'Fehlgeschlagen'),
     ('canceled', 'Storniert'), ('expired', 'Abgelaufen'),
     ('refunded_partial', 'Teilweise erstattet'), ('refunded_full', 'Vollständig erstattet'),
-    ('charged_back', 'Chargeback'), ('unknown', 'Unbekannt'),
+    ('chargeback', 'Chargeback'), ('chargeback_reversed', 'Chargeback zurückgenommen'), ('unknown', 'Unbekannt'),
 ]
 EMAIL_STATUS_CHOICES = [
     ('queued', 'Warteschlange'), ('sending', 'Wird gesendet'),

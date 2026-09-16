@@ -1,10 +1,10 @@
 {
   "project": "PromptMaster Commercial RC14 Full Repository",
   "generated_at": "2026-09-15T17:09:08.547879+00:00",
-  "file_count_excluding_manifest_files": 517,
-  "total_bytes_excluding_manifest_files": 20561500,
+  "file_count_excluding_manifest_files": 518,
+  "total_bytes_excluding_manifest_files": 20564677,
   "roles": {
-    "active-backend": 311,
+    "active-backend": 312,
     "active-ci": 1,
     "active-marketing": 99,
     "active-operations": 31,
@@ -124,6 +124,18 @@
       "role": "historical-reference"
     },
     {
+      "path": "archive/chat-transfer-2026-09-12/04_UI_PROTOTYPES/PromptMaster_Kundenportal.html",
+      "size": 42660,
+      "sha256": "8472907d76febc0698b82db2fef3b6a8ef73163941152ff98ed415a7f80404be",
+      "role": "historical-reference"
+    },
+    {
+      "path": "archive/chat-transfer-2026-09-12/04_UI_PROTOTYPES/PromptMaster_netstyle_Admin_V2.html",
+      "size": 21426,
+      "sha256": "75b547934f2166560acc3cd4687cba10b1f061e050e743121ff72584aea6dd42",
+      "role": "historical-reference"
+    },
+    {
       "path": "archive/chat-transfer-2026-09-12/04_UI_PROTOTYPES/promptmaster-prototype-v1/app.html",
       "size": 42956,
       "sha256": "5092fd0ae3ee0c2a97a41df90587282db6bbfced9cbea4c7803d2e71ea4c1b82",
@@ -157,18 +169,6 @@
       "path": "archive/chat-transfer-2026-09-12/04_UI_PROTOTYPES/promptmaster-prototype-v1/SPEC.md",
       "size": 1371,
       "sha256": "831bc744acfe383312227ccd072fc6b11f75eacd434a9480efc0f8a0b9e40c3d",
-      "role": "historical-reference"
-    },
-    {
-      "path": "archive/chat-transfer-2026-09-12/04_UI_PROTOTYPES/PromptMaster_Kundenportal.html",
-      "size": 42660,
-      "sha256": "8472907d76febc0698b82db2fef3b6a8ef73163941152ff98ed415a7f80404be",
-      "role": "historical-reference"
-    },
-    {
-      "path": "archive/chat-transfer-2026-09-12/04_UI_PROTOTYPES/PromptMaster_netstyle_Admin_V2.html",
-      "size": 21426,
-      "sha256": "75b547934f2166560acc3cd4687cba10b1f061e050e743121ff72584aea6dd42",
       "role": "historical-reference"
     },
     {
@@ -304,6 +304,12 @@
       "role": "active-backend"
     },
     {
+      "path": "backend/apps/accounts/migrations/__init__.py",
+      "size": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "role": "active-backend"
+    },
+    {
       "path": "backend/apps/accounts/migrations/0001_initial.py",
       "size": 4839,
       "sha256": "c8aaa69f090ff7177c3d8e4af18cacf0bb6d8bc9605f5cee9f4b766262fb16af",
@@ -322,12 +328,6 @@
       "role": "active-backend"
     },
     {
-      "path": "backend/apps/accounts/migrations/__init__.py",
-      "size": 0,
-      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
-      "role": "active-backend"
-    },
-    {
       "path": "backend/apps/accounts/models.py",
       "size": 2623,
       "sha256": "78f6480cac68070e3fdd5e89e5c22aa45403ae94d2f20511ce03961d3b1b6b63",
@@ -340,12 +340,6 @@
       "role": "active-backend"
     },
     {
-      "path": "backend/apps/accounts/tests.py",
-      "size": 356,
-      "sha256": "a3d9928c67add4d28170f4384d066621ddccf692c77c4ce73e8c2eab6b42d1a6",
-      "role": "active-backend"
-    },
-    {
       "path": "backend/apps/accounts/tests_invitation_http.py",
       "size": 5689,
       "sha256": "d4bb306fa3054f5e82fd1379ba4f92ff24ac40dbf0ef72bc5b7a8b589cb2c00e",
@@ -355,6 +349,12 @@
       "path": "backend/apps/accounts/tests_security.py",
       "size": 3169,
       "sha256": "23d44379716c3418679375c73c4d7b8195d39c51b00e0b8596cb1962b67f5c7a",
+      "role": "active-backend"
+    },
+    {
+      "path": "backend/apps/accounts/tests.py",
+      "size": 356,
+      "sha256": "a3d9928c67add4d28170f4384d066621ddccf692c77c4ce73e8c2eab6b42d1a6",
       "role": "active-backend"
     },
     {
@@ -394,6 +394,12 @@
       "role": "active-backend"
     },
     {
+      "path": "backend/apps/audit/migrations/__init__.py",
+      "size": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "role": "active-backend"
+    },
+    {
       "path": "backend/apps/audit/migrations/0001_initial.py",
       "size": 1261,
       "sha256": "f948c18fe71b4559eab97228d63ee8d6dd068c0ff6a8a433d420042bee557b6c",
@@ -409,12 +415,6 @@
       "path": "backend/apps/audit/migrations/0003_remove_historical_prompt_content.py",
       "size": 955,
       "sha256": "c3d6cb1d4f4f365211266e73ca3c1e48a4b4d63f2e80b1211aa92726caf5565a",
-      "role": "active-backend"
-    },
-    {
-      "path": "backend/apps/audit/migrations/__init__.py",
-      "size": 0,
-      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
       "role": "active-backend"
     },
     {
@@ -448,6 +448,12 @@
       "role": "active-backend"
     },
     {
+      "path": "backend/apps/catalog/migrations/__init__.py",
+      "size": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "role": "active-backend"
+    },
+    {
       "path": "backend/apps/catalog/migrations/0001_initial.py",
       "size": 4403,
       "sha256": "4030a6cce8a2332b66c0a5e438c38b1c491a1828f588f67868eb778b032d6fe3",
@@ -457,12 +463,6 @@
       "path": "backend/apps/catalog/migrations/0002_rename_catalog_pp_stream_idx_catalog_pro_product_2e5f65_idx.py",
       "size": 398,
       "sha256": "6057623d904e5279af6eb8322505f79460e63f6ad8b94616ca46ec36845fe5d3",
-      "role": "active-backend"
-    },
-    {
-      "path": "backend/apps/catalog/migrations/__init__.py",
-      "size": 0,
-      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
       "role": "active-backend"
     },
     {
@@ -502,6 +502,12 @@
       "role": "active-backend"
     },
     {
+      "path": "backend/apps/companies/migrations/__init__.py",
+      "size": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "role": "active-backend"
+    },
+    {
       "path": "backend/apps/companies/migrations/0001_initial.py",
       "size": 4658,
       "sha256": "dbe6eb88e69b61ef149fd5d7ba88aebf540b10e5e53a94eb106d033327b23cbc",
@@ -514,27 +520,21 @@
       "role": "active-backend"
     },
     {
-      "path": "backend/apps/companies/migrations/__init__.py",
-      "size": 0,
-      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
-      "role": "active-backend"
-    },
-    {
       "path": "backend/apps/companies/models.py",
       "size": 4477,
       "sha256": "5f8f0ebd6de05ff721fdad27ba1a5fa7f0525b7802a429b24bbeaefe0f2cac2d",
       "role": "active-backend"
     },
     {
-      "path": "backend/apps/companies/portal.py",
-      "size": 37351,
-      "sha256": "b32d0b48422b830ce1db6f3ddc139d7789bbe219b97cc31e2ca70814f950359b",
-      "role": "active-backend"
-    },
-    {
       "path": "backend/apps/companies/portal_urls.py",
       "size": 1972,
       "sha256": "bb8de83592080cc9610465cedc11c23013f263e5835d253db3e1a7482a59a755",
+      "role": "active-backend"
+    },
+    {
+      "path": "backend/apps/companies/portal.py",
+      "size": 37351,
+      "sha256": "b32d0b48422b830ce1db6f3ddc139d7789bbe219b97cc31e2ca70814f950359b",
       "role": "active-backend"
     },
     {
@@ -562,15 +562,15 @@
       "role": "active-backend"
     },
     {
-      "path": "backend/apps/contenthub/api.py",
-      "size": 828,
-      "sha256": "8a131b12c29948a1658b968024040a477a7d97d6bea6adf0f9ffda16b655fb22",
-      "role": "active-backend"
-    },
-    {
       "path": "backend/apps/contenthub/api_urls.py",
       "size": 131,
       "sha256": "d29d503fa2b8f55fcc6c852c284c74f4c5764acdfc2da38c28f61a033b7dc1b8",
+      "role": "active-backend"
+    },
+    {
+      "path": "backend/apps/contenthub/api.py",
+      "size": 828,
+      "sha256": "8a131b12c29948a1658b968024040a477a7d97d6bea6adf0f9ffda16b655fb22",
       "role": "active-backend"
     },
     {
@@ -604,6 +604,12 @@
       "role": "active-backend"
     },
     {
+      "path": "backend/apps/contenthub/migrations/__init__.py",
+      "size": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "role": "active-backend"
+    },
+    {
       "path": "backend/apps/contenthub/migrations/0001_initial.py",
       "size": 1299,
       "sha256": "08542bb32bc29b2b97c2faa57911b684f075bc87e6b29121317908c7fb6fa991",
@@ -613,12 +619,6 @@
       "path": "backend/apps/contenthub/migrations/0002_rename_contenthub_f_audienc_46b102_idx_contenthub__audienc_bc5020_idx.py",
       "size": 407,
       "sha256": "4749fa093905438cefb6193f58df0589f9723ec62cbd31eed32fd93da3975bf7",
-      "role": "active-backend"
-    },
-    {
-      "path": "backend/apps/contenthub/migrations/__init__.py",
-      "size": 0,
-      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
       "role": "active-backend"
     },
     {
@@ -653,8 +653,8 @@
     },
     {
       "path": "backend/apps/core/admin_views.py",
-      "size": 54457,
-      "sha256": "1ed8a0b89d68d4a9a9f95017a3175aca0a46a0a6d61f56743ee59ba57a6bec04",
+      "size": 54510,
+      "sha256": "44151ea5045269c14799f5a61c6398828faee61e52d19c94ef1a1606a95011f9",
       "role": "active-backend"
     },
     {
@@ -712,6 +712,12 @@
       "role": "active-backend"
     },
     {
+      "path": "backend/apps/core/migrations/__init__.py",
+      "size": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "role": "active-backend"
+    },
+    {
       "path": "backend/apps/core/migrations/0001_initial.py",
       "size": 752,
       "sha256": "30baa368b096bb6360a19ff9cc37b667aa5e16b97164c4720d06003c0dd172a8",
@@ -721,12 +727,6 @@
       "path": "backend/apps/core/migrations/0002_search_indexes.py",
       "size": 2232,
       "sha256": "7f2f26d9214308e9f5d06a6d772f1d6e71411c35c340bd3c36f18f155d27b86b",
-      "role": "active-backend"
-    },
-    {
-      "path": "backend/apps/core/migrations/__init__.py",
-      "size": 0,
-      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
       "role": "active-backend"
     },
     {
@@ -766,12 +766,6 @@
       "role": "active-backend"
     },
     {
-      "path": "backend/apps/core/tests.py",
-      "size": 6784,
-      "sha256": "124513218876c4455b00a8d63fdaee52f2d9573dd365e74cfff09508fb106975",
-      "role": "active-backend"
-    },
-    {
       "path": "backend/apps/core/tests_marketing_integration.py",
       "size": 2204,
       "sha256": "b3c651dfe1b75096004c4fe78738723cb5d4bc5f8de99e6d45fede4cfa6359e8",
@@ -787,6 +781,12 @@
       "path": "backend/apps/core/tests_release_rules.py",
       "size": 12036,
       "sha256": "d063b54804c4d75338c3894b7f3e3a49866210a8dbfd912208f971ebad66b990",
+      "role": "active-backend"
+    },
+    {
+      "path": "backend/apps/core/tests.py",
+      "size": 6784,
+      "sha256": "124513218876c4455b00a8d63fdaee52f2d9573dd365e74cfff09508fb106975",
       "role": "active-backend"
     },
     {
@@ -814,6 +814,12 @@
       "role": "active-backend"
     },
     {
+      "path": "backend/apps/devices/migrations/__init__.py",
+      "size": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "role": "active-backend"
+    },
+    {
       "path": "backend/apps/devices/migrations/0001_initial.py",
       "size": 1243,
       "sha256": "5d3673ec735416f044d7726bd8030112df33e19c412e89cc843c9a6eabd7d1ce",
@@ -823,12 +829,6 @@
       "path": "backend/apps/devices/migrations/0002_rename_devices_d_user_idx_devices_dev_user_id_40cac7_idx.py",
       "size": 401,
       "sha256": "e204f796510bbd73024e90da9e4491505401aa20694be04e542906144104d474",
-      "role": "active-backend"
-    },
-    {
-      "path": "backend/apps/devices/migrations/__init__.py",
-      "size": 0,
-      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
       "role": "active-backend"
     },
     {
@@ -862,15 +862,15 @@
       "role": "active-backend"
     },
     {
-      "path": "backend/apps/integrations/migrations/0001_initial.py",
-      "size": 1129,
-      "sha256": "f364f3d88237a8f4b240d1e1d08fdc1497a573412a21753c61bdd551ad3f0c77",
-      "role": "active-backend"
-    },
-    {
       "path": "backend/apps/integrations/migrations/__init__.py",
       "size": 0,
       "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "role": "active-backend"
+    },
+    {
+      "path": "backend/apps/integrations/migrations/0001_initial.py",
+      "size": 1129,
+      "sha256": "f364f3d88237a8f4b240d1e1d08fdc1497a573412a21753c61bdd551ad3f0c77",
       "role": "active-backend"
     },
     {
@@ -904,15 +904,15 @@
       "role": "active-backend"
     },
     {
-      "path": "backend/apps/legal/migrations/0001_initial.py",
-      "size": 3147,
-      "sha256": "0a5dacd95c41a5dc885452ce4d9274cf732f6ca8c381bfe68fde243e31e31220",
-      "role": "active-backend"
-    },
-    {
       "path": "backend/apps/legal/migrations/__init__.py",
       "size": 0,
       "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "role": "active-backend"
+    },
+    {
+      "path": "backend/apps/legal/migrations/0001_initial.py",
+      "size": 3147,
+      "sha256": "0a5dacd95c41a5dc885452ce4d9274cf732f6ca8c381bfe68fde243e31e31220",
       "role": "active-backend"
     },
     {
@@ -952,6 +952,12 @@
       "role": "active-backend"
     },
     {
+      "path": "backend/apps/licenses/migrations/__init__.py",
+      "size": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "role": "active-backend"
+    },
+    {
       "path": "backend/apps/licenses/migrations/0001_initial.py",
       "size": 3835,
       "sha256": "43478baed265d8b10e8ac50c85bf421fe40d530ad8360d946c9eb2d808bd5299",
@@ -979,12 +985,6 @@
       "path": "backend/apps/licenses/migrations/0005_rename_licenses_l_status_idx_licenses_li_status_3263d5_idx_and_more.py",
       "size": 1175,
       "sha256": "8daa3556c128041fa2c4b6ef7a92cebfd67dd7f89de70268d526c65c1f6376bb",
-      "role": "active-backend"
-    },
-    {
-      "path": "backend/apps/licenses/migrations/__init__.py",
-      "size": 0,
-      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
       "role": "active-backend"
     },
     {
@@ -1048,15 +1048,15 @@
       "role": "active-backend"
     },
     {
-      "path": "backend/apps/notifications/migrations/0001_initial.py",
-      "size": 1494,
-      "sha256": "3093ca30120c6d8d6b2178168a12234cecfb791426dce94b6a15fdd3bf210a92",
-      "role": "active-backend"
-    },
-    {
       "path": "backend/apps/notifications/migrations/__init__.py",
       "size": 0,
       "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "role": "active-backend"
+    },
+    {
+      "path": "backend/apps/notifications/migrations/0001_initial.py",
+      "size": 1494,
+      "sha256": "3093ca30120c6d8d6b2178168a12234cecfb791426dce94b6a15fdd3bf210a92",
       "role": "active-backend"
     },
     {
@@ -1090,15 +1090,15 @@
       "role": "active-backend"
     },
     {
-      "path": "backend/apps/ops/api.py",
-      "size": 7924,
-      "sha256": "eb1851f5396078aa538ffa7b9432b713a7b64daf100499a87e569539733b6215",
-      "role": "active-backend"
-    },
-    {
       "path": "backend/apps/ops/api_urls.py",
       "size": 541,
       "sha256": "625387664fd7d0b80426ec90268c6f7f9df30b119a7ed4adaac04991d6d6734b",
+      "role": "active-backend"
+    },
+    {
+      "path": "backend/apps/ops/api.py",
+      "size": 7924,
+      "sha256": "eb1851f5396078aa538ffa7b9432b713a7b64daf100499a87e569539733b6215",
       "role": "active-backend"
     },
     {
@@ -1120,6 +1120,12 @@
       "role": "active-backend"
     },
     {
+      "path": "backend/apps/ops/migrations/__init__.py",
+      "size": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "role": "active-backend"
+    },
+    {
       "path": "backend/apps/ops/migrations/0001_initial.py",
       "size": 3091,
       "sha256": "029a74079262e84810d75c82a1524b47adddae62ef6bb549552197bb2a8d1a1d",
@@ -1135,12 +1141,6 @@
       "path": "backend/apps/ops/migrations/0003_rename_ops_alert_state_idx_ops_systema_active_99d084_idx_and_more.py",
       "size": 579,
       "sha256": "a7b51d9e779da89e8ecb5f53f18a1597efbae2be6110802d7738827e3e23ff54",
-      "role": "active-backend"
-    },
-    {
-      "path": "backend/apps/ops/migrations/__init__.py",
-      "size": 0,
-      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
       "role": "active-backend"
     },
     {
@@ -1180,6 +1180,12 @@
       "role": "active-backend"
     },
     {
+      "path": "backend/apps/orders/migrations/__init__.py",
+      "size": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "role": "active-backend"
+    },
+    {
       "path": "backend/apps/orders/migrations/0001_initial.py",
       "size": 3309,
       "sha256": "6392d15d9b966ddf8c2cb679806f6fe02b7ce75c0cd6c470fff4d63b261ab1e4",
@@ -1189,12 +1195,6 @@
       "path": "backend/apps/orders/migrations/0002_rename_orders_o_status_idx_orders_orde_status_25e057_idx.py",
       "size": 387,
       "sha256": "2ca9912178b3adaf6d70e816c5610e11e363ce94f485fdc5ebf16275bc78b582",
-      "role": "active-backend"
-    },
-    {
-      "path": "backend/apps/orders/migrations/__init__.py",
-      "size": 0,
-      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
       "role": "active-backend"
     },
     {
@@ -1228,15 +1228,21 @@
       "role": "active-backend"
     },
     {
+      "path": "backend/apps/payments/migrations/__init__.py",
+      "size": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "role": "active-backend"
+    },
+    {
       "path": "backend/apps/payments/migrations/0001_initial.py",
       "size": 2696,
       "sha256": "a5f8cfb69ddf07d9f17c9db94ccf95de405bb4234aa4e68611a5969fb7dff796",
       "role": "active-backend"
     },
     {
-      "path": "backend/apps/payments/migrations/__init__.py",
-      "size": 0,
-      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "path": "backend/apps/payments/migrations/0002_normalize_chargeback_status.py",
+      "size": 1004,
+      "sha256": "6c14893a36481d724568334ef9fcaea09acdaa087fa18ac7f745934b7b8000a5",
       "role": "active-backend"
     },
     {
@@ -1253,14 +1259,14 @@
     },
     {
       "path": "backend/apps/payments/services.py",
-      "size": 18711,
-      "sha256": "0a14dda4a948668b7cbb1833e565b92ba4f917985b3960daf5b2713eb7a21059",
+      "size": 20054,
+      "sha256": "e11088c052b99df2dddc1f19fad275862e42746e70679a8f0c413c3111af64dd",
       "role": "active-backend"
     },
     {
       "path": "backend/apps/payments/tests.py",
-      "size": 6786,
-      "sha256": "5722ad184daa7e791dd53b434f86b569c0945b58e3d64a159e7d4a3710913adf",
+      "size": 7563,
+      "sha256": "d265de41218c7b7c78c91d84b3d107f6f6685f045bbfc646c29f1c26003c2413",
       "role": "active-backend"
     },
     {
@@ -1306,15 +1312,15 @@
       "role": "active-backend"
     },
     {
-      "path": "backend/apps/proaccess/tests.py",
-      "size": 779,
-      "sha256": "c0edf4c1449ec0586d386372b2e5ecd98a80a19afe1bbca331e475ba09c59ea1",
-      "role": "active-backend"
-    },
-    {
       "path": "backend/apps/proaccess/tests_integration.py",
       "size": 5991,
       "sha256": "fc5828dbaedb8045c746d76cc4cd7fdea2e51616954144094eede1952d077bb2",
+      "role": "active-backend"
+    },
+    {
+      "path": "backend/apps/proaccess/tests.py",
+      "size": 779,
+      "sha256": "c0edf4c1449ec0586d386372b2e5ecd98a80a19afe1bbca331e475ba09c59ea1",
       "role": "active-backend"
     },
     {
@@ -1342,15 +1348,15 @@
       "role": "active-backend"
     },
     {
-      "path": "backend/apps/prompts/api.py",
-      "size": 7695,
-      "sha256": "9943c76df9b488dc82df935a7a0ec972b4fb168b3c9e956d74c3e4f90fe50fd9",
-      "role": "active-backend"
-    },
-    {
       "path": "backend/apps/prompts/api_urls.py",
       "size": 309,
       "sha256": "877b24fd4742e85fa01da4bb1b9e236e7fd8f4d506f2b3f2bd161d1f0b7ee872",
+      "role": "active-backend"
+    },
+    {
+      "path": "backend/apps/prompts/api.py",
+      "size": 7695,
+      "sha256": "9943c76df9b488dc82df935a7a0ec972b4fb168b3c9e956d74c3e4f90fe50fd9",
       "role": "active-backend"
     },
     {
@@ -1414,6 +1420,12 @@
       "role": "active-backend"
     },
     {
+      "path": "backend/apps/prompts/migrations/__init__.py",
+      "size": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "role": "active-backend"
+    },
+    {
       "path": "backend/apps/prompts/migrations/0001_initial.py",
       "size": 12817,
       "sha256": "6d32b17ca051143ce77c97b24666205136bbdbcf15f267d11053c0465b68963d",
@@ -1429,12 +1441,6 @@
       "path": "backend/apps/prompts/migrations/0003_rename_prompts_pro_applica_e75f93_idx_prompts_pro_applica_997686_idx_and_more.py",
       "size": 1202,
       "sha256": "753f7f86d257d3cfdb922cca6d6a468f7970754d65bec170fabeca943dc72342",
-      "role": "active-backend"
-    },
-    {
-      "path": "backend/apps/prompts/migrations/__init__.py",
-      "size": 0,
-      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
       "role": "active-backend"
     },
     {
@@ -1498,15 +1504,15 @@
       "role": "active-backend"
     },
     {
-      "path": "backend/apps/support/migrations/0001_initial.py",
-      "size": 1214,
-      "sha256": "0f26ed01e27179024544bcb5dd4e2f8d5e4d617f5b76c54220d6de1d5baea1fa",
-      "role": "active-backend"
-    },
-    {
       "path": "backend/apps/support/migrations/__init__.py",
       "size": 0,
       "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "role": "active-backend"
+    },
+    {
+      "path": "backend/apps/support/migrations/0001_initial.py",
+      "size": 1214,
+      "sha256": "0f26ed01e27179024544bcb5dd4e2f8d5e4d617f5b76c54220d6de1d5baea1fa",
       "role": "active-backend"
     },
     {
@@ -1564,15 +1570,15 @@
       "role": "active-backend"
     },
     {
-      "path": "backend/private_assets/promptmaster_pro.html",
-      "size": 233404,
-      "sha256": "aa7b2da53ba3cbcf9874b9b6f7381ea4c3e86ee1f9c09db186cbec6876a3c9cf",
-      "role": "active-backend"
-    },
-    {
       "path": "backend/private_assets/promptmaster_pro_runtime.html",
       "size": 248805,
       "sha256": "29da4bb38b121ef585d07711e4e30966f1ae37089ffc01be048de7a2e821ebba",
+      "role": "active-backend"
+    },
+    {
+      "path": "backend/private_assets/promptmaster_pro.html",
+      "size": 233404,
+      "sha256": "aa7b2da53ba3cbcf9874b9b6f7381ea4c3e86ee1f9c09db186cbec6876a3c9cf",
       "role": "active-backend"
     },
     {
@@ -1672,15 +1678,15 @@
       "role": "active-backend"
     },
     {
-      "path": "backend/templates/auth/two_factor.html",
-      "size": 436,
-      "sha256": "8df0a762298070836fc3cbc44fe6a54e2c801d0f93aebf6fe14c79afde6fe8ab",
-      "role": "active-backend"
-    },
-    {
       "path": "backend/templates/auth/two_factor_setup.html",
       "size": 466,
       "sha256": "dd7dd8aeeda9d75adde1104c689153361fd1de3c9327f014a3baaca4f3dbe065",
+      "role": "active-backend"
+    },
+    {
+      "path": "backend/templates/auth/two_factor.html",
+      "size": 436,
+      "sha256": "8df0a762298070836fc3cbc44fe6a54e2c801d0f93aebf6fe14c79afde6fe8ab",
       "role": "active-backend"
     },
     {
@@ -1768,15 +1774,15 @@
       "role": "active-backend"
     },
     {
-      "path": "backend/templates/ns_admin/email.html",
-      "size": 500,
-      "sha256": "78883c95cb8a2076f9d400723180fe87cc234c41c2e1bee095f2fca27dab9c7c",
-      "role": "active-backend"
-    },
-    {
       "path": "backend/templates/ns_admin/email_log.html",
       "size": 1421,
       "sha256": "524c18f58bebbb519e7aaa3c0c46fd01bc3eb20ec9678bb5eaf2900f98f73734",
+      "role": "active-backend"
+    },
+    {
+      "path": "backend/templates/ns_admin/email.html",
+      "size": 500,
+      "sha256": "78883c95cb8a2076f9d400723180fe87cc234c41c2e1bee095f2fca27dab9c7c",
       "role": "active-backend"
     },
     {
@@ -1810,12 +1816,6 @@
       "role": "active-backend"
     },
     {
-      "path": "backend/templates/ns_admin/legal.html",
-      "size": 365,
-      "sha256": "f10b4c0a5860944b8cbf3cbf85978c3943758a804230e92b7f928a65ab68f712",
-      "role": "active-backend"
-    },
-    {
       "path": "backend/templates/ns_admin/legal_deletions.html",
       "size": 1557,
       "sha256": "8104d623a6176611fc6b31d1c8d1179e1e035a90757746fa92aa1c4316c79fea",
@@ -1834,15 +1834,15 @@
       "role": "active-backend"
     },
     {
-      "path": "backend/templates/ns_admin/license_detail.html",
-      "size": 2769,
-      "sha256": "edd1ad58b4c12db088cc9b9b36df81cc8cfa6083ec58ea2c57922fdc5ca9526e",
+      "path": "backend/templates/ns_admin/legal.html",
+      "size": 365,
+      "sha256": "f10b4c0a5860944b8cbf3cbf85978c3943758a804230e92b7f928a65ab68f712",
       "role": "active-backend"
     },
     {
-      "path": "backend/templates/ns_admin/mollie.html",
-      "size": 492,
-      "sha256": "c52b282e9f7f77d91a793408f52e5fc782decafcf0fb738d78af16830281d0e9",
+      "path": "backend/templates/ns_admin/license_detail.html",
+      "size": 2769,
+      "sha256": "edd1ad58b4c12db088cc9b9b36df81cc8cfa6083ec58ea2c57922fdc5ca9526e",
       "role": "active-backend"
     },
     {
@@ -1852,9 +1852,9 @@
       "role": "active-backend"
     },
     {
-      "path": "backend/templates/ns_admin/ops.html",
-      "size": 1242,
-      "sha256": "624156d3d2758a0c6c87d7f4e27409e63ca50c954456823c488ebc3d4676dfc4",
+      "path": "backend/templates/ns_admin/mollie.html",
+      "size": 492,
+      "sha256": "c52b282e9f7f77d91a793408f52e5fc782decafcf0fb738d78af16830281d0e9",
       "role": "active-backend"
     },
     {
@@ -1873,6 +1873,12 @@
       "path": "backend/templates/ns_admin/ops_services.html",
       "size": 2107,
       "sha256": "d6ee418c30bb07f30bda981f9be96c14edba0eb60d412761cc31db2fc560014b",
+      "role": "active-backend"
+    },
+    {
+      "path": "backend/templates/ns_admin/ops.html",
+      "size": 1242,
+      "sha256": "624156d3d2758a0c6c87d7f4e27409e63ca50c954456823c488ebc3d4676dfc4",
       "role": "active-backend"
     },
     {
@@ -1924,15 +1930,15 @@
       "role": "active-backend"
     },
     {
-      "path": "backend/templates/ns_admin/prompt_studio/quality.html",
-      "size": 1987,
-      "sha256": "afd7ca1155696684187749c1cdae534a38bf8fbf6c523aedb3b9cc4840dd81c9",
-      "role": "active-backend"
-    },
-    {
       "path": "backend/templates/ns_admin/prompt_studio/quality_policy.html",
       "size": 520,
       "sha256": "fbf1ec1fff1d3ae377a33cb6c0e06baa854a1f3cd083f4e5130239d23f8d725a",
+      "role": "active-backend"
+    },
+    {
+      "path": "backend/templates/ns_admin/prompt_studio/quality.html",
+      "size": 1987,
+      "sha256": "afd7ca1155696684187749c1cdae534a38bf8fbf6c523aedb3b9cc4840dd81c9",
       "role": "active-backend"
     },
     {
@@ -1984,15 +1990,15 @@
       "role": "active-backend"
     },
     {
-      "path": "backend/templates/ns_admin/support.html",
-      "size": 1408,
-      "sha256": "df6d343d153690fdadd84ff3b748a99223571b5f8242cd6bf7d6d1e963f4d1df",
-      "role": "active-backend"
-    },
-    {
       "path": "backend/templates/ns_admin/support_detail.html",
       "size": 1510,
       "sha256": "bbea642f49787c7d5bbbca93497ca5524b079cb8e3471db3876f953547266dd6",
+      "role": "active-backend"
+    },
+    {
+      "path": "backend/templates/ns_admin/support.html",
+      "size": 1408,
+      "sha256": "df6d343d153690fdadd84ff3b748a99223571b5f8242cd6bf7d6d1e963f4d1df",
       "role": "active-backend"
     },
     {
@@ -2086,15 +2092,15 @@
       "role": "active-backend"
     },
     {
-      "path": "backend/templates/portal/team.html",
-      "size": 2393,
-      "sha256": "52bd8ad5cc77b3310e497b20ab2b67d3191cf84aaabc9407acee29d2858d0500",
-      "role": "active-backend"
-    },
-    {
       "path": "backend/templates/portal/team_member.html",
       "size": 1975,
       "sha256": "dd31bc5dd1a93c66dd6e8d6e339a16353845b1ac9df2dff79932e1eb3aee0d5e",
+      "role": "active-backend"
+    },
+    {
+      "path": "backend/templates/portal/team.html",
+      "size": 2393,
+      "sha256": "52bd8ad5cc77b3310e497b20ab2b67d3191cf84aaabc9407acee29d2858d0500",
       "role": "active-backend"
     },
     {
@@ -2317,6 +2323,12 @@
       "path": "marketing/.oxlintrc.json",
       "size": 1370,
       "sha256": "1a7aa1c7d83b05939e4e697eed9316224caea8958c4ad12837f8be740c13a47d",
+      "role": "active-marketing"
+    },
+    {
+      "path": "marketing/components.json",
+      "size": 516,
+      "sha256": "9928283696d86836422959a2c520df83a718d31ffbcab533a14ca8dca2c8d475",
       "role": "active-marketing"
     },
     {
@@ -2677,12 +2689,6 @@
       "path": "marketing/components/ui/tooltip.tsx",
       "size": 2921,
       "sha256": "7667acc0cbb79b9daad94af6bb694fb6840b5bd1395e7e60c68c0fb63af9c4bd",
-      "role": "active-marketing"
-    },
-    {
-      "path": "marketing/components.json",
-      "size": 516,
-      "sha256": "9928283696d86836422959a2c520df83a718d31ffbcab533a14ca8dca2c8d475",
       "role": "active-marketing"
     },
     {

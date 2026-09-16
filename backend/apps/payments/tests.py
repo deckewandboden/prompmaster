@@ -122,6 +122,10 @@ class MollieStateIntegrationTests(TestCase):
         license_obj = License.objects.get(owner_user=self.user)
         self.assertEqual(LicenseTerm.objects.filter(license=license_obj).count(), 1)
         self.assertEqual(license_obj.valid_until - license_obj.valid_from, timedelta(days=365))
+        self.assertEqual(
+            MollieEvent.objects.filter(payment=self.payment, provider_status='paid').count(),
+            1,
+        )
 
     @patch('apps.payments.services._queue_after_commit')
     def test_failed_payment_creates_no_license(self, _mail):
@@ -142,20 +146,35 @@ class MollieStateIntegrationTests(TestCase):
         process_provider_state(self.payment.provider_payment_id, self.payload('charged_back'))
         license_obj.refresh_from_db()
         self.payment.refresh_from_db()
-        self.assertEqual(self.payment.status, 'charged_back')
+        self.assertEqual(self.payment.status, 'chargeback')
         self.assertEqual(license_obj.status, 'payment_review')
 
         process_provider_state(self.payment.provider_payment_id, self.payload('paid'))
         license_obj.refresh_from_db()
         self.payment.refresh_from_db()
-        self.assertEqual(self.payment.status, 'paid')
+        self.assertEqual(self.payment.status, 'chargeback_reversed')
         self.assertEqual(license_obj.status, 'active')
         self.assertEqual(License.objects.filter(owner_user=self.user).count(), 1)
         self.assertTrue(
             MollieEvent.objects.filter(
                 payment=self.payment,
-                provider_status='charged_back',
+                provider_status='chargeback',
             ).exists()
+        )
+        self.assertTrue(
+            MollieEvent.objects.filter(
+                payment=self.payment,
+                provider_status='chargeback_reversed',
+            ).exists()
+        )
+
+        events_before_duplicate = MollieEvent.objects.filter(payment=self.payment).count()
+        process_provider_state(self.payment.provider_payment_id, self.payload('paid'))
+        self.payment.refresh_from_db()
+        self.assertEqual(self.payment.status, 'chargeback_reversed')
+        self.assertEqual(
+            MollieEvent.objects.filter(payment=self.payment).count(),
+            events_before_duplicate,
         )
 
     @patch('apps.payments.services._queue_after_commit')
