@@ -3,9 +3,10 @@ from decimal import Decimal
 
 from django.core.exceptions import ValidationError
 from django.test import TestCase
+from django.urls import reverse
 from django.utils import timezone
 
-from apps.accounts.models import User
+from apps.accounts.models import Permission, Role, User, UserRole
 from apps.audit.models import AuditEvent
 from apps.catalog.models import Product, ProductPrice
 from apps.companies.models import Company, Invitation, Membership, PrivateCustomerProfile
@@ -79,6 +80,168 @@ class InvitationRulesTests(TestCase):
         before=timezone.now(); inv,raw=create_invitation(company=self.company,actor=self.admin,email='neu@example.test'); after=timezone.now(); self.assertTrue(raw); self.assertGreaterEqual(inv.expires_at,before+timedelta(hours=24)); self.assertLessEqual(inv.expires_at,after+timedelta(hours=24,seconds=1)); self.assertTrue(inv.is_valid())
     def test_new_invitation_revokes_previous(self):
         first,_=create_invitation(company=self.company,actor=self.admin,email='neu@example.test'); second,_=create_invitation(company=self.company,actor=self.admin,email='neu@example.test'); first.refresh_from_db(); self.assertIsNotNone(first.revoked_at); self.assertIsNone(second.revoked_at); self.assertEqual(Invitation.objects.filter(company=self.company,email='neu@example.test',accepted_at__isnull=True,revoked_at__isnull=True).count(),1)
+
+
+class AdminTransferContractTests(TestCase):
+    staff_password = 'Support-Transfer-Password-42!'
+
+    def setUp(self):
+        self.company = Company.objects.create(
+            customer_number='PM-C-TRANSFER',
+            name='Transfer GmbH',
+            email='transfer@example.test',
+            country='DE',
+        )
+        self.old_admin = User.objects.create_user(
+            'transfer-old@example.test',
+            'Customer-Transfer-Password-42!',
+            first_name='Alte',
+            last_name='Admin',
+        )
+        self.member = User.objects.create_user(
+            'transfer-new@example.test',
+            'Customer-Member-Password-42!',
+            first_name='Neue',
+            last_name='Admin',
+        )
+        Membership.objects.create(company=self.company, user=self.old_admin, role='admin', active=True)
+        Membership.objects.create(company=self.company, user=self.member, role='member', active=True)
+        self.staff = User.objects.create_user(
+            'support-transfer@example.test',
+            self.staff_password,
+            first_name='Netstyle',
+            last_name='Support',
+            is_staff=True,
+            two_factor_required=True,
+            totp_secret_enc='configured',
+        )
+        self.support_role = Role.objects.create(code='support-transfer-test', name='Support Transfer Test')
+        read_perm = Permission.objects.create(code='customers.read', name='Customers read')
+        write_perm = Permission.objects.create(code='customers.write', name='Customers write')
+        self.support_role.permissions.set([read_perm, write_perm])
+        UserRole.objects.create(user=self.staff, role=self.support_role)
+        self.transfer_url = reverse(
+            'ns_admin:customer_admin_transfer',
+            args=[self.company.id, self.member.id],
+        )
+        self.users_url = reverse('ns_admin:customer_users', args=[self.company.id])
+        self._login_staff(self.staff, two_factor_ok=True)
+
+    def _login_staff(self, user, *, two_factor_ok):
+        self.client.force_login(user)
+        session = self.client.session
+        session['security_version'] = user.security_version
+        if two_factor_ok:
+            session['two_factor_ok'] = True
+        else:
+            session.pop('two_factor_ok', None)
+        session.save()
+
+    def assert_original_admin_unchanged(self):
+        self.assertEqual(Membership.objects.get(company=self.company, user=self.old_admin).role, 'admin')
+        self.assertEqual(Membership.objects.get(company=self.company, user=self.member).role, 'member')
+
+    def test_support_transfer_requires_confirmation_password_and_2fa(self):
+        response = self.client.get(self.transfer_url)
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, self.member.full_name)
+        self.assertContains(response, 'Administratorübertragung verbindlich bestätigen')
+
+        response = self.client.post(self.transfer_url, {'password': self.staff_password})
+        self.assertEqual(response.status_code, 200)
+        self.assert_original_admin_unchanged()
+
+        response = self.client.post(
+            self.transfer_url,
+            {'password': 'Falsches-Passwort-42!', 'confirm': 'on'},
+        )
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, 'Passwort falsch')
+        self.assert_original_admin_unchanged()
+
+        self._login_staff(self.staff, two_factor_ok=False)
+        response = self.client.post(
+            self.transfer_url,
+            {'password': self.staff_password, 'confirm': 'on'},
+        )
+        self.assertEqual(response.status_code, 302)
+        self.assertIn('/auth/2fa/', response['Location'])
+        self.assert_original_admin_unchanged()
+
+    def test_support_can_transfer_admin_with_single_admin_audit_and_session_invalidation(self):
+        old_version = self.old_admin.security_version
+        new_version = self.member.security_version
+        response = self.client.post(
+            self.transfer_url,
+            {'password': self.staff_password, 'confirm': 'on'},
+        )
+        self.assertRedirects(response, self.users_url)
+        old_membership = Membership.objects.get(company=self.company, user=self.old_admin)
+        new_membership = Membership.objects.get(company=self.company, user=self.member)
+        self.old_admin.refresh_from_db()
+        self.member.refresh_from_db()
+        self.assertEqual(old_membership.role, 'member')
+        self.assertEqual(new_membership.role, 'admin')
+        self.assertEqual(Membership.objects.filter(company=self.company, active=True, role='admin').count(), 1)
+        self.assertEqual(self.old_admin.security_version, old_version + 1)
+        self.assertEqual(self.member.security_version, new_version + 1)
+        self.assertTrue(self.member.two_factor_required)
+        event = AuditEvent.objects.get(action='company.admin_transferred', object_id=str(self.company.id))
+        self.assertEqual(event.actor_id, self.staff.id)
+        self.assertEqual(event.changes['old_admin'], str(self.old_admin.id))
+        self.assertEqual(event.changes['new_admin'], str(self.member.id))
+
+    def test_cross_tenant_target_is_rejected(self):
+        other_company = Company.objects.create(
+            customer_number='PM-C-TRANSFER-OTHER',
+            name='Other GmbH',
+            email='other@example.test',
+            country='DE',
+        )
+        other_user = User.objects.create_user('other-member@example.test', 'Other-Member-Password-42!')
+        Membership.objects.create(company=other_company, user=other_user, role='member', active=True)
+        url = reverse('ns_admin:customer_admin_transfer', args=[self.company.id, other_user.id])
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 404)
+        self.assert_original_admin_unchanged()
+
+    def test_read_only_staff_sees_no_transfer_action_and_cannot_open_route(self):
+        read_only = User.objects.create_user(
+            'read-only-transfer@example.test',
+            'Read-Only-Transfer-Password-42!',
+            is_staff=True,
+        )
+        role = Role.objects.create(code='customer-reader-test', name='Customer Reader Test')
+        role.permissions.add(Permission.objects.get(code='customers.read'))
+        UserRole.objects.create(user=read_only, role=role)
+        self._login_staff(read_only, two_factor_ok=True)
+        response = self.client.get(self.users_url)
+        self.assertEqual(response.status_code, 200)
+        self.assertNotContains(response, self.transfer_url)
+        response = self.client.get(self.transfer_url)
+        self.assertEqual(response.status_code, 403)
+        self.assert_original_admin_unchanged()
+
+    def test_company_admin_self_service_transfer_uses_same_confirmation_contract(self):
+        self.client.force_login(self.old_admin)
+        session = self.client.session
+        session['security_version'] = self.old_admin.security_version
+        session['two_factor_ok'] = True
+        session.save()
+        url = reverse('portal:transfer_admin', args=[self.member.id])
+        response = self.client.post(url, {'password': 'Customer-Transfer-Password-42!'})
+        self.assertEqual(response.status_code, 200)
+        self.assert_original_admin_unchanged()
+        response = self.client.post(
+            url,
+            {'password': 'Customer-Transfer-Password-42!', 'confirm': 'on'},
+        )
+        self.assertRedirects(response, reverse('accounts:login'))
+        self.assertEqual(Membership.objects.get(company=self.company, user=self.old_admin).role, 'member')
+        self.assertEqual(Membership.objects.get(company=self.company, user=self.member).role, 'admin')
+        event = AuditEvent.objects.get(action='company.admin_transferred', object_id=str(self.company.id))
+        self.assertEqual(event.actor_id, self.old_admin.id)
+
 
 class TenantIsolationTests(TestCase):
     def test_company_license_cannot_be_assigned_cross_tenant(self):

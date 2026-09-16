@@ -59,6 +59,7 @@ class AcceptInvitationForm(forms.Form):
 
 class TransferAdminForm(forms.Form):
     password = forms.CharField(widget=forms.PasswordInput, label='Passwort zur Bestätigung')
+    confirm = forms.BooleanField(label='Administratorübertragung verbindlich bestätigen')
 
 
 class PasswordResetRequestForm(forms.Form):

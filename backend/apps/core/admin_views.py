@@ -11,6 +11,7 @@ from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse
 from django.utils import timezone
 
+from apps.accounts.forms import TransferAdminForm
 from apps.accounts.models import Role, User, UserRole
 from apps.accounts.security import bump_security_version
 from apps.audit.models import AuditEvent
@@ -18,6 +19,7 @@ from apps.audit.services import audit as write_audit
 from apps.catalog.models import Feature, Product
 from apps.catalog.services import create_price_version
 from apps.companies.models import Company, Membership, PrivateCustomerProfile
+from apps.companies.services import transfer_admin
 from apps.devices.models import DeviceRegistration
 from apps.integrations.models import ServiceAccount
 from apps.legal.models import DeletionRequest, LegalDocument, RetentionPolicy
@@ -339,7 +341,69 @@ def customer_users(request, pk):
         default_sort='user__last_name',
         filters={'role': 'role', 'active': 'active'},
     ).build()
-    return render(request, 'ns_admin/customer_grid.html', {'customer': customer, 'title': 'Benutzer', 'grid': grid, 'kind': 'users', 'filter_options': [('role', 'Rolle', Membership.ROLE), ('active', 'Status', [('True', 'Aktiv'), ('False', 'Inaktiv')])]})
+    return render(
+        request,
+        'ns_admin/customer_grid.html',
+        {
+            'customer': customer,
+            'title': 'Benutzer',
+            'grid': grid,
+            'kind': 'users',
+            'can_write': has_perm(request.user, 'customers.write'),
+            'filter_options': [
+                ('role', 'Rolle', Membership.ROLE),
+                ('active', 'Status', [('True', 'Aktiv'), ('False', 'Inaktiv')]),
+            ],
+        },
+    )
+
+
+@staff_perm('customers.write')
+def customer_admin_transfer(request, pk, user_id):
+    customer = _customer(request, pk)
+    current_admin = get_object_or_404(
+        Membership.objects.select_related('user'),
+        company=customer,
+        active=True,
+        role='admin',
+    )
+    new_member = get_object_or_404(
+        Membership.objects.select_related('user'),
+        company=customer,
+        user_id=user_id,
+        active=True,
+    )
+    form = TransferAdminForm(request.POST or None)
+    if request.method == 'POST' and form.is_valid():
+        if not request.user.check_password(form.cleaned_data['password']):
+            form.add_error('password', 'Passwort falsch.')
+        elif not request.session.get('two_factor_ok'):
+            raise PermissionDenied
+        else:
+            try:
+                transfer_admin(
+                    customer,
+                    current_admin.user,
+                    new_member.user,
+                    actor=request.user,
+                    request=request,
+                )
+            except ValidationError as exc:
+                form.add_error(None, exc.messages[0])
+            else:
+                messages.success(
+                    request,
+                    'Firmenadministrator übertragen. Die betroffenen Kundensitzungen wurden ungültig gemacht.',
+                )
+                return redirect('ns_admin:customer_users', pk=customer.pk)
+    return render(
+        request,
+        'ns_admin/form.html',
+        {
+            'title': f'Firmenadministrator an {new_member.user.full_name} übertragen',
+            'form': form,
+        },
+    )
 
 
 @staff_perm('customers.read')
