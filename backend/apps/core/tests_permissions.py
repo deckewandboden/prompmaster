@@ -70,9 +70,11 @@ class AdminDataVisibilityTests(TestCase):
             'audit.read': f'/ns-admin/customers/private/{self.private_profile.id}/audit/',
         }
 
-        for domain_permission, routes in (
-            *[(permission, (company_routes[permission], private_routes[permission])) for permission in company_routes],
-        ):
+        for domain_permission in company_routes:
+            routes = (
+                company_routes[domain_permission],
+                private_routes[domain_permission],
+            )
             with self.subTest(domain_permission=domain_permission, missing='customers.read'):
                 self._reset_permissions(domain_permission)
                 for path in routes:
