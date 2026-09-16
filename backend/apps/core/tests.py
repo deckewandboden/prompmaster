@@ -8,6 +8,10 @@ from django.test import RequestFactory, SimpleTestCase, TestCase
 from django.utils import timezone
 
 from apps.accounts.models import User
+from apps.catalog.models import Product
+from apps.companies.models import Company, Membership
+from apps.devices.models import DeviceRegistration
+from apps.licenses.models import License, LicenseAssignment
 from apps.audit.models import AuditEvent
 from apps.integrations.models import ServiceAccount
 from apps.legal.models import DeletionRequest
@@ -311,3 +315,146 @@ class NotificationReleaseTests(TestCase):
         args = queue_email_mock.call_args.args
         self.assertEqual(args[0], 't60')
         self.assertEqual(args[1], user.email)
+
+class PortalTenantIsolationHttpTests(TestCase):
+    def setUp(self):
+        self.now = timezone.now()
+        self.product = Product.objects.create(
+            code='PORTAL-IDOR-PRO',
+            name='Portal IDOR Pro',
+            default_license_days=365,
+            default_device_limit=2,
+            reminder_1_days=60,
+            reminder_2_days=30,
+            critical_warning_days=7,
+        )
+        self.company_a = Company.objects.create(
+            customer_number='PM-IDOR-A',
+            name='Tenant A GmbH',
+            email='tenant-a@example.test',
+            country='DE',
+        )
+        self.company_b = Company.objects.create(
+            customer_number='PM-IDOR-B',
+            name='Tenant B GmbH',
+            email='tenant-b@example.test',
+            country='DE',
+        )
+        self.admin_a = User.objects.create_user(
+            'admin-a@example.test',
+            'Portal-Idor-Password-42!',
+            first_name='Admin',
+            last_name='A',
+            email_verified_at=self.now,
+        )
+        self.member_a = User.objects.create_user(
+            'member-a@example.test',
+            'Portal-Idor-Password-42!',
+            first_name='Member',
+            last_name='A',
+            email_verified_at=self.now,
+        )
+        self.member_b = User.objects.create_user(
+            'member-b@example.test',
+            'Portal-Idor-Password-42!',
+            first_name='Member',
+            last_name='B',
+            email_verified_at=self.now,
+        )
+        Membership.objects.create(
+            company=self.company_a,
+            user=self.admin_a,
+            role='admin',
+            active=True,
+        )
+        self.member_a_membership = Membership.objects.create(
+            company=self.company_a,
+            user=self.member_a,
+            role='member',
+            active=True,
+        )
+        Membership.objects.create(
+            company=self.company_b,
+            user=self.member_b,
+            role='admin',
+            active=True,
+        )
+        # Realistic historical state: the user used to belong to tenant B, but
+        # an old tenant-B license/device still exists after moving to tenant A.
+        Membership.objects.create(
+            company=self.company_b,
+            user=self.member_a,
+            role='member',
+            active=False,
+        )
+        self.foreign_license = License.objects.create(
+            company=self.company_b,
+            product=self.product,
+            status='active',
+            valid_from=self.now - timezone.timedelta(days=1),
+            valid_until=self.now + timezone.timedelta(days=364),
+        )
+        LicenseAssignment.objects.create(
+            license=self.foreign_license,
+            user=self.member_a,
+        )
+        self.foreign_device = DeviceRegistration.objects.create(
+            user=self.member_a,
+            license=self.foreign_license,
+            token_hash='a' * 64,
+            display_name='FOREIGN-TENANT-DEVICE',
+            last_seen_at=self.now,
+        )
+        self._login(self.admin_a)
+
+    def _login(self, user):
+        self.client.force_login(user)
+        session = self.client.session
+        session['security_version'] = user.security_version
+        session['two_factor_ok'] = True
+        session.save()
+
+    def test_foreign_team_member_direct_url_is_not_found(self):
+        response = self.client.get(f'/portal/team/{self.member_b.id}/')
+        self.assertEqual(response.status_code, 404)
+
+    def test_foreign_company_license_cannot_be_renewed_by_admin(self):
+        response = self.client.get(f'/portal/licenses/{self.foreign_license.id}/renew/')
+        self.assertEqual(response.status_code, 403)
+
+    def test_company_admin_device_views_hide_foreign_tenant_device(self):
+        response = self.client.get('/portal/devices/')
+        self.assertEqual(response.status_code, 200)
+        self.assertNotContains(response, self.foreign_device.display_name)
+
+        response = self.client.get(f'/portal/team/{self.member_a.id}/')
+        self.assertEqual(response.status_code, 200)
+        self.assertNotContains(response, self.foreign_device.display_name)
+
+    def test_company_admin_cannot_revoke_foreign_tenant_device(self):
+        response = self.client.post(f'/portal/devices/{self.foreign_device.id}/revoke/')
+        self.assertEqual(response.status_code, 404)
+        self.foreign_device.refresh_from_db()
+        self.assertIsNone(self.foreign_device.revoked_at)
+
+    def test_member_deactivation_does_not_revoke_foreign_tenant_device(self):
+        response = self.client.post(f'/portal/team/{self.member_a.id}/deactivate/')
+        self.assertEqual(response.status_code, 302)
+        self.foreign_device.refresh_from_db()
+        self.assertIsNone(self.foreign_device.revoked_at)
+
+    def test_member_cannot_open_admin_only_portal_areas_or_post_admin_action(self):
+        self._login(self.member_a)
+        for path in (
+            '/portal/team/',
+            '/portal/team/invitations/',
+            '/portal/company/',
+            '/portal/orders/',
+        ):
+            with self.subTest(path=path):
+                self.assertEqual(self.client.get(path).status_code, 403)
+        self.assertEqual(
+            self.client.post(f'/portal/team/{self.admin_a.id}/deactivate/').status_code,
+            403,
+        )
+
