@@ -343,6 +343,7 @@ def devices(request):
     company, membership = _ctx(request)
     if company and membership and membership.role == 'admin':
         queryset = DeviceRegistration.objects.filter(
+            license__company=company,
             user__company_memberships__company=company,
             user__company_memberships__active=True,
         )
@@ -370,6 +371,7 @@ def revoke_device_view(request, pk):
     device = get_object_or_404(
         DeviceRegistration,
         pk=pk,
+        license__company=company,
         user__company_memberships__company=company,
         user__company_memberships__active=True,
     )
@@ -779,7 +781,10 @@ def team_member(request, user_id):
             'member': member,
             'free_licenses': free,
             'assignments': assignments,
-            'devices': member.user.devices.filter(revoked_at__isnull=True).select_related('license'),
+            'devices': member.user.devices.filter(
+                license__company=company_obj,
+                revoked_at__isnull=True,
+            ).select_related('license'),
         },
     )
 
@@ -890,7 +895,11 @@ def member_deactivate(request, user_id):
         )
         for row in assignment_rows:
             release_license(row.license, request.user)
-        DeviceRegistration.objects.filter(user=member.user, revoked_at__isnull=True).update(revoked_at=timezone.now())
+        DeviceRegistration.objects.filter(
+            user=member.user,
+            license__company=company_obj,
+            revoked_at__isnull=True,
+        ).update(revoked_at=timezone.now())
         member.active = False
         member.save(update_fields=['active', 'updated_at'])
         member.user.is_active = False
