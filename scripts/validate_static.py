@@ -230,6 +230,27 @@ for template in sorted((ROOT/'backend/templates').rglob('*.html')):
         fail(f'{template.relative_to(ROOT)} contains javascript: navigation')
 
 
+# 10e) Literal backend template classes must exist in the central stylesheet.
+# Dynamic Django class expressions are validated by the narrower variant guards
+# above. Literal classes are part of the shared design system and must never
+# silently rely on stale prototype CSS.
+_app_css = (ROOT/'backend/static/css/app.css').read_text(encoding='utf-8')
+_defined_classes = set(re.findall(r'\.([A-Za-z_][A-Za-z0-9_-]*)', _app_css))
+for template in sorted((ROOT/'backend/templates').rglob('*.html')):
+    text = template.read_text(encoding='utf-8')
+    for match in re.finditer(r'''class=["']([^"']+)["']''', text):
+        raw = match.group(1)
+        if '{%' in raw or '{{' in raw:
+            continue
+        line = text.count('\n', 0, match.start()) + 1
+        for class_name in raw.split():
+            if class_name not in _defined_classes:
+                fail(
+                    f'{template.relative_to(ROOT)}:{line} uses undefined literal '
+                    f'CSS class: {class_name}'
+                )
+
+
 # 11) Security-critical implementation guards.
 checks = {
  'backend/apps/accounts/models.py': ('security_version=models.PositiveBigIntegerField(default=1)',),
