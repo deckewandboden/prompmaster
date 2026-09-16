@@ -188,6 +188,40 @@ for template in sorted((ROOT/'backend/templates').rglob('*.html')):
             'required by mobile card layout'
         )
 
+
+# 10c) Literal design-system controls must use one of the defined visual
+# variants. A naked .btn has no intended product color; unknown badge/alert
+# variants are almost always stale prototype CSS names.
+_allowed_button_variants = {'primary', 'secondary', 'danger'}
+_allowed_badge_variants = {'ok', 'warn', 'bad', 'info', 'pro'}
+_allowed_alert_variants = {'ok', 'info', 'warn', 'danger'}
+for template in sorted((ROOT/'backend/templates').rglob('*.html')):
+    text = template.read_text(encoding='utf-8')
+    for match in re.finditer(r'class=["\']([^"\']+)["\']', text):
+        raw = match.group(1)
+        # Template-generated class strings are validated by their source logic,
+        # not by this literal-token guard.
+        if '{%' in raw or '{{' in raw:
+            continue
+        tokens = set(raw.split())
+        line = text.count('\n', 0, match.start()) + 1
+        if 'btn' in tokens and not (tokens & _allowed_button_variants):
+            fail(
+                f'{template.relative_to(ROOT)}:{line} naked/unknown button variant: {raw}'
+            )
+        if 'badge' in tokens:
+            variants = tokens - {'badge'}
+            if variants and not (variants & _allowed_badge_variants):
+                fail(
+                    f'{template.relative_to(ROOT)}:{line} unknown badge variant: {raw}'
+                )
+        if 'alert' in tokens:
+            variants = tokens - {'alert'}
+            if variants and not (variants & _allowed_alert_variants):
+                fail(
+                    f'{template.relative_to(ROOT)}:{line} unknown alert variant: {raw}'
+                )
+
 # 11) Security-critical implementation guards.
 checks = {
  'backend/apps/accounts/models.py': ('security_version=models.PositiveBigIntegerField(default=1)',),
