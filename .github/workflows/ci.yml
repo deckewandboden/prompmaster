@@ -121,6 +121,15 @@ jobs:
           python manage.py check
           python manage.py test --verbosity 2
 
+      - name: 100k DataGrid scalability gate
+        working-directory: backend
+        env:
+          RUN_100K_DATAGRID_ACCEPTANCE: '1'
+        run: |
+          python manage.py test \
+            apps.core.tests.DataGrid100kAcceptanceTests.test_100000_rows_paginate_without_unbounded_result_materialization \
+            --verbosity 2
+
       - name: Compose configuration
         env:
           CADDY_DOMAIN: localhost

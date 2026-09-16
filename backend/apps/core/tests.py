@@ -4,8 +4,10 @@ import logging
 from types import SimpleNamespace
 from unittest.mock import Mock, patch
 
+from django.db import connection
 from django.http import HttpResponse
 from django.test import RequestFactory, SimpleTestCase, TestCase
+from django.test.utils import CaptureQueriesContext
 from unittest import skipUnless
 from django.utils import timezone
 
@@ -425,8 +427,19 @@ class DataGridAcceptanceTests(TestCase):
 class DataGrid100kAcceptanceTests(DataGridAcceptanceTests):
     def test_100000_rows_paginate_without_unbounded_result_materialization(self):
         self._companies(100000)
-        grid = self._grid({'page': '2000', 'page_size': '50'})
+        with CaptureQueriesContext(connection) as queries:
+            grid = self._grid({'page': '2000', 'page_size': '50'})
+            rows = list(grid.page.object_list)
+
         self.assertEqual(grid.page.paginator.count, 100000)
         self.assertEqual(grid.page.paginator.num_pages, 2000)
-        self.assertEqual(len(grid.page.object_list), 50)
+        self.assertEqual(len(rows), 50)
+        self.assertLessEqual(
+            len(queries),
+            3,
+            f'100k pagination issued too many SQL queries: {[q["sql"] for q in queries]}',
+        )
+        select_sql = ' '.join(q['sql'] for q in queries if 'SELECT' in q['sql'].upper())
+        self.assertIn('LIMIT 50', select_sql.upper())
+        self.assertIn('OFFSET 99950', select_sql.upper())
 
