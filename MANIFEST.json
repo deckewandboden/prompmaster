@@ -35,8 +35,8 @@
     },
     {
       "path": ".github/workflows/ci.yml",
-      "size": 6305,
-      "sha256": "6069fe207e86ee71c73550a76aab66e59b279ce922a77b4190e4f6fed0fbda0a",
+      "size": 7126,
+      "sha256": "81370ecbbe78255c9fcddc1cb3bfadc0b420b16b59f1cbd4db51a009108a1fc0",
       "role": "active-ci"
     },
     {
@@ -2730,13 +2730,13 @@
     {
       "path": "marketing/package-lock.json",
       "size": 347285,
-      "sha256": "e742e43c1184fdbd3566241ac582c54f899cfddbbd0cc29db09e7f89e1521887",
+      "sha256": "85ebf234b206e78f035635cafe8435804075d2d458bb2189c0a424eafee10e4f",
       "role": "active-marketing"
     },
     {
       "path": "marketing/package.json",
-      "size": 1668,
-      "sha256": "53f28ed51b220ae668f5b06fc14cfbcfe121e5a7973d6a990b3a48daf67db3b2",
+      "size": 1713,
+      "sha256": "7e04a495c54d014b6cab1ac4c1fcb47ee7f5f93046a43ff2056f71f4d60a456d",
       "role": "active-marketing"
     },
     {
@@ -2927,8 +2927,8 @@
     },
     {
       "path": "requirements.txt",
-      "size": 206,
-      "sha256": "ceb986bad2b3fbe439d43e758686454954b00e4f39b438903eb2dfe864abfb0c",
+      "size": 237,
+      "sha256": "06d85cd19b2de162c7038cfb3521f4e084eec43296d492c92d74aba6c5b90476",
       "role": "repository-root"
     },
     {

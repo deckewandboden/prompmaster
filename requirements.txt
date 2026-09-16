@@ -1,11 +1,12 @@
-Django>=5.2,<5.3
+Django>=5.2.17,<5.3
 psycopg[binary]>=3.2,<3.4
 celery>=5.5,<5.7
 redis>=5.2,<7
-requests>=2.32,<3
-cryptography>=45,<47
+requests>=2.33.0,<3
+urllib3>=2.7.0,<3
+cryptography>=46.0.7,<47
 prometheus-client>=0.22,<1
-gunicorn>=26,<27
+gunicorn>=26.2.0,<27
 pyotp>=2.10,<3
 whitenoise>=6.9,<7
 PyYAML>=6.0,<7
