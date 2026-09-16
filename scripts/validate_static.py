@@ -222,6 +222,14 @@ for template in sorted((ROOT/'backend/templates').rglob('*.html')):
                     f'{template.relative_to(ROOT)}:{line} unknown alert variant: {raw}'
                 )
 
+# 10d) Product templates must not depend on javascript: navigation.
+# CSP/browser history can make those links unreliable; use named Django routes.
+for template in sorted((ROOT/'backend/templates').rglob('*.html')):
+    text = template.read_text(encoding='utf-8')
+    if re.search(r'''(?:href|action)\s*=\s*["']\s*javascript:''', text, flags=re.I):
+        fail(f'{template.relative_to(ROOT)} contains javascript: navigation')
+
+
 # 11) Security-critical implementation guards.
 checks = {
  'backend/apps/accounts/models.py': ('security_version=models.PositiveBigIntegerField(default=1)',),
