@@ -1,6 +1,6 @@
-| `backend/templates/ns_admin/service_account_token.html` | 603 | `e925718eca563cf3199d428f3e858c216e6823838923b4bc0a287ca1d276a954` || `backend/templates/ns_admin/api.html` | 1235 | `da72eb8c5979e8f13c9c6331a2aaf4cfce6dee86fb352ff7fb393c77e67d04fc` || `backend/apps/core/tests.py` | 6784 | `124513218876c4455b00a8d63fdaee52f2d9573dd365e74cfff09508fb106975` || `backend/apps/core/admin_urls.py` | 5846 | `c06689e8b4a809e5e8513c8f80269c2d7aad6a914e2a80d0d369f796e9789ee9` || `backend/apps/core/admin_views.py` | 54457 | `1ed8a0b89d68d4a9a9f95017a3175aca0a46a0a6d61f56743ee59ba57a6bec04` |# Vollständiges Datei-Inventar — PromptMaster RC14
+# Vollständiges Datei-Inventar — PromptMaster RC14
 
-Erfasst: **517 Dateien** (Manifest-/Inventardateien selbst ausgenommen), **20,537,871 Byte**.
+Erfasst: **517 Dateien** (Manifest-/Inventardateien selbst ausgenommen), **20,573,600 Byte**.
 
 Maschinenlesbar: `FILE_MANIFEST.tsv` und `MANIFEST.json`.
 
@@ -56,7 +56,7 @@ Maschinenlesbar: `FILE_MANIFEST.tsv` und `MANIFEST.json`.
 | `backend/apps/companies/migrations/0002_rename_companies_c_name_idx_companies_c_name_2d8260_idx_and_more.py` | 935 | `61214c81793e1edee3cc7a76394549eaaf762019611dd2c2943b728b2d48509c` |
 | `backend/apps/companies/migrations/__init__.py` | 0 | `e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855` |
 | `backend/apps/companies/models.py` | 4477 | `5f8f0ebd6de05ff721fdad27ba1a5fa7f0525b7802a429b24bbeaefe0f2cac2d` |
-| `backend/apps/companies/portal.py` | 37351 | `b32d0b48422b830ce1db6f3ddc139d7789bbe219b97cc31e2ca70814f950359b` |
+| `backend/apps/companies/portal.py` | 37577 | `e90181f8a0da20f28a32ea3a7122dc33668e409692f15a6a4b591868207ac43f` |
 | `backend/apps/companies/portal_urls.py` | 1972 | `bb8de83592080cc9610465cedc11c23013f263e5835d253db3e1a7482a59a755` |
 | `backend/apps/companies/services.py` | 3187 | `a536c08fac5295beb1eb70cc08eb5cc980dec2152dc3c1485b237849774ed394` |
 | `backend/apps/contenthub/__init__.py` | 0 | `e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855` |
@@ -76,8 +76,8 @@ Maschinenlesbar: `FILE_MANIFEST.tsv` und `MANIFEST.json`.
 | `backend/apps/contenthub/tests.py` | 1268 | `7cda88a698efe4ac07a8c2ea66f60eb51e5f890516e20f09463fbb7f05558b90` |
 | `backend/apps/core/__init__.py` | 0 | `e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855` |
 | `backend/apps/core/admin_forms.py` | 8687 | `b839e61b9a1fe19d172ff99d4032b44089ea5276bc230e631dbd4ed031744977` |
-| `backend/apps/core/admin_urls.py` | 5638 | `79e4f0b5bbd1188a89e525c7a38d440dc582dffb8e222099ca0406387fcf14a7` |
-| `backend/apps/core/admin_views.py` | 52449 | `8849a8ba2971468759aaf25facd0ec6797b8f13e05451dffbd59d20e6383e93b` |
+| `backend/apps/core/admin_urls.py` | 5846 | `c06689e8b4a809e5e8513c8f80269c2d7aad6a914e2a80d0d369f796e9789ee9` |
+| `backend/apps/core/admin_views.py` | 54457 | `1ed8a0b89d68d4a9a9f95017a3175aca0a46a0a6d61f56743ee59ba57a6bec04` |
 | `backend/apps/core/apps.py` | 210 | `8134ed07155edcd5917919300abfbad09d504b9390c59be5733a5c4132c57b24` |
 | `backend/apps/core/checks.py` | 1150 | `ac8bc9a61a89a3bb5b1cac9436885b4c77aa99d98e95f78742ae025a1fedf6ab` |
 | `backend/apps/core/context_processors.py` | 747 | `09659e56cf02408ea2d27de161700bbb995b72863389b5a096adab884356bbb5` |
@@ -96,7 +96,7 @@ Maschinenlesbar: `FILE_MANIFEST.tsv` und `MANIFEST.json`.
 | `backend/apps/core/settings_store.py` | 389 | `84e6673b306c3fb15add41f9cc461cdc626d2e22858b88869464d10c72cc2500` |
 | `backend/apps/core/templatetags/__init__.py` | 0 | `e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855` |
 | `backend/apps/core/templatetags/pm.py` | 2473 | `e05d823315a4cc8054ee82cb56714afaa0d50fb21fe2de18d36601df8974d297` |
-| `backend/apps/core/tests.py` | 256 | `11c33a31813610e01e5e78295e19072944481eb02ba5cde6616af474d62f5487` |
+| `backend/apps/core/tests.py` | 17761 | `2c69e69c354030714dce5d2959e25fbc8be13971afaa71b64dc403cf0db94079` |
 | `backend/apps/core/tests_marketing_integration.py` | 2204 | `b3c651dfe1b75096004c4fe78738723cb5d4bc5f8de99e6d45fede4cfa6359e8` |
 | `backend/apps/core/tests_permissions.py` | 1872 | `a8ebca460fc07a95e4e3e75e5e26cf4fa000d8713e8251cebe21e9d6893d13a2` |
 | `backend/apps/core/tests_release_rules.py` | 12036 | `d063b54804c4d75338c3894b7f3e3a49866210a8dbfd912208f971ebad66b990` |
@@ -254,7 +254,7 @@ Maschinenlesbar: `FILE_MANIFEST.tsv` und `MANIFEST.json`.
 | `backend/templates/includes/grid_toolbar.html` | 2391 | `da53bad0adffef400100582b26f9d8795da8016ed9bd0edf6850d60b2378023a` |
 | `backend/templates/includes/pagination.html` | 865 | `ab8612bb290fdf8f4f4e33998c114f57088eb7f35b8f3cf09bf98ad90d01bcba` |
 | `backend/templates/legal_public.html` | 484 | `77e09fc30e13b6a4bfa42d1b3c4f439952dec2a043a5e2597139233f59c2712e` |
-| `backend/templates/ns_admin/api.html` | 334 | `f0bf7909d22ae88388f8981762488f37542015c5482fa209efb4e2681b02534d` |
+| `backend/templates/ns_admin/api.html` | 1235 | `da72eb8c5979e8f13c9c6331a2aaf4cfce6dee86fb352ff7fb393c77e67d04fc` |
 | `backend/templates/ns_admin/audit.html` | 1194 | `62a98a5a3e95d8c815cc32044118bd27b88b3617aa962433dc77973c812abe44` |
 | `backend/templates/ns_admin/base.html` | 3248 | `293485cc7d3ceb03b9336ec78950226353b38a6b2963dc29b8de4146f0429a29` |
 | `backend/templates/ns_admin/content/faq_edit.html` | 468 | `cfbd88dc11210f15d48778ef91efe1965611cc47e86ed4248fa2ed3e4a4342a5` |
@@ -296,7 +296,7 @@ Maschinenlesbar: `FILE_MANIFEST.tsv` und `MANIFEST.json`.
 | `backend/templates/ns_admin/prompt_studio/version_edit.html` | 587 | `eaf47adc22768040903083b7c932f5ea447dea3558185a681f2324a31d8674c7` |
 | `backend/templates/ns_admin/roles.html` | 2083 | `b0d7e9441073a2e9646d02580172278d29e8ebaa912a254bb608fdd072d47cff` |
 | `backend/templates/ns_admin/search.html` | 1978 | `01c2ef1534e69e2de878fc4dabea55d31a6a5a8e66a878daedddd4a7be901d4b` |
-| `backend/templates/ns_admin/service_account_token.html` | 506 | `0fcf67bc080a5764e875c13260366a88a326e905c9180f28f5079e8a18979909` |
+| `backend/templates/ns_admin/service_account_token.html` | 603 | `e925718eca563cf3199d428f3e858c216e6823838923b4bc0a287ca1d276a954` |
 | `backend/templates/ns_admin/settings.html` | 419 | `ec9a7f2c59f6ebcdee585acf956e0024e44e76ef23ce57145b7073175fd21af5` |
 | `backend/templates/ns_admin/stats.html` | 714 | `fb045f17096046ce9cf6ada192a6663a3e518f00c1f0d39480a15ee8871c9187` |
 | `backend/templates/ns_admin/support.html` | 1408 | `df6d343d153690fdadd84ff3b748a99223571b5f8242cd6bf7d6d1e963f4d1df` |
@@ -328,7 +328,7 @@ Maschinenlesbar: `FILE_MANIFEST.tsv` und `MANIFEST.json`.
 
 | Pfad | Größe | SHA256 |
 |---|---:|---|
-| `.github/workflows/ci.yml` | 6305 | `6069fe207e86ee71c73550a76aab66e59b279ce922a77b4190e4f6fed0fbda0a` |
+| `.github/workflows/ci.yml` | 7126 | `81370ecbbe78255c9fcddc1cb3bfadc0b420b16b59f1cbd4db51a009108a1fc0` |
 
 ## active-marketing
 
@@ -408,8 +408,8 @@ Maschinenlesbar: `FILE_MANIFEST.tsv` und `MANIFEST.json`.
 | `marketing/INTEGRATION.md` | 1209 | `46dd7ebdf99e5481e2e39aa807ada646a2133c9cc3376580004fbb573db024da` |
 | `marketing/lib/utils.ts` | 169 | `9304a861c8673bee09e0f12de31773abbde503b02e59dfd74763ddec2e37cf05` |
 | `marketing/next.config.ts` | 104 | `d063bebef3a4878ae82f9f9547c2c9675b8b6945ab23702932dcb63a011a9fc9` |
-| `marketing/package-lock.json` | 347285 | `e742e43c1184fdbd3566241ac582c54f899cfddbbd0cc29db09e7f89e1521887` |
-| `marketing/package.json` | 1668 | `53f28ed51b220ae668f5b06fc14cfbcfe121e5a7973d6a990b3a48daf67db3b2` |
+| `marketing/package-lock.json` | 347285 | `85ebf234b206e78f035635cafe8435804075d2d458bb2189c0a424eafee10e4f` |
+| `marketing/package.json` | 1713 | `7e04a495c54d014b6cab1ac4c1fcb47ee7f5f93046a43ff2056f71f4d60a456d` |
 | `marketing/public/_headers` | 190 | `b9201f6a9456864da5620b1a6828b9894171d960f123da891f97f6ea81410e94` |
 | `marketing/public/brand/design-reference.jpeg` | 238669 | `2bfb44f2d888e463e7f9e9b581b02d775d59506146aa1d6b5b027e8bef889340` |
 | `marketing/public/catalog.json` | 297 | `7b8ccc92bc3b74efd64fec82c9b6669908cc83cd8f3a6f8972ce8e9a59badcb3` |
@@ -581,5 +581,6 @@ Maschinenlesbar: `FILE_MANIFEST.tsv` und `MANIFEST.json`.
 | `Dockerfile` | 672 | `f7d131ec42cb4503cba4775915838c477b43e4c8f1727289b8849fde04b11494` |
 | `Dockerfile.caddy` | 291 | `547c367f14227de8814c43d7ea32a1ba85982a58af55d8e04b1a4875b5bbd809` |
 | `README.md` | 6011 | `d8ffbf46bb7cc79061ed383bfd75e81bb21389fc13e32c3974fa08d928ab0c92` |
-| `requirements.txt` | 206 | `ceb986bad2b3fbe439d43e758686454954b00e4f39b438903eb2dfe864abfb0c` |
+| `requirements.txt` | 237 | `06d85cd19b2de162c7038cfb3521f4e084eec43296d492c92d74aba6c5b90476` |
 | `SPEC.md` | 46369 | `e5e6491322fc8d75c5086cc737743cbb55d0e7dcf806e515e5d62a8791d248fc` |
+
