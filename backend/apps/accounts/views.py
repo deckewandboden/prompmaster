@@ -140,7 +140,7 @@ def register(request):
             else:
                 token = signing.dumps({'uid': str(user.id), 'email': user.email}, salt=EMAIL_VERIFY_SALT)
                 url = request.build_absolute_uri(reverse('accounts:verify_email', args=[token]))
-                queue_email('verify_email', user.email, {'url': url})
+                queue_email('verify_email', user.email, {'url': url}, scope_user=user)
                 login(request, user)
                 request.session.cycle_key()
                 bind_security_session(request, user, two_factor_ok=not user.two_factor_required)
@@ -255,7 +255,7 @@ def password_reset_request(request):
         if user:
             token = signing.dumps({'uid': str(user.id), 'email': user.email, 'sv': int(user.security_version)}, salt=PASSWORD_RESET_SALT)
             url = request.build_absolute_uri(reverse('accounts:password_reset_confirm', args=[token]))
-            queue_email('password_reset', user.email, {'url': url})
+            queue_email('password_reset', user.email, {'url': url}, scope_user=user)
         # Deliberately identical response for existing and unknown addresses.
         return render(request, 'auth/password_reset_sent.html')
     return render(request, 'auth/password_reset_request.html', {'form': form})
