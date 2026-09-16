@@ -19,11 +19,11 @@
       <tbody>
       {% for row in support_history %}
         <tr>
-          <td>{{ row.created_at|date:"d.m.Y H:i" }}</td>
-          <td>{{ row.get_category_display }}</td>
-          <td>{{ row.subject }}</td>
-          <td>{% if row.license %}{{ row.license.license_number }}{% else %}–{% endif %}</td>
-          <td>{{ row.get_status_display }}</td>
+          <td data-label="Datum">{{ row.created_at|date:"d.m.Y H:i" }}</td>
+          <td data-label="Kategorie">{{ row.get_category_display }}</td>
+          <td data-label="Betreff">{{ row.subject }}</td>
+          <td data-label="Lizenz">{% if row.license %}{{ row.license.license_number }}{% else %}–{% endif %}</td>
+          <td data-label="Status">{{ row.get_status_display }}</td>
         </tr>
       {% empty %}
         <tr><td colspan="5">Noch keine Anfragen vorhanden.</td></tr>

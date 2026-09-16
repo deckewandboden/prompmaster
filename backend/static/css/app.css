@@ -92,3 +92,25 @@ a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,te
   .desktopTable{display:none}
   .mobileCards{display:grid;gap:9px}
 }
+
+
+/* Detail/auth layout primitives */
+.actions,.form-actions{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.detail-list{margin:0;display:grid;gap:0}
+.detail-list>div{display:grid;grid-template-columns:minmax(120px,.75fr) minmax(0,1.25fr);gap:16px;padding:10px 0;border-bottom:1px solid #edf2f6}
+.detail-list>div:last-child{border-bottom:0}
+.detail-list dt{color:var(--muted);font-size:12px;font-weight:700}
+.detail-list dd{margin:0;min-width:0;overflow-wrap:anywhere}
+.row-line{display:grid;grid-template-columns:minmax(140px,1fr) minmax(100px,.7fr) minmax(140px,.9fr);gap:12px;align-items:center;padding:9px 0;border-bottom:1px solid #edf2f6}
+.row-line:last-child{border-bottom:0}
+.check-row{display:flex!important;align-items:flex-start;gap:9px;font-weight:500!important}
+.check-row input{width:auto!important;min-height:0!important;margin-top:2px}
+.wrap-value,.statusrow strong,.statusrow span{min-width:0;overflow-wrap:anywhere}
+.code-wrap,pre{max-width:100%;overflow:auto;white-space:pre-wrap;overflow-wrap:anywhere}
+.auth-code{display:block;padding:10px 12px;border:1px solid var(--line);border-radius:9px;background:#f8fbfd;font-family:ui-monospace,SFMono-Regular,Consolas,monospace;font-size:12px;overflow-wrap:anywhere}
+@media(max-width:700px){
+  .actions,.form-actions{width:100%}
+  .actions .btn,.form-actions .btn{flex:1}
+  .detail-list>div{grid-template-columns:1fr;gap:3px}
+  .row-line{grid-template-columns:1fr;gap:4px}
+}
