@@ -385,6 +385,166 @@ class PortalLicenseDetailIsolationTests(TestCase):
             404,
         )
 
+class PortalTenantHttpIsolationMatrixTests(TestCase):
+    def setUp(self):
+        self.now = timezone.now()
+        self.product = Product.objects.create(
+            code='PORTAL-MATRIX-PRO',
+            name='Portal Matrix Pro',
+            default_license_days=365,
+            default_device_limit=2,
+            reminder_1_days=60,
+            reminder_2_days=30,
+            critical_warning_days=7,
+        )
+        self.company = Company.objects.create(
+            customer_number='PM-C-MATRIX-A',
+            name='Matrix A GmbH',
+            email='matrix-a@example.test',
+        )
+        self.foreign_company = Company.objects.create(
+            customer_number='PM-C-MATRIX-B',
+            name='Matrix B GmbH',
+            email='matrix-b@example.test',
+        )
+        self.admin = User.objects.create_user(
+            'matrix-admin@example.test',
+            'Matrix-Password-42!',
+            first_name='Matrix',
+            last_name='Admin',
+            email_verified_at=self.now,
+        )
+        self.member = User.objects.create_user(
+            'matrix-member@example.test',
+            'Matrix-Password-42!',
+            first_name='Matrix',
+            last_name='Member',
+            email_verified_at=self.now,
+        )
+        self.foreign_member = User.objects.create_user(
+            'matrix-foreign@example.test',
+            'Matrix-Password-42!',
+            first_name='Foreign',
+            last_name='Member',
+            email_verified_at=self.now,
+        )
+        Membership.objects.create(company=self.company, user=self.admin, role='admin', active=True)
+        Membership.objects.create(company=self.company, user=self.member, role='member', active=True)
+        Membership.objects.create(
+            company=self.foreign_company,
+            user=self.foreign_member,
+            role='member',
+            active=True,
+        )
+
+        self.own_license = License.objects.create(
+            company=self.company,
+            product=self.product,
+            status='active',
+            valid_from=self.now - timedelta(days=1),
+            valid_until=self.now + timedelta(days=364),
+        )
+        self.foreign_license = License.objects.create(
+            company=self.foreign_company,
+            product=self.product,
+            status='active',
+            valid_from=self.now - timedelta(days=1),
+            valid_until=self.now + timedelta(days=364),
+        )
+        LicenseAssignment.objects.create(license=self.own_license, user=self.member)
+        # Deliberately inconsistent legacy/corrupt assignment: the member of
+        # company A points at a company-B license. Read scopes must still fail
+        # closed and never expose its device.
+        LicenseAssignment.objects.create(license=self.foreign_license, user=self.member)
+
+        self.own_device = DeviceRegistration.objects.create(
+            user=self.member,
+            license=self.own_license,
+            token_hash='e' * 64,
+            display_name='Matrix A device',
+            last_seen_at=self.now,
+        )
+        self.foreign_device = DeviceRegistration.objects.create(
+            user=self.member,
+            license=self.foreign_license,
+            token_hash='f' * 64,
+            display_name='Matrix B leaked device',
+            last_seen_at=self.now,
+        )
+
+    def _login(self, user):
+        self.client.force_login(user)
+        session = self.client.session
+        session['security_version'] = user.security_version
+        session['two_factor_ok'] = True
+        session.save()
+
+    def test_company_admin_cannot_open_or_mutate_foreign_tenant_objects(self):
+        self._login(self.admin)
+
+        self.assertEqual(
+            self.client.get(f'/portal/team/{self.foreign_member.id}/').status_code,
+            404,
+        )
+        self.assertEqual(
+            self.client.get(f'/portal/licenses/{self.foreign_license.id}/').status_code,
+            404,
+        )
+        self.assertEqual(
+            self.client.get(f'/portal/licenses/{self.foreign_license.id}/renew/').status_code,
+            404,
+        )
+        self.assertEqual(
+            self.client.post(
+                f'/portal/team/{self.member.id}/assign/',
+                {'license_id': str(self.foreign_license.id)},
+            ).status_code,
+            404,
+        )
+        self.assertEqual(
+            self.client.post(
+                f'/portal/devices/{self.foreign_device.id}/revoke/',
+            ).status_code,
+            404,
+        )
+        self.foreign_device.refresh_from_db()
+        self.assertIsNone(self.foreign_device.revoked_at)
+
+    def test_company_device_views_require_license_tenant_as_well_as_membership(self):
+        self._login(self.admin)
+
+        response = self.client.get('/portal/devices/')
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, self.own_device.display_name)
+        self.assertNotContains(response, self.foreign_device.display_name)
+
+        dashboard = self.client.get('/portal/dashboard/')
+        self.assertEqual(dashboard.status_code, 200)
+        self.assertEqual(dashboard.context['device_count'], 1)
+
+        member = self.client.get(f'/portal/team/{self.member.id}/')
+        self.assertEqual(member.status_code, 200)
+        device_ids = {row.id for row in member.context['devices']}
+        self.assertEqual(device_ids, {self.own_device.id})
+
+    def test_company_member_cannot_deep_link_admin_only_portal_areas(self):
+        self._login(self.member)
+        for url in (
+            '/portal/team/',
+            '/portal/team/invitations/',
+            '/portal/company/',
+            '/portal/orders/',
+            '/portal/licenses/buy/',
+        ):
+            with self.subTest(url=url):
+                self.assertEqual(self.client.get(url).status_code, 403)
+
+        devices = self.client.get('/portal/devices/')
+        self.assertEqual(devices.status_code, 200)
+        ids = {row.id for row in devices.context['grid'].page.object_list}
+        self.assertEqual(ids, {self.own_device.id})
+
+
 class SupportContextIsolationTests(TestCase):
     def setUp(self):
         self.now = timezone.now()
