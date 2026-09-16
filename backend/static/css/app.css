@@ -126,3 +126,5 @@ a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,te
   .narrow-card,.form-card{max-width:none}
   .security-actions .btn,.login-card .result-actions .btn{flex:1}
 }
+
+.wrap-cell{white-space:normal!important;overflow-wrap:anywhere;min-width:220px;max-width:520px}

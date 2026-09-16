@@ -1,16 +1,13 @@
 {% extends 'ns_admin/base.html' %}{% block content %}
-<div class="page-head">
-  <div><h1>Statistiken</h1><div class="sub">Kompakte Geschäftszahlen innerhalb Ihrer Berechtigungen.</div></div>
+<div class="page-head"><div><h1>Statistiken</h1><div class="sub">Kompakte Geschäftszahlen innerhalb Ihrer Berechtigungen.</div></div></div>
+<div class="grid four">
+  {% if rights.customers %}<div class="card kpi"><div>Neue Kunden · 30 Tage</div><div class="value">{{ new_customers_30 }}</div><div class="small muted">{{ customers }} Kunden gesamt</div></div>{% endif %}
+  {% if rights.licenses %}<div class="card kpi"><div>Verlängerungsanteil</div><div class="value">{% if renewal_share != None %}{{ renewal_share }} %{% else %}–{% endif %}</div><div class="small muted">{{ renewals }} Verlängerungsterms</div></div>{% endif %}
+  {% if rights.licenses %}<div class="card kpi"><div>Refund-Quote</div><div class="value">{% if refund_rate != None %}{{ refund_rate }} %{% else %}–{% endif %}</div><div class="small muted">Anteil refundierter Lizenzterms</div></div>{% endif %}
+  {% if rights.customers and rights.licenses %}<div class="card kpi"><div>Ø Lizenzen / Firma</div><div class="value">{% if avg_licenses_company != None %}{{ avg_licenses_company }}{% else %}–{% endif %}</div><div class="small muted">Firmenkundenbestand</div></div>{% endif %}
 </div>
-<div class="grid kpis">
-  {% if rights.customers %}<div class="card"><div>Kunden</div><div class="value">{{ customers }}</div></div>{% endif %}
-  {% if rights.licenses %}<div class="card"><div>Lizenzen</div><div class="value">{{ licenses }}</div></div>{% endif %}
-  {% if rights.orders %}<div class="card"><div>Bestellungen</div><div class="value">{{ orders }}</div></div>{% endif %}
-  {% if rights.licenses %}<div class="card"><div>Verlängerungen</div><div class="value">{{ renewals }}</div></div>{% endif %}
+<div class="grid two" style="margin-top:14px">
+  {% if rights.orders %}<div class="card"><div>Umsatz letzte 30 Tage</div><div class="value">{{ revenue30|floatformat:2 }} €</div><div class="small muted">{{ orders }} Bestellungen gesamt</div></div>{% endif %}
+  {% if rights.licenses %}<div class="card"><div>Lizenzen gesamt</div><div class="value">{{ licenses }}</div><div class="small muted">inkl. aktiv, frei, abgelaufen und historisch</div></div>{% endif %}
 </div>
-{% if rights.orders %}
-<div class="card" style="margin-top:14px">
-  <div>Umsatz letzte 30 Tage</div><div class="value">{{ revenue30|floatformat:2 }} €</div>
-</div>
-{% endif %}
 {% endblock %}

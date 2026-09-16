@@ -20,7 +20,7 @@ from apps.audit.services import audit as write_audit
 from apps.catalog.models import Feature, Product
 from apps.catalog.services import create_price_version
 from apps.companies.models import Company, Membership, PrivateCustomerProfile
-from apps.companies.services import deactivate_company_member, transfer_admin
+from apps.companies.services import INVITATION_TTL_HOURS, deactivate_company_member, transfer_admin
 from apps.devices.models import DeviceRegistration
 from apps.devices.services import revoke_device
 from apps.integrations.models import ServiceAccount
@@ -861,8 +861,22 @@ def order_detail(request, pk):
 
 @staff_perm('payments.read')
 def payments(request):
-    grid = DataGrid(request, Payment.objects.select_related('order', 'order__company', 'order__private_user'), search_fields=('provider_payment_id', 'order__order_number', 'order__company__name', 'order__private_user__email'), sort_fields={'date': 'created_at', 'amount': 'amount', 'status': 'status'}, default_sort='-created_at', filters={'status': 'status'}).build()
-    return render(request, 'ns_admin/payments.html', {'grid': grid, 'filter_options': [('status','Status',PAYMENT_STATUS_CHOICES)]})
+    queryset = Payment.objects.select_related('order', 'order__company', 'order__private_user')
+    grid = DataGrid(request, queryset, search_fields=('provider_payment_id', 'order__order_number', 'order__company__name', 'order__private_user__email'), sort_fields={'date': 'created_at', 'amount': 'amount', 'status': 'status'}, default_sort='-created_at', filters={'status': 'status'}).build()
+    return render(
+        request,
+        'ns_admin/payments.html',
+        {
+            'grid': grid,
+            'filter_options': [('status','Status',PAYMENT_STATUS_CHOICES)],
+            'payment_counts': {
+                'paid': Payment.objects.filter(status='paid').count(),
+                'open': Payment.objects.filter(status__in=['created', 'open', 'pending', 'authorized']).count(),
+                'failed': Payment.objects.filter(status='failed').count(),
+                'chargeback': Payment.objects.filter(status='chargeback').count(),
+            },
+        },
+    )
 
 
 @staff_perm('products.read')
@@ -1036,21 +1050,41 @@ def stats(request):
     }
     if not any(rights.values()):
         raise PermissionDenied
+
+    customer_total = (
+        Company.objects.count() + PrivateCustomerProfile.objects.count()
+        if rights['customers'] else None
+    )
+    new_customers_30 = (
+        Company.objects.filter(created_at__gte=now - timedelta(days=30)).count()
+        + PrivateCustomerProfile.objects.filter(created_at__gte=now - timedelta(days=30)).count()
+        if rights['customers'] else None
+    )
+    term_total = LicenseTerm.objects.count() if rights['licenses'] else 0
+    renewal_terms = (
+        LicenseTerm.objects.filter(order_item__target_license__isnull=False).count()
+        if rights['licenses'] else 0
+    )
+    refunded_terms = (
+        LicenseTerm.objects.filter(status='refunded').count()
+        if rights['licenses'] else 0
+    )
+    company_count = Company.objects.count() if rights['customers'] and rights['licenses'] else 0
+    company_license_count = License.objects.filter(company__isnull=False).count() if company_count else 0
+
     return render(
         request,
         'ns_admin/stats.html',
         {
             'rights': rights,
-            'customers': (
-                Company.objects.count() + PrivateCustomerProfile.objects.count()
-                if rights['customers'] else None
-            ),
+            'customers': customer_total,
+            'new_customers_30': new_customers_30,
             'licenses': License.objects.count() if rights['licenses'] else None,
             'orders': Order.objects.count() if rights['orders'] else None,
-            'renewals': (
-                LicenseTerm.objects.filter(order_item__target_license__isnull=False).count()
-                if rights['licenses'] else None
-            ),
+            'renewals': renewal_terms if rights['licenses'] else None,
+            'renewal_share': round((renewal_terms / term_total) * 100, 1) if term_total else None,
+            'refund_rate': round((refunded_terms / term_total) * 100, 1) if term_total else None,
+            'avg_licenses_company': round(company_license_count / company_count, 1) if company_count else None,
             'revenue30': (
                 Order.objects.filter(
                     status='paid',
@@ -1348,8 +1382,20 @@ def audit(request):
 
 @staff_perm('roles.read')
 def roles(request):
+    descriptions = {
+        'superadmin': 'Uneingeschränkte Rechte auf alle PromptMaster-Verwaltungsbereiche.',
+        'support': 'Kunden, Lizenzen, Geräte, Bestellungen, Zahlungen, E-Mail und Support.',
+        'ops': 'Monitoring, Backups, Operations API, Logs und Systemstatus.',
+        'prompt_manager': 'Prompt Studio, Prompt-Lifecycle, Qualität und zentrale Inhalte.',
+    }
+    role_rows = list(Role.objects.prefetch_related('permissions').order_by('name'))
+    for role in role_rows:
+        role.display_description = descriptions.get(
+            role.code,
+            'Berechtigungen werden über die zugewiesenen Capabilities gesteuert.',
+        )
     return render(request, 'ns_admin/roles.html', {
-        'roles': Role.objects.prefetch_related('permissions').order_by('name'),
+        'roles': role_rows,
         'users': User.objects.filter(is_staff=True).prefetch_related('role_links__role').order_by('email'),
     })
 
@@ -1492,7 +1538,16 @@ def settings_view(request):
             write_audit(request.user, 'settings.updated', request.user, {'support_email': support_email, 'ops_thresholds': data}, request=request)
             messages.success(request, 'Einstellungen gespeichert.')
             return redirect('ns_admin:settings')
-    return render(request, 'ns_admin/settings.html', {'form': form, 'can_write': has_perm(request.user, 'settings.write')})
+    return render(
+        request,
+        'ns_admin/settings.html',
+        {
+            'form': form,
+            'can_write': has_perm(request.user, 'settings.write'),
+            'pro_product': Product.objects.filter(code='PRO').first(),
+            'invitation_ttl_hours': INVITATION_TTL_HOURS,
+        },
+    )
 
 
 @staff_perm()

@@ -1,5 +1,7 @@
 from datetime import timedelta
 
+INVITATION_TTL_HOURS = 24
+
 from django.core.exceptions import ValidationError
 from django.db import transaction
 from django.utils import timezone
@@ -30,7 +32,7 @@ def create_invitation(*, company, actor, email, first_name='', last_name=''):
         first_name=first_name.strip(),
         last_name=last_name.strip(),
         token_hash=hashed,
-        expires_at=timezone.now() + timedelta(hours=24),
+        expires_at=timezone.now() + timedelta(hours=INVITATION_TTL_HOURS),
         invited_by=actor,
     )
     audit(actor, 'invitation.created', invitation, {'email': normalized})
