@@ -97,11 +97,7 @@ def _license_state_from_assignments(license_obj, now):
 
 
 def _locked_order_licenses(order, *, active_terms_only=False):
-    """Lock licenses touched by an order without FOR UPDATE + DISTINCT.
-
-    PostgreSQL rejects SELECT DISTINCT ... FOR UPDATE. Resolve the unique
-    license IDs first, then lock the concrete License rows in a second query.
-    """
+    """Lock licenses touched by an order without FOR UPDATE + DISTINCT."""
     terms = LicenseTerm.objects.filter(order_item__order=order)
     if active_terms_only:
         terms = terms.filter(status='active')
@@ -113,10 +109,6 @@ def _locked_order_licenses(order, *, active_terms_only=False):
 
 @transaction.atomic
 def process_provider_state(payment_id, payload):
-    # Lock only the payment row. Joining nullable order owners here would make
-    # PostgreSQL apply FOR UPDATE to the nullable side of LEFT OUTER JOINs,
-    # which PostgreSQL rejects. Related order/customer data is read separately;
-    # _activate_order obtains its own row lock before mutating the order.
     payment = Payment.objects.select_for_update().get(provider_payment_id=payment_id)
     order = Order.objects.select_related('private_user', 'company').get(pk=payment.order_id)
     payment.order = order
@@ -135,16 +127,8 @@ def process_provider_state(payment_id, payload):
     if base_status == 'paid' and refunded_amount > 0:
         status = 'refunded_full' if refunded_amount >= payment.amount.quantize(CENT) else 'refunded_partial'
     elif base_status == 'paid' and previous_status in {'chargeback', 'charged_back', 'chargeback_reversed'}:
-        # Mollie reports a reversed chargeback as paid again. Preserve that
-        # transition as its own internal state instead of collapsing it back
-        # to the original paid state.
         status = 'chargeback_reversed'
 
-    # Canonical provider result is the idempotency key. The previous internal
-    # state must not be part of the key: otherwise a duplicate paid webhook
-    # would create open->paid and paid->paid as two different events. A
-    # chargeback reversal remains distinct because its canonical status is
-    # chargeback_reversed.
     event_key = f'{payment_id}:{status}:{refunded}:{remaining}'[:180]
     event, _ = MollieEvent.objects.get_or_create(
         payment=payment,
@@ -174,9 +158,6 @@ def process_provider_state(payment_id, payload):
                     'expiry': timezone.localtime(target.valid_until).strftime('%d.%m.%Y'),
                 }, order=payment.order)
         else:
-            # A previously charged-back payment may become paid again after a
-            # reversal. Re-enable only licenses that still have paid active
-            # terms; refunded terms remain excluded.
             now = timezone.now()
             for license_obj in _locked_order_licenses(payment.order):
                 has_terms = license_obj.terms.filter(status='active', valid_until__gt=now).exists()
@@ -208,13 +189,8 @@ def process_provider_state(payment_id, payload):
 
     payment.save(
         update_fields=[
-            'status',
-            'method',
-            'last_provider_payload',
-            'paid_at',
-            'failed_at',
-            'processed_paid',
-            'updated_at',
+            'status', 'method', 'last_provider_payload', 'paid_at', 'failed_at',
+            'processed_paid', 'updated_at',
         ]
     )
     event.provider_status = status
@@ -228,7 +204,6 @@ def process_provider_state(payment_id, payload):
 
 
 def record_webhook_failure(payment_id, exc):
-    """Persist a sanitised retry/error signal for known Mollie payments."""
     payment = Payment.objects.filter(provider_payment_id=payment_id).first()
     if not payment:
         return None
@@ -296,11 +271,6 @@ def _activate_order(order, paid_at):
 
 
 def calculate_refund(term, today=None):
-    """Return unused whole calendar days and the pro-rata gross refund.
-
-    A future prepaid term is capped at its purchased 365-day duration, so a
-    renewal bought early can never produce a refund greater than its price.
-    """
     today = today or timezone.localdate()
     start_date = timezone.localtime(term.valid_from).date()
     end_date = timezone.localtime(term.valid_until).date()
@@ -319,7 +289,6 @@ def calculate_refund(term, today=None):
 
 
 def _terminate_license_access(license_obj, now):
-    """End active assignment credentials and invalidate existing sessions."""
     assignments = list(
         LicenseAssignment.objects.select_for_update()
         .filter(license=license_obj, ended_at__isnull=True)
@@ -338,10 +307,6 @@ def _recalculate_license_after_refund(license_obj, now):
     active_terms = license_obj.terms.filter(status='active')
     bounds = active_terms.aggregate(start=Min('valid_from'), end=Max('valid_until'))
     if not bounds['end']:
-        # No active paid period remains. Keep the historical dates on
-        # LicenseTerm rows and clear the denormalised current window together;
-        # the License constraint only permits both null or a strictly ordered
-        # valid_from/valid_until pair.
         license_obj.valid_from = None
         license_obj.valid_until = None
         license_obj.status = 'refunded'
@@ -354,8 +319,6 @@ def _recalculate_license_after_refund(license_obj, now):
             license_obj.status = _license_state_from_assignments(license_obj, now)
         else:
             license_obj.status = 'expired'
-            # A future prepaid term may remain. Access stays off until its
-            # valid_from date; no term dates are silently shifted.
             _terminate_license_access(license_obj, now)
     license_obj.save(update_fields=['valid_from', 'valid_until', 'status', 'updated_at'])
 
@@ -398,20 +361,12 @@ def create_refund_request(*, term, actor, reason=''):
             remaining_days=remaining_days,
             reason=reason.strip()[:2000],
         )
-        audit(
-            actor,
-            'refund.created',
-            refund,
-            {'amount': str(amount), 'remaining_days': remaining_days},
-        )
+        audit(actor, 'refund.created', refund, {'amount': str(amount), 'remaining_days': remaining_days})
         return refund
 
     if refund.status == 'succeeded':
         raise ValidationError('Für diese Lizenzperiode wurde bereits eine Erstattung abgeschlossen.')
     if refund.status == 'submitted':
-        # In-flight or ambiguous provider attempts must retain their original
-        # quote and idempotency key. Requoting here could desynchronise the
-        # local amount from a request Mollie may already have accepted.
         audit(
             actor,
             'refund.retry_requested',
@@ -469,15 +424,8 @@ def _prepare_refund_attempt(refund_id):
 
     max_number = row.attempts.aggregate(value=Max('number'))['value'] or 0
     number = max_number + 1
-    # Legacy submitted refunds created before RefundAttempt used refund:<uuid>.
-    # Reusing that original key is the only safe recovery for an unknown
-    # pre-migration provider outcome.
     legacy_submitted = row.status == 'submitted' and max_number == 0
-    idempotency_key = (
-        f'refund:{row.id}'
-        if legacy_submitted
-        else f'refund:{row.id}:attempt:{number}'
-    )
+    idempotency_key = f'refund:{row.id}' if legacy_submitted else f'refund:{row.id}:attempt:{number}'
     attempt = RefundAttempt.objects.create(
         refund=row,
         number=number,
@@ -497,6 +445,11 @@ def _record_refund_attempt_error(refund_id, attempt_id, exc):
     with transaction.atomic():
         row = Refund.objects.select_for_update().get(pk=refund_id)
         attempt = RefundAttempt.objects.select_for_update().get(pk=attempt_id)
+        # A concurrent request using the same idempotency key may already have
+        # established success. Success is terminal and must never be downgraded
+        # by a later timeout/error response from another local caller.
+        if row.status == 'succeeded' or attempt.status == 'succeeded':
+            return
         now = timezone.now()
         attempt.error_class = type(exc).__name__[:120]
         attempt.resolved_at = None if exc.ambiguous else now
@@ -507,9 +460,7 @@ def _record_refund_attempt_error(refund_id, attempt_id, exc):
             attempt.status = 'failed'
             row.status = 'failed'
             row.provider_refund_id = None
-        attempt.save(
-            update_fields=['status', 'error_class', 'resolved_at', 'updated_at']
-        )
+        attempt.save(update_fields=['status', 'error_class', 'resolved_at', 'updated_at'])
         row.save(update_fields=['status', 'provider_refund_id', 'updated_at'])
     audit(
         None,
@@ -524,9 +475,6 @@ def _record_refund_attempt_error(refund_id, attempt_id, exc):
 
 
 def submit_refund(refund):
-    # Reserve/reuse an attempt while holding a row lock, then release the DB
-    # transaction before waiting on Mollie. Concurrent callers converge on the
-    # same active attempt and therefore the same provider idempotency key.
     row, attempt = _prepare_refund_attempt(refund.pk)
     try:
         response = MollieClient().create_refund(
@@ -546,6 +494,8 @@ def submit_refund(refund):
     with transaction.atomic():
         row = Refund.objects.select_for_update().get(pk=row.pk)
         attempt = RefundAttempt.objects.select_for_update().get(pk=attempt.pk)
+        if row.status == 'succeeded' or attempt.status == 'succeeded':
+            return row
         if provider_id:
             attempt.provider_refund_id = provider_id
         attempt.error_class = ''
@@ -566,8 +516,7 @@ def submit_refund(refund):
             row.provider_refund_id = provider_id or row.provider_refund_id
         attempt.save(
             update_fields=[
-                'provider_refund_id', 'status', 'error_class', 'resolved_at',
-                'updated_at',
+                'provider_refund_id', 'status', 'error_class', 'resolved_at', 'updated_at',
             ]
         )
         row.save(update_fields=['provider_refund_id', 'status', 'updated_at'])
@@ -611,8 +560,7 @@ def mark_refund_success(refund, provider_id):
         attempt.resolved_at = now
         attempt.save(
             update_fields=[
-                'status', 'provider_refund_id', 'error_class', 'resolved_at',
-                'updated_at',
+                'status', 'provider_refund_id', 'error_class', 'resolved_at', 'updated_at',
             ]
         )
 
@@ -641,7 +589,6 @@ def mark_refund_success(refund, provider_id):
 
 
 def reconcile_refunds(payment):
-    """Reconcile provider-visible submitted refunds using Mollie's refund list."""
     pending = list(
         payment.refunds.filter(status='submitted')
         .exclude(provider_refund_id__isnull=True)
@@ -661,17 +608,17 @@ def reconcile_refunds(payment):
         elif provider and provider.get('status') in {'failed', 'canceled'}:
             with transaction.atomic():
                 current = Refund.objects.select_for_update().get(pk=refund.pk)
+                if current.status == 'succeeded':
+                    continue
                 provider_id = current.provider_refund_id
                 attempt = current.attempts.select_for_update().filter(
                     provider_refund_id=provider_id
                 ).order_by('-number').first()
-                if attempt is not None:
+                if attempt is not None and attempt.status != 'succeeded':
                     attempt.status = 'failed'
                     attempt.resolved_at = timezone.now()
                     attempt.error_class = ''
-                    attempt.save(
-                        update_fields=['status', 'resolved_at', 'error_class', 'updated_at']
-                    )
+                    attempt.save(update_fields=['status', 'resolved_at', 'error_class', 'updated_at'])
                 current.status = 'failed'
                 current.provider_refund_id = None
                 current.save(update_fields=['status', 'provider_refund_id', 'updated_at'])
