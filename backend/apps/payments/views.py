@@ -3,6 +3,7 @@ import logging
 from django.http import HttpResponse
 from django.views.decorators.csrf import csrf_exempt
 
+from .models import Payment
 from .mollie import MollieClient
 from .services import process_provider_state, reconcile_refunds, record_webhook_failure
 
@@ -19,6 +20,14 @@ def mollie_webhook(request):
     payment_id = request.POST.get('id', '').strip()
     if not payment_id or len(payment_id) > 100:
         return HttpResponse(status=400)
+
+    # Never turn an unauthenticated public webhook into an arbitrary Mollie API
+    # oracle/amplifier. Only provider IDs already linked to one of our orders
+    # are eligible for a canonical provider fetch. A very early legitimate
+    # webhook can be retried by Mollie once the local payment row exists.
+    if not Payment.objects.filter(provider_payment_id=payment_id).exists():
+        return HttpResponse(status=404)
+
     try:
         payload = MollieClient().get_payment(payment_id)
         payment = process_provider_state(payment_id, payload)
