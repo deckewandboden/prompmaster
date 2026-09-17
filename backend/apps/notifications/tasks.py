@@ -217,8 +217,28 @@ def schedule_license_reminders():
 
 @shared_task
 def sync_license_states():
-    """Keep denormalised License.status aligned with paid term coverage."""
+    """Keep license state aligned and finish provider-confirmed refund commits.
+
+    Refund provider success is recorded before the final local business-state
+    transaction. If a worker process dies in that tiny interval, a later sync
+    detects ``Refund.status=succeeded`` with an active term and idempotently
+    completes the same mark_refund_success transaction.
+    """
     from apps.licenses.services import effective_license_status
+    from apps.payments.models import Refund
+    from apps.payments.services import mark_refund_success
+
+    recovery_ids = list(
+        Refund.objects.filter(status='succeeded', term__status='active')
+        .values_list('id', flat=True)[:500]
+    )
+    recovered_refunds = 0
+    for refund_id in recovery_ids:
+        refund = Refund.objects.filter(pk=refund_id).first()
+        if refund is None:
+            continue
+        mark_refund_success(refund, refund.provider_refund_id)
+        recovered_refunds += 1
 
     mutable_states = {'active', 'free', 'expired'}
     ids = License.objects.filter(status__in=mutable_states).values_list('id', flat=True)
@@ -237,4 +257,4 @@ def sync_license_states():
                 license_obj.status = desired
                 license_obj.save(update_fields=['status', 'updated_at'])
                 changed += 1
-    return changed
+    return {'license_states_changed': changed, 'refunds_recovered': recovered_refunds}
