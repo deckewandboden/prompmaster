@@ -160,6 +160,7 @@ CELERY_BEAT_SCHEDULE = {
     'beat-heartbeat': {'task': 'apps.ops.tasks.beat_heartbeat', 'schedule': 60.0},
     'retention': {'task': 'apps.legal.tasks.apply_retention', 'schedule': 86400.0},
     'prompt-quality': {'task': 'apps.prompts.tasks.refresh_prompt_quality', 'schedule': 21600.0},
+    'export-dispatch': {'task': 'apps.core.tasks.dispatch_pending_exports', 'schedule': 300.0},
     'export-cleanup': {'task': 'apps.core.tasks.cleanup_expired_exports', 'schedule': 3600.0},
 }
 
