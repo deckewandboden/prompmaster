@@ -128,14 +128,20 @@ class MollieStateIntegrationTests(TestCase):
         )
 
     @patch('apps.payments.services._queue_after_commit')
-    def test_failed_payment_creates_no_license(self, _mail):
+    def test_failed_payment_creates_no_license_and_preserves_first_failure_time(self, _mail):
         process_provider_state(self.payment.provider_payment_id, self.payload('failed'))
         self.order.refresh_from_db()
         self.payment.refresh_from_db()
         self.assertEqual(self.order.status, 'failed')
         self.assertEqual(self.payment.status, 'failed')
+        self.assertIsNotNone(self.payment.failed_at)
+        first_failed_at = self.payment.failed_at
         self.assertFalse(self.payment.processed_paid)
         self.assertFalse(License.objects.filter(owner_user=self.user).exists())
+
+        process_provider_state(self.payment.provider_payment_id, self.payload('failed'))
+        self.payment.refresh_from_db()
+        self.assertEqual(self.payment.failed_at, first_failed_at)
 
     @patch('apps.payments.services._queue_after_commit')
     def test_chargeback_blocks_license_and_paid_reversal_restores_access_state(self, _mail):
