@@ -115,12 +115,22 @@ class RealProAccessTests(TestCase):
         self.assertEqual(self.client.get('/api/v1/prompts/').status_code, 200)
 
     def test_unverified_account_cannot_register_or_compose(self):
+        _device, raw = register_device(self.user, self.license, 'Verification-bound browser')
+        self.assertIsNotNone(validate_device_token(self.user, raw))
         self.user.email_verified_at = None
         self.user.save(update_fields=['email_verified_at'])
+        self.assertIsNone(validate_device_token(self.user, raw))
         self.assertEqual(self.client.post('/pro/device/register/', {'display_name': 'Denied'}).status_code, 403)
         response = self.client.get('/api/v1/prompts/')
         self.assertEqual(response.status_code, 403)
         self.assertEqual(response.json()['error']['code'], 'email_verification_required')
+
+    def test_inactive_identity_invalidates_device_token_directly(self):
+        _device, raw = register_device(self.user, self.license, 'Identity-bound browser')
+        self.assertIsNotNone(validate_device_token(self.user, raw))
+        self.user.is_active = False
+        self.user.save(update_fields=['is_active'])
+        self.assertIsNone(validate_device_token(self.user, raw))
 
     def test_expired_or_revoked_device_is_denied(self):
         device, raw = register_device(self.user, self.license, 'Revoked browser')
@@ -141,13 +151,19 @@ class RealProAccessTests(TestCase):
         self.license.save()
         device, raw = register_device(self.user, self.license, 'Company browser')
         self.client.cookies[DEVICE_COOKIE] = raw
+        self.assertIsNotNone(validate_device_token(self.user, raw))
         self.assertEqual(self.client.get('/api/v1/prompts/').status_code, 200)
+
         membership.active = False
         membership.save()
+        self.assertIsNone(validate_device_token(self.user, raw))
         self.assertEqual(self.client.get('/api/v1/prompts/').status_code, 403)
+
         membership.active = True
         membership.save()
+        self.assertIsNotNone(validate_device_token(self.user, raw))
         company.status = 'inactive'
         company.save()
+        self.assertIsNone(validate_device_token(self.user, raw))
         self.assertEqual(self.client.get('/api/v1/prompts/').status_code, 403)
         self.assertEqual(self.client.get('/portal/dashboard/').status_code, 403)
