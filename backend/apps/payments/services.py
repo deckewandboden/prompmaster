@@ -72,12 +72,20 @@ def _order_recipient(order):
     return ''
 
 
-def _queue_after_commit(code, recipient, context):
+def _queue_after_commit(code, recipient, context, *, order=None):
     if not recipient:
         return
+
     def send():
         from apps.notifications.services import queue_email
-        queue_email(code, recipient, context)
+        queue_email(
+            code,
+            recipient,
+            context,
+            scope_company=(order.company_id if order and order.company_id else None),
+            scope_user=(order.private_user_id if order and order.private_user_id else None),
+        )
+
     transaction.on_commit(send, robust=True)
 
 
@@ -126,15 +134,18 @@ def process_provider_state(payment_id, payload):
     status = base_status
     if base_status == 'paid' and refunded_amount > 0:
         status = 'refunded_full' if refunded_amount >= payment.amount.quantize(CENT) else 'refunded_partial'
-    elif base_status == 'paid' and previous_status in {'chargeback', 'chargeback_reversed'}:
+    elif base_status == 'paid' and previous_status in {'chargeback', 'charged_back', 'chargeback_reversed'}:
         # Mollie reports a reversed chargeback as paid again. Preserve that
-        # transition as its own internal V1 state instead of silently
-        # collapsing it back to the original paid state.
+        # transition as its own internal state instead of collapsing it back
+        # to the original paid state.
         status = 'chargeback_reversed'
-    # Include the previous canonical state so a chargeback reversal back to
-    # paid is preserved as its own transition rather than overwriting the
-    # original paid event. Repeated identical deliveries still deduplicate.
-    event_key = f'{payment_id}:{previous_status}->{status}:{refunded}:{remaining}'[:180]
+
+    # Canonical provider result is the idempotency key. The previous internal
+    # state must not be part of the key: otherwise a duplicate paid webhook
+    # would create open->paid and paid->paid as two different events. A
+    # chargeback reversal remains distinct because its canonical status is
+    # chargeback_reversed.
+    event_key = f'{payment_id}:{status}:{refunded}:{remaining}'[:180]
     event, _ = MollieEvent.objects.get_or_create(
         payment=payment,
         event_key=event_key,
@@ -155,13 +166,13 @@ def process_provider_state(payment_id, payload):
                 'order': payment.order.order_number,
                 'amount': f'{payment.amount:.2f}',
                 'currency': payment.currency,
-            })
+            }, order=payment.order)
             for item in payment.order.items.select_related('target_license').filter(target_license__isnull=False):
                 target = item.target_license
                 _queue_after_commit('license_renewed', recipient, {
                     'license': target.license_number,
                     'expiry': timezone.localtime(target.valid_until).strftime('%d.%m.%Y'),
-                })
+                }, order=payment.order)
         else:
             # A previously charged-back payment may become paid again after a
             # reversal. Re-enable only licenses that still have paid active
@@ -180,10 +191,15 @@ def process_provider_state(payment_id, payload):
         if previous_status != status:
             _queue_after_commit('payment_failed', _order_recipient(payment.order), {
                 'order': payment.order.order_number, 'status': base_status,
-            })
+            }, order=payment.order)
     elif base_status == 'chargeback':
-        if previous_status != 'chargeback':
-            _queue_after_commit('chargeback_review', _order_recipient(payment.order), {'order': payment.order.order_number})
+        if previous_status not in {'chargeback', 'charged_back'}:
+            _queue_after_commit(
+                'chargeback_review',
+                _order_recipient(payment.order),
+                {'order': payment.order.order_number},
+                order=payment.order,
+            )
         for license_obj in _locked_order_licenses(payment.order, active_terms_only=True):
             if license_obj.status != 'payment_review':
                 license_obj.status = 'payment_review'
@@ -204,7 +220,6 @@ def process_provider_state(payment_id, payload):
     event.provider_status = status
     event.processed_at = timezone.now()
     event.error = ''
-    # Avoid QuerySet.update on audit only; normal event rows are mutable retry logs.
     event.save(update_fields=['provider_status', 'processed_at', 'error', 'updated_at'])
     MollieEvent.objects.filter(payment=payment, event_key=f'{payment_id}:webhook-error').update(
         error='', processed_at=timezone.now(), provider_status='recovered', updated_at=timezone.now()
@@ -433,7 +448,7 @@ def mark_refund_success(refund, provider_id):
     order = row.payment.order
     _queue_after_commit('refund_confirmed', _order_recipient(order), {
         'amount': f'{row.amount:.2f}', 'currency': row.payment.currency, 'license': license_obj.license_number,
-    })
+    }, order=order)
     return row
 
 
