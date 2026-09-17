@@ -36,12 +36,7 @@ def _extract_last_url_token(value):
 
 
 def _infer_message_scope(code, recipient, context, scope_company, scope_user):
-    """Infer missing scope for authentication/capability e-mails.
-
-    Callers should still pass explicit scope whenever they already own it. This
-    fallback keeps security properties intact for legacy call sites without
-    requiring raw capability tokens to remain stored in the mail queue.
-    """
+    """Infer missing scope for authentication/capability e-mails."""
     if scope_user is None and code in _USER_SCOPED_TEMPLATES:
         user = get_user_model().objects.filter(email__iexact=recipient).only('id').first()
         if user:
@@ -101,11 +96,6 @@ def _render_context(context):
 
 
 def sanitize_stored_email_contexts(*, batch_size=500):
-    """Encrypt legacy plaintext capability fields already persisted in queue rows.
-
-    Idempotent: values carrying the versioned encryption marker are left
-    untouched, so this can safely run on every deploy through seed_defaults.
-    """
     changed = 0
     ids = EmailMessage.objects.order_by('id').values_list('id', flat=True)
     for message_id in ids.iterator(chunk_size=batch_size):
@@ -133,35 +123,161 @@ def _assert_sensitive_values_not_in_subject(template, context):
         raise ValueError('Sensitive URL/token fields are not allowed in persisted e-mail subjects')
 
 
+def reminder_recipient_scopes(license_obj):
+    """Return current reminder recipient e-mail -> user id mapping.
+
+    This is the canonical source for both scheduling and last-second delivery
+    authorization. A queued reminder therefore follows membership/admin changes
+    instead of trusting a stale address captured hours earlier.
+    """
+    recipients = {}
+    if license_obj.company_id:
+        from apps.companies.models import Membership
+
+        if not license_obj.company or license_obj.company.status != 'active':
+            return recipients
+        active_members = {
+            row.user_id: row.user
+            for row in Membership.objects.filter(
+                company_id=license_obj.company_id,
+                active=True,
+                user__is_active=True,
+            ).select_related('user')
+        }
+        active_assignment = (
+            license_obj.assignments.filter(ended_at__isnull=True)
+            .select_related('user')
+            .first()
+        )
+        if active_assignment and active_assignment.user_id in active_members:
+            user = active_members[active_assignment.user_id]
+            recipients[user.email.lower()] = user.pk
+        admin = (
+            Membership.objects.filter(
+                company_id=license_obj.company_id,
+                active=True,
+                role='admin',
+                user__is_active=True,
+            )
+            .select_related('user')
+            .first()
+        )
+        if admin:
+            recipients[admin.user.email.lower()] = admin.user_id
+    elif license_obj.owner_user_id and license_obj.owner_user.is_active:
+        recipients[license_obj.owner_user.email.lower()] = license_obj.owner_user_id
+    return recipients
+
+
+def _capability_message_active(message, rendered_context):
+    code = message.template.code if message.template_id and message.template else ''
+    raw_token = _extract_last_url_token(rendered_context.get('url'))
+    if code == 'invite':
+        if not raw_token:
+            return False
+        from apps.companies.models import Invitation
+
+        invitation = (
+            Invitation.objects.select_related('company')
+            .filter(
+                token_hash=token_hash(raw_token),
+                email__iexact=message.recipient,
+            )
+            .first()
+        )
+        return bool(
+            invitation
+            and invitation.company.status == 'active'
+            and invitation.is_valid()
+        )
+
+    if code == 'assignment_link':
+        if not raw_token:
+            return False
+        from apps.licenses.models import LicenseAssignmentLink
+        from apps.licenses.services import has_current_term
+
+        link = (
+            LicenseAssignmentLink.objects.select_related(
+                'company', 'target_user', 'license__company'
+            )
+            .filter(token_hash=token_hash(raw_token))
+            .first()
+        )
+        if not link or not link.is_valid():
+            return False
+        if link.company.status != 'active' or not link.target_user.is_active:
+            return False
+        if link.target_user.email.lower() != message.recipient.lower():
+            return False
+        if not link.target_user.company_memberships.filter(
+            company=link.company,
+            active=True,
+        ).exists():
+            return False
+        if (
+            link.license.company_id != link.company_id
+            or link.license.status != 'free'
+            or not has_current_term(link.license)
+        ):
+            return False
+    return True
+
+
 def message_scope_active(message):
-    """Revalidate a queued message's authorization scope immediately before send."""
-    context = message.context or {}
-    company_id = context.get('pm_scope_company_id')
-    user_id = context.get('pm_scope_user_id')
+    """Revalidate authorization and concrete capability immediately before send."""
+    stored_context = message.context or {}
+    company_id = stored_context.get('pm_scope_company_id')
+    user_id = stored_context.get('pm_scope_user_id')
 
     company_ok = True
     user_ok = True
     if company_id:
         from apps.companies.models import Company
-
         company_ok = Company.objects.filter(pk=company_id, status='active').exists()
     if user_id:
         user_ok = get_user_model().objects.filter(pk=user_id, is_active=True).exists()
     if not company_ok or not user_ok:
         return False
 
-    # When both scopes are present the capability belongs to a user inside that
-    # tenant. Require the relationship itself to still be active as well.
     if company_id and user_id:
         from apps.companies.models import Membership
-
-        return Membership.objects.filter(
+        if not Membership.objects.filter(
             company_id=company_id,
             user_id=user_id,
             company__status='active',
             active=True,
             user__is_active=True,
-        ).exists()
+        ).exists():
+            return False
+
+    try:
+        rendered_context = _render_context(stored_context)
+    except Exception:
+        return False
+
+    if not _capability_message_active(message, rendered_context):
+        return False
+
+    reminder_id = rendered_context.get('reminder_id')
+    if reminder_id:
+        from apps.licenses.models import LicenseReminder
+
+        reminder = (
+            LicenseReminder.objects.select_related(
+                'license__company', 'license__owner_user'
+            )
+            .filter(pk=reminder_id)
+            .first()
+        )
+        if not reminder:
+            return False
+        current = reminder_recipient_scopes(reminder.license)
+        current_user_id = current.get(message.recipient.lower())
+        if not current_user_id:
+            return False
+        if user_id and str(current_user_id) != str(user_id):
+            return False
     return True
 
 
@@ -177,13 +293,7 @@ def queue_email(code, recipient, context, *, scope_company=None, scope_user=None
         scope_user,
     )
 
-    # Persisted subjects are intentionally non-secret. A future template must
-    # not move a capability URL/token into the subject line where it would be
-    # stored and propagated outside the encrypted context field.
     _assert_sensitive_values_not_in_subject(template, plain_context)
-
-    # Render/validate against plaintext only in memory. Capability URLs are
-    # encrypted before the durable queue row is created.
     subject = template.subject.format(**plain_context)
     template.body_text.format(**plain_context)
     stored_context = _protect_context(plain_context)
@@ -203,11 +313,6 @@ def queue_email(code, recipient, context, *, scope_company=None, scope_user=None
         context=stored_context,
     )
     from .tasks import send_email_message
-
-    # Never publish a task before the surrounding database transaction is
-    # committed; a fast worker could otherwise see a message ID that is not
-    # committed yet. A periodic dispatcher recovers queued rows if the broker
-    # was unavailable at commit time.
     transaction.on_commit(lambda: send_email_message.delay(str(message.id)), robust=True)
     return message
 
