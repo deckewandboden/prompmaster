@@ -1,7 +1,9 @@
 from datetime import datetime, time, timedelta
 from decimal import Decimal
+from urllib.parse import urlsplit
 from unittest.mock import patch
 
+import pyotp
 from django.core.exceptions import ValidationError
 from django.core.management import call_command
 from django.test import TestCase
@@ -11,10 +13,10 @@ from apps.accounts.models import User
 from apps.audit.models import AuditEvent
 from apps.catalog.models import Product
 from apps.catalog.services import current_price
-from apps.companies.models import Company, Membership
+from apps.companies.models import Membership
 from apps.companies.services import create_invitation
-from apps.core.crypto import encrypt
 from apps.devices.services import register_device, validate_device_token
+from apps.legal.models import LegalDocument
 from apps.licenses.models import License, LicenseReminder, LicenseTerm
 from apps.licenses.services import assign_license
 from apps.notifications.models import EmailMessage
@@ -26,50 +28,80 @@ from apps.proaccess.services import active_product_assignment
 
 
 class CommercialCoreFlowE2ETests(TestCase):
-    """Single contract for the PM-TEST-007 commercial lifecycle.
+    """One integrated contract for all 20 PM-TEST-007 lifecycle steps."""
 
-    Dedicated auth/browser tests validate the registration forms, e-mail token,
-    CSRF and TOTP UI in depth. This contract starts from the completed
-    registration/verification/2FA state and then keeps every commercial state
-    transition in one chain so incompatible service changes cannot pass in
-    isolation.
-    """
-
+    admin_email = 'e2e-admin@example.test'
+    member_email = 'e2e-member@example.test'
     password = 'E2E-Core-Flow-Password-42!'
 
     def setUp(self):
         call_command('seed_defaults', verbosity=0)
         self.now = timezone.now()
         self.product = Product.objects.get(code='PRO')
-        self.company = Company.objects.create(
-            customer_number='E2E-COMPANY-001',
-            name='E2E Muster GmbH',
-            email='e2e-company@example.test',
-            country='DE',
-            status='active',
+        for doc_type in ('terms', 'privacy'):
+            LegalDocument.objects.create(
+                doc_type=doc_type,
+                version='e2e-v1',
+                content=f'E2E {doc_type}',
+                valid_from=self.now - timedelta(days=1),
+                active=True,
+            )
+
+    def _register_verify_and_enable_2fa(self):
+        # 1: register the company through the real HTTP registration view.
+        response = self.client.post(
+            '/auth/register/',
+            {
+                'customer_type': 'company',
+                'first_name': 'Ada',
+                'last_name': 'Admin',
+                'email': self.admin_email,
+                'password': self.password,
+                'company_name': 'E2E Muster GmbH',
+                'accept_terms': 'on',
+                'accept_privacy': 'on',
+            },
         )
-        self.admin = User.objects.create_user(
-            'e2e-admin@example.test',
-            self.password,
-            first_name='Ada',
-            last_name='Admin',
-            email_verified_at=self.now,
-            two_factor_required=True,
-            totp_secret_enc=encrypt('JBSWY3DPEHPK3PXP'),
-        )
-        Membership.objects.create(
-            company=self.company,
-            user=self.admin,
+        self.assertEqual(response.status_code, 302)
+        self.assertTrue(response['Location'].endswith('/auth/2fa/setup/'))
+
+        admin = User.objects.get(email=self.admin_email)
+        membership = Membership.objects.select_related('company').get(
+            user=admin,
             role='admin',
             active=True,
         )
-        self.member = User.objects.create_user(
-            'e2e-member@example.test',
-            self.password,
-            first_name='Mara',
-            last_name='Member',
-            email_verified_at=self.now,
-        )
+        company = membership.company
+        self.assertEqual(company.name, 'E2E Muster GmbH')
+        self.assertEqual(company.status, 'active')
+        self.assertTrue(admin.two_factor_required)
+        self.assertIsNone(admin.email_verified_at)
+
+        # 2: follow the actual verification URL stored in the mail queue.
+        verification = EmailMessage.objects.filter(
+            template__code='verify_email',
+            recipient=self.admin_email,
+        ).latest('created_at')
+        verify_path = urlsplit(verification.context['url']).path
+        verify_response = self.client.get(verify_path)
+        self.assertEqual(verify_response.status_code, 200)
+        admin.refresh_from_db()
+        self.assertIsNotNone(admin.email_verified_at)
+
+        # 3: set up TOTP through the real 2FA setup view.
+        setup = self.client.get('/auth/2fa/setup/')
+        self.assertEqual(setup.status_code, 200)
+        secret = setup.context['secret']
+        code = pyotp.TOTP(secret).now()
+        complete = self.client.post('/auth/2fa/setup/', {'code': code})
+        self.assertEqual(complete.status_code, 200)
+        admin.refresh_from_db()
+        self.assertTrue(admin.two_factor_required)
+        self.assertTrue(admin.totp_secret_enc)
+        session = self.client.session
+        self.assertTrue(session.get('two_factor_ok'))
+        self.assertEqual(int(session['security_version']), int(admin.security_version))
+        return admin, company
 
     def _order(self, *, number, quantity, price_type, target_license=None):
         price = current_price(self.product, price_type, timezone.now())
@@ -106,7 +138,8 @@ class CommercialCoreFlowE2ETests(TestCase):
         )
         return order, payment
 
-    def _paid_payload(self, payment, *, paid_at=None, status='paid'):
+    @staticmethod
+    def _paid_payload(payment, *, paid_at=None, status='paid'):
         paid_at = paid_at or timezone.now()
         return {
             'id': payment.provider_payment_id,
@@ -134,21 +167,15 @@ class CommercialCoreFlowE2ETests(TestCase):
         return target
 
     def test_complete_commercial_core_flow(self):
-        # 1-3: company exists; admin identity is verified and 2FA-enforced.
-        self.assertEqual(self.company.status, 'active')
-        self.assertIsNotNone(self.admin.email_verified_at)
-        self.assertTrue(self.admin.two_factor_required)
-        self.assertTrue(self.admin.totp_secret_enc)
+        self.admin, self.company = self._register_verify_and_enable_2fa()
 
-        # 4-6: buy five seats and confirm the canonical Mollie paid state.
+        # 4-6: purchase five seats and process canonical Mollie paid state.
         order, payment = self._order(
             number='E2E-NEW-001',
             quantity=5,
             price_type='new',
         )
-        # Keep the original paid term clearly in the past so the later expiry
-        # simulation can never violate valid_until > valid_from on a fast CI host.
-        paid_at = timezone.now() - timedelta(days=120)
+        paid_at = timezone.now()
         process_provider_state(
             payment.provider_payment_id,
             self._paid_payload(payment, paid_at=paid_at),
@@ -164,11 +191,8 @@ class CommercialCoreFlowE2ETests(TestCase):
         self.assertEqual(len(licenses), 5)
         for license_obj in licenses:
             self.assertEqual(license_obj.status, 'free')
-            self.assertEqual(
-                license_obj.valid_until - license_obj.valid_from,
-                timedelta(days=365),
-            )
-        # A duplicate provider notification must not create another five seats.
+            term = license_obj.terms.get()
+            self.assertEqual(term.valid_until - term.valid_from, timedelta(days=365))
         process_provider_state(
             payment.provider_payment_id,
             self._paid_payload(payment, paid_at=paid_at),
@@ -178,25 +202,31 @@ class CommercialCoreFlowE2ETests(TestCase):
             5,
         )
 
-        # 7-8: invite an existing verified identity and accept over the real URL.
+        # 7-8: invite a new member and accept through the actual invite route.
         invitation, raw_token = create_invitation(
             company=self.company,
             actor=self.admin,
-            email=self.member.email,
-            first_name=self.member.first_name,
-            last_name=self.member.last_name,
+            email=self.member_email,
+            first_name='Mara',
+            last_name='Member',
         )
-        self.client.force_login(self.member)
-        session = self.client.session
-        session['security_version'] = self.member.security_version
-        session['two_factor_ok'] = True
-        session['authenticated_at'] = timezone.now().timestamp()
-        session['last_activity_at'] = timezone.now().timestamp()
-        session.save()
-        response = self.client.post(f'/auth/invite/{raw_token}/')
-        self.assertEqual(response.status_code, 200)
+        self.client.post('/auth/logout/')
+        response = self.client.post(
+            f'/auth/invite/{raw_token}/',
+            {
+                'first_name': 'Mara',
+                'last_name': 'Member',
+                'password': self.password,
+                'accept_terms': 'on',
+                'accept_privacy': 'on',
+            },
+        )
+        self.assertEqual(response.status_code, 302)
+        self.assertTrue(response['Location'].endswith('/portal/dashboard/'))
         invitation.refresh_from_db()
         self.assertIsNotNone(invitation.accepted_at)
+        self.member = User.objects.get(email=self.member_email)
+        self.assertIsNotNone(self.member.email_verified_at)
         self.assertTrue(
             Membership.objects.filter(
                 company=self.company,
@@ -206,35 +236,23 @@ class CommercialCoreFlowE2ETests(TestCase):
             ).exists()
         )
 
-        # 9: assign one of the free seats to the invited member.
+        # 9: assign a free seat to the invited member.
         assigned_license = licenses[0]
         assignment = assign_license(assigned_license, self.member, self.admin)
         assigned_license.refresh_from_db()
         self.assertEqual(assigned_license.status, 'active')
         self.assertEqual(assignment.user_id, self.member.id)
 
-        # 10-12: exactly two devices are allowed; the third is rejected.
+        # 10-12: two devices work; the third is rejected.
         device_one, token_one = register_device(
-            self.member,
-            assigned_license,
-            'Notebook',
-            'Windows',
-            'Edge',
+            self.member, assigned_license, 'Notebook', 'Windows', 'Edge'
         )
-        _device_two, _token_two = register_device(
-            self.member,
-            assigned_license,
-            'Desktop',
-            'Windows',
-            'Edge',
+        register_device(
+            self.member, assigned_license, 'Desktop', 'Windows', 'Edge'
         )
         with self.assertRaises(ValidationError):
             register_device(
-                self.member,
-                assigned_license,
-                'Drittes Gerät',
-                'Windows',
-                'Edge',
+                self.member, assigned_license, 'Drittes Gerät', 'Windows', 'Edge'
             )
 
         # 13: entitlement + live assignment + device token unlock Pro.
@@ -243,8 +261,8 @@ class CommercialCoreFlowE2ETests(TestCase):
         self.assertIsNotNone(validated)
         self.assertEqual(validated.pk, device_one.pk)
 
-        # 14-15: T-60 and T-30 reminders each create one logical reminder and
-        # mail rows for the assigned member plus mandatory company admin.
+        # 14-15: T-60 and T-30 each queue one logical reminder for both
+        # member and mandatory company admin; repeated scheduling is idempotent.
         t60_end = self._set_term_end_date(assigned_license, 60)
         schedule_license_reminders.run()
         t60 = LicenseReminder.objects.get(
@@ -253,14 +271,11 @@ class CommercialCoreFlowE2ETests(TestCase):
             target_valid_until=t60_end,
         )
         self.assertEqual(
-            EmailMessage.objects.filter(context__reminder_id=str(t60.id)).count(),
-            2,
+            EmailMessage.objects.filter(context__reminder_id=str(t60.id)).count(), 2
         )
-        # Re-running the scheduler is idempotent for the same target date.
         schedule_license_reminders.run()
         self.assertEqual(
-            EmailMessage.objects.filter(context__reminder_id=str(t60.id)).count(),
-            2,
+            EmailMessage.objects.filter(context__reminder_id=str(t60.id)).count(), 2
         )
 
         t30_end = self._set_term_end_date(assigned_license, 30)
@@ -271,26 +286,29 @@ class CommercialCoreFlowE2ETests(TestCase):
             target_valid_until=t30_end,
         )
         self.assertEqual(
-            EmailMessage.objects.filter(context__reminder_id=str(t30.id)).count(),
-            2,
+            EmailMessage.objects.filter(context__reminder_id=str(t30.id)).count(), 2
         )
 
-        # 16: term expiry removes effective Pro access.
+        # 16: simulate expiry while preserving the database validity constraint.
         expired_at = timezone.now() - timedelta(seconds=1)
+        historical_start = expired_at - timedelta(days=365)
+        assigned_license.valid_from = historical_start
         assigned_license.valid_until = expired_at
-        assigned_license.save(update_fields=['valid_until', 'updated_at'])
+        assigned_license.save(
+            update_fields=['valid_from', 'valid_until', 'updated_at']
+        )
         LicenseTerm.objects.filter(
             license=assigned_license,
             status='active',
-        ).update(valid_until=expired_at)
+        ).update(valid_from=historical_start, valid_until=expired_at)
         sync_license_states.run()
         assigned_license.refresh_from_db()
         self.assertEqual(assigned_license.status, 'expired')
         self.assertIsNone(active_product_assignment(self.member))
         self.assertIsNone(validate_device_token(self.member, token_one, touch=False))
 
-        # 17: paying a renewal restarts an expired seat at payment time and
-        # restores access without creating a sixth license record.
+        # 17: renewal of an expired seat starts a new exact 365-day term and
+        # does not create a sixth license record.
         renewal_order, renewal_payment = self._order(
             number='E2E-RENEW-001',
             quantity=1,
@@ -307,21 +325,25 @@ class CommercialCoreFlowE2ETests(TestCase):
         self.assertEqual(renewal_order.items.count(), 1)
         self.assertEqual(renewal_payment.status, 'paid')
         self.assertEqual(
-            License.objects.filter(company=self.company, product=self.product).count(),
-            5,
+            License.objects.filter(company=self.company, product=self.product).count(), 5
         )
-        self.assertEqual(assigned_license.status, 'active')
+        renewal_term = assigned_license.terms.filter(status='active').order_by(
+            '-valid_until'
+        ).first()
+        self.assertIsNotNone(renewal_term)
+        self.assertEqual(renewal_term.valid_from, renewal_payment.paid_at)
         self.assertEqual(
-            assigned_license.valid_until - renewal_paid_at,
+            renewal_term.valid_until - renewal_term.valid_from,
             timedelta(days=365),
         )
+        self.assertEqual(assigned_license.status, 'active')
         self.assertIsNotNone(active_product_assignment(self.member))
         self.assertIsNotNone(validate_device_token(self.member, token_one, touch=False))
 
-        # 18: refund the latest paid term through the production refund path.
-        latest_term = assigned_license.terms.filter(status='active').order_by('-valid_until').first()
+        # 18: refund latest paid term through production refund logic; only the
+        # network edge to Mollie is mocked.
         refund = create_refund_request(
-            term=latest_term,
+            term=renewal_term,
             actor=self.admin,
             reason='E2E Vertragsbeendigung',
         )
@@ -336,8 +358,8 @@ class CommercialCoreFlowE2ETests(TestCase):
         self.assertIsNone(active_product_assignment(self.member))
         self.assertIsNone(validate_device_token(self.member, token_one, touch=False))
 
-        # 19: a chargeback on the original five-seat payment puts affected
-        # paid licenses into payment review.
+        # 19: chargeback on the original purchase moves affected paid licenses
+        # into payment review.
         chargeback_payload = self._paid_payload(payment, status='charged_back')
         chargeback_payload.pop('paidAt', None)
         process_provider_state(payment.provider_payment_id, chargeback_payload)
@@ -351,7 +373,7 @@ class CommercialCoreFlowE2ETests(TestCase):
             ).exists()
         )
 
-        # 20: the chain must leave auditable security/business evidence.
+        # 20: the complete chain leaves auditable business/security evidence.
         required_actions = {
             'invitation.created',
             'license.assigned',
