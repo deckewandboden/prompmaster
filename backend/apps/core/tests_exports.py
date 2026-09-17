@@ -52,6 +52,18 @@ class BackgroundExportTests(TestCase):
         values.update(overrides)
         return ExportJob.objects.create(**values)
 
+    def _staff_exporter(self):
+        permission = Permission.objects.create(code='customers.read', name='Kunden lesen')
+        role = Role.objects.create(code='export-worker-reader', name='Export Worker Reader')
+        role.permissions.add(permission)
+        user = User.objects.create_user(
+            'worker-export@example.test',
+            'Secure-Test-Password-42!',
+            is_staff=True,
+        )
+        UserRole.objects.create(user=user, role=role)
+        return user, role, permission
+
     def test_large_csv_request_is_queued_before_view_and_filter_state_is_encrypted(self):
         request = self.factory.get('/ns-admin/customers/?export=csv&q=Alpha')
         request.user = self.owner
@@ -81,6 +93,40 @@ class BackgroundExportTests(TestCase):
         self.assertTrue(path.is_file())
         content = path.read_text(encoding='utf-8-sig')
         self.assertIn("'=2+2", content)
+
+    def test_worker_refuses_to_materialise_export_after_permission_revocation(self):
+        user, role, permission = self._staff_exporter()
+        job = self._export_job(requested_by=user)
+        role.permissions.remove(permission)
+
+        result = generate_grid_export.run(str(job.id))
+
+        self.assertEqual(result['status'], 'denied')
+        job.refresh_from_db()
+        self.assertEqual(job.status, 'failed')
+        self.assertIn('Berechtigung', job.error)
+        self.assertFalse((Path(self.tempdir.name) / f'{job.id}.csv').exists())
+        self.assertFalse(list(Path(self.tempdir.name).glob(f'{job.id}.*.tmp')))
+
+    def test_worker_discards_export_if_permission_is_revoked_during_generation(self):
+        user, role, permission = self._staff_exporter()
+        job = self._export_job(requested_by=user)
+        company = Company.objects.order_by('customer_number').first()
+
+        class PermissionRevokingQueryset:
+            def iterator(self, chunk_size):
+                yield company
+                role.permissions.remove(permission)
+
+        with patch('apps.core.tasks.export_queryset', return_value=PermissionRevokingQueryset()):
+            result = generate_grid_export.run(str(job.id))
+
+        self.assertEqual(result['status'], 'denied')
+        job.refresh_from_db()
+        self.assertEqual(job.status, 'failed')
+        self.assertIn('entzogen', job.error)
+        self.assertFalse((Path(self.tempdir.name) / f'{job.id}.csv').exists())
+        self.assertFalse(list(Path(self.tempdir.name).glob(f'{job.id}.*.tmp')))
 
     def test_fresh_running_job_is_not_generated_twice(self):
         job = self._export_job(status='running', run_token=uuid.uuid4())
