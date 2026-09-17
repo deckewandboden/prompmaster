@@ -10,29 +10,66 @@ from .models import EmailMessage
 from .services import queue_email, send_now
 
 
+def _reminder_recipients(license_obj):
+    recipients = set()
+    active_assignment = license_obj.assignments.filter(ended_at__isnull=True).select_related('user').first()
+    if active_assignment and active_assignment.user.is_active:
+        recipients.add(active_assignment.user.email.lower())
+    if license_obj.company_id:
+        admin = (
+            Membership.objects.filter(
+                company_id=license_obj.company_id,
+                company__status='active',
+                active=True,
+                role='admin',
+            )
+            .select_related('user')
+            .first()
+        )
+        if admin and admin.user.is_active:
+            recipients.add(admin.user.email.lower())
+    elif license_obj.owner_user_id and license_obj.owner_user.is_active:
+        recipients.add(license_obj.owner_user.email.lower())
+    return sorted(recipients)
+
+
 def _sync_reminder_delivery(message):
     reminder_id = (message.context or {}).get('reminder_id')
     if not reminder_id:
         return
     try:
-        reminder = LicenseReminder.objects.get(pk=reminder_id)
+        reminder = LicenseReminder.objects.select_related(
+            'license__company', 'license__owner_user'
+        ).get(pk=reminder_id)
     except LicenseReminder.DoesNotExist:
         return
-    related = EmailMessage.objects.filter(context__reminder_id=str(reminder.id))
+
+    # Only recipients that are still entitled/operationally responsible count
+    # for the current reminder result. Historical failed rows for a former
+    # company admin must not keep a reminder in error after an admin transfer.
+    intended = set(_reminder_recipients(reminder.license))
+    if not intended:
+        reminder.status = 'error'
+        reminder.error = 'Keine aktuellen Reminder-Empfänger verfügbar.'
+        reminder.save(update_fields=['status', 'error', 'updated_at'])
+        return
+
+    related = EmailMessage.objects.filter(
+        context__reminder_id=str(reminder.id),
+        recipient__in=intended,
+    )
     recipients = set(related.values_list('recipient', flat=True))
     sent_recipients = set(
         related.filter(status='sent').values_list('recipient', flat=True)
     )
-    # Historical duplicate queue rows must not keep a reminder in error once
-    # every intended recipient has at least one confirmed successful delivery.
-    if recipients and recipients.issubset(sent_recipients):
+    if intended.issubset(sent_recipients):
         reminder.status = 'sent'
         reminder.sent_at = timezone.now()
         reminder.error = ''
         reminder.save(update_fields=['status', 'sent_at', 'error', 'updated_at'])
     elif related.filter(status='failed').exists():
         reminder.status = 'error'
-        reminder.error = 'Mindestens eine Reminder-E-Mail konnte nicht versendet werden.'
+        reminder.error = 'Mindestens eine aktuelle Reminder-E-Mail konnte nicht versendet werden.'
         reminder.save(update_fields=['status', 'error', 'updated_at'])
 
 
@@ -77,24 +114,6 @@ def dispatch_queued_emails():
     for message_id in ids:
         send_email_message.delay(str(message_id))
     return len(ids)
-
-
-def _reminder_recipients(license_obj):
-    recipients = set()
-    active_assignment = license_obj.assignments.filter(ended_at__isnull=True).select_related('user').first()
-    if active_assignment and active_assignment.user.is_active:
-        recipients.add(active_assignment.user.email.lower())
-    if license_obj.company_id:
-        admin = (
-            Membership.objects.filter(company_id=license_obj.company_id, active=True, role='admin')
-            .select_related('user')
-            .first()
-        )
-        if admin and admin.user.is_active:
-            recipients.add(admin.user.email.lower())
-    elif license_obj.owner_user_id and license_obj.owner_user.is_active:
-        recipients.add(license_obj.owner_user.email.lower())
-    return sorted(recipients)
 
 
 @shared_task
@@ -188,16 +207,30 @@ def schedule_license_reminders():
 
 @shared_task
 def sync_license_states():
-    """Keep denormalised License.status aligned with paid term coverage."""
+    """Keep denormalised License.status aligned with paid term coverage.
+
+    Each license is reloaded under SELECT FOR UPDATE before deriving and writing
+    its status. This serialises the maintenance task with refund, manual block,
+    chargeback and assignment state transitions so a stale background read can
+    never overwrite a newly terminal/sensitive state.
+    """
     from apps.licenses.services import effective_license_status
 
-    now = timezone.now()
+    mutable_states = {'active', 'free', 'expired'}
+    ids = License.objects.filter(status__in=mutable_states).values_list('id', flat=True)
     changed = 0
-    queryset = License.objects.filter(status__in=['active', 'free', 'expired']).select_related('product')
-    for license_obj in queryset.iterator(chunk_size=500):
-        desired = effective_license_status(license_obj, now)
-        if desired != license_obj.status:
-            license_obj.status = desired
-            license_obj.save(update_fields=['status', 'updated_at'])
-            changed += 1
+    for license_id in ids.iterator(chunk_size=500):
+        with transaction.atomic():
+            license_obj = (
+                License.objects.select_for_update()
+                .select_related('product')
+                .get(pk=license_id)
+            )
+            if license_obj.status not in mutable_states:
+                continue
+            desired = effective_license_status(license_obj, timezone.now())
+            if desired != license_obj.status:
+                license_obj.status = desired
+                license_obj.save(update_fields=['status', 'updated_at'])
+                changed += 1
     return changed
