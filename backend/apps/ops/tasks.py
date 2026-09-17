@@ -21,25 +21,41 @@ MANAGED_PREFIXES = (
     'service.', 'worker.', 'beat.', 'queue.', 'task.',
 )
 MAX_BIGINT = 2**63 - 1
+DEFAULT_THRESHOLDS = {
+    'disk_warning': 80,
+    'disk_critical': 90,
+    'ram_warning': 80,
+    'ram_critical': 90,
+    'cpu_warning': 80,
+    'backup_warning_hours': 8,
+    'backup_critical_hours': 24,
+    'restore_warning_days': 35,
+    'worker_warning_minutes': 3,
+    'beat_warning_minutes': 3,
+    'queue_warning': 100,
+}
+
+
+def _safe_threshold_int(value, default):
+    if isinstance(value, bool):
+        return default
+    try:
+        parsed = int(value)
+    except (TypeError, ValueError, OverflowError):
+        return default
+    if parsed < 0 or parsed > MAX_BIGINT:
+        return default
+    return parsed
 
 
 def _thresholds():
-    return get_setting(
-        'ops_thresholds',
-        {
-            'disk_warning': 80,
-            'disk_critical': 90,
-            'ram_warning': 80,
-            'ram_critical': 90,
-            'cpu_warning': 80,
-            'backup_warning_hours': 8,
-            'backup_critical_hours': 24,
-            'restore_warning_days': 35,
-            'worker_warning_minutes': 3,
-            'beat_warning_minutes': 3,
-            'queue_warning': 100,
-        },
-    )
+    raw = get_setting('ops_thresholds', DEFAULT_THRESHOLDS)
+    if not isinstance(raw, dict):
+        return dict(DEFAULT_THRESHOLDS)
+    return {
+        key: _safe_threshold_int(raw.get(key, default), default)
+        for key, default in DEFAULT_THRESHOLDS.items()
+    }
 
 
 def _parse_status_time(value):
