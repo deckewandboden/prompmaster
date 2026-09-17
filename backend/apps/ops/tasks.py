@@ -1,5 +1,4 @@
 import json
-import os
 import socket
 from datetime import datetime, timedelta, timezone as dt_timezone
 from pathlib import Path
@@ -49,34 +48,59 @@ def _parse_status_time(value):
         return None
 
 
-def _backup_state():
+def _read_status_payload(path):
+    """Return a dict status payload or None for any malformed/unreadable input."""
     try:
-        payload = json.loads(BACKUP_STATUS.read_text(encoding='utf-8'))
-    except (OSError, ValueError):
+        payload = json.loads(path.read_text(encoding='utf-8'))
+    except (OSError, ValueError, TypeError):
+        return None
+    return payload if isinstance(payload, dict) else None
+
+
+def _nonnegative_int(value):
+    try:
+        parsed = int(value or 0)
+    except (TypeError, ValueError, OverflowError):
+        return None
+    return max(0, parsed)
+
+
+def _backup_state():
+    payload = _read_status_payload(BACKUP_STATUS)
+    if payload is None:
         return None
     timestamp = payload.get('timestamp')
     finished = _parse_status_time(timestamp)
+    size_bytes = _nonnegative_int(payload.get('size_bytes'))
+    if size_bytes is None:
+        return None
+    status = payload.get('status', 'unknown')
+    if not isinstance(status, str):
+        return None
     if finished and not BackupRecord.objects.filter(provider_ref=timestamp).exists():
         BackupRecord.objects.create(
-            status=payload.get('status', 'unknown'),
-            provider_ref=timestamp,
-            size_bytes=max(0, int(payload.get('size_bytes') or 0)),
+            status=status[:30],
+            provider_ref=str(timestamp)[:200],
+            size_bytes=size_bytes,
             finished_at=finished,
         )
     return {'payload': payload, 'finished_at': finished}
 
 
 def _restore_state():
-    try:
-        payload = json.loads(RESTORE_STATUS.read_text(encoding='utf-8'))
-    except (OSError, ValueError):
+    payload = _read_status_payload(RESTORE_STATUS)
+    if payload is None:
         return None
     started = _parse_status_time(payload.get('started_at'))
     finished = _parse_status_time(payload.get('finished_at'))
-    backup_ref = str(payload.get('backup_ref') or '')[:200]
+    raw_status = payload.get('status', 'unknown')
+    raw_backup_ref = payload.get('backup_ref', '')
+    if not isinstance(raw_status, str) or not isinstance(raw_backup_ref, (str, int, float)):
+        return None
+    backup_ref = str(raw_backup_ref)[:200]
     if started and not RestoreTest.objects.filter(started_at=started, backup_ref=backup_ref).exists():
         RestoreTest.objects.create(
-            status=str(payload.get('status') or 'unknown')[:30],
+            status=raw_status[:30],
             backup_ref=backup_ref,
             started_at=started,
             finished_at=finished,
@@ -151,8 +175,10 @@ def refresh_alerts():
         elif age_hours >= thresholds['backup_warning_hours']:
             active.append(('backup.warning', 'warning', f'Backup ist {age_hours:.1f} Stunden alt'))
 
-    _restore_state()
+    restore_state = _restore_state()
     restore = RestoreTest.objects.order_by('-started_at').first()
+    if restore_state is None and RESTORE_STATUS.exists():
+        active.append(('restore.unavailable', 'warning', 'Restore-Statusdatei ist nicht auswertbar'))
     if not restore:
         active.append(('restore.missing', 'warning', 'Noch kein Restore-Test protokolliert'))
     else:
