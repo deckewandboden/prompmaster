@@ -10,6 +10,10 @@ class LoginForm(forms.Form):
     email = forms.EmailField()
     password = forms.CharField(widget=forms.PasswordInput)
 
+    def __init__(self, *args, request=None, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.request = request
+
     def clean(self):
         data = super().clean()
         email = (data.get('email') or '').strip().lower()
@@ -22,6 +26,7 @@ class LoginForm(forms.Form):
                     'auth.login_locked',
                     known_user,
                     {'remaining_seconds': remaining},
+                    request=self.request,
                 )
             raise forms.ValidationError('Anmeldung fehlgeschlagen. Bitte später erneut versuchen.')
 
@@ -34,6 +39,7 @@ class LoginForm(forms.Form):
                     'auth.login_failed',
                     known_user,
                     {'failures': failures, 'locked': locked},
+                    request=self.request,
                 )
             raise forms.ValidationError('Anmeldung fehlgeschlagen.')
 
