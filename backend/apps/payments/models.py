@@ -1,4 +1,5 @@
 from django.db import models
+from django.utils import timezone
 
 from apps.core.models import TimeStampedModel
 
@@ -31,6 +32,16 @@ class Payment(TimeStampedModel):
     failed_at = models.DateTimeField(null=True, blank=True)
     processed_paid = models.BooleanField(default=False)
     last_provider_payload = models.JSONField(default=dict)
+
+    def save(self, *args, **kwargs):
+        # Keep the first known failure point as immutable history. The webhook
+        # state machine also sets this field, but model-level protection covers
+        # administrative and maintenance saves that bypass that path.
+        if self.status in {'failed', 'canceled', 'expired'} and self.failed_at is None:
+            self.failed_at = timezone.now()
+            if kwargs.get('update_fields') is not None:
+                kwargs['update_fields'] = set(kwargs['update_fields']) | {'failed_at'}
+        super().save(*args, **kwargs)
 
     def __str__(self):
         return self.provider_payment_id
