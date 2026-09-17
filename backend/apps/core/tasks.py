@@ -1,4 +1,5 @@
 import csv
+from datetime import timedelta
 from pathlib import Path
 
 from celery import shared_task
@@ -12,6 +13,9 @@ from .exporting import EXPORTS, csv_value, decode_query_state, export_queryset
 from .models import ExportJob
 
 
+RUNNING_STALE_AFTER = timedelta(minutes=10)
+
+
 def _export_root():
     root = Path(getattr(settings, 'EXPORT_ROOT', '/app/exports')).resolve()
     root.mkdir(parents=True, exist_ok=True)
@@ -22,17 +26,24 @@ def _export_root():
 def generate_grid_export(self, job_id):
     with transaction.atomic():
         job = ExportJob.objects.select_for_update().select_related('requested_by').get(pk=job_id)
+        now = timezone.now()
         if job.status == 'ready':
             return {'job_id': str(job.id), 'status': 'ready', 'rows': job.row_count}
-        if job.expires_at <= timezone.now():
+        if job.expires_at <= now:
             job.status = 'failed'
             job.error = 'Exportauftrag ist abgelaufen.'
-            job.finished_at = timezone.now()
+            job.finished_at = now
             job.save(update_fields=['status', 'error', 'finished_at', 'updated_at'])
             return {'job_id': str(job.id), 'status': 'expired'}
+        # Duplicate deliveries can happen when the broker reconnects or the
+        # recovery dispatcher sees a just-started job. Only one fresh worker
+        # may generate a file. Stale running jobs are deliberately recoverable.
+        if job.status == 'running' and job.updated_at >= now - RUNNING_STALE_AFTER:
+            return {'job_id': str(job.id), 'status': 'already_running'}
         job.status = 'running'
         job.error = ''
-        job.save(update_fields=['status', 'error', 'updated_at'])
+        job.finished_at = None
+        job.save(update_fields=['status', 'error', 'finished_at', 'updated_at'])
 
     target = _export_root() / f'{job.id}.csv'
     try:
@@ -65,6 +76,32 @@ def generate_grid_export(self, job_id):
             raise self.retry(exc=exc)
         audit(job.requested_by, 'export.failed', job, {'kind': job.kind})
         raise
+
+
+@shared_task
+def dispatch_pending_exports():
+    """Recover queued jobs and stale running jobs after broker/worker outages."""
+    now = timezone.now()
+    stale_before = now - RUNNING_STALE_AFTER
+    candidates = list(
+        ExportJob.objects.filter(expires_at__gt=now)
+        .filter(status='queued')
+        .values_list('id', flat=True)[:100]
+    )
+    stale = list(
+        ExportJob.objects.filter(status='running', expires_at__gt=now, updated_at__lt=stale_before)
+        .values_list('id', flat=True)[:100]
+    )
+    job_ids = list(dict.fromkeys([*candidates, *stale]))
+    if stale:
+        ExportJob.objects.filter(id__in=stale, status='running', updated_at__lt=stale_before).update(
+            status='queued', error='', finished_at=None, updated_at=now
+        )
+    dispatched = 0
+    for job_id in job_ids:
+        generate_grid_export.delay(str(job_id))
+        dispatched += 1
+    return dispatched
 
 
 @shared_task
