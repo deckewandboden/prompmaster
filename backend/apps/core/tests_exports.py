@@ -2,7 +2,6 @@ import tempfile
 import uuid
 from datetime import timedelta
 from pathlib import Path
-from types import SimpleNamespace
 from unittest.mock import Mock, patch
 
 from cryptography.fernet import Fernet
@@ -56,7 +55,6 @@ class BackgroundExportTests(TestCase):
     def test_large_csv_request_is_queued_before_view_and_filter_state_is_encrypted(self):
         request = self.factory.get('/ns-admin/customers/?export=csv&q=Alpha')
         request.user = self.owner
-        request.resolver_match = SimpleNamespace(url_name='customers')
         request.session = {}
         request._messages = FallbackStorage(request)
         view = Mock()
@@ -131,7 +129,6 @@ class BackgroundExportTests(TestCase):
 
     def test_expired_export_file_temp_files_and_job_are_removed(self):
         path = Path(self.tempdir.name) / 'expired.csv'
-        temporary = Path(self.tempdir.name) / 'placeholder.tmp'
         path.write_text('old', encoding='utf-8')
         job = self._export_job(
             file_name=path.name,
