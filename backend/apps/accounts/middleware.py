@@ -59,17 +59,19 @@ class TwoFactorEnforcementMiddleware:
         ):
             raise PermissionDenied
 
-        limited = check_rate(
-            request,
-            f'sensitive-reauth:{user.pk}',
-            limit=10,
-            window=300,
-        )
-        if limited:
-            return limited
-
         password = request.POST.get('password', '')
         if not password or not user.check_password(password):
+            # Only failed proofs count against the throttle. Legitimate support
+            # work must not be blocked merely because several valid transfers
+            # happen inside the same five-minute window.
+            limited = check_rate(
+                request,
+                f'sensitive-reauth:{user.pk}',
+                limit=10,
+                window=300,
+            )
+            if limited:
+                return limited
             raise PermissionDenied
         return None
 
