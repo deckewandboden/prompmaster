@@ -1,6 +1,6 @@
 from django.test import TestCase
 from apps.accounts.models import User, Role, Permission, UserRole
-from apps.companies.models import Company, PrivateCustomerProfile
+from apps.companies.models import Company, Membership, PrivateCustomerProfile
 
 
 class AdminDataVisibilityTests(TestCase):
@@ -25,8 +25,6 @@ class AdminDataVisibilityTests(TestCase):
         session['two_factor_ok'] = True
         session.save()
 
-
-
     def grant(self, code):
         permission, _ = Permission.objects.get_or_create(code=code, defaults={'name': code})
         self.role.permissions.add(permission)
@@ -50,6 +48,7 @@ class AdminDataVisibilityTests(TestCase):
         response = self.client.get('/ns-admin/search/', {'q': 'PRIVATE'})
         self.assertContains(response, self.company.name)
         self.assertEqual(list(response.context['results']['payments']), [])
+
     def test_navigation_hides_unauthorized_admin_areas(self):
         response = self.client.get('/ns-admin/')
         self.assertEqual(response.status_code, 200)
@@ -192,3 +191,118 @@ class AdminDataVisibilityTests(TestCase):
         self.company.refresh_from_db()
         self.assertEqual(self.company.name, 'Changed with write')
 
+
+class SupportAdminTransferReauthTests(TestCase):
+    password = 'Staff-Reauth-Password-42!'
+
+    def setUp(self):
+        self.staff = User.objects.create_user(
+            'security-admin@example.test',
+            self.password,
+            first_name='Security',
+            last_name='Admin',
+            is_staff=True,
+            is_superuser=True,
+            two_factor_required=True,
+            totp_secret_enc='configured-sensitive-action-secret',
+        )
+        self.company = Company.objects.create(
+            name='Transfer Security GmbH',
+            customer_number='PM-C-REAUTH-001',
+            email='transfer@example.test',
+        )
+        self.old_admin = User.objects.create_user(
+            'transfer-old@example.test',
+            'Customer-Password-42!',
+            first_name='Old',
+            last_name='Admin',
+            two_factor_required=True,
+            totp_secret_enc='configured-customer-secret',
+        )
+        self.target = User.objects.create_user(
+            'transfer-new@example.test',
+            'Customer-Password-42!',
+            first_name='New',
+            last_name='Admin',
+        )
+        Membership.objects.create(
+            company=self.company,
+            user=self.old_admin,
+            role='admin',
+            active=True,
+        )
+        Membership.objects.create(
+            company=self.company,
+            user=self.target,
+            role='member',
+            active=True,
+        )
+        self.url = (
+            f'/ns-admin/customers/{self.company.id}/users/'
+            f'{self.target.id}/transfer-admin/'
+        )
+        self.client.force_login(self.staff)
+        self._set_security_session(two_factor_ok=True)
+
+    def _set_security_session(self, *, two_factor_ok):
+        self.staff.refresh_from_db()
+        session = self.client.session
+        session['security_version'] = self.staff.security_version
+        session['two_factor_ok'] = two_factor_ok
+        session.save()
+
+    def _post(self, password):
+        return self.client.post(
+            self.url,
+            {
+                'password': password,
+                'identity_verified': 'on',
+                'note': 'Regression test',
+            },
+        )
+
+    def _assert_unchanged(self):
+        old_link = Membership.objects.get(company=self.company, user=self.old_admin)
+        new_link = Membership.objects.get(company=self.company, user=self.target)
+        self.assertEqual(old_link.role, 'admin')
+        self.assertEqual(new_link.role, 'member')
+
+    def test_support_transfer_rejects_missing_or_wrong_staff_password(self):
+        self.assertEqual(self._post('').status_code, 403)
+        self._assert_unchanged()
+        self.assertEqual(self._post('wrong-password').status_code, 403)
+        self._assert_unchanged()
+
+    def test_support_transfer_requires_completed_two_factor_session(self):
+        self._set_security_session(two_factor_ok=False)
+        response = self._post(self.password)
+        self.assertEqual(response.status_code, 302)
+        self.assertIn('/auth/2fa/', response['Location'])
+        self._assert_unchanged()
+
+    def test_support_transfer_requires_two_factor_configuration(self):
+        self.staff.two_factor_required = False
+        self.staff.totp_secret_enc = ''
+        self.staff.save(
+            update_fields=['two_factor_required', 'totp_secret_enc', 'updated_at']
+        )
+        self._set_security_session(two_factor_ok=True)
+        response = self._post(self.password)
+        self.assertEqual(response.status_code, 403)
+        self._assert_unchanged()
+
+    def test_support_transfer_succeeds_after_password_and_two_factor_reauth(self):
+        response = self._post(self.password)
+        self.assertEqual(response.status_code, 302)
+        old_link = Membership.objects.get(company=self.company, user=self.old_admin)
+        new_link = Membership.objects.get(company=self.company, user=self.target)
+        self.assertEqual(old_link.role, 'member')
+        self.assertEqual(new_link.role, 'admin')
+        self.assertEqual(
+            Membership.objects.filter(
+                company=self.company,
+                role='admin',
+                active=True,
+            ).count(),
+            1,
+        )
