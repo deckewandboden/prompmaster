@@ -1,15 +1,20 @@
 from django.utils import timezone
 
+from apps.catalog.services import PRO_ACCESS_FEATURE
 from apps.licenses.models import LicenseAssignment
 from apps.licenses.services import has_current_term
 
 DEVICE_COOKIE = 'pm_device_v2'
 LEGACY_DEVICE_COOKIE = 'pm_device'
-PRO_RUNTIME_FEATURE = 'promptmaster.pro_runtime'
 
 
-def active_product_assignment(user, product_code='PRO', required_feature=PRO_RUNTIME_FEATURE):
-    """Return the one assignment that currently grants entitled product access."""
+def active_product_assignment(user, product_code=None, required_feature=PRO_ACCESS_FEATURE):
+    """Return a live assignment whose product grants the runtime entitlement.
+
+    ``product_code`` remains accepted for backwards compatibility with older
+    callers but deliberately does not participate in authorization. Access is
+    controlled by the enabled product entitlement.
+    """
     if not user.is_active or not user.email_verified_at:
         return None
     from apps.companies.models import Membership
@@ -20,7 +25,6 @@ def active_product_assignment(user, product_code='PRO', required_feature=PRO_RUN
         .filter(
             user=user,
             ended_at__isnull=True,
-            license__product__code=product_code,
             license__product__active=True,
             license__status='active',
             license__product__entitlements__feature__code=required_feature,
