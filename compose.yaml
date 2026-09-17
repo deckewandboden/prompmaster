@@ -154,6 +154,7 @@ services:
       postgres: {condition: service_healthy}
     volumes:
       - backup_status:/status
+      - backup_repository:/repository
     networks: [app, data]
     healthcheck:
       test: ["CMD-SHELL", "test -s /status/last-backup.json && grep -q '\"status\":\"ok\"' /status/last-backup.json"]
@@ -170,6 +171,7 @@ volumes:
   caddy_config:
   prometheus_data:
   backup_status:
+  backup_repository:
   export_data:
 networks:
   edge:
