@@ -222,16 +222,8 @@ def schedule_license_reminders():
     return queued
 
 
-@shared_task
-def sync_license_states():
-    """Keep license state aligned and finish provider-confirmed refund commits.
-
-    Refund provider success is recorded before the final local business-state
-    transaction. If a worker process dies in that tiny interval, a later sync
-    detects ``Refund.status=succeeded`` with an active term and idempotently
-    completes the same mark_refund_success transaction.
-    """
-    from apps.licenses.services import effective_license_status
+def _recover_succeeded_refunds():
+    """Attempt every incomplete local refund finalization before reporting failures."""
     from apps.payments.models import Refund
     from apps.payments.services import mark_refund_success
 
@@ -239,10 +231,32 @@ def sync_license_states():
         Refund.objects.filter(status='succeeded', term__status='active')
         .values_list('id', flat=True)[:500]
     )
+    failures = []
     for refund_id in recovery_ids:
         refund = Refund.objects.filter(pk=refund_id).first()
-        if refund is not None:
+        if refund is None:
+            continue
+        try:
             mark_refund_success(refund, refund.provider_refund_id)
+        except Exception as exc:
+            failures.append((str(refund_id), exc))
+    return failures
+
+
+@shared_task
+def sync_license_states():
+    """Keep license state aligned and finish provider-confirmed refund commits.
+
+    Refund provider success is recorded before the final local business-state
+    transaction. If a worker process dies in that tiny interval, a later sync
+    detects ``Refund.status=succeeded`` with an active term and idempotently
+    completes the same mark_refund_success transaction. Recovery failures are
+    isolated so one malformed row cannot prevent other recoveries/state syncs;
+    the task still fails after processing to preserve operational visibility.
+    """
+    from apps.licenses.services import effective_license_status
+
+    recovery_failures = _recover_succeeded_refunds()
 
     mutable_states = {'active', 'free', 'expired'}
     ids = License.objects.filter(status__in=mutable_states).values_list('id', flat=True)
@@ -261,4 +275,10 @@ def sync_license_states():
                 license_obj.status = desired
                 license_obj.save(update_fields=['status', 'updated_at'])
                 changed += 1
+
+    if recovery_failures:
+        failed_ids = ', '.join(refund_id for refund_id, _exc in recovery_failures[:10])
+        raise RuntimeError(
+            f'{len(recovery_failures)} bestätigte Erstattung(en) konnten lokal nicht finalisiert werden: {failed_ids}'
+        )
     return changed
