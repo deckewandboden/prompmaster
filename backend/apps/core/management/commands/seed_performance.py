@@ -17,8 +17,9 @@ NAMESPACE = uuid.UUID('5c773e42-f1c9-4c3b-9292-0f2c1e3f9d90')
 DEFAULT_PREFIX = 'PMPERF'
 
 
-def stable_uuid(kind, number):
-    return uuid.uuid5(NAMESPACE, f'{kind}:{number}')
+def stable_uuid(prefix, kind, number):
+    """Return a deterministic ID isolated to one synthetic dataset prefix."""
+    return uuid.uuid5(NAMESPACE, f'{prefix}:{kind}:{number}')
 
 
 class Command(BaseCommand):
@@ -67,9 +68,9 @@ class Command(BaseCommand):
             payments = []
             for number in numbers:
                 suffix = f'{number:07d}'
-                company_id = stable_uuid('company', number)
-                order_id = stable_uuid('order', number)
-                license_id = stable_uuid('license', number)
+                company_id = stable_uuid(prefix, 'company', number)
+                order_id = stable_uuid(prefix, 'order', number)
+                license_id = stable_uuid(prefix, 'license', number)
 
                 companies.append(
                     Company(
@@ -120,7 +121,7 @@ class Command(BaseCommand):
                 payment_status = 'paid' if number % 5 else 'open'
                 payments.append(
                     Payment(
-                        id=stable_uuid('payment', number),
+                        id=stable_uuid(prefix, 'payment', number),
                         order_id=order_id,
                         provider='mollie',
                         provider_payment_id=f'tr_{prefix.lower()}_{suffix}',
