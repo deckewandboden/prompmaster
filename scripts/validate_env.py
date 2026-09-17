@@ -3,11 +3,9 @@ from __future__ import annotations
 
 import argparse
 import base64
-import os
 import re
 import sys
 from pathlib import Path
-from urllib.parse import urlparse
 
 ROOT = Path(__file__).resolve().parents[1]
 ENV_FILE = ROOT / '.env'
@@ -122,6 +120,9 @@ def main() -> int:
             fail(errors, 'Staging darf keinen Mollie-Live-Key verwenden.')
         if provider not in {'smtp', 'mailpit'}:
             fail(errors, 'Staging EMAIL_PROVIDER muss smtp/mailpit sein, damit keine echten Kundenmails versendet werden.')
+        admin_password = values.get('INITIAL_ADMIN_PASSWORD', '')
+        if is_placeholder(admin_password) or len(admin_password) < 12:
+            fail(errors, 'INITIAL_ADMIN_PASSWORD muss im Staging mindestens 12 Zeichen lang und kein Platzhalter sein.')
 
     if errors:
         for item in errors:
