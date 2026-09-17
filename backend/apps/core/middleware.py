@@ -8,6 +8,17 @@ from datetime import datetime, timezone
 _CORRELATION_ID_RE = re.compile(r'^[A-Za-z0-9._:-]{1,80}$')
 _CORRELATION_ID = contextvars.ContextVar('promptmaster_correlation_id', default='')
 _USER_ID = contextvars.ContextVar('promptmaster_user_id', default='')
+_CLIENT_IP = contextvars.ContextVar('promptmaster_client_ip', default='')
+_USER_AGENT = contextvars.ContextVar('promptmaster_user_agent', default='')
+
+
+def current_audit_context():
+    """Return request metadata for service-layer audits in this execution context."""
+    return {
+        'correlation_id': _CORRELATION_ID.get(),
+        'ip': _CLIENT_IP.get(),
+        'user_agent': _USER_AGENT.get(),
+    }
 
 
 class JsonLogFormatter(logging.Formatter):
@@ -40,19 +51,27 @@ class CorrelationIdMiddleware:
         self.get_response = get_response
 
     def __call__(self, request):
+        from apps.core.security import client_ip
+
         supplied = (request.headers.get('X-Correlation-ID') or '').strip()
         cid = supplied if _CORRELATION_ID_RE.fullmatch(supplied) else str(uuid.uuid4())
         request.correlation_id = cid
         user = getattr(request, 'user', None)
         uid = str(user.pk) if getattr(user, 'is_authenticated', False) else ''
+        ip = client_ip(request)
+        user_agent = (request.META.get('HTTP_USER_AGENT') or '')[:300]
 
         correlation_token = _CORRELATION_ID.set(cid)
         user_token = _USER_ID.set(uid)
+        ip_token = _CLIENT_IP.set(ip)
+        user_agent_token = _USER_AGENT.set(user_agent)
         try:
             response = self.get_response(request)
         finally:
-            _CORRELATION_ID.reset(correlation_token)
+            _USER_AGENT.reset(user_agent_token)
+            _CLIENT_IP.reset(ip_token)
             _USER_ID.reset(user_token)
+            _CORRELATION_ID.reset(correlation_token)
 
         response['X-Correlation-ID'] = cid
         return response
