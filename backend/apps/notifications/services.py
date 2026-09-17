@@ -1,3 +1,4 @@
+from string import Formatter
 from urllib.parse import unquote, urlsplit
 
 import requests
@@ -79,9 +80,14 @@ def _infer_message_scope(code, recipient, context, scope_company, scope_user):
 
 
 def _protect_context(context):
-    stored = dict(context)
+    stored = dict(context or {})
     for key, value in list(stored.items()):
-        if key.lower() in _SENSITIVE_CONTEXT_KEYS and isinstance(value, str) and value:
+        if (
+            key.lower() in _SENSITIVE_CONTEXT_KEYS
+            and isinstance(value, str)
+            and value
+            and not value.startswith(_ENCRYPTED_PREFIX)
+        ):
             stored[key] = _ENCRYPTED_PREFIX + encrypt(value)
     return stored
 
@@ -92,6 +98,39 @@ def _render_context(context):
         if isinstance(value, str) and value.startswith(_ENCRYPTED_PREFIX):
             rendered[key] = decrypt(value[len(_ENCRYPTED_PREFIX):])
     return rendered
+
+
+def sanitize_stored_email_contexts(*, batch_size=500):
+    """Encrypt legacy plaintext capability fields already persisted in queue rows.
+
+    Idempotent: values carrying the versioned encryption marker are left
+    untouched, so this can safely run on every deploy through seed_defaults.
+    """
+    changed = 0
+    ids = EmailMessage.objects.order_by('id').values_list('id', flat=True)
+    for message_id in ids.iterator(chunk_size=batch_size):
+        with transaction.atomic():
+            message = EmailMessage.objects.select_for_update().get(pk=message_id)
+            protected = _protect_context(message.context)
+            if protected != (message.context or {}):
+                message.context = protected
+                message.save(update_fields=['context', 'updated_at'])
+                changed += 1
+    return changed
+
+
+def _assert_sensitive_values_not_in_subject(template, context):
+    fields = {
+        (field_name or '').split('.', 1)[0].split('[', 1)[0]
+        for _literal, field_name, _format_spec, _conversion in Formatter().parse(template.subject)
+        if field_name
+    }
+    sensitive = {
+        key for key, value in (context or {}).items()
+        if key.lower() in _SENSITIVE_CONTEXT_KEYS and value
+    }
+    if fields.intersection(sensitive):
+        raise ValueError('Sensitive URL/token fields are not allowed in persisted e-mail subjects')
 
 
 def message_scope_active(message):
@@ -137,6 +176,11 @@ def queue_email(code, recipient, context, *, scope_company=None, scope_user=None
         scope_company,
         scope_user,
     )
+
+    # Persisted subjects are intentionally non-secret. A future template must
+    # not move a capability URL/token into the subject line where it would be
+    # stored and propagated outside the encrypted context field.
+    _assert_sensitive_values_not_in_subject(template, plain_context)
 
     # Render/validate against plaintext only in memory. Capability URLs are
     # encrypted before the durable queue row is created.
