@@ -19,7 +19,13 @@ def _sync_reminder_delivery(message):
     except LicenseReminder.DoesNotExist:
         return
     related = EmailMessage.objects.filter(context__reminder_id=str(reminder.id))
-    if related.exists() and not related.exclude(status='sent').exists():
+    recipients = set(related.values_list('recipient', flat=True))
+    sent_recipients = set(
+        related.filter(status='sent').values_list('recipient', flat=True)
+    )
+    # Historical duplicate queue rows must not keep a reminder in error once
+    # every intended recipient has at least one confirmed successful delivery.
+    if recipients and recipients.issubset(sent_recipients):
         reminder.status = 'sent'
         reminder.sent_at = timezone.now()
         reminder.error = ''
@@ -130,12 +136,48 @@ def schedule_license_reminders():
                         'expiry': timezone.localtime(license_obj.valid_until).strftime('%d.%m.%Y'),
                         'reminder_id': str(reminder.id),
                     }
+                    reminder_messages = EmailMessage.objects.select_for_update().filter(
+                        context__reminder_id=str(reminder.id)
+                    )
                     for recipient in recipients:
-                        queue_email(template_code, recipient, context)
-                    reminder.status = 'queued'
-                    reminder.queued_at = timezone.now()
-                    reminder.error = ''
-                    reminder.save(update_fields=['status', 'queued_at', 'error', 'updated_at'])
+                        recipient_messages = reminder_messages.filter(recipient=recipient)
+                        if recipient_messages.filter(status='sent').exists():
+                            continue
+                        existing = recipient_messages.order_by('-created_at').first()
+                        if existing:
+                            stale_sending = (
+                                existing.status == 'sending'
+                                and existing.updated_at <= now - timedelta(minutes=10)
+                            )
+                            if existing.status == 'failed' or stale_sending:
+                                existing.status = 'queued'
+                                existing.error = ''
+                                existing.save(update_fields=['status', 'error', 'updated_at'])
+                                transaction.on_commit(
+                                    lambda message_id=str(existing.id): send_email_message.delay(message_id),
+                                    robust=True,
+                                )
+                            continue
+                        queue_email(
+                            template_code,
+                            recipient,
+                            context,
+                            scope_company=license_obj.company_id,
+                            scope_user=license_obj.owner_user_id,
+                        )
+
+                    related = EmailMessage.objects.filter(
+                        context__reminder_id=str(reminder.id)
+                    )
+                    probe = related.first()
+                    if probe:
+                        _sync_reminder_delivery(probe)
+                        reminder.refresh_from_db(fields=['status', 'sent_at', 'error'])
+                    if reminder.status != 'sent':
+                        reminder.status = 'queued'
+                        reminder.queued_at = timezone.now()
+                        reminder.error = ''
+                        reminder.save(update_fields=['status', 'queued_at', 'error', 'updated_at'])
                     queued += 1
                 except Exception as exc:
                     reminder.status = 'error'
