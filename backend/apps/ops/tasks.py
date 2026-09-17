@@ -20,6 +20,7 @@ MANAGED_PREFIXES = (
     'disk.', 'ram.', 'cpu.', 'backup.', 'restore.', 'mail.', 'mollie.',
     'service.', 'worker.', 'beat.', 'queue.', 'task.',
 )
+MAX_BIGINT = 2**63 - 1
 
 
 def _thresholds():
@@ -62,7 +63,11 @@ def _nonnegative_int(value):
         parsed = int(value or 0)
     except (TypeError, ValueError, OverflowError):
         return None
-    return max(0, parsed)
+    if parsed < 0:
+        return 0
+    if parsed > MAX_BIGINT:
+        return None
+    return parsed
 
 
 def _backup_state():
