@@ -8,6 +8,11 @@ from django.urls import Resolver404, resolve, reverse
 from django.utils import timezone
 
 from apps.core.security import check_rate
+from apps.core.sensitive import (
+    SENSITIVE_REAUTH_NEXT_KEY,
+    safe_internal_return_url,
+    sensitive_reauth_is_fresh,
+)
 
 
 class TwoFactorEnforcementMiddleware:
@@ -17,9 +22,9 @@ class TwoFactorEnforcementMiddleware:
     session hash. Role changes, company-admin promotion, 2FA resets and other
     privilege changes can therefore invalidate every older session immediately.
 
-    Selected high-impact staff actions additionally require the executing
-    staff identity to prove its password again inside an already completed
-    2FA session. This protects against a stolen but still-valid browser session.
+    High-impact netstyle actions require either the existing action-specific
+    password proof (company-admin transfer) or a short-lived staff step-up grant
+    established with password + an already completed 2FA session.
     """
 
     allowed_prefixes = (
@@ -32,48 +37,76 @@ class TwoFactorEnforcementMiddleware:
         '/api/webhooks/mollie/',
     )
 
-    sensitive_reauth_views = {
+    direct_password_reauth_views = {
         'ns_admin:customer_admin_transfer',
+    }
+
+    # These views mutate privileged identities, credentials, financial state or
+    # customer access. A stolen but otherwise valid browser session must not be
+    # sufficient to execute them.
+    sensitive_session_views = {
+        'ns_admin:staff_user_create',
+        'ns_admin:staff_user_toggle',
+        'ns_admin:staff_user_reset_2fa',
+        'ns_admin:role_edit',
+        'ns_admin:user_role_assign',
+        'ns_admin:user_role_remove',
+        'ns_admin:service_account_create',
+        'ns_admin:service_account_rotate',
+        'ns_admin:service_account_revoke',
+        'ns_admin:mollie_config',
+        'ns_admin:license_refund',
+        'ns_admin:deletion_request_process',
+        'ns_admin:customer_user_deactivate',
     }
 
     def __init__(self, get_response):
         self.get_response = get_response
 
     def _sensitive_reauth(self, request, user):
-        if request.method != 'POST':
-            return None
         try:
             view_name = resolve(request.path_info).view_name
         except Resolver404:
             return None
-        if view_name not in self.sensitive_reauth_views:
+
+        if view_name in self.direct_password_reauth_views and request.method == 'POST':
+            if not (
+                user.is_staff
+                and user.two_factor_required
+                and bool(user.totp_secret_enc)
+                and request.session.get('two_factor_ok') is True
+            ):
+                raise PermissionDenied
+
+            password = request.POST.get('password', '')
+            if not password or not user.check_password(password):
+                # Only failed proofs count against the throttle. Legitimate
+                # support work must not consume the attack budget.
+                limited = check_rate(
+                    request,
+                    f'sensitive-reauth:{user.pk}',
+                    limit=10,
+                    window=300,
+                )
+                if limited:
+                    return limited
+                raise PermissionDenied
             return None
 
-        # A high-impact staff action must never rely on a password-only staff
-        # account or on a session that has not completed the configured TOTP.
-        if not (
-            user.is_staff
-            and user.two_factor_required
-            and bool(user.totp_secret_enc)
-            and request.session.get('two_factor_ok') is True
-        ):
-            raise PermissionDenied
+        if view_name not in self.sensitive_session_views:
+            return None
+        if sensitive_reauth_is_fresh(request, user):
+            return None
 
-        password = request.POST.get('password', '')
-        if not password or not user.check_password(password):
-            # Only failed proofs count against the throttle. Legitimate support
-            # work must not be blocked merely because several valid transfers
-            # happen inside the same five-minute window.
-            limited = check_rate(
-                request,
-                f'sensitive-reauth:{user.pk}',
-                limit=10,
-                window=300,
-            )
-            if limited:
-                return limited
-            raise PermissionDenied
-        return None
+        if request.method in {'GET', 'HEAD'}:
+            candidate = request.get_full_path()
+        else:
+            candidate = request.META.get('HTTP_REFERER', '')
+        request.session[SENSITIVE_REAUTH_NEXT_KEY] = safe_internal_return_url(
+            request,
+            candidate,
+        )
+        return redirect(reverse('ns_admin:sensitive_reauth'))
 
     def __call__(self, request):
         user = getattr(request, 'user', None)
