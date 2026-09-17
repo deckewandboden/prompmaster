@@ -25,6 +25,21 @@ class OpsStatusFailSafeTests(TestCase):
                 self.assertIsNone(_backup_state())
         self.assertEqual(BackupRecord.objects.count(), 0)
 
+    def test_backup_oversized_bigint_fails_closed(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            path = Path(tmp) / 'last-backup.json'
+            path.write_text(
+                json.dumps({
+                    'timestamp': '20260917T180000Z',
+                    'status': 'ok',
+                    'size_bytes': 2**80,
+                }),
+                encoding='utf-8',
+            )
+            with patch('apps.ops.tasks.BACKUP_STATUS', path):
+                self.assertIsNone(_backup_state())
+        self.assertEqual(BackupRecord.objects.count(), 0)
+
     def test_backup_non_object_json_fails_closed(self):
         with tempfile.TemporaryDirectory() as tmp:
             path = Path(tmp) / 'last-backup.json'
