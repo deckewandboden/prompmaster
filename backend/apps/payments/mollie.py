@@ -3,7 +3,17 @@ from django.conf import settings
 
 
 class MollieError(RuntimeError):
-    pass
+    """Sanitised provider error with retry-safety classification.
+
+    ``ambiguous`` means the request may have reached Mollie and therefore a
+    retry must reuse the exact same idempotency key. Deterministic failures may
+    start a new provider attempt after the local business state is revalidated.
+    """
+
+    def __init__(self, message, *, ambiguous=False, status_code=None):
+        super().__init__(message)
+        self.ambiguous = bool(ambiguous)
+        self.status_code = status_code
 
 
 class MollieClient:
@@ -17,7 +27,7 @@ class MollieClient:
 
     def _request(self, method, path, **kwargs):
         if not self.key:
-            raise MollieError('Mollie API key is not configured')
+            raise MollieError('Mollie API key is not configured', ambiguous=False)
         headers = {'Authorization': f'Bearer {self.key}', 'Accept': 'application/json'}
         headers.update(kwargs.pop('headers', {}))
         try:
@@ -29,13 +39,24 @@ class MollieClient:
                 **kwargs,
             )
         except requests.RequestException as exc:
-            raise MollieError('Mollie request failed') from exc
+            # A timeout/connection reset after bytes were sent can mean Mollie
+            # accepted the command. Never create a fresh idempotency key here.
+            raise MollieError('Mollie request failed', ambiguous=True) from exc
         if not response.ok:
-            raise MollieError(f'Mollie HTTP {response.status_code}')
+            # 5xx can occur after Mollie accepted/processed the request. 4xx is
+            # a deterministic rejection of this exact attempt.
+            ambiguous = response.status_code >= 500
+            raise MollieError(
+                f'Mollie HTTP {response.status_code}',
+                ambiguous=ambiguous,
+                status_code=response.status_code,
+            )
         try:
             return response.json()
         except ValueError as exc:
-            raise MollieError('Mollie returned invalid JSON') from exc
+            # Successful HTTP status with an unreadable body leaves the provider
+            # outcome unknown; retry only with the same idempotency key.
+            raise MollieError('Mollie returned invalid JSON', ambiguous=True) from exc
 
     def create_payment(self, *, amount, currency, description, redirect_url, webhook_url, metadata, idempotency_key):
         return self._request(
