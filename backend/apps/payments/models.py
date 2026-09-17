@@ -34,9 +34,6 @@ class Payment(TimeStampedModel):
     last_provider_payload = models.JSONField(default=dict)
 
     def save(self, *args, **kwargs):
-        # Keep the first known failure point as immutable history. The webhook
-        # state machine also sets this field, but model-level protection covers
-        # administrative and maintenance saves that bypass that path.
         if self.status in {'failed', 'canceled', 'expired'} and self.failed_at is None:
             self.failed_at = timezone.now()
             if kwargs.get('update_fields') is not None:
@@ -62,9 +59,6 @@ class MollieEvent(TimeStampedModel):
 class Refund(TimeStampedModel):
     STATUS = [('created', 'Erstellt'), ('submitted', 'Übermittelt'), ('succeeded', 'Erfolgreich'), ('failed', 'Fehlgeschlagen')]
 
-    # The V1 policy is one pro-rata termination/refund per paid term. A
-    # OneToOne relation prevents duplicate logical refund requests under races.
-    # Provider retries are retained separately in RefundAttempt.
     term = models.OneToOneField('licenses.LicenseTerm', on_delete=models.PROTECT, related_name='refund')
     payment = models.ForeignKey(Payment, on_delete=models.PROTECT, related_name='refunds')
     provider_refund_id = models.CharField(max_length=100, blank=True, unique=True, null=True)
@@ -78,11 +72,11 @@ class Refund(TimeStampedModel):
 
 
 class RefundAttempt(TimeStampedModel):
-    """Immutable-ish provider submission history for one logical refund.
+    """Provider submission history for one logical refund.
 
-    A deterministic provider rejection may be retried with a new quote and a
-    new attempt key. An ambiguous network/server outcome must reuse the same
-    idempotency key until its outcome is known, preventing a double refund.
+    Deterministic rejections may start a new attempt after re-quoting. An
+    ambiguous network/server outcome keeps the same idempotency key until the
+    provider outcome is known, preventing a double refund.
     """
 
     STATUS = [
@@ -110,8 +104,14 @@ class RefundAttempt(TimeStampedModel):
             ),
         ]
         indexes = [
-            models.Index(fields=['refund', '-number']),
-            models.Index(fields=['status', 'submitted_at']),
+            models.Index(
+                fields=['refund', '-number'],
+                name='payments_re_refund__455d54_idx',
+            ),
+            models.Index(
+                fields=['status', 'submitted_at'],
+                name='payments_re_status_30820e_idx',
+            ),
         ]
 
     def __str__(self):
