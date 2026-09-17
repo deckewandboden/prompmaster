@@ -6,6 +6,9 @@ from django.utils import timezone
 from .models import Product, ProductPrice
 
 
+PRO_ACCESS_FEATURE = 'promptmaster.pro_runtime'
+
+
 def current_price(product, price_type, at=None):
     at = at or timezone.now()
     return (
