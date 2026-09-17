@@ -146,7 +146,9 @@ class CommercialCoreFlowE2ETests(TestCase):
             quantity=5,
             price_type='new',
         )
-        paid_at = timezone.now()
+        # Keep the original paid term clearly in the past so the later expiry
+        # simulation can never violate valid_until > valid_from on a fast CI host.
+        paid_at = timezone.now() - timedelta(days=120)
         process_provider_state(
             payment.provider_payment_id,
             self._paid_payload(payment, paid_at=paid_at),
