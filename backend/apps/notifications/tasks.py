@@ -7,7 +7,7 @@ from django.utils import timezone
 from apps.companies.models import Membership
 from apps.licenses.models import License, LicenseReminder
 from .models import EmailMessage
-from .services import queue_email, send_now
+from .services import MailScopeInactive, message_scope_active, queue_email, send_now
 
 
 def _reminder_recipients(license_obj):
@@ -58,7 +58,6 @@ def _sync_reminder_delivery(message):
         context__reminder_id=str(reminder.id),
         recipient__in=intended,
     )
-    recipients = set(related.values_list('recipient', flat=True))
     sent_recipients = set(
         related.filter(status='sent').values_list('recipient', flat=True)
     )
@@ -73,6 +72,14 @@ def _sync_reminder_delivery(message):
         reminder.save(update_fields=['status', 'error', 'updated_at'])
 
 
+def _suppress_inactive_scope(message):
+    message.status = 'failed'
+    message.error = 'Versand verworfen: Benutzer-/Firmenscope ist nicht mehr aktiv.'
+    message.save(update_fields=['status', 'error', 'updated_at'])
+    _sync_reminder_delivery(message)
+    return 'scope-inactive'
+
+
 @shared_task(bind=True, max_retries=4, default_retry_delay=60)
 def send_email_message(self, message_id):
     # Claim the row before contacting an external provider. Duplicate Celery
@@ -81,15 +88,25 @@ def send_email_message(self, message_id):
         message = EmailMessage.objects.select_for_update().select_related('template').get(pk=message_id)
         if message.status == 'sent':
             return 'already-sent'
+        if not message_scope_active(message):
+            return _suppress_inactive_scope(message)
         if message.status == 'sending' and message.updated_at > timezone.now() - timedelta(minutes=10):
             return 'already-sending'
         message.status = 'sending'
         message.error = ''
         message.save(update_fields=['status', 'error', 'updated_at'])
     try:
+        # Scope is checked again inside send_now immediately before the provider
+        # call to narrow the post-lock TOCTOU window as far as practical.
         send_now(message)
         _sync_reminder_delivery(message)
         return 'sent'
+    except MailScopeInactive:
+        with transaction.atomic():
+            message = EmailMessage.objects.select_for_update().get(pk=message_id)
+            if message.status != 'sent':
+                return _suppress_inactive_scope(message)
+        return 'already-sent'
     except Exception as exc:
         with transaction.atomic():
             message = EmailMessage.objects.select_for_update().get(pk=message_id)
