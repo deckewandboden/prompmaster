@@ -101,7 +101,7 @@ class MollieStateIntegrationTests(TestCase):
         }
 
     @patch('apps.payments.services._queue_after_commit')
-    def test_duplicate_paid_webhook_creates_exactly_one_license_and_term(self, _mail):
+    def test_duplicate_paid_webhook_creates_exactly_one_license_term_and_event(self, _mail):
         paid = self.payload('paid')
         with patch('apps.payments.views.MollieClient.get_payment', return_value=paid):
             first = self.client.post(
@@ -123,17 +123,26 @@ class MollieStateIntegrationTests(TestCase):
         license_obj = License.objects.get(owner_user=self.user)
         self.assertEqual(LicenseTerm.objects.filter(license=license_obj).count(), 1)
         self.assertEqual(license_obj.valid_until - license_obj.valid_from, timedelta(days=365))
+        self.assertEqual(
+            MollieEvent.objects.filter(payment=self.payment, provider_status='paid').count(),
+            1,
+        )
 
     @patch('apps.payments.services._queue_after_commit')
-    def test_failed_payment_creates_no_license(self, _mail):
+    def test_failed_payment_creates_no_license_and_preserves_first_failure_time(self, _mail):
         process_provider_state(self.payment.provider_payment_id, self.payload('failed'))
         self.order.refresh_from_db()
         self.payment.refresh_from_db()
         self.assertEqual(self.order.status, 'failed')
         self.assertEqual(self.payment.status, 'failed')
         self.assertIsNotNone(self.payment.failed_at)
+        first_failed_at = self.payment.failed_at
         self.assertFalse(self.payment.processed_paid)
         self.assertFalse(License.objects.filter(owner_user=self.user).exists())
+
+        process_provider_state(self.payment.provider_payment_id, self.payload('failed'))
+        self.payment.refresh_from_db()
+        self.assertEqual(self.payment.failed_at, first_failed_at)
 
     @patch('apps.payments.services._queue_after_commit')
     def test_chargeback_blocks_license_and_paid_reversal_restores_access_state(self, _mail):
@@ -159,7 +168,21 @@ class MollieStateIntegrationTests(TestCase):
                 provider_status='chargeback',
             ).exists()
         )
+        self.assertTrue(
+            MollieEvent.objects.filter(
+                payment=self.payment,
+                provider_status='chargeback_reversed',
+            ).exists()
+        )
 
+        events_before_duplicate = MollieEvent.objects.filter(payment=self.payment).count()
+        process_provider_state(self.payment.provider_payment_id, self.payload('paid'))
+        self.payment.refresh_from_db()
+        self.assertEqual(self.payment.status, 'chargeback_reversed')
+        self.assertEqual(
+            MollieEvent.objects.filter(payment=self.payment).count(),
+            events_before_duplicate,
+        )
 
     @patch('apps.payments.services._queue_after_commit')
     @patch('apps.payments.services.MollieClient.create_refund')
@@ -195,8 +218,6 @@ class MollieStateIntegrationTests(TestCase):
 
     @patch('apps.payments.services._queue_after_commit')
     def test_provider_amount_or_currency_mismatch_is_rejected(self, _mail):
-        from django.core.exceptions import ValidationError
-
         wrong = self.payload('paid')
         wrong['amount'] = {'value': '99.99', 'currency': 'EUR'}
         with self.assertRaises(ValidationError):
