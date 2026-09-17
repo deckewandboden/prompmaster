@@ -31,7 +31,7 @@ def effective_license_status(license_obj, now=None):
 
 @transaction.atomic
 def assign_license(license, user, actor):
-    lic = License.objects.select_for_update().select_related('product').get(pk=license.pk)
+    lic = License.objects.select_for_update().select_related('product', 'company').get(pk=license.pk)
     # Lock the identity as well as the seat. Two different free seats of the
     # same product can otherwise be assigned concurrently to the same user.
     user = get_user_model().objects.select_for_update().get(pk=user.pk)
@@ -42,8 +42,11 @@ def assign_license(license, user, actor):
         raise ValidationError('Lizenz ist bereits zugewiesen.')
     if not user.is_active:
         raise ValidationError('Benutzer ist deaktiviert.')
-    if lic.company_id and not user.company_memberships.filter(company_id=lic.company_id, active=True).exists():
-        raise ValidationError('Benutzer gehört nicht zum Unternehmen.')
+    if lic.company_id:
+        if not lic.company or lic.company.status != 'active':
+            raise ValidationError('Das Unternehmen ist deaktiviert; Lizenzzuweisungen sind gesperrt.')
+        if not user.company_memberships.filter(company_id=lic.company_id, active=True).exists():
+            raise ValidationError('Benutzer gehört nicht zum Unternehmen.')
     if lic.owner_user_id and lic.owner_user_id != user.id:
         raise ValidationError('Private Lizenz gehört einem anderen Benutzer.')
 
@@ -126,6 +129,8 @@ def unblock_license(license_obj, actor, request=None):
 def request_product_upgrade(*, user, company, product, note='', request=None):
     from .models import LicenseUpgradeRequest
 
+    if company.status != 'active':
+        raise ValidationError('Das Unternehmen ist deaktiviert.')
     membership = user.company_memberships.select_for_update().filter(company=company, active=True).first()
     if not membership:
         raise ValidationError('Benutzer gehört nicht zum Unternehmen.')
@@ -167,6 +172,8 @@ def resolve_product_upgrade(*, upgrade_request, actor, approve: bool, license_ob
     )
     if row.status != 'pending':
         raise ValidationError('Diese Upgrade-Anfrage ist nicht mehr offen.')
+    if row.company.status != 'active':
+        raise ValidationError('Das Unternehmen ist deaktiviert.')
     membership = actor.company_memberships.select_for_update().filter(
         company=row.company, active=True, role='admin'
     ).first()
@@ -208,13 +215,17 @@ def create_assignment_link(*, company, target_user, license_obj, actor, expires_
     from apps.core.security import token_pair
     from .models import LicenseAssignmentLink
 
+    if company.status != 'active':
+        raise ValidationError('Das Unternehmen ist deaktiviert; Zuordnungslinks sind gesperrt.')
     membership = target_user.company_memberships.filter(company=company, active=True).first()
     if not membership:
         raise ValidationError('Zielbenutzer gehört nicht zum Unternehmen.')
     actor_membership = actor.company_memberships.filter(company=company, active=True, role='admin').first()
     if not actor_membership:
         raise ValidationError('Nur der Firmenadministrator darf Zuordnungslinks erzeugen.')
-    lic = License.objects.select_for_update().get(pk=license_obj.pk)
+    lic = License.objects.select_for_update().select_related('company').get(pk=license_obj.pk)
+    if not lic.company or lic.company.status != 'active':
+        raise ValidationError('Das Unternehmen ist deaktiviert; Zuordnungslinks sind gesperrt.')
     if lic.company_id != company.id or lic.status != 'free' or not has_current_term(lic):
         raise ValidationError('Lizenz ist nicht als freie gültige Unternehmenslizenz verfügbar.')
     LicenseAssignmentLink.objects.filter(
@@ -249,17 +260,21 @@ def consume_assignment_link(*, raw_token, user, request=None):
 
     link = (
         LicenseAssignmentLink.objects.select_for_update()
-        .select_related('company', 'license', 'target_user', 'created_by')
+        .select_related('company', 'license__company', 'target_user', 'created_by')
         .filter(token_hash=token_hash(raw_token))
         .first()
     )
     if not link or not link.is_valid():
         raise ValidationError('Zuordnungslink ist ungültig oder abgelaufen.')
+    if link.company.status != 'active':
+        raise ValidationError('Das Unternehmen ist deaktiviert; der Zuordnungslink ist gesperrt.')
     if link.target_user_id != user.id:
         raise ValidationError('Dieser Zuordnungslink ist für einen anderen Benutzer bestimmt.')
     if not user.company_memberships.filter(company=link.company, active=True).exists():
         raise ValidationError('Benutzer gehört nicht mehr zum Unternehmen.')
-    locked_license = License.objects.select_for_update().get(pk=link.license_id)
+    locked_license = License.objects.select_for_update().select_related('company').get(pk=link.license_id)
+    if not locked_license.company or locked_license.company.status != 'active':
+        raise ValidationError('Das Unternehmen ist deaktiviert; die Lizenz kann nicht zugewiesen werden.')
     if locked_license.status != 'free' or not has_current_term(locked_license):
         raise ValidationError('Die vorbereitete Lizenz ist nicht mehr frei/verfügbar. Bitte einen neuen Link anfordern.')
     if LicenseAssignment.objects.filter(license=locked_license, ended_at__isnull=True).exists():
