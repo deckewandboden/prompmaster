@@ -3,7 +3,7 @@
 
 Only cryptographic values and safe staging defaults are generated. Production
 provider credentials are never invented. Generated bootstrap credentials are
-written once to .bootstrap-credentials with mode 0600.
+written to .bootstrap-credentials with mode 0600.
 """
 from __future__ import annotations
 
@@ -66,6 +66,9 @@ def hostname_default() -> str:
 
 if not ENV.exists():
     ENV.write_text(EXAMPLE.read_text(encoding='utf-8'), encoding='utf-8')
+# Lock the file down before any generated secret is written. On a shared
+# staging host this avoids even a short 0644 exposure window.
+os.chmod(ENV, 0o600)
 
 template_lines, defaults = parse(EXAMPLE.read_text(encoding='utf-8'))
 _, current = parse(ENV.read_text(encoding='utf-8'))
@@ -119,9 +122,19 @@ ENV.write_text(serialise(template_lines, values), encoding='utf-8')
 os.chmod(ENV, 0o600)
 
 if generated:
-    with CREDS.open('a', encoding='utf-8') as handle:
-        for key, value in generated.items():
-            handle.write(f'{key}={value}\n')
+    # Keep only the credential matching the current generated .env. Appending
+    # stale passwords after a reinitialisation is operationally ambiguous and
+    # unnecessarily retains obsolete secrets.
+    CREDS.touch(mode=0o600, exist_ok=True)
+    os.chmod(CREDS, 0o600)
+    credential_values = {
+        'INITIAL_ADMIN_EMAIL': values['INITIAL_ADMIN_EMAIL'],
+        **generated,
+    }
+    CREDS.write_text(
+        ''.join(f'{key}={value}\n' for key, value in credential_values.items()),
+        encoding='utf-8',
+    )
     os.chmod(CREDS, 0o600)
 
 print(f'Environment prepared for {domain}.')
