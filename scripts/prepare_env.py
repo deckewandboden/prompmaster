@@ -87,6 +87,17 @@ if placeholder(values.get('APP_ENCRYPTION_KEY', ''), 'GENERATE_WITH_FERNET'):
 if placeholder(values.get('RESTIC_PASSWORD', ''), 'CHANGE_ME'):
     values['RESTIC_PASSWORD'] = secrets.token_urlsafe(32)
 
+# A fresh staging installation must be able to exercise backup + restore even
+# before external object-storage credentials exist. Use a Docker named volume
+# as a local restic repository only for staging placeholders. Production env
+# validation still requires an external S3-compatible repository and keys.
+if values.get('ENVIRONMENT', '').strip().lower() == 'staging':
+    repo = values.get('RESTIC_REPOSITORY', '')
+    access_key = values.get('AWS_ACCESS_KEY_ID', '')
+    secret_key = values.get('AWS_SECRET_ACCESS_KEY', '')
+    if placeholder(repo) or placeholder(access_key, 'CHANGE_ME') or placeholder(secret_key, 'CHANGE_ME'):
+        values['RESTIC_REPOSITORY'] = '/repository'
+
 admin_email = values.get('INITIAL_ADMIN_EMAIL', '')
 if placeholder(admin_email) or admin_email == 'admin@example.com':
     values['INITIAL_ADMIN_EMAIL'] = os.environ.get('PM_ADMIN_EMAIL', '').strip() or (
@@ -114,5 +125,7 @@ if generated:
     os.chmod(CREDS, 0o600)
 
 print(f'Environment prepared for {domain}.')
+if values.get('RESTIC_REPOSITORY') == '/repository':
+    print('Staging backup repository: local persistent Docker volume (/repository).')
 if generated:
     print(f'Initial bootstrap credential written to {CREDS.name} (0600).')
