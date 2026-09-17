@@ -12,8 +12,8 @@ from apps.accounts.security import bump_security_version
 from apps.devices.models import DeviceRegistration
 from apps.licenses.models import License, LicenseAssignment, LicenseTerm
 from apps.orders.models import Order
-from .models import MollieEvent, Payment, Refund
-from .mollie import MollieClient
+from .models import MollieEvent, Payment, Refund, RefundAttempt
+from .mollie import MollieClient, MollieError
 
 CENT = Decimal('0.01')
 STATUS_MAP = {
@@ -379,44 +379,210 @@ def create_refund_request(*, term, actor, reason=''):
         raise ValidationError('Für diese Lizenzperiode besteht kein erstattungsfähiger Restzeitraum.')
 
     payment = (
-        Payment.objects.filter(order=locked.order_item.order, status__in=['paid', 'chargeback_reversed', 'refunded_partial'])
+        Payment.objects.filter(
+            order=locked.order_item.order,
+            status__in=['paid', 'chargeback_reversed', 'refunded_partial'],
+        )
         .order_by('-paid_at', '-created_at')
         .first()
     )
     if not payment:
         raise ValidationError('Keine bestätigte Mollie-Zahlung für diese Lizenzperiode gefunden.')
 
-    refund, created = Refund.objects.get_or_create(
-        term=locked,
-        defaults={
-            'payment': payment,
-            'amount': amount,
+    refund = Refund.objects.select_for_update().filter(term=locked).first()
+    if refund is None:
+        refund = Refund.objects.create(
+            term=locked,
+            payment=payment,
+            amount=amount,
+            remaining_days=remaining_days,
+            reason=reason.strip()[:2000],
+        )
+        audit(
+            actor,
+            'refund.created',
+            refund,
+            {'amount': str(amount), 'remaining_days': remaining_days},
+        )
+        return refund
+
+    if refund.status == 'succeeded':
+        raise ValidationError('Für diese Lizenzperiode wurde bereits eine Erstattung abgeschlossen.')
+    if refund.status == 'submitted':
+        # In-flight or ambiguous provider attempts must retain their original
+        # quote and idempotency key. Requoting here could desynchronise the
+        # local amount from a request Mollie may already have accepted.
+        audit(
+            actor,
+            'refund.retry_requested',
+            refund,
+            {'status': refund.status, 'attempts': refund.attempts.count()},
+        )
+        return refund
+
+    previous_amount = refund.amount
+    previous_days = refund.remaining_days
+    refund.payment = payment
+    refund.amount = amount
+    refund.remaining_days = remaining_days
+    refund.reason = reason.strip()[:2000]
+    refund.status = 'created'
+    refund.provider_refund_id = None
+    refund.save(
+        update_fields=[
+            'payment', 'amount', 'remaining_days', 'reason', 'status',
+            'provider_refund_id', 'updated_at',
+        ]
+    )
+    audit(
+        actor,
+        'refund.requoted',
+        refund,
+        {
+            'previous_amount': str(previous_amount),
+            'amount': str(amount),
+            'previous_remaining_days': previous_days,
             'remaining_days': remaining_days,
-            'reason': reason.strip()[:2000],
         },
     )
-    if not created and refund.status in {'submitted', 'succeeded'}:
-        raise ValidationError('Für diese Lizenzperiode wurde bereits eine Erstattung ausgelöst.')
-    audit(actor, 'refund.created', refund, {'amount': str(amount), 'remaining_days': remaining_days})
     return refund
+
+
+@transaction.atomic
+def _prepare_refund_attempt(refund_id):
+    row = (
+        Refund.objects.select_for_update()
+        .select_related('payment', 'term__license')
+        .get(pk=refund_id)
+    )
+    if row.status == 'succeeded':
+        raise ValidationError('Erstattung ist bereits abgeschlossen.')
+
+    active_attempt = (
+        row.attempts.select_for_update()
+        .filter(status__in=['submitted', 'ambiguous'])
+        .order_by('-number')
+        .first()
+    )
+    if row.status == 'submitted' and active_attempt:
+        return row, active_attempt
+
+    max_number = row.attempts.aggregate(value=Max('number'))['value'] or 0
+    number = max_number + 1
+    # Legacy submitted refunds created before RefundAttempt used refund:<uuid>.
+    # Reusing that original key is the only safe recovery for an unknown
+    # pre-migration provider outcome.
+    legacy_submitted = row.status == 'submitted' and max_number == 0
+    idempotency_key = (
+        f'refund:{row.id}'
+        if legacy_submitted
+        else f'refund:{row.id}:attempt:{number}'
+    )
+    attempt = RefundAttempt.objects.create(
+        refund=row,
+        number=number,
+        idempotency_key=idempotency_key,
+        amount=row.amount,
+        provider_refund_id=row.provider_refund_id if legacy_submitted else None,
+        status='submitted',
+    )
+    row.status = 'submitted'
+    if not legacy_submitted:
+        row.provider_refund_id = None
+    row.save(update_fields=['status', 'provider_refund_id', 'updated_at'])
+    return row, attempt
+
+
+def _record_refund_attempt_error(refund_id, attempt_id, exc):
+    with transaction.atomic():
+        row = Refund.objects.select_for_update().get(pk=refund_id)
+        attempt = RefundAttempt.objects.select_for_update().get(pk=attempt_id)
+        now = timezone.now()
+        attempt.error_class = type(exc).__name__[:120]
+        attempt.resolved_at = None if exc.ambiguous else now
+        if exc.ambiguous:
+            attempt.status = 'ambiguous'
+            row.status = 'submitted'
+        else:
+            attempt.status = 'failed'
+            row.status = 'failed'
+            row.provider_refund_id = None
+        attempt.save(
+            update_fields=['status', 'error_class', 'resolved_at', 'updated_at']
+        )
+        row.save(update_fields=['status', 'provider_refund_id', 'updated_at'])
+    audit(
+        None,
+        'refund.provider_attempt_failed',
+        row,
+        {
+            'attempt': attempt.number,
+            'ambiguous': bool(exc.ambiguous),
+            'error_class': type(exc).__name__,
+        },
+    )
 
 
 def submit_refund(refund):
-    # No database transaction is held while waiting for the external provider.
-    response = MollieClient().create_refund(
-        refund.payment.provider_payment_id,
-        refund.amount,
-        refund.payment.currency,
-        f'PromptMaster Erstattung {refund.term.license.license_number}',
-        f'refund:{refund.id}',
-    )
-    refund.provider_refund_id = response.get('id') or refund.provider_refund_id
-    status = str(response.get('status') or 'pending')
-    refund.status = 'succeeded' if status == 'refunded' else 'submitted'
-    refund.save(update_fields=['provider_refund_id', 'status', 'updated_at'])
-    if refund.status == 'succeeded':
-        mark_refund_success(refund, refund.provider_refund_id)
-    return refund
+    # Reserve/reuse an attempt while holding a row lock, then release the DB
+    # transaction before waiting on Mollie. Concurrent callers converge on the
+    # same active attempt and therefore the same provider idempotency key.
+    row, attempt = _prepare_refund_attempt(refund.pk)
+    try:
+        response = MollieClient().create_refund(
+            row.payment.provider_payment_id,
+            attempt.amount,
+            row.payment.currency,
+            f'PromptMaster Erstattung {row.term.license.license_number}',
+            attempt.idempotency_key,
+        )
+    except MollieError as exc:
+        _record_refund_attempt_error(row.pk, attempt.pk, exc)
+        raise
+
+    provider_id = str(response.get('id') or '')[:100]
+    provider_status = str(response.get('status') or 'pending').lower()
+    now = timezone.now()
+    with transaction.atomic():
+        row = Refund.objects.select_for_update().get(pk=row.pk)
+        attempt = RefundAttempt.objects.select_for_update().get(pk=attempt.pk)
+        if provider_id:
+            attempt.provider_refund_id = provider_id
+        attempt.error_class = ''
+        if provider_status == 'refunded':
+            attempt.status = 'succeeded'
+            attempt.resolved_at = now
+            row.status = 'succeeded'
+            row.provider_refund_id = provider_id or row.provider_refund_id
+        elif provider_status in {'failed', 'canceled'}:
+            attempt.status = 'failed'
+            attempt.resolved_at = now
+            row.status = 'failed'
+            row.provider_refund_id = None
+        else:
+            attempt.status = 'submitted'
+            attempt.resolved_at = None
+            row.status = 'submitted'
+            row.provider_refund_id = provider_id or row.provider_refund_id
+        attempt.save(
+            update_fields=[
+                'provider_refund_id', 'status', 'error_class', 'resolved_at',
+                'updated_at',
+            ]
+        )
+        row.save(update_fields=['provider_refund_id', 'status', 'updated_at'])
+
+    if provider_status == 'refunded':
+        return mark_refund_success(row, row.provider_refund_id)
+    if provider_status in {'failed', 'canceled'}:
+        audit(
+            None,
+            'refund.provider_attempt_failed',
+            row,
+            {'attempt': attempt.number, 'ambiguous': False, 'provider_status': provider_status},
+        )
+        raise MollieError(f'Mollie refund {provider_status}', ambiguous=False)
+    return row
 
 
 @transaction.atomic
@@ -427,6 +593,28 @@ def mark_refund_success(refund, provider_id):
     row.provider_refund_id = provider_id or row.provider_refund_id
     row.status = 'succeeded'
     row.save(update_fields=['provider_refund_id', 'status', 'updated_at'])
+
+    now = timezone.now()
+    attempt = None
+    if row.provider_refund_id:
+        attempt = row.attempts.select_for_update().filter(
+            provider_refund_id=row.provider_refund_id
+        ).order_by('-number').first()
+    if attempt is None:
+        attempt = row.attempts.select_for_update().filter(
+            status__in=['submitted', 'ambiguous']
+        ).order_by('-number').first()
+    if attempt is not None and attempt.status != 'succeeded':
+        attempt.status = 'succeeded'
+        attempt.provider_refund_id = row.provider_refund_id or attempt.provider_refund_id
+        attempt.error_class = ''
+        attempt.resolved_at = now
+        attempt.save(
+            update_fields=[
+                'status', 'provider_refund_id', 'error_class', 'resolved_at',
+                'updated_at',
+            ]
+        )
 
     payment = Payment.objects.select_for_update().get(pk=row.payment_id)
     refunded_total = payment.refunds.filter(status='succeeded').aggregate(total=Sum('amount'))['total'] or Decimal('0.00')
@@ -439,11 +627,11 @@ def mark_refund_success(refund, provider_id):
     term = LicenseTerm.objects.select_for_update().get(pk=row.term_id)
     if term.status != 'refunded':
         term.status = 'refunded'
-        term.refunded_at = timezone.now()
+        term.refunded_at = now
         term.save(update_fields=['status', 'refunded_at', 'updated_at'])
 
     license_obj = License.objects.select_for_update().get(pk=term.license_id)
-    _recalculate_license_after_refund(license_obj, timezone.now())
+    _recalculate_license_after_refund(license_obj, now)
     audit(None, 'refund.succeeded', row, {'amount': str(row.amount), 'term': str(term.id), 'license': str(license_obj.id)})
     order = row.payment.order
     _queue_after_commit('refund_confirmed', _order_recipient(order), {
@@ -453,8 +641,12 @@ def mark_refund_success(refund, provider_id):
 
 
 def reconcile_refunds(payment):
-    """Reconcile submitted refunds using Mollie's canonical refund list."""
-    pending = list(payment.refunds.filter(status='submitted').exclude(provider_refund_id__isnull=True))
+    """Reconcile provider-visible submitted refunds using Mollie's refund list."""
+    pending = list(
+        payment.refunds.filter(status='submitted')
+        .exclude(provider_refund_id__isnull=True)
+        .exclude(provider_refund_id='')
+    )
     if not pending:
         return 0
     payload = MollieClient().list_refunds(payment.provider_payment_id)
@@ -467,6 +659,20 @@ def reconcile_refunds(payment):
             mark_refund_success(refund, refund.provider_refund_id)
             count += 1
         elif provider and provider.get('status') in {'failed', 'canceled'}:
-            refund.status = 'failed'
-            refund.save(update_fields=['status', 'updated_at'])
+            with transaction.atomic():
+                current = Refund.objects.select_for_update().get(pk=refund.pk)
+                provider_id = current.provider_refund_id
+                attempt = current.attempts.select_for_update().filter(
+                    provider_refund_id=provider_id
+                ).order_by('-number').first()
+                if attempt is not None:
+                    attempt.status = 'failed'
+                    attempt.resolved_at = timezone.now()
+                    attempt.error_class = ''
+                    attempt.save(
+                        update_fields=['status', 'resolved_at', 'error_class', 'updated_at']
+                    )
+                current.status = 'failed'
+                current.provider_refund_id = None
+                current.save(update_fields=['status', 'provider_refund_id', 'updated_at'])
     return count
