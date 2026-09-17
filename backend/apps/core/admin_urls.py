@@ -1,10 +1,13 @@
 from django.urls import path
 from . import admin_views as v
+from . import export_views as ev
 
 app_name = 'ns_admin'
 urlpatterns = [
     path('', v.dashboard, name='dashboard'),
     path('search/', v.global_search, name='search'),
+    path('exports/<uuid:pk>/', ev.export_status, name='export_status'),
+    path('exports/<uuid:pk>/download/', ev.export_download, name='export_download'),
     path('customers/', v.customers, name='customers'),
     path('customers/private/', v.private_customers, name='private_customers'),
     path('customers/private/<uuid:pk>/', v.private_customer_detail, name='private_customer_detail'),
