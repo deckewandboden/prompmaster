@@ -114,6 +114,12 @@ def generate_grid_export(self, job_id):
             current = ExportJob.objects.select_for_update().select_related('requested_by').get(pk=job.id)
             owns_lease = current.status == 'running' and current.run_token == run_token
             if owns_lease:
+                # A filesystem rename is not rolled back with the database.
+                # Remove a final file created by this failed lease before the
+                # job is made retryable. A superseded worker must never delete
+                # the file of its successor, therefore this happens only while
+                # the current lease token still matches.
+                target.unlink(missing_ok=True)
                 current.status = 'failed'
                 current.error = f'{exc.__class__.__name__}: Export konnte nicht erstellt werden.'[:500]
                 current.finished_at = timezone.now()
