@@ -4,33 +4,20 @@ from celery import shared_task
 from django.db import transaction
 from django.utils import timezone
 
-from apps.companies.models import Membership
 from apps.licenses.models import License, LicenseReminder
 from .models import EmailMessage
-from .services import MailScopeInactive, message_scope_active, queue_email, send_now
+from .services import (
+    MailScopeInactive,
+    message_scope_active,
+    queue_email,
+    reminder_recipient_scopes,
+    send_now,
+)
 
 
 def _reminder_recipients(license_obj):
-    recipients = set()
-    active_assignment = license_obj.assignments.filter(ended_at__isnull=True).select_related('user').first()
-    if active_assignment and active_assignment.user.is_active:
-        recipients.add(active_assignment.user.email.lower())
-    if license_obj.company_id:
-        admin = (
-            Membership.objects.filter(
-                company_id=license_obj.company_id,
-                company__status='active',
-                active=True,
-                role='admin',
-            )
-            .select_related('user')
-            .first()
-        )
-        if admin and admin.user.is_active:
-            recipients.add(admin.user.email.lower())
-    elif license_obj.owner_user_id and license_obj.owner_user.is_active:
-        recipients.add(license_obj.owner_user.email.lower())
-    return sorted(recipients)
+    """Compatibility helper returning the canonical current recipient set."""
+    return sorted(reminder_recipient_scopes(license_obj))
 
 
 def _sync_reminder_delivery(message):
@@ -44,10 +31,7 @@ def _sync_reminder_delivery(message):
     except LicenseReminder.DoesNotExist:
         return
 
-    # Only recipients that are still entitled/operationally responsible count
-    # for the current reminder result. Historical failed rows for a former
-    # company admin must not keep a reminder in error after an admin transfer.
-    intended = set(_reminder_recipients(reminder.license))
+    intended = set(reminder_recipient_scopes(reminder.license))
     if not intended:
         reminder.status = 'error'
         reminder.error = 'Keine aktuellen Reminder-Empfänger verfügbar.'
@@ -74,7 +58,7 @@ def _sync_reminder_delivery(message):
 
 def _suppress_inactive_scope(message):
     message.status = 'failed'
-    message.error = 'Versand verworfen: Benutzer-/Firmenscope ist nicht mehr aktiv.'
+    message.error = 'Versand verworfen: Capability/Benutzer-/Firmenscope ist nicht mehr aktiv.'
     message.save(update_fields=['status', 'error', 'updated_at'])
     _sync_reminder_delivery(message)
     return 'scope-inactive'
@@ -82,8 +66,6 @@ def _suppress_inactive_scope(message):
 
 @shared_task(bind=True, max_retries=4, default_retry_delay=60)
 def send_email_message(self, message_id):
-    # Claim the row before contacting an external provider. Duplicate Celery
-    # deliveries then collapse into one active sender.
     with transaction.atomic():
         message = EmailMessage.objects.select_for_update().select_related('template').get(pk=message_id)
         if message.status == 'sent':
@@ -96,8 +78,6 @@ def send_email_message(self, message_id):
         message.error = ''
         message.save(update_fields=['status', 'error', 'updated_at'])
     try:
-        # Scope is checked again inside send_now immediately before the provider
-        # call to narrow the post-lock TOCTOU window as far as practical.
         send_now(message)
         _sync_reminder_delivery(message)
         return 'sent'
@@ -146,7 +126,6 @@ def schedule_license_reminders():
     for license_obj in queryset.iterator(chunk_size=500):
         remaining = (timezone.localtime(license_obj.valid_until).date() - today).days
         candidates = []
-        # Windows avoid sending T-60 and T-30 together after a long outage.
         if license_obj.status == 'expired' or remaining < 0:
             candidates.append(('t0', 'license_expired'))
         elif license_obj.product.reminder_2_days < remaining <= license_obj.product.reminder_1_days:
@@ -164,8 +143,8 @@ def schedule_license_reminders():
                 if reminder.status in {'queued', 'sent'}:
                     continue
                 try:
-                    recipients = _reminder_recipients(license_obj)
-                    if not recipients:
+                    recipient_scopes = reminder_recipient_scopes(license_obj)
+                    if not recipient_scopes:
                         raise RuntimeError('Keine Reminder-Empfänger verfügbar.')
                     context = {
                         'license': license_obj.license_number,
@@ -175,7 +154,7 @@ def schedule_license_reminders():
                     reminder_messages = EmailMessage.objects.select_for_update().filter(
                         context__reminder_id=str(reminder.id)
                     )
-                    for recipient in recipients:
+                    for recipient, recipient_user_id in recipient_scopes.items():
                         recipient_messages = reminder_messages.filter(recipient=recipient)
                         if recipient_messages.filter(status='sent').exists():
                             continue
@@ -186,9 +165,12 @@ def schedule_license_reminders():
                                 and existing.updated_at <= now - timedelta(minutes=10)
                             )
                             if existing.status == 'failed' or stale_sending:
+                                existing.context = dict(existing.context or {})
+                                existing.context['pm_scope_company_id'] = str(license_obj.company_id) if license_obj.company_id else ''
+                                existing.context['pm_scope_user_id'] = str(recipient_user_id)
                                 existing.status = 'queued'
                                 existing.error = ''
-                                existing.save(update_fields=['status', 'error', 'updated_at'])
+                                existing.save(update_fields=['context', 'status', 'error', 'updated_at'])
                                 transaction.on_commit(
                                     lambda message_id=str(existing.id): send_email_message.delay(message_id),
                                     robust=True,
@@ -199,7 +181,7 @@ def schedule_license_reminders():
                             recipient,
                             context,
                             scope_company=license_obj.company_id,
-                            scope_user=license_obj.owner_user_id,
+                            scope_user=recipient_user_id,
                         )
 
                     related = EmailMessage.objects.filter(
@@ -224,13 +206,7 @@ def schedule_license_reminders():
 
 @shared_task
 def sync_license_states():
-    """Keep denormalised License.status aligned with paid term coverage.
-
-    Each license is reloaded under SELECT FOR UPDATE before deriving and writing
-    its status. This serialises the maintenance task with refund, manual block,
-    chargeback and assignment state transitions so a stale background read can
-    never overwrite a newly terminal/sensitive state.
-    """
+    """Keep denormalised License.status aligned with paid term coverage."""
     from apps.licenses.services import effective_license_status
 
     mutable_states = {'active', 'free', 'expired'}
