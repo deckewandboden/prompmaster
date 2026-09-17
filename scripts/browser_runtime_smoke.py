@@ -345,11 +345,16 @@ def _browser_login(page, base: str, email: str, password: str, secret: str) -> N
     if not response or response.status != 200:
         raise AssertionError(f'login page failed for {email}')
     page.locator('input[name="email"]').fill(email)
-    page.locator('input[name="password"]').fill(password)
-    page.locator('button[type="submit"]').click()
+    password_input = page.locator('input[name="password"]')
+    password_input.fill(password)
+    # Submit through the focused form control instead of depending on a
+    # presentation-level button selector. This still exercises the browser's
+    # normal HTML form submit path and survives harmless template refactors.
+    password_input.press('Enter')
     page.wait_for_url('**/auth/2fa/**')
-    page.locator('input[name="code"]').fill(pyotp.TOTP(secret).now())
-    page.locator('button[type="submit"]').click()
+    code_input = page.locator('input[name="code"]')
+    code_input.fill(pyotp.TOTP(secret).now())
+    code_input.press('Enter')
     page.wait_for_url(lambda url: '/auth/2fa/' not in url and '/auth/login/' not in url)
     page.wait_for_load_state('networkidle')
 
