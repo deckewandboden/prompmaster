@@ -9,13 +9,15 @@ from django.core.management import call_command
 from django.test import TestCase
 from django.utils import timezone
 
-from apps.accounts.models import User
+from apps.accounts.models import Role, User, UserRole
 from apps.audit.models import AuditEvent
 from apps.catalog.models import Product
 from apps.catalog.services import current_price
 from apps.companies.models import Membership
 from apps.companies.services import create_invitation
+from apps.core.security import token_pair
 from apps.devices.services import register_device, validate_device_token
+from apps.integrations.models import ServiceAccount
 from apps.legal.models import LegalDocument
 from apps.licenses.models import License, LicenseReminder, LicenseTerm
 from apps.licenses.services import assign_license
@@ -28,7 +30,7 @@ from apps.proaccess.services import active_product_assignment
 
 
 class CommercialCoreFlowE2ETests(TestCase):
-    """One integrated contract for all 20 PM-TEST-007 lifecycle steps."""
+    """One integrated contract for all 22 PM-TEST-007 lifecycle steps."""
 
     admin_email = 'e2e-admin@example.test'
     member_email = 'e2e-member@example.test'
@@ -384,3 +386,65 @@ class CommercialCoreFlowE2ETests(TestCase):
         }
         actual_actions = set(AuditEvent.objects.values_list('action', flat=True))
         self.assertTrue(required_actions.issubset(actual_actions))
+
+        # 21: a real netstyle Operations role can open the Ops dashboard. Only
+        # external infrastructure probes are isolated; RBAC, session security,
+        # rendering and database access remain the production code path.
+        ops_user = User.objects.create_user(
+            'e2e-ops@example.test',
+            self.password,
+            first_name='E2E',
+            last_name='Operations',
+            is_staff=True,
+            two_factor_required=True,
+            totp_secret_enc='e2e-configured-secret',
+        )
+        UserRole.objects.create(user=ops_user, role=Role.objects.get(code='ops'))
+        self.client.force_login(ops_user)
+        session = self.client.session
+        session['security_version'] = ops_user.security_version
+        session['two_factor_ok'] = True
+        session['authenticated_at'] = timezone.now().timestamp()
+        session['last_activity_at'] = timezone.now().timestamp()
+        session.save()
+        with (
+            patch('apps.core.admin_views.snapshot', return_value={'disk_percent': 10.0}),
+            patch('apps.core.admin_views.caddy_health', return_value=True),
+            patch('apps.core.admin_views.certificate_status', return_value={'status': 'ok'}),
+            patch('apps.ops.api._database_payload', return_value={'status': 'ok'}),
+            patch('apps.ops.api._service_payload', return_value={'django': True}),
+            patch('apps.ops.api._integration_payload', return_value={'mollie': {'configured': True}}),
+        ):
+            ops_response = self.client.get('/ns-admin/ops/')
+        self.assertEqual(ops_response.status_code, 200)
+        self.assertEqual(ops_response.context['environment'], 'development')
+
+        # 22: the maintenance snapshot is protected by a real hash-only
+        # ServiceAccount credential carrying exactly the ops.read scope.
+        raw_service_token, hashed_service_token = token_pair()
+        service_account = ServiceAccount.objects.create(
+            name='E2E Maintenance Reader',
+            token_hash=hashed_service_token,
+            scopes=['ops.read'],
+            expires_at=timezone.now() + timedelta(hours=1),
+        )
+        with (
+            patch('apps.ops.api.snapshot', return_value={'disk_percent': 10.0}),
+            patch('apps.ops.api._database_payload', return_value={'status': 'ok'}),
+            patch('apps.ops.api._backup_payload', return_value={'status': 'ok'}),
+            patch('apps.ops.api._restore_payload', return_value={'status': 'ok'}),
+            patch('apps.ops.api._service_payload', return_value={'django': True}),
+            patch('apps.ops.api._integration_payload', return_value={'mollie': {'configured': True}}),
+        ):
+            snapshot_response = self.client.get(
+                '/api/v1/ops/maintenance-snapshot',
+                HTTP_AUTHORIZATION=f'Bearer {raw_service_token}',
+            )
+        self.assertEqual(snapshot_response.status_code, 200)
+        self.assertEqual(snapshot_response['Cache-Control'], 'no-store')
+        snapshot_payload = snapshot_response.json()
+        self.assertEqual(snapshot_payload['schema_version'], 1)
+        self.assertEqual(snapshot_payload['service_account'], str(service_account.id))
+        self.assertEqual(snapshot_payload['database']['status'], 'ok')
+        service_account.refresh_from_db()
+        self.assertIsNotNone(service_account.last_used_at)
