@@ -1,5 +1,7 @@
 from datetime import timedelta
 from decimal import Decimal
+from types import SimpleNamespace
+from unittest.mock import MagicMock, patch
 
 from django.test import TestCase
 from django.utils import timezone
@@ -12,7 +14,11 @@ from apps.licenses.models import License, LicenseAssignment, LicenseReminder
 
 from .models import EmailMessage, EmailTemplate
 from .services import message_scope_active, queue_email
-from .tasks import schedule_license_reminders, send_email_message
+from .tasks import (
+    _recover_succeeded_refunds,
+    schedule_license_reminders,
+    send_email_message,
+)
 
 
 class NotificationSecurityTests(TestCase):
@@ -166,3 +172,31 @@ class NotificationSecurityTests(TestCase):
             EmailMessage.objects.filter(context__reminder_id=str(reminder.id)).count(),
             2,
         )
+
+    def test_refund_recovery_isolates_one_failure_and_attempts_later_rows(self):
+        recovery_values = MagicMock()
+        recovery_values.__getitem__.return_value = ['refund-bad', 'refund-good']
+        recovery_queryset = MagicMock()
+        recovery_queryset.values_list.return_value = recovery_values
+        rows = {
+            'refund-bad': SimpleNamespace(provider_refund_id='re_bad'),
+            'refund-good': SimpleNamespace(provider_refund_id='re_good'),
+        }
+
+        def fake_filter(**kwargs):
+            if kwargs.get('status') == 'succeeded':
+                return recovery_queryset
+            row_queryset = MagicMock()
+            row_queryset.first.return_value = rows.get(kwargs.get('pk'))
+            return row_queryset
+
+        with patch('apps.payments.models.Refund.objects.filter', side_effect=fake_filter):
+            with patch(
+                'apps.payments.services.mark_refund_success',
+                side_effect=[RuntimeError('broken refund row'), None],
+            ) as finalize:
+                failures = _recover_succeeded_refunds()
+
+        self.assertEqual(finalize.call_count, 2)
+        self.assertEqual(len(failures), 1)
+        self.assertEqual(failures[0][0], 'refund-bad')
