@@ -103,7 +103,26 @@ cp .env.example .env
 ./scripts/bootstrap.sh
 ```
 
-Der Bootstrap migriert, seedet Rollen/Produkte, **34/194 PromptDomain**, **194 Smoke-Tests**, zentrale FAQ, legt den initialen Admin an, startet Stack und führt die Django-Test-Suite aus.
+Der Bootstrap migriert, seedet Rollen/Produkte, **34/194 PromptDomain**, **194 Smoke-Tests**, zentrale FAQ, legt den initialen Admin an, startet Stack und führt die Django-Test-Suite aus. Bei automatisch erzeugtem Staging-Admin stehen die aktuell gültigen Zugangsdaten ausschließlich in `.bootstrap-credentials` (0600); die Datei ist Git-ignoriert.
+
+## Produktion: einmaliger Erstadmin
+
+In Produktion bleibt `INITIAL_ADMIN_PASSWORD` in `.env` leer bzw. `DISABLED`. Ein dauerhaftes Bootstrap-Passwort in der Produktionskonfiguration ist ausdrücklich nicht vorgesehen. Nach dem ersten erfolgreichen `./scripts/deploy.sh` wird der erste Superadmin einmalig aus temporären Prozessvariablen angelegt:
+
+```bash
+read -r -p 'Initiale Admin-E-Mail: ' INITIAL_ADMIN_EMAIL
+read -r -s -p 'Initiales Admin-Passwort: ' INITIAL_ADMIN_PASSWORD
+echo
+export INITIAL_ADMIN_EMAIL INITIAL_ADMIN_PASSWORD
+
+docker compose -f compose.yaml -f compose.production.yaml run --rm \
+  -e INITIAL_ADMIN_EMAIL -e INITIAL_ADMIN_PASSWORD \
+  web python manage.py bootstrap_admin
+
+unset INITIAL_ADMIN_PASSWORD INITIAL_ADMIN_EMAIL
+```
+
+Das Passwort wird dabei **nicht** in `.env`, Git oder ein Repository-Artefakt geschrieben. Der neu angelegte Superadmin muss beim ersten Login 2FA einrichten. Für spätere Deployments wird `bootstrap_admin` nicht benötigt.
 
 ## Runtime Acceptance
 
@@ -121,7 +140,7 @@ Ein-Kommando-Preflight/Initialisierung:
 ./scripts/github_prepare.sh
 ```
 
-Siehe `docs/GITHUB_TRANSFER.md`. Das Repository ist für einen privaten GitHub-Erstimport vorbereitet; `.env`, Secrets, DB-/Backup-Artefakte und lokale Runtime-Daten gehören nicht ins Repository.
+Siehe `docs/GITHUB_TRANSFER.md`. Das Repository ist für einen privaten GitHub-Erstimport vorbereitet; `.env`, `.bootstrap-credentials`, Secrets, DB-/Backup-Artefakte und lokale Runtime-Daten gehören nicht ins Repository.
 
 ## Noch extern zu bestätigen
 
