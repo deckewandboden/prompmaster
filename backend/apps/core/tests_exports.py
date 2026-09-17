@@ -65,6 +65,14 @@ class BackgroundExportTests(TestCase):
         return user, role, permission
 
     def test_large_csv_request_is_queued_before_view_and_filter_state_is_encrypted(self):
+        # The async boundary is strictly greater than EXPORT_SYNC_LIMIT.  Two
+        # matching rows therefore prove that a filtered export over the limit is
+        # queued while a one-row export remains synchronous.
+        Company.objects.create(
+            customer_number='EXP-0003',
+            name='Alpha Two',
+            email='alpha-two@example.test',
+        )
         request = self.factory.get('/ns-admin/customers/?export=csv&q=Alpha')
         request.user = self.owner
         request.session = {}
@@ -216,4 +224,8 @@ class BackgroundExportTests(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response['Cache-Control'], 'private, no-store')
         self.assertEqual(response['X-Content-Type-Options'], 'nosniff')
-        response.close()
+        # FileResponse.close() emits request_finished and closes the test DB
+        # connection.  This direct-view test owns only the opened file handle.
+        stream = getattr(response, 'file_to_stream', None)
+        if stream is not None:
+            stream.close()
