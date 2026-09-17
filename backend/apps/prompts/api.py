@@ -25,13 +25,12 @@ def _require_pro_access(request):
         raise PromptValidationError('Anmeldung erforderlich.', code='authentication_required')
     if not request.user.email_verified_at:
         raise PromptValidationError('Bitte E-Mail-Adresse bestätigen.', code='email_verification_required')
-    assignment = active_product_assignment(request.user, 'PRO')
+    assignment = active_product_assignment(request.user)
     if not assignment:
-        raise PromptValidationError('Aktive PromptMaster-Pro-Lizenz erforderlich.', code='license_required')
+        raise PromptValidationError('Aktiver PromptMaster-Pro-Zugriff erforderlich.', code='license_required')
     device = validate_device_token(
         request.user,
         request.COOKIES.get(DEVICE_COOKIE, ''),
-        product_code='PRO',
     )
     if not device or device.license_id != assignment.license_id:
         raise PromptValidationError('Registriertes Gerät erforderlich.', code='device_required')
@@ -50,7 +49,6 @@ def catalog(request):
     response = JsonResponse({'ok': True, 'catalog': catalog_snapshot(product)})
     response['Cache-Control'] = 'no-store'
     return response
-
 
 
 
