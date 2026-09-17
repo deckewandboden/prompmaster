@@ -99,6 +99,15 @@ class MollieStateIntegrationTests(TestCase):
             'method': 'banktransfer',
         }
 
+    @patch('apps.payments.views.MollieClient.get_payment')
+    def test_unknown_webhook_id_does_not_call_provider_api(self, provider_get):
+        response = self.client.post(
+            '/api/webhooks/mollie/',
+            {'id': 'tr_unknown_payment'},
+        )
+        self.assertEqual(response.status_code, 404)
+        provider_get.assert_not_called()
+
     @patch('apps.payments.services._queue_after_commit')
     def test_duplicate_paid_webhook_creates_exactly_one_license_and_term(self, _mail):
         paid = self.payload('paid')
