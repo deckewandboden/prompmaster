@@ -12,6 +12,7 @@ from apps.audit.services import audit
 
 from .exporting import EXPORTS, csv_value, decode_query_state, export_queryset
 from .models import ExportJob
+from .permissions import has_perm
 
 
 RUNNING_STALE_AFTER = timedelta(minutes=10)
@@ -34,6 +35,15 @@ def _touch_lease(job_id, run_token):
     )
 
 
+def _fail_without_materialising(job, message, now):
+    job.status = 'failed'
+    job.error = message[:500]
+    job.finished_at = now
+    job.run_token = None
+    job.save(update_fields=['status', 'error', 'finished_at', 'run_token', 'updated_at'])
+    return {'job_id': str(job.id), 'status': 'denied'}
+
+
 @shared_task(bind=True, max_retries=2, default_retry_delay=30)
 def generate_grid_export(self, job_id):
     run_token = uuid.uuid4()
@@ -51,6 +61,25 @@ def generate_grid_export(self, job_id):
             return {'job_id': str(job.id), 'status': 'expired'}
         if job.status == 'running' and job.updated_at >= now - RUNNING_STALE_AFTER:
             return {'job_id': str(job.id), 'status': 'already_running'}
+
+        config = EXPORTS.get(job.kind)
+        requested_by = job.requested_by
+        if (
+            not config
+            or not requested_by.is_active
+            or not requested_by.is_staff
+            or not has_perm(requested_by, config['permission'])
+        ):
+            # Permissions are intentionally re-evaluated at execution time.
+            # A queued export must not materialise sensitive data after the
+            # requesting staff identity has been disabled or its capability
+            # has been revoked.
+            return _fail_without_materialising(
+                job,
+                'Exportberechtigung ist nicht mehr gültig.',
+                now,
+            )
+
         job.status = 'running'
         job.error = ''
         job.finished_at = None
@@ -89,6 +118,24 @@ def generate_grid_export(self, job_id):
                 current.run_token = None
                 current.save(update_fields=['status', 'error', 'finished_at', 'run_token', 'updated_at'])
                 return {'job_id': str(job.id), 'status': 'expired'}
+
+            # Re-check the capability immediately before publishing the file as
+            # ready. This closes the second TOCTOU window where a long-running
+            # export loses permission while rows are being generated.
+            config = EXPORTS.get(current.kind)
+            requested_by = current.requested_by
+            if (
+                not config
+                or not requested_by.is_active
+                or not requested_by.is_staff
+                or not has_perm(requested_by, config['permission'])
+            ):
+                temporary.unlink(missing_ok=True)
+                return _fail_without_materialising(
+                    current,
+                    'Exportberechtigung wurde während der Erstellung entzogen.',
+                    now,
+                )
 
             temporary.replace(target)
             current.status = 'ready'
