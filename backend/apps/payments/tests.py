@@ -128,6 +128,19 @@ class MollieStateIntegrationTests(TestCase):
         )
 
     @patch('apps.payments.services._queue_after_commit')
+    def test_paid_order_cannot_be_downgraded_by_stale_checkout_state(self, _mail):
+        process_provider_state(self.payment.provider_payment_id, self.payload('paid'))
+        self.order.refresh_from_db()
+        self.assertEqual(self.order.status, 'paid')
+
+        for stale_status in ('payment_open', 'failed', 'canceled', 'draft'):
+            with self.subTest(stale_status=stale_status):
+                self.order.status = stale_status
+                self.order.save(update_fields=['status', 'updated_at'])
+                self.order.refresh_from_db()
+                self.assertEqual(self.order.status, 'paid')
+
+    @patch('apps.payments.services._queue_after_commit')
     def test_failed_payment_creates_no_license_and_preserves_first_failure_time(self, _mail):
         process_provider_state(self.payment.provider_payment_id, self.payload('failed'))
         self.order.refresh_from_db()
