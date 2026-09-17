@@ -1,8 +1,14 @@
+from urllib.parse import unquote, urlsplit
+
 import requests
+from django.contrib.auth import get_user_model
 from django.db import transaction
 from django.conf import settings
 from django.core.mail import send_mail
 from django.utils import timezone
+
+from apps.core.crypto import decrypt, encrypt
+from apps.core.security import token_hash
 
 from .models import EmailMessage, EmailTemplate
 
@@ -11,9 +17,132 @@ class MailProviderError(RuntimeError):
     pass
 
 
+class MailScopeInactive(MailProviderError):
+    pass
+
+
+_ENCRYPTED_PREFIX = 'pm_enc:v1:'
+_SENSITIVE_CONTEXT_KEYS = {'url', 'link', 'token'}
+_USER_SCOPED_TEMPLATES = {'verify_email', 'password_reset', 'staff_invite'}
+
+
+def _extract_last_url_token(value):
+    try:
+        path = urlsplit(str(value or '')).path.rstrip('/')
+        return unquote(path.rsplit('/', 1)[-1]) if path else ''
+    except Exception:
+        return ''
+
+
+def _infer_message_scope(code, recipient, context, scope_company, scope_user):
+    """Infer missing scope for authentication/capability e-mails.
+
+    Callers should still pass explicit scope whenever they already own it. This
+    fallback keeps security properties intact for legacy call sites without
+    requiring raw capability tokens to remain stored in the mail queue.
+    """
+    if scope_user is None and code in _USER_SCOPED_TEMPLATES:
+        user = get_user_model().objects.filter(email__iexact=recipient).only('id').first()
+        if user:
+            scope_user = user.pk
+
+    raw_token = _extract_last_url_token(context.get('url'))
+    if raw_token and code == 'invite' and scope_company is None:
+        from apps.companies.models import Invitation
+
+        invitation = (
+            Invitation.objects.filter(
+                token_hash=token_hash(raw_token),
+                email__iexact=recipient,
+            )
+            .only('company_id')
+            .first()
+        )
+        if invitation:
+            scope_company = invitation.company_id
+
+    if raw_token and code == 'assignment_link':
+        from apps.licenses.models import LicenseAssignmentLink
+
+        link = (
+            LicenseAssignmentLink.objects.filter(token_hash=token_hash(raw_token))
+            .only('company_id', 'target_user_id')
+            .first()
+        )
+        if link:
+            if scope_company is None:
+                scope_company = link.company_id
+            if scope_user is None:
+                scope_user = link.target_user_id
+
+    return scope_company, scope_user
+
+
+def _protect_context(context):
+    stored = dict(context)
+    for key, value in list(stored.items()):
+        if key.lower() in _SENSITIVE_CONTEXT_KEYS and isinstance(value, str) and value:
+            stored[key] = _ENCRYPTED_PREFIX + encrypt(value)
+    return stored
+
+
+def _render_context(context):
+    rendered = dict(context or {})
+    for key, value in list(rendered.items()):
+        if isinstance(value, str) and value.startswith(_ENCRYPTED_PREFIX):
+            rendered[key] = decrypt(value[len(_ENCRYPTED_PREFIX):])
+    return rendered
+
+
+def message_scope_active(message):
+    """Revalidate a queued message's authorization scope immediately before send."""
+    context = message.context or {}
+    company_id = context.get('pm_scope_company_id')
+    user_id = context.get('pm_scope_user_id')
+
+    company_ok = True
+    user_ok = True
+    if company_id:
+        from apps.companies.models import Company
+
+        company_ok = Company.objects.filter(pk=company_id, status='active').exists()
+    if user_id:
+        user_ok = get_user_model().objects.filter(pk=user_id, is_active=True).exists()
+    if not company_ok or not user_ok:
+        return False
+
+    # When both scopes are present the capability belongs to a user inside that
+    # tenant. Require the relationship itself to still be active as well.
+    if company_id and user_id:
+        from apps.companies.models import Membership
+
+        return Membership.objects.filter(
+            company_id=company_id,
+            user_id=user_id,
+            company__status='active',
+            active=True,
+            user__is_active=True,
+        ).exists()
+    return True
+
+
 def queue_email(code, recipient, context, *, scope_company=None, scope_user=None):
     template = EmailTemplate.objects.get(code=code, active=True)
-    stored_context = dict(context)
+    recipient = recipient.strip().lower()
+    plain_context = dict(context)
+    scope_company, scope_user = _infer_message_scope(
+        code,
+        recipient,
+        plain_context,
+        scope_company,
+        scope_user,
+    )
+
+    # Render/validate against plaintext only in memory. Capability URLs are
+    # encrypted before the durable queue row is created.
+    subject = template.subject.format(**plain_context)
+    template.body_text.format(**plain_context)
+    stored_context = _protect_context(plain_context)
     if scope_company is not None:
         stored_context['pm_scope_company_id'] = str(
             getattr(scope_company, 'pk', scope_company)
@@ -22,13 +151,10 @@ def queue_email(code, recipient, context, *, scope_company=None, scope_user=None
         stored_context['pm_scope_user_id'] = str(
             getattr(scope_user, 'pk', scope_user)
         )
-    subject = template.subject.format(**stored_context)
-    # Validate the body now too, so malformed template placeholders don't
-    # create permanently broken queue records.
-    template.body_text.format(**stored_context)
+
     message = EmailMessage.objects.create(
         template=template,
-        recipient=recipient.strip().lower(),
+        recipient=recipient,
         subject=subject,
         context=stored_context,
     )
@@ -93,8 +219,11 @@ def _send_graph(message, body):
 def send_now(message):
     if message.status == 'sent':
         return message
+    if not message_scope_active(message):
+        raise MailScopeInactive('Queued e-mail authorization scope is no longer active')
     template = message.template
-    body = template.body_text.format(**message.context) if template else ''
+    context = _render_context(message.context)
+    body = template.body_text.format(**context) if template else ''
     provider = settings.EMAIL_PROVIDER.lower().strip()
     if provider in {'smtp', 'mailpit'}:
         reference = _send_smtp(message, body)
