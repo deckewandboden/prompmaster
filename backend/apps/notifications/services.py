@@ -11,17 +11,26 @@ class MailProviderError(RuntimeError):
     pass
 
 
-def queue_email(code, recipient, context):
+def queue_email(code, recipient, context, *, scope_company=None, scope_user=None):
     template = EmailTemplate.objects.get(code=code, active=True)
-    subject = template.subject.format(**context)
+    stored_context = dict(context)
+    if scope_company is not None:
+        stored_context['pm_scope_company_id'] = str(
+            getattr(scope_company, 'pk', scope_company)
+        )
+    if scope_user is not None:
+        stored_context['pm_scope_user_id'] = str(
+            getattr(scope_user, 'pk', scope_user)
+        )
+    subject = template.subject.format(**stored_context)
     # Validate the body now too, so malformed template placeholders don't
     # create permanently broken queue records.
-    template.body_text.format(**context)
+    template.body_text.format(**stored_context)
     message = EmailMessage.objects.create(
         template=template,
         recipient=recipient.strip().lower(),
         subject=subject,
-        context=context,
+        context=stored_context,
     )
     from .tasks import send_email_message
 
