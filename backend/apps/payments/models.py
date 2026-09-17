@@ -1,4 +1,5 @@
 from django.db import models
+from django.utils import timezone
 
 from apps.core.models import TimeStampedModel
 
@@ -12,8 +13,16 @@ class Payment(TimeStampedModel):
     currency = models.CharField(max_length=3, default='EUR')
     method = models.CharField(max_length=50, blank=True)
     paid_at = models.DateTimeField(null=True, blank=True)
+    failed_at = models.DateTimeField(null=True, blank=True)
     processed_paid = models.BooleanField(default=False)
     last_provider_payload = models.JSONField(default=dict)
+
+    def save(self, *args, **kwargs):
+        if self.status in {'failed', 'canceled', 'expired'} and self.failed_at is None:
+            self.failed_at = timezone.now()
+            if kwargs.get('update_fields') is not None:
+                kwargs['update_fields'] = set(kwargs['update_fields']) | {'failed_at'}
+        super().save(*args, **kwargs)
 
     def __str__(self):
         return self.provider_payment_id
