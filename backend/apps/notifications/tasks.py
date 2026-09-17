@@ -140,7 +140,7 @@ def schedule_license_reminders():
                     kind=kind,
                     target_valid_until=license_obj.valid_until,
                 )
-                if reminder.status in {'queued', 'sent'}:
+                if reminder.status == 'sent':
                     continue
                 try:
                     recipient_scopes = reminder_recipient_scopes(license_obj)
@@ -154,6 +154,7 @@ def schedule_license_reminders():
                     reminder_messages = EmailMessage.objects.select_for_update().filter(
                         context__reminder_id=str(reminder.id)
                     )
+                    delivery_changed = False
                     for recipient, recipient_user_id in recipient_scopes.items():
                         recipient_messages = reminder_messages.filter(recipient=recipient)
                         if recipient_messages.filter(status='sent').exists():
@@ -164,9 +165,16 @@ def schedule_license_reminders():
                                 existing.status == 'sending'
                                 and existing.updated_at <= now - timedelta(minutes=10)
                             )
-                            if existing.status == 'failed' or stale_sending:
+                            scope_changed = (
+                                str((existing.context or {}).get('pm_scope_user_id') or '')
+                                != str(recipient_user_id)
+                            )
+                            if existing.status == 'failed' or stale_sending or scope_changed:
                                 existing.context = dict(existing.context or {})
-                                existing.context['pm_scope_company_id'] = str(license_obj.company_id) if license_obj.company_id else ''
+                                if license_obj.company_id:
+                                    existing.context['pm_scope_company_id'] = str(license_obj.company_id)
+                                else:
+                                    existing.context.pop('pm_scope_company_id', None)
                                 existing.context['pm_scope_user_id'] = str(recipient_user_id)
                                 existing.status = 'queued'
                                 existing.error = ''
@@ -175,6 +183,7 @@ def schedule_license_reminders():
                                     lambda message_id=str(existing.id): send_email_message.delay(message_id),
                                     robust=True,
                                 )
+                                delivery_changed = True
                             continue
                         queue_email(
                             template_code,
@@ -183,6 +192,7 @@ def schedule_license_reminders():
                             scope_company=license_obj.company_id,
                             scope_user=recipient_user_id,
                         )
+                        delivery_changed = True
 
                     related = EmailMessage.objects.filter(
                         context__reminder_id=str(reminder.id)
@@ -193,10 +203,11 @@ def schedule_license_reminders():
                         reminder.refresh_from_db(fields=['status', 'sent_at', 'error'])
                     if reminder.status != 'sent':
                         reminder.status = 'queued'
-                        reminder.queued_at = timezone.now()
+                        reminder.queued_at = reminder.queued_at or timezone.now()
                         reminder.error = ''
                         reminder.save(update_fields=['status', 'queued_at', 'error', 'updated_at'])
-                    queued += 1
+                    if delivery_changed:
+                        queued += 1
                 except Exception as exc:
                     reminder.status = 'error'
                     reminder.error = str(exc)[:1000]
