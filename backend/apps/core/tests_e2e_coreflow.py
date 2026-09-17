@@ -4,6 +4,7 @@ from urllib.parse import urlsplit
 from unittest.mock import patch
 
 import pyotp
+from django.conf import settings
 from django.core.exceptions import ValidationError
 from django.core.management import call_command
 from django.test import TestCase
@@ -421,7 +422,7 @@ class CommercialCoreFlowE2ETests(TestCase):
         ):
             ops_response = self.client.get('/ns-admin/ops/')
         self.assertEqual(ops_response.status_code, 200)
-        self.assertEqual(ops_response.context['environment'], 'development')
+        self.assertEqual(ops_response.context['environment'], settings.ENVIRONMENT)
 
         # 22: the maintenance snapshot is protected by a real hash-only
         # ServiceAccount credential carrying exactly the ops.read scope.
