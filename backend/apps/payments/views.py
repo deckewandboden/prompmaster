@@ -24,7 +24,11 @@ def mollie_webhook(request):
         payment = process_provider_state(payment_id, payload)
         reconcile_refunds(payment)
     except Exception as exc:
-        record_webhook_failure(payment_id, exc)
+        event = record_webhook_failure(payment_id, exc)
+        if event:
+            from .tasks import retry_mollie_payment
+
+            retry_mollie_payment.apply_async(args=[payment_id], countdown=30)
         logger.exception('Mollie webhook processing failed for %s', payment_id)
         return HttpResponse(status=500)
     return HttpResponse('OK')
