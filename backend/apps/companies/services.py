@@ -2,6 +2,7 @@ from datetime import timedelta
 
 INVITATION_TTL_HOURS = 24
 
+from django.contrib.auth import get_user_model
 from django.core.exceptions import ValidationError
 from django.db import transaction
 from django.utils import timezone
@@ -15,6 +16,13 @@ from .models import Invitation, Membership, PrivateCustomerProfile
 @transaction.atomic
 def create_invitation(*, company, actor, email, first_name='', last_name=''):
     normalized = email.strip().lower()
+    existing_user = get_user_model().objects.filter(email__iexact=normalized).only(
+        'id', 'is_staff'
+    ).first()
+    if existing_user and existing_user.is_staff:
+        raise ValidationError(
+            'Interne netstyle Benutzer können keinem Kundenunternehmen beitreten.'
+        )
     if Membership.objects.filter(user__email__iexact=normalized, active=True).exists():
         raise ValidationError('Diese E-Mail-Adresse gehört bereits zu einem aktiven Unternehmenskonto.')
     if PrivateCustomerProfile.objects.filter(user__email__iexact=normalized).exists():
@@ -43,6 +51,10 @@ def create_invitation(*, company, actor, email, first_name='', last_name=''):
 def transfer_admin(company, old_admin, new_user, *, actor=None, request=None, audit_context=None):
     if old_admin.pk == new_user.pk:
         raise ValidationError('Der Benutzer ist bereits Firmenadministrator.')
+    if new_user.is_staff:
+        raise ValidationError(
+            'Interne netstyle Benutzer dürfen keine Kunden-Firmenadministratoren werden.'
+        )
 
     active_memberships = Membership.objects.select_for_update().filter(company=company, active=True)
     old_membership = active_memberships.filter(user=old_admin, role='admin').first()
@@ -98,6 +110,10 @@ def deactivate_company_member(*, company, member, actor, request=None):
         .select_related('user')
         .get(pk=member.pk, company=company, active=True)
     )
+    if locked.user.is_staff:
+        raise ValidationError(
+            'Interne netstyle Benutzer dürfen nicht über ein Kundenunternehmen verwaltet werden.'
+        )
     if locked.role == 'admin':
         raise ValidationError('Firmenadministrator zuerst übertragen.')
 
