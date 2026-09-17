@@ -50,9 +50,41 @@ class CorrelationIdMiddleware:
         user_token = _USER_ID.set(uid)
         try:
             response = self.get_response(request)
+            self._audit_sensitive_csv_export(request, response)
         finally:
             _CORRELATION_ID.reset(correlation_token)
             _USER_ID.reset(user_token)
 
         response['X-Correlation-ID'] = cid
         return response
+
+    @staticmethod
+    def _audit_sensitive_csv_export(request, response):
+        """Audit successful netstyle CSV exports without copying PII into audit metadata."""
+        user = getattr(request, 'user', None)
+        if not getattr(user, 'is_authenticated', False) or not getattr(user, 'is_staff', False):
+            return
+        if not request.path.startswith('/ns-admin/') or request.GET.get('export') != 'csv':
+            return
+        content_type = (response.get('Content-Type') or '').lower()
+        if not content_type.startswith('text/csv'):
+            return
+
+        from apps.audit.services import audit
+
+        disposition = response.get('Content-Disposition', '')
+        filter_keys = sorted(
+            key for key in request.GET.keys()
+            if key not in {'export', 'page'}
+        )
+        audit(
+            user,
+            'datagrid.csv_export',
+            user,
+            {
+                'path': request.path,
+                'filename': disposition[:300],
+                'filter_keys': filter_keys,
+            },
+            request=request,
+        )
