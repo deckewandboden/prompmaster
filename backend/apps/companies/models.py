@@ -98,7 +98,16 @@ class Invitation(TimeStampedModel):
     def is_valid(self):
         from django.utils import timezone
 
-        return not self.accepted_at and not self.revoked_at and self.expires_at > timezone.now()
+        # Invitations are capabilities into a tenant. Once that tenant is
+        # disabled, every still-open invitation must become unusable as well;
+        # otherwise a token issued before the block could still onboard a new
+        # identity into an inactive company.
+        return (
+            self.company.status == 'active'
+            and not self.accepted_at
+            and not self.revoked_at
+            and self.expires_at > timezone.now()
+        )
 
     def __str__(self):
         return f'{self.email} → {self.company}'
