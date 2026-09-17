@@ -47,6 +47,17 @@ class Order(TimeStampedModel):
             models.CheckConstraint(condition=Q(tax_total__gte=0), name='order_tax_nonnegative'),
         ]
 
+    def save(self, *args, **kwargs):
+        # Payment confirmation is a terminal business transition for the order.
+        # A replayed checkout request, provider timeout or stale browser POST
+        # must never downgrade an already-paid order back to payment_open,
+        # failed or canceled. Refund/chargeback state lives on Payment/License.
+        if self.pk and self.status != 'paid':
+            previous = type(self).objects.filter(pk=self.pk).values_list('status', flat=True).first()
+            if previous == 'paid':
+                self.status = 'paid'
+        super().save(*args, **kwargs)
+
     def __str__(self):
         return self.order_number
 
