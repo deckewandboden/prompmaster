@@ -35,10 +35,10 @@ class Migration(migrations.Migration):
         ),
         migrations.AddIndex(
             model_name='refundattempt',
-            index=models.Index(fields=['refund', '-number'], name='payments_re_refund__455d54_idx'),
+            index=models.Index(fields=['refund', '-number'], name='payments_re_refund__a900d6_idx'),
         ),
         migrations.AddIndex(
             model_name='refundattempt',
-            index=models.Index(fields=['status', 'submitted_at'], name='payments_re_status_30820e_idx'),
+            index=models.Index(fields=['status', 'submitted_at'], name='payments_re_status_5849ef_idx'),
         ),
     ]
