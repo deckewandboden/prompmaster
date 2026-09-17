@@ -53,17 +53,21 @@ def validate_device_token(
     feature_code=PRO_ACCESS_FEATURE,
     touch=True,
 ):
-    """Validate a device credential against an enabled product entitlement.
+    """Validate a device credential against the complete access contract.
 
+    The validator is intentionally self-contained: callers must not be able to
+    turn a still-valid browser cookie into access for a disabled/unverified
+    identity or for a user whose company membership/company has been disabled.
     ``product_code`` is retained only for compatibility with older callers and
-    intentionally does not authorize access.
+    deliberately does not authorize access.
     """
-    if not raw_token:
+    if not raw_token or not user.is_active or not user.email_verified_at:
         return None
+
     hashed = token_hash(raw_token)
     now = timezone.now()
     device = (
-        DeviceRegistration.objects.select_related('license__product')
+        DeviceRegistration.objects.select_related('license__product', 'license__company')
         .filter(
             user=user,
             token_hash=hashed,
@@ -78,8 +82,24 @@ def validate_device_token(
     )
     if not device:
         return None
+
     lic = device.license
-    if not LicenseAssignment.objects.filter(license=lic, user=user, ended_at__isnull=True).exists():
+    if lic.company_id:
+        from apps.companies.models import Membership
+
+        if not Membership.objects.filter(
+            company_id=lic.company_id,
+            user=user,
+            active=True,
+            company__status='active',
+        ).exists():
+            return None
+
+    if not LicenseAssignment.objects.filter(
+        license=lic,
+        user=user,
+        ended_at__isnull=True,
+    ).exists():
         return None
     if not has_current_term(lic, now):
         return None
