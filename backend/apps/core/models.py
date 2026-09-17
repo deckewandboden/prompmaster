@@ -54,9 +54,18 @@ class ExportJob(TimeStampedModel):
     run_token = models.UUIDField(null=True, blank=True, editable=False)
 
     class Meta:
+        # Keep names pinned to the schema introduced by 0004_exportjob.  Explicit
+        # names prevent Django-version-dependent auto-name drift from creating
+        # no-op RenameIndex migrations on clean installations.
         indexes = [
-            models.Index(fields=['requested_by', '-created_at']),
-            models.Index(fields=['status', 'expires_at']),
+            models.Index(
+                fields=['requested_by', '-created_at'],
+                name='core_export_request_2a9bc7_idx',
+            ),
+            models.Index(
+                fields=['status', 'expires_at'],
+                name='core_export_status_00eed8_idx',
+            ),
         ]
 
     def __str__(self):
