@@ -5,6 +5,7 @@ from django.db import transaction
 from django.utils import timezone
 
 from apps.audit.services import audit
+from apps.catalog.services import PRO_ACCESS_FEATURE
 from apps.core.security import token_hash, token_pair
 from apps.licenses.models import LicenseAssignment
 from apps.licenses.services import has_current_term
@@ -21,7 +22,7 @@ def register_device(user, license, display_name, os_family='', browser_family=''
         raise ValidationError('Lizenz ist diesem Benutzer nicht zugewiesen.')
 
     # Limit applies per user/product, not merely per database license row. This
-    # remains correct if a seat is replaced while the product stays Pro.
+    # remains correct if a seat is replaced while the product stays entitled.
     active = DeviceRegistration.objects.select_for_update().filter(
         user=user,
         license__product=lic.product,
@@ -44,7 +45,19 @@ def register_device(user, license, display_name, os_family='', browser_family=''
     return device, raw
 
 
-def validate_device_token(user, raw_token, *, product_code='PRO', touch=True):
+def validate_device_token(
+    user,
+    raw_token,
+    *,
+    product_code=None,
+    feature_code=PRO_ACCESS_FEATURE,
+    touch=True,
+):
+    """Validate a device credential against an enabled product entitlement.
+
+    ``product_code`` is retained only for compatibility with older callers and
+    intentionally does not authorize access.
+    """
     if not raw_token:
         return None
     hashed = token_hash(raw_token)
@@ -55,9 +68,12 @@ def validate_device_token(user, raw_token, *, product_code='PRO', touch=True):
             user=user,
             token_hash=hashed,
             revoked_at__isnull=True,
-            license__product__code=product_code,
+            license__product__active=True,
+            license__product__entitlements__feature__code=feature_code,
+            license__product__entitlements__enabled=True,
             license__status='active',
         )
+        .distinct()
         .first()
     )
     if not device:
