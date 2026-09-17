@@ -115,7 +115,10 @@ values['DATABASE_URL'] = (
     f"postgresql://{values.get('POSTGRES_USER', 'promptmaster')}:"
     f"{values['POSTGRES_PASSWORD']}@postgres:5432/{values.get('POSTGRES_DB', 'promptmaster')}"
 )
-values['ALLOWED_HOSTS'] = f'{domain},localhost,127.0.0.1'
+# `web` is the internal Docker DNS name used by Prometheus on the isolated
+# monitor network. It is not published on the host, but Django must accept the
+# Host header of that internal scrape target.
+values['ALLOWED_HOSTS'] = f'{domain},localhost,127.0.0.1,web'
 values['CSRF_TRUSTED_ORIGINS'] = f'https://{domain}' if domain != 'localhost' else 'https://localhost,http://localhost'
 
 ENV.write_text(serialise(template_lines, values), encoding='utf-8')
