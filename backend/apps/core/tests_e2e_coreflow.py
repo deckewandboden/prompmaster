@@ -22,6 +22,7 @@ from apps.legal.models import LegalDocument
 from apps.licenses.models import License, LicenseReminder, LicenseTerm
 from apps.licenses.services import assign_license
 from apps.notifications.models import EmailMessage
+from apps.notifications.services import _render_context
 from apps.notifications.tasks import schedule_license_reminders, sync_license_states
 from apps.orders.models import Order, OrderItem
 from apps.payments.models import Payment
@@ -79,12 +80,15 @@ class CommercialCoreFlowE2ETests(TestCase):
         self.assertTrue(admin.two_factor_required)
         self.assertIsNone(admin.email_verified_at)
 
-        # 2: follow the actual verification URL stored in the mail queue.
+        # 2: follow the actual verification URL through the same renderer used
+        # for provider delivery. Sensitive URLs are encrypted in persisted
+        # EmailMessage.context and must never be read as plaintext at rest.
         verification = EmailMessage.objects.filter(
             template__code='verify_email',
             recipient=self.admin_email,
         ).latest('created_at')
-        verify_path = urlsplit(verification.context['url']).path
+        verify_url = _render_context(verification.context)['url']
+        verify_path = urlsplit(verify_url).path
         verify_response = self.client.get(verify_path)
         self.assertEqual(verify_response.status_code, 200)
         admin.refresh_from_db()
