@@ -5,6 +5,7 @@ from unittest.mock import patch
 from django.core.exceptions import ValidationError
 from django.db import IntegrityError, transaction
 from django.test import TestCase
+from django.urls import reverse
 from django.utils import timezone
 
 from apps.accounts.models import Permission, Role, User, UserRole
@@ -15,8 +16,8 @@ from apps.companies.models import Company, Invitation, Membership, PrivateCustom
 from apps.companies.services import create_invitation, transfer_admin
 from apps.devices.models import DeviceRegistration
 from apps.devices.services import register_device
-from apps.licenses.models import License, LicenseAssignment
-from apps.licenses.services import assign_license, block_license, unblock_license
+from apps.licenses.models import License, LicenseAssignment, LicenseTerm
+from apps.licenses.services import assign_license, block_license, release_license, unblock_license
 from apps.orders.models import Order, OrderItem
 from apps.support.models import SupportRequest
 from apps.payments.services import _activate_order
@@ -76,6 +77,178 @@ class DeviceLimitTests(ReleaseRuleFixture):
     def test_third_device_is_blocked(self):
         order=self.make_order(suffix='device'); _activate_order(order,self.now); lic=License.objects.get(owner_user=self.user); register_device(self.user,lic,'Gerät 1'); register_device(self.user,lic,'Gerät 2')
         with self.assertRaises(ValidationError): register_device(self.user,lic,'Gerät 3')
+
+
+class LicenseAssignmentContractTests(TestCase):
+    def setUp(self):
+        self.now = timezone.now()
+        self.product = Product.objects.create(
+            code='PRO-ASSIGN',
+            name='PromptMaster Pro Assignment Test',
+            default_license_days=365,
+            default_device_limit=2,
+            reminder_1_days=60,
+            reminder_2_days=30,
+            critical_warning_days=7,
+        )
+        self.company = Company.objects.create(
+            customer_number='PM-C-ASSIGN',
+            name='Assignment GmbH',
+            email='assignment@example.test',
+            country='DE',
+        )
+        self.admin = User.objects.create_user(
+            'assignment-admin@example.test',
+            'Assignment-Admin-Password-42!',
+            first_name='Ada',
+            last_name='Admin',
+        )
+        self.member_a = User.objects.create_user(
+            'assignment-a@example.test',
+            'Assignment-Member-A-42!',
+            first_name='Anna',
+            last_name='A',
+        )
+        self.member_b = User.objects.create_user(
+            'assignment-b@example.test',
+            'Assignment-Member-B-42!',
+            first_name='Berta',
+            last_name='B',
+        )
+        Membership.objects.create(company=self.company, user=self.admin, role='admin', active=True)
+        Membership.objects.create(company=self.company, user=self.member_a, role='member', active=True)
+        Membership.objects.create(company=self.company, user=self.member_b, role='member', active=True)
+        self.price = ProductPrice.objects.create(
+            product=self.product,
+            price_type='new',
+            gross_amount=Decimal('35.88'),
+            currency='EUR',
+            valid_from=self.now - timedelta(days=2),
+        )
+        self.order = Order.objects.create(
+            order_number='PM-O-ASSIGN',
+            company=self.company,
+            status='paid',
+            currency='EUR',
+            gross_total=Decimal('35.88'),
+            tax_total=Decimal('5.73'),
+            billing_snapshot={},
+            idempotency_key='assignment-contract',
+        )
+        self.item = OrderItem.objects.create(
+            order=self.order,
+            product=self.product,
+            price_version=self.price,
+            quantity=1,
+            unit_gross=Decimal('35.88'),
+            unit_net=Decimal('30.15'),
+            tax_rate=Decimal('19.00'),
+            product_name_snapshot=self.product.name,
+        )
+        self.valid_from = self.now - timedelta(days=1)
+        self.valid_until = self.now + timedelta(days=364)
+        self.license = License.objects.create(
+            company=self.company,
+            product=self.product,
+            status='free',
+            valid_from=self.valid_from,
+            valid_until=self.valid_until,
+        )
+        self.term = LicenseTerm.objects.create(
+            license=self.license,
+            order_item=self.item,
+            valid_from=self.valid_from,
+            valid_until=self.valid_until,
+            paid_gross_amount=Decimal('35.88'),
+        )
+
+    def _login_admin(self):
+        self.client.force_login(self.admin)
+        session = self.client.session
+        session['security_version'] = self.admin.security_version
+        session['two_factor_ok'] = True
+        session.save()
+
+    def test_only_free_valid_license_can_be_assigned(self):
+        assignment = assign_license(self.license, self.member_a, self.admin)
+        self.license.refresh_from_db()
+        self.assertEqual(self.license.status, 'active')
+        self.assertEqual(assignment.user_id, self.member_a.id)
+
+        with self.assertRaises(ValidationError):
+            assign_license(self.license, self.member_b, self.admin)
+
+        assignment.refresh_from_db()
+        self.assertIsNone(assignment.ended_at)
+        self.assertFalse(
+            LicenseAssignment.objects.filter(
+                license=self.license,
+                user=self.member_b,
+                ended_at__isnull=True,
+            ).exists()
+        )
+
+    def test_release_preserves_term_and_dates_and_revokes_device(self):
+        assignment = assign_license(self.license, self.member_a, self.admin)
+        device, _raw = register_device(self.member_a, self.license, 'Arbeitsplatz')
+        terms_before = list(
+            self.license.terms.values_list('id', 'valid_from', 'valid_until', 'status')
+        )
+
+        release_license(self.license, self.admin)
+
+        self.license.refresh_from_db()
+        assignment.refresh_from_db()
+        device.refresh_from_db()
+        self.assertEqual(self.license.status, 'free')
+        self.assertEqual(self.license.valid_from, self.valid_from)
+        self.assertEqual(self.license.valid_until, self.valid_until)
+        self.assertIsNotNone(assignment.ended_at)
+        self.assertIsNotNone(device.revoked_at)
+        self.assertEqual(
+            list(self.license.terms.values_list('id', 'valid_from', 'valid_until', 'status')),
+            terms_before,
+        )
+        self.assertTrue(
+            AuditEvent.objects.filter(
+                action='license.released',
+                object_id=str(self.license.id),
+                actor=self.admin,
+            ).exists()
+        )
+
+    def test_member_deactivation_releases_license_revokes_devices_and_sessions(self):
+        assignment = assign_license(self.license, self.member_a, self.admin)
+        device, _raw = register_device(self.member_a, self.license, 'Notebook')
+        security_version = self.member_a.security_version
+        self._login_admin()
+
+        response = self.client.post(
+            reverse('portal:member_deactivate', args=[self.member_a.id])
+        )
+
+        self.assertRedirects(response, reverse('portal:team'))
+        membership = Membership.objects.get(company=self.company, user=self.member_a)
+        self.member_a.refresh_from_db()
+        self.license.refresh_from_db()
+        assignment.refresh_from_db()
+        device.refresh_from_db()
+        self.assertFalse(membership.active)
+        self.assertFalse(self.member_a.is_active)
+        self.assertEqual(self.member_a.security_version, security_version + 1)
+        self.assertEqual(self.license.status, 'free')
+        self.assertEqual(self.license.valid_from, self.valid_from)
+        self.assertEqual(self.license.valid_until, self.valid_until)
+        self.assertIsNotNone(assignment.ended_at)
+        self.assertIsNotNone(device.revoked_at)
+        self.assertTrue(
+            AuditEvent.objects.filter(
+                action='company.member_deactivated',
+                object_id=str(membership.id),
+                actor=self.admin,
+            ).exists()
+        )
+
 
 class InvitationRulesTests(TestCase):
     def setUp(self):

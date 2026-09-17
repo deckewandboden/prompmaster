@@ -31,15 +31,15 @@ def effective_license_status(license_obj, now=None):
 
 @transaction.atomic
 def assign_license(license, user, actor):
-    from apps.devices.models import DeviceRegistration
-
     lic = License.objects.select_for_update().select_related('product').get(pk=license.pk)
     # Lock the identity as well as the seat. Two different free seats of the
     # same product can otherwise be assigned concurrently to the same user.
     user = get_user_model().objects.select_for_update().get(pk=user.pk)
     now = timezone.now()
-    if lic.status in {'blocked', 'payment_review', 'refunded'} or not has_current_term(lic, now):
-        raise ValidationError('Lizenz ist nicht zuweisbar.')
+    if lic.status != 'free' or not has_current_term(lic, now):
+        raise ValidationError('Nur freie gültige Lizenzen sind zuweisbar.')
+    if LicenseAssignment.objects.filter(license=lic, ended_at__isnull=True).exists():
+        raise ValidationError('Lizenz ist bereits zugewiesen.')
     if not user.is_active:
         raise ValidationError('Benutzer ist deaktiviert.')
     if lic.company_id and not user.company_memberships.filter(company_id=lic.company_id, active=True).exists():
@@ -57,20 +57,6 @@ def assign_license(license, user, actor):
     ).exclude(license=lic).distinct()
     if duplicate.exists():
         raise ValidationError('Dem Benutzer ist dieses Produkt bereits aktiv zugewiesen.')
-
-    previous = list(
-        LicenseAssignment.objects.select_for_update()
-        .filter(license=lic, ended_at__isnull=True)
-        .select_related('user')
-    )
-    for row in previous:
-        row.ended_at = now
-        row.save(update_fields=['ended_at'])
-        # A device token is an authorization credential for the old assignment;
-        # it must never survive a reassignment to a different user.
-        DeviceRegistration.objects.filter(
-            license=lic, user=row.user, revoked_at__isnull=True
-        ).update(revoked_at=now)
 
     assignment = LicenseAssignment.objects.create(license=lic, user=user)
     lic.status = 'active'

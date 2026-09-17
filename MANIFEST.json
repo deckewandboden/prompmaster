@@ -785,8 +785,8 @@
     },
     {
       "path": "backend/apps/core/tests_release_rules.py",
-      "size": 12036,
-      "sha256": "d063b54804c4d75338c3894b7f3e3a49866210a8dbfd912208f971ebad66b990",
+      "size": 18779,
+      "sha256": "a1a0f0236f56890a3de82f3dbec63b7f60b90a50ae73fcefe8d187b85a372aa2",
       "role": "active-backend"
     },
     {
@@ -995,8 +995,8 @@
     },
     {
       "path": "backend/apps/licenses/services.py",
-      "size": 12182,
-      "sha256": "8ac0a3ef910cc342343649bc2f49a04ae6da9b51dbe07b122bdfa53fe79ff50d",
+      "size": 11706,
+      "sha256": "e7f4ae9e54b53c06ba431fcab4287e782ea0589a52a301f2ce950715cef6363a",
       "role": "active-backend"
     },
     {
