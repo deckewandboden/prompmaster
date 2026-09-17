@@ -1,3 +1,5 @@
+import uuid
+
 from django.db import migrations, models
 import django.db.models.deletion
 import django.utils.timezone
@@ -13,7 +15,7 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='RefundAttempt',
             fields=[
-                ('id', models.UUIDField(default=__import__('uuid').uuid4, editable=False, primary_key=True, serialize=False)),
+                ('id', models.UUIDField(default=uuid.uuid4, editable=False, primary_key=True, serialize=False)),
                 ('created_at', models.DateTimeField(auto_now_add=True, db_index=True)),
                 ('updated_at', models.DateTimeField(auto_now=True)),
                 ('number', models.PositiveIntegerField()),
