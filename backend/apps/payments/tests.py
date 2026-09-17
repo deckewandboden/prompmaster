@@ -23,7 +23,7 @@ class RefundMathTests(SimpleTestCase):
             valid_from=now,
             valid_until=now + timedelta(days=365),
         )
-        days, amount = calculate_refund(term, today=timezone.localdate(now))
+        days, amount = calculate_refund(term, now=now)
         self.assertEqual(days, 365)
         self.assertEqual(amount, Decimal('35.88'))
 
@@ -34,7 +34,7 @@ class RefundMathTests(SimpleTestCase):
             valid_from=now - timedelta(days=265),
             valid_until=now + timedelta(days=100),
         )
-        days, amount = calculate_refund(term, today=timezone.localdate(now))
+        days, amount = calculate_refund(term, now=now)
         self.assertEqual(days, 100)
         self.assertEqual(amount, Decimal('9.83'))
 
