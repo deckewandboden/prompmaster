@@ -4,8 +4,8 @@
   <div class="statusrow"><span>Status</span><strong>{{ job.get_status_display }}</strong></div>
   {% if job.status == 'ready' %}<div class="statusrow"><span>Zeilen</span><strong>{{ job.row_count }}</strong></div>{% endif %}
   <div class="statusrow"><span>Verfügbar bis</span><strong>{{ job.expires_at|date:'d.m.Y H:i' }}</strong></div>
-  {% if job.error %}<div class="alert bad">{{ job.error }}</div>{% endif %}
-  {% if expired %}<div class="alert bad">Dieser Export ist abgelaufen.</div>
+  {% if job.error %}<div class="alert danger">{{ job.error }}</div>{% endif %}
+  {% if expired %}<div class="alert danger">Dieser Export ist abgelaufen.</div>
   {% elif job.status == 'ready' %}<p><a class="btn primary" href="{% url 'ns_admin:export_download' job.id %}">CSV herunterladen</a></p>
   {% elif job.status == 'failed' %}<p>Der Export konnte nicht erstellt werden. Bitte erneut anfordern.</p>
   {% else %}<p aria-live="polite">Der Export wird im Hintergrund erstellt. Diese Seite aktualisiert sich automatisch.</p><meta http-equiv="refresh" content="3">{% endif %}
