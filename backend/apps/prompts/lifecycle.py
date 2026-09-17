@@ -164,21 +164,49 @@ def _validate_transition(version: PromptVersion, target: str):
             raise ValidationError('PUBLISH blockiert: alle aktiven Testfälle müssen unmittelbar zuvor bestehen.')
 
 
+def _lock_prompt_definition(definition_id):
+    """Single publication mutex for all versions of one prompt definition."""
+    return PromptDefinition.objects.select_for_update().get(pk=definition_id)
+
+
 def transition(version: PromptVersion, target: str, actor=None, request=None):
     target = str(target or '').upper()
+    publish_started_at = timezone.now() if target == 'PUBLISHED' else None
     with transaction.atomic():
+        definition_lock = None
+        if target == 'PUBLISHED':
+            definition_id = PromptVersion.objects.only('definition_id').get(pk=version.pk).definition_id
+            definition_lock = _lock_prompt_definition(definition_id)
+
         locked = PromptVersion.objects.select_for_update().select_related('definition').get(pk=version.pk)
         _validate_transition(locked, target)
         previous = locked.lifecycle
 
         if target == 'PUBLISHED':
-            PromptVersion.objects.select_for_update().filter(
-                definition=locked.definition,
-                lifecycle='PUBLISHED',
-            ).exclude(pk=locked.pk).update(lifecycle='ARCHIVED', updated_at=timezone.now())
+            existing = (
+                PromptVersion.objects.select_for_update()
+                .filter(definition=definition_lock, lifecycle='PUBLISHED')
+                .exclude(pk=locked.pk)
+                .order_by('-published_at', '-version')
+                .first()
+            )
+            if (
+                existing
+                and existing.published_at
+                and publish_started_at
+                and existing.published_at >= publish_started_at
+            ):
+                raise ValidationError(
+                    'Parallel-Publish erkannt: Eine andere Version wurde während dieser Freigabe veröffentlicht. '
+                    'Bitte Status aktualisieren und die gewünschte Version erneut prüfen.'
+                )
+            if existing:
+                PromptVersion.objects.filter(pk=existing.pk).update(
+                    lifecycle='ARCHIVED',
+                    updated_at=timezone.now(),
+                )
             locked.published_at = timezone.now()
         elif previous == 'PUBLISHED' and target == 'ARCHIVED':
-            # published_at stays as historical evidence
             pass
         else:
             if target != 'PUBLISHED':
