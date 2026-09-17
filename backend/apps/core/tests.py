@@ -19,6 +19,7 @@ from apps.legal.models import DeletionRequest
 from .middleware import CorrelationIdMiddleware, JsonLogFormatter
 from .datagrid import DataGrid, csv_response
 from .security import token_hash, token_pair
+from .sensitive import SENSITIVE_REAUTH_SESSION_KEY
 
 
 class SecurityTests(SimpleTestCase):
@@ -35,13 +36,18 @@ class ServiceAccountRotationTests(TestCase):
             None,
             is_staff=True,
             is_superuser=True,
-            two_factor_required=False,
+            two_factor_required=True,
+            totp_secret_enc='configured-service-account-test-secret',
             email_verified_at=timezone.now(),
         )
         self.client.force_login(self.user)
         session = self.client.session
+        now = timezone.now().timestamp()
         session['security_version'] = self.user.security_version
         session['two_factor_ok'] = True
+        session['authenticated_at'] = now
+        session['last_activity_at'] = now
+        session[SENSITIVE_REAUTH_SESSION_KEY] = now
         session.save()
 
         self.old_token, hashed = token_pair()
@@ -277,11 +283,12 @@ class NotificationReleaseTests(TestCase):
         self.assertEqual(send_call.kwargs['headers']['Authorization'], 'Bearer access-token')
         self.assertNotIn('secret', json.dumps(send_call.kwargs['json']))
 
-    @patch('apps.notifications.tasks.queue_email')
-    def test_license_reminder_is_idempotent_for_same_expiry(self, queue_email_mock):
+    @patch('apps.notifications.tasks.send_email_message.delay')
+    def test_license_reminder_is_idempotent_for_same_expiry(self, delay):
         from datetime import timedelta
         from apps.catalog.models import Product
         from apps.licenses.models import License, LicenseAssignment, LicenseReminder
+        from apps.notifications.models import EmailMessage
         from apps.notifications.tasks import schedule_license_reminders
 
         user = User.objects.create_user(
@@ -306,17 +313,20 @@ class NotificationReleaseTests(TestCase):
         )
         LicenseAssignment.objects.create(license=license_obj, user=user)
 
-        first = schedule_license_reminders.run()
-        second = schedule_license_reminders.run()
+        with self.captureOnCommitCallbacks(execute=True):
+            first = schedule_license_reminders.run()
+        with self.captureOnCommitCallbacks(execute=True):
+            second = schedule_license_reminders.run()
 
         self.assertEqual(first, 1)
         self.assertEqual(second, 0)
         reminder = LicenseReminder.objects.get(license=license_obj, kind='t60')
         self.assertEqual(reminder.status, 'queued')
-        self.assertEqual(queue_email_mock.call_count, 1)
-        args = queue_email_mock.call_args.args
-        self.assertEqual(args[0], 't60')
-        self.assertEqual(args[1], user.email)
+        message = EmailMessage.objects.get(context__reminder_id=str(reminder.id))
+        self.assertEqual(message.recipient, user.email)
+        self.assertEqual(message.context.get('pm_scope_user_id'), str(user.id))
+        self.assertEqual(delay.call_count, 1)
+
 
 class DataGridAcceptanceTests(TestCase):
     def _companies(self, count):
@@ -442,4 +452,3 @@ class DataGrid100kAcceptanceTests(DataGridAcceptanceTests):
         select_sql = ' '.join(q['sql'] for q in queries if 'SELECT' in q['sql'].upper())
         self.assertIn('LIMIT 50', select_sql.upper())
         self.assertIn('OFFSET 99950', select_sql.upper())
-
