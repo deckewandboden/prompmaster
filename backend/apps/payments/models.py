@@ -106,11 +106,11 @@ class RefundAttempt(TimeStampedModel):
         indexes = [
             models.Index(
                 fields=['refund', '-number'],
-                name='payments_re_refund__455d54_idx',
+                name='payments_re_refund__a900d6_idx',
             ),
             models.Index(
                 fields=['status', 'submitted_at'],
-                name='payments_re_status_30820e_idx',
+                name='payments_re_status_5849ef_idx',
             ),
         ]
 
