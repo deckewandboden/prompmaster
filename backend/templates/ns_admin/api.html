@@ -1,17 +1,7 @@
 {% extends 'ns_admin/base.html' %}{% block content %}
-<div class="page-head"><div><h1>API & Integrationen</h1><div class="sub">Service Accounts und interne API-Zugänge</div></div>{% if can_write %}<a class="btn primary" href="{% url 'ns_admin:service_account_create' %}">+ Service Account anlegen</a>{% endif %}</div>
-<div class="card"><h2>Service Accounts</h2>
-{% for a in accounts %}
-<div class="statusrow">
-  <span><strong>{{ a.name }}</strong><br><small class="muted">{{ a.scopes|join:', ' }}{% if a.expires_at %} · Ablauf {{ a.expires_at }}{% endif %}</small></span>
-  <span>
-    {% if a.active %}<span class="badge ok">Aktiv</span>{% else %}<span class="badge">Gesperrt</span>{% endif %}
-    {% if can_write and a.active %}
-      <form method="post" action="{% url 'ns_admin:service_account_rotate' a.id %}" style="display:inline">{% csrf_token %}<button class="btn sm" type="submit">Token rotieren</button></form>
-      <form method="post" action="{% url 'ns_admin:service_account_revoke' a.id %}" style="display:inline">{% csrf_token %}<button class="btn sm" type="submit">Sperren</button></form>
-    {% endif %}
-  </span>
-</div>
-{% empty %}<p class="muted">Noch keine Service Accounts.</p>{% endfor %}
+<div class="page-head"><div><h1>API &amp; Integrationen</h1><div class="sub">Geschützte Operations-Schnittstellen und Service Accounts.</div></div>{% if can_write %}<a class="btn primary" href="{% url 'ns_admin:service_account_create' %}">+ Service Account anlegen</a>{% endif %}</div>
+<div class="grid two">
+  <div class="card"><h2>Operations API</h2><div class="statusrow"><span>/api/v1/ops/health/</span><span class="badge ok">Aktiv</span></div><div class="statusrow"><span>/api/v1/ops/system/</span><span class="badge ok">Aktiv</span></div><div class="statusrow"><span>/api/v1/ops/database/</span><span class="badge ok">Aktiv</span></div><div class="statusrow"><span>/api/v1/ops/backups/</span><span class="badge ok">Aktiv</span></div><div class="statusrow"><span>/api/v1/ops/maintenance-snapshot/</span><span class="badge ok">Aktiv</span></div><p class="small muted">Zugriff ausschließlich über aktive Service Accounts mit passendem Scope. Tokens werden nur einmal bei Erstellung bzw. Rotation angezeigt.</p></div>
+  <div class="card"><h2>Service Accounts</h2>{% for a in accounts %}<div class="statusrow"><span><strong>{{ a.name }}</strong><br><small class="muted">{{ a.scopes|join:', ' }}{% if a.expires_at %} · Ablauf {{ a.expires_at|date:'d.m.Y H:i' }}{% endif %}</small></span><span>{% if a.active %}<span class="badge ok">Aktiv</span>{% else %}<span class="badge warn">Gesperrt</span>{% endif %}{% if can_write and a.active %}<div class="page-actions" style="margin-top:6px"><form method="post" action="{% url 'ns_admin:service_account_rotate' a.id %}" class="inline-form">{% csrf_token %}<button class="btn secondary sm" type="submit">Token rotieren</button></form><form method="post" action="{% url 'ns_admin:service_account_revoke' a.id %}" class="inline-form" onsubmit="return confirm('Service Account wirklich sperren?');">{% csrf_token %}<button class="btn danger sm" type="submit">Sperren</button></form></div>{% endif %}</span></div>{% empty %}<p class="muted">Noch keine Service Accounts.</p>{% endfor %}</div>
 </div>
 {% endblock %}

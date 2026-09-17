@@ -1,19 +1,27 @@
 {% extends 'portal/base.html' %}
 {% block content %}
-<div class="page-head"><div><h1>Guten Morgen, {{ request.user.first_name }}</h1><div class="sub">{% if company %}{{ company.name }}{% else %}Privatkonto{% endif %}</div></div>{% if can_start_pro %}<a class="btn primary" href="{% url 'proaccess:launch' %}">PromptMaster Pro starten</a>{% endif %}</div>
-<div class="grid kpis">
-  <div class="card"><div>Lizenzen</div><div class="value">{{ license_total }}</div><div class="small muted">gesamt</div></div>
-  <div class="card"><div>Aktiv</div><div class="value">{{ license_active }}</div><div class="small muted">{{ license_free }} frei</div></div>
-  <div class="card"><div>Ablauf ≤30 Tage</div><div class="value">{{ expiring_30 }}</div></div>
-  <div class="card"><div>Sicherheit</div><div class="value">{% if request.user.totp_secret_enc %}2FA{% else %}–{% endif %}</div></div>
+{% if device_capacity %}{% widthratio device_count device_capacity 100 as device_pct %}{% else %}{% widthratio 0 1 100 as device_pct %}{% endif %}
+<div class="page-head">
+  <div><h1>Guten Morgen, {{ request.user.first_name }}</h1><div class="sub">{% if company %}{{ company.name }}{% else %}Privatkonto{% endif %}{% if membership and membership.role == 'admin' %} · Unternehmensadministrator{% endif %}</div></div>
+  {% if can_start_pro %}<a class="btn primary" href="{% url 'proaccess:launch' %}">PromptMaster Pro starten →</a>{% endif %}
 </div>
-{% if pro_expiry and pro_expiry.level != 'none' %}
-<div class="alert {% if pro_expiry.level == 'critical' %}danger{% elif pro_expiry.level == 'warning' %}warn{% else %}info{% endif %}" style="margin-top:14px">
-  <strong>PromptMaster Pro: noch {{ pro_expiry.days_remaining }} Tag{% if pro_expiry.days_remaining != 1 %}e{% endif %}.</strong>
-  Deine Lizenz läuft am {{ pro_expiry.valid_until|date:"d.m.Y" }} ab.
-  {% if pro_expiry.level == 'critical' %}<strong>Bitte jetzt verlängern, damit der Zugriff nicht unterbrochen wird.</strong>{% else %}Eine Verlängerung kann bereits jetzt durchgeführt werden; Restlaufzeit bleibt vollständig erhalten.{% endif %}
-  <a href="{% url 'portal:licenses' %}">Lizenz ansehen</a>
+<div class="grid kpis">
+  <div class="card purple kpi"><div>PROMPTMASTER PRO</div><div class="value">{{ license_total }}</div><div>Lizenzen insgesamt</div><div class="small" style="margin-top:10px">{{ license_assigned }} vergeben · {{ license_free }} verfügbar</div></div>
+  <div class="card kpi"><div>Lizenzstatus</div><div class="value">{{ license_active }}</div><div>aktiv</div><div class="delta">{{ license_free }} frei · {{ expiring_30 }} läuft bald ab</div></div>
+  <div class="card kpi"><div>Geräte</div><div class="value">{{ device_count }}{% if device_capacity %} / {{ device_capacity }}{% endif %}</div><div>registriert</div><div class="progress" style="margin-top:12px"><span style="width:{{ device_pct }}%"></span></div></div>
+  <div class="card kpi"><div>Nächster Ablauf</div><div class="value">{% if next_expiring_days != None %}{{ next_expiring_days }}{% else %}–{% endif %}</div><div>{% if next_expiring_days != None %}Tage{% else %}kein Ablauf{% endif %}</div>{% if next_expiring %}<div class="delta" style="color:var(--yellow)">{{ next_expiring.license_number }}</div>{% endif %}</div>
+</div>
+{% if next_expiring_days != None and next_expiring_days <= 30 or membership and membership.role == 'admin' and license_free %}
+<div class="grid two" style="margin-top:14px">
+  {% if next_expiring_days != None and next_expiring_days <= 30 %}<div class="alert warn"><div><strong>Eine Lizenz läuft in {{ next_expiring_days }} Tagen ab.</strong><div class="muted small">{{ next_expiring.license_number }} · {{ next_expiring.valid_until|date:'d.m.Y' }}</div><a class="btn primary sm" style="margin-top:8px" href="{% url 'portal:renew' next_expiring.id %}">Jetzt verlängern</a></div></div>{% endif %}
+  {% if membership and membership.role == 'admin' and license_free %}<div class="alert info"><div><strong>{{ license_free }} freie Pro-Lizenz{% if license_free != 1 %}en{% endif %}.</strong><div class="muted small">Sie kann einem Team-Mitglied zugewiesen werden.</div></div></div>{% endif %}
 </div>
 {% endif %}
-{% if not can_start_pro %}<div class="alert info" style="margin-top:14px"><strong>Kein Pro-Zugriff für dieses Benutzerkonto.</strong> {% if membership and membership.role == 'admin' %}Als Firmenadministrator können Sie eine freie Lizenz über „Mein Team“ auch sich selbst zuweisen.{% elif membership %}{% if pending_upgrade %}Ihre Pro-Anfrage ist bereits offen.{% else %}Sie können die Zuweisung einer PromptMaster-Pro-Lizenz bei Ihrem Firmenadministrator anfragen. <form method="post" action="{% url 'portal:request_pro_upgrade' %}" style="display:inline">{% csrf_token %}<button class="btn primary sm" type="submit">Pro anfragen</button></form>{% endif %}{% else %}Für den Pro-Zugriff benötigen Sie eine aktive PromptMaster-Pro-Lizenz.{% endif %}</div>{% endif %}
+{% if company_missing_fields %}<div class="alert warn" style="margin-top:14px"><strong>Unternehmensdaten unvollständig.</strong> Für Kauf/Abrechnung fehlen: {{ company_missing_fields|join:", " }}. <a href="{% url 'portal:company' %}">Unternehmensdaten bearbeiten</a></div>{% endif %}
+{% if payment_issues %}<div class="card" style="margin-top:14px"><h2>Zahlungen mit Handlungsbedarf</h2>{% for payment in payment_issues %}<div class="statusrow"><span>{{ payment.order.order_number }} · {{ payment.provider_payment_id }}</span><strong>{{ payment.status }}</strong></div>{% endfor %}<a class="btn secondary sm" href="{% url 'portal:orders' %}">Bestellungen &amp; Zahlungen öffnen</a></div>{% endif %}
+{% if team_shortlist %}
+<div class="card" style="margin-top:14px"><div class="page-head"><div><h2>Mein Team</h2><div class="small muted">Aktive Mitglieder</div></div><div class="page-actions"><a class="btn secondary sm" href="{% url 'portal:team' %}">Team öffnen</a>{% if membership.role == 'admin' %}<a class="btn primary sm" href="{% url 'portal:invite' %}">+ Benutzer hinzufügen</a>{% endif %}</div></div>{% for row in team_shortlist %}<div class="statusrow"><span class="person"><span class="mini">{{ row.user.first_name|slice:':1' }}{{ row.user.last_name|slice:':1' }}</span><span><strong>{{ row.user.full_name }}</strong><span class="tiny muted" style="display:block">{{ row.user.email }}</span></span></span><strong>{{ row.get_role_display }}</strong></div>{% endfor %}</div>
+{% endif %}
+{% if pro_expiry and pro_expiry.level != 'none' %}<div class="alert {% if pro_expiry.level == 'critical' %}danger{% elif pro_expiry.level == 'warning' %}warn{% else %}info{% endif %}" style="margin-top:14px"><strong>PromptMaster Pro: noch {{ pro_expiry.days_remaining }} Tag{% if pro_expiry.days_remaining != 1 %}e{% endif %}.</strong> Deine Lizenz läuft am {{ pro_expiry.valid_until|date:'d.m.Y' }} ab. <a href="{% url 'portal:renew_index' %}">Lizenz verlängern</a></div>{% endif %}
+{% if not can_start_pro %}<div class="alert info" style="margin-top:14px"><strong>Kein Pro-Zugriff für dieses Benutzerkonto.</strong> {% if membership and membership.role == 'admin' %}Als Firmenadministrator können Sie eine freie Lizenz über „Mein Team“ zuweisen.{% elif membership %}{% if pending_upgrade %}Ihre Pro-Anfrage ist bereits offen.{% else %}<form method="post" action="{% url 'portal:request_pro_upgrade' %}" class="inline-form">{% csrf_token %}<button class="btn primary sm" type="submit">Pro anfragen</button></form>{% endif %}{% else %}Für den Pro-Zugriff benötigen Sie eine aktive PromptMaster-Pro-Lizenz.{% endif %}</div>{% endif %}
 {% endblock %}

@@ -4,9 +4,28 @@ from django import forms
 from django.utils import timezone
 
 from apps.accounts.models import Permission, Role, User
+from apps.companies.forms import CompanyForm
 from apps.catalog.models import Feature, Product, ProductEntitlement
 from apps.legal.models import LegalDocument, RetentionPolicy
 from apps.notifications.models import EmailTemplate
+
+
+class SupportAdminTransferForm(forms.Form):
+    identity_verified = forms.BooleanField(
+        required=True,
+        label='Identität und Berechtigung des Ansprechpartners wurden geprüft',
+    )
+    note = forms.CharField(
+        required=False,
+        max_length=500,
+        widget=forms.Textarea(attrs={'rows': 3}),
+        label='Interne Notiz zur Prüfung (optional)',
+    )
+
+
+class AdminCompanyForm(CompanyForm):
+    class Meta(CompanyForm.Meta):
+        fields = CompanyForm.Meta.fields + ['status']
 
 
 class ProductForm(forms.ModelForm):

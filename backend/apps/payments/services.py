@@ -8,6 +8,7 @@ from django.utils import timezone
 from django.utils.dateparse import parse_datetime
 
 from apps.audit.services import audit
+from apps.accounts.security import bump_security_version
 from apps.devices.models import DeviceRegistration
 from apps.licenses.models import License, LicenseAssignment, LicenseTerm
 from apps.orders.models import Order
@@ -24,7 +25,7 @@ STATUS_MAP = {
     'failed': 'failed',
     'canceled': 'canceled',
     'expired': 'expired',
-    'charged_back': 'charged_back',
+    'charged_back': 'chargeback',
 }
 
 
@@ -125,6 +126,11 @@ def process_provider_state(payment_id, payload):
     status = base_status
     if base_status == 'paid' and refunded_amount > 0:
         status = 'refunded_full' if refunded_amount >= payment.amount.quantize(CENT) else 'refunded_partial'
+    elif base_status == 'paid' and previous_status in {'chargeback', 'chargeback_reversed'}:
+        # Mollie reports a reversed chargeback as paid again. Preserve that
+        # transition as its own internal V1 state instead of silently
+        # collapsing it back to the original paid state.
+        status = 'chargeback_reversed'
     # Include the previous canonical state so a chargeback reversal back to
     # paid is preserved as its own transition rather than overwriting the
     # original paid event. Repeated identical deliveries still deduplicate.
@@ -168,14 +174,15 @@ def process_provider_state(payment_id, payload):
                     license_obj.save(update_fields=['status', 'updated_at'])
                     audit(None, 'license.chargeback_reversed', license_obj, {'payment': payment.provider_payment_id})
     elif base_status in {'failed', 'canceled', 'expired'} and payment.order.status != 'paid':
+        payment.failed_at = payment.failed_at or timezone.now()
         payment.order.status = 'canceled' if base_status == 'canceled' else 'failed'
         payment.order.save(update_fields=['status', 'updated_at'])
         if previous_status != status:
             _queue_after_commit('payment_failed', _order_recipient(payment.order), {
                 'order': payment.order.order_number, 'status': base_status,
             })
-    elif base_status == 'charged_back':
-        if previous_status != 'charged_back':
+    elif base_status == 'chargeback':
+        if previous_status != 'chargeback':
             _queue_after_commit('chargeback_review', _order_recipient(payment.order), {'order': payment.order.order_number})
         for license_obj in _locked_order_licenses(payment.order, active_terms_only=True):
             if license_obj.status != 'payment_review':
@@ -189,6 +196,7 @@ def process_provider_state(payment_id, payload):
             'method',
             'last_provider_payload',
             'paid_at',
+            'failed_at',
             'processed_paid',
             'updated_at',
         ]
@@ -295,15 +303,34 @@ def calculate_refund(term, today=None):
     return remaining, amount
 
 
+def _terminate_license_access(license_obj, now):
+    """End active assignment credentials and invalidate existing sessions."""
+    assignments = list(
+        LicenseAssignment.objects.select_for_update()
+        .filter(license=license_obj, ended_at__isnull=True)
+        .select_related('user')
+    )
+    for assignment in assignments:
+        assignment.ended_at = now
+        assignment.save(update_fields=['ended_at'])
+        bump_security_version(assignment.user)
+    DeviceRegistration.objects.filter(
+        license=license_obj, revoked_at__isnull=True
+    ).update(revoked_at=now)
+
+
 def _recalculate_license_after_refund(license_obj, now):
     active_terms = license_obj.terms.filter(status='active')
     bounds = active_terms.aggregate(start=Min('valid_from'), end=Max('valid_until'))
     if not bounds['end']:
+        # No active paid period remains. Keep the historical dates on
+        # LicenseTerm rows and clear the denormalised current window together;
+        # the License constraint only permits both null or a strictly ordered
+        # valid_from/valid_until pair.
         license_obj.valid_from = None
-        license_obj.valid_until = now
+        license_obj.valid_until = None
         license_obj.status = 'refunded'
-        LicenseAssignment.objects.filter(license=license_obj, ended_at__isnull=True).update(ended_at=now)
-        DeviceRegistration.objects.filter(license=license_obj, revoked_at__isnull=True).update(revoked_at=now)
+        _terminate_license_access(license_obj, now)
     else:
         license_obj.valid_from = bounds['start']
         license_obj.valid_until = bounds['end']
@@ -314,8 +341,7 @@ def _recalculate_license_after_refund(license_obj, now):
             license_obj.status = 'expired'
             # A future prepaid term may remain. Access stays off until its
             # valid_from date; no term dates are silently shifted.
-            LicenseAssignment.objects.filter(license=license_obj, ended_at__isnull=True).update(ended_at=now)
-            DeviceRegistration.objects.filter(license=license_obj, revoked_at__isnull=True).update(revoked_at=now)
+            _terminate_license_access(license_obj, now)
     license_obj.save(update_fields=['valid_from', 'valid_until', 'status', 'updated_at'])
 
 
@@ -338,7 +364,7 @@ def create_refund_request(*, term, actor, reason=''):
         raise ValidationError('Für diese Lizenzperiode besteht kein erstattungsfähiger Restzeitraum.')
 
     payment = (
-        Payment.objects.filter(order=locked.order_item.order, status__in=['paid', 'refunded_partial'])
+        Payment.objects.filter(order=locked.order_item.order, status__in=['paid', 'chargeback_reversed', 'refunded_partial'])
         .order_by('-paid_at', '-created_at')
         .first()
     )
@@ -389,7 +415,7 @@ def mark_refund_success(refund, provider_id):
 
     payment = Payment.objects.select_for_update().get(pk=row.payment_id)
     refunded_total = payment.refunds.filter(status='succeeded').aggregate(total=Sum('amount'))['total'] or Decimal('0.00')
-    if payment.status != 'charged_back':
+    if payment.status != 'chargeback':
         desired_payment_status = 'refunded_full' if refunded_total >= payment.amount else 'refunded_partial'
         if payment.status != desired_payment_status:
             payment.status = desired_payment_status

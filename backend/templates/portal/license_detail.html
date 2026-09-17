@@ -1,0 +1,64 @@
+{% extends 'portal/base.html' %}{% block content %}
+<div class="page-head">
+  <div>
+    <h1>Lizenz {{ license.license_number }}</h1>
+    <div class="sub">{{ license.product.name }}</div>
+  </div>
+  <div class="actions">
+    <a class="btn secondary" href="{% url 'portal:licenses' %}">Zurück</a>
+    {% if can_manage and license.status != 'refunded' and license.status != 'payment_review' and license.status != 'blocked' %}
+      <a class="btn primary" href="{% url 'portal:renew' license.id %}">Verlängern</a>
+    {% endif %}
+  </div>
+</div>
+
+<div class="grid two">
+  <section class="card">
+    <h2>Lizenzdaten</h2>
+    <dl class="detail-list">
+      <div><dt>Lizenz-ID</dt><dd>{{ license.license_number }}</dd></div>
+      <div><dt>Produkt</dt><dd>{{ license.product.name }}</dd></div>
+      <div><dt>Status</dt><dd><span class="badge info">{{ license.get_status_display }}</span></dd></div>
+      <div><dt>Gültig ab</dt><dd>{{ license.valid_from|date:'d.m.Y H:i'|default:'–' }}</dd></div>
+      <div><dt>Gültig bis</dt><dd>{{ license.valid_until|date:'d.m.Y H:i'|default:'–' }}</dd></div>
+      <div><dt>Resttage</dt><dd>{{ remaining_days }}</dd></div>
+      <div><dt>Zuweisung</dt><dd>{% if assignment %}{{ assignment.user.full_name }} · {{ assignment.user.email }}{% else %}Nicht zugewiesen{% endif %}</dd></div>
+    </dl>
+  </section>
+
+  <section class="card">
+    <h2>Reminder</h2>
+    {% for reminder in reminders %}
+      <div class="row-line">
+        <strong>{{ reminder.get_kind_display }}</strong>
+        <span>{{ reminder.get_status_display }}</span>
+        <span>{% if reminder.sent_at %}{{ reminder.sent_at|date:'d.m.Y H:i' }}{% elif reminder.queued_at %}{{ reminder.queued_at|date:'d.m.Y H:i' }}{% else %}–{% endif %}</span>
+      </div>
+    {% empty %}
+      <div class="empty">Noch keine Reminder für den aktuellen Ablaufzeitpunkt.</div>
+    {% endfor %}
+  </section>
+</div>
+
+<section class="card">
+  <h2>Aktive Geräte</h2>
+  <div class="tablewrap">
+    <table>
+      <thead><tr><th>Gerät</th><th>Benutzer</th><th>Browser</th><th>System</th><th>Zuletzt gesehen</th></tr></thead>
+      <tbody>
+      {% for device in devices %}
+        <tr>
+          <td data-label="Gerät">{{ device.display_name }}</td>
+          <td data-label="Benutzer">{{ device.user.email }}</td>
+          <td data-label="Browser">{{ device.browser_family|default:'–' }}</td>
+          <td data-label="System">{{ device.os_family|default:'–' }}</td>
+          <td data-label="Zuletzt gesehen">{{ device.last_seen_at|date:'d.m.Y H:i' }}</td>
+        </tr>
+      {% empty %}
+        <tr><td colspan="5" class="empty">Keine aktiven Geräte.</td></tr>
+      {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</section>
+{% endblock %}

@@ -1,1 +1,7 @@
-{% extends 'portal/base.html' %}{% block content %}<div class="page-head"><div><h1>Unternehmen</h1><div class="sub">Stammdaten und Steuerdaten.</div></div></div><div class="card"><form method="post" class="form">{% csrf_token %}{{ form.as_p }}<button class="btn primary">Speichern</button></form></div>{% endblock %}
+{% extends 'portal/base.html' %}{% block content %}
+<div class="page-head"><div><h1>Unternehmen</h1><div class="sub">Stammdaten, Steuerdaten und Firmen-Administrator.</div></div></div>
+<div class="grid two">
+  <div class="card"><h2>Unternehmensdaten</h2><form method="post" class="form">{% csrf_token %}{{ form.as_p }}<button class="btn primary">Speichern</button></form></div>
+  <div class="card"><h2>Firmen-Administrator</h2>{% if current_admin %}<div class="person"><span class="mini">{{ current_admin.user.first_name|slice:':1' }}{{ current_admin.user.last_name|slice:':1' }}</span><div><strong>{{ current_admin.user.full_name }}</strong><div class="muted">{{ current_admin.user.email }}</div></div></div>{% else %}<div class="alert danger">Kein aktiver Firmenadministrator gefunden.</div>{% endif %}<div class="alert info" style="margin-top:14px">V1: exakt ein aktiver Firmenadministrator. Eine Übertragung ist nur auf ein aktives Team-Mitglied möglich.</div><a class="btn secondary" style="margin-top:12px" href="{% url 'portal:team' %}">Administrator übertragen</a></div>
+</div>
+{% endblock %}

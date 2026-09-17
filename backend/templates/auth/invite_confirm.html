@@ -1,4 +1,11 @@
-{% extends 'base.html' %}{% block body %}
-<div class="card"><h1>Einladung annehmen</h1><p>Sie wurden zu {{ invitation.company.name }} eingeladen.</p>
-<form method="post">{% csrf_token %}<button class="btn" type="submit">Firma beitreten</button></form></div>
+{% extends 'base.html' %}{% load static %}{% block body %}
+<div class="login-wrap"><div class="login-card">
+  <div class="login-logo"><img src="{% static 'brand/promptmaster-logo-reference.png' %}" width="239" height="47" alt="PromptMaster by netstyle"></div>
+  <h1>Einladung annehmen</h1>
+  <p class="muted">Sie wurden zu <strong>{{ invitation.company.name }}</strong> eingeladen.</p>
+  <div class="alert info">Der Beitritt erfolgt erst nach Ihrer ausdrücklichen Bestätigung.</div>
+  <form method="post" class="form" style="margin-top:14px">{% csrf_token %}
+    <button class="btn primary" type="submit">Firma beitreten</button>
+  </form>
+</div></div>
 {% endblock %}

@@ -4,14 +4,31 @@ from apps.core.models import TimeStampedModel
 
 
 class Payment(TimeStampedModel):
+    STATUS = [
+        ('created', 'Erstellt'),
+        ('open', 'Offen'),
+        ('pending', 'Ausstehend'),
+        ('authorized', 'Autorisiert'),
+        ('paid', 'Bezahlt'),
+        ('failed', 'Fehlgeschlagen'),
+        ('canceled', 'Storniert'),
+        ('expired', 'Abgelaufen'),
+        ('refunded_partial', 'Teilweise erstattet'),
+        ('refunded_full', 'Vollständig erstattet'),
+        ('chargeback', 'Chargeback'),
+        ('chargeback_reversed', 'Chargeback zurückgenommen'),
+        ('unknown', 'Unbekannt'),
+    ]
+
     order = models.ForeignKey('orders.Order', on_delete=models.PROTECT, related_name='payments')
     provider = models.CharField(max_length=30, default='mollie')
     provider_payment_id = models.CharField(max_length=100, unique=True)
-    status = models.CharField(max_length=40)
+    status = models.CharField(max_length=40, choices=STATUS)
     amount = models.DecimalField(max_digits=12, decimal_places=2)
     currency = models.CharField(max_length=3, default='EUR')
     method = models.CharField(max_length=50, blank=True)
     paid_at = models.DateTimeField(null=True, blank=True)
+    failed_at = models.DateTimeField(null=True, blank=True)
     processed_paid = models.BooleanField(default=False)
     last_provider_payload = models.JSONField(default=dict)
 

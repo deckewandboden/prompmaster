@@ -170,6 +170,87 @@ for template in sorted((ROOT/'backend/templates').rglob('*.html')):
         if closing < 0 or '{% csrf_token %}' not in text[match.end():closing]:
             fail(f'{template.relative_to(ROOT)} has POST form without csrf_token')
 
+
+# 10b) Responsive tables collapse into cards below 700px. Every real data
+# cell therefore needs its own label once THEAD is hidden. Colspan-only empty
+# state rows are exempt.
+for template in sorted((ROOT/'backend/templates').rglob('*.html')):
+    text = template.read_text(encoding='utf-8')
+    if '<table' not in text:
+        continue
+    for match in re.finditer(r'<td\b([^>]*)>', text, flags=re.I):
+        attrs = match.group(1)
+        if 'data-label=' in attrs or 'colspan=' in attrs:
+            continue
+        line = text.count('\n', 0, match.start()) + 1
+        fail(
+            f'{template.relative_to(ROOT)}:{line} table cell lacks data-label '
+            'required by mobile card layout'
+        )
+
+
+# 10c) Literal design-system controls must use one of the defined visual
+# variants. A naked .btn has no intended product color; unknown badge/alert
+# variants are almost always stale prototype CSS names.
+_allowed_button_variants = {'primary', 'secondary', 'danger'}
+_allowed_badge_variants = {'ok', 'warn', 'bad', 'info', 'pro'}
+_allowed_alert_variants = {'ok', 'info', 'warn', 'danger'}
+for template in sorted((ROOT/'backend/templates').rglob('*.html')):
+    text = template.read_text(encoding='utf-8')
+    for match in re.finditer(r'class=["\']([^"\']+)["\']', text):
+        raw = match.group(1)
+        # Template-generated class strings are validated by their source logic,
+        # not by this literal-token guard.
+        if '{%' in raw or '{{' in raw:
+            continue
+        tokens = set(raw.split())
+        line = text.count('\n', 0, match.start()) + 1
+        if 'btn' in tokens and not (tokens & _allowed_button_variants):
+            fail(
+                f'{template.relative_to(ROOT)}:{line} naked/unknown button variant: {raw}'
+            )
+        if 'badge' in tokens:
+            variants = tokens - {'badge'}
+            if variants and not (variants & _allowed_badge_variants):
+                fail(
+                    f'{template.relative_to(ROOT)}:{line} unknown badge variant: {raw}'
+                )
+        if 'alert' in tokens:
+            variants = tokens - {'alert'}
+            if variants and not (variants & _allowed_alert_variants):
+                fail(
+                    f'{template.relative_to(ROOT)}:{line} unknown alert variant: {raw}'
+                )
+
+# 10d) Product templates must not depend on javascript: navigation.
+# CSP/browser history can make those links unreliable; use named Django routes.
+for template in sorted((ROOT/'backend/templates').rglob('*.html')):
+    text = template.read_text(encoding='utf-8')
+    if re.search(r'''(?:href|action)\s*=\s*["']\s*javascript:''', text, flags=re.I):
+        fail(f'{template.relative_to(ROOT)} contains javascript: navigation')
+
+
+# 10e) Literal backend template classes must exist in the central stylesheet.
+# Dynamic Django class expressions are validated by the narrower variant guards
+# above. Literal classes are part of the shared design system and must never
+# silently rely on stale prototype CSS.
+_app_css = (ROOT/'backend/static/css/app.css').read_text(encoding='utf-8')
+_defined_classes = set(re.findall(r'\.([A-Za-z_][A-Za-z0-9_-]*)', _app_css))
+for template in sorted((ROOT/'backend/templates').rglob('*.html')):
+    text = template.read_text(encoding='utf-8')
+    for match in re.finditer(r'''class=["']([^"']+)["']''', text):
+        raw = match.group(1)
+        if '{%' in raw or '{{' in raw:
+            continue
+        line = text.count('\n', 0, match.start()) + 1
+        for class_name in raw.split():
+            if class_name not in _defined_classes:
+                fail(
+                    f'{template.relative_to(ROOT)}:{line} uses undefined literal '
+                    f'CSS class: {class_name}'
+                )
+
+
 # 11) Security-critical implementation guards.
 checks = {
  'backend/apps/accounts/models.py': ('security_version=models.PositiveBigIntegerField(default=1)',),

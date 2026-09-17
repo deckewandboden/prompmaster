@@ -1,5 +1,7 @@
 from datetime import timedelta
 
+INVITATION_TTL_HOURS = 24
+
 from django.core.exceptions import ValidationError
 from django.db import transaction
 from django.utils import timezone
@@ -30,7 +32,7 @@ def create_invitation(*, company, actor, email, first_name='', last_name=''):
         first_name=first_name.strip(),
         last_name=last_name.strip(),
         token_hash=hashed,
-        expires_at=timezone.now() + timedelta(hours=24),
+        expires_at=timezone.now() + timedelta(hours=INVITATION_TTL_HOURS),
         invited_by=actor,
     )
     audit(actor, 'invitation.created', invitation, {'email': normalized})
@@ -38,7 +40,7 @@ def create_invitation(*, company, actor, email, first_name='', last_name=''):
 
 
 @transaction.atomic
-def transfer_admin(company, old_admin, new_user):
+def transfer_admin(company, old_admin, new_user, *, actor=None, request=None, audit_context=None):
     if old_admin.pk == new_user.pk:
         raise ValidationError('Der Benutzer ist bereits Firmenadministrator.')
 
@@ -68,5 +70,64 @@ def transfer_admin(company, old_admin, new_user):
     bump_security_version(old_admin)
     bump_security_version(new_user)
 
-    audit(old_admin, 'company.admin_transferred', company, {'new_admin': str(new_user.id)})
+    event_context = {
+        'old_admin': str(old_admin.id),
+        'new_admin': str(new_user.id),
+    }
+    if audit_context:
+        event_context.update(audit_context)
+    audit(
+        actor or old_admin,
+        'company.admin_transferred',
+        company,
+        event_context,
+        request=request,
+    )
     return new_membership
+
+
+@transaction.atomic
+def deactivate_company_member(*, company, member, actor, request=None):
+    """Deactivate a non-admin company member and release tenant resources."""
+    from apps.devices.models import DeviceRegistration
+    from apps.licenses.models import LicenseAssignment
+    from apps.licenses.services import release_license
+
+    locked = (
+        Membership.objects.select_for_update()
+        .select_related('user')
+        .get(pk=member.pk, company=company, active=True)
+    )
+    if locked.role == 'admin':
+        raise ValidationError('Firmenadministrator zuerst übertragen.')
+
+    assignments = list(
+        LicenseAssignment.objects.select_for_update()
+        .filter(
+            user=locked.user,
+            license__company=company,
+            ended_at__isnull=True,
+        )
+        .select_related('license')
+    )
+    for row in assignments:
+        release_license(row.license, actor)
+
+    DeviceRegistration.objects.filter(
+        user=locked.user,
+        license__company=company,
+        revoked_at__isnull=True,
+    ).update(revoked_at=timezone.now())
+    locked.active = False
+    locked.save(update_fields=['active', 'updated_at'])
+    locked.user.is_active = False
+    locked.user.save(update_fields=['is_active', 'updated_at'])
+    bump_security_version(locked.user)
+    audit(
+        actor,
+        'company.member_deactivated',
+        locked,
+        {'user': str(locked.user_id), 'company': str(company.id)},
+        request=request,
+    )
+    return locked

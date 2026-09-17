@@ -2,6 +2,7 @@ from django.db.models import F
 from django.utils import timezone
 from django.db import transaction
 from django.contrib.auth.hashers import check_password
+from django.contrib.auth import get_user_model
 from apps.core.crypto import decrypt
 from .totp import matching_step
 
@@ -9,7 +10,7 @@ from .totp import matching_step
 @transaction.atomic
 def consume_second_factor(user, value):
     """Serialize TOTP and recovery use, including concurrent logins."""
-    locked = type(user).objects.select_for_update().get(pk=user.pk)
+    locked = get_user_model().objects.select_for_update().get(pk=user.pk)
     if not locked.is_active or not locked.totp_secret_enc:
         return False
     step = matching_step(decrypt(locked.totp_secret_enc), value)
@@ -32,12 +33,22 @@ def bump_security_version(user):
     action is intentionally performed by the authenticated user (for example
     completing TOTP setup).
     """
-    type(user).objects.filter(pk=user.pk).update(
+    model = get_user_model()
+    model.objects.filter(pk=user.pk).update(
         security_version=F('security_version') + 1,
         last_security_change_at=timezone.now(),
     )
-    user.refresh_from_db(fields=['security_version', 'last_security_change_at'])
-    return user.security_version
+    refreshed = model.objects.only(
+        'security_version', 'last_security_change_at'
+    ).get(pk=user.pk)
+    # request.user is a SimpleLazyObject. Updating through the concrete auth
+    # model keeps this helper valid for both request users and model instances.
+    try:
+        user.security_version = refreshed.security_version
+        user.last_security_change_at = refreshed.last_security_change_at
+    except (AttributeError, TypeError):
+        pass
+    return refreshed.security_version
 
 
 def bind_security_session(request, user, *, two_factor_ok):

@@ -2,11 +2,13 @@ from datetime import timedelta
 from functools import wraps
 
 from django.contrib import messages
+from django.conf import settings
 from django.contrib.auth.decorators import login_required
 from django.core import signing
 from django.core.exceptions import PermissionDenied, ValidationError
 from django.db import transaction
-from django.db.models import Q, Sum
+from django.db.models import Count, Q, Sum
+from django.db.models.functions import TruncMonth
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse
 from django.utils import timezone
@@ -16,13 +18,15 @@ from apps.accounts.security import bump_security_version
 from apps.audit.models import AuditEvent
 from apps.audit.services import audit as write_audit
 from apps.catalog.models import Feature, Product
-from apps.catalog.services import create_price_version
+from apps.catalog.services import create_price_version, current_price
 from apps.companies.models import Company, Membership, PrivateCustomerProfile
+from apps.companies.services import INVITATION_TTL_HOURS, deactivate_company_member, transfer_admin
 from apps.devices.models import DeviceRegistration
+from apps.devices.services import revoke_device
 from apps.integrations.models import ServiceAccount
-from apps.legal.models import DeletionRequest, LegalDocument, RetentionPolicy
+from apps.legal.models import DeletionRequest, LegalAcceptance, LegalDocument, RetentionPolicy
 from apps.licenses.models import License, LicenseTerm
-from apps.licenses.services import block_license, unblock_license
+from apps.licenses.services import assign_license, block_license, release_license, unblock_license
 from apps.notifications.models import EmailMessage, EmailTemplate
 from apps.ops.metrics import caddy_health, certificate_status, snapshot
 from apps.ops.models import BackupRecord, RestoreTest, SystemAlert
@@ -31,6 +35,7 @@ from apps.payments.models import MollieEvent, Payment
 from apps.payments.services import calculate_refund, create_refund_request, submit_refund
 from apps.support.models import SupportRequest
 from .admin_forms import (
+    AdminCompanyForm,
     EmailTemplateForm,
     FeatureForm,
     GeneralSettingsForm,
@@ -45,6 +50,7 @@ from .admin_forms import (
     ServiceAccountForm,
     StaffUserCreateForm,
     StaffUserRoleForm,
+    SupportAdminTransferForm,
 )
 from .datagrid import DataGrid, csv_response
 from .permissions import has_perm
@@ -52,14 +58,17 @@ from .security import token_pair
 from .settings_store import get_setting, set_setting
 
 
-def staff_perm(code=None):
+def staff_perm(*codes):
+    """Require a staff account and every supplied domain permission."""
+    required = tuple(code for code in codes if code)
+
     def decorator(view):
         @wraps(view)
         @login_required
         def wrapped(request, *args, **kwargs):
             if not request.user.is_staff:
                 raise PermissionDenied
-            if code and not has_perm(request.user, code):
+            if any(not has_perm(request.user, code) for code in required):
                 raise PermissionDenied
             return view(request, *args, **kwargs)
 
@@ -74,7 +83,7 @@ PAYMENT_STATUS_CHOICES = [
     ('authorized', 'Autorisiert'), ('paid', 'Bezahlt'), ('failed', 'Fehlgeschlagen'),
     ('canceled', 'Storniert'), ('expired', 'Abgelaufen'),
     ('refunded_partial', 'Teilweise erstattet'), ('refunded_full', 'Vollständig erstattet'),
-    ('charged_back', 'Chargeback'), ('unknown', 'Unbekannt'),
+    ('chargeback', 'Chargeback'), ('chargeback_reversed', 'Chargeback zurückgenommen'), ('unknown', 'Unbekannt'),
 ]
 EMAIL_STATUS_CHOICES = [
     ('queued', 'Warteschlange'), ('sending', 'Wird gesendet'),
@@ -108,6 +117,19 @@ def _send_staff_setup_email(request, user):
 
 def _grid_export(request, grid, columns, filename):
     if request.GET.get('export') == 'csv':
+        # Export actions can contain customer, license, payment or audit data.
+        # Record the operation without persisting the user's raw search text.
+        write_audit(
+            request.user,
+            'datagrid.exported',
+            request.user,
+            {
+                'filename': filename,
+                'rows': grid.page.paginator.count,
+                'filtered': bool(grid.query or grid.filters),
+            },
+            request=request,
+        )
         return csv_response(grid.queryset, columns, filename)
     return None
 
@@ -115,7 +137,44 @@ def _grid_export(request, grid, columns, filename):
 @staff_perm()
 def dashboard(request):
     now = timezone.now()
-    rights = {name: has_perm(request.user, f'{name}.read') for name in ('customers', 'licenses', 'orders', 'ops', 'support')}
+    rights = {
+        name: has_perm(request.user, f'{name}.read')
+        for name in ('customers', 'licenses', 'orders', 'ops', 'support')
+    }
+    paid_orders = Order.objects.filter(status='paid')
+    revenue_since = now - timedelta(days=185)
+
+    product_mix = (
+        list(
+            License.objects.values('product__name')
+            .annotate(total=Count('id'))
+            .order_by('-total', 'product__name')[:8]
+        )
+        if rights['licenses'] else []
+    )
+    product_total = sum(row['total'] for row in product_mix)
+    for row in product_mix:
+        row['percent'] = round((row['total'] / product_total) * 100, 1) if product_total else 0
+
+    revenue_months = (
+        list(
+            paid_orders.filter(created_at__gte=revenue_since)
+            .annotate(month=TruncMonth('created_at'))
+            .values('month')
+            .annotate(total=Sum('gross_total'), orders=Count('id'))
+            .order_by('month')
+        )
+        if rights['orders'] else []
+    )
+    revenue_peak = max((float(row['total'] or 0) for row in revenue_months), default=0)
+    for row in revenue_months:
+        row['percent'] = round((float(row['total'] or 0) / revenue_peak) * 100, 1) if revenue_peak else 0
+
+    failed_payment_count = Payment.objects.filter(status='failed').count() if rights['orders'] else None
+    chargeback_count = Payment.objects.filter(status='chargeback').count() if rights['orders'] else None
+    active_alerts = list(SystemAlert.objects.filter(active=True)[:8]) if rights['ops'] else []
+    open_support_count = SupportRequest.objects.exclude(status='closed').count() if rights['support'] else None
+
     context = {
         'rights': rights,
         'customers': Company.objects.count() + PrivateCustomerProfile.objects.count() if rights['customers'] else None,
@@ -123,10 +182,36 @@ def dashboard(request):
         'expiring30': License.objects.filter(valid_until__gt=now, valid_until__lte=now + timedelta(days=30)).count() if rights['licenses'] else None,
         'expiring60': License.objects.filter(valid_until__gt=now, valid_until__lte=now + timedelta(days=60)).count() if rights['licenses'] else None,
         'orders30': Order.objects.filter(created_at__gte=now - timedelta(days=30)).count() if rights['orders'] else None,
-        'revenue30': (Order.objects.filter(status='paid', created_at__gte=now - timedelta(days=30)).aggregate(v=Sum('gross_total'))['v'] or 0) if rights['orders'] else None,
-        'alerts': SystemAlert.objects.filter(active=True)[:8] if rights['ops'] else [],
-        'open_support_count': SupportRequest.objects.exclude(status='closed').count() if rights['support'] else None,
+        'revenue30': (
+            paid_orders.filter(created_at__gte=now - timedelta(days=30))
+            .aggregate(v=Sum('gross_total'))['v'] or 0
+        ) if rights['orders'] else None,
+        'product_mix': product_mix,
+        'product_total': product_total,
+        'revenue_months': revenue_months,
+        'failed_payment_count': failed_payment_count,
+        'chargeback_count': chargeback_count,
+        'alerts': active_alerts,
+        'open_support_count': open_support_count,
+        'system_healthy': bool(
+            rights['ops']
+            and not active_alerts
+            and not (failed_payment_count or 0)
+            and not (chargeback_count or 0)
+        ),
         'ops': snapshot() if rights['ops'] else {},
+        'backup': BackupRecord.objects.order_by('-finished_at', '-created_at').first() if rights['ops'] else None,
+        'restore': RestoreTest.objects.order_by('-started_at').first() if rights['ops'] else None,
+        'integration_status': {
+            'mollie': bool(get_setting('mollie_profile_id', '') or settings.MOLLIE_PROFILE_ID),
+            'mail_provider': settings.EMAIL_PROVIDER,
+            'graph_configured': bool(
+                settings.GRAPH_TENANT_ID
+                and settings.GRAPH_CLIENT_ID
+                and settings.GRAPH_CLIENT_SECRET
+                and settings.GRAPH_SENDER
+            ),
+        } if rights['ops'] else {},
         'recent_orders': Order.objects.select_related('company', 'private_user').order_by('-created_at')[:8] if rights['orders'] else [],
         'expiring': License.objects.select_related('company', 'owner_user', 'product').filter(valid_until__gt=now).order_by('valid_until')[:8] if rights['licenses'] else [],
     }
@@ -246,7 +331,7 @@ def private_customer_portal_preview(request, pk):
     })
 
 
-@staff_perm('licenses.read')
+@staff_perm('customers.read', 'licenses.read')
 def private_customer_licenses(request, pk):
     profile = _private_customer(request, pk)
     grid = DataGrid(request, profile.user.owned_licenses.select_related('product'), search_fields=('license_number', 'product__name'), sort_fields={'number':'license_number','expiry':'valid_until','status':'status'}, default_sort='valid_until', filters={'status':'status'}).build()
@@ -256,32 +341,64 @@ def private_customer_licenses(request, pk):
 @staff_perm('customers.read')
 def private_customer_devices(request, pk):
     profile = _private_customer(request, pk)
-    grid = DataGrid(request, profile.user.devices.select_related('license'), search_fields=('display_name','os_family','browser_family'), sort_fields={'device':'display_name','last':'last_seen_at'}, default_sort='-last_seen_at').build()
-    return render(request, 'ns_admin/private_customer_grid.html', {'profile': profile, 'title':'Geräte', 'kind':'devices', 'grid':grid, 'filter_options':[]})
+    grid = DataGrid(
+        request,
+        profile.user.devices.select_related('license'),
+        search_fields=('display_name', 'os_family', 'browser_family'),
+        sort_fields={'device': 'display_name', 'last': 'last_seen_at'},
+        default_sort='-last_seen_at',
+    ).build()
+    return render(
+        request,
+        'ns_admin/private_customer_grid.html',
+        {
+            'profile': profile,
+            'title': 'Geräte',
+            'kind': 'devices',
+            'grid': grid,
+            'filter_options': [],
+            'can_revoke_devices': has_perm(request.user, 'devices.write'),
+        },
+    )
 
 
-@staff_perm('orders.read')
+@staff_perm('devices.write')
+def private_customer_device_revoke(request, pk, device_id):
+    if request.method != 'POST' or not has_perm(request.user, 'customers.read'):
+        raise PermissionDenied
+    profile = _private_customer(request, pk)
+    device = get_object_or_404(
+        DeviceRegistration.objects.select_related('user', 'license'),
+        pk=device_id,
+        user=profile.user,
+    )
+    revoke_device(device, request.user, request=request)
+    messages.success(request, 'Gerät wurde widerrufen.')
+    return redirect('ns_admin:private_customer_devices', pk=profile.pk)
+
+
+@staff_perm('customers.read', 'orders.read')
 def private_customer_orders(request, pk):
     profile = _private_customer(request, pk)
     grid = DataGrid(request, profile.user.private_orders.all(), search_fields=('order_number',), sort_fields={'number':'order_number','date':'created_at','amount':'gross_total','status':'status'}, default_sort='-created_at', filters={'status':'status'}).build()
     return render(request, 'ns_admin/private_customer_grid.html', {'profile': profile, 'title':'Bestellungen', 'kind':'orders', 'grid':grid, 'filter_options':[('status','Status',Order.STATUS)]})
 
 
-@staff_perm('payments.read')
+@staff_perm('customers.read', 'payments.read')
 def private_customer_payments(request, pk):
     profile = _private_customer(request, pk)
     grid = DataGrid(request, Payment.objects.filter(order__private_user=profile.user).select_related('order'), search_fields=('provider_payment_id','order__order_number'), sort_fields={'date':'created_at','amount':'amount','status':'status'}, default_sort='-created_at', filters={'status':'status'}).build()
     return render(request, 'ns_admin/private_customer_grid.html', {'profile': profile, 'title':'Zahlungen', 'kind':'payments', 'grid':grid, 'filter_options':[('status','Status',PAYMENT_STATUS_CHOICES)]})
 
 
-@staff_perm('email.read')
+@staff_perm('customers.read', 'email.read')
 def private_customer_emails(request, pk):
     profile = _private_customer(request, pk)
     grid = DataGrid(request, EmailMessage.objects.filter(recipient=profile.user.email).select_related('template'), search_fields=('recipient','subject'), sort_fields={'date':'created_at','status':'status'}, default_sort='-created_at', filters={'status':'status'}).build()
     return render(request, 'ns_admin/private_customer_grid.html', {'profile': profile, 'title':'E-Mail-Historie', 'kind':'emails', 'grid':grid, 'filter_options':[('status','Status',EMAIL_STATUS_CHOICES)]})
 
 
-@staff_perm('audit.read')
+@staff_perm('customers.read', 'audit.read')
 def private_customer_audit(request, pk):
     profile = _private_customer(request, pk)
     object_ids = {str(profile.id), str(profile.user_id)}
@@ -310,6 +427,47 @@ def customer_detail(request, pk):
 
 
 @staff_perm('customers.read')
+def customer_company(request, pk):
+    customer = _customer(request, pk)
+    can_write = has_perm(request.user, 'customers.write')
+    if request.method == 'POST' and not can_write:
+        raise PermissionDenied
+
+    before = {
+        field: getattr(customer, field)
+        for field in AdminCompanyForm.Meta.fields
+    }
+    form = AdminCompanyForm(request.POST or None, instance=customer)
+    if request.method == 'POST' and form.is_valid():
+        saved = form.save()
+        after = {
+            field: getattr(saved, field)
+            for field in AdminCompanyForm.Meta.fields
+        }
+        changes = {
+            field: {'before': str(before[field]), 'after': str(after[field])}
+            for field in after
+            if before[field] != after[field]
+        }
+        if changes:
+            write_audit(
+                request.user,
+                'company.updated',
+                saved,
+                {'changes': changes},
+                request=request,
+            )
+        messages.success(request, 'Unternehmensdaten gespeichert.')
+        return redirect('ns_admin:customer_company', pk=saved.pk)
+
+    return render(
+        request,
+        'ns_admin/customer_company.html',
+        {'customer': customer, 'form': form, 'can_write': can_write},
+    )
+
+
+@staff_perm('customers.read')
 def customer_portal_preview(request, pk):
     customer = _customer(request, pk)
     licenses = customer.licenses.select_related('product')
@@ -322,7 +480,12 @@ def customer_portal_preview(request, pk):
         'license_total': licenses.count(), 'license_free': licenses.filter(status='free', valid_until__gt=now).count(),
         'license_active': licenses.filter(status='active', valid_until__gt=now).count(),
         'expiring_30': licenses.filter(valid_until__gt=now, valid_until__lte=now + timedelta(days=30)).count(),
-        'device_count': DeviceRegistration.objects.filter(user__company_memberships__company=customer, user__company_memberships__active=True, revoked_at__isnull=True).distinct().count(),
+        'device_count': DeviceRegistration.objects.filter(
+            user__company_memberships__company=customer,
+            user__company_memberships__active=True,
+            license__company=customer,
+            revoked_at__isnull=True,
+        ).distinct().count(),
         'order_count': customer.orders.count(), 'member_count': customer.memberships.filter(active=True).count(),
         'back_route': 'ns_admin:customer_detail', 'back_pk': customer.pk,
     })
@@ -339,10 +502,105 @@ def customer_users(request, pk):
         default_sort='user__last_name',
         filters={'role': 'role', 'active': 'active'},
     ).build()
-    return render(request, 'ns_admin/customer_grid.html', {'customer': customer, 'title': 'Benutzer', 'grid': grid, 'kind': 'users', 'filter_options': [('role', 'Rolle', Membership.ROLE), ('active', 'Status', [('True', 'Aktiv'), ('False', 'Inaktiv')])]})
+    return render(
+        request,
+        'ns_admin/customer_grid.html',
+        {
+            'customer': customer,
+            'title': 'Benutzer',
+            'grid': grid,
+            'kind': 'users',
+            'filter_options': [
+                ('role', 'Rolle', Membership.ROLE),
+                ('active', 'Status', [('True', 'Aktiv'), ('False', 'Inaktiv')]),
+            ],
+            'can_manage_users': has_perm(request.user, 'customers.write'),
+        },
+    )
 
 
-@staff_perm('customers.read')
+@staff_perm('customers.write')
+def customer_admin_transfer(request, pk, user_id):
+    customer = _customer(request, pk)
+    target = get_object_or_404(
+        Membership.objects.select_related('user'),
+        company=customer,
+        user_id=user_id,
+        active=True,
+    )
+    current_admin = get_object_or_404(
+        Membership.objects.select_related('user'),
+        company=customer,
+        role='admin',
+        active=True,
+    )
+    if target.pk == current_admin.pk:
+        messages.info(request, 'Dieser Benutzer ist bereits Firmenadministrator.')
+        return redirect('ns_admin:customer_users', pk=customer.pk)
+
+    form = SupportAdminTransferForm(request.POST or None)
+    if request.method == 'POST' and form.is_valid():
+        try:
+            transfer_admin(
+                customer,
+                current_admin.user,
+                target.user,
+                actor=request.user,
+                request=request,
+                audit_context={
+                    'identity_verified': True,
+                    'verification_note_present': bool(form.cleaned_data.get('note')),
+                },
+            )
+        except ValidationError as exc:
+            form.add_error(None, exc.messages[0])
+        else:
+            messages.success(
+                request,
+                f'Firmenadministrator wurde auf {target.user.email} übertragen.',
+            )
+            return redirect('ns_admin:customer_users', pk=customer.pk)
+
+    return render(
+        request,
+        'ns_admin/form.html',
+        {
+            'title': f'Firmenadministrator übertragen · {target.user.email}',
+            'form': form,
+            'cancel_url': reverse('ns_admin:customer_users', args=[customer.pk]),
+        },
+    )
+
+
+@staff_perm('customers.write')
+def customer_user_deactivate(request, pk, user_id):
+    if request.method != 'POST':
+        raise PermissionDenied
+    customer = _customer(request, pk)
+    member = get_object_or_404(
+        Membership.objects.select_related('user'),
+        company=customer,
+        user_id=user_id,
+        active=True,
+    )
+    try:
+        deactivate_company_member(
+            company=customer,
+            member=member,
+            actor=request.user,
+            request=request,
+        )
+    except ValidationError as exc:
+        messages.error(request, exc.messages[0])
+    else:
+        messages.success(
+            request,
+            'Benutzer deaktiviert; Lizenz- und Gerätezugänge wurden freigegeben.',
+        )
+    return redirect('ns_admin:customer_users', pk=customer.pk)
+
+
+@staff_perm('customers.read', 'licenses.read')
 def customer_licenses(request, pk):
     customer = _customer(request, pk)
     grid = DataGrid(
@@ -361,15 +619,47 @@ def customer_devices(request, pk):
     customer = _customer(request, pk)
     grid = DataGrid(
         request,
-        DeviceRegistration.objects.filter(user__company_memberships__company=customer).select_related('user', 'license'),
+        DeviceRegistration.objects.filter(
+            user__company_memberships__company=customer,
+            user__company_memberships__active=True,
+            license__company=customer,
+        ).select_related('user', 'license'),
         search_fields=('display_name', 'user__email'),
         sort_fields={'device': 'display_name', 'last': 'last_seen_at', 'user': 'user__email'},
         default_sort='-last_seen_at',
     ).build()
-    return render(request, 'ns_admin/customer_grid.html', {'customer': customer, 'title': 'Geräte', 'grid': grid, 'kind': 'devices', 'filter_options': []})
+    return render(
+        request,
+        'ns_admin/customer_grid.html',
+        {
+            'customer': customer,
+            'title': 'Geräte',
+            'grid': grid,
+            'kind': 'devices',
+            'filter_options': [],
+            'can_revoke_devices': has_perm(request.user, 'devices.write'),
+        },
+    )
 
 
-@staff_perm('orders.read')
+@staff_perm('devices.write')
+def customer_device_revoke(request, pk, device_id):
+    if request.method != 'POST' or not has_perm(request.user, 'customers.read'):
+        raise PermissionDenied
+    customer = _customer(request, pk)
+    device = get_object_or_404(
+        DeviceRegistration.objects.select_related('user', 'license'),
+        pk=device_id,
+        user__company_memberships__company=customer,
+        user__company_memberships__active=True,
+        license__company=customer,
+    )
+    revoke_device(device, request.user, request=request)
+    messages.success(request, 'Gerät wurde widerrufen.')
+    return redirect('ns_admin:customer_devices', pk=customer.pk)
+
+
+@staff_perm('customers.read', 'orders.read')
 def customer_orders(request, pk):
     customer = _customer(request, pk)
     grid = DataGrid(
@@ -383,7 +673,7 @@ def customer_orders(request, pk):
     return render(request, 'ns_admin/customer_grid.html', {'customer': customer, 'title': 'Bestellungen', 'grid': grid, 'kind': 'orders', 'filter_options': [('status', 'Status', Order.STATUS)]})
 
 
-@staff_perm('payments.read')
+@staff_perm('customers.read', 'payments.read')
 def customer_payments(request, pk):
     customer = _customer(request, pk)
     grid = DataGrid(
@@ -397,7 +687,7 @@ def customer_payments(request, pk):
     return render(request, 'ns_admin/customer_grid.html', {'customer': customer, 'title': 'Zahlungen', 'grid': grid, 'kind': 'payments', 'filter_options': [('status','Status',PAYMENT_STATUS_CHOICES)]})
 
 
-@staff_perm('email.read')
+@staff_perm('customers.read', 'email.read')
 def customer_emails(request, pk):
     customer = _customer(request, pk)
     recipients = list(customer.memberships.values_list('user__email', flat=True))
@@ -413,7 +703,36 @@ def customer_emails(request, pk):
     return render(request, 'ns_admin/customer_grid.html', {'customer': customer, 'title': 'E-Mail-Historie', 'grid': grid, 'kind': 'emails', 'filter_options': [('status','Status',EMAIL_STATUS_CHOICES)]})
 
 
-@staff_perm('audit.read')
+@staff_perm('customers.read', 'legal.read')
+def customer_privacy(request, pk):
+    customer = _customer(request, pk)
+    user_ids = list(
+        customer.memberships.values_list('user_id', flat=True)
+    )
+    acceptances = (
+        LegalAcceptance.objects.filter(user_id__in=user_ids)
+        .select_related('user', 'document', 'order')
+        .order_by('-accepted_at')[:30]
+    )
+    deletions = (
+        DeletionRequest.objects.filter(user_id__in=user_ids)
+        .select_related('user')
+        .order_by('-requested_at')[:30]
+    )
+    return render(
+        request,
+        'ns_admin/customer_privacy.html',
+        {
+            'customer': customer,
+            'acceptances': acceptances,
+            'deletions': deletions,
+            'acceptance_count': LegalAcceptance.objects.filter(user_id__in=user_ids).count(),
+            'deletion_count': DeletionRequest.objects.filter(user_id__in=user_ids).count(),
+        },
+    )
+
+
+@staff_perm('customers.read', 'audit.read')
 def customer_audit(request, pk):
     customer = _customer(request, pk)
     object_ids = {str(customer.id)}
@@ -448,8 +767,29 @@ def licenses(request):
 
 @staff_perm('licenses.read')
 def license_detail(request, pk):
-    license_obj = get_object_or_404(License.objects.select_related('company', 'owner_user', 'product'), pk=pk)
-    terms = list(license_obj.terms.select_related('order_item__order').order_by('-valid_until'))
+    license_obj = get_object_or_404(
+        License.objects.select_related('company', 'owner_user', 'product'),
+        pk=pk,
+    )
+    terms = list(
+        license_obj.terms.select_related('order_item__order').order_by('-valid_until')
+    )
+    active_assignment = (
+        license_obj.assignments.filter(ended_at__isnull=True)
+        .select_related('user')
+        .first()
+    )
+    eligible_members = []
+    if license_obj.company_id:
+        eligible_members = list(
+            Membership.objects.filter(
+                company=license_obj.company,
+                active=True,
+                user__is_active=True,
+            )
+            .select_related('user')
+            .order_by('user__last_name', 'user__first_name', 'user__email')
+        )
     refund_preview = {}
     for term in terms:
         if term.status == 'active':
@@ -460,10 +800,52 @@ def license_detail(request, pk):
         {
             'license': license_obj,
             'terms': terms,
+            'active_assignment': active_assignment,
+            'eligible_members': eligible_members,
             'refund_preview': refund_preview,
             'can_write': has_perm(request.user, 'licenses.write'),
+            'can_refund': has_perm(request.user, 'payments.refund'),
         },
     )
+
+
+@staff_perm('licenses.write')
+def license_assign(request, pk):
+    if request.method != 'POST':
+        raise PermissionDenied
+    license_obj = get_object_or_404(
+        License.objects.select_related('company', 'product'),
+        pk=pk,
+    )
+    if not license_obj.company_id:
+        raise PermissionDenied
+    member = get_object_or_404(
+        Membership.objects.select_related('user'),
+        company=license_obj.company,
+        user_id=request.POST.get('user_id'),
+        active=True,
+        user__is_active=True,
+    )
+    try:
+        assign_license(license_obj, member.user, request.user)
+    except ValidationError as exc:
+        messages.error(request, exc.messages[0])
+    else:
+        messages.success(request, f'Lizenz wurde {member.user.email} zugewiesen.')
+    return redirect('ns_admin:license_detail', pk=license_obj.pk)
+
+
+@staff_perm('licenses.write')
+def license_release(request, pk):
+    if request.method != 'POST':
+        raise PermissionDenied
+    license_obj = get_object_or_404(License, pk=pk)
+    if not license_obj.assignments.filter(ended_at__isnull=True).exists():
+        messages.info(request, 'Die Lizenz ist bereits frei.')
+        return redirect('ns_admin:license_detail', pk=license_obj.pk)
+    release_license(license_obj, request.user)
+    messages.success(request, 'Lizenzzuweisung wurde freigegeben.')
+    return redirect('ns_admin:license_detail', pk=license_obj.pk)
 
 
 @staff_perm('licenses.write')
@@ -522,13 +904,33 @@ def order_detail(request, pk):
 
 @staff_perm('payments.read')
 def payments(request):
-    grid = DataGrid(request, Payment.objects.select_related('order', 'order__company', 'order__private_user'), search_fields=('provider_payment_id', 'order__order_number', 'order__company__name', 'order__private_user__email'), sort_fields={'date': 'created_at', 'amount': 'amount', 'status': 'status'}, default_sort='-created_at', filters={'status': 'status'}).build()
-    return render(request, 'ns_admin/payments.html', {'grid': grid, 'filter_options': [('status','Status',PAYMENT_STATUS_CHOICES)]})
+    queryset = Payment.objects.select_related('order', 'order__company', 'order__private_user')
+    grid = DataGrid(request, queryset, search_fields=('provider_payment_id', 'order__order_number', 'order__company__name', 'order__private_user__email'), sort_fields={'date': 'created_at', 'amount': 'amount', 'status': 'status'}, default_sort='-created_at', filters={'status': 'status'}).build()
+    return render(
+        request,
+        'ns_admin/payments.html',
+        {
+            'grid': grid,
+            'filter_options': [('status','Status',PAYMENT_STATUS_CHOICES)],
+            'payment_counts': {
+                'paid': Payment.objects.filter(status='paid').count(),
+                'open': Payment.objects.filter(status__in=['created', 'open', 'pending', 'authorized']).count(),
+                'failed': Payment.objects.filter(status='failed').count(),
+                'chargeback': Payment.objects.filter(status='chargeback').count(),
+            },
+        },
+    )
 
 
 @staff_perm('products.read')
 def products(request):
-    return render(request, 'ns_admin/products.html', {'products': Product.objects.prefetch_related('prices', 'entitlements__feature').order_by('name')})
+    product_rows = list(
+        Product.objects.prefetch_related('prices', 'entitlements__feature').order_by('name')
+    )
+    for product in product_rows:
+        product.current_new_price = current_price(product, 'new')
+        product.current_renewal_price = current_price(product, 'renewal')
+    return render(request, 'ns_admin/products.html', {'products': product_rows})
 
 
 @staff_perm('products.write')
@@ -539,7 +941,7 @@ def product_new(request):
         write_audit(request.user, 'product.created', saved, {'code': saved.code}, request=request)
         messages.success(request, 'Produkt angelegt. Legen Sie anschließend Preisversionen an.')
         return redirect('ns_admin:product_edit', pk=saved.pk)
-    return render(request, 'ns_admin/form.html', {'title': 'Produkt anlegen', 'form': form})
+    return render(request, 'ns_admin/form.html', {'title': 'Produkt anlegen', 'form': form, 'cancel_url': reverse('ns_admin:products')})
 
 
 @staff_perm('products.read')
@@ -557,7 +959,7 @@ def feature_edit(request, pk=None):
         write_audit(request.user, 'feature.saved', saved, {'code': saved.code}, request=request)
         messages.success(request, 'Feature gespeichert.')
         return redirect('ns_admin:features')
-    return render(request, 'ns_admin/form.html', {'title':'Feature bearbeiten' if feature else 'Feature anlegen', 'form':form})
+    return render(request, 'ns_admin/form.html', {'title':'Feature bearbeiten' if feature else 'Feature anlegen', 'form':form, 'cancel_url': reverse('ns_admin:features')})
 
 
 @staff_perm('products.write')
@@ -585,12 +987,38 @@ def product_price_add(request, pk):
             write_audit(request.user, 'product.price_created', price, {'gross_amount': str(price.gross_amount), 'type': price.price_type}, request=request)
             messages.success(request, 'Neue Preisversion angelegt.')
             return redirect('ns_admin:product_edit', pk=pk)
-    return render(request, 'ns_admin/form.html', {'title': f'Preisversion · {product.name}', 'form': form})
+    return render(request, 'ns_admin/form.html', {'title': f'Preisversion · {product.name}', 'form': form, 'cancel_url': reverse('ns_admin:product_edit', args=[product.pk])})
 
 
 @staff_perm('email.read')
 def email(request):
-    return render(request, 'ns_admin/email.html', {'templates': EmailTemplate.objects.order_by('code'), 'recent': EmailMessage.objects.select_related('template').order_by('-created_at')[:20]})
+    provider = settings.EMAIL_PROVIDER.lower().strip()
+    graph_configured = all(
+        [
+            settings.GRAPH_TENANT_ID,
+            settings.GRAPH_CLIENT_ID,
+            settings.GRAPH_CLIENT_SECRET,
+            settings.GRAPH_SENDER,
+        ]
+    )
+    provider_configured = (
+        bool(settings.EMAIL_HOST)
+        if provider in {'smtp', 'mailpit'}
+        else graph_configured
+        if provider in {'graph', 'microsoft_graph'}
+        else False
+    )
+    return render(
+        request,
+        'ns_admin/email.html',
+        {
+            'templates': EmailTemplate.objects.order_by('code'),
+            'recent': EmailMessage.objects.select_related('template').order_by('-created_at')[:20],
+            'provider': provider,
+            'provider_configured': provider_configured,
+            'graph_sender': settings.GRAPH_SENDER,
+        },
+    )
 
 
 @staff_perm('email.write')
@@ -602,7 +1030,7 @@ def email_template_edit(request, pk):
         write_audit(request.user, 'email_template.updated', saved, {'fields': list(form.changed_data)}, request=request)
         messages.success(request, 'E-Mail-Vorlage gespeichert.')
         return redirect('ns_admin:email')
-    return render(request, 'ns_admin/form.html', {'title': f'E-Mail-Vorlage · {template.code}', 'form': form})
+    return render(request, 'ns_admin/form.html', {'title': f'E-Mail-Vorlage · {template.code}', 'form': form, 'cancel_url': reverse('ns_admin:email')})
 
 
 @staff_perm('email.read')
@@ -613,8 +1041,31 @@ def email_log(request):
 
 @staff_perm('payments.read')
 def mollie(request):
-    profile = get_setting('mollie_profile_id', '')
-    return render(request, 'ns_admin/mollie.html', {'profile_id': profile, 'payments': Payment.objects.order_by('-created_at')[:20], 'events': MollieEvent.objects.order_by('-created_at')[:20]})
+    from apps.integrations.services import get_secret
+
+    profile = get_setting('mollie_profile_id', settings.MOLLIE_PROFILE_ID)
+    api_key = get_secret('mollie_api_key', settings.MOLLIE_API_KEY)
+    if api_key.startswith('live_'):
+        mode = 'LIVE'
+    elif api_key:
+        mode = 'TEST'
+    else:
+        mode = 'NICHT KONFIGURIERT'
+    events = MollieEvent.objects.order_by('-created_at')[:20]
+    return render(
+        request,
+        'ns_admin/mollie.html',
+        {
+            'profile_id': profile,
+            'configured': bool(api_key and profile),
+            'mode': mode,
+            'webhook_base': settings.MOLLIE_WEBHOOK_BASE,
+            'payments': Payment.objects.order_by('-created_at')[:20],
+            'events': events,
+            'last_event': events[0] if events else None,
+            'can_configure': has_perm(request.user, 'settings.write'),
+        },
+    )
 
 
 @staff_perm('settings.write')
@@ -629,7 +1080,7 @@ def mollie_config(request):
         write_audit(request.user, 'mollie.configuration_updated', request.user, {'profile_id': form.cleaned_data['profile_id'], 'api_key': '[REDACTED]' if form.cleaned_data['api_key'] else 'unchanged'}, request=request)
         messages.success(request, 'Mollie-Konfiguration gespeichert.')
         return redirect('ns_admin:mollie')
-    return render(request, 'ns_admin/form.html', {'title': 'Mollie konfigurieren', 'form': form})
+    return render(request, 'ns_admin/form.html', {'title': 'Mollie konfigurieren', 'form': form, 'cancel_url': reverse('ns_admin:mollie')})
 
 
 @staff_perm('payments.read')
@@ -638,16 +1089,90 @@ def mollie_events(request):
     return render(request, 'ns_admin/mollie_events.html', {'grid': grid, 'filter_options': [('provider_status','Status',MOLLIE_STATUS_CHOICES)]})
 
 
-@staff_perm('customers.read')
+@staff_perm()
 def stats(request):
     now = timezone.now()
-    return render(request, 'ns_admin/stats.html', {'customers': Company.objects.count() + PrivateCustomerProfile.objects.count(), 'licenses': License.objects.count(), 'orders': Order.objects.count(), 'renewals': LicenseTerm.objects.filter(order_item__target_license__isnull=False).count(), 'revenue30': Order.objects.filter(status='paid', created_at__gte=now - timedelta(days=30)).aggregate(v=Sum('gross_total'))['v'] or 0})
+    rights = {
+        'customers': has_perm(request.user, 'customers.read'),
+        'licenses': has_perm(request.user, 'licenses.read'),
+        'orders': has_perm(request.user, 'orders.read'),
+    }
+    if not any(rights.values()):
+        raise PermissionDenied
+
+    customer_total = (
+        Company.objects.count() + PrivateCustomerProfile.objects.count()
+        if rights['customers'] else None
+    )
+    new_customers_30 = (
+        Company.objects.filter(created_at__gte=now - timedelta(days=30)).count()
+        + PrivateCustomerProfile.objects.filter(created_at__gte=now - timedelta(days=30)).count()
+        if rights['customers'] else None
+    )
+    term_total = LicenseTerm.objects.count() if rights['licenses'] else 0
+    renewal_terms = (
+        LicenseTerm.objects.filter(order_item__target_license__isnull=False).count()
+        if rights['licenses'] else 0
+    )
+    refunded_terms = (
+        LicenseTerm.objects.filter(status='refunded').count()
+        if rights['licenses'] else 0
+    )
+    company_count = Company.objects.count() if rights['customers'] and rights['licenses'] else 0
+    company_license_count = License.objects.filter(company__isnull=False).count() if company_count else 0
+
+    return render(
+        request,
+        'ns_admin/stats.html',
+        {
+            'rights': rights,
+            'customers': customer_total,
+            'new_customers_30': new_customers_30,
+            'licenses': License.objects.count() if rights['licenses'] else None,
+            'orders': Order.objects.count() if rights['orders'] else None,
+            'renewals': renewal_terms if rights['licenses'] else None,
+            'renewal_share': round((renewal_terms / term_total) * 100, 1) if term_total else None,
+            'refund_rate': round((refunded_terms / term_total) * 100, 1) if term_total else None,
+            'avg_licenses_company': round(company_license_count / company_count, 1) if company_count else None,
+            'revenue30': (
+                Order.objects.filter(
+                    status='paid',
+                    created_at__gte=now - timedelta(days=30),
+                ).aggregate(v=Sum('gross_total'))['v'] or 0
+            ) if rights['orders'] else None,
+        },
+    )
 
 
 @staff_perm('ops.read')
 def ops(request):
-    domain = __import__('django.conf', fromlist=['settings']).settings.CADDY_DOMAIN
-    return render(request, 'ns_admin/ops.html', {'ops': snapshot(), 'alerts': SystemAlert.objects.filter(active=True), 'backups': BackupRecord.objects.order_by('-created_at')[:10], 'restores': RestoreTest.objects.order_by('-started_at')[:10], 'caddy_ok': caddy_health(), 'certificate': certificate_status(domain.split(':', 1)[0] if domain else '')})
+    from apps.ops.api import _database_payload, _integration_payload, _service_payload
+
+    domain = settings.CADDY_DOMAIN
+    metrics = snapshot()
+    backups = BackupRecord.objects.order_by('-finished_at', '-created_at')[:10]
+    restores = RestoreTest.objects.order_by('-started_at')[:10]
+    return render(
+        request,
+        'ns_admin/ops.html',
+        {
+            'ops': metrics,
+            'alerts': SystemAlert.objects.filter(active=True).order_by('severity', '-created_at')[:20],
+            'backups': backups,
+            'restores': restores,
+            'latest_backup': backups[0] if backups else None,
+            'latest_restore': restores[0] if restores else None,
+            'caddy_ok': caddy_health(),
+            'certificate': certificate_status(domain.split(':', 1)[0] if domain else ''),
+            'database': _database_payload(safe=True),
+            'services': _service_payload(),
+            'integrations': _integration_payload(),
+            'app_version': settings.APP_VERSION,
+            'git_sha': settings.GIT_SHA,
+            'deployed_at': getattr(settings, 'DEPLOYED_AT', ''),
+            'environment': settings.ENVIRONMENT,
+        },
+    )
 
 
 @staff_perm('ops.read')
@@ -709,7 +1234,7 @@ def service_account_create(request):
             'ns_admin/service_account_token.html',
             {'account': account, 'token': raw, 'token_action': 'erstellt'},
         )
-    return render(request, 'ns_admin/form.html', {'title': 'Service Account anlegen', 'form': form})
+    return render(request, 'ns_admin/form.html', {'title': 'Service Account anlegen', 'form': form, 'cancel_url': reverse('ns_admin:api')})
 
 
 @staff_perm('api.write')
@@ -783,7 +1308,7 @@ def legal_document_edit(request, pk=None):
         write_audit(request.user, 'legal_document.saved', saved, {'version': saved.version, 'active': saved.active}, request=request)
         messages.success(request, 'Rechtsdokument gespeichert.')
         return redirect('ns_admin:legal_documents')
-    return render(request, 'ns_admin/form.html', {'title': 'Rechtsdokument bearbeiten' if document else 'Rechtsdokument anlegen', 'form': form})
+    return render(request, 'ns_admin/form.html', {'title': 'Rechtsdokument bearbeiten' if document else 'Rechtsdokument anlegen', 'form': form, 'cancel_url': reverse('ns_admin:legal_documents')})
 
 
 @staff_perm('legal.read')
@@ -808,7 +1333,7 @@ def retention_policy_edit(request, pk=None):
         write_audit(request.user, 'retention_policy.saved', saved, {'data_class': saved.data_class, 'retain_days': saved.retain_days, 'active': saved.active}, request=request)
         messages.success(request, 'Retention-Policy gespeichert.')
         return redirect('ns_admin:retention_policies')
-    return render(request, 'ns_admin/form.html', {'title': 'Retention-Policy bearbeiten' if policy else 'Retention-Policy anlegen', 'form': form})
+    return render(request, 'ns_admin/form.html', {'title': 'Retention-Policy bearbeiten' if policy else 'Retention-Policy anlegen', 'form': form, 'cancel_url': reverse('ns_admin:retention_policies')})
 
 
 @staff_perm('legal.read')
@@ -852,14 +1377,14 @@ def deletion_request_reject(request, pk):
         else:
             messages.success(request, 'Löschanfrage abgelehnt.')
             return redirect('ns_admin:deletion_requests')
-    return render(request, 'ns_admin/form.html', {'title': 'Löschanfrage ablehnen', 'form': form})
+    return render(request, 'ns_admin/form.html', {'title': 'Löschanfrage ablehnen', 'form': form, 'cancel_url': reverse('ns_admin:deletion_requests')})
 
 
 @staff_perm('support.read')
 def support_requests(request):
     grid = DataGrid(
         request,
-        SupportRequest.objects.select_related('user', 'company'),
+        SupportRequest.objects.select_related('user', 'company', 'license', 'license__product'),
         search_fields=('subject', 'message', 'user__email', 'company__name'),
         sort_fields={'date':'created_at','status':'status','category':'category','subject':'subject'},
         default_sort='-created_at',
@@ -873,7 +1398,7 @@ def support_requests(request):
 
 @staff_perm('support.read')
 def support_request_detail(request, pk):
-    support_request = get_object_or_404(SupportRequest.objects.select_related('user','company'), pk=pk)
+    support_request = get_object_or_404(SupportRequest.objects.select_related('user','company','license','license__product'), pk=pk)
     return render(request, 'ns_admin/support_detail.html', {'support_request': support_request, 'can_write': has_perm(request.user, 'support.write')})
 
 
@@ -906,8 +1431,20 @@ def audit(request):
 
 @staff_perm('roles.read')
 def roles(request):
+    descriptions = {
+        'superadmin': 'Uneingeschränkte Rechte auf alle PromptMaster-Verwaltungsbereiche.',
+        'support': 'Kunden, Lizenzen, Geräte, Bestellungen, Zahlungen, E-Mail und Support.',
+        'ops': 'Monitoring, Backups, Operations API, Logs und Systemstatus.',
+        'prompt_manager': 'Prompt Studio, Prompt-Lifecycle, Qualität und zentrale Inhalte.',
+    }
+    role_rows = list(Role.objects.prefetch_related('permissions').order_by('name'))
+    for role in role_rows:
+        role.display_description = descriptions.get(
+            role.code,
+            'Berechtigungen werden über die zugewiesenen Capabilities gesteuert.',
+        )
     return render(request, 'ns_admin/roles.html', {
-        'roles': Role.objects.prefetch_related('permissions').order_by('name'),
+        'roles': role_rows,
         'users': User.objects.filter(is_staff=True).prefetch_related('role_links__role').order_by('email'),
     })
 
@@ -931,7 +1468,7 @@ def staff_user_create(request):
             transaction.on_commit(lambda: _send_staff_setup_email(request, user), robust=True)
         messages.success(request, 'netstyle Benutzer angelegt; Einrichtungslink wurde per E-Mail versendet.')
         return redirect('ns_admin:roles')
-    return render(request, 'ns_admin/form.html', {'title': 'netstyle Benutzer anlegen', 'form': form})
+    return render(request, 'ns_admin/form.html', {'title': 'netstyle Benutzer anlegen', 'form': form, 'cancel_url': reverse('ns_admin:roles')})
 
 
 @staff_perm('roles.write')
@@ -980,12 +1517,12 @@ def role_edit(request, pk):
     if request.method == 'POST' and form.is_valid():
         if role.code == 'superadmin' and not form.cleaned_data.get('active') and _active_superadmin_count() <= 1:
             form.add_error('active', 'Der letzte aktive Superadmin darf nicht deaktiviert werden.')
-            return render(request, 'ns_admin/form.html', {'title': f'Rolle · {role.name}', 'form': form})
+            return render(request, 'ns_admin/form.html', {'title': f'Rolle · {role.name}', 'form': form, 'cancel_url': reverse('ns_admin:roles')})
         saved = form.save()
         write_audit(request.user, 'role.updated', saved, {'fields': list(form.changed_data)}, request=request)
         messages.success(request, 'Rolle gespeichert.')
         return redirect('ns_admin:roles')
-    return render(request, 'ns_admin/form.html', {'title': f'Rolle · {role.name}', 'form': form})
+    return render(request, 'ns_admin/form.html', {'title': f'Rolle · {role.name}', 'form': form, 'cancel_url': reverse('ns_admin:roles')})
 
 
 @staff_perm('roles.write')
@@ -1002,7 +1539,7 @@ def user_role_assign(request):
         write_audit(request.user, 'user_role.assigned', link, {'user': str(link.user_id), 'role': link.role.code}, request=request)
         messages.success(request, 'Rolle zugewiesen.')
         return redirect('ns_admin:roles')
-    return render(request, 'ns_admin/form.html', {'title': 'netstyle Rolle zuweisen', 'form': form})
+    return render(request, 'ns_admin/form.html', {'title': 'netstyle Rolle zuweisen', 'form': form, 'cancel_url': reverse('ns_admin:roles')})
 
 
 @staff_perm('roles.write')
@@ -1050,7 +1587,16 @@ def settings_view(request):
             write_audit(request.user, 'settings.updated', request.user, {'support_email': support_email, 'ops_thresholds': data}, request=request)
             messages.success(request, 'Einstellungen gespeichert.')
             return redirect('ns_admin:settings')
-    return render(request, 'ns_admin/settings.html', {'form': form, 'can_write': has_perm(request.user, 'settings.write')})
+    return render(
+        request,
+        'ns_admin/settings.html',
+        {
+            'form': form,
+            'can_write': has_perm(request.user, 'settings.write'),
+            'pro_product': Product.objects.filter(code='PRO').first(),
+            'invitation_ttl_hours': INVITATION_TTL_HOURS,
+        },
+    )
 
 
 @staff_perm()

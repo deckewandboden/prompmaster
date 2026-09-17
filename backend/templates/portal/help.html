@@ -1,6 +1,35 @@
 {% extends 'portal/base.html' %}
 {% block content %}
 <div class="page-head"><div><h1>Hilfe & Kontakt</h1><p class="sub">Direkter Kontakt zu netstyle und Verlauf Ihrer Anfragen.</p></div></div>
-<div class="grid two"><div class="card"><h2>Kontaktformular</h2><form method="post" class="form">{% csrf_token %}{{ form.as_p }}<button class="btn primary">Nachricht senden</button></form></div><div class="card"><h2>Automatischer Kontext</h2><p class="muted">Konto, Benutzer und Zeitpunkt werden dem Supportkontext zugeordnet; keine unnötigen sensitiven Daten.</p></div></div>
-<div class="card" style="margin-top:14px"><h2>Supporthistorie</h2><div class="tablewrap"><table><thead><tr><th>Datum</th><th>Kategorie</th><th>Betreff</th><th>Status</th></tr></thead><tbody>{% for row in support_history %}<tr><td>{{ row.created_at|date:"d.m.Y H:i" }}</td><td>{{ row.get_category_display }}</td><td>{{ row.subject }}</td><td>{{ row.get_status_display }}</td></tr>{% empty %}<tr><td colspan="4">Noch keine Anfragen vorhanden.</td></tr>{% endfor %}</tbody></table></div></div>
+<div class="grid two">
+  <div class="card">
+    <h2>Kontaktformular</h2>
+    <form method="post" class="form">{% csrf_token %}{{ form.as_p }}<button class="btn primary">Nachricht senden</button></form>
+  </div>
+  <div class="card">
+    <h2>Automatischer Kontext</h2>
+    <p class="muted">Konto, Unternehmen, Benutzer-ID und Zeitpunkt werden automatisch zugeordnet. Optional kann eine für Ihr Konto sichtbare Lizenz mitgesendet werden. Passwörter, Tokens oder andere unnötige sensitive Daten werden nicht übernommen.</p>
+  </div>
+</div>
+<div class="card" style="margin-top:14px">
+  <h2>Supporthistorie</h2>
+  <div class="tablewrap">
+    <table>
+      <thead><tr><th>Datum</th><th>Kategorie</th><th>Betreff</th><th>Lizenz</th><th>Status</th></tr></thead>
+      <tbody>
+      {% for row in support_history %}
+        <tr>
+          <td data-label="Datum">{{ row.created_at|date:"d.m.Y H:i" }}</td>
+          <td data-label="Kategorie">{{ row.get_category_display }}</td>
+          <td data-label="Betreff">{{ row.subject }}</td>
+          <td data-label="Lizenz">{% if row.license %}{{ row.license.license_number }}{% else %}–{% endif %}</td>
+          <td data-label="Status">{{ row.get_status_display }}</td>
+        </tr>
+      {% empty %}
+        <tr><td colspan="5">Noch keine Anfragen vorhanden.</td></tr>
+      {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
 {% endblock %}

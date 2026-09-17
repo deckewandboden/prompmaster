@@ -1,1 +1,7 @@
-{% extends 'ns_admin/base.html' %}{% block content %}<h1>Datenschutz & Recht</h1><div class="card">{% for d in documents %}<div class="statusrow"><span>{{ d.doc_type }} · {{ d.version }}</span><strong>{% if d.active %}Aktiv{% else %}Inaktiv{% endif %}</strong></div>{% empty %}<p class="muted">Noch keine Rechtstexte hinterlegt.</p>{% endfor %}</div>{% endblock %}
+{% extends 'ns_admin/base.html' %}{% block content %}
+<div class="page-head"><div><h1>Datenschutz &amp; Recht</h1><div class="sub">Rechtsdokumente, Aufbewahrung und Löschanforderungen.</div></div></div>
+<div class="grid two">
+  <div class="card"><h2>Rechtsdokumente</h2>{% for d in documents %}<div class="statusrow"><span>{{ d.get_doc_type_display|default:d.doc_type }} · {{ d.version }}</span><span class="badge {% if d.active %}ok{% else %}warn{% endif %}">{% if d.active %}Aktiv{% else %}Inaktiv{% endif %}</span></div>{% empty %}<p class="muted">Noch keine Rechtstexte hinterlegt.</p>{% endfor %}<a class="btn secondary sm" href="{% url 'ns_admin:legal_documents' %}">Rechtsdokumente verwalten</a></div>
+  <div class="card"><h2>Retention / Löschung</h2><div class="statusrow"><span>Aktive Retention-Policies</span><strong>{{ retention_count }}</strong></div><div class="statusrow"><span>Offene Löschanfragen</span><strong>{{ open_deletion_count }}</strong></div><div class="page-actions" style="margin-top:12px"><a class="btn secondary sm" href="{% url 'ns_admin:retention_policies' %}">Retention-Policies</a><a class="btn secondary sm" href="{% url 'ns_admin:deletion_requests' %}">Löschanfragen</a></div></div>
+</div>
+{% endblock %}

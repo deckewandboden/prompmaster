@@ -6,7 +6,7 @@
 <div class="card" style="margin-top:14px">
   <h2>Was möchtest du tun?</h2>
   <p class="muted">Eine Verlängerung vor Ablauf hängt weitere 365 Tage an das bestehende Ablaufdatum an. Die Restlaufzeit geht nicht verloren.</p>
-  <div style="display:flex;gap:10px;flex-wrap:wrap">
+  <div class="page-actions">
     <a class="btn primary" href="{% url 'portal:licenses' %}">Lizenzverwaltung / Verlängerung</a>
     <form method="post">{% csrf_token %}<button class="btn secondary" type="submit">Jetzt trotzdem PromptMaster Pro starten</button></form>
   </div>

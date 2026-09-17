@@ -1,6 +1,8 @@
 {% load pm %}
 <form class="toolbar" method="get" aria-label="Tabellenfilter">
-  <input name="q" value="{{ grid.query }}" placeholder="Suchen …" aria-label="Tabelle durchsuchen">
+  <input type="hidden" name="page" value="1">
+  {% if grid.sort %}<input type="hidden" name="sort" value="{{ grid.sort }}"><input type="hidden" name="dir" value="{{ grid.direction }}">{% endif %}
+  <input name="q" value="{{ grid.query }}" placeholder="Suchen …" aria-label="Tabelle durchsuchen" autocomplete="off">
   {% for param,label,choices in filter_options %}
     <select name="{{ param }}" aria-label="{{ label }} filtern">
       <option value="">{{ label }}: Alle</option>

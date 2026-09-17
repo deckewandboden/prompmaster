@@ -8,7 +8,7 @@ from django.utils import timezone
 
 from apps.accounts.models import User
 from apps.audit.models import AuditEvent
-from apps.catalog.models import Product, ProductPrice
+from apps.catalog.models import Product, ProductEntitlement, ProductPrice
 from apps.companies.models import Company, Membership
 from apps.devices.models import DeviceRegistration
 from apps.devices.services import register_device
@@ -69,6 +69,21 @@ class RealProAccessTests(TestCase):
         self.assertEqual(response.cookies[LEGACY_DEVICE_COOKIE]['max-age'], 0)
         self.assertEqual(DeviceRegistration.objects.filter(user=self.user).count(), 1)
         self.assertEqual(self.client.get('/api/v1/prompts/').status_code, 200)
+
+    def test_disabled_product_entitlement_denies_pro_access(self):
+        entitlement = ProductEntitlement.objects.get(
+            product=self.license.product,
+            feature__code='promptmaster.pro_runtime',
+        )
+        entitlement.enabled = False
+        entitlement.save(update_fields=['enabled', 'updated_at'])
+
+        self.assertEqual(
+            self.client.post('/pro/device/register/', {'display_name': 'Denied'}).status_code,
+            403,
+        )
+        response = self.client.get('/api/v1/prompts/')
+        self.assertEqual(response.status_code, 403)
 
     def test_unverified_account_cannot_register_or_compose(self):
         self.user.email_verified_at = None

@@ -1,29 +1,35 @@
 {% extends 'app_shell.html' %}
+{% load pm %}
 {% block title %}PromptMaster Kundenportal{% endblock %}
+{% block shell_class %}portal-shell{% endblock %}
+{% block mobile_title %}PROMPTMASTER<small>KUNDENPORTAL</small>{% endblock %}
+{% block search_placeholder %}Benutzer, E-Mail oder Lizenz suchen …{% endblock %}
+{% block user_meta %}{% if current_membership %}{{ current_membership.get_role_display }}{% else %}Privatkunde{% endif %}{% endblock %}
+{% block side_footer %}{% if current_membership %}{{ current_membership.company.name }}<br>{{ current_membership.get_role_display }}{% else %}PromptMaster Kundenportal{% endif %}{% endblock %}
 {% block home_url %}{% url 'portal:dashboard' %}{% endblock %}
 {% block nav %}
-<a href="{% url 'portal:dashboard' %}"><span class="ico">⌂</span><span class="label">Dashboard</span></a>
+<a class="{% nav_class request 'dashboard' %}" href="{% url 'portal:dashboard' %}"><span class="ico">⌂</span><span class="label">Dashboard</span></a>
 {% if current_membership and current_membership.role == 'admin' %}
-<a href="{% url 'portal:team' %}"><span class="ico">♙</span><span class="label">Mein Team</span></a>
+<a class="{% nav_class request 'team,invitations,invite,team_member,transfer_admin' %}" href="{% url 'portal:team' %}"><span class="ico">♙</span><span class="label">Mein Team</span></a>
 {% endif %}
-<a href="{% url 'portal:licenses' %}"><span class="ico">▣</span><span class="label">Lizenzen</span></a>
+<a class="{% nav_class request 'licenses,license_detail,renew,renew_index,claim_assignment_link' %}" href="{% url 'portal:licenses' %}"><span class="ico">▣</span><span class="label">Lizenzen</span></a>
 {% if current_membership and current_membership.role == 'admin' or not current_membership %}
-<a href="{% url 'portal:buy' %}"><span class="ico">＋</span><span class="label">Weitere Lizenzen kaufen</span></a>
+<a class="{% nav_class request 'buy' %}" href="{% url 'portal:buy' %}"><span class="ico">＋</span><span class="label">Weitere Lizenzen kaufen</span></a>
 {% endif %}
-<a href="{% url 'portal:devices' %}"><span class="ico">▤</span><span class="label">Geräte</span></a>
-{% if current_membership and current_membership.role == 'admin' or not current_membership %}<a href="{% url 'portal:orders' %}"><span class="ico">▧</span><span class="label">Bestellungen &amp; Zahlungen</span></a>{% endif %}
+<a class="{% nav_class request 'devices,device_revoke' %}" href="{% url 'portal:devices' %}"><span class="ico">▤</span><span class="label">Geräte</span></a>
+{% if current_membership and current_membership.role == 'admin' or not current_membership %}<a class="{% nav_class request 'orders' %}" href="{% url 'portal:orders' %}"><span class="ico">▧</span><span class="label">Bestellungen &amp; Zahlungen</span></a>{% endif %}
 {% if current_membership and current_membership.role == 'admin' %}
-<a href="{% url 'portal:company' %}"><span class="ico">▥</span><span class="label">Unternehmen</span></a>
+<a class="{% nav_class request 'company' %}" href="{% url 'portal:company' %}"><span class="ico">▥</span><span class="label">Unternehmen</span></a>
 {% endif %}
-<a href="{% url 'portal:profile' %}"><span class="ico">⚙</span><span class="label">Einstellungen</span></a>
-<a href="{% url 'portal:help' %}"><span class="ico">?</span><span class="label">Hilfe &amp; Kontakt</span></a>
+<a class="{% nav_class request 'profile,security,privacy' %}" href="{% url 'portal:profile' %}"><span class="ico">⚙</span><span class="label">Einstellungen</span></a>
+<a class="{% nav_class request 'help' %}" href="{% url 'portal:help' %}"><span class="ico">?</span><span class="label">Hilfe &amp; Kontakt</span></a>
 <a href="{% url 'accounts:logout' %}"><span class="ico">↪</span><span class="label">Abmelden</span></a>
 {% endblock %}
 {% block mobile %}
 <div class="mobile-menu">
-<a href="{% url 'portal:dashboard' %}"><b>⌂</b>Home</a>
-{% if current_membership and current_membership.role == 'admin' %}<a href="{% url 'portal:team' %}"><b>♙</b>Team</a>{% else %}<a href="{% url 'portal:profile' %}"><b>⚙</b>Einstellungen</a>{% endif %}
-<a href="{% url 'portal:licenses' %}"><b>▣</b>Lizenzen</a>
-<a href="{% url 'portal:devices' %}"><b>▤</b>Geräte</a>
+<a class="{% nav_class request 'dashboard' %}" href="{% url 'portal:dashboard' %}"><b>⌂</b>Home</a>
+{% if current_membership and current_membership.role == 'admin' %}<a class="{% nav_class request 'team,invitations,invite,team_member,transfer_admin' %}" href="{% url 'portal:team' %}"><b>♙</b>Team</a>{% else %}<a class="{% nav_class request 'profile,security,privacy' %}" href="{% url 'portal:profile' %}"><b>⚙</b>Einstellungen</a>{% endif %}
+<a class="{% nav_class request 'licenses,license_detail,renew,renew_index,claim_assignment_link' %}" href="{% url 'portal:licenses' %}"><b>▣</b>Lizenzen</a>
+<a class="{% nav_class request 'devices,device_revoke' %}" href="{% url 'portal:devices' %}"><b>▤</b>Geräte</a>
 </div>
 {% endblock %}

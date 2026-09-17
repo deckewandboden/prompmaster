@@ -1,10 +1,19 @@
+{% load pm %}
+{% user_has_perm request.user 'licenses.read' as can_licenses %}
+{% user_has_perm request.user 'orders.read' as can_orders %}
+{% user_has_perm request.user 'payments.read' as can_payments %}
+{% user_has_perm request.user 'email.read' as can_email %}
+{% user_has_perm request.user 'legal.read' as can_legal %}
+{% user_has_perm request.user 'audit.read' as can_audit %}
 <nav class="subnav" aria-label="Kundenbereiche">
   <a class="{% if request.resolver_match.url_name == 'customer_detail' %}active{% endif %}" href="{% url 'ns_admin:customer_detail' customer.id %}">Übersicht</a>
+  <a class="{% if request.resolver_match.url_name == 'customer_company' %}active{% endif %}" href="{% url 'ns_admin:customer_company' customer.id %}">Unternehmen</a>
   <a class="{% if request.resolver_match.url_name == 'customer_users' %}active{% endif %}" href="{% url 'ns_admin:customer_users' customer.id %}">Benutzer</a>
-  <a class="{% if request.resolver_match.url_name == 'customer_licenses' %}active{% endif %}" href="{% url 'ns_admin:customer_licenses' customer.id %}">Lizenzen</a>
+  {% if can_licenses %}<a class="{% if request.resolver_match.url_name == 'customer_licenses' %}active{% endif %}" href="{% url 'ns_admin:customer_licenses' customer.id %}">Lizenzen</a>{% endif %}
   <a class="{% if request.resolver_match.url_name == 'customer_devices' %}active{% endif %}" href="{% url 'ns_admin:customer_devices' customer.id %}">Geräte</a>
-  <a class="{% if request.resolver_match.url_name == 'customer_orders' %}active{% endif %}" href="{% url 'ns_admin:customer_orders' customer.id %}">Bestellungen</a>
-  <a class="{% if request.resolver_match.url_name == 'customer_payments' %}active{% endif %}" href="{% url 'ns_admin:customer_payments' customer.id %}">Zahlungen</a>
-  <a class="{% if request.resolver_match.url_name == 'customer_emails' %}active{% endif %}" href="{% url 'ns_admin:customer_emails' customer.id %}">E-Mail</a>
-  <a class="{% if request.resolver_match.url_name == 'customer_audit' %}active{% endif %}" href="{% url 'ns_admin:customer_audit' customer.id %}">Audit</a>
+  {% if can_orders %}<a class="{% if request.resolver_match.url_name == 'customer_orders' %}active{% endif %}" href="{% url 'ns_admin:customer_orders' customer.id %}">Bestellungen</a>{% endif %}
+  {% if can_payments %}<a class="{% if request.resolver_match.url_name == 'customer_payments' %}active{% endif %}" href="{% url 'ns_admin:customer_payments' customer.id %}">Zahlungen</a>{% endif %}
+  {% if can_email %}<a class="{% if request.resolver_match.url_name == 'customer_emails' %}active{% endif %}" href="{% url 'ns_admin:customer_emails' customer.id %}">E-Mail</a>{% endif %}
+  {% if can_legal %}<a class="{% if request.resolver_match.url_name == 'customer_privacy' %}active{% endif %}" href="{% url 'ns_admin:customer_privacy' customer.id %}">Datenschutz</a>{% endif %}
+  {% if can_audit %}<a class="{% if request.resolver_match.url_name == 'customer_audit' %}active{% endif %}" href="{% url 'ns_admin:customer_audit' customer.id %}">Audit</a>{% endif %}
 </nav>

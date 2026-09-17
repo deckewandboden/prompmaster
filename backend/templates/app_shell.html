@@ -1,1 +1,21 @@
-{% extends 'base.html' %}{% load static %}{% block body %}<div class="shell"><aside class="sidebar"><a class="brand" href="{% block home_url %}/{% endblock %}"><img src="{% static 'brand/promptmaster-logo-reference.png' %}" alt="PromptMaster"></a><nav class="nav">{% block nav %}{% endblock %}</nav></aside><main class="main"><div class="topbar"><div class="search"><form method="get" action="{% block search_action %}{{ request.path }}{% endblock %}"><input name="q" value="{{ request.GET.q|default:'' }}" placeholder="Suchen …"></form></div><div class="userbox"><div class="avatar">{{ request.user.first_name|slice:':1' }}{{ request.user.last_name|slice:':1' }}</div><div><strong>{{ request.user.full_name }}</strong><div class="small muted">{{ request.user.email }}</div></div></div></div><div class="content">{% if messages %}<div class="messages">{% for message in messages %}<div class="{{ message.tags }}">{{ message }}</div>{% endfor %}</div>{% endif %}{% block content %}{% endblock %}</div></main></div>{% block mobile %}{% endblock %}{% endblock %}
+{% extends 'base.html' %}{% load static %}{% block body %}
+<div class="shell {% block shell_class %}{% endblock %}">
+  <aside class="sidebar">
+    <a class="brand" href="{% block home_url %}/{% endblock %}"><img src="{% static 'brand/promptmaster-logo-reference.png' %}" alt="PromptMaster"></a>
+    <nav class="nav">{% block nav %}{% endblock %}</nav>
+    <div class="side-footer">{% block side_footer %}{% endblock %}</div>
+  </aside>
+  <main class="main">
+    <div class="topbar">
+      <div class="mobile-title">{% block mobile_title %}PROMPTMASTER{% endblock %}</div>
+      <div class="search"><form method="get" action="{% block search_action %}{{ request.path }}{% endblock %}"><input name="q" value="{{ request.GET.q|default:'' }}" placeholder="{% block search_placeholder %}Suchen …{% endblock %}"></form></div>
+      <div class="userbox">
+        <div class="avatar">{{ request.user.first_name|slice:':1' }}{{ request.user.last_name|slice:':1' }}</div>
+        <div class="user-meta"><strong>{{ request.user.full_name }}</strong><div class="small muted">{% block user_meta %}{{ request.user.email }}{% endblock %}</div></div>
+      </div>
+    </div>
+    <div class="content">{% if messages %}<div class="messages">{% for message in messages %}<div class="{{ message.tags }}">{{ message }}</div>{% endfor %}</div>{% endif %}{% block content %}{% endblock %}</div>
+  </main>
+</div>
+{% block mobile %}{% endblock %}
+{% endblock %}

@@ -64,10 +64,28 @@ def filter_display(request, param, choices):
 
 @register.simple_tag
 def nav_class(request, names):
-    current = getattr(getattr(request, 'resolver_match', None), 'url_name', '') or ''
+    match = getattr(request, 'resolver_match', None)
+    current = getattr(match, 'url_name', '') or ''
+    namespace = getattr(match, 'namespace', '') or ''
+    app_name = getattr(match, 'app_name', '') or ''
     candidates = [item.strip() for item in names.split(',') if item.strip()]
+
+    def normalized(value):
+        return str(value).strip().lower().replace('-', '_')
+
+    current_n = normalized(current)
+    namespace_n = normalized(namespace)
+    app_name_n = normalized(app_name)
     for candidate in candidates:
-        if current == candidate or current.startswith(candidate + '_'):
+        candidate_n = normalized(candidate)
+        if (
+            current_n == candidate_n
+            or current_n.startswith(candidate_n + '_')
+            or namespace_n == candidate_n
+            or namespace_n.startswith(candidate_n + '_')
+            or app_name_n == candidate_n
+            or app_name_n.startswith(candidate_n + '_')
+        ):
             return 'active'
     return ''
 
@@ -91,3 +109,10 @@ def human_bytes(value):
             return f'{number:.1f} {unit}' if unit != 'B' else f'{int(number)} B'
         number /= 1024
     return f'{number:.1f} PB'
+
+
+@register.simple_tag
+def user_has_perm(user, code):
+    from apps.core.permissions import has_perm
+
+    return bool(user and getattr(user, 'is_authenticated', False) and has_perm(user, code))
