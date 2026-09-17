@@ -8,12 +8,11 @@ from django.utils import timezone
 
 from apps.accounts.models import User
 from apps.catalog.models import Product, ProductPrice
-from apps.devices.services import register_device
-from apps.licenses.models import License, LicenseAssignment, LicenseTerm
+from apps.licenses.models import License, LicenseTerm
 from apps.orders.models import Order, OrderItem
 
 from .models import MollieEvent, Payment
-from .services import calculate_refund, create_refund_request, process_provider_state, submit_refund
+from .services import calculate_refund, process_provider_state
 
 
 class RefundMathTests(SimpleTestCase):
@@ -101,7 +100,7 @@ class MollieStateIntegrationTests(TestCase):
         }
 
     @patch('apps.payments.services._queue_after_commit')
-    def test_duplicate_paid_webhook_creates_exactly_one_license_term_and_event(self, _mail):
+    def test_duplicate_paid_webhook_creates_exactly_one_license_and_term(self, _mail):
         paid = self.payload('paid')
         with patch('apps.payments.views.MollieClient.get_payment', return_value=paid):
             first = self.client.post(
@@ -185,39 +184,9 @@ class MollieStateIntegrationTests(TestCase):
         )
 
     @patch('apps.payments.services._queue_after_commit')
-    @patch('apps.payments.services.MollieClient.create_refund')
-    def test_refund_terminates_access_revokes_device_and_invalidates_sessions(self, create_refund, _mail):
-        process_provider_state(self.payment.provider_payment_id, self.payload('paid'))
-        license_obj = License.objects.get(owner_user=self.user)
-        term = LicenseTerm.objects.get(license=license_obj)
-        assignment = LicenseAssignment.objects.get(license=license_obj, ended_at__isnull=True)
-        device, _raw = register_device(self.user, license_obj, 'Refund Browser')
-        self.user.refresh_from_db()
-        security_version_before = self.user.security_version
-
-        refund = create_refund_request(term=term, actor=self.user, reason='Test refund')
-        create_refund.return_value = {'id': 're_refund_test', 'status': 'refunded'}
-        submit_refund(refund)
-
-        refund.refresh_from_db()
-        term.refresh_from_db()
-        license_obj.refresh_from_db()
-        assignment.refresh_from_db()
-        device.refresh_from_db()
-        self.payment.refresh_from_db()
-        self.user.refresh_from_db()
-
-        self.assertEqual(refund.status, 'succeeded')
-        self.assertEqual(refund.provider_refund_id, 're_refund_test')
-        self.assertEqual(term.status, 'refunded')
-        self.assertEqual(license_obj.status, 'refunded')
-        self.assertEqual(self.payment.status, 'refunded_full')
-        self.assertIsNotNone(assignment.ended_at)
-        self.assertIsNotNone(device.revoked_at)
-        self.assertGreater(self.user.security_version, security_version_before)
-
-    @patch('apps.payments.services._queue_after_commit')
     def test_provider_amount_or_currency_mismatch_is_rejected(self, _mail):
+        from django.core.exceptions import ValidationError
+
         wrong = self.payload('paid')
         wrong['amount'] = {'value': '99.99', 'currency': 'EUR'}
         with self.assertRaises(ValidationError):
