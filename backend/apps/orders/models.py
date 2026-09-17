@@ -1,5 +1,5 @@
 from django.conf import settings
-from django.db import models
+from django.db import models, transaction
 from django.db.models import Q
 
 from apps.core.models import TimeStampedModel
@@ -52,11 +52,25 @@ class Order(TimeStampedModel):
         # A replayed checkout request, provider timeout or stale browser POST
         # must never downgrade an already-paid order back to payment_open,
         # failed or canceled. Refund/chargeback state lives on Payment/License.
+        #
+        # The row lock is essential here. A plain read-then-save guard has a
+        # TOCTOU race: another transaction can commit ``paid`` after the read
+        # but before this stale save obtains its UPDATE lock, causing the stale
+        # writer to overwrite the successful payment. Serialize every
+        # non-paid transition with the order row so whichever transaction wins
+        # first still leaves ``paid`` terminal.
         if self.pk and self.status != 'paid':
-            previous = type(self).objects.filter(pk=self.pk).values_list('status', flat=True).first()
-            if previous == 'paid':
-                self.status = 'paid'
-        super().save(*args, **kwargs)
+            with transaction.atomic():
+                previous = (
+                    type(self).objects.select_for_update()
+                    .filter(pk=self.pk)
+                    .values_list('status', flat=True)
+                    .first()
+                )
+                if previous == 'paid':
+                    self.status = 'paid'
+                return super().save(*args, **kwargs)
+        return super().save(*args, **kwargs)
 
     def __str__(self):
         return self.order_number
