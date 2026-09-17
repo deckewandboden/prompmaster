@@ -1,9 +1,10 @@
 from django.urls import path
 from . import admin_views as v
+from . import admin_completion_views as c
 
 app_name = 'ns_admin'
 urlpatterns = [
-    path('', v.dashboard, name='dashboard'),
+    path('', c.dashboard, name='dashboard'),
     path('search/', v.global_search, name='search'),
     path('customers/', v.customers, name='customers'),
     path('customers/private/', v.private_customers, name='private_customers'),
@@ -16,6 +17,8 @@ urlpatterns = [
     path('customers/private/<uuid:pk>/emails/', v.private_customer_emails, name='private_customer_emails'),
     path('customers/private/<uuid:pk>/audit/', v.private_customer_audit, name='private_customer_audit'),
     path('customers/<uuid:pk>/', v.customer_detail, name='customer_detail'),
+    path('customers/<uuid:pk>/company/', c.customer_company, name='customer_company'),
+    path('customers/<uuid:pk>/privacy/', c.customer_privacy, name='customer_privacy'),
     path('customers/<uuid:pk>/portal-preview/', v.customer_portal_preview, name='customer_portal_preview'),
     path('customers/<uuid:pk>/users/', v.customer_users, name='customer_users'),
     path('customers/<uuid:pk>/licenses/', v.customer_licenses, name='customer_licenses'),
@@ -39,6 +42,7 @@ urlpatterns = [
     path('products/<uuid:pk>/', v.product_edit, name='product_edit'),
     path('products/<uuid:pk>/prices/new/', v.product_price_add, name='product_price_add'),
     path('email/', v.email, name='email'),
+    path('email/templates/', c.email_templates, name='email_templates'),
     path('email/log/', v.email_log, name='email_log'),
     path('email/templates/<uuid:pk>/', v.email_template_edit, name='email_template_edit'),
     path('mollie/', v.mollie, name='mollie'),
@@ -69,6 +73,7 @@ urlpatterns = [
     path('support/<uuid:pk>/', v.support_request_detail, name='support_request_detail'),
     path('support/<uuid:pk>/status/', v.support_request_status, name='support_request_status'),
     path('audit/', v.audit, name='audit'),
+    path('users/', c.users, name='users'),
     path('roles/', v.roles, name='roles'),
     path('roles/users/new/', v.staff_user_create, name='staff_user_create'),
     path('roles/users/<uuid:pk>/toggle/', v.staff_user_toggle, name='staff_user_toggle'),
