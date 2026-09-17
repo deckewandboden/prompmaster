@@ -45,6 +45,16 @@
         reverse_proxy web:8000
     }
 
+    # Mollie sends only a tiny form payload containing the provider payment ID.
+    # Keep this public CSRF-exempt endpoint far below the general application
+    # body ceiling to reduce parser/memory abuse before Django sees the request.
+    handle /api/webhooks/mollie/ {
+        request_body {
+            max_size 64KB
+        }
+        reverse_proxy web:8000
+    }
+
     # Prometheus scrapes the web container directly. Never proxy internal
     # metrics from the public virtual host.
     handle /metrics/internal/* {
