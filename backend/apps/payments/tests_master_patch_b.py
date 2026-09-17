@@ -11,6 +11,7 @@ from apps.catalog.models import Product, ProductPrice
 from apps.companies.models import Company, Membership
 from apps.licenses.models import License, LicenseAssignment, LicenseTerm
 from apps.licenses.services import assign_license, consume_assignment_link, create_assignment_link
+from apps.notifications.tasks import sync_license_states
 from apps.orders.models import Order, OrderItem
 
 from .mollie import MollieError
@@ -155,6 +156,31 @@ class RefundRetryStateMachineTests(TestCase):
         self.assertEqual(attempt.idempotency_key, original_key)
         self.assertEqual(RefundAttempt.objects.filter(refund=same_refund).count(), 1)
         self.assertEqual(provider.call_args.args[-1], original_key)
+
+    @patch('apps.payments.services._queue_after_commit')
+    def test_license_sync_recovers_interrupted_provider_success(self, _mail):
+        refund = create_refund_request(term=self.term, actor=self.user)
+        refund.status = 'succeeded'
+        refund.provider_refund_id = 're_interrupted_success'
+        refund.save(update_fields=['status', 'provider_refund_id', 'updated_at'])
+
+        result = sync_license_states.run()
+
+        refund.refresh_from_db()
+        self.term.refresh_from_db()
+        self.payment.refresh_from_db()
+        self.license.refresh_from_db()
+        assignment = LicenseAssignment.objects.get(license=self.license, user=self.user)
+        assignment.refresh_from_db()
+
+        self.assertIsInstance(result, int)
+        self.assertEqual(refund.status, 'succeeded')
+        self.assertEqual(self.term.status, 'refunded')
+        self.assertEqual(self.payment.status, 'refunded_full')
+        self.assertEqual(self.license.status, 'refunded')
+        self.assertIsNone(self.license.valid_from)
+        self.assertIsNone(self.license.valid_until)
+        self.assertIsNotNone(assignment.ended_at)
 
 
 class SuspendedTenantAssignmentTests(TestCase):
