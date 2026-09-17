@@ -13,6 +13,7 @@ from apps.catalog.models import Product, ProductPrice
 from apps.catalog.services import create_price_version, current_price
 from apps.companies.models import Company, Invitation, Membership, PrivateCustomerProfile
 from apps.companies.services import create_invitation, transfer_admin
+from apps.core.sensitive import SENSITIVE_REAUTH_SESSION_KEY
 from apps.devices.models import DeviceRegistration
 from apps.devices.services import register_device
 from apps.licenses.models import License, LicenseAssignment
@@ -283,7 +284,10 @@ class CompanyAdminTransferTests(TestCase):
         session.save()
 
         url = f'/portal/team/{self.new_admin.id}/transfer-admin/'
-        response = self.client.post(url, {'password': 'Transfer-Password-42!'})
+        response = self.client.post(
+            url,
+            {'password': 'Transfer-Password-42!', 'confirm': 'on'},
+        )
         self.assertEqual(response.status_code, 302)
         self.assertTrue(response['Location'].startswith('/auth/2fa/'))
         self.assertEqual(
@@ -294,7 +298,10 @@ class CompanyAdminTransferTests(TestCase):
         session = self.client.session
         session['two_factor_ok'] = True
         session.save()
-        response = self.client.post(url, {'password': 'Transfer-Password-42!'})
+        response = self.client.post(
+            url,
+            {'password': 'Transfer-Password-42!', 'confirm': 'on'},
+        )
         self.assertEqual(response.status_code, 302)
 
         self.assertEqual(
@@ -712,6 +719,7 @@ class NetstyleSupportAdminTransferTests(TestCase):
         session = self.client.session
         session['security_version'] = self.staff.security_version
         session['two_factor_ok'] = True
+        session[SENSITIVE_REAUTH_SESSION_KEY] = timezone.now().timestamp()
         session.save()
 
     def test_support_transfer_requires_identity_verification_and_audits_actor(self):
@@ -719,7 +727,13 @@ class NetstyleSupportAdminTransferTests(TestCase):
             f'/ns-admin/customers/{self.company.id}/users/'
             f'{self.target.id}/transfer-admin/'
         )
-        response = self.client.post(url, {'note': 'verified by phone'})
+        response = self.client.post(
+            url,
+            {
+                'password': 'Transfer-Password-42!',
+                'note': 'verified by phone',
+            },
+        )
         self.assertEqual(response.status_code, 200)
         self.assertEqual(
             Membership.objects.get(company=self.company, user=self.old_admin).role,
@@ -731,6 +745,7 @@ class NetstyleSupportAdminTransferTests(TestCase):
         response = self.client.post(
             url,
             {
+                'password': 'Transfer-Password-42!',
                 'identity_verified': 'on',
                 'note': 'verified by phone',
             },
@@ -1017,4 +1032,3 @@ class NetstyleDeviceRevokeTests(TestCase):
                 object_id=str(private_device.id),
             ).exists()
         )
-
