@@ -226,6 +226,12 @@ class NotificationReleaseTests(TestCase):
             body_text='Text {value}',
             active=True,
         )
+        EmailTemplate.objects.create(
+            code='t60',
+            subject='Lizenz-Erinnerung',
+            body_text='Lizenz {license} endet am {expiry}.',
+            active=True,
+        )
 
     @patch('apps.notifications.tasks.send_email_message.delay')
     def test_queue_is_persisted_before_task_and_normalizes_recipient(self, delay):
