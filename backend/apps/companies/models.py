@@ -1,4 +1,5 @@
 from django.conf import settings
+from django.core.exceptions import ValidationError
 from django.db import models
 from django.db.models import Q
 
@@ -65,6 +66,22 @@ class Membership(TimeStampedModel):
             ),
         ]
         indexes = [models.Index(fields=['company', 'active', 'role'])]
+
+    def save(self, *args, **kwargs):
+        # Internal netstyle identities and customer identities are separate
+        # security domains. Block the invalid state centrally so an old invite,
+        # import or future code path cannot make a staff identity tenant-owned.
+        if self.active and self.user_id:
+            user = self.user if 'user' in self._state.fields_cache else None
+            is_staff = user.is_staff if user is not None else self._meta.get_field('user').remote_field.model.objects.filter(
+                pk=self.user_id,
+                is_staff=True,
+            ).exists()
+            if is_staff:
+                raise ValidationError(
+                    'Interne netstyle Benutzer dürfen keine aktive Kundenmitgliedschaft besitzen.'
+                )
+        super().save(*args, **kwargs)
 
     def __str__(self):
         return f'{self.company} · {self.user} · {self.role}'
