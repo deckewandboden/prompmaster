@@ -51,6 +51,7 @@ class ExportJob(TimeStampedModel):
     error = models.CharField(max_length=500, blank=True)
     finished_at = models.DateTimeField(null=True, blank=True)
     expires_at = models.DateTimeField(db_index=True)
+    run_token = models.UUIDField(null=True, blank=True, editable=False)
 
     class Meta:
         indexes = [
