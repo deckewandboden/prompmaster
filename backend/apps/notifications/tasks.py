@@ -232,13 +232,10 @@ def sync_license_states():
         Refund.objects.filter(status='succeeded', term__status='active')
         .values_list('id', flat=True)[:500]
     )
-    recovered_refunds = 0
     for refund_id in recovery_ids:
         refund = Refund.objects.filter(pk=refund_id).first()
-        if refund is None:
-            continue
-        mark_refund_success(refund, refund.provider_refund_id)
-        recovered_refunds += 1
+        if refund is not None:
+            mark_refund_success(refund, refund.provider_refund_id)
 
     mutable_states = {'active', 'free', 'expired'}
     ids = License.objects.filter(status__in=mutable_states).values_list('id', flat=True)
@@ -257,4 +254,4 @@ def sync_license_states():
                 license_obj.status = desired
                 license_obj.save(update_fields=['status', 'updated_at'])
                 changed += 1
-    return {'license_states_changed': changed, 'refunds_recovered': recovered_refunds}
+    return changed
