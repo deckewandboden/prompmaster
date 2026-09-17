@@ -67,6 +67,17 @@ jobs:
         with:
           node-version: '22'
 
+      - name: Validate operational shell scripts
+        run: |
+          bash -n scripts/bootstrap.sh
+          bash -n scripts/deploy.sh
+          bash -n scripts/backup.sh
+          bash -n scripts/restore-test.sh
+          bash -n scripts/diagnose.sh
+          bash -n scripts/runtime_validate.sh
+          bash -n scripts/test_backup_restore.sh
+          bash -n backup/backup.sh
+
       # Python-Abhängigkeiten müssen vor allen Python-Prüfskripten
       # installiert sein. validate_static.py benötigt u. a. PyYAML.
       - name: Install Python dependencies
