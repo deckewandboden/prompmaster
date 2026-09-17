@@ -67,7 +67,14 @@ def _suppress_inactive_scope(message):
 @shared_task(bind=True, max_retries=4, default_retry_delay=60)
 def send_email_message(self, message_id):
     with transaction.atomic():
-        message = EmailMessage.objects.select_for_update().select_related('template').get(pk=message_id)
+        # EmailMessage.template is nullable for a small set of system-generated
+        # rows.  PostgreSQL cannot FOR UPDATE the nullable side of the LEFT JOIN
+        # emitted by select_related('template'), so lock only EmailMessage.
+        message = (
+            EmailMessage.objects.select_for_update(of=('self',))
+            .select_related('template')
+            .get(pk=message_id)
+        )
         if message.status == 'sent':
             return 'already-sent'
         if not message_scope_active(message):
