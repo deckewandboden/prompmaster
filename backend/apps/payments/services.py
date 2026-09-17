@@ -1,5 +1,6 @@
 from datetime import timedelta
 from decimal import Decimal, ROUND_HALF_UP
+from math import ceil
 
 from django.core.exceptions import ValidationError
 from django.db import transaction
@@ -270,17 +271,20 @@ def _activate_order(order, paid_at):
     order.save(update_fields=['status', 'updated_at'])
 
 
-def calculate_refund(term, today=None):
-    today = today or timezone.localdate()
-    start_date = timezone.localtime(term.valid_from).date()
-    end_date = timezone.localtime(term.valid_until).date()
-    total_days = max((end_date - start_date).days, 0)
-    if today <= start_date:
+def calculate_refund(term, now=None):
+    now = now or timezone.now()
+    day_seconds = 24 * 60 * 60
+    total_seconds = max((term.valid_until - term.valid_from).total_seconds(), 0)
+    total_days = min(max(ceil(total_seconds / day_seconds), 0), 365)
+
+    if now <= term.valid_from:
         remaining = total_days
-    elif today >= end_date:
+    elif now >= term.valid_until:
         remaining = 0
     else:
-        remaining = (end_date - today).days
+        remaining_seconds = max((term.valid_until - now).total_seconds(), 0)
+        remaining = ceil(remaining_seconds / day_seconds)
+
     remaining = max(0, min(remaining, total_days, 365))
     amount = (
         term.paid_gross_amount * Decimal(remaining) / Decimal(365)
