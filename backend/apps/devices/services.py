@@ -1,5 +1,6 @@
 from datetime import timedelta
 
+from django.contrib.auth import get_user_model
 from django.core.exceptions import ValidationError
 from django.db import transaction
 from django.utils import timezone
@@ -15,6 +16,11 @@ from .models import DeviceRegistration
 @transaction.atomic
 def register_device(user, license, display_name, os_family='', browser_family=''):
     lic = type(license).objects.select_for_update().select_related('product').get(pk=license.pk)
+    # Device limits are enforced per user/product. Locking only the concrete
+    # license row is insufficient when one private user owns multiple license
+    # rows for the same product: concurrent registrations through different
+    # licenses could otherwise both observe the same pre-insert device count.
+    user = get_user_model().objects.select_for_update().get(pk=user.pk)
     now = timezone.now()
     if lic.status != 'active' or not has_current_term(lic, now):
         raise ValidationError('Lizenz ist nicht aktiv.')
