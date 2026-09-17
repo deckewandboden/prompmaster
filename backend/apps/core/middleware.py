@@ -56,3 +56,66 @@ class CorrelationIdMiddleware:
 
         response['X-Correlation-ID'] = cid
         return response
+
+
+class LargeExportMiddleware:
+    """Move large netstyle CSV exports off the request worker into Celery."""
+
+    def __init__(self, get_response):
+        self.get_response = get_response
+
+    def __call__(self, request):
+        response = self.get_response(request)
+        if request.method != 'GET' or request.GET.get('export') != 'csv':
+            return response
+        if not str(response.get('Content-Type', '')).startswith('text/csv'):
+            return response
+
+        match = getattr(request, 'resolver_match', None)
+        if not match:
+            return response
+
+        from datetime import timedelta
+        from django.conf import settings
+        from django.contrib import messages
+        from django.db import transaction
+        from django.shortcuts import redirect
+        from django.utils import timezone as django_timezone
+
+        from apps.audit.services import audit
+        from .exporting import EXPORTS, URL_NAME_TO_KIND, capture_query_state, decode_query_state, export_queryset
+        from .models import ExportJob
+        from .permissions import has_perm
+
+        kind = URL_NAME_TO_KIND.get(match.url_name)
+        config = EXPORTS.get(kind)
+        user = getattr(request, 'user', None)
+        if not config or not getattr(user, 'is_authenticated', False) or not user.is_staff:
+            return response
+        if not has_perm(user, config['permission']):
+            return response
+
+        query_state_enc = capture_query_state(request.GET)
+        state = decode_query_state(query_state_enc)
+        row_count = export_queryset(kind, state).count()
+        threshold = int(getattr(settings, 'EXPORT_SYNC_LIMIT', 5000))
+        if row_count <= threshold:
+            return response
+
+        ttl_hours = max(1, int(getattr(settings, 'EXPORT_TTL_HOURS', 24)))
+        job = ExportJob.objects.create(
+            requested_by=user,
+            kind=kind,
+            filename=config['filename'],
+            query_state_enc=query_state_enc,
+            expires_at=django_timezone.now() + timedelta(hours=ttl_hours),
+        )
+        from .tasks import generate_grid_export
+
+        transaction.on_commit(
+            lambda job_id=str(job.id): generate_grid_export.delay(job_id),
+            robust=True,
+        )
+        audit(user, 'export.queued', job, {'kind': kind, 'row_count': row_count}, request=request)
+        messages.info(request, f'Der Export enthält {row_count} Zeilen und wird im Hintergrund erstellt.')
+        return redirect('ns_admin:export_status', pk=job.pk)
