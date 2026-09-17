@@ -1,4 +1,5 @@
 from datetime import timedelta
+from decimal import Decimal
 
 from django.contrib.auth.hashers import make_password
 from django.test import TestCase
@@ -7,6 +8,8 @@ from django.utils import timezone
 from apps.accounts.models import Permission, Role, User, UserRole
 from apps.companies.models import Company, Membership, PrivateCustomerProfile
 from apps.core.sensitive import SENSITIVE_REAUTH_SESSION_KEY
+from apps.orders.models import Order
+from apps.payments.models import Payment
 
 
 class MasterPatchARbacTests(TestCase):
@@ -53,6 +56,24 @@ class MasterPatchARbacTests(TestCase):
             'Internal-Password-42!',
             is_staff=True,
         )
+        self.order = Order.objects.create(
+            order_number='PM-O-PATCH-A',
+            company=self.company,
+            status='paid',
+            currency='EUR',
+            gross_total=Decimal('19.90'),
+            tax_total=Decimal('3.18'),
+            billing_snapshot={},
+            idempotency_key='patch-a-order',
+        )
+        self.payment = Payment.objects.create(
+            order=self.order,
+            provider='mollie',
+            provider_payment_id='tr_patch_a_sensitive',
+            status='failed',
+            amount=Decimal('19.90'),
+            currency='EUR',
+        )
 
         self.client.force_login(self.staff)
         session = self.client.session
@@ -66,11 +87,13 @@ class MasterPatchARbacTests(TestCase):
         permission, _ = Permission.objects.get_or_create(code=code, defaults={'name': code})
         self.role.permissions.add(permission)
 
-    def test_customer_only_reader_does_not_see_license_or_order_aggregates(self):
+    def test_customer_only_reader_does_not_see_or_compute_license_or_order_aggregates(self):
         company_detail = self.client.get(f'/ns-admin/customers/{self.company.id}/')
         self.assertEqual(company_detail.status_code, 200)
         self.assertNotContains(company_detail, '<span>Lizenzen</span>', html=True)
         self.assertNotContains(company_detail, '<span>Bestellungen</span>', html=True)
+        self.assertIsNone(company_detail.context['license_count'])
+        self.assertIsNone(company_detail.context['order_count'])
 
         private_detail = self.client.get(
             f'/ns-admin/customers/private/{self.private_profile.id}/'
@@ -78,6 +101,8 @@ class MasterPatchARbacTests(TestCase):
         self.assertEqual(private_detail.status_code, 200)
         self.assertNotContains(private_detail, '<span>Lizenzen</span>', html=True)
         self.assertNotContains(private_detail, '<span>Bestellungen</span>', html=True)
+        self.assertIsNone(private_detail.context['license_count'])
+        self.assertIsNone(private_detail.context['order_count'])
         self.assertContains(private_detail, 'Aktive Geräte')
 
         preview = self.client.get(
@@ -86,6 +111,8 @@ class MasterPatchARbacTests(TestCase):
         self.assertEqual(preview.status_code, 200)
         self.assertNotContains(preview, '<div>Lizenzen</div>', html=True)
         self.assertNotContains(preview, '<span>Bestellungen</span>', html=True)
+        self.assertIsNone(preview.context['license_total'])
+        self.assertIsNone(preview.context['order_count'])
         self.assertContains(preview, '<div>Geräte</div>', html=True)
 
     def test_domain_aggregates_appear_only_after_matching_permissions(self):
@@ -94,16 +121,45 @@ class MasterPatchARbacTests(TestCase):
         response = self.client.get(f'/ns-admin/customers/{self.company.id}/')
         self.assertContains(response, '<span>Lizenzen</span>', html=True)
         self.assertContains(response, '<span>Bestellungen</span>', html=True)
+        self.assertIsNotNone(response.context['license_count'])
+        self.assertEqual(response.context['order_count'], 1)
 
-    def test_customer_search_does_not_expose_internal_staff_without_roles_read(self):
+    def test_customer_search_does_not_query_expose_internal_staff_without_roles_read(self):
         response = self.client.get('/ns-admin/search/', {'q': 'patch-a'})
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, self.private_user.email)
         self.assertNotContains(response, self.internal.email)
+        self.assertNotIn(self.internal, list(response.context['results']['users']))
 
         self.grant('roles.read')
         response = self.client.get('/ns-admin/search/', {'q': 'patch-a'})
         self.assertContains(response, self.internal.email)
+        self.assertIn(self.internal, list(response.context['results']['users']))
+
+    def test_order_reader_cannot_load_payment_details_without_payments_read(self):
+        self.grant('orders.read')
+
+        detail = self.client.get(f'/ns-admin/orders/{self.order.id}/')
+        self.assertEqual(detail.status_code, 200)
+        self.assertFalse(detail.context['can_payments'])
+        self.assertNotContains(detail, self.payment.provider_payment_id)
+        self.assertNotContains(detail, '<h2>Zahlungen</h2>', html=True)
+
+        dashboard = self.client.get('/ns-admin/')
+        self.assertEqual(dashboard.status_code, 200)
+        self.assertFalse(dashboard.context['rights']['payments'])
+        self.assertIsNone(dashboard.context['failed_payment_count'])
+        self.assertIsNone(dashboard.context['chargeback_count'])
+
+        self.grant('payments.read')
+        detail = self.client.get(f'/ns-admin/orders/{self.order.id}/')
+        self.assertTrue(detail.context['can_payments'])
+        self.assertContains(detail, self.payment.provider_payment_id)
+
+        dashboard = self.client.get('/ns-admin/')
+        self.assertTrue(dashboard.context['rights']['payments'])
+        self.assertEqual(dashboard.context['failed_payment_count'], 1)
+        self.assertEqual(dashboard.context['chargeback_count'], 0)
 
 
 class MasterPatchASensitiveActionTests(TestCase):
