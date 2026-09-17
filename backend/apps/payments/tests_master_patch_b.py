@@ -1,3 +1,4 @@
+from datetime import timedelta
 from decimal import Decimal
 from unittest.mock import patch
 
@@ -75,7 +76,7 @@ class RefundRetryStateMachineTests(TestCase):
             product=self.product,
             status='active',
             valid_from=now,
-            valid_until=now + timezone.timedelta(days=365),
+            valid_until=now + timedelta(days=365),
         )
         LicenseAssignment.objects.create(license=self.license, user=self.user)
         self.term = LicenseTerm.objects.create(
@@ -103,7 +104,7 @@ class RefundRetryStateMachineTests(TestCase):
         first = refund.attempts.get(number=1)
         self.assertEqual(refund.status, 'failed')
         self.assertEqual(first.status, 'failed')
-        self.assertFalse(first.idempotency_key.endswith(':attempt:2'))
+        self.assertTrue(first.idempotency_key.endswith(':attempt:1'))
 
         calculate.return_value = (250, Decimal('25.00'))
         requoted = create_refund_request(term=self.term, actor=self.user, reason='retry')
@@ -139,8 +140,6 @@ class RefundRetryStateMachineTests(TestCase):
         self.assertEqual(refund.status, 'submitted')
         self.assertEqual(attempt.status, 'ambiguous')
 
-        # Even if the calendar would now produce a lower quote, an unknown
-        # provider outcome must keep the original amount/key until resolved.
         calculate.return_value = (200, Decimal('20.00'))
         same_refund = create_refund_request(term=self.term, actor=self.user)
         self.assertEqual(same_refund.amount, Decimal('30.00'))
@@ -219,7 +218,7 @@ class SuspendedTenantAssignmentTests(TestCase):
             product=self.product,
             status='free',
             valid_from=now,
-            valid_until=now + timezone.timedelta(days=365),
+            valid_until=now + timedelta(days=365),
         )
         LicenseTerm.objects.create(
             license=self.license,
