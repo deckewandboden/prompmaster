@@ -785,8 +785,8 @@
     },
     {
       "path": "backend/apps/core/tests_release_rules.py",
-      "size": 12036,
-      "sha256": "d063b54804c4d75338c3894b7f3e3a49866210a8dbfd912208f971ebad66b990",
+      "size": 18944,
+      "sha256": "377e019026f5b83d4684f7fae0b819d9fe007cff08880a47d68f0d9e94052d35",
       "role": "active-backend"
     },
     {
@@ -1073,8 +1073,8 @@
     },
     {
       "path": "backend/apps/notifications/tasks.py",
-      "size": 6852,
-      "sha256": "82b984307f22d22f6266aed9aa25439ba076eafa2dca196ad587b6a28bd825b3",
+      "size": 8889,
+      "sha256": "d47f0533f4c398a11f7734fbd223f5072778a24d9e7ac57df749c94cce82c5e5",
       "role": "active-backend"
     },
     {
