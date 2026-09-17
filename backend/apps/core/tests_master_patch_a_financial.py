@@ -12,8 +12,6 @@ from apps.orders.models import Order, OrderItem
 
 
 class LicenseDetailFinancialRbacTests(TestCase):
-    amount_marker = '987'
-
     def setUp(self):
         now = timezone.now()
         self.staff = User.objects.create_user(
@@ -107,15 +105,18 @@ class LicenseDetailFinancialRbacTests(TestCase):
         response = self.client.get(url)
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, 'Lizenzperioden')
-        self.assertNotContains(response, self.amount_marker)
+        self.assertNotContains(response, '<th>Bezahlt</th>', html=True)
+        self.assertNotContains(response, '<th>Bestellung</th>', html=True)
         self.assertNotContains(response, 'PM-O-FIN-RBAC-SECRET')
 
         self.grant('payments.read')
         response = self.client.get(url)
-        self.assertContains(response, self.amount_marker)
+        self.assertContains(response, '<th>Bezahlt</th>', html=True)
+        self.assertNotContains(response, '<th>Bestellung</th>', html=True)
         self.assertNotContains(response, 'PM-O-FIN-RBAC-SECRET')
 
         self.grant('orders.read')
         response = self.client.get(url)
-        self.assertContains(response, self.amount_marker)
+        self.assertContains(response, '<th>Bezahlt</th>', html=True)
+        self.assertContains(response, '<th>Bestellung</th>', html=True)
         self.assertContains(response, 'PM-O-FIN-RBAC-SECRET')
