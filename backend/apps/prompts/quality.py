@@ -8,6 +8,10 @@ from django.utils import timezone
 from .models import PromptDefinition, PromptQualityPolicy, PromptQualitySnapshot, PromptRating, PromptVersion
 
 
+def _create_default_quality_policy():
+    return PromptQualityPolicy.objects.create(name='Standard', active=True)
+
+
 def active_quality_policy():
     policy = PromptQualityPolicy.objects.filter(active=True).first()
     if policy:
@@ -18,7 +22,7 @@ def active_quality_policy():
             policy = PromptQualityPolicy.objects.select_for_update().filter(active=True).first()
             if policy:
                 return policy
-            return PromptQualityPolicy.objects.create(name='Standard', active=True)
+            return _create_default_quality_policy()
     except IntegrityError:
         # Concurrent first access may win the partial unique constraint while
         # this transaction waits. After the savepoint rollback the committed
