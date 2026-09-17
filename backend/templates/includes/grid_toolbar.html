@@ -31,7 +31,7 @@
   <button class="btn secondary" type="submit">Anwenden</button>
   {% if export_enabled %}{% url_replace request export='csv' page=None as export_url %}<a class="btn secondary" href="{{ export_url }}">CSV exportieren</a>{% endif %}
   {% if grid.has_state %}<a class="btn secondary" href="{{ request.path }}">Zurücksetzen</a>{% endif %}
-  <span class="grid-loading" role="status" aria-live="polite" data-grid-status hidden>Daten werden geladen …</span>
+  <span class="small muted" role="status" aria-live="polite" data-grid-status hidden>Daten werden geladen …</span>
 </form>
 {% if grid.query or grid.filters %}
 <div class="filter-chips" aria-label="Aktive Filter">
@@ -41,4 +41,4 @@
   {% endfor %}
 </div>
 {% endif %}
-{% if not grid.page.paginator.count and grid.has_state %}<div class="grid-state no-results" role="status"><strong>Keine Such- oder Filtertreffer.</strong> <a href="{{ request.path }}">Filter zurücksetzen</a></div>{% endif %}
+{% if not grid.page.paginator.count and grid.has_state %}<div class="empty" role="status"><strong>Keine Such- oder Filtertreffer.</strong> <a href="{{ request.path }}">Filter zurücksetzen</a></div>{% endif %}
