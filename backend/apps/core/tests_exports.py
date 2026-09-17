@@ -1,8 +1,9 @@
 import tempfile
+import uuid
 from datetime import timedelta
 from pathlib import Path
 from types import SimpleNamespace
-from unittest.mock import patch
+from unittest.mock import Mock, patch
 
 from cryptography.fernet import Fernet
 from django.contrib.messages.storage.fallback import FallbackStorage
@@ -14,7 +15,6 @@ from django.utils import timezone
 from apps.accounts.models import Permission, Role, User, UserRole
 from apps.companies.models import Company
 
-from .datagrid import csv_response
 from .export_views import export_download, export_status
 from .exporting import capture_query_state
 from .middleware import LargeExportMiddleware
@@ -53,23 +53,19 @@ class BackgroundExportTests(TestCase):
         values.update(overrides)
         return ExportJob.objects.create(**values)
 
-    def test_large_csv_request_is_queued_and_filter_state_is_encrypted(self):
+    def test_large_csv_request_is_queued_before_view_and_filter_state_is_encrypted(self):
         request = self.factory.get('/ns-admin/customers/?export=csv&q=Alpha')
         request.user = self.owner
         request.resolver_match = SimpleNamespace(url_name='customers')
         request.session = {}
         request._messages = FallbackStorage(request)
-        middleware = LargeExportMiddleware(
-            lambda _request: csv_response(
-                Company.objects.all(),
-                [('customer_number', 'Kundennummer'), ('name', 'Kunde')],
-                'promptmaster-kunden.csv',
-            )
-        )
+        view = Mock()
+        middleware = LargeExportMiddleware(view)
         with patch('apps.core.tasks.generate_grid_export.delay') as delay:
             with self.captureOnCommitCallbacks(execute=True):
                 response = middleware(request)
         self.assertEqual(response.status_code, 302)
+        view.assert_not_called()
         job = ExportJob.objects.get()
         self.assertNotIn('Alpha', job.query_state_enc)
         self.assertEqual(job.kind, 'customers')
@@ -81,6 +77,7 @@ class BackgroundExportTests(TestCase):
         self.assertEqual(result['status'], 'ready')
         job.refresh_from_db()
         self.assertEqual(job.status, 'ready')
+        self.assertIsNone(job.run_token)
         self.assertEqual(job.row_count, 2)
         path = Path(self.tempdir.name) / job.file_name
         self.assertTrue(path.is_file())
@@ -88,7 +85,7 @@ class BackgroundExportTests(TestCase):
         self.assertIn("'=2+2", content)
 
     def test_fresh_running_job_is_not_generated_twice(self):
-        job = self._export_job(status='running')
+        job = self._export_job(status='running', run_token=uuid.uuid4())
         result = generate_grid_export.run(str(job.id))
         self.assertEqual(result['status'], 'already_running')
         self.assertFalse((Path(self.tempdir.name) / f'{job.id}.csv').exists())
@@ -100,16 +97,52 @@ class BackgroundExportTests(TestCase):
         self.assertEqual(dispatched, 1)
         delay.assert_called_once_with(str(job.id))
 
-    def test_expired_export_file_and_job_are_removed(self):
+    def test_dispatcher_revokes_stale_worker_lease_before_retry(self):
+        old_token = uuid.uuid4()
+        job = self._export_job(status='running', run_token=old_token)
+        ExportJob.objects.filter(pk=job.pk).update(
+            updated_at=timezone.now() - timedelta(minutes=11)
+        )
+        with patch('apps.core.tasks.generate_grid_export.delay') as delay:
+            dispatched = dispatch_pending_exports.run()
+        self.assertEqual(dispatched, 1)
+        job.refresh_from_db()
+        self.assertEqual(job.status, 'queued')
+        self.assertIsNone(job.run_token)
+        delay.assert_called_once_with(str(job.id))
+
+    def test_superseded_worker_cannot_publish_or_overwrite_export(self):
+        job = self._export_job()
+        company = Company.objects.order_by('customer_number').first()
+
+        class LeaseStealingQueryset:
+            def iterator(self, chunk_size):
+                ExportJob.objects.filter(pk=job.pk).update(
+                    run_token=uuid.uuid4(),
+                    updated_at=timezone.now(),
+                )
+                yield company
+
+        with patch('apps.core.tasks.export_queryset', return_value=LeaseStealingQueryset()):
+            result = generate_grid_export.run(str(job.id))
+        self.assertEqual(result['status'], 'superseded')
+        self.assertFalse((Path(self.tempdir.name) / f'{job.id}.csv').exists())
+        self.assertFalse(list(Path(self.tempdir.name).glob(f'{job.id}.*.tmp')))
+
+    def test_expired_export_file_temp_files_and_job_are_removed(self):
         path = Path(self.tempdir.name) / 'expired.csv'
+        temporary = Path(self.tempdir.name) / 'placeholder.tmp'
         path.write_text('old', encoding='utf-8')
         job = self._export_job(
             file_name=path.name,
             status='ready',
             expires_at=timezone.now() - timedelta(minutes=1),
         )
+        temporary = Path(self.tempdir.name) / f'{job.id}.deadbeef.tmp'
+        temporary.write_text('partial', encoding='utf-8')
         self.assertEqual(cleanup_expired_exports.run(), 1)
         self.assertFalse(path.exists())
+        self.assertFalse(temporary.exists())
         self.assertFalse(ExportJob.objects.filter(pk=job.pk).exists())
 
     def test_other_staff_user_cannot_read_or_download_someone_elses_export(self):
