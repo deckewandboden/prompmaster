@@ -75,6 +75,29 @@ class LoginRateLimitTests(TestCase):
     def tearDown(self):
         cache.clear()
 
+    def test_safe_login_page_requests_do_not_consume_attempt_budget(self):
+        for _ in range(25):
+            response = self.client.get('/auth/login/', REMOTE_ADDR='203.0.113.41')
+            self.assertEqual(response.status_code, 200)
+
+        payload = {
+            'email': 'unknown@example.test',
+            'password': 'Definitely-Wrong-Password-42!',
+        }
+        for _ in range(10):
+            response = self.client.post(
+                '/auth/login/',
+                payload,
+                REMOTE_ADDR='203.0.113.41',
+            )
+            self.assertEqual(response.status_code, 200)
+        response = self.client.post(
+            '/auth/login/',
+            payload,
+            REMOTE_ADDR='203.0.113.41',
+        )
+        self.assertEqual(response.status_code, 429)
+
     def test_login_is_temporarily_throttled_and_security_event_is_logged(self):
         payload = {
             'email': 'unknown@example.test',
