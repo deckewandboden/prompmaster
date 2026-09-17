@@ -2,7 +2,8 @@ from django.core.management.base import BaseCommand
 from django.utils import timezone
 from decimal import Decimal
 from apps.accounts.models import Permission,Role
-from apps.catalog.models import Product,ProductPrice,TaxRule
+from apps.catalog.models import Feature,Product,ProductEntitlement,ProductPrice,TaxRule
+from apps.catalog.services import PRO_ACCESS_FEATURE
 from apps.notifications.models import EmailTemplate
 PERMS=['customers.read','customers.write','licenses.read','licenses.write','devices.write','orders.read','payments.read','payments.refund','products.read','products.write','email.read','email.write','ops.read','api.read','api.write','roles.read','roles.write','legal.read','legal.write','support.read','support.write','audit.read','settings.read','settings.write','prompts.read','prompts.write','prompts.compose','prompts.publish','prompts.quality','content.read','content.write']
 class Command(BaseCommand):
@@ -12,6 +13,8 @@ class Command(BaseCommand):
         for code,name,codes in roles:
             r,_=Role.objects.get_or_create(code=code,defaults={'name':name});r.name=name;r.active=True;r.save(update_fields=['name','active','updated_at']);r.permissions.set([perms[c] for c in codes])
         p,_=Product.objects.get_or_create(code='PRO',defaults={'name':'PromptMaster Pro','description':'PromptMaster Pro','default_license_days':365,'default_device_limit':2,'reminder_1_days':60,'reminder_2_days':30,'critical_warning_days':7})
+        pro_feature,_=Feature.objects.get_or_create(code=PRO_ACCESS_FEATURE,defaults={'name':'PromptMaster Pro Zugriff'})
+        ProductEntitlement.objects.update_or_create(product=p,feature=pro_feature,defaults={'enabled':True})
         now=timezone.now()
         for typ in ['new','renewal']:
             if not ProductPrice.objects.filter(product=p,price_type=typ,active=True,valid_until__isnull=True).exists(): ProductPrice.objects.create(product=p,price_type=typ,gross_amount=Decimal('35.88'),currency='EUR',valid_from=now)

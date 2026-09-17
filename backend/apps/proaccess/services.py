@@ -1,5 +1,6 @@
 from django.utils import timezone
 
+from apps.catalog.services import PRO_ACCESS_FEATURE
 from apps.licenses.models import LicenseAssignment
 from apps.licenses.services import has_current_term
 
@@ -7,8 +8,8 @@ DEVICE_COOKIE = 'pm_device_v2'
 LEGACY_DEVICE_COOKIE = 'pm_device'
 
 
-def active_product_assignment(user, product_code='PRO'):
-    """Return the one assignment that currently grants product access."""
+def active_product_assignment(user, feature_code=PRO_ACCESS_FEATURE):
+    """Return the newest live assignment whose product grants the feature."""
     if not user.is_active or not user.email_verified_at:
         return None
     from apps.companies.models import Membership
@@ -19,8 +20,9 @@ def active_product_assignment(user, product_code='PRO'):
         .filter(
             user=user,
             ended_at__isnull=True,
-            license__product__code=product_code,
             license__product__active=True,
+            license__product__entitlements__feature__code=feature_code,
+            license__product__entitlements__enabled=True,
             license__status='active',
         )
         .order_by('-assigned_at')
