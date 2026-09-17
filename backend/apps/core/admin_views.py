@@ -139,7 +139,7 @@ def dashboard(request):
     now = timezone.now()
     rights = {
         name: has_perm(request.user, f'{name}.read')
-        for name in ('customers', 'licenses', 'orders', 'ops', 'support')
+        for name in ('customers', 'licenses', 'orders', 'payments', 'ops', 'support')
     }
     paid_orders = Order.objects.filter(status='paid')
     revenue_since = now - timedelta(days=185)
@@ -170,8 +170,8 @@ def dashboard(request):
     for row in revenue_months:
         row['percent'] = round((float(row['total'] or 0) / revenue_peak) * 100, 1) if revenue_peak else 0
 
-    failed_payment_count = Payment.objects.filter(status='failed').count() if rights['orders'] else None
-    chargeback_count = Payment.objects.filter(status='chargeback').count() if rights['orders'] else None
+    failed_payment_count = Payment.objects.filter(status='failed').count() if rights['payments'] else None
+    chargeback_count = Payment.objects.filter(status='chargeback').count() if rights['payments'] else None
     active_alerts = list(SystemAlert.objects.filter(active=True)[:8]) if rights['ops'] else []
     open_support_count = SupportRequest.objects.exclude(status='closed').count() if rights['support'] else None
 
@@ -304,11 +304,13 @@ def _private_customer(request, pk):
 def private_customer_detail(request, pk):
     profile = _private_customer(request, pk)
     user = profile.user
+    can_licenses = has_perm(request.user, 'licenses.read')
+    can_orders = has_perm(request.user, 'orders.read')
     return render(request, 'ns_admin/private_customer_detail.html', {
         'profile': profile,
         'customer_user': user,
-        'license_count': user.owned_licenses.count(),
-        'order_count': user.private_orders.count(),
+        'license_count': user.owned_licenses.count() if can_licenses else None,
+        'order_count': user.private_orders.count() if can_orders else None,
         'device_count': user.devices.filter(revoked_at__isnull=True).count(),
     })
 
@@ -317,16 +319,19 @@ def private_customer_detail(request, pk):
 def private_customer_portal_preview(request, pk):
     profile = _private_customer(request, pk)
     user = profile.user
-    licenses = user.owned_licenses.select_related('product')
+    can_licenses = has_perm(request.user, 'licenses.read')
+    can_orders = has_perm(request.user, 'orders.read')
+    licenses = user.owned_licenses.select_related('product') if can_licenses else None
     now = timezone.now()
     return render(request, 'ns_admin/customer_portal_preview.html', {
         'preview_kind': 'private', 'preview_title': user.full_name or user.email,
         'preview_subtitle': f'{profile.customer_number} · Privatkonto', 'preview_user': user,
-        'preview_company': None, 'license_total': licenses.count(),
-        'license_free': licenses.filter(status='free', valid_until__gt=now).count(),
-        'license_active': licenses.filter(status='active', valid_until__gt=now).count(),
-        'expiring_30': licenses.filter(valid_until__gt=now, valid_until__lte=now + timedelta(days=30)).count(),
-        'device_count': user.devices.filter(revoked_at__isnull=True).count(), 'order_count': user.private_orders.count(),
+        'preview_company': None, 'license_total': licenses.count() if can_licenses else None,
+        'license_free': licenses.filter(status='free', valid_until__gt=now).count() if can_licenses else None,
+        'license_active': licenses.filter(status='active', valid_until__gt=now).count() if can_licenses else None,
+        'expiring_30': licenses.filter(valid_until__gt=now, valid_until__lte=now + timedelta(days=30)).count() if can_licenses else None,
+        'device_count': user.devices.filter(revoked_at__isnull=True).count(),
+        'order_count': user.private_orders.count() if can_orders else None,
         'member_count': 1, 'back_route': 'ns_admin:private_customer_detail', 'back_pk': profile.pk,
     })
 
@@ -414,14 +419,16 @@ def _customer(request, pk):
 @staff_perm('customers.read')
 def customer_detail(request, pk):
     customer = _customer(request, pk)
+    can_licenses = has_perm(request.user, 'licenses.read')
+    can_orders = has_perm(request.user, 'orders.read')
     return render(
         request,
         'ns_admin/customer_detail.html',
         {
             'customer': customer,
             'member_count': customer.memberships.filter(active=True).count(),
-            'license_count': customer.licenses.count(),
-            'order_count': customer.orders.count(),
+            'license_count': customer.licenses.count() if can_licenses else None,
+            'order_count': customer.orders.count() if can_orders else None,
         },
     )
 
@@ -470,23 +477,27 @@ def customer_company(request, pk):
 @staff_perm('customers.read')
 def customer_portal_preview(request, pk):
     customer = _customer(request, pk)
-    licenses = customer.licenses.select_related('product')
+    can_licenses = has_perm(request.user, 'licenses.read')
+    can_orders = has_perm(request.user, 'orders.read')
+    licenses = customer.licenses.select_related('product') if can_licenses else None
     now = timezone.now()
     admin_membership = customer.memberships.filter(active=True, role='admin').select_related('user').first()
     return render(request, 'ns_admin/customer_portal_preview.html', {
         'preview_kind': 'company', 'preview_title': customer.name,
         'preview_subtitle': f'{customer.customer_number} · Firmenkonto',
         'preview_user': admin_membership.user if admin_membership else None, 'preview_company': customer,
-        'license_total': licenses.count(), 'license_free': licenses.filter(status='free', valid_until__gt=now).count(),
-        'license_active': licenses.filter(status='active', valid_until__gt=now).count(),
-        'expiring_30': licenses.filter(valid_until__gt=now, valid_until__lte=now + timedelta(days=30)).count(),
+        'license_total': licenses.count() if can_licenses else None,
+        'license_free': licenses.filter(status='free', valid_until__gt=now).count() if can_licenses else None,
+        'license_active': licenses.filter(status='active', valid_until__gt=now).count() if can_licenses else None,
+        'expiring_30': licenses.filter(valid_until__gt=now, valid_until__lte=now + timedelta(days=30)).count() if can_licenses else None,
         'device_count': DeviceRegistration.objects.filter(
             user__company_memberships__company=customer,
             user__company_memberships__active=True,
             license__company=customer,
             revoked_at__isnull=True,
         ).distinct().count(),
-        'order_count': customer.orders.count(), 'member_count': customer.memberships.filter(active=True).count(),
+        'order_count': customer.orders.count() if can_orders else None,
+        'member_count': customer.memberships.filter(active=True).count(),
         'back_route': 'ns_admin:customer_detail', 'back_pk': customer.pk,
     })
 
@@ -898,8 +909,12 @@ def orders(request):
 
 @staff_perm('orders.read')
 def order_detail(request, pk):
-    order = get_object_or_404(Order.objects.select_related('company', 'private_user').prefetch_related('items__product', 'payments'), pk=pk)
-    return render(request, 'ns_admin/order_detail.html', {'order': order})
+    can_payments = has_perm(request.user, 'payments.read')
+    queryset = Order.objects.select_related('company', 'private_user').prefetch_related('items__product')
+    if can_payments:
+        queryset = queryset.prefetch_related('payments')
+    order = get_object_or_404(queryset, pk=pk)
+    return render(request, 'ns_admin/order_detail.html', {'order': order, 'can_payments': can_payments})
 
 
 @staff_perm('payments.read')
@@ -1346,7 +1361,7 @@ def deletion_requests(request):
         default_sort='-requested_at',
         filters={'status': 'status'},
     ).build()
-    return render(request, 'ns_admin/legal_deletions.html', {'grid': grid, 'filter_options': [('status', 'Status', DeletionRequest.STATUS)]})
+    return render(request, 'ns_admin/legal_deletions.html', {'grid': grid, 'filter_options': [('status','Status', DeletionRequest.STATUS)]})
 
 
 @staff_perm('legal.write')
@@ -1607,7 +1622,10 @@ def global_search(request):
         if has_perm(request.user, 'customers.read'):
             results['customers'] = Company.objects.filter(Q(name__icontains=query) | Q(customer_number__icontains=query) | Q(email__icontains=query))[:10]
             results['private_customers'] = PrivateCustomerProfile.objects.filter(Q(customer_number__icontains=query) | Q(user__email__icontains=query) | Q(user__first_name__icontains=query) | Q(user__last_name__icontains=query)).select_related('user')[:10]
-            results['users'] = User.objects.filter(Q(email__icontains=query) | Q(first_name__icontains=query) | Q(last_name__icontains=query))[:10]
+            user_matches = User.objects.filter(Q(email__icontains=query) | Q(first_name__icontains=query) | Q(last_name__icontains=query))
+            if not has_perm(request.user, 'roles.read'):
+                user_matches = user_matches.filter(is_staff=False)
+            results['users'] = user_matches[:10]
         if has_perm(request.user, 'licenses.read'):
             results['licenses'] = License.objects.filter(license_number__icontains=query).select_related('company', 'owner_user')[:10]
         if has_perm(request.user, 'orders.read'):
