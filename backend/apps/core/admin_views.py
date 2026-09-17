@@ -567,6 +567,7 @@ def license_detail(request, pk):
             'terms': terms,
             'refund_preview': refund_preview,
             'can_write': has_perm(request.user, 'licenses.write'),
+            'can_refund': has_perm(request.user, 'payments.refund'),
         },
     )
 
@@ -633,7 +634,14 @@ def payments(request):
 
 @staff_perm('products.read')
 def products(request):
-    return render(request, 'ns_admin/products.html', {'products': Product.objects.prefetch_related('prices', 'entitlements__feature').order_by('name')})
+    return render(
+        request,
+        'ns_admin/products.html',
+        {
+            'products': Product.objects.prefetch_related('prices', 'entitlements__feature').order_by('name'),
+            'can_write': has_perm(request.user, 'products.write'),
+        },
+    )
 
 
 @staff_perm('products.write')
@@ -650,7 +658,11 @@ def product_new(request):
 @staff_perm('products.read')
 def features(request):
     grid = DataGrid(request, Feature.objects.all(), search_fields=('code','name'), sort_fields={'code':'code','name':'name'}, default_sort='name').build()
-    return render(request, 'ns_admin/features.html', {'grid':grid, 'filter_options':[]})
+    return render(
+        request,
+        'ns_admin/features.html',
+        {'grid': grid, 'filter_options': [], 'can_write': has_perm(request.user, 'products.write')},
+    )
 
 
 @staff_perm('products.write')
@@ -746,7 +758,23 @@ def mollie_events(request):
 @staff_perm('customers.read')
 def stats(request):
     now = timezone.now()
-    return render(request, 'ns_admin/stats.html', {'customers': Company.objects.count() + PrivateCustomerProfile.objects.count(), 'licenses': License.objects.count(), 'orders': Order.objects.count(), 'renewals': LicenseTerm.objects.filter(order_item__target_license__isnull=False).count(), 'revenue30': Order.objects.filter(status='paid', created_at__gte=now - timedelta(days=30)).aggregate(v=Sum('gross_total'))['v'] or 0})
+    can_licenses = has_perm(request.user, 'licenses.read')
+    can_orders = has_perm(request.user, 'orders.read')
+    return render(
+        request,
+        'ns_admin/stats.html',
+        {
+            'customers': Company.objects.count() + PrivateCustomerProfile.objects.count(),
+            'can_licenses': can_licenses,
+            'can_orders': can_orders,
+            'licenses': License.objects.count() if can_licenses else None,
+            'renewals': LicenseTerm.objects.filter(order_item__target_license__isnull=False).count() if can_licenses else None,
+            'orders': Order.objects.count() if can_orders else None,
+            'revenue30': (
+                Order.objects.filter(status='paid', created_at__gte=now - timedelta(days=30)).aggregate(v=Sum('gross_total'))['v'] or 0
+            ) if can_orders else None,
+        },
+    )
 
 
 @staff_perm('ops.read')
@@ -873,7 +901,15 @@ def legal_documents(request):
         default_sort='doc_type',
         filters={'doc_type': 'doc_type', 'active': 'active'},
     ).build()
-    return render(request, 'ns_admin/legal_documents.html', {'grid': grid, 'filter_options': [('doc_type', 'Typ', LegalDocument.DOC_TYPES), ('active', 'Status', [('True', 'Aktiv'), ('False', 'Inaktiv')])]})
+    return render(
+        request,
+        'ns_admin/legal_documents.html',
+        {
+            'grid': grid,
+            'filter_options': [('doc_type', 'Typ', LegalDocument.DOC_TYPES), ('active', 'Status', [('True', 'Aktiv'), ('False', 'Inaktiv')])],
+            'can_write': has_perm(request.user, 'legal.write'),
+        },
+    )
 
 
 @staff_perm('legal.write')
@@ -901,7 +937,15 @@ def retention_policies(request):
         default_sort='data_class',
         filters={'active': 'active'},
     ).build()
-    return render(request, 'ns_admin/legal_retention.html', {'grid': grid, 'filter_options': [('active', 'Status', [('True', 'Aktiv'), ('False', 'Inaktiv')])]})
+    return render(
+        request,
+        'ns_admin/legal_retention.html',
+        {
+            'grid': grid,
+            'filter_options': [('active', 'Status', [('True', 'Aktiv'), ('False', 'Inaktiv')])],
+            'can_write': has_perm(request.user, 'legal.write'),
+        },
+    )
 
 
 @staff_perm('legal.write')
@@ -926,7 +970,15 @@ def deletion_requests(request):
         default_sort='-requested_at',
         filters={'status': 'status'},
     ).build()
-    return render(request, 'ns_admin/legal_deletions.html', {'grid': grid, 'filter_options': [('status', 'Status', DeletionRequest.STATUS)]})
+    return render(
+        request,
+        'ns_admin/legal_deletions.html',
+        {
+            'grid': grid,
+            'filter_options': [('status', 'Status', DeletionRequest.STATUS)],
+            'can_write': has_perm(request.user, 'legal.write'),
+        },
+    )
 
 
 @staff_perm('legal.write')
@@ -1014,6 +1066,7 @@ def roles(request):
     return render(request, 'ns_admin/roles.html', {
         'roles': Role.objects.prefetch_related('permissions').order_by('name'),
         'users': User.objects.filter(is_staff=True).prefetch_related('role_links__role').order_by('email'),
+        'can_write': has_perm(request.user, 'roles.write'),
     })
 
 
