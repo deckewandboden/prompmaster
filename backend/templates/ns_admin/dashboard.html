@@ -1,4 +1,5 @@
 {% extends 'ns_admin/base.html' %}{% load pm %}{% block content %}
+{% user_has_perm request.user 'payments.read' as can_payments %}
 <div class="page-head">
   <div><h1>Dashboard</h1><div class="sub">Geschäft, Handlungsbedarf und Systemstatus auf einen Blick.</div></div>
   <div class="page-actions">
@@ -40,15 +41,15 @@
   </div>
   {% endif %}
 
-  {% if rights.ops or rights.support or rights.orders or rights.licenses %}
+  {% if rights.ops or rights.support or rights.orders or rights.licenses or can_payments %}
   <div class="card">
     <h2>Handlungsbedarf</h2>
     {% if rights.licenses and expiring30 %}<div class="alert warn">⚠ {{ expiring30 }} Lizenz{% if expiring30 != 1 %}en{% endif %} läuft/laufen in weniger als 30 Tagen ab.</div>{% endif %}
-    {% if rights.orders and failed_payment_count %}<div class="alert warn">⚠ <a href="{% url 'ns_admin:payments' %}?status=failed">{{ failed_payment_count }} fehlgeschlagene Zahlung{% if failed_payment_count != 1 %}en{% endif %}</a></div>{% endif %}
-    {% if rights.orders and chargeback_count %}<div class="alert danger">⚠ <a href="{% url 'ns_admin:payments' %}?status=chargeback">{{ chargeback_count }} Chargeback{% if chargeback_count != 1 %}s{% endif %}</a></div>{% endif %}
+    {% if can_payments and failed_payment_count %}<div class="alert warn">⚠ <a href="{% url 'ns_admin:payments' %}?status=failed">{{ failed_payment_count }} fehlgeschlagene Zahlung{% if failed_payment_count != 1 %}en{% endif %}</a></div>{% endif %}
+    {% if can_payments and chargeback_count %}<div class="alert danger">⚠ <a href="{% url 'ns_admin:payments' %}?status=chargeback">{{ chargeback_count }} Chargeback{% if chargeback_count != 1 %}s{% endif %}</a></div>{% endif %}
     {% if rights.support and open_support_count %}<div class="alert info">● <a href="{% url 'ns_admin:support_requests' %}">{{ open_support_count }} offene Kontaktanfrage{% if open_support_count != 1 %}n{% endif %}</a></div>{% endif %}
     {% if rights.ops %}{% for a in alerts %}<div class="alert {% if a.severity == 'critical' %}danger{% else %}warn{% endif %}">⚠ {{ a.message }}</div>{% endfor %}{% endif %}
-    {% if not expiring30 and not failed_payment_count and not chargeback_count and not open_support_count and not alerts %}<div class="alert ok">Kein aktueller Handlungsbedarf.</div>{% endif %}
+    {% if not expiring30 and not open_support_count and not alerts %}{% if not can_payments or not failed_payment_count and not chargeback_count %}<div class="alert ok">Kein aktueller Handlungsbedarf.</div>{% endif %}{% endif %}
   </div>
   {% endif %}
 </div>
