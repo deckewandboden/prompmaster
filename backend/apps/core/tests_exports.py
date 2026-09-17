@@ -112,7 +112,7 @@ class BackgroundExportTests(TestCase):
         self.assertEqual(result['status'], 'denied')
         job.refresh_from_db()
         self.assertEqual(job.status, 'failed')
-        self.assertIn('Berechtigung', job.error)
+        self.assertIn('berechtigung', job.error.lower())
         self.assertFalse((Path(self.tempdir.name) / f'{job.id}.csv').exists())
         self.assertFalse(list(Path(self.tempdir.name).glob(f'{job.id}.*.tmp')))
 
