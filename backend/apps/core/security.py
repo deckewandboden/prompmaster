@@ -45,6 +45,13 @@ def client_ip(request):
 
 
 def check_rate(request, scope, limit=8, window=300):
+    # Form pages call this helper before branching on request.method. Safe
+    # navigation (GET/HEAD/OPTIONS) must never consume the attack budget;
+    # otherwise simply refreshing login/registration/2FA pages can lock out a
+    # legitimate client without a single credential attempt.
+    if request.method in {'GET', 'HEAD', 'OPTIONS'}:
+        return None
+
     ip = client_ip(request)
     key = f'rl:{scope}:{ip}'
     added = cache.add(key, 1, window)
