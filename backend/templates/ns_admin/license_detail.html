@@ -1,4 +1,5 @@
-{% extends 'ns_admin/base.html' %}{% block content %}
+{% extends 'ns_admin/base.html' %}{% load pm %}{% block content %}
+{% user_has_perm request.user 'payments.read' as can_payments %}{% user_has_perm request.user 'orders.read' as can_orders %}
 <div class="page-head">
   <div><h1>{{ license.license_number }}</h1><div class="sub">{{ license.product.name }} · {% if license.company %}{{ license.company.name }}{% else %}{{ license.owner_user.email }}{% endif %}</div></div>
   <a class="btn secondary" href="{% url 'ns_admin:licenses' %}">Zurück zur Liste</a>
@@ -50,18 +51,18 @@
 </div>
 
 <div class="card" style="margin-top:14px">
-  <h2>Bezahlte Lizenzperioden</h2>
+  <h2>Lizenzperioden</h2>
   <div class="tablewrap">
     <table>
-      <thead><tr><th>Von</th><th>Bis</th><th>Bezahlt</th><th>Status</th><th>Bestellung</th><th>Erstattung</th></tr></thead>
+      <thead><tr><th>Von</th><th>Bis</th>{% if can_payments %}<th>Bezahlt</th>{% endif %}<th>Status</th>{% if can_orders %}<th>Bestellung</th>{% endif %}<th>Erstattung</th></tr></thead>
       <tbody>
       {% for term in terms %}
         <tr>
           <td data-label="Von">{{ term.valid_from|date:'d.m.Y H:i' }}</td>
           <td data-label="Bis">{{ term.valid_until|date:'d.m.Y H:i' }}</td>
-          <td data-label="Bezahlt">{{ term.paid_gross_amount }} €</td>
+          {% if can_payments %}<td data-label="Bezahlt">{{ term.paid_gross_amount }} €</td>{% endif %}
           <td data-label="Status">{{ term.get_status_display }}</td>
-          <td data-label="Bestellung">{{ term.order_item.order.order_number }}</td>
+          {% if can_orders %}<td data-label="Bestellung">{{ term.order_item.order.order_number }}</td>{% endif %}
           <td data-label="Erstattung">
             {% if term.status == 'active' and can_refund %}
               <form method="post" action="{% url 'ns_admin:license_refund' license.id term.id %}" class="inline-form" onsubmit="return confirm('Erstattung wirklich verbindlich über Mollie auslösen?');">
