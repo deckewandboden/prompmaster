@@ -2,7 +2,7 @@ from threading import Barrier, Lock, Thread
 from unittest.mock import patch
 
 from django.core.exceptions import ValidationError
-from django.db import close_old_connections, connection
+from django.db import close_old_connections, connection, connections
 from django.test import TransactionTestCase
 
 from . import lifecycle as lifecycle_module
@@ -82,7 +82,7 @@ class PromptConcurrencyTests(TransactionTestCase):
             except Exception as exc:  # captured for cross-thread assertion
                 outcome = (type(exc).__name__, str(exc))
             finally:
-                close_old_connections()
+                connections.close_all()
             with result_lock:
                 results.append(outcome)
 
@@ -134,7 +134,7 @@ class PromptConcurrencyTests(TransactionTestCase):
                 with result_lock:
                     errors.append(exc)
             finally:
-                close_old_connections()
+                connections.close_all()
 
         with patch(
             'apps.prompts.quality._create_default_quality_policy',
