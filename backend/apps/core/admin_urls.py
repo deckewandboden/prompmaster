@@ -1,10 +1,12 @@
 from django.urls import path
 from . import admin_views as v
 from . import export_views as ev
+from . import sensitive as sv
 
 app_name = 'ns_admin'
 urlpatterns = [
     path('', v.dashboard, name='dashboard'),
+    path('security/reauth/', sv.sensitive_reauth, name='sensitive_reauth'),
     path('search/', v.global_search, name='search'),
     path('exports/<uuid:pk>/', ev.export_status, name='export_status'),
     path('exports/<uuid:pk>/download/', ev.export_download, name='export_download'),
