@@ -11,6 +11,11 @@ from apps.notifications.models import EmailTemplate
 
 
 class SupportAdminTransferForm(forms.Form):
+    password = forms.CharField(
+        widget=forms.PasswordInput(render_value=False),
+        label='Eigenes Passwort erneut eingeben',
+        help_text='Sicherheitsbestätigung des aktuell angemeldeten netstyle Benutzers.',
+    )
     identity_verified = forms.BooleanField(
         required=True,
         label='Identität und Berechtigung des Ansprechpartners wurden geprüft',
@@ -217,6 +222,7 @@ class GeneralSettingsForm(forms.Form):
             if data.get(warning) is not None and data.get(critical) is not None and data[warning] >= data[critical]:
                 self.add_error(critical, 'Der kritische Wert muss über dem Warnwert liegen.')
         return data
+
 
 class RefundForm(forms.Form):
     reason = forms.CharField(widget=forms.Textarea, required=False, max_length=2000, label='Begründung optional')
