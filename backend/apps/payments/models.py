@@ -63,7 +63,8 @@ class Refund(TimeStampedModel):
     STATUS = [('created', 'Erstellt'), ('submitted', 'Übermittelt'), ('succeeded', 'Erfolgreich'), ('failed', 'Fehlgeschlagen')]
 
     # The V1 policy is one pro-rata termination/refund per paid term. A
-    # OneToOne relation prevents duplicate refund requests under races.
+    # OneToOne relation prevents duplicate logical refund requests under races.
+    # Provider retries are retained separately in RefundAttempt.
     term = models.OneToOneField('licenses.LicenseTerm', on_delete=models.PROTECT, related_name='refund')
     payment = models.ForeignKey(Payment, on_delete=models.PROTECT, related_name='refunds')
     provider_refund_id = models.CharField(max_length=100, blank=True, unique=True, null=True)
@@ -74,3 +75,44 @@ class Refund(TimeStampedModel):
 
     def __str__(self):
         return f'{self.term} · {self.amount} {self.payment.currency}'
+
+
+class RefundAttempt(TimeStampedModel):
+    """Immutable-ish provider submission history for one logical refund.
+
+    A deterministic provider rejection may be retried with a new quote and a
+    new attempt key. An ambiguous network/server outcome must reuse the same
+    idempotency key until its outcome is known, preventing a double refund.
+    """
+
+    STATUS = [
+        ('submitted', 'Übermittelt'),
+        ('ambiguous', 'Ausgang unklar'),
+        ('succeeded', 'Erfolgreich'),
+        ('failed', 'Fehlgeschlagen'),
+    ]
+
+    refund = models.ForeignKey(Refund, on_delete=models.PROTECT, related_name='attempts')
+    number = models.PositiveIntegerField()
+    idempotency_key = models.CharField(max_length=180, unique=True)
+    amount = models.DecimalField(max_digits=10, decimal_places=2)
+    provider_refund_id = models.CharField(max_length=100, blank=True, null=True, db_index=True)
+    status = models.CharField(max_length=30, choices=STATUS, default='submitted')
+    error_class = models.CharField(max_length=120, blank=True)
+    submitted_at = models.DateTimeField(default=timezone.now)
+    resolved_at = models.DateTimeField(null=True, blank=True)
+
+    class Meta:
+        constraints = [
+            models.UniqueConstraint(
+                fields=['refund', 'number'],
+                name='uniq_refund_attempt_number',
+            ),
+        ]
+        indexes = [
+            models.Index(fields=['refund', '-number']),
+            models.Index(fields=['status', 'submitted_at']),
+        ]
+
+    def __str__(self):
+        return f'{self.refund_id} · Versuch {self.number} · {self.status}'
