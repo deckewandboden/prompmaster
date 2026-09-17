@@ -61,11 +61,11 @@ def _user_agent_families(request):
 
 
 def _access(request):
-    assignment = active_product_assignment(request.user, 'PRO')
+    assignment = active_product_assignment(request.user)
     if not assignment:
         return None, None
     token = _device_cookie(request)
-    device = validate_device_token(request.user, token, product_code='PRO')
+    device = validate_device_token(request.user, token)
     if device and device.license_id != assignment.license_id:
         # License reassignment should already revoke the old credential. Treat
         # any remaining mismatch conservatively and require registration again.
@@ -91,10 +91,10 @@ def launch(request):
 
 @login_required
 def register_device_view(request):
-    assignment = active_product_assignment(request.user, 'PRO')
+    assignment = active_product_assignment(request.user)
     if not assignment:
         raise PermissionDenied
-    current = validate_device_token(request.user, _device_cookie(request), product_code='PRO')
+    current = validate_device_token(request.user, _device_cookie(request))
     if current and current.license_id == assignment.license_id:
         return redirect('proaccess:content')
 
