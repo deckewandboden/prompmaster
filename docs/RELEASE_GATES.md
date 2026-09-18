@@ -62,13 +62,28 @@ Erst `RUNTIME VALIDATION OK` plus erfolgreicher Backup-/Restore-Test gilt als lo
 
 ## Gate 3 — Externe Integrationen
 
-Die ausführbaren Abnahmeschritte stehen in `docs/PRODUCTION_ACCEPTANCE.md`.
+Die ausführbaren Abnahmeschritte stehen in `docs/PRODUCTION_ACCEPTANCE.md`. Diese Gates werden **nicht** in der normalen CI mit realen Secrets ausgeführt; sie müssen gegen denselben Release-Commit in der realen Staging-/Provider-Umgebung nachgewiesen werden.
 
-- Mollie Sandbox: echter Portal-Kauf / Webhook / Refund / Chargeback / Chargeback-Reversal über `external_mollie_acceptance`
-- Microsoft Graph: Exchange-Application-RBAC für `Application Mail.Send` mit positivem `InScope`-Nachweis für `GRAPH_SENDER`, negativem Kontrollpostfach-Nachweis und ohne parallelen unbeschränkten Entra-`Mail.Send`-Grant; anschließend realer Sendetest und realer Provider-Fehlerpfad über `external_graph_acceptance`
-- externer S3/restic Backup-Zieltest plus isolierter PostgreSQL-Restore über `scripts/external_backup_acceptance.sh`
+- Mollie Sandbox über `external_mollie_acceptance`:
+  - echter Portal-Kauf ausschließlich mit `test_`-API-Key,
+  - Mollie muss den Providerdatensatz selbst mit `mode=test` zurückliefern,
+  - `metadata.order_id` und öffentliche `webhookUrl` müssen zum lokalen PromptMaster-Kauf passen,
+  - echter Webhook / Paid-Aktivierung,
+  - Refund über den produktiven Refund-Service,
+  - Chargeback und – sofern die verwendete Mollie-Testumgebung ihn anbietet – Chargeback-Reversal.
+- Microsoft Graph über `external_graph_acceptance`:
+  - Exchange-Application-RBAC für `Application Mail.Send`,
+  - positiver `InScope`-Nachweis für `GRAPH_SENDER` und negativer Kontrollpostfach-Nachweis,
+  - kein paralleler unbeschränkter Entra-`Mail.Send`-Grant,
+  - echter Versand über den produktiven `EmailMessage`-/Taskpfad,
+  - echter Provider-Fehler mit persistiertem Failed-/Retry-Zustand sowie tatsächlicher Empfang der Erfolgsnachricht.
+- Externes S3/restic über `PM_EXTERNAL_BACKUP_ACCEPTANCE=RUN_EXTERNAL_S3_RESTORE ./scripts/external_backup_acceptance.sh`:
+  - ausschließlich externes TLS-geschütztes S3-Ziel,
+  - regulärer Backupdienst während des Drills angehalten, damit kein paralleler Snapshot die Evidence verfälscht,
+  - neuer externer Snapshot,
+  - echter isolierter PostgreSQL-Restore mit Integritätsprüfung.
 
-Provider-Gates dürfen nicht ausschließlich gemockt sein. Die Acceptance-Harnesses verweigern Mollie-Live-Keys beziehungsweise externe Aktionen ohne expliziten Bestätigungswert.
+Provider-Gates dürfen nicht ausschließlich gemockt sein. Die Acceptance-Harnesses verweigern Mollie-Live-Keys, unsichere/Platzhalter-S3-Ziele beziehungsweise externe Aktionen ohne expliziten Bestätigungswert.
 
 ## Gate 4 — Browser / Security / Performance
 
