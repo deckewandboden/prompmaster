@@ -16,7 +16,7 @@ snapshot_id() {
       export AWS_DEFAULT_REGION="$S3_REGION"
     fi
     restic snapshots --json --tag promptmaster-db 2>/dev/null \
-      | grep -o '"'"'"id"'"'":"'"'"'[^"'"'"']*'"'"'"' \
+      | grep -Eo '"'"'"id"'"'[[:space:]]*:[[:space:]]*"'"'"'[^"'"'"']*'"'"'"' \
       | tail -n 1 \
       | cut -d '"'"'"'"'"' -f 4
   ' 2>/dev/null | tail -n 1
@@ -63,9 +63,9 @@ docker compose "${F[@]}" run --rm --no-deps --entrypoint /bin/sh backup -ec '
   fi
   grep -q "\"status\":\"ok\"" /status/last-backup.json
   grep -q "\"status\":\"ok\"" /status/last-restore.json
-  grep -Eq '"'"'"backup_ref"'"'":"'"'"'[^"'"'"']+'"'"'"' /status/last-restore.json
+  grep -Eq '"'"'"backup_ref"'"'[[:space:]]*:[[:space:]]*"'"'"'[^"'"'"']+'"'"'"' /status/last-restore.json
   restic snapshots --json --tag promptmaster-db >/tmp/external-snapshots.json
-  grep -q '"'"'"id"'"':' /tmp/external-snapshots.json
+  grep -Eq '"'"'"id"'"'[[:space:]]*:' /tmp/external-snapshots.json
 '
 echo "external_snapshot_id=$after_snapshot"
 echo "EXTERNAL S3/RESTIC BACKUP + ISOLATED POSTGRES RESTORE OK"
