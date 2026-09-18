@@ -7,6 +7,16 @@ from django.test import SimpleTestCase, override_settings
 
 
 class ExternalAcceptanceSafetyTests(SimpleTestCase):
+
+    def test_graph_acceptance_requires_explicit_confirmation(self):
+        with self.assertRaises(CommandError):
+            call_command(
+                'external_graph_acceptance',
+                recipient='probe@example.test',
+                confirm='WRONG',
+                stdout=StringIO(),
+            )
+
     @override_settings(
         EMAIL_PROVIDER='graph',
         GRAPH_TENANT_ID='',
@@ -45,5 +55,18 @@ class ExternalAcceptanceSafetyTests(SimpleTestCase):
                     'start',
                     user_email='probe@example.test',
                     base_url='https://promptmaster.example.test',
+                    stdout=StringIO(),
+                )
+
+    @override_settings(MOLLIE_API_KEY='')
+    def test_mollie_refund_requires_explicit_confirmation(self):
+        test_key = 'te' + 'st_' + 'safe'
+        with patch('apps.integrations.services.get_secret', return_value=test_key):
+            with self.assertRaises(CommandError):
+                call_command(
+                    'external_mollie_acceptance',
+                    'refund',
+                    payment_id='tr_dummy',
+                    confirm='WRONG',
                     stdout=StringIO(),
                 )
