@@ -1079,7 +1079,7 @@ def mollie(request):
             'profile_id': profile,
             'configured': bool(api_key and profile),
             'mode': mode,
-            'webhook_base': settings.MOLLIE_WEBHOOK_BASE,
+            'webhook_base': request.build_absolute_uri('/').rstrip('/'),
             'payments': Payment.objects.order_by('-created_at')[:20],
             'events': events,
             'last_event': events[0] if events else None,
