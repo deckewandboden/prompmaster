@@ -24,7 +24,7 @@
 {% user_has_perm request.user 'roles.read' as can_roles %}
 {% user_has_perm request.user 'settings.read' as can_settings %}
 <a class="{% nav_class request 'dashboard,search,more' %}" href="{% url 'ns_admin:dashboard' %}"><span class="ico">⌂</span><span class="label">Übersicht</span></a>
-{% if can_customers %}<a class="{% nav_class request 'customers,customer,private_customer' %}" href="{% url 'ns_admin:customers' %}"><span class="ico">♙</span><span class="label">Kunden</span></a>{% endif %}
+{% if can_customers %}<a class="{% nav_class request 'customers,customer,private_customers,private_customer' %}" href="{% url 'ns_admin:customers' %}"><span class="ico">♙</span><span class="label">Kunden</span></a>{% endif %}
 {% if can_licenses %}<a class="{% nav_class request 'licenses,license' %}" href="{% url 'ns_admin:licenses' %}"><span class="ico">▣</span><span class="label">Lizenzen</span></a>{% endif %}
 {% if can_orders %}<a class="{% nav_class request 'orders,order,payments,payment' %}" href="{% url 'ns_admin:orders' %}"><span class="ico">▧</span><span class="label">Bestellungen{% if can_payments %} &amp; Zahlungen{% endif %}</span></a>{% elif can_payments %}<a class="{% nav_class request 'payments,payment' %}" href="{% url 'ns_admin:payments' %}"><span class="ico">▧</span><span class="label">Zahlungen</span></a>{% endif %}
 {% if can_products %}<a class="{% nav_class request 'products,product,features,feature' %}" href="{% url 'ns_admin:products' %}"><span class="ico">◈</span><span class="label">Produkte &amp; Preise</span></a>{% endif %}
