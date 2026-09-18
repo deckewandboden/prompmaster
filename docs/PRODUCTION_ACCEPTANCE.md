@@ -82,7 +82,7 @@ Danach erneut `verify` mit dem tatsächlich erreichten lokalen Refundstatus ausf
 
 ### 4. Chargeback und Chargeback-Reversal
 
-Für eine bezahlte Testzahlung Mollies `changePaymentState`-Link verwenden und einen Chargeback erzeugen. Danach:
+Für eine bezahlte Testzahlung Mollies `changePaymentState`-Link verwenden und einen Chargeback erzeugen. Mollies regulärer Payment-Status bleibt dabei typischerweise `paid`; der Acceptance-Command lädt deshalb zusätzlich die Chargeback-Ressourcen des Payments. Ein Chargeback mit `reversedAt=null` muss lokal zu `Payment.status=chargeback` und für alle betroffenen aktiven Lizenzen zu `payment_review` führen. Danach:
 
 ```bash
 docker compose exec -T web python manage.py external_mollie_acceptance verify \
@@ -90,7 +90,7 @@ docker compose exec -T web python manage.py external_mollie_acceptance verify \
   --expect chargeback
 ```
 
-Ein Chargeback-Reversal darf **nur** dann als bestanden markiert werden, wenn Mollie selbst für die Testzahlung einen echten Reversal-/wieder-bezahlt-Zustand erzeugt und dieser über den öffentlichen Webhook erneut in PromptMaster verarbeitet wurde. Mollie dokumentiert für den Testmodus ausdrücklich das Erzeugen von Refunds und Chargebacks über `changePaymentState`; ein jederzeit verfügbarer manueller Reversal-Schalter ist dagegen nicht garantiert. Falls die verwendete Mollie-Testumgebung einen Reversal-Pfad anbietet, anschließend prüfen:
+Ein Chargeback-Reversal darf **nur** dann als bestanden markiert werden, wenn Mollie für denselben Chargeback einen gesetzten `reversedAt`-Zeitpunkt liefert und dieser Zustand über den öffentlichen Webhook erneut in PromptMaster verarbeitet wurde. Der Acceptance-Command verlangt dabei gleichzeitig den Provider-Chargeback-Zustand, einen verarbeiteten lokalen `chargeback_reversed`-Event und wieder freigegebene betroffene Lizenzen. Mollie dokumentiert für den Testmodus ausdrücklich das Erzeugen von Refunds und Chargebacks über `changePaymentState`; ein jederzeit verfügbarer manueller Reversal-Schalter ist dagegen nicht garantiert. Falls die verwendete Mollie-Testumgebung einen Reversal-Pfad anbietet, anschließend prüfen:
 
 ```bash
 docker compose exec -T web python manage.py external_mollie_acceptance verify \
