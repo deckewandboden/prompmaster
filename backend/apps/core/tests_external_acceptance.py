@@ -177,15 +177,72 @@ class ExternalMollieAcceptanceInvariantTests(SimpleTestCase):
                 expected_webhook='https://promptmaster.example.org/api/webhooks/mollie/',
             )
 
-    def test_mollie_paid_acceptance_rejects_live_provider_chargeback(self):
+    def test_mollie_paid_acceptance_rejects_active_chargeback_resource(self):
         payment = MagicMock()
+        payment.provider_payment_id = 'tr_payment_test'
         payment.amount = Decimal('35.88')
+        payment.currency = 'EUR'
+        chargebacks = {
+            '_embedded': {
+                'chargebacks': [{
+                    'id': 'chb_test',
+                    'paymentId': 'tr_payment_test',
+                    'amount': {'value': '35.88', 'currency': 'EUR'},
+                    'reversedAt': None,
+                }]
+            }
+        }
 
         with self.assertRaises(CommandError):
             MollieAcceptanceCommand()._assert_provider_state(
                 payment,
-                {'status': 'charged_back'},
+                {'status': 'paid'},
                 'paid',
+                chargebacks=chargebacks,
+            )
+
+    def test_mollie_chargeback_reversal_acceptance_uses_reversed_at(self):
+        payment = MagicMock()
+        payment.provider_payment_id = 'tr_payment_test'
+        payment.amount = Decimal('35.88')
+        payment.currency = 'EUR'
+        chargebacks = {
+            '_embedded': {
+                'chargebacks': [{
+                    'id': 'chb_test',
+                    'paymentId': 'tr_payment_test',
+                    'amount': {'value': '35.88', 'currency': 'EUR'},
+                    'reversedAt': '2026-09-18T10:00:00+00:00',
+                }]
+            }
+        }
+
+        MollieAcceptanceCommand()._assert_provider_state(
+            payment,
+            {'status': 'paid'},
+            'chargeback_reversed',
+            chargebacks=chargebacks,
+        )
+
+    def test_mollie_acceptance_rejects_cross_payment_chargeback_resource(self):
+        payment = MagicMock()
+        payment.provider_payment_id = 'tr_payment_test'
+        payment.amount = Decimal('35.88')
+        payment.currency = 'EUR'
+        with self.assertRaises(CommandError):
+            MollieAcceptanceCommand()._assert_provider_state(
+                payment,
+                {'status': 'paid'},
+                'chargeback',
+                chargebacks={
+                    '_embedded': {
+                        'chargebacks': [{
+                            'paymentId': 'tr_other_payment',
+                            'amount': {'value': '35.88', 'currency': 'EUR'},
+                            'reversedAt': None,
+                        }]
+                    }
+                },
             )
 
     def test_mollie_full_refund_acceptance_requires_live_refunded_amount(self):
