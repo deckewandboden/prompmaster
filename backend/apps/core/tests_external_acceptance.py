@@ -145,6 +145,38 @@ class ExternalGraphAcceptanceFlowTests(TestCase):
 
 class ExternalMollieAcceptanceInvariantTests(SimpleTestCase):
 
+    def test_mollie_acceptance_requires_provider_test_mode(self):
+        payment = MagicMock()
+        payment.order_id = 'order-1'
+        with self.assertRaises(CommandError):
+            MollieAcceptanceCommand()._assert_test_payment_payload(
+                {'mode': 'live', 'metadata': {'order_id': 'order-1'}},
+                payment=payment,
+            )
+
+    def test_mollie_acceptance_rejects_wrong_order_metadata(self):
+        payment = MagicMock()
+        payment.order_id = 'order-1'
+        with self.assertRaises(CommandError):
+            MollieAcceptanceCommand()._assert_test_payment_payload(
+                {'mode': 'test', 'metadata': {'order_id': 'order-2'}},
+                payment=payment,
+            )
+
+    def test_mollie_acceptance_rejects_wrong_webhook_url(self):
+        payment = MagicMock()
+        payment.order_id = 'order-1'
+        with self.assertRaises(CommandError):
+            MollieAcceptanceCommand()._assert_test_payment_payload(
+                {
+                    'mode': 'test',
+                    'metadata': {'order_id': 'order-1'},
+                    'webhookUrl': 'https://wrong.example.org/api/webhooks/mollie/',
+                },
+                payment=payment,
+                expected_webhook='https://promptmaster.example.org/api/webhooks/mollie/',
+            )
+
     def test_mollie_paid_acceptance_rejects_live_provider_chargeback(self):
         payment = MagicMock()
         payment.amount = Decimal('35.88')
