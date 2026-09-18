@@ -150,6 +150,57 @@ class Command(BaseCommand):
         except Payment.DoesNotExist as exc:
             raise CommandError('No local PromptMaster payment exists for this Mollie ID.') from exc
 
+    def _assert_provider_state(self, payment, provider, expected):
+        """Require the live Mollie payload to agree with the expected local state."""
+        if not expected:
+            return
+
+        provider_status = str(provider.get('status') or '').strip().lower()
+        status_map = {
+            'created': 'created',
+            'open': 'open',
+            'pending': 'pending',
+            'authorized': 'authorized',
+            'failed': 'failed',
+            'canceled': 'canceled',
+            'expired': 'expired',
+            'charged_back': 'chargeback',
+        }
+
+        if provider_status == 'paid':
+            refunded_data = provider.get('amountRefunded') or {}
+            raw_refunded = refunded_data.get('value')
+            try:
+                refunded_amount = (
+                    Decimal(str(raw_refunded)).quantize(Decimal('0.01'))
+                    if raw_refunded not in (None, '')
+                    else Decimal('0.00')
+                )
+            except Exception as exc:
+                raise CommandError('Mollie returned an invalid refunded amount.') from exc
+
+            if refunded_amount > 0:
+                provider_state = (
+                    'refunded_full'
+                    if refunded_amount >= payment.amount.quantize(Decimal('0.01'))
+                    else 'refunded_partial'
+                )
+            elif expected == 'chargeback_reversed':
+                # Mollie returns a recovered chargeback as paid again. The
+                # exact chargeback_reversed transition must additionally be
+                # evidenced by a processed local event in _verify().
+                provider_state = 'chargeback_reversed'
+            else:
+                provider_state = 'paid'
+        else:
+            provider_state = status_map.get(provider_status, 'unknown')
+
+        if provider_state != expected:
+            raise CommandError(
+                f'Live Mollie state resolves to {provider_state!r}, expected {expected!r}. '
+                'The provider and local webhook state are not yet aligned.'
+            )
+
     def _assert_business_state(self, payment, expected):
         """Fail closed when provider status is ahead of local business finalization."""
         if not expected:
@@ -244,9 +295,18 @@ class Command(BaseCommand):
             payment=payment,
             processed_at__isnull=False,
         ).count()
-        if expected and expected not in {'created', 'open', 'pending'} and processed_events < 1:
-            raise CommandError('No processed Mollie webhook event exists for the expected state.')
+        if expected and expected not in {'created', 'open', 'pending'}:
+            expected_events = MollieEvent.objects.filter(
+                payment=payment,
+                provider_status=expected,
+                processed_at__isnull=False,
+            ).count()
+            if expected_events < 1:
+                raise CommandError(
+                    f'No processed Mollie webhook event exists for expected state {expected!r}.'
+                )
 
+        self._assert_provider_state(payment, provider, expected)
         self._assert_business_state(payment, expected)
 
         change_state = (
