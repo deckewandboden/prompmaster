@@ -118,7 +118,7 @@ def _backend_fixture() -> dict:
     from apps.accounts.models import Role, User, UserRole
     from apps.catalog.models import Product
     from apps.catalog.services import current_price
-    from apps.companies.models import Company, Invitation, Membership
+    from apps.companies.models import Company, Invitation, Membership, PrivateCustomerProfile
     from apps.core.crypto import encrypt
     from apps.devices.models import DeviceRegistration
     from apps.legal.models import LegalDocument
@@ -205,6 +205,23 @@ def _backend_fixture() -> dict:
         company=company,
         user=member,
         defaults={'role': 'member', 'active': True},
+    )
+
+    private_user = upsert_user(
+        'browser-private@example.invalid',
+        'Private',
+        'Customer',
+    )
+    private_profile, _ = PrivateCustomerProfile.objects.update_or_create(
+        user=private_user,
+        defaults={
+            'customer_number': 'P-BROWSER-SMOKE',
+            'street': 'Privatweg',
+            'house_number': '7',
+            'postal_code': '57072',
+            'city': 'Siegen',
+            'country': 'DE',
+        },
     )
     Invitation.objects.update_or_create(
         token_hash=hashlib.sha256(b'browser-smoke-invitation').hexdigest(),
@@ -342,6 +359,7 @@ def _backend_fixture() -> dict:
         'customer_email': customer.email,
         'customer_secret': customer_secret,
         'company_id': str(company.pk),
+        'private_customer_id': str(private_profile.pk),
         'member_id': str(member.pk),
         'product_id': str(product.pk),
         'license_id': str(active_license.pk),
@@ -603,6 +621,15 @@ def run_backend_ui_smoke(browser, fixture=None) -> None:
             ('ns-admin/search/?q=PM-BROWSER', 'Admin Suche'),
             ('ns-admin/more/', 'Admin Mehr'),
             ('ns-admin/customers/', 'Admin Kunden'),
+            ('ns-admin/customers/private/', 'Admin Privatkunden'),
+            (f'ns-admin/customers/private/{fixture["private_customer_id"]}/', 'Admin Privatkundendetail'),
+            (f'ns-admin/customers/private/{fixture["private_customer_id"]}/portal-preview/', 'Admin Privatkunden-Portalvorschau'),
+            (f'ns-admin/customers/private/{fixture["private_customer_id"]}/licenses/', 'Admin Privatkundenlizenzen'),
+            (f'ns-admin/customers/private/{fixture["private_customer_id"]}/devices/', 'Admin Privatkundengeräte'),
+            (f'ns-admin/customers/private/{fixture["private_customer_id"]}/orders/', 'Admin Privatkundenbestellungen'),
+            (f'ns-admin/customers/private/{fixture["private_customer_id"]}/payments/', 'Admin Privatkundenzahlungen'),
+            (f'ns-admin/customers/private/{fixture["private_customer_id"]}/emails/', 'Admin Privatkunden-E-Mails'),
+            (f'ns-admin/customers/private/{fixture["private_customer_id"]}/audit/', 'Admin Privatkundenaudit'),
             (f'ns-admin/customers/{fixture["company_id"]}/', 'Admin Kundendetail'),
             (f'ns-admin/customers/{fixture["company_id"]}/company/', 'Admin Unternehmen'),
             (f'ns-admin/customers/{fixture["company_id"]}/portal-preview/', 'Admin Portalvorschau'),
