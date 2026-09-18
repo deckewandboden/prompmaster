@@ -258,6 +258,7 @@ class NotificationReleaseTests(TestCase):
         token_response.raise_for_status.return_value = None
         token_response.json.return_value = {'access_token': 'access-token'}
         send_response = Mock()
+        send_response.status_code = 202
         send_response.raise_for_status.return_value = None
         send_response.headers = {'request-id': 'graph-request-42'}
         post.side_effect = [token_response, send_response]
