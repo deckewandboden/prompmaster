@@ -64,7 +64,11 @@ docker compose "${F[@]}" run --rm --no-deps --entrypoint /bin/sh backup -ec '
   test -n "$RESTIC_PASSWORD"
   test -n "$AWS_ACCESS_KEY_ID"
   test -n "$AWS_SECRET_ACCESS_KEY"
-  echo "External restic repository configuration present."
+  if ! restic cat config >/dev/null 2>&1; then
+    echo "External restic repository must already exist and be readable; acceptance will not initialize it." >&2
+    exit 3
+  fi
+  echo "Existing external restic repository is reachable."
 '
 
 before_snapshot="$(snapshot_id || true)"
