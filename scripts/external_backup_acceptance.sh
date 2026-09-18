@@ -10,6 +10,18 @@ fi
 
 F=(-f compose.yaml -f compose.production.yaml)
 
+snapshot_id() {
+  docker compose "${F[@]}" run --rm --no-deps --entrypoint /bin/sh backup -ec '
+    if [ -z "${AWS_DEFAULT_REGION:-}" ] && [ -n "${S3_REGION:-}" ]; then
+      export AWS_DEFAULT_REGION="$S3_REGION"
+    fi
+    restic snapshots --json --tag promptmaster-db 2>/dev/null \
+      | grep -o '"'"'"id"'"'":"'"'"'[^"'"'"']*'"'"'"' \
+      | tail -n 1 \
+      | cut -d '"'"'"'"'"' -f 4
+  ' 2>/dev/null | tail -n 1
+}
+
 docker compose "${F[@]}" run --rm --no-deps --entrypoint /bin/sh backup -ec '
   if [ -z "${AWS_DEFAULT_REGION:-}" ] && [ -n "${S3_REGION:-}" ]; then
     export AWS_DEFAULT_REGION="$S3_REGION"
@@ -27,7 +39,23 @@ docker compose "${F[@]}" run --rm --no-deps --entrypoint /bin/sh backup -ec '
   echo "External restic repository configuration present."
 '
 
-docker compose "${F[@]}" run --rm --no-deps   -e BACKUP_ONCE=1   -e RESTORE_TEST_INTERVAL_SECONDS=0   -e PRUNE_INTERVAL_SECONDS=9999999999   backup
+before_snapshot="$(snapshot_id || true)"
+
+docker compose "${F[@]}" run --rm --no-deps \
+  -e BACKUP_ONCE=1 \
+  -e RESTORE_TEST_INTERVAL_SECONDS=0 \
+  -e PRUNE_INTERVAL_SECONDS=9999999999 \
+  backup
+
+after_snapshot="$(snapshot_id)"
+if [[ -z "$after_snapshot" ]]; then
+  echo "External restic backup returned no promptmaster-db snapshot id." >&2
+  exit 4
+fi
+if [[ -n "$before_snapshot" && "$after_snapshot" == "$before_snapshot" ]]; then
+  echo "External restic acceptance did not create a new snapshot." >&2
+  exit 5
+fi
 
 docker compose "${F[@]}" run --rm --no-deps --entrypoint /bin/sh backup -ec '
   if [ -z "${AWS_DEFAULT_REGION:-}" ] && [ -n "${S3_REGION:-}" ]; then
@@ -35,7 +63,9 @@ docker compose "${F[@]}" run --rm --no-deps --entrypoint /bin/sh backup -ec '
   fi
   grep -q "\"status\":\"ok\"" /status/last-backup.json
   grep -q "\"status\":\"ok\"" /status/last-restore.json
-  restic snapshots --tag promptmaster-db >/tmp/external-snapshots.txt
-  test -s /tmp/external-snapshots.txt
-  echo "EXTERNAL S3/RESTIC BACKUP + ISOLATED POSTGRES RESTORE OK"
+  grep -Eq '"'"'"backup_ref"'"'":"'"'"'[^"'"'"']+'"'"'"' /status/last-restore.json
+  restic snapshots --json --tag promptmaster-db >/tmp/external-snapshots.json
+  grep -q '"'"'"id"'"':' /tmp/external-snapshots.json
 '
+echo "external_snapshot_id=$after_snapshot"
+echo "EXTERNAL S3/RESTIC BACKUP + ISOLATED POSTGRES RESTORE OK"
