@@ -1,0 +1,224 @@
+import json
+from urllib.parse import urlsplit
+
+from django.conf import settings
+from django.contrib.auth import get_user_model
+from django.core.management.base import BaseCommand, CommandError
+from django.test import Client
+from django.utils import timezone
+
+from apps.companies.models import Membership
+from apps.payments.mollie import MollieClient
+from apps.payments.models import MollieEvent, Payment
+from apps.payments.services import create_refund_request, submit_refund
+
+
+START_CONFIRM = 'CREATE-MOLLIE-TEST-PAYMENT'
+REFUND_CONFIRM = 'CREATE-MOLLIE-TEST-REFUND'
+
+
+class Command(BaseCommand):
+    help = 'Run staged acceptance against Mollie test mode using PromptMaster production code paths.'
+
+    def add_arguments(self, parser):
+        parser.add_argument('action', choices=['start', 'verify', 'refund'])
+        parser.add_argument('--user-email')
+        parser.add_argument('--payment-id')
+        parser.add_argument('--base-url')
+        parser.add_argument('--expect', choices=[
+            'created', 'open', 'pending', 'authorized', 'paid', 'failed',
+            'canceled', 'expired', 'refunded_partial', 'refunded_full',
+            'chargeback', 'chargeback_reversed',
+        ])
+        parser.add_argument('--confirm')
+
+    def _client(self):
+        client = MollieClient()
+        if not client.key:
+            raise CommandError('MOLLIE_API_KEY is not configured.')
+        if not client.key.startswith('test_'):
+            raise CommandError('External Mollie acceptance refuses non-test API keys.')
+        return client
+
+    def handle(self, *args, **options):
+        client = self._client()
+        action = options['action']
+        if action == 'start':
+            return self._start(client, options)
+        if action == 'verify':
+            return self._verify(client, options)
+        return self._refund(options)
+
+    def _base_url(self, options):
+        raw = (options.get('base_url') or '').strip()
+        if not raw and settings.CADDY_DOMAIN:
+            raw = f'https://{settings.CADDY_DOMAIN}'
+        parsed = urlsplit(raw)
+        if parsed.scheme != 'https' or not parsed.netloc:
+            raise CommandError('Use an explicit HTTPS --base-url or configure CADDY_DOMAIN.')
+        return parsed
+
+    def _start(self, client, options):
+        if options.get('confirm') != START_CONFIRM:
+            raise CommandError(
+                f'Refusing provider-side payment creation. Pass --confirm {START_CONFIRM}.'
+            )
+        email = (options.get('user_email') or '').strip().lower()
+        if not email:
+            raise CommandError('--user-email is required for start.')
+        user = get_user_model().objects.filter(email__iexact=email, is_active=True).first()
+        if not user:
+            raise CommandError('Acceptance user does not exist or is inactive.')
+        if not user.email_verified_at:
+            raise CommandError('Acceptance user must have a verified e-mail address.')
+
+        parsed = self._base_url(options)
+        host = parsed.netloc
+        started = timezone.now()
+
+        client_http = Client()
+        client_http.force_login(user)
+        session = client_http.session
+        session['security_version'] = user.security_version
+        session['two_factor_ok'] = True
+        session.save()
+
+        payload = {
+            'quantity': '1',
+            'accept_terms': 'on',
+            'accept_privacy': 'on',
+        }
+        if not user.company_memberships.filter(active=True).exists():
+            if not hasattr(user, 'private_customer'):
+                raise CommandError('Private acceptance user has no PrivateCustomerProfile.')
+            payload['accept_withdrawal'] = 'on'
+
+        response = client_http.post(
+            '/portal/licenses/buy/',
+            payload,
+            secure=True,
+            HTTP_HOST=host,
+            follow=False,
+        )
+        location = response.headers.get('Location', '')
+        if response.status_code != 302 or not location.startswith('https://'):
+            body = response.content.decode('utf-8', errors='replace')
+            raise CommandError(
+                f'Portal checkout did not redirect to Mollie (HTTP {response.status_code}). '
+                f'Form/provider response: {body[:500]}'
+            )
+
+        payment_qs = Payment.objects.filter(created_at__gte=started).select_related('order')
+        membership = user.company_memberships.filter(active=True).select_related('company').first()
+        if membership:
+            payment_qs = payment_qs.filter(order__company=membership.company)
+        else:
+            payment_qs = payment_qs.filter(order__private_user=user)
+        payment = payment_qs.order_by('-created_at').first()
+        if not payment:
+            raise CommandError('Checkout redirected but no local Payment row was created.')
+
+        provider = client.get_payment(payment.provider_payment_id)
+        change_state = (
+            ((provider.get('_links') or {}).get('changePaymentState') or {}).get('href') or ''
+        )
+        self.stdout.write(json.dumps({
+            'status': 'started',
+            'order': payment.order.order_number,
+            'payment_id': payment.provider_payment_id,
+            'checkout_url': location,
+            'provider_status': provider.get('status'),
+            'change_payment_state_url': change_state,
+            'webhook_url': (
+                ((provider.get('_links') or {}).get('webhook') or {}).get('href') or
+                f'{parsed.scheme}://{parsed.netloc}/api/webhooks/mollie/'
+            ),
+            'next': 'Complete the hosted Mollie test checkout, then run verify --expect paid.',
+        }, sort_keys=True))
+
+    def _payment(self, options):
+        payment_id = (options.get('payment_id') or '').strip()
+        if not payment_id:
+            raise CommandError('--payment-id is required.')
+        try:
+            return Payment.objects.select_related('order').get(provider_payment_id=payment_id)
+        except Payment.DoesNotExist as exc:
+            raise CommandError('No local PromptMaster payment exists for this Mollie ID.') from exc
+
+    def _verify(self, client, options):
+        payment = self._payment(options)
+        provider = client.get_payment(payment.provider_payment_id)
+        payment.refresh_from_db()
+        expected = options.get('expect')
+        if expected and payment.status != expected:
+            raise CommandError(
+                f'Local payment status is {payment.status!r}, expected {expected!r}. '
+                'Wait for/retry the real Mollie webhook before accepting the gate.'
+            )
+        processed_events = MollieEvent.objects.filter(
+            payment=payment,
+            processed_at__isnull=False,
+        ).count()
+        if expected and expected not in {'created', 'open', 'pending'} and processed_events < 1:
+            raise CommandError('No processed Mollie webhook event exists for the expected state.')
+
+        change_state = (
+            ((provider.get('_links') or {}).get('changePaymentState') or {}).get('href') or ''
+        )
+        self.stdout.write(json.dumps({
+            'status': 'ok',
+            'payment_id': payment.provider_payment_id,
+            'order': payment.order.order_number,
+            'local_status': payment.status,
+            'provider_status': provider.get('status'),
+            'processed_webhook_events': processed_events,
+            'change_payment_state_url': change_state,
+        }, sort_keys=True))
+
+    def _refund(self, options):
+        if options.get('confirm') != REFUND_CONFIRM:
+            raise CommandError(
+                f'Refusing provider-side refund. Pass --confirm {REFUND_CONFIRM}.'
+            )
+        payment = self._payment(options)
+        if payment.status not in {'paid', 'chargeback_reversed', 'refunded_partial'}:
+            raise CommandError(f'Payment state {payment.status!r} is not refundable.')
+
+        term = (
+            payment.order.items.filter(license_terms__status='active')
+            .values_list('license_terms__id', flat=True)
+            .order_by('-license_terms__valid_until')
+            .first()
+        )
+        if not term:
+            raise CommandError('Paid acceptance order has no active LicenseTerm to refund.')
+        from apps.licenses.models import LicenseTerm
+        term = LicenseTerm.objects.select_related('license').get(pk=term)
+
+        actor = payment.order.private_user
+        if actor is None and payment.order.company_id:
+            admin = (
+                Membership.objects.filter(
+                    company_id=payment.order.company_id,
+                    role='admin',
+                    active=True,
+                )
+                .select_related('user')
+                .first()
+            )
+            actor = admin.user if admin else None
+
+        refund = create_refund_request(
+            term=term,
+            actor=actor,
+            reason='PromptMaster external Mollie acceptance',
+        )
+        refund = submit_refund(refund)
+        self.stdout.write(json.dumps({
+            'status': refund.status,
+            'payment_id': payment.provider_payment_id,
+            'refund_id': refund.provider_refund_id,
+            'amount': str(refund.amount),
+            'remaining_days': refund.remaining_days,
+            'next': 'Run verify again after Mollie has delivered the refund webhook/state update.',
+        }, sort_keys=True))
