@@ -99,6 +99,8 @@ Vor Produktion muss bestätigt sein:
 - Prometheus ist ebenfalls nicht öffentlich veröffentlicht;
 - Host-/Docker-Mounts bleiben read-only, soweit cAdvisor dies unterstützt;
 - das cAdvisor-Image bleibt versionsgepinnt und wird im Dependency-/Image-Review berücksichtigt;
+- `scripts/validate_static.py` erzwingt: keine Host-Ports für Prometheus/cAdvisor, ausschließlich internes `monitor`-Netz und unveränderte read-only Host-Mounts;
+- `scripts/runtime_validate.sh` verlangt im realen Stack die Prometheus-Targets `node`, `postgres`, `cadvisor` und `django` mit Zustand `UP`;
 - der Host selbst gilt als vertrauenswürdige Administrationszone;
 - eine Kompromittierung von cAdvisor wird als möglicher Host-Impact behandelt und in Incident-/Backup-Planung berücksichtigt.
 
