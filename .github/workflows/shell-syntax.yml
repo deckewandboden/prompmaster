@@ -38,3 +38,5 @@ jobs:
           set -e
           test "$status" -eq 2
           grep -q "Refusing external backup drill" <<<"$output"
+          grep -q "restic cat config" scripts/external_backup_acceptance.sh
+          grep -q "acceptance will not initialize it" scripts/external_backup_acceptance.sh
