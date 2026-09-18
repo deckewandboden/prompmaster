@@ -25,6 +25,12 @@ docker compose "${FILES[@]}" up -d
 docker compose "${FILES[@]}" exec -T beat sh -c 'test -w /tmp/celerybeat && touch /tmp/celerybeat/write-test && rm /tmp/celerybeat/write-test'
 for i in $(seq 1 30); do docker compose "${FILES[@]}" exec -T web curl -fsS http://127.0.0.1:8000/health/ready/ >/dev/null 2>&1 && break; [[ "$i" -lt 30 ]] || fail "Django ready health blieb rot"; sleep 2; done
 docker compose "${FILES[@]}" exec -T caddy caddy validate --config /etc/caddy/Caddyfile >/dev/null
+for i in $(seq 1 30); do
+  MONITOR_OK="$(docker compose "${FILES[@]}" exec -T web sh -c "curl -fsS 'http://prometheus:9090/api/v1/targets?state=active' | python -c 'import json,sys; d=json.load(sys.stdin); rows=d.get(\"data\",{}).get(\"activeTargets\",[]); state={r.get(\"labels\",{}).get(\"job\"):r.get(\"health\") for r in rows}; required={\"node\",\"postgres\",\"cadvisor\",\"django\"}; print(\"1\" if required.issubset(state) and all(state[x]==\"up\" for x in required) else \"0\")'" 2>/dev/null | tail -n1 | tr -d '\r')"
+  [[ "$MONITOR_OK" == 1 ]] && break
+  [[ "$i" -lt 30 ]] || fail "Prometheus Monitoring-Targets (node/postgres/cadvisor/django) wurden nicht vollständig UP"
+  sleep 2
+done
 docker compose "${FILES[@]}" exec -T caddy sh -c "test -s /srv/marketing/index.html && test -s /srv/marketing/models/head.glb && test -s /srv/marketing/integration-patch.js" || fail "Marketing-Artefakte fehlen im Caddy-Container"
 docker compose "${FILES[@]}" exec -T web sh -c "curl -fsS http://127.0.0.1:8000/catalog.json | python -c 'import json,sys; d=json.load(sys.stdin); assert d[\"proApplicationCount\"]==34; p=next(x for x in d[\"products\"] if x[\"id\"]==\"PROMPTMASTER_PRO\"); assert p[\"annualGrossCents\"]==3588'" || fail "Öffentlicher Marketing-Katalog ist nicht synchron"
 docker compose "${FILES[@]}" exec -T web python manage.py shell -c "from apps.prompts.models import PromptApplication,PromptDefinition,PromptLegacyContract; a=PromptApplication.objects.filter(active=True).count(); t=PromptDefinition.objects.filter(active=True).count(); f=PromptLegacyContract.objects.filter(source='FREE_1_2_4').count(); print(f'PROMPT_DOMAIN:{a}:{t}:{f}'); raise SystemExit(0 if (a,t,f)==(34,194,16) else 1)"
