@@ -4,7 +4,7 @@ from types import SimpleNamespace
 from unittest.mock import MagicMock, patch
 
 from celery.exceptions import Retry
-from django.test import TestCase
+from django.test import TestCase, override_settings
 from django.utils import timezone
 
 from apps.accounts.models import User
@@ -14,7 +14,7 @@ from apps.core.security import token_hash
 from apps.licenses.models import License, LicenseAssignment, LicenseReminder
 
 from .models import EmailMessage, EmailTemplate
-from .services import message_scope_active, queue_email
+from .services import MailProviderError, _send_graph, message_scope_active, queue_email
 from .tasks import (
     _recover_succeeded_refunds,
     schedule_license_reminders,
@@ -231,3 +231,60 @@ class NotificationSecurityTests(TestCase):
         self.assertEqual(finalize.call_count, 2)
         self.assertEqual(len(failures), 1)
         self.assertEqual(failures[0][0], 'refund-bad')
+
+
+class GraphProviderContractTests(TestCase):
+    def _message(self):
+        return SimpleNamespace(
+            subject='PromptMaster Graph contract test',
+            recipient='recipient@example.test',
+        )
+
+    @override_settings(
+        GRAPH_TENANT_ID='tenant-id',
+        GRAPH_CLIENT_ID='client-id',
+        GRAPH_CLIENT_SECRET='client-secret',
+        GRAPH_SENDER='sender@example.test',
+    )
+    def test_graph_send_accepts_documented_202(self):
+        token = MagicMock()
+        token.raise_for_status.return_value = None
+        token.json.return_value = {'access_token': 'access-token'}
+
+        sent = MagicMock()
+        sent.status_code = 202
+        sent.raise_for_status.return_value = None
+        sent.headers = {'request-id': 'graph-request-id'}
+
+        with patch(
+            'apps.notifications.services.requests.post',
+            side_effect=[token, sent],
+        ):
+            reference = _send_graph(self._message(), 'body')
+
+        self.assertEqual(reference, 'graph-request-id')
+
+    @override_settings(
+        GRAPH_TENANT_ID='tenant-id',
+        GRAPH_CLIENT_ID='client-id',
+        GRAPH_CLIENT_SECRET='client-secret',
+        GRAPH_SENDER='sender@example.test',
+    )
+    def test_graph_send_rejects_unexpected_success_status(self):
+        token = MagicMock()
+        token.raise_for_status.return_value = None
+        token.json.return_value = {'access_token': 'access-token'}
+
+        unexpected = MagicMock()
+        unexpected.status_code = 200
+        unexpected.raise_for_status.return_value = None
+        unexpected.headers = {}
+
+        with patch(
+            'apps.notifications.services.requests.post',
+            side_effect=[token, unexpected],
+        ):
+            with self.assertRaises(MailProviderError) as error:
+                _send_graph(self._message(), 'body')
+
+        self.assertIn('expected 202', str(error.exception))
