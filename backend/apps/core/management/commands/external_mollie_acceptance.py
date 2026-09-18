@@ -185,6 +185,17 @@ class Command(BaseCommand):
                     if refunded_amount >= payment.amount.quantize(Decimal('0.01'))
                     else 'refunded_partial'
                 )
+                if expected in {'refunded_partial', 'refunded_full'}:
+                    local_refunded = (
+                        payment.refunds.filter(status='succeeded')
+                        .aggregate(total=Sum('amount'))['total']
+                        or Decimal('0.00')
+                    ).quantize(Decimal('0.01'))
+                    if local_refunded != refunded_amount:
+                        raise CommandError(
+                            'Live Mollie refunded amount does not match the sum of locally '
+                            'succeeded refunds.'
+                        )
             elif expected == 'chargeback_reversed':
                 # Mollie returns a recovered chargeback as paid again. The
                 # exact chargeback_reversed transition must additionally be
