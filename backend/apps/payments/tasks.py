@@ -12,8 +12,14 @@ logger = logging.getLogger(__name__)
 def retry_mollie_payment(self, payment_id):
     """Retry a known failed Mollie webhook through the canonical state machine."""
     try:
-        payload = MollieClient().get_payment(payment_id)
-        payment = process_provider_state(payment_id, payload)
+        client = MollieClient()
+        payload = client.get_payment(payment_id)
+        chargebacks = client.list_chargebacks(payment_id)
+        payment = process_provider_state(
+            payment_id,
+            payload,
+            chargebacks_payload=chargebacks,
+        )
         reconcile_refunds(payment)
         return {'payment_id': payment_id, 'status': payment.status}
     except Exception as exc:
