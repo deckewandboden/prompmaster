@@ -6,6 +6,7 @@ import base64
 import re
 import sys
 from pathlib import Path
+from urllib.parse import urlsplit
 
 ROOT = Path(__file__).resolve().parents[1]
 ENV_FILE = ROOT / '.env'
@@ -44,6 +45,26 @@ def check_fernet(value: str) -> bool:
         return len(raw) == 32 and len(value) == 44
     except Exception:
         return False
+
+
+def is_external_s3_repository(value: str) -> bool:
+    """Accept only canonical TLS-protected restic S3 repository forms."""
+    repo = (value or '').strip()
+    if repo.startswith('s3:https://'):
+        parsed = urlsplit(repo[3:])
+        return bool(
+            parsed.scheme == 'https'
+            and parsed.hostname
+            and parsed.path
+            and parsed.path != '/'
+        )
+    return bool(
+        re.fullmatch(
+            r's3:s3(?:\.[a-z0-9-]+)?\.amazonaws\.com/.+',
+            repo,
+            flags=re.I,
+        )
+    )
 
 
 def main() -> int:
@@ -101,8 +122,12 @@ def main() -> int:
             fail(errors, 'MOLLIE_API_KEY muss in Produktion ein Mollie-Live-Key (live_…) sein.')
 
         repo = values.get('RESTIC_REPOSITORY', '')
-        if is_placeholder(repo) or not (repo.startswith('s3:') or repo.startswith('s3://')):
-            fail(errors, 'RESTIC_REPOSITORY muss in Produktion auf externen S3-kompatiblen Storage zeigen.')
+        if is_placeholder(repo) or not is_external_s3_repository(repo):
+            fail(
+                errors,
+                'RESTIC_REPOSITORY muss in Produktion ein kanonisches TLS-S3-Ziel sein '
+                '(s3:https://host/bucket oder s3:s3.<region>.amazonaws.com/bucket).',
+            )
         if is_placeholder(values.get('RESTIC_PASSWORD', '')) or len(values.get('RESTIC_PASSWORD', '')) < 20:
             fail(errors, 'RESTIC_PASSWORD muss sicher gesetzt sein.')
         for key in ('AWS_ACCESS_KEY_ID', 'AWS_SECRET_ACCESS_KEY'):
