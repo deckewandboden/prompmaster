@@ -125,6 +125,30 @@ class ExternalGraphAcceptanceFlowTests(TestCase):
 
 class ExternalMollieAcceptanceInvariantTests(SimpleTestCase):
 
+    def test_mollie_paid_acceptance_rejects_live_provider_chargeback(self):
+        payment = MagicMock()
+        payment.amount = Decimal('35.88')
+
+        with self.assertRaises(CommandError):
+            MollieAcceptanceCommand()._assert_provider_state(
+                payment,
+                {'status': 'charged_back'},
+                'paid',
+            )
+
+    def test_mollie_full_refund_acceptance_requires_live_refunded_amount(self):
+        payment = MagicMock()
+        payment.amount = Decimal('35.88')
+
+        MollieAcceptanceCommand()._assert_provider_state(
+            payment,
+            {
+                'status': 'paid',
+                'amountRefunded': {'currency': 'EUR', 'value': '35.88'},
+            },
+            'refunded_full',
+        )
+
     def test_mollie_paid_acceptance_requires_real_license_activation(self):
         payment = MagicMock()
         payment.status = 'paid'
