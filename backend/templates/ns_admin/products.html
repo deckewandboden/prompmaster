@@ -4,7 +4,7 @@
 {% for p in products %}
   <div class="card">
     <span class="badge {% if p.active %}{% if p.code == 'PRO' %}pro{% else %}info{% endif %}{% else %}warn{% endif %}">{% if p.active %}AKTIV{% else %}INAKTIV{% endif %}</span>
-    <h2 style="margin-top:12px">{{ p.name }}</h2>
+    <h2 class="mt-12">{{ p.name }}</h2>
     <div class="value">{% if p.current_new_price %}{{ p.current_new_price.gross_amount|floatformat:2 }} {{ p.current_new_price.currency }}{% else %}–{% endif %}</div>
     <div class="small muted">aktueller Neukaufpreis{% if not p.current_new_price %} · nicht konfiguriert{% endif %}</div>
     <div class="statusrow"><span>Verlängerung</span><strong>{% if p.current_renewal_price %}{{ p.current_renewal_price.gross_amount|floatformat:2 }} {{ p.current_renewal_price.currency }}{% else %}–{% endif %}</strong></div>
@@ -12,7 +12,7 @@
     <div class="statusrow"><span>Geräte</span><strong>{{ p.default_device_limit }}</strong></div>
     <div class="statusrow"><span>Reminder</span><strong>T−{{ p.reminder_1_days }} / T−{{ p.reminder_2_days }}</strong></div>
     <div class="statusrow"><span>Sichtbar / kaufbar</span><strong>{% if p.visible %}Ja{% else %}Nein{% endif %} / {% if p.purchasable %}Ja{% else %}Nein{% endif %}</strong></div>
-    <div class="page-actions" style="margin-top:12px"><a class="btn secondary sm" href="{% url 'ns_admin:product_edit' p.id %}">Bearbeiten</a></div>
+    <div class="page-actions mt-12"><a class="btn secondary sm" href="{% url 'ns_admin:product_edit' p.id %}">Bearbeiten</a></div>
   </div>
 {% empty %}<div class="card"><p class="muted">Noch keine Produkte.</p></div>{% endfor %}
 </div>

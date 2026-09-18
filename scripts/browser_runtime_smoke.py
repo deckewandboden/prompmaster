@@ -121,6 +121,7 @@ def _backend_fixture() -> dict:
     from apps.companies.models import Company, Invitation, Membership
     from apps.core.crypto import encrypt
     from apps.devices.models import DeviceRegistration
+    from apps.legal.models import LegalDocument
     from apps.licenses.models import License, LicenseAssignment
     from apps.orders.models import Order, OrderItem
     from apps.payments.models import Payment
@@ -218,6 +219,17 @@ def _backend_fixture() -> dict:
             'invited_by': customer,
         },
     )
+
+    for doc_type in ('terms', 'privacy'):
+        LegalDocument.objects.update_or_create(
+            doc_type=doc_type,
+            version='browser-smoke-v1',
+            defaults={
+                'content': f'Browser smoke {doc_type}',
+                'valid_from': now - timedelta(days=1),
+                'active': True,
+            },
+        )
 
     product = Product.objects.get(code='PRO')
     price = current_price(product, 'new', now)
@@ -330,6 +342,8 @@ def _backend_fixture() -> dict:
         'customer_email': customer.email,
         'customer_secret': customer_secret,
         'company_id': str(company.pk),
+        'member_id': str(member.pk),
+        'product_id': str(product.pk),
         'license_id': str(active_license.pk),
         'order_id': str(order.pk),
         'task_id': definition.task_id,
@@ -409,6 +423,13 @@ def _check_backend_page(page, base: str, path: str, width: int, label: str) -> N
           const sidebar = document.querySelector('.sidebar');
           const mobileTitle = document.querySelector('.mobile-title');
           const mobileMenu = document.querySelector('.mobile-menu');
+          const mobileLinks = mobileMenu
+            ? [...mobileMenu.querySelectorAll('a')].filter(visible)
+            : [];
+          const mobileRows = new Set(
+            mobileLinks.map(el => Math.round(el.getBoundingClientRect().top))
+          ).size;
+          const content = document.querySelector('.content');
           const userMeta = document.querySelector('.user-meta');
           return {
             innerWidth,
@@ -421,6 +442,10 @@ def _check_backend_page(page, base: str, path: str, width: int, label: str) -> N
             mobileTitleDisplay: mobileTitle ? getComputedStyle(mobileTitle).display : 'missing',
             mobileTitleText: (mobileTitle?.textContent || '').trim(),
             mobileMenuDisplay: mobileMenu ? getComputedStyle(mobileMenu).display : 'missing',
+            mobileMenuCount: mobileLinks.length,
+            mobileMenuRows: mobileRows,
+            mobileMenuHeight: mobileMenu ? Math.round(mobileMenu.getBoundingClientRect().height) : 0,
+            contentPaddingBottom: content ? parseFloat(getComputedStyle(content).paddingBottom || '0') : 0,
             userMetaDisplay: userMeta ? getComputedStyle(userMeta).display : 'missing',
           };
         }"""
@@ -447,6 +472,21 @@ def _check_backend_page(page, base: str, path: str, width: int, label: str) -> N
             raise AssertionError(f'{label} {width}px: PromptMaster mobile header missing')
         if metrics['mobileMenuDisplay'] == 'none':
             raise AssertionError(f'{label} {width}px: mobile bottom navigation missing')
+        if metrics['mobileMenuCount'] != 5:
+            raise AssertionError(
+                f'{label} {width}px: expected 5 mobile navigation entries, '
+                f'got {metrics["mobileMenuCount"]}'
+            )
+        if metrics['mobileMenuRows'] != 1:
+            raise AssertionError(
+                f'{label} {width}px: mobile navigation wraps into '
+                f'{metrics["mobileMenuRows"]} rows'
+            )
+        if metrics['contentPaddingBottom'] < metrics['mobileMenuHeight'] + 4:
+            raise AssertionError(
+                f'{label} {width}px: content padding does not clear mobile navigation '
+                f'({metrics["contentPaddingBottom"]} < {metrics["mobileMenuHeight"]} + 4)'
+            )
         if metrics['userMetaDisplay'] != 'none':
             raise AssertionError(f'{label} {width}px: verbose user metadata must be hidden')
     else:
@@ -485,10 +525,17 @@ def run_backend_ui_smoke(browser, fixture=None) -> None:
 
         portal_routes = [
             ('portal/dashboard/', 'Portal Dashboard'),
+            ('portal/search/?q=PM-BROWSER-ACTIVE', 'Portal Suche'),
+            ('portal/more/', 'Portal Mehr'),
             ('portal/team/', 'Portal Team'),
             ('portal/team/invitations/', 'Portal Einladungen'),
+            ('portal/team/invite/', 'Portal Einladung erstellen'),
+            (f'portal/team/{fixture["member_id"]}/', 'Portal Teammitglied'),
             ('portal/licenses/', 'Portal Lizenzen'),
+            ('portal/licenses/buy/', 'Portal Lizenzkauf'),
+            ('portal/licenses/renew/', 'Portal Verlängerungsübersicht'),
             (f'portal/licenses/{fixture["license_id"]}/', 'Portal Lizenzdetail'),
+            (f'portal/licenses/{fixture["license_id"]}/renew/', 'Portal Lizenz verlängern'),
             ('portal/devices/', 'Portal Geräte'),
             ('portal/orders/', 'Portal Bestellungen'),
             ('portal/company/', 'Portal Unternehmen'),
@@ -498,23 +545,49 @@ def run_backend_ui_smoke(browser, fixture=None) -> None:
         ]
         admin_routes = [
             ('ns-admin/', 'Admin Dashboard'),
+            ('ns-admin/more/', 'Admin Mehr'),
             ('ns-admin/customers/', 'Admin Kunden'),
             (f'ns-admin/customers/{fixture["company_id"]}/', 'Admin Kundendetail'),
+            (f'ns-admin/customers/{fixture["company_id"]}/company/', 'Admin Unternehmen'),
+            (f'ns-admin/customers/{fixture["company_id"]}/portal-preview/', 'Admin Portalvorschau'),
+            (f'ns-admin/customers/{fixture["company_id"]}/users/', 'Admin Kundenbenutzer'),
+            (f'ns-admin/customers/{fixture["company_id"]}/licenses/', 'Admin Kundenlizenzen'),
+            (f'ns-admin/customers/{fixture["company_id"]}/devices/', 'Admin Kundengeräte'),
+            (f'ns-admin/customers/{fixture["company_id"]}/orders/', 'Admin Kundenbestellungen'),
+            (f'ns-admin/customers/{fixture["company_id"]}/payments/', 'Admin Kundenzahlungen'),
+            (f'ns-admin/customers/{fixture["company_id"]}/emails/', 'Admin Kunden-E-Mails'),
+            (f'ns-admin/customers/{fixture["company_id"]}/privacy/', 'Admin Kundendatenschutz'),
+            (f'ns-admin/customers/{fixture["company_id"]}/audit/', 'Admin Kundenaudit'),
             ('ns-admin/licenses/', 'Admin Lizenzen'),
             (f'ns-admin/licenses/{fixture["license_id"]}/', 'Admin Lizenzdetail'),
             ('ns-admin/orders/', 'Admin Bestellungen'),
             (f'ns-admin/orders/{fixture["order_id"]}/', 'Admin Bestelldetail'),
             ('ns-admin/payments/', 'Admin Zahlungen'),
             ('ns-admin/products/', 'Admin Produkte'),
+            (f'ns-admin/products/{fixture["product_id"]}/', 'Admin Produktdetail'),
+            ('ns-admin/products/features/', 'Admin Produktmerkmale'),
+            ('ns-admin/email/', 'Admin E-Mail'),
+            ('ns-admin/email/log/', 'Admin E-Mail-Protokoll'),
+            ('ns-admin/mollie/', 'Admin Mollie'),
+            ('ns-admin/mollie/events/', 'Admin Mollie-Ereignisse'),
             ('ns-admin/statistics/', 'Admin Statistik'),
             ('ns-admin/ops/', 'Admin System'),
+            ('ns-admin/ops/services/', 'Admin Dienste'),
+            ('ns-admin/ops/database/', 'Admin Datenbank'),
+            ('ns-admin/ops/backups/', 'Admin Backups'),
+            ('ns-admin/ops/restore-tests/', 'Admin Restore-Tests'),
+            ('ns-admin/ops/alerts/', 'Admin Systemmeldungen'),
             ('ns-admin/api/', 'Admin API'),
             ('ns-admin/legal/', 'Admin Recht'),
+            ('ns-admin/legal/documents/', 'Admin Rechtsdokumente'),
+            ('ns-admin/legal/retention/', 'Admin Aufbewahrung'),
+            ('ns-admin/legal/deletions/', 'Admin Löschanfragen'),
             ('ns-admin/support/', 'Admin Support'),
             ('ns-admin/audit/', 'Admin Audit'),
             ('ns-admin/roles/', 'Admin Rollen'),
             ('ns-admin/settings/', 'Admin Einstellungen'),
             ('ns-admin/prompt-studio/', 'Prompt Studio'),
+            ('ns-admin/prompt-studio/quality/', 'Prompt Qualität'),
             (f'ns-admin/prompt-studio/{fixture["task_id"]}/', 'Prompt Definition'),
             (f'ns-admin/prompt-studio/version/{fixture["version_id"]}/', 'Prompt Version'),
             ('ns-admin/content/faqs/', 'Admin FAQ'),
@@ -540,6 +613,17 @@ def run_backend_ui_smoke(browser, fixture=None) -> None:
 
             _browser_login(page, base, email, fixture['password'], secret)
 
+            if role == 'portal':
+                page.goto(base + 'portal/dashboard/', wait_until='networkidle')
+                search_input = page.locator('.topbar .search input')
+                if not search_input.is_visible():
+                    raise AssertionError('portal: desktop global search input is not visible')
+                search_input.fill('PM-BROWSER-ACTIVE')
+                search_input.press('Enter')
+                page.wait_for_url(lambda url: '/portal/search/' in str(url))
+                if 'PM-BROWSER-ACTIVE' not in page.locator('body').inner_text():
+                    raise AssertionError('portal: global search did not return the visible tenant license')
+
             for width, height in ((390, 844), (768, 1024), (1440, 1000)):
                 page.set_viewport_size({'width': width, 'height': height})
                 for route, label in routes:
@@ -553,7 +637,7 @@ def run_backend_ui_smoke(browser, fixture=None) -> None:
 
         print(
             'DJANGO BACKEND BROWSER SMOKE OK: real login + TOTP 2FA + '
-            'portal/admin/prompt-studio + responsive 390/768/1440 + overflow/overlap guards'
+            'portal/admin/prompt-studio + global search + complete mobile navigation + responsive 390/768/1440 + overflow/overlap guards'
         )
     finally:
         if process.poll() is None:

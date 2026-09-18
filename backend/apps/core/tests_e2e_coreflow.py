@@ -14,7 +14,7 @@ from apps.accounts.models import Role, User, UserRole
 from apps.audit.models import AuditEvent
 from apps.catalog.models import Product
 from apps.catalog.services import current_price
-from apps.companies.models import Membership
+from apps.companies.models import Company, Membership
 from apps.companies.services import create_invitation
 from apps.core.security import token_pair
 from apps.devices.services import register_device, validate_device_token
@@ -453,3 +453,76 @@ class CommercialCoreFlowE2ETests(TestCase):
         self.assertEqual(snapshot_payload['database']['status'], 'ok')
         service_account.refresh_from_db()
         self.assertIsNotNone(service_account.last_used_at)
+
+
+class PortalSearchIsolationTests(TestCase):
+    def setUp(self):
+        now = timezone.now()
+        self.password = 'Portal-Search-Password-42!'
+        self.admin = User.objects.create_user(
+            'search-admin@example.test',
+            self.password,
+            email_verified_at=now,
+        )
+        self.member = User.objects.create_user(
+            'search-member@example.test',
+            self.password,
+            email_verified_at=now,
+        )
+        self.other = User.objects.create_user(
+            'other-tenant@example.test',
+            self.password,
+            email_verified_at=now,
+        )
+        self.company = Company.objects.create(
+            customer_number='PM-C-SEARCH-A',
+            name='Search Tenant A',
+            email='search-a@example.test',
+            status='active',
+        )
+        other_company = Company.objects.create(
+            customer_number='PM-C-SEARCH-B',
+            name='Search Tenant B',
+            email='search-b@example.test',
+            status='active',
+        )
+        Membership.objects.create(company=self.company, user=self.admin, role='admin', active=True)
+        Membership.objects.create(company=self.company, user=self.member, role='member', active=True)
+        Membership.objects.create(company=other_company, user=self.other, role='admin', active=True)
+
+        product = Product.objects.create(code='SEARCH-PRO', name='Search Pro')
+        self.own_license = License.objects.create(
+            company=self.company,
+            product=product,
+            license_number='PM-SEARCH-OWN',
+            status='active',
+            valid_from=now - timedelta(days=1),
+            valid_until=now + timedelta(days=365),
+        )
+        License.objects.create(
+            company=other_company,
+            product=product,
+            license_number='PM-SEARCH-OTHER-TENANT',
+            status='active',
+            valid_from=now - timedelta(days=1),
+            valid_until=now + timedelta(days=365),
+        )
+
+        self.client.force_login(self.admin)
+        session = self.client.session
+        session['security_version'] = self.admin.security_version
+        session['authenticated_at'] = now.timestamp()
+        session['last_activity_at'] = now.timestamp()
+        session.save()
+
+    def test_portal_search_is_tenant_scoped_and_returns_visible_members_and_licenses(self):
+        response = self.client.get('/portal/search/', {'q': 'PM-SEARCH'})
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, 'PM-SEARCH-OWN')
+        self.assertNotContains(response, 'PM-SEARCH-OTHER-TENANT')
+
+        response = self.client.get('/portal/search/', {'q': 'search-member@example.test'})
+        self.assertContains(response, 'search-member@example.test')
+
+        response = self.client.get('/portal/search/', {'q': 'other-tenant@example.test'})
+        self.assertNotContains(response, 'other-tenant@example.test')

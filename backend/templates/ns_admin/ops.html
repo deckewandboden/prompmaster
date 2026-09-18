@@ -34,7 +34,7 @@
   </div>
 </div>
 
-<div class="grid two" style="margin-top:14px">
+<div class="grid two mt-14">
   <section class="card">
     <h2>Host &amp; Release</h2>
     <div class="statusrow"><span>Umgebung</span><strong>{{ environment }}</strong></div>
@@ -60,7 +60,7 @@
   </section>
 </div>
 
-<div class="grid two" style="margin-top:14px">
+<div class="grid two mt-14">
   <section class="card">
     <h2>Datenbank &amp; Jobs</h2>
     <div class="statusrow"><span>PostgreSQL</span><span class="badge {% if database.status == 'ok' %}ok{% else %}bad{% endif %}">{{ database.status }}</span></div>
@@ -83,13 +83,13 @@
   </section>
 </div>
 
-<div class="grid two" style="margin-top:14px">
+<div class="grid two mt-14">
   <section class="card">
     <h2>Backup &amp; Restore</h2>
     <div class="statusrow"><span>Letztes Backup</span><strong>{% if latest_backup %}{{ latest_backup.status }} · {{ latest_backup.finished_at|date:'d.m.Y H:i' }} · {{ latest_backup.size_bytes|human_bytes }}{% else %}nicht protokolliert{% endif %}</strong></div>
     <div class="statusrow"><span>Letzter Restore-Test</span><strong>{% if latest_restore %}{{ latest_restore.status }} · {{ latest_restore.started_at|date:'d.m.Y H:i' }}{% else %}nicht protokolliert{% endif %}</strong></div>
     {% if latest_restore %}<div class="statusrow"><span>Verwendetes Backup</span><strong>{{ latest_restore.backup_ref|default:'–' }}</strong></div>{% endif %}
-    <div class="page-actions" style="margin-top:12px">
+    <div class="page-actions mt-12">
       <a class="btn secondary sm" href="{% url 'ns_admin:ops_backups' %}">Backups öffnen</a>
       <a class="btn secondary sm" href="{% url 'ns_admin:ops_restore_tests' %}">Restore-Tests öffnen</a>
     </div>

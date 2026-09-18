@@ -8,6 +8,7 @@ urlpatterns = [
     path('', v.dashboard, name='dashboard'),
     path('security/reauth/', sv.sensitive_reauth, name='sensitive_reauth'),
     path('search/', v.global_search, name='search'),
+    path('more/', v.more_menu, name='more'),
     path('exports/<uuid:pk>/', ev.export_status, name='export_status'),
     path('exports/<uuid:pk>/download/', ev.export_download, name='export_download'),
     path('customers/', v.customers, name='customers'),

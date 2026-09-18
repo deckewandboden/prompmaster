@@ -6,7 +6,7 @@
   {% if rights.licenses %}<div class="card kpi"><div>Refund-Quote</div><div class="value">{% if refund_rate != None %}{{ refund_rate }} %{% else %}–{% endif %}</div><div class="small muted">Anteil refundierter Lizenzterms</div></div>{% endif %}
   {% if rights.customers and rights.licenses %}<div class="card kpi"><div>Ø Lizenzen / Firma</div><div class="value">{% if avg_licenses_company != None %}{{ avg_licenses_company }}{% else %}–{% endif %}</div><div class="small muted">Firmenkundenbestand</div></div>{% endif %}
 </div>
-<div class="grid two" style="margin-top:14px">
+<div class="grid two mt-14">
   {% if rights.orders %}<div class="card"><div>Umsatz letzte 30 Tage</div><div class="value">{{ revenue30|floatformat:2 }} €</div><div class="small muted">{{ orders }} Bestellungen gesamt</div></div>{% endif %}
   {% if rights.licenses %}<div class="card"><div>Lizenzen gesamt</div><div class="value">{{ licenses }}</div><div class="small muted">inkl. aktiv, frei, abgelaufen und historisch</div></div>{% endif %}
 </div>

@@ -120,3 +120,11 @@ class LicenseDetailFinancialRbacTests(TestCase):
         self.assertContains(response, '<th>Bezahlt</th>', html=True)
         self.assertContains(response, '<th>Bestellung</th>', html=True)
         self.assertContains(response, 'PM-O-FIN-RBAC-SECRET')
+
+
+    def test_payments_only_reader_gets_payment_navigation_without_orders_permission(self):
+        self.grant('payments.read')
+        response = self.client.get('/ns-admin/payments/')
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, '>Zahlungen</span>', html=False)
+        self.assertNotContains(response, 'Bestellungen &amp; Zahlungen')

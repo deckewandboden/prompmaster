@@ -23,7 +23,7 @@
     <div class="column-menu">
       {% for key,label,sortkey in columns %}
         {% col_visible request key as visible %}
-        <label><input type="checkbox" name="cols" value="{{ key }}" style="min-width:0;width:auto" {% if visible %}checked{% endif %}> {{ label }}</label>
+        <label><input type="checkbox" name="cols" value="{{ key }}" {% if visible %}checked{% endif %} class="compact-checkbox"> {{ label }}</label>
       {% endfor %}
     </div>
   </details>

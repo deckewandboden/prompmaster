@@ -4,7 +4,7 @@
   <h1>Einladung annehmen</h1>
   <p class="muted">Sie wurden zu <strong>{{ invitation.company.name }}</strong> eingeladen.</p>
   <div class="alert info">Der Beitritt erfolgt erst nach Ihrer ausdrücklichen Bestätigung.</div>
-  <form method="post" class="form" style="margin-top:14px">{% csrf_token %}
+  <form method="post" class="form mt-14">{% csrf_token %}
     <button class="btn primary" type="submit">Firma beitreten</button>
   </form>
 </div></div>

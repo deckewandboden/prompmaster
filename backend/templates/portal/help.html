@@ -4,14 +4,14 @@
 <div class="grid two">
   <div class="card">
     <h2>Kontaktformular</h2>
-    <form method="post" class="form">{% csrf_token %}{{ form.as_p }}<button class="btn primary">Nachricht senden</button></form>
+    <form method="post" class="form">{% csrf_token %}{{ form.as_p }}<button type="submit" class="btn primary">Nachricht senden</button></form>
   </div>
   <div class="card">
     <h2>Automatischer Kontext</h2>
     <p class="muted">Konto, Unternehmen, Benutzer-ID und Zeitpunkt werden automatisch zugeordnet. Optional kann eine für Ihr Konto sichtbare Lizenz mitgesendet werden. Passwörter, Tokens oder andere unnötige sensitive Daten werden nicht übernommen.</p>
   </div>
 </div>
-<div class="card" style="margin-top:14px">
+<div class="card mt-14">
   <h2>Supporthistorie</h2>
   <div class="tablewrap">
     <table>

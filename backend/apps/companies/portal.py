@@ -7,7 +7,7 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.core.exceptions import PermissionDenied, ValidationError
 from django.db import transaction
-from django.db.models import Prefetch
+from django.db.models import Prefetch, Q
 from django.shortcuts import get_object_or_404, redirect, render
 from django.http import HttpResponse
 from django.core.serializers.json import DjangoJSONEncoder
@@ -268,6 +268,66 @@ def dashboard(request):
             'now': now,
         },
     )
+
+
+@login_required
+def search(request):
+    company, membership = _ctx(request)
+    query = (request.GET.get('q') or '').strip()
+    member_results = Membership.objects.none()
+    license_results = License.objects.none()
+
+    if query:
+        license_filter = Q(license_number__icontains=query) | Q(product__name__icontains=query)
+        if company and membership and membership.role == 'admin':
+            member_results = (
+                Membership.objects.filter(company=company, active=True)
+                .select_related('user')
+                .filter(
+                    Q(user__email__icontains=query)
+                    | Q(user__first_name__icontains=query)
+                    | Q(user__last_name__icontains=query)
+                )
+                .order_by('user__last_name', 'user__first_name', 'user__email')
+            )
+            license_results = (
+                License.objects.filter(company=company)
+                .select_related('product')
+                .filter(license_filter)
+            )
+        elif company:
+            license_results = (
+                License.objects.filter(
+                    company=company,
+                    assignments__user=request.user,
+                    assignments__ended_at__isnull=True,
+                )
+                .select_related('product')
+                .filter(license_filter)
+                .distinct()
+            )
+        else:
+            license_results = (
+                License.objects.filter(owner_user=request.user)
+                .select_related('product')
+                .filter(license_filter)
+            )
+
+    return render(
+        request,
+        'portal/search.html',
+        {
+            'query': query,
+            'member_results': member_results[:25],
+            'license_results': license_results.order_by('license_number')[:25],
+        },
+    )
+
+
+@login_required
+def more_menu(request):
+    company, membership = _ctx(request)
+    return render(request, 'portal/more.html', {'company': company, 'membership': membership})
 
 
 @login_required

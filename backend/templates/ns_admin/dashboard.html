@@ -14,7 +14,7 @@
   {% if rights.orders %}<div class="card kpi"><div>Umsatz 30 Tage</div><div class="value">{{ revenue30|floatformat:2 }} €</div><div class="small muted">{{ orders30 }} Bestellungen</div></div>{% endif %}
 </div>
 
-<div class="grid three" style="margin-top:14px">
+<div class="grid three mt-14">
   {% if rights.orders %}
   <div class="card">
     <h2>Umsatzentwicklung</h2>
@@ -54,7 +54,7 @@
   {% endif %}
 </div>
 
-<div class="grid two" style="margin-top:14px">
+<div class="grid two mt-14">
   {% if rights.orders %}
   <div class="card"><h2>Letzte Bestellungen</h2>{% for o in recent_orders %}<div class="statusrow"><span><a href="{% url 'ns_admin:order_detail' o.id %}">{{ o.order_number }}</a> · {% if o.company %}{{ o.company.name }}{% else %}{{ o.private_user.email }}{% endif %}</span><strong>{{ o.gross_total }} {{ o.currency }}</strong></div>{% empty %}<p class="muted">Keine Bestellungen.</p>{% endfor %}<a class="btn secondary sm" href="{% url 'ns_admin:orders' %}">Alle Bestellungen</a></div>
   {% endif %}

@@ -218,6 +218,11 @@ def dashboard(request):
     return render(request, 'ns_admin/dashboard.html', context)
 
 
+@staff_perm()
+def more_menu(request):
+    return render(request, 'ns_admin/more.html')
+
+
 @staff_perm('customers.read')
 def customers(request):
     grid = DataGrid(

@@ -155,6 +155,8 @@ url_names = {
     'payments': names_from(ROOT/'backend/apps/payments/webhook_urls.py'),
     'proaccess': names_from(ROOT/'backend/apps/proaccess/urls.py'),
     'ops_api': names_from(ROOT/'backend/apps/ops/api_urls.py'),
+    'content_admin': names_from(ROOT/'backend/apps/contenthub/admin_urls.py'),
+    'prompt_studio': names_from(ROOT/'backend/apps/prompts/studio_urls.py'),
 }
 for template in sorted((ROOT/'backend/templates').rglob('*.html')):
     text = template.read_text(encoding='utf-8')
@@ -251,6 +253,26 @@ for template in sorted((ROOT/'backend/templates').rglob('*.html')):
                 )
 
 
+# 10f) Buttons must declare their behavior explicitly. Relying on the HTML
+# default submit type makes refactors and nested-form mistakes unnecessarily risky.
+for template in sorted((ROOT/'backend/templates').rglob('*.html')):
+    text = template.read_text(encoding='utf-8')
+    for match in re.finditer(r'<button\\b([^>]*)>', text, flags=re.I):
+        if not re.search(r'\\btype\\s*=\\s*["\\'](?:submit|button|reset)["\\']', match.group(1), flags=re.I):
+            line = text.count('\\n', 0, match.start()) + 1
+            fail(f'{template.relative_to(ROOT)}:{line} button lacks explicit type')
+
+# 10g) Layout belongs to the shared design system. Dynamic inline values used
+# for charts/progress are allowed; literal one-off layout styles are not.
+for template in sorted((ROOT/'backend/templates').rglob('*.html')):
+    text = template.read_text(encoding='utf-8')
+    for match in re.finditer(r'\\sstyle\\s*=\\s*["\\']([^"\\']+)["\\']', text, flags=re.I):
+        value = match.group(1)
+        if '{{' in value or '{%' in value:
+            continue
+        line = text.count('\\n', 0, match.start()) + 1
+        fail(f'{template.relative_to(ROOT)}:{line} literal inline style must use shared CSS: {value}')
+
 # 11) Security-critical implementation guards.
 checks = {
  'backend/apps/accounts/models.py': ('security_version=models.PositiveBigIntegerField(default=1)',),
@@ -268,9 +290,9 @@ for rel, tokens in checks.items():
             fail(f'Security invariant missing {rel}: {token}')
 
 # 12) Expected enterprise routes.
-expected_admin = {'dashboard','search','customers','customer_detail','customer_portal_preview','private_customer_portal_preview','customer_users','customer_licenses','customer_devices','customer_orders','customer_payments','customer_emails','customer_audit','licenses','license_detail','license_refund','orders','order_detail','payments','products','product_edit','product_price_add','email','email_log','mollie','mollie_events','stats','ops','ops_services','ops_database','ops_backups','ops_restore_tests','ops_alerts','api','legal','audit','roles','settings'}
+expected_admin = {'dashboard','search','more','customers','customer_detail','customer_portal_preview','private_customer_portal_preview','customer_users','customer_licenses','customer_devices','customer_orders','customer_payments','customer_emails','customer_audit','licenses','license_detail','license_refund','orders','order_detail','payments','products','product_edit','product_price_add','email','email_log','mollie','mollie_events','stats','ops','ops_services','ops_database','ops_backups','ops_restore_tests','ops_alerts','api','legal','audit','roles','settings'}
 for name in sorted(expected_admin - url_names['ns_admin']): fail(f'Missing ns-admin route: {name}')
-expected_portal={'dashboard','team','invitations','invite','licenses','buy','renew','devices','orders','company','profile','security','help'}
+expected_portal={'dashboard','search','more','team','invitations','invite','licenses','buy','renew','devices','orders','company','profile','security','help'}
 for name in sorted(expected_portal-url_names['portal']): fail(f'Missing portal route: {name}')
 expected_ops={'health','system','storage','database','services','backups','integrations','maintenance_snapshot'}
 for name in sorted(expected_ops-url_names['ops_api']): fail(f'Missing Ops API route: {name}')
@@ -419,6 +441,8 @@ route_files = {
     'proaccess': ROOT/'backend/apps/proaccess/urls.py',
     'ops_api': ROOT/'backend/apps/ops/api_urls.py',
     'prompts_api': ROOT/'backend/apps/prompts/api_urls.py',
+    'content_admin': ROOT/'backend/apps/contenthub/admin_urls.py',
+    'prompt_studio': ROOT/'backend/apps/prompts/studio_urls.py',
     'root': ROOT/'backend/config/urls.py',
 }
 route_args = {}

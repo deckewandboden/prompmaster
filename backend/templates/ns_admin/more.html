@@ -1,0 +1,40 @@
+{% extends 'ns_admin/base.html' %}{% load pm %}{% block content %}
+{% user_has_perm request.user 'customers.read' as can_customers %}
+{% user_has_perm request.user 'licenses.read' as can_licenses %}
+{% user_has_perm request.user 'orders.read' as can_orders %}
+{% user_has_perm request.user 'payments.read' as can_payments %}
+{% user_has_perm request.user 'products.read' as can_products %}
+{% user_has_perm request.user 'prompts.read' as can_prompts %}
+{% user_has_perm request.user 'content.read' as can_content %}
+{% user_has_perm request.user 'email.read' as can_email %}
+{% user_has_perm request.user 'ops.read' as can_ops %}
+{% user_has_perm request.user 'api.read' as can_api %}
+{% user_has_perm request.user 'legal.read' as can_legal %}
+{% user_has_perm request.user 'support.read' as can_support %}
+{% user_has_perm request.user 'audit.read' as can_audit %}
+{% user_has_perm request.user 'roles.read' as can_roles %}
+{% user_has_perm request.user 'settings.read' as can_settings %}
+<div class="page-head"><div><h1>Mehr</h1><div class="sub">Alle für Ihr Konto freigegebenen Adminbereiche.</div></div></div>
+<div class="grid two">
+  <div class="card"><h2>Geschäft &amp; Inhalte</h2><div class="list">
+    <a class="btn secondary" href="{% url 'ns_admin:search' %}">Globale Suche</a>
+    {% if can_customers %}<a class="btn secondary" href="{% url 'ns_admin:customers' %}">Kunden</a>{% endif %}
+    {% if can_licenses %}<a class="btn secondary" href="{% url 'ns_admin:licenses' %}">Lizenzen</a>{% endif %}
+    {% if can_orders %}<a class="btn secondary" href="{% url 'ns_admin:orders' %}">Bestellungen{% if can_payments %} &amp; Zahlungen{% endif %}</a>{% elif can_payments %}<a class="btn secondary" href="{% url 'ns_admin:payments' %}">Zahlungen</a>{% endif %}
+    {% if can_products %}<a class="btn secondary" href="{% url 'ns_admin:products' %}">Produkte &amp; Preise</a>{% endif %}
+    {% if can_prompts %}<a class="btn secondary" href="{% url 'prompt_studio:index' %}">Prompt Studio</a>{% endif %}
+    {% if can_content %}<a class="btn secondary" href="{% url 'content_admin:faqs' %}">FAQ &amp; Inhalte</a>{% endif %}
+    {% if can_email %}<a class="btn secondary" href="{% url 'ns_admin:email' %}">E-Mail</a>{% endif %}
+    {% if can_payments %}<a class="btn secondary" href="{% url 'ns_admin:mollie' %}">Mollie</a>{% endif %}
+  </div></div>
+  <div class="card"><h2>System &amp; Governance</h2><div class="list">
+    {% if can_ops %}<a class="btn secondary" href="{% url 'ns_admin:ops' %}">System &amp; Betrieb</a>{% endif %}
+    {% if can_api %}<a class="btn secondary" href="{% url 'ns_admin:api' %}">API &amp; Integrationen</a>{% endif %}
+    {% if can_legal %}<a class="btn secondary" href="{% url 'ns_admin:legal' %}">Datenschutz &amp; Recht</a>{% endif %}
+    {% if can_support %}<a class="btn secondary" href="{% url 'ns_admin:support_requests' %}">Kontaktanfragen</a>{% endif %}
+    {% if can_audit %}<a class="btn secondary" href="{% url 'ns_admin:audit' %}">Protokolle</a>{% endif %}
+    {% if can_roles %}<a class="btn secondary" href="{% url 'ns_admin:roles' %}">Benutzer &amp; Rollen</a>{% endif %}
+    {% if can_settings %}<a class="btn secondary" href="{% url 'ns_admin:settings' %}">Einstellungen</a>{% endif %}
+  </div></div>
+</div>
+{% endblock %}

@@ -2,6 +2,6 @@
 <div class="page-head"><div><h1>2FA einrichten</h1><p class="sub">Authenticator-App verwenden und Einrichtung mit einem gültigen 6-stelligen Code bestätigen.</p></div></div>
 <div class="grid two">
   <div class="card"><h2>Authenticator-Daten</h2><div class="statusrow"><span>Secret</span><strong class="code-wrap">{{ secret }}</strong></div><p class="small muted">Alternativ kann die URI manuell in einer kompatiblen Authenticator-App verwendet werden.</p><code class="auth-code">{{ uri }}</code></div>
-  <div class="card"><h2>Einrichtung bestätigen</h2><form method="post" class="form">{% csrf_token %}<label>6-stelliger Code<input name="code" inputmode="numeric" pattern="[0-9]{6}" maxlength="6" autocomplete="one-time-code" required></label><button class="btn primary">Aktivieren</button></form></div>
+  <div class="card"><h2>Einrichtung bestätigen</h2><form method="post" class="form">{% csrf_token %}<label>6-stelliger Code<input name="code" inputmode="numeric" pattern="[0-9]{6}" maxlength="6" autocomplete="one-time-code" required></label><button type="submit" class="btn primary">Aktivieren</button></form></div>
 </div>
 {% endblock %}
