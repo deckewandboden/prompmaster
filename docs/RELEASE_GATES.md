@@ -70,7 +70,7 @@ Die ausführbaren Abnahmeschritte stehen in `docs/PRODUCTION_ACCEPTANCE.md`. Die
   - `metadata.order_id` und öffentliche `webhookUrl` müssen zum lokalen PromptMaster-Kauf passen,
   - echter Webhook / Paid-Aktivierung,
   - Refund über den produktiven Refund-Service,
-  - Chargeback und – sofern die verwendete Mollie-Testumgebung ihn anbietet – Chargeback-Reversal.
+  - Chargeback über die separate Mollie-Chargeback-Ressource (`reversedAt=null`) und – sofern die verwendete Mollie-Testumgebung ihn anbietet – Chargeback-Reversal über denselben Chargeback mit gesetztem `reversedAt`.
 - Microsoft Graph über `external_graph_acceptance`:
   - Exchange-Application-RBAC für `Application Mail.Send`,
   - positiver `InScope`-Nachweis für `GRAPH_SENDER` und negativer Kontrollpostfach-Nachweis,
