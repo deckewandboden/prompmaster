@@ -165,15 +165,20 @@ The existing `.github/workflows/ci.yml` already contains PostgreSQL/Redis, migra
 
 ## Executed CI evidence — 2026-09-18
 
-The previous GitHub-hosted runner allocation blocker is resolved. The executable code state at commit `d4e396e10c76b3a5ece64a163c288de15b4008e8` was executed on real GitHub-hosted runners and completed successfully:
+The repository-controlled completion state is now evidenced on final audited commit `18fd85782cb0e394f44dfc9c161c82165dbde69e`, executed on real GitHub-hosted runners:
 
-- **PromptMaster CI** — run `35309611512`: all four jobs green (`test`, `security`, `browser-smoke`, `full-stack`). This includes migration drift, migrations/seeds, Prompt runtime sanity, the complete Django/PostgreSQL suite, completion security/concurrency regressions, 100k DataGrid, Compose validation, Docker builds, authenticated TOTP browser coverage at 390/768/1440 px, production-filesystem runtime validation and restore failure/recovery testing.
-- **PromptMaster Full Dependency Security** — run `35309611579`: green.
-- **PromptMaster Shell Syntax** — run `35309611509`: green.
+- **PromptMaster CI** — run `35328465358`: all four jobs green (`test`, `security`, `browser-smoke`, `full-stack`).
+  - `test`: Marketing tests/lint/build, strict static repository guards, migration drift, migrations/seeds, Prompt runtime sanity, complete Django/PostgreSQL suite, external-acceptance safety regressions, 100k DataGrid, Compose validation, collectstatic and Docker builds.
+  - `browser-smoke`: public auth/legal pages, customer portal, company-admin flows, private-customer admin flows, netstyle admin, Prompt Studio, tenant-safe global search, complete mobile “Mehr” navigation, responsive 390/768/1440 px coverage, overflow/overlap guards and Marketing browser smoke.
+  - `full-stack`: clean bootstrap, production filesystem restrictions, live Prometheus target validation (`node`, `postgres`, `cadvisor`, `django` all `UP`), backup/restore failure propagation and recovery.
+  - `security`: Python dependency audit and complete Marketing dependency audit.
+- **PromptMaster Full Dependency Security** — run `35328465326`: green.
+- **PromptMaster Shell Syntax** — run `35328465369`: green, including `scripts/external_backup_acceptance.sh`.
 
-The final responsive browser findings discovered by the real runner were fixed before this evidence was recorded: mobile Datagrid toolbar items now retain a usable flex basis instead of collapsing to zero-basis intrinsic overflow, and dense Datagrids switch to the existing card representation on 701–820 px tablets while preserving the tablet sidebar/navigation contract.
+Additional findings discovered by the deeper UI/runtime audit and fixed before this evidence was recorded include: tenant-safe portal search, complete mobile navigation, missing active-nav mappings, private-customer browser coverage, a real HTTP 500 on the Mollie admin page, full marketing dependency-audit consistency and restic S3-region normalization. The monitoring trust-boundary is now technically enforced by static Compose invariants and real Prometheus scrape validation.
 
-This resolves the repository-controlled CI/runtime blocker. It does **not** by itself certify production GO: the external Mollie/Graph/S3-restic gates, monitoring trust-boundary decision and final human production review remain separate release requirements.
+This resolves the repository-controlled CI/runtime blockers. It does **not** by itself certify production GO: the external Mollie/Graph/S3-restic acceptance commands still require real provider/infrastructure credentials and must be executed in staging/acceptance. The remaining cAdvisor item is the explicit human acceptance of the documented host-level risk of `privileged: true`, not an unverified monitoring-functionality gap.
+
 
 ## Static completion status
 
@@ -185,11 +190,13 @@ After the grouped implementation and final cross-patch review:
 - existing task return contracts were preserved while adding refund crash recovery;
 - no additional unresolved P0/P1 was identified by the final static cross-patch review.
 
-Static/code-level completion and the repository-controlled CI/runtime gates are now evidenced on commit `d4e396e10c76b3a5ece64a163c288de15b4008e8`. Production readiness remains gated by the external provider/backup evidence, monitoring trust-boundary decision and final human release review.
+Static/code-level completion and the repository-controlled CI/runtime gates are now evidenced on commit `18fd85782cb0e394f44dfc9c161c82165dbde69e`. Production readiness remains gated by execution/evidence of the real external provider/backup acceptance, explicit cAdvisor host-risk acceptance and final human release review.
 
 ## Definition of done
 
 The implementation portion of A–E is complete, and all repository-controlled executable gates were green on the recorded code commit. Production readiness still requires all of the following:
-- external Mollie/Graph/S3-restic provider/backup gates evidenced,
-- cAdvisor host-risk accepted or replaced after staging validation,
+- real Mollie Test-mode acceptance evidenced (purchase/webhook/refund/chargeback/reversal),
+- real Microsoft Graph send + provider-failure acceptance evidenced,
+- real external S3/restic backup + isolated PostgreSQL restore evidenced,
+- cAdvisor host-risk explicitly accepted (monitoring functionality is already runtime-validated) or replaced only after separate staging validation,
 - final human review with no unresolved P0/P1.
