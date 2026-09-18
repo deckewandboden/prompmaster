@@ -184,7 +184,7 @@ jobs:
         run: |
           set -o pipefail
           npm ci
-          npm audit --omit=dev --audit-level=high 2>&1 | tee ../security-npm-audit.log
+          npm audit --audit-level=high 2>&1 | tee ../security-npm-audit.log
 
       - name: Upload security diagnostics
         if: failure()
