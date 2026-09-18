@@ -163,13 +163,17 @@ The existing `pg_dump -> restic -> restore drill` design is preserved. Applicati
 
 The existing `.github/workflows/ci.yml` already contains PostgreSQL/Redis, migration drift, full Django tests, 100k DataGrid, Docker/full-stack/restore and browser-smoke gates. Separate dependency-security and shell-syntax workflows remain authoritative for their domains.
 
-## External blocker — GitHub-hosted runners
+## Executed CI evidence — 2026-09-18
 
-The current branch workflows still terminate before step 1 with no allocated GitHub-hosted runner (`runner_id: 0`, `steps: []`). On the current CI run all four jobs (`test`, `security`, `full-stack`, `browser-smoke`) were affected. This is not an application test failure and is also not pass evidence: no checkout, command, migration or test ran.
+The previous GitHub-hosted runner allocation blocker is resolved. The executable code state at commit `d4e396e10c76b3a5ece64a163c288de15b4008e8` was executed on real GitHub-hosted runners and completed successfully:
 
-The available local execution environment for this audit also cannot resolve `github.com`, so it cannot clone the private branch as a substitute runner.
+- **PromptMaster CI** — run `35309611512`: all four jobs green (`test`, `security`, `browser-smoke`, `full-stack`). This includes migration drift, migrations/seeds, Prompt runtime sanity, the complete Django/PostgreSQL suite, completion security/concurrency regressions, 100k DataGrid, Compose validation, Docker builds, authenticated TOTP browser coverage at 390/768/1440 px, production-filesystem runtime validation and restore failure/recovery testing.
+- **PromptMaster Full Dependency Security** — run `35309611579`: green.
+- **PromptMaster Shell Syntax** — run `35309611509`: green.
 
-Therefore **production GO is not certified** until the same branch is executed on a real runner and the external provider/backup/browser gates are evidenced.
+The final responsive browser findings discovered by the real runner were fixed before this evidence was recorded: mobile Datagrid toolbar items now retain a usable flex basis instead of collapsing to zero-basis intrinsic overflow, and dense Datagrids switch to the existing card representation on 701–820 px tablets while preserving the tablet sidebar/navigation contract.
+
+This resolves the repository-controlled CI/runtime blocker. It does **not** by itself certify production GO: the external Mollie/Graph/S3-restic gates, monitoring trust-boundary decision and final human production review remain separate release requirements.
 
 ## Static completion status
 
@@ -181,13 +185,11 @@ After the grouped implementation and final cross-patch review:
 - existing task return contracts were preserved while adding refund crash recovery;
 - no additional unresolved P0/P1 was identified by the final static cross-patch review.
 
-This statement is intentionally limited to static/code-level completion. Runtime correctness and production readiness remain gated by the unexecuted CI/staging/external gates.
+Static/code-level completion and the repository-controlled CI/runtime gates are now evidenced on commit `d4e396e10c76b3a5ece64a163c288de15b4008e8`. Production readiness remains gated by the external provider/backup evidence, monitoring trust-boundary decision and final human release review.
 
 ## Definition of done
 
-The implementation portion of A–E is complete. Merge/production readiness requires all of the following:
-- every P1/P2 implementation above present in the branch,
-- all executable release gates actually run green on a real runner,
-- external provider/backup/browser gates evidenced,
+The implementation portion of A–E is complete, and all repository-controlled executable gates were green on the recorded code commit. Production readiness still requires all of the following:
+- external Mollie/Graph/S3-restic provider/backup gates evidenced,
 - cAdvisor host-risk accepted or replaced after staging validation,
 - final human review with no unresolved P0/P1.
