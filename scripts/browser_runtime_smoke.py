@@ -625,6 +625,36 @@ def run_backend_ui_smoke(browser, fixture=None) -> None:
                 if 'PM-BROWSER-ACTIVE' not in page.locator('body').inner_text():
                     raise AssertionError('portal: global search did not return the visible tenant license')
 
+                page.set_viewport_size({'width': 390, 'height': 844})
+                page.goto(base + 'portal/more/', wait_until='networkidle')
+                hrefs = set(page.locator('.content a').evaluate_all(
+                    "els => els.map(e => new URL(e.href).pathname)"
+                ))
+                expected = {
+                    '/portal/search/', '/portal/profile/', '/portal/security/', '/portal/help/',
+                    '/auth/logout/', '/portal/licenses/buy/', '/portal/orders/', '/portal/company/',
+                }
+                missing = sorted(expected - hrefs)
+                if missing:
+                    raise AssertionError(f'portal mobile More navigation missing: {missing}')
+            else:
+                page.set_viewport_size({'width': 390, 'height': 844})
+                page.goto(base + 'ns-admin/more/', wait_until='networkidle')
+                hrefs = set(page.locator('.content a').evaluate_all(
+                    "els => els.map(e => new URL(e.href).pathname)"
+                ))
+                expected = {
+                    '/ns-admin/search/', '/ns-admin/customers/', '/ns-admin/licenses/',
+                    '/ns-admin/orders/', '/ns-admin/products/', '/ns-admin/prompt-studio/',
+                    '/ns-admin/content/faqs/', '/ns-admin/email/', '/ns-admin/mollie/',
+                    '/ns-admin/statistics/', '/ns-admin/ops/', '/ns-admin/api/',
+                    '/ns-admin/legal/', '/ns-admin/support/', '/ns-admin/audit/',
+                    '/ns-admin/roles/', '/ns-admin/settings/',
+                }
+                missing = sorted(expected - hrefs)
+                if missing:
+                    raise AssertionError(f'admin mobile More navigation missing: {missing}')
+
             for width, height in ((390, 844), (768, 1024), (1440, 1000)):
                 page.set_viewport_size({'width': width, 'height': height})
                 for route, label in routes:
