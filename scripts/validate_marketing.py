@@ -39,6 +39,32 @@ caddy = (ROOT / 'Caddyfile').read_text(encoding='utf-8')
 for needle in ('/srv/marketing', 'handle /catalog.json', '/auth/*', '/pro/*', '/portal/*', '/ns-admin/*'):
     if needle not in caddy:
         raise SystemExit(f'MARKETING VALIDATION FAIL: Caddy integration missing {needle}')
+
+compatibility_redirects = (
+    ('handle /login* {', 'redir * /auth/login/{?query} 302'),
+    ('handle /checkout* {', 'redir * /portal/licenses/buy/{?query} 302'),
+    ('handle /app/pro* {', 'redir * /pro/{?query} 302'),
+    ('handle /portal {', 'redir * /portal/dashboard/{?query} 302'),
+    ('handle /portal/ {', 'redir * /portal/dashboard/{?query} 302'),
+)
+for route, redirect in compatibility_redirects:
+    if route not in caddy or redirect not in caddy:
+        raise SystemExit(
+            f'MARKETING VALIDATION FAIL: compatibility redirect contract missing: '
+            f'{route} -> {redirect}'
+        )
+
+for ambiguous in (
+    'redir /auth/login/ 302',
+    'redir /portal/licenses/buy/ 302',
+    'redir /pro/ 302',
+    'redir /portal/dashboard/ 302',
+):
+    if ambiguous in caddy:
+        raise SystemExit(
+            f'MARKETING VALIDATION FAIL: ambiguous Caddy redirect syntax remains: {ambiguous}'
+        )
+
 compose = (ROOT / 'compose.yaml').read_text(encoding='utf-8')
 if 'dockerfile: Dockerfile.caddy' not in compose:
     raise SystemExit('MARKETING VALIDATION FAIL: Caddy is not built from Dockerfile.caddy')
