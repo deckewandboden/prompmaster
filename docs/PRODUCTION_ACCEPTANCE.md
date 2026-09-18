@@ -56,7 +56,7 @@ docker compose exec -T web python manage.py external_mollie_acceptance start \
   --confirm CREATE-MOLLIE-TEST-PAYMENT
 ```
 
-Der Command verwendet den echten Portal-POST `/portal/licenses/buy/`. Erwartete Ausgabe: `payment_id`, `order`, `checkout_url` und ggf. `change_payment_state_url`.
+Der Command verwendet den echten Portal-POST `/portal/licenses/buy/`. Er akzeptiert den Lauf nur, wenn Mollie den angelegten Payment-Datensatz selbst mit `mode=test` zurückliefert, `metadata.order_id` exakt auf die lokal erzeugte Bestellung zeigt und die von Mollie gespeicherte `webhookUrl` exakt dem öffentlichen PromptMaster-Webhook der angegebenen Base-URL entspricht. Erwartete Ausgabe: `payment_id`, `order`, `checkout_url`, `provider_mode=test`, `webhook_url` und ggf. `change_payment_state_url`.
 
 Die `checkout_url` im Mollie-Testmodus öffnen und den Teststatus auf **paid** setzen. Mollie muss anschließend den echten PromptMaster-Webhook aufrufen.
 
@@ -68,7 +68,7 @@ docker compose exec -T web python manage.py external_mollie_acceptance verify \
   --expect paid
 ```
 
-Das Gate verlangt mindestens ein verarbeitetes `MollieEvent`. Nur ein manuelles Ändern der lokalen Datenbank reicht daher nicht.
+Das Gate verlangt zusätzlich erneut `provider_mode=test`, passende Order-Metadaten und mindestens ein verarbeitetes `MollieEvent`. Nur ein manuelles Ändern der lokalen Datenbank reicht daher nicht.
 
 ### 3. Refund über den produktiven Refund-Service
 
@@ -108,7 +108,7 @@ Voraussetzungen in der Deployment-Umgebung:
 - `RESTIC_PASSWORD`
 - `AWS_ACCESS_KEY_ID`
 - `AWS_SECRET_ACCESS_KEY`
-- `AWS_DEFAULT_REGION` bei S3-kompatiblen Endpunkten, falls die Region nicht aus dem Endpoint hervorgeht (`S3_REGION` wird aus Bestandsgründen weiterhin als Alias akzeptiert)
+- `AWS_DEFAULT_REGION` bei S3-kompatiblen Endpunkten, falls die Region nicht aus dem Endpoint hervorgeht (`S3_REGION` wird im Runner nur noch als Altbestand-Alias akzeptiert)
 - bei temporären S3-Credentials zusätzlich `AWS_SESSION_TOKEN`
 - laufende PostgreSQL-Instanz
 
@@ -119,7 +119,7 @@ PM_EXTERNAL_BACKUP_ACCEPTANCE=RUN_EXTERNAL_S3_RESTORE \
   ./scripts/external_backup_acceptance.sh
 ```
 
-Der Lauf verweigert lokale restic-Ziele. Er merkt sich den vorherigen externen `promptmaster-db`-Snapshot, erstellt einen echten PostgreSQL-Dump, speichert ihn im externen S3/restic-Repository und verlangt danach eine **neue Snapshot-ID**. Anschließend restauriert der Backup-Container den neuesten Snapshot in ein isoliertes PostgreSQL, prüft `django_migrations` und verlangt einen nichtleeren `backup_ref` im Restore-Status. Die Ausgabe enthält die neue `external_snapshot_id` als Abnahmeevidenz. Retention/Prune wird in diesem Acceptance-Lauf nicht ausgelöst. Der Drill soll auf Staging bzw. gegen ein dediziertes externes Acceptance-/Backup-Repository laufen, nicht als Experiment gegen ein unbekanntes Produktions-Repository.
+Der Lauf verweigert lokale, Platzhalter- und unverschlüsselte `s3:http://`-Ziele. Falls der reguläre Backup-Service läuft, wird er für die Dauer des Acceptance-Drills angehalten und beim Verlassen des Skripts automatisch wieder gestartet; dadurch kann kein paralleler geplanter Snapshot den Nachweis verfälschen. Der Runner prüft zuerst die laufende PostgreSQL-Instanz, merkt sich dann den vorherigen externen `promptmaster-db`-Snapshot, erstellt einen echten PostgreSQL-Dump, speichert ihn im externen S3/restic-Repository und verlangt danach eine **neue Snapshot-ID**. Anschließend restauriert der Backup-Container den neuesten Snapshot in ein isoliertes PostgreSQL, prüft `django_migrations` und verlangt einen nichtleeren `backup_ref` im Restore-Status. Die Ausgabe enthält die neue `external_snapshot_id` als Abnahmeevidenz. Retention/Prune wird in diesem Acceptance-Lauf nicht ausgelöst. Der Drill soll auf Staging bzw. gegen ein dediziertes externes Acceptance-/Backup-Repository laufen, nicht als Experiment gegen ein unbekanntes Produktions-Repository.
 
 ## Abnahmeevidenz
 
