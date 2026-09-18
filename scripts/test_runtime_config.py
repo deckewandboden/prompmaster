@@ -23,6 +23,22 @@ class RuntimeConfigTests(unittest.TestCase):
         self.base['services']['postgres']['ports'] = ['5432:5432']
         self.assertTrue(validate(self.base, self.production))
 
+    def test_public_monitoring_network_is_rejected(self):
+        self.base['networks']['monitor']['internal'] = False
+        self.assertTrue(validate(self.base, self.production))
+
+    def test_cadvisor_public_port_is_rejected(self):
+        self.base['services']['cadvisor']['ports'] = ['8080:8080']
+        self.assertTrue(validate(self.base, self.production))
+
+    def test_cadvisor_unpinned_image_is_rejected(self):
+        self.base['services']['cadvisor']['image'] = 'ghcr.io/google/cadvisor:latest'
+        self.assertTrue(validate(self.base, self.production))
+
+    def test_cadvisor_mount_write_access_is_rejected(self):
+        self.base['services']['cadvisor']['volumes'][0] = '/:/rootfs'
+        self.assertTrue(validate(self.base, self.production))
+
     def test_missing_beat_writable_path_is_rejected(self):
         self.base['services']['beat']['tmpfs'] = []
         self.assertTrue(validate(self.base, self.production))
