@@ -14,7 +14,7 @@ backup_once="${BACKUP_ONCE:-0}"
 # variable as a compatibility alias so existing deployments do not silently
 # fall back to us-east-1 on S3-compatible endpoints.
 if [[ -z "${AWS_DEFAULT_REGION:-}" && -n "${S3_REGION:-}" ]]; then
-  export AWS_DEFAULT_REGION="${S3_REGION}"
+  export AWS_DEFAULT_REGION="$S3_REGION"
 fi
 
 json_status() {
