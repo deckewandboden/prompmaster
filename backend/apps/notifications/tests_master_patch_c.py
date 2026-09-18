@@ -3,6 +3,7 @@ from decimal import Decimal
 from types import SimpleNamespace
 from unittest.mock import MagicMock, patch
 
+from celery.exceptions import Retry
 from django.test import TestCase
 from django.utils import timezone
 
@@ -146,6 +147,36 @@ class NotificationSecurityTests(TestCase):
         message.refresh_from_db()
         self.assertEqual(message.status, 'sending')
         self.assertEqual(message.retry_count, 0)
+
+    def test_provider_failure_marks_message_failed_and_requests_retry(self):
+        message = EmailMessage.objects.create(
+            template=EmailTemplate.objects.get(code='t30'),
+            recipient=self.admin.email,
+            subject='Retry probe',
+            status='queued',
+            context={
+                'license': self.license.license_number,
+                'expiry': '01.01.2099',
+            },
+        )
+        retry_signal = Retry('provider retry')
+        with patch(
+            'apps.notifications.tasks.send_now',
+            side_effect=RuntimeError('provider unavailable'),
+        ):
+            with patch.object(
+                send_email_message,
+                'retry',
+                side_effect=retry_signal,
+            ) as retry:
+                with self.assertRaises(Retry):
+                    send_email_message.run(str(message.id))
+
+        message.refresh_from_db()
+        self.assertEqual(message.status, 'failed')
+        self.assertEqual(message.retry_count, 1)
+        self.assertIn('provider unavailable', message.error)
+        retry.assert_called_once()
 
     def test_reminder_scheduling_is_idempotent_and_binds_each_recipient_user(self):
         with self.captureOnCommitCallbacks(execute=False):
