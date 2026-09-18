@@ -197,6 +197,11 @@ for template in sorted((ROOT/'backend/templates').rglob('*.html')):
 _allowed_button_variants = {'primary', 'secondary', 'danger'}
 _allowed_badge_variants = {'ok', 'warn', 'bad', 'info', 'pro'}
 _allowed_alert_variants = {'ok', 'info', 'warn', 'danger'}
+_layout_utility_classes = {
+    'mt-6', 'mt-8', 'mt-10', 'mt-12', 'mt-14', 'mt-16', 'mt-18',
+    'mb-0', 'mb-14', 'd-block', 'd-inline', 'wrap-anywhere',
+    'compact-actions', 'compact-checkbox', 'text-warn', 'pre-wrap',
+}
 for template in sorted((ROOT/'backend/templates').rglob('*.html')):
     text = template.read_text(encoding='utf-8')
     for match in re.finditer(r'class=["\']([^"\']+)["\']', text):
@@ -212,13 +217,13 @@ for template in sorted((ROOT/'backend/templates').rglob('*.html')):
                 f'{template.relative_to(ROOT)}:{line} naked/unknown button variant: {raw}'
             )
         if 'badge' in tokens:
-            variants = tokens - {'badge'}
+            variants = tokens - {'badge'} - _layout_utility_classes
             if variants and not (variants & _allowed_badge_variants):
                 fail(
                     f'{template.relative_to(ROOT)}:{line} unknown badge variant: {raw}'
                 )
         if 'alert' in tokens:
-            variants = tokens - {'alert'}
+            variants = tokens - {'alert'} - _layout_utility_classes
             if variants and not (variants & _allowed_alert_variants):
                 fail(
                     f'{template.relative_to(ROOT)}:{line} unknown alert variant: {raw}'
