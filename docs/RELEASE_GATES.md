@@ -62,12 +62,13 @@ Erst `RUNTIME VALIDATION OK` plus erfolgreicher Backup-/Restore-Test gilt als lo
 
 ## Gate 3 — Externe Integrationen
 
-- Mollie Sandbox: Kauf / Webhook / Retry / Refund / Chargeback / Chargeback-Reversal
-- Microsoft Graph: Produktionsnaher Mailadapter inklusive Fehler-/Retrypfad
-- externer S3/restic Backup-Zieltest
-- echter Restore-Drill gegen ein isoliertes PostgreSQL
+Die ausführbaren Abnahmeschritte stehen in `docs/PRODUCTION_ACCEPTANCE.md`.
 
-Provider-Gates dürfen nicht ausschließlich gemockt sein.
+- Mollie Sandbox: echter Portal-Kauf / Webhook / Refund / Chargeback / Chargeback-Reversal über `external_mollie_acceptance`
+- Microsoft Graph: realer Sendetest und realer Provider-Fehlerpfad über `external_graph_acceptance`
+- externer S3/restic Backup-Zieltest plus isolierter PostgreSQL-Restore über `scripts/external_backup_acceptance.sh`
+
+Provider-Gates dürfen nicht ausschließlich gemockt sein. Die Acceptance-Harnesses verweigern Mollie-Live-Keys beziehungsweise externe Aktionen ohne expliziten Bestätigungswert.
 
 ## Gate 4 — Browser / Security / Performance
 
