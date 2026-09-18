@@ -1,5 +1,5 @@
 {% extends 'ns_admin/base.html' %}{% load pm %}{% block content %}
-<div class="page-head"><div><h1>Bestellungen &amp; Zahlungen</h1><div class="sub">Mollie-Zahlungsstatus, Beträge, Refunds und Chargebacks.</div></div></div>
+<div class="page-head"><div><h1>Zahlungen</h1><div class="sub">Mollie-Zahlungsstatus, Beträge, Refunds und Chargebacks.</div></div></div>
 <div class="grid four">
   <div class="card kpi"><div>Bezahlt</div><div class="value">{{ payment_counts.paid }}</div></div>
   <div class="card kpi"><div>Offen</div><div class="value">{{ payment_counts.open }}</div></div>
