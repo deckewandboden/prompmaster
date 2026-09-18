@@ -43,7 +43,7 @@ Das Gate gilt erst als bestanden, wenn der Command JSON mit `"status": "ok"` lie
 
 ## Mollie Testmodus
 
-Der Acceptance-Command akzeptiert ausschließlich API-Keys mit `test_`-Präfix. Live-Keys werden abgelehnt.
+Der Acceptance-Command akzeptiert ausschließlich API-Keys mit `test_`-Präfix. Live-Keys werden abgelehnt. Die `--base-url` muss eine öffentlich erreichbare HTTPS-Adresse sein; `localhost`, lokale/Test-Domains sowie private/Loopback-IP-Adressen werden bereits vor der Provider-Aktion abgelehnt, weil Mollie den Webhook sonst nicht real zurückrufen könnte.
 
 ### 1. Echten PromptMaster-Kauf starten
 

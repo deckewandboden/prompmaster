@@ -54,6 +54,26 @@ class ExternalAcceptanceSafetyTests(SimpleTestCase):
                     stdout=StringIO(),
                 )
 
+    def test_mollie_acceptance_refuses_non_public_webhook_bases(self):
+        command = MollieAcceptanceCommand()
+        for base_url in (
+            'https://localhost',
+            'https://127.0.0.1',
+            'https://10.20.30.40',
+            'https://promptmaster.local',
+            'https://promptmaster.example.test',
+        ):
+            with self.subTest(base_url=base_url):
+                with self.assertRaises(CommandError):
+                    command._base_url({'base_url': base_url})
+
+    def test_mollie_acceptance_allows_public_https_hostname(self):
+        parsed = MollieAcceptanceCommand()._base_url(
+            {'base_url': 'https://promptmaster-staging.netstyle.de'}
+        )
+        self.assertEqual(parsed.scheme, 'https')
+        self.assertEqual(parsed.hostname, 'promptmaster-staging.netstyle.de')
+
     @override_settings(MOLLIE_API_KEY='')
     def test_mollie_start_requires_explicit_confirmation(self):
         test_key = 'te' + 'st_' + 'safe'

@@ -565,6 +565,76 @@ prompt_validator = subprocess.run(
 if prompt_validator.returncode:
     fail('PromptDomain validator failed: ' + (prompt_validator.stdout + prompt_validator.stderr).strip())
 
+
+# 22) External production-acceptance harnesses are release invariants. They are
+# deliberately manual because they require real provider/infrastructure access,
+# but CI must prevent later edits from weakening their fail-closed safety.
+acceptance_files = {
+    'mollie': ROOT/'backend/apps/core/management/commands/external_mollie_acceptance.py',
+    'graph': ROOT/'backend/apps/core/management/commands/external_graph_acceptance.py',
+    'backup': ROOT/'scripts/external_backup_acceptance.sh',
+    'docs': ROOT/'docs/PRODUCTION_ACCEPTANCE.md',
+}
+for name, path in acceptance_files.items():
+    if not path.exists():
+        fail(f'External acceptance artifact missing: {name} ({path.relative_to(ROOT)})')
+
+if all(path.exists() for path in acceptance_files.values()):
+    mollie_acceptance = acceptance_files['mollie'].read_text(encoding='utf-8')
+    graph_acceptance = acceptance_files['graph'].read_text(encoding='utf-8')
+    backup_acceptance = acceptance_files['backup'].read_text(encoding='utf-8')
+    production_acceptance = acceptance_files['docs'].read_text(encoding='utf-8')
+
+    for needle in (
+        "client.key.startswith('test_')",
+        'CREATE-MOLLIE-TEST-PAYMENT',
+        'CREATE-MOLLIE-TEST-REFUND',
+        'publicly reachable HTTPS hostname',
+        'processed_at__isnull=False',
+        'create_refund_request',
+        'submit_refund',
+    ):
+        if needle not in mollie_acceptance:
+            fail(f'Mollie external acceptance safety/invariant missing: {needle}')
+
+    for needle in (
+        'SEND-GRAPH-ACCEPTANCE',
+        'send_email_message.run',
+        'INVALID_SENDER',
+        "failure.status != 'failed'",
+        'retry_count',
+    ):
+        if needle not in graph_acceptance:
+            fail(f'Graph external acceptance safety/invariant missing: {needle}')
+
+    for needle in (
+        'RUN_EXTERNAL_S3_RESTORE',
+        's3:*)',
+        'RESTORE_TEST_INTERVAL_SECONDS=0',
+        'PRUNE_INTERVAL_SECONDS=9999999999',
+        'before_snapshot',
+        'after_snapshot',
+        'last-restore.json',
+        'EXTERNAL S3/RESTIC BACKUP + ISOLATED POSTGRES RESTORE OK',
+    ):
+        if needle not in backup_acceptance:
+            fail(f'External backup acceptance safety/invariant missing: {needle}')
+
+    for needle in (
+        'external_graph_acceptance',
+        'external_mollie_acceptance',
+        'external_backup_acceptance.sh',
+        'Application Mail.Send',
+        'Chargeback-Reversal',
+    ):
+        if needle not in production_acceptance:
+            fail(f'Production acceptance documentation incomplete: {needle}')
+
+release_gates = (ROOT/'docs/RELEASE_GATES.md').read_text(encoding='utf-8')
+if 'docs/PRODUCTION_ACCEPTANCE.md' not in release_gates:
+    fail('Release gates do not reference the executable production acceptance procedure')
+
+
 if errors:
     print('\n'.join(f'[FAIL] {e}' for e in errors))
     print(f'\nSTATIC VALIDATION FAILED: {len(errors)} issue(s)')

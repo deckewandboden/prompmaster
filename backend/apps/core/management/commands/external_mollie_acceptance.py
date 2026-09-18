@@ -1,3 +1,4 @@
+import ipaddress
 import json
 from decimal import Decimal
 from urllib.parse import urlsplit
@@ -58,6 +59,25 @@ class Command(BaseCommand):
         parsed = urlsplit(raw)
         if parsed.scheme != 'https' or not parsed.netloc:
             raise CommandError('Use an explicit HTTPS --base-url or configure CADDY_DOMAIN.')
+        hostname = (parsed.hostname or '').strip().lower().rstrip('.')
+        if (
+            not hostname
+            or hostname == 'localhost'
+            or hostname.endswith(('.localhost', '.local', '.invalid', '.test'))
+        ):
+            raise CommandError('Mollie acceptance requires a publicly reachable HTTPS hostname.')
+        try:
+            ip = ipaddress.ip_address(hostname)
+        except ValueError:
+            ip = None
+        if ip is not None and (
+            ip.is_private
+            or ip.is_loopback
+            or ip.is_link_local
+            or ip.is_reserved
+            or ip.is_unspecified
+        ):
+            raise CommandError('Mollie acceptance refuses non-public IP addresses.')
         return parsed
 
     def _start(self, client, options):
