@@ -11,7 +11,7 @@
 {% block nav %}
 <a class="{% nav_class request 'dashboard,search' %}" href="{% url 'portal:dashboard' %}"><span class="ico">⌂</span><span class="label">Dashboard</span></a>
 {% if current_membership and current_membership.role == 'admin' %}
-<a class="{% nav_class request 'team,invitations,invite,team_member,transfer_admin' %}" href="{% url 'portal:team' %}"><span class="ico">♙</span><span class="label">Mein Team</span></a>
+<a class="{% nav_class request 'team,invitations,invite,team_member,member_assignment_link,transfer_admin' %}" href="{% url 'portal:team' %}"><span class="ico">♙</span><span class="label">Mein Team</span></a>
 {% endif %}
 <a class="{% nav_class request 'licenses,license_detail,renew,renew_index,claim_assignment_link' %}" href="{% url 'portal:licenses' %}"><span class="ico">▣</span><span class="label">Lizenzen</span></a>
 {% if current_membership and current_membership.role == 'admin' or not current_membership %}
