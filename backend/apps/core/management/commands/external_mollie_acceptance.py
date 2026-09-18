@@ -1,9 +1,11 @@
 import json
+from decimal import Decimal
 from urllib.parse import urlsplit
 
 from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.core.management.base import BaseCommand, CommandError
+from django.db.models import Sum
 from django.test import Client
 from django.utils import timezone
 
@@ -148,6 +150,86 @@ class Command(BaseCommand):
         except Payment.DoesNotExist as exc:
             raise CommandError('No local PromptMaster payment exists for this Mollie ID.') from exc
 
+    def _assert_business_state(self, payment, expected):
+        """Fail closed when provider status is ahead of local business finalization."""
+        if not expected:
+            return
+
+        payment.refresh_from_db()
+        order = payment.order
+        order.refresh_from_db()
+
+        if expected == 'paid':
+            if payment.status != 'paid' or order.status != 'paid' or not payment.processed_paid:
+                raise CommandError(
+                    'Paid acceptance requires Payment=paid, Order=paid and processed_paid=true.'
+                )
+            if not order.items.filter(license_terms__status='active').exists():
+                raise CommandError(
+                    'Paid acceptance has no active LicenseTerm created through the real activation path.'
+                )
+            return
+
+        if expected in {'refunded_partial', 'refunded_full'}:
+            if order.status != 'paid':
+                raise CommandError('Refund acceptance requires the paid order to remain terminal.')
+            succeeded = payment.refunds.filter(status='succeeded').select_related('term__license')
+            if not succeeded.exists():
+                raise CommandError(
+                    'Payment reports a refund state but no local Refund was reconciled to succeeded.'
+                )
+            if succeeded.exclude(term__status='refunded').exists():
+                raise CommandError(
+                    'A succeeded refund still has a LicenseTerm that was not finalized as refunded.'
+                )
+            if payment.refunds.filter(status__in=['created', 'submitted']).exists():
+                raise CommandError(
+                    'Refund acceptance still has an unfinished local refund request.'
+                )
+            refunded_total = succeeded.aggregate(total=Sum('amount'))['total'] or Decimal('0.00')
+            if expected == 'refunded_full' and refunded_total < payment.amount:
+                raise CommandError(
+                    'Payment is refunded_full but locally succeeded refunds do not cover the payment amount.'
+                )
+            if expected == 'refunded_partial' and not (
+                Decimal('0.00') < refunded_total < payment.amount
+            ):
+                raise CommandError(
+                    'Payment is refunded_partial but the locally succeeded refund total is not partial.'
+                )
+            return
+
+        if expected in {'chargeback', 'chargeback_reversed'}:
+            if order.status != 'paid':
+                raise CommandError('Chargeback acceptance requires the original order to remain paid.')
+            from apps.licenses.models import License
+
+            licenses = License.objects.filter(
+                terms__order_item__order=order,
+                terms__status='active',
+            ).distinct()
+            if not licenses.exists():
+                raise CommandError(
+                    'Chargeback acceptance found no active license term linked to the paid order.'
+                )
+            if expected == 'chargeback':
+                if licenses.exclude(status='payment_review').exists():
+                    raise CommandError(
+                        'Chargeback payment state is present but not every affected license is in payment_review.'
+                    )
+            elif licenses.filter(status='payment_review').exists():
+                raise CommandError(
+                    'Chargeback reversal is present but an affected license is still in payment_review.'
+                )
+            return
+
+        if expected in {'failed', 'canceled', 'expired'}:
+            wanted = 'canceled' if expected == 'canceled' else 'failed'
+            if order.status != wanted:
+                raise CommandError(
+                    f'Payment is {expected!r} but order status is {order.status!r}, expected {wanted!r}.'
+                )
+
     def _verify(self, client, options):
         payment = self._payment(options)
         provider = client.get_payment(payment.provider_payment_id)
@@ -164,6 +246,8 @@ class Command(BaseCommand):
         ).count()
         if expected and expected not in {'created', 'open', 'pending'} and processed_events < 1:
             raise CommandError('No processed Mollie webhook event exists for the expected state.')
+
+        self._assert_business_state(payment, expected)
 
         change_state = (
             ((provider.get('_links') or {}).get('changePaymentState') or {}).get('href') or ''
