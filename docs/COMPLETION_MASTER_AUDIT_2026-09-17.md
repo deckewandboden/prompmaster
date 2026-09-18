@@ -165,18 +165,18 @@ The existing `.github/workflows/ci.yml` already contains PostgreSQL/Redis, migra
 
 ## Executed CI evidence — 2026-09-18
 
-The repository-controlled completion state, including the hardened external-acceptance harnesses and the Microsoft Graph sendMail contract hardening, is evidenced on code commit `c2d4881b2199ce9e38e3b5a1b92624fea201e14e`, executed on real GitHub-hosted runners:
+The repository-controlled completion state, including the hardened external-acceptance harnesses and the Microsoft Graph sendMail contract hardening, is evidenced on code commit `e3d78eb884a4cf13a68cb741b085d4ebbcb0905c`, executed on real GitHub-hosted runners:
 
-- **PromptMaster CI** — run `35339593049`: all four jobs green (`test`, `security`, `browser-smoke`, `full-stack`).
+- **PromptMaster CI** — run `35341710728`: all four jobs green (`test`, `security`, `browser-smoke`, `full-stack`).
   - `test`: Marketing tests/lint/build, strict static repository guards, migration drift, migrations/seeds, Prompt runtime sanity, complete Django/PostgreSQL suite, external-acceptance safety/invariant regressions, Microsoft Graph HTTP-202 contract regressions, 100k DataGrid, Compose validation, collectstatic and Docker builds.
   - `browser-smoke`: public auth/legal pages, customer portal, company-admin flows, private-customer admin flows, netstyle admin, Prompt Studio, tenant-safe searches, complete mobile navigation, responsive 360/390/768/1440/1920 coverage, overflow/overlap guards and Marketing browser smoke.
   - `full-stack`: clean bootstrap, production filesystem restrictions, monitoring/runtime validation, backup/restore failure propagation and recovery.
   - `security`: Python dependency audit and complete Marketing dependency audit.
-- **PromptMaster Full Dependency Security** — run `35339593076`: green.
-- **PromptMaster Shell Syntax** — run `35339593060`: green.
+- **PromptMaster Full Dependency Security** — run `35341710738`: green.
+- **PromptMaster Shell Syntax** — run `35341710749`: green.
 
 The external release harnesses are executable and fail closed:
-- **Mollie** accepts only `test_` API keys, uses the real portal checkout/provider/webhook/refund paths, requires provider/local status agreement and rejects false-green refund totals. Chargeback reversal may only pass when Mollie itself exposes a real reversed/provider-paid state and the corresponding webhook/business state is processed; local database manipulation is not accepted as evidence.
+- **Mollie** accepts only `test_` API keys, uses the real portal checkout/provider/webhook/refund paths, requires provider/local status agreement and rejects false-green refund totals. Its acceptance base URL must now be a publicly reachable HTTPS host; localhost, local/test domains and private/loopback IP addresses are rejected before provider-side payment creation. Static validation also pins the confirmation/test-mode/webhook/refund invariants so later edits cannot silently weaken the gate. Chargeback reversal may only pass when Mollie itself exposes a real reversed/provider-paid state and the corresponding webhook/business state is processed; local database manipulation is not accepted as evidence.
 - **Microsoft Graph** uses the persisted production `EmailMessage`/task path, requires the documented `202 Accepted` result from `sendMail`, exercises a real provider failure with persisted retry/error state, and the production release gate now additionally requires Exchange Application RBAC scope evidence: `Application Mail.Send` must be in scope for `GRAPH_SENDER`, out of scope for a control mailbox, and no parallel unrestricted Entra `Mail.Send` application grant may bypass that scope.
 - **External S3/restic** requires an explicit confirmation value and an `s3:` target, proves that a new `promptmaster-db` snapshot ID was created, runs the isolated PostgreSQL restore/integrity check and requires a non-empty restore `backup_ref`.
 - **Monitoring trust boundary** is repository- and runtime-validated: Prometheus/cAdvisor publish no host ports, use the internal `monitor` network, cAdvisor keeps the documented read-only host mounts, and runtime validation requires Prometheus targets `node`, `postgres`, `cadvisor` and `django` to be `UP`.
@@ -193,7 +193,7 @@ After the grouped implementation and final cross-patch review:
 - existing task return contracts were preserved while adding refund crash recovery;
 - no additional unresolved P0/P1 was identified by the final static cross-patch review.
 
-Static/code-level completion and the repository-controlled CI/runtime gates are now evidenced on code commit `c2d4881b2199ce9e38e3b5a1b92624fea201e14e`. Production readiness remains gated by execution/evidence of the real external provider/backup acceptance, explicit cAdvisor host-risk acceptance and final human release review.
+Static/code-level completion and the repository-controlled CI/runtime gates are now evidenced on code commit `e3d78eb884a4cf13a68cb741b085d4ebbcb0905c`. Production readiness remains gated by execution/evidence of the real external provider/backup acceptance, explicit cAdvisor host-risk acceptance and final human release review.
 
 ## Definition of done
 
