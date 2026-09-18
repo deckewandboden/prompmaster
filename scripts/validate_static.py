@@ -258,7 +258,7 @@ for template in sorted((ROOT/'backend/templates').rglob('*.html')):
 for template in sorted((ROOT/'backend/templates').rglob('*.html')):
     text = template.read_text(encoding='utf-8')
     for match in re.finditer(r'<button\\b([^>]*)>', text, flags=re.I):
-        if not re.search(r'\\btype\\s*=\\s*["\\'](?:submit|button|reset)["\\']', match.group(1), flags=re.I):
+        if not re.search(r"""\\btype\\s*=\\s*["'](?:submit|button|reset)["']""", match.group(1), flags=re.I):
             line = text.count('\\n', 0, match.start()) + 1
             fail(f'{template.relative_to(ROOT)}:{line} button lacks explicit type')
 
@@ -266,7 +266,7 @@ for template in sorted((ROOT/'backend/templates').rglob('*.html')):
 # for charts/progress are allowed; literal one-off layout styles are not.
 for template in sorted((ROOT/'backend/templates').rglob('*.html')):
     text = template.read_text(encoding='utf-8')
-    for match in re.finditer(r'\\sstyle\\s*=\\s*["\\']([^"\\']+)["\\']', text, flags=re.I):
+    for match in re.finditer(r"""\\sstyle\\s*=\\s*["']([^"']+)["']""", text, flags=re.I):
         value = match.group(1)
         if '{{' in value or '{%' in value:
             continue
