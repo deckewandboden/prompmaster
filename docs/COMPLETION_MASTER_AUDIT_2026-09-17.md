@@ -165,22 +165,23 @@ The existing `.github/workflows/ci.yml` already contains PostgreSQL/Redis, migra
 
 ## Executed CI evidence — 2026-09-18
 
-The repository-controlled completion state, including the hardened external-acceptance harnesses, is evidenced on commit `23a092fd5e6527867355644668351d7a23280dcd`, executed on real GitHub-hosted runners:
+The repository-controlled completion state, including the hardened external-acceptance harnesses and the Microsoft Graph sendMail contract hardening, is evidenced on code commit `c2d4881b2199ce9e38e3b5a1b92624fea201e14e`, executed on real GitHub-hosted runners:
 
-- **PromptMaster CI** — run `35335746672`: all four jobs green (`test`, `security`, `browser-smoke`, `full-stack`).
-  - `test`: Marketing tests/lint/build, strict static repository guards, migration drift, migrations/seeds, Prompt runtime sanity, complete Django/PostgreSQL suite, external-acceptance safety/invariant regressions, 100k DataGrid, Compose validation, collectstatic and Docker builds.
-  - `browser-smoke`: public auth/legal pages, customer portal, company-admin flows, private-customer admin flows, netstyle admin, Prompt Studio, tenant-safe searches, complete mobile navigation, responsive viewport coverage, overflow/overlap guards and Marketing browser smoke.
+- **PromptMaster CI** — run `35339593049`: all four jobs green (`test`, `security`, `browser-smoke`, `full-stack`).
+  - `test`: Marketing tests/lint/build, strict static repository guards, migration drift, migrations/seeds, Prompt runtime sanity, complete Django/PostgreSQL suite, external-acceptance safety/invariant regressions, Microsoft Graph HTTP-202 contract regressions, 100k DataGrid, Compose validation, collectstatic and Docker builds.
+  - `browser-smoke`: public auth/legal pages, customer portal, company-admin flows, private-customer admin flows, netstyle admin, Prompt Studio, tenant-safe searches, complete mobile navigation, responsive 360/390/768/1440/1920 coverage, overflow/overlap guards and Marketing browser smoke.
   - `full-stack`: clean bootstrap, production filesystem restrictions, monitoring/runtime validation, backup/restore failure propagation and recovery.
   - `security`: Python dependency audit and complete Marketing dependency audit.
-- **PromptMaster Full Dependency Security** — run `35335746694`: green.
-- **PromptMaster Shell Syntax** — run `35335746665`: green, including syntax validation and the explicit opt-in refusal guard for `scripts/external_backup_acceptance.sh`.
+- **PromptMaster Full Dependency Security** — run `35339593076`: green.
+- **PromptMaster Shell Syntax** — run `35339593060`: green.
 
-The external release harnesses are now executable and fail closed:
+The external release harnesses are executable and fail closed:
 - **Mollie** accepts only `test_` API keys, uses the real portal checkout/provider/webhook/refund paths, requires provider/local status agreement and rejects false-green refund totals. Chargeback reversal may only pass when Mollie itself exposes a real reversed/provider-paid state and the corresponding webhook/business state is processed; local database manipulation is not accepted as evidence.
-- **Microsoft Graph** uses the persisted production `EmailMessage`/task path, requires a real successful Graph send and additionally exercises a real provider failure with persisted retry/error state.
+- **Microsoft Graph** uses the persisted production `EmailMessage`/task path, requires the documented `202 Accepted` result from `sendMail`, exercises a real provider failure with persisted retry/error state, and the production release gate now additionally requires Exchange Application RBAC scope evidence: `Application Mail.Send` must be in scope for `GRAPH_SENDER`, out of scope for a control mailbox, and no parallel unrestricted Entra `Mail.Send` application grant may bypass that scope.
 - **External S3/restic** requires an explicit confirmation value and an `s3:` target, proves that a new `promptmaster-db` snapshot ID was created, runs the isolated PostgreSQL restore/integrity check and requires a non-empty restore `backup_ref`.
+- **Monitoring trust boundary** is repository- and runtime-validated: Prometheus/cAdvisor publish no host ports, use the internal `monitor` network, cAdvisor keeps the documented read-only host mounts, and runtime validation requires Prometheus targets `node`, `postgres`, `cadvisor` and `django` to be `UP`.
 
-These harnesses being implemented and repository-tested does **not** mark the external gates green. Mollie, Graph and external S3/restic still require execution in the actual staging/acceptance environment with real provider/infrastructure credentials. The cAdvisor monitoring functionality is runtime-validated; production still requires the explicit human acceptance (or separately validated replacement) of its documented host-level trust boundary.
+These harnesses and controls being implemented and repository-tested do **not** mark the external gates green. Mollie, Graph and external S3/restic still require execution in the actual staging/acceptance environment with real provider/infrastructure credentials. Production also still requires explicit human acceptance (or a separately validated replacement) of the documented cAdvisor host-level trust boundary.
 
 ## Static completion status
 
@@ -192,7 +193,7 @@ After the grouped implementation and final cross-patch review:
 - existing task return contracts were preserved while adding refund crash recovery;
 - no additional unresolved P0/P1 was identified by the final static cross-patch review.
 
-Static/code-level completion and the repository-controlled CI/runtime gates are now evidenced on commit `23a092fd5e6527867355644668351d7a23280dcd`. Production readiness remains gated by execution/evidence of the real external provider/backup acceptance, explicit cAdvisor host-risk acceptance and final human release review.
+Static/code-level completion and the repository-controlled CI/runtime gates are now evidenced on code commit `c2d4881b2199ce9e38e3b5a1b92624fea201e14e`. Production readiness remains gated by execution/evidence of the real external provider/backup acceptance, explicit cAdvisor host-risk acceptance and final human release review.
 
 ## Definition of done
 
