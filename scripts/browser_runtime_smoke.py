@@ -496,6 +496,47 @@ def _check_backend_page(page, base: str, path: str, width: int, label: str) -> N
             raise AssertionError(f'{label} {width}px: mobile title visible outside mobile breakpoint')
 
 
+
+def _check_public_page(page, base: str, path: str, width: int, label: str) -> None:
+    page.set_viewport_size({'width': width, 'height': 900})
+    response = page.goto(base + path.lstrip('/'), wait_until='networkidle')
+    if not response or response.status != 200:
+        status = response.status if response else 'no response'
+        raise AssertionError(f'{label} {width}px: HTTP {status} for {path}')
+    metrics = page.evaluate(
+        """() => {
+          const visible = (el) => {
+            const s = getComputedStyle(el);
+            const r = el.getBoundingClientRect();
+            return s.display !== 'none' && s.visibility !== 'hidden' && r.width > 0 && r.height > 0;
+          };
+          const elements = [...document.querySelectorAll(
+            '.login-card,.legal-page,.login-card input,.login-card select,.login-card textarea,.login-card .btn'
+          )].filter(visible);
+          const overflowers = elements.map(el => {
+            const r = el.getBoundingClientRect();
+            return {tag:el.tagName.toLowerCase(),left:Math.round(r.left),right:Math.round(r.right)};
+          }).filter(x => x.left < -1 || x.right > innerWidth + 1);
+          return {
+            innerWidth,
+            scrollWidth: document.documentElement.scrollWidth,
+            h1: (document.querySelector('h1')?.textContent || '').trim(),
+            overflowers,
+          };
+        }"""
+    )
+    if metrics['scrollWidth'] > metrics['innerWidth'] + 1:
+        raise AssertionError(
+            f'{label} {width}px: horizontal overflow '
+            f'{metrics["scrollWidth"]}>{metrics["innerWidth"]}'
+        )
+    if metrics['overflowers']:
+        raise AssertionError(f'{label} {width}px: public UI leaves viewport: {metrics["overflowers"]}')
+    if not metrics['h1']:
+        raise AssertionError(f'{label} {width}px: page has no visible H1')
+
+
+
 def run_backend_ui_smoke(browser, fixture=None) -> None:
     if os.getenv('BACKEND_UI_BROWSER_SMOKE') != '1':
         return
@@ -522,6 +563,20 @@ def run_backend_ui_smoke(browser, fixture=None) -> None:
     )
     try:
         _wait_http(base + 'health/live/', process)
+
+        public_context = browser.new_context(viewport={'width': 1440, 'height': 900})
+        public_page = public_context.new_page()
+        public_routes = [
+            ('auth/login/', 'Login'),
+            ('auth/register/', 'Registrierung'),
+            ('auth/password-reset/', 'Passwortreset'),
+            ('legal/terms/', 'AGB'),
+            ('legal/privacy/', 'Datenschutz'),
+        ]
+        for width in (390, 768, 1440):
+            for route, label in public_routes:
+                _check_public_page(public_page, base, route, width, label)
+        public_context.close()
 
         portal_routes = [
             ('portal/dashboard/', 'Portal Dashboard'),
@@ -668,7 +723,7 @@ def run_backend_ui_smoke(browser, fixture=None) -> None:
 
         print(
             'DJANGO BACKEND BROWSER SMOKE OK: real login + TOTP 2FA + '
-            'portal/admin/prompt-studio + global search + complete mobile navigation + responsive 390/768/1440 + overflow/overlap guards'
+            'public auth/legal + portal/admin/prompt-studio + global search + complete mobile navigation + responsive 390/768/1440 + overflow/overlap guards'
         )
     finally:
         if process.poll() is None:
