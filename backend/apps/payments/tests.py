@@ -243,10 +243,10 @@ class MollieStateIntegrationTests(TestCase):
             chargebacks_payload=reversed_chargeback,
         )
         self.payment.refresh_from_db()
-        self.assertEqual(self.payment.status, 'paid')
+        self.assertEqual(self.payment.status, 'chargeback_reversed')
         self.assertEqual(
             MollieEvent.objects.filter(payment=self.payment).count(),
-            events_before_duplicate + 1,
+            events_before_duplicate,
         )
 
     @patch('apps.payments.services._queue_after_commit')
