@@ -139,6 +139,9 @@ class ExternalMollieAcceptanceInvariantTests(SimpleTestCase):
     def test_mollie_full_refund_acceptance_requires_live_refunded_amount(self):
         payment = MagicMock()
         payment.amount = Decimal('35.88')
+        succeeded = MagicMock()
+        succeeded.aggregate.return_value = {'total': Decimal('35.88')}
+        payment.refunds.filter.return_value = succeeded
 
         MollieAcceptanceCommand()._assert_provider_state(
             payment,
@@ -148,6 +151,23 @@ class ExternalMollieAcceptanceInvariantTests(SimpleTestCase):
             },
             'refunded_full',
         )
+
+    def test_mollie_refund_acceptance_rejects_provider_local_total_mismatch(self):
+        payment = MagicMock()
+        payment.amount = Decimal('35.88')
+        succeeded = MagicMock()
+        succeeded.aggregate.return_value = {'total': Decimal('20.00')}
+        payment.refunds.filter.return_value = succeeded
+
+        with self.assertRaises(CommandError):
+            MollieAcceptanceCommand()._assert_provider_state(
+                payment,
+                {
+                    'status': 'paid',
+                    'amountRefunded': {'currency': 'EUR', 'value': '25.00'},
+                },
+                'refunded_partial',
+            )
 
     def test_mollie_paid_acceptance_requires_real_license_activation(self):
         payment = MagicMock()
