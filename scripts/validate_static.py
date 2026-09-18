@@ -566,6 +566,18 @@ if prompt_validator.returncode:
     fail('PromptDomain validator failed: ' + (prompt_validator.stdout + prompt_validator.stderr).strip())
 
 
+# 21b) Production backup and external acceptance must resolve the same
+# restic S3 region configuration. S3_REGION is retained only as a compatibility
+# alias; restic consumes AWS_DEFAULT_REGION.
+backup_script = (ROOT/'backup/backup.sh').read_text(encoding='utf-8')
+for needle in (
+    'AWS_DEFAULT_REGION',
+    'S3_REGION',
+    'export AWS_DEFAULT_REGION="$S3_REGION"',
+):
+    if needle not in backup_script:
+        fail(f'Production backup S3-region compatibility missing: {needle}')
+
 # 22) External production-acceptance harnesses are release invariants. They are
 # deliberately manual because they require real provider/infrastructure access,
 # but CI must prevent later edits from weakening their fail-closed safety.
