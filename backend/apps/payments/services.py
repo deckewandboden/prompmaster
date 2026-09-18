@@ -103,7 +103,7 @@ def _provider_chargeback_state(payload, payment):
 
     if active:
         return 'chargeback'
-    if seen and payment.status in {'chargeback', 'charged_back'}:
+    if seen and payment.status in {'chargeback', 'charged_back', 'chargeback_reversed'}:
         return 'chargeback_reversed'
     return None
 
