@@ -362,6 +362,10 @@ def _send_graph(message, body):
         timeout=(5, 20),
     )
     response.raise_for_status()
+    if response.status_code != 202:
+        raise MailProviderError(
+            f'Microsoft Graph sendMail returned HTTP {response.status_code}; expected 202'
+        )
     return response.headers.get('request-id', '')[:160]
 
 
