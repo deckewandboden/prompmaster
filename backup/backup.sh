@@ -1,13 +1,6 @@
 #!/usr/bin/env bash
 set -Eeuo pipefail
 
-# Legacy compatibility: older PromptMaster deployments used S3_REGION.
-# Restic itself reads AWS_DEFAULT_REGION, so normalize once for every
-# production backup/restore operation, not only in the acceptance harness.
-if [[ -z "${AWS_DEFAULT_REGION:-}" && -n "${S3_REGION:-}" ]]; then
-  export AWS_DEFAULT_REGION="$S3_REGION"
-fi
-
 status_dir=/status
 work_dir=/tmp/pmbackup
 mkdir -p "$status_dir" "$work_dir"
