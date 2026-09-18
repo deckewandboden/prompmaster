@@ -24,21 +24,21 @@
 {% user_has_perm request.user 'roles.read' as can_roles %}
 {% user_has_perm request.user 'settings.read' as can_settings %}
 <a class="{% nav_class request 'dashboard,search,more' %}" href="{% url 'ns_admin:dashboard' %}"><span class="ico">⌂</span><span class="label">Übersicht</span></a>
-{% if can_customers %}<a class="{% nav_class request 'customers,customer' %}" href="{% url 'ns_admin:customers' %}"><span class="ico">♙</span><span class="label">Kunden</span></a>{% endif %}
+{% if can_customers %}<a class="{% nav_class request 'customers,customer,private_customer' %}" href="{% url 'ns_admin:customers' %}"><span class="ico">♙</span><span class="label">Kunden</span></a>{% endif %}
 {% if can_licenses %}<a class="{% nav_class request 'licenses,license' %}" href="{% url 'ns_admin:licenses' %}"><span class="ico">▣</span><span class="label">Lizenzen</span></a>{% endif %}
 {% if can_orders %}<a class="{% nav_class request 'orders,order,payments,payment' %}" href="{% url 'ns_admin:orders' %}"><span class="ico">▧</span><span class="label">Bestellungen{% if can_payments %} &amp; Zahlungen{% endif %}</span></a>{% elif can_payments %}<a class="{% nav_class request 'payments,payment' %}" href="{% url 'ns_admin:payments' %}"><span class="ico">▧</span><span class="label">Zahlungen</span></a>{% endif %}
-{% if can_products %}<a class="{% nav_class request 'products,product' %}" href="{% url 'ns_admin:products' %}"><span class="ico">◈</span><span class="label">Produkte &amp; Preise</span></a>{% endif %}
+{% if can_products %}<a class="{% nav_class request 'products,product,features,feature' %}" href="{% url 'ns_admin:products' %}"><span class="ico">◈</span><span class="label">Produkte &amp; Preise</span></a>{% endif %}
 {% if can_prompts %}<a class="{% nav_class request 'prompt-studio' %}" href="{% url 'prompt_studio:index' %}"><span class="ico">✦</span><span class="label">Prompt Studio</span></a>{% endif %}
 {% if can_content %}<a class="{% nav_class request 'content' %}" href="{% url 'content_admin:faqs' %}"><span class="ico">≡</span><span class="label">FAQ &amp; Inhalte</span></a>{% endif %}
 {% if can_email %}<a class="{% nav_class request 'email' %}" href="{% url 'ns_admin:email' %}"><span class="ico">✉</span><span class="label">E-Mail</span></a>{% endif %}
 {% if can_payments %}<a class="{% nav_class request 'mollie' %}" href="{% url 'ns_admin:mollie' %}"><span class="ico">◉</span><span class="label">Mollie</span></a>{% endif %}
 {% if can_customers or can_licenses or can_orders %}<a class="{% nav_class request 'stats' %}" href="{% url 'ns_admin:stats' %}"><span class="ico">▥</span><span class="label">Statistiken</span></a>{% endif %}
 {% if can_ops %}<a class="{% nav_class request 'ops' %}" href="{% url 'ns_admin:ops' %}"><span class="ico">⚙</span><span class="label">System &amp; Betrieb</span></a>{% endif %}
-{% if can_api %}<a class="{% nav_class request 'api' %}" href="{% url 'ns_admin:api' %}"><span class="ico">◇</span><span class="label">API &amp; Integrationen</span></a>{% endif %}
+{% if can_api %}<a class="{% nav_class request 'api,service_account' %}" href="{% url 'ns_admin:api' %}"><span class="ico">◇</span><span class="label">API &amp; Integrationen</span></a>{% endif %}
 {% if can_legal %}<a class="{% nav_class request 'legal,retention,deletion' %}" href="{% url 'ns_admin:legal' %}"><span class="ico">♢</span><span class="label">Datenschutz &amp; Recht</span></a>{% endif %}
 {% if can_support %}<a class="{% nav_class request 'support' %}" href="{% url 'ns_admin:support_requests' %}"><span class="ico">?</span><span class="label">Kontaktanfragen</span></a>{% endif %}
 {% if can_audit %}<a class="{% nav_class request 'audit' %}" href="{% url 'ns_admin:audit' %}"><span class="ico">▤</span><span class="label">Protokolle</span></a>{% endif %}
-{% if can_roles %}<a class="{% nav_class request 'roles,role,staff,users' %}" href="{% url 'ns_admin:roles' %}"><span class="ico">♙</span><span class="label">Benutzer &amp; Rollen</span></a>{% endif %}
+{% if can_roles %}<a class="{% nav_class request 'roles,role,staff,users,user_role' %}" href="{% url 'ns_admin:roles' %}"><span class="ico">♙</span><span class="label">Benutzer &amp; Rollen</span></a>{% endif %}
 {% if can_settings %}<a class="{% nav_class request 'settings' %}" href="{% url 'ns_admin:settings' %}"><span class="ico">⚙</span><span class="label">Einstellungen</span></a>{% endif %}
 {% endblock %}
 {% block mobile %}
@@ -50,6 +50,6 @@
   {% if mobile_customers %}<a class="{% nav_class request 'customers,customer' %}" href="{% url 'ns_admin:customers' %}"><b>♙</b>Kunden</a>{% endif %}
   {% if mobile_ops %}<a class="{% nav_class request 'ops' %}" href="{% url 'ns_admin:ops' %}"><b>⚙</b>System</a>{% endif %}
   {% if mobile_audit %}<a class="{% nav_class request 'audit' %}" href="{% url 'ns_admin:audit' %}"><b>▤</b>Logs</a>{% endif %}
-  <a class="{% nav_class request 'search,licenses,license,orders,order,payments,payment,products,product,prompt-studio,content,email,mollie,stats,api,legal,retention,deletion,support,roles,role,staff,users,settings,more' %}" href="{% url 'ns_admin:more' %}"><b>⋯</b>Mehr</a>
+  <a class="{% nav_class request 'search,licenses,license,orders,order,payments,payment,products,product,features,feature,prompt-studio,content,email,mollie,stats,api,service_account,legal,retention,deletion,support,roles,role,staff,users,user_role,settings,private_customer,more' %}" href="{% url 'ns_admin:more' %}"><b>⋯</b>Mehr</a>
 </div>
 {% endblock %}
