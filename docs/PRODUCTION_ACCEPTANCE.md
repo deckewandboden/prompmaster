@@ -91,6 +91,7 @@ Voraussetzungen in der Deployment-Umgebung:
 - `RESTIC_PASSWORD`
 - `AWS_ACCESS_KEY_ID`
 - `AWS_SECRET_ACCESS_KEY`
+- `AWS_DEFAULT_REGION` bei S3-kompatiblen Endpunkten, falls die Region nicht aus dem Endpoint hervorgeht (`S3_REGION` wird aus Bestandsgründen weiterhin als Alias akzeptiert)
 - laufende PostgreSQL-Instanz
 
 Ausführung:
