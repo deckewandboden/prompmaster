@@ -11,6 +11,7 @@ from django.conf import settings
 from django.test import SimpleTestCase, TestCase, override_settings
 
 from apps.core.management.commands.external_graph_acceptance import INVALID_SENDER
+from apps.core.management.commands.external_mollie_acceptance import Command as MollieAcceptanceCommand
 from apps.notifications.models import EmailMessage
 
 
@@ -119,6 +120,10 @@ class ExternalGraphAcceptanceFlowTests(TestCase):
         self.assertEqual(success.provider_reference, 'req-success-123')
         self.assertEqual(failure.status, 'failed')
         self.assertEqual(failure.retry_count, 1)
+
+
+
+class ExternalMollieAcceptanceInvariantTests(SimpleTestCase):
 
     def test_mollie_paid_acceptance_requires_real_license_activation(self):
         payment = MagicMock()
