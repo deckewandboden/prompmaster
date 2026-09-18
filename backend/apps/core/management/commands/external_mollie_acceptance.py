@@ -80,6 +80,35 @@ class Command(BaseCommand):
             raise CommandError('Mollie acceptance refuses non-public IP addresses.')
         return parsed
 
+    def _assert_test_payment_payload(self, provider, payment=None, expected_webhook=None):
+        mode = str(provider.get('mode') or '').strip().lower()
+        if mode != 'test':
+            raise CommandError(
+                f'Mollie acceptance requires provider mode=test, got {mode or "missing"!r}.'
+            )
+
+        if payment is not None:
+            metadata = provider.get('metadata') or {}
+            if isinstance(metadata, str):
+                try:
+                    metadata = json.loads(metadata)
+                except (TypeError, ValueError) as exc:
+                    raise CommandError('Mollie returned invalid payment metadata.') from exc
+            if not isinstance(metadata, dict):
+                raise CommandError('Mollie payment metadata is not an object.')
+            if str(metadata.get('order_id') or '') != str(payment.order_id):
+                raise CommandError(
+                    'Mollie payment metadata order_id does not match the local order.'
+                )
+
+        if expected_webhook:
+            actual = str(provider.get('webhookUrl') or '').strip()
+            if actual.rstrip('/') + '/' != expected_webhook.rstrip('/') + '/':
+                raise CommandError(
+                    f'Mollie webhook URL {actual!r} does not match expected '
+                    f'{expected_webhook!r}.'
+                )
+
     def _start(self, client, options):
         if options.get('confirm') != START_CONFIRM:
             raise CommandError(
@@ -144,6 +173,12 @@ class Command(BaseCommand):
             raise CommandError('Checkout redirected but no local Payment row was created.')
 
         provider = client.get_payment(payment.provider_payment_id)
+        expected_webhook = f'{parsed.scheme}://{parsed.netloc}/api/webhooks/mollie/'
+        self._assert_test_payment_payload(
+            provider,
+            payment=payment,
+            expected_webhook=expected_webhook,
+        )
         change_state = (
             ((provider.get('_links') or {}).get('changePaymentState') or {}).get('href') or ''
         )
@@ -153,11 +188,9 @@ class Command(BaseCommand):
             'payment_id': payment.provider_payment_id,
             'checkout_url': location,
             'provider_status': provider.get('status'),
+            'provider_mode': provider.get('mode'),
             'change_payment_state_url': change_state,
-            'webhook_url': (
-                ((provider.get('_links') or {}).get('webhook') or {}).get('href') or
-                f'{parsed.scheme}://{parsed.netloc}/api/webhooks/mollie/'
-            ),
+            'webhook_url': provider.get('webhookUrl') or expected_webhook,
             'next': 'Complete the hosted Mollie test checkout, then run verify --expect paid.',
         }, sort_keys=True))
 
@@ -316,6 +349,7 @@ class Command(BaseCommand):
         payment = self._payment(options)
         provider = client.get_payment(payment.provider_payment_id)
         payment.refresh_from_db()
+        self._assert_test_payment_payload(provider, payment=payment)
         expected = options.get('expect')
         if expected and payment.status != expected:
             raise CommandError(
@@ -349,6 +383,7 @@ class Command(BaseCommand):
             'order': payment.order.order_number,
             'local_status': payment.status,
             'provider_status': provider.get('status'),
+            'provider_mode': provider.get('mode'),
             'processed_webhook_events': processed_events,
             'change_payment_state_url': change_state,
         }, sort_keys=True))
