@@ -72,10 +72,47 @@ for path in [ROOT/'compose.yaml', ROOT/'compose.staging.yaml', ROOT/'compose.pro
         fail(f'Unpinned latest image: {path.name}')
 
 compose = yaml.safe_load((ROOT/'compose.yaml').read_text())
+services = (compose or {}).get('services', {})
 required_services = {'postgres','redis','web','worker','beat','caddy','prometheus','node-exporter','cadvisor','postgres-exporter','backup'}
-missing_services = required_services - set((compose or {}).get('services', {}))
+missing_services = required_services - set(services)
 if missing_services:
     fail(f'Missing compose services: {sorted(missing_services)}')
+
+# Monitoring trust-boundary invariants. These are intentionally explicit:
+# cAdvisor remains privileged, but it must never become a public application
+# endpoint and its host mounts must remain read-only.
+def _network_names(service):
+    networks = (service or {}).get('networks') or []
+    return set(networks if isinstance(networks, list) else networks.keys())
+
+for name in ('prometheus', 'cadvisor'):
+    service = services.get(name, {})
+    if service.get('ports'):
+        fail(f'{name} must not publish host ports')
+    if _network_names(service) != {'monitor'}:
+        fail(f'{name} must be attached only to the internal monitor network')
+
+cadvisor = services.get('cadvisor', {})
+if cadvisor.get('privileged') is not True:
+    fail('cadvisor trust-boundary contract expects privileged: true until a separately validated replacement exists')
+
+required_cadvisor_mounts = {
+    '/:/rootfs:ro',
+    '/var/run:/var/run:ro',
+    '/sys:/sys:ro',
+    '/var/lib/docker/:/var/lib/docker:ro',
+    '/dev/disk/:/dev/disk:ro',
+}
+cadvisor_mounts = set(cadvisor.get('volumes') or [])
+missing_mounts = required_cadvisor_mounts - cadvisor_mounts
+if missing_mounts:
+    fail(f'cadvisor required read-only host mounts missing/changed: {sorted(missing_mounts)}')
+
+for name in ('prometheus', 'node-exporter', 'cadvisor', 'postgres-exporter'):
+    image = str((services.get(name) or {}).get('image') or '')
+    tail = image.rsplit('/', 1)[-1]
+    if not image or (':' not in tail and '@sha256:' not in image):
+        fail(f'{name} image must be version-pinned')
 
 # 6) Required release files.
 required = [
