@@ -58,6 +58,55 @@ def _provider_paid_at(payload):
         parsed = timezone.make_aware(parsed, timezone.get_current_timezone())
     return parsed or timezone.now()
 
+def _provider_chargeback_state(payload, payment):
+    """Return the authoritative local chargeback state from Mollie's chargeback list.
+
+    Classic Mollie payment webhooks only contain the payment ID. The payment
+    resource itself remains in the normal payment status lifecycle even when a
+    chargeback exists, so chargebacks must be queried separately. ``reversedAt``
+    distinguishes an active chargeback from a reversal.
+    """
+    if payload is None:
+        return None
+    if not isinstance(payload, dict):
+        raise ValidationError('Ungültige Chargeback-Antwort vom Zahlungsanbieter.')
+    embedded = payload.get('_embedded') or {}
+    rows = embedded.get('chargebacks') or []
+    if not isinstance(rows, list):
+        raise ValidationError('Ungültige Chargeback-Liste vom Zahlungsanbieter.')
+
+    seen = False
+    active = False
+    for row in rows:
+        if not isinstance(row, dict):
+            raise ValidationError('Ungültiger Chargeback-Eintrag vom Zahlungsanbieter.')
+        linked_payment = str(row.get('paymentId') or '')
+        if linked_payment and linked_payment != payment.provider_payment_id:
+            raise ValidationError('Chargeback gehört nicht zur erwarteten Zahlung.')
+
+        amount_data = row.get('amount') or {}
+        currency = str(amount_data.get('currency') or '').upper()
+        if currency and currency != payment.currency.upper():
+            raise ValidationError('Chargeback-Währung stimmt nicht mit der Zahlung überein.')
+        raw_value = amount_data.get('value')
+        if raw_value not in (None, ''):
+            try:
+                amount = Decimal(str(raw_value)).quantize(CENT)
+            except Exception as exc:
+                raise ValidationError('Ungültiger Chargeback-Betrag vom Zahlungsanbieter.') from exc
+            if amount <= 0:
+                raise ValidationError('Ungültiger Chargeback-Betrag vom Zahlungsanbieter.')
+
+        seen = True
+        if not row.get('reversedAt'):
+            active = True
+
+    if active:
+        return 'chargeback'
+    if seen and payment.status in {'chargeback', 'charged_back'}:
+        return 'chargeback_reversed'
+    return None
+
 
 def _order_recipient(order):
     if order.private_user_id:
@@ -109,7 +158,7 @@ def _locked_order_licenses(order, *, active_terms_only=False):
 
 
 @transaction.atomic
-def process_provider_state(payment_id, payload):
+def process_provider_state(payment_id, payload, *, chargebacks_payload=None):
     payment = Payment.objects.select_for_update().get(provider_payment_id=payment_id)
     order = Order.objects.select_related('private_user', 'company').get(pk=payment.order_id)
     payment.order = order
@@ -118,16 +167,29 @@ def process_provider_state(payment_id, payload):
         raise ValidationError('Mollie-Betrag oder Währung stimmen nicht mit der Bestellung überein.')
     if payment.order.gross_total.quantize(CENT) != payment.amount.quantize(CENT) or payment.order.currency.upper() != payment.currency.upper():
         raise ValidationError('Interne Bestell- und Zahlungsbeträge stimmen nicht überein.')
+
     previous_status = payment.status
     provider_status = str(payload.get('status') or 'unknown')[:40]
     base_status = STATUS_MAP.get(provider_status, 'unknown')
+    chargeback_state = _provider_chargeback_state(chargebacks_payload, payment)
     refunded_amount = _provider_refunded_amount(payload)
     refunded = (payload.get('amountRefunded') or {}).get('value', '')
     remaining = (payload.get('amountRemaining') or {}).get('value', '')
+
     status = base_status
-    if base_status == 'paid' and refunded_amount > 0:
+    if chargeback_state == 'chargeback':
+        status = 'chargeback'
+    elif base_status == 'paid' and refunded_amount > 0:
         status = 'refunded_full' if refunded_amount >= payment.amount.quantize(CENT) else 'refunded_partial'
-    elif base_status == 'paid' and previous_status in {'chargeback', 'charged_back', 'chargeback_reversed'}:
+    elif chargeback_state == 'chargeback_reversed':
+        status = 'chargeback_reversed'
+    elif (
+        chargebacks_payload is None
+        and base_status == 'paid'
+        and previous_status in {'chargeback', 'charged_back', 'chargeback_reversed'}
+    ):
+        # Compatibility for historical/internal callers that predate the
+        # canonical chargeback-list fetch. Real webhooks always pass the list.
         status = 'chargeback_reversed'
 
     event_key = f'{payment_id}:{status}:{refunded}:{remaining}'[:180]
@@ -141,24 +203,40 @@ def process_provider_state(payment_id, payload):
     payment.method = str(payload.get('method') or '')[:50]
     payment.last_provider_payload = payload
 
-    if base_status == 'paid':
-        if not payment.processed_paid:
-            payment.paid_at = payment.paid_at or _provider_paid_at(payload)
-            _activate_order(payment.order, payment.paid_at)
-            payment.processed_paid = True
-            recipient = _order_recipient(payment.order)
-            _queue_after_commit('payment_confirmed', recipient, {
-                'order': payment.order.order_number,
-                'amount': f'{payment.amount:.2f}',
-                'currency': payment.currency,
+    # If the first state we observe is already paid+charged back, create the
+    # paid entitlement once and immediately quarantine it below.
+    if base_status == 'paid' and not payment.processed_paid:
+        payment.paid_at = payment.paid_at or _provider_paid_at(payload)
+        _activate_order(payment.order, payment.paid_at)
+        payment.processed_paid = True
+        recipient = _order_recipient(payment.order)
+        _queue_after_commit('payment_confirmed', recipient, {
+            'order': payment.order.order_number,
+            'amount': f'{payment.amount:.2f}',
+            'currency': payment.currency,
+        }, order=payment.order)
+        for item in payment.order.items.select_related('target_license').filter(target_license__isnull=False):
+            target = item.target_license
+            _queue_after_commit('license_renewed', recipient, {
+                'license': target.license_number,
+                'expiry': timezone.localtime(target.valid_until).strftime('%d.%m.%Y'),
             }, order=payment.order)
-            for item in payment.order.items.select_related('target_license').filter(target_license__isnull=False):
-                target = item.target_license
-                _queue_after_commit('license_renewed', recipient, {
-                    'license': target.license_number,
-                    'expiry': timezone.localtime(target.valid_until).strftime('%d.%m.%Y'),
-                }, order=payment.order)
-        else:
+
+    if status == 'chargeback':
+        if previous_status not in {'chargeback', 'charged_back'}:
+            _queue_after_commit(
+                'chargeback_review',
+                _order_recipient(payment.order),
+                {'order': payment.order.order_number},
+                order=payment.order,
+            )
+        for license_obj in _locked_order_licenses(payment.order, active_terms_only=True):
+            if license_obj.status != 'payment_review':
+                license_obj.status = 'payment_review'
+                license_obj.save(update_fields=['status', 'updated_at'])
+                audit(None, 'license.chargeback_review', license_obj, {'payment': payment.provider_payment_id})
+    elif base_status == 'paid':
+        if status == 'chargeback_reversed':
             now = timezone.now()
             for license_obj in _locked_order_licenses(payment.order):
                 has_terms = license_obj.terms.filter(status='active', valid_until__gt=now).exists()
@@ -174,19 +252,6 @@ def process_provider_state(payment_id, payload):
             _queue_after_commit('payment_failed', _order_recipient(payment.order), {
                 'order': payment.order.order_number, 'status': base_status,
             }, order=payment.order)
-    elif base_status == 'chargeback':
-        if previous_status not in {'chargeback', 'charged_back'}:
-            _queue_after_commit(
-                'chargeback_review',
-                _order_recipient(payment.order),
-                {'order': payment.order.order_number},
-                order=payment.order,
-            )
-        for license_obj in _locked_order_licenses(payment.order, active_terms_only=True):
-            if license_obj.status != 'payment_review':
-                license_obj.status = 'payment_review'
-                license_obj.save(update_fields=['status', 'updated_at'])
-                audit(None, 'license.chargeback_review', license_obj, {'payment': payment.provider_payment_id})
 
     payment.save(
         update_fields=[
@@ -202,7 +267,6 @@ def process_provider_state(payment_id, payload):
         error='', processed_at=timezone.now(), provider_status='recovered', updated_at=timezone.now()
     )
     return payment
-
 
 def record_webhook_failure(payment_id, exc):
     payment = Payment.objects.filter(provider_payment_id=payment_id).first()
