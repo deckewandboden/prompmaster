@@ -25,6 +25,7 @@ jobs:
           bash -n scripts/diagnose.sh
           bash -n scripts/runtime_validate.sh
           bash -n scripts/test_backup_restore.sh
+          bash -n scripts/external_backup_acceptance.sh
           bash -n scripts/performance_validate.sh
           bash -n scripts/run_repo_preflight.sh
           bash -n backup/backup.sh
