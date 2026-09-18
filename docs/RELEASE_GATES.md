@@ -65,7 +65,7 @@ Erst `RUNTIME VALIDATION OK` plus erfolgreicher Backup-/Restore-Test gilt als lo
 Die ausführbaren Abnahmeschritte stehen in `docs/PRODUCTION_ACCEPTANCE.md`.
 
 - Mollie Sandbox: echter Portal-Kauf / Webhook / Refund / Chargeback / Chargeback-Reversal über `external_mollie_acceptance`
-- Microsoft Graph: realer Sendetest und realer Provider-Fehlerpfad über `external_graph_acceptance`
+- Microsoft Graph: Exchange-Application-RBAC für `Application Mail.Send` mit positivem `InScope`-Nachweis für `GRAPH_SENDER`, negativem Kontrollpostfach-Nachweis und ohne parallelen unbeschränkten Entra-`Mail.Send`-Grant; anschließend realer Sendetest und realer Provider-Fehlerpfad über `external_graph_acceptance`
 - externer S3/restic Backup-Zieltest plus isolierter PostgreSQL-Restore über `scripts/external_backup_acceptance.sh`
 
 Provider-Gates dürfen nicht ausschließlich gemockt sein. Die Acceptance-Harnesses verweigern Mollie-Live-Keys beziehungsweise externe Aktionen ohne expliziten Bestätigungswert.
