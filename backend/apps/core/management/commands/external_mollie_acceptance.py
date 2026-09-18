@@ -79,8 +79,11 @@ class Command(BaseCommand):
         client_http = Client()
         client_http.force_login(user)
         session = client_http.session
+        now_ts = timezone.now().timestamp()
         session['security_version'] = user.security_version
         session['two_factor_ok'] = True
+        session['authenticated_at'] = now_ts
+        session['last_activity_at'] = now_ts
         session.save()
 
         payload = {
