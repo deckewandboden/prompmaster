@@ -11,8 +11,25 @@ Voraussetzungen:
 - `GRAPH_CLIENT_ID`
 - `GRAPH_CLIENT_SECRET`
 - `GRAPH_SENDER`
-- Entra-Anwendungsberechtigung `Mail.Send` mit Admin Consent
-- der Graph-App-Zugriff sollte auf das tatsächlich benötigte Absenderpostfach eingeschränkt werden
+- Microsoft Graph App-only-Authentifizierung über die konfigurierte Entra-App
+- in Exchange Online eine **Application-RBAC**-Zuweisung `Application Mail.Send`, deren Ressourcenbereich ausschließlich das tatsächlich benötigte PromptMaster-Absenderpostfach umfasst
+- **kein zusätzlicher unbeschränkter Entra-`Mail.Send`-Application-Grant**, wenn Application RBAC die wirksame Postfachbegrenzung liefern soll; Entra- und Exchange-RBAC-Berechtigungen sind additiv
+
+### Postfachbereich vor dem Versand nachweisen
+
+In Exchange Online PowerShell muss derselbe Service Principal einmal gegen das erlaubte Absenderpostfach und einmal gegen ein bewusst nicht freigegebenes Kontrollpostfach geprüft werden:
+
+```powershell
+Test-ServicePrincipalAuthorization -Identity "<GRAPH_CLIENT_ID oder ServicePrincipal>" -Resource "<GRAPH_SENDER>" |
+  Format-Table RoleName,GrantedPermissions,AllowedResourceScope,ScopeType,InScope
+
+Test-ServicePrincipalAuthorization -Identity "<GRAPH_CLIENT_ID oder ServicePrincipal>" -Resource "<KONTROLLPOSTFACH>" |
+  Format-Table RoleName,GrantedPermissions,AllowedResourceScope,ScopeType,InScope
+```
+
+Für `Application Mail.Send` muss beim `GRAPH_SENDER` **`InScope=True`** und beim Kontrollpostfach **`InScope=False`** nachgewiesen werden. Der Cmdlet-Test bewertet Exchange Application RBAC; deshalb ist zusätzlich im Entra-Portal zu prüfen, dass kein organisationsweiter `Mail.Send`-Application-Grant parallel aktiv ist.
+
+### Reale Versand-/Fehlerprobe
 
 Ausführung im laufenden Web-Container:
 
@@ -109,6 +126,7 @@ Der Lauf verweigert lokale restic-Ziele. Er merkt sich den vorherigen externen `
 Für die Produktionsfreigabe werden mindestens festgehalten:
 
 - Datum/Uhrzeit und Commit-SHA
+- Graph Application-RBAC-Nachweis: `Application Mail.Send` für `GRAPH_SENDER` mit `InScope=True`, Kontrollpostfach mit `InScope=False`, plus Bestätigung, dass kein unbeschränkter Entra-`Mail.Send`-Application-Grant parallel aktiv ist
 - Graph Probe-ID + persistierte Erfolgs-/Fehler-Message-IDs + tatsächlicher Mail-Empfang; Graph Request-ID zusätzlich, sofern vom Provider geliefert
 - Mollie Order-/Payment-ID und erfolgreich verarbeitete Webhook-Zustände
 - Mollie Refund-ID sowie Chargeback-/Reversal-Zustände
