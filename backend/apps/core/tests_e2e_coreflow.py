@@ -525,4 +525,6 @@ class PortalSearchIsolationTests(TestCase):
         self.assertContains(response, 'search-member@example.test')
 
         response = self.client.get('/portal/search/', {'q': 'other-tenant@example.test'})
-        self.assertNotContains(response, 'other-tenant@example.test')
+        self.assertEqual(response.context['query'], 'other-tenant@example.test')
+        self.assertEqual(list(response.context['member_results']), [])
+        self.assertEqual(list(response.context['license_results']), [])
