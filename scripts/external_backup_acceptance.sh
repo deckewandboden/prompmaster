@@ -10,6 +10,23 @@ fi
 
 F=(-f compose.yaml -f compose.production.yaml)
 
+backup_was_running=0
+restore_backup_service() {
+  if [[ "$backup_was_running" == "1" ]]; then
+    docker compose "${F[@]}" start backup >/dev/null 2>&1 || true
+  fi
+}
+trap restore_backup_service EXIT
+
+if docker compose "${F[@]}" ps --status running -q backup | grep -q .; then
+  backup_was_running=1
+  docker compose "${F[@]}" stop backup >/dev/null
+fi
+
+docker compose "${F[@]}" exec -T postgres sh -ec '
+  pg_isready -U "$POSTGRES_USER" -d "$POSTGRES_DB" >/dev/null
+'
+
 snapshot_id() {
   docker compose "${F[@]}" run --rm --no-deps --entrypoint /bin/sh backup -ec '
     if [ -z "${AWS_DEFAULT_REGION:-}" ] && [ -n "${S3_REGION:-}" ]; then
@@ -27,9 +44,20 @@ docker compose "${F[@]}" run --rm --no-deps --entrypoint /bin/sh backup -ec '
     export AWS_DEFAULT_REGION="$S3_REGION"
   fi
   case "$RESTIC_REPOSITORY" in
-    s3:*) ;;
+    s3:https://*) ;;
+    s3:s3.amazonaws.com/*|s3:s3.*.amazonaws.com/*) ;;
+    s3:http://*)
+      echo "Insecure s3:http:// repositories are refused by the production acceptance gate." >&2
+      exit 3
+      ;;
     *)
-      echo "RESTIC_REPOSITORY must be an external s3: target for this acceptance gate." >&2
+      echo "RESTIC_REPOSITORY must be an external TLS-protected S3 target." >&2
+      exit 3
+      ;;
+  esac
+  case "$RESTIC_REPOSITORY" in
+    *example.com*|*CHANGE_ME*)
+      echo "Placeholder RESTIC_REPOSITORY is not an acceptance target." >&2
       exit 3
       ;;
   esac
