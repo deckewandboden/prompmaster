@@ -121,6 +121,8 @@ PM_EXTERNAL_BACKUP_ACCEPTANCE=RUN_EXTERNAL_S3_RESTORE \
 
 Der Lauf verweigert lokale, Platzhalter- und unverschlüsselte `s3:http://`-Ziele. Falls der reguläre Backup-Service läuft, wird er für die Dauer des Acceptance-Drills angehalten und beim Verlassen des Skripts automatisch wieder gestartet; dadurch kann kein paralleler geplanter Snapshot den Nachweis verfälschen. Der Runner prüft zuerst die laufende PostgreSQL-Instanz, merkt sich dann den vorherigen externen `promptmaster-db`-Snapshot, erstellt einen echten PostgreSQL-Dump, speichert ihn im externen S3/restic-Repository und verlangt danach eine **neue Snapshot-ID**. Anschließend restauriert der Backup-Container den neuesten Snapshot in ein isoliertes PostgreSQL, prüft `django_migrations` und verlangt einen nichtleeren `backup_ref` im Restore-Status. Die Ausgabe enthält die neue `external_snapshot_id` als Abnahmeevidenz. Retention/Prune wird in diesem Acceptance-Lauf nicht ausgelöst. Der Drill soll auf Staging bzw. gegen ein dediziertes externes Acceptance-/Backup-Repository laufen, nicht als Experiment gegen ein unbekanntes Produktions-Repository.
 
+Zusätzlich muss `scripts/runtime_validate.sh` auf demselben Release-Kandidaten `MONITOR TRUST BOUNDARY OK` ausgeben. Dieser Runtime-Nachweis bestätigt die laufende Monitoring-Isolation (keine Host-Ports, ausschließlich internes `monitor`-Netz, cAdvisor privileged und Host-Mounts read-only). Die verbleibende Entscheidung ist anschließend ausschließlich die bewusste menschliche Akzeptanz dieser dokumentierten Host-Trust-Boundary.
+
 ## Abnahmeevidenz
 
 Für die Produktionsfreigabe werden mindestens festgehalten:
