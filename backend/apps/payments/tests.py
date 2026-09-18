@@ -99,19 +99,42 @@ class MollieStateIntegrationTests(TestCase):
             'method': 'banktransfer',
         }
 
-    @patch('apps.payments.views.MollieClient.get_payment')
-    def test_unknown_webhook_id_does_not_call_provider_api(self, provider_get):
-        response = self.client.post(
-            '/api/webhooks/mollie/',
-            {'id': 'tr_unknown_payment'},
-        )
+    def chargebacks(self, *rows):
+        return {'_embedded': {'chargebacks': list(rows)}}
+
+    def chargeback(self, *, reversed_at=None, payment_id=None):
+        return {
+            'resource': 'chargeback',
+            'id': 'chb_payment_test',
+            'paymentId': payment_id or self.payment.provider_payment_id,
+            'amount': {'value': '35.88', 'currency': 'EUR'},
+            'createdAt': '2026-09-18T09:00:00+00:00',
+            'reversedAt': reversed_at,
+        }
+
+    def test_unknown_webhook_id_does_not_call_provider_api(self):
+        with (
+            patch('apps.payments.views.MollieClient.get_payment') as provider_get,
+            patch('apps.payments.views.MollieClient.list_chargebacks') as provider_chargebacks,
+        ):
+            response = self.client.post(
+                '/api/webhooks/mollie/',
+                {'id': 'tr_unknown_payment'},
+            )
         self.assertEqual(response.status_code, 404)
         provider_get.assert_not_called()
+        provider_chargebacks.assert_not_called()
 
     @patch('apps.payments.services._queue_after_commit')
     def test_duplicate_paid_webhook_creates_exactly_one_license_and_term(self, _mail):
         paid = self.payload('paid')
-        with patch('apps.payments.views.MollieClient.get_payment', return_value=paid):
+        with (
+            patch('apps.payments.views.MollieClient.get_payment', return_value=paid),
+            patch(
+                'apps.payments.views.MollieClient.list_chargebacks',
+                return_value=self.chargebacks(),
+            ) as provider_chargebacks,
+        ):
             first = self.client.post(
                 '/api/webhooks/mollie/',
                 {'id': self.payment.provider_payment_id},
@@ -120,6 +143,7 @@ class MollieStateIntegrationTests(TestCase):
                 '/api/webhooks/mollie/',
                 {'id': self.payment.provider_payment_id},
             )
+        self.assertEqual(provider_chargebacks.call_count, 2)
 
         self.assertEqual(first.status_code, 200)
         self.assertEqual(second.status_code, 200)
@@ -166,18 +190,34 @@ class MollieStateIntegrationTests(TestCase):
         self.assertEqual(self.payment.failed_at, first_failed_at)
 
     @patch('apps.payments.services._queue_after_commit')
-    def test_chargeback_blocks_license_and_paid_reversal_restores_access_state(self, _mail):
-        process_provider_state(self.payment.provider_payment_id, self.payload('paid'))
+    def test_chargeback_blocks_license_and_reversal_restores_access_state(self, _mail):
+        process_provider_state(
+            self.payment.provider_payment_id,
+            self.payload('paid'),
+            chargebacks_payload=self.chargebacks(),
+        )
         license_obj = License.objects.get(owner_user=self.user)
         self.assertEqual(license_obj.status, 'active')
 
-        process_provider_state(self.payment.provider_payment_id, self.payload('charged_back'))
+        active_chargeback = self.chargebacks(self.chargeback())
+        process_provider_state(
+            self.payment.provider_payment_id,
+            self.payload('paid'),
+            chargebacks_payload=active_chargeback,
+        )
         license_obj.refresh_from_db()
         self.payment.refresh_from_db()
         self.assertEqual(self.payment.status, 'chargeback')
         self.assertEqual(license_obj.status, 'payment_review')
 
-        process_provider_state(self.payment.provider_payment_id, self.payload('paid'))
+        reversed_chargeback = self.chargebacks(
+            self.chargeback(reversed_at='2026-09-18T10:00:00+00:00')
+        )
+        process_provider_state(
+            self.payment.provider_payment_id,
+            self.payload('paid'),
+            chargebacks_payload=reversed_chargeback,
+        )
         license_obj.refresh_from_db()
         self.payment.refresh_from_db()
         self.assertEqual(self.payment.status, 'chargeback_reversed')
@@ -197,13 +237,34 @@ class MollieStateIntegrationTests(TestCase):
         )
 
         events_before_duplicate = MollieEvent.objects.filter(payment=self.payment).count()
-        process_provider_state(self.payment.provider_payment_id, self.payload('paid'))
+        process_provider_state(
+            self.payment.provider_payment_id,
+            self.payload('paid'),
+            chargebacks_payload=reversed_chargeback,
+        )
         self.payment.refresh_from_db()
-        self.assertEqual(self.payment.status, 'chargeback_reversed')
+        self.assertEqual(self.payment.status, 'paid')
         self.assertEqual(
             MollieEvent.objects.filter(payment=self.payment).count(),
-            events_before_duplicate,
+            events_before_duplicate + 1,
         )
+
+    @patch('apps.payments.services._queue_after_commit')
+    def test_foreign_chargeback_reference_is_rejected(self, _mail):
+        from django.core.exceptions import ValidationError
+
+        with self.assertRaises(ValidationError):
+            process_provider_state(
+                self.payment.provider_payment_id,
+                self.payload('paid'),
+                chargebacks_payload=self.chargebacks(
+                    self.chargeback(payment_id='tr_different_payment')
+                ),
+            )
+        self.payment.refresh_from_db()
+        self.assertEqual(self.payment.status, 'open')
+        self.assertFalse(self.payment.processed_paid)
+
 
     @patch('apps.payments.services._queue_after_commit')
     def test_provider_amount_or_currency_mismatch_is_rejected(self, _mail):
