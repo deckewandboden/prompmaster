@@ -73,7 +73,7 @@ docker compose exec -T web python manage.py external_mollie_acceptance verify \
   --expect chargeback
 ```
 
-Die Testzahlung anschließend über Mollies Testoberfläche wieder auf bezahlt/reversed setzen und prüfen:
+Ein Chargeback-Reversal darf **nur** dann als bestanden markiert werden, wenn Mollie selbst für die Testzahlung einen echten Reversal-/wieder-bezahlt-Zustand erzeugt und dieser über den öffentlichen Webhook erneut in PromptMaster verarbeitet wurde. Mollie dokumentiert für den Testmodus ausdrücklich das Erzeugen von Refunds und Chargebacks über `changePaymentState`; ein jederzeit verfügbarer manueller Reversal-Schalter ist dagegen nicht garantiert. Falls die verwendete Mollie-Testumgebung einen Reversal-Pfad anbietet, anschließend prüfen:
 
 ```bash
 docker compose exec -T web python manage.py external_mollie_acceptance verify \
@@ -81,7 +81,7 @@ docker compose exec -T web python manage.py external_mollie_acceptance verify \
   --expect chargeback_reversed
 ```
 
-Damit werden die realen Mollie-Webhooks, die lokale Zahlungszustandsmaschine und die Lizenzsperre/-freigabe gemeinsam abgenommen.
+Der Command akzeptiert hierfür weder ein lokales Datenbank-Umschreiben noch nur einen alten `paid`-Datensatz: Providerstatus, verarbeiteter Webhook und wieder freigegebener Lizenzstatus müssen gemeinsam passen. Bietet Mollie im verwendeten Testkonto keinen Reversal-Pfad an, bleibt genau dieser Teil des externen Gates **offen** und muss mit einem von Mollie bereitgestellten/providerunterstützten Reversal-Test nachgewiesen werden. Chargeback selbst kann davon unabhängig vollständig abgenommen werden.
 
 ## Externes S3/restic + echter Restore-Drill
 
@@ -102,7 +102,7 @@ PM_EXTERNAL_BACKUP_ACCEPTANCE=RUN_EXTERNAL_S3_RESTORE \
   ./scripts/external_backup_acceptance.sh
 ```
 
-Der Lauf verweigert lokale restic-Ziele. Er erstellt einen echten PostgreSQL-Dump, speichert ihn im externen S3/restic-Repository, restauriert den neuesten `promptmaster-db`-Snapshot in ein isoliertes PostgreSQL und prüft `django_migrations`. Retention/Prune wird in diesem Acceptance-Lauf nicht ausgelöst. Der Drill soll auf Staging bzw. gegen ein dediziertes externes Acceptance-/Backup-Repository laufen, nicht als Experiment gegen ein unbekanntes Produktions-Repository.
+Der Lauf verweigert lokale restic-Ziele. Er merkt sich den vorherigen externen `promptmaster-db`-Snapshot, erstellt einen echten PostgreSQL-Dump, speichert ihn im externen S3/restic-Repository und verlangt danach eine **neue Snapshot-ID**. Anschließend restauriert der Backup-Container den neuesten Snapshot in ein isoliertes PostgreSQL, prüft `django_migrations` und verlangt einen nichtleeren `backup_ref` im Restore-Status. Die Ausgabe enthält die neue `external_snapshot_id` als Abnahmeevidenz. Retention/Prune wird in diesem Acceptance-Lauf nicht ausgelöst. Der Drill soll auf Staging bzw. gegen ein dediziertes externes Acceptance-/Backup-Repository laufen, nicht als Experiment gegen ein unbekanntes Produktions-Repository.
 
 ## Abnahmeevidenz
 
