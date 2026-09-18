@@ -24,21 +24,23 @@
     }
 
     # Compatibility routes from the recovered marketing frontend to the
-    # canonical Django application routes.
+    # canonical Django application routes. Use an explicit wildcard matcher so
+    # the redirect target is never parsed as another path matcher, and preserve
+    # the incoming query string (for example checkout quantity).
     handle /login* {
-        redir /auth/login/ 302
+        redir * /auth/login/{?query} 302
     }
     handle /checkout* {
-        redir /portal/licenses/buy/ 302
+        redir * /portal/licenses/buy/{?query} 302
     }
     handle /app/pro* {
-        redir /pro/ 302
+        redir * /pro/{?query} 302
     }
     handle /portal {
-        redir /portal/dashboard/ 302
+        redir * /portal/dashboard/{?query} 302
     }
     handle /portal/ {
-        redir /portal/dashboard/ 302
+        redir * /portal/dashboard/{?query} 302
     }
 
     handle /catalog.json {
