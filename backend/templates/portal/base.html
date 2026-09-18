@@ -9,7 +9,7 @@
 {% block side_footer %}{% if current_membership %}{{ current_membership.company.name }}<br>{{ current_membership.get_role_display }}{% else %}PromptMaster Kundenportal{% endif %}{% endblock %}
 {% block home_url %}{% url 'portal:dashboard' %}{% endblock %}
 {% block nav %}
-<a class="{% nav_class request 'dashboard' %}" href="{% url 'portal:dashboard' %}"><span class="ico">⌂</span><span class="label">Dashboard</span></a>
+<a class="{% nav_class request 'dashboard,search' %}" href="{% url 'portal:dashboard' %}"><span class="ico">⌂</span><span class="label">Dashboard</span></a>
 {% if current_membership and current_membership.role == 'admin' %}
 <a class="{% nav_class request 'team,invitations,invite,team_member,transfer_admin' %}" href="{% url 'portal:team' %}"><span class="ico">♙</span><span class="label">Mein Team</span></a>
 {% endif %}
@@ -33,9 +33,9 @@
 <a class="{% nav_class request 'licenses,license_detail,renew,renew_index,claim_assignment_link' %}" href="{% url 'portal:licenses' %}"><b>▣</b>Lizenzen</a>
 <a class="{% nav_class request 'devices,device_revoke' %}" href="{% url 'portal:devices' %}"><b>▤</b>Geräte</a>
 {% if current_membership and current_membership.role == 'admin' %}
-<a class="{% nav_class request 'buy,orders,company,profile,security,privacy,help,more' %}" href="{% url 'portal:more' %}"><b>⋯</b>Mehr</a>
+<a class="{% nav_class request 'search,buy,orders,company,profile,security,privacy,help,more' %}" href="{% url 'portal:more' %}"><b>⋯</b>Mehr</a>
 {% else %}
-<a class="{% nav_class request 'buy,orders,company,help,more' %}" href="{% url 'portal:more' %}"><b>⋯</b>Mehr</a>
+<a class="{% nav_class request 'search,buy,orders,company,help,more' %}" href="{% url 'portal:more' %}"><b>⋯</b>Mehr</a>
 {% endif %}
 </div>
 {% endblock %}
