@@ -605,6 +605,9 @@ if all(path.exists() for path in acceptance_files.values()):
         'processed_at__isnull=False',
         'create_refund_request',
         'submit_refund',
+        "mode != 'test'",
+        'metadata order_id does not match',
+        'Mollie webhook URL',
     ):
         if needle not in mollie_acceptance:
             fail(f'Mollie external acceptance safety/invariant missing: {needle}')
@@ -621,7 +624,11 @@ if all(path.exists() for path in acceptance_files.values()):
 
     for needle in (
         'RUN_EXTERNAL_S3_RESTORE',
-        's3:*)',
+        's3:https://*)',
+        's3:http://*)',
+        'backup_was_running',
+        'trap restore_backup_service EXIT',
+        'pg_isready',
         'RESTORE_TEST_INTERVAL_SECONDS=0',
         'PRUNE_INTERVAL_SECONDS=9999999999',
         'before_snapshot',
