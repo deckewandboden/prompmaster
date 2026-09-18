@@ -1,6 +1,7 @@
 import json
+from decimal import Decimal
 from io import StringIO
-from unittest.mock import patch
+from unittest.mock import MagicMock, patch
 
 import requests
 
@@ -118,3 +119,34 @@ class ExternalGraphAcceptanceFlowTests(TestCase):
         self.assertEqual(success.provider_reference, 'req-success-123')
         self.assertEqual(failure.status, 'failed')
         self.assertEqual(failure.retry_count, 1)
+
+    def test_mollie_paid_acceptance_requires_real_license_activation(self):
+        payment = MagicMock()
+        payment.status = 'paid'
+        payment.processed_paid = True
+        payment.amount = Decimal('35.88')
+        order = MagicMock()
+        order.status = 'paid'
+        order.items.filter.return_value.exists.return_value = False
+        payment.order = order
+
+        with self.assertRaises(CommandError):
+            MollieAcceptanceCommand()._assert_business_state(payment, 'paid')
+
+    def test_mollie_refund_acceptance_rejects_unreconciled_local_refund(self):
+        payment = MagicMock()
+        payment.status = 'refunded_full'
+        payment.processed_paid = True
+        payment.amount = Decimal('35.88')
+        order = MagicMock()
+        order.status = 'paid'
+        payment.order = order
+
+        succeeded_filter = MagicMock()
+        succeeded = MagicMock()
+        succeeded.exists.return_value = False
+        succeeded_filter.select_related.return_value = succeeded
+        payment.refunds.filter.return_value = succeeded_filter
+
+        with self.assertRaises(CommandError):
+            MollieAcceptanceCommand()._assert_business_state(payment, 'refunded_full')
