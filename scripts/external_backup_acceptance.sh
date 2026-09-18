@@ -11,6 +11,9 @@ fi
 F=(-f compose.yaml -f compose.production.yaml)
 
 docker compose "${F[@]}" run --rm --no-deps --entrypoint /bin/sh backup -ec '
+  if [ -z "${AWS_DEFAULT_REGION:-}" ] && [ -n "${S3_REGION:-}" ]; then
+    export AWS_DEFAULT_REGION="$S3_REGION"
+  fi
   case "$RESTIC_REPOSITORY" in
     s3:*) ;;
     *)
@@ -27,6 +30,9 @@ docker compose "${F[@]}" run --rm --no-deps --entrypoint /bin/sh backup -ec '
 docker compose "${F[@]}" run --rm --no-deps   -e BACKUP_ONCE=1   -e RESTORE_TEST_INTERVAL_SECONDS=0   -e PRUNE_INTERVAL_SECONDS=9999999999   backup
 
 docker compose "${F[@]}" run --rm --no-deps --entrypoint /bin/sh backup -ec '
+  if [ -z "${AWS_DEFAULT_REGION:-}" ] && [ -n "${S3_REGION:-}" ]; then
+    export AWS_DEFAULT_REGION="$S3_REGION"
+  fi
   grep -q "\"status\":\"ok\"" /status/last-backup.json
   grep -q "\"status\":\"ok\"" /status/last-restore.json
   restic snapshots --tag promptmaster-db >/tmp/external-snapshots.txt
