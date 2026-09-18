@@ -203,7 +203,37 @@ class Command(BaseCommand):
         except Payment.DoesNotExist as exc:
             raise CommandError('No local PromptMaster payment exists for this Mollie ID.') from exc
 
-    def _assert_provider_state(self, payment, provider, expected):
+    def _provider_chargeback_state(self, payment, payload):
+        if payload is None:
+            return None
+        if not isinstance(payload, dict):
+            raise CommandError('Mollie returned an invalid chargeback response.')
+        rows = ((payload.get('_embedded') or {}).get('chargebacks') or [])
+        if not isinstance(rows, list):
+            raise CommandError('Mollie returned an invalid chargeback list.')
+
+        seen = False
+        active = False
+        for row in rows:
+            if not isinstance(row, dict):
+                raise CommandError('Mollie returned an invalid chargeback entry.')
+            linked_payment = str(row.get('paymentId') or '')
+            if linked_payment and linked_payment != payment.provider_payment_id:
+                raise CommandError('Mollie chargeback points to a different payment.')
+            currency = str(((row.get('amount') or {}).get('currency')) or '').upper()
+            if currency and currency != payment.currency.upper():
+                raise CommandError('Mollie chargeback currency does not match the payment.')
+            seen = True
+            if not row.get('reversedAt'):
+                active = True
+
+        if active:
+            return 'chargeback'
+        if seen:
+            return 'chargeback_reversed'
+        return None
+
+    def _assert_provider_state(self, payment, provider, expected, chargebacks=None):
         """Require the live Mollie payload to agree with the expected local state."""
         if not expected:
             return
@@ -217,10 +247,15 @@ class Command(BaseCommand):
             'failed': 'failed',
             'canceled': 'canceled',
             'expired': 'expired',
+            # Historical compatibility only. Current Mollie payment statuses
+            # stay in the normal lifecycle and chargebacks are separate resources.
             'charged_back': 'chargeback',
         }
+        chargeback_state = self._provider_chargeback_state(payment, chargebacks)
 
-        if provider_status == 'paid':
+        if chargeback_state == 'chargeback':
+            provider_state = 'chargeback'
+        elif provider_status == 'paid':
             refunded_data = provider.get('amountRefunded') or {}
             raw_refunded = refunded_data.get('value')
             try:
@@ -249,10 +284,7 @@ class Command(BaseCommand):
                             'Live Mollie refunded amount does not match the sum of locally '
                             'succeeded refunds.'
                         )
-            elif expected == 'chargeback_reversed':
-                # Mollie returns a recovered chargeback as paid again. The
-                # exact chargeback_reversed transition must additionally be
-                # evidenced by a processed local event in _verify().
+            elif chargeback_state == 'chargeback_reversed':
                 provider_state = 'chargeback_reversed'
             else:
                 provider_state = 'paid'
@@ -348,6 +380,7 @@ class Command(BaseCommand):
     def _verify(self, client, options):
         payment = self._payment(options)
         provider = client.get_payment(payment.provider_payment_id)
+        chargebacks = client.list_chargebacks(payment.provider_payment_id)
         payment.refresh_from_db()
         self._assert_test_payment_payload(provider, payment=payment)
         expected = options.get('expect')
@@ -371,7 +404,12 @@ class Command(BaseCommand):
                     f'No processed Mollie webhook event exists for expected state {expected!r}.'
                 )
 
-        self._assert_provider_state(payment, provider, expected)
+        self._assert_provider_state(
+            payment,
+            provider,
+            expected,
+            chargebacks=chargebacks,
+        )
         self._assert_business_state(payment, expected)
 
         change_state = (
@@ -384,6 +422,7 @@ class Command(BaseCommand):
             'local_status': payment.status,
             'provider_status': provider.get('status'),
             'provider_mode': provider.get('mode'),
+            'provider_chargeback_state': self._provider_chargeback_state(payment, chargebacks),
             'processed_webhook_events': processed_events,
             'change_payment_state_url': change_state,
         }, sort_keys=True))
