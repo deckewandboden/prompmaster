@@ -26,6 +26,7 @@
     {% if can_content %}<a class="btn secondary" href="{% url 'content_admin:faqs' %}">FAQ &amp; Inhalte</a>{% endif %}
     {% if can_email %}<a class="btn secondary" href="{% url 'ns_admin:email' %}">E-Mail</a>{% endif %}
     {% if can_payments %}<a class="btn secondary" href="{% url 'ns_admin:mollie' %}">Mollie</a>{% endif %}
+    {% if can_customers or can_licenses or can_orders %}<a class="btn secondary" href="{% url 'ns_admin:stats' %}">Statistiken</a>{% endif %}
   </div></div>
   <div class="card"><h2>System &amp; Governance</h2><div class="list">
     {% if can_ops %}<a class="btn secondary" href="{% url 'ns_admin:ops' %}">System &amp; Betrieb</a>{% endif %}
