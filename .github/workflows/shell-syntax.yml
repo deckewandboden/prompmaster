@@ -29,3 +29,12 @@ jobs:
           bash -n scripts/performance_validate.sh
           bash -n scripts/run_repo_preflight.sh
           bash -n backup/backup.sh
+
+      - name: Verify external backup drill is opt-in
+        run: |
+          set +e
+          output="$(env -u PM_EXTERNAL_BACKUP_ACCEPTANCE bash scripts/external_backup_acceptance.sh 2>&1)"
+          status=$?
+          set -e
+          test "$status" -eq 2
+          grep -q "Refusing external backup drill" <<<"$output"
