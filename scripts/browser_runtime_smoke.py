@@ -545,6 +545,7 @@ def run_backend_ui_smoke(browser, fixture=None) -> None:
         ]
         admin_routes = [
             ('ns-admin/', 'Admin Dashboard'),
+            ('ns-admin/search/?q=PM-BROWSER', 'Admin Suche'),
             ('ns-admin/more/', 'Admin Mehr'),
             ('ns-admin/customers/', 'Admin Kunden'),
             (f'ns-admin/customers/{fixture["company_id"]}/', 'Admin Kundendetail'),
