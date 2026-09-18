@@ -3,7 +3,7 @@ import time
 from decimal import Decimal
 from unittest import skipUnless
 
-from django.db import close_old_connections, connection, transaction
+from django.db import close_old_connections, connection, connections, transaction
 from django.test import TransactionTestCase
 
 from apps.accounts.models import User
@@ -48,7 +48,7 @@ class OrderStatusConcurrencyTests(TransactionTestCase):
             except Exception as exc:  # pragma: no cover - surfaced below
                 failures.append(exc)
             finally:
-                close_old_connections()
+                connections.close_all()
 
         def stale_checkout_write():
             close_old_connections()
@@ -58,7 +58,7 @@ class OrderStatusConcurrencyTests(TransactionTestCase):
             except Exception as exc:  # pragma: no cover - surfaced below
                 failures.append(exc)
             finally:
-                close_old_connections()
+                connections.close_all()
 
         paid_thread = threading.Thread(target=provider_commit, daemon=True)
         paid_thread.start()
