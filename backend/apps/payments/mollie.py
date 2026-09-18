@@ -88,3 +88,6 @@ class MollieClient:
 
     def list_refunds(self, payment_id):
         return self._request('GET', f'/payments/{payment_id}/refunds')
+
+    def list_chargebacks(self, payment_id):
+        return self._request('GET', f'/payments/{payment_id}/chargebacks')
