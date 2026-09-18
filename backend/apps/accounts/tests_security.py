@@ -2,12 +2,14 @@ from datetime import timedelta
 from unittest.mock import patch
 
 from django.contrib.auth.hashers import make_password
+from django.core.cache import cache
 from django.test import TestCase, override_settings
 from django.utils import timezone
 
 from apps.accounts.models import User, RecoveryCode
-from apps.accounts.security import consume_second_factor
+from apps.accounts.security import consume_second_factor, login_lock_remaining
 from apps.accounts.totp import code
+from apps.audit.models import AuditEvent
 from apps.core.crypto import encrypt
 
 
@@ -64,3 +66,146 @@ class SecondFactorTests(TestCase):
         session.save()
         self.assertEqual(self.client.get('/portal/dashboard/').status_code, 302)
         self.assertNotIn('_auth_user_id', self.client.session)
+
+
+class LoginRateLimitTests(TestCase):
+    def setUp(self):
+        cache.clear()
+
+    def tearDown(self):
+        cache.clear()
+
+    def test_safe_login_page_requests_do_not_consume_attempt_budget(self):
+        for _ in range(25):
+            response = self.client.get('/auth/login/', REMOTE_ADDR='203.0.113.41')
+            self.assertEqual(response.status_code, 200)
+
+        payload = {
+            'email': 'unknown@example.test',
+            'password': 'Definitely-Wrong-Password-42!',
+        }
+        for _ in range(10):
+            response = self.client.post(
+                '/auth/login/',
+                payload,
+                REMOTE_ADDR='203.0.113.41',
+            )
+            self.assertEqual(response.status_code, 200)
+        response = self.client.post(
+            '/auth/login/',
+            payload,
+            REMOTE_ADDR='203.0.113.41',
+        )
+        self.assertEqual(response.status_code, 429)
+
+    def test_login_is_temporarily_throttled_and_security_event_is_logged(self):
+        payload = {
+            'email': 'unknown@example.test',
+            'password': 'Definitely-Wrong-Password-42!',
+        }
+        for _ in range(10):
+            response = self.client.post(
+                '/auth/login/',
+                payload,
+                REMOTE_ADDR='203.0.113.40',
+            )
+            self.assertEqual(response.status_code, 200)
+
+        with self.assertLogs('apps.core.security', level='WARNING') as captured:
+            response = self.client.post(
+                '/auth/login/',
+                payload,
+                REMOTE_ADDR='203.0.113.40',
+            )
+
+        self.assertEqual(response.status_code, 429)
+        self.assertEqual(response['Retry-After'], '300')
+        self.assertTrue(
+            any('Rate limit exceeded for scope=login' in row for row in captured.output)
+        )
+
+
+class LoginLockoutTests(TestCase):
+    email = 'lockout@example.test'
+    password = 'Lockout-Test-Password-42!'
+
+    def setUp(self):
+        cache.clear()
+        self.user = User.objects.create_user(self.email, self.password)
+
+    def tearDown(self):
+        cache.clear()
+
+    def test_five_failures_temporarily_lock_account_and_are_audited(self):
+        for _ in range(5):
+            response = self.client.post(
+                '/auth/login/',
+                {'email': self.email, 'password': 'Wrong-Password-42!'},
+            )
+            self.assertEqual(response.status_code, 200)
+
+        self.assertGreater(login_lock_remaining(self.email), 0)
+        self.assertEqual(
+            AuditEvent.objects.filter(actor=self.user, action='auth.login_failed').count(),
+            5,
+        )
+        last_failure = AuditEvent.objects.filter(
+            actor=self.user,
+            action='auth.login_failed',
+        ).latest('created_at')
+        self.assertTrue(last_failure.changes['locked'])
+
+        response = self.client.post(
+            '/auth/login/',
+            {'email': self.email, 'password': self.password},
+        )
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, 'Anmeldung fehlgeschlagen. Bitte später erneut versuchen.')
+        self.assertNotIn('_auth_user_id', self.client.session)
+        self.assertTrue(
+            AuditEvent.objects.filter(actor=self.user, action='auth.login_locked').exists()
+        )
+
+    def test_failed_login_audit_contains_request_evidence(self):
+        response = self.client.post(
+            '/auth/login/',
+            {'email': self.email, 'password': 'Wrong-Password-42!'},
+            REMOTE_ADDR='203.0.113.55',
+            HTTP_USER_AGENT='PromptMaster-Security-Test/1.0',
+            HTTP_X_CORRELATION_ID='auth-lockout-test-001',
+        )
+        self.assertEqual(response.status_code, 200)
+        event = AuditEvent.objects.get(actor=self.user, action='auth.login_failed')
+        self.assertEqual(event.ip, '203.0.113.55')
+        self.assertEqual(event.user_agent, 'PromptMaster-Security-Test/1.0')
+        self.assertEqual(event.correlation_id, 'auth-lockout-test-001')
+
+    def test_successful_login_clears_account_failure_counter(self):
+        for _ in range(4):
+            self.client.post(
+                '/auth/login/',
+                {'email': self.email, 'password': 'Wrong-Password-42!'},
+            )
+        response = self.client.post(
+            '/auth/login/',
+            {'email': self.email, 'password': self.password},
+        )
+        self.assertEqual(response.status_code, 302)
+        self.assertEqual(login_lock_remaining(self.email), 0)
+
+        self.client.post('/auth/logout/')
+        for _ in range(4):
+            self.client.post(
+                '/auth/login/',
+                {'email': self.email, 'password': 'Wrong-Password-42!'},
+            )
+        self.assertEqual(login_lock_remaining(self.email), 0)
+
+    def test_unknown_account_uses_same_generic_failure_without_audit_target(self):
+        response = self.client.post(
+            '/auth/login/',
+            {'email': 'unknown@example.test', 'password': 'Wrong-Password-42!'},
+        )
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, 'Anmeldung fehlgeschlagen.')
+        self.assertFalse(AuditEvent.objects.filter(action='auth.login_failed').exists())

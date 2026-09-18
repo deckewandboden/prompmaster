@@ -3,7 +3,7 @@
 
 Only cryptographic values and safe staging defaults are generated. Production
 provider credentials are never invented. Generated bootstrap credentials are
-written once to .bootstrap-credentials with mode 0600.
+written to .bootstrap-credentials with mode 0600.
 """
 from __future__ import annotations
 
@@ -66,6 +66,9 @@ def hostname_default() -> str:
 
 if not ENV.exists():
     ENV.write_text(EXAMPLE.read_text(encoding='utf-8'), encoding='utf-8')
+# Lock the file down before any generated secret is written. On a shared
+# staging host this avoids even a short 0644 exposure window.
+os.chmod(ENV, 0o600)
 
 template_lines, defaults = parse(EXAMPLE.read_text(encoding='utf-8'))
 _, current = parse(ENV.read_text(encoding='utf-8'))
@@ -87,6 +90,17 @@ if placeholder(values.get('APP_ENCRYPTION_KEY', ''), 'GENERATE_WITH_FERNET'):
 if placeholder(values.get('RESTIC_PASSWORD', ''), 'CHANGE_ME'):
     values['RESTIC_PASSWORD'] = secrets.token_urlsafe(32)
 
+# A fresh staging installation must be able to exercise backup + restore even
+# before external object-storage credentials exist. Use a Docker named volume
+# as a local restic repository only for staging placeholders. Production env
+# validation still requires an external S3-compatible repository and keys.
+if values.get('ENVIRONMENT', '').strip().lower() == 'staging':
+    repo = values.get('RESTIC_REPOSITORY', '')
+    access_key = values.get('AWS_ACCESS_KEY_ID', '')
+    secret_key = values.get('AWS_SECRET_ACCESS_KEY', '')
+    if placeholder(repo) or placeholder(access_key, 'CHANGE_ME') or placeholder(secret_key, 'CHANGE_ME'):
+        values['RESTIC_REPOSITORY'] = '/repository'
+
 admin_email = values.get('INITIAL_ADMIN_EMAIL', '')
 if placeholder(admin_email) or admin_email == 'admin@example.com':
     values['INITIAL_ADMIN_EMAIL'] = os.environ.get('PM_ADMIN_EMAIL', '').strip() or (
@@ -101,18 +115,33 @@ values['DATABASE_URL'] = (
     f"postgresql://{values.get('POSTGRES_USER', 'promptmaster')}:"
     f"{values['POSTGRES_PASSWORD']}@postgres:5432/{values.get('POSTGRES_DB', 'promptmaster')}"
 )
-values['ALLOWED_HOSTS'] = f'{domain},localhost,127.0.0.1'
+# `web` is the internal Docker DNS name used by Prometheus on the isolated
+# monitor network. It is not published on the host, but Django must accept the
+# Host header of that internal scrape target.
+values['ALLOWED_HOSTS'] = f'{domain},localhost,127.0.0.1,web'
 values['CSRF_TRUSTED_ORIGINS'] = f'https://{domain}' if domain != 'localhost' else 'https://localhost,http://localhost'
 
 ENV.write_text(serialise(template_lines, values), encoding='utf-8')
 os.chmod(ENV, 0o600)
 
 if generated:
-    with CREDS.open('a', encoding='utf-8') as handle:
-        for key, value in generated.items():
-            handle.write(f'{key}={value}\n')
+    # Keep only the credential matching the current generated .env. Appending
+    # stale passwords after a reinitialisation is operationally ambiguous and
+    # unnecessarily retains obsolete secrets.
+    CREDS.touch(mode=0o600, exist_ok=True)
+    os.chmod(CREDS, 0o600)
+    credential_values = {
+        'INITIAL_ADMIN_EMAIL': values['INITIAL_ADMIN_EMAIL'],
+        **generated,
+    }
+    CREDS.write_text(
+        ''.join(f'{key}={value}\n' for key, value in credential_values.items()),
+        encoding='utf-8',
+    )
     os.chmod(CREDS, 0o600)
 
 print(f'Environment prepared for {domain}.')
+if values.get('RESTIC_REPOSITORY') == '/repository':
+    print('Staging backup repository: local persistent Docker volume (/repository).')
 if generated:
     print(f'Initial bootstrap credential written to {CREDS.name} (0600).')

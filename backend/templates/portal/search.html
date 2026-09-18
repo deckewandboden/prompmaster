@@ -1,0 +1,26 @@
+{% extends 'portal/base.html' %}
+{% block content %}
+<div class="page-head"><div><h1>Suche</h1><div class="sub">Die Suche bleibt auf Ihren eigenen Mandanten- und Lizenzbereich begrenzt.</div></div></div>
+<form class="toolbar" method="get" action="{% url 'portal:search' %}">
+  <input name="q" value="{{ query }}" placeholder="{% if current_membership and current_membership.role == 'admin' %}Benutzer, E-Mail oder Lizenz suchen …{% else %}Lizenz suchen …{% endif %}" aria-label="Portal durchsuchen">
+  <button class="btn primary" type="submit">Suchen</button>
+</form>
+{% if query %}
+<div class="grid two mt-14">
+  {% if current_membership and current_membership.role == 'admin' %}
+  <div class="card"><h2>Benutzer</h2>
+    {% for row in member_results %}
+      <div class="statusrow"><span><strong>{{ row.user.full_name|default:row.user.email }}</strong><span class="small muted d-block">{{ row.user.email }}</span></span><a class="btn secondary sm" href="{% url 'portal:team_member' row.user_id %}">Öffnen</a></div>
+    {% empty %}<div class="empty">Keine Benutzer gefunden.</div>{% endfor %}
+  </div>
+  {% endif %}
+  <div class="card"><h2>Lizenzen</h2>
+    {% for license in license_results %}
+      <div class="statusrow"><span><strong>{{ license.license_number }}</strong><span class="small muted d-block">{{ license.product.name }}</span></span><a class="btn secondary sm" href="{% url 'portal:license_detail' license.id %}">Öffnen</a></div>
+    {% empty %}<div class="empty">Keine Lizenzen gefunden.</div>{% endfor %}
+  </div>
+</div>
+{% else %}
+<div class="card mt-14"><p class="muted">Geben Sie einen Suchbegriff ein. Firmenadministratoren können nach Teammitgliedern, E-Mail-Adressen und Lizenzen suchen; andere Benutzer sehen ausschließlich ihre eigene Lizenzsicht.</p></div>
+{% endif %}
+{% endblock %}

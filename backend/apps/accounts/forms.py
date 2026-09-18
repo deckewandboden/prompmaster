@@ -1,19 +1,49 @@
 from django import forms
 from django.contrib.auth import authenticate, password_validation
 
+from apps.audit.services import audit
+from .models import User
+from .security import clear_login_failures, login_lock_remaining, register_login_failure
+
 
 class LoginForm(forms.Form):
     email = forms.EmailField()
     password = forms.CharField(widget=forms.PasswordInput)
 
+    def __init__(self, *args, request=None, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.request = request
+
     def clean(self):
         data = super().clean()
-        self.user = authenticate(
-            email=(data.get('email') or '').strip().lower(),
-            password=data.get('password'),
-        )
+        email = (data.get('email') or '').strip().lower()
+        known_user = User.objects.filter(email__iexact=email).first() if email else None
+        remaining = login_lock_remaining(email)
+        if remaining:
+            if known_user:
+                audit(
+                    known_user,
+                    'auth.login_locked',
+                    known_user,
+                    {'remaining_seconds': remaining},
+                    request=self.request,
+                )
+            raise forms.ValidationError('Anmeldung fehlgeschlagen. Bitte später erneut versuchen.')
+
+        self.user = authenticate(email=email, password=data.get('password'))
         if not self.user or not self.user.is_active:
+            failures, locked = register_login_failure(email)
+            if known_user:
+                audit(
+                    known_user,
+                    'auth.login_failed',
+                    known_user,
+                    {'failures': failures, 'locked': locked},
+                    request=self.request,
+                )
             raise forms.ValidationError('Anmeldung fehlgeschlagen.')
+
+        clear_login_failures(email)
         return data
 
 
@@ -59,6 +89,7 @@ class AcceptInvitationForm(forms.Form):
 
 class TransferAdminForm(forms.Form):
     password = forms.CharField(widget=forms.PasswordInput, label='Passwort zur Bestätigung')
+    confirm = forms.BooleanField(label='Administratorübertragung verbindlich bestätigen')
 
 
 class PasswordResetRequestForm(forms.Form):

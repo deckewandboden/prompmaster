@@ -1,1 +1,8 @@
-{% extends 'base.html' %}{% block body %}<div class="login-wrap"><div class="login-card"><h1>{% if ok %}Einladung angenommen{% else %}Einladung ungültig oder abgelaufen{% endif %}</h1><a class="btn primary" href="{% url 'home' %}">Weiter</a></div></div>{% endblock %}
+{% extends 'base.html' %}{% load static %}{% block body %}
+<div class="login-wrap"><div class="login-card">
+  <div class="login-logo"><img src="{% static 'brand/promptmaster-logo-reference.png' %}" width="239" height="47" alt="PromptMaster by netstyle"></div>
+  <h1>{% if ok %}Einladung angenommen{% else %}Einladung ungültig oder abgelaufen{% endif %}</h1>
+  <p class="muted">{% if ok %}Ihr Benutzerkonto ist dem Unternehmen jetzt zugeordnet.{% else %}Der Einladungslink kann nicht mehr verwendet werden. Bitte fordern Sie bei Ihrem Firmenadministrator eine neue Einladung an.{% endif %}</p>
+  <div class="result-actions"><a class="btn primary" href="{% url 'home' %}">Weiter</a></div>
+</div></div>
+{% endblock %}

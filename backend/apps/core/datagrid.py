@@ -17,6 +17,23 @@ class GridResult:
     has_state: bool
     queryset: object
 
+    @property
+    def navigation(self):
+        """Return an elided, template-friendly numbered page navigation."""
+        values = self.page.paginator.get_elided_page_range(
+            self.page.number,
+            on_each_side=2,
+            on_ends=1,
+        )
+        return [
+            {
+                'label': str(value),
+                'number': value if isinstance(value, int) else None,
+                'current': value == self.page.number,
+            }
+            for value in values
+        ]
+
 
 class DataGrid:
     allowed_page_sizes = (25, 50, 100, 250)

@@ -1,3 +1,4 @@
+from apps.core.middleware import current_audit_context
 from apps.core.security import client_ip
 
 from .models import AuditEvent
@@ -27,14 +28,23 @@ def _actor_role(actor):
 
 
 def audit(actor, action, obj, changes=None, request=None):
+    fallback = current_audit_context()
     return AuditEvent.objects.create(
         actor=actor if getattr(actor, 'is_authenticated', False) else None,
         actor_role=_actor_role(actor),
         action=action,
         object_type=obj.__class__.__name__,
         object_id=str(obj.pk),
-        ip=(client_ip(request) if request else None),
-        user_agent=(request.META.get('HTTP_USER_AGENT', '')[:300] if request else ''),
-        correlation_id=(getattr(request, 'correlation_id', '') if request else ''),
+        ip=(client_ip(request) if request else (fallback.get('ip') or None)),
+        user_agent=(
+            request.META.get('HTTP_USER_AGENT', '')[:300]
+            if request
+            else str(fallback.get('user_agent') or '')[:300]
+        ),
+        correlation_id=(
+            getattr(request, 'correlation_id', '')
+            if request
+            else str(fallback.get('correlation_id') or '')[:80]
+        ),
         changes=redact(changes or {}),
     )

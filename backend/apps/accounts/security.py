@@ -1,15 +1,79 @@
+import hashlib
+
+from django.contrib.auth import get_user_model
+from django.contrib.auth.hashers import check_password
+from django.core.cache import cache
+from django.db import transaction
 from django.db.models import F
 from django.utils import timezone
-from django.db import transaction
-from django.contrib.auth.hashers import check_password
+
 from apps.core.crypto import decrypt
 from .totp import matching_step
+
+LOGIN_FAILURE_LIMIT = 5
+LOGIN_FAILURE_WINDOW = 900
+LOGIN_LOCK_SECONDS = 900
+
+
+def _login_identity(email):
+    normalized = (email or '').strip().lower()
+    return hashlib.sha256(normalized.encode('utf-8')).hexdigest() if normalized else ''
+
+
+def _login_cache_key(kind, email):
+    identity = _login_identity(email)
+    return f'auth:{kind}:{identity}' if identity else ''
+
+
+def login_lock_remaining(email):
+    key = _login_cache_key('lock', email)
+    if not key:
+        return 0
+    locked_until = cache.get(key)
+    if not locked_until:
+        return 0
+    remaining = max(0, int(float(locked_until) - timezone.now().timestamp()))
+    if remaining <= 0:
+        cache.delete(key)
+        return 0
+    return remaining
+
+
+def register_login_failure(email):
+    """Record failed password logins without storing raw e-mail identifiers."""
+    failure_key = _login_cache_key('failures', email)
+    lock_key = _login_cache_key('lock', email)
+    if not failure_key or not lock_key:
+        return 0, False
+
+    if cache.add(failure_key, 1, LOGIN_FAILURE_WINDOW):
+        failures = 1
+    else:
+        try:
+            failures = cache.incr(failure_key)
+        except (ValueError, TypeError):
+            cache.set(failure_key, 1, LOGIN_FAILURE_WINDOW)
+            failures = 1
+
+    if failures >= LOGIN_FAILURE_LIMIT:
+        locked_until = timezone.now().timestamp() + LOGIN_LOCK_SECONDS
+        cache.set(lock_key, locked_until, LOGIN_LOCK_SECONDS)
+        cache.delete(failure_key)
+        return failures, True
+    return failures, False
+
+
+def clear_login_failures(email):
+    for kind in ('failures', 'lock'):
+        key = _login_cache_key(kind, email)
+        if key:
+            cache.delete(key)
 
 
 @transaction.atomic
 def consume_second_factor(user, value):
     """Serialize TOTP and recovery use, including concurrent logins."""
-    locked = type(user).objects.select_for_update().get(pk=user.pk)
+    locked = get_user_model().objects.select_for_update().get(pk=user.pk)
     if not locked.is_active or not locked.totp_secret_enc:
         return False
     step = matching_step(decrypt(locked.totp_secret_enc), value)
@@ -32,12 +96,20 @@ def bump_security_version(user):
     action is intentionally performed by the authenticated user (for example
     completing TOTP setup).
     """
-    type(user).objects.filter(pk=user.pk).update(
+    model = get_user_model()
+    model.objects.filter(pk=user.pk).update(
         security_version=F('security_version') + 1,
         last_security_change_at=timezone.now(),
     )
-    user.refresh_from_db(fields=['security_version', 'last_security_change_at'])
-    return user.security_version
+    refreshed = model.objects.only(
+        'security_version', 'last_security_change_at'
+    ).get(pk=user.pk)
+    try:
+        user.security_version = refreshed.security_version
+        user.last_security_change_at = refreshed.last_security_change_at
+    except (AttributeError, TypeError):
+        pass
+    return refreshed.security_version
 
 
 def bind_security_session(request, user, *, two_factor_ok):

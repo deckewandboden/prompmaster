@@ -1,15 +1,17 @@
 {% load pm %}
-<form class="toolbar" method="get" aria-label="Tabellenfilter">
-  <input name="q" value="{{ grid.query }}" placeholder="Suchen …" aria-label="Tabelle durchsuchen">
+<form class="toolbar" method="get" aria-label="Tabellenfilter" data-datagrid>
+  <input type="hidden" name="page" value="1">
+  {% if grid.sort %}<input type="hidden" name="sort" value="{{ grid.sort }}"><input type="hidden" name="dir" value="{{ grid.direction }}">{% endif %}
+  <input name="q" value="{{ grid.query }}" placeholder="Suchen …" aria-label="Tabelle durchsuchen" data-grid-search autocomplete="off">
   {% for param,label,choices in filter_options %}
-    <select name="{{ param }}" aria-label="{{ label }} filtern">
+    <select name="{{ param }}" aria-label="{{ label }} filtern" data-grid-auto-submit>
       <option value="">{{ label }}: Alle</option>
       {% for value,text in choices %}
         <option value="{{ value }}" {% if request.GET|get_item:param == value|stringformat:'s' %}selected{% endif %}>{{ text }}</option>
       {% endfor %}
     </select>
   {% endfor %}
-  <select name="page_size" aria-label="Seitengröße">
+  <select name="page_size" aria-label="Seitengröße" data-grid-auto-submit>
     <option value="25" {% if grid.page_size == 25 %}selected{% endif %}>25 / Seite</option>
     <option value="50" {% if grid.page_size == 50 %}selected{% endif %}>50 / Seite</option>
     <option value="100" {% if grid.page_size == 100 %}selected{% endif %}>100 / Seite</option>
@@ -21,7 +23,7 @@
     <div class="column-menu">
       {% for key,label,sortkey in columns %}
         {% col_visible request key as visible %}
-        <label><input type="checkbox" name="cols" value="{{ key }}" {% if visible %}checked{% endif %}> {{ label }}</label>
+        <label><input type="checkbox" name="cols" value="{{ key }}" {% if visible %}checked{% endif %} class="compact-checkbox"> {{ label }}</label>
       {% endfor %}
     </div>
   </details>
@@ -29,6 +31,7 @@
   <button class="btn secondary" type="submit">Anwenden</button>
   {% if export_enabled %}{% url_replace request export='csv' page=None as export_url %}<a class="btn secondary" href="{{ export_url }}">CSV exportieren</a>{% endif %}
   {% if grid.has_state %}<a class="btn secondary" href="{{ request.path }}">Zurücksetzen</a>{% endif %}
+  <span class="small muted" role="status" aria-live="polite" data-grid-status hidden>Daten werden geladen …</span>
 </form>
 {% if grid.query or grid.filters %}
 <div class="filter-chips" aria-label="Aktive Filter">
@@ -38,3 +41,4 @@
   {% endfor %}
 </div>
 {% endif %}
+{% if not grid.page.paginator.count and grid.has_state %}<div class="empty" role="status"><strong>Keine Such- oder Filtertreffer.</strong> <a href="{{ request.path }}">Filter zurücksetzen</a></div>{% endif %}

@@ -1,4 +1,4 @@
-# Vollständiges Datei-Inventar — PromptMaster RC14
+| `backend/templates/ns_admin/service_account_token.html` | 603 | `e925718eca563cf3199d428f3e858c216e6823838923b4bc0a287ca1d276a954` || `backend/templates/ns_admin/api.html` | 1235 | `da72eb8c5979e8f13c9c6331a2aaf4cfce6dee86fb352ff7fb393c77e67d04fc` || `backend/apps/core/tests.py` | 6784 | `124513218876c4455b00a8d63fdaee52f2d9573dd365e74cfff09508fb106975` || `backend/apps/core/admin_urls.py` | 5846 | `c06689e8b4a809e5e8513c8f80269c2d7aad6a914e2a80d0d369f796e9789ee9` || `backend/apps/core/admin_views.py` | 54457 | `1ed8a0b89d68d4a9a9f95017a3175aca0a46a0a6d61f56743ee59ba57a6bec04` |# Vollständiges Datei-Inventar — PromptMaster RC14
 
 Erfasst: **517 Dateien** (Manifest-/Inventardateien selbst ausgenommen), **20,537,871 Byte**.
 
@@ -56,8 +56,8 @@ Maschinenlesbar: `FILE_MANIFEST.tsv` und `MANIFEST.json`.
 | `backend/apps/companies/migrations/0002_rename_companies_c_name_idx_companies_c_name_2d8260_idx_and_more.py` | 935 | `61214c81793e1edee3cc7a76394549eaaf762019611dd2c2943b728b2d48509c` |
 | `backend/apps/companies/migrations/__init__.py` | 0 | `e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855` |
 | `backend/apps/companies/models.py` | 4477 | `5f8f0ebd6de05ff721fdad27ba1a5fa7f0525b7802a429b24bbeaefe0f2cac2d` |
-| `backend/apps/companies/portal.py` | 35529 | `cd88f35c713cb39ea9287e3b45e38e1aa26218283f493d4bb80320fb54acd99b` |
-| `backend/apps/companies/portal_urls.py` | 1878 | `1712c9fd387d5c61d7be16a6ee211bcb60cd6deb3c8049c8b91a0296ecb32970` |
+| `backend/apps/companies/portal.py` | 37351 | `b32d0b48422b830ce1db6f3ddc139d7789bbe219b97cc31e2ca70814f950359b` |
+| `backend/apps/companies/portal_urls.py` | 1972 | `bb8de83592080cc9610465cedc11c23013f263e5835d253db3e1a7482a59a755` |
 | `backend/apps/companies/services.py` | 3187 | `a536c08fac5295beb1eb70cc08eb5cc980dec2152dc3c1485b237849774ed394` |
 | `backend/apps/contenthub/__init__.py` | 0 | `e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855` |
 | `backend/apps/contenthub/admin_urls.py` | 329 | `e85cc9b995e5b209ee021364bf0d2e64b5261a28bff3d61612cf033a269ebf91` |
@@ -86,7 +86,7 @@ Maschinenlesbar: `FILE_MANIFEST.tsv` und `MANIFEST.json`.
 | `backend/apps/core/management/__init__.py` | 0 | `e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855` |
 | `backend/apps/core/management/commands/__init__.py` | 0 | `e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855` |
 | `backend/apps/core/management/commands/seed_defaults.py` | 5183 | `2fa34881682f6e782b892a5fbf719394d3f185606b2e9212f668ef9f0467b534` |
-| `backend/apps/core/middleware.py` | 542 | `a1ce3fd282c526d386befef8eb4a32890a8ca7fafc02ec3ecd1e569cbdc08f02` |
+| `backend/apps/core/middleware.py` | 2190 | `d42f1a76084aa03e3ed0cf3be48b7dc927720f0e64acddf76d8fce1c70777fc8` |
 | `backend/apps/core/migrations/0001_initial.py` | 752 | `30baa368b096bb6360a19ff9cc37b667aa5e16b97164c4720d06003c0dd172a8` |
 | `backend/apps/core/migrations/0002_search_indexes.py` | 2232 | `7f2f26d9214308e9f5d06a6d772f1d6e71411c35c340bd3c36f18f155d27b86b` |
 | `backend/apps/core/migrations/__init__.py` | 0 | `e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855` |
@@ -99,7 +99,7 @@ Maschinenlesbar: `FILE_MANIFEST.tsv` und `MANIFEST.json`.
 | `backend/apps/core/tests.py` | 256 | `11c33a31813610e01e5e78295e19072944481eb02ba5cde6616af474d62f5487` |
 | `backend/apps/core/tests_marketing_integration.py` | 2204 | `b3c651dfe1b75096004c4fe78738723cb5d4bc5f8de99e6d45fede4cfa6359e8` |
 | `backend/apps/core/tests_permissions.py` | 1872 | `a8ebca460fc07a95e4e3e75e5e26cf4fa000d8713e8251cebe21e9d6893d13a2` |
-| `backend/apps/core/tests_release_rules.py` | 10568 | `125cfd2ee21d9662d0e0ae811b0f01a2be4427980fd830e9cc731feda1395f42` |
+| `backend/apps/core/tests_release_rules.py` | 12036 | `d063b54804c4d75338c3894b7f3e3a49866210a8dbfd912208f971ebad66b990` |
 | `backend/apps/core/views.py` | 4155 | `f9d224673242716285a6b504385202028563797f427e048f1d2eeb996a8af839` |
 | `backend/apps/devices/__init__.py` | 0 | `e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855` |
 | `backend/apps/devices/admin.py` | 112 | `a1bf059a584a2d74f1983220170352703a4e63fcb1ddf2756a8a18c94baef4a9` |
@@ -134,7 +134,7 @@ Maschinenlesbar: `FILE_MANIFEST.tsv` und `MANIFEST.json`.
 | `backend/apps/licenses/migrations/0005_rename_licenses_l_status_idx_licenses_li_status_3263d5_idx_and_more.py` | 1175 | `8daa3556c128041fa2c4b6ef7a92cebfd67dd7f89de70268d526c65c1f6376bb` |
 | `backend/apps/licenses/migrations/__init__.py` | 0 | `e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855` |
 | `backend/apps/licenses/models.py` | 8247 | `fb2fae27424315e4b2f93bbe658c4feb6fafb12e12f0ffae016c4c5e3856cae6` |
-| `backend/apps/licenses/services.py` | 10581 | `eeee948e4b3b7822869c3b37ede6de7278da3b37a46549ea2113c3ffb12daced` |
+| `backend/apps/licenses/services.py` | 12182 | `8ac0a3ef910cc342343649bc2f49a04ae6da9b51dbe07b122bdfa53fe79ff50d` |
 | `backend/apps/mcp_internal/__init__.py` | 0 | `e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855` |
 | `backend/apps/mcp_internal/apps.py` | 205 | `03c3075359518bcf0458759fae83ab456cf2819613756c3a6abe30b543f86170` |
 | `backend/apps/mcp_internal/tests.py` | 4562 | `9457b70e801d4a50029a7e1b42a26a43e17ded7c5994270505f81cc285c09964` |
@@ -178,7 +178,7 @@ Maschinenlesbar: `FILE_MANIFEST.tsv` und `MANIFEST.json`.
 | `backend/apps/payments/models.py` | 2204 | `da7dca5eace363e39060737f7f9f6b979ca14343b04f61c5b71e791bce318528` |
 | `backend/apps/payments/mollie.py` | 2395 | `1c9a23ef59ff4db3f912b898cb4eb6b8afe1a20f8b661e1647b8369173b415e8` |
 | `backend/apps/payments/services.py` | 18711 | `0a14dda4a948668b7cbb1833e565b92ba4f917985b3960daf5b2713eb7a21059` |
-| `backend/apps/payments/tests.py` | 890 | `3fe40b15b3be011e5a6505034dea199a2e83e404338f88768503f3a6996fb6c7` |
+| `backend/apps/payments/tests.py` | 6786 | `5722ad184daa7e791dd53b434f86b569c0945b58e3d64a159e7d4a3710913adf` |
 | `backend/apps/payments/views.py` | 1141 | `5a90adb3f87198aa493c69afad8bfebe94cb305f6637b5291712f25900db3ca2` |
 | `backend/apps/payments/webhook_urls.py` | 150 | `d0b0d70de61d8953de7df7f4e156bc16a9420db662c5ca7e7e77f7a6db709393` |
 | `backend/apps/proaccess/__init__.py` | 0 | `e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855` |
@@ -224,7 +224,7 @@ Maschinenlesbar: `FILE_MANIFEST.tsv` und `MANIFEST.json`.
 | `backend/config/__init__.py` | 64 | `40e9457320576e0813c9ec166611e979252a367aede83677fe5626398648cedc` |
 | `backend/config/asgi.py` | 161 | `e66806d324f24440dc47c97b9a870686dc47e2f5879aa61d1df7bb1c028bf25b` |
 | `backend/config/celery.py` | 221 | `99c9d65218b5b7ec9416eed0fb746644ca7aa90fe27223f166df94cea3fd6982` |
-| `backend/config/settings.py` | 8125 | `863ee938fe761f8a87691959b39c1ab9cee0bc81d90dce1b56d0fe323df6b809` |
+| `backend/config/settings.py` | 8155 | `8b57aa8b8900f829b1954dcd026f55024765ed7123433ac07fce7a9ef0c9fe79` |
 | `backend/config/urls.py` | 1689 | `391594b133ccc7b9edef4edfc1c170a9d0d057a1e73c8a192ff4541914da0054` |
 | `backend/config/wsgi.py` | 161 | `25d3ac3de67e7a1e20c9cfed54bf208a378c7e634f426239c36c63cbabc22f36` |
 | `backend/manage.py` | 239 | `9bba94f103ecf4d96b7bb92b4efd737352b65e003b6d0d5dc20c2a97cb62e13f` |
@@ -274,7 +274,7 @@ Maschinenlesbar: `FILE_MANIFEST.tsv` und `MANIFEST.json`.
 | `backend/templates/ns_admin/legal_deletions.html` | 1557 | `8104d623a6176611fc6b31d1c8d1179e1e035a90757746fa92aa1c4316c79fea` |
 | `backend/templates/ns_admin/legal_documents.html` | 1367 | `ce793472a05f970719a6eb86880c0ce0d8d79b0fdc86a2c20ed7f5b248407034` |
 | `backend/templates/ns_admin/legal_retention.html` | 1239 | `85f3639791fd975a64aaa03da1f99796e62cffe97146b8f0017ae4197a5944d9` |
-| `backend/templates/ns_admin/license_detail.html` | 2338 | `0de8081c3b366456aa8eb24840659b654e1619cd1a6e27317bd0158cf29b5792` |
+| `backend/templates/ns_admin/license_detail.html` | 2769 | `edd1ad58b4c12db088cc9b9b36df81cc8cfa6083ec58ea2c57922fdc5ca9526e` |
 | `backend/templates/ns_admin/mollie.html` | 492 | `c52b282e9f7f77d91a793408f52e5fc782decafcf0fb738d78af16830281d0e9` |
 | `backend/templates/ns_admin/mollie_events.html` | 1367 | `28ddd06ef6e64d6106beffd6b2af7462d3ec02c3d143183bde38691ac46d6d97` |
 | `backend/templates/ns_admin/ops.html` | 1242 | `624156d3d2758a0c6c87d7f4e27409e63ca50c954456823c488ebc3d4676dfc4` |
@@ -313,7 +313,7 @@ Maschinenlesbar: `FILE_MANIFEST.tsv` und `MANIFEST.json`.
 | `backend/templates/portal/invitations.html` | 1831 | `e3fc15c9a9534b26410cffb8742abd740dbf235e351a25d0b827072319a634f5` |
 | `backend/templates/portal/licenses.html` | 1879 | `21b04e50a7c05a201beec24560361368fd635f8d022e72cc5f829f0b4894b71a` |
 | `backend/templates/portal/orders.html` | 1642 | `86bcd1b171a94e8716b9ba0e6e3039990301faa21943c7248e0e04b120c9876e` |
-| `backend/templates/portal/profile.html` | 1236 | `9c6cc4140034bdf0c6c8bcb81f3f9c5220f9a34b67e794e050c5b86075bd0275` |
+| `backend/templates/portal/profile.html` | 2133 | `3ca029bef3e5dc359195687bfa52272362a5eae34b112512c23bfae997827375` |
 | `backend/templates/portal/renew.html` | 788 | `cdf24527050777f927ee446e11eb5e4139303a69a792f03cf59c7ba860ac6a31` |
 | `backend/templates/portal/security.html` | 357 | `ab26737e33f2d55622e372bc6220610c044464d29fe6004f5bd8cbc99f282df1` |
 | `backend/templates/portal/team.html` | 2393 | `52bd8ad5cc77b3310e497b20ab2b67d3191cf84aaabc9407acee29d2858d0500` |

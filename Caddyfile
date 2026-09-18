@@ -16,6 +16,7 @@
         Referrer-Policy strict-origin-when-cross-origin
         X-Frame-Options DENY
         Permissions-Policy "camera=(), microphone=(), geolocation=()"
+        Content-Security-Policy "default-src 'self'; base-uri 'self'; object-src 'none'; frame-ancestors 'none'; form-action 'self' https://*.mollie.com; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; font-src 'self' data:; connect-src 'self'; worker-src 'self' blob:"
         Strict-Transport-Security "max-age=31536000; includeSubDomains"
     }
     request_body {
@@ -23,24 +24,36 @@
     }
 
     # Compatibility routes from the recovered marketing frontend to the
-    # canonical Django application routes.
+    # canonical Django application routes. Use an explicit wildcard matcher so
+    # the redirect target is never parsed as another path matcher, and preserve
+    # the incoming query string (for example checkout quantity).
     handle /login* {
-        redir /auth/login/ 302
+        redir * /auth/login/{?query} 302
     }
     handle /checkout* {
-        redir /portal/licenses/buy/ 302
+        redir * /portal/licenses/buy/{?query} 302
     }
     handle /app/pro* {
-        redir /pro/ 302
+        redir * /pro/{?query} 302
     }
     handle /portal {
-        redir /portal/dashboard/ 302
+        redir * /portal/dashboard/{?query} 302
     }
     handle /portal/ {
-        redir /portal/dashboard/ 302
+        redir * /portal/dashboard/{?query} 302
     }
 
     handle /catalog.json {
+        reverse_proxy web:8000
+    }
+
+    # Mollie sends only a tiny form payload containing the provider payment ID.
+    # Keep this public CSRF-exempt endpoint far below the general application
+    # body ceiling to reduce parser/memory abuse before Django sees the request.
+    handle /api/webhooks/mollie/ {
+        request_body {
+            max_size 64KB
+        }
         reverse_proxy web:8000
     }
 

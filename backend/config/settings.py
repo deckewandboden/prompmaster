@@ -13,6 +13,7 @@ CSRF_TRUSTED_ORIGINS = [x.strip() for x in os.getenv('CSRF_TRUSTED_ORIGINS', '')
 CADDY_DOMAIN = os.getenv('CADDY_DOMAIN', '').strip()
 APP_VERSION = os.getenv('APP_VERSION', 'development')
 GIT_SHA = os.getenv('GIT_SHA', '')
+DEPLOYED_AT = os.getenv('DEPLOYED_AT', '')
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -53,6 +54,7 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'apps.core.middleware.CorrelationIdMiddleware',
+    'apps.core.middleware.LargeExportMiddleware',
 ]
 
 ROOT_URLCONF = 'config.urls'
@@ -132,6 +134,10 @@ X_FRAME_OPTIONS = 'DENY'
 DATA_UPLOAD_MAX_MEMORY_SIZE = 10 * 1024 * 1024
 FILE_UPLOAD_MAX_MEMORY_SIZE = 5 * 1024 * 1024
 
+EXPORT_ROOT = os.getenv('EXPORT_ROOT', '/app/exports')
+EXPORT_SYNC_LIMIT = int(os.getenv('EXPORT_SYNC_LIMIT', '5000'))
+EXPORT_TTL_HOURS = int(os.getenv('EXPORT_TTL_HOURS', '24'))
+
 CACHES = {
     'default': {
         'BACKEND': 'django.core.cache.backends.redis.RedisCache',
@@ -155,6 +161,8 @@ CELERY_BEAT_SCHEDULE = {
     'beat-heartbeat': {'task': 'apps.ops.tasks.beat_heartbeat', 'schedule': 60.0},
     'retention': {'task': 'apps.legal.tasks.apply_retention', 'schedule': 86400.0},
     'prompt-quality': {'task': 'apps.prompts.tasks.refresh_prompt_quality', 'schedule': 21600.0},
+    'export-dispatch': {'task': 'apps.core.tasks.dispatch_pending_exports', 'schedule': 300.0},
+    'export-cleanup': {'task': 'apps.core.tasks.cleanup_expired_exports', 'schedule': 3600.0},
 }
 
 EMAIL_PROVIDER = os.getenv('EMAIL_PROVIDER', 'smtp')
@@ -185,10 +193,15 @@ LOGGING = {
     'version': 1,
     'disable_existing_loggers': False,
     'formatters': {
-        'standard': {
-            'format': '%(asctime)s %(levelname)s %(name)s %(message)s',
-        }
+        'json': {
+            '()': 'apps.core.middleware.JsonLogFormatter',
+        },
     },
-    'handlers': {'console': {'class': 'logging.StreamHandler', 'formatter': 'standard'}},
+    'handlers': {
+        'console': {
+            'class': 'logging.StreamHandler',
+            'formatter': 'json',
+        },
+    },
     'root': {'handlers': ['console'], 'level': os.getenv('LOG_LEVEL', 'INFO')},
 }

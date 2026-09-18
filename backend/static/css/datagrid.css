@@ -1,0 +1,9 @@
+.grid-loading{font-size:12px;color:var(--muted);font-weight:700}
+.toolbar[aria-busy="true"]{opacity:.78}
+.grid-state{border-radius:12px;padding:12px 14px;margin:0 0 12px}
+.grid-state.no-results{background:#fff9eb;border:1px solid #ffe2a6;color:#805300}
+
+@media(max-width:700px){
+  .toolbar,.tablewrap,.tablewrap table,.tablewrap tbody,.tablewrap tr,.tablewrap td{max-width:100%;min-width:0}
+  .tablewrap td{overflow-wrap:anywhere;word-break:break-word}
+}

@@ -3,10 +3,10 @@
 {% block content %}
 <div class="page-head"><div><h1>PromptMaster-Pro-Lizenz läuft bald ab</h1><div class="sub">Dein Pro-Zugriff bleibt bis zum Ablaufdatum aktiv.</div></div></div>
 <div class="alert danger"><strong>Noch {{ expiry.days_remaining }} Tag{% if expiry.days_remaining != 1 %}e{% endif %}.</strong> Die Lizenz {{ assignment.license.license_number }} läuft am {{ expiry.valid_until|date:"d.m.Y H:i" }} Uhr ab. Ohne Verlängerung wird der Pro-Zugriff danach automatisch gesperrt.</div>
-<div class="card" style="margin-top:14px">
+<div class="card mt-14">
   <h2>Was möchtest du tun?</h2>
   <p class="muted">Eine Verlängerung vor Ablauf hängt weitere 365 Tage an das bestehende Ablaufdatum an. Die Restlaufzeit geht nicht verloren.</p>
-  <div style="display:flex;gap:10px;flex-wrap:wrap">
+  <div class="page-actions">
     <a class="btn primary" href="{% url 'portal:licenses' %}">Lizenzverwaltung / Verlängerung</a>
     <form method="post">{% csrf_token %}<button class="btn secondary" type="submit">Jetzt trotzdem PromptMaster Pro starten</button></form>
   </div>

@@ -75,6 +75,7 @@ def caddy_health():
 def snapshot():
     metrics = {}
     queries = {
+        'cpu_current_percent': '100-(avg(rate(node_cpu_seconds_total{mode="idle"}[1m]))*100)',
         'cpu_percent': '100-(avg(rate(node_cpu_seconds_total{mode="idle"}[10m]))*100)',
         'memory_total': 'node_memory_MemTotal_bytes',
         'memory_available': 'node_memory_MemAvailable_bytes',

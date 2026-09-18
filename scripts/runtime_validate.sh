@@ -4,7 +4,7 @@ cd "$(dirname "$0")/.."
 STAMP="$(date -u +%Y%m%dT%H%M%SZ)"; ARTIFACT_DIR="${PM_VALIDATION_ARTIFACT_DIR:-artifacts/runtime-validation}"; mkdir -p "$ARTIFACT_DIR"; LOG="$ARTIFACT_DIR/runtime-validation-${STAMP}.log"; exec > >(tee -a "$LOG") 2>&1
 fail(){ echo "[FAIL] $*" >&2; exit 1; }
 command -v docker >/dev/null 2>&1 || fail "docker fehlt auf diesem Host"; docker compose version >/dev/null 2>&1 || fail "docker compose ist nicht verfügbar"; [[ -f .env ]] || fail ".env fehlt"
-python3 scripts/github_preflight.py; python3 scripts/validate_env.py --environment staging
+bash scripts/run_repo_preflight.sh staging
 FILES=(-f compose.yaml -f compose.staging.yaml)
 docker compose -f compose.yaml -f compose.production.yaml config >/dev/null
 # Exercise production filesystem restrictions with safe staging integrations.
@@ -25,6 +25,29 @@ docker compose "${FILES[@]}" up -d
 docker compose "${FILES[@]}" exec -T beat sh -c 'test -w /tmp/celerybeat && touch /tmp/celerybeat/write-test && rm /tmp/celerybeat/write-test'
 for i in $(seq 1 30); do docker compose "${FILES[@]}" exec -T web curl -fsS http://127.0.0.1:8000/health/ready/ >/dev/null 2>&1 && break; [[ "$i" -lt 30 ]] || fail "Django ready health blieb rot"; sleep 2; done
 docker compose "${FILES[@]}" exec -T caddy caddy validate --config /etc/caddy/Caddyfile >/dev/null
+for i in $(seq 1 30); do
+  MONITOR_OK="$(docker compose "${FILES[@]}" exec -T web sh -c "curl -fsS 'http://prometheus:9090/api/v1/targets?state=active' | python -c 'import json,sys; d=json.load(sys.stdin); rows=d.get(\"data\",{}).get(\"activeTargets\",[]); state={r.get(\"labels\",{}).get(\"job\"):r.get(\"health\") for r in rows}; required={\"node\",\"postgres\",\"cadvisor\",\"django\"}; print(\"1\" if required.issubset(state) and all(state[x]==\"up\" for x in required) else \"0\")'" 2>/dev/null | tail -n1 | tr -d '\r')"
+  [[ "$MONITOR_OK" == 1 ]] && break
+  [[ "$i" -lt 30 ]] || fail "Prometheus Monitoring-Targets (node/postgres/cadvisor/django) wurden nicht vollständig UP"
+  sleep 2
+done
+# Runtime trust-boundary evidence: do not rely only on Compose source validation.
+for spec in "cadvisor:8080" "prometheus:9090"; do
+  service="${spec%%:*}"; port="${spec##*:}"
+  published="$(docker compose "${FILES[@]}" port "$service" "$port" 2>/dev/null || true)"
+  [[ -z "$published" ]] || fail "$service darf keinen veröffentlichten Host-Port besitzen: $published"
+done
+CADVISOR_ID="$(docker compose "${FILES[@]}" ps -q cadvisor)"
+PROMETHEUS_ID="$(docker compose "${FILES[@]}" ps -q prometheus)"
+[[ -n "$CADVISOR_ID" && -n "$PROMETHEUS_ID" ]] || fail "Monitoring-Container fehlen"
+[[ "$(docker inspect -f '{{.HostConfig.Privileged}}' "$CADVISOR_ID")" == "true" ]] || fail "cAdvisor Trust-Boundary erwartet privileged=true"
+CADVISOR_NETWORKS="$(docker inspect -f '{{range $name, $_ := .NetworkSettings.Networks}}{{println $name}}{{end}}' "$CADVISOR_ID" | sed '/^$/d')"
+PROMETHEUS_NETWORKS="$(docker inspect -f '{{range $name, $_ := .NetworkSettings.Networks}}{{println $name}}{{end}}' "$PROMETHEUS_ID" | sed '/^$/d')"
+[[ "$(printf '%s\n' "$CADVISOR_NETWORKS" | wc -l | tr -d ' ')" == "1" && "$CADVISOR_NETWORKS" == *_monitor ]] || fail "cAdvisor läuft nicht ausschließlich im monitor-Netz: $CADVISOR_NETWORKS"
+[[ "$(printf '%s\n' "$PROMETHEUS_NETWORKS" | wc -l | tr -d ' ')" == "1" && "$PROMETHEUS_NETWORKS" == *_monitor ]] || fail "Prometheus läuft nicht ausschließlich im monitor-Netz: $PROMETHEUS_NETWORKS"
+RW_HOST_MOUNTS="$(docker inspect -f '{{range .Mounts}}{{if .RW}}{{println .Source "->" .Destination}}{{end}}{{end}}' "$CADVISOR_ID" | sed '/^$/d')"
+[[ -z "$RW_HOST_MOUNTS" ]] || fail "cAdvisor besitzt unerwartete schreibbare Host-Mounts: $RW_HOST_MOUNTS"
+echo "MONITOR TRUST BOUNDARY OK: internal-only ports/network, cAdvisor privileged, mounts read-only"
 docker compose "${FILES[@]}" exec -T caddy sh -c "test -s /srv/marketing/index.html && test -s /srv/marketing/models/head.glb && test -s /srv/marketing/integration-patch.js" || fail "Marketing-Artefakte fehlen im Caddy-Container"
 docker compose "${FILES[@]}" exec -T web sh -c "curl -fsS http://127.0.0.1:8000/catalog.json | python -c 'import json,sys; d=json.load(sys.stdin); assert d[\"proApplicationCount\"]==34; p=next(x for x in d[\"products\"] if x[\"id\"]==\"PROMPTMASTER_PRO\"); assert p[\"annualGrossCents\"]==3588'" || fail "Öffentlicher Marketing-Katalog ist nicht synchron"
 docker compose "${FILES[@]}" exec -T web python manage.py shell -c "from apps.prompts.models import PromptApplication,PromptDefinition,PromptLegacyContract; a=PromptApplication.objects.filter(active=True).count(); t=PromptDefinition.objects.filter(active=True).count(); f=PromptLegacyContract.objects.filter(source='FREE_1_2_4').count(); print(f'PROMPT_DOMAIN:{a}:{t}:{f}'); raise SystemExit(0 if (a,t,f)==(34,194,16) else 1)"

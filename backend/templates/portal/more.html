@@ -1,0 +1,20 @@
+{% extends 'portal/base.html' %}
+{% block content %}
+<div class="page-head"><div><h1>Mehr</h1><div class="sub">Weitere Bereiche Ihres Kundenportals.</div></div></div>
+<div class="grid two">
+  <div class="card"><h2>Konto &amp; Hilfe</h2><div class="list">
+    <a class="btn secondary" href="{% url 'portal:search' %}">Suche</a>
+    <a class="btn secondary" href="{% url 'portal:profile' %}">Einstellungen</a>
+    <a class="btn secondary" href="{% url 'portal:security' %}">Sicherheit</a>
+    <a class="btn secondary" href="{% url 'portal:help' %}">Hilfe &amp; Kontakt</a>
+    <a class="btn secondary" href="{% url 'accounts:logout' %}">Abmelden</a>
+  </div></div>
+  {% if membership and membership.role == 'admin' or not membership %}
+  <div class="card"><h2>Verwaltung &amp; Abrechnung</h2><div class="list">
+    <a class="btn secondary" href="{% url 'portal:buy' %}">Weitere Lizenzen kaufen</a>
+    <a class="btn secondary" href="{% url 'portal:orders' %}">Bestellungen &amp; Zahlungen</a>
+    {% if membership and membership.role == 'admin' %}<a class="btn secondary" href="{% url 'portal:company' %}">Unternehmen</a>{% endif %}
+  </div></div>
+  {% endif %}
+</div>
+{% endblock %}

@@ -11,6 +11,7 @@ from django.utils.html import escape
 from apps.accounts.models import User
 from apps.companies.models import Company, Membership
 from apps.companies.services import create_invitation
+from apps.legal.models import LegalDocument
 
 
 class FormParser(HTMLParser):
@@ -120,3 +121,67 @@ class InvitationHTTPTests(LiveServerTestCase):
             self.assertEqual(response.status_code, 200)
             self.assertIn('Einladung ungültig oder abgelaufen', response.text)
             self.assert_not_joined()
+
+    def test_company_deactivation_invalidates_existing_user_invitation(self):
+        page = self.http.get(self.url(), timeout=10)
+        csrf = FormParser(page.text).csrf
+        self.assertTrue(csrf)
+        self.company.status = 'inactive'
+        self.company.save(update_fields=['status', 'updated_at'])
+
+        response = self.http.post(
+            self.url(),
+            data={'csrfmiddlewaretoken': csrf},
+            timeout=10,
+        )
+
+        self.assertEqual(response.status_code, 200)
+        self.assertIn('Einladung ungültig oder abgelaufen', response.text)
+        self.assert_not_joined()
+
+    def test_company_deactivation_blocks_new_user_after_confirmation_page(self):
+        now = timezone.now()
+        LegalDocument.objects.create(
+            doc_type='terms', version='invite-test-terms', content='Terms',
+            valid_from=now - timedelta(minutes=1), active=True,
+        )
+        LegalDocument.objects.create(
+            doc_type='privacy', version='invite-test-privacy', content='Privacy',
+            valid_from=now - timedelta(minutes=1), active=True,
+        )
+        invitation, raw = create_invitation(
+            company=self.company,
+            actor=self.admin,
+            email='fresh-invite@example.test',
+            first_name='Fresh',
+            last_name='Invite',
+        )
+        anonymous = requests.Session()
+        self.addCleanup(anonymous.close)
+        invite_url = self.url(raw)
+        page = anonymous.get(invite_url, timeout=10)
+        self.assertEqual(page.status_code, 200)
+        csrf = FormParser(page.text).csrf
+        self.assertTrue(csrf)
+
+        self.company.status = 'inactive'
+        self.company.save(update_fields=['status', 'updated_at'])
+        response = anonymous.post(
+            invite_url,
+            data={
+                'csrfmiddlewaretoken': csrf,
+                'first_name': 'Fresh',
+                'last_name': 'Invite',
+                'password': 'Fresh-Invitation-Password-42!',
+                'accept_terms': 'on',
+                'accept_privacy': 'on',
+            },
+            timeout=10,
+        )
+
+        self.assertEqual(response.status_code, 200)
+        self.assertIn('Einladung ungültig oder abgelaufen', response.text)
+        invitation.refresh_from_db()
+        self.assertIsNone(invitation.accepted_at)
+        self.assertFalse(User.objects.filter(email='fresh-invite@example.test').exists())
+        self.assertFalse(Membership.objects.filter(company=self.company, user__email='fresh-invite@example.test').exists())

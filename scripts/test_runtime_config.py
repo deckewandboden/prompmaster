@@ -5,6 +5,7 @@ import unittest
 import yaml
 
 from validate_runtime_config import ROOT, validate
+from validate_env import is_external_s3_repository
 
 
 class RuntimeConfigTests(unittest.TestCase):
@@ -22,6 +23,37 @@ class RuntimeConfigTests(unittest.TestCase):
     def test_public_database_is_rejected(self):
         self.base['services']['postgres']['ports'] = ['5432:5432']
         self.assertTrue(validate(self.base, self.production))
+
+    def test_public_monitoring_network_is_rejected(self):
+        self.base['networks']['monitor']['internal'] = False
+        self.assertTrue(validate(self.base, self.production))
+
+    def test_cadvisor_public_port_is_rejected(self):
+        self.base['services']['cadvisor']['ports'] = ['8080:8080']
+        self.assertTrue(validate(self.base, self.production))
+
+    def test_cadvisor_unpinned_image_is_rejected(self):
+        self.base['services']['cadvisor']['image'] = 'ghcr.io/google/cadvisor:latest'
+        self.assertTrue(validate(self.base, self.production))
+
+    def test_cadvisor_mount_write_access_is_rejected(self):
+        self.base['services']['cadvisor']['volumes'][0] = '/:/rootfs'
+        self.assertTrue(validate(self.base, self.production))
+
+    def test_external_restic_repository_accepts_canonical_tls_forms(self):
+        self.assertTrue(is_external_s3_repository('s3:https://s3.example.net/promptmaster'))
+        self.assertTrue(is_external_s3_repository('s3:s3.eu-central-1.amazonaws.com/promptmaster'))
+        self.assertTrue(is_external_s3_repository('s3:s3.amazonaws.com/promptmaster'))
+
+    def test_external_restic_repository_rejects_noncanonical_or_insecure_forms(self):
+        for value in (
+            's3://s3.example.net/promptmaster',
+            's3:http://s3.example.net/promptmaster',
+            's3:https://s3.example.net',
+            '/local/repository',
+        ):
+            with self.subTest(value=value):
+                self.assertFalse(is_external_s3_repository(value))
 
     def test_missing_beat_writable_path_is_rejected(self):
         self.base['services']['beat']['tmpfs'] = []

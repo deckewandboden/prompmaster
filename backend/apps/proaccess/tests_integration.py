@@ -8,14 +8,15 @@ from django.utils import timezone
 
 from apps.accounts.models import User
 from apps.audit.models import AuditEvent
-from apps.catalog.models import Product, ProductPrice
+from apps.catalog.models import Feature, Product, ProductEntitlement, ProductPrice
+from apps.catalog.services import PRO_ACCESS_FEATURE
 from apps.companies.models import Company, Membership
 from apps.devices.models import DeviceRegistration
-from apps.devices.services import register_device
+from apps.devices.services import register_device, validate_device_token
 from apps.orders.models import Order, OrderItem
 from apps.payments.services import _activate_order
 from apps.licenses.models import License
-from apps.proaccess.services import DEVICE_COOKIE, LEGACY_DEVICE_COOKIE
+from apps.proaccess.services import active_product_assignment, DEVICE_COOKIE, LEGACY_DEVICE_COOKIE
 
 
 class RealProAccessTests(TestCase):
@@ -39,6 +40,17 @@ class RealProAccessTests(TestCase):
         session['two_factor_ok'] = True
         session.save()
 
+    def test_seed_grants_pro_access_entitlement(self):
+        product = Product.objects.get(code='PRO')
+        feature = Feature.objects.get(code=PRO_ACCESS_FEATURE)
+        self.assertTrue(
+            ProductEntitlement.objects.filter(
+                product=product,
+                feature=feature,
+                enabled=True,
+            ).exists()
+        )
+
     def test_registered_cookie_reaches_real_catalog_and_composer(self):
         response = self.client.post('/pro/device/register/', {'display_name': 'Test browser'})
         self.assertEqual(response.status_code, 302)
@@ -60,6 +72,38 @@ class RealProAccessTests(TestCase):
         self.assertEqual(response['Cache-Control'], 'no-store')
         self.assertEqual(AuditEvent.objects.count(), before)
 
+    def test_pro_access_depends_on_entitlement_not_product_code(self):
+        product = self.license.product
+        product.code = 'ULTRA'
+        product.save(update_fields=['code', 'updated_at'])
+
+        assignment = active_product_assignment(self.user)
+        self.assertIsNotNone(assignment)
+        self.assertEqual(assignment.license_id, self.license.id)
+
+        device, raw = register_device(self.user, self.license, 'Ultra browser')
+        self.assertEqual(validate_device_token(self.user, raw).id, device.id)
+        self.client.cookies[DEVICE_COOKIE] = raw
+        self.assertEqual(self.client.get('/api/v1/prompts/').status_code, 200)
+        self.assertEqual(self.client.get('/pro/app/').status_code, 200)
+
+    def test_disabling_entitlement_revokes_server_side_access(self):
+        device, raw = register_device(self.user, self.license, 'Disabled entitlement browser')
+        self.client.cookies[DEVICE_COOKIE] = raw
+        self.assertIsNotNone(active_product_assignment(self.user))
+        self.assertEqual(validate_device_token(self.user, raw).id, device.id)
+
+        ProductEntitlement.objects.filter(
+            product=self.license.product,
+            feature__code=PRO_ACCESS_FEATURE,
+        ).update(enabled=False)
+
+        self.assertIsNone(active_product_assignment(self.user))
+        self.assertIsNone(validate_device_token(self.user, raw))
+        response = self.client.get('/api/v1/prompts/')
+        self.assertEqual(response.status_code, 403)
+        self.assertEqual(response.json()['error']['code'], 'license_required')
+
     def test_legacy_cookie_migrates_without_consuming_another_device(self):
         device, raw = register_device(self.user, self.license, 'Existing browser')
         self.client.cookies[LEGACY_DEVICE_COOKIE] = raw
@@ -71,12 +115,22 @@ class RealProAccessTests(TestCase):
         self.assertEqual(self.client.get('/api/v1/prompts/').status_code, 200)
 
     def test_unverified_account_cannot_register_or_compose(self):
+        _device, raw = register_device(self.user, self.license, 'Verification-bound browser')
+        self.assertIsNotNone(validate_device_token(self.user, raw))
         self.user.email_verified_at = None
         self.user.save(update_fields=['email_verified_at'])
+        self.assertIsNone(validate_device_token(self.user, raw))
         self.assertEqual(self.client.post('/pro/device/register/', {'display_name': 'Denied'}).status_code, 403)
         response = self.client.get('/api/v1/prompts/')
         self.assertEqual(response.status_code, 403)
         self.assertEqual(response.json()['error']['code'], 'email_verification_required')
+
+    def test_inactive_identity_invalidates_device_token_directly(self):
+        _device, raw = register_device(self.user, self.license, 'Identity-bound browser')
+        self.assertIsNotNone(validate_device_token(self.user, raw))
+        self.user.is_active = False
+        self.user.save(update_fields=['is_active'])
+        self.assertIsNone(validate_device_token(self.user, raw))
 
     def test_expired_or_revoked_device_is_denied(self):
         device, raw = register_device(self.user, self.license, 'Revoked browser')
@@ -97,13 +151,19 @@ class RealProAccessTests(TestCase):
         self.license.save()
         device, raw = register_device(self.user, self.license, 'Company browser')
         self.client.cookies[DEVICE_COOKIE] = raw
+        self.assertIsNotNone(validate_device_token(self.user, raw))
         self.assertEqual(self.client.get('/api/v1/prompts/').status_code, 200)
+
         membership.active = False
         membership.save()
+        self.assertIsNone(validate_device_token(self.user, raw))
         self.assertEqual(self.client.get('/api/v1/prompts/').status_code, 403)
+
         membership.active = True
         membership.save()
+        self.assertIsNotNone(validate_device_token(self.user, raw))
         company.status = 'inactive'
         company.save()
+        self.assertIsNone(validate_device_token(self.user, raw))
         self.assertEqual(self.client.get('/api/v1/prompts/').status_code, 403)
         self.assertEqual(self.client.get('/portal/dashboard/').status_code, 403)

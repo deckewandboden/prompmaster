@@ -1,10 +1,14 @@
 import hashlib
+import logging
 import ipaddress
 import secrets
 
 from django.core.cache import cache
 from django.core.exceptions import PermissionDenied
 from django.http import HttpResponse
+
+logger = logging.getLogger(__name__)
+
 
 class HttpResponseTooManyRequests(HttpResponse):
     status_code = 429
@@ -41,6 +45,13 @@ def client_ip(request):
 
 
 def check_rate(request, scope, limit=8, window=300):
+    # Form pages call this helper before branching on request.method. Safe
+    # navigation (GET/HEAD/OPTIONS) must never consume the attack budget;
+    # otherwise simply refreshing login/registration/2FA pages can lock out a
+    # legitimate client without a single credential attempt.
+    if request.method in {'GET', 'HEAD', 'OPTIONS'}:
+        return None
+
     ip = client_ip(request)
     key = f'rl:{scope}:{ip}'
     added = cache.add(key, 1, window)
@@ -51,6 +62,12 @@ def check_rate(request, scope, limit=8, window=300):
             cache.set(key, 1, window)
             n = 1
         if n > limit:
+            logger.warning(
+                'Rate limit exceeded for scope=%s ip=%s',
+                scope,
+                ip,
+                extra={'event_code': 'security.rate_limited'},
+            )
             response = HttpResponseTooManyRequests('Zu viele Versuche. Bitte später erneut versuchen.')
             response['Retry-After'] = str(window)
             return response

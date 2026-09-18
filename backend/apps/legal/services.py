@@ -14,11 +14,16 @@ from .models import DeletionRequest
 
 @transaction.atomic
 def process_deletion_request(deletion, *, actor, request=None):
-    """Deactivate and anonymize an approved account deletion request.
+    """Deactivate and anonymize an approved customer account deletion request.
 
     Financial/order, legal acceptance and append-only audit records are retained
     by reference to the anonymized user. No legally relevant business record is
     silently deleted here. Company administrators must transfer their role first.
+
+    Internal netstyle staff identities are deliberately excluded from this
+    customer/privacy workflow. Their removal requires a separate privileged
+    internal offboarding process so a tenant path can never destroy an operator
+    identity through stale/imported membership data.
     """
     deletion = (
         DeletionRequest.objects.select_for_update()
@@ -31,6 +36,11 @@ def process_deletion_request(deletion, *, actor, request=None):
         raise ValidationError('Diese Löschanfrage kann nicht verarbeitet werden.')
 
     user = deletion.user
+    if user.is_staff:
+        raise ValidationError(
+            'Interne netstyle Benutzer können nicht über den Kunden-Löschworkflow anonymisiert werden.'
+        )
+
     active_memberships = list(
         Membership.objects.select_for_update()
         .filter(user=user, active=True)

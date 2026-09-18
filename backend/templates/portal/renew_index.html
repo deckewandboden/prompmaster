@@ -1,0 +1,27 @@
+{% extends 'portal/base.html' %}{% block content %}
+<div class="page-head">
+  <div>
+    <h1>Lizenz verlängern</h1>
+    <div class="sub">Wählen Sie die Lizenz, deren bestehende Restlaufzeit um weitere 365 Tage verlängert werden soll.</div>
+  </div>
+  <a class="btn secondary" href="{% url 'portal:licenses' %}">Zurück zu Lizenzen</a>
+</div>
+<div class="tablewrap">
+  <table>
+    <thead><tr><th>Lizenz-ID</th><th>Produkt</th><th>Status</th><th>Gültig bis</th><th>Aktion</th></tr></thead>
+    <tbody>
+    {% for license in licenses %}
+      <tr>
+        <td data-label="Lizenz-ID"><strong>{{ license.license_number }}</strong></td>
+        <td data-label="Produkt">{{ license.product.name }}</td>
+        <td data-label="Status">{{ license.get_status_display }}</td>
+        <td data-label="Gültig bis">{{ license.valid_until|date:'d.m.Y H:i'|default:'–' }}</td>
+        <td data-label="Aktion"><a class="btn primary sm" href="{% url 'portal:renew' license.id %}">Verlängern</a></td>
+      </tr>
+    {% empty %}
+      <tr><td colspan="5" class="empty">Keine verlängerbare Lizenz vorhanden.</td></tr>
+    {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endblock %}

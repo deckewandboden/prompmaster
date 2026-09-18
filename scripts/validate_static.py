@@ -72,10 +72,47 @@ for path in [ROOT/'compose.yaml', ROOT/'compose.staging.yaml', ROOT/'compose.pro
         fail(f'Unpinned latest image: {path.name}')
 
 compose = yaml.safe_load((ROOT/'compose.yaml').read_text())
+services = (compose or {}).get('services', {})
 required_services = {'postgres','redis','web','worker','beat','caddy','prometheus','node-exporter','cadvisor','postgres-exporter','backup'}
-missing_services = required_services - set((compose or {}).get('services', {}))
+missing_services = required_services - set(services)
 if missing_services:
     fail(f'Missing compose services: {sorted(missing_services)}')
+
+# Monitoring trust-boundary invariants. These are intentionally explicit:
+# cAdvisor remains privileged, but it must never become a public application
+# endpoint and its host mounts must remain read-only.
+def _network_names(service):
+    networks = (service or {}).get('networks') or []
+    return set(networks if isinstance(networks, list) else networks.keys())
+
+for name in ('prometheus', 'cadvisor'):
+    service = services.get(name, {})
+    if service.get('ports'):
+        fail(f'{name} must not publish host ports')
+    if _network_names(service) != {'monitor'}:
+        fail(f'{name} must be attached only to the internal monitor network')
+
+cadvisor = services.get('cadvisor', {})
+if cadvisor.get('privileged') is not True:
+    fail('cadvisor trust-boundary contract expects privileged: true until a separately validated replacement exists')
+
+required_cadvisor_mounts = {
+    '/:/rootfs:ro',
+    '/var/run:/var/run:ro',
+    '/sys:/sys:ro',
+    '/var/lib/docker/:/var/lib/docker:ro',
+    '/dev/disk/:/dev/disk:ro',
+}
+cadvisor_mounts = set(cadvisor.get('volumes') or [])
+missing_mounts = required_cadvisor_mounts - cadvisor_mounts
+if missing_mounts:
+    fail(f'cadvisor required read-only host mounts missing/changed: {sorted(missing_mounts)}')
+
+for name in ('prometheus', 'node-exporter', 'cadvisor', 'postgres-exporter'):
+    image = str((services.get(name) or {}).get('image') or '')
+    tail = image.rsplit('/', 1)[-1]
+    if not image or (':' not in tail and '@sha256:' not in image):
+        fail(f'{name} image must be version-pinned')
 
 # 6) Required release files.
 required = [
@@ -155,6 +192,8 @@ url_names = {
     'payments': names_from(ROOT/'backend/apps/payments/webhook_urls.py'),
     'proaccess': names_from(ROOT/'backend/apps/proaccess/urls.py'),
     'ops_api': names_from(ROOT/'backend/apps/ops/api_urls.py'),
+    'content_admin': names_from(ROOT/'backend/apps/contenthub/admin_urls.py'),
+    'prompt_studio': names_from(ROOT/'backend/apps/prompts/studio_urls.py'),
 }
 for template in sorted((ROOT/'backend/templates').rglob('*.html')):
     text = template.read_text(encoding='utf-8')
@@ -169,6 +208,112 @@ for template in sorted((ROOT/'backend/templates').rglob('*.html')):
         closing = text.find('</form>', match.end())
         if closing < 0 or '{% csrf_token %}' not in text[match.end():closing]:
             fail(f'{template.relative_to(ROOT)} has POST form without csrf_token')
+
+
+# 10b) Responsive tables collapse into cards below 700px. Every real data
+# cell therefore needs its own label once THEAD is hidden. Colspan-only empty
+# state rows are exempt.
+for template in sorted((ROOT/'backend/templates').rglob('*.html')):
+    text = template.read_text(encoding='utf-8')
+    if '<table' not in text:
+        continue
+    for match in re.finditer(r'<td\b([^>]*)>', text, flags=re.I):
+        attrs = match.group(1)
+        if 'data-label=' in attrs or 'colspan=' in attrs:
+            continue
+        line = text.count('\n', 0, match.start()) + 1
+        fail(
+            f'{template.relative_to(ROOT)}:{line} table cell lacks data-label '
+            'required by mobile card layout'
+        )
+
+
+# 10c) Literal design-system controls must use one of the defined visual
+# variants. A naked .btn has no intended product color; unknown badge/alert
+# variants are almost always stale prototype CSS names.
+_allowed_button_variants = {'primary', 'secondary', 'danger'}
+_allowed_badge_variants = {'ok', 'warn', 'bad', 'info', 'pro'}
+_allowed_alert_variants = {'ok', 'info', 'warn', 'danger'}
+_layout_utility_classes = {
+    'mt-6', 'mt-8', 'mt-10', 'mt-12', 'mt-14', 'mt-16', 'mt-18',
+    'mb-0', 'mb-14', 'd-block', 'd-inline', 'wrap-anywhere',
+    'compact-actions', 'compact-checkbox', 'text-warn', 'pre-wrap',
+}
+for template in sorted((ROOT/'backend/templates').rglob('*.html')):
+    text = template.read_text(encoding='utf-8')
+    for match in re.finditer(r'class=["\']([^"\']+)["\']', text):
+        raw = match.group(1)
+        # Template-generated class strings are validated by their source logic,
+        # not by this literal-token guard.
+        if '{%' in raw or '{{' in raw:
+            continue
+        tokens = set(raw.split())
+        line = text.count('\n', 0, match.start()) + 1
+        if 'btn' in tokens and not (tokens & _allowed_button_variants):
+            fail(
+                f'{template.relative_to(ROOT)}:{line} naked/unknown button variant: {raw}'
+            )
+        if 'badge' in tokens:
+            variants = tokens - {'badge'} - _layout_utility_classes
+            if variants and not (variants & _allowed_badge_variants):
+                fail(
+                    f'{template.relative_to(ROOT)}:{line} unknown badge variant: {raw}'
+                )
+        if 'alert' in tokens:
+            variants = tokens - {'alert'} - _layout_utility_classes
+            if variants and not (variants & _allowed_alert_variants):
+                fail(
+                    f'{template.relative_to(ROOT)}:{line} unknown alert variant: {raw}'
+                )
+
+# 10d) Product templates must not depend on javascript: navigation.
+# CSP/browser history can make those links unreliable; use named Django routes.
+for template in sorted((ROOT/'backend/templates').rglob('*.html')):
+    text = template.read_text(encoding='utf-8')
+    if re.search(r'''(?:href|action)\s*=\s*["']\s*javascript:''', text, flags=re.I):
+        fail(f'{template.relative_to(ROOT)} contains javascript: navigation')
+
+
+# 10e) Literal backend template classes must exist in the central stylesheet.
+# Dynamic Django class expressions are validated by the narrower variant guards
+# above. Literal classes are part of the shared design system and must never
+# silently rely on stale prototype CSS.
+_app_css = (ROOT/'backend/static/css/app.css').read_text(encoding='utf-8')
+_defined_classes = set(re.findall(r'\.([A-Za-z_][A-Za-z0-9_-]*)', _app_css))
+for template in sorted((ROOT/'backend/templates').rglob('*.html')):
+    text = template.read_text(encoding='utf-8')
+    for match in re.finditer(r'''class=["']([^"']+)["']''', text):
+        raw = match.group(1)
+        if '{%' in raw or '{{' in raw:
+            continue
+        line = text.count('\n', 0, match.start()) + 1
+        for class_name in raw.split():
+            if class_name not in _defined_classes:
+                fail(
+                    f'{template.relative_to(ROOT)}:{line} uses undefined literal '
+                    f'CSS class: {class_name}'
+                )
+
+
+# 10f) Buttons must declare their behavior explicitly. Relying on the HTML
+# default submit type makes refactors and nested-form mistakes unnecessarily risky.
+for template in sorted((ROOT/'backend/templates').rglob('*.html')):
+    text = template.read_text(encoding='utf-8')
+    for match in re.finditer(r'<button\\b([^>]*)>', text, flags=re.I):
+        if not re.search(r"""\\btype\\s*=\\s*["'](?:submit|button|reset)["']""", match.group(1), flags=re.I):
+            line = text.count('\\n', 0, match.start()) + 1
+            fail(f'{template.relative_to(ROOT)}:{line} button lacks explicit type')
+
+# 10g) Layout belongs to the shared design system. Dynamic inline values used
+# for charts/progress are allowed; literal one-off layout styles are not.
+for template in sorted((ROOT/'backend/templates').rglob('*.html')):
+    text = template.read_text(encoding='utf-8')
+    for match in re.finditer(r"""\\sstyle\\s*=\\s*["']([^"']+)["']""", text, flags=re.I):
+        value = match.group(1)
+        if '{{' in value or '{%' in value:
+            continue
+        line = text.count('\\n', 0, match.start()) + 1
+        fail(f'{template.relative_to(ROOT)}:{line} literal inline style must use shared CSS: {value}')
 
 # 11) Security-critical implementation guards.
 checks = {
@@ -187,9 +332,9 @@ for rel, tokens in checks.items():
             fail(f'Security invariant missing {rel}: {token}')
 
 # 12) Expected enterprise routes.
-expected_admin = {'dashboard','search','customers','customer_detail','customer_portal_preview','private_customer_portal_preview','customer_users','customer_licenses','customer_devices','customer_orders','customer_payments','customer_emails','customer_audit','licenses','license_detail','license_refund','orders','order_detail','payments','products','product_edit','product_price_add','email','email_log','mollie','mollie_events','stats','ops','ops_services','ops_database','ops_backups','ops_restore_tests','ops_alerts','api','legal','audit','roles','settings'}
+expected_admin = {'dashboard','search','more','customers','customer_detail','customer_portal_preview','private_customer_portal_preview','customer_users','customer_licenses','customer_devices','customer_orders','customer_payments','customer_emails','customer_audit','licenses','license_detail','license_refund','orders','order_detail','payments','products','product_edit','product_price_add','email','email_log','mollie','mollie_events','stats','ops','ops_services','ops_database','ops_backups','ops_restore_tests','ops_alerts','api','legal','audit','roles','settings'}
 for name in sorted(expected_admin - url_names['ns_admin']): fail(f'Missing ns-admin route: {name}')
-expected_portal={'dashboard','team','invitations','invite','licenses','buy','renew','devices','orders','company','profile','security','help'}
+expected_portal={'dashboard','search','more','team','invitations','invite','licenses','buy','renew','devices','orders','company','profile','security','help'}
 for name in sorted(expected_portal-url_names['portal']): fail(f'Missing portal route: {name}')
 expected_ops={'health','system','storage','database','services','backups','integrations','maintenance_snapshot'}
 for name in sorted(expected_ops-url_names['ops_api']): fail(f'Missing Ops API route: {name}')
@@ -338,6 +483,8 @@ route_files = {
     'proaccess': ROOT/'backend/apps/proaccess/urls.py',
     'ops_api': ROOT/'backend/apps/ops/api_urls.py',
     'prompts_api': ROOT/'backend/apps/prompts/api_urls.py',
+    'content_admin': ROOT/'backend/apps/contenthub/admin_urls.py',
+    'prompt_studio': ROOT/'backend/apps/prompts/studio_urls.py',
     'root': ROOT/'backend/config/urls.py',
 }
 route_args = {}
@@ -417,6 +564,95 @@ prompt_validator = subprocess.run(
 )
 if prompt_validator.returncode:
     fail('PromptDomain validator failed: ' + (prompt_validator.stdout + prompt_validator.stderr).strip())
+
+
+# 21b) Production backup and external acceptance must resolve the same
+# restic S3 region configuration. S3_REGION is retained only as a compatibility
+# alias; restic consumes AWS_DEFAULT_REGION.
+backup_script = (ROOT/'backup/backup.sh').read_text(encoding='utf-8')
+for needle in (
+    'AWS_DEFAULT_REGION',
+    'S3_REGION',
+    'export AWS_DEFAULT_REGION="$S3_REGION"',
+):
+    if needle not in backup_script:
+        fail(f'Production backup S3-region compatibility missing: {needle}')
+
+# 22) External production-acceptance harnesses are release invariants. They are
+# deliberately manual because they require real provider/infrastructure access,
+# but CI must prevent later edits from weakening their fail-closed safety.
+acceptance_files = {
+    'mollie': ROOT/'backend/apps/core/management/commands/external_mollie_acceptance.py',
+    'graph': ROOT/'backend/apps/core/management/commands/external_graph_acceptance.py',
+    'backup': ROOT/'scripts/external_backup_acceptance.sh',
+    'docs': ROOT/'docs/PRODUCTION_ACCEPTANCE.md',
+}
+for name, path in acceptance_files.items():
+    if not path.exists():
+        fail(f'External acceptance artifact missing: {name} ({path.relative_to(ROOT)})')
+
+if all(path.exists() for path in acceptance_files.values()):
+    mollie_acceptance = acceptance_files['mollie'].read_text(encoding='utf-8')
+    graph_acceptance = acceptance_files['graph'].read_text(encoding='utf-8')
+    backup_acceptance = acceptance_files['backup'].read_text(encoding='utf-8')
+    production_acceptance = acceptance_files['docs'].read_text(encoding='utf-8')
+
+    for needle in (
+        "client.key.startswith('test_')",
+        'CREATE-MOLLIE-TEST-PAYMENT',
+        'CREATE-MOLLIE-TEST-REFUND',
+        'publicly reachable HTTPS hostname',
+        'processed_at__isnull=False',
+        'create_refund_request',
+        'submit_refund',
+        "mode != 'test'",
+        'metadata order_id does not match',
+        'Mollie webhook URL',
+    ):
+        if needle not in mollie_acceptance:
+            fail(f'Mollie external acceptance safety/invariant missing: {needle}')
+
+    for needle in (
+        'SEND-GRAPH-ACCEPTANCE',
+        'send_email_message.run',
+        'INVALID_SENDER',
+        "failure.status != 'failed'",
+        'retry_count',
+    ):
+        if needle not in graph_acceptance:
+            fail(f'Graph external acceptance safety/invariant missing: {needle}')
+
+    for needle in (
+        'RUN_EXTERNAL_S3_RESTORE',
+        's3:https://*)',
+        's3:http://*)',
+        'backup_was_running',
+        'trap restore_backup_service EXIT',
+        'pg_isready',
+        'RESTORE_TEST_INTERVAL_SECONDS=0',
+        'PRUNE_INTERVAL_SECONDS=9999999999',
+        'before_snapshot',
+        'after_snapshot',
+        'last-restore.json',
+        'EXTERNAL S3/RESTIC BACKUP + ISOLATED POSTGRES RESTORE OK',
+    ):
+        if needle not in backup_acceptance:
+            fail(f'External backup acceptance safety/invariant missing: {needle}')
+
+    for needle in (
+        'external_graph_acceptance',
+        'external_mollie_acceptance',
+        'external_backup_acceptance.sh',
+        'Application Mail.Send',
+        'Chargeback-Reversal',
+    ):
+        if needle not in production_acceptance:
+            fail(f'Production acceptance documentation incomplete: {needle}')
+
+release_gates = (ROOT/'docs/RELEASE_GATES.md').read_text(encoding='utf-8')
+if 'docs/PRODUCTION_ACCEPTANCE.md' not in release_gates:
+    fail('Release gates do not reference the executable production acceptance procedure')
+
 
 if errors:
     print('\n'.join(f'[FAIL] {e}' for e in errors))

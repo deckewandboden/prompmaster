@@ -8,11 +8,13 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 
 TSV = ROOT / 'FILE_MANIFEST.tsv'
+AUDIT_TSV = ROOT / 'FILE_MANIFEST_AUDIT.tsv'
 JSON_OUT = ROOT / 'MANIFEST.json'
 MD = ROOT / 'docs' / 'COMPLETE_FILE_INVENTORY.md'
 
 EXCLUDED = {
     TSV.resolve(),
+    AUDIT_TSV.resolve(),
     JSON_OUT.resolve(),
     MD.resolve(),
 }
@@ -108,26 +110,34 @@ if not TSV.exists():
     )
 
 expected: dict[str, tuple[int, str, str]] = {}
+manifest_sources = [TSV]
+if AUDIT_TSV.exists():
+    manifest_sources.append(AUDIT_TSV)
 
-for line in TSV.read_text(
-    encoding='utf-8'
-).splitlines()[1:]:
+for manifest_path in manifest_sources:
+    for line in manifest_path.read_text(encoding='utf-8').splitlines()[1:]:
+        if not line.strip():
+            continue
 
-    if not line.strip():
-        continue
+        try:
+            rel, size, digest, role = line.split('\t', 3)
+        except ValueError as exc:
+            raise SystemExit(
+                f'MANIFEST VALIDATION FAIL: malformed manifest row in '
+                f'{manifest_path.name}: {line}'
+            ) from exc
 
-    try:
-        rel, size, digest, role = line.split('\t', 3)
-    except ValueError as exc:
-        raise SystemExit(
-            f'MANIFEST VALIDATION FAIL: malformed manifest row: {line}'
-        ) from exc
+        if rel in expected:
+            raise SystemExit(
+                'MANIFEST VALIDATION FAIL: duplicate manifest path across inventories: '
+                f'{rel}'
+            )
 
-    expected[rel] = (
-        int(size),
-        digest,
-        role,
-    )
+        expected[rel] = (
+            int(size),
+            digest,
+            role,
+        )
 
 
 # ---------------------------------------------------------------------------
@@ -222,5 +232,6 @@ if obsolete:
 print(
     'MANIFEST VALIDATION OK: '
     f'{checked} Git-tracked files inventoried; '
-    f'{binary_checked} binary files byte-validated'
+    f'{binary_checked} binary files byte-validated; '
+    f'{len(manifest_sources)} inventory file(s) loaded'
 )

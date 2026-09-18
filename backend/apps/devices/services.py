@@ -1,10 +1,12 @@
 from datetime import timedelta
 
+from django.contrib.auth import get_user_model
 from django.core.exceptions import ValidationError
 from django.db import transaction
 from django.utils import timezone
 
 from apps.audit.services import audit
+from apps.catalog.services import PRO_ACCESS_FEATURE
 from apps.core.security import token_hash, token_pair
 from apps.licenses.models import LicenseAssignment
 from apps.licenses.services import has_current_term
@@ -14,6 +16,11 @@ from .models import DeviceRegistration
 @transaction.atomic
 def register_device(user, license, display_name, os_family='', browser_family=''):
     lic = type(license).objects.select_for_update().select_related('product').get(pk=license.pk)
+    # Device limits are enforced per user/product. Locking only the concrete
+    # license row is insufficient when one private user owns multiple license
+    # rows for the same product: concurrent registrations through different
+    # licenses could otherwise both observe the same pre-insert device count.
+    user = get_user_model().objects.select_for_update().get(pk=user.pk)
     now = timezone.now()
     if lic.status != 'active' or not has_current_term(lic, now):
         raise ValidationError('Lizenz ist nicht aktiv.')
@@ -21,7 +28,7 @@ def register_device(user, license, display_name, os_family='', browser_family=''
         raise ValidationError('Lizenz ist diesem Benutzer nicht zugewiesen.')
 
     # Limit applies per user/product, not merely per database license row. This
-    # remains correct if a seat is replaced while the product stays Pro.
+    # remains correct if a seat is replaced while the product stays entitled.
     active = DeviceRegistration.objects.select_for_update().filter(
         user=user,
         license__product=lic.product,
@@ -44,26 +51,61 @@ def register_device(user, license, display_name, os_family='', browser_family=''
     return device, raw
 
 
-def validate_device_token(user, raw_token, *, product_code='PRO', touch=True):
-    if not raw_token:
+def validate_device_token(
+    user,
+    raw_token,
+    *,
+    product_code=None,
+    feature_code=PRO_ACCESS_FEATURE,
+    touch=True,
+):
+    """Validate a device credential against the complete access contract.
+
+    The validator is intentionally self-contained: callers must not be able to
+    turn a still-valid browser cookie into access for a disabled/unverified
+    identity or for a user whose company membership/company has been disabled.
+    ``product_code`` is retained only for compatibility with older callers and
+    deliberately does not authorize access.
+    """
+    if not raw_token or not user.is_active or not user.email_verified_at:
         return None
+
     hashed = token_hash(raw_token)
     now = timezone.now()
     device = (
-        DeviceRegistration.objects.select_related('license__product')
+        DeviceRegistration.objects.select_related('license__product', 'license__company')
         .filter(
             user=user,
             token_hash=hashed,
             revoked_at__isnull=True,
-            license__product__code=product_code,
+            license__product__active=True,
+            license__product__entitlements__feature__code=feature_code,
+            license__product__entitlements__enabled=True,
             license__status='active',
         )
+        .distinct()
         .first()
     )
     if not device:
         return None
+
     lic = device.license
-    if not LicenseAssignment.objects.filter(license=lic, user=user, ended_at__isnull=True).exists():
+    if lic.company_id:
+        from apps.companies.models import Membership
+
+        if not Membership.objects.filter(
+            company_id=lic.company_id,
+            user=user,
+            active=True,
+            company__status='active',
+        ).exists():
+            return None
+
+    if not LicenseAssignment.objects.filter(
+        license=lic,
+        user=user,
+        ended_at__isnull=True,
+    ).exists():
         return None
     if not has_current_term(lic, now):
         return None

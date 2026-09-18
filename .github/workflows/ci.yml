@@ -86,7 +86,18 @@ jobs:
           npm run build
 
       - name: Static repository guards
-        run: python scripts/github_preflight.py
+        run: |
+          set -o pipefail
+          python scripts/github_preflight.py 2>&1 | tee ci-preflight.log
+
+      - name: Upload test diagnostics
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-diagnostics
+          path: |
+            ci-preflight.log
+          if-no-files-found: ignore
 
       - name: Check migration drift
         working-directory: backend
@@ -109,6 +120,15 @@ jobs:
         run: |
           python manage.py check
           python manage.py test --verbosity 2
+
+      - name: 100k DataGrid scalability gate
+        working-directory: backend
+        env:
+          RUN_100K_DATAGRID_ACCEPTANCE: '1'
+        run: |
+          python manage.py test \
+            apps.core.tests.DataGrid100kAcceptanceTests.test_100000_rows_paginate_without_unbounded_result_materialization \
+            --verbosity 2
 
       - name: Compose configuration
         env:
@@ -133,29 +153,62 @@ jobs:
           docker build -f Dockerfile.caddy -t promptmaster-caddy-ci:${{ github.sha }} .
           docker build -t promptmaster-backup-ci:${{ github.sha }} ./backup
 
-  full-stack:
+
+  security:
     runs-on: ubuntu-latest
-    timeout-minutes: 30
+    timeout-minutes: 15
+
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
         with:
           python-version: '3.13'
-      - uses: actions/setup-node@v4
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
         with:
           node-version: '22'
-      - name: Install validation dependencies
-        run: pip install -r requirements.txt
-      - name: Build marketing for repository validation
+
+      - name: Python dependency vulnerability audit
+        run: |
+          set -o pipefail
+          python -m pip install --upgrade pip
+          pip install "pip-audit>=2.7,<3"
+          pip-audit -r requirements.txt --progress-spinner off 2>&1 | tee security-pip-audit.log
+
+      - name: Marketing production dependency vulnerability audit
         working-directory: marketing
         run: |
+          set -o pipefail
           npm ci
-          npm run build
-      - name: Generate isolated staging configuration
+          npm audit --audit-level=high 2>&1 | tee ../security-npm-audit.log
+
+      - name: Upload security diagnostics
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: security-diagnostics
+          path: |
+            security-pip-audit.log
+            security-npm-audit.log
+          if-no-files-found: ignore
+
+  full-stack:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+      - name: Clean bootstrap installation
         env:
           PM_DOMAIN: localhost
-        run: python scripts/prepare_env.py
-      - name: Start and validate full stack with production filesystem restrictions
+        run: |
+          rm -rf marketing/dist marketing/node_modules
+          rm -f .env .bootstrap-credentials
+          bash scripts/bootstrap.sh
+      - name: Validate full stack with production filesystem restrictions
         env:
           PM_VALIDATE_READ_ONLY: '1'
         run: bash scripts/runtime_validate.sh
@@ -173,7 +226,47 @@ jobs:
 
   browser-smoke:
     runs-on: ubuntu-latest
-    timeout-minutes: 20
+    timeout-minutes: 25
+
+    services:
+      postgres:
+        image: postgres:18
+        env:
+          POSTGRES_DB: promptmaster
+          POSTGRES_USER: promptmaster
+          POSTGRES_PASSWORD: testpass1234567890
+        ports:
+          - '5432:5432'
+        options: >-
+          --health-cmd "pg_isready -U promptmaster -d promptmaster"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+      redis:
+        image: redis:7
+        ports:
+          - '6379:6379'
+        options: >-
+          --health-cmd "redis-cli ping"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+    env:
+      ENVIRONMENT: development
+      DJANGO_SECRET_KEY: ci-browser-secret-key-ci-browser-secret-key
+      APP_ENCRYPTION_KEY: 3fDltyLLocPcNedSN3wwVTiyNlFCsVyTcdi-pP-WiJY=
+      POSTGRES_DB: promptmaster
+      POSTGRES_USER: promptmaster
+      POSTGRES_PASSWORD: testpass1234567890
+      POSTGRES_HOST: 127.0.0.1
+      REDIS_URL: redis://127.0.0.1:6379/0
+      ALLOWED_HOSTS: localhost,127.0.0.1
+      SECURE_SSL_REDIRECT: 0
+      SESSION_COOKIE_SECURE: 0
+      CSRF_COOKIE_SECURE: 0
+      BACKEND_UI_BROWSER_SMOKE: '1'
 
     steps:
       - name: Checkout repository
@@ -195,14 +288,39 @@ jobs:
           npm ci
           npm run build
 
-      - name: Install Playwright
+      - name: Install backend dependencies and Playwright
         run: |
           python -m pip install --upgrade pip
+          pip install -r requirements.txt
           pip install "playwright>=1.50,<2"
+          pip check
           python -m playwright install --with-deps chromium
 
-      - name: Pro runtime browser smoke
-        run: python scripts/browser_runtime_smoke.py
+      - name: Prepare Django browser fixtures
+        working-directory: backend
+        run: |
+          python manage.py migrate --noinput
+          python manage.py seed_defaults
+          python manage.py seed_prompt_catalog
+          python manage.py seed_faqs
+          python manage.py check
+
+      - name: Pro runtime and Django backend browser smoke
+        run: |
+          set -o pipefail
+          python scripts/browser_runtime_smoke.py 2>&1 | tee browser-runtime-smoke.log
 
       - name: Marketing browser smoke
-        run: python scripts/browser_marketing_smoke.py
+        run: |
+          set -o pipefail
+          python scripts/browser_marketing_smoke.py 2>&1 | tee browser-marketing-smoke.log
+
+      - name: Upload browser diagnostics
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: browser-diagnostics
+          path: |
+            browser-runtime-smoke.log
+            browser-marketing-smoke.log
+          if-no-files-found: ignore

@@ -28,12 +28,17 @@ services:
   web:
     build: .
     env_file: .env
+    environment:
+      APP_VERSION: ${APP_VERSION:-development}
+      GIT_SHA: ${GIT_SHA:-}
+      DEPLOYED_AT: ${DEPLOYED_AT:-}
     depends_on:
       postgres: {condition: service_healthy}
       redis: {condition: service_healthy}
     volumes:
       - static_data:/app/staticfiles
       - backup_status:/var/run/promptmaster-backup:ro
+      - export_data:/app/exports
     networks: [edge, app, data, monitor]
     healthcheck:
       test: ["CMD-SHELL", "curl -fsS http://localhost:8000/health/live/ || exit 1"]
@@ -50,7 +55,14 @@ services:
       redis: {condition: service_healthy}
     volumes:
       - backup_status:/var/run/promptmaster-backup:ro
+      - export_data:/app/exports
     networks: [app, data, monitor]
+    healthcheck:
+      test: ["CMD-SHELL", "celery -A config inspect ping --timeout=5 2>/dev/null | grep -q pong"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 30s
     restart: unless-stopped
   beat:
     build: .
@@ -62,6 +74,15 @@ services:
       postgres: {condition: service_healthy}
       redis: {condition: service_healthy}
     networks: [app, data]
+    healthcheck:
+      test:
+        - CMD-SHELL
+        - >-
+          python manage.py shell -c "from datetime import timedelta; from django.utils import timezone; from apps.ops.models import BeatHeartbeat; import sys; row=BeatHeartbeat.objects.filter(name='default').first(); sys.exit(0 if row and row.last_seen_at >= timezone.now()-timedelta(minutes=3) else 1)"
+      interval: 60s
+      timeout: 10s
+      retries: 3
+      start_period: 180s
     restart: unless-stopped
   caddy:
     build:
@@ -76,6 +97,12 @@ services:
     depends_on:
       web: {condition: service_healthy}
     networks: [edge, monitor]
+    healthcheck:
+      test: ["CMD-SHELL", "wget -qO- http://localhost:8081/healthz >/dev/null || exit 1"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 15s
     restart: unless-stopped
   prometheus:
     image: prom/prometheus:v3.13.3
@@ -127,7 +154,14 @@ services:
       postgres: {condition: service_healthy}
     volumes:
       - backup_status:/status
+      - backup_repository:/repository
     networks: [app, data]
+    healthcheck:
+      test: ["CMD-SHELL", "test -s /status/last-backup.json && grep -q '\"status\":\"ok\"' /status/last-backup.json"]
+      interval: 5m
+      timeout: 10s
+      retries: 2
+      start_period: 120s
     restart: unless-stopped
 volumes:
   postgres_data:
@@ -137,6 +171,8 @@ volumes:
   caddy_config:
   prometheus_data:
   backup_status:
+  backup_repository:
+  export_data:
 networks:
   edge:
   app:

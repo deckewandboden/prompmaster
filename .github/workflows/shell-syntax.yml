@@ -1,0 +1,42 @@
+name: PromptMaster Shell Syntax
+
+on:
+  push:
+    branches: ['**']
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  shell-syntax:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Validate operational shell scripts
+        run: |
+          bash -n scripts/bootstrap.sh
+          bash -n scripts/deploy.sh
+          bash -n scripts/backup.sh
+          bash -n scripts/restore-test.sh
+          bash -n scripts/diagnose.sh
+          bash -n scripts/runtime_validate.sh
+          bash -n scripts/test_backup_restore.sh
+          bash -n scripts/external_backup_acceptance.sh
+          bash -n scripts/performance_validate.sh
+          bash -n scripts/run_repo_preflight.sh
+          bash -n backup/backup.sh
+
+      - name: Verify external backup drill is opt-in
+        run: |
+          set +e
+          output="$(env -u PM_EXTERNAL_BACKUP_ACCEPTANCE bash scripts/external_backup_acceptance.sh 2>&1)"
+          status=$?
+          set -e
+          test "$status" -eq 2
+          grep -q "Refusing external backup drill" <<<"$output"
+          grep -q "restic cat config" scripts/external_backup_acceptance.sh
+          grep -q "acceptance will not initialize it" scripts/external_backup_acceptance.sh

@@ -1,0 +1,29 @@
+{% extends 'ns_admin/base.html' %}{% block content %}
+<div class="page-head">
+  <div><h1>{{ customer.name }}</h1><div class="sub">Datenschutz · {{ customer.customer_number }}</div></div>
+</div>
+{% include 'ns_admin/includes_customer_nav.html' %}
+<div class="grid two">
+  <section class="card">
+    <h2>Rechtsakzeptanzen</h2>
+    <div class="statusrow"><span>Gesamt</span><strong>{{ acceptance_count }}</strong></div>
+    {% for row in acceptances %}
+      <div class="statusrow">
+        <span>{{ row.user.email }}<div class="tiny muted">{{ row.document.get_doc_type_display }} · Version {{ row.document.version }}</div></span>
+        <strong>{{ row.accepted_at|date:'d.m.Y H:i' }}</strong>
+      </div>
+    {% empty %}<p class="muted">Keine Rechtsakzeptanzen protokolliert.</p>{% endfor %}
+  </section>
+  <section class="card">
+    <h2>Löschanfragen</h2>
+    <div class="statusrow"><span>Gesamt</span><strong>{{ deletion_count }}</strong></div>
+    {% for row in deletions %}
+      <div class="statusrow">
+        <span>{{ row.user.email }}<div class="tiny muted">{{ row.get_status_display }}</div></span>
+        <strong>{{ row.requested_at|date:'d.m.Y H:i' }}</strong>
+      </div>
+    {% empty %}<p class="muted">Keine Löschanfragen.</p>{% endfor %}
+    <a class="btn secondary sm" href="{% url 'ns_admin:deletion_requests' %}">Alle Löschanfragen</a>
+  </section>
+</div>
+{% endblock %}
