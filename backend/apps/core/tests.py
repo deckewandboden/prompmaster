@@ -458,3 +458,30 @@ class DataGrid100kAcceptanceTests(DataGridAcceptanceTests):
         select_sql = ' '.join(q['sql'] for q in queries if 'SELECT' in q['sql'].upper())
         self.assertIn('LIMIT 50', select_sql.upper())
         self.assertIn('OFFSET 99950', select_sql.upper())
+
+
+class MollieAdminPageTests(TestCase):
+    def setUp(self):
+        self.user = User.objects.create_user(
+            'mollie-admin-page@example.test',
+            None,
+            is_staff=True,
+            is_superuser=True,
+            two_factor_required=True,
+            totp_secret_enc='configured-mollie-admin-test-secret',
+            email_verified_at=timezone.now(),
+        )
+        self.client.force_login(self.user)
+        session = self.client.session
+        now = timezone.now().timestamp()
+        session['security_version'] = self.user.security_version
+        session['two_factor_ok'] = True
+        session['authenticated_at'] = now
+        session['last_activity_at'] = now
+        session.save()
+
+    def test_mollie_overview_renders_without_optional_webhook_setting(self):
+        response = self.client.get('/ns-admin/mollie/')
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, '<h1>Mollie</h1>', html=True)
+        self.assertEqual(response.context['webhook_base'], 'http://testserver')
