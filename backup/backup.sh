@@ -10,6 +10,13 @@ prune_interval="${PRUNE_INTERVAL_SECONDS:-86400}"
 restore_interval="${RESTORE_TEST_INTERVAL_SECONDS:-2592000}"
 backup_once="${BACKUP_ONCE:-0}"
 
+# restic's S3 backend uses AWS_DEFAULT_REGION. Keep the historical S3_REGION
+# variable as a compatibility alias so existing deployments do not silently
+# fall back to us-east-1 on S3-compatible endpoints.
+if [[ -z "${AWS_DEFAULT_REGION:-}" && -n "${S3_REGION:-}" ]]; then
+  export AWS_DEFAULT_REGION="${S3_REGION}"
+fi
+
 json_status() {
   local file="$1" status="$2" ts="$3" size="${4:-0}" detail="${5:-}"
   printf '{"status":"%s","timestamp":"%s","size_bytes":%s,"detail":"%s"}\n' \
