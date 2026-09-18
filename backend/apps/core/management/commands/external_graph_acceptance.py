@@ -1,20 +1,29 @@
 import json
 import uuid
-from types import SimpleNamespace
 
-import requests
 from django.conf import settings
 from django.core.management.base import BaseCommand, CommandError
 
-from apps.notifications.services import _send_graph
+from apps.notifications.models import EmailMessage
+from apps.notifications.tasks import send_email_message
 
 
 CONFIRM_VALUE = 'SEND-GRAPH-ACCEPTANCE'
 INVALID_SENDER = '00000000-0000-0000-0000-000000000000'
 
 
+def _provider_http_status(exc):
+    candidates = [exc, getattr(exc, 'exc', None)]
+    for candidate in candidates:
+        response = getattr(candidate, 'response', None) if candidate is not None else None
+        status = getattr(response, 'status_code', None)
+        if status:
+            return status
+    return None
+
+
 class Command(BaseCommand):
-    help = 'Run a real Microsoft Graph mail acceptance probe without persisting secrets.'
+    help = 'Run a real Microsoft Graph mail acceptance probe through the production EmailMessage task path.'
 
     def add_arguments(self, parser):
         parser.add_argument('--recipient', required=True)
@@ -43,30 +52,32 @@ class Command(BaseCommand):
             raise CommandError('Recipient must be a valid e-mail address.')
 
         probe_id = uuid.uuid4().hex
-        message = SimpleNamespace(
-            subject=f'PromptMaster Graph Acceptance {probe_id}',
+        success = EmailMessage.objects.create(
             recipient=recipient,
+            subject=f'PromptMaster Graph Acceptance {probe_id}',
+            context={},
         )
-        request_id = _send_graph(
-            message,
-            'PromptMaster external Graph acceptance. '
-            f'Probe ID: {probe_id}. No action is required.',
-        )
+        result = send_email_message.run(str(success.id))
+        success.refresh_from_db()
+        if result != 'sent' or success.status != 'sent':
+            raise CommandError(
+                f'Graph success probe did not complete the production mail task: '
+                f'result={result!r}, status={success.status!r}.'
+            )
 
         original_sender = settings.GRAPH_SENDER
-        failure_status = None
+        failure = EmailMessage.objects.create(
+            recipient=recipient,
+            subject=f'PromptMaster Graph Failure Probe {probe_id}',
+            context={},
+        )
+        failure_exc = None
         try:
             settings.GRAPH_SENDER = INVALID_SENDER
             try:
-                _send_graph(
-                    SimpleNamespace(
-                        subject=f'PromptMaster Graph Failure Probe {probe_id}',
-                        recipient=recipient,
-                    ),
-                    'This message must not be delivered because the sender is intentionally invalid.',
-                )
-            except requests.HTTPError as exc:
-                failure_status = exc.response.status_code if exc.response is not None else None
+                send_email_message.run(str(failure.id))
+            except Exception as exc:
+                failure_exc = exc
             else:
                 raise CommandError(
                     'Graph failure probe unexpectedly succeeded with an invalid sender.'
@@ -74,8 +85,14 @@ class Command(BaseCommand):
         finally:
             settings.GRAPH_SENDER = original_sender
 
+        failure.refresh_from_db()
+        failure_status = _provider_http_status(failure_exc)
         if not failure_status or failure_status < 400:
-            raise CommandError('Graph failure probe did not produce a provider error.')
+            raise CommandError('Graph failure probe did not produce a real provider HTTP error.')
+        if failure.status != 'failed' or failure.retry_count < 1:
+            raise CommandError(
+                'Graph provider failure did not traverse the production failed/retry state path.'
+            )
 
         self.stdout.write(
             json.dumps(
@@ -84,9 +101,12 @@ class Command(BaseCommand):
                     'probe_id': probe_id,
                     'recipient': recipient,
                     'sender': original_sender,
-                    'request_id': request_id,
+                    'request_id': success.provider_reference,
+                    'success_message_id': str(success.id),
+                    'failure_message_id': str(failure.id),
                     'provider_failure_status': failure_status,
-                    'retry_path': 'covered by apps.notifications.tasks.send_email_message CI regression',
+                    'retry_count': failure.retry_count,
+                    'retry_path': 'production EmailMessage/Celery task path exercised with real Graph provider failure',
                 },
                 sort_keys=True,
             )

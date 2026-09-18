@@ -591,7 +591,7 @@ def run_backend_ui_smoke(browser, fixture=None) -> None:
             ('legal/terms/', 'AGB'),
             ('legal/privacy/', 'Datenschutz'),
         ]
-        for width in (390, 768, 1440):
+        for width in (360, 390, 768, 1440, 1920):
             for route, label in public_routes:
                 _check_public_page(public_page, base, route, width, label)
         public_context.close()
@@ -737,7 +737,7 @@ def run_backend_ui_smoke(browser, fixture=None) -> None:
                 if missing:
                     raise AssertionError(f'admin mobile More navigation missing: {missing}')
 
-            for width, height in ((390, 844), (768, 1024), (1440, 1000)):
+            for width, height in ((360, 800), (390, 844), (768, 1024), (1440, 1000), (1920, 1080)):
                 page.set_viewport_size({'width': width, 'height': height})
                 for route, label in routes:
                     _check_backend_page(page, base, route, width, label)
@@ -750,7 +750,7 @@ def run_backend_ui_smoke(browser, fixture=None) -> None:
 
         print(
             'DJANGO BACKEND BROWSER SMOKE OK: real login + TOTP 2FA + '
-            'public auth/legal + portal/admin/prompt-studio + global search + complete mobile navigation + responsive 390/768/1440 + overflow/overlap guards'
+            'public auth/legal + portal/admin/prompt-studio + global search + complete mobile navigation + responsive 360/390/768/1440/1920 + overflow/overlap guards'
         )
     finally:
         if process.poll() is None:

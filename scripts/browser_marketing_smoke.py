@@ -14,6 +14,7 @@ ROOT = Path(__file__).resolve().parents[1]
 DIST = ROOT / 'marketing' / 'dist'
 DATA = ROOT / 'backend' / 'apps' / 'prompts' / 'data' / 'pm20_golden_logic.json'
 TARGETS = (
+    (360, 800),
     (390, 844),
     (768, 1024),
     (1440, 1000),

@@ -1,9 +1,16 @@
+import json
 from io import StringIO
 from unittest.mock import patch
 
+import requests
+
 from django.core.management import call_command
 from django.core.management.base import CommandError
-from django.test import SimpleTestCase, override_settings
+from django.conf import settings
+from django.test import SimpleTestCase, TestCase, override_settings
+
+from apps.core.management.commands.external_graph_acceptance import INVALID_SENDER
+from apps.notifications.models import EmailMessage
 
 
 class ExternalAcceptanceSafetyTests(SimpleTestCase):
@@ -70,3 +77,44 @@ class ExternalAcceptanceSafetyTests(SimpleTestCase):
                     confirm='WRONG',
                     stdout=StringIO(),
                 )
+
+
+@override_settings(
+    EMAIL_PROVIDER='graph',
+    GRAPH_TENANT_ID='tenant-test',
+    GRAPH_CLIENT_ID='client-test',
+    GRAPH_CLIENT_SECRET='secret-test',
+    GRAPH_SENDER='sender@example.test',
+)
+class ExternalGraphAcceptanceFlowTests(TestCase):
+
+    @patch('apps.notifications.services._send_graph')
+    def test_graph_acceptance_uses_persisted_success_and_real_retry_state_path(self, send_graph):
+        def provider(message, _body):
+            if settings.GRAPH_SENDER == INVALID_SENDER:
+                response = requests.Response()
+                response.status_code = 404
+                response.url = 'https://graph.microsoft.com/v1.0/users/invalid/sendMail'
+                raise requests.HTTPError('Graph sender not found', response=response)
+            return 'req-success-123'
+
+        send_graph.side_effect = provider
+        stdout = StringIO()
+        call_command(
+            'external_graph_acceptance',
+            recipient='probe@example.test',
+            confirm='SEND-GRAPH-ACCEPTANCE',
+            stdout=stdout,
+        )
+        payload = json.loads(stdout.getvalue())
+        self.assertEqual(payload['status'], 'ok')
+        self.assertEqual(payload['request_id'], 'req-success-123')
+        self.assertEqual(payload['provider_failure_status'], 404)
+        self.assertEqual(payload['retry_count'], 1)
+
+        success = EmailMessage.objects.get(pk=payload['success_message_id'])
+        failure = EmailMessage.objects.get(pk=payload['failure_message_id'])
+        self.assertEqual(success.status, 'sent')
+        self.assertEqual(success.provider_reference, 'req-success-123')
+        self.assertEqual(failure.status, 'failed')
+        self.assertEqual(failure.retry_count, 1)

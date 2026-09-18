@@ -22,7 +22,7 @@ docker compose exec -T web python manage.py external_graph_acceptance \
   --confirm SEND-GRAPH-ACCEPTANCE
 ```
 
-Das Gate gilt erst als bestanden, wenn der Command JSON mit `"status": "ok"` liefert und die Testmail beim vorgesehenen Empfänger angekommen ist. Der Command führt zusätzlich mit denselben realen OAuth-Credentials eine absichtlich ungültige Sender-Anfrage aus und erwartet einen echten Graph-Fehler. Der lokale Celery-Retrypfad bleibt zusätzlich durch die normale Django-CI abgesichert.
+Das Gate gilt erst als bestanden, wenn der Command JSON mit `"status": "ok"` liefert und die Testmail beim vorgesehenen Empfänger angekommen ist. Der Erfolgsversand läuft über einen echten persistierten `EmailMessage`-Datensatz und denselben `send_email_message`-Task wie der Produktivversand. Anschließend wird mit denselben realen OAuth-Credentials absichtlich ein ungültiger Sender verwendet. Der Command verlangt dabei einen echten Graph-HTTP-Fehler **und** einen persistierten `failed`-Status mit erhöhtem `retry_count`. Damit sind Providerfehler und lokaler Retrypfad im selben externen Gate nachgewiesen. Microsoft Graph bestätigt einen Versandaufruf lediglich mit `202 Accepted`; deshalb bleibt der tatsächliche Mail-Empfang ein separater Abnahmepunkt.
 
 ## Mollie Testmodus
 
@@ -92,6 +92,7 @@ Voraussetzungen in der Deployment-Umgebung:
 - `AWS_ACCESS_KEY_ID`
 - `AWS_SECRET_ACCESS_KEY`
 - `AWS_DEFAULT_REGION` bei S3-kompatiblen Endpunkten, falls die Region nicht aus dem Endpoint hervorgeht (`S3_REGION` wird aus Bestandsgründen weiterhin als Alias akzeptiert)
+- bei temporären S3-Credentials zusätzlich `AWS_SESSION_TOKEN`
 - laufende PostgreSQL-Instanz
 
 Ausführung:
@@ -101,14 +102,14 @@ PM_EXTERNAL_BACKUP_ACCEPTANCE=RUN_EXTERNAL_S3_RESTORE \
   ./scripts/external_backup_acceptance.sh
 ```
 
-Der Lauf verweigert lokale restic-Ziele. Er erstellt einen echten PostgreSQL-Dump, speichert ihn im externen S3/restic-Repository, restauriert den neuesten `promptmaster-db`-Snapshot in ein isoliertes PostgreSQL und prüft `django_migrations`. Retention/Prune wird in diesem Acceptance-Lauf nicht ausgelöst.
+Der Lauf verweigert lokale restic-Ziele. Er erstellt einen echten PostgreSQL-Dump, speichert ihn im externen S3/restic-Repository, restauriert den neuesten `promptmaster-db`-Snapshot in ein isoliertes PostgreSQL und prüft `django_migrations`. Retention/Prune wird in diesem Acceptance-Lauf nicht ausgelöst. Der Drill soll auf Staging bzw. gegen ein dediziertes externes Acceptance-/Backup-Repository laufen, nicht als Experiment gegen ein unbekanntes Produktions-Repository.
 
 ## Abnahmeevidenz
 
 Für die Produktionsfreigabe werden mindestens festgehalten:
 
 - Datum/Uhrzeit und Commit-SHA
-- Graph Probe-ID + Graph Request-ID + tatsächlicher Mail-Empfang
+- Graph Probe-ID + persistierte Erfolgs-/Fehler-Message-IDs + tatsächlicher Mail-Empfang; Graph Request-ID zusätzlich, sofern vom Provider geliefert
 - Mollie Order-/Payment-ID und erfolgreich verarbeitete Webhook-Zustände
 - Mollie Refund-ID sowie Chargeback-/Reversal-Zustände
 - Ausgabe `EXTERNAL S3/RESTIC BACKUP + ISOLATED POSTGRES RESTORE OK`

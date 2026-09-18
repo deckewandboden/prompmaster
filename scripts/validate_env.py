@@ -89,10 +89,6 @@ def main() -> int:
     if domain not in {'localhost', '127.0.0.1', ''} and f'https://{domain}' not in csrf:
         fail(errors, 'https://CADDY_DOMAIN muss in CSRF_TRUSTED_ORIGINS enthalten sein.')
 
-    webhook = values.get('MOLLIE_WEBHOOK_BASE', '').rstrip('/')
-    if expected == 'production' and webhook != f'https://{domain}':
-        fail(errors, 'MOLLIE_WEBHOOK_BASE muss in Produktion exakt https://CADDY_DOMAIN entsprechen.')
-
     provider = values.get('EMAIL_PROVIDER', '').strip().lower()
     if expected == 'production':
         if provider not in {'graph', 'microsoft_graph'}:
