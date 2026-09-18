@@ -24,6 +24,25 @@ def validate(compose, production):
         errors.append('Internal data network and PostgreSQL healthcheck required')
     if services['backup'].get('build') != './backup':
         errors.append('Backup build context must be ./backup')
+    monitor = compose.get('networks', {}).get('monitor', {})
+    cadvisor = services.get('cadvisor', {})
+    if monitor.get('internal') is not True:
+        errors.append('Monitoring network must remain internal')
+    if cadvisor.get('image') != 'ghcr.io/google/cadvisor:v0.60.5':
+        errors.append('cAdvisor image must remain explicitly pinned')
+    if cadvisor.get('privileged') is not True:
+        errors.append('cAdvisor host trust boundary changed; staging validation and release decision required')
+    if cadvisor.get('networks') != ['monitor'] or cadvisor.get('ports'):
+        errors.append('cAdvisor must use only internal monitor network and publish no host ports')
+    expected_cadvisor_mounts = {
+        '/:/rootfs:ro',
+        '/var/run:/var/run:ro',
+        '/sys:/sys:ro',
+        '/var/lib/docker/:/var/lib/docker:ro',
+        '/dev/disk/:/dev/disk:ro',
+    }
+    if set(cadvisor.get('volumes', [])) != expected_cadvisor_mounts:
+        errors.append('cAdvisor host mounts must match the documented read-only trust boundary')
     beat = services['beat']
     if '--schedule=/tmp/celerybeat/celerybeat-schedule' not in beat.get('command', []):
         errors.append('Beat must use its explicit schedule directory')
@@ -55,7 +74,7 @@ def main():
             errors.append(f'Backup build input is not Git-tracked: {path}')
     if errors:
         raise SystemExit('\n'.join(f'RUNTIME CONFIG FAIL: {error}' for error in errors))
-    print('RUNTIME CONFIG OK: PostgreSQL 18, tracked backup context, read-only Beat')
+    print('RUNTIME CONFIG OK: PostgreSQL 18, tracked backup context, read-only Beat, internal cAdvisor trust boundary')
 
 
 if __name__ == '__main__':
