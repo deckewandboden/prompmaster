@@ -165,6 +165,7 @@ def main() -> int:
                         headRenderer: renderer,
                         fallbackHidden: one('.head-fallback').hidden,
                         motionControlPresent: !!one('.motion-button'),
+                        headOverlayPresent: !!document.querySelector('.hero-title,.core-sentence'),
                         productCount: document.querySelectorAll('.product').length,
                         faqCount: document.querySelectorAll('#faq details').length,
                         proExtraApps: [...document.querySelectorAll('.mini-label')].some(
@@ -215,6 +216,8 @@ def main() -> int:
                     fail(f'{width}px: Chromium muss den primären WebGL-Renderer validieren')
                 if metrics['motionControlPresent']:
                     fail(f'{engine} {width}px: unerwünschte Bewegungssteuerung ist sichtbar')
+                if metrics['headOverlayPresent']:
+                    fail(f'{engine} {width}px: sichtbarer Text liegt im Kopfbereich')
                 if metrics['freeBorder'] == metrics['proBorder']:
                     fail(f'{width}px: Free-/Pro-Karten haben keine getrennte Cyan/Violett-Inszenierung')
                 if metrics['faqCount'] != 20:
@@ -304,6 +307,7 @@ def main() -> int:
                     return r.width > 300 && r.height > 300;
                   })(),
                   motionControlPresent: !!document.querySelector('.motion-button'),
+                  headOverlayPresent: !!document.querySelector('.hero-title,.core-sentence'),
                   fallbackText: (document.querySelector('.head-fallback')?.textContent || '').trim(),
                   headBounds: document.querySelector('.head-stage')?.dataset.headBounds || '',
                   headModelRequested: performance.getEntriesByType('resource')
@@ -317,6 +321,8 @@ def main() -> int:
                 fail('No-WebGL: Canvas2D-Kopf ist nicht sichtbar')
             if fallback_metrics['motionControlPresent']:
                 fail('No-WebGL: unerwünschte Bewegungssteuerung ist vorhanden')
+            if fallback_metrics['headOverlayPresent']:
+                fail('No-WebGL: sichtbarer Text liegt im Kopfbereich')
             if fallback_metrics['fallbackText']:
                 fail(f'No-WebGL: unerwünschter Text liegt über dem Kopf: {fallback_metrics["fallbackText"]!r}')
             try:
