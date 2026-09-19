@@ -2,13 +2,16 @@ from datetime import timedelta
 from unittest.mock import patch
 
 from django.contrib.auth.hashers import make_password
+from django.core import signing
 from django.core.cache import cache
-from django.test import TestCase, override_settings
+from django.test import Client, TestCase, override_settings
+from django.urls import reverse
 from django.utils import timezone
 
 from apps.accounts.models import User, RecoveryCode
 from apps.accounts.security import consume_second_factor, login_lock_remaining
 from apps.accounts.totp import code
+from apps.accounts.views import PASSWORD_RESET_SALT
 from apps.audit.models import AuditEvent
 from apps.core.crypto import encrypt
 
