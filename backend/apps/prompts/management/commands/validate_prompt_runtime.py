@@ -21,7 +21,11 @@ class Command(BaseCommand):
             PromptDefinition.objects.filter(active=True).count(),
             PromptLegacyContract.objects.filter(source='FREE_1_2_4').count(),
             PromptVersion.objects.filter(lifecycle='PUBLISHED').count(),
-            PromptTestCase.objects.filter(name='system-smoke', enabled=True).count(),
+            PromptTestCase.objects.filter(
+                name='system-smoke',
+                enabled=True,
+                version__lifecycle='PUBLISHED',
+            ).count(),
         )
         if counts != (34, 194, 16, 194, 194):
             raise CommandError(f'PromptDomain-Zähler falsch: {counts}')
