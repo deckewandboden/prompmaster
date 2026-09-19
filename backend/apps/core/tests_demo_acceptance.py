@@ -9,9 +9,13 @@ from django.utils import timezone
 
 from apps.accounts.models import User, UserRole
 from apps.companies.models import Company, Invitation, Membership, PrivateCustomerProfile
+from apps.devices.models import DeviceRegistration
+from apps.legal.models import DeletionRequest, LegalAcceptance
 from apps.core.crypto import encrypt
-from apps.licenses.models import License, LicenseAssignment, LicenseUpgradeRequest
+from apps.licenses.models import License, LicenseAssignment, LicenseAssignmentLink, LicenseUpgradeRequest
 from apps.accounts.totp import new_secret
+from apps.orders.models import Order
+from apps.payments.models import Payment
 from apps.support.models import SupportRequest
 
 
@@ -246,6 +250,129 @@ class DemoEstateFunctionalAcceptanceTests(TestCase):
                 ).exists()
             )
             self.client.logout()
+
+
+    @patch('apps.companies.portal.queue_email')
+    def test_company_invitation_resend_and_revoke_with_demo_admin(self, _mail):
+        company = Company.objects.get(customer_number='DEMO-1002')
+        admin = Membership.objects.get(company=company, active=True, role='admin').user
+        invitation = Invitation.objects.get(
+            company=company,
+            email='demo.einladung@promptmaster.invalid',
+            accepted_at__isnull=True,
+            revoked_at__isnull=True,
+        )
+        self._session_as(admin)
+
+        response = self.client.post(f'/portal/team/invitations/{invitation.id}/resend/')
+        self.assertEqual(response.status_code, 302)
+        invitation.refresh_from_db()
+        self.assertIsNotNone(invitation.revoked_at)
+
+        replacement = Invitation.objects.get(
+            company=company,
+            email=invitation.email,
+            accepted_at__isnull=True,
+            revoked_at__isnull=True,
+        )
+        self.assertNotEqual(replacement.id, invitation.id)
+
+        response = self.client.post(f'/portal/team/invitations/{replacement.id}/revoke/')
+        self.assertEqual(response.status_code, 302)
+        replacement.refresh_from_db()
+        self.assertIsNotNone(replacement.revoked_at)
+
+    @patch('apps.companies.portal.queue_email')
+    def test_assignment_link_is_created_and_consumed_by_exact_demo_member(self, _mail):
+        company = Company.objects.get(customer_number='DEMO-1004')
+        admin = Membership.objects.get(company=company, active=True, role='admin').user
+        target = User.objects.get(email='demo.kunde4.user25@promptmaster.invalid')
+        free_license = License.objects.filter(
+            company=company,
+            status='free',
+        ).order_by('license_number').first()
+        self.assertIsNotNone(free_license)
+        self.assertFalse(
+            LicenseAssignment.objects.filter(user=target, ended_at__isnull=True).exists()
+        )
+
+        self._session_as(admin)
+        response = self.client.post(
+            f'/portal/team/{target.id}/assignment-link/',
+            {'license_id': str(free_license.id)},
+        )
+        self.assertEqual(response.status_code, 200)
+        claim_url = response.context['claim_url']
+        token = claim_url.rstrip('/').split('/')[-1]
+        link = LicenseAssignmentLink.objects.get(
+            company=company,
+            license=free_license,
+            target_user=target,
+            used_at__isnull=True,
+        )
+
+        self.client.logout()
+        self._session_as(target)
+        response = self.client.post(f'/portal/licenses/claim/{token}/')
+        self.assertEqual(response.status_code, 302)
+        link.refresh_from_db()
+        free_license.refresh_from_db()
+        self.assertIsNotNone(link.used_at)
+        self.assertEqual(free_license.status, 'active')
+        self.assertTrue(
+            LicenseAssignment.objects.filter(
+                license=free_license,
+                user=target,
+                ended_at__isnull=True,
+            ).exists()
+        )
+
+    @patch('apps.companies.portal.queue_email')
+    def test_demo_upgrade_approval_assigns_free_seat(self, _mail):
+        company = Company.objects.get(customer_number='DEMO-1005')
+        admin = Membership.objects.get(company=company, active=True, role='admin').user
+        upgrade = (
+            LicenseUpgradeRequest.objects.filter(company=company, status='pending')
+            .select_related('user')
+            .first()
+        )
+        self.assertIsNotNone(upgrade)
+        self.assertFalse(
+            LicenseAssignment.objects.filter(user=upgrade.user, ended_at__isnull=True).exists()
+        )
+        self._session_as(admin)
+        response = self.client.post(
+            f'/portal/licenses/upgrade-requests/{upgrade.id}/approve/'
+        )
+        self.assertEqual(response.status_code, 302)
+        upgrade.refresh_from_db()
+        self.assertEqual(upgrade.status, 'approved')
+        self.assertIsNotNone(upgrade.assigned_license_id)
+        self.assertTrue(
+            LicenseAssignment.objects.filter(
+                license_id=upgrade.assigned_license_id,
+                user=upgrade.user,
+                ended_at__isnull=True,
+            ).exists()
+        )
+
+    def test_demo_admin_can_revoke_company_device(self):
+        company = Company.objects.get(customer_number='DEMO-1001')
+        admin = Membership.objects.get(company=company, active=True, role='admin').user
+        device = (
+            DeviceRegistration.objects.filter(
+                license__company=company,
+                revoked_at__isnull=True,
+            )
+            .order_by('created_at')
+            .first()
+        )
+        self.assertIsNotNone(device)
+        self._session_as(admin)
+        response = self.client.post(f'/portal/devices/{device.id}/revoke/')
+        self.assertEqual(response.status_code, 302)
+        device.refresh_from_db()
+        self.assertIsNotNone(device.revoked_at)
 
     def test_demo_license_upgrade_requests_exist_for_every_company(self):
         self.assertEqual(
