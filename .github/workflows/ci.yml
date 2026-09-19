@@ -222,9 +222,21 @@ jobs:
           PM_LOAD_WORKERS: '32'
           PM_LOAD_REQUESTS: '640'
         run: python3 scripts/http_load_smoke.py
+      - name: Re-run bootstrap idempotently
+        env:
+          PM_DOMAIN: localhost
+        run: bash scripts/bootstrap.sh
+      - name: Revalidate after idempotent bootstrap
+        env:
+          PM_VALIDATE_READ_ONLY: '1'
+        run: bash scripts/runtime_validate.sh
       - name: Test restore failure propagation and recovery
         run: bash scripts/test_backup_restore.sh
       - name: Container status
+        run: docker compose -f compose.yaml -f compose.staging.yaml -f compose.production.yaml ps -a
+      - name: Rehearse external Caddy network mode
+        run: bash scripts/test_external_caddy_mode.sh
+      - name: Container status after external-Caddy rehearsal
         if: always()
         run: docker compose -f compose.yaml -f compose.staging.yaml -f compose.production.yaml ps -a
       - name: Container diagnostics on failure

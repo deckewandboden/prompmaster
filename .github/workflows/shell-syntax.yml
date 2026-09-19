@@ -28,6 +28,7 @@ jobs:
           bash -n scripts/external_backup_acceptance.sh
           bash -n scripts/performance_validate.sh
           bash -n scripts/run_repo_preflight.sh
+          bash -n scripts/test_external_caddy_mode.sh
           bash -n backup/backup.sh
 
       - name: Verify external backup drill is opt-in
