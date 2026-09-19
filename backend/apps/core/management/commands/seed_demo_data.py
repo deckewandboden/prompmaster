@@ -679,7 +679,7 @@ class Command(BaseCommand):
                     password,
                     {
                         'active': 'Privatkunde · aktive PRO-Lizenz',
-                        'expiring': 'Privatkunde · PRO läuft in 7 Tagen aus',
+                        'expiring': 'Privatkunde · PRO läuft in 30 Tagen aus',
                         'expired': 'Privatkunde · abgelaufene PRO-Lizenz / fehlgeschlagene Zahlung',
                     }[spec['state']],
                 )
@@ -737,7 +737,7 @@ class Command(BaseCommand):
             license_status = 'expired'
         elif spec['state'] == 'expiring':
             valid_from = now - timedelta(days=358)
-            valid_until = now + timedelta(days=7)
+            valid_until = now + timedelta(days=30)
             license_status = 'active'
         else:
             valid_from = now - timedelta(days=90)
