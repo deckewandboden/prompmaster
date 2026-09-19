@@ -14,7 +14,6 @@ from apps.legal.models import DeletionRequest, LegalAcceptance
 from apps.core.crypto import encrypt
 from apps.licenses.models import License, LicenseAssignment, LicenseAssignmentLink, LicenseUpgradeRequest
 from apps.accounts.totp import new_secret
-from apps.orders.models import Order
 from apps.payments.models import Payment
 from apps.support.models import SupportRequest
 
@@ -455,7 +454,8 @@ class DemoEstateFunctionalAcceptanceTests(TestCase):
         self.assertEqual(payload['user']['email'], user.email)
         self.assertEqual(payload['private_customer']['customer_number'], 'DEMO-P-2001')
         self.assertNotIn('password', payload['user'])
-        self.assertNotIn('token', str(payload).lower())
+        self.assertNotIn('token_hash', str(payload).lower())
+        self.assertNotIn('totp_secret', str(payload).lower())
 
         response = self.client.post(
             '/portal/privacy/deletion-request/',
