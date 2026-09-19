@@ -38,4 +38,8 @@ jobs:
         working-directory: marketing
         run: |
           npm ci
-          npm audit --audit-level=high
+          # Audit the complete locked dependency graph rather than npm's
+          # platform-pruned node_modules tree. Native optional bindings are
+          # intentionally pruned by npm ci on Linux and can otherwise make the
+          # legacy quick-audit endpoint reject an otherwise valid lockfile.
+          npm audit --package-lock-only --audit-level=high
