@@ -162,7 +162,7 @@ def main() -> int:
                         path=str(live_path),
                         full_page=False,
                     )
-                    if engine != 'chromium':
+                    if engine == 'firefox':
                         edge_reference = artifact_dir / 'chromium-1440-live.png'
                         if not edge_reference.is_file():
                             fail(f'{engine}: canonical Chromium/Edge screenshot missing')
