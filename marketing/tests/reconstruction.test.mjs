@@ -46,7 +46,7 @@ test('non-WebGL fallback keeps the actual head visible without camera access',()
   assert.match(fallback,/MeshSurfaceSampler uses exactly two additional random values/);
   assert.match(fallback,/u\+v>1/);
   assert.doesNotMatch(fallback,/parametricPoints/);
-  assert.match(fallback,/viewZ=mobile\?5\.3:4\.35/);
+  assert.match(fallback,/viewZ=width<650\?5\.3:4\.35/);
   assert.match(fallback,/projectionScale=1\/\(2\*Math\.tan\(39\*Math\.PI\/360\)\*viewZ\)/);
 });
 
