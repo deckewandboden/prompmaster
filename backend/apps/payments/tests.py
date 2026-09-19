@@ -190,6 +190,56 @@ class MollieStateIntegrationTests(TestCase):
         self.assertEqual(self.payment.failed_at, first_failed_at)
 
     @patch('apps.payments.services._queue_after_commit')
+    def test_canceled_payment_cancels_order_without_creating_license(self, _mail):
+        process_provider_state(self.payment.provider_payment_id, self.payload('canceled'))
+        self.order.refresh_from_db()
+        self.payment.refresh_from_db()
+        self.assertEqual(self.order.status, 'canceled')
+        self.assertEqual(self.payment.status, 'canceled')
+        self.assertIsNotNone(self.payment.failed_at)
+        self.assertFalse(self.payment.processed_paid)
+        self.assertFalse(License.objects.filter(owner_user=self.user).exists())
+
+    @patch('apps.payments.services._queue_after_commit')
+    def test_expired_payment_fails_order_without_creating_license(self, _mail):
+        process_provider_state(self.payment.provider_payment_id, self.payload('expired'))
+        self.order.refresh_from_db()
+        self.payment.refresh_from_db()
+        self.assertEqual(self.order.status, 'failed')
+        self.assertEqual(self.payment.status, 'expired')
+        self.assertIsNotNone(self.payment.failed_at)
+        self.assertFalse(self.payment.processed_paid)
+        self.assertFalse(License.objects.filter(owner_user=self.user).exists())
+
+    @patch('apps.payments.services._queue_after_commit')
+    def test_stale_negative_webhook_cannot_downgrade_paid_payment(self, _mail):
+        process_provider_state(
+            self.payment.provider_payment_id,
+            self.payload('paid'),
+            chargebacks_payload=self.chargebacks(),
+        )
+        self.order.refresh_from_db()
+        self.payment.refresh_from_db()
+        license_obj = License.objects.get(owner_user=self.user)
+        self.assertEqual(self.order.status, 'paid')
+        self.assertEqual(self.payment.status, 'paid')
+
+        for stale_status in ('canceled', 'expired', 'failed'):
+            with self.subTest(stale_status=stale_status):
+                process_provider_state(
+                    self.payment.provider_payment_id,
+                    self.payload(stale_status),
+                    chargebacks_payload=self.chargebacks(),
+                )
+                self.order.refresh_from_db()
+                self.payment.refresh_from_db()
+                license_obj.refresh_from_db()
+                self.assertEqual(self.order.status, 'paid')
+                self.assertEqual(self.payment.status, 'paid')
+                self.assertTrue(self.payment.processed_paid)
+                self.assertIn(license_obj.status, {'active', 'free'})
+
+    @patch('apps.payments.services._queue_after_commit')
     def test_chargeback_blocks_license_and_reversal_restores_access_state(self, _mail):
         process_provider_state(
             self.payment.provider_payment_id,
