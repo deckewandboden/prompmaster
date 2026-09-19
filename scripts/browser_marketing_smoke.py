@@ -9,6 +9,7 @@ import threading
 from functools import partial
 from http.server import SimpleHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
+from PIL import Image, ImageChops, ImageStat
 
 ROOT = Path(__file__).resolve().parents[1]
 DIST = ROOT / 'marketing' / 'dist'
@@ -34,6 +35,32 @@ def app_names() -> list[str]:
 
 def fail(message: str) -> None:
     raise AssertionError(f'MARKETING BROWSER SMOKE FAIL: {message}')
+
+
+def compare_head_render(reference: Path, candidate: Path) -> dict:
+    # The product requirement is not merely "a head exists" in Firefox.
+    # Compare the unobstructed central hero region against the canonical
+    # Chromium/Edge render. Cards sit outside this crop, so font rendering and
+    # controls do not dilute the visual gate.
+    crop = (480, 90, 960, 720)
+    ref = Image.open(reference).convert('RGB').crop(crop)
+    cand = Image.open(candidate).convert('RGB').crop(crop)
+    diff = ImageChops.difference(ref, cand)
+    mae = sum(ImageStat.Stat(diff).mean) / 3.0
+
+    def bright_count(image, threshold=70):
+        histogram = image.convert('L').histogram()
+        return sum(histogram[threshold + 1:])
+
+    ref_bright = bright_count(ref)
+    cand_bright = bright_count(cand)
+    bright_ratio = cand_bright / max(1, ref_bright)
+    return {
+        'mae': mae,
+        'reference_bright': ref_bright,
+        'candidate_bright': cand_bright,
+        'bright_ratio': bright_ratio,
+    }
 
 
 def main() -> int:
@@ -130,10 +157,26 @@ def main() -> int:
                 )
                 page.wait_for_timeout(900)
                 if width == 1440:
+                    live_path = artifact_dir / f'{engine}-1440-live.png'
                     page.screenshot(
-                        path=str(artifact_dir / f'{engine}-1440-live.png'),
+                        path=str(live_path),
                         full_page=False,
                     )
+                    if engine != 'chromium':
+                        edge_reference = artifact_dir / 'chromium-1440-live.png'
+                        if not edge_reference.is_file():
+                            fail(f'{engine}: canonical Chromium/Edge screenshot missing')
+                        visual = compare_head_render(edge_reference, live_path)
+                        if visual['mae'] > 20.0:
+                            fail(
+                                f'{engine}: head differs too strongly from Edge '
+                                f'(central MAE={visual["mae"]:.2f}, max=20.00)'
+                            )
+                        if not 0.65 <= visual['bright_ratio'] <= 1.45:
+                            fail(
+                                f'{engine}: head point energy differs from Edge '
+                                f'(ratio={visual["bright_ratio"]:.3f}, allowed 0.65..1.45)'
+                            )
 
                 metrics = page.evaluate(
                     """() => {
