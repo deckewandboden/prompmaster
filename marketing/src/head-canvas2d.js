@@ -78,6 +78,108 @@ function findPrimitive(gltf){
   throw new Error('Kopfgeometrie fehlt');
 }
 
+function mat4Identity(){
+  return new Float64Array([1,0,0,0,0,1,0,0,0,0,1,0,0,0,0,1]);
+}
+
+function mat4Multiply(a,b){
+  const out=new Float64Array(16);
+  for(let col=0;col<4;col++){
+    for(let row=0;row<4;row++){
+      out[col*4+row]=
+        a[row]*b[col*4]+
+        a[4+row]*b[col*4+1]+
+        a[8+row]*b[col*4+2]+
+        a[12+row]*b[col*4+3];
+    }
+  }
+  return out;
+}
+
+function gltfNodeMatrix(node){
+  if(node&&Array.isArray(node.matrix)&&node.matrix.length===16){
+    return new Float64Array(node.matrix);
+  }
+  const t=node&&node.translation?node.translation:[0,0,0];
+  const q=node&&node.rotation?node.rotation:[0,0,0,1];
+  const s=node&&node.scale?node.scale:[1,1,1];
+  const x=q[0],y=q[1],z=q[2],w=q[3];
+  const x2=x+x,y2=y+y,z2=z+z;
+  const xx=x*x2,xy=x*y2,xz=x*z2;
+  const yy=y*y2,yz=y*z2,zz=z*z2;
+  const wx=w*x2,wy=w*y2,wz=w*z2;
+  return new Float64Array([
+    (1-(yy+zz))*s[0],(xy+wz)*s[0],(xz-wy)*s[0],0,
+    (xy-wz)*s[1],(1-(xx+zz))*s[1],(yz+wx)*s[1],0,
+    (xz+wy)*s[2],(yz-wx)*s[2],(1-(xx+yy))*s[2],0,
+    t[0],t[1],t[2],1,
+  ]);
+}
+
+function gltfMeshWorldMatrix(gltf,meshIndex){
+  const nodes=gltf.nodes||[];
+  const parents=new Int32Array(nodes.length);
+  parents.fill(-1);
+  for(let parent=0;parent<nodes.length;parent++){
+    for(const child of nodes[parent].children||[]){
+      if(child>=0&&child<nodes.length)parents[child]=parent;
+    }
+  }
+  const nodeIndex=nodes.findIndex(node=>node.mesh===meshIndex);
+  if(nodeIndex<0)return mat4Identity();
+  const chain=[];
+  for(let current=nodeIndex;current>=0;current=parents[current])chain.push(current);
+  let world=mat4Identity();
+  for(let i=chain.length-1;i>=0;i--){
+    world=mat4Multiply(world,gltfNodeMatrix(nodes[chain[i]]));
+  }
+  return world;
+}
+
+function applyPositionMatrix(raw,matrix){
+  const out=new Float32Array(raw.length);
+  for(let i=0;i<raw.length;i+=3){
+    const x=raw[i],y=raw[i+1],z=raw[i+2];
+    out[i]=matrix[0]*x+matrix[4]*y+matrix[8]*z+matrix[12];
+    out[i+1]=matrix[1]*x+matrix[5]*y+matrix[9]*z+matrix[13];
+    out[i+2]=matrix[2]*x+matrix[6]*y+matrix[10]*z+matrix[14];
+  }
+  return out;
+}
+
+function applyNormalMatrix(raw,matrix){
+  const a00=matrix[0],a01=matrix[4],a02=matrix[8];
+  const a10=matrix[1],a11=matrix[5],a12=matrix[9];
+  const a20=matrix[2],a21=matrix[6],a22=matrix[10];
+  const c00=a22*a11-a12*a21;
+  const c01=-a22*a10+a12*a20;
+  const c02=a21*a10-a11*a20;
+  let det=a00*c00+a01*c01+a02*c02;
+  if(Math.abs(det)<1e-12)det=1;
+  else det=1/det;
+  const i00=c00*det;
+  const i01=(-a22*a01+a02*a21)*det;
+  const i02=(a12*a01-a02*a11)*det;
+  const i10=c01*det;
+  const i11=(a22*a00-a02*a20)*det;
+  const i12=(-a12*a00+a02*a10)*det;
+  const i20=c02*det;
+  const i21=(-a21*a00+a01*a20)*det;
+  const i22=(a11*a00-a01*a10)*det;
+  const out=new Float32Array(raw.length);
+  for(let i=0;i<raw.length;i+=3){
+    const x=raw[i],y=raw[i+1],z=raw[i+2];
+    const nx=i00*x+i10*y+i20*z;
+    const ny=i01*x+i11*y+i21*z;
+    const nz=i02*x+i12*y+i22*z;
+    const length=Math.hypot(nx,ny,nz)||1;
+    out[i]=nx/length;
+    out[i+1]=ny/length;
+    out[i+2]=nz/length;
+  }
+  return out;
+}
+
 function normalizePoints(raw){
   let minX=Infinity,minY=Infinity,minZ=Infinity,maxX=-Infinity,maxY=-Infinity,maxZ=-Infinity;
   for(let i=0;i<raw.length;i+=3){
@@ -245,15 +347,16 @@ async function modelCloud(surfaceCount){
   const response=await fetch(MODEL_URL,{cache:'force-cache'});
   if(!response.ok)throw new Error('Originales Kopfmodell nicht verfügbar');
   const {json,bin}=parseGlb(await response.arrayBuffer());
-  const {primitive}=findPrimitive(json);
+  const {meshIndex,primitive}=findPrimitive(json);
   if(primitive.mode!==undefined&&primitive.mode!==4)throw new Error('Kopfmodell verwendet keinen TRIANGLES-Modus');
   const positionsAccessor=readAccessor(json,bin,primitive.attributes.POSITION);
   if(positionsAccessor.components!==3||positionsAccessor.count<100)throw new Error('Kopfmodell enthält zu wenig Geometrie');
-  const vertices=normalizePoints(positionsAccessor.data);
+  const worldMatrix=gltfMeshWorldMatrix(json,meshIndex);
+  const vertices=normalizePoints(applyPositionMatrix(positionsAccessor.data,worldMatrix));
   const indices=primitive.indices===undefined?null:readAccessor(json,bin,primitive.indices);
   const vertexNormals=primitive.attributes.NORMAL===undefined
     ? deriveVertexNormals(vertices,indices)
-    : normalizeNormals(readAccessor(json,bin,primitive.attributes.NORMAL).data);
+    : applyNormalMatrix(normalizeNormals(readAccessor(json,bin,primitive.attributes.NORMAL).data),worldMatrix);
   return {
     surface:sampleOriginalSurface(vertices,vertexNormals,indices,surfaceCount),
     topology:buildOriginalTopology(vertices,vertexNormals,indices),
