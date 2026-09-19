@@ -2,6 +2,7 @@
 .env.*
 !.env.example
 .bootstrap-credentials
+.demo-credentials
 
 __pycache__/
 *.py[cod]

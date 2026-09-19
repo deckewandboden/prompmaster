@@ -61,6 +61,12 @@ CADDY_DOMAIN="$(awk -F= '$1 == "CADDY_DOMAIN" {sub(/^[^=]*=/, ""); value=$0} END
 CADDY_DOMAIN="${CADDY_DOMAIN#\"}"
 CADDY_DOMAIN="${CADDY_DOMAIN%\"}"
 [[ -n "$CADDY_DOMAIN" ]] || fail "CADDY_DOMAIN fehlt nach Environment-Vorbereitung"
+ENVIRONMENT_NAME="$(awk -F= '$1 == "ENVIRONMENT" {sub(/^[^=]*=/, ""); value=$0} END {print value}' .env | tr -d '\r' | tr '[:upper:]' '[:lower:]')"
+ENVIRONMENT_NAME="${ENVIRONMENT_NAME#\"}"
+ENVIRONMENT_NAME="${ENVIRONMENT_NAME%\"}"
+SEED_DEMO_DATA="$(awk -F= '$1 == "PM_SEED_DEMO_DATA" {sub(/^[^=]*=/, ""); value=$0} END {print value}' .env | tr -d '\r')"
+SEED_DEMO_DATA="${SEED_DEMO_DATA#\"}"
+SEED_DEMO_DATA="${SEED_DEMO_DATA%\"}"
 
 if [[ -z "${GIT_SHA:-}" ]]; then
   if command -v git >/dev/null 2>&1 && git rev-parse HEAD >/dev/null 2>&1; then
@@ -100,6 +106,17 @@ log "Django Checks vor Migration"; docker compose "${F[@]}" run --rm web python 
 log "Migrationen prüfen"; docker compose "${F[@]}" run --rm web python manage.py makemigrations --check --dry-run
 log "Migrationen"; docker compose "${F[@]}" run --rm web python manage.py migrate --noinput
 log "Defaults"; docker compose "${F[@]}" run --rm web python manage.py seed_defaults; docker compose "${F[@]}" run --rm web python manage.py seed_prompt_catalog; docker compose "${F[@]}" run --rm web python manage.py seed_faqs; docker compose "${F[@]}" run --rm web python manage.py validate_prompt_runtime; docker compose "${F[@]}" run --rm web python manage.py bootstrap_admin
+if [[ "$ENVIRONMENT_NAME" != "production" && "$SEED_DEMO_DATA" == "1" ]]; then
+  log "Demo-Daten für $ENVIRONMENT_NAME setzen"
+  demo_credentials=".demo-credentials"
+  umask 077
+  docker compose "${F[@]}" run --rm web python manage.py seed_demo_data >"$demo_credentials"
+  chmod 600 "$demo_credentials"
+  grep -E "^(Demo-Daten erfolgreich gesetzt\.|Firmen:|Interne Rollen:|Der vorhandene echte Superadmin bleibt unverändert)" "$demo_credentials" || true
+  log "TEMPORÄRE DEMO-ZUGÄNGE wurden sicher nach $demo_credentials geschrieben (0600)"
+else
+  log "Demo-Daten übersprungen (ENVIRONMENT=$ENVIRONMENT_NAME, PM_SEED_DEMO_DATA=${SEED_DEMO_DATA:-0})"
+fi
 log "Static"; docker compose "${F[@]}" run --rm web python manage.py collectstatic --noinput
 log "Stack"; docker compose "${F[@]}" up -d
 
