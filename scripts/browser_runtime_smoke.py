@@ -391,6 +391,44 @@ def _backend_fixture() -> dict:
     if not version:
         raise AssertionError('Browser fixture requires seeded Prompt Studio version')
 
+    # Seed the exact staging demo estate too. Browser acceptance then uses the
+    # same five companies, three private customers and duplicated netstyle
+    # role identities that operators receive after bootstrap.
+    import io
+    from django.core.management import call_command
+    demo_output = io.StringIO()
+    call_command('seed_demo_data', stdout=demo_output, verbosity=0)
+    demo_credentials = {}
+    for line in demo_output.getvalue().splitlines():
+        if '@promptmaster.invalid' not in line or '|' not in line:
+            continue
+        parts = [part.strip() for part in line.split('|')]
+        if len(parts) >= 4 and '@promptmaster.invalid' in parts[1]:
+            demo_credentials[parts[1]] = {
+                'password': parts[2],
+                'label': parts[0],
+                'note': parts[3],
+            }
+    if len(demo_credentials) != 26:
+        raise AssertionError(
+            f'Browser demo fixture expected 26 login identities, got {len(demo_credentials)}'
+        )
+
+    demo_companies = list(
+        Company.objects.filter(customer_number__startswith='DEMO-')
+        .order_by('customer_number')
+        .values_list('customer_number', flat=True)
+    )
+    demo_private = list(
+        PrivateCustomerProfile.objects.filter(customer_number__startswith='DEMO-P-')
+        .order_by('customer_number')
+        .values_list('customer_number', flat=True)
+    )
+    if demo_companies != ['DEMO-1001', 'DEMO-1002', 'DEMO-1003', 'DEMO-1004', 'DEMO-1005']:
+        raise AssertionError(f'Browser demo companies incomplete: {demo_companies}')
+    if demo_private != ['DEMO-P-2001', 'DEMO-P-2002', 'DEMO-P-2003']:
+        raise AssertionError(f'Browser private demo customers incomplete: {demo_private}')
+
     connections.close_all()
     return {
         'password': password,
@@ -409,7 +447,38 @@ def _backend_fixture() -> dict:
         'task_id': definition.task_id,
         'version_id': str(version.pk),
         'free_license_id': str(free_license.pk),
+        'demo_credentials': demo_credentials,
+        'demo_companies': demo_companies,
+        'demo_private': demo_private,
     }
+
+
+def _browser_first_time_mfa_login(page, base: str, email: str, password: str, expected_path: str) -> None:
+    import pyotp
+
+    response = page.goto(base + 'auth/login/', wait_until='networkidle')
+    if not response or response.status != 200:
+        raise AssertionError(f'first-time login page failed for {email}')
+    page.locator('input[name="email"]').fill(email)
+    password_input = page.locator('input[name="password"]')
+    password_input.fill(password)
+    password_input.press('Enter')
+    page.wait_for_url('**/auth/2fa/setup/**')
+    secret = page.locator('.code-wrap').inner_text().strip()
+    if not secret:
+        raise AssertionError(f'first-time MFA secret missing for {email}')
+    page.locator('input[name="code"]').fill(pyotp.TOTP(secret).now())
+    page.locator('input[name="code"]').press('Enter')
+    page.wait_for_selector('.recovery-codes')
+    continue_button = page.locator('.result-actions a.btn.primary')
+    if continue_button.get_attribute('href') != expected_path:
+        raise AssertionError(
+            f'first-time MFA for {email} continues to '
+            f'{continue_button.get_attribute("href")}, expected {expected_path}'
+        )
+    continue_button.click()
+    page.wait_for_url(lambda url: expected_path in str(url))
+    page.wait_for_load_state('networkidle')
 
 
 def _browser_login(page, base: str, email: str, password: str, secret: str, expected_path: str) -> None:
@@ -907,6 +976,59 @@ def run_backend_ui_smoke(browser, fixture=None) -> None:
         if '/ns-admin/' not in first_page.url:
             raise AssertionError('first-time staff MFA did not enter the netstyle backend')
         first_context.close()
+
+        # Real demo identities: exercise every generated login credential through
+        # the browser. Privileged identities perform first-time MFA enrollment;
+        # customer members/private customers land according to their actual
+        # seeded entitlement state. This catches broken post-login routing that
+        # route-only smoke tests cannot see.
+        demo_credentials = fixture['demo_credentials']
+        demo_login_expectations = {}
+        for email, meta in demo_credentials.items():
+            if email.startswith('demo.superadmin') or email.startswith('demo.support') or email.startswith('demo.ops') or email.startswith('demo.prompts'):
+                demo_login_expectations[email] = ('mfa', '/ns-admin/')
+            elif '.admin@promptmaster.invalid' in email:
+                demo_login_expectations[email] = ('mfa', '/portal/dashboard/')
+            elif email.startswith('demo.privat1@') or email.startswith('demo.privat2@'):
+                demo_login_expectations[email] = ('password', '/pro/')
+            elif email.startswith('demo.privat3@'):
+                demo_login_expectations[email] = ('password', '/portal/dashboard/')
+            else:
+                # Seeded company users with an assigned seat launch Pro; the
+                # last login user of each company is intentionally unlicensed.
+                demo_login_expectations[email] = (
+                    'password',
+                    '/portal/dashboard/' if 'ohne PRO-Lizenz' in meta['note'] else '/pro/',
+                )
+
+        if len(demo_login_expectations) != 26:
+            raise AssertionError(
+                f'demo browser login matrix incomplete: {len(demo_login_expectations)} identities'
+            )
+
+        for email in sorted(demo_login_expectations):
+            mode, expected = demo_login_expectations[email]
+            context = browser.new_context(viewport={'width': 1440, 'height': 1000})
+            page = context.new_page()
+            if mode == 'mfa':
+                _browser_first_time_mfa_login(
+                    page, base, email, demo_credentials[email]['password'], expected
+                )
+            else:
+                _browser_login_password_only(
+                    page, base, email, demo_credentials[email]['password'], expected
+                )
+            if expected == '/ns-admin/':
+                if page.goto(base + 'ns-admin/', wait_until='networkidle').status != 200:
+                    raise AssertionError(f'demo netstyle identity cannot open dashboard: {email}')
+            elif expected == '/portal/dashboard/':
+                if page.goto(base + 'portal/dashboard/', wait_until='networkidle').status != 200:
+                    raise AssertionError(f'demo portal identity cannot open dashboard: {email}')
+            else:
+                pro_response = page.goto(base + 'pro/', wait_until='networkidle')
+                if not pro_response or pro_response.status != 200:
+                    raise AssertionError(f'demo licensed identity cannot enter Pro: {email}')
+            context.close()
 
         for role, email, secret, routes in (
             ('portal', fixture['customer_email'], fixture['customer_secret'], portal_routes),
