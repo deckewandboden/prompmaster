@@ -49,6 +49,22 @@ bindings="$(
 domain="$(awk -F= '$1=="CADDY_DOMAIN"{sub(/^[^=]*=/,""); print $0}' .env | tail -n1 | tr -d '\r"')"
 [[ -n "$domain" ]] || domain=localhost
 
+log "Marketing und Original-Kopf über externes Proxy-Netz testen"
+home="$(
+  docker run --rm --network "$NETWORK" curlimages/curl:8.12.1     -fsS -H "Host: $domain" "http://$ALIAS/"
+)"
+grep -qi 'PROMPTMASTER' <<<"$home" || {
+  echo "Marketing response through external Caddy is unexpected" >&2
+  exit 1
+}
+head_size="$(
+  docker run --rm --network "$NETWORK" curlimages/curl:8.12.1     -fsS -H "Host: $domain" "http://$ALIAS/models/head.glb" | wc -c
+)"
+[[ "$head_size" -gt 100000 ]] || {
+  echo "Original head.glb is missing or unexpectedly small via external Caddy: $head_size bytes" >&2
+  exit 1
+}
+
 log "Login-Upstream über externes Proxy-Netz testen"
 login="$(
   docker run --rm --network "$NETWORK" curlimages/curl:8.12.1 \
