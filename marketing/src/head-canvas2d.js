@@ -239,26 +239,45 @@ function sampleOriginalSurface(vertices,vertexNormals,indexAccessor,count){
   const triangleCount=indices?Math.floor(indices.length/3):Math.floor(vertexCount/3);
   if(!triangleCount)throw new Error('Kopfmodell enthält keine Dreiecke');
 
-  const cumulative=new Float64Array(triangleCount);
-  let totalArea=0;
+  // Mirror THREE.MeshSurfaceSampler r185 exactly: face weights and the
+  // cumulative distribution are Float32, then the original ceil-based binary
+  // search selects the face from the same seeded random stream.
+  const faceWeights=new Float32Array(triangleCount);
   for(let t=0;t<triangleCount;t++){
     const ia=indices?Math.trunc(indices[t*3]):t*3;
     const ib=indices?Math.trunc(indices[t*3+1]):t*3+1;
     const ic=indices?Math.trunc(indices[t*3+2]):t*3+2;
-    if(ia<0||ib<0||ic<0||ia>=vertexCount||ib>=vertexCount||ic>=vertexCount){
-      cumulative[t]=totalArea;continue;
-    }
     const a=ia*3,b=ib*3,d=ic*3;
     const abx=vertices[b]-vertices[a],aby=vertices[b+1]-vertices[a+1],abz=vertices[b+2]-vertices[a+2];
     const acx=vertices[d]-vertices[a],acy=vertices[d+1]-vertices[a+1],acz=vertices[d+2]-vertices[a+2];
-    totalArea+=Math.hypot(
+    faceWeights[t]=Math.hypot(
       aby*acz-abz*acy,
       abz*acx-abx*acz,
       abx*acy-aby*acx
     )*.5;
-    cumulative[t]=totalArea;
   }
+  const distribution=new Float32Array(triangleCount);
+  let cumulativeTotal=0;
+  for(let t=0;t<triangleCount;t++){
+    cumulativeTotal+=faceWeights[t];
+    distribution[t]=cumulativeTotal;
+  }
+  const totalArea=distribution[distribution.length-1];
   if(totalArea<=1e-8)throw new Error('Kopfmodell hat keine nutzbare Oberfläche');
+
+  const faceFor=(value)=>{
+    let low=0,high=distribution.length-1,index=-1;
+    while(low<=high){
+      const mid=Math.ceil((low+high)/2);
+      if(mid===0||(distribution[mid-1]<=value&&distribution[mid]>value)){
+        index=mid;
+        break;
+      }
+      if(value<distribution[mid])high=mid-1;
+      else low=mid+1;
+    }
+    return index;
+  };
 
   const random=seeded(93);
   const positions=new Float32Array(count*3);
@@ -268,34 +287,29 @@ function sampleOriginalSurface(vertices,vertexNormals,indexAccessor,count){
   const scatter=new Float32Array(count*3);
 
   for(let i=0;i<count;i++){
-    const target=random()*totalArea;
-    let low=0,high=triangleCount-1;
-    while(low<high){
-      const mid=(low+high)>>1;
-      if(target<=cumulative[mid])high=mid;else low=mid+1;
-    }
-    const t=low;
+    const t=faceFor(random()*totalArea);
+    if(t<0)throw new Error('Kopfmodell-Sampling fehlgeschlagen');
     const ia=indices?Math.trunc(indices[t*3]):t*3;
     const ib=indices?Math.trunc(indices[t*3+1]):t*3+1;
     const ic=indices?Math.trunc(indices[t*3+2]):t*3+2;
     const a=ia*3,b=ib*3,d=ic*3;
 
-    // Three.js MeshSurfaceSampler uses exactly two additional random values
-    // and folds the barycentric pair when u+v>1. Reproduce that sequence so
-    // Firefox receives the same deterministic point cloud as the original
-    // WebGL/Edge renderer, not a stylistic approximation.
     let u=random(),v=random();
     if(u+v>1){u=1-u;v=1-v;}
-    const wa=1-u-v,wb=u,wc=v;
+    const wc=1-(u+v);
     const o=i*3;
-    positions[o]=vertices[a]*wa+vertices[b]*wb+vertices[d]*wc;
-    positions[o+1]=vertices[a+1]*wa+vertices[b+1]*wb+vertices[d+1]*wc;
-    positions[o+2]=vertices[a+2]*wa+vertices[b+2]*wb+vertices[d+2]*wc;
 
-    let nx=vertexNormals[a]*wa+vertexNormals[b]*wb+vertexNormals[d]*wc;
-    let ny=vertexNormals[a+1]*wa+vertexNormals[b+1]*wb+vertexNormals[d+1]*wc;
-    let nz=vertexNormals[a+2]*wa+vertexNormals[b+2]*wb+vertexNormals[d+2]*wc;
-    const nl=Math.hypot(nx,ny,nz)||1;nx/=nl;ny/=nl;nz/=nl;
+    // THREE.MeshSurfaceSampler._sampleFace:
+    // target = A*u + B*v + C*(1-u-v)
+    positions[o]=vertices[a]*u+vertices[b]*v+vertices[d]*wc;
+    positions[o+1]=vertices[a+1]*u+vertices[b+1]*v+vertices[d+1]*wc;
+    positions[o+2]=vertices[a+2]*u+vertices[b+2]*v+vertices[d+2]*wc;
+
+    let nx=vertexNormals[a]*u+vertexNormals[b]*v+vertexNormals[d]*wc;
+    let ny=vertexNormals[a+1]*u+vertexNormals[b+1]*v+vertexNormals[d+1]*wc;
+    let nz=vertexNormals[a+2]*u+vertexNormals[b+2]*v+vertexNormals[d+2]*wc;
+    const nl=Math.hypot(nx,ny,nz)||1;
+    nx/=nl;ny/=nl;nz/=nl;
     normals[o]=nx;normals[o+1]=ny;normals[o+2]=nz;
 
     const front=clamp((nz+.08)/1.08,0,1);
