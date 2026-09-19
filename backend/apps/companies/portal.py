@@ -1047,7 +1047,7 @@ def buy(request):
     from apps.catalog.models import Product
     from apps.catalog.services import current_price
     from apps.orders.forms import PurchaseForm
-    from apps.orders.services import create_order
+    from apps.orders.services import MAX_PURCHASE_QUANTITY, create_order
 
     company_obj, membership = _ctx(request)
     if company_obj and (not membership or membership.role != 'admin'):
@@ -1055,7 +1055,16 @@ def buy(request):
     private_customer = not company_obj
     product = get_object_or_404(Product, code='PRO', active=True, purchasable=True)
     checkout_session_key, checkout_key = _checkout_key(request, 'buy:PRO')
-    form = PurchaseForm(request.POST or None, require_withdrawal=private_customer)
+    try:
+        initial_quantity = int(request.GET.get('quantity', '1'))
+    except (TypeError, ValueError):
+        initial_quantity = 1
+    initial_quantity = max(1, min(MAX_PURCHASE_QUANTITY, initial_quantity))
+    form = PurchaseForm(
+        request.POST or None,
+        initial={'quantity': initial_quantity},
+        require_withdrawal=private_customer,
+    )
 
     if request.method == 'POST' and form.is_valid():
         try:
