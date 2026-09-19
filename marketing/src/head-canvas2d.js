@@ -368,7 +368,8 @@ export async function initCanvasHead({sourceCanvas,stage,fallback}){
     const projectionScale=1/(2*Math.tan(39*Math.PI/360)*viewZ);
     const base=height*projectionScale;
     const centerX=width*.5;
-    const centerY=height*.5+.06*base;
+    const centerY=height*.5;
+    const cameraY=.06;
     const bob=Math.sin(elapsed*.42)*.008;
     let headMinX=Infinity,headMinY=Infinity,headMaxX=-Infinity,headMaxY=-Infinity;
 
@@ -379,7 +380,13 @@ export async function initCanvasHead({sourceCanvas,stage,fallback}){
       const rz2=y*sp+rz*cp;
       const depth=viewZ-rz2;
       const perspective=viewZ/depth;
-      return [centerX+rx*base*perspective,centerY-ry*base*perspective,rz2,depth,perspective];
+      return [
+        centerX+rx*base*perspective,
+        centerY-(ry-cameraY)*base*perspective,
+        rz2,
+        depth,
+        perspective,
+      ];
     };
     context.shadowBlur=0;
     context.globalCompositeOperation='lighter';
