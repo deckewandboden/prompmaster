@@ -1,3 +1,7 @@
+import * as THREE from 'three';
+import {GLTFLoader} from 'three/addons/loaders/GLTFLoader.js';
+import {MeshSurfaceSampler} from 'three/addons/math/MeshSurfaceSampler.js';
+
 const MODEL_URL='/models/head.glb';
 const clamp=(value,min,max)=>Math.min(max,Math.max(min,value));
 const smoothstep=(edge0,edge1,value)=>{
@@ -13,372 +17,111 @@ function seeded(seed=0x51f15e){
   };
 }
 
-function componentsFor(type){
-  return {SCALAR:1,VEC2:2,VEC3:3,VEC4:4,MAT2:4,MAT3:9,MAT4:16}[type]||0;
-}
+async function modelCloud(surfaceCount){
+  const gltf=await new GLTFLoader().loadAsync(MODEL_URL);
+  let mesh;
+  gltf.scene.traverse(object=>{if(object.isMesh&&!mesh)mesh=object;});
+  if(!mesh)throw new Error('Kopfgeometrie fehlt');
 
-function componentInfo(type){
-  return {
-    5120:[Int8Array,1],
-    5121:[Uint8Array,1],
-    5122:[Int16Array,2],
-    5123:[Uint16Array,2],
-    5125:[Uint32Array,4],
-    5126:[Float32Array,4],
-  }[type]||null;
-}
+  // This is deliberately the same geometry pipeline as the canonical
+  // Chromium/Edge WebGL renderer. Canvas2D differs only at the final raster
+  // step, never in model loading, world transforms or point sampling.
+  const geometry=mesh.geometry.clone();
+  geometry.applyMatrix4(mesh.matrixWorld);
+  geometry.center();
+  geometry.computeBoundingBox();
+  const size=new THREE.Vector3();
+  geometry.boundingBox.getSize(size);
+  geometry.scale(2.9/size.y,2.9/size.y,2.9/size.y);
 
-function parseGlb(buffer){
-  const view=new DataView(buffer);
-  if(view.byteLength<20||view.getUint32(0,true)!==0x46546c67)throw new Error('Ungültiges GLB');
-  let offset=12,json=null,bin=null;
-  while(offset+8<=view.byteLength){
-    const length=view.getUint32(offset,true);
-    const type=view.getUint32(offset+4,true);
-    offset+=8;
-    if(offset+length>view.byteLength)throw new Error('Beschädigtes GLB');
-    if(type===0x4e4f534a)json=JSON.parse(new TextDecoder().decode(new Uint8Array(buffer,offset,length)).replaceAll(String.fromCharCode(0),'').trimEnd());
-    if(type===0x004e4942)bin=new Uint8Array(buffer,offset,length);
-    offset+=length;
-  }
-  if(!json||!bin)throw new Error('GLB-Chunks fehlen');
-  return {json,bin};
-}
+  const samplingMesh=new THREE.Mesh(geometry);
+  const sampler=new MeshSurfaceSampler(samplingMesh).build();
+  let seed=93;
+  sampler.setRandomGenerator(()=>{
+    seed=(seed*1664525+1013904223)>>>0;
+    return seed/4294967296;
+  });
 
-function readAccessor(gltf,bin,index){
-  const accessor=gltf.accessors?.[index];
-  if(!accessor||accessor.bufferView===undefined||accessor.sparse)throw new Error('Nicht unterstützter GLB-Accessor');
-  const bufferView=gltf.bufferViews?.[accessor.bufferView];
-  if(!bufferView)throw new Error('GLB-BufferView fehlt');
-  const info=componentInfo(accessor.componentType);
-  const components=componentsFor(accessor.type);
-  if(!info||!components)throw new Error('Nicht unterstütztes GLB-Datenformat');
-  const [,bytes]=info;
-  const stride=bufferView.byteStride||components*bytes;
-  const start=(bufferView.byteOffset||0)+(accessor.byteOffset||0);
-  const data=new DataView(bin.buffer,bin.byteOffset,bin.byteLength);
-  const getter={
-    5120:'getInt8',5121:'getUint8',5122:'getInt16',5123:'getUint16',5125:'getUint32',5126:'getFloat32',
-  }[accessor.componentType];
-  const little=bytes>1;
-  const out=new Float32Array(accessor.count*components);
-  for(let i=0;i<accessor.count;i++){
-    const row=start+i*stride;
-    for(let c=0;c<components;c++)out[i*components+c]=data[getter](row+c*bytes,little);
-  }
-  return {data:out,count:accessor.count,components};
-}
+  const positions=new Float32Array(surfaceCount*3);
+  const colors=new Float32Array(surfaceCount*3);
+  const seeds=new Float32Array(surfaceCount);
+  const scatter=new Float32Array(surfaceCount*3);
+  const p=new THREE.Vector3();
+  const n=new THREE.Vector3();
 
-function findPrimitive(gltf){
-  for(let meshIndex=0;meshIndex<(gltf.meshes||[]).length;meshIndex++){
-    for(const primitive of gltf.meshes[meshIndex].primitives||[]){
-      if(primitive.attributes?.POSITION!==undefined)return {meshIndex,primitive};
-    }
-  }
-  throw new Error('Kopfgeometrie fehlt');
-}
-
-function mat4Identity(){
-  return new Float64Array([1,0,0,0,0,1,0,0,0,0,1,0,0,0,0,1]);
-}
-
-function mat4Multiply(a,b){
-  const out=new Float64Array(16);
-  for(let col=0;col<4;col++){
-    for(let row=0;row<4;row++){
-      out[col*4+row]=
-        a[row]*b[col*4]+
-        a[4+row]*b[col*4+1]+
-        a[8+row]*b[col*4+2]+
-        a[12+row]*b[col*4+3];
-    }
-  }
-  return out;
-}
-
-function gltfNodeMatrix(node){
-  if(node&&Array.isArray(node.matrix)&&node.matrix.length===16){
-    return new Float64Array(node.matrix);
-  }
-  const t=node&&node.translation?node.translation:[0,0,0];
-  const q=node&&node.rotation?node.rotation:[0,0,0,1];
-  const s=node&&node.scale?node.scale:[1,1,1];
-  const x=q[0],y=q[1],z=q[2],w=q[3];
-  const x2=x+x,y2=y+y,z2=z+z;
-  const xx=x*x2,xy=x*y2,xz=x*z2;
-  const yy=y*y2,yz=y*z2,zz=z*z2;
-  const wx=w*x2,wy=w*y2,wz=w*z2;
-  return new Float64Array([
-    (1-(yy+zz))*s[0],(xy+wz)*s[0],(xz-wy)*s[0],0,
-    (xy-wz)*s[1],(1-(xx+zz))*s[1],(yz+wx)*s[1],0,
-    (xz+wy)*s[2],(yz-wx)*s[2],(1-(xx+yy))*s[2],0,
-    t[0],t[1],t[2],1,
-  ]);
-}
-
-function gltfMeshWorldMatrix(gltf,meshIndex){
-  const nodes=gltf.nodes||[];
-  const parents=new Int32Array(nodes.length);
-  parents.fill(-1);
-  for(let parent=0;parent<nodes.length;parent++){
-    for(const child of nodes[parent].children||[]){
-      if(child>=0&&child<nodes.length)parents[child]=parent;
-    }
-  }
-  const nodeIndex=nodes.findIndex(node=>node.mesh===meshIndex);
-  if(nodeIndex<0)return mat4Identity();
-  const chain=[];
-  for(let current=nodeIndex;current>=0;current=parents[current])chain.push(current);
-  let world=mat4Identity();
-  for(let i=chain.length-1;i>=0;i--){
-    world=mat4Multiply(world,gltfNodeMatrix(nodes[chain[i]]));
-  }
-  return world;
-}
-
-function applyPositionMatrix(raw,matrix){
-  const out=new Float32Array(raw.length);
-  for(let i=0;i<raw.length;i+=3){
-    const x=raw[i],y=raw[i+1],z=raw[i+2];
-    out[i]=matrix[0]*x+matrix[4]*y+matrix[8]*z+matrix[12];
-    out[i+1]=matrix[1]*x+matrix[5]*y+matrix[9]*z+matrix[13];
-    out[i+2]=matrix[2]*x+matrix[6]*y+matrix[10]*z+matrix[14];
-  }
-  return out;
-}
-
-function applyNormalMatrix(raw,matrix){
-  const a00=matrix[0],a01=matrix[4],a02=matrix[8];
-  const a10=matrix[1],a11=matrix[5],a12=matrix[9];
-  const a20=matrix[2],a21=matrix[6],a22=matrix[10];
-  const c00=a22*a11-a12*a21;
-  const c01=-a22*a10+a12*a20;
-  const c02=a21*a10-a11*a20;
-  let det=a00*c00+a01*c01+a02*c02;
-  if(Math.abs(det)<1e-12)det=1;
-  else det=1/det;
-  const i00=c00*det;
-  const i01=(-a22*a01+a02*a21)*det;
-  const i02=(a12*a01-a02*a11)*det;
-  const i10=c01*det;
-  const i11=(a22*a00-a02*a20)*det;
-  const i12=(-a12*a00+a02*a10)*det;
-  const i20=c02*det;
-  const i21=(-a21*a00+a01*a20)*det;
-  const i22=(a11*a00-a01*a10)*det;
-  const out=new Float32Array(raw.length);
-  for(let i=0;i<raw.length;i+=3){
-    const x=raw[i],y=raw[i+1],z=raw[i+2];
-    const nx=i00*x+i10*y+i20*z;
-    const ny=i01*x+i11*y+i21*z;
-    const nz=i02*x+i12*y+i22*z;
-    const length=Math.hypot(nx,ny,nz)||1;
-    out[i]=nx/length;
-    out[i+1]=ny/length;
-    out[i+2]=nz/length;
-  }
-  return out;
-}
-
-function normalizePoints(raw){
-  let minX=Infinity,minY=Infinity,minZ=Infinity,maxX=-Infinity,maxY=-Infinity,maxZ=-Infinity;
-  for(let i=0;i<raw.length;i+=3){
-    const x=raw[i],y=raw[i+1],z=raw[i+2];
-    if(x<minX)minX=x;if(x>maxX)maxX=x;
-    if(y<minY)minY=y;if(y>maxY)maxY=y;
-    if(z<minZ)minZ=z;if(z>maxZ)maxZ=z;
-  }
-  const cx=(minX+maxX)/2,cy=(minY+maxY)/2,cz=(minZ+maxZ)/2;
-  const scale=2.9/Math.max(.0001,maxY-minY);
-  const out=new Float32Array(raw.length);
-  for(let i=0;i<raw.length;i+=3){
-    out[i]=(raw[i]-cx)*scale;
-    out[i+1]=(raw[i+1]-cy)*scale;
-    out[i+2]=(raw[i+2]-cz)*scale;
-  }
-  return out;
-}
-
-function deriveVertexNormals(vertices,indexAccessor){
-  const normals=new Float32Array(vertices.length);
-  const indices=indexAccessor?.data||null;
-  const vertexCount=vertices.length/3;
-  const triangleCount=indices?Math.floor(indices.length/3):Math.floor(vertexCount/3);
-  for(let t=0;t<triangleCount;t++){
-    const ia=indices?Math.trunc(indices[t*3]):t*3;
-    const ib=indices?Math.trunc(indices[t*3+1]):t*3+1;
-    const ic=indices?Math.trunc(indices[t*3+2]):t*3+2;
-    if(ia<0||ib<0||ic<0||ia>=vertexCount||ib>=vertexCount||ic>=vertexCount)continue;
-    const a=ia*3,b=ib*3,d=ic*3;
-    const abx=vertices[b]-vertices[a],aby=vertices[b+1]-vertices[a+1],abz=vertices[b+2]-vertices[a+2];
-    const acx=vertices[d]-vertices[a],acy=vertices[d+1]-vertices[a+1],acz=vertices[d+2]-vertices[a+2];
-    const nx=aby*acz-abz*acy,ny=abz*acx-abx*acz,nz=abx*acy-aby*acx;
-    for(const index of [ia,ib,ic]){
-      normals[index*3]+=nx;normals[index*3+1]+=ny;normals[index*3+2]+=nz;
-    }
-  }
-  for(let i=0;i<normals.length;i+=3){
-    const length=Math.hypot(normals[i],normals[i+1],normals[i+2])||1;
-    normals[i]/=length;normals[i+1]/=length;normals[i+2]/=length;
-  }
-  return normals;
-}
-
-function normalizeNormals(raw){
-  const out=new Float32Array(raw.length);
-  for(let i=0;i<raw.length;i+=3){
-    const length=Math.hypot(raw[i],raw[i+1],raw[i+2])||1;
-    out[i]=raw[i]/length;out[i+1]=raw[i+1]/length;out[i+2]=raw[i+2]/length;
-  }
-  return out;
-}
-
-function sampleOriginalSurface(vertices,vertexNormals,indexAccessor,count){
-  const indices=indexAccessor?.data||null;
-  const vertexCount=vertices.length/3;
-  const triangleCount=indices?Math.floor(indices.length/3):Math.floor(vertexCount/3);
-  if(!triangleCount)throw new Error('Kopfmodell enthält keine Dreiecke');
-
-  // Mirror THREE.MeshSurfaceSampler r185 exactly: face weights and the
-  // cumulative distribution are Float32, then the original ceil-based binary
-  // search selects the face from the same seeded random stream.
-  const faceWeights=new Float32Array(triangleCount);
-  for(let t=0;t<triangleCount;t++){
-    const ia=indices?Math.trunc(indices[t*3]):t*3;
-    const ib=indices?Math.trunc(indices[t*3+1]):t*3+1;
-    const ic=indices?Math.trunc(indices[t*3+2]):t*3+2;
-    const a=ia*3,b=ib*3,d=ic*3;
-    const abx=vertices[b]-vertices[a],aby=vertices[b+1]-vertices[a+1],abz=vertices[b+2]-vertices[a+2];
-    const acx=vertices[d]-vertices[a],acy=vertices[d+1]-vertices[a+1],acz=vertices[d+2]-vertices[a+2];
-    faceWeights[t]=Math.hypot(
-      aby*acz-abz*acy,
-      abz*acx-abx*acz,
-      abx*acy-aby*acx
-    )*.5;
-  }
-  const distribution=new Float32Array(triangleCount);
-  let cumulativeTotal=0;
-  for(let t=0;t<triangleCount;t++){
-    cumulativeTotal+=faceWeights[t];
-    distribution[t]=cumulativeTotal;
-  }
-  const totalArea=distribution[distribution.length-1];
-  if(totalArea<=1e-8)throw new Error('Kopfmodell hat keine nutzbare Oberfläche');
-
-  const faceFor=(value)=>{
-    let low=0,high=distribution.length-1,index=-1;
-    while(low<=high){
-      const mid=Math.ceil((low+high)/2);
-      if(mid===0||(distribution[mid-1]<=value&&distribution[mid]>value)){
-        index=mid;
-        break;
-      }
-      if(value<distribution[mid])high=mid-1;
-      else low=mid+1;
-    }
-    return index;
-  };
-
-  const random=seeded(93);
-  const positions=new Float32Array(count*3);
-  const normals=new Float32Array(count*3);
-  const colors=new Float32Array(count*3);
-  const seeds=new Float32Array(count);
-  const scatter=new Float32Array(count*3);
-
-  for(let i=0;i<count;i++){
-    const t=faceFor(random()*totalArea);
-    if(t<0)throw new Error('Kopfmodell-Sampling fehlgeschlagen');
-    const ia=indices?Math.trunc(indices[t*3]):t*3;
-    const ib=indices?Math.trunc(indices[t*3+1]):t*3+1;
-    const ic=indices?Math.trunc(indices[t*3+2]):t*3+2;
-    const a=ia*3,b=ib*3,d=ic*3;
-
-    let u=random(),v=random();
-    if(u+v>1){u=1-u;v=1-v;}
-    const wc=1-(u+v);
-    const o=i*3;
-
-    // THREE.MeshSurfaceSampler._sampleFace:
-    // target = A*u + B*v + C*(1-u-v)
-    positions[o]=vertices[a]*u+vertices[b]*v+vertices[d]*wc;
-    positions[o+1]=vertices[a+1]*u+vertices[b+1]*v+vertices[d+1]*wc;
-    positions[o+2]=vertices[a+2]*u+vertices[b+2]*v+vertices[d+2]*wc;
-
-    let nx=vertexNormals[a]*u+vertexNormals[b]*v+vertexNormals[d]*wc;
-    let ny=vertexNormals[a+1]*u+vertexNormals[b+1]*v+vertexNormals[d+1]*wc;
-    let nz=vertexNormals[a+2]*u+vertexNormals[b+2]*v+vertexNormals[d+2]*wc;
-    const nl=Math.hypot(nx,ny,nz)||1;
-    nx/=nl;ny/=nl;nz/=nl;
-    normals[o]=nx;normals[o+1]=ny;normals[o+2]=nz;
-
-    const front=clamp((nz+.08)/1.08,0,1);
+  for(let i=0;i<surfaceCount;i++){
+    sampler.sample(p,n);
+    positions.set([p.x,p.y,p.z],i*3);
+    const front=Math.max(0,Math.min(1,(n.z+.08)/1.08));
     const intensity=.42+front*.58;
-    colors[o]=.14*intensity;colors[o+1]=.63*intensity;colors[o+2]=intensity;
-
-    const pointSeed=random();
-    const side=random()-.5;
-    const lift=random();
+    colors.set([.14*intensity,.63*intensity,1*intensity],i*3);
+    const pointSeed=(seed=(seed*1664525+1013904223)>>>0)/4294967296;
+    const side=(seed=(seed*1664525+1013904223)>>>0)/4294967296-.5;
+    const lift=(seed=(seed*1664525+1013904223)>>>0)/4294967296;
     seeds[i]=pointSeed;
     const distance=.065+pointSeed*.22;
-    scatter[o]=nx*distance+side*.05;
-    scatter[o+1]=ny*distance+lift*.065;
-    scatter[o+2]=nz*distance;
+    scatter.set([n.x*distance+side*.05,n.y*distance+lift*.065,n.z*distance],i*3);
   }
-  return {positions,normals,colors,seeds,scatter};
-}
 
-function buildOriginalTopology(vertices,vertexNormals,indexAccessor){
-  const vertexCount=vertices.length/3;
+  const vertexPosition=geometry.getAttribute('position');
+  const vertexNormal=geometry.getAttribute('normal');
+  const vertexCount=vertexPosition.count;
   const curvature=new Float32Array(vertexCount);
   const neighbors=new Uint16Array(vertexCount);
-  const indices=indexAccessor?.data||null;
+  const index=geometry.index?.array;
   const accumulate=(a,b)=>{
-    const ao=a*3,bo=b*3;
-    const dot=vertexNormals[ao]*vertexNormals[bo]+vertexNormals[ao+1]*vertexNormals[bo+1]+vertexNormals[ao+2]*vertexNormals[bo+2];
+    const dot=
+      vertexNormal.getX(a)*vertexNormal.getX(b)+
+      vertexNormal.getY(a)*vertexNormal.getY(b)+
+      vertexNormal.getZ(a)*vertexNormal.getZ(b);
     const bend=Math.max(0,1-dot);
-    curvature[a]+=bend;curvature[b]+=bend;neighbors[a]++;neighbors[b]++;
+    curvature[a]+=bend;
+    curvature[b]+=bend;
+    neighbors[a]++;
+    neighbors[b]++;
   };
-  if(indices){
-    for(let i=0;i<indices.length;i+=3){
-      const a=Math.trunc(indices[i]),b=Math.trunc(indices[i+1]),d=Math.trunc(indices[i+2]);
-      accumulate(a,b);accumulate(b,d);accumulate(d,a);
+  if(index){
+    for(let i=0;i<index.length;i+=3){
+      const a=index[i],b=index[i+1],d=index[i+2];
+      accumulate(a,b);
+      accumulate(b,d);
+      accumulate(d,a);
     }
   }
-  const colors=new Float32Array(vertices.length);
-  const detail=new Float32Array(vertexCount);
-  for(let i=0;i<vertexCount;i++){
-    const o=i*3;
-    const d=Math.min(1,Math.sqrt((curvature[i]/Math.max(1,neighbors[i]))*13));
-    const front=clamp((vertexNormals[o+2]+.1)/1.1,0,1);
-    const intensity=.28+front*.43+d*.46;
-    colors[o]=.1*intensity;colors[o+1]=.58*intensity;colors[o+2]=intensity;detail[i]=d;
-  }
-  return {positions:vertices,normals:vertexNormals,colors,detail};
-}
 
-async function modelCloud(surfaceCount){
-  const response=await fetch(MODEL_URL,{cache:'force-cache'});
-  if(!response.ok)throw new Error('Originales Kopfmodell nicht verfügbar');
-  const {json,bin}=parseGlb(await response.arrayBuffer());
-  const {meshIndex,primitive}=findPrimitive(json);
-  if(primitive.mode!==undefined&&primitive.mode!==4)throw new Error('Kopfmodell verwendet keinen TRIANGLES-Modus');
-  const positionsAccessor=readAccessor(json,bin,primitive.attributes.POSITION);
-  if(positionsAccessor.components!==3||positionsAccessor.count<100)throw new Error('Kopfmodell enthält zu wenig Geometrie');
-  const worldMatrix=gltfMeshWorldMatrix(json,meshIndex);
-  const vertices=normalizePoints(applyPositionMatrix(positionsAccessor.data,worldMatrix));
-  const indices=primitive.indices===undefined?null:readAccessor(json,bin,primitive.indices);
-  const vertexNormals=primitive.attributes.NORMAL===undefined
-    ? deriveVertexNormals(vertices,indices)
-    : applyNormalMatrix(normalizeNormals(readAccessor(json,bin,primitive.attributes.NORMAL).data),worldMatrix);
+  const topologyPositions=new Float32Array(vertexCount*3);
+  const topologyColors=new Float32Array(vertexCount*3);
+  const topologyDetail=new Float32Array(vertexCount);
+  for(let i=0;i<vertexCount;i++){
+    const detail=Math.min(1,Math.sqrt((curvature[i]/Math.max(1,neighbors[i]))*13));
+    const front=Math.max(0,Math.min(1,(vertexNormal.getZ(i)+.1)/1.1));
+    const intensity=.28+front*.43+detail*.46;
+    topologyPositions.set(
+      [vertexPosition.getX(i),vertexPosition.getY(i),vertexPosition.getZ(i)],
+      i*3
+    );
+    topologyColors.set([.1*intensity,.58*intensity,1*intensity],i*3);
+    topologyDetail[i]=detail;
+  }
+
+  const depthIndices=index
+    ? new index.constructor(index)
+    : null;
+
   return {
-    surface:sampleOriginalSurface(vertices,vertexNormals,indices,surfaceCount),
-    topology:buildOriginalTopology(vertices,vertexNormals,indices),
-    depth:{positions:vertices,indices:indices?indices.data:null,screen:new Float32Array(vertices.length)},
+    surface:{positions,colors,seeds,scatter},
+    topology:{
+      positions:topologyPositions,
+      colors:topologyColors,
+      detail:topologyDetail,
+    },
+    depth:{
+      positions:topologyPositions,
+      indices:depthIndices,
+      screen:new Float32Array(topologyPositions.length),
+    },
   };
 }
-
-
 
 function rasterizeDepthMesh(depth,project,width,height,cell){
   const cols=Math.max(1,Math.ceil(width/cell));
