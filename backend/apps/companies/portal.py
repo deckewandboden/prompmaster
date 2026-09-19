@@ -7,7 +7,7 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.core.exceptions import PermissionDenied, ValidationError
 from django.db import transaction
-from django.db.models import Count, Prefetch, Q
+from django.db.models import Count, Max, Prefetch, Q
 from django.shortcuts import get_object_or_404, redirect, render
 from django.http import HttpResponse
 from django.core.serializers.json import DjangoJSONEncoder
@@ -373,6 +373,16 @@ def team(request):
                     user__devices__revoked_at__isnull=True,
                 ),
                 distinct=True,
+            ),
+            active_device_limit=Max(
+                'user__license_assignments__license__product__default_device_limit',
+                filter=Q(
+                    user__license_assignments__license__company=company,
+                    user__license_assignments__license__product__code='PRO',
+                    user__license_assignments__license__status='active',
+                    user__license_assignments__license__valid_until__gt=now,
+                    user__license_assignments__ended_at__isnull=True,
+                ),
             ),
         )
     )
