@@ -1,4 +1,4 @@
-export function normalizeQuantity(value, max=999) {
+export function normalizeQuantity(value, max=500) {
   const n=Number(value);
   return Number.isFinite(n)?Math.min(max,Math.max(1,Math.trunc(n))):1;
 }
