@@ -5,7 +5,7 @@ from django.core.management.base import CommandError
 from django.test import TestCase, override_settings
 
 from apps.accounts.models import User, UserRole
-from apps.companies.models import Company, Invitation, Membership
+from apps.companies.models import Company, Invitation, Membership, PrivateCustomerProfile
 from apps.devices.models import DeviceRegistration
 from apps.licenses.models import License, LicenseUpgradeRequest
 from apps.notifications.models import EmailMessage
@@ -28,6 +28,8 @@ class DemoDataSeedTests(TestCase):
             'DEMO-1001': 3,
             'DEMO-1002': 8,
             'DEMO-1003': 15,
+            'DEMO-1004': 25,
+            'DEMO-1005': 40,
         }
         for customer_number, employee_count in expected.items():
             company = Company.objects.get(customer_number=customer_number)
@@ -40,19 +42,31 @@ class DemoDataSeedTests(TestCase):
                 1,
             )
 
-        staff_roles = {
-            'demo.support@promptmaster.invalid': 'support',
-            'demo.ops@promptmaster.invalid': 'ops',
-            'demo.prompts@promptmaster.invalid': 'prompt_manager',
+        expected_staff_roles = {
+            'superadmin': 2,
+            'support': 2,
+            'ops': 2,
+            'prompt_manager': 2,
         }
-        for email, role_code in staff_roles.items():
-            user = User.objects.get(email=email)
-            self.assertTrue(user.is_staff)
-            self.assertTrue(user.two_factor_required)
-            self.assertEqual(
-                list(UserRole.objects.filter(user=user).values_list('role__code', flat=True)),
-                [role_code],
+        for role_code, expected_count in expected_staff_roles.items():
+            users = User.objects.filter(
+                email__startswith=f'demo.{role_code.replace("_manager", "s")}',
+                is_staff=True,
             )
+            role_users = UserRole.objects.filter(
+                role__code=role_code,
+                user__email__endswith='@promptmaster.invalid',
+                user__is_staff=True,
+            ).select_related('user')
+            self.assertEqual(role_users.count(), expected_count)
+            for link in role_users:
+                self.assertTrue(link.user.two_factor_required)
+                self.assertTrue(link.user.is_active)
+
+        self.assertEqual(
+            PrivateCustomerProfile.objects.filter(customer_number__startswith='DEMO-P-').count(),
+            3,
+        )
 
         self.assertIn('TEMPORÄRE DEMO-ZUGÄNGE', output)
         self.assertIn('Der vorhandene echte Superadmin bleibt unverändert', output)
@@ -70,14 +84,14 @@ class DemoDataSeedTests(TestCase):
             'mail': EmailMessage.objects.filter(subject__startswith='[DEMO]').count(),
         }
 
-        self.assertEqual(first_counts['companies'], 3)
-        self.assertEqual(first_counts['memberships'], 26)
-        self.assertEqual(first_counts['licenses'], 23)
-        self.assertEqual(first_counts['orders'], 5)
-        self.assertEqual(first_counts['payments'], 5)
-        self.assertGreaterEqual(first_counts['devices'], 6)
-        self.assertEqual(first_counts['support'], 3)
-        self.assertEqual(first_counts['mail'], 3)
+        self.assertEqual(first_counts['companies'], 5)
+        self.assertEqual(first_counts['memberships'], 91)
+        self.assertEqual(first_counts['licenses'], 76)
+        self.assertEqual(first_counts['orders'], 11)
+        self.assertEqual(first_counts['payments'], 11)
+        self.assertGreaterEqual(first_counts['devices'], 13)
+        self.assertEqual(first_counts['support'], 8)
+        self.assertEqual(first_counts['mail'], 4)
         self.assertEqual(
             Invitation.objects.filter(company__customer_number='DEMO-1002', accepted_at__isnull=True).count(),
             1,
@@ -87,7 +101,7 @@ class DemoDataSeedTests(TestCase):
                 company__customer_number__startswith='DEMO-',
                 status='pending',
             ).count(),
-            3,
+            5,
         )
         self.assertTrue(
             License.objects.filter(
@@ -100,6 +114,24 @@ class DemoDataSeedTests(TestCase):
         )
         self.assertTrue(
             Payment.objects.filter(provider_payment_id='tr_demo_0003_failed', status='failed').exists()
+        )
+        self.assertTrue(
+            License.objects.filter(
+                owner_user__private_customer__customer_number='DEMO-P-2001',
+                status='active',
+            ).exists()
+        )
+        self.assertTrue(
+            License.objects.filter(
+                owner_user__private_customer__customer_number='DEMO-P-2003',
+                status='expired',
+            ).exists()
+        )
+        self.assertTrue(
+            Payment.objects.filter(
+                provider_payment_id='tr_demo_private_0003_failed',
+                status='failed',
+            ).exists()
         )
 
         self.seed()
