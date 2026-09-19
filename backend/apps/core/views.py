@@ -104,5 +104,5 @@ def public_catalog(request):
         'proApplicationNames': applications,
         'generatedAt': now.isoformat(),
     })
-    response['Cache-Control'] = 'public, max-age=60, stale-while-revalidate=300'
+    response['Cache-Control'] = 'no-store'
     return response

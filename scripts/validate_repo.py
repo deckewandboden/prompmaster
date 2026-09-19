@@ -16,9 +16,11 @@ required = [
     'compose.yaml',
     'compose.staging.yaml',
     'compose.production.yaml',
+    'compose.external-caddy.yaml',
     'Dockerfile',
     'Dockerfile.caddy',
     'Caddyfile',
+    'Caddyfile.external',
     '.github/workflows/ci.yml',
 
     'backend/manage.py',

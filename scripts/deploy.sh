@@ -39,8 +39,11 @@ rollback_help(){
     printf '[PromptMaster deploy] Last-known-good Git SHA: %s\n' "$PREVIOUS_SHA" >&2
     printf '[PromptMaster deploy] Code-Rollback nach Ursachenprüfung:\n' >&2
     printf '  git checkout %s\n' "$PREVIOUS_SHA" >&2
-    printf '  docker compose -f compose.yaml -f compose.production.yaml build\n' >&2
-    printf '  docker compose -f compose.yaml -f compose.production.yaml up -d --remove-orphans\n' >&2
+    if [[ -n "${EXTERNAL_CADDY_NETWORK:-}" ]]; then
+      printf '  PM_EXTERNAL_CADDY_NETWORK=%s ./scripts/deploy.sh\n' "$EXTERNAL_CADDY_NETWORK" >&2
+    else
+      printf '  ./scripts/deploy.sh\n' >&2
+    fi
   else
     printf '[PromptMaster deploy] Kein verwendbarer last-known-good Git SHA protokolliert; vorherigen freigegebenen Release-Tag/Commit verwenden.\n' >&2
   fi
@@ -88,7 +91,32 @@ wait_beat(){
   return 1
 }
 
+assert_external_caddy_ports_closed(){
+  [[ -n "${EXTERNAL_CADDY_NETWORK:-}" ]] || return 0
+  local cid bindings
+  cid="$(docker compose "${F[@]}" ps -q caddy 2>/dev/null || true)"
+  [[ -n "$cid" ]] || { echo "[PromptMaster deploy] Caddy-Container fehlt für Host-Port-Prüfung" >&2; return 1; }
+  bindings="$(
+    docker inspect "$cid" --format '{{range $port, $bindings := .NetworkSettings.Ports}}{{if $bindings}}{{range $bindings}}{{println $port .HostIp .HostPort}}{{end}}{{end}}{{end}}' |
+      awk '$1=="80/tcp" || $1=="443/tcp"'
+  )"
+  [[ -z "$bindings" ]] || { echo "[PromptMaster deploy] External-Caddy-Modus veröffentlicht unerwartet Host-Port 80/443: $bindings" >&2; return 1; }
+  log "Host-Port-Gate OK: PromptMaster veröffentlicht 80/443 nicht auf dem Host"
+}
+
 bash scripts/run_repo_preflight.sh production
+EXTERNAL_CADDY_NETWORK="${PM_EXTERNAL_CADDY_NETWORK:-}"
+if [[ -z "$EXTERNAL_CADDY_NETWORK" && -f .env ]]; then
+  EXTERNAL_CADDY_NETWORK="$(awk -F= '$1 == "PM_EXTERNAL_CADDY_NETWORK" {sub(/^[^=]*=/, ""); value=$0} END {print value}' .env | tr -d '\r')"
+  EXTERNAL_CADDY_NETWORK="${EXTERNAL_CADDY_NETWORK#\"}"
+  EXTERNAL_CADDY_NETWORK="${EXTERNAL_CADDY_NETWORK%\"}"
+fi
+if [[ -n "$EXTERNAL_CADDY_NETWORK" ]]; then
+  export PM_EXTERNAL_CADDY_NETWORK="$EXTERNAL_CADDY_NETWORK"
+  docker network inspect "$EXTERNAL_CADDY_NETWORK" >/dev/null 2>&1 || { echo "[PromptMaster deploy] Externes Reverse-Proxy-Netz fehlt: $EXTERNAL_CADDY_NETWORK" >&2; exit 1; }
+  F+=(-f compose.external-caddy.yaml)
+  log "External-Caddy-Modus aktiv: $EXTERNAL_CADDY_NETWORK · keine PromptMaster-Host-Ports 80/443"
+fi
 log "Deploy ${CURRENT_SHA} · bisheriger last-known-good: ${PREVIOUS_SHA:-keiner}"
 log "Compose-Konfiguration prüfen"
 docker compose "${F[@]}" config >/dev/null
@@ -135,6 +163,7 @@ log "Celery Beat prüfen"
 wait_beat
 log "Caddy-Konfiguration prüfen"
 docker compose "${F[@]}" exec -T caddy caddy validate --config /etc/caddy/Caddyfile >/dev/null
+assert_external_caddy_ports_closed
 log "Containerstatus"
 docker compose "${F[@]}" ps
 printf '%s\n' "$CURRENT_SHA" > "$LAST_SUCCESS_FILE.tmp"

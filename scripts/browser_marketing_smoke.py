@@ -66,26 +66,34 @@ def main() -> int:
     base = f'http://127.0.0.1:{server.server_port}/'
 
     try:
-        executable = (
-            os.getenv('CHROMIUM_PATH')
-            or shutil.which('chromium')
-            or shutil.which('chromium-browser')
-            or shutil.which('google-chrome')
-        )
+        engine = os.getenv('PM_BROWSER_ENGINE', 'chromium').strip().lower()
+        if engine not in {'chromium', 'firefox', 'webkit'}:
+            fail(f'unbekannte Browser-Engine: {engine}')
         with sync_playwright() as pw:
-            launch = {
-                'headless': True,
-                'args': [
-                    '--no-sandbox',
-                    '--enable-webgl',
-                    '--ignore-gpu-blocklist',
-                    '--use-gl=angle',
-                    '--use-angle=swiftshader',
-                ],
-            }
-            if executable:
-                launch['executable_path'] = executable
-            browser = pw.chromium.launch(**launch)
+            if engine == 'chromium':
+                executable = (
+                    os.getenv('CHROMIUM_PATH')
+                    or shutil.which('chromium')
+                    or shutil.which('chromium-browser')
+                    or shutil.which('google-chrome')
+                )
+                launch = {
+                    'headless': True,
+                    'args': [
+                        '--no-sandbox',
+                        '--enable-webgl',
+                        '--ignore-gpu-blocklist',
+                        '--use-gl=angle',
+                        '--use-angle=swiftshader',
+                    ],
+                }
+                if executable:
+                    launch['executable_path'] = executable
+                browser = pw.chromium.launch(**launch)
+            elif engine == 'firefox':
+                browser = pw.firefox.launch(headless=True)
+            else:
+                browser = pw.webkit.launch(headless=True)
 
             for width, height in TARGETS:
                 page = browser.new_page(
@@ -115,8 +123,7 @@ def main() -> int:
                     "document.querySelectorAll('#faq details').length === 20"
                 )
                 page.wait_for_function(
-                    "document.querySelector('#particle-head') && "
-                    "document.querySelector('.head-fallback')?.hidden === true",
+                    "document.querySelector('.head-stage')?.dataset.headReady === '1'",
                     timeout=15000,
                 )
                 page.wait_for_timeout(900)
@@ -128,7 +135,11 @@ def main() -> int:
                       const free = rect('.product.free');
                       const pro = rect('.product.pro');
                       const center = rect('.hero-center');
-                      const canvas = rect('#particle-head');
+                      const renderer = one('.head-stage').dataset.headRenderer || '';
+                      const headCanvas = renderer === 'canvas2d'
+                        ? one('.head-fallback-canvas')
+                        : one('#particle-head');
+                      const canvas = headCanvas.getBoundingClientRect();
                       const scene = getComputedStyle(one('.scene-world'));
                       const landscape = getComputedStyle(one('.landscape'));
                       const header = getComputedStyle(one('header'));
@@ -151,8 +162,9 @@ def main() -> int:
                         freeBorder: freeStyle.borderColor,
                         proBorder: proStyle.borderColor,
                         canvasVisible: !!(canvas.width && canvas.height),
+                        headRenderer: renderer,
                         fallbackHidden: one('.head-fallback').hidden,
-                        motionVisible: !!one('.motion-button') && getComputedStyle(one('.motion-button')).display !== 'none',
+                        motionControlPresent: !!one('.motion-button'),
                         productCount: document.querySelectorAll('.product').length,
                         faqCount: document.querySelectorAll('#faq details').length,
                         proExtraApps: [...document.querySelectorAll('.mini-label')].some(
@@ -196,11 +208,13 @@ def main() -> int:
                 if metrics['headerPosition'] != 'fixed':
                     fail(f'{width}px: Marketing-Navigation ist nicht fixiert')
                 if not metrics['canvasVisible'] or metrics['canvasWidth'] < width * 0.95:
-                    fail(f'{width}px: Kopf-Canvas füllt die Szene nicht')
-                if not metrics['fallbackHidden']:
-                    fail(f'{width}px: WebGL-Kopf fiel auf Text-Fallback zurück')
-                if not metrics['motionVisible']:
-                    fail(f'{width}px: Steuerung der Kopfanimation fehlt')
+                    fail(f'{engine} {width}px: Kopf-Canvas füllt die Szene nicht')
+                if metrics['headRenderer'] not in {'webgl', 'canvas2d'}:
+                    fail(f'{engine} {width}px: kein aktiver Kopf-Renderer ({metrics["headRenderer"]})')
+                if engine == 'chromium' and metrics['headRenderer'] != 'webgl':
+                    fail(f'{width}px: Chromium muss den primären WebGL-Renderer validieren')
+                if metrics['motionControlPresent']:
+                    fail(f'{engine} {width}px: unerwünschte Bewegungssteuerung ist sichtbar')
                 if metrics['freeBorder'] == metrics['proBorder']:
                     fail(f'{width}px: Free-/Pro-Karten haben keine getrennte Cyan/Violett-Inszenierung')
                 if metrics['faqCount'] != 20:
@@ -219,7 +233,12 @@ def main() -> int:
                     fail(f'{width}px: fehlende lokale Ressource: {bad_responses[0]}')
 
                 if width == 1440:
-                    canvas = page.locator('#particle-head')
+                    selector = (
+                        '.head-fallback-canvas'
+                        if metrics['headRenderer'] == 'canvas2d'
+                        else '#particle-head'
+                    )
+                    canvas = page.locator(selector)
                     before = hashlib.sha256(canvas.screenshot()).hexdigest()
                     page.mouse.move(width * 0.15, height * 0.35)
                     page.wait_for_timeout(600)
@@ -227,9 +246,134 @@ def main() -> int:
                     page.wait_for_timeout(600)
                     after = hashlib.sha256(canvas.screenshot()).hexdigest()
                     if before == after:
-                        fail('1440px: Partikelkopf rendert, aber sichtbare Animation/Pointer-Reaktion fehlt')
+                        fail(
+                            f'{engine} 1440px: Kopf rendert, aber sichtbare '
+                            'Animation/Pointer-Reaktion fehlt'
+                        )
+                    page.locator('#plus').click()
+                    page.wait_for_function(
+                        "document.querySelector('#quantity')?.value === '2' && "
+                        "document.querySelector('[data-price=\"gross\"]')?.textContent.includes('71,76')"
+                    )
+                    page.locator('#minus').click()
+                    page.wait_for_function(
+                        "document.querySelector('#quantity')?.value === '1' && "
+                        "document.querySelector('[data-price=\"gross\"]')?.textContent.includes('35,88')"
+                    )
 
                 page.close()
+
+            # Deterministic no-WebGL acceptance. This simulates Firefox/VDI/
+            # enterprise clients where WebGL context creation is unavailable.
+            # The product must still show a real head through Canvas2D without
+            # asking users to change browser or GPU settings.
+            fallback_page = browser.new_page(
+                viewport={'width': 1440, 'height': 1000},
+                device_scale_factor=1,
+            )
+            fallback_errors: list[str] = []
+            fallback_page.on('pageerror', lambda exc: fallback_errors.append(str(exc)))
+            fallback_page.add_init_script(
+                """(() => {
+                  const original = HTMLCanvasElement.prototype.getContext;
+                  HTMLCanvasElement.prototype.getContext = function(type, ...args) {
+                    if (type === 'webgl' || type === 'webgl2' || type === 'experimental-webgl') {
+                      return null;
+                    }
+                    return original.call(this, type, ...args);
+                  };
+                })();"""
+            )
+            fallback_page.goto(base, wait_until='networkidle')
+            fallback_page.wait_for_selector('.scene-world')
+            fallback_page.wait_for_function(
+                "document.querySelector('#particle-head')?.hidden === true && "
+                "document.querySelector('.head-fallback')?.hidden === false && "
+                "document.querySelector('.head-fallback')?.dataset.ready === '1' && "
+                "document.querySelector('.head-fallback-canvas')",
+                timeout=15000,
+            )
+            fallback_metrics = fallback_page.evaluate(
+                """() => ({
+                  canvasHidden: document.querySelector('#particle-head')?.hidden === true,
+                  fallbackVisible: document.querySelector('.head-fallback')?.hidden === false,
+                  fallbackCanvasVisible: (() => {
+                    const c = document.querySelector('.head-fallback-canvas');
+                    if (!c) return false;
+                    const r = c.getBoundingClientRect();
+                    return r.width > 300 && r.height > 300;
+                  })(),
+                  motionControlPresent: !!document.querySelector('.motion-button'),
+                  fallbackText: (document.querySelector('.head-fallback')?.textContent || '').trim(),
+                  headBounds: document.querySelector('.head-stage')?.dataset.headBounds || '',
+                  headModelRequested: performance.getEntriesByType('resource')
+                    .some(r => r.name.includes('/models/head.glb')),
+                  ctaVisible: !!document.querySelector('.product.pro a.button'),
+                })"""
+            )
+            if not fallback_metrics['canvasHidden'] or not fallback_metrics['fallbackVisible']:
+                fail('No-WebGL: visueller Fallback wird nicht angezeigt')
+            if not fallback_metrics['fallbackCanvasVisible']:
+                fail('No-WebGL: Canvas2D-Kopf ist nicht sichtbar')
+            if fallback_metrics['motionControlPresent']:
+                fail('No-WebGL: unerwünschte Bewegungssteuerung ist vorhanden')
+            if fallback_metrics['fallbackText']:
+                fail(f'No-WebGL: unerwünschter Text liegt über dem Kopf: {fallback_metrics["fallbackText"]!r}')
+            try:
+                min_x, min_y, max_x, max_y = [
+                    int(value) for value in fallback_metrics['headBounds'].split(',')
+                ]
+            except (TypeError, ValueError):
+                fail(f'No-WebGL: keine messbare Kopfprojektion: {fallback_metrics["headBounds"]!r}')
+            else:
+                head_width = max_x - min_x
+                head_height = max_y - min_y
+                if head_width < 420 or head_height < 650:
+                    fail(
+                        'No-WebGL: Kopf ist gegenüber der Edge-Komposition zu klein '
+                        f'({head_width}x{head_height}px)'
+                    )
+            if not fallback_metrics['headModelRequested']:
+                fail('No-WebGL: Canvas2D-Fallback verwendet das Kopfmodell nicht')
+            if not fallback_metrics['ctaVisible']:
+                fail('No-WebGL: Marketing-CTA ist nicht weiter benutzbar')
+            if fallback_errors:
+                fail(f'No-WebGL: unbehandelter Browser-JS-Fehler: {fallback_errors[0]}')
+            fallback_canvas = fallback_page.locator('.head-fallback-canvas')
+            fallback_before = hashlib.sha256(fallback_canvas.screenshot()).hexdigest()
+            fallback_page.wait_for_timeout(850)
+            fallback_after = hashlib.sha256(fallback_canvas.screenshot()).hexdigest()
+            if fallback_before == fallback_after:
+                fail('No-WebGL: Kopf-/Bodenanimation ist statisch')
+            fallback_page.close()
+
+            # Pricing must remain usable even when a browser/proxy serves a stale
+            # HTML response for /catalog.json. The embedded catalog is the safe
+            # browser-independent fallback and preserves the agreed gross price.
+            pricing_page = browser.new_page(
+                viewport={'width': 1440, 'height': 1000},
+                device_scale_factor=1,
+            )
+            pricing_page.route(
+                '**/catalog.json*',
+                lambda route: route.fulfill(
+                    status=200,
+                    content_type='text/html',
+                    body='<!doctype html><title>stale cache</title>',
+                ),
+            )
+            pricing_page.goto(base, wait_until='networkidle')
+            pricing_page.wait_for_function(
+                "document.querySelector('.product.pro .price')?.textContent.includes('2,99')"
+            )
+            pricing_page.wait_for_function(
+                "document.querySelector('#quantity') && !document.querySelector('#quantity').disabled"
+            )
+            pricing_page.locator('#plus').click()
+            pricing_page.wait_for_function(
+                "document.querySelector('#quantity')?.value === '2'"
+            )
+            pricing_page.close()
 
             browser.close()
     finally:
@@ -239,7 +383,7 @@ def main() -> int:
 
     print(
         'MARKETING BROWSER SMOKE OK: real HTTP/CSS/JS + night landscape + '
-        'animated particle head + responsive 390/768/1440/1920 + price/catalog/FAQ'
+        f'{engine}: animated WebGL/Canvas2D head + responsive 390/768/1440/1920 + resilient price/catalog/FAQ'
     )
     return 0
 

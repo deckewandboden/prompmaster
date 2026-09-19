@@ -100,8 +100,17 @@ Automatisierte Browser-Smokes:
 
 ```bash
 python scripts/browser_runtime_smoke.py
-python scripts/browser_marketing_smoke.py
+for engine in chromium firefox webkit; do
+  PM_BROWSER_ENGINE="$engine" python scripts/browser_marketing_smoke.py
+done
 ```
+
+Der Marketing-Smoke muss den Kopf sowohl mit WebGL als auch mit erzwungenem
+WebGL-Ausfall validieren. Ohne WebGL muss automatisch Canvas2D übernehmen;
+Kamera-/Webcam-Zugriff ist im Marketing-Runtime nicht zulässig. Der
+Preisrechner wird zusätzlich gegen eine absichtlich falsche HTML-Antwort auf
+`/catalog.json` geprüft und muss mit dem eingebetteten Anzeigekatalog
+weiterarbeiten.
 
 ## Gate 5 — Monitoring-Trust-Boundary
 
@@ -141,7 +150,7 @@ Vor Release zusätzlich:
 python scripts/validate_runtime_catalog.py
 ```
 
-Der Pro-Browser-Smoke muss 34 eindeutige App-Kacheln rendern und Compose sowie Rating/Feedback über die Server-API ausführen. Der Marketing-Smoke prüft öffentliche Free/Pro-Karten, 2,99-EUR-Anzeige, 34-App-/28-Zusatz-App-Synchronisierung, 20 FAQ und das Partikelkopf-Canvas. Der unveränderte Pro-Golden-Master bleibt Referenz; die abgeleitete Runtime lädt den veröffentlichten PromptDomain-Katalog serverseitig.
+Der Pro-Browser-Smoke muss 34 eindeutige App-Kacheln rendern und Compose sowie Rating/Feedback über die Server-API ausführen. Der Marketing-Smoke prüft in Chromium, Firefox und WebKit öffentliche Free/Pro-Karten, den funktionierenden Preisrechner, 2,99-EUR-Anzeige, 34-App-/28-Zusatz-App-Synchronisierung, 20 FAQ und den WebGL-/Canvas2D-Partikelkopf. Der unveränderte Pro-Golden-Master bleibt Referenz; die abgeleitete Runtime lädt den veröffentlichten PromptDomain-Katalog serverseitig.
 
 ## Runner-Regel
 

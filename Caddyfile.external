@@ -1,5 +1,13 @@
 {
     admin off
+    # This Caddy is reachable only from the existing front proxy's private
+    # Docker network. Trust that proxy hop, parse X-Forwarded-For strictly,
+    # then normalize the value passed to Django to one canonical client IP.
+    servers {
+        trusted_proxies static private_ranges
+        trusted_proxies_strict
+        client_ip_headers X-Forwarded-For
+    }
 }
 
 # Internal-only health listener. It isn't published to a host port; Django and
@@ -8,7 +16,7 @@
     respond /healthz 200
 }
 
-{$CADDY_DOMAIN} {
+http://{$CADDY_DOMAIN} {
     encode zstd gzip
     header {
         -Server
@@ -65,7 +73,12 @@
     }
 
     handle /catalog.json {
-        reverse_proxy web:8000
+        reverse_proxy promptmaster-web-internal:8000 {
+            header_up Host {http.request.host}
+            header_up X-Forwarded-Host {http.request.host}
+            header_up X-Forwarded-Proto https
+            header_up X-Forwarded-For {client_ip}
+        }
     }
 
     # Mollie sends only a tiny form payload containing the provider payment ID.
@@ -75,7 +88,12 @@
         request_body {
             max_size 64KB
         }
-        reverse_proxy web:8000
+        reverse_proxy promptmaster-web-internal:8000 {
+            header_up Host {http.request.host}
+            header_up X-Forwarded-Host {http.request.host}
+            header_up X-Forwarded-Proto https
+            header_up X-Forwarded-For {client_ip}
+        }
     }
 
     # Prometheus scrapes the web container directly. Never proxy internal
@@ -101,7 +119,12 @@
         path /auth /auth/* /free /free/* /pro /pro/* /portal/* /ns-admin /ns-admin/* /api /api/* /health/* /legal/*
     }
     handle @django {
-        reverse_proxy web:8000
+        reverse_proxy promptmaster-web-internal:8000 {
+            header_up Host {http.request.host}
+            header_up X-Forwarded-Host {http.request.host}
+            header_up X-Forwarded-Proto https
+            header_up X-Forwarded-For {client_ip}
+        }
     }
 
     # Public Marketing-/Vertriebsfrontend. marketing/dist is committed as a

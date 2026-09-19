@@ -8,7 +8,8 @@ from django.utils import timezone
 
 from apps.accounts.models import User
 from apps.audit.models import AuditEvent
-from apps.catalog.models import Product, ProductPrice
+from apps.catalog.models import Feature, Product, ProductEntitlement, ProductPrice
+from apps.catalog.services import PRO_ACCESS_FEATURE
 from apps.companies.models import Company, Membership
 from apps.devices.services import register_device
 from apps.orders.models import Order, OrderItem
@@ -182,5 +183,134 @@ class LicenseAssignmentContractTests(TestCase):
                 action='company.member_deactivated',
                 object_id=str(membership.id),
                 actor=self.admin,
+            ).exists()
+        )
+
+
+class CustomerAdminSelfActivationTests(TestCase):
+    def setUp(self):
+        self.now = timezone.now()
+        self.product = Product.objects.create(
+            code='PRO-SELF-ACTIVATE',
+            name='PromptMaster Pro Self Activation',
+            default_license_days=365,
+            default_device_limit=2,
+            reminder_1_days=60,
+            reminder_2_days=30,
+            critical_warning_days=7,
+        )
+        feature, _ = Feature.objects.get_or_create(
+            code=PRO_ACCESS_FEATURE,
+            defaults={'name': 'PromptMaster Pro Runtime'},
+        )
+        ProductEntitlement.objects.create(
+            product=self.product,
+            feature=feature,
+            enabled=True,
+        )
+        self.price = ProductPrice.objects.create(
+            product=self.product,
+            price_type='new',
+            gross_amount=Decimal('35.88'),
+            currency='EUR',
+            valid_from=self.now - timedelta(days=1),
+        )
+        self.company = Company.objects.create(
+            customer_number='PM-C-SELF-ACTIVATE',
+            name='Self Activate GmbH',
+            email='admin-self@example.test',
+        )
+        self.admin = User.objects.create_user(
+            'admin-self@example.test',
+            'Self-Activate-Password-2026!',
+            first_name='Admin',
+            last_name='Self',
+            email_verified_at=self.now,
+        )
+        self.member = User.objects.create_user(
+            'member-self@example.test',
+            'Self-Activate-Member-2026!',
+            first_name='Member',
+            last_name='Self',
+            email_verified_at=self.now,
+        )
+        Membership.objects.create(
+            company=self.company,
+            user=self.admin,
+            role='admin',
+            active=True,
+        )
+        Membership.objects.create(
+            company=self.company,
+            user=self.member,
+            role='member',
+            active=True,
+        )
+        order = Order.objects.create(
+            order_number='PM-O-SELF-ACTIVATE',
+            company=self.company,
+            status='paid',
+            currency='EUR',
+            gross_total=Decimal('35.88'),
+            tax_total=Decimal('5.73'),
+            billing_snapshot={},
+            idempotency_key='self-activate-order',
+        )
+        item = OrderItem.objects.create(
+            order=order,
+            product=self.product,
+            price_version=self.price,
+            quantity=1,
+            unit_gross=Decimal('35.88'),
+            unit_net=Decimal('30.15'),
+            tax_rate=Decimal('19.00'),
+            product_name_snapshot=self.product.name,
+        )
+        self.license = License.objects.create(
+            company=self.company,
+            product=self.product,
+            status='free',
+            valid_from=self.now - timedelta(days=1),
+            valid_until=self.now + timedelta(days=364),
+        )
+        LicenseTerm.objects.create(
+            license=self.license,
+            order_item=item,
+            valid_from=self.license.valid_from,
+            valid_until=self.license.valid_until,
+            paid_gross_amount=Decimal('35.88'),
+        )
+
+    def _login(self, user):
+        self.client.force_login(user)
+        session = self.client.session
+        session['security_version'] = user.security_version
+        session['two_factor_ok'] = True
+        session.save()
+
+    def test_company_admin_can_consume_one_free_seat_for_own_pro_use(self):
+        self._login(self.admin)
+        response = self.client.post(reverse('portal:activate_my_pro'))
+        self.assertEqual(response.status_code, 302)
+        self.assertEqual(response.url, reverse('proaccess:launch'))
+        self.license.refresh_from_db()
+        self.assertEqual(self.license.status, 'active')
+        self.assertTrue(
+            LicenseAssignment.objects.filter(
+                license=self.license,
+                user=self.admin,
+                ended_at__isnull=True,
+            ).exists()
+        )
+
+    def test_company_member_cannot_self_assign_a_free_company_seat(self):
+        self._login(self.member)
+        response = self.client.post(reverse('portal:activate_my_pro'))
+        self.assertEqual(response.status_code, 403)
+        self.assertFalse(
+            LicenseAssignment.objects.filter(
+                license=self.license,
+                user=self.member,
+                ended_at__isnull=True,
             ).exists()
         )

@@ -13,7 +13,7 @@ from django.views.decorators.clickjacking import xframe_options_sameorigin
 from apps.devices.services import register_device, validate_device_token
 from .assets import GoldenMasterIntegrityError, read_verified_asset
 from .forms import DeviceRegistrationForm
-from .services import active_product_assignment, assignment_expiry_context, DEVICE_COOKIE, LEGACY_DEVICE_COOKIE
+from .services import active_product_assignment, assignment_expiry_context, has_internal_staff_access, DEVICE_COOKIE, LEGACY_DEVICE_COOKIE
 
 logger = logging.getLogger(__name__)
 
@@ -75,6 +75,8 @@ def _access(request):
 
 @login_required
 def launch(request):
+    if has_internal_staff_access(request.user):
+        return redirect('proaccess:content')
     assignment, device = _access(request)
     if not assignment:
         messages.error(request, 'Für dieses Benutzerkonto ist keine aktive PromptMaster-Pro-Lizenz zugewiesen.')
@@ -91,6 +93,8 @@ def launch(request):
 
 @login_required
 def register_device_view(request):
+    if has_internal_staff_access(request.user):
+        return redirect('proaccess:content')
     assignment = active_product_assignment(request.user, 'PRO')
     if not assignment:
         raise PermissionDenied
@@ -124,6 +128,8 @@ def register_device_view(request):
 
 @login_required
 def renewal_warning(request):
+    if has_internal_staff_access(request.user):
+        return redirect('proaccess:content')
     assignment, device = _access(request)
     if not assignment:
         return redirect('portal:licenses')
@@ -146,10 +152,11 @@ def renewal_warning(request):
 @login_required
 @xframe_options_sameorigin
 def content(request):
-    assignment, device = _access(request)
-    if not assignment:
+    internal_staff = has_internal_staff_access(request.user)
+    assignment, device = (None, None) if internal_staff else _access(request)
+    if not internal_staff and not assignment:
         raise PermissionDenied
-    if not device:
+    if not internal_staff and not device:
         return redirect('proaccess:register_device')
 
     # Serve the deterministic runtime derivative. The exact Golden Master stays
@@ -166,20 +173,53 @@ def content(request):
         logger.error('PromptMaster Pro runtime asset is missing CSRF placeholder')
         return render(request, 'proaccess/asset_missing.html', status=503)
     data = data.replace(marker, csrf_token.encode('ascii'))
+
+    # The verified runtime asset remains immutable on disk. Add only
+    # session-navigation links to the delivered response so users who land
+    # directly in Pro can return to their own security domain or sign out.
+    utility_marker = b'<div class="utility"><div class="max">'
+    if utility_marker not in data:
+        logger.error('PromptMaster Pro runtime asset is missing utility navigation marker')
+        return render(request, 'proaccess/asset_missing.html', status=503)
+    workspace_url = (
+        reverse('ns_admin:dashboard')
+        if internal_staff
+        else reverse('portal:dashboard')
+    )
+    workspace_label = 'netstyle Admin' if internal_staff else 'Kundenportal'
+    session_links = (
+        f'<a href="{workspace_url}">{workspace_label}</a>'
+        f'<a href="{reverse("accounts:logout")}">Abmelden</a>'
+    ).encode('utf-8')
+    data = data.replace(utility_marker, utility_marker + session_links, 1)
+
     response = HttpResponse(data, content_type='text/html; charset=utf-8')
     response['Cache-Control'] = 'private, no-store'
-    if not request.COOKIES.get(DEVICE_COOKIE):
+    if not internal_staff and not request.COOKIES.get(DEVICE_COOKIE):
         _set_device_cookie(response, _device_cookie(request))
     return response
 
 
 def free_content(request):
-    """Serve the exact anonymous Free Golden Master, fail-closed on byte drift."""
+    """Serve FREE 1.2.4 with the additive 34-app visibility bridge.
+
+    The reviewed Golden Master remains byte-verified and unchanged. The bridge
+    only augments catalog visibility at runtime: the 16 reviewed Free task
+    contracts keep their original local composition logic; all additional
+    PromptDomain applications are visible but Pro-locked.
+    """
     try:
         data = read_verified_asset(settings.FREE_GOLDEN_MASTER_PATH, settings.FREE_GOLDEN_MASTER_SHA256)
     except GoldenMasterIntegrityError:
         logger.exception('PromptMaster Free Golden Master failed integrity validation')
         return HttpResponse('PromptMaster Free ist vorübergehend nicht verfügbar.', status=503)
+
+    marker = b'</body></html>'
+    bridge = b'<script src="/static/js/free_catalog_bridge.20260918.js" defer></script>'
+    if data.count(marker) != 1:
+        logger.error('PromptMaster Free Golden Master has unexpected closing markup')
+        return HttpResponse('PromptMaster Free ist vorübergehend nicht verfügbar.', status=503)
+    data = data.replace(marker, bridge + marker)
     response = HttpResponse(data, content_type='text/html; charset=utf-8')
     response['Cache-Control'] = 'public, max-age=300'
     return response

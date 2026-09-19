@@ -17,6 +17,7 @@
 <div class="page-head"><div><h1>Mehr</h1><div class="sub">Alle für Ihr Konto freigegebenen Adminbereiche.</div></div></div>
 <div class="grid two">
   <div class="card"><h2>Geschäft &amp; Inhalte</h2><div class="list">
+    <a class="btn primary" href="{% url 'proaccess:launch' %}">PromptMaster Pro öffnen</a>
     <a class="btn secondary" href="{% url 'ns_admin:search' %}">Globale Suche</a>
     {% if can_customers %}<a class="btn secondary" href="{% url 'ns_admin:customers' %}">Kunden</a>{% endif %}
     {% if can_licenses %}<a class="btn secondary" href="{% url 'ns_admin:licenses' %}">Lizenzen</a>{% endif %}
@@ -36,6 +37,7 @@
     {% if can_audit %}<a class="btn secondary" href="{% url 'ns_admin:audit' %}">Protokolle</a>{% endif %}
     {% if can_roles %}<a class="btn secondary" href="{% url 'ns_admin:roles' %}">Benutzer &amp; Rollen</a>{% endif %}
     {% if can_settings %}<a class="btn secondary" href="{% url 'ns_admin:settings' %}">Einstellungen</a>{% endif %}
+    <a class="btn secondary" href="{% url 'accounts:logout' %}">Abmelden</a>
   </div></div>
 </div>
 {% endblock %}

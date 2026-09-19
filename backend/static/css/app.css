@@ -155,3 +155,10 @@ a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,te
 @media(max-width:700px){.statusrow{align-items:flex-start;flex-wrap:wrap}.statusrow>strong,.statusrow>.badge{margin-left:auto}.statusrow .page-actions{width:auto}}
 
 .token-card code{display:block;max-width:100%;padding:12px 14px;border:1px solid var(--line);border-radius:10px;background:#f8fbfd;white-space:pre-wrap;overflow-wrap:anywhere;word-break:break-all;font-family:ui-monospace,SFMono-Regular,Consolas,monospace;font-size:13px;line-height:1.5}
+
+
+/* Reconstruction 2026-09-18: security setup must not render an unusable portal navigation. */
+.login-card.auth-wide{width:min(920px,100%)}
+.auth-setup-grid{grid-template-columns:1.05fr .95fr}
+.recovery-codes{margin:0;font-size:15px;line-height:1.7;letter-spacing:.04em}
+@media(max-width:700px){.login-card.auth-wide{padding:18px}.auth-setup-grid{grid-template-columns:1fr}}
