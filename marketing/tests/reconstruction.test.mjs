@@ -40,8 +40,7 @@ test('non-WebGL fallback keeps the actual head visible without camera access',()
   assert.match(fallback,/traffic/);
   assert.match(fallback,/skyLights/);
   assert.match(fallback,/shootingStars/);
-  assert.match(fallback,/sampleOriginalSurface/);
-  assert.match(fallback,/surfaceCount\)/);
+  assert.match(fallback,/async function modelCloud\(surfaceCount\)/);
   assert.match(fallback,/mobile\?8200:22000/);
   assert.match(fallback,/MeshSurfaceSampler/);
   assert.match(fallback,/new MeshSurfaceSampler\(samplingMesh\)\.build\(\)/);
