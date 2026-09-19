@@ -510,8 +510,10 @@ class Command(BaseCommand):
                 },
             )
 
-        category = ('license', 'technical', 'payment')[company_index - 1]
-        support_status = ('new', 'in_progress', 'closed')[company_index - 1]
+        categories = ('license', 'technical', 'payment', 'device', 'user')
+        support_states = ('new', 'in_progress', 'closed', 'new', 'in_progress')
+        category = categories[(company_index - 1) % len(categories)]
+        support_status = support_states[(company_index - 1) % len(support_states)]
         subject = f"[DEMO] {company.customer_number} – Beispielanfrage"
         SupportRequest.objects.update_or_create(
             company=company,
@@ -780,7 +782,7 @@ class Command(BaseCommand):
         if spec['state'] == 'expiring':
             LicenseReminder.objects.update_or_create(
                 license=license_obj,
-                kind='t7',
+                kind='t30',
                 target_valid_until=valid_until,
                 defaults={'status': 'pending', 'error': ''},
             )
