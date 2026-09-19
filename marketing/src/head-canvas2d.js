@@ -296,6 +296,10 @@ export async function initCanvasHead({sourceCanvas,stage,fallback}){
     return ()=>{};
   }
 
+  // WebGL point shaders use a radial alpha falloff, while Canvas2D fillRect would
+  // otherwise paint the whole point quad at full alpha. The fallback therefore
+  // uses smaller quads and shader-energy-equivalent alpha so Firefox/no-WebGL
+  // stays visually aligned with the canonical Chromium/Edge composition.
   // Canvas2D mirrors the animated lower scene of the WebGL edition instead of
   // degrading Firefox/VDI clients to a head-only fallback.
   const sceneRandom=seeded(712367);
@@ -380,8 +384,8 @@ export async function initCanvasHead({sourceCanvas,stage,fallback}){
     for(const star of skyLights){
       const wave=.5+.5*Math.sin(elapsed*(1.05+star.size*.72)+star.phase);
       const twinkle=Math.pow(wave,3.2);
-      context.fillStyle=`rgba(80,190,255,${.11+twinkle*.55})`;
-      const r=.45+star.size*.9+twinkle*.8;
+      context.fillStyle=`rgba(80,190,255,${.035+twinkle*.18})`;
+      const r=.35+star.size*.62+twinkle*.5;
       context.fillRect(star.x*width,star.y*height,r,r);
     }
     for(const star of shootingStars){
@@ -404,19 +408,19 @@ export async function initCanvasHead({sourceCanvas,stage,fallback}){
       const pulse=.5+.5*Math.sin(elapsed*(.5+dot.size*.38)+dot.phase);
       const x=(.5+dot.x)*width;
       const y=dot.y*height+Math.sin(elapsed*.22+dot.phase)*height*.0008;
-      const a=dot.alpha*(.45+pulse*.72);
+      const a=dot.alpha*(.16+pulse*.25);
       context.fillStyle=dot.violet
         ? `rgba(112,96,255,${a})`
         : `rgba(22,154,255,${a})`;
-      const size=.7+dot.size*1.15+pulse*.55;
+      const size=.45+dot.size*.82+pulse*.35;
       context.fillRect(x,y,size,size);
     }
     for(const dot of blendParticles){
       const pulse=.5+.5*Math.sin(elapsed*(.55+dot.size*.28)+dot.phase);
       const x=(.5+dot.x)*width;
       const y=dot.y*height+Math.sin(elapsed*.24+dot.phase)*height*.001;
-      context.fillStyle=`rgba(35,170,255,${.10+pulse*.27})`;
-      const size=.65+dot.size*.95+pulse*.5;
+      context.fillStyle=`rgba(35,170,255,${.035+pulse*.09})`;
+      const size=.45+dot.size*.68+pulse*.32;
       context.fillRect(x,y,size,size);
     }
     for(const beacon of beacons){
@@ -424,9 +428,9 @@ export async function initCanvasHead({sourceCanvas,stage,fallback}){
       const flash=Math.pow(wave,7);
       const x=(.5+beacon.x)*width;
       const y=beacon.y*height;
-      const radius=1.1+flash*4.8;
+      const radius=.8+flash*3.4;
       const g=context.createRadialGradient(x,y,0,x,y,radius);
-      g.addColorStop(0,`rgba(170,245,255,${.25+flash*.72})`);
+      g.addColorStop(0,`rgba(170,245,255,${.10+flash*.45})`);
       g.addColorStop(1,'rgba(20,130,255,0)');
       context.fillStyle=g;
       context.beginPath();context.arc(x,y,radius,0,Math.PI*2);context.fill();
@@ -434,7 +438,7 @@ export async function initCanvasHead({sourceCanvas,stage,fallback}){
     for(const light of traffic){
       let x=(light.phase+elapsed*light.speed)%1;
       if(x<0)x+=1;
-      context.fillStyle=`rgba(125,225,255,${light.alpha})`;
+      context.fillStyle=`rgba(125,225,255,${light.alpha*.38})`;
       context.fillRect(x*width,light.y*height,2.2,1.3);
     }
 
@@ -524,8 +528,9 @@ export async function initCanvasHead({sourceCanvas,stage,fallback}){
     for(const bucket of surfaceBuckets){
       for(let i=0;i<bucket.length;i+=7){
         const [x,y,size,r,g,b,a]=bucket.slice(i,i+7);
-        context.fillStyle=`rgba(${r},${g},${b},${clamp(a*.82,0,1)})`;
-        context.fillRect(x-size*.5,y-size*.5,Math.max(.65,size),Math.max(.65,size));
+        const renderSize=Math.max(.5,size*.74);
+        context.fillStyle=`rgba(${r},${g},${b},${clamp(a*.28,0,1)})`;
+        context.fillRect(x-renderSize*.5,y-renderSize*.5,renderSize,renderSize);
       }
     }
 
@@ -549,8 +554,9 @@ export async function initCanvasHead({sourceCanvas,stage,fallback}){
       const r=Math.round(clamp(topology.colors[o]*detailBoost*1.55,0,1)*255);
       const g=Math.round(clamp(topology.colors[o+1]*detailBoost*1.55,0,1)*255);
       const b=Math.round(clamp(topology.colors[o+2]*detailBoost*1.55,0,1)*255);
-      context.fillStyle=`rgba(${r},${g},${b},${clamp(alpha*.78,0,1)})`;
-      context.fillRect(sx2-size*.5,sy2-size*.5,Math.max(.65,size),Math.max(.65,size));
+      const renderSize=Math.max(.5,size*.72);
+      context.fillStyle=`rgba(${r},${g},${b},${clamp(alpha*.25,0,1)})`;
+      context.fillRect(sx2-renderSize*.5,sy2-renderSize*.5,renderSize,renderSize);
     }
 
     if(Number.isFinite(headMinX)){
