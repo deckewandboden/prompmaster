@@ -366,8 +366,6 @@ export async function initCanvasHead({sourceCanvas,stage,fallback}){
   function draw(now){
     if(disposed)return;
     const dt=Math.min(.05,Math.max(0,(now-last)/1000||0));last=now;elapsed+=dt;
-    smoothX+=(targetX-smoothX)*Math.min(1,dt*3.4);
-    smoothY+=(targetY-smoothY)*Math.min(1,dt*3.4);
     context.clearRect(0,0,width,height);
     const glow=context.createRadialGradient(width*.5,height*.42,0,width*.5,height*.42,Math.min(width,height)*.38);
     glow.addColorStop(0,'rgba(30,155,255,.12)');
@@ -537,9 +535,9 @@ export async function initCanvasHead({sourceCanvas,stage,fallback}){
       const x=topology.positions[o],y=topology.positions[o+1],z=topology.positions[o+2];
       const nx=topology.normals[o],ny=topology.normals[o+1],nz=topology.normals[o+2];
       const shoulderFade=1-smoothstep(-1.20,-.08,y);
-      let px=x+Math.sign(x)*(.10+Math.abs(x)*.12)*shoulderFade;
-      let py=y-.22*shoulderFade;
-      let pz=z-.05*shoulderFade;
+      const px=x+Math.sign(x)*(.10+Math.abs(x)*.12)*shoulderFade;
+      const py=y-.22*shoulderFade;
+      const pz=z-.05*shoulderFade;
       const alpha=(.62+topology.detail[i]*.3)*(1-shoulderFade*.997);
       if(alpha<=.006)continue;
       const [, , normalZ]=rotateNormal(nx,ny,nz);
@@ -561,7 +559,7 @@ export async function initCanvasHead({sourceCanvas,stage,fallback}){
 
     const eyePulse=1+Math.sin(elapsed*1.8)*.025+(edition==='pro'?.055:0);
     for(const [x,y,z] of [[-.245,.6,.755],[.18,.6,.75]]){
-      const [eyeX,eyeY,,depth,perspective]=project(x,y,z);
+      const [eyeX,eyeY,,,perspective]=project(x,y,z);
       const haloRadius=.135*base*perspective*eyePulse;
       const halo=context.createRadialGradient(eyeX,eyeY,0,eyeX,eyeY,haloRadius);
       halo.addColorStop(0,'rgba(255,255,255,.56)');
