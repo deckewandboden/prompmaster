@@ -328,6 +328,11 @@ def main() -> int:
                 if parity_renderer != 'webgl':
                     fail('Chromium parity reference must use WebGL')
             elif engine == 'firefox':
+                if parity_renderer != 'canvas2d':
+                    fail(
+                        f'Firefox parity must use deterministic Canvas2D renderer, '
+                        f'got {parity_renderer!r}'
+                    )
                 edge_parity = artifact_dir / 'chromium-1440-parity.png'
                 if not edge_parity.is_file():
                     fail('Firefox parity: Chromium/Edge reference missing')
