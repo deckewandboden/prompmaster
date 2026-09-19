@@ -273,6 +273,40 @@ def main() -> int:
 
                 page.close()
 
+            if engine == 'chromium':
+                # Export clean WebGL scene masters without navigation/cards.
+                # These are generated from the canonical Chromium/Edge renderer
+                # and can be used as pixel-stable no-WebGL fallbacks.
+                for master_width, master_height in (
+                    (1912, 948),
+                    (1920, 1032),
+                    (1440, 1000),
+                    (768, 1024),
+                    (390, 844),
+                ):
+                    master_page = browser.new_page(
+                        viewport={'width': master_width, 'height': master_height},
+                        device_scale_factor=1,
+                    )
+                    master_page.goto(base, wait_until='networkidle')
+                    master_page.wait_for_function(
+                        "document.querySelector('.head-stage')?.dataset.headRenderer === 'webgl' && "
+                        "document.querySelector('.head-stage')?.dataset.headReady === '1'",
+                        timeout=15000,
+                    )
+                    master_page.wait_for_timeout(900)
+                    master_page.add_style_tag(
+                        content='header, main, footer, .skip { visibility: hidden !important; }'
+                    )
+                    master_page.screenshot(
+                        path=str(
+                            artifact_dir
+                            / f'edge-scene-master-{master_width}x{master_height}.png'
+                        ),
+                        full_page=False,
+                    )
+                    master_page.close()
+
             # Deterministic no-WebGL acceptance. This simulates Firefox/VDI/
             # enterprise clients where WebGL context creation is unavailable.
             # The product must still show a real head through Canvas2D without
