@@ -63,6 +63,7 @@ def public_catalog(request):
     from django.utils import timezone
     from apps.catalog.models import Product, TaxRule
     from apps.catalog.services import current_price
+    from apps.orders.services import MAX_PURCHASE_QUANTITY
     from apps.prompts.models import PromptApplication
 
     now = timezone.now()
@@ -96,7 +97,7 @@ def public_catalog(request):
                 'purchasable': bool(pro and pro.purchasable),
             },
         ],
-        'maxQuantity': 999,
+        'maxQuantity': MAX_PURCHASE_QUANTITY,
         'checkoutEnabled': bool(pro and pro.purchasable),
         'loginEnabled': True,
         'freeUrl': '/free/',
