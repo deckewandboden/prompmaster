@@ -124,6 +124,24 @@ class PromptDomainSeedTests(TestCase):
         self.assertEqual(PromptLegacyContract.objects.filter(source='FREE_1_2_4').count(), 16)
         self.assertEqual(PromptTestCase.objects.filter(name='system-smoke').count(), 194)
 
+    def test_runtime_validator_ignores_archived_smoke_tests(self):
+        definition = PromptDefinition.objects.get(task_id='PM20-001')
+        source = PromptVersion.objects.get(definition=definition, lifecycle='PUBLISHED')
+        archived = clone_as_draft(definition, source=source)
+        archived.lifecycle = 'ARCHIVED'
+        archived.save(update_fields=['lifecycle', 'updated_at'])
+        self.assertEqual(PromptTestCase.objects.filter(name='system-smoke', enabled=True).count(), 195)
+        self.assertEqual(
+            PromptTestCase.objects.filter(
+                name='system-smoke',
+                enabled=True,
+                version__lifecycle='PUBLISHED',
+            ).count(),
+            194,
+        )
+        call_command('seed_faqs', verbosity=0)
+        call_command('validate_prompt_runtime', verbosity=0)
+
     def test_current_pm20_is_fully_entitled_for_pro(self):
         enabled = ProductEntitlement.objects.filter(
             product__code='PRO', enabled=True, feature__code__startswith='prompt.task.'
