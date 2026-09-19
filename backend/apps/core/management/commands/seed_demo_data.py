@@ -185,16 +185,29 @@ class Command(BaseCommand):
             ),
         }
         for doc_type, content in demo_legal.items():
-            LegalDocument.objects.filter(doc_type=doc_type, active=True).update(active=False)
-            LegalDocument.objects.update_or_create(
+            # Never replace an operator-maintained active staging document.
+            # Only fill a missing contract with an unmistakable demo version.
+            if LegalDocument.objects.filter(
+                doc_type=doc_type,
+                active=True,
+                valid_from__lte=now,
+            ).exists():
+                continue
+            demo_document, _ = LegalDocument.objects.update_or_create(
                 doc_type=doc_type,
                 version='demo-staging-v1',
                 defaults={
                     'content': content,
                     'valid_from': now - timedelta(minutes=1),
-                    'active': True,
+                    'active': False,
                 },
             )
+            LegalDocument.objects.filter(
+                doc_type=doc_type,
+                active=True,
+            ).exclude(pk=demo_document.pk).update(active=False)
+            demo_document.active = True
+            demo_document.save(update_fields=['active', 'updated_at'])
 
         credentials = []
 
