@@ -475,14 +475,6 @@ export async function initCanvasHead({sourceCanvas,stage,fallback}){
       const perspective=viewZ/depth;
       return [centerX+rx*base*perspective,centerY-ry*base*perspective,rz2,depth,perspective];
     };
-    const rotateNormal=(nx,ny,nz)=>{
-      const rx=nx*cy+nz*sy;
-      const rz=-nx*sy+nz*cy;
-      const ry=ny*cp-rz*sp;
-      const rz2=ny*sp+rz*cp;
-      return [rx,ry,rz2];
-    };
-
     context.shadowBlur=0;
     context.globalCompositeOperation='lighter';
 
@@ -499,7 +491,6 @@ export async function initCanvasHead({sourceCanvas,stage,fallback}){
     for(let i=0;i<surface.seeds.length;i++){
       const o=i*3;
       const x=surface.positions[o],y=surface.positions[o+1],z=surface.positions[o+2];
-      const nx=surface.normals[o],ny=surface.normals[o+1],nz=surface.normals[o+2];
       const vertical=(y+1.45)/2.9;
       const threshold=surface.seeds[i]*.61+vertical*.13;
       let released=smoothstep(threshold-.14,threshold+.08,dissolve);
@@ -549,7 +540,6 @@ export async function initCanvasHead({sourceCanvas,stage,fallback}){
     for(let i=0;i<topology.detail.length;i++){
       const o=i*3;
       const x=topology.positions[o],y=topology.positions[o+1],z=topology.positions[o+2];
-      const nx=topology.normals[o],ny=topology.normals[o+1],nz=topology.normals[o+2];
       const shoulderFade=1-smoothstep(-1.20,-.08,y);
       const px=x+Math.sign(x)*(.10+Math.abs(x)*.12)*shoulderFade;
       const py=y-.22*shoulderFade;
