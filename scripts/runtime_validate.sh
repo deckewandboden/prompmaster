@@ -26,7 +26,7 @@ docker compose "${FILES[@]}" up -d
 docker compose "${FILES[@]}" exec -T beat sh -c 'test -w /tmp/celerybeat && touch /tmp/celerybeat/write-test && rm /tmp/celerybeat/write-test'
 for i in $(seq 1 30); do docker compose "${FILES[@]}" exec -T web curl -fsS http://127.0.0.1:8000/health/ready/ >/dev/null 2>&1 && break; [[ "$i" -lt 30 ]] || fail "Django ready health blieb rot"; sleep 2; done
 docker compose "${FILES[@]}" exec -T caddy caddy validate --config /etc/caddy/Caddyfile >/dev/null
-docker compose "${FILES[@]}" exec -T caddy caddy validate --config /dev/stdin < Caddyfile.external >/dev/null
+docker compose "${FILES[@]}" exec -T caddy caddy validate --adapter caddyfile --config /dev/stdin < Caddyfile.external >/dev/null
 check_caddy_redirect(){
   local path="$1" expected="$2" headers
   headers="$(docker compose "${FILES[@]}" exec -T web sh -c "curl -skS --connect-to localhost:443:caddy:443 -D - -o /dev/null 'https://localhost${path}'" | tr -d '\r')"
