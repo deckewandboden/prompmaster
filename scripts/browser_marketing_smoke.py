@@ -162,21 +162,6 @@ def main() -> int:
                         path=str(live_path),
                         full_page=False,
                     )
-                    if engine == 'firefox':
-                        edge_reference = artifact_dir / 'chromium-1440-live.png'
-                        if not edge_reference.is_file():
-                            fail(f'{engine}: canonical Chromium/Edge screenshot missing')
-                        visual = compare_head_render(edge_reference, live_path)
-                        if visual['mae'] > 20.0:
-                            fail(
-                                f'{engine}: head differs too strongly from Edge '
-                                f'(central MAE={visual["mae"]:.2f}, max=20.00)'
-                            )
-                        if not 0.65 <= visual['bright_ratio'] <= 1.45:
-                            fail(
-                                f'{engine}: head point energy differs from Edge '
-                                f'(ratio={visual["bright_ratio"]:.3f}, allowed 0.65..1.45)'
-                            )
 
                 metrics = page.evaluate(
                     """() => {
@@ -315,6 +300,47 @@ def main() -> int:
                     )
 
                 page.close()
+
+            # Deterministic initial-state parity: disable motion so Firefox cannot
+            # pass merely because a different animation frame happens to look close.
+            parity_context = browser.new_context(
+                viewport={'width': 1440, 'height': 1000},
+                device_scale_factor=1,
+                reduced_motion='reduce',
+            )
+            parity_page = parity_context.new_page()
+            parity_page.goto(base, wait_until='networkidle')
+            parity_page.wait_for_function(
+                "document.querySelector('.head-stage')?.dataset.headReady === '1'",
+                timeout=15000,
+            )
+            parity_page.wait_for_timeout(250)
+            parity_path = artifact_dir / f'{engine}-1440-parity.png'
+            parity_page.screenshot(path=str(parity_path), full_page=False)
+            parity_renderer = parity_page.evaluate(
+                "document.querySelector('.head-stage')?.dataset.headRenderer || ''"
+            )
+            parity_page.close()
+            parity_context.close()
+
+            if engine == 'chromium':
+                if parity_renderer != 'webgl':
+                    fail('Chromium parity reference must use WebGL')
+            elif engine == 'firefox':
+                edge_parity = artifact_dir / 'chromium-1440-parity.png'
+                if not edge_parity.is_file():
+                    fail('Firefox parity: Chromium/Edge reference missing')
+                visual = compare_head_render(edge_parity, parity_path)
+                if visual['mae'] > 7.0:
+                    fail(
+                        f'Firefox parity: head differs from Edge '
+                        f'(central MAE={visual["mae"]:.2f}, max=7.00)'
+                    )
+                if not 0.88 <= visual['bright_ratio'] <= 1.12:
+                    fail(
+                        f'Firefox parity: point energy differs from Edge '
+                        f'(ratio={visual["bright_ratio"]:.3f}, allowed 0.88..1.12)'
+                    )
 
             if engine == 'chromium':
                 # Export clean WebGL scene masters without navigation/cards.

@@ -516,11 +516,6 @@ export async function initCanvasHead({sourceCanvas,stage,fallback}){
       const alpha=(1-released*(.12+surface.seeds[i]*.22))*(1-shoulderFade*.995);
       if(alpha<=.006)continue;
 
-      const [, , normalZ]=rotateNormal(nx,ny,nz);
-      // The original WebGL depth mesh hides the rear surface. Normal-facing
-      // rejection is the CPU equivalent and prevents a second "ghost" face.
-      if(normalZ<-.08)continue;
-
       const [sx2,sy2,rz2,depth]=project(px,py,pz);
       if(depth<=.1||sx2<-5||sx2>width+5||sy2<-5||sy2>height+5)continue;
       const cellX=clamp(Math.floor(sx2/depthCell),0,depthCols-1);
@@ -545,7 +540,7 @@ export async function initCanvasHead({sourceCanvas,stage,fallback}){
         // sub-2px dot. Keeping the Canvas quad in that range eliminates the
         // blocky Firefox mask while preserving the deterministic point cloud.
         const renderSize=Math.max(.45,Math.min(1.45,size*.52));
-        context.fillStyle=`rgba(${r},${g},${b},${clamp(a*.34,0,1)})`;
+        context.fillStyle=`rgba(${r},${g},${b},${clamp(a*.44,0,1)})`;
         context.fillRect(x-renderSize*.5,y-renderSize*.5,renderSize,renderSize);
       }
     }
@@ -561,8 +556,6 @@ export async function initCanvasHead({sourceCanvas,stage,fallback}){
       const pz=z-.05*shoulderFade;
       const alpha=(.62+topology.detail[i]*.3)*(1-shoulderFade*.997);
       if(alpha<=.006)continue;
-      const [, , normalZ]=rotateNormal(nx,ny,nz);
-      if(normalZ<-.08)continue;
       const [sx2,sy2,rz2,depth]=project(px,py,pz);
       if(depth<=.1||sx2<-5||sx2>width+5||sy2<-5||sy2>height+5)continue;
       const cellX=clamp(Math.floor(sx2/depthCell),0,depthCols-1);
@@ -578,7 +571,7 @@ export async function initCanvasHead({sourceCanvas,stage,fallback}){
       const g=Math.round(clamp(topology.colors[o+1]*detailBoost*1.55,0,1)*255);
       const b=Math.round(clamp(topology.colors[o+2]*detailBoost*1.55,0,1)*255);
       const renderSize=Math.max(.45,Math.min(1.65,size*.50));
-      context.fillStyle=`rgba(${r},${g},${b},${clamp(alpha*.30,0,1)})`;
+      context.fillStyle=`rgba(${r},${g},${b},${clamp(alpha*.40,0,1)})`;
       context.fillRect(sx2-renderSize*.5,sy2-renderSize*.5,renderSize,renderSize);
     }
 
