@@ -212,3 +212,98 @@ class LoginLockoutTests(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, 'Anmeldung fehlgeschlagen.')
         self.assertFalse(AuditEvent.objects.filter(action='auth.login_failed').exists())
+
+
+class PasswordResetSecurityTests(TestCase):
+    password = 'Reset-Old-Password-42!'
+    new_password = 'Reset-New-Password-84!'
+
+    def setUp(self):
+        self.user = User.objects.create_user(
+            'password-reset@example.test',
+            self.password,
+            email_verified_at=timezone.now(),
+        )
+
+    def _token(self):
+        return signing.dumps(
+            {
+                'uid': str(self.user.id),
+                'email': self.user.email,
+                'sv': int(self.user.security_version),
+            },
+            salt=PASSWORD_RESET_SALT,
+        )
+
+    @patch('apps.accounts.views.queue_email')
+    def test_request_response_is_identical_for_known_and_unknown_email(self, queue):
+        known = self.client.post('/auth/password-reset/', {'email': self.user.email})
+        unknown = self.client.post(
+            '/auth/password-reset/',
+            {'email': 'unknown-reset@example.test'},
+        )
+        self.assertEqual(known.status_code, 200)
+        self.assertEqual(unknown.status_code, 200)
+        self.assertEqual(known.content, unknown.content)
+        self.assertEqual(queue.call_count, 1)
+
+    def test_successful_reset_invalidates_old_session_and_token_reuse(self):
+        old_security_version = self.user.security_version
+        old_session = Client()
+        old_session.force_login(self.user)
+        session = old_session.session
+        session['security_version'] = old_security_version
+        session['authenticated_at'] = timezone.now().timestamp()
+        session['last_activity_at'] = timezone.now().timestamp()
+        session.save()
+
+        token = self._token()
+        url = reverse('accounts:password_reset_confirm', args=[token])
+        response = self.client.post(
+            url,
+            {
+                'password': self.new_password,
+                'password_repeat': self.new_password,
+            },
+        )
+        self.assertEqual(response.status_code, 200)
+        self.assertTrue(response.context['ok'])
+
+        self.user.refresh_from_db()
+        self.assertTrue(self.user.check_password(self.new_password))
+        self.assertGreater(self.user.security_version, old_security_version)
+
+        stale = old_session.get('/portal/dashboard/')
+        self.assertEqual(stale.status_code, 302)
+        self.assertIn('/auth/login/', stale.url)
+        self.assertNotIn('_auth_user_id', old_session.session)
+
+        reused = self.client.post(
+            url,
+            {
+                'password': 'Another-Reset-Password-126!',
+                'password_repeat': 'Another-Reset-Password-126!',
+            },
+        )
+        self.assertEqual(reused.status_code, 200)
+        self.assertFalse(reused.context['ok'])
+        self.user.refresh_from_db()
+        self.assertTrue(self.user.check_password(self.new_password))
+
+    def test_expired_and_invalid_reset_tokens_are_rejected(self):
+        with patch('django.core.signing.time.time', return_value=1800000000):
+            expired_token = self._token()
+        expired_url = reverse(
+            'accounts:password_reset_confirm',
+            args=[expired_token],
+        )
+        with patch('django.core.signing.time.time', return_value=1800003601):
+            expired = self.client.get(expired_url)
+        self.assertEqual(expired.status_code, 200)
+        self.assertFalse(expired.context['ok'])
+
+        invalid = self.client.get(
+            reverse('accounts:password_reset_confirm', args=['invalid-token'])
+        )
+        self.assertEqual(invalid.status_code, 200)
+        self.assertFalse(invalid.context['ok'])
