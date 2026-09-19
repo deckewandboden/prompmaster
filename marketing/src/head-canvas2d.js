@@ -628,14 +628,13 @@ export async function initCanvasHead({sourceCanvas,stage,fallback}){
     context.globalCompositeOperation='lighter';
 
     const surface=cloud.surface;
-    // WebGL uses the original mesh as an invisible depth occluder. Reproduce
-    // that behavior in screen space so rear/top/back points cannot shine
-    // through the face in Firefox/no-WebGL and enlarge the silhouette.
+    // Match Three.js: the original GLB triangle mesh is rendered first as a
+    // colorless depth occluder at scale .992.
     const depthCell=3;
-    const depthCols=Math.max(1,Math.ceil(width/depthCell));
-    const depthRows=Math.max(1,Math.ceil(height/depthCell));
-    const depthGrid=new Float32Array(depthCols*depthRows);
-    depthGrid.fill(-1e9);
+    const depthRaster=rasterizeDepthMesh(cloud.depth,project,width,height,depthCell);
+    const depthCols=depthRaster.cols;
+    const depthRows=depthRaster.rows;
+    const depthGrid=depthRaster.grid;
     const surfaceBuckets=Array.from({length:10},()=>[]);
     for(let i=0;i<surface.seeds.length;i++){
       const o=i*3;
@@ -661,7 +660,6 @@ export async function initCanvasHead({sourceCanvas,stage,fallback}){
       const cellX=clamp(Math.floor(sx2/depthCell),0,depthCols-1);
       const cellY=clamp(Math.floor(sy2/depthCell),0,depthRows-1);
       const depthIndex=cellY*depthCols+cellX;
-      if(rz2>depthGrid[depthIndex])depthGrid[depthIndex]=rz2;
       const pointSize=(1.9+pointPower*.43+released*.9)*(4.5/depth);
       const colorBoost=1.42+pointPower*.42;
       const r=Math.round(clamp(surface.colors[o]*colorBoost,0,1)*255);
@@ -673,7 +671,7 @@ export async function initCanvasHead({sourceCanvas,stage,fallback}){
     for(const bucket of surfaceBuckets){
       for(let i=0;i<bucket.length;i+=9){
         const [x,y,size,r,g,b,a,depthIndex,rz2]=bucket.slice(i,i+9);
-        if(rz2<depthGrid[depthIndex]-.10)continue;
+        if(depthGrid[depthIndex]>-1e8&&rz2<depthGrid[depthIndex]-.025)continue;
         headMinX=Math.min(headMinX,x);headMaxX=Math.max(headMaxX,x);
         headMinY=Math.min(headMinY,y);headMaxY=Math.max(headMaxY,y);
         // At CSS-pixel scale the WebGL radial point shader is visually a
@@ -701,7 +699,7 @@ export async function initCanvasHead({sourceCanvas,stage,fallback}){
       const cellY=clamp(Math.floor(sy2/depthCell),0,depthRows-1);
       const depthIndex=cellY*depthCols+cellX;
       const nearest=depthGrid[depthIndex];
-      if(nearest>-1e8&&rz2<nearest-.12)continue;
+      if(nearest>-1e8&&rz2<nearest-.025)continue;
       headMinX=Math.min(headMinX,sx2);headMaxX=Math.max(headMaxX,sx2);
       headMinY=Math.min(headMinY,sy2);headMaxY=Math.max(headMaxY,sy2);
       const size=(1.55+topology.detail[i]*1.75+topologyPower*.18)*(4.5/depth);
