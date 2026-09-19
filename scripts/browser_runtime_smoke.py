@@ -733,6 +733,89 @@ def _check_public_page(page, base: str, path: str, width: int, label: str) -> No
 
 
 
+def _browser_register_verify_to_buy(
+    page, base: str, *, customer_type: str, email: str, password: str,
+    quantity: int, company_name: str = '',
+) -> None:
+    from urllib.parse import quote, urlencode
+
+    import pyotp
+    from django.core import signing
+    from django.db import close_old_connections
+
+    from apps.accounts.models import User
+    from apps.accounts.views import EMAIL_VERIFY_SALT
+
+    next_path = f'/portal/licenses/buy/?quantity={quantity}'
+    response = page.goto(
+        base + 'auth/register/?' + urlencode({'next': next_path}),
+        wait_until='networkidle',
+    )
+    if not response or response.status != 200:
+        raise AssertionError(f'registration page failed for {customer_type}')
+
+    page.locator('select[name="customer_type"]').select_option(customer_type)
+    page.locator('input[name="first_name"]').fill('Browser')
+    page.locator('input[name="last_name"]').fill(
+        'Firma' if customer_type == 'company' else 'Privat'
+    )
+    page.locator('input[name="email"]').fill(email)
+    page.locator('input[name="password"]').fill(password)
+    if customer_type == 'company':
+        page.locator('input[name="company_name"]').fill(company_name)
+    page.locator('input[name="accept_terms"]').check()
+    page.locator('input[name="accept_privacy"]').check()
+    page.locator('button[type="submit"]').click()
+
+    if customer_type == 'company':
+        page.wait_for_url('**/auth/2fa/setup/**')
+        secret = page.locator('.code-wrap').inner_text().strip()
+        if not secret:
+            raise AssertionError('company registration did not expose TOTP secret')
+        page.locator('input[name="code"]').fill(pyotp.TOTP(secret).now())
+        page.locator('button[type="submit"]').click()
+        page.wait_for_selector('.recovery-codes')
+        continue_button = page.locator('.result-actions a.btn.primary')
+        if '/portal/licenses/buy/' not in (continue_button.get_attribute('href') or ''):
+            raise AssertionError('company registration lost checkout destination after MFA')
+        continue_button.click()
+
+    page.wait_for_url(lambda url: '/portal/licenses/buy/' in str(url))
+    page.wait_for_load_state('networkidle')
+
+    close_old_connections()
+    user = User.objects.get(email=email)
+    token = signing.dumps(
+        {'uid': str(user.id), 'email': user.email, 'next': next_path},
+        salt=EMAIL_VERIFY_SALT,
+    )
+    verify = page.goto(
+        base + 'auth/verify/' + quote(token, safe='') + '/',
+        wait_until='networkidle',
+    )
+    if not verify or verify.status != 200:
+        raise AssertionError(f'email verification route failed for {email}')
+    if not page.locator('.result-actions a.btn.primary').is_visible():
+        raise AssertionError(f'verification result has no continue action for {email}')
+    page.locator('.result-actions a.btn.primary').click()
+    page.wait_for_url(lambda url: '/portal/licenses/buy/' in str(url))
+    page.wait_for_load_state('networkidle')
+
+    close_old_connections()
+    user.refresh_from_db()
+    if not user.email_verified_at:
+        raise AssertionError(f'email verification was not persisted for {email}')
+    quantity_field = page.locator('input[name="quantity"]')
+    if not quantity_field.is_visible() or quantity_field.input_value() != str(quantity):
+        raise AssertionError(
+            f'registration checkout quantity drift for {email}: '
+            f'{quantity_field.input_value() if quantity_field.count() else "missing"}'
+        )
+    for name in ('accept_terms', 'accept_privacy'):
+        if not page.locator(f'input[name="{name}"]').is_visible():
+            raise AssertionError(f'checkout legal acceptance missing after registration: {name}')
+
+
 def run_backend_ui_smoke(browser, fixture=None) -> None:
     if os.getenv('BACKEND_UI_BROWSER_SMOKE') != '1':
         return
@@ -772,6 +855,36 @@ def run_backend_ui_smoke(browser, fixture=None) -> None:
         for width in (360, 390, 768, 1440, 1920):
             for route, label in public_routes:
                 _check_public_page(public_page, base, route, width, label)
+
+        # Real browser registration acceptance for both supported customer types.
+        for registration in (
+            {
+                'customer_type': 'private',
+                'email': 'browser-register-private@example.invalid',
+                'quantity': 1,
+                'company_name': '',
+            },
+            {
+                'customer_type': 'company',
+                'email': 'browser-register-company@example.invalid',
+                'quantity': 3,
+                'company_name': 'Browser Registration GmbH',
+            },
+        ):
+            registration_context = browser.new_context(
+                viewport={'width': 1440, 'height': 1000}
+            )
+            registration_page = registration_context.new_page()
+            _browser_register_verify_to_buy(
+                registration_page,
+                base,
+                customer_type=registration['customer_type'],
+                email=registration['email'],
+                password='Browser-Registration-Password-42!',
+                quantity=registration['quantity'],
+                company_name=registration['company_name'],
+            )
+            registration_context.close()
 
         # FREE keeps its reviewed 16-task local logic but must expose the same
         # complete 34-app catalog as PRO, with the other 28 apps visibly locked.
