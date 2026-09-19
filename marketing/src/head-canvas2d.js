@@ -360,6 +360,7 @@ async function modelCloud(surfaceCount){
   return {
     surface:sampleOriginalSurface(vertices,vertexNormals,indices,surfaceCount),
     topology:buildOriginalTopology(vertices,vertexNormals,indices),
+    depth:{positions:vertices,indices:indices?indices.data:null,screen:new Float32Array(vertices.length)},
   };
 }
 
