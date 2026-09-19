@@ -365,6 +365,51 @@ async function modelCloud(surfaceCount){
 }
 
 
+
+function rasterizeDepthMesh(depth,project,width,height,cell){
+  const cols=Math.max(1,Math.ceil(width/cell));
+  const rows=Math.max(1,Math.ceil(height/cell));
+  const grid=new Float32Array(cols*rows);
+  grid.fill(-1e9);
+  const vertexCount=depth.positions.length/3;
+  for(let i=0;i<vertexCount;i++){
+    const o=i*3;
+    const p=project(depth.positions[o]*.992,depth.positions[o+1]*.992,depth.positions[o+2]*.992);
+    depth.screen[o]=p[0];depth.screen[o+1]=p[1];depth.screen[o+2]=p[2];
+  }
+  const triangleCount=depth.indices?Math.floor(depth.indices.length/3):Math.floor(vertexCount/3);
+  for(let t=0;t<triangleCount;t++){
+    const ia=depth.indices?Math.trunc(depth.indices[t*3]):t*3;
+    const ib=depth.indices?Math.trunc(depth.indices[t*3+1]):t*3+1;
+    const ic=depth.indices?Math.trunc(depth.indices[t*3+2]):t*3+2;
+    if(ia<0||ib<0||ic<0||ia>=vertexCount||ib>=vertexCount||ic>=vertexCount)continue;
+    const a=ia*3,b=ib*3,d=ic*3;
+    const ax=depth.screen[a],ay=depth.screen[a+1],az=depth.screen[a+2];
+    const bx=depth.screen[b],by=depth.screen[b+1],bz=depth.screen[b+2];
+    const cx=depth.screen[d],cy=depth.screen[d+1],cz=depth.screen[d+2];
+    const area=(bx-ax)*(cy-ay)-(by-ay)*(cx-ax);
+    if(Math.abs(area)<1e-7)continue;
+    let minX=Math.floor(Math.min(ax,bx,cx)/cell),maxX=Math.floor(Math.max(ax,bx,cx)/cell);
+    let minY=Math.floor(Math.min(ay,by,cy)/cell),maxY=Math.floor(Math.max(ay,by,cy)/cell);
+    if(maxX<0||maxY<0||minX>=cols||minY>=rows)continue;
+    minX=clamp(minX,0,cols-1);maxX=clamp(maxX,0,cols-1);
+    minY=clamp(minY,0,rows-1);maxY=clamp(maxY,0,rows-1);
+    for(let gy=minY;gy<=maxY;gy++){
+      const py=(gy+.5)*cell;
+      for(let gx=minX;gx<=maxX;gx++){
+        const px=(gx+.5)*cell;
+        const wa=((bx-px)*(cy-py)-(by-py)*(cx-px))/area;
+        const wb=((cx-px)*(ay-py)-(cy-py)*(ax-px))/area;
+        const wc=1-wa-wb;
+        if(wa<-.001||wb<-.001||wc<-.001)continue;
+        const rz=wa*az+wb*bz+wc*cz;
+        const index=gy*cols+gx;
+        if(rz>grid[index])grid[index]=rz;
+      }
+    }
+  }
+  return {grid,cols,rows};
+}
 export async function initCanvasHead({sourceCanvas,stage,fallback}){
   sourceCanvas.hidden=true;
   fallback.hidden=false;
