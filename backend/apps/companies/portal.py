@@ -7,7 +7,7 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.core.exceptions import PermissionDenied, ValidationError
 from django.db import transaction
-from django.db.models import Prefetch, Q
+from django.db.models import Count, Prefetch, Q
 from django.shortcuts import get_object_or_404, redirect, render
 from django.http import HttpResponse
 from django.core.serializers.json import DjangoJSONEncoder
@@ -350,15 +350,45 @@ def more_menu(request):
 @login_required
 def team(request):
     company, _ = _admin(request)
+    now = timezone.now()
+    team_queryset = (
+        Membership.objects.filter(company=company)
+        .select_related('user')
+        .annotate(
+            active_pro_count=Count(
+                'user__license_assignments',
+                filter=Q(
+                    user__license_assignments__license__company=company,
+                    user__license_assignments__license__product__code='PRO',
+                    user__license_assignments__license__status='active',
+                    user__license_assignments__license__valid_until__gt=now,
+                    user__license_assignments__ended_at__isnull=True,
+                ),
+                distinct=True,
+            ),
+            active_device_count=Count(
+                'user__devices',
+                filter=Q(
+                    user__devices__license__company=company,
+                    user__devices__revoked_at__isnull=True,
+                ),
+                distinct=True,
+            ),
+        )
+    )
     grid = DataGrid(
         request,
-        Membership.objects.filter(company=company).select_related('user'),
+        team_queryset,
         search_fields=('user__email', 'user__first_name', 'user__last_name'),
-        sort_fields={'name': 'user__last_name', 'email': 'user__email', 'created': 'created_at'},
+        sort_fields={
+            'name': 'user__last_name',
+            'email': 'user__email',
+            'created': 'created_at',
+            'last': 'user__last_login',
+        },
         default_sort='user__last_name',
         filters={'role': 'role', 'active': 'active'},
     ).build()
-    now = timezone.now()
     active_assignments = list(
         LicenseAssignment.objects.filter(
             license__company=company,
@@ -367,23 +397,31 @@ def team(request):
             license__valid_until__gt=now,
         ).select_related('license__product')
     )
+    team_count = Membership.objects.filter(company=company, active=True).count()
+    pro_count = LicenseAssignment.objects.filter(
+        user__company_memberships__company=company,
+        user__company_memberships__active=True,
+        license__company=company,
+        license__product__code='PRO',
+        license__status='active',
+        license__valid_until__gt=now,
+        ended_at__isnull=True,
+    ).values('user_id').distinct().count()
     return render(
         request,
         'portal/team.html',
         {
             'company': company,
             'grid': grid,
-            'team_count': Membership.objects.filter(company=company, active=True).count(),
-            'pro_count': LicenseAssignment.objects.filter(
-                user__company_memberships__company=company,
-                user__company_memberships__active=True,
-                license__company=company,
-                license__product__code='PRO',
-                license__status='active',
-                license__valid_until__gt=now,
-                ended_at__isnull=True,
-            ).values('user_id').distinct().count(),
-            'free_license_count': License.objects.filter(company=company, status='free', valid_until__gt=now).count(),
+            'team_count': team_count,
+            'pro_count': pro_count,
+            'free_user_count': max(0, team_count - pro_count),
+            'free_license_count': License.objects.filter(
+                company=company,
+                status='free',
+                product__code='PRO',
+                valid_until__gt=now,
+            ).count(),
             'device_count': DeviceRegistration.objects.filter(
                 user__company_memberships__company=company,
                 user__company_memberships__active=True,
