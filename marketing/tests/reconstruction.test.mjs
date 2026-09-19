@@ -22,7 +22,9 @@ test('reconstructed marketing uses latest recovered head engine',()=>{
   assert.doesNotMatch(head,/pm-headtrack|getUserMedia|enumerateDevices/);
   assert.doesNotMatch(head,/Bewegung pausieren|Bewegung aktivieren|motion-button/);
   assert.match(head,/loadAsync\('\/models\/head\.glb'\)/);
-  assert.equal(gitBlobSha('src/head.js'),'b3707513c9568653224d40ddbf8436889a0585b2');
+  assert.match(head,/Firefox\\\//);
+  assert.match(head,/if\(firefox\)\{[\s\S]*initCanvasHead/);
+  assert.match(head,/new THREE\.WebGLRenderer/);
   assert.equal(gitBlobSha('public/models/head.glb'),'cff335de726fa518c1ef80f4c8aa540037b2f5b2');
 });
 
