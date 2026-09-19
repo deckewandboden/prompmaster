@@ -320,6 +320,7 @@ def main() -> int:
             parity_renderer = parity_page.evaluate(
                 "document.querySelector('.head-stage')?.dataset.headRenderer || ''"
             )
+            print(f'PARITY {engine}: renderer={parity_renderer}')
             parity_page.close()
             parity_context.close()
 
