@@ -8,6 +8,15 @@ export async function initHead(){
   if(!canvas)return;
   const stage=canvas.parentElement;
   const fallback=stage.querySelector('.head-fallback');
+  // Firefox WebGL point-sprite output differs visibly from Chromium/Edge on
+  // identical shaders/drivers. Use the deterministic Canvas2D renderer there;
+  // it shares the same GLB and Three.js sampling pipeline and is measurably
+  // closer to the canonical Edge composition.
+  const firefox=/Firefox\//.test(navigator.userAgent);
+  if(firefox){
+    await initCanvasHead({sourceCanvas:canvas,stage,fallback});
+    return;
+  }
   let renderer;
   const attributes={alpha:true,antialias:true,powerPreference:'low-power'};
   let webglContext=null;
