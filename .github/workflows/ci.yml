@@ -324,11 +324,12 @@ jobs:
           done
 
       - name: Upload browser diagnostics
-        if: failure()
+        if: always()
         uses: actions/upload-artifact@v4
         with:
           name: browser-diagnostics
           path: |
             browser-runtime-smoke.log
             browser-marketing-smoke.log
+            browser-artifacts/*.png
           if-no-files-found: ignore

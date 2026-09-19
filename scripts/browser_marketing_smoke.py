@@ -69,6 +69,8 @@ def main() -> int:
         engine = os.getenv('PM_BROWSER_ENGINE', 'chromium').strip().lower()
         if engine not in {'chromium', 'firefox', 'webkit'}:
             fail(f'unbekannte Browser-Engine: {engine}')
+        artifact_dir = ROOT / 'browser-artifacts'
+        artifact_dir.mkdir(exist_ok=True)
         with sync_playwright() as pw:
             if engine == 'chromium':
                 executable = (
@@ -127,6 +129,11 @@ def main() -> int:
                     timeout=15000,
                 )
                 page.wait_for_timeout(900)
+                if width == 1440:
+                    page.screenshot(
+                        path=str(artifact_dir / f'{engine}-1440-live.png'),
+                        full_page=False,
+                    )
 
                 metrics = page.evaluate(
                     """() => {
@@ -295,6 +302,11 @@ def main() -> int:
                 "document.querySelector('.head-fallback')?.dataset.ready === '1' && "
                 "document.querySelector('.head-fallback-canvas')",
                 timeout=15000,
+            )
+            fallback_page.wait_for_timeout(900)
+            fallback_page.screenshot(
+                path=str(artifact_dir / f'{engine}-1440-forced-no-webgl.png'),
+                full_page=False,
             )
             fallback_metrics = fallback_page.evaluate(
                 """() => ({
