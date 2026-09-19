@@ -16,7 +16,7 @@ from apps.orders.models import Order, OrderItem
 
 from .mollie import MollieError
 from .models import Payment, RefundAttempt
-from .services import create_refund_request, submit_refund
+from .services import create_refund_request, reconcile_refunds, submit_refund
 
 
 class RefundRetryStateMachineTests(TestCase):
@@ -156,6 +156,51 @@ class RefundRetryStateMachineTests(TestCase):
         self.assertEqual(attempt.idempotency_key, original_key)
         self.assertEqual(RefundAttempt.objects.filter(refund=same_refund).count(), 1)
         self.assertEqual(provider.call_args.args[-1], original_key)
+
+    @patch('apps.payments.services._queue_after_commit')
+    @patch('apps.payments.services.calculate_refund')
+    @patch('apps.payments.services.MollieClient.list_refunds')
+    @patch('apps.payments.services.MollieClient.create_refund')
+    def test_provider_canceled_refund_can_be_retried_without_duplicate_attempt(
+        self, create_provider, list_provider, calculate, _mail
+    ):
+        calculate.return_value = (300, Decimal('30.00'))
+        refund = create_refund_request(term=self.term, actor=self.user)
+        create_provider.return_value = {'id': 're_cancelled_1', 'status': 'pending'}
+        submit_refund(refund)
+
+        refund.refresh_from_db()
+        first = refund.attempts.get(number=1)
+        self.assertEqual(refund.status, 'submitted')
+        self.assertEqual(first.status, 'submitted')
+
+        list_provider.return_value = {
+            '_embedded': {
+                'refunds': [
+                    {'id': 're_cancelled_1', 'status': 'canceled'}
+                ]
+            }
+        }
+        self.assertEqual(reconcile_refunds(self.payment), 0)
+        refund.refresh_from_db()
+        first.refresh_from_db()
+        self.assertEqual(refund.status, 'failed')
+        self.assertIsNone(refund.provider_refund_id)
+        self.assertEqual(first.status, 'failed')
+
+        calculate.return_value = (250, Decimal('25.00'))
+        retry = create_refund_request(term=self.term, actor=self.user)
+        self.assertEqual(retry.status, 'created')
+        self.assertEqual(retry.amount, Decimal('25.00'))
+
+        create_provider.return_value = {'id': 're_cancelled_2', 'status': 'refunded'}
+        submit_refund(retry)
+        retry.refresh_from_db()
+        second = retry.attempts.get(number=2)
+        self.assertEqual(retry.status, 'succeeded')
+        self.assertEqual(second.status, 'succeeded')
+        self.assertNotEqual(first.idempotency_key, second.idempotency_key)
+        self.assertEqual(retry.attempts.count(), 2)
 
     @patch('apps.payments.services._queue_after_commit')
     def test_license_sync_recovers_interrupted_provider_success(self, _mail):
