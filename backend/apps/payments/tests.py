@@ -190,6 +190,36 @@ class MollieStateIntegrationTests(TestCase):
         self.assertEqual(self.payment.failed_at, first_failed_at)
 
     @patch('apps.payments.services._queue_after_commit')
+    def test_nonterminal_provider_states_never_activate_entitlement(self, _mail):
+        for provider_status in ('created', 'open', 'pending', 'authorized'):
+            with self.subTest(provider_status=provider_status):
+                process_provider_state(
+                    self.payment.provider_payment_id,
+                    self.payload(provider_status),
+                )
+                self.order.refresh_from_db()
+                self.payment.refresh_from_db()
+                self.assertEqual(self.order.status, 'payment_open')
+                self.assertEqual(self.payment.status, provider_status)
+                self.assertFalse(self.payment.processed_paid)
+                self.assertFalse(
+                    License.objects.filter(owner_user=self.user).exists()
+                )
+
+    @patch('apps.payments.services._queue_after_commit')
+    def test_unknown_provider_state_fails_closed_without_entitlement(self, _mail):
+        process_provider_state(
+            self.payment.provider_payment_id,
+            self.payload('provider_future_state'),
+        )
+        self.order.refresh_from_db()
+        self.payment.refresh_from_db()
+        self.assertEqual(self.order.status, 'payment_open')
+        self.assertEqual(self.payment.status, 'unknown')
+        self.assertFalse(self.payment.processed_paid)
+        self.assertFalse(License.objects.filter(owner_user=self.user).exists())
+
+    @patch('apps.payments.services._queue_after_commit')
     def test_canceled_payment_cancels_order_without_creating_license(self, _mail):
         process_provider_state(self.payment.provider_payment_id, self.payload('canceled'))
         self.order.refresh_from_db()
