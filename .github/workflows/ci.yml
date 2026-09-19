@@ -5,6 +5,10 @@ on:
     branches: ['**']
   pull_request:
 
+concurrency:
+  group: promptmaster-ci-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
 permissions:
   contents: read
 
@@ -54,16 +58,16 @@ jobs:
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
 
       - name: Set up Python
-        uses: actions/setup-python@v5
+        uses: actions/setup-python@v7
         with:
           python-version: '3.13'
           cache: pip
 
       - name: Set up Node
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v7
         with:
           node-version: '22'
 
@@ -160,15 +164,15 @@ jobs:
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
 
       - name: Set up Python
-        uses: actions/setup-python@v5
+        uses: actions/setup-python@v7
         with:
           python-version: '3.13'
 
       - name: Set up Node
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v7
         with:
           node-version: '22'
 
@@ -200,7 +204,7 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 45
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       - name: Clean bootstrap installation
         env:
           PM_DOMAIN: localhost
@@ -226,7 +230,7 @@ jobs:
 
   browser-smoke:
     runs-on: ubuntu-latest
-    timeout-minutes: 25
+    timeout-minutes: 35
 
     services:
       postgres:
@@ -270,15 +274,15 @@ jobs:
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
 
       - name: Set up Python
-        uses: actions/setup-python@v5
+        uses: actions/setup-python@v7
         with:
           python-version: '3.13'
 
       - name: Set up Node
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v7
         with:
           node-version: '22'
 
@@ -294,7 +298,7 @@ jobs:
           pip install -r requirements.txt
           pip install "playwright>=1.50,<2"
           pip check
-          python -m playwright install --with-deps chromium
+          python -m playwright install --with-deps chromium firefox webkit
 
       - name: Prepare Django browser fixtures
         working-directory: backend
@@ -313,14 +317,19 @@ jobs:
       - name: Marketing browser smoke
         run: |
           set -o pipefail
-          python scripts/browser_marketing_smoke.py 2>&1 | tee browser-marketing-smoke.log
+          : > browser-marketing-smoke.log
+          for engine in chromium firefox webkit; do
+            echo "===== $engine =====" | tee -a browser-marketing-smoke.log
+            PM_BROWSER_ENGINE="$engine" python scripts/browser_marketing_smoke.py 2>&1 | tee -a browser-marketing-smoke.log
+          done
 
       - name: Upload browser diagnostics
-        if: failure()
+        if: always()
         uses: actions/upload-artifact@v4
         with:
           name: browser-diagnostics
           path: |
             browser-runtime-smoke.log
             browser-marketing-smoke.log
+            browser-artifacts/*.png
           if-no-files-found: ignore

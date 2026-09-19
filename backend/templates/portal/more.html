@@ -3,6 +3,7 @@
 <div class="page-head"><div><h1>Mehr</h1><div class="sub">Weitere Bereiche Ihres Kundenportals.</div></div></div>
 <div class="grid two">
   <div class="card"><h2>Konto &amp; Hilfe</h2><div class="list">
+    {% if pm_can_start_pro %}<a class="btn primary" href="{% url 'proaccess:launch' %}">PromptMaster Pro öffnen</a>{% endif %}
     <a class="btn secondary" href="{% url 'portal:search' %}">Suche</a>
     <a class="btn secondary" href="{% url 'portal:profile' %}">Einstellungen</a>
     <a class="btn secondary" href="{% url 'portal:security' %}">Sicherheit</a>

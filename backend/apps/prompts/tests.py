@@ -124,6 +124,24 @@ class PromptDomainSeedTests(TestCase):
         self.assertEqual(PromptLegacyContract.objects.filter(source='FREE_1_2_4').count(), 16)
         self.assertEqual(PromptTestCase.objects.filter(name='system-smoke').count(), 194)
 
+    def test_runtime_validator_ignores_archived_smoke_tests(self):
+        definition = PromptDefinition.objects.get(task_id='PM20-001')
+        source = PromptVersion.objects.get(definition=definition, lifecycle='PUBLISHED')
+        archived = clone_as_draft(definition, source=source)
+        archived.lifecycle = 'ARCHIVED'
+        archived.save(update_fields=['lifecycle', 'updated_at'])
+        self.assertEqual(PromptTestCase.objects.filter(name='system-smoke', enabled=True).count(), 195)
+        self.assertEqual(
+            PromptTestCase.objects.filter(
+                name='system-smoke',
+                enabled=True,
+                version__lifecycle='PUBLISHED',
+            ).count(),
+            194,
+        )
+        call_command('seed_faqs', verbosity=0)
+        call_command('validate_prompt_runtime', verbosity=0)
+
     def test_current_pm20_is_fully_entitled_for_pro(self):
         enabled = ProductEntitlement.objects.filter(
             product__code='PRO', enabled=True, feature__code__startswith='prompt.task.'
@@ -320,6 +338,58 @@ class PromptApiTests(TestCase):
         )
         self.assertEqual(response.status_code, 409)
         self.assertEqual(response.json()['error']['code'], 'free_mapping_pending')
+
+
+class InternalStaffPromptApiTests(TestCase):
+    @classmethod
+    def setUpTestData(cls):
+        call_command('seed_prompt_catalog', verbosity=0)
+        cls.user = get_user_model().objects.create_user(
+            email='internal-staff-prompt@example.invalid',
+            password='Internal-Staff-Prompt-Password-2026!',
+            first_name='Internal',
+            last_name='Staff',
+            is_staff=True,
+            two_factor_required=True,
+            totp_secret_enc='configured-for-test',
+        )
+
+    def setUp(self):
+        self.client = Client()
+        self.client.force_login(self.user)
+        session = self.client.session
+        session['security_version'] = self.user.security_version
+        session['two_factor_ok'] = True
+        session.save()
+
+    def test_staff_catalog_uses_internal_entitlement_without_customer_license(self):
+        response = self.client.get('/api/v1/prompts/?product=PRO')
+        self.assertEqual(response.status_code, 200)
+        self.assertTrue(response.json()['ok'])
+        self.assertEqual(response.json()['catalog']['task_count'], 194)
+
+    def test_staff_can_compose_without_customer_license_or_device(self):
+        response = self.client.post(
+            '/api/v1/prompts/compose/',
+            data=json.dumps({
+                'product': 'PRO',
+                'task_id': 'PM20-001',
+                'microsoft_tier': 'chatbasic',
+                'input': {
+                    'fields': {'Fragestellung': 'Interner Test', 'Kontext': 'netstyle'},
+                    'audience': 'Management',
+                    'focus': ['Primärquellen'],
+                    'output': 'Fundierte Antwort',
+                    'source': 'webwork',
+                    'tone': 'professional',
+                    'detail': 'standard',
+                },
+            }),
+            content_type='application/json',
+        )
+        self.assertEqual(response.status_code, 200)
+        self.assertTrue(response.json()['ok'])
+        self.assertIn('Interner Test', response.json()['result']['prompt'])
 
 
 class PromptStudioLifecycleTests(TestCase):

@@ -7,8 +7,8 @@ from .security import clear_login_failures, login_lock_remaining, register_login
 
 
 class LoginForm(forms.Form):
-    email = forms.EmailField()
-    password = forms.CharField(widget=forms.PasswordInput)
+    email = forms.EmailField(label='E-Mail-Adresse')
+    password = forms.CharField(label='Passwort', widget=forms.PasswordInput)
 
     def __init__(self, *args, request=None, **kwargs):
         super().__init__(*args, **kwargs)

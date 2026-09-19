@@ -1,5 +1,5 @@
 import secrets
-from urllib.parse import quote, urlsplit
+from urllib.parse import quote, urlencode, urlsplit
 
 from django.contrib import messages
 from django.contrib.auth import login, logout
@@ -42,6 +42,60 @@ def _safe_next(request, value=None):
     return ''
 
 
+def _default_post_login_url(user):
+    """Send a successful login to the role's primary working surface."""
+    if user.is_staff:
+        return reverse('ns_admin:dashboard')
+
+    membership = (
+        user.company_memberships.filter(active=True, company__status='active')
+        .select_related('company')
+        .first()
+    )
+    if membership and membership.role == 'admin':
+        return reverse('portal:dashboard')
+
+    if hasattr(user, 'private_customer') or membership:
+        from apps.proaccess.services import active_product_assignment
+
+        if active_product_assignment(user, 'PRO'):
+            return reverse('proaccess:launch')
+        return reverse('portal:dashboard')
+    return reverse('home')
+
+
+def _role_safe_next(user, next_url):
+    """Only honor internal destinations that belong to the user's security domain."""
+    if not next_url:
+        return ''
+    if user.is_staff:
+        return next_url if next_url.startswith(('/ns-admin/', '/pro/')) else ''
+    if hasattr(user, 'private_customer') or user.company_memberships.filter(
+        active=True,
+        company__status='active',
+    ).exists():
+        return next_url if next_url.startswith(('/portal/', '/pro/')) else ''
+    return ''
+
+
+def _recovery_continue_context(request, user):
+    next_url = _role_safe_next(
+        user,
+        _safe_next(request, request.session.pop('post_2fa_next', '')),
+    )
+    continue_url = next_url or _default_post_login_url(user)
+    if user.is_staff:
+        continue_label = 'Zum netstyle Admin-Backend →'
+    elif continue_url.startswith('/pro/'):
+        continue_label = 'PromptMaster Pro öffnen →'
+    else:
+        continue_label = 'Zum Kundenportal →'
+    return {
+        'continue_url': continue_url,
+        'continue_label': continue_label,
+    }
+
+
 @transaction.atomic
 def _new_recovery_codes(user):
     type(user).objects.select_for_update().get(pk=user.pk)
@@ -54,21 +108,24 @@ def _new_recovery_codes(user):
 
 
 def login_view(request):
+    if request.user.is_authenticated:
+        next_url = _role_safe_next(request.user, _safe_next(request))
+        return redirect(next_url or _default_post_login_url(request.user))
     limited = check_rate(request, 'login', 10, 300)
     if limited:
         return limited
-    form = LoginForm(request.POST or None)
+    form = LoginForm(request.POST or None, request=request)
     if request.method == 'POST' and form.is_valid():
         login(request, form.user)
         request.session.cycle_key()
         bind_security_session(request, form.user, two_factor_ok=not form.user.two_factor_required)
         request.session['authenticated_at'] = timezone.now().timestamp()
         audit(form.user, 'auth.login', form.user, {'second_factor_pending': form.user.two_factor_required}, request=request)
-        next_url = _safe_next(request)
+        next_url = _role_safe_next(form.user, _safe_next(request))
         if form.user.two_factor_required:
-            request.session['post_2fa_next'] = next_url or reverse('home')
+            request.session['post_2fa_next'] = next_url or _default_post_login_url(form.user)
             return redirect('accounts:two_factor')
-        return redirect(next_url or 'home')
+        return redirect(next_url or _default_post_login_url(form.user))
     return render(request, 'auth/login.html', {'form': form, 'next': _safe_next(request)})
 
 
@@ -82,10 +139,13 @@ def logout_view(request):
 
 @transaction.atomic
 def register(request):
+    if request.user.is_authenticated:
+        return redirect(_default_post_login_url(request.user))
     limited = check_rate(request, 'register', 5, 3600)
     if limited:
         return limited
     form = RegistrationForm(request.POST or None)
+    requested_next = _safe_next(request)
     if request.method == 'POST' and form.is_valid():
         data = form.cleaned_data
         now = timezone.now()
@@ -101,7 +161,7 @@ def register(request):
                 break
             legal_documents[doc_type] = document
         if form.errors:
-            return render(request, 'auth/register.html', {'form': form})
+            return render(request, 'auth/register.html', {'form': form, 'next': requested_next})
         if User.objects.filter(email__iexact=data['email']).exists():
             form.add_error('email', 'E-Mail-Adresse bereits registriert.')
         else:
@@ -138,15 +198,22 @@ def register(request):
             except IntegrityError:
                 form.add_error('email', 'Konto konnte nicht angelegt werden. Bitte erneut versuchen.')
             else:
-                token = signing.dumps({'uid': str(user.id), 'email': user.email}, salt=EMAIL_VERIFY_SALT)
+                destination = _role_safe_next(user, requested_next) or _default_post_login_url(user)
+                token = signing.dumps(
+                    {'uid': str(user.id), 'email': user.email, 'next': destination},
+                    salt=EMAIL_VERIFY_SALT,
+                )
                 url = request.build_absolute_uri(reverse('accounts:verify_email', args=[token]))
                 queue_email('verify_email', user.email, {'url': url})
                 login(request, user)
                 request.session.cycle_key()
                 bind_security_session(request, user, two_factor_ok=not user.two_factor_required)
                 messages.success(request, 'Konto angelegt. Bitte E-Mail-Adresse bestätigen.')
-                return redirect('accounts:two_factor_setup' if user.two_factor_required else 'portal:dashboard')
-    return render(request, 'auth/register.html', {'form': form})
+                if user.two_factor_required:
+                    request.session['post_2fa_next'] = destination
+                    return redirect('accounts:two_factor_setup')
+                return redirect(destination)
+    return render(request, 'auth/register.html', {'form': form, 'next': requested_next})
 
 
 def verify_email(request, token):
@@ -158,16 +225,37 @@ def verify_email(request, token):
     if not user.email_verified_at:
         user.email_verified_at = timezone.now()
         user.save(update_fields=['email_verified_at', 'updated_at'])
-    return render(request, 'auth/verify_result.html', {'ok': True})
+
+    next_url = _role_safe_next(user, str(data.get('next') or ''))
+    destination = next_url or _default_post_login_url(user)
+    if request.user.is_authenticated and request.user.pk == user.pk:
+        continue_url = destination
+    else:
+        continue_url = f"{reverse('accounts:login')}?{urlencode({'next': destination})}"
+    return render(
+        request,
+        'auth/verify_result.html',
+        {'ok': True, 'continue_url': continue_url},
+    )
 
 
 @login_required
 def two_factor(request):
     if not request.user.two_factor_required:
         request.session['two_factor_ok'] = True
-        return redirect(_safe_next(request, request.session.pop('post_2fa_next', '')) or 'home')
+        return redirect(
+            _role_safe_next(
+                request.user,
+                _safe_next(request, request.session.pop('post_2fa_next', '')),
+            )
+            or _default_post_login_url(request.user)
+        )
     if request.session.get('two_factor_ok'):
-        return redirect(_safe_next(request, request.session.pop('post_2fa_next', '')) or 'home')
+        next_url = _role_safe_next(
+            request.user,
+            _safe_next(request, request.session.pop('post_2fa_next', '')),
+        )
+        return redirect(next_url or _default_post_login_url(request.user))
     if not request.user.totp_secret_enc:
         return redirect('accounts:two_factor_setup')
 
@@ -186,8 +274,11 @@ def two_factor(request):
             request.session.cycle_key()
             bind_security_session(request, request.user, two_factor_ok=True)
             audit(request.user, 'auth.second_factor', request.user, {}, request=request)
-            next_url = _safe_next(request, request.session.pop('post_2fa_next', ''))
-            return redirect(next_url or 'home')
+            next_url = _role_safe_next(
+                request.user,
+                _safe_next(request, request.session.pop('post_2fa_next', '')),
+            )
+            return redirect(next_url or _default_post_login_url(request.user))
         error = 'Code ungültig.'
     return render(request, 'auth/two_factor.html', {'form': form, 'error': error})
 
@@ -197,6 +288,8 @@ def two_factor(request):
 def two_factor_setup(request):
     request.user = User.objects.select_for_update().get(pk=request.user.pk)
     if request.user.totp_secret_enc:
+        if request.user.is_staff:
+            return redirect('ns_admin:dashboard')
         return redirect('portal:security')
     request.session.pop('pending_totp', None)
     pending = request.session.get('pending_totp_enc')
@@ -219,7 +312,9 @@ def two_factor_setup(request):
             request.session.cycle_key()
             bind_security_session(request, request.user, two_factor_ok=True)
             audit(request.user, 'auth.second_factor_enabled', request.user, {}, request=request)
-            return render(request, 'auth/recovery_codes.html', {'codes': codes})
+            context = {'codes': codes}
+            context.update(_recovery_continue_context(request, request.user))
+            return render(request, 'auth/recovery_codes.html', context)
         messages.error(request, 'Code ungültig.')
     label = quote(f'PromptMaster:{request.user.email}', safe='')
     uri = f'otpauth://totp/{label}?secret={secret}&issuer=PromptMaster'
@@ -241,7 +336,9 @@ def regenerate_recovery_codes(request):
             bump_security_version(request.user)
             bind_security_session(request, request.user, two_factor_ok=True)
             audit(request.user, 'auth.recovery_regenerated', request.user, {}, request=request)
-            return render(request, 'auth/recovery_codes.html', {'codes': codes})
+            context = {'codes': codes}
+            context.update(_recovery_continue_context(request, request.user))
+            return render(request, 'auth/recovery_codes.html', context)
     return render(request, 'auth/password_confirm.html', {'form': form, 'title': 'Recovery-Codes neu erzeugen'})
 
 
@@ -297,6 +394,12 @@ def accept_invitation(request, token):
 
     existing = User.objects.filter(email__iexact=invitation.email).first()
     if existing:
+        if existing.is_staff:
+            return render(
+                request,
+                'auth/invite_result.html',
+                {'ok': False, 'reason': 'staff_customer_conflict'},
+            )
         if not request.user.is_authenticated:
             return redirect(f"{reverse('accounts:login')}?next={request.path}")
         if request.user.id != existing.id:

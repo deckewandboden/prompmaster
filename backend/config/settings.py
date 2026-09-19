@@ -182,7 +182,7 @@ FREE_GOLDEN_MASTER_SHA256 = os.getenv('FREE_GOLDEN_MASTER_SHA256', 'aada4fbb3461
 PRO_GOLDEN_MASTER_PATH = os.getenv('PRO_GOLDEN_MASTER_PATH', str(BASE_DIR / 'private_assets' / 'promptmaster_pro.html'))
 PRO_GOLDEN_MASTER_SHA256 = os.getenv('PRO_GOLDEN_MASTER_SHA256', 'aa7b2da53ba3cbcf9874b9b6f7381ea4c3e86ee1f9c09db186cbec6876a3c9cf')
 PRO_RUNTIME_PATH = os.getenv('PRO_RUNTIME_PATH', str(BASE_DIR / 'private_assets' / 'promptmaster_pro_runtime.html'))
-PRO_RUNTIME_SHA256 = os.getenv('PRO_RUNTIME_SHA256', '29da4bb38b121ef585d07711e4e30966f1ae37089ffc01be048de7a2e821ebba')
+PRO_RUNTIME_SHA256 = os.getenv('PRO_RUNTIME_SHA256', '4348a0a6c6f4aca1836f95cc5b481da5c36b68de6d2be1b520e20427188cd9c7')
 
 GRAPH_TENANT_ID = os.getenv('GRAPH_TENANT_ID', '')
 GRAPH_CLIENT_ID = os.getenv('GRAPH_CLIENT_ID', '')

@@ -23,6 +23,18 @@ def create_invitation(*, company, actor, email, first_name='', last_name=''):
         raise ValidationError(
             'Interne netstyle Benutzer können keinem Kundenunternehmen beitreten.'
         )
+    if existing_user and not existing_user.is_active:
+        if Membership.objects.filter(
+            company=company,
+            user=existing_user,
+            active=False,
+        ).exists():
+            raise ValidationError(
+                'Dieser Benutzer ist deaktiviert. Öffnen Sie ihn unter „Mein Team“ und reaktivieren Sie das Konto.'
+            )
+        raise ValidationError(
+            'Zu dieser E-Mail-Adresse existiert ein deaktiviertes Konto. Bitte wenden Sie sich an den Support.'
+        )
     if Membership.objects.filter(user__email__iexact=normalized, active=True).exists():
         raise ValidationError('Diese E-Mail-Adresse gehört bereits zu einem aktiven Unternehmenskonto.')
     if PrivateCustomerProfile.objects.filter(user__email__iexact=normalized).exists():
@@ -96,6 +108,43 @@ def transfer_admin(company, old_admin, new_user, *, actor=None, request=None, au
         request=request,
     )
     return new_membership
+
+
+@transaction.atomic
+def reactivate_company_member(*, company, member, actor, request=None):
+    locked = (
+        Membership.objects.select_for_update()
+        .select_related('user')
+        .get(pk=member.pk, company=company)
+    )
+    user = get_user_model().objects.select_for_update().get(pk=locked.user_id)
+    if locked.active:
+        return locked
+    if user.is_staff:
+        raise ValidationError(
+            'Interne netstyle Benutzer dürfen nicht über ein Kundenunternehmen reaktiviert werden.'
+        )
+    if hasattr(user, 'private_customer'):
+        raise ValidationError(
+            'Ein Privatkundenkonto kann nicht als Firmenmitglied reaktiviert werden.'
+        )
+    if Membership.objects.filter(user=user, active=True).exclude(pk=locked.pk).exists():
+        raise ValidationError('Der Benutzer gehört bereits zu einem anderen aktiven Unternehmen.')
+    locked.active = True
+    locked.role = 'member'
+    locked.save(update_fields=['active', 'role', 'updated_at'])
+    if not user.is_active:
+        user.is_active = True
+        user.save(update_fields=['is_active', 'updated_at'])
+    bump_security_version(user)
+    audit(
+        actor,
+        'company.member_reactivated',
+        locked,
+        {'user': str(user.id), 'company': str(company.id)},
+        request=request,
+    )
+    return locked
 
 
 @transaction.atomic

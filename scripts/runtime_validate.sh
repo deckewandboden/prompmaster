@@ -7,6 +7,7 @@ command -v docker >/dev/null 2>&1 || fail "docker fehlt auf diesem Host"; docker
 bash scripts/run_repo_preflight.sh staging
 FILES=(-f compose.yaml -f compose.staging.yaml)
 docker compose -f compose.yaml -f compose.production.yaml config >/dev/null
+PM_EXTERNAL_CADDY_NETWORK=promptmaster-ci-external docker compose -f compose.yaml -f compose.production.yaml -f compose.external-caddy.yaml config >/dev/null
 # Exercise production filesystem restrictions with safe staging integrations.
 if [[ "${PM_VALIDATE_READ_ONLY:-0}" == 1 ]]; then FILES+=(-f compose.production.yaml); fi
 docker compose "${FILES[@]}" config >/dev/null; docker compose "${FILES[@]}" build; docker compose "${FILES[@]}" up -d postgres redis mailpit
@@ -19,12 +20,38 @@ docker compose "${FILES[@]}" run --rm web python manage.py seed_prompt_catalog
 docker compose "${FILES[@]}" run --rm web python manage.py seed_faqs
 docker compose "${FILES[@]}" run --rm web python manage.py validate_prompt_runtime
 docker compose "${FILES[@]}" run --rm web python manage.py test --verbosity 2
-docker compose "${FILES[@]}" run --rm web python manage.py check --deploy
+docker compose "${FILES[@]}" run --rm -e ENVIRONMENT=production -e SECURE_SSL_REDIRECT=1 web python manage.py check --deploy
 docker compose "${FILES[@]}" run --rm web python manage.py collectstatic --noinput
 docker compose "${FILES[@]}" up -d
 docker compose "${FILES[@]}" exec -T beat sh -c 'test -w /tmp/celerybeat && touch /tmp/celerybeat/write-test && rm /tmp/celerybeat/write-test'
 for i in $(seq 1 30); do docker compose "${FILES[@]}" exec -T web curl -fsS http://127.0.0.1:8000/health/ready/ >/dev/null 2>&1 && break; [[ "$i" -lt 30 ]] || fail "Django ready health blieb rot"; sleep 2; done
 docker compose "${FILES[@]}" exec -T caddy caddy validate --config /etc/caddy/Caddyfile >/dev/null
+docker compose "${FILES[@]}" exec -T caddy caddy validate --adapter caddyfile --config /dev/stdin < Caddyfile.external >/dev/null
+check_caddy_redirect(){
+  local path="$1" expected="$2" headers
+  headers="$(docker compose "${FILES[@]}" exec -T web sh -c "curl -skS --connect-to localhost:443:caddy:443 -D - -o /dev/null 'https://localhost${path}'" | tr -d '\r')"
+  printf '%s\\n' "$headers" | grep -Eq '^HTTP/[0-9.]+ 302' || fail "Caddy redirect erwartet 302 für ${path}"
+  printf '%s\\n' "$headers" | grep -Fqi "location: ${expected}" || { printf '%s\\n' "$headers"; fail "Caddy redirect falsch: ${path} -> erwartet ${expected}"; }
+}
+check_caddy_redirect '/login/' '/auth/login/'
+check_caddy_redirect '/checkout/?quantity=3' '/portal/licenses/buy/?quantity=3'
+check_caddy_redirect '/app/pro/' '/pro/'
+check_caddy_redirect '/portal' '/portal/dashboard/'
+check_caddy_redirect '/portal/' '/portal/dashboard/'
+check_caddy_redirect '/datenschutz/' '/legal/privacy/'
+check_caddy_redirect '/agb/' '/legal/terms/'
+check_caddy_redirect '/lizenzbedingungen/' '/legal/license/'
+check_caddy_redirect '/widerruf/' '/legal/withdrawal/'
+echo "CADDY ROUTE CONTRACT OK: compatibility + legal redirects execute correctly"
+check_caddy_status(){
+  local path="$1" expected="$2" status
+  status="$(docker compose "${FILES[@]}" exec -T web sh -c "curl -skS --connect-to localhost:443:caddy:443 -o /dev/null -w '%{http_code}' 'https://localhost${path}'")"
+  [[ "$status" == "$expected" ]] || fail "Caddy Status ${path}: erwartet ${expected}, erhalten ${status}"
+}
+for path in '/.env' '/.git/config' '/Dockerfile' '/compose.yaml'; do
+  check_caddy_status "$path" 404
+done
+echo "CADDY SENSITIVE-PATH CONTRACT OK: source/configuration probes return 404"
 for i in $(seq 1 30); do
   MONITOR_OK="$(docker compose "${FILES[@]}" exec -T web sh -c "curl -fsS 'http://prometheus:9090/api/v1/targets?state=active' | python -c 'import json,sys; d=json.load(sys.stdin); rows=d.get(\"data\",{}).get(\"activeTargets\",[]); state={r.get(\"labels\",{}).get(\"job\"):r.get(\"health\") for r in rows}; required={\"node\",\"postgres\",\"cadvisor\",\"django\"}; print(\"1\" if required.issubset(state) and all(state[x]==\"up\" for x in required) else \"0\")'" 2>/dev/null | tail -n1 | tr -d '\r')"
   [[ "$MONITOR_OK" == 1 ]] && break

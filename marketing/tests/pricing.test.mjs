@@ -13,8 +13,8 @@ test('MwSt. ist im vereinbarten Bruttopreis enthalten und wird nicht aufgeschlag
 test('Grenzen und manipulierte Mengen bleiben gültig',()=>{
   for(const invalid of [undefined,NaN,Infinity,-1,0,'', 'abc', '-80'])assert.equal(normalizeQuantity(invalid),1);
   assert.equal(normalizeQuantity('3.9'),3);
-  assert.equal(normalizeQuantity(1e20),999);
-  assert.equal(quote(catalog,'999999').quantity,999);
+  assert.equal(normalizeQuantity(1e20),500);
+  assert.equal(quote(catalog,'999999').quantity,500);
 });
 test('Ein aktualisierter Katalog ändert Preise ohne Änderung der Rechenlogik',()=>{
   const changed=structuredClone(catalog);changed.products[1].monthlyGrossCents=399;

@@ -141,7 +141,10 @@ class TwoFactorEnforcementMiddleware:
 
         if user.two_factor_required and not user.totp_secret_enc:
             if not request.path.startswith(('/auth/2fa/setup/', '/auth/logout/', '/auth/verify/')):
-                request.session['post_2fa_next'] = request.get_full_path()
+                # Preserve the original authenticated destination selected at
+                # login. Visiting the intermediate /auth/2fa/ route must not
+                # replace /ns-admin/ or /portal/dashboard/ with /auth/2fa/.
+                request.session.setdefault('post_2fa_next', request.get_full_path())
                 return redirect(reverse('accounts:two_factor_setup'))
 
         if (

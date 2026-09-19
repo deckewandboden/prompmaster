@@ -48,8 +48,10 @@
 
   const sync = async () => {
     try {
-      const response = await fetch('/catalog.json', {cache: 'no-cache'});
+      const response = await fetch('/catalog.json?marketing-bridge=20260919', {cache: 'no-store', headers: {Accept: 'application/json'}});
       if (!response.ok) return;
+      const contentType = (response.headers.get('content-type') || '').toLowerCase();
+      if (!contentType.includes('application/json')) return;
       applyCatalog(await response.json());
     } catch (_) {
       // Marketing remains usable with its committed static fallback catalog.

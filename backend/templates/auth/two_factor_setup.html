@@ -1,7 +1,6 @@
-{% extends 'portal/base.html' %}{% block content %}
-<div class="page-head"><div><h1>2FA einrichten</h1><p class="sub">Authenticator-App verwenden und Einrichtung mit einem gültigen 6-stelligen Code bestätigen.</p></div></div>
-<div class="grid two">
-  <div class="card"><h2>Authenticator-Daten</h2><div class="statusrow"><span>Secret</span><strong class="code-wrap">{{ secret }}</strong></div><p class="small muted">Alternativ kann die URI manuell in einer kompatiblen Authenticator-App verwendet werden.</p><code class="auth-code">{{ uri }}</code></div>
-  <div class="card"><h2>Einrichtung bestätigen</h2><form method="post" class="form">{% csrf_token %}<label>6-stelliger Code<input name="code" inputmode="numeric" pattern="[0-9]{6}" maxlength="6" autocomplete="one-time-code" required></label><button type="submit" class="btn primary">Aktivieren</button></form></div>
-</div>
-{% endblock %}
+{% extends 'base.html' %}{% load static %}{% block title %}2FA einrichten · PromptMaster{% endblock %}{% block body %}
+<div class="login-wrap"><div class="login-card auth-wide"><div class="login-logo"><img src="{% static 'brand/promptmaster-logo-reference.png' %}" width="239" height="47" alt="PromptMaster by netstyle"></div>
+<div class="page-head"><div><h1>2FA einrichten</h1><p class="sub">Schließen Sie die Sicherheitseinrichtung ab, bevor Sie Ihren geschützten PromptMaster-Bereich verwenden.</p></div></div>
+<div class="grid two auth-setup-grid"><div class="card"><h2>Authenticator-Daten</h2><div class="statusrow"><span>Secret</span><strong class="code-wrap">{{ secret }}</strong></div><p class="small muted">Fügen Sie das Secret oder die URI in Microsoft Authenticator, Google Authenticator, 1Password oder eine kompatible TOTP-App ein.</p><code class="auth-code">{{ uri }}</code></div>
+<div class="card"><h2>Einrichtung bestätigen</h2><form method="post" class="form">{% csrf_token %}<label>6-stelliger Code<input name="code" inputmode="numeric" pattern="[0-9]{6}" maxlength="6" autocomplete="one-time-code" required autofocus></label><button type="submit" class="btn primary">2FA aktivieren</button></form><p class="small muted mt-12">Nach erfolgreicher Aktivierung werden einmalig Recovery-Codes angezeigt.</p></div></div>
+</div></div>{% endblock %}

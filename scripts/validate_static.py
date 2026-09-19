@@ -23,6 +23,21 @@ ROOT = Path(__file__).resolve().parents[1]
 errors: list[str] = []
 
 
+class ComposeLoader(yaml.SafeLoader):
+    """Safe YAML loader with Docker Compose's local !override tag."""
+
+
+def _construct_compose_override(loader, node):
+    if isinstance(node, yaml.SequenceNode):
+        return loader.construct_sequence(node, deep=True)
+    if isinstance(node, yaml.MappingNode):
+        return loader.construct_mapping(node, deep=True)
+    return loader.construct_scalar(node)
+
+
+ComposeLoader.add_constructor('!override', _construct_compose_override)
+
+
 def fail(message: str):
     errors.append(message)
 
@@ -42,12 +57,12 @@ for path in sorted(ROOT.rglob('*.sh')):
 
 # 3) Configuration files must parse as YAML.
 yaml_files = [
-    ROOT / 'compose.yaml', ROOT / 'compose.staging.yaml', ROOT / 'compose.production.yaml',
+    ROOT / 'compose.yaml', ROOT / 'compose.staging.yaml', ROOT / 'compose.production.yaml', ROOT / 'compose.external-caddy.yaml',
     ROOT / 'monitoring/prometheus.yml', ROOT / '.github/workflows/ci.yml',
 ]
 for path in yaml_files:
     try:
-        payload = yaml.safe_load(path.read_text(encoding='utf-8'))
+        payload = yaml.load(path.read_text(encoding='utf-8'), Loader=ComposeLoader)
         if payload is None:
             fail(f'YAML empty: {path.relative_to(ROOT)}')
     except Exception as exc:
@@ -334,15 +349,24 @@ for rel, tokens in checks.items():
 # 12) Expected enterprise routes.
 expected_admin = {'dashboard','search','more','customers','customer_detail','customer_portal_preview','private_customer_portal_preview','customer_users','customer_licenses','customer_devices','customer_orders','customer_payments','customer_emails','customer_audit','licenses','license_detail','license_refund','orders','order_detail','payments','products','product_edit','product_price_add','email','email_log','mollie','mollie_events','stats','ops','ops_services','ops_database','ops_backups','ops_restore_tests','ops_alerts','api','legal','audit','roles','settings'}
 for name in sorted(expected_admin - url_names['ns_admin']): fail(f'Missing ns-admin route: {name}')
-expected_portal={'dashboard','search','more','team','invitations','invite','licenses','buy','renew','devices','orders','company','profile','security','help'}
+expected_portal={'dashboard','search','more','team','invitations','invite','licenses','buy','activate_my_pro','member_reactivate','renew','devices','orders','company','profile','security','help'}
 for name in sorted(expected_portal-url_names['portal']): fail(f'Missing portal route: {name}')
 expected_ops={'health','system','storage','database','services','backups','integrations','maintenance_snapshot'}
 for name in sorted(expected_ops-url_names['ops_api']): fail(f'Missing Ops API route: {name}')
 
-# 13) Production must never silently degrade deploy checks.
+# 13) Staging and production deploy checks must stay explicit and fail closed.
 bootstrap=(ROOT/'scripts/bootstrap.sh').read_text(encoding='utf-8')
 if 'check --deploy || true' in bootstrap:
     fail('bootstrap ignores django check --deploy')
+if 'Staging Security Check' not in bootstrap or 'check --deploy --fail-level ERROR' not in bootstrap:
+    fail('bootstrap does not run the staging deploy/security check')
+if 'assert_external_caddy_ports_closed' not in bootstrap or '.NetworkSettings.Ports' not in bootstrap:
+    fail('bootstrap external-Caddy host-port gate is missing or not based on Docker bindings')
+deploy_script=(ROOT/'scripts/deploy.sh').read_text(encoding='utf-8')
+if 'check --deploy' not in deploy_script:
+    fail('production deploy does not run django check --deploy')
+if 'assert_external_caddy_ports_closed' not in deploy_script or '.NetworkSettings.Ports' not in deploy_script:
+    fail('deploy external-Caddy host-port gate is missing or not based on Docker bindings')
 if 'DEBUG=True' in (ROOT/'compose.production.yaml').read_text(encoding='utf-8'):
     fail('production compose enables DEBUG')
 

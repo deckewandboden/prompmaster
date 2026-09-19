@@ -5,6 +5,7 @@ from unittest.mock import patch
 from django.core.exceptions import ValidationError
 from django.db import IntegrityError, transaction
 from django.test import TestCase
+from django.urls import reverse
 from django.utils import timezone
 
 from apps.accounts.models import Permission, Role, User, UserRole
@@ -85,6 +86,27 @@ class InvitationRulesTests(TestCase):
         before=timezone.now(); inv,raw=create_invitation(company=self.company,actor=self.admin,email='neu@example.test'); after=timezone.now(); self.assertTrue(raw); self.assertGreaterEqual(inv.expires_at,before+timedelta(hours=24)); self.assertLessEqual(inv.expires_at,after+timedelta(hours=24,seconds=1)); self.assertTrue(inv.is_valid())
     def test_new_invitation_revokes_previous(self):
         first,_=create_invitation(company=self.company,actor=self.admin,email='neu@example.test'); second,_=create_invitation(company=self.company,actor=self.admin,email='neu@example.test'); first.refresh_from_db(); self.assertIsNotNone(first.revoked_at); self.assertIsNone(second.revoked_at); self.assertEqual(Invitation.objects.filter(company=self.company,email='neu@example.test',accepted_at__isnull=True,revoked_at__isnull=True).count(),1)
+
+    def test_deactivated_member_must_be_reactivated_instead_of_reinvited(self):
+        inactive = User.objects.create_user(
+            'inactive-invite@example.test',
+            'Inactive-Invite-Password-2026!',
+            first_name='Inactive',
+            last_name='Member',
+            is_active=False,
+        )
+        Membership.objects.create(
+            company=self.company,
+            user=inactive,
+            role='member',
+            active=False,
+        )
+        with self.assertRaises(ValidationError):
+            create_invitation(
+                company=self.company,
+                actor=self.admin,
+                email=inactive.email,
+            )
 
 class TenantIsolationTests(TestCase):
     def test_company_license_cannot_be_assigned_cross_tenant(self):
@@ -1032,3 +1054,66 @@ class NetstyleDeviceRevokeTests(TestCase):
                 object_id=str(private_device.id),
             ).exists()
         )
+
+
+class CustomerMemberReactivationTests(TestCase):
+    def setUp(self):
+        self.company = Company.objects.create(
+            customer_number='PM-C-REACTIVATE',
+            name='Reactivation GmbH',
+            email='reactivate@example.test',
+        )
+        self.admin = User.objects.create_user(
+            'reactivate-admin@example.test',
+            'Reactivate-Admin-Password-2026!',
+            first_name='Admin',
+            last_name='Reactivation',
+        )
+        self.member = User.objects.create_user(
+            'reactivate-member@example.test',
+            'Reactivate-Member-Password-2026!',
+            first_name='Member',
+            last_name='Reactivation',
+            is_active=False,
+        )
+        Membership.objects.create(
+            company=self.company,
+            user=self.admin,
+            role='admin',
+            active=True,
+        )
+        self.membership = Membership.objects.create(
+            company=self.company,
+            user=self.member,
+            role='member',
+            active=False,
+        )
+        self.client.force_login(self.admin)
+        session = self.client.session
+        session['security_version'] = self.admin.security_version
+        session['two_factor_ok'] = True
+        session.save()
+
+    def test_inactive_member_detail_remains_manageable(self):
+        response = self.client.get(
+            reverse('portal:team_member', args=[self.member.id])
+        )
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, 'Benutzer reaktivieren')
+
+    def test_reactivation_restores_membership_and_login_identity(self):
+        response = self.client.post(
+            reverse('portal:member_reactivate', args=[self.member.id])
+        )
+        self.assertEqual(response.status_code, 302)
+        self.membership.refresh_from_db()
+        self.member.refresh_from_db()
+        self.assertTrue(self.membership.active)
+        self.assertEqual(self.membership.role, 'member')
+        self.assertTrue(self.member.is_active)
+
+    def test_reactivation_is_post_only(self):
+        response = self.client.get(
+            reverse('portal:member_reactivate', args=[self.member.id])
+        )
+        self.assertEqual(response.status_code, 403)

@@ -3,6 +3,6 @@
   <div class="login-logo"><img src="{% static 'brand/promptmaster-logo-reference.png' %}" width="239" height="47" alt="PromptMaster by netstyle"></div>
   <h1>{% if ok %}E-Mail bestätigt{% else %}Link ungültig oder abgelaufen{% endif %}</h1>
   <p class="muted">{% if ok %}Die E-Mail-Adresse Ihres PromptMaster-Kontos wurde bestätigt.{% else %}Dieser Bestätigungslink ist nicht mehr gültig.{% endif %}</p>
-  <div class="result-actions"><a class="btn primary" href="{% url 'accounts:login' %}">Zur Anmeldung</a></div>
+  <div class="result-actions">{% if ok and continue_url %}<a class="btn primary" href="{{ continue_url }}">Weiter →</a>{% else %}<a class="btn primary" href="{% url 'accounts:login' %}">Zur Anmeldung</a>{% endif %}</div>
 </div></div>
 {% endblock %}

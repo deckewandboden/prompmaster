@@ -6,7 +6,7 @@ from django.http import JsonResponse
 from django.views.decorators.http import require_GET, require_POST
 
 from apps.devices.services import validate_device_token
-from apps.proaccess.services import active_product_assignment, DEVICE_COOKIE
+from apps.proaccess.services import active_product_assignment, has_internal_staff_access, DEVICE_COOKIE
 
 from .composer_core import PromptValidationError
 from .services import build_spec, catalog_snapshot, compose_task, published_version, task_entitled
@@ -23,6 +23,10 @@ def _error(exc: PromptValidationError, status: int = 400):
 def _require_pro_access(request):
     if not request.user.is_authenticated:
         raise PromptValidationError('Anmeldung erforderlich.', code='authentication_required')
+    if has_internal_staff_access(request.user):
+        if request.user.two_factor_required and request.session.get('two_factor_ok') is not True:
+            raise PromptValidationError('Zwei-Faktor-Anmeldung erforderlich.', code='second_factor_required')
+        return
     if not request.user.email_verified_at:
         raise PromptValidationError('Bitte E-Mail-Adresse bestätigen.', code='email_verification_required')
     assignment = active_product_assignment(request.user, 'PRO')
@@ -126,7 +130,7 @@ def compose(request):
             raise PromptValidationError('input muss ein Objekt sein.', field='input')
         result = compose_task(task_id=task_id, microsoft_tier=tier, payload=payload, product_code='PRO')
     except PromptValidationError as exc:
-        status = 403 if exc.code in {'email_verification_required', 'license_required', 'device_required', 'entitlement_required', 'tier_required'} else 400
+        status = 403 if exc.code in {'email_verification_required', 'second_factor_required', 'license_required', 'device_required', 'entitlement_required', 'tier_required'} else 400
         if exc.code == 'authentication_required':
             status = 401
         if exc.code == 'not_found':

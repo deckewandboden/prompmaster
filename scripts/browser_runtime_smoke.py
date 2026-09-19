@@ -122,7 +122,7 @@ def _backend_fixture() -> dict:
     from apps.core.crypto import encrypt
     from apps.devices.models import DeviceRegistration
     from apps.legal.models import LegalDocument
-    from apps.licenses.models import License, LicenseAssignment
+    from apps.licenses.models import License, LicenseAssignment, LicenseTerm
     from apps.orders.models import Order, OrderItem
     from apps.payments.models import Payment
     from apps.prompts.models import PromptDefinition
@@ -169,6 +169,25 @@ def _backend_fixture() -> dict:
     superadmin = Role.objects.filter(code='superadmin').first()
     if superadmin:
         UserRole.objects.get_or_create(user=admin, role=superadmin)
+
+    first_time_admin = upsert_user(
+        'browser-first-mfa-admin@example.invalid',
+        'First MFA',
+        'Admin',
+        staff=True,
+        superuser=True,
+    )
+    first_time_admin.two_factor_required = True
+    first_time_admin.totp_secret_enc = ''
+    first_time_admin.last_totp_step = -1
+    first_time_admin.save(
+        update_fields=[
+            'two_factor_required', 'totp_secret_enc',
+            'last_totp_step', 'updated_at',
+        ]
+    )
+    if superadmin:
+        UserRole.objects.get_or_create(user=first_time_admin, role=superadmin)
 
     customer = upsert_user(
         'browser-company@example.invalid',
@@ -281,8 +300,14 @@ def _backend_fixture() -> dict:
         user=customer,
         ended_at=None,
     )
+    deterministic_device_hash = hashlib.sha256(b'browser-smoke-device').hexdigest()
+    DeviceRegistration.objects.filter(
+        user=customer,
+        license=active_license,
+        revoked_at__isnull=True,
+    ).exclude(token_hash=deterministic_device_hash).delete()
     DeviceRegistration.objects.update_or_create(
-        token_hash=hashlib.sha256(b'browser-smoke-device').hexdigest(),
+        token_hash=deterministic_device_hash,
         defaults={
             'user': customer,
             'license': active_license,
@@ -307,8 +332,12 @@ def _backend_fixture() -> dict:
             'idempotency_key': 'browser-smoke-order-v1',
         },
     )
+    # LicenseTerm protects its OrderItem. Remove only this deterministic smoke
+    # fixture's term before rebuilding the order item so repeated local runs
+    # remain idempotent.
+    LicenseTerm.objects.filter(order_item__order=order).delete()
     order.items.all().delete()
-    OrderItem.objects.create(
+    order_item = OrderItem.objects.create(
         order=order,
         product=product,
         price_version=price,
@@ -317,6 +346,17 @@ def _backend_fixture() -> dict:
         unit_net=Decimal('30.15'),
         tax_rate=Decimal('19.00'),
         product_name_snapshot=product.name,
+    )
+    LicenseTerm.objects.update_or_create(
+        license=active_license,
+        order_item=order_item,
+        defaults={
+            'valid_from': active_license.valid_from,
+            'valid_until': active_license.valid_until,
+            'paid_gross_amount': Decimal('35.88'),
+            'status': 'active',
+            'refunded_at': None,
+        },
     )
     Payment.objects.update_or_create(
         provider_payment_id='tr_browser_smoke_paid',
@@ -356,8 +396,10 @@ def _backend_fixture() -> dict:
         'password': password,
         'admin_email': admin.email,
         'admin_secret': admin_secret,
+        'first_time_admin_email': first_time_admin.email,
         'customer_email': customer.email,
         'customer_secret': customer_secret,
+        'member_email': member.email,
         'company_id': str(company.pk),
         'private_customer_id': str(private_profile.pk),
         'member_id': str(member.pk),
@@ -370,7 +412,7 @@ def _backend_fixture() -> dict:
     }
 
 
-def _browser_login(page, base: str, email: str, password: str, secret: str) -> None:
+def _browser_login(page, base: str, email: str, password: str, secret: str, expected_path: str) -> None:
     import pyotp
 
     response = page.goto(base + 'auth/login/', wait_until='networkidle')
@@ -389,6 +431,22 @@ def _browser_login(page, base: str, email: str, password: str, secret: str) -> N
     code_input.press('Enter')
     page.wait_for_url(lambda url: '/auth/2fa/' not in url and '/auth/login/' not in url)
     page.wait_for_load_state('networkidle')
+    if expected_path not in page.url:
+        raise AssertionError(f'login for {email} ended at {page.url}, expected {expected_path}')
+
+
+def _browser_login_password_only(page, base: str, email: str, password: str, expected_path: str) -> None:
+    response = page.goto(base + 'auth/login/', wait_until='networkidle')
+    if not response or response.status != 200:
+        raise AssertionError(f'login page failed for {email}')
+    page.locator('input[name="email"]').fill(email)
+    password_input = page.locator('input[name="password"]')
+    password_input.fill(password)
+    password_input.press('Enter')
+    page.wait_for_url(lambda url: '/auth/login/' not in str(url) and '/auth/2fa/' not in str(url))
+    page.wait_for_load_state('networkidle')
+    if expected_path not in page.url:
+        raise AssertionError(f'password-only login for {email} ended at {page.url}, expected {expected_path}')
 
 
 def _check_backend_page(page, base: str, path: str, width: int, label: str) -> None:
@@ -447,6 +505,19 @@ def _check_backend_page(page, base: str, path: str, width: int, label: str) -> N
           const mobileRows = new Set(
             mobileLinks.map(el => Math.round(el.getBoundingClientRect().top))
           ).size;
+          const badAnchors = [...document.querySelectorAll('.content a')]
+            .filter(visible)
+            .map(el => ({text:(el.textContent||'').trim().slice(0,60), href:(el.getAttribute('href')||'').trim()}))
+            .filter(row => !row.href || row.href === '#' || row.href.toLowerCase().startsWith('javascript:'));
+          const orphanSubmitButtons = [...document.querySelectorAll('.content button')]
+            .filter(visible)
+            .filter(el => (el.getAttribute('type') || 'submit').toLowerCase() === 'submit' && !el.closest('form'))
+            .map(el => (el.textContent||'').trim().slice(0,60));
+          const postFormsMissingCsrf = [...document.querySelectorAll('.content form')]
+            .filter(form => (form.getAttribute('method') || 'get').toLowerCase() === 'post')
+            .filter(form => !form.querySelector('input[name="csrfmiddlewaretoken"]'))
+            .map(form => form.getAttribute('action') || location.pathname);
+
           const content = document.querySelector('.content');
           const userMeta = document.querySelector('.user-meta');
           return {
@@ -454,6 +525,9 @@ def _check_backend_page(page, base: str, path: str, width: int, label: str) -> N
             scrollWidth: document.documentElement.scrollWidth,
             overflowers,
             overlaps: overlaps.slice(0,10),
+            badAnchors: badAnchors.slice(0,10),
+            orphanSubmitButtons: orphanSubmitButtons.slice(0,10),
+            postFormsMissingCsrf: postFormsMissingCsrf.slice(0,10),
             h1: (document.querySelector('h1')?.textContent || '').trim(),
             activeNav: document.querySelectorAll('.nav a.active').length,
             sidebarDisplay: sidebar ? getComputedStyle(sidebar).display : 'missing',
@@ -478,6 +552,16 @@ def _check_backend_page(page, base: str, path: str, width: int, label: str) -> N
         raise AssertionError(f'{label} {width}px: controls/cards leave viewport: {metrics["overflowers"]}')
     if metrics['overlaps']:
         raise AssertionError(f'{label} {width}px: overlapping actions: {metrics["overlaps"]}')
+    if metrics['badAnchors']:
+        raise AssertionError(f'{label} {width}px: unwired/invalid links: {metrics["badAnchors"]}')
+    if metrics['orphanSubmitButtons']:
+        raise AssertionError(
+            f'{label} {width}px: submit buttons without form: {metrics["orphanSubmitButtons"]}'
+        )
+    if metrics['postFormsMissingCsrf']:
+        raise AssertionError(
+            f'{label} {width}px: POST forms without CSRF token: {metrics["postFormsMissingCsrf"]}'
+        )
     if not metrics['h1']:
         raise AssertionError(f'{label} {width}px: page has no visible H1')
     if metrics['activeNav'] < 1:
@@ -535,11 +619,26 @@ def _check_public_page(page, base: str, path: str, width: int, label: str) -> No
             const r = el.getBoundingClientRect();
             return {tag:el.tagName.toLowerCase(),left:Math.round(r.left),right:Math.round(r.right)};
           }).filter(x => x.left < -1 || x.right > innerWidth + 1);
+          const badAnchors = [...document.querySelectorAll('a')]
+            .filter(visible)
+            .map(el => ({text:(el.textContent||'').trim().slice(0,60), href:(el.getAttribute('href')||'').trim()}))
+            .filter(row => !row.href || row.href === '#' || row.href.toLowerCase().startsWith('javascript:'));
+          const orphanSubmitButtons = [...document.querySelectorAll('button')]
+            .filter(visible)
+            .filter(el => (el.getAttribute('type') || 'submit').toLowerCase() === 'submit' && !el.closest('form'))
+            .map(el => (el.textContent||'').trim().slice(0,60));
+          const postFormsMissingCsrf = [...document.querySelectorAll('form')]
+            .filter(form => (form.getAttribute('method') || 'get').toLowerCase() === 'post')
+            .filter(form => !form.querySelector('input[name="csrfmiddlewaretoken"]'))
+            .map(form => form.getAttribute('action') || location.pathname);
           return {
             innerWidth,
             scrollWidth: document.documentElement.scrollWidth,
             h1: (document.querySelector('h1')?.textContent || '').trim(),
             overflowers,
+            badAnchors: badAnchors.slice(0,10),
+            orphanSubmitButtons: orphanSubmitButtons.slice(0,10),
+            postFormsMissingCsrf: postFormsMissingCsrf.slice(0,10),
           };
         }"""
     )
@@ -550,6 +649,16 @@ def _check_public_page(page, base: str, path: str, width: int, label: str) -> No
         )
     if metrics['overflowers']:
         raise AssertionError(f'{label} {width}px: public UI leaves viewport: {metrics["overflowers"]}')
+    if metrics['badAnchors']:
+        raise AssertionError(f'{label} {width}px: unwired public links: {metrics["badAnchors"]}')
+    if metrics['orphanSubmitButtons']:
+        raise AssertionError(
+            f'{label} {width}px: public submit buttons without form: {metrics["orphanSubmitButtons"]}'
+        )
+    if metrics['postFormsMissingCsrf']:
+        raise AssertionError(
+            f'{label} {width}px: public POST forms without CSRF: {metrics["postFormsMissingCsrf"]}'
+        )
     if not metrics['h1']:
         raise AssertionError(f'{label} {width}px: page has no visible H1')
 
@@ -594,6 +703,80 @@ def run_backend_ui_smoke(browser, fixture=None) -> None:
         for width in (360, 390, 768, 1440, 1920):
             for route, label in public_routes:
                 _check_public_page(public_page, base, route, width, label)
+
+        # FREE keeps its reviewed 16-task local logic but must expose the same
+        # complete 34-app catalog as PRO, with the other 28 apps visibly locked.
+        public_page.set_viewport_size({'width': 1440, 'height': 1000})
+        free_response = public_page.goto(base + 'free/', wait_until='networkidle')
+        if not free_response or free_response.status != 200:
+            raise AssertionError('Free runtime: HTTP 200 expected')
+        public_page.wait_for_function(
+            "document.querySelectorAll('[data-appwrap]').length === 34",
+            timeout=15000,
+        )
+        free_catalog = public_page.evaluate(
+            """() => ({
+              total: document.querySelectorAll('[data-appwrap]').length,
+              base: document.querySelectorAll('[data-appwrap][data-prolocked="0"]').length,
+              locked: document.querySelectorAll('[data-appwrap][data-prolocked="1"]').length,
+              freeTasks: Object.values(APP).flatMap(a => a.tasks || []).filter(t => t[3] === 'free').length,
+              hasPowerAutomate: !!document.querySelector('[data-central-code="power_automate"]'),
+              hasGithubCopilot: !!document.querySelector('[data-central-code="github_copilot"]'),
+              bridgeLoaded: performance.getEntriesByType('resource')
+                .some(r => r.name.includes('/static/js/free_catalog_bridge.20260918.js')),
+            })"""
+        )
+        if free_catalog != {
+            'total': 34,
+            'base': 6,
+            'locked': 28,
+            'freeTasks': 16,
+            'hasPowerAutomate': True,
+            'hasGithubCopilot': True,
+            'bridgeLoaded': True,
+        }:
+            raise AssertionError(f'Free runtime catalog contract drift: {free_catalog}')
+
+        public_page.locator('[data-central-code="power_automate"] .app-card').click()
+        public_page.wait_for_function(
+            "document.querySelector('#proModal')?.classList.contains('open')"
+        )
+        if 'Power Automate' not in public_page.locator('#proModal').inner_text():
+            raise AssertionError('Free runtime: locked app does not open its Pro explanation')
+
+        public_page.locator('[data-close="proModal"]').first.click()
+        public_page.locator('[data-appwrap="chat"] .app-card').click()
+        public_page.wait_for_function(
+            "document.querySelectorAll('#taskGrid .task').length >= 2"
+        )
+        usable_chat_tasks = public_page.locator(
+            '#taskGrid .task[data-prolocked="0"]'
+        ).count()
+        if usable_chat_tasks != 2:
+            raise AssertionError(
+                f'Free runtime: expected 2 usable Copilot Chat tasks, got {usable_chat_tasks}'
+            )
+        expected_free_counts = {
+            'chat': 2, 'outlook': 6, 'teams': 2,
+            'word': 2, 'excel': 2, 'powerpoint': 2,
+        }
+        selected_tier = public_page.evaluate(
+            "() => document.querySelector('input[name=mslicense]:checked')?.value || ''"
+        )
+        # Task contracts are independent of the selected Microsoft tier. Apps
+        # may be Microsoft-license-locked, but their reviewed Free task mapping
+        # must remain exactly 16 across the six base applications.
+        free_counts = public_page.evaluate(
+            """() => Object.fromEntries(
+              ['chat','outlook','teams','word','excel','powerpoint'].map(id => [
+                id, (APP[id]?.tasks || []).filter(t => t[3] === 'free').length
+              ])
+            )"""
+        )
+        if free_counts != expected_free_counts:
+            raise AssertionError(
+                f'Free runtime task mapping drift ({selected_tier}): {free_counts}'
+            )
         public_context.close()
 
         portal_routes = [
@@ -676,6 +859,55 @@ def run_backend_ui_smoke(browser, fixture=None) -> None:
             ('ns-admin/content/faqs/', 'Admin FAQ'),
         ]
 
+        # One public login serves ordinary customer users too. A company member
+        # without a Pro seat must land in the customer portal, must not see a
+        # Pro launch link, and must never enter the netstyle security domain.
+        member_context = browser.new_context(viewport={'width': 1440, 'height': 1000})
+        member_page = member_context.new_page()
+        _browser_login_password_only(
+            member_page,
+            base,
+            fixture['member_email'],
+            fixture['password'],
+            '/portal/dashboard/',
+        )
+        member_page.goto(base + 'portal/more/', wait_until='networkidle')
+        member_hrefs = set(member_page.locator('.content a').evaluate_all(
+            "els => els.map(e => new URL(e.href).pathname)"
+        ))
+        if '/pro/' in member_hrefs:
+            raise AssertionError('unlicensed company member sees a Pro launch link')
+        forbidden_admin = member_page.goto(base + 'ns-admin/', wait_until='networkidle')
+        if not forbidden_admin or forbidden_admin.status != 403:
+            raise AssertionError('customer member can enter the netstyle admin domain')
+        member_context.close()
+
+        # First-time netstyle admin MFA must finish inside the admin backend,
+        # never on the public marketing page or in the customer portal.
+        first_context = browser.new_context(viewport={'width': 1440, 'height': 1000})
+        first_page = first_context.new_page()
+        first_page.goto(base + 'auth/login/', wait_until='networkidle')
+        first_page.locator('input[name="email"]').fill(fixture['first_time_admin_email'])
+        first_page.locator('input[name="password"]').fill(fixture['password'])
+        first_page.locator('input[name="password"]').press('Enter')
+        first_page.wait_for_url('**/auth/2fa/setup/**')
+        secret = first_page.locator('.code-wrap').inner_text().strip()
+        import pyotp
+        first_page.locator('input[name="code"]').fill(pyotp.TOTP(secret).now())
+        first_page.locator('input[name="code"]').press('Enter')
+        first_page.wait_for_selector('.recovery-codes')
+        continue_button = first_page.locator('.result-actions a.btn.primary')
+        if 'netstyle Admin-Backend' not in continue_button.inner_text():
+            raise AssertionError('first-time staff MFA exposes the wrong continuation label')
+        if continue_button.get_attribute('href') != '/ns-admin/':
+            raise AssertionError('first-time staff MFA does not continue to /ns-admin/')
+        continue_button.click()
+        first_page.wait_for_url('**/ns-admin/')
+        first_page.wait_for_load_state('networkidle')
+        if '/ns-admin/' not in first_page.url:
+            raise AssertionError('first-time staff MFA did not enter the netstyle backend')
+        first_context.close()
+
         for role, email, secret, routes in (
             ('portal', fixture['customer_email'], fixture['customer_secret'], portal_routes),
             ('admin', fixture['admin_email'], fixture['admin_secret'], admin_routes),
@@ -694,7 +926,10 @@ def run_backend_ui_smoke(browser, fixture=None) -> None:
                 ),
             )
 
-            _browser_login(page, base, email, fixture['password'], secret)
+            _browser_login(
+                page, base, email, fixture['password'], secret,
+                '/portal/dashboard/' if role == 'portal' else '/ns-admin/',
+            )
 
             if role == 'portal':
                 page.goto(base + 'portal/dashboard/', wait_until='networkidle')
@@ -715,10 +950,106 @@ def run_backend_ui_smoke(browser, fixture=None) -> None:
                 expected = {
                     '/portal/search/', '/portal/profile/', '/portal/security/', '/portal/help/',
                     '/auth/logout/', '/portal/licenses/buy/', '/portal/orders/', '/portal/company/',
+                    '/pro/',
                 }
                 missing = sorted(expected - hrefs)
                 if missing:
                     raise AssertionError(f'portal mobile More navigation missing: {missing}')
+
+                page.set_viewport_size({'width': 1440, 'height': 1000})
+                customer_pro = page.goto(base + 'pro/', wait_until='networkidle')
+                if not customer_pro or customer_pro.status != 200:
+                    raise AssertionError('licensed customer admin cannot reach PromptMaster Pro flow')
+                if '/pro/device/register/' not in page.url:
+                    raise AssertionError(
+                        f'new customer browser did not enter device registration: {page.url}'
+                    )
+                device_name = page.locator('input[name="display_name"]')
+                if not device_name.is_visible():
+                    raise AssertionError('PromptMaster Pro device registration form is missing')
+                device_name.fill('Browser Smoke Firefox/Edge')
+                device_name.press('Enter')
+                page.wait_for_url('**/pro/app/')
+                page.wait_for_load_state('networkidle')
+
+                customer_utility_paths = set(page.locator('.utility a').evaluate_all(
+                    "els => els.map(e => new URL(e.href).pathname)"
+                ))
+                required_customer_utility = {'/portal/dashboard/', '/auth/logout/'}
+                if not required_customer_utility.issubset(customer_utility_paths):
+                    raise AssertionError(
+                        'customer Pro session navigation missing: '
+                        f'{sorted(required_customer_utility - customer_utility_paths)}'
+                    )
+                customer_catalog_probe = page.evaluate(
+                    """async () => {
+                      const r = await fetch('/api/v1/prompts/?product=PRO', {
+                        credentials: 'same-origin',
+                        headers: {Accept: 'application/json'}
+                      });
+                      return {status: r.status, body: await r.json()};
+                    }"""
+                )
+                if customer_catalog_probe['status'] != 200 or not customer_catalog_probe['body'].get('ok'):
+                    raise AssertionError(
+                        f'customer PromptMaster API access failed: {customer_catalog_probe}'
+                    )
+                customer_compose_probe = page.evaluate(
+                    """async () => {
+                      const runtimeSource = [...document.scripts]
+                        .map(script => script.textContent || '')
+                        .find(source => source.includes("const PM_CSRF='")) || '';
+                      const csrfMatch = runtimeSource.match(/const PM_CSRF='([^']+)'/);
+                      const csrf = csrfMatch?.[1] || '';
+                      if (!csrf) {
+                        return {status: 0, body: null, text: 'embedded CSRF token missing'};
+                      }
+                      const r = await fetch('/api/v1/prompts/compose/', {
+                        method: 'POST',
+                        credentials: 'same-origin',
+                        headers: {
+                          Accept: 'application/json',
+                          'Content-Type': 'application/json',
+                          'X-CSRFToken': decodeURIComponent(csrf),
+                        },
+                        body: JSON.stringify({
+                          product: 'PRO',
+                          task_id: 'PM20-001',
+                          microsoft_tier: 'chatbasic',
+                          input: {
+                            fields: {
+                              Fragestellung: 'Browser Kundenfunktionstest',
+                              Kontext: 'PromptMaster Kundenbackend'
+                            },
+                            audience: 'Management',
+                            focus: ['Primärquellen'],
+                            output: 'Fundierte Antwort',
+                            source: 'webwork',
+                            tone: 'professional',
+                            detail: 'standard'
+                          }
+                        })
+                      });
+                      const text = await r.text();
+                      let body = null;
+                      try { body = JSON.parse(text); } catch (_error) {}
+                      return {
+                        status: r.status,
+                        contentType: r.headers.get('content-type') || '',
+                        body,
+                        text: text.slice(0, 500)
+                      };
+                    }"""
+                )
+                if (
+                    customer_compose_probe['status'] != 200
+                    or not (customer_compose_probe.get('body') or {}).get('ok')
+                    or 'Browser Kundenfunktionstest'
+                    not in (customer_compose_probe.get('body') or {}).get('result', {}).get('prompt', '')
+                ):
+                    raise AssertionError(
+                        f'customer PromptMaster compose failed: {customer_compose_probe}'
+                    )
             else:
                 page.set_viewport_size({'width': 390, 'height': 844})
                 page.goto(base + 'ns-admin/more/', wait_until='networkidle')
@@ -731,11 +1062,95 @@ def run_backend_ui_smoke(browser, fixture=None) -> None:
                     '/ns-admin/content/faqs/', '/ns-admin/email/', '/ns-admin/mollie/',
                     '/ns-admin/statistics/', '/ns-admin/ops/', '/ns-admin/api/',
                     '/ns-admin/legal/', '/ns-admin/support/', '/ns-admin/audit/',
-                    '/ns-admin/roles/', '/ns-admin/settings/',
+                    '/ns-admin/roles/', '/ns-admin/settings/', '/pro/', '/auth/logout/',
                 }
                 missing = sorted(expected - hrefs)
                 if missing:
                     raise AssertionError(f'admin mobile More navigation missing: {missing}')
+
+                page.set_viewport_size({'width': 1440, 'height': 1000})
+                pro_response = page.goto(base + 'pro/', wait_until='networkidle')
+                if not pro_response or pro_response.status != 200:
+                    raise AssertionError('netstyle staff cannot open PromptMaster Pro')
+                utility_paths = set(page.locator('.utility a').evaluate_all(
+                    "els => els.map(e => new URL(e.href).pathname)"
+                ))
+                required_utility_paths = {'/ns-admin/', '/auth/logout/'}
+                if not required_utility_paths.issubset(utility_paths):
+                    raise AssertionError(
+                        f'netstyle Pro session navigation missing: {sorted(required_utility_paths - utility_paths)}'
+                    )
+                catalog_probe = page.evaluate(
+                    """async () => {
+                      const r = await fetch('/api/v1/prompts/?product=PRO', {
+                        credentials: 'same-origin',
+                        headers: {Accept: 'application/json'}
+                      });
+                      return {status: r.status, body: await r.json()};
+                    }"""
+                )
+                if catalog_probe['status'] != 200 or not catalog_probe['body'].get('ok'):
+                    raise AssertionError(
+                        f'netstyle PromptMaster API access failed: {catalog_probe}'
+                    )
+                if catalog_probe['body']['catalog'].get('task_count') != 194:
+                    raise AssertionError('netstyle PromptMaster catalog is incomplete')
+                staff_compose_probe = page.evaluate(
+                    """async () => {
+                      const runtimeSource = [...document.scripts]
+                        .map(script => script.textContent || '')
+                        .find(source => source.includes("const PM_CSRF='")) || '';
+                      const csrfMatch = runtimeSource.match(/const PM_CSRF='([^']+)'/);
+                      const csrf = csrfMatch?.[1] || '';
+                      if (!csrf) {
+                        return {status: 0, body: null, text: 'embedded CSRF token missing'};
+                      }
+                      const r = await fetch('/api/v1/prompts/compose/', {
+                        method: 'POST',
+                        credentials: 'same-origin',
+                        headers: {
+                          Accept: 'application/json',
+                          'Content-Type': 'application/json',
+                          'X-CSRFToken': decodeURIComponent(csrf),
+                        },
+                        body: JSON.stringify({
+                          product: 'PRO',
+                          task_id: 'PM20-001',
+                          microsoft_tier: 'chatbasic',
+                          input: {
+                            fields: {
+                              Fragestellung: 'Browser netstyle Funktionstest',
+                              Kontext: 'PromptMaster Adminbackend'
+                            },
+                            audience: 'Management',
+                            focus: ['Primärquellen'],
+                            output: 'Fundierte Antwort',
+                            source: 'webwork',
+                            tone: 'professional',
+                            detail: 'standard'
+                          }
+                        })
+                      });
+                      const text = await r.text();
+                      let body = null;
+                      try { body = JSON.parse(text); } catch (_error) {}
+                      return {
+                        status: r.status,
+                        contentType: r.headers.get('content-type') || '',
+                        body,
+                        text: text.slice(0, 500)
+                      };
+                    }"""
+                )
+                if (
+                    staff_compose_probe['status'] != 200
+                    or not (staff_compose_probe.get('body') or {}).get('ok')
+                    or 'Browser netstyle Funktionstest'
+                    not in (staff_compose_probe.get('body') or {}).get('result', {}).get('prompt', '')
+                ):
+                    raise AssertionError(
+                        f'netstyle PromptMaster compose failed: {staff_compose_probe}'
+                    )
 
             for width, height in ((360, 800), (390, 844), (768, 1024), (1440, 1000), (1920, 1080)):
                 page.set_viewport_size({'width': width, 'height': height})
@@ -749,7 +1164,7 @@ def run_backend_ui_smoke(browser, fixture=None) -> None:
             context.close()
 
         print(
-            'DJANGO BACKEND BROWSER SMOKE OK: real login + TOTP 2FA + '
+            'DJANGO BACKEND BROWSER SMOKE OK: real login + existing/first-time TOTP 2FA + '
             'public auth/legal + portal/admin/prompt-studio + global search + complete mobile navigation + responsive 360/390/768/1440/1920 + overflow/overlap guards'
         )
     finally:
@@ -803,6 +1218,10 @@ def main() -> int:
 
         page.locator('#pmRatingButton').click()
         page.locator('[data-pm-stars="2"]').click()
+        page.wait_for_function("!document.querySelector('#pmFeedbackReveal').classList.contains('hidden')")
+        if not page.locator('#pmFeedback').evaluate("el => el.classList.contains('hidden')"):
+            raise AssertionError('low-rating feedback field opened without deliberate Feedback ergänzen action')
+        page.locator('#pmFeedbackReveal').click()
         page.wait_for_function("!document.querySelector('#pmFeedback').classList.contains('hidden')")
         page.locator('#pmFeedbackText').fill('Mehr Kontext wäre hilfreich.')
         page.locator('#pmFeedbackSend').click()
@@ -810,6 +1229,14 @@ def main() -> int:
         ratings = page.evaluate('window.__pmSmokeRatings')
         if not ratings or ratings[-1].get('feedback') != 'Mehr Kontext wäre hilfreich.':
             raise AssertionError('optional low-rating feedback was not sent')
+
+        # 4-5 stars are complete ratings: no additional feedback prompt.
+        page.locator('[data-pm-stars="5"]').click()
+        page.wait_for_function("document.querySelector('#pmRatingState').textContent.includes('5 ★ gespeichert')")
+        if not page.locator('#pmFeedbackReveal').evaluate("el => el.classList.contains('hidden')"):
+            raise AssertionError('high rating incorrectly asks for extra feedback')
+        if not page.locator('#pmFeedback').evaluate("el => el.classList.contains('hidden')"):
+            raise AssertionError('high rating incorrectly leaves feedback field visible')
 
         run_backend_ui_smoke(browser, backend_fixture)
         browser.close()

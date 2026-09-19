@@ -239,6 +239,7 @@
         <div id="pmStars" style="display:flex;gap:6px;flex-wrap:wrap">
           ${[1,2,3,4,5].map(n=>`<button type="button" class="btn secondary" data-pm-stars="${n}" style="min-width:42px">${n} ★</button>`).join('')}
         </div>
+        <button type="button" class="btn secondary hidden" id="pmFeedbackReveal" style="margin-top:10px">Feedback ergänzen</button>
         <div id="pmFeedback" class="hidden" style="margin-top:10px">
           <label for="pmFeedbackText" style="display:block;font-weight:700;margin-bottom:5px">Optional: Was sollten wir verbessern?</label>
           <textarea id="pmFeedbackText" rows="4" style="width:100%;border:1px solid #bbc7cf;border-radius:11px;padding:10px"></textarea>
@@ -259,9 +260,17 @@
       try{
         await jsonPost(`/api/v1/prompts/${encodeURIComponent(lastComposedTask)}/rating/`,{stars:lastRatingStars});
         state.textContent=`${lastRatingStars} ★ gespeichert.`;
-        document.getElementById('pmFeedback').classList.toggle('hidden',lastRatingStars>3);
+        const lowRating=lastRatingStars>=1 && lastRatingStars<=3;
+        document.getElementById('pmFeedbackReveal').classList.toggle('hidden',!lowRating);
+        document.getElementById('pmFeedback').classList.add('hidden');
       }catch(error){
         state.textContent='Bewertung konnte nicht gespeichert werden: '+error.message;
+      }
+    });
+    document.getElementById('pmFeedbackReveal').addEventListener('click',()=>{
+      if(lastRatingStars>=1 && lastRatingStars<=3){
+        document.getElementById('pmFeedback').classList.remove('hidden');
+        document.getElementById('pmFeedbackText').focus();
       }
     });
     document.getElementById('pmFeedbackSend').addEventListener('click',async()=>{
@@ -283,6 +292,8 @@
     lastRatingStars=0;
     const panel=document.getElementById('pmRatingPanel');
     if(panel)panel.classList.add('hidden');
+    const reveal=document.getElementById('pmFeedbackReveal');
+    if(reveal)reveal.classList.add('hidden');
     const feedback=document.getElementById('pmFeedback');
     if(feedback)feedback.classList.add('hidden');
     const text=document.getElementById('pmFeedbackText');

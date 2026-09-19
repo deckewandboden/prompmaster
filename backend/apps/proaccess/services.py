@@ -8,6 +8,22 @@ DEVICE_COOKIE = 'pm_device_v2'
 LEGACY_DEVICE_COOKIE = 'pm_device'
 
 
+def has_internal_staff_access(user):
+    """Internal netstyle identities may use PromptMaster Pro without a customer seat.
+
+    Staff accounts are a separate security domain: they cannot belong to a
+    customer tenant and are protected by the mandatory staff MFA flow.
+    """
+    return bool(
+        user
+        and user.is_authenticated
+        and user.is_active
+        and user.is_staff
+        and user.two_factor_required
+        and user.totp_secret_enc
+    )
+
+
 def active_product_assignment(user, product_code=None, required_feature=PRO_ACCESS_FEATURE):
     """Return a live assignment whose product grants the runtime entitlement.
 

@@ -3,6 +3,7 @@ import {quote,normalizeQuantity,money} from './pricing.js';
 const toggle=document.querySelector('.menu-toggle');
 toggle.addEventListener('click',()=>{const open=toggle.getAttribute('aria-expanded')!=='true';toggle.setAttribute('aria-expanded',String(open));document.querySelector('nav').classList.toggle('open',open)});
 document.querySelectorAll('nav a').forEach(a=>a.addEventListener('click',()=>{toggle.setAttribute('aria-expanded','false');document.querySelector('nav').classList.remove('open')}));
+const fallbackCatalog={currency:'EUR',priceBasis:'gross',taxBasisPoints:1900,market:'DE',products:[{id:'PROMPTMASTER_FREE',monthlyGrossCents:0,termMonths:0},{id:'PROMPTMASTER_PRO',monthlyGrossCents:299,termMonths:12}],maxQuantity:500,checkoutEnabled:false,loginEnabled:false,freeUrl:null};
 const motionReduced=matchMedia('(prefers-reduced-motion:reduce)');
 let scrollQueued=false;
 const syncScene=()=>{
@@ -19,9 +20,19 @@ if(!motionReduced.matches){
 async function initializePricing(){
   const input=document.getElementById('quantity');
   try {
-    const response=await fetch('/catalog.json',{cache:'no-cache'});
-    if(!response.ok) throw new Error('Produktkatalog nicht verfügbar');
-    const catalog=await response.json();
+    let catalog=fallbackCatalog;
+    try{
+      const response=await fetch('/catalog.json?marketing=20260919',{cache:'no-store',headers:{Accept:'application/json'}});
+      if(!response.ok)throw new Error('Produktkatalog nicht verfügbar');
+      const contentType=(response.headers.get('content-type')||'').toLowerCase();
+      if(!contentType.includes('application/json'))throw new Error('Produktkatalog wurde nicht als JSON ausgeliefert');
+      const liveCatalog=await response.json();
+      quote(liveCatalog,1);
+      catalog=liveCatalog;
+    }catch(error){
+      console.warn('Live-Produktkatalog nicht verfügbar; eingebetteter Preiskatalog wird verwendet.',error);
+      quote(catalog,1);
+    }
     const initial=quote(catalog,new URLSearchParams(location.search).get('quantity')||1);
     if(home){
       document.querySelector('.pro .price').innerHTML=money(initial.monthlyGross)+'<span>/ Monat</span>';
@@ -44,8 +55,8 @@ async function initializePricing(){
       document.getElementById('minus').disabled=q.quantity<=1;
       document.getElementById('plus').disabled=q.quantity>=catalog.maxQuantity;
       if(path==='/checkout'){
-        buy.textContent='Kauf noch nicht freigeschaltet';
-        buy.removeAttribute('href');buy.setAttribute('aria-disabled','true');
+        buy.textContent=q.quantity+' PromptMaster-Pro-'+(q.quantity===1?'Lizenz':'Lizenzen')+' kaufen ↗';
+        buy.href='/portal/licenses/buy/?quantity='+q.quantity;
         history.replaceState(null,'','/checkout/?quantity='+q.quantity);
       }else{
         buy.textContent=q.quantity+' PromptMaster-Pro-'+(q.quantity===1?'Lizenz':'Lizenzen')+' kaufen ↗';
@@ -76,24 +87,24 @@ if(home){
   let title,body;
   if(path==='/checkout'){
     title='Deine PromptMaster-Pro-Lizenzen.';
-    body='<p>Prüfe deine gewünschte Benutzerzahl und den Preis für zwölf Monate.</p>'+calculator()+'<div class="notice" role="status">Der Kauf ist in dieser Vorschau noch nicht freigeschaltet. Es wird keine Bestellung angelegt und keine Zahlung ausgelöst.</div><a class="text-link" href="/#preise">← Zurück zu den Preisen</a>';
+    body='<p>Prüfe deine gewünschte Benutzerzahl und den Preis für zwölf Monate.</p>'+calculator()+'<div class="notice" role="status">Der Kauf wird sicher im PromptMaster-Kundenportal abgeschlossen.</div><a class="button" href="/portal/licenses/buy/">Zum Checkout →</a><a class="text-link" href="/#preise">← Zurück zu den Preisen</a>';
   }else if(path==='/login'||path==='/portal'||path==='/app/pro'){
     title='Willkommen bei PromptMaster.';
-    body='<p>Hier meldest du dich künftig für dein Kundenportal und PromptMaster Pro an.</p><div class="notice">Die Anmeldung ist in dieser Vorschau noch nicht freigeschaltet.</div><a class="button secondary" href="/">Zur Marketingseite →</a>';
+    body='<p>Melde dich an, um Kundenportal und PromptMaster Pro zu öffnen.</p><a class="button" href="/auth/login/">Zur Anmeldung →</a><a class="button secondary" href="/">Zur Marketingseite →</a>';
   }else if(path==='/free'){
     title='PromptMaster Free.';
-    body='<p>Einfach starten. Kostenlos nutzen.</p><div class="notice">Die bestehende PromptMaster-Free-Anwendung ist in dieser Vorschau noch nicht hinterlegt. Sie wird unverändert eingebunden, sobald die Originaldatei vorliegt.</div><a class="button secondary" href="/#funktionen">Free kennenlernen →</a>';
+    body='<p>Einfach starten. Kostenlos nutzen.</p><a class="button" href="/free/">PromptMaster Free starten →</a><a class="button secondary" href="/#funktionen">Free kennenlernen →</a>';
   }else if(legal[path]){
     title=legal[path];
-    body='<div class="notice">Die verbindlichen Angaben und Rechtstexte werden vor dem öffentlichen Verkaufsstart ergänzt. Diese Vorschau ermöglicht keinen Kauf.</div><a class="text-link" href="/">← Zurück zur Startseite</a>';
+    body='<p>PromptMaster stellt die jeweils gültigen Rechtstexte versioniert über die Commercial-Plattform bereit.</p><a class="text-link" href="/">← Zurück zur Startseite</a>';
   }else if(path==='/kontakt'||path==='/unternehmen'){
     title=path==='/kontakt'?'Kontakt zu netstyle.':'PromptMaster by netstyle.';
-    body='<p>Bessere Prompts für Microsoft Copilot.</p><div class="notice">Die bestätigten Unternehmens- und Kontaktdaten werden vor dem öffentlichen Start ergänzt.</div><a class="text-link" href="/">← Zurück zur Startseite</a>';
+    body='<p>PromptMaster by netstyle – bessere Prompts für Microsoft Copilot.</p><a class="text-link" href="/">← Zurück zur Startseite</a>';
   }else{
     title='Diese Seite gibt es nicht.';
     body='<p>Über die Startseite findest du Funktionen, Preise und Antworten auf deine Fragen.</p><a class="button secondary" href="/">Zur Startseite →</a>';
   }
   document.title=title+' | PromptMaster by netstyle';
-  document.querySelector('main').innerHTML='<section class="route-page"><span class="status-badge">PromptMaster · Vorschau</span><h1>'+title+'</h1>'+body+'</section>';
+  document.querySelector('main').innerHTML='<section class="route-page"><span class="status-badge">PromptMaster</span><h1>'+title+'</h1>'+body+'</section>';
 }
 void initializePricing();

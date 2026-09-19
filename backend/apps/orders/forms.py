@@ -1,8 +1,10 @@
 from django import forms
 
+from .services import MAX_PURCHASE_QUANTITY
+
 
 class PurchaseForm(forms.Form):
-    quantity = forms.IntegerField(min_value=1, max_value=500, initial=1, label='Anzahl Lizenzen')
+    quantity = forms.IntegerField(min_value=1, max_value=MAX_PURCHASE_QUANTITY, initial=1, label='Anzahl Lizenzen')
     accept_terms = forms.BooleanField(label='AGB akzeptieren')
     accept_privacy = forms.BooleanField(label='Datenschutzhinweise zur Kenntnis genommen')
     accept_withdrawal = forms.BooleanField(

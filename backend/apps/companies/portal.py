@@ -7,7 +7,7 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.core.exceptions import PermissionDenied, ValidationError
 from django.db import transaction
-from django.db.models import Prefetch, Q
+from django.db.models import Count, Max, Prefetch, Q
 from django.shortcuts import get_object_or_404, redirect, render
 from django.http import HttpResponse
 from django.core.serializers.json import DjangoJSONEncoder
@@ -19,13 +19,14 @@ from apps.accounts.forms import TransferAdminForm
 from apps.accounts.models import User
 from apps.accounts.security import bump_security_version
 from apps.audit.services import audit
+from apps.catalog.services import PRO_ACCESS_FEATURE
 from apps.core.datagrid import DataGrid
 from apps.devices.models import DeviceRegistration
 from apps.devices.services import revoke_device
 from apps.legal.models import DeletionRequest, LegalAcceptance, LegalDocument
 from apps.legal.services import process_deletion_request
 from apps.licenses.models import License, LicenseAssignment, LicenseReminder, LicenseUpgradeRequest
-from apps.licenses.services import assign_license, release_license, request_product_upgrade, resolve_product_upgrade, create_assignment_link, consume_assignment_link
+from apps.licenses.services import assign_license, release_license, request_product_upgrade, resolve_product_upgrade, create_assignment_link, consume_assignment_link, has_current_term
 from apps.notifications.services import queue_email
 from apps.orders.models import Order
 from apps.payments.models import Payment
@@ -34,12 +35,14 @@ from apps.payments.mollie import MollieClient, MollieError
 from apps.support.models import SupportRequest
 from .forms import CompanyForm, InviteForm, PrivateCustomerForm, SupportForm, UserProfileForm
 from .models import Invitation, Membership
-from .services import create_invitation, deactivate_company_member, transfer_admin
+from .services import create_invitation, deactivate_company_member, reactivate_company_member, transfer_admin
 
 logger = logging.getLogger(__name__)
 
 
 def _ctx(request):
+    if request.user.is_staff:
+        raise PermissionDenied('Interne netstyle Benutzer verwenden das netstyle Admin-Backend.')
     membership = (
         Membership.objects.filter(user=request.user, active=True)
         .select_related('company')
@@ -216,6 +219,19 @@ def dashboard(request):
         company_missing_fields = []
 
     now = timezone.now()
+    pro_free_count = (
+        licenses.filter(
+            status='free',
+            product__active=True,
+            product__entitlements__feature__code=PRO_ACCESS_FEATURE,
+            product__entitlements__enabled=True,
+            terms__status='active',
+            terms__valid_from__lte=now,
+            terms__valid_until__gt=now,
+        )
+        .distinct()
+        .count()
+    )
     active_licenses = list(
         licenses.filter(status='active', valid_until__gt=now).select_related('product')
     )
@@ -240,6 +256,7 @@ def dashboard(request):
             'licenses': licenses.select_related('product'),
             'license_total': licenses.count(),
             'license_free': licenses.filter(status='free', valid_until__gt=now).count(),
+            'pro_free_count': pro_free_count,
             'license_active': len(active_licenses),
             'license_assigned': licenses.filter(
                 assignments__ended_at__isnull=True,
@@ -333,15 +350,55 @@ def more_menu(request):
 @login_required
 def team(request):
     company, _ = _admin(request)
+    now = timezone.now()
+    team_queryset = (
+        Membership.objects.filter(company=company)
+        .select_related('user')
+        .annotate(
+            active_pro_count=Count(
+                'user__license_assignments',
+                filter=Q(
+                    user__license_assignments__license__company=company,
+                    user__license_assignments__license__product__code='PRO',
+                    user__license_assignments__license__status='active',
+                    user__license_assignments__license__valid_until__gt=now,
+                    user__license_assignments__ended_at__isnull=True,
+                ),
+                distinct=True,
+            ),
+            active_device_count=Count(
+                'user__devices',
+                filter=Q(
+                    user__devices__license__company=company,
+                    user__devices__revoked_at__isnull=True,
+                ),
+                distinct=True,
+            ),
+            active_device_limit=Max(
+                'user__license_assignments__license__product__default_device_limit',
+                filter=Q(
+                    user__license_assignments__license__company=company,
+                    user__license_assignments__license__product__code='PRO',
+                    user__license_assignments__license__status='active',
+                    user__license_assignments__license__valid_until__gt=now,
+                    user__license_assignments__ended_at__isnull=True,
+                ),
+            ),
+        )
+    )
     grid = DataGrid(
         request,
-        Membership.objects.filter(company=company).select_related('user'),
+        team_queryset,
         search_fields=('user__email', 'user__first_name', 'user__last_name'),
-        sort_fields={'name': 'user__last_name', 'email': 'user__email', 'created': 'created_at'},
+        sort_fields={
+            'name': 'user__last_name',
+            'email': 'user__email',
+            'created': 'created_at',
+            'last': 'user__last_login',
+        },
         default_sort='user__last_name',
         filters={'role': 'role', 'active': 'active'},
     ).build()
-    now = timezone.now()
     active_assignments = list(
         LicenseAssignment.objects.filter(
             license__company=company,
@@ -350,23 +407,31 @@ def team(request):
             license__valid_until__gt=now,
         ).select_related('license__product')
     )
+    team_count = Membership.objects.filter(company=company, active=True).count()
+    pro_count = LicenseAssignment.objects.filter(
+        user__company_memberships__company=company,
+        user__company_memberships__active=True,
+        license__company=company,
+        license__product__code='PRO',
+        license__status='active',
+        license__valid_until__gt=now,
+        ended_at__isnull=True,
+    ).values('user_id').distinct().count()
     return render(
         request,
         'portal/team.html',
         {
             'company': company,
             'grid': grid,
-            'team_count': Membership.objects.filter(company=company, active=True).count(),
-            'pro_count': LicenseAssignment.objects.filter(
-                user__company_memberships__company=company,
-                user__company_memberships__active=True,
-                license__company=company,
-                license__product__code='PRO',
-                license__status='active',
-                license__valid_until__gt=now,
-                ended_at__isnull=True,
-            ).values('user_id').distinct().count(),
-            'free_license_count': License.objects.filter(company=company, status='free', valid_until__gt=now).count(),
+            'team_count': team_count,
+            'pro_count': pro_count,
+            'free_user_count': max(0, team_count - pro_count),
+            'free_license_count': License.objects.filter(
+                company=company,
+                status='free',
+                product__code='PRO',
+                valid_until__gt=now,
+            ).count(),
             'device_count': DeviceRegistration.objects.filter(
                 user__company_memberships__company=company,
                 user__company_memberships__active=True,
@@ -415,6 +480,47 @@ def invite(request):
             messages.success(request, 'Einladung wurde versendet.')
             return redirect('portal:invitations')
     return render(request, 'portal/form.html', {'title': 'Benutzer einladen', 'form': form})
+
+
+@login_required
+@transaction.atomic
+def activate_my_pro(request):
+    if request.method != 'POST':
+        raise PermissionDenied
+    company, membership = _admin(request)
+    if not request.user.email_verified_at:
+        messages.error(
+            request,
+            'Bitte bestätigen Sie zuerst Ihre E-Mail-Adresse, bevor Sie eine Pro-Lizenz aktivieren.',
+        )
+        return redirect('portal:dashboard')
+    current = active_product_assignment(request.user, 'PRO')
+    if current:
+        messages.info(request, 'PromptMaster Pro ist für Ihr Benutzerkonto bereits aktiviert.')
+        return redirect('proaccess:launch')
+
+    candidates = (
+        License.objects.select_for_update()
+        .filter(
+            company=company,
+            status='free',
+            product__active=True,
+            product__entitlements__feature__code=PRO_ACCESS_FEATURE,
+            product__entitlements__enabled=True,
+        )
+        .order_by('valid_until', 'created_at')
+    )
+    # ProductEntitlement is unique per product+feature, so this join cannot
+    # duplicate a license row. Avoid DISTINCT here because PostgreSQL forbids
+    # SELECT DISTINCT ... FOR UPDATE.
+    license_obj = next((row for row in candidates if has_current_term(row)), None)
+    if not license_obj:
+        messages.error(request, 'Es ist keine freie gültige PromptMaster-Pro-Lizenz verfügbar.')
+        return redirect('portal:dashboard')
+
+    assign_license(license_obj, request.user, request.user)
+    messages.success(request, 'PromptMaster Pro wurde Ihrem Administrator-Konto zugewiesen.')
+    return redirect('proaccess:launch')
 
 
 @login_required
@@ -941,7 +1047,7 @@ def buy(request):
     from apps.catalog.models import Product
     from apps.catalog.services import current_price
     from apps.orders.forms import PurchaseForm
-    from apps.orders.services import create_order
+    from apps.orders.services import MAX_PURCHASE_QUANTITY, create_order
 
     company_obj, membership = _ctx(request)
     if company_obj and (not membership or membership.role != 'admin'):
@@ -949,7 +1055,16 @@ def buy(request):
     private_customer = not company_obj
     product = get_object_or_404(Product, code='PRO', active=True, purchasable=True)
     checkout_session_key, checkout_key = _checkout_key(request, 'buy:PRO')
-    form = PurchaseForm(request.POST or None, require_withdrawal=private_customer)
+    try:
+        initial_quantity = int(request.GET.get('quantity', '1'))
+    except (TypeError, ValueError):
+        initial_quantity = 1
+    initial_quantity = max(1, min(MAX_PURCHASE_QUANTITY, initial_quantity))
+    form = PurchaseForm(
+        request.POST or None,
+        initial={'quantity': initial_quantity},
+        require_withdrawal=private_customer,
+    )
 
     if request.method == 'POST' and form.is_valid():
         try:
@@ -1099,18 +1214,21 @@ def team_member(request, user_id):
         Membership.objects.select_related('user'),
         company=company_obj,
         user_id=user_id,
-        active=True,
     )
     free = License.objects.filter(
         company=company_obj,
         status='free',
         valid_until__gt=timezone.now(),
     ).select_related('product')
-    assignments = LicenseAssignment.objects.filter(
-        user=member.user,
-        license__company=company_obj,
-        ended_at__isnull=True,
-    ).select_related('license__product')
+    if member.active:
+        assignments = LicenseAssignment.objects.filter(
+            user=member.user,
+            license__company=company_obj,
+            ended_at__isnull=True,
+        ).select_related('license__product')
+    else:
+        free = License.objects.none()
+        assignments = LicenseAssignment.objects.none()
     return render(
         request,
         'portal/team_member.html',
@@ -1118,10 +1236,14 @@ def team_member(request, user_id):
             'member': member,
             'free_licenses': free,
             'assignments': assignments,
-            'devices': member.user.devices.filter(
-                license__company=company_obj,
-                revoked_at__isnull=True,
-            ).select_related('license'),
+            'devices': (
+                member.user.devices.filter(
+                    license__company=company_obj,
+                    revoked_at__isnull=True,
+                ).select_related('license')
+                if member.active
+                else DeviceRegistration.objects.none()
+            ),
         },
     )
 
@@ -1201,6 +1323,31 @@ def member_release(request, user_id, license_id):
     )
     release_license(license_obj, request.user)
     messages.success(request, 'Lizenz freigegeben.')
+    return redirect('portal:team_member', user_id=user_id)
+
+
+@login_required
+def member_reactivate(request, user_id):
+    company_obj, _ = _admin(request)
+    if request.method != 'POST':
+        raise PermissionDenied
+    member = get_object_or_404(
+        Membership.objects.select_related('user'),
+        company=company_obj,
+        user_id=user_id,
+        active=False,
+    )
+    try:
+        reactivate_company_member(
+            company=company_obj,
+            member=member,
+            actor=request.user,
+            request=request,
+        )
+    except ValidationError as exc:
+        messages.error(request, exc.messages[0])
+    else:
+        messages.success(request, 'Benutzer reaktiviert. Lizenzen können jetzt wieder zugewiesen werden.')
     return redirect('portal:team_member', user_id=user_id)
 
 

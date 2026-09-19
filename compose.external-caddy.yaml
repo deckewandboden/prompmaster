@@ -1,0 +1,27 @@
+# Use this overlay when another stack already owns host ports 80/443.
+# Set PM_EXTERNAL_CADDY_NETWORK to that reverse proxy's existing Docker network.
+services:
+  web:
+    networks:
+      edge:
+        aliases:
+          - promptmaster-web-internal
+      app: {}
+      data: {}
+      monitor: {}
+
+  caddy:
+    ports: !override []
+    volumes:
+      - ./Caddyfile.external:/etc/caddy/Caddyfile:ro
+    networks:
+      edge: {}
+      monitor: {}
+      external_caddy:
+        aliases:
+          - ${PM_EXTERNAL_CADDY_ALIAS:-promptmaster-caddy-edge}
+
+networks:
+  external_caddy:
+    external: true
+    name: ${PM_EXTERNAL_CADDY_NETWORK:?PM_EXTERNAL_CADDY_NETWORK muss das vorhandene Reverse-Proxy-Docker-Netz benennen}

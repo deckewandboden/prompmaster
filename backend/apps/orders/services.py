@@ -11,6 +11,7 @@ from apps.catalog.services import current_price
 from .models import Order, OrderItem
 
 CENT = Decimal('0.01')
+MAX_PURCHASE_QUANTITY = 500
 
 
 def _tax_rule_for(user, company):
@@ -71,7 +72,7 @@ def _billing_snapshot(user, company, rule):
 
 @transaction.atomic
 def create_order(*, user, product, quantity=1, target_license=None, idempotency_key=None):
-    if quantity < 1 or quantity > 500:
+    if quantity < 1 or quantity > MAX_PURCHASE_QUANTITY:
         raise ValidationError('Ungültige Anzahl.')
     if not product.active or not product.purchasable:
         raise ValidationError('Produkt ist derzeit nicht kaufbar.')

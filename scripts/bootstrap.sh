@@ -38,6 +38,19 @@ wait_healthy(){
   fail "Service $service wurde innerhalb von ${timeout}s nicht healthy"
 }
 
+assert_external_caddy_ports_closed(){
+  [[ -n "${EXTERNAL_CADDY_NETWORK:-}" ]] || return 0
+  local cid bindings
+  cid="$(docker compose "${F[@]}" ps -q caddy 2>/dev/null || true)"
+  [[ -n "$cid" ]] || fail "Caddy-Container fehlt für Host-Port-Prüfung"
+  bindings="$(
+    docker inspect "$cid" --format '{{range $port, $bindings := .NetworkSettings.Ports}}{{if $bindings}}{{range $bindings}}{{println $port .HostIp .HostPort}}{{end}}{{end}}{{end}}' |
+      awk '$1=="80/tcp" || $1=="443/tcp"'
+  )"
+  [[ -z "$bindings" ]] || fail "External-Caddy-Modus veröffentlicht unerwartet Host-Port 80/443: $bindings"
+  log "Host-Port-Gate OK: PromptMaster veröffentlicht 80/443 nicht auf dem Host"
+}
+
 log "Sauberer Repository-/Marketing-Preflight ohne Host-Python/Node-Abhängigkeit"
 bash scripts/run_repo_preflight.sh staging --prepare-env
 
@@ -66,6 +79,18 @@ fi
 export DEPLOYED_AT="${DEPLOYED_AT:-$(date -u +%Y-%m-%dT%H:%M:%SZ)}"
 
 F=(-f compose.yaml -f compose.staging.yaml)
+EXTERNAL_CADDY_NETWORK="${PM_EXTERNAL_CADDY_NETWORK:-}"
+if [[ -z "$EXTERNAL_CADDY_NETWORK" ]]; then
+  EXTERNAL_CADDY_NETWORK="$(awk -F= '$1 == "PM_EXTERNAL_CADDY_NETWORK" {sub(/^[^=]*=/, ""); value=$0} END {print value}' .env | tr -d '\r')"
+  EXTERNAL_CADDY_NETWORK="${EXTERNAL_CADDY_NETWORK#\"}"
+  EXTERNAL_CADDY_NETWORK="${EXTERNAL_CADDY_NETWORK%\"}"
+fi
+if [[ -n "$EXTERNAL_CADDY_NETWORK" ]]; then
+  export PM_EXTERNAL_CADDY_NETWORK="$EXTERNAL_CADDY_NETWORK"
+  docker network inspect "$EXTERNAL_CADDY_NETWORK" >/dev/null 2>&1 || fail "Externes Reverse-Proxy-Netz fehlt: $EXTERNAL_CADDY_NETWORK"
+  F+=(-f compose.external-caddy.yaml)
+  log "Externes TLS-Reverse-Proxy-Netz: $EXTERNAL_CADDY_NETWORK · PromptMaster veröffentlicht keine Host-Ports 80/443"
+fi
 log "Compose-Konfiguration"; docker compose "${F[@]}" config >/dev/null
 log "Build"; docker compose "${F[@]}" build
 log "Datenservices"; docker compose "${F[@]}" up -d postgres redis mailpit
@@ -77,14 +102,38 @@ log "Migrationen"; docker compose "${F[@]}" run --rm web python manage.py migrat
 log "Defaults"; docker compose "${F[@]}" run --rm web python manage.py seed_defaults; docker compose "${F[@]}" run --rm web python manage.py seed_prompt_catalog; docker compose "${F[@]}" run --rm web python manage.py seed_faqs; docker compose "${F[@]}" run --rm web python manage.py validate_prompt_runtime; docker compose "${F[@]}" run --rm web python manage.py bootstrap_admin
 log "Static"; docker compose "${F[@]}" run --rm web python manage.py collectstatic --noinput
 log "Stack"; docker compose "${F[@]}" up -d
-log "Tests"; docker compose "${F[@]}" exec -T web python manage.py test
-log "Check deploy"; docker compose "${F[@]}" exec -T web python manage.py check --deploy
+
+# The suite intentionally exercises denied/invalid requests. On success, keep
+# those expected request warnings out of the operator-facing installation log.
+log "Tests"
+test_log="$(mktemp)"
+if docker compose "${F[@]}" exec -T web python manage.py test >"$test_log" 2>&1; then
+  grep -E "^(Ran [0-9]+ tests|OK( \(skipped=[0-9]+\))?)$" "$test_log" || tail -n 8 "$test_log"
+  rm -f "$test_log"
+else
+  cat "$test_log" >&2
+  rm -f "$test_log"
+  fail "Django-Testlauf fehlgeschlagen"
+fi
+
+log "Staging Security Check"
+security_log="$(mktemp)"
+if docker compose "${F[@]}" exec -T web python manage.py check --deploy --fail-level ERROR >"$security_log" 2>&1; then
+  log "Staging Security Check OK"
+  rm -f "$security_log"
+else
+  cat "$security_log" >&2
+  rm -f "$security_log"
+  fail "Staging Security Check fehlgeschlagen"
+fi
+
 log "Kritische Services abwarten"
 wait_healthy web 240
 wait_healthy worker 240
 wait_healthy beat 300
 wait_healthy caddy 180
 wait_healthy backup 360
+assert_external_caddy_ports_closed
 log "Django Ready"; docker compose "${F[@]}" exec -T web curl -fsS http://127.0.0.1:8000/health/ready/ >/dev/null
 log "Marketing-Artefakte im Caddy-Container"; docker compose "${F[@]}" exec -T caddy sh -c 'test -s /srv/marketing/index.html && test -s /srv/marketing/models/head.glb && test -s /srv/marketing/models/night-landscape.png && test -s /srv/marketing/integration-patch.js'
 log "Containerstatus"; docker compose "${F[@]}" ps
