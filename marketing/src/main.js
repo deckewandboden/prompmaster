@@ -3,7 +3,7 @@ import {quote,normalizeQuantity,money} from './pricing.js';
 const toggle=document.querySelector('.menu-toggle');
 toggle.addEventListener('click',()=>{const open=toggle.getAttribute('aria-expanded')!=='true';toggle.setAttribute('aria-expanded',String(open));document.querySelector('nav').classList.toggle('open',open)});
 document.querySelectorAll('nav a').forEach(a=>a.addEventListener('click',()=>{toggle.setAttribute('aria-expanded','false');document.querySelector('nav').classList.remove('open')}));
-const fallbackCatalog={currency:'EUR',priceBasis:'gross',taxBasisPoints:1900,market:'DE',products:[{id:'PROMPTMASTER_FREE',monthlyGrossCents:0,termMonths:0},{id:'PROMPTMASTER_PRO',monthlyGrossCents:299,termMonths:12}],maxQuantity:999,checkoutEnabled:false,loginEnabled:false,freeUrl:null};
+const fallbackCatalog={currency:'EUR',priceBasis:'gross',taxBasisPoints:1900,market:'DE',products:[{id:'PROMPTMASTER_FREE',monthlyGrossCents:0,termMonths:0},{id:'PROMPTMASTER_PRO',monthlyGrossCents:299,termMonths:12}],maxQuantity:500,checkoutEnabled:false,loginEnabled:false,freeUrl:null};
 const motionReduced=matchMedia('(prefers-reduced-motion:reduce)');
 let scrollQueued=false;
 const syncScene=()=>{
