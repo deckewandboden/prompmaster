@@ -374,6 +374,182 @@ class DemoEstateFunctionalAcceptanceTests(TestCase):
         device.refresh_from_db()
         self.assertIsNotNone(device.revoked_at)
 
+
+    def test_demo_company_profile_update_and_admin_transfer(self):
+        company = Company.objects.get(customer_number='DEMO-1001')
+        admin_membership = Membership.objects.get(
+            company=company,
+            active=True,
+            role='admin',
+        )
+        admin = admin_membership.user
+        target_membership = (
+            Membership.objects.filter(company=company, active=True, role='member')
+            .select_related('user')
+            .order_by('user__email')
+            .first()
+        )
+        self._session_as(admin)
+
+        response = self.client.post(
+            '/portal/company/',
+            {
+                'name': company.name,
+                'legal_form': company.legal_form,
+                'email': company.email,
+                'phone': '+49 271 5550199',
+                'street': company.street,
+                'house_number': company.house_number,
+                'postal_code': company.postal_code,
+                'city': company.city,
+                'country': company.country,
+                'vat_id': company.vat_id,
+                'tax_number': company.tax_number,
+            },
+        )
+        self.assertEqual(response.status_code, 302)
+        company.refresh_from_db()
+        self.assertEqual(company.phone, '+49 271 5550199')
+
+        response = self.client.post(
+            f'/portal/team/{target_membership.user_id}/transfer-admin/',
+            {'password': self.credentials[admin.email]},
+        )
+        self.assertEqual(response.status_code, 302)
+        self.assertEqual(response.url, '/auth/login/')
+        admin_membership.refresh_from_db()
+        target_membership.refresh_from_db()
+        target_membership.user.refresh_from_db()
+        self.assertEqual(admin_membership.role, 'member')
+        self.assertEqual(target_membership.role, 'admin')
+        self.assertTrue(target_membership.user.two_factor_required)
+
+    def test_private_profile_export_and_deletion_request_are_real(self):
+        profile = PrivateCustomerProfile.objects.select_related('user').get(
+            customer_number='DEMO-P-2001'
+        )
+        user = profile.user
+        self._session_as(user)
+
+        response = self.client.post(
+            '/portal/profile/',
+            {
+                'first_name': 'Petra',
+                'last_name': 'Privat-Test',
+                'address-street': 'Neuer Privatweg',
+                'address-house_number': '11',
+                'address-postal_code': '57072',
+                'address-city': 'Siegen',
+                'address-country': 'DE',
+            },
+        )
+        self.assertEqual(response.status_code, 302)
+        user.refresh_from_db()
+        profile.refresh_from_db()
+        self.assertEqual(user.last_name, 'Privat-Test')
+        self.assertEqual(profile.street, 'Neuer Privatweg')
+
+        response = self.client.get('/portal/privacy/export/')
+        self.assertEqual(response.status_code, 200)
+        payload = response.json()
+        self.assertEqual(payload['user']['email'], user.email)
+        self.assertEqual(payload['private_customer']['customer_number'], 'DEMO-P-2001')
+        self.assertNotIn('password', payload['user'])
+        self.assertNotIn('token', str(payload).lower())
+
+        response = self.client.post(
+            '/portal/privacy/deletion-request/',
+            {'confirm': '1'},
+        )
+        self.assertEqual(response.status_code, 302)
+        self.assertTrue(
+            DeletionRequest.objects.filter(user=user, status='open').exists()
+        )
+
+    @patch('apps.companies.portal.MollieClient.create_payment')
+    def test_demo_company_purchase_and_private_renewal_reach_secure_checkout(self, create_payment):
+        create_payment.side_effect = [
+            {
+                'id': 'tr_demo_company_acceptance',
+                'status': 'open',
+                '_links': {
+                    'checkout': {
+                        'href': 'https://checkout.example.test/company'
+                    }
+                },
+            },
+            {
+                'id': 'tr_demo_private_acceptance',
+                'status': 'open',
+                '_links': {
+                    'checkout': {
+                        'href': 'https://checkout.example.test/private'
+                    }
+                },
+            },
+        ]
+
+        company = Company.objects.get(customer_number='DEMO-1001')
+        admin = Membership.objects.get(company=company, active=True, role='admin').user
+        self._session_as(admin)
+        response = self.client.post(
+            '/portal/licenses/buy/?quantity=2',
+            {
+                'quantity': '2',
+                'accept_terms': 'on',
+                'accept_privacy': 'on',
+            },
+        )
+        self.assertEqual(response.status_code, 302)
+        self.assertEqual(response.url, 'https://checkout.example.test/company')
+        company_payment = Payment.objects.get(
+            provider_payment_id='tr_demo_company_acceptance'
+        )
+        self.assertEqual(company_payment.order.company, company)
+        self.assertEqual(company_payment.order.items.get().quantity, 2)
+        self.assertEqual(
+            LegalAcceptance.objects.filter(
+                user=admin,
+                order=company_payment.order,
+            ).count(),
+            2,
+        )
+
+        self.client.logout()
+        private = PrivateCustomerProfile.objects.select_related('user').get(
+            customer_number='DEMO-P-2001'
+        )
+        private_license = License.objects.get(
+            owner_user=private.user,
+            product__code='PRO',
+        )
+        self._session_as(private.user)
+        response = self.client.post(
+            f'/portal/licenses/{private_license.id}/renew/',
+            {
+                'accept_terms': 'on',
+                'accept_privacy': 'on',
+                'accept_withdrawal': 'on',
+            },
+        )
+        self.assertEqual(response.status_code, 302)
+        self.assertEqual(response.url, 'https://checkout.example.test/private')
+        private_payment = Payment.objects.get(
+            provider_payment_id='tr_demo_private_acceptance'
+        )
+        self.assertEqual(private_payment.order.private_user, private.user)
+        self.assertEqual(
+            private_payment.order.items.get().target_license,
+            private_license,
+        )
+        self.assertEqual(
+            LegalAcceptance.objects.filter(
+                user=private.user,
+                order=private_payment.order,
+            ).count(),
+            3,
+        )
+
     def test_demo_license_upgrade_requests_exist_for_every_company(self):
         self.assertEqual(
             LicenseUpgradeRequest.objects.filter(
