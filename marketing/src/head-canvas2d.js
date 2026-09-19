@@ -487,6 +487,14 @@ export async function initCanvasHead({sourceCanvas,stage,fallback}){
     context.globalCompositeOperation='lighter';
 
     const surface=cloud.surface;
+    // WebGL uses the original mesh as an invisible depth occluder. Reproduce
+    // that behavior in screen space so rear/top/back points cannot shine
+    // through the face in Firefox/no-WebGL and enlarge the silhouette.
+    const depthCell=3;
+    const depthCols=Math.max(1,Math.ceil(width/depthCell));
+    const depthRows=Math.max(1,Math.ceil(height/depthCell));
+    const depthGrid=new Float32Array(depthCols*depthRows);
+    depthGrid.fill(-1e9);
     const surfaceBuckets=Array.from({length:10},()=>[]);
     for(let i=0;i<surface.seeds.length;i++){
       const o=i*3;
@@ -515,21 +523,29 @@ export async function initCanvasHead({sourceCanvas,stage,fallback}){
 
       const [sx2,sy2,rz2,depth]=project(px,py,pz);
       if(depth<=.1||sx2<-5||sx2>width+5||sy2<-5||sy2>height+5)continue;
-      headMinX=Math.min(headMinX,sx2);headMaxX=Math.max(headMaxX,sx2);
-      headMinY=Math.min(headMinY,sy2);headMaxY=Math.max(headMaxY,sy2);
+      const cellX=clamp(Math.floor(sx2/depthCell),0,depthCols-1);
+      const cellY=clamp(Math.floor(sy2/depthCell),0,depthRows-1);
+      const depthIndex=cellY*depthCols+cellX;
+      if(rz2>depthGrid[depthIndex])depthGrid[depthIndex]=rz2;
       const pointSize=(1.9+pointPower*.43+released*.9)*(4.5/depth);
       const colorBoost=1.42+pointPower*.42;
       const r=Math.round(clamp(surface.colors[o]*colorBoost,0,1)*255);
       const g=Math.round(clamp(surface.colors[o+1]*colorBoost,0,1)*255);
       const b=Math.round(clamp(surface.colors[o+2]*colorBoost,0,1)*255);
       const bucket=clamp(Math.floor((rz2+1.7)/3.4*10),0,9);
-      surfaceBuckets[bucket].push(sx2,sy2,pointSize,r,g,b,alpha);
+      surfaceBuckets[bucket].push(sx2,sy2,pointSize,r,g,b,alpha,depthIndex,rz2);
     }
     for(const bucket of surfaceBuckets){
-      for(let i=0;i<bucket.length;i+=7){
-        const [x,y,size,r,g,b,a]=bucket.slice(i,i+7);
-        const renderSize=Math.max(.5,size*.74);
-        context.fillStyle=`rgba(${r},${g},${b},${clamp(a*.28,0,1)})`;
+      for(let i=0;i<bucket.length;i+=9){
+        const [x,y,size,r,g,b,a,depthIndex,rz2]=bucket.slice(i,i+9);
+        if(rz2<depthGrid[depthIndex]-.10)continue;
+        headMinX=Math.min(headMinX,x);headMaxX=Math.max(headMaxX,x);
+        headMinY=Math.min(headMinY,y);headMaxY=Math.max(headMaxY,y);
+        // At CSS-pixel scale the WebGL radial point shader is visually a
+        // sub-2px dot. Keeping the Canvas quad in that range eliminates the
+        // blocky Firefox mask while preserving the deterministic point cloud.
+        const renderSize=Math.max(.45,Math.min(1.45,size*.52));
+        context.fillStyle=`rgba(${r},${g},${b},${clamp(a*.34,0,1)})`;
         context.fillRect(x-renderSize*.5,y-renderSize*.5,renderSize,renderSize);
       }
     }
@@ -547,15 +563,22 @@ export async function initCanvasHead({sourceCanvas,stage,fallback}){
       if(alpha<=.006)continue;
       const [, , normalZ]=rotateNormal(nx,ny,nz);
       if(normalZ<-.08)continue;
-      const [sx2,sy2,,depth]=project(px,py,pz);
+      const [sx2,sy2,rz2,depth]=project(px,py,pz);
       if(depth<=.1||sx2<-5||sx2>width+5||sy2<-5||sy2>height+5)continue;
+      const cellX=clamp(Math.floor(sx2/depthCell),0,depthCols-1);
+      const cellY=clamp(Math.floor(sy2/depthCell),0,depthRows-1);
+      const depthIndex=cellY*depthCols+cellX;
+      const nearest=depthGrid[depthIndex];
+      if(nearest>-1e8&&rz2<nearest-.12)continue;
+      headMinX=Math.min(headMinX,sx2);headMaxX=Math.max(headMaxX,sx2);
+      headMinY=Math.min(headMinY,sy2);headMaxY=Math.max(headMaxY,sy2);
       const size=(1.55+topology.detail[i]*1.75+topologyPower*.18)*(4.5/depth);
       const detailBoost=1+topology.detail[i]*.72;
       const r=Math.round(clamp(topology.colors[o]*detailBoost*1.55,0,1)*255);
       const g=Math.round(clamp(topology.colors[o+1]*detailBoost*1.55,0,1)*255);
       const b=Math.round(clamp(topology.colors[o+2]*detailBoost*1.55,0,1)*255);
-      const renderSize=Math.max(.5,size*.72);
-      context.fillStyle=`rgba(${r},${g},${b},${clamp(alpha*.25,0,1)})`;
+      const renderSize=Math.max(.45,Math.min(1.65,size*.50));
+      context.fillStyle=`rgba(${r},${g},${b},${clamp(alpha*.30,0,1)})`;
       context.fillRect(sx2-renderSize*.5,sy2-renderSize*.5,renderSize,renderSize);
     }
 
