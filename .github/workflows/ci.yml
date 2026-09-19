@@ -216,6 +216,12 @@ jobs:
         env:
           PM_VALIDATE_READ_ONLY: '1'
         run: bash scripts/runtime_validate.sh
+      - name: Concurrent HTTP load smoke
+        env:
+          PM_LOAD_BASE_URL: https://localhost
+          PM_LOAD_WORKERS: '32'
+          PM_LOAD_REQUESTS: '640'
+        run: python3 scripts/http_load_smoke.py
       - name: Test restore failure propagation and recovery
         run: bash scripts/test_backup_restore.sh
       - name: Container status
