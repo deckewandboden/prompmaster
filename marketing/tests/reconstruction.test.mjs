@@ -31,7 +31,7 @@ test('non-WebGL fallback keeps the actual head visible without camera access',()
   assert.match(fallback,/models\/head\.glb/);
   assert.match(fallback,/getContext\('2d'/);
   assert.match(fallback,/head-fallback-canvas/);
-  assert.doesNotMatch(fallback,/getUserMedia|enumerateDevices|camera|Bewegung pausieren|Bewegung aktivieren|motion-button/i);
+  assert.doesNotMatch(fallback,/getUserMedia|enumerateDevices|navigator\.mediaDevices|pm-headtrack|Bewegung pausieren|Bewegung aktivieren|motion-button/i);
   assert.doesNotMatch(fallback,/Aus deiner Aufgabe wird ein präziser Copilot-Prompt/i);
   assert.match(fallback,/const base=height\*projectionScale/);
   assert.match(fallback,/groundParticles/);
