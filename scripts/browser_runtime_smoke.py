@@ -1006,9 +1006,20 @@ def run_backend_ui_smoke(browser, fixture=None) -> None:
                 f'demo browser login matrix incomplete: {len(demo_login_expectations)} identities'
             )
 
-        for email in sorted(demo_login_expectations):
+        for demo_index, email in enumerate(sorted(demo_login_expectations), start=1):
             mode, expected = demo_login_expectations[email]
-            context = browser.new_context(viewport={'width': 1440, 'height': 1000})
+            # Login throttling is intentionally per client IP (10 attempts /
+            # 5 minutes). This acceptance suite represents 26 independent demo
+            # people, not a brute-force attack from one workstation. Give each
+            # browser context its own TEST-NET-style client address so the
+            # production throttle remains active and is not weakened just to
+            # make the test pass.
+            context = browser.new_context(
+                viewport={'width': 1440, 'height': 1000},
+                extra_http_headers={
+                    'X-Forwarded-For': f'198.18.1.{demo_index}',
+                },
+            )
             page = context.new_page()
             if mode == 'mfa':
                 _browser_first_time_mfa_login(
