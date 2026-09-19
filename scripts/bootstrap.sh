@@ -151,6 +151,16 @@ wait_healthy beat 300
 wait_healthy caddy 180
 wait_healthy backup 360
 assert_external_caddy_ports_closed
+if [[ -n "$EXTERNAL_CADDY_NETWORK" ]]; then
+  log "External-Caddy Upstream-Gate"
+  docker compose "${F[@]}" exec -T caddy sh -c \
+    "wget -qO- --header='Host: ${CADDY_DOMAIN}' http://127.0.0.1/auth/login/ >/dev/null" \
+    || fail "External-Caddy kann /auth/login/ nicht fehlerfrei über promptmaster-web-internal erreichen"
+  docker compose "${F[@]}" exec -T caddy sh -c \
+    "wget -qO- --header='Host: ${CADDY_DOMAIN}' http://127.0.0.1/catalog.json | grep -q 'PROMPTMASTER_PRO'" \
+    || fail "External-Caddy kann /catalog.json nicht fehlerfrei über promptmaster-web-internal erreichen"
+  log "External-Caddy Upstream-Gate OK: Login und Katalog ohne HTTP-400"
+fi
 log "Django Ready"; docker compose "${F[@]}" exec -T web curl -fsS http://127.0.0.1:8000/health/ready/ >/dev/null
 log "Marketing-Artefakte im Caddy-Container"; docker compose "${F[@]}" exec -T caddy sh -c 'test -s /srv/marketing/index.html && test -s /srv/marketing/models/head.glb && test -s /srv/marketing/models/night-landscape.png && test -s /srv/marketing/integration-patch.js'
 log "Containerstatus"; docker compose "${F[@]}" ps
