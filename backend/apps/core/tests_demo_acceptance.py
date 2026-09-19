@@ -550,6 +550,32 @@ class DemoEstateFunctionalAcceptanceTests(TestCase):
             3,
         )
 
+
+    def test_private_customer_can_revoke_own_device_but_not_foreign_device(self):
+        private = PrivateCustomerProfile.objects.select_related('user').get(
+            customer_number='DEMO-P-2001'
+        )
+        own_device = DeviceRegistration.objects.filter(
+            user=private.user,
+            revoked_at__isnull=True,
+        ).first()
+        self.assertIsNotNone(own_device)
+        foreign_device = DeviceRegistration.objects.filter(
+            revoked_at__isnull=True,
+        ).exclude(user=private.user).first()
+        self.assertIsNotNone(foreign_device)
+
+        self._session_as(private.user)
+        response = self.client.post(f'/portal/devices/{foreign_device.id}/revoke/')
+        self.assertEqual(response.status_code, 404)
+        foreign_device.refresh_from_db()
+        self.assertIsNone(foreign_device.revoked_at)
+
+        response = self.client.post(f'/portal/devices/{own_device.id}/revoke/')
+        self.assertEqual(response.status_code, 302)
+        own_device.refresh_from_db()
+        self.assertIsNotNone(own_device.revoked_at)
+
     def test_demo_license_upgrade_requests_exist_for_every_company(self):
         self.assertEqual(
             LicenseUpgradeRequest.objects.filter(

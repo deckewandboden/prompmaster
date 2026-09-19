@@ -705,25 +705,47 @@ def devices(request):
         sort_fields={'device': 'display_name', 'last': 'last_seen_at', 'user': 'user__email'},
         default_sort='-last_seen_at',
     ).build()
+    can_manage_devices = bool(
+        (company and membership and membership.role == 'admin')
+        or not company
+    )
     return render(
         request,
         'portal/devices.html',
-        {'grid': grid, 'is_admin': bool(membership and membership.role == 'admin'), 'filter_options': []},
+        {
+            'grid': grid,
+            'is_admin': bool(membership and membership.role == 'admin'),
+            'can_manage_devices': can_manage_devices,
+            'is_private_customer': not company,
+            'filter_options': [],
+        },
     )
 
 
 @login_required
 def revoke_device_view(request, pk):
-    company, _ = _admin(request)
     if request.method != 'POST':
         raise PermissionDenied
-    device = get_object_or_404(
-        DeviceRegistration,
-        pk=pk,
-        user__company_memberships__company=company,
-        user__company_memberships__active=True,
-        license__company=company,
-    )
+    company, membership = _ctx(request)
+    if company:
+        if not membership or membership.role != 'admin':
+            raise PermissionDenied
+        device = get_object_or_404(
+            DeviceRegistration,
+            pk=pk,
+            user__company_memberships__company=company,
+            user__company_memberships__active=True,
+            license__company=company,
+        )
+    else:
+        if not _is_private_customer(request.user):
+            raise PermissionDenied
+        device = get_object_or_404(
+            DeviceRegistration,
+            pk=pk,
+            user=request.user,
+            license__owner_user=request.user,
+        )
     revoke_device(device, request.user, request=request)
     messages.success(request, 'Gerät entfernt.')
     return redirect('portal:devices')
