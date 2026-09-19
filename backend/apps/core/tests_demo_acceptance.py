@@ -412,7 +412,7 @@ class DemoEstateFunctionalAcceptanceTests(TestCase):
 
         response = self.client.post(
             f'/portal/team/{target_membership.user_id}/transfer-admin/',
-            {'password': self.credentials[admin.email]},
+            {'password': self.credentials[admin.email], 'confirm': 'on'},
         )
         self.assertEqual(response.status_code, 302)
         self.assertEqual(response.url, '/auth/login/')

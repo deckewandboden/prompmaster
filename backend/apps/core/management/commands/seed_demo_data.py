@@ -16,6 +16,7 @@ from apps.accounts.models import Role, User, UserRole
 from apps.catalog.models import Product, ProductPrice
 from apps.companies.models import Company, Invitation, Membership, PrivateCustomerProfile
 from apps.devices.models import DeviceRegistration
+from apps.legal.models import LegalDocument
 from apps.licenses.models import (
     License,
     LicenseAssignment,
@@ -165,6 +166,35 @@ class Command(BaseCommand):
         )
         if price is None:
             raise CommandError('Aktiver PRO-Neukaufpreis fehlt; seed_defaults konnte keinen Preis bereitstellen.')
+
+        # Demo checkout must exercise the same legal-acceptance contract as a
+        # real customer. These records exist only because this command itself
+        # is hard-blocked in production.
+        demo_legal = {
+            'terms': (
+                'DEMO-AGB für Staging-Funktionstests. Kein produktiver Rechtstext.'
+            ),
+            'privacy': (
+                'DEMO-Datenschutzhinweis für Staging-Funktionstests. Kein produktiver Rechtstext.'
+            ),
+            'withdrawal': (
+                'DEMO-Widerrufsinformation für Staging-Funktionstests. Kein produktiver Rechtstext.'
+            ),
+            'license': (
+                'DEMO-Lizenzbedingungen für Staging-Funktionstests. Kein produktiver Rechtstext.'
+            ),
+        }
+        for doc_type, content in demo_legal.items():
+            LegalDocument.objects.filter(doc_type=doc_type, active=True).update(active=False)
+            LegalDocument.objects.update_or_create(
+                doc_type=doc_type,
+                version='demo-staging-v1',
+                defaults={
+                    'content': content,
+                    'valid_from': now - timedelta(minutes=1),
+                    'active': True,
+                },
+            )
 
         credentials = []
 
