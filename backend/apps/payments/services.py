@@ -191,6 +191,21 @@ def process_provider_state(payment_id, payload, *, chargebacks_payload=None):
         # Compatibility for historical/internal callers that predate the
         # canonical chargeback-list fetch. Real webhooks always pass the list.
         status = 'chargeback_reversed'
+    elif (
+        base_status in {'failed', 'canceled', 'expired'}
+        and (payment.processed_paid or payment.order.status == 'paid')
+    ):
+        # Provider webhooks can arrive out of order. Once a payment has
+        # activated the paid order, a stale negative state must never downgrade
+        # the canonical local payment state.
+        status = (
+            previous_status
+            if previous_status in {
+                'paid', 'refunded_partial', 'refunded_full',
+                'chargeback', 'chargeback_reversed',
+            }
+            else 'paid'
+        )
 
     event_key = f'{payment_id}:{status}:{refunded}:{remaining}'[:180]
     event, _ = MollieEvent.objects.get_or_create(
