@@ -655,6 +655,12 @@ for needle in (
     "stage.dataset.lowerSceneContract='edge-shared-v1'",
     'sceneLayers',
     'drawSceneLayers',
+    'meta.scaleSum+=worldPixelScale',
+    'drawSceneLayers(sceneLayers.landscape,.72,.075,.018,.22,.006)',
+    'drawSceneLayers(sceneLayers.blend,.68,.075,0,.24,.008)',
+    'sceneProject(beacon.x-smoothX*.075,beacon.y,beacon.z)',
+    'worldX=worldX-4.2;',
+    'sceneProject(worldX-smoothX*.075,light.y,light.z)',
     'length:6',
     'offset:.45+index*1.72',
     'period:9.1+(index%3)*1.05',
@@ -688,6 +694,15 @@ for forbidden in (
 ):
     if forbidden in webgl_head:
         fail(f'Browser-specific head renderer logic is forbidden: {forbidden}')
+if canvas_head.index('smoothX+=(mouseX-smoothX)') > canvas_head.index('drawSceneLayers(sceneLayers.sky'):
+    fail('Canvas pointer smoothing must run before lower-scene drawing like Edge')
+for forbidden in (
+    'worldX=worldX-4.2-smoothX*.08',
+    'beacon.y+smoothY*.018',
+    'light.y+smoothY*.018',
+):
+    if forbidden in canvas_head:
+        fail(f'Canvas lower-scene motion diverges from Edge: {forbidden}')
 if 'font-family:Inter,' in marketing_style:
     fail('Marketing must not trigger blocked local Inter font lookup in Firefox')
 if 'font-family:"Segoe UI",Arial,sans-serif;' not in marketing_style:
