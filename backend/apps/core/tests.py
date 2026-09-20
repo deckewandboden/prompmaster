@@ -350,6 +350,13 @@ class AdminDashboardRegressionTests(TestCase):
             email_verified_at=timezone.now(),
         )
         self.client.force_login(self.admin)
+        session = self.client.session
+        now_ts = timezone.now().timestamp()
+        session['security_version'] = self.admin.security_version
+        session['two_factor_ok'] = True
+        session['authenticated_at'] = now_ts
+        session['last_activity_at'] = now_ts
+        session.save()
         self.company = Company.objects.create(
             customer_number='DASH-1001',
             name='Dashboard GmbH',
@@ -408,6 +415,13 @@ class AdminOrderGridTests(TestCase):
             email_verified_at=timezone.now(),
         )
         self.client.force_login(self.admin)
+        session = self.client.session
+        now_ts = timezone.now().timestamp()
+        session['security_version'] = self.admin.security_version
+        session['two_factor_ok'] = True
+        session['authenticated_at'] = now_ts
+        session['last_activity_at'] = now_ts
+        session.save()
         self.company = Company.objects.create(
             customer_number='ORD-COMPANY',
             name='Alpha GmbH',
