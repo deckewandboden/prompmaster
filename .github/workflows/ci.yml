@@ -338,7 +338,12 @@ jobs:
           : > browser-marketing-smoke.log
           for engine in chromium firefox webkit; do
             echo "===== $engine =====" | tee -a browser-marketing-smoke.log
-            PM_BROWSER_ENGINE="$engine" python scripts/browser_marketing_smoke.py 2>&1 | tee -a browser-marketing-smoke.log
+            if [ "$engine" = "firefox" ]; then
+              xvfb-run -a env PM_BROWSER_ENGINE=firefox PM_FIREFOX_HEADED=1 \
+                python scripts/browser_marketing_smoke.py 2>&1 | tee -a browser-marketing-smoke.log
+            else
+              PM_BROWSER_ENGINE="$engine" python scripts/browser_marketing_smoke.py 2>&1 | tee -a browser-marketing-smoke.log
+            fi
           done
 
       - name: Upload browser diagnostics
