@@ -486,6 +486,12 @@ export async function initCanvasHead({sourceCanvas,stage,fallback}){
     // the clamped dt, so a slow Canvas frame also slowed the entire head,
     // beacons and shooting stars and produced the observed millimetre crawl.
     elapsed+=Math.min(rawDt,.25);
+    // Edge updates smoothed pointer input before moving any scene object.
+    // Keep the fallback in the same frame order so ground/stars never lag a
+    // frame behind the head.
+    const inputFollow=3.15;
+    smoothX+=(mouseX-smoothX)*Math.min(1,dt*inputFollow);
+    smoothY+=(mouseY-smoothY)*Math.min(1,dt*inputFollow);
     context.clearRect(0,0,width,height);
     const glow=context.createRadialGradient(width*.5,height*.42,0,width*.5,height*.42,Math.min(width,height)*.38);
     glow.addColorStop(0,'rgba(30,155,255,.12)');
@@ -539,7 +545,7 @@ export async function initCanvasHead({sourceCanvas,stage,fallback}){
     for(const beacon of beacons){
       const wave=.5+.5*Math.sin(elapsed*(1.05+beacon.rate)+beacon.phase);
       const flash=Math.pow(wave,7);
-      const [x,y,depth]=sceneProject(beacon.x-smoothX*.075,beacon.y+smoothY*.018,beacon.z);
+      const [x,y,depth]=sceneProject(beacon.x-smoothX*.075,beacon.y,beacon.z);
       if(depth<=.1)continue;
       const pointScale=4.5/depth;
       const diameter=Math.max(1.6,(2.8+flash*8.5)*pointScale);
@@ -553,8 +559,8 @@ export async function initCanvasHead({sourceCanvas,stage,fallback}){
     for(const light of traffic){
       let worldX=(light.phase+elapsed*light.speed+4.2)%8.4;
       if(worldX<0)worldX+=8.4;
-      worldX=worldX-4.2-smoothX*.08;
-      const [x,y,depth]=sceneProject(worldX-smoothX*.075,light.y+smoothY*.018,light.z);
+      worldX=worldX-4.2;
+      const [x,y,depth]=sceneProject(worldX-smoothX*.075,light.y,light.z);
       if(depth<=.1)continue;
       const alpha=.48+.35*Math.sin(elapsed*1.7+light.phase);
       const size=Math.max(.8,2.5*(4.5/depth));
@@ -562,9 +568,6 @@ export async function initCanvasHead({sourceCanvas,stage,fallback}){
       context.fillRect(x,y,size,size*.52);
     }
 
-    const inputFollow=3.15;
-    smoothX+=(mouseX-smoothX)*Math.min(1,dt*inputFollow);
-    smoothY+=(mouseY-smoothY)*Math.min(1,dt*inputFollow);
     const yawTarget=edition==='free'?-.22:edition==='pro'?.22:smoothX*.3;
     headYaw+=(yawTarget-headYaw)*Math.min(1,dt*3);
     headPitch+=(smoothY*.18-headPitch)*Math.min(1,dt*3);
