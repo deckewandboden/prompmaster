@@ -549,6 +549,21 @@ if re.search(r'\.brand\s+img\s*\{[^}]*object-fit\s*:\s*cover', css, flags=re.I|r
 if re.search(r'\.brand\s+img\s*\{[^}]*height\s*:\s*47px[^}]*width\s*:\s*54px', css, flags=re.I|re.S):
     fail('Responsive CSS distorts/crops PromptMaster logo dimensions')
 
+# 19b) Admin dashboard charts must keep CSS percentages locale-neutral.
+# German localization renders floats such as 100,0 for text, which is invalid
+# inside CSS percentages and previously collapsed the revenue bar/donut.
+dashboard_template = (ROOT/'backend/templates/ns_admin/dashboard.html').read_text(encoding='utf-8')
+dashboard_views = (ROOT/'backend/apps/core/admin_views.py').read_text(encoding='utf-8')
+dashboard_css = (ROOT/'backend/static/css/app.css').read_text(encoding='utf-8')
+for needle in ("row['percent_css']", "format(row['percent'], '.1f')"):
+    if needle not in dashboard_views:
+        fail(f'Dashboard locale-safe percentage contract missing: {needle}')
+for needle in ('height:{{ row.percent_css }}%', '--share:{{ product_mix.0.percent_css }}%', 'class="revenue-value"', 'class="alert-stack"'):
+    if needle not in dashboard_template:
+        fail(f'Dashboard rendering contract missing: {needle}')
+if '.alert-stack{display:grid;gap:' not in dashboard_css:
+    fail('Dashboard action alerts are missing explicit visual spacing')
+
 # 20) Customer/account separation is a V1 invariant. A private customer may
 # not silently become a company member, which would make tenant scoping
 # ambiguous and destructive company deactivation possible.
