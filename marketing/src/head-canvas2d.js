@@ -17,6 +17,98 @@ function seeded(seed=0x51f15e){
   };
 }
 
+export function createLowerSceneData(mobile=false){
+  const random=seeded(712367);
+  const landscapeCount=mobile?1500:4200;
+  const landscape=[];
+  for(let i=0;i<landscapeCount;i++){
+    const city=i<landscapeCount*.36;
+    const mountain=i>=landscapeCount*.36&&i<landscapeCount*.78;
+    const x=(random()-.5)*(city?7.4:9.4);
+    const edge=Math.min(1,Math.max(0,(Math.abs(x)-.7)/3.9));
+    const ridge=-1.08+edge*.68+Math.sin(x*2.25)*.075+Math.sin(x*5.1)*.035;
+    const level=city?Math.floor(random()*12):0;
+    const y=city
+      ? -1.38+level*(.028+random()*.012)
+      : mountain
+        ? ridge-random()*(.18+edge*.48)
+        : -1.3-random()*.3;
+    const z=city?-.42-random()*1.9:mountain?-1-random()*2.8:-.25-random()*3.4;
+    const cyan=.55+random()*.45;
+    const violet=random()>.88;
+    landscape.push({
+      x,y,z,
+      color:violet?[.42*cyan,.38*cyan,cyan]:[.08*cyan,.58*cyan,cyan],
+      phase:random()*Math.PI*2,
+      size:city?.65+random()*1.15:mountain?.4+random()*.85:.3+random()*.65,
+    });
+  }
+
+  const blendCount=mobile?850:2400;
+  const blend=[];
+  for(let i=0;i<blendCount;i++){
+    const x=(random()-.5)*9.4;
+    const center=1-Math.min(1,Math.abs(x)/4.7);
+    const top=-1.18+center*.16;
+    blend.push({
+      x,
+      y:top-random()*(.12+center*.34),
+      z:-.5-random()*2.35,
+      phase:random()*Math.PI*2,
+      size:.45+random()*1.05,
+    });
+  }
+
+  const beaconCount=mobile?58:150;
+  const beacons=[];
+  for(let i=0;i<beaconCount;i++){
+    beacons.push({
+      x:(random()-.5)*9,
+      y:-1.43+random()*.42,
+      z:-.18-random()*2.25,
+      phase:random()*Math.PI*2,
+      rate:.42+random()*.64,
+    });
+  }
+
+  const trafficCount=mobile?16:38;
+  const traffic=[];
+  for(let i=0;i<trafficCount;i++){
+    traffic.push({
+      y:-1.39+random()*.3,
+      z:-.15-random()*1.4,
+      speed:(random()>.5?1:-1)*(.11+random()*.24),
+      phase:random()*8.4,
+    });
+  }
+
+  const skyCount=mobile?105:245;
+  const sky=[];
+  for(let i=0;i<skyCount;i++){
+    sky.push({
+      x:(random()-.5)*9.2,
+      y:.42+random()*1.32,
+      z:-1.2-random()*2.8,
+      phase:random()*Math.PI*2,
+      size:.35+random()*.85,
+    });
+  }
+
+  const starHeights=[1.42,1.16,.92,1.3,1.02,.76];
+  const starDepths=[-1.25,-1.75,-1.45,-2.05,-1.6,-2.3];
+  const shootingStars=Array.from({length:6},(_,index)=>({
+    direction:index%2?-1:1,
+    offset:.45+index*1.72,
+    period:9.1+(index%3)*1.05,
+    y:starHeights[index],
+    z:starDepths[index],
+    opacity:.72-(index%3)*.055,
+    scaleBias:(index%3)*.04,
+  }));
+
+  return {landscape,blend,beacons,traffic,sky,shootingStars};
+}
+
 async function modelCloud(surfaceCount){
   const gltf=await new GLTFLoader().loadAsync(MODEL_URL);
   let mesh;
@@ -211,55 +303,13 @@ export async function initCanvasHead({sourceCanvas,stage,fallback}){
   // stays visually aligned with the canonical Chromium/Edge composition.
   // Canvas2D mirrors the animated lower scene of the WebGL edition instead of
   // degrading Firefox/VDI clients to a head-only fallback.
-  const sceneRandom=seeded(712367);
-  const groundParticles=Array.from({length:mobile?1500:4200},()=>{
-    const x=sceneRandom()-.5;
-    const edge=Math.min(1,Math.max(0,(Math.abs(x)-.08)/.42));
-    const ridge=.765-edge*.075-Math.sin(x*14)*.008-Math.sin(x*31)*.004;
-    const city=sceneRandom()<.38;
-    return {
-      x,
-      y:city?.82-sceneRandom()*.13:ridge+sceneRandom()*(.025+edge*.055),
-      phase:sceneRandom()*Math.PI*2,
-      size:.45+sceneRandom()*1.25,
-      alpha:.16+sceneRandom()*.42,
-      violet:sceneRandom()>.88,
-    };
-  });
-  const blendParticles=Array.from({length:mobile?850:2400},()=>{
-    const x=(sceneRandom()-.5)*.92;
-    const center=1-Math.min(1,Math.abs(x)/.46);
-    return {
-      x,
-      y:.775-center*.02+sceneRandom()*(.018+center*.045),
-      phase:sceneRandom()*Math.PI*2,
-      size:.45+sceneRandom()*1.15,
-    };
-  });
-  const beacons=Array.from({length:mobile?58:150},()=>({
-    x:(sceneRandom()-.5)*.88,
-    y:.735+sceneRandom()*.09,
-    phase:sceneRandom()*Math.PI*2,
-    rate:1.47+sceneRandom()*.64,
-  }));
-  const traffic=Array.from({length:mobile?16:38},()=>({
-    phase:sceneRandom(),
-    y:.785+sceneRandom()*.045,
-    speed:(sceneRandom()>.5?1:-1)*(.025+sceneRandom()*.055),
-    alpha:.38+sceneRandom()*.35,
-  }));
-  const skyLights=Array.from({length:mobile?105:245},()=>({
-    x:sceneRandom(),
-    y:.13+sceneRandom()*.30,
-    phase:sceneRandom()*Math.PI*2,
-    size:.35+sceneRandom()*.85,
-  }));
-  const shootingStars=Array.from({length:mobile?2:4},(_,index)=>({
-    phase:sceneRandom(),
-    y:.14+sceneRandom()*.24,
-    direction:index%2?1:-1,
-    speed:.035+sceneRandom()*.025,
-  }));
+  const sceneData=createLowerSceneData(mobile);
+  const groundParticles=sceneData.landscape;
+  const blendParticles=sceneData.blend;
+  const beacons=sceneData.beacons;
+  const traffic=sceneData.traffic;
+  const skyLights=sceneData.sky;
+  const shootingStars=sceneData.shootingStars;
 
   const reduced=matchMedia('(prefers-reduced-motion:reduce)');
   let paused=reduced.matches,disposed=false,visible=true,last=0,lastFrame=0,elapsed=0,mouseX=0,mouseY=0,smoothX=0,smoothY=0,lastPointerX=0,lastPointerY=0,hasPointer=false,cursorEnergy=0,dissolve=0,headYaw=0,headPitch=0,pointPower=1,topologyPower=1,edition='',raf=0,width=1,height=1,dpr=1;
