@@ -583,7 +583,7 @@ canvas_head = (ROOT/'marketing/src/head-canvas2d.js').read_text(encoding='utf-8'
 for needle in (
     "customer_sort=Lower(",
     "'customer': 'customer_sort'",
-    "customer_display=Coalesce('company__name', 'private_user__email')",
+    "customer_display=Coalesce('company__name', 'private_user__email', output_field=CharField())",
     "('customer_display', 'Kunde', 'customer')",
 ):
     if needle not in admin_views:
