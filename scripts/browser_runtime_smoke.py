@@ -1578,6 +1578,86 @@ def run_backend_ui_smoke(browser, fixture=None) -> None:
                 process.kill()
                 process.wait(timeout=5)
 
+def _run_cross_browser_2fa_layout(browser, fixture: dict, engine: str) -> None:
+    import subprocess
+    import sys
+
+    port = _free_port()
+    base = f'http://127.0.0.1:{port}/'
+    env = os.environ.copy()
+    env.setdefault('ENVIRONMENT', 'development')
+    env.setdefault('ALLOWED_HOSTS', '127.0.0.1,localhost')
+    env.setdefault('SESSION_COOKIE_SECURE', '0')
+    env.setdefault('CSRF_COOKIE_SECURE', '0')
+    process = subprocess.Popen(
+        [sys.executable, 'manage.py', 'runserver', f'127.0.0.1:{port}', '--noreload'],
+        cwd=str(ROOT / 'backend'),
+        env=env,
+        stdout=subprocess.DEVNULL,
+        stderr=subprocess.STDOUT,
+    )
+    try:
+        _wait_http(base + 'health/live/', process)
+        context = browser.new_context(viewport={'width': 460, 'height': 820})
+        page = context.new_page()
+        response = page.goto(base + 'auth/login/', wait_until='networkidle')
+        if not response or response.status != 200:
+            raise AssertionError(f'{engine} 2FA layout: login page failed')
+        page.locator('input[name="email"]').fill(fixture['admin_email'])
+        password_input = page.locator('input[name="password"]')
+        password_input.fill(fixture['password'])
+        password_input.press('Enter')
+        page.wait_for_url('**/auth/2fa/**')
+        page.wait_for_load_state('networkidle')
+        layout = page.evaluate(
+            """() => {
+              const card = document.querySelector('.auth-login-card');
+              const form = document.querySelector('.auth-login-form');
+              const input = form?.querySelector('input[name="code"]');
+              const button = form?.querySelector('.auth-submit');
+              if (!card || !form || !input || !button) return null;
+              const c = card.getBoundingClientRect();
+              const f = form.getBoundingClientRect();
+              const i = input.getBoundingClientRect();
+              const b = button.getBoundingClientRect();
+              return {
+                cardLeft: c.left, cardRight: c.right, cardWidth: c.width,
+                formLeft: f.left, formRight: f.right,
+                inputLeft: i.left, inputRight: i.right, inputWidth: i.width,
+                buttonLeft: b.left, buttonRight: b.right, buttonWidth: b.width,
+                inputHeight: i.height, buttonHeight: b.height,
+                verticalGap: b.top - i.bottom,
+                overflow: (
+                  i.left < c.left || i.right > c.right ||
+                  b.left < c.left || b.right > c.right
+                ),
+              };
+            }"""
+        )
+        if (
+            not layout
+            or layout['cardWidth'] < 300
+            or layout['overflow']
+            or abs(layout['inputLeft'] - layout['buttonLeft']) > 1.5
+            or abs(layout['inputRight'] - layout['buttonRight']) > 1.5
+            or abs(layout['inputWidth'] - layout['buttonWidth']) > 2
+            or layout['inputHeight'] < 44
+            or layout['buttonHeight'] < 42
+            or layout['verticalGap'] < 10
+        ):
+            raise AssertionError(f'{engine} 2FA layout unstable: {layout}')
+        context.close()
+        print(f'{engine.upper()} 2FA LAYOUT OK: {layout}')
+    finally:
+        if process.poll() is None:
+            process.terminate()
+            try:
+                process.wait(timeout=5)
+            except subprocess.TimeoutExpired:
+                process.kill()
+                process.wait(timeout=5)
+
+
 def main() -> int:
     try:
         from playwright.sync_api import sync_playwright
@@ -1643,7 +1723,22 @@ def main() -> int:
         run_backend_ui_smoke(browser, backend_fixture)
         browser.close()
 
-    print('BROWSER RUNTIME SMOKE OK: 34-app central catalog + compose + rating/feedback bridge + authenticated backend UI gate')
+        if backend_fixture is not None:
+            for engine_name, browser_type in (
+                ('firefox', pw.firefox),
+                ('webkit', pw.webkit),
+            ):
+                engine_browser = browser_type.launch(headless=True)
+                try:
+                    _run_cross_browser_2fa_layout(
+                        engine_browser,
+                        backend_fixture,
+                        engine_name,
+                    )
+                finally:
+                    engine_browser.close()
+
+    print('BROWSER RUNTIME SMOKE OK: 34-app central catalog + compose + rating/feedback bridge + authenticated backend UI gate + Firefox/WebKit 2FA layout')
     return 0
 
 
