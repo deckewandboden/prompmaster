@@ -1203,6 +1203,19 @@ def run_backend_ui_smoke(browser, fixture=None) -> None:
                         f'portal profile: raw English/internal address labels visible: {flattened_labels}'
                     )
 
+                company_response = page.goto(base + 'portal/company/', wait_until='networkidle')
+                if company_response and company_response.status == 200:
+                    company_labels = ' '.join(page.locator('label').all_text_contents())
+                    for german_label in ('Firmenname', 'Telefon', 'Straße', 'Hausnummer', 'PLZ', 'Ort', 'Land'):
+                        if german_label not in company_labels:
+                            raise AssertionError(
+                                f'portal company: German label missing: {german_label}'
+                            )
+                    if any(token in company_labels for token in ('phone', 'street', 'house_number', 'postal_code', 'city', 'country')):
+                        raise AssertionError(
+                            f'portal company: raw English/internal labels visible: {company_labels}'
+                        )
+
                 page.goto(base + 'portal/dashboard/', wait_until='networkidle')
                 search_input = page.locator('.topbar .search input')
                 if not search_input.is_visible():
