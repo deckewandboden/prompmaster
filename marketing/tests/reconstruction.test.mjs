@@ -20,6 +20,7 @@ test('reconstructed marketing uses latest recovered head engine',()=>{
   assert.match(head,/shootingStars/);
   assert.match(head,/createLowerSceneData/);
   assert.match(head,/stage\.dataset\.beaconProbe=probe\.join\(','\)/);
+  assert.match(head,/stage\.dataset\.headYaw=group\.rotation\.y\.toFixed\(4\)/);
   assert.match(head,/point\.x\+cityBeacons\.position\.x/);
   assert.match(head,/createShootingStarCanvas/);
   assert.match(head,/getShootingStarState/);
@@ -119,6 +120,8 @@ test('non-WebGL fallback keeps the actual head visible without camera access',()
   assert.match(fallback,/context\.drawImage\(trafficSprite,x-size\*\.5,y-size\*\.5,size,size\)/);
   assert.match(fallback,/canvasDrawMs/);
   assert.match(fallback,/canvasDrawPeakMs/);
+  assert.match(fallback,/stage\.dataset\.canvasElapsed=elapsed\.toFixed\(3\)/);
+  assert.match(fallback,/stage\.dataset\.headYaw=headYaw\.toFixed\(4\)/);
   assert.match(fallback,/const rawDt=last>0\?Math\.max\(0,\(now-last\)\/1000\):0/);
   assert.match(fallback,/const dt=Math\.min\(\.10,rawDt\)/);
   assert.match(fallback,/elapsed\+=Math\.min\(rawDt,\.25\)/);
