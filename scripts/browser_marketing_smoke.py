@@ -564,12 +564,18 @@ def main() -> int:
                 )
                 context_loss_page.wait_for_timeout(250)
                 context_loss_state = context_loss_page.evaluate(
-                    """() => ({
-                      renderer: document.querySelector('.head-stage')?.dataset.headRenderer || '',
-                      fallbackVisible: document.querySelector('.head-fallback')?.hidden === false,
-                      webglHidden: document.querySelector('#particle-head')?.hidden === true,
-                      canvasCount: document.querySelectorAll('.head-fallback-canvas').length,
-                    })"""
+                    """() => {
+                      const stage = document.querySelector('.head-stage');
+                      return {
+                        renderer: stage?.dataset.headRenderer || '',
+                        webglInit: stage?.dataset.webglInit || '',
+                        webglCleanup: stage?.dataset.webglCleanup || '',
+                        eyeContract: stage?.dataset.eyeContract || '',
+                        fallbackVisible: document.querySelector('.head-fallback')?.hidden === false,
+                        webglHidden: document.querySelector('#particle-head')?.hidden === true,
+                        canvasCount: document.querySelectorAll('.head-fallback-canvas').length,
+                      };
+                    }"""
                 )
                 if context_loss_errors:
                     fail(
@@ -578,6 +584,9 @@ def main() -> int:
                     )
                 if context_loss_state != {
                     'renderer': 'canvas2d',
+                    'webglInit': 'canvas-context-loss',
+                    'webglCleanup': '1',
+                    'eyeContract': '',
                     'fallbackVisible': True,
                     'webglHidden': True,
                     'canvasCount': 1,
