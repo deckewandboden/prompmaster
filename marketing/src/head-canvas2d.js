@@ -471,7 +471,9 @@ export async function initCanvasHead({sourceCanvas,stage,fallback}){
         const [x,y,depth,,worldPixelScale]=sceneProject(point.x,point.y,point.z);
         if(depth<=.1||x<-8||x>width+8||y<-8||y>height+8)continue;
         meta.scaleSum+=worldPixelScale;meta.count++;
-        const size=Math.max(.45,.012*worldPixelScale);
+        // THREE.PointsMaterial uses gl_PointSize=size*(viewportHeight/2)/depth
+        // for perspective attenuation (pixel ratio cancels in CSS pixels).
+        const size=Math.max(.45,.012*(height*.5)/depth);
         ctx.fillRect(x-size*.5,y-size*.5,size,size);
       }
     }
