@@ -496,7 +496,7 @@ export async function initCanvasHead({sourceCanvas,stage,fallback}){
     for(const beacon of beacons){
       const wave=.5+.5*Math.sin(elapsed*(1.05+beacon.rate)+beacon.phase);
       const flash=Math.pow(wave,7);
-      const [x,y,depth]=sceneProject(beacon.x-smoothX*.08,beacon.y,beacon.z);
+      const [x,y,depth]=sceneProject(beacon.x-smoothX*.075,beacon.y+smoothY*.018,beacon.z);
       if(depth<=.1)continue;
       const pointScale=4.5/depth;
       const diameter=Math.max(1.6,(2.8+flash*8.5)*pointScale);
@@ -511,7 +511,7 @@ export async function initCanvasHead({sourceCanvas,stage,fallback}){
       let worldX=(light.phase+elapsed*light.speed+4.2)%8.4;
       if(worldX<0)worldX+=8.4;
       worldX=worldX-4.2-smoothX*.08;
-      const [x,y,depth]=sceneProject(worldX,light.y,light.z);
+      const [x,y,depth]=sceneProject(worldX-smoothX*.075,light.y+smoothY*.018,light.z);
       if(depth<=.1)continue;
       const alpha=.48+.35*Math.sin(elapsed*1.7+light.phase);
       const size=Math.max(.8,2.5*(4.5/depth));
