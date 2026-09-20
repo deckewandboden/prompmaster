@@ -569,19 +569,32 @@ export async function initCanvasHead({sourceCanvas,stage,fallback}){
     if(disposed)return;
     const drawStarted=performance.now();
     const rawDt=last>0?Math.max(0,(now-last)/1000):0;
-    const dt=Math.min(.05,rawDt);
     last=now;
-    // Keep animation phase tied to wall-clock time. The old code added only
-    // the clamped dt, so a slow Canvas frame also slowed the entire head,
-    // beacons and shooting stars and produced the observed millimetre crawl.
-    elapsed+=Math.min(rawDt,.25);
+    // Canvas may render fewer frames than WebGL. Advance the interaction state
+    // in canonical 60 Hz Edge steps, but rasterize only once. This preserves
+    // the Edge response speed without increasing Canvas draw load.
+    const stateDt=Math.min(rawDt,.25);
+    elapsed+=stateDt;
+    let remainingState=stateDt;
+    while(remainingState>1e-6){
+      const step=Math.min(1/60,remainingState);
+      const inputFollow=3.15;
+      smoothX+=(mouseX-smoothX)*Math.min(1,step*inputFollow);
+      smoothY+=(mouseY-smoothY)*Math.min(1,step*inputFollow);
+      const yawTarget=edition==='free'?-.22:edition==='pro'?.22:smoothX*.3;
+      headYaw+=(yawTarget-headYaw)*Math.min(1,step*3);
+      headPitch+=(smoothY*.18-headPitch)*Math.min(1,step*3);
+      const powerTarget=edition==='pro'?1.28:edition==='free'?.7:1;
+      pointPower+=(powerTarget-pointPower)*Math.min(1,step*3);
+      topologyPower+=(powerTarget-topologyPower)*Math.min(1,step*3);
+      cursorEnergy=Math.max(0,cursorEnergy-step*.75);
+      const dissolveTarget=Math.min(.58,Math.max(edition?.42:.055,cursorEnergy*.5));
+      const dissolveSpeed=dissolveTarget<dissolve?6:1.75;
+      dissolve+=(dissolveTarget-dissolve)*Math.min(1,step*dissolveSpeed);
+      remainingState-=step;
+    }
     stage.dataset.canvasElapsed=elapsed.toFixed(3);
-    // Edge updates smoothed pointer input before moving any scene object.
-    // Keep the fallback in the same frame order so ground/stars never lag a
-    // frame behind the head.
-    const inputFollow=3.15;
-    smoothX+=(mouseX-smoothX)*Math.min(1,dt*inputFollow);
-    smoothY+=(mouseY-smoothY)*Math.min(1,dt*inputFollow);
+    stage.dataset.headYaw=headYaw.toFixed(4);
     context.clearRect(0,0,width,height);
     const glow=context.createRadialGradient(width*.5,height*.42,0,width*.5,height*.42,Math.min(width,height)*.38);
     glow.addColorStop(0,'rgba(30,155,255,.12)');
@@ -660,18 +673,6 @@ export async function initCanvasHead({sourceCanvas,stage,fallback}){
       context.drawImage(trafficSprite,x-size*.5,y-size*.5,size,size);
       context.restore();
     }
-
-    const yawTarget=edition==='free'?-.22:edition==='pro'?.22:smoothX*.3;
-    headYaw+=(yawTarget-headYaw)*Math.min(1,dt*3);
-    headPitch+=(smoothY*.18-headPitch)*Math.min(1,dt*3);
-    stage.dataset.headYaw=headYaw.toFixed(4);
-    const powerTarget=edition==='pro'?1.28:edition==='free'?.7:1;
-    pointPower+=(powerTarget-pointPower)*Math.min(1,dt*3);
-    topologyPower+=(powerTarget-topologyPower)*Math.min(1,dt*3);
-    cursorEnergy=Math.max(0,cursorEnergy-dt*.75);
-    const dissolveTarget=Math.min(.58,Math.max(edition?.42:.055,cursorEnergy*.5));
-    const dissolveSpeed=dissolveTarget<dissolve?6:1.75;
-    dissolve+=(dissolveTarget-dissolve)*Math.min(1,dt*dissolveSpeed);
 
     const yaw=headYaw,pitch=headPitch;
     const cy=Math.cos(yaw),sy=Math.sin(yaw),cp=Math.cos(pitch),sp=Math.sin(pitch);
