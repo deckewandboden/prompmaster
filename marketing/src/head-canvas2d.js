@@ -628,10 +628,13 @@ export async function initCanvasHead({sourceCanvas,stage,fallback}){
     stage.dataset.starProbe=activeStarProbe;
 
     // Strong beacons use the exact same 3D positions/phases/rates as Edge.
-    for(const beacon of beacons){
+    const beaconProbe=[];
+    for(let beaconIndex=0;beaconIndex<beacons.length;beaconIndex++){
+      const beacon=beacons[beaconIndex];
       const wave=.5+.5*Math.sin(elapsed*(1.05+beacon.rate)+beacon.phase);
       const flash=Math.pow(wave,7);
       const [x,y,depth]=sceneProject(beacon.x-smoothX*.075,beacon.y,beacon.z);
+      if(beaconIndex<6)beaconProbe.push(Math.round(x),Math.round(y));
       if(depth<=.1)continue;
       const pointScale=4.5/depth;
       const diameter=Math.max(1.6,(2.8+flash*8.5)*pointScale);
@@ -640,6 +643,7 @@ export async function initCanvasHead({sourceCanvas,stage,fallback}){
       context.drawImage(beaconSprite,x-diameter*.5,y-diameter*.5,diameter,diameter);
       context.restore();
     }
+    stage.dataset.beaconProbe=beaconProbe.join(',');
 
     // Moving traffic lights also follow Edge's world-space lane coordinates.
     for(const light of traffic){
