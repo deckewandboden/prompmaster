@@ -668,6 +668,7 @@ for needle in (
     'dustPoints',
     'dustLayer=createSceneLayer()',
     "rgba(52,147,223,.30)",
+    '.012*(height*.5)/depth',
     'offsetX=-smoothX*.06*worldPixelScale',
     'offsetY=-smoothY*.03*worldPixelScale',
     'drawDustLayer()',
