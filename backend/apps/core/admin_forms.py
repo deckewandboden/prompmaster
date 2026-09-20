@@ -46,6 +46,19 @@ class ProductForm(forms.ModelForm):
             'default_license_days', 'default_device_limit', 'reminder_1_days',
             'reminder_2_days', 'critical_warning_days',
         ]
+        labels = {
+            'code': 'Produktcode',
+            'name': 'Name',
+            'description': 'Beschreibung',
+            'active': 'Aktiv',
+            'visible': 'Sichtbar',
+            'purchasable': 'Kaufbar',
+            'default_license_days': 'Standard-Laufzeit in Tagen',
+            'default_device_limit': 'Geräte je Benutzer',
+            'reminder_1_days': 'Erinnerung 1 · Tage vorher',
+            'reminder_2_days': 'Erinnerung 2 · Tage vorher',
+            'critical_warning_days': 'Kritische Warnung · Tage vorher',
+        }
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -88,15 +101,16 @@ class FeatureForm(forms.ModelForm):
     class Meta:
         model = Feature
         fields = ['code', 'name']
+        labels = {'code': 'Code', 'name': 'Name'}
 
     def clean_code(self):
         return self.cleaned_data['code'].strip().upper()
 
 
 class PriceVersionForm(forms.Form):
-    price_type = forms.ChoiceField(choices=[('new', 'Neukauf'), ('renewal', 'Verlängerung')])
+    price_type = forms.ChoiceField(label='Preistyp', choices=[('new', 'Neukauf'), ('renewal', 'Verlängerung')])
     gross_amount = forms.DecimalField(min_value=Decimal('0.00'), decimal_places=2, max_digits=10, label='Bruttopreis')
-    currency = forms.CharField(max_length=3, initial='EUR')
+    currency = forms.CharField(max_length=3, initial='EUR', label='Währung')
     valid_from = forms.DateTimeField(initial=timezone.now, label='Gültig ab')
 
     def clean_currency(self):
@@ -107,6 +121,7 @@ class EmailTemplateForm(forms.ModelForm):
     class Meta:
         model = EmailTemplate
         fields = ['subject', 'body_text', 'active']
+        labels = {'subject': 'Betreff', 'body_text': 'Nachrichtentext', 'active': 'Aktiv'}
 
 
 class ServiceAccountForm(forms.Form):
@@ -116,8 +131,8 @@ class ServiceAccountForm(forms.Form):
         ('prompt.draft', 'Prompt-Drafts erzeugen'),
         ('prompt.test', 'Prompt-Tests ausführen'),
     ]
-    name = forms.CharField(max_length=120)
-    scopes = forms.MultipleChoiceField(choices=SCOPE_CHOICES, initial=['ops.read'])
+    name = forms.CharField(max_length=120, label='Name')
+    scopes = forms.MultipleChoiceField(label='Berechtigungen', choices=SCOPE_CHOICES, initial=['ops.read'])
     expires_at = forms.DateTimeField(required=False, label='Ablauf optional')
 
 
@@ -125,12 +140,20 @@ class LegalDocumentForm(forms.ModelForm):
     class Meta:
         model = LegalDocument
         fields = ['doc_type', 'version', 'content', 'valid_from', 'active']
+        labels = {
+            'doc_type': 'Dokumenttyp',
+            'version': 'Version',
+            'content': 'Inhalt',
+            'valid_from': 'Gültig ab',
+            'active': 'Aktiv',
+        }
 
 
 class RetentionPolicyForm(forms.ModelForm):
     class Meta:
         model = RetentionPolicy
         fields = ['data_class', 'retain_days', 'active']
+        labels = {'data_class': 'Datenklasse', 'retain_days': 'Aufbewahrung in Tagen', 'active': 'Aktiv'}
         help_texts = {
             'data_class': 'Unterstützt: expired_invitations, email_messages, revoked_devices, resolved_system_alerts, resolved_task_failures, expired_sessions.',
             'retain_days': 'Löschung erst nach dieser Anzahl Tage. Rechtliche Aufbewahrungsfristen separat prüfen.',
@@ -157,11 +180,13 @@ class RoleForm(forms.ModelForm):
         queryset=Permission.objects.none(),
         required=False,
         widget=forms.CheckboxSelectMultiple,
+        label='Berechtigungen',
     )
 
     class Meta:
         model = Role
         fields = ['name', 'active', 'permissions']
+        labels = {'name': 'Rollenname', 'active': 'Aktiv'}
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -186,8 +211,8 @@ class StaffUserCreateForm(forms.Form):
 
 
 class StaffUserRoleForm(forms.Form):
-    user = forms.ModelChoiceField(queryset=User.objects.none())
-    role = forms.ModelChoiceField(queryset=Role.objects.none())
+    user = forms.ModelChoiceField(queryset=User.objects.none(), label='Benutzer')
+    role = forms.ModelChoiceField(queryset=Role.objects.none(), label='Rolle')
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -201,20 +226,21 @@ class MollieConfigForm(forms.Form):
         max_length=255,
         required=False,
         widget=forms.PasswordInput(render_value=False),
+        label='API-Schlüssel',
         help_text='Leer lassen, um den bestehenden Schlüssel unverändert zu lassen.',
     )
 
 
 class GeneralSettingsForm(forms.Form):
     support_email = forms.EmailField(label='Support-Empfänger')
-    disk_warning = forms.IntegerField(min_value=1, max_value=99, initial=80)
-    disk_critical = forms.IntegerField(min_value=2, max_value=100, initial=90)
-    ram_warning = forms.IntegerField(min_value=1, max_value=99, initial=80)
-    ram_critical = forms.IntegerField(min_value=2, max_value=100, initial=90)
-    cpu_warning = forms.IntegerField(min_value=1, max_value=100, initial=80)
-    backup_warning_hours = forms.IntegerField(min_value=1, max_value=720, initial=8)
-    backup_critical_hours = forms.IntegerField(min_value=2, max_value=720, initial=24)
-    restore_warning_days = forms.IntegerField(min_value=1, max_value=365, initial=35)
+    disk_warning = forms.IntegerField(min_value=1, max_value=99, initial=80, label='Datenträger-Warnung in %')
+    disk_critical = forms.IntegerField(min_value=2, max_value=100, initial=90, label='Datenträger kritisch in %')
+    ram_warning = forms.IntegerField(min_value=1, max_value=99, initial=80, label='RAM-Warnung in %')
+    ram_critical = forms.IntegerField(min_value=2, max_value=100, initial=90, label='RAM kritisch in %')
+    cpu_warning = forms.IntegerField(min_value=1, max_value=100, initial=80, label='CPU-Warnung in %')
+    backup_warning_hours = forms.IntegerField(min_value=1, max_value=720, initial=8, label='Backup-Warnung in Stunden')
+    backup_critical_hours = forms.IntegerField(min_value=2, max_value=720, initial=24, label='Backup kritisch in Stunden')
+    restore_warning_days = forms.IntegerField(min_value=1, max_value=365, initial=35, label='Restore-Test-Warnung in Tagen')
 
     def clean(self):
         data = super().clean()
@@ -230,4 +256,4 @@ class RefundForm(forms.Form):
 
 
 class IntegrationSecretForm(forms.Form):
-    value = forms.CharField(widget=forms.PasswordInput(render_value=False), max_length=500)
+    value = forms.CharField(widget=forms.PasswordInput(render_value=False), max_length=500, label='Neuer Schlüssel')
