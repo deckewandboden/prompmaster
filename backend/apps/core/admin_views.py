@@ -7,7 +7,7 @@ from django.contrib.auth.decorators import login_required
 from django.core import signing
 from django.core.exceptions import PermissionDenied, ValidationError
 from django.db import transaction
-from django.db.models import Count, Q, Sum
+from django.db.models import CharField, Count, Q, Sum
 from django.db.models.functions import Coalesce, Lower, TruncMonth
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse
@@ -916,8 +916,8 @@ def orders(request):
     queryset = (
         Order.objects.select_related('company', 'private_user')
         .annotate(
-            customer_display=Coalesce('company__name', 'private_user__email'),
-            customer_sort=Lower(Coalesce('company__name', 'private_user__email')),
+            customer_display=Coalesce('company__name', 'private_user__email', output_field=CharField()),
+            customer_sort=Lower(Coalesce('company__name', 'private_user__email', output_field=CharField())),
         )
     )
     grid = DataGrid(
