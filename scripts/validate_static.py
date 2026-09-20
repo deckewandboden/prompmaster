@@ -294,6 +294,7 @@ for template in sorted((ROOT/'backend/templates').rglob('*.html')):
 # above. Literal classes are part of the shared design system and must never
 # silently rely on stale prototype CSS.
 _app_css = (ROOT/'backend/static/css/app.css').read_text(encoding='utf-8')
+marketing_style = (ROOT/'marketing/src/style.css').read_text(encoding='utf-8')
 _defined_classes = set(re.findall(r'\.([A-Za-z_][A-Za-z0-9_-]*)', _app_css))
 for template in sorted((ROOT/'backend/templates').rglob('*.html')):
     text = template.read_text(encoding='utf-8')
@@ -638,6 +639,12 @@ for needle in (
     'mobile?58:150',
     'mobile?105:245',
     'stage.dataset.eyeAnchors',
+    'maskPath',
+    "context.globalCompositeOperation='destination-out'",
+    'makePointBatches',
+    'paintPointBatches',
+    'stage.dataset.canvasDrawMs',
+    "context.rotate(star.direction>0?.22:-.22)",
     'export function createLowerSceneData',
     "stage.dataset.lowerSceneContract='edge-shared-v1'",
     'sceneLayers',
@@ -657,8 +664,10 @@ for needle in (
     "stage.dataset.lowerSceneContract='edge-shared-v1'",
     "powerPreference:'low-power'",
     "failIfMajorPerformanceCaveat:false",
-    "stage.dataset.webglInit='edge-webgl2'",
-    "stage.dataset.webglInit='edge-three-managed'",
+    "edge-webgl2-no-msaa",
+    "edge-webgl2-minimal",
+    "edge-three-managed-no-msaa",
+    "stage.dataset.webglAttempts",
     "stage.dataset.webglInit='canvas-emergency'",
     "stage.dataset.eyeContract='edge-shared-webgl'",
 ):
@@ -670,6 +679,10 @@ for forbidden in (
 ):
     if forbidden in webgl_head:
         fail(f'Browser-specific head renderer logic is forbidden: {forbidden}')
+if 'font-family:Inter,' in marketing_style:
+    fail('Marketing must not trigger blocked local Inter font lookup in Firefox')
+if 'font-family:"Segoe UI",Arial,sans-serif;' not in marketing_style:
+    fail('Marketing system font stack contract missing')
 for needle in (
     'PromptMaster Pro',
     'PromptMaster Free',
