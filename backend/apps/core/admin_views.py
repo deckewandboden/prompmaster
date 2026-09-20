@@ -8,7 +8,7 @@ from django.core import signing
 from django.core.exceptions import PermissionDenied, ValidationError
 from django.db import transaction
 from django.db.models import Count, Q, Sum
-from django.db.models.functions import TruncMonth
+from django.db.models.functions import Coalesce, Lower, TruncMonth
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse
 from django.utils import timezone
@@ -913,11 +913,32 @@ def license_refund(request, pk, term_id):
 
 @staff_perm('orders.read')
 def orders(request):
-    grid = DataGrid(request, Order.objects.select_related('company', 'private_user'), search_fields=('order_number', 'company__name', 'private_user__email'), sort_fields={'number': 'order_number', 'date': 'created_at', 'amount': 'gross_total', 'status': 'status'}, default_sort='-created_at', filters={'status': 'status'}).build()
+    queryset = (
+        Order.objects.select_related('company', 'private_user')
+        .annotate(
+            customer_sort=Lower(
+                Coalesce('company__name', 'private_user__email')
+            )
+        )
+    )
+    grid = DataGrid(
+        request,
+        queryset,
+        search_fields=('order_number', 'company__name', 'private_user__email'),
+        sort_fields={
+            'number': 'order_number',
+            'customer': 'customer_sort',
+            'date': 'created_at',
+            'amount': 'gross_total',
+            'status': 'status',
+        },
+        default_sort='-created_at',
+        filters={'status': 'status'},
+    ).build()
     export = _grid_export(request, grid, [('order_number', 'Bestellung'), ('company.name', 'Unternehmen'), ('private_user.email', 'Privatkunde'), ('gross_total', 'Betrag'), ('status', 'Status'), ('created_at', 'Datum')], 'promptmaster-bestellungen.csv')
     if export:
         return export
-    return render(request, 'ns_admin/grid.html', {'title': 'Bestellungen', 'grid': grid, 'columns': [('order_number', 'Bestellung', 'number'), ('company', 'Kunde', None), ('gross_total', 'Betrag', 'amount'), ('status', 'Status', 'status'), ('created_at', 'Datum', 'date')], 'detail_route': 'ns_admin:order_detail', 'filter_options': [('status', 'Status', Order.STATUS)], 'export_enabled': True})
+    return render(request, 'ns_admin/grid.html', {'title': 'Bestellungen', 'grid': grid, 'columns': [('order_number', 'Bestellung', 'number'), ('company', 'Kunde', 'customer'), ('gross_total', 'Betrag', 'amount'), ('status', 'Status', 'status'), ('created_at', 'Datum', 'date')], 'detail_route': 'ns_admin:order_detail', 'filter_options': [('status', 'Status', Order.STATUS)], 'export_enabled': True})
 
 
 @staff_perm('orders.read')
