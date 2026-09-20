@@ -223,6 +223,7 @@ def main() -> int:
                         proBorder: proStyle.borderColor,
                         canvasVisible: !!(canvas.width && canvas.height),
                         headRenderer: renderer,
+                        webglInit: one('.head-stage').dataset.webglInit || '',
                         lowerSceneContract: one('.head-stage').dataset.lowerSceneContract || '',
                         eyeContract: one('.head-stage').dataset.eyeContract || '',
                         headBounds: one('.head-stage').dataset.headBounds || '',
@@ -282,6 +283,13 @@ def main() -> int:
                     fail(
                         f'{width}px: Firefox-Test muss den kanonischen WebGL-Pfad '
                         f'validieren, erhalten={metrics["headRenderer"]!r}'
+                    )
+                if engine in {'chromium', 'firefox'} and metrics['webglInit'] not in {
+                    'edge-webgl2', 'edge-three-managed'
+                }:
+                    fail(
+                        f'{engine} {width}px: Browser verwendet nicht die gemeinsame '
+                        f'Edge-WebGL-Initialisierung ({metrics["webglInit"]!r})'
                     )
                 if metrics['lowerSceneContract'] != 'edge-shared-v1':
                     fail(
