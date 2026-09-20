@@ -8,20 +8,55 @@ export async function initHead(){
   if(!canvas)return;
   const stage=canvas.parentElement;
   const fallback=stage.querySelector('.head-fallback');
-  // Firefox uses the same canonical WebGL scene as Chromium/Edge whenever
-  // WebGL is available. Canvas2D is reserved for genuine no-WebGL/context-loss
-  // fallback, avoiding a CPU-bound duplicate renderer and guaranteeing that
-  // beacons, depth occlusion and shooting-star coordinates are shared.
-  const firefox=/Firefox\//.test(navigator.userAgent);
-  const powerPreference=firefox?'high-performance':'low-power';
+  // Edge is the rendering contract. Every browser gets the exact same
+  // WebGL2 initialization first; there is no Firefox-specific renderer.
+  // A second Three.js-managed WebGL retry uses the same scene/animation code
+  // before the CPU Canvas2D emergency fallback is allowed.
   let renderer;
-  const attributes={alpha:true,antialias:true,powerPreference};
-  let webglContext=null;
-  try{webglContext=canvas.getContext('webgl2',attributes)||canvas.getContext('webgl',attributes);}
-  catch(error){console.info('WebGL nicht verfügbar – Canvas2D-Kopf wird verwendet.',error?.message||error);}
-  if(!webglContext){await initCanvasHead({sourceCanvas:canvas,stage,fallback});return;}
-  try{renderer=new THREE.WebGLRenderer({canvas,context:webglContext,alpha:true,antialias:true,powerPreference});}
-  catch(error){console.info('WebGL-Renderer nicht verfügbar – Canvas2D-Kopf wird verwendet.',error?.message||error);await initCanvasHead({sourceCanvas:canvas,stage,fallback});return;}
+  const attributes={
+    alpha:true,
+    antialias:true,
+    powerPreference:'low-power',
+    failIfMajorPerformanceCaveat:false,
+  };
+  let webglError=null;
+  try{
+    const webglContext=canvas.getContext('webgl2',attributes);
+    if(webglContext){
+      renderer=new THREE.WebGLRenderer({
+        canvas,
+        context:webglContext,
+        alpha:true,
+        antialias:true,
+        powerPreference:'low-power',
+      });
+      stage.dataset.webglInit='edge-webgl2';
+    }
+  }catch(error){
+    webglError=error;
+  }
+  if(!renderer){
+    try{
+      renderer=new THREE.WebGLRenderer({
+        canvas,
+        alpha:true,
+        antialias:true,
+        powerPreference:'low-power',
+      });
+      stage.dataset.webglInit='edge-three-managed';
+    }catch(error){
+      webglError=error;
+    }
+  }
+  if(!renderer){
+    console.info(
+      'WebGL2 nicht verfügbar – Canvas2D-Notfallrenderer wird verwendet.',
+      webglError?.message||webglError||''
+    );
+    stage.dataset.webglInit='canvas-emergency';
+    await initCanvasHead({sourceCanvas:canvas,stage,fallback});
+    return;
+  }
   const mobile=matchMedia('(max-width:800px)').matches;
   renderer.setPixelRatio(Math.min(devicePixelRatio,mobile?1.5:2));
   const scene=new THREE.Scene();
