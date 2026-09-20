@@ -621,6 +621,7 @@ def main() -> int:
                   starProbe: document.querySelector('.head-stage')?.dataset.starProbe || '',
                 })"""
             )
+            print(f'NO-WEBGL CANVAS DIAGNOSTIC {engine}: {fallback_metrics}')
             if not fallback_metrics['canvasHidden'] or not fallback_metrics['fallbackVisible']:
                 fail('No-WebGL: visueller Fallback wird nicht angezeigt')
             if not fallback_metrics['fallbackCanvasVisible']:
@@ -725,6 +726,62 @@ def main() -> int:
             if direction1 < 0 and x2 >= x1:
                 fail(f'No-WebGL: RTL-Sternschnuppe hat falsche X-Richtung {star_pair}')
             fallback_page.close()
+
+            # Deterministic visual parity for the exact no-WebGL path. Freeze
+            # motion in both renders so animation phase cannot hide a geometry,
+            # brightness or lower-scene regression.
+            fallback_parity_context = browser.new_context(
+                viewport={'width': 1440, 'height': 1000},
+                device_scale_factor=1,
+                reduced_motion='reduce',
+            )
+            fallback_parity_page = fallback_parity_context.new_page()
+            fallback_parity_page.add_init_script(
+                """(() => {
+                  const original = HTMLCanvasElement.prototype.getContext;
+                  HTMLCanvasElement.prototype.getContext = function(type, ...args) {
+                    if (type === 'webgl' || type === 'webgl2' || type === 'experimental-webgl') {
+                      return null;
+                    }
+                    return original.call(this, type, ...args);
+                  };
+                })();"""
+            )
+            fallback_parity_page.goto(base, wait_until='networkidle')
+            fallback_parity_page.wait_for_function(
+                "document.querySelector('.head-stage')?.dataset.headRenderer === 'canvas2d' && "
+                "document.querySelector('.head-stage')?.dataset.headReady === '1'",
+                timeout=15000,
+            )
+            fallback_parity_page.wait_for_timeout(250)
+            fallback_parity_path = artifact_dir / f'{engine}-1440-no-webgl-parity.png'
+            fallback_parity_page.screenshot(
+                path=str(fallback_parity_path),
+                full_page=False,
+            )
+            fallback_parity_page.close()
+            fallback_parity_context.close()
+
+            edge_parity = artifact_dir / 'chromium-1440-parity.png'
+            if not edge_parity.is_file():
+                fail('No-WebGL parity: Chromium/Edge reference missing')
+            fallback_visual = compare_head_render(edge_parity, fallback_parity_path)
+            print(f'NO-WEBGL VISUAL PARITY {engine}: {fallback_visual}')
+            if fallback_visual['mae'] > 9.0:
+                fail(
+                    f'No-WebGL parity: head differs too strongly from Edge '
+                    f'(central MAE={fallback_visual["mae"]:.2f}, max=9.00)'
+                )
+            if not 0.65 <= fallback_visual['bright_ratio'] <= 1.35:
+                fail(
+                    f'No-WebGL parity: head point energy differs from Edge '
+                    f'(ratio={fallback_visual["bright_ratio"]:.3f}, allowed 0.65..1.35)'
+                )
+            if not 0.65 <= fallback_visual['ground_bright_ratio'] <= 1.45:
+                fail(
+                    f'No-WebGL parity: lower-scene light energy differs from Edge '
+                    f'(ratio={fallback_visual["ground_bright_ratio"]:.3f}, allowed 0.65..1.45)'
+                )
 
             # Pricing must remain usable even when a browser/proxy serves a stale
             # HTML response for /catalog.json. The embedded catalog is the safe
