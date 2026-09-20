@@ -53,6 +53,40 @@ class RegistrationPurchaseReleaseAcceptanceTests(TestCase):
         self.assertIsNotNone(user.email_verified_at)
         return user
 
+    def complete_private_profile(self, *, first_name, last_name):
+        response = self.client.post(
+            '/portal/profile/',
+            {
+                'first_name': first_name,
+                'last_name': last_name,
+                'address-street': 'Releaseweg',
+                'address-house_number': '12',
+                'address-postal_code': '57072',
+                'address-city': 'Siegen',
+                'address-country': 'DE',
+            },
+        )
+        self.assertEqual(response.status_code, 302)
+
+    def complete_company_profile(self, company):
+        response = self.client.post(
+            '/portal/company/',
+            {
+                'name': company.name,
+                'legal_form': 'GmbH',
+                'email': company.email,
+                'phone': '+49 271 5550199',
+                'street': 'Releaseallee',
+                'house_number': '8',
+                'postal_code': '57072',
+                'city': 'Siegen',
+                'country': 'DE',
+                'vat_id': 'DE123456789',
+                'tax_number': '',
+            },
+        )
+        self.assertEqual(response.status_code, 302)
+
     def webhook(self, payment, status):
         payload = {
             'id': payment.provider_payment_id,
@@ -92,6 +126,7 @@ class RegistrationPurchaseReleaseAcceptanceTests(TestCase):
         )
         self.assertEqual(response.status_code, 302)
         user = self.verify_email(email)
+        self.complete_private_profile(first_name='Private', last_name='Release')
         create_payment.return_value = {
             'id': 'tr_release_private_paid',
             'status': 'open',
@@ -150,6 +185,7 @@ class RegistrationPurchaseReleaseAcceptanceTests(TestCase):
         )
         self.assertEqual(complete.status_code, 200)
         company = Membership.objects.get(user=user, role='admin', active=True).company
+        self.complete_company_profile(company)
         create_payment.return_value = {
             'id': 'tr_release_company_paid',
             'status': 'open',
@@ -185,6 +221,7 @@ class RegistrationPurchaseReleaseAcceptanceTests(TestCase):
             HTTP_X_FORWARDED_FOR='198.18.20.3',
         )
         user = self.verify_email(email)
+        self.complete_private_profile(first_name='Cancel', last_name='Release')
         create_payment.return_value = {
             'id': 'tr_release_cancelled',
             'status': 'open',
