@@ -69,8 +69,11 @@ class RegistrationForm(forms.Form):
         password = data.get('password')
         if password:
             password_validation.validate_password(password)
-        if data.get('customer_type') == 'company' and not data.get('company_name'):
-            self.add_error('company_name', 'Firmenname erforderlich.')
+        if data.get('customer_type') == 'company':
+            if not data.get('company_name'):
+                self.add_error('company_name', 'Firmenname erforderlich.')
+        else:
+            data['company_name'] = ''
         return data
 
 
