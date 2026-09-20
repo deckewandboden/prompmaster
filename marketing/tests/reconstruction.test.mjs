@@ -123,7 +123,7 @@ test('non-WebGL fallback keeps the actual head visible without camera access',()
   assert.match(fallback,/stage\.dataset\.canvasElapsed=elapsed\.toFixed\(3\)/);
   assert.match(fallback,/stage\.dataset\.headYaw=headYaw\.toFixed\(4\)/);
   assert.match(fallback,/const rawDt=last>0\?Math\.max\(0,\(now-last\)\/1000\):0/);
-  assert.match(fallback,/const dt=Math\.min\(\.10,rawDt\)/);
+  assert.match(fallback,/const dt=Math\.min\(\.05,rawDt\)/);
   assert.match(fallback,/elapsed\+=Math\.min\(rawDt,\.25\)/);
   assert.match(fallback,/context\.rotate\(star\.direction>0\?\.22:-\.22\)/);
   assert.match(fallback,/lowerSceneContract='edge-shared-v1'/);
