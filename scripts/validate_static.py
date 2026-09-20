@@ -637,6 +637,8 @@ for needle in (
     'mobile?1500:4200',
     'mobile?850:2400',
     'mobile?58:150',
+    'const beaconProbe=[]',
+    "stage.dataset.beaconProbe=beaconProbe.join(',')",
     'mobile?105:245',
     'stage.dataset.eyeAnchors',
     'maskPath',
@@ -681,15 +683,14 @@ for needle in (
     'length:6',
     'offset:.45+index*1.72',
     'period:9.1+(index%3)*1.05',
-    'makeBeaconSprite',
-    'makeShootingStarSprite',
     'beacon.x-smoothX*.075',
-    'beacon.y+smoothY*.018',
 ):
     if needle not in canvas_head:
         fail(f'Firefox/Canvas2D parity contract missing: {needle}')
 for needle in (
     'createLowerSceneData',
+    "stage.dataset.beaconProbe=probe.join(',')",
+    'point.x+cityBeacons.position.x',
     'createShootingStarCanvas',
     'getShootingStarState',
     'const state=getShootingStarState(spec,elapsed,smoothPointerX)',
