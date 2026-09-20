@@ -1,1 +1,44 @@
-{% extends 'base.html' %}{% load static %}{% block body %}<div class="login-wrap"><div class="login-card"><div class="login-logo"><img src="{% static 'brand/promptmaster-logo-reference.png' %}" width="239" height="47" alt="PromptMaster by netstyle"></div><h1>Konto anlegen</h1><p class="small muted">Bitte lesen Sie vor der Registrierung die <a href="{% url 'legal_public' 'terms' %}" target="_blank" rel="noopener">AGB</a> und die <a href="{% url 'legal_public' 'privacy' %}" target="_blank" rel="noopener">Datenschutzerklärung</a>.</p><form method="post" class="form">{% csrf_token %}<input type="hidden" name="next" value="{{ next }}">{{ form.as_p }}<button type="submit" class="btn primary">Registrieren</button></form><p class="small muted">Unternehmensadministratoren richten anschließend verpflichtend 2FA ein.</p><p class="small muted">Bereits registriert? <a href="{% url 'accounts:login' %}{% if next %}?next={{ next|urlencode }}{% endif %}">Zur Anmeldung</a></p></div></div>{% endblock %}
+{% extends 'base.html' %}{% load static %}{% block body %}
+<div class="login-wrap">
+  <div class="login-card">
+    <div class="login-logo"><img src="{% static 'brand/promptmaster-logo-reference.png' %}" width="239" height="47" alt="PromptMaster by netstyle"></div>
+    <h1>Konto anlegen</h1>
+    <p class="small muted">Bitte lesen Sie vor der Registrierung die <a href="{% url 'legal_public' 'terms' %}" target="_blank" rel="noopener">AGB</a> und die <a href="{% url 'legal_public' 'privacy' %}" target="_blank" rel="noopener">Datenschutzerklärung</a>.</p>
+    <form method="post" class="form registration-form">
+      {% csrf_token %}
+      <input type="hidden" name="next" value="{{ next }}">
+      {{ form.non_field_errors }}
+      <label for="{{ form.customer_type.id_for_label }}">{{ form.customer_type.label }}{{ form.customer_type }}{{ form.customer_type.errors }}</label>
+      <label for="{{ form.first_name.id_for_label }}">{{ form.first_name.label }}{{ form.first_name }}{{ form.first_name.errors }}</label>
+      <label for="{{ form.last_name.id_for_label }}">{{ form.last_name.label }}{{ form.last_name }}{{ form.last_name.errors }}</label>
+      <label for="{{ form.email.id_for_label }}">{{ form.email.label }}{{ form.email }}{{ form.email.errors }}</label>
+      <label for="{{ form.password.id_for_label }}">{{ form.password.label }}{{ form.password }}{{ form.password.errors }}</label>
+      <div id="company-name-row" data-company-field>
+        <label for="{{ form.company_name.id_for_label }}">{{ form.company_name.label }}{{ form.company_name }}{{ form.company_name.errors }}</label>
+      </div>
+      <label class="check-row" for="{{ form.accept_terms.id_for_label }}">{{ form.accept_terms }}<span>{{ form.accept_terms.label }}</span>{{ form.accept_terms.errors }}</label>
+      <label class="check-row" for="{{ form.accept_privacy.id_for_label }}">{{ form.accept_privacy }}<span>{{ form.accept_privacy.label }}</span>{{ form.accept_privacy.errors }}</label>
+      <button type="submit" class="btn primary">Registrieren</button>
+    </form>
+    <p class="small muted">Unternehmensadministratoren richten anschließend verpflichtend 2FA ein.</p>
+    <p class="small muted">Bereits registriert? <a href="{% url 'accounts:login' %}{% if next %}?next={{ next|urlencode }}{% endif %}">Zur Anmeldung</a></p>
+  </div>
+</div>
+<script>
+(() => {
+  const type = document.getElementById('{{ form.customer_type.id_for_label }}');
+  const row = document.querySelector('[data-company-field]');
+  const input = document.getElementById('{{ form.company_name.id_for_label }}');
+  if (!type || !row || !input) return;
+  const sync = () => {
+    const company = type.value === 'company';
+    row.hidden = !company;
+    input.required = company;
+    input.disabled = !company;
+    if (!company) input.value = '';
+  };
+  type.addEventListener('change', sync);
+  sync();
+})();
+</script>
+{% endblock %}
