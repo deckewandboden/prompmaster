@@ -728,13 +728,6 @@ export async function initCanvasHead({sourceCanvas,stage,fallback}){
 
     const topology=cloud.topology;
     const topologyBatches=makePointBatches();
-    // Anchor the Firefox eye glows to the actual high-detail eyelid geometry.
-    // This avoids a perceptual offset caused by drawing a full 2D radial halo
-    // over a depth-tested point cloud.
-    const eyeAnchors=[
-      {targetX:-.245,targetY:.6,sx:0,sy:0,w:0},
-      {targetX:.18,targetY:.6,sx:0,sy:0,w:0},
-    ];
     for(let i=0;i<topology.detail.length;i++){
       const o=i*3;
       const x=topology.positions[o],y=topology.positions[o+1],z=topology.positions[o+2];
@@ -753,14 +746,6 @@ export async function initCanvasHead({sourceCanvas,stage,fallback}){
       if(nearest>-1e8&&rz2<nearest-.025)continue;
       headMinX=Math.min(headMinX,sx2);headMaxX=Math.max(headMaxX,sx2);
       headMinY=Math.min(headMinY,sy2);headMaxY=Math.max(headMaxY,sy2);
-      if(z>.52&&Math.abs(y-.6)<.14){
-        for(const anchor of eyeAnchors){
-          if(Math.abs(x-anchor.targetX)<.145){
-            const w=.10+topology.detail[i]*topology.detail[i]*2.2;
-            anchor.sx+=sx2*w;anchor.sy+=sy2*w;anchor.w+=w;
-          }
-        }
-      }
       const size=(1.55+topology.detail[i]*1.75+topologyPower*.18)*(4.5/depth);
       const detailBoost=1+topology.detail[i]*.72;
       const intensity=clamp(topology.colors[o+2]*detailBoost*1.55,0,1);
@@ -779,9 +764,8 @@ export async function initCanvasHead({sourceCanvas,stage,fallback}){
     for(let eyeIndex=0;eyeIndex<eyeSpecs.length;eyeIndex++){
       const [x,y,z]=eyeSpecs[eyeIndex];
       const projected=project(x,y,z);
-      const anchor=eyeAnchors[eyeIndex];
-      const eyeX=anchor.w>0?anchor.sx/anchor.w:projected[0];
-      const eyeY=anchor.w>0?anchor.sy/anchor.w:projected[1];
+      const eyeX=projected[0];
+      const eyeY=projected[1];
       const perspective=projected[4];
       renderedEyes.push(Math.round(eyeX),Math.round(eyeY));
       const haloRadius=.135*base*perspective*eyePulse;
