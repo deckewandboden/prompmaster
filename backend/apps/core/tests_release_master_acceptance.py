@@ -15,6 +15,7 @@ from apps.catalog.models import Feature, Product, ProductPrice
 from apps.companies.models import Company, Membership, PrivateCustomerProfile
 from apps.core.crypto import encrypt
 from apps.core.settings_store import get_setting
+from apps.core.sensitive import SENSITIVE_REAUTH_SESSION_KEY
 from apps.integrations.models import ServiceAccount
 from apps.legal.models import DeletionRequest, LegalDocument, RetentionPolicy
 from apps.licenses.models import License, LicenseAssignment, LicenseTerm
@@ -225,6 +226,7 @@ class NetstyleMutationReleaseAcceptanceTests(TestCase):
         session['two_factor_ok'] = True
         session['authenticated_at'] = timezone.now().timestamp()
         session['last_activity_at'] = timezone.now().timestamp()
+        session[SENSITIVE_REAUTH_SESSION_KEY] = timezone.now().timestamp()
         session.save()
 
     def test_product_price_settings_and_mollie_mutations(self):
