@@ -33,6 +33,9 @@ test('reconstructed marketing uses latest recovered head engine',()=>{
   assert.match(head,/edge-webgl2-minimal/);
   assert.match(head,/edge-three-managed-no-msaa/);
   assert.match(head,/stage\.dataset\.webglAttempts/);
+  assert.match(head,/const freshCanvas=/);
+  assert.match(head,/cloneNode\(false\)/);
+  assert.match(head,/attemptIndex>0\)freshCanvas\(\)/);
   assert.match(head,/stage\.dataset\.webglInit='canvas-emergency'/);
   assert.match(head,/eyeContract='edge-shared-webgl'/);
   assert.match(head,/new THREE\.WebGLRenderer/);
