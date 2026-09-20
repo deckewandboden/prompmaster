@@ -372,16 +372,17 @@ export async function initCanvasHead({sourceCanvas,stage,fallback}){
 
   const createSceneLayer=()=>{
     const layer=document.createElement('canvas');
-    layer.width=Math.max(1,Math.round(width*dpr));
-    layer.height=Math.max(1,Math.round(height*dpr));
+    const layerScale=Math.min(1,Math.max(.6,dpr*.5));
+    layer.width=Math.max(1,Math.round(width*layerScale));
+    layer.height=Math.max(1,Math.round(height*layerScale));
     const layerContext=layer.getContext('2d',{alpha:true});
-    layerContext.setTransform(dpr,0,0,dpr,0,0);
+    layerContext.setTransform(layerScale,0,0,layerScale,0,0);
     layerContext.globalCompositeOperation='lighter';
     return [layer,layerContext];
   };
 
   const rebuildSceneLayers=()=>{
-    const LAND_BUCKETS=8,BLEND_BUCKETS=6,SKY_BUCKETS=6;
+    const LAND_BUCKETS=6,BLEND_BUCKETS=4,SKY_BUCKETS=4;
     sceneLayers={
       landscape:Array.from({length:LAND_BUCKETS},createSceneLayer),
       blend:Array.from({length:BLEND_BUCKETS},createSceneLayer),
