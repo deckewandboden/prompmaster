@@ -361,6 +361,20 @@ export async function initCanvasHead({sourceCanvas,stage,fallback}){
   const traffic=sceneData.traffic;
   const skyLights=sceneData.sky;
   const shootingStars=sceneData.shootingStars;
+  const dustCount=mobile?220:680;
+  const dustPoints=[];
+  for(let i=0;i<dustCount;i++){
+    const t=i/Math.max(1,dustCount-1);
+    const side=i%2===0?1:-1;
+    const edge=Math.pow(i%2===0?t:1-t,.72);
+    const span=.55+edge*3.65;
+    const jitter=(Math.sin(i*12.37)+Math.cos(i*5.91))*.045;
+    dustPoints.push({
+      x:side*(span+jitter),
+      y:-.22-Math.pow((i*.61803398875)%1,.96)*1.95,
+      z:-1.1+Math.sin(i*.37)*.55,
+    });
+  }
 
   const makeShaderPointSprite=(size,[r,g,b],exponent)=>{
     const sprite=document.createElement('canvas');
@@ -393,6 +407,7 @@ export async function initCanvasHead({sourceCanvas,stage,fallback}){
   const reduced=matchMedia('(prefers-reduced-motion:reduce)');
   let paused=reduced.matches,disposed=false,visible=true,last=0,lastFrame=0,elapsed=0,mouseX=0,mouseY=0,smoothX=0,smoothY=0,lastPointerX=0,lastPointerY=0,hasPointer=false,cursorEnergy=0,dissolve=0,headYaw=0,headPitch=0,pointPower=1,topologyPower=1,edition='',raf=0,width=1,height=1,dpr=1;
   let sceneLayers={landscape:[],blend:[],sky:[]};
+  let dustLayer=null;
   let cachedDepth=null,cachedDepthYaw=Infinity,cachedDepthPitch=Infinity,cachedDepthAt=-Infinity;
   let canvasFrameCount=0,canvasSteadyPeakMs=0;
 
@@ -448,6 +463,18 @@ export async function initCanvasHead({sourceCanvas,stage,fallback}){
       blend:Array.from({length:BLEND_BUCKETS},createSceneLayer),
       sky:Array.from({length:SKY_BUCKETS},createSceneLayer),
     };
+    dustLayer=createSceneLayer();
+    {
+      const [,ctx,meta]=dustLayer;
+      ctx.fillStyle='rgba(52,147,223,.30)';
+      for(const point of dustPoints){
+        const [x,y,depth,,worldPixelScale]=sceneProject(point.x,point.y,point.z);
+        if(depth<=.1||x<-8||x>width+8||y<-8||y>height+8)continue;
+        meta.scaleSum+=worldPixelScale;meta.count++;
+        const size=Math.max(.45,.012*worldPixelScale);
+        ctx.fillRect(x-size*.5,y-size*.5,size,size);
+      }
+    }
 
     for(const point of groundParticles){
       const bucket=Math.floor((point.phase/(Math.PI*2))*LAND_BUCKETS)%LAND_BUCKETS;
@@ -511,6 +538,16 @@ export async function initCanvasHead({sourceCanvas,stage,fallback}){
     }
     context.globalAlpha=1;
   };
+  const drawDustLayer=()=>{
+    if(!dustLayer)return;
+    const [layer,,meta]=dustLayer;
+    const worldPixelScale=meta.count?meta.scaleSum/meta.count:height*.22;
+    const offsetX=-smoothX*.06*worldPixelScale;
+    const offsetY=-smoothY*.03*worldPixelScale;
+    context.globalAlpha=1;
+    context.drawImage(layer,offsetX,offsetY,width,height);
+  };
+
   const resize=()=>{
     const rect=stage.getBoundingClientRect();
     width=Math.max(1,Math.round(rect.width));
@@ -555,6 +592,7 @@ export async function initCanvasHead({sourceCanvas,stage,fallback}){
     drawSceneLayers(sceneLayers.sky,1.34,.025);
     drawSceneLayers(sceneLayers.landscape,.72,.075,.018,.22,.006);
     drawSceneLayers(sceneLayers.blend,.68,.075,0,.24,.008);
+    drawDustLayer();
 
     // Edge/WebGL shooting-star contract: same six trails, schedule, direction,
     // height, depth, duration and scale progression.
