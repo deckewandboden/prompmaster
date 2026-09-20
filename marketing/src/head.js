@@ -1,7 +1,7 @@
 import * as THREE from 'three';
 import {GLTFLoader} from 'three/addons/loaders/GLTFLoader.js';
 import {MeshSurfaceSampler} from 'three/addons/math/MeshSurfaceSampler.js';
-import {createLowerSceneData,initCanvasHead} from './head-canvas2d.js';
+import {createLowerSceneData,createShootingStarCanvas,initCanvasHead} from './head-canvas2d.js';
 
 export async function initHead(){
   let canvas=document.getElementById('particle-head');
@@ -240,14 +240,10 @@ export async function initHead(){
     // Infrequent light trails cross at different depths to add quiet spatial movement.
     const starCount=sceneData.shootingStars.length;
     const createStarTexture=(reverse=false)=>{
-      const canvas=document.createElement('canvas');canvas.width=256;canvas.height=32;
-      const context=canvas.getContext('2d');const gradient=context.createLinearGradient(0,0,256,0);
-      if(reverse){gradient.addColorStop(0,'rgba(255,255,255,1)');gradient.addColorStop(.06,'rgba(190,245,255,.9)');gradient.addColorStop(.28,'rgba(90,205,255,.32)');gradient.addColorStop(1,'rgba(40,150,255,0)');}
-      else {gradient.addColorStop(0,'rgba(40,150,255,0)');gradient.addColorStop(.72,'rgba(90,205,255,.32)');gradient.addColorStop(.94,'rgba(190,245,255,.9)');gradient.addColorStop(1,'rgba(255,255,255,1)');}
-      context.fillStyle=gradient;context.fillRect(0,0,256,32);
-      const feather=context.createLinearGradient(0,0,0,32);feather.addColorStop(0,'rgba(255,255,255,0)');feather.addColorStop(.5,'rgba(255,255,255,1)');feather.addColorStop(1,'rgba(255,255,255,0)');
-      context.globalCompositeOperation='destination-in';context.fillStyle=feather;context.fillRect(0,0,256,32);context.globalCompositeOperation='source-over';
-      const texture=new THREE.CanvasTexture(canvas);texture.colorSpace=THREE.SRGBColorSpace;materials.push(texture);return texture;
+      const texture=new THREE.CanvasTexture(createShootingStarCanvas(reverse));
+      texture.colorSpace=THREE.SRGBColorSpace;
+      materials.push(texture);
+      return texture;
     };
     const starTextureLtr=createStarTexture(false),starTextureRtl=createStarTexture(true);
     const shootingStars=[];
