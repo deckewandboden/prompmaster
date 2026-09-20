@@ -583,7 +583,8 @@ canvas_head = (ROOT/'marketing/src/head-canvas2d.js').read_text(encoding='utf-8'
 for needle in (
     "customer_sort=Lower(",
     "'customer': 'customer_sort'",
-    "('company', 'Kunde', 'customer')",
+    "customer_display=Coalesce('company__name', 'private_user__email')",
+    "('customer_display', 'Kunde', 'customer')",
 ):
     if needle not in admin_views:
         fail(f'Order customer sorting contract missing: {needle}')
