@@ -155,6 +155,10 @@ def dashboard(request):
     product_total = sum(row['total'] for row in product_mix)
     for row in product_mix:
         row['percent'] = round((row['total'] / product_total) * 100, 1) if product_total else 0
+        # CSS numbers must always use a decimal point, independent of Django's
+        # active locale (e.g. de-DE would otherwise render 100,0 and invalidate
+        # conic-gradient percentages).
+        row['percent_css'] = format(row['percent'], '.1f')
 
     revenue_months = (
         list(
@@ -169,6 +173,9 @@ def dashboard(request):
     revenue_peak = max((float(row['total'] or 0) for row in revenue_months), default=0)
     for row in revenue_months:
         row['percent'] = round((float(row['total'] or 0) / revenue_peak) * 100, 1) if revenue_peak else 0
+        # Keep inline CSS locale-neutral. A localized value such as "100,0%"
+        # is invalid CSS and collapses the bar to its minimum height.
+        row['percent_css'] = format(row['percent'], '.1f')
 
     failed_payment_count = Payment.objects.filter(status='failed').count() if rights['payments'] else None
     chargeback_count = Payment.objects.filter(status='chargeback').count() if rights['payments'] else None
