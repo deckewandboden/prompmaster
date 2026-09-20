@@ -654,7 +654,7 @@ for needle in (
     'stage.dataset.canvasElapsed=elapsed.toFixed(3)',
     'stage.dataset.headYaw=headYaw.toFixed(4)',
     'const rawDt=last>0?Math.max(0,(now-last)/1000):0',
-    'const dt=Math.min(.10,rawDt)',
+    'const dt=Math.min(.05,rawDt)',
     'elapsed+=Math.min(rawDt,.25)',
     "stage.dataset.canvasOcclusion='head-silhouette-v1'",
     'stage.dataset.starProbe=activeStarProbe',
