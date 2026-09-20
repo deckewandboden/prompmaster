@@ -583,6 +583,7 @@ webgl_head = (ROOT/'marketing/src/head.js').read_text(encoding='utf-8')
 admin_base = (ROOT/'backend/templates/ns_admin/base.html').read_text(encoding='utf-8')
 admin_dashboard = (ROOT/'backend/templates/ns_admin/dashboard.html').read_text(encoding='utf-8')
 two_factor_template = (ROOT/'backend/templates/auth/two_factor.html').read_text(encoding='utf-8')
+register_template = (ROOT/'backend/templates/auth/register.html').read_text(encoding='utf-8')
 app_css = (ROOT/'backend/static/css/app.css').read_text(encoding='utf-8')
 
 for needle in (
@@ -681,6 +682,15 @@ for needle in (
 for needle in ('auth-login-card', 'auth-login-form', 'auth-submit'):
     if needle not in two_factor_template:
         fail(f'2FA stable-layout template contract missing: {needle}')
+for needle in (
+    'data-company-field',
+    "type.value === 'company'",
+    'row.hidden = !company',
+    'input.disabled = !company',
+    "if (!company) input.value = ''",
+):
+    if needle not in register_template:
+        fail(f'Registration customer-type UI contract missing: {needle}')
 for needle in (
     '.auth-login-card{width:min(460px,100%);display:grid;gap:18px}',
     '.auth-submit{width:100%;min-width:0;height:44px;margin:0}',
