@@ -916,9 +916,8 @@ def orders(request):
     queryset = (
         Order.objects.select_related('company', 'private_user')
         .annotate(
-            customer_sort=Lower(
-                Coalesce('company__name', 'private_user__email')
-            )
+            customer_display=Coalesce('company__name', 'private_user__email'),
+            customer_sort=Lower(Coalesce('company__name', 'private_user__email')),
         )
     )
     grid = DataGrid(
@@ -938,7 +937,7 @@ def orders(request):
     export = _grid_export(request, grid, [('order_number', 'Bestellung'), ('company.name', 'Unternehmen'), ('private_user.email', 'Privatkunde'), ('gross_total', 'Betrag'), ('status', 'Status'), ('created_at', 'Datum')], 'promptmaster-bestellungen.csv')
     if export:
         return export
-    return render(request, 'ns_admin/grid.html', {'title': 'Bestellungen', 'grid': grid, 'columns': [('order_number', 'Bestellung', 'number'), ('company', 'Kunde', 'customer'), ('gross_total', 'Betrag', 'amount'), ('status', 'Status', 'status'), ('created_at', 'Datum', 'date')], 'detail_route': 'ns_admin:order_detail', 'filter_options': [('status', 'Status', Order.STATUS)], 'export_enabled': True})
+    return render(request, 'ns_admin/grid.html', {'title': 'Bestellungen', 'grid': grid, 'columns': [('order_number', 'Bestellung', 'number'), ('customer_display', 'Kunde', 'customer'), ('gross_total', 'Betrag', 'amount'), ('status', 'Status', 'status'), ('created_at', 'Datum', 'date')], 'detail_route': 'ns_admin:order_detail', 'filter_options': [('status', 'Status', Order.STATUS)], 'export_enabled': True})
 
 
 @staff_perm('orders.read')
