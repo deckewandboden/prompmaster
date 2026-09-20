@@ -569,7 +569,7 @@ export async function initCanvasHead({sourceCanvas,stage,fallback}){
     if(disposed)return;
     const drawStarted=performance.now();
     const rawDt=last>0?Math.max(0,(now-last)/1000):0;
-    const dt=Math.min(.10,rawDt);
+    const dt=Math.min(.05,rawDt);
     last=now;
     // Keep animation phase tied to wall-clock time. The old code added only
     // the clamped dt, so a slow Canvas frame also slowed the entire head,
