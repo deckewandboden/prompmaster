@@ -677,7 +677,11 @@ def main() -> int:
                 timeout=7000,
             )
             star_pair = None
-            for _ in range(5):
+            # Canvas frames can take longer than one short polling interval on a
+            # contended CI runner. Only accept two samples after the same star
+            # has demonstrably advanced; identical snapshots are not evidence
+            # of a frozen animation and must be retried.
+            for _ in range(20):
                 first = fallback_page.evaluate(
                     "document.querySelector('.head-stage')?.dataset.starProbe || ''"
                 )
@@ -685,11 +689,26 @@ def main() -> int:
                 second = fallback_page.evaluate(
                     "document.querySelector('.head-stage')?.dataset.starProbe || ''"
                 )
-                if first and second and first.split(',')[0] == second.split(',')[0]:
-                    star_pair = (first, second)
-                    break
+                if not first or not second:
+                    continue
+                first_parts = first.split(',')
+                second_parts = second.split(',')
+                if first_parts[0] != second_parts[0]:
+                    continue
+                try:
+                    first_progress = float(first_parts[4])
+                    second_progress = float(second_parts[4])
+                except (IndexError, ValueError):
+                    continue
+                if second_progress <= first_progress:
+                    continue
+                star_pair = (first, second)
+                break
             if not star_pair:
-                fail('No-WebGL: keine stabile Sternschnuppen-Bewegungsprobe verfügbar')
+                fail(
+                    'No-WebGL: Sternschnuppe hat sich innerhalb des '
+                    'Beobachtungsfensters nicht messbar weiterbewegt'
+                )
             first_parts = star_pair[0].split(',')
             second_parts = star_pair[1].split(',')
             _, x1, y1, direction1, progress1 = map(float, first_parts)
