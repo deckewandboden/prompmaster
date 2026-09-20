@@ -361,6 +361,7 @@ export async function initCanvasHead({sourceCanvas,stage,fallback}){
   let paused=reduced.matches,disposed=false,visible=true,last=0,lastFrame=0,elapsed=0,mouseX=0,mouseY=0,smoothX=0,smoothY=0,lastPointerX=0,lastPointerY=0,hasPointer=false,cursorEnergy=0,dissolve=0,headYaw=0,headPitch=0,pointPower=1,topologyPower=1,edition='',raf=0,width=1,height=1,dpr=1;
   let sceneLayers={landscape:[],blend:[],sky:[]};
   let cachedDepth=null,cachedDepthYaw=Infinity,cachedDepthPitch=Infinity,cachedDepthAt=-Infinity;
+  let canvasFrameCount=0,canvasSteadyPeakMs=0;
 
   const makePointBatches=()=>Array.from({length:24},()=>new Path2D());
   const addPointToBatch=(batches,x,y,size,intensity,alpha)=>{
@@ -478,7 +479,13 @@ export async function initCanvasHead({sourceCanvas,stage,fallback}){
   function draw(now){
     if(disposed)return;
     const drawStarted=performance.now();
-    const dt=Math.min(.05,Math.max(0,(now-last)/1000||0));last=now;elapsed+=dt;
+    const rawDt=Math.max(0,(now-last)/1000||0);
+    const dt=Math.min(.05,rawDt);
+    last=now;
+    // Keep animation phase tied to wall-clock time. The old code added only
+    // the clamped dt, so a slow Canvas frame also slowed the entire head,
+    // beacons and shooting stars and produced the observed millimetre crawl.
+    elapsed+=Math.min(rawDt,.25);
     context.clearRect(0,0,width,height);
     const glow=context.createRadialGradient(width*.5,height*.42,0,width*.5,height*.42,Math.min(width,height)*.38);
     glow.addColorStop(0,'rgba(30,155,255,.12)');
@@ -749,7 +756,12 @@ export async function initCanvasHead({sourceCanvas,stage,fallback}){
     stage.dataset.eyeAnchors=renderedEyes.join(',');
     context.shadowBlur=0;
     context.globalCompositeOperation='source-over';
-    stage.dataset.canvasDrawMs=(performance.now()-drawStarted).toFixed(1);
+    const drawMs=performance.now()-drawStarted;
+    canvasFrameCount++;
+    if(canvasFrameCount>5)canvasSteadyPeakMs=Math.max(canvasSteadyPeakMs,drawMs);
+    stage.dataset.canvasDrawMs=drawMs.toFixed(1);
+    stage.dataset.canvasDrawPeakMs=canvasSteadyPeakMs.toFixed(1);
+    stage.dataset.canvasFrames=String(canvasFrameCount);
   }
 
   function loop(now){
