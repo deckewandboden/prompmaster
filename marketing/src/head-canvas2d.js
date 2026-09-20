@@ -496,7 +496,9 @@ export async function initCanvasHead({sourceCanvas,stage,fallback}){
 
     // Edge/WebGL shooting-star contract: same six trails, schedule, direction,
     // height, depth, duration and scale progression.
-    for(const star of shootingStars){
+    let activeStarProbe='';
+    for(let starIndex=0;starIndex<shootingStars.length;starIndex++){
+      const star=shootingStars[starIndex];
       const activeTime=elapsed-star.offset;
       const local=activeTime>=0?activeTime%star.period:-1;
       if(local<0||local>=3.45)continue;
@@ -509,6 +511,11 @@ export async function initCanvasHead({sourceCanvas,stage,fallback}){
       const trailWidth=(.72+progress*.48+star.scaleBias)*worldPixelScale;
       const trailHeight=Math.max(1,(.026+progress*.022)*worldPixelScale);
       const alpha=Math.sin(progress*Math.PI)*star.opacity;
+      if(!activeStarProbe){
+        activeStarProbe=[starIndex,x,y,star.direction,progress].map(value=>
+          typeof value==='number'?value.toFixed(3):value
+        ).join(',');
+      }
       context.save();
       context.globalAlpha=alpha;
       context.translate(x,y);
@@ -519,6 +526,7 @@ export async function initCanvasHead({sourceCanvas,stage,fallback}){
       );
       context.restore();
     }
+    stage.dataset.starProbe=activeStarProbe;
 
     // Strong beacons use the exact same 3D positions/phases/rates as Edge.
     for(const beacon of beacons){
@@ -622,6 +630,7 @@ export async function initCanvasHead({sourceCanvas,stage,fallback}){
     context.fillStyle='#000';
     context.fill(depthRaster.maskPath);
     context.restore();
+    stage.dataset.canvasOcclusion='head-silhouette-v1';
     context.globalCompositeOperation='lighter';
 
     const surfaceBatches=makePointBatches();
