@@ -4,7 +4,7 @@ import {MeshSurfaceSampler} from 'three/addons/math/MeshSurfaceSampler.js';
 import {createLowerSceneData,initCanvasHead} from './head-canvas2d.js';
 
 export async function initHead(){
-  const canvas=document.getElementById('particle-head');
+  let canvas=document.getElementById('particle-head');
   if(!canvas)return;
   const stage=canvas.parentElement;
   const fallback=stage.querySelector('.head-fallback');
@@ -50,9 +50,17 @@ export async function initHead(){
     },
   ];
   const attempted=[];
-  for(const attempt of webglAttempts){
+  const freshCanvas=()=>{
+    const replacement=canvas.cloneNode(false);
+    canvas.replaceWith(replacement);
+    canvas=replacement;
+    return canvas;
+  };
+  for(let attemptIndex=0;attemptIndex<webglAttempts.length;attemptIndex++){
+    const attempt=webglAttempts[attemptIndex];
     if(renderer)break;
     attempted.push(attempt.id);
+    if(attemptIndex>0)freshCanvas();
     try{
       const webglContext=canvas.getContext('webgl2',attempt.context);
       if(!webglContext)continue;
@@ -68,6 +76,7 @@ export async function initHead(){
   }
   if(!renderer){
     attempted.push('edge-three-managed-no-msaa');
+    freshCanvas();
     try{
       renderer=new THREE.WebGLRenderer({
         canvas,
