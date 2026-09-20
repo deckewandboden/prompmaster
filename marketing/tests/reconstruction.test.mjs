@@ -19,6 +19,8 @@ test('reconstructed marketing uses latest recovered head engine',()=>{
   assert.match(head,/uDissolve/);
   assert.match(head,/shootingStars/);
   assert.match(head,/createLowerSceneData/);
+  assert.match(head,/stage\.dataset\.beaconProbe=probe\.join\(','\)/);
+  assert.match(head,/point\.x\+cityBeacons\.position\.x/);
   assert.match(head,/createShootingStarCanvas/);
   assert.match(head,/getShootingStarState/);
   assert.match(head,/new THREE\.CanvasTexture\(createShootingStarCanvas\(reverse\)\)/);
@@ -67,6 +69,8 @@ test('non-WebGL fallback keeps the actual head visible without camera access',()
   assert.match(fallback,/mobile\?850:2400/);
   assert.match(fallback,/beacons/);
   assert.match(fallback,/mobile\?58:150/);
+  assert.match(fallback,/const beaconProbe=\[\]/);
+  assert.match(fallback,/stage\.dataset\.beaconProbe=beaconProbe\.join\(','\)/);
   assert.match(fallback,/traffic/);
   assert.match(fallback,/mobile\?16:38/);
   assert.match(fallback,/skyLights/);
