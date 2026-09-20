@@ -316,6 +316,7 @@ export async function initCanvasHead({sourceCanvas,stage,fallback}){
   fallback.dataset.renderer='canvas2d';
   delete fallback.dataset.ready;
   stage.dataset.headRenderer='canvas2d';
+  delete stage.dataset.eyeContract;
   delete stage.dataset.headReady;
   fallback.replaceChildren();
 
