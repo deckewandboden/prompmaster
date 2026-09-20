@@ -1,7 +1,7 @@
 import * as THREE from 'three';
 import {GLTFLoader} from 'three/addons/loaders/GLTFLoader.js';
 import {MeshSurfaceSampler} from 'three/addons/math/MeshSurfaceSampler.js';
-import {createLowerSceneData,createShootingStarCanvas,initCanvasHead} from './head-canvas2d.js';
+import {createLowerSceneData,createShootingStarCanvas,getShootingStarState,initCanvasHead} from './head-canvas2d.js';
 
 export async function initHead(){
   let canvas=document.getElementById('particle-head');
@@ -253,10 +253,15 @@ export async function initHead(){
     }
     const updateShootingStars=()=>{
       for(let s=0;s<starCount;s++){
-        const spec=sceneData.shootingStars[s],direction=spec.direction,activeTime=elapsed-spec.offset,local=activeTime>=0?activeTime%spec.period:-1,active=local>=0&&local<3.45,progress=active?local/3.45:0;
-        const startX=direction>0?-3.25:3.25;
-        const star=shootingStars[s];star.visible=active;
-        if(active){star.position.set(startX+direction*progress*4.75-smoothPointerX*.035,spec.y-progress*.76,spec.z);star.material.opacity=Math.sin(progress*Math.PI)*spec.opacity;star.scale.set(.72+progress*.48+spec.scaleBias,.026+progress*.022,1)}
+        const spec=sceneData.shootingStars[s];
+        const state=getShootingStarState(spec,elapsed,smoothPointerX);
+        const star=shootingStars[s];
+        star.visible=state.active;
+        if(state.active){
+          star.position.set(state.x,state.y,state.z);
+          star.material.opacity=state.opacity;
+          star.scale.set(state.width,state.height,1);
+        }
       }
     };
     function render(time=0){
