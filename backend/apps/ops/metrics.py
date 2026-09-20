@@ -87,6 +87,11 @@ def snapshot():
         'load1': 'node_load1',
         'load5': 'node_load5',
         'load15': 'node_load15',
+        # cAdvisor values are deliberately kept separate from node_exporter
+        # host/VM metrics so the admin UI never mixes container and VM scopes.
+        'container_count': 'count(container_last_seen{image!=""})',
+        'container_memory_used': 'sum(container_memory_working_set_bytes{image!=""})',
+        'container_cpu_cores': 'sum(rate(container_cpu_usage_seconds_total{image!=""}[1m]))',
     }
     for key, expression in queries.items():
         try:
@@ -128,6 +133,9 @@ def snapshot():
     except MetricsUnavailable:
         cadvisor = {}
     metrics['docker_version'] = cadvisor.get('dockerVersion') or cadvisor.get('docker_version') or ''
+    metrics['scope'] = 'vm'
+    metrics['scope_label'] = 'Docker-Host-VM'
+    metrics['source_label'] = 'Prometheus · node_exporter / cAdvisor'
     return metrics
 
 
