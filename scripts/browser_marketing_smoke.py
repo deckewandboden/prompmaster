@@ -210,6 +210,7 @@ def main() -> int:
                         canvasVisible: !!(canvas.width && canvas.height),
                         headRenderer: renderer,
                         lowerSceneContract: one('.head-stage').dataset.lowerSceneContract || '',
+                        eyeContract: one('.head-stage').dataset.eyeContract || '',
                         headBounds: one('.head-stage').dataset.headBounds || '',
                         eyeAnchors: one('.head-stage').dataset.eyeAnchors || '',
                         fallbackHidden: one('.head-fallback').hidden,
@@ -308,24 +309,31 @@ def main() -> int:
                             'Animation/Pointer-Reaktion fehlt'
                         )
                     if engine == 'firefox':
-                        try:
-                            bounds = [float(v) for v in metrics['headBounds'].split(',')]
-                            eyes = [float(v) for v in metrics['eyeAnchors'].split(',')]
-                        except ValueError:
-                            fail(f'Firefox 1440px: ungültige Kopf-/Augen-Anker {metrics}')
-                        if len(bounds) != 4 or len(eyes) != 4:
-                            fail(f'Firefox 1440px: Augen-Anker fehlen {metrics}')
-                        min_x, min_y, max_x, max_y = bounds
-                        left_x, left_y, right_x, right_y = eyes
-                        if not (
-                            min_x <= left_x <= max_x and min_x <= right_x <= max_x
-                            and min_y <= left_y <= max_y and min_y <= right_y <= max_y
-                            and right_x - left_x >= 25
-                        ):
-                            fail(
-                                f'Firefox 1440px: Augen sitzen außerhalb der Kopfgeometrie '
-                                f'(bounds={bounds}, eyes={eyes})'
-                            )
+                        if metrics['headRenderer'] == 'webgl':
+                            if metrics['eyeContract'] != 'edge-shared-webgl':
+                                fail(
+                                    f'Firefox 1440px: Augen verwenden nicht den '
+                                    f'Edge-WebGL-Vertrag ({metrics["eyeContract"]!r})'
+                                )
+                        else:
+                            try:
+                                bounds = [float(v) for v in metrics['headBounds'].split(',')]
+                                eyes = [float(v) for v in metrics['eyeAnchors'].split(',')]
+                            except ValueError:
+                                fail(f'Firefox 1440px: ungültige Kopf-/Augen-Anker {metrics}')
+                            if len(bounds) != 4 or len(eyes) != 4:
+                                fail(f'Firefox 1440px: Augen-Anker fehlen {metrics}')
+                            min_x, min_y, max_x, max_y = bounds
+                            left_x, left_y, right_x, right_y = eyes
+                            if not (
+                                min_x <= left_x <= max_x and min_x <= right_x <= max_x
+                                and min_y <= left_y <= max_y and min_y <= right_y <= max_y
+                                and right_x - left_x >= 25
+                            ):
+                                fail(
+                                    f'Firefox 1440px: Augen sitzen außerhalb der Kopfgeometrie '
+                                    f'(bounds={bounds}, eyes={eyes})'
+                                )
                         frame_stats = page.evaluate(
                             """async () => {
                               const samples = [];
@@ -395,9 +403,9 @@ def main() -> int:
                 if parity_renderer != 'webgl':
                     fail('Chromium parity reference must use WebGL')
             elif engine == 'firefox':
-                if parity_renderer != 'canvas2d':
+                if parity_renderer != 'webgl':
                     fail(
-                        f'Firefox parity must use deterministic Canvas2D renderer, '
+                        f'Firefox parity must use the canonical Edge/WebGL renderer, '
                         f'got {parity_renderer!r}'
                     )
                 edge_parity = artifact_dir / 'chromium-1440-parity.png'
