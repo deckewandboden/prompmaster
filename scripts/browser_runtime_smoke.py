@@ -783,12 +783,18 @@ def _browser_register_verify_to_buy(
     # Buying is blocked until e-mail verification; verify before checkout.
     page.wait_for_load_state('networkidle')
 
-    close_old_connections()
-    user = User.objects.get(email=email)
-    token = signing.dumps(
-        {'uid': str(user.id), 'email': user.email, 'next': next_path},
-        salt=EMAIL_VERIFY_SALT,
-    )
+    def _verification_token():
+        close_old_connections()
+        user = User.objects.get(email=email)
+        value = signing.dumps(
+            {'uid': str(user.id), 'email': user.email, 'next': next_path},
+            salt=EMAIL_VERIFY_SALT,
+        )
+        close_old_connections()
+        return value
+
+    with ThreadPoolExecutor(max_workers=1) as pool:
+        token = pool.submit(_verification_token).result()
     verify = page.goto(
         base + 'auth/verify/' + quote(token, safe='') + '/',
         wait_until='networkidle',
