@@ -131,7 +131,20 @@ def main() -> int:
                     launch['executable_path'] = executable
                 browser = pw.chromium.launch(**launch)
             elif engine == 'firefox':
-                browser = pw.firefox.launch(headless=True)
+                firefox_env = os.environ.copy()
+                firefox_env.setdefault('MOZ_WEBRENDER', '1')
+                firefox_env.setdefault('LIBGL_ALWAYS_SOFTWARE', '1')
+                browser = pw.firefox.launch(
+                    headless=True,
+                    env=firefox_env,
+                    firefox_user_prefs={
+                        'webgl.disabled': False,
+                        'webgl.force-enabled': True,
+                        'layers.acceleration.force-enabled': True,
+                        'gfx.webrender.all': True,
+                        'gfx.webrender.software': True,
+                    },
+                )
             else:
                 browser = pw.webkit.launch(headless=True)
 
@@ -264,6 +277,11 @@ def main() -> int:
                     fail(f'{engine} {width}px: kein aktiver Kopf-Renderer ({metrics["headRenderer"]})')
                 if engine == 'chromium' and metrics['headRenderer'] != 'webgl':
                     fail(f'{width}px: Chromium muss den primären WebGL-Renderer validieren')
+                if engine == 'firefox' and metrics['headRenderer'] != 'webgl':
+                    fail(
+                        f'{width}px: Firefox-Test muss den kanonischen WebGL-Pfad '
+                        f'validieren, erhalten={metrics["headRenderer"]!r}'
+                    )
                 if metrics['lowerSceneContract'] != 'edge-shared-v1':
                     fail(
                         f'{engine} {width}px: Kopf verwendet nicht den gemeinsamen '
@@ -360,7 +378,7 @@ def main() -> int:
                         )
                         if frame_stats['median'] > 35 or frame_stats['p95'] > 65 or frame_stats['max'] > 140:
                             fail(
-                                f'Firefox 1440px: Canvas2D-Animation ruckelt '
+                                f'Firefox 1440px: Animation ruckelt '
                                 f'(frame timings={frame_stats})'
                             )
                     page.locator('#plus').click()
