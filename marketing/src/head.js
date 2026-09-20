@@ -120,6 +120,7 @@ export async function initHead(){
     // Layered ground and skyline lights visually connect the 3D head with the landscape.
     // Edge/WebGL and Firefox/Canvas2D consume the exact same deterministic scene data.
     const sceneData=createLowerSceneData(mobile);
+    stage.dataset.lowerSceneContract='edge-shared-v1';
     const landscapeCount=sceneData.landscape.length,landscapePositions=new Float32Array(landscapeCount*3),landscapeColors=new Float32Array(landscapeCount*3),landscapePhase=new Float32Array(landscapeCount),landscapeSize=new Float32Array(landscapeCount);
     for(let i=0;i<landscapeCount;i++){
       const point=sceneData.landscape[i];
