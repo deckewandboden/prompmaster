@@ -597,6 +597,77 @@ def main() -> int:
                     )
                 context_loss_page.close()
 
+                # Strong-beacon position parity: the six sampled glowing nodes
+                # must land at the same screen coordinates in canonical WebGL
+                # and in the forced Canvas fallback, including pointer parallax.
+                async_probe_js = """() => {
+                  const raw = document.querySelector('.head-stage')?.dataset.beaconProbe || '';
+                  return raw ? raw.split(',').map(Number) : [];
+                }"""
+                beacon_webgl = browser.new_page(
+                    viewport={'width': 1440, 'height': 1000},
+                    device_scale_factor=1,
+                )
+                beacon_webgl.goto(base, wait_until='networkidle')
+                beacon_webgl.wait_for_function(
+                    "document.querySelector('.head-stage')?.dataset.headRenderer === 'webgl' && "
+                    "document.querySelector('.head-stage')?.dataset.headReady === '1' && "
+                    "document.querySelector('.head-stage')?.dataset.beaconProbe",
+                    timeout=15000,
+                )
+                beacon_webgl.mouse.move(1120, 260)
+                beacon_webgl.wait_for_timeout(2200)
+                webgl_probe = beacon_webgl.evaluate(async_probe_js)
+                beacon_webgl.close()
+
+                beacon_canvas = browser.new_page(
+                    viewport={'width': 1440, 'height': 1000},
+                    device_scale_factor=1,
+                )
+                beacon_canvas.add_init_script(
+                    """(() => {
+                      const original = HTMLCanvasElement.prototype.getContext;
+                      HTMLCanvasElement.prototype.getContext = function(type, ...args) {
+                        if (type === 'webgl' || type === 'webgl2' || type === 'experimental-webgl') {
+                          return null;
+                        }
+                        return original.call(this, type, ...args);
+                      };
+                    })();"""
+                )
+                beacon_canvas.goto(base, wait_until='networkidle')
+                beacon_canvas.wait_for_function(
+                    "document.querySelector('.head-stage')?.dataset.headRenderer === 'canvas2d' && "
+                    "document.querySelector('.head-stage')?.dataset.headReady === '1' && "
+                    "document.querySelector('.head-stage')?.dataset.beaconProbe",
+                    timeout=15000,
+                )
+                beacon_canvas.mouse.move(1120, 260)
+                beacon_canvas.wait_for_timeout(2200)
+                canvas_probe = beacon_canvas.evaluate(async_probe_js)
+                beacon_canvas.close()
+
+                if len(webgl_probe) != 12 or len(canvas_probe) != 12:
+                    fail(
+                        'Beacon parity: expected six XY coordinate pairs, got '
+                        f'WebGL={webgl_probe}, Canvas={canvas_probe}'
+                    )
+                beacon_deltas = [
+                    abs(float(a) - float(b))
+                    for a, b in zip(webgl_probe, canvas_probe, strict=True)
+                ]
+                beacon_max_delta = max(beacon_deltas)
+                print(
+                    'BEACON POSITION PARITY chromium: '
+                    f'max_delta={beacon_max_delta:.1f}px '
+                    f'webgl={webgl_probe} canvas={canvas_probe}'
+                )
+                if beacon_max_delta > 4:
+                    fail(
+                        'Beacon parity: strong glowing points do not match Edge '
+                        f'(max coordinate delta={beacon_max_delta:.1f}px > 4px)'
+                    )
+
             if engine == 'chromium':
                 # Export clean WebGL scene masters without navigation/cards.
                 # These are generated from the canonical Chromium/Edge renderer
