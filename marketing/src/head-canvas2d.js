@@ -312,6 +312,46 @@ export async function initCanvasHead({sourceCanvas,stage,fallback}){
   const skyLights=sceneData.sky;
   const shootingStars=sceneData.shootingStars;
 
+  const makeBeaconSprite=()=>{
+    const sprite=document.createElement('canvas');
+    sprite.width=64;sprite.height=64;
+    const ctx=sprite.getContext('2d',{alpha:true});
+    const gradient=ctx.createRadialGradient(32,32,0,32,32,32);
+    gradient.addColorStop(0,'rgba(97,230,255,1)');
+    gradient.addColorStop(.42,'rgba(70,205,255,.48)');
+    gradient.addColorStop(1,'rgba(20,130,255,0)');
+    ctx.fillStyle=gradient;ctx.fillRect(0,0,64,64);
+    return sprite;
+  };
+  const makeShootingStarSprite=(reverse=false)=>{
+    const sprite=document.createElement('canvas');
+    sprite.width=256;sprite.height=32;
+    const ctx=sprite.getContext('2d',{alpha:true});
+    const gradient=ctx.createLinearGradient(0,0,256,0);
+    if(reverse){
+      gradient.addColorStop(0,'rgba(255,255,255,1)');
+      gradient.addColorStop(.06,'rgba(190,245,255,.9)');
+      gradient.addColorStop(.28,'rgba(90,205,255,.32)');
+      gradient.addColorStop(1,'rgba(40,150,255,0)');
+    }else{
+      gradient.addColorStop(0,'rgba(40,150,255,0)');
+      gradient.addColorStop(.72,'rgba(90,205,255,.32)');
+      gradient.addColorStop(.94,'rgba(190,245,255,.9)');
+      gradient.addColorStop(1,'rgba(255,255,255,1)');
+    }
+    ctx.fillStyle=gradient;ctx.fillRect(0,0,256,32);
+    const feather=ctx.createLinearGradient(0,0,0,32);
+    feather.addColorStop(0,'rgba(255,255,255,0)');
+    feather.addColorStop(.5,'rgba(255,255,255,1)');
+    feather.addColorStop(1,'rgba(255,255,255,0)');
+    ctx.globalCompositeOperation='destination-in';
+    ctx.fillStyle=feather;ctx.fillRect(0,0,256,32);
+    return sprite;
+  };
+  const beaconSprite=makeBeaconSprite();
+  const shootingStarLtr=makeShootingStarSprite(false);
+  const shootingStarRtl=makeShootingStarSprite(true);
+
   const reduced=matchMedia('(prefers-reduced-motion:reduce)');
   let paused=reduced.matches,disposed=false,visible=true,last=0,lastFrame=0,elapsed=0,mouseX=0,mouseY=0,smoothX=0,smoothY=0,lastPointerX=0,lastPointerY=0,hasPointer=false,cursorEnergy=0,dissolve=0,headYaw=0,headPitch=0,pointPower=1,topologyPower=1,edition='',raf=0,width=1,height=1,dpr=1;
   let sceneLayers={landscape:[],blend:[],sky:[]};
@@ -326,6 +366,7 @@ export async function initCanvasHead({sourceCanvas,stage,fallback}){
       height*.5-(y-.06)*base*perspective,
       depth,
       perspective,
+      base*perspective,
     ];
   };
 
@@ -435,29 +476,19 @@ export async function initCanvasHead({sourceCanvas,stage,fallback}){
       const startX=star.direction>0?-3.25:3.25;
       const worldX=startX+star.direction*progress*4.75-smoothX*.035;
       const worldY=star.y-progress*.76;
-      const [x,y,depth]=sceneProject(worldX,worldY,star.z);
+      const [x,y,depth,,worldPixelScale]=sceneProject(worldX,worldY,star.z);
       if(depth<=.1)continue;
-      const pointScale=4.5/depth;
-      const trailWidth=(.72+progress*.48+star.scaleBias)*height*.12*pointScale;
-      const trailHeight=Math.max(1,(.026+progress*.022)*height*.12*pointScale);
+      const trailWidth=(.72+progress*.48+star.scaleBias)*worldPixelScale;
+      const trailHeight=Math.max(1,(.026+progress*.022)*worldPixelScale);
       const alpha=Math.sin(progress*Math.PI)*star.opacity;
       context.save();
+      context.globalAlpha=alpha;
       context.translate(x,y);
       context.rotate(star.direction>0?-.22:.22);
-      const gradient=context.createLinearGradient(-trailWidth*.5,0,trailWidth*.5,0);
-      if(star.direction>0){
-        gradient.addColorStop(0,'rgba(40,150,255,0)');
-        gradient.addColorStop(.72,`rgba(90,205,255,${alpha*.44})`);
-        gradient.addColorStop(.94,`rgba(190,245,255,${alpha*.9})`);
-        gradient.addColorStop(1,`rgba(255,255,255,${alpha})`);
-      }else{
-        gradient.addColorStop(0,`rgba(255,255,255,${alpha})`);
-        gradient.addColorStop(.06,`rgba(190,245,255,${alpha*.9})`);
-        gradient.addColorStop(.28,`rgba(90,205,255,${alpha*.44})`);
-        gradient.addColorStop(1,'rgba(40,150,255,0)');
-      }
-      context.fillStyle=gradient;
-      context.fillRect(-trailWidth*.5,-trailHeight*.5,trailWidth,trailHeight);
+      context.drawImage(
+        star.direction>0?shootingStarLtr:shootingStarRtl,
+        -trailWidth*.5,-trailHeight*.5,trailWidth,trailHeight
+      );
       context.restore();
     }
 
@@ -468,13 +499,11 @@ export async function initCanvasHead({sourceCanvas,stage,fallback}){
       const [x,y,depth]=sceneProject(beacon.x-smoothX*.08,beacon.y,beacon.z);
       if(depth<=.1)continue;
       const pointScale=4.5/depth;
-      const radius=Math.max(.8,(2.8+flash*8.5)*pointScale*.5);
-      const g=context.createRadialGradient(x,y,0,x,y,radius);
-      g.addColorStop(0,`rgba(97,230,255,${Math.min(1,.14+flash*1.28)})`);
-      g.addColorStop(.42,`rgba(70,205,255,${.08+flash*.48})`);
-      g.addColorStop(1,'rgba(20,130,255,0)');
-      context.fillStyle=g;
-      context.beginPath();context.arc(x,y,radius,0,Math.PI*2);context.fill();
+      const diameter=Math.max(1.6,(2.8+flash*8.5)*pointScale);
+      context.save();
+      context.globalAlpha=Math.min(1,.14+flash*1.28);
+      context.drawImage(beaconSprite,x-diameter*.5,y-diameter*.5,diameter,diameter);
+      context.restore();
     }
 
     // Moving traffic lights also follow Edge's world-space lane coordinates.
