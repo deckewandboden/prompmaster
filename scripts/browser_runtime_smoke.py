@@ -497,6 +497,34 @@ def _browser_login(page, base: str, email: str, password: str, secret: str, expe
     password_input.press('Enter')
     page.wait_for_url('**/auth/2fa/**')
     code_input = page.locator('input[name="code"]')
+    two_factor_layout = page.evaluate(
+        """() => {
+          const card = document.querySelector('.auth-login-card');
+          const input = document.querySelector('.auth-login-form input[name="code"]');
+          const button = document.querySelector('.auth-login-form .auth-submit');
+          if (!card || !input || !button) return null;
+          const i = input.getBoundingClientRect();
+          const b = button.getBoundingClientRect();
+          const c = card.getBoundingClientRect();
+          return {
+            cardWidth: c.width,
+            inputWidth: i.width,
+            buttonWidth: b.width,
+            inputHeight: i.height,
+            buttonHeight: b.height,
+            overlap: !(i.bottom <= b.top),
+          };
+        }"""
+    )
+    if (
+        not two_factor_layout
+        or two_factor_layout['cardWidth'] < 300
+        or abs(two_factor_layout['inputWidth'] - two_factor_layout['buttonWidth']) > 2
+        or two_factor_layout['inputHeight'] < 44
+        or two_factor_layout['buttonHeight'] < 42
+        or two_factor_layout['overlap']
+    ):
+        raise AssertionError(f'2FA layout is unstable: {two_factor_layout}')
     code_input.fill(pyotp.TOTP(secret).now())
     code_input.press('Enter')
     page.wait_for_url(lambda url: '/auth/2fa/' not in url and '/auth/login/' not in url)
@@ -1367,6 +1395,39 @@ def run_backend_ui_smoke(browser, fixture=None) -> None:
                     raise AssertionError(
                         f'admin dashboard action alerts have no visual spacing: {dashboard_visual}'
                     )
+
+                launcher_contract = page.evaluate(
+                    """() => {
+                      const links = [...document.querySelectorAll('a')];
+                      const pick = label => links.find(a => a.textContent.trim().includes(label));
+                      return Object.fromEntries(['PromptMaster Pro', 'PromptMaster Free'].map(label => {
+                        const a = pick(label);
+                        return [label, a ? {
+                          path: new URL(a.href).pathname,
+                          target: a.target,
+                          rel: a.rel,
+                        } : null];
+                      }));
+                    }"""
+                )
+                expected_launchers = {
+                    'PromptMaster Pro': '/pro/',
+                    'PromptMaster Free': '/free/',
+                }
+                for label, path in expected_launchers.items():
+                    row = launcher_contract.get(label)
+                    if (
+                        not row
+                        or row.get('path') != path
+                        or row.get('target') != '_blank'
+                        or 'noopener' not in (row.get('rel') or '').split()
+                    ):
+                        raise AssertionError(
+                            f'admin launcher contract invalid for {label}: {row}'
+                        )
+                dashboard_launchers = page.locator('.page-actions a[target="_blank"]')
+                if dashboard_launchers.count() < 2:
+                    raise AssertionError('admin dashboard must expose Free and Pro as new-tab launchers')
 
                 page.goto(base + 'ns-admin/orders/', wait_until='networkidle')
                 customer_sort = page.locator('th a', has_text='Kunde').first
