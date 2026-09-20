@@ -778,9 +778,8 @@ def _browser_register_verify_to_buy(
         continue_button = page.locator('.result-actions a.btn.primary')
         if '/portal/licenses/buy/' not in (continue_button.get_attribute('href') or ''):
             raise AssertionError('company registration lost checkout destination after MFA')
-        continue_button.click()
 
-    page.wait_for_url(lambda url: '/portal/licenses/buy/' in str(url))
+    # Buying is blocked until e-mail verification; verify before checkout.
     page.wait_for_load_state('networkidle')
 
     close_old_connections()
