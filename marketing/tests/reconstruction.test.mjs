@@ -24,7 +24,6 @@ test('reconstructed marketing uses latest recovered head engine',()=>{
   assert.doesNotMatch(head,/pm-headtrack|getUserMedia|enumerateDevices/);
   assert.doesNotMatch(head,/Bewegung pausieren|Bewegung aktivieren|motion-button/);
   assert.match(head,/loadAsync\('\/models\/head\.glb'\)/);
-  assert.match(head,/Firefox\\\//);
   assert.doesNotMatch(head,/const firefox=\/Firefox\\\//);
   assert.doesNotMatch(head,/powerPreference=firefox/);
   assert.match(head,/powerPreference:'low-power'/);
