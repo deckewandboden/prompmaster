@@ -98,7 +98,7 @@ class RenderedUiActionContractTests(TestCase):
 
         while queue:
             url = queue.popleft()
-            canonical = url.split('#', 1)[0]
+            canonical = urlsplit(url).path
             if canonical in visited:
                 continue
             if len(visited) >= 220:
