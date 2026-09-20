@@ -69,6 +69,17 @@ test('non-WebGL fallback keeps the actual head visible without camera access',()
   assert.match(fallback,/period:9\.1\+\(index%3\)\*1\.05/);
   assert.match(fallback,/sceneLayers/);
   assert.match(fallback,/drawSceneLayers/);
+  assert.match(fallback,/meta\.scaleSum\+=worldPixelScale/);
+  assert.match(fallback,/drawSceneLayers\(sceneLayers\.landscape,\.72,\.075,\.018,\.22,\.006\)/);
+  assert.match(fallback,/drawSceneLayers\(sceneLayers\.blend,\.68,\.075,0,\.24,\.008\)/);
+  assert.match(fallback,/sceneProject\(beacon\.x-smoothX\*\.075,beacon\.y,beacon\.z\)/);
+  assert.match(fallback,/worldX=worldX-4\.2;/);
+  assert.match(fallback,/sceneProject\(worldX-smoothX\*\.075,light\.y,light\.z\)/);
+  assert.ok(
+    fallback.indexOf('smoothX+=(mouseX-smoothX)') <
+      fallback.indexOf('drawSceneLayers(sceneLayers.sky'),
+    'Canvas pointer smoothing must happen before lower-scene drawing like Edge',
+  );
   assert.match(fallback,/maskPath/);
   assert.match(fallback,/destination-out/);
   assert.match(fallback,/makePointBatches/);
