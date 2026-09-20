@@ -336,6 +336,64 @@ class NotificationReleaseTests(TestCase):
         self.assertEqual(delay.call_count, 1)
 
 
+class AdminDashboardRegressionTests(TestCase):
+    def setUp(self):
+        self.admin = User.objects.create_user(
+            'dashboard-admin@example.test',
+            None,
+            is_staff=True,
+            is_superuser=True,
+            two_factor_required=False,
+            email_verified_at=timezone.now(),
+        )
+        self.client.force_login(self.admin)
+        self.company = Company.objects.create(
+            customer_number='DASH-1001',
+            name='Dashboard GmbH',
+            email='dashboard@example.test',
+            status='active',
+        )
+        self.product = Product.objects.create(code='DASH-PRO', name='PromptMaster Pro Test')
+        now = timezone.now()
+        License.objects.create(
+            company=self.company,
+            product=self.product,
+            status='active',
+            valid_from=now - timedelta(days=10),
+            valid_until=now + timedelta(days=100),
+        )
+        License.objects.create(
+            company=self.company,
+            product=self.product,
+            status='expired',
+            valid_from=now - timedelta(days=400),
+            valid_until=now - timedelta(days=1),
+        )
+        Order.objects.create(
+            order_number='DASH-ORDER-1',
+            company=self.company,
+            status='paid',
+            gross_total='35.88',
+            tax_total='5.73',
+            idempotency_key='dashboard-order-1',
+        )
+
+    @patch('apps.core.admin_views.snapshot', return_value={})
+    def test_dashboard_css_percentages_are_locale_neutral_and_counts_align(self, _snapshot):
+        response = self.client.get('/ns-admin/')
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.context['licenses'], 1)
+        self.assertEqual(response.context['product_total'], 1)
+        self.assertEqual(response.context['product_mix'][0]['percent_css'], '100.0')
+        self.assertEqual(response.context['revenue_months'][0]['percent_css'], '100.0')
+        body = response.content.decode('utf-8')
+        self.assertIn('height:100.0%', body)
+        self.assertIn('--share:100.0%', body)
+        self.assertNotIn('height:100,0%', body)
+        self.assertNotIn('--share:100,0%', body)
+        self.assertIn('alert-stack', body)
+
+
 class AdminOrderGridTests(TestCase):
     def setUp(self):
         self.admin = User.objects.create_user(
