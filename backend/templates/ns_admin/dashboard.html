@@ -3,7 +3,7 @@
 <div class="page-head">
   <div><h1>Dashboard</h1><div class="sub">Geschäft, Handlungsbedarf und Systemstatus auf einen Blick.</div></div>
   <div class="page-actions">
-    <a class="btn primary" href="{% url 'proaccess:launch' %}">PromptMaster Pro öffnen →</a>
+    <a class="btn primary" href="{% url 'proaccess:launch' %}" target="_blank" rel="noopener">PromptMaster Pro öffnen →</a><a class="btn secondary" href="{% url 'free_product' %}" target="_blank" rel="noopener">PromptMaster Free öffnen →</a>
     {% if rights.ops %}<span class="badge {% if system_healthy %}ok{% else %}warn{% endif %}">● {% if system_healthy %}System gesund{% else %}Prüfung erforderlich{% endif %}</span><a class="btn secondary" href="{% url 'ns_admin:ops' %}">System &amp; Betrieb</a>{% endif %}
   </div>
 </div>
