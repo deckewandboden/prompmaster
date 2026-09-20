@@ -670,6 +670,9 @@ for needle in (
     "edge-webgl2-minimal",
     "edge-three-managed-no-msaa",
     "stage.dataset.webglAttempts",
+    'const freshCanvas=',
+    'cloneNode(false)',
+    'attemptIndex>0)freshCanvas()',
     "stage.dataset.webglInit='canvas-emergency'",
     "stage.dataset.eyeContract='edge-shared-webgl'",
 ):
