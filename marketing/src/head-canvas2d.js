@@ -44,6 +44,24 @@ export function createShootingStarCanvas(reverse=false){
   return sprite;
 }
 
+export function getShootingStarState(spec,elapsed,pointerX=0){
+  const activeTime=elapsed-spec.offset;
+  const local=activeTime>=0?activeTime%spec.period:-1;
+  const active=local>=0&&local<3.45;
+  const progress=active?local/3.45:0;
+  const startX=spec.direction>0?-3.25:3.25;
+  return {
+    active,
+    progress,
+    x:startX+spec.direction*progress*4.75-pointerX*.035,
+    y:spec.y-progress*.76,
+    z:spec.z,
+    opacity:Math.sin(progress*Math.PI)*spec.opacity,
+    width:.72+progress*.48+spec.scaleBias,
+    height:.026+progress*.022,
+  };
+}
+
 export function createLowerSceneData(mobile=false){
   const random=seeded(712367);
   const landscapeCount=mobile?1500:4200;
@@ -530,18 +548,14 @@ export async function initCanvasHead({sourceCanvas,stage,fallback}){
     let activeStarProbe='';
     for(let starIndex=0;starIndex<shootingStars.length;starIndex++){
       const star=shootingStars[starIndex];
-      const activeTime=elapsed-star.offset;
-      const local=activeTime>=0?activeTime%star.period:-1;
-      if(local<0||local>=3.45)continue;
-      const progress=local/3.45;
-      const startX=star.direction>0?-3.25:3.25;
-      const worldX=startX+star.direction*progress*4.75-smoothX*.035;
-      const worldY=star.y-progress*.76;
-      const [x,y,depth,,worldPixelScale]=sceneProject(worldX,worldY,star.z);
+      const state=getShootingStarState(star,elapsed,smoothX);
+      if(!state.active)continue;
+      const {progress}=state;
+      const [x,y,depth,,worldPixelScale]=sceneProject(state.x,state.y,state.z);
       if(depth<=.1)continue;
-      const trailWidth=(.72+progress*.48+star.scaleBias)*worldPixelScale;
-      const trailHeight=Math.max(1,(.026+progress*.022)*worldPixelScale);
-      const alpha=Math.sin(progress*Math.PI)*star.opacity;
+      const trailWidth=state.width*worldPixelScale;
+      const trailHeight=Math.max(1,state.height*worldPixelScale);
+      const alpha=state.opacity;
       if(!activeStarProbe){
         activeStarProbe=[starIndex,x,y,star.direction,progress].map(value=>
           typeof value==='number'?value.toFixed(3):value
