@@ -7,8 +7,8 @@ from django.contrib.auth.decorators import login_required
 from django.core import signing
 from django.core.exceptions import PermissionDenied, ValidationError
 from django.db import transaction
-from django.db.models import Count, Q, Sum
-from django.db.models.functions import TruncMonth
+from django.db.models import CharField, Count, Q, Sum
+from django.db.models.functions import Coalesce, Lower, TruncMonth
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse
 from django.utils import timezone
@@ -142,11 +142,12 @@ def dashboard(request):
         for name in ('customers', 'licenses', 'orders', 'payments', 'ops', 'support')
     }
     paid_orders = Order.objects.filter(status='paid')
+    active_licenses = License.objects.filter(valid_until__gt=now, status__in=['active', 'free'])
     revenue_since = now - timedelta(days=185)
 
     product_mix = (
         list(
-            License.objects.values('product__name')
+            active_licenses.values('product__name')
             .annotate(total=Count('id'))
             .order_by('-total', 'product__name')[:8]
         )
@@ -155,6 +156,10 @@ def dashboard(request):
     product_total = sum(row['total'] for row in product_mix)
     for row in product_mix:
         row['percent'] = round((row['total'] / product_total) * 100, 1) if product_total else 0
+        # CSS numbers must always use a decimal point, independent of Django's
+        # active locale (e.g. de-DE would otherwise render 100,0 and invalidate
+        # conic-gradient percentages).
+        row['percent_css'] = format(row['percent'], '.1f')
 
     revenue_months = (
         list(
@@ -169,6 +174,9 @@ def dashboard(request):
     revenue_peak = max((float(row['total'] or 0) for row in revenue_months), default=0)
     for row in revenue_months:
         row['percent'] = round((float(row['total'] or 0) / revenue_peak) * 100, 1) if revenue_peak else 0
+        # Keep inline CSS locale-neutral. A localized value such as "100,0%"
+        # is invalid CSS and collapses the bar to its minimum height.
+        row['percent_css'] = format(row['percent'], '.1f')
 
     failed_payment_count = Payment.objects.filter(status='failed').count() if rights['payments'] else None
     chargeback_count = Payment.objects.filter(status='chargeback').count() if rights['payments'] else None
@@ -178,7 +186,7 @@ def dashboard(request):
     context = {
         'rights': rights,
         'customers': Company.objects.count() + PrivateCustomerProfile.objects.count() if rights['customers'] else None,
-        'licenses': License.objects.filter(valid_until__gt=now, status__in=['active', 'free']).count() if rights['licenses'] else None,
+        'licenses': active_licenses.count() if rights['licenses'] else None,
         'expiring30': License.objects.filter(valid_until__gt=now, valid_until__lte=now + timedelta(days=30)).count() if rights['licenses'] else None,
         'expiring60': License.objects.filter(valid_until__gt=now, valid_until__lte=now + timedelta(days=60)).count() if rights['licenses'] else None,
         'orders30': Order.objects.filter(created_at__gte=now - timedelta(days=30)).count() if rights['orders'] else None,
@@ -905,11 +913,31 @@ def license_refund(request, pk, term_id):
 
 @staff_perm('orders.read')
 def orders(request):
-    grid = DataGrid(request, Order.objects.select_related('company', 'private_user'), search_fields=('order_number', 'company__name', 'private_user__email'), sort_fields={'number': 'order_number', 'date': 'created_at', 'amount': 'gross_total', 'status': 'status'}, default_sort='-created_at', filters={'status': 'status'}).build()
+    queryset = (
+        Order.objects.select_related('company', 'private_user')
+        .annotate(
+            customer_display=Coalesce('company__name', 'private_user__email', output_field=CharField()),
+            customer_sort=Lower(Coalesce('company__name', 'private_user__email', output_field=CharField())),
+        )
+    )
+    grid = DataGrid(
+        request,
+        queryset,
+        search_fields=('order_number', 'company__name', 'private_user__email'),
+        sort_fields={
+            'number': 'order_number',
+            'customer': 'customer_sort',
+            'date': 'created_at',
+            'amount': 'gross_total',
+            'status': 'status',
+        },
+        default_sort='-created_at',
+        filters={'status': 'status'},
+    ).build()
     export = _grid_export(request, grid, [('order_number', 'Bestellung'), ('company.name', 'Unternehmen'), ('private_user.email', 'Privatkunde'), ('gross_total', 'Betrag'), ('status', 'Status'), ('created_at', 'Datum')], 'promptmaster-bestellungen.csv')
     if export:
         return export
-    return render(request, 'ns_admin/grid.html', {'title': 'Bestellungen', 'grid': grid, 'columns': [('order_number', 'Bestellung', 'number'), ('company', 'Kunde', None), ('gross_total', 'Betrag', 'amount'), ('status', 'Status', 'status'), ('created_at', 'Datum', 'date')], 'detail_route': 'ns_admin:order_detail', 'filter_options': [('status', 'Status', Order.STATUS)], 'export_enabled': True})
+    return render(request, 'ns_admin/grid.html', {'title': 'Bestellungen', 'grid': grid, 'columns': [('order_number', 'Bestellung', 'number'), ('customer_display', 'Kunde', 'customer'), ('gross_total', 'Betrag', 'amount'), ('status', 'Status', 'status'), ('created_at', 'Datum', 'date')], 'detail_route': 'ns_admin:order_detail', 'filter_options': [('status', 'Status', Order.STATUS)], 'export_enabled': True})
 
 
 @staff_perm('orders.read')

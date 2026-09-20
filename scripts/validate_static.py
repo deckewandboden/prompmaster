@@ -549,6 +549,93 @@ if re.search(r'\.brand\s+img\s*\{[^}]*object-fit\s*:\s*cover', css, flags=re.I|r
 if re.search(r'\.brand\s+img\s*\{[^}]*height\s*:\s*47px[^}]*width\s*:\s*54px', css, flags=re.I|re.S):
     fail('Responsive CSS distorts/crops PromptMaster logo dimensions')
 
+# 19b) Admin dashboard charts must keep CSS percentages locale-neutral.
+# German localization renders floats such as 100,0 for text, which is invalid
+# inside CSS percentages and previously collapsed the revenue bar/donut.
+dashboard_template = (ROOT/'backend/templates/ns_admin/dashboard.html').read_text(encoding='utf-8')
+dashboard_views = (ROOT/'backend/apps/core/admin_views.py').read_text(encoding='utf-8')
+dashboard_css = (ROOT/'backend/static/css/app.css').read_text(encoding='utf-8')
+for needle in (
+    "row['percent_css']",
+    "format(row['percent'], '.1f')",
+    "active_licenses = License.objects.filter(valid_until__gt=now, status__in=['active', 'free'])",
+    "active_licenses.values('product__name')",
+    "'licenses': active_licenses.count()",
+):
+    if needle not in dashboard_views:
+        fail(f'Dashboard rendering/data contract missing: {needle}')
+for needle in ('height:{{ row.percent_css }}%', '--share:{{ product_mix.0.percent_css }}%', 'class="revenue-value"', 'class="alert-stack"'):
+    if needle not in dashboard_template:
+        fail(f'Dashboard rendering contract missing: {needle}')
+if '.alert-stack{display:grid;gap:' not in dashboard_css:
+    fail('Dashboard action alerts are missing explicit visual spacing')
+
+# 19c) Post-install UI corrections are release invariants.
+admin_views = (ROOT/'backend/apps/core/admin_views.py').read_text(encoding='utf-8')
+grid_toolbar = (ROOT/'backend/templates/includes/grid_toolbar.html').read_text(encoding='utf-8')
+template_tags = (ROOT/'backend/apps/core/templatetags/pm.py').read_text(encoding='utf-8')
+company_forms = (ROOT/'backend/apps/companies/forms.py').read_text(encoding='utf-8')
+account_forms = (ROOT/'backend/apps/accounts/forms.py').read_text(encoding='utf-8')
+ops_metrics = (ROOT/'backend/apps/ops/metrics.py').read_text(encoding='utf-8')
+ops_template = (ROOT/'backend/templates/ns_admin/ops.html').read_text(encoding='utf-8')
+canvas_head = (ROOT/'marketing/src/head-canvas2d.js').read_text(encoding='utf-8')
+
+for needle in (
+    "customer_sort=Lower(",
+    "'customer': 'customer_sort'",
+    "customer_display=Coalesce('company__name', 'private_user__email', output_field=CharField())",
+    "('customer_display', 'Kunde', 'customer')",
+):
+    if needle not in admin_views:
+        fail(f'Order customer sorting contract missing: {needle}')
+for needle in ('def clear_sort_url', "q.pop('sort', None)", "q.pop('dir', None)"):
+    if needle not in template_tags:
+        fail(f'Datagrid sort reset helper missing: {needle}')
+for needle in ('Sortierung zurücksetzen', 'Alles zurücksetzen'):
+    if needle not in grid_toolbar:
+        fail(f'Datagrid reset action missing: {needle}')
+
+for needle in (
+    "'phone': 'Telefon'",
+    "'street': 'Straße'",
+    "'house_number': 'Hausnummer'",
+    "'postal_code': 'PLZ'",
+    "'city': 'Ort'",
+    "'country': 'Land'",
+):
+    if needle not in company_forms:
+        fail(f'German customer form label missing: {needle}')
+for needle in ("label='Vorname'", "label='Nachname'", "label='E-Mail-Adresse'", "label='Passwort'"):
+    if needle not in account_forms:
+        fail(f'German account form label missing: {needle}')
+
+for needle in (
+    "'container_count': 'count(container_last_seen{image!=\"\"})'",
+    "'container_memory_used': 'sum(container_memory_working_set_bytes{image!=\"\"})'",
+    "'scope_label'] = 'Docker-Host-VM'",
+):
+    if needle not in ops_metrics:
+        fail(f'Monitoring scope/container contract missing: {needle}')
+for needle in (
+    'VM-CPU aktuell',
+    'RAM verfügbar',
+    'Messbereich',
+    'Docker-Container',
+    'Dateiobjekte (Inodes)',
+):
+    if needle not in ops_template:
+        fail(f'Monitoring explanation missing: {needle}')
+
+for needle in (
+    'mobile?1500:4200',
+    'mobile?850:2400',
+    'mobile?58:150',
+    'mobile?105:245',
+    'stage.dataset.eyeAnchors',
+):
+    if needle not in canvas_head:
+        fail(f'Firefox/Canvas2D parity contract missing: {needle}')
+
 # 20) Customer/account separation is a V1 invariant. A private customer may
 # not silently become a company member, which would make tenant scoping
 # ambiguous and destructive company deactivation possible.

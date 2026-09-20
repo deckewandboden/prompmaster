@@ -13,19 +13,19 @@
 
 <div class="grid kpis">
   <div class="card">
-    <div>CPU aktuell</div>
+    <div>VM-CPU aktuell</div>
     <div class="value">{% if ops.cpu_current_percent != None %}{{ ops.cpu_current_percent|floatformat:1 }}%{% else %}–{% endif %}</div>
     <div class="small muted">10-Min.-Ø: {% if ops.cpu_percent != None %}{{ ops.cpu_percent|floatformat:1 }}%{% else %}–{% endif %}</div>
   </div>
   <div class="card">
-    <div>RAM</div>
+    <div>VM-RAM</div>
     <div class="value">{{ ops.memory_percent|floatformat:1|default:'–' }}{% if ops.memory_percent != None %}%{% endif %}</div>
-    <div class="small muted">{{ ops.memory_available|human_bytes }} frei von {{ ops.memory_total|human_bytes }}</div>
+    <div class="small muted">{{ ops.memory_available|human_bytes }} verfügbar von {{ ops.memory_total|human_bytes }}</div>
   </div>
   <div class="card">
-    <div>Disk</div>
+    <div>VM-Datenträger /</div>
     <div class="value">{{ ops.disk_percent|floatformat:1|default:'–' }}{% if ops.disk_percent != None %}%{% endif %}</div>
-    <div class="small muted">{{ ops.disk_available|human_bytes }} frei von {{ ops.disk_total|human_bytes }}</div>
+    <div class="small muted">{{ ops.disk_available|human_bytes }} verfügbar von {{ ops.disk_total|human_bytes }}</div>
   </div>
   <div class="card">
     <div>Uptime</div>
@@ -41,6 +41,8 @@
     <div class="statusrow"><span>Hostname</span><strong>{{ ops.host.hostname|default:'–' }}</strong></div>
     <div class="statusrow"><span>OS / Kernel</span><strong>{{ ops.host.os|default:'–' }} · {{ ops.host.kernel|default:'–' }}</strong></div>
     <div class="statusrow"><span>Architektur</span><strong>{{ ops.host.machine|default:'–' }}</strong></div>
+    <div class="statusrow"><span>Messbereich</span><strong>{{ ops.scope_label|default:'Docker-Host-VM' }}</strong></div>
+    <div class="statusrow"><span>Messquelle</span><strong>{{ ops.source_label|default:'Prometheus · node_exporter / cAdvisor' }}</strong></div>
     <div class="statusrow"><span>Docker</span><strong>{{ ops.docker_version|default:'–' }}</strong></div>
     <div class="statusrow"><span>App-Version</span><strong>{{ app_version|default:'–' }}</strong></div>
     <div class="statusrow"><span>Git Commit</span><strong class="wrap-value">{{ git_sha|default:'–' }}</strong></div>
@@ -48,15 +50,29 @@
   </section>
 
   <section class="card">
-    <h2>Speicher &amp; Inodes</h2>
+    <h2>VM-Speicher &amp; Dateisystem</h2>
     <div class="statusrow"><span>RAM gesamt</span><strong>{{ ops.memory_total|human_bytes }}</strong></div>
     <div class="statusrow"><span>RAM verwendet</span><strong>{{ ops.memory_used|human_bytes }}</strong></div>
-    <div class="statusrow"><span>RAM frei</span><strong>{{ ops.memory_available|human_bytes }}</strong></div>
-    <div class="statusrow"><span>Disk gesamt</span><strong>{{ ops.disk_total|human_bytes }}</strong></div>
-    <div class="statusrow"><span>Disk verwendet</span><strong>{{ ops.disk_used|human_bytes }}</strong></div>
-    <div class="statusrow"><span>Disk frei</span><strong>{{ ops.disk_available|human_bytes }}</strong></div>
-    <div class="statusrow"><span>Inodes frei</span><strong>{% if ops.inodes_free != None %}{{ ops.inodes_free|floatformat:0 }}{% else %}–{% endif %}</strong></div>
-    <div class="statusrow"><span>Inodes belegt</span><strong>{% if ops.inode_percent != None %}{{ ops.inode_percent|floatformat:1 }}%{% else %}–{% endif %}</strong></div>
+    <div class="statusrow"><span>RAM verfügbar</span><strong>{{ ops.memory_available|human_bytes }}</strong></div>
+    <div class="statusrow"><span>Datenträger / gesamt</span><strong>{{ ops.disk_total|human_bytes }}</strong></div>
+    <div class="statusrow"><span>Datenträger / verwendet</span><strong>{{ ops.disk_used|human_bytes }}</strong></div>
+    <div class="statusrow"><span>Datenträger / verfügbar</span><strong>{{ ops.disk_available|human_bytes }}</strong></div>
+    <div class="statusrow"><span>Dateiobjekte (Inodes) verfügbar <span title="Inodes sind Dateisystem-Einträge für Dateien und Verzeichnisse. Sind sie ausgeschöpft, können trotz freiem Speicher keine neuen Dateien angelegt werden.">ⓘ</span></span><strong>{% if ops.inodes_free != None %}{{ ops.inodes_free|floatformat:0 }}{% else %}–{% endif %}</strong></div>
+    <div class="statusrow"><span>Dateiobjekte (Inodes) belegt</span><strong>{% if ops.inode_percent != None %}{{ ops.inode_percent|floatformat:1 }}%{% else %}–{% endif %}</strong></div>
+  </section>
+</div>
+
+<div class="grid two mt-14">
+  <section class="card">
+    <h2>Docker-Container</h2>
+    <div class="statusrow"><span>Erkannte Container</span><strong>{% if ops.container_count != None %}{{ ops.container_count|floatformat:0 }}{% else %}–{% endif %}</strong></div>
+    <div class="statusrow"><span>Container-RAM gesamt</span><strong>{{ ops.container_memory_used|human_bytes }}</strong></div>
+    <div class="statusrow"><span>Container-CPU aktuell</span><strong>{% if ops.container_cpu_cores != None %}{{ ops.container_cpu_cores|floatformat:2 }} CPU-Kerne{% else %}–{% endif %}</strong></div>
+    <p class="small muted mb-0">Diese Werte stammen aus cAdvisor und beziehen sich auf Docker-Container. Die VM-Werte oben stammen aus node_exporter und beziehen sich auf die gesamte Docker-Host-VM.</p>
+  </section>
+  <section class="card">
+    <h2>Messwert-Erklärung</h2>
+    <p class="small muted mb-0">„RAM verfügbar“ entspricht Linux <code>MemAvailable</code> und ist die für neue Prozesse realistisch nutzbare Speichermenge. „Inodes“ sind Dateisystem-Einträge; ein niedriger Belegungsgrad ist unkritisch.</p>
   </section>
 </div>
 

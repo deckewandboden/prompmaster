@@ -1190,6 +1190,32 @@ def run_backend_ui_smoke(browser, fixture=None) -> None:
             )
 
             if role == 'portal':
+                page.goto(base + 'portal/profile/', wait_until='networkidle')
+                profile_labels = set(page.locator('label').all_text_contents())
+                flattened_labels = ' '.join(profile_labels)
+                for german_label in ('Vorname', 'Nachname'):
+                    if german_label not in flattened_labels:
+                        raise AssertionError(
+                            f'portal profile: German label missing: {german_label}'
+                        )
+                if any(token in flattened_labels for token in ('street', 'house_number', 'postal_code')):
+                    raise AssertionError(
+                        f'portal profile: raw English/internal address labels visible: {flattened_labels}'
+                    )
+
+                company_response = page.goto(base + 'portal/company/', wait_until='networkidle')
+                if company_response and company_response.status == 200:
+                    company_labels = ' '.join(page.locator('label').all_text_contents())
+                    for german_label in ('Firmenname', 'Telefon', 'Straße', 'Hausnummer', 'PLZ', 'Ort', 'Land'):
+                        if german_label not in company_labels:
+                            raise AssertionError(
+                                f'portal company: German label missing: {german_label}'
+                            )
+                    if any(token in company_labels for token in ('phone', 'street', 'house_number', 'postal_code', 'city', 'country')):
+                        raise AssertionError(
+                            f'portal company: raw English/internal labels visible: {company_labels}'
+                        )
+
                 page.goto(base + 'portal/dashboard/', wait_until='networkidle')
                 search_input = page.locator('.topbar .search input')
                 if not search_input.is_visible():
@@ -1309,6 +1335,63 @@ def run_backend_ui_smoke(browser, fixture=None) -> None:
                         f'customer PromptMaster compose failed: {customer_compose_probe}'
                     )
             else:
+                page.set_viewport_size({'width': 1440, 'height': 1000})
+                dashboard_response = page.goto(base + 'ns-admin/', wait_until='networkidle')
+                if not dashboard_response or dashboard_response.status != 200:
+                    raise AssertionError('admin dashboard post-install acceptance failed')
+                dashboard_visual = page.evaluate(
+                    """() => {
+                      const bars = [...document.querySelectorAll('.revenue-bar')];
+                      const donut = document.querySelector('.donut-live');
+                      const alerts = document.querySelector('.alert-stack');
+                      return {
+                        barCount: bars.length,
+                        maxBarHeight: bars.length ? Math.max(...bars.map(
+                          bar => bar.getBoundingClientRect().height
+                        )) : 0,
+                        donutPresent: !!donut,
+                        donutBackground: donut ? getComputedStyle(donut).backgroundImage : '',
+                        alertGap: alerts ? parseFloat(getComputedStyle(alerts).rowGap || getComputedStyle(alerts).gap || '0') : 0,
+                      };
+                    }"""
+                )
+                if dashboard_visual['barCount'] and dashboard_visual['maxBarHeight'] <= 3.5:
+                    raise AssertionError(
+                        f'admin dashboard revenue chart collapsed: {dashboard_visual}'
+                    )
+                if dashboard_visual['donutPresent'] and 'conic-gradient' not in dashboard_visual['donutBackground']:
+                    raise AssertionError(
+                        f'admin dashboard license donut missing: {dashboard_visual}'
+                    )
+                if dashboard_visual['alertGap'] < 7:
+                    raise AssertionError(
+                        f'admin dashboard action alerts have no visual spacing: {dashboard_visual}'
+                    )
+
+                page.goto(base + 'ns-admin/orders/', wait_until='networkidle')
+                customer_sort = page.locator('th a', has_text='Kunde').first
+                if not customer_sort.is_visible():
+                    raise AssertionError('admin orders: customer column is not sortable')
+                customer_sort.click()
+                page.wait_for_load_state('networkidle')
+                if 'sort=customer' not in page.url:
+                    raise AssertionError(f'admin orders: customer sort did not activate: {page.url}')
+                if not page.get_by_role('link', name='Sortierung zurücksetzen').is_visible():
+                    raise AssertionError('admin orders: explicit sort reset is missing')
+
+                page.goto(base + 'ns-admin/ops/', wait_until='networkidle')
+                ops_text = page.locator('body').inner_text()
+                for expected_text in (
+                    'Docker-Host-VM',
+                    'RAM verfügbar',
+                    'Docker-Container',
+                    'Dateiobjekte (Inodes)',
+                ):
+                    if expected_text not in ops_text:
+                        raise AssertionError(
+                            f'admin ops: monitoring scope/explanation missing: {expected_text}'
+                        )
+
                 page.set_viewport_size({'width': 390, 'height': 844})
                 page.goto(base + 'ns-admin/more/', wait_until='networkidle')
                 hrefs = set(page.locator('.content a').evaluate_all(

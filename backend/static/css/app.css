@@ -142,8 +142,8 @@ a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,te
 
 /* Admin V2 dashboard visualizations */
 .revenue-chart{height:210px;display:flex;align-items:stretch;gap:8px;padding:12px 8px 4px;border-radius:12px;background:linear-gradient(to top,rgba(11,109,246,.08),transparent 70%),repeating-linear-gradient(to top,#eaf0f6 0 1px,transparent 1px 25%)}
-.revenue-column{flex:1;min-width:0;height:100%;display:grid;grid-template-rows:minmax(0,1fr) 20px;gap:5px;text-align:center}
-.revenue-track{height:100%;display:flex;align-items:flex-end}
+.revenue-column{flex:1;min-width:0;height:100%;display:grid;grid-template-rows:18px minmax(0,1fr) 20px;gap:5px;text-align:center}
+.revenue-value{font-size:11px;font-weight:800;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.revenue-track{height:100%;display:flex;align-items:flex-end}
 .revenue-bar{display:block;width:100%;min-height:3px;border-radius:6px 6px 2px 2px;background:linear-gradient(180deg,var(--cyan),var(--blue));box-shadow:0 4px 12px rgba(11,109,246,.18)}
 .donut-live{--share:0%;width:165px;height:165px;margin:6px auto 16px;border-radius:50%;background:conic-gradient(var(--purple) 0 var(--share),var(--cyan) var(--share) 100%);position:relative}
 .donut-live:after{content:"";position:absolute;inset:34px;background:#fff;border-radius:50%}
@@ -162,3 +162,5 @@ a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,te
 .auth-setup-grid{grid-template-columns:1.05fr .95fr}
 .recovery-codes{margin:0;font-size:15px;line-height:1.7;letter-spacing:.04em}
 @media(max-width:700px){.login-card.auth-wide{padding:18px}.auth-setup-grid{grid-template-columns:1fr}}
+
+.alert-stack{display:grid;gap:8px}.alert-stack .alert{margin:0}.alert-stack .alert a{color:inherit;text-decoration:none;font-weight:750}.alert-stack .alert a:hover,.alert-stack .alert a:focus-visible{text-decoration:underline}

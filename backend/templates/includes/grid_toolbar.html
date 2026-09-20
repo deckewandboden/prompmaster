@@ -30,7 +30,8 @@
   {% endif %}
   <button class="btn secondary" type="submit">Anwenden</button>
   {% if export_enabled %}{% url_replace request export='csv' page=None as export_url %}<a class="btn secondary" href="{{ export_url }}">CSV exportieren</a>{% endif %}
-  {% if grid.has_state %}<a class="btn secondary" href="{{ request.path }}">Zurücksetzen</a>{% endif %}
+  {% if grid.sort %}{% clear_sort_url request as clear_sort %}<a class="btn secondary" href="{{ clear_sort }}">Sortierung zurücksetzen</a>{% endif %}
+  {% if grid.has_state %}<a class="btn secondary" href="{{ request.path }}">Alles zurücksetzen</a>{% endif %}
   <span class="small muted" role="status" aria-live="polite" data-grid-status hidden>Daten werden geladen …</span>
 </form>
 {% if grid.query or grid.filters %}

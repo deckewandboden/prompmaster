@@ -1,3 +1,4 @@
+from datetime import timedelta
 import json
 import os
 import logging
@@ -13,9 +14,12 @@ from django.utils import timezone
 
 from apps.accounts.models import User
 from apps.audit.models import AuditEvent
+from apps.catalog.models import Product
 from apps.integrations.models import ServiceAccount
 from apps.companies.models import Company
 from apps.legal.models import DeletionRequest
+from apps.licenses.models import License
+from apps.orders.models import Order
 from .middleware import CorrelationIdMiddleware, JsonLogFormatter
 from .datagrid import DataGrid, csv_response
 from .security import token_hash, token_pair
@@ -335,6 +339,131 @@ class NotificationReleaseTests(TestCase):
         self.assertEqual(delay.call_count, 1)
 
 
+class AdminDashboardRegressionTests(TestCase):
+    def setUp(self):
+        self.admin = User.objects.create_user(
+            'dashboard-admin@example.test',
+            None,
+            is_staff=True,
+            is_superuser=True,
+            two_factor_required=False,
+            email_verified_at=timezone.now(),
+        )
+        self.client.force_login(self.admin)
+        session = self.client.session
+        now_ts = timezone.now().timestamp()
+        session['security_version'] = self.admin.security_version
+        session['two_factor_ok'] = True
+        session['authenticated_at'] = now_ts
+        session['last_activity_at'] = now_ts
+        session.save()
+        self.company = Company.objects.create(
+            customer_number='DASH-1001',
+            name='Dashboard GmbH',
+            email='dashboard@example.test',
+            status='active',
+        )
+        self.product = Product.objects.create(code='DASH-PRO', name='PromptMaster Pro Test')
+        now = timezone.now()
+        License.objects.create(
+            company=self.company,
+            product=self.product,
+            status='active',
+            valid_from=now - timedelta(days=10),
+            valid_until=now + timedelta(days=100),
+        )
+        License.objects.create(
+            company=self.company,
+            product=self.product,
+            status='expired',
+            valid_from=now - timedelta(days=400),
+            valid_until=now - timedelta(days=1),
+        )
+        Order.objects.create(
+            order_number='DASH-ORDER-1',
+            company=self.company,
+            status='paid',
+            gross_total='35.88',
+            tax_total='5.73',
+            idempotency_key='dashboard-order-1',
+        )
+
+    @patch('apps.core.admin_views.snapshot', return_value={})
+    def test_dashboard_css_percentages_are_locale_neutral_and_counts_align(self, _snapshot):
+        response = self.client.get('/ns-admin/')
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.context['licenses'], 1)
+        self.assertEqual(response.context['product_total'], 1)
+        self.assertEqual(response.context['product_mix'][0]['percent_css'], '100.0')
+        self.assertEqual(response.context['revenue_months'][0]['percent_css'], '100.0')
+        body = response.content.decode('utf-8')
+        self.assertIn('height:100.0%', body)
+        self.assertIn('--share:100.0%', body)
+        self.assertNotIn('height:100,0%', body)
+        self.assertNotIn('--share:100,0%', body)
+        self.assertIn('alert-stack', body)
+
+
+class AdminOrderGridTests(TestCase):
+    def setUp(self):
+        self.admin = User.objects.create_user(
+            'orders-admin@example.test',
+            None,
+            is_staff=True,
+            is_superuser=True,
+            two_factor_required=False,
+            email_verified_at=timezone.now(),
+        )
+        self.client.force_login(self.admin)
+        session = self.client.session
+        now_ts = timezone.now().timestamp()
+        session['security_version'] = self.admin.security_version
+        session['two_factor_ok'] = True
+        session['authenticated_at'] = now_ts
+        session['last_activity_at'] = now_ts
+        session.save()
+        self.company = Company.objects.create(
+            customer_number='ORD-COMPANY',
+            name='Alpha GmbH',
+            email='alpha@example.test',
+            status='active',
+        )
+        self.private_user = User.objects.create_user(
+            'zeta.private@example.test',
+            None,
+            email_verified_at=timezone.now(),
+        )
+        Order.objects.create(
+            order_number='ORD-C-1',
+            company=self.company,
+            gross_total='10.00',
+            tax_total='1.60',
+            idempotency_key='order-company-1',
+        )
+        Order.objects.create(
+            order_number='ORD-P-1',
+            private_user=self.private_user,
+            gross_total='20.00',
+            tax_total='3.19',
+            idempotency_key='order-private-1',
+        )
+
+    def test_customer_column_sorts_company_and_private_orders_and_can_reset(self):
+        response = self.client.get('/ns-admin/orders/?sort=customer&dir=asc')
+        self.assertEqual(response.status_code, 200)
+        rows = list(response.context['grid'].page.object_list)
+        self.assertEqual(
+            [row.customer_display for row in rows],
+            ['Alpha GmbH', 'zeta.private@example.test'],
+        )
+        body = response.content.decode('utf-8')
+        self.assertIn('sort=customer', body)
+        self.assertIn('Sortierung zurücksetzen', body)
+        self.assertIn('Alles zurücksetzen', body)
+        self.assertIn('Alpha GmbH', body)
+        self.assertIn('zeta.private@example.test', body)
+
+
 class DataGridAcceptanceTests(TestCase):
     def _companies(self, count):
         Company.objects.bulk_create(
@@ -486,3 +615,58 @@ class MollieAdminPageTests(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, '<h1>Mollie</h1>', html=True)
         self.assertEqual(response.context['webhook_base'], 'http://testserver')
+
+
+class MonitoringScopeTests(SimpleTestCase):
+    @patch('apps.ops.metrics.query_labels')
+    @patch('apps.ops.metrics.query_value')
+    def test_snapshot_separates_vm_and_container_metrics(self, query_value, query_labels):
+        from apps.ops.metrics import snapshot
+
+        values = {
+            '100-(avg(rate(node_cpu_seconds_total{mode="idle"}[1m]))*100)': 12.5,
+            '100-(avg(rate(node_cpu_seconds_total{mode="idle"}[10m]))*100)': 10.0,
+            'node_memory_MemTotal_bytes': 16 * 1024**3,
+            'node_memory_MemAvailable_bytes': 9 * 1024**3,
+            'node_filesystem_size_bytes{mountpoint="/",fstype!~"tmpfs|overlay|squashfs"}': 500 * 1024**3,
+            'node_filesystem_avail_bytes{mountpoint="/",fstype!~"tmpfs|overlay|squashfs"}': 300 * 1024**3,
+            'node_filesystem_files{mountpoint="/",fstype!~"tmpfs|overlay|squashfs"}': 10000,
+            'node_filesystem_files_free{mountpoint="/",fstype!~"tmpfs|overlay|squashfs"}': 9500,
+            'time()-node_boot_time_seconds': 3600,
+            'node_load1': 0.5,
+            'node_load5': 0.4,
+            'node_load15': 0.3,
+            'count(container_last_seen{image!=""})': 12,
+            'sum(container_memory_working_set_bytes{image!=""})': 3 * 1024**3,
+            'sum(rate(container_cpu_usage_seconds_total{image!=""}[1m]))': 1.25,
+        }
+        query_value.side_effect = lambda expression: values.get(expression)
+
+        def labels(expression):
+            if expression == 'node_uname_info':
+                return {
+                    'nodename': 'promptmaster-vm',
+                    'release': '6.8.0',
+                    'sysname': 'Linux',
+                    'machine': 'x86_64',
+                }
+            if expression == 'cadvisor_version_info':
+                return {'dockerVersion': '28.0.0'}
+            return {}
+
+        query_labels.side_effect = labels
+        data = snapshot()
+
+        self.assertEqual(data['scope'], 'vm')
+        self.assertEqual(data['scope_label'], 'Docker-Host-VM')
+        self.assertEqual(data['memory_total'], 16 * 1024**3)
+        self.assertEqual(data['memory_available'], 9 * 1024**3)
+        self.assertEqual(data['memory_used'], 7 * 1024**3)
+        self.assertAlmostEqual(data['memory_percent'], 43.75)
+        self.assertEqual(data['disk_used'], 200 * 1024**3)
+        self.assertAlmostEqual(data['inode_percent'], 5.0)
+        self.assertEqual(data['container_count'], 12)
+        self.assertEqual(data['container_memory_used'], 3 * 1024**3)
+        self.assertEqual(data['container_cpu_cores'], 1.25)
+        self.assertEqual(data['host']['hostname'], 'promptmaster-vm')
+        self.assertEqual(data['docker_version'], '28.0.0')

@@ -55,11 +55,22 @@ def compare_head_render(reference: Path, candidate: Path) -> dict:
     ref_bright = bright_count(ref)
     cand_bright = bright_count(cand)
     bright_ratio = cand_bright / max(1, ref_bright)
+
+    # Separate lower-scene energy gate. The original parity crop focused on
+    # the face and could therefore miss the Firefox regression where the
+    # strong animated ground beacons were nearly absent.
+    ground_crop = (430, 620, 1010, 900)
+    ref_ground = Image.open(reference).convert('RGB').crop(ground_crop)
+    cand_ground = Image.open(candidate).convert('RGB').crop(ground_crop)
+    ref_ground_bright = bright_count(ref_ground, threshold=105)
+    cand_ground_bright = bright_count(cand_ground, threshold=105)
+    ground_bright_ratio = cand_ground_bright / max(1, ref_ground_bright)
     return {
         'mae': mae,
         'reference_bright': ref_bright,
         'candidate_bright': cand_bright,
         'bright_ratio': bright_ratio,
+        'ground_bright_ratio': ground_bright_ratio,
     }
 
 
@@ -198,6 +209,8 @@ def main() -> int:
                         proBorder: proStyle.borderColor,
                         canvasVisible: !!(canvas.width && canvas.height),
                         headRenderer: renderer,
+                        headBounds: one('.head-stage').dataset.headBounds || '',
+                        eyeAnchors: one('.head-stage').dataset.eyeAnchors || '',
                         fallbackHidden: one('.head-fallback').hidden,
                         motionControlPresent: !!one('.motion-button'),
                         headOverlayPresent: !!document.querySelector('.hero-title,.core-sentence'),
@@ -288,6 +301,25 @@ def main() -> int:
                             f'{engine} 1440px: Kopf rendert, aber sichtbare '
                             'Animation/Pointer-Reaktion fehlt'
                         )
+                    if engine == 'firefox':
+                        try:
+                            bounds = [float(v) for v in metrics['headBounds'].split(',')]
+                            eyes = [float(v) for v in metrics['eyeAnchors'].split(',')]
+                        except ValueError:
+                            fail(f'Firefox 1440px: ungültige Kopf-/Augen-Anker {metrics}')
+                        if len(bounds) != 4 or len(eyes) != 4:
+                            fail(f'Firefox 1440px: Augen-Anker fehlen {metrics}')
+                        min_x, min_y, max_x, max_y = bounds
+                        left_x, left_y, right_x, right_y = eyes
+                        if not (
+                            min_x <= left_x <= max_x and min_x <= right_x <= max_x
+                            and min_y <= left_y <= max_y and min_y <= right_y <= max_y
+                            and right_x - left_x >= 25
+                        ):
+                            fail(
+                                f'Firefox 1440px: Augen sitzen außerhalb der Kopfgeometrie '
+                                f'(bounds={bounds}, eyes={eyes})'
+                            )
                     page.locator('#plus').click()
                     page.wait_for_function(
                         "document.querySelector('#quantity')?.value === '2' && "
@@ -346,6 +378,11 @@ def main() -> int:
                     fail(
                         f'Firefox parity: point energy differs from Edge '
                         f'(ratio={visual["bright_ratio"]:.3f}, allowed 0.88..1.12)'
+                    )
+                if not 0.72 <= visual['ground_bright_ratio'] <= 1.35:
+                    fail(
+                        f'Firefox parity: lower-scene light energy differs from Edge '
+                        f'(ratio={visual["ground_bright_ratio"]:.3f}, allowed 0.72..1.35)'
                     )
 
             if engine == 'chromium':

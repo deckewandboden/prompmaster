@@ -39,6 +39,15 @@ def sort_url(request, key, current_sort, current_dir):
     return '?' + q.urlencode()
 
 
+@register.simple_tag
+def clear_sort_url(request):
+    q = request.GET.copy()
+    q.pop('sort', None)
+    q.pop('dir', None)
+    q['page'] = '1'
+    return '?' + q.urlencode() if q else request.path
+
+
 @register.filter
 def get_item(mapping, key):
     try:

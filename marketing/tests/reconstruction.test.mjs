@@ -37,10 +37,17 @@ test('non-WebGL fallback keeps the actual head visible without camera access',()
   assert.doesNotMatch(fallback,/Aus deiner Aufgabe wird ein präziser Copilot-Prompt/i);
   assert.match(fallback,/const base=height\*projectionScale/);
   assert.match(fallback,/groundParticles/);
+  assert.match(fallback,/mobile\?1500:4200/);
   assert.match(fallback,/blendParticles/);
+  assert.match(fallback,/mobile\?850:2400/);
   assert.match(fallback,/beacons/);
+  assert.match(fallback,/mobile\?58:150/);
   assert.match(fallback,/traffic/);
+  assert.match(fallback,/mobile\?16:38/);
   assert.match(fallback,/skyLights/);
+  assert.match(fallback,/mobile\?105:245/);
+  assert.match(fallback,/eyeAnchors/);
+  assert.match(fallback,/stage\.dataset\.eyeAnchors/);
   assert.match(fallback,/shootingStars/);
   assert.match(fallback,/async function modelCloud\(surfaceCount\)/);
   assert.match(fallback,/mobile\?8200:22000/);

@@ -212,7 +212,7 @@ export async function initCanvasHead({sourceCanvas,stage,fallback}){
   // Canvas2D mirrors the animated lower scene of the WebGL edition instead of
   // degrading Firefox/VDI clients to a head-only fallback.
   const sceneRandom=seeded(712367);
-  const groundParticles=Array.from({length:mobile?520:1450},()=>{
+  const groundParticles=Array.from({length:mobile?1500:4200},()=>{
     const x=sceneRandom()-.5;
     const edge=Math.min(1,Math.max(0,(Math.abs(x)-.08)/.42));
     const ridge=.765-edge*.075-Math.sin(x*14)*.008-Math.sin(x*31)*.004;
@@ -226,7 +226,7 @@ export async function initCanvasHead({sourceCanvas,stage,fallback}){
       violet:sceneRandom()>.88,
     };
   });
-  const blendParticles=Array.from({length:mobile?360:950},()=>{
+  const blendParticles=Array.from({length:mobile?850:2400},()=>{
     const x=(sceneRandom()-.5)*.92;
     const center=1-Math.min(1,Math.abs(x)/.46);
     return {
@@ -236,19 +236,19 @@ export async function initCanvasHead({sourceCanvas,stage,fallback}){
       size:.45+sceneRandom()*1.15,
     };
   });
-  const beacons=Array.from({length:mobile?34:88},()=>({
+  const beacons=Array.from({length:mobile?58:150},()=>({
     x:(sceneRandom()-.5)*.88,
     y:.735+sceneRandom()*.09,
     phase:sceneRandom()*Math.PI*2,
-    rate:.8+sceneRandom()*1.2,
+    rate:1.47+sceneRandom()*.64,
   }));
-  const traffic=Array.from({length:mobile?12:30},()=>({
+  const traffic=Array.from({length:mobile?16:38},()=>({
     phase:sceneRandom(),
     y:.785+sceneRandom()*.045,
     speed:(sceneRandom()>.5?1:-1)*(.025+sceneRandom()*.055),
     alpha:.38+sceneRandom()*.35,
   }));
-  const skyLights=Array.from({length:mobile?55:135},()=>({
+  const skyLights=Array.from({length:mobile?105:245},()=>({
     x:sceneRandom(),
     y:.13+sceneRandom()*.30,
     phase:sceneRandom()*Math.PI*2,
@@ -317,7 +317,7 @@ export async function initCanvasHead({sourceCanvas,stage,fallback}){
       const pulse=.5+.5*Math.sin(elapsed*(.5+dot.size*.38)+dot.phase);
       const x=(.5+dot.x)*width;
       const y=dot.y*height+Math.sin(elapsed*.22+dot.phase)*height*.0008;
-      const a=dot.alpha*(.16+pulse*.25);
+      const a=.07+pulse*(.16+dot.alpha*.44);
       context.fillStyle=dot.violet
         ? `rgba(112,96,255,${a})`
         : `rgba(22,154,255,${a})`;
@@ -328,7 +328,7 @@ export async function initCanvasHead({sourceCanvas,stage,fallback}){
       const pulse=.5+.5*Math.sin(elapsed*(.55+dot.size*.28)+dot.phase);
       const x=(.5+dot.x)*width;
       const y=dot.y*height+Math.sin(elapsed*.24+dot.phase)*height*.001;
-      context.fillStyle=`rgba(35,170,255,${.035+pulse*.09})`;
+      context.fillStyle=`rgba(35,170,255,${.055+pulse*.16})`;
       const size=.45+dot.size*.68+pulse*.32;
       context.fillRect(x,y,size,size);
     }
@@ -337,9 +337,10 @@ export async function initCanvasHead({sourceCanvas,stage,fallback}){
       const flash=Math.pow(wave,7);
       const x=(.5+beacon.x)*width;
       const y=beacon.y*height;
-      const radius=.8+flash*3.4;
+      const radius=1.2+flash*5.8;
       const g=context.createRadialGradient(x,y,0,x,y,radius);
-      g.addColorStop(0,`rgba(170,245,255,${.10+flash*.45})`);
+      g.addColorStop(0,`rgba(210,250,255,${.16+flash*.84})`);
+      g.addColorStop(.22,`rgba(90,215,255,${.10+flash*.52})`);
       g.addColorStop(1,'rgba(20,130,255,0)');
       context.fillStyle=g;
       context.beginPath();context.arc(x,y,radius,0,Math.PI*2);context.fill();
@@ -347,7 +348,7 @@ export async function initCanvasHead({sourceCanvas,stage,fallback}){
     for(const light of traffic){
       let x=(light.phase+elapsed*light.speed)%1;
       if(x<0)x+=1;
-      context.fillStyle=`rgba(125,225,255,${light.alpha*.38})`;
+      context.fillStyle=`rgba(125,225,255,${light.alpha*.62})`;
       context.fillRect(x*width,light.y*height,2.2,1.3);
     }
 
@@ -451,6 +452,13 @@ export async function initCanvasHead({sourceCanvas,stage,fallback}){
     }
 
     const topology=cloud.topology;
+    // Anchor the Firefox eye glows to the actual high-detail eyelid geometry.
+    // This avoids a perceptual offset caused by drawing a full 2D radial halo
+    // over a depth-tested point cloud.
+    const eyeAnchors=[
+      {targetX:-.245,targetY:.6,sx:0,sy:0,w:0},
+      {targetX:.18,targetY:.6,sx:0,sy:0,w:0},
+    ];
     for(let i=0;i<topology.detail.length;i++){
       const o=i*3;
       const x=topology.positions[o],y=topology.positions[o+1],z=topology.positions[o+2];
@@ -469,6 +477,14 @@ export async function initCanvasHead({sourceCanvas,stage,fallback}){
       if(nearest>-1e8&&rz2<nearest-.025)continue;
       headMinX=Math.min(headMinX,sx2);headMaxX=Math.max(headMaxX,sx2);
       headMinY=Math.min(headMinY,sy2);headMaxY=Math.max(headMaxY,sy2);
+      if(z>.52&&Math.abs(y-.6)<.14){
+        for(const anchor of eyeAnchors){
+          if(Math.abs(x-anchor.targetX)<.145){
+            const w=.10+topology.detail[i]*topology.detail[i]*2.2;
+            anchor.sx+=sx2*w;anchor.sy+=sy2*w;anchor.w+=w;
+          }
+        }
+      }
       const size=(1.55+topology.detail[i]*1.75+topologyPower*.18)*(4.5/depth);
       const detailBoost=1+topology.detail[i]*.72;
       const r=Math.round(clamp(topology.colors[o]*detailBoost*1.55,0,1)*255);
@@ -484,8 +500,16 @@ export async function initCanvasHead({sourceCanvas,stage,fallback}){
     }
 
     const eyePulse=1+Math.sin(elapsed*1.8)*.025+(edition==='pro'?.055:0);
-    for(const [x,y,z] of [[-.245,.6,.755],[.18,.6,.75]]){
-      const [eyeX,eyeY,,,perspective]=project(x,y,z);
+    const eyeSpecs=[[-.245,.6,.755],[.18,.6,.75]];
+    const renderedEyes=[];
+    for(let eyeIndex=0;eyeIndex<eyeSpecs.length;eyeIndex++){
+      const [x,y,z]=eyeSpecs[eyeIndex];
+      const projected=project(x,y,z);
+      const anchor=eyeAnchors[eyeIndex];
+      const eyeX=anchor.w>0?anchor.sx/anchor.w:projected[0];
+      const eyeY=anchor.w>0?anchor.sy/anchor.w:projected[1];
+      const perspective=projected[4];
+      renderedEyes.push(Math.round(eyeX),Math.round(eyeY));
       const haloRadius=.135*base*perspective*eyePulse;
       const halo=context.createRadialGradient(eyeX,eyeY,0,eyeX,eyeY,haloRadius);
       halo.addColorStop(0,'rgba(255,255,255,.56)');
@@ -505,6 +529,7 @@ export async function initCanvasHead({sourceCanvas,stage,fallback}){
       context.fillStyle=core;
       context.beginPath();context.arc(eyeX,eyeY,coreRadius,0,Math.PI*2);context.fill();
     }
+    stage.dataset.eyeAnchors=renderedEyes.join(',');
     context.shadowBlur=0;
     context.globalCompositeOperation='source-over';
   }
