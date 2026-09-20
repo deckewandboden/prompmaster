@@ -644,6 +644,10 @@ for needle in (
     'length:6',
     'offset:.45+index*1.72',
     'period:9.1+(index%3)*1.05',
+    'makeBeaconSprite',
+    'makeShootingStarSprite',
+    'beacon.x-smoothX*.075',
+    'beacon.y+smoothY*.018',
 ):
     if needle not in canvas_head:
         fail(f'Firefox/Canvas2D parity contract missing: {needle}')
