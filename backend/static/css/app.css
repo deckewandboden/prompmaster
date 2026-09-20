@@ -164,3 +164,18 @@ a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,te
 @media(max-width:700px){.login-card.auth-wide{padding:18px}.auth-setup-grid{grid-template-columns:1fr}}
 
 .alert-stack{display:grid;gap:8px}.alert-stack .alert{margin:0}.alert-stack .alert a{color:inherit;text-decoration:none;font-weight:750}.alert-stack .alert a:hover,.alert-stack .alert a:focus-visible{text-decoration:underline}
+
+/* Stable authentication layout across Chromium, Firefox and WebKit. */
+.auth-login-card{width:min(460px,100%);display:grid;gap:18px}
+.auth-heading{display:grid;gap:8px}
+.auth-heading h1,.auth-heading p{margin:0}
+.auth-login-form{gap:14px}
+.auth-field{display:grid;gap:7px}
+.auth-field>span{display:block}
+.auth-login-form input{width:100%;height:46px;min-height:46px;margin:0;font-size:18px;font-variant-numeric:tabular-nums;letter-spacing:.08em}
+.auth-submit{width:100%;min-width:0;height:44px;margin:0}
+.auth-error{margin:0}
+@media(max-width:520px){
+  .auth-login-card{padding:20px}
+  .auth-login-form input{font-size:17px}
+}
