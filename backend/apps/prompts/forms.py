@@ -16,21 +16,32 @@ class PromptVersionEditorForm(forms.ModelForm):
     required_fields = forms.CharField(
         required=False,
         widget=forms.Textarea(attrs={'rows': 6}),
+        label='Pflichtfelder',
         help_text='Ein Pflichtfeld pro Zeile.',
     )
     optional_fields = forms.CharField(
         required=False,
         widget=forms.Textarea(attrs={'rows': 6}),
+        label='Optionale Felder',
         help_text='Ein Feld pro Zeile. Optionales Fragment: Feldname ||| Text mit {value}.',
     )
-    sources = forms.CharField(required=False, widget=forms.Textarea(attrs={'rows': 5}))
-    outputs = forms.CharField(required=False, widget=forms.Textarea(attrs={'rows': 5}))
-    focuses = forms.CharField(required=False, widget=forms.Textarea(attrs={'rows': 5}))
-    audiences = forms.CharField(required=False, widget=forms.Textarea(attrs={'rows': 5}))
+    sources = forms.CharField(required=False, widget=forms.Textarea(attrs={'rows': 5}), label='Quellen')
+    outputs = forms.CharField(required=False, widget=forms.Textarea(attrs={'rows': 5}), label='Ausgabeformen')
+    focuses = forms.CharField(required=False, widget=forms.Textarea(attrs={'rows': 5}), label='Schwerpunkte')
+    audiences = forms.CharField(required=False, widget=forms.Textarea(attrs={'rows': 5}), label='Zielgruppen')
 
     class Meta:
         model = PromptVersion
         fields = ['title', 'area', 'family', 'intent', 'max_chars', 'context_template', 'app_rule_snapshot']
+        labels = {
+            'title': 'Titel',
+            'area': 'Bereich',
+            'family': 'Familie',
+            'intent': 'Ziel / Intent',
+            'max_chars': 'Maximale Zeichen',
+            'context_template': 'Kontextvorlage',
+            'app_rule_snapshot': 'App-Regel-Snapshot',
+        }
         widgets = {
             'intent': forms.Textarea(attrs={'rows': 7}),
             'context_template': forms.Textarea(attrs={'rows': 5}),
@@ -109,6 +120,7 @@ class PromptTestCaseForm(forms.ModelForm):
     class Meta:
         model = PromptTestCase
         fields = ['name', 'enabled', 'sort_order']
+        labels = {'name': 'Name', 'enabled': 'Aktiv', 'sort_order': 'Sortierung'}
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -152,9 +164,10 @@ class PromptTestCaseForm(forms.ModelForm):
 
 class PromptPreviewForm(forms.Form):
     microsoft_tier = forms.ChoiceField(
+        label='Microsoft-Lizenzstufe',
         choices=[('chatbasic', 'Copilot Chat'), ('m365basic', 'M365 Copilot (Basic)'), ('premium', 'Microsoft 365 Copilot Business')]
     )
-    payload_json = forms.CharField(widget=forms.Textarea(attrs={'rows': 18}))
+    payload_json = forms.CharField(label='Eingabedaten (JSON)', widget=forms.Textarea(attrs={'rows': 18}))
 
     def clean_payload_json(self):
         try:
@@ -174,3 +187,13 @@ class PromptQualityPolicyForm(forms.ModelForm):
             'name', 'minimum_average', 'critical_average', 'warning_drop', 'critical_drop',
             'recent_sample_size', 'previous_sample_size', 'minimum_samples',
         ]
+        labels = {
+            'name': 'Name',
+            'minimum_average': 'Mindestdurchschnitt',
+            'critical_average': 'Kritischer Durchschnitt',
+            'warning_drop': 'Warnung bei Abfall',
+            'critical_drop': 'Kritisch bei Abfall',
+            'recent_sample_size': 'Aktuelle Stichprobengröße',
+            'previous_sample_size': 'Vorherige Stichprobengröße',
+            'minimum_samples': 'Mindestanzahl Stichproben',
+        }
