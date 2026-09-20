@@ -651,6 +651,9 @@ for needle in (
     "stage.dataset.canvasOcclusion='head-silhouette-v1'",
     'stage.dataset.starProbe=activeStarProbe',
     "context.rotate(star.direction>0?.22:-.22)",
+    'export function createShootingStarCanvas',
+    'createShootingStarCanvas(false)',
+    'createShootingStarCanvas(true)',
     'export function createLowerSceneData',
     "stage.dataset.lowerSceneContract='edge-shared-v1'",
     'sceneLayers',
@@ -673,6 +676,8 @@ for needle in (
         fail(f'Firefox/Canvas2D parity contract missing: {needle}')
 for needle in (
     'createLowerSceneData',
+    'createShootingStarCanvas',
+    'new THREE.CanvasTexture(createShootingStarCanvas(reverse))',
     "stage.dataset.lowerSceneContract='edge-shared-v1'",
     "powerPreference:'low-power'",
     "failIfMajorPerformanceCaveat:false",
