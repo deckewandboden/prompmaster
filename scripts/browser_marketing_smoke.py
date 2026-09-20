@@ -617,6 +617,12 @@ def main() -> int:
                   canvasDrawMs: parseFloat(
                     document.querySelector('.head-stage')?.dataset.canvasDrawMs || '9999'
                   ),
+                  canvasDrawPeakMs: parseFloat(
+                    document.querySelector('.head-stage')?.dataset.canvasDrawPeakMs || '9999'
+                  ),
+                  canvasFrames: parseInt(
+                    document.querySelector('.head-stage')?.dataset.canvasFrames || '0', 10
+                  ),
                   canvasOcclusion: document.querySelector('.head-stage')?.dataset.canvasOcclusion || '',
                   starProbe: document.querySelector('.head-stage')?.dataset.starProbe || '',
                 })"""
@@ -655,10 +661,20 @@ def main() -> int:
                     'No-WebGL: Kopf-Occlusion fehlt; Sternschnuppen/Lichter können '
                     'durch Gesicht oder Hals scheinen'
                 )
-            if fallback_metrics['canvasDrawMs'] > 70:
+            if fallback_metrics['canvasFrames'] < 6:
                 fail(
-                    f'No-WebGL: Canvas2D-Zeichenzeit zu hoch '
-                    f'({fallback_metrics["canvasDrawMs"]:.1f} ms > 70 ms)'
+                    f'No-WebGL: zu wenige Canvas-Frames für Performancebewertung '
+                    f'({fallback_metrics["canvasFrames"]})'
+                )
+            if fallback_metrics['canvasDrawMs'] > 55:
+                fail(
+                    f'No-WebGL: aktuelle Canvas2D-Zeichenzeit zu hoch '
+                    f'({fallback_metrics["canvasDrawMs"]:.1f} ms > 55 ms)'
+                )
+            if fallback_metrics['canvasDrawPeakMs'] > 85:
+                fail(
+                    f'No-WebGL: Canvas2D-Spitzenlast nach Warm-up zu hoch '
+                    f'({fallback_metrics["canvasDrawPeakMs"]:.1f} ms > 85 ms)'
                 )
             if not fallback_metrics['headModelRequested']:
                 fail('No-WebGL: Canvas2D-Fallback verwendet das Kopfmodell nicht')
