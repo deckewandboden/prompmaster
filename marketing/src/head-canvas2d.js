@@ -17,6 +17,33 @@ function seeded(seed=0x51f15e){
   };
 }
 
+export function createShootingStarCanvas(reverse=false){
+  const sprite=document.createElement('canvas');
+  sprite.width=256;sprite.height=32;
+  const ctx=sprite.getContext('2d',{alpha:true});
+  const gradient=ctx.createLinearGradient(0,0,256,0);
+  if(reverse){
+    gradient.addColorStop(0,'rgba(255,255,255,1)');
+    gradient.addColorStop(.06,'rgba(190,245,255,.9)');
+    gradient.addColorStop(.28,'rgba(90,205,255,.32)');
+    gradient.addColorStop(1,'rgba(40,150,255,0)');
+  }else{
+    gradient.addColorStop(0,'rgba(40,150,255,0)');
+    gradient.addColorStop(.72,'rgba(90,205,255,.32)');
+    gradient.addColorStop(.94,'rgba(190,245,255,.9)');
+    gradient.addColorStop(1,'rgba(255,255,255,1)');
+  }
+  ctx.fillStyle=gradient;ctx.fillRect(0,0,256,32);
+  const feather=ctx.createLinearGradient(0,0,0,32);
+  feather.addColorStop(0,'rgba(255,255,255,0)');
+  feather.addColorStop(.5,'rgba(255,255,255,1)');
+  feather.addColorStop(1,'rgba(255,255,255,0)');
+  ctx.globalCompositeOperation='destination-in';
+  ctx.fillStyle=feather;ctx.fillRect(0,0,256,32);
+  ctx.globalCompositeOperation='source-over';
+  return sprite;
+}
+
 export function createLowerSceneData(mobile=false){
   const random=seeded(712367);
   const landscapeCount=mobile?1500:4200;
@@ -328,34 +355,9 @@ export async function initCanvasHead({sourceCanvas,stage,fallback}){
     ctx.fillStyle=gradient;ctx.fillRect(0,0,64,64);
     return sprite;
   };
-  const makeShootingStarSprite=(reverse=false)=>{
-    const sprite=document.createElement('canvas');
-    sprite.width=256;sprite.height=32;
-    const ctx=sprite.getContext('2d',{alpha:true});
-    const gradient=ctx.createLinearGradient(0,0,256,0);
-    if(reverse){
-      gradient.addColorStop(0,'rgba(255,255,255,1)');
-      gradient.addColorStop(.06,'rgba(190,245,255,.9)');
-      gradient.addColorStop(.28,'rgba(90,205,255,.32)');
-      gradient.addColorStop(1,'rgba(40,150,255,0)');
-    }else{
-      gradient.addColorStop(0,'rgba(40,150,255,0)');
-      gradient.addColorStop(.72,'rgba(90,205,255,.32)');
-      gradient.addColorStop(.94,'rgba(190,245,255,.9)');
-      gradient.addColorStop(1,'rgba(255,255,255,1)');
-    }
-    ctx.fillStyle=gradient;ctx.fillRect(0,0,256,32);
-    const feather=ctx.createLinearGradient(0,0,0,32);
-    feather.addColorStop(0,'rgba(255,255,255,0)');
-    feather.addColorStop(.5,'rgba(255,255,255,1)');
-    feather.addColorStop(1,'rgba(255,255,255,0)');
-    ctx.globalCompositeOperation='destination-in';
-    ctx.fillStyle=feather;ctx.fillRect(0,0,256,32);
-    return sprite;
-  };
   const beaconSprite=makeBeaconSprite();
-  const shootingStarLtr=makeShootingStarSprite(false);
-  const shootingStarRtl=makeShootingStarSprite(true);
+  const shootingStarLtr=createShootingStarCanvas(false);
+  const shootingStarRtl=createShootingStarCanvas(true);
 
   const reduced=matchMedia('(prefers-reduced-motion:reduce)');
   let paused=reduced.matches,disposed=false,visible=true,last=0,lastFrame=0,elapsed=0,mouseX=0,mouseY=0,smoothX=0,smoothY=0,lastPointerX=0,lastPointerY=0,hasPointer=false,cursorEnergy=0,dissolve=0,headYaw=0,headPitch=0,pointPower=1,topologyPower=1,edition='',raf=0,width=1,height=1,dpr=1;
