@@ -209,6 +209,7 @@ def main() -> int:
                         proBorder: proStyle.borderColor,
                         canvasVisible: !!(canvas.width && canvas.height),
                         headRenderer: renderer,
+                        lowerSceneContract: one('.head-stage').dataset.lowerSceneContract || '',
                         headBounds: one('.head-stage').dataset.headBounds || '',
                         eyeAnchors: one('.head-stage').dataset.eyeAnchors || '',
                         fallbackHidden: one('.head-fallback').hidden,
@@ -262,6 +263,11 @@ def main() -> int:
                     fail(f'{engine} {width}px: kein aktiver Kopf-Renderer ({metrics["headRenderer"]})')
                 if engine == 'chromium' and metrics['headRenderer'] != 'webgl':
                     fail(f'{width}px: Chromium muss den primären WebGL-Renderer validieren')
+                if metrics['lowerSceneContract'] != 'edge-shared-v1':
+                    fail(
+                        f'{engine} {width}px: Kopf verwendet nicht den gemeinsamen '
+                        f'Edge/Firefox-Szenenvertrag ({metrics["lowerSceneContract"]!r})'
+                    )
                 if metrics['motionControlPresent']:
                     fail(f'{engine} {width}px: unerwünschte Bewegungssteuerung ist sichtbar')
                 if metrics['headOverlayPresent']:
@@ -319,6 +325,35 @@ def main() -> int:
                             fail(
                                 f'Firefox 1440px: Augen sitzen außerhalb der Kopfgeometrie '
                                 f'(bounds={bounds}, eyes={eyes})'
+                            )
+                        frame_stats = page.evaluate(
+                            """async () => {
+                              const samples = [];
+                              await new Promise(resolve => {
+                                let last = performance.now();
+                                const tick = now => {
+                                  samples.push(now - last);
+                                  last = now;
+                                  if (samples.length >= 48) resolve();
+                                  else requestAnimationFrame(tick);
+                                };
+                                requestAnimationFrame(tick);
+                              });
+                              const sorted = samples.slice(4).sort((a,b) => a-b);
+                              const percentile = p => sorted[
+                                Math.min(sorted.length - 1, Math.floor(sorted.length * p))
+                              ];
+                              return {
+                                median: percentile(.5),
+                                p95: percentile(.95),
+                                max: Math.max(...sorted),
+                              };
+                            }"""
+                        )
+                        if frame_stats['median'] > 35 or frame_stats['p95'] > 65 or frame_stats['max'] > 140:
+                            fail(
+                                f'Firefox 1440px: Canvas2D-Animation ruckelt '
+                                f'(frame timings={frame_stats})'
                             )
                     page.locator('#plus').click()
                     page.wait_for_function(
