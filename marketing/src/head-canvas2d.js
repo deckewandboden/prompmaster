@@ -575,6 +575,7 @@ export async function initCanvasHead({sourceCanvas,stage,fallback}){
     // the clamped dt, so a slow Canvas frame also slowed the entire head,
     // beacons and shooting stars and produced the observed millimetre crawl.
     elapsed+=Math.min(rawDt,.25);
+    stage.dataset.canvasElapsed=elapsed.toFixed(3);
     // Edge updates smoothed pointer input before moving any scene object.
     // Keep the fallback in the same frame order so ground/stars never lag a
     // frame behind the head.
@@ -663,6 +664,7 @@ export async function initCanvasHead({sourceCanvas,stage,fallback}){
     const yawTarget=edition==='free'?-.22:edition==='pro'?.22:smoothX*.3;
     headYaw+=(yawTarget-headYaw)*Math.min(1,dt*3);
     headPitch+=(smoothY*.18-headPitch)*Math.min(1,dt*3);
+    stage.dataset.headYaw=headYaw.toFixed(4);
     const powerTarget=edition==='pro'?1.28:edition==='free'?.7:1;
     pointPower+=(powerTarget-pointPower)*Math.min(1,dt*3);
     topologyPower+=(powerTarget-topologyPower)*Math.min(1,dt*3);
