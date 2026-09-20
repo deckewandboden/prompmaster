@@ -784,6 +784,16 @@ def _browser_register_verify_to_buy(
         raise AssertionError(f'registration page failed for {customer_type}')
 
     page.locator('select[name="customer_type"]').select_option(customer_type)
+    company_row = page.locator('[data-company-field]')
+    company_input = page.locator('input[name="company_name"]')
+    if customer_type == 'private':
+        if company_row.is_visible() or company_input.is_enabled():
+            raise AssertionError('private registration exposes company-name field')
+    else:
+        if not company_row.is_visible() or not company_input.is_enabled():
+            raise AssertionError('company registration hides company-name field')
+        if company_input.get_attribute('required') is None:
+            raise AssertionError('company registration does not require company name in browser')
     page.locator('input[name="first_name"]').fill('Browser')
     page.locator('input[name="last_name"]').fill(
         'Firma' if customer_type == 'company' else 'Privat'
