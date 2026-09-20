@@ -93,6 +93,10 @@ test('non-WebGL fallback keeps the actual head visible without camera access',()
   assert.match(fallback,/destination-out/);
   assert.match(fallback,/makePointBatches/);
   assert.match(fallback,/paintPointBatches/);
+  assert.match(fallback,/makeShaderPointSprite/);
+  assert.match(fallback,/makeShaderPointSprite\(64,\[97,230,255\],1\.35\)/);
+  assert.match(fallback,/makeShaderPointSprite\(32,\[107,230,255\],1\)/);
+  assert.match(fallback,/context\.drawImage\(trafficSprite,x-size\*\.5,y-size\*\.5,size,size\)/);
   assert.match(fallback,/canvasDrawMs/);
   assert.match(fallback,/canvasDrawPeakMs/);
   assert.match(fallback,/const rawDt=last>0\?Math\.max\(0,\(now-last\)\/1000\):0/);
