@@ -643,6 +643,10 @@ for needle in (
     "context.globalCompositeOperation='destination-out'",
     'makePointBatches',
     'paintPointBatches',
+    'makeShaderPointSprite',
+    'makeShaderPointSprite(64,[97,230,255],1.35)',
+    'makeShaderPointSprite(32,[107,230,255],1)',
+    'context.drawImage(trafficSprite,x-size*.5,y-size*.5,size,size)',
     'stage.dataset.canvasDrawMs',
     'stage.dataset.canvasDrawPeakMs',
     'const rawDt=last>0?Math.max(0,(now-last)/1000):0',
@@ -712,6 +716,12 @@ for forbidden in (
 ):
     if forbidden in canvas_head:
         fail(f'Canvas lower-scene motion diverges from Edge: {forbidden}')
+for forbidden in (
+    "gradient.addColorStop(.42,'rgba(70,205,255,.48)')",
+    'context.fillRect(x,y,size,size*.52)',
+):
+    if forbidden in canvas_head:
+        fail(f'Canvas point sprite still uses non-Edge approximation: {forbidden}')
 if 'font-family:Inter,' in marketing_style:
     fail('Marketing must not trigger blocked local Inter font lookup in Firefox')
 if 'font-family:"Segoe UI",Arial,sans-serif;' not in marketing_style:
