@@ -38,7 +38,31 @@ def validate_once(path):
         raise SystemExit(f'LOAD PREFLIGHT FAIL: {path} returned {status}: {result!r}')
     if path == '/catalog.json':
         payload = json.loads(result.decode('utf-8'))
-        if payload.get('application_count') != 34 or payload.get('task_count') != 194:
+        products = {
+            item.get('id'): item
+            for item in payload.get('products', [])
+            if isinstance(item, dict) and item.get('id')
+        }
+        pro = products.get('PROMPTMASTER_PRO') or {}
+        names = payload.get('proApplicationNames') or []
+        contract_ok = (
+            payload.get('currency') == 'EUR'
+            and payload.get('priceBasis') == 'gross'
+            and payload.get('taxBasisPoints') == 1900
+            and payload.get('market') == 'DE'
+            and payload.get('maxQuantity') == 500
+            and payload.get('checkoutEnabled') is True
+            and payload.get('loginEnabled') is True
+            and payload.get('proApplicationCount') == 34
+            and len(names) == 34
+            and len(set(names)) == 34
+            and pro.get('monthlyGrossCents') == 299
+            and pro.get('annualGrossCents') == 3588
+            and pro.get('termMonths') == 12
+            and pro.get('active') is True
+            and pro.get('purchasable') is True
+        )
+        if not contract_ok:
             raise SystemExit(f'LOAD PREFLIGHT FAIL: catalog contract drift: {payload}')
     return elapsed
 
