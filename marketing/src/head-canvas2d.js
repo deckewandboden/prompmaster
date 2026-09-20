@@ -405,7 +405,7 @@ export async function initCanvasHead({sourceCanvas,stage,fallback}){
     const layerContext=layer.getContext('2d',{alpha:true});
     layerContext.setTransform(layerScale,0,0,layerScale,0,0);
     layerContext.globalCompositeOperation='lighter';
-    return [layer,layerContext];
+    return [layer,layerContext,{scaleSum:0,count:0}];
   };
 
   const rebuildSceneLayers=()=>{
@@ -418,9 +418,10 @@ export async function initCanvasHead({sourceCanvas,stage,fallback}){
 
     for(const point of groundParticles){
       const bucket=Math.floor((point.phase/(Math.PI*2))*LAND_BUCKETS)%LAND_BUCKETS;
-      const [,ctx]=sceneLayers.landscape[bucket];
-      const [x,y,depth]=sceneProject(point.x,point.y,point.z);
+      const [,ctx,meta]=sceneLayers.landscape[bucket];
+      const [x,y,depth,,worldPixelScale]=sceneProject(point.x,point.y,point.z);
       if(depth<=.1||x<-8||x>width+8||y<-8||y>height+8)continue;
+      meta.scaleSum+=worldPixelScale;meta.count++;
       const pointScale=4.5/depth;
       const size=Math.max(.35,(1.15+point.size*1.5+.36)*pointScale);
       const [r,g,b]=point.color.map(value=>Math.round(value*255));
@@ -430,9 +431,10 @@ export async function initCanvasHead({sourceCanvas,stage,fallback}){
 
     for(const point of blendParticles){
       const bucket=Math.floor((point.phase/(Math.PI*2))*BLEND_BUCKETS)%BLEND_BUCKETS;
-      const [,ctx]=sceneLayers.blend[bucket];
-      const [x,y,depth]=sceneProject(point.x,point.y,point.z);
+      const [,ctx,meta]=sceneLayers.blend[bucket];
+      const [x,y,depth,,worldPixelScale]=sceneProject(point.x,point.y,point.z);
       if(depth<=.1||x<-8||x>width+8||y<-8||y>height+8)continue;
+      meta.scaleSum+=worldPixelScale;meta.count++;
       const pointScale=4.5/depth;
       const size=Math.max(.3,(1.05+point.size*1.35+.35)*pointScale);
       ctx.fillStyle='rgba(31,168,255,.58)';
@@ -441,9 +443,10 @@ export async function initCanvasHead({sourceCanvas,stage,fallback}){
 
     for(const point of skyLights){
       const bucket=Math.floor((point.phase/(Math.PI*2))*SKY_BUCKETS)%SKY_BUCKETS;
-      const [,ctx]=sceneLayers.sky[bucket];
-      const [x,y,depth]=sceneProject(point.x,point.y,point.z);
+      const [,ctx,meta]=sceneLayers.sky[bucket];
+      const [x,y,depth,,worldPixelScale]=sceneProject(point.x,point.y,point.z);
       if(depth<=.1||x<-8||x>width+8||y<-8||y>height+8)continue;
+      meta.scaleSum+=worldPixelScale;meta.count++;
       const pointScale=4.5/depth;
       const size=Math.max(.3,(.9+point.size*1.55+.9)*pointScale);
       ctx.fillStyle='rgba(132,214,255,.78)';
@@ -451,14 +454,27 @@ export async function initCanvasHead({sourceCanvas,stage,fallback}){
     }
   };
 
-  const drawSceneLayers=(layers,baseRate,depthShift)=>{
+  const drawSceneLayers=(
+    layers,
+    baseRate,
+    worldShiftX,
+    pointerWorldShiftY=0,
+    bobRate=0,
+    bobWorldAmplitude=0
+  )=>{
     const count=layers.length;
-    const offsetPx=-smoothX*depthShift*height*.22;
     for(let index=0;index<count;index++){
       const phase=index/count*Math.PI*2;
       const pulse=.5+.5*Math.sin(elapsed*baseRate+phase);
+      const [layer,,meta]=layers[index];
+      const worldPixelScale=meta.count?meta.scaleSum/meta.count:height*.22;
+      const offsetX=-smoothX*worldShiftX*worldPixelScale;
+      const pointerOffsetY=-smoothY*pointerWorldShiftY*worldPixelScale;
+      const bobOffsetY=bobWorldAmplitude
+        ? -Math.sin(elapsed*bobRate+phase)*bobWorldAmplitude*worldPixelScale
+        : 0;
       context.globalAlpha=.34+pulse*.66;
-      context.drawImage(layers[index][0],offsetPx,0,width,height);
+      context.drawImage(layer,offsetX,pointerOffsetY+bobOffsetY,width,height);
     }
     context.globalAlpha=1;
   };
@@ -504,8 +520,8 @@ export async function initCanvasHead({sourceCanvas,stage,fallback}){
     // layers. Positions remain exact; only their shimmer is grouped into phase
     // buckets so Firefox does not repaint 6,000+ individual quads every frame.
     drawSceneLayers(sceneLayers.sky,1.34,.025);
-    drawSceneLayers(sceneLayers.landscape,.72,.08);
-    drawSceneLayers(sceneLayers.blend,.68,.08);
+    drawSceneLayers(sceneLayers.landscape,.72,.075,.018,.22,.006);
+    drawSceneLayers(sceneLayers.blend,.68,.075,0,.24,.008);
 
     // Edge/WebGL shooting-star contract: same six trails, schedule, direction,
     // height, depth, duration and scale progression.
