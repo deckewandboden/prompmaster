@@ -1319,12 +1319,25 @@ def legal_documents(request):
 @staff_perm('legal.write')
 def legal_document_edit(request, pk=None):
     document = get_object_or_404(LegalDocument, pk=pk) if pk else None
-    form = LegalDocumentForm(request.POST or None, instance=document)
+    activate_requested = bool(request.method == 'POST' and request.POST.get('active'))
+    form_data = request.POST or None
+    if activate_requested:
+        # Validate the new version as inactive first. Otherwise the conditional
+        # DB constraint correctly rejects a second active document before this
+        # view gets a chance to retire the previous version.
+        form_data = request.POST.copy()
+        form_data['active'] = ''
+    form = LegalDocumentForm(form_data, instance=document)
     if request.method == 'POST' and form.is_valid():
         with transaction.atomic():
-            if form.cleaned_data['active']:
-                LegalDocument.objects.select_for_update().filter(doc_type=form.cleaned_data['doc_type'], active=True).exclude(pk=document.pk if document else None).update(active=False)
-            saved = form.save()
+            saved = form.save(commit=False)
+            if activate_requested:
+                LegalDocument.objects.select_for_update().filter(
+                    doc_type=saved.doc_type, active=True
+                ).exclude(pk=saved.pk if saved.pk else None).update(active=False)
+                saved.active = True
+            saved.save()
+            form.save_m2m()
         write_audit(request.user, 'legal_document.saved', saved, {'version': saved.version, 'active': saved.active}, request=request)
         messages.success(request, 'Rechtsdokument gespeichert.')
         return redirect('ns_admin:legal_documents')
