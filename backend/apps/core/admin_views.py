@@ -142,11 +142,12 @@ def dashboard(request):
         for name in ('customers', 'licenses', 'orders', 'payments', 'ops', 'support')
     }
     paid_orders = Order.objects.filter(status='paid')
+    active_licenses = License.objects.filter(valid_until__gt=now, status__in=['active', 'free'])
     revenue_since = now - timedelta(days=185)
 
     product_mix = (
         list(
-            License.objects.values('product__name')
+            active_licenses.values('product__name')
             .annotate(total=Count('id'))
             .order_by('-total', 'product__name')[:8]
         )
@@ -185,7 +186,7 @@ def dashboard(request):
     context = {
         'rights': rights,
         'customers': Company.objects.count() + PrivateCustomerProfile.objects.count() if rights['customers'] else None,
-        'licenses': License.objects.filter(valid_until__gt=now, status__in=['active', 'free']).count() if rights['licenses'] else None,
+        'licenses': active_licenses.count() if rights['licenses'] else None,
         'expiring30': License.objects.filter(valid_until__gt=now, valid_until__lte=now + timedelta(days=30)).count() if rights['licenses'] else None,
         'expiring60': License.objects.filter(valid_until__gt=now, valid_until__lte=now + timedelta(days=60)).count() if rights['licenses'] else None,
         'orders30': Order.objects.filter(created_at__gte=now - timedelta(days=30)).count() if rights['orders'] else None,
