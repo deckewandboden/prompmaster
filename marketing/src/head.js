@@ -304,12 +304,32 @@ export async function initHead(){
     const controls=new AbortController();
     document.querySelectorAll('[data-edition]').forEach(card=>{for(const event of ['pointerenter','focusin'])card.addEventListener(event,()=>{edition=card.dataset.edition},{signal:controls.signal});for(const event of ['pointerleave','focusout'])card.addEventListener(event,()=>{edition=''},{signal:controls.signal})});
     const observer=new IntersectionObserver(([entry])=>{visible=entry.isIntersecting;syncLoop()},{rootMargin:'80px'});observer.observe(canvas);
-    const onLost=e=>{e.preventDefault();renderer.setAnimationLoop(null);void initCanvasHead({sourceCanvas:canvas,stage,fallback})};canvas.addEventListener('webglcontextlost',onLost);
+    let cleanup=()=>{};
+    const onLost=e=>{
+      e.preventDefault();
+      cleanup();
+      void initCanvasHead({sourceCanvas:canvas,stage,fallback});
+    };
+    cleanup=()=>{
+      if(disposed)return;
+      disposed=true;
+      renderer.setAnimationLoop(null);
+      observer.disconnect();
+      ro.disconnect();
+      controls.abort();
+      canvas.removeEventListener('webglcontextlost',onLost);
+      window.removeEventListener('pointermove',onPointer);
+      document.removeEventListener('visibilitychange',onVisibility);
+      reduced.removeEventListener('change',onReduced);
+      geometries.forEach(g=>g.dispose());
+      materials.forEach(m=>m.dispose());
+      renderer.dispose();
+    };
+    canvas.addEventListener('webglcontextlost',onLost);
     resize();syncLoop();
     stage.dataset.headRenderer='webgl';
     stage.dataset.eyeContract='edge-shared-webgl';
     stage.dataset.headReady='1';
-    const cleanup=()=>{if(disposed)return;disposed=true;renderer.setAnimationLoop(null);observer.disconnect();ro.disconnect();controls.abort();window.removeEventListener('pointermove',onPointer);document.removeEventListener('visibilitychange',onVisibility);reduced.removeEventListener('change',onReduced);geometries.forEach(g=>g.dispose());materials.forEach(m=>m.dispose());renderer.dispose()};
     window.addEventListener('pagehide',cleanup,{once:true});
     if(import.meta.hot)import.meta.hot.dispose(cleanup);
   }catch(error){ro.disconnect();renderer.dispose();console.warn('WebGL-Kopf nicht verfügbar – Canvas2D-Kopf wird verwendet.',error);await initCanvasHead({sourceCanvas:canvas,stage,fallback})}
