@@ -2,15 +2,15 @@
 set -Eeuo pipefail
 cd "$(dirname "$0")/.."
 
-NETWORK="\${PM_EXTERNAL_CADDY_TEST_NETWORK:-promptmaster_ci_external_proxy}"
-ALIAS="\${PM_EXTERNAL_CADDY_ALIAS:-promptmaster-caddy-edge}"
+NETWORK="${PM_EXTERNAL_CADDY_TEST_NETWORK:-promptmaster_ci_external_proxy}"
+ALIAS="${PM_EXTERNAL_CADDY_ALIAS:-promptmaster-caddy-edge}"
 F=(-f compose.yaml -f compose.staging.yaml -f compose.external-caddy.yaml)
 
 log(){ printf '[PromptMaster external-caddy test] %s\n' "$*"; }
 
 cleanup(){
   PM_EXTERNAL_CADDY_NETWORK="$NETWORK" PM_EXTERNAL_CADDY_ALIAS="$ALIAS" \
-    docker compose "\${F[@]}" down --remove-orphans >/dev/null 2>&1 || true
+    docker compose "${F[@]}" down --remove-orphans >/dev/null 2>&1 || true
   docker network rm "$NETWORK" >/dev/null 2>&1 || true
 }
 trap cleanup EXIT
@@ -22,20 +22,20 @@ export PM_EXTERNAL_CADDY_NETWORK="$NETWORK"
 export PM_EXTERNAL_CADDY_ALIAS="$ALIAS"
 
 log "Compose-Konfiguration im External-Caddy-Modus prüfen"
-docker compose "\${F[@]}" config >/dev/null
+docker compose "${F[@]}" config >/dev/null
 log "External-Caddy-Stack starten"
-docker compose "\${F[@]}" up -d
+docker compose "${F[@]}" up -d
 
-cid="$(docker compose "\${F[@]}" ps -q caddy)"
+cid="$(docker compose "${F[@]}" ps -q caddy)"
 [[ -n "$cid" ]] || { echo "Caddy container missing" >&2; exit 1; }
 
 for _ in $(seq 1 60); do
-  if docker compose "\${F[@]}" exec -T caddy wget -qO- http://127.0.0.1:8081/healthz >/dev/null 2>&1; then
+  if docker compose "${F[@]}" exec -T caddy wget -qO- http://127.0.0.1:8081/healthz >/dev/null 2>&1; then
     break
   fi
   sleep 2
 done
-docker compose "\${F[@]}" exec -T caddy wget -qO- http://127.0.0.1:8081/healthz >/dev/null
+docker compose "${F[@]}" exec -T caddy wget -qO- http://127.0.0.1:8081/healthz >/dev/null
 
 bindings="$(
   docker inspect "$cid" --format '{{range $port, $bindings := .NetworkSettings.Ports}}{{if $bindings}}{{range $bindings}}{{println $port .HostIp .HostPort}}{{end}}{{end}}{{end}}' |
@@ -83,7 +83,31 @@ catalog="$(
 python3 - "$catalog" <<'PY'
 import json, sys
 payload=json.loads(sys.argv[1])
-if payload.get('application_count') != 34 or payload.get('task_count') != 194:
+products={
+    item.get('id'): item
+    for item in payload.get('products', [])
+    if isinstance(item, dict) and item.get('id')
+}
+pro=products.get('PROMPTMASTER_PRO') or {}
+names=payload.get('proApplicationNames') or []
+contract_ok=(
+    payload.get('currency') == 'EUR'
+    and payload.get('priceBasis') == 'gross'
+    and payload.get('taxBasisPoints') == 1900
+    and payload.get('market') == 'DE'
+    and payload.get('maxQuantity') == 500
+    and payload.get('checkoutEnabled') is True
+    and payload.get('loginEnabled') is True
+    and payload.get('proApplicationCount') == 34
+    and len(names) == 34
+    and len(set(names)) == 34
+    and pro.get('monthlyGrossCents') == 299
+    and pro.get('annualGrossCents') == 3588
+    and pro.get('termMonths') == 12
+    and pro.get('active') is True
+    and pro.get('purchasable') is True
+)
+if not contract_ok:
     raise SystemExit(f"catalog contract drift via external Caddy: {payload}")
 PY
 
