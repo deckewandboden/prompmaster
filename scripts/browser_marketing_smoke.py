@@ -131,7 +131,21 @@ def main() -> int:
                     launch['executable_path'] = executable
                 browser = pw.chromium.launch(**launch)
             elif engine == 'firefox':
-                browser = pw.firefox.launch(headless=True)
+                firefox_env = os.environ.copy()
+                firefox_env.setdefault('MOZ_WEBRENDER', '1')
+                firefox_env.setdefault('LIBGL_ALWAYS_SOFTWARE', '1')
+                firefox_headed = os.getenv('PM_FIREFOX_HEADED') == '1'
+                browser = pw.firefox.launch(
+                    headless=not firefox_headed,
+                    env=firefox_env,
+                    firefox_user_prefs={
+                        'webgl.disabled': False,
+                        'webgl.force-enabled': True,
+                        'layers.acceleration.force-enabled': True,
+                        'gfx.webrender.all': True,
+                        'gfx.webrender.software': True,
+                    },
+                )
             else:
                 browser = pw.webkit.launch(headless=True)
 
@@ -209,6 +223,9 @@ def main() -> int:
                         proBorder: proStyle.borderColor,
                         canvasVisible: !!(canvas.width && canvas.height),
                         headRenderer: renderer,
+                        webglInit: one('.head-stage').dataset.webglInit || '',
+                        lowerSceneContract: one('.head-stage').dataset.lowerSceneContract || '',
+                        eyeContract: one('.head-stage').dataset.eyeContract || '',
                         headBounds: one('.head-stage').dataset.headBounds || '',
                         eyeAnchors: one('.head-stage').dataset.eyeAnchors || '',
                         fallbackHidden: one('.head-fallback').hidden,
@@ -262,6 +279,23 @@ def main() -> int:
                     fail(f'{engine} {width}px: kein aktiver Kopf-Renderer ({metrics["headRenderer"]})')
                 if engine == 'chromium' and metrics['headRenderer'] != 'webgl':
                     fail(f'{width}px: Chromium muss den primären WebGL-Renderer validieren')
+                if engine == 'firefox' and metrics['headRenderer'] != 'webgl':
+                    fail(
+                        f'{width}px: Firefox-Test muss den kanonischen WebGL-Pfad '
+                        f'validieren, erhalten={metrics["headRenderer"]!r}'
+                    )
+                if engine in {'chromium', 'firefox'} and metrics['webglInit'] not in {
+                    'edge-webgl2', 'edge-three-managed'
+                }:
+                    fail(
+                        f'{engine} {width}px: Browser verwendet nicht die gemeinsame '
+                        f'Edge-WebGL-Initialisierung ({metrics["webglInit"]!r})'
+                    )
+                if metrics['lowerSceneContract'] != 'edge-shared-v1':
+                    fail(
+                        f'{engine} {width}px: Kopf verwendet nicht den gemeinsamen '
+                        f'Edge/Firefox-Szenenvertrag ({metrics["lowerSceneContract"]!r})'
+                    )
                 if metrics['motionControlPresent']:
                     fail(f'{engine} {width}px: unerwünschte Bewegungssteuerung ist sichtbar')
                 if metrics['headOverlayPresent']:
@@ -302,24 +336,80 @@ def main() -> int:
                             'Animation/Pointer-Reaktion fehlt'
                         )
                     if engine == 'firefox':
-                        try:
-                            bounds = [float(v) for v in metrics['headBounds'].split(',')]
-                            eyes = [float(v) for v in metrics['eyeAnchors'].split(',')]
-                        except ValueError:
-                            fail(f'Firefox 1440px: ungültige Kopf-/Augen-Anker {metrics}')
-                        if len(bounds) != 4 or len(eyes) != 4:
-                            fail(f'Firefox 1440px: Augen-Anker fehlen {metrics}')
-                        min_x, min_y, max_x, max_y = bounds
-                        left_x, left_y, right_x, right_y = eyes
-                        if not (
-                            min_x <= left_x <= max_x and min_x <= right_x <= max_x
-                            and min_y <= left_y <= max_y and min_y <= right_y <= max_y
-                            and right_x - left_x >= 25
-                        ):
-                            fail(
-                                f'Firefox 1440px: Augen sitzen außerhalb der Kopfgeometrie '
-                                f'(bounds={bounds}, eyes={eyes})'
+                        if metrics['headRenderer'] == 'webgl':
+                            if metrics['eyeContract'] != 'edge-shared-webgl':
+                                fail(
+                                    f'Firefox 1440px: Augen verwenden nicht den '
+                                    f'Edge-WebGL-Vertrag ({metrics["eyeContract"]!r})'
+                                )
+                        else:
+                            try:
+                                bounds = [float(v) for v in metrics['headBounds'].split(',')]
+                                eyes = [float(v) for v in metrics['eyeAnchors'].split(',')]
+                            except ValueError:
+                                fail(f'Firefox 1440px: ungültige Kopf-/Augen-Anker {metrics}')
+                            if len(bounds) != 4 or len(eyes) != 4:
+                                fail(f'Firefox 1440px: Augen-Anker fehlen {metrics}')
+                            min_x, min_y, max_x, max_y = bounds
+                            left_x, left_y, right_x, right_y = eyes
+                            if not (
+                                min_x <= left_x <= max_x and min_x <= right_x <= max_x
+                                and min_y <= left_y <= max_y and min_y <= right_y <= max_y
+                                and right_x - left_x >= 25
+                            ):
+                                fail(
+                                    f'Firefox 1440px: Augen sitzen außerhalb der Kopfgeometrie '
+                                    f'(bounds={bounds}, eyes={eyes})'
+                                )
+                        frame_stats = page.evaluate(
+                            """async () => {
+                              const samples = [];
+                              await new Promise(resolve => {
+                                let last = performance.now();
+                                const tick = now => {
+                                  samples.push(now - last);
+                                  last = now;
+                                  if (samples.length >= 48) resolve();
+                                  else requestAnimationFrame(tick);
+                                };
+                                requestAnimationFrame(tick);
+                              });
+                              const sorted = samples.slice(4).sort((a,b) => a-b);
+                              const percentile = p => sorted[
+                                Math.min(sorted.length - 1, Math.floor(sorted.length * p))
+                              ];
+                              return {
+                                median: percentile(.5),
+                                p95: percentile(.95),
+                                max: Math.max(...sorted),
+                              };
+                            }"""
+                        )
+                        if metrics['headRenderer'] == 'canvas2d':
+                            if (
+                                frame_stats['median'] > 35
+                                or frame_stats['p95'] > 65
+                                or frame_stats['max'] > 140
+                            ):
+                                fail(
+                                    f'Firefox 1440px: Canvas2D-Animation ruckelt '
+                                    f'(frame timings={frame_stats})'
+                                )
+                        else:
+                            # GitHub/Xvfb has no physical GPU. Once Firefox is
+                            # proven to use the canonical WebGL renderer, absolute
+                            # rAF timings here describe the CI software renderer,
+                            # not desktop Firefox performance. Keep them as a
+                            # diagnostic and fail only on genuine render stalls.
+                            print(
+                                'FIREFOX WEBGL FRAME DIAGNOSTIC '
+                                f'(Xvfb/software): {frame_stats}'
                             )
+                            if frame_stats['max'] > 500:
+                                fail(
+                                    f'Firefox 1440px: WebGL animation stalls '
+                                    f'(frame timings={frame_stats})'
+                                )
                     page.locator('#plus').click()
                     page.wait_for_function(
                         "document.querySelector('#quantity')?.value === '2' && "
@@ -360,9 +450,9 @@ def main() -> int:
                 if parity_renderer != 'webgl':
                     fail('Chromium parity reference must use WebGL')
             elif engine == 'firefox':
-                if parity_renderer != 'canvas2d':
+                if parity_renderer != 'webgl':
                     fail(
-                        f'Firefox parity must use deterministic Canvas2D renderer, '
+                        f'Firefox parity must use the canonical Edge/WebGL renderer, '
                         f'got {parity_renderer!r}'
                     )
                 edge_parity = artifact_dir / 'chromium-1440-parity.png'

@@ -579,6 +579,12 @@ account_forms = (ROOT/'backend/apps/accounts/forms.py').read_text(encoding='utf-
 ops_metrics = (ROOT/'backend/apps/ops/metrics.py').read_text(encoding='utf-8')
 ops_template = (ROOT/'backend/templates/ns_admin/ops.html').read_text(encoding='utf-8')
 canvas_head = (ROOT/'marketing/src/head-canvas2d.js').read_text(encoding='utf-8')
+webgl_head = (ROOT/'marketing/src/head.js').read_text(encoding='utf-8')
+admin_base = (ROOT/'backend/templates/ns_admin/base.html').read_text(encoding='utf-8')
+admin_dashboard = (ROOT/'backend/templates/ns_admin/dashboard.html').read_text(encoding='utf-8')
+two_factor_template = (ROOT/'backend/templates/auth/two_factor.html').read_text(encoding='utf-8')
+register_template = (ROOT/'backend/templates/auth/register.html').read_text(encoding='utf-8')
+app_css = (ROOT/'backend/static/css/app.css').read_text(encoding='utf-8')
 
 for needle in (
     "customer_sort=Lower(",
@@ -632,9 +638,73 @@ for needle in (
     'mobile?58:150',
     'mobile?105:245',
     'stage.dataset.eyeAnchors',
+    'export function createLowerSceneData',
+    "stage.dataset.lowerSceneContract='edge-shared-v1'",
+    'sceneLayers',
+    'drawSceneLayers',
+    'length:6',
+    'offset:.45+index*1.72',
+    'period:9.1+(index%3)*1.05',
+    'makeBeaconSprite',
+    'makeShootingStarSprite',
+    'beacon.x-smoothX*.075',
+    'beacon.y+smoothY*.018',
 ):
     if needle not in canvas_head:
         fail(f'Firefox/Canvas2D parity contract missing: {needle}')
+for needle in (
+    'createLowerSceneData',
+    "stage.dataset.lowerSceneContract='edge-shared-v1'",
+    "powerPreference:'low-power'",
+    "failIfMajorPerformanceCaveat:false",
+    "stage.dataset.webglInit='edge-webgl2'",
+    "stage.dataset.webglInit='edge-three-managed'",
+    "stage.dataset.webglInit='canvas-emergency'",
+    "stage.dataset.eyeContract='edge-shared-webgl'",
+):
+    if needle not in webgl_head:
+        fail(f'Edge/WebGL shared-scene contract missing: {needle}')
+for forbidden in (
+    'const firefox=/Firefox',
+    'powerPreference=firefox',
+):
+    if forbidden in webgl_head:
+        fail(f'Browser-specific head renderer logic is forbidden: {forbidden}')
+for needle in (
+    'PromptMaster Pro',
+    'PromptMaster Free',
+    'target="_blank"',
+    'rel="noopener"',
+    "{% url 'free_product' %}",
+):
+    if needle not in admin_base:
+        fail(f'Admin product launcher contract missing: {needle}')
+for needle in (
+    'PromptMaster Pro öffnen',
+    'PromptMaster Free öffnen',
+    'target="_blank"',
+    'rel="noopener"',
+):
+    if needle not in admin_dashboard:
+        fail(f'Admin dashboard launcher contract missing: {needle}')
+for needle in ('auth-login-card', 'auth-login-form', 'auth-submit'):
+    if needle not in two_factor_template:
+        fail(f'2FA stable-layout template contract missing: {needle}')
+for needle in (
+    'data-company-field',
+    "type.value === 'company'",
+    'row.hidden = !company',
+    'input.disabled = !company',
+    "if (!company) input.value = ''",
+):
+    if needle not in register_template:
+        fail(f'Registration customer-type UI contract missing: {needle}')
+for needle in (
+    '.auth-login-card{width:min(460px,100%);display:grid;gap:18px}',
+    '.auth-submit{width:100%;min-width:0;height:44px;margin:0}',
+):
+    if needle not in app_css:
+        fail(f'2FA stable-layout CSS contract missing: {needle}')
 
 # 20) Customer/account separation is a V1 invariant. A private customer may
 # not silently become a company member, which would make tenant scoping

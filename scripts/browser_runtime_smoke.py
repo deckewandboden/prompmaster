@@ -497,6 +497,34 @@ def _browser_login(page, base: str, email: str, password: str, secret: str, expe
     password_input.press('Enter')
     page.wait_for_url('**/auth/2fa/**')
     code_input = page.locator('input[name="code"]')
+    two_factor_layout = page.evaluate(
+        """() => {
+          const card = document.querySelector('.auth-login-card');
+          const input = document.querySelector('.auth-login-form input[name="code"]');
+          const button = document.querySelector('.auth-login-form .auth-submit');
+          if (!card || !input || !button) return null;
+          const i = input.getBoundingClientRect();
+          const b = button.getBoundingClientRect();
+          const c = card.getBoundingClientRect();
+          return {
+            cardWidth: c.width,
+            inputWidth: i.width,
+            buttonWidth: b.width,
+            inputHeight: i.height,
+            buttonHeight: b.height,
+            overlap: !(i.bottom <= b.top),
+          };
+        }"""
+    )
+    if (
+        not two_factor_layout
+        or two_factor_layout['cardWidth'] < 300
+        or abs(two_factor_layout['inputWidth'] - two_factor_layout['buttonWidth']) > 2
+        or two_factor_layout['inputHeight'] < 44
+        or two_factor_layout['buttonHeight'] < 42
+        or two_factor_layout['overlap']
+    ):
+        raise AssertionError(f'2FA layout is unstable: {two_factor_layout}')
     code_input.fill(pyotp.TOTP(secret).now())
     code_input.press('Enter')
     page.wait_for_url(lambda url: '/auth/2fa/' not in url and '/auth/login/' not in url)
@@ -756,6 +784,16 @@ def _browser_register_verify_to_buy(
         raise AssertionError(f'registration page failed for {customer_type}')
 
     page.locator('select[name="customer_type"]').select_option(customer_type)
+    company_row = page.locator('[data-company-field]')
+    company_input = page.locator('input[name="company_name"]')
+    if customer_type == 'private':
+        if company_row.is_visible() or company_input.is_enabled():
+            raise AssertionError('private registration exposes company-name field')
+    else:
+        if not company_row.is_visible() or not company_input.is_enabled():
+            raise AssertionError('company registration hides company-name field')
+        if company_input.get_attribute('required') is None:
+            raise AssertionError('company registration does not require company name in browser')
     page.locator('input[name="first_name"]').fill('Browser')
     page.locator('input[name="last_name"]').fill(
         'Firma' if customer_type == 'company' else 'Privat'
@@ -1368,6 +1406,39 @@ def run_backend_ui_smoke(browser, fixture=None) -> None:
                         f'admin dashboard action alerts have no visual spacing: {dashboard_visual}'
                     )
 
+                launcher_contract = page.evaluate(
+                    """() => {
+                      const links = [...document.querySelectorAll('a')];
+                      const pick = label => links.find(a => a.textContent.trim().includes(label));
+                      return Object.fromEntries(['PromptMaster Pro', 'PromptMaster Free'].map(label => {
+                        const a = pick(label);
+                        return [label, a ? {
+                          path: new URL(a.href).pathname,
+                          target: a.target,
+                          rel: a.rel,
+                        } : null];
+                      }));
+                    }"""
+                )
+                expected_launchers = {
+                    'PromptMaster Pro': '/pro/',
+                    'PromptMaster Free': '/free/',
+                }
+                for label, path in expected_launchers.items():
+                    row = launcher_contract.get(label)
+                    if (
+                        not row
+                        or row.get('path') != path
+                        or row.get('target') != '_blank'
+                        or 'noopener' not in (row.get('rel') or '').split()
+                    ):
+                        raise AssertionError(
+                            f'admin launcher contract invalid for {label}: {row}'
+                        )
+                dashboard_launchers = page.locator('.page-actions a[target="_blank"]')
+                if dashboard_launchers.count() < 2:
+                    raise AssertionError('admin dashboard must expose Free and Pro as new-tab launchers')
+
                 page.goto(base + 'ns-admin/orders/', wait_until='networkidle')
                 customer_sort = page.locator('th a', has_text='Kunde').first
                 if not customer_sort.is_visible():
@@ -1517,6 +1588,86 @@ def run_backend_ui_smoke(browser, fixture=None) -> None:
                 process.kill()
                 process.wait(timeout=5)
 
+def _run_cross_browser_2fa_layout(browser, fixture: dict, engine: str) -> None:
+    import subprocess
+    import sys
+
+    port = _free_port()
+    base = f'http://127.0.0.1:{port}/'
+    env = os.environ.copy()
+    env.setdefault('ENVIRONMENT', 'development')
+    env.setdefault('ALLOWED_HOSTS', '127.0.0.1,localhost')
+    env.setdefault('SESSION_COOKIE_SECURE', '0')
+    env.setdefault('CSRF_COOKIE_SECURE', '0')
+    process = subprocess.Popen(
+        [sys.executable, 'manage.py', 'runserver', f'127.0.0.1:{port}', '--noreload'],
+        cwd=str(ROOT / 'backend'),
+        env=env,
+        stdout=subprocess.DEVNULL,
+        stderr=subprocess.STDOUT,
+    )
+    try:
+        _wait_http(base + 'health/live/', process)
+        context = browser.new_context(viewport={'width': 460, 'height': 820})
+        page = context.new_page()
+        response = page.goto(base + 'auth/login/', wait_until='networkidle')
+        if not response or response.status != 200:
+            raise AssertionError(f'{engine} 2FA layout: login page failed')
+        page.locator('input[name="email"]').fill(fixture['admin_email'])
+        password_input = page.locator('input[name="password"]')
+        password_input.fill(fixture['password'])
+        password_input.press('Enter')
+        page.wait_for_url('**/auth/2fa/**')
+        page.wait_for_load_state('networkidle')
+        layout = page.evaluate(
+            """() => {
+              const card = document.querySelector('.auth-login-card');
+              const form = document.querySelector('.auth-login-form');
+              const input = form?.querySelector('input[name="code"]');
+              const button = form?.querySelector('.auth-submit');
+              if (!card || !form || !input || !button) return null;
+              const c = card.getBoundingClientRect();
+              const f = form.getBoundingClientRect();
+              const i = input.getBoundingClientRect();
+              const b = button.getBoundingClientRect();
+              return {
+                cardLeft: c.left, cardRight: c.right, cardWidth: c.width,
+                formLeft: f.left, formRight: f.right,
+                inputLeft: i.left, inputRight: i.right, inputWidth: i.width,
+                buttonLeft: b.left, buttonRight: b.right, buttonWidth: b.width,
+                inputHeight: i.height, buttonHeight: b.height,
+                verticalGap: b.top - i.bottom,
+                overflow: (
+                  i.left < c.left || i.right > c.right ||
+                  b.left < c.left || b.right > c.right
+                ),
+              };
+            }"""
+        )
+        if (
+            not layout
+            or layout['cardWidth'] < 300
+            or layout['overflow']
+            or abs(layout['inputLeft'] - layout['buttonLeft']) > 1.5
+            or abs(layout['inputRight'] - layout['buttonRight']) > 1.5
+            or abs(layout['inputWidth'] - layout['buttonWidth']) > 2
+            or layout['inputHeight'] < 44
+            or layout['buttonHeight'] < 42
+            or layout['verticalGap'] < 10
+        ):
+            raise AssertionError(f'{engine} 2FA layout unstable: {layout}')
+        context.close()
+        print(f'{engine.upper()} 2FA LAYOUT OK: {layout}')
+    finally:
+        if process.poll() is None:
+            process.terminate()
+            try:
+                process.wait(timeout=5)
+            except subprocess.TimeoutExpired:
+                process.kill()
+                process.wait(timeout=5)
+
+
 def main() -> int:
     try:
         from playwright.sync_api import sync_playwright
@@ -1582,7 +1733,22 @@ def main() -> int:
         run_backend_ui_smoke(browser, backend_fixture)
         browser.close()
 
-    print('BROWSER RUNTIME SMOKE OK: 34-app central catalog + compose + rating/feedback bridge + authenticated backend UI gate')
+        if backend_fixture is not None:
+            for engine_name, browser_type in (
+                ('firefox', pw.firefox),
+                ('webkit', pw.webkit),
+            ):
+                engine_browser = browser_type.launch(headless=True)
+                try:
+                    _run_cross_browser_2fa_layout(
+                        engine_browser,
+                        backend_fixture,
+                        engine_name,
+                    )
+                finally:
+                    engine_browser.close()
+
+    print('BROWSER RUNTIME SMOKE OK: 34-app central catalog + compose + rating/feedback bridge + authenticated backend UI gate + Firefox/WebKit 2FA layout')
     return 0
 
 

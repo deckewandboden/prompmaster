@@ -17,6 +17,98 @@ function seeded(seed=0x51f15e){
   };
 }
 
+export function createLowerSceneData(mobile=false){
+  const random=seeded(712367);
+  const landscapeCount=mobile?1500:4200;
+  const landscape=[];
+  for(let i=0;i<landscapeCount;i++){
+    const city=i<landscapeCount*.36;
+    const mountain=i>=landscapeCount*.36&&i<landscapeCount*.78;
+    const x=(random()-.5)*(city?7.4:9.4);
+    const edge=Math.min(1,Math.max(0,(Math.abs(x)-.7)/3.9));
+    const ridge=-1.08+edge*.68+Math.sin(x*2.25)*.075+Math.sin(x*5.1)*.035;
+    const level=city?Math.floor(random()*12):0;
+    const y=city
+      ? -1.38+level*(.028+random()*.012)
+      : mountain
+        ? ridge-random()*(.18+edge*.48)
+        : -1.3-random()*.3;
+    const z=city?-.42-random()*1.9:mountain?-1-random()*2.8:-.25-random()*3.4;
+    const cyan=.55+random()*.45;
+    const violet=random()>.88;
+    landscape.push({
+      x,y,z,
+      color:violet?[.42*cyan,.38*cyan,cyan]:[.08*cyan,.58*cyan,cyan],
+      phase:random()*Math.PI*2,
+      size:city?.65+random()*1.15:mountain?.4+random()*.85:.3+random()*.65,
+    });
+  }
+
+  const blendCount=mobile?850:2400;
+  const blend=[];
+  for(let i=0;i<blendCount;i++){
+    const x=(random()-.5)*9.4;
+    const center=1-Math.min(1,Math.abs(x)/4.7);
+    const top=-1.18+center*.16;
+    blend.push({
+      x,
+      y:top-random()*(.12+center*.34),
+      z:-.5-random()*2.35,
+      phase:random()*Math.PI*2,
+      size:.45+random()*1.05,
+    });
+  }
+
+  const beaconCount=mobile?58:150;
+  const beacons=[];
+  for(let i=0;i<beaconCount;i++){
+    beacons.push({
+      x:(random()-.5)*9,
+      y:-1.43+random()*.42,
+      z:-.18-random()*2.25,
+      phase:random()*Math.PI*2,
+      rate:.42+random()*.64,
+    });
+  }
+
+  const trafficCount=mobile?16:38;
+  const traffic=[];
+  for(let i=0;i<trafficCount;i++){
+    traffic.push({
+      y:-1.39+random()*.3,
+      z:-.15-random()*1.4,
+      speed:(random()>.5?1:-1)*(.11+random()*.24),
+      phase:random()*8.4,
+    });
+  }
+
+  const skyCount=mobile?105:245;
+  const sky=[];
+  for(let i=0;i<skyCount;i++){
+    sky.push({
+      x:(random()-.5)*9.2,
+      y:.42+random()*1.32,
+      z:-1.2-random()*2.8,
+      phase:random()*Math.PI*2,
+      size:.35+random()*.85,
+    });
+  }
+
+  const starHeights=[1.42,1.16,.92,1.3,1.02,.76];
+  const starDepths=[-1.25,-1.75,-1.45,-2.05,-1.6,-2.3];
+  const shootingStars=Array.from({length:6},(_,index)=>({
+    direction:index%2?-1:1,
+    offset:.45+index*1.72,
+    period:9.1+(index%3)*1.05,
+    y:starHeights[index],
+    z:starDepths[index],
+    opacity:.72-(index%3)*.055,
+    scaleBias:(index%3)*.04,
+  }));
+
+  return {landscape,blend,beacons,traffic,sky,shootingStars};
+}
+
 async function modelCloud(surfaceCount){
   const gltf=await new GLTFLoader().loadAsync(MODEL_URL);
   let mesh;
@@ -211,58 +303,138 @@ export async function initCanvasHead({sourceCanvas,stage,fallback}){
   // stays visually aligned with the canonical Chromium/Edge composition.
   // Canvas2D mirrors the animated lower scene of the WebGL edition instead of
   // degrading Firefox/VDI clients to a head-only fallback.
-  const sceneRandom=seeded(712367);
-  const groundParticles=Array.from({length:mobile?1500:4200},()=>{
-    const x=sceneRandom()-.5;
-    const edge=Math.min(1,Math.max(0,(Math.abs(x)-.08)/.42));
-    const ridge=.765-edge*.075-Math.sin(x*14)*.008-Math.sin(x*31)*.004;
-    const city=sceneRandom()<.38;
-    return {
-      x,
-      y:city?.82-sceneRandom()*.13:ridge+sceneRandom()*(.025+edge*.055),
-      phase:sceneRandom()*Math.PI*2,
-      size:.45+sceneRandom()*1.25,
-      alpha:.16+sceneRandom()*.42,
-      violet:sceneRandom()>.88,
-    };
-  });
-  const blendParticles=Array.from({length:mobile?850:2400},()=>{
-    const x=(sceneRandom()-.5)*.92;
-    const center=1-Math.min(1,Math.abs(x)/.46);
-    return {
-      x,
-      y:.775-center*.02+sceneRandom()*(.018+center*.045),
-      phase:sceneRandom()*Math.PI*2,
-      size:.45+sceneRandom()*1.15,
-    };
-  });
-  const beacons=Array.from({length:mobile?58:150},()=>({
-    x:(sceneRandom()-.5)*.88,
-    y:.735+sceneRandom()*.09,
-    phase:sceneRandom()*Math.PI*2,
-    rate:1.47+sceneRandom()*.64,
-  }));
-  const traffic=Array.from({length:mobile?16:38},()=>({
-    phase:sceneRandom(),
-    y:.785+sceneRandom()*.045,
-    speed:(sceneRandom()>.5?1:-1)*(.025+sceneRandom()*.055),
-    alpha:.38+sceneRandom()*.35,
-  }));
-  const skyLights=Array.from({length:mobile?105:245},()=>({
-    x:sceneRandom(),
-    y:.13+sceneRandom()*.30,
-    phase:sceneRandom()*Math.PI*2,
-    size:.35+sceneRandom()*.85,
-  }));
-  const shootingStars=Array.from({length:mobile?2:4},(_,index)=>({
-    phase:sceneRandom(),
-    y:.14+sceneRandom()*.24,
-    direction:index%2?1:-1,
-    speed:.035+sceneRandom()*.025,
-  }));
+  const sceneData=createLowerSceneData(mobile);
+    stage.dataset.lowerSceneContract='edge-shared-v1';
+  const groundParticles=sceneData.landscape;
+  const blendParticles=sceneData.blend;
+  const beacons=sceneData.beacons;
+  const traffic=sceneData.traffic;
+  const skyLights=sceneData.sky;
+  const shootingStars=sceneData.shootingStars;
+
+  const makeBeaconSprite=()=>{
+    const sprite=document.createElement('canvas');
+    sprite.width=64;sprite.height=64;
+    const ctx=sprite.getContext('2d',{alpha:true});
+    const gradient=ctx.createRadialGradient(32,32,0,32,32,32);
+    gradient.addColorStop(0,'rgba(97,230,255,1)');
+    gradient.addColorStop(.42,'rgba(70,205,255,.48)');
+    gradient.addColorStop(1,'rgba(20,130,255,0)');
+    ctx.fillStyle=gradient;ctx.fillRect(0,0,64,64);
+    return sprite;
+  };
+  const makeShootingStarSprite=(reverse=false)=>{
+    const sprite=document.createElement('canvas');
+    sprite.width=256;sprite.height=32;
+    const ctx=sprite.getContext('2d',{alpha:true});
+    const gradient=ctx.createLinearGradient(0,0,256,0);
+    if(reverse){
+      gradient.addColorStop(0,'rgba(255,255,255,1)');
+      gradient.addColorStop(.06,'rgba(190,245,255,.9)');
+      gradient.addColorStop(.28,'rgba(90,205,255,.32)');
+      gradient.addColorStop(1,'rgba(40,150,255,0)');
+    }else{
+      gradient.addColorStop(0,'rgba(40,150,255,0)');
+      gradient.addColorStop(.72,'rgba(90,205,255,.32)');
+      gradient.addColorStop(.94,'rgba(190,245,255,.9)');
+      gradient.addColorStop(1,'rgba(255,255,255,1)');
+    }
+    ctx.fillStyle=gradient;ctx.fillRect(0,0,256,32);
+    const feather=ctx.createLinearGradient(0,0,0,32);
+    feather.addColorStop(0,'rgba(255,255,255,0)');
+    feather.addColorStop(.5,'rgba(255,255,255,1)');
+    feather.addColorStop(1,'rgba(255,255,255,0)');
+    ctx.globalCompositeOperation='destination-in';
+    ctx.fillStyle=feather;ctx.fillRect(0,0,256,32);
+    return sprite;
+  };
+  const beaconSprite=makeBeaconSprite();
+  const shootingStarLtr=makeShootingStarSprite(false);
+  const shootingStarRtl=makeShootingStarSprite(true);
 
   const reduced=matchMedia('(prefers-reduced-motion:reduce)');
   let paused=reduced.matches,disposed=false,visible=true,last=0,lastFrame=0,elapsed=0,mouseX=0,mouseY=0,smoothX=0,smoothY=0,lastPointerX=0,lastPointerY=0,hasPointer=false,cursorEnergy=0,dissolve=0,headYaw=0,headPitch=0,pointPower=1,topologyPower=1,edition='',raf=0,width=1,height=1,dpr=1;
+  let sceneLayers={landscape:[],blend:[],sky:[]};
+
+  const sceneProject=(x,y,z)=>{
+    const viewZ=width<650?5.3:4.35;
+    const base=height/(2*Math.tan(39*Math.PI/360)*viewZ);
+    const depth=viewZ-z;
+    const perspective=viewZ/depth;
+    return [
+      width*.5+x*base*perspective,
+      height*.5-(y-.06)*base*perspective,
+      depth,
+      perspective,
+      base*perspective,
+    ];
+  };
+
+  const createSceneLayer=()=>{
+    const layer=document.createElement('canvas');
+    const layerScale=Math.min(1,Math.max(.6,dpr*.5));
+    layer.width=Math.max(1,Math.round(width*layerScale));
+    layer.height=Math.max(1,Math.round(height*layerScale));
+    const layerContext=layer.getContext('2d',{alpha:true});
+    layerContext.setTransform(layerScale,0,0,layerScale,0,0);
+    layerContext.globalCompositeOperation='lighter';
+    return [layer,layerContext];
+  };
+
+  const rebuildSceneLayers=()=>{
+    const LAND_BUCKETS=6,BLEND_BUCKETS=4,SKY_BUCKETS=4;
+    sceneLayers={
+      landscape:Array.from({length:LAND_BUCKETS},createSceneLayer),
+      blend:Array.from({length:BLEND_BUCKETS},createSceneLayer),
+      sky:Array.from({length:SKY_BUCKETS},createSceneLayer),
+    };
+
+    for(const point of groundParticles){
+      const bucket=Math.floor((point.phase/(Math.PI*2))*LAND_BUCKETS)%LAND_BUCKETS;
+      const [,ctx]=sceneLayers.landscape[bucket];
+      const [x,y,depth]=sceneProject(point.x,point.y,point.z);
+      if(depth<=.1||x<-8||x>width+8||y<-8||y>height+8)continue;
+      const pointScale=4.5/depth;
+      const size=Math.max(.35,(1.15+point.size*1.5+.36)*pointScale);
+      const [r,g,b]=point.color.map(value=>Math.round(value*255));
+      ctx.fillStyle=`rgba(${r},${g},${b},.72)`;
+      ctx.fillRect(x,y,size,size);
+    }
+
+    for(const point of blendParticles){
+      const bucket=Math.floor((point.phase/(Math.PI*2))*BLEND_BUCKETS)%BLEND_BUCKETS;
+      const [,ctx]=sceneLayers.blend[bucket];
+      const [x,y,depth]=sceneProject(point.x,point.y,point.z);
+      if(depth<=.1||x<-8||x>width+8||y<-8||y>height+8)continue;
+      const pointScale=4.5/depth;
+      const size=Math.max(.3,(1.05+point.size*1.35+.35)*pointScale);
+      ctx.fillStyle='rgba(31,168,255,.58)';
+      ctx.fillRect(x,y,size,size);
+    }
+
+    for(const point of skyLights){
+      const bucket=Math.floor((point.phase/(Math.PI*2))*SKY_BUCKETS)%SKY_BUCKETS;
+      const [,ctx]=sceneLayers.sky[bucket];
+      const [x,y,depth]=sceneProject(point.x,point.y,point.z);
+      if(depth<=.1||x<-8||x>width+8||y<-8||y>height+8)continue;
+      const pointScale=4.5/depth;
+      const size=Math.max(.3,(.9+point.size*1.55+.9)*pointScale);
+      ctx.fillStyle='rgba(132,214,255,.78)';
+      ctx.fillRect(x,y,size,size);
+    }
+  };
+
+  const drawSceneLayers=(layers,baseRate,depthShift)=>{
+    const count=layers.length;
+    const offsetPx=-smoothX*depthShift*height*.22;
+    for(let index=0;index<count;index++){
+      const phase=index/count*Math.PI*2;
+      const pulse=.5+.5*Math.sin(elapsed*baseRate+phase);
+      context.globalAlpha=.34+pulse*.66;
+      context.drawImage(layers[index][0],offsetPx,0,width,height);
+    }
+    context.globalAlpha=1;
+  };
   const resize=()=>{
     const rect=stage.getBoundingClientRect();
     width=Math.max(1,Math.round(rect.width));
@@ -273,6 +445,7 @@ export async function initCanvasHead({sourceCanvas,stage,fallback}){
     canvas.style.width=width+'px';
     canvas.style.height=height+'px';
     context.setTransform(dpr,0,0,dpr,0,0);
+    rebuildSceneLayers();
     draw(performance.now());
   };
 
@@ -287,69 +460,64 @@ export async function initCanvasHead({sourceCanvas,stage,fallback}){
     context.fillStyle=glow;context.fillRect(0,0,width,height);
     context.globalCompositeOperation='lighter';
 
-    // Animated sky, city/floor particles and the soft bridge between the head
-    // and the night landscape. Coordinates intentionally follow the WebGL
-    // scene composition so both renderers have the same visual weight.
-    for(const star of skyLights){
-      const wave=.5+.5*Math.sin(elapsed*(1.05+star.size*.72)+star.phase);
-      const twinkle=Math.pow(wave,3.2);
-      context.fillStyle=`rgba(80,190,255,${.035+twinkle*.18})`;
-      const r=.35+star.size*.62+twinkle*.5;
-      context.fillRect(star.x*width,star.y*height,r,r);
-    }
+    // Draw the thousands of weak Edge-equivalent points from cached phase
+    // layers. Positions remain exact; only their shimmer is grouped into phase
+    // buckets so Firefox does not repaint 6,000+ individual quads every frame.
+    drawSceneLayers(sceneLayers.sky,1.34,.025);
+    drawSceneLayers(sceneLayers.landscape,.72,.08);
+    drawSceneLayers(sceneLayers.blend,.68,.08);
+
+    // Edge/WebGL shooting-star contract: same six trails, schedule, direction,
+    // height, depth, duration and scale progression.
     for(const star of shootingStars){
-      const progress=(star.phase+elapsed*star.speed)%1;
-      if(progress<.26){
-        const p=progress/.26;
-        const start=star.direction>0?-.08:1.08;
-        const x=(start+star.direction*p*1.16)*width;
-        const y=(star.y+p*.085)*height;
-        const alpha=Math.sin(p*Math.PI)*.52;
-        context.strokeStyle=`rgba(85,205,255,${alpha})`;
-        context.lineWidth=1;
-        context.beginPath();
-        context.moveTo(x,y);
-        context.lineTo(x-star.direction*width*.035,y-height*.012);
-        context.stroke();
-      }
+      const activeTime=elapsed-star.offset;
+      const local=activeTime>=0?activeTime%star.period:-1;
+      if(local<0||local>=3.45)continue;
+      const progress=local/3.45;
+      const startX=star.direction>0?-3.25:3.25;
+      const worldX=startX+star.direction*progress*4.75-smoothX*.035;
+      const worldY=star.y-progress*.76;
+      const [x,y,depth,,worldPixelScale]=sceneProject(worldX,worldY,star.z);
+      if(depth<=.1)continue;
+      const trailWidth=(.72+progress*.48+star.scaleBias)*worldPixelScale;
+      const trailHeight=Math.max(1,(.026+progress*.022)*worldPixelScale);
+      const alpha=Math.sin(progress*Math.PI)*star.opacity;
+      context.save();
+      context.globalAlpha=alpha;
+      context.translate(x,y);
+      context.rotate(star.direction>0?-.22:.22);
+      context.drawImage(
+        star.direction>0?shootingStarLtr:shootingStarRtl,
+        -trailWidth*.5,-trailHeight*.5,trailWidth,trailHeight
+      );
+      context.restore();
     }
-    for(const dot of groundParticles){
-      const pulse=.5+.5*Math.sin(elapsed*(.5+dot.size*.38)+dot.phase);
-      const x=(.5+dot.x)*width;
-      const y=dot.y*height+Math.sin(elapsed*.22+dot.phase)*height*.0008;
-      const a=.07+pulse*(.16+dot.alpha*.44);
-      context.fillStyle=dot.violet
-        ? `rgba(112,96,255,${a})`
-        : `rgba(22,154,255,${a})`;
-      const size=.45+dot.size*.82+pulse*.35;
-      context.fillRect(x,y,size,size);
-    }
-    for(const dot of blendParticles){
-      const pulse=.5+.5*Math.sin(elapsed*(.55+dot.size*.28)+dot.phase);
-      const x=(.5+dot.x)*width;
-      const y=dot.y*height+Math.sin(elapsed*.24+dot.phase)*height*.001;
-      context.fillStyle=`rgba(35,170,255,${.055+pulse*.16})`;
-      const size=.45+dot.size*.68+pulse*.32;
-      context.fillRect(x,y,size,size);
-    }
+
+    // Strong beacons use the exact same 3D positions/phases/rates as Edge.
     for(const beacon of beacons){
-      const wave=.5+.5*Math.sin(elapsed*beacon.rate+beacon.phase);
+      const wave=.5+.5*Math.sin(elapsed*(1.05+beacon.rate)+beacon.phase);
       const flash=Math.pow(wave,7);
-      const x=(.5+beacon.x)*width;
-      const y=beacon.y*height;
-      const radius=1.2+flash*5.8;
-      const g=context.createRadialGradient(x,y,0,x,y,radius);
-      g.addColorStop(0,`rgba(210,250,255,${.16+flash*.84})`);
-      g.addColorStop(.22,`rgba(90,215,255,${.10+flash*.52})`);
-      g.addColorStop(1,'rgba(20,130,255,0)');
-      context.fillStyle=g;
-      context.beginPath();context.arc(x,y,radius,0,Math.PI*2);context.fill();
+      const [x,y,depth]=sceneProject(beacon.x-smoothX*.075,beacon.y+smoothY*.018,beacon.z);
+      if(depth<=.1)continue;
+      const pointScale=4.5/depth;
+      const diameter=Math.max(1.6,(2.8+flash*8.5)*pointScale);
+      context.save();
+      context.globalAlpha=Math.min(1,.14+flash*1.28);
+      context.drawImage(beaconSprite,x-diameter*.5,y-diameter*.5,diameter,diameter);
+      context.restore();
     }
+
+    // Moving traffic lights also follow Edge's world-space lane coordinates.
     for(const light of traffic){
-      let x=(light.phase+elapsed*light.speed)%1;
-      if(x<0)x+=1;
-      context.fillStyle=`rgba(125,225,255,${light.alpha*.62})`;
-      context.fillRect(x*width,light.y*height,2.2,1.3);
+      let worldX=(light.phase+elapsed*light.speed+4.2)%8.4;
+      if(worldX<0)worldX+=8.4;
+      worldX=worldX-4.2-smoothX*.08;
+      const [x,y,depth]=sceneProject(worldX-smoothX*.075,light.y+smoothY*.018,light.z);
+      if(depth<=.1)continue;
+      const alpha=.48+.35*Math.sin(elapsed*1.7+light.phase);
+      const size=Math.max(.8,2.5*(4.5/depth));
+      context.fillStyle=`rgba(107,230,255,${alpha})`;
+      context.fillRect(x,y,size,size*.52);
     }
 
     const inputFollow=3.15;

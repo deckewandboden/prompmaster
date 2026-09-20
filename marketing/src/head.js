@@ -1,30 +1,62 @@
 import * as THREE from 'three';
 import {GLTFLoader} from 'three/addons/loaders/GLTFLoader.js';
 import {MeshSurfaceSampler} from 'three/addons/math/MeshSurfaceSampler.js';
-import {initCanvasHead} from './head-canvas2d.js';
+import {createLowerSceneData,initCanvasHead} from './head-canvas2d.js';
 
 export async function initHead(){
   const canvas=document.getElementById('particle-head');
   if(!canvas)return;
   const stage=canvas.parentElement;
   const fallback=stage.querySelector('.head-fallback');
-  // Firefox WebGL point-sprite output differs visibly from Chromium/Edge on
-  // identical shaders/drivers. Use the deterministic Canvas2D renderer there;
-  // it shares the same GLB and Three.js sampling pipeline and is measurably
-  // closer to the canonical Edge composition.
-  const firefox=/Firefox\//.test(navigator.userAgent);
-  if(firefox){
+  // Edge is the rendering contract. Every browser gets the exact same
+  // WebGL2 initialization first; there is no Firefox-specific renderer.
+  // A second Three.js-managed WebGL retry uses the same scene/animation code
+  // before the CPU Canvas2D emergency fallback is allowed.
+  let renderer;
+  const attributes={
+    alpha:true,
+    antialias:true,
+    powerPreference:'low-power',
+    failIfMajorPerformanceCaveat:false,
+  };
+  let webglError=null;
+  try{
+    const webglContext=canvas.getContext('webgl2',attributes);
+    if(webglContext){
+      renderer=new THREE.WebGLRenderer({
+        canvas,
+        context:webglContext,
+        alpha:true,
+        antialias:true,
+        powerPreference:'low-power',
+      });
+      stage.dataset.webglInit='edge-webgl2';
+    }
+  }catch(error){
+    webglError=error;
+  }
+  if(!renderer){
+    try{
+      renderer=new THREE.WebGLRenderer({
+        canvas,
+        alpha:true,
+        antialias:true,
+        powerPreference:'low-power',
+      });
+      stage.dataset.webglInit='edge-three-managed';
+    }catch(error){
+      webglError=error;
+    }
+  }
+  if(!renderer){
+    console.info(
+      'WebGL2 nicht verfügbar – Canvas2D-Notfallrenderer wird verwendet.',
+      webglError?.message||webglError||''
+    );
+    stage.dataset.webglInit='canvas-emergency';
     await initCanvasHead({sourceCanvas:canvas,stage,fallback});
     return;
   }
-  let renderer;
-  const attributes={alpha:true,antialias:true,powerPreference:'low-power'};
-  let webglContext=null;
-  try{webglContext=canvas.getContext('webgl2',attributes)||canvas.getContext('webgl',attributes);}
-  catch(error){console.info('WebGL nicht verfügbar – Canvas2D-Kopf wird verwendet.',error?.message||error);}
-  if(!webglContext){await initCanvasHead({sourceCanvas:canvas,stage,fallback});return;}
-  try{renderer=new THREE.WebGLRenderer({canvas,context:webglContext,alpha:true,antialias:true,powerPreference:'low-power'});}
-  catch(error){console.info('WebGL-Renderer nicht verfügbar – Canvas2D-Kopf wird verwendet.',error?.message||error);await initCanvasHead({sourceCanvas:canvas,stage,fallback});return;}
   const mobile=matchMedia('(max-width:800px)').matches;
   renderer.setPixelRatio(Math.min(devicePixelRatio,mobile?1.5:2));
   const scene=new THREE.Scene();
@@ -118,19 +150,15 @@ export async function initHead(){
     const dustMat=new THREE.PointsMaterial({color:0x3493df,size:.012,transparent:true,opacity:.30,depthWrite:false});materials.push(dustMat);const dust=new THREE.Points(dustGeo,dustMat);scene.add(dust);
 
     // Layered ground and skyline lights visually connect the 3D head with the landscape.
-    let sceneSeed=712367;const random=()=>{sceneSeed=(sceneSeed*1664525+1013904223)>>>0;return sceneSeed/4294967296};
-    const landscapeCount=mobile?1500:4200,landscapePositions=new Float32Array(landscapeCount*3),landscapeColors=new Float32Array(landscapeCount*3),landscapePhase=new Float32Array(landscapeCount),landscapeSize=new Float32Array(landscapeCount);
+    // Edge/WebGL and Firefox/Canvas2D consume the exact same deterministic scene data.
+    const sceneData=createLowerSceneData(mobile);
+    stage.dataset.lowerSceneContract='edge-shared-v1';
+    const landscapeCount=sceneData.landscape.length,landscapePositions=new Float32Array(landscapeCount*3),landscapeColors=new Float32Array(landscapeCount*3),landscapePhase=new Float32Array(landscapeCount),landscapeSize=new Float32Array(landscapeCount);
     for(let i=0;i<landscapeCount;i++){
-      const city=i<landscapeCount*.36,mountain=i>=landscapeCount*.36&&i<landscapeCount*.78;
-      const x=(random()-.5)*(city?7.4:9.4),edge=Math.min(1,Math.max(0,(Math.abs(x)-.7)/3.9));
-      const ridge=-1.08+edge*.68+Math.sin(x*2.25)*.075+Math.sin(x*5.1)*.035;
-      const level=city?Math.floor(random()*12):0;
-      const y=city?-1.38+level*(.028+random()*.012):mountain?ridge-random()*(.18+edge*.48):-1.3-random()*.3;
-      const z=city?-.42-random()*1.9:mountain?-1-random()*2.8:-.25-random()*3.4;
-      landscapePositions.set([x,y,z],i*3);
-      const cyan=.55+random()*.45,violet=random()>.88;
-      landscapeColors.set(violet?[.42*cyan,.38*cyan,1*cyan]:[.08*cyan,.58*cyan,1*cyan],i*3);
-      landscapePhase[i]=random()*Math.PI*2;landscapeSize[i]=city?.65+random()*1.15:mountain?.4+random()*.85:.3+random()*.65;
+      const point=sceneData.landscape[i];
+      landscapePositions.set([point.x,point.y,point.z],i*3);
+      landscapeColors.set(point.color,i*3);
+      landscapePhase[i]=point.phase;landscapeSize[i]=point.size;
     }
     const landscapeGeometry=new THREE.BufferGeometry();landscapeGeometry.setAttribute('position',new THREE.BufferAttribute(landscapePositions,3));landscapeGeometry.setAttribute('color',new THREE.BufferAttribute(landscapeColors,3));landscapeGeometry.setAttribute('aPhase',new THREE.BufferAttribute(landscapePhase,1));landscapeGeometry.setAttribute('aSize',new THREE.BufferAttribute(landscapeSize,1));geometries.push(landscapeGeometry);
     const landscapeMaterial=new THREE.ShaderMaterial({transparent:true,depthWrite:false,blending:THREE.AdditiveBlending,vertexColors:true,uniforms:{uTime:{value:0},uPixel:{value:renderer.getPixelRatio()}},vertexShader:'uniform float uTime; uniform float uPixel; attribute float aPhase; attribute float aSize; varying vec3 vColor; varying float vAlpha; void main(){float pulse=.5+.5*sin(uTime*(.5+aSize*.38)+aPhase);vec3 p=position;p.y+=sin(uTime*.22+aPhase)*.006;vColor=color;vAlpha=.24+pulse*.58;vec4 mv=modelViewMatrix*vec4(p,1.);gl_PointSize=(1.15+aSize*1.5+pulse*.72)*uPixel*(4.5/-mv.z);gl_Position=projectionMatrix*mv;}',fragmentShader:'varying vec3 vColor; varying float vAlpha; void main(){float d=length(gl_PointCoord-.5);if(d>.5)discard;float a=pow(1.-d*2.,1.7)*vAlpha;gl_FragColor=vec4(vColor*1.72,a);}'});
@@ -138,36 +166,36 @@ export async function initHead(){
 
     // A low, wide particle veil blends the base of the head into the landscape.
     // Its curved upper edge stays below the mountain silhouette at both sides.
-    const blendCount=mobile?850:2400,blendPositions=new Float32Array(blendCount*3),blendPhases=new Float32Array(blendCount),blendSizes=new Float32Array(blendCount);
+    const blendCount=sceneData.blend.length,blendPositions=new Float32Array(blendCount*3),blendPhases=new Float32Array(blendCount),blendSizes=new Float32Array(blendCount);
     for(let i=0;i<blendCount;i++){
-      const x=(random()-.5)*9.4,center=1-Math.min(1,Math.abs(x)/4.7),top=-1.18+center*.16,y=top-random()*(.12+center*.34);
-      blendPositions.set([x,y,-.5-random()*2.35],i*3);blendPhases[i]=random()*Math.PI*2;blendSizes[i]=.45+random()*1.05;
+      const point=sceneData.blend[i];
+      blendPositions.set([point.x,point.y,point.z],i*3);blendPhases[i]=point.phase;blendSizes[i]=point.size;
     }
     const blendGeometry=new THREE.BufferGeometry();blendGeometry.setAttribute('position',new THREE.BufferAttribute(blendPositions,3));blendGeometry.setAttribute('aPhase',new THREE.BufferAttribute(blendPhases,1));blendGeometry.setAttribute('aSize',new THREE.BufferAttribute(blendSizes,1));geometries.push(blendGeometry);
     const blendMaterial=new THREE.ShaderMaterial({transparent:true,depthWrite:false,blending:THREE.AdditiveBlending,uniforms:{uTime:{value:0},uPixel:{value:renderer.getPixelRatio()}},vertexShader:'uniform float uTime;uniform float uPixel;attribute float aPhase;attribute float aSize;varying float vAlpha;void main(){float pulse=.5+.5*sin(uTime*(.55+aSize*.28)+aPhase);vAlpha=.16+pulse*.42;vec3 p=position;p.y+=sin(uTime*.24+aPhase)*.008;vec4 mv=modelViewMatrix*vec4(p,1.);gl_PointSize=(1.05+aSize*1.35+pulse*.7)*uPixel*(4.5/-mv.z);gl_Position=projectionMatrix*mv;}',fragmentShader:'varying float vAlpha;void main(){float d=length(gl_PointCoord-.5);if(d>.5)discard;gl_FragColor=vec4(.12,.66,1.,pow(1.-d*2.,1.65)*vAlpha);}'});
     materials.push(blendMaterial);const landscapeBlend=new THREE.Points(blendGeometry,blendMaterial);scene.add(landscapeBlend);
 
     // Sparse light nodes switch on at changing positions across the ground plane.
-    const beaconCount=mobile?58:150,beaconPositions=new Float32Array(beaconCount*3),beaconPhases=new Float32Array(beaconCount),beaconRates=new Float32Array(beaconCount);
-    for(let i=0;i<beaconCount;i++){beaconPositions.set([(random()-.5)*9,-1.43+random()*.42,-.18-random()*2.25],i*3);beaconPhases[i]=random()*Math.PI*2;beaconRates[i]=.42+random()*.64}
+    const beaconCount=sceneData.beacons.length,beaconPositions=new Float32Array(beaconCount*3),beaconPhases=new Float32Array(beaconCount),beaconRates=new Float32Array(beaconCount);
+    for(let i=0;i<beaconCount;i++){const point=sceneData.beacons[i];beaconPositions.set([point.x,point.y,point.z],i*3);beaconPhases[i]=point.phase;beaconRates[i]=point.rate}
     const beaconGeometry=new THREE.BufferGeometry();beaconGeometry.setAttribute('position',new THREE.BufferAttribute(beaconPositions,3));beaconGeometry.setAttribute('aPhase',new THREE.BufferAttribute(beaconPhases,1));beaconGeometry.setAttribute('aRate',new THREE.BufferAttribute(beaconRates,1));geometries.push(beaconGeometry);
     const beaconMaterial=new THREE.ShaderMaterial({transparent:true,depthWrite:false,blending:THREE.AdditiveBlending,uniforms:{uTime:{value:0},uPixel:{value:renderer.getPixelRatio()}},vertexShader:'uniform float uTime;uniform float uPixel;attribute float aPhase;attribute float aRate;varying float vAlpha;void main(){float wave=.5+.5*sin(uTime*(1.05+aRate)+aPhase);float flash=pow(wave,7.);vAlpha=.14+flash*1.28;vec4 mv=modelViewMatrix*vec4(position,1.);gl_PointSize=(2.8+flash*8.5)*uPixel*(4.5/-mv.z);gl_Position=projectionMatrix*mv;}',fragmentShader:'varying float vAlpha;void main(){float d=length(gl_PointCoord-.5);if(d>.5)discard;float glow=pow(1.-d*2.,1.35);gl_FragColor=vec4(.38,.9,1.,glow*vAlpha);}'});
     materials.push(beaconMaterial);const cityBeacons=new THREE.Points(beaconGeometry,beaconMaterial);scene.add(cityBeacons);
 
-    const trafficCount=mobile?16:38,trafficPositions=new Float32Array(trafficCount*3),trafficSpeed=new Float32Array(trafficCount),trafficPhase=new Float32Array(trafficCount);
-    for(let i=0;i<trafficCount;i++){trafficPositions.set([0,-1.39+random()*.3,-.15-random()*1.4],i*3);trafficSpeed[i]=(random()>.5?1:-1)*(.11+random()*.24);trafficPhase[i]=random()*8.4}
+    const trafficCount=sceneData.traffic.length,trafficPositions=new Float32Array(trafficCount*3),trafficSpeed=new Float32Array(trafficCount),trafficPhase=new Float32Array(trafficCount);
+    for(let i=0;i<trafficCount;i++){const point=sceneData.traffic[i];trafficPositions.set([0,point.y,point.z],i*3);trafficSpeed[i]=point.speed;trafficPhase[i]=point.phase}
     const trafficGeometry=new THREE.BufferGeometry();trafficGeometry.setAttribute('position',new THREE.BufferAttribute(trafficPositions,3));trafficGeometry.setAttribute('aSpeed',new THREE.BufferAttribute(trafficSpeed,1));trafficGeometry.setAttribute('aPhase',new THREE.BufferAttribute(trafficPhase,1));geometries.push(trafficGeometry);
     const trafficMaterial=new THREE.ShaderMaterial({transparent:true,depthWrite:false,blending:THREE.AdditiveBlending,uniforms:{uTime:{value:0},uPixel:{value:renderer.getPixelRatio()}},vertexShader:'uniform float uTime;uniform float uPixel;attribute float aSpeed;attribute float aPhase;varying float vAlpha;void main(){vec3 p=position;p.x=mod(aPhase+uTime*aSpeed+4.2,8.4)-4.2;vAlpha=.48+.35*sin(uTime*1.7+aPhase);vec4 mv=modelViewMatrix*vec4(p,1.);gl_PointSize=2.5*uPixel*(4.5/-mv.z);gl_Position=projectionMatrix*mv;}',fragmentShader:'varying float vAlpha;void main(){float d=length(gl_PointCoord-.5);if(d>.5)discard;gl_FragColor=vec4(.42,.9,1.,(1.-d*2.)*vAlpha);}'});
     materials.push(trafficMaterial);const trafficLights=new THREE.Points(trafficGeometry,trafficMaterial);scene.add(trafficLights);
 
-    const skyCount=mobile?105:245,skyPositions=new Float32Array(skyCount*3),skyPhases=new Float32Array(skyCount),skySizes=new Float32Array(skyCount);
-    for(let i=0;i<skyCount;i++){skyPositions.set([(random()-.5)*9.2,.42+random()*1.32,-1.2-random()*2.8],i*3);skyPhases[i]=random()*Math.PI*2;skySizes[i]=.35+random()*.85}
+    const skyCount=sceneData.sky.length,skyPositions=new Float32Array(skyCount*3),skyPhases=new Float32Array(skyCount),skySizes=new Float32Array(skyCount);
+    for(let i=0;i<skyCount;i++){const point=sceneData.sky[i];skyPositions.set([point.x,point.y,point.z],i*3);skyPhases[i]=point.phase;skySizes[i]=point.size}
     const skyGeometry=new THREE.BufferGeometry();skyGeometry.setAttribute('position',new THREE.BufferAttribute(skyPositions,3));skyGeometry.setAttribute('aPhase',new THREE.BufferAttribute(skyPhases,1));skyGeometry.setAttribute('aSize',new THREE.BufferAttribute(skySizes,1));geometries.push(skyGeometry);
     const skyMaterial=new THREE.ShaderMaterial({transparent:true,depthWrite:false,blending:THREE.AdditiveBlending,uniforms:{uTime:{value:0},uPixel:{value:renderer.getPixelRatio()}},vertexShader:'uniform float uTime;uniform float uPixel;attribute float aPhase;attribute float aSize;varying float vAlpha;void main(){float wave=.5+.5*sin(uTime*(1.05+aSize*.72)+aPhase);float twinkle=pow(wave,3.2);vAlpha=.16+twinkle*.98;vec4 mv=modelViewMatrix*vec4(position,1.);gl_PointSize=(.9+aSize*1.55+twinkle*1.75)*uPixel*(4.5/-mv.z);gl_Position=projectionMatrix*mv;}',fragmentShader:'varying float vAlpha;void main(){float d=length(gl_PointCoord-.5);if(d>.5)discard;gl_FragColor=vec4(.52,.84,1.,pow(1.-d*2.,1.35)*vAlpha);}'});
     materials.push(skyMaterial);const skyStars=new THREE.Points(skyGeometry,skyMaterial);scene.add(skyStars);
 
     // Infrequent light trails cross at different depths to add quiet spatial movement.
-    const starCount=6;
+    const starCount=sceneData.shootingStars.length;
     const createStarTexture=(reverse=false)=>{
       const canvas=document.createElement('canvas');canvas.width=256;canvas.height=32;
       const context=canvas.getContext('2d');const gradient=context.createLinearGradient(0,0,256,0);
@@ -181,15 +209,15 @@ export async function initHead(){
     const starTextureLtr=createStarTexture(false),starTextureRtl=createStarTexture(true);
     const shootingStars=[];
     for(let s=0;s<starCount;s++){
-      const direction=s%2?-1:1,material=new THREE.SpriteMaterial({map:direction>0?starTextureLtr:starTextureRtl,transparent:true,opacity:0,depthTest:true,depthWrite:false,blending:THREE.AdditiveBlending,rotation:direction>0?-.22:.22});
+      const spec=sceneData.shootingStars[s],direction=spec.direction,material=new THREE.SpriteMaterial({map:direction>0?starTextureLtr:starTextureRtl,transparent:true,opacity:0,depthTest:true,depthWrite:false,blending:THREE.AdditiveBlending,rotation:direction>0?-.22:.22});
       const sprite=new THREE.Sprite(material);sprite.visible=false;sprite.scale.set(.58,.032,1);materials.push(material);shootingStars.push(sprite);scene.add(sprite);
     }
     const updateShootingStars=()=>{
       for(let s=0;s<starCount;s++){
-        const direction=s%2?-1:1,offset=.45+s*1.72,period=9.1+(s%3)*1.05,activeTime=elapsed-offset,local=activeTime>=0?activeTime%period:-1,active=local>=0&&local<3.45,progress=active?local/3.45:0;
-        const startX=direction>0?-3.25:3.25,startY=[1.42,1.16,.92,1.3,1.02,.76][s],depth=[-1.25,-1.75,-1.45,-2.05,-1.6,-2.3][s];
+        const spec=sceneData.shootingStars[s],direction=spec.direction,activeTime=elapsed-spec.offset,local=activeTime>=0?activeTime%spec.period:-1,active=local>=0&&local<3.45,progress=active?local/3.45:0;
+        const startX=direction>0?-3.25:3.25;
         const star=shootingStars[s];star.visible=active;
-        if(active){star.position.set(startX+direction*progress*4.75-smoothPointerX*.035,startY-progress*.76,depth);star.material.opacity=Math.sin(progress*Math.PI)*(.72-(s%3)*.055);star.scale.set(.72+progress*.48+(s%3)*.04,.026+progress*.022,1)}
+        if(active){star.position.set(startX+direction*progress*4.75-smoothPointerX*.035,spec.y-progress*.76,spec.z);star.material.opacity=Math.sin(progress*Math.PI)*spec.opacity;star.scale.set(.72+progress*.48+spec.scaleBias,.026+progress*.022,1)}
       }
     };
     function render(time=0){
@@ -235,6 +263,7 @@ export async function initHead(){
     const onLost=e=>{e.preventDefault();renderer.setAnimationLoop(null);void initCanvasHead({sourceCanvas:canvas,stage,fallback})};canvas.addEventListener('webglcontextlost',onLost);
     resize();syncLoop();
     stage.dataset.headRenderer='webgl';
+    stage.dataset.eyeContract='edge-shared-webgl';
     stage.dataset.headReady='1';
     const cleanup=()=>{if(disposed)return;disposed=true;renderer.setAnimationLoop(null);observer.disconnect();ro.disconnect();controls.abort();window.removeEventListener('pointermove',onPointer);document.removeEventListener('visibilitychange',onVisibility);reduced.removeEventListener('change',onReduced);geometries.forEach(g=>g.dispose());materials.forEach(m=>m.dispose());renderer.dispose()};
     window.addEventListener('pagehide',cleanup,{once:true});
