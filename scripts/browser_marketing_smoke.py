@@ -479,6 +479,54 @@ def main() -> int:
                     )
 
             if engine == 'chromium':
+                # Compatibility acceptance: simulate a browser/driver where the
+                # canonical antialiased WebGL2 context has no EGL config, but a
+                # no-MSAA WebGL2 context is available. The page must retry on a
+                # fresh canvas and still use the exact same WebGL scene.
+                compat_page = browser.new_page(
+                    viewport={'width': 1440, 'height': 1000},
+                    device_scale_factor=1,
+                )
+                compat_page.add_init_script(
+                    """(() => {
+                      const original = HTMLCanvasElement.prototype.getContext;
+                      HTMLCanvasElement.prototype.getContext = function(type, options, ...rest) {
+                        if (type === 'webgl2' && options?.antialias === true) {
+                          return null;
+                        }
+                        return original.call(this, type, options, ...rest);
+                      };
+                    })();"""
+                )
+                compat_page.goto(base, wait_until='networkidle')
+                compat_page.wait_for_function(
+                    "document.querySelector('.head-stage')?.dataset.headReady === '1'",
+                    timeout=15000,
+                )
+                compat_result = compat_page.evaluate(
+                    """() => {
+                      const stage = document.querySelector('.head-stage');
+                      return {
+                        renderer: stage?.dataset.headRenderer || '',
+                        init: stage?.dataset.webglInit || '',
+                        attempts: stage?.dataset.webglAttempts || '',
+                      };
+                    }"""
+                )
+                if compat_result['renderer'] != 'webgl':
+                    fail(f'WebGL compatibility retry fell back to Canvas: {compat_result}')
+                if compat_result['init'] != 'edge-webgl2-no-msaa':
+                    fail(
+                        'WebGL compatibility retry did not select the no-MSAA '
+                        f'Edge scene: {compat_result}'
+                    )
+                if not compat_result['attempts'].startswith(
+                    'edge-webgl2,edge-webgl2-no-msaa'
+                ):
+                    fail(f'WebGL compatibility retry order invalid: {compat_result}')
+                compat_page.close()
+
+            if engine == 'chromium':
                 # Export clean WebGL scene masters without navigation/cards.
                 # These are generated from the canonical Chromium/Edge renderer
                 # and can be used as pixel-stable no-WebGL fallbacks.
