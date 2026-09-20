@@ -651,6 +651,8 @@ for needle in (
     'context.drawImage(trafficSprite,x-size*.5,y-size*.5,size,size)',
     'stage.dataset.canvasDrawMs',
     'stage.dataset.canvasDrawPeakMs',
+    'stage.dataset.canvasElapsed=elapsed.toFixed(3)',
+    'stage.dataset.headYaw=headYaw.toFixed(4)',
     'const rawDt=last>0?Math.max(0,(now-last)/1000):0',
     'const dt=Math.min(.10,rawDt)',
     'elapsed+=Math.min(rawDt,.25)',
@@ -690,6 +692,7 @@ for needle in (
 for needle in (
     'createLowerSceneData',
     "stage.dataset.beaconProbe=probe.join(',')",
+    'stage.dataset.headYaw=group.rotation.y.toFixed(4)',
     'point.x+cityBeacons.position.x',
     'createShootingStarCanvas',
     'getShootingStarState',
