@@ -28,8 +28,11 @@ test('reconstructed marketing uses latest recovered head engine',()=>{
   assert.doesNotMatch(head,/powerPreference=firefox/);
   assert.match(head,/powerPreference:'low-power'/);
   assert.match(head,/failIfMajorPerformanceCaveat:false/);
-  assert.match(head,/stage\.dataset\.webglInit='edge-webgl2'/);
-  assert.match(head,/stage\.dataset\.webglInit='edge-three-managed'/);
+  assert.match(head,/stage\.dataset\.webglInit=attempt\.id/);
+  assert.match(head,/edge-webgl2-no-msaa/);
+  assert.match(head,/edge-webgl2-minimal/);
+  assert.match(head,/edge-three-managed-no-msaa/);
+  assert.match(head,/stage\.dataset\.webglAttempts/);
   assert.match(head,/stage\.dataset\.webglInit='canvas-emergency'/);
   assert.match(head,/eyeContract='edge-shared-webgl'/);
   assert.match(head,/new THREE\.WebGLRenderer/);
@@ -63,6 +66,12 @@ test('non-WebGL fallback keeps the actual head visible without camera access',()
   assert.match(fallback,/period:9\.1\+\(index%3\)\*1\.05/);
   assert.match(fallback,/sceneLayers/);
   assert.match(fallback,/drawSceneLayers/);
+  assert.match(fallback,/maskPath/);
+  assert.match(fallback,/destination-out/);
+  assert.match(fallback,/makePointBatches/);
+  assert.match(fallback,/paintPointBatches/);
+  assert.match(fallback,/canvasDrawMs/);
+  assert.match(fallback,/context\.rotate\(star\.direction>0\?\.22:-\.22\)/);
   assert.match(fallback,/lowerSceneContract='edge-shared-v1'/);
   assert.match(fallback,/async function modelCloud\(surfaceCount\)/);
   assert.match(fallback,/mobile\?8200:22000/);
