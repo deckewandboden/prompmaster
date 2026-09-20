@@ -362,18 +362,31 @@ export async function initCanvasHead({sourceCanvas,stage,fallback}){
   const skyLights=sceneData.sky;
   const shootingStars=sceneData.shootingStars;
 
-  const makeBeaconSprite=()=>{
+  const makeShaderPointSprite=(size,[r,g,b],exponent)=>{
     const sprite=document.createElement('canvas');
-    sprite.width=64;sprite.height=64;
+    sprite.width=size;sprite.height=size;
     const ctx=sprite.getContext('2d',{alpha:true});
-    const gradient=ctx.createRadialGradient(32,32,0,32,32,32);
-    gradient.addColorStop(0,'rgba(97,230,255,1)');
-    gradient.addColorStop(.42,'rgba(70,205,255,.48)');
-    gradient.addColorStop(1,'rgba(20,130,255,0)');
-    ctx.fillStyle=gradient;ctx.fillRect(0,0,64,64);
+    const image=ctx.createImageData(size,size);
+    const radius=size*.5;
+    for(let py=0;py<size;py++){
+      for(let px=0;px<size;px++){
+        const dx=(px+.5-radius)/radius;
+        const dy=(py+.5-radius)/radius;
+        const distance=Math.hypot(dx,dy);
+        const alpha=distance<=1?Math.pow(1-distance,exponent):0;
+        const offset=(py*size+px)*4;
+        image.data[offset]=r;
+        image.data[offset+1]=g;
+        image.data[offset+2]=b;
+        image.data[offset+3]=Math.round(alpha*255);
+      }
+    }
+    ctx.putImageData(image,0,0);
     return sprite;
   };
-  const beaconSprite=makeBeaconSprite();
+  // Exact Canvas equivalents of the WebGL fragment point profiles.
+  const beaconSprite=makeShaderPointSprite(64,[97,230,255],1.35);
+  const trafficSprite=makeShaderPointSprite(32,[107,230,255],1);
   const shootingStarLtr=createShootingStarCanvas(false);
   const shootingStarRtl=createShootingStarCanvas(true);
 
@@ -596,8 +609,10 @@ export async function initCanvasHead({sourceCanvas,stage,fallback}){
       if(depth<=.1)continue;
       const alpha=.48+.35*Math.sin(elapsed*1.7+light.phase);
       const size=Math.max(.8,2.5*(4.5/depth));
-      context.fillStyle=`rgba(107,230,255,${alpha})`;
-      context.fillRect(x,y,size,size*.52);
+      context.save();
+      context.globalAlpha=alpha;
+      context.drawImage(trafficSprite,x-size*.5,y-size*.5,size,size);
+      context.restore();
     }
 
     const yawTarget=edition==='free'?-.22:edition==='pro'?.22:smoothX*.3;
