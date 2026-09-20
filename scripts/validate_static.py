@@ -706,6 +706,8 @@ for needle in (
     'attemptIndex>0)freshCanvas()',
     "stage.dataset.webglInit='canvas-emergency'",
     "stage.dataset.eyeContract='edge-shared-webgl'",
+    'let cleanup=()=>{}',
+    'canvas.removeEventListener(\'webglcontextlost\',onLost)',
 ):
     if needle not in webgl_head:
         fail(f'Edge/WebGL shared-scene contract missing: {needle}')
