@@ -526,6 +526,68 @@ def main() -> int:
                     fail(f'WebGL compatibility retry order invalid: {compat_result}')
                 compat_page.close()
 
+                # Runtime context-loss acceptance: a browser may start on WebGL
+                # and lose the GPU context later. The old WebGL listeners must
+                # be torn down before the Canvas emergency renderer takes over.
+                context_loss_page = browser.new_page(
+                    viewport={'width': 1440, 'height': 1000},
+                    device_scale_factor=1,
+                )
+                context_loss_errors: list[str] = []
+                context_loss_page.on(
+                    'pageerror',
+                    lambda exc: context_loss_errors.append(str(exc)),
+                )
+                context_loss_page.goto(base, wait_until='networkidle')
+                context_loss_page.wait_for_function(
+                    "document.querySelector('.head-stage')?.dataset.headRenderer === 'webgl' && "
+                    "document.querySelector('.head-stage')?.dataset.headReady === '1'",
+                    timeout=15000,
+                )
+                lost = context_loss_page.evaluate(
+                    """() => {
+                      const canvas = document.querySelector('#particle-head');
+                      const gl = canvas?.getContext('webgl2');
+                      const ext = gl?.getExtension('WEBGL_lose_context');
+                      if (!ext) return false;
+                      ext.loseContext();
+                      return true;
+                    }"""
+                )
+                if not lost:
+                    fail('WebGL context-loss test: WEBGL_lose_context unavailable')
+                context_loss_page.wait_for_function(
+                    "document.querySelector('.head-stage')?.dataset.headRenderer === 'canvas2d' && "
+                    "document.querySelector('.head-stage')?.dataset.headReady === '1' && "
+                    "document.querySelector('.head-fallback')?.dataset.ready === '1'",
+                    timeout=15000,
+                )
+                context_loss_page.wait_for_timeout(250)
+                context_loss_state = context_loss_page.evaluate(
+                    """() => ({
+                      renderer: document.querySelector('.head-stage')?.dataset.headRenderer || '',
+                      fallbackVisible: document.querySelector('.head-fallback')?.hidden === false,
+                      webglHidden: document.querySelector('#particle-head')?.hidden === true,
+                      canvasCount: document.querySelectorAll('.head-fallback-canvas').length,
+                    })"""
+                )
+                if context_loss_errors:
+                    fail(
+                        'WebGL context-loss transition raised browser JS error: '
+                        f'{context_loss_errors[0]}'
+                    )
+                if context_loss_state != {
+                    'renderer': 'canvas2d',
+                    'fallbackVisible': True,
+                    'webglHidden': True,
+                    'canvasCount': 1,
+                }:
+                    fail(
+                        'WebGL context-loss transition did not cleanly hand off '
+                        f'to one Canvas renderer: {context_loss_state}'
+                    )
+                context_loss_page.close()
+
             if engine == 'chromium':
                 # Export clean WebGL scene masters without navigation/cards.
                 # These are generated from the canonical Chromium/Edge renderer
