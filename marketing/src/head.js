@@ -8,22 +8,19 @@ export async function initHead(){
   if(!canvas)return;
   const stage=canvas.parentElement;
   const fallback=stage.querySelector('.head-fallback');
-  // Firefox WebGL point-sprite output differs visibly from Chromium/Edge on
-  // identical shaders/drivers. Use the deterministic Canvas2D renderer there;
-  // it shares the same GLB and Three.js sampling pipeline and is measurably
-  // closer to the canonical Edge composition.
+  // Firefox uses the same canonical WebGL scene as Chromium/Edge whenever
+  // WebGL is available. Canvas2D is reserved for genuine no-WebGL/context-loss
+  // fallback, avoiding a CPU-bound duplicate renderer and guaranteeing that
+  // beacons, depth occlusion and shooting-star coordinates are shared.
   const firefox=/Firefox\//.test(navigator.userAgent);
-  if(firefox){
-    await initCanvasHead({sourceCanvas:canvas,stage,fallback});
-    return;
-  }
+  const powerPreference=firefox?'high-performance':'low-power';
   let renderer;
-  const attributes={alpha:true,antialias:true,powerPreference:'low-power'};
+  const attributes={alpha:true,antialias:true,powerPreference};
   let webglContext=null;
   try{webglContext=canvas.getContext('webgl2',attributes)||canvas.getContext('webgl',attributes);}
   catch(error){console.info('WebGL nicht verfügbar – Canvas2D-Kopf wird verwendet.',error?.message||error);}
   if(!webglContext){await initCanvasHead({sourceCanvas:canvas,stage,fallback});return;}
-  try{renderer=new THREE.WebGLRenderer({canvas,context:webglContext,alpha:true,antialias:true,powerPreference:'low-power'});}
+  try{renderer=new THREE.WebGLRenderer({canvas,context:webglContext,alpha:true,antialias:true,powerPreference});}
   catch(error){console.info('WebGL-Renderer nicht verfügbar – Canvas2D-Kopf wird verwendet.',error?.message||error);await initCanvasHead({sourceCanvas:canvas,stage,fallback});return;}
   const mobile=matchMedia('(max-width:800px)').matches;
   renderer.setPixelRatio(Math.min(devicePixelRatio,mobile?1.5:2));
@@ -231,6 +228,7 @@ export async function initHead(){
     const onLost=e=>{e.preventDefault();renderer.setAnimationLoop(null);void initCanvasHead({sourceCanvas:canvas,stage,fallback})};canvas.addEventListener('webglcontextlost',onLost);
     resize();syncLoop();
     stage.dataset.headRenderer='webgl';
+    stage.dataset.eyeContract='edge-shared-webgl';
     stage.dataset.headReady='1';
     const cleanup=()=>{if(disposed)return;disposed=true;renderer.setAnimationLoop(null);observer.disconnect();ro.disconnect();controls.abort();window.removeEventListener('pointermove',onPointer);document.removeEventListener('visibilitychange',onVisibility);reduced.removeEventListener('change',onReduced);geometries.forEach(g=>g.dispose());materials.forEach(m=>m.dispose());renderer.dispose()};
     window.addEventListener('pagehide',cleanup,{once:true});
