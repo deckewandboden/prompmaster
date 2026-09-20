@@ -18,6 +18,8 @@ test('reconstructed marketing uses latest recovered head engine',()=>{
   assert.match(head,/topologyGeometry/);
   assert.match(head,/uDissolve/);
   assert.match(head,/shootingStars/);
+  assert.match(head,/createLowerSceneData/);
+  assert.match(head,/lowerSceneContract='edge-shared-v1'/);
   assert.match(head,/initCanvasHead/);
   assert.doesNotMatch(head,/pm-headtrack|getUserMedia|enumerateDevices/);
   assert.doesNotMatch(head,/Bewegung pausieren|Bewegung aktivieren|motion-button/);
@@ -49,6 +51,13 @@ test('non-WebGL fallback keeps the actual head visible without camera access',()
   assert.match(fallback,/eyeAnchors/);
   assert.match(fallback,/stage\.dataset\.eyeAnchors/);
   assert.match(fallback,/shootingStars/);
+  assert.match(fallback,/export function createLowerSceneData/);
+  assert.match(fallback,/length:6/);
+  assert.match(fallback,/offset:\.45\+index\*1\.72/);
+  assert.match(fallback,/period:9\.1\+\(index%3\)\*1\.05/);
+  assert.match(fallback,/sceneLayers/);
+  assert.match(fallback,/drawSceneLayers/);
+  assert.match(fallback,/lowerSceneContract='edge-shared-v1'/);
   assert.match(fallback,/async function modelCloud\(surfaceCount\)/);
   assert.match(fallback,/mobile\?8200:22000/);
   assert.match(fallback,/MeshSurfaceSampler/);
