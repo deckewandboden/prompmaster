@@ -644,6 +644,8 @@ for needle in (
     'makePointBatches',
     'paintPointBatches',
     'stage.dataset.canvasDrawMs',
+    "stage.dataset.canvasOcclusion='head-silhouette-v1'",
+    'stage.dataset.starProbe=activeStarProbe',
     "context.rotate(star.direction>0?.22:-.22)",
     'export function createLowerSceneData',
     "stage.dataset.lowerSceneContract='edge-shared-v1'",
