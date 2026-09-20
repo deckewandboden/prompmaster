@@ -652,6 +652,8 @@ for needle in (
     'stage.dataset.starProbe=activeStarProbe',
     "context.rotate(star.direction>0?.22:-.22)",
     'export function createShootingStarCanvas',
+    'export function getShootingStarState',
+    'const state=getShootingStarState(star,elapsed,smoothX)',
     'createShootingStarCanvas(false)',
     'createShootingStarCanvas(true)',
     'export function createLowerSceneData',
@@ -677,6 +679,8 @@ for needle in (
 for needle in (
     'createLowerSceneData',
     'createShootingStarCanvas',
+    'getShootingStarState',
+    'const state=getShootingStarState(spec,elapsed,smoothPointerX)',
     'new THREE.CanvasTexture(createShootingStarCanvas(reverse))',
     "stage.dataset.lowerSceneContract='edge-shared-v1'",
     "powerPreference:'low-power'",
