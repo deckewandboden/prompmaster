@@ -74,6 +74,9 @@ test('non-WebGL fallback keeps the actual head visible without camera access',()
   assert.match(fallback,/makePointBatches/);
   assert.match(fallback,/paintPointBatches/);
   assert.match(fallback,/canvasDrawMs/);
+  assert.match(fallback,/canvasDrawPeakMs/);
+  assert.match(fallback,/const rawDt=/);
+  assert.match(fallback,/elapsed\+=Math\.min\(rawDt,\.25\)/);
   assert.match(fallback,/context\.rotate\(star\.direction>0\?\.22:-\.22\)/);
   assert.match(fallback,/lowerSceneContract='edge-shared-v1'/);
   assert.match(fallback,/async function modelCloud\(surfaceCount\)/);
