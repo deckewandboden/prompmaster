@@ -16,6 +16,7 @@ from apps.audit.models import AuditEvent
 from apps.integrations.models import ServiceAccount
 from apps.companies.models import Company
 from apps.legal.models import DeletionRequest
+from apps.orders.models import Order
 from .middleware import CorrelationIdMiddleware, JsonLogFormatter
 from .datagrid import DataGrid, csv_response
 from .security import token_hash, token_pair
@@ -333,6 +334,59 @@ class NotificationReleaseTests(TestCase):
         self.assertEqual(message.recipient, user.email)
         self.assertEqual(message.context.get('pm_scope_user_id'), str(user.id))
         self.assertEqual(delay.call_count, 1)
+
+
+class AdminOrderGridTests(TestCase):
+    def setUp(self):
+        self.admin = User.objects.create_user(
+            'orders-admin@example.test',
+            None,
+            is_staff=True,
+            is_superuser=True,
+            two_factor_required=False,
+            email_verified_at=timezone.now(),
+        )
+        self.client.force_login(self.admin)
+        self.company = Company.objects.create(
+            customer_number='ORD-COMPANY',
+            name='Alpha GmbH',
+            email='alpha@example.test',
+            status='active',
+        )
+        self.private_user = User.objects.create_user(
+            'zeta.private@example.test',
+            None,
+            email_verified_at=timezone.now(),
+        )
+        Order.objects.create(
+            order_number='ORD-C-1',
+            company=self.company,
+            gross_total='10.00',
+            tax_total='1.60',
+            idempotency_key='order-company-1',
+        )
+        Order.objects.create(
+            order_number='ORD-P-1',
+            private_user=self.private_user,
+            gross_total='20.00',
+            tax_total='3.19',
+            idempotency_key='order-private-1',
+        )
+
+    def test_customer_column_sorts_company_and_private_orders_and_can_reset(self):
+        response = self.client.get('/ns-admin/orders/?sort=customer&dir=asc')
+        self.assertEqual(response.status_code, 200)
+        rows = list(response.context['grid'].page.object_list)
+        self.assertEqual(
+            [row.customer_display for row in rows],
+            ['Alpha GmbH', 'zeta.private@example.test'],
+        )
+        body = response.content.decode('utf-8')
+        self.assertIn('sort=customer', body)
+        self.assertIn('Sortierung zurücksetzen', body)
+        self.assertIn('Alles zurücksetzen', body)
+        self.assertIn('Alpha GmbH', body)
+        self.assertIn('zeta.private@example.test', body)
 
 
 class DataGridAcceptanceTests(TestCase):
