@@ -807,9 +807,15 @@ def _browser_register_verify_to_buy(
     page.wait_for_url(lambda url: '/portal/licenses/buy/' in str(url))
     page.wait_for_load_state('networkidle')
 
-    close_old_connections()
-    user.refresh_from_db()
-    if not user.email_verified_at:
+    def _is_verified():
+        close_old_connections()
+        verified = bool(User.objects.get(email=email).email_verified_at)
+        close_old_connections()
+        return verified
+
+    with ThreadPoolExecutor(max_workers=1) as pool:
+        verified = pool.submit(_is_verified).result()
+    if not verified:
         raise AssertionError(f'email verification was not persisted for {email}')
     quantity_field = page.locator('input[name="quantity"]')
     if not quantity_field.is_visible() or quantity_field.input_value() != str(quantity):
