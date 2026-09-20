@@ -655,13 +655,21 @@ for needle in (
 for needle in (
     'createLowerSceneData',
     "stage.dataset.lowerSceneContract='edge-shared-v1'",
-    "powerPreference=firefox?'high-performance':'low-power'",
+    "powerPreference:'low-power'",
+    "failIfMajorPerformanceCaveat:false",
+    "stage.dataset.webglInit='edge-webgl2'",
+    "stage.dataset.webglInit='edge-three-managed'",
+    "stage.dataset.webglInit='canvas-emergency'",
     "stage.dataset.eyeContract='edge-shared-webgl'",
 ):
     if needle not in webgl_head:
         fail(f'Edge/WebGL shared-scene contract missing: {needle}')
-if "if(firefox){" in webgl_head and 'initCanvasHead' in webgl_head.split("if(firefox){", 1)[1][:180]:
-    fail('Firefox must not be forced onto the CPU Canvas2D renderer when WebGL is available')
+for forbidden in (
+    'const firefox=/Firefox',
+    'powerPreference=firefox',
+):
+    if forbidden in webgl_head:
+        fail(f'Browser-specific head renderer logic is forbidden: {forbidden}')
 for needle in (
     'PromptMaster Pro',
     'PromptMaster Free',
