@@ -307,6 +307,8 @@ export async function initHead(){
     let cleanup=()=>{};
     const onLost=e=>{
       e.preventDefault();
+      stage.dataset.webglInit='canvas-context-loss';
+      delete stage.dataset.eyeContract;
       cleanup();
       void initCanvasHead({sourceCanvas:canvas,stage,fallback});
     };
@@ -321,6 +323,7 @@ export async function initHead(){
       window.removeEventListener('pointermove',onPointer);
       document.removeEventListener('visibilitychange',onVisibility);
       reduced.removeEventListener('change',onReduced);
+      stage.dataset.webglCleanup='1';
       geometries.forEach(g=>g.dispose());
       materials.forEach(m=>m.dispose());
       renderer.dispose();
