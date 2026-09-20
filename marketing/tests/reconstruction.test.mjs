@@ -78,6 +78,13 @@ test('non-WebGL fallback keeps the actual head visible without camera access',()
   assert.match(fallback,/period:9\.1\+\(index%3\)\*1\.05/);
   assert.match(fallback,/sceneLayers/);
   assert.match(fallback,/drawSceneLayers/);
+  assert.match(fallback,/const dustCount=mobile\?220:680/);
+  assert.match(fallback,/dustPoints/);
+  assert.match(fallback,/dustLayer=createSceneLayer\(\)/);
+  assert.match(fallback,/rgba\(52,147,223,\.30\)/);
+  assert.match(fallback,/offsetX=-smoothX\*\.06\*worldPixelScale/);
+  assert.match(fallback,/offsetY=-smoothY\*\.03\*worldPixelScale/);
+  assert.match(fallback,/drawDustLayer\(\)/);
   assert.match(fallback,/meta\.scaleSum\+=worldPixelScale/);
   assert.match(fallback,/drawSceneLayers\(sceneLayers\.landscape,\.72,\.075,\.018,\.22,\.006\)/);
   assert.match(fallback,/drawSceneLayers\(sceneLayers\.blend,\.68,\.075,0,\.24,\.008\)/);
