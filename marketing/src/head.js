@@ -4,7 +4,7 @@ import {MeshSurfaceSampler} from 'three/addons/math/MeshSurfaceSampler.js';
 import {createLowerSceneData,initCanvasHead} from './head-canvas2d.js';
 
 export async function initHead(){
-  const canvas=document.getElementById('particle-head');
+  let canvas=document.getElementById('particle-head');
   if(!canvas)return;
   const stage=canvas.parentElement;
   const fallback=stage.querySelector('.head-fallback');
@@ -13,47 +13,90 @@ export async function initHead(){
   // A second Three.js-managed WebGL retry uses the same scene/animation code
   // before the CPU Canvas2D emergency fallback is allowed.
   let renderer;
-  const attributes={
-    alpha:true,
-    antialias:true,
-    powerPreference:'low-power',
-    failIfMajorPerformanceCaveat:false,
-  };
   let webglError=null;
-  try{
-    const webglContext=canvas.getContext('webgl2',attributes);
-    if(webglContext){
+  const webglAttempts=[
+    {
+      id:'edge-webgl2',
+      context:{
+        alpha:true,
+        antialias:true,
+        powerPreference:'low-power',
+        failIfMajorPerformanceCaveat:false,
+      },
+      renderer:{alpha:true,antialias:true,powerPreference:'low-power'},
+    },
+    {
+      id:'edge-webgl2-no-msaa',
+      context:{
+        alpha:true,
+        antialias:false,
+        depth:true,
+        stencil:false,
+        premultipliedAlpha:true,
+        preserveDrawingBuffer:false,
+        powerPreference:'default',
+        failIfMajorPerformanceCaveat:false,
+      },
+      renderer:{alpha:true,antialias:false,powerPreference:'default'},
+    },
+    {
+      id:'edge-webgl2-minimal',
+      context:{
+        alpha:true,
+        antialias:false,
+        failIfMajorPerformanceCaveat:false,
+      },
+      renderer:{alpha:true,antialias:false},
+    },
+  ];
+  const attempted=[];
+  const freshCanvas=()=>{
+    const replacement=canvas.cloneNode(false);
+    canvas.replaceWith(replacement);
+    canvas=replacement;
+    return canvas;
+  };
+  for(let attemptIndex=0;attemptIndex<webglAttempts.length;attemptIndex++){
+    const attempt=webglAttempts[attemptIndex];
+    if(renderer)break;
+    attempted.push(attempt.id);
+    if(attemptIndex>0)freshCanvas();
+    try{
+      const webglContext=canvas.getContext('webgl2',attempt.context);
+      if(!webglContext)continue;
       renderer=new THREE.WebGLRenderer({
         canvas,
         context:webglContext,
-        alpha:true,
-        antialias:true,
-        powerPreference:'low-power',
+        ...attempt.renderer,
       });
-      stage.dataset.webglInit='edge-webgl2';
-    }
-  }catch(error){
-    webglError=error;
-  }
-  if(!renderer){
-    try{
-      renderer=new THREE.WebGLRenderer({
-        canvas,
-        alpha:true,
-        antialias:true,
-        powerPreference:'low-power',
-      });
-      stage.dataset.webglInit='edge-three-managed';
+      stage.dataset.webglInit=attempt.id;
     }catch(error){
       webglError=error;
     }
   }
+  if(!renderer){
+    attempted.push('edge-three-managed-no-msaa');
+    freshCanvas();
+    try{
+      renderer=new THREE.WebGLRenderer({
+        canvas,
+        alpha:true,
+        antialias:false,
+        powerPreference:'default',
+      });
+      stage.dataset.webglInit='edge-three-managed-no-msaa';
+    }catch(error){
+      webglError=error;
+    }
+  }
+  stage.dataset.webglAttempts=attempted.join(',');
   if(!renderer){
     console.info(
       'WebGL2 nicht verfügbar – Canvas2D-Notfallrenderer wird verwendet.',
       webglError?.message||webglError||''
     );
     stage.dataset.webglInit='canvas-emergency';
+    stage.dataset.webglFailure=String(webglError?.message||webglError||'context-unavailable').slice(0,240);
     await initCanvasHead({sourceCanvas:canvas,stage,fallback});
     return;
   }

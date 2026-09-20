@@ -220,6 +220,7 @@ function rasterizeDepthMesh(depth,project,width,height,cell){
   const rows=Math.max(1,Math.ceil(height/cell));
   const grid=new Float32Array(cols*rows);
   grid.fill(-1e9);
+  const maskPath=new Path2D();
   const vertexCount=depth.positions.length/3;
   for(let i=0;i<vertexCount;i++){
     const o=i*3;
@@ -238,6 +239,10 @@ function rasterizeDepthMesh(depth,project,width,height,cell){
     const cx=depth.screen[d],cy=depth.screen[d+1],cz=depth.screen[d+2];
     const area=(bx-ax)*(cy-ay)-(by-ay)*(cx-ax);
     if(Math.abs(area)<1e-7)continue;
+    maskPath.moveTo(ax,ay);
+    maskPath.lineTo(bx,by);
+    maskPath.lineTo(cx,cy);
+    maskPath.closePath();
     let minX=Math.floor(Math.min(ax,bx,cx)/cell),maxX=Math.floor(Math.max(ax,bx,cx)/cell);
     let minY=Math.floor(Math.min(ay,by,cy)/cell),maxY=Math.floor(Math.max(ay,by,cy)/cell);
     if(maxX<0||maxY<0||minX>=cols||minY>=rows)continue;
@@ -257,7 +262,7 @@ function rasterizeDepthMesh(depth,project,width,height,cell){
       }
     }
   }
-  return {grid,cols,rows};
+  return {grid,cols,rows,maskPath};
 }
 export async function initCanvasHead({sourceCanvas,stage,fallback}){
   sourceCanvas.hidden=true;
@@ -355,6 +360,27 @@ export async function initCanvasHead({sourceCanvas,stage,fallback}){
   const reduced=matchMedia('(prefers-reduced-motion:reduce)');
   let paused=reduced.matches,disposed=false,visible=true,last=0,lastFrame=0,elapsed=0,mouseX=0,mouseY=0,smoothX=0,smoothY=0,lastPointerX=0,lastPointerY=0,hasPointer=false,cursorEnergy=0,dissolve=0,headYaw=0,headPitch=0,pointPower=1,topologyPower=1,edition='',raf=0,width=1,height=1,dpr=1;
   let sceneLayers={landscape:[],blend:[],sky:[]};
+  let cachedDepth=null,cachedDepthYaw=Infinity,cachedDepthPitch=Infinity,cachedDepthAt=-Infinity;
+
+  const makePointBatches=()=>Array.from({length:24},()=>new Path2D());
+  const addPointToBatch=(batches,x,y,size,intensity,alpha)=>{
+    const ib=clamp(Math.floor(clamp(intensity,0,1)*6),0,5);
+    const ab=clamp(Math.floor(clamp(alpha,0,1)*4),0,3);
+    batches[ab*6+ib].rect(x-size*.5,y-size*.5,size,size);
+  };
+  const paintPointBatches=(batches,rRatio,gRatio)=>{
+    for(let ab=0;ab<4;ab++){
+      const alpha=(ab+.65)/4;
+      for(let ib=0;ib<6;ib++){
+        const intensity=(ib+.58)/6;
+        const r=Math.round(clamp(rRatio*intensity,0,1)*255);
+        const g=Math.round(clamp(gRatio*intensity,0,1)*255);
+        const b=Math.round(clamp(intensity,0,1)*255);
+        context.fillStyle=`rgba(${r},${g},${b},${alpha})`;
+        context.fill(batches[ab*6+ib]);
+      }
+    }
+  };
 
   const sceneProject=(x,y,z)=>{
     const viewZ=width<650?5.3:4.35;
@@ -439,7 +465,7 @@ export async function initCanvasHead({sourceCanvas,stage,fallback}){
     const rect=stage.getBoundingClientRect();
     width=Math.max(1,Math.round(rect.width));
     height=Math.max(1,Math.round(rect.height));
-    dpr=Math.min(devicePixelRatio||1,1.5);
+    dpr=1;
     canvas.width=Math.round(width*dpr);
     canvas.height=Math.round(height*dpr);
     canvas.style.width=width+'px';
@@ -451,6 +477,7 @@ export async function initCanvasHead({sourceCanvas,stage,fallback}){
 
   function draw(now){
     if(disposed)return;
+    const drawStarted=performance.now();
     const dt=Math.min(.05,Math.max(0,(now-last)/1000||0));last=now;elapsed+=dt;
     context.clearRect(0,0,width,height);
     const glow=context.createRadialGradient(width*.5,height*.42,0,width*.5,height*.42,Math.min(width,height)*.38);
@@ -469,7 +496,9 @@ export async function initCanvasHead({sourceCanvas,stage,fallback}){
 
     // Edge/WebGL shooting-star contract: same six trails, schedule, direction,
     // height, depth, duration and scale progression.
-    for(const star of shootingStars){
+    let activeStarProbe='';
+    for(let starIndex=0;starIndex<shootingStars.length;starIndex++){
+      const star=shootingStars[starIndex];
       const activeTime=elapsed-star.offset;
       const local=activeTime>=0?activeTime%star.period:-1;
       if(local<0||local>=3.45)continue;
@@ -482,16 +511,22 @@ export async function initCanvasHead({sourceCanvas,stage,fallback}){
       const trailWidth=(.72+progress*.48+star.scaleBias)*worldPixelScale;
       const trailHeight=Math.max(1,(.026+progress*.022)*worldPixelScale);
       const alpha=Math.sin(progress*Math.PI)*star.opacity;
+      if(!activeStarProbe){
+        activeStarProbe=[starIndex,x,y,star.direction,progress].map(value=>
+          typeof value==='number'?value.toFixed(3):value
+        ).join(',');
+      }
       context.save();
       context.globalAlpha=alpha;
       context.translate(x,y);
-      context.rotate(star.direction>0?-.22:.22);
+      context.rotate(star.direction>0?.22:-.22);
       context.drawImage(
         star.direction>0?shootingStarLtr:shootingStarRtl,
         -trailWidth*.5,-trailHeight*.5,trailWidth,trailHeight
       );
       context.restore();
     }
+    stage.dataset.starProbe=activeStarProbe;
 
     // Strong beacons use the exact same 3D positions/phases/rates as Edge.
     for(const beacon of beacons){
@@ -565,13 +600,40 @@ export async function initCanvasHead({sourceCanvas,stage,fallback}){
 
     const surface=cloud.surface;
     // Match Three.js: the original GLB triangle mesh is rendered first as a
-    // colorless depth occluder at scale .992.
-    const depthCell=3;
-    const depthRaster=rasterizeDepthMesh(cloud.depth,project,width,height,depthCell);
+    // colorless depth occluder at scale .992. Rebuild the CPU depth mesh only
+    // when the head orientation changed materially; the Edge renderer keeps
+    // this on the GPU, while re-rasterizing every Canvas frame caused the
+    // observed multi-hundred-millisecond stalls.
+    const depthCell=6;
+    if(
+      !cachedDepth
+      || Math.abs(yaw-cachedDepthYaw)>.018
+      || Math.abs(pitch-cachedDepthPitch)>.014
+      || elapsed-cachedDepthAt>.14
+    ){
+      cachedDepth=rasterizeDepthMesh(cloud.depth,project,width,height,depthCell);
+      cachedDepthYaw=yaw;
+      cachedDepthPitch=pitch;
+      cachedDepthAt=elapsed;
+    }
+    const depthRaster=cachedDepth;
     const depthCols=depthRaster.cols;
     const depthRows=depthRaster.rows;
     const depthGrid=depthRaster.grid;
-    const surfaceBuckets=Array.from({length:10},()=>[]);
+
+    // WebGL's invisible depth mesh blocks stars and ground lights behind the
+    // head. Canvas point gaps previously let those effects shine through and
+    // look as if they were in front of the face/neck.
+    context.save();
+    context.globalCompositeOperation='destination-out';
+    context.globalAlpha=1;
+    context.fillStyle='#000';
+    context.fill(depthRaster.maskPath);
+    context.restore();
+    stage.dataset.canvasOcclusion='head-silhouette-v1';
+    context.globalCompositeOperation='lighter';
+
+    const surfaceBatches=makePointBatches();
     for(let i=0;i<surface.seeds.length;i++){
       const o=i*3;
       const x=surface.positions[o],y=surface.positions[o+1],z=surface.positions[o+2];
@@ -596,30 +658,19 @@ export async function initCanvasHead({sourceCanvas,stage,fallback}){
       const cellX=clamp(Math.floor(sx2/depthCell),0,depthCols-1);
       const cellY=clamp(Math.floor(sy2/depthCell),0,depthRows-1);
       const depthIndex=cellY*depthCols+cellX;
+      if(depthGrid[depthIndex]>-1e8&&rz2<depthGrid[depthIndex]-.025)continue;
       const pointSize=(1.9+pointPower*.43+released*.9)*(4.5/depth);
       const colorBoost=1.42+pointPower*.42;
-      const r=Math.round(clamp(surface.colors[o]*colorBoost,0,1)*255);
-      const g=Math.round(clamp(surface.colors[o+1]*colorBoost,0,1)*255);
-      const b=Math.round(clamp(surface.colors[o+2]*colorBoost,0,1)*255);
-      const bucket=clamp(Math.floor((rz2+1.7)/3.4*10),0,9);
-      surfaceBuckets[bucket].push(sx2,sy2,pointSize,r,g,b,alpha,depthIndex,rz2);
+      const intensity=clamp(surface.colors[o+2]*colorBoost,0,1);
+      headMinX=Math.min(headMinX,sx2);headMaxX=Math.max(headMaxX,sx2);
+      headMinY=Math.min(headMinY,sy2);headMaxY=Math.max(headMaxY,sy2);
+      const renderSize=Math.max(.465,Math.min(1.50,pointSize*.538));
+      addPointToBatch(surfaceBatches,sx2,sy2,renderSize,intensity,clamp(alpha*.44,0,1));
     }
-    for(const bucket of surfaceBuckets){
-      for(let i=0;i<bucket.length;i+=9){
-        const [x,y,size,r,g,b,a,depthIndex,rz2]=bucket.slice(i,i+9);
-        if(depthGrid[depthIndex]>-1e8&&rz2<depthGrid[depthIndex]-.025)continue;
-        headMinX=Math.min(headMinX,x);headMaxX=Math.max(headMaxX,x);
-        headMinY=Math.min(headMinY,y);headMaxY=Math.max(headMaxY,y);
-        // At CSS-pixel scale the WebGL radial point shader is visually a
-        // sub-2px dot. Keeping the Canvas quad in that range eliminates the
-        // blocky Firefox mask while preserving the deterministic point cloud.
-        const renderSize=Math.max(.465,Math.min(1.50,size*.538));
-        context.fillStyle=`rgba(${r},${g},${b},${clamp(a*.44,0,1)})`;
-        context.fillRect(x-renderSize*.5,y-renderSize*.5,renderSize,renderSize);
-      }
-    }
+    paintPointBatches(surfaceBatches,.14,.63);
 
     const topology=cloud.topology;
+    const topologyBatches=makePointBatches();
     // Anchor the Firefox eye glows to the actual high-detail eyelid geometry.
     // This avoids a perceptual offset caused by drawing a full 2D radial halo
     // over a depth-tested point cloud.
@@ -655,13 +706,11 @@ export async function initCanvasHead({sourceCanvas,stage,fallback}){
       }
       const size=(1.55+topology.detail[i]*1.75+topologyPower*.18)*(4.5/depth);
       const detailBoost=1+topology.detail[i]*.72;
-      const r=Math.round(clamp(topology.colors[o]*detailBoost*1.55,0,1)*255);
-      const g=Math.round(clamp(topology.colors[o+1]*detailBoost*1.55,0,1)*255);
-      const b=Math.round(clamp(topology.colors[o+2]*detailBoost*1.55,0,1)*255);
+      const intensity=clamp(topology.colors[o+2]*detailBoost*1.55,0,1);
       const renderSize=Math.max(.465,Math.min(1.71,size*.518));
-      context.fillStyle=`rgba(${r},${g},${b},${clamp(alpha*.40,0,1)})`;
-      context.fillRect(sx2-renderSize*.5,sy2-renderSize*.5,renderSize,renderSize);
+      addPointToBatch(topologyBatches,sx2,sy2,renderSize,intensity,clamp(alpha*.40,0,1));
     }
+    paintPointBatches(topologyBatches,.10,.58);
 
     if(Number.isFinite(headMinX)){
       stage.dataset.headBounds=[headMinX,headMinY,headMaxX,headMaxY].map(v=>Math.round(v)).join(',');
@@ -700,11 +749,12 @@ export async function initCanvasHead({sourceCanvas,stage,fallback}){
     stage.dataset.eyeAnchors=renderedEyes.join(',');
     context.shadowBlur=0;
     context.globalCompositeOperation='source-over';
+    stage.dataset.canvasDrawMs=(performance.now()-drawStarted).toFixed(1);
   }
 
   function loop(now){
     if(disposed||paused||!visible||document.hidden){raf=0;return;}
-    if(now-lastFrame>=32){lastFrame=now;draw(now);}
+    if(now-lastFrame>=24){lastFrame=now;draw(now);}
     raf=requestAnimationFrame(loop);
   }
   function sync(){

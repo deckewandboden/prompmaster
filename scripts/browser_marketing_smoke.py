@@ -285,7 +285,10 @@ def main() -> int:
                         f'validieren, erhalten={metrics["headRenderer"]!r}'
                     )
                 if engine in {'chromium', 'firefox'} and metrics['webglInit'] not in {
-                    'edge-webgl2', 'edge-three-managed'
+                    'edge-webgl2',
+                    'edge-webgl2-no-msaa',
+                    'edge-webgl2-minimal',
+                    'edge-three-managed-no-msaa',
                 }:
                     fail(
                         f'{engine} {width}px: Browser verwendet nicht die gemeinsame '
@@ -476,6 +479,54 @@ def main() -> int:
                     )
 
             if engine == 'chromium':
+                # Compatibility acceptance: simulate a browser/driver where the
+                # canonical antialiased WebGL2 context has no EGL config, but a
+                # no-MSAA WebGL2 context is available. The page must retry on a
+                # fresh canvas and still use the exact same WebGL scene.
+                compat_page = browser.new_page(
+                    viewport={'width': 1440, 'height': 1000},
+                    device_scale_factor=1,
+                )
+                compat_page.add_init_script(
+                    """(() => {
+                      const original = HTMLCanvasElement.prototype.getContext;
+                      HTMLCanvasElement.prototype.getContext = function(type, options, ...rest) {
+                        if (type === 'webgl2' && options?.antialias === true) {
+                          return null;
+                        }
+                        return original.call(this, type, options, ...rest);
+                      };
+                    })();"""
+                )
+                compat_page.goto(base, wait_until='networkidle')
+                compat_page.wait_for_function(
+                    "document.querySelector('.head-stage')?.dataset.headReady === '1'",
+                    timeout=15000,
+                )
+                compat_result = compat_page.evaluate(
+                    """() => {
+                      const stage = document.querySelector('.head-stage');
+                      return {
+                        renderer: stage?.dataset.headRenderer || '',
+                        init: stage?.dataset.webglInit || '',
+                        attempts: stage?.dataset.webglAttempts || '',
+                      };
+                    }"""
+                )
+                if compat_result['renderer'] != 'webgl':
+                    fail(f'WebGL compatibility retry fell back to Canvas: {compat_result}')
+                if compat_result['init'] != 'edge-webgl2-no-msaa':
+                    fail(
+                        'WebGL compatibility retry did not select the no-MSAA '
+                        f'Edge scene: {compat_result}'
+                    )
+                if not compat_result['attempts'].startswith(
+                    'edge-webgl2,edge-webgl2-no-msaa'
+                ):
+                    fail(f'WebGL compatibility retry order invalid: {compat_result}')
+                compat_page.close()
+
+            if engine == 'chromium':
                 # Export clean WebGL scene masters without navigation/cards.
                 # These are generated from the canonical Chromium/Edge renderer
                 # and can be used as pixel-stable no-WebGL fallbacks.
@@ -561,6 +612,13 @@ def main() -> int:
                   headModelRequested: performance.getEntriesByType('resource')
                     .some(r => r.name.includes('/models/head.glb')),
                   ctaVisible: !!document.querySelector('.product.pro a.button'),
+                  headRenderer: document.querySelector('.head-stage')?.dataset.headRenderer || '',
+                  webglInit: document.querySelector('.head-stage')?.dataset.webglInit || '',
+                  canvasDrawMs: parseFloat(
+                    document.querySelector('.head-stage')?.dataset.canvasDrawMs || '9999'
+                  ),
+                  canvasOcclusion: document.querySelector('.head-stage')?.dataset.canvasOcclusion || '',
+                  starProbe: document.querySelector('.head-stage')?.dataset.starProbe || '',
                 })"""
             )
             if not fallback_metrics['canvasHidden'] or not fallback_metrics['fallbackVisible']:
@@ -587,6 +645,20 @@ def main() -> int:
                         'No-WebGL: Kopf ist gegenüber der Edge-Komposition zu klein '
                         f'({head_width}x{head_height}px)'
                     )
+            if fallback_metrics['headRenderer'] != 'canvas2d':
+                fail(f'No-WebGL: falscher Renderer {fallback_metrics["headRenderer"]!r}')
+            if fallback_metrics['webglInit'] != 'canvas-emergency':
+                fail(f'No-WebGL: falscher WebGL-Fallbackstatus {fallback_metrics["webglInit"]!r}')
+            if fallback_metrics['canvasOcclusion'] != 'head-silhouette-v1':
+                fail(
+                    'No-WebGL: Kopf-Occlusion fehlt; Sternschnuppen/Lichter können '
+                    'durch Gesicht oder Hals scheinen'
+                )
+            if fallback_metrics['canvasDrawMs'] > 70:
+                fail(
+                    f'No-WebGL: Canvas2D-Zeichenzeit zu hoch '
+                    f'({fallback_metrics["canvasDrawMs"]:.1f} ms > 70 ms)'
+                )
             if not fallback_metrics['headModelRequested']:
                 fail('No-WebGL: Canvas2D-Fallback verwendet das Kopfmodell nicht')
             if not fallback_metrics['ctaVisible']:
@@ -599,6 +671,40 @@ def main() -> int:
             fallback_after = hashlib.sha256(fallback_canvas.screenshot()).hexdigest()
             if fallback_before == fallback_after:
                 fail('No-WebGL: Kopf-/Bodenanimation ist statisch')
+
+            fallback_page.wait_for_function(
+                "document.querySelector('.head-stage')?.dataset.starProbe",
+                timeout=7000,
+            )
+            star_pair = None
+            for _ in range(5):
+                first = fallback_page.evaluate(
+                    "document.querySelector('.head-stage')?.dataset.starProbe || ''"
+                )
+                fallback_page.wait_for_timeout(140)
+                second = fallback_page.evaluate(
+                    "document.querySelector('.head-stage')?.dataset.starProbe || ''"
+                )
+                if first and second and first.split(',')[0] == second.split(',')[0]:
+                    star_pair = (first, second)
+                    break
+            if not star_pair:
+                fail('No-WebGL: keine stabile Sternschnuppen-Bewegungsprobe verfügbar')
+            first_parts = star_pair[0].split(',')
+            second_parts = star_pair[1].split(',')
+            _, x1, y1, direction1, progress1 = map(float, first_parts)
+            _, x2, y2, direction2, progress2 = map(float, second_parts)
+            if direction1 != direction2 or progress2 <= progress1:
+                fail(f'No-WebGL: ungültige Sternschnuppen-Probe {star_pair}')
+            if y2 <= y1:
+                fail(
+                    f'No-WebGL: Sternschnuppe fliegt im Bildschirm nach oben statt '
+                    f'wie Edge nach unten ({y1:.1f} -> {y2:.1f})'
+                )
+            if direction1 > 0 and x2 <= x1:
+                fail(f'No-WebGL: LTR-Sternschnuppe hat falsche X-Richtung {star_pair}')
+            if direction1 < 0 and x2 >= x1:
+                fail(f'No-WebGL: RTL-Sternschnuppe hat falsche X-Richtung {star_pair}')
             fallback_page.close()
 
             # Pricing must remain usable even when a browser/proxy serves a stale
