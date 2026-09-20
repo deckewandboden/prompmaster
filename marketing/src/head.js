@@ -274,6 +274,7 @@ export async function initHead(){
         const rotationFollow=3;
         group.rotation.y+=(targetX-group.rotation.y)*Math.min(1,dt*rotationFollow);
         group.rotation.x+=(smoothPointerY*.18-group.rotation.x)*Math.min(1,dt*rotationFollow);
+        stage.dataset.headYaw=group.rotation.y.toFixed(4);
         group.position.y=Math.sin(elapsed*.42)*.008;
         pointMaterial.uniforms.uTime.value=elapsed;
         landscapeMaterial.uniforms.uTime.value=elapsed;
