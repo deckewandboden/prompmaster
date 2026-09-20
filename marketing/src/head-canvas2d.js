@@ -181,7 +181,7 @@ export async function initCanvasHead({sourceCanvas,stage,fallback}){
   canvas.className='head-fallback-canvas';
   // Empirically align Canvas2D luminance with the canonical Edge/WebGL point
   // energy without changing geometry, alpha coverage or the base scene.
-  canvas.style.filter='brightness(1.03)';
+  canvas.style.filter='brightness(1.04)';
   canvas.setAttribute('aria-hidden','true');
   fallback.append(canvas);
   const context=canvas.getContext('2d',{alpha:true});
