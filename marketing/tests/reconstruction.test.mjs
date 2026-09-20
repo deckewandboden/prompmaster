@@ -37,6 +37,10 @@ test('reconstructed marketing uses latest recovered head engine',()=>{
   assert.match(head,/edge-webgl2-minimal/);
   assert.match(head,/edge-three-managed-no-msaa/);
   assert.match(head,/stage\.dataset\.webglAttempts/);
+  assert.match(head,/stage\.dataset\.webglCleanup='1'/);
+  assert.match(head,/stage\.dataset\.webglInit='canvas-context-loss'/);
+  assert.match(head,/delete stage\.dataset\.eyeContract/);
+  assert.match(head,/canvas\.removeEventListener\('webglcontextlost',onLost\)/);
   assert.match(head,/const freshCanvas=/);
   assert.match(head,/cloneNode\(false\)/);
   assert.match(head,/attemptIndex>0\)freshCanvas\(\)/);
@@ -69,6 +73,7 @@ test('non-WebGL fallback keeps the actual head visible without camera access',()
   assert.match(fallback,/mobile\?105:245/);
   assert.match(fallback,/eyeAnchors/);
   assert.match(fallback,/stage\.dataset\.eyeAnchors/);
+  assert.match(fallback,/delete stage\.dataset\.eyeContract/);
   assert.match(fallback,/shootingStars/);
   assert.match(fallback,/export function createShootingStarCanvas/);
   assert.match(fallback,/export function getShootingStarState/);
