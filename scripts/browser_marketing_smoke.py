@@ -134,8 +134,9 @@ def main() -> int:
                 firefox_env = os.environ.copy()
                 firefox_env.setdefault('MOZ_WEBRENDER', '1')
                 firefox_env.setdefault('LIBGL_ALWAYS_SOFTWARE', '1')
+                firefox_headed = os.getenv('PM_FIREFOX_HEADED') == '1'
                 browser = pw.firefox.launch(
-                    headless=True,
+                    headless=not firefox_headed,
                     env=firefox_env,
                     firefox_user_prefs={
                         'webgl.disabled': False,
