@@ -20,7 +20,9 @@ test('reconstructed marketing uses latest recovered head engine',()=>{
   assert.match(head,/shootingStars/);
   assert.match(head,/createLowerSceneData/);
   assert.match(head,/createShootingStarCanvas/);
+  assert.match(head,/getShootingStarState/);
   assert.match(head,/new THREE\.CanvasTexture\(createShootingStarCanvas\(reverse\)\)/);
+  assert.match(head,/const state=getShootingStarState\(spec,elapsed,smoothPointerX\)/);
   assert.match(head,/lowerSceneContract='edge-shared-v1'/);
   assert.match(head,/initCanvasHead/);
   assert.doesNotMatch(head,/pm-headtrack|getUserMedia|enumerateDevices/);
@@ -66,6 +68,8 @@ test('non-WebGL fallback keeps the actual head visible without camera access',()
   assert.match(fallback,/stage\.dataset\.eyeAnchors/);
   assert.match(fallback,/shootingStars/);
   assert.match(fallback,/export function createShootingStarCanvas/);
+  assert.match(fallback,/export function getShootingStarState/);
+  assert.match(fallback,/const state=getShootingStarState\(star,elapsed,smoothX\)/);
   assert.match(fallback,/createShootingStarCanvas\(false\)/);
   assert.match(fallback,/createShootingStarCanvas\(true\)/);
   assert.match(fallback,/export function createLowerSceneData/);
