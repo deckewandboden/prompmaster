@@ -427,8 +427,12 @@ class NetstyleMutationReleaseAcceptanceTests(TestCase):
         company = Company.objects.get(customer_number='DEMO-1001')
         free_license = License.objects.filter(company=company, status='free').first()
         target = (
-            Membership.objects.filter(company=company, active=True, role='member')
-            .exclude(user__license_assignments__ended_at__isnull=True)
+            Membership.objects.filter(
+                company=company,
+                active=True,
+                role='member',
+                user__license_assignments__isnull=True,
+            )
             .select_related('user')
             .first()
         )
