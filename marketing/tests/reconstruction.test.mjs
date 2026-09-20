@@ -25,8 +25,13 @@ test('reconstructed marketing uses latest recovered head engine',()=>{
   assert.doesNotMatch(head,/Bewegung pausieren|Bewegung aktivieren|motion-button/);
   assert.match(head,/loadAsync\('\/models\/head\.glb'\)/);
   assert.match(head,/Firefox\\\//);
-  assert.match(head,/powerPreference=firefox\?'high-performance':'low-power'/);
-  assert.doesNotMatch(head,/if\(firefox\)\{[\s\S]*initCanvasHead/);
+  assert.doesNotMatch(head,/const firefox=\/Firefox\\\//);
+  assert.doesNotMatch(head,/powerPreference=firefox/);
+  assert.match(head,/powerPreference:'low-power'/);
+  assert.match(head,/failIfMajorPerformanceCaveat:false/);
+  assert.match(head,/stage\.dataset\.webglInit='edge-webgl2'/);
+  assert.match(head,/stage\.dataset\.webglInit='edge-three-managed'/);
+  assert.match(head,/stage\.dataset\.webglInit='canvas-emergency'/);
   assert.match(head,/eyeContract='edge-shared-webgl'/);
   assert.match(head,/new THREE\.WebGLRenderer/);
   assert.equal(gitBlobSha('public/models/head.glb'),'cff335de726fa518c1ef80f4c8aa540037b2f5b2');
