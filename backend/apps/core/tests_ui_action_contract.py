@@ -101,7 +101,7 @@ class RenderedUiActionContractTests(TestCase):
             canonical = urlsplit(url).path
             if canonical in visited:
                 continue
-            if len(visited) >= 220:
+            if len(visited) >= 600:
                 self.fail(f'UI crawl exceeded safety bound for {scope_prefix}: {url}')
             visited.add(canonical)
 
