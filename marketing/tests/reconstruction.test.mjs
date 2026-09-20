@@ -42,6 +42,9 @@ test('reconstructed marketing uses latest recovered head engine',()=>{
   assert.match(head,/attemptIndex>0\)freshCanvas\(\)/);
   assert.match(head,/stage\.dataset\.webglInit='canvas-emergency'/);
   assert.match(head,/eyeContract='edge-shared-webgl'/);
+  assert.match(head,/let cleanup=\(\)=>\{\}/);
+  assert.match(head,/cleanup\(\);[\s\S]*initCanvasHead\(\{sourceCanvas:canvas,stage,fallback\}\)/);
+  assert.match(head,/canvas\.removeEventListener\('webglcontextlost',onLost\)/);
   assert.match(head,/new THREE\.WebGLRenderer/);
   assert.equal(gitBlobSha('public/models/head.glb'),'cff335de726fa518c1ef80f4c8aa540037b2f5b2');
 });
