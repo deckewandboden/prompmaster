@@ -618,6 +618,11 @@ def main() -> int:
                 beacon_webgl.mouse.move(1120, 260)
                 beacon_webgl.wait_for_timeout(2200)
                 webgl_probe = beacon_webgl.evaluate(async_probe_js)
+                webgl_yaw = float(
+                    beacon_webgl.evaluate(
+                        "document.querySelector('.head-stage')?.dataset.headYaw || '0'"
+                    )
+                )
                 beacon_webgl.close()
 
                 beacon_canvas = browser.new_page(
@@ -645,6 +650,11 @@ def main() -> int:
                 beacon_canvas.mouse.move(1120, 260)
                 beacon_canvas.wait_for_timeout(2200)
                 canvas_probe = beacon_canvas.evaluate(async_probe_js)
+                canvas_yaw = float(
+                    beacon_canvas.evaluate(
+                        "document.querySelector('.head-stage')?.dataset.headYaw || '0'"
+                    )
+                )
                 beacon_canvas.close()
 
                 if len(webgl_probe) != 12 or len(canvas_probe) != 12:
@@ -666,6 +676,22 @@ def main() -> int:
                     fail(
                         'Beacon parity: strong glowing points do not match Edge '
                         f'(max coordinate delta={beacon_max_delta:.1f}px > 4px)'
+                    )
+                yaw_delta = abs(webgl_yaw - canvas_yaw)
+                print(
+                    'HEAD YAW PARITY chromium: '
+                    f'webgl={webgl_yaw:.4f} canvas={canvas_yaw:.4f} '
+                    f'delta={yaw_delta:.4f}'
+                )
+                if webgl_yaw < .12 or canvas_yaw < .12:
+                    fail(
+                        'Head motion parity: head did not visibly follow the pointer '
+                        f'(WebGL={webgl_yaw:.4f}, Canvas={canvas_yaw:.4f})'
+                    )
+                if yaw_delta > .035:
+                    fail(
+                        'Head motion parity: Canvas head response differs from Edge '
+                        f'(yaw delta={yaw_delta:.4f} > 0.035)'
                     )
 
             if engine == 'chromium':
@@ -765,6 +791,12 @@ def main() -> int:
                   canvasFrames: parseInt(
                     document.querySelector('.head-stage')?.dataset.canvasFrames || '0', 10
                   ),
+                  canvasElapsed: parseFloat(
+                    document.querySelector('.head-stage')?.dataset.canvasElapsed || '0'
+                  ),
+                  headYaw: parseFloat(
+                    document.querySelector('.head-stage')?.dataset.headYaw || '0'
+                  ),
                   canvasOcclusion: document.querySelector('.head-stage')?.dataset.canvasOcclusion || '',
                   starProbe: document.querySelector('.head-stage')?.dataset.starProbe || '',
                 })"""
@@ -818,6 +850,51 @@ def main() -> int:
                     f'No-WebGL: Canvas2D-Spitzenlast nach Warm-up zu hoch '
                     f'({fallback_metrics["canvasDrawPeakMs"]:.1f} ms > 85 ms)'
                 )
+
+            motion_start = fallback_page.evaluate(
+                """() => {
+                  const stage = document.querySelector('.head-stage');
+                  return {
+                    elapsed: parseFloat(stage?.dataset.canvasElapsed || '0'),
+                    frames: parseInt(stage?.dataset.canvasFrames || '0', 10),
+                  };
+                }"""
+            )
+            fallback_page.mouse.move(1300, 500)
+            fallback_page.wait_for_timeout(1200)
+            motion_end = fallback_page.evaluate(
+                """() => {
+                  const stage = document.querySelector('.head-stage');
+                  return {
+                    elapsed: parseFloat(stage?.dataset.canvasElapsed || '0'),
+                    frames: parseInt(stage?.dataset.canvasFrames || '0', 10),
+                    yaw: parseFloat(stage?.dataset.headYaw || '0'),
+                  };
+                }"""
+            )
+            elapsed_delta = motion_end['elapsed'] - motion_start['elapsed']
+            frame_delta = motion_end['frames'] - motion_start['frames']
+            print(
+                f'NO-WEBGL MOTION DIAGNOSTIC {engine}: '
+                f'elapsed_delta={elapsed_delta:.3f}s '
+                f'frame_delta={frame_delta} yaw={motion_end["yaw"]:.4f}'
+            )
+            if not .85 <= elapsed_delta <= 1.50:
+                fail(
+                    'No-WebGL: Animationszeit läuft nicht in Echtzeit '
+                    f'(1.2s wall clock -> {elapsed_delta:.3f}s animation)'
+                )
+            if frame_delta < 12:
+                fail(
+                    'No-WebGL: Canvas liefert zu wenige bewegte Frames '
+                    f'({frame_delta} Frames in 1.2s)'
+                )
+            if motion_end['yaw'] < .12:
+                fail(
+                    'No-WebGL: Kopf reagiert zu schwach auf Mausbewegung '
+                    f'(yaw={motion_end["yaw"]:.4f})'
+                )
+
             if not fallback_metrics['headModelRequested']:
                 fail('No-WebGL: Canvas2D-Fallback verwendet das Kopfmodell nicht')
             if not fallback_metrics['ctaVisible']:
