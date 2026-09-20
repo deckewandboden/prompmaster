@@ -304,6 +304,7 @@ export async function initCanvasHead({sourceCanvas,stage,fallback}){
   // Canvas2D mirrors the animated lower scene of the WebGL edition instead of
   // degrading Firefox/VDI clients to a head-only fallback.
   const sceneData=createLowerSceneData(mobile);
+    stage.dataset.lowerSceneContract='edge-shared-v1';
   const groundParticles=sceneData.landscape;
   const blendParticles=sceneData.blend;
   const beacons=sceneData.beacons;
