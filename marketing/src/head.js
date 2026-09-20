@@ -280,6 +280,24 @@ export async function initHead(){
         blendMaterial.uniforms.uTime.value=elapsed;beaconMaterial.uniforms.uTime.value=elapsed;trafficMaterial.uniforms.uTime.value=elapsed;skyMaterial.uniforms.uTime.value=elapsed;
         landscapeLights.position.x=-smoothPointerX*.075;landscapeLights.position.y=smoothPointerY*.018;
         landscapeBlend.position.x=landscapeLights.position.x;cityBeacons.position.x=landscapeLights.position.x;trafficLights.position.x=landscapeLights.position.x;skyStars.position.x=-smoothPointerX*.025;
+        {
+          const {width,height}=stage.getBoundingClientRect();
+          const probe=[];
+          camera.updateMatrixWorld();
+          for(let i=0;i<Math.min(6,sceneData.beacons.length);i++){
+            const point=sceneData.beacons[i];
+            const projected=new THREE.Vector3(
+              point.x+cityBeacons.position.x,
+              point.y,
+              point.z
+            ).project(camera);
+            probe.push(
+              Math.round((projected.x*.5+.5)*width),
+              Math.round((-.5*projected.y+.5)*height)
+            );
+          }
+          stage.dataset.beaconProbe=probe.join(',');
+        }
         updateShootingStars();
         cursorEnergy=Math.max(0,cursorEnergy-dt*.75);
         const dissolveTarget=Math.min(.58,Math.max(edition?.42:.055,cursorEnergy*.5));
