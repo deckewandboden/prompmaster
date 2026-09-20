@@ -313,6 +313,85 @@ export async function initCanvasHead({sourceCanvas,stage,fallback}){
 
   const reduced=matchMedia('(prefers-reduced-motion:reduce)');
   let paused=reduced.matches,disposed=false,visible=true,last=0,lastFrame=0,elapsed=0,mouseX=0,mouseY=0,smoothX=0,smoothY=0,lastPointerX=0,lastPointerY=0,hasPointer=false,cursorEnergy=0,dissolve=0,headYaw=0,headPitch=0,pointPower=1,topologyPower=1,edition='',raf=0,width=1,height=1,dpr=1;
+  let sceneLayers={landscape:[],blend:[],sky:[]};
+
+  const sceneProject=(x,y,z)=>{
+    const viewZ=width<650?5.3:4.35;
+    const base=height/(2*Math.tan(39*Math.PI/360)*viewZ);
+    const depth=viewZ-z;
+    const perspective=viewZ/depth;
+    return [
+      width*.5+x*base*perspective,
+      height*.5-(y-.06)*base*perspective,
+      depth,
+      perspective,
+    ];
+  };
+
+  const createSceneLayer=()=>{
+    const layer=document.createElement('canvas');
+    layer.width=Math.max(1,Math.round(width*dpr));
+    layer.height=Math.max(1,Math.round(height*dpr));
+    const layerContext=layer.getContext('2d',{alpha:true});
+    layerContext.setTransform(dpr,0,0,dpr,0,0);
+    layerContext.globalCompositeOperation='lighter';
+    return [layer,layerContext];
+  };
+
+  const rebuildSceneLayers=()=>{
+    const LAND_BUCKETS=8,BLEND_BUCKETS=6,SKY_BUCKETS=6;
+    sceneLayers={
+      landscape:Array.from({length:LAND_BUCKETS},createSceneLayer),
+      blend:Array.from({length:BLEND_BUCKETS},createSceneLayer),
+      sky:Array.from({length:SKY_BUCKETS},createSceneLayer),
+    };
+
+    for(const point of groundParticles){
+      const bucket=Math.floor((point.phase/(Math.PI*2))*LAND_BUCKETS)%LAND_BUCKETS;
+      const [,ctx]=sceneLayers.landscape[bucket];
+      const [x,y,depth]=sceneProject(point.x,point.y,point.z);
+      if(depth<=.1||x<-8||x>width+8||y<-8||y>height+8)continue;
+      const pointScale=4.5/depth;
+      const size=Math.max(.35,(1.15+point.size*1.5+.36)*pointScale);
+      const [r,g,b]=point.color.map(value=>Math.round(value*255));
+      ctx.fillStyle=`rgba(${r},${g},${b},.72)`;
+      ctx.fillRect(x,y,size,size);
+    }
+
+    for(const point of blendParticles){
+      const bucket=Math.floor((point.phase/(Math.PI*2))*BLEND_BUCKETS)%BLEND_BUCKETS;
+      const [,ctx]=sceneLayers.blend[bucket];
+      const [x,y,depth]=sceneProject(point.x,point.y,point.z);
+      if(depth<=.1||x<-8||x>width+8||y<-8||y>height+8)continue;
+      const pointScale=4.5/depth;
+      const size=Math.max(.3,(1.05+point.size*1.35+.35)*pointScale);
+      ctx.fillStyle='rgba(31,168,255,.58)';
+      ctx.fillRect(x,y,size,size);
+    }
+
+    for(const point of skyLights){
+      const bucket=Math.floor((point.phase/(Math.PI*2))*SKY_BUCKETS)%SKY_BUCKETS;
+      const [,ctx]=sceneLayers.sky[bucket];
+      const [x,y,depth]=sceneProject(point.x,point.y,point.z);
+      if(depth<=.1||x<-8||x>width+8||y<-8||y>height+8)continue;
+      const pointScale=4.5/depth;
+      const size=Math.max(.3,(.9+point.size*1.55+.9)*pointScale);
+      ctx.fillStyle='rgba(132,214,255,.78)';
+      ctx.fillRect(x,y,size,size);
+    }
+  };
+
+  const drawSceneLayers=(layers,baseRate,depthShift)=>{
+    const count=layers.length;
+    const offsetPx=-smoothX*depthShift*height*.22;
+    for(let index=0;index<count;index++){
+      const phase=index/count*Math.PI*2;
+      const pulse=.5+.5*Math.sin(elapsed*baseRate+phase);
+      context.globalAlpha=.34+pulse*.66;
+      context.drawImage(layers[index][0],offsetPx,0,width,height);
+    }
+    context.globalAlpha=1;
+  };
   const resize=()=>{
     const rect=stage.getBoundingClientRect();
     width=Math.max(1,Math.round(rect.width));
@@ -323,6 +402,7 @@ export async function initCanvasHead({sourceCanvas,stage,fallback}){
     canvas.style.width=width+'px';
     canvas.style.height=height+'px';
     context.setTransform(dpr,0,0,dpr,0,0);
+    rebuildSceneLayers();
     draw(performance.now());
   };
 
@@ -337,69 +417,76 @@ export async function initCanvasHead({sourceCanvas,stage,fallback}){
     context.fillStyle=glow;context.fillRect(0,0,width,height);
     context.globalCompositeOperation='lighter';
 
-    // Animated sky, city/floor particles and the soft bridge between the head
-    // and the night landscape. Coordinates intentionally follow the WebGL
-    // scene composition so both renderers have the same visual weight.
-    for(const star of skyLights){
-      const wave=.5+.5*Math.sin(elapsed*(1.05+star.size*.72)+star.phase);
-      const twinkle=Math.pow(wave,3.2);
-      context.fillStyle=`rgba(80,190,255,${.035+twinkle*.18})`;
-      const r=.35+star.size*.62+twinkle*.5;
-      context.fillRect(star.x*width,star.y*height,r,r);
-    }
+    // Draw the thousands of weak Edge-equivalent points from cached phase
+    // layers. Positions remain exact; only their shimmer is grouped into phase
+    // buckets so Firefox does not repaint 6,000+ individual quads every frame.
+    drawSceneLayers(sceneLayers.sky,1.34,.025);
+    drawSceneLayers(sceneLayers.landscape,.72,.08);
+    drawSceneLayers(sceneLayers.blend,.68,.08);
+
+    // Edge/WebGL shooting-star contract: same six trails, schedule, direction,
+    // height, depth, duration and scale progression.
     for(const star of shootingStars){
-      const progress=(star.phase+elapsed*star.speed)%1;
-      if(progress<.26){
-        const p=progress/.26;
-        const start=star.direction>0?-.08:1.08;
-        const x=(start+star.direction*p*1.16)*width;
-        const y=(star.y+p*.085)*height;
-        const alpha=Math.sin(p*Math.PI)*.52;
-        context.strokeStyle=`rgba(85,205,255,${alpha})`;
-        context.lineWidth=1;
-        context.beginPath();
-        context.moveTo(x,y);
-        context.lineTo(x-star.direction*width*.035,y-height*.012);
-        context.stroke();
+      const activeTime=elapsed-star.offset;
+      const local=activeTime>=0?activeTime%star.period:-1;
+      if(local<0||local>=3.45)continue;
+      const progress=local/3.45;
+      const startX=star.direction>0?-3.25:3.25;
+      const worldX=startX+star.direction*progress*4.75-smoothX*.035;
+      const worldY=star.y-progress*.76;
+      const [x,y,depth]=sceneProject(worldX,worldY,star.z);
+      if(depth<=.1)continue;
+      const pointScale=4.5/depth;
+      const trailWidth=(.72+progress*.48+star.scaleBias)*height*.12*pointScale;
+      const trailHeight=Math.max(1,(.026+progress*.022)*height*.12*pointScale);
+      const alpha=Math.sin(progress*Math.PI)*star.opacity;
+      context.save();
+      context.translate(x,y);
+      context.rotate(star.direction>0?-.22:.22);
+      const gradient=context.createLinearGradient(-trailWidth*.5,0,trailWidth*.5,0);
+      if(star.direction>0){
+        gradient.addColorStop(0,'rgba(40,150,255,0)');
+        gradient.addColorStop(.72,`rgba(90,205,255,${alpha*.44})`);
+        gradient.addColorStop(.94,`rgba(190,245,255,${alpha*.9})`);
+        gradient.addColorStop(1,`rgba(255,255,255,${alpha})`);
+      }else{
+        gradient.addColorStop(0,`rgba(255,255,255,${alpha})`);
+        gradient.addColorStop(.06,`rgba(190,245,255,${alpha*.9})`);
+        gradient.addColorStop(.28,`rgba(90,205,255,${alpha*.44})`);
+        gradient.addColorStop(1,'rgba(40,150,255,0)');
       }
+      context.fillStyle=gradient;
+      context.fillRect(-trailWidth*.5,-trailHeight*.5,trailWidth,trailHeight);
+      context.restore();
     }
-    for(const dot of groundParticles){
-      const pulse=.5+.5*Math.sin(elapsed*(.5+dot.size*.38)+dot.phase);
-      const x=(.5+dot.x)*width;
-      const y=dot.y*height+Math.sin(elapsed*.22+dot.phase)*height*.0008;
-      const a=.07+pulse*(.16+dot.alpha*.44);
-      context.fillStyle=dot.violet
-        ? `rgba(112,96,255,${a})`
-        : `rgba(22,154,255,${a})`;
-      const size=.45+dot.size*.82+pulse*.35;
-      context.fillRect(x,y,size,size);
-    }
-    for(const dot of blendParticles){
-      const pulse=.5+.5*Math.sin(elapsed*(.55+dot.size*.28)+dot.phase);
-      const x=(.5+dot.x)*width;
-      const y=dot.y*height+Math.sin(elapsed*.24+dot.phase)*height*.001;
-      context.fillStyle=`rgba(35,170,255,${.055+pulse*.16})`;
-      const size=.45+dot.size*.68+pulse*.32;
-      context.fillRect(x,y,size,size);
-    }
+
+    // Strong beacons use the exact same 3D positions/phases/rates as Edge.
     for(const beacon of beacons){
-      const wave=.5+.5*Math.sin(elapsed*beacon.rate+beacon.phase);
+      const wave=.5+.5*Math.sin(elapsed*(1.05+beacon.rate)+beacon.phase);
       const flash=Math.pow(wave,7);
-      const x=(.5+beacon.x)*width;
-      const y=beacon.y*height;
-      const radius=1.2+flash*5.8;
+      const [x,y,depth]=sceneProject(beacon.x-smoothX*.08,beacon.y,beacon.z);
+      if(depth<=.1)continue;
+      const pointScale=4.5/depth;
+      const radius=Math.max(.8,(2.8+flash*8.5)*pointScale*.5);
       const g=context.createRadialGradient(x,y,0,x,y,radius);
-      g.addColorStop(0,`rgba(210,250,255,${.16+flash*.84})`);
-      g.addColorStop(.22,`rgba(90,215,255,${.10+flash*.52})`);
+      g.addColorStop(0,`rgba(97,230,255,${Math.min(1,.14+flash*1.28)})`);
+      g.addColorStop(.42,`rgba(70,205,255,${.08+flash*.48})`);
       g.addColorStop(1,'rgba(20,130,255,0)');
       context.fillStyle=g;
       context.beginPath();context.arc(x,y,radius,0,Math.PI*2);context.fill();
     }
+
+    // Moving traffic lights also follow Edge's world-space lane coordinates.
     for(const light of traffic){
-      let x=(light.phase+elapsed*light.speed)%1;
-      if(x<0)x+=1;
-      context.fillStyle=`rgba(125,225,255,${light.alpha*.62})`;
-      context.fillRect(x*width,light.y*height,2.2,1.3);
+      let worldX=(light.phase+elapsed*light.speed+4.2)%8.4;
+      if(worldX<0)worldX+=8.4;
+      worldX=worldX-4.2-smoothX*.08;
+      const [x,y,depth]=sceneProject(worldX,light.y,light.z);
+      if(depth<=.1)continue;
+      const alpha=.48+.35*Math.sin(elapsed*1.7+light.phase);
+      const size=Math.max(.8,2.5*(4.5/depth));
+      context.fillStyle=`rgba(107,230,255,${alpha})`;
+      context.fillRect(x,y,size,size*.52);
     }
 
     const inputFollow=3.15;
