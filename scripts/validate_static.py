@@ -555,9 +555,15 @@ if re.search(r'\.brand\s+img\s*\{[^}]*height\s*:\s*47px[^}]*width\s*:\s*54px', c
 dashboard_template = (ROOT/'backend/templates/ns_admin/dashboard.html').read_text(encoding='utf-8')
 dashboard_views = (ROOT/'backend/apps/core/admin_views.py').read_text(encoding='utf-8')
 dashboard_css = (ROOT/'backend/static/css/app.css').read_text(encoding='utf-8')
-for needle in ("row['percent_css']", "format(row['percent'], '.1f')"):
+for needle in (
+    "row['percent_css']",
+    "format(row['percent'], '.1f')",
+    "active_licenses = License.objects.filter(valid_until__gt=now, status__in=['active', 'free'])",
+    "active_licenses.values('product__name')",
+    "'licenses': active_licenses.count()",
+):
     if needle not in dashboard_views:
-        fail(f'Dashboard locale-safe percentage contract missing: {needle}')
+        fail(f'Dashboard rendering/data contract missing: {needle}')
 for needle in ('height:{{ row.percent_css }}%', '--share:{{ product_mix.0.percent_css }}%', 'class="revenue-value"', 'class="alert-stack"'):
     if needle not in dashboard_template:
         fail(f'Dashboard rendering contract missing: {needle}')
