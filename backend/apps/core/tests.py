@@ -14,9 +14,11 @@ from django.utils import timezone
 
 from apps.accounts.models import User
 from apps.audit.models import AuditEvent
+from apps.catalog.models import Product
 from apps.integrations.models import ServiceAccount
 from apps.companies.models import Company
 from apps.legal.models import DeletionRequest
+from apps.licenses.models import License
 from apps.orders.models import Order
 from .middleware import CorrelationIdMiddleware, JsonLogFormatter
 from .datagrid import DataGrid, csv_response
