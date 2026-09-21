@@ -523,7 +523,8 @@ export async function initCanvasHead({sourceCanvas,stage,fallback}){
     worldShiftX,
     pointerWorldShiftY=0,
     bobRate=0,
-    bobWorldAmplitude=0
+    bobWorldAmplitude=0,
+    energy=1
   )=>{
     const count=layers.length;
     for(let index=0;index<count;index++){
@@ -536,7 +537,10 @@ export async function initCanvasHead({sourceCanvas,stage,fallback}){
       const bobOffsetY=bobWorldAmplitude
         ? -Math.sin(elapsed*bobRate+phase)*bobWorldAmplitude*worldPixelScale
         : 0;
-      context.globalAlpha=.34+pulse*.66;
+      // Canvas compositing is slightly dimmer than the WebGL point
+      // shader on the cached lower landscape layers. Apply only a small energy
+      // correction here; coordinates, phase buckets and geometry stay exact.
+      context.globalAlpha=Math.min(1,(.34+pulse*.66)*energy);
       context.drawImage(layer,offsetX,pointerOffsetY+bobOffsetY,width,height);
     }
     context.globalAlpha=1;
@@ -611,8 +615,8 @@ export async function initCanvasHead({sourceCanvas,stage,fallback}){
     // layers. Positions remain exact; only their shimmer is grouped into phase
     // buckets so Firefox does not repaint 6,000+ individual quads every frame.
     drawSceneLayers(sceneLayers.sky,1.34,.025);
-    drawSceneLayers(sceneLayers.landscape,.72,.075,.018,.22,.006);
-    drawSceneLayers(sceneLayers.blend,.68,.075,0,.24,.008);
+    drawSceneLayers(sceneLayers.landscape,.72,.075,.018,.22,.006,1.08);
+    drawSceneLayers(sceneLayers.blend,.68,.075,0,.24,.008,1.08);
     drawDustLayer();
 
     // Edge/WebGL shooting-star contract: same six trails, schedule, direction,
