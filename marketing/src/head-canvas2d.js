@@ -487,7 +487,9 @@ export async function initCanvasHead({sourceCanvas,stage,fallback}){
       meta.scaleSum+=worldPixelScale;meta.count++;
       const pointScale=4.5/depth;
       const size=Math.max(.35,(1.15+point.size*1.5+.36)*pointScale);
-      const [r,g,b]=point.color.map(value=>Math.round(value*255));
+      // WebGL landscape fragment shader emits vColor*1.72. Preserve
+      // that exact peak color in Canvas; only the rasterizer differs.
+      const [r,g,b]=point.color.map(value=>Math.round(clamp(value*1.72,0,1)*255));
       // WebGL landscape vAlpha ranges from .24 to .82. Keep the
       // cached layer at the same maximum and reconstruct the exact pulse alpha
       // during compositing below.
