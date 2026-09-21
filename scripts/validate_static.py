@@ -652,6 +652,7 @@ for needle in (
     'stage.dataset.canvasDrawMs',
     'stage.dataset.canvasDrawPeakMs',
     'stage.dataset.canvasElapsed=elapsed.toFixed(3)',
+    'stage.dataset.canvasClockAt=now.toFixed(1)',
     'stage.dataset.headYaw=headYaw.toFixed(4)',
     'const rawDt=last>0?Math.max(0,(now-last)/1000):0',
     'const stateDt=Math.min(rawDt,.25)',
