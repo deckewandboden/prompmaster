@@ -829,6 +829,17 @@ def main() -> int:
                   canvasDrawMs: parseFloat(
                     document.querySelector('.head-stage')?.dataset.canvasDrawMs || '9999'
                   ),
+                  canvasDepthMs: parseFloat(
+                    document.querySelector('.head-stage')?.dataset.canvasDepthMs || '9999'
+                  ),
+                  canvasDepthRebuilt:
+                    document.querySelector('.head-stage')?.dataset.canvasDepthRebuilt || '',
+                  canvasSurfaceMs: parseFloat(
+                    document.querySelector('.head-stage')?.dataset.canvasSurfaceMs || '9999'
+                  ),
+                  canvasTopologyMs: parseFloat(
+                    document.querySelector('.head-stage')?.dataset.canvasTopologyMs || '9999'
+                  ),
                   canvasDrawPeakMs: parseFloat(
                     document.querySelector('.head-stage')?.dataset.canvasDrawPeakMs || '9999'
                   ),
