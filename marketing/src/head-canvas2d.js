@@ -574,7 +574,10 @@ export async function initCanvasHead({sourceCanvas,stage,fallback}){
     // in canonical 60 Hz Edge steps, but rasterize only once. This preserves
     // the Edge response speed without increasing Canvas draw load.
     const stateDt=Math.min(rawDt,.25);
-    elapsed+=stateDt;
+    // Visual animation time must follow wall clock even when requestAnimationFrame
+    // is temporarily sparse. Interaction state remains capped separately so a
+    // long tab/background pause cannot snap the head to a new pose in one step.
+    elapsed+=Math.min(rawDt,1.5);
     let remainingState=stateDt;
     while(remainingState>1e-6){
       const step=Math.min(1/60,remainingState);
