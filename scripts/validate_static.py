@@ -655,6 +655,7 @@ for needle in (
     'stage.dataset.headYaw=headYaw.toFixed(4)',
     'const rawDt=last>0?Math.max(0,(now-last)/1000):0',
     'const stateDt=Math.min(rawDt,.25)',
+    'elapsed+=Math.min(rawDt,1.5)',
     'let remainingState=stateDt',
     'const step=Math.min(1/60,remainingState)',
     'smoothX+=(mouseX-smoothX)*Math.min(1,step*inputFollow)',
