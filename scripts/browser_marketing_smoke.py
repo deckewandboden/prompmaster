@@ -615,14 +615,53 @@ def main() -> int:
                     "document.querySelector('.head-stage')?.dataset.beaconProbe",
                     timeout=15000,
                 )
-                beacon_webgl.mouse.move(1120, 260)
-                beacon_webgl.wait_for_timeout(2200)
-                webgl_probe = beacon_webgl.evaluate(async_probe_js)
-                webgl_yaw = float(
-                    beacon_webgl.evaluate(
-                        "document.querySelector('.head-stage')?.dataset.headYaw || '0'"
+                def settle_head_target(page, label):
+                    page.mouse.move(1120, 260)
+                    expected_yaw = float(
+                        page.evaluate(
+                            """() => {
+                              const element = document.elementFromPoint(1120, 260);
+                              const edition =
+                                element?.closest('[data-edition]')?.dataset.edition || '';
+                              const pointerX = Math.max(
+                                -1,
+                                Math.min(1, 1120 / innerWidth * 2 - 1)
+                              );
+                              if (edition === 'free') return -.22;
+                              if (edition === 'pro') return .22;
+                              return pointerX * .3;
+                            }"""
+                        )
                     )
-                )
+                    # Do not compare the two renderers at an arbitrary wall-clock
+                    # instant: software WebGL in headless CI can render far fewer
+                    # frames than Canvas. Both implementations must instead reach
+                    # the same Edge interaction target and are compared only after
+                    # that deterministic state has settled.
+                    page.wait_for_function(
+                        """expected => {
+                          const yaw = parseFloat(
+                            document.querySelector('.head-stage')?.dataset.headYaw || 'NaN'
+                          );
+                          return Number.isFinite(yaw) && Math.abs(yaw - expected) <= .02;
+                        }""",
+                        arg=expected_yaw,
+                        timeout=12000,
+                    )
+                    page.wait_for_timeout(250)
+                    actual_yaw = float(
+                        page.evaluate(
+                            "document.querySelector('.head-stage')?.dataset.headYaw || '0'"
+                        )
+                    )
+                    print(
+                        f'HEAD TARGET {label}: '
+                        f'expected={expected_yaw:.4f} actual={actual_yaw:.4f}'
+                    )
+                    return actual_yaw, expected_yaw
+
+                webgl_yaw, webgl_target = settle_head_target(beacon_webgl, 'webgl')
+                webgl_probe = beacon_webgl.evaluate(async_probe_js)
                 beacon_webgl.close()
 
                 beacon_canvas = browser.new_page(
@@ -647,16 +686,15 @@ def main() -> int:
                     "document.querySelector('.head-stage')?.dataset.beaconProbe",
                     timeout=15000,
                 )
-                beacon_canvas.mouse.move(1120, 260)
-                beacon_canvas.wait_for_timeout(2200)
+                canvas_yaw, canvas_target = settle_head_target(beacon_canvas, 'canvas2d')
                 canvas_probe = beacon_canvas.evaluate(async_probe_js)
-                canvas_yaw = float(
-                    beacon_canvas.evaluate(
-                        "document.querySelector('.head-stage')?.dataset.headYaw || '0'"
-                    )
-                )
                 beacon_canvas.close()
 
+                if abs(webgl_target - canvas_target) > 1e-6:
+                    fail(
+                        'Head motion parity: renderers resolved different pointer/edition '
+                        f'targets (WebGL={webgl_target:.4f}, Canvas={canvas_target:.4f})'
+                    )
                 if len(webgl_probe) != 12 or len(canvas_probe) != 12:
                     fail(
                         'Beacon parity: expected six XY coordinate pairs, got '
@@ -677,21 +715,27 @@ def main() -> int:
                         'Beacon parity: strong glowing points do not match Edge '
                         f'(max coordinate delta={beacon_max_delta:.1f}px > 4px)'
                     )
+                webgl_target_error = abs(webgl_yaw - webgl_target)
+                canvas_target_error = abs(canvas_yaw - canvas_target)
                 yaw_delta = abs(webgl_yaw - canvas_yaw)
                 print(
                     'HEAD YAW PARITY chromium: '
+                    f'target={webgl_target:.4f} '
                     f'webgl={webgl_yaw:.4f} canvas={canvas_yaw:.4f} '
+                    f'webgl_error={webgl_target_error:.4f} '
+                    f'canvas_error={canvas_target_error:.4f} '
                     f'delta={yaw_delta:.4f}'
                 )
-                if webgl_yaw < .12 or canvas_yaw < .12:
+                if webgl_target_error > .025 or canvas_target_error > .025:
                     fail(
-                        'Head motion parity: head did not visibly follow the pointer '
-                        f'(WebGL={webgl_yaw:.4f}, Canvas={canvas_yaw:.4f})'
+                        'Head motion parity: renderer did not converge to the shared '
+                        f'Edge target (WebGL error={webgl_target_error:.4f}, '
+                        f'Canvas error={canvas_target_error:.4f})'
                     )
-                if yaw_delta > .035:
+                if yaw_delta > .025:
                     fail(
-                        'Head motion parity: Canvas head response differs from Edge '
-                        f'(yaw delta={yaw_delta:.4f} > 0.035)'
+                        'Head motion parity: settled Canvas head response differs from Edge '
+                        f'(yaw delta={yaw_delta:.4f} > 0.025)'
                     )
 
             if engine == 'chromium':
