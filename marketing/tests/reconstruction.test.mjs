@@ -96,6 +96,7 @@ test('non-WebGL fallback keeps the actual head visible without camera access',()
   assert.match(fallback,/dustPoints/);
   assert.match(fallback,/dustLayer=createSceneLayer\(\)/);
   assert.match(fallback,/rgba\(52,147,223,\.30\)/);
+  assert.match(fallback,/point\.color\.map\(value=>Math\.round\(clamp\(value\*1\.72,0,1\)\*255\)\)/);
   assert.match(fallback,/rgba\(\$\{r\},\$\{g\},\$\{b\},\.82\)/);
   assert.match(fallback,/\.012\*\(height\*\.5\)\/depth/);
   assert.match(fallback,/offsetX=-smoothX\*\.06\*worldPixelScale/);
