@@ -913,6 +913,7 @@ def main() -> int:
                   const stage = document.querySelector('.head-stage');
                   return {
                     elapsed: parseFloat(stage?.dataset.canvasElapsed || '0'),
+                    clockAt: parseFloat(stage?.dataset.canvasClockAt || '0'),
                     frames: parseInt(stage?.dataset.canvasFrames || '0', 10),
                   };
                 }"""
@@ -924,22 +925,33 @@ def main() -> int:
                   const stage = document.querySelector('.head-stage');
                   return {
                     elapsed: parseFloat(stage?.dataset.canvasElapsed || '0'),
+                    clockAt: parseFloat(stage?.dataset.canvasClockAt || '0'),
                     frames: parseInt(stage?.dataset.canvasFrames || '0', 10),
                     yaw: parseFloat(stage?.dataset.headYaw || '0'),
                   };
                 }"""
             )
             elapsed_delta = motion_end['elapsed'] - motion_start['elapsed']
+            clock_delta = (motion_end['clockAt'] - motion_start['clockAt']) / 1000
+            clock_error = abs(elapsed_delta - clock_delta)
             frame_delta = motion_end['frames'] - motion_start['frames']
             print(
                 f'NO-WEBGL MOTION DIAGNOSTIC {engine}: '
                 f'elapsed_delta={elapsed_delta:.3f}s '
+                f'frame_clock_delta={clock_delta:.3f}s '
+                f'clock_error={clock_error:.3f}s '
                 f'frame_delta={frame_delta} yaw={motion_end["yaw"]:.4f}'
             )
-            if not .85 <= elapsed_delta <= 1.50:
+            if clock_delta < .35:
                 fail(
-                    'No-WebGL: Animationszeit läuft nicht in Echtzeit '
-                    f'(1.2s wall clock -> {elapsed_delta:.3f}s animation)'
+                    'No-WebGL: zu kurze gerenderte Zeitspanne für '
+                    f'Echtzeit-Clock-Prüfung ({clock_delta:.3f}s)'
+                )
+            if clock_error > .08:
+                fail(
+                    'No-WebGL: Animationszeit weicht von der tatsächlichen '
+                    f'Frame-Zeit ab (animation={elapsed_delta:.3f}s, '
+                    f'frame_clock={clock_delta:.3f}s, error={clock_error:.3f}s)'
                 )
             # Headless Chromium on a contended GitHub runner can throttle
             # requestAnimationFrame even for the foreground page. That scheduler
