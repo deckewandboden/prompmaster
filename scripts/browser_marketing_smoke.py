@@ -906,6 +906,8 @@ def main() -> int:
                     f'({fallback_metrics["canvasDrawPeakMs"]:.1f} ms > 85 ms)'
                 )
 
+            fallback_page.bring_to_front()
+            fallback_page.wait_for_timeout(120)
             motion_start = fallback_page.evaluate(
                 """() => {
                   const stage = document.querySelector('.head-stage');
