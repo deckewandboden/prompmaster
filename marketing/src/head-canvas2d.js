@@ -777,7 +777,7 @@ export async function initCanvasHead({sourceCanvas,stage,fallback}){
       headMinX=Math.min(headMinX,sx2);headMaxX=Math.max(headMaxX,sx2);
       headMinY=Math.min(headMinY,sy2);headMaxY=Math.max(headMaxY,sy2);
       const renderSize=Math.max(.465,Math.min(1.50,pointSize*.538));
-      addPointToBatch(surfaceBatches,sx2,sy2,renderSize,intensity,clamp(alpha*.44,0,1));
+      addPointToBatch(surfaceBatches,sx2,sy2,renderSize,intensity,clamp(alpha*.48,0,1));
     }
     paintPointBatches(surfaceBatches,.14,.63);
     const surfaceMs=performance.now()-surfaceStarted;
@@ -807,7 +807,7 @@ export async function initCanvasHead({sourceCanvas,stage,fallback}){
       const detailBoost=1+topology.detail[i]*.72;
       const intensity=clamp(topology.colors[o+2]*detailBoost*1.55,0,1);
       const renderSize=Math.max(.465,Math.min(1.71,size*.518));
-      addPointToBatch(topologyBatches,sx2,sy2,renderSize,intensity,clamp(alpha*.40,0,1));
+      addPointToBatch(topologyBatches,sx2,sy2,renderSize,intensity,clamp(alpha*.44,0,1));
     }
     paintPointBatches(topologyBatches,.10,.58);
     const topologyMs=performance.now()-topologyStarted;
