@@ -678,6 +678,7 @@ for needle in (
     'dustPoints',
     'dustLayer=createSceneLayer()',
     "rgba(52,147,223,.30)",
+    "point.color.map(value=>Math.round(clamp(value*1.72,0,1)*255))",
     "rgba(${r},${g},${b},.82)",
     '.012*(height*.5)/depth',
     'offsetX=-smoothX*.06*worldPixelScale',
