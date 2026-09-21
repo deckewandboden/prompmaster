@@ -488,7 +488,10 @@ export async function initCanvasHead({sourceCanvas,stage,fallback}){
       const pointScale=4.5/depth;
       const size=Math.max(.35,(1.15+point.size*1.5+.36)*pointScale);
       const [r,g,b]=point.color.map(value=>Math.round(value*255));
-      ctx.fillStyle=`rgba(${r},${g},${b},.72)`;
+      // WebGL landscape vAlpha ranges from .24 to .82. Keep the
+      // cached layer at the same maximum and reconstruct the exact pulse alpha
+      // during compositing below.
+      ctx.fillStyle=`rgba(${r},${g},${b},.82)`;
       ctx.fillRect(x,y,size,size);
     }
 
@@ -524,7 +527,8 @@ export async function initCanvasHead({sourceCanvas,stage,fallback}){
     pointerWorldShiftY=0,
     bobRate=0,
     bobWorldAmplitude=0,
-    energy=1
+    alphaBase=.34,
+    alphaPulse=.66
   )=>{
     const count=layers.length;
     for(let index=0;index<count;index++){
@@ -537,10 +541,9 @@ export async function initCanvasHead({sourceCanvas,stage,fallback}){
       const bobOffsetY=bobWorldAmplitude
         ? -Math.sin(elapsed*bobRate+phase)*bobWorldAmplitude*worldPixelScale
         : 0;
-      // Canvas compositing is slightly dimmer than the WebGL point
-      // shader on the cached lower landscape layers. Apply only a small energy
-      // correction here; coordinates, phase buckets and geometry stay exact.
-      context.globalAlpha=Math.min(1,(.34+pulse*.66)*energy);
+      // Reconstruct each cached layer's WebGL alpha curve while
+      // retaining the exact shared coordinates and phase buckets.
+      context.globalAlpha=clamp(alphaBase+pulse*alphaPulse,0,1);
       context.drawImage(layer,offsetX,pointerOffsetY+bobOffsetY,width,height);
     }
     context.globalAlpha=1;
@@ -615,8 +618,10 @@ export async function initCanvasHead({sourceCanvas,stage,fallback}){
     // layers. Positions remain exact; only their shimmer is grouped into phase
     // buckets so Firefox does not repaint 6,000+ individual quads every frame.
     drawSceneLayers(sceneLayers.sky,1.34,.025);
-    drawSceneLayers(sceneLayers.landscape,.72,.075,.018,.22,.006,1.08);
-    drawSceneLayers(sceneLayers.blend,.68,.075,0,.24,.008,1.08);
+    // Cached alpha (.82/.58) multiplied by these compositing curves yields
+    // Edge's exact vAlpha: landscape .24+pulse*.58, blend .16+pulse*.42.
+    drawSceneLayers(sceneLayers.landscape,.72,.075,.018,.22,.006,.292683,.707317);
+    drawSceneLayers(sceneLayers.blend,.68,.075,0,.24,.008,.275862,.724138);
     drawDustLayer();
 
     // Edge/WebGL shooting-star contract: same six trails, schedule, direction,
