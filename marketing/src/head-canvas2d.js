@@ -597,6 +597,7 @@ export async function initCanvasHead({sourceCanvas,stage,fallback}){
       remainingState-=step;
     }
     stage.dataset.canvasElapsed=elapsed.toFixed(3);
+    stage.dataset.canvasClockAt=now.toFixed(1);
     stage.dataset.headYaw=headYaw.toFixed(4);
     context.clearRect(0,0,width,height);
     const glow=context.createRadialGradient(width*.5,height*.42,0,width*.5,height*.42,Math.min(width,height)*.38);
