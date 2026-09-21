@@ -409,7 +409,7 @@ export async function initCanvasHead({sourceCanvas,stage,fallback}){
   let paused=reduced.matches,disposed=false,visible=true,last=0,lastFrame=0,elapsed=0,mouseX=0,mouseY=0,smoothX=0,smoothY=0,lastPointerX=0,lastPointerY=0,hasPointer=false,cursorEnergy=0,dissolve=0,headYaw=0,headPitch=0,pointPower=1,topologyPower=1,edition='',raf=0,width=1,height=1,dpr=1;
   let sceneLayers={landscape:[],blend:[],sky:[]};
   let dustLayer=null;
-  let cachedDepth=null,cachedDepthYaw=Infinity,cachedDepthPitch=Infinity,cachedDepthAt=-Infinity;
+  let cachedDepth=null,cachedDepthYaw=Infinity,cachedDepthPitch=Infinity;
   let canvasFrameCount=0,canvasSteadyPeakMs=0;
 
   const makePointBatches=()=>Array.from({length:24},()=>new Path2D());
@@ -710,17 +710,19 @@ export async function initCanvasHead({sourceCanvas,stage,fallback}){
     // this on the GPU, while re-rasterizing every Canvas frame caused the
     // observed multi-hundred-millisecond stalls.
     const depthCell=6;
+    const depthStarted=performance.now();
+    let depthRebuilt=false;
     if(
       !cachedDepth
       || Math.abs(yaw-cachedDepthYaw)>.018
       || Math.abs(pitch-cachedDepthPitch)>.014
-      || elapsed-cachedDepthAt>.14
     ){
+      depthRebuilt=true;
       cachedDepth=rasterizeDepthMesh(cloud.depth,project,width,height,depthCell);
       cachedDepthYaw=yaw;
       cachedDepthPitch=pitch;
-      cachedDepthAt=elapsed;
     }
+    const depthMs=performance.now()-depthStarted;
     const depthRaster=cachedDepth;
     const depthCols=depthRaster.cols;
     const depthRows=depthRaster.rows;
@@ -738,6 +740,7 @@ export async function initCanvasHead({sourceCanvas,stage,fallback}){
     stage.dataset.canvasOcclusion='head-silhouette-v1';
     context.globalCompositeOperation='lighter';
 
+    const surfaceStarted=performance.now();
     const surfaceBatches=makePointBatches();
     for(let i=0;i<surface.seeds.length;i++){
       const o=i*3;
@@ -773,7 +776,9 @@ export async function initCanvasHead({sourceCanvas,stage,fallback}){
       addPointToBatch(surfaceBatches,sx2,sy2,renderSize,intensity,clamp(alpha*.44,0,1));
     }
     paintPointBatches(surfaceBatches,.14,.63);
+    const surfaceMs=performance.now()-surfaceStarted;
 
+    const topologyStarted=performance.now();
     const topology=cloud.topology;
     const topologyBatches=makePointBatches();
     for(let i=0;i<topology.detail.length;i++){
@@ -801,6 +806,7 @@ export async function initCanvasHead({sourceCanvas,stage,fallback}){
       addPointToBatch(topologyBatches,sx2,sy2,renderSize,intensity,clamp(alpha*.40,0,1));
     }
     paintPointBatches(topologyBatches,.10,.58);
+    const topologyMs=performance.now()-topologyStarted;
 
     if(Number.isFinite(headMinX)){
       stage.dataset.headBounds=[headMinX,headMinY,headMaxX,headMaxY].map(v=>Math.round(v)).join(',');
@@ -842,6 +848,10 @@ export async function initCanvasHead({sourceCanvas,stage,fallback}){
     canvasFrameCount++;
     if(canvasFrameCount>5)canvasSteadyPeakMs=Math.max(canvasSteadyPeakMs,drawMs);
     stage.dataset.canvasDrawMs=drawMs.toFixed(1);
+    stage.dataset.canvasDepthMs=depthMs.toFixed(1);
+    stage.dataset.canvasDepthRebuilt=depthRebuilt?'1':'0';
+    stage.dataset.canvasSurfaceMs=surfaceMs.toFixed(1);
+    stage.dataset.canvasTopologyMs=topologyMs.toFixed(1);
     stage.dataset.canvasDrawPeakMs=canvasSteadyPeakMs.toFixed(1);
     stage.dataset.canvasFrames=String(canvasFrameCount);
   }
