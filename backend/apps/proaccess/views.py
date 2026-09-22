@@ -24,6 +24,20 @@ V2_SCRIPT = b'<script src="/static/js/promptmaster_ui_v2.20260922.js" defer></sc
 def _inject_v2_ui(data: bytes) -> bytes:
     head_marker = b'</head>'
     body_marker = b'</body></html>'
+
+    # The preserved Golden Masters still reference the historic remote netstyle
+    # logo in the header that V2 removes immediately after DOM startup. Avoid
+    # opening an unnecessary external connection on redesigned routes. Legacy
+    # routes continue to serve the original bytes unchanged.
+    remote_logo = (
+        b'https://netstyle.de/public_pictures/'
+        b'netstyle%20Logo%20OHNE%20Netz%20FREIGESTELLT.png'
+    )
+    transparent_pixel = (
+        b'data:image/gif;base64,'
+        b'R0lGODlhAQABAAAAACw='
+    )
+    data = data.replace(remote_logo, transparent_pixel)
     if data.count(head_marker) != 1 or data.count(body_marker) != 1:
         raise GoldenMasterIntegrityError('PromptMaster V2 injection markers are not unique.')
     data = data.replace(head_marker, V2_STYLE + head_marker, 1)
