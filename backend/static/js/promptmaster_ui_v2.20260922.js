@@ -132,6 +132,8 @@
   if (promptHeading) promptHeading.textContent = 'Dein fertiger Prompt';
   right.append(promptSection);
   right.append(actions);
+  const existingRating = $('#pmRatingWrap');
+  if (existingRating) right.append(existingRating);
 
   const review = document.createElement('section');
   review.className = 'section pmv2-section pmv2-review';
