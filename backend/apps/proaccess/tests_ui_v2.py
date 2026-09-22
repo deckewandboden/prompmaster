@@ -44,7 +44,16 @@ class PromptMasterV2RouteIsolationTests(TestCase):
         self.assertNotIn('/static/css/promptmaster_v2.20260922.css', legacy_html)
         self.assertNotIn('/static/js/promptmaster_ui_v2.20260922.js', legacy_html)
 
-        # Remove only the two additive V2 tags. The remaining response must be
+        remote_logo = (
+            'https://netstyle.de/public_pictures/'
+            'netstyle%20Logo%20OHNE%20Netz%20FREIGESTELLT.png'
+        )
+        self.assertNotIn(remote_logo, current_html)
+        self.assertIn(remote_logo, legacy_html)
+
+        # Remove only the additive V2 tags and the V2-only remote-logo
+        # neutralization. The remaining response must be byte-for-byte
+        # identical to the preserved pre-redesign route.
         # byte-for-byte identical to the preserved pre-redesign route.
         stripped = current_html.replace(
             '<link rel="stylesheet" href="/static/css/promptmaster_v2.20260922.css">',
@@ -52,6 +61,9 @@ class PromptMasterV2RouteIsolationTests(TestCase):
         ).replace(
             '<script src="/static/js/promptmaster_ui_v2.20260922.js" defer></script>',
             '',
+        ).replace(
+            'data:image/gif;base64,R0lGODlhAQABAAAAACw=',
+            remote_logo,
         )
         self.assertEqual(stripped, legacy_html)
 
@@ -70,6 +82,13 @@ class PromptMasterV2RouteIsolationTests(TestCase):
         self.assertIn('/static/js/promptmaster_ui_v2.20260922.js', current_html)
         self.assertNotIn('/static/css/promptmaster_v2.20260922.css', legacy_html)
         self.assertNotIn('/static/js/promptmaster_ui_v2.20260922.js', legacy_html)
+
+        remote_logo = (
+            'https://netstyle.de/public_pictures/'
+            'netstyle%20Logo%20OHNE%20Netz%20FREIGESTELLT.png'
+        )
+        self.assertNotIn(remote_logo, current_html)
+        self.assertIn(remote_logo, legacy_html)
 
         # Session links and the server runtime bridge must exist on both routes.
         for html in (current_html, legacy_html):
