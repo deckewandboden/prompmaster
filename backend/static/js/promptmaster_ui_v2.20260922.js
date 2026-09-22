@@ -335,7 +335,7 @@
   };
   left.addEventListener('change', () => setTimeout(updateReview,0));
   left.addEventListener('click', () => setTimeout(updateReview,80));
-  new MutationObserver(updateReview).observe(left,{subtree:true,childList:true,attributes:true,attributeFilter:['class','checked','disabled']});
+  new MutationObserver(updateReview).observe(left,{subtree:true,attributes:true,attributeFilter:['class','checked','disabled']});
   updateReview();
 
   const oldProgressText = $('#progressText');
