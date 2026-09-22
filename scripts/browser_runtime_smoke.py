@@ -1724,6 +1724,103 @@ def run_backend_ui_smoke(browser, fixture=None) -> None:
                 process.kill()
                 process.wait(timeout=5)
 
+def _run_cross_browser_product_v2(browser, fixture: dict, engine: str) -> None:
+    """Targeted Free/Pro V2 compatibility gate for Firefox and WebKit."""
+    import subprocess
+    import sys
+
+    port = _free_port()
+    base = f'http://127.0.0.1:{port}/'
+    env = os.environ.copy()
+    env.setdefault('ENVIRONMENT', 'development')
+    env.setdefault('ALLOWED_HOSTS', '127.0.0.1,localhost')
+    env.setdefault('SESSION_COOKIE_SECURE', '0')
+    env.setdefault('CSRF_COOKIE_SECURE', '0')
+    process = subprocess.Popen(
+        [sys.executable, 'manage.py', 'runserver', f'127.0.0.1:{port}', '--noreload'],
+        cwd=str(ROOT / 'backend'),
+        env=env,
+        stdout=subprocess.DEVNULL,
+        stderr=subprocess.STDOUT,
+    )
+    try:
+        _wait_http(base + 'health/live/', process)
+        context = browser.new_context(viewport={'width': 1440, 'height': 1000})
+        page = context.new_page()
+
+        response = page.goto(base + 'free/', wait_until='networkidle')
+        if not response or response.status != 200:
+            raise AssertionError(f'{engine} Free V2: HTTP 200 expected')
+        page.wait_for_function(
+            "document.body.classList.contains('pmv2') && "
+            "document.querySelectorAll('[data-appwrap]').length === 34",
+            timeout=15000,
+        )
+        free_layout = page.evaluate(
+            """async () => {
+              const left = document.querySelector('#pmv2ConfigScroll');
+              const right = document.querySelector('.pmv2-prompt-panel');
+              if (!left || !right) return null;
+              const before = right.getBoundingClientRect().top;
+              left.scrollTop = Math.min(600, left.scrollHeight-left.clientHeight);
+              await new Promise(resolve => setTimeout(resolve, 80));
+              return {
+                before,
+                after: right.getBoundingClientRect().top,
+                leftTop: left.scrollTop,
+                windowY: scrollY,
+                bodyOverflow: getComputedStyle(document.body).overflow,
+              };
+            }"""
+        )
+        if (
+            not free_layout
+            or free_layout['leftTop'] < 50
+            or abs(free_layout['before'] - free_layout['after']) > 1.5
+            or free_layout['windowY'] != 0
+            or free_layout['bodyOverflow'] != 'hidden'
+        ):
+            raise AssertionError(f'{engine} Free V2 layout unstable: {free_layout}')
+        page.locator('#resetBtn').click()
+        page.wait_for_function("document.querySelector('#pmv2ConfigScroll').scrollTop < 3")
+
+        _browser_login(
+            page,
+            base,
+            fixture['admin_email'],
+            fixture['password'],
+            fixture['admin_secret'],
+            '/ns-admin/',
+        )
+        pro_response = page.goto(base + 'pro/app/', wait_until='networkidle')
+        if not pro_response or pro_response.status != 200:
+            raise AssertionError(f'{engine} Pro V2: HTTP 200 expected')
+        page.wait_for_function(
+            "document.body.classList.contains('pmv2') && "
+            "document.querySelectorAll('#catalog .app-card').length === 34",
+            timeout=15000,
+        )
+        if page.locator('#pmv2AppSearch').count() != 1:
+            raise AssertionError(f'{engine} Pro V2 search control missing')
+        page.locator('#pmv2AppSearch').fill('Planner')
+        page.wait_for_timeout(100)
+        visible_apps = page.locator('#catalog .app-card:not(.pmv2-search-hidden)').count()
+        if visible_apps != 1:
+            raise AssertionError(f'{engine} Pro V2 search expected 1 Planner result, got {visible_apps}')
+        page.locator('#pmv2AppSearch').fill('')
+        page.wait_for_timeout(80)
+        context.close()
+        print(f'{engine.upper()} PROMPTMASTER V2 UI OK')
+    finally:
+        if process.poll() is None:
+            process.terminate()
+            try:
+                process.wait(timeout=5)
+            except subprocess.TimeoutExpired:
+                process.kill()
+                process.wait(timeout=5)
+
+
 def _run_cross_browser_2fa_layout(browser, fixture: dict, engine: str) -> None:
     import subprocess
     import sys
@@ -1833,6 +1930,34 @@ def main() -> int:
         if 'power_automate' not in app_ids or 'github_copilot' not in app_ids:
             raise AssertionError('expanded 34-app catalog is not visible')
 
+        # Exercise every catalog application and every one of the 194 task
+        # render paths in the browser. Server composition parity for all 194
+        # tasks is covered by validate_prompt_runtime; this loop validates the
+        # interactive DOM contract and dynamic field generation task-by-task.
+        premium = page.locator('input[name="mslicense"][value="premium"]')
+        premium.check()
+        rendered_tasks = 0
+        for source_app in catalog['applications']:
+            app_code = source_app['code']
+            page.locator(f'[data-app="{app_code}"]').click()
+            expected_tasks = source_app['tasks']
+            page.wait_for_function(
+                f"document.querySelectorAll('#taskGrid [data-task]').length === {len(expected_tasks)}"
+            )
+            for source_task in expected_tasks:
+                task_id = source_task['id']
+                page.locator(f'[data-task="{task_id}"]').click()
+                expected_fields = len(source_task.get('required') or []) + len(source_task.get('optional') or [])
+                actual_fields = page.locator('#inputGrid .task-input').count()
+                if actual_fields != expected_fields:
+                    raise AssertionError(
+                        f'{app_code}/{task_id}: expected {expected_fields} rendered input fields, '
+                        f'got {actual_fields}'
+                    )
+                rendered_tasks += 1
+        if rendered_tasks != 194:
+            raise AssertionError(f'expected to exercise 194 Pro task render paths, got {rendered_tasks}')
+
         page.locator('[data-app="copilot_chat"]').click()
         page.wait_for_function("document.querySelectorAll('#taskGrid [data-task]').length === 5")
         page.locator('[data-task="PM20-001"]').click()
@@ -1881,10 +2006,15 @@ def main() -> int:
                         backend_fixture,
                         engine_name,
                     )
+                    _run_cross_browser_product_v2(
+                        engine_browser,
+                        backend_fixture,
+                        engine_name,
+                    )
                 finally:
                     engine_browser.close()
 
-    print('BROWSER RUNTIME SMOKE OK: 34-app central catalog + compose + rating/feedback bridge + authenticated backend UI gate + Firefox/WebKit 2FA layout')
+    print('BROWSER RUNTIME SMOKE OK: 34 apps / 194 task render paths + compose + rating/feedback + V2 Free/Pro layout in Chromium/Firefox/WebKit')
     return 0
 
 
