@@ -149,9 +149,7 @@ def renewal_warning(request):
     )
 
 
-@login_required
-@xframe_options_sameorigin
-def content(request):
+def _pro_runtime_response(request):
     internal_staff = has_internal_staff_access(request.user)
     assignment, device = (None, None) if internal_staff else _access(request)
     if not internal_staff and not assignment:
@@ -200,14 +198,21 @@ def content(request):
     return response
 
 
-def free_content(request):
-    """Serve FREE 1.2.4 with the additive 34-app visibility bridge.
+@login_required
+@xframe_options_sameorigin
+def content(request):
+    return _pro_runtime_response(request)
 
-    The reviewed Golden Master remains byte-verified and unchanged. The bridge
-    only augments catalog visibility at runtime: the 16 reviewed Free task
-    contracts keep their original local composition logic; all additional
-    PromptDomain applications are visible but Pro-locked.
-    """
+
+@login_required
+@xframe_options_sameorigin
+def legacy_content(request):
+    """Serve the pre-redesign Pro runtime as a permanent rollback/reference route."""
+    return _pro_runtime_response(request)
+
+
+def _free_runtime_response():
+    """Serve FREE 1.2.4 with the additive 34-app visibility bridge."""
     try:
         data = read_verified_asset(settings.FREE_GOLDEN_MASTER_PATH, settings.FREE_GOLDEN_MASTER_SHA256)
     except GoldenMasterIntegrityError:
@@ -223,3 +228,19 @@ def free_content(request):
     response = HttpResponse(data, content_type='text/html; charset=utf-8')
     response['Cache-Control'] = 'public, max-age=300'
     return response
+
+
+def free_content(request):
+    """Serve the current Free product route.
+
+    The reviewed Golden Master remains byte-verified and unchanged. The bridge
+    only augments catalog visibility at runtime: the 16 reviewed Free task
+    contracts keep their original local composition logic; all additional
+    PromptDomain applications are visible but Pro-locked.
+    """
+    return _free_runtime_response()
+
+
+def free_old_content(request):
+    """Serve the pre-redesign Free UI as a permanent rollback/reference route."""
+    return _free_runtime_response()
