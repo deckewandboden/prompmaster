@@ -202,6 +202,28 @@
       modalObserver.observe(proModalTitle,{childList:true,subtree:true,characterData:true});
     }
   } else {
+    const catalog = $('#catalog');
+    const appBody = catalog?.closest('.section-body');
+    if (catalog && appBody) {
+      const tools = document.createElement('div');
+      tools.className = 'pmv2-app-tools';
+      tools.innerHTML = '<input type="search" class="pmv2-app-search" id="pmv2AppSearch" placeholder="Copilot-Bereich suchen …" autocomplete="off"><span class="pmv2-app-count">34 Apps</span>';
+      appBody.insertBefore(tools, catalog);
+      const search = $('#pmv2AppSearch', tools);
+      search.addEventListener('input', () => {
+        const query = search.value.trim().toLocaleLowerCase('de');
+        $('.catalog-block', catalog).forEach(block => {
+          let visible = 0;
+          $('.app-card', block).forEach(card => {
+            const match = !query || (card.textContent || '').toLocaleLowerCase('de').includes(query);
+            card.classList.toggle('pmv2-search-hidden', !match);
+            if (match) visible += 1;
+          });
+          block.classList.toggle('pmv2-search-hidden', visible === 0);
+        });
+      });
+    }
+
     const note = $('.legal-footer-note span', footer);
     if (note) {
       note.textContent = 'Die Prompt-Konfiguration wird serverseitig verarbeitet, um den Prompt zu erzeugen. Eingaben und erzeugte Prompts werden dabei nicht als Promptinhalt gespeichert.';
