@@ -169,26 +169,53 @@
   addNextButton(outputSection, 'Zum Prompt-Check →', 'review');
 
   if (free) {
-    const proApps = $('#proApps');
-    const proHead = proApps?.previousElementSibling;
-    if (proApps && proHead) {
-      const block = document.createElement('div');
-      block.className = 'pmv2-free-pro-block';
-      proHead.parentNode.insertBefore(block, proHead);
-      block.append(proHead, proApps);
-      block.hidden = true;
-      const toggle = document.createElement('button');
-      toggle.type = 'button';
-      toggle.className = 'pmv2-pro-toggle';
-      toggle.textContent = '28 weitere Pro-Bereiche anzeigen ▾';
-      block.parentNode.insertBefore(toggle, block);
-      toggle.addEventListener('click', () => {
-        block.hidden = !block.hidden;
+    const ensureFreeProToggle = () => {
+      const proApps = $('#proApps');
+      if (!proApps) return null;
+
+      let block = proApps.closest('.pmv2-free-pro-block');
+      if (!block) {
+        const parent = proApps.parentElement;
+        const proHead = proApps.previousElementSibling?.classList.contains('catalog-head')
+          ? proApps.previousElementSibling
+          : null;
+        if (!parent || !proHead) return null;
+
+        block = document.createElement('div');
+        block.className = 'pmv2-free-pro-block';
+        parent.insertBefore(block, proHead);
+        block.append(proHead, proApps);
+        block.hidden = true;
+      }
+
+      let toggle = block.previousElementSibling;
+      if (!toggle?.classList.contains('pmv2-pro-toggle')) {
+        toggle = document.createElement('button');
+        toggle.type = 'button';
+        toggle.className = 'pmv2-pro-toggle';
+        block.parentNode.insertBefore(toggle, block);
+      }
+
+      const syncToggleLabel = () => {
         toggle.textContent = block.hidden
           ? '28 weitere Pro-Bereiche anzeigen ▾'
           : '28 weitere Pro-Bereiche ausblenden ▴';
-      });
-    }
+        toggle.setAttribute('aria-expanded', String(!block.hidden));
+      };
+      syncToggleLabel();
+
+      if (toggle.dataset.pmv2Bound !== '1') {
+        toggle.dataset.pmv2Bound = '1';
+        toggle.addEventListener('click', () => {
+          block.hidden = !block.hidden;
+          syncToggleLabel();
+        });
+      }
+      return toggle;
+    };
+
+    ensureFreeProToggle();
+    window.addEventListener('pm-free-catalog-ready', ensureFreeProToggle);
 
     const proModalTitle = $('#proModalTitle');
     const proModalSubtitle = $('#proModalSubtitle');
