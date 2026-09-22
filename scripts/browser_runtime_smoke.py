@@ -939,7 +939,7 @@ def run_backend_ui_smoke(browser, fixture=None) -> None:
         # FREE keeps its reviewed 16-task local logic but must expose the same
         # complete 34-app catalog as PRO, with the other 28 apps visibly locked.
         public_page.set_viewport_size({'width': 1440, 'height': 1000})
-        free_response = public_page.goto(base + 'free/', wait_until='networkidle')
+        free_response = public_page.goto(base + 'free/', wait_until='domcontentloaded')
         if not free_response or free_response.status != 200:
             raise AssertionError('Free runtime: HTTP 200 expected')
         public_page.wait_for_function(
@@ -1748,7 +1748,7 @@ def _run_cross_browser_product_v2(browser, fixture: dict, engine: str) -> None:
         context = browser.new_context(viewport={'width': 1440, 'height': 1000})
         page = context.new_page()
 
-        response = page.goto(base + 'free/', wait_until='networkidle')
+        response = page.goto(base + 'free/', wait_until='domcontentloaded')
         if not response or response.status != 200:
             raise AssertionError(f'{engine} Free V2: HTTP 200 expected')
         page.wait_for_function(
@@ -1792,7 +1792,7 @@ def _run_cross_browser_product_v2(browser, fixture: dict, engine: str) -> None:
             fixture['admin_secret'],
             '/ns-admin/',
         )
-        pro_response = page.goto(base + 'pro/app/', wait_until='networkidle')
+        pro_response = page.goto(base + 'pro/app/', wait_until='domcontentloaded')
         if not pro_response or pro_response.status != 200:
             raise AssertionError(f'{engine} Pro V2: HTTP 200 expected')
         page.wait_for_function(
