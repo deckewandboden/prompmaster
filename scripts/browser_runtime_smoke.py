@@ -969,6 +969,72 @@ def run_backend_ui_smoke(browser, fixture=None) -> None:
         }:
             raise AssertionError(f'Free runtime catalog contract drift: {free_catalog}')
 
+        public_page.wait_for_function("document.body.classList.contains('pmv2')")
+        v2_free_layout = public_page.evaluate(
+            """() => {
+              const left = document.querySelector('#pmv2ConfigScroll');
+              const right = document.querySelector('.pmv2-prompt-panel');
+              const logo = document.querySelector('.pmv2-brand img');
+              return {
+                left: !!left,
+                right: !!right,
+                logoPath: logo ? new URL(logo.src).pathname : '',
+                bodyOverflow: getComputedStyle(document.body).overflow,
+                rightTop: right?.getBoundingClientRect().top ?? -1,
+                rightHeight: right?.getBoundingClientRect().height ?? 0,
+                windowY: scrollY,
+              };
+            }"""
+        )
+        if (
+            not v2_free_layout['left']
+            or not v2_free_layout['right']
+            or v2_free_layout['logoPath'] != '/static/brand/promptmaster-logo-reference.png'
+            or v2_free_layout['bodyOverflow'] != 'hidden'
+            or v2_free_layout['rightHeight'] < 300
+        ):
+            raise AssertionError(f'Free V2 desktop shell invalid: {v2_free_layout}')
+
+        fixed_prompt_probe = public_page.evaluate(
+            """async () => {
+              const left = document.querySelector('#pmv2ConfigScroll');
+              const right = document.querySelector('.pmv2-prompt-panel');
+              const before = right.getBoundingClientRect().top;
+              left.scrollTop = Math.min(700, left.scrollHeight - left.clientHeight);
+              await new Promise(resolve => setTimeout(resolve, 80));
+              return {
+                before,
+                after: right.getBoundingClientRect().top,
+                leftTop: left.scrollTop,
+                windowY: scrollY,
+              };
+            }"""
+        )
+        if (
+            fixed_prompt_probe['leftTop'] < 50
+            or abs(fixed_prompt_probe['after'] - fixed_prompt_probe['before']) > 1
+            or fixed_prompt_probe['windowY'] != 0
+        ):
+            raise AssertionError(f'Free V2 prompt panel is not fixed while left scrolls: {fixed_prompt_probe}')
+
+        public_page.locator('#resetBtn').click()
+        public_page.wait_for_function(
+            "document.querySelector('#pmv2ConfigScroll').scrollTop < 3"
+        )
+
+        pro_toggle = public_page.locator('.pmv2-pro-toggle')
+        if not pro_toggle.is_visible():
+            raise AssertionError('Free V2: Pro-app expand control missing')
+        pro_toggle.click()
+        public_page.wait_for_function(
+            "() => !document.querySelector('.pmv2-free-pro-block')?.hidden"
+        )
+        visible_locked = public_page.locator(
+            '.pmv2-free-pro-block [data-prolocked="1"]'
+        ).count()
+        if visible_locked != 28:
+            raise AssertionError(f'Free V2: expected 28 expanded Pro apps, got {visible_locked}')
+
         public_page.locator('[data-central-code="power_automate"] .app-card').click()
         public_page.wait_for_function(
             "document.querySelector('#proModal')?.classList.contains('open')"
@@ -981,6 +1047,38 @@ def run_backend_ui_smoke(browser, fixture=None) -> None:
         public_page.wait_for_function(
             "document.querySelectorAll('#taskGrid .task').length >= 2"
         )
+        public_page.wait_for_timeout(450)
+        app_scroll_probe = public_page.evaluate(
+            """() => {
+              const left = document.querySelector('#pmv2ConfigScroll').getBoundingClientRect();
+              const target = document.querySelector('#taskSection').getBoundingClientRect();
+              return {offset: target.top-left.top};
+            }"""
+        )
+        if abs(app_scroll_probe['offset']) > 28:
+            raise AssertionError(f'Free V2 app -> task autoscroll missed target: {app_scroll_probe}')
+
+        public_page.locator('#taskGrid .task[data-prolocked="0"]').first.click()
+        public_page.wait_for_timeout(450)
+        task_scroll_probe = public_page.evaluate(
+            """() => {
+              const left = document.querySelector('#pmv2ConfigScroll').getBoundingClientRect();
+              const target = document.querySelector('#contextSection').getBoundingClientRect();
+              return {offset: target.top-left.top};
+            }"""
+        )
+        if abs(task_scroll_probe['offset']) > 28:
+            raise AssertionError(f'Free V2 task -> context autoscroll missed target: {task_scroll_probe}')
+
+        context_scroll_before = public_page.locator('#pmv2ConfigScroll').evaluate('el => el.scrollTop')
+        public_page.locator('#sourceContextInput').click()
+        public_page.wait_for_timeout(180)
+        context_scroll_after = public_page.locator('#pmv2ConfigScroll').evaluate('el => el.scrollTop')
+        if abs(context_scroll_after - context_scroll_before) > 3:
+            raise AssertionError(
+                'Free V2 focusing the second context field moved the left scroller: '
+                f'{context_scroll_before} -> {context_scroll_after}'
+            )
         usable_chat_tasks = public_page.locator(
             '#taskGrid .task[data-prolocked="0"]'
         ).count()
@@ -1294,15 +1392,53 @@ def run_backend_ui_smoke(browser, fixture=None) -> None:
                 page.wait_for_url('**/pro/app/')
                 page.wait_for_load_state('networkidle')
 
-                customer_utility_paths = set(page.locator('.utility a').evaluate_all(
+                page.wait_for_function("document.body.classList.contains('pmv2')")
+                customer_utility_paths = set(page.locator('.pmv2-header-actions a').evaluate_all(
                     "els => els.map(e => new URL(e.href).pathname)"
                 ))
                 required_customer_utility = {'/portal/dashboard/', '/auth/logout/'}
                 if not required_customer_utility.issubset(customer_utility_paths):
                     raise AssertionError(
-                        'customer Pro session navigation missing: '
+                        'customer Pro V2 session navigation missing: '
                         f'{sorted(required_customer_utility - customer_utility_paths)}'
                     )
+
+                page.wait_for_function(
+                    "document.querySelectorAll('#catalog .app-card').length === 34"
+                )
+                direct_pro_apps = page.locator('#catalog .app-card').count()
+                if direct_pro_apps != 34:
+                    raise AssertionError(
+                        f'PromptMaster Pro V2 must expose all 34 apps directly, got {direct_pro_apps}'
+                    )
+
+                pro_fixed_probe = page.evaluate(
+                    """async () => {
+                      const left = document.querySelector('#pmv2ConfigScroll');
+                      const right = document.querySelector('.pmv2-prompt-panel');
+                      const before = right.getBoundingClientRect().top;
+                      left.scrollTop = Math.min(700, left.scrollHeight - left.clientHeight);
+                      await new Promise(resolve => setTimeout(resolve, 80));
+                      return {
+                        before,
+                        after: right.getBoundingClientRect().top,
+                        leftTop: left.scrollTop,
+                        windowY: scrollY,
+                      };
+                    }"""
+                )
+                if (
+                    pro_fixed_probe['leftTop'] < 50
+                    or abs(pro_fixed_probe['after'] - pro_fixed_probe['before']) > 1
+                    or pro_fixed_probe['windowY'] != 0
+                ):
+                    raise AssertionError(
+                        f'PromptMaster Pro V2 prompt panel is not fixed: {pro_fixed_probe}'
+                    )
+                page.locator('#resetBtn').click()
+                page.wait_for_function(
+                    "document.querySelector('#pmv2ConfigScroll').scrollTop < 3"
+                )
                 customer_catalog_probe = page.evaluate(
                     """async () => {
                       const r = await fetch('/api/v1/prompts/?product=PRO', {
