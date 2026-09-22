@@ -17,6 +17,20 @@ from .services import active_product_assignment, assignment_expiry_context, has_
 
 logger = logging.getLogger(__name__)
 
+V2_STYLE = b'<link rel="stylesheet" href="/static/css/promptmaster_v2.20260922.css">'
+V2_SCRIPT = b'<script src="/static/js/promptmaster_ui_v2.20260922.js" defer></script>'
+
+
+def _inject_v2_ui(data: bytes) -> bytes:
+    head_marker = b'</head>'
+    body_marker = b'</body></html>'
+    if data.count(head_marker) != 1 or data.count(body_marker) != 1:
+        raise GoldenMasterIntegrityError('PromptMaster V2 injection markers are not unique.')
+    data = data.replace(head_marker, V2_STYLE + head_marker, 1)
+    data = data.replace(body_marker, V2_SCRIPT + body_marker, 1)
+    return data
+
+
 
 def _device_cookie(request):
     return request.COOKIES.get(DEVICE_COOKIE) or request.COOKIES.get(LEGACY_DEVICE_COOKIE, '')
@@ -149,7 +163,7 @@ def renewal_warning(request):
     )
 
 
-def _pro_runtime_response(request):
+def _pro_runtime_response(request, *, ui_v2=False):
     internal_staff = has_internal_staff_access(request.user)
     assignment, device = (None, None) if internal_staff else _access(request)
     if not internal_staff and not assignment:
@@ -191,6 +205,13 @@ def _pro_runtime_response(request):
     ).encode('utf-8')
     data = data.replace(utility_marker, utility_marker + session_links, 1)
 
+    if ui_v2:
+        try:
+            data = _inject_v2_ui(data)
+        except GoldenMasterIntegrityError:
+            logger.exception('PromptMaster Pro V2 UI injection failed')
+            return render(request, 'proaccess/asset_missing.html', status=503)
+
     response = HttpResponse(data, content_type='text/html; charset=utf-8')
     response['Cache-Control'] = 'private, no-store'
     if not internal_staff and not request.COOKIES.get(DEVICE_COOKIE):
@@ -201,17 +222,17 @@ def _pro_runtime_response(request):
 @login_required
 @xframe_options_sameorigin
 def content(request):
-    return _pro_runtime_response(request)
+    return _pro_runtime_response(request, ui_v2=True)
 
 
 @login_required
 @xframe_options_sameorigin
 def legacy_content(request):
     """Serve the pre-redesign Pro runtime as a permanent rollback/reference route."""
-    return _pro_runtime_response(request)
+    return _pro_runtime_response(request, ui_v2=False)
 
 
-def _free_runtime_response():
+def _free_runtime_response(*, ui_v2=False):
     """Serve FREE 1.2.4 with the additive 34-app visibility bridge."""
     try:
         data = read_verified_asset(settings.FREE_GOLDEN_MASTER_PATH, settings.FREE_GOLDEN_MASTER_SHA256)
@@ -225,6 +246,12 @@ def _free_runtime_response():
         logger.error('PromptMaster Free Golden Master has unexpected closing markup')
         return HttpResponse('PromptMaster Free ist vorübergehend nicht verfügbar.', status=503)
     data = data.replace(marker, bridge + marker)
+    if ui_v2:
+        try:
+            data = _inject_v2_ui(data)
+        except GoldenMasterIntegrityError:
+            logger.exception('PromptMaster Free V2 UI injection failed')
+            return HttpResponse('PromptMaster Free ist vorübergehend nicht verfügbar.', status=503)
     response = HttpResponse(data, content_type='text/html; charset=utf-8')
     response['Cache-Control'] = 'public, max-age=300'
     return response
@@ -238,9 +265,9 @@ def free_content(request):
     contracts keep their original local composition logic; all additional
     PromptDomain applications are visible but Pro-locked.
     """
-    return _free_runtime_response()
+    return _free_runtime_response(ui_v2=True)
 
 
 def free_old_content(request):
     """Serve the pre-redesign Free UI as a permanent rollback/reference route."""
-    return _free_runtime_response()
+    return _free_runtime_response(ui_v2=False)
