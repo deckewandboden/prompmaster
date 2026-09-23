@@ -642,6 +642,10 @@ def _check_backend_page(page, base: str, path: str, width: int, label: str) -> N
 
           const content = document.querySelector('.content');
           const userMeta = document.querySelector('.user-meta');
+          const brandLogo = document.querySelector('.sidebar .brand img');
+          const inlineConfirmForms = [...document.querySelectorAll('form[onsubmit]')]
+            .filter(form => (form.getAttribute('onsubmit') || '').includes('confirm('))
+            .map(form => form.getAttribute('action') || location.pathname);
           return {
             innerWidth,
             scrollWidth: document.documentElement.scrollWidth,
@@ -661,6 +665,9 @@ def _check_backend_page(page, base: str, path: str, width: int, label: str) -> N
             mobileMenuHeight: mobileMenu ? Math.round(mobileMenu.getBoundingClientRect().height) : 0,
             contentPaddingBottom: content ? parseFloat(getComputedStyle(content).paddingBottom || '0') : 0,
             userMetaDisplay: userMeta ? getComputedStyle(userMeta).display : 'missing',
+            brandLogoPath: brandLogo ? new URL(brandLogo.src).pathname : '',
+            brandNaturalWidth: brandLogo?.naturalWidth || 0,
+            inlineConfirmForms: inlineConfirmForms.slice(0,10),
           };
         }"""
     )
@@ -683,6 +690,18 @@ def _check_backend_page(page, base: str, path: str, width: int, label: str) -> N
     if metrics['postFormsMissingCsrf']:
         raise AssertionError(
             f'{label} {width}px: POST forms without CSRF token: {metrics["postFormsMissingCsrf"]}'
+        )
+    if metrics['inlineConfirmForms']:
+        raise AssertionError(
+            f'{label} {width}px: browser-native confirm handlers still active: {metrics["inlineConfirmForms"]}'
+        )
+    if metrics['brandLogoPath'] != '/static/brand/promptmaster-logo-clean.svg':
+        raise AssertionError(
+            f'{label} {width}px: legacy brand asset active: {metrics["brandLogoPath"]}'
+        )
+    if metrics['brandNaturalWidth'] < 300:
+        raise AssertionError(
+            f'{label} {width}px: brand asset is not high-resolution enough: {metrics["brandNaturalWidth"]}'
         )
     if not metrics['h1']:
         raise AssertionError(f'{label} {width}px: page has no visible H1')
@@ -753,6 +772,7 @@ def _check_public_page(page, base: str, path: str, width: int, label: str) -> No
             .filter(form => (form.getAttribute('method') || 'get').toLowerCase() === 'post')
             .filter(form => !form.querySelector('input[name="csrfmiddlewaretoken"]'))
             .map(form => form.getAttribute('action') || location.pathname);
+          const loginLogo = document.querySelector('.login-logo img');
           return {
             innerWidth,
             scrollWidth: document.documentElement.scrollWidth,
@@ -761,6 +781,8 @@ def _check_public_page(page, base: str, path: str, width: int, label: str) -> No
             badAnchors: badAnchors.slice(0,10),
             orphanSubmitButtons: orphanSubmitButtons.slice(0,10),
             postFormsMissingCsrf: postFormsMissingCsrf.slice(0,10),
+            loginLogoPath: loginLogo ? new URL(loginLogo.src).pathname : '',
+            loginLogoNaturalWidth: loginLogo?.naturalWidth || 0,
           };
         }"""
     )
@@ -781,6 +803,15 @@ def _check_public_page(page, base: str, path: str, width: int, label: str) -> No
         raise AssertionError(
             f'{label} {width}px: public POST forms without CSRF: {metrics["postFormsMissingCsrf"]}'
         )
+    if metrics['loginLogoPath']:
+        if metrics['loginLogoPath'] != '/static/brand/promptmaster-logo-clean.svg':
+            raise AssertionError(
+                f'{label} {width}px: legacy auth logo asset active: {metrics["loginLogoPath"]}'
+            )
+        if metrics['loginLogoNaturalWidth'] < 300:
+            raise AssertionError(
+                f'{label} {width}px: auth logo source too small: {metrics["loginLogoNaturalWidth"]}'
+            )
     if not metrics['h1']:
         raise AssertionError(f'{label} {width}px: page has no visible H1')
 
