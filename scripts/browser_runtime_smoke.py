@@ -1009,6 +1009,7 @@ def run_backend_ui_smoke(browser, fixture=None) -> None:
                 left: !!left,
                 right: !!right,
                 logoPath: logo ? new URL(logo.src).pathname : '',
+                logoNaturalWidth: logo?.naturalWidth || 0,
                 bodyOverflowY: getComputedStyle(document.body).overflowY,
                 leftOverflowY: left ? getComputedStyle(left).overflowY : '',
                 rightOverflowY: right ? getComputedStyle(right).overflowY : '',
@@ -1026,6 +1027,7 @@ def run_backend_ui_smoke(browser, fixture=None) -> None:
             not v2_free_layout['left']
             or not v2_free_layout['right']
             or v2_free_layout['logoPath'] != '/static/brand/promptmaster-logo-clean.svg'
+            or v2_free_layout['logoNaturalWidth'] < 300
             or v2_free_layout['bodyOverflowY'] not in {'auto', 'scroll'}
             or v2_free_layout['leftOverflowY'] != 'visible'
             or v2_free_layout['rightOverflowY'] != 'visible'
@@ -1100,8 +1102,27 @@ def run_backend_ui_smoke(browser, fixture=None) -> None:
         )
         if 'Power Automate' not in public_page.locator('#proModal').inner_text():
             raise AssertionError('Free runtime: locked app does not open its Pro explanation')
+        pro_modal_text = public_page.locator('#proModal').inner_text()
+        if 'CopilotPromptMaster' in pro_modal_text:
+            raise AssertionError(f'Free V2 Pro modal exposes legacy brand naming: {pro_modal_text}')
+        if 'PromptMaster Pro anfragen' not in pro_modal_text:
+            raise AssertionError('Free V2 Pro modal CTA is not normalized')
 
         public_page.locator('[data-close="proModal"]').first.click()
+
+        public_page.locator('[data-appwrap="word"] .app-card').click()
+        public_page.wait_for_function(
+            "document.querySelector('#businessModal')?.classList.contains('open')"
+        )
+        license_modal_text = public_page.locator('#businessModal').inner_text()
+        if 'Copilot Business anfragen' in license_modal_text:
+            raise AssertionError(
+                f'Free V2 Microsoft-license modal exposes factually wrong CTA: {license_modal_text}'
+            )
+        if 'Microsoft-Copilot-Lizenz anfragen' not in license_modal_text:
+            raise AssertionError('Free V2 Microsoft-license modal neutral CTA missing')
+        public_page.locator('[data-close="businessModal"]').first.click()
+
         public_page.locator('[data-appwrap="chat"] .app-card').click()
         public_page.wait_for_function(
             "document.querySelectorAll('#taskGrid .task').length >= 2"
@@ -1278,7 +1299,12 @@ def run_backend_ui_smoke(browser, fixture=None) -> None:
         first_page.locator('input[name="password"]').fill(fixture['password'])
         first_page.locator('input[name="password"]').press('Enter')
         first_page.wait_for_url('**/auth/2fa/setup/**')
-        secret = first_page.locator('.code-wrap').inner_text().strip()
+        setup_logo = first_page.locator('.login-logo img')
+        if '/static/brand/promptmaster-logo-clean.svg' not in setup_logo.get_attribute('src'):
+            raise AssertionError('first-time MFA still uses the low-resolution logo asset')
+        if first_page.locator('[data-copy-target]').count() != 2:
+            raise AssertionError('first-time MFA copy controls missing')
+        secret = first_page.locator('#totpSecret').inner_text().strip()
         import pyotp
         first_page.locator('input[name="code"]').fill(pyotp.TOTP(secret).now())
         first_page.locator('input[name="code"]').press('Enter')
@@ -1381,6 +1407,51 @@ def run_backend_ui_smoke(browser, fixture=None) -> None:
                 page, base, email, fixture['password'], secret,
                 '/portal/dashboard/' if role == 'portal' else '/ns-admin/',
             )
+
+            if role == 'admin':
+                admin_logo = page.locator('.sidebar .brand img')
+                if '/static/brand/promptmaster-logo-clean.svg' not in admin_logo.get_attribute('src'):
+                    raise AssertionError('admin shell still uses the low-resolution logo asset')
+
+                page.goto(
+                    base + f'ns-admin/customers/{fixture["company_id"]}/devices/',
+                    wait_until='networkidle',
+                )
+                native_dialogs = []
+                def _capture_native_dialog(dialog):
+                    native_dialogs.append(dialog.message)
+                    dialog.dismiss()
+                page.on('dialog', _capture_native_dialog)
+                revoke_button = page.locator('form[action*="/revoke/"] button').first
+                if revoke_button.count() != 1:
+                    raise AssertionError('admin device revoke action missing for confirmation UI test')
+                revoke_button.click()
+                page.wait_for_timeout(100)
+                if native_dialogs:
+                    raise AssertionError(f'admin still opens browser-native confirm dialog: {native_dialogs}')
+                confirm_backdrop = page.locator('.pm-confirm-backdrop:not([hidden])')
+                if confirm_backdrop.count() != 1 or 'Gerätezugang wirklich widerrufen' not in confirm_backdrop.inner_text():
+                    raise AssertionError('admin branded confirmation dialog did not open for device revoke')
+                confirm_backdrop.locator('[data-confirm-cancel]').click()
+                if page.locator('.pm-confirm-backdrop:not([hidden])').count():
+                    raise AssertionError('admin branded confirmation dialog did not close')
+
+                page.goto(
+                    base + f'ns-admin/licenses/{fixture["license_id"]}/',
+                    wait_until='networkidle',
+                )
+                action_row = page.locator('.card-action-row').first
+                if action_row.count() != 1:
+                    raise AssertionError('admin license destructive action spacing wrapper missing')
+                spacing = action_row.evaluate(
+                    """el => {
+                      const previous = el.previousElementSibling;
+                      if (!previous) return -1;
+                      return el.getBoundingClientRect().top - previous.getBoundingClientRect().bottom;
+                    }"""
+                )
+                if spacing < 10:
+                    raise AssertionError(f'admin license destructive action has insufficient spacing: {spacing}')
 
             if role == 'portal':
                 page.goto(base + 'portal/profile/', wait_until='networkidle')
