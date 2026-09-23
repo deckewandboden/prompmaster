@@ -35,7 +35,42 @@
 
   document.body.classList.add('pmv2', 'pmv2-' + edition);
 
-  const utilityLinks = $$('.utility a').map(a => ({
+  const ensureProCatalogSearch = () => {
+    if (free) return null;
+    const catalog = $('#catalog');
+    const appBody = catalog?.closest('.section-body');
+    if (!catalog || !appBody) return null;
+
+    let tools = $('.pmv2-app-tools', appBody);
+    if (!tools) {
+      tools = document.createElement('div');
+      tools.className = 'pmv2-app-tools';
+      tools.innerHTML = '<input type="search" class="pmv2-app-search" id="pmv2AppSearch" placeholder="Copilot-Bereich suchen …" autocomplete="off"><span class="pmv2-app-count">34 Apps</span>';
+      appBody.insertBefore(tools, catalog);
+    }
+
+    const search = $('#pmv2AppSearch', tools);
+    if (search && search.dataset.pmv2Bound !== '1') {
+      search.dataset.pmv2Bound = '1';
+      search.addEventListener('input', () => {
+        const query = search.value.trim().toLocaleLowerCase('de');
+        $('.catalog-block', catalog).forEach(block => {
+          let visible = 0;
+          $('.app-card', block).forEach(card => {
+            const match = !query || (card.textContent || '').toLocaleLowerCase('de').includes(query);
+            card.classList.toggle('pmv2-search-hidden', !match);
+            if (match) visible += 1;
+          });
+          block.classList.toggle('pmv2-search-hidden', visible === 0);
+        });
+      });
+    }
+    return search;
+  };
+
+  ensureProCatalogSearch();
+
+  const utilityLinks = $('.utility a').map(a => ({
     href: a.getAttribute('href') || '',
     label: (a.textContent || '').trim()
   }));
@@ -236,27 +271,7 @@
       modalObserver.observe(proModalTitle,{childList:true,subtree:true,characterData:true});
     }
   } else {
-    const catalog = $('#catalog');
-    const appBody = catalog?.closest('.section-body');
-    if (catalog && appBody) {
-      const tools = document.createElement('div');
-      tools.className = 'pmv2-app-tools';
-      tools.innerHTML = '<input type="search" class="pmv2-app-search" id="pmv2AppSearch" placeholder="Copilot-Bereich suchen …" autocomplete="off"><span class="pmv2-app-count">34 Apps</span>';
-      appBody.insertBefore(tools, catalog);
-      const search = $('#pmv2AppSearch', tools);
-      search.addEventListener('input', () => {
-        const query = search.value.trim().toLocaleLowerCase('de');
-        $('.catalog-block', catalog).forEach(block => {
-          let visible = 0;
-          $('.app-card', block).forEach(card => {
-            const match = !query || (card.textContent || '').toLocaleLowerCase('de').includes(query);
-            card.classList.toggle('pmv2-search-hidden', !match);
-            if (match) visible += 1;
-          });
-          block.classList.toggle('pmv2-search-hidden', visible === 0);
-        });
-      });
-    }
+    ensureProCatalogSearch();
 
     const note = $('.legal-footer-note span', footer);
     if (note) {
@@ -409,5 +424,6 @@
   $('#switchRequiredBtn')?.addEventListener('click', () => setTimeout(() => scrollToTarget(licenseSection),80));
   $('#switchBusinessBtn')?.addEventListener('click', () => setTimeout(() => scrollToTarget(licenseSection),80));
 
+  document.body.dataset.pmv2Ready = '1';
   window.dispatchEvent(new CustomEvent('pm-v2-ready',{detail:{edition}}));
 })();
