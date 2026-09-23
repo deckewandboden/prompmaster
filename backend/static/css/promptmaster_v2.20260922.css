@@ -1,3 +1,5 @@
+/* V2 owns scroll timing explicitly in JavaScript. */
+html{scroll-behavior:auto!important}
 /* PromptMaster V2 visual layer.
  * Loaded only on the redesigned routes. Golden-Master markup and logic stay intact.
  */
