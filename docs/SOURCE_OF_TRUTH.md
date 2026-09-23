@@ -1,6 +1,6 @@
 # PromptMaster Commercial — Source of Truth
 
-Stand: 2026-09-12
+Stand: 2026-09-23
 
 ## Priorität
 
@@ -9,6 +9,22 @@ Stand: 2026-09-12
 3. aktueller materialisierter Quellcode dieses Repositories
 4. unveränderte Free-/Pro-Golden-Master als Produkt-/Regression-Referenz
 5. historische Chat-/RC-/Marketing-Artefakte nur als Provenienz
+
+## Aktiver Release-Stand
+
+Maßgeblich für Betrieb und weitere Entwicklung ist der aktuelle `main`-Stand des Repositories. Historische RC-/Marketing-Bezeichnungen bleiben ausschließlich Provenienz und dürfen nicht als aktiver Release-Zweig interpretiert werden.
+
+Aktive Produktoberflächen:
+
+- Free V2: `/free/`
+- Pro V2: `/pro/app/`
+- Free Legacy/Rollback: `/free-old/`
+- Pro Legacy/Rollback: `/pro-old/`
+- Commercial Portal/Admin/API bleiben serverseitig in Django integriert
+
+Der aktive Release-Stand hat am 23.09.2026 die internen automatisierten Release-Gates vollständig bestanden: 292 Django-Tests, separates 100k-DataGrid-Gate, 34 Apps / 194 Tasks / 194 Prompt-Smokes, Chromium/Firefox/WebKit Browser-Smoke, Full-Stack-Bootstrap/Idempotenz, HTTP-Lasttest, Backup-Restore-Recovery, External-Caddy-Rehearsal sowie Dependency-/Shell-Security.
+
+Provider-/Infrastruktur- und Human-Gates aus `docs/PRODUCTION_ACCEPTANCE.md` und `docs/RELEASE_GATES.md` bleiben davon getrennt und müssen vor einem echten Produktions-Go-Live nachgewiesen werden.
 
 ## Produkt-Golden-Master
 
