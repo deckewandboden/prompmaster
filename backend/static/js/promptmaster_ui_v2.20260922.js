@@ -290,7 +290,9 @@
   if (oldMain.isConnected) oldMain.remove();
 
   let scrollRequestId = 0;
+  let resetScrollGuardUntil = 0;
   const scrollToTarget = target => {
+    if (Date.now() < resetScrollGuardUntil) return;
     const node = typeof target === 'string' ? $(target) : target;
     if (!node) return;
     const requestId = ++scrollRequestId;
@@ -414,11 +416,26 @@
   updateFlow();
 
   $('#resetBtn').addEventListener('click', () => {
+    resetScrollGuardUntil = Date.now() + 800;
+    scrollRequestId += 1;
+
+    const resetToTop = () => {
+      if (matchMedia('(max-width: 1180px)').matches) {
+        window.scrollTo({top:0,behavior:'auto'});
+      } else {
+        left.scrollTo({top:0,behavior:'auto'});
+        left.scrollTop = 0;
+      }
+    };
+
+    resetToTop();
+    setTimeout(resetToTop, 100);
+    setTimeout(resetToTop, 400);
     setTimeout(() => {
-      if (matchMedia('(max-width: 1180px)').matches) window.scrollTo({top:0,behavior:'smooth'});
-      else left.scrollTo({top:0,behavior:'smooth'});
+      resetToTop();
+      resetScrollGuardUntil = 0;
       updateReview();
-    }, 40);
+    }, 800);
   });
 
   $('#switchRequiredBtn')?.addEventListener('click', () => setTimeout(() => scrollToTarget(licenseSection),80));
