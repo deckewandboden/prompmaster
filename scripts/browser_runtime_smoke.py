@@ -1620,13 +1620,14 @@ def run_backend_ui_smoke(browser, fixture=None) -> None:
                 pro_response = page.goto(base + 'pro/', wait_until='networkidle')
                 if not pro_response or pro_response.status != 200:
                     raise AssertionError('netstyle staff cannot open PromptMaster Pro')
-                utility_paths = set(page.locator('.utility a').evaluate_all(
+                page.wait_for_function("document.body.classList.contains('pmv2')")
+                utility_paths = set(page.locator('.pmv2-header-actions a').evaluate_all(
                     "els => els.map(e => new URL(e.href).pathname)"
                 ))
                 required_utility_paths = {'/ns-admin/', '/auth/logout/'}
                 if not required_utility_paths.issubset(utility_paths):
                     raise AssertionError(
-                        f'netstyle Pro session navigation missing: {sorted(required_utility_paths - utility_paths)}'
+                        f'netstyle Pro V2 session navigation missing: {sorted(required_utility_paths - utility_paths)}'
                     )
                 catalog_probe = page.evaluate(
                     """async () => {
