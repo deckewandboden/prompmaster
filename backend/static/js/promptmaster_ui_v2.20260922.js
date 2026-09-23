@@ -404,7 +404,7 @@
   const updateFlow = () => {
     const raw = parseInt((oldProgressText?.textContent || '0').replace(/\D/g,''),10) || 0;
     const thresholds = free ? [0,12,28,43,57,72,88] : [0,8,20,38,55,70,86];
-    $$('.pmv2-flow-step', hero).forEach((button,index) => {
+    $Array.from(hero.querySelectorAll('.pmv2-flow-step')).forEach((button,index) => {
       button.classList.toggle('active', raw >= thresholds[index]);
     });
     if (oldProgressBar) oldProgressBar.setAttribute('aria-label', raw + ' Prozent vollständig');
