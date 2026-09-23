@@ -240,6 +240,29 @@
   addNextButton(outputSection, 'Zum Prompt-Check →', 'review');
 
   if (free) {
+    const makeLicenseLockedCardsInteractive = () => {
+      document.querySelectorAll('[data-licenselocked="1"]').forEach(card => {
+        const appName = $('.app-name', card)?.textContent?.trim() || 'Diese Anwendung';
+        card.setAttribute('role', 'button');
+        card.setAttribute('tabindex', '0');
+        card.setAttribute(
+          'aria-label',
+          `${appName}: erforderliche Microsoft-Copilot-Stufe anzeigen`
+        );
+        if (card.dataset.pmv2LicenseBound === '1') return;
+        card.dataset.pmv2LicenseBound = '1';
+        card.addEventListener('keydown', event => {
+          if (event.key !== 'Enter' && event.key !== ' ') return;
+          event.preventDefault();
+          card.dispatchEvent(new MouseEvent('click', {
+            bubbles: true,
+            cancelable: true,
+            view: window,
+          }));
+        });
+      });
+    };
+
     const ensureFreeProToggle = () => {
       const proApps = $('#proApps');
       if (!proApps) return null;
@@ -294,6 +317,7 @@
           syncToggleLabel();
         });
       }
+      makeLicenseLockedCardsInteractive();
       return toggle;
     };
 
