@@ -70,6 +70,20 @@
 
   ensureProCatalogSearch();
 
+  const normalizePromptMasterBrand = root => {
+    if (!root) return;
+    const walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT);
+    const nodes = [];
+    while (walker.nextNode()) nodes.push(walker.currentNode);
+    nodes.forEach(node => {
+      const value = node.nodeValue || '';
+      const next = value.replaceAll('CopilotPromptMaster', 'PromptMaster');
+      if (next !== value) node.nodeValue = next;
+    });
+  };
+
+  document.title = free ? 'PromptMaster Free | Microsoft Copilot' : 'PromptMaster Pro | Microsoft Copilot';
+
   const utilityLinks = Array.from(document.querySelectorAll('.utility a')).map(a => ({
     href: a.getAttribute('href') || '',
     label: (a.textContent || '').trim()
@@ -286,16 +300,6 @@
     ensureFreeProToggle();
     window.addEventListener('pm-free-catalog-ready', ensureFreeProToggle);
 
-    const normalizePromptMasterBrand = root => {
-      if (!root) return;
-      const walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT);
-      const nodes = [];
-      while (walker.nextNode()) nodes.push(walker.currentNode);
-      nodes.forEach(node => {
-        node.nodeValue = (node.nodeValue || '').replaceAll('CopilotPromptMaster', 'PromptMaster');
-      });
-    };
-
     const freeHeading = $('#freeApps')?.previousElementSibling?.querySelector('h3');
     if (freeHeading) freeHeading.textContent = 'PromptMaster Free';
     const proHeading = $('.pmv2-free-pro-block .catalog-head h3');
@@ -314,9 +318,19 @@
     const licenseModal = $('#businessModal');
     const licenseContact = licenseModal?.querySelector('.modal-actions a[href*="netstyle.de/kontakt"]');
     if (licenseContact) licenseContact.textContent = 'Microsoft-Copilot-Lizenz anfragen';
-    const licenseNote = $('.modal-note', licenseModal);
-    if (licenseNote) {
-      licenseNote.textContent = 'Microsoft-Copilot-Lizenzen werden separat von PromptMaster lizenziert. Prüfen Sie, welche Copilot-Stufe Ihrem Microsoft-Konto tatsächlich zugewiesen ist.';
+    const normalizeLicenseModal = () => {
+      normalizePromptMasterBrand(licenseModal);
+      const licenseNote = $('.modal-note', licenseModal);
+      if (licenseNote) {
+        licenseNote.textContent = 'Microsoft-Copilot-Lizenzen werden separat von PromptMaster lizenziert. Die gewählte Stufe beschreibt ausschließlich den Microsoft-Copilot-Kontext, für den der Prompt optimiert wird.';
+      }
+    };
+    normalizeLicenseModal();
+    if (licenseModal) {
+      new MutationObserver(normalizeLicenseModal).observe(
+        licenseModal,
+        {subtree:true,childList:true,characterData:true}
+      );
     }
 
     const proModalTitle = $('#proModalTitle');
@@ -342,6 +356,8 @@
       note.textContent = 'Die Prompt-Konfiguration wird serverseitig verarbeitet, um den Prompt zu erzeugen. Eingaben und erzeugte Prompts werden dabei nicht als Promptinhalt gespeichert.';
     }
   }
+
+  normalizePromptMasterBrand(footer);
 
   document.body.insertBefore(header, document.body.firstChild);
   header.insertAdjacentElement('afterend', hero);
