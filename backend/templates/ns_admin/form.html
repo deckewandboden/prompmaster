@@ -1,13 +1,14 @@
 {% extends 'ns_admin/base.html' %}{% block content %}
 <div class="page-head"><div><h1>{{ title }}</h1><div class="sub">Änderungen werden serverseitig validiert und – sofern sicherheits- oder geschäftskritisch – protokolliert.</div></div></div>
-<div class="card form-card">
+<div class="card form-card{% if form_variant == 'security' %} security-reauth-card{% endif %}">
+  {% if form_variant == 'security' %}<div class="security-reauth-note"><strong>Zusätzliche Sicherheitsfreigabe.</strong> Bestätigen Sie Ihr eigenes Passwort. Die Freigabe gilt anschließend ausschließlich für wenige Minuten und nur für geschützte Admin-Aktionen.</div>{% endif %}
   <form method="post" class="form">
     {% csrf_token %}
     {{ form.non_field_errors }}
     {{ form.as_p }}
     <div class="form-actions">
       <a class="btn secondary" href="{{ cancel_url|default:'/ns-admin/' }}">Abbrechen</a>
-      <button class="btn primary" type="submit">Speichern</button>
+      <button class="btn primary" type="submit">Bestätigen</button>
     </div>
   </form>
 </div>
