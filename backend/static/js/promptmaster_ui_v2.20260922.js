@@ -173,27 +173,32 @@
       const proApps = $('#proApps');
       if (!proApps) return null;
 
-      let block = proApps.closest('.pmv2-free-pro-block');
+      const sectionBody = proApps.closest('.section-body');
+      if (!sectionBody) return null;
+
+      let block = $('.pmv2-free-pro-block', sectionBody);
       if (!block) {
-        const parent = proApps.parentElement;
-        const proHead = proApps.previousElementSibling?.classList.contains('catalog-head')
-          ? proApps.previousElementSibling
-          : null;
-        if (!parent || !proHead) return null;
+        const proHead = [...sectionBody.querySelectorAll(':scope > .catalog-head')]
+          .find(node => /Pro/i.test(node.textContent || ''));
 
         block = document.createElement('div');
         block.className = 'pmv2-free-pro-block';
-        parent.insertBefore(block, proHead);
-        block.append(proHead, proApps);
+        sectionBody.insertBefore(block, proHead || proApps);
+        if (proHead) block.append(proHead);
+        block.append(proApps);
         block.hidden = true;
+      } else if (!block.contains(proApps)) {
+        block.append(proApps);
       }
 
-      let toggle = block.previousElementSibling;
-      if (!toggle?.classList.contains('pmv2-pro-toggle')) {
+      let toggle = $('.pmv2-pro-toggle', sectionBody);
+      if (!toggle) {
         toggle = document.createElement('button');
         toggle.type = 'button';
         toggle.className = 'pmv2-pro-toggle';
-        block.parentNode.insertBefore(toggle, block);
+        sectionBody.insertBefore(toggle, block);
+      } else if (toggle.nextElementSibling !== block) {
+        sectionBody.insertBefore(toggle, block);
       }
 
       const syncToggleLabel = () => {
