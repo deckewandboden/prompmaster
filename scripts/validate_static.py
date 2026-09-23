@@ -379,6 +379,16 @@ if 'PRO_GOLDEN_MASTER_PATH' not in settings_text:
 if '/private_assets/' in (ROOT/'Caddyfile').read_text(encoding='utf-8'):
     fail('Caddy must not expose private_assets')
 
+for caddy_path in (ROOT / 'Caddyfile', ROOT / 'Caddyfile.external'):
+    caddy_text = caddy_path.read_text(encoding='utf-8')
+    for legacy_route in ('/free-old /free-old/*', '/pro-old /pro-old/*'):
+        if legacy_route not in caddy_text:
+            fail(f'{caddy_path.name} does not route legacy product surface through Django: {legacy_route}')
+external_caddy_test = (ROOT / 'scripts/test_external_caddy_mode.sh').read_text(encoding='utf-8')
+for token in ('/free-old/', '/pro-old/', 'free_catalog_bridge.20260918.js'):
+    if token not in external_caddy_test:
+        fail(f'External-Caddy rehearsal does not verify legacy product routing: {token}')
+
 pro_asset = ROOT / 'backend/private_assets/promptmaster_pro.html'
 approved_pro_sha = 'aa7b2da53ba3cbcf9874b9b6f7381ea4c3e86ee1f9c09db186cbec6876a3c9cf'
 if pro_asset.exists() and hashlib.sha256(pro_asset.read_bytes()).hexdigest() != approved_pro_sha:
