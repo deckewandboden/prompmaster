@@ -1798,11 +1798,12 @@ def _run_cross_browser_product_v2(browser, fixture: dict, engine: str) -> None:
             raise AssertionError(f'{engine} Pro V2: HTTP 200 expected')
         page.wait_for_function(
             "document.body.classList.contains('pmv2') && "
-            "document.querySelectorAll('#catalog .app-card').length === 34",
+            "document.querySelectorAll('#catalog .app-card').length === 34 && "
+            "document.querySelectorAll('#pmv2AppSearch').length === 1",
             timeout=15000,
         )
         if page.locator('#pmv2AppSearch').count() != 1:
-            raise AssertionError(f'{engine} Pro V2 search control missing')
+            raise AssertionError(f'{engine} Pro V2 search control missing after V2 ready')
         page.locator('#pmv2AppSearch').fill('Planner')
         page.wait_for_timeout(100)
         visible_apps = page.locator('#catalog .app-card:not(.pmv2-search-hidden)').count()
