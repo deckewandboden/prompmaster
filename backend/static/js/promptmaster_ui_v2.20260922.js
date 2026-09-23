@@ -319,10 +319,10 @@
   };
 
   const stepSection = number => sections[number-1];
-  $Array.from(hero.querySelectorAll('.pmv2-flow-step')).forEach(button => {
+  Array.from(hero.querySelectorAll('.pmv2-flow-step')).forEach(button => {
     button.addEventListener('click', () => scrollToTarget(stepSection(Number(button.dataset.pmv2Step))));
   });
-  $Array.from(review.querySelectorAll('[data-pmv2-edit]')).forEach(button => {
+  Array.from(review.querySelectorAll('[data-pmv2-edit]')).forEach(button => {
     button.addEventListener('click', () => scrollToTarget(stepSection(Number(button.dataset.pmv2Edit))));
   });
 
@@ -406,7 +406,7 @@
   const updateFlow = () => {
     const raw = parseInt((oldProgressText?.textContent || '0').replace(/\D/g,''),10) || 0;
     const thresholds = free ? [0,12,28,43,57,72,88] : [0,8,20,38,55,70,86];
-    $Array.from(hero.querySelectorAll('.pmv2-flow-step')).forEach((button,index) => {
+    Array.from(hero.querySelectorAll('.pmv2-flow-step')).forEach((button,index) => {
       button.classList.toggle('active', raw >= thresholds[index]);
     });
     if (oldProgressBar) oldProgressBar.setAttribute('aria-label', raw + ' Prozent vollständig');
