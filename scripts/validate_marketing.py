@@ -12,7 +12,7 @@ required = [
     'index.html', 'package.json', 'package-lock.json', 'vite.marketing.config.js',
     'src/main.js', 'src/content.js', 'src/head.js', 'src/head-canvas2d.js', 'src/style.css', 'src/immersive.css',
     'public/models/head.glb', 'public/models/night-landscape.png',
-    'public/brand/design-reference.jpeg', 'public/integration-patch.js',
+    'public/brand/design-reference.jpeg', 'public/brand/promptmaster-logo-clean.svg', 'public/integration-patch.js',
     'dist/index.html', 'dist/integration-patch.js', 'dist/models/head.glb',
 ]
 missing = [name for name in required if not (MARKETING / name).exists()]
@@ -29,6 +29,11 @@ if not pro or pro.get('monthlyGrossCents') != 299 or pro.get('termMonths') != 12
 source = (MARKETING / 'src/content.js').read_text(encoding='utf-8')
 index = (MARKETING / 'index.html').read_text(encoding='utf-8')
 patch = (MARKETING / 'public/integration-patch.js').read_text(encoding='utf-8')
+immersive_css = (MARKETING / 'src/immersive.css').read_text(encoding='utf-8')
+if "url('/brand/promptmaster-logo-clean.svg')" not in immersive_css:
+    raise SystemExit('MARKETING VALIDATION FAIL: active header still uses screenshot-cropped logo')
+if "background-image:url('/brand/design-reference.jpeg')" in immersive_css:
+    raise SystemExit('MARKETING VALIDATION FAIL: screenshot-cropped logo regression returned')
 pro_apps_match = re.search(r"const proApps=\[(.*?)\];", source, re.S)
 if not pro_apps_match:
     raise SystemExit('MARKETING VALIDATION FAIL: Pro application catalog missing')
