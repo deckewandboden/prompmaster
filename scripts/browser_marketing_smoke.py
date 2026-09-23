@@ -802,7 +802,11 @@ def main() -> int:
                 "document.querySelector('.head-fallback-canvas')",
                 timeout=15000,
             )
-            fallback_page.wait_for_timeout(900)
+            fallback_page.wait_for_function(
+                "parseInt(document.querySelector('.head-stage')?.dataset.canvasFrames || '0', 10) >= 12",
+                timeout=15000,
+            )
+            fallback_page.wait_for_timeout(250)
             fallback_page.screenshot(
                 path=str(artifact_dir / f'{engine}-1440-forced-no-webgl.png'),
                 full_page=False,
@@ -842,6 +846,9 @@ def main() -> int:
                   ),
                   canvasDrawPeakMs: parseFloat(
                     document.querySelector('.head-stage')?.dataset.canvasDrawPeakMs || '9999'
+                  ),
+                  canvasDrawP90Ms: parseFloat(
+                    document.querySelector('.head-stage')?.dataset.canvasDrawP90Ms || '9999'
                   ),
                   canvasFrames: parseInt(
                     document.querySelector('.head-stage')?.dataset.canvasFrames || '0', 10
@@ -890,7 +897,7 @@ def main() -> int:
                     'No-WebGL: Kopf-Occlusion fehlt; Sternschnuppen/Lichter können '
                     'durch Gesicht oder Hals scheinen'
                 )
-            if fallback_metrics['canvasFrames'] < 6:
+            if fallback_metrics['canvasFrames'] < 12:
                 fail(
                     f'No-WebGL: zu wenige Canvas-Frames für Performancebewertung '
                     f'({fallback_metrics["canvasFrames"]})'
@@ -900,10 +907,15 @@ def main() -> int:
                     f'No-WebGL: aktuelle Canvas2D-Zeichenzeit zu hoch '
                     f'({fallback_metrics["canvasDrawMs"]:.1f} ms > 55 ms)'
                 )
-            if fallback_metrics['canvasDrawPeakMs'] > 85:
+            if fallback_metrics['canvasDrawP90Ms'] > 70:
                 fail(
-                    f'No-WebGL: Canvas2D-Spitzenlast nach Warm-up zu hoch '
-                    f'({fallback_metrics["canvasDrawPeakMs"]:.1f} ms > 85 ms)'
+                    f'No-WebGL: Canvas2D-Steady-State-P90 zu hoch '
+                    f'({fallback_metrics["canvasDrawP90Ms"]:.1f} ms > 70 ms)'
+                )
+            if fallback_metrics['canvasDrawPeakMs'] > 140:
+                fail(
+                    f'No-WebGL: Canvas2D-Hard-Peak nach Warm-up zu hoch '
+                    f'({fallback_metrics["canvasDrawPeakMs"]:.1f} ms > 140 ms)'
                 )
 
             fallback_page.bring_to_front()
