@@ -772,7 +772,7 @@ def _check_public_page(page, base: str, path: str, width: int, label: str) -> No
             .filter(form => (form.getAttribute('method') || 'get').toLowerCase() === 'post')
             .filter(form => !form.querySelector('input[name="csrfmiddlewaretoken"]'))
             .map(form => form.getAttribute('action') || location.pathname);
-          const loginLogo = document.querySelector('.login-logo img');
+          const loginLogo = document.querySelector('.login-logo img, .legal-page-head img');
           return {
             innerWidth,
             scrollWidth: document.documentElement.scrollWidth,
