@@ -215,3 +215,22 @@ a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,te
 .pm-confirm-actions .btn{min-width:108px}
 .pm-confirm-actions .btn.danger{background:linear-gradient(90deg,#df4354,#f06472);border-color:transparent;color:#fff}
 @media(max-width:520px){.pm-confirm-actions{display:grid;grid-template-columns:1fr 1fr}.pm-confirm-actions .btn{width:100%;min-width:0}}
+
+
+/* Collapsed sidebar brand crop */
+@media(min-width:701px) and (max-width:1100px){
+  .sidebar .brand{
+    width:54px;
+    margin-left:auto;
+    margin-right:auto;
+    overflow:hidden;
+    justify-content:flex-start;
+  }
+  .sidebar .brand img{
+    width:220px!important;
+    max-width:none!important;
+    height:auto!important;
+    flex:0 0 auto;
+    object-position:left center;
+  }
+}
