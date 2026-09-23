@@ -5,12 +5,14 @@ from unittest.mock import patch
 from django.test import TestCase
 from django.utils import timezone
 
-from apps.accounts.models import User
+from apps.accounts.models import Permission, Role, User, UserRole
+from apps.audit.models import AuditEvent
 from apps.catalog.models import Product, TaxRule
 from apps.catalog.services import create_price_version, current_price
 from apps.companies.models import Company, Membership, PrivateCustomerProfile
 from apps.licenses.models import License, LicenseAssignment, LicenseReminder, LicenseTerm
 from apps.notifications.models import EmailMessage, EmailTemplate
+from apps.notifications.services import queue_email
 from apps.notifications.tasks import (
     _sync_reminder_delivery,
     schedule_license_reminders,
@@ -373,3 +375,154 @@ class ReminderIdempotencyReleaseRegressionTests(TestCase):
                 target_valid_until=self.license.valid_until,
             ).exists()
         )
+
+class TenantHistoryReleaseRegressionTests(TestCase):
+    def setUp(self):
+        self.staff = User.objects.create_user(
+            'tenant-history-staff@example.test',
+            'Tenant-History-Staff-Password-2026!',
+            is_staff=True,
+        )
+        role = Role.objects.create(code='tenant-history-gate', name='Tenant History Gate')
+        permissions = []
+        for code in ('customers.read', 'email.read', 'audit.read'):
+            permission, _ = Permission.objects.get_or_create(code=code, defaults={'name': code})
+            permissions.append(permission)
+        role.permissions.set(permissions)
+        UserRole.objects.create(user=self.staff, role=role)
+
+        self.client.force_login(self.staff)
+        session = self.client.session
+        session['security_version'] = self.staff.security_version
+        session['two_factor_ok'] = True
+        session.save()
+
+        self.company = Company.objects.create(
+            customer_number='PM-C-HISTORY-A',
+            name='History A GmbH',
+            email='history-a@example.test',
+            country='DE',
+        )
+        self.other_company = Company.objects.create(
+            customer_number='PM-C-HISTORY-B',
+            name='History B GmbH',
+            email='history-b@example.test',
+            country='DE',
+        )
+        self.company_member = User.objects.create_user(
+            'history-member@example.test',
+            'History-Member-Password-2026!',
+        )
+        self.membership = Membership.objects.create(
+            company=self.company,
+            user=self.company_member,
+            role='member',
+            active=True,
+        )
+        self.private_user = User.objects.create_user(
+            'history-private@example.test',
+            'History-Private-Password-2026!',
+        )
+        self.private_profile = PrivateCustomerProfile.objects.create(
+            user=self.private_user,
+            customer_number='PM-P-HISTORY-A',
+            street='Historienweg',
+            house_number='1',
+            postal_code='57072',
+            city='Siegen',
+            country='DE',
+        )
+
+    @patch('apps.notifications.tasks.send_email_message.delay')
+    def test_queue_persists_explicit_customer_scope(self, delay):
+        EmailTemplate.objects.create(
+            code='release-scope-gate',
+            subject='Status {value}',
+            body_text='Status {value}',
+            active=True,
+        )
+        with self.captureOnCommitCallbacks(execute=True):
+            message = queue_email(
+                'release-scope-gate',
+                'scope@example.test',
+                {'value': 'Scoped'},
+                scope_company='company-42',
+                scope_user='user-42',
+            )
+
+        message.refresh_from_db()
+        self.assertEqual(message.context['pm_scope_company_id'], 'company-42')
+        self.assertEqual(message.context['pm_scope_user_id'], 'user-42')
+        self.assertEqual(message.subject, 'Status Scoped')
+        delay.assert_called_once_with(str(message.id))
+
+    def test_company_email_history_uses_explicit_company_scope_only(self):
+        shared_recipient = 'shared-recipient@example.test'
+        EmailMessage.objects.create(
+            recipient=shared_recipient,
+            subject='COMPANY-SCOPE-MARKER',
+            context={'pm_scope_company_id': str(self.company.id)},
+        )
+        EmailMessage.objects.create(
+            recipient=shared_recipient,
+            subject='OTHER-COMPANY-MARKER',
+            context={'pm_scope_company_id': str(self.other_company.id)},
+        )
+        EmailMessage.objects.create(
+            recipient=shared_recipient,
+            subject='UNSCOPED-MARKER',
+            context={},
+        )
+
+        response = self.client.get(f'/ns-admin/customers/{self.company.id}/emails/')
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, 'COMPANY-SCOPE-MARKER')
+        self.assertNotContains(response, 'OTHER-COMPANY-MARKER')
+        self.assertNotContains(response, 'UNSCOPED-MARKER')
+
+    def test_private_email_history_uses_explicit_user_scope_only(self):
+        EmailMessage.objects.create(
+            recipient=self.private_user.email,
+            subject='PRIVATE-SCOPE-MARKER',
+            context={'pm_scope_user_id': str(self.private_user.id)},
+        )
+        EmailMessage.objects.create(
+            recipient=self.private_user.email,
+            subject='WRONG-PRIVATE-SCOPE-MARKER',
+            context={'pm_scope_user_id': str(self.company_member.id)},
+        )
+        EmailMessage.objects.create(
+            recipient=self.private_user.email,
+            subject='PRIVATE-UNSCOPED-MARKER',
+            context={},
+        )
+
+        response = self.client.get(
+            f'/ns-admin/customers/private/{self.private_profile.id}/emails/'
+        )
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, 'PRIVATE-SCOPE-MARKER')
+        self.assertNotContains(response, 'WRONG-PRIVATE-SCOPE-MARKER')
+        self.assertNotContains(response, 'PRIVATE-UNSCOPED-MARKER')
+
+    def test_company_audit_excludes_global_identity_events(self):
+        AuditEvent.objects.create(
+            actor=self.company_member,
+            action='AUTH-GLOBAL-MARKER',
+            object_type='User',
+            object_id=str(self.company_member.id),
+            changes={},
+        )
+        AuditEvent.objects.create(
+            actor=self.staff,
+            action='MEMBERSHIP-TENANT-MARKER',
+            object_type='Membership',
+            object_id=str(self.membership.id),
+            changes={},
+        )
+
+        response = self.client.get(f'/ns-admin/customers/{self.company.id}/audit/')
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, 'MEMBERSHIP-TENANT-MARKER')
+        self.assertNotContains(response, 'AUTH-GLOBAL-MARKER')
+
