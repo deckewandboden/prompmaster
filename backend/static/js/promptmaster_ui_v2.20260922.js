@@ -274,17 +274,31 @@
   });
   if (oldMain.isConnected) oldMain.remove();
 
+  let scrollRequestId = 0;
   const scrollToTarget = target => {
     const node = typeof target === 'string' ? $(target) : target;
     if (!node) return;
+    const requestId = ++scrollRequestId;
+
     if (matchMedia('(max-width: 1180px)').matches) {
       node.scrollIntoView({behavior:'smooth',block:'start'});
       return;
     }
-    const leftRect = left.getBoundingClientRect();
-    const nodeRect = node.getBoundingClientRect();
-    const top = left.scrollTop + (nodeRect.top - leftRect.top) - 2;
-    left.scrollTo({top,behavior:'smooth'});
+
+    const align = behavior => {
+      if (requestId !== scrollRequestId || !node.isConnected) return;
+      const leftRect = left.getBoundingClientRect();
+      const nodeRect = node.getBoundingClientRect();
+      const offset = nodeRect.top - leftRect.top - 2;
+      left.scrollTo({top:left.scrollTop + offset,behavior});
+    };
+
+    align('smooth');
+
+    // Smooth scrolling is browser-dependent and can still be a few pixels
+    // short when a preceding section changes height. Finish quickly and
+    // deterministically so the active step sits at the top of the scroller.
+    setTimeout(() => align('auto'), 260);
   };
 
   const stepSection = number => sections[number-1];
