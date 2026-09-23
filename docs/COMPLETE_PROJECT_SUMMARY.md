@@ -1,6 +1,6 @@
-# PromptMaster Commercial — Gesamtkonsolidierung RC14
+# PromptMaster Commercial — konsolidierter Release-Stand
 
-Stand: 2026-09-13
+Stand: 2026-09-23
 
 ## Vollständigkeitsnachweis
 
@@ -29,14 +29,16 @@ Der aktuell integrierte Marketing-Source ist der **neueste physisch vollständig
 
 - exakter Golden Master unter `product/golden_masters/promptmaster_free.html`
 - SHA256: `aada4fbb3461d3758c48ed808bf018716a53aa33baf81efb058412e63535b0a8`
-- öffentlich ohne Login über `/free/`
+- öffentlich ohne Login über `/free/` als V2-Oberfläche
+- bewahrte Legacy-/Rollback-Ansicht unter `/free-old/`
 - 16 Free-Legacy-Verträge sind serverseitig als Referenz gesichert
 
 ### PromptMaster Pro
 
 - exakter Golden Master unter `product/golden_masters/promptmaster_pro.html`
 - SHA256: `aa7b2da53ba3cbcf9874b9b6f7381ea4c3e86ee1f9c09db186cbec6876a3c9cf`
-- Login + aktive Lizenz + gültiges Gerät serverseitig erforderlich
+- V2-Runtime unter `/pro/app/`; Login + aktive Lizenz + gültiges Gerät serverseitig erforderlich
+- bewahrte Legacy-/Rollback-Runtime unter `/pro-old/` mit derselben Auth-/Entitlement-Grenze
 - abgeleitete Runtime nutzt die zentrale PromptDomain
 - 34 Anwendungen / 194 PM20-Aufgaben
 - serverseitiger Composer
@@ -116,30 +118,37 @@ Caddy ist jetzt ein eigenes Build-Image (`Dockerfile.caddy`):
 
 Damit liegen Marketing, Free, Pro und Commercial Backend im selben Repository und werden von einem gemeinsamen Compose-Stack betrieben.
 
-## Aktuelle statische Nachweise
+## Aktueller Release-Nachweis
 
-Lokal erfolgreich:
+Am 23.09.2026 wurden die internen automatisierten Gates auf dem konsolidierten Release-Stand vollständig ausgeführt und grün bestätigt:
 
-- Python-Syntax
+- Python-/Repository-/Secret-/Shell-Guards
 - Golden-Master-/Runtime-Hashes
-- 34 Apps / 194 PM20-Tasks
-- Composer 194/194 ohne ungelöste Platzhalter
-- zentrale Runtime-Katalogprüfung
-- Marketing-Struktur-/Integrationsprüfung
-- Repository-/Secret-Guard
-- Shell-Syntax
-- Marketing Node-Test-Suite: 11/11
-- Pro Headless-Chromium-Smoke
-- Marketing Headless-Chromium-DOM-Smoke
+- 34 Apps / 194 PM20-Tasks / 194 Prompt-Smokes
+- 292 Django-Tests, 6 absichtliche Skips für das separat ausgeführte Performance-Gate
+- separates 100.000-Zeilen-DataGrid-Acceptance-Gate
+- PostgreSQL/Redis/Celery Full Stack
+- Backend-/Caddy-/Backup-Docker-Build
+- Chromium-/Firefox-/WebKit Browser-Smoke
+- Free/Pro V2 inklusive Compose, Rating/Feedback und erhaltenen Legacy-Routen
+- Clean Bootstrap und idempotenter zweiter Bootstrap
+- Production-Filesystemrestriktionen
+- Runtime Validation
+- HTTP-Lasttest
+- Backup-Restore-Fehlerfall und Recovery
+- External-Caddy-Rehearsal
+- Dependency Security und Shell Syntax
 
-Nicht in dieser Umgebung beweisbar:
+Zusätzlich wurden beim finalen Konsolidierungs-Audit verlorene Regressionen wieder als harte Release-Gates aufgenommen: Preis-/Renewal-Verträge, Reminder-Idempotenz sowie strikte Tenant-Isolation für Kunden-E-Mail-Historien und Audit-Scope.
 
-- Docker Compose Runtime
-- echte PostgreSQL/Redis/Celery-Runtime
-- GitHub Actions Lauf
-- Mollie Sandbox E2E
-- Microsoft Graph Mail E2E
-- externer S3/restic Drill
-- vollständige Browser-/Security-/100k-Performance-Abnahme
+Nicht durch CI ersetzbar und deshalb vor einem echten Produktions-Go-Live weiterhin extern abzunehmen:
 
-Diese Punkte bleiben Release-Gates und werden nicht als grün behauptet, bevor sie tatsächlich gelaufen sind.
+- Zielhost mit öffentlicher Domain/DNS/TLS
+- Mollie Sandbox E2E inklusive öffentlichem Webhook, Refund und Chargeback
+- Microsoft Graph Mail E2E inklusive Exchange Application-RBAC-Scope
+- externer S3/restic Backup-/Restore-Drill
+- reale Monitoring-/Alert-Empfänger und Notfallzugang
+- Rechtstexte/Steuerprüfung sowie menschliche Produktionsfreigabe
+- bewusste Marketing-Freigabe des integrierten Source-Stands; historische V15-Provenienz bleibt separat dokumentiert
+
+Verbindlich sind `docs/RELEASE_GATES.md` und `docs/PRODUCTION_ACCEPTANCE.md`.
