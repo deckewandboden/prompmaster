@@ -14,7 +14,7 @@
     <div class="statusrow"><span>Produkt</span><strong>{{ license.product.name }}</strong></div>
     {% if can_write and license.status != 'payment_review' and license.status != 'refunded' %}
       <div class="card-action-row">
-        <form method="post" action="{% url 'ns_admin:license_block_toggle' license.id %}" class="inline-form" onsubmit="return confirm('Lizenzstatus wirklich ändern?');">
+        <form method="post" action="{% url 'ns_admin:license_block_toggle' license.id %}" class="inline-form" data-confirm="Lizenzstatus wirklich ändern?">
           {% csrf_token %}
           <button class="btn {% if license.status == 'blocked' %}primary{% else %}danger{% endif %} sm" type="submit">{% if license.status == 'blocked' %}Lizenz entsperren{% else %}Lizenz sperren{% endif %}</button>
         </form>
@@ -30,7 +30,7 @@
 
     {% if can_write and license.company %}
       {% if active_assignment %}
-        <form method="post" action="{% url 'ns_admin:license_release' license.id %}" class="inline-form" onsubmit="return confirm('Lizenzzuweisung wirklich freigeben? Aktive Geräte dieser Lizenz werden widerrufen.');">
+        <form method="post" action="{% url 'ns_admin:license_release' license.id %}" class="inline-form" data-confirm="Lizenzzuweisung wirklich freigeben? Aktive Geräte dieser Lizenz werden widerrufen.">
           {% csrf_token %}
           <button class="btn danger sm" type="submit">Zuweisung freigeben</button>
         </form>
@@ -67,7 +67,7 @@
           {% if can_orders %}<td data-label="Bestellung">{{ term.order_item.order.order_number }}</td>{% endif %}
           <td data-label="Erstattung">
             {% if term.status == 'active' and can_refund %}
-              <form method="post" action="{% url 'ns_admin:license_refund' license.id term.id %}" class="inline-form" onsubmit="return confirm('Erstattung wirklich verbindlich über Mollie auslösen?');">
+              <form method="post" action="{% url 'ns_admin:license_refund' license.id term.id %}" class="inline-form" data-confirm="Erstattung wirklich verbindlich über Mollie auslösen?">
                 {% csrf_token %}
                 <input type="hidden" name="confirm" value="on">
                 <input type="hidden" name="reason" value="">
