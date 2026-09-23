@@ -8,7 +8,7 @@ from django.core import signing
 from django.core.exceptions import PermissionDenied, ValidationError
 from django.db import transaction
 from django.db.models import CharField, Count, Q, Sum
-from django.db.models.functions import Coalesce, Lower, TruncMonth
+from django.db.models.functions import Cast, Coalesce, Lower, TruncMonth
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse
 from django.utils import timezone
@@ -429,18 +429,28 @@ def private_customer_emails(request, pk):
 def private_customer_audit(request, pk):
     profile = _private_customer(request, pk)
     user = profile.user
-    license_ids = user.owned_licenses.values_list('id', flat=True)
+    license_ids = user.owned_licenses.annotate(
+        audit_object_id=Cast('id', CharField()),
+    ).values_list('audit_object_id', flat=True)
     device_ids = DeviceRegistration.objects.filter(
         user=user,
         license__owner_user=user,
-    ).values_list('id', flat=True)
-    order_ids = user.private_orders.values_list('id', flat=True)
+    ).annotate(
+        audit_object_id=Cast('id', CharField()),
+    ).values_list('audit_object_id', flat=True)
+    order_ids = user.private_orders.annotate(
+        audit_object_id=Cast('id', CharField()),
+    ).values_list('audit_object_id', flat=True)
     payment_ids = Payment.objects.filter(
         order__private_user=user,
-    ).values_list('id', flat=True)
+    ).annotate(
+        audit_object_id=Cast('id', CharField()),
+    ).values_list('audit_object_id', flat=True)
     refund_ids = Refund.objects.filter(
         payment__order__private_user=user,
-    ).values_list('id', flat=True)
+    ).annotate(
+        audit_object_id=Cast('id', CharField()),
+    ).values_list('audit_object_id', flat=True)
 
     audit_scope = (
         Q(object_type='PrivateCustomerProfile', object_id=str(profile.id))
@@ -795,28 +805,48 @@ def customer_privacy(request, pk):
 @staff_perm('customers.read', 'audit.read')
 def customer_audit(request, pk):
     customer = _customer(request, pk)
-    membership_ids = customer.memberships.values_list('id', flat=True)
-    invitation_ids = customer.invitations.values_list('id', flat=True)
-    license_ids = customer.licenses.values_list('id', flat=True)
+    membership_ids = customer.memberships.annotate(
+        audit_object_id=Cast('id', CharField()),
+    ).values_list('audit_object_id', flat=True)
+    invitation_ids = customer.invitations.annotate(
+        audit_object_id=Cast('id', CharField()),
+    ).values_list('audit_object_id', flat=True)
+    license_ids = customer.licenses.annotate(
+        audit_object_id=Cast('id', CharField()),
+    ).values_list('audit_object_id', flat=True)
     device_ids = DeviceRegistration.objects.filter(
         license__company=customer,
-    ).values_list('id', flat=True)
-    order_ids = customer.orders.values_list('id', flat=True)
+    ).annotate(
+        audit_object_id=Cast('id', CharField()),
+    ).values_list('audit_object_id', flat=True)
+    order_ids = customer.orders.annotate(
+        audit_object_id=Cast('id', CharField()),
+    ).values_list('audit_object_id', flat=True)
     payment_ids = Payment.objects.filter(
         order__company=customer,
-    ).values_list('id', flat=True)
+    ).annotate(
+        audit_object_id=Cast('id', CharField()),
+    ).values_list('audit_object_id', flat=True)
     refund_ids = Refund.objects.filter(
         payment__order__company=customer,
-    ).values_list('id', flat=True)
+    ).annotate(
+        audit_object_id=Cast('id', CharField()),
+    ).values_list('audit_object_id', flat=True)
     support_ids = SupportRequest.objects.filter(
         company=customer,
-    ).values_list('id', flat=True)
+    ).annotate(
+        audit_object_id=Cast('id', CharField()),
+    ).values_list('audit_object_id', flat=True)
     upgrade_ids = LicenseUpgradeRequest.objects.filter(
         company=customer,
-    ).values_list('id', flat=True)
+    ).annotate(
+        audit_object_id=Cast('id', CharField()),
+    ).values_list('audit_object_id', flat=True)
     assignment_link_ids = LicenseAssignmentLink.objects.filter(
         company=customer,
-    ).values_list('id', flat=True)
+    ).annotate(
+        audit_object_id=Cast('id', CharField()),
+    ).values_list('audit_object_id', flat=True)
 
     audit_scope = (
         Q(object_type='Company', object_id=str(customer.id))
