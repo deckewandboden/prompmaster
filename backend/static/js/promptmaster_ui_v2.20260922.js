@@ -321,8 +321,9 @@
     const normalizeLicenseModal = () => {
       normalizePromptMasterBrand(licenseModal);
       const licenseNote = $('.modal-note', licenseModal);
-      if (licenseNote) {
-        licenseNote.textContent = 'Microsoft-Copilot-Lizenzen werden separat von PromptMaster lizenziert. Die gewählte Stufe beschreibt ausschließlich den Microsoft-Copilot-Kontext, für den der Prompt optimiert wird.';
+      const licenseNoteText = 'Microsoft-Copilot-Lizenzen werden separat von PromptMaster lizenziert. Die gewählte Stufe beschreibt ausschließlich den Microsoft-Copilot-Kontext, für den der Prompt optimiert wird.';
+      if (licenseNote && licenseNote.textContent !== licenseNoteText) {
+        licenseNote.textContent = licenseNoteText;
       }
     };
     normalizeLicenseModal();
