@@ -204,6 +204,7 @@ def main() -> int:
                       const scene = getComputedStyle(one('.scene-world'));
                       const landscape = getComputedStyle(one('.landscape'));
                       const header = getComputedStyle(one('header'));
+                      const logoStyle = getComputedStyle(one('.logo-crop'));
                       const freeStyle = getComputedStyle(one('.product.free'));
                       const proStyle = getComputedStyle(one('.product.pro'));
                       return {
@@ -220,6 +221,7 @@ def main() -> int:
                         scenePosition: scene.position,
                         landscapeImage: landscape.backgroundImage,
                         headerPosition: header.position,
+                        logoImage: logoStyle.backgroundImage,
                         freeBorder: freeStyle.borderColor,
                         proBorder: proStyle.borderColor,
                         canvasVisible: !!(canvas.width && canvas.height),
@@ -274,6 +276,10 @@ def main() -> int:
                     fail(f'{width}px: Nachtlandschaft ist nicht geladen')
                 if metrics['headerPosition'] != 'fixed':
                     fail(f'{width}px: Marketing-Navigation ist nicht fixiert')
+                if 'promptmaster-logo-clean.svg' not in metrics['logoImage']:
+                    fail(f'{width}px: Marketing-Header verwendet nicht das saubere Logo-Asset')
+                if 'design-reference.jpeg' in metrics['logoImage']:
+                    fail(f'{width}px: Marketing-Header verwendet wieder den Screenshot-Logo-Crop')
                 if not metrics['canvasVisible'] or metrics['canvasWidth'] < width * 0.95:
                     fail(f'{engine} {width}px: Kopf-Canvas füllt die Szene nicht')
                 if metrics['headRenderer'] not in {'webgl', 'canvas2d'}:
