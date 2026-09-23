@@ -1126,22 +1126,36 @@ def run_backend_ui_smoke(browser, fixture=None) -> None:
             """async () => {
               const left = document.querySelector('#pmv2ConfigScroll');
               const right = document.querySelector('.pmv2-prompt-panel');
-              window.scrollTo(0, Math.min(700, document.documentElement.scrollHeight - innerHeight));
+              window.scrollTo(0, 0);
+              await new Promise(resolve => setTimeout(resolve, 40));
+              const beforeTop = right.getBoundingClientRect().top;
+              const maxScroll = Math.max(0, document.documentElement.scrollHeight - innerHeight);
+              const targetY = Math.min(700, maxScroll);
+              window.scrollTo(0, targetY);
               await new Promise(resolve => setTimeout(resolve, 100));
+              const afterTop = right.getBoundingClientRect().top;
+              const expectedTop = Math.max(18, beforeTop - scrollY);
               return {
                 windowY: scrollY,
+                maxScroll,
+                targetY,
+                beforeTop,
+                afterTop,
+                expectedTop,
+                stickyError: Math.abs(afterTop - expectedTop),
                 leftTop: left.scrollTop,
                 rightTop: right.scrollTop,
-                rightViewportTop: right.getBoundingClientRect().top,
+                rightPosition: getComputedStyle(right).position,
               };
             }"""
         )
         if (
-            single_scroll_probe['windowY'] < 50
-            or single_scroll_probe['leftTop'] >= 3
+            single_scroll_probe['leftTop'] >= 3
             or single_scroll_probe['rightTop'] >= 3
-            or single_scroll_probe['rightViewportTop'] < 0
-            or single_scroll_probe['rightViewportTop'] > 40
+            or single_scroll_probe['rightPosition'] != 'sticky'
+            or abs(single_scroll_probe['windowY'] - single_scroll_probe['targetY']) > 3
+            or single_scroll_probe['afterTop'] < 17
+            or single_scroll_probe['stickyError'] > 5
         ):
             raise AssertionError(f'Free V2 must use one browser scrollbar with sticky prompt: {single_scroll_probe}')
 
@@ -1634,24 +1648,36 @@ def run_backend_ui_smoke(browser, fixture=None) -> None:
                     """async () => {
                       const left = document.querySelector('#pmv2ConfigScroll');
                       const right = document.querySelector('.pmv2-prompt-panel');
-                      window.scrollTo(0, Math.min(700, document.documentElement.scrollHeight - innerHeight));
+                      window.scrollTo(0, 0);
+                      await new Promise(resolve => setTimeout(resolve, 40));
+                      const beforeTop = right.getBoundingClientRect().top;
+                      const maxScroll = Math.max(0, document.documentElement.scrollHeight - innerHeight);
+                      const targetY = Math.min(700, maxScroll);
+                      window.scrollTo(0, targetY);
                       await new Promise(resolve => setTimeout(resolve, 100));
+                      const afterTop = right.getBoundingClientRect().top;
+                      const expectedTop = Math.max(18, beforeTop - scrollY);
                       return {
                         leftTop: left.scrollTop,
                         rightTop: right.scrollTop,
                         windowY: scrollY,
-                        rightViewportTop: right.getBoundingClientRect().top,
+                        maxScroll,
+                        targetY,
+                        beforeTop,
+                        afterTop,
+                        expectedTop,
+                        stickyError: Math.abs(afterTop - expectedTop),
                         rightPosition: getComputedStyle(right).position,
                       };
                     }"""
                 )
                 if (
-                    pro_fixed_probe['windowY'] < 50
-                    or pro_fixed_probe['leftTop'] >= 3
+                    pro_fixed_probe['leftTop'] >= 3
                     or pro_fixed_probe['rightTop'] >= 3
                     or pro_fixed_probe['rightPosition'] != 'sticky'
-                    or pro_fixed_probe['rightViewportTop'] < 0
-                    or pro_fixed_probe['rightViewportTop'] > 40
+                    or abs(pro_fixed_probe['windowY'] - pro_fixed_probe['targetY']) > 3
+                    or pro_fixed_probe['afterTop'] < 17
+                    or pro_fixed_probe['stickyError'] > 5
                 ):
                     raise AssertionError(
                         f'PromptMaster Pro V2 single-scroll sticky panel invalid: {pro_fixed_probe}'
@@ -1989,31 +2015,43 @@ def _run_cross_browser_product_v2(browser, fixture: dict, engine: str) -> None:
               const left = document.querySelector('#pmv2ConfigScroll');
               const right = document.querySelector('.pmv2-prompt-panel');
               if (!left || !right) return null;
-              window.scrollTo(0, Math.min(600, document.documentElement.scrollHeight-innerHeight));
+              window.scrollTo(0, 0);
+              await new Promise(resolve => setTimeout(resolve, 40));
+              const beforeTop = right.getBoundingClientRect().top;
+              const maxScroll = Math.max(0, document.documentElement.scrollHeight-innerHeight);
+              const targetY = Math.min(600, maxScroll);
+              window.scrollTo(0, targetY);
               await new Promise(resolve => setTimeout(resolve, 100));
+              const afterTop = right.getBoundingClientRect().top;
+              const expectedTop = Math.max(18, beforeTop - scrollY);
               return {
                 leftTop: left.scrollTop,
                 rightTop: right.scrollTop,
                 windowY: scrollY,
+                maxScroll,
+                targetY,
+                beforeTop,
+                afterTop,
+                expectedTop,
+                stickyError: Math.abs(afterTop - expectedTop),
                 bodyOverflowY: getComputedStyle(document.body).overflowY,
                 leftOverflowY: getComputedStyle(left).overflowY,
                 rightOverflowY: getComputedStyle(right).overflowY,
                 rightPosition: getComputedStyle(right).position,
-                rightViewportTop: right.getBoundingClientRect().top,
               };
             }"""
         )
         if (
             not free_layout
-            or free_layout['windowY'] < 50
             or free_layout['leftTop'] >= 3
             or free_layout['rightTop'] >= 3
             or free_layout['bodyOverflowY'] not in {'auto', 'scroll'}
             or free_layout['leftOverflowY'] != 'visible'
             or free_layout['rightOverflowY'] != 'visible'
             or free_layout['rightPosition'] != 'sticky'
-            or free_layout['rightViewportTop'] < 0
-            or free_layout['rightViewportTop'] > 40
+            or abs(free_layout['windowY'] - free_layout['targetY']) > 3
+            or free_layout['afterTop'] < 17
+            or free_layout['stickyError'] > 5
         ):
             raise AssertionError(f'{engine} Free V2 single-scroll layout unstable: {free_layout}')
         page.locator('#resetBtn').click()
