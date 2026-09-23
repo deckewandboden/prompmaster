@@ -755,3 +755,24 @@ body.pmv2 textarea{font-family:inherit}
 .pmv2 .pmv2-pro-toggle:hover{border-color:rgba(171,126,238,.52);background:rgba(66,40,106,.46)}
 @media(max-width:850px){.pmv2-brand img{width:235px}}
 @media(max-width:620px){.pmv2-brand img{width:205px}}
+
+
+/* V2 compact header audit */
+@media(max-width:620px){
+  .pmv2-header{padding:0 12px;gap:8px}
+  .pmv2-brand{gap:8px}
+  .pmv2-brand img{width:150px!important;max-height:42px}
+  .pmv2-header-actions{gap:7px}
+  .pmv2-header-cta{
+    min-height:40px;
+    max-width:165px;
+    padding:0 9px;
+    font-size:10.5px;
+    line-height:1.15;
+    text-align:center;
+  }
+}
+@media(max-width:390px){
+  .pmv2-brand img{width:138px!important}
+  .pmv2-header-cta{max-width:150px;font-size:10px}
+}
