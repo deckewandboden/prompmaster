@@ -410,7 +410,8 @@ export async function initCanvasHead({sourceCanvas,stage,fallback}){
   let sceneLayers={landscape:[],blend:[],sky:[]};
   let dustLayer=null;
   let cachedDepth=null,cachedDepthYaw=Infinity,cachedDepthPitch=Infinity;
-  let canvasFrameCount=0,canvasSteadyPeakMs=0;
+  let canvasFrameCount=0,canvasSteadyPeakMs=0,canvasSteadyP90Ms=0;
+  const canvasSteadyDrawSamples=[];
 
   const makePointBatches=()=>Array.from({length:24},()=>new Path2D());
   const addPointToBatch=(batches,x,y,size,intensity,alpha)=>{
@@ -861,13 +862,20 @@ export async function initCanvasHead({sourceCanvas,stage,fallback}){
     context.globalCompositeOperation='source-over';
     const drawMs=performance.now()-drawStarted;
     canvasFrameCount++;
-    if(canvasFrameCount>5)canvasSteadyPeakMs=Math.max(canvasSteadyPeakMs,drawMs);
+    if(canvasFrameCount>5){
+      canvasSteadyDrawSamples.push(drawMs);
+      if(canvasSteadyDrawSamples.length>60)canvasSteadyDrawSamples.shift();
+      const ordered=[...canvasSteadyDrawSamples].sort((a,b)=>a-b);
+      canvasSteadyPeakMs=ordered[ordered.length-1]||0;
+      canvasSteadyP90Ms=ordered[Math.floor((ordered.length-1)*.9)]||0;
+    }
     stage.dataset.canvasDrawMs=drawMs.toFixed(1);
     stage.dataset.canvasDepthMs=depthMs.toFixed(1);
     stage.dataset.canvasDepthRebuilt=depthRebuilt?'1':'0';
     stage.dataset.canvasSurfaceMs=surfaceMs.toFixed(1);
     stage.dataset.canvasTopologyMs=topologyMs.toFixed(1);
     stage.dataset.canvasDrawPeakMs=canvasSteadyPeakMs.toFixed(1);
+    stage.dataset.canvasDrawP90Ms=canvasSteadyP90Ms.toFixed(1);
     stage.dataset.canvasFrames=String(canvasFrameCount);
   }
 
