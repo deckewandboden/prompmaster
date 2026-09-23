@@ -1207,14 +1207,15 @@ def run_backend_ui_smoke(browser, fixture=None) -> None:
 
         public_page.locator('[data-close="proModal"]').first.click()
 
-        word_card = public_page.locator('[data-appwrap="word"] .app-card')
-        word_box = word_card.bounding_box()
-        if not word_box:
-            raise AssertionError('Free V2 Word card has no clickable geometry')
-        public_page.mouse.click(
-            word_box['x'] + word_box['width'] / 2,
-            word_box['y'] + word_box['height'] / 2,
-        )
+        word_wrap = public_page.locator('[data-appwrap="word"]')
+        if (
+            word_wrap.get_attribute('role') != 'button'
+            or word_wrap.get_attribute('tabindex') != '0'
+        ):
+            raise AssertionError('Free V2 license-locked Word card is not keyboard interactive')
+        word_wrap.scroll_into_view_if_needed()
+        word_wrap.focus()
+        public_page.keyboard.press('Enter')
         public_page.wait_for_function(
             "document.querySelector('#businessModal')?.classList.contains('open')"
         )
