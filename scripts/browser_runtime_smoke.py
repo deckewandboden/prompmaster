@@ -817,6 +817,56 @@ def _check_public_page(page, base: str, path: str, width: int, label: str) -> No
 
 
 
+def _check_product_v2_shell(page, label: str, width: int) -> None:
+    metrics = page.evaluate(
+        """() => {
+          const logo = document.querySelector('.pmv2-brand img');
+          const header = document.querySelector('.pmv2-header');
+          const left = document.querySelector('#pmv2ConfigScroll');
+          const right = document.querySelector('.pmv2-prompt-panel');
+          const output = document.querySelector('#promptOutput');
+          const headerRect = header?.getBoundingClientRect();
+          return {
+            innerWidth,
+            scrollWidth: document.documentElement.scrollWidth,
+            logoPath: logo ? new URL(logo.src).pathname : '',
+            logoNaturalWidth: logo?.naturalWidth || 0,
+            headerLeft: headerRect?.left ?? -1,
+            headerRight: headerRect?.right ?? -1,
+            leftOverflowY: left ? getComputedStyle(left).overflowY : '',
+            rightOverflowY: right ? getComputedStyle(right).overflowY : '',
+            rightPosition: right ? getComputedStyle(right).position : '',
+            outputOverflowY: output ? getComputedStyle(output).overflowY : '',
+            nestedScroll: [left,right,output].filter(Boolean).some(el => (
+              ['auto','scroll'].includes(getComputedStyle(el).overflowY)
+              && el.scrollHeight > el.clientHeight + 2
+            )),
+          };
+        }"""
+    )
+    if metrics['scrollWidth'] > metrics['innerWidth'] + 1:
+        raise AssertionError(
+            f'{label} {width}px: V2 horizontal overflow '
+            f'{metrics["scrollWidth"]}>{metrics["innerWidth"]}'
+        )
+    if metrics['headerLeft'] < -1 or metrics['headerRight'] > metrics['innerWidth'] + 1:
+        raise AssertionError(f'{label} {width}px: V2 header leaves viewport: {metrics}')
+    if metrics['logoPath'] != '/static/brand/promptmaster-logo-clean.svg':
+        raise AssertionError(f'{label} {width}px: V2 legacy logo active: {metrics["logoPath"]}')
+    if metrics['logoNaturalWidth'] < 300:
+        raise AssertionError(f'{label} {width}px: V2 logo source too small: {metrics["logoNaturalWidth"]}')
+    if metrics['leftOverflowY'] != 'visible' or metrics['rightOverflowY'] != 'visible':
+        raise AssertionError(f'{label} {width}px: nested V2 column scrolling returned: {metrics}')
+    if metrics['nestedScroll']:
+        raise AssertionError(f'{label} {width}px: V2 contains a nested scroll area: {metrics}')
+    if width <= 1180 and metrics['rightPosition'] != 'relative':
+        raise AssertionError(f'{label} {width}px: stacked prompt panel must be relative: {metrics}')
+    if width > 1180 and metrics['rightPosition'] not in {'sticky','relative'}:
+        raise AssertionError(f'{label} {width}px: desktop prompt panel positioning invalid: {metrics}')
+    if metrics['outputOverflowY'] not in {'hidden','clip','visible'}:
+        raise AssertionError(f'{label} {width}px: prompt output gained its own scrollbar: {metrics}')
+
+
 def _browser_register_verify_to_buy(
     page, base: str, *, customer_type: str, email: str, password: str,
     quantity: int, company_name: str = '',
@@ -1216,6 +1266,15 @@ def run_backend_ui_smoke(browser, fixture=None) -> None:
             raise AssertionError(
                 f'Free runtime task mapping drift ({selected_tier}): {free_counts}'
             )
+
+        for width, height in ((360,800),(390,844),(768,1024),(1440,1000),(1920,1080)):
+            public_page.set_viewport_size({'width': width, 'height': height})
+            response = public_page.goto(base + 'free/', wait_until='networkidle')
+            if not response or response.status != 200:
+                raise AssertionError(f'Free V2 responsive shell {width}px: HTTP failure')
+            public_page.wait_for_function("document.body.classList.contains('pmv2')")
+            _check_product_v2_shell(public_page, 'Free V2 responsive shell', width)
+
         public_context.close()
 
         portal_routes = [
@@ -1860,6 +1919,14 @@ def run_backend_ui_smoke(browser, fixture=None) -> None:
                     raise AssertionError(
                         f'netstyle PromptMaster compose failed: {staff_compose_probe}'
                     )
+
+                for width, height in ((360,800),(390,844),(768,1024),(1440,1000),(1920,1080)):
+                    page.set_viewport_size({'width': width, 'height': height})
+                    response = page.goto(base + 'pro/app/', wait_until='networkidle')
+                    if not response or response.status != 200:
+                        raise AssertionError(f'Pro V2 responsive shell {width}px: HTTP failure')
+                    page.wait_for_function("document.body.classList.contains('pmv2')")
+                    _check_product_v2_shell(page, 'Pro V2 responsive shell', width)
 
             for width, height in ((360, 800), (390, 844), (768, 1024), (1440, 1000), (1920, 1080)):
                 page.set_viewport_size({'width': width, 'height': height})
