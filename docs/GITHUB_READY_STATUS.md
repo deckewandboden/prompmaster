@@ -1,52 +1,56 @@
-# GitHub Ready Status — RC14 Full Repository
+# GitHub Ready Status — konsolidierter Release-Stand
 
-Stand: 2026-09-13
+Stand: 2026-09-23
 
-## Lokal grün nachgewiesen
+## Automatisiert grün nachgewiesen
 
-- Marketing-Source + deploybarer Dist-Stand vorhanden
-- Marketing Node-Test-Suite 11/11 grün
-- Marketing-/Caddy-Integrationsvalidator grün
-- Headless-Chromium-Marketing-Smoke grün (Preis, 34-App-Brücke, 20 FAQ, Partikelkopf-Canvas)
-- Python-Syntax: 214 Dateien (Stand vor finalem Manifest-Generator; tatsächliche Zahl wird im Preflight ausgegeben)
-- Free/Pro Golden-Master-Hashes korrekt
-- deterministische Pro-Runtime korrekt
-- PromptDomain: 34 Apps / 194 PM20-Tasks / 16 Free-Legacy-Verträge
-- Composer-Smoke: 194/194 ohne ungelöste Platzhalter
-- Runtime-Katalog-Guard: zentraler Serverkatalog aktiv
-- statische Repository-Validierung
-- Secret-Guard
+Der aktuelle konsolidierte Release-Stand wurde auf einem realen GitHub-Actions-Runner vollständig ausgeführt und ist intern grün:
+
 - Shell-Syntax aller Betriebs-/Backupskripte
-- YAML-Syntax Compose + GitHub Actions
-- Headless-Chromium-Smoke:
-  - 34 eindeutige Apps sichtbar
-  - zentraler Katalog ersetzt historische 16-App-Darstellung
-  - PM20-001 sendet Pflichtfelder an Server-Compose
-  - Serverergebnis wird angezeigt
-  - Rating 1–5 funktioniert
-  - optionales Feedback erscheint nur für 1–3 Sterne und wird gesendet
-
-## In GitHub CI vorgesehen
-
-- PostgreSQL 18 + Redis
-- Migration Drift
-- Migrationen
+- vollständiger Python-Dependency-Audit
+- vollständiger Marketing-Dependency-Audit
+- PostgreSQL + Redis
+- Migration Drift + Migrationen
 - Defaults / Prompt-Katalog / FAQ Seeds
-- `validate_prompt_runtime`
-- vollständige Django-Tests
-- `collectstatic`
+- Prompt Runtime: **34 Apps / 194 PM20-Tasks / 194 Prompt-Smokes**
+- Free: 16 Legacy-Verträge erhalten; V2 unter `/free/`
+- Pro: 34/194 serverseitiger Katalog; V2 unter `/pro/app/`
+- Legacy-/Rollback-Routen: `/free-old/` und `/pro-old/`
+- **292 Django-Tests**, davon 6 absichtliche Skips für das separat ausgeführte 100k-Performance-Gate
+- separates **100.000-Zeilen-DataGrid-Acceptance-Gate**
 - Compose-Konfiguration
-- Backend-Docker-Build
-- Caddy-/Marketing-Multistage-Docker-Build
-- separater Playwright/Chromium-Browser-Smoke
+- Backend-/Caddy-/Backup-Docker-Build
+- Chromium-/Firefox-/WebKit-Browser-Smoke
+- Compose/Rating/Feedback über die Server-API
+- Clean Bootstrap
+- idempotenter zweiter Bootstrap
+- Production-Filesystemrestriktionen
+- Runtime Validation
+- HTTP-Lasttest
+- Backup-Restore-Fehlerfall und Recovery
+- External-Caddy-Rehearsal
 
-## Noch nicht lokal beweisbar in dieser Build-Umgebung
+Die Free-/Pro-Golden-Master bleiben hash-geschützt und unverändert; die V2-Integration ist additiv.
 
-Hier stehen weder Docker noch Django/psycopg/Celery zur Verfügung. Deshalb bleibt die tatsächliche Runtime-Abnahme bis zum ersten grünen GitHub-Actions-Lauf bzw. Ubuntu-24.04-Staging-Lauf offen.
+## Produktiv noch extern abzunehmen
 
-## Staging-Abnahme
+Die folgenden Gates können nicht durch normale CI ersetzt werden und bleiben bis zur realen Provider-/Infrastrukturabnahme offen:
 
-Nach grünem CI:
+- Deployment auf dem tatsächlichen Zielhost inklusive öffentlicher Domain/DNS/TLS
+- Microsoft Graph Mail E2E inklusive Exchange Application-RBAC-Scope-Nachweis
+- Mollie Sandbox E2E über den öffentlichen Webhook, inklusive Refund/Chargeback
+- externer S3/restic Backup-/Restore-Drill
+- reale Monitoring-/Alert-Empfänger und dokumentierter Notfallzugang
+- cAdvisor-Host-Trust-Boundary bewusst akzeptieren oder nach realem Staging-Test technisch ersetzen
+- Rechtstexte / Steuerprüfung
+- menschliche Produktionsfreigabe
+- bewusste Freigabe des integrierten 06.09.-Marketing-Sources; die historische V15-Provenienz bleibt separat dokumentiert
+
+Verbindliche Schritte und Evidenz: `docs/RELEASE_GATES.md` und `docs/PRODUCTION_ACCEPTANCE.md`.
+
+## Deployment
+
+Staging:
 
 ```bash
 cp .env.example .env
@@ -54,15 +58,10 @@ cp .env.example .env
 ./scripts/runtime_validate.sh
 ```
 
-Der Runtime-Validator startet zusätzlich das lokale Staging-Restic-Repository, erzeugt ein PostgreSQL-Backup und verlangt einen erfolgreichen Restore-Test. Das ersetzt nicht den späteren externen S3-Produktionsdrill.
+Produktion:
 
-## Bekannte externe Go-Live-Gates
+```bash
+./scripts/deploy.sh
+```
 
-- Mollie Sandbox E2E inklusive Refund/Chargeback
-- Microsoft Graph Mail E2E
-- externer S3/restic Backup-/Restore-Drill
-- Tenant/IDOR/Auth/2FA/Device E2E
-- 100k DataGrid Performance
-- responsive Browserabnahme
-- Rechtstexte / Steuerprüfung
-- formale Freigabe des integrierten vollständigen 06.09.-Marketing-Sources oder Wiederbeschaffung des exakten V15-Archivs
+In Produktion bleibt `INITIAL_ADMIN_PASSWORD` in `.env` leer bzw. `DISABLED`. Der erste Superadmin wird einmalig mit temporären Prozessvariablen gemäß `README.md` angelegt.
