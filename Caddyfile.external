@@ -116,7 +116,7 @@ http://{$CADDY_DOMAIN} {
     # before the static marketing fallback so authentication/licensing can
     # never be bypassed by a stale HTML file in marketing/dist.
     @django {
-        path /auth /auth/* /free /free/* /pro /pro/* /portal/* /ns-admin /ns-admin/* /api /api/* /health/* /legal/*
+        path /auth /auth/* /free /free/* /free-old /free-old/* /pro /pro/* /pro-old /pro-old/* /portal/* /ns-admin /ns-admin/* /api /api/* /health/* /legal/*
     }
     handle @django {
         reverse_proxy promptmaster-web-internal:8000 {
