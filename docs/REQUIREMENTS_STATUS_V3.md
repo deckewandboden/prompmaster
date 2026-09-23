@@ -1,4 +1,4 @@
-# Requirements Status V3 — materialisierter GitHub-RC
+# Requirements Status V3 — konsolidierter Release-Stand
 
 ## Code-materialisiert
 
@@ -28,13 +28,26 @@
 - 16 Free-Legacy-Verträge bewahrt
 - Free→PM20-Mapping bleibt absichtlich fail-closed, bis fachlich freigegeben
 
-## Extern/runtime noch zu bestätigen
+## Automatisierter Runtime-Status
 
-- echter Docker-Stack auf Ubuntu 24.04
-- Mollie Sandbox E2E
-- Graph Mail E2E
-- externer Backup/Restore-Drill
-- Browser-/Responsive-Abnahme
-- vollständiger Security-/Tenant-E2E
-- 100k Performance/DataGrid
-- exakte Marketing-V15-Quelle bzw. bewusste Freigabe einer anderen Marketing-Baseline
+Intern automatisiert grün nachgewiesen:
+
+- vollständiger Docker-/Compose-Full-Stack auf GitHub Runner
+- PostgreSQL/Redis/Celery Runtime
+- 292 Django-Tests
+- separate 100k DataGrid Acceptance
+- Browser-Smoke in Chromium, Firefox und WebKit
+- Security-/Tenant-Regressionen einschließlich explizitem Kunden-/User-Scope für E-Mail-Historien und tenant-spezifischem Audit-Scope
+- 34 Apps / 194 Tasks / 194 Prompt-Smokes
+- Clean + idempotenter Bootstrap
+- Runtime Validation, HTTP Load, Backup-Restore-Recovery und External-Caddy-Rehearsal
+
+## Extern/produktiv noch zu bestätigen
+
+- echter Zielhost inklusive Domain/DNS/TLS
+- Mollie Sandbox E2E über öffentlichen Webhook
+- Microsoft Graph Mail E2E inklusive Exchange Application-RBAC
+- externer S3/restic Backup-/Restore-Drill
+- reale Monitoring-/Alert-Empfänger und Notfallzugang
+- Rechtstexte / Steuerprüfung / menschliche Go-Live-Freigabe
+- exakte Marketing-V15-Provenienz bleibt historisch; für Go-Live ist die bewusste Freigabe des integrierten Marketing-Sources erforderlich
