@@ -1042,9 +1042,23 @@ def run_backend_ui_smoke(browser, fixture=None) -> None:
             raise AssertionError(f'Free V2 prompt panel is not fixed while left scrolls: {fixed_prompt_probe}')
 
         public_page.locator('#resetBtn').click()
-        public_page.wait_for_function(
-            "document.querySelector('#pmv2ConfigScroll').scrollTop < 3"
+        public_page.wait_for_timeout(500)
+        reset_probe = public_page.evaluate(
+            """() => {
+              const left = document.querySelector('#pmv2ConfigScroll');
+              return {
+                leftTop: left?.scrollTop ?? -1,
+                windowY: scrollY,
+                hasConfig: !!left,
+              };
+            }"""
         )
+        if (
+            not reset_probe['hasConfig']
+            or reset_probe['leftTop'] >= 3
+            or reset_probe['windowY'] != 0
+        ):
+            raise AssertionError(f'Free V2 reset did not return to top: {reset_probe}')
 
         pro_toggle = public_page.locator('.pmv2-pro-toggle')
         if not pro_toggle.is_visible():
