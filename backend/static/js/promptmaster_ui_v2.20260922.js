@@ -54,9 +54,9 @@
       search.dataset.pmv2Bound = '1';
       search.addEventListener('input', () => {
         const query = search.value.trim().toLocaleLowerCase('de');
-        $('.catalog-block', catalog).forEach(block => {
+        Array.from(catalog.querySelectorAll('.catalog-block')).forEach(block => {
           let visible = 0;
-          $('.app-card', block).forEach(card => {
+          Array.from(block.querySelectorAll('.app-card')).forEach(card => {
             const match = !query || (card.textContent || '').toLocaleLowerCase('de').includes(query);
             card.classList.toggle('pmv2-search-hidden', !match);
             if (match) visible += 1;
@@ -70,7 +70,7 @@
 
   ensureProCatalogSearch();
 
-  const utilityLinks = $('.utility a').map(a => ({
+  const utilityLinks = Array.from(document.querySelectorAll('.utility a')).map(a => ({
     href: a.getAttribute('href') || '',
     label: (a.textContent || '').trim()
   }));
@@ -317,10 +317,10 @@
   };
 
   const stepSection = number => sections[number-1];
-  $$('.pmv2-flow-step', hero).forEach(button => {
+  $Array.from(hero.querySelectorAll('.pmv2-flow-step')).forEach(button => {
     button.addEventListener('click', () => scrollToTarget(stepSection(Number(button.dataset.pmv2Step))));
   });
-  $$('[data-pmv2-edit]', review).forEach(button => {
+  $Array.from(review.querySelectorAll('[data-pmv2-edit]')).forEach(button => {
     button.addEventListener('click', () => scrollToTarget(stepSection(Number(button.dataset.pmv2Edit))));
   });
 
