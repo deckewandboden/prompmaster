@@ -179,3 +179,39 @@ a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,te
   .auth-login-card{padding:20px}
   .auth-login-form input{font-size:17px}
 }
+
+
+/* UI audit hardening 2026-09-23 */
+/* Crisp brand rendering: clean SVG wraps the higher-resolution reviewed logo and clips the baked-in top line. */
+.brand img{width:220px;height:auto;max-height:48px;object-fit:contain;object-position:left center}
+.login-logo{overflow:hidden}
+.login-logo img{width:270px;height:auto;max-height:54px;object-fit:contain;object-position:left center}
+@media(max-width:1100px){.brand img{width:54px;height:auto;max-height:48px;object-position:center}}
+@media(max-width:700px){.login-logo img{width:min(270px,100%);height:auto}}
+
+/* Destructive/detail actions must not visually collide with the last data row. */
+.card-action-row{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-top:14px;padding-top:14px;border-top:1px solid #edf2f6}
+.card-action-row .inline-form{margin:0}
+.security-reauth-card{max-width:820px;border-top:4px solid var(--blue);box-shadow:0 14px 34px rgba(5,32,58,.10)}
+.security-reauth-note{margin:0 0 14px;padding:12px 14px;border:1px solid #cfe3ff;border-radius:11px;background:#f2f8ff;color:#36516b;font-size:13px;line-height:1.5}
+
+/* 2FA setup: long secrets/URIs must be readable and copyable without broken two-column wrapping. */
+.auth-field-label{margin:0 0 6px;color:var(--muted);font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:.04em}
+.auth-copy-row{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:8px;align-items:start;margin-bottom:12px}
+.auth-copy-row .auth-code{min-height:42px;display:flex;align-items:center;white-space:normal;word-break:break-all;line-height:1.45}
+.auth-copy-row .btn{align-self:stretch}
+.auth-setup-grid>.card{min-width:0}
+@media(max-width:700px){.auth-copy-row{grid-template-columns:1fr}.auth-copy-row .btn{width:100%}}
+
+/* Consistent in-app confirmation modal instead of browser-native confirm(). */
+.pm-confirm-backdrop[hidden]{display:none!important}
+.pm-confirm-backdrop{position:fixed;inset:0;z-index:10000;display:grid;place-items:center;padding:20px;background:rgba(1,10,20,.66);backdrop-filter:blur(4px)}
+.pm-confirm-dialog{width:min(500px,100%);overflow:hidden;border:1px solid #d9e5ef;border-radius:16px;background:#fff;box-shadow:0 30px 90px rgba(0,0,0,.30)}
+.pm-confirm-head{padding:18px 20px 10px}
+.pm-confirm-kicker{margin-bottom:5px;color:var(--muted);font-size:10px;font-weight:850;text-transform:uppercase;letter-spacing:.08em}
+.pm-confirm-head h2{margin:0;font-size:22px;line-height:1.2}
+.pm-confirm-body{padding:4px 20px 18px;color:#405469;font-size:14px;line-height:1.55}
+.pm-confirm-actions{display:flex;justify-content:flex-end;gap:8px;padding:14px 20px;border-top:1px solid var(--line);background:#f8fbfd}
+.pm-confirm-actions .btn{min-width:108px}
+.pm-confirm-actions .btn.danger{background:linear-gradient(90deg,#df4354,#f06472);border-color:transparent;color:#fff}
+@media(max-width:520px){.pm-confirm-actions{display:grid;grid-template-columns:1fr 1fr}.pm-confirm-actions .btn{width:100%;min-width:0}}
