@@ -111,4 +111,29 @@ if not contract_ok:
     raise SystemExit(f"catalog contract drift via external Caddy: {payload}")
 PY
 
+log "Legacy Free/Pro routes through external Caddy testen"
+free_old="$(
+  docker run --rm --network "$NETWORK" curlimages/curl:8.12.1 \
+    -fsS -H "Host: $domain" "http://$ALIAS/free-old/"
+)"
+grep -q 'free_catalog_bridge.20260918.js' <<<"$free_old" || {
+  echo "Free legacy route did not reach Django through external Caddy" >&2
+  exit 1
+}
+
+pro_old_headers="$(
+  docker run --rm --network "$NETWORK" curlimages/curl:8.12.1 \
+    -sS -D - -o /dev/null -H "Host: $domain" "http://$ALIAS/pro-old/"
+)"
+grep -qE '^HTTP/[0-9.]+ 302' <<<"$pro_old_headers" || {
+  echo "Pro legacy route did not preserve the Django authentication redirect" >&2
+  printf '%s\n' "$pro_old_headers" >&2
+  exit 1
+}
+grep -qiE '^location: .*/auth/login/' <<<"$pro_old_headers" || {
+  echo "Pro legacy route redirect target is not the Django login route" >&2
+  printf '%s\n' "$pro_old_headers" >&2
+  exit 1
+}
+
 log "External-Caddy-Rehearsal OK"
