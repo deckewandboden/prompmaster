@@ -1025,7 +1025,7 @@ def run_backend_ui_smoke(browser, fixture=None) -> None:
         if (
             not v2_free_layout['left']
             or not v2_free_layout['right']
-            or v2_free_layout['logoPath'] != '/static/brand/promptmaster-logo-reference.png'
+            or v2_free_layout['logoPath'] != '/static/brand/promptmaster-logo-clean.svg'
             or v2_free_layout['bodyOverflowY'] not in {'auto', 'scroll'}
             or v2_free_layout['leftOverflowY'] != 'visible'
             or v2_free_layout['rightOverflowY'] != 'visible'
