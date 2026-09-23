@@ -465,7 +465,7 @@ def _browser_first_time_mfa_login(page, base: str, email: str, password: str, ex
     password_input.fill(password)
     password_input.press('Enter')
     page.wait_for_url('**/auth/2fa/setup/**')
-    secret = page.locator('.code-wrap').inner_text().strip()
+    secret = page.locator('#totpSecret').inner_text().strip()
     if not secret:
         raise AssertionError(f'first-time MFA secret missing for {email}')
     page.locator('input[name="code"]').fill(pyotp.TOTP(secret).now())
@@ -913,7 +913,7 @@ def _browser_register_verify_to_buy(
 
     if customer_type == 'company':
         page.wait_for_url('**/auth/2fa/setup/**')
-        secret = page.locator('.code-wrap').inner_text().strip()
+        secret = page.locator('#totpSecret').inner_text().strip()
         if not secret:
             raise AssertionError('company registration did not expose TOTP secret')
         page.locator('input[name="code"]').fill(pyotp.TOTP(secret).now())
