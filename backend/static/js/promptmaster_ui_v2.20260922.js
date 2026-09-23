@@ -128,7 +128,7 @@
   const subline = free
     ? 'PromptMaster macht aus deinem Anliegen Schritt für Schritt einen klaren, direkt einsetzbaren Prompt – kostenlos im Browser.'
     : '34 Copilot-Bereiche, präzise Aufgabenführung und professionelle Ausgabeformate – für Prompts, die im Arbeitsalltag sofort weiterhelfen.';
-  const flowNames = ['Copilot-Stufe','Anwendung','Aufgabe','Kontext','Zielgruppe','Schwerpunkt','Ausgabe'];
+  const flowNames = ['Copilot-Stufe','Anwendung','Aufgabe','Kontext','Zielgruppe','Schwerpunkt','Prompt-Check'];
   hero.innerHTML = `
     <div class="pmv2-hero-inner">
       <div class="pmv2-hero-copy">
@@ -169,6 +169,19 @@
   right.append(actions);
   const existingRating = $('#pmRatingWrap');
   if (existingRating) right.append(existingRating);
+
+  const promptOutput = $('#promptOutput', promptSection);
+  const autoSizePrompt = () => {
+    if (!promptOutput) return;
+    promptOutput.style.height = 'auto';
+    promptOutput.style.height = Math.max(330, promptOutput.scrollHeight + 2) + 'px';
+  };
+  promptOutput?.addEventListener('input', autoSizePrompt);
+  ['#promptMeta','#promptStatus','#charInfo'].forEach(selector => {
+    const node = $(selector, promptSection);
+    if (node) new MutationObserver(autoSizePrompt).observe(node,{subtree:true,childList:true,characterData:true,attributes:true});
+  });
+  autoSizePrompt();
 
   const review = document.createElement('section');
   review.className = 'section pmv2-section pmv2-review';
@@ -231,7 +244,14 @@
         toggle = document.createElement('button');
         toggle.type = 'button';
         toggle.className = 'pmv2-pro-toggle';
-        sectionBody.insertBefore(toggle, block);
+      }
+
+      // Keep the approved Free order deterministic even after the catalog
+      // bridge rerenders: heading -> six Free apps -> Pro expander -> Pro block.
+      const freeApps = $('#freeApps', sectionBody);
+      if (freeApps) {
+        freeApps.insertAdjacentElement('afterend', toggle);
+        toggle.insertAdjacentElement('afterend', block);
       } else if (toggle.nextElementSibling !== block) {
         sectionBody.insertBefore(toggle, block);
       }
@@ -295,30 +315,22 @@
     if (!node) return;
     const requestId = ++scrollRequestId;
 
-    if (matchMedia('(max-width: 1180px)').matches) {
-      node.scrollIntoView({behavior:'smooth',block:'start'});
-      return;
-    }
-
     const align = behavior => {
       if (requestId !== scrollRequestId || !node.isConnected) return;
-      const leftRect = left.getBoundingClientRect();
-      const nodeRect = node.getBoundingClientRect();
-      const offset = nodeRect.top - leftRect.top - 2;
-      left.scrollTo({top:left.scrollTop + offset,behavior});
+      const top = Math.max(0, window.scrollY + node.getBoundingClientRect().top - 18);
+      window.scrollTo({top,left:0,behavior});
     };
 
     align('smooth');
-
-    // Smooth scrolling is browser-dependent and can still be a few pixels
-    // short when a preceding section changes height. Finish quickly and
-    // deterministically so the active step sits at the top of the scroller.
     setTimeout(() => align('auto'), 260);
   };
 
   const stepSection = number => sections[number-1];
   Array.from(hero.querySelectorAll('.pmv2-flow-step')).forEach(button => {
-    button.addEventListener('click', () => scrollToTarget(stepSection(Number(button.dataset.pmv2Step))));
+    button.addEventListener('click', () => {
+      const step = Number(button.dataset.pmv2Step);
+      scrollToTarget(step === 7 ? review : stepSection(step));
+    });
   });
   Array.from(review.querySelectorAll('[data-pmv2-edit]')).forEach(button => {
     button.addEventListener('click', () => scrollToTarget(stepSection(Number(button.dataset.pmv2Edit))));
@@ -393,6 +405,8 @@
     $('[data-pmv2-review="task"]', review).textContent = selectedTaskName();
     $('[data-pmv2-review="audience"]', review).textContent = selectedAudience();
     $('[data-pmv2-review="output"]', review).textContent = outputSummary();
+    requestAnimationFrame(autoSizePrompt);
+    setTimeout(autoSizePrompt, 180);
   };
   left.addEventListener('change', () => setTimeout(updateReview,0));
   left.addEventListener('click', () => setTimeout(updateReview,80));
@@ -428,12 +442,8 @@
     const resetGeneration = scrollRequestId;
     const resetToTop = () => {
       if (resetGeneration !== scrollRequestId) return;
-      if (matchMedia('(max-width: 1180px)').matches) {
-        window.scrollTo(0, 0);
-      } else {
-        left.scrollTop = 0;
-        left.scrollTo({top:0,left:0,behavior:'auto'});
-      }
+      left.scrollTop = 0;
+      window.scrollTo({top:0,left:0,behavior:'auto'});
     };
 
     // Apply once synchronously and again after browser layout/scroll anchoring
