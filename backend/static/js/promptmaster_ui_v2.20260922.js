@@ -290,9 +290,7 @@
   if (oldMain.isConnected) oldMain.remove();
 
   let scrollRequestId = 0;
-  let resetScrollGuardUntil = 0;
   const scrollToTarget = target => {
-    if (Date.now() < resetScrollGuardUntil) return;
     const node = typeof target === 'string' ? $(target) : target;
     if (!node) return;
     const requestId = ++scrollRequestId;
@@ -416,10 +414,12 @@
   updateFlow();
 
   $('#resetBtn').addEventListener('click', () => {
-    resetScrollGuardUntil = Date.now() + 800;
-    scrollRequestId += 1;
+    const resetRequestId = ++scrollRequestId;
 
     const resetToTop = () => {
+      // A new user navigation invalidates the remaining reset timers so the
+      // configurator is immediately usable again after resetting.
+      if (resetRequestId !== scrollRequestId) return;
       if (matchMedia('(max-width: 1180px)').matches) {
         window.scrollTo({top:0,behavior:'auto'});
       } else {
@@ -433,7 +433,6 @@
     setTimeout(resetToTop, 400);
     setTimeout(() => {
       resetToTop();
-      resetScrollGuardUntil = 0;
       updateReview();
     }, 800);
   });
