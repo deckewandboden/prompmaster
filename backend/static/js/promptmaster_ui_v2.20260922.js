@@ -322,9 +322,12 @@
       const tierSwitch = $('#switchBusinessBtn', licenseModal);
       const tierSwitchText = (tierSwitch?.textContent || '').trim();
       if (licenseContact) {
-        licenseContact.textContent = tierSwitchText.endsWith(' auswählen')
+        const desiredContactText = tierSwitchText.endsWith(' auswählen')
           ? tierSwitchText.replace(/ auswählen$/, ' anfragen')
           : 'Microsoft-Copilot-Lizenz anfragen';
+        if (licenseContact.textContent.trim() !== desiredContactText) {
+          licenseContact.textContent = desiredContactText;
+        }
       }
       const licenseNote = $('.modal-note', licenseModal);
       const licenseNoteText = 'Microsoft-Copilot-Lizenzen werden separat von PromptMaster lizenziert. Die gewählte Stufe beschreibt ausschließlich den Microsoft-Copilot-Kontext, für den der Prompt optimiert wird.';
