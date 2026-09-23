@@ -1,6 +1,6 @@
 {% extends 'base.html' %}{% load static %}{% block body %}
 <div class="login-wrap"><div class="login-card">
-<div class="login-logo"><img src="{% static 'brand/promptmaster-logo-reference.png' %}" width="239" height="47" alt="PromptMaster by netstyle"></div>
+<div class="login-logo"><img src="{% static 'brand/promptmaster-logo-clean.svg' %}" width="239" height="47" alt="PromptMaster by netstyle"></div>
 <h1>Einladung annehmen</h1><p class="muted">{{ invitation.company.name }} lädt Sie zu PromptMaster ein.</p>
 <form method="post" class="form">{% csrf_token %}
 {{ form.non_field_errors }}
