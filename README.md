@@ -1,8 +1,8 @@
-# PromptMaster Commercial Platform — GitHub RC14 Full Repository
+# PromptMaster Commercial Platform — konsolidierter Release-Stand
 
-Konsolidierter Gesamtstand aus den belegbaren PromptMaster-Entwicklungssträngen bis 13.09.2026, jetzt einschließlich Marketing-/Vertriebsfrontend und historischer Transfer-/Designreferenzen.
+Konsolidierter Gesamtstand der belegbaren PromptMaster-Entwicklung mit Marketing-/Vertriebsfrontend, Free/Pro V2, Commercial Backend und erhaltener historischer Transfer-/Designprovenienz.
 
-> **Status:** vollständiges GitHub-/CI-fähiges Monorepo für den aktuell materialisierten Stand. Marketing, Free, Pro und Commercial Backend liegen gemeinsam vor. Produktionsfreigabe erst nach grünem GitHub-CI sowie den externen Staging-/E2E-Gates in `docs/RELEASE_GATES.md`.
+> **Status 23.09.2026:** Der konsolidierte `main`-Stand hat die internen automatisierten Release-Gates vollständig bestanden: Shell-/Dependency-Security, 292 Django-Tests (6 absichtliche Performance-Skips), separates 100k-DataGrid-Gate, 34 Apps / 194 Tasks / 194 Prompt-Smokes, Chromium/Firefox/WebKit Browser-Smoke sowie Full-Stack-Bootstrap, Idempotenz, HTTP-Lasttest, Backup-Restore-Recovery und External-Caddy-Rehearsal. Eine echte Produktionsfreigabe erfordert zusätzlich die provider-/infrastrukturabhängigen Gates und die menschliche Freigabe aus `docs/RELEASE_GATES.md` und `docs/PRODUCTION_ACCEPTANCE.md`.
 
 Der vollständige Dateiindex liegt in `docs/COMPLETE_FILE_INVENTORY.md`; `FILE_MANIFEST.tsv` und `MANIFEST.json` sichern Pfad, Größe, SHA256 und Rolle jeder inventarisierten Repository-Datei. Die Original-Recovery-ZIPs der beiden zuletzt gelieferten Quellen sind unverändert unter `archive/source-packages/` enthalten.
 
@@ -66,8 +66,12 @@ Der aktuelle Pro-Golden-Master ist PM20 mit **34 Apps / 194 Tasks**. PM11-160 bl
 
 ## Zentrale Endpunkte
 
+- PromptMaster Free V2: `/free/`
+- PromptMaster Pro V2: `/pro/app/`
+- Free Legacy/Rollback: `/free-old/`
+- Pro Legacy/Rollback: `/pro-old/`
 - Kundenportal: `/portal/dashboard/`
-- Pro-Zugang: `/pro/`
+- Pro-Zugang/Entitlement-Einstieg: `/pro/`
 - netstyle Backend: `/ns-admin/`
 - Prompt Studio: `/ns-admin/prompt-studio/`
 - FAQ-Pflege: `/ns-admin/content/faqs/`
@@ -144,14 +148,14 @@ Siehe `docs/GITHUB_TRANSFER.md`. Das Repository ist für einen privaten GitHub-E
 
 ## Noch extern zu bestätigen
 
-Dieser Arbeitscontainer besitzt weder Docker noch installierbares Django. Deshalb werden folgende Punkte **nicht fälschlich als runtime-grün** ausgewiesen:
+Die GitHub-/Docker-/Browser-/Security-/100k-Gates sind für den konsolidierten Release-Stand automatisiert grün nachgewiesen. **Nicht durch CI ersetzbar** und deshalb vor einem echten Go-Live weiterhin extern abzunehmen sind:
 
-- GitHub CI / echter Django-PostgreSQL-Lauf
-- Ubuntu-Docker-Runtime
-- Mollie Sandbox E2E
-- Microsoft Graph Mail E2E
+- Deployment auf dem tatsächlichen Zielhost inklusive öffentlicher Domain/DNS/TLS
+- Mollie Sandbox E2E über den echten öffentlichen Webhook, einschließlich Refund/Chargeback
+- Microsoft Graph Mail E2E inklusive Exchange Application-RBAC-Scope-Nachweis
 - externer S3/restic Backup-/Restore-Drill
-- Browser-/Responsive-Abnahme
-- vollständige Security-/Tenant-E2E
-- 100k DataGrid Performance
-- formale Marketing-Freigabe des integrierten, vollständig vorhandenen 06.09.-Source-Stands oder Wiederbeschaffung des bytegenauen V15-Archivs
+- reale Monitoring-/Alert-Empfänger und dokumentierter Notfallzugang
+- Rechtstexte/Steuerprüfung und menschliche Produktionsfreigabe
+- bewusste Marketing-Freigabe des integrierten 06.09.-Source-Stands; die historische V15-Provenienz bleibt davon getrennt dokumentiert
+
+Details und verbindliche Evidenz stehen in `docs/PRODUCTION_ACCEPTANCE.md` und `docs/RELEASE_GATES.md`.
