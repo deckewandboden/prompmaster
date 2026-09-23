@@ -55,9 +55,9 @@ body.pmv2 textarea{font-family:inherit}
 .pmv2-brand{display:flex;align-items:center;gap:13px;min-width:0}
 .pmv2-brand img{
   display:block;
-  width:300px;
+  width:270px;
   height:auto;
-  max-height:54px;
+  max-height:52px;
   object-fit:contain;
   object-position:left center;
   border:0;
@@ -402,9 +402,9 @@ body.pmv2 textarea{font-family:inherit}
   background:linear-gradient(180deg,rgba(78,45,127,.34),rgba(35,29,80,.42))!important;
 }
 .pmv2 .app.locked,
-.pmv2 .app-card.locked{opacity:.58!important;filter:saturate(.65)}
+.pmv2 .app-card.locked{opacity:.74!important;filter:saturate(.82)}
 .pmv2 .app.locked:hover,
-.pmv2 .app-card.locked:hover{opacity:.82!important;filter:saturate(.8)}
+.pmv2 .app-card.locked:hover{opacity:.92!important;filter:saturate(.92)}
 .pmv2 .app-icon{
   width:48px!important;height:48px!important;min-width:48px!important;
   border-radius:13px!important;
@@ -542,6 +542,7 @@ body.pmv2 textarea{font-family:inherit}
   background:linear-gradient(90deg,var(--pmv2-cyan),var(--pmv2-blue));
 }
 .pmv2-pro .pmv2-prompt-panel:before{background:linear-gradient(90deg,var(--pmv2-purple),var(--pmv2-purple2),var(--pmv2-cyan))}
+.pmv2-prompt-panel.pmv2-prompt-tall{position:relative;top:auto}
 .pmv2 .pmv2-prompt{
   margin:0!important;
   border:0!important;
@@ -573,6 +574,11 @@ body.pmv2 textarea{font-family:inherit}
   background:rgba(19,77,104,.36)!important;
   color:#b8f4fb!important;
   font-size:10px!important;
+}
+.pmv2-pro .prompt-mode{
+  border-color:rgba(151,99,238,.35)!important;
+  background:rgba(74,43,119,.34)!important;
+  color:#e3d3ff!important;
 }
 .pmv2 .bottom-progress-card{display:none!important}
 .pmv2 .prompt-body{padding:15px 17px 11px!important;background:transparent!important}
@@ -732,3 +738,20 @@ body.pmv2 textarea{font-family:inherit}
   .pmv2 .option-grid{grid-template-columns:1fr!important}
   .pmv2 .prompt-top h2{font-size:27px!important}
 }
+
+
+/* V2 audit refinements 2026-09-23 */
+.pmv2 .modal-backdrop{backdrop-filter:blur(5px)}
+.pmv2 .modal{
+  border:1px solid rgba(126,181,217,.22)!important;
+  border-radius:18px!important;
+  overflow:hidden!important;
+  box-shadow:0 28px 80px rgba(0,0,0,.42)!important
+}
+.pmv2 .modal-actions{gap:10px!important;flex-wrap:wrap!important}
+.pmv2 .modal-actions .btn{min-height:42px!important}
+.pmv2 .modal-actions a.btn{text-decoration:none!important}
+.pmv2 .modal-note{line-height:1.5!important}
+.pmv2 .pmv2-pro-toggle:hover{border-color:rgba(171,126,238,.52);background:rgba(66,40,106,.46)}
+@media(max-width:850px){.pmv2-brand img{width:235px}}
+@media(max-width:620px){.pmv2-brand img{width:205px}}
