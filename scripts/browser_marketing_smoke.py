@@ -88,6 +88,7 @@ def main() -> int:
         DIST / 'models' / 'head.glb',
         DIST / 'models' / 'night-landscape.png',
         DIST / 'brand' / 'design-reference.jpeg',
+        DIST / 'brand' / 'promptmaster-logo-clean.svg',
     )
     missing = [str(path.relative_to(ROOT)) for path in required_assets if not path.is_file()]
     if missing:
