@@ -999,14 +999,26 @@ def run_backend_ui_smoke(browser, fixture=None) -> None:
               const left = document.querySelector('#pmv2ConfigScroll');
               const right = document.querySelector('.pmv2-prompt-panel');
               const logo = document.querySelector('.pmv2-brand img');
+              const freeApps = document.querySelector('#freeApps');
+              const toggle = document.querySelector('.pmv2-pro-toggle');
+              const firstLicense = document.querySelector('.license-option > span');
+              const flow7 = document.querySelector('.pmv2-flow-step[data-pmv2-step="7"] span');
+              const firstFreeCopy = document.querySelector('#freeApps .app-copy');
+              const firstFreeFooter = document.querySelector('#freeApps .app-footer');
               return {
                 left: !!left,
                 right: !!right,
                 logoPath: logo ? new URL(logo.src).pathname : '',
-                bodyOverflow: getComputedStyle(document.body).overflow,
-                rightTop: right?.getBoundingClientRect().top ?? -1,
+                bodyOverflowY: getComputedStyle(document.body).overflowY,
+                leftOverflowY: left ? getComputedStyle(left).overflowY : '',
+                rightOverflowY: right ? getComputedStyle(right).overflowY : '',
+                rightPosition: right ? getComputedStyle(right).position : '',
                 rightHeight: right?.getBoundingClientRect().height ?? 0,
-                windowY: scrollY,
+                toggleAfterFreeApps: !!(freeApps && toggle && freeApps.nextElementSibling === toggle),
+                flow7Text: flow7?.textContent?.trim() || '',
+                licenseBackground: firstLicense ? getComputedStyle(firstLicense).backgroundColor : '',
+                freeCopyDisplay: firstFreeCopy ? getComputedStyle(firstFreeCopy).display : '',
+                freeFooterDisplay: firstFreeFooter ? getComputedStyle(firstFreeFooter).display : '',
               };
             }"""
         )
@@ -1014,32 +1026,41 @@ def run_backend_ui_smoke(browser, fixture=None) -> None:
             not v2_free_layout['left']
             or not v2_free_layout['right']
             or v2_free_layout['logoPath'] != '/static/brand/promptmaster-logo-reference.png'
-            or v2_free_layout['bodyOverflow'] != 'hidden'
+            or v2_free_layout['bodyOverflowY'] not in {'auto', 'scroll'}
+            or v2_free_layout['leftOverflowY'] != 'visible'
+            or v2_free_layout['rightOverflowY'] != 'visible'
+            or v2_free_layout['rightPosition'] != 'sticky'
             or v2_free_layout['rightHeight'] < 300
+            or not v2_free_layout['toggleAfterFreeApps']
+            or v2_free_layout['flow7Text'] != 'Prompt-Check'
+            or v2_free_layout['freeCopyDisplay'] != 'none'
+            or v2_free_layout['freeFooterDisplay'] != 'none'
+            or v2_free_layout['licenseBackground'] not in {'rgba(0, 0, 0, 0)', 'transparent'}
         ):
-            raise AssertionError(f'Free V2 desktop shell invalid: {v2_free_layout}')
+            raise AssertionError(f'Free V2 approved desktop shell invalid: {v2_free_layout}')
 
-        fixed_prompt_probe = public_page.evaluate(
+        single_scroll_probe = public_page.evaluate(
             """async () => {
               const left = document.querySelector('#pmv2ConfigScroll');
               const right = document.querySelector('.pmv2-prompt-panel');
-              const before = right.getBoundingClientRect().top;
-              left.scrollTop = Math.min(700, left.scrollHeight - left.clientHeight);
-              await new Promise(resolve => setTimeout(resolve, 80));
+              window.scrollTo(0, Math.min(700, document.documentElement.scrollHeight - innerHeight));
+              await new Promise(resolve => setTimeout(resolve, 100));
               return {
-                before,
-                after: right.getBoundingClientRect().top,
-                leftTop: left.scrollTop,
                 windowY: scrollY,
+                leftTop: left.scrollTop,
+                rightTop: right.scrollTop,
+                rightViewportTop: right.getBoundingClientRect().top,
               };
             }"""
         )
         if (
-            fixed_prompt_probe['leftTop'] < 50
-            or abs(fixed_prompt_probe['after'] - fixed_prompt_probe['before']) > 1
-            or fixed_prompt_probe['windowY'] != 0
+            single_scroll_probe['windowY'] < 50
+            or single_scroll_probe['leftTop'] >= 3
+            or single_scroll_probe['rightTop'] >= 3
+            or single_scroll_probe['rightViewportTop'] < 0
+            or single_scroll_probe['rightViewportTop'] > 40
         ):
-            raise AssertionError(f'Free V2 prompt panel is not fixed while left scrolls: {fixed_prompt_probe}')
+            raise AssertionError(f'Free V2 must use one browser scrollbar with sticky prompt: {single_scroll_probe}')
 
         public_page.locator('#resetBtn').click()
         public_page.wait_for_timeout(500)
@@ -1056,7 +1077,7 @@ def run_backend_ui_smoke(browser, fixture=None) -> None:
         if (
             not reset_probe['hasConfig']
             or reset_probe['leftTop'] >= 3
-            or reset_probe['windowY'] != 0
+            or reset_probe['windowY'] >= 3
         ):
             raise AssertionError(f'Free V2 reset did not return to top: {reset_probe}')
 
@@ -1088,33 +1109,31 @@ def run_backend_ui_smoke(browser, fixture=None) -> None:
         public_page.wait_for_timeout(450)
         app_scroll_probe = public_page.evaluate(
             """() => {
-              const left = document.querySelector('#pmv2ConfigScroll').getBoundingClientRect();
               const target = document.querySelector('#taskSection').getBoundingClientRect();
-              return {offset: target.top-left.top};
+              return {top: target.top, windowY: scrollY};
             }"""
         )
-        if abs(app_scroll_probe['offset']) > 28:
-            raise AssertionError(f'Free V2 app -> task autoscroll missed target: {app_scroll_probe}')
+        if abs(app_scroll_probe['top'] - 18) > 40 or app_scroll_probe['windowY'] < 10:
+            raise AssertionError(f'Free V2 app -> task page autoscroll missed target: {app_scroll_probe}')
 
         public_page.locator('#taskGrid .task[data-prolocked="0"]').first.click()
         public_page.wait_for_timeout(450)
         task_scroll_probe = public_page.evaluate(
             """() => {
-              const left = document.querySelector('#pmv2ConfigScroll').getBoundingClientRect();
               const target = document.querySelector('#contextSection').getBoundingClientRect();
-              return {offset: target.top-left.top};
+              return {top: target.top, windowY: scrollY};
             }"""
         )
-        if abs(task_scroll_probe['offset']) > 28:
-            raise AssertionError(f'Free V2 task -> context autoscroll missed target: {task_scroll_probe}')
+        if abs(task_scroll_probe['top'] - 18) > 40 or task_scroll_probe['windowY'] < 10:
+            raise AssertionError(f'Free V2 task -> context page autoscroll missed target: {task_scroll_probe}')
 
-        context_scroll_before = public_page.locator('#pmv2ConfigScroll').evaluate('el => el.scrollTop')
+        context_scroll_before = public_page.evaluate('scrollY')
         public_page.locator('#sourceContextInput').click()
         public_page.wait_for_timeout(180)
-        context_scroll_after = public_page.locator('#pmv2ConfigScroll').evaluate('el => el.scrollTop')
+        context_scroll_after = public_page.evaluate('scrollY')
         if abs(context_scroll_after - context_scroll_before) > 3:
             raise AssertionError(
-                'Free V2 focusing the second context field moved the left scroller: '
+                'Free V2 focusing the second context field moved the page: '
                 f'{context_scroll_before} -> {context_scroll_after}'
             )
         usable_chat_tasks = public_page.locator(
@@ -1454,29 +1473,30 @@ def run_backend_ui_smoke(browser, fixture=None) -> None:
                     """async () => {
                       const left = document.querySelector('#pmv2ConfigScroll');
                       const right = document.querySelector('.pmv2-prompt-panel');
-                      const before = right.getBoundingClientRect().top;
-                      left.scrollTop = Math.min(700, left.scrollHeight - left.clientHeight);
-                      await new Promise(resolve => setTimeout(resolve, 80));
+                      window.scrollTo(0, Math.min(700, document.documentElement.scrollHeight - innerHeight));
+                      await new Promise(resolve => setTimeout(resolve, 100));
                       return {
-                        before,
-                        after: right.getBoundingClientRect().top,
                         leftTop: left.scrollTop,
+                        rightTop: right.scrollTop,
                         windowY: scrollY,
+                        rightViewportTop: right.getBoundingClientRect().top,
+                        rightPosition: getComputedStyle(right).position,
                       };
                     }"""
                 )
                 if (
-                    pro_fixed_probe['leftTop'] < 50
-                    or abs(pro_fixed_probe['after'] - pro_fixed_probe['before']) > 1
-                    or pro_fixed_probe['windowY'] != 0
+                    pro_fixed_probe['windowY'] < 50
+                    or pro_fixed_probe['leftTop'] >= 3
+                    or pro_fixed_probe['rightTop'] >= 3
+                    or pro_fixed_probe['rightPosition'] != 'sticky'
+                    or pro_fixed_probe['rightViewportTop'] < 0
+                    or pro_fixed_probe['rightViewportTop'] > 40
                 ):
                     raise AssertionError(
-                        f'PromptMaster Pro V2 prompt panel is not fixed: {pro_fixed_probe}'
+                        f'PromptMaster Pro V2 single-scroll sticky panel invalid: {pro_fixed_probe}'
                     )
                 page.locator('#resetBtn').click()
-                page.wait_for_function(
-                    "document.querySelector('#pmv2ConfigScroll').scrollTop < 3"
-                )
+                page.wait_for_function("window.scrollY < 3")
                 customer_catalog_probe = page.evaluate(
                     """async () => {
                       const r = await fetch('/api/v1/prompts/?product=PRO', {
@@ -1800,28 +1820,35 @@ def _run_cross_browser_product_v2(browser, fixture: dict, engine: str) -> None:
               const left = document.querySelector('#pmv2ConfigScroll');
               const right = document.querySelector('.pmv2-prompt-panel');
               if (!left || !right) return null;
-              const before = right.getBoundingClientRect().top;
-              left.scrollTop = Math.min(600, left.scrollHeight-left.clientHeight);
-              await new Promise(resolve => setTimeout(resolve, 80));
+              window.scrollTo(0, Math.min(600, document.documentElement.scrollHeight-innerHeight));
+              await new Promise(resolve => setTimeout(resolve, 100));
               return {
-                before,
-                after: right.getBoundingClientRect().top,
                 leftTop: left.scrollTop,
+                rightTop: right.scrollTop,
                 windowY: scrollY,
-                bodyOverflow: getComputedStyle(document.body).overflow,
+                bodyOverflowY: getComputedStyle(document.body).overflowY,
+                leftOverflowY: getComputedStyle(left).overflowY,
+                rightOverflowY: getComputedStyle(right).overflowY,
+                rightPosition: getComputedStyle(right).position,
+                rightViewportTop: right.getBoundingClientRect().top,
               };
             }"""
         )
         if (
             not free_layout
-            or free_layout['leftTop'] < 50
-            or abs(free_layout['before'] - free_layout['after']) > 1.5
-            or free_layout['windowY'] != 0
-            or free_layout['bodyOverflow'] != 'hidden'
+            or free_layout['windowY'] < 50
+            or free_layout['leftTop'] >= 3
+            or free_layout['rightTop'] >= 3
+            or free_layout['bodyOverflowY'] not in {'auto', 'scroll'}
+            or free_layout['leftOverflowY'] != 'visible'
+            or free_layout['rightOverflowY'] != 'visible'
+            or free_layout['rightPosition'] != 'sticky'
+            or free_layout['rightViewportTop'] < 0
+            or free_layout['rightViewportTop'] > 40
         ):
-            raise AssertionError(f'{engine} Free V2 layout unstable: {free_layout}')
+            raise AssertionError(f'{engine} Free V2 single-scroll layout unstable: {free_layout}')
         page.locator('#resetBtn').click()
-        page.wait_for_function("document.querySelector('#pmv2ConfigScroll').scrollTop < 3")
+        page.wait_for_function("window.scrollY < 3")
 
         _browser_login(
             page,
