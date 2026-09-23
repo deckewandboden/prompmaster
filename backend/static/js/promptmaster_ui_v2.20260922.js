@@ -84,7 +84,7 @@
   header.className = 'pmv2-header';
   header.innerHTML = `
     <div class="pmv2-brand">
-      <img src="/static/brand/promptmaster-logo-reference.png" alt="PromptMaster">
+      <img src="/static/brand/promptmaster-logo-clean.svg" alt="PromptMaster">
       <span class="pmv2-edition pmv2-edition-${edition}">${edition.toUpperCase()}</span>
     </div>
     <div class="pmv2-header-spacer"></div>
