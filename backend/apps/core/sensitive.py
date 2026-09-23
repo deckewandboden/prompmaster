@@ -115,6 +115,7 @@ def sensitive_reauth(request):
         {
             'title': 'Sicherheitsfreigabe bestätigen',
             'form': form,
+            'form_variant': 'security',
             'cancel_url': safe_internal_return_url(
                 request,
                 request.session.get(SENSITIVE_REAUTH_NEXT_KEY, ''),
