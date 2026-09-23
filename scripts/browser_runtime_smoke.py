@@ -482,6 +482,28 @@ def _browser_first_time_mfa_login(page, base: str, email: str, password: str, ex
     page.wait_for_load_state('networkidle')
 
 
+_LAST_SUCCESSFUL_TOTP_BY_EMAIL = {}
+
+
+def _fresh_browser_totp(email: str, secret: str) -> str:
+    """Return a TOTP code not already consumed by this browser acceptance run."""
+    import time
+    import pyotp
+
+    totp = pyotp.TOTP(secret)
+    previous = _LAST_SUCCESSFUL_TOTP_BY_EMAIL.get(email)
+    code = totp.now()
+    deadline = time.monotonic() + 35.0
+
+    while previous is not None and code == previous:
+        if time.monotonic() >= deadline:
+            raise AssertionError(f'fresh TOTP not available in time for {email}')
+        time.sleep(0.25)
+        code = totp.now()
+
+    return code
+
+
 def _browser_login(page, base: str, email: str, password: str, secret: str, expected_path: str) -> None:
     import pyotp
 
@@ -525,12 +547,14 @@ def _browser_login(page, base: str, email: str, password: str, secret: str, expe
         or two_factor_layout['overlap']
     ):
         raise AssertionError(f'2FA layout is unstable: {two_factor_layout}')
-    code_input.fill(pyotp.TOTP(secret).now())
+    submitted_code = _fresh_browser_totp(email, secret)
+    code_input.fill(submitted_code)
     code_input.press('Enter')
     page.wait_for_url(lambda url: '/auth/2fa/' not in url and '/auth/login/' not in url)
     page.wait_for_load_state('networkidle')
     if expected_path not in page.url:
         raise AssertionError(f'login for {email} ended at {page.url}, expected {expected_path}')
+    _LAST_SUCCESSFUL_TOTP_BY_EMAIL[email] = submitted_code
 
 
 def _browser_login_password_only(page, base: str, email: str, password: str, expected_path: str) -> None:
