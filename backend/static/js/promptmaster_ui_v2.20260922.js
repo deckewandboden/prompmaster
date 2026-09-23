@@ -171,10 +171,15 @@
   if (existingRating) right.append(existingRating);
 
   const promptOutput = $('#promptOutput', promptSection);
+  const syncPromptStickiness = () => {
+    const tooTall = right.scrollHeight > Math.max(520, window.innerHeight - 36);
+    right.classList.toggle('pmv2-prompt-tall', tooTall);
+  };
   const autoSizePrompt = () => {
     if (!promptOutput) return;
     promptOutput.style.height = 'auto';
     promptOutput.style.height = Math.max(330, promptOutput.scrollHeight + 2) + 'px';
+    requestAnimationFrame(syncPromptStickiness);
   };
   promptOutput?.addEventListener('input', autoSizePrompt);
   ['#promptMeta','#promptStatus','#charInfo'].forEach(selector => {
@@ -182,6 +187,10 @@
     if (node) new MutationObserver(autoSizePrompt).observe(node,{subtree:true,childList:true,characterData:true,attributes:true});
   });
   autoSizePrompt();
+  window.addEventListener('resize', syncPromptStickiness);
+  if ('ResizeObserver' in window) {
+    new ResizeObserver(syncPromptStickiness).observe(right);
+  }
 
   const review = document.createElement('section');
   review.className = 'section pmv2-section pmv2-review';
@@ -277,16 +286,51 @@
     ensureFreeProToggle();
     window.addEventListener('pm-free-catalog-ready', ensureFreeProToggle);
 
+    const normalizePromptMasterBrand = root => {
+      if (!root) return;
+      const walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT);
+      const nodes = [];
+      while (walker.nextNode()) nodes.push(walker.currentNode);
+      nodes.forEach(node => {
+        node.nodeValue = (node.nodeValue || '').replaceAll('CopilotPromptMaster', 'PromptMaster');
+      });
+    };
+
+    const freeHeading = $('#freeApps')?.previousElementSibling?.querySelector('h3');
+    if (freeHeading) freeHeading.textContent = 'PromptMaster Free';
+    const proHeading = $('.pmv2-free-pro-block .catalog-head h3');
+    if (proHeading) proHeading.textContent = 'Weitere Anwendungen mit PromptMaster Pro';
+
+    const generalProModal = $('#generalProModal');
+    const proModal = $('#proModal');
+    normalizePromptMasterBrand(generalProModal);
+    normalizePromptMasterBrand(proModal);
+
+    const generalProCta = generalProModal?.querySelector('.modal-actions a.btn');
+    if (generalProCta) generalProCta.textContent = 'PromptMaster Pro anfragen';
+    const proModalCta = proModal?.querySelector('.modal-actions a.btn');
+    if (proModalCta) proModalCta.textContent = 'PromptMaster Pro anfragen';
+
+    const licenseModal = $('#businessModal');
+    const licenseContact = licenseModal?.querySelector('.modal-actions a[href*="netstyle.de/kontakt"]');
+    if (licenseContact) licenseContact.textContent = 'Microsoft-Copilot-Lizenz anfragen';
+    const licenseNote = $('.modal-note', licenseModal);
+    if (licenseNote) {
+      licenseNote.textContent = 'Microsoft-Copilot-Lizenzen werden separat von PromptMaster lizenziert. Prüfen Sie, welche Copilot-Stufe Ihrem Microsoft-Konto tatsächlich zugewiesen ist.';
+    }
+
     const proModalTitle = $('#proModalTitle');
     const proModalSubtitle = $('#proModalSubtitle');
     if (proModalTitle && proModalSubtitle) {
       const modalObserver = new MutationObserver(() => {
         const title = proModalTitle.textContent.trim();
-        if (title.startsWith('CopilotPromptMaster Pro für ')) {
-          const app = title.replace('CopilotPromptMaster Pro für ','');
+        if (title.startsWith('CopilotPromptMaster Pro für ') || title.startsWith('PromptMaster Pro für ')) {
+          const app = title.replace(/^CopilotPromptMaster Pro für |^PromptMaster Pro für /,'');
           proModalTitle.textContent = app + ' mit PromptMaster Pro nutzen';
           proModalSubtitle.textContent = 'Nutze den erweiterten Copilot-Katalog und passe Prompts noch genauer an deinen Arbeitsbereich an.';
         }
+        normalizePromptMasterBrand(proModal);
+        if (proModalCta) proModalCta.textContent = 'PromptMaster Pro anfragen';
       });
       modalObserver.observe(proModalTitle,{childList:true,subtree:true,characterData:true});
     }
