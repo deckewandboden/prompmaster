@@ -200,6 +200,16 @@ for token in ('initConfirmationDialogs', 'pm-confirm-backdrop', 'data-copy-targe
     if token not in app_js:
         fail(f'Admin/auth UI audit invariant missing from app.js: {token}')
 
+for template in sorted((ROOT/'backend/templates').rglob('*.html')):
+    template_text = template.read_text(encoding='utf-8')
+    rel = template.relative_to(ROOT)
+    if 'promptmaster-logo-reference.png' in template_text:
+        fail(f'Active template still uses legacy low-resolution logo: {rel}')
+    if 'return confirm(' in template_text:
+        fail(f'Active template still uses browser-native confirm(): {rel}')
+    if 'CopilotPromptMaster' in template_text:
+        fail(f'Active template still exposes legacy product branding: {rel}')
+
 css = (ROOT/'backend/static/css/app.css').read_text(encoding='utf-8')
 for token in (
     '--button-h:40px',
