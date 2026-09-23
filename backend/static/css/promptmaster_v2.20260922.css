@@ -784,3 +784,12 @@ body.pmv2 textarea{font-family:inherit}
 @media(max-width:1180px){
   .pmv2-prompt-panel{position:relative;top:auto}
 }
+
+
+/* Accessible Microsoft-license explanation cards. */
+.pmv2 [data-licenselocked="1"][role="button"]:focus-visible{outline:none}
+.pmv2 [data-licenselocked="1"][role="button"]:focus-visible .app-card{
+  outline:2px solid var(--pmv2-cyan);
+  outline-offset:3px;
+  box-shadow:0 0 0 4px rgba(53,220,243,.12);
+}
