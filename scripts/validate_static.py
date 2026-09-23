@@ -135,7 +135,8 @@ required = [
     'backend/private_assets/promptmaster_pro.html',
     'backend/apps/payments/services.py','backend/apps/ops/api.py','backend/apps/proaccess/views.py',
     'backend/templates/portal/base.html','backend/templates/ns_admin/base.html',
-    'backend/static/brand/promptmaster-logo-reference.png','scripts/runtime_validate.sh',
+    'backend/static/brand/promptmaster-logo-reference.png',
+    'backend/static/brand/promptmaster-logo-clean.svg','scripts/runtime_validate.sh',
     'backend/apps/prompts/models.py','backend/apps/prompts/composer_core.py',
     'backend/apps/prompts/services.py','backend/apps/prompts/api.py','backend/apps/prompts/api_urls.py',
     'backend/apps/prompts/management/commands/seed_prompt_catalog.py',
@@ -150,24 +151,64 @@ for rel in required:
     if not (ROOT/rel).exists():
         fail(f'Missing {rel}')
 
-# 7) Exact approved PromptMaster logo regression guard.
+# 7) PromptMaster branding regression guards.
+# The 239x47 PNG is retained byte-exactly for legacy rollback routes only.
 logo = ROOT/'backend/static/brand/promptmaster-logo-reference.png'
 if logo.exists():
     data = logo.read_bytes()
     expected_sha = '5848c7bc83fa903f9eb2de1b8a3c8443a9dca937cf3659494d2db2d5a26ff231'
     if hashlib.sha256(data).hexdigest() != expected_sha:
-        fail('PromptMaster logo hash differs from approved 239x47 reference')
+        fail('Legacy PromptMaster logo hash differs from approved 239x47 reference')
     try:
         if data[:8] != b'\x89PNG\r\n\x1a\n':
             raise ValueError('not png')
         width, height = struct.unpack('>II', data[16:24])
         if (width, height) != (239, 47):
-            fail(f'PromptMaster logo dimensions are {width}x{height}, expected 239x47')
+            fail(f'Legacy PromptMaster logo dimensions are {width}x{height}, expected 239x47')
     except Exception as exc:
-        fail(f'Logo metadata invalid: {exc}')
+        fail(f'Legacy logo metadata invalid: {exc}')
+
+clean_logo = ROOT/'backend/static/brand/promptmaster-logo-clean.svg'
+clean_svg = clean_logo.read_text(encoding='utf-8')
+for token in ('width="315"', 'height="59"', 'viewBox="0 3 315 59"', 'data:image/png;base64,'):
+    if token not in clean_svg:
+        fail(f'Clean PromptMaster logo invariant missing: {token}')
+
+active_brand_files = (
+    ROOT/'backend/templates/app_shell.html',
+    ROOT/'backend/templates/auth/login.html',
+    ROOT/'backend/templates/auth/two_factor_setup.html',
+    ROOT/'backend/static/js/promptmaster_ui_v2.20260922.js',
+)
+for path in active_brand_files:
+    text = path.read_text(encoding='utf-8')
+    if 'promptmaster-logo-clean.svg' not in text:
+        fail(f'Active UI still does not use clean PromptMaster logo: {path.relative_to(ROOT)}')
+
+v2_js = (ROOT/'backend/static/js/promptmaster_ui_v2.20260922.js').read_text(encoding='utf-8')
+for token in (
+    "'Prompt-Check'",
+    'Microsoft-Copilot-Lizenz anfragen',
+    'PromptMaster Pro anfragen',
+    'pmv2-prompt-tall',
+):
+    if token not in v2_js:
+        fail(f'V2 UI audit invariant missing: {token}')
+
+app_js = (ROOT/'backend/static/js/app.js').read_text(encoding='utf-8')
+for token in ('initConfirmationDialogs', 'pm-confirm-backdrop', 'data-copy-target'):
+    if token not in app_js:
+        fail(f'Admin/auth UI audit invariant missing from app.js: {token}')
 
 css = (ROOT/'backend/static/css/app.css').read_text(encoding='utf-8')
-for token in ('--button-h:40px', '.brand img{display:block;width:239px;height:47px', '.btn.sm{height:34px', '@media(max-width:700px)'):
+for token in (
+    '--button-h:40px',
+    '.btn.sm{height:34px',
+    '@media(max-width:700px)',
+    '/* UI audit hardening 2026-09-23 */',
+    '.pm-confirm-backdrop',
+    '.card-action-row',
+):
     if token not in css:
         fail(f'Design-system invariant missing from app.css: {token}')
 
