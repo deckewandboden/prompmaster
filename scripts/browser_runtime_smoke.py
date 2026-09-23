@@ -1092,6 +1092,7 @@ def run_backend_ui_smoke(browser, fixture=None) -> None:
                 logoPath: logo ? new URL(logo.src).pathname : '',
                 logoNaturalWidth: logo?.naturalWidth || 0,
                 bodyOverflowY: getComputedStyle(document.body).overflowY,
+                rootScrollBehavior: getComputedStyle(document.documentElement).scrollBehavior,
                 leftOverflowY: left ? getComputedStyle(left).overflowY : '',
                 rightOverflowY: right ? getComputedStyle(right).overflowY : '',
                 rightPosition: right ? getComputedStyle(right).position : '',
@@ -1110,6 +1111,7 @@ def run_backend_ui_smoke(browser, fixture=None) -> None:
             or v2_free_layout['logoPath'] != '/static/brand/promptmaster-logo-clean.svg'
             or v2_free_layout['logoNaturalWidth'] < 300
             or v2_free_layout['bodyOverflowY'] not in {'auto', 'scroll'}
+            or v2_free_layout['rootScrollBehavior'] != 'auto'
             or v2_free_layout['leftOverflowY'] != 'visible'
             or v2_free_layout['rightOverflowY'] != 'visible'
             or v2_free_layout['rightPosition'] != 'sticky'
