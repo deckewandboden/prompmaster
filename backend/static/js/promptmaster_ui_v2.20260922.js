@@ -413,29 +413,42 @@
   if (oldProgressBar) new MutationObserver(updateFlow).observe(oldProgressBar,{attributes:true,attributeFilter:['style']});
   updateFlow();
 
-  $('#resetBtn').addEventListener('click', () => {
-    const resetRequestId = ++scrollRequestId;
+  const resetButton = $('#resetBtn');
+  const legacyReset = resetButton.onclick;
+  resetButton.onclick = event => {
+    // Invalidate every smooth-scroll finisher that was created before reset.
+    ++scrollRequestId;
 
+    // Run the preserved Golden-Master reset first. It hides/rebuilds sections
+    // and recalculates the original product state.
+    if (typeof legacyReset === 'function') {
+      legacyReset.call(resetButton, event);
+    }
+
+    const resetGeneration = scrollRequestId;
     const resetToTop = () => {
-      // A new user navigation invalidates the remaining reset timers so the
-      // configurator is immediately usable again after resetting.
-      if (resetRequestId !== scrollRequestId) return;
+      if (resetGeneration !== scrollRequestId) return;
       if (matchMedia('(max-width: 1180px)').matches) {
-        window.scrollTo({top:0,behavior:'auto'});
+        window.scrollTo(0, 0);
       } else {
-        left.scrollTo({top:0,behavior:'auto'});
         left.scrollTop = 0;
+        left.scrollTo({top:0,left:0,behavior:'auto'});
       }
     };
 
+    // Apply once synchronously and again after browser layout/scroll anchoring
+    // had a chance to react to the Golden-Master rerender.
     resetToTop();
-    setTimeout(resetToTop, 100);
-    setTimeout(resetToTop, 400);
+    requestAnimationFrame(() => {
+      resetToTop();
+      requestAnimationFrame(resetToTop);
+    });
+    setTimeout(resetToTop, 80);
     setTimeout(() => {
       resetToTop();
       updateReview();
-    }, 800);
-  });
+    }, 300);
+  };
 
   $('#switchRequiredBtn')?.addEventListener('click', () => setTimeout(() => scrollToTarget(licenseSection),80));
   $('#switchBusinessBtn')?.addEventListener('click', () => setTimeout(() => scrollToTarget(licenseSection),80));
