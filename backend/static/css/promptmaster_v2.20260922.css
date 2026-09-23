@@ -230,6 +230,7 @@ body.pmv2 textarea{font-family:inherit}
   height:100%;
   min-width:0;
   overflow-y:auto;
+  overflow-anchor:none;
   overscroll-behavior:contain;
   padding:0 10px 34vh 0;
   scrollbar-width:thin;
