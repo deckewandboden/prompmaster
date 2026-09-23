@@ -1209,13 +1209,26 @@ def run_backend_ui_smoke(browser, fixture=None) -> None:
         public_page.wait_for_function(
             "document.querySelector('#businessModal')?.classList.contains('open')"
         )
-        license_modal_text = public_page.locator('#businessModal').inner_text()
+        license_modal = public_page.locator('#businessModal')
+        license_modal_text = license_modal.inner_text()
         if 'Copilot Business anfragen' in license_modal_text:
             raise AssertionError(
                 f'Free V2 Microsoft-license modal exposes factually wrong CTA: {license_modal_text}'
             )
-        if 'Microsoft-Copilot-Lizenz anfragen' not in license_modal_text:
-            raise AssertionError('Free V2 Microsoft-license modal neutral CTA missing')
+        tier_switch_text = license_modal.locator('#switchBusinessBtn').inner_text().strip()
+        tier_contact_text = license_modal.locator(
+            '.modal-actions a[href*="netstyle.de/kontakt"]'
+        ).inner_text().strip()
+        expected_tier_contact = (
+            tier_switch_text[:-len(' auswählen')] + ' anfragen'
+            if tier_switch_text.endswith(' auswählen')
+            else ''
+        )
+        if not expected_tier_contact or tier_contact_text != expected_tier_contact:
+            raise AssertionError(
+                'Free V2 Microsoft-license CTA does not match required tier: '
+                f'{tier_contact_text!r} != {expected_tier_contact!r}'
+            )
         public_page.locator('[data-close="businessModal"]').first.click()
 
         public_page.locator('[data-appwrap="chat"] .app-card').click()
