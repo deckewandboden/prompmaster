@@ -145,6 +145,13 @@ test('non-WebGL fallback keeps the actual head visible without camera access',()
   assert.match(fallback,/projectionScale=1\/\(2\*Math\.tan\(39\*Math\.PI\/360\)\*viewZ\)/);
 });
 
+test('marketing header uses dedicated clean logo instead of screenshot crop',()=>{
+  const css=read('src/immersive.css');
+  assert.match(css,/\/brand\/promptmaster-logo-clean\.svg/);
+  assert.doesNotMatch(css,/background-image:url\('\/brand\/design-reference\.jpeg'\)/);
+  assert.match(read('public/brand/promptmaster-logo-clean.svg'),/viewBox="0 3 315 59"/);
+});
+
 test('hero and marketing copy use recovered V15 decisions',()=>{
   const index=read('index.html');
   const content=read('src/content.js');
