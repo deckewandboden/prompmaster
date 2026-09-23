@@ -776,3 +776,9 @@ body.pmv2 textarea{font-family:inherit}
   .pmv2-brand img{width:138px!important}
   .pmv2-header-cta{max-width:150px;font-size:10px}
 }
+
+
+/* V2 responsive sticky contract */
+@media(max-width:1180px){
+  .pmv2-prompt-panel{position:relative;top:auto}
+}
