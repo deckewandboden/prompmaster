@@ -138,6 +138,7 @@ required = [
     'backend/static/brand/promptmaster-logo-reference.png',
     'backend/static/brand/promptmaster-logo-clean.svg','scripts/runtime_validate.sh',
     'backend/apps/prompts/models.py','backend/apps/prompts/composer_core.py',
+    'backend/apps/prompts/free_legacy.py',
     'backend/apps/prompts/services.py','backend/apps/prompts/api.py','backend/apps/prompts/api_urls.py',
     'backend/apps/prompts/management/commands/seed_prompt_catalog.py',
     'backend/apps/prompts/data/pm20_golden_logic.json','backend/apps/prompts/data/free_legacy_tasks.json',
@@ -923,6 +924,8 @@ prompt_urls = (ROOT/'backend/config/urls.py').read_text(encoding='utf-8')
 prompt_models = (ROOT/'backend/apps/prompts/models.py').read_text(encoding='utf-8')
 prompt_services = (ROOT/'backend/apps/prompts/services.py').read_text(encoding='utf-8')
 prompt_api = (ROOT/'backend/apps/prompts/api.py').read_text(encoding='utf-8')
+free_legacy = (ROOT/'backend/apps/prompts/free_legacy.py').read_text(encoding='utf-8')
+free_bridge = (ROOT/'backend/static/js/free_catalog_bridge.20260918.js').read_text(encoding='utf-8')
 if "'apps.prompts'" not in prompt_settings:
     fail('Central PromptDomain app is not installed')
 if "path('api/v1/prompts/', include('apps.prompts.api_urls'))" not in prompt_urls:
@@ -939,6 +942,31 @@ if "'persisted': False" not in prompt_api or "response['Cache-Control'] = 'no-st
     fail('Prompt compose API does not expose stateless/no-store contract')
 if 'version.app_rule_snapshot or app.rule' not in prompt_services:
     fail('Published prompt version does not use app-rule snapshot')
+for token in (
+    'FREE_RUNTIME_CONTRACTS',
+    'compose_free_legacy',
+    "stored.get('runtime_contract')",
+    "'source': 'PromptLegacyContract'",
+):
+    if token not in free_legacy:
+        fail(f'Free database composer invariant missing: {token}')
+for token in (
+    "product == 'FREE'",
+    "source='FREE_1_2_4'",
+    'compose_free_legacy',
+):
+    if token not in prompt_api:
+        fail(f'Free compose API invariant missing: {token}')
+for token in (
+    'pm-free-compose',
+    "document.body.dataset.pmFreeCompose='server'",
+    "product:'FREE'",
+    "output.dataset.source='database'",
+):
+    if token not in free_bridge:
+        fail(f'Free browser DB bridge invariant missing: {token}')
+if 'free_mapping_pending' in prompt_api:
+    fail('Free compose API still exposes obsolete free_mapping_pending blocker')
 
 prompt_validator = subprocess.run(
     [sys.executable, str(ROOT/'scripts/validate_prompt_domain.py')],
