@@ -212,6 +212,9 @@ for token in (
     'pmv2LicenseKeyboardBound',
     'pmv2LicenseObserver',
     'promptmaster-logo-clean.svg?v=20260924-ui3',
+    'syncRequiredFieldState',
+    'PFLICHTFELD',
+    'pmv2-prompt-guard',
 ):
     if token not in v2_js:
         fail(f'V2 UI audit invariant missing: {token}')
@@ -240,6 +243,8 @@ for token in (
     '.pm-confirm-backdrop',
     '.card-action-row',
     '.brand img{display:block;width:210px;height:auto;max-height:44px',
+    '/* RBAC permission editor */',
+    '#id_permissions',
 ):
     if token not in css:
         fail(f'Design-system invariant missing from app.css: {token}')
@@ -252,6 +257,12 @@ for token in (
     'body.pmv2 .btn',
     '.pmv2-prompt-panel .actions .btn',
     'linear-gradient(100deg,#8735fa 0%,#7664ff 43%,#3487ff 72%,#31dcee 100%)',
+    '/* V2 UI audit round 3 2026-09-24 */',
+    '.pmv2-prompt-panel.pmv2-prompt-tall',
+    '.pmv2 .required-mark',
+    '.pmv2-prompt-guard',
+    '.pmv2-pro .app-card.locked:hover',
+    '.pmv2-pro .pmv2-prompt-panel .actions .btn:not(:disabled):hover',
 ):
     if token not in v2_css:
         fail(f'V2 screenshot regression invariant missing from promptmaster_v2 CSS: {token}')
