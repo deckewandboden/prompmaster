@@ -1261,6 +1261,53 @@ def run_backend_ui_smoke(browser, fixture=None) -> None:
         ):
             raise AssertionError(f'Free V2 reset did not return to top: {reset_probe}')
 
+        # Current Free must generate the authoritative prompt through the
+        # database-backed PromptLegacyContract API, not the embedded JS composer.
+        if public_page.locator('body').get_attribute('data-pm-free-compose') != 'server':
+            raise AssertionError('Free V2 database compose mode is not active')
+        public_page.locator('[data-appwrap="chat"]').click()
+        public_page.wait_for_function(
+            "() => !document.querySelector('#taskSection')?.classList.contains('hidden')"
+        )
+        public_page.locator('[data-task="chat_sum"]').click()
+        public_page.wait_for_function(
+            "() => !document.querySelector('#contextSection')?.classList.contains('hidden')"
+        )
+        public_page.locator('#goalInput').fill('Kernaussagen und nächste Schritte')
+        public_page.locator('#sourceContextInput').fill('Browser-Free-DB-Probe')
+        public_page.locator('input[name="audience"][value="self"]').check()
+        public_page.locator('input[name="focus"][value="Kernaussagen"]').check()
+        public_page.locator('#detailSelect').select_option('short')
+        public_page.locator('#formatSelect').select_option('bullets')
+        public_page.locator('#toneSelect').select_option('professional')
+        public_page.wait_for_function(
+            """() => {
+              const output=document.querySelector('#promptOutput');
+              return output?.dataset.source==='database'
+                && output.value.includes('Browser-Free-DB-Probe')
+                && document.querySelector('#promptStatus')?.textContent==='PROMPT BEREIT'
+                && document.querySelector('#copyBtn')?.disabled===false;
+            }""",
+            timeout=10000,
+        )
+        free_db_probe = public_page.evaluate(
+            """() => ({
+              source: document.querySelector('#promptOutput')?.dataset.source || '',
+              prompt: document.querySelector('#promptOutput')?.value || '',
+              copyState: document.querySelector('#copyState')?.textContent || '',
+            })"""
+        )
+        if (
+            free_db_probe['source'] != 'database'
+            or 'Browser-Free-DB-Probe' not in free_db_probe['prompt']
+            or 'Aus Prompt-Datenbank erstellt' not in free_db_probe['copyState']
+        ):
+            raise AssertionError(
+                f'Free V2 did not render database-composed prompt: {free_db_probe}'
+            )
+        public_page.locator('#resetBtn').click()
+        public_page.wait_for_timeout(250)
+
         pro_toggle = public_page.locator('.pmv2-pro-toggle')
         if not pro_toggle.is_visible():
             raise AssertionError('Free V2: Pro-app expand control missing')
