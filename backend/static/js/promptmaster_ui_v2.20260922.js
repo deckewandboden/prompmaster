@@ -655,6 +655,44 @@
   $('#switchRequiredBtn')?.addEventListener('click', () => setTimeout(() => scrollToTarget(licenseSection),80));
   $('#switchBusinessBtn')?.addEventListener('click', () => setTimeout(() => scrollToTarget(licenseSection),80));
 
-  document.body.dataset.pmv2Ready = '1';
-  window.dispatchEvent(new CustomEvent('pm-v2-ready',{detail:{edition}}));
+  const announceV2Ready = () => {
+    if (document.body.dataset.pmv2Ready === '1') return;
+    document.body.dataset.pmv2Ready = '1';
+    window.dispatchEvent(new CustomEvent('pm-v2-ready',{detail:{edition}}));
+  };
+
+  if (free) {
+    announceV2Ready();
+  } else {
+    /*
+     * Pro replaces the embedded Golden-Master catalog asynchronously with the
+     * authoritative server catalog. Do not announce an interactive V2 before
+     * that replacement is complete: an early selection would otherwise be
+     * discarded when the server catalog arrives.
+     *
+     * The central bridge renders three canonical group headings. Requiring
+     * those headings plus all 34 app cards distinguishes the hydrated server
+     * catalog from the embedded reference catalog without changing the
+     * integrity-protected runtime asset.
+     */
+    document.body.dataset.pmv2Ready = 'loading';
+    const centralCatalogReady = () => {
+      const headings = Array.from(catalog.querySelectorAll('.catalog-title h3'))
+        .map(node => (node.textContent || '').trim());
+      return catalog.querySelectorAll('.app-card').length === 34
+        && headings.includes('Microsoft 365 Anwendungen')
+        && headings.includes('Power Platform & Data')
+        && headings.includes('Business, Security & Development');
+    };
+    let proReadyObserver = null;
+    const finishProReady = () => {
+      if (!centralCatalogReady()) return false;
+      if (proReadyObserver) proReadyObserver.disconnect();
+      announceV2Ready();
+      return true;
+    };
+    proReadyObserver = new MutationObserver(finishProReady);
+    proReadyObserver.observe(catalog,{subtree:true,childList:true,characterData:true});
+    finishProReady();
+  }
 })();
