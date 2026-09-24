@@ -477,9 +477,18 @@ def _browser_first_time_mfa_login(page, base: str, email: str, password: str, ex
             f'first-time MFA for {email} continues to '
             f'{continue_button.get_attribute("href")}, expected {expected_path}'
         )
-    continue_button.click()
-    page.wait_for_url(lambda url: expected_path in str(url))
-    page.wait_for_load_state('networkidle')
+    # Use a DOM click and own the navigation wait explicitly. Playwright's
+    # Locator.click() waits for every scheduled navigation and can hang for 30s
+    # on this post-MFA handoff even after the link was successfully activated.
+    # The acceptance contract is the resulting URL + loaded destination, not
+    # Playwright's implicit navigation bookkeeping.
+    continue_button.evaluate("(el) => el.click()")
+    page.wait_for_url(
+        lambda url: expected_path in str(url),
+        wait_until='domcontentloaded',
+        timeout=15000,
+    )
+    page.wait_for_load_state('domcontentloaded')
 
 
 _LAST_SUCCESSFUL_TOTP_BY_EMAIL = {}
