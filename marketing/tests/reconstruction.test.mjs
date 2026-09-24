@@ -145,16 +145,14 @@ test('non-WebGL fallback keeps the actual head visible without camera access',()
   assert.match(fallback,/projectionScale=1\/\(2\*Math\.tan\(39\*Math\.PI\/360\)\*viewZ\)/);
 });
 
-test('marketing header uses dedicated true-vector logo instead of screenshot crop',()=>{
+test('marketing header uses dedicated approved cropped logo artwork',()=>{
   const css=read('src/immersive.css');
   assert.match(css,/\/brand\/promptmaster-logo-clean\.svg/);
   assert.doesNotMatch(css,/background-image:url\('\/brand\/design-reference\.jpeg'\)/);
   const logo=read('public/brand/promptmaster-logo-clean.svg');
   assert.match(logo,/viewBox="0 3 315 59"/);
-  assert.match(logo,/PROMPT/);
-  assert.match(logo,/MASTER/);
-  assert.doesNotMatch(logo,/<image\b/);
-  assert.doesNotMatch(logo,/data:image\//);
+  assert.match(logo,/<image x="0" y="0" width="315" height="62"/);
+  assert.match(logo,/data:image\/png;base64,/);
 });
 
 test('hero and marketing copy use recovered V15 decisions',()=>{
