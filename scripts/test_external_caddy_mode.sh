@@ -116,11 +116,11 @@ free_current="$(
   docker run --rm --network "$NETWORK" curlimages/curl:8.12.1 \
     -fsS -H "Host: $domain" "http://$ALIAS/free/"
 )"
-grep -q 'promptmaster_v2.20260922.css?v=20260924-live2' <<<"$free_current" || {
+grep -q 'promptmaster_v2.20260922.css?v=20260924-ui3' <<<"$free_current" || {
   echo "Free V2 stylesheet is not cache-busted through external Caddy" >&2
   exit 1
 }
-grep -q 'promptmaster_ui_v2.20260922.js?v=20260924-live2' <<<"$free_current" || {
+grep -q 'promptmaster_ui_v2.20260922.js?v=20260924-ui3' <<<"$free_current" || {
   echo "Free V2 script is not cache-busted through external Caddy" >&2
   exit 1
 }
@@ -128,7 +128,7 @@ grep -q 'promptmaster_ui_v2.20260922.js?v=20260924-live2' <<<"$free_current" || 
 mutable_headers="$(
   docker run --rm --network "$NETWORK" curlimages/curl:8.12.1 \
     -sS -D - -o /dev/null -H "Host: $domain" \
-    "http://$ALIAS/static/css/promptmaster_v2.20260922.css?v=20260924-live2"
+    "http://$ALIAS/static/css/promptmaster_v2.20260922.css?v=20260924-ui3"
 )"
 grep -qiE '^cache-control: .*no-cache.*must-revalidate' <<<"$mutable_headers" || {
   echo "Mutable V2 stylesheet still inherits immutable one-year cache" >&2
