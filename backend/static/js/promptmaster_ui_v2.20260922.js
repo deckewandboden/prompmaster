@@ -249,19 +249,38 @@
           'aria-label',
           `${appName}: erforderliche Microsoft-Copilot-Stufe anzeigen`
         );
-        if (card.dataset.pmv2LicenseBound === '1') return;
-        card.dataset.pmv2LicenseBound = '1';
-        card.addEventListener('keydown', event => {
-          if (event.key !== 'Enter' && event.key !== ' ') return;
-          event.preventDefault();
-          card.dispatchEvent(new MouseEvent('click', {
-            bubbles: true,
-            cancelable: true,
-            view: window,
-          }));
-        });
       });
     };
+
+    if (appSection.dataset.pmv2LicenseKeyboardBound !== '1') {
+      appSection.dataset.pmv2LicenseKeyboardBound = '1';
+      appSection.addEventListener('keydown', event => {
+        if (event.key !== 'Enter' && event.key !== ' ') return;
+        const card = event.target.closest('[data-licenselocked="1"]');
+        if (!card || !appSection.contains(card)) return;
+        event.preventDefault();
+        event.stopPropagation();
+        const appId = card.dataset.appwrap;
+        if (appId && typeof window.openLicenseModal === 'function') {
+          window.openLicenseModal(appId);
+          return;
+        }
+        card.dispatchEvent(new MouseEvent('click', {
+          bubbles: true,
+          cancelable: true,
+          view: window,
+        }));
+      });
+    }
+
+    const freeAppsForLicenseA11y = $('#freeApps');
+    if (freeAppsForLicenseA11y && freeAppsForLicenseA11y.dataset.pmv2LicenseObserver !== '1') {
+      freeAppsForLicenseA11y.dataset.pmv2LicenseObserver = '1';
+      new MutationObserver(makeLicenseLockedCardsInteractive).observe(
+        freeAppsForLicenseA11y,
+        {childList:true,subtree:true}
+      );
+    }
 
     const ensureFreeProToggle = () => {
       const proApps = $('#proApps');
