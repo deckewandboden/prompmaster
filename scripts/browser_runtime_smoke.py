@@ -1248,22 +1248,52 @@ def run_backend_ui_smoke(browser, fixture=None) -> None:
         public_page.wait_for_timeout(450)
         app_scroll_probe = public_page.evaluate(
             """() => {
-              const target = document.querySelector('#taskSection').getBoundingClientRect();
-              return {top: target.top, windowY: scrollY};
+              const rect = document.querySelector('#taskSection').getBoundingClientRect();
+              const docTop = rect.top + scrollY;
+              const maxScroll = Math.max(0, document.documentElement.scrollHeight - innerHeight);
+              const expectedWindowY = Math.min(Math.max(0, docTop - 18), maxScroll);
+              const expectedTop = docTop - expectedWindowY;
+              return {
+                top: rect.top,
+                windowY: scrollY,
+                docTop,
+                maxScroll,
+                expectedWindowY,
+                expectedTop,
+              };
             }"""
         )
-        if abs(app_scroll_probe['top'] - 18) > 40 or app_scroll_probe['windowY'] < 10:
+        if (
+            abs(app_scroll_probe['top'] - app_scroll_probe['expectedTop']) > 6
+            or abs(app_scroll_probe['windowY'] - app_scroll_probe['expectedWindowY']) > 6
+            or app_scroll_probe['windowY'] < 10
+        ):
             raise AssertionError(f'Free V2 app -> task page autoscroll missed target: {app_scroll_probe}')
 
         public_page.locator('#taskGrid .task[data-prolocked="0"]').first.click()
         public_page.wait_for_timeout(450)
         task_scroll_probe = public_page.evaluate(
             """() => {
-              const target = document.querySelector('#contextSection').getBoundingClientRect();
-              return {top: target.top, windowY: scrollY};
+              const rect = document.querySelector('#contextSection').getBoundingClientRect();
+              const docTop = rect.top + scrollY;
+              const maxScroll = Math.max(0, document.documentElement.scrollHeight - innerHeight);
+              const expectedWindowY = Math.min(Math.max(0, docTop - 18), maxScroll);
+              const expectedTop = docTop - expectedWindowY;
+              return {
+                top: rect.top,
+                windowY: scrollY,
+                docTop,
+                maxScroll,
+                expectedWindowY,
+                expectedTop,
+              };
             }"""
         )
-        if abs(task_scroll_probe['top'] - 18) > 40 or task_scroll_probe['windowY'] < 10:
+        if (
+            abs(task_scroll_probe['top'] - task_scroll_probe['expectedTop']) > 6
+            or abs(task_scroll_probe['windowY'] - task_scroll_probe['expectedWindowY']) > 6
+            or task_scroll_probe['windowY'] < 10
+        ):
             raise AssertionError(f'Free V2 task -> context page autoscroll missed target: {task_scroll_probe}')
 
         context_scroll_before = public_page.evaluate('scrollY')
