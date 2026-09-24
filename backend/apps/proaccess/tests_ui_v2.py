@@ -32,6 +32,8 @@ class PromptMasterV2RouteIsolationTests(TestCase):
 
         self.assertEqual(current.status_code, 200)
         self.assertEqual(legacy.status_code, 200)
+        self.assertEqual(current['Cache-Control'], 'public, max-age=0, must-revalidate')
+        self.assertEqual(legacy['Cache-Control'], 'public, max-age=300')
 
         current_html = current.content.decode('utf-8')
         legacy_html = legacy.content.decode('utf-8')
