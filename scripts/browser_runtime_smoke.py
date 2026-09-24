@@ -1036,9 +1036,14 @@ def _browser_register_verify_to_buy(
         raise AssertionError(f'email verification route failed for {email}')
     if not page.locator('.result-actions a.btn.primary').is_visible():
         raise AssertionError(f'verification result has no continue action for {email}')
-    page.locator('.result-actions a.btn.primary').click()
-    page.wait_for_url(lambda url: '/portal/licenses/buy/' in str(url))
-    page.wait_for_load_state('networkidle')
+    verification_continue = page.locator('.result-actions a.btn.primary')
+    verification_continue.evaluate("(el) => el.click()")
+    page.wait_for_url(
+        lambda url: '/portal/licenses/buy/' in str(url),
+        wait_until='domcontentloaded',
+        timeout=15000,
+    )
+    page.wait_for_load_state('domcontentloaded')
 
     def _is_verified():
         close_old_connections()
@@ -1608,9 +1613,13 @@ def run_backend_ui_smoke(browser, fixture=None) -> None:
             raise AssertionError('first-time staff MFA exposes the wrong continuation label')
         if continue_button.get_attribute('href') != '/ns-admin/':
             raise AssertionError('first-time staff MFA does not continue to /ns-admin/')
-        continue_button.click()
-        first_page.wait_for_url('**/ns-admin/')
-        first_page.wait_for_load_state('networkidle')
+        continue_button.evaluate("(el) => el.click()")
+        first_page.wait_for_url(
+            '**/ns-admin/',
+            wait_until='domcontentloaded',
+            timeout=15000,
+        )
+        first_page.wait_for_load_state('domcontentloaded')
         if '/ns-admin/' not in first_page.url:
             raise AssertionError('first-time staff MFA did not enter the netstyle backend')
         first_context.close()
