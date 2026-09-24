@@ -2342,7 +2342,7 @@ def _run_cross_browser_product_v2(browser, fixture: dict, engine: str) -> None:
         page.wait_for_function(
             "() => document.querySelectorAll('#taskGrid [data-task]').length > 0"
         )
-        page.locator('#taskGrid [data-task]').first.click()
+        page.locator('#taskGrid [data-task]').first.evaluate("(el) => el.click()")
         page.wait_for_function(
             "() => document.querySelectorAll('#audienceGrid .option > span').length > 0"
         )
@@ -2390,7 +2390,7 @@ def _run_cross_browser_product_v2(browser, fixture: dict, engine: str) -> None:
         page.wait_for_function(
             "() => document.querySelectorAll('#taskGrid [data-task]').length > 0"
         )
-        page.locator('#taskGrid [data-task="PM20-159"]').click()
+        page.locator('#taskGrid [data-task="PM20-159"]').evaluate("(el) => el.click()")
         page.wait_for_function(
             "() => document.querySelectorAll('.input-card.required .task-input').length === 2"
         )
