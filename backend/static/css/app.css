@@ -234,3 +234,28 @@ a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,te
     object-position:left center;
   }
 }
+
+
+/* RBAC permission editor */
+.form-card:has(#id_permissions){max-width:1040px}
+#id_permissions{
+  display:grid!important;
+  grid-template-columns:repeat(2,minmax(0,1fr))!important;
+  gap:8px 12px!important;
+  margin-top:9px!important;
+}
+#id_permissions li{min-width:0}
+#id_permissions label{
+  min-height:42px;
+  padding:9px 10px;
+  border:1px solid var(--line);
+  border-radius:9px;
+  background:#f8fbfd;
+  line-height:1.35;
+  overflow-wrap:anywhere;
+}
+#id_permissions label:hover{border-color:#b8d6ef;background:#f1f8fe}
+#id_permissions input[type=checkbox]{margin-top:1px!important}
+@media(max-width:760px){
+  #id_permissions{grid-template-columns:1fr!important}
+}
