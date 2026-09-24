@@ -61,6 +61,15 @@ class AdminDataVisibilityTests(TestCase):
         self.assertContains(response, 'href="/ns-admin/customers/"')
         self.assertNotContains(response, 'href="/ns-admin/licenses/"')
 
+    def test_role_editor_uses_human_permission_labels_not_model_uuids(self):
+        self.grant('roles.write')
+        self.grant('ops.read')
+        response = self.client.get(f'/ns-admin/roles/{self.role.id}/')
+        self.assertEqual(response.status_code, 200)
+        self.assertNotContains(response, 'Permission object')
+        self.assertContains(response, 'System &amp; Betrieb: Lesen (ops.read)')
+        self.assertContains(response, 'Benutzer &amp; Rollen: Bearbeiten (roles.write)')
+
     def test_statistics_do_not_leak_unpermitted_domains(self):
         self.assertEqual(self.client.get('/ns-admin/statistics/').status_code, 403)
 
