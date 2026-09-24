@@ -793,3 +793,25 @@ body.pmv2 textarea{font-family:inherit}
   outline-offset:3px;
   box-shadow:0 0 0 4px rgba(53,220,243,.12);
 }
+
+
+/* V2 tablet footer wrap contract */
+@media(max-width:850px){
+  .pmv2 .legal-footer-line{
+    white-space:normal!important;
+    flex-wrap:wrap!important;
+    gap:7px 10px!important;
+    align-items:flex-start!important;
+  }
+  .pmv2 .legal-links{
+    width:100%!important;
+    margin-left:0!important;
+    flex-wrap:wrap!important;
+    gap:10px 14px!important;
+  }
+  .pmv2 .legal-footer-note{
+    grid-template-columns:1fr!important;
+    gap:6px!important;
+  }
+  .pmv2 .legal-footer-note span:last-child{text-align:left!important}
+}
