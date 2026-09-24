@@ -475,6 +475,11 @@
       });
       modalObserver.observe(proModalTitle,{childList:true,subtree:true,characterData:true});
     }
+
+    const freePrivacyNote = $('.legal-footer-note span', footer);
+    if (freePrivacyNote) {
+      freePrivacyNote.textContent = 'Die Prompt-Konfiguration wird serverseitig verarbeitet, um den Prompt aus dem gespeicherten Free-Vertrag zu erzeugen. Eingaben und erzeugte Prompts werden dabei nicht als Promptinhalt gespeichert.';
+    }
   } else {
     ensureProCatalogSearch();
 
