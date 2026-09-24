@@ -120,11 +120,11 @@ class PromptMasterV2RouteIsolationTests(TestCase):
             pro_html,
         )
 
-    @override_settings(GIT_SHA='release/2026 09 <unsafe>', APP_VERSION='development')
+    @override_settings(GIT_SHA='release/2026 09 <unsafe>ä', APP_VERSION='development')
     def test_v2_asset_cache_key_is_html_url_safe(self):
         html = self.client.get(reverse('free_product')).content.decode('utf-8')
         self.assertIn('?v=release202609unsafe', html)
-        self.assertNotIn('release/2026 09 <unsafe>', html)
+        self.assertNotIn('release/2026 09 <unsafe>ä', html)
 
     def test_pro_legacy_route_keeps_the_same_authentication_boundary(self):
         response = self.client.get(reverse('pro_product_old'))
