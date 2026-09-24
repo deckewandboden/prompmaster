@@ -175,8 +175,46 @@ class DeletionRejectForm(forms.Form):
     notes = forms.CharField(widget=forms.Textarea, max_length=5000, label='Begründung')
 
 
+PERMISSION_DOMAIN_LABELS = {
+    'customers': 'Kunden',
+    'licenses': 'Lizenzen',
+    'devices': 'Geräte',
+    'orders': 'Bestellungen',
+    'payments': 'Zahlungen',
+    'products': 'Produkte & Preise',
+    'email': 'E-Mail',
+    'ops': 'System & Betrieb',
+    'api': 'API & Integrationen',
+    'roles': 'Benutzer & Rollen',
+    'legal': 'Datenschutz & Recht',
+    'support': 'Kontaktanfragen',
+    'audit': 'Protokolle',
+    'settings': 'Einstellungen',
+    'prompts': 'Prompt Studio',
+    'content': 'FAQ & Inhalte',
+}
+PERMISSION_ACTION_LABELS = {
+    'read': 'Lesen',
+    'write': 'Bearbeiten',
+    'refund': 'Erstatten',
+    'compose': 'Prompts erzeugen',
+    'publish': 'Veröffentlichen',
+    'quality': 'Qualität verwalten',
+}
+
+
+class PermissionChoiceField(forms.ModelMultipleChoiceField):
+    def label_from_instance(self, obj):
+        if obj.name and obj.name != obj.code:
+            return f'{obj.name} ({obj.code})'
+        domain, _, action = obj.code.partition('.')
+        domain_label = PERMISSION_DOMAIN_LABELS.get(domain, domain.replace('_', ' ').title())
+        action_label = PERMISSION_ACTION_LABELS.get(action, action.replace('_', ' ').title())
+        return f'{domain_label}: {action_label} ({obj.code})'
+
+
 class RoleForm(forms.ModelForm):
-    permissions = forms.ModelMultipleChoiceField(
+    permissions = PermissionChoiceField(
         queryset=Permission.objects.none(),
         required=False,
         widget=forms.CheckboxSelectMultiple,
