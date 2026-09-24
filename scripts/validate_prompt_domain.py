@@ -13,12 +13,14 @@ import re
 import subprocess
 import sys
 from pathlib import Path
+from types import SimpleNamespace
 
 ROOT = Path(__file__).resolve().parents[1]
 BACKEND = ROOT / 'backend'
 sys.path.insert(0, str(BACKEND))
 
 from apps.prompts.composer_core import PromptValidationError, compose_prompt  # noqa: E402
+from apps.prompts.free_legacy import FREE_RUNTIME_CONTRACTS, compose_free_legacy  # noqa: E402
 
 DATA = BACKEND / 'apps' / 'prompts' / 'data' / 'pm20_golden_logic.json'
 FREE_DATA = BACKEND / 'apps' / 'prompts' / 'data' / 'free_legacy_tasks.json'
@@ -211,6 +213,39 @@ legacy_ids = [item.get('legacy_id') for item in free.get('tasks') or []]
 if len(legacy_ids) != 16 or len(set(legacy_ids)) != 16:
     fail(f'Expected 16 unique Free legacy tasks, got {len(set(legacy_ids))}')
 
+if set(legacy_ids) != set(FREE_RUNTIME_CONTRACTS):
+    fail(
+        'Free runtime-contract IDs differ from preserved legacy IDs: '
+        f'{sorted(set(legacy_ids) ^ set(FREE_RUNTIME_CONTRACTS))}'
+    )
+for legacy_id in legacy_ids:
+    runtime = FREE_RUNTIME_CONTRACTS.get(legacy_id) or {}
+    if not runtime.get('intent') or not runtime.get('audiences') or not runtime.get('formats') or not runtime.get('focus'):
+        fail(f'{legacy_id}: incomplete Free runtime contract')
+        continue
+    contract = SimpleNamespace(legacy_id=legacy_id, payload={'runtime_contract': runtime})
+    try:
+        free_result = compose_free_legacy(
+            contract=contract,
+            microsoft_tier='premium',
+            payload={
+                'primary': 'Free-Validator-Primärwert',
+                'secondary': 'Free-Validator-Sekundärwert',
+                'audience': runtime['audiences'][0],
+                'focus': [runtime['focus'][0]],
+                'output': runtime['formats'][0],
+                'tone': 'professional',
+                'detail': 'short',
+            },
+        )
+    except Exception as exc:
+        fail(f'{legacy_id}: Free composer failed: {exc}')
+        continue
+    if not free_result.get('ready') or not free_result.get('prompt'):
+        fail(f'{legacy_id}: Free composer did not produce a ready prompt')
+    if free_result.get('source') != 'PromptLegacyContract':
+        fail(f'{legacy_id}: Free composer did not declare database contract source')
+
 # Run every current PM20 task through the stateless composer. This catches
 # field loss, unresolved placeholders, invalid policy references and maxChars.
 for tid, (app_code, app, task) in tasks.items():
@@ -308,5 +343,5 @@ if errors:
 
 print('PROMPT DOMAIN VALIDATION OK')
 print(f'PM20 catalog: {len(apps)} apps / {len(tasks)} tasks / {len(context_specs)} handcrafted context specs')
-print(f'Free legacy preservation: {len(legacy_ids)} contracts')
+print(f'Free legacy preservation + DB composer smoke: {len(legacy_ids)}/16 contracts')
 print('Composer smoke: 194/194 tasks composed successfully with no unresolved placeholders')
