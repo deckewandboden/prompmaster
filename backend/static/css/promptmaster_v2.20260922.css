@@ -1045,6 +1045,11 @@ body.pmv2 .pmv2-header-cta{
 }
 
 /* Pro prompt actions: slight lift/scale and a dark-violet hover, never white. */
+.pmv2-pro .pmv2-prompt-panel .actions .btn{
+  transition-property:transform,box-shadow,filter!important;
+  transition-duration:.15s!important;
+  transition-timing-function:ease!important;
+}
 .pmv2-pro .pmv2-prompt-panel .actions .btn:not(:disabled):hover{
   border-color:rgba(177,126,248,.70)!important;
   background:linear-gradient(100deg,#572782 0%,#45266f 52%,#30205b 100%)!important;
