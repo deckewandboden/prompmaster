@@ -2351,8 +2351,8 @@ def _run_cross_browser_product_v2(browser, fixture: dict, engine: str) -> None:
         # compatibility probe. Set the same Golden-Master state explicitly and
         # render the controls synchronously; this gate is about cross-browser
         # rendering/state semantics, not click/scroll timing.
-        pro_state = page.evaluate(
-            """() => {
+        required_probe = page.evaluate(
+            """async () => {
               selectedApp='copilot_chat';
               selectedTask='PM20-001';
               renderCatalog();
@@ -2366,43 +2366,42 @@ def _run_cross_browser_product_v2(browser, fixture: dict, engine: str) -> None:
               show('focusSection',true);
               show('outputSection',true);
               update();
-              return {
-                app:selectedApp,
-                task:selectedTask,
-                audienceCount:document.querySelectorAll('#audienceGrid .option > span').length,
-                requiredCount:document.querySelectorAll('.input-card.required .task-input').length,
-              };
-            }"""
-        )
-        if (
-            pro_state['app'] != 'copilot_chat'
-            or pro_state['task'] != 'PM20-001'
-            or pro_state['audienceCount'] < 1
-            or pro_state['requiredCount'] < 1
-        ):
-            raise AssertionError(
-                f'{engine} Pro deterministic PM20-001 render failed: {pro_state}'
-            )
-        page.wait_for_function(
-            "() => document.querySelectorAll('.input-card.required .task-input').length > 0"
-        )
-        required_probe = page.evaluate(
-            """() => {
+
+              // Let the V2 MutationObserver mark the newly rendered required
+              // fields, but keep render + assertion in one browser evaluation
+              // so no unrelated async UI callback can race between them.
+              await new Promise(resolve => requestAnimationFrame(
+                () => requestAnimationFrame(resolve)
+              ));
+
               const input = document.querySelector('.input-card.required .task-input');
               const mark = document.querySelector('.input-card.required .required-mark');
               const guard = document.querySelector('.pmv2-prompt-guard');
               const style = mark ? getComputedStyle(mark) : null;
               return {
-                required: input?.required === true,
-                ariaRequired: input?.getAttribute('aria-required') || '',
-                ariaInvalid: input?.getAttribute('aria-invalid') || '',
-                markText: (mark?.textContent || '').trim(),
-                markBackground: style?.backgroundImage || '',
-                guardVisible: !!guard && !guard.hidden,
-                guardText: (guard?.textContent || '').trim(),
+                app:selectedApp,
+                task:selectedTask,
+                audienceCount:document.querySelectorAll('#audienceGrid .option > span').length,
+                requiredCount:document.querySelectorAll('.input-card.required .task-input').length,
+                required:input?.required === true,
+                ariaRequired:input?.getAttribute('aria-required') || '',
+                ariaInvalid:input?.getAttribute('aria-invalid') || '',
+                markText:(mark?.textContent || '').trim(),
+                markBackground:style?.backgroundImage || '',
+                guardVisible:!!guard && !guard.hidden,
+                guardText:(guard?.textContent || '').trim(),
               };
             }"""
         )
+        if (
+            required_probe['app'] != 'copilot_chat'
+            or required_probe['task'] != 'PM20-001'
+            or required_probe['audienceCount'] < 1
+            or required_probe['requiredCount'] < 1
+        ):
+            raise AssertionError(
+                f'{engine} Pro deterministic PM20-001 render failed: {required_probe}'
+            )
         if (
             not required_probe['required']
             or required_probe['ariaRequired'] != 'true'
