@@ -1823,7 +1823,7 @@ def run_backend_ui_smoke(browser, fixture=None) -> None:
                 page.wait_for_url('**/pro/app/')
                 page.wait_for_load_state('networkidle')
 
-                page.wait_for_function("document.body.classList.contains('pmv2')")
+                page.wait_for_function("document.body.dataset.pmv2Ready === '1'", timeout=15000)
                 customer_utility_paths = set(page.locator('.pmv2-header-actions a').evaluate_all(
                     "els => els.map(e => new URL(e.href).pathname)"
                 ))
@@ -2064,7 +2064,7 @@ def run_backend_ui_smoke(browser, fixture=None) -> None:
                 pro_response = page.goto(base + 'pro/', wait_until='networkidle')
                 if not pro_response or pro_response.status != 200:
                     raise AssertionError('netstyle staff cannot open PromptMaster Pro')
-                page.wait_for_function("document.body.classList.contains('pmv2')")
+                page.wait_for_function("document.body.dataset.pmv2Ready === '1'", timeout=15000)
                 utility_paths = set(page.locator('.pmv2-header-actions a').evaluate_all(
                     "els => els.map(e => new URL(e.href).pathname)"
                 ))
@@ -2150,7 +2150,7 @@ def run_backend_ui_smoke(browser, fixture=None) -> None:
                     response = page.goto(base + 'pro/app/', wait_until='networkidle')
                     if not response or response.status != 200:
                         raise AssertionError(f'Pro V2 responsive shell {width}px: HTTP failure')
-                    page.wait_for_function("document.body.classList.contains('pmv2')")
+                    page.wait_for_function("document.body.dataset.pmv2Ready === '1'", timeout=15000)
                     _check_product_v2_shell(page, 'Pro V2 responsive shell', width)
 
             for width, height in ((360, 800), (390, 844), (768, 1024), (1440, 1000), (1920, 1080)):
@@ -2268,9 +2268,16 @@ def _run_cross_browser_product_v2(browser, fixture: dict, engine: str) -> None:
         if not pro_response or pro_response.status != 200:
             raise AssertionError(f'{engine} Pro V2: HTTP 200 expected')
         page.wait_for_function(
-            "document.body.dataset.pmv2Ready === '1' && "
-            "document.querySelectorAll('#catalog .app-card').length === 34 && "
-            "document.querySelectorAll('#pmv2AppSearch').length === 1",
+            """() => {
+              const headings=[...document.querySelectorAll('#catalog .catalog-title h3')]
+                .map(node => (node.textContent || '').trim());
+              return document.body.dataset.pmv2Ready === '1'
+                && document.querySelectorAll('#catalog .app-card').length === 34
+                && document.querySelectorAll('#pmv2AppSearch').length === 1
+                && headings.includes('Microsoft 365 Anwendungen')
+                && headings.includes('Power Platform & Data')
+                && headings.includes('Business, Security & Development');
+            }""",
             timeout=15000,
         )
         if page.locator('#pmv2AppSearch').count() != 1:
