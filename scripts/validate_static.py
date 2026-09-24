@@ -193,6 +193,8 @@ for token in (
     'pmv2-prompt-tall',
     'pmv2LicenseKeyboardBound',
     'pmv2LicenseObserver',
+    'const assetQuery =',
+    'promptmaster-logo-clean.svg${assetQuery}',
 ):
     if token not in v2_js:
         fail(f'V2 UI audit invariant missing: {token}')
@@ -203,6 +205,7 @@ for token in (
     "V2_SCRIPT_PATH = '/static/js/promptmaster_ui_v2.20260922.js'",
     'settings.GIT_SHA or settings.APP_VERSION',
     '?v={asset_version}',
+    'free_catalog_bridge.20260918.js?v={asset_version}',
 ):
     if token not in proaccess_views:
         fail(f'V2 immutable-cache busting invariant missing: {token}')
