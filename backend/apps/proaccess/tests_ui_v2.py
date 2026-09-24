@@ -36,8 +36,8 @@ class PromptMasterV2RouteIsolationTests(TestCase):
         current_html = current.content.decode('utf-8')
         legacy_html = legacy.content.decode('utf-8')
 
-        self.assertIn('/static/js/free_catalog_bridge.20260918.js', current_html)
-        self.assertIn('/static/js/free_catalog_bridge.20260918.js', legacy_html)
+        self.assertIn('/static/js/free_catalog_bridge.20260918.js?v=development', current_html)
+        self.assertIn('/static/js/free_catalog_bridge.20260918.js?v=development', legacy_html)
 
         self.assertIn('/static/css/promptmaster_v2.20260922.css?v=development', current_html)
         self.assertIn('/static/js/promptmaster_ui_v2.20260922.js?v=development', current_html)
@@ -106,6 +106,10 @@ class PromptMasterV2RouteIsolationTests(TestCase):
         )
         self.assertIn(
             '/static/js/promptmaster_ui_v2.20260922.js?v=abc123def456',
+            free_html,
+        )
+        self.assertIn(
+            '/static/js/free_catalog_bridge.20260918.js?v=abc123def456',
             free_html,
         )
 
