@@ -792,6 +792,7 @@ def _check_public_page(page, base: str, path: str, width: int, label: str) -> No
             postFormsMissingCsrf: postFormsMissingCsrf.slice(0,10),
             loginLogoPath: loginLogo ? new URL(loginLogo.src).pathname : '',
             loginLogoNaturalWidth: loginLogo?.naturalWidth || 0,
+            loginLogoNaturalHeight: loginLogo?.naturalHeight || 0,
           };
         }"""
     )
@@ -820,6 +821,11 @@ def _check_public_page(page, base: str, path: str, width: int, label: str) -> No
         if metrics['loginLogoNaturalWidth'] < 300:
             raise AssertionError(
                 f'{label} {width}px: auth logo source too small: {metrics["loginLogoNaturalWidth"]}'
+            )
+        if metrics['loginLogoNaturalHeight'] != 55:
+            raise AssertionError(
+                f'{label} {width}px: auth logo crop regressed: '
+                f'{metrics["loginLogoNaturalHeight"]}px intrinsic height'
             )
     if not metrics['h1']:
         raise AssertionError(f'{label} {width}px: page has no visible H1')
@@ -1370,6 +1376,45 @@ def run_backend_ui_smoke(browser, fixture=None) -> None:
             )
 
         public_page.locator('[data-close="proModal"]').first.click()
+
+        # The Pro purchase CTA is intentionally same-tab. An anonymous user
+        # must land on our styled login page with the checkout path preserved,
+        # never in a blank/new tab. This covers the live black-page/login-logo
+        # regression reported from the purchase flow.
+        purchase_page = public_context.new_page()
+        purchase_response = purchase_page.goto(
+            base + 'portal/licenses/buy/?quantity=1',
+            wait_until='networkidle',
+        )
+        if not purchase_response or purchase_response.status != 200:
+            raise AssertionError('anonymous Pro purchase route did not resolve to login')
+        if '/auth/login/' not in purchase_page.url or 'next=' not in purchase_page.url:
+            raise AssertionError(
+                f'Pro purchase login continuation missing: {purchase_page.url}'
+            )
+        purchase_login_probe = purchase_page.evaluate(
+            """() => {
+              const logo=document.querySelector('.login-logo img');
+              return {
+                h1:document.querySelector('h1')?.textContent?.trim() || '',
+                logoPath:logo ? new URL(logo.src).pathname : '',
+                logoWidth:logo?.naturalWidth || 0,
+                logoHeight:logo?.naturalHeight || 0,
+                bodyText:(document.body?.innerText || '').trim(),
+              };
+            }"""
+        )
+        if (
+            purchase_login_probe['h1'] != 'Anmelden'
+            or purchase_login_probe['logoPath'] != '/static/brand/promptmaster-logo-clean.svg'
+            or purchase_login_probe['logoWidth'] < 300
+            or purchase_login_probe['logoHeight'] != 55
+            or not purchase_login_probe['bodyText']
+        ):
+            raise AssertionError(
+                f'Pro purchase login rendering regression: {purchase_login_probe}'
+            )
+        purchase_page.close()
 
         word_wrap = public_page.locator('[data-appwrap="word"]')
         if (
