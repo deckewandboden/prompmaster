@@ -192,7 +192,7 @@
   let promptGuard = null;
   const syncRequiredFieldState = () => {
     if (free) return;
-    const requiredInputs = $('.input-card.required .task-input', contextSection);
+    const requiredInputs = [...contextSection.querySelectorAll('.input-card.required .task-input')];
     requiredInputs.forEach(input => {
       input.required = true;
       input.setAttribute('aria-required', 'true');
