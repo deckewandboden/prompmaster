@@ -9,6 +9,18 @@
   const $$ = (selector, root=document) => [...root.querySelectorAll(selector)];
   const free = Boolean($('#freeApps'));
   const edition = free ? 'free' : 'pro';
+  const runtimeScript = [...document.scripts].find(script =>
+    (script.src || '').includes('/static/js/promptmaster_ui_v2.20260922.js')
+  );
+  const assetVersion = (() => {
+    if (!runtimeScript?.src) return '';
+    try {
+      return new URL(runtimeScript.src, location.href).searchParams.get('v') || '';
+    } catch (_error) {
+      return '';
+    }
+  })();
+  const assetQuery = assetVersion ? '?v=' + encodeURIComponent(assetVersion) : '';
 
   const oldMain = $('main.max');
   const licenseSection = $('#licensePanel') || $('input[name="mslicense"]')?.closest('.panel');
@@ -98,7 +110,7 @@
   header.className = 'pmv2-header';
   header.innerHTML = `
     <div class="pmv2-brand">
-      <img src="/static/brand/promptmaster-logo-clean.svg" alt="PromptMaster">
+      <img src="/static/brand/promptmaster-logo-clean.svg${assetQuery}" alt="PromptMaster">
       <span class="pmv2-edition pmv2-edition-${edition}">${edition.toUpperCase()}</span>
     </div>
     <div class="pmv2-header-spacer"></div>
