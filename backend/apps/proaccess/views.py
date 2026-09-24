@@ -268,7 +268,11 @@ def _free_runtime_response(*, ui_v2=False):
             logger.exception('PromptMaster Free V2 UI injection failed')
             return HttpResponse('PromptMaster Free ist vorübergehend nicht verfügbar.', status=503)
     response = HttpResponse(data, content_type='text/html; charset=utf-8')
-    response['Cache-Control'] = 'public, max-age=300'
+    response['Cache-Control'] = (
+        'public, max-age=0, must-revalidate'
+        if ui_v2
+        else 'public, max-age=300'
+    )
     return response
 
 
