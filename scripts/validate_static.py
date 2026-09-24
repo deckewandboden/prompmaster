@@ -215,6 +215,7 @@ for token in (
     'promptmaster-logo-clean.svg?v=20260924-dbfree3',
     'syncRequiredFieldState',
     'PFLICHTFELD',
+    "if (mark.textContent !== 'PFLICHTFELD')",
     'pmv2-prompt-guard',
     "document.body.dataset.pmv2Ready = 'loading'",
     "headings.includes('Microsoft 365 Anwendungen')",
