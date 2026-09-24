@@ -197,6 +197,16 @@ for token in (
     if token not in v2_js:
         fail(f'V2 UI audit invariant missing: {token}')
 
+proaccess_views = (ROOT/'backend/apps/proaccess/views.py').read_text(encoding='utf-8')
+for token in (
+    "V2_STYLE_PATH = '/static/css/promptmaster_v2.20260922.css'",
+    "V2_SCRIPT_PATH = '/static/js/promptmaster_ui_v2.20260922.js'",
+    'settings.GIT_SHA or settings.APP_VERSION',
+    '?v={asset_version}',
+):
+    if token not in proaccess_views:
+        fail(f'V2 immutable-cache busting invariant missing: {token}')
+
 app_js = (ROOT/'backend/static/js/app.js').read_text(encoding='utf-8')
 for token in ('initConfirmationDialogs', 'pm-confirm-backdrop', 'data-copy-target'):
     if token not in app_js:
