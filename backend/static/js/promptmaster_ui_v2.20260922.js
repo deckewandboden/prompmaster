@@ -200,8 +200,16 @@
       input.setAttribute('aria-invalid', String(empty));
       const mark = input.closest('.input-card')?.querySelector('.required-mark');
       if (mark) {
-        mark.textContent = 'PFLICHTFELD';
-        mark.setAttribute('title', 'Dieses Feld muss ausgefüllt werden, bevor der Prompt erzeugt wird.');
+        // This function is called from a childList MutationObserver. Replacing
+        // the badge text unconditionally would itself create another childList
+        // mutation and can trap Firefox/WebKit in an endless observer loop.
+        if (mark.textContent !== 'PFLICHTFELD') {
+          mark.textContent = 'PFLICHTFELD';
+        }
+        const requiredTitle = 'Dieses Feld muss ausgefüllt werden, bevor der Prompt erzeugt wird.';
+        if (mark.getAttribute('title') !== requiredTitle) {
+          mark.setAttribute('title', requiredTitle);
+        }
       }
     });
 
