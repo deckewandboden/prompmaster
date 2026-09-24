@@ -26,6 +26,7 @@ class PromptMasterV2RouteIsolationTests(TestCase):
         session.save()
         return user
 
+    @override_settings(GIT_SHA='', APP_VERSION='development')
     def test_free_current_route_adds_v2_shell_but_legacy_route_does_not(self):
         current = self.client.get(reverse('free_product'))
         legacy = self.client.get(reverse('free_product_old'))
@@ -67,6 +68,7 @@ class PromptMasterV2RouteIsolationTests(TestCase):
         )
         self.assertEqual(stripped, legacy_html)
 
+    @override_settings(GIT_SHA='', APP_VERSION='development')
     def test_pro_current_route_adds_v2_shell_but_legacy_route_does_not(self):
         self._staff_session()
         current = self.client.get(reverse('proaccess:content'))
