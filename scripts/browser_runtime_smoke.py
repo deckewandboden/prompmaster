@@ -2218,6 +2218,55 @@ def _run_cross_browser_product_v2(browser, fixture: dict, engine: str) -> None:
         page.locator('#pmv2AppSearch').fill('')
         page.wait_for_timeout(80)
 
+        locked_card = page.locator('#catalog .app-card.locked').first
+        if locked_card.count() == 0:
+            raise AssertionError(f'{engine} Pro V2: expected Microsoft-tier locked app cards')
+        locked_card.hover()
+        page.wait_for_timeout(120)
+        locked_hover = locked_card.evaluate(
+            """el => {
+              const style = getComputedStyle(el);
+              const tag = el.querySelector('.tag');
+              const tagStyle = tag ? getComputedStyle(tag) : null;
+              return {
+                background: style.backgroundImage,
+                transform: style.transform,
+                tagBackground: tagStyle?.backgroundColor || '',
+                tagColor: tagStyle?.color || '',
+              };
+            }"""
+        )
+        if (
+            '75, 38, 121' not in locked_hover['background']
+            or locked_hover['transform'] == 'none'
+            or locked_hover['tagColor'] not in {'rgb(248, 239, 255)', 'rgba(248, 239, 255, 1)'}
+        ):
+            raise AssertionError(
+                f'{engine} Pro locked-app hover is not dark violet: {locked_hover}'
+            )
+
+        reset_action = page.locator('.pmv2-prompt-panel > .actions .btn').first
+        reset_action.hover()
+        page.wait_for_timeout(120)
+        action_hover = reset_action.evaluate(
+            """el => {
+              const style = getComputedStyle(el);
+              return {
+                background: style.backgroundImage,
+                color: style.color,
+                transform: style.transform,
+              };
+            }"""
+        )
+        if (
+            '87, 39, 130' not in action_hover['background']
+            or action_hover['color'] not in {'rgb(255, 255, 255)', 'rgba(255, 255, 255, 1)'}
+            or action_hover['transform'] == 'none'
+        ):
+            raise AssertionError(
+                f'{engine} Pro prompt-action hover is not dark violet: {action_hover}'
+            )
+
         # Populate the dynamic Pro controls before validating their computed
         # style. This catches the exact white selected option regression from
         # the 2026-09-24 Pro screenshot in Firefox/WebKit as well as Chromium.
