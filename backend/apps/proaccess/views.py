@@ -17,8 +17,9 @@ from .services import active_product_assignment, assignment_expiry_context, has_
 
 logger = logging.getLogger(__name__)
 
-V2_STYLE = b'<link rel="stylesheet" href="/static/css/promptmaster_v2.20260922.css">'
-V2_SCRIPT = b'<script src="/static/js/promptmaster_ui_v2.20260922.js" defer></script>'
+V2_ASSET_REV = b'20260924-live2'
+V2_STYLE = b'<link rel="stylesheet" href="/static/css/promptmaster_v2.20260922.css?v=' + V2_ASSET_REV + b'">'
+V2_SCRIPT = b'<script src="/static/js/promptmaster_ui_v2.20260922.js?v=' + V2_ASSET_REV + b'" defer></script>'
 
 
 def _inject_v2_ui(data: bytes) -> bytes:
@@ -255,7 +256,7 @@ def _free_runtime_response(*, ui_v2=False):
         return HttpResponse('PromptMaster Free ist vorübergehend nicht verfügbar.', status=503)
 
     marker = b'</body></html>'
-    bridge = b'<script src="/static/js/free_catalog_bridge.20260918.js" defer></script>'
+    bridge = b'<script src="/static/js/free_catalog_bridge.20260918.js?v=' + V2_ASSET_REV + b'" defer></script>'
     if data.count(marker) != 1:
         logger.error('PromptMaster Free Golden Master has unexpected closing markup')
         return HttpResponse('PromptMaster Free ist vorübergehend nicht verfügbar.', status=503)
@@ -267,7 +268,11 @@ def _free_runtime_response(*, ui_v2=False):
             logger.exception('PromptMaster Free V2 UI injection failed')
             return HttpResponse('PromptMaster Free ist vorübergehend nicht verfügbar.', status=503)
     response = HttpResponse(data, content_type='text/html; charset=utf-8')
-    response['Cache-Control'] = 'public, max-age=300'
+    response['Cache-Control'] = (
+        'public, max-age=0, must-revalidate'
+        if ui_v2
+        else 'public, max-age=300'
+    )
     return response
 
 

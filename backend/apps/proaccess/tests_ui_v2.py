@@ -32,15 +32,17 @@ class PromptMasterV2RouteIsolationTests(TestCase):
 
         self.assertEqual(current.status_code, 200)
         self.assertEqual(legacy.status_code, 200)
+        self.assertEqual(current['Cache-Control'], 'public, max-age=0, must-revalidate')
+        self.assertEqual(legacy['Cache-Control'], 'public, max-age=300')
 
         current_html = current.content.decode('utf-8')
         legacy_html = legacy.content.decode('utf-8')
 
-        self.assertIn('/static/js/free_catalog_bridge.20260918.js', current_html)
-        self.assertIn('/static/js/free_catalog_bridge.20260918.js', legacy_html)
+        self.assertIn('/static/js/free_catalog_bridge.20260918.js?v=20260924-live2', current_html)
+        self.assertIn('/static/js/free_catalog_bridge.20260918.js?v=20260924-live2', legacy_html)
 
-        self.assertIn('/static/css/promptmaster_v2.20260922.css', current_html)
-        self.assertIn('/static/js/promptmaster_ui_v2.20260922.js', current_html)
+        self.assertIn('/static/css/promptmaster_v2.20260922.css?v=20260924-live2', current_html)
+        self.assertIn('/static/js/promptmaster_ui_v2.20260922.js?v=20260924-live2', current_html)
         self.assertNotIn('/static/css/promptmaster_v2.20260922.css', legacy_html)
         self.assertNotIn('/static/js/promptmaster_ui_v2.20260922.js', legacy_html)
 
@@ -56,10 +58,10 @@ class PromptMasterV2RouteIsolationTests(TestCase):
         # identical to the preserved pre-redesign route.
         # byte-for-byte identical to the preserved pre-redesign route.
         stripped = current_html.replace(
-            '<link rel="stylesheet" href="/static/css/promptmaster_v2.20260922.css">',
+            '<link rel="stylesheet" href="/static/css/promptmaster_v2.20260922.css?v=20260924-live2">',
             '',
         ).replace(
-            '<script src="/static/js/promptmaster_ui_v2.20260922.js" defer></script>',
+            '<script src="/static/js/promptmaster_ui_v2.20260922.js?v=20260924-live2" defer></script>',
             '',
         ).replace(
             'data:image/gif;base64,R0lGODlhAQABAAAAACw=',
@@ -78,8 +80,8 @@ class PromptMasterV2RouteIsolationTests(TestCase):
         current_html = current.content.decode('utf-8')
         legacy_html = legacy.content.decode('utf-8')
 
-        self.assertIn('/static/css/promptmaster_v2.20260922.css', current_html)
-        self.assertIn('/static/js/promptmaster_ui_v2.20260922.js', current_html)
+        self.assertIn('/static/css/promptmaster_v2.20260922.css?v=20260924-live2', current_html)
+        self.assertIn('/static/js/promptmaster_ui_v2.20260922.js?v=20260924-live2', current_html)
         self.assertNotIn('/static/css/promptmaster_v2.20260922.css', legacy_html)
         self.assertNotIn('/static/js/promptmaster_ui_v2.20260922.js', legacy_html)
 

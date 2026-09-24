@@ -170,11 +170,17 @@ if logo.exists():
 
 clean_logo = ROOT/'backend/static/brand/promptmaster-logo-clean.svg'
 clean_svg = clean_logo.read_text(encoding='utf-8')
-for token in ('width="315"', 'height="59"', 'viewBox="0 3 315 59"', 'PROMPT', 'MASTER', 'KI. EINFACH. BESSER.'):
+# The approved mark is the recovered 315x62 master artwork, cropped by the SVG
+# viewBox to remove the historic top-edge line. Do not redraw the wordmark with
+# substitute fonts: exact artwork fidelity is more important than pretending
+# the recovered raster master is native vector geometry.
+for token in (
+    'width="315"', 'height="59"', 'viewBox="0 3 315 59"',
+    '<image x="0" y="0" width="315" height="62"',
+    'data:image/png;base64,',
+):
     if token not in clean_svg:
         fail(f'Clean PromptMaster logo invariant missing: {token}')
-if '<image' in clean_svg or 'data:image/' in clean_svg:
-    fail('Clean PromptMaster logo must be true vector SVG and must not embed raster image data')
 
 active_brand_files = (
     ROOT/'backend/templates/app_shell.html',
@@ -187,6 +193,16 @@ for path in active_brand_files:
     if 'promptmaster-logo-clean.svg' not in text:
         fail(f'Active UI still does not use clean PromptMaster logo: {path.relative_to(ROOT)}')
 
+proaccess_views = (ROOT/'backend/apps/proaccess/views.py').read_text(encoding='utf-8')
+for token in (
+    "V2_ASSET_REV = b'20260924-live2'",
+    'promptmaster_v2.20260922.css?v=',
+    'promptmaster_ui_v2.20260922.js?v=',
+    'free_catalog_bridge.20260918.js?v=',
+):
+    if token not in proaccess_views:
+        fail(f'Immutable-static cache busting invariant missing from proaccess views: {token}')
+
 v2_js = (ROOT/'backend/static/js/promptmaster_ui_v2.20260922.js').read_text(encoding='utf-8')
 for token in (
     "'Prompt-Check'",
@@ -195,6 +211,7 @@ for token in (
     'pmv2-prompt-tall',
     'pmv2LicenseKeyboardBound',
     'pmv2LicenseObserver',
+    'promptmaster-logo-clean.svg?v=20260924-live2',
 ):
     if token not in v2_js:
         fail(f'V2 UI audit invariant missing: {token}')
@@ -222,6 +239,7 @@ for token in (
     '/* UI audit hardening 2026-09-23 */',
     '.pm-confirm-backdrop',
     '.card-action-row',
+    '.brand img{display:block;width:210px;height:auto;max-height:44px',
 ):
     if token not in css:
         fail(f'Design-system invariant missing from app.css: {token}')
@@ -455,6 +473,19 @@ external_caddy_test = (ROOT / 'scripts/test_external_caddy_mode.sh').read_text(e
 for token in ('/free-old/', '/pro-old/', 'free_catalog_bridge.20260918.js'):
     if token not in external_caddy_test:
         fail(f'External-Caddy rehearsal does not verify legacy product routing: {token}')
+
+for caddy_path in (ROOT / 'Caddyfile', ROOT / 'Caddyfile.external'):
+    caddy_text = caddy_path.read_text(encoding='utf-8')
+    for token in (
+        '@mutable_product_static path',
+        '/static/css/promptmaster_v2.20260922.css',
+        '/static/js/promptmaster_ui_v2.20260922.js',
+        '/static/js/free_catalog_bridge.20260918.js',
+        '/static/brand/promptmaster-logo-clean.svg',
+        'Cache-Control "no-cache, must-revalidate"',
+    ):
+        if token not in caddy_text:
+            fail(f'{caddy_path.name} mutable product-static cache contract missing: {token}')
 
 pro_asset = ROOT / 'backend/private_assets/promptmaster_pro.html'
 approved_pro_sha = 'aa7b2da53ba3cbcf9874b9b6f7381ea4c3e86ee1f9c09db186cbec6876a3c9cf'
