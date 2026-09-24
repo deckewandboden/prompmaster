@@ -330,6 +330,44 @@ class PromptApiTests(TestCase):
         self.assertEqual(response['Cache-Control'], 'no-store')
 
     @patch('apps.prompts.api._require_pro_access')
+    def test_power_automate_sync_requires_both_systems_then_composes(self, access):
+        base = {
+            'product': 'PRO',
+            'task_id': 'PM20-159',
+            'microsoft_tier': 'premium',
+            'input': {
+                'fields': {'Quellsystem': 'Sage 100'},
+                'audience': 'IT',
+                'focus': ['Trigger'],
+                'output': 'Integrationsflow',
+                'source': 'product',
+                'tone': 'professional',
+                'detail': 'standard',
+            },
+        }
+        missing = self.client.post(
+            '/api/v1/prompts/compose/',
+            data=json.dumps(base),
+            content_type='application/json',
+        )
+        self.assertEqual(missing.status_code, 400)
+        self.assertEqual(missing.json()['error']['code'], 'required')
+        self.assertEqual(missing.json()['error']['field'], 'Zielsystem')
+
+        base['input']['fields']['Zielsystem'] = 'CRM'
+        complete = self.client.post(
+            '/api/v1/prompts/compose/',
+            data=json.dumps(base),
+            content_type='application/json',
+        )
+        self.assertEqual(complete.status_code, 200)
+        body = complete.json()
+        self.assertTrue(body['ok'])
+        self.assertIn('Sage 100', body['result']['prompt'])
+        self.assertIn('CRM', body['result']['prompt'])
+        self.assertTrue(body['result']['ready'])
+
+    @patch('apps.prompts.api._require_pro_access')
     def test_free_server_compose_fails_closed_until_reviewed_mapping(self, access):
         response = self.client.post(
             '/api/v1/prompts/compose/',
