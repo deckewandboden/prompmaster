@@ -825,6 +825,28 @@ def _check_product_v2_shell(page, label: str, width: int) -> None:
           const left = document.querySelector('#pmv2ConfigScroll');
           const right = document.querySelector('.pmv2-prompt-panel');
           const output = document.querySelector('#promptOutput');
+          const optionSpan = document.querySelector('#audienceGrid .option > span');
+          const optionInput = optionSpan?.previousElementSibling;
+          const nextButton = document.querySelector('.pmv2-next');
+          const promptActionButtons = [...document.querySelectorAll('.pmv2-prompt-panel > .actions .btn')];
+          const styleOf = (el) => {
+            if (!el) return null;
+            const style = getComputedStyle(el);
+            return {
+              backgroundColor: style.backgroundColor,
+              backgroundImage: style.backgroundImage,
+              color: style.color,
+              fontFamily: style.fontFamily,
+            };
+          };
+          const optionRestStyle = styleOf(optionSpan);
+          let optionSelectedStyle = null;
+          if (optionSpan && optionInput && !optionInput.disabled) {
+            const wasChecked = optionInput.checked;
+            optionInput.checked = true;
+            optionSelectedStyle = styleOf(optionSpan);
+            optionInput.checked = wasChecked;
+          }
           const headerRect = header?.getBoundingClientRect();
           const widest = [...document.querySelectorAll('body *')]
             .map(el => {
@@ -853,6 +875,10 @@ def _check_product_v2_shell(page, label: str, width: int) -> None:
             rightOverflowY: right ? getComputedStyle(right).overflowY : '',
             rightPosition: right ? getComputedStyle(right).position : '',
             outputOverflowY: output ? getComputedStyle(output).overflowY : '',
+            optionRestStyle,
+            optionSelectedStyle,
+            nextButtonStyle: styleOf(nextButton),
+            promptActionStyles: promptActionButtons.map(styleOf),
             nestedScroll: [left,right,output].filter(Boolean).some(el => (
               ['auto','scroll'].includes(getComputedStyle(el).overflowY)
               && el.scrollHeight > el.clientHeight + 2
@@ -881,6 +907,43 @@ def _check_product_v2_shell(page, label: str, width: int) -> None:
         raise AssertionError(f'{label} {width}px: desktop prompt panel positioning invalid: {metrics}')
     if metrics['outputOverflowY'] not in {'hidden','clip','visible'}:
         raise AssertionError(f'{label} {width}px: prompt output gained its own scrollbar: {metrics}')
+
+    # Visual regression guard for the exact 2026-09-24 screenshots:
+    # legacy embedded CSS paints .option > span white and forces Verdana on
+    # .btn. V2 must override the actual visible child and every prompt action.
+    option_rest = metrics.get('optionRestStyle')
+    option_selected = metrics.get('optionSelectedStyle')
+    # Pro renders audience/focus options only after a task is selected. When
+    # the control exists, verify both its resting and checked presentation.
+    if option_rest and 'gradient' not in (option_rest.get('backgroundImage') or ''):
+        raise AssertionError(
+            f'{label} {width}px: V2 audience option still exposes legacy light surface: '
+            f'{option_rest}'
+        )
+    if option_selected and 'gradient' not in (option_selected.get('backgroundImage') or ''):
+        raise AssertionError(
+            f'{label} {width}px: selected V2 option still exposes legacy light surface: '
+            f'{option_selected}'
+        )
+
+    next_style = metrics.get('nextButtonStyle') or {}
+    if 'Segoe UI' not in (next_style.get('fontFamily') or ''):
+        raise AssertionError(
+            f'{label} {width}px: V2 workflow button typography regressed: {next_style}'
+        )
+
+    prompt_actions = metrics.get('promptActionStyles') or []
+    if len(prompt_actions) < 2:
+        raise AssertionError(f'{label} {width}px: prompt action button set incomplete: {prompt_actions}')
+    for action_style in prompt_actions:
+        if 'gradient' not in (action_style.get('backgroundImage') or ''):
+            raise AssertionError(
+                f'{label} {width}px: flat prompt action button returned: {action_style}'
+            )
+        if 'Segoe UI' not in (action_style.get('fontFamily') or ''):
+            raise AssertionError(
+                f'{label} {width}px: prompt action button typography regressed: {action_style}'
+            )
 
 
 def _browser_register_verify_to_buy(
@@ -2152,6 +2215,20 @@ def _run_cross_browser_product_v2(browser, fixture: dict, engine: str) -> None:
             raise AssertionError(f'{engine} Pro V2 search expected 1 Planner result, got {visible_apps}')
         page.locator('#pmv2AppSearch').fill('')
         page.wait_for_timeout(80)
+
+        # Populate the dynamic Pro controls before validating their computed
+        # style. This catches the exact white selected option regression from
+        # the 2026-09-24 Pro screenshot in Firefox/WebKit as well as Chromium.
+        page.locator('[data-app="copilot_chat"]').click()
+        page.wait_for_function(
+            "() => document.querySelectorAll('#taskGrid [data-task]').length > 0"
+        )
+        page.locator('#taskGrid [data-task]').first.click()
+        page.wait_for_function(
+            "() => document.querySelectorAll('#audienceGrid .option > span').length > 0"
+        )
+        _check_product_v2_shell(page, f'{engine} Pro V2 selected controls', 1440)
+
         context.close()
         print(f'{engine.upper()} PROMPTMASTER V2 UI OK')
     finally:

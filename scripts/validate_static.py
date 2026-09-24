@@ -224,6 +224,18 @@ for token in (
     if token not in css:
         fail(f'Design-system invariant missing from app.css: {token}')
 
+v2_css = (ROOT/'backend/static/css/promptmaster_v2.20260922.css').read_text(encoding='utf-8')
+for token in (
+    '/* V2 screenshot regression hardening 2026-09-24 */',
+    '.pmv2 .option > span',
+    '.pmv2 .option input:checked + span',
+    'body.pmv2 .btn',
+    '.pmv2-prompt-panel .actions .btn',
+    'linear-gradient(100deg,#8735fa 0%,#7664ff 43%,#3487ff 72%,#31dcee 100%)',
+):
+    if token not in v2_css:
+        fail(f'V2 screenshot regression invariant missing from promptmaster_v2 CSS: {token}')
+
 # 8) Every model app must have concrete initial migrations; migration CreateModel
 # names must cover all concrete model classes defined by that app.
 for models_path in sorted((ROOT/'backend/apps').glob('*/models.py')):

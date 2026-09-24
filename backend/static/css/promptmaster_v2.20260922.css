@@ -815,3 +815,103 @@ body.pmv2 textarea{font-family:inherit}
   }
   .pmv2 .legal-footer-note span:last-child{text-align:left!important}
 }
+
+
+/* V2 screenshot regression hardening 2026-09-24 */
+/*
+ * The preserved Free/Pro HTML styles the visible option rectangle on the
+ * child <span>, not on the <label class="option">. Styling only the label
+ * therefore left the legacy white surfaces visible. Keep the Golden Master
+ * markup untouched and override the actual rendered control here.
+ */
+.pmv2 .option{
+  min-height:0!important;
+  padding:0!important;
+  border:0!important;
+  border-radius:12px!important;
+  background:transparent!important;
+  color:inherit!important;
+}
+.pmv2 .option > span{
+  display:flex!important;
+  align-items:center!important;
+  width:100%!important;
+  min-height:48px!important;
+  padding:10px 11px!important;
+  border:1px solid rgba(128,177,208,.18)!important;
+  border-radius:12px!important;
+  background:linear-gradient(180deg,rgba(17,42,70,.92),rgba(10,29,51,.92))!important;
+  color:#c7d5e1!important;
+  opacity:1!important;
+  box-shadow:none!important;
+  transform:none!important;
+  cursor:pointer!important;
+  transition:border-color .15s ease,background .15s ease,box-shadow .15s ease!important;
+  -webkit-text-fill-color:currentColor!important;
+}
+.pmv2 .option:hover > span{
+  border-color:rgba(86,207,237,.42)!important;
+  background:linear-gradient(180deg,rgba(21,51,84,.96),rgba(12,35,60,.96))!important;
+}
+.pmv2 .option:has(input:checked) > span,
+.pmv2 .option input:checked + span{
+  border-color:rgba(53,220,243,.68)!important;
+  background:linear-gradient(135deg,rgba(31,93,125,.62),rgba(26,61,105,.74))!important;
+  color:#f4fbff!important;
+  font-weight:750!important;
+  box-shadow:0 0 0 1px rgba(53,220,243,.10),0 8px 20px rgba(0,8,20,.18)!important;
+}
+.pmv2-pro .option:has(input:checked) > span,
+.pmv2-pro .option input:checked + span{
+  border-color:rgba(157,108,241,.76)!important;
+  background:linear-gradient(135deg,rgba(104,57,164,.68),rgba(56,49,128,.72),rgba(24,91,126,.58))!important;
+  color:#fff!important;
+}
+.pmv2 .option.locked > span,
+.pmv2 .option:has(input:disabled) > span{
+  border-color:rgba(128,177,208,.10)!important;
+  background:linear-gradient(180deg,rgba(15,35,58,.72),rgba(10,26,45,.72))!important;
+  color:#71889a!important;
+  cursor:not-allowed!important;
+  box-shadow:none!important;
+}
+
+/*
+ * The legacy embedded assets force Verdana on .btn with !important. V2 owns
+ * the redesigned UI typography, so explicitly win that cascade and use one
+ * action treatment in Free and Pro. This covers the right prompt actions
+ * that were still rendered as flat dark buttons in the browser screenshots.
+ */
+body.pmv2 button,
+body.pmv2 .btn,
+body.pmv2 .pmv2-next,
+body.pmv2 .pmv2-header-cta{
+  font-family:"Segoe UI Variable Text","Segoe UI",Arial,sans-serif!important;
+  font-weight:800!important;
+  letter-spacing:0!important;
+}
+.pmv2 .pmv2-next,
+.pmv2 .pmv2-header-cta,
+.pmv2 .modal-actions .btn.primary,
+.pmv2-prompt-panel .actions .btn{
+  border:0!important;
+  color:#06132d!important;
+  background:linear-gradient(100deg,#8735fa 0%,#7664ff 43%,#3487ff 72%,#31dcee 100%)!important;
+  box-shadow:0 7px 20px rgba(92,83,235,.22)!important;
+  -webkit-text-fill-color:#06132d!important;
+}
+.pmv2 .pmv2-next:hover,
+.pmv2 .pmv2-header-cta:hover,
+.pmv2 .modal-actions .btn.primary:hover,
+.pmv2-prompt-panel .actions .btn:hover{
+  filter:brightness(1.07)!important;
+  transform:translateY(-1px)!important;
+}
+.pmv2-prompt-panel .actions .btn:disabled,
+.pmv2-prompt-panel .actions .btn[aria-disabled="true"],
+.pmv2 .pmv2-next:disabled{
+  opacity:.48!important;
+  filter:saturate(.55)!important;
+  cursor:not-allowed!important;
+  transform:none!important;
+}
