@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+import re
+
 from django.test import TestCase
 from django.urls import reverse
 
@@ -32,7 +34,7 @@ class PromptMasterV2RouteIsolationTests(TestCase):
 
         self.assertEqual(current.status_code, 200)
         self.assertEqual(legacy.status_code, 200)
-        self.assertEqual(current['Cache-Control'], 'public, max-age=0, must-revalidate')
+        self.assertEqual(current['Cache-Control'], 'private, no-store')
         self.assertEqual(legacy['Cache-Control'], 'public, max-age=300')
 
         current_html = current.content.decode('utf-8')
@@ -40,6 +42,11 @@ class PromptMasterV2RouteIsolationTests(TestCase):
 
         self.assertIn('/static/js/free_catalog_bridge.20260918.js?v=20260924-ui3', current_html)
         self.assertIn('/static/js/free_catalog_bridge.20260918.js?v=20260924-ui3', legacy_html)
+        self.assertRegex(
+            current_html,
+            r'<meta name="pm-free-compose" content="server" data-csrf="[A-Za-z0-9]+">',
+        )
+        self.assertNotIn('name="pm-free-compose"', legacy_html)
 
         self.assertIn('/static/css/promptmaster_v2.20260922.css?v=20260924-ui3', current_html)
         self.assertIn('/static/js/promptmaster_ui_v2.20260922.js?v=20260924-ui3', current_html)
@@ -66,6 +73,11 @@ class PromptMasterV2RouteIsolationTests(TestCase):
         ).replace(
             'data:image/gif;base64,R0lGODlhAQABAAAAACw=',
             remote_logo,
+        )
+        stripped = re.sub(
+            r'<meta name="pm-free-compose" content="server" data-csrf="[A-Za-z0-9]+">',
+            '',
+            stripped,
         )
         self.assertEqual(stripped, legacy_html)
 
