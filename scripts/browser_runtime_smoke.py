@@ -879,7 +879,7 @@ def _check_product_v2_shell(page, label: str, width: int) -> None:
             optionSelectedStyle,
             nextButtonStyle: styleOf(nextButton),
             promptActionStyles: promptActionButtons.map(styleOf),
-            nestedScroll: [left,right,output].filter(Boolean).some(el => (
+            nestedScroll: [left,output].filter(Boolean).some(el => (
               ['auto','scroll'].includes(getComputedStyle(el).overflowY)
               && el.scrollHeight > el.clientHeight + 2
             )),
@@ -897,14 +897,16 @@ def _check_product_v2_shell(page, label: str, width: int) -> None:
         raise AssertionError(f'{label} {width}px: V2 legacy logo active: {metrics["logoPath"]}')
     if metrics['logoNaturalWidth'] < 300:
         raise AssertionError(f'{label} {width}px: V2 logo source too small: {metrics["logoNaturalWidth"]}')
-    if metrics['leftOverflowY'] != 'visible' or metrics['rightOverflowY'] != 'visible':
-        raise AssertionError(f'{label} {width}px: nested V2 column scrolling returned: {metrics}')
+    if metrics['leftOverflowY'] != 'visible':
+        raise AssertionError(f'{label} {width}px: left V2 column gained nested scrolling: {metrics}')
     if metrics['nestedScroll']:
-        raise AssertionError(f'{label} {width}px: V2 contains a nested scroll area: {metrics}')
-    if width <= 1180 and metrics['rightPosition'] != 'relative':
-        raise AssertionError(f'{label} {width}px: stacked prompt panel must be relative: {metrics}')
-    if width > 1180 and metrics['rightPosition'] not in {'sticky','relative'}:
-        raise AssertionError(f'{label} {width}px: desktop prompt panel positioning invalid: {metrics}')
+        raise AssertionError(f'{label} {width}px: V2 config/textarea contains an unapproved nested scroll area: {metrics}')
+    if width <= 1180:
+        if metrics['rightPosition'] != 'relative' or metrics['rightOverflowY'] != 'visible':
+            raise AssertionError(f'{label} {width}px: stacked prompt panel contract invalid: {metrics}')
+    else:
+        if metrics['rightPosition'] != 'sticky' or metrics['rightOverflowY'] not in {'auto','scroll'}:
+            raise AssertionError(f'{label} {width}px: desktop prompt rail must stay sticky and bounded: {metrics}')
     if metrics['outputOverflowY'] not in {'hidden','clip','visible'}:
         raise AssertionError(f'{label} {width}px: prompt output gained its own scrollbar: {metrics}')
 
@@ -1192,7 +1194,7 @@ def run_backend_ui_smoke(browser, fixture=None) -> None:
             or v2_free_layout['bodyOverflowY'] not in {'auto', 'scroll'}
             or v2_free_layout['rootScrollBehavior'] != 'auto'
             or v2_free_layout['leftOverflowY'] != 'visible'
-            or v2_free_layout['rightOverflowY'] != 'visible'
+            or v2_free_layout['rightOverflowY'] not in {'auto', 'scroll'}
             or v2_free_layout['rightPosition'] != 'sticky'
             or v2_free_layout['rightHeight'] < 300
             or not v2_free_layout['toggleAfterFreeApps']
@@ -2179,7 +2181,7 @@ def _run_cross_browser_product_v2(browser, fixture: dict, engine: str) -> None:
             or free_layout['rightTop'] >= 3
             or free_layout['bodyOverflowY'] not in {'auto', 'scroll'}
             or free_layout['leftOverflowY'] != 'visible'
-            or free_layout['rightOverflowY'] != 'visible'
+            or free_layout['rightOverflowY'] not in {'auto', 'scroll'}
             or free_layout['rightPosition'] != 'sticky'
             or abs(free_layout['windowY'] - free_layout['targetY']) > 3
             or free_layout['afterTop'] < 17
@@ -2227,6 +2229,39 @@ def _run_cross_browser_product_v2(browser, fixture: dict, engine: str) -> None:
         page.wait_for_function(
             "() => document.querySelectorAll('#audienceGrid .option > span').length > 0"
         )
+        page.wait_for_function(
+            "() => document.querySelectorAll('.input-card.required .task-input').length > 0"
+        )
+        required_probe = page.evaluate(
+            """() => {
+              const input = document.querySelector('.input-card.required .task-input');
+              const mark = document.querySelector('.input-card.required .required-mark');
+              const guard = document.querySelector('.pmv2-prompt-guard');
+              const style = mark ? getComputedStyle(mark) : null;
+              return {
+                required: input?.required === true,
+                ariaRequired: input?.getAttribute('aria-required') || '',
+                ariaInvalid: input?.getAttribute('aria-invalid') || '',
+                markText: (mark?.textContent || '').trim(),
+                markBackground: style?.backgroundImage || '',
+                guardVisible: !!guard && !guard.hidden,
+                guardText: (guard?.textContent || '').trim(),
+              };
+            }"""
+        )
+        if (
+            not required_probe['required']
+            or required_probe['ariaRequired'] != 'true'
+            or required_probe['ariaInvalid'] != 'true'
+            or required_probe['markText'] != 'PFLICHTFELD'
+            or 'gradient' not in required_probe['markBackground']
+            or not required_probe['guardVisible']
+            or 'Pflichtfelder fehlen' not in required_probe['guardText']
+        ):
+            raise AssertionError(
+                f'{engine} Pro required-field guidance regressed: {required_probe}'
+            )
+
         _check_product_v2_shell(page, f'{engine} Pro V2 selected controls', 1440)
 
         context.close()
