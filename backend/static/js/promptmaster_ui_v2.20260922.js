@@ -98,7 +98,7 @@
   header.className = 'pmv2-header';
   header.innerHTML = `
     <div class="pmv2-brand">
-      <img src="/static/brand/promptmaster-logo-clean.svg?v=20260924-dbfree3" alt="PromptMaster">
+      <img src="/static/brand/promptmaster-logo-clean.svg?v=20260924-audit4" alt="PromptMaster">
       <span class="pmv2-edition pmv2-edition-${edition}">${edition.toUpperCase()}</span>
     </div>
     <div class="pmv2-header-spacer"></div>
@@ -435,10 +435,17 @@
     normalizePromptMasterBrand(generalProModal);
     normalizePromptMasterBrand(proModal);
 
+    const configureProPurchaseCta = cta => {
+      if (!cta) return;
+      cta.textContent = 'PromptMaster Pro kaufen';
+      cta.href = '/portal/licenses/buy/?quantity=1';
+      cta.removeAttribute('target');
+      cta.removeAttribute('rel');
+    };
     const generalProCta = generalProModal?.querySelector('.modal-actions a.btn');
-    if (generalProCta) generalProCta.textContent = 'PromptMaster Pro anfragen';
     const proModalCta = proModal?.querySelector('.modal-actions a.btn');
-    if (proModalCta) proModalCta.textContent = 'PromptMaster Pro anfragen';
+    configureProPurchaseCta(generalProCta);
+    configureProPurchaseCta(proModalCta);
 
     const licenseModal = $('#businessModal');
     const licenseContact = licenseModal?.querySelector('.modal-actions a[href*="netstyle.de/kontakt"]');
@@ -479,7 +486,7 @@
           proModalSubtitle.textContent = 'Nutze den erweiterten Copilot-Katalog und passe Prompts noch genauer an deinen Arbeitsbereich an.';
         }
         normalizePromptMasterBrand(proModal);
-        if (proModalCta) proModalCta.textContent = 'PromptMaster Pro anfragen';
+        configureProPurchaseCta(proModalCta);
       });
       modalObserver.observe(proModalTitle,{childList:true,subtree:true,characterData:true});
     }
