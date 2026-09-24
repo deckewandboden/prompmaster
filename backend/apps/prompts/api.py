@@ -9,6 +9,8 @@ from apps.devices.services import validate_device_token
 from apps.proaccess.services import active_product_assignment, has_internal_staff_access, DEVICE_COOKIE
 
 from .composer_core import PromptValidationError
+from .free_legacy import compose_free_legacy
+from .models import PromptLegacyContract
 from .services import build_spec, catalog_snapshot, compose_task, published_version, task_entitled
 from .quality import save_rating
 
@@ -108,19 +110,7 @@ def compose(request):
         return _error(PromptValidationError('JSON muss ein Objekt sein.', code='invalid_json'))
 
     product = str(body.get('product') or 'PRO').upper()
-    if product != 'PRO':
-        # Free remains the unchanged standalone Golden Master until its 16
-        # legacy task contracts have an explicitly reviewed PM20 mapping.
-        return _error(
-            PromptValidationError(
-                'Serverseitige Free-Komposition ist bis zum geprüften Legacy-Mapping deaktiviert.',
-                field='product',
-                code='free_mapping_pending',
-            ),
-            409,
-        )
     try:
-        _require_pro_access(request)
         task_id = str(body.get('task_id') or '').strip()
         if not task_id:
             raise PromptValidationError('task_id fehlt.', field='task_id', code='required')
@@ -128,19 +118,32 @@ def compose(request):
         payload = body.get('input') or {}
         if not isinstance(payload, dict):
             raise PromptValidationError('input muss ein Objekt sein.', field='input')
-        result = compose_task(task_id=task_id, microsoft_tier=tier, payload=payload, product_code='PRO')
-    except PromptValidationError as exc:
-        status = 403 if exc.code in {'email_verification_required', 'second_factor_required', 'license_required', 'device_required', 'entitlement_required', 'tier_required'} else 400
-        if exc.code == 'authentication_required':
-            status = 401
-        if exc.code == 'not_found':
-            status = 404
-        return _error(exc, status)
 
-    response = JsonResponse(
-        {
-            'ok': True,
-            'result': {
+        if product == 'FREE':
+            contract = PromptLegacyContract.objects.filter(
+                source='FREE_1_2_4',
+                legacy_id=task_id,
+            ).first()
+            if not contract:
+                raise PromptValidationError(
+                    'Free-Prompt-Aufgabe nicht veröffentlicht.',
+                    field='task_id',
+                    code='not_found',
+                )
+            result_payload = compose_free_legacy(
+                contract=contract,
+                microsoft_tier=tier,
+                payload=payload,
+            )
+        elif product == 'PRO':
+            _require_pro_access(request)
+            result = compose_task(
+                task_id=task_id,
+                microsoft_tier=tier,
+                payload=payload,
+                product_code='PRO',
+            )
+            result_payload = {
                 'prompt': result.prompt,
                 'ready': result.ready,
                 'progress_percent': result.progress_percent,
@@ -149,9 +152,22 @@ def compose(request):
                 'policy_version': result.policy_version,
                 'prompt_version': result.prompt_version,
                 'persisted': False,
-            },
-        }
-    )
+            }
+        else:
+            raise PromptValidationError(
+                'Unbekanntes Produkt.',
+                field='product',
+                code='choice',
+            )
+    except PromptValidationError as exc:
+        status = 403 if exc.code in {'email_verification_required', 'second_factor_required', 'license_required', 'device_required', 'entitlement_required', 'tier_required'} else 400
+        if exc.code == 'authentication_required':
+            status = 401
+        if exc.code == 'not_found':
+            status = 404
+        return _error(exc, status)
+
+    response = JsonResponse({'ok': True, 'result': result_payload})
     response['Cache-Control'] = 'no-store'
     return response
 
