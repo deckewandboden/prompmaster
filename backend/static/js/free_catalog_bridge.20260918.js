@@ -129,5 +129,168 @@
     }
   }
 
+  const serverComposeMeta=document.querySelector('meta[name="pm-free-compose"][content="server"]');
+  if(serverComposeMeta){
+    const csrfToken=serverComposeMeta.dataset.csrf||'';
+    let composeSequence=0;
+    let composeTimer=null;
+
+    document.body.dataset.pmFreeCompose='server';
+
+    function freeServerInput(){
+      return {
+        primary:document.getElementById('goalInput')?.value?.trim()||'',
+        secondary:document.getElementById('sourceContextInput')?.value?.trim()||'',
+        audience:getAudience()?.[0]||'',
+        focus:focusSelected(),
+        output:document.getElementById('formatSelect')?.value||'',
+        detail:document.getElementById('detailSelect')?.value||'',
+        tone:document.getElementById('toneSelect')?.value||''
+      };
+    }
+
+    function freeServerReady(input){
+      const currentSpec=spec();
+      const task=getTask();
+      if(!task||!currentSpec)return false;
+      if(currentSpec.primary?.required&&!input.primary)return false;
+      if(currentSpec.secondary?.required&&!input.secondary)return false;
+      return Boolean(
+        input.audience
+        && input.focus.length
+        && input.output
+        && input.detail
+        && input.tone
+      );
+    }
+
+    function showServerPending(){
+      const output=document.getElementById('promptOutput');
+      if(output){
+        output.value='';
+        output.dataset.source='database';
+      }
+      const state=document.getElementById('promptStatus');
+      if(state){
+        state.textContent='WIRD AUS DER PROMPT-DATENBANK ERSTELLT';
+        state.className='status wait';
+      }
+      const copy=document.getElementById('copyBtn');
+      if(copy)copy.disabled=true;
+    }
+
+    function showServerIncomplete(){
+      const output=document.getElementById('promptOutput');
+      if(output){
+        output.value='';
+        output.dataset.source='database';
+      }
+      const state=document.getElementById('promptStatus');
+      if(state){
+        state.textContent='NOCH NICHT VOLLSTÄNDIG';
+        state.className='status wait';
+      }
+      const copy=document.getElementById('copyBtn');
+      if(copy)copy.disabled=true;
+    }
+
+    async function composeFromDatabase(sequence,taskId,input){
+      try{
+        const response=await fetch('/api/v1/prompts/compose/',{
+          method:'POST',
+          credentials:'same-origin',
+          cache:'no-store',
+          headers:{
+            'Accept':'application/json',
+            'Content-Type':'application/json',
+            'X-CSRFToken':csrfToken,
+            'X-Requested-With':'XMLHttpRequest'
+          },
+          body:JSON.stringify({
+            product:'FREE',
+            task_id:taskId,
+            microsoft_tier:msLicense(),
+            input
+          })
+        });
+        let data={};
+        try{data=await response.json();}catch(_error){}
+        if(sequence!==composeSequence||taskId!==selectedTask)return;
+        if(!response.ok||!data?.ok){
+          throw new Error(data?.error?.message||('Serverfehler ('+response.status+')'));
+        }
+        const result=data.result||{};
+        const output=document.getElementById('promptOutput');
+        if(output){
+          output.value=result.prompt||'';
+          output.dataset.source=result.source==='PromptLegacyContract'?'database':'server';
+        }
+        const state=document.getElementById('promptStatus');
+        if(state){
+          state.textContent=result.ready?'PROMPT BEREIT':'NOCH NICHT VOLLSTÄNDIG';
+          state.className='status '+(result.ready?'ready':'wait');
+        }
+        const copy=document.getElementById('copyBtn');
+        if(copy)copy.disabled=!result.ready;
+        const copyState=document.getElementById('copyState');
+        if(copyState)copyState.textContent=result.ready?'Aus Prompt-Datenbank erstellt':'';
+      }catch(error){
+        if(sequence!==composeSequence||taskId!==selectedTask)return;
+        const output=document.getElementById('promptOutput');
+        if(output){
+          output.value='';
+          output.dataset.source='database-error';
+        }
+        const state=document.getElementById('promptStatus');
+        if(state){
+          state.textContent='SERVER-PRÜFUNG FEHLGESCHLAGEN';
+          state.className='status wait';
+        }
+        const copy=document.getElementById('copyBtn');
+        if(copy)copy.disabled=true;
+        const copyState=document.getElementById('copyState');
+        if(copyState)copyState.textContent=error.message;
+      }
+    }
+
+    function scheduleDatabaseCompose(){
+      composeSequence+=1;
+      const sequence=composeSequence;
+      if(composeTimer){
+        clearTimeout(composeTimer);
+        composeTimer=null;
+      }
+      const input=freeServerInput();
+      if(!freeServerReady(input)){
+        showServerIncomplete();
+        return;
+      }
+      const taskId=selectedTask;
+      showServerPending();
+      composeTimer=setTimeout(
+        ()=>composeFromDatabase(sequence,taskId,input),
+        180
+      );
+    }
+
+    document.addEventListener('input',event=>{
+      if(event.target.matches('#goalInput,#sourceContextInput'))scheduleDatabaseCompose();
+    });
+    document.addEventListener('change',event=>{
+      if(event.target.matches(
+        'input[name="mslicense"],input[name="app"],input[name="audience"],input[name="focus"],#detailSelect,#formatSelect,#toneSelect'
+      )){
+        setTimeout(scheduleDatabaseCompose,0);
+      }
+    });
+    document.addEventListener('click',event=>{
+      if(event.target.closest('.task,#resetBtn'))setTimeout(scheduleDatabaseCompose,0);
+    });
+
+    // The legacy inline composer runs during page parsing. Current Free must
+    // never expose that local result as the authoritative V2 output.
+    setTimeout(scheduleDatabaseCompose,0);
+  }
+
   void hydrateFreeCatalog();
 })();
