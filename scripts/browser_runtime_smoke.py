@@ -2363,6 +2363,46 @@ def _run_cross_browser_product_v2(browser, fixture: dict, engine: str) -> None:
 
         _check_product_v2_shell(page, f'{engine} Pro V2 selected controls', 1440)
 
+        # Reproduce the exact Power Automate screenshot path end-to-end. One
+        # missing required field must block composition; once Quell- und
+        # Zielsystem are present the server-generated prompt must appear.
+        page.locator('input[name="mslicense"][value="premium"]').check(force=True)
+        page.wait_for_timeout(100)
+        page.locator('[data-app="power_automate"]').click()
+        page.wait_for_function(
+            "() => document.querySelectorAll('#taskGrid [data-task]').length > 0"
+        )
+        page.locator('#taskGrid [data-task="PM20-159"]').click()
+        page.wait_for_function(
+            "() => document.querySelectorAll('.input-card.required .task-input').length === 2"
+        )
+        required_inputs = page.locator('.input-card.required .task-input')
+        required_inputs.nth(0).fill('Sage 100 Browserquelle')
+        page.wait_for_timeout(350)
+        if page.locator('#promptOutput').input_value().strip():
+            raise AssertionError(
+                f'{engine} Pro PM20-159 composed before Zielsystem was provided'
+            )
+        required_inputs.nth(1).fill('CRM Browserziel')
+        page.wait_for_function(
+            """() => {
+              const output=document.querySelector('#promptOutput');
+              return document.querySelector('#promptStatus')?.textContent==='BEREIT ZUM KOPIEREN'
+                && !!output?.value
+                && output.value.includes('Sage 100 Browserquelle')
+                && output.value.includes('CRM Browserziel');
+            }""",
+            timeout=10000,
+        )
+        power_automate_prompt = page.locator('#promptOutput').input_value()
+        if (
+            'Sage 100 Browserquelle' not in power_automate_prompt
+            or 'CRM Browserziel' not in power_automate_prompt
+        ):
+            raise AssertionError(
+                f'{engine} Pro PM20-159 server prompt missing required inputs'
+            )
+
         context.close()
         print(f'{engine.upper()} PROMPTMASTER V2 UI OK')
     finally:
