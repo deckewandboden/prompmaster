@@ -26,7 +26,7 @@ def _v2_asset_version() -> str:
     # intentionally keep stable repository paths, so every deployed revision
     # must receive a distinct request URL or browsers can retain stale CSS/JS.
     raw = str(settings.GIT_SHA or settings.APP_VERSION or 'development')
-    safe = ''.join(ch for ch in raw if ch.isalnum() or ch in '._-')
+    safe = ''.join(ch for ch in raw if ch.isascii() and (ch.isalnum() or ch in '._-'))
     return (safe or 'development')[:80]
 
 
