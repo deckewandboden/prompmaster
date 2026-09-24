@@ -216,6 +216,10 @@ for token in (
     'syncRequiredFieldState',
     'PFLICHTFELD',
     'pmv2-prompt-guard',
+    "document.body.dataset.pmv2Ready = 'loading'",
+    "headings.includes('Microsoft 365 Anwendungen')",
+    "headings.includes('Power Platform & Data')",
+    "headings.includes('Business, Security & Development')",
 ):
     if token not in v2_js:
         fail(f'V2 UI audit invariant missing: {token}')
