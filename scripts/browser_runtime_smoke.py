@@ -826,9 +826,25 @@ def _check_product_v2_shell(page, label: str, width: int) -> None:
           const right = document.querySelector('.pmv2-prompt-panel');
           const output = document.querySelector('#promptOutput');
           const headerRect = header?.getBoundingClientRect();
+          const widest = [...document.querySelectorAll('body *')]
+            .map(el => {
+              const r = el.getBoundingClientRect();
+              return {
+                tag: el.tagName,
+                cls: typeof el.className === 'string' ? el.className.slice(0,120) : '',
+                id: el.id || '',
+                left: Math.round(r.left),
+                right: Math.round(r.right),
+                width: Math.round(r.width),
+              };
+            })
+            .filter(x => x.right > innerWidth + 1 || x.left < -1)
+            .sort((a,b) => Math.max(b.right-innerWidth,-b.left) - Math.max(a.right-innerWidth,-a.left))
+            .slice(0,8);
           return {
             innerWidth,
             scrollWidth: document.documentElement.scrollWidth,
+            widest,
             logoPath: logo ? new URL(logo.src).pathname : '',
             logoNaturalWidth: logo?.naturalWidth || 0,
             headerLeft: headerRect?.left ?? -1,
@@ -847,7 +863,7 @@ def _check_product_v2_shell(page, label: str, width: int) -> None:
     if metrics['scrollWidth'] > metrics['innerWidth'] + 1:
         raise AssertionError(
             f'{label} {width}px: V2 horizontal overflow '
-            f'{metrics["scrollWidth"]}>{metrics["innerWidth"]}'
+            f'{metrics["scrollWidth"]}>{metrics["innerWidth"]}; offenders={metrics["widest"]}'
         )
     if metrics['headerLeft'] < -1 or metrics['headerRight'] > metrics['innerWidth'] + 1:
         raise AssertionError(f'{label} {width}px: V2 header leaves viewport: {metrics}')
