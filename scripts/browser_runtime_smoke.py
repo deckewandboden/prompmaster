@@ -2338,11 +2338,16 @@ def _run_cross_browser_product_v2(browser, fixture: dict, engine: str) -> None:
         # Populate the dynamic Pro controls before validating their computed
         # style. This catches the exact white selected option regression from
         # the 2026-09-24 Pro screenshot in Firefox/WebKit as well as Chromium.
-        page.locator('[data-app="copilot_chat"]').click()
+        # Chromium's end-to-end path above already exercises real pointer
+        # interaction. In Firefox/WebKit, smooth-scroll animations can keep the
+        # task cards in perpetual actionability motion. Call the same runtime
+        # selection functions directly here so this cross-browser gate tests
+        # rendering/state semantics rather than animation timing.
+        page.evaluate("selectApp('copilot_chat')")
         page.wait_for_function(
             "() => document.querySelectorAll('#taskGrid [data-task]').length > 0"
         )
-        page.locator('#taskGrid [data-task]').first.evaluate("(el) => el.click()")
+        page.evaluate("selectTask('PM20-001')")
         page.wait_for_function(
             "() => document.querySelectorAll('#audienceGrid .option > span').length > 0"
         )
@@ -2385,12 +2390,13 @@ def _run_cross_browser_product_v2(browser, fixture: dict, engine: str) -> None:
         # missing required field must block composition; once Quell- und
         # Zielsystem are present the server-generated prompt must appear.
         page.locator('input[name="mslicense"][value="premium"]').check(force=True)
+        page.locator('input[name="mslicense"][value="premium"]').dispatch_event('change')
         page.wait_for_timeout(100)
-        page.locator('[data-app="power_automate"]').click()
+        page.evaluate("selectApp('power_automate')")
         page.wait_for_function(
             "() => document.querySelectorAll('#taskGrid [data-task]').length > 0"
         )
-        page.locator('#taskGrid [data-task="PM20-159"]').evaluate("(el) => el.click()")
+        page.evaluate("selectTask('PM20-159')")
         page.wait_for_function(
             "() => document.querySelectorAll('.input-card.required .task-input').length === 2"
         )
