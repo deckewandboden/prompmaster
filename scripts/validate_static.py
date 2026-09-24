@@ -196,7 +196,7 @@ for path in active_brand_files:
 
 proaccess_views = (ROOT/'backend/apps/proaccess/views.py').read_text(encoding='utf-8')
 for token in (
-    "V2_ASSET_REV = b'20260924-ui3'",
+    "V2_ASSET_REV = b'20260924-dbfree1'",
     'promptmaster_v2.20260922.css?v=',
     'promptmaster_ui_v2.20260922.js?v=',
     'free_catalog_bridge.20260918.js?v=',
@@ -212,7 +212,7 @@ for token in (
     'pmv2-prompt-tall',
     'pmv2LicenseKeyboardBound',
     'pmv2LicenseObserver',
-    'promptmaster-logo-clean.svg?v=20260924-ui3',
+    'promptmaster-logo-clean.svg?v=20260924-dbfree1',
     'syncRequiredFieldState',
     'PFLICHTFELD',
     'pmv2-prompt-guard',
