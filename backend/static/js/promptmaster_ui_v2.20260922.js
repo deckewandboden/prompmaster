@@ -13,6 +13,7 @@
   const oldMain = $('main.max');
   const licenseSection = $('#licensePanel') || $('input[name="mslicense"]')?.closest('.panel');
   const appSection = free ? $('#freeApps')?.closest('.section') : $('#applicationSection');
+  const catalog = $('#catalog');
   const taskSection = $('#taskSection');
   const contextSection = free ? $('#contextSection') : $('#inputSection');
   const audienceSection = $('#audienceSection');
@@ -37,7 +38,6 @@
 
   const ensureProCatalogSearch = () => {
     if (free) return null;
-    const catalog = $('#catalog');
     const appBody = catalog?.closest('.section-body');
     if (!catalog || !appBody) return null;
 
