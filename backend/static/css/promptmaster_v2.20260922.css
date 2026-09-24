@@ -915,3 +915,142 @@ body.pmv2 .pmv2-header-cta{
   cursor:not-allowed!important;
   transform:none!important;
 }
+
+
+/* V2 UI audit round 3 2026-09-24 */
+/*
+ * Desktop prompt rail contract:
+ * the finished prompt must remain available while the configuration page
+ * scrolls. If the rail is taller than the viewport, the rail itself becomes
+ * the only bounded scroll surface; the prompt textarea never gets its own
+ * scrollbar. Tablet/mobile keep the natural stacked document flow.
+ */
+@media(min-width:1181px){
+  .pmv2-prompt-panel,
+  .pmv2-prompt-panel.pmv2-prompt-tall{
+    position:sticky!important;
+    top:18px!important;
+    align-self:start!important;
+    max-height:calc(100vh - 36px)!important;
+    overflow-x:hidden!important;
+    overflow-y:auto!important;
+    overscroll-behavior:contain;
+    scrollbar-width:thin;
+    scrollbar-color:rgba(128,177,208,.38) rgba(4,17,33,.18);
+  }
+  .pmv2-prompt-panel::-webkit-scrollbar{width:8px}
+  .pmv2-prompt-panel::-webkit-scrollbar-track{background:rgba(4,17,33,.18)}
+  .pmv2-prompt-panel::-webkit-scrollbar-thumb{
+    background:rgba(128,177,208,.38);
+    border-radius:99px;
+  }
+}
+@media(max-width:1180px){
+  .pmv2-prompt-panel,
+  .pmv2-prompt-panel.pmv2-prompt-tall{
+    position:relative!important;
+    top:auto!important;
+    max-height:none!important;
+    overflow:visible!important;
+  }
+}
+
+/* Required fields must be visually unmistakable and machine-readable. */
+.pmv2 .required-mark,
+.pmv2 .optional-mark{
+  display:inline-flex!important;
+  align-items:center!important;
+  min-height:19px!important;
+  margin-left:5px!important;
+  padding:2px 7px!important;
+  border-radius:999px!important;
+  vertical-align:middle!important;
+  font-size:9px!important;
+  line-height:1!important;
+  font-weight:900!important;
+  letter-spacing:.045em!important;
+  text-transform:uppercase!important;
+}
+.pmv2 .required-mark{
+  border:1px solid rgba(255,151,207,.72)!important;
+  background:linear-gradient(100deg,rgba(130,47,188,.96),rgba(207,66,151,.96))!important;
+  color:#fff!important;
+  -webkit-text-fill-color:#fff!important;
+  box-shadow:0 0 0 2px rgba(198,76,166,.10)!important;
+}
+.pmv2 .optional-mark{
+  border:1px solid rgba(128,177,208,.22)!important;
+  background:rgba(114,143,165,.10)!important;
+  color:#aabccb!important;
+  -webkit-text-fill-color:#aabccb!important;
+}
+.pmv2 .input-card.required .task-input{
+  border-color:rgba(156,106,239,.46)!important;
+  box-shadow:inset 3px 0 0 rgba(139,68,239,.76)!important;
+}
+.pmv2 .input-card.required .task-input[aria-invalid="true"]{
+  border-color:rgba(231,91,159,.82)!important;
+  box-shadow:
+    inset 3px 0 0 rgba(225,76,149,.95),
+    0 0 0 2px rgba(225,76,149,.08)!important;
+}
+.pmv2 .input-card.required .task-input[aria-invalid="true"]:focus{
+  border-color:rgba(255,124,189,.96)!important;
+  box-shadow:
+    inset 3px 0 0 rgba(225,76,149,.98),
+    0 0 0 3px rgba(225,76,149,.13)!important;
+}
+
+/* Explain why Pro has not composed yet instead of presenting an empty box. */
+.pmv2-prompt-guard{
+  margin:0 0 10px!important;
+  padding:10px 12px!important;
+  border:1px solid rgba(225,94,164,.42)!important;
+  border-radius:10px!important;
+  background:linear-gradient(100deg,rgba(80,34,116,.42),rgba(74,29,73,.32))!important;
+  color:#f0d8e8!important;
+  font-size:11px!important;
+  line-height:1.45!important;
+}
+.pmv2-prompt-guard[hidden]{display:none!important}
+.pmv2-prompt-guard strong{color:#fff!important}
+
+/*
+ * Locked Microsoft-app cards stay dark on hover. The previous generic hover
+ * plus opacity/filter chain made them look pale/white in Firefox.
+ */
+.pmv2-pro .app-card.locked:hover{
+  opacity:1!important;
+  filter:none!important;
+  transform:translateY(-2px) scale(1.015)!important;
+  border-color:rgba(169,113,255,.82)!important;
+  background:linear-gradient(145deg,rgba(75,38,121,.98),rgba(43,27,82,.98))!important;
+  box-shadow:0 14px 30px rgba(35,15,72,.30)!important;
+}
+.pmv2-pro .app-card.locked:hover .app-name{
+  color:#fff!important;
+  -webkit-text-fill-color:#fff!important;
+}
+.pmv2-pro .app-card.locked:hover .app-copy,
+.pmv2-pro .app-card.locked:hover .app-access{
+  color:#cdbce3!important;
+  -webkit-text-fill-color:#cdbce3!important;
+}
+.pmv2-pro .app-card.locked:hover .tag,
+.pmv2-pro .app-card.locked:hover .app-footer .tag{
+  border-color:rgba(183,132,255,.72)!important;
+  background:#4a2474!important;
+  color:#f8efff!important;
+  -webkit-text-fill-color:#f8efff!important;
+}
+
+/* Pro prompt actions: slight lift/scale and a dark-violet hover, never white. */
+.pmv2-pro .pmv2-prompt-panel .actions .btn:not(:disabled):hover{
+  border-color:rgba(177,126,248,.70)!important;
+  background:linear-gradient(100deg,#572782 0%,#45266f 52%,#30205b 100%)!important;
+  color:#fff!important;
+  -webkit-text-fill-color:#fff!important;
+  filter:none!important;
+  transform:translateY(-1px) scale(1.012)!important;
+  box-shadow:0 9px 22px rgba(38,16,71,.32)!important;
+}
