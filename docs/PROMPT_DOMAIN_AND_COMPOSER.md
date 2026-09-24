@@ -100,13 +100,18 @@ Beispiel:
 
 Antwort enthält unter anderem `prompt`, `progress_percent`, `policy_version`, `prompt_version` und explizit `persisted: false`.
 
+### Free Compose
+
+Die aktuelle Route `/free/` verwendet denselben Compose-Endpunkt mit `product: "FREE"`, aber weiterhin die historischen Free-Task-IDs (z. B. `chat_sum`). Der Server lädt den zugehörigen `PromptLegacyContract.payload.runtime_contract` aus der Datenbank und erzeugt daraus den Prompt zustandslos. Die 16 Free-Aufgaben werden **nicht** auf PM20 umgedeutet.
+
+
 ## Security / Privacy
 
 - Pro-Endpunkte: Login + aktive Pro-Lizenz + registriertes Gerät.
 - Server prüft Produktentitlement und Microsoft-Tier; Clientangaben allein autorisieren nichts.
 - `Cache-Control: no-store` für Prompt-API-Antworten.
 - keine Prompt-/Input-Persistenz im Composer.
-- Free bleibt unverändert standalone, bis das Legacy→PM20-Mapping geprüft ist.
+- Die aktuelle Free-Route komponiert serverseitig aus dem in `PromptLegacyContract` gespeicherten Free-1.2.4-Vertrag; ein Free→PM20-Mapping wird dabei ausdrücklich nicht geraten. `/free-old/` bleibt die lokale Golden-Master-Rollbackroute.
 
 Der frühere kundensichtbare Datenschutztext „alles lokal im Browser“ muss vor Aktivierung der serverseitigen Komposition gegenüber Endkunden an den tatsächlichen Datenfluss angepasst werden. Die technische Architektur minimiert diesen Datenfluss durch Statelessness und fehlende Promptpersistenz, macht ihn aber nicht „lokal-only“.
 
@@ -121,7 +126,7 @@ Der Seed:
 3. importiert Felder/Optionen/Policies;
 4. setzt Microsoft-Tiers/Capabilities;
 5. erzeugt PRO-Task/App-Entitlements;
-6. erhält 16 Free-Legacy-Verträge als `unmapped`;
+6. materialisiert 16 vollständige Free-Legacy-Runtime-Verträge in `PromptLegacyContract` und lässt deren PM20-Mappingstatus bewusst `unmapped`;
 7. überschreibt keine Version mit abweichendem Source-Hash;
 8. reaktiviert bei später existierender freigegebener Version nicht stillschweigend V1.
 

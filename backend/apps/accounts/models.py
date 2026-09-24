@@ -22,8 +22,11 @@ class User(TimeStampedModel,AbstractBaseUser,PermissionsMixin):
     def full_name(self): return f'{self.first_name} {self.last_name}'.strip() or self.email
 class Permission(TimeStampedModel):
     code=models.CharField(max_length=100,unique=True); name=models.CharField(max_length=160)
+    def __str__(self):
+        return self.name if self.name and self.name != self.code else self.code
 class Role(TimeStampedModel):
     code=models.CharField(max_length=80,unique=True); name=models.CharField(max_length=120); active=models.BooleanField(default=True); permissions=models.ManyToManyField(Permission,blank=True)
+    def __str__(self): return self.name
 class UserRole(TimeStampedModel):
     user=models.ForeignKey(settings.AUTH_USER_MODEL,on_delete=models.CASCADE,related_name='role_links'); role=models.ForeignKey(Role,on_delete=models.CASCADE)
     class Meta: constraints=[models.UniqueConstraint(fields=['user','role'],name='uniq_user_role')]

@@ -138,6 +138,7 @@ required = [
     'backend/static/brand/promptmaster-logo-reference.png',
     'backend/static/brand/promptmaster-logo-clean.svg','scripts/runtime_validate.sh',
     'backend/apps/prompts/models.py','backend/apps/prompts/composer_core.py',
+    'backend/apps/prompts/free_legacy.py',
     'backend/apps/prompts/services.py','backend/apps/prompts/api.py','backend/apps/prompts/api_urls.py',
     'backend/apps/prompts/management/commands/seed_prompt_catalog.py',
     'backend/apps/prompts/data/pm20_golden_logic.json','backend/apps/prompts/data/free_legacy_tasks.json',
@@ -195,7 +196,7 @@ for path in active_brand_files:
 
 proaccess_views = (ROOT/'backend/apps/proaccess/views.py').read_text(encoding='utf-8')
 for token in (
-    "V2_ASSET_REV = b'20260924-live2'",
+    "V2_ASSET_REV = b'20260924-dbfree3'",
     'promptmaster_v2.20260922.css?v=',
     'promptmaster_ui_v2.20260922.js?v=',
     'free_catalog_bridge.20260918.js?v=',
@@ -211,7 +212,15 @@ for token in (
     'pmv2-prompt-tall',
     'pmv2LicenseKeyboardBound',
     'pmv2LicenseObserver',
-    'promptmaster-logo-clean.svg?v=20260924-live2',
+    'promptmaster-logo-clean.svg?v=20260924-dbfree3',
+    'syncRequiredFieldState',
+    'PFLICHTFELD',
+    "if (mark.textContent !== 'PFLICHTFELD')",
+    'pmv2-prompt-guard',
+    "document.body.dataset.pmv2Ready = 'loading'",
+    "headings.includes('Microsoft 365 Anwendungen')",
+    "headings.includes('Power Platform & Data')",
+    "headings.includes('Business, Security & Development')",
 ):
     if token not in v2_js:
         fail(f'V2 UI audit invariant missing: {token}')
@@ -240,6 +249,8 @@ for token in (
     '.pm-confirm-backdrop',
     '.card-action-row',
     '.brand img{display:block;width:210px;height:auto;max-height:44px',
+    '/* RBAC permission editor */',
+    '#id_permissions',
 ):
     if token not in css:
         fail(f'Design-system invariant missing from app.css: {token}')
@@ -252,6 +263,12 @@ for token in (
     'body.pmv2 .btn',
     '.pmv2-prompt-panel .actions .btn',
     'linear-gradient(100deg,#8735fa 0%,#7664ff 43%,#3487ff 72%,#31dcee 100%)',
+    '/* V2 UI audit round 3 2026-09-24 */',
+    '.pmv2-prompt-panel.pmv2-prompt-tall',
+    '.pmv2 .required-mark',
+    '.pmv2-prompt-guard',
+    '.pmv2-pro .app-card.locked:hover',
+    '.pmv2-pro .pmv2-prompt-panel .actions .btn:not(:disabled):hover',
 ):
     if token not in v2_css:
         fail(f'V2 screenshot regression invariant missing from promptmaster_v2 CSS: {token}')
@@ -912,6 +929,8 @@ prompt_urls = (ROOT/'backend/config/urls.py').read_text(encoding='utf-8')
 prompt_models = (ROOT/'backend/apps/prompts/models.py').read_text(encoding='utf-8')
 prompt_services = (ROOT/'backend/apps/prompts/services.py').read_text(encoding='utf-8')
 prompt_api = (ROOT/'backend/apps/prompts/api.py').read_text(encoding='utf-8')
+free_legacy = (ROOT/'backend/apps/prompts/free_legacy.py').read_text(encoding='utf-8')
+free_bridge = (ROOT/'backend/static/js/free_catalog_bridge.20260918.js').read_text(encoding='utf-8')
 if "'apps.prompts'" not in prompt_settings:
     fail('Central PromptDomain app is not installed')
 if "path('api/v1/prompts/', include('apps.prompts.api_urls'))" not in prompt_urls:
@@ -928,6 +947,31 @@ if "'persisted': False" not in prompt_api or "response['Cache-Control'] = 'no-st
     fail('Prompt compose API does not expose stateless/no-store contract')
 if 'version.app_rule_snapshot or app.rule' not in prompt_services:
     fail('Published prompt version does not use app-rule snapshot')
+for token in (
+    'FREE_RUNTIME_CONTRACTS',
+    'compose_free_legacy',
+    "stored.get('runtime_contract')",
+    "'source': 'PromptLegacyContract'",
+):
+    if token not in free_legacy:
+        fail(f'Free database composer invariant missing: {token}')
+for token in (
+    "product == 'FREE'",
+    "source='FREE_1_2_4'",
+    'compose_free_legacy',
+):
+    if token not in prompt_api:
+        fail(f'Free compose API invariant missing: {token}')
+for token in (
+    'pm-free-compose',
+    "document.body.dataset.pmFreeCompose='server'",
+    "product:'FREE'",
+    "output.dataset.source='database'",
+):
+    if token not in free_bridge:
+        fail(f'Free browser DB bridge invariant missing: {token}')
+if 'free_mapping_pending' in prompt_api:
+    fail('Free compose API still exposes obsolete free_mapping_pending blocker')
 
 prompt_validator = subprocess.run(
     [sys.executable, str(ROOT/'scripts/validate_prompt_domain.py')],

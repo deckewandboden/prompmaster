@@ -11,6 +11,7 @@ from django.utils import timezone
 
 from apps.catalog.models import Feature, Product, ProductEntitlement
 from apps.prompts.composer_core import DEFAULT_NO_FABRICATION_RULE
+from apps.prompts.free_legacy import FREE_RUNTIME_CONTRACTS
 from apps.prompts.models import (
     MicrosoftCapability,
     MicrosoftTier,
@@ -332,12 +333,16 @@ class Command(BaseCommand):
         legacy_sha = legacy.get('source_sha256') or ''
         PromptLegacyContract.objects.filter(source='FREE_1_2_4').delete()
         for item in legacy.get('tasks') or []:
+            legacy_id = item['legacy_id']
+            runtime_contract = FREE_RUNTIME_CONTRACTS.get(legacy_id)
+            if not runtime_contract:
+                raise CommandError(f'Free-Runtime-Vertrag fehlt: {legacy_id}')
             PromptLegacyContract.objects.create(
                 source='FREE_1_2_4',
-                legacy_id=item['legacy_id'],
+                legacy_id=legacy_id,
                 application_code=item.get('app_code') or '',
-                title=item.get('title') or item['legacy_id'],
-                payload=item,
+                title=item.get('title') or legacy_id,
+                payload={**item, 'runtime_contract': runtime_contract},
                 mapping_status='unmapped',
                 source_sha256=legacy_sha,
             )

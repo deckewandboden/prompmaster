@@ -13,6 +13,7 @@
   const oldMain = $('main.max');
   const licenseSection = $('#licensePanel') || $('input[name="mslicense"]')?.closest('.panel');
   const appSection = free ? $('#freeApps')?.closest('.section') : $('#applicationSection');
+  const catalog = $('#catalog');
   const taskSection = $('#taskSection');
   const contextSection = free ? $('#contextSection') : $('#inputSection');
   const audienceSection = $('#audienceSection');
@@ -37,7 +38,6 @@
 
   const ensureProCatalogSearch = () => {
     if (free) return null;
-    const catalog = $('#catalog');
     const appBody = catalog?.closest('.section-body');
     if (!catalog || !appBody) return null;
 
@@ -98,7 +98,7 @@
   header.className = 'pmv2-header';
   header.innerHTML = `
     <div class="pmv2-brand">
-      <img src="/static/brand/promptmaster-logo-clean.svg?v=20260924-live2" alt="PromptMaster">
+      <img src="/static/brand/promptmaster-logo-clean.svg?v=20260924-dbfree3" alt="PromptMaster">
       <span class="pmv2-edition pmv2-edition-${edition}">${edition.toUpperCase()}</span>
     </div>
     <div class="pmv2-header-spacer"></div>
@@ -185,6 +185,88 @@
   if (existingRating) right.append(existingRating);
 
   const promptOutput = $('#promptOutput', promptSection);
+
+  // Pro composes only after every required task field is present. Make that
+  // fail-closed contract explicit in the UI instead of showing an unexplained
+  // empty prompt panel.
+  let promptGuard = null;
+  const syncRequiredFieldState = () => {
+    if (free) return;
+    const requiredInputs = [...contextSection.querySelectorAll('.input-card.required .task-input')];
+    requiredInputs.forEach(input => {
+      input.required = true;
+      input.setAttribute('aria-required', 'true');
+      const empty = !(input.value || '').trim();
+      input.setAttribute('aria-invalid', String(empty));
+      const mark = input.closest('.input-card')?.querySelector('.required-mark');
+      if (mark) {
+        // This function is called from a childList MutationObserver. Replacing
+        // the badge text unconditionally would itself create another childList
+        // mutation and can trap Firefox/WebKit in an endless observer loop.
+        if (mark.textContent !== 'PFLICHTFELD') {
+          mark.textContent = 'PFLICHTFELD';
+        }
+        const requiredTitle = 'Dieses Feld muss ausgefüllt werden, bevor der Prompt erzeugt wird.';
+        if (mark.getAttribute('title') !== requiredTitle) {
+          mark.setAttribute('title', requiredTitle);
+        }
+      }
+    });
+
+    const selectedTask = $('.task.selected', taskSection);
+    const missing = requiredInputs
+      .filter(input => !(input.value || '').trim())
+      .map(input => {
+        const label = input.closest('.input-card')?.querySelector('label');
+        if (!label) return 'Pflichtfeld';
+        const clone = label.cloneNode(true);
+        clone.querySelector('.required-mark')?.remove();
+        return (clone.textContent || '').replace(/\s+/g,' ').trim() || 'Pflichtfeld';
+      });
+
+    if (!promptGuard) {
+      const promptBody = $('.prompt-body', promptSection);
+      if (promptBody && promptOutput) {
+        promptGuard = document.createElement('div');
+        promptGuard.className = 'pmv2-prompt-guard';
+        promptGuard.hidden = true;
+        promptBody.insertBefore(promptGuard, promptOutput);
+      }
+    }
+
+    if (!promptGuard) return;
+    if (selectedTask && missing.length) {
+      promptGuard.hidden = false;
+      promptGuard.innerHTML =
+        '<strong>Prompt noch nicht erstellt.</strong> Pflichtfelder fehlen: '
+        + missing.map(value => value.replace(/[&<>"']/g, char => ({
+          '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'
+        })[char])).join(', ')
+        + '.';
+      if (promptOutput && !promptOutput.value) {
+        promptOutput.placeholder = 'Bitte zuerst alle markierten Pflichtfelder ausfüllen.';
+      }
+    } else {
+      promptGuard.hidden = true;
+      promptGuard.textContent = '';
+      if (promptOutput) {
+        promptOutput.placeholder = 'Dein Prompt wird hier nach vollständiger Eingabe erzeugt.';
+      }
+    }
+  };
+
+  if (!free) {
+    contextSection.addEventListener('input', event => {
+      if (event.target.matches('.task-input')) syncRequiredFieldState();
+    });
+    contextSection.addEventListener('change', syncRequiredFieldState);
+    new MutationObserver(syncRequiredFieldState).observe(
+      contextSection,
+      {subtree:true,childList:true}
+    );
+    syncRequiredFieldState();
+  }
+
   const syncPromptStickiness = () => {
     const tooTall = right.scrollHeight > Math.max(520, window.innerHeight - 36);
     right.classList.toggle('pmv2-prompt-tall', tooTall);
@@ -401,6 +483,11 @@
       });
       modalObserver.observe(proModalTitle,{childList:true,subtree:true,characterData:true});
     }
+
+    const freePrivacyNote = $('.legal-footer-note span', footer);
+    if (freePrivacyNote) {
+      freePrivacyNote.textContent = 'Die Prompt-Konfiguration wird serverseitig verarbeitet, um den Prompt aus dem gespeicherten Free-Vertrag zu erzeugen. Eingaben und erzeugte Prompts werden dabei nicht als Promptinhalt gespeichert.';
+    }
   } else {
     ensureProCatalogSearch();
 
@@ -576,6 +663,44 @@
   $('#switchRequiredBtn')?.addEventListener('click', () => setTimeout(() => scrollToTarget(licenseSection),80));
   $('#switchBusinessBtn')?.addEventListener('click', () => setTimeout(() => scrollToTarget(licenseSection),80));
 
-  document.body.dataset.pmv2Ready = '1';
-  window.dispatchEvent(new CustomEvent('pm-v2-ready',{detail:{edition}}));
+  const announceV2Ready = () => {
+    if (document.body.dataset.pmv2Ready === '1') return;
+    document.body.dataset.pmv2Ready = '1';
+    window.dispatchEvent(new CustomEvent('pm-v2-ready',{detail:{edition}}));
+  };
+
+  if (free) {
+    announceV2Ready();
+  } else {
+    /*
+     * Pro replaces the embedded Golden-Master catalog asynchronously with the
+     * authoritative server catalog. Do not announce an interactive V2 before
+     * that replacement is complete: an early selection would otherwise be
+     * discarded when the server catalog arrives.
+     *
+     * The central bridge renders three canonical group headings. Requiring
+     * those headings plus all 34 app cards distinguishes the hydrated server
+     * catalog from the embedded reference catalog without changing the
+     * integrity-protected runtime asset.
+     */
+    document.body.dataset.pmv2Ready = 'loading';
+    const centralCatalogReady = () => {
+      const headings = Array.from(catalog.querySelectorAll('.catalog-title h3'))
+        .map(node => (node.textContent || '').trim());
+      return catalog.querySelectorAll('.app-card').length === 34
+        && headings.includes('Microsoft 365 Anwendungen')
+        && headings.includes('Power Platform & Data')
+        && headings.includes('Business, Security & Development');
+    };
+    let proReadyObserver = null;
+    const finishProReady = () => {
+      if (!centralCatalogReady()) return false;
+      if (proReadyObserver) proReadyObserver.disconnect();
+      announceV2Ready();
+      return true;
+    };
+    proReadyObserver = new MutationObserver(finishProReady);
+    proReadyObserver.observe(catalog,{subtree:true,childList:true,characterData:true});
+    finishProReady();
+  }
 })();

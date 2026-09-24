@@ -17,7 +17,7 @@ from .services import active_product_assignment, assignment_expiry_context, has_
 
 logger = logging.getLogger(__name__)
 
-V2_ASSET_REV = b'20260924-live2'
+V2_ASSET_REV = b'20260924-dbfree3'
 V2_STYLE = b'<link rel="stylesheet" href="/static/css/promptmaster_v2.20260922.css?v=' + V2_ASSET_REV + b'">'
 V2_SCRIPT = b'<script src="/static/js/promptmaster_ui_v2.20260922.js?v=' + V2_ASSET_REV + b'" defer></script>'
 
@@ -247,8 +247,13 @@ def legacy_content(request):
     return _pro_runtime_response(request, ui_v2=False)
 
 
-def _free_runtime_response(*, ui_v2=False):
-    """Serve FREE 1.2.4 with the additive 34-app visibility bridge."""
+def _free_runtime_response(request, *, ui_v2=False):
+    """Serve FREE 1.2.4 without mutating the verified Golden Master on disk.
+
+    The current V2 route activates database-backed composition through the
+    additive bridge. The permanent /free-old/ rollback route keeps the original
+    local composer and therefore receives no server-composition marker.
+    """
     try:
         data = read_verified_asset(settings.FREE_GOLDEN_MASTER_PATH, settings.FREE_GOLDEN_MASTER_SHA256)
     except GoldenMasterIntegrityError:
@@ -261,15 +266,28 @@ def _free_runtime_response(*, ui_v2=False):
         logger.error('PromptMaster Free Golden Master has unexpected closing markup')
         return HttpResponse('PromptMaster Free ist vorübergehend nicht verfügbar.', status=503)
     data = data.replace(marker, bridge + marker)
+
     if ui_v2:
+        head_marker = b'</head>'
+        if data.count(head_marker) != 1:
+            logger.error('PromptMaster Free Golden Master has unexpected head markup')
+            return HttpResponse('PromptMaster Free ist vorübergehend nicht verfügbar.', status=503)
+        csrf_token = get_token(request).encode('ascii')
+        compose_marker = (
+            b'<meta name="pm-free-compose" content="server" data-csrf="'
+            + csrf_token
+            + b'">'
+        )
+        data = data.replace(head_marker, compose_marker + head_marker, 1)
         try:
             data = _inject_v2_ui(data)
         except GoldenMasterIntegrityError:
             logger.exception('PromptMaster Free V2 UI injection failed')
             return HttpResponse('PromptMaster Free ist vorübergehend nicht verfügbar.', status=503)
+
     response = HttpResponse(data, content_type='text/html; charset=utf-8')
     response['Cache-Control'] = (
-        'public, max-age=0, must-revalidate'
+        'private, no-store'
         if ui_v2
         else 'public, max-age=300'
     )
@@ -277,16 +295,10 @@ def _free_runtime_response(*, ui_v2=False):
 
 
 def free_content(request):
-    """Serve the current Free product route.
-
-    The reviewed Golden Master remains byte-verified and unchanged. The bridge
-    only augments catalog visibility at runtime: the 16 reviewed Free task
-    contracts keep their original local composition logic; all additional
-    PromptDomain applications are visible but Pro-locked.
-    """
-    return _free_runtime_response(ui_v2=True)
+    """Serve current Free with a DB-backed legacy-contract composer."""
+    return _free_runtime_response(request, ui_v2=True)
 
 
 def free_old_content(request):
     """Serve the pre-redesign Free UI as a permanent rollback/reference route."""
-    return _free_runtime_response(ui_v2=False)
+    return _free_runtime_response(request, ui_v2=False)

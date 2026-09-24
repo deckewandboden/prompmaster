@@ -1,4 +1,5 @@
 from django.test import TestCase
+from django.utils import timezone
 from apps.accounts.models import User, Role, Permission, UserRole
 from apps.companies.models import Company, Membership, PrivateCustomerProfile
 
@@ -60,6 +61,22 @@ class AdminDataVisibilityTests(TestCase):
         response = self.client.get('/ns-admin/')
         self.assertContains(response, 'href="/ns-admin/customers/"')
         self.assertNotContains(response, 'href="/ns-admin/licenses/"')
+
+    def test_role_editor_uses_human_permission_labels_not_model_uuids(self):
+        self.grant('roles.write')
+        self.grant('ops.read')
+        self.user.two_factor_required = True
+        self.user.totp_secret_enc = 'configured-for-test'
+        self.user.save(update_fields=['two_factor_required', 'totp_secret_enc', 'updated_at'])
+        session = self.client.session
+        session['two_factor_ok'] = True
+        session['staff_sensitive_reauth_at'] = timezone.now().timestamp()
+        session.save()
+        response = self.client.get(f'/ns-admin/roles/{self.role.id}/')
+        self.assertEqual(response.status_code, 200)
+        self.assertNotContains(response, 'Permission object')
+        self.assertContains(response, 'System &amp; Betrieb: Lesen (ops.read)')
+        self.assertContains(response, 'Benutzer &amp; Rollen: Bearbeiten (roles.write)')
 
     def test_statistics_do_not_leak_unpermitted_domains(self):
         self.assertEqual(self.client.get('/ns-admin/statistics/').status_code, 403)

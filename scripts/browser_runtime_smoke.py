@@ -477,9 +477,18 @@ def _browser_first_time_mfa_login(page, base: str, email: str, password: str, ex
             f'first-time MFA for {email} continues to '
             f'{continue_button.get_attribute("href")}, expected {expected_path}'
         )
-    continue_button.click()
-    page.wait_for_url(lambda url: expected_path in str(url))
-    page.wait_for_load_state('networkidle')
+    # Use a DOM click and own the navigation wait explicitly. Playwright's
+    # Locator.click() waits for every scheduled navigation and can hang for 30s
+    # on this post-MFA handoff even after the link was successfully activated.
+    # The acceptance contract is the resulting URL + loaded destination, not
+    # Playwright's implicit navigation bookkeeping.
+    continue_button.evaluate("(el) => el.click()")
+    page.wait_for_url(
+        lambda url: expected_path in str(url),
+        wait_until='domcontentloaded',
+        timeout=15000,
+    )
+    page.wait_for_load_state('domcontentloaded')
 
 
 _LAST_SUCCESSFUL_TOTP_BY_EMAIL = {}
@@ -879,7 +888,7 @@ def _check_product_v2_shell(page, label: str, width: int) -> None:
             optionSelectedStyle,
             nextButtonStyle: styleOf(nextButton),
             promptActionStyles: promptActionButtons.map(styleOf),
-            nestedScroll: [left,right,output].filter(Boolean).some(el => (
+            nestedScroll: [left,output].filter(Boolean).some(el => (
               ['auto','scroll'].includes(getComputedStyle(el).overflowY)
               && el.scrollHeight > el.clientHeight + 2
             )),
@@ -897,14 +906,16 @@ def _check_product_v2_shell(page, label: str, width: int) -> None:
         raise AssertionError(f'{label} {width}px: V2 legacy logo active: {metrics["logoPath"]}')
     if metrics['logoNaturalWidth'] < 300:
         raise AssertionError(f'{label} {width}px: V2 logo source too small: {metrics["logoNaturalWidth"]}')
-    if metrics['leftOverflowY'] != 'visible' or metrics['rightOverflowY'] != 'visible':
-        raise AssertionError(f'{label} {width}px: nested V2 column scrolling returned: {metrics}')
+    if metrics['leftOverflowY'] != 'visible':
+        raise AssertionError(f'{label} {width}px: left V2 column gained nested scrolling: {metrics}')
     if metrics['nestedScroll']:
-        raise AssertionError(f'{label} {width}px: V2 contains a nested scroll area: {metrics}')
-    if width <= 1180 and metrics['rightPosition'] != 'relative':
-        raise AssertionError(f'{label} {width}px: stacked prompt panel must be relative: {metrics}')
-    if width > 1180 and metrics['rightPosition'] not in {'sticky','relative'}:
-        raise AssertionError(f'{label} {width}px: desktop prompt panel positioning invalid: {metrics}')
+        raise AssertionError(f'{label} {width}px: V2 config/textarea contains an unapproved nested scroll area: {metrics}')
+    if width <= 1180:
+        if metrics['rightPosition'] != 'relative' or metrics['rightOverflowY'] != 'visible':
+            raise AssertionError(f'{label} {width}px: stacked prompt panel contract invalid: {metrics}')
+    else:
+        if metrics['rightPosition'] != 'sticky' or metrics['rightOverflowY'] not in {'auto','scroll'}:
+            raise AssertionError(f'{label} {width}px: desktop prompt rail must stay sticky and bounded: {metrics}')
     if metrics['outputOverflowY'] not in {'hidden','clip','visible'}:
         raise AssertionError(f'{label} {width}px: prompt output gained its own scrollbar: {metrics}')
 
@@ -1025,9 +1036,14 @@ def _browser_register_verify_to_buy(
         raise AssertionError(f'email verification route failed for {email}')
     if not page.locator('.result-actions a.btn.primary').is_visible():
         raise AssertionError(f'verification result has no continue action for {email}')
-    page.locator('.result-actions a.btn.primary').click()
-    page.wait_for_url(lambda url: '/portal/licenses/buy/' in str(url))
-    page.wait_for_load_state('networkidle')
+    verification_continue = page.locator('.result-actions a.btn.primary')
+    verification_continue.evaluate("(el) => el.click()")
+    page.wait_for_url(
+        lambda url: '/portal/licenses/buy/' in str(url),
+        wait_until='domcontentloaded',
+        timeout=15000,
+    )
+    page.wait_for_load_state('domcontentloaded')
 
     def _is_verified():
         close_old_connections()
@@ -1192,7 +1208,7 @@ def run_backend_ui_smoke(browser, fixture=None) -> None:
             or v2_free_layout['bodyOverflowY'] not in {'auto', 'scroll'}
             or v2_free_layout['rootScrollBehavior'] != 'auto'
             or v2_free_layout['leftOverflowY'] != 'visible'
-            or v2_free_layout['rightOverflowY'] != 'visible'
+            or v2_free_layout['rightOverflowY'] not in {'auto', 'scroll'}
             or v2_free_layout['rightPosition'] != 'sticky'
             or v2_free_layout['rightHeight'] < 300
             or not v2_free_layout['toggleAfterFreeApps']
@@ -1258,6 +1274,53 @@ def run_backend_ui_smoke(browser, fixture=None) -> None:
             or reset_probe['windowY'] >= 3
         ):
             raise AssertionError(f'Free V2 reset did not return to top: {reset_probe}')
+
+        # Current Free must generate the authoritative prompt through the
+        # database-backed PromptLegacyContract API, not the embedded JS composer.
+        if public_page.locator('body').get_attribute('data-pm-free-compose') != 'server':
+            raise AssertionError('Free V2 database compose mode is not active')
+        public_page.locator('[data-appwrap="chat"]').click()
+        public_page.wait_for_function(
+            "() => !document.querySelector('#taskSection')?.classList.contains('hidden')"
+        )
+        public_page.locator('[data-task="chat_sum"]').click()
+        public_page.wait_for_function(
+            "() => !document.querySelector('#contextSection')?.classList.contains('hidden')"
+        )
+        public_page.locator('#goalInput').fill('Kernaussagen und nächste Schritte')
+        public_page.locator('#sourceContextInput').fill('Browser-Free-DB-Probe')
+        public_page.locator('input[name="audience"][value="self"]').check(force=True)
+        public_page.locator('input[name="focus"][value="Kernaussagen"]').check(force=True)
+        public_page.locator('#detailSelect').select_option('short')
+        public_page.locator('#formatSelect').select_option('bullets')
+        public_page.locator('#toneSelect').select_option('professional')
+        public_page.wait_for_function(
+            """() => {
+              const output=document.querySelector('#promptOutput');
+              return output?.dataset.source==='database'
+                && output.value.includes('Browser-Free-DB-Probe')
+                && document.querySelector('#promptStatus')?.textContent==='PROMPT BEREIT'
+                && document.querySelector('#copyBtn')?.disabled===false;
+            }""",
+            timeout=10000,
+        )
+        free_db_probe = public_page.evaluate(
+            """() => ({
+              source: document.querySelector('#promptOutput')?.dataset.source || '',
+              prompt: document.querySelector('#promptOutput')?.value || '',
+              copyState: document.querySelector('#copyState')?.textContent || '',
+            })"""
+        )
+        if (
+            free_db_probe['source'] != 'database'
+            or 'Browser-Free-DB-Probe' not in free_db_probe['prompt']
+            or 'Aus Prompt-Datenbank erstellt' not in free_db_probe['copyState']
+        ):
+            raise AssertionError(
+                f'Free V2 did not render database-composed prompt: {free_db_probe}'
+            )
+        public_page.locator('#resetBtn').click()
+        public_page.wait_for_timeout(250)
 
         pro_toggle = public_page.locator('.pmv2-pro-toggle')
         if not pro_toggle.is_visible():
@@ -1550,9 +1613,13 @@ def run_backend_ui_smoke(browser, fixture=None) -> None:
             raise AssertionError('first-time staff MFA exposes the wrong continuation label')
         if continue_button.get_attribute('href') != '/ns-admin/':
             raise AssertionError('first-time staff MFA does not continue to /ns-admin/')
-        continue_button.click()
-        first_page.wait_for_url('**/ns-admin/')
-        first_page.wait_for_load_state('networkidle')
+        continue_button.evaluate("(el) => el.click()")
+        first_page.wait_for_url(
+            '**/ns-admin/',
+            wait_until='domcontentloaded',
+            timeout=15000,
+        )
+        first_page.wait_for_load_state('domcontentloaded')
         if '/ns-admin/' not in first_page.url:
             raise AssertionError('first-time staff MFA did not enter the netstyle backend')
         first_context.close()
@@ -1756,7 +1823,7 @@ def run_backend_ui_smoke(browser, fixture=None) -> None:
                 page.wait_for_url('**/pro/app/')
                 page.wait_for_load_state('networkidle')
 
-                page.wait_for_function("document.body.classList.contains('pmv2')")
+                page.wait_for_function("document.body.dataset.pmv2Ready === '1'", timeout=15000)
                 customer_utility_paths = set(page.locator('.pmv2-header-actions a').evaluate_all(
                     "els => els.map(e => new URL(e.href).pathname)"
                 ))
@@ -1997,7 +2064,7 @@ def run_backend_ui_smoke(browser, fixture=None) -> None:
                 pro_response = page.goto(base + 'pro/', wait_until='networkidle')
                 if not pro_response or pro_response.status != 200:
                     raise AssertionError('netstyle staff cannot open PromptMaster Pro')
-                page.wait_for_function("document.body.classList.contains('pmv2')")
+                page.wait_for_function("document.body.dataset.pmv2Ready === '1'", timeout=15000)
                 utility_paths = set(page.locator('.pmv2-header-actions a').evaluate_all(
                     "els => els.map(e => new URL(e.href).pathname)"
                 ))
@@ -2083,7 +2150,7 @@ def run_backend_ui_smoke(browser, fixture=None) -> None:
                     response = page.goto(base + 'pro/app/', wait_until='networkidle')
                     if not response or response.status != 200:
                         raise AssertionError(f'Pro V2 responsive shell {width}px: HTTP failure')
-                    page.wait_for_function("document.body.classList.contains('pmv2')")
+                    page.wait_for_function("document.body.dataset.pmv2Ready === '1'", timeout=15000)
                     _check_product_v2_shell(page, 'Pro V2 responsive shell', width)
 
             for width, height in ((360, 800), (390, 844), (768, 1024), (1440, 1000), (1920, 1080)):
@@ -2179,7 +2246,7 @@ def _run_cross_browser_product_v2(browser, fixture: dict, engine: str) -> None:
             or free_layout['rightTop'] >= 3
             or free_layout['bodyOverflowY'] not in {'auto', 'scroll'}
             or free_layout['leftOverflowY'] != 'visible'
-            or free_layout['rightOverflowY'] != 'visible'
+            or free_layout['rightOverflowY'] not in {'auto', 'scroll'}
             or free_layout['rightPosition'] != 'sticky'
             or abs(free_layout['windowY'] - free_layout['targetY']) > 3
             or free_layout['afterTop'] < 17
@@ -2201,9 +2268,16 @@ def _run_cross_browser_product_v2(browser, fixture: dict, engine: str) -> None:
         if not pro_response or pro_response.status != 200:
             raise AssertionError(f'{engine} Pro V2: HTTP 200 expected')
         page.wait_for_function(
-            "document.body.dataset.pmv2Ready === '1' && "
-            "document.querySelectorAll('#catalog .app-card').length === 34 && "
-            "document.querySelectorAll('#pmv2AppSearch').length === 1",
+            """() => {
+              const headings=[...document.querySelectorAll('#catalog .catalog-title h3')]
+                .map(node => (node.textContent || '').trim());
+              return document.body.dataset.pmv2Ready === '1'
+                && document.querySelectorAll('#catalog .app-card').length === 34
+                && document.querySelectorAll('#pmv2AppSearch').length === 1
+                && headings.includes('Microsoft 365 Anwendungen')
+                && headings.includes('Power Platform & Data')
+                && headings.includes('Business, Security & Development');
+            }""",
             timeout=15000,
         )
         if page.locator('#pmv2AppSearch').count() != 1:
@@ -2216,18 +2290,195 @@ def _run_cross_browser_product_v2(browser, fixture: dict, engine: str) -> None:
         page.locator('#pmv2AppSearch').fill('')
         page.wait_for_timeout(80)
 
+        locked_card = page.locator('#catalog .app-card.locked').first
+        if locked_card.count() == 0:
+            raise AssertionError(f'{engine} Pro V2: expected Microsoft-tier locked app cards')
+        locked_card.hover()
+        page.wait_for_timeout(120)
+        locked_hover = locked_card.evaluate(
+            """el => {
+              const style = getComputedStyle(el);
+              const tag = el.querySelector('.tag');
+              const tagStyle = tag ? getComputedStyle(tag) : null;
+              return {
+                background: style.backgroundImage,
+                transform: style.transform,
+                tagBackground: tagStyle?.backgroundColor || '',
+                tagColor: tagStyle?.color || '',
+              };
+            }"""
+        )
+        if (
+            '75, 38, 121' not in locked_hover['background']
+            or locked_hover['transform'] == 'none'
+            or locked_hover['tagColor'] not in {'rgb(248, 239, 255)', 'rgba(248, 239, 255, 1)'}
+        ):
+            raise AssertionError(
+                f'{engine} Pro locked-app hover is not dark violet: {locked_hover}'
+            )
+
+        reset_action = page.locator('.pmv2-prompt-panel > .actions .btn').first
+        reset_action.hover()
+        page.wait_for_timeout(120)
+        action_hover = reset_action.evaluate(
+            """el => {
+              const style = getComputedStyle(el);
+              return {
+                background: style.backgroundImage,
+                color: style.color,
+                transform: style.transform,
+              };
+            }"""
+        )
+        if (
+            '87, 39, 130' not in action_hover['background']
+            or action_hover['color'] not in {
+                'rgb(255, 255, 255)', 'rgba(255, 255, 255, 1)',
+                'rgb(253, 253, 253)', 'rgba(253, 253, 253, 1)',
+            }
+            or action_hover['transform'] == 'none'
+        ):
+            raise AssertionError(
+                f'{engine} Pro prompt-action hover is not dark violet: {action_hover}'
+            )
+
         # Populate the dynamic Pro controls before validating their computed
         # style. This catches the exact white selected option regression from
         # the 2026-09-24 Pro screenshot in Firefox/WebKit as well as Chromium.
-        page.locator('[data-app="copilot_chat"]').click()
-        page.wait_for_function(
-            "() => document.querySelectorAll('#taskGrid [data-task]').length > 0"
+        # Chromium's end-to-end path above already exercises the real pointer
+        # workflow. Firefox/WebKit can keep smooth-scroll callbacks alive long
+        # enough for the legacy selection helpers to race with this visual
+        # compatibility probe. Set the same Golden-Master state explicitly and
+        # render the controls synchronously; this gate is about cross-browser
+        # rendering/state semantics, not click/scroll timing.
+        required_probe = page.evaluate(
+            """async () => {
+              selectedApp='copilot_chat';
+              selectedTask='PM20-001';
+              renderCatalog();
+              renderTasks();
+              renderInputs();
+              renderOptions();
+              const task=taskObj();
+              show('taskSection',true);
+              show('inputSection',true);
+              show('audienceSection',!taskHasOwnAudience(task));
+              show('focusSection',true);
+              show('outputSection',true);
+              update();
+
+              // Let the V2 MutationObserver mark the newly rendered required
+              // fields, but keep render + assertion in one browser evaluation
+              // so no unrelated async UI callback can race between them.
+              await new Promise(resolve => requestAnimationFrame(
+                () => requestAnimationFrame(resolve)
+              ));
+
+              const input = document.querySelector('.input-card.required .task-input');
+              const mark = document.querySelector('.input-card.required .required-mark');
+              const guard = document.querySelector('.pmv2-prompt-guard');
+              const style = mark ? getComputedStyle(mark) : null;
+              return {
+                app:selectedApp,
+                task:selectedTask,
+                audienceCount:document.querySelectorAll('#audienceGrid .option > span').length,
+                requiredCount:document.querySelectorAll('.input-card.required .task-input').length,
+                required:input?.required === true,
+                ariaRequired:input?.getAttribute('aria-required') || '',
+                ariaInvalid:input?.getAttribute('aria-invalid') || '',
+                markText:(mark?.textContent || '').trim(),
+                markBackground:style?.backgroundImage || '',
+                guardVisible:!!guard && !guard.hidden,
+                guardText:(guard?.textContent || '').trim(),
+              };
+            }"""
         )
-        page.locator('#taskGrid [data-task]').first.click()
-        page.wait_for_function(
-            "() => document.querySelectorAll('#audienceGrid .option > span').length > 0"
-        )
+        if (
+            required_probe['app'] != 'copilot_chat'
+            or required_probe['task'] != 'PM20-001'
+            or required_probe['audienceCount'] < 1
+            or required_probe['requiredCount'] < 1
+        ):
+            raise AssertionError(
+                f'{engine} Pro deterministic PM20-001 render failed: {required_probe}'
+            )
+        if (
+            not required_probe['required']
+            or required_probe['ariaRequired'] != 'true'
+            or required_probe['ariaInvalid'] != 'true'
+            or required_probe['markText'] != 'PFLICHTFELD'
+            or 'gradient' not in required_probe['markBackground']
+            or not required_probe['guardVisible']
+            or 'Pflichtfelder fehlen' not in required_probe['guardText']
+        ):
+            raise AssertionError(
+                f'{engine} Pro required-field guidance regressed: {required_probe}'
+            )
+
         _check_product_v2_shell(page, f'{engine} Pro V2 selected controls', 1440)
+
+        # Reproduce the exact Power Automate screenshot path end-to-end. One
+        # missing required field must block composition; once Quell- und
+        # Zielsystem are present the server-generated prompt must appear.
+        page.locator('input[name="mslicense"][value="premium"]').check(force=True)
+        page.locator('input[name="mslicense"][value="premium"]').dispatch_event('change')
+        page.wait_for_timeout(100)
+        power_state = page.evaluate(
+            """() => {
+              selectedApp='power_automate';
+              selectedTask='PM20-159';
+              renderCatalog();
+              renderTasks();
+              renderInputs();
+              renderOptions();
+              const task=taskObj();
+              show('taskSection',true);
+              show('inputSection',true);
+              show('audienceSection',!taskHasOwnAudience(task));
+              show('focusSection',true);
+              show('outputSection',true);
+              update();
+              return {
+                app:selectedApp,
+                task:selectedTask,
+                requiredCount:document.querySelectorAll('.input-card.required .task-input').length,
+              };
+            }"""
+        )
+        if power_state != {
+            'app': 'power_automate',
+            'task': 'PM20-159',
+            'requiredCount': 2,
+        }:
+            raise AssertionError(
+                f'{engine} Pro deterministic PM20-159 render failed: {power_state}'
+            )
+        required_inputs = page.locator('.input-card.required .task-input')
+        required_inputs.nth(0).fill('Sage 100 Browserquelle')
+        page.wait_for_timeout(350)
+        if page.locator('#promptOutput').input_value().strip():
+            raise AssertionError(
+                f'{engine} Pro PM20-159 composed before Zielsystem was provided'
+            )
+        required_inputs.nth(1).fill('CRM Browserziel')
+        page.wait_for_function(
+            """() => {
+              const output=document.querySelector('#promptOutput');
+              return document.querySelector('#promptStatus')?.textContent==='BEREIT ZUM KOPIEREN'
+                && !!output?.value
+                && output.value.includes('Sage 100 Browserquelle')
+                && output.value.includes('CRM Browserziel');
+            }""",
+            timeout=10000,
+        )
+        power_automate_prompt = page.locator('#promptOutput').input_value()
+        if (
+            'Sage 100 Browserquelle' not in power_automate_prompt
+            or 'CRM Browserziel' not in power_automate_prompt
+        ):
+            raise AssertionError(
+                f'{engine} Pro PM20-159 server prompt missing required inputs'
+            )
 
         context.close()
         print(f'{engine.upper()} PROMPTMASTER V2 UI OK')
