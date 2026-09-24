@@ -8,6 +8,7 @@ from django.test import Client
 from apps.contenthub.models import FAQEntry
 from apps.core.security import token_pair
 from apps.integrations.models import ServiceAccount
+from apps.prompts.free_legacy import compose_free_legacy
 from apps.prompts.lifecycle import run_test_case
 from apps.prompts.models import PromptApplication, PromptDefinition, PromptLegacyContract, PromptTestCase, PromptVersion
 
@@ -29,6 +30,45 @@ class Command(BaseCommand):
         )
         if counts != (34, 194, 16, 194, 194):
             raise CommandError(f'PromptDomain-Zähler falsch: {counts}')
+
+        legacy_contracts = list(
+            PromptLegacyContract.objects.filter(source='FREE_1_2_4').order_by('legacy_id')
+        )
+        incomplete_legacy = [
+            contract.legacy_id
+            for contract in legacy_contracts
+            if not isinstance(contract.payload, dict)
+            or not isinstance(contract.payload.get('runtime_contract'), dict)
+        ]
+        if incomplete_legacy:
+            raise CommandError(
+                f'Free-Runtime-Verträge unvollständig: {incomplete_legacy}'
+            )
+        free_probe = next(
+            (contract for contract in legacy_contracts if contract.legacy_id == 'chat_sum'),
+            None,
+        )
+        if not free_probe:
+            raise CommandError('Free-Runtime-Probe chat_sum fehlt.')
+        free_result = compose_free_legacy(
+            contract=free_probe,
+            microsoft_tier='chatbasic',
+            payload={
+                'primary': 'Runtime-Validator',
+                'secondary': 'Free-Datenbankprobe',
+                'audience': 'self',
+                'focus': ['Kernaussagen'],
+                'output': 'bullets',
+                'tone': 'professional',
+                'detail': 'short',
+            },
+        )
+        if (
+            not free_result.get('ready')
+            or free_result.get('source') != 'PromptLegacyContract'
+            or 'Free-Datenbankprobe' not in free_result.get('prompt', '')
+        ):
+            raise CommandError(f'Free-Datenbankkomposition fehlerhaft: {free_result}')
 
         failed = []
         cases = PromptTestCase.objects.filter(
