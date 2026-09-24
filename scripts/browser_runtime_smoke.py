@@ -913,7 +913,9 @@ def _check_product_v2_shell(page, label: str, width: int) -> None:
     # .btn. V2 must override the actual visible child and every prompt action.
     option_rest = metrics.get('optionRestStyle')
     option_selected = metrics.get('optionSelectedStyle')
-    if not option_rest or 'gradient' not in (option_rest.get('backgroundImage') or ''):
+    # Pro renders audience/focus options only after a task is selected. When
+    # the control exists, verify both its resting and checked presentation.
+    if option_rest and 'gradient' not in (option_rest.get('backgroundImage') or ''):
         raise AssertionError(
             f'{label} {width}px: V2 audience option still exposes legacy light surface: '
             f'{option_rest}'
@@ -2213,6 +2215,20 @@ def _run_cross_browser_product_v2(browser, fixture: dict, engine: str) -> None:
             raise AssertionError(f'{engine} Pro V2 search expected 1 Planner result, got {visible_apps}')
         page.locator('#pmv2AppSearch').fill('')
         page.wait_for_timeout(80)
+
+        # Populate the dynamic Pro controls before validating their computed
+        # style. This catches the exact white selected option regression from
+        # the 2026-09-24 Pro screenshot in Firefox/WebKit as well as Chromium.
+        page.locator('[data-app="copilot_chat"]').click()
+        page.wait_for_function(
+            "() => document.querySelectorAll('#taskGrid [data-task]').length > 0"
+        )
+        page.locator('#taskGrid [data-task]').first.click()
+        page.wait_for_function(
+            "() => document.querySelectorAll('#audienceGrid .option > span').length > 0"
+        )
+        _check_product_v2_shell(page, f'{engine} Pro V2 selected controls', 1440)
+
         context.close()
         print(f'{engine.upper()} PROMPTMASTER V2 UI OK')
     finally:
