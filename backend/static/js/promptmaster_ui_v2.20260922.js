@@ -185,6 +185,80 @@
   if (existingRating) right.append(existingRating);
 
   const promptOutput = $('#promptOutput', promptSection);
+
+  // Pro composes only after every required task field is present. Make that
+  // fail-closed contract explicit in the UI instead of showing an unexplained
+  // empty prompt panel.
+  let promptGuard = null;
+  const syncRequiredFieldState = () => {
+    if (free) return;
+    const requiredInputs = $('.input-card.required .task-input', contextSection);
+    requiredInputs.forEach(input => {
+      input.required = true;
+      input.setAttribute('aria-required', 'true');
+      const empty = !(input.value || '').trim();
+      input.setAttribute('aria-invalid', String(empty));
+      const mark = input.closest('.input-card')?.querySelector('.required-mark');
+      if (mark) {
+        mark.textContent = 'PFLICHTFELD';
+        mark.setAttribute('title', 'Dieses Feld muss ausgefüllt werden, bevor der Prompt erzeugt wird.');
+      }
+    });
+
+    const selectedTask = $('.task.selected', taskSection);
+    const missing = requiredInputs
+      .filter(input => !(input.value || '').trim())
+      .map(input => {
+        const label = input.closest('.input-card')?.querySelector('label');
+        if (!label) return 'Pflichtfeld';
+        const clone = label.cloneNode(true);
+        clone.querySelector('.required-mark')?.remove();
+        return (clone.textContent || '').replace(/\s+/g,' ').trim() || 'Pflichtfeld';
+      });
+
+    if (!promptGuard) {
+      const promptBody = $('.prompt-body', promptSection);
+      if (promptBody && promptOutput) {
+        promptGuard = document.createElement('div');
+        promptGuard.className = 'pmv2-prompt-guard';
+        promptGuard.hidden = true;
+        promptBody.insertBefore(promptGuard, promptOutput);
+      }
+    }
+
+    if (!promptGuard) return;
+    if (selectedTask && missing.length) {
+      promptGuard.hidden = false;
+      promptGuard.innerHTML =
+        '<strong>Prompt noch nicht erstellt.</strong> Pflichtfelder fehlen: '
+        + missing.map(value => value.replace(/[&<>"']/g, char => ({
+          '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'
+        })[char])).join(', ')
+        + '.';
+      if (promptOutput && !promptOutput.value) {
+        promptOutput.placeholder = 'Bitte zuerst alle markierten Pflichtfelder ausfüllen.';
+      }
+    } else {
+      promptGuard.hidden = true;
+      promptGuard.textContent = '';
+      if (promptOutput) {
+        promptOutput.placeholder = 'Dein Prompt wird hier nach vollständiger Eingabe erzeugt.';
+      }
+    }
+  };
+
+  if (!free) {
+    contextSection.addEventListener('input', event => {
+      if (event.target.matches('.task-input')) syncRequiredFieldState();
+    });
+    contextSection.addEventListener('change', syncRequiredFieldState);
+    new MutationObserver(syncRequiredFieldState).observe(
+      contextSection,
+      {subtree:true,childList:true}
+    );
+    syncRequiredFieldState();
+  }
+
   const syncPromptStickiness = () => {
     const tooTall = right.scrollHeight > Math.max(520, window.innerHeight - 36);
     right.classList.toggle('pmv2-prompt-tall', tooTall);
