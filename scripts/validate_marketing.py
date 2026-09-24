@@ -34,6 +34,9 @@ if "url('/brand/promptmaster-logo-clean.svg')" not in immersive_css:
     raise SystemExit('MARKETING VALIDATION FAIL: active header still uses screenshot-cropped logo')
 if "background-image:url('/brand/design-reference.jpeg')" in immersive_css:
     raise SystemExit('MARKETING VALIDATION FAIL: screenshot-cropped logo regression returned')
+marketing_logo = (MARKETING / 'public/brand/promptmaster-logo-clean.svg').read_text(encoding='utf-8')
+if '<image' in marketing_logo or 'data:image/' in marketing_logo:
+    raise SystemExit('MARKETING VALIDATION FAIL: clean logo contains embedded raster data instead of true vectors')
 pro_apps_match = re.search(r"const proApps=\[(.*?)\];", source, re.S)
 if not pro_apps_match:
     raise SystemExit('MARKETING VALIDATION FAIL: Pro application catalog missing')
