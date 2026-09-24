@@ -21,7 +21,7 @@ V2_STYLE_PATH = '/static/css/promptmaster_v2.20260922.css'
 V2_SCRIPT_PATH = '/static/js/promptmaster_ui_v2.20260922.js'
 
 
-def _v2_asset_version() -> str:
+def _static_asset_version() -> str:
     # Caddy serves /static with a one-year immutable cache. The V2 source files
     # intentionally keep stable repository paths, so every deployed revision
     # must receive a distinct request URL or browsers can retain stale CSS/JS.
@@ -33,7 +33,7 @@ def _v2_asset_version() -> str:
 def _inject_v2_ui(data: bytes) -> bytes:
     head_marker = b'</head>'
     body_marker = b'</body></html>'
-    asset_version = _v2_asset_version()
+    asset_version = _static_asset_version()
     v2_style = (
         f'<link rel="stylesheet" href="{V2_STYLE_PATH}?v={asset_version}">'
     ).encode('ascii')
@@ -271,7 +271,10 @@ def _free_runtime_response(*, ui_v2=False):
         return HttpResponse('PromptMaster Free ist vorübergehend nicht verfügbar.', status=503)
 
     marker = b'</body></html>'
-    bridge = b'<script src="/static/js/free_catalog_bridge.20260918.js" defer></script>'
+    asset_version = _static_asset_version()
+    bridge = (
+        f'<script src="/static/js/free_catalog_bridge.20260918.js?v={asset_version}" defer></script>'
+    ).encode('ascii')
     if data.count(marker) != 1:
         logger.error('PromptMaster Free Golden Master has unexpected closing markup')
         return HttpResponse('PromptMaster Free ist vorübergehend nicht verfügbar.', status=503)
