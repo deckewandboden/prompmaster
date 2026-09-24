@@ -149,19 +149,14 @@
       };
     }
 
-    function freeServerReady(input){
+    function freeServerReady(_input){
+      // Match the reviewed Free 1.2.4 interaction contract: the prompt grows
+      // incrementally as soon as a task is selected. The server remains the
+      // authoritative composer; result.ready controls whether copying is
+      // enabled once every required selection is complete.
       const currentSpec=spec();
       const task=getTask();
-      if(!task||!currentSpec)return false;
-      if(currentSpec.primary?.required&&!input.primary)return false;
-      if(currentSpec.secondary?.required&&!input.secondary)return false;
-      return Boolean(
-        input.audience
-        && input.focus.length
-        && input.output
-        && input.detail
-        && input.tone
-      );
+      return Boolean(task&&currentSpec);
     }
 
     function showServerPending(){
