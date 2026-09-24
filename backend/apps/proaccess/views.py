@@ -17,13 +17,29 @@ from .services import active_product_assignment, assignment_expiry_context, has_
 
 logger = logging.getLogger(__name__)
 
-V2_STYLE = b'<link rel="stylesheet" href="/static/css/promptmaster_v2.20260922.css">'
-V2_SCRIPT = b'<script src="/static/js/promptmaster_ui_v2.20260922.js" defer></script>'
+V2_STYLE_PATH = '/static/css/promptmaster_v2.20260922.css'
+V2_SCRIPT_PATH = '/static/js/promptmaster_ui_v2.20260922.js'
+
+
+def _v2_asset_version() -> str:
+    # Caddy serves /static with a one-year immutable cache. The V2 source files
+    # intentionally keep stable repository paths, so every deployed revision
+    # must receive a distinct request URL or browsers can retain stale CSS/JS.
+    raw = str(settings.GIT_SHA or settings.APP_VERSION or 'development')
+    safe = ''.join(ch for ch in raw if ch.isalnum() or ch in '._-')
+    return (safe or 'development')[:80]
 
 
 def _inject_v2_ui(data: bytes) -> bytes:
     head_marker = b'</head>'
     body_marker = b'</body></html>'
+    asset_version = _v2_asset_version()
+    v2_style = (
+        f'<link rel="stylesheet" href="{V2_STYLE_PATH}?v={asset_version}">'
+    ).encode('ascii')
+    v2_script = (
+        f'<script src="{V2_SCRIPT_PATH}?v={asset_version}" defer></script>'
+    ).encode('ascii')
 
     # The preserved Golden Masters still reference the historic remote netstyle
     # logo in the header that V2 removes immediately after DOM startup. Avoid
@@ -40,8 +56,8 @@ def _inject_v2_ui(data: bytes) -> bytes:
     data = data.replace(remote_logo, transparent_pixel)
     if data.count(head_marker) != 1 or data.count(body_marker) != 1:
         raise GoldenMasterIntegrityError('PromptMaster V2 injection markers are not unique.')
-    data = data.replace(head_marker, V2_STYLE + head_marker, 1)
-    data = data.replace(body_marker, V2_SCRIPT + body_marker, 1)
+    data = data.replace(head_marker, v2_style + head_marker, 1)
+    data = data.replace(body_marker, v2_script + body_marker, 1)
     return data
 
 
