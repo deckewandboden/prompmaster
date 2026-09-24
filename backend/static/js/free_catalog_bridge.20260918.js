@@ -57,14 +57,25 @@
     openModal('proModal');
   };
 
+  function decorateLicenseLockedCards(){
+    freeApps.querySelectorAll('[data-licenselocked="1"]').forEach(card=>{
+      const appName=card.querySelector('.app-name')?.textContent?.trim()||'Diese Anwendung';
+      card.setAttribute('role','button');
+      card.setAttribute('tabindex','0');
+      card.setAttribute('aria-label',appName+': erforderliche Microsoft-Copilot-Stufe anzeigen');
+    });
+  }
+
   const originalRenderApps=renderApps;
   renderApps=function(){
     if(!centralApplications){
       originalRenderApps();
+      decorateLicenseLockedCards();
       return;
     }
 
     freeApps.innerHTML=LEGACY_APP_IDS.map(id=>appHtml(id,APP[id])).join('');
+    decorateLicenseLockedCards();
 
     centralBySyntheticId.clear();
     const extras=centralApplications.filter(app=>!CENTRAL_TO_LEGACY[app.code]);
