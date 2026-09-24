@@ -1059,3 +1059,99 @@ body.pmv2 .pmv2-header-cta{
   transform:translateY(-1px) scale(1.012)!important;
   box-shadow:0 9px 22px rgba(38,16,71,.32)!important;
 }
+
+
+/* V2 live audit round 4 2026-09-24
+ * Screenshot regressions: Pro overview modal inherited light Golden-Master
+ * surfaces and V2 audit round 1 accidentally replaced the modal's scrollable
+ * overflow with overflow:hidden. Keep the page theme dark, make long dialogs
+ * independently scrollable, and keep the two Free context editors identical
+ * in their default geometry.
+ */
+.pmv2 .modal-backdrop.open{
+  overflow-x:hidden!important;
+  overflow-y:auto!important;
+  overscroll-behavior:contain;
+}
+.pmv2 .modal{
+  max-height:calc(100vh - 36px)!important;
+  overflow-x:hidden!important;
+  overflow-y:auto!important;
+  overscroll-behavior:contain;
+  scrollbar-width:thin;
+  scrollbar-color:rgba(128,177,208,.42) rgba(4,17,33,.22);
+}
+.pmv2 .modal::-webkit-scrollbar{width:9px}
+.pmv2 .modal::-webkit-scrollbar-track{background:rgba(4,17,33,.22)}
+.pmv2 .modal::-webkit-scrollbar-thumb{background:rgba(128,177,208,.42);border-radius:99px}
+.pmv2 #generalProModal .modal{width:min(980px,calc(100vw - 36px))!important}
+.pmv2 #proModal .modal,
+.pmv2 #businessModal .modal{width:min(600px,calc(100vw - 36px))!important}
+
+.pmv2 #generalProModal .modal-body{padding:18px 20px!important}
+.pmv2 #generalProModal .compare-intro{color:#8fa5b7!important;line-height:1.5}
+.pmv2 #generalProModal .pro-overview-price{margin-bottom:14px!important}
+.pmv2 #generalProModal .pro-overview-grid{
+  grid-template-columns:repeat(5,minmax(0,1fr))!important;
+  gap:10px!important;
+}
+.pmv2 #generalProModal .pro-app-tile{
+  min-width:0;
+  border:1px solid rgba(128,177,208,.16)!important;
+  background:linear-gradient(180deg,rgba(17,42,70,.94),rgba(10,29,51,.94))!important;
+  color:#dce8f1!important;
+  box-shadow:0 7px 18px rgba(0,7,18,.14);
+}
+.pmv2 #generalProModal .pro-app-name{color:#dce8f1!important}
+.pmv2 #generalProModal .compare-wrap{
+  overflow-x:auto!important;
+  overflow-y:hidden!important;
+  border-color:rgba(128,177,208,.16)!important;
+  background:rgba(7,23,42,.90)!important;
+}
+.pmv2 #generalProModal .compare-table{
+  min-width:720px;
+  background:transparent!important;
+  color:#c7d4df!important;
+}
+.pmv2 #generalProModal .compare-table th,
+.pmv2 #generalProModal .compare-table td{
+  border-bottom-color:rgba(128,177,208,.12)!important;
+  background:transparent!important;
+  color:#b9cad7!important;
+}
+.pmv2 #generalProModal .compare-table thead th{
+  background:#102943!important;
+  color:#91a8ba!important;
+}
+.pmv2 #generalProModal .compare-table .ok{color:#62d8a2!important}
+.pmv2 #generalProModal .compare-table .no{color:#f0a56e!important}
+.pmv2 #generalProModal .compare-table .partial{color:#b79af1!important}
+.pmv2 #generalProModal .modal-actions{
+  position:sticky;
+  bottom:0;
+  z-index:6;
+  margin-top:0!important;
+  padding:14px 20px 18px!important;
+  border-top:1px solid rgba(128,177,208,.14);
+  background:linear-gradient(180deg,rgba(10,24,44,.94),#0a182c 34%)!important;
+  box-shadow:0 -12px 28px rgba(1,8,20,.22);
+}
+
+.pmv2 #goalInput,
+.pmv2 #sourceContextInput{
+  height:132px!important;
+  min-height:132px!important;
+}
+
+@media(max-width:900px){
+  .pmv2 #generalProModal .pro-overview-grid{grid-template-columns:repeat(3,minmax(0,1fr))!important}
+}
+@media(max-width:620px){
+  .pmv2 #generalProModal .modal,
+  .pmv2 #proModal .modal,
+  .pmv2 #businessModal .modal{width:calc(100vw - 20px)!important;max-height:calc(100vh - 20px)!important}
+  .pmv2 #generalProModal .pro-overview-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important}
+  .pmv2 #goalInput,
+  .pmv2 #sourceContextInput{height:120px!important;min-height:120px!important}
+}
