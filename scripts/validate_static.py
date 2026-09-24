@@ -474,6 +474,19 @@ for token in ('/free-old/', '/pro-old/', 'free_catalog_bridge.20260918.js'):
     if token not in external_caddy_test:
         fail(f'External-Caddy rehearsal does not verify legacy product routing: {token}')
 
+for caddy_path in (ROOT / 'Caddyfile', ROOT / 'Caddyfile.external'):
+    caddy_text = caddy_path.read_text(encoding='utf-8')
+    for token in (
+        '@mutable_product_static path',
+        '/static/css/promptmaster_v2.20260922.css',
+        '/static/js/promptmaster_ui_v2.20260922.js',
+        '/static/js/free_catalog_bridge.20260918.js',
+        '/static/brand/promptmaster-logo-clean.svg',
+        'Cache-Control "no-cache, must-revalidate"',
+    ):
+        if token not in caddy_text:
+            fail(f'{caddy_path.name} mutable product-static cache contract missing: {token}')
+
 pro_asset = ROOT / 'backend/private_assets/promptmaster_pro.html'
 approved_pro_sha = 'aa7b2da53ba3cbcf9874b9b6f7381ea4c3e86ee1f9c09db186cbec6876a3c9cf'
 if pro_asset.exists() and hashlib.sha256(pro_asset.read_bytes()).hexdigest() != approved_pro_sha:
