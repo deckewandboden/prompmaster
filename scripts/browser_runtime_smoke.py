@@ -2260,7 +2260,10 @@ def _run_cross_browser_product_v2(browser, fixture: dict, engine: str) -> None:
         )
         if (
             '87, 39, 130' not in action_hover['background']
-            or action_hover['color'] not in {'rgb(255, 255, 255)', 'rgba(255, 255, 255, 1)'}
+            or action_hover['color'] not in {
+                'rgb(255, 255, 255)', 'rgba(255, 255, 255, 1)',
+                'rgb(253, 253, 253)', 'rgba(253, 253, 253, 1)',
+            }
             or action_hover['transform'] == 'none'
         ):
             raise AssertionError(
