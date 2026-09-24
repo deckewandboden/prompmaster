@@ -191,6 +191,8 @@ for token in (
     'Microsoft-Copilot-Lizenz anfragen',
     'PromptMaster Pro anfragen',
     'pmv2-prompt-tall',
+    'pmv2LicenseKeyboardBound',
+    'pmv2LicenseObserver',
 ):
     if token not in v2_js:
         fail(f'V2 UI audit invariant missing: {token}')
