@@ -335,10 +335,12 @@ def _grounding(runtime: dict, tier_code: str) -> str:
 
 
 def compose_free_legacy(*, contract, microsoft_tier: str, payload: dict) -> dict:
-    """Compose one Free prompt strictly from the persisted legacy DB contract.
+    """Compose Free from the persisted legacy contract, including partial UI state.
 
-    There is deliberately no implicit Free->PM20 mapping here. The current Free
-    semantics are persisted in PromptLegacyContract and read on every request.
+    Free 1.2.4 has always rendered an incremental prompt while the user moves
+    through the configurator. ready is only true once all required selections
+    are complete. This keeps the database contract authoritative without
+    regressing the reviewed live interaction.
     """
     if not isinstance(payload, dict):
         raise PromptValidationError('input muss ein Objekt sein.', field='input', code='choice')
@@ -368,31 +370,31 @@ def compose_free_legacy(*, contract, microsoft_tier: str, payload: dict) -> dict
 
     primary = str(payload.get('primary') or '').strip()
     secondary = str(payload.get('secondary') or '').strip()
-    if runtime.get('primary_required') and not primary:
-        raise PromptValidationError(
-            'Das erste Pflichtfeld muss ausgefüllt werden.',
-            field='primary',
-            code='required',
-        )
-    if runtime.get('secondary_required') and not secondary:
-        raise PromptValidationError(
-            'Das zweite Pflichtfeld muss ausgefüllt werden.',
-            field='secondary',
-            code='required',
-        )
 
-    audience = _choice(payload.get('audience'), runtime.get('audiences') or [], field='audience')
-    output = _choice(payload.get('output'), runtime.get('formats') or [], field='output')
-    detail = _choice(payload.get('detail'), DETAIL_RULES, field='detail')
-    tone = _choice(payload.get('tone'), TONE_RULES, field='tone')
+    def optional_choice(value, allowed, *, field):
+        value = str(value or '').strip()
+        if not value:
+            return ''
+        if value not in allowed:
+            raise PromptValidationError('Ungültige Auswahl.', field=field, code='choice')
+        return value
+
+    audience = optional_choice(
+        payload.get('audience'),
+        runtime.get('audiences') or [],
+        field='audience',
+    )
+    output = optional_choice(
+        payload.get('output'),
+        runtime.get('formats') or [],
+        field='output',
+    )
+    detail = optional_choice(payload.get('detail'), DETAIL_RULES, field='detail')
+    tone = optional_choice(payload.get('tone'), TONE_RULES, field='tone')
 
     focus = payload.get('focus') or []
-    if not isinstance(focus, list) or not focus:
-        raise PromptValidationError(
-            'Mindestens ein Schwerpunkt muss ausgewählt werden.',
-            field='focus',
-            code='required',
-        )
+    if not isinstance(focus, list):
+        raise PromptValidationError('Ungültige Auswahl.', field='focus', code='choice')
     allowed_focus = set(runtime.get('focus') or [])
     normalized_focus = []
     for item in focus:
@@ -425,14 +427,21 @@ def compose_free_legacy(*, contract, microsoft_tier: str, payload: dict) -> dict
         parts.append(context)
 
     parts.append('Arbeite dabei in folgender Reihenfolge: ' + ' '.join(method))
-    parts.append('Lege besonderes Augenmerk auf ' + ', '.join(normalized_focus) + '.')
-    parts.append(AUDIENCE_RULES[audience])
-    parts.append(
-        f'Liefere das Ergebnis im Format „{FORMAT_LABELS[output]}“. '
-        + DETAIL_RULES[detail]
-        + ' '
-        + TONE_RULES[tone]
-    )
+    if normalized_focus:
+        parts.append('Lege besonderes Augenmerk auf ' + ', '.join(normalized_focus) + '.')
+    if audience:
+        parts.append(AUDIENCE_RULES[audience])
+
+    output_rules = []
+    if output:
+        output_rules.append(f'Liefere das Ergebnis im Format „{FORMAT_LABELS[output]}“.')
+    if detail:
+        output_rules.append(DETAIL_RULES[detail])
+    if tone:
+        output_rules.append(TONE_RULES[tone])
+    if output_rules:
+        parts.append(' '.join(output_rules))
+
     parts.append('Als Informationsgrundlage gilt: ' + _grounding(runtime, tier_code))
     parts.append(
         f'Für {runtime["app_name"]} gilt zusätzlich: {runtime["app_rule"]}'
@@ -444,11 +453,36 @@ def compose_free_legacy(*, contract, microsoft_tier: str, payload: dict) -> dict
         + 'Wenn eine notwendige Information fehlt, benenne die konkrete Lücke statt sie stillschweigend zu ergänzen.'
     )
 
+    primary_ok = not runtime.get('primary_required') or bool(primary)
+    secondary_ok = not runtime.get('secondary_required') or bool(secondary)
+    ready = bool(
+        primary_ok
+        and secondary_ok
+        and audience
+        and normalized_focus
+        and output
+        and detail
+        and tone
+    )
+    progress_steps = [
+        True,  # application is implied by the selected legacy contract
+        True,  # task is the contract addressed by this request
+        primary_ok and secondary_ok,
+        bool(audience),
+        bool(normalized_focus),
+        bool(detail),
+        bool(output),
+        bool(tone),
+    ]
+    progress_percent = round(
+        sum(1 for step in progress_steps if step) / len(progress_steps) * 100
+    )
+
     prompt = '\n\n'.join(part for part in parts if part)
     return {
         'prompt': prompt,
-        'ready': True,
-        'progress_percent': 100,
+        'ready': ready,
+        'progress_percent': progress_percent,
         'task_id': contract.legacy_id,
         'app_code': runtime['app_code'],
         'policy_version': 'FREE_1_2_4',
