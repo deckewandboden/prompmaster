@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from django.test import TestCase
+from django.test import TestCase, override_settings
 from django.urls import reverse
 
 from apps.accounts.models import User
@@ -39,8 +39,8 @@ class PromptMasterV2RouteIsolationTests(TestCase):
         self.assertIn('/static/js/free_catalog_bridge.20260918.js', current_html)
         self.assertIn('/static/js/free_catalog_bridge.20260918.js', legacy_html)
 
-        self.assertIn('/static/css/promptmaster_v2.20260922.css', current_html)
-        self.assertIn('/static/js/promptmaster_ui_v2.20260922.js', current_html)
+        self.assertIn('/static/css/promptmaster_v2.20260922.css?v=development', current_html)
+        self.assertIn('/static/js/promptmaster_ui_v2.20260922.js?v=development', current_html)
         self.assertNotIn('/static/css/promptmaster_v2.20260922.css', legacy_html)
         self.assertNotIn('/static/js/promptmaster_ui_v2.20260922.js', legacy_html)
 
@@ -56,10 +56,10 @@ class PromptMasterV2RouteIsolationTests(TestCase):
         # identical to the preserved pre-redesign route.
         # byte-for-byte identical to the preserved pre-redesign route.
         stripped = current_html.replace(
-            '<link rel="stylesheet" href="/static/css/promptmaster_v2.20260922.css">',
+            '<link rel="stylesheet" href="/static/css/promptmaster_v2.20260922.css?v=development">',
             '',
         ).replace(
-            '<script src="/static/js/promptmaster_ui_v2.20260922.js" defer></script>',
+            '<script src="/static/js/promptmaster_ui_v2.20260922.js?v=development" defer></script>',
             '',
         ).replace(
             'data:image/gif;base64,R0lGODlhAQABAAAAACw=',
@@ -78,8 +78,8 @@ class PromptMasterV2RouteIsolationTests(TestCase):
         current_html = current.content.decode('utf-8')
         legacy_html = legacy.content.decode('utf-8')
 
-        self.assertIn('/static/css/promptmaster_v2.20260922.css', current_html)
-        self.assertIn('/static/js/promptmaster_ui_v2.20260922.js', current_html)
+        self.assertIn('/static/css/promptmaster_v2.20260922.css?v=development', current_html)
+        self.assertIn('/static/js/promptmaster_ui_v2.20260922.js?v=development', current_html)
         self.assertNotIn('/static/css/promptmaster_v2.20260922.css', legacy_html)
         self.assertNotIn('/static/js/promptmaster_ui_v2.20260922.js', legacy_html)
 
@@ -96,6 +96,35 @@ class PromptMasterV2RouteIsolationTests(TestCase):
             self.assertIn('href="/auth/logout/"', html)
             self.assertIn('/api/v1/prompts/?product=PRO', html)
             self.assertIn('/api/v1/prompts/compose/', html)
+
+    @override_settings(GIT_SHA='abc123def456', APP_VERSION='ignored-version')
+    def test_v2_asset_urls_are_cache_busted_by_deployed_git_sha(self):
+        free_html = self.client.get(reverse('free_product')).content.decode('utf-8')
+        self.assertIn(
+            '/static/css/promptmaster_v2.20260922.css?v=abc123def456',
+            free_html,
+        )
+        self.assertIn(
+            '/static/js/promptmaster_ui_v2.20260922.js?v=abc123def456',
+            free_html,
+        )
+
+        self._staff_session()
+        pro_html = self.client.get(reverse('proaccess:content')).content.decode('utf-8')
+        self.assertIn(
+            '/static/css/promptmaster_v2.20260922.css?v=abc123def456',
+            pro_html,
+        )
+        self.assertIn(
+            '/static/js/promptmaster_ui_v2.20260922.js?v=abc123def456',
+            pro_html,
+        )
+
+    @override_settings(GIT_SHA='release/2026 09 <unsafe>', APP_VERSION='development')
+    def test_v2_asset_cache_key_is_html_url_safe(self):
+        html = self.client.get(reverse('free_product')).content.decode('utf-8')
+        self.assertIn('?v=release202609unsafe', html)
+        self.assertNotIn('release/2026 09 <unsafe>', html)
 
     def test_pro_legacy_route_keeps_the_same_authentication_boundary(self):
         response = self.client.get(reverse('pro_product_old'))
