@@ -367,15 +367,76 @@ class PromptApiTests(TestCase):
         self.assertIn('CRM', body['result']['prompt'])
         self.assertTrue(body['result']['ready'])
 
-    @patch('apps.prompts.api._require_pro_access')
-    def test_free_server_compose_fails_closed_until_reviewed_mapping(self, access):
+    def test_free_server_compose_reads_persisted_legacy_contract(self):
+        base = {
+            'product': 'FREE',
+            'task_id': 'chat_sum',
+            'microsoft_tier': 'chatbasic',
+            'input': {
+                'primary': 'Kernaussagen und nächste Schritte',
+                'secondary': 'Testinhalt aus dem Free-Browser',
+                'audience': 'self',
+                'focus': ['Kernaussagen'],
+                'output': 'bullets',
+                'tone': 'professional',
+                'detail': 'short',
+            },
+        }
         response = self.client.post(
             '/api/v1/prompts/compose/',
-            data=json.dumps({'product': 'FREE', 'task_id': 'chat_sum', 'input': {}}),
+            data=json.dumps(base),
             content_type='application/json',
         )
-        self.assertEqual(response.status_code, 409)
-        self.assertEqual(response.json()['error']['code'], 'free_mapping_pending')
+        self.assertEqual(response.status_code, 200)
+        body = response.json()
+        self.assertTrue(body['ok'])
+        self.assertTrue(body['result']['ready'])
+        self.assertFalse(body['result']['persisted'])
+        self.assertEqual(body['result']['source'], 'PromptLegacyContract')
+        self.assertIn('Testinhalt aus dem Free-Browser', body['result']['prompt'])
+        self.assertEqual(response['Cache-Control'], 'no-store')
+
+        contract = PromptLegacyContract.objects.get(
+            source='FREE_1_2_4',
+            legacy_id='chat_sum',
+        )
+        payload = dict(contract.payload)
+        runtime = dict(payload['runtime_contract'])
+        runtime['intent'] = 'DB-PROBE: Dieser Text stammt aus dem gespeicherten Free-Vertrag.'
+        payload['runtime_contract'] = runtime
+        contract.payload = payload
+        contract.save(update_fields=['payload', 'updated_at'])
+
+        changed = self.client.post(
+            '/api/v1/prompts/compose/',
+            data=json.dumps(base),
+            content_type='application/json',
+        )
+        self.assertEqual(changed.status_code, 200)
+        self.assertIn('DB-PROBE:', changed.json()['result']['prompt'])
+
+    def test_free_server_compose_rejects_missing_required_primary(self):
+        response = self.client.post(
+            '/api/v1/prompts/compose/',
+            data=json.dumps({
+                'product': 'FREE',
+                'task_id': 'chat_sum',
+                'microsoft_tier': 'chatbasic',
+                'input': {
+                    'primary': '',
+                    'secondary': 'Test',
+                    'audience': 'self',
+                    'focus': ['Kernaussagen'],
+                    'output': 'bullets',
+                    'tone': 'professional',
+                    'detail': 'short',
+                },
+            }),
+            content_type='application/json',
+        )
+        self.assertEqual(response.status_code, 400)
+        self.assertEqual(response.json()['error']['code'], 'required')
+        self.assertEqual(response.json()['error']['field'], 'primary')
 
 
 class InternalStaffPromptApiTests(TestCase):
