@@ -868,6 +868,7 @@ def _check_product_v2_shell(page, label: str, width: int) -> None:
             scrollWidth: document.documentElement.scrollWidth,
             widest,
             logoPath: logo ? new URL(logo.src).pathname : '',
+            logoSearch: logo ? new URL(logo.src).search : '',
             logoNaturalWidth: logo?.naturalWidth || 0,
             headerLeft: headerRect?.left ?? -1,
             headerRight: headerRect?.right ?? -1,
@@ -895,6 +896,11 @@ def _check_product_v2_shell(page, label: str, width: int) -> None:
         raise AssertionError(f'{label} {width}px: V2 header leaves viewport: {metrics}')
     if metrics['logoPath'] != '/static/brand/promptmaster-logo-clean.svg':
         raise AssertionError(f'{label} {width}px: V2 legacy logo active: {metrics["logoPath"]}')
+    if metrics.get('logoSearch') != '?v=development':
+        raise AssertionError(
+            f'{label} {width}px: V2 logo is not tied to the deployed asset revision: '
+            f'{metrics.get("logoSearch")}'
+        )
     if metrics['logoNaturalWidth'] < 300:
         raise AssertionError(f'{label} {width}px: V2 logo source too small: {metrics["logoNaturalWidth"]}')
     if metrics['leftOverflowY'] != 'visible' or metrics['rightOverflowY'] != 'visible':
