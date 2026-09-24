@@ -170,9 +170,11 @@ if logo.exists():
 
 clean_logo = ROOT/'backend/static/brand/promptmaster-logo-clean.svg'
 clean_svg = clean_logo.read_text(encoding='utf-8')
-for token in ('width="315"', 'height="59"', 'viewBox="0 3 315 59"', 'data:image/png;base64,'):
+for token in ('width="315"', 'height="59"', 'viewBox="0 3 315 59"', 'PROMPT', 'MASTER', 'KI. EINFACH. BESSER.'):
     if token not in clean_svg:
         fail(f'Clean PromptMaster logo invariant missing: {token}')
+if '<image' in clean_svg or 'data:image/' in clean_svg:
+    fail('Clean PromptMaster logo must be true vector SVG and must not embed raster image data')
 
 active_brand_files = (
     ROOT/'backend/templates/app_shell.html',
