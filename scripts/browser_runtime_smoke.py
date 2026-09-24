@@ -2345,19 +2345,44 @@ def _run_cross_browser_product_v2(browser, fixture: dict, engine: str) -> None:
         # Populate the dynamic Pro controls before validating their computed
         # style. This catches the exact white selected option regression from
         # the 2026-09-24 Pro screenshot in Firefox/WebKit as well as Chromium.
-        # Chromium's end-to-end path above already exercises real pointer
-        # interaction. In Firefox/WebKit, smooth-scroll animations can keep the
-        # task cards in perpetual actionability motion. Call the same runtime
-        # selection functions directly here so this cross-browser gate tests
-        # rendering/state semantics rather than animation timing.
-        page.evaluate("selectApp('copilot_chat')")
-        page.wait_for_function(
-            "() => document.querySelectorAll('#taskGrid [data-task]').length > 0"
+        # Chromium's end-to-end path above already exercises the real pointer
+        # workflow. Firefox/WebKit can keep smooth-scroll callbacks alive long
+        # enough for the legacy selection helpers to race with this visual
+        # compatibility probe. Set the same Golden-Master state explicitly and
+        # render the controls synchronously; this gate is about cross-browser
+        # rendering/state semantics, not click/scroll timing.
+        pro_state = page.evaluate(
+            """() => {
+              selectedApp='copilot_chat';
+              selectedTask='PM20-001';
+              renderCatalog();
+              renderTasks();
+              renderInputs();
+              renderOptions();
+              const task=taskObj();
+              show('taskSection',true);
+              show('inputSection',true);
+              show('audienceSection',!taskHasOwnAudience(task));
+              show('focusSection',true);
+              show('outputSection',true);
+              update();
+              return {
+                app:selectedApp,
+                task:selectedTask,
+                audienceCount:document.querySelectorAll('#audienceGrid .option > span').length,
+                requiredCount:document.querySelectorAll('.input-card.required .task-input').length,
+              };
+            }"""
         )
-        page.evaluate("selectTask('PM20-001')")
-        page.wait_for_function(
-            "() => document.querySelectorAll('#audienceGrid .option > span').length > 0"
-        )
+        if (
+            pro_state['app'] != 'copilot_chat'
+            or pro_state['task'] != 'PM20-001'
+            or pro_state['audienceCount'] < 1
+            or pro_state['requiredCount'] < 1
+        ):
+            raise AssertionError(
+                f'{engine} Pro deterministic PM20-001 render failed: {pro_state}'
+            )
         page.wait_for_function(
             "() => document.querySelectorAll('.input-card.required .task-input').length > 0"
         )
@@ -2399,14 +2424,36 @@ def _run_cross_browser_product_v2(browser, fixture: dict, engine: str) -> None:
         page.locator('input[name="mslicense"][value="premium"]').check(force=True)
         page.locator('input[name="mslicense"][value="premium"]').dispatch_event('change')
         page.wait_for_timeout(100)
-        page.evaluate("selectApp('power_automate')")
-        page.wait_for_function(
-            "() => document.querySelectorAll('#taskGrid [data-task]').length > 0"
+        power_state = page.evaluate(
+            """() => {
+              selectedApp='power_automate';
+              selectedTask='PM20-159';
+              renderCatalog();
+              renderTasks();
+              renderInputs();
+              renderOptions();
+              const task=taskObj();
+              show('taskSection',true);
+              show('inputSection',true);
+              show('audienceSection',!taskHasOwnAudience(task));
+              show('focusSection',true);
+              show('outputSection',true);
+              update();
+              return {
+                app:selectedApp,
+                task:selectedTask,
+                requiredCount:document.querySelectorAll('.input-card.required .task-input').length,
+              };
+            }"""
         )
-        page.evaluate("selectTask('PM20-159')")
-        page.wait_for_function(
-            "() => document.querySelectorAll('.input-card.required .task-input').length === 2"
-        )
+        if power_state != {
+            'app': 'power_automate',
+            'task': 'PM20-159',
+            'requiredCount': 2,
+        }:
+            raise AssertionError(
+                f'{engine} Pro deterministic PM20-159 render failed: {power_state}'
+            )
         required_inputs = page.locator('.input-card.required .task-input')
         required_inputs.nth(0).fill('Sage 100 Browserquelle')
         page.wait_for_timeout(350)
