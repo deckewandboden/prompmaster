@@ -239,7 +239,7 @@ for token in (
     '/* UI audit hardening 2026-09-23 */',
     '.pm-confirm-backdrop',
     '.card-action-row',
-    '.brand img{display:block;width:210px;height:auto;max-height:44px',
+    '.brand img{display:block;width:239px;height:47px',
 ):
     if token not in css:
         fail(f'Design-system invariant missing from app.css: {token}')
