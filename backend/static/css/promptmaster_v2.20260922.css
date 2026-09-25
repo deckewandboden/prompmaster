@@ -1448,6 +1448,32 @@ body.pmv2 .pmv2-header-cta{
   }
 }
 
+@media(max-width:620px){
+  /* On phones the page already is the navigation: users move naturally from
+     one stacked section to the next by scrolling. Keep the explicit workflow
+     jump buttons for tablet/desktop, but remove them from the phone flow. */
+  .pmv2-next-row{
+    display:none!important;
+  }
+
+  /* Mobile browser chrome can cover the last action at the physical bottom
+     of the document. Keep enough real trailing scroll space so "Prompt
+     kopieren" can always be brought fully above Safari/Chrome controls. */
+  .pmv2-prompt-panel{
+    margin-bottom:calc(56px + env(safe-area-inset-bottom,0px))!important;
+  }
+  .pmv2-prompt-panel>.actions{
+    padding:0 13px calc(34px + env(safe-area-inset-bottom,0px))!important;
+  }
+  .pmv2-prompt-panel .actions #copyBtn{
+    display:flex!important;
+    align-items:center!important;
+    justify-content:center!important;
+    min-height:50px!important;
+    visibility:visible!important;
+  }
+}
+
 @media(max-width:390px){
   .pmv2-brand img{
     width:120px!important;
