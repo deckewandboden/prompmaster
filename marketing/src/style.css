@@ -2,3 +2,32 @@
 .sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}.plain-list{color:var(--muted);font-size:14px;padding-left:20px}.plain-list li{margin:9px 0}.button[aria-disabled=true]{opacity:.5;cursor:not-allowed;transform:none;box-shadow:none}.attribution{font-size:11px!important;color:#768a9e!important}
 .hero-title .core-sentence{font-size:13px;letter-spacing:.5px;color:#88a6c4;margin:2px auto 17px}footer .attribution a{display:inline}.footer-grid .brand{display:block}.footer-grid .brand small{display:block}
 #particle-head[hidden]{display:none}
+
+
+/* Mobile footer: keep the brand full-width, then retain the three semantic
+   navigation groups side-by-side instead of turning the whole footer into
+   one long vertical list. */
+@media(max-width:480px){
+  #footer .footer-grid{
+    grid-template-columns:repeat(3,minmax(0,1fr));
+    gap:24px 10px;
+    align-items:start;
+  }
+  #footer .footer-grid>div:first-child{
+    grid-column:1/-1;
+  }
+  #footer .footer-grid h3{
+    margin-bottom:12px;
+    font-size:11px;
+    line-height:1.2;
+  }
+  #footer .footer-grid a:not(.brand){
+    margin:7px 0;
+    font-size:11px;
+    line-height:1.28;
+    overflow-wrap:anywhere;
+  }
+  #footer .footer-grid p{
+    margin-bottom:0;
+  }
+}
