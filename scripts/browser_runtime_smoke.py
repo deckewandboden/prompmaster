@@ -792,6 +792,7 @@ def _check_public_page(page, base: str, path: str, width: int, label: str) -> No
             postFormsMissingCsrf: postFormsMissingCsrf.slice(0,10),
             loginLogoPath: loginLogo ? new URL(loginLogo.src).pathname : '',
             loginLogoNaturalWidth: loginLogo?.naturalWidth || 0,
+            loginLogoNaturalHeight: loginLogo?.naturalHeight || 0,
           };
         }"""
     )
@@ -820,6 +821,11 @@ def _check_public_page(page, base: str, path: str, width: int, label: str) -> No
         if metrics['loginLogoNaturalWidth'] < 300:
             raise AssertionError(
                 f'{label} {width}px: auth logo source too small: {metrics["loginLogoNaturalWidth"]}'
+            )
+        if metrics['loginLogoNaturalHeight'] != 55:
+            raise AssertionError(
+                f'{label} {width}px: auth logo crop regressed: '
+                f'{metrics["loginLogoNaturalHeight"]}px intrinsic height'
             )
     if not metrics['h1']:
         raise AssertionError(f'{label} {width}px: page has no visible H1')
@@ -1186,6 +1192,7 @@ def run_backend_ui_smoke(browser, fixture=None) -> None:
                 right: !!right,
                 logoPath: logo ? new URL(logo.src).pathname : '',
                 logoNaturalWidth: logo?.naturalWidth || 0,
+                logoNaturalHeight: logo?.naturalHeight || 0,
                 bodyOverflowY: getComputedStyle(document.body).overflowY,
                 rootScrollBehavior: getComputedStyle(document.documentElement).scrollBehavior,
                 leftOverflowY: left ? getComputedStyle(left).overflowY : '',
@@ -1205,6 +1212,7 @@ def run_backend_ui_smoke(browser, fixture=None) -> None:
             or not v2_free_layout['right']
             or v2_free_layout['logoPath'] != '/static/brand/promptmaster-logo-clean.svg'
             or v2_free_layout['logoNaturalWidth'] < 300
+            or v2_free_layout['logoNaturalHeight'] != 55
             or v2_free_layout['bodyOverflowY'] not in {'auto', 'scroll'}
             or v2_free_layout['rootScrollBehavior'] != 'auto'
             or v2_free_layout['leftOverflowY'] != 'visible'
@@ -1344,10 +1352,69 @@ def run_backend_ui_smoke(browser, fixture=None) -> None:
         pro_modal_text = public_page.locator('#proModal').inner_text()
         if 'CopilotPromptMaster' in pro_modal_text:
             raise AssertionError(f'Free V2 Pro modal exposes legacy brand naming: {pro_modal_text}')
-        if 'PromptMaster Pro anfragen' not in pro_modal_text:
-            raise AssertionError('Free V2 Pro modal CTA is not normalized')
+        pro_purchase = public_page.locator('#proModal .modal-actions a.btn').first
+        if 'PromptMaster Pro kaufen' not in pro_modal_text:
+            raise AssertionError('Free V2 Pro modal CTA does not offer direct purchase')
+        pro_purchase_contract = public_page.evaluate(
+            """() => {
+              const a=document.querySelector('#proModal .modal-actions a.btn');
+              const u=a ? new URL(a.href) : null;
+              return {
+                path: u?.pathname || '',
+                search: u?.search || '',
+                target: a?.getAttribute('target') || '',
+              };
+            }"""
+        )
+        if (
+            pro_purchase_contract['path'] != '/portal/licenses/buy/'
+            or pro_purchase_contract['search'] != '?quantity=1'
+            or pro_purchase_contract['target']
+        ):
+            raise AssertionError(
+                f'Free V2 Pro modal purchase route invalid: {pro_purchase_contract}'
+            )
 
         public_page.locator('[data-close="proModal"]').first.click()
+
+        # The Pro purchase CTA is intentionally same-tab. An anonymous user
+        # must land on our styled login page with the checkout path preserved,
+        # never in a blank/new tab. This covers the live black-page/login-logo
+        # regression reported from the purchase flow.
+        purchase_page = public_context.new_page()
+        purchase_response = purchase_page.goto(
+            base + 'portal/licenses/buy/?quantity=1',
+            wait_until='networkidle',
+        )
+        if not purchase_response or purchase_response.status != 200:
+            raise AssertionError('anonymous Pro purchase route did not resolve to login')
+        if '/auth/login/' not in purchase_page.url or 'next=' not in purchase_page.url:
+            raise AssertionError(
+                f'Pro purchase login continuation missing: {purchase_page.url}'
+            )
+        purchase_login_probe = purchase_page.evaluate(
+            """() => {
+              const logo=document.querySelector('.login-logo img');
+              return {
+                h1:document.querySelector('h1')?.textContent?.trim() || '',
+                logoPath:logo ? new URL(logo.src).pathname : '',
+                logoWidth:logo?.naturalWidth || 0,
+                logoHeight:logo?.naturalHeight || 0,
+                bodyText:(document.body?.innerText || '').trim(),
+              };
+            }"""
+        )
+        if (
+            purchase_login_probe['h1'] != 'Anmelden'
+            or purchase_login_probe['logoPath'] != '/static/brand/promptmaster-logo-clean.svg'
+            or purchase_login_probe['logoWidth'] < 300
+            or purchase_login_probe['logoHeight'] != 55
+            or not purchase_login_probe['bodyText']
+        ):
+            raise AssertionError(
+                f'Pro purchase login rendering regression: {purchase_login_probe}'
+            )
+        purchase_page.close()
 
         word_wrap = public_page.locator('[data-appwrap="word"]')
         if (
@@ -1381,7 +1448,115 @@ def run_backend_ui_smoke(browser, fixture=None) -> None:
                 'Free V2 Microsoft-license CTA does not match required tier: '
                 f'{tier_contact_text!r} != {expected_tier_contact!r}'
             )
-        public_page.locator('[data-close="businessModal"]').first.click()
+        # Use the actual Microsoft tier switch, then reproduce the live Word
+        # screenshot path. A partial database prompt must already be visible
+        # immediately after selecting the task; completing the remaining
+        # controls must transition it to PROMPT BEREIT.
+        license_modal.locator('#switchBusinessBtn').click()
+        public_page.wait_for_function(
+            "() => !document.querySelector('#businessModal')?.classList.contains('open')"
+        )
+        public_page.wait_for_function(
+            "() => document.querySelector('input[name=mslicense][value=m365basic]')?.checked === true"
+        )
+        public_page.locator('[data-appwrap="word"] .app-card').click()
+        public_page.wait_for_function(
+            "() => document.querySelectorAll('#taskGrid .task').length >= 2"
+        )
+        public_page.locator('[data-task="word_rewrite"]').click()
+        public_page.wait_for_function(
+            "() => !document.querySelector('#contextSection')?.classList.contains('hidden')"
+        )
+        public_page.wait_for_function(
+            """() => {
+              const output=document.querySelector('#promptOutput');
+              return output?.dataset.source==='database'
+                && output.value.length > 100
+                && document.querySelector('#promptStatus')?.textContent==='NOCH NICHT VOLLSTÄNDIG'
+                && document.querySelector('#copyBtn')?.disabled===true;
+            }""",
+            timeout=10000,
+        )
+        context_geometry = public_page.evaluate(
+            """() => {
+              const a=document.querySelector('#goalInput')?.getBoundingClientRect();
+              const b=document.querySelector('#sourceContextInput')?.getBoundingClientRect();
+              return {first:a?.height || 0, second:b?.height || 0};
+            }"""
+        )
+        if (
+            context_geometry['first'] < 110
+            or abs(context_geometry['first'] - context_geometry['second']) > 1
+        ):
+            raise AssertionError(
+                f'Free V2 context editors must have equal default height: {context_geometry}'
+            )
+        public_page.locator('#goalInput').fill('Browser-Word-Live-Pfad klarer formulieren')
+        public_page.locator('#sourceContextInput').fill('Zahlen und Namen unverändert lassen')
+        public_page.locator('input[name="audience"][value="customer"]').check(force=True)
+        public_page.locator('input[name="focus"][value="Verständlichkeit"]').check(force=True)
+        public_page.locator('#detailSelect').select_option('short')
+        public_page.locator('#formatSelect').select_option('prose')
+        public_page.locator('#toneSelect').select_option('professional')
+        public_page.wait_for_function(
+            """() => {
+              const output=document.querySelector('#promptOutput');
+              return output?.dataset.source==='database'
+                && output.value.includes('Browser-Word-Live-Pfad')
+                && document.querySelector('#promptStatus')?.textContent==='PROMPT BEREIT'
+                && document.querySelector('#copyBtn')?.disabled===false;
+            }""",
+            timeout=10000,
+        )
+        public_page.locator('#resetBtn').click()
+        public_page.wait_for_timeout(250)
+
+        # The long Pro overview must be a scrollable dark modal. Round 1 had
+        # accidentally overridden the Golden Master's overflow:auto with
+        # overflow:hidden, which made the lower comparison/action area
+        # unreachable in the live browser.
+        public_page.evaluate(
+            "() => document.querySelector('#generalProModal')?.classList.add('open')"
+        )
+        public_page.wait_for_function(
+            "() => document.querySelector('#generalProModal')?.classList.contains('open')"
+        )
+        general_modal_probe = public_page.evaluate(
+            """async () => {
+              const modal=document.querySelector('#generalProModal .modal');
+              const tile=document.querySelector('#generalProModal .pro-app-tile');
+              const compare=document.querySelector('#generalProModal .compare-wrap');
+              const cta=document.querySelector('#generalProModal .modal-actions a.btn');
+              const url=cta ? new URL(cta.href) : null;
+              modal.scrollTop=modal.scrollHeight;
+              await new Promise(resolve => setTimeout(resolve, 60));
+              return {
+                overflowY:getComputedStyle(modal).overflowY,
+                scrollHeight:modal.scrollHeight,
+                clientHeight:modal.clientHeight,
+                scrollTop:modal.scrollTop,
+                tileBackground:getComputedStyle(tile).backgroundColor,
+                compareBackground:getComputedStyle(compare).backgroundColor,
+                ctaText:cta?.textContent?.trim() || '',
+                ctaPath:url?.pathname || '',
+                ctaSearch:url?.search || '',
+              };
+            }"""
+        )
+        if (
+            general_modal_probe['overflowY'] not in {'auto', 'scroll'}
+            or general_modal_probe['scrollHeight'] <= general_modal_probe['clientHeight'] + 5
+            or general_modal_probe['scrollTop'] <= 5
+            or general_modal_probe['tileBackground'] in {'rgb(250, 251, 253)', 'rgb(255, 255, 255)'}
+            or general_modal_probe['compareBackground'] == 'rgb(255, 255, 255)'
+            or general_modal_probe['ctaText'] != 'PromptMaster Pro kaufen'
+            or general_modal_probe['ctaPath'] != '/portal/licenses/buy/'
+            or general_modal_probe['ctaSearch'] != '?quantity=1'
+        ):
+            raise AssertionError(
+                f'Free V2 Pro overview modal regression: {general_modal_probe}'
+            )
+        public_page.locator('[data-close="generalProModal"]').first.click()
 
         public_page.locator('[data-appwrap="chat"] .app-card').click()
         public_page.wait_for_function(

@@ -415,7 +415,7 @@ class PromptApiTests(TestCase):
         self.assertEqual(changed.status_code, 200)
         self.assertIn('DB-PROBE:', changed.json()['result']['prompt'])
 
-    def test_free_server_compose_rejects_missing_required_primary(self):
+    def test_free_server_compose_returns_partial_prompt_until_required_input_is_complete(self):
         response = self.client.post(
             '/api/v1/prompts/compose/',
             data=json.dumps({
@@ -425,18 +425,51 @@ class PromptApiTests(TestCase):
                 'input': {
                     'primary': '',
                     'secondary': 'Test',
-                    'audience': 'self',
-                    'focus': ['Kernaussagen'],
-                    'output': 'bullets',
+                    'audience': '',
+                    'focus': [],
+                    'output': '',
+                    'tone': '',
+                    'detail': '',
+                },
+            }),
+            content_type='application/json',
+        )
+        self.assertEqual(response.status_code, 200)
+        body = response.json()
+        self.assertTrue(body['ok'])
+        self.assertFalse(body['result']['ready'])
+        self.assertEqual(body['result']['source'], 'PromptLegacyContract')
+        self.assertGreater(len(body['result']['prompt']), 100)
+        self.assertGreater(body['result']['progress_percent'], 0)
+        self.assertLess(body['result']['progress_percent'], 100)
+
+    def test_free_server_compose_word_rewrite_matches_live_configuration(self):
+        response = self.client.post(
+            '/api/v1/prompts/compose/',
+            data=json.dumps({
+                'product': 'FREE',
+                'task_id': 'word_rewrite',
+                'microsoft_tier': 'm365basic',
+                'input': {
+                    'primary': 'Text klarer formulieren',
+                    'secondary': 'Zahlen und Namen unverändert lassen',
+                    'audience': 'customer',
+                    'focus': ['Verständlichkeit'],
+                    'output': 'prose',
                     'tone': 'professional',
                     'detail': 'short',
                 },
             }),
             content_type='application/json',
         )
-        self.assertEqual(response.status_code, 400)
-        self.assertEqual(response.json()['error']['code'], 'required')
-        self.assertEqual(response.json()['error']['field'], 'primary')
+        self.assertEqual(response.status_code, 200)
+        body = response.json()
+        self.assertTrue(body['ok'])
+        self.assertTrue(body['result']['ready'])
+        self.assertEqual(body['result']['task_id'], 'word_rewrite')
+        self.assertEqual(body['result']['source'], 'PromptLegacyContract')
+        self.assertIn('Text klarer formulieren', body['result']['prompt'])
+        self.assertIn('Zahlen und Namen unverändert lassen', body['result']['prompt'])
 
 
 class InternalStaffPromptApiTests(TestCase):

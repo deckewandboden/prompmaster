@@ -150,7 +150,7 @@ test('marketing header uses dedicated approved cropped logo artwork',()=>{
   assert.match(css,/\/brand\/promptmaster-logo-clean\.svg/);
   assert.doesNotMatch(css,/background-image:url\('\/brand\/design-reference\.jpeg'\)/);
   const logo=read('public/brand/promptmaster-logo-clean.svg');
-  assert.match(logo,/viewBox="0 3 315 59"/);
+  assert.match(logo,/width="315" height="55" viewBox="0 7 315 55"/);
   assert.match(logo,/<image x="0" y="0" width="315" height="62"/);
   assert.match(logo,/data:image\/png;base64,/);
 });

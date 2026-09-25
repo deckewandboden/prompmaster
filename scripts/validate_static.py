@@ -176,7 +176,7 @@ clean_svg = clean_logo.read_text(encoding='utf-8')
 # substitute fonts: exact artwork fidelity is more important than pretending
 # the recovered raster master is native vector geometry.
 for token in (
-    'width="315"', 'height="59"', 'viewBox="0 3 315 59"',
+    'width="315"', 'height="55"', 'viewBox="0 7 315 55"',
     '<image x="0" y="0" width="315" height="62"',
     'data:image/png;base64,',
 ):
@@ -196,7 +196,7 @@ for path in active_brand_files:
 
 proaccess_views = (ROOT/'backend/apps/proaccess/views.py').read_text(encoding='utf-8')
 for token in (
-    "V2_ASSET_REV = b'20260924-dbfree3'",
+    "V2_ASSET_REV = b'20260924-audit4'",
     'promptmaster_v2.20260922.css?v=',
     'promptmaster_ui_v2.20260922.js?v=',
     'free_catalog_bridge.20260918.js?v=',
@@ -208,11 +208,11 @@ v2_js = (ROOT/'backend/static/js/promptmaster_ui_v2.20260922.js').read_text(enco
 for token in (
     "'Prompt-Check'",
     'Microsoft-Copilot-Lizenz anfragen',
-    'PromptMaster Pro anfragen',
+    'PromptMaster Pro kaufen',
     'pmv2-prompt-tall',
     'pmv2LicenseKeyboardBound',
     'pmv2LicenseObserver',
-    'promptmaster-logo-clean.svg?v=20260924-dbfree3',
+    'promptmaster-logo-clean.svg?v=20260924-audit4',
     'syncRequiredFieldState',
     'PFLICHTFELD',
     "if (mark.textContent !== 'PFLICHTFELD')",
@@ -221,6 +221,8 @@ for token in (
     "headings.includes('Microsoft 365 Anwendungen')",
     "headings.includes('Power Platform & Data')",
     "headings.includes('Business, Security & Development')",
+    "cta.href = '/portal/licenses/buy/?quantity=1'",
+    "cta.removeAttribute('target')",
 ):
     if token not in v2_js:
         fail(f'V2 UI audit invariant missing: {token}')
@@ -269,6 +271,10 @@ for token in (
     '.pmv2-prompt-guard',
     '.pmv2-pro .app-card.locked:hover',
     '.pmv2-pro .pmv2-prompt-panel .actions .btn:not(:disabled):hover',
+    '/* V2 live audit round 4 2026-09-24',
+    '.pmv2 #generalProModal .compare-wrap',
+    '.pmv2 #goalInput,',
+    'overflow-y:auto!important',
 ):
     if token not in v2_css:
         fail(f'V2 screenshot regression invariant missing from promptmaster_v2 CSS: {token}')
