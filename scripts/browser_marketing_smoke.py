@@ -209,6 +209,8 @@ def main() -> int:
                       const proStyle = getComputedStyle(one('.product.pro'));
                       const footerGrid = one('.footer-grid');
                       const footerGridStyle = footerGrid ? getComputedStyle(footerGrid) : null;
+                      const footerBrandLogo = footerGrid?.firstElementChild?.querySelector('.logo-crop');
+                      const footerBrandCopy = footerGrid?.firstElementChild?.querySelector('p');
                       return {
                         innerWidth,
                         scrollWidth: document.documentElement.scrollWidth,
@@ -248,6 +250,13 @@ def main() -> int:
                         footerBrandColumn: footerGrid?.firstElementChild
                           ? getComputedStyle(footerGrid.firstElementChild).gridColumn
                           : '',
+                        footerBrandLogoLeft: footerBrandLogo
+                          ? Math.round(footerBrandLogo.getBoundingClientRect().left)
+                          : -999,
+                        footerBrandCopyLeft: footerBrandCopy
+                          ? Math.round(footerBrandCopy.getBoundingClientRect().left)
+                          : -999,
+                        motionSensor: one('.head-stage').dataset.motionSensor || '',
                         overflowers: [...document.querySelectorAll('body *')]
                           .map(e => {
                             const r = e.getBoundingClientRect();
@@ -281,6 +290,14 @@ def main() -> int:
                         fail(
                             f'{width}px: Marketing-Footer-Brand spannt nicht über alle Spalten '
                             f'({metrics["footerBrandColumn"]!r})'
+                        )
+                    footer_logo_delta = (
+                        metrics['footerBrandLogoLeft'] - metrics['footerBrandCopyLeft']
+                    )
+                    if footer_logo_delta > 2 or footer_logo_delta < -12:
+                        fail(
+                            f'{width}px: Footer-Logo nicht sauber links am Begleittext ausgerichtet '
+                            f'(delta={footer_logo_delta}px)'
                         )
                 if metrics['productCount'] != 2:
                     fail(f'{width}px: Free/Pro-Karten fehlen')
@@ -338,8 +355,14 @@ def main() -> int:
 
                 if width <= 650:
                     first_card_top = min(metrics['freeTop'], metrics['proTop'])
-                    if first_card_top < metrics['centerBottom'] - 4:
+                    card_gap = first_card_top - metrics['centerBottom']
+                    if card_gap < -4:
                         fail(f'{width}px: Produktkarten liegen nicht unterhalb des Kopfbereichs')
+                    if card_gap > 24:
+                        fail(
+                            f'{width}px: Produktkarten stehen zu weit vom Kopfbereich entfernt '
+                            f'(gap={card_gap:.1f}px)'
+                        )
 
                 if page_errors:
                     fail(f'{width}px: Browser-JS-Fehler: {page_errors[0]}')
