@@ -851,6 +851,7 @@ def _check_product_v2_shell(page, label: str, width: int) -> None:
           const reviewProgress = document.querySelector('.pmv2-review-progress');
           const reviewProgressText = document.querySelector('[data-pmv2-review-progress-text]');
           const reviewProgressBar = document.querySelector('[data-pmv2-review-progress-bar]');
+          const reviewEditButtons = [...document.querySelectorAll('[data-pmv2-edit]')];
           const heroActiveSteps = document.querySelectorAll('.pmv2-flow-step.active').length;
           const reviewActiveSteps = document.querySelectorAll('.pmv2-review-flow-step.active').length;
           const hero = document.querySelector('.pmv2-hero');
@@ -948,6 +949,17 @@ def _check_product_v2_shell(page, label: str, width: int) -> None:
             heroProgressText: (heroProgressText?.textContent || '').trim(),
             reviewProgressText: (reviewProgressText?.textContent || '').trim(),
             reviewProgressBarWidth: reviewProgressBar?.style.width || '',
+            reviewEditButtonCount: reviewEditButtons.length,
+            reviewEditButtonStyles: reviewEditButtons.map(el => {
+              const s=getComputedStyle(el);
+              return {
+                display:s.display,
+                minHeight:parseFloat(s.minHeight || '0'),
+                borderTopWidth:parseFloat(s.borderTopWidth || '0'),
+                borderRadius:parseFloat(s.borderRadius || '0'),
+                backgroundImage:s.backgroundImage,
+              };
+            }),
             heroActiveSteps,
             reviewActiveSteps,
             headerHeight: headerRect?.height ?? -1,
@@ -1055,6 +1067,23 @@ def _check_product_v2_shell(page, label: str, width: int) -> None:
             raise AssertionError(
                 f'{label} {width}px: first configuration step starts too low: {metrics}'
             )
+    if metrics.get('reviewEditButtonCount') != 4:
+        raise AssertionError(
+            f'{label} {width}px: Prompt-Check edit button set incomplete: {metrics}'
+        )
+    for edit_style in metrics.get('reviewEditButtonStyles') or []:
+        if (
+            edit_style.get('display') not in {'inline-flex', 'flex'}
+            or edit_style.get('minHeight', 0) < 29
+            or edit_style.get('borderTopWidth', 0) < 1
+            or edit_style.get('borderRadius', 0) < 6
+            or 'gradient' not in (edit_style.get('backgroundImage') or '')
+        ):
+            raise AssertionError(
+                f'{label} {width}px: Prompt-Check edit action still looks like text: '
+                f'{edit_style}'
+            )
+
     if (
         not metrics['reviewProgressPresent']
         or metrics['reviewProgressDisplay'] == 'none'
