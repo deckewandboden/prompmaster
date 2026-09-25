@@ -1486,3 +1486,103 @@ body.pmv2 .pmv2-header-cta{
     font-size:22px!important;
   }
 }
+
+
+/* V2 mobile polish 2026-09-25 round 3
+ * Keep Pro prices atomic, make dialogs feel like true mobile lightboxes,
+ * and leave the legal footer below the finished prompt.
+ */
+@media(max-width:620px){
+  .pmv2 .price,
+  .pmv2 .pro-overview-price{
+    display:flex!important;
+    align-items:baseline!important;
+    flex-wrap:wrap!important;
+    gap:6px 8px!important;
+  }
+  .pmv2 .price b,
+  .pmv2 .pro-overview-price b{
+    flex:0 0 auto!important;
+    white-space:nowrap!important;
+    word-break:keep-all!important;
+    overflow-wrap:normal!important;
+  }
+  .pmv2 .price span,
+  .pmv2 .pro-overview-price span{
+    min-width:0!important;
+    flex:1 1 180px!important;
+    margin-bottom:0!important;
+  }
+
+  .pmv2 .modal-backdrop.open{
+    align-items:flex-start!important;
+    justify-content:center!important;
+    padding:
+      max(12px,env(safe-area-inset-top,0px))
+      10px
+      max(12px,env(safe-area-inset-bottom,0px))!important;
+  }
+  .pmv2 .modal{
+    width:100%!important;
+    max-width:calc(100vw - 20px)!important;
+    max-height:calc(100vh - 24px)!important;
+    max-height:calc(100dvh - 24px - env(safe-area-inset-top,0px) - env(safe-area-inset-bottom,0px))!important;
+    margin:0!important;
+    border-radius:18px!important;
+    overflow-x:hidden!important;
+    overflow-y:auto!important;
+    box-shadow:0 22px 60px rgba(0,0,0,.58)!important;
+  }
+  .pmv2 .modal-head{
+    padding:18px 16px 15px!important;
+  }
+  .pmv2 .modal-head h2{
+    font-size:22px!important;
+    line-height:1.12!important;
+  }
+  .pmv2 .modal-body,
+  .pmv2 #generalProModal .modal-body{
+    padding:16px!important;
+  }
+  .pmv2 .modal-actions,
+  .pmv2 #generalProModal .modal-actions{
+    position:sticky!important;
+    left:0;
+    right:0;
+    bottom:0!important;
+    z-index:8!important;
+    display:grid!important;
+    grid-template-columns:1fr!important;
+    gap:8px!important;
+    margin:0!important;
+    padding:
+      12px
+      16px
+      calc(14px + env(safe-area-inset-bottom,0px))!important;
+    border-top:1px solid rgba(128,177,208,.14)!important;
+    background:linear-gradient(180deg,rgba(10,24,44,.96),#0a182c 30%)!important;
+    box-shadow:0 -10px 24px rgba(1,8,20,.28)!important;
+  }
+  .pmv2 .modal-actions .btn{
+    width:100%!important;
+    min-height:46px!important;
+    display:flex!important;
+    align-items:center!important;
+    justify-content:center!important;
+    margin:0!important;
+  }
+
+  /* The footer now follows the prompt in DOM order on phones. The prompt no
+     longer needs artificial bottom clearance; the footer itself provides the
+     trailing scroll space above mobile browser chrome. */
+  .pmv2-prompt-panel{
+    margin-bottom:12px!important;
+  }
+  .pmv2-prompt-panel>.actions{
+    padding-bottom:18px!important;
+  }
+  .pmv2 .legal-footer{
+    margin:0!important;
+    padding-bottom:calc(38px + env(safe-area-inset-bottom,0px))!important;
+  }
+}
