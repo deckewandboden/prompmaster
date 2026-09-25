@@ -1645,3 +1645,49 @@ body.pmv2 .pmv2-header-cta{
 .pmv2-prompt-panel .actions #recommendBtn>span{
   flex:0 0 auto!important;
 }
+
+
+/* V2 Prompt-Check edit controls 2026-09-25.
+ * The four "Bearbeiten" actions are real buttons and must read visually as
+ * buttons on both desktop and phone, not as loose cyan text. */
+.pmv2-review-label button[data-pmv2-edit]{
+  display:inline-flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  min-height:30px!important;
+  padding:5px 10px!important;
+  border:1px solid rgba(70,210,239,.46)!important;
+  border-radius:8px!important;
+  background:linear-gradient(100deg,rgba(31,114,207,.30),rgba(43,201,229,.18))!important;
+  color:#9defff!important;
+  -webkit-text-fill-color:#9defff!important;
+  font-size:9.5px!important;
+  font-weight:800!important;
+  line-height:1!important;
+  letter-spacing:0!important;
+  text-transform:none!important;
+  box-shadow:0 5px 14px rgba(0,10,26,.18)!important;
+}
+.pmv2-review-label button[data-pmv2-edit]:hover,
+.pmv2-review-label button[data-pmv2-edit]:focus-visible{
+  border-color:rgba(77,225,248,.78)!important;
+  background:linear-gradient(100deg,rgba(39,132,224,.44),rgba(49,216,238,.28))!important;
+  color:#fff!important;
+  -webkit-text-fill-color:#fff!important;
+}
+.pmv2-pro .pmv2-review-label button[data-pmv2-edit]{
+  border-color:rgba(169,113,255,.52)!important;
+  background:linear-gradient(100deg,rgba(126,68,219,.34),rgba(50,184,231,.18))!important;
+  color:#eadcff!important;
+  -webkit-text-fill-color:#eadcff!important;
+}
+@media(max-width:620px){
+  .pmv2-review-label{
+    align-items:center!important;
+  }
+  .pmv2-review-label button[data-pmv2-edit]{
+    min-height:34px!important;
+    padding:6px 12px!important;
+    font-size:10px!important;
+  }
+}
