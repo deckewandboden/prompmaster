@@ -954,7 +954,9 @@ def _check_product_v2_shell(page, label: str, width: int) -> None:
         raise AssertionError(
             f'{label} {width}px: Prompt-Check active-step state drift: {metrics}'
         )
-    raw_progress = re.sub(r'\D', '', metrics['heroProgressText'] or '0') or '0'
+    raw_progress = ''.join(
+        ch for ch in (metrics['heroProgressText'] or '0') if ch.isdigit()
+    ) or '0'
     if metrics['reviewProgressBarWidth'] != f'{max(0, min(100, int(raw_progress)))}%':
         raise AssertionError(
             f'{label} {width}px: Prompt-Check progress bar drift: {metrics}'
