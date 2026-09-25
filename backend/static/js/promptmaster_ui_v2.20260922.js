@@ -292,9 +292,26 @@
   review.className = 'section pmv2-section pmv2-review';
   review.id = 'pmv2Review';
   review.innerHTML = `
-    <div class="section-head">
-      <div class="step pmv2-check-icon">✓</div>
-      <div><h2>Prompt-Check</h2><p>Die wichtigsten Einstellungen auf einen Blick.</p></div>
+    <div class="section-head pmv2-review-head">
+      <div class="pmv2-review-heading">
+        <div class="step pmv2-check-icon">✓</div>
+        <div><h2>Prompt-Check</h2><p>Die wichtigsten Einstellungen auf einen Blick.</p></div>
+      </div>
+      <div class="pmv2-review-progress" aria-label="Fortschritt der Prompt-Konfiguration">
+        <div class="pmv2-review-flow-row">
+          ${flowNames.map((name,index) => `
+            <button type="button" class="pmv2-review-flow-step" data-pmv2-review-step="${index+1}">
+              <b>${index+1}</b><span>${name}</span>
+            </button>`).join('')}
+        </div>
+        <div class="pmv2-review-progress-meta">
+          <span>Fortschritt</span>
+          <b data-pmv2-review-progress-text>0 %</b>
+        </div>
+        <div class="pmv2-review-track" aria-hidden="true">
+          <div class="pmv2-review-bar" data-pmv2-review-progress-bar style="width:0%"></div>
+        </div>
+      </div>
     </div>
     <div class="section-body">
       <div class="pmv2-review-grid">
@@ -542,6 +559,12 @@
   Array.from(review.querySelectorAll('[data-pmv2-edit]')).forEach(button => {
     button.addEventListener('click', () => scrollToTarget(stepSection(Number(button.dataset.pmv2Edit))));
   });
+  Array.from(review.querySelectorAll('[data-pmv2-review-step]')).forEach(button => {
+    button.addEventListener('click', () => {
+      const step = Number(button.dataset.pmv2ReviewStep);
+      scrollToTarget(step === 7 ? review : stepSection(step));
+    });
+  });
 
   licenseSection.addEventListener('change', event => {
     if (event.target.matches('input[name="mslicense"]')) setTimeout(() => scrollToTarget(appSection), 90);
@@ -622,12 +645,22 @@
 
   const oldProgressText = $('#progressText');
   const oldProgressBar = $('#progressBar');
+  const reviewProgressText = $('[data-pmv2-review-progress-text]', review);
+  const reviewProgressBar = $('[data-pmv2-review-progress-bar]', review);
   const updateFlow = () => {
     const raw = parseInt((oldProgressText?.textContent || '0').replace(/\D/g,''),10) || 0;
     const thresholds = free ? [0,12,28,43,57,72,88] : [0,8,20,38,55,70,86];
     Array.from(hero.querySelectorAll('.pmv2-flow-step')).forEach((button,index) => {
       button.classList.toggle('active', raw >= thresholds[index]);
     });
+    Array.from(review.querySelectorAll('.pmv2-review-flow-step')).forEach((button,index) => {
+      button.classList.toggle('active', raw >= thresholds[index]);
+    });
+    if (reviewProgressText) reviewProgressText.textContent = raw + ' %';
+    if (reviewProgressBar) {
+      reviewProgressBar.style.width = Math.max(0, Math.min(100, raw)) + '%';
+      reviewProgressBar.setAttribute('aria-label', raw + ' Prozent vollständig');
+    }
     if (oldProgressBar) oldProgressBar.setAttribute('aria-label', raw + ' Prozent vollständig');
   };
   if (oldProgressText) new MutationObserver(updateFlow).observe(oldProgressText,{subtree:true,childList:true,characterData:true});
