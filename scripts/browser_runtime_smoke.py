@@ -856,6 +856,7 @@ def _check_product_v2_shell(page, label: str, width: int) -> None:
           const heroCopy = document.querySelector('.pmv2-hero-copy');
           const flowPanel = document.querySelector('.pmv2-flow-panel');
           const firstSection = document.querySelector('#pmv2ConfigScroll > .pmv2-section');
+          const footer = document.querySelector('footer.legal-footer');
           const visibleFlowSteps = [...document.querySelectorAll('.pmv2-flow-step')]
             .filter(el => {
               const s=getComputedStyle(el), r=el.getBoundingClientRect();
@@ -930,6 +931,8 @@ def _check_product_v2_shell(page, label: str, width: int) -> None:
             heroCopyBottom: heroCopy?.getBoundingClientRect().bottom ?? -1,
             flowPanelTop: flowPanel?.getBoundingClientRect().top ?? -1,
             firstSectionTop: firstSection?.getBoundingClientRect().top ?? -1,
+            footerParentClass: footer?.parentElement?.className || '',
+            footerPreviousClass: footer?.previousElementSibling?.className || '',
             visibleFlowSteps,
             nestedScroll: [left,output].filter(Boolean).some(el => (
               ['auto','scroll'].includes(getComputedStyle(el).overflowY)
@@ -962,6 +965,10 @@ def _check_product_v2_shell(page, label: str, width: int) -> None:
     if metrics['outputOverflowY'] not in {'hidden','clip','visible'}:
         raise AssertionError(f'{label} {width}px: prompt output gained its own scrollbar: {metrics}')
     if width <= 620:
+        if 'pmv2-workspace' not in metrics['footerParentClass'] or 'pmv2-prompt-panel' not in metrics['footerPreviousClass']:
+            raise AssertionError(
+                f'{label} {width}px: mobile legal footer is not below the finished prompt: {metrics}'
+            )
         if not metrics['nextRowDisplays'] or any(
             display != 'none' for display in metrics['nextRowDisplays']
         ):
@@ -976,12 +983,17 @@ def _check_product_v2_shell(page, label: str, width: int) -> None:
             raise AssertionError(
                 f'{label} {width}px: final copy action is not safely reachable: {metrics}'
             )
-    elif metrics['nextRowDisplays'] and all(
-        display == 'none' for display in metrics['nextRowDisplays']
-    ):
-        raise AssertionError(
-            f'{label} {width}px: desktop/tablet workflow jump buttons disappeared: {metrics}'
-        )
+    else:
+        if 'pmv2-config-scroll' not in metrics['footerParentClass']:
+            raise AssertionError(
+                f'{label} {width}px: desktop/tablet legal footer left the configuration column: {metrics}'
+            )
+        if metrics['nextRowDisplays'] and all(
+            display == 'none' for display in metrics['nextRowDisplays']
+        ):
+            raise AssertionError(
+                f'{label} {width}px: desktop/tablet workflow jump buttons disappeared: {metrics}'
+            )
 
     if width <= 850:
         if metrics['visibleFlowSteps'] != 7:
