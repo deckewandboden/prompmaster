@@ -1217,3 +1217,243 @@ body.pmv2 .pmv2-header-cta{
   .pmv2 #goalInput,
   .pmv2 #sourceContextInput{height:120px!important;min-height:120px!important}
 }
+
+
+/* V2 mobile repair 2026-09-25
+ * Free + Pro: keep the landing viewport compact, expose all seven workflow
+ * steps, and remove desktop minimum heights from the stacked mobile layout.
+ */
+@media(max-width:1180px){
+  .pmv2-hero-inner{
+    height:auto!important;
+    min-height:0!important;
+    align-items:start!important;
+  }
+  .pmv2-workspace{
+    min-height:0!important;
+  }
+  .pmv2-prompt-panel,
+  .pmv2-prompt-panel.pmv2-prompt-tall{
+    min-height:0!important;
+  }
+}
+
+@media(max-width:850px){
+  .pmv2-header{
+    height:68px!important;
+    min-height:68px!important;
+  }
+  .pmv2-hero{
+    padding:16px 14px 14px!important;
+  }
+  .pmv2-hero-inner{
+    gap:12px!important;
+  }
+  .pmv2-hero-copy h1{
+    margin:3px 0 6px!important;
+    font-size:27px!important;
+  }
+  .pmv2-hero-copy p{
+    font-size:12.5px!important;
+    line-height:1.42!important;
+  }
+  .pmv2-flow-panel{
+    padding:9px!important;
+    border-radius:14px!important;
+  }
+  .pmv2-flow-row{
+    grid-template-columns:repeat(4,minmax(0,1fr))!important;
+    gap:6px!important;
+  }
+  .pmv2-flow-step,
+  .pmv2-flow-step:nth-child(n){
+    display:block!important;
+    min-width:0!important;
+    min-height:52px!important;
+    padding:5px 3px!important;
+    border-radius:10px!important;
+  }
+  .pmv2-flow-step b{
+    width:23px!important;
+    height:23px!important;
+    margin-bottom:4px!important;
+    border-radius:7px!important;
+    font-size:10px!important;
+  }
+  .pmv2-flow-step span{
+    overflow-wrap:anywhere;
+    font-size:7.5px!important;
+    line-height:1.12!important;
+  }
+  .pmv2-progress-host .hero-card{
+    margin-top:7px!important;
+  }
+  .pmv2-progress-host .progress-line{
+    margin-bottom:4px!important;
+    font-size:9px!important;
+  }
+  .pmv2-progress-host .progress-line b{
+    font-size:9px!important;
+  }
+  .pmv2-progress-host .track{
+    height:5px!important;
+  }
+  .pmv2-workspace{
+    width:calc(100% - 20px)!important;
+    padding:10px 0 22px!important;
+  }
+  .pmv2-review-flow-row{
+    grid-template-columns:repeat(4,minmax(0,1fr))!important;
+  }
+  .pmv2-review-flow-step span{
+    white-space:normal!important;
+    overflow:visible!important;
+    text-overflow:clip!important;
+  }
+}
+
+@media(max-width:620px){
+  .pmv2-header{
+    height:62px!important;
+    min-height:62px!important;
+    padding:0 10px!important;
+  }
+  .pmv2-brand{
+    gap:6px!important;
+  }
+  .pmv2-brand img{
+    width:132px!important;
+    max-height:38px!important;
+  }
+  .pmv2-header-actions{
+    gap:5px!important;
+  }
+  .pmv2-header-cta{
+    min-height:36px!important;
+    max-width:142px!important;
+    padding:0 8px!important;
+    font-size:9.5px!important;
+    line-height:1.1!important;
+  }
+  .pmv2-hero{
+    padding:11px 10px 10px!important;
+  }
+  .pmv2-hero-inner{
+    gap:9px!important;
+  }
+  .pmv2-eyebrow{
+    font-size:8.5px!important;
+    letter-spacing:.12em!important;
+  }
+  .pmv2-hero-copy h1{
+    margin:2px 0 4px!important;
+    font-size:23px!important;
+    line-height:1.08!important;
+    letter-spacing:-.55px!important;
+  }
+  .pmv2-hero-copy p{
+    font-size:11px!important;
+    line-height:1.34!important;
+  }
+  .pmv2-flow-panel{
+    padding:7px!important;
+    border-radius:12px!important;
+  }
+  .pmv2-flow-row{
+    grid-template-columns:repeat(4,minmax(0,1fr))!important;
+    gap:4px!important;
+  }
+  .pmv2-flow-step,
+  .pmv2-flow-step:nth-child(n){
+    display:block!important;
+    min-height:46px!important;
+    padding:4px 2px!important;
+    border-radius:8px!important;
+  }
+  .pmv2-flow-step b{
+    width:20px!important;
+    height:20px!important;
+    margin-bottom:3px!important;
+    border-radius:6px!important;
+    font-size:8.5px!important;
+  }
+  .pmv2-flow-step span{
+    font-size:6.8px!important;
+    line-height:1.08!important;
+  }
+  .pmv2-progress-host .progress-line{
+    margin-bottom:3px!important;
+    font-size:8px!important;
+  }
+  .pmv2-progress-host .progress-line b{
+    font-size:8px!important;
+  }
+  .pmv2-progress-host .track{
+    height:4px!important;
+  }
+  .pmv2-workspace{
+    width:calc(100% - 16px)!important;
+    padding-top:8px!important;
+  }
+  .pmv2 .panel,
+  .pmv2 .section{
+    margin-bottom:11px!important;
+    border-radius:14px!important;
+  }
+  .pmv2 .panel-head,
+  .pmv2 .section-head{
+    padding:12px 13px!important;
+    gap:10px!important;
+  }
+  .pmv2 .panel-body,
+  .pmv2 .section-body{
+    padding:13px!important;
+  }
+  .pmv2 .section-head h2,
+  .pmv2 .panel-head h2{
+    font-size:17px!important;
+  }
+  .pmv2 .section-head p{
+    font-size:10.5px!important;
+  }
+  .pmv2 .step{
+    width:32px!important;
+    height:32px!important;
+    min-width:32px!important;
+    border-radius:10px!important;
+    font-size:13px!important;
+  }
+  .pmv2-review-progress{
+    padding:7px!important;
+  }
+  .pmv2-review-flow-row{
+    grid-template-columns:repeat(4,minmax(0,1fr))!important;
+    gap:4px!important;
+  }
+  .pmv2-review-flow-step{
+    min-height:42px!important;
+    padding:4px 2px!important;
+  }
+  .pmv2-review-flow-step b{
+    width:19px!important;
+    height:19px!important;
+    font-size:8px!important;
+  }
+  .pmv2-review-flow-step span{
+    font-size:6.5px!important;
+    line-height:1.08!important;
+  }
+}
+
+@media(max-width:390px){
+  .pmv2-brand img{
+    width:120px!important;
+  }
+  .pmv2-header-cta{
+    max-width:132px!important;
+    font-size:9px!important;
+  }
+  .pmv2-hero-copy h1{
+    font-size:22px!important;
+  }
+}
