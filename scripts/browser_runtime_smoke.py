@@ -843,6 +843,8 @@ def _check_product_v2_shell(page, label: str, width: int) -> None:
           const optionSpan = document.querySelector('#audienceGrid .option > span');
           const optionInput = optionSpan?.previousElementSibling;
           const nextButton = document.querySelector('.pmv2-next');
+          const nextRows = [...document.querySelectorAll('.pmv2-next-row')];
+          const copyButton = document.querySelector('#copyBtn');
           const promptActionButtons = [...document.querySelectorAll('.pmv2-prompt-panel > .actions .btn')];
           const heroProgressText = document.querySelector('#progressText');
           const reviewProgress = document.querySelector('.pmv2-review-progress');
@@ -909,6 +911,12 @@ def _check_product_v2_shell(page, label: str, width: int) -> None:
             optionSelectedStyle,
             nextButtonStyle: styleOf(nextButton),
             promptActionStyles: promptActionButtons.map(styleOf),
+            nextRowDisplays: nextRows.map(el => getComputedStyle(el).display),
+            copyButtonDisplay: copyButton ? getComputedStyle(copyButton).display : '',
+            copyButtonVisibility: copyButton ? getComputedStyle(copyButton).visibility : '',
+            copyButtonTrailingSpace: copyButton
+              ? Math.round(document.documentElement.scrollHeight - (copyButton.getBoundingClientRect().bottom + scrollY))
+              : -1,
             reviewProgressPresent: !!reviewProgress,
             reviewProgressDisplay: reviewProgress ? getComputedStyle(reviewProgress).display : '',
             reviewProgressSteps: document.querySelectorAll('.pmv2-review-flow-step').length,
@@ -953,6 +961,28 @@ def _check_product_v2_shell(page, label: str, width: int) -> None:
             raise AssertionError(f'{label} {width}px: desktop prompt rail must stay sticky and bounded: {metrics}')
     if metrics['outputOverflowY'] not in {'hidden','clip','visible'}:
         raise AssertionError(f'{label} {width}px: prompt output gained its own scrollbar: {metrics}')
+    if width <= 620:
+        if not metrics['nextRowDisplays'] or any(
+            display != 'none' for display in metrics['nextRowDisplays']
+        ):
+            raise AssertionError(
+                f'{label} {width}px: phone flow still shows jump buttons: {metrics}'
+            )
+        if (
+            metrics['copyButtonDisplay'] == 'none'
+            or metrics['copyButtonVisibility'] == 'hidden'
+            or metrics['copyButtonTrailingSpace'] < 48
+        ):
+            raise AssertionError(
+                f'{label} {width}px: final copy action is not safely reachable: {metrics}'
+            )
+    elif metrics['nextRowDisplays'] and all(
+        display == 'none' for display in metrics['nextRowDisplays']
+    ):
+        raise AssertionError(
+            f'{label} {width}px: desktop/tablet workflow jump buttons disappeared: {metrics}'
+        )
+
     if width <= 850:
         if metrics['visibleFlowSteps'] != 7:
             raise AssertionError(
