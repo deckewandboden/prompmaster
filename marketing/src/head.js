@@ -275,6 +275,7 @@ export async function initHead(){
         group.rotation.y+=(targetX-group.rotation.y)*Math.min(1,dt*rotationFollow);
         group.rotation.x+=(smoothPointerY*.18-group.rotation.x)*Math.min(1,dt*rotationFollow);
         stage.dataset.headYaw=group.rotation.y.toFixed(4);
+        stage.dataset.headPitch=group.rotation.x.toFixed(4);
         group.position.y=Math.sin(elapsed*.42)*.008;
         pointMaterial.uniforms.uTime.value=elapsed;
         landscapeMaterial.uniforms.uTime.value=elapsed;
@@ -318,7 +319,52 @@ export async function initHead(){
     function syncLoop(){renderer.setAnimationLoop(!paused&&visible&&!document.hidden?render:null);render(lastTime)}
     const onReduced=()=>{paused=reduced.matches;syncLoop()};reduced.addEventListener('change',onReduced);
     const onVisibility=()=>syncLoop();document.addEventListener('visibilitychange',onVisibility);
-    const onPointer=e=>{const nextX=Math.max(-1,Math.min(1,e.clientX/innerWidth*2-1));const nextY=Math.max(-1,Math.min(1,e.clientY/innerHeight*2-1));if(hasPointer)cursorEnergy=Math.min(1,cursorEnergy+Math.hypot(nextX-lastPointerX,nextY-lastPointerY)*.34);else hasPointer=true;lastPointerX=nextX;lastPointerY=nextY;mouseX=nextX;mouseY=nextY};
+    let orientationActive=false,orientationListening=false,orientationBaseBeta=null,orientationBaseGamma=null;
+    const onOrientation=event=>{
+      if(!Number.isFinite(event.beta)||!Number.isFinite(event.gamma))return;
+      if(orientationBaseBeta===null||orientationBaseGamma===null){
+        orientationBaseBeta=event.beta;
+        orientationBaseGamma=event.gamma;
+      }
+      const nextX=Math.max(-1,Math.min(1,(event.gamma-orientationBaseGamma)/28));
+      const nextY=Math.max(-1,Math.min(1,(event.beta-orientationBaseBeta)/24));
+      if(orientationActive)cursorEnergy=Math.min(1,cursorEnergy+Math.hypot(nextX-mouseX,nextY-mouseY)*.24);
+      mouseX=nextX;mouseY=nextY;orientationActive=true;
+      stage.dataset.motionInput='orientation';
+      stage.dataset.motionGamma=event.gamma.toFixed(1);
+      stage.dataset.motionBeta=event.beta.toFixed(1);
+    };
+    const enableOrientation=()=>{
+      if(orientationListening)return;
+      orientationListening=true;
+      window.addEventListener('deviceorientation',onOrientation,{passive:true});
+      stage.dataset.motionSensor='listening';
+    };
+    const motionPermissionControls=new AbortController();
+    const orientationType=window.DeviceOrientationEvent;
+    if(orientationType&&typeof orientationType.requestPermission==='function'){
+      stage.dataset.motionSensor='gesture-required';
+      document.querySelector('.hero-center')?.addEventListener('click',async()=>{
+        try{
+          if(await orientationType.requestPermission()==='granted')enableOrientation();
+          else stage.dataset.motionSensor='denied';
+        }catch(_error){
+          stage.dataset.motionSensor='denied';
+        }
+      },{signal:motionPermissionControls.signal});
+    }else if('DeviceOrientationEvent' in window||'ondeviceorientation' in window){
+      enableOrientation();
+    }else{
+      stage.dataset.motionSensor='unavailable';
+    }
+    const onPointer=e=>{
+      if(orientationActive&&e.pointerType==='touch')return;
+      const nextX=Math.max(-1,Math.min(1,e.clientX/innerWidth*2-1));
+      const nextY=Math.max(-1,Math.min(1,e.clientY/innerHeight*2-1));
+      if(hasPointer)cursorEnergy=Math.min(1,cursorEnergy+Math.hypot(nextX-lastPointerX,nextY-lastPointerY)*.34);else hasPointer=true;
+      lastPointerX=nextX;lastPointerY=nextY;mouseX=nextX;mouseY=nextY;
+      stage.dataset.motionInput='pointer';
+    };
     window.addEventListener('pointermove',onPointer,{passive:true});
     const controls=new AbortController();
     document.querySelectorAll('[data-edition]').forEach(card=>{for(const event of ['pointerenter','focusin'])card.addEventListener(event,()=>{edition=card.dataset.edition},{signal:controls.signal});for(const event of ['pointerleave','focusout'])card.addEventListener(event,()=>{edition=''},{signal:controls.signal})});
@@ -338,8 +384,10 @@ export async function initHead(){
       observer.disconnect();
       ro.disconnect();
       controls.abort();
+      motionPermissionControls.abort();
       canvas.removeEventListener('webglcontextlost',onLost);
       window.removeEventListener('pointermove',onPointer);
+      window.removeEventListener('deviceorientation',onOrientation);
       document.removeEventListener('visibilitychange',onVisibility);
       reduced.removeEventListener('change',onReduced);
       stage.dataset.webglCleanup='1';
