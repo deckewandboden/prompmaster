@@ -844,6 +844,12 @@ def _check_product_v2_shell(page, label: str, width: int) -> None:
           const optionInput = optionSpan?.previousElementSibling;
           const nextButton = document.querySelector('.pmv2-next');
           const promptActionButtons = [...document.querySelectorAll('.pmv2-prompt-panel > .actions .btn')];
+          const heroProgressText = document.querySelector('#progressText');
+          const reviewProgress = document.querySelector('.pmv2-review-progress');
+          const reviewProgressText = document.querySelector('[data-pmv2-review-progress-text]');
+          const reviewProgressBar = document.querySelector('[data-pmv2-review-progress-bar]');
+          const heroActiveSteps = document.querySelectorAll('.pmv2-flow-step.active').length;
+          const reviewActiveSteps = document.querySelectorAll('.pmv2-review-flow-step.active').length;
           const styleOf = (el) => {
             if (!el) return null;
             const style = getComputedStyle(el);
@@ -894,6 +900,14 @@ def _check_product_v2_shell(page, label: str, width: int) -> None:
             optionSelectedStyle,
             nextButtonStyle: styleOf(nextButton),
             promptActionStyles: promptActionButtons.map(styleOf),
+            reviewProgressPresent: !!reviewProgress,
+            reviewProgressDisplay: reviewProgress ? getComputedStyle(reviewProgress).display : '',
+            reviewProgressSteps: document.querySelectorAll('.pmv2-review-flow-step').length,
+            heroProgressText: (heroProgressText?.textContent || '').trim(),
+            reviewProgressText: (reviewProgressText?.textContent || '').trim(),
+            reviewProgressBarWidth: reviewProgressBar?.style.width || '',
+            heroActiveSteps,
+            reviewActiveSteps,
             nestedScroll: [left,output].filter(Boolean).some(el => (
               ['auto','scroll'].includes(getComputedStyle(el).overflowY)
               && el.scrollHeight > el.clientHeight + 2
@@ -924,6 +938,27 @@ def _check_product_v2_shell(page, label: str, width: int) -> None:
             raise AssertionError(f'{label} {width}px: desktop prompt rail must stay sticky and bounded: {metrics}')
     if metrics['outputOverflowY'] not in {'hidden','clip','visible'}:
         raise AssertionError(f'{label} {width}px: prompt output gained its own scrollbar: {metrics}')
+    if (
+        not metrics['reviewProgressPresent']
+        or metrics['reviewProgressDisplay'] == 'none'
+        or metrics['reviewProgressSteps'] != 7
+    ):
+        raise AssertionError(
+            f'{label} {width}px: Prompt-Check progress mirror missing/incomplete: {metrics}'
+        )
+    if metrics['reviewProgressText'] != metrics['heroProgressText']:
+        raise AssertionError(
+            f'{label} {width}px: Prompt-Check progress text drift: {metrics}'
+        )
+    if metrics['reviewActiveSteps'] != metrics['heroActiveSteps']:
+        raise AssertionError(
+            f'{label} {width}px: Prompt-Check active-step state drift: {metrics}'
+        )
+    raw_progress = re.sub(r'\D', '', metrics['heroProgressText'] or '0') or '0'
+    if metrics['reviewProgressBarWidth'] != f'{max(0, min(100, int(raw_progress)))}%':
+        raise AssertionError(
+            f'{label} {width}px: Prompt-Check progress bar drift: {metrics}'
+        )
 
     # Visual regression guard for the exact 2026-09-24 screenshots:
     # legacy embedded CSS paints .option > span white and forces Verdana on
