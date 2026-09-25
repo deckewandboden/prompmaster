@@ -1691,3 +1691,73 @@ body.pmv2 .pmv2-header-cta{
     font-size:10px!important;
   }
 }
+
+
+/* V2 Prompt-Check edit controls 2026-09-25 round 2.
+ * Structural layout: label/value on the left, a real purple CTA centered
+ * vertically on the right. This intentionally supersedes the earlier
+ * label-inline treatment so legacy text-button styling cannot win. */
+.pmv2 .pmv2-review-card{
+  display:grid!important;
+  grid-template-columns:minmax(0,1fr) auto!important;
+  align-items:center!important;
+  column-gap:14px!important;
+}
+.pmv2 .pmv2-review-copy{
+  min-width:0!important;
+}
+.pmv2 .pmv2-review-label{
+  display:block!important;
+  justify-content:initial!important;
+  align-items:initial!important;
+  gap:0!important;
+}
+.pmv2 .pmv2-review-edit{
+  appearance:none!important;
+  -webkit-appearance:none!important;
+  display:inline-flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  align-self:center!important;
+  min-width:104px!important;
+  min-height:36px!important;
+  margin:0!important;
+  padding:8px 14px!important;
+  border:1px solid rgba(202,166,255,.72)!important;
+  border-radius:10px!important;
+  background:linear-gradient(135deg,#6f32dc 0%,#8a3ff0 52%,#a653f4 100%)!important;
+  color:#fff!important;
+  -webkit-text-fill-color:#fff!important;
+  font-family:"Segoe UI",Arial,sans-serif!important;
+  font-size:11px!important;
+  font-weight:800!important;
+  line-height:1!important;
+  letter-spacing:0!important;
+  text-transform:none!important;
+  cursor:pointer!important;
+  box-shadow:0 8px 20px rgba(73,30,151,.34),inset 0 1px 0 rgba(255,255,255,.15)!important;
+  transition:transform .14s ease,filter .14s ease,border-color .14s ease!important;
+}
+.pmv2 .pmv2-review-edit:hover,
+.pmv2 .pmv2-review-edit:focus-visible{
+  border-color:rgba(229,209,255,.96)!important;
+  filter:brightness(1.12)!important;
+  transform:translateY(-1px)!important;
+  outline:none!important;
+}
+.pmv2 .pmv2-review-edit:active{
+  transform:translateY(0)!important;
+  filter:brightness(.98)!important;
+}
+@media(max-width:620px){
+  .pmv2 .pmv2-review-card{
+    column-gap:12px!important;
+  }
+  .pmv2 .pmv2-review-edit{
+    min-width:112px!important;
+    min-height:40px!important;
+    padding:9px 13px!important;
+    border-radius:11px!important;
+    font-size:11px!important;
+  }
+}
