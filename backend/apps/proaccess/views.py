@@ -17,7 +17,7 @@ from .services import active_product_assignment, assignment_expiry_context, has_
 
 logger = logging.getLogger(__name__)
 
-V2_ASSET_REV = b'20260925-mobile3'
+V2_ASSET_REV = b'20260925-mobile4'
 V2_STYLE = b'<link rel="stylesheet" href="/static/css/promptmaster_v2.20260922.css?v=' + V2_ASSET_REV + b'">'
 V2_SCRIPT = b'<script src="/static/js/promptmaster_ui_v2.20260922.js?v=' + V2_ASSET_REV + b'" defer></script>'
 
