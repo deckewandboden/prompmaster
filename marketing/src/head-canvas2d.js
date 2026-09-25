@@ -923,6 +923,8 @@ export async function initCanvasHead({sourceCanvas,stage,fallback}){
         else stage.dataset.motionSensor='denied';
       }catch(_error){
         stage.dataset.motionSensor='denied';
+      }finally{
+        motionPermissionControls.abort();
       }
     },{signal:motionPermissionControls.signal});
   }else if('DeviceOrientationEvent' in window||'ondeviceorientation' in window){
