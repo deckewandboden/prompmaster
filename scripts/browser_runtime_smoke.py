@@ -850,6 +850,15 @@ def _check_product_v2_shell(page, label: str, width: int) -> None:
           const reviewProgressBar = document.querySelector('[data-pmv2-review-progress-bar]');
           const heroActiveSteps = document.querySelectorAll('.pmv2-flow-step.active').length;
           const reviewActiveSteps = document.querySelectorAll('.pmv2-review-flow-step.active').length;
+          const hero = document.querySelector('.pmv2-hero');
+          const heroCopy = document.querySelector('.pmv2-hero-copy');
+          const flowPanel = document.querySelector('.pmv2-flow-panel');
+          const firstSection = document.querySelector('#pmv2ConfigScroll > .pmv2-section');
+          const visibleFlowSteps = [...document.querySelectorAll('.pmv2-flow-step')]
+            .filter(el => {
+              const s=getComputedStyle(el), r=el.getBoundingClientRect();
+              return s.display !== 'none' && s.visibility !== 'hidden' && r.width > 0 && r.height > 0;
+            }).length;
           const styleOf = (el) => {
             if (!el) return null;
             const style = getComputedStyle(el);
@@ -908,6 +917,12 @@ def _check_product_v2_shell(page, label: str, width: int) -> None:
             reviewProgressBarWidth: reviewProgressBar?.style.width || '',
             heroActiveSteps,
             reviewActiveSteps,
+            headerHeight: headerRect?.height ?? -1,
+            heroHeight: hero?.getBoundingClientRect().height ?? -1,
+            heroCopyBottom: heroCopy?.getBoundingClientRect().bottom ?? -1,
+            flowPanelTop: flowPanel?.getBoundingClientRect().top ?? -1,
+            firstSectionTop: firstSection?.getBoundingClientRect().top ?? -1,
+            visibleFlowSteps,
             nestedScroll: [left,output].filter(Boolean).some(el => (
               ['auto','scroll'].includes(getComputedStyle(el).overflowY)
               && el.scrollHeight > el.clientHeight + 2
@@ -938,6 +953,29 @@ def _check_product_v2_shell(page, label: str, width: int) -> None:
             raise AssertionError(f'{label} {width}px: desktop prompt rail must stay sticky and bounded: {metrics}')
     if metrics['outputOverflowY'] not in {'hidden','clip','visible'}:
         raise AssertionError(f'{label} {width}px: prompt output gained its own scrollbar: {metrics}')
+    if width <= 850:
+        if metrics['visibleFlowSteps'] != 7:
+            raise AssertionError(
+                f'{label} {width}px: mobile workflow hides steps: {metrics}'
+            )
+        if metrics['headerHeight'] > 70:
+            raise AssertionError(
+                f'{label} {width}px: mobile header remains too tall: {metrics}'
+            )
+        mobile_gap = metrics['flowPanelTop'] - metrics['heroCopyBottom']
+        if mobile_gap < -1 or mobile_gap > 18:
+            raise AssertionError(
+                f'{label} {width}px: excessive hero-to-flow gap: {metrics}'
+            )
+    if width <= 390:
+        if metrics['heroHeight'] > 330:
+            raise AssertionError(
+                f'{label} {width}px: mobile landing hero is too tall: {metrics}'
+            )
+        if metrics['firstSectionTop'] > 440:
+            raise AssertionError(
+                f'{label} {width}px: first configuration step starts too low: {metrics}'
+            )
     if (
         not metrics['reviewProgressPresent']
         or metrics['reviewProgressDisplay'] == 'none'
