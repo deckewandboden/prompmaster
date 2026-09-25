@@ -227,8 +227,6 @@
         }
         const copy=document.getElementById('copyBtn');
         if(copy)copy.disabled=!result.ready;
-        const copyState=document.getElementById('copyState');
-        if(copyState)copyState.textContent=result.ready?'Aus Prompt-Datenbank erstellt':'';
       }catch(error){
         if(sequence!==composeSequence||taskId!==selectedTask)return;
         const output=document.getElementById('promptOutput');
@@ -243,8 +241,6 @@
         }
         const copy=document.getElementById('copyBtn');
         if(copy)copy.disabled=true;
-        const copyState=document.getElementById('copyState');
-        if(copyState)copyState.textContent=error.message;
       }
     }
 
