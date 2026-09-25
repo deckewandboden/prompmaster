@@ -31,3 +31,43 @@
     margin-bottom:0;
   }
 }
+
+
+/* Mobile footer refinement 2026-09-25.
+ * Align the brand with the footer copy and tighten the otherwise oversized
+ * vertical spacing while preserving the three navigation columns. */
+@media(max-width:480px){
+  #footer{
+    padding:28px 5% 16px;
+  }
+  #footer .footer-grid{
+    gap:16px 10px;
+  }
+  #footer .footer-grid>div:first-child{
+    justify-self:start;
+    text-align:left;
+  }
+  #footer .footer-grid .brand{
+    display:flex;
+    justify-content:flex-start;
+    align-items:flex-start;
+    width:max-content;
+    margin:0;
+  }
+  #footer .footer-grid .logo-crop{
+    width:220px;
+    margin-left:-8px;
+    background-position:left center;
+  }
+  #footer .footer-grid>div:first-child p{
+    margin:2px 0 0;
+  }
+  #footer .footer-bottom{
+    margin-top:22px;
+    padding-top:14px;
+  }
+  #footer .attribution{
+    margin:10px 0 0;
+    line-height:1.35;
+  }
+}
