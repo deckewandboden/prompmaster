@@ -857,6 +857,28 @@ def _check_product_v2_shell(page, label: str, width: int) -> None:
           const flowPanel = document.querySelector('.pmv2-flow-panel');
           const firstSection = document.querySelector('#pmv2ConfigScroll > .pmv2-section');
           const footer = document.querySelector('footer.legal-footer');
+          const generalModalBackdrop = document.querySelector('#generalProModal');
+          const generalModal = document.querySelector('#generalProModal .modal');
+          const generalModalActions = document.querySelector('#generalProModal .modal-actions');
+          const modalPrice = document.querySelector('#generalProModal .price b, #proModal .price b');
+          let mobileModalProbe = null;
+          if (innerWidth <= 620 && generalModalBackdrop && generalModal && generalModalActions) {
+            const wasOpen = generalModalBackdrop.classList.contains('open');
+            generalModalBackdrop.classList.add('open');
+            const backdropStyle = getComputedStyle(generalModalBackdrop);
+            const modalStyle = getComputedStyle(generalModal);
+            const actionsStyle = getComputedStyle(generalModalActions);
+            const priceStyle = modalPrice ? getComputedStyle(modalPrice) : null;
+            mobileModalProbe = {
+              backdropOverflowY: backdropStyle.overflowY,
+              backdropDisplay: backdropStyle.display,
+              modalOverflowY: modalStyle.overflowY,
+              modalMaxHeight: modalStyle.maxHeight,
+              actionsPosition: actionsStyle.position,
+              priceWhiteSpace: priceStyle?.whiteSpace || '',
+            };
+            if (!wasOpen) generalModalBackdrop.classList.remove('open');
+          }
           const visibleFlowSteps = [...document.querySelectorAll('.pmv2-flow-step')]
             .filter(el => {
               const s=getComputedStyle(el), r=el.getBoundingClientRect();
@@ -933,6 +955,7 @@ def _check_product_v2_shell(page, label: str, width: int) -> None:
             firstSectionTop: firstSection?.getBoundingClientRect().top ?? -1,
             footerParentClass: footer?.parentElement?.className || '',
             footerPreviousClass: footer?.previousElementSibling?.className || '',
+            mobileModalProbe,
             visibleFlowSteps,
             nestedScroll: [left,output].filter(Boolean).some(el => (
               ['auto','scroll'].includes(getComputedStyle(el).overflowY)
@@ -965,6 +988,18 @@ def _check_product_v2_shell(page, label: str, width: int) -> None:
     if metrics['outputOverflowY'] not in {'hidden','clip','visible'}:
         raise AssertionError(f'{label} {width}px: prompt output gained its own scrollbar: {metrics}')
     if width <= 620:
+        mobile_modal = metrics.get('mobileModalProbe') or {}
+        if (
+            mobile_modal.get('backdropDisplay') == 'none'
+            or mobile_modal.get('backdropOverflowY') not in {'auto', 'scroll'}
+            or mobile_modal.get('modalOverflowY') not in {'visible', 'clip'}
+            or mobile_modal.get('modalMaxHeight') != 'none'
+            or mobile_modal.get('actionsPosition') != 'static'
+            or mobile_modal.get('priceWhiteSpace') != 'nowrap'
+        ):
+            raise AssertionError(
+                f'{label} {width}px: mobile Pro lightbox scroll/price contract invalid: {metrics}'
+            )
         if 'pmv2-workspace' not in metrics['footerParentClass'] or 'pmv2-prompt-panel' not in metrics['footerPreviousClass']:
             raise AssertionError(
                 f'{label} {width}px: mobile legal footer is not below the finished prompt: {metrics}'
