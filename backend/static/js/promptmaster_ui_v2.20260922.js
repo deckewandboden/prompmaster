@@ -315,10 +315,34 @@
     </div>
     <div class="section-body">
       <div class="pmv2-review-grid">
-        <div class="pmv2-review-card"><div class="pmv2-review-label">Anwendung <button type="button" data-pmv2-edit="2">Bearbeiten</button></div><div class="pmv2-review-value" data-pmv2-review="app">Noch nicht gewählt</div></div>
-        <div class="pmv2-review-card"><div class="pmv2-review-label">Aufgabe <button type="button" data-pmv2-edit="3">Bearbeiten</button></div><div class="pmv2-review-value" data-pmv2-review="task">Noch nicht gewählt</div></div>
-        <div class="pmv2-review-card"><div class="pmv2-review-label">Zielgruppe <button type="button" data-pmv2-edit="5">Bearbeiten</button></div><div class="pmv2-review-value" data-pmv2-review="audience">Noch nicht gewählt</div></div>
-        <div class="pmv2-review-card"><div class="pmv2-review-label">Ausgabe <button type="button" data-pmv2-edit="7">Bearbeiten</button></div><div class="pmv2-review-value" data-pmv2-review="output">Noch nicht vollständig</div></div>
+        <div class="pmv2-review-card">
+          <div class="pmv2-review-copy">
+            <div class="pmv2-review-label">Anwendung</div>
+            <div class="pmv2-review-value" data-pmv2-review="app">Noch nicht gewählt</div>
+          </div>
+          <button type="button" class="pmv2-review-edit" data-pmv2-edit="2">Bearbeiten</button>
+        </div>
+        <div class="pmv2-review-card">
+          <div class="pmv2-review-copy">
+            <div class="pmv2-review-label">Aufgabe</div>
+            <div class="pmv2-review-value" data-pmv2-review="task">Noch nicht gewählt</div>
+          </div>
+          <button type="button" class="pmv2-review-edit" data-pmv2-edit="3">Bearbeiten</button>
+        </div>
+        <div class="pmv2-review-card">
+          <div class="pmv2-review-copy">
+            <div class="pmv2-review-label">Zielgruppe</div>
+            <div class="pmv2-review-value" data-pmv2-review="audience">Noch nicht gewählt</div>
+          </div>
+          <button type="button" class="pmv2-review-edit" data-pmv2-edit="5">Bearbeiten</button>
+        </div>
+        <div class="pmv2-review-card">
+          <div class="pmv2-review-copy">
+            <div class="pmv2-review-label">Ausgabe</div>
+            <div class="pmv2-review-value" data-pmv2-review="output">Noch nicht vollständig</div>
+          </div>
+          <button type="button" class="pmv2-review-edit" data-pmv2-edit="7">Bearbeiten</button>
+        </div>
       </div>
       <div class="pmv2-review-note">Prüfe die Kerneinstellungen. Den vollständigen, tatsächlich erzeugten Prompt siehst du rechts und kannst ihn direkt kopieren.</div>
     </div>
