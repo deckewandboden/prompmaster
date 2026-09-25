@@ -1224,6 +1224,9 @@ body.pmv2 .pmv2-header-cta{
  * steps, and remove desktop minimum heights from the stacked mobile layout.
  */
 @media(max-width:1180px){
+  body.pmv2{
+    background-attachment:scroll!important;
+  }
   .pmv2-hero-inner{
     height:auto!important;
     min-height:0!important;
