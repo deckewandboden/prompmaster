@@ -1632,3 +1632,16 @@ body.pmv2 .pmv2-header-cta{
     border-radius:0 0 17px 17px!important;
   }
 }
+
+
+/* V2 action alignment polish 2026-09-25.
+ * The legacy recommend button contains two spans and inherited a split
+ * alignment. Treat the complete label/badge pair as one centered action. */
+.pmv2-prompt-panel .actions #recommendBtn{
+  justify-content:center!important;
+  text-align:center!important;
+  gap:8px!important;
+}
+.pmv2-prompt-panel .actions #recommendBtn>span{
+  flex:0 0 auto!important;
+}
