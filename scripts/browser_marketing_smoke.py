@@ -207,6 +207,8 @@ def main() -> int:
                       const logoStyle = getComputedStyle(one('.logo-crop'));
                       const freeStyle = getComputedStyle(one('.product.free'));
                       const proStyle = getComputedStyle(one('.product.pro'));
+                      const footerGrid = one('.footer-grid');
+                      const footerGridStyle = footerGrid ? getComputedStyle(footerGrid) : null;
                       return {
                         innerWidth,
                         scrollWidth: document.documentElement.scrollWidth,
@@ -240,6 +242,12 @@ def main() -> int:
                           e => e.textContent.trim() === 'MIT PRO ZUSÄTZLICH'
                             && e.nextElementSibling?.children.length === 28
                         ),
+                        footerGridColumns: footerGridStyle
+                          ? footerGridStyle.gridTemplateColumns.trim().split(/\s+/).filter(Boolean).length
+                          : 0,
+                        footerBrandColumn: footerGrid?.firstElementChild
+                          ? getComputedStyle(footerGrid.firstElementChild).gridColumn
+                          : '',
                         overflowers: [...document.querySelectorAll('body *')]
                           .map(e => {
                             const r = e.getBoundingClientRect();
@@ -263,6 +271,17 @@ def main() -> int:
                         f'{width}px: horizontaler Overflow {metrics["scrollWidth"]} > '
                         f'{metrics["innerWidth"]}; Elemente: {metrics["overflowers"]}'
                     )
+                if width <= 480:
+                    if metrics['footerGridColumns'] != 3:
+                        fail(
+                            f'{width}px: Marketing-Footer hat nicht drei Linkspalten '
+                            f'({metrics["footerGridColumns"]})'
+                        )
+                    if metrics['footerBrandColumn'] != '1 / -1':
+                        fail(
+                            f'{width}px: Marketing-Footer-Brand spannt nicht über alle Spalten '
+                            f'({metrics["footerBrandColumn"]!r})'
+                        )
                 if metrics['productCount'] != 2:
                     fail(f'{width}px: Free/Pro-Karten fehlen')
                 if abs(metrics['freeHeight'] - metrics['proHeight']) > 4:
