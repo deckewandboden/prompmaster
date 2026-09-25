@@ -578,14 +578,35 @@
   if (oldMain.isConnected) oldMain.remove();
 
   let scrollRequestId = 0;
+  const phoneFlowQuery = window.matchMedia('(max-width: 620px)');
+
+  const mobileHeaderOffset = () => {
+    if (!phoneFlowQuery.matches) return 18;
+    const rect = header.getBoundingClientRect();
+    return Math.max(0, Math.round(rect.height)) + 12;
+  };
+
+  const isComfortablyVisible = node => {
+    if (!phoneFlowQuery.matches || !node?.isConnected) return false;
+    const rect = node.getBoundingClientRect();
+    const topGuard = mobileHeaderOffset();
+    const bottomGuard = window.innerHeight - 72;
+    return rect.top >= topGuard && rect.bottom <= bottomGuard;
+  };
+
   const scrollToTarget = target => {
     const node = typeof target === 'string' ? $(target) : target;
     if (!node) return;
-    const requestId = ++scrollRequestId;
 
+    if (isComfortablyVisible(node)) return;
+
+    const requestId = ++scrollRequestId;
     const align = behavior => {
       if (requestId !== scrollRequestId || !node.isConnected) return;
-      const top = Math.max(0, window.scrollY + node.getBoundingClientRect().top - 18);
+      const top = Math.max(
+        0,
+        window.scrollY + node.getBoundingClientRect().top - mobileHeaderOffset()
+      );
       window.scrollTo({top,left:0,behavior});
     };
 
@@ -643,7 +664,6 @@
      finishes a focus interaction, bring step 7 into a useful position. Because
      focus is multi-select, debounce the jump so several quick selections can be
      made before we advance. Free and Pro share this exact V2 controller. */
-  const phoneFlowQuery = window.matchMedia('(max-width: 620px)');
   let focusAdvanceTimer = 0;
   focusSection.addEventListener('change', event => {
     if (!phoneFlowQuery.matches || !event.target.matches('input[name="focus"]')) return;
@@ -662,18 +682,8 @@
     if (!phoneFlowQuery.matches || !detailSelectForFlow.value || !formatSelectForFlow) return;
     window.setTimeout(() => {
       const field = formatSelectForFlow.closest('.field') || formatSelectForFlow;
-      const rect = field.getBoundingClientRect();
-      const topGuard = 72;
-      const bottomGuard = window.innerHeight - 88;
-      if (rect.top < topGuard || rect.bottom > bottomGuard) {
-        const requestId = ++scrollRequestId;
-        const align = behavior => {
-          if (requestId !== scrollRequestId || !field.isConnected) return;
-          const top = Math.max(0, window.scrollY + field.getBoundingClientRect().top - 84);
-          window.scrollTo({top,left:0,behavior});
-        };
-        align('smooth');
-        window.setTimeout(() => align('auto'), 240);
+      if (!isComfortablyVisible(field)) {
+        scrollToTarget(field);
       }
     }, 100);
   });
