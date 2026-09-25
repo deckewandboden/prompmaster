@@ -768,7 +768,6 @@ body.pmv2 textarea{font-family:inherit}
   .pmv2-prompt-panel{height:auto;min-height:640px;overflow:visible}
 }
 @media(max-width:850px){
-  .pmv2-header{padding:0 16px}
   .pmv2-review-head{align-items:flex-start!important;flex-wrap:wrap}
   .pmv2-review-progress{width:100%;min-width:0;margin-left:0}
   .pmv2-header{padding:0 16px}
