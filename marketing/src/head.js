@@ -270,10 +270,11 @@ export async function initHead(){
         const inputFollow=3.15;
         smoothPointerX+=(mouseX-smoothPointerX)*Math.min(1,dt*inputFollow);
         smoothPointerY+=(mouseY-smoothPointerY)*Math.min(1,dt*inputFollow);
-        const targetX=edition==='free'?-.22:edition==='pro'?.22:smoothPointerX*.3;
-        const rotationFollow=3;
+        const targetX=edition==='free'?-.22:edition==='pro'?.22:smoothPointerX*(orientationActive?.40:.3);
+        const targetPitch=smoothPointerY*(orientationActive?.26:.18);
+        const rotationFollow=orientationActive?3.8:3;
         group.rotation.y+=(targetX-group.rotation.y)*Math.min(1,dt*rotationFollow);
-        group.rotation.x+=(smoothPointerY*.18-group.rotation.x)*Math.min(1,dt*rotationFollow);
+        group.rotation.x+=(targetPitch-group.rotation.x)*Math.min(1,dt*rotationFollow);
         stage.dataset.headYaw=group.rotation.y.toFixed(4);
         stage.dataset.headPitch=group.rotation.x.toFixed(4);
         group.position.y=Math.sin(elapsed*.42)*.008;
@@ -326,8 +327,8 @@ export async function initHead(){
         orientationBaseBeta=event.beta;
         orientationBaseGamma=event.gamma;
       }
-      const nextX=Math.max(-1,Math.min(1,(event.gamma-orientationBaseGamma)/28));
-      const nextY=Math.max(-1,Math.min(1,(event.beta-orientationBaseBeta)/24));
+      const nextX=Math.max(-1,Math.min(1,(event.gamma-orientationBaseGamma)/18));
+      const nextY=Math.max(-1,Math.min(1,(event.beta-orientationBaseBeta)/16));
       if(orientationActive)cursorEnergy=Math.min(1,cursorEnergy+Math.hypot(nextX-mouseX,nextY-mouseY)*.24);
       mouseX=nextX;mouseY=nextY;orientationActive=true;
       stage.dataset.motionInput='orientation';
