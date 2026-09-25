@@ -639,6 +639,45 @@
     }
   });
 
+  /* Phone flow: the stacked layout itself is the navigation. After the user
+     finishes a focus interaction, bring step 7 into a useful position. Because
+     focus is multi-select, debounce the jump so several quick selections can be
+     made before we advance. Free and Pro share this exact V2 controller. */
+  const phoneFlowQuery = window.matchMedia('(max-width: 620px)');
+  let focusAdvanceTimer = 0;
+  focusSection.addEventListener('change', event => {
+    if (!phoneFlowQuery.matches || !event.target.matches('input[name="focus"]')) return;
+    window.clearTimeout(focusAdvanceTimer);
+    focusAdvanceTimer = window.setTimeout(() => {
+      if (!outputSection.classList.contains('hidden')) scrollToTarget(outputSection);
+    }, 420);
+  });
+
+  /* If step 7 is already high enough, selecting detail depth should not cause
+     another jump. Only reveal Ausgabeformat when mobile browser chrome or a
+     short viewport leaves that next field outside the comfortable tap area. */
+  const detailSelectForFlow = $('#detailSelect');
+  const formatSelectForFlow = $('#formatSelect');
+  detailSelectForFlow?.addEventListener('change', () => {
+    if (!phoneFlowQuery.matches || !detailSelectForFlow.value || !formatSelectForFlow) return;
+    window.setTimeout(() => {
+      const field = formatSelectForFlow.closest('.field') || formatSelectForFlow;
+      const rect = field.getBoundingClientRect();
+      const topGuard = 72;
+      const bottomGuard = window.innerHeight - 88;
+      if (rect.top < topGuard || rect.bottom > bottomGuard) {
+        const requestId = ++scrollRequestId;
+        const align = behavior => {
+          if (requestId !== scrollRequestId || !field.isConnected) return;
+          const top = Math.max(0, window.scrollY + field.getBoundingClientRect().top - 84);
+          window.scrollTo({top,left:0,behavior});
+        };
+        align('smooth');
+        window.setTimeout(() => align('auto'), 240);
+      }
+    }, 100);
+  });
+
   left.addEventListener('click', event => {
     const next = event.target.closest('[data-pmv2-next]');
     if (!next) return;
