@@ -326,6 +326,26 @@
   left.append(review);
   left.append(footer);
 
+  // Desktop keeps legal information in the configuration column. On phones
+  // the prompt panel is stacked below Prompt-Check, so the legal block must
+  // follow the finished prompt instead of separating Prompt-Check from it.
+  const mobileFooterQuery = window.matchMedia('(max-width: 620px)');
+  const syncFooterPosition = () => {
+    if (mobileFooterQuery.matches) {
+      if (footer.parentElement !== workspace || footer.previousElementSibling !== right) {
+        workspace.append(footer);
+      }
+    } else if (footer.parentElement !== left) {
+      left.append(footer);
+    }
+  };
+  syncFooterPosition();
+  if (typeof mobileFooterQuery.addEventListener === 'function') {
+    mobileFooterQuery.addEventListener('change', syncFooterPosition);
+  } else if (typeof mobileFooterQuery.addListener === 'function') {
+    mobileFooterQuery.addListener(syncFooterPosition);
+  }
+
   const addNextButton = (section, text, target) => {
     const body = $('.section-body', section);
     if (!body || $('[data-pmv2-next]', body)) return;
