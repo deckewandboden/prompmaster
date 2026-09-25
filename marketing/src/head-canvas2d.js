@@ -876,6 +876,7 @@ export async function initCanvasHead({sourceCanvas,stage,fallback}){
     stage.dataset.canvasTopologyMs=topologyMs.toFixed(1);
     stage.dataset.canvasDrawPeakMs=canvasSteadyPeakMs.toFixed(1);
     stage.dataset.canvasDrawP90Ms=canvasSteadyP90Ms.toFixed(1);
+    stage.dataset.canvasSteadyDrawSamples=String(canvasSteadyDrawSamples.length);
     stage.dataset.canvasFrames=String(canvasFrameCount);
   }
 

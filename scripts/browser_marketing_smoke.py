@@ -809,11 +809,15 @@ def main() -> int:
                 "document.querySelector('.head-fallback-canvas')",
                 timeout=15000,
             )
+            # P90 from only a handful of frames is statistically unstable on
+            # Firefox/Xvfb software rendering. Wait for a real steady-state
+            # window before evaluating the unchanged 70 ms P90 and 140 ms peak
+            # limits. This stabilizes the gate without relaxing product targets.
             fallback_page.wait_for_function(
-                "parseInt(document.querySelector('.head-stage')?.dataset.canvasFrames || '0', 10) >= 12",
-                timeout=15000,
+                "parseInt(document.querySelector('.head-stage')?.dataset.canvasSteadyDrawSamples || '0', 10) >= 24",
+                timeout=20000,
             )
-            fallback_page.wait_for_timeout(250)
+            fallback_page.wait_for_timeout(120)
             fallback_page.screenshot(
                 path=str(artifact_dir / f'{engine}-1440-forced-no-webgl.png'),
                 full_page=False,
@@ -860,6 +864,9 @@ def main() -> int:
                   canvasFrames: parseInt(
                     document.querySelector('.head-stage')?.dataset.canvasFrames || '0', 10
                   ),
+                  canvasSteadyDrawSamples: parseInt(
+                    document.querySelector('.head-stage')?.dataset.canvasSteadyDrawSamples || '0', 10
+                  ),
                   canvasElapsed: parseFloat(
                     document.querySelector('.head-stage')?.dataset.canvasElapsed || '0'
                   ),
@@ -904,10 +911,10 @@ def main() -> int:
                     'No-WebGL: Kopf-Occlusion fehlt; Sternschnuppen/Lichter können '
                     'durch Gesicht oder Hals scheinen'
                 )
-            if fallback_metrics['canvasFrames'] < 12:
+            if fallback_metrics['canvasSteadyDrawSamples'] < 24:
                 fail(
-                    f'No-WebGL: zu wenige Canvas-Frames für Performancebewertung '
-                    f'({fallback_metrics["canvasFrames"]})'
+                    f'No-WebGL: zu wenige Steady-State-Samples für Performancebewertung '
+                    f'({fallback_metrics["canvasSteadyDrawSamples"]})'
                 )
             if fallback_metrics['canvasDrawMs'] > 55:
                 fail(
