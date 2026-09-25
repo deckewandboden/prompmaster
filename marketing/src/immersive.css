@@ -77,3 +77,23 @@ footer { max-width:none; background:#020919f5; }
 @media(prefers-reduced-motion:no-preference) { .section { opacity:1; transform:none; } .section.in-view { animation:section-arrival .85s cubic-bezier(.2,.7,.2,1) both; } }
 @keyframes section-arrival { from { opacity:.72; transform:translateY(24px); } to { opacity:1; transform:translateY(0); } }
 @media(min-width:851px) and (max-width:1699px) { .product { min-height:600px; } }
+
+
+/* Mobile hero refinement 2026-09-25.
+ * Pull the Free/Pro cards closer to the dissolving lower head without
+ * changing the desktop composition or covering the face/neck region. */
+@media(max-width:650px){
+  .hero-grid{
+    row-gap:10px;
+  }
+  .hero-center{
+    min-height:358px;
+  }
+  .product{
+    margin:4px 0 28px;
+  }
+  .hero-center{
+    pointer-events:auto;
+    touch-action:pan-y;
+  }
+}
