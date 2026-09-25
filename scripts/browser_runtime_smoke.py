@@ -845,6 +845,7 @@ def _check_product_v2_shell(page, label: str, width: int) -> None:
           const nextButton = document.querySelector('.pmv2-next');
           const nextRows = [...document.querySelectorAll('.pmv2-next-row')];
           const copyButton = document.querySelector('#copyBtn');
+          const recommendButton = document.querySelector('#recommendBtn');
           const promptActionButtons = [...document.querySelectorAll('.pmv2-prompt-panel > .actions .btn')];
           const heroProgressText = document.querySelector('#progressText');
           const reviewProgress = document.querySelector('.pmv2-review-progress');
@@ -937,6 +938,7 @@ def _check_product_v2_shell(page, label: str, width: int) -> None:
             nextRowDisplays: nextRows.map(el => getComputedStyle(el).display),
             copyButtonDisplay: copyButton ? getComputedStyle(copyButton).display : '',
             copyButtonVisibility: copyButton ? getComputedStyle(copyButton).visibility : '',
+            recommendJustify: recommendButton ? getComputedStyle(recommendButton).justifyContent : '',
             copyButtonTrailingSpace: copyButton
               ? Math.round(document.documentElement.scrollHeight - (copyButton.getBoundingClientRect().bottom + scrollY))
               : -1,
@@ -1099,6 +1101,11 @@ def _check_product_v2_shell(page, label: str, width: int) -> None:
     if 'Segoe UI' not in (next_style.get('fontFamily') or ''):
         raise AssertionError(
             f'{label} {width}px: V2 workflow button typography regressed: {next_style}'
+        )
+
+    if metrics.get('recommendJustify') != 'center':
+        raise AssertionError(
+            f'{label} {width}px: recommend action is not centered: {metrics}'
         )
 
     prompt_actions = metrics.get('promptActionStyles') or []
