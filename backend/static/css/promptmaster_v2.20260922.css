@@ -1586,3 +1586,49 @@ body.pmv2 .pmv2-header-cta{
     padding-bottom:calc(38px + env(safe-area-inset-bottom,0px))!important;
   }
 }
+
+
+/* V2 mobile polish 2026-09-25 round 4
+ * One scroll surface for long mobile lightboxes. The backdrop owns scrolling;
+ * the card stays a complete rounded surface, including its final actions.
+ */
+@media(max-width:620px){
+  .pmv2 .modal-backdrop.open{
+    display:block!important;
+    height:100vh!important;
+    height:100dvh!important;
+    overflow-x:hidden!important;
+    overflow-y:auto!important;
+    -webkit-overflow-scrolling:touch;
+    overscroll-behavior:contain;
+    padding:
+      max(12px,env(safe-area-inset-top,0px))
+      10px
+      max(28px,calc(12px + env(safe-area-inset-bottom,0px)))!important;
+  }
+  .pmv2 .modal{
+    width:100%!important;
+    max-width:calc(100vw - 20px)!important;
+    max-height:none!important;
+    height:auto!important;
+    margin:0 auto!important;
+    overflow:visible!important;
+    border-radius:18px!important;
+  }
+  .pmv2 #generalProModal .modal,
+  .pmv2 #proModal .modal,
+  .pmv2 #businessModal .modal{
+    width:100%!important;
+    max-height:none!important;
+  }
+  .pmv2 .modal-actions,
+  .pmv2 #generalProModal .modal-actions{
+    position:static!important;
+    bottom:auto!important;
+    padding:
+      12px
+      16px
+      calc(16px + env(safe-area-inset-bottom,0px))!important;
+    border-radius:0 0 17px 17px!important;
+  }
+}
