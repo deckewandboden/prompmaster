@@ -594,9 +594,11 @@ export async function initCanvasHead({sourceCanvas,stage,fallback}){
       const inputFollow=3.15;
       smoothX+=(mouseX-smoothX)*Math.min(1,step*inputFollow);
       smoothY+=(mouseY-smoothY)*Math.min(1,step*inputFollow);
-      const yawTarget=edition==='free'?-.22:edition==='pro'?.22:smoothX*.3;
-      headYaw+=(yawTarget-headYaw)*Math.min(1,step*3);
-      headPitch+=(smoothY*.18-headPitch)*Math.min(1,step*3);
+      const yawTarget=edition==='free'?-.22:edition==='pro'?.22:smoothX*(orientationActive?.40:.3);
+      const pitchTarget=smoothY*(orientationActive?.26:.18);
+      const rotationFollow=orientationActive?3.8:3;
+      headYaw+=(yawTarget-headYaw)*Math.min(1,step*rotationFollow);
+      headPitch+=(pitchTarget-headPitch)*Math.min(1,step*rotationFollow);
       const powerTarget=edition==='pro'?1.28:edition==='free'?.7:1;
       pointPower+=(powerTarget-pointPower)*Math.min(1,step*3);
       topologyPower+=(powerTarget-topologyPower)*Math.min(1,step*3);
@@ -899,8 +901,8 @@ export async function initCanvasHead({sourceCanvas,stage,fallback}){
       orientationBaseBeta=event.beta;
       orientationBaseGamma=event.gamma;
     }
-    const nextX=clamp((event.gamma-orientationBaseGamma)/28,-1,1);
-    const nextY=clamp((event.beta-orientationBaseBeta)/24,-1,1);
+    const nextX=clamp((event.gamma-orientationBaseGamma)/18,-1,1);
+    const nextY=clamp((event.beta-orientationBaseBeta)/16,-1,1);
     if(orientationActive)cursorEnergy=Math.min(1,cursorEnergy+Math.hypot(nextX-mouseX,nextY-mouseY)*.24);
     mouseX=nextX;mouseY=nextY;orientationActive=true;
     stage.dataset.motionInput='orientation';
