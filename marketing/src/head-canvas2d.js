@@ -609,6 +609,7 @@ export async function initCanvasHead({sourceCanvas,stage,fallback}){
     stage.dataset.canvasElapsed=elapsed.toFixed(3);
     stage.dataset.canvasClockAt=now.toFixed(1);
     stage.dataset.headYaw=headYaw.toFixed(4);
+    stage.dataset.headPitch=headPitch.toFixed(4);
     context.clearRect(0,0,width,height);
     const glow=context.createRadialGradient(width*.5,height*.42,0,width*.5,height*.42,Math.min(width,height)*.38);
     glow.addColorStop(0,'rgba(30,155,255,.12)');
@@ -891,12 +892,52 @@ export async function initCanvasHead({sourceCanvas,stage,fallback}){
     if(!paused&&visible&&!document.hidden)raf=requestAnimationFrame(loop);
   }
 
+  let orientationActive=false,orientationListening=false,orientationBaseBeta=null,orientationBaseGamma=null;
+  const onOrientation=(event)=>{
+    if(!Number.isFinite(event.beta)||!Number.isFinite(event.gamma))return;
+    if(orientationBaseBeta===null||orientationBaseGamma===null){
+      orientationBaseBeta=event.beta;
+      orientationBaseGamma=event.gamma;
+    }
+    const nextX=clamp((event.gamma-orientationBaseGamma)/28,-1,1);
+    const nextY=clamp((event.beta-orientationBaseBeta)/24,-1,1);
+    if(orientationActive)cursorEnergy=Math.min(1,cursorEnergy+Math.hypot(nextX-mouseX,nextY-mouseY)*.24);
+    mouseX=nextX;mouseY=nextY;orientationActive=true;
+    stage.dataset.motionInput='orientation';
+    stage.dataset.motionGamma=event.gamma.toFixed(1);
+    stage.dataset.motionBeta=event.beta.toFixed(1);
+  };
+  const enableOrientation=()=>{
+    if(orientationListening)return;
+    orientationListening=true;
+    window.addEventListener('deviceorientation',onOrientation,{passive:true});
+    stage.dataset.motionSensor='listening';
+  };
+  const motionPermissionControls=new AbortController();
+  const orientationType=window.DeviceOrientationEvent;
+  if(orientationType&&typeof orientationType.requestPermission==='function'){
+    stage.dataset.motionSensor='gesture-required';
+    document.querySelector('.hero-center')?.addEventListener('click',async()=>{
+      try{
+        if(await orientationType.requestPermission()==='granted')enableOrientation();
+        else stage.dataset.motionSensor='denied';
+      }catch(_error){
+        stage.dataset.motionSensor='denied';
+      }
+    },{signal:motionPermissionControls.signal});
+  }else if('DeviceOrientationEvent' in window||'ondeviceorientation' in window){
+    enableOrientation();
+  }else{
+    stage.dataset.motionSensor='unavailable';
+  }
   const onPointer=(event)=>{
+    if(orientationActive&&event.pointerType==='touch')return;
     const nextX=clamp(event.clientX/Math.max(1,innerWidth)*2-1,-1,1);
     const nextY=clamp(event.clientY/Math.max(1,innerHeight)*2-1,-1,1);
     if(hasPointer)cursorEnergy=Math.min(1,cursorEnergy+Math.hypot(nextX-lastPointerX,nextY-lastPointerY)*.34);
     else hasPointer=true;
     lastPointerX=nextX;lastPointerY=nextY;mouseX=nextX;mouseY=nextY;
+    stage.dataset.motionInput='pointer';
   };
   const onVisibility=()=>sync();
   const onReduced=()=>{paused=reduced.matches;sync();};
@@ -919,8 +960,9 @@ export async function initCanvasHead({sourceCanvas,stage,fallback}){
     if(disposed)return;
     disposed=true;
     if(raf)cancelAnimationFrame(raf);
-    observer.disconnect();resizeObserver.disconnect();controls.abort();
+    observer.disconnect();resizeObserver.disconnect();controls.abort();motionPermissionControls.abort();
     window.removeEventListener('pointermove',onPointer);
+    window.removeEventListener('deviceorientation',onOrientation);
     document.removeEventListener('visibilitychange',onVisibility);
     reduced.removeEventListener('change',onReduced);
   };
