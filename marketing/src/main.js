@@ -75,7 +75,24 @@ async function initializePricing(){
     document.getElementById('plus').addEventListener('click',()=>{input.value=String(normalizeQuantity(input.value,catalog.maxQuantity)+1);update()});
     update();
   }catch(error){
-    if(input){input.disabled=true;document.getElementById('minus').disabled=true;document.getElementById('plus').disabled=true;document.getElementById('catalog-error').hidden=false;const buy=document.getElementById('buy-licenses');buy.removeAttribute('href');buy.setAttribute('aria-disabled','true');buy.textContent='Preis nicht verfügbar';}
+    if(input){
+      input.disabled=true;
+      document.getElementById('minus').disabled=true;
+      document.getElementById('plus').disabled=true;
+      const catalogError=document.getElementById('catalog-error');
+      if(catalogError)catalogError.hidden=false;
+      const buy=document.getElementById('buy-licenses');
+      if(buy){
+        buy.removeAttribute('href');
+        buy.setAttribute('aria-disabled','true');
+        buy.textContent='Preis nicht verfügbar';
+      }
+      const checkoutSubmit=document.getElementById('checkout-submit');
+      if(checkoutSubmit){
+        checkoutSubmit.disabled=true;
+        checkoutSubmit.textContent='Preis nicht verfügbar';
+      }
+    }
     console.error('Preise konnten nicht geladen werden.',error);
   }
 }
