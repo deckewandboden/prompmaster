@@ -70,32 +70,35 @@
 
   ensureProCatalogSearch();
 
-  /* Pro groups tasks by their catalog area (for example Recherche,
-     Entscheidung, E-Mail or Kalender). The Golden-Master renderer writes each
-     area heading as a full-width grid item, which makes one-task areas look
-     like a broken single-column list. Keep the semantic area grouping, but
-     turn every area plus its tasks into one layout block. The outer task grid
-     can then place those blocks left/right in stable row-major order. */
+  /* Pro task layout is data-driven. Each catalog area remains one semantic
+     block, but the blocks are distributed between two desktop columns by the
+     number of task cards they contain. This keeps the columns balanced when
+     Prompt Designer adds/removes tasks later without hard-coding any app,
+     category or task count. Ties prefer the left column, so odd totals end
+     predictably on the left. */
   const normalizeProTaskBlocks = () => {
     if (free) return;
     const grid = $('#taskGrid', taskSection);
     if (!grid) return;
 
-    const children = Array.from(grid.children);
-    if (!children.length) return;
-    if (children.every(node => node.classList.contains('pmv2-task-block'))) return;
+    const currentChildren = Array.from(grid.children);
+    if (!currentChildren.length) return;
+    if (
+      currentChildren.length === 2 &&
+      currentChildren.every(node => node.classList.contains('pmv2-task-column'))
+    ) return;
 
-    const fragment = document.createDocumentFragment();
+    const blocks = [];
     let block = null;
 
     const startBlock = () => {
       block = document.createElement('div');
       block.className = 'pmv2-task-block';
-      fragment.appendChild(block);
+      blocks.push(block);
       return block;
     };
 
-    children.forEach(node => {
+    currentChildren.forEach(node => {
       if (node.classList.contains('task-area')) {
         startBlock().appendChild(node);
         return;
@@ -104,11 +107,37 @@
         (block || startBlock()).appendChild(node);
         return;
       }
-      fragment.appendChild(node);
+      /* Unexpected non-task nodes get their own block instead of being lost. */
+      const extra = startBlock();
+      extra.classList.add('pmv2-task-block-extra');
+      extra.appendChild(node);
       block = null;
     });
 
-    grid.replaceChildren(fragment);
+    if (!blocks.length) return;
+
+    const columns = [0, 1].map(index => {
+      const column = document.createElement('div');
+      column.className = 'pmv2-task-column';
+      column.dataset.pmv2Column = String(index);
+      return column;
+    });
+    const load = [0, 0];
+
+    blocks.forEach((taskBlock, index) => {
+      const taskCount = taskBlock.querySelectorAll('.task').length;
+      const weight = Math.max(1, taskCount);
+      /* Lowest load wins; equal load deliberately stays left. */
+      const columnIndex = load[0] <= load[1] ? 0 : 1;
+      taskBlock.dataset.pmv2TaskCount = String(taskCount);
+      taskBlock.style.setProperty('--pmv2-task-order', String(index));
+      columns[columnIndex].appendChild(taskBlock);
+      load[columnIndex] += weight;
+    });
+
+    grid.replaceChildren(...columns);
+    grid.dataset.pmv2LeftLoad = String(load[0]);
+    grid.dataset.pmv2RightLoad = String(load[1]);
   };
 
   if (!free) {
