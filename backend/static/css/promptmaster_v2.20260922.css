@@ -1764,8 +1764,9 @@ body.pmv2 .pmv2-header-cta{
   border:1px solid rgba(202,166,255,.72)!important;
   border-radius:10px!important;
   background:linear-gradient(135deg,#6f32dc 0%,#8a3ff0 52%,#a653f4 100%)!important;
-  color:#fff!important;
-  -webkit-text-fill-color:#fff!important;
+  color:#06101f!important;
+  -webkit-text-fill-color:#06101f!important;
+  text-shadow:none!important;
   font-family:"Segoe UI",Arial,sans-serif!important;
   font-size:11px!important;
   font-weight:800!important;
@@ -1779,6 +1780,8 @@ body.pmv2 .pmv2-header-cta{
 .pmv2 .pmv2-review-edit:hover,
 .pmv2 .pmv2-review-edit:focus-visible{
   border-color:rgba(229,209,255,.96)!important;
+  color:#020711!important;
+  -webkit-text-fill-color:#020711!important;
   filter:brightness(1.12)!important;
   transform:translateY(-1px)!important;
   outline:none!important;
