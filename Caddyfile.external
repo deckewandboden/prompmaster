@@ -38,15 +38,12 @@ http://{$CADDY_DOMAIN} {
         respond 404
     }
 
-    # Compatibility routes from the recovered marketing frontend to the
-    # canonical Django application routes. Use an explicit wildcard matcher so
-    # the redirect target is never parsed as another path matcher, and preserve
-    # the incoming query string (for example checkout quantity).
+    # Compatibility routes from the recovered marketing frontend to canonical
+    # Django application routes. /checkout/ is intentionally NOT redirected:
+    # it is now a first-class public marketing checkout surface that preserves
+    # the calculator quantity before the secure payment backend is entered.
     handle /login* {
         redir * /auth/login/{?query} 302
-    }
-    handle /checkout* {
-        redir * /portal/licenses/buy/{?query} 302
     }
     handle /app/pro* {
         redir * /pro/{?query} 302
