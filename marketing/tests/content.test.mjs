@@ -62,3 +62,15 @@ test('öffentliche Checkout-Seite enthält den vereinbarten Neukunden-Kaufaufbau
   assert.match(main,/data-checkout-company/);
   assert.match(main,/data-checkout-private/);
 });
+
+
+test('Hauptnavigation benennt Free und Pro eindeutig',async()=>{
+  const index=await readFile('index.html','utf8');
+  assert.match(index,/href="\/#start">PromptMaster Free &amp; Pro<\/a>/);
+  assert.match(index,/href="\/#funktionen">Funktionen<\/a>/);
+  assert.match(index,/href="\/#preise">Preise<\/a>/);
+  assert.match(index,/href="\/#vergleich">Vergleich<\/a>/);
+  assert.match(index,/href="\/#faq">FAQ<\/a>/);
+  assert.doesNotMatch(index,/href="\/#start">Produkte<\/a>/);
+  assert.doesNotMatch(index,/href="\/#vergleich">Free vs\. Pro<\/a>/);
+});
