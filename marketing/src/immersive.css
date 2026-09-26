@@ -496,3 +496,19 @@ footer { max-width:none; background:#020919f5; }
   .checkout-card,
   .checkout-summary-card{padding:18px}
 }
+
+
+/* Desktop brand baseline: the approved HQ PNG contains transparent artwork
+   padding on its left edge. Keep the footer copy on the normal 6% content
+   gutter, offset only the logo box by that artwork inset, and start the header
+   logo from the same compensated position. The visible header logo, visible
+   footer logo and "Bessere Prompts..." copy therefore share one x-axis. */
+@media(min-width:651px){
+  header{
+    padding-left:calc(6% - 24px);
+  }
+  #footer .footer-grid>div:first-child .brand{
+    width:max-content;
+    margin-left:-24px;
+  }
+}
