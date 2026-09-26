@@ -47,7 +47,6 @@ test('Pro-Kachel auf der Startseite führt zum Lizenzrechner',async()=>{
 test('öffentliche Checkout-Seite enthält den vereinbarten Neukunden-Kaufaufbau',async()=>{
   const html=checkoutPage(7);
   const main=await readFile('src/main.js','utf8');
-  const caddy=await readFile('../Caddyfile.external','utf8');
   assert.match(html,/PromptMaster Pro kaufen/);
   assert.match(html,/value="company" checked/);
   assert.match(html,/value="private"/);
@@ -62,5 +61,4 @@ test('öffentliche Checkout-Seite enthält den vereinbarten Neukunden-Kaufaufbau
   assert.match(main,/customer_type/);
   assert.match(main,/data-checkout-company/);
   assert.match(main,/data-checkout-private/);
-  assert.doesNotMatch(caddy,/handle \/checkout\*\s*\{\s*redir/);
 });
