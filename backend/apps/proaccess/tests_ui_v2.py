@@ -40,16 +40,16 @@ class PromptMasterV2RouteIsolationTests(TestCase):
         current_html = current.content.decode('utf-8')
         legacy_html = legacy.content.decode('utf-8')
 
-        self.assertIn('/static/js/free_catalog_bridge.20260918.js?v=20260925-mobile14', current_html)
-        self.assertIn('/static/js/free_catalog_bridge.20260918.js?v=20260925-mobile14', legacy_html)
+        self.assertIn('/static/js/free_catalog_bridge.20260918.js?v=20260925-mobile15', current_html)
+        self.assertIn('/static/js/free_catalog_bridge.20260918.js?v=20260925-mobile15', legacy_html)
         self.assertRegex(
             current_html,
             r'<meta name="pm-free-compose" content="server" data-csrf="[A-Za-z0-9]+">',
         )
         self.assertNotIn('name="pm-free-compose"', legacy_html)
 
-        self.assertIn('/static/css/promptmaster_v2.20260922.css?v=20260925-mobile14', current_html)
-        self.assertIn('/static/js/promptmaster_ui_v2.20260922.js?v=20260925-mobile14', current_html)
+        self.assertIn('/static/css/promptmaster_v2.20260922.css?v=20260925-mobile15', current_html)
+        self.assertIn('/static/js/promptmaster_ui_v2.20260922.js?v=20260925-mobile15', current_html)
         self.assertNotIn('/static/css/promptmaster_v2.20260922.css', legacy_html)
         self.assertNotIn('/static/js/promptmaster_ui_v2.20260922.js', legacy_html)
 
@@ -68,10 +68,10 @@ class PromptMasterV2RouteIsolationTests(TestCase):
         self.assertIn(free_source_node, legacy_html)
 
         stripped = current_html.replace(
-            '<link rel="stylesheet" href="/static/css/promptmaster_v2.20260922.css?v=20260925-mobile14">',
+            '<link rel="stylesheet" href="/static/css/promptmaster_v2.20260922.css?v=20260925-mobile15">',
             '',
         ).replace(
-            '<script src="/static/js/promptmaster_ui_v2.20260922.js?v=20260925-mobile14" defer></script>',
+            '<script src="/static/js/promptmaster_ui_v2.20260922.js?v=20260925-mobile15" defer></script>',
             '',
         ).replace(
             'data:image/gif;base64,R0lGODlhAQABAAAAACw=',
@@ -95,8 +95,8 @@ class PromptMasterV2RouteIsolationTests(TestCase):
         current_html = current.content.decode('utf-8')
         legacy_html = legacy.content.decode('utf-8')
 
-        self.assertIn('/static/css/promptmaster_v2.20260922.css?v=20260925-mobile14', current_html)
-        self.assertIn('/static/js/promptmaster_ui_v2.20260922.js?v=20260925-mobile14', current_html)
+        self.assertIn('/static/css/promptmaster_v2.20260922.css?v=20260925-mobile15', current_html)
+        self.assertIn('/static/js/promptmaster_ui_v2.20260922.js?v=20260925-mobile15', current_html)
         self.assertNotIn('/static/css/promptmaster_v2.20260922.css', legacy_html)
         self.assertNotIn('/static/js/promptmaster_ui_v2.20260922.js', legacy_html)
 
@@ -160,6 +160,8 @@ class PromptMasterV2RouteIsolationTests(TestCase):
             '@media(max-width:850px){\n  .pmv2-pro .task-grid{grid-template-columns:1fr!important}',
             css,
         )
+        self.assertIn('color:#06101f!important;', css)
+        self.assertIn('-webkit-text-fill-color:#06101f!important;', css)
 
 
     def test_pro_legacy_route_keeps_the_same_authentication_boundary(self):
