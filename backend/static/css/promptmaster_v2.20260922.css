@@ -460,7 +460,7 @@ body.pmv2 textarea{font-family:inherit}
 
 /* Pro: every catalog area is one semantic block. JavaScript assigns those
    blocks to two balanced desktop columns using the live number of tasks in
-   each area. Prompt Designer can therefore add/remove tasks without creating
+   each area. PromptMaster can therefore add/remove tasks without creating
    the old 4-left/1-right layout. */
 .pmv2-pro .task-grid{
   align-items:start!important;
