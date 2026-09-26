@@ -70,12 +70,14 @@
 
   ensureProCatalogSearch();
 
-  /* Pro task layout is data-driven. Each catalog area remains one semantic
-     block, but the blocks are distributed between two desktop columns by the
-     number of task cards they contain. This keeps the columns balanced when
-     Prompt Designer adds/removes tasks later without hard-coding any app,
-     category or task count. Ties prefer the left column, so odd totals end
-     predictably on the left. */
+  /* PromptMaster Pro task layout is fully data-driven.
+     - One category: keep the category as one full-width semantic block and
+       arrange its task cards in a two-column grid on desktop.
+     - Several categories: keep every category intact and assign whole
+       category blocks to the currently lighter desktop column, measured by
+       their live task count.
+     This adapts automatically when PromptMaster's catalog changes; no app,
+     category or task count is hard-coded. */
   const normalizeProTaskBlocks = () => {
     if (free) return;
     const grid = $('#taskGrid', taskSection);
@@ -83,10 +85,19 @@
 
     const currentChildren = Array.from(grid.children);
     if (!currentChildren.length) return;
+
+    if (
+      grid.classList.contains('pmv2-task-grid-single-area') &&
+      currentChildren.length === 1 &&
+      currentChildren[0].classList.contains('pmv2-task-block-single')
+    ) return;
+
     if (
       currentChildren.length === 2 &&
       currentChildren.every(node => node.classList.contains('pmv2-task-column'))
     ) return;
+
+    grid.classList.remove('pmv2-task-grid-single-area');
 
     const blocks = [];
     let block = null;
@@ -116,6 +127,22 @@
 
     if (!blocks.length) return;
 
+    blocks.forEach((taskBlock, index) => {
+      const taskCount = taskBlock.querySelectorAll('.task').length;
+      taskBlock.dataset.pmv2TaskCount = String(taskCount);
+      taskBlock.style.setProperty('--pmv2-task-order', String(index));
+    });
+
+    if (blocks.length === 1) {
+      const onlyBlock = blocks[0];
+      onlyBlock.classList.add('pmv2-task-block-single');
+      grid.classList.add('pmv2-task-grid-single-area');
+      grid.replaceChildren(onlyBlock);
+      grid.dataset.pmv2LeftLoad = String(Math.ceil(Number(onlyBlock.dataset.pmv2TaskCount || 0) / 2));
+      grid.dataset.pmv2RightLoad = String(Math.floor(Number(onlyBlock.dataset.pmv2TaskCount || 0) / 2));
+      return;
+    }
+
     const columns = [0, 1].map(index => {
       const column = document.createElement('div');
       column.className = 'pmv2-task-column';
@@ -124,13 +151,11 @@
     });
     const load = [0, 0];
 
-    blocks.forEach((taskBlock, index) => {
-      const taskCount = taskBlock.querySelectorAll('.task').length;
+    blocks.forEach(taskBlock => {
+      const taskCount = Number(taskBlock.dataset.pmv2TaskCount || 0);
       const weight = Math.max(1, taskCount);
       /* Lowest load wins; equal load deliberately stays left. */
       const columnIndex = load[0] <= load[1] ? 0 : 1;
-      taskBlock.dataset.pmv2TaskCount = String(taskCount);
-      taskBlock.style.setProperty('--pmv2-task-order', String(index));
       columns[columnIndex].appendChild(taskBlock);
       load[columnIndex] += weight;
     });
