@@ -704,11 +704,11 @@ def _check_backend_page(page, base: str, path: str, width: int, label: str) -> N
         raise AssertionError(
             f'{label} {width}px: browser-native confirm handlers still active: {metrics["inlineConfirmForms"]}'
         )
-    if metrics['brandLogoPath'] != '/static/brand/promptmaster-logo-clean.svg':
+    if metrics['brandLogoPath'] != '/static/brand/promptmaster-logo-hq.png':
         raise AssertionError(
             f'{label} {width}px: legacy brand asset active: {metrics["brandLogoPath"]}'
         )
-    if metrics['brandNaturalWidth'] < 300:
+    if metrics['brandNaturalWidth'] < 1000:
         raise AssertionError(
             f'{label} {width}px: brand asset is not high-resolution enough: {metrics["brandNaturalWidth"]}'
         )
@@ -814,15 +814,15 @@ def _check_public_page(page, base: str, path: str, width: int, label: str) -> No
             f'{label} {width}px: public POST forms without CSRF: {metrics["postFormsMissingCsrf"]}'
         )
     if metrics['loginLogoPath']:
-        if metrics['loginLogoPath'] != '/static/brand/promptmaster-logo-clean.svg':
+        if metrics['loginLogoPath'] != '/static/brand/promptmaster-logo-hq.png':
             raise AssertionError(
                 f'{label} {width}px: legacy auth logo asset active: {metrics["loginLogoPath"]}'
             )
-        if metrics['loginLogoNaturalWidth'] < 300:
+        if metrics['loginLogoNaturalWidth'] < 1000:
             raise AssertionError(
                 f'{label} {width}px: auth logo source too small: {metrics["loginLogoNaturalWidth"]}'
             )
-        if metrics['loginLogoNaturalHeight'] != 55:
+        if metrics['loginLogoNaturalHeight'] < 250:
             raise AssertionError(
                 f'{label} {width}px: auth logo crop regressed: '
                 f'{metrics["loginLogoNaturalHeight"]}px intrinsic height'
@@ -985,9 +985,9 @@ def _check_product_v2_shell(page, label: str, width: int) -> None:
         )
     if metrics['headerLeft'] < -1 or metrics['headerRight'] > metrics['innerWidth'] + 1:
         raise AssertionError(f'{label} {width}px: V2 header leaves viewport: {metrics}')
-    if metrics['logoPath'] != '/static/brand/promptmaster-logo-clean.svg':
+    if metrics['logoPath'] != '/static/brand/promptmaster-logo-hq.png':
         raise AssertionError(f'{label} {width}px: V2 legacy logo active: {metrics["logoPath"]}')
-    if metrics['logoNaturalWidth'] < 300:
+    if metrics['logoNaturalWidth'] < 1000:
         raise AssertionError(f'{label} {width}px: V2 logo source too small: {metrics["logoNaturalWidth"]}')
     if metrics['leftOverflowY'] != 'visible':
         raise AssertionError(f'{label} {width}px: left V2 column gained nested scrolling: {metrics}')
@@ -1398,9 +1398,9 @@ def run_backend_ui_smoke(browser, fixture=None) -> None:
         if (
             not v2_free_layout['left']
             or not v2_free_layout['right']
-            or v2_free_layout['logoPath'] != '/static/brand/promptmaster-logo-clean.svg'
-            or v2_free_layout['logoNaturalWidth'] < 300
-            or v2_free_layout['logoNaturalHeight'] != 55
+            or v2_free_layout['logoPath'] != '/static/brand/promptmaster-logo-hq.png'
+            or v2_free_layout['logoNaturalWidth'] < 1000
+            or v2_free_layout['logoNaturalHeight'] < 250
             or v2_free_layout['bodyOverflowY'] not in {'auto', 'scroll'}
             or v2_free_layout['rootScrollBehavior'] != 'auto'
             or v2_free_layout['leftOverflowY'] != 'visible'
@@ -1555,7 +1555,7 @@ def run_backend_ui_smoke(browser, fixture=None) -> None:
             }"""
         )
         if (
-            pro_purchase_contract['path'] != '/portal/licenses/buy/'
+            pro_purchase_contract['path'] != '/checkout/'
             or pro_purchase_contract['search'] != '?quantity=1'
             or pro_purchase_contract['target']
         ):
@@ -1565,42 +1565,37 @@ def run_backend_ui_smoke(browser, fixture=None) -> None:
 
         public_page.locator('[data-close="proModal"]').first.click()
 
-        # The Pro purchase CTA is intentionally same-tab. An anonymous user
-        # must land on our styled login page with the checkout path preserved,
-        # never in a blank/new tab. This covers the live black-page/login-logo
-        # regression reported from the purchase flow.
+        # Free-to-Pro purchase is public. The CTA must land on the designed
+        # checkout and preserve the selected quantity without forcing login.
         purchase_page = public_context.new_page()
         purchase_response = purchase_page.goto(
-            base + 'portal/licenses/buy/?quantity=1',
+            base + 'checkout/?quantity=1',
             wait_until='networkidle',
         )
         if not purchase_response or purchase_response.status != 200:
-            raise AssertionError('anonymous Pro purchase route did not resolve to login')
-        if '/auth/login/' not in purchase_page.url or 'next=' not in purchase_page.url:
-            raise AssertionError(
-                f'Pro purchase login continuation missing: {purchase_page.url}'
-            )
-        purchase_login_probe = purchase_page.evaluate(
-            """() => {
-              const logo=document.querySelector('.login-logo img');
-              return {
-                h1:document.querySelector('h1')?.textContent?.trim() || '',
-                logoPath:logo ? new URL(logo.src).pathname : '',
-                logoWidth:logo?.naturalWidth || 0,
-                logoHeight:logo?.naturalHeight || 0,
-                bodyText:(document.body?.innerText || '').trim(),
-              };
-            }"""
+            raise AssertionError('public Pro checkout did not resolve')
+        purchase_probe = purchase_page.evaluate(
+            """() => ({
+              path:location.pathname,
+              h1:document.querySelector('#checkout-title')?.textContent?.trim() || '',
+              quantity:document.querySelector('#quantity')?.value || '',
+              companyDefault:document.querySelector('input[name="customer_type"][value="company"]')?.checked === true,
+              privateChoice:!!document.querySelector('input[name="customer_type"][value="private"]'),
+              submitText:document.querySelector('#checkout-submit')?.textContent?.trim() || '',
+              loginHref:document.querySelector('#checkout-login-link')?.getAttribute('href') || '',
+            })"""
         )
         if (
-            purchase_login_probe['h1'] != 'Anmelden'
-            or purchase_login_probe['logoPath'] != '/static/brand/promptmaster-logo-clean.svg'
-            or purchase_login_probe['logoWidth'] < 300
-            or purchase_login_probe['logoHeight'] != 55
-            or not purchase_login_probe['bodyText']
+            purchase_probe['path'] != '/checkout/'
+            or purchase_probe['h1'] != 'PromptMaster Pro kaufen.'
+            or purchase_probe['quantity'] != '1'
+            or not purchase_probe['companyDefault']
+            or not purchase_probe['privateChoice']
+            or 'Zahlungspflichtig kaufen' not in purchase_probe['submitText']
+            or '/auth/login/' not in purchase_probe['loginHref']
         ):
             raise AssertionError(
-                f'Pro purchase login rendering regression: {purchase_login_probe}'
+                f'public Pro checkout rendering regression: {purchase_probe}'
             )
         purchase_page.close()
 
@@ -1738,7 +1733,7 @@ def run_backend_ui_smoke(browser, fixture=None) -> None:
             or general_modal_probe['tileBackground'] in {'rgb(250, 251, 253)', 'rgb(255, 255, 255)'}
             or general_modal_probe['compareBackground'] == 'rgb(255, 255, 255)'
             or general_modal_probe['ctaText'] != 'PromptMaster Pro kaufen'
-            or general_modal_probe['ctaPath'] != '/portal/licenses/buy/'
+            or general_modal_probe['ctaPath'] != '/checkout/'
             or general_modal_probe['ctaSearch'] != '?quantity=1'
         ):
             raise AssertionError(
@@ -1962,7 +1957,7 @@ def run_backend_ui_smoke(browser, fixture=None) -> None:
         first_page.locator('input[name="password"]').press('Enter')
         first_page.wait_for_url('**/auth/2fa/setup/**')
         setup_logo = first_page.locator('.login-logo img')
-        if '/static/brand/promptmaster-logo-clean.svg' not in setup_logo.get_attribute('src'):
+        if '/static/brand/promptmaster-logo-hq.png' not in setup_logo.get_attribute('src'):
             raise AssertionError('first-time MFA still uses the low-resolution logo asset')
         if first_page.locator('[data-copy-target]').count() != 2:
             raise AssertionError('first-time MFA copy controls missing')
@@ -2076,7 +2071,7 @@ def run_backend_ui_smoke(browser, fixture=None) -> None:
 
             if role == 'admin':
                 admin_logo = page.locator('.sidebar .brand img')
-                if '/static/brand/promptmaster-logo-clean.svg' not in admin_logo.get_attribute('src'):
+                if '/static/brand/promptmaster-logo-hq.png' not in admin_logo.get_attribute('src'):
                     raise AssertionError('admin shell still uses the low-resolution logo asset')
 
                 page.goto(
