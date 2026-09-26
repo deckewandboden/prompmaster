@@ -458,6 +458,32 @@ body.pmv2 textarea{font-family:inherit}
 .pmv2 .task-copy{display:block!important;color:#91a5b6!important;font-size:12px!important;line-height:1.52!important;margin:0!important}
 .pmv2 .task-badges,.pmv2 .task-meta{margin-top:9px!important}
 
+/* Pro: every catalog area is one visual block. This keeps the semantic area
+   headings while preventing single-task areas from forcing the whole task
+   chooser into a broken one-column rhythm. Blocks fill left/right, then the
+   next row; an odd final block remains on the left. */
+.pmv2-pro .task-grid{align-items:start!important}
+.pmv2-pro .pmv2-task-block{
+  min-width:0!important;
+  display:flex!important;
+  flex-direction:column!important;
+  gap:9px!important;
+  align-self:start!important;
+}
+.pmv2-pro .pmv2-task-block .task-area{
+  grid-column:auto!important;
+  margin:0 0 1px!important;
+  min-height:18px!important;
+  color:#aebdca!important;
+  font-size:11px!important;
+  font-weight:800!important;
+  letter-spacing:.065em!important;
+}
+.pmv2-pro .pmv2-task-block .task{
+  width:100%!important;
+  margin:0!important;
+}
+
 .pmv2 .context-grid,
 .pmv2 .input-grid{display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:15px!important}
 .pmv2 .context-field,
