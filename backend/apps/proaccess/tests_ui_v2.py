@@ -60,10 +60,13 @@ class PromptMasterV2RouteIsolationTests(TestCase):
         self.assertNotIn(remote_logo, current_html)
         self.assertIn(remote_logo, legacy_html)
 
-        # Remove only the additive V2 tags and the V2-only remote-logo
-        # neutralization. The remaining response must be byte-for-byte
-        # identical to the preserved pre-redesign route.
-        # byte-for-byte identical to the preserved pre-redesign route.
+        # Free V2 intentionally removes the obsolete internal copy/source
+        # status node. Account for that one V2-only DOM removal while proving
+        # that the remaining response still matches the preserved legacy route.
+        free_source_node = '<span class="copy-state" id="copyState"></span>'
+        self.assertNotIn(free_source_node, current_html)
+        self.assertIn(free_source_node, legacy_html)
+
         stripped = current_html.replace(
             '<link rel="stylesheet" href="/static/css/promptmaster_v2.20260922.css?v=20260925-mobile9">',
             '',
@@ -79,7 +82,7 @@ class PromptMasterV2RouteIsolationTests(TestCase):
             '',
             stripped,
         )
-        self.assertEqual(stripped, legacy_html)
+        self.assertEqual(stripped, legacy_html.replace(free_source_node, '', 1))
 
     def test_pro_current_route_adds_v2_shell_but_legacy_route_does_not(self):
         self._staff_session()
