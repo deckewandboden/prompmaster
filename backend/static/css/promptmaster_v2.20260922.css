@@ -490,29 +490,14 @@ body.pmv2 textarea{font-family:inherit}
   font-weight:800!important;
   letter-spacing:.065em!important;
 }
+.pmv2-pro .pmv2-task-block .task-area.pmv2-task-area-mirror{
+  visibility:hidden!important;
+  pointer-events:none!important;
+  user-select:none!important;
+}
 .pmv2-pro .pmv2-task-block .task{
   width:100%!important;
   margin:0!important;
-}
-
-/* A single category spans the full chooser width; only its task cards use the
-   two-column desktop grid. This avoids the one-category/all-left failure mode
-   while preserving the category heading as one semantic block. */
-.pmv2-pro .task-grid.pmv2-task-grid-single-area{
-  grid-template-columns:1fr!important;
-}
-.pmv2-pro .pmv2-task-block-single{
-  display:grid!important;
-  grid-template-columns:repeat(2,minmax(0,1fr))!important;
-  gap:11px!important;
-  width:100%!important;
-}
-.pmv2-pro .pmv2-task-block-single .task-area{
-  grid-column:1/-1!important;
-  margin-bottom:0!important;
-}
-.pmv2-pro .pmv2-task-block-single .task{
-  min-width:0!important;
 }
 
 /* On tablet/mobile return to the catalog's natural source order. display:
@@ -522,7 +507,7 @@ body.pmv2 textarea{font-family:inherit}
   .pmv2-pro .task-grid{grid-template-columns:1fr!important}
   .pmv2-pro .pmv2-task-column{display:contents!important}
   .pmv2-pro .pmv2-task-block{order:var(--pmv2-task-order)!important}
-  .pmv2-pro .pmv2-task-block-single{grid-template-columns:1fr!important}
+  .pmv2-pro .pmv2-task-area-mirror{display:none!important}
 }
 
 .pmv2 .context-grid,
