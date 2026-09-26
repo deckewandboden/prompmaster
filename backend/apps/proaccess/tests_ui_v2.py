@@ -40,16 +40,16 @@ class PromptMasterV2RouteIsolationTests(TestCase):
         current_html = current.content.decode('utf-8')
         legacy_html = legacy.content.decode('utf-8')
 
-        self.assertIn('/static/js/free_catalog_bridge.20260918.js?v=20260925-mobile11', current_html)
-        self.assertIn('/static/js/free_catalog_bridge.20260918.js?v=20260925-mobile11', legacy_html)
+        self.assertIn('/static/js/free_catalog_bridge.20260918.js?v=20260925-mobile12', current_html)
+        self.assertIn('/static/js/free_catalog_bridge.20260918.js?v=20260925-mobile12', legacy_html)
         self.assertRegex(
             current_html,
             r'<meta name="pm-free-compose" content="server" data-csrf="[A-Za-z0-9]+">',
         )
         self.assertNotIn('name="pm-free-compose"', legacy_html)
 
-        self.assertIn('/static/css/promptmaster_v2.20260922.css?v=20260925-mobile11', current_html)
-        self.assertIn('/static/js/promptmaster_ui_v2.20260922.js?v=20260925-mobile11', current_html)
+        self.assertIn('/static/css/promptmaster_v2.20260922.css?v=20260925-mobile12', current_html)
+        self.assertIn('/static/js/promptmaster_ui_v2.20260922.js?v=20260925-mobile12', current_html)
         self.assertNotIn('/static/css/promptmaster_v2.20260922.css', legacy_html)
         self.assertNotIn('/static/js/promptmaster_ui_v2.20260922.js', legacy_html)
 
@@ -68,10 +68,10 @@ class PromptMasterV2RouteIsolationTests(TestCase):
         self.assertIn(free_source_node, legacy_html)
 
         stripped = current_html.replace(
-            '<link rel="stylesheet" href="/static/css/promptmaster_v2.20260922.css?v=20260925-mobile11">',
+            '<link rel="stylesheet" href="/static/css/promptmaster_v2.20260922.css?v=20260925-mobile12">',
             '',
         ).replace(
-            '<script src="/static/js/promptmaster_ui_v2.20260922.js?v=20260925-mobile11" defer></script>',
+            '<script src="/static/js/promptmaster_ui_v2.20260922.js?v=20260925-mobile12" defer></script>',
             '',
         ).replace(
             'data:image/gif;base64,R0lGODlhAQABAAAAACw=',
@@ -95,8 +95,8 @@ class PromptMasterV2RouteIsolationTests(TestCase):
         current_html = current.content.decode('utf-8')
         legacy_html = legacy.content.decode('utf-8')
 
-        self.assertIn('/static/css/promptmaster_v2.20260922.css?v=20260925-mobile11', current_html)
-        self.assertIn('/static/js/promptmaster_ui_v2.20260922.js?v=20260925-mobile11', current_html)
+        self.assertIn('/static/css/promptmaster_v2.20260922.css?v=20260925-mobile12', current_html)
+        self.assertIn('/static/js/promptmaster_ui_v2.20260922.js?v=20260925-mobile12', current_html)
         self.assertNotIn('/static/css/promptmaster_v2.20260922.css', legacy_html)
         self.assertNotIn('/static/js/promptmaster_ui_v2.20260922.js', legacy_html)
 
@@ -146,8 +146,14 @@ class PromptMasterV2RouteIsolationTests(TestCase):
         self.assertIn("taskBlock.querySelectorAll('.task').length", js)
         self.assertIn("grid.dataset.pmv2LeftLoad", js)
         self.assertIn("grid.dataset.pmv2RightLoad", js)
+        self.assertIn("if (blocks.length === 1)", js)
+        self.assertIn("onlyBlock.classList.add('pmv2-task-block-single')", js)
+        self.assertIn("grid.classList.add('pmv2-task-grid-single-area')", js)
+        self.assertIn("Math.ceil(Number(onlyBlock.dataset.pmv2TaskCount || 0) / 2)", js)
         self.assertIn('.pmv2-pro .pmv2-task-column{', css)
         self.assertIn('.pmv2-pro .pmv2-task-block{', css)
+        self.assertIn('.pmv2-pro .pmv2-task-block-single{', css)
+        self.assertIn('grid-template-columns:repeat(2,minmax(0,1fr))!important', css)
         self.assertIn('display:contents!important', css)
         self.assertIn('order:var(--pmv2-task-order)!important', css)
 
