@@ -2,6 +2,132 @@ import faq from './faq.json' with {type:'json'};
 const freeApps=['Copilot Chat','Outlook','Teams','Word','Excel','PowerPoint'];
 const proApps=['OneNote','OneDrive','SharePoint','Microsoft Forms','Whiteboard','Microsoft Loop','Clipchamp','Microsoft Planner','Microsoft Edge','Power Automate','Power Apps','Power Pages','Power BI','Microsoft Fabric','Copilot Studio','AI Builder – Prompt Builder','Dynamics 365 Sales','Dynamics 365 Customer Service','Dynamics 365 Customer Insights','Dynamics 365 Business Central','Microsoft Security Copilot','Microsoft Copilot in Azure','GitHub Copilot','Viva Engage','Viva Insights','Viva Glint','Copilot Pages','Copilot Notebooks'];
 export const calculator=()=>`<div class="calculator"><span class="mini-label">PROMPTMASTER PRO</span><h3>Dein Team. Deine Lizenzanzahl.</h3><label for="quantity">Anzahl Benutzer</label><div class="quantity"><button type="button" id="minus" aria-label="Eine Lizenz weniger">−</button><input id="quantity" type="number" min="1" max="999" step="1" value="1" inputmode="numeric"><button type="button" id="plus" aria-label="Eine Lizenz mehr">+</button></div><p class="fine">12 Monate Laufzeit · Abrechnung jährlich im Voraus</p><div id="price-result" aria-live="polite" aria-atomic="true"><dl><div><dt>Pro Benutzer / Monat</dt><dd data-price="monthly">–</dd></div><div><dt>Pro Benutzer / Jahr</dt><dd data-price="annual">–</dd></div><div class="total"><dt>Gesamt / Jahr</dt><dd data-price="gross">–</dd></div></dl></div><p class="vat-note">Alle Beträge inklusive gesetzlicher MwSt.</p><a id="buy-licenses" class="button" href="/checkout/?quantity=1">1 PromptMaster-Pro-Lizenz kaufen ↗</a><p class="fine">Keine automatische Verlängerung.</p><p id="catalog-error" hidden role="alert">Die Preise sind gerade nicht verfügbar. Bitte lade die Seite erneut.</p></div>`;
+export const checkoutPage=(quantity=1)=>`
+<section class="checkout-page" aria-labelledby="checkout-title">
+  <div class="checkout-intro">
+    <span class="status-badge">PROMPTMASTER PRO</span>
+    <h1 id="checkout-title">PromptMaster Pro kaufen.</h1>
+    <p>Lizenzanzahl prüfen, Kundendaten hinterlegen und anschließend sicher über Mollie bezahlen.</p>
+    <div class="checkout-steps" aria-label="Kaufprozess">
+      <span class="active"><b>1</b>Kundendaten</span>
+      <span><b>2</b>Zahlung</span>
+      <span><b>3</b>Aktivierung</span>
+    </div>
+  </div>
+
+  <div class="checkout-layout">
+    <form class="checkout-form" id="public-checkout-form" novalidate>
+      <input type="hidden" name="quantity" id="checkout-quantity-hidden" value="${quantity}">
+
+      <section class="checkout-card checkout-login-card">
+        <div>
+          <span class="checkout-kicker">BESTANDSKUNDE</span>
+          <h2>Schon bei PromptMaster registriert?</h2>
+          <p>Melde dich an. Deine vorhandenen Kunden- und Rechnungsdaten können anschließend verwendet werden.</p>
+        </div>
+        <a class="button secondary checkout-login-link" id="checkout-login-link" href="/auth/login/?next=/checkout/">Anmelden →</a>
+      </section>
+
+      <section class="checkout-card">
+        <div class="checkout-section-head">
+          <span class="checkout-index">01</span>
+          <div><h2>Kundentyp</h2><p>Für Geschäftskunden ist „Unternehmen“ vorausgewählt.</p></div>
+        </div>
+        <div class="checkout-type" role="radiogroup" aria-label="Kundentyp">
+          <label><input type="radio" name="customer_type" value="company" checked><span><strong>Unternehmen</strong><small>Firma, Organisation oder Selbstständige</small></span></label>
+          <label><input type="radio" name="customer_type" value="private"><span><strong>Privatkunde</strong><small>Kauf als Privatperson</small></span></label>
+        </div>
+      </section>
+
+      <section class="checkout-card">
+        <div class="checkout-section-head">
+          <span class="checkout-index">02</span>
+          <div><h2>Ansprechpartner</h2><p>Diese Person erhält später die Bestell- und Aktivierungsinformationen.</p></div>
+        </div>
+        <div class="checkout-fields two">
+          <label>Vorname<input name="first_name" autocomplete="given-name" required></label>
+          <label>Nachname<input name="last_name" autocomplete="family-name" required></label>
+          <label>E-Mail-Adresse<input name="email" type="email" autocomplete="email" required></label>
+          <label>Telefon <small>optional</small><input name="phone" type="tel" autocomplete="tel"></label>
+        </div>
+      </section>
+
+      <section class="checkout-card" data-checkout-company>
+        <div class="checkout-section-head">
+          <span class="checkout-index">03</span>
+          <div><h2>Unternehmensdaten</h2><p>Angaben für Kundenkonto und Rechnungsdaten.</p></div>
+        </div>
+        <div class="checkout-fields two">
+          <label class="span-2">Unternehmensname<input name="company_name" autocomplete="organization" required></label>
+          <label>Rechtsform<input name="legal_form" placeholder="z. B. GmbH"></label>
+          <label>USt-IdNr. <small>falls vorhanden / erforderlich</small><input name="vat_id" autocomplete="off"></label>
+          <label>Steuernummer <small>falls erforderlich</small><input name="tax_number" autocomplete="off"></label>
+        </div>
+      </section>
+
+      <section class="checkout-card">
+        <div class="checkout-section-head">
+          <span class="checkout-index">04</span>
+          <div><h2>Rechnungsanschrift</h2><p>Die Anschrift wird für die Bestellung hinterlegt.</p></div>
+        </div>
+        <div class="checkout-fields address">
+          <label class="street">Straße<input name="street" autocomplete="address-line1" required></label>
+          <label class="number">Hausnummer<input name="house_number" autocomplete="address-line2"></label>
+          <label>PLZ<input name="postal_code" autocomplete="postal-code" required></label>
+          <label>Ort<input name="city" autocomplete="address-level2" required></label>
+          <label>Land<select name="country" autocomplete="country" required><option value="DE" selected>Deutschland</option></select></label>
+        </div>
+      </section>
+
+      <section class="checkout-card checkout-legal">
+        <div class="checkout-section-head">
+          <span class="checkout-index">05</span>
+          <div><h2>Rechtliches</h2><p>Bitte vor dem Kauf bestätigen.</p></div>
+        </div>
+        <label class="checkline"><input type="checkbox" name="accept_terms" required><span>Ich akzeptiere die <a href="/legal/terms/" target="_blank" rel="noopener">AGB</a>.</span></label>
+        <label class="checkline"><input type="checkbox" name="accept_privacy" required><span>Ich habe die <a href="/legal/privacy/" target="_blank" rel="noopener">Datenschutzerklärung</a> zur Kenntnis genommen.</span></label>
+        <label class="checkline" data-checkout-private hidden><input type="checkbox" name="accept_withdrawal"><span>Ich habe die <a href="/legal/withdrawal/" target="_blank" rel="noopener">Widerrufsbelehrung</a> zur Kenntnis genommen.</span></label>
+      </section>
+
+      <div class="checkout-submit-row">
+        <p><strong>Zahlungsdaten werden nicht bei PromptMaster gespeichert.</strong><br>Bank-, Karten- oder andere Zahlungsdaten werden im nächsten Schritt sicher bei Mollie eingegeben.</p>
+        <button class="button checkout-purchase" id="checkout-submit" type="submit">Zahlungspflichtig kaufen →</button>
+      </div>
+      <div class="checkout-stage-message" id="checkout-stage-message" hidden role="status"></div>
+    </form>
+
+    <aside class="checkout-summary" aria-label="Bestellübersicht">
+      <div class="checkout-summary-card">
+        <span class="mini-label">DEINE BESTELLUNG</span>
+        <div class="checkout-product">
+          <div><strong>PromptMaster Pro</strong><span>12 Monate · keine automatische Verlängerung</span></div>
+          <span class="badge-pro">PRO</span>
+        </div>
+
+        <label for="quantity">Anzahl Lizenzen</label>
+        <div class="quantity">
+          <button type="button" id="minus" aria-label="Eine Lizenz weniger">−</button>
+          <input id="quantity" type="number" min="1" max="500" step="1" value="${quantity}" inputmode="numeric">
+          <button type="button" id="plus" aria-label="Eine Lizenz mehr">+</button>
+        </div>
+
+        <dl class="checkout-price-list">
+          <div><dt>Pro Benutzer / Monat</dt><dd data-price="monthly">–</dd></div>
+          <div><dt>Pro Benutzer / Jahr</dt><dd data-price="annual">–</dd></div>
+          <div class="total"><dt>Gesamt / Jahr</dt><dd data-price="gross">–</dd></div>
+        </dl>
+        <p class="vat-note">Alle Beträge inklusive gesetzlicher MwSt.</p>
+        <div class="checkout-trust">
+          <span>✓ 365 Tage Laufzeit je Lizenz</span>
+          <span>✓ Sichere Zahlung über Mollie</span>
+          <span>✓ Aktivierung nach bestätigter Zahlung</span>
+        </div>
+      </div>
+      <a class="text-link checkout-back" href="/#preise">← Zurück zum Preisrechner</a>
+    </aside>
+  </div>
+</section>`;
+
 export function renderContent(){return `<div class="facts">${[
 ['Für Microsoft Copilot entwickelt','PromptMaster erstellt strukturierte Prompts für unterschiedliche Microsoft-Copilot-Anwendungen.'],['Keine eigene KI erforderlich','PromptMaster erstellt den Prompt regel- und bausteinbasiert. Die Ausführung erfolgt anschließend in Microsoft Copilot.'],['Prompt-Erstellung im Browser','Die eigentliche Prompt-Zusammenstellung erfolgt innerhalb der PromptMaster-Anwendung.'],['Sofort einsetzbar','Prompt erstellen, kopieren und direkt in Microsoft Copilot verwenden.']].map(([h,p])=>`<article><h3>${h}</h3><p>${p}</p></article>`).join('')}</div>
 <section class="section split" id="funktionen"><div><span class="eyebrow">VON DER AUFGABE ZUM ERGEBNIS</span><h2>Aus einer Idee wird ein Auftrag, den Copilot versteht.</h2><p>Ein starkes Ergebnis beginnt mit einem klaren Auftrag. PromptMaster führt dich durch genau die Angaben, die Microsoft Copilot für deinen konkreten Anwendungsfall benötigt.</p><p>Du wählst den Microsoft- oder Copilot-Bereich, legst Aufgabe, Zielgruppe, Schwerpunkte und gewünschte Ausgabe fest und ergänzt deinen konkreten Kontext.</p><p>PromptMaster verbindet diese Entscheidungen zu einem natürlich formulierten, aufgabenspezifischen Prompt. So kommst du schneller vom leeren Eingabefeld zu einem Ergebnis, mit dem du weiterarbeiten kannst.</p><a class="text-link" href="/free/">PromptMaster Free ausprobieren ↗</a></div><div><h3>Ein wachsender Katalog für deine Arbeit mit Copilot.</h3><span class="mini-label">IN FREE & PRO</span><div class="apps">${freeApps.map(a=>`<span class="app-pill">${a}</span>`).join('')}</div><p>PromptMaster deckt Microsoft-365-Anwendungen, aktuelle Copilot-Bereiche, Agents, Power Platform sowie weitere Business- und Speziallösungen ab. Der Katalog wird fortlaufend geprüft und erweitert.</p><span class="mini-label">MIT PRO ZUSÄTZLICH</span><div class="apps">${proApps.map(a=>`<span class="app-pill">${a}</span>`).join('')}</div><p>Welche Funktionen verfügbar sind, hängt vom jeweiligen Microsoft-Produkt, Plan und Administrationsstatus ab. PromptMaster Pro weist die passende Voraussetzung beim jeweiligen Bereich aus.</p></div></section>
