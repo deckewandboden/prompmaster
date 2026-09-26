@@ -458,56 +458,42 @@ body.pmv2 textarea{font-family:inherit}
 .pmv2 .task-copy{display:block!important;color:#91a5b6!important;font-size:12px!important;line-height:1.52!important;margin:0!important}
 .pmv2 .task-badges,.pmv2 .task-meta{margin-top:9px!important}
 
-/* Pro: every catalog area is one semantic block. JavaScript assigns those
-   blocks to two balanced desktop columns using the live number of tasks in
-   each area. PromptMaster can therefore add/remove tasks without creating
-   the old 4-left/1-right layout. */
+/* PromptMaster Pro uses one flat two-column task grid.
+   Category information lives inside each card as a compact overline label, so
+   headings can no longer create ragged columns or large vertical gaps. */
 .pmv2-pro .task-grid{
-  align-items:start!important;
+  display:grid!important;
   grid-template-columns:repeat(2,minmax(0,1fr))!important;
+  align-items:stretch!important;
   gap:11px!important;
 }
-.pmv2-pro .pmv2-task-column{
-  min-width:0!important;
-  display:flex!important;
-  flex-direction:column!important;
-  gap:11px!important;
-  align-self:start!important;
-}
-.pmv2-pro .pmv2-task-block{
-  min-width:0!important;
-  display:flex!important;
-  flex-direction:column!important;
-  gap:9px!important;
-  align-self:start!important;
-}
-.pmv2-pro .pmv2-task-block .task-area{
-  grid-column:auto!important;
-  margin:0 0 1px!important;
-  min-height:18px!important;
-  color:#aebdca!important;
-  font-size:11px!important;
-  font-weight:800!important;
-  letter-spacing:.065em!important;
-}
-.pmv2-pro .pmv2-task-block .task-area.pmv2-task-area-mirror{
-  visibility:hidden!important;
-  pointer-events:none!important;
-  user-select:none!important;
-}
-.pmv2-pro .pmv2-task-block .task{
+.pmv2-pro .task-grid>.task{
   width:100%!important;
+  height:100%!important;
   margin:0!important;
+  min-width:0!important;
 }
-
-/* On tablet/mobile return to the catalog's natural source order. display:
-   contents flattens the two balancing columns and the stored order value
-   restores area 1, area 2, area 3 ... as one continuous column. */
+.pmv2-pro .pmv2-task-area-chip{
+  display:inline-flex!important;
+  align-items:center!important;
+  width:max-content!important;
+  max-width:100%!important;
+  min-height:20px!important;
+  margin:0 0 7px!important;
+  padding:3px 7px!important;
+  border:1px solid rgba(156,105,239,.24)!important;
+  border-radius:999px!important;
+  background:rgba(123,70,217,.10)!important;
+  color:#bca4e7!important;
+  font-size:8.5px!important;
+  line-height:1.15!important;
+  font-weight:800!important;
+  letter-spacing:.055em!important;
+  text-transform:uppercase!important;
+  white-space:normal!important;
+}
 @media(max-width:850px){
   .pmv2-pro .task-grid{grid-template-columns:1fr!important}
-  .pmv2-pro .pmv2-task-column{display:contents!important}
-  .pmv2-pro .pmv2-task-block{order:var(--pmv2-task-order)!important}
-  .pmv2-pro .pmv2-task-area-mirror{display:none!important}
 }
 
 .pmv2 .context-grid,
