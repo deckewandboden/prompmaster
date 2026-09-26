@@ -47,16 +47,21 @@ def _inject_v2_ui(data: bytes) -> bytes:
 
 
 def _remove_v2_source_status(data: bytes) -> bytes:
-    """Remove the internal prompt-source indicator from current Free/Pro V2.
+    """Hide internal prompt-source indicators on current Free/Pro V2.
 
     The verified legacy assets stay byte-identical on disk and on the permanent
-    rollback routes. Current V2 responses remove the source-status node itself,
-    not merely its styling, so no internal database/server provenance is shown.
+    rollback routes. Free no longer writes to its source-status node, so that
+    node can be removed. Pro's server runtime still updates #charInfo as part
+    of its normal state machine; keep an inert hidden node in V2 so the bridge
+    never dereferences a missing element while no provenance text is visible.
     """
     free_node = b'<span class="copy-state" id="copyState"></span>'
     pro_node = b'<span class="char-info" id="charInfo"></span>'
+    pro_hidden_node = (
+        b'<span class="char-info" id="charInfo" hidden aria-hidden="true"></span>'
+    )
     data = data.replace(free_node, b'', 1)
-    data = data.replace(pro_node, b'', 1)
+    data = data.replace(pro_node, pro_hidden_node, 1)
     return data
 
 
