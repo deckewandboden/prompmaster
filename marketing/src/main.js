@@ -1,4 +1,4 @@
-import {renderContent,footer,calculator} from './content.js';
+import {renderContent,footer,calculator,checkoutPage} from './content.js';
 import {quote,normalizeQuantity,money} from './pricing.js';
 const toggle=document.querySelector('.menu-toggle');
 toggle.addEventListener('click',()=>{const open=toggle.getAttribute('aria-expanded')!=='true';toggle.setAttribute('aria-expanded',String(open));document.querySelector('nav').classList.toggle('open',open)});
@@ -55,8 +55,14 @@ async function initializePricing(){
       document.getElementById('minus').disabled=q.quantity<=1;
       document.getElementById('plus').disabled=q.quantity>=catalog.maxQuantity;
       if(path==='/checkout'){
-        buy.textContent=q.quantity+' PromptMaster-Pro-'+(q.quantity===1?'Lizenz':'Lizenzen')+' kaufen ↗';
-        buy.href='/portal/licenses/buy/?quantity='+q.quantity;
+        const hidden=document.getElementById('checkout-quantity-hidden');
+        if(hidden)hidden.value=String(q.quantity);
+        const login=document.getElementById('checkout-login-link');
+        if(login)login.href='/auth/login/?next='+encodeURIComponent('/portal/licenses/buy/?quantity='+q.quantity);
+        if(buy?.tagName==='A'){
+          buy.textContent='Zahlungspflichtig kaufen →';
+          buy.href='/portal/licenses/buy/?quantity='+q.quantity;
+        }
         history.replaceState(null,'','/checkout/?quantity='+q.quantity);
       }else{
         buy.textContent=q.quantity+' PromptMaster-Pro-'+(q.quantity===1?'Lizenz':'Lizenzen')+' kaufen ↗';
@@ -99,8 +105,10 @@ if(home){
   const legal={'/impressum':'Impressum','/datenschutz':'Datenschutz','/lizenzbedingungen':'Lizenzbedingungen','/agb':'AGB'};
   let title,body;
   if(path==='/checkout'){
-    title='Deine PromptMaster-Pro-Lizenzen.';
-    body='<p>Prüfe deine gewünschte Benutzerzahl und den Preis für zwölf Monate.</p>'+calculator()+'<div class="notice" role="status">Der Kauf wird sicher im PromptMaster-Kundenportal abgeschlossen.</div><a class="button" href="/portal/licenses/buy/">Zum Checkout →</a><a class="text-link" href="/#preise">← Zurück zu den Preisen</a>';
+    title='PromptMaster Pro kaufen.';
+    const requestedQuantity=normalizeQuantity(new URLSearchParams(location.search).get('quantity')||1,fallbackCatalog.maxQuantity);
+    document.querySelector('main').innerHTML=checkoutPage(requestedQuantity);
+    body=null;
   }else if(path==='/login'||path==='/portal'||path==='/app/pro'){
     title='Willkommen bei PromptMaster.';
     body='<p>Melde dich an, um Kundenportal und PromptMaster Pro zu öffnen.</p><a class="button" href="/auth/login/">Zur Anmeldung →</a><a class="button secondary" href="/">Zur Marketingseite →</a>';
@@ -118,6 +126,54 @@ if(home){
     body='<p>Über die Startseite findest du Funktionen, Preise und Antworten auf deine Fragen.</p><a class="button secondary" href="/">Zur Startseite →</a>';
   }
   document.title=title+' | PromptMaster by netstyle';
-  document.querySelector('main').innerHTML='<section class="route-page"><span class="status-badge">PromptMaster</span><h1>'+title+'</h1>'+body+'</section>';
+  if(body!==null){
+    document.querySelector('main').innerHTML='<section class="route-page"><span class="status-badge">PromptMaster</span><h1>'+title+'</h1>'+body+'</section>';
+  }
 }
+
+function setupCheckoutPage(){
+  if(path!=='/checkout')return;
+  const form=document.getElementById('public-checkout-form');
+  if(!form)return;
+
+  const companySection=form.querySelector('[data-checkout-company]');
+  const privateLine=form.querySelector('[data-checkout-private]');
+  const companyFields=['company_name','legal_form','vat_id','tax_number']
+    .map(name=>form.elements.namedItem(name))
+    .filter(Boolean);
+  const withdrawal=form.elements.namedItem('accept_withdrawal');
+  const stage=document.getElementById('checkout-stage-message');
+
+  const syncCustomerType=()=>{
+    const type=form.elements.namedItem('customer_type').value;
+    const company=type==='company';
+    if(companySection)companySection.hidden=!company;
+    companyFields.forEach(field=>{
+      if(field.name==='company_name')field.required=company;
+      field.disabled=!company;
+    });
+    if(privateLine)privateLine.hidden=company;
+    if(withdrawal){
+      withdrawal.required=!company;
+      if(company)withdrawal.checked=false;
+    }
+  };
+
+  form.querySelectorAll('input[name="customer_type"]').forEach(input=>{
+    input.addEventListener('change',syncCustomerType);
+  });
+  syncCustomerType();
+
+  form.addEventListener('submit',event=>{
+    event.preventDefault();
+    if(!form.reportValidity())return;
+    if(stage){
+      stage.hidden=false;
+      stage.innerHTML='<strong>Kaufdaten vollständig.</strong> Die sichere Mollie-Zahlungsübergabe wird als nächster technischer Schritt an diese Maske angebunden; es wurde noch keine Bestellung ausgelöst.';
+      stage.scrollIntoView({behavior:motionReduced.matches?'auto':'smooth',block:'nearest'});
+    }
+  });
+}
+
+setupCheckoutPage();
 void initializePricing();
