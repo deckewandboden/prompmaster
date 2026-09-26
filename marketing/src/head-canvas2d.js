@@ -923,7 +923,7 @@ export async function initCanvasHead({sourceCanvas,stage,fallback}){
       try{
         if(await orientationType.requestPermission()==='granted')enableOrientation();
         else stage.dataset.motionSensor='denied';
-      }catch(_error){
+      }catch{
         stage.dataset.motionSensor='denied';
       }finally{
         motionPermissionControls.abort();
