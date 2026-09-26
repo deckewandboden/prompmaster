@@ -1802,3 +1802,21 @@ body.pmv2 .pmv2-header-cta{
     font-size:11px!important;
   }
 }
+
+
+/* Final contrast override: Prompt-Check edit labels are dark on the bright
+   gradient in both Free and Pro. Keep specificity above the older edition
+   rules so neither cyan nor lavender text can win. */
+.pmv2 .pmv2-review-label button.pmv2-review-edit[data-pmv2-edit],
+.pmv2-pro .pmv2-review-label button.pmv2-review-edit[data-pmv2-edit]{
+  color:#050a14!important;
+  -webkit-text-fill-color:#050a14!important;
+  text-shadow:none!important;
+}
+.pmv2 .pmv2-review-label button.pmv2-review-edit[data-pmv2-edit]:hover,
+.pmv2 .pmv2-review-label button.pmv2-review-edit[data-pmv2-edit]:focus-visible,
+.pmv2-pro .pmv2-review-label button.pmv2-review-edit[data-pmv2-edit]:hover,
+.pmv2-pro .pmv2-review-label button.pmv2-review-edit[data-pmv2-edit]:focus-visible{
+  color:#02050b!important;
+  -webkit-text-fill-color:#02050b!important;
+}
