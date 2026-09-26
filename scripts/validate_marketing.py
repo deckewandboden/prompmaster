@@ -12,7 +12,7 @@ required = [
     'index.html', 'package.json', 'package-lock.json', 'vite.marketing.config.js',
     'src/main.js', 'src/content.js', 'src/head.js', 'src/head-canvas2d.js', 'src/style.css', 'src/immersive.css',
     'public/models/head.glb', 'public/models/night-landscape.png',
-    'public/brand/design-reference.jpeg', 'public/brand/promptmaster-logo-clean.svg', 'public/integration-patch.js',
+    'public/brand/design-reference.jpeg', 'public/brand/promptmaster-logo-clean.svg', 'public/brand/promptmaster-logo-hq.png', 'public/integration-patch.js',
     'dist/index.html', 'dist/integration-patch.js', 'dist/models/head.glb',
 ]
 missing = [name for name in required if not (MARKETING / name).exists()]
@@ -30,8 +30,8 @@ source = (MARKETING / 'src/content.js').read_text(encoding='utf-8')
 index = (MARKETING / 'index.html').read_text(encoding='utf-8')
 patch = (MARKETING / 'public/integration-patch.js').read_text(encoding='utf-8')
 immersive_css = (MARKETING / 'src/immersive.css').read_text(encoding='utf-8')
-if "url('/brand/promptmaster-logo-clean.svg')" not in immersive_css:
-    raise SystemExit('MARKETING VALIDATION FAIL: active header still uses screenshot-cropped logo')
+if "url('/brand/promptmaster-logo-hq.png')" not in immersive_css:
+    raise SystemExit('MARKETING VALIDATION FAIL: active header/footer do not use approved HQ logo')
 if "background-image:url('/brand/design-reference.jpeg')" in immersive_css:
     raise SystemExit('MARKETING VALIDATION FAIL: screenshot-cropped logo regression returned')
 marketing_logo = (MARKETING / 'public/brand/promptmaster-logo-clean.svg').read_text(encoding='utf-8')
@@ -68,7 +68,6 @@ for needle in ('/srv/marketing', 'handle /catalog.json', '/auth/*', '/pro/*', '/
 
 compatibility_redirects = (
     ('handle /login* {', 'redir * /auth/login/{?query} 302'),
-    ('handle /checkout* {', 'redir * /portal/licenses/buy/{?query} 302'),
     ('handle /app/pro* {', 'redir * /pro/{?query} 302'),
     ('handle /portal {', 'redir * /portal/dashboard/{?query} 302'),
     ('handle /portal/ {', 'redir * /portal/dashboard/{?query} 302'),
@@ -84,9 +83,11 @@ for route, redirect in compatibility_redirects:
             f'{route} -> {redirect}'
         )
 
+if 'handle /checkout* {' in caddy or 'handle /checkout* {' in external_caddy:
+    raise SystemExit('MARKETING VALIDATION FAIL: public /checkout/ must be served by marketing, not redirected to the authenticated portal')
+
 for ambiguous in (
     'redir /auth/login/ 302',
-    'redir /portal/licenses/buy/ 302',
     'redir /pro/ 302',
     'redir /portal/dashboard/ 302',
 ):
