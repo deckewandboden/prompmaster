@@ -40,16 +40,16 @@ class PromptMasterV2RouteIsolationTests(TestCase):
         current_html = current.content.decode('utf-8')
         legacy_html = legacy.content.decode('utf-8')
 
-        self.assertIn('/static/js/free_catalog_bridge.20260918.js?v=20260925-mobile12', current_html)
-        self.assertIn('/static/js/free_catalog_bridge.20260918.js?v=20260925-mobile12', legacy_html)
+        self.assertIn('/static/js/free_catalog_bridge.20260918.js?v=20260925-mobile13', current_html)
+        self.assertIn('/static/js/free_catalog_bridge.20260918.js?v=20260925-mobile13', legacy_html)
         self.assertRegex(
             current_html,
             r'<meta name="pm-free-compose" content="server" data-csrf="[A-Za-z0-9]+">',
         )
         self.assertNotIn('name="pm-free-compose"', legacy_html)
 
-        self.assertIn('/static/css/promptmaster_v2.20260922.css?v=20260925-mobile12', current_html)
-        self.assertIn('/static/js/promptmaster_ui_v2.20260922.js?v=20260925-mobile12', current_html)
+        self.assertIn('/static/css/promptmaster_v2.20260922.css?v=20260925-mobile13', current_html)
+        self.assertIn('/static/js/promptmaster_ui_v2.20260922.js?v=20260925-mobile13', current_html)
         self.assertNotIn('/static/css/promptmaster_v2.20260922.css', legacy_html)
         self.assertNotIn('/static/js/promptmaster_ui_v2.20260922.js', legacy_html)
 
@@ -68,10 +68,10 @@ class PromptMasterV2RouteIsolationTests(TestCase):
         self.assertIn(free_source_node, legacy_html)
 
         stripped = current_html.replace(
-            '<link rel="stylesheet" href="/static/css/promptmaster_v2.20260922.css?v=20260925-mobile12">',
+            '<link rel="stylesheet" href="/static/css/promptmaster_v2.20260922.css?v=20260925-mobile13">',
             '',
         ).replace(
-            '<script src="/static/js/promptmaster_ui_v2.20260922.js?v=20260925-mobile12" defer></script>',
+            '<script src="/static/js/promptmaster_ui_v2.20260922.js?v=20260925-mobile13" defer></script>',
             '',
         ).replace(
             'data:image/gif;base64,R0lGODlhAQABAAAAACw=',
@@ -95,8 +95,8 @@ class PromptMasterV2RouteIsolationTests(TestCase):
         current_html = current.content.decode('utf-8')
         legacy_html = legacy.content.decode('utf-8')
 
-        self.assertIn('/static/css/promptmaster_v2.20260922.css?v=20260925-mobile12', current_html)
-        self.assertIn('/static/js/promptmaster_ui_v2.20260922.js?v=20260925-mobile12', current_html)
+        self.assertIn('/static/css/promptmaster_v2.20260922.css?v=20260925-mobile13', current_html)
+        self.assertIn('/static/js/promptmaster_ui_v2.20260922.js?v=20260925-mobile13', current_html)
         self.assertNotIn('/static/css/promptmaster_v2.20260922.css', legacy_html)
         self.assertNotIn('/static/js/promptmaster_ui_v2.20260922.js', legacy_html)
 
@@ -131,31 +131,36 @@ class PromptMasterV2RouteIsolationTests(TestCase):
             self.assertIn('/api/v1/prompts/?product=PRO', html)
             self.assertIn('/api/v1/prompts/compose/', html)
 
-    def test_pro_v2_task_areas_are_normalized_into_balanced_layout_blocks(self):
+    def test_pro_v2_task_areas_use_one_general_balancing_algorithm(self):
         from django.conf import settings
 
         js = (settings.BASE_DIR / 'static' / 'js' / 'promptmaster_ui_v2.20260922.js').read_text(encoding='utf-8')
         css = (settings.BASE_DIR / 'static' / 'css' / 'promptmaster_v2.20260922.css').read_text(encoding='utf-8')
 
-        self.assertIn('const normalizeProTaskBlocks = () => {', js)
-        self.assertIn("node.classList.contains('task-area')", js)
-        self.assertIn("block.className = 'pmv2-task-block'", js)
+        # One global formula: ceil(N/2) cards left, floor(N/2) right.
+        self.assertIn('const totalTasks = groups.reduce', js)
+        self.assertIn('Math.ceil(totalTasks / 2)', js)
+        self.assertIn('Math.floor(totalTasks / 2)', js)
+
+        # Categories stay whole when possible; otherwise the category itself is
+        # split exactly at the remaining left/right capacities.
+        self.assertIn('const wholeFits = [0, 1].filter', js)
+        self.assertIn('capacity[index] >= count', js)
+        self.assertIn('let leftCount = Math.min(count, capacity[0])', js)
+        self.assertIn('rightCount = capacity[1]', js)
+
+        # The same code handles one category, many categories and future catalog
+        # changes. There are no page/app-specific task layout branches.
+        self.assertNotIn('blocks.length === 1', js)
+        self.assertNotIn('pmv2-task-grid-single-area', css)
         self.assertIn("column.className = 'pmv2-task-column'", js)
-        self.assertIn("const load = [0, 0]", js)
-        self.assertIn("const columnIndex = load[0] <= load[1] ? 0 : 1", js)
-        self.assertIn("taskBlock.querySelectorAll('.task').length", js)
-        self.assertIn("grid.dataset.pmv2LeftLoad", js)
-        self.assertIn("grid.dataset.pmv2RightLoad", js)
-        self.assertIn("if (blocks.length === 1)", js)
-        self.assertIn("onlyBlock.classList.add('pmv2-task-block-single')", js)
-        self.assertIn("grid.classList.add('pmv2-task-grid-single-area')", js)
-        self.assertIn("Math.ceil(Number(onlyBlock.dataset.pmv2TaskCount || 0) / 2)", js)
-        self.assertIn('.pmv2-pro .pmv2-task-column{', css)
-        self.assertIn('.pmv2-pro .pmv2-task-block{', css)
-        self.assertIn('.pmv2-pro .pmv2-task-block-single{', css)
-        self.assertIn('grid-template-columns:repeat(2,minmax(0,1fr))!important', css)
+        self.assertIn("heading.classList.add('pmv2-task-area-mirror')", js)
+        self.assertIn('.pmv2-pro .pmv2-task-area-mirror', css)
+
+        # Mobile/tablet flatten the desktop columns back into source group order.
         self.assertIn('display:contents!important', css)
         self.assertIn('order:var(--pmv2-task-order)!important', css)
+
 
     def test_pro_legacy_route_keeps_the_same_authentication_boundary(self):
         response = self.client.get(reverse('pro_product_old'))
