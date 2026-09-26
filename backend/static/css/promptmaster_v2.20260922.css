@@ -458,11 +458,22 @@ body.pmv2 textarea{font-family:inherit}
 .pmv2 .task-copy{display:block!important;color:#91a5b6!important;font-size:12px!important;line-height:1.52!important;margin:0!important}
 .pmv2 .task-badges,.pmv2 .task-meta{margin-top:9px!important}
 
-/* Pro: every catalog area is one visual block. This keeps the semantic area
-   headings while preventing single-task areas from forcing the whole task
-   chooser into a broken one-column rhythm. Blocks fill left/right, then the
-   next row; an odd final block remains on the left. */
-.pmv2-pro .task-grid{align-items:start!important}
+/* Pro: every catalog area is one semantic block. JavaScript assigns those
+   blocks to two balanced desktop columns using the live number of tasks in
+   each area. Prompt Designer can therefore add/remove tasks without creating
+   the old 4-left/1-right layout. */
+.pmv2-pro .task-grid{
+  align-items:start!important;
+  grid-template-columns:repeat(2,minmax(0,1fr))!important;
+  gap:11px!important;
+}
+.pmv2-pro .pmv2-task-column{
+  min-width:0!important;
+  display:flex!important;
+  flex-direction:column!important;
+  gap:11px!important;
+  align-self:start!important;
+}
 .pmv2-pro .pmv2-task-block{
   min-width:0!important;
   display:flex!important;
@@ -482,6 +493,15 @@ body.pmv2 textarea{font-family:inherit}
 .pmv2-pro .pmv2-task-block .task{
   width:100%!important;
   margin:0!important;
+}
+
+/* On tablet/mobile return to the catalog's natural source order. display:
+   contents flattens the two balancing columns and the stored order value
+   restores area 1, area 2, area 3 ... as one continuous column. */
+@media(max-width:850px){
+  .pmv2-pro .task-grid{grid-template-columns:1fr!important}
+  .pmv2-pro .pmv2-task-column{display:contents!important}
+  .pmv2-pro .pmv2-task-block{order:var(--pmv2-task-order)!important}
 }
 
 .pmv2 .context-grid,
