@@ -40,16 +40,16 @@ class PromptMasterV2RouteIsolationTests(TestCase):
         current_html = current.content.decode('utf-8')
         legacy_html = legacy.content.decode('utf-8')
 
-        self.assertIn('/static/js/free_catalog_bridge.20260918.js?v=20260925-mobile10', current_html)
-        self.assertIn('/static/js/free_catalog_bridge.20260918.js?v=20260925-mobile10', legacy_html)
+        self.assertIn('/static/js/free_catalog_bridge.20260918.js?v=20260925-mobile11', current_html)
+        self.assertIn('/static/js/free_catalog_bridge.20260918.js?v=20260925-mobile11', legacy_html)
         self.assertRegex(
             current_html,
             r'<meta name="pm-free-compose" content="server" data-csrf="[A-Za-z0-9]+">',
         )
         self.assertNotIn('name="pm-free-compose"', legacy_html)
 
-        self.assertIn('/static/css/promptmaster_v2.20260922.css?v=20260925-mobile10', current_html)
-        self.assertIn('/static/js/promptmaster_ui_v2.20260922.js?v=20260925-mobile10', current_html)
+        self.assertIn('/static/css/promptmaster_v2.20260922.css?v=20260925-mobile11', current_html)
+        self.assertIn('/static/js/promptmaster_ui_v2.20260922.js?v=20260925-mobile11', current_html)
         self.assertNotIn('/static/css/promptmaster_v2.20260922.css', legacy_html)
         self.assertNotIn('/static/js/promptmaster_ui_v2.20260922.js', legacy_html)
 
@@ -68,10 +68,10 @@ class PromptMasterV2RouteIsolationTests(TestCase):
         self.assertIn(free_source_node, legacy_html)
 
         stripped = current_html.replace(
-            '<link rel="stylesheet" href="/static/css/promptmaster_v2.20260922.css?v=20260925-mobile10">',
+            '<link rel="stylesheet" href="/static/css/promptmaster_v2.20260922.css?v=20260925-mobile11">',
             '',
         ).replace(
-            '<script src="/static/js/promptmaster_ui_v2.20260922.js?v=20260925-mobile10" defer></script>',
+            '<script src="/static/js/promptmaster_ui_v2.20260922.js?v=20260925-mobile11" defer></script>',
             '',
         ).replace(
             'data:image/gif;base64,R0lGODlhAQABAAAAACw=',
@@ -95,8 +95,8 @@ class PromptMasterV2RouteIsolationTests(TestCase):
         current_html = current.content.decode('utf-8')
         legacy_html = legacy.content.decode('utf-8')
 
-        self.assertIn('/static/css/promptmaster_v2.20260922.css?v=20260925-mobile10', current_html)
-        self.assertIn('/static/js/promptmaster_ui_v2.20260922.js?v=20260925-mobile10', current_html)
+        self.assertIn('/static/css/promptmaster_v2.20260922.css?v=20260925-mobile11', current_html)
+        self.assertIn('/static/js/promptmaster_ui_v2.20260922.js?v=20260925-mobile11', current_html)
         self.assertNotIn('/static/css/promptmaster_v2.20260922.css', legacy_html)
         self.assertNotIn('/static/js/promptmaster_ui_v2.20260922.js', legacy_html)
 
@@ -131,7 +131,7 @@ class PromptMasterV2RouteIsolationTests(TestCase):
             self.assertIn('/api/v1/prompts/?product=PRO', html)
             self.assertIn('/api/v1/prompts/compose/', html)
 
-    def test_pro_v2_task_areas_are_normalized_into_layout_blocks(self):
+    def test_pro_v2_task_areas_are_normalized_into_balanced_layout_blocks(self):
         from django.conf import settings
 
         js = (settings.BASE_DIR / 'static' / 'js' / 'promptmaster_ui_v2.20260922.js').read_text(encoding='utf-8')
@@ -140,8 +140,16 @@ class PromptMasterV2RouteIsolationTests(TestCase):
         self.assertIn('const normalizeProTaskBlocks = () => {', js)
         self.assertIn("node.classList.contains('task-area')", js)
         self.assertIn("block.className = 'pmv2-task-block'", js)
+        self.assertIn("column.className = 'pmv2-task-column'", js)
+        self.assertIn("const load = [0, 0]", js)
+        self.assertIn("const columnIndex = load[0] <= load[1] ? 0 : 1", js)
+        self.assertIn("taskBlock.querySelectorAll('.task').length", js)
+        self.assertIn("grid.dataset.pmv2LeftLoad", js)
+        self.assertIn("grid.dataset.pmv2RightLoad", js)
+        self.assertIn('.pmv2-pro .pmv2-task-column{', css)
         self.assertIn('.pmv2-pro .pmv2-task-block{', css)
-        self.assertIn('.pmv2-pro .pmv2-task-block .task-area{', css)
+        self.assertIn('display:contents!important', css)
+        self.assertIn('order:var(--pmv2-task-order)!important', css)
 
     def test_pro_legacy_route_keeps_the_same_authentication_boundary(self):
         response = self.client.get(reverse('pro_product_old'))
