@@ -104,6 +104,23 @@ class PromptMasterV2RouteIsolationTests(TestCase):
         self.assertNotIn(remote_logo, current_html)
         self.assertIn(remote_logo, legacy_html)
 
+        # V2 hides the internal source/provenance status without deleting the
+        # node that the Pro server bridge updates during catalog/composition
+        # state changes. Deleting it caused Firefox to fail with a null
+        # textContent dereference.
+        self.assertIn(
+            '<span class="char-info" id="charInfo" hidden aria-hidden="true"></span>',
+            current_html,
+        )
+        self.assertNotIn(
+            '<span class="char-info" id="charInfo"></span>',
+            current_html,
+        )
+        self.assertIn(
+            '<span class="char-info" id="charInfo"></span>',
+            legacy_html,
+        )
+
         # Session links and the server runtime bridge must exist on both routes.
         for html in (current_html, legacy_html):
             self.assertIn('href="/ns-admin/"', html)
