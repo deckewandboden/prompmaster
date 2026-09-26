@@ -1,4 +1,4 @@
-import {renderContent,footer,calculator,checkoutPage} from './content.js';
+import {renderContent,footer,checkoutPage} from './content.js';
 import {quote,normalizeQuantity,money} from './pricing.js';
 const toggle=document.querySelector('.menu-toggle');
 toggle.addEventListener('click',()=>{const open=toggle.getAttribute('aria-expanded')!=='true';toggle.setAttribute('aria-expanded',String(open));document.querySelector('nav').classList.toggle('open',open)});
