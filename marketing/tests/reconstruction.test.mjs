@@ -132,7 +132,8 @@ test('non-WebGL fallback keeps the actual head visible without camera access',()
   assert.match(fallback,/let remainingState=stateDt/);
   assert.match(fallback,/const step=Math\.min\(1\/60,remainingState\)/);
   assert.match(fallback,/smoothX\+=\(mouseX-smoothX\)\*Math\.min\(1,step\*inputFollow\)/);
-  assert.match(fallback,/headYaw\+=\(yawTarget-headYaw\)\*Math\.min\(1,step\*3\)/);
+  assert.match(fallback,/const rotationFollow=orientationActive\?3\.8:3/);
+  assert.match(fallback,/headYaw\+=\(yawTarget-headYaw\)\*Math\.min\(1,step\*rotationFollow\)/);
   assert.match(fallback,/context\.rotate\(star\.direction>0\?\.22:-\.22\)/);
   assert.match(fallback,/lowerSceneContract='edge-shared-v1'/);
   assert.match(fallback,/async function modelCloud\(surfaceCount\)/);
@@ -145,14 +146,12 @@ test('non-WebGL fallback keeps the actual head visible without camera access',()
   assert.match(fallback,/projectionScale=1\/\(2\*Math\.tan\(39\*Math\.PI\/360\)\*viewZ\)/);
 });
 
-test('marketing header uses dedicated approved cropped logo artwork',()=>{
+test('marketing header uses dedicated approved HQ logo artwork',()=>{
   const css=read('src/immersive.css');
-  assert.match(css,/\/brand\/promptmaster-logo-clean\.svg/);
+  assert.match(css,/\/brand\/promptmaster-logo-hq\.png/);
+  assert.doesNotMatch(css,/\/brand\/promptmaster-logo-clean\.svg/);
   assert.doesNotMatch(css,/background-image:url\('\/brand\/design-reference\.jpeg'\)/);
-  const logo=read('public/brand/promptmaster-logo-clean.svg');
-  assert.match(logo,/width="315" height="55" viewBox="0 7 315 55"/);
-  assert.match(logo,/<image x="0" y="0" width="315" height="62"/);
-  assert.match(logo,/data:image\/png;base64,/);
+  assert.equal(gitBlobSha('public/brand/promptmaster-logo-hq.png'),'87be29848672ddac093e49cae479ec9dcc1e43ff');
 });
 
 test('hero and marketing copy use recovered V15 decisions',()=>{
