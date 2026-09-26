@@ -70,6 +70,55 @@
 
   ensureProCatalogSearch();
 
+  /* Pro groups tasks by their catalog area (for example Recherche,
+     Entscheidung, E-Mail or Kalender). The Golden-Master renderer writes each
+     area heading as a full-width grid item, which makes one-task areas look
+     like a broken single-column list. Keep the semantic area grouping, but
+     turn every area plus its tasks into one layout block. The outer task grid
+     can then place those blocks left/right in stable row-major order. */
+  const normalizeProTaskBlocks = () => {
+    if (free) return;
+    const grid = $('#taskGrid', taskSection);
+    if (!grid) return;
+
+    const children = Array.from(grid.children);
+    if (!children.length) return;
+    if (children.every(node => node.classList.contains('pmv2-task-block'))) return;
+
+    const fragment = document.createDocumentFragment();
+    let block = null;
+
+    const startBlock = () => {
+      block = document.createElement('div');
+      block.className = 'pmv2-task-block';
+      fragment.appendChild(block);
+      return block;
+    };
+
+    children.forEach(node => {
+      if (node.classList.contains('task-area')) {
+        startBlock().appendChild(node);
+        return;
+      }
+      if (node.classList.contains('task')) {
+        (block || startBlock()).appendChild(node);
+        return;
+      }
+      fragment.appendChild(node);
+      block = null;
+    });
+
+    grid.replaceChildren(fragment);
+  };
+
+  if (!free) {
+    const proTaskGrid = $('#taskGrid', taskSection);
+    if (proTaskGrid) {
+      new MutationObserver(normalizeProTaskBlocks).observe(proTaskGrid, {childList:true});
+      normalizeProTaskBlocks();
+    }
+  }
+
   const normalizePromptMasterBrand = root => {
     if (!root) return;
     const walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT);
