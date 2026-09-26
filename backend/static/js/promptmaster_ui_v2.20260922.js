@@ -566,7 +566,7 @@
     const configureProPurchaseCta = cta => {
       if (!cta) return;
       cta.textContent = 'PromptMaster Pro kaufen';
-      cta.href = '/portal/licenses/buy/?quantity=1';
+      cta.href = '/checkout/?quantity=1';
       cta.removeAttribute('target');
       cta.removeAttribute('rel');
     };
