@@ -154,6 +154,17 @@ test('marketing header uses dedicated approved HQ logo artwork',()=>{
   assert.equal(gitBlobSha('public/brand/promptmaster-logo-hq.png'),'87be29848672ddac093e49cae479ec9dcc1e43ff');
 });
 
+test('header and footer use the same HQ logo and share one visible left baseline',()=>{
+  const content=read('src/content.js');
+  const css=read('src/immersive.css');
+  assert.match(content,/footer=.*class="brand"[^]*class="logo-crop"/);
+  assert.match(css,/background-image:url\('\/brand\/promptmaster-logo-hq\.png'\)/);
+  assert.doesNotMatch(css,/promptmaster-logo-clean\.svg/);
+  assert.match(css,/@media\(min-width:651px\)\{[^]*header\{[^]*padding-left:calc\(6% - 24px\)/);
+  assert.match(css,/#footer \.footer-grid>div:first-child \.brand\{[^]*margin-left:-24px/);
+});
+
+
 test('hero and marketing copy use recovered V15 decisions',()=>{
   const index=read('index.html');
   const content=read('src/content.js');
