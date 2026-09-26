@@ -32,3 +32,13 @@ test('Kopfmodell ist gültiges binäres glTF mit Geometrie',async()=>{
   const gltf=JSON.parse(b.toString('utf8',20,20+b.readUInt32LE(12)));
   assert.ok(gltf.meshes.length>0);assert.ok(gltf.accessors.some(a=>a.type==='VEC3'&&a.count>1000));
 });
+
+test('Pro-Kachel auf der Startseite führt zum Lizenzrechner',async()=>{
+  const index=await readFile('index.html','utf8');
+  const main=await readFile('src/main.js','utf8');
+  assert.match(index,/class="button pro-calculator-link" href="#preise"/);
+  assert.match(main,/const scrollToProCalculator=/);
+  assert.match(main,/querySelector\('#preise \.calculator'\)/);
+  assert.match(main,/scrollIntoView\(\{behavior:motionReduced\.matches\?'auto':'smooth',block:'center'\}\)/);
+  assert.match(main,/querySelector\('\.product\.pro'\)/);
+});

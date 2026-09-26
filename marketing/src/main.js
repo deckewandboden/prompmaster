@@ -80,6 +80,19 @@ document.body.classList.toggle('inner-page',!home);
 document.querySelector('#footer').innerHTML=footer();
 if(home){
   document.querySelector('#content').innerHTML=renderContent();
+  const scrollToProCalculator=()=>{
+    const target=document.querySelector('#preise .calculator');
+    if(!target)return false;
+    target.scrollIntoView({behavior:motionReduced.matches?'auto':'smooth',block:'center'});
+    return true;
+  };
+  document.querySelector('.pro-calculator-link')?.addEventListener('click',event=>{
+    if(scrollToProCalculator())event.preventDefault();
+  });
+  document.querySelector('.product.pro')?.addEventListener('click',event=>{
+    if(event.target.closest('a,button,input,select,textarea,label'))return;
+    scrollToProCalculator();
+  });
   if(aliases[path]) requestAnimationFrame(()=>document.getElementById(aliases[path]).scrollIntoView());
   import('./head.js').then(m=>m.initHead()).catch(()=>{document.querySelector('.head-fallback').hidden=false});
 }else{
