@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {readFile} from 'node:fs/promises';
-import {renderContent} from '../src/content.js';
+import {renderContent,checkoutPage} from '../src/content.js';
 import faq from '../src/faq.json' with {type:'json'};
 test('Alle 20 FAQ und vereinbarten Inhaltsbereiche vorhanden',()=>{
   assert.equal(faq.length,20);
@@ -41,4 +41,26 @@ test('Pro-Kachel auf der Startseite führt zum Lizenzrechner',async()=>{
   assert.match(main,/querySelector\('#preise \.calculator'\)/);
   assert.match(main,/scrollIntoView\(\{behavior:motionReduced\.matches\?'auto':'smooth',block:'center'\}\)/);
   assert.match(main,/querySelector\('\.product\.pro'\)/);
+});
+
+
+test('öffentliche Checkout-Seite enthält den vereinbarten Neukunden-Kaufaufbau',async()=>{
+  const html=checkoutPage(7);
+  const main=await readFile('src/main.js','utf8');
+  const caddy=await readFile('../Caddyfile.external','utf8');
+  assert.match(html,/PromptMaster Pro kaufen/);
+  assert.match(html,/value="company" checked/);
+  assert.match(html,/value="private"/);
+  for(const field of ['first_name','last_name','email','company_name','legal_form','vat_id','tax_number','street','house_number','postal_code','city','country']){
+    assert.match(html,new RegExp('name="'+field+'"'));
+  }
+  assert.match(html,/Bereits|Schon bei PromptMaster registriert/);
+  assert.match(html,/Zahlungspflichtig kaufen/);
+  assert.match(html,/Mollie/);
+  assert.match(html,/Keine automatische Verlängerung|keine automatische Verlängerung/);
+  assert.match(main,/checkoutPage\(requestedQuantity\)/);
+  assert.match(main,/customer_type/);
+  assert.match(main,/data-checkout-company/);
+  assert.match(main,/data-checkout-private/);
+  assert.doesNotMatch(caddy,/handle \/checkout\*\s*\{\s*redir/);
 });
