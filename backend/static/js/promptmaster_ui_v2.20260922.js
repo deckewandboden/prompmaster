@@ -71,12 +71,11 @@
   ensureProCatalogSearch();
 
   /* PromptMaster Pro task layout is fully data-driven.
-     Every task card has the same layout weight. For N visible tasks the target
-     is ceil(N/2) cards on the left and floor(N/2) on the right. Categories are
-     kept whole whenever that still fits the target; only a category that would
-     otherwise create an imbalance is split across both columns. A split keeps
-     one visible category heading and an invisible alignment mirror in the
-     second column. No app, category or task count is hard-coded. */
+     Standalone category headings are converted into compact labels inside each
+     task card. The task chooser itself remains one flat CSS grid, so every
+     current and future task is placed left/right in row-major order:
+     1 left, 2 right, 3 left, 4 right ... . An odd final task stays left.
+     No app, category or task count is hard-coded. */
   const normalizeProTaskBlocks = () => {
     if (free) return;
     const grid = $('#taskGrid', taskSection);
@@ -84,122 +83,50 @@
 
     const currentChildren = Array.from(grid.children);
     if (!currentChildren.length) return;
+
+    /* Already normalized for the current render. */
     if (
-      currentChildren.length === 2 &&
-      currentChildren.every(node => node.classList.contains('pmv2-task-column'))
+      currentChildren.every(node =>
+        node.classList.contains('task') &&
+        node.querySelector('.pmv2-task-area-chip')
+      )
     ) return;
 
-    const groups = [];
-    let group = null;
+    const fragment = document.createDocumentFragment();
+    let currentArea = '';
     let taskOrder = 0;
-
-    const ensureGroup = () => {
-      if (group) return group;
-      group = {heading:null,tasks:[],extras:[],order:groups.length};
-      groups.push(group);
-      return group;
-    };
 
     currentChildren.forEach(node => {
       if (node.classList.contains('task-area')) {
-        group = {heading:node,tasks:[],extras:[],order:groups.length};
-        groups.push(group);
+        currentArea = (node.textContent || '').replace(/\s+/g,' ').trim();
         return;
       }
-      if (node.classList.contains('task')) {
-        node.style.setProperty('--pmv2-task-card-order', String(taskOrder++));
-        ensureGroup().tasks.push(node);
+
+      if (!node.classList.contains('task')) {
+        fragment.appendChild(node);
         return;
       }
-      ensureGroup().extras.push(node);
+
+      node.querySelector('.pmv2-task-area-chip')?.remove();
+
+      const content = node.lastElementChild || node;
+      if (currentArea) {
+        const chip = document.createElement('div');
+        chip.className = 'pmv2-task-area-chip';
+        chip.textContent = currentArea;
+        content.insertBefore(chip, content.firstChild);
+        node.dataset.pmv2Area = currentArea;
+      } else {
+        delete node.dataset.pmv2Area;
+      }
+
+      node.style.setProperty('--pmv2-task-card-order', String(taskOrder++));
+      fragment.appendChild(node);
     });
 
-    const totalTasks = groups.reduce((sum,item) => sum + item.tasks.length, 0);
-    if (!totalTasks) return;
-
-    const targets = [Math.ceil(totalTasks / 2), Math.floor(totalTasks / 2)];
-    const load = [0, 0];
-
-    const columns = [0, 1].map(index => {
-      const column = document.createElement('div');
-      column.className = 'pmv2-task-column';
-      column.dataset.pmv2Column = String(index);
-      return column;
-    });
-
-    const appendPart = (source, columnIndex, tasks, {mirrorHeading=false}={}) => {
-      if (!tasks.length && !source.extras.length) return;
-      const part = document.createElement('div');
-      part.className = 'pmv2-task-block';
-      part.dataset.pmv2GroupOrder = String(source.order);
-      part.dataset.pmv2TaskCount = String(tasks.length);
-      part.style.setProperty('--pmv2-task-order', String(source.order));
-
-      if (source.heading) {
-        const heading = source.heading.cloneNode(true);
-        if (mirrorHeading) {
-          heading.classList.add('pmv2-task-area-mirror');
-          heading.setAttribute('aria-hidden','true');
-        }
-        part.appendChild(heading);
-      }
-
-      tasks.forEach(task => part.appendChild(task));
-      source.extras.splice(0).forEach(node => part.appendChild(node));
-      columns[columnIndex].appendChild(part);
-    };
-
-    groups.forEach(source => {
-      const count = source.tasks.length;
-      if (!count) {
-        const columnIndex = load[0] <= load[1] ? 0 : 1;
-        appendPart(source, columnIndex, []);
-        return;
-      }
-
-      const capacity = [
-        Math.max(0, targets[0] - load[0]),
-        Math.max(0, targets[1] - load[1]),
-      ];
-
-      const wholeFits = [0, 1].filter(index => capacity[index] >= count);
-      if (wholeFits.length) {
-        wholeFits.sort((a,b) => (load[a] - load[b]) || (a - b));
-        const columnIndex = wholeFits[0];
-        appendPart(source, columnIndex, source.tasks);
-        load[columnIndex] += count;
-        return;
-      }
-
-      /* The category is larger than either remaining capacity. Split exactly
-         at the global left/right target so the final card counts stay balanced. */
-      let leftCount = Math.min(count, capacity[0]);
-      let rightCount = count - leftCount;
-      if (rightCount > capacity[1]) {
-        rightCount = capacity[1];
-        leftCount = count - rightCount;
-      }
-
-      const leftTasks = source.tasks.slice(0, leftCount);
-      const rightTasks = source.tasks.slice(leftCount, leftCount + rightCount);
-
-      if (leftTasks.length) {
-        appendPart(source, 0, leftTasks);
-        load[0] += leftTasks.length;
-      }
-      if (rightTasks.length) {
-        appendPart(source, 1, rightTasks, {mirrorHeading:leftTasks.length > 0});
-        load[1] += rightTasks.length;
-      }
-    });
-
-    grid.classList.remove('pmv2-task-grid-single-area');
-    grid.replaceChildren(...columns);
-    grid.dataset.pmv2TotalTasks = String(totalTasks);
-    grid.dataset.pmv2LeftTarget = String(targets[0]);
-    grid.dataset.pmv2RightTarget = String(targets[1]);
-    grid.dataset.pmv2LeftLoad = String(load[0]);
-    grid.dataset.pmv2RightLoad = String(load[1]);
+    grid.replaceChildren(fragment);
+    grid.dataset.pmv2TotalTasks = String(taskOrder);
+    grid.dataset.pmv2Layout = 'flat-balanced-grid';
   };
 
   if (!free) {
