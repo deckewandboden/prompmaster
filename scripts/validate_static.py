@@ -136,7 +136,7 @@ required = [
     'backend/apps/payments/services.py','backend/apps/ops/api.py','backend/apps/proaccess/views.py',
     'backend/templates/portal/base.html','backend/templates/ns_admin/base.html',
     'backend/static/brand/promptmaster-logo-reference.png',
-    'backend/static/brand/promptmaster-logo-clean.svg','scripts/runtime_validate.sh',
+    'backend/static/brand/promptmaster-logo-clean.svg','backend/static/brand/promptmaster-logo-hq.png','scripts/runtime_validate.sh',
     'backend/apps/prompts/models.py','backend/apps/prompts/composer_core.py',
     'backend/apps/prompts/free_legacy.py',
     'backend/apps/prompts/services.py','backend/apps/prompts/api.py','backend/apps/prompts/api_urls.py',
@@ -191,12 +191,12 @@ active_brand_files = (
 )
 for path in active_brand_files:
     text = path.read_text(encoding='utf-8')
-    if 'promptmaster-logo-clean.svg' not in text:
-        fail(f'Active UI still does not use clean PromptMaster logo: {path.relative_to(ROOT)}')
+    if 'promptmaster-logo-hq.png' not in text:
+        fail(f'Active UI does not use approved HQ PromptMaster logo: {path.relative_to(ROOT)}')
 
 proaccess_views = (ROOT/'backend/apps/proaccess/views.py').read_text(encoding='utf-8')
 for token in (
-    "V2_ASSET_REV = b'20260924-audit4'",
+    "V2_ASSET_REV = b'",
     'promptmaster_v2.20260922.css?v=',
     'promptmaster_ui_v2.20260922.js?v=',
     'free_catalog_bridge.20260918.js?v=',
@@ -212,7 +212,7 @@ for token in (
     'pmv2-prompt-tall',
     'pmv2LicenseKeyboardBound',
     'pmv2LicenseObserver',
-    'promptmaster-logo-clean.svg?v=20260924-audit4',
+    'promptmaster-logo-hq.png?v=20260925-hq1',
     'syncRequiredFieldState',
     'PFLICHTFELD',
     "if (mark.textContent !== 'PFLICHTFELD')",
@@ -221,7 +221,7 @@ for token in (
     "headings.includes('Microsoft 365 Anwendungen')",
     "headings.includes('Power Platform & Data')",
     "headings.includes('Business, Security & Development')",
-    "cta.href = '/portal/licenses/buy/?quantity=1'",
+    "cta.href = '/checkout/?quantity=1'",
     "cta.removeAttribute('target')",
 ):
     if token not in v2_js:
@@ -791,7 +791,8 @@ for needle in (
     'let remainingState=stateDt',
     'const step=Math.min(1/60,remainingState)',
     'smoothX+=(mouseX-smoothX)*Math.min(1,step*inputFollow)',
-    'headYaw+=(yawTarget-headYaw)*Math.min(1,step*3)',
+    'const rotationFollow=orientationActive?3.8:3',
+    'headYaw+=(yawTarget-headYaw)*Math.min(1,step*rotationFollow)',
     "stage.dataset.canvasOcclusion='head-silhouette-v1'",
     'stage.dataset.starProbe=activeStarProbe',
     "context.rotate(star.direction>0?.22:-.22)",
