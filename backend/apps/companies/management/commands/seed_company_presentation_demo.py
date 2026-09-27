@@ -159,7 +159,7 @@ class Command(BaseCommand):
                 customer_type='company',
                 active=True,
             )
-            .order_by('-valid_from', '-created_at')
+            .order_by('-created_at')
             .first()
         )
         tax_rate = Decimal(str(tax_rule.tax_rate if tax_rule else '19.00'))
@@ -170,7 +170,7 @@ class Command(BaseCommand):
         credentials = []
         users = {}
         for key, first_name, last_name, scenario, joined_days, last_login_days in MEMBER_SPECS:
-            email = f'presentation.{key}{DEMO_SUFFIX}'
+            email = f'presentation.{marker.lower()}.{key}{DEMO_SUFFIX}'
             user = User.objects.select_for_update().filter(email=email).first()
             created = user is None
             password = None
