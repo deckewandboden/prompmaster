@@ -240,9 +240,10 @@ class LeadManagementTests(TestCase):
                 'notes': '',
             },
         )
-        self.assertEqual(response.status_code, 403)
+        self.assertEqual(response.status_code, 302)
         self.lead.refresh_from_db()
         self.assertIsNone(self.lead.assigned_to_id)
+        self.assertEqual(self.lead.company_name, 'Lead Test GmbH')
 
     def test_lead_list_search_and_global_search_respect_soft_delete(self):
         response = self.client.get('/ns-admin/leads/?q=Lead%20Test')
