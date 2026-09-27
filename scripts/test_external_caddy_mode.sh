@@ -111,6 +111,85 @@ if not contract_ok:
     raise SystemExit(f"catalog contract drift via external Caddy: {payload}")
 PY
 
+log "Öffentlichen Checkout-API-Pfad und CSRF-Schutz über externes Proxy-Netz testen"
+csrf_headers="$(mktemp)"
+csrf_body="$(mktemp)"
+trap 'rm -f "$csrf_headers" "$csrf_body"; cleanup' EXIT
+
+docker run --rm --network "$NETWORK" curlimages/curl:8.12.1 \
+  -fsS -D - -H "Host: $domain" "http://$ALIAS/api/v1/checkout/csrf/" \
+  >"$csrf_headers"
+
+csrf_json="$(
+  docker run --rm --network "$NETWORK" curlimages/curl:8.12.1 \
+    -fsS -H "Host: $domain" "http://$ALIAS/api/v1/checkout/csrf/"
+)"
+csrf_token="$(python3 - "$csrf_json" <<'PY'
+import json, sys
+payload=json.loads(sys.argv[1])
+print(payload.get('csrfToken') or '')
+PY
+)"
+[[ -n "$csrf_token" ]] || {
+  echo "Checkout CSRF endpoint returned no token through external Caddy" >&2
+  exit 1
+}
+
+csrf_cookie="$(
+  awk 'BEGIN{IGNORECASE=1}
+       /^set-cookie: csrftoken=/{
+         sub(/^set-cookie: csrftoken=/,"",$0);
+         sub(/;.*/,"",$0);
+         gsub(/\r/,"",$0);
+         print $0;
+         exit
+       }' "$csrf_headers"
+)"
+# Some curl/Caddy combinations normalize header casing but preserve the same
+# cookie contract. Fetch one deterministic header response if the first token
+# request above did not expose it to awk.
+if [[ -z "$csrf_cookie" ]]; then
+  docker run --rm --network "$NETWORK" curlimages/curl:8.12.1 \
+    -sS -D "$csrf_headers" -o "$csrf_body" -H "Host: $domain" \
+    "http://$ALIAS/api/v1/checkout/csrf/" >/dev/null
+  csrf_cookie="$(
+    sed -nE 's/^[Ss]et-[Cc]ookie: csrftoken=([^;]+).*/\1/p' "$csrf_headers" |
+      tr -d '\r' | head -n1
+  )"
+fi
+[[ -n "$csrf_cookie" ]] || {
+  echo "Checkout CSRF cookie missing through external Caddy" >&2
+  exit 1
+}
+
+without_csrf="$(
+  docker run --rm --network "$NETWORK" curlimages/curl:8.12.1 \
+    -sS -o /dev/null -w '%{http_code}' -X POST -H "Host: $domain" \
+    --data 'quantity=1' "http://$ALIAS/api/v1/checkout/start/"
+)"
+[[ "$without_csrf" == "403" ]] || {
+  echo "Checkout POST without CSRF should be 403, got $without_csrf" >&2
+  exit 1
+}
+
+with_csrf_headers="$(
+  docker run --rm --network "$NETWORK" curlimages/curl:8.12.1 \
+    -sS -D - -o /dev/null -X POST -H "Host: $domain" \
+    -H "X-CSRFToken: $csrf_token" \
+    -H "Cookie: csrftoken=$csrf_cookie" \
+    --data 'quantity=1' "http://$ALIAS/api/v1/checkout/start/"
+)"
+grep -qE '^HTTP/[0-9.]+ 302' <<<"$with_csrf_headers" || {
+  echo "CSRF-valid checkout POST did not reach Django validation" >&2
+  printf '%s\n' "$with_csrf_headers" >&2
+  exit 1
+}
+grep -qiE '^location: /checkout/\?quantity=1(&|&)error=invalid' <<<"$with_csrf_headers" || {
+  echo "CSRF-valid invalid checkout did not return the expected safe validation redirect" >&2
+  printf '%s\n' "$with_csrf_headers" >&2
+  exit 1
+}
+
 log "Current Free V2 cache-busting through external Caddy testen"
 free_current="$(
   docker run --rm --network "$NETWORK" curlimages/curl:8.12.1 \
