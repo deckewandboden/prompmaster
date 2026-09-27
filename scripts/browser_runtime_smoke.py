@@ -1898,6 +1898,8 @@ def run_backend_ui_smoke(browser, fixture=None) -> None:
             ('ns-admin/', 'Admin Dashboard'),
             ('ns-admin/search/?q=PM-BROWSER', 'Admin Suche'),
             ('ns-admin/more/', 'Admin Mehr'),
+            ('ns-admin/leads/', 'Admin Leads'),
+            ('ns-admin/leads/new/', 'Admin Lead anlegen'),
             ('ns-admin/customers/', 'Admin Kunden'),
             ('ns-admin/customers/private/', 'Admin Privatkunden'),
             (f'ns-admin/customers/private/{fixture["private_customer_id"]}/', 'Admin Privatkundendetail'),
