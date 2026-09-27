@@ -32,6 +32,7 @@ urlpatterns = [
     path('customers/<uuid:pk>/company/', v.customer_company, name='customer_company'),
     path('customers/<uuid:pk>/portal-preview/', v.customer_portal_preview, name='customer_portal_preview'),
     path('customers/<uuid:pk>/users/', v.customer_users, name='customer_users'),
+    path('customers/<uuid:pk>/users/invite-admin/', v.customer_admin_invite, name='customer_admin_invite'),
     path('customers/<uuid:pk>/users/<uuid:user_id>/transfer-admin/', v.customer_admin_transfer, name='customer_admin_transfer'),
     path('customers/<uuid:pk>/users/<uuid:user_id>/deactivate/', v.customer_user_deactivate, name='customer_user_deactivate'),
     path('customers/<uuid:pk>/licenses/', v.customer_licenses, name='customer_licenses'),
