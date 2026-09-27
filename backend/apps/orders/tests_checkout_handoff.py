@@ -275,6 +275,7 @@ class PublicCheckoutFlowTests(TestCase):
 
         user = User.objects.get(email='new-private@example.test')
         profile = user.private_customer
+        self.assertEqual(profile.phone, '')
         self.assertEqual(profile.street, 'Privatweg')
         self.assertEqual(profile.city, 'Siegen')
         order = Order.objects.get(private_user=user)
@@ -284,6 +285,27 @@ class PublicCheckoutFlowTests(TestCase):
             user.legalacceptance_set.filter(order=order).count(),
             3,
         )
+
+    @patch('apps.payments.mollie.MollieClient.create_payment')
+    def test_public_checkout_enforces_configured_company_tax_fields(
+        self,
+        create_payment,
+    ):
+        TaxRule.objects.filter(
+            country='DE',
+            customer_type='company',
+            active=True,
+        ).update(require_vat_id=True, require_tax_number=True)
+
+        payload = self.company_payload(email='tax-required@example.test')
+        payload['vat_id'] = ''
+        payload['tax_number'] = ''
+        response = self.client.post('/api/v1/checkout/start/', payload)
+
+        self.assertEqual(response.status_code, 302)
+        self.assertIn('error=invalid', response.url)
+        self.assertFalse(User.objects.filter(email='tax-required@example.test').exists())
+        self.assertFalse(create_payment.called)
 
     @patch('apps.payments.mollie.MollieClient.create_payment')
     def test_public_checkout_existing_email_is_sent_to_login_without_duplicate(self, create_payment):
