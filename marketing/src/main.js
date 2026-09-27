@@ -30,8 +30,14 @@ async function initializePricing(){
       quote(liveCatalog,1);
       catalog=liveCatalog;
     }catch(error){
+      if(path==='/checkout'){
+        throw new Error('Sicherer Live-Produktkatalog für den Checkout nicht verfügbar',{cause:error});
+      }
       console.warn('Live-Produktkatalog nicht verfügbar; eingebetteter Preiskatalog wird verwendet.',error);
       quote(catalog,1);
+    }
+    if(path==='/checkout'&&catalog.checkoutEnabled!==true){
+      throw new Error('Checkout ist im Live-Produktkatalog nicht freigeschaltet');
     }
     const initial=quote(catalog,new URLSearchParams(location.search).get('quantity')||1);
     if(home){
@@ -91,6 +97,11 @@ async function initializePricing(){
       if(checkoutSubmit){
         checkoutSubmit.disabled=true;
         checkoutSubmit.textContent='Preis nicht verfügbar';
+      }
+      const checkoutStage=document.getElementById('checkout-stage-message');
+      if(checkoutStage){
+        checkoutStage.hidden=false;
+        checkoutStage.textContent='Der aktuelle Preis und Kaufstatus konnten nicht sicher geladen werden. Es wird keine Bestellung gestartet. Bitte lade die Seite neu und versuche es erneut.';
       }
     }
     console.error('Preise konnten nicht geladen werden.',error);
