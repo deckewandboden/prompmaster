@@ -7,7 +7,7 @@ from django.utils import timezone
 from apps.accounts.models import Permission, Role, User, UserRole
 from apps.accounts.totp import code as totp_code
 from apps.audit.models import AuditEvent
-from apps.companies.models import Company, Invitation
+from apps.companies.models import Company, Invitation, Membership
 from apps.core.crypto import decrypt
 from apps.core.models import Lead
 from apps.legal.models import LegalDocument
