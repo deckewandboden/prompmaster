@@ -112,36 +112,39 @@ if not contract_ok:
 PY
 
 log "Öffentlichen Checkout-API-Pfad und CSRF-Schutz über externes Proxy-Netz testen"
-csrf_headers="$(mktemp)"
-csrf_body="$(mktemp)"
-trap 'rm -f "$csrf_headers" "$csrf_body"; cleanup' EXIT
 
-# Token und Cookie müssen aus exakt derselben Django-Antwort stammen. Ein
-# getrenntes zweites GET würde ein neues CSRF-Secret erzeugen und damit einen
-# formal korrekten, aber zum Cookie unpassenden Token testen.
-docker run --rm --network "$NETWORK" curlimages/curl:8.12.1 \
-  -fsS -D "$csrf_headers" -o "$csrf_body" -H "Host: $domain" \
-  "http://$ALIAS/api/v1/checkout/csrf/"
+# Header und JSON-Body müssen aus derselben Django-Antwort stammen. Tempfiles
+# innerhalb eines ephemeren curl-Containers wären auf dem Host leer; deshalb
+# transportieren wir die komplette HTTP-Antwort über stdout zurück.
+csrf_response="$(
+  docker run --rm --network "$NETWORK" curlimages/curl:8.12.1 \
+    -fsS -i -H "Host: $domain" \
+    "http://$ALIAS/api/v1/checkout/csrf/"
+)"
 
-csrf_token="$(python3 - "$csrf_body" <<'PY'
-import json, pathlib, sys
-payload=json.loads(pathlib.Path(sys.argv[1]).read_text(encoding='utf-8'))
+csrf_token="$(python3 - "$csrf_response" <<'PY'
+import json, sys
+raw=sys.argv[1].replace('\r\n','\n')
+parts=raw.split('\n\n',1)
+if len(parts) != 2:
+    raise SystemExit('checkout CSRF response has no HTTP/body separator')
+payload=json.loads(parts[1])
 print(payload.get('csrfToken') or '')
 PY
 )"
 [[ -n "$csrf_token" ]] || {
   echo "Checkout CSRF endpoint returned no token through external Caddy" >&2
-  cat "$csrf_body" >&2 || true
+  printf '%s\n' "$csrf_response" >&2
   exit 1
 }
 
 csrf_cookie="$(
-  sed -nE 's/^[Ss]et-[Cc]ookie: csrftoken=([^;]+).*/\1/p' "$csrf_headers" |
+  sed -nE 's/^[Ss]et-[Cc]ookie: csrftoken=([^;]+).*/\1/p' <<<"$csrf_response" |
     tr -d '\r' | head -n1
 )"
 [[ -n "$csrf_cookie" ]] || {
   echo "Checkout CSRF cookie missing through external Caddy" >&2
-  cat "$csrf_headers" >&2 || true
+  printf '%s\n' "$csrf_response" >&2
   exit 1
 }
 
