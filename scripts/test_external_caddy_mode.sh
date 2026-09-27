@@ -116,49 +116,32 @@ csrf_headers="$(mktemp)"
 csrf_body="$(mktemp)"
 trap 'rm -f "$csrf_headers" "$csrf_body"; cleanup' EXIT
 
+# Token und Cookie müssen aus exakt derselben Django-Antwort stammen. Ein
+# getrenntes zweites GET würde ein neues CSRF-Secret erzeugen und damit einen
+# formal korrekten, aber zum Cookie unpassenden Token testen.
 docker run --rm --network "$NETWORK" curlimages/curl:8.12.1 \
-  -fsS -D - -H "Host: $domain" "http://$ALIAS/api/v1/checkout/csrf/" \
-  >"$csrf_headers"
+  -fsS -D "$csrf_headers" -o "$csrf_body" -H "Host: $domain" \
+  "http://$ALIAS/api/v1/checkout/csrf/"
 
-csrf_json="$(
-  docker run --rm --network "$NETWORK" curlimages/curl:8.12.1 \
-    -fsS -H "Host: $domain" "http://$ALIAS/api/v1/checkout/csrf/"
-)"
-csrf_token="$(python3 - "$csrf_json" <<'PY'
-import json, sys
-payload=json.loads(sys.argv[1])
+csrf_token="$(python3 - "$csrf_body" <<'PY'
+import json, pathlib, sys
+payload=json.loads(pathlib.Path(sys.argv[1]).read_text(encoding='utf-8'))
 print(payload.get('csrfToken') or '')
 PY
 )"
 [[ -n "$csrf_token" ]] || {
   echo "Checkout CSRF endpoint returned no token through external Caddy" >&2
+  cat "$csrf_body" >&2 || true
   exit 1
 }
 
 csrf_cookie="$(
-  awk 'BEGIN{IGNORECASE=1}
-       /^set-cookie: csrftoken=/{
-         sub(/^set-cookie: csrftoken=/,"",$0);
-         sub(/;.*/,"",$0);
-         gsub(/\r/,"",$0);
-         print $0;
-         exit
-       }' "$csrf_headers"
+  sed -nE 's/^[Ss]et-[Cc]ookie: csrftoken=([^;]+).*/\1/p' "$csrf_headers" |
+    tr -d '\r' | head -n1
 )"
-# Some curl/Caddy combinations normalize header casing but preserve the same
-# cookie contract. Fetch one deterministic header response if the first token
-# request above did not expose it to awk.
-if [[ -z "$csrf_cookie" ]]; then
-  docker run --rm --network "$NETWORK" curlimages/curl:8.12.1 \
-    -sS -D "$csrf_headers" -o "$csrf_body" -H "Host: $domain" \
-    "http://$ALIAS/api/v1/checkout/csrf/" >/dev/null
-  csrf_cookie="$(
-    sed -nE 's/^[Ss]et-[Cc]ookie: csrftoken=([^;]+).*/\1/p' "$csrf_headers" |
-      tr -d '\r' | head -n1
-  )"
-fi
 [[ -n "$csrf_cookie" ]] || {
   echo "Checkout CSRF cookie missing through external Caddy" >&2
+  cat "$csrf_headers" >&2 || true
   exit 1
 }
 
@@ -184,7 +167,7 @@ grep -qE '^HTTP/[0-9.]+ 302' <<<"$with_csrf_headers" || {
   printf '%s\n' "$with_csrf_headers" >&2
   exit 1
 }
-grep -qiE '^location: /checkout/\?quantity=1(&|&)error=invalid' <<<"$with_csrf_headers" || {
+grep -qiE '^location: /checkout/\?quantity=1&error=invalid' <<<"$with_csrf_headers" || {
   echo "CSRF-valid invalid checkout did not return the expected safe validation redirect" >&2
   printf '%s\n' "$with_csrf_headers" >&2
   exit 1
