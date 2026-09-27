@@ -163,18 +163,38 @@ def _sha(value: str) -> str:
 
 class Command(BaseCommand):
     help = (
-        'Erzeugt einen sicheren, wiederholbaren Demo-Datenbestand für Staging/Development. '
-        'Produktion wird ausdrücklich verweigert.'
+        'Erzeugt einen sicheren, wiederholbaren Demo-Datenbestand. Staging/Development '
+        'ist der Standard; Production erfordert einen ausdrücklich bestätigten '
+        'Präsentationsmodus, der Staffkonten und Rechtstexte nicht verändert.'
     )
+
+    def add_arguments(self, parser):
+        parser.add_argument(
+            '--allow-production-presentation',
+            action='store_true',
+            help=(
+                'Erlaubt ausschließlich die klar gekennzeichneten DEMO-Kunden-/'
+                'Verlaufsdaten in Production. Demo-Staff und Rechtstexte bleiben unberührt.'
+            ),
+        )
 
     @transaction.atomic
     def handle(self, *args, **options):
-        if settings.ENVIRONMENT == 'production':
-            raise CommandError('Demo-Daten dürfen niemals in ENVIRONMENT=production angelegt werden.')
+        production_presentation = (
+            settings.ENVIRONMENT == 'production'
+            and options['allow_production_presentation']
+        )
+        if settings.ENVIRONMENT == 'production' and not production_presentation:
+            raise CommandError(
+                'Demo-Daten dürfen niemals unbeabsichtigt in ENVIRONMENT=production '
+                'angelegt werden; für die Präsentationsumgebung ist '
+                '--allow-production-presentation ausdrücklich erforderlich.'
+            )
 
-        # The demo command depends only on canonical product/RBAC defaults and
-        # intentionally does not alter the Prompt Golden Masters.
-        call_command('seed_defaults', verbosity=0, stdout=io.StringIO())
+        # In Production canonical products, prices, mail templates and RBAC are
+        # operator-managed. Never let a presentation seed rewrite those.
+        if not production_presentation:
+            call_command('seed_defaults', verbosity=0, stdout=io.StringIO())
 
         now = timezone.now()
         product = Product.objects.get(code='PRO')
@@ -192,66 +212,69 @@ class Command(BaseCommand):
         if price is None:
             raise CommandError('Aktiver PRO-Neukaufpreis fehlt; seed_defaults konnte keinen Preis bereitstellen.')
 
-        # Demo checkout must exercise the same legal-acceptance contract as a
-        # real customer. These records exist only because this command itself
-        # is hard-blocked in production.
-        demo_legal = {
-            'terms': (
-                'DEMO-AGB für Staging-Funktionstests. Kein produktiver Rechtstext.'
-            ),
-            'privacy': (
-                'DEMO-Datenschutzhinweis für Staging-Funktionstests. Kein produktiver Rechtstext.'
-            ),
-            'withdrawal': (
-                'DEMO-Widerrufsinformation für Staging-Funktionstests. Kein produktiver Rechtstext.'
-            ),
-            'license': (
-                'DEMO-Lizenzbedingungen für Staging-Funktionstests. Kein produktiver Rechtstext.'
-            ),
-        }
-        for doc_type, content in demo_legal.items():
-            # Never replace an operator-maintained active staging document.
-            # Only fill a missing contract with an unmistakable demo version.
-            if LegalDocument.objects.filter(
-                doc_type=doc_type,
-                active=True,
-                valid_from__lte=now,
-            ).exists():
-                continue
-            demo_document, _ = LegalDocument.objects.update_or_create(
-                doc_type=doc_type,
-                version='demo-staging-v1',
-                defaults={
-                    'content': content,
-                    'valid_from': now - timedelta(minutes=1),
-                    'active': False,
-                },
-            )
-            LegalDocument.objects.filter(
-                doc_type=doc_type,
-                active=True,
-            ).exclude(pk=demo_document.pk).update(active=False)
-            demo_document.active = True
-            demo_document.save(update_fields=['active', 'updated_at'])
-
+        if not production_presentation:
+            # real customer. These records exist only because this command itself
+            # is hard-blocked in production.
+            demo_legal = {
+                'terms': (
+                    'DEMO-AGB für Staging-Funktionstests. Kein produktiver Rechtstext.'
+                ),
+                'privacy': (
+                    'DEMO-Datenschutzhinweis für Staging-Funktionstests. Kein produktiver Rechtstext.'
+                ),
+                'withdrawal': (
+                    'DEMO-Widerrufsinformation für Staging-Funktionstests. Kein produktiver Rechtstext.'
+                ),
+                'license': (
+                    'DEMO-Lizenzbedingungen für Staging-Funktionstests. Kein produktiver Rechtstext.'
+                ),
+            }
+            for doc_type, content in demo_legal.items():
+                # Never replace an operator-maintained active staging document.
+                # Only fill a missing contract with an unmistakable demo version.
+                if LegalDocument.objects.filter(
+                    doc_type=doc_type,
+                    active=True,
+                    valid_from__lte=now,
+                ).exists():
+                    continue
+                demo_document, _ = LegalDocument.objects.update_or_create(
+                    doc_type=doc_type,
+                    version='demo-staging-v1',
+                    defaults={
+                        'content': content,
+                        'valid_from': now - timedelta(minutes=1),
+                        'active': False,
+                    },
+                )
+                LegalDocument.objects.filter(
+                    doc_type=doc_type,
+                    active=True,
+                ).exclude(pk=demo_document.pk).update(active=False)
+                demo_document.active = True
+                demo_document.save(update_fields=['active', 'updated_at'])
+    
+    
         credentials = []
 
-        for email, first_name, last_name, role_code, role_label in STAFF_ACCOUNTS:
-            password = _password()
-            user = self._upsert_user(
-                email=email,
-                first_name=first_name,
-                last_name=last_name,
-                password=password,
-                is_staff=True,
-                two_factor_required=True,
-                verified_at=now,
-            )
-            role = Role.objects.get(code=role_code, active=True)
-            UserRole.objects.filter(user=user).exclude(role=role).delete()
-            UserRole.objects.get_or_create(user=user, role=role)
-            credentials.append((role_label, email, password, '2FA-Einrichtung beim ersten Login'))
-
+        if not production_presentation:
+            for email, first_name, last_name, role_code, role_label in STAFF_ACCOUNTS:
+                password = _password()
+                user = self._upsert_user(
+                    email=email,
+                    first_name=first_name,
+                    last_name=last_name,
+                    password=password,
+                    is_staff=True,
+                    two_factor_required=True,
+                    verified_at=now,
+                )
+                role = Role.objects.get(code=role_code, active=True)
+                UserRole.objects.filter(user=user).exclude(role=role).delete()
+                UserRole.objects.get_or_create(user=user, role=role)
+                credentials.append((role_label, email, password, '2FA-Einrichtung beim ersten Login'))
+    
+    
         company_users = {}
         for company_index, spec in enumerate(COMPANIES, start=1):
             company = self._upsert_company(spec)
@@ -288,10 +311,17 @@ class Command(BaseCommand):
             )
         )
         self.stdout.write('Privatkunden: DEMO-P-2001, DEMO-P-2002, DEMO-P-2003.')
-        self.stdout.write('Interne Rollen: je 2× Superadmin, Vertrieb / Support, Technik / Operations, Prompt Manager.')
-        self.stdout.write(
-            'Der vorhandene echte Superadmin bleibt unverändert und wird für den Superadmin-Test verwendet.'
-        )
+        if production_presentation:
+            self.stdout.write(
+                'Production-Präsentationsmodus: keine Demo-Staffkonten und keine Rechtstexte verändert.'
+            )
+        else:
+            self.stdout.write(
+                'Interne Rollen: je 2× Superadmin, Vertrieb / Support, Technik / Operations, Prompt Manager.'
+            )
+            self.stdout.write(
+                'Der vorhandene echte Superadmin bleibt unverändert und wird für den Superadmin-Test verwendet.'
+            )
         self.stdout.write('')
         self.stdout.write('TEMPORÄRE DEMO-ZUGÄNGE – Passwörter werden bei jedem Seed neu erzeugt:')
         for label, email, password, note in credentials:
@@ -1149,8 +1179,29 @@ class Command(BaseCommand):
         )
 
     def _seed_demo_leads(self, now):
-        support_one = User.objects.get(email='demo.support1@promptmaster.invalid')
-        support_two = User.objects.get(email='demo.support2@promptmaster.invalid')
+        support_one = User.objects.filter(
+            email='demo.support1@promptmaster.invalid'
+        ).first()
+        support_two = User.objects.filter(
+            email='demo.support2@promptmaster.invalid'
+        ).first()
+        if support_one is None:
+            support_one = User.objects.filter(
+                is_staff=True,
+                is_active=True,
+            ).order_by('-is_superuser', 'created_at').first()
+        if support_two is None:
+            support_two = (
+                User.objects.filter(is_staff=True, is_active=True)
+                .exclude(pk=getattr(support_one, 'pk', None))
+                .order_by('-is_superuser', 'created_at')
+                .first()
+                or support_one
+            )
+        if support_one is None:
+            raise CommandError(
+                'Für Demo-Leads wird mindestens ein aktiver interner Staff-Benutzer benötigt.'
+            )
         specs = (
             {
                 'lead_number': 'LD-DEMO-0001',
