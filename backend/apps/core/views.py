@@ -340,7 +340,7 @@ def public_catalog(request):
             },
         ],
         'maxQuantity': MAX_PURCHASE_QUANTITY,
-        'checkoutEnabled': bool(pro and pro.purchasable),
+        'checkoutEnabled': bool(pro and pro.purchasable and pro_price),
         'loginEnabled': True,
         'freeUrl': '/free/',
         'proApplicationCount': len(applications),
