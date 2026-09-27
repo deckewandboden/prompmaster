@@ -284,7 +284,7 @@ class LeadManagementTests(TestCase):
         self.assertContains(portal, 'Unternehmensadministrator')
 
     @patch('apps.notifications.services.queue_email')
-    def test_converted_company_can_recover_expired_bootstrap_admin_invitation(
+    def test_converted_company_can_replace_pending_bootstrap_admin_invitation(
         self,
         queue_email,
     ):
@@ -311,19 +311,17 @@ class LeadManagementTests(TestCase):
         self.lead.refresh_from_db()
         company = self.lead.converted_company
         first_invitation = Invitation.objects.get(company=company, role='admin')
-        first_invitation.revoked_at = timezone.now()
-        first_invitation.save(update_fields=['revoked_at', 'updated_at'])
 
         users = self.client.get(f'/ns-admin/customers/{company.id}/users/')
         self.assertEqual(users.status_code, 200)
-        self.assertContains(users, 'Firmenadministrator einladen')
+        self.assertContains(users, 'Admin-Einladung neu senden')
 
         recovered = self.client.post(
             f'/ns-admin/customers/{company.id}/users/invite-admin/',
             {
-                'email': 'ada.lead@example.test',
-                'first_name': 'Ada',
-                'last_name': 'Lovelace',
+                'email': 'grace.admin@example.test',
+                'first_name': 'Grace',
+                'last_name': 'Hopper',
             },
         )
         self.assertEqual(recovered.status_code, 302)
@@ -334,7 +332,11 @@ class LeadManagementTests(TestCase):
             revoked_at__isnull=True,
         )
         self.assertEqual(open_invites.count(), 1)
-        self.assertNotEqual(open_invites.get().id, first_invitation.id)
+        replacement = open_invites.get()
+        self.assertNotEqual(replacement.id, first_invitation.id)
+        self.assertEqual(replacement.email, 'grace.admin@example.test')
+        first_invitation.refresh_from_db()
+        self.assertIsNotNone(first_invitation.revoked_at)
         self.assertEqual(queue_email.call_count, 2)
         self.assertTrue(
             AuditEvent.objects.filter(
