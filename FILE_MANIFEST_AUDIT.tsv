@@ -62,3 +62,7 @@ backend/apps/core/tests_leads.py	0	0	test
 backend/templates/ns_admin/lead_detail.html	0	0	active-backend
 backend/apps/core/migrations/0007_lead_active_email_unique.py	0	0	active-backend
 backend/apps/companies/migrations/0004_invitation_role.py	0	0000000000000000000000000000000000000000000000000000000000000000	active-backend
+backend/apps/companies/management/__init__.py	0	0	active-backend
+backend/apps/companies/management/commands/__init__.py	0	0	active-backend
+backend/apps/companies/management/commands/create_customer_admin.py	0	0	active-backend
+backend/apps/companies/tests_customer_admin_command.py	0	0	test
