@@ -477,6 +477,74 @@ class PublicCheckoutFlowTests(TestCase):
             1,
         )
 
+    @patch('apps.payments.mollie.MollieClient.create_payment')
+    def test_private_public_checkout_order_is_visible_in_customer_and_netstyle_backends(
+        self,
+        create_payment,
+    ):
+        create_payment.return_value = {
+            'id': 'tr_private_cross_backend',
+            'status': 'open',
+            '_links': {
+                'checkout': {
+                    'href': 'https://checkout.example.test/private-cross',
+                },
+            },
+        }
+        response = self.client.post(
+            '/api/v1/checkout/start/',
+            self.private_payload(
+                quantity='2',
+                email='private-cross@example.test',
+            ),
+        )
+        self.assertEqual(response.status_code, 302)
+
+        user = User.objects.get(email='private-cross@example.test')
+        profile = user.private_customer
+        order = Order.objects.get(private_user=user)
+        now = timezone.now()
+
+        user.email_verified_at = now
+        user.save(update_fields=['email_verified_at', 'updated_at'])
+        self.client.force_login(user)
+        session = self.client.session
+        session['security_version'] = user.security_version
+        session['authenticated_at'] = now.timestamp()
+        session['last_activity_at'] = now.timestamp()
+        session.save()
+
+        portal_response = self.client.get('/portal/orders/')
+        self.assertEqual(portal_response.status_code, 200)
+        self.assertContains(portal_response, order.order_number)
+
+        staff = User.objects.create_user(
+            'private-checkout-auditor@example.test',
+            'Private-Checkout-Auditor-Password-2026!',
+            first_name='Private',
+            last_name='Auditor',
+            email_verified_at=now,
+            is_staff=True,
+            is_superuser=True,
+            two_factor_required=False,
+        )
+        self.client.force_login(staff)
+        session = self.client.session
+        session['security_version'] = staff.security_version
+        session['authenticated_at'] = now.timestamp()
+        session['last_activity_at'] = now.timestamp()
+        session.save()
+
+        admin_response = self.client.get(
+            f'/ns-admin/customers/private/{profile.id}/orders/'
+        )
+        self.assertEqual(admin_response.status_code, 200)
+        self.assertContains(admin_response, order.order_number)
+        self.assertEqual(
+            Order.objects.filter(pk=order.pk, private_user=user).count(),
+            1,
+        )
+
     @patch('apps.payments.services._queue_after_commit')
     @patch('apps.payments.mollie.MollieClient.create_payment')
     def test_paid_public_checkout_activates_license_and_queues_account_activation(
