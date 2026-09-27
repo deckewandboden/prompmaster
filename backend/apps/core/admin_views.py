@@ -671,18 +671,42 @@ def private_customer_portal_preview(request, pk):
     user = profile.user
     can_licenses = has_perm(request.user, 'licenses.read')
     can_orders = has_perm(request.user, 'orders.read')
-    licenses = user.owned_licenses.select_related('product') if can_licenses else None
+    allowed_sections = {'dashboard', 'licenses', 'devices', 'orders', 'profile', 'more'}
+    preview_section = request.GET.get('section', 'dashboard')
+    if preview_section not in allowed_sections:
+        preview_section = 'dashboard'
+
+    licenses = (
+        user.owned_licenses.select_related('product').order_by('valid_until', 'license_number')
+        if can_licenses else None
+    )
+    devices = user.devices.filter(revoked_at__isnull=True).select_related('license').order_by('-last_seen_at')
+    orders = (
+        user.private_orders.prefetch_related('payments').order_by('-created_at')
+        if can_orders else None
+    )
     now = timezone.now()
     return render(request, 'ns_admin/customer_portal_preview.html', {
-        'preview_kind': 'private', 'preview_title': user.full_name or user.email,
-        'preview_subtitle': f'{profile.customer_number} · Privatkonto', 'preview_user': user,
-        'preview_company': None, 'license_total': licenses.count() if can_licenses else None,
+        'preview_kind': 'private',
+        'preview_section': preview_section,
+        'preview_title': user.full_name or user.email,
+        'preview_subtitle': f'{profile.customer_number} · Privatkonto',
+        'preview_user': user,
+        'preview_company': None,
+        'preview_profile': profile,
+        'preview_members': None,
+        'preview_licenses': licenses[:20] if licenses is not None else None,
+        'preview_devices': devices[:20],
+        'preview_orders': orders[:20] if orders is not None else None,
+        'license_total': licenses.count() if can_licenses else None,
         'license_free': licenses.filter(status='free', valid_until__gt=now).count() if can_licenses else None,
         'license_active': licenses.filter(status='active', valid_until__gt=now).count() if can_licenses else None,
         'expiring_30': licenses.filter(valid_until__gt=now, valid_until__lte=now + timedelta(days=30)).count() if can_licenses else None,
-        'device_count': user.devices.filter(revoked_at__isnull=True).count(),
-        'order_count': user.private_orders.count() if can_orders else None,
-        'member_count': 1, 'back_route': 'ns_admin:private_customer_detail', 'back_pk': profile.pk,
+        'device_count': devices.count(),
+        'order_count': orders.count() if can_orders else None,
+        'member_count': 1,
+        'back_route': 'ns_admin:private_customer_detail',
+        'back_pk': profile.pk,
     })
 
 
@@ -875,26 +899,57 @@ def customer_portal_preview(request, pk):
     customer = _customer(request, pk)
     can_licenses = has_perm(request.user, 'licenses.read')
     can_orders = has_perm(request.user, 'orders.read')
-    licenses = customer.licenses.select_related('product') if can_licenses else None
-    now = timezone.now()
-    admin_membership = customer.memberships.filter(active=True, role='admin').select_related('user').first()
-    return render(request, 'ns_admin/customer_portal_preview.html', {
-        'preview_kind': 'company', 'preview_title': customer.name,
-        'preview_subtitle': f'{customer.customer_number} · Firmenkonto',
-        'preview_user': admin_membership.user if admin_membership else None, 'preview_company': customer,
-        'license_total': licenses.count() if can_licenses else None,
-        'license_free': licenses.filter(status='free', valid_until__gt=now).count() if can_licenses else None,
-        'license_active': licenses.filter(status='active', valid_until__gt=now).count() if can_licenses else None,
-        'expiring_30': licenses.filter(valid_until__gt=now, valid_until__lte=now + timedelta(days=30)).count() if can_licenses else None,
-        'device_count': DeviceRegistration.objects.filter(
+    allowed_sections = {'dashboard', 'team', 'licenses', 'devices', 'orders', 'company', 'more'}
+    preview_section = request.GET.get('section', 'dashboard')
+    if preview_section not in allowed_sections:
+        preview_section = 'dashboard'
+
+    licenses = (
+        customer.licenses.select_related('product').order_by('valid_until', 'license_number')
+        if can_licenses else None
+    )
+    members = (
+        customer.memberships.filter(active=True)
+        .select_related('user')
+        .order_by('user__last_name', 'user__first_name', 'user__email')
+    )
+    devices = (
+        DeviceRegistration.objects.filter(
             user__company_memberships__company=customer,
             user__company_memberships__active=True,
             license__company=customer,
             revoked_at__isnull=True,
-        ).distinct().count(),
-        'order_count': customer.orders.count() if can_orders else None,
-        'member_count': customer.memberships.filter(active=True).count(),
-        'back_route': 'ns_admin:customer_detail', 'back_pk': customer.pk,
+        )
+        .select_related('user', 'license')
+        .distinct()
+        .order_by('-last_seen_at')
+    )
+    orders = (
+        customer.orders.prefetch_related('payments').order_by('-created_at')
+        if can_orders else None
+    )
+    now = timezone.now()
+    admin_membership = members.filter(role='admin').first()
+    return render(request, 'ns_admin/customer_portal_preview.html', {
+        'preview_kind': 'company',
+        'preview_section': preview_section,
+        'preview_title': customer.name,
+        'preview_subtitle': f'{customer.customer_number} · Firmenkonto',
+        'preview_user': admin_membership.user if admin_membership else None,
+        'preview_company': customer,
+        'preview_members': members[:20],
+        'preview_licenses': licenses[:20] if licenses is not None else None,
+        'preview_devices': devices[:20],
+        'preview_orders': orders[:20] if orders is not None else None,
+        'license_total': licenses.count() if can_licenses else None,
+        'license_free': licenses.filter(status='free', valid_until__gt=now).count() if can_licenses else None,
+        'license_active': licenses.filter(status='active', valid_until__gt=now).count() if can_licenses else None,
+        'expiring_30': licenses.filter(valid_until__gt=now, valid_until__lte=now + timedelta(days=30)).count() if can_licenses else None,
+        'device_count': devices.count(),
+        'order_count': orders.count() if can_orders else None,
+        'member_count': members.count(),
+        'back_route': 'ns_admin:customer_detail',
+        'back_pk': customer.pk,
     })
 
 
