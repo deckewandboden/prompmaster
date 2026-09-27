@@ -117,12 +117,10 @@ free_current="$(
     -fsS -H "Host: $domain" "http://$ALIAS/free/"
 )"
 v2_css_url="$(
-  grep -oE '/static/css/promptmaster_v2\.20260922\.css\?v=[^"[:space:]]+' <<<"$free_current" |
-    head -n1
+  grep -m1 -oE '/static/css/promptmaster_v2\.20260922\.css\?v=[^"[:space:]]+' <<<"$free_current"
 )"
 v2_js_url="$(
-  grep -oE '/static/js/promptmaster_ui_v2\.20260922\.js\?v=[^"[:space:]]+' <<<"$free_current" |
-    head -n1
+  grep -m1 -oE '/static/js/promptmaster_ui_v2\.20260922\.js\?v=[^"[:space:]]+' <<<"$free_current"
 )"
 [[ -n "$v2_css_url" ]] || {
   echo "Free V2 stylesheet is not cache-busted through external Caddy" >&2
