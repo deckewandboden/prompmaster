@@ -1504,13 +1504,15 @@ def run_backend_ui_smoke(browser, fixture=None) -> None:
             """() => ({
               source: document.querySelector('#promptOutput')?.dataset.source || '',
               prompt: document.querySelector('#promptOutput')?.value || '',
-              copyState: document.querySelector('#copyState')?.textContent || '',
+              status: document.querySelector('#promptStatus')?.textContent || '',
+              copyEnabled: document.querySelector('#copyBtn')?.disabled === false,
             })"""
         )
         if (
             free_db_probe['source'] != 'database'
             or 'Browser-Free-DB-Probe' not in free_db_probe['prompt']
-            or 'Aus Prompt-Datenbank erstellt' not in free_db_probe['copyState']
+            or free_db_probe['status'] != 'PROMPT BEREIT'
+            or not free_db_probe['copyEnabled']
         ):
             raise AssertionError(
                 f'Free V2 did not render database-composed prompt: {free_db_probe}'
