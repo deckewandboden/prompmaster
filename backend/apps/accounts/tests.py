@@ -366,5 +366,5 @@ class CheckoutActivationTransactionTests(TransactionTestCase):
 
         replay = self.client.get(url)
         self.assertEqual(replay.status_code, 200)
-        self.assertContains(replay, 'nicht', status_code=200)
+        self.assertContains(replay, 'Link ungültig', status_code=200)
 
