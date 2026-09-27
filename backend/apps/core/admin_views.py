@@ -2091,8 +2091,14 @@ def settings_view(request):
 @staff_perm()
 def global_search(request):
     query = request.GET.get('q', '').strip()[:200]
-    results = {'customers': [], 'private_customers': [], 'users': [], 'licenses': [], 'orders': [], 'payments': []}
+    results = {'leads': [], 'customers': [], 'private_customers': [], 'users': [], 'licenses': [], 'orders': [], 'payments': []}
     if len(query) >= 2:
+        if has_perm(request.user, 'leads.read'):
+            results['leads'] = Lead.objects.filter(deleted_at__isnull=True).filter(
+                Q(lead_number__icontains=query) | Q(company_name__icontains=query)
+                | Q(first_name__icontains=query) | Q(last_name__icontains=query)
+                | Q(email__icontains=query) | Q(phone__icontains=query)
+            ).select_related('assigned_to')[:10]
         if has_perm(request.user, 'customers.read'):
             results['customers'] = Company.objects.filter(Q(name__icontains=query) | Q(customer_number__icontains=query) | Q(email__icontains=query))[:10]
             results['private_customers'] = PrivateCustomerProfile.objects.filter(Q(customer_number__icontains=query) | Q(user__email__icontains=query) | Q(user__first_name__icontains=query) | Q(user__last_name__icontains=query)).select_related('user')[:10]
