@@ -1496,8 +1496,24 @@ def run_backend_ui_smoke(browser, fixture=None) -> None:
         )
         public_page.locator('#goalInput').fill('Kernaussagen und nächste Schritte')
         public_page.locator('#sourceContextInput').fill('Browser-Free-DB-Probe')
-        public_page.locator('input[name="audience"][value="self"]').check(force=True)
-        public_page.locator('input[name="focus"][value="Kernaussagen"]').check(force=True)
+        # The Golden Master intentionally makes the native radio/checkbox
+        # transparent and pointer-events:none; the visible <span> inside its
+        # <label> is the actual user interaction surface. Exercise that surface
+        # instead of force-clicking the hidden control.
+        public_page.locator(
+            'label.option:has(input[name="audience"][value="self"]) > span'
+        ).click()
+        if not public_page.locator(
+            'input[name="audience"][value="self"]'
+        ).is_checked():
+            raise AssertionError('Free audience option did not persist after visible label click')
+        public_page.locator(
+            'label.option:has(input[name="focus"][value="Kernaussagen"]) > span'
+        ).click()
+        if not public_page.locator(
+            'input[name="focus"][value="Kernaussagen"]'
+        ).is_checked():
+            raise AssertionError('Free focus option did not persist after visible label click')
         public_page.locator('#detailSelect').select_option('short')
         public_page.locator('#formatSelect').select_option('bullets')
         public_page.locator('#toneSelect').select_option('professional')
@@ -1678,8 +1694,20 @@ def run_backend_ui_smoke(browser, fixture=None) -> None:
             )
         public_page.locator('#goalInput').fill('Browser-Word-Live-Pfad klarer formulieren')
         public_page.locator('#sourceContextInput').fill('Zahlen und Namen unverändert lassen')
-        public_page.locator('input[name="audience"][value="customer"]').check(force=True)
-        public_page.locator('input[name="focus"][value="Verständlichkeit"]').check(force=True)
+        public_page.locator(
+            'label.option:has(input[name="audience"][value="customer"]) > span'
+        ).click()
+        if not public_page.locator(
+            'input[name="audience"][value="customer"]'
+        ).is_checked():
+            raise AssertionError('Free Word audience option did not persist after visible label click')
+        public_page.locator(
+            'label.option:has(input[name="focus"][value="Verständlichkeit"]) > span'
+        ).click()
+        if not public_page.locator(
+            'input[name="focus"][value="Verständlichkeit"]'
+        ).is_checked():
+            raise AssertionError('Free Word focus option did not persist after visible label click')
         public_page.locator('#detailSelect').select_option('short')
         public_page.locator('#formatSelect').select_option('prose')
         public_page.locator('#toneSelect').select_option('professional')
