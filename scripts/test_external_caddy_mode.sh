@@ -116,11 +116,19 @@ free_current="$(
   docker run --rm --network "$NETWORK" curlimages/curl:8.12.1 \
     -fsS -H "Host: $domain" "http://$ALIAS/free/"
 )"
-grep -q 'promptmaster_v2.20260922.css?v=20260924-audit4' <<<"$free_current" || {
+v2_css_url="$(
+  grep -oE '/static/css/promptmaster_v2\.20260922\.css\?v=[^"[:space:]]+' <<<"$free_current" |
+    head -n1
+)"
+v2_js_url="$(
+  grep -oE '/static/js/promptmaster_ui_v2\.20260922\.js\?v=[^"[:space:]]+' <<<"$free_current" |
+    head -n1
+)"
+[[ -n "$v2_css_url" ]] || {
   echo "Free V2 stylesheet is not cache-busted through external Caddy" >&2
   exit 1
 }
-grep -q 'promptmaster_ui_v2.20260922.js?v=20260924-audit4' <<<"$free_current" || {
+[[ -n "$v2_js_url" ]] || {
   echo "Free V2 script is not cache-busted through external Caddy" >&2
   exit 1
 }
@@ -128,7 +136,7 @@ grep -q 'promptmaster_ui_v2.20260922.js?v=20260924-audit4' <<<"$free_current" ||
 mutable_headers="$(
   docker run --rm --network "$NETWORK" curlimages/curl:8.12.1 \
     -sS -D - -o /dev/null -H "Host: $domain" \
-    "http://$ALIAS/static/css/promptmaster_v2.20260922.css?v=20260924-audit4"
+    "http://$ALIAS$v2_css_url"
 )"
 grep -qiE '^cache-control: .*no-cache.*must-revalidate' <<<"$mutable_headers" || {
   echo "Mutable V2 stylesheet still inherits immutable one-year cache" >&2
