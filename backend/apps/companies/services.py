@@ -19,14 +19,25 @@ def create_invitation(*, company, actor, email, first_name='', last_name='', rol
     valid_roles = {code for code, _label in Membership.ROLE}
     if role not in valid_roles:
         raise ValidationError('Ungültige Rolle für die Einladung.')
-    if role == 'admin' and Membership.objects.filter(
-        company=company,
-        active=True,
-        role='admin',
-    ).exists():
-        raise ValidationError(
-            'Für dieses Unternehmen existiert bereits ein aktiver Firmenadministrator.'
-        )
+    if role == 'admin':
+        if Membership.objects.filter(
+            company=company,
+            active=True,
+            role='admin',
+        ).exists():
+            raise ValidationError(
+                'Für dieses Unternehmen existiert bereits ein aktiver Firmenadministrator.'
+            )
+        if Invitation.objects.filter(
+            company=company,
+            role='admin',
+            accepted_at__isnull=True,
+            revoked_at__isnull=True,
+            expires_at__gt=timezone.now(),
+        ).exclude(email__iexact=normalized).exists():
+            raise ValidationError(
+                'Für dieses Unternehmen ist bereits eine Administrator-Einladung offen.'
+            )
     existing_user = get_user_model().objects.filter(email__iexact=normalized).only(
         'id', 'is_staff'
     ).first()
