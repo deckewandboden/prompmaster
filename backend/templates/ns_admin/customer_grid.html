@@ -1,5 +1,5 @@
 {% extends 'ns_admin/base.html' %}{% load pm %}{% block content %}
-<div class="page-head"><div><h1>{{ customer.name }}</h1><div class="sub">{{ customer.customer_number }} · {{ title }}</div></div><a class="btn secondary" href="{% url 'ns_admin:customers' %}">Zur Kundenliste</a></div>
+<div class="page-head"><div><h1>{{ customer.name }}</h1><div class="sub">{{ customer.customer_number }} · {{ title }}</div></div><div class="page-actions">{% if kind == 'users' and can_manage_users and not has_active_admin %}<a class="btn primary" href="{% url 'ns_admin:customer_admin_invite' customer.id %}">{% if pending_admin_invitation %}Admin-Einladung neu senden{% else %}Firmenadministrator einladen{% endif %}</a>{% endif %}<a class="btn secondary" href="{% url 'ns_admin:customers' %}">Zur Kundenliste</a></div></div>
 {% include 'ns_admin/includes_customer_nav.html' %}
 {% include 'includes/grid_toolbar.html' %}
 <div class="tablewrap"><table><thead><tr>
