@@ -14,8 +14,19 @@ from .models import Invitation, Membership, PrivateCustomerProfile
 
 
 @transaction.atomic
-def create_invitation(*, company, actor, email, first_name='', last_name=''):
+def create_invitation(*, company, actor, email, first_name='', last_name='', role='member'):
     normalized = email.strip().lower()
+    valid_roles = {code for code, _label in Membership.ROLE}
+    if role not in valid_roles:
+        raise ValidationError('Ungültige Rolle für die Einladung.')
+    if role == 'admin' and Membership.objects.filter(
+        company=company,
+        active=True,
+        role='admin',
+    ).exists():
+        raise ValidationError(
+            'Für dieses Unternehmen existiert bereits ein aktiver Firmenadministrator.'
+        )
     existing_user = get_user_model().objects.filter(email__iexact=normalized).only(
         'id', 'is_staff'
     ).first()
@@ -51,11 +62,12 @@ def create_invitation(*, company, actor, email, first_name='', last_name=''):
         email=normalized,
         first_name=first_name.strip(),
         last_name=last_name.strip(),
+        role=role,
         token_hash=hashed,
         expires_at=timezone.now() + timedelta(hours=INVITATION_TTL_HOURS),
         invited_by=actor,
     )
-    audit(actor, 'invitation.created', invitation, {'email': normalized})
+    audit(actor, 'invitation.created', invitation, {'email': normalized, 'role': role})
     return invitation, raw
 
 
