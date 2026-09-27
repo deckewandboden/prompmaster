@@ -324,6 +324,72 @@ class PublicCheckoutFlowTests(TestCase):
         self.assertEqual(User.objects.filter(email='existing@example.test').count(), 1)
         self.assertFalse(create_payment.called)
 
+    @patch('apps.payments.mollie.MollieClient.create_payment')
+    def test_unactivated_public_checkout_resumes_existing_mollie_payment(self, create_payment):
+        create_payment.return_value = {
+            'id': 'tr_resume_public',
+            'status': 'open',
+            '_links': {'checkout': {'href': 'https://checkout.example.test/resume'}},
+        }
+        payload = self.company_payload(
+            quantity='3',
+            email='resume-public@example.test',
+        )
+        first = self.client.post('/api/v1/checkout/start/', payload)
+        second = self.client.post('/api/v1/checkout/start/', payload)
+
+        self.assertEqual(first.status_code, 302)
+        self.assertEqual(first.url, 'https://checkout.example.test/resume')
+        self.assertEqual(second.status_code, 302)
+        self.assertEqual(second.url, 'https://checkout.example.test/resume')
+        self.assertEqual(create_payment.call_count, 1)
+        self.assertEqual(
+            User.objects.filter(email='resume-public@example.test').count(),
+            1,
+        )
+        user = User.objects.get(email='resume-public@example.test')
+        company = Company.objects.get(
+            memberships__user=user,
+            memberships__active=True,
+        )
+        self.assertEqual(Order.objects.filter(company=company).count(), 1)
+        self.assertEqual(Payment.objects.filter(order__company=company).count(), 1)
+
+    @patch('apps.payments.mollie.MollieClient.create_payment')
+    def test_unactivated_public_checkout_without_resumable_payment_goes_to_password_reset(
+        self,
+        create_payment,
+    ):
+        create_payment.return_value = {
+            'id': 'tr_cancelled_public',
+            'status': 'open',
+            '_links': {'checkout': {'href': 'https://checkout.example.test/cancelled'}},
+        }
+        payload = self.private_payload(
+            quantity='1',
+            email='cancelled-public@example.test',
+        )
+        first = self.client.post('/api/v1/checkout/start/', payload)
+        self.assertEqual(first.status_code, 302)
+
+        user = User.objects.get(email='cancelled-public@example.test')
+        order = Order.objects.get(private_user=user)
+        payment = Payment.objects.get(order=order)
+        payment.status = 'canceled'
+        payment.save(update_fields=['status', 'updated_at'])
+        order.status = 'canceled'
+        order.save(update_fields=['status', 'updated_at'])
+
+        second = self.client.post('/api/v1/checkout/start/', payload)
+        self.assertEqual(second.status_code, 302)
+        self.assertTrue(second.url.startswith('/auth/password-reset/'))
+        self.assertEqual(create_payment.call_count, 1)
+        self.assertEqual(
+            User.objects.filter(email='cancelled-public@example.test').count(),
+            1,
+        )
+        self.assertEqual(Order.objects.filter(private_user=user).count(), 1)
+
     def test_checkout_csrf_endpoint_supports_http_only_cookie_flow(self):
         client = self.client_class(enforce_csrf_checks=True)
         token_response = client.get('/api/v1/checkout/csrf/')
