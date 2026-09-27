@@ -161,6 +161,7 @@ without_csrf="$(
 with_csrf_headers="$(
   docker run --rm --network "$NETWORK" curlimages/curl:8.12.1 \
     -sS -D - -o /dev/null -X POST -H "Host: $domain" \
+    -H "Origin: https://$domain" \
     -H "X-CSRFToken: $csrf_token" \
     -H "Cookie: csrftoken=$csrf_cookie" \
     --data 'quantity=1' "http://$ALIAS/api/v1/checkout/start/"
