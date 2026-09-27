@@ -164,6 +164,18 @@ test('header and footer use the same HQ logo and share one visible left baseline
   assert.match(css,/#footer \.footer-grid>div:first-child \.brand\{[^]*margin-left:-24px/);
 });
 
+test('mobile footer brand box aligns with its copy baseline',()=>{
+  const css=read('src/style.css');
+  assert.match(
+    css,
+    /@media\(max-width:480px\)\{[^]*#footer \.footer-grid \.logo-crop\{[^]*margin-left:0/
+  );
+  assert.doesNotMatch(
+    css,
+    /#footer \.footer-grid \.logo-crop\{[^}]*margin-left:-18px/
+  );
+});
+
 
 test('hero and marketing copy use recovered V15 decisions',()=>{
   const index=read('index.html');
