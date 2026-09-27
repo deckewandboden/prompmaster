@@ -8,6 +8,8 @@ from apps.proaccess import views as product_views
 urlpatterns = [
     path('', core.home, name='home'),
     path('catalog.json', core.public_catalog, name='public_catalog'),
+    path('api/v1/checkout/csrf/', core.checkout_csrf, name='checkout_csrf'),
+    path('api/v1/checkout/start/', core.public_checkout_start, name='public_checkout_start'),
     path('free/', product_views.free_content, name='free_product'),
     path('free-old/', product_views.free_old_content, name='free_product_old'),
     path('pro-old/', product_views.legacy_content, name='pro_product_old'),
