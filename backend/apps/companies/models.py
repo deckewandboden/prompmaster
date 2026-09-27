@@ -137,6 +137,7 @@ class PrivateCustomerProfile(TimeStampedModel):
         related_name='private_customer',
     )
     customer_number = models.CharField(max_length=30, unique=True)
+    phone = models.CharField(max_length=60, blank=True)
     street = models.CharField(max_length=160, blank=True)
     house_number = models.CharField(max_length=40, blank=True)
     postal_code = models.CharField(max_length=20, blank=True)
