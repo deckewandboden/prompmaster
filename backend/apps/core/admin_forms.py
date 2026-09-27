@@ -128,6 +128,20 @@ class LeadConvertCompanyForm(forms.Form):
         return value
 
 
+class CustomerAdminInviteForm(forms.Form):
+    email = forms.EmailField(label='E-Mail des Firmenadministrators')
+    first_name = forms.CharField(max_length=120, label='Vorname')
+    last_name = forms.CharField(max_length=120, label='Nachname')
+
+    def clean_email(self):
+        value = self.cleaned_data['email'].strip().lower()
+        if User.objects.filter(email__iexact=value).exists():
+            raise forms.ValidationError(
+                'Diese E-Mail-Adresse gehört bereits zu einem PromptMaster-Konto.'
+            )
+        return value
+
+
 class SupportAdminTransferForm(forms.Form):
     password = forms.CharField(
         widget=forms.PasswordInput(render_value=False),
