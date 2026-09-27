@@ -245,7 +245,7 @@ def main() -> int:
                             && e.nextElementSibling?.children.length === 28
                         ),
                         footerGridColumns: footerGridStyle
-                          ? footerGridStyle.gridTemplateColumns.trim().split(/\s+/).filter(Boolean).length
+                          ? footerGridStyle.gridTemplateColumns.trim().split(/\\s+/).filter(Boolean).length
                           : 0,
                         footerBrandColumn: footerGrid?.firstElementChild
                           ? getComputedStyle(footerGrid.firstElementChild).gridColumn
