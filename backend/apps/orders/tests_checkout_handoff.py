@@ -450,7 +450,7 @@ class PublicCheckoutFlowTests(TestCase):
         self.assertEqual(user.owned_licenses.get().status, 'active')
         activation_calls = [
             call for call in queue_after_commit.call_args_list
-            if call.args and call.args[0] == 'password_reset'
+            if call.args and call.args[0] == 'checkout_activation'
         ]
         self.assertEqual(len(activation_calls), 1)
         self.assertEqual(activation_calls[0].args[1], user.email)
