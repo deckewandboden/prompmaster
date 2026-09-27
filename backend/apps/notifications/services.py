@@ -24,7 +24,7 @@ class MailScopeInactive(MailProviderError):
 
 _ENCRYPTED_PREFIX = 'pm_enc:v1:'
 _SENSITIVE_CONTEXT_KEYS = {'url', 'link', 'token'}
-_USER_SCOPED_TEMPLATES = {'verify_email', 'password_reset', 'staff_invite'}
+_USER_SCOPED_TEMPLATES = {'verify_email', 'password_reset', 'staff_invite', 'checkout_activation'}
 
 
 def _extract_last_url_token(value):
