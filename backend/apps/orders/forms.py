@@ -1,5 +1,6 @@
 from django import forms
 
+from apps.catalog.models import TaxRule
 from .services import MAX_PURCHASE_QUANTITY
 
 
@@ -69,6 +70,23 @@ class PublicCheckoutForm(forms.Form):
         if customer_type == 'company':
             if not cleaned.get('company_name'):
                 self.add_error('company_name', 'Unternehmensname ist erforderlich.')
+            country = (cleaned.get('country') or '').upper()
+            rule = TaxRule.objects.filter(
+                country=country,
+                customer_type='company',
+                active=True,
+            ).first()
+            if rule:
+                if rule.require_vat_id and not cleaned.get('vat_id'):
+                    self.add_error(
+                        'vat_id',
+                        'USt-IdNr. ist für diese Steuerregel erforderlich.',
+                    )
+                if rule.require_tax_number and not cleaned.get('tax_number'):
+                    self.add_error(
+                        'tax_number',
+                        'Steuernummer ist für diese Steuerregel erforderlich.',
+                    )
         elif customer_type == 'private':
             if not cleaned.get('accept_withdrawal'):
                 self.add_error(
