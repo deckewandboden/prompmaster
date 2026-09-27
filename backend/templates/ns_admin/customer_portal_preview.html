@@ -77,14 +77,14 @@
 {% elif preview_section == 'team' and preview_kind == 'company' %}
 <div class="card mt-14"><h2>Mein Team</h2>
 <table><thead><tr><th>Name</th><th>E-Mail</th><th>Rolle</th><th>Status</th></tr></thead><tbody>
-{% for membership in preview_members %}<tr><td>{{ membership.user.full_name }}</td><td>{{ membership.user.email }}</td><td>{{ membership.get_role_display }}</td><td>{% if membership.active %}Aktiv{% else %}Inaktiv{% endif %}</td></tr>{% empty %}<tr><td colspan="4">Keine Benutzer vorhanden.</td></tr>{% endfor %}
+{% for membership in preview_members %}<tr><td data-label="Name">{{ membership.user.full_name }}</td><td data-label="E-Mail">{{ membership.user.email }}</td><td data-label="Rolle">{{ membership.get_role_display }}</td><td data-label="Status">{% if membership.active %}Aktiv{% else %}Inaktiv{% endif %}</td></tr>{% empty %}<tr><td data-label="Hinweis" colspan="4">Keine Benutzer vorhanden.</td></tr>{% endfor %}
 </tbody></table></div>
 
 {% elif preview_section == 'licenses' %}
 <div class="card mt-14"><h2>Lizenzen</h2>
 {% if can_licenses %}
 <table><thead><tr><th>Lizenz</th><th>Produkt</th><th>Status</th><th>Gültig bis</th></tr></thead><tbody>
-{% for license in preview_licenses %}<tr><td>{{ license.license_number }}</td><td>{{ license.product.name }}</td><td>{{ license.get_status_display }}</td><td>{{ license.valid_until|date:"d.m.Y" }}</td></tr>{% empty %}<tr><td colspan="4">Keine Lizenzen vorhanden.</td></tr>{% endfor %}
+{% for license in preview_licenses %}<tr><td data-label="Lizenz">{{ license.license_number }}</td><td data-label="Produkt">{{ license.product.name }}</td><td data-label="Status">{{ license.get_status_display }}</td><td data-label="Gültig bis">{{ license.valid_until|date:"d.m.Y" }}</td></tr>{% empty %}<tr><td data-label="Hinweis" colspan="4">Keine Lizenzen vorhanden.</td></tr>{% endfor %}
 </tbody></table>
 {% else %}<div class="muted">Keine netstyle-Berechtigung zum Anzeigen der Lizenzdaten.</div>{% endif %}
 </div>
@@ -92,14 +92,14 @@
 {% elif preview_section == 'devices' %}
 <div class="card mt-14"><h2>Geräte</h2>
 <table><thead><tr><th>Gerät</th>{% if preview_kind == 'company' %}<th>Benutzer</th>{% endif %}<th>Lizenz</th><th>Zuletzt gesehen</th></tr></thead><tbody>
-{% for device in preview_devices %}<tr><td>{{ device.display_name|default:"Gerät" }}</td>{% if preview_kind == 'company' %}<td>{{ device.user.email }}</td>{% endif %}<td>{{ device.license.license_number }}</td><td>{{ device.last_seen_at|date:"d.m.Y H:i" }}</td></tr>{% empty %}<tr><td colspan="{% if preview_kind == 'company' %}4{% else %}3{% endif %}">Keine aktiven Geräte vorhanden.</td></tr>{% endfor %}
+{% for device in preview_devices %}<tr><td data-label="Gerät">{{ device.display_name|default:"Gerät" }}</td>{% if preview_kind == 'company' %}<td data-label="Benutzer">{{ device.user.email }}</td>{% endif %}<td data-label="Lizenz">{{ device.license.license_number }}</td><td data-label="Zuletzt gesehen">{{ device.last_seen_at|date:"d.m.Y H:i" }}</td></tr>{% empty %}<tr><td data-label="Hinweis" colspan="{% if preview_kind == 'company' %}4{% else %}3{% endif %}">Keine aktiven Geräte vorhanden.</td></tr>{% endfor %}
 </tbody></table></div>
 
 {% elif preview_section == 'orders' %}
 <div class="card mt-14"><h2>Bestellungen &amp; Zahlungen</h2>
 {% if can_orders %}
 <table><thead><tr><th>Bestellung</th><th>Datum</th><th>Status</th><th>Gesamt</th></tr></thead><tbody>
-{% for order in preview_orders %}<tr><td>{{ order.order_number }}</td><td>{{ order.created_at|date:"d.m.Y H:i" }}</td><td>{{ order.get_status_display }}</td><td>{{ order.gross_total }} {{ order.currency }}</td></tr>{% empty %}<tr><td colspan="4">Keine Bestellungen vorhanden.</td></tr>{% endfor %}
+{% for order in preview_orders %}<tr><td data-label="Bestellung">{{ order.order_number }}</td><td data-label="Datum">{{ order.created_at|date:"d.m.Y H:i" }}</td><td data-label="Status">{{ order.get_status_display }}</td><td data-label="Gesamt">{{ order.gross_total }} {{ order.currency }}</td></tr>{% empty %}<tr><td data-label="Hinweis" colspan="4">Keine Bestellungen vorhanden.</td></tr>{% endfor %}
 </tbody></table>
 {% else %}<div class="muted">Keine netstyle-Berechtigung zum Anzeigen der Bestelldaten.</div>{% endif %}
 </div>
