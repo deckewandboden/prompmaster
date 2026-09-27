@@ -302,7 +302,13 @@ def leads(request):
 
 @staff_perm('leads.write')
 def lead_new(request):
-    form = LeadForm(request.POST or None)
+    can_assign = has_perm(request.user, 'leads.assign')
+    form = LeadForm(
+        request.POST or None,
+        initial={'assigned_to': request.user if not can_assign else None},
+    )
+    if not can_assign:
+        form.fields['assigned_to'].disabled = True
     if request.method == 'POST' and form.is_valid():
         lead = form.save(commit=False)
         lead.created_by = request.user
@@ -355,6 +361,8 @@ def lead_detail(request, pk):
         raise PermissionDenied
 
     form = LeadForm(request.POST or None, instance=lead)
+    if not can_assign:
+        form.fields['assigned_to'].disabled = True
     if request.method == 'POST' and form.is_valid():
         requested_assigned = form.cleaned_data.get('assigned_to')
         requested_assigned_id = requested_assigned.pk if requested_assigned else None
