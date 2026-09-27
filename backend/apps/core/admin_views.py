@@ -20,7 +20,8 @@ from apps.audit.services import audit as write_audit
 from apps.catalog.models import Feature, Product
 from apps.catalog.services import create_price_version, current_price
 from apps.companies.models import Company, Membership, PrivateCustomerProfile
-from apps.companies.services import INVITATION_TTL_HOURS, deactivate_company_member, transfer_admin
+from apps.companies.services import INVITATION_TTL_HOURS, create_invitation, deactivate_company_member, transfer_admin
+from apps.core.models import Lead
 from apps.devices.models import DeviceRegistration
 from apps.devices.services import revoke_device
 from apps.integrations.models import ServiceAccount
@@ -41,6 +42,10 @@ from .admin_forms import (
     GeneralSettingsForm,
     DeletionRejectForm,
     LegalDocumentForm,
+    LeadAssignForm,
+    LeadConvertCompanyForm,
+    LeadDeleteForm,
+    LeadForm,
     RetentionPolicyForm,
     MollieConfigForm,
     PriceVersionForm,
@@ -139,7 +144,7 @@ def dashboard(request):
     now = timezone.now()
     rights = {
         name: has_perm(request.user, f'{name}.read')
-        for name in ('customers', 'licenses', 'orders', 'payments', 'ops', 'support')
+        for name in ('customers', 'leads', 'licenses', 'orders', 'payments', 'ops', 'support')
     }
     paid_orders = Order.objects.filter(status='paid')
     active_licenses = License.objects.filter(valid_until__gt=now, status__in=['active', 'free'])
@@ -186,6 +191,7 @@ def dashboard(request):
     context = {
         'rights': rights,
         'customers': Company.objects.count() + PrivateCustomerProfile.objects.count() if rights['customers'] else None,
+        'open_leads': Lead.objects.filter(deleted_at__isnull=True).exclude(status__in=['won', 'lost']).count() if rights['leads'] else None,
         'licenses': active_licenses.count() if rights['licenses'] else None,
         'expiring30': License.objects.filter(valid_until__gt=now, valid_until__lte=now + timedelta(days=30)).count() if rights['licenses'] else None,
         'expiring60': License.objects.filter(valid_until__gt=now, valid_until__lte=now + timedelta(days=60)).count() if rights['licenses'] else None,
@@ -229,6 +235,329 @@ def dashboard(request):
 @staff_perm()
 def more_menu(request):
     return render(request, 'ns_admin/more.html')
+
+
+@staff_perm('leads.read')
+def leads(request):
+    queryset = Lead.objects.filter(deleted_at__isnull=True).select_related('assigned_to')
+    grid = DataGrid(
+        request,
+        queryset,
+        search_fields=(
+            'lead_number', 'company_name', 'first_name', 'last_name',
+            'email', 'phone', 'assigned_to__email',
+        ),
+        sort_fields={
+            'number': 'lead_number',
+            'customer': 'company_name',
+            'status': 'status',
+            'priority': 'priority',
+            'assigned': 'assigned_to__last_name',
+            'created': 'created_at',
+        },
+        default_sort='-created_at',
+        filters={'status': 'status', 'source': 'source', 'priority': 'priority'},
+    ).build()
+    export = _grid_export(
+        request,
+        grid,
+        [
+            ('lead_number', 'Lead'),
+            ('customer_display', 'Interessent'),
+            ('email', 'E-Mail'),
+            ('status_name', 'Status'),
+            ('assigned_name', 'Zuständig'),
+        ],
+        'promptmaster-leads.csv',
+    )
+    if export:
+        return export
+    return render(
+        request,
+        'ns_admin/grid.html',
+        {
+            'title': 'Leads',
+            'grid': grid,
+            'columns': [
+                ('lead_number', 'Lead', 'number'),
+                ('customer_display', 'Interessent', 'customer'),
+                ('email', 'E-Mail', None),
+                ('status_name', 'Status', 'status'),
+                ('priority', 'Priorität', 'priority'),
+                ('assigned_name', 'Zuständig', 'assigned'),
+                ('created_at', 'Erstellt', 'created'),
+            ],
+            'detail_route': 'ns_admin:lead_detail',
+            'filter_options': [
+                ('status', 'Status', Lead.STATUS),
+                ('source', 'Quelle', Lead.SOURCE),
+                ('priority', 'Priorität', Lead.PRIORITY),
+            ],
+            'export_enabled': True,
+            'primary_action_url': reverse('ns_admin:lead_new') if has_perm(request.user, 'leads.write') else '',
+            'primary_action_label': 'Lead anlegen',
+        },
+    )
+
+
+@staff_perm('leads.write')
+def lead_new(request):
+    form = LeadForm(request.POST or None)
+    if request.method == 'POST' and form.is_valid():
+        lead = form.save(commit=False)
+        lead.created_by = request.user
+        if not has_perm(request.user, 'leads.assign'):
+            lead.assigned_to = request.user
+        lead.save()
+        write_audit(
+            request.user,
+            'lead.created',
+            lead,
+            {
+                'status': lead.status,
+                'source': lead.source,
+                'assigned_to': str(lead.assigned_to_id or ''),
+            },
+            request=request,
+        )
+        messages.success(request, f'Lead {lead.lead_number} angelegt.')
+        return redirect('ns_admin:lead_detail', pk=lead.pk)
+    return render(
+        request,
+        'ns_admin/form.html',
+        {
+            'title': 'Lead anlegen',
+            'form': form,
+            'cancel_url': reverse('ns_admin:leads'),
+        },
+    )
+
+
+def _lead(pk):
+    return get_object_or_404(Lead.objects.select_related('assigned_to', 'converted_company'), pk=pk, deleted_at__isnull=True)
+
+
+@staff_perm('leads.read')
+def lead_detail(request, pk):
+    lead = _lead(pk)
+    can_write = has_perm(request.user, 'leads.write')
+    can_assign = has_perm(request.user, 'leads.assign')
+    before_assigned = lead.assigned_to_id
+    before = {
+        field: getattr(lead, field)
+        for field in (
+            'kind', 'company_name', 'first_name', 'last_name', 'email', 'phone',
+            'source', 'status', 'priority', 'next_action_at', 'notes',
+        )
+    }
+
+    if request.method == 'POST' and not can_write:
+        raise PermissionDenied
+
+    form = LeadForm(request.POST or None, instance=lead)
+    if request.method == 'POST' and form.is_valid():
+        requested_assigned = form.cleaned_data.get('assigned_to')
+        requested_assigned_id = requested_assigned.pk if requested_assigned else None
+        if requested_assigned_id != before_assigned and not can_assign:
+            raise PermissionDenied
+
+        saved = form.save()
+        changes = {}
+        for field, old_value in before.items():
+            new_value = getattr(saved, field)
+            if old_value != new_value:
+                changes[field] = {'before': str(old_value), 'after': str(new_value)}
+        if before_assigned != saved.assigned_to_id:
+            changes['assigned_to'] = {
+                'before': str(before_assigned or ''),
+                'after': str(saved.assigned_to_id or ''),
+            }
+        if changes:
+            write_audit(
+                request.user,
+                'lead.updated',
+                saved,
+                {'changes': changes},
+                request=request,
+            )
+        messages.success(request, 'Lead gespeichert.')
+        return redirect('ns_admin:lead_detail', pk=saved.pk)
+
+    return render(
+        request,
+        'ns_admin/lead_detail.html',
+        {
+            'lead': lead,
+            'form': form,
+            'can_write': can_write,
+            'can_assign': can_assign,
+            'can_delete': has_perm(request.user, 'leads.delete'),
+            'can_convert': has_perm(request.user, 'leads.convert'),
+        },
+    )
+
+
+@staff_perm('leads.assign')
+def lead_assign(request, pk):
+    lead = _lead(pk)
+    form = LeadAssignForm(
+        request.POST or None,
+        initial={'assigned_to': lead.assigned_to_id},
+    )
+    if request.method == 'POST' and form.is_valid():
+        old_id = lead.assigned_to_id
+        lead.assigned_to = form.cleaned_data['assigned_to']
+        lead.save(update_fields=['assigned_to', 'updated_at'])
+        write_audit(
+            request.user,
+            'lead.assigned',
+            lead,
+            {
+                'before': str(old_id or ''),
+                'after': str(lead.assigned_to_id or ''),
+            },
+            request=request,
+        )
+        messages.success(request, 'Lead-Zuständigkeit aktualisiert.')
+        return redirect('ns_admin:lead_detail', pk=lead.pk)
+    return render(
+        request,
+        'ns_admin/form.html',
+        {
+            'title': f'{lead.lead_number} zuweisen',
+            'form': form,
+            'cancel_url': reverse('ns_admin:lead_detail', args=[lead.pk]),
+        },
+    )
+
+
+@staff_perm('leads.delete')
+def lead_delete(request, pk):
+    lead = _lead(pk)
+    form = LeadDeleteForm(request.POST or None)
+    if request.method == 'POST' and form.is_valid():
+        lead.deleted_at = timezone.now()
+        lead.save(update_fields=['deleted_at', 'updated_at'])
+        write_audit(
+            request.user,
+            'lead.deleted',
+            lead,
+            {
+                'status': lead.status,
+                'assigned_to': str(lead.assigned_to_id or ''),
+            },
+            request=request,
+        )
+        messages.success(request, f'Lead {lead.lead_number} gelöscht.')
+        return redirect('ns_admin:leads')
+    return render(
+        request,
+        'ns_admin/form.html',
+        {
+            'title': f'{lead.lead_number} löschen',
+            'form': form,
+            'cancel_url': reverse('ns_admin:lead_detail', args=[lead.pk]),
+        },
+    )
+
+
+@staff_perm('leads.convert')
+def lead_convert_company(request, pk):
+    lead = _lead(pk)
+    if lead.converted_company_id:
+        messages.info(request, 'Dieser Lead ist bereits einem Kunden zugeordnet.')
+        return redirect('ns_admin:customer_detail', pk=lead.converted_company_id)
+    if lead.kind != 'company':
+        messages.error(
+            request,
+            'Privatkunden werden aus rechtlichen Gründen über Registrierung/Checkout angelegt; '
+            'der Lead kann dort anschließend als gewonnen abgeschlossen werden.',
+        )
+        return redirect('ns_admin:lead_detail', pk=lead.pk)
+
+    form = LeadConvertCompanyForm(
+        request.POST or None,
+        initial={
+            'company_name': lead.company_name,
+            'email': lead.email,
+            'first_name': lead.first_name,
+            'last_name': lead.last_name,
+            'phone': lead.phone,
+            'country': 'DE',
+        },
+    )
+    if request.method == 'POST' and form.is_valid():
+        data = form.cleaned_data
+        with transaction.atomic():
+            locked = Lead.objects.select_for_update().get(pk=lead.pk, deleted_at__isnull=True)
+            if locked.converted_company_id:
+                return redirect('ns_admin:customer_detail', pk=locked.converted_company_id)
+
+            company = Company.objects.create(
+                customer_number=f'C-{locked.lead_number}',
+                name=data['company_name'].strip(),
+                legal_form=data['legal_form'].strip(),
+                email=data['email'].strip().lower(),
+                phone=data['phone'].strip(),
+                street=data['street'].strip(),
+                house_number=data['house_number'].strip(),
+                postal_code=data['postal_code'].strip(),
+                city=data['city'].strip(),
+                country=data['country'].strip().upper(),
+                vat_id=data['vat_id'].strip(),
+                tax_number=data['tax_number'].strip(),
+                status='active',
+            )
+            invitation, raw_token = create_invitation(
+                company=company,
+                actor=request.user,
+                email=data['email'],
+                first_name=data['first_name'],
+                last_name=data['last_name'],
+            )
+            from apps.notifications.services import queue_email
+
+            invitation_url = request.build_absolute_uri(
+                reverse('accounts:accept_invitation', args=[raw_token])
+            )
+            queue_email('invite', invitation.email, {'url': invitation_url})
+
+            locked.status = 'won'
+            locked.converted_company = company
+            locked.converted_at = timezone.now()
+            locked.save(
+                update_fields=[
+                    'status', 'converted_company', 'converted_at', 'updated_at',
+                ]
+            )
+            write_audit(
+                request.user,
+                'lead.converted',
+                locked,
+                {
+                    'company_id': str(company.id),
+                    'customer_number': company.customer_number,
+                    'invitation_id': str(invitation.id),
+                },
+                request=request,
+            )
+
+        messages.success(
+            request,
+            'Lead wurde in einen Firmenkunden umgewandelt. '
+            'Der Ansprechpartner hat eine sichere Einladung erhalten.',
+        )
+        return redirect('ns_admin:customer_detail', pk=company.pk)
+
+    return render(
+        request,
+        'ns_admin/form.html',
+        {
+            'title': f'{lead.lead_number} in Kunden umwandeln',
+            'form': form,
+            'cancel_url': reverse('ns_admin:lead_detail', args=[lead.pk]),
+        },
+    )
 
 
 @staff_perm('customers.read')
