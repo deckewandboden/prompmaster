@@ -55,3 +55,4 @@ backend/apps/core/tests_release_contract_regressions.py	0	0000000000000000000000
 backend/apps/prompts/free_legacy.py	0	0000000000000000000000000000000000000000000000000000000000000000	active-backend
 backend/static/brand/promptmaster-logo-hq.png	716278	61e53bedb5792580bc060268c8d2d0398986bbeb9f54c333b4a7e5de9add8072	active-backend
 marketing/public/brand/promptmaster-logo-hq.png	716278	61e53bedb5792580bc060268c8d2d0398986bbeb9f54c333b4a7e5de9add8072	active-marketing
+backend/static/js/promptmaster_brand_hq.20260925.js	479	0000000000000000000000000000000000000000000000000000000000000000	active-backend
