@@ -126,6 +126,9 @@ if(home){
     const requestedQuantity=normalizeQuantity(new URLSearchParams(location.search).get('quantity')||1,fallbackCatalog.maxQuantity);
     document.querySelector('main').innerHTML=checkoutPage(requestedQuantity);
     body=null;
+  }else if(path==='/checkout/success'){
+    title='Zahlung wird bestätigt.';
+    body='<span class="status-badge">PROMPTMASTER PRO</span><h1>Zahlung wird bestätigt.</h1><p>Mollie hat dich zu PromptMaster zurückgeführt. Sobald die Zahlung serverseitig bestätigt wurde, werden deine Pro-Lizenzen automatisch aktiviert.</p><p>Bei einem neu angelegten Kundenkonto erhältst du anschließend eine E-Mail, über die du dein Passwort festlegst und den Zugang aktivierst.</p><a class="button" href="/auth/login/">Zum Kundenkonto →</a><a class="button secondary" href="/">Zur Startseite →</a>';
   }else if(path==='/login'||path==='/portal'||path==='/app/pro'){
     title='Willkommen bei PromptMaster.';
     body='<p>Melde dich an, um Kundenportal und PromptMaster Pro zu öffnen.</p><a class="button" href="/auth/login/">Zur Anmeldung →</a><a class="button secondary" href="/">Zur Marketingseite →</a>';
@@ -160,6 +163,24 @@ function setupCheckoutPage(){
     .filter(Boolean);
   const withdrawal=form.elements.namedItem('accept_withdrawal');
   const stage=document.getElementById('checkout-stage-message');
+  const submit=document.getElementById('checkout-submit');
+  const csrfInput=document.getElementById('checkout-csrf');
+
+  const showStage=(message)=>{
+    if(!stage)return;
+    stage.hidden=false;
+    stage.textContent=message;
+  };
+
+  const checkoutError=new URLSearchParams(location.search).get('error');
+  if(checkoutError){
+    const messages={
+      invalid:'Bitte prüfe deine Angaben und versuche es erneut.',
+      unavailable:'Der Kauf ist gerade nicht verfügbar. Bitte versuche es später erneut.',
+      payment:'Die Zahlung konnte nicht vorbereitet werden. Es wurde nichts freigeschaltet. Bitte versuche es erneut.',
+    };
+    showStage(messages[checkoutError]||'Der Kauf konnte nicht gestartet werden. Bitte versuche es erneut.');
+  }
 
   const syncCustomerType=()=>{
     const type=form.elements.namedItem('customer_type').value;
@@ -181,13 +202,45 @@ function setupCheckoutPage(){
   });
   syncCustomerType();
 
-  form.addEventListener('submit',event=>{
+  let csrfPromise=null;
+  const ensureCsrf=()=>{
+    if(csrfInput?.value)return Promise.resolve(csrfInput.value);
+    if(!csrfPromise){
+      csrfPromise=fetch('/api/v1/checkout/csrf/',{
+        method:'GET',
+        credentials:'same-origin',
+        cache:'no-store',
+        headers:{Accept:'application/json'},
+      }).then(async response=>{
+        if(!response.ok)throw new Error('CSRF token unavailable');
+        const payload=await response.json();
+        if(!payload.csrfToken)throw new Error('CSRF token missing');
+        if(csrfInput)csrfInput.value=payload.csrfToken;
+        return payload.csrfToken;
+      }).finally(()=>{csrfPromise=null});
+    }
+    return csrfPromise;
+  };
+
+  void ensureCsrf().catch(()=>{});
+
+  form.addEventListener('submit',async event=>{
     event.preventDefault();
     if(!form.reportValidity())return;
-    if(stage){
-      stage.hidden=false;
-      stage.innerHTML='<strong>Kaufdaten vollständig.</strong> Die sichere Mollie-Zahlungsübergabe wird als nächster technischer Schritt an diese Maske angebunden; es wurde noch keine Bestellung ausgelöst.';
-      stage.scrollIntoView({behavior:motionReduced.matches?'auto':'smooth',block:'nearest'});
+    if(submit){
+      submit.disabled=true;
+      submit.textContent='Kauf wird vorbereitet …';
+    }
+    try{
+      await ensureCsrf();
+      HTMLFormElement.prototype.submit.call(form);
+    }catch(error){
+      console.error('Checkout konnte nicht gestartet werden.',error);
+      showStage('Die sichere Kaufverbindung konnte nicht vorbereitet werden. Bitte lade die Seite neu und versuche es erneut.');
+      if(submit){
+        submit.disabled=false;
+        submit.textContent='Zahlungspflichtig kaufen →';
+      }
     }
   });
 }
