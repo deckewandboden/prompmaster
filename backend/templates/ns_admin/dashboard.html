@@ -10,6 +10,7 @@
 
 <div class="grid kpis">
   {% if rights.customers %}<div class="card kpi"><div>Kunden gesamt</div><div class="value">{{ customers }}</div></div>{% endif %}
+  {% if rights.leads %}<div class="card kpi"><div>Offene Leads</div><div class="value">{{ open_leads }}</div><div class="small muted"><a href="{% url 'ns_admin:leads' %}">Lead-Pipeline öffnen</a></div></div>{% endif %}
   {% if rights.licenses %}<div class="card kpi"><div>Aktive Lizenzen</div><div class="value">{{ licenses }}</div></div>{% endif %}
   {% if rights.licenses %}<div class="card kpi"><div>Ablauf &lt;30 Tage</div><div class="value">{{ expiring30 }}</div><div class="small muted">{{ expiring60 }} laufen &lt;60 Tage ab</div></div>{% endif %}
   {% if rights.orders %}<div class="card kpi"><div>Umsatz 30 Tage</div><div class="value">{{ revenue30|floatformat:2 }} €</div><div class="small muted">{{ orders30 }} Bestellungen</div></div>{% endif %}
