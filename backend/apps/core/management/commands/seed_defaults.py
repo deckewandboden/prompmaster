@@ -118,6 +118,10 @@ class Command(BaseCommand):
                 'PromptMaster Passwort zurücksetzen',
                 'Sie können Ihr Passwort innerhalb einer Stunde zurücksetzen: {url}',
             ),
+            'checkout_activation': (
+                'PromptMaster Pro Zugang aktivieren',
+                'Ihre Zahlung wurde bestätigt. Legen Sie innerhalb von 7 Tagen Ihr Passwort fest und aktivieren Sie damit Ihren PromptMaster-Zugang: {url}',
+            ),
             'staff_invite': (
                 'PromptMaster netstyle-Zugang einrichten',
                 'Ihr netstyle PromptMaster-Administrationszugang wurde angelegt. Legen Sie innerhalb einer Stunde Ihr Passwort fest: {url}',
