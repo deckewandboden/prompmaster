@@ -1567,39 +1567,28 @@ def run_backend_ui_smoke(browser, fixture=None) -> None:
 
         public_page.locator('[data-close="proModal"]').first.click()
 
-        # Free-to-Pro purchase is public. The CTA must land on the designed
-        # checkout and preserve the selected quantity without forcing login.
-        purchase_page = public_context.new_page()
-        purchase_response = purchase_page.goto(
-            base + 'checkout/?quantity=1',
-            wait_until='networkidle',
+        # Free-to-Pro purchase is public. The Free runtime only owns the
+        # purchase URL contract; /checkout/ itself is served by the marketing
+        # frontend, not Django's runserver used by this backend smoke.
+        csrf_response = public_page.request.get(base + 'api/v1/checkout/csrf/')
+        if csrf_response.status != 200 or not csrf_response.json().get('csrfToken'):
+            raise AssertionError('public checkout CSRF endpoint did not resolve')
+
+        checkout_start_probe = public_page.evaluate(
+            """async (baseUrl) => {
+              const response = await fetch(baseUrl + 'api/v1/checkout/start/', {
+                method: 'GET',
+                credentials: 'same-origin',
+                redirect: 'manual',
+              });
+              return response.status;
+            }""",
+            base,
         )
-        if not purchase_response or purchase_response.status != 200:
-            raise AssertionError('public Pro checkout did not resolve')
-        purchase_probe = purchase_page.evaluate(
-            """() => ({
-              path:location.pathname,
-              h1:document.querySelector('#checkout-title')?.textContent?.trim() || '',
-              quantity:document.querySelector('#quantity')?.value || '',
-              companyDefault:document.querySelector('input[name="customer_type"][value="company"]')?.checked === true,
-              privateChoice:!!document.querySelector('input[name="customer_type"][value="private"]'),
-              submitText:document.querySelector('#checkout-submit')?.textContent?.trim() || '',
-              loginHref:document.querySelector('#checkout-login-link')?.getAttribute('href') || '',
-            })"""
-        )
-        if (
-            purchase_probe['path'] != '/checkout/'
-            or purchase_probe['h1'] != 'PromptMaster Pro kaufen.'
-            or purchase_probe['quantity'] != '1'
-            or not purchase_probe['companyDefault']
-            or not purchase_probe['privateChoice']
-            or 'Zahlungspflichtig kaufen' not in purchase_probe['submitText']
-            or '/auth/login/' not in purchase_probe['loginHref']
-        ):
+        if checkout_start_probe != 405:
             raise AssertionError(
-                f'public Pro checkout rendering regression: {purchase_probe}'
+                f'public checkout mutation endpoint must be POST-only, got {checkout_start_probe}'
             )
-        purchase_page.close()
 
         word_wrap = public_page.locator('[data-appwrap="word"]')
         if (
