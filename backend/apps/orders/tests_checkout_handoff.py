@@ -1,4 +1,5 @@
 from decimal import Decimal
+from urllib.parse import urlsplit
 from unittest.mock import patch
 
 from django.core.cache import cache
@@ -616,4 +617,95 @@ class PublicCheckoutFlowTests(TestCase):
             '/auth/checkout-activation/',
             activation_calls[0].args[2]['url'],
         )
+
+    @patch('apps.payments.services._queue_after_commit')
+    @patch('apps.payments.mollie.MollieClient.create_payment')
+    def test_checkout_activation_link_sets_password_is_single_use_and_opens_customer_portal(
+        self,
+        create_payment,
+        queue_after_commit,
+    ):
+        from apps.payments.services import process_provider_state
+
+        create_payment.return_value = {
+            'id': 'tr_public_activation',
+            'status': 'open',
+            '_links': {
+                'checkout': {
+                    'href': 'https://checkout.example.test/activation',
+                },
+            },
+        }
+        self.client.post(
+            '/api/v1/checkout/start/',
+            self.private_payload(
+                quantity='1',
+                email='activate-public@example.test',
+            ),
+        )
+        user = User.objects.get(email='activate-public@example.test')
+
+        process_provider_state(
+            'tr_public_activation',
+            {
+                'id': 'tr_public_activation',
+                'status': 'paid',
+                'amount': {'value': '35.88', 'currency': 'EUR'},
+                'amountRefunded': {'value': '0.00', 'currency': 'EUR'},
+                'method': 'ideal',
+            },
+            chargebacks_payload={'_embedded': {'chargebacks': []}},
+        )
+
+        activation_calls = [
+            call for call in queue_after_commit.call_args_list
+            if call.args and call.args[0] == 'checkout_activation'
+        ]
+        self.assertEqual(len(activation_calls), 1)
+        activation_url = activation_calls[0].args[2]['url']
+        activation_path = urlsplit(activation_url).path
+        self.assertTrue(activation_path.startswith('/auth/checkout-activation/'))
+
+        open_link = self.client.get(activation_path)
+        self.assertEqual(open_link.status_code, 200)
+        self.assertContains(open_link, 'Neues Passwort')
+
+        password = 'Aktivierung-Checkout-2026!SehrSicher'
+        activated = self.client.post(
+            activation_path,
+            {
+                'password': password,
+                'password_repeat': password,
+            },
+        )
+        self.assertEqual(activated.status_code, 200)
+        self.assertContains(activated, 'Passwort geändert')
+
+        user.refresh_from_db()
+        self.assertTrue(user.has_usable_password())
+        self.assertTrue(user.check_password(password))
+        self.assertIsNotNone(user.email_verified_at)
+
+        # The signed activation link must be one-time use after the security
+        # version is bumped by successful activation.
+        reused = self.client.get(activation_path)
+        self.assertEqual(reused.status_code, 200)
+        self.assertContains(reused, 'Link ungültig')
+
+        login = self.client.post(
+            '/auth/login/',
+            {
+                'email': user.email,
+                'password': password,
+            },
+        )
+        self.assertEqual(login.status_code, 302)
+
+        # A paid private Pro customer may be routed directly into Pro after
+        # login, but the same authenticated identity must still own and open
+        # the customer backend.
+        portal = self.client.get('/portal/dashboard/')
+        self.assertEqual(portal.status_code, 200)
+        self.assertContains(portal, user.email)
+
 
