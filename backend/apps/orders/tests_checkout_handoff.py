@@ -1,6 +1,7 @@
 from decimal import Decimal
 from unittest.mock import patch
 
+from django.core.cache import cache
 from django.test import TestCase
 from django.utils import timezone
 
@@ -150,6 +151,10 @@ class PublicCatalogPurchaseLimitTests(TestCase):
 
 class PublicCheckoutFlowTests(TestCase):
     def setUp(self):
+        # Public checkout is deliberately rate-limited in production. These
+        # tests share one loopback IP and a persistent Redis cache inside CI,
+        # so isolate each case without weakening the production limit.
+        cache.clear()
         now = timezone.now()
         self.product = Product.objects.create(
             code='PRO',
