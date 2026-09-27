@@ -207,6 +207,15 @@ test('pricing calculator survives stale non-JSON browser responses but checkout 
   assert.match(content,/id="checkout-submit" type="submit" disabled/);
 });
 
+test('checkout mirrors server tax-field requirements before submission',()=>{
+  const main=read('src/main.js');
+  assert.match(main,/companyRequireVatId===true/);
+  assert.match(main,/companyRequireTaxNumber===true/);
+  assert.match(main,/vatField\.required=/);
+  assert.match(main,/taxField\.required=/);
+});
+
+
 test('static compatibility pages no longer claim product is unavailable',()=>{
   const main=read('src/main.js');
   assert.doesNotMatch(main,/Kauf noch nicht freigeschaltet/);
