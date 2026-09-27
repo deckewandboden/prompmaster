@@ -179,12 +179,15 @@ test('hero and marketing copy use recovered V15 decisions',()=>{
   assert.doesNotMatch(content,/Vorschau · Kauf und Anmeldung noch nicht freigeschaltet/);
 });
 
-test('pricing calculator survives stale non-JSON browser responses',()=>{
+test('pricing calculator survives stale non-JSON browser responses but checkout fails closed',()=>{
   const main=read('src/main.js');
   assert.match(main,/fallbackCatalog/);
   assert.match(main,/cache:'no-store'/);
   assert.match(main,/Accept:'application\/json'/);
   assert.match(main,/eingebetteter Preiskatalog/);
+  assert.match(main,/if\(path==='\/checkout'\)\{\s*throw new Error\('Sicherer Live-Produktkatalog für den Checkout nicht verfügbar'/);
+  assert.match(main,/catalog\.checkoutEnabled!==true/);
+  assert.match(main,/Es wird keine Bestellung gestartet/);
 });
 
 test('static compatibility pages no longer claim product is unavailable',()=>{
