@@ -16,6 +16,7 @@ from apps.accounts.models import Role, User, UserRole
 from apps.catalog.models import Product, ProductPrice
 from apps.companies.models import Company, Invitation, Membership, PrivateCustomerProfile
 from apps.devices.models import DeviceRegistration
+from apps.core.models import Lead
 from apps.legal.models import LegalDocument
 from apps.licenses.models import (
     License,
@@ -248,6 +249,7 @@ class Command(BaseCommand):
             now=now,
             credentials=credentials,
         )
+        self._seed_demo_leads(now)
         self._seed_cross_function_demo_rows(company_users, private_users, now)
 
         self.stdout.write(self.style.SUCCESS('Demo-Daten erfolgreich gesetzt.'))
@@ -915,6 +917,74 @@ class Command(BaseCommand):
                 'status': 'new' if spec['state'] != 'expired' else 'in_progress',
             },
         )
+
+    def _seed_demo_leads(self, now):
+        support_one = User.objects.get(email='demo.support1@promptmaster.invalid')
+        support_two = User.objects.get(email='demo.support2@promptmaster.invalid')
+        specs = (
+            {
+                'lead_number': 'LD-DEMO-0001',
+                'kind': 'company',
+                'company_name': 'Demo Interessent GmbH',
+                'first_name': 'Lena',
+                'last_name': 'Lead',
+                'email': 'demo.lead1@promptmaster.invalid',
+                'phone': '+49 271 5557001',
+                'source': 'website',
+                'status': 'new',
+                'priority': 'high',
+                'assigned_to': support_one,
+                'next_action_at': now + timedelta(days=1),
+                'notes': 'Demo-Lead für Listen-, Detail-, Zuweisungs- und Konvertierungsprüfung.',
+            },
+            {
+                'lead_number': 'LD-DEMO-0002',
+                'kind': 'company',
+                'company_name': 'Demo Beratung KG',
+                'first_name': 'Kai',
+                'last_name': 'Kontakt',
+                'email': 'demo.lead2@promptmaster.invalid',
+                'phone': '+49 231 5557002',
+                'source': 'free',
+                'status': 'contacted',
+                'priority': 'normal',
+                'assigned_to': support_two,
+                'next_action_at': now + timedelta(days=3),
+                'notes': 'Demo-Lead nach Erstkontakt.',
+            },
+            {
+                'lead_number': 'LD-DEMO-0003',
+                'kind': 'private',
+                'company_name': '',
+                'first_name': 'Paula',
+                'last_name': 'Prospekt',
+                'email': 'demo.lead3@promptmaster.invalid',
+                'phone': '',
+                'source': 'contact',
+                'status': 'qualified',
+                'priority': 'low',
+                'assigned_to': support_one,
+                'next_action_at': None,
+                'notes': 'Privat-Leads werden nicht intern in Kundenkonten umgewandelt.',
+            },
+        )
+        keep = []
+        for spec in specs:
+            lead_number = spec['lead_number']
+            keep.append(lead_number)
+            Lead.objects.update_or_create(
+                lead_number=lead_number,
+                defaults={
+                    **{key: value for key, value in spec.items() if key != 'lead_number'},
+                    'created_by': support_one,
+                    'converted_company': None,
+                    'converted_at': None,
+                    'deleted_at': None,
+                },
+            )
+        Lead.objects.filter(lead_number__startswith='LD-DEMO-').exclude(
+            lead_number__in=keep
+        ).delete()
 
     def _seed_cross_function_demo_rows(self, company_users, private_users, now):
         EmailMessage.objects.filter(subject__startswith='[DEMO]').delete()
