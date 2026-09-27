@@ -312,8 +312,10 @@ def main() -> int:
                     fail(f'{width}px: Nachtlandschaft ist nicht geladen')
                 if metrics['headerPosition'] != 'fixed':
                     fail(f'{width}px: Marketing-Navigation ist nicht fixiert')
-                if 'promptmaster-logo-clean.svg' not in metrics['logoImage']:
-                    fail(f'{width}px: Marketing-Header verwendet nicht das saubere Logo-Asset')
+                if 'promptmaster-logo-hq.png' not in metrics['logoImage']:
+                    fail(f'{width}px: Marketing-Header verwendet nicht das freigegebene HQ-Logo-Asset')
+                if 'promptmaster-logo-clean.svg' in metrics['logoImage']:
+                    fail(f'{width}px: Marketing-Header verwendet wieder das alte SVG-Logo')
                 if 'design-reference.jpeg' in metrics['logoImage']:
                     fail(f'{width}px: Marketing-Header verwendet wieder den Screenshot-Logo-Crop')
                 if not metrics['canvasVisible'] or metrics['canvasWidth'] < width * 0.95:
