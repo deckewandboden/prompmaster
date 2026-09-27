@@ -2,6 +2,8 @@ import uuid
 
 from django.conf import settings
 from django.db import models
+from django.db.models import Q
+from django.db.models.functions import Lower
 
 
 class TimeStampedModel(models.Model):
@@ -139,6 +141,13 @@ class Lead(TimeStampedModel):
             models.Index(fields=['status', '-created_at'], name='core_lead_status_created_idx'),
             models.Index(fields=['assigned_to', 'status'], name='core_lead_owner_status_idx'),
             models.Index(fields=['deleted_at', '-created_at'], name='core_lead_deleted_created_idx'),
+        ]
+        constraints = [
+            models.UniqueConstraint(
+                Lower('email'),
+                condition=Q(deleted_at__isnull=True),
+                name='uniq_active_lead_email_ci',
+            ),
         ]
 
     def save(self, *args, **kwargs):
