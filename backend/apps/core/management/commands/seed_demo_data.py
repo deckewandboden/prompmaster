@@ -255,6 +255,9 @@ class Command(BaseCommand):
         company_users = {}
         for company_index, spec in enumerate(COMPANIES, start=1):
             company = self._upsert_company(spec)
+            Company.objects.filter(pk=company.pk).update(
+                created_at=now - timedelta(days=DEMO_PURCHASE_AGES[company_index][0] + 24)
+            )
             users = self._seed_company_users(company, spec, company_index, now, credentials)
             company_users[spec['customer_number']] = users
             self._seed_commercial_data(
@@ -503,8 +506,13 @@ class Command(BaseCommand):
                     'product_name_snapshot': product.name,
                 },
             )
+            provider_payment_id = (
+                f'tr_demo_{company_index:04d}_paid'
+                if code == 'O'
+                else f'tr_demo_{company_index:04d}_{code.lower()}_paid'
+            )
             payment, _ = Payment.objects.update_or_create(
-                provider_payment_id=f'tr_demo_{company_index:04d}_{code.lower()}_paid',
+                provider_payment_id=provider_payment_id,
                 defaults={
                     'order': order,
                     'provider': 'mollie',
@@ -516,7 +524,7 @@ class Command(BaseCommand):
                     'failed_at': None,
                     'processed_paid': True,
                     'last_provider_payload': {
-                        'id': f'tr_demo_{company_index:04d}_{code.lower()}_paid',
+                        'id': provider_payment_id,
                         'status': 'paid',
                         'method': 'banktransfer' if code in {'O', 'LG'} else 'creditcard',
                         'demo': True,
