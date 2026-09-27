@@ -257,7 +257,7 @@ class DemoEstateFunctionalAcceptanceTests(TestCase):
         admin = Membership.objects.get(company=company, active=True, role='admin').user
         invitation = Invitation.objects.get(
             company=company,
-            email='demo.einladung@promptmaster.invalid',
+            email='eva.einladung.westfalen@promptmaster.invalid',
             accepted_at__isnull=True,
             revoked_at__isnull=True,
         )
