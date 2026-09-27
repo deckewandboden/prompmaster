@@ -65,6 +65,11 @@ async function initializePricing(){
         if(hidden)hidden.value=String(q.quantity);
         const login=document.getElementById('checkout-login-link');
         if(login)login.href='/auth/login/?next='+encodeURIComponent('/portal/licenses/buy/?quantity='+q.quantity);
+        const checkoutSubmit=document.getElementById('checkout-submit');
+        if(checkoutSubmit){
+          checkoutSubmit.disabled=false;
+          checkoutSubmit.textContent='Zahlungspflichtig kaufen →';
+        }
         if(buy?.tagName==='A'){
           buy.textContent='Zahlungspflichtig kaufen →';
           buy.href='/portal/licenses/buy/?quantity='+q.quantity;
