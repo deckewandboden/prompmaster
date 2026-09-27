@@ -365,8 +365,20 @@ def public_catalog(request):
     pro_price = current_price(pro, 'new', now) if pro else None
     annual_gross = pro_price.gross_amount if pro_price else Decimal('35.88')
     monthly_gross = (annual_gross / Decimal('12')).quantize(Decimal('0.01'), rounding=ROUND_HALF_UP)
-    tax = TaxRule.objects.filter(country='DE', active=True).order_by('customer_type').first()
-    tax_basis_points = int((tax.tax_rate if tax else Decimal('19.00')) * 100)
+    company_tax = TaxRule.objects.filter(
+        country='DE',
+        customer_type='company',
+        active=True,
+    ).first()
+    private_tax = TaxRule.objects.filter(
+        country='DE',
+        customer_type='private',
+        active=True,
+    ).first()
+    display_tax = private_tax or company_tax
+    tax_basis_points = int(
+        (display_tax.tax_rate if display_tax else Decimal('19.00')) * 100
+    )
     applications = list(
         PromptApplication.objects.filter(active=True).order_by('sort_order', 'name').values_list('name', flat=True)
     )
@@ -392,6 +404,10 @@ def public_catalog(request):
         ],
         'maxQuantity': MAX_PURCHASE_QUANTITY,
         'checkoutEnabled': bool(pro and pro.purchasable and pro_price),
+        'companyRequireVatId': bool(company_tax and company_tax.require_vat_id),
+        'companyRequireTaxNumber': bool(
+            company_tax and company_tax.require_tax_number
+        ),
         'loginEnabled': True,
         'freeUrl': '/free/',
         'proApplicationCount': len(applications),
