@@ -2,9 +2,12 @@ from datetime import timedelta
 from decimal import Decimal, ROUND_HALF_UP
 from math import ceil
 
+from django.conf import settings
+from django.core import signing
 from django.core.exceptions import ValidationError
 from django.db import transaction
 from django.db.models import Max, Min, Sum
+from django.urls import reverse
 from django.utils import timezone
 from django.utils.dateparse import parse_datetime
 
@@ -122,6 +125,40 @@ def _order_recipient(order):
     return ''
 
 
+def _order_account_user(order):
+    if order.private_user_id:
+        return order.private_user if order.private_user and order.private_user.is_active else None
+    if order.company_id:
+        from apps.companies.models import Membership
+
+        membership = (
+            Membership.objects.filter(
+                company_id=order.company_id,
+                role='admin',
+                active=True,
+                user__is_active=True,
+            )
+            .select_related('user')
+            .first()
+        )
+        return membership.user if membership else None
+    return None
+
+
+def _checkout_activation_url(user):
+    token = signing.dumps(
+        {
+            'uid': str(user.id),
+            'email': user.email,
+            'sv': int(user.security_version),
+        },
+        salt='pm-checkout-activation',
+    )
+    host = settings.CADDY_DOMAIN or 'localhost'
+    scheme = 'https' if getattr(settings, 'ENVIRONMENT', '') == 'production' else 'http'
+    return f"{scheme}://{host}{reverse('accounts:checkout_activation', args=[token])}"
+
+
 def _queue_after_commit(code, recipient, context, *, order=None):
     if not recipient:
         return
@@ -230,6 +267,18 @@ def process_provider_state(payment_id, payload, *, chargebacks_payload=None):
             'amount': f'{payment.amount:.2f}',
             'currency': payment.currency,
         }, order=payment.order)
+        account_user = _order_account_user(payment.order)
+        if (
+            (payment.order.billing_snapshot or {}).get('source') == 'public_checkout'
+            and account_user
+            and not account_user.has_usable_password()
+        ):
+            _queue_after_commit(
+                'password_reset',
+                account_user.email,
+                {'url': _checkout_activation_url(account_user)},
+                order=payment.order,
+            )
         for item in payment.order.items.select_related('target_license').filter(target_license__isnull=False):
             target = item.target_license
             _queue_after_commit('license_renewed', recipient, {
