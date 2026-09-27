@@ -522,6 +522,7 @@ def lead_convert_company(request, pk):
                 email=data['email'],
                 first_name=data['first_name'],
                 last_name=data['last_name'],
+                role='admin',
             )
             from apps.notifications.services import queue_email
 
