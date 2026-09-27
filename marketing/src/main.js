@@ -63,6 +63,11 @@ async function initializePricing(){
       if(path==='/checkout'){
         const hidden=document.getElementById('checkout-quantity-hidden');
         if(hidden)hidden.value=String(q.quantity);
+        const checkoutForm=document.getElementById('public-checkout-form');
+        const vatField=checkoutForm?.elements.namedItem('vat_id');
+        const taxField=checkoutForm?.elements.namedItem('tax_number');
+        if(vatField)vatField.required=catalog.companyRequireVatId===true;
+        if(taxField)taxField.required=catalog.companyRequireTaxNumber===true;
         const login=document.getElementById('checkout-login-link');
         if(login)login.href='/auth/login/?next='+encodeURIComponent('/portal/licenses/buy/?quantity='+q.quantity);
         const checkoutSubmit=document.getElementById('checkout-submit');
