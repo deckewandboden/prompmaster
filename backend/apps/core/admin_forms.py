@@ -100,6 +100,19 @@ class LeadConvertCompanyForm(forms.Form):
     )
 
 
+    def clean_email(self):
+        value = self.cleaned_data['email'].strip().lower()
+        if User.objects.filter(email__iexact=value).exists():
+            raise forms.ValidationError(
+                'Diese E-Mail-Adresse gehört bereits zu einem PromptMaster-Konto.'
+            )
+        if Company.objects.filter(email__iexact=value).exists():
+            raise forms.ValidationError(
+                'Diese E-Mail-Adresse ist bereits einem Firmenkunden zugeordnet.'
+            )
+        return value
+
+
 class SupportAdminTransferForm(forms.Form):
     password = forms.CharField(
         widget=forms.PasswordInput(render_value=False),
