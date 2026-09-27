@@ -187,3 +187,35 @@ class DemoDataProductionGuardTests(TestCase):
     def test_seed_refuses_production(self):
         with self.assertRaisesMessage(CommandError, 'niemals'):
             call_command('seed_demo_data', stdout=io.StringIO())
+
+    @override_settings(ENVIRONMENT='production')
+    def test_explicit_presentation_mode_seeds_only_demo_customer_estate(self):
+        call_command('seed_defaults', verbosity=0, stdout=io.StringIO())
+        User.objects.create_superuser(
+            email='real.staff@example.test',
+            password='Production-Test-Admin-2026!',
+            first_name='Real',
+            last_name='Staff',
+        )
+
+        output = io.StringIO()
+        call_command(
+            'seed_demo_data',
+            allow_production_presentation=True,
+            stdout=output,
+        )
+
+        self.assertEqual(
+            Company.objects.filter(customer_number__startswith='DEMO-').count(),
+            5,
+        )
+        self.assertFalse(
+            User.objects.filter(
+                email__startswith='demo.superadmin',
+                is_staff=True,
+            ).exists()
+        )
+        self.assertIn(
+            'keine Demo-Staffkonten und keine Rechtstexte verändert',
+            output.getvalue(),
+        )
