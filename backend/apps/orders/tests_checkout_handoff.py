@@ -317,6 +317,78 @@ class PublicCheckoutFlowTests(TestCase):
         # does not mock Mollie credentials.
         self.assertNotEqual(response.status_code, 403)
 
+    @patch('apps.payments.mollie.MollieClient.create_payment')
+    def test_public_checkout_order_is_visible_in_customer_and_netstyle_backends(
+        self,
+        create_payment,
+    ):
+        create_payment.return_value = {
+            'id': 'tr_cross_backend',
+            'status': 'open',
+            '_links': {'checkout': {'href': 'https://checkout.example.test/cross'}},
+        }
+        response = self.client.post(
+            '/api/v1/checkout/start/',
+            self.company_payload(
+                quantity='4',
+                email='cross-backend@example.test',
+            ),
+        )
+        self.assertEqual(response.status_code, 302)
+
+        user = User.objects.get(email='cross-backend@example.test')
+        company = Company.objects.get(
+            memberships__user=user,
+            memberships__active=True,
+        )
+        order = Order.objects.get(company=company)
+        now = timezone.now()
+
+        # The same order must be visible from the real customer portal.
+        user.email_verified_at = now
+        user.two_factor_required = False
+        user.save(update_fields=[
+            'email_verified_at',
+            'two_factor_required',
+            'updated_at',
+        ])
+        self.client.force_login(user)
+        session = self.client.session
+        session['security_version'] = user.security_version
+        session['authenticated_at'] = now.timestamp()
+        session['last_activity_at'] = now.timestamp()
+        session.save()
+        portal_response = self.client.get('/portal/orders/')
+        self.assertEqual(portal_response.status_code, 200)
+        self.assertContains(portal_response, order.order_number)
+
+        # Netstyle must see that exact same database order, not a copy.
+        staff = User.objects.create_user(
+            'checkout-auditor@example.test',
+            'Checkout-Auditor-Password-2026!',
+            first_name='Checkout',
+            last_name='Auditor',
+            email_verified_at=now,
+            is_staff=True,
+            is_superuser=True,
+            two_factor_required=False,
+        )
+        self.client.force_login(staff)
+        session = self.client.session
+        session['security_version'] = staff.security_version
+        session['authenticated_at'] = now.timestamp()
+        session['last_activity_at'] = now.timestamp()
+        session.save()
+        admin_response = self.client.get(
+            f'/ns-admin/customers/{company.id}/orders/'
+        )
+        self.assertEqual(admin_response.status_code, 200)
+        self.assertContains(admin_response, order.order_number)
+        self.assertEqual(
+            Order.objects.filter(pk=order.pk, company=company).count(),
+            1,
+        )
+
     @patch('apps.payments.services._queue_after_commit')
     @patch('apps.payments.mollie.MollieClient.create_payment')
     def test_paid_public_checkout_activates_license_and_queues_account_activation(
