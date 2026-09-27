@@ -53,6 +53,247 @@ def legal_public(request, doc_type):
     return render(request, 'legal_public.html', {'document': document})
 
 
+def checkout_csrf(request):
+    """Issue a CSRF token for the static public checkout page."""
+    if request.method != 'GET':
+        return HttpResponse(status=405)
+    from django.middleware.csrf import get_token
+
+    response = JsonResponse({'csrfToken': get_token(request)})
+    response['Cache-Control'] = 'no-store'
+    return response
+
+
+def public_checkout_start(request):
+    """Create a new customer/order and hand the browser to Mollie.
+
+    GET /checkout/ remains the static marketing surface. Only this same-origin
+    POST endpoint mutates customer, order and payment state.
+    """
+    if request.method != 'POST':
+        return HttpResponse(status=405)
+
+    import secrets
+    from urllib.parse import urlencode
+
+    from django.contrib import messages
+    from django.contrib.auth import get_user_model
+    from django.core.exceptions import ValidationError
+    from django.db import IntegrityError, transaction
+    from django.urls import reverse
+    from django.utils import timezone
+
+    from apps.catalog.models import Product
+    from apps.companies.models import Company, Membership, PrivateCustomerProfile
+    from apps.core.security import check_rate, client_ip
+    from apps.legal.models import LegalAcceptance, LegalDocument
+    from apps.orders.forms import PublicCheckoutForm
+    from apps.orders.services import MAX_PURCHASE_QUANTITY, create_order
+    from apps.payments.mollie import MollieClient, MollieError
+    from apps.payments.models import Payment
+
+    limited = check_rate(request, 'public-checkout', 10, 3600)
+    if limited:
+        return limited
+
+    form = PublicCheckoutForm(request.POST)
+    try:
+        fallback_quantity = int(request.POST.get('quantity') or 1)
+    except (TypeError, ValueError):
+        fallback_quantity = 1
+    fallback_quantity = max(1, min(MAX_PURCHASE_QUANTITY, fallback_quantity))
+
+    if request.user.is_authenticated:
+        if request.user.is_staff:
+            return redirect('ns_admin:dashboard')
+        return redirect(
+            f"{reverse('portal:buy')}?{urlencode({'quantity': fallback_quantity})}"
+        )
+
+    if not form.is_valid():
+        return redirect(
+            f"/checkout/?{urlencode({'quantity': fallback_quantity, 'error': 'invalid'})}"
+        )
+
+    data = form.cleaned_data
+    quantity = data['quantity']
+    User = get_user_model()
+    existing = User.objects.filter(email__iexact=data['email']).first()
+    if existing:
+        messages.info(
+            request,
+            'Für diese E-Mail-Adresse besteht bereits ein PromptMaster-Konto. Bitte anmelden.',
+        )
+        next_url = f"{reverse('portal:buy')}?{urlencode({'quantity': quantity})}"
+        return redirect(
+            f"{reverse('accounts:login')}?{urlencode({'next': next_url})}"
+        )
+
+    private_customer = data['customer_type'] == 'private'
+    required_docs = ['terms', 'privacy'] + (['withdrawal'] if private_customer else [])
+    now = timezone.now()
+    documents = {}
+    for doc_type in required_docs:
+        document = (
+            LegalDocument.objects.filter(
+                doc_type=doc_type,
+                active=True,
+                valid_from__lte=now,
+            )
+            .order_by('-valid_from')
+            .first()
+        )
+        if not document:
+            return redirect(
+                f"/checkout/?{urlencode({'quantity': quantity, 'error': 'unavailable'})}"
+            )
+        documents[doc_type] = document
+
+    product = Product.objects.filter(
+        code='PRO',
+        active=True,
+        purchasable=True,
+    ).first()
+    if not product:
+        return redirect(
+            f"/checkout/?{urlencode({'quantity': quantity, 'error': 'unavailable'})}"
+        )
+
+    checkout_key = request.session.get('public_checkout_key')
+    if not checkout_key:
+        checkout_key = secrets.token_urlsafe(24)
+        request.session['public_checkout_key'] = checkout_key
+
+    try:
+        with transaction.atomic():
+            user = User.objects.create_user(
+                email=data['email'],
+                password=None,
+                first_name=data['first_name'].strip(),
+                last_name=data['last_name'].strip(),
+                two_factor_required=(data['customer_type'] == 'company'),
+            )
+
+            if data['customer_type'] == 'company':
+                company = Company.objects.create(
+                    customer_number=f'C-{user.id.hex[:24].upper()}',
+                    name=data['company_name'].strip(),
+                    legal_form=data['legal_form'].strip(),
+                    email=user.email,
+                    phone=data['phone'].strip(),
+                    street=data['street'].strip(),
+                    house_number=data['house_number'].strip(),
+                    postal_code=data['postal_code'].strip(),
+                    city=data['city'].strip(),
+                    country=data['country'],
+                    vat_id=data['vat_id'].strip(),
+                    tax_number=data['tax_number'].strip(),
+                )
+                Membership.objects.create(
+                    company=company,
+                    user=user,
+                    role='admin',
+                    active=True,
+                )
+            else:
+                PrivateCustomerProfile.objects.create(
+                    user=user,
+                    customer_number=f'P-{user.id.hex[:24].upper()}',
+                    street=data['street'].strip(),
+                    house_number=data['house_number'].strip(),
+                    postal_code=data['postal_code'].strip(),
+                    city=data['city'].strip(),
+                    country=data['country'],
+                )
+
+            evidence = {
+                'source': 'public_checkout',
+                'ip': client_ip(request),
+                'user_agent': (request.META.get('HTTP_USER_AGENT') or '')[:300],
+            }
+            for doc_type in ('terms', 'privacy'):
+                LegalAcceptance.objects.create(
+                    user=user,
+                    document=documents[doc_type],
+                    order=None,
+                    evidence=evidence,
+                )
+
+            order = create_order(
+                user=user,
+                product=product,
+                quantity=quantity,
+                idempotency_key=checkout_key,
+            )
+            snapshot = dict(order.billing_snapshot or {})
+            snapshot['source'] = 'public_checkout'
+            order.billing_snapshot = snapshot
+            order.save(update_fields=['billing_snapshot', 'updated_at'])
+
+            for document in documents.values():
+                LegalAcceptance.objects.create(
+                    user=user,
+                    document=document,
+                    order=order,
+                    evidence=evidence,
+                )
+
+            payload = MollieClient().create_payment(
+                amount=order.gross_total,
+                currency=order.currency,
+                description=f'PromptMaster {order.order_number}',
+                redirect_url=request.build_absolute_uri('/checkout/success/'),
+                webhook_url=request.build_absolute_uri(
+                    reverse('payments:mollie_webhook')
+                ),
+                metadata={'order_id': str(order.id)},
+                idempotency_key=order.idempotency_key,
+            )
+            payment_id = str(payload.get('id') or '')[:100]
+            checkout_url = (
+                (((payload.get('_links') or {}).get('checkout') or {}).get('href') or '')
+                .strip()
+            )
+            if not payment_id or not checkout_url.startswith('https://'):
+                raise MollieError(
+                    'Mollie response is missing payment ID or secure checkout URL'
+                )
+
+            Payment.objects.create(
+                provider_payment_id=payment_id,
+                order=order,
+                status=str(payload.get('status') or 'open')[:40],
+                amount=order.gross_total,
+                currency=order.currency,
+                last_provider_payload=payload,
+            )
+            order.status = 'payment_open'
+            order.save(update_fields=['status', 'updated_at'])
+    except IntegrityError:
+        messages.info(
+            request,
+            'Für diese E-Mail-Adresse besteht bereits ein PromptMaster-Konto. Bitte anmelden.',
+        )
+        next_url = f"{reverse('portal:buy')}?{urlencode({'quantity': quantity})}"
+        return redirect(
+            f"{reverse('accounts:login')}?{urlencode({'next': next_url})}"
+        )
+    except (ValidationError, MollieError):
+        return redirect(
+            f"/checkout/?{urlencode({'quantity': quantity, 'error': 'payment'})}"
+        )
+    except Exception:
+        import logging
+
+        logging.getLogger(__name__).exception('Public checkout failed')
+        return redirect(
+            f"/checkout/?{urlencode({'quantity': quantity, 'error': 'payment'})}"
+        )
+
+    request.session['public_checkout_key'] = secrets.token_urlsafe(24)
+    return redirect(checkout_url)
+
+
 def public_catalog(request):
     """Public, non-sensitive product metadata used by the marketing frontend.
 
