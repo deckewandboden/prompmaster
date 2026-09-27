@@ -274,7 +274,7 @@ def process_provider_state(payment_id, payload, *, chargebacks_payload=None):
             and not account_user.has_usable_password()
         ):
             _queue_after_commit(
-                'password_reset',
+                'checkout_activation',
                 account_user.email,
                 {'url': _checkout_activation_url(account_user)},
                 order=payment.order,
