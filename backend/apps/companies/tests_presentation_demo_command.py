@@ -1,7 +1,6 @@
 from io import StringIO
-from unittest.mock import patch
-
 from django.core.management import call_command
+from django.core.management.base import CommandError
 from django.test import TestCase, override_settings
 from django.utils import timezone
 
@@ -107,7 +106,7 @@ class CompanyPresentationDemoCommandTests(TestCase):
             last_name='Member',
         )
         Membership.objects.create(company=self.company, user=user, role='member', active=True)
-        with self.assertRaisesMessage(Exception, 'weitere echte Benutzer'):
+        with self.assertRaisesMessage(CommandError, 'weitere echte Benutzer'):
             call_command(
                 'seed_company_presentation_demo',
                 company_name=self.company.name,
@@ -117,7 +116,7 @@ class CompanyPresentationDemoCommandTests(TestCase):
 
     @override_settings(ENVIRONMENT='production')
     def test_production_requires_explicit_allow_flag(self):
-        with self.assertRaisesMessage(Exception, '--allow-production'):
+        with self.assertRaisesMessage(CommandError, '--allow-production'):
             call_command(
                 'seed_company_presentation_demo',
                 company_name=self.company.name,
