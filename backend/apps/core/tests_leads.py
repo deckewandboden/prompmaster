@@ -262,6 +262,63 @@ class LeadManagementTests(TestCase):
         search_hidden = self.client.get('/ns-admin/search/?q=ada.lead')
         self.assertNotContains(search_hidden, self.lead.lead_number)
 
+    def test_active_lead_email_is_deduplicated_but_soft_deleted_contact_can_return(self):
+        duplicate = self.client.post(
+            '/ns-admin/leads/new/',
+            {
+                'kind': 'company',
+                'company_name': 'Duplicate GmbH',
+                'first_name': 'Ada',
+                'last_name': 'Duplicate',
+                'email': self.lead.email.upper(),
+                'phone': '',
+                'source': 'manual',
+                'status': 'new',
+                'priority': 'normal',
+                'assigned_to': '',
+                'next_action_at': '',
+                'notes': '',
+            },
+        )
+        self.assertEqual(duplicate.status_code, 200)
+        self.assertContains(
+            duplicate,
+            'Für diese E-Mail-Adresse existiert bereits ein aktiver Lead.',
+        )
+        self.assertEqual(
+            Lead.objects.filter(email__iexact=self.lead.email).count(),
+            1,
+        )
+
+        self.lead.deleted_at = timezone.now()
+        self.lead.save(update_fields=['deleted_at', 'updated_at'])
+
+        recreated = self.client.post(
+            '/ns-admin/leads/new/',
+            {
+                'kind': 'company',
+                'company_name': 'Return GmbH',
+                'first_name': 'Ada',
+                'last_name': 'Return',
+                'email': self.lead.email.upper(),
+                'phone': '',
+                'source': 'manual',
+                'status': 'new',
+                'priority': 'normal',
+                'assigned_to': '',
+                'next_action_at': '',
+                'notes': '',
+            },
+        )
+        self.assertEqual(recreated.status_code, 302)
+        self.assertEqual(
+            Lead.objects.filter(
+                email__iexact=self.lead.email,
+                deleted_at__isnull=True,
+            ).count(),
+            1,
+        )
+
     def test_sales_support_seed_permissions_cover_full_lead_lifecycle(self):
         from django.core.management import call_command
 
