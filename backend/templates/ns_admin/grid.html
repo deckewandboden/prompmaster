@@ -1,5 +1,5 @@
 {% extends 'ns_admin/base.html' %}{% load pm %}{% block content %}
-<div class="page-head"><div><h1>{{ title }}</h1><div class="sub">Serverseitige Suche, Filter, Sortierung und Pagination.</div></div></div>
+<div class="page-head"><div><h1>{{ title }}</h1><div class="sub">Serverseitige Suche, Filter, Sortierung und Pagination.</div></div>{% if primary_action_url %}<div><a class="btn primary" href="{{ primary_action_url }}">{{ primary_action_label|default:'Neu anlegen' }}</a></div>{% endif %}</div>
 {% if customer_tabs %}<nav class="subnav" aria-label="Kundentyp"><a class="{% if customer_type == 'company' %}active{% endif %}" href="{% url 'ns_admin:customers' %}">Unternehmen</a><a class="{% if customer_type == 'private' %}active{% endif %}" href="{% url 'ns_admin:private_customers' %}">Privatkunden</a></nav>{% endif %}
 {% include 'includes/grid_toolbar.html' %}
 <div class="tablewrap"><table><thead><tr>
