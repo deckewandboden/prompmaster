@@ -5,6 +5,7 @@ from django.utils import timezone
 
 from apps.accounts.models import Permission, Role, User
 from apps.companies.forms import CompanyForm
+from apps.companies.models import Company
 from apps.core.models import Lead
 from apps.catalog.models import Feature, Product, ProductEntitlement
 from apps.legal.models import LegalDocument, RetentionPolicy
