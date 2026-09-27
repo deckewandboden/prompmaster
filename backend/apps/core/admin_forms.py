@@ -58,6 +58,21 @@ class LeadForm(forms.ModelForm):
         return data
 
 
+    def clean_email(self):
+        value = self.cleaned_data['email'].strip().lower()
+        duplicates = Lead.objects.filter(
+            email__iexact=value,
+            deleted_at__isnull=True,
+        )
+        if self.instance and self.instance.pk:
+            duplicates = duplicates.exclude(pk=self.instance.pk)
+        if duplicates.exists():
+            raise forms.ValidationError(
+                'Für diese E-Mail-Adresse existiert bereits ein aktiver Lead.'
+            )
+        return value
+
+
 class LeadAssignForm(forms.Form):
     assigned_to = forms.ModelChoiceField(
         queryset=User.objects.none(),
