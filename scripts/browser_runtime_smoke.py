@@ -2808,8 +2808,13 @@ def _run_cross_browser_product_v2(browser, fixture: dict, engine: str) -> None:
         # Reproduce the exact Power Automate screenshot path end-to-end. One
         # missing required field must block composition; once Quell- und
         # Zielsystem are present the server-generated prompt must appear.
-        page.locator('input[name="mslicense"][value="premium"]').check(force=True)
-        page.locator('input[name="mslicense"][value="premium"]').dispatch_event('change')
+        page.locator(
+            'label.license-option:has(input[name="mslicense"][value="premium"]) > span'
+        ).click()
+        if not page.locator(
+            'input[name="mslicense"][value="premium"]'
+        ).is_checked():
+            raise AssertionError(f'{engine} Pro premium license did not persist after visible label click')
         page.wait_for_timeout(100)
         power_state = page.evaluate(
             """() => {
@@ -2994,7 +2999,11 @@ def main() -> int:
         # tasks is covered by validate_prompt_runtime; this loop validates the
         # interactive DOM contract and dynamic field generation task-by-task.
         premium = page.locator('input[name="mslicense"][value="premium"]')
-        premium.check(force=True)
+        page.locator(
+            'label.license-option:has(input[name="mslicense"][value="premium"]) > span'
+        ).click()
+        if not premium.is_checked():
+            raise AssertionError('Pro catalog audit could not select premium through visible license card')
         rendered_tasks = 0
         for source_app in catalog['applications']:
             app_code = source_app['code']
