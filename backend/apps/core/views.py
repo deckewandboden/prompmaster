@@ -199,6 +199,7 @@ def public_checkout_start(request):
                 PrivateCustomerProfile.objects.create(
                     user=user,
                     customer_number=f'P-{user.id.hex[:24].upper()}',
+                    phone=data['phone'].strip(),
                     street=data['street'].strip(),
                     house_number=data['house_number'].strip(),
                     postal_code=data['postal_code'].strip(),
