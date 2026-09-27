@@ -283,6 +283,66 @@ class LeadManagementTests(TestCase):
         self.assertContains(portal, company.name)
         self.assertContains(portal, 'Unternehmensadministrator')
 
+    @patch('apps.notifications.services.queue_email')
+    def test_converted_company_can_recover_expired_bootstrap_admin_invitation(
+        self,
+        queue_email,
+    ):
+        response = self.client.post(
+            f'/ns-admin/leads/{self.lead.id}/convert-company/',
+            {
+                'company_name': 'Lead Test GmbH',
+                'legal_form': 'GmbH',
+                'email': 'ada.lead@example.test',
+                'first_name': 'Ada',
+                'last_name': 'Lovelace',
+                'phone': '+49 271 12345',
+                'street': 'Markt 1',
+                'house_number': '',
+                'postal_code': '57072',
+                'city': 'Siegen',
+                'country': 'DE',
+                'vat_id': 'DE123456789',
+                'tax_number': '123/456/789',
+                'confirm': 'on',
+            },
+        )
+        self.assertEqual(response.status_code, 302)
+        self.lead.refresh_from_db()
+        company = self.lead.converted_company
+        first_invitation = Invitation.objects.get(company=company, role='admin')
+        first_invitation.revoked_at = timezone.now()
+        first_invitation.save(update_fields=['revoked_at', 'updated_at'])
+
+        users = self.client.get(f'/ns-admin/customers/{company.id}/users/')
+        self.assertEqual(users.status_code, 200)
+        self.assertContains(users, 'Firmenadministrator einladen')
+
+        recovered = self.client.post(
+            f'/ns-admin/customers/{company.id}/users/invite-admin/',
+            {
+                'email': 'ada.lead@example.test',
+                'first_name': 'Ada',
+                'last_name': 'Lovelace',
+            },
+        )
+        self.assertEqual(recovered.status_code, 302)
+        open_invites = Invitation.objects.filter(
+            company=company,
+            role='admin',
+            accepted_at__isnull=True,
+            revoked_at__isnull=True,
+        )
+        self.assertEqual(open_invites.count(), 1)
+        self.assertNotEqual(open_invites.get().id, first_invitation.id)
+        self.assertEqual(queue_email.call_count, 2)
+        self.assertTrue(
+            AuditEvent.objects.filter(
+                action='customer.admin_invited',
+                object_id=str(company.id),
+            ).exists()
+        )
+
     def test_private_lead_is_not_silently_converted_without_customer_legal_acceptance(self):
         self.lead.kind = 'private'
         self.lead.company_name = ''
