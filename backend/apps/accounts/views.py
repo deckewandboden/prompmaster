@@ -392,7 +392,11 @@ def checkout_activation(request, token):
             salt=CHECKOUT_ACTIVATION_SALT,
             max_age=7 * 24 * 60 * 60,
         )
-        user = User.objects.select_for_update().get(
+        # GET token validation runs in autocommit mode. Do not request a
+        # row lock here; PostgreSQL rejects SELECT ... FOR UPDATE outside an
+        # explicit transaction. The POST path re-locks the row atomically
+        # immediately before changing the password/security version.
+        user = User.objects.get(
             pk=data['uid'],
             email=data['email'],
             is_active=True,
