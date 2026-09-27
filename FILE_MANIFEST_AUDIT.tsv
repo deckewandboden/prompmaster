@@ -57,3 +57,6 @@ backend/static/brand/promptmaster-logo-hq.png	716278	61e53bedb5792580bc060268c8d
 marketing/public/brand/promptmaster-logo-hq.png	716278	61e53bedb5792580bc060268c8d2d0398986bbeb9f54c333b4a7e5de9add8072	active-marketing
 backend/static/js/promptmaster_brand_hq.20260925.js	479	0000000000000000000000000000000000000000000000000000000000000000	active-backend
 backend/apps/companies/migrations/0003_privatecustomerprofile_phone.py	409	0000000000000000000000000000000000000000000000000000000000000000	active-backend
+backend/apps/core/migrations/0006_lead.py	0	0	active-backend
+backend/apps/core/tests_leads.py	0	0	test
+backend/templates/ns_admin/lead_detail.html	0	0	active-backend
