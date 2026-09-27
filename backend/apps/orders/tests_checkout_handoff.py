@@ -129,6 +129,25 @@ class PublicCatalogPurchaseLimitTests(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.json()['maxQuantity'], MAX_PURCHASE_QUANTITY)
 
+    def test_public_catalog_exposes_company_tax_field_requirements(self):
+        TaxRule.objects.filter(
+            country='DE',
+            customer_type='company',
+            active=True,
+        ).delete()
+        TaxRule.objects.create(
+            country='DE',
+            customer_type='company',
+            tax_rate=Decimal('19.00'),
+            require_vat_id=True,
+            require_tax_number=True,
+            active=True,
+        )
+        response = self.client.get('/catalog.json')
+        self.assertEqual(response.status_code, 200)
+        self.assertTrue(response.json()['companyRequireVatId'])
+        self.assertTrue(response.json()['companyRequireTaxNumber'])
+
 class PublicCheckoutFlowTests(TestCase):
     def setUp(self):
         now = timezone.now()
