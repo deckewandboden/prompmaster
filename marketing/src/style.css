@@ -56,7 +56,7 @@
   }
   #footer .footer-grid .logo-crop{
     width:220px;
-    margin-left:-18px;
+    margin-left:0;
     background-position:left center;
   }
   #footer .footer-grid>div:first-child p{
