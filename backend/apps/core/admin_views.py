@@ -37,6 +37,7 @@ from apps.payments.services import calculate_refund, create_refund_request, subm
 from apps.support.models import SupportRequest
 from .admin_forms import (
     AdminCompanyForm,
+    CustomerAdminInviteForm,
     EmailTemplateForm,
     FeatureForm,
     GeneralSettingsForm,
@@ -954,6 +955,87 @@ def customer_portal_preview(request, pk):
     })
 
 
+@staff_perm('customers.write')
+def customer_admin_invite(request, pk):
+    customer = _customer(request, pk)
+    if customer.memberships.filter(active=True, role='admin').exists():
+        messages.info(request, 'Für dieses Unternehmen existiert bereits ein aktiver Firmenadministrator.')
+        return redirect('ns_admin:customer_users', pk=customer.pk)
+
+    pending = (
+        customer.invitations.filter(
+            role='admin',
+            accepted_at__isnull=True,
+            revoked_at__isnull=True,
+            expires_at__gt=timezone.now(),
+        )
+        .order_by('-created_at')
+        .first()
+    )
+    lead = (
+        Lead.objects.filter(converted_company=customer, deleted_at__isnull=True)
+        .order_by('-converted_at', '-created_at')
+        .first()
+    )
+    initial = {
+        'email': pending.email if pending else customer.email,
+        'first_name': pending.first_name if pending else (lead.first_name if lead else ''),
+        'last_name': pending.last_name if pending else (lead.last_name if lead else ''),
+    }
+    form = CustomerAdminInviteForm(request.POST or None, initial=initial)
+
+    if request.method == 'POST' and form.is_valid():
+        try:
+            with transaction.atomic():
+                locked = Company.objects.select_for_update().get(pk=customer.pk)
+                if locked.memberships.filter(active=True, role='admin').exists():
+                    raise ValidationError(
+                        'Für dieses Unternehmen existiert bereits ein aktiver Firmenadministrator.'
+                    )
+                invitation, raw_token = create_invitation(
+                    company=locked,
+                    actor=request.user,
+                    email=form.cleaned_data['email'],
+                    first_name=form.cleaned_data['first_name'],
+                    last_name=form.cleaned_data['last_name'],
+                    role='admin',
+                )
+                from apps.notifications.services import queue_email
+
+                invitation_url = request.build_absolute_uri(
+                    reverse('accounts:accept_invitation', args=[raw_token])
+                )
+                queue_email('invite', invitation.email, {'url': invitation_url})
+                write_audit(
+                    request.user,
+                    'customer.admin_invited',
+                    locked,
+                    {
+                        'invitation_id': str(invitation.id),
+                        'email': invitation.email,
+                    },
+                    request=request,
+                )
+        except ValidationError as exc:
+            form.add_error(None, exc.messages[0])
+        else:
+            messages.success(
+                request,
+                'Einladung für den Firmenadministrator wurde gesendet.',
+            )
+            return redirect('ns_admin:customer_users', pk=customer.pk)
+
+    return render(
+        request,
+        'ns_admin/form.html',
+        {
+            'title': f'Firmenadministrator einladen · {customer.name}',
+            'form': form,
+            'cancel_url': reverse('ns_admin:customer_users', args=[customer.pk]),
+        },
+    )
+
+
 @staff_perm('customers.read')
 def customer_users(request, pk):
     customer = _customer(request, pk)
@@ -978,6 +1060,13 @@ def customer_users(request, pk):
                 ('active', 'Status', [('True', 'Aktiv'), ('False', 'Inaktiv')]),
             ],
             'can_manage_users': has_perm(request.user, 'customers.write'),
+            'has_active_admin': customer.memberships.filter(active=True, role='admin').exists(),
+            'pending_admin_invitation': customer.invitations.filter(
+                role='admin',
+                accepted_at__isnull=True,
+                revoked_at__isnull=True,
+                expires_at__gt=timezone.now(),
+            ).order_by('-created_at').first(),
         },
     )
 
