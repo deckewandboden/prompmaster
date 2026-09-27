@@ -91,7 +91,7 @@ export const checkoutPage=(quantity=1)=>`
 
       <div class="checkout-submit-row">
         <p><strong>Zahlungsdaten werden nicht bei PromptMaster gespeichert.</strong><br>Bank-, Karten- oder andere Zahlungsdaten werden im nächsten Schritt sicher bei Mollie eingegeben.</p>
-        <button class="button checkout-purchase" id="checkout-submit" type="submit">Zahlungspflichtig kaufen →</button>
+        <button class="button checkout-purchase" id="checkout-submit" type="submit" disabled>Zahlungspflichtig kaufen →</button>
       </div>
       <div class="checkout-stage-message" id="checkout-stage-message" hidden role="status"></div>
     </form>
