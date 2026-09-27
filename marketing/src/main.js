@@ -70,9 +70,14 @@ async function initializePricing(){
           buy.href='/portal/licenses/buy/?quantity='+q.quantity;
         }
         history.replaceState(null,'','/checkout/?quantity='+q.quantity);
-      }else{
+      }else if(catalog.checkoutEnabled===true){
+        buy.removeAttribute('aria-disabled');
         buy.textContent=q.quantity+' PromptMaster-Pro-'+(q.quantity===1?'Lizenz':'Lizenzen')+' kaufen ↗';
         buy.href='/checkout/?quantity='+q.quantity;
+      }else{
+        buy.removeAttribute('href');
+        buy.setAttribute('aria-disabled','true');
+        buy.textContent='Kauf vorübergehend nicht verfügbar';
       }
     }
     input.addEventListener('change',update);
