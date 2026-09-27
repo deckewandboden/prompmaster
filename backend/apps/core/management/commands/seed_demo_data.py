@@ -128,6 +128,30 @@ STAFF_ACCOUNTS = (
     ('demo.prompts2@promptmaster.invalid', 'Paul', 'Promptmanager', 'prompt_manager', 'Prompt Manager'),
 )
 
+DEMO_FIRST_NAMES = (
+    'Anna', 'Jonas', 'Lea', 'Mara', 'Felix', 'Nina', 'David', 'Sophie',
+    'Lukas', 'Miriam', 'Tobias', 'Julia', 'Daniel', 'Katharina', 'Robin',
+    'Laura', 'Simon', 'Nora', 'Jan', 'Carolin', 'Martin', 'Sarah', 'Sebastian',
+    'Elena',
+)
+DEMO_LAST_NAMES = (
+    'Becker', 'Roth', 'Sommer', 'Krueger', 'Weber', 'Hartmann', 'Klein',
+    'Schneider', 'Bauer', 'Koch', 'Richter', 'Wolf', 'Neumann', 'Schulz',
+    'Vogel', 'Brandt', 'Krause', 'Zimmermann', 'Peters', 'Hoffmann', 'Jung',
+    'Lorenz', 'Seidel', 'Fischer',
+)
+
+# Purchase ages deliberately overlap across companies so the Netstyle dashboard
+# shows a plausible six-month revenue curve instead of one synthetic spike.
+DEMO_PURCHASE_AGES = {
+    1: (178, 112, 31),
+    2: (163, 95, 22),
+    3: (147, 80, 16),
+    4: (132, 66, 11),
+    5: (116, 51, 5),
+}
+
+
 
 def _password():
     return 'PmDemo-' + secrets.token_urlsafe(16)
@@ -326,41 +350,78 @@ class Command(BaseCommand):
         return company
 
     def _seed_company_users(self, company, spec, company_index, now, credentials):
-        first_names = [
-            'Anna', 'Jonas', 'Lea', 'Mara', 'Felix', 'Nina', 'David', 'Sophie',
-            'Lukas', 'Miriam', 'Tobias', 'Julia', 'Daniel', 'Katharina', 'Robin',
-        ]
-        last_names = [
-            'Becker', 'Roth', 'Sommer', 'Krüger', 'Weber', 'Hartmann', 'Klein',
-            'Schneider', 'Bauer', 'Koch', 'Richter', 'Wolf', 'Neumann', 'Schulz', 'Vogel',
-        ]
         users = []
-        slug = f'kunde{company_index}'
+        previous_people = sum(row['employees'] for row in COMPANIES[:company_index - 1])
+        company_slug = company.customer_number.lower().replace('-', '')
+        company_age_days = DEMO_PURCHASE_AGES[company_index][0] + 24
+        join_span = max(1, company_age_days - 4)
+
         for index in range(spec['employees']):
+            global_index = previous_people + index
+            first_name = DEMO_FIRST_NAMES[global_index % len(DEMO_FIRST_NAMES)]
+            # The quotient term changes the surname every time a first name
+            # cycles, guaranteeing unique full names throughout the 91-person
+            # demo estate while keeping the distribution natural.
+            last_name = DEMO_LAST_NAMES[
+                ((global_index * 7) + (global_index // len(DEMO_FIRST_NAMES)))
+                % len(DEMO_LAST_NAMES)
+            ]
             is_admin = index == 0
-            email = (
-                f'demo.{slug}.admin{DEMO_EMAIL_SUFFIX}'
+            legacy_email = (
+                f'demo.kunde{company_index}.admin{DEMO_EMAIL_SUFFIX}'
                 if is_admin
-                else f'demo.{slug}.user{index + 1:02d}{DEMO_EMAIL_SUFFIX}'
+                else f'demo.kunde{company_index}.user{index + 1:02d}{DEMO_EMAIL_SUFFIX}'
+            )
+            email = (
+                f'demo.{company_slug}.{first_name.lower()}.'
+                f'{last_name.lower()}.{index + 1:02d}{DEMO_EMAIL_SUFFIX}'
             )
             login_user = is_admin or index in {1, spec['employees'] - 1}
             password = _password() if login_user else None
+            joined_days_ago = max(
+                2,
+                company_age_days - round((join_span * index) / max(1, spec['employees'] - 1)),
+            )
+            verified_at = now - timedelta(days=joined_days_ago)
+
+            # Migrate the previous generic address in place. This avoids
+            # duplicate memberships when an existing staging/demo database is
+            # reseeded after the realistic identity upgrade.
+            user = User.objects.filter(email=email).first()
+            if user is None:
+                user = User.objects.filter(email=legacy_email).first()
+                if user is not None:
+                    user.email = email
+                    user.save(update_fields=['email', 'updated_at'])
+
             user = self._upsert_user(
                 email=email,
-                first_name=first_names[index % len(first_names)],
-                last_name=last_names[index % len(last_names)],
+                first_name=first_name,
+                last_name=last_name,
                 password=password,
                 is_staff=False,
                 two_factor_required=is_admin,
-                verified_at=now,
+                verified_at=verified_at,
             )
             UserRole.objects.filter(user=user).delete()
-            Membership.objects.update_or_create(
+            membership, _ = Membership.objects.update_or_create(
                 company=company,
                 user=user,
                 defaults={'role': 'admin' if is_admin else 'member', 'active': True},
             )
+
+            joined_at = now - timedelta(days=joined_days_ago)
+            last_login = None if index % 9 == 8 else now - timedelta(
+                days=(index * 3 + company_index) % 19,
+                hours=(index * 5) % 12,
+            )
+            User.objects.filter(pk=user.pk).update(
+                created_at=joined_at,
+                last_login=last_login,
+            )
+            Membership.objects.filter(pk=membership.pk).update(created_at=joined_at)
             users.append(user)
+
             if login_user:
                 license_note = (
                     'Firmenadmin · 2FA-Einrichtung beim ersten Login'
@@ -368,7 +429,7 @@ class Command(BaseCommand):
                     else (
                         'Mitarbeiter · PRO zugewiesen'
                         if index < spec['assigned_count']
-                        else 'Mitarbeiter · ohne PRO-Lizenz'
+                        else 'Mitarbeiter · Free / ohne PRO-Lizenz'
                     )
                 )
                 credentials.append(
@@ -383,63 +444,138 @@ class Command(BaseCommand):
 
     def _seed_commercial_data(self, *, company, users, spec, company_index, product, price, now):
         quantity = spec['seat_count']
-        gross_total = (GROSS_PRICE * quantity).quantize(Decimal('0.01'))
-        tax_total = (gross_total - (gross_total / Decimal('1.19'))).quantize(Decimal('0.01'))
-        order, _ = Order.objects.update_or_create(
-            order_number=f"DEMO-O-{company_index:04d}",
-            defaults={
-                'company': company,
-                'private_user': None,
-                'status': 'paid',
-                'currency': 'EUR',
-                'gross_total': gross_total,
-                'tax_total': tax_total,
-                'billing_snapshot': {
-                    'company': company.name,
-                    'street': company.street,
-                    'house_number': company.house_number,
-                    'postal_code': company.postal_code,
-                    'city': company.city,
-                    'country': company.country,
-                    'vat_id': company.vat_id,
-                    'demo': True,
-                },
-                'idempotency_key': f'demo:purchase:{company.customer_number}',
-            },
-        )
-        item, _ = OrderItem.objects.update_or_create(
-            order=order,
-            product=product,
-            target_license=None,
-            defaults={
-                'price_version': price,
-                'quantity': quantity,
-                'unit_gross': GROSS_PRICE,
-                'unit_net': NET_PRICE,
-                'tax_rate': TAX_RATE,
-                'product_name_snapshot': product.name,
-            },
-        )
-        Payment.objects.update_or_create(
-            provider_payment_id=f'tr_demo_{company_index:04d}_paid',
-            defaults={
-                'order': order,
-                'provider': 'mollie',
-                'status': 'paid',
-                'amount': gross_total,
-                'currency': 'EUR',
-                'method': 'banktransfer',
-                'paid_at': now - timedelta(days=90),
-                'failed_at': None,
-                'processed_paid': True,
-                'last_provider_payload': {
-                    'id': f'tr_demo_{company_index:04d}_paid',
+        purchase_ages = DEMO_PURCHASE_AGES[company_index]
+
+        def split_growth(total):
+            if total <= 1:
+                return (total,)
+            if total == 2:
+                return (1, 1)
+            first = max(1, int(round(total * 0.55)))
+            second = max(1, int(round(total * 0.25)))
+            third = total - first - second
+            if third < 1:
+                third = 1
+                if first >= second and first > 1:
+                    first -= 1
+                elif second > 1:
+                    second -= 1
+            return (first, second, third)
+
+        def paid_order(*, code, seats, purchased_at, phase):
+            gross_total = (GROSS_PRICE * seats).quantize(Decimal('0.01'))
+            tax_total = (
+                gross_total - (gross_total / Decimal('1.19'))
+            ).quantize(Decimal('0.01'))
+            order, _ = Order.objects.update_or_create(
+                order_number=f"DEMO-{code}-{company_index:04d}",
+                defaults={
+                    'company': company,
+                    'private_user': None,
                     'status': 'paid',
-                    'method': 'banktransfer',
-                    'demo': True,
+                    'currency': 'EUR',
+                    'gross_total': gross_total,
+                    'tax_total': tax_total,
+                    'billing_snapshot': {
+                        'company': company.name,
+                        'street': company.street,
+                        'house_number': company.house_number,
+                        'postal_code': company.postal_code,
+                        'city': company.city,
+                        'country': company.country,
+                        'vat_id': company.vat_id,
+                        'demo': True,
+                        'phase': phase,
+                    },
+                    'idempotency_key': f'demo:purchase:{company.customer_number}:{code.lower()}',
                 },
-            },
+            )
+            item, _ = OrderItem.objects.update_or_create(
+                order=order,
+                product=product,
+                target_license=None,
+                defaults={
+                    'price_version': price,
+                    'quantity': seats,
+                    'unit_gross': GROSS_PRICE,
+                    'unit_net': NET_PRICE,
+                    'tax_rate': TAX_RATE,
+                    'product_name_snapshot': product.name,
+                },
+            )
+            payment, _ = Payment.objects.update_or_create(
+                provider_payment_id=f'tr_demo_{company_index:04d}_{code.lower()}_paid',
+                defaults={
+                    'order': order,
+                    'provider': 'mollie',
+                    'status': 'paid',
+                    'amount': gross_total,
+                    'currency': 'EUR',
+                    'method': 'banktransfer' if code in {'O', 'LG'} else 'creditcard',
+                    'paid_at': purchased_at,
+                    'failed_at': None,
+                    'processed_paid': True,
+                    'last_provider_payload': {
+                        'id': f'tr_demo_{company_index:04d}_{code.lower()}_paid',
+                        'status': 'paid',
+                        'method': 'banktransfer' if code in {'O', 'LG'} else 'creditcard',
+                        'demo': True,
+                        'phase': phase,
+                    },
+                },
+            )
+            Order.objects.filter(pk=order.pk).update(created_at=purchased_at)
+            OrderItem.objects.filter(pk=item.pk).update(created_at=purchased_at)
+            Payment.objects.filter(pk=payment.pk).update(created_at=purchased_at)
+            return item, purchased_at
+
+        special = None
+        growth_quantity = quantity
+        if company_index == 2:
+            growth_quantity -= 1
+            special = paid_order(
+                code='LG',
+                seats=1,
+                purchased_at=now - timedelta(days=335),
+                phase='Bestandslizenz vor aktuellem Wachstum',
+            )
+        elif company_index == 3:
+            growth_quantity -= 1
+            special = paid_order(
+                code='LG',
+                seats=1,
+                purchased_at=now - timedelta(days=400),
+                phase='Historische, inzwischen abgelaufene Lizenz',
+            )
+
+        phase_codes = ('O', 'A1', 'A2')
+        phase_labels = (
+            'Erstkauf',
+            'erste Erweiterung',
+            'spätere Nachbuchung',
         )
+        cohorts = []
+        for phase_index, seats in enumerate(split_growth(growth_quantity)):
+            if seats <= 0:
+                continue
+            item, purchased_at = paid_order(
+                code=phase_codes[phase_index],
+                seats=seats,
+                purchased_at=now - timedelta(days=purchase_ages[phase_index]),
+                phase=phase_labels[phase_index],
+            )
+            cohorts.extend([(item, purchased_at)] * seats)
+
+        if company_index == 2 and special is not None:
+            cohorts.insert(min(2, len(cohorts)), special)
+        elif company_index == 3 and special is not None:
+            cohorts.append(special)
+
+        if len(cohorts) != quantity:
+            raise CommandError(
+                f'Demo-Kaufhistorie für {company.customer_number} erzeugte '
+                f'{len(cohorts)} statt {quantity} Lizenzkohorten.'
+            )
 
         demo_license_numbers = [
             f"PM-DEMO-{company_index:02d}-{seat_index + 1:03d}"
@@ -454,21 +590,15 @@ class Command(BaseCommand):
         ).delete()
 
         licenses = []
-        for seat_index, number in enumerate(demo_license_numbers):
-            expired = company_index == 3 and seat_index == quantity - 1
-            expiring = company_index == 2 and seat_index == 2
-            if expired:
-                valid_from = now - timedelta(days=400)
-                valid_until = now - timedelta(days=35)
-                status = 'expired'
-            elif expiring:
-                valid_from = now - timedelta(days=335)
-                valid_until = now + timedelta(days=30)
-                status = 'active'
-            else:
-                valid_from = now - timedelta(days=90)
-                valid_until = now + timedelta(days=275)
-                status = 'active' if seat_index < spec['assigned_count'] else 'free'
+        for seat_index, (number, cohort) in enumerate(zip(demo_license_numbers, cohorts)):
+            item, valid_from = cohort
+            valid_until = valid_from + timedelta(days=product.default_license_days)
+            expired = valid_until <= now
+            status = (
+                'expired'
+                if expired
+                else ('active' if seat_index < spec['assigned_count'] else 'free')
+            )
 
             license_obj, _ = License.objects.update_or_create(
                 license_number=number,
@@ -481,6 +611,10 @@ class Command(BaseCommand):
                     'valid_until': valid_until,
                 },
             )
+            License.objects.filter(pk=license_obj.pk).update(created_at=valid_from)
+            # A demo license represents one paid term in this seed. Remove an
+            # older synthetic term if the historical cohort changed.
+            LicenseTerm.objects.filter(license=license_obj).exclude(order_item=item).delete()
             LicenseTerm.objects.update_or_create(
                 license=license_obj,
                 order_item=item,
@@ -495,13 +629,13 @@ class Command(BaseCommand):
             licenses.append(license_obj)
 
             if not expired and seat_index < spec['assigned_count']:
-                target = users[seat_index]
                 LicenseAssignment.objects.create(
                     license=license_obj,
-                    user=target,
+                    user=users[seat_index],
                 )
 
-            if expiring:
+            remaining_days = (valid_until.date() - now.date()).days
+            if not expired and remaining_days <= 30:
                 LicenseReminder.objects.update_or_create(
                     license=license_obj,
                     kind='t30',
@@ -513,7 +647,11 @@ class Command(BaseCommand):
                     license=license_obj,
                     kind='t0',
                     target_valid_until=valid_until,
-                    defaults={'status': 'sent', 'sent_at': now - timedelta(days=35), 'error': ''},
+                    defaults={
+                        'status': 'sent',
+                        'sent_at': valid_until + timedelta(hours=2),
+                        'error': '',
+                    },
                 )
 
         # Add realistic registered devices without storing reusable bearer tokens.
@@ -521,13 +659,20 @@ class Command(BaseCommand):
         if licenses and spec['assigned_count'] >= 2:
             device_specs.extend(
                 [
-                    (users[0], licenses[0], 'Büro-PC', 'Windows', 'Edge'),
-                    (users[1], licenses[1], 'Notebook', 'Windows', 'Firefox'),
+                    (users[0], licenses[0], 'Büro-PC', 'Windows', 'Edge', 2 + company_index),
+                    (users[1], licenses[1], 'Notebook', 'Windows', 'Firefox', 7 + company_index),
                 ]
             )
-            if company_index == 1:
-                device_specs.append((users[1], licenses[1], 'iPhone', 'iOS', 'Safari'))
-        for device_index, (user, license_obj, display, os_family, browser_family) in enumerate(device_specs):
+            if company_index in {1, 4, 5}:
+                device_specs.append(
+                    (users[1], licenses[1], 'Mobilgerät', 'iOS', 'Safari', 1)
+                )
+        if spec['assigned_count'] >= 6:
+            device_specs.append(
+                (users[5], licenses[5], 'Homeoffice-Notebook', 'Windows', 'Edge', 28)
+            )
+
+        for device_index, (user, license_obj, display, os_family, browser_family, hours_ago) in enumerate(device_specs):
             token_hash = _sha(f'demo-device:{company.customer_number}:{device_index}')
             DeviceRegistration.objects.update_or_create(
                 token_hash=token_hash,
@@ -537,7 +682,7 @@ class Command(BaseCommand):
                     'display_name': display,
                     'os_family': os_family,
                     'browser_family': browser_family,
-                    'last_seen_at': now - timedelta(hours=device_index + 1),
+                    'last_seen_at': now - timedelta(hours=hours_ago),
                     'revoked_at': None,
                 },
             )
@@ -545,7 +690,7 @@ class Command(BaseCommand):
         # Unlicensed employee requests PRO to exercise the approval workflow.
         request_user = users[-1]
         if not LicenseAssignment.objects.filter(user=request_user, ended_at__isnull=True).exists():
-            LicenseUpgradeRequest.objects.update_or_create(
+            upgrade, _ = LicenseUpgradeRequest.objects.update_or_create(
                 user=request_user,
                 product=product,
                 status='pending',
@@ -554,13 +699,16 @@ class Command(BaseCommand):
                     'note': 'Demo: Mitarbeiter benötigt PromptMaster Pro für tägliche Copilot-Aufgaben.',
                 },
             )
+            LicenseUpgradeRequest.objects.filter(pk=upgrade.pk).update(
+                created_at=now - timedelta(days=3 + company_index * 2)
+            )
 
         categories = ('license', 'technical', 'payment', 'device', 'user')
         support_states = ('new', 'in_progress', 'closed', 'new', 'in_progress')
         category = categories[(company_index - 1) % len(categories)]
         support_status = support_states[(company_index - 1) % len(support_states)]
         subject = f"[DEMO] {company.customer_number} – Beispielanfrage"
-        SupportRequest.objects.update_or_create(
+        support, _ = SupportRequest.objects.update_or_create(
             company=company,
             user=users[0],
             subject=subject,
@@ -574,15 +722,18 @@ class Command(BaseCommand):
                 'status': support_status,
             },
         )
+        SupportRequest.objects.filter(pk=support.pk).update(
+            created_at=now - timedelta(days=(company_index * 9) - 4)
+        )
 
         if company_index == 2:
             Invitation.objects.update_or_create(
                 token_hash=_sha('demo-open-invitation-westfalen'),
                 defaults={
                     'company': company,
-                    'email': 'demo.einladung@promptmaster.invalid',
+                    'email': 'eva.einladung.westfalen@promptmaster.invalid',
                     'first_name': 'Eva',
-                    'last_name': 'Einladung',
+                    'last_name': 'Reimann',
                     'expires_at': now + timedelta(days=7),
                     'accepted_at': None,
                     'revoked_at': None,
