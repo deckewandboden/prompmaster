@@ -457,6 +457,15 @@ def accept_invitation(request, token):
                 'auth/invite_result.html',
                 {'ok': False, 'reason': 'staff_customer_conflict'},
             )
+        if invitation.role == 'admin':
+            # Administrator invitations are bootstrap capabilities for a new
+            # company identity. Never elevate an existing identity through the
+            # generic invitation acceptance path.
+            return render(
+                request,
+                'auth/invite_result.html',
+                {'ok': False, 'reason': 'admin_invite_existing_identity'},
+            )
         if not request.user.is_authenticated:
             return redirect(f"{reverse('accounts:login')}?next={request.path}")
         if request.user.id != existing.id:
@@ -475,7 +484,7 @@ def accept_invitation(request, token):
             Membership.objects.update_or_create(
                 company=invitation.company,
                 user=existing,
-                defaults={'active': True, 'role': 'member'},
+                defaults={'active': True, 'role': invitation.role},
             )
             invitation.accepted_at = timezone.now()
             invitation.save(update_fields=['accepted_at', 'updated_at'])
@@ -515,8 +524,14 @@ def accept_invitation(request, token):
                 first_name=form.cleaned_data['first_name'].strip(),
                 last_name=form.cleaned_data['last_name'].strip(),
                 email_verified_at=timezone.now(),
+                two_factor_required=(invitation.role == 'admin'),
             )
-            Membership.objects.create(company=invitation.company, user=user, role='member', active=True)
+            Membership.objects.create(
+                company=invitation.company,
+                user=user,
+                role=invitation.role,
+                active=True,
+            )
             evidence = {
                 'source': 'invitation',
                 'ip': client_ip(request),
@@ -528,7 +543,13 @@ def accept_invitation(request, token):
             invitation.save(update_fields=['accepted_at', 'updated_at'])
             login(request, user)
             request.session.cycle_key()
-            bind_security_session(request, user, two_factor_ok=True)
+            if invitation.role == 'admin':
+                bind_security_session(request, user, two_factor_ok=False)
+                request.session['post_2fa_next'] = reverse('portal:dashboard')
+            else:
+                bind_security_session(request, user, two_factor_ok=True)
+        if invitation.role == 'admin':
+            return redirect('accounts:two_factor')
         return redirect('portal:dashboard')
     return render(
         request,
