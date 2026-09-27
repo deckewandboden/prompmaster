@@ -1058,7 +1058,7 @@ class Command(BaseCommand):
                 defaults={'status': 'sent', 'sent_at': now - timedelta(days=35), 'error': ''},
             )
 
-        Payment.objects.update_or_create(
+        payment, _ = Payment.objects.update_or_create(
             provider_payment_id=f'tr_demo_private_{index:04d}_paid',
             defaults={
                 'order': order,
@@ -1077,8 +1077,13 @@ class Command(BaseCommand):
                 },
             },
         )
+        Order.objects.filter(pk=order.pk).update(created_at=valid_from)
+        OrderItem.objects.filter(pk=item.pk).update(created_at=valid_from)
+        Payment.objects.filter(pk=payment.pk).update(created_at=valid_from)
+        License.objects.filter(pk=license_obj.pk).update(created_at=valid_from)
 
         if spec['state'] == 'expired':
+            failed_at = now - timedelta(days=4)
             failed_order, _ = Order.objects.update_or_create(
                 order_number=f'DEMO-P-R-{index:04d}',
                 defaults={
@@ -1092,7 +1097,7 @@ class Command(BaseCommand):
                     'idempotency_key': f"demo:private:failed:{spec['customer_number']}",
                 },
             )
-            OrderItem.objects.update_or_create(
+            failed_item, _ = OrderItem.objects.update_or_create(
                 order=failed_order,
                 product=product,
                 target_license=license_obj,
@@ -1105,7 +1110,7 @@ class Command(BaseCommand):
                     'product_name_snapshot': product.name,
                 },
             )
-            Payment.objects.update_or_create(
+            failed_payment, _ = Payment.objects.update_or_create(
                 provider_payment_id=f'tr_demo_private_{index:04d}_failed',
                 defaults={
                     'order': failed_order,
@@ -1115,7 +1120,7 @@ class Command(BaseCommand):
                     'currency': 'EUR',
                     'method': 'creditcard',
                     'paid_at': None,
-                    'failed_at': now - timedelta(hours=8),
+                    'failed_at': failed_at,
                     'processed_paid': False,
                     'last_provider_payload': {
                         'id': f'tr_demo_private_{index:04d}_failed',
@@ -1124,8 +1129,11 @@ class Command(BaseCommand):
                     },
                 },
             )
+            Order.objects.filter(pk=failed_order.pk).update(created_at=failed_at)
+            OrderItem.objects.filter(pk=failed_item.pk).update(created_at=failed_at)
+            Payment.objects.filter(pk=failed_payment.pk).update(created_at=failed_at)
 
-        SupportRequest.objects.update_or_create(
+        support, _ = SupportRequest.objects.update_or_create(
             user=user,
             company=None,
             subject=f"[DEMO] {spec['customer_number']} – Privatanfrage",
@@ -1136,6 +1144,9 @@ class Command(BaseCommand):
                 'status': 'new' if spec['state'] != 'expired' else 'in_progress',
             },
         )
+        SupportRequest.objects.filter(pk=support.pk).update(
+            created_at=now - timedelta(days=(index * 11) + 2)
+        )
 
     def _seed_demo_leads(self, now):
         support_one = User.objects.get(email='demo.support1@promptmaster.invalid')
@@ -1144,62 +1155,165 @@ class Command(BaseCommand):
             {
                 'lead_number': 'LD-DEMO-0001',
                 'kind': 'company',
-                'company_name': 'Demo Interessent GmbH',
+                'company_name': 'Siegerland Automation GmbH',
                 'first_name': 'Lena',
-                'last_name': 'Lead',
-                'email': 'demo.lead1@promptmaster.invalid',
+                'last_name': 'Althaus',
+                'email': 'lena.althaus.siegerland@promptmaster.invalid',
                 'phone': '+49 271 5557001',
                 'source': 'website',
                 'status': 'new',
                 'priority': 'high',
                 'assigned_to': support_one,
                 'next_action_at': now + timedelta(days=1),
-                'notes': 'Demo-Lead für Listen-, Detail-, Zuweisungs- und Konvertierungsprüfung.',
+                'notes': 'Website-Anfrage nach einer Teamlizenz für Microsoft Copilot.',
+                'age_days': 1,
             },
             {
                 'lead_number': 'LD-DEMO-0002',
                 'kind': 'company',
-                'company_name': 'Demo Beratung KG',
+                'company_name': 'Ruhrtal Beratung KG',
                 'first_name': 'Kai',
-                'last_name': 'Kontakt',
-                'email': 'demo.lead2@promptmaster.invalid',
+                'last_name': 'Hensel',
+                'email': 'kai.hensel.ruhrtal@promptmaster.invalid',
                 'phone': '+49 231 5557002',
                 'source': 'free',
                 'status': 'contacted',
                 'priority': 'normal',
                 'assigned_to': support_two,
                 'next_action_at': now + timedelta(days=3),
-                'notes': 'Demo-Lead nach Erstkontakt.',
+                'notes': 'Mehrere Free-Registrierungen; Teamlizenz wurde telefonisch besprochen.',
+                'age_days': 6,
             },
             {
                 'lead_number': 'LD-DEMO-0003',
                 'kind': 'private',
                 'company_name': '',
                 'first_name': 'Paula',
-                'last_name': 'Prospekt',
-                'email': 'demo.lead3@promptmaster.invalid',
+                'last_name': 'Westphal',
+                'email': 'paula.westphal.prospekt@promptmaster.invalid',
                 'phone': '',
                 'source': 'contact',
                 'status': 'qualified',
                 'priority': 'low',
                 'assigned_to': support_one,
+                'next_action_at': now + timedelta(days=5),
+                'notes': 'Privatinteressentin mit konkreter PRO-Nachfrage.',
+                'age_days': 13,
+            },
+            {
+                'lead_number': 'LD-DEMO-0004',
+                'kind': 'company',
+                'company_name': 'Mittelhessen Planung GmbH',
+                'first_name': 'Henrik',
+                'last_name': 'Sauer',
+                'email': 'henrik.sauer.mittelhessen@promptmaster.invalid',
+                'phone': '+49 641 5557004',
+                'source': 'checkout',
+                'status': 'qualified',
+                'priority': 'high',
+                'assigned_to': support_two,
+                'next_action_at': now + timedelta(days=2),
+                'notes': 'Checkout abgebrochen; Angebot für 18 Benutzer angefordert.',
+                'age_days': 21,
+            },
+            {
+                'lead_number': 'LD-DEMO-0005',
+                'kind': 'company',
+                'company_name': 'Südwest Prozess GmbH',
+                'first_name': 'Clara',
+                'last_name': 'Bender',
+                'email': 'clara.bender.suedwest@promptmaster.invalid',
+                'phone': '+49 721 5557005',
+                'source': 'website',
+                'status': 'won',
+                'priority': 'normal',
+                'assigned_to': support_one,
                 'next_action_at': None,
-                'notes': 'Privat-Leads werden nicht intern in Kundenkonten umgewandelt.',
+                'notes': 'Historischer Demo-Lead, erfolgreich zum Kunden konvertiert.',
+                'age_days': 52,
+                'converted_customer': 'DEMO-1004',
+            },
+            {
+                'lead_number': 'LD-DEMO-0006',
+                'kind': 'company',
+                'company_name': 'Rhein Data Services GmbH',
+                'first_name': 'Malte',
+                'last_name': 'Jansen',
+                'email': 'malte.jansen.rheindata@promptmaster.invalid',
+                'phone': '+49 221 5557006',
+                'source': 'free',
+                'status': 'lost',
+                'priority': 'normal',
+                'assigned_to': support_two,
+                'next_action_at': None,
+                'notes': 'Budgetentscheidung vertagt; aktuell kein weiterer Kontakt.',
+                'age_days': 74,
+            },
+            {
+                'lead_number': 'LD-DEMO-0007',
+                'kind': 'company',
+                'company_name': 'Mainwerk Engineering GmbH',
+                'first_name': 'Theresa',
+                'last_name': 'Kappel',
+                'email': 'theresa.kappel.mainwerk@promptmaster.invalid',
+                'phone': '+49 69 5557007',
+                'source': 'contact',
+                'status': 'won',
+                'priority': 'high',
+                'assigned_to': support_one,
+                'next_action_at': None,
+                'notes': 'Demo-Lead aus früherer Vertriebsphase, inzwischen Kunde.',
+                'age_days': 108,
+                'converted_customer': 'DEMO-1005',
+            },
+            {
+                'lead_number': 'LD-DEMO-0008',
+                'kind': 'company',
+                'company_name': 'Nordwest Handel GmbH',
+                'first_name': 'Oliver',
+                'last_name': 'Dreyer',
+                'email': 'oliver.dreyer.nordwest@promptmaster.invalid',
+                'phone': '+49 421 5557008',
+                'source': 'other',
+                'status': 'lost',
+                'priority': 'low',
+                'assigned_to': support_two,
+                'next_action_at': None,
+                'notes': 'Historischer Demo-Lead ohne Abschluss.',
+                'age_days': 151,
             },
         )
         keep = []
         for spec in specs:
             lead_number = spec['lead_number']
             keep.append(lead_number)
-            Lead.objects.update_or_create(
+            converted_number = spec.get('converted_customer')
+            converted_company = (
+                Company.objects.get(customer_number=converted_number)
+                if converted_number
+                else None
+            )
+            defaults = {
+                key: value
+                for key, value in spec.items()
+                if key not in {'lead_number', 'age_days', 'converted_customer'}
+            }
+            lead, _ = Lead.objects.update_or_create(
                 lead_number=lead_number,
                 defaults={
-                    **{key: value for key, value in spec.items() if key != 'lead_number'},
+                    **defaults,
                     'created_by': support_one,
-                    'converted_company': None,
-                    'converted_at': None,
+                    'converted_company': converted_company,
+                    'converted_at': (
+                        now - timedelta(days=max(1, spec['age_days'] - 7))
+                        if converted_company
+                        else None
+                    ),
                     'deleted_at': None,
                 },
+            )
+            Lead.objects.filter(pk=lead.pk).update(
+                created_at=now - timedelta(days=spec['age_days'])
             )
         Lead.objects.filter(lead_number__startswith='LD-DEMO-').exclude(
             lead_number__in=keep
