@@ -32,6 +32,7 @@ from apps.audit.services import audit
 
 EMAIL_VERIFY_SALT = 'pm-email-verify'
 PASSWORD_RESET_SALT = 'pm-password-reset'
+CHECKOUT_ACTIVATION_SALT = 'pm-checkout-activation'
 
 
 def _safe_next(request, value=None):
@@ -378,6 +379,61 @@ def password_reset_confirm(request, token):
         user.save(update_fields=update_fields)
         bump_security_version(user)
         audit(user, 'auth.password_reset', user, {}, request=request)
+        return render(request, 'auth/password_reset_result.html', {'ok': True})
+    return render(request, 'auth/password_reset_confirm.html', {'form': form})
+
+
+def checkout_activation(request, token):
+    """Activate an account created by the public checkout after paid status."""
+    try:
+        data = signing.loads(
+            token,
+            salt=CHECKOUT_ACTIVATION_SALT,
+            max_age=7 * 24 * 60 * 60,
+        )
+        user = User.objects.select_for_update().get(
+            pk=data['uid'],
+            email=data['email'],
+            is_active=True,
+        )
+        if int(data['sv']) != int(user.security_version):
+            raise KeyError('checkout activation token already used or invalidated')
+        if user.has_usable_password():
+            raise KeyError('account is already activated')
+    except (
+        signing.BadSignature,
+        signing.SignatureExpired,
+        User.DoesNotExist,
+        KeyError,
+        ValueError,
+        TypeError,
+    ):
+        return render(request, 'auth/password_reset_result.html', {'ok': False})
+
+    form = PasswordResetConfirmForm(request.POST or None)
+    if request.method == 'POST' and form.is_valid():
+        with transaction.atomic():
+            user = User.objects.select_for_update().get(pk=user.pk)
+            if user.has_usable_password() or int(data['sv']) != int(user.security_version):
+                return render(
+                    request,
+                    'auth/password_reset_result.html',
+                    {'ok': False},
+                )
+            user.set_password(form.cleaned_data['password'])
+            update_fields = ['password', 'updated_at']
+            if not user.email_verified_at:
+                user.email_verified_at = timezone.now()
+                update_fields.append('email_verified_at')
+            user.save(update_fields=update_fields)
+            bump_security_version(user)
+            audit(
+                user,
+                'auth.checkout_activation',
+                user,
+                {'source': 'public_checkout'},
+                request=request,
+            )
         return render(request, 'auth/password_reset_result.html', {'ok': True})
     return render(request, 'auth/password_reset_confirm.html', {'form': form})
 
