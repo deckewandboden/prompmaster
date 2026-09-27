@@ -120,6 +120,57 @@ def public_checkout_start(request):
     User = get_user_model()
     existing = User.objects.filter(email__iexact=data['email']).first()
     if existing:
+        # A customer can leave Mollie and return to the public checkout before
+        # the post-payment activation mail has established a usable password.
+        # Sending that placeholder account to the normal login would dead-end
+        # the purchase. Resume the still-open provider checkout instead, and
+        # fall back to password recovery only when the prior provider attempt
+        # is no longer resumable.
+        from django.db.models import Q
+        from apps.orders.models import Order
+
+        public_orders = (
+            Order.objects.filter(billing_snapshot__source='public_checkout')
+            .filter(
+                Q(private_user=existing)
+                | Q(
+                    company__memberships__user=existing,
+                    company__memberships__active=True,
+                )
+            )
+            .distinct()
+        )
+        if not existing.has_usable_password() and public_orders.exists():
+            resumable = (
+                Payment.objects.filter(
+                    order__in=public_orders,
+                    status__in={'created', 'open', 'pending', 'authorized'},
+                )
+                .order_by('-created_at')
+                .first()
+            )
+            checkout_url = ''
+            if resumable:
+                checkout_url = (
+                    (((resumable.last_provider_payload or {}).get('_links') or {})
+                     .get('checkout') or {})
+                    .get('href') or ''
+                ).strip()
+            if checkout_url.startswith('https://'):
+                return redirect(checkout_url)
+
+            if public_orders.filter(status='paid').exists():
+                return redirect('/checkout/success/?state=paid')
+
+            messages.info(
+                request,
+                'Für diese E-Mail-Adresse besteht bereits ein noch nicht aktiviertes '
+                'PromptMaster-Konto. Bitte setzen Sie zuerst Ihr Passwort zurück.',
+            )
+            return redirect(
+                f"{reverse('accounts:password_reset')}?{urlencode({'checkout': 1})}"
+            )
+
         messages.info(
             request,
             'Für diese E-Mail-Adresse besteht bereits ein PromptMaster-Konto. Bitte anmelden.',
