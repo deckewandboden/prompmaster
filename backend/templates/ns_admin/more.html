@@ -1,5 +1,6 @@
 {% extends 'ns_admin/base.html' %}{% load pm %}{% block content %}
 {% user_has_perm request.user 'customers.read' as can_customers %}
+{% user_has_perm request.user 'leads.read' as can_leads %}
 {% user_has_perm request.user 'licenses.read' as can_licenses %}
 {% user_has_perm request.user 'orders.read' as can_orders %}
 {% user_has_perm request.user 'payments.read' as can_payments %}
@@ -19,6 +20,7 @@
   <div class="card"><h2>Geschäft &amp; Inhalte</h2><div class="list">
     <a class="btn primary" href="{% url 'proaccess:launch' %}">PromptMaster Pro öffnen</a>
     <a class="btn secondary" href="{% url 'ns_admin:search' %}">Globale Suche</a>
+    {% if can_leads %}<a class="btn secondary" href="{% url 'ns_admin:leads' %}">Leads</a>{% endif %}
     {% if can_customers %}<a class="btn secondary" href="{% url 'ns_admin:customers' %}">Kunden</a>{% endif %}
     {% if can_licenses %}<a class="btn secondary" href="{% url 'ns_admin:licenses' %}">Lizenzen</a>{% endif %}
     {% if can_orders %}<a class="btn secondary" href="{% url 'ns_admin:orders' %}">Bestellungen{% if can_payments %} &amp; Zahlungen{% endif %}</a>{% elif can_payments %}<a class="btn secondary" href="{% url 'ns_admin:payments' %}">Zahlungen</a>{% endif %}
