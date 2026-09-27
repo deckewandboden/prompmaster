@@ -787,6 +787,64 @@ def main() -> int:
                         f'(yaw delta={yaw_delta:.4f} > 0.025)'
                     )
 
+            # The public purchase surface belongs to the marketing frontend.
+            # Exercise it here (rather than in the Django-only browser smoke)
+            # and verify that it is wired to the real server-side checkout.
+            checkout_page = browser.new_page(
+                viewport={'width': 1440, 'height': 1000},
+                device_scale_factor=1,
+            )
+            checkout_errors: list[str] = []
+            checkout_page.on('pageerror', lambda exc: checkout_errors.append(str(exc)))
+            checkout_page.goto(base + 'checkout/?quantity=3', wait_until='networkidle')
+            checkout_page.wait_for_selector('#public-checkout-form')
+            checkout_probe = checkout_page.evaluate(
+                """() => {
+                  const form = document.querySelector('#public-checkout-form');
+                  const action = form ? new URL(form.action, location.href) : null;
+                  const login = document.querySelector('#checkout-login-link');
+                  return {
+                    path: location.pathname,
+                    h1: document.querySelector('#checkout-title')?.textContent?.trim() || '',
+                    quantity: document.querySelector('#quantity')?.value || '',
+                    hiddenQuantity: document.querySelector('#checkout-quantity-hidden')?.value || '',
+                    companyDefault:
+                      document.querySelector(
+                        'input[name="customer_type"][value="company"]'
+                      )?.checked === true,
+                    privateChoice:
+                      !!document.querySelector(
+                        'input[name="customer_type"][value="private"]'
+                      ),
+                    method: (form?.method || '').toLowerCase(),
+                    actionPath: action?.pathname || '',
+                    csrfField: !!document.querySelector(
+                      'input[name="csrfmiddlewaretoken"]#checkout-csrf'
+                    ),
+                    submitText:
+                      document.querySelector('#checkout-submit')?.textContent?.trim() || '',
+                    loginHref: login?.getAttribute('href') || '',
+                  };
+                }"""
+            )
+            if (
+                checkout_probe['path'] != '/checkout/'
+                or checkout_probe['h1'] != 'PromptMaster Pro kaufen.'
+                or checkout_probe['quantity'] != '3'
+                or checkout_probe['hiddenQuantity'] != '3'
+                or not checkout_probe['companyDefault']
+                or not checkout_probe['privateChoice']
+                or checkout_probe['method'] != 'post'
+                or checkout_probe['actionPath'] != '/api/v1/checkout/start/'
+                or not checkout_probe['csrfField']
+                or 'Zahlungspflichtig kaufen' not in checkout_probe['submitText']
+                or '/auth/login/' not in checkout_probe['loginHref']
+            ):
+                fail(f'public checkout rendering/wiring regression: {checkout_probe}')
+            if checkout_errors:
+                fail(f'public checkout JavaScript errors: {checkout_errors}')
+            checkout_page.close()
+
             if engine == 'chromium':
                 # Export clean WebGL scene masters without navigation/cards.
                 # These are generated from the canonical Chromium/Edge renderer
