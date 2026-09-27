@@ -19,7 +19,7 @@ from apps.audit.models import AuditEvent
 from apps.audit.services import audit as write_audit
 from apps.catalog.models import Feature, Product
 from apps.catalog.services import create_price_version, current_price
-from apps.companies.models import Company, Membership, PrivateCustomerProfile
+from apps.companies.models import Company, Invitation, Membership, PrivateCustomerProfile
 from apps.companies.services import INVITATION_TTL_HOURS, create_invitation, deactivate_company_member, transfer_admin
 from apps.core.models import Lead
 from apps.devices.models import DeviceRegistration
@@ -987,11 +987,27 @@ def customer_admin_invite(request, pk):
     if request.method == 'POST' and form.is_valid():
         try:
             with transaction.atomic():
+                pending_admin_invites = list(
+                    Invitation.objects.select_for_update().filter(
+                        company=customer,
+                        role='admin',
+                        accepted_at__isnull=True,
+                        revoked_at__isnull=True,
+                    )
+                )
                 locked = Company.objects.select_for_update().get(pk=customer.pk)
                 if locked.memberships.filter(active=True, role='admin').exists():
                     raise ValidationError(
                         'Für dieses Unternehmen existiert bereits ein aktiver Firmenadministrator.'
                     )
+                replaced_invites = 0
+                for pending_invite in pending_admin_invites:
+                    if pending_invite.revoked_at is None:
+                        pending_invite.revoked_at = timezone.now()
+                        pending_invite.save(
+                            update_fields=['revoked_at', 'updated_at']
+                        )
+                        replaced_invites += 1
                 invitation, raw_token = create_invitation(
                     company=locked,
                     actor=request.user,
@@ -1013,6 +1029,7 @@ def customer_admin_invite(request, pk):
                     {
                         'invitation_id': str(invitation.id),
                         'email': invitation.email,
+                        'replaced_invites': replaced_invites,
                     },
                     request=request,
                 )
