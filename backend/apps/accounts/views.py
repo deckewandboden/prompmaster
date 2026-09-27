@@ -383,6 +383,7 @@ def password_reset_confirm(request, token):
     return render(request, 'auth/password_reset_confirm.html', {'form': form})
 
 
+@transaction.atomic
 def checkout_activation(request, token):
     """Activate an account created by the public checkout after paid status."""
     try:
