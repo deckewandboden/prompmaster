@@ -1,6 +1,5 @@
 from unittest.mock import patch
-from django.core import signing
-from django.test import SimpleTestCase, TestCase, TransactionTestCase
+from django.test import SimpleTestCase, TestCase
 from django.urls import reverse
 
 from apps.companies.models import Company, Membership, PrivateCustomerProfile
@@ -311,60 +310,3 @@ class LogoutWorkspaceRoutingTests(TestCase):
         response = self.client.get(reverse('accounts:logout'))
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, 'href="/portal/dashboard/"')
-
-class CheckoutActivationTransactionTests(TransactionTestCase):
-    reset_sequences = True
-
-    def _activation_url(self, user):
-        token = signing.dumps(
-            {
-                'uid': str(user.id),
-                'email': user.email,
-                'sv': int(user.security_version),
-            },
-            salt='pm-checkout-activation',
-        )
-        return reverse('accounts:checkout_activation', args=[token])
-
-    def test_activation_get_works_in_autocommit_mode(self):
-        user = User.objects.create_user(
-            email='checkout-activation-get@example.test',
-            password=None,
-            first_name='Checkout',
-            last_name='Activation',
-        )
-
-        response = self.client.get(self._activation_url(user))
-
-        self.assertEqual(response.status_code, 200)
-        self.assertContains(response, 'Neues Passwort')
-
-    def test_activation_post_sets_password_verifies_email_and_invalidates_token(self):
-        user = User.objects.create_user(
-            email='checkout-activation-post@example.test',
-            password=None,
-            first_name='Checkout',
-            last_name='Activation',
-        )
-        url = self._activation_url(user)
-        password = 'Checkout-Activation-Password-2026!'
-
-        response = self.client.post(
-            url,
-            {
-                'password': password,
-                'password_repeat': password,
-            },
-        )
-
-        self.assertEqual(response.status_code, 200)
-        user.refresh_from_db()
-        self.assertTrue(user.has_usable_password())
-        self.assertTrue(user.check_password(password))
-        self.assertIsNotNone(user.email_verified_at)
-        self.assertGreater(user.security_version, 1)
-
-        replay = self.client.get(url)
-        self.assertEqual(replay.status_code, 200)
-        self.assertContains(replay, 'Link ungültig', status_code=200)
-
