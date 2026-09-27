@@ -158,6 +158,55 @@ class RenderedUiActionContractTests(TestCase):
         self.assertGreaterEqual(controls, minimum_controls, f'UI crawl for {user.email} covered too few interactive controls')
         self.client.logout()
 
+    def test_customer_portal_previews_use_real_portal_shell_without_impersonation(self):
+        superadmin = (
+            UserRole.objects.filter(
+                role__code='superadmin',
+                user__email__endswith='@promptmaster.invalid',
+                user__is_staff=True,
+            )
+            .select_related('user')
+            .order_by('user__email')
+            .first()
+            .user
+        )
+        self._session_as(superadmin)
+
+        company = Company.objects.get(customer_number='DEMO-1001')
+        private = PrivateCustomerProfile.objects.select_related('user').get(
+            customer_number='DEMO-P-2001'
+        )
+        company_sections = (
+            'dashboard', 'team', 'licenses', 'devices', 'orders', 'company', 'more',
+        )
+        private_sections = (
+            'dashboard', 'licenses', 'devices', 'orders', 'profile', 'more',
+        )
+
+        for section in company_sections:
+            response = self.client.get(
+                f'/ns-admin/customers/{company.pk}/portal-preview/?section={section}'
+            )
+            self.assertEqual(response.status_code, 200)
+            html = response.content.decode(response.charset or 'utf-8')
+            self.assertIn('shell portal-shell', html)
+            self.assertIn('Read-only Kundenansicht.', html)
+            self.assertNotIn('href="/portal/', html)
+            self.assertNotIn('<form method="post"', html.lower())
+
+        for section in private_sections:
+            response = self.client.get(
+                f'/ns-admin/customers/private/{private.pk}/portal-preview/?section={section}'
+            )
+            self.assertEqual(response.status_code, 200)
+            html = response.content.decode(response.charset or 'utf-8')
+            self.assertIn('shell portal-shell', html)
+            self.assertIn('Read-only Kundenansicht.', html)
+            self.assertNotIn('href="/portal/', html)
+            self.assertNotIn('<form method="post"', html.lower())
+
+        self.client.logout()
+
     def test_superadmin_rendered_admin_actions_are_wired(self):
         superadmin = (
             UserRole.objects.filter(
