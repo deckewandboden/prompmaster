@@ -5,8 +5,10 @@ from django.test import TestCase
 from django.utils import timezone
 
 from apps.accounts.models import Permission, Role, User, UserRole
+from apps.accounts.totp import code as totp_code
 from apps.audit.models import AuditEvent
 from apps.companies.models import Company, Invitation
+from apps.core.crypto import decrypt
 from apps.core.models import Lead
 from apps.legal.models import LegalDocument
 
@@ -175,6 +177,7 @@ class LeadManagementTests(TestCase):
 
         invitation = Invitation.objects.get(company=company)
         self.assertEqual(invitation.email, 'ada.lead@example.test')
+        self.assertEqual(invitation.role, 'admin')
         self.assertIsNone(invitation.accepted_at)
         self.assertFalse(
             User.objects.filter(email='ada.lead@example.test').exists(),
@@ -249,28 +252,36 @@ class LeadManagementTests(TestCase):
                 'accept_privacy': 'on',
             },
         )
-        self.assertEqual(accepted.status_code, 200)
-        self.assertContains(accepted, 'Einladung angenommen')
+        self.assertEqual(accepted.status_code, 302)
+        self.assertEqual(accepted.url, '/auth/2fa/')
 
         customer = User.objects.get(email='ada.lead@example.test')
         membership = Membership.objects.get(company=company, user=customer)
         self.assertTrue(membership.active)
-        self.assertEqual(membership.role, 'member')
+        self.assertEqual(membership.role, 'admin')
+        self.assertTrue(customer.two_factor_required)
         self.assertIsNotNone(customer.email_verified_at)
         self.assertTrue(customer.check_password(password))
 
-        self.client.logout()
-        login = self.client.post(
-            '/auth/login/',
-            {
-                'email': customer.email,
-                'password': password,
-            },
+        # A converted company's first administrator must establish MFA before
+        # entering the customer backend.
+        to_setup = self.client.get('/auth/2fa/')
+        self.assertEqual(to_setup.status_code, 302)
+        self.assertEqual(to_setup.url, '/auth/2fa/setup/')
+        setup = self.client.get(to_setup.url)
+        self.assertEqual(setup.status_code, 200)
+        secret = decrypt(self.client.session['pending_totp_enc'])
+        completed = self.client.post(
+            '/auth/2fa/setup/',
+            {'code': totp_code(secret)},
         )
-        self.assertEqual(login.status_code, 302)
+        self.assertEqual(completed.status_code, 200)
+        self.assertContains(completed, 'Recovery')
+
         portal = self.client.get('/portal/dashboard/')
         self.assertEqual(portal.status_code, 200)
         self.assertContains(portal, company.name)
+        self.assertContains(portal, 'Unternehmensadministrator')
 
     def test_private_lead_is_not_silently_converted_without_customer_legal_acceptance(self):
         self.lead.kind = 'private'
