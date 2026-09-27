@@ -57,6 +57,22 @@ class LeadForm(forms.ModelForm):
         return data
 
 
+class LeadAssignForm(forms.Form):
+    assigned_to = forms.ModelChoiceField(
+        queryset=User.objects.none(),
+        required=False,
+        label='Zuständig',
+        empty_label='Nicht zugewiesen',
+    )
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['assigned_to'].queryset = User.objects.filter(
+            is_staff=True,
+            is_active=True,
+        ).order_by('last_name', 'first_name', 'email')
+
+
 class LeadDeleteForm(forms.Form):
     confirm = forms.BooleanField(
         label='Lead wirklich löschen',
