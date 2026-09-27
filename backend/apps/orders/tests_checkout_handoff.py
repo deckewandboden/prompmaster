@@ -706,6 +706,7 @@ class PublicCheckoutFlowTests(TestCase):
         # the customer backend.
         portal = self.client.get('/portal/dashboard/')
         self.assertEqual(portal.status_code, 200)
-        self.assertContains(portal, user.email)
+        self.assertContains(portal, user.full_name)
+        self.assertContains(portal, 'Privatkonto')
 
 
