@@ -27,6 +27,33 @@ class QuietHandler(SimpleHTTPRequestHandler):
     def log_message(self, _format, *args):
         return
 
+    def do_GET(self):
+        # Production Caddy proxies /catalog.json to Django, where the seeded
+        # Product/ProductPrice state decides whether checkout is available.
+        # This smoke server is intentionally static, so emulate that live
+        # catalog response without weakening the committed fail-closed
+        # marketing/public/catalog.json fallback.
+        if self.path.split('?', 1)[0] == '/catalog.json':
+            catalog = json.loads(
+                (DIST / 'catalog.json').read_text(encoding='utf-8')
+            )
+            catalog.update({
+                'checkoutEnabled': True,
+                'companyRequireVatId': False,
+                'companyRequireTaxNumber': False,
+                'loginEnabled': True,
+                'freeUrl': '/free/',
+            })
+            payload = json.dumps(catalog, separators=(',', ':')).encode('utf-8')
+            self.send_response(200)
+            self.send_header('Content-Type', 'application/json; charset=utf-8')
+            self.send_header('Cache-Control', 'no-store')
+            self.send_header('Content-Length', str(len(payload)))
+            self.end_headers()
+            self.wfile.write(payload)
+            return
+        super().do_GET()
+
 
 def app_names() -> list[str]:
     data = json.loads(DATA.read_text(encoding='utf-8'))
