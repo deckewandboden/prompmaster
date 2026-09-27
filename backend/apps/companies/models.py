@@ -92,6 +92,7 @@ class Invitation(TimeStampedModel):
     email = models.EmailField()
     first_name = models.CharField(max_length=120, blank=True)
     last_name = models.CharField(max_length=120, blank=True)
+    role = models.CharField(max_length=20, choices=Membership.ROLE, default='member')
     token_hash = models.CharField(max_length=64, unique=True)
     expires_at = models.DateTimeField()
     accepted_at = models.DateTimeField(null=True, blank=True)
