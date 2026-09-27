@@ -765,9 +765,41 @@ class Command(BaseCommand):
                 now=now,
                 state='failed',
             )
+        elif company_index == 4:
+            self._seed_secondary_payment(
+                company=company,
+                company_index=company_index,
+                product=product,
+                price=price,
+                now=now,
+                state='chargeback',
+            )
 
     def _seed_secondary_payment(self, *, company, company_index, product, price, now, state):
-        order_status = 'payment_open' if state == 'open' else 'failed'
+        if state == 'open':
+            order_status = 'payment_open'
+            occurred_at = now - timedelta(days=2)
+            paid_at = None
+            failed_at = None
+            processed_paid = False
+            method = 'banktransfer'
+        elif state == 'failed':
+            order_status = 'failed'
+            occurred_at = now - timedelta(days=6)
+            paid_at = None
+            failed_at = occurred_at
+            processed_paid = False
+            method = 'creditcard'
+        elif state == 'chargeback':
+            order_status = 'paid'
+            occurred_at = now - timedelta(days=18)
+            paid_at = occurred_at - timedelta(days=3)
+            failed_at = None
+            processed_paid = True
+            method = 'creditcard'
+        else:
+            raise CommandError(f'Unbekannter Demo-Zahlungsstatus: {state}')
+
         order, _ = Order.objects.update_or_create(
             order_number=f"DEMO-R-{company_index:04d}",
             defaults={
@@ -777,11 +809,15 @@ class Command(BaseCommand):
                 'currency': 'EUR',
                 'gross_total': GROSS_PRICE,
                 'tax_total': Decimal('5.73'),
-                'billing_snapshot': {'company': company.name, 'demo': True},
+                'billing_snapshot': {
+                    'company': company.name,
+                    'demo': True,
+                    'scenario': state,
+                },
                 'idempotency_key': f'demo:secondary:{company.customer_number}',
             },
         )
-        OrderItem.objects.update_or_create(
+        item, _ = OrderItem.objects.update_or_create(
             order=order,
             product=product,
             target_license=None,
@@ -794,7 +830,7 @@ class Command(BaseCommand):
                 'product_name_snapshot': product.name,
             },
         )
-        Payment.objects.update_or_create(
+        payment, _ = Payment.objects.update_or_create(
             provider_payment_id=f'tr_demo_{company_index:04d}_{state}',
             defaults={
                 'order': order,
@@ -802,10 +838,10 @@ class Command(BaseCommand):
                 'status': state,
                 'amount': GROSS_PRICE,
                 'currency': 'EUR',
-                'method': 'creditcard' if state == 'failed' else 'banktransfer',
-                'paid_at': None,
-                'failed_at': now - timedelta(hours=4) if state == 'failed' else None,
-                'processed_paid': False,
+                'method': method,
+                'paid_at': paid_at,
+                'failed_at': failed_at,
+                'processed_paid': processed_paid,
                 'last_provider_payload': {
                     'id': f'tr_demo_{company_index:04d}_{state}',
                     'status': state,
@@ -813,46 +849,63 @@ class Command(BaseCommand):
                 },
             },
         )
+        Order.objects.filter(pk=order.pk).update(created_at=occurred_at)
+        OrderItem.objects.filter(pk=item.pk).update(created_at=occurred_at)
+        Payment.objects.filter(pk=payment.pk).update(created_at=occurred_at)
 
     def _seed_private_customers(self, *, product, price, now, credentials):
         specs = (
             {
                 'customer_number': 'DEMO-P-2001',
-                'email': 'demo.privat1@promptmaster.invalid',
+                'email': 'petra.hagedorn.privat@promptmaster.invalid',
+                'legacy_email': 'demo.privat1@promptmaster.invalid',
                 'first_name': 'Petra',
-                'last_name': 'Privat',
+                'last_name': 'Hagedorn',
                 'street': 'Privatweg',
                 'house_number': '1',
                 'postal_code': '57072',
                 'city': 'Siegen',
                 'state': 'active',
+                'registered_days': 128,
             },
             {
                 'customer_number': 'DEMO-P-2002',
-                'email': 'demo.privat2@promptmaster.invalid',
+                'email': 'patrick.moeller.privat@promptmaster.invalid',
+                'legacy_email': 'demo.privat2@promptmaster.invalid',
                 'first_name': 'Patrick',
-                'last_name': 'Persönlich',
+                'last_name': 'Moeller',
                 'street': 'Teststraße',
                 'house_number': '22',
                 'postal_code': '44135',
                 'city': 'Dortmund',
                 'state': 'expiring',
+                'registered_days': 372,
             },
             {
                 'customer_number': 'DEMO-P-2003',
-                'email': 'demo.privat3@promptmaster.invalid',
+                'email': 'pia.wendt.privat@promptmaster.invalid',
+                'legacy_email': 'demo.privat3@promptmaster.invalid',
                 'first_name': 'Pia',
-                'last_name': 'Probe',
+                'last_name': 'Wendt',
                 'street': 'Musterallee',
                 'house_number': '3',
                 'postal_code': '20095',
                 'city': 'Hamburg',
                 'state': 'expired',
+                'registered_days': 414,
             },
         )
         users = {}
         for index, spec in enumerate(specs, start=1):
+            existing = User.objects.filter(email=spec['email']).first()
+            if existing is None:
+                existing = User.objects.filter(email=spec['legacy_email']).first()
+                if existing is not None:
+                    existing.email = spec['email']
+                    existing.save(update_fields=['email', 'updated_at'])
+
             password = _password()
+            registered_at = now - timedelta(days=spec['registered_days'])
             user = self._upsert_user(
                 email=spec['email'],
                 first_name=spec['first_name'],
@@ -860,11 +913,15 @@ class Command(BaseCommand):
                 password=password,
                 is_staff=False,
                 two_factor_required=False,
-                verified_at=now,
+                verified_at=registered_at,
+            )
+            User.objects.filter(pk=user.pk).update(
+                created_at=registered_at,
+                last_login=now - timedelta(days=index * 4),
             )
             UserRole.objects.filter(user=user).delete()
             Membership.objects.filter(user=user, active=True).update(active=False)
-            PrivateCustomerProfile.objects.update_or_create(
+            profile, _ = PrivateCustomerProfile.objects.update_or_create(
                 user=user,
                 defaults={
                     'customer_number': spec['customer_number'],
@@ -874,6 +931,9 @@ class Command(BaseCommand):
                     'city': spec['city'],
                     'country': 'DE',
                 },
+            )
+            PrivateCustomerProfile.objects.filter(pk=profile.pk).update(
+                created_at=registered_at
             )
             users[spec['customer_number']] = user
             credentials.append(
