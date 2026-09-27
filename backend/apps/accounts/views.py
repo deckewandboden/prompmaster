@@ -518,6 +518,18 @@ def accept_invitation(request, token):
                 return render(request, 'auth/invite_result.html', {'ok': False})
             if User.objects.filter(email__iexact=invitation.email).exists():
                 return render(request, 'auth/invite_result.html', {'ok': False})
+            if invitation.role == 'admin':
+                Company.objects.select_for_update().get(pk=invitation.company_id)
+                if Membership.objects.filter(
+                    company_id=invitation.company_id,
+                    active=True,
+                    role='admin',
+                ).exists():
+                    return render(
+                        request,
+                        'auth/invite_result.html',
+                        {'ok': False, 'reason': 'admin_already_exists'},
+                    )
             user = User.objects.create_user(
                 email=invitation.email,
                 password=form.cleaned_data['password'],
