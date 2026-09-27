@@ -56,7 +56,7 @@
     {% endif %}
     {% if lead.notes %}
       <h3>Interne Notizen</h3>
-      <p class="prewrap">{{ lead.notes }}</p>
+      <p>{{ lead.notes|linebreaksbr }}</p>
     {% endif %}
   </div>
 </div>
