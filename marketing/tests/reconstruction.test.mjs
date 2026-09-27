@@ -190,6 +190,9 @@ test('pricing calculator survives stale non-JSON browser responses but checkout 
   assert.match(main,/Es wird keine Bestellung gestartet/);
   assert.match(main,/catalog\.checkoutEnabled===true/);
   assert.match(main,/Kauf vorübergehend nicht verfügbar/);
+  assert.match(main,/checkoutSubmit\.disabled=false/);
+  const content=read('src/content.js');
+  assert.match(content,/id="checkout-submit" type="submit" disabled/);
 });
 
 test('static compatibility pages no longer claim product is unavailable',()=>{
