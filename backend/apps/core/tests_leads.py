@@ -1,4 +1,5 @@
 from unittest.mock import patch
+from urllib.parse import urlsplit
 
 from django.test import TestCase
 from django.utils import timezone
@@ -7,6 +8,7 @@ from apps.accounts.models import Permission, Role, User, UserRole
 from apps.audit.models import AuditEvent
 from apps.companies.models import Company, Invitation
 from apps.core.models import Lead
+from apps.legal.models import LegalDocument
 
 
 class LeadManagementTests(TestCase):
@@ -188,6 +190,87 @@ class LeadManagementTests(TestCase):
                 object_id=str(self.lead.id),
             ).exists()
         )
+
+    @patch('apps.notifications.services.queue_email')
+    def test_lead_conversion_invitation_acceptance_reaches_real_customer_portal(
+        self,
+        queue_email,
+    ):
+        now = timezone.now()
+        for doc_type in ('terms', 'privacy'):
+            LegalDocument.objects.create(
+                doc_type=doc_type,
+                version='lead-flow-v1',
+                content=f'Lead flow {doc_type}',
+                valid_from=now,
+                active=True,
+            )
+
+        converted = self.client.post(
+            f'/ns-admin/leads/{self.lead.id}/convert-company/',
+            {
+                'company_name': 'Lead Test GmbH',
+                'legal_form': 'GmbH',
+                'email': 'ada.lead@example.test',
+                'first_name': 'Ada',
+                'last_name': 'Lovelace',
+                'phone': '+49 271 12345',
+                'street': 'Markt 1',
+                'house_number': '',
+                'postal_code': '57072',
+                'city': 'Siegen',
+                'country': 'DE',
+                'vat_id': 'DE123456789',
+                'tax_number': '123/456/789',
+                'confirm': 'on',
+            },
+        )
+        self.assertEqual(converted.status_code, 302)
+        self.lead.refresh_from_db()
+        company = self.lead.converted_company
+        self.assertIsNotNone(company)
+
+        invite_url = queue_email.call_args.args[2]['url']
+        invite_path = urlsplit(invite_url).path
+        self.assertTrue(invite_path.startswith('/auth/invite/'))
+
+        confirm = self.client.get(invite_path)
+        self.assertEqual(confirm.status_code, 200)
+        self.assertContains(confirm, company.name)
+
+        password = 'Lead-Kunde-Portal-2026!SehrSicher'
+        accepted = self.client.post(
+            invite_path,
+            {
+                'first_name': 'Ada',
+                'last_name': 'Lovelace',
+                'password': password,
+                'accept_terms': 'on',
+                'accept_privacy': 'on',
+            },
+        )
+        self.assertEqual(accepted.status_code, 200)
+        self.assertContains(accepted, 'Einladung angenommen')
+
+        customer = User.objects.get(email='ada.lead@example.test')
+        membership = Membership.objects.get(company=company, user=customer)
+        self.assertTrue(membership.active)
+        self.assertEqual(membership.role, 'member')
+        self.assertIsNotNone(customer.email_verified_at)
+        self.assertTrue(customer.check_password(password))
+
+        self.client.logout()
+        login = self.client.post(
+            '/auth/login/',
+            {
+                'email': customer.email,
+                'password': password,
+            },
+        )
+        self.assertEqual(login.status_code, 302)
+        portal = self.client.get('/portal/dashboard/')
+        self.assertEqual(portal.status_code, 200)
+        self.assertContains(portal, company.name)
 
     def test_private_lead_is_not_silently_converted_without_customer_legal_acceptance(self):
         self.lead.kind = 'private'
