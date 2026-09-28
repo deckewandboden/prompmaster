@@ -11,7 +11,7 @@ from apps.licenses.models import License, LicenseUpgradeRequest
 from apps.notifications.models import EmailMessage
 from apps.orders.models import Order
 from apps.payments.models import Payment
-from apps.support.models import SupportRequest
+from apps.support.models import SupportMessage, SupportRequest
 
 
 @override_settings(ENVIRONMENT='staging')
@@ -107,6 +107,7 @@ class DemoDataSeedTests(TestCase):
             'payments': Payment.objects.filter(provider_payment_id__startswith='tr_demo_').count(),
             'devices': DeviceRegistration.objects.filter(license__license_number__startswith='PM-DEMO-').count(),
             'support': SupportRequest.objects.filter(subject__startswith='[DEMO]').count(),
+            'support_messages': SupportMessage.objects.filter(support_request__subject__startswith='[DEMO]').count(),
             'mail': EmailMessage.objects.filter(subject__startswith='[DEMO]').count(),
         }
 
@@ -117,7 +118,20 @@ class DemoDataSeedTests(TestCase):
         self.assertEqual(first_counts['payments'], 24)
         self.assertGreaterEqual(first_counts['devices'], 13)
         self.assertEqual(first_counts['support'], 8)
+        self.assertEqual(first_counts['support_messages'], 17)
         self.assertEqual(first_counts['mail'], 4)
+        private_two = SupportRequest.objects.get(subject='[DEMO] DEMO-P-2002 – Privatanfrage')
+        self.assertEqual(private_two.status, 'in_progress')
+        self.assertIn('landet', private_two.message)
+        self.assertEqual(private_two.messages.count(), 3)
+        self.assertEqual(
+            list(private_two.messages.values_list('sender_type', 'visibility')),
+            [
+                ('staff', 'customer'),
+                ('customer', 'customer'),
+                ('staff', 'internal'),
+            ],
+        )
         self.assertEqual(
             Invitation.objects.filter(company__customer_number='DEMO-1002', accepted_at__isnull=True).count(),
             1,
@@ -171,6 +185,7 @@ class DemoDataSeedTests(TestCase):
             'orders': Order.objects.filter(order_number__startswith='DEMO-').count(),
             'payments': Payment.objects.filter(provider_payment_id__startswith='tr_demo_').count(),
             'support': SupportRequest.objects.filter(subject__startswith='[DEMO]').count(),
+            'support_messages': SupportMessage.objects.filter(support_request__subject__startswith='[DEMO]').count(),
             'mail': EmailMessage.objects.filter(subject__startswith='[DEMO]').count(),
         }
         self.assertEqual(first_counts['companies'], second_counts['companies'])
@@ -179,6 +194,7 @@ class DemoDataSeedTests(TestCase):
         self.assertEqual(first_counts['orders'], second_counts['orders'])
         self.assertEqual(first_counts['payments'], second_counts['payments'])
         self.assertEqual(first_counts['support'], second_counts['support'])
+        self.assertEqual(first_counts['support_messages'], second_counts['support_messages'])
         self.assertEqual(first_counts['mail'], second_counts['mail'])
 
 
