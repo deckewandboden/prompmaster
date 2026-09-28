@@ -257,7 +257,7 @@ def _backend_fixture() -> dict:
         },
     )
 
-    for doc_type in ('terms', 'privacy'):
+    for doc_type in ('terms', 'privacy', 'license', 'withdrawal', 'imprint', 'accessibility'):
         LegalDocument.objects.update_or_create(
             doc_type=doc_type,
             version='browser-smoke-v1',
@@ -1306,6 +1306,12 @@ def run_backend_ui_smoke(browser, fixture=None) -> None:
             ('auth/password-reset/', 'Passwortreset'),
             ('legal/terms/', 'AGB'),
             ('legal/privacy/', 'Datenschutz'),
+            ('legal/license/', 'Lizenzbedingungen'),
+            ('legal/withdrawal/', 'Widerrufsbelehrung'),
+            ('legal/imprint/', 'Impressum'),
+            ('legal/accessibility/', 'Barrierefreiheit'),
+            ('vertrag-widerrufen/', 'Widerrufsfunktion'),
+            ('vertraege-kuendigen/', 'Kündigungsfunktion'),
         ]
         for width in (360, 390, 768, 1440, 1920):
             for route, label in public_routes:
