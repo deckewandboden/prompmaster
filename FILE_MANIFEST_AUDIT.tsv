@@ -72,3 +72,5 @@ backend/apps/legal/forms.py	0	0	active-backend
 backend/apps/legal/migrations/0002_consumer_declarations.py	0	0	active-backend
 backend/templates/legal_action_form.html	0	0	active-backend
 backend/templates/legal_action_success.html	0	0	active-backend
+backend/apps/legal/management/__init__.py	0	0	active-backend
+backend/apps/legal/management/commands/__init__.py	0	0	active-backend
