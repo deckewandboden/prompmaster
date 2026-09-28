@@ -112,6 +112,11 @@ class PublicCheckoutForm(forms.Form):
             if not cleaned.get('request_early_performance'):
                 self.add_error(
                     'request_early_performance',
+                    'Bitte bestätigen Sie den gewünschten Leistungsbeginn vor Ablauf der Widerrufsfrist.',
+                )
+            if not cleaned.get('request_early_performance'):
+                self.add_error(
+                    'request_early_performance',
                     'Bitte bestätigen Sie den gewünschten sofortigen Leistungsbeginn.',
                 )
         return cleaned
