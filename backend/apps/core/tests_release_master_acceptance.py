@@ -138,7 +138,9 @@ class RegistrationPurchaseReleaseAcceptanceTests(TestCase):
                 'quantity': '1',
                 'accept_terms': 'on',
                 'accept_privacy': 'on',
+                'accept_license': 'on',
                 'accept_withdrawal': 'on',
+                'request_early_performance': 'on',
             },
         )
         self.assertEqual(response.status_code, 302)
@@ -193,7 +195,12 @@ class RegistrationPurchaseReleaseAcceptanceTests(TestCase):
         }
         response = self.client.post(
             '/portal/licenses/buy/?quantity=2',
-            {'quantity': '2', 'accept_terms': 'on', 'accept_privacy': 'on'},
+            {
+                'quantity': '2',
+                'accept_terms': 'on',
+                'accept_privacy': 'on',
+                'accept_license': 'on',
+            },
         )
         self.assertEqual(response.status_code, 302)
         payment = Payment.objects.get(provider_payment_id='tr_release_company_paid')
