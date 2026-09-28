@@ -13,68 +13,118 @@
 </div>
 
 <div class="grid support-layout">
-  <div class="card">
-    <div class="page-head support-card-head">
-      <div>
-        <h2>Nachrichtenverlauf</h2>
-        <div class="small muted">Kundenanfrage und alle netstyle-Antworten in chronologischer Reihenfolge.</div>
-      </div>
-      <span class="badge {% if support_request.status == 'closed' %}ok{% elif support_request.status == 'in_progress' %}info{% else %}warn{% endif %}">
-        {{ support_request.get_status_display }}
-      </span>
-    </div>
-
-    <div class="support-thread">
-      <article class="support-message support-message-customer">
-        <header class="support-message-head">
-          <div>
-            <strong>{{ support_request.user.full_name }}</strong>
-            <span class="badge info">Kunde</span>
-          </div>
-          <time>{{ support_request.created_at|date:'d.m.Y H:i' }}</time>
-        </header>
-        <div class="support-message-meta">
-          {{ support_request.user.email }}
-          {% if support_request.company %} · {{ support_request.company.name }}{% endif %}
-          {% if support_request.license %} · {{ support_request.license.license_number }}{% endif %}
+  <div class="support-main">
+    <div class="card">
+      <div class="page-head support-card-head">
+        <div>
+          <h2>Nachrichtenverlauf</h2>
+          <div class="small muted">Kundenanfrage, Rückfragen und netstyle-Antworten in chronologischer Reihenfolge.</div>
         </div>
-        <div class="support-message-body">{{ support_request.message|linebreaksbr }}</div>
-      </article>
+        <span class="badge {% if support_request.status == 'closed' %}ok{% elif support_request.status == 'in_progress' %}info{% else %}warn{% endif %}">
+          {{ support_request.get_status_display }}
+        </span>
+      </div>
 
-      {% for item in conversation_messages %}
-      <article class="support-message {% if item.visibility == 'internal' %}support-message-internal{% else %}support-message-staff{% endif %}">
-        <header class="support-message-head">
-          <div>
-            <strong>{{ item.author_display }}</strong>
-            {% if item.visibility == 'internal' %}
-              <span class="badge warn">Interne Notiz</span>
+      <div class="support-thread">
+        <article class="support-message support-message-customer">
+          <header class="support-message-head">
+            <div>
+              <strong>{{ support_request.user.full_name }}</strong>
+              <span class="badge info">Kunde</span>
+              <span class="small muted">Erstanfrage</span>
+            </div>
+            <time>{{ support_request.created_at|date:'d.m.Y H:i' }}</time>
+          </header>
+          <div class="support-message-meta">
+            {{ support_request.user.email }}
+            {% if support_request.company %} · {{ support_request.company.name }}{% endif %}
+            {% if support_request.license %} · {{ support_request.license.license_number }}{% endif %}
+          </div>
+          <div class="support-message-body">{{ support_request.message|linebreaksbr }}</div>
+        </article>
+
+        {% for item in conversation_messages %}
+        <article class="support-message {% if item.visibility == 'internal' %}support-message-internal{% elif item.sender_type == 'customer' %}support-message-customer{% else %}support-message-staff{% endif %}">
+          <header class="support-message-head">
+            <div>
+              <strong>{{ item.author_display }}</strong>
+              {% if item.visibility == 'internal' %}
+                <span class="badge warn">Interne Notiz</span>
+              {% elif item.sender_type == 'customer' %}
+                <span class="badge info">Kunde</span>
+              {% else %}
+                <span class="badge pro">netstyle Support</span>
+              {% endif %}
+            </div>
+            <time>{{ item.created_at|date:'d.m.Y H:i' }}</time>
+          </header>
+
+          {% if item.visibility == 'customer' and item.sender_type == 'staff' %}
+          <div class="support-message-meta">
+            Für Kunden sichtbar
+            {% if item.notification_email %}
+              · E-Mail:
+              <span class="badge {% if item.notification_email.status == 'sent' %}ok{% elif item.notification_email.status == 'failed' %}bad{% else %}info{% endif %}">
+                {% if item.notification_email.status == 'sent' %}Gesendet{% elif item.notification_email.status == 'failed' %}Fehler{% elif item.notification_email.status == 'sending' %}Wird gesendet{% else %}Warteschlange{% endif %}
+              </span>
+            {% elif support_request.user.email|slice:"-21:" == "@promptmaster.invalid" %}
+              · Demo-Adresse – kein Mailversand
             {% else %}
-              <span class="badge pro">netstyle Support</span>
+              · keine E-Mail protokolliert
             {% endif %}
           </div>
-          <time>{{ item.created_at|date:'d.m.Y H:i' }}</time>
-        </header>
-
-        {% if item.visibility == 'customer' %}
-        <div class="support-message-meta">
-          Für Kunden sichtbar
-          {% if item.notification_email %}
-            · E-Mail:
-            <span class="badge {% if item.notification_email.status == 'sent' %}ok{% elif item.notification_email.status == 'failed' %}bad{% else %}info{% endif %}">
-              {% if item.notification_email.status == 'sent' %}Gesendet{% elif item.notification_email.status == 'failed' %}Fehler{% elif item.notification_email.status == 'sending' %}Wird gesendet{% else %}Warteschlange{% endif %}
-            </span>
-          {% else %}
-            · keine E-Mail protokolliert
+          {% elif item.sender_type == 'customer' %}
+          <div class="support-message-meta">Kundenrückfrage</div>
           {% endif %}
-        </div>
-        {% endif %}
 
-        <div class="support-message-body">{{ item.body|linebreaksbr }}</div>
-      </article>
-      {% empty %}
-      <div class="empty support-empty">Noch keine netstyle-Antwort vorhanden.</div>
-      {% endfor %}
+          <div class="support-message-body">{{ item.body|linebreaksbr }}</div>
+        </article>
+        {% empty %}
+        <div class="empty support-empty">Noch keine weitere Nachricht vorhanden.</div>
+        {% endfor %}
+      </div>
     </div>
+
+    {% if can_write %}
+    <div class="card support-reply-card">
+      <h2>Antwort / interne Notiz</h2>
+      <div class="small muted support-reply-intro">
+        Hier direkt auf den Vorgang antworten oder eine ausschließlich intern sichtbare Notiz ergänzen.
+      </div>
+
+      <form method="post" action="{% url 'ns_admin:support_request_reply' support_request.id %}" class="form support-reply-form">
+        {% csrf_token %}
+        {{ reply_form.non_field_errors }}
+
+        <div class="support-reply-options">
+          <label>
+            {{ reply_form.visibility.label }}
+            {{ reply_form.visibility }}
+          </label>
+
+          <label>
+            {{ reply_form.status_after_message.label }}
+            {{ reply_form.status_after_message }}
+          </label>
+        </div>
+        {{ reply_form.visibility.errors }}
+        {{ reply_form.status_after_message.errors }}
+
+        <label>
+          {{ reply_form.body.label }}
+          {{ reply_form.body }}
+        </label>
+        {{ reply_form.body.errors }}
+
+        <p class="small muted support-reply-hint">
+          Kundenantworten werden im Vorgang gespeichert und bei echten Kundenadressen per E-Mail angekündigt.
+          Interne Notizen bleiben ausschließlich im netstyle-Backend.
+        </p>
+
+        <button class="btn primary" type="submit">Nachricht speichern</button>
+      </form>
+    </div>
+    {% endif %}
   </div>
 
   <div class="support-side">
@@ -91,39 +141,6 @@
     </div>
 
     {% if can_write %}
-    <div class="card">
-      <h2>Antwort / interne Notiz</h2>
-      <form method="post" action="{% url 'ns_admin:support_request_reply' support_request.id %}" class="form support-reply-form">
-        {% csrf_token %}
-        {{ reply_form.non_field_errors }}
-
-        <label>
-          {{ reply_form.visibility.label }}
-          {{ reply_form.visibility }}
-        </label>
-        {{ reply_form.visibility.errors }}
-
-        <label>
-          {{ reply_form.body.label }}
-          {{ reply_form.body }}
-        </label>
-        {{ reply_form.body.errors }}
-
-        <label>
-          {{ reply_form.status_after_message.label }}
-          {{ reply_form.status_after_message }}
-        </label>
-        {{ reply_form.status_after_message.errors }}
-
-        <p class="small muted support-reply-hint">
-          Kundenantworten werden im Vorgang gespeichert und bei echten Kundenadressen per E-Mail angekündigt.
-          Interne Notizen bleiben ausschließlich im netstyle-Backend.
-        </p>
-
-        <button class="btn primary" type="submit">Nachricht speichern</button>
-      </form>
-    </div>
-
     <div class="card">
       <h2>Status ändern</h2>
       <form method="post" action="{% url 'ns_admin:support_request_status' support_request.id %}" class="form">
