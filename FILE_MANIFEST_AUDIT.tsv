@@ -76,3 +76,4 @@ backend/apps/legal/management/__init__.py	0	0	active-backend
 backend/apps/legal/management/commands/__init__.py	0	0	active-backend
 backend/apps/legal/management/commands/seed_legal_documents_2026.py	0	0	active-backend
 backend/apps/legal/tests_public_legal.py	0	0	test
+backend/templates/ns_admin/legal_declaration_detail.html	0	0	active-backend
