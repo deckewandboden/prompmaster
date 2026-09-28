@@ -12,7 +12,7 @@ from apps.notifications.models import EmailTemplate
 class CurrentLegalDocumentSeedTests(TestCase):
     def test_seed_installs_complete_active_legal_set(self):
         out = StringIO()
-        call_command('seed_legal_documents_2026', stdout=out)
+        call_command('seed_legal_documents_2026', vat_id='DE123456789', stdout=out)
 
         expected = {
             'imprint', 'privacy', 'withdrawal',
@@ -54,7 +54,7 @@ class CurrentLegalDocumentSeedTests(TestCase):
             self.assertEqual(response.status_code, 200, doc_type)
 
     def test_reseed_replaces_active_version_without_duplicates(self):
-        call_command('seed_legal_documents_2026', stdout=StringIO())
+        call_command('seed_legal_documents_2026', vat_id='DE123456789', stdout=StringIO())
         call_command('seed_legal_documents_2026', stdout=StringIO())
         for doc_type in (
             'imprint', 'privacy', 'withdrawal',
