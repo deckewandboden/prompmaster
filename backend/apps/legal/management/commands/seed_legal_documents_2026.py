@@ -269,13 +269,13 @@ PromptMaster unterstützt Nutzer bei der strukturierten Erstellung von Prompts f
 PromptMaster Free kann im jeweils bereitgestellten Funktionsumfang ohne Entgelt genutzt werden. Ein Anspruch auf dauerhafte Bereitstellung bestimmter kostenloser Funktionen besteht nur im Rahmen zwingender gesetzlicher Vorgaben.
 
 4. PromptMaster Pro
-PromptMaster Pro ist eine entgeltliche digitale Dienstleistung. Pro-Lizenzen werden je Benutzer bzw. Lizenzplatz für die beim Kauf angegebene Laufzeit bereitgestellt. Nach aktuellem Produktmodell beträgt die Laufzeit zwölf Monate. Es erfolgt keine automatische kostenpflichtige Verlängerung. Eine Verlängerung erfordert eine neue ausdrückliche Bestellung.
+PromptMaster Pro ist eine entgeltliche digitale Dienstleistung. Pro-Lizenzen werden je Benutzer bzw. Lizenzplatz für die beim Kauf angegebene Laufzeit bereitgestellt. Nach aktuellem Produktmodell beträgt die Laufzeit exakt 365 Tage. Es erfolgt keine automatische kostenpflichtige Verlängerung. Eine Verlängerung erfordert eine neue ausdrückliche Bestellung.
 
 5. Vertragsschluss
 Die Darstellung auf der Webseite ist eine Aufforderung zur Abgabe einer Bestellung. Der Kunde wählt Lizenzanzahl und Kundentyp, gibt die erforderlichen Daten ein und gibt über die eindeutig als zahlungspflichtig gekennzeichnete Schaltfläche eine verbindliche Bestellung ab. Der Vertrag kommt nach erfolgreicher Annahme und Zahlungsabwicklung entsprechend dem im Checkout dargestellten Ablauf zustande. Der Vertragsinhalt und die zugeordneten Rechtsdokumentversionen werden technisch protokolliert.
 
 6. Preise und Zahlung
-Es gelten die im Checkout unmittelbar vor Abgabe der Bestellung angezeigten Preise. Verbraucherpreise werden einschließlich der gesetzlichen Umsatzsteuer angezeigt. Die Abrechnung für PromptMaster Pro erfolgt nach aktuellem Produktmodell für die gesamte zwölfmonatige Laufzeit im Voraus. Die Zahlungsabwicklung erfolgt über Mollie und die im Checkout angebotenen Zahlungsmethoden.
+Es gelten die im Checkout unmittelbar vor Abgabe der Bestellung angezeigten Preise. Verbraucherpreise werden einschließlich der gesetzlichen Umsatzsteuer angezeigt. Die Abrechnung für PromptMaster Pro erfolgt nach aktuellem Produktmodell für die gesamte 365-Tage-Laufzeit im Voraus. Die Zahlungsabwicklung erfolgt über Mollie und die im Checkout angebotenen Zahlungsmethoden.
 
 7. Bereitstellung und Benutzerkonto
 Nach bestätigter Zahlung werden die erworbenen Lizenzen dem Kundenkonto zugeordnet. Bei Unternehmenskunden verwaltet der Firmenadministrator die Benutzer und Lizenzzuweisungen. Zugangsdaten sind geheim zu halten und dürfen nicht mit unberechtigten Dritten geteilt werden.
