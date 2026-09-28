@@ -272,6 +272,74 @@ def _surface_fields(contract: dict) -> list[dict]:
     return fields
 
 
+def build_free_legacy_pro_spec(task_id: str) -> dict:
+    contract = PromptLegacyContract.objects.filter(
+        source='FREE_1_2_4',
+        legacy_id=task_id,
+    ).first()
+    if not contract:
+        raise PromptValidationError(
+            'Free-Prompt-Aufgabe nicht veröffentlicht.',
+            field='task_id',
+            code='not_found',
+        )
+    app_code = FREE_TO_PRO_APP_CODE.get(contract.application_code)
+    app = PromptApplication.objects.filter(code=app_code, active=True).first()
+    if not app:
+        raise PromptValidationError(
+            'Prompt-Anwendung nicht veröffentlicht.',
+            field='task_id',
+            code='not_found',
+        )
+    entry = _free_legacy_catalog_entry(contract)
+    policy = active_policy()
+    fields = []
+    for kind, key in (('required', 'required'), ('optional', 'optional')):
+        for index, label in enumerate(entry[key]):
+            fields.append({
+                'label': label,
+                'kind': kind,
+                'sort_order': index,
+                'optional_fragment': '',
+            })
+    options = []
+    for kind, key in (
+        ('source', 'sources'),
+        ('output', 'outputs'),
+        ('focus', 'focus'),
+        ('audience', 'audiences'),
+    ):
+        for index, value in enumerate(entry[key]):
+            options.append({
+                'kind': kind,
+                'value': value,
+                'label': value,
+                'sort_order': index,
+            })
+    return {
+        'task_id': task_id,
+        'application': {
+            'code': app.code,
+            'name': app.name,
+            'rule': app.rule,
+            'minimum_tier_rank': 0,
+        },
+        'version': {
+            'version': 1,
+            'title': entry['title'],
+            'area': entry['area'],
+            'family': entry['family'],
+            'intent': entry['intent'],
+            'max_chars': None,
+            'context_template': '',
+            'minimum_tier_rank': entry['minimum_tier_rank'],
+            'fields': fields,
+            'options': options,
+        },
+        'policy': _policy_spec(policy),
+    }
+
+
 def build_free_surface_pro_spec(task_id: str) -> dict:
     contract = FREE_SURFACE_PRO_CONTRACTS.get(task_id)
     if not contract:
