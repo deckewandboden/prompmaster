@@ -257,7 +257,7 @@ def _backend_fixture() -> dict:
         },
     )
 
-    for doc_type in ('terms', 'privacy'):
+    for doc_type in ('terms', 'privacy', 'license', 'withdrawal', 'imprint', 'accessibility'):
         LegalDocument.objects.update_or_create(
             doc_type=doc_type,
             version='browser-smoke-v1',
@@ -704,11 +704,11 @@ def _check_backend_page(page, base: str, path: str, width: int, label: str) -> N
         raise AssertionError(
             f'{label} {width}px: browser-native confirm handlers still active: {metrics["inlineConfirmForms"]}'
         )
-    if metrics['brandLogoPath'] != '/static/brand/promptmaster-logo-clean.svg':
+    if metrics['brandLogoPath'] != '/static/brand/promptmaster-logo-hq.png':
         raise AssertionError(
             f'{label} {width}px: legacy brand asset active: {metrics["brandLogoPath"]}'
         )
-    if metrics['brandNaturalWidth'] < 300:
+    if metrics['brandNaturalWidth'] < 1000:
         raise AssertionError(
             f'{label} {width}px: brand asset is not high-resolution enough: {metrics["brandNaturalWidth"]}'
         )
@@ -814,15 +814,15 @@ def _check_public_page(page, base: str, path: str, width: int, label: str) -> No
             f'{label} {width}px: public POST forms without CSRF: {metrics["postFormsMissingCsrf"]}'
         )
     if metrics['loginLogoPath']:
-        if metrics['loginLogoPath'] != '/static/brand/promptmaster-logo-clean.svg':
+        if metrics['loginLogoPath'] != '/static/brand/promptmaster-logo-hq.png':
             raise AssertionError(
                 f'{label} {width}px: legacy auth logo asset active: {metrics["loginLogoPath"]}'
             )
-        if metrics['loginLogoNaturalWidth'] < 300:
+        if metrics['loginLogoNaturalWidth'] < 1000:
             raise AssertionError(
                 f'{label} {width}px: auth logo source too small: {metrics["loginLogoNaturalWidth"]}'
             )
-        if metrics['loginLogoNaturalHeight'] != 55:
+        if metrics['loginLogoNaturalHeight'] < 250:
             raise AssertionError(
                 f'{label} {width}px: auth logo crop regressed: '
                 f'{metrics["loginLogoNaturalHeight"]}px intrinsic height'
@@ -843,13 +843,50 @@ def _check_product_v2_shell(page, label: str, width: int) -> None:
           const optionSpan = document.querySelector('#audienceGrid .option > span');
           const optionInput = optionSpan?.previousElementSibling;
           const nextButton = document.querySelector('.pmv2-next');
+          const nextRows = [...document.querySelectorAll('.pmv2-next-row')];
+          const copyButton = document.querySelector('#copyBtn');
+          const recommendButton = document.querySelector('#recommendBtn');
           const promptActionButtons = [...document.querySelectorAll('.pmv2-prompt-panel > .actions .btn')];
           const heroProgressText = document.querySelector('#progressText');
           const reviewProgress = document.querySelector('.pmv2-review-progress');
           const reviewProgressText = document.querySelector('[data-pmv2-review-progress-text]');
           const reviewProgressBar = document.querySelector('[data-pmv2-review-progress-bar]');
+          const reviewEditButtons = [...document.querySelectorAll('[data-pmv2-edit]')];
           const heroActiveSteps = document.querySelectorAll('.pmv2-flow-step.active').length;
           const reviewActiveSteps = document.querySelectorAll('.pmv2-review-flow-step.active').length;
+          const hero = document.querySelector('.pmv2-hero');
+          const heroCopy = document.querySelector('.pmv2-hero-copy');
+          const flowPanel = document.querySelector('.pmv2-flow-panel');
+          const firstSection = document.querySelector('#pmv2ConfigScroll > .pmv2-section');
+          const footer = document.querySelector('footer.legal-footer');
+          const purchaseModalBackdrop = document.querySelector('#generalProModal');
+          const purchaseModal = document.querySelector('#generalProModal .modal');
+          const purchaseModalActions = document.querySelector('#generalProModal .modal-actions');
+          const modalPrice = document.querySelector('#generalProModal .price b, #proModal .price b');
+          const hasPurchaseModal = !!(purchaseModalBackdrop && purchaseModal && purchaseModalActions);
+          let mobileModalProbe = null;
+          if (innerWidth <= 620 && hasPurchaseModal) {
+            const wasOpen = purchaseModalBackdrop.classList.contains('open');
+            purchaseModalBackdrop.classList.add('open');
+            const backdropStyle = getComputedStyle(purchaseModalBackdrop);
+            const modalStyle = getComputedStyle(purchaseModal);
+            const actionsStyle = getComputedStyle(purchaseModalActions);
+            const priceStyle = modalPrice ? getComputedStyle(modalPrice) : null;
+            mobileModalProbe = {
+              backdropOverflowY: backdropStyle.overflowY,
+              backdropDisplay: backdropStyle.display,
+              modalOverflowY: modalStyle.overflowY,
+              modalMaxHeight: modalStyle.maxHeight,
+              actionsPosition: actionsStyle.position,
+              priceWhiteSpace: priceStyle?.whiteSpace || '',
+            };
+            if (!wasOpen) purchaseModalBackdrop.classList.remove('open');
+          }
+          const visibleFlowSteps = [...document.querySelectorAll('.pmv2-flow-step')]
+            .filter(el => {
+              const s=getComputedStyle(el), r=el.getBoundingClientRect();
+              return s.display !== 'none' && s.visibility !== 'hidden' && r.width > 0 && r.height > 0;
+            }).length;
           const styleOf = (el) => {
             if (!el) return null;
             const style = getComputedStyle(el);
@@ -900,14 +937,42 @@ def _check_product_v2_shell(page, label: str, width: int) -> None:
             optionSelectedStyle,
             nextButtonStyle: styleOf(nextButton),
             promptActionStyles: promptActionButtons.map(styleOf),
+            nextRowDisplays: nextRows.map(el => getComputedStyle(el).display),
+            copyButtonDisplay: copyButton ? getComputedStyle(copyButton).display : '',
+            copyButtonVisibility: copyButton ? getComputedStyle(copyButton).visibility : '',
+            recommendJustify: recommendButton ? getComputedStyle(recommendButton).justifyContent : '',
+            copyButtonTrailingSpace: copyButton
+              ? Math.round(document.documentElement.scrollHeight - (copyButton.getBoundingClientRect().bottom + scrollY))
+              : -1,
             reviewProgressPresent: !!reviewProgress,
             reviewProgressDisplay: reviewProgress ? getComputedStyle(reviewProgress).display : '',
             reviewProgressSteps: document.querySelectorAll('.pmv2-review-flow-step').length,
             heroProgressText: (heroProgressText?.textContent || '').trim(),
             reviewProgressText: (reviewProgressText?.textContent || '').trim(),
             reviewProgressBarWidth: reviewProgressBar?.style.width || '',
+            reviewEditButtonCount: reviewEditButtons.length,
+            reviewEditButtonStyles: reviewEditButtons.map(el => {
+              const s=getComputedStyle(el);
+              return {
+                display:s.display,
+                minHeight:parseFloat(s.minHeight || '0'),
+                borderTopWidth:parseFloat(s.borderTopWidth || '0'),
+                borderRadius:parseFloat(s.borderRadius || '0'),
+                backgroundImage:s.backgroundImage,
+              };
+            }),
             heroActiveSteps,
             reviewActiveSteps,
+            headerHeight: headerRect?.height ?? -1,
+            heroHeight: hero?.getBoundingClientRect().height ?? -1,
+            heroCopyBottom: heroCopy?.getBoundingClientRect().bottom ?? -1,
+            flowPanelTop: flowPanel?.getBoundingClientRect().top ?? -1,
+            firstSectionTop: firstSection?.getBoundingClientRect().top ?? -1,
+            footerParentClass: footer?.parentElement?.className || '',
+            footerPreviousClass: footer?.previousElementSibling?.className || '',
+            hasPurchaseModal,
+            mobileModalProbe,
+            visibleFlowSteps,
             nestedScroll: [left,output].filter(Boolean).some(el => (
               ['auto','scroll'].includes(getComputedStyle(el).overflowY)
               && el.scrollHeight > el.clientHeight + 2
@@ -922,9 +987,9 @@ def _check_product_v2_shell(page, label: str, width: int) -> None:
         )
     if metrics['headerLeft'] < -1 or metrics['headerRight'] > metrics['innerWidth'] + 1:
         raise AssertionError(f'{label} {width}px: V2 header leaves viewport: {metrics}')
-    if metrics['logoPath'] != '/static/brand/promptmaster-logo-clean.svg':
+    if metrics['logoPath'] != '/static/brand/promptmaster-logo-hq.png':
         raise AssertionError(f'{label} {width}px: V2 legacy logo active: {metrics["logoPath"]}')
-    if metrics['logoNaturalWidth'] < 300:
+    if metrics['logoNaturalWidth'] < 1000:
         raise AssertionError(f'{label} {width}px: V2 logo source too small: {metrics["logoNaturalWidth"]}')
     if metrics['leftOverflowY'] != 'visible':
         raise AssertionError(f'{label} {width}px: left V2 column gained nested scrolling: {metrics}')
@@ -938,6 +1003,98 @@ def _check_product_v2_shell(page, label: str, width: int) -> None:
             raise AssertionError(f'{label} {width}px: desktop prompt rail must stay sticky and bounded: {metrics}')
     if metrics['outputOverflowY'] not in {'hidden','clip','visible'}:
         raise AssertionError(f'{label} {width}px: prompt output gained its own scrollbar: {metrics}')
+    if width <= 620:
+        # The public Free surface contains the Pro-purchase lightbox. The
+        # authenticated Pro runtime intentionally does not: there is nothing
+        # to upsell there. Validate the lightbox only when that product surface
+        # actually owns it, rather than failing every Pro mobile viewport.
+        if metrics.get('hasPurchaseModal'):
+            mobile_modal = metrics.get('mobileModalProbe') or {}
+            if (
+                mobile_modal.get('backdropDisplay') == 'none'
+                or mobile_modal.get('backdropOverflowY') not in {'auto', 'scroll'}
+                or mobile_modal.get('modalOverflowY') not in {'visible', 'clip'}
+                or mobile_modal.get('modalMaxHeight') != 'none'
+                or mobile_modal.get('actionsPosition') != 'static'
+                or mobile_modal.get('priceWhiteSpace') != 'nowrap'
+            ):
+                raise AssertionError(
+                    f'{label} {width}px: mobile Pro lightbox scroll/price contract invalid: {metrics}'
+                )
+        elif label.startswith('Free '):
+            raise AssertionError(
+                f'{label} {width}px: Free upgrade lightbox is missing: {metrics}'
+            )
+        if 'pmv2-workspace' not in metrics['footerParentClass'] or 'pmv2-prompt-panel' not in metrics['footerPreviousClass']:
+            raise AssertionError(
+                f'{label} {width}px: mobile legal footer is not below the finished prompt: {metrics}'
+            )
+        if not metrics['nextRowDisplays'] or any(
+            display != 'none' for display in metrics['nextRowDisplays']
+        ):
+            raise AssertionError(
+                f'{label} {width}px: phone flow still shows jump buttons: {metrics}'
+            )
+        if (
+            metrics['copyButtonDisplay'] == 'none'
+            or metrics['copyButtonVisibility'] == 'hidden'
+            or metrics['copyButtonTrailingSpace'] < 48
+        ):
+            raise AssertionError(
+                f'{label} {width}px: final copy action is not safely reachable: {metrics}'
+            )
+    else:
+        if 'pmv2-config-scroll' not in metrics['footerParentClass']:
+            raise AssertionError(
+                f'{label} {width}px: desktop/tablet legal footer left the configuration column: {metrics}'
+            )
+        if metrics['nextRowDisplays'] and all(
+            display == 'none' for display in metrics['nextRowDisplays']
+        ):
+            raise AssertionError(
+                f'{label} {width}px: desktop/tablet workflow jump buttons disappeared: {metrics}'
+            )
+
+    if width <= 850:
+        if metrics['visibleFlowSteps'] != 7:
+            raise AssertionError(
+                f'{label} {width}px: mobile workflow hides steps: {metrics}'
+            )
+        if metrics['headerHeight'] > 70:
+            raise AssertionError(
+                f'{label} {width}px: mobile header remains too tall: {metrics}'
+            )
+        mobile_gap = metrics['flowPanelTop'] - metrics['heroCopyBottom']
+        if mobile_gap < -1 or mobile_gap > 18:
+            raise AssertionError(
+                f'{label} {width}px: excessive hero-to-flow gap: {metrics}'
+            )
+    if width <= 390:
+        if metrics['heroHeight'] > 330:
+            raise AssertionError(
+                f'{label} {width}px: mobile landing hero is too tall: {metrics}'
+            )
+        if metrics['firstSectionTop'] > 440:
+            raise AssertionError(
+                f'{label} {width}px: first configuration step starts too low: {metrics}'
+            )
+    if metrics.get('reviewEditButtonCount') != 4:
+        raise AssertionError(
+            f'{label} {width}px: Prompt-Check edit button set incomplete: {metrics}'
+        )
+    for edit_style in metrics.get('reviewEditButtonStyles') or []:
+        if (
+            edit_style.get('display') not in {'inline-flex', 'flex'}
+            or edit_style.get('minHeight', 0) < 29
+            or edit_style.get('borderTopWidth', 0) < 1
+            or edit_style.get('borderRadius', 0) < 6
+            or 'gradient' not in (edit_style.get('backgroundImage') or '')
+        ):
+            raise AssertionError(
+                f'{label} {width}px: Prompt-Check edit action still looks like text: '
+                f'{edit_style}'
+            )
+
     if (
         not metrics['reviewProgressPresent']
         or metrics['reviewProgressDisplay'] == 'none'
@@ -984,6 +1141,11 @@ def _check_product_v2_shell(page, label: str, width: int) -> None:
     if 'Segoe UI' not in (next_style.get('fontFamily') or ''):
         raise AssertionError(
             f'{label} {width}px: V2 workflow button typography regressed: {next_style}'
+        )
+
+    if metrics.get('recommendJustify') != 'center':
+        raise AssertionError(
+            f'{label} {width}px: recommend action is not centered: {metrics}'
         )
 
     prompt_actions = metrics.get('promptActionStyles') or []
@@ -1144,6 +1306,12 @@ def run_backend_ui_smoke(browser, fixture=None) -> None:
             ('auth/password-reset/', 'Passwortreset'),
             ('legal/terms/', 'AGB'),
             ('legal/privacy/', 'Datenschutz'),
+            ('legal/license/', 'Lizenzbedingungen'),
+            ('legal/withdrawal/', 'Widerrufsbelehrung'),
+            ('legal/imprint/', 'Impressum'),
+            ('legal/accessibility/', 'Barrierefreiheit'),
+            ('vertrag-widerrufen/', 'Widerrufsfunktion'),
+            ('vertraege-kuendigen/', 'Kündigungsfunktion'),
         ]
         for width in (360, 390, 768, 1440, 1920):
             for route, label in public_routes:
@@ -1247,9 +1415,9 @@ def run_backend_ui_smoke(browser, fixture=None) -> None:
         if (
             not v2_free_layout['left']
             or not v2_free_layout['right']
-            or v2_free_layout['logoPath'] != '/static/brand/promptmaster-logo-clean.svg'
-            or v2_free_layout['logoNaturalWidth'] < 300
-            or v2_free_layout['logoNaturalHeight'] != 55
+            or v2_free_layout['logoPath'] != '/static/brand/promptmaster-logo-hq.png'
+            or v2_free_layout['logoNaturalWidth'] < 1000
+            or v2_free_layout['logoNaturalHeight'] < 250
             or v2_free_layout['bodyOverflowY'] not in {'auto', 'scroll'}
             or v2_free_layout['rootScrollBehavior'] != 'auto'
             or v2_free_layout['leftOverflowY'] != 'visible'
@@ -1334,8 +1502,24 @@ def run_backend_ui_smoke(browser, fixture=None) -> None:
         )
         public_page.locator('#goalInput').fill('Kernaussagen und nächste Schritte')
         public_page.locator('#sourceContextInput').fill('Browser-Free-DB-Probe')
-        public_page.locator('input[name="audience"][value="self"]').check(force=True)
-        public_page.locator('input[name="focus"][value="Kernaussagen"]').check(force=True)
+        # The Golden Master intentionally makes the native radio/checkbox
+        # transparent and pointer-events:none; the visible <span> inside its
+        # <label> is the actual user interaction surface. Exercise that surface
+        # instead of force-clicking the hidden control.
+        public_page.locator(
+            'label.option:has(input[name="audience"][value="self"]) > span'
+        ).click()
+        if not public_page.locator(
+            'input[name="audience"][value="self"]'
+        ).is_checked():
+            raise AssertionError('Free audience option did not persist after visible label click')
+        public_page.locator(
+            'label.option:has(input[name="focus"][value="Kernaussagen"]) > span'
+        ).click()
+        if not public_page.locator(
+            'input[name="focus"][value="Kernaussagen"]'
+        ).is_checked():
+            raise AssertionError('Free focus option did not persist after visible label click')
         public_page.locator('#detailSelect').select_option('short')
         public_page.locator('#formatSelect').select_option('bullets')
         public_page.locator('#toneSelect').select_option('professional')
@@ -1353,13 +1537,15 @@ def run_backend_ui_smoke(browser, fixture=None) -> None:
             """() => ({
               source: document.querySelector('#promptOutput')?.dataset.source || '',
               prompt: document.querySelector('#promptOutput')?.value || '',
-              copyState: document.querySelector('#copyState')?.textContent || '',
+              status: document.querySelector('#promptStatus')?.textContent || '',
+              copyEnabled: document.querySelector('#copyBtn')?.disabled === false,
             })"""
         )
         if (
             free_db_probe['source'] != 'database'
             or 'Browser-Free-DB-Probe' not in free_db_probe['prompt']
-            or 'Aus Prompt-Datenbank erstellt' not in free_db_probe['copyState']
+            or free_db_probe['status'] != 'PROMPT BEREIT'
+            or not free_db_probe['copyEnabled']
         ):
             raise AssertionError(
                 f'Free V2 did not render database-composed prompt: {free_db_probe}'
@@ -1404,7 +1590,7 @@ def run_backend_ui_smoke(browser, fixture=None) -> None:
             }"""
         )
         if (
-            pro_purchase_contract['path'] != '/portal/licenses/buy/'
+            pro_purchase_contract['path'] != '/checkout/'
             or pro_purchase_contract['search'] != '?quantity=1'
             or pro_purchase_contract['target']
         ):
@@ -1414,44 +1600,28 @@ def run_backend_ui_smoke(browser, fixture=None) -> None:
 
         public_page.locator('[data-close="proModal"]').first.click()
 
-        # The Pro purchase CTA is intentionally same-tab. An anonymous user
-        # must land on our styled login page with the checkout path preserved,
-        # never in a blank/new tab. This covers the live black-page/login-logo
-        # regression reported from the purchase flow.
-        purchase_page = public_context.new_page()
-        purchase_response = purchase_page.goto(
-            base + 'portal/licenses/buy/?quantity=1',
-            wait_until='networkidle',
+        # Free-to-Pro purchase is public. The Free runtime only owns the
+        # purchase URL contract; /checkout/ itself is served by the marketing
+        # frontend, not Django's runserver used by this backend smoke.
+        csrf_response = public_page.request.get(base + 'api/v1/checkout/csrf/')
+        if csrf_response.status != 200 or not csrf_response.json().get('csrfToken'):
+            raise AssertionError('public checkout CSRF endpoint did not resolve')
+
+        checkout_start_probe = public_page.evaluate(
+            """async (baseUrl) => {
+              const response = await fetch(baseUrl + 'api/v1/checkout/start/', {
+                method: 'GET',
+                credentials: 'same-origin',
+                redirect: 'manual',
+              });
+              return response.status;
+            }""",
+            base,
         )
-        if not purchase_response or purchase_response.status != 200:
-            raise AssertionError('anonymous Pro purchase route did not resolve to login')
-        if '/auth/login/' not in purchase_page.url or 'next=' not in purchase_page.url:
+        if checkout_start_probe != 405:
             raise AssertionError(
-                f'Pro purchase login continuation missing: {purchase_page.url}'
+                f'public checkout mutation endpoint must be POST-only, got {checkout_start_probe}'
             )
-        purchase_login_probe = purchase_page.evaluate(
-            """() => {
-              const logo=document.querySelector('.login-logo img');
-              return {
-                h1:document.querySelector('h1')?.textContent?.trim() || '',
-                logoPath:logo ? new URL(logo.src).pathname : '',
-                logoWidth:logo?.naturalWidth || 0,
-                logoHeight:logo?.naturalHeight || 0,
-                bodyText:(document.body?.innerText || '').trim(),
-              };
-            }"""
-        )
-        if (
-            purchase_login_probe['h1'] != 'Anmelden'
-            or purchase_login_probe['logoPath'] != '/static/brand/promptmaster-logo-clean.svg'
-            or purchase_login_probe['logoWidth'] < 300
-            or purchase_login_probe['logoHeight'] != 55
-            or not purchase_login_probe['bodyText']
-        ):
-            raise AssertionError(
-                f'Pro purchase login rendering regression: {purchase_login_probe}'
-            )
-        purchase_page.close()
 
         word_wrap = public_page.locator('[data-appwrap="word"]')
         if (
@@ -1530,8 +1700,20 @@ def run_backend_ui_smoke(browser, fixture=None) -> None:
             )
         public_page.locator('#goalInput').fill('Browser-Word-Live-Pfad klarer formulieren')
         public_page.locator('#sourceContextInput').fill('Zahlen und Namen unverändert lassen')
-        public_page.locator('input[name="audience"][value="customer"]').check(force=True)
-        public_page.locator('input[name="focus"][value="Verständlichkeit"]').check(force=True)
+        public_page.locator(
+            'label.option:has(input[name="audience"][value="customer"]) > span'
+        ).click()
+        if not public_page.locator(
+            'input[name="audience"][value="customer"]'
+        ).is_checked():
+            raise AssertionError('Free Word audience option did not persist after visible label click')
+        public_page.locator(
+            'label.option:has(input[name="focus"][value="Verständlichkeit"]) > span'
+        ).click()
+        if not public_page.locator(
+            'input[name="focus"][value="Verständlichkeit"]'
+        ).is_checked():
+            raise AssertionError('Free Word focus option did not persist after visible label click')
         public_page.locator('#detailSelect').select_option('short')
         public_page.locator('#formatSelect').select_option('prose')
         public_page.locator('#toneSelect').select_option('professional')
@@ -1587,7 +1769,7 @@ def run_backend_ui_smoke(browser, fixture=None) -> None:
             or general_modal_probe['tileBackground'] in {'rgb(250, 251, 253)', 'rgb(255, 255, 255)'}
             or general_modal_probe['compareBackground'] == 'rgb(255, 255, 255)'
             or general_modal_probe['ctaText'] != 'PromptMaster Pro kaufen'
-            or general_modal_probe['ctaPath'] != '/portal/licenses/buy/'
+            or general_modal_probe['ctaPath'] != '/checkout/'
             or general_modal_probe['ctaSearch'] != '?quantity=1'
         ):
             raise AssertionError(
@@ -1722,6 +1904,8 @@ def run_backend_ui_smoke(browser, fixture=None) -> None:
             ('ns-admin/', 'Admin Dashboard'),
             ('ns-admin/search/?q=PM-BROWSER', 'Admin Suche'),
             ('ns-admin/more/', 'Admin Mehr'),
+            ('ns-admin/leads/', 'Admin Leads'),
+            ('ns-admin/leads/new/', 'Admin Lead anlegen'),
             ('ns-admin/customers/', 'Admin Kunden'),
             ('ns-admin/customers/private/', 'Admin Privatkunden'),
             (f'ns-admin/customers/private/{fixture["private_customer_id"]}/', 'Admin Privatkundendetail'),
@@ -1811,7 +1995,7 @@ def run_backend_ui_smoke(browser, fixture=None) -> None:
         first_page.locator('input[name="password"]').press('Enter')
         first_page.wait_for_url('**/auth/2fa/setup/**')
         setup_logo = first_page.locator('.login-logo img')
-        if '/static/brand/promptmaster-logo-clean.svg' not in setup_logo.get_attribute('src'):
+        if '/static/brand/promptmaster-logo-hq.png' not in setup_logo.get_attribute('src'):
             raise AssertionError('first-time MFA still uses the low-resolution logo asset')
         if first_page.locator('[data-copy-target]').count() != 2:
             raise AssertionError('first-time MFA copy controls missing')
@@ -1844,20 +2028,25 @@ def run_backend_ui_smoke(browser, fixture=None) -> None:
         demo_credentials = fixture['demo_credentials']
         demo_login_expectations = {}
         for email, meta in demo_credentials.items():
-            if email.startswith('demo.superadmin') or email.startswith('demo.support') or email.startswith('demo.ops') or email.startswith('demo.prompts'):
+            label = meta.get('label', '')
+            note = meta.get('note', '')
+            if email.startswith(('demo.superadmin', 'demo.support', 'demo.ops', 'demo.prompts')):
                 demo_login_expectations[email] = ('mfa', '/ns-admin/')
-            elif '.admin@promptmaster.invalid' in email:
+            elif '2FA-Einrichtung' in note:
+                # Company admins now use realistic per-person addresses rather
+                # than the retired *.admin@... convention.
                 demo_login_expectations[email] = ('mfa', '/portal/dashboard/')
-            elif email.startswith('demo.privat1@') or email.startswith('demo.privat2@'):
-                demo_login_expectations[email] = ('password', '/pro/')
-            elif email.startswith('demo.privat3@'):
-                demo_login_expectations[email] = ('password', '/portal/dashboard/')
+            elif 'Privatkunde' in label:
+                demo_login_expectations[email] = (
+                    'password',
+                    '/portal/dashboard/' if 'abgelaufene PRO-Lizenz' in note else '/pro/',
+                )
             else:
                 # Seeded company users with an assigned seat launch Pro; the
                 # last login user of each company is intentionally unlicensed.
                 demo_login_expectations[email] = (
                     'password',
-                    '/portal/dashboard/' if 'ohne PRO-Lizenz' in meta['note'] else '/pro/',
+                    '/portal/dashboard/' if 'ohne PRO-Lizenz' in note else '/pro/',
                 )
 
         if len(demo_login_expectations) != 26:
@@ -1925,7 +2114,7 @@ def run_backend_ui_smoke(browser, fixture=None) -> None:
 
             if role == 'admin':
                 admin_logo = page.locator('.sidebar .brand img')
-                if '/static/brand/promptmaster-logo-clean.svg' not in admin_logo.get_attribute('src'):
+                if '/static/brand/promptmaster-logo-hq.png' not in admin_logo.get_attribute('src'):
                     raise AssertionError('admin shell still uses the low-resolution logo asset')
 
                 page.goto(
@@ -2632,8 +2821,13 @@ def _run_cross_browser_product_v2(browser, fixture: dict, engine: str) -> None:
         # Reproduce the exact Power Automate screenshot path end-to-end. One
         # missing required field must block composition; once Quell- und
         # Zielsystem are present the server-generated prompt must appear.
-        page.locator('input[name="mslicense"][value="premium"]').check(force=True)
-        page.locator('input[name="mslicense"][value="premium"]').dispatch_event('change')
+        page.locator(
+            'label.license-option:has(input[name="mslicense"][value="premium"]) > span'
+        ).click()
+        if not page.locator(
+            'input[name="mslicense"][value="premium"]'
+        ).is_checked():
+            raise AssertionError(f'{engine} Pro premium license did not persist after visible label click')
         page.wait_for_timeout(100)
         power_state = page.evaluate(
             """() => {
@@ -2818,7 +3012,11 @@ def main() -> int:
         # tasks is covered by validate_prompt_runtime; this loop validates the
         # interactive DOM contract and dynamic field generation task-by-task.
         premium = page.locator('input[name="mslicense"][value="premium"]')
-        premium.check(force=True)
+        page.locator(
+            'label.license-option:has(input[name="mslicense"][value="premium"]) > span'
+        ).click()
+        if not premium.is_checked():
+            raise AssertionError('Pro catalog audit could not select premium through visible license card')
         rendered_tasks = 0
         for source_app in catalog['applications']:
             app_code = source_app['code']

@@ -13,4 +13,5 @@ urlpatterns = [
     path('2fa/recovery/regenerate/', views.regenerate_recovery_codes, name='recovery_regenerate'),
     path('password-reset/', views.password_reset_request, name='password_reset'),
     path('password-reset/<str:token>/', views.password_reset_confirm, name='password_reset_confirm'),
+    path('checkout-activation/<str:token>/', views.checkout_activation, name='checkout_activation'),
 ]

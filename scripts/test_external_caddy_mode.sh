@@ -103,7 +103,7 @@ contract_ok=(
     and len(set(names)) == 34
     and pro.get('monthlyGrossCents') == 299
     and pro.get('annualGrossCents') == 3588
-    and pro.get('termMonths') == 12
+    and pro.get('termDays') == 365
     and pro.get('active') is True
     and pro.get('purchasable') is True
 )
@@ -111,16 +111,88 @@ if not contract_ok:
     raise SystemExit(f"catalog contract drift via external Caddy: {payload}")
 PY
 
+log "Öffentlichen Checkout-API-Pfad und CSRF-Schutz über externes Proxy-Netz testen"
+
+# Header und JSON-Body müssen aus derselben Django-Antwort stammen. Tempfiles
+# innerhalb eines ephemeren curl-Containers wären auf dem Host leer; deshalb
+# transportieren wir die komplette HTTP-Antwort über stdout zurück.
+csrf_response="$(
+  docker run --rm --network "$NETWORK" curlimages/curl:8.12.1 \
+    -fsS -i -H "Host: $domain" \
+    "http://$ALIAS/api/v1/checkout/csrf/"
+)"
+
+csrf_token="$(python3 - "$csrf_response" <<'PY'
+import json, sys
+raw=sys.argv[1].replace('\r\n','\n')
+parts=raw.split('\n\n',1)
+if len(parts) != 2:
+    raise SystemExit('checkout CSRF response has no HTTP/body separator')
+payload=json.loads(parts[1])
+print(payload.get('csrfToken') or '')
+PY
+)"
+[[ -n "$csrf_token" ]] || {
+  echo "Checkout CSRF endpoint returned no token through external Caddy" >&2
+  printf '%s\n' "$csrf_response" >&2
+  exit 1
+}
+
+csrf_cookie="$(
+  sed -nE 's/^[Ss]et-[Cc]ookie: csrftoken=([^;]+).*/\1/p' <<<"$csrf_response" |
+    tr -d '\r' | head -n1
+)"
+[[ -n "$csrf_cookie" ]] || {
+  echo "Checkout CSRF cookie missing through external Caddy" >&2
+  printf '%s\n' "$csrf_response" >&2
+  exit 1
+}
+
+without_csrf="$(
+  docker run --rm --network "$NETWORK" curlimages/curl:8.12.1 \
+    -sS -o /dev/null -w '%{http_code}' -X POST -H "Host: $domain" \
+    --data 'quantity=1' "http://$ALIAS/api/v1/checkout/start/"
+)"
+[[ "$without_csrf" == "403" ]] || {
+  echo "Checkout POST without CSRF should be 403, got $without_csrf" >&2
+  exit 1
+}
+
+with_csrf_headers="$(
+  docker run --rm --network "$NETWORK" curlimages/curl:8.12.1 \
+    -sS -D - -o /dev/null -X POST -H "Host: $domain" \
+    -H "Origin: https://$domain" \
+    -H "X-CSRFToken: $csrf_token" \
+    -H "Cookie: csrftoken=$csrf_cookie" \
+    --data 'quantity=1' "http://$ALIAS/api/v1/checkout/start/"
+)"
+grep -qE '^HTTP/[0-9.]+ 302' <<<"$with_csrf_headers" || {
+  echo "CSRF-valid checkout POST did not reach Django validation" >&2
+  printf '%s\n' "$with_csrf_headers" >&2
+  exit 1
+}
+grep -qiE '^location: /checkout/\?quantity=1&error=invalid' <<<"$with_csrf_headers" || {
+  echo "CSRF-valid invalid checkout did not return the expected safe validation redirect" >&2
+  printf '%s\n' "$with_csrf_headers" >&2
+  exit 1
+}
+
 log "Current Free V2 cache-busting through external Caddy testen"
 free_current="$(
   docker run --rm --network "$NETWORK" curlimages/curl:8.12.1 \
     -fsS -H "Host: $domain" "http://$ALIAS/free/"
 )"
-grep -q 'promptmaster_v2.20260922.css?v=20260924-audit4' <<<"$free_current" || {
+v2_css_url="$(
+  grep -m1 -oE '/static/css/promptmaster_v2\.20260922\.css\?v=[^"[:space:]]+' <<<"$free_current"
+)"
+v2_js_url="$(
+  grep -m1 -oE '/static/js/promptmaster_ui_v2\.20260922\.js\?v=[^"[:space:]]+' <<<"$free_current"
+)"
+[[ -n "$v2_css_url" ]] || {
   echo "Free V2 stylesheet is not cache-busted through external Caddy" >&2
   exit 1
 }
-grep -q 'promptmaster_ui_v2.20260922.js?v=20260924-audit4' <<<"$free_current" || {
+[[ -n "$v2_js_url" ]] || {
   echo "Free V2 script is not cache-busted through external Caddy" >&2
   exit 1
 }
@@ -128,7 +200,7 @@ grep -q 'promptmaster_ui_v2.20260922.js?v=20260924-audit4' <<<"$free_current" ||
 mutable_headers="$(
   docker run --rm --network "$NETWORK" curlimages/curl:8.12.1 \
     -sS -D - -o /dev/null -H "Host: $domain" \
-    "http://$ALIAS/static/css/promptmaster_v2.20260922.css?v=20260924-audit4"
+    "http://$ALIAS$v2_css_url"
 )"
 grep -qiE '^cache-control: .*no-cache.*must-revalidate' <<<"$mutable_headers" || {
   echo "Mutable V2 stylesheet still inherits immutable one-year cache" >&2

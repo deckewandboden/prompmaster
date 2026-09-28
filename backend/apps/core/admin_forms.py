@@ -5,9 +5,141 @@ from django.utils import timezone
 
 from apps.accounts.models import Permission, Role, User
 from apps.companies.forms import CompanyForm
+from apps.companies.models import Company
+from apps.core.models import Lead
 from apps.catalog.models import Feature, Product, ProductEntitlement
 from apps.legal.models import LegalDocument, RetentionPolicy
 from apps.notifications.models import EmailTemplate
+
+
+class LeadForm(forms.ModelForm):
+    assigned_to = forms.ModelChoiceField(
+        queryset=User.objects.none(),
+        required=False,
+        label='Zuständig',
+        empty_label='Nicht zugewiesen',
+    )
+
+    class Meta:
+        model = Lead
+        fields = [
+            'kind', 'company_name', 'first_name', 'last_name', 'email', 'phone',
+            'source', 'status', 'priority', 'assigned_to', 'next_action_at', 'notes',
+        ]
+        labels = {
+            'kind': 'Lead-Typ',
+            'company_name': 'Unternehmen',
+            'first_name': 'Vorname',
+            'last_name': 'Nachname',
+            'email': 'E-Mail',
+            'phone': 'Telefon',
+            'source': 'Quelle',
+            'status': 'Status',
+            'priority': 'Priorität',
+            'next_action_at': 'Nächste Aktion',
+            'notes': 'Interne Notizen',
+        }
+        widgets = {
+            'next_action_at': forms.DateTimeInput(attrs={'type': 'datetime-local'}),
+            'notes': forms.Textarea(attrs={'rows': 5}),
+        }
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['assigned_to'].queryset = User.objects.filter(
+            is_staff=True,
+            is_active=True,
+        ).order_by('last_name', 'first_name', 'email')
+
+    def clean(self):
+        data = super().clean()
+        if data.get('kind') == 'company' and not (data.get('company_name') or '').strip():
+            self.add_error('company_name', 'Für Unternehmens-Leads ist der Unternehmensname erforderlich.')
+        return data
+
+
+    def clean_email(self):
+        value = self.cleaned_data['email'].strip().lower()
+        duplicates = Lead.objects.filter(
+            email__iexact=value,
+            deleted_at__isnull=True,
+        )
+        if self.instance and self.instance.pk:
+            duplicates = duplicates.exclude(pk=self.instance.pk)
+        if duplicates.exists():
+            raise forms.ValidationError(
+                'Für diese E-Mail-Adresse existiert bereits ein aktiver Lead.'
+            )
+        return value
+
+
+class LeadAssignForm(forms.Form):
+    assigned_to = forms.ModelChoiceField(
+        queryset=User.objects.none(),
+        required=False,
+        label='Zuständig',
+        empty_label='Nicht zugewiesen',
+    )
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['assigned_to'].queryset = User.objects.filter(
+            is_staff=True,
+            is_active=True,
+        ).order_by('last_name', 'first_name', 'email')
+
+
+class LeadDeleteForm(forms.Form):
+    confirm = forms.BooleanField(
+        label='Lead wirklich löschen',
+        help_text='Der Datensatz wird revisionssicher ausgeblendet und im Audit protokolliert.',
+    )
+
+
+class LeadConvertCompanyForm(forms.Form):
+    company_name = forms.CharField(max_length=200, label='Unternehmensname')
+    legal_form = forms.CharField(max_length=80, required=False, label='Rechtsform')
+    email = forms.EmailField(label='E-Mail des Firmenadministrators')
+    first_name = forms.CharField(max_length=120, label='Vorname')
+    last_name = forms.CharField(max_length=120, label='Nachname')
+    phone = forms.CharField(max_length=60, required=False, label='Telefon')
+    street = forms.CharField(max_length=160, required=False, label='Straße')
+    house_number = forms.CharField(max_length=40, required=False, label='Hausnummer')
+    postal_code = forms.CharField(max_length=20, required=False, label='PLZ')
+    city = forms.CharField(max_length=120, required=False, label='Ort')
+    country = forms.CharField(max_length=2, initial='DE', label='Land')
+    vat_id = forms.CharField(max_length=40, required=False, label='USt-IdNr.')
+    tax_number = forms.CharField(max_length=60, required=False, label='Steuernummer')
+    confirm = forms.BooleanField(
+        label='Lead in Firmenkunden umwandeln und Einladungslink senden',
+    )
+
+
+    def clean_email(self):
+        value = self.cleaned_data['email'].strip().lower()
+        if User.objects.filter(email__iexact=value).exists():
+            raise forms.ValidationError(
+                'Diese E-Mail-Adresse gehört bereits zu einem PromptMaster-Konto.'
+            )
+        if Company.objects.filter(email__iexact=value).exists():
+            raise forms.ValidationError(
+                'Diese E-Mail-Adresse ist bereits einem Firmenkunden zugeordnet.'
+            )
+        return value
+
+
+class CustomerAdminInviteForm(forms.Form):
+    email = forms.EmailField(label='E-Mail des Firmenadministrators')
+    first_name = forms.CharField(max_length=120, label='Vorname')
+    last_name = forms.CharField(max_length=120, label='Nachname')
+
+    def clean_email(self):
+        value = self.cleaned_data['email'].strip().lower()
+        if User.objects.filter(email__iexact=value).exists():
+            raise forms.ValidationError(
+                'Diese E-Mail-Adresse gehört bereits zu einem PromptMaster-Konto.'
+            )
+        return value
 
 
 class SupportAdminTransferForm(forms.Form):
@@ -177,6 +309,7 @@ class DeletionRejectForm(forms.Form):
 
 PERMISSION_DOMAIN_LABELS = {
     'customers': 'Kunden',
+    'leads': 'Leads',
     'licenses': 'Lizenzen',
     'devices': 'Geräte',
     'orders': 'Bestellungen',
@@ -195,6 +328,9 @@ PERMISSION_DOMAIN_LABELS = {
 }
 PERMISSION_ACTION_LABELS = {
     'read': 'Lesen',
+    'assign': 'Zuweisen',
+    'convert': 'In Kunde umwandeln',
+    'delete': 'Löschen',
     'write': 'Bearbeiten',
     'refund': 'Erstatten',
     'compose': 'Prompts erzeugen',

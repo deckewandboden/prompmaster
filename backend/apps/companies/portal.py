@@ -66,7 +66,7 @@ def _is_private_customer(user):
 
 def _active_legal_documents(private_customer=False):
     now = timezone.now()
-    required = ['terms', 'privacy'] + (['withdrawal'] if private_customer else [])
+    required = ['terms', 'privacy', 'license'] + (['withdrawal'] if private_customer else [])
     documents = {}
     for doc_type in required:
         document = (
@@ -80,10 +80,17 @@ def _active_legal_documents(private_customer=False):
     return documents
 
 
-def _record_legal_acceptances(request, order, documents):
+def _record_legal_acceptances(
+    request,
+    order,
+    documents,
+    *,
+    early_performance_requested=False,
+):
     evidence = {
         'ip': client_ip(request),
         'user_agent': request.META.get('HTTP_USER_AGENT', '')[:300],
+        'early_performance_requested': bool(early_performance_requested),
     }
     for document in documents.values():
         LegalAcceptance.objects.get_or_create(
@@ -1092,7 +1099,15 @@ def buy(request):
         try:
             documents = _active_legal_documents(private_customer=private_customer)
             order = create_order(user=request.user, product=product, quantity=form.cleaned_data['quantity'], idempotency_key=checkout_key)
-            _record_legal_acceptances(request, order, documents)
+            _record_legal_acceptances(
+                request,
+                order,
+                documents,
+                early_performance_requested=bool(
+                    private_customer
+                    and form.cleaned_data.get('request_early_performance')
+                ),
+            )
             response = _start_mollie_checkout(
                 request,
                 order,
@@ -1147,7 +1162,15 @@ def renew(request, pk):
         try:
             documents = _active_legal_documents(private_customer=private_customer)
             order = create_order(user=request.user, product=license_obj.product, quantity=1, target_license=license_obj, idempotency_key=checkout_key)
-            _record_legal_acceptances(request, order, documents)
+            _record_legal_acceptances(
+                request,
+                order,
+                documents,
+                early_performance_requested=bool(
+                    private_customer
+                    and form.cleaned_data.get('request_early_performance')
+                ),
+            )
             response = _start_mollie_checkout(
                 request,
                 order,

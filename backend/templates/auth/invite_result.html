@@ -1,6 +1,6 @@
 {% extends 'base.html' %}{% load static %}{% block body %}
 <div class="login-wrap"><div class="login-card">
-  <div class="login-logo"><img src="{% static 'brand/promptmaster-logo-clean.svg' %}" width="239" height="47" alt="PromptMaster by netstyle"></div>
+  <div class="login-logo"><img src="{% static 'brand/promptmaster-logo-hq.png' %}" width="239" height="47" alt="PromptMaster by netstyle"></div>
   <h1>{% if ok %}Einladung angenommen{% else %}Einladung ungültig oder abgelaufen{% endif %}</h1>
   <p class="muted">{% if ok %}Ihr Benutzerkonto ist dem Unternehmen jetzt zugeordnet.{% else %}Der Einladungslink kann nicht mehr verwendet werden. Bitte fordern Sie bei Ihrem Firmenadministrator eine neue Einladung an.{% endif %}</p>
   <div class="result-actions">{% if ok %}<a class="btn primary" href="{% url 'portal:dashboard' %}">Zum Kundenportal →</a>{% else %}<a class="btn primary" href="{% url 'home' %}">Zur Startseite</a>{% endif %}</div>

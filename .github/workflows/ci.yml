@@ -134,6 +134,17 @@ jobs:
             apps.core.tests.DataGrid100kAcceptanceTests.test_100000_rows_paginate_without_unbounded_result_materialization \
             --verbosity 2
 
+      - name: 100k multi-domain performance benchmark
+        if: github.ref == 'refs/heads/dev/mobile-free-pro-2026-09-25' || github.ref == 'refs/heads/main'
+        working-directory: backend
+        run: |
+          python manage.py seed_performance --count 100000 --prefix PMPERF
+          python manage.py performance_smoke \
+            --prefix PMPERF \
+            --min-rows 100000 \
+            --iterations 20 \
+            --max-ms 500
+
       - name: Compose configuration
         env:
           CADDY_DOMAIN: localhost

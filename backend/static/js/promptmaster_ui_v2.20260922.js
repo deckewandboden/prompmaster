@@ -70,6 +70,73 @@
 
   ensureProCatalogSearch();
 
+  /* PromptMaster Pro task layout is fully data-driven.
+     Standalone category headings are converted into compact labels inside each
+     task card. The task chooser itself remains one flat CSS grid, so every
+     current and future task is placed left/right in row-major order:
+     1 left, 2 right, 3 left, 4 right ... . An odd final task stays left.
+     No app, category or task count is hard-coded. */
+  const normalizeProTaskBlocks = () => {
+    if (free) return;
+    const grid = $('#taskGrid', taskSection);
+    if (!grid) return;
+
+    const currentChildren = Array.from(grid.children);
+    if (!currentChildren.length) return;
+
+    /* Already normalized for the current render. */
+    if (
+      currentChildren.every(node =>
+        node.classList.contains('task') &&
+        node.querySelector('.pmv2-task-area-chip')
+      )
+    ) return;
+
+    const fragment = document.createDocumentFragment();
+    let currentArea = '';
+    let taskOrder = 0;
+
+    currentChildren.forEach(node => {
+      if (node.classList.contains('task-area')) {
+        currentArea = (node.textContent || '').replace(/\s+/g,' ').trim();
+        return;
+      }
+
+      if (!node.classList.contains('task')) {
+        fragment.appendChild(node);
+        return;
+      }
+
+      node.querySelector('.pmv2-task-area-chip')?.remove();
+
+      const content = node.lastElementChild || node;
+      if (currentArea) {
+        const chip = document.createElement('div');
+        chip.className = 'pmv2-task-area-chip';
+        chip.textContent = currentArea;
+        content.insertBefore(chip, content.firstChild);
+        node.dataset.pmv2Area = currentArea;
+      } else {
+        delete node.dataset.pmv2Area;
+      }
+
+      node.style.setProperty('--pmv2-task-card-order', String(taskOrder++));
+      fragment.appendChild(node);
+    });
+
+    grid.replaceChildren(fragment);
+    grid.dataset.pmv2TotalTasks = String(taskOrder);
+    grid.dataset.pmv2Layout = 'flat-balanced-grid';
+  };
+
+  if (!free) {
+    const proTaskGrid = $('#taskGrid', taskSection);
+    if (proTaskGrid) {
+      new MutationObserver(normalizeProTaskBlocks).observe(proTaskGrid, {childList:true});
+      normalizeProTaskBlocks();
+    }
+  }
+
   const normalizePromptMasterBrand = root => {
     if (!root) return;
     const walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT);
@@ -98,7 +165,7 @@
   header.className = 'pmv2-header';
   header.innerHTML = `
     <div class="pmv2-brand">
-      <img src="/static/brand/promptmaster-logo-clean.svg?v=20260924-audit4" alt="PromptMaster">
+      <img src="/static/brand/promptmaster-logo-hq.png?v=20260925-hq1" alt="PromptMaster">
       <span class="pmv2-edition pmv2-edition-${edition}">${edition.toUpperCase()}</span>
     </div>
     <div class="pmv2-header-spacer"></div>
@@ -315,16 +382,60 @@
     </div>
     <div class="section-body">
       <div class="pmv2-review-grid">
-        <div class="pmv2-review-card"><div class="pmv2-review-label">Anwendung <button type="button" data-pmv2-edit="2">Bearbeiten</button></div><div class="pmv2-review-value" data-pmv2-review="app">Noch nicht gewählt</div></div>
-        <div class="pmv2-review-card"><div class="pmv2-review-label">Aufgabe <button type="button" data-pmv2-edit="3">Bearbeiten</button></div><div class="pmv2-review-value" data-pmv2-review="task">Noch nicht gewählt</div></div>
-        <div class="pmv2-review-card"><div class="pmv2-review-label">Zielgruppe <button type="button" data-pmv2-edit="5">Bearbeiten</button></div><div class="pmv2-review-value" data-pmv2-review="audience">Noch nicht gewählt</div></div>
-        <div class="pmv2-review-card"><div class="pmv2-review-label">Ausgabe <button type="button" data-pmv2-edit="7">Bearbeiten</button></div><div class="pmv2-review-value" data-pmv2-review="output">Noch nicht vollständig</div></div>
+        <div class="pmv2-review-card">
+          <div class="pmv2-review-copy">
+            <div class="pmv2-review-label">Anwendung</div>
+            <div class="pmv2-review-value" data-pmv2-review="app">Noch nicht gewählt</div>
+          </div>
+          <button type="button" class="pmv2-review-edit" data-pmv2-edit="2">Bearbeiten</button>
+        </div>
+        <div class="pmv2-review-card">
+          <div class="pmv2-review-copy">
+            <div class="pmv2-review-label">Aufgabe</div>
+            <div class="pmv2-review-value" data-pmv2-review="task">Noch nicht gewählt</div>
+          </div>
+          <button type="button" class="pmv2-review-edit" data-pmv2-edit="3">Bearbeiten</button>
+        </div>
+        <div class="pmv2-review-card">
+          <div class="pmv2-review-copy">
+            <div class="pmv2-review-label">Zielgruppe</div>
+            <div class="pmv2-review-value" data-pmv2-review="audience">Noch nicht gewählt</div>
+          </div>
+          <button type="button" class="pmv2-review-edit" data-pmv2-edit="5">Bearbeiten</button>
+        </div>
+        <div class="pmv2-review-card">
+          <div class="pmv2-review-copy">
+            <div class="pmv2-review-label">Ausgabe</div>
+            <div class="pmv2-review-value" data-pmv2-review="output">Noch nicht vollständig</div>
+          </div>
+          <button type="button" class="pmv2-review-edit" data-pmv2-edit="7">Bearbeiten</button>
+        </div>
       </div>
       <div class="pmv2-review-note">Prüfe die Kerneinstellungen. Den vollständigen, tatsächlich erzeugten Prompt siehst du rechts und kannst ihn direkt kopieren.</div>
     </div>
   `;
   left.append(review);
   left.append(footer);
+
+  // Desktop keeps legal information in the configuration column. On phones
+  // the prompt panel is stacked below Prompt-Check, so the legal block must
+  // follow the finished prompt instead of separating Prompt-Check from it.
+  const mobileFooterQuery = window.matchMedia('(max-width: 620px)');
+  const syncFooterPosition = () => {
+    if (mobileFooterQuery.matches) {
+      if (footer.parentElement !== workspace || footer.previousElementSibling !== right) {
+        workspace.append(footer);
+      }
+    } else if (footer.parentElement !== left) {
+      left.append(footer);
+    }
+  };
+  syncFooterPosition();
+  if (typeof mobileFooterQuery.addEventListener === 'function') {
+    mobileFooterQuery.addEventListener('change', syncFooterPosition);
+  } else if (typeof mobileFooterQuery.addListener === 'function') {
+    mobileFooterQuery.addListener(syncFooterPosition);
+  }
 
   const addNextButton = (section, text, target) => {
     const body = $('.section-body', section);
@@ -455,7 +566,7 @@
     const configureProPurchaseCta = cta => {
       if (!cta) return;
       cta.textContent = 'PromptMaster Pro kaufen';
-      cta.href = '/portal/licenses/buy/?quantity=1';
+      cta.href = '/checkout/?quantity=1';
       cta.removeAttribute('target');
       cta.removeAttribute('rel');
     };
@@ -534,14 +645,35 @@
   if (oldMain.isConnected) oldMain.remove();
 
   let scrollRequestId = 0;
+  const phoneFlowQuery = window.matchMedia('(max-width: 620px)');
+
+  const mobileHeaderOffset = () => {
+    if (!phoneFlowQuery.matches) return 18;
+    const rect = header.getBoundingClientRect();
+    return Math.max(0, Math.round(rect.height)) + 12;
+  };
+
+  const isComfortablyVisible = node => {
+    if (!phoneFlowQuery.matches || !node?.isConnected) return false;
+    const rect = node.getBoundingClientRect();
+    const topGuard = mobileHeaderOffset();
+    const bottomGuard = window.innerHeight - 72;
+    return rect.top >= topGuard && rect.bottom <= bottomGuard;
+  };
+
   const scrollToTarget = target => {
     const node = typeof target === 'string' ? $(target) : target;
     if (!node) return;
-    const requestId = ++scrollRequestId;
 
+    if (isComfortablyVisible(node)) return;
+
+    const requestId = ++scrollRequestId;
     const align = behavior => {
       if (requestId !== scrollRequestId || !node.isConnected) return;
-      const top = Math.max(0, window.scrollY + node.getBoundingClientRect().top - 18);
+      const top = Math.max(
+        0,
+        window.scrollY + node.getBoundingClientRect().top - mobileHeaderOffset()
+      );
       window.scrollTo({top,left:0,behavior});
     };
 
@@ -593,6 +725,34 @@
         if (!focusSection.classList.contains('hidden')) scrollToTarget(focusSection);
       }, 90);
     }
+  });
+
+  /* Phone flow: the stacked layout itself is the navigation. After the user
+     finishes a focus interaction, bring step 7 into a useful position. Because
+     focus is multi-select, debounce the jump so several quick selections can be
+     made before we advance. Free and Pro share this exact V2 controller. */
+  let focusAdvanceTimer = 0;
+  focusSection.addEventListener('change', event => {
+    if (!phoneFlowQuery.matches || !event.target.matches('input[name="focus"]')) return;
+    window.clearTimeout(focusAdvanceTimer);
+    focusAdvanceTimer = window.setTimeout(() => {
+      if (!outputSection.classList.contains('hidden')) scrollToTarget(outputSection);
+    }, 420);
+  });
+
+  /* If step 7 is already high enough, selecting detail depth should not cause
+     another jump. Only reveal Ausgabeformat when mobile browser chrome or a
+     short viewport leaves that next field outside the comfortable tap area. */
+  const detailSelectForFlow = $('#detailSelect');
+  const formatSelectForFlow = $('#formatSelect');
+  detailSelectForFlow?.addEventListener('change', () => {
+    if (!phoneFlowQuery.matches || !detailSelectForFlow.value || !formatSelectForFlow) return;
+    window.setTimeout(() => {
+      const field = formatSelectForFlow.closest('.field') || formatSelectForFlow;
+      if (!isComfortablyVisible(field)) {
+        scrollToTarget(field);
+      }
+    }, 100);
   });
 
   left.addEventListener('click', event => {

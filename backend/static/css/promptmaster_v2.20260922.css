@@ -458,6 +458,44 @@ body.pmv2 textarea{font-family:inherit}
 .pmv2 .task-copy{display:block!important;color:#91a5b6!important;font-size:12px!important;line-height:1.52!important;margin:0!important}
 .pmv2 .task-badges,.pmv2 .task-meta{margin-top:9px!important}
 
+/* PromptMaster Pro uses one flat two-column task grid.
+   Category information lives inside each card as a compact overline label, so
+   headings can no longer create ragged columns or large vertical gaps. */
+.pmv2-pro .task-grid{
+  display:grid!important;
+  grid-template-columns:repeat(2,minmax(0,1fr))!important;
+  align-items:stretch!important;
+  gap:11px!important;
+}
+.pmv2-pro .task-grid>.task{
+  width:100%!important;
+  height:100%!important;
+  margin:0!important;
+  min-width:0!important;
+}
+.pmv2-pro .pmv2-task-area-chip{
+  display:inline-flex!important;
+  align-items:center!important;
+  width:max-content!important;
+  max-width:100%!important;
+  min-height:20px!important;
+  margin:0 0 7px!important;
+  padding:3px 7px!important;
+  border:1px solid rgba(156,105,239,.24)!important;
+  border-radius:999px!important;
+  background:rgba(123,70,217,.10)!important;
+  color:#bca4e7!important;
+  font-size:8.5px!important;
+  line-height:1.15!important;
+  font-weight:800!important;
+  letter-spacing:.055em!important;
+  text-transform:uppercase!important;
+  white-space:normal!important;
+}
+@media(max-width:850px){
+  .pmv2-pro .task-grid{grid-template-columns:1fr!important}
+}
+
 .pmv2 .context-grid,
 .pmv2 .input-grid{display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:15px!important}
 .pmv2 .context-field,
@@ -1216,4 +1254,569 @@ body.pmv2 .pmv2-header-cta{
   .pmv2 #generalProModal .pro-overview-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important}
   .pmv2 #goalInput,
   .pmv2 #sourceContextInput{height:120px!important;min-height:120px!important}
+}
+
+
+/* V2 mobile repair 2026-09-25
+ * Free + Pro: keep the landing viewport compact, expose all seven workflow
+ * steps, and remove desktop minimum heights from the stacked mobile layout.
+ */
+@media(max-width:1180px){
+  body.pmv2{
+    background-attachment:scroll!important;
+  }
+  .pmv2-hero-inner{
+    height:auto!important;
+    min-height:0!important;
+    align-items:start!important;
+  }
+  .pmv2-workspace{
+    min-height:0!important;
+  }
+  .pmv2-prompt-panel,
+  .pmv2-prompt-panel.pmv2-prompt-tall{
+    min-height:0!important;
+  }
+}
+
+@media(max-width:850px){
+  .pmv2-header{
+    height:68px!important;
+    min-height:68px!important;
+  }
+  .pmv2-hero{
+    padding:16px 14px 14px!important;
+  }
+  .pmv2-hero-inner{
+    gap:12px!important;
+  }
+  .pmv2-hero-copy h1{
+    margin:3px 0 6px!important;
+    font-size:27px!important;
+  }
+  .pmv2-hero-copy p{
+    font-size:12.5px!important;
+    line-height:1.42!important;
+  }
+  .pmv2-flow-panel{
+    padding:9px!important;
+    border-radius:14px!important;
+  }
+  .pmv2-flow-row{
+    grid-template-columns:repeat(4,minmax(0,1fr))!important;
+    gap:6px!important;
+  }
+  .pmv2-flow-step,
+  .pmv2-flow-step:nth-child(n){
+    display:block!important;
+    min-width:0!important;
+    min-height:52px!important;
+    padding:5px 3px!important;
+    border-radius:10px!important;
+  }
+  .pmv2-flow-step b{
+    width:23px!important;
+    height:23px!important;
+    margin-bottom:4px!important;
+    border-radius:7px!important;
+    font-size:10px!important;
+  }
+  .pmv2-flow-step span{
+    overflow-wrap:anywhere;
+    font-size:7.5px!important;
+    line-height:1.12!important;
+  }
+  .pmv2-progress-host .hero-card{
+    margin-top:7px!important;
+  }
+  .pmv2-progress-host .progress-line{
+    margin-bottom:4px!important;
+    font-size:9px!important;
+  }
+  .pmv2-progress-host .progress-line b{
+    font-size:9px!important;
+  }
+  .pmv2-progress-host .track{
+    height:5px!important;
+  }
+  .pmv2-workspace{
+    width:calc(100% - 20px)!important;
+    padding:10px 0 22px!important;
+  }
+  .pmv2-review-flow-row{
+    grid-template-columns:repeat(4,minmax(0,1fr))!important;
+  }
+  .pmv2-review-flow-step span{
+    white-space:normal!important;
+    overflow:visible!important;
+    text-overflow:clip!important;
+  }
+}
+
+@media(max-width:620px){
+  .pmv2-header{
+    height:62px!important;
+    min-height:62px!important;
+    padding:0 10px!important;
+  }
+  .pmv2-brand{
+    gap:6px!important;
+  }
+  .pmv2-brand img{
+    width:132px!important;
+    max-height:38px!important;
+  }
+  .pmv2-header-actions{
+    gap:5px!important;
+  }
+  .pmv2-header-cta{
+    min-height:36px!important;
+    max-width:142px!important;
+    padding:0 8px!important;
+    font-size:9.5px!important;
+    line-height:1.1!important;
+  }
+  .pmv2-hero{
+    padding:11px 10px 10px!important;
+  }
+  .pmv2-hero-inner{
+    gap:9px!important;
+  }
+  .pmv2-eyebrow{
+    font-size:8.5px!important;
+    letter-spacing:.12em!important;
+  }
+  .pmv2-hero-copy h1{
+    margin:2px 0 4px!important;
+    font-size:23px!important;
+    line-height:1.08!important;
+    letter-spacing:-.55px!important;
+  }
+  .pmv2-hero-copy p{
+    font-size:11px!important;
+    line-height:1.34!important;
+  }
+  .pmv2-flow-panel{
+    padding:7px!important;
+    border-radius:12px!important;
+  }
+  .pmv2-flow-row{
+    grid-template-columns:repeat(4,minmax(0,1fr))!important;
+    gap:4px!important;
+  }
+  .pmv2-flow-step,
+  .pmv2-flow-step:nth-child(n){
+    display:block!important;
+    min-height:46px!important;
+    padding:4px 2px!important;
+    border-radius:8px!important;
+  }
+  .pmv2-flow-step b{
+    width:20px!important;
+    height:20px!important;
+    margin-bottom:3px!important;
+    border-radius:6px!important;
+    font-size:8.5px!important;
+  }
+  .pmv2-flow-step span{
+    font-size:6.8px!important;
+    line-height:1.08!important;
+  }
+  .pmv2-progress-host .progress-line{
+    margin-bottom:3px!important;
+    font-size:8px!important;
+  }
+  .pmv2-progress-host .progress-line b{
+    font-size:8px!important;
+  }
+  .pmv2-progress-host .track{
+    height:4px!important;
+  }
+  .pmv2-workspace{
+    width:calc(100% - 16px)!important;
+    padding-top:8px!important;
+  }
+  .pmv2 .panel,
+  .pmv2 .section{
+    margin-bottom:11px!important;
+    border-radius:14px!important;
+  }
+  .pmv2 .panel-head,
+  .pmv2 .section-head{
+    padding:12px 13px!important;
+    gap:10px!important;
+  }
+  .pmv2 .panel-body,
+  .pmv2 .section-body{
+    padding:13px!important;
+  }
+  .pmv2 .section-head h2,
+  .pmv2 .panel-head h2{
+    font-size:17px!important;
+  }
+  .pmv2 .section-head p{
+    font-size:10.5px!important;
+  }
+  .pmv2 .step{
+    width:32px!important;
+    height:32px!important;
+    min-width:32px!important;
+    border-radius:10px!important;
+    font-size:13px!important;
+  }
+  .pmv2-review-progress{
+    padding:7px!important;
+  }
+  .pmv2-review-flow-row{
+    grid-template-columns:repeat(4,minmax(0,1fr))!important;
+    gap:4px!important;
+  }
+  .pmv2-review-flow-step{
+    min-height:42px!important;
+    padding:4px 2px!important;
+  }
+  .pmv2-review-flow-step b{
+    width:19px!important;
+    height:19px!important;
+    font-size:8px!important;
+  }
+  .pmv2-review-flow-step span{
+    font-size:6.5px!important;
+    line-height:1.08!important;
+  }
+}
+
+@media(max-width:620px){
+  /* On phones the page already is the navigation: users move naturally from
+     one stacked section to the next by scrolling. Keep the explicit workflow
+     jump buttons for tablet/desktop, but remove them from the phone flow. */
+  .pmv2-next-row{
+    display:none!important;
+  }
+
+  /* Mobile browser chrome can cover the last action at the physical bottom
+     of the document. Keep enough real trailing scroll space so "Prompt
+     kopieren" can always be brought fully above Safari/Chrome controls. */
+  .pmv2-prompt-panel{
+    margin-bottom:calc(56px + env(safe-area-inset-bottom,0px))!important;
+  }
+  .pmv2-prompt-panel>.actions{
+    padding:0 13px calc(34px + env(safe-area-inset-bottom,0px))!important;
+  }
+  .pmv2-prompt-panel .actions #copyBtn{
+    display:flex!important;
+    align-items:center!important;
+    justify-content:center!important;
+    min-height:50px!important;
+    visibility:visible!important;
+  }
+}
+
+@media(max-width:390px){
+  .pmv2-brand img{
+    width:120px!important;
+  }
+  .pmv2-header-cta{
+    max-width:132px!important;
+    font-size:9px!important;
+  }
+  .pmv2-hero-copy h1{
+    font-size:22px!important;
+  }
+}
+
+
+/* V2 mobile polish 2026-09-25 round 3
+ * Keep Pro prices atomic, make dialogs feel like true mobile lightboxes,
+ * and leave the legal footer below the finished prompt.
+ */
+@media(max-width:620px){
+  .pmv2 .price,
+  .pmv2 .pro-overview-price{
+    display:flex!important;
+    align-items:baseline!important;
+    flex-wrap:wrap!important;
+    gap:6px 8px!important;
+  }
+  .pmv2 .price b,
+  .pmv2 .pro-overview-price b{
+    flex:0 0 auto!important;
+    white-space:nowrap!important;
+    word-break:keep-all!important;
+    overflow-wrap:normal!important;
+  }
+  .pmv2 .price span,
+  .pmv2 .pro-overview-price span{
+    min-width:0!important;
+    flex:1 1 180px!important;
+    margin-bottom:0!important;
+  }
+
+  .pmv2 .modal-backdrop.open{
+    align-items:flex-start!important;
+    justify-content:center!important;
+    padding:
+      max(12px,env(safe-area-inset-top,0px))
+      10px
+      max(12px,env(safe-area-inset-bottom,0px))!important;
+  }
+  .pmv2 .modal{
+    width:100%!important;
+    max-width:calc(100vw - 20px)!important;
+    max-height:calc(100vh - 24px)!important;
+    max-height:calc(100dvh - 24px - env(safe-area-inset-top,0px) - env(safe-area-inset-bottom,0px))!important;
+    margin:0!important;
+    border-radius:18px!important;
+    overflow-x:hidden!important;
+    overflow-y:auto!important;
+    box-shadow:0 22px 60px rgba(0,0,0,.58)!important;
+  }
+  .pmv2 .modal-head{
+    padding:18px 16px 15px!important;
+  }
+  .pmv2 .modal-head h2{
+    font-size:22px!important;
+    line-height:1.12!important;
+  }
+  .pmv2 .modal-body,
+  .pmv2 #generalProModal .modal-body{
+    padding:16px!important;
+  }
+  .pmv2 .modal-actions,
+  .pmv2 #generalProModal .modal-actions{
+    position:sticky!important;
+    left:0;
+    right:0;
+    bottom:0!important;
+    z-index:8!important;
+    display:grid!important;
+    grid-template-columns:1fr!important;
+    gap:8px!important;
+    margin:0!important;
+    padding:
+      12px
+      16px
+      calc(14px + env(safe-area-inset-bottom,0px))!important;
+    border-top:1px solid rgba(128,177,208,.14)!important;
+    background:linear-gradient(180deg,rgba(10,24,44,.96),#0a182c 30%)!important;
+    box-shadow:0 -10px 24px rgba(1,8,20,.28)!important;
+  }
+  .pmv2 .modal-actions .btn{
+    width:100%!important;
+    min-height:46px!important;
+    display:flex!important;
+    align-items:center!important;
+    justify-content:center!important;
+    margin:0!important;
+  }
+
+  /* The footer now follows the prompt in DOM order on phones. The prompt no
+     longer needs artificial bottom clearance; the footer itself provides the
+     trailing scroll space above mobile browser chrome. */
+  .pmv2-prompt-panel{
+    margin-bottom:12px!important;
+  }
+  .pmv2-prompt-panel>.actions{
+    padding-bottom:18px!important;
+  }
+  .pmv2 .legal-footer{
+    margin:0!important;
+    padding-bottom:calc(38px + env(safe-area-inset-bottom,0px))!important;
+  }
+}
+
+
+/* V2 mobile polish 2026-09-25 round 4
+ * One scroll surface for long mobile lightboxes. The backdrop owns scrolling;
+ * the card stays a complete rounded surface, including its final actions.
+ */
+@media(max-width:620px){
+  .pmv2 .modal-backdrop.open{
+    display:block!important;
+    height:100vh!important;
+    height:100dvh!important;
+    overflow-x:hidden!important;
+    overflow-y:auto!important;
+    -webkit-overflow-scrolling:touch;
+    overscroll-behavior:contain;
+    padding:
+      max(12px,env(safe-area-inset-top,0px))
+      10px
+      max(28px,calc(12px + env(safe-area-inset-bottom,0px)))!important;
+  }
+  .pmv2 .modal{
+    width:100%!important;
+    max-width:calc(100vw - 20px)!important;
+    max-height:none!important;
+    height:auto!important;
+    margin:0 auto!important;
+    overflow:visible!important;
+    border-radius:18px!important;
+  }
+  .pmv2 #generalProModal .modal,
+  .pmv2 #proModal .modal,
+  .pmv2 #businessModal .modal{
+    width:100%!important;
+    max-height:none!important;
+  }
+  .pmv2 .modal-actions,
+  .pmv2 #generalProModal .modal-actions{
+    position:static!important;
+    bottom:auto!important;
+    padding:
+      12px
+      16px
+      calc(16px + env(safe-area-inset-bottom,0px))!important;
+    border-radius:0 0 17px 17px!important;
+  }
+}
+
+
+/* V2 action alignment polish 2026-09-25.
+ * The legacy recommend button contains two spans and inherited a split
+ * alignment. Treat the complete label/badge pair as one centered action. */
+.pmv2-prompt-panel .actions #recommendBtn{
+  justify-content:center!important;
+  text-align:center!important;
+  gap:8px!important;
+}
+.pmv2-prompt-panel .actions #recommendBtn>span{
+  flex:0 0 auto!important;
+}
+
+
+/* V2 Prompt-Check edit controls 2026-09-25.
+ * The four "Bearbeiten" actions are real buttons and must read visually as
+ * buttons on both desktop and phone, not as loose cyan text. */
+.pmv2-review-label button[data-pmv2-edit]{
+  display:inline-flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  min-height:30px!important;
+  padding:5px 10px!important;
+  border:1px solid rgba(70,210,239,.46)!important;
+  border-radius:8px!important;
+  background:linear-gradient(100deg,rgba(31,114,207,.30),rgba(43,201,229,.18))!important;
+  color:#9defff!important;
+  -webkit-text-fill-color:#9defff!important;
+  font-size:9.5px!important;
+  font-weight:800!important;
+  line-height:1!important;
+  letter-spacing:0!important;
+  text-transform:none!important;
+  box-shadow:0 5px 14px rgba(0,10,26,.18)!important;
+}
+.pmv2-review-label button[data-pmv2-edit]:hover,
+.pmv2-review-label button[data-pmv2-edit]:focus-visible{
+  border-color:rgba(77,225,248,.78)!important;
+  background:linear-gradient(100deg,rgba(39,132,224,.44),rgba(49,216,238,.28))!important;
+  color:#fff!important;
+  -webkit-text-fill-color:#fff!important;
+}
+.pmv2-pro .pmv2-review-label button[data-pmv2-edit]{
+  border-color:rgba(169,113,255,.52)!important;
+  background:linear-gradient(100deg,rgba(126,68,219,.34),rgba(50,184,231,.18))!important;
+  color:#eadcff!important;
+  -webkit-text-fill-color:#eadcff!important;
+}
+@media(max-width:620px){
+  .pmv2-review-label{
+    align-items:center!important;
+  }
+  .pmv2-review-label button[data-pmv2-edit]{
+    min-height:34px!important;
+    padding:6px 12px!important;
+    font-size:10px!important;
+  }
+}
+
+
+/* V2 Prompt-Check edit controls 2026-09-25 round 2.
+ * Structural layout: label/value on the left, a real purple CTA centered
+ * vertically on the right. This intentionally supersedes the earlier
+ * label-inline treatment so legacy text-button styling cannot win. */
+.pmv2 .pmv2-review-card{
+  display:grid!important;
+  grid-template-columns:minmax(0,1fr) auto!important;
+  align-items:center!important;
+  column-gap:14px!important;
+}
+.pmv2 .pmv2-review-copy{
+  min-width:0!important;
+}
+.pmv2 .pmv2-review-label{
+  display:block!important;
+  justify-content:initial!important;
+  align-items:initial!important;
+  gap:0!important;
+}
+.pmv2 .pmv2-review-edit{
+  appearance:none!important;
+  -webkit-appearance:none!important;
+  display:inline-flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  align-self:center!important;
+  min-width:104px!important;
+  min-height:36px!important;
+  margin:0!important;
+  padding:8px 14px!important;
+  border:1px solid rgba(202,166,255,.72)!important;
+  border-radius:10px!important;
+  background:linear-gradient(135deg,#6f32dc 0%,#8a3ff0 52%,#a653f4 100%)!important;
+  color:#06101f!important;
+  -webkit-text-fill-color:#06101f!important;
+  text-shadow:none!important;
+  font-family:"Segoe UI",Arial,sans-serif!important;
+  font-size:11px!important;
+  font-weight:800!important;
+  line-height:1!important;
+  letter-spacing:0!important;
+  text-transform:none!important;
+  cursor:pointer!important;
+  box-shadow:0 8px 20px rgba(73,30,151,.34),inset 0 1px 0 rgba(255,255,255,.15)!important;
+  transition:transform .14s ease,filter .14s ease,border-color .14s ease!important;
+}
+.pmv2 .pmv2-review-edit:hover,
+.pmv2 .pmv2-review-edit:focus-visible{
+  border-color:rgba(229,209,255,.96)!important;
+  color:#020711!important;
+  -webkit-text-fill-color:#020711!important;
+  filter:brightness(1.12)!important;
+  transform:translateY(-1px)!important;
+  outline:none!important;
+}
+.pmv2 .pmv2-review-edit:active{
+  transform:translateY(0)!important;
+  filter:brightness(.98)!important;
+}
+@media(max-width:620px){
+  .pmv2 .pmv2-review-card{
+    column-gap:12px!important;
+  }
+  .pmv2 .pmv2-review-edit{
+    min-width:112px!important;
+    min-height:40px!important;
+    padding:9px 13px!important;
+    border-radius:11px!important;
+    font-size:11px!important;
+  }
+}
+
+
+/* Final contrast override: Prompt-Check edit labels are dark on the bright
+   gradient in both Free and Pro. Keep specificity above the older edition
+   rules so neither cyan nor lavender text can win. */
+.pmv2 .pmv2-review-label button.pmv2-review-edit[data-pmv2-edit],
+.pmv2-pro .pmv2-review-label button.pmv2-review-edit[data-pmv2-edit]{
+  color:#050a14!important;
+  -webkit-text-fill-color:#050a14!important;
+  text-shadow:none!important;
+}
+.pmv2 .pmv2-review-label button.pmv2-review-edit[data-pmv2-edit]:hover,
+.pmv2 .pmv2-review-label button.pmv2-review-edit[data-pmv2-edit]:focus-visible,
+.pmv2-pro .pmv2-review-label button.pmv2-review-edit[data-pmv2-edit]:hover,
+.pmv2-pro .pmv2-review-label button.pmv2-review-edit[data-pmv2-edit]:focus-visible{
+  color:#02050b!important;
+  -webkit-text-fill-color:#02050b!important;
 }

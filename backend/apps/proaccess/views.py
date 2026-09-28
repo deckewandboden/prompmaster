@@ -17,7 +17,7 @@ from .services import active_product_assignment, assignment_expiry_context, has_
 
 logger = logging.getLogger(__name__)
 
-V2_ASSET_REV = b'20260924-audit4'
+V2_ASSET_REV = b'20260925-mobile17'
 V2_STYLE = b'<link rel="stylesheet" href="/static/css/promptmaster_v2.20260922.css?v=' + V2_ASSET_REV + b'">'
 V2_SCRIPT = b'<script src="/static/js/promptmaster_ui_v2.20260922.js?v=' + V2_ASSET_REV + b'" defer></script>'
 
@@ -43,6 +43,25 @@ def _inject_v2_ui(data: bytes) -> bytes:
         raise GoldenMasterIntegrityError('PromptMaster V2 injection markers are not unique.')
     data = data.replace(head_marker, V2_STYLE + head_marker, 1)
     data = data.replace(body_marker, V2_SCRIPT + body_marker, 1)
+    return data
+
+
+def _remove_v2_source_status(data: bytes) -> bytes:
+    """Hide internal prompt-source indicators on current Free/Pro V2.
+
+    The verified legacy assets stay byte-identical on disk and on the permanent
+    rollback routes. Free no longer writes to its source-status node, so that
+    node can be removed. Pro's server runtime still updates #charInfo as part
+    of its normal state machine; keep an inert hidden node in V2 so the bridge
+    never dereferences a missing element while no provenance text is visible.
+    """
+    free_node = b'<span class="copy-state" id="copyState"></span>'
+    pro_node = b'<span class="char-info" id="charInfo"></span>'
+    pro_hidden_node = (
+        b'<span class="char-info" id="charInfo" hidden aria-hidden="true"></span>'
+    )
+    data = data.replace(free_node, b'', 1)
+    data = data.replace(pro_node, pro_hidden_node, 1)
     return data
 
 
@@ -221,6 +240,7 @@ def _pro_runtime_response(request, *, ui_v2=False):
     data = data.replace(utility_marker, utility_marker + session_links, 1)
 
     if ui_v2:
+        data = _remove_v2_source_status(data)
         try:
             data = _inject_v2_ui(data)
         except GoldenMasterIntegrityError:
@@ -279,6 +299,7 @@ def _free_runtime_response(request, *, ui_v2=False):
             + b'">'
         )
         data = data.replace(head_marker, compose_marker + head_marker, 1)
+        data = _remove_v2_source_status(data)
         try:
             data = _inject_v2_ui(data)
         except GoldenMasterIntegrityError:

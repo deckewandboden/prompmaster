@@ -68,6 +68,32 @@ class DemoDataSeedTests(TestCase):
             3,
         )
 
+        company_members = list(
+            User.objects.filter(
+                company_memberships__company__customer_number__startswith='DEMO-',
+                company_memberships__active=True,
+            ).distinct()
+        )
+        full_names = [(user.first_name, user.last_name) for user in company_members]
+        self.assertEqual(len(full_names), len(set(full_names)))
+        self.assertFalse(
+            any(user.email.startswith('demo.kunde') for user in company_members)
+        )
+        self.assertEqual(
+            len({user.email for user in company_members}),
+            len(company_members),
+        )
+
+        paid_demo_orders = Order.objects.filter(
+            order_number__startswith='DEMO-',
+            status='paid',
+        )
+        revenue_months = {
+            (order.created_at.year, order.created_at.month)
+            for order in paid_demo_orders
+        }
+        self.assertGreaterEqual(len(revenue_months), 6)
+
         self.assertIn('TEMPORÄRE DEMO-ZUGÄNGE', output)
         self.assertIn('Der vorhandene echte Superadmin bleibt unverändert', output)
 
@@ -87,8 +113,8 @@ class DemoDataSeedTests(TestCase):
         self.assertEqual(first_counts['companies'], 5)
         self.assertEqual(first_counts['memberships'], 91)
         self.assertEqual(first_counts['licenses'], 76)
-        self.assertEqual(first_counts['orders'], 11)
-        self.assertEqual(first_counts['payments'], 11)
+        self.assertEqual(first_counts['orders'], 24)
+        self.assertEqual(first_counts['payments'], 24)
         self.assertGreaterEqual(first_counts['devices'], 13)
         self.assertEqual(first_counts['support'], 8)
         self.assertEqual(first_counts['mail'], 4)
@@ -114,6 +140,9 @@ class DemoDataSeedTests(TestCase):
         )
         self.assertTrue(
             Payment.objects.filter(provider_payment_id='tr_demo_0003_failed', status='failed').exists()
+        )
+        self.assertTrue(
+            Payment.objects.filter(provider_payment_id='tr_demo_0004_chargeback', status='chargeback').exists()
         )
         self.assertTrue(
             License.objects.filter(
@@ -158,3 +187,35 @@ class DemoDataProductionGuardTests(TestCase):
     def test_seed_refuses_production(self):
         with self.assertRaisesMessage(CommandError, 'niemals'):
             call_command('seed_demo_data', stdout=io.StringIO())
+
+    @override_settings(ENVIRONMENT='production')
+    def test_explicit_presentation_mode_seeds_only_demo_customer_estate(self):
+        call_command('seed_defaults', verbosity=0, stdout=io.StringIO())
+        User.objects.create_superuser(
+            email='real.staff@example.test',
+            password='Production-Test-Admin-2026!',
+            first_name='Real',
+            last_name='Staff',
+        )
+
+        output = io.StringIO()
+        call_command(
+            'seed_demo_data',
+            allow_production_presentation=True,
+            stdout=output,
+        )
+
+        self.assertEqual(
+            Company.objects.filter(customer_number__startswith='DEMO-').count(),
+            5,
+        )
+        self.assertFalse(
+            User.objects.filter(
+                email__startswith='demo.superadmin',
+                is_staff=True,
+            ).exists()
+        )
+        self.assertIn(
+            'keine Demo-Staffkonten und keine Rechtstexte verändert',
+            output.getvalue(),
+        )

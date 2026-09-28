@@ -257,7 +257,7 @@ class DemoEstateFunctionalAcceptanceTests(TestCase):
         admin = Membership.objects.get(company=company, active=True, role='admin').user
         invitation = Invitation.objects.get(
             company=company,
-            email='demo.einladung@promptmaster.invalid',
+            email='eva.einladung.westfalen@promptmaster.invalid',
             accepted_at__isnull=True,
             revoked_at__isnull=True,
         )
@@ -285,7 +285,27 @@ class DemoEstateFunctionalAcceptanceTests(TestCase):
     def test_assignment_link_is_created_and_consumed_by_exact_demo_member(self, _mail):
         company = Company.objects.get(customer_number='DEMO-1004')
         admin = Membership.objects.get(company=company, active=True, role='admin').user
-        target = User.objects.get(email='demo.kunde4.user25@promptmaster.invalid')
+        # Pick the seeded login-enabled member that is intentionally
+        # unlicensed. Demo identities now use realistic unique names, so the
+        # acceptance test must follow the seed contract instead of a retired
+        # generic demo.kunde4.user25 address.
+        target = next(
+            membership.user
+            for membership in (
+                Membership.objects.filter(
+                    company=company,
+                    active=True,
+                    role='member',
+                    user__email__in=self.credentials,
+                )
+                .select_related('user')
+                .order_by('created_at', 'user__email')
+            )
+            if not LicenseAssignment.objects.filter(
+                user=membership.user,
+                ended_at__isnull=True,
+            ).exists()
+        )
         free_license = License.objects.filter(
             company=company,
             status='free',
@@ -498,6 +518,7 @@ class DemoEstateFunctionalAcceptanceTests(TestCase):
                 'quantity': '2',
                 'accept_terms': 'on',
                 'accept_privacy': 'on',
+                'accept_license': 'on',
             },
         )
         self.assertEqual(response.status_code, 302)
@@ -512,7 +533,7 @@ class DemoEstateFunctionalAcceptanceTests(TestCase):
                 user=admin,
                 order=company_payment.order,
             ).count(),
-            2,
+            3,
         )
 
         self.client.logout()
@@ -529,7 +550,9 @@ class DemoEstateFunctionalAcceptanceTests(TestCase):
             {
                 'accept_terms': 'on',
                 'accept_privacy': 'on',
+                'accept_license': 'on',
                 'accept_withdrawal': 'on',
+                'request_early_performance': 'on',
             },
         )
         self.assertEqual(response.status_code, 302)
@@ -547,7 +570,7 @@ class DemoEstateFunctionalAcceptanceTests(TestCase):
                 user=private.user,
                 order=private_payment.order,
             ).count(),
-            3,
+            4,
         )
 
 

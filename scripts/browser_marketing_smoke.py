@@ -27,6 +27,33 @@ class QuietHandler(SimpleHTTPRequestHandler):
     def log_message(self, _format, *args):
         return
 
+    def do_GET(self):
+        # Production Caddy proxies /catalog.json to Django, where the seeded
+        # Product/ProductPrice state decides whether checkout is available.
+        # This smoke server is intentionally static, so emulate that live
+        # catalog response without weakening the committed fail-closed
+        # marketing/public/catalog.json fallback.
+        if self.path.split('?', 1)[0] == '/catalog.json':
+            catalog = json.loads(
+                (DIST / 'catalog.json').read_text(encoding='utf-8')
+            )
+            catalog.update({
+                'checkoutEnabled': True,
+                'companyRequireVatId': False,
+                'companyRequireTaxNumber': False,
+                'loginEnabled': True,
+                'freeUrl': '/free/',
+            })
+            payload = json.dumps(catalog, separators=(',', ':')).encode('utf-8')
+            self.send_response(200)
+            self.send_header('Content-Type', 'application/json; charset=utf-8')
+            self.send_header('Cache-Control', 'no-store')
+            self.send_header('Content-Length', str(len(payload)))
+            self.end_headers()
+            self.wfile.write(payload)
+            return
+        super().do_GET()
+
 
 def app_names() -> list[str]:
     data = json.loads(DATA.read_text(encoding='utf-8'))
@@ -207,6 +234,10 @@ def main() -> int:
                       const logoStyle = getComputedStyle(one('.logo-crop'));
                       const freeStyle = getComputedStyle(one('.product.free'));
                       const proStyle = getComputedStyle(one('.product.pro'));
+                      const footerGrid = one('.footer-grid');
+                      const footerGridStyle = footerGrid ? getComputedStyle(footerGrid) : null;
+                      const footerBrandLogo = footerGrid?.firstElementChild?.querySelector('.logo-crop');
+                      const footerBrandCopy = footerGrid?.firstElementChild?.querySelector('p');
                       return {
                         innerWidth,
                         scrollWidth: document.documentElement.scrollWidth,
@@ -240,6 +271,19 @@ def main() -> int:
                           e => e.textContent.trim() === 'MIT PRO ZUSÄTZLICH'
                             && e.nextElementSibling?.children.length === 28
                         ),
+                        footerGridColumns: footerGridStyle
+                          ? footerGridStyle.gridTemplateColumns.trim().split(/\\s+/).filter(Boolean).length
+                          : 0,
+                        footerBrandColumn: footerGrid?.firstElementChild
+                          ? getComputedStyle(footerGrid.firstElementChild).gridColumn
+                          : '',
+                        footerBrandLogoLeft: footerBrandLogo
+                          ? Math.round(footerBrandLogo.getBoundingClientRect().left)
+                          : -999,
+                        footerBrandCopyLeft: footerBrandCopy
+                          ? Math.round(footerBrandCopy.getBoundingClientRect().left)
+                          : -999,
+                        motionSensor: one('.head-stage').dataset.motionSensor || '',
                         overflowers: [...document.querySelectorAll('body *')]
                           .map(e => {
                             const r = e.getBoundingClientRect();
@@ -263,6 +307,25 @@ def main() -> int:
                         f'{width}px: horizontaler Overflow {metrics["scrollWidth"]} > '
                         f'{metrics["innerWidth"]}; Elemente: {metrics["overflowers"]}'
                     )
+                if width <= 480:
+                    if metrics['footerGridColumns'] != 3:
+                        fail(
+                            f'{width}px: Marketing-Footer hat nicht drei Linkspalten '
+                            f'({metrics["footerGridColumns"]})'
+                        )
+                    if metrics['footerBrandColumn'] != '1 / -1':
+                        fail(
+                            f'{width}px: Marketing-Footer-Brand spannt nicht über alle Spalten '
+                            f'({metrics["footerBrandColumn"]!r})'
+                        )
+                    footer_logo_delta = (
+                        metrics['footerBrandLogoLeft'] - metrics['footerBrandCopyLeft']
+                    )
+                    if footer_logo_delta > 2 or footer_logo_delta < -12:
+                        fail(
+                            f'{width}px: Footer-Logo nicht sauber links am Begleittext ausgerichtet '
+                            f'(delta={footer_logo_delta}px)'
+                        )
                 if metrics['productCount'] != 2:
                     fail(f'{width}px: Free/Pro-Karten fehlen')
                 if abs(metrics['freeHeight'] - metrics['proHeight']) > 4:
@@ -276,8 +339,10 @@ def main() -> int:
                     fail(f'{width}px: Nachtlandschaft ist nicht geladen')
                 if metrics['headerPosition'] != 'fixed':
                     fail(f'{width}px: Marketing-Navigation ist nicht fixiert')
-                if 'promptmaster-logo-clean.svg' not in metrics['logoImage']:
-                    fail(f'{width}px: Marketing-Header verwendet nicht das saubere Logo-Asset')
+                if 'promptmaster-logo-hq.png' not in metrics['logoImage']:
+                    fail(f'{width}px: Marketing-Header verwendet nicht das freigegebene HQ-Logo-Asset')
+                if 'promptmaster-logo-clean.svg' in metrics['logoImage']:
+                    fail(f'{width}px: Marketing-Header verwendet wieder das alte SVG-Logo')
                 if 'design-reference.jpeg' in metrics['logoImage']:
                     fail(f'{width}px: Marketing-Header verwendet wieder den Screenshot-Logo-Crop')
                 if not metrics['canvasVisible'] or metrics['canvasWidth'] < width * 0.95:
@@ -319,8 +384,14 @@ def main() -> int:
 
                 if width <= 650:
                     first_card_top = min(metrics['freeTop'], metrics['proTop'])
-                    if first_card_top < metrics['centerBottom'] - 4:
+                    card_gap = first_card_top - metrics['centerBottom']
+                    if card_gap < -4:
                         fail(f'{width}px: Produktkarten liegen nicht unterhalb des Kopfbereichs')
+                    if card_gap > 24:
+                        fail(
+                            f'{width}px: Produktkarten stehen zu weit vom Kopfbereich entfernt '
+                            f'(gap={card_gap:.1f}px)'
+                        )
 
                 if page_errors:
                     fail(f'{width}px: Browser-JS-Fehler: {page_errors[0]}')
@@ -744,6 +815,64 @@ def main() -> int:
                         'Head motion parity: settled Canvas head response differs from Edge '
                         f'(yaw delta={yaw_delta:.4f} > 0.025)'
                     )
+
+            # The public purchase surface belongs to the marketing frontend.
+            # Exercise it here (rather than in the Django-only browser smoke)
+            # and verify that it is wired to the real server-side checkout.
+            checkout_page = browser.new_page(
+                viewport={'width': 1440, 'height': 1000},
+                device_scale_factor=1,
+            )
+            checkout_errors: list[str] = []
+            checkout_page.on('pageerror', lambda exc: checkout_errors.append(str(exc)))
+            checkout_page.goto(base + 'checkout/?quantity=3', wait_until='networkidle')
+            checkout_page.wait_for_selector('#public-checkout-form')
+            checkout_probe = checkout_page.evaluate(
+                """() => {
+                  const form = document.querySelector('#public-checkout-form');
+                  const action = form ? new URL(form.action, location.href) : null;
+                  const login = document.querySelector('#checkout-login-link');
+                  return {
+                    path: location.pathname,
+                    h1: document.querySelector('#checkout-title')?.textContent?.trim() || '',
+                    quantity: document.querySelector('#quantity')?.value || '',
+                    hiddenQuantity: document.querySelector('#checkout-quantity-hidden')?.value || '',
+                    companyDefault:
+                      document.querySelector(
+                        'input[name="customer_type"][value="company"]'
+                      )?.checked === true,
+                    privateChoice:
+                      !!document.querySelector(
+                        'input[name="customer_type"][value="private"]'
+                      ),
+                    method: (form?.method || '').toLowerCase(),
+                    actionPath: action?.pathname || '',
+                    csrfField: !!document.querySelector(
+                      'input[name="csrfmiddlewaretoken"]#checkout-csrf'
+                    ),
+                    submitText:
+                      document.querySelector('#checkout-submit')?.textContent?.trim() || '',
+                    loginHref: login?.getAttribute('href') || '',
+                  };
+                }"""
+            )
+            if (
+                checkout_probe['path'] != '/checkout/'
+                or checkout_probe['h1'] != 'PromptMaster Pro kaufen.'
+                or checkout_probe['quantity'] != '3'
+                or checkout_probe['hiddenQuantity'] != '3'
+                or not checkout_probe['companyDefault']
+                or not checkout_probe['privateChoice']
+                or checkout_probe['method'] != 'post'
+                or checkout_probe['actionPath'] != '/api/v1/checkout/start/'
+                or not checkout_probe['csrfField']
+                or 'Zahlungspflichtig kaufen' not in checkout_probe['submitText']
+                or '/auth/login/' not in checkout_probe['loginHref']
+            ):
+                fail(f'public checkout rendering/wiring regression: {checkout_probe}')
+            if checkout_errors:
+                fail(f'public checkout JavaScript errors: {checkout_errors}')
+            checkout_page.close()
 
             if engine == 'chromium':
                 # Export clean WebGL scene masters without navigation/cards.

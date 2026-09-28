@@ -1,0 +1,19 @@
+{% extends 'base.html' %}{% load static %}{% block title %}{{ page_title }} | PromptMaster{% endblock %}{% block body %}
+<div class="legal-page">
+  <div class="legal-page-head">
+    <a href="/" aria-label="PromptMaster Startseite"><img src="{% static 'brand/promptmaster-logo-hq.png' %}" alt="PromptMaster"></a>
+  </div>
+  <article class="card legal-document">
+    <p class="muted">{{ eyebrow }}</p>
+    <h1>{{ page_title }}</h1>
+    <p>{{ intro }}</p>
+    <form method="post" novalidate>
+      {% csrf_token %}
+      {{ form.as_p }}
+      <p class="muted">{{ notice }}</p>
+      <button class="btn primary" type="submit">{{ submit_label }}</button>
+    </form>
+    <p><a href="/legal/withdrawal/">Widerrufsbelehrung</a> · <a href="/legal/terms/">AGB</a> · <a href="/legal/privacy/">Datenschutz</a></p>
+  </article>
+</div>
+{% endblock %}

@@ -2,9 +2,12 @@ from datetime import timedelta
 from decimal import Decimal, ROUND_HALF_UP
 from math import ceil
 
+from django.conf import settings
+from django.core import signing
 from django.core.exceptions import ValidationError
 from django.db import transaction
 from django.db.models import Max, Min, Sum
+from django.urls import reverse
 from django.utils import timezone
 from django.utils.dateparse import parse_datetime
 
@@ -122,6 +125,40 @@ def _order_recipient(order):
     return ''
 
 
+def _order_account_user(order):
+    if order.private_user_id:
+        return order.private_user if order.private_user and order.private_user.is_active else None
+    if order.company_id:
+        from apps.companies.models import Membership
+
+        membership = (
+            Membership.objects.filter(
+                company_id=order.company_id,
+                role='admin',
+                active=True,
+                user__is_active=True,
+            )
+            .select_related('user')
+            .first()
+        )
+        return membership.user if membership else None
+    return None
+
+
+def _checkout_activation_url(user):
+    token = signing.dumps(
+        {
+            'uid': str(user.id),
+            'email': user.email,
+            'sv': int(user.security_version),
+        },
+        salt='pm-checkout-activation',
+    )
+    host = settings.CADDY_DOMAIN or 'localhost'
+    scheme = 'https' if getattr(settings, 'ENVIRONMENT', '') == 'production' else 'http'
+    return f"{scheme}://{host}{reverse('accounts:checkout_activation', args=[token])}"
+
+
 def _queue_after_commit(code, recipient, context, *, order=None):
     if not recipient:
         return
@@ -137,6 +174,70 @@ def _queue_after_commit(code, recipient, context, *, order=None):
         )
 
     transaction.on_commit(send, robust=True)
+
+
+def _consumer_contract_confirmation_context(order, payment):
+    from apps.legal.models import LegalAcceptance
+
+    items = list(
+        order.items.select_related('product').order_by('created_at', 'id')
+    )
+    item_summary = '; '.join(
+        f'{item.quantity} × {item.product_name_snapshot or item.product.name}'
+        for item in items
+    ) or 'PromptMaster Pro'
+
+    durations = sorted({
+        int(item.product.default_license_days)
+        for item in items
+        if item.product_id
+    })
+    term = (
+        f'{durations[0]} Tage je Lizenz'
+        if len(durations) == 1
+        else 'gemäß den in der Bestellung ausgewiesenen Lizenzlaufzeiten'
+    )
+
+    accepted = list(
+        LegalAcceptance.objects.filter(order=order)
+        .select_related('document')
+        .order_by('document__doc_type', 'document__version')
+    )
+    legal_documents = []
+    early_performance_from_evidence = False
+    for acceptance in accepted:
+        document = acceptance.document
+        legal_documents.append(
+            f'{document.get_doc_type_display()} – Version {document.version}\n'
+            f'{document.content.strip()}'
+        )
+        if (
+            document.doc_type == 'withdrawal'
+            and (acceptance.evidence or {}).get('early_performance_requested')
+        ):
+            early_performance_from_evidence = True
+
+    snapshot = order.billing_snapshot or {}
+    early_performance_requested = bool(
+        snapshot.get(
+            'early_performance_requested',
+            early_performance_from_evidence,
+        )
+    )
+    return {
+        'order': order.order_number,
+        'contract_date': timezone.localtime(
+            payment.paid_at or timezone.now()
+        ).strftime('%d.%m.%Y %H:%M:%S %Z'),
+        'items': item_summary,
+        'amount': f'{payment.amount:.2f}',
+        'currency': payment.currency,
+        'term': term,
+        'early_performance': (
+            'ja' if early_performance_requested else 'nein'
+        ),
+        'legal_documents': '\n\n'.join(legal_documents),
+    }
 
 
 def _license_state_from_assignments(license_obj, now):
@@ -230,6 +331,25 @@ def process_provider_state(payment_id, payload, *, chargebacks_payload=None):
             'amount': f'{payment.amount:.2f}',
             'currency': payment.currency,
         }, order=payment.order)
+        if payment.order.private_user_id:
+            _queue_after_commit(
+                'contract_confirmation',
+                recipient,
+                _consumer_contract_confirmation_context(payment.order, payment),
+                order=payment.order,
+            )
+        account_user = _order_account_user(payment.order)
+        if (
+            (payment.order.billing_snapshot or {}).get('source') == 'public_checkout'
+            and account_user
+            and not account_user.has_usable_password()
+        ):
+            _queue_after_commit(
+                'checkout_activation',
+                account_user.email,
+                {'url': _checkout_activation_url(account_user)},
+                order=payment.order,
+            )
         for item in payment.order.items.select_related('target_license').filter(target_license__isnull=False):
             target = item.target_license
             _queue_after_commit('license_renewed', recipient, {

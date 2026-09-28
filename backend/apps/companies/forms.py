@@ -59,8 +59,9 @@ class CompanyForm(forms.ModelForm):
 class PrivateCustomerForm(forms.ModelForm):
     class Meta:
         model = PrivateCustomerProfile
-        fields = ['street', 'house_number', 'postal_code', 'city', 'country']
+        fields = ['phone', 'street', 'house_number', 'postal_code', 'city', 'country']
         labels = {
+            'phone': 'Telefon',
             'street': 'Straße',
             'house_number': 'Hausnummer',
             'postal_code': 'PLZ',

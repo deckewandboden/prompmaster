@@ -2,6 +2,8 @@ import uuid
 
 from django.conf import settings
 from django.db import models
+from django.db.models import Q
+from django.db.models.functions import Lower
 
 
 class TimeStampedModel(models.Model):
@@ -70,3 +72,105 @@ class ExportJob(TimeStampedModel):
 
     def __str__(self):
         return f'{self.get_kind_display()} · {self.status} · {self.requested_by}'
+
+
+class Lead(TimeStampedModel):
+    STATUS = [
+        ('new', 'Neu'),
+        ('contacted', 'Kontaktiert'),
+        ('qualified', 'Qualifiziert'),
+        ('won', 'Gewonnen'),
+        ('lost', 'Verloren'),
+    ]
+    SOURCE = [
+        ('website', 'Website'),
+        ('free', 'PromptMaster Free'),
+        ('checkout', 'Checkout'),
+        ('contact', 'Kontaktanfrage'),
+        ('manual', 'Manuell'),
+        ('other', 'Sonstiges'),
+    ]
+    KIND = [
+        ('company', 'Unternehmen'),
+        ('private', 'Privatkunde'),
+    ]
+    PRIORITY = [
+        ('low', 'Niedrig'),
+        ('normal', 'Normal'),
+        ('high', 'Hoch'),
+    ]
+
+    lead_number = models.CharField(max_length=24, unique=True, editable=False)
+    kind = models.CharField(max_length=20, choices=KIND, default='company')
+    company_name = models.CharField(max_length=200, blank=True)
+    first_name = models.CharField(max_length=120, blank=True)
+    last_name = models.CharField(max_length=120, blank=True)
+    email = models.EmailField()
+    phone = models.CharField(max_length=60, blank=True)
+    source = models.CharField(max_length=30, choices=SOURCE, default='manual')
+    status = models.CharField(max_length=30, choices=STATUS, default='new', db_index=True)
+    priority = models.CharField(max_length=20, choices=PRIORITY, default='normal')
+    notes = models.TextField(blank=True)
+    next_action_at = models.DateTimeField(null=True, blank=True, db_index=True)
+    assigned_to = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.PROTECT,
+        null=True,
+        blank=True,
+        related_name='assigned_leads',
+    )
+    created_by = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.PROTECT,
+        null=True,
+        blank=True,
+        related_name='created_leads',
+    )
+    converted_company = models.ForeignKey(
+        'companies.Company',
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name='source_leads',
+    )
+    converted_at = models.DateTimeField(null=True, blank=True)
+    deleted_at = models.DateTimeField(null=True, blank=True, db_index=True)
+
+    class Meta:
+        indexes = [
+            models.Index(fields=['status', '-created_at'], name='core_lead_status_created_idx'),
+            models.Index(fields=['assigned_to', 'status'], name='core_lead_owner_status_idx'),
+            models.Index(fields=['deleted_at', '-created_at'], name='core_lead_deleted_created_idx'),
+        ]
+        constraints = [
+            models.UniqueConstraint(
+                Lower('email'),
+                condition=Q(deleted_at__isnull=True),
+                name='uniq_active_lead_email_ci',
+            ),
+        ]
+
+    def save(self, *args, **kwargs):
+        if not self.lead_number:
+            self.lead_number = f'LD-{str(self.id).split("-")[0].upper()}'
+        super().save(*args, **kwargs)
+
+    @property
+    def contact_name(self):
+        value = f'{self.first_name} {self.last_name}'.strip()
+        return value or self.email
+
+    @property
+    def assigned_name(self):
+        return self.assigned_to.full_name if self.assigned_to_id else 'Nicht zugewiesen'
+
+    @property
+    def status_name(self):
+        return self.get_status_display()
+
+    @property
+    def customer_display(self):
+        return self.company_name or self.contact_name
+
+    def __str__(self):
+        return f'{self.lead_number} · {self.customer_display}'

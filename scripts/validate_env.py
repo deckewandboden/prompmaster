@@ -112,6 +112,13 @@ def main() -> int:
 
     provider = values.get('EMAIL_PROVIDER', '').strip().lower()
     if expected == 'production':
+        vat_id = values.get('NETSTYLE_VAT_ID', '').replace(' ', '').upper()
+        if not re.fullmatch(r'DE\d{9}', vat_id):
+            fail(
+                errors,
+                'NETSTYLE_VAT_ID muss für das produktive Impressum intern bestätigt '
+                'und im Format DE123456789 gesetzt sein.',
+            )
         if provider not in {'graph', 'microsoft_graph'}:
             fail(errors, 'Production EMAIL_PROVIDER muss graph/microsoft_graph sein.')
         for key in ('GRAPH_TENANT_ID', 'GRAPH_CLIENT_ID', 'GRAPH_CLIENT_SECRET', 'GRAPH_SENDER'):

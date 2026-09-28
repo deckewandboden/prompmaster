@@ -32,6 +32,7 @@ from apps.audit.services import audit
 
 EMAIL_VERIFY_SALT = 'pm-email-verify'
 PASSWORD_RESET_SALT = 'pm-password-reset'
+CHECKOUT_ACTIVATION_SALT = 'pm-checkout-activation'
 
 
 def _safe_next(request, value=None):
@@ -382,6 +383,62 @@ def password_reset_confirm(request, token):
     return render(request, 'auth/password_reset_confirm.html', {'form': form})
 
 
+@transaction.atomic
+def checkout_activation(request, token):
+    """Activate an account created by the public checkout after paid status."""
+    try:
+        data = signing.loads(
+            token,
+            salt=CHECKOUT_ACTIVATION_SALT,
+            max_age=7 * 24 * 60 * 60,
+        )
+        user = User.objects.select_for_update().get(
+            pk=data['uid'],
+            email=data['email'],
+            is_active=True,
+        )
+        if int(data['sv']) != int(user.security_version):
+            raise KeyError('checkout activation token already used or invalidated')
+        if user.has_usable_password():
+            raise KeyError('account is already activated')
+    except (
+        signing.BadSignature,
+        signing.SignatureExpired,
+        User.DoesNotExist,
+        KeyError,
+        ValueError,
+        TypeError,
+    ):
+        return render(request, 'auth/password_reset_result.html', {'ok': False})
+
+    form = PasswordResetConfirmForm(request.POST or None)
+    if request.method == 'POST' and form.is_valid():
+        with transaction.atomic():
+            user = User.objects.select_for_update().get(pk=user.pk)
+            if user.has_usable_password() or int(data['sv']) != int(user.security_version):
+                return render(
+                    request,
+                    'auth/password_reset_result.html',
+                    {'ok': False},
+                )
+            user.set_password(form.cleaned_data['password'])
+            update_fields = ['password', 'updated_at']
+            if not user.email_verified_at:
+                user.email_verified_at = timezone.now()
+                update_fields.append('email_verified_at')
+            user.save(update_fields=update_fields)
+            bump_security_version(user)
+            audit(
+                user,
+                'auth.checkout_activation',
+                user,
+                {'source': 'public_checkout'},
+                request=request,
+            )
+        return render(request, 'auth/password_reset_result.html', {'ok': True})
+    return render(request, 'auth/password_reset_confirm.html', {'form': form})
+
+
 def accept_invitation(request, token):
     from apps.companies.models import Invitation
 
@@ -399,6 +456,15 @@ def accept_invitation(request, token):
                 request,
                 'auth/invite_result.html',
                 {'ok': False, 'reason': 'staff_customer_conflict'},
+            )
+        if invitation.role == 'admin':
+            # Administrator invitations are bootstrap capabilities for a new
+            # company identity. Never elevate an existing identity through the
+            # generic invitation acceptance path.
+            return render(
+                request,
+                'auth/invite_result.html',
+                {'ok': False, 'reason': 'admin_invite_existing_identity'},
             )
         if not request.user.is_authenticated:
             return redirect(f"{reverse('accounts:login')}?next={request.path}")
@@ -418,7 +484,7 @@ def accept_invitation(request, token):
             Membership.objects.update_or_create(
                 company=invitation.company,
                 user=existing,
-                defaults={'active': True, 'role': 'member'},
+                defaults={'active': True, 'role': invitation.role},
             )
             invitation.accepted_at = timezone.now()
             invitation.save(update_fields=['accepted_at', 'updated_at'])
@@ -452,14 +518,32 @@ def accept_invitation(request, token):
                 return render(request, 'auth/invite_result.html', {'ok': False})
             if User.objects.filter(email__iexact=invitation.email).exists():
                 return render(request, 'auth/invite_result.html', {'ok': False})
+            if invitation.role == 'admin':
+                Company.objects.select_for_update().get(pk=invitation.company_id)
+                if Membership.objects.filter(
+                    company_id=invitation.company_id,
+                    active=True,
+                    role='admin',
+                ).exists():
+                    return render(
+                        request,
+                        'auth/invite_result.html',
+                        {'ok': False, 'reason': 'admin_already_exists'},
+                    )
             user = User.objects.create_user(
                 email=invitation.email,
                 password=form.cleaned_data['password'],
                 first_name=form.cleaned_data['first_name'].strip(),
                 last_name=form.cleaned_data['last_name'].strip(),
                 email_verified_at=timezone.now(),
+                two_factor_required=(invitation.role == 'admin'),
             )
-            Membership.objects.create(company=invitation.company, user=user, role='member', active=True)
+            Membership.objects.create(
+                company=invitation.company,
+                user=user,
+                role=invitation.role,
+                active=True,
+            )
             evidence = {
                 'source': 'invitation',
                 'ip': client_ip(request),
@@ -471,7 +555,13 @@ def accept_invitation(request, token):
             invitation.save(update_fields=['accepted_at', 'updated_at'])
             login(request, user)
             request.session.cycle_key()
-            bind_security_session(request, user, two_factor_ok=True)
+            if invitation.role == 'admin':
+                bind_security_session(request, user, two_factor_ok=False)
+                request.session['post_2fa_next'] = reverse('portal:dashboard')
+            else:
+                bind_security_session(request, user, two_factor_ok=True)
+        if invitation.role == 'admin':
+            return redirect('accounts:two_factor')
         return redirect('portal:dashboard')
     return render(
         request,

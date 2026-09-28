@@ -1,8 +1,125 @@
-{% extends 'ns_admin/base.html' %}{% load pm %}
+{% extends 'portal/base.html' %}{% load pm %}
+{% block title %}Kundenportal-Vorschau{% endblock %}
+{% block home_url %}{% url back_route back_pk %}{% endblock %}
+{% block mobile_title %}PROMPTMASTER<small>KUNDENPORTAL · VORSCHAU</small>{% endblock %}
+{% block search_action %}{{ request.path }}{% endblock %}
+{% block search_placeholder %}Read-only Vorschau …{% endblock %}
+{% block user_meta %}Support-Vorschau · {{ preview_title }}{% endblock %}
+{% block side_footer %}Kundenportal-Vorschau<br>{{ preview_subtitle }}{% endblock %}
+
+{% block nav %}
+<a class="{% if preview_section == 'dashboard' %}active{% endif %}" href="{{ request.path }}?section=dashboard"><span class="ico">⌂</span><span class="label">Dashboard</span></a>
+{% if preview_kind == 'company' %}
+<a class="{% if preview_section == 'team' %}active{% endif %}" href="{{ request.path }}?section=team"><span class="ico">♙</span><span class="label">Mein Team</span></a>
+{% endif %}
+<a class="{% if preview_section == 'licenses' %}active{% endif %}" href="{{ request.path }}?section=licenses"><span class="ico">▣</span><span class="label">Lizenzen</span></a>
+<a class="{% if preview_section == 'devices' %}active{% endif %}" href="{{ request.path }}?section=devices"><span class="ico">▤</span><span class="label">Geräte</span></a>
+<a class="{% if preview_section == 'orders' %}active{% endif %}" href="{{ request.path }}?section=orders"><span class="ico">▧</span><span class="label">Bestellungen &amp; Zahlungen</span></a>
+{% if preview_kind == 'company' %}
+<a class="{% if preview_section == 'company' %}active{% endif %}" href="{{ request.path }}?section=company"><span class="ico">▥</span><span class="label">Unternehmen</span></a>
+{% else %}
+<a class="{% if preview_section == 'profile' %}active{% endif %}" href="{{ request.path }}?section=profile"><span class="ico">⚙</span><span class="label">Einstellungen</span></a>
+{% endif %}
+<a class="{% if preview_section == 'more' %}active{% endif %}" href="{{ request.path }}?section=more"><span class="ico">?</span><span class="label">Hilfe &amp; Kontakt</span></a>
+{% endblock %}
+
+{% block mobile %}
+<div class="mobile-menu">
+<a class="{% if preview_section == 'dashboard' %}active{% endif %}" href="{{ request.path }}?section=dashboard"><b>⌂</b>Home</a>
+{% if preview_kind == 'company' %}
+<a class="{% if preview_section == 'team' %}active{% endif %}" href="{{ request.path }}?section=team"><b>♙</b>Team</a>
+{% else %}
+<a class="{% if preview_section == 'profile' %}active{% endif %}" href="{{ request.path }}?section=profile"><b>⚙</b>Einstellungen</a>
+{% endif %}
+<a class="{% if preview_section == 'licenses' %}active{% endif %}" href="{{ request.path }}?section=licenses"><b>▣</b>Lizenzen</a>
+<a class="{% if preview_section == 'devices' %}active{% endif %}" href="{{ request.path }}?section=devices"><b>▤</b>Geräte</a>
+<a class="{% if preview_section == 'orders' or preview_section == 'company' or preview_section == 'more' %}active{% endif %}" href="{{ request.path }}?section=more"><b>⋯</b>Mehr</a>
+</div>
+{% endblock %}
+
 {% block content %}
-{% user_has_perm request.user 'licenses.read' as can_licenses %}{% user_has_perm request.user 'orders.read' as can_orders %}
-<div class="page-head"><div><h1>Kundenportal-Vorschau</h1><div class="sub">Read-only · keine Session-Impersonation · {{ preview_title }}</div></div><a class="btn secondary" href="{% url back_route back_pk %}">Zurück zum Kundendetail</a></div>
-<div class="alert info"><strong>Nur Vorschau.</strong> Diese Ansicht zeigt den Kundenportal-Zustand aus Support-Sicht. Es sind bewusst keine kundenbezogenen Schreibaktionen verfügbar.</div>
-<div class="grid kpis mt-14">{% if can_licenses %}<div class="card"><div>Lizenzen</div><div class="value">{{ license_total }}</div><div class="small muted">gesamt</div></div><div class="card"><div>Aktiv</div><div class="value">{{ license_active }}</div><div class="small muted">{{ license_free }} frei</div></div><div class="card"><div>Ablauf ≤30 Tage</div><div class="value">{{ expiring_30 }}</div></div>{% endif %}<div class="card"><div>Geräte</div><div class="value">{{ device_count }}</div></div></div>
-<div class="grid two mt-14"><div class="card"><h2>Konto</h2><div class="statusrow"><span>Kontotyp</span><strong>{% if preview_kind == 'company' %}Unternehmen{% else %}Privatkunde{% endif %}</strong></div>{% if preview_user %}<div class="statusrow"><span>Portal-Benutzer</span><strong>{{ preview_user.email }}</strong></div>{% endif %}{% if preview_company %}<div class="statusrow"><span>Unternehmen</span><strong>{{ preview_company.name }}</strong></div>{% endif %}<div class="statusrow"><span>Aktive Benutzer</span><strong>{{ member_count }}</strong></div></div><div class="card"><h2>Bestand</h2>{% if can_orders %}<div class="statusrow"><span>Bestellungen</span><strong>{{ order_count }}</strong></div>{% endif %}{% if can_licenses %}<div class="statusrow"><span>Aktive Lizenzen</span><strong>{{ license_active }}</strong></div><div class="statusrow"><span>Freie Lizenzen</span><strong>{{ license_free }}</strong></div>{% endif %}</div></div>
+{% user_has_perm request.user 'licenses.read' as can_licenses %}
+{% user_has_perm request.user 'orders.read' as can_orders %}
+<div class="page-head">
+  <div>
+    <h1>{{ preview_title }}</h1>
+    <div class="sub">{{ preview_subtitle }} · Kundenportal-Vorschau</div>
+  </div>
+  <a class="btn secondary" href="{% url back_route back_pk %}">Zurück zum netstyle Kundendetail</a>
+</div>
+<div class="alert info"><strong>Read-only Kundenansicht.</strong> Diese Seite verwendet bewusst das Kundenportal-Layout, aber keine Session-Impersonation. Schreibaktionen, Käufe und Kontosicherheitsaktionen sind in der Vorschau deaktiviert.</div>
+
+{% if preview_section == 'dashboard' %}
+<div class="grid kpis mt-14">
+  {% if can_licenses %}
+  <div class="card"><div>Lizenzen</div><div class="value">{{ license_total }}</div><div class="small muted">gesamt</div></div>
+  <div class="card"><div>Aktiv</div><div class="value">{{ license_active }}</div><div class="small muted">{{ license_free }} frei</div></div>
+  <div class="card"><div>Ablauf ≤30 Tage</div><div class="value">{{ expiring_30 }}</div></div>
+  {% endif %}
+  <div class="card"><div>Geräte</div><div class="value">{{ device_count }}</div></div>
+</div>
+<div class="grid two mt-14">
+  <div class="card">
+    <h2>Konto</h2>
+    <div class="statusrow"><span>Kontotyp</span><strong>{% if preview_kind == 'company' %}Unternehmen{% else %}Privatkunde{% endif %}</strong></div>
+    {% if preview_user %}<div class="statusrow"><span>Portal-Benutzer</span><strong>{{ preview_user.email }}</strong></div>{% endif %}
+    {% if preview_company %}<div class="statusrow"><span>Unternehmen</span><strong>{{ preview_company.name }}</strong></div>{% endif %}
+    <div class="statusrow"><span>Aktive Benutzer</span><strong>{{ member_count }}</strong></div>
+  </div>
+  <div class="card">
+    <h2>Bestand</h2>
+    {% if can_orders %}<div class="statusrow"><span>Bestellungen</span><strong>{{ order_count }}</strong></div>{% endif %}
+    {% if can_licenses %}<div class="statusrow"><span>Aktive Lizenzen</span><strong>{{ license_active }}</strong></div><div class="statusrow"><span>Freie Lizenzen</span><strong>{{ license_free }}</strong></div>{% endif %}
+    <div class="statusrow"><span>Aktive Geräte</span><strong>{{ device_count }}</strong></div>
+  </div>
+</div>
+
+{% elif preview_section == 'team' and preview_kind == 'company' %}
+<div class="card mt-14"><h2>Mein Team</h2>
+<table><thead><tr><th>Name</th><th>E-Mail</th><th>Rolle</th><th>Status</th></tr></thead><tbody>
+{% for membership in preview_members %}<tr><td data-label="Name">{{ membership.user.full_name }}</td><td data-label="E-Mail">{{ membership.user.email }}</td><td data-label="Rolle">{{ membership.get_role_display }}</td><td data-label="Status">{% if membership.active %}Aktiv{% else %}Inaktiv{% endif %}</td></tr>{% empty %}<tr><td data-label="Hinweis" colspan="4">Keine Benutzer vorhanden.</td></tr>{% endfor %}
+</tbody></table></div>
+
+{% elif preview_section == 'licenses' %}
+<div class="card mt-14"><h2>Lizenzen</h2>
+{% if can_licenses %}
+<table><thead><tr><th>Lizenz</th><th>Produkt</th><th>Status</th><th>Gültig bis</th></tr></thead><tbody>
+{% for license in preview_licenses %}<tr><td data-label="Lizenz">{{ license.license_number }}</td><td data-label="Produkt">{{ license.product.name }}</td><td data-label="Status">{{ license.get_status_display }}</td><td data-label="Gültig bis">{{ license.valid_until|date:"d.m.Y" }}</td></tr>{% empty %}<tr><td data-label="Hinweis" colspan="4">Keine Lizenzen vorhanden.</td></tr>{% endfor %}
+</tbody></table>
+{% else %}<div class="muted">Keine netstyle-Berechtigung zum Anzeigen der Lizenzdaten.</div>{% endif %}
+</div>
+
+{% elif preview_section == 'devices' %}
+<div class="card mt-14"><h2>Geräte</h2>
+<table><thead><tr><th>Gerät</th>{% if preview_kind == 'company' %}<th>Benutzer</th>{% endif %}<th>Lizenz</th><th>Zuletzt gesehen</th></tr></thead><tbody>
+{% for device in preview_devices %}<tr><td data-label="Gerät">{{ device.display_name|default:"Gerät" }}</td>{% if preview_kind == 'company' %}<td data-label="Benutzer">{{ device.user.email }}</td>{% endif %}<td data-label="Lizenz">{{ device.license.license_number }}</td><td data-label="Zuletzt gesehen">{{ device.last_seen_at|date:"d.m.Y H:i" }}</td></tr>{% empty %}<tr><td data-label="Hinweis" colspan="{% if preview_kind == 'company' %}4{% else %}3{% endif %}">Keine aktiven Geräte vorhanden.</td></tr>{% endfor %}
+</tbody></table></div>
+
+{% elif preview_section == 'orders' %}
+<div class="card mt-14"><h2>Bestellungen &amp; Zahlungen</h2>
+{% if can_orders %}
+<table><thead><tr><th>Bestellung</th><th>Datum</th><th>Status</th><th>Gesamt</th></tr></thead><tbody>
+{% for order in preview_orders %}<tr><td data-label="Bestellung">{{ order.order_number }}</td><td data-label="Datum">{{ order.created_at|date:"d.m.Y H:i" }}</td><td data-label="Status">{{ order.get_status_display }}</td><td data-label="Gesamt">{{ order.gross_total }} {{ order.currency }}</td></tr>{% empty %}<tr><td data-label="Hinweis" colspan="4">Keine Bestellungen vorhanden.</td></tr>{% endfor %}
+</tbody></table>
+{% else %}<div class="muted">Keine netstyle-Berechtigung zum Anzeigen der Bestelldaten.</div>{% endif %}
+</div>
+
+{% elif preview_section == 'company' and preview_kind == 'company' %}
+<div class="grid two mt-14">
+  <div class="card"><h2>Unternehmen</h2><div class="statusrow"><span>Name</span><strong>{{ preview_company.name }}</strong></div><div class="statusrow"><span>Rechtsform</span><strong>{{ preview_company.legal_form|default:"–" }}</strong></div><div class="statusrow"><span>E-Mail</span><strong>{{ preview_company.email }}</strong></div><div class="statusrow"><span>Telefon</span><strong>{{ preview_company.phone|default:"–" }}</strong></div></div>
+  <div class="card"><h2>Rechnungsanschrift</h2><div class="statusrow"><span>Adresse</span><strong>{{ preview_company.street }} {{ preview_company.house_number }}</strong></div><div class="statusrow"><span>Ort</span><strong>{{ preview_company.postal_code }} {{ preview_company.city }}</strong></div><div class="statusrow"><span>Land</span><strong>{{ preview_company.country }}</strong></div><div class="statusrow"><span>USt-IdNr.</span><strong>{{ preview_company.vat_id|default:"–" }}</strong></div></div>
+</div>
+
+{% elif preview_section == 'profile' and preview_kind == 'private' %}
+<div class="grid two mt-14">
+  <div class="card"><h2>Profil</h2><div class="statusrow"><span>Name</span><strong>{{ preview_user.full_name }}</strong></div><div class="statusrow"><span>E-Mail</span><strong>{{ preview_user.email }}</strong></div><div class="statusrow"><span>Telefon</span><strong>{{ preview_profile.phone|default:"–" }}</strong></div></div>
+  <div class="card"><h2>Anschrift</h2><div class="statusrow"><span>Adresse</span><strong>{{ preview_profile.street }} {{ preview_profile.house_number }}</strong></div><div class="statusrow"><span>Ort</span><strong>{{ preview_profile.postal_code }} {{ preview_profile.city }}</strong></div><div class="statusrow"><span>Land</span><strong>{{ preview_profile.country }}</strong></div></div>
+</div>
+
+{% else %}
+<div class="grid two mt-14">
+  <div class="card"><h2>Weitere Bereiche</h2><div class="statusrow"><span>Kontoeinstellungen</span><strong>Read-only</strong></div><div class="statusrow"><span>Sicherheit / 2FA</span><strong>nicht impersoniert</strong></div><div class="statusrow"><span>Datenschutz</span><strong>nicht ausführbar</strong></div></div>
+  <div class="card"><h2>Support-Hinweis</h2><p class="muted">Für echte Schreibaktionen oder einen vollständigen Login-Test muss ein eigener Nicht-Staff-Testkunde verwendet werden. Die Vorschau übernimmt niemals die Identität des Kunden.</p></div>
+</div>
+{% endif %}
 {% endblock %}

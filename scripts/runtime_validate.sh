@@ -34,7 +34,6 @@ check_caddy_redirect(){
   printf '%s\\n' "$headers" | grep -Fqi "location: ${expected}" || { printf '%s\\n' "$headers"; fail "Caddy redirect falsch: ${path} -> erwartet ${expected}"; }
 }
 check_caddy_redirect '/login/' '/auth/login/'
-check_caddy_redirect '/checkout/?quantity=3' '/portal/licenses/buy/?quantity=3'
 check_caddy_redirect '/app/pro/' '/pro/'
 check_caddy_redirect '/portal' '/portal/dashboard/'
 check_caddy_redirect '/portal/' '/portal/dashboard/'
@@ -42,7 +41,7 @@ check_caddy_redirect '/datenschutz/' '/legal/privacy/'
 check_caddy_redirect '/agb/' '/legal/terms/'
 check_caddy_redirect '/lizenzbedingungen/' '/legal/license/'
 check_caddy_redirect '/widerruf/' '/legal/withdrawal/'
-echo "CADDY ROUTE CONTRACT OK: compatibility + legal redirects execute correctly"
+echo "CADDY ROUTE CONTRACT OK: compatibility + legal redirects execute correctly; public checkout is not redirected"
 check_caddy_status(){
   local path="$1" expected="$2" status
   status="$(docker compose "${FILES[@]}" exec -T web sh -c "curl -skS --connect-to localhost:443:caddy:443 -o /dev/null -w '%{http_code}' 'https://localhost${path}'")"
@@ -51,6 +50,8 @@ check_caddy_status(){
 for path in '/.env' '/.git/config' '/Dockerfile' '/compose.yaml'; do
   check_caddy_status "$path" 404
 done
+check_caddy_status '/checkout/?quantity=3' 200
+echo "CADDY PUBLIC CHECKOUT CONTRACT OK: /checkout/ remains a first-class marketing surface"
 echo "CADDY SENSITIVE-PATH CONTRACT OK: source/configuration probes return 404"
 for i in $(seq 1 30); do
   MONITOR_OK="$(docker compose "${FILES[@]}" exec -T web sh -c "curl -fsS 'http://prometheus:9090/api/v1/targets?state=active' | python -c 'import json,sys; d=json.load(sys.stdin); rows=d.get(\"data\",{}).get(\"activeTargets\",[]); state={r.get(\"labels\",{}).get(\"job\"):r.get(\"health\") for r in rows}; required={\"node\",\"postgres\",\"cadvisor\",\"django\"}; print(\"1\" if required.issubset(state) and all(state[x]==\"up\" for x in required) else \"0\")'" 2>/dev/null | tail -n1 | tr -d '\r')"

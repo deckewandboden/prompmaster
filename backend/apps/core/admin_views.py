@@ -19,12 +19,13 @@ from apps.audit.models import AuditEvent
 from apps.audit.services import audit as write_audit
 from apps.catalog.models import Feature, Product
 from apps.catalog.services import create_price_version, current_price
-from apps.companies.models import Company, Membership, PrivateCustomerProfile
-from apps.companies.services import INVITATION_TTL_HOURS, deactivate_company_member, transfer_admin
+from apps.companies.models import Company, Invitation, Membership, PrivateCustomerProfile
+from apps.companies.services import INVITATION_TTL_HOURS, create_invitation, deactivate_company_member, transfer_admin
+from apps.core.models import Lead
 from apps.devices.models import DeviceRegistration
 from apps.devices.services import revoke_device
 from apps.integrations.models import ServiceAccount
-from apps.legal.models import DeletionRequest, LegalAcceptance, LegalDocument, RetentionPolicy
+from apps.legal.models import ConsumerContractDeclaration, DeletionRequest, LegalAcceptance, LegalDocument, RetentionPolicy
 from apps.licenses.models import License, LicenseAssignmentLink, LicenseTerm, LicenseUpgradeRequest
 from apps.licenses.services import assign_license, block_license, release_license, unblock_license
 from apps.notifications.models import EmailMessage, EmailTemplate
@@ -36,11 +37,16 @@ from apps.payments.services import calculate_refund, create_refund_request, subm
 from apps.support.models import SupportRequest
 from .admin_forms import (
     AdminCompanyForm,
+    CustomerAdminInviteForm,
     EmailTemplateForm,
     FeatureForm,
     GeneralSettingsForm,
     DeletionRejectForm,
     LegalDocumentForm,
+    LeadAssignForm,
+    LeadConvertCompanyForm,
+    LeadDeleteForm,
+    LeadForm,
     RetentionPolicyForm,
     MollieConfigForm,
     PriceVersionForm,
@@ -139,7 +145,7 @@ def dashboard(request):
     now = timezone.now()
     rights = {
         name: has_perm(request.user, f'{name}.read')
-        for name in ('customers', 'licenses', 'orders', 'payments', 'ops', 'support')
+        for name in ('customers', 'leads', 'licenses', 'orders', 'payments', 'ops', 'support')
     }
     paid_orders = Order.objects.filter(status='paid')
     active_licenses = License.objects.filter(valid_until__gt=now, status__in=['active', 'free'])
@@ -186,6 +192,7 @@ def dashboard(request):
     context = {
         'rights': rights,
         'customers': Company.objects.count() + PrivateCustomerProfile.objects.count() if rights['customers'] else None,
+        'open_leads': Lead.objects.filter(deleted_at__isnull=True).exclude(status__in=['won', 'lost']).count() if rights['leads'] else None,
         'licenses': active_licenses.count() if rights['licenses'] else None,
         'expiring30': License.objects.filter(valid_until__gt=now, valid_until__lte=now + timedelta(days=30)).count() if rights['licenses'] else None,
         'expiring60': License.objects.filter(valid_until__gt=now, valid_until__lte=now + timedelta(days=60)).count() if rights['licenses'] else None,
@@ -229,6 +236,338 @@ def dashboard(request):
 @staff_perm()
 def more_menu(request):
     return render(request, 'ns_admin/more.html')
+
+
+@staff_perm('leads.read')
+def leads(request):
+    queryset = Lead.objects.filter(deleted_at__isnull=True).select_related('assigned_to')
+    grid = DataGrid(
+        request,
+        queryset,
+        search_fields=(
+            'lead_number', 'company_name', 'first_name', 'last_name',
+            'email', 'phone', 'assigned_to__email',
+        ),
+        sort_fields={
+            'number': 'lead_number',
+            'customer': 'company_name',
+            'status': 'status',
+            'priority': 'priority',
+            'assigned': 'assigned_to__last_name',
+            'created': 'created_at',
+        },
+        default_sort='-created_at',
+        filters={'status': 'status', 'source': 'source', 'priority': 'priority'},
+    ).build()
+    export = _grid_export(
+        request,
+        grid,
+        [
+            ('lead_number', 'Lead'),
+            ('customer_display', 'Interessent'),
+            ('email', 'E-Mail'),
+            ('status_name', 'Status'),
+            ('assigned_name', 'Zuständig'),
+        ],
+        'promptmaster-leads.csv',
+    )
+    if export:
+        return export
+    return render(
+        request,
+        'ns_admin/grid.html',
+        {
+            'title': 'Leads',
+            'grid': grid,
+            'columns': [
+                ('lead_number', 'Lead', 'number'),
+                ('customer_display', 'Interessent', 'customer'),
+                ('email', 'E-Mail', None),
+                ('status_name', 'Status', 'status'),
+                ('priority', 'Priorität', 'priority'),
+                ('assigned_name', 'Zuständig', 'assigned'),
+                ('created_at', 'Erstellt', 'created'),
+            ],
+            'detail_route': 'ns_admin:lead_detail',
+            'filter_options': [
+                ('status', 'Status', Lead.STATUS),
+                ('source', 'Quelle', Lead.SOURCE),
+                ('priority', 'Priorität', Lead.PRIORITY),
+            ],
+            'export_enabled': True,
+            'primary_action_url': reverse('ns_admin:lead_new') if has_perm(request.user, 'leads.write') else '',
+            'primary_action_label': 'Lead anlegen',
+        },
+    )
+
+
+@staff_perm('leads.write')
+def lead_new(request):
+    can_assign = has_perm(request.user, 'leads.assign')
+    form = LeadForm(
+        request.POST or None,
+        initial={'assigned_to': request.user if not can_assign else None},
+    )
+    if not can_assign:
+        form.fields['assigned_to'].disabled = True
+    if request.method == 'POST' and form.is_valid():
+        lead = form.save(commit=False)
+        lead.created_by = request.user
+        if not has_perm(request.user, 'leads.assign'):
+            lead.assigned_to = request.user
+        lead.save()
+        write_audit(
+            request.user,
+            'lead.created',
+            lead,
+            {
+                'status': lead.status,
+                'source': lead.source,
+                'assigned_to': str(lead.assigned_to_id or ''),
+            },
+            request=request,
+        )
+        messages.success(request, f'Lead {lead.lead_number} angelegt.')
+        return redirect('ns_admin:lead_detail', pk=lead.pk)
+    return render(
+        request,
+        'ns_admin/form.html',
+        {
+            'title': 'Lead anlegen',
+            'form': form,
+            'cancel_url': reverse('ns_admin:leads'),
+        },
+    )
+
+
+def _lead(pk):
+    return get_object_or_404(Lead.objects.select_related('assigned_to', 'converted_company'), pk=pk, deleted_at__isnull=True)
+
+
+@staff_perm('leads.read')
+def lead_detail(request, pk):
+    lead = _lead(pk)
+    can_write = has_perm(request.user, 'leads.write')
+    can_assign = has_perm(request.user, 'leads.assign')
+    before_assigned = lead.assigned_to_id
+    before = {
+        field: getattr(lead, field)
+        for field in (
+            'kind', 'company_name', 'first_name', 'last_name', 'email', 'phone',
+            'source', 'status', 'priority', 'next_action_at', 'notes',
+        )
+    }
+
+    if request.method == 'POST' and not can_write:
+        raise PermissionDenied
+
+    form = LeadForm(request.POST or None, instance=lead)
+    if not can_assign:
+        form.fields['assigned_to'].disabled = True
+    if request.method == 'POST' and form.is_valid():
+        requested_assigned = form.cleaned_data.get('assigned_to')
+        requested_assigned_id = requested_assigned.pk if requested_assigned else None
+        if requested_assigned_id != before_assigned and not can_assign:
+            raise PermissionDenied
+
+        saved = form.save()
+        changes = {}
+        for field, old_value in before.items():
+            new_value = getattr(saved, field)
+            if old_value != new_value:
+                changes[field] = {'before': str(old_value), 'after': str(new_value)}
+        if before_assigned != saved.assigned_to_id:
+            changes['assigned_to'] = {
+                'before': str(before_assigned or ''),
+                'after': str(saved.assigned_to_id or ''),
+            }
+        if changes:
+            write_audit(
+                request.user,
+                'lead.updated',
+                saved,
+                {'changes': changes},
+                request=request,
+            )
+        messages.success(request, 'Lead gespeichert.')
+        return redirect('ns_admin:lead_detail', pk=saved.pk)
+
+    return render(
+        request,
+        'ns_admin/lead_detail.html',
+        {
+            'lead': lead,
+            'form': form,
+            'can_write': can_write,
+            'can_assign': can_assign,
+            'can_delete': has_perm(request.user, 'leads.delete'),
+            'can_convert': has_perm(request.user, 'leads.convert'),
+        },
+    )
+
+
+@staff_perm('leads.assign')
+def lead_assign(request, pk):
+    lead = _lead(pk)
+    form = LeadAssignForm(
+        request.POST or None,
+        initial={'assigned_to': lead.assigned_to_id},
+    )
+    if request.method == 'POST' and form.is_valid():
+        old_id = lead.assigned_to_id
+        lead.assigned_to = form.cleaned_data['assigned_to']
+        lead.save(update_fields=['assigned_to', 'updated_at'])
+        write_audit(
+            request.user,
+            'lead.assigned',
+            lead,
+            {
+                'before': str(old_id or ''),
+                'after': str(lead.assigned_to_id or ''),
+            },
+            request=request,
+        )
+        messages.success(request, 'Lead-Zuständigkeit aktualisiert.')
+        return redirect('ns_admin:lead_detail', pk=lead.pk)
+    return render(
+        request,
+        'ns_admin/form.html',
+        {
+            'title': f'{lead.lead_number} zuweisen',
+            'form': form,
+            'cancel_url': reverse('ns_admin:lead_detail', args=[lead.pk]),
+        },
+    )
+
+
+@staff_perm('leads.delete')
+def lead_delete(request, pk):
+    lead = _lead(pk)
+    form = LeadDeleteForm(request.POST or None)
+    if request.method == 'POST' and form.is_valid():
+        lead.deleted_at = timezone.now()
+        lead.save(update_fields=['deleted_at', 'updated_at'])
+        write_audit(
+            request.user,
+            'lead.deleted',
+            lead,
+            {
+                'status': lead.status,
+                'assigned_to': str(lead.assigned_to_id or ''),
+            },
+            request=request,
+        )
+        messages.success(request, f'Lead {lead.lead_number} gelöscht.')
+        return redirect('ns_admin:leads')
+    return render(
+        request,
+        'ns_admin/form.html',
+        {
+            'title': f'{lead.lead_number} löschen',
+            'form': form,
+            'cancel_url': reverse('ns_admin:lead_detail', args=[lead.pk]),
+        },
+    )
+
+
+@staff_perm('leads.convert')
+def lead_convert_company(request, pk):
+    lead = _lead(pk)
+    if lead.converted_company_id:
+        messages.info(request, 'Dieser Lead ist bereits einem Kunden zugeordnet.')
+        return redirect('ns_admin:customer_detail', pk=lead.converted_company_id)
+    if lead.kind != 'company':
+        messages.error(
+            request,
+            'Privatkunden werden aus rechtlichen Gründen über Registrierung/Checkout angelegt; '
+            'der Lead kann dort anschließend als gewonnen abgeschlossen werden.',
+        )
+        return redirect('ns_admin:lead_detail', pk=lead.pk)
+
+    form = LeadConvertCompanyForm(
+        request.POST or None,
+        initial={
+            'company_name': lead.company_name,
+            'email': lead.email,
+            'first_name': lead.first_name,
+            'last_name': lead.last_name,
+            'phone': lead.phone,
+            'country': 'DE',
+        },
+    )
+    if request.method == 'POST' and form.is_valid():
+        data = form.cleaned_data
+        with transaction.atomic():
+            locked = Lead.objects.select_for_update().get(pk=lead.pk, deleted_at__isnull=True)
+            if locked.converted_company_id:
+                return redirect('ns_admin:customer_detail', pk=locked.converted_company_id)
+
+            company = Company.objects.create(
+                customer_number=f'C-{locked.lead_number}',
+                name=data['company_name'].strip(),
+                legal_form=data['legal_form'].strip(),
+                email=data['email'].strip().lower(),
+                phone=data['phone'].strip(),
+                street=data['street'].strip(),
+                house_number=data['house_number'].strip(),
+                postal_code=data['postal_code'].strip(),
+                city=data['city'].strip(),
+                country=data['country'].strip().upper(),
+                vat_id=data['vat_id'].strip(),
+                tax_number=data['tax_number'].strip(),
+                status='active',
+            )
+            invitation, raw_token = create_invitation(
+                company=company,
+                actor=request.user,
+                email=data['email'],
+                first_name=data['first_name'],
+                last_name=data['last_name'],
+                role='admin',
+            )
+            from apps.notifications.services import queue_email
+
+            invitation_url = request.build_absolute_uri(
+                reverse('accounts:accept_invitation', args=[raw_token])
+            )
+            queue_email('invite', invitation.email, {'url': invitation_url})
+
+            locked.status = 'won'
+            locked.converted_company = company
+            locked.converted_at = timezone.now()
+            locked.save(
+                update_fields=[
+                    'status', 'converted_company', 'converted_at', 'updated_at',
+                ]
+            )
+            write_audit(
+                request.user,
+                'lead.converted',
+                locked,
+                {
+                    'company_id': str(company.id),
+                    'customer_number': company.customer_number,
+                    'invitation_id': str(invitation.id),
+                },
+                request=request,
+            )
+
+        messages.success(
+            request,
+            'Lead wurde in einen Firmenkunden umgewandelt. '
+            'Der Ansprechpartner hat eine sichere Einladung erhalten.',
+        )
+        return redirect('ns_admin:customer_detail', pk=company.pk)
+
+    return render(
+        request,
+        'ns_admin/form.html',
+        {
+            'title': f'{lead.lead_number} in Kunden umwandeln',
+            'form': form,
+            'cancel_url': reverse('ns_admin:lead_detail', args=[lead.pk]),
+        },
+    )
 
 
 @staff_perm('customers.read')
@@ -334,18 +673,42 @@ def private_customer_portal_preview(request, pk):
     user = profile.user
     can_licenses = has_perm(request.user, 'licenses.read')
     can_orders = has_perm(request.user, 'orders.read')
-    licenses = user.owned_licenses.select_related('product') if can_licenses else None
+    allowed_sections = {'dashboard', 'licenses', 'devices', 'orders', 'profile', 'more'}
+    preview_section = request.GET.get('section', 'dashboard')
+    if preview_section not in allowed_sections:
+        preview_section = 'dashboard'
+
+    licenses = (
+        user.owned_licenses.select_related('product').order_by('valid_until', 'license_number')
+        if can_licenses else None
+    )
+    devices = user.devices.filter(revoked_at__isnull=True).select_related('license').order_by('-last_seen_at')
+    orders = (
+        user.private_orders.prefetch_related('payments').order_by('-created_at')
+        if can_orders else None
+    )
     now = timezone.now()
     return render(request, 'ns_admin/customer_portal_preview.html', {
-        'preview_kind': 'private', 'preview_title': user.full_name or user.email,
-        'preview_subtitle': f'{profile.customer_number} · Privatkonto', 'preview_user': user,
-        'preview_company': None, 'license_total': licenses.count() if can_licenses else None,
+        'preview_kind': 'private',
+        'preview_section': preview_section,
+        'preview_title': user.full_name or user.email,
+        'preview_subtitle': f'{profile.customer_number} · Privatkonto',
+        'preview_user': user,
+        'preview_company': None,
+        'preview_profile': profile,
+        'preview_members': None,
+        'preview_licenses': licenses[:20] if licenses is not None else None,
+        'preview_devices': devices[:20],
+        'preview_orders': orders[:20] if orders is not None else None,
+        'license_total': licenses.count() if can_licenses else None,
         'license_free': licenses.filter(status='free', valid_until__gt=now).count() if can_licenses else None,
         'license_active': licenses.filter(status='active', valid_until__gt=now).count() if can_licenses else None,
         'expiring_30': licenses.filter(valid_until__gt=now, valid_until__lte=now + timedelta(days=30)).count() if can_licenses else None,
-        'device_count': user.devices.filter(revoked_at__isnull=True).count(),
-        'order_count': user.private_orders.count() if can_orders else None,
-        'member_count': 1, 'back_route': 'ns_admin:private_customer_detail', 'back_pk': profile.pk,
+        'device_count': devices.count(),
+        'order_count': orders.count() if can_orders else None,
+        'member_count': 1,
+        'back_route': 'ns_admin:private_customer_detail',
+        'back_pk': profile.pk,
     })
 
 
@@ -538,27 +901,156 @@ def customer_portal_preview(request, pk):
     customer = _customer(request, pk)
     can_licenses = has_perm(request.user, 'licenses.read')
     can_orders = has_perm(request.user, 'orders.read')
-    licenses = customer.licenses.select_related('product') if can_licenses else None
-    now = timezone.now()
-    admin_membership = customer.memberships.filter(active=True, role='admin').select_related('user').first()
-    return render(request, 'ns_admin/customer_portal_preview.html', {
-        'preview_kind': 'company', 'preview_title': customer.name,
-        'preview_subtitle': f'{customer.customer_number} · Firmenkonto',
-        'preview_user': admin_membership.user if admin_membership else None, 'preview_company': customer,
-        'license_total': licenses.count() if can_licenses else None,
-        'license_free': licenses.filter(status='free', valid_until__gt=now).count() if can_licenses else None,
-        'license_active': licenses.filter(status='active', valid_until__gt=now).count() if can_licenses else None,
-        'expiring_30': licenses.filter(valid_until__gt=now, valid_until__lte=now + timedelta(days=30)).count() if can_licenses else None,
-        'device_count': DeviceRegistration.objects.filter(
+    allowed_sections = {'dashboard', 'team', 'licenses', 'devices', 'orders', 'company', 'more'}
+    preview_section = request.GET.get('section', 'dashboard')
+    if preview_section not in allowed_sections:
+        preview_section = 'dashboard'
+
+    licenses = (
+        customer.licenses.select_related('product').order_by('valid_until', 'license_number')
+        if can_licenses else None
+    )
+    members = (
+        customer.memberships.filter(active=True)
+        .select_related('user')
+        .order_by('user__last_name', 'user__first_name', 'user__email')
+    )
+    devices = (
+        DeviceRegistration.objects.filter(
             user__company_memberships__company=customer,
             user__company_memberships__active=True,
             license__company=customer,
             revoked_at__isnull=True,
-        ).distinct().count(),
-        'order_count': customer.orders.count() if can_orders else None,
-        'member_count': customer.memberships.filter(active=True).count(),
-        'back_route': 'ns_admin:customer_detail', 'back_pk': customer.pk,
+        )
+        .select_related('user', 'license')
+        .distinct()
+        .order_by('-last_seen_at')
+    )
+    orders = (
+        customer.orders.prefetch_related('payments').order_by('-created_at')
+        if can_orders else None
+    )
+    now = timezone.now()
+    admin_membership = members.filter(role='admin').first()
+    return render(request, 'ns_admin/customer_portal_preview.html', {
+        'preview_kind': 'company',
+        'preview_section': preview_section,
+        'preview_title': customer.name,
+        'preview_subtitle': f'{customer.customer_number} · Firmenkonto',
+        'preview_user': admin_membership.user if admin_membership else None,
+        'preview_company': customer,
+        'preview_members': members[:20],
+        'preview_licenses': licenses[:20] if licenses is not None else None,
+        'preview_devices': devices[:20],
+        'preview_orders': orders[:20] if orders is not None else None,
+        'license_total': licenses.count() if can_licenses else None,
+        'license_free': licenses.filter(status='free', valid_until__gt=now).count() if can_licenses else None,
+        'license_active': licenses.filter(status='active', valid_until__gt=now).count() if can_licenses else None,
+        'expiring_30': licenses.filter(valid_until__gt=now, valid_until__lte=now + timedelta(days=30)).count() if can_licenses else None,
+        'device_count': devices.count(),
+        'order_count': orders.count() if can_orders else None,
+        'member_count': members.count(),
+        'back_route': 'ns_admin:customer_detail',
+        'back_pk': customer.pk,
     })
+
+
+@staff_perm('customers.write')
+def customer_admin_invite(request, pk):
+    customer = _customer(request, pk)
+    if customer.memberships.filter(active=True, role='admin').exists():
+        messages.info(request, 'Für dieses Unternehmen existiert bereits ein aktiver Firmenadministrator.')
+        return redirect('ns_admin:customer_users', pk=customer.pk)
+
+    pending = (
+        customer.invitations.filter(
+            role='admin',
+            accepted_at__isnull=True,
+            revoked_at__isnull=True,
+            expires_at__gt=timezone.now(),
+        )
+        .order_by('-created_at')
+        .first()
+    )
+    lead = (
+        Lead.objects.filter(converted_company=customer, deleted_at__isnull=True)
+        .order_by('-converted_at', '-created_at')
+        .first()
+    )
+    initial = {
+        'email': pending.email if pending else customer.email,
+        'first_name': pending.first_name if pending else (lead.first_name if lead else ''),
+        'last_name': pending.last_name if pending else (lead.last_name if lead else ''),
+    }
+    form = CustomerAdminInviteForm(request.POST or None, initial=initial)
+
+    if request.method == 'POST' and form.is_valid():
+        try:
+            with transaction.atomic():
+                pending_admin_invites = list(
+                    Invitation.objects.select_for_update().filter(
+                        company=customer,
+                        role='admin',
+                        accepted_at__isnull=True,
+                        revoked_at__isnull=True,
+                    )
+                )
+                locked = Company.objects.select_for_update().get(pk=customer.pk)
+                if locked.memberships.filter(active=True, role='admin').exists():
+                    raise ValidationError(
+                        'Für dieses Unternehmen existiert bereits ein aktiver Firmenadministrator.'
+                    )
+                replaced_invites = 0
+                for pending_invite in pending_admin_invites:
+                    if pending_invite.revoked_at is None:
+                        pending_invite.revoked_at = timezone.now()
+                        pending_invite.save(
+                            update_fields=['revoked_at', 'updated_at']
+                        )
+                        replaced_invites += 1
+                invitation, raw_token = create_invitation(
+                    company=locked,
+                    actor=request.user,
+                    email=form.cleaned_data['email'],
+                    first_name=form.cleaned_data['first_name'],
+                    last_name=form.cleaned_data['last_name'],
+                    role='admin',
+                )
+                from apps.notifications.services import queue_email
+
+                invitation_url = request.build_absolute_uri(
+                    reverse('accounts:accept_invitation', args=[raw_token])
+                )
+                queue_email('invite', invitation.email, {'url': invitation_url})
+                write_audit(
+                    request.user,
+                    'customer.admin_invited',
+                    locked,
+                    {
+                        'invitation_id': str(invitation.id),
+                        'email': invitation.email,
+                        'replaced_invites': replaced_invites,
+                    },
+                    request=request,
+                )
+        except ValidationError as exc:
+            form.add_error(None, exc.messages[0])
+        else:
+            messages.success(
+                request,
+                'Einladung für den Firmenadministrator wurde gesendet.',
+            )
+            return redirect('ns_admin:customer_users', pk=customer.pk)
+
+    return render(
+        request,
+        'ns_admin/form.html',
+        {
+            'title': f'Firmenadministrator einladen · {customer.name}',
+            'form': form,
+            'cancel_url': reverse('ns_admin:customer_users', args=[customer.pk]),
+        },
+    )
 
 
 @staff_perm('customers.read')
@@ -585,6 +1077,13 @@ def customer_users(request, pk):
                 ('active', 'Status', [('True', 'Aktiv'), ('False', 'Inaktiv')]),
             ],
             'can_manage_users': has_perm(request.user, 'customers.write'),
+            'has_active_admin': customer.memberships.filter(active=True, role='admin').exists(),
+            'pending_admin_invitation': customer.invitations.filter(
+                role='admin',
+                accepted_at__isnull=True,
+                revoked_at__isnull=True,
+                expires_at__gt=timezone.now(),
+            ).order_by('-created_at').first(),
         },
     )
 
@@ -1426,6 +1925,89 @@ def legal(request):
             'documents': LegalDocument.objects.order_by('doc_type', '-valid_from')[:20],
             'retention_count': RetentionPolicy.objects.filter(active=True).count(),
             'open_deletion_count': DeletionRequest.objects.filter(status__in=['open', 'processing']).count(),
+            'open_contract_declaration_count': ConsumerContractDeclaration.objects.filter(
+                status__in=['received', 'processing']
+            ).count(),
+        },
+    )
+
+
+@staff_perm('legal.read')
+def legal_declarations(request):
+    grid = DataGrid(
+        request,
+        ConsumerContractDeclaration.objects.all(),
+        search_fields=('name', 'email', 'contract_reference', 'reason'),
+        sort_fields={
+            'date': 'submitted_at',
+            'kind': 'kind',
+            'email': 'email',
+            'reference': 'contract_reference',
+            'status': 'status',
+        },
+        default_sort='-submitted_at',
+        filters={'kind': 'kind', 'status': 'status'},
+    ).build()
+    return render(
+        request,
+        'ns_admin/grid.html',
+        {
+            'title': 'Widerrufe & Kündigungen',
+            'grid': grid,
+            'columns': [
+                ('submitted_at', 'Eingang', 'date'),
+                ('kind', 'Art', 'kind'),
+                ('name', 'Name', None),
+                ('email', 'E-Mail', 'email'),
+                ('contract_reference', 'Vertragsbezug', 'reference'),
+                ('status', 'Status', 'status'),
+            ],
+            'filter_options': [
+                ('kind', 'Art', ConsumerContractDeclaration.KIND),
+                ('status', 'Status', ConsumerContractDeclaration.STATUS),
+            ],
+            'detail_route': 'ns_admin:legal_declaration_detail',
+        },
+    )
+
+
+@staff_perm('legal.read')
+def legal_declaration_detail(request, pk):
+    declaration = get_object_or_404(ConsumerContractDeclaration, pk=pk)
+    can_write = has_perm(request.user, 'legal.write')
+    if request.method == 'POST':
+        if not can_write:
+            raise PermissionDenied
+        status = (request.POST.get('status') or '').strip()
+        allowed = {value for value, _label in ConsumerContractDeclaration.STATUS}
+        if status not in allowed:
+            messages.error(request, 'Ungültiger Bearbeitungsstatus.')
+            return redirect('ns_admin:legal_declaration_detail', pk=declaration.pk)
+        declaration.status = status
+        declaration.internal_notes = (request.POST.get('internal_notes') or '').strip()[:10000]
+        declaration.processed_at = (
+            timezone.now() if status in {'completed', 'rejected'} else None
+        )
+        declaration.save(
+            update_fields=['status', 'internal_notes', 'processed_at', 'updated_at']
+        )
+        write_audit(
+            request.user,
+            'legal.consumer_declaration_status',
+            declaration,
+            {'kind': declaration.kind, 'status': status},
+            request=request,
+        )
+        messages.success(request, 'Verbrauchererklärung aktualisiert.')
+        return redirect('ns_admin:legal_declaration_detail', pk=declaration.pk)
+
+    return render(
+        request,
+        'ns_admin/legal_declaration_detail.html',
+        {
+            'declaration': declaration,
+            'can_write': can_write,
+            'status_choices': ConsumerContractDeclaration.STATUS,
         },
     )
 
@@ -1762,8 +2344,14 @@ def settings_view(request):
 @staff_perm()
 def global_search(request):
     query = request.GET.get('q', '').strip()[:200]
-    results = {'customers': [], 'private_customers': [], 'users': [], 'licenses': [], 'orders': [], 'payments': []}
+    results = {'leads': [], 'customers': [], 'private_customers': [], 'users': [], 'licenses': [], 'orders': [], 'payments': []}
     if len(query) >= 2:
+        if has_perm(request.user, 'leads.read'):
+            results['leads'] = Lead.objects.filter(deleted_at__isnull=True).filter(
+                Q(lead_number__icontains=query) | Q(company_name__icontains=query)
+                | Q(first_name__icontains=query) | Q(last_name__icontains=query)
+                | Q(email__icontains=query) | Q(phone__icontains=query)
+            ).select_related('assigned_to')[:10]
         if has_perm(request.user, 'customers.read'):
             results['customers'] = Company.objects.filter(Q(name__icontains=query) | Q(customer_number__icontains=query) | Q(email__icontains=query))[:10]
             results['private_customers'] = PrivateCustomerProfile.objects.filter(Q(customer_number__icontains=query) | Q(user__email__icontains=query) | Q(user__first_name__icontains=query) | Q(user__last_name__icontains=query)).select_related('user')[:10]

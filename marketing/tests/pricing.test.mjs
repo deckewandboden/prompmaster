@@ -17,12 +17,14 @@ test('Grenzen und manipulierte Mengen bleiben gültig',()=>{
   assert.equal(quote(catalog,'999999').quantity,500);
 });
 test('Ein aktualisierter Katalog ändert Preise ohne Änderung der Rechenlogik',()=>{
-  const changed=structuredClone(catalog);changed.products[1].monthlyGrossCents=399;
+  const changed=structuredClone(catalog);changed.products[1].monthlyGrossCents=399;changed.products[1].annualGrossCents=4788;
   assert.equal(quote(changed,3).gross,14364);
   assert.equal(quote(catalog,3).gross,10764);
 });
 test('Ungültige Kataloge werden abgewiesen',()=>{
   for(const value of [-1,2.99,NaN,Infinity]){const changed=structuredClone(catalog);changed.products[1].monthlyGrossCents=value;assert.throws(()=>quote(changed,1))}
+  for(const value of [-1,35.88,NaN,Infinity]){const changed=structuredClone(catalog);changed.products[1].annualGrossCents=value;assert.throws(()=>quote(changed,1))}
+  for(const value of [0,365.5,NaN,Infinity]){const changed=structuredClone(catalog);changed.products[1].termDays=value;assert.throws(()=>quote(changed,1))}
   assert.throws(()=>quote({...catalog,products:[]},1));
 });
 test('Deutsche Währungsdarstellung',()=>assert.equal(money(3588).replace(/\s/g,' '),'35,88 €'));

@@ -11,7 +11,8 @@ from apps.notifications.services import sanitize_stored_email_contexts
 
 
 PERMS = [
-    'customers.read', 'customers.write', 'licenses.read', 'licenses.write',
+    'customers.read', 'customers.write', 'leads.read', 'leads.write',
+    'leads.assign', 'leads.convert', 'leads.delete', 'licenses.read', 'licenses.write',
     'devices.write', 'orders.read', 'payments.read', 'payments.refund',
     'products.read', 'products.write', 'email.read', 'email.write',
     'ops.read', 'api.read', 'api.write', 'roles.read', 'roles.write',
@@ -34,7 +35,8 @@ class Command(BaseCommand):
                 'support',
                 'Vertrieb / Support',
                 [
-                    'customers.read', 'customers.write', 'licenses.read',
+                    'customers.read', 'customers.write', 'leads.read', 'leads.write',
+                    'leads.assign', 'leads.convert', 'leads.delete', 'licenses.read',
                     'licenses.write', 'devices.write', 'orders.read',
                     'payments.read', 'products.read', 'email.read',
                     'support.read', 'support.write', 'audit.read', 'content.read',
@@ -118,6 +120,10 @@ class Command(BaseCommand):
                 'PromptMaster Passwort zurücksetzen',
                 'Sie können Ihr Passwort innerhalb einer Stunde zurücksetzen: {url}',
             ),
+            'checkout_activation': (
+                'PromptMaster Pro Zugang aktivieren',
+                'Ihre Zahlung wurde bestätigt. Legen Sie innerhalb von 7 Tagen Ihr Passwort fest und aktivieren Sie damit Ihren PromptMaster-Zugang: {url}',
+            ),
             'staff_invite': (
                 'PromptMaster netstyle-Zugang einrichten',
                 'Ihr netstyle PromptMaster-Administrationszugang wurde angelegt. Legen Sie innerhalb einer Stunde Ihr Passwort fest: {url}',
@@ -141,6 +147,20 @@ class Command(BaseCommand):
             'payment_confirmed': (
                 'PromptMaster-Zahlung bestätigt',
                 'Ihre Zahlung für Bestellung {order} über {amount} {currency} wurde bestätigt.',
+            ),
+            'contract_confirmation': (
+                'PromptMaster – Vertragsbestätigung {order}',
+                'Ihre Vertragsbestätigung für PromptMaster Pro\n\n'
+                'Anbieter: netstyle Informationstechnik GmbH, Am Bühl 2, 57223 Kreuztal\n'
+                'Bestellung: {order}\n'
+                'Vertragsdatum / Zahlungsbestätigung: {contract_date}\n'
+                'Leistungsumfang: {items}\n'
+                'Gesamtpreis: {amount} {currency}\n'
+                'Laufzeit: {term}\n'
+                'Automatische Verlängerung: nein\n'
+                'Vorzeitiger Leistungsbeginn verlangt: {early_performance}\n\n'
+                'Bei Vertragsschluss einbezogene Unterlagen:\n\n{legal_documents}\n\n'
+                'Diese E-Mail dient als Vertragsbestätigung auf einem dauerhaften Datenträger.',
             ),
             'payment_failed': (
                 'PromptMaster-Zahlung nicht erfolgreich',
@@ -178,6 +198,26 @@ class Command(BaseCommand):
                 'Neue PromptMaster-Supportanfrage',
                 'Kategorie: {category}\nKunde: {customer}\nE-Mail: {email}\nLizenz: {license}\nBetreff: {subject}\n\n{message}',
             ),
+            'withdrawal_received': (
+                'PromptMaster – Eingang Ihres Widerrufs',
+                'Guten Tag {name},\n\nwir bestätigen den Eingang Ihres Widerrufs.\n'
+                'Vertrag / Bestellung / Kundennummer: {contract_reference}\n'
+                'Eingang: {submitted_at}\n'
+                'Vorgangs-ID: {declaration_id}\n\n'
+                'Diese Nachricht dokumentiert den elektronischen Eingang Ihrer Erklärung.',
+            ),
+            'cancellation_received': (
+                'PromptMaster – Eingang Ihrer Kündigung',
+                'Guten Tag {name},\n\nwir bestätigen den Eingang Ihrer Kündigung.\n'
+                'Art: {cancellation_kind}\n'
+                'Vertrag / Bestellung / Kundennummer: {contract_reference}\n'
+                'Gewünschter Beendigungszeitpunkt: {requested_end_date}\n'
+                'Grund: {reason}\n'
+                'Eingang: {submitted_at}\n'
+                'Vorgangs-ID: {declaration_id}\n\n'
+                'Diese Nachricht dokumentiert den elektronischen Eingang Ihrer Erklärung.',
+            ),
+
         }
         for code, (subject, body) in templates.items():
             EmailTemplate.objects.update_or_create(

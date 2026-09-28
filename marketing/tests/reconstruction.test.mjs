@@ -132,7 +132,8 @@ test('non-WebGL fallback keeps the actual head visible without camera access',()
   assert.match(fallback,/let remainingState=stateDt/);
   assert.match(fallback,/const step=Math\.min\(1\/60,remainingState\)/);
   assert.match(fallback,/smoothX\+=\(mouseX-smoothX\)\*Math\.min\(1,step\*inputFollow\)/);
-  assert.match(fallback,/headYaw\+=\(yawTarget-headYaw\)\*Math\.min\(1,step\*3\)/);
+  assert.match(fallback,/const rotationFollow=orientationActive\?3\.8:3/);
+  assert.match(fallback,/headYaw\+=\(yawTarget-headYaw\)\*Math\.min\(1,step\*rotationFollow\)/);
   assert.match(fallback,/context\.rotate\(star\.direction>0\?\.22:-\.22\)/);
   assert.match(fallback,/lowerSceneContract='edge-shared-v1'/);
   assert.match(fallback,/async function modelCloud\(surfaceCount\)/);
@@ -145,15 +146,36 @@ test('non-WebGL fallback keeps the actual head visible without camera access',()
   assert.match(fallback,/projectionScale=1\/\(2\*Math\.tan\(39\*Math\.PI\/360\)\*viewZ\)/);
 });
 
-test('marketing header uses dedicated approved cropped logo artwork',()=>{
+test('marketing header uses dedicated approved HQ logo artwork',()=>{
   const css=read('src/immersive.css');
-  assert.match(css,/\/brand\/promptmaster-logo-clean\.svg/);
+  assert.match(css,/\/brand\/promptmaster-logo-hq\.png/);
+  assert.doesNotMatch(css,/\/brand\/promptmaster-logo-clean\.svg/);
   assert.doesNotMatch(css,/background-image:url\('\/brand\/design-reference\.jpeg'\)/);
-  const logo=read('public/brand/promptmaster-logo-clean.svg');
-  assert.match(logo,/width="315" height="55" viewBox="0 7 315 55"/);
-  assert.match(logo,/<image x="0" y="0" width="315" height="62"/);
-  assert.match(logo,/data:image\/png;base64,/);
+  assert.equal(gitBlobSha('public/brand/promptmaster-logo-hq.png'),'87be29848672ddac093e49cae479ec9dcc1e43ff');
 });
+
+test('header and footer use the same HQ logo and share one visible left baseline',()=>{
+  const content=read('src/content.js');
+  const css=read('src/immersive.css');
+  assert.match(content,/footer=.*class="brand"[^]*class="logo-crop"/);
+  assert.match(css,/background-image:url\('\/brand\/promptmaster-logo-hq\.png'\)/);
+  assert.doesNotMatch(css,/promptmaster-logo-clean\.svg/);
+  assert.match(css,/@media\(min-width:651px\)\{[^]*header\{[^]*padding-left:calc\(6% - 24px\)/);
+  assert.match(css,/#footer \.footer-grid>div:first-child \.brand\{[^]*margin-left:-24px/);
+});
+
+test('mobile footer brand box aligns with its copy baseline',()=>{
+  const css=read('src/style.css');
+  assert.match(
+    css,
+    /@media\(max-width:480px\)\{[^]*#footer \.footer-grid \.logo-crop\{[^]*margin-left:0/
+  );
+  assert.doesNotMatch(
+    css,
+    /#footer \.footer-grid \.logo-crop\{[^}]*margin-left:-18px/
+  );
+});
+
 
 test('hero and marketing copy use recovered V15 decisions',()=>{
   const index=read('index.html');
@@ -169,13 +191,30 @@ test('hero and marketing copy use recovered V15 decisions',()=>{
   assert.doesNotMatch(content,/Vorschau · Kauf und Anmeldung noch nicht freigeschaltet/);
 });
 
-test('pricing calculator survives stale non-JSON browser responses',()=>{
+test('pricing calculator survives stale non-JSON browser responses but checkout fails closed',()=>{
   const main=read('src/main.js');
   assert.match(main,/fallbackCatalog/);
   assert.match(main,/cache:'no-store'/);
   assert.match(main,/Accept:'application\/json'/);
   assert.match(main,/eingebetteter Preiskatalog/);
+  assert.match(main,/if\(path==='\/checkout'\)\{\s*throw new Error\('Sicherer Live-Produktkatalog für den Checkout nicht verfügbar'/);
+  assert.match(main,/catalog\.checkoutEnabled!==true/);
+  assert.match(main,/Es wird keine Bestellung gestartet/);
+  assert.match(main,/catalog\.checkoutEnabled===true/);
+  assert.match(main,/Kauf vorübergehend nicht verfügbar/);
+  assert.match(main,/checkoutSubmit\.disabled=false/);
+  const content=read('src/content.js');
+  assert.match(content,/id="checkout-submit" type="submit" disabled/);
 });
+
+test('checkout mirrors server tax-field requirements before submission',()=>{
+  const main=read('src/main.js');
+  assert.match(main,/companyRequireVatId===true/);
+  assert.match(main,/companyRequireTaxNumber===true/);
+  assert.match(main,/vatField\.required=/);
+  assert.match(main,/taxField\.required=/);
+});
+
 
 test('static compatibility pages no longer claim product is unavailable',()=>{
   const main=read('src/main.js');

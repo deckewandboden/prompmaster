@@ -146,6 +146,7 @@ log "Migrationen anwenden"
 docker compose "${F[@]}" run --rm web python manage.py migrate --noinput
 log "Defaults und zentralen Prompt-Katalog aktualisieren"
 docker compose "${F[@]}" run --rm web python manage.py seed_defaults
+docker compose "${F[@]}" run --rm web python manage.py seed_legal_documents_2026
 docker compose "${F[@]}" run --rm web python manage.py seed_prompt_catalog
 docker compose "${F[@]}" run --rm web python manage.py seed_faqs
 docker compose "${F[@]}" run --rm web python manage.py validate_prompt_runtime

@@ -92,6 +92,7 @@ class Invitation(TimeStampedModel):
     email = models.EmailField()
     first_name = models.CharField(max_length=120, blank=True)
     last_name = models.CharField(max_length=120, blank=True)
+    role = models.CharField(max_length=20, choices=Membership.ROLE, default='member')
     token_hash = models.CharField(max_length=64, unique=True)
     expires_at = models.DateTimeField()
     accepted_at = models.DateTimeField(null=True, blank=True)
@@ -137,6 +138,7 @@ class PrivateCustomerProfile(TimeStampedModel):
         related_name='private_customer',
     )
     customer_number = models.CharField(max_length=30, unique=True)
+    phone = models.CharField(max_length=60, blank=True)
     street = models.CharField(max_length=160, blank=True)
     house_number = models.CharField(max_length=40, blank=True)
     postal_code = models.CharField(max_length=20, blank=True)

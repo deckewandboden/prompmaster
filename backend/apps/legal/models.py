@@ -11,6 +11,8 @@ class LegalDocument(TimeStampedModel):
         ('privacy', 'Datenschutz'),
         ('withdrawal', 'Widerruf'),
         ('license', 'Lizenzbedingungen'),
+        ('imprint', 'Impressum'),
+        ('accessibility', 'Barrierefreiheit'),
     ]
 
     doc_type = models.CharField(max_length=30, choices=DOC_TYPES)
@@ -61,3 +63,49 @@ class DeletionRequest(TimeStampedModel):
     status = models.CharField(max_length=30, choices=STATUS, default='open')
     completed_at = models.DateTimeField(null=True, blank=True)
     notes = models.TextField(blank=True)
+
+
+class ConsumerContractDeclaration(TimeStampedModel):
+    KIND = [
+        ('withdrawal', 'Widerruf'),
+        ('cancellation', 'Kündigung'),
+    ]
+    CANCELLATION_KIND = [
+        ('ordinary', 'Ordentliche Kündigung'),
+        ('extraordinary', 'Außerordentliche Kündigung'),
+    ]
+    STATUS = [
+        ('received', 'Eingegangen'),
+        ('processing', 'In Bearbeitung'),
+        ('completed', 'Abgeschlossen'),
+        ('rejected', 'Abgelehnt'),
+    ]
+
+    kind = models.CharField(max_length=20, choices=KIND)
+    cancellation_kind = models.CharField(
+        max_length=20,
+        choices=CANCELLATION_KIND,
+        blank=True,
+    )
+    name = models.CharField(max_length=240)
+    email = models.EmailField()
+    contract_reference = models.CharField(max_length=160)
+    requested_end_date = models.DateField(null=True, blank=True)
+    reason = models.TextField(blank=True)
+    status = models.CharField(max_length=20, choices=STATUS, default='received')
+    submitted_at = models.DateTimeField(auto_now_add=True, db_index=True)
+    confirmation_sent_at = models.DateTimeField(null=True, blank=True)
+    processed_at = models.DateTimeField(null=True, blank=True)
+    request_meta = models.JSONField(default=dict)
+    internal_notes = models.TextField(blank=True)
+
+    class Meta:
+        ordering = ['-submitted_at']
+        indexes = [
+            models.Index(fields=['kind', '-submitted_at'], name='legal_decl_kind_sub_idx'),
+            models.Index(fields=['email', '-submitted_at'], name='legal_decl_email_sub_idx'),
+            models.Index(fields=['status', '-submitted_at'], name='legal_decl_status_sub_idx'),
+        ]
+
+    def __str__(self):
+        return f'{self.get_kind_display()} · {self.contract_reference} · {self.email}'
