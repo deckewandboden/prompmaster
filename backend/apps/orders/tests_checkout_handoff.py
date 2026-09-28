@@ -282,13 +282,9 @@ class PublicCheckoutFlowTests(TestCase):
         )
         self.assertEqual(
             user.legalacceptance_set.filter(order=order).count(),
-            4,
+            3,
         )
-        self.assertTrue(order.billing_snapshot['early_performance_requested'])
-        self.assertEqual(
-            set(order.billing_snapshot['legal_versions']),
-            {'terms', 'privacy', 'license', 'withdrawal'},
-        )
+        self.assertFalse(order.billing_snapshot.get('early_performance_requested', False))
         self.assertEqual(
             set(order.billing_snapshot['legal_versions']),
             {'terms', 'privacy', 'license'},
@@ -321,7 +317,12 @@ class PublicCheckoutFlowTests(TestCase):
         self.assertEqual(order.billing_snapshot['source'], 'public_checkout')
         self.assertEqual(
             user.legalacceptance_set.filter(order=order).count(),
-            3,
+            4,
+        )
+        self.assertTrue(order.billing_snapshot['early_performance_requested'])
+        self.assertEqual(
+            set(order.billing_snapshot['legal_versions']),
+            {'terms', 'privacy', 'license', 'withdrawal'},
         )
 
     @patch('apps.payments.mollie.MollieClient.create_payment')
