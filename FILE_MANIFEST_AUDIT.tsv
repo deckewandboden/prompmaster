@@ -68,3 +68,7 @@ backend/apps/companies/management/commands/create_customer_admin.py	0	0	active-b
 backend/apps/companies/tests_customer_admin_command.py	0	0	test
 backend/apps/companies/management/commands/seed_company_presentation_demo.py	0	0	active-backend
 backend/apps/companies/tests_presentation_demo_command.py	0	0	test
+backend/apps/legal/forms.py	0	0	active-backend
+backend/apps/legal/migrations/0002_consumer_declarations.py	0	0	active-backend
+backend/templates/legal_action_form.html	0	0	active-backend
+backend/templates/legal_action_success.html	0	0	active-backend
