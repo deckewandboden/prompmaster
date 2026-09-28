@@ -78,6 +78,7 @@ urlpatterns = [
     path('api/service-accounts/<uuid:pk>/rotate/', v.service_account_rotate, name='service_account_rotate'),
     path('api/service-accounts/<uuid:pk>/revoke/', v.service_account_revoke, name='service_account_revoke'),
     path('legal/', v.legal, name='legal'),
+    path('legal/declarations/', v.legal_declarations, name='legal_declarations'),
     path('legal/documents/', v.legal_documents, name='legal_documents'),
     path('legal/documents/new/', v.legal_document_edit, name='legal_document_new'),
     path('legal/documents/<uuid:pk>/', v.legal_document_edit, name='legal_document_edit'),
