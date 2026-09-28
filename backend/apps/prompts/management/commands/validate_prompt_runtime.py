@@ -9,12 +9,14 @@ from apps.contenthub.models import FAQEntry
 from apps.core.security import token_pair
 from apps.integrations.models import ServiceAccount
 from apps.prompts.free_legacy import compose_free_legacy
+from apps.prompts.free_surface import FREE_SURFACE_IDS
 from apps.prompts.lifecycle import run_test_case
 from apps.prompts.models import PromptApplication, PromptDefinition, PromptLegacyContract, PromptTestCase, PromptVersion
+from apps.prompts.services import catalog_snapshot
 
 
 class Command(BaseCommand):
-    help = 'Prüft die materialisierte PromptDomain, 194 Smoke-Tests, FAQ und MCP-Transport.'
+    help = 'Prüft 194 PM20-Definitionen, den 227-Aufgaben-Pro-Katalog, Smoke-Tests, FAQ und MCP-Transport.'
 
     def handle(self, *args, **options):
         counts = (
@@ -30,6 +32,31 @@ class Command(BaseCommand):
         )
         if counts != (34, 194, 16, 194, 194):
             raise CommandError(f'PromptDomain-Zähler falsch: {counts}')
+
+        pro_catalog = catalog_snapshot('PRO')
+        pro_tasks = [
+            task
+            for app in pro_catalog.get('applications') or []
+            for task in app.get('tasks') or []
+        ]
+        pro_ids = {task.get('id') for task in pro_tasks}
+        if (
+            pro_catalog.get('application_count') != 34
+            or pro_catalog.get('task_count') != 227
+            or len(pro_ids) != 227
+        ):
+            raise CommandError(
+                'Pro-Runtime-Katalog unvollständig: '
+                f"{pro_catalog.get('application_count')} Apps / "
+                f"{pro_catalog.get('task_count')} Tasks / "
+                f"{len(pro_ids)} eindeutige IDs"
+            )
+        missing_surface = set(FREE_SURFACE_IDS) - pro_ids
+        if missing_surface:
+            raise CommandError(
+                'Free→Pro-Parität verletzt; fehlende Aufgaben: '
+                + ', '.join(sorted(missing_surface))
+            )
 
         legacy_contracts = list(
             PromptLegacyContract.objects.filter(source='FREE_1_2_4').order_by('legacy_id')
@@ -119,4 +146,4 @@ class Command(BaseCommand):
         finally:
             account.delete()
 
-        self.stdout.write(self.style.SUCCESS('PROMPT RUNTIME VALIDATION OK: 34 apps / 194 tasks / 194 smoke tests / MCP / FAQ'))
+        self.stdout.write(self.style.SUCCESS('PROMPT RUNTIME VALIDATION OK: 34 apps / 194 PM20 + 33 Free-surface = 227 Pro tasks / 194 PM20 smoke tests / MCP / FAQ'))
