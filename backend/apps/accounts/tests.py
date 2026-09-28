@@ -229,6 +229,10 @@ class UnifiedLoginAndRegistrationFlowTests(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, 'Noch kein Konto? Konto erstellen')
         self.assertContains(response, reverse('accounts:password_reset'))
+        self.assertContains(response, 'login-card auth-login-card')
+        self.assertContains(response, 'class="auth-heading"')
+        self.assertContains(response, 'form auth-login-form')
+        self.assertContains(response, 'class="auth-field"', count=2)
 
     @patch('apps.accounts.views.queue_email')
     def test_company_registration_preserves_checkout_target_through_mfa_setup(self, queue_email_mock):
