@@ -866,6 +866,7 @@
   const announceV2Ready = () => {
     if (document.body.dataset.pmv2Ready === '1') return;
     document.body.dataset.pmv2Ready = '1';
+    window.__pmv2Reveal?.();
     window.dispatchEvent(new CustomEvent('pm-v2-ready',{detail:{edition}}));
   };
 
