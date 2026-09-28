@@ -53,6 +53,143 @@ def legal_public(request, doc_type):
     return render(request, 'legal_public.html', {'document': document})
 
 
+
+def contract_withdrawal(request):
+    from django.utils import timezone
+
+    from apps.core.security import check_rate
+    from apps.legal.forms import WithdrawalDeclarationForm
+    from apps.legal.models import ConsumerContractDeclaration
+    from apps.notifications.services import queue_email
+
+    if request.method == 'POST':
+        limited = check_rate(request, 'contract-withdrawal', 20, 3600)
+        if limited:
+            return limited
+
+    form = WithdrawalDeclarationForm(request.POST or None)
+    if request.method == 'POST' and form.is_valid():
+        declaration = ConsumerContractDeclaration.objects.create(
+            kind='withdrawal',
+            name=form.cleaned_data['name'].strip(),
+            email=form.cleaned_data['email'].strip().lower(),
+            contract_reference=form.cleaned_data['contract_reference'].strip(),
+            request_meta={'source': 'public_web'},
+        )
+        submitted = timezone.localtime(declaration.submitted_at).strftime('%d.%m.%Y %H:%M:%S %Z')
+        queue_email(
+            'withdrawal_received',
+            declaration.email,
+            {
+                'name': declaration.name,
+                'contract_reference': declaration.contract_reference,
+                'submitted_at': submitted,
+                'declaration_id': str(declaration.id),
+            },
+        )
+        return render(
+            request,
+            'legal_action_success.html',
+            {
+                'declaration': declaration,
+                'title': 'Widerruf eingegangen',
+                'message': 'Ihr Widerruf wurde elektronisch entgegengenommen.',
+            },
+        )
+
+    return render(
+        request,
+        'legal_action_form.html',
+        {
+            'form': form,
+            'page_title': 'Vertrag widerrufen',
+            'eyebrow': 'WIDERRUFSFUNKTION',
+            'intro': (
+                'Mit diesem Formular können Verbraucher einen über PromptMaster '
+                'geschlossenen Fernabsatzvertrag widerrufen.'
+            ),
+            'notice': (
+                'Nach dem Absenden erhalten Sie unverzüglich eine elektronische '
+                'Eingangsbestätigung an die angegebene E-Mail-Adresse.'
+            ),
+            'submit_label': 'Widerruf bestätigen',
+        },
+    )
+
+
+def contract_cancellation(request):
+    from django.utils import timezone
+
+    from apps.core.security import check_rate
+    from apps.legal.forms import CancellationDeclarationForm
+    from apps.legal.models import ConsumerContractDeclaration
+    from apps.notifications.services import queue_email
+
+    if request.method == 'POST':
+        limited = check_rate(request, 'contract-cancellation', 20, 3600)
+        if limited:
+            return limited
+
+    form = CancellationDeclarationForm(request.POST or None)
+    if request.method == 'POST' and form.is_valid():
+        declaration = ConsumerContractDeclaration.objects.create(
+            kind='cancellation',
+            cancellation_kind=form.cleaned_data['cancellation_kind'],
+            name=form.cleaned_data['name'].strip(),
+            email=form.cleaned_data['email'].strip().lower(),
+            contract_reference=form.cleaned_data['contract_reference'].strip(),
+            requested_end_date=form.cleaned_data.get('requested_end_date'),
+            reason=(form.cleaned_data.get('reason') or '').strip(),
+            request_meta={'source': 'public_web'},
+        )
+        submitted = timezone.localtime(declaration.submitted_at).strftime('%d.%m.%Y %H:%M:%S %Z')
+        requested_end = (
+            declaration.requested_end_date.strftime('%d.%m.%Y')
+            if declaration.requested_end_date
+            else 'zum frühestmöglichen Zeitpunkt'
+        )
+        queue_email(
+            'cancellation_received',
+            declaration.email,
+            {
+                'name': declaration.name,
+                'contract_reference': declaration.contract_reference,
+                'submitted_at': submitted,
+                'declaration_id': str(declaration.id),
+                'cancellation_kind': declaration.get_cancellation_kind_display(),
+                'requested_end_date': requested_end,
+                'reason': declaration.reason or '–',
+            },
+        )
+        return render(
+            request,
+            'legal_action_success.html',
+            {
+                'declaration': declaration,
+                'title': 'Kündigung eingegangen',
+                'message': 'Ihre Kündigung wurde elektronisch entgegengenommen.',
+            },
+        )
+
+    return render(
+        request,
+        'legal_action_form.html',
+        {
+            'form': form,
+            'page_title': 'Verträge hier kündigen',
+            'eyebrow': 'KÜNDIGUNGSFUNKTION',
+            'intro': (
+                'Hier können Verbraucher einen über PromptMaster geschlossenen '
+                'Laufzeitvertrag ordentlich oder außerordentlich kündigen.'
+            ),
+            'notice': (
+                'Wenn Sie keinen Beendigungszeitpunkt angeben, behandeln wir die '
+                'Kündigung als Erklärung zum frühestmöglichen Zeitpunkt.'
+            ),
+            'submit_label': 'jetzt kündigen',
+        },
+    )
+
 def checkout_csrf(request):
     """Issue a CSRF token for the static public checkout page."""
     if request.method != 'GET':
