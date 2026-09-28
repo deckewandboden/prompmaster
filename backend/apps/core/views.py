@@ -586,12 +586,12 @@ def public_catalog(request):
         'taxBasisPoints': tax_basis_points,
         'market': 'DE',
         'products': [
-            {'id': 'PROMPTMASTER_FREE', 'monthlyGrossCents': 0, 'termMonths': 0, 'active': bool(free)},
+            {'id': 'PROMPTMASTER_FREE', 'monthlyGrossCents': 0, 'annualGrossCents': 0, 'termDays': 0, 'active': bool(free)},
             {
                 'id': 'PROMPTMASTER_PRO',
                 'monthlyGrossCents': cents(monthly_gross),
                 'annualGrossCents': cents(annual_gross),
-                'termMonths': 12,
+                'termDays': int(pro.default_license_days) if pro else 0,
                 'active': bool(pro),
                 'purchasable': bool(pro and pro.purchasable),
             },
