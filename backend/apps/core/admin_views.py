@@ -1966,6 +1966,48 @@ def legal_declarations(request):
                 ('kind', 'Art', ConsumerContractDeclaration.KIND),
                 ('status', 'Status', ConsumerContractDeclaration.STATUS),
             ],
+            'detail_route': 'ns_admin:legal_declaration_detail',
+        },
+    )
+
+
+@staff_perm('legal.read')
+def legal_declaration_detail(request, pk):
+    declaration = get_object_or_404(ConsumerContractDeclaration, pk=pk)
+    can_write = has_perm(request.user, 'legal.write')
+    if request.method == 'POST':
+        if not can_write:
+            raise PermissionDenied
+        status = (request.POST.get('status') or '').strip()
+        allowed = {value for value, _label in ConsumerContractDeclaration.STATUS}
+        if status not in allowed:
+            messages.error(request, 'Ungültiger Bearbeitungsstatus.')
+            return redirect('ns_admin:legal_declaration_detail', pk=declaration.pk)
+        declaration.status = status
+        declaration.internal_notes = (request.POST.get('internal_notes') or '').strip()[:10000]
+        declaration.processed_at = (
+            timezone.now() if status in {'completed', 'rejected'} else None
+        )
+        declaration.save(
+            update_fields=['status', 'internal_notes', 'processed_at', 'updated_at']
+        )
+        write_audit(
+            request.user,
+            'legal.consumer_declaration_status',
+            declaration,
+            {'kind': declaration.kind, 'status': status},
+            request=request,
+        )
+        messages.success(request, 'Verbrauchererklärung aktualisiert.')
+        return redirect('ns_admin:legal_declaration_detail', pk=declaration.pk)
+
+    return render(
+        request,
+        'ns_admin/legal_declaration_detail.html',
+        {
+            'declaration': declaration,
+            'can_write': can_write,
+            'status_choices': ConsumerContractDeclaration.STATUS,
         },
     )
 
