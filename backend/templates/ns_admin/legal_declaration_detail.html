@@ -1,0 +1,46 @@
+{% extends 'ns_admin/base.html' %}{% block content %}
+<div class="page-head">
+  <div>
+    <h1>{{ declaration.get_kind_display }}</h1>
+    <div class="sub">{{ declaration.contract_reference }} · Eingang {{ declaration.submitted_at|date:'d.m.Y H:i:s' }}</div>
+  </div>
+  <div><a class="btn secondary" href="{% url 'ns_admin:legal_declarations' %}">← Zur Übersicht</a></div>
+</div>
+
+<div class="grid two">
+  <div class="card">
+    <h2>Erklärung</h2>
+    <div class="statusrow"><span>Status</span><strong>{{ declaration.get_status_display }}</strong></div>
+    {% if declaration.kind == 'cancellation' %}<div class="statusrow"><span>Kündigungsart</span><strong>{{ declaration.get_cancellation_kind_display }}</strong></div>{% endif %}
+    <div class="statusrow"><span>Name</span><strong>{{ declaration.name }}</strong></div>
+    <div class="statusrow"><span>E-Mail</span><strong>{{ declaration.email }}</strong></div>
+    <div class="statusrow"><span>Vertragsbezug</span><strong>{{ declaration.contract_reference }}</strong></div>
+    {% if declaration.requested_end_date %}<div class="statusrow"><span>Gewünschtes Ende</span><strong>{{ declaration.requested_end_date|date:'d.m.Y' }}</strong></div>{% endif %}
+    {% if declaration.reason %}<h3>Grund</h3><p>{{ declaration.reason|linebreaksbr }}</p>{% endif %}
+    <div class="statusrow"><span>Eingang</span><strong>{{ declaration.submitted_at|date:'d.m.Y H:i:s' }}</strong></div>
+    {% if declaration.processed_at %}<div class="statusrow"><span>Bearbeitet</span><strong>{{ declaration.processed_at|date:'d.m.Y H:i:s' }}</strong></div>{% endif %}
+    <div class="statusrow"><span>Vorgangs-ID</span><code>{{ declaration.id }}</code></div>
+  </div>
+
+  <div class="card">
+    <h2>Bearbeitung</h2>
+    {% if can_write %}
+    <form method="post" class="form">
+      {% csrf_token %}
+      <label>Status
+        <select name="status">
+          {% for value,label in status_choices %}<option value="{{ value }}" {% if declaration.status == value %}selected{% endif %}>{{ label }}</option>{% endfor %}
+        </select>
+      </label>
+      <label>Interne Notizen
+        <textarea name="internal_notes" rows="8">{{ declaration.internal_notes }}</textarea>
+      </label>
+      <button class="btn primary" type="submit">Status speichern</button>
+    </form>
+    {% else %}
+    <p class="muted">Sie haben Leserechte, aber keine Berechtigung zur Bearbeitung.</p>
+    {% if declaration.internal_notes %}<h3>Interne Notizen</h3><p>{{ declaration.internal_notes|linebreaksbr }}</p>{% endif %}
+    {% endif %}
+  </div>
+</div>
+{% endblock %}
