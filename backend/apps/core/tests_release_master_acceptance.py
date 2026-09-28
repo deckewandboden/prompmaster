@@ -240,7 +240,9 @@ class RegistrationPurchaseReleaseAcceptanceTests(TestCase):
                 'quantity': '1',
                 'accept_terms': 'on',
                 'accept_privacy': 'on',
+                'accept_license': 'on',
                 'accept_withdrawal': 'on',
+                'request_early_performance': 'on',
             },
         )
         self.assertEqual(response.status_code, 302)
