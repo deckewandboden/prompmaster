@@ -122,7 +122,7 @@ class DemoDataSeedTests(TestCase):
         self.assertEqual(first_counts['mail'], 4)
         private_two = SupportRequest.objects.get(subject='[DEMO] DEMO-P-2002 – Privatanfrage')
         self.assertEqual(private_two.status, 'in_progress')
-        self.assertIn('landet', private_two.message)
+        self.assertIn('lande ich', private_two.message)
         self.assertEqual(private_two.messages.count(), 3)
         self.assertEqual(
             list(private_two.messages.values_list('sender_type', 'visibility')),
