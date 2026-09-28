@@ -56,6 +56,12 @@ http://{$CADDY_DOMAIN} {
     }
 
     # Public marketing aliases for versioned server-side legal documents.
+    handle /impressum* {
+        redir * /legal/imprint/{?query} 302
+    }
+    handle /barrierefreiheit* {
+        redir * /legal/accessibility/{?query} 302
+    }
     handle /datenschutz* {
         redir * /legal/privacy/{?query} 302
     }
@@ -125,7 +131,7 @@ http://{$CADDY_DOMAIN} {
     # before the static marketing fallback so authentication/licensing can
     # never be bypassed by a stale HTML file in marketing/dist.
     @django {
-        path /auth /auth/* /free /free/* /free-old /free-old/* /pro /pro/* /pro-old /pro-old/* /portal/* /ns-admin /ns-admin/* /api /api/* /health/* /legal/* /vertrag-widerrufen /vertrag-widerrufen/* /vertraege-kuendigen /vertraege-kuendigen/*
+        path /auth /auth/* /free /free/* /free-old /free-old/* /pro /pro/* /pro-old /pro-old/* /portal/* /ns-admin /ns-admin/* /api /api/* /health/* /legal/* /vertrag-widerrufen /vertrag-widerrufen/* /vertraege-kuendigen /vertraege-kuendigen/* /vertrag-widerrufen /vertrag-widerrufen/* /vertraege-kuendigen /vertraege-kuendigen/*
     }
     handle @django {
         reverse_proxy promptmaster-web-internal:8000 {
