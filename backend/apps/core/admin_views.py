@@ -25,7 +25,7 @@ from apps.core.models import Lead
 from apps.devices.models import DeviceRegistration
 from apps.devices.services import revoke_device
 from apps.integrations.models import ServiceAccount
-from apps.legal.models import DeletionRequest, LegalAcceptance, LegalDocument, RetentionPolicy
+from apps.legal.models import ConsumerContractDeclaration, DeletionRequest, LegalAcceptance, LegalDocument, RetentionPolicy
 from apps.licenses.models import License, LicenseAssignmentLink, LicenseTerm, LicenseUpgradeRequest
 from apps.licenses.services import assign_license, block_license, release_license, unblock_license
 from apps.notifications.models import EmailMessage, EmailTemplate
@@ -1925,6 +1925,47 @@ def legal(request):
             'documents': LegalDocument.objects.order_by('doc_type', '-valid_from')[:20],
             'retention_count': RetentionPolicy.objects.filter(active=True).count(),
             'open_deletion_count': DeletionRequest.objects.filter(status__in=['open', 'processing']).count(),
+            'open_contract_declaration_count': ConsumerContractDeclaration.objects.filter(
+                status__in=['received', 'processing']
+            ).count(),
+        },
+    )
+
+
+@staff_perm('legal.read')
+def legal_declarations(request):
+    grid = DataGrid(
+        request,
+        ConsumerContractDeclaration.objects.all(),
+        search_fields=('name', 'email', 'contract_reference', 'reason'),
+        sort_fields={
+            'date': 'submitted_at',
+            'kind': 'kind',
+            'email': 'email',
+            'reference': 'contract_reference',
+            'status': 'status',
+        },
+        default_sort='-submitted_at',
+        filters={'kind': 'kind', 'status': 'status'},
+    ).build()
+    return render(
+        request,
+        'ns_admin/grid.html',
+        {
+            'title': 'Widerrufe & Kündigungen',
+            'grid': grid,
+            'columns': [
+                ('submitted_at', 'Eingang', 'date'),
+                ('kind', 'Art', 'kind'),
+                ('name', 'Name', None),
+                ('email', 'E-Mail', 'email'),
+                ('contract_reference', 'Vertragsbezug', 'reference'),
+                ('status', 'Status', 'status'),
+            ],
+            'filter_options': [
+                ('kind', 'Art', ConsumerContractDeclaration.KIND),
+                ('status', 'Status', ConsumerContractDeclaration.STATUS),
+            ],
         },
     )
 
