@@ -176,6 +176,60 @@ def _queue_after_commit(code, recipient, context, *, order=None):
     transaction.on_commit(send, robust=True)
 
 
+def _consumer_contract_confirmation_context(order, payment):
+    from apps.legal.models import LegalAcceptance
+
+    items = list(
+        order.items.select_related('product').order_by('created_at', 'id')
+    )
+    item_summary = '; '.join(
+        f'{item.quantity} × {item.product_name_snapshot or item.product.name}'
+        for item in items
+    ) or 'PromptMaster Pro'
+
+    durations = sorted({
+        int(item.product.default_license_days)
+        for item in items
+        if item.product_id
+    })
+    term = (
+        f'{durations[0]} Tage je Lizenz'
+        if len(durations) == 1
+        else 'gemäß den in der Bestellung ausgewiesenen Lizenzlaufzeiten'
+    )
+
+    accepted = (
+        LegalAcceptance.objects.filter(order=order)
+        .select_related('document')
+        .order_by('document__doc_type', 'document__version')
+    )
+    legal_documents = []
+    for acceptance in accepted:
+        document = acceptance.document
+        legal_documents.append(
+            f'{document.get_doc_type_display()} – Version {document.version}\n'
+            f'{document.content.strip()}'
+        )
+
+    snapshot = order.billing_snapshot or {}
+    return {
+        'order': order.order_number,
+        'contract_date': timezone.localtime(
+            payment.paid_at or timezone.now()
+        ).strftime('%d.%m.%Y %H:%M:%S %Z'),
+        'items': item_summary,
+        'amount': f'{payment.amount:.2f}',
+        'currency': payment.currency,
+        'term': term,
+        'early_performance': (
+            'ja'
+            if snapshot.get('early_performance_requested')
+            else 'nein'
+        ),
+        'legal_documents': '\n\n'.join(legal_documents),
+    }
+
+
 def _license_state_from_assignments(license_obj, now):
     if not license_obj.valid_until or license_obj.valid_until <= now:
         return 'expired'
@@ -267,6 +321,13 @@ def process_provider_state(payment_id, payload, *, chargebacks_payload=None):
             'amount': f'{payment.amount:.2f}',
             'currency': payment.currency,
         }, order=payment.order)
+        if payment.order.private_user_id:
+            _queue_after_commit(
+                'contract_confirmation',
+                recipient,
+                _consumer_contract_confirmation_context(payment.order, payment),
+                order=payment.order,
+            )
         account_user = _order_account_user(payment.order)
         if (
             (payment.order.billing_snapshot or {}).get('source') == 'public_checkout'
