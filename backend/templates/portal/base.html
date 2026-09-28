@@ -6,7 +6,7 @@
 {% block search_placeholder %}{% if current_membership and current_membership.role == 'admin' %}Benutzer, E-Mail oder Lizenz suchen …{% else %}Lizenz suchen …{% endif %}{% endblock %}
 {% block search_action %}{% url 'portal:search' %}{% endblock %}
 {% block user_meta %}{% if current_membership %}{{ current_membership.get_role_display }}{% else %}Privatkunde{% endif %}{% endblock %}
-{% block side_footer %}{% if current_membership %}{{ current_membership.company.name }}<br>{{ current_membership.get_role_display }}{% else %}PromptMaster Kundenportal{% endif %}{% endblock %}
+{% block side_footer %}{% if current_membership %}{{ current_membership.company.name }}<br>{{ current_membership.get_role_display }}{% else %}PromptMaster Kundenportal<br><a href="/vertrag-widerrufen/">Vertrag widerrufen</a><br><a href="/vertraege-kuendigen/">Verträge hier kündigen</a>{% endif %}{% endblock %}
 {% block home_url %}{% url 'portal:dashboard' %}{% endblock %}
 {% block nav %}
 <a class="{% nav_class request 'dashboard,search' %}" href="{% url 'portal:dashboard' %}"><span class="ico">⌂</span><span class="label">Dashboard</span></a>
