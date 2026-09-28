@@ -63,7 +63,7 @@ class PurchaseHandoffTests(TestCase):
             tax_rate=Decimal('19.00'),
             active=True,
         )
-        for doc_type in ('terms', 'privacy'):
+        for doc_type in ('terms', 'privacy', 'license'):
             LegalDocument.objects.create(
                 doc_type=doc_type,
                 version='checkout-handoff-v1',
@@ -109,6 +109,7 @@ class PurchaseHandoffTests(TestCase):
                 'quantity': '7',
                 'accept_terms': 'on',
                 'accept_privacy': 'on',
+                'accept_license': 'on',
             },
         )
         self.assertEqual(response.status_code, 302)
@@ -180,7 +181,7 @@ class PublicCheckoutFlowTests(TestCase):
                 tax_rate=Decimal('19.00'),
                 active=True,
             )
-        for doc_type in ('terms', 'privacy', 'withdrawal'):
+        for doc_type in ('terms', 'privacy', 'license', 'withdrawal'):
             LegalDocument.objects.create(
                 doc_type=doc_type,
                 version='public-checkout-v1',
@@ -209,6 +210,7 @@ class PublicCheckoutFlowTests(TestCase):
             'country': 'DE',
             'accept_terms': 'on',
             'accept_privacy': 'on',
+            'accept_license': 'on',
         }
 
     @staticmethod
@@ -231,7 +233,9 @@ class PublicCheckoutFlowTests(TestCase):
             'country': 'DE',
             'accept_terms': 'on',
             'accept_privacy': 'on',
+            'accept_license': 'on',
             'accept_withdrawal': 'on',
+            'request_early_performance': 'on',
         }
 
     @patch('apps.payments.mollie.MollieClient.create_payment')
@@ -278,7 +282,16 @@ class PublicCheckoutFlowTests(TestCase):
         )
         self.assertEqual(
             user.legalacceptance_set.filter(order=order).count(),
-            2,
+            4,
+        )
+        self.assertTrue(order.billing_snapshot['early_performance_requested'])
+        self.assertEqual(
+            set(order.billing_snapshot['legal_versions']),
+            {'terms', 'privacy', 'license', 'withdrawal'},
+        )
+        self.assertEqual(
+            set(order.billing_snapshot['legal_versions']),
+            {'terms', 'privacy', 'license'},
         )
         self.assertEqual(
             create_payment.call_args.kwargs['redirect_url'],
