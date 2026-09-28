@@ -4,9 +4,15 @@ from __future__ import annotations
 import json
 import re
 import subprocess
+import sys
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
+BACKEND = ROOT / 'backend'
+sys.path.insert(0, str(BACKEND))
+
+from apps.prompts.free_surface import FREE_SURFACE_IDS  # noqa: E402
+
 CATALOG = ROOT / 'backend/apps/prompts/data/pm20_golden_logic.json'
 BRIDGE = ROOT / 'product/runtime/pro_server_bridge.js'
 RUNTIME = ROOT / 'backend/private_assets/promptmaster_pro_runtime.html'
@@ -17,7 +23,14 @@ apps = catalog.get('APP') or {}
 tasks = [task for app in apps.values() for task in (app.get('tasks') or [])]
 ids = [str(task.get('id') or '') for task in tasks]
 if (len(apps), len(tasks), len(set(ids))) != (34, 194, 194):
-    raise SystemExit(f'RUNTIME CATALOG FAIL: expected 34/194/194, got {len(apps)}/{len(tasks)}/{len(set(ids))}')
+    raise SystemExit(f'RUNTIME CATALOG FAIL: expected PM20 source 34/194/194, got {len(apps)}/{len(tasks)}/{len(set(ids))}')
+if len(FREE_SURFACE_IDS) != 33:
+    raise SystemExit(f'RUNTIME CATALOG FAIL: expected 33 Free-surface compatibility tasks, got {len(FREE_SURFACE_IDS)}')
+if set(ids).intersection(FREE_SURFACE_IDS):
+    raise SystemExit('RUNTIME CATALOG FAIL: Free-surface compatibility IDs collide with PM20 IDs')
+EXPECTED_PRO_RUNTIME_TASKS = len(tasks) + len(FREE_SURFACE_IDS)
+if EXPECTED_PRO_RUNTIME_TASKS != 227:
+    raise SystemExit(f'RUNTIME CATALOG FAIL: expected 227 delivered Pro tasks, got {EXPECTED_PRO_RUNTIME_TASKS}')
 
 missing_contract = []
 for app_code, app in apps.items():
@@ -40,6 +53,7 @@ for token in (
     'clearObject(APP)',
     'clearObject(ACCESS_RULES)',
     'clearObject(TASK_ACCESS_RULES)',
+    'compatibilityKind',
 ):
     if token not in bridge:
         raise SystemExit(f'RUNTIME CATALOG FAIL: bridge token missing: {token}')
@@ -68,4 +82,4 @@ if 'hydrateCentralCatalog();' not in runtime:
 if runtime.count('/api/v1/prompts/?product=PRO') != 1:
     raise SystemExit('RUNTIME CATALOG FAIL: unexpected central catalog endpoint occurrence count')
 
-print('RUNTIME CATALOG OK: authoritative server catalog bridge + 34 apps / 194 tasks')
+print('RUNTIME CATALOG OK: 34 apps / 194 PM20 + 33 Free-surface inherited = 227 Pro tasks')
