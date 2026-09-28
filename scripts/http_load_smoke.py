@@ -58,7 +58,7 @@ def validate_once(path):
             and len(set(names)) == 34
             and pro.get('monthlyGrossCents') == 299
             and pro.get('annualGrossCents') == 3588
-            and pro.get('termMonths') == 12
+            and pro.get('termDays') == 365
             and pro.get('active') is True
             and pro.get('purchasable') is True
         )
