@@ -21,6 +21,7 @@ sys.path.insert(0, str(BACKEND))
 
 from apps.prompts.composer_core import PromptValidationError, compose_prompt  # noqa: E402
 from apps.prompts.free_legacy import FREE_RUNTIME_CONTRACTS, compose_free_legacy  # noqa: E402
+from apps.prompts.free_surface import FREE_PRO_PREVIEW_IDS, FREE_SURFACE_IDS  # noqa: E402
 
 DATA = BACKEND / 'apps' / 'prompts' / 'data' / 'pm20_golden_logic.json'
 FREE_DATA = BACKEND / 'apps' / 'prompts' / 'data' / 'free_legacy_tasks.json'
@@ -218,6 +219,49 @@ if set(legacy_ids) != set(FREE_RUNTIME_CONTRACTS):
         'Free runtime-contract IDs differ from preserved legacy IDs: '
         f'{sorted(set(legacy_ids) ^ set(FREE_RUNTIME_CONTRACTS))}'
     )
+
+
+free_html = FREE_GM.read_text(encoding='utf-8')
+free_app_start = free_html.find('const APP={')
+free_app_end = free_html.find('\n\nconst PRO_VISIBLE', free_app_start)
+if free_app_start < 0 or free_app_end < 0:
+    fail('Free Golden Master task surface could not be located')
+    free_surface_cards = []
+else:
+    free_app_block = free_html[free_app_start:free_app_end]
+    free_surface_cards = re.findall(
+        r"\['([^']+)','[^']*','[^']*','(free|pro)'",
+        free_app_block,
+    )
+
+visible_free_ids = {task_id for task_id, _tier in free_surface_cards}
+visible_actual_free_ids = {
+    task_id for task_id, tier in free_surface_cards if tier == 'free'
+}
+visible_pro_preview_ids = {
+    task_id for task_id, tier in free_surface_cards if tier == 'pro'
+}
+
+if len(free_surface_cards) != 33 or len(visible_free_ids) != 33:
+    fail(
+        'Free Golden Master surface must expose exactly 33 unique task cards, '
+        f'got {len(free_surface_cards)}/{len(visible_free_ids)}'
+    )
+if visible_actual_free_ids != set(legacy_ids):
+    fail(
+        'Visible actual-Free task IDs differ from persisted Free contracts: '
+        f'{sorted(visible_actual_free_ids ^ set(legacy_ids))}'
+    )
+if visible_pro_preview_ids != set(FREE_PRO_PREVIEW_IDS):
+    fail(
+        'Visible purple Pro-preview IDs differ from compatibility contracts: '
+        f'{sorted(visible_pro_preview_ids ^ set(FREE_PRO_PREVIEW_IDS))}'
+    )
+if visible_free_ids != set(FREE_SURFACE_IDS):
+    fail(
+        'Complete Free surface differs from Pro compatibility contract: '
+        f'{sorted(visible_free_ids ^ set(FREE_SURFACE_IDS))}'
+    )
 for legacy_id in legacy_ids:
     runtime = FREE_RUNTIME_CONTRACTS.get(legacy_id) or {}
     if not runtime.get('intent') or not runtime.get('audiences') or not runtime.get('formats') or not runtime.get('focus'):
@@ -344,4 +388,5 @@ if errors:
 print('PROMPT DOMAIN VALIDATION OK')
 print(f'PM20 catalog: {len(apps)} apps / {len(tasks)} tasks / {len(context_specs)} handcrafted context specs')
 print(f'Free legacy preservation + DB composer smoke: {len(legacy_ids)}/16 contracts')
-print('Composer smoke: 194/194 tasks composed successfully with no unresolved placeholders')
+print('Composer smoke: 194/194 PM20 tasks composed successfully with no unresolved placeholders')
+print('FREE→PRO SURFACE PARITY OK: 33/33 visible Free task cards contracted for Pro')
