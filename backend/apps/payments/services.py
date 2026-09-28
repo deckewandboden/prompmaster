@@ -198,20 +198,32 @@ def _consumer_contract_confirmation_context(order, payment):
         else 'gemäß den in der Bestellung ausgewiesenen Lizenzlaufzeiten'
     )
 
-    accepted = (
+    accepted = list(
         LegalAcceptance.objects.filter(order=order)
         .select_related('document')
         .order_by('document__doc_type', 'document__version')
     )
     legal_documents = []
+    early_performance_from_evidence = False
     for acceptance in accepted:
         document = acceptance.document
         legal_documents.append(
             f'{document.get_doc_type_display()} – Version {document.version}\n'
             f'{document.content.strip()}'
         )
+        if (
+            document.doc_type == 'withdrawal'
+            and (acceptance.evidence or {}).get('early_performance_requested')
+        ):
+            early_performance_from_evidence = True
 
     snapshot = order.billing_snapshot or {}
+    early_performance_requested = bool(
+        snapshot.get(
+            'early_performance_requested',
+            early_performance_from_evidence,
+        )
+    )
     return {
         'order': order.order_number,
         'contract_date': timezone.localtime(
@@ -222,9 +234,7 @@ def _consumer_contract_confirmation_context(order, payment):
         'currency': payment.currency,
         'term': term,
         'early_performance': (
-            'ja'
-            if snapshot.get('early_performance_requested')
-            else 'nein'
+            'ja' if early_performance_requested else 'nein'
         ),
         'legal_documents': '\n\n'.join(legal_documents),
     }
