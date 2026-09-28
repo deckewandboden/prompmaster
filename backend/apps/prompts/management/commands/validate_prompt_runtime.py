@@ -166,7 +166,6 @@ class Command(BaseCommand):
                         raise CommandError(
                             f'Free→Pro-Kompositionsvertrag fehlt: {task_id}'
                         )
-                    runtime = (contract.payload or {}).get('runtime_contract') or {}
                     payload['primary'] = (
                         f'Runtime-Validator {task_id}: Primärinhalt'
                     )
