@@ -2022,20 +2022,25 @@ def run_backend_ui_smoke(browser, fixture=None) -> None:
         demo_credentials = fixture['demo_credentials']
         demo_login_expectations = {}
         for email, meta in demo_credentials.items():
-            if email.startswith('demo.superadmin') or email.startswith('demo.support') or email.startswith('demo.ops') or email.startswith('demo.prompts'):
+            label = meta.get('label', '')
+            note = meta.get('note', '')
+            if email.startswith(('demo.superadmin', 'demo.support', 'demo.ops', 'demo.prompts')):
                 demo_login_expectations[email] = ('mfa', '/ns-admin/')
-            elif '.admin@promptmaster.invalid' in email:
+            elif '2FA-Einrichtung' in note:
+                # Company admins now use realistic per-person addresses rather
+                # than the retired *.admin@... convention.
                 demo_login_expectations[email] = ('mfa', '/portal/dashboard/')
-            elif email.startswith('demo.privat1@') or email.startswith('demo.privat2@'):
-                demo_login_expectations[email] = ('password', '/pro/')
-            elif email.startswith('demo.privat3@'):
-                demo_login_expectations[email] = ('password', '/portal/dashboard/')
+            elif 'Privatkunde' in label:
+                demo_login_expectations[email] = (
+                    'password',
+                    '/portal/dashboard/' if 'abgelaufene PRO-Lizenz' in note else '/pro/',
+                )
             else:
                 # Seeded company users with an assigned seat launch Pro; the
                 # last login user of each company is intentionally unlicensed.
                 demo_login_expectations[email] = (
                     'password',
-                    '/portal/dashboard/' if 'ohne PRO-Lizenz' in meta['note'] else '/pro/',
+                    '/portal/dashboard/' if 'ohne PRO-Lizenz' in note else '/pro/',
                 )
 
         if len(demo_login_expectations) != 26:
