@@ -11,8 +11,8 @@ class WithdrawalDeclarationForm(forms.Form):
     )
     contract_reference = forms.CharField(
         max_length=160,
-        label='Vertrag / Bestellung / Kundennummer',
-        help_text='Zum Beispiel Bestellnummer oder Kundennummer.',
+        label='Bestellnummer',
+        help_text='Die Bestellnummer finden Sie in Ihrer Bestell- bzw. Zahlungsbestätigung.',
     )
 
 
