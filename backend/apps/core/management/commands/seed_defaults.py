@@ -184,6 +184,14 @@ class Command(BaseCommand):
                 'Neue PromptMaster-Supportanfrage',
                 'Kategorie: {category}\nKunde: {customer}\nE-Mail: {email}\nLizenz: {license}\nBetreff: {subject}\n\n{message}',
             ),
+            'withdrawal_received': (
+                'PromptMaster Widerruf eingegangen',
+                'Hallo {name},\n\nIhr Widerruf zu {contract_reference} ist am {submitted_at} bei uns eingegangen.\nVorgangs-ID: {declaration_id}\n\nDiese E-Mail bestätigt ausschließlich den elektronischen Eingang Ihrer Erklärung.',
+            ),
+            'cancellation_received': (
+                'PromptMaster Kündigung eingegangen',
+                'Hallo {name},\n\nIhre {cancellation_kind} zu {contract_reference} ist am {submitted_at} bei uns eingegangen.\nGewünschter Beendigungszeitpunkt: {requested_end_date}\nGrund: {reason}\nVorgangs-ID: {declaration_id}\n\nDiese E-Mail bestätigt ausschließlich den elektronischen Eingang Ihrer Erklärung.',
+            ),
         }
         for code, (subject, body) in templates.items():
             EmailTemplate.objects.update_or_create(
