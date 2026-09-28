@@ -17,9 +17,29 @@ from .services import active_product_assignment, assignment_expiry_context, has_
 
 logger = logging.getLogger(__name__)
 
-V2_ASSET_REV = b'20260925-mobile17'
+V2_ASSET_REV = b'20260928-no-legacy-flash1'
 V2_STYLE = b'<link rel="stylesheet" href="/static/css/promptmaster_v2.20260922.css?v=' + V2_ASSET_REV + b'">'
 V2_SCRIPT = b'<script src="/static/js/promptmaster_ui_v2.20260922.js?v=' + V2_ASSET_REV + b'" defer></script>'
+V2_BOOT = (
+    b'<style id="pmv2-boot-style">'
+    b'html.pmv2-booting{background:#06192c!important;}'
+    b'html.pmv2-booting body{visibility:hidden!important;}'
+    b'html.pmv2-booting::before{content:"PROMPTMASTER";position:fixed;inset:0;'
+    b'z-index:2147483647;display:grid;place-items:center;background:#06192c;'
+    b'color:#fff;font:800 18px/1.2 Inter,Segoe UI,Arial,sans-serif;'
+    b'letter-spacing:.08em;}'
+    b'</style>'
+    b'<script>(function(){var r=document.documentElement;'
+    b'r.classList.add("pmv2-booting");'
+    b'window.__pmv2Reveal=function(){r.classList.remove("pmv2-booting");'
+    b'var s=document.getElementById("pmv2-boot-style");if(s)s.remove();};'
+    b'window.setTimeout(function(){if(!r.classList.contains("pmv2-booting"))return;'
+    b'if(document.body){document.body.innerHTML='
+    b'"<main style=\\\"max-width:720px;margin:12vh auto;padding:32px;font-family:Segoe UI,Arial,sans-serif\\\">'
+    b'<h1>PromptMaster konnte nicht geladen werden.</h1>'
+    b'<p>Bitte laden Sie die Seite neu.</p></main>";}'
+    b'window.__pmv2Reveal();},15000);})();</script>'
+)
 
 
 def _inject_v2_ui(data: bytes) -> bytes:
@@ -41,7 +61,7 @@ def _inject_v2_ui(data: bytes) -> bytes:
     data = data.replace(remote_logo, transparent_pixel)
     if data.count(head_marker) != 1 or data.count(body_marker) != 1:
         raise GoldenMasterIntegrityError('PromptMaster V2 injection markers are not unique.')
-    data = data.replace(head_marker, V2_STYLE + head_marker, 1)
+    data = data.replace(head_marker, V2_BOOT + V2_STYLE + head_marker, 1)
     data = data.replace(body_marker, V2_SCRIPT + body_marker, 1)
     return data
 
