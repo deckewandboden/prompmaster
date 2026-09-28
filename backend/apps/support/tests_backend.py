@@ -228,6 +228,13 @@ class NetstyleSupportBackendTests(TestCase):
         )
         SupportMessage.objects.create(
             support_request=self.support_request,
+            author_user=self.customer,
+            sender_type='customer',
+            visibility='customer',
+            body='Kundenrückfrage im Verlauf.',
+        )
+        SupportMessage.objects.create(
+            support_request=self.support_request,
             author_user=self.superadmin,
             sender_type='staff',
             visibility='internal',
@@ -242,6 +249,11 @@ class NetstyleSupportBackendTests(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, 'Beim Start erscheint eine Fehlermeldung.')
         self.assertContains(response, 'Kundenantwort im Verlauf.')
+        self.assertContains(response, 'Kundenrückfrage im Verlauf.')
+        self.assertContains(response, 'Kundenrückfrage')
         self.assertContains(response, 'Interne Notiz im Verlauf.')
         self.assertContains(response, 'Antwort / interne Notiz')
         self.assertContains(response, 'Nachrichtenverlauf')
+        html = response.content.decode(response.charset or 'utf-8')
+        self.assertLess(html.index('Nachrichtenverlauf'), html.index('Antwort / interne Notiz'))
+        self.assertLess(html.index('Antwort / interne Notiz'), html.index('Anfragedaten'))
