@@ -41,7 +41,7 @@ class PublicMarketingCatalogTests(TestCase):
         pro = next(p for p in payload['products'] if p['id'] == 'PROMPTMASTER_PRO')
         self.assertEqual(pro['monthlyGrossCents'], 299)
         self.assertEqual(pro['annualGrossCents'], 3588)
-        self.assertEqual(pro['termMonths'], 12)
+        self.assertEqual(pro['termDays'], 365)
 
     def test_public_catalog_disables_checkout_without_current_pro_price(self):
         ProductPrice.objects.filter(product=self.pro, price_type='new').update(active=False)
