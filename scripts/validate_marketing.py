@@ -23,8 +23,13 @@ catalog = json.loads((MARKETING / 'public/catalog.json').read_text(encoding='utf
 if catalog.get('priceBasis') != 'gross' or catalog.get('market') != 'DE':
     raise SystemExit('MARKETING VALIDATION FAIL: static fallback catalog contract drift')
 pro = next((p for p in catalog.get('products', []) if p.get('id') == 'PROMPTMASTER_PRO'), None)
-if not pro or pro.get('monthlyGrossCents') != 299 or pro.get('termMonths') != 12:
-    raise SystemExit('MARKETING VALIDATION FAIL: fallback Pro price drift')
+if (
+    not pro
+    or pro.get('monthlyGrossCents') != 299
+    or pro.get('annualGrossCents') != 3588
+    or pro.get('termDays') != 365
+):
+    raise SystemExit('MARKETING VALIDATION FAIL: fallback Pro price/term drift')
 
 source = (MARKETING / 'src/content.js').read_text(encoding='utf-8')
 index = (MARKETING / 'index.html').read_text(encoding='utf-8')
