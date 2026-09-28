@@ -18,8 +18,11 @@ class Command(BaseCommand):
     def add_arguments(self, parser):
         parser.add_argument(
             '--vat-id',
-            default='DE815319970',
-            help='Umsatzsteuer-Identifikationsnummer für das Impressum.',
+            required=True,
+            help=(
+                'Intern bestätigte Umsatzsteuer-Identifikationsnummer für das Impressum. '
+                'Sie wird absichtlich nicht aus Drittverzeichnissen übernommen.'
+            ),
         )
         parser.add_argument(
             '--consumer-dispute',
@@ -397,7 +400,12 @@ E-Mail: info@netstyle.de
 Bitte beschreiben Sie möglichst genau, welche Seite oder Funktion betroffen ist und welche Unterstützung Sie benötigen.
 
 8. Zuständige Marktüberwachungsbehörde
-Für die Marktüberwachung nach dem BFSG ist die gemeinsame Marktüberwachungsstelle der Länder für die Barrierefreiheit von Produkten und Dienstleistungen (MLBF) zuständig. Aktuelle Kontaktdaten und Beschwerdemöglichkeiten veröffentlicht die MLBF sowie die Bundesfachstelle Barrierefreiheit.
+Für die Marktüberwachung nach dem BFSG ist die Marktüberwachungsstelle der Länder für die Barrierefreiheit von Produkten und Dienstleistungen (MLBF AöR) zuständig:
+
+Carl-Miller-Straße 6
+39112 Magdeburg
+Telefon: +49 391 289 230 23
+E-Mail: kontakt@mlbf-barrierefrei.de
 
 9. Erstellung und Überprüfung
 Erstellt am 28.09.2026. Die Angaben werden bei wesentlichen Änderungen an PromptMaster oder den gesetzlichen Anforderungen überprüft und aktualisiert.
