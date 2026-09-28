@@ -54,6 +54,44 @@ def legal_public(request, doc_type):
 
 
 
+
+def _resolve_consumer_contract_end(email, order_number):
+    """Resolve a contract end date without exposing contract existence publicly."""
+    from django.db.models import Q
+    from apps.licenses.models import LicenseTerm
+    from apps.orders.models import Order
+
+    email = (email or '').strip().lower()
+    order_number = (order_number or '').strip()
+    if not email or not order_number:
+        return None
+
+    order = (
+        Order.objects.filter(order_number__iexact=order_number)
+        .filter(
+            Q(private_user__email__iexact=email)
+            | Q(
+                company__memberships__user__email__iexact=email,
+                company__memberships__active=True,
+            )
+        )
+        .distinct()
+        .first()
+    )
+    if not order:
+        return None
+
+    latest = (
+        LicenseTerm.objects.filter(
+            order_item__order=order,
+            status='active',
+        )
+        .order_by('-valid_until')
+        .values_list('valid_until', flat=True)
+        .first()
+    )
+    return latest.date() if latest else None
+
 def contract_withdrawal(request):
     from django.utils import timezone
 
@@ -132,13 +170,21 @@ def contract_cancellation(request):
 
     form = CancellationDeclarationForm(request.POST or None)
     if request.method == 'POST' and form.is_valid():
+        email = form.cleaned_data['email'].strip().lower()
+        contract_reference = form.cleaned_data['contract_reference'].strip()
+        requested_end_date = form.cleaned_data.get('requested_end_date')
+        if requested_end_date is None:
+            requested_end_date = _resolve_consumer_contract_end(
+                email,
+                contract_reference,
+            )
         declaration = ConsumerContractDeclaration.objects.create(
             kind='cancellation',
             cancellation_kind=form.cleaned_data['cancellation_kind'],
             name=form.cleaned_data['name'].strip(),
-            email=form.cleaned_data['email'].strip().lower(),
-            contract_reference=form.cleaned_data['contract_reference'].strip(),
-            requested_end_date=form.cleaned_data.get('requested_end_date'),
+            email=email,
+            contract_reference=contract_reference,
+            requested_end_date=requested_end_date,
             reason=(form.cleaned_data.get('reason') or '').strip(),
             request_meta={'source': 'public_web'},
         )
