@@ -102,9 +102,9 @@ class ConsumerContractDeclaration(TimeStampedModel):
     class Meta:
         ordering = ['-submitted_at']
         indexes = [
-            models.Index(fields=['kind', '-submitted_at']),
-            models.Index(fields=['email', '-submitted_at']),
-            models.Index(fields=['status', '-submitted_at']),
+            models.Index(fields=['kind', '-submitted_at'], name='legal_decl_kind_sub_idx'),
+            models.Index(fields=['email', '-submitted_at'], name='legal_decl_email_sub_idx'),
+            models.Index(fields=['status', '-submitted_at'], name='legal_decl_status_sub_idx'),
         ]
 
     def __str__(self):
