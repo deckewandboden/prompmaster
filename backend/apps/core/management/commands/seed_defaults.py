@@ -203,14 +203,7 @@ class Command(BaseCommand):
                 'Vorgangs-ID: {declaration_id}\n\n'
                 'Diese Nachricht dokumentiert den elektronischen Eingang Ihrer Erklärung.',
             ),
-            'withdrawal_received': (
-                'PromptMaster Widerruf eingegangen',
-                'Hallo {name},\n\nIhr Widerruf zu {contract_reference} ist am {submitted_at} bei uns eingegangen.\nVorgangs-ID: {declaration_id}\n\nDiese E-Mail bestätigt ausschließlich den elektronischen Eingang Ihrer Erklärung.',
-            ),
-            'cancellation_received': (
-                'PromptMaster Kündigung eingegangen',
-                'Hallo {name},\n\nIhre {cancellation_kind} zu {contract_reference} ist am {submitted_at} bei uns eingegangen.\nGewünschter Beendigungszeitpunkt: {requested_end_date}\nGrund: {reason}\nVorgangs-ID: {declaration_id}\n\nDiese E-Mail bestätigt ausschließlich den elektronischen Eingang Ihrer Erklärung.',
-            ),
+
         }
         for code, (subject, body) in templates.items():
             EmailTemplate.objects.update_or_create(
