@@ -129,7 +129,7 @@ class ConsumerContractFunctionTests(TestCase):
         )
         self.assertEqual(response.status_code, 200)
         self.assertEqual(ConsumerContractDeclaration.objects.count(), 0)
-        self.assertContains(response, 'Kündigungsgrund ist erforderlich')
+        self.assertContains(response, 'Bei einer außerordentlichen Kündigung ist der Kündigungsgrund erforderlich.')
 
     def test_cancellation_confirmation_is_recorded(self):
         with patch('apps.notifications.services.queue_email') as queue:
@@ -161,8 +161,12 @@ class ConsumerContractFunctionTests(TestCase):
             password='Legal-Admin-Password-2026!',
             first_name='Legal',
             last_name='Admin',
+            two_factor_required=False,
         )
         self.client.force_login(admin)
+        session = self.client.session
+        session['security_version'] = admin.security_version
+        session.save()
 
         list_response = self.client.get('/ns-admin/legal/declarations/')
         self.assertEqual(list_response.status_code, 200)
