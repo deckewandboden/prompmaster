@@ -121,7 +121,8 @@ export const checkoutPage=(quantity=1)=>`
         <p class="vat-note">Alle Beträge inklusive gesetzlicher MwSt.</p>
         <div class="checkout-trust">
           <span>✓ 365 Tage Laufzeit je Lizenz</span>
-          <span>✓ Sichere Zahlung über Mollie</span>
+          <span>✓ Digitale Bereitstellung · keine Versandkosten</span>
+          <span>✓ Zahlung über Mollie; verfügbare Zahlungsmittel werden dort vor Abschluss angezeigt</span>
           <span>✓ Aktivierung nach bestätigter Zahlung</span>
         </div>
       </div>
