@@ -91,6 +91,7 @@ urlpatterns = [
     path('legal/deletions/<uuid:pk>/reject/', v.deletion_request_reject, name='deletion_request_reject'),
     path('support/', v.support_requests, name='support_requests'),
     path('support/<uuid:pk>/', v.support_request_detail, name='support_request_detail'),
+    path('support/<uuid:pk>/reply/', v.support_request_reply, name='support_request_reply'),
     path('support/<uuid:pk>/status/', v.support_request_status, name='support_request_status'),
     path('audit/', v.audit, name='audit'),
     path('users/', v.roles, name='users'),
