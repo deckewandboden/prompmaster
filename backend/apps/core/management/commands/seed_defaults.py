@@ -148,6 +148,20 @@ class Command(BaseCommand):
                 'PromptMaster-Zahlung bestätigt',
                 'Ihre Zahlung für Bestellung {order} über {amount} {currency} wurde bestätigt.',
             ),
+            'contract_confirmation': (
+                'PromptMaster – Vertragsbestätigung {order}',
+                'Ihre Vertragsbestätigung für PromptMaster Pro\n\n'
+                'Anbieter: netstyle Informationstechnik GmbH, Am Bühl 2, 57223 Kreuztal\n'
+                'Bestellung: {order}\n'
+                'Vertragsdatum / Zahlungsbestätigung: {contract_date}\n'
+                'Leistungsumfang: {items}\n'
+                'Gesamtpreis: {amount} {currency}\n'
+                'Laufzeit: {term}\n'
+                'Automatische Verlängerung: nein\n'
+                'Vorzeitiger Leistungsbeginn verlangt: {early_performance}\n\n'
+                'Bei Vertragsschluss einbezogene Unterlagen:\n\n{legal_documents}\n\n'
+                'Diese E-Mail dient als Vertragsbestätigung auf einem dauerhaften Datenträger.',
+            ),
             'payment_failed': (
                 'PromptMaster-Zahlung nicht erfolgreich',
                 'Die Zahlung für Bestellung {order} konnte nicht erfolgreich abgeschlossen werden. Status: {status}.',
