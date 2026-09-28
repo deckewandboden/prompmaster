@@ -304,3 +304,29 @@ a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,te
 @media(max-width:700px){
   .auth-login-card .auth-login-actions .btn{justify-self:stretch;width:100%}
 }
+
+
+/* Netstyle support conversation backend */
+.support-layout{grid-template-columns:minmax(0,1.45fr) minmax(320px,.55fr);align-items:start}
+.support-side{display:grid;gap:14px;min-width:0}
+.support-card-head{margin-bottom:8px;align-items:center}
+.support-thread{display:grid;gap:12px}
+.support-message{border:1px solid var(--line);border-radius:13px;padding:14px;background:#fff;min-width:0}
+.support-message-customer{border-left:4px solid var(--blue);background:#f8fbff}
+.support-message-staff{border-left:4px solid var(--purple);background:#fbf9ff}
+.support-message-internal{border-left:4px solid var(--yellow);background:#fff9eb}
+.support-message-head{display:flex;justify-content:space-between;gap:12px;align-items:flex-start}
+.support-message-head>div{display:flex;align-items:center;gap:8px;flex-wrap:wrap;min-width:0}
+.support-message-head time{font-size:11px;color:var(--muted);white-space:nowrap}
+.support-message-meta{margin-top:5px;color:var(--muted);font-size:11px;overflow-wrap:anywhere}
+.support-message-body{margin-top:12px;line-height:1.6;white-space:normal;overflow-wrap:anywhere}
+.support-empty{padding:20px 12px}
+.support-reply-form textarea{min-height:150px}
+.support-reply-hint{margin:0;line-height:1.5}
+@media(max-width:1100px){
+  .support-layout{grid-template-columns:1fr}
+}
+@media(max-width:700px){
+  .support-message-head{display:grid;gap:5px}
+  .support-message-head time{white-space:normal}
+}
