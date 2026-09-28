@@ -225,3 +225,13 @@ test('static compatibility pages no longer claim product is unavailable',()=>{
   assert.match(main,/\/portal\/licenses\/buy\//);
   assert.match(main,/\/auth\/login\//);
 });
+
+test('public Anmelden links go directly to neutral auth login, never Pro',()=>{
+  const index=read('index.html');
+  const content=read('src/content.js');
+  assert.match(index,/class="login-link"[^>]*>Anmelden<\/a>/);
+  assert.match(index,/href="\/auth\/login\/" class="login-link"/);
+  assert.match(content,/href="\/auth\/login\/">Anmelden<\/a>/);
+  assert.doesNotMatch(index,/href="\/pro\/" class="login-link"/);
+  assert.doesNotMatch(index,/href="\/login\/" class="login-link"/);
+});
