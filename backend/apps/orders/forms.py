@@ -8,32 +8,46 @@ class PurchaseForm(forms.Form):
     quantity = forms.IntegerField(min_value=1, max_value=MAX_PURCHASE_QUANTITY, initial=1, label='Anzahl Lizenzen')
     accept_terms = forms.BooleanField(label='AGB akzeptieren')
     accept_privacy = forms.BooleanField(label='Datenschutzhinweise zur Kenntnis genommen')
+    accept_license = forms.BooleanField(label='Lizenzbedingungen akzeptieren')
     accept_withdrawal = forms.BooleanField(
         required=False,
         label='Widerrufsinformation zur Kenntnis genommen',
+    )
+    request_early_performance = forms.BooleanField(
+        required=False,
+        label='Leistungsbeginn vor Ablauf der Widerrufsfrist ausdrücklich verlangt',
     )
 
     def __init__(self, *args, require_withdrawal=False, **kwargs):
         super().__init__(*args, **kwargs)
         self.require_withdrawal = require_withdrawal
         self.fields['accept_withdrawal'].required = require_withdrawal
+        self.fields['request_early_performance'].required = require_withdrawal
         if not require_withdrawal:
             self.fields.pop('accept_withdrawal')
+            self.fields.pop('request_early_performance')
 
 
 class RenewalForm(forms.Form):
     accept_terms = forms.BooleanField(label='AGB akzeptieren')
     accept_privacy = forms.BooleanField(label='Datenschutzhinweise zur Kenntnis genommen')
+    accept_license = forms.BooleanField(label='Lizenzbedingungen akzeptieren')
     accept_withdrawal = forms.BooleanField(
         required=False,
         label='Widerrufsinformation zur Kenntnis genommen',
+    )
+    request_early_performance = forms.BooleanField(
+        required=False,
+        label='Leistungsbeginn vor Ablauf der Widerrufsfrist ausdrücklich verlangt',
     )
 
     def __init__(self, *args, require_withdrawal=False, **kwargs):
         super().__init__(*args, **kwargs)
         self.fields['accept_withdrawal'].required = require_withdrawal
+        self.fields['request_early_performance'].required = require_withdrawal
         if not require_withdrawal:
             self.fields.pop('accept_withdrawal')
+            self.fields.pop('request_early_performance')
 
 class PublicCheckoutForm(forms.Form):
     CUSTOMER_TYPES = (
@@ -62,7 +76,9 @@ class PublicCheckoutForm(forms.Form):
     country = forms.ChoiceField(choices=(('DE', 'Deutschland'),))
     accept_terms = forms.BooleanField()
     accept_privacy = forms.BooleanField()
+    accept_license = forms.BooleanField()
     accept_withdrawal = forms.BooleanField(required=False)
+    request_early_performance = forms.BooleanField(required=False)
 
     def clean(self):
         cleaned = super().clean()
@@ -92,6 +108,11 @@ class PublicCheckoutForm(forms.Form):
                 self.add_error(
                     'accept_withdrawal',
                     'Bitte bestätigen Sie die Widerrufsbelehrung.',
+                )
+            if not cleaned.get('request_early_performance'):
+                self.add_error(
+                    'request_early_performance',
+                    'Bitte bestätigen Sie den gewünschten sofortigen Leistungsbeginn.',
                 )
         return cleaned
 
