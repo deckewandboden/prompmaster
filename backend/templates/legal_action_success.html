@@ -1,0 +1,24 @@
+{% extends 'base.html' %}{% load static %}{% block title %}Bestätigung | PromptMaster{% endblock %}{% block body %}
+<div class="legal-page">
+  <div class="legal-page-head">
+    <a href="/" aria-label="PromptMaster Startseite"><img src="{% static 'brand/promptmaster-logo-hq.png' %}" alt="PromptMaster"></a>
+  </div>
+  <article class="card legal-document">
+    <h1>{{ title }}</h1>
+    <p>{{ message }}</p>
+    <dl>
+      <dt>Art</dt><dd>{{ declaration.get_kind_display }}</dd>
+      {% if declaration.kind == 'cancellation' %}<dt>Kündigungsart</dt><dd>{{ declaration.get_cancellation_kind_display }}</dd>{% endif %}
+      <dt>Name</dt><dd>{{ declaration.name }}</dd>
+      <dt>E-Mail</dt><dd>{{ declaration.email }}</dd>
+      <dt>Vertragsbezug</dt><dd>{{ declaration.contract_reference }}</dd>
+      {% if declaration.requested_end_date %}<dt>Gewünschter Beendigungszeitpunkt</dt><dd>{{ declaration.requested_end_date|date:'d.m.Y' }}</dd>{% endif %}
+      {% if declaration.reason %}<dt>Grund</dt><dd>{{ declaration.reason|linebreaksbr }}</dd>{% endif %}
+      <dt>Eingang</dt><dd>{{ declaration.submitted_at|date:'d.m.Y H:i:s' }}</dd>
+      <dt>Vorgangs-ID</dt><dd>{{ declaration.id }}</dd>
+    </dl>
+    <p class="muted">Eine elektronische Eingangsbestätigung wird an die angegebene E-Mail-Adresse versendet. Diese Seite kann zusätzlich gespeichert oder ausgedruckt werden.</p>
+    <p><a href="/">Zur PromptMaster-Startseite</a></p>
+  </article>
+</div>
+{% endblock %}
