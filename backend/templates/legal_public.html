@@ -1,4 +1,4 @@
-{% extends 'base.html' %}{% load static %}{% block body %}
+{% extends 'base.html' %}{% load static %}{% block title %}{{ document.get_doc_type_display }} | PromptMaster{% endblock %}{% block body %}
 <div class="legal-page">
   <div class="legal-page-head">
     <a href="/" aria-label="PromptMaster Startseite"><img src="{% static 'brand/promptmaster-logo-hq.png' %}" alt="PromptMaster"></a>
@@ -9,17 +9,17 @@
     <div class="legal-content">{{ document.content|linebreaks }}</div>
     <hr>
     <nav aria-label="Rechtliche Informationen">
-      <a href="/legal/imprint/">Impressum</a> ·
-      <a href="/legal/privacy/">Datenschutz</a> ·
-      <a href="/legal/terms/">AGB</a> ·
-      <a href="/legal/license/">Lizenzbedingungen</a> ·
-      <a href="/legal/withdrawal/">Widerrufsbelehrung</a> ·
-      <a href="/legal/accessibility/">Barrierefreiheit</a>
+      <p>
+        <a href="/impressum/">Impressum</a> ·
+        <a href="/datenschutz/">Datenschutz</a> ·
+        <a href="/agb/">AGB</a> ·
+        <a href="/lizenzbedingungen/">Lizenzbedingungen</a> ·
+        <a href="/widerruf/">Widerrufsbelehrung</a> ·
+        <a href="/barrierefreiheit/">Barrierefreiheit</a>
+      </p>
+      <p><a href="/vertrag-widerrufen/">Vertrag widerrufen</a> · <a href="/vertraege-kuendigen/">Verträge hier kündigen</a></p>
     </nav>
-    <p>
-      <a class="btn secondary" href="/vertrag-widerrufen/">Vertrag widerrufen</a>
-      <a class="btn secondary" href="/vertraege-kuendigen/">Verträge hier kündigen</a>
-    </p>
+    <p><a href="/">← Zur PromptMaster-Startseite</a></p>
   </article>
 </div>
 {% endblock %}
