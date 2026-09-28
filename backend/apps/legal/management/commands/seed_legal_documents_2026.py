@@ -18,7 +18,7 @@ class Command(BaseCommand):
     def add_arguments(self, parser):
         parser.add_argument(
             '--vat-id',
-            default='DE222271246',
+            default='DE815319970',
             help='Umsatzsteuer-Identifikationsnummer für das Impressum.',
         )
         parser.add_argument(
