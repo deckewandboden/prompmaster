@@ -199,7 +199,7 @@ class Command(BaseCommand):
                 'Kategorie: {category}\nKunde: {customer}\nE-Mail: {email}\nLizenz: {license}\nBetreff: {subject}\n\n{message}',
             ),
             'support_reply': (
-                'Antwort auf Ihre PromptMaster-Anfrage: {subject}',
+                'PromptMaster: {subject}',
                 'Guten Tag,\n\n'
                 'zu Ihrer PromptMaster-Anfrage "{subject}" gibt es eine neue Antwort:\n\n'
                 '{reply}\n\n'
