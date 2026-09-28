@@ -35,7 +35,7 @@ def add_staff_message(
 
     with transaction.atomic():
         locked = (
-            SupportRequest.objects.select_for_update()
+            SupportRequest.objects.select_for_update(of=('self',))
             .select_related('user', 'company')
             .get(pk=support_request.pk)
         )
