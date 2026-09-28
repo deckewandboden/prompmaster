@@ -14,9 +14,20 @@ AUDIENCE_RULES = {
     'team': 'Richte die Ausgabe auf ein internes Team bzw. Projekt aus. Stelle Aufgaben, Verantwortlichkeiten, Termine und Abhängigkeiten klar dar.',
 }
 
+AUDIENCE_DISPLAY = {
+    'self': 'Eigene Verwendung',
+    'customer': 'Kunde / extern',
+    'internal': 'Intern / Kolleg:innen',
+    'participants': 'Besprechungsteilnehmende',
+    'own_tasks': 'Eigene Aufgaben',
+    'team': 'Team / Projekt',
+}
+
 DETAIL_RULES = {
     'short': 'Halte das Ergebnis sehr kurz und beschränke dich auf die absolut wesentlichen Punkte.',
     'compact': 'Erstelle eine kompakte, aber vollständige Darstellung ohne unnötige Wiederholungen.',
+    'standard': 'Erstelle eine vollständige Darstellung mit den relevanten Details, ohne unnötige Wiederholungen.',
+    'detailed': 'Erstelle eine detaillierte Darstellung mit Begründungen, Risiken und relevanten Nebenbedingungen.',
 }
 
 FORMAT_LABELS = {
@@ -36,6 +47,9 @@ TONE_RULES = {
     'professional': 'Formuliere professionell, klar und präzise.',
     'friendly': 'Formuliere freundlich, wertschätzend und professionell.',
     'factual': 'Formuliere sachlich, neutral und ohne unnötige Wertungen.',
+    'management': 'Formuliere managementorientiert, knapp und entscheidungsbezogen.',
+    'technical': 'Formuliere technisch präzise und fachlich eindeutig.',
+    'direct': 'Formuliere direkt, handlungsorientiert und ohne Fülltext.',
 }
 
 METHOD_RULES = {
@@ -379,13 +393,20 @@ def compose_free_legacy(*, contract, microsoft_tier: str, payload: dict) -> dict
             raise PromptValidationError('Ungültige Auswahl.', field=field, code='choice')
         return value
 
+    def normalize_display_choice(value, labels):
+        value = str(value or '').strip()
+        if not value:
+            return ''
+        reverse = {str(label): code for code, label in labels.items()}
+        return reverse.get(value, value)
+
     audience = optional_choice(
-        payload.get('audience'),
+        normalize_display_choice(payload.get('audience'), AUDIENCE_DISPLAY),
         runtime.get('audiences') or [],
         field='audience',
     )
     output = optional_choice(
-        payload.get('output'),
+        normalize_display_choice(payload.get('output'), FORMAT_LABELS),
         runtime.get('formats') or [],
         field='output',
     )
