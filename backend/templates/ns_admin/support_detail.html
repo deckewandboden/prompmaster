@@ -61,7 +61,7 @@
           {% if item.notification_email %}
             · E-Mail:
             <span class="badge {% if item.notification_email.status == 'sent' %}ok{% elif item.notification_email.status == 'failed' %}bad{% else %}info{% endif %}">
-              {{ item.notification_email.status }}
+              {% if item.notification_email.status == 'sent' %}Gesendet{% elif item.notification_email.status == 'failed' %}Fehler{% elif item.notification_email.status == 'sending' %}Wird gesendet{% else %}Warteschlange{% endif %}
             </span>
           {% else %}
             · keine E-Mail protokolliert
