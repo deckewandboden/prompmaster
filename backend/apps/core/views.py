@@ -318,7 +318,7 @@ def public_checkout_start(request):
         )
 
     private_customer = data['customer_type'] == 'private'
-    required_docs = ['terms', 'privacy'] + (['withdrawal'] if private_customer else [])
+    required_docs = ['terms', 'privacy', 'license'] + (['withdrawal'] if private_customer else [])
     now = timezone.now()
     documents = {}
     for doc_type in required_docs:
@@ -399,6 +399,9 @@ def public_checkout_start(request):
                 'source': 'public_checkout',
                 'ip': client_ip(request),
                 'user_agent': (request.META.get('HTTP_USER_AGENT') or '')[:300],
+                'early_performance_requested': bool(
+                    private_customer and data.get('request_early_performance')
+                ),
             }
             for doc_type in ('terms', 'privacy'):
                 LegalAcceptance.objects.create(
@@ -416,6 +419,14 @@ def public_checkout_start(request):
             )
             snapshot = dict(order.billing_snapshot or {})
             snapshot['source'] = 'public_checkout'
+            snapshot['legal_versions'] = {
+                doc_type: document.version
+                for doc_type, document in documents.items()
+            }
+            if private_customer:
+                snapshot['early_performance_requested'] = bool(
+                    data.get('request_early_performance')
+                )
             order.billing_snapshot = snapshot
             order.save(update_fields=['billing_snapshot', 'updated_at'])
 
