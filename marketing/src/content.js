@@ -86,7 +86,9 @@ export const checkoutPage=(quantity=1)=>`
         </div>
         <label class="checkline"><input type="checkbox" name="accept_terms" required><span>Ich akzeptiere die <a href="/legal/terms/" target="_blank" rel="noopener">AGB</a>.</span></label>
         <label class="checkline"><input type="checkbox" name="accept_privacy" required><span>Ich habe die <a href="/legal/privacy/" target="_blank" rel="noopener">Datenschutzerklärung</a> zur Kenntnis genommen.</span></label>
+        <label class="checkline"><input type="checkbox" name="accept_license" required><span>Ich akzeptiere die <a href="/legal/license/" target="_blank" rel="noopener">Lizenzbedingungen</a>.</span></label>
         <label class="checkline" data-checkout-private hidden><input type="checkbox" name="accept_withdrawal"><span>Ich habe die <a href="/legal/withdrawal/" target="_blank" rel="noopener">Widerrufsbelehrung</a> zur Kenntnis genommen.</span></label>
+        <label class="checkline" data-checkout-private hidden><input type="checkbox" name="request_early_performance"><span>Ich verlange ausdrücklich, dass PromptMaster vor Ablauf der Widerrufsfrist mit der Vertragsausführung beginnt.</span></label>
       </section>
 
       <div class="checkout-submit-row">
