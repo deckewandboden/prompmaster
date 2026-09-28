@@ -10,8 +10,18 @@ from apps.proaccess.services import active_product_assignment, has_internal_staf
 
 from .composer_core import PromptValidationError
 from .free_legacy import compose_free_legacy
+from .free_surface import FREE_INPUT_META, FREE_SURFACE_PRO_CONTRACTS
 from .models import PromptLegacyContract
-from .services import build_spec, catalog_snapshot, compose_task, published_version, task_entitled
+from .services import (
+    build_free_legacy_pro_spec,
+    build_free_surface_pro_spec,
+    build_spec,
+    catalog_snapshot,
+    compose_free_surface_pro_task,
+    compose_task,
+    published_version,
+    task_entitled,
+)
 from .quality import save_rating
 
 
@@ -60,6 +70,16 @@ def catalog(request):
 
 
 
+def _legacy_pro_payload(task_id, payload):
+    normalized = dict(payload or {})
+    fields = normalized.get('fields') or {}
+    meta = FREE_INPUT_META.get(task_id) or {}
+    if isinstance(fields, dict):
+        normalized['primary'] = fields.get(meta.get('primary'), '')
+        normalized['secondary'] = fields.get(meta.get('secondary'), '')
+    return normalized
+
+
 def _public_spec(spec):
     return {
         'task_id': spec['task_id'],
@@ -85,13 +105,31 @@ def task_detail(request, task_id):
     elif product != 'FREE':
         return _error(PromptValidationError('Unbekanntes Produkt.', field='product', code='choice'))
     try:
-        if not task_entitled(product, task_id):
-            raise PromptValidationError(
-                'Diese Prompt-Aufgabe ist für das ausgewählte PromptMaster-Produkt nicht freigeschaltet.',
-                field='task_id',
-                code='entitlement_required',
-            )
-        spec = build_spec(task_id)
+        if product == 'PRO':
+            legacy = PromptLegacyContract.objects.filter(
+                source='FREE_1_2_4',
+                legacy_id=task_id,
+            ).first()
+            if legacy:
+                spec = build_free_legacy_pro_spec(task_id)
+            elif task_id in FREE_SURFACE_PRO_CONTRACTS:
+                spec = build_free_surface_pro_spec(task_id)
+            else:
+                if not task_entitled(product, task_id):
+                    raise PromptValidationError(
+                        'Diese Prompt-Aufgabe ist für das ausgewählte PromptMaster-Produkt nicht freigeschaltet.',
+                        field='task_id',
+                        code='entitlement_required',
+                    )
+                spec = build_spec(task_id)
+        else:
+            if not task_entitled(product, task_id):
+                raise PromptValidationError(
+                    'Diese Prompt-Aufgabe ist für das ausgewählte PromptMaster-Produkt nicht freigeschaltet.',
+                    field='task_id',
+                    code='entitlement_required',
+                )
+            spec = build_spec(task_id)
     except PromptValidationError as exc:
         status = 404 if exc.code == 'not_found' else 403 if exc.code == 'entitlement_required' else 400
         return _error(exc, status)
@@ -137,22 +175,52 @@ def compose(request):
             )
         elif product == 'PRO':
             _require_pro_access(request)
-            result = compose_task(
-                task_id=task_id,
-                microsoft_tier=tier,
-                payload=payload,
-                product_code='PRO',
-            )
-            result_payload = {
-                'prompt': result.prompt,
-                'ready': result.ready,
-                'progress_percent': result.progress_percent,
-                'task_id': result.task_id,
-                'app_code': result.app_code,
-                'policy_version': result.policy_version,
-                'prompt_version': result.prompt_version,
-                'persisted': False,
-            }
+            legacy = PromptLegacyContract.objects.filter(
+                source='FREE_1_2_4',
+                legacy_id=task_id,
+            ).first()
+            if legacy:
+                result_payload = compose_free_legacy(
+                    contract=legacy,
+                    microsoft_tier=tier,
+                    payload=_legacy_pro_payload(task_id, payload),
+                )
+                result_payload['inherited_from'] = 'FREE'
+            elif task_id in FREE_SURFACE_PRO_CONTRACTS:
+                result = compose_free_surface_pro_task(
+                    task_id=task_id,
+                    microsoft_tier=tier,
+                    payload=payload,
+                )
+                result_payload = {
+                    'prompt': result.prompt,
+                    'ready': result.ready,
+                    'progress_percent': result.progress_percent,
+                    'task_id': result.task_id,
+                    'app_code': result.app_code,
+                    'policy_version': result.policy_version,
+                    'prompt_version': result.prompt_version,
+                    'persisted': False,
+                    'source': 'FreeSurfaceProContract',
+                    'inherited_from': 'FREE_SURFACE',
+                }
+            else:
+                result = compose_task(
+                    task_id=task_id,
+                    microsoft_tier=tier,
+                    payload=payload,
+                    product_code='PRO',
+                )
+                result_payload = {
+                    'prompt': result.prompt,
+                    'ready': result.ready,
+                    'progress_percent': result.progress_percent,
+                    'task_id': result.task_id,
+                    'app_code': result.app_code,
+                    'policy_version': result.policy_version,
+                    'prompt_version': result.prompt_version,
+                    'persisted': False,
+                }
         else:
             raise PromptValidationError(
                 'Unbekanntes Produkt.',
