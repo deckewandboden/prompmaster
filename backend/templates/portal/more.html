@@ -17,12 +17,18 @@
     {% if membership and membership.role == 'admin' %}<a class="btn secondary" href="{% url 'portal:company' %}">Unternehmen</a>{% endif %}
   </div></div>
   {% endif %}
+  <div class="card"><h2>Rechtliches</h2><div class="list">
+    <a class="btn secondary" href="/impressum/">Impressum</a>
+    <a class="btn secondary" href="/datenschutz/">Datenschutz</a>
+    <a class="btn secondary" href="/agb/">AGB</a>
+    <a class="btn secondary" href="/lizenzbedingungen/">Lizenzbedingungen</a>
+    <a class="btn secondary" href="/barrierefreiheit/">Barrierefreiheit</a>
+  </div></div>
   {% if not membership %}
   <div class="card"><h2>Verbraucherrechte</h2><div class="list">
-    <a class="btn secondary" href="/legal/withdrawal/">Widerrufsbelehrung</a>
+    <a class="btn secondary" href="/widerruf/">Widerrufsbelehrung</a>
     <a class="btn secondary" href="/vertrag-widerrufen/">Vertrag widerrufen</a>
     <a class="btn secondary" href="/vertraege-kuendigen/">Verträge hier kündigen</a>
-    <a class="btn secondary" href="/legal/privacy/">Datenschutz</a>
   </div></div>
   {% endif %}
 </div>
