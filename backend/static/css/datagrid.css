@@ -22,11 +22,10 @@
   overflow-wrap:anywhere;
   word-break:break-word;
 }
-.tablewrap>.data-grid th:last-child,
-.tablewrap>.data-grid td:last-child{
+.tablewrap>.data-grid .grid-action{
   width:86px;
 }
-.tablewrap>.data-grid td:last-child .btn{
+.tablewrap>.data-grid .grid-action .btn{
   max-width:100%;
 }
 
