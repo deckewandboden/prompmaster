@@ -281,3 +281,12 @@ a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,te
   max-width:100%;
 }
 
+
+
+/* Customer portal renewal: keep all consent controls in one predictable column. */
+.renew-consents{display:grid;gap:9px;margin:12px 0 14px;max-width:760px}
+.renew-consent-row{display:grid!important;grid-template-columns:18px minmax(0,1fr);gap:9px;align-items:start;font-size:12px;font-weight:700!important;line-height:1.4;cursor:pointer}
+.renew-consent-row input[type=checkbox]{width:16px!important;height:16px;min-height:0!important;margin:1px 0 0;padding:0;justify-self:start}
+.renew-consents .errorlist{margin:-3px 0 1px 27px;padding:0;list-style:none}
+.renew-submit{width:100%}
+@media(max-width:700px){.renew-consents{max-width:none}.renew-consent-row{grid-template-columns:18px minmax(0,1fr)}}
