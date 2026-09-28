@@ -145,7 +145,7 @@ if(home){
   if(aliases[path]) requestAnimationFrame(()=>document.getElementById(aliases[path]).scrollIntoView());
   import('./head.js').then(m=>m.initHead()).catch(()=>{document.querySelector('.head-fallback').hidden=false});
 }else{
-  const legal={'/impressum':'Impressum','/datenschutz':'Datenschutz','/lizenzbedingungen':'Lizenzbedingungen','/agb':'AGB'};
+  const legal={'/impressum':'Impressum','/datenschutz':'Datenschutz','/lizenzbedingungen':'Lizenzbedingungen','/agb':'AGB','/widerruf':'Widerrufsbelehrung','/barrierefreiheit':'Barrierefreiheit'};
   let title,body;
   if(path==='/checkout'){
     title='PromptMaster Pro kaufen.';
