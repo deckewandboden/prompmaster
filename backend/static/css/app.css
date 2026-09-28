@@ -330,3 +330,6 @@ a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,te
   .support-message-head{display:grid;gap:5px}
   .support-message-head time{white-space:normal}
 }
+
+/* Keep the desktop sidebar footer fix from overriding the mobile hidden sidebar. */
+@media(max-width:700px){.sidebar{display:none}}
