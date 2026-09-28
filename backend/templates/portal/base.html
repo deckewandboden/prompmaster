@@ -10,7 +10,8 @@
 {% block home_url %}{% url 'portal:dashboard' %}{% endblock %}
 {% block nav %}
 <a class="{% nav_class request 'dashboard,search' %}" href="{% url 'portal:dashboard' %}"><span class="ico">⌂</span><span class="label">Dashboard</span></a>
-{% if pm_can_start_pro %}<a href="{% url 'proaccess:launch' %}"><span class="ico">✦</span><span class="label">PromptMaster Pro</span></a>{% endif %}
+<a href="/free/" target="_blank" rel="noopener"><span class="ico">◇</span><span class="label">PromptMaster Free</span></a>
+{% if pm_can_start_pro %}<a href="{% url 'proaccess:launch' %}" target="_blank" rel="noopener"><span class="ico">✦</span><span class="label">PromptMaster Pro</span></a>{% endif %}
 {% if current_membership and current_membership.role == 'admin' %}
 <a class="{% nav_class request 'team,invitations,invite,team_member,member_assignment_link,transfer_admin' %}" href="{% url 'portal:team' %}"><span class="ico">♙</span><span class="label">Mein Team</span></a>
 {% endif %}
