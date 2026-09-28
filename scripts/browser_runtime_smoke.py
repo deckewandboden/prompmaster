@@ -10,12 +10,20 @@ from __future__ import annotations
 import json
 import os
 import shutil
+import sys
 from pathlib import Path
 from concurrent.futures import ThreadPoolExecutor
 
 ROOT = Path(__file__).resolve().parents[1]
+BACKEND = ROOT / 'backend'
+sys.path.insert(0, str(BACKEND))
+
+from apps.prompts.free_legacy import AUDIENCE_DISPLAY, FORMAT_LABELS, FREE_RUNTIME_CONTRACTS  # noqa: E402
+from apps.prompts.free_surface import FREE_INPUT_META, FREE_SURFACE_PRO_CONTRACTS, FREE_TO_PRO_APP_CODE  # noqa: E402
+
 RUNTIME = ROOT / 'backend/private_assets/promptmaster_pro_runtime.html'
 DATA = ROOT / 'backend/apps/prompts/data/pm20_golden_logic.json'
+FREE_DATA = ROOT / 'backend/apps/prompts/data/free_legacy_tasks.json'
 
 
 def mock_catalog() -> dict:
@@ -46,6 +54,77 @@ def mock_catalog() -> dict:
             'minimum_tier_rank': int((access.get(code) or {}).get('tier', 0)),
             'promptmaster_entitled': True, 'tasks': tasks,
         })
+    app_map = {app['code']: app for app in apps}
+    surface_by_app = {}
+
+    free_data = json.loads(FREE_DATA.read_text(encoding='utf-8'))
+    for item in free_data.get('tasks') or []:
+        task_id = item['legacy_id']
+        runtime = FREE_RUNTIME_CONTRACTS[task_id]
+        meta = FREE_INPUT_META[task_id]
+        required = []
+        optional = []
+        if runtime.get('primary_required'):
+            required.append(meta['primary'])
+        else:
+            optional.append(meta['primary'])
+        if runtime.get('secondary_required'):
+            required.append(meta['secondary'])
+        else:
+            optional.append(meta['secondary'])
+        app_code = FREE_TO_PRO_APP_CODE[item['app_code']]
+        surface_by_app.setdefault(app_code, []).append({
+            'id': task_id,
+            'title': item.get('title') or task_id,
+            'intent': runtime.get('intent') or '',
+            'required': required,
+            'optional': optional,
+            'area': item.get('area') or 'Free-Basis',
+            'family': runtime.get('family') or 'analysis',
+            'sources': ['provided'],
+            'outputs': [FORMAT_LABELS.get(value, value) for value in runtime.get('formats') or []],
+            'focus': runtime.get('focus') or [],
+            'audiences': [AUDIENCE_DISPLAY.get(value, value) for value in runtime.get('audiences') or []],
+            'access': None,
+            'status': 'FREE + PRO',
+            'maxChars': None,
+            'prompt_version': 'FREE_1_2_4',
+            'policy_version': 'FREE_1_2_4',
+            'minimum_tier_rank': int(runtime.get('minimum_tier_rank') or 0),
+            'promptmaster_entitled': True,
+            'compatibility_kind': 'free_legacy',
+            'surface_origin': 'FREE_1_2_4',
+        })
+
+    for task_id, contract in FREE_SURFACE_PRO_CONTRACTS.items():
+        surface_by_app.setdefault(contract['app_code'], []).append({
+            'id': task_id,
+            'title': contract['title'],
+            'intent': contract['intent'],
+            'required': contract.get('required') or [],
+            'optional': contract.get('optional') or [],
+            'area': contract.get('area') or 'Pro',
+            'family': contract.get('family') or 'analysis',
+            'sources': contract.get('sources') or ['provided'],
+            'outputs': contract.get('outputs') or ['Ergebnis'],
+            'focus': contract.get('focus') or [],
+            'audiences': contract.get('audiences') or [],
+            'access': None,
+            'status': 'PRO',
+            'maxChars': None,
+            'prompt_version': 1,
+            'policy_version': 1,
+            'minimum_tier_rank': int(contract.get('minimum_tier_rank') or 0),
+            'promptmaster_entitled': True,
+            'compatibility_kind': 'free_pro_preview',
+            'surface_origin': 'FREE_1_2_4',
+        })
+
+    for app_code, inherited in surface_by_app.items():
+        if app_code not in app_map:
+            raise AssertionError(f'Free→Pro browser fixture references missing app {app_code}')
+        app_map[app_code]['tasks'] = inherited + app_map[app_code]['tasks']
+
     return {
         'product_code': 'PRO', 'policy_version': 1, 'source_labels': data.get('SRC_LABEL') or {},
         'application_count': len(apps), 'task_count': sum(len(app['tasks']) for app in apps),
@@ -2487,7 +2566,7 @@ def run_backend_ui_smoke(browser, fixture=None) -> None:
                     raise AssertionError(
                         f'netstyle PromptMaster API access failed: {catalog_probe}'
                     )
-                if catalog_probe['body']['catalog'].get('task_count') != 194:
+                if catalog_probe['body']['catalog'].get('task_count') != 227:
                     raise AssertionError('netstyle PromptMaster catalog is incomplete')
                 staff_compose_probe = page.evaluate(
                     """async () => {
@@ -2986,7 +3065,7 @@ def main() -> int:
     executable = os.getenv('CHROMIUM_PATH') or shutil.which('chromium') or shutil.which('chromium-browser') or shutil.which('google-chrome')
     backend_fixture = _backend_fixture() if os.getenv('BACKEND_UI_BROWSER_SMOKE') == '1' else None
     catalog = mock_catalog()
-    if (catalog['application_count'], catalog['task_count']) != (34, 194):
+    if (catalog['application_count'], catalog['task_count']) != (34, 227):
         raise SystemExit('BROWSER SMOKE FAIL: catalog count drift')
     html = RUNTIME.read_text(encoding='utf-8')
     # Prevent all asset network access and inject the mocked API before product JS.
@@ -3007,8 +3086,8 @@ def main() -> int:
         if 'power_automate' not in app_ids or 'github_copilot' not in app_ids:
             raise AssertionError('expanded 34-app catalog is not visible')
 
-        # Exercise every catalog application and every one of the 194 task
-        # render paths in the browser. Server composition parity for all 194
+        # Exercise every catalog application and all 227 Pro task render paths:
+        # 194 PM20 plus the complete 33-card Free surface inheritance.
         # tasks is covered by validate_prompt_runtime; this loop validates the
         # interactive DOM contract and dynamic field generation task-by-task.
         premium = page.locator('input[name="mslicense"][value="premium"]')
@@ -3036,8 +3115,8 @@ def main() -> int:
                         f'got {actual_fields}'
                     )
                 rendered_tasks += 1
-        if rendered_tasks != 194:
-            raise AssertionError(f'expected to exercise 194 Pro task render paths, got {rendered_tasks}')
+        if rendered_tasks != 227:
+            raise AssertionError(f'expected to exercise 227 Pro task render paths, got {rendered_tasks}')
 
         page.locator('[data-app="copilot_chat"]').click()
         page.wait_for_function("document.querySelectorAll('#taskGrid [data-task]').length === 5")
@@ -3095,7 +3174,7 @@ def main() -> int:
                 finally:
                     engine_browser.close()
 
-    print('BROWSER RUNTIME SMOKE OK: 34 apps / 194 task render paths + compose + rating/feedback + V2 Free/Pro layout in Chromium/Firefox/WebKit')
+    print('BROWSER RUNTIME SMOKE OK: 34 apps / 227 task render paths (194 PM20 + 33 Free surface) + compose + rating/feedback + V2 Free/Pro layout in Chromium/Firefox/WebKit')
     return 0
 
 
