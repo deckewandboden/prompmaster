@@ -290,3 +290,17 @@ a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,te
 .renew-consents .errorlist{margin:-3px 0 1px 27px;padding:0;list-style:none}
 .renew-submit{width:100%}
 @media(max-width:700px){.renew-consents{max-width:none}.renew-consent-row{grid-template-columns:18px minmax(0,1fr)}}
+
+
+/* 2026-09-28 browser audit: auth spacing and sidebar footer placement. */
+.sidebar{display:flex;flex-direction:column}
+.sidebar .nav{flex:0 0 auto}
+.sidebar .side-footer{margin-top:auto;padding-top:15px}
+.auth-login-card .login-logo{margin-bottom:0}
+.auth-login-card .auth-heading{margin:0}
+.auth-login-card .auth-login-form{margin-top:2px}
+.auth-login-card .auth-login-actions{display:grid;gap:8px;margin-top:0}
+.auth-login-card .auth-login-actions .btn{justify-self:start}
+@media(max-width:700px){
+  .auth-login-card .auth-login-actions .btn{justify-self:stretch;width:100%}
+}
