@@ -3,8 +3,10 @@ from unittest.mock import patch
 
 from django.core.cache import cache
 from django.core.management import call_command
-from django.test import TestCase
+from django.core.management.base import CommandError
+from django.test import TestCase, override_settings
 
+from apps.accounts.models import User
 from apps.legal.models import ConsumerContractDeclaration, LegalDocument
 from apps.notifications.models import EmailTemplate
 
@@ -63,6 +65,15 @@ class CurrentLegalDocumentSeedTests(TestCase):
             self.assertEqual(
                 LegalDocument.objects.filter(doc_type=doc_type, active=True).count(),
                 1,
+            )
+
+    @override_settings(ENVIRONMENT='production')
+    def test_production_seed_requires_verified_vat_id(self):
+        with self.assertRaisesMessage(CommandError, 'NETSTYLE_VAT_ID'):
+            call_command(
+                'seed_legal_documents_2026',
+                vat_id='',
+                stdout=StringIO(),
             )
 
 
@@ -137,3 +148,43 @@ class ConsumerContractFunctionTests(TestCase):
         self.assertEqual(declaration.cancellation_kind, 'ordinary')
         queue.assert_called_once()
         self.assertContains(response, 'Kündigung eingegangen')
+
+    def test_netstyle_admin_can_process_consumer_declaration(self):
+        declaration = ConsumerContractDeclaration.objects.create(
+            kind='withdrawal',
+            name='Private Kundin',
+            email='private@example.test',
+            contract_reference='PM-ORDER-1001',
+        )
+        admin = User.objects.create_superuser(
+            email='legal.admin@example.test',
+            password='Legal-Admin-Password-2026!',
+            first_name='Legal',
+            last_name='Admin',
+        )
+        self.client.force_login(admin)
+
+        list_response = self.client.get('/ns-admin/legal/declarations/')
+        self.assertEqual(list_response.status_code, 200)
+        self.assertContains(list_response, 'PM-ORDER-1001')
+
+        detail_path = f'/ns-admin/legal/declarations/{declaration.id}/'
+        detail_response = self.client.get(detail_path)
+        self.assertEqual(detail_response.status_code, 200)
+
+        response = self.client.post(
+            detail_path,
+            {
+                'status': 'completed',
+                'internal_notes': 'Widerruf geprüft und verarbeitet.',
+            },
+        )
+        self.assertEqual(response.status_code, 302)
+        declaration.refresh_from_db()
+        self.assertEqual(declaration.status, 'completed')
+        self.assertIsNotNone(declaration.processed_at)
+        self.assertEqual(
+            declaration.internal_notes,
+            'Widerruf geprüft und verarbeitet.',
+        )
+
