@@ -185,6 +185,25 @@ class Command(BaseCommand):
                 'Kategorie: {category}\nKunde: {customer}\nE-Mail: {email}\nLizenz: {license}\nBetreff: {subject}\n\n{message}',
             ),
             'withdrawal_received': (
+                'PromptMaster – Eingang Ihres Widerrufs',
+                'Guten Tag {name},\n\nwir bestätigen den Eingang Ihres Widerrufs.\n'
+                'Vertrag / Bestellung / Kundennummer: {contract_reference}\n'
+                'Eingang: {submitted_at}\n'
+                'Vorgangs-ID: {declaration_id}\n\n'
+                'Diese Nachricht dokumentiert den elektronischen Eingang Ihrer Erklärung.',
+            ),
+            'cancellation_received': (
+                'PromptMaster – Eingang Ihrer Kündigung',
+                'Guten Tag {name},\n\nwir bestätigen den Eingang Ihrer Kündigung.\n'
+                'Art: {cancellation_kind}\n'
+                'Vertrag / Bestellung / Kundennummer: {contract_reference}\n'
+                'Gewünschter Beendigungszeitpunkt: {requested_end_date}\n'
+                'Grund: {reason}\n'
+                'Eingang: {submitted_at}\n'
+                'Vorgangs-ID: {declaration_id}\n\n'
+                'Diese Nachricht dokumentiert den elektronischen Eingang Ihrer Erklärung.',
+            ),
+            'withdrawal_received': (
                 'PromptMaster Widerruf eingegangen',
                 'Hallo {name},\n\nIhr Widerruf zu {contract_reference} ist am {submitted_at} bei uns eingegangen.\nVorgangs-ID: {declaration_id}\n\nDiese E-Mail bestätigt ausschließlich den elektronischen Eingang Ihrer Erklärung.',
             ),
