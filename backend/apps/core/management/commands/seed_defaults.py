@@ -198,6 +198,17 @@ class Command(BaseCommand):
                 'Neue PromptMaster-Supportanfrage',
                 'Kategorie: {category}\nKunde: {customer}\nE-Mail: {email}\nLizenz: {license}\nBetreff: {subject}\n\n{message}',
             ),
+            'support_reply': (
+                'Antwort auf Ihre PromptMaster-Anfrage: {subject}',
+                'Guten Tag,\n\n'
+                'zu Ihrer PromptMaster-Anfrage "{subject}" gibt es eine neue Antwort:\n\n'
+                '{reply}\n\n'
+                'Status: {status}\n'
+                'Vorgangs-ID: {support_id}\n\n'
+                'Mit freundlichen Grüßen\n'
+                '{responder}\n'
+                'netstyle PromptMaster Support',
+            ),
             'withdrawal_received': (
                 'PromptMaster – Eingang Ihres Widerrufs',
                 'Guten Tag {name},\n\nwir bestätigen den Eingang Ihres Widerrufs.\n'
