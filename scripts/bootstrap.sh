@@ -105,7 +105,7 @@ wait_healthy redis 180
 log "Django Checks vor Migration"; docker compose "${F[@]}" run --rm web python manage.py check
 log "Migrationen prüfen"; docker compose "${F[@]}" run --rm web python manage.py makemigrations --check --dry-run
 log "Migrationen"; docker compose "${F[@]}" run --rm web python manage.py migrate --noinput
-log "Defaults"; docker compose "${F[@]}" run --rm web python manage.py seed_defaults; docker compose "${F[@]}" run --rm web python manage.py seed_prompt_catalog; docker compose "${F[@]}" run --rm web python manage.py seed_faqs; docker compose "${F[@]}" run --rm web python manage.py validate_prompt_runtime; docker compose "${F[@]}" run --rm web python manage.py bootstrap_admin
+log "Defaults"; docker compose "${F[@]}" run --rm web python manage.py seed_defaults; docker compose "${F[@]}" run --rm web python manage.py seed_legal_documents_2026; docker compose "${F[@]}" run --rm web python manage.py seed_prompt_catalog; docker compose "${F[@]}" run --rm web python manage.py seed_faqs; docker compose "${F[@]}" run --rm web python manage.py validate_prompt_runtime; docker compose "${F[@]}" run --rm web python manage.py bootstrap_admin
 if [[ "$ENVIRONMENT_NAME" != "production" && "$SEED_DEMO_DATA" == "1" ]]; then
   log "Demo-Daten für $ENVIRONMENT_NAME setzen"
   demo_credentials=".demo-credentials"
