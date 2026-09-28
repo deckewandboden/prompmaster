@@ -249,3 +249,42 @@ class RenderedUiActionContractTests(TestCase):
             minimum_pages=7,
             minimum_controls=25,
         )
+
+
+    def test_customer_portal_product_links_use_new_tabs_and_renewal_consents_are_aligned(self):
+        company = Company.objects.get(customer_number='DEMO-1001')
+        admin = Membership.objects.get(company=company, active=True, role='admin').user
+        self._session_as(admin)
+
+        dashboard = self.client.get('/portal/dashboard/')
+        self.assertEqual(dashboard.status_code, 200)
+        dashboard_html = dashboard.content.decode(dashboard.charset or 'utf-8')
+        self.assertIn(
+            'href="/free/" target="_blank" rel="noopener"',
+            dashboard_html,
+        )
+        self.assertIn(
+            'target="_blank" rel="noopener">PromptMaster Pro starten',
+            dashboard_html,
+        )
+
+        more = self.client.get('/portal/more/')
+        self.assertEqual(more.status_code, 200)
+        more_html = more.content.decode(more.charset or 'utf-8')
+        self.assertIn(
+            'href="/free/" target="_blank" rel="noopener">PromptMaster Free öffnen',
+            more_html,
+        )
+        self.assertIn(
+            'target="_blank" rel="noopener">PromptMaster Pro öffnen',
+            more_html,
+        )
+
+        license_obj = company.licenses.order_by('license_number').first()
+        self.assertIsNotNone(license_obj)
+        renewal = self.client.get(f'/portal/licenses/{license_obj.pk}/renew/')
+        self.assertEqual(renewal.status_code, 200)
+        renewal_html = renewal.content.decode(renewal.charset or 'utf-8')
+        self.assertIn('class="renew-consents"', renewal_html)
+        self.assertEqual(renewal_html.count('class="renew-consent-row"'), 3)
+        self.assertIn('class="btn primary renew-submit"', renewal_html)
