@@ -58,6 +58,38 @@ class Command(BaseCommand):
                 + ', '.join(sorted(missing_surface))
             )
 
+        expected_surface_counts = {
+            'copilot_chat': 4,
+            'outlook': 13,
+            'teams': 4,
+            'word': 4,
+            'excel': 4,
+            'powerpoint': 4,
+        }
+        for app in pro_catalog.get('applications') or []:
+            app_tasks = app.get('tasks') or []
+            app_ids = [task.get('id') for task in app_tasks]
+            if not app_tasks:
+                raise CommandError(f"Pro-App ohne Aufgaben: {app.get('code')}")
+            if len(app_ids) != len(set(app_ids)):
+                raise CommandError(f"Doppelte Task-ID in Pro-App: {app.get('code')}")
+            if not all(task.get('promptmaster_entitled') for task in app_tasks):
+                raise CommandError(f"Nicht freigeschaltete Aufgabe in Pro-App: {app.get('code')}")
+            inherited = [
+                task for task in app_tasks
+                if task.get('surface_origin') == 'FREE_1_2_4'
+            ]
+            expected_inherited = expected_surface_counts.get(app.get('code'), 0)
+            if len(inherited) != expected_inherited:
+                raise CommandError(
+                    f"Free→Pro-App-Parität falsch für {app.get('code')}: "
+                    f"{len(inherited)} statt {expected_inherited}"
+                )
+            self.stdout.write(
+                f"PRO_APP_AUDIT {app.get('code')}: "
+                f"total={len(app_tasks)} free_surface={len(inherited)}"
+            )
+
         legacy_contracts = list(
             PromptLegacyContract.objects.filter(source='FREE_1_2_4').order_by('legacy_id')
         )
