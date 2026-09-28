@@ -1,33 +1,145 @@
-{% extends 'ns_admin/base.html' %}{% block content %}
+{% extends 'ns_admin/base.html' %}
+{% block content %}
 <div class="page-head">
-  <div><h1>{{ support_request.subject }}</h1><div class="sub">{{ support_request.get_category_display }} · {{ support_request.created_at|date:'d.m.Y H:i' }}</div></div>
+  <div>
+    <h1>{{ support_request.subject }}</h1>
+    <div class="sub">
+      {{ support_request.get_category_display }} ·
+      {{ support_request.created_at|date:'d.m.Y H:i' }} ·
+      Vorgang {{ support_request.id }}
+    </div>
+  </div>
   <a class="btn secondary" href="{% url 'ns_admin:support_requests' %}">Zurück</a>
 </div>
-<div class="grid two">
+
+<div class="grid support-layout">
   <div class="card">
-    <h2>Anfrage</h2>
-    <div class="statusrow"><span>Kunde</span><strong>{% if support_request.company %}{{ support_request.company.name }}{% else %}{{ support_request.user.full_name }}{% endif %}</strong></div>
-    <div class="statusrow"><span>Benutzer-ID</span><strong>{{ support_request.user_id }}</strong></div>
-    <div class="statusrow"><span>E-Mail</span><strong>{{ support_request.user.email }}</strong></div>
-    <div class="statusrow"><span>Lizenz</span><strong>{% if support_request.license %}{{ support_request.license.license_number }} · {{ support_request.license.product.name }}{% else %}–{% endif %}</strong></div>
-    <div class="statusrow"><span>Status</span><strong>{{ support_request.get_status_display }}</strong></div>
-    <div class="message-box">{{ support_request.message|linebreaksbr }}</div>
+    <div class="page-head support-card-head">
+      <div>
+        <h2>Nachrichtenverlauf</h2>
+        <div class="small muted">Kundenanfrage und alle netstyle-Antworten in chronologischer Reihenfolge.</div>
+      </div>
+      <span class="badge {% if support_request.status == 'closed' %}ok{% elif support_request.status == 'in_progress' %}info{% else %}warn{% endif %}">
+        {{ support_request.get_status_display }}
+      </span>
+    </div>
+
+    <div class="support-thread">
+      <article class="support-message support-message-customer">
+        <header class="support-message-head">
+          <div>
+            <strong>{{ support_request.user.full_name }}</strong>
+            <span class="badge info">Kunde</span>
+          </div>
+          <time>{{ support_request.created_at|date:'d.m.Y H:i' }}</time>
+        </header>
+        <div class="support-message-meta">
+          {{ support_request.user.email }}
+          {% if support_request.company %} · {{ support_request.company.name }}{% endif %}
+          {% if support_request.license %} · {{ support_request.license.license_number }}{% endif %}
+        </div>
+        <div class="support-message-body">{{ support_request.message|linebreaksbr }}</div>
+      </article>
+
+      {% for item in conversation_messages %}
+      <article class="support-message {% if item.visibility == 'internal' %}support-message-internal{% else %}support-message-staff{% endif %}">
+        <header class="support-message-head">
+          <div>
+            <strong>{{ item.author_display }}</strong>
+            {% if item.visibility == 'internal' %}
+              <span class="badge warn">Interne Notiz</span>
+            {% else %}
+              <span class="badge pro">netstyle Support</span>
+            {% endif %}
+          </div>
+          <time>{{ item.created_at|date:'d.m.Y H:i' }}</time>
+        </header>
+
+        {% if item.visibility == 'customer' %}
+        <div class="support-message-meta">
+          Für Kunden sichtbar
+          {% if item.notification_email %}
+            · E-Mail:
+            <span class="badge {% if item.notification_email.status == 'sent' %}ok{% elif item.notification_email.status == 'failed' %}bad{% else %}info{% endif %}">
+              {{ item.notification_email.status }}
+            </span>
+          {% else %}
+            · keine E-Mail protokolliert
+          {% endif %}
+        </div>
+        {% endif %}
+
+        <div class="support-message-body">{{ item.body|linebreaksbr }}</div>
+      </article>
+      {% empty %}
+      <div class="empty support-empty">Noch keine netstyle-Antwort vorhanden.</div>
+      {% endfor %}
+    </div>
   </div>
-  {% if can_write %}
-  <div class="card">
-    <h2>Status ändern</h2>
-    <form method="post" action="{% url 'ns_admin:support_request_status' support_request.id %}" class="form">
-      {% csrf_token %}
-      <label>Status
-        <select name="status">
-          <option value="new" {% if support_request.status == 'new' %}selected{% endif %}>Neu</option>
-          <option value="in_progress" {% if support_request.status == 'in_progress' %}selected{% endif %}>In Bearbeitung</option>
-          <option value="closed" {% if support_request.status == 'closed' %}selected{% endif %}>Abgeschlossen</option>
-        </select>
-      </label>
-      <button class="btn primary" type="submit">Speichern</button>
-    </form>
+
+  <div class="support-side">
+    <div class="card">
+      <h2>Anfragedaten</h2>
+      <div class="detail-list">
+        <div><dt>Kunde</dt><dd>{% if support_request.company %}{{ support_request.company.name }}{% else %}{{ support_request.user.full_name }}{% endif %}</dd></div>
+        <div><dt>Benutzer-ID</dt><dd>{{ support_request.user_id }}</dd></div>
+        <div><dt>E-Mail</dt><dd>{{ support_request.user.email }}</dd></div>
+        <div><dt>Lizenz</dt><dd>{% if support_request.license %}{{ support_request.license.license_number }} · {{ support_request.license.product.name }}{% else %}–{% endif %}</dd></div>
+        <div><dt>Kategorie</dt><dd>{{ support_request.get_category_display }}</dd></div>
+        <div><dt>Status</dt><dd>{{ support_request.get_status_display }}</dd></div>
+      </div>
+    </div>
+
+    {% if can_write %}
+    <div class="card">
+      <h2>Antwort / interne Notiz</h2>
+      <form method="post" action="{% url 'ns_admin:support_request_reply' support_request.id %}" class="form support-reply-form">
+        {% csrf_token %}
+        {{ reply_form.non_field_errors }}
+
+        <label>
+          {{ reply_form.visibility.label }}
+          {{ reply_form.visibility }}
+        </label>
+        {{ reply_form.visibility.errors }}
+
+        <label>
+          {{ reply_form.body.label }}
+          {{ reply_form.body }}
+        </label>
+        {{ reply_form.body.errors }}
+
+        <label>
+          {{ reply_form.status_after_message.label }}
+          {{ reply_form.status_after_message }}
+        </label>
+        {{ reply_form.status_after_message.errors }}
+
+        <p class="small muted support-reply-hint">
+          Kundenantworten werden im Vorgang gespeichert und bei echten Kundenadressen per E-Mail angekündigt.
+          Interne Notizen bleiben ausschließlich im netstyle-Backend.
+        </p>
+
+        <button class="btn primary" type="submit">Nachricht speichern</button>
+      </form>
+    </div>
+
+    <div class="card">
+      <h2>Status ändern</h2>
+      <form method="post" action="{% url 'ns_admin:support_request_status' support_request.id %}" class="form">
+        {% csrf_token %}
+        <label>
+          Status
+          <select name="status">
+            <option value="new" {% if support_request.status == 'new' %}selected{% endif %}>Neu</option>
+            <option value="in_progress" {% if support_request.status == 'in_progress' %}selected{% endif %}>In Bearbeitung</option>
+            <option value="closed" {% if support_request.status == 'closed' %}selected{% endif %}>Abgeschlossen</option>
+          </select>
+        </label>
+        <button class="btn secondary" type="submit">Status speichern</button>
+      </form>
+    </div>
+    {% endif %}
   </div>
-  {% endif %}
 </div>
 {% endblock %}
