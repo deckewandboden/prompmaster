@@ -1,1 +1,57 @@
-{% extends 'portal/base.html' %}{% block content %}<h1>Lizenz verlängern</h1><div class="card"><div class="statusrow"><span>Lizenz</span><strong>{{ license.license_number }}</strong></div><div class="statusrow"><span>Aktuelles Ende</span><strong>{{ license.valid_until }}</strong></div><p class="small muted">Rechtsdokumente: <a href="{% url 'legal_public' 'terms' %}" target="_blank" rel="noopener">AGB</a> · <a href="{% url 'legal_public' 'privacy' %}" target="_blank" rel="noopener">Datenschutz</a> · <a href="{% url 'legal_public' 'license' %}" target="_blank" rel="noopener">Lizenzbedingungen</a>{% if form.accept_withdrawal %} · <a href="{% url 'legal_public' 'withdrawal' %}" target="_blank" rel="noopener">Widerruf</a>{% endif %}</p><form method="post" class="form">{% csrf_token %}{{ form.as_p }}<button type="submit" class="btn primary">Zahlungspflichtig verlängern →</button></form></div>{% endblock %}
+{% extends 'portal/base.html' %}
+{% block content %}
+<h1>Lizenz verlängern</h1>
+<div class="card">
+  <div class="statusrow"><span>Lizenz</span><strong>{{ license.license_number }}</strong></div>
+  <div class="statusrow"><span>Aktuelles Ende</span><strong>{{ license.valid_until }}</strong></div>
+
+  <p class="small muted">
+    Rechtsdokumente:
+    <a href="{% url 'legal_public' 'terms' %}" target="_blank" rel="noopener">AGB</a> ·
+    <a href="{% url 'legal_public' 'privacy' %}" target="_blank" rel="noopener">Datenschutz</a> ·
+    <a href="{% url 'legal_public' 'license' %}" target="_blank" rel="noopener">Lizenzbedingungen</a>
+    {% if form.accept_withdrawal %} · <a href="{% url 'legal_public' 'withdrawal' %}" target="_blank" rel="noopener">Widerruf</a>{% endif %}
+  </p>
+
+  <form method="post" class="form">
+    {% csrf_token %}
+    {{ form.non_field_errors }}
+
+    <div class="renew-consents">
+      <label class="renew-consent-row">
+        {{ form.accept_terms }}
+        <span>{{ form.accept_terms.label }}</span>
+      </label>
+      {{ form.accept_terms.errors }}
+
+      <label class="renew-consent-row">
+        {{ form.accept_privacy }}
+        <span>{{ form.accept_privacy.label }}</span>
+      </label>
+      {{ form.accept_privacy.errors }}
+
+      <label class="renew-consent-row">
+        {{ form.accept_license }}
+        <span>{{ form.accept_license.label }}</span>
+      </label>
+      {{ form.accept_license.errors }}
+
+      {% if form.accept_withdrawal %}
+      <label class="renew-consent-row">
+        {{ form.accept_withdrawal }}
+        <span>{{ form.accept_withdrawal.label }}</span>
+      </label>
+      {{ form.accept_withdrawal.errors }}
+
+      <label class="renew-consent-row">
+        {{ form.request_early_performance }}
+        <span>{{ form.request_early_performance.label }}</span>
+      </label>
+      {{ form.request_early_performance.errors }}
+      {% endif %}
+    </div>
+
+    <button type="submit" class="btn primary renew-submit">Zahlungspflichtig verlängern →</button>
+  </form>
+</div>
+{% endblock %}
