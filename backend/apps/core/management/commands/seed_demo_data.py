@@ -28,7 +28,7 @@ from apps.licenses.models import (
 from apps.notifications.models import EmailMessage, EmailTemplate
 from apps.orders.models import Order, OrderItem
 from apps.payments.models import Payment
-from apps.support.models import SupportRequest
+from apps.support.models import SupportMessage, SupportRequest
 
 
 DEMO_PREFIX = 'DEMO-'
@@ -149,6 +149,111 @@ DEMO_PURCHASE_AGES = {
     3: (147, 80, 16),
     4: (132, 66, 11),
     5: (116, 51, 5),
+}
+
+
+COMPANY_SUPPORT_DEMOS = {
+    1: {
+        'message': (
+            'Guten Tag, wir haben drei PromptMaster-Pro-Lizenzen. Eine Kollegin soll '
+            'zukünftig nur noch Free verwenden. Können Sie bitte prüfen, ob wir die '
+            'freie PRO-Lizenz anschließend einem anderen Mitarbeiter zuweisen können?'
+        ),
+        'status': 'new',
+        'thread': (
+            (5, 'staff', 'internal', 1, 'Lizenzbestand geprüft. Ein freier Sitz kann nach der Entkopplung neu zugewiesen werden.'),
+        ),
+    },
+    2: {
+        'message': (
+            'Seit heute öffnet sich PromptMaster Pro bei zwei Mitarbeitern nicht mehr. '
+            'Nach dem Klick auf „PromptMaster Pro“ erscheint kurz die Oberfläche, danach '
+            'landen beide wieder im Kundenportal. Können Sie das bitte prüfen?'
+        ),
+        'status': 'in_progress',
+        'thread': (
+            (2, 'staff', 'customer', 2, 'Wir prüfen die betroffenen Lizenzzuweisungen und Gerätesitzungen. Bitte testen Sie den Start einmal in einem privaten Browserfenster.'),
+            (5, 'customer', 'customer', None, 'Im privaten Browser funktioniert es bei einem Benutzer, beim zweiten weiterhin nicht.'),
+            (7, 'staff', 'internal', 1, 'Zweite Sitzung zeigt noch eine alte Gerätebindung. Technische Prüfung läuft.'),
+        ),
+    },
+    3: {
+        'message': (
+            'Auf unserer letzten Bestellung ist die Zahl der PRO-Plätze korrekt, die '
+            'zugehörige Zahlung wird im Portal aber weiterhin als offen angezeigt. '
+            'Bitte gleichen Sie Bestellung und Zahlung miteinander ab.'
+        ),
+        'status': 'closed',
+        'thread': (
+            (3, 'staff', 'customer', 1, 'Wir haben Bestellung und Zahlung abgeglichen. Die Zahlung war korrekt eingegangen; lediglich der Status war noch nicht verarbeitet.'),
+            (6, 'customer', 'customer', None, 'Der Status wird jetzt korrekt angezeigt. Danke für die schnelle Prüfung.'),
+            (7, 'staff', 'customer', 1, 'Perfekt. Wir schließen den Vorgang damit ab.'),
+        ),
+    },
+    4: {
+        'message': (
+            'Ein Mitarbeiter hat einen neuen Rechner erhalten. Im Kundenportal sehen '
+            'wir noch das alte Gerät und können den neuen Arbeitsplatz deshalb nicht '
+            'sauber zuordnen. Wie sollen wir vorgehen?'
+        ),
+        'status': 'new',
+        'thread': (
+            (4, 'staff', 'internal', 2, 'Geräteliste geprüft. Altes Gerät ist noch aktiv; vor Kundenantwort Gerätefreigabe kontrollieren.'),
+        ),
+    },
+    5: {
+        'message': (
+            'Wir haben einen neuen Kollegen angelegt. Er sieht PromptMaster Free, soll '
+            'aber einen vorhandenen PRO-Platz erhalten. Die Lizenzzuweisung ist für uns '
+            'nicht eindeutig. Können Sie die Zuordnung prüfen?'
+        ),
+        'status': 'in_progress',
+        'thread': (
+            (2, 'staff', 'customer', 1, 'Der Benutzer ist korrekt angelegt. Wir haben geprüft, welcher PRO-Platz aktuell frei beziehungsweise freigabefähig ist.'),
+            (4, 'customer', 'customer', None, 'Danke. Der Kollege ist bereits im Team sichtbar. Wir warten noch auf Ihre Rückmeldung zur Lizenz.'),
+        ),
+    },
+}
+
+
+PRIVATE_SUPPORT_DEMOS = {
+    1: {
+        'message': (
+            'Ich nutze PromptMaster Pro auf meinem Notebook. Nach einem Browserwechsel '
+            'wird mein Gerät im Portal zweimal angezeigt. Muss ich eines der Geräte '
+            'löschen oder kann ich beide Einträge behalten?'
+        ),
+        'status': 'new',
+        'thread': (
+            (3, 'staff', 'internal', 1, 'Doppelten Browser-Fingerprint prüfen; noch keine Kundenantwort versendet.'),
+        ),
+    },
+    2: {
+        'message': (
+            'PromptMaster Pro startet bei mir seit heute nicht zuverlässig. Nach dem '
+            'Anmelden lande ich teilweise wieder im Kundenportal. Die Lizenz ist noch '
+            'aktiv und läuft erst in einigen Wochen aus.'
+        ),
+        'status': 'in_progress',
+        'thread': (
+            (2, 'staff', 'customer', 2, 'Ihre Lizenz ist aktiv. Wir haben die Anmeldung geprüft. Bitte melden Sie sich einmal vollständig ab und starten Sie PromptMaster Pro danach erneut.'),
+            (5, 'customer', 'customer', None, 'Nach dem erneuten Anmelden startet Pro wieder, beim ersten Versuch kam die Weiterleitung aber noch einmal vor.'),
+            (7, 'staff', 'internal', 2, 'Weiterleitungsverhalten für diesen Demo-Vorgang weiter beobachten. Lizenz selbst ist unauffällig.'),
+        ),
+    },
+    3: {
+        'message': (
+            'Meine PRO-Lizenz ist abgelaufen. Beim letzten Verlängerungsversuch wurde '
+            'die Zahlung nicht abgeschlossen. Ich möchte wissen, ob ich erneut bestellen '
+            'muss oder die Verlängerung wiederholen kann.'
+        ),
+        'status': 'closed',
+        'thread': (
+            (2, 'staff', 'customer', 1, 'Die fehlgeschlagene Zahlung hat keine neue Laufzeit erzeugt. Sie können die Verlängerung erneut ausführen; es wird keine doppelte Lizenz angelegt.'),
+            (6, 'customer', 'customer', None, 'Die erneute Verlängerung hat funktioniert und die neue Laufzeit wird angezeigt.'),
+            (8, 'staff', 'customer', 1, 'Danke für die Rückmeldung. Der Vorgang ist damit abgeschlossen.'),
+        ),
+    },
 }
 
 
@@ -742,9 +847,8 @@ class Command(BaseCommand):
             )
 
         categories = ('license', 'technical', 'payment', 'device', 'user')
-        support_states = ('new', 'in_progress', 'closed', 'new', 'in_progress')
         category = categories[(company_index - 1) % len(categories)]
-        support_status = support_states[(company_index - 1) % len(support_states)]
+        support_demo = COMPANY_SUPPORT_DEMOS[company_index]
         subject = f"[DEMO] {company.customer_number} – Beispielanfrage"
         support, _ = SupportRequest.objects.update_or_create(
             company=company,
@@ -753,15 +857,19 @@ class Command(BaseCommand):
             defaults={
                 'license': licenses[0] if licenses else None,
                 'category': category,
-                'message': (
-                    'Demo-Datensatz zur Prüfung von Kunden-, Lizenz-, Geräte-, '
-                    'Zahlungs- und Supportansichten.'
-                ),
-                'status': support_status,
+                'message': support_demo['message'],
+                'status': support_demo['status'],
             },
         )
+        support_created_at = now - timedelta(days=(company_index * 9) - 4)
         SupportRequest.objects.filter(pk=support.pk).update(
-            created_at=now - timedelta(days=(company_index * 9) - 4)
+            created_at=support_created_at
+        )
+        self._seed_support_thread(
+            support=support,
+            customer=users[0],
+            base_time=support_created_at,
+            thread=support_demo['thread'],
         )
 
         if company_index == 2:
@@ -1163,6 +1271,7 @@ class Command(BaseCommand):
             OrderItem.objects.filter(pk=failed_item.pk).update(created_at=failed_at)
             Payment.objects.filter(pk=failed_payment.pk).update(created_at=failed_at)
 
+        support_demo = PRIVATE_SUPPORT_DEMOS[index]
         support, _ = SupportRequest.objects.update_or_create(
             user=user,
             company=None,
@@ -1170,13 +1279,55 @@ class Command(BaseCommand):
             defaults={
                 'license': license_obj,
                 'category': 'technical' if spec['state'] != 'expired' else 'payment',
-                'message': 'Demo-Datensatz zur Prüfung des Privatkundenportals.',
-                'status': 'new' if spec['state'] != 'expired' else 'in_progress',
+                'message': support_demo['message'],
+                'status': support_demo['status'],
             },
         )
+        support_created_at = now - timedelta(days=(index * 11) + 2)
         SupportRequest.objects.filter(pk=support.pk).update(
-            created_at=now - timedelta(days=(index * 11) + 2)
+            created_at=support_created_at
         )
+        self._seed_support_thread(
+            support=support,
+            customer=user,
+            base_time=support_created_at,
+            thread=support_demo['thread'],
+        )
+
+    def _seed_support_thread(self, *, support, customer, base_time, thread):
+        if not support.subject.startswith('[DEMO]'):
+            raise CommandError(
+                'Support-Demoverlauf darf nur an [DEMO]-Vorgänge geschrieben werden.'
+            )
+
+        # Reseeding restores only presentation fixtures to a deterministic state.
+        support.messages.all().delete()
+
+        staff = {
+            1: User.objects.filter(
+                email='demo.support1@promptmaster.invalid',
+                is_staff=True,
+            ).first(),
+            2: User.objects.filter(
+                email='demo.support2@promptmaster.invalid',
+                is_staff=True,
+            ).first(),
+        }
+
+        for offset_hours, sender_type, visibility, staff_slot, body in thread:
+            author = customer if sender_type == 'customer' else staff.get(staff_slot)
+            item = SupportMessage.objects.create(
+                support_request=support,
+                author_user=author,
+                sender_type=sender_type,
+                visibility=visibility,
+                body=body,
+            )
+            occurred_at = base_time + timedelta(hours=offset_hours)
+            SupportMessage.objects.filter(pk=item.pk).update(
+                created_at=occurred_at,
+                updated_at=occurred_at,
+            )
 
     def _seed_demo_leads(self, now):
         support_one = User.objects.filter(
