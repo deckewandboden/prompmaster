@@ -40,18 +40,21 @@ class PromptMasterV2RouteIsolationTests(TestCase):
         current_html = current.content.decode('utf-8')
         legacy_html = legacy.content.decode('utf-8')
 
-        self.assertIn('/static/js/free_catalog_bridge.20260918.js?v=20260925-mobile17', current_html)
-        self.assertIn('/static/js/free_catalog_bridge.20260918.js?v=20260925-mobile17', legacy_html)
+        self.assertIn('/static/js/free_catalog_bridge.20260918.js?v=20260928-no-legacy-flash1', current_html)
+        self.assertIn('/static/js/free_catalog_bridge.20260918.js?v=20260928-no-legacy-flash1', legacy_html)
         self.assertRegex(
             current_html,
             r'<meta name="pm-free-compose" content="server" data-csrf="[A-Za-z0-9]+">',
         )
         self.assertNotIn('name="pm-free-compose"', legacy_html)
 
-        self.assertIn('/static/css/promptmaster_v2.20260922.css?v=20260925-mobile17', current_html)
-        self.assertIn('/static/js/promptmaster_ui_v2.20260922.js?v=20260925-mobile17', current_html)
+        self.assertIn('/static/css/promptmaster_v2.20260922.css?v=20260928-no-legacy-flash1', current_html)
+        self.assertIn('/static/js/promptmaster_ui_v2.20260922.js?v=20260928-no-legacy-flash1', current_html)
         self.assertNotIn('/static/css/promptmaster_v2.20260922.css', legacy_html)
         self.assertNotIn('/static/js/promptmaster_ui_v2.20260922.js', legacy_html)
+        self.assertIn('id="pmv2-boot-style"', current_html)
+        self.assertIn('pmv2-booting', current_html)
+        self.assertNotIn('id="pmv2-boot-style"', legacy_html)
 
         remote_logo = (
             'https://netstyle.de/public_pictures/'
@@ -68,10 +71,10 @@ class PromptMasterV2RouteIsolationTests(TestCase):
         self.assertIn(free_source_node, legacy_html)
 
         stripped = current_html.replace(
-            '<link rel="stylesheet" href="/static/css/promptmaster_v2.20260922.css?v=20260925-mobile17">',
+            '<link rel="stylesheet" href="/static/css/promptmaster_v2.20260922.css?v=20260928-no-legacy-flash1">',
             '',
         ).replace(
-            '<script src="/static/js/promptmaster_ui_v2.20260922.js?v=20260925-mobile17" defer></script>',
+            '<script src="/static/js/promptmaster_ui_v2.20260922.js?v=20260928-no-legacy-flash1" defer></script>',
             '',
         ).replace(
             'data:image/gif;base64,R0lGODlhAQABAAAAACw=',
@@ -81,6 +84,13 @@ class PromptMasterV2RouteIsolationTests(TestCase):
             r'<meta name="pm-free-compose" content="server" data-csrf="[A-Za-z0-9]+">',
             '',
             stripped,
+        )
+        stripped = re.sub(
+            r'<style id="pmv2-boot-style">.*?</script>',
+            '',
+            stripped,
+            count=1,
+            flags=re.S,
         )
         self.assertEqual(stripped, legacy_html.replace(free_source_node, '', 1))
 
@@ -95,10 +105,13 @@ class PromptMasterV2RouteIsolationTests(TestCase):
         current_html = current.content.decode('utf-8')
         legacy_html = legacy.content.decode('utf-8')
 
-        self.assertIn('/static/css/promptmaster_v2.20260922.css?v=20260925-mobile17', current_html)
-        self.assertIn('/static/js/promptmaster_ui_v2.20260922.js?v=20260925-mobile17', current_html)
+        self.assertIn('/static/css/promptmaster_v2.20260922.css?v=20260928-no-legacy-flash1', current_html)
+        self.assertIn('/static/js/promptmaster_ui_v2.20260922.js?v=20260928-no-legacy-flash1', current_html)
         self.assertNotIn('/static/css/promptmaster_v2.20260922.css', legacy_html)
         self.assertNotIn('/static/js/promptmaster_ui_v2.20260922.js', legacy_html)
+        self.assertIn('id="pmv2-boot-style"', current_html)
+        self.assertIn('pmv2-booting', current_html)
+        self.assertNotIn('id="pmv2-boot-style"', legacy_html)
 
         remote_logo = (
             'https://netstyle.de/public_pictures/'
