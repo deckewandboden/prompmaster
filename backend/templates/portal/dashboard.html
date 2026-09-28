@@ -3,7 +3,7 @@
 {% if device_capacity %}{% widthratio device_count device_capacity 100 as device_pct %}{% else %}{% widthratio 0 1 100 as device_pct %}{% endif %}
 <div class="page-head">
   <div><h1>Guten Morgen, {{ request.user.first_name }}</h1><div class="sub">{% if company %}{{ company.name }}{% else %}Privatkonto{% endif %}{% if membership and membership.role == 'admin' %} · Unternehmensadministrator{% endif %}</div></div>
-  {% if can_start_pro %}<a class="btn primary" href="{% url 'proaccess:launch' %}">PromptMaster Pro starten →</a>{% endif %}
+  {% if can_start_pro %}<a class="btn primary" href="{% url 'proaccess:launch' %}" target="_blank" rel="noopener">PromptMaster Pro starten →</a>{% endif %}
 </div>
 <div class="grid kpis">
   <div class="card purple kpi"><div>PROMPTMASTER PRO</div><div class="value">{{ license_total }}</div><div>Lizenzen insgesamt</div><div class="small mt-10">{{ license_assigned }} vergeben · {{ license_free }} verfügbar</div></div>
