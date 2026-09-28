@@ -2181,11 +2181,7 @@ def _support_detail_context(support_request, user, *, reply_form=None):
         reply_form = SupportReplyForm(
             initial={
                 'visibility': 'customer',
-                'status_after_message': (
-                    'in_progress'
-                    if support_request.status == 'new'
-                    else support_request.status
-                ),
+                'status_after_message': '',
             }
         )
     return {
