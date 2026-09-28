@@ -518,6 +518,7 @@ class DemoEstateFunctionalAcceptanceTests(TestCase):
                 'quantity': '2',
                 'accept_terms': 'on',
                 'accept_privacy': 'on',
+                'accept_license': 'on',
             },
         )
         self.assertEqual(response.status_code, 302)
@@ -532,7 +533,7 @@ class DemoEstateFunctionalAcceptanceTests(TestCase):
                 user=admin,
                 order=company_payment.order,
             ).count(),
-            2,
+            3,
         )
 
         self.client.logout()
@@ -549,7 +550,9 @@ class DemoEstateFunctionalAcceptanceTests(TestCase):
             {
                 'accept_terms': 'on',
                 'accept_privacy': 'on',
+                'accept_license': 'on',
                 'accept_withdrawal': 'on',
+                'request_early_performance': 'on',
             },
         )
         self.assertEqual(response.status_code, 302)
@@ -567,7 +570,7 @@ class DemoEstateFunctionalAcceptanceTests(TestCase):
                 user=private.user,
                 order=private_payment.order,
             ).count(),
-            3,
+            4,
         )
 
 
