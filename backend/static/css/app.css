@@ -259,3 +259,25 @@ a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,te
 @media(max-width:760px){
   #id_permissions{grid-template-columns:1fr!important}
 }
+
+
+/* Generic admin DataGrid tables must fit the content viewport at desktop
+   widths as well as on phones. Long e-mail/customer/status values may wrap,
+   while the compact action column remains bounded. */
+.tablewrap>.data-grid{
+  width:100%;
+  table-layout:fixed;
+}
+.tablewrap>.data-grid th,
+.tablewrap>.data-grid td{
+  white-space:normal;
+  overflow-wrap:anywhere;
+  word-break:break-word;
+}
+.tablewrap>.data-grid .grid-action{
+  width:86px;
+}
+.tablewrap>.data-grid .grid-action .btn{
+  max-width:100%;
+}
+
