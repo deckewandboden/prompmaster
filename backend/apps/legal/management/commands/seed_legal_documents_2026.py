@@ -1,4 +1,6 @@
-from django.core.management.base import BaseCommand
+import os
+
+from django.core.management.base import BaseCommand, CommandError
 from django.db import transaction
 from django.utils import timezone
 
@@ -18,10 +20,10 @@ class Command(BaseCommand):
     def add_arguments(self, parser):
         parser.add_argument(
             '--vat-id',
-            required=True,
+            default=os.getenv('NETSTYLE_VAT_ID', ''),
             help=(
                 'Intern bestätigte Umsatzsteuer-Identifikationsnummer für das Impressum. '
-                'Sie wird absichtlich nicht aus Drittverzeichnissen übernommen.'
+                'Standard: NETSTYLE_VAT_ID aus der Umgebung.'
             ),
         )
         parser.add_argument(
@@ -37,6 +39,14 @@ class Command(BaseCommand):
     @transaction.atomic
     def handle(self, *args, **options):
         vat_id = (options['vat_id'] or '').strip()
+        if not vat_id:
+            raise CommandError(
+                'NETSTYLE_VAT_ID bzw. --vat-id fehlt. Eine USt-IdNr. wird '
+                'absichtlich nicht aus externen Verzeichnissen übernommen.'
+            )
+        if not vat_id.upper().startswith('DE') or len(vat_id.replace(' ', '')) != 11:
+            raise CommandError('USt-IdNr. muss im Format DE123456789 angegeben werden.')
+        vat_id = vat_id.replace(' ', '').upper()
         dispute = options['consumer_dispute']
 
         dispute_text = (
