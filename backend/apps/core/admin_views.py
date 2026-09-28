@@ -34,7 +34,9 @@ from apps.ops.models import BackupRecord, RestoreTest, SystemAlert
 from apps.orders.models import Order
 from apps.payments.models import MollieEvent, Payment, Refund
 from apps.payments.services import calculate_refund, create_refund_request, submit_refund
+from apps.support.forms import SupportReplyForm
 from apps.support.models import SupportRequest
+from apps.support.services import add_staff_message
 from .admin_forms import (
     AdminCompanyForm,
     CustomerAdminInviteForm,
@@ -2124,24 +2126,145 @@ def deletion_request_reject(request, pk):
 
 @staff_perm('support.read')
 def support_requests(request):
+    queryset = (
+        SupportRequest.objects.select_related(
+            'user',
+            'company',
+            'license',
+            'license__product',
+        )
+        .annotate(reply_count=Count('messages'))
+    )
     grid = DataGrid(
         request,
-        SupportRequest.objects.select_related('user', 'company', 'license', 'license__product'),
+        queryset,
         search_fields=('subject', 'message', 'user__email', 'company__name'),
-        sort_fields={'date':'created_at','status':'status','category':'category','subject':'subject'},
+        sort_fields={
+            'date': 'created_at',
+            'status': 'status',
+            'category': 'category',
+            'subject': 'subject',
+            'messages': 'reply_count',
+        },
         default_sort='-created_at',
-        filters={'status':'status','category':'category'},
+        filters={'status': 'status', 'category': 'category'},
     ).build()
-    return render(request, 'ns_admin/support.html', {
-        'grid': grid,
-        'filter_options': [('status','Status',SupportRequest.STATUS),('category','Kategorie',SupportRequest.CATEGORY)],
-    })
+    return render(
+        request,
+        'ns_admin/support.html',
+        {
+            'grid': grid,
+            'filter_options': [
+                ('status', 'Status', SupportRequest.STATUS),
+                ('category', 'Kategorie', SupportRequest.CATEGORY),
+            ],
+        },
+    )
+
+
+def _support_detail_context(support_request, user, *, reply_form=None):
+    support_request = (
+        SupportRequest.objects.select_related(
+            'user',
+            'company',
+            'license',
+            'license__product',
+        )
+        .prefetch_related(
+            'messages__author_user',
+            'messages__notification_email',
+        )
+        .get(pk=support_request.pk)
+    )
+    can_write = has_perm(user, 'support.write')
+    if reply_form is None and can_write:
+        reply_form = SupportReplyForm(
+            initial={
+                'visibility': 'customer',
+                'status_after_message': (
+                    'in_progress'
+                    if support_request.status == 'new'
+                    else support_request.status
+                ),
+            }
+        )
+    return {
+        'support_request': support_request,
+        'conversation_messages': support_request.messages.all(),
+        'can_write': can_write,
+        'reply_form': reply_form,
+    }
 
 
 @staff_perm('support.read')
 def support_request_detail(request, pk):
-    support_request = get_object_or_404(SupportRequest.objects.select_related('user','company','license','license__product'), pk=pk)
-    return render(request, 'ns_admin/support_detail.html', {'support_request': support_request, 'can_write': has_perm(request.user, 'support.write')})
+    support_request = get_object_or_404(SupportRequest, pk=pk)
+    return render(
+        request,
+        'ns_admin/support_detail.html',
+        _support_detail_context(support_request, request.user),
+    )
+
+
+@staff_perm('support.write')
+def support_request_reply(request, pk):
+    if request.method != 'POST':
+        raise PermissionDenied
+
+    support_request = get_object_or_404(SupportRequest, pk=pk)
+    form = SupportReplyForm(request.POST)
+    if not form.is_valid():
+        return render(
+            request,
+            'ns_admin/support_detail.html',
+            _support_detail_context(
+                support_request,
+                request.user,
+                reply_form=form,
+            ),
+            status=400,
+        )
+
+    result = add_staff_message(
+        support_request,
+        author=request.user,
+        body=form.cleaned_data['body'],
+        visibility=form.cleaned_data['visibility'],
+        status_after_message=form.cleaned_data['status_after_message'],
+        request=request,
+    )
+
+    if form.cleaned_data['visibility'] == 'internal':
+        messages.success(request, 'Interne Notiz gespeichert.')
+    elif result['mail_suppressed']:
+        messages.success(
+            request,
+            'Kundenantwort gespeichert. Für Demo-Adressen wurde keine E-Mail versendet.',
+        )
+    elif result['mail_queued']:
+        messages.success(
+            request,
+            'Kundenantwort gespeichert und E-Mail-Benachrichtigung eingeplant.',
+        )
+    else:
+        messages.warning(
+            request,
+            'Kundenantwort gespeichert, E-Mail-Benachrichtigung konnte aber nicht eingeplant werden.',
+        )
+
+    if result['mail_error']:
+        write_audit(
+            request.user,
+            'support.notification_queue_failed',
+            result['message'],
+            {
+                'support_request_id': str(support_request.pk),
+                'error_type': 'queue_failed',
+            },
+            request=request,
+        )
+
+    return redirect('ns_admin:support_request_detail', pk=pk)
 
 
 @staff_perm('support.write')
@@ -2156,8 +2279,14 @@ def support_request_status(request, pk):
         return redirect('ns_admin:support_request_detail', pk=pk)
     previous = support_request.status
     support_request.status = status
-    support_request.save(update_fields=['status','updated_at'])
-    write_audit(request.user, 'support.status_changed', support_request, {'before':previous,'after':status}, request=request)
+    support_request.save(update_fields=['status', 'updated_at'])
+    write_audit(
+        request.user,
+        'support.status_changed',
+        support_request,
+        {'before': previous, 'after': status},
+        request=request,
+    )
     messages.success(request, 'Status aktualisiert.')
     return redirect('ns_admin:support_request_detail', pk=pk)
 
