@@ -97,6 +97,47 @@ class DemoDataSeedTests(TestCase):
         self.assertIn('TEMPORÄRE DEMO-ZUGÄNGE', output)
         self.assertIn('Der vorhandene echte Superadmin bleibt unverändert', output)
 
+    def test_support_only_seed_preserves_demo_admin_credentials_and_mfa(self):
+        self.seed()
+
+        company = Company.objects.get(customer_number='DEMO-1001')
+        admin = Membership.objects.get(
+            company=company,
+            active=True,
+            role='admin',
+        ).user
+
+        admin.set_password('Keep-This-Demo-Password-2026!')
+        admin.totp_secret_enc = 'KEEP-THIS-MFA-SECRET'
+        admin.last_totp_step = 123456
+        admin.save(
+            update_fields=[
+                'password',
+                'totp_secret_enc',
+                'last_totp_step',
+                'updated_at',
+            ]
+        )
+
+        password_hash = admin.password
+        totp_secret = admin.totp_secret_enc
+        last_totp_step = admin.last_totp_step
+
+        output = io.StringIO()
+        call_command('seed_demo_support_threads', stdout=output)
+
+        admin.refresh_from_db()
+        self.assertEqual(admin.password, password_hash)
+        self.assertEqual(admin.totp_secret_enc, totp_secret)
+        self.assertEqual(admin.last_totp_step, last_totp_step)
+        self.assertIn('Benutzer und Zugangsdaten: UNVERÄNDERT', output.getvalue())
+        self.assertEqual(
+            SupportMessage.objects.filter(
+                support_request__subject__startswith='[DEMO]'
+            ).count(),
+            17,
+        )
+
     def test_seed_populates_cross_function_states_and_is_idempotent(self):
         self.seed()
         first_counts = {
