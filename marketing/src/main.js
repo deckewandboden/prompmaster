@@ -183,11 +183,12 @@ function setupCheckoutPage(){
   if(!form)return;
 
   const companySection=form.querySelector('[data-checkout-company]');
-  const privateLine=form.querySelector('[data-checkout-private]');
+  const privateLines=[...form.querySelectorAll('[data-checkout-private]')];
   const companyFields=['company_name','legal_form','vat_id','tax_number']
     .map(name=>form.elements.namedItem(name))
     .filter(Boolean);
   const withdrawal=form.elements.namedItem('accept_withdrawal');
+  const earlyPerformance=form.elements.namedItem('request_early_performance');
   const stage=document.getElementById('checkout-stage-message');
   const submit=document.getElementById('checkout-submit');
   const csrfInput=document.getElementById('checkout-csrf');
@@ -216,10 +217,11 @@ function setupCheckoutPage(){
       if(field.name==='company_name')field.required=company;
       field.disabled=!company;
     });
-    if(privateLine)privateLine.hidden=company;
-    if(withdrawal){
-      withdrawal.required=!company;
-      if(company)withdrawal.checked=false;
+    privateLines.forEach(line=>{line.hidden=company});
+    for(const field of [withdrawal,earlyPerformance]){
+      if(!field)continue;
+      field.required=!company;
+      if(company)field.checked=false;
     }
   };
 
