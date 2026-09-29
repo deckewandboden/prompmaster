@@ -18,6 +18,7 @@ class SupportReplyAdminTests(TestCase):
             password='Secret123!',
             first_name='Support',
             last_name='Admin',
+            totp_secret_enc='configured-support-admin-secret',
         )
         self.customer = User.objects.create_user(
             email='customer@example.test',
