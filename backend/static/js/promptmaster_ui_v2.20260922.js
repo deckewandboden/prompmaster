@@ -382,14 +382,14 @@
     </div>
     <div class="section-body">
       <div class="pmv2-review-grid">
-        <div class="pmv2-review-card">
+        <div class="pmv2-review-card" data-pmv2-review-card="app">
           <div class="pmv2-review-copy">
             <div class="pmv2-review-label">Anwendung</div>
             <div class="pmv2-review-value" data-pmv2-review="app">Noch nicht gewählt</div>
           </div>
           <button type="button" class="pmv2-review-edit" data-pmv2-edit="2">Bearbeiten</button>
         </div>
-        <div class="pmv2-review-card">
+        <div class="pmv2-review-card" data-pmv2-review-card="task">
           <div class="pmv2-review-copy">
             <div class="pmv2-review-label">Aufgabe</div>
             <div class="pmv2-review-value" data-pmv2-review="task">Noch nicht gewählt</div>
@@ -870,7 +870,7 @@
     $('[data-pmv2-review="output"]', review).textContent = outputSummary();
 
     const validity = stepValidity();
-    const cardStep = {context:4,audience:5,focus:6,output:7};
+    const cardStep = {app:2,task:3,context:4,audience:5,focus:6,output:7};
     Object.entries(cardStep).forEach(([name,step]) => {
       const card = review.querySelector('[data-pmv2-review-card="' + name + '"]');
       const value = review.querySelector('[data-pmv2-review="' + name + '"]');
