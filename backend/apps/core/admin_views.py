@@ -29,12 +29,13 @@ from apps.legal.models import ConsumerContractDeclaration, DeletionRequest, Lega
 from apps.licenses.models import License, LicenseAssignment, LicenseAssignmentLink, LicenseTerm, LicenseUpgradeRequest
 from apps.licenses.services import assign_license, block_license, release_license, unblock_license
 from apps.notifications.models import EmailMessage, EmailTemplate
+from apps.notifications.services import queue_email
 from apps.ops.metrics import caddy_health, certificate_status, snapshot
 from apps.ops.models import BackupRecord, RestoreTest, SystemAlert
 from apps.orders.models import Order
 from apps.payments.models import MollieEvent, Payment, Refund
 from apps.payments.services import calculate_refund, create_refund_request, submit_refund
-from apps.support.models import SupportRequest
+from apps.support.models import SupportMessage, SupportRequest
 from .admin_forms import (
     AdminCompanyForm,
     CustomerAdminInviteForm,
@@ -2217,8 +2218,81 @@ def support_requests(request):
 
 @staff_perm('support.read')
 def support_request_detail(request, pk):
-    support_request = get_object_or_404(SupportRequest.objects.select_related('user','company','license','license__product'), pk=pk)
-    return render(request, 'ns_admin/support_detail.html', {'support_request': support_request, 'can_write': has_perm(request.user, 'support.write')})
+    support_request = get_object_or_404(
+        SupportRequest.objects.select_related(
+            'user', 'company', 'license', 'license__product'
+        ),
+        pk=pk,
+    )
+    thread_messages = list(
+        support_request.messages
+        .select_related('author', 'email_message')
+        .order_by('created_at', 'id')
+    )
+    return render(
+        request,
+        'ns_admin/support_detail.html',
+        {
+            'support_request': support_request,
+            'thread_messages': thread_messages,
+            'can_write': has_perm(request.user, 'support.write'),
+        },
+    )
+
+
+@staff_perm('support.write')
+def support_request_reply(request, pk):
+    if request.method != 'POST':
+        raise PermissionDenied
+
+    support_request = get_object_or_404(
+        SupportRequest.objects.select_related('user', 'company'),
+        pk=pk,
+    )
+    body = (request.POST.get('message') or '').strip()
+    if not body:
+        messages.error(request, 'Bitte eine Antwort eingeben.')
+        return redirect('ns_admin:support_request_detail', pk=pk)
+    if len(body) > 10000:
+        messages.error(request, 'Die Antwort darf höchstens 10.000 Zeichen enthalten.')
+        return redirect('ns_admin:support_request_detail', pk=pk)
+
+    with transaction.atomic():
+        email_message = queue_email(
+            'support_reply',
+            support_request.user.email,
+            {
+                'subject': support_request.subject,
+                'message': body,
+                'reference': str(support_request.id),
+            },
+            scope_user=support_request.user_id,
+        )
+        support_message = SupportMessage.objects.create(
+            support_request=support_request,
+            direction='staff',
+            author=request.user,
+            body=body,
+            email_message=email_message,
+        )
+        if support_request.status == 'new':
+            support_request.status = 'in_progress'
+            support_request.save(update_fields=['status', 'updated_at'])
+        write_audit(
+            request.user,
+            'support.reply_sent',
+            support_request,
+            {
+                'message_id': str(support_message.id),
+                'email_message_id': str(email_message.id),
+                'recipient': support_request.user.email,
+                'characters': len(body),
+            },
+            request=request,
+        )
+
+    messages.success(request, 'Antwort gespeichert und für den E-Mail-Versand eingeplant.')
+    return redirect('ns_admin:support_request_detail', pk=pk)
 
 
 @staff_perm('support.write')
