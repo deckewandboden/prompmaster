@@ -26,3 +26,39 @@ class SupportRequest(TimeStampedModel):
 
     def __str__(self):
         return f'{self.get_category_display()} · {self.subject}'
+
+
+
+class SupportMessage(TimeStampedModel):
+    DIRECTION = [
+        ('customer', 'Kunde'),
+        ('staff', 'netstyle'),
+    ]
+
+    support_request = models.ForeignKey(
+        SupportRequest,
+        on_delete=models.CASCADE,
+        related_name='messages',
+    )
+    direction = models.CharField(max_length=20, choices=DIRECTION)
+    author = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        null=True,
+        blank=True,
+        on_delete=models.PROTECT,
+        related_name='support_messages_authored',
+    )
+    body = models.TextField()
+    email_message = models.ForeignKey(
+        'notifications.EmailMessage',
+        null=True,
+        blank=True,
+        on_delete=models.SET_NULL,
+        related_name='support_messages',
+    )
+
+    class Meta:
+        ordering = ('created_at', 'id')
+
+    def __str__(self):
+        return f'{self.get_direction_display()} · {self.support_request.subject}'

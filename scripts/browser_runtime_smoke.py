@@ -497,7 +497,7 @@ def _backend_fixture() -> dict:
             'last_provider_payload': {},
         },
     )
-    SupportRequest.objects.update_or_create(
+    support_request, _ = SupportRequest.objects.update_or_create(
         user=customer,
         company=company,
         subject='Browser Smoke Support',
@@ -572,6 +572,7 @@ def _backend_fixture() -> dict:
         'task_id': definition.task_id,
         'version_id': str(version.pk),
         'free_license_id': str(free_license.pk),
+        'support_id': str(support_request.pk),
         'demo_credentials': demo_credentials,
         'demo_companies': demo_companies,
         'demo_private': demo_private,
@@ -2280,6 +2281,42 @@ def run_backend_ui_smoke(browser, fixture=None) -> None:
                 )
                 if spacing < 10:
                     raise AssertionError(f'admin license destructive action has insufficient spacing: {spacing}')
+
+                owner_card = page.locator('.license-owner-card')
+                release_footer = owner_card.locator(':scope > .card-action-row')
+                release_button = release_footer.get_by_role('button', name='Zuweisung freigeben')
+                if owner_card.count() != 1 or release_footer.count() != 1 or not release_button.is_visible():
+                    raise AssertionError('admin license assignment footer/button is missing')
+                footer_position = owner_card.evaluate(
+                    """card => {
+                      const footer = card.querySelector(':scope > .card-action-row');
+                      const cr = card.getBoundingClientRect();
+                      const fr = footer.getBoundingClientRect();
+                      return {
+                        bottomGap: cr.bottom - fr.bottom,
+                        rightGap: cr.right - fr.right,
+                        justify: getComputedStyle(footer).justifyContent,
+                      };
+                    }"""
+                )
+                if footer_position['bottomGap'] > 22 or footer_position['justify'] != 'flex-end':
+                    raise AssertionError(
+                        f'admin license assignment action is not pinned bottom-right: {footer_position}'
+                    )
+
+                page.goto(
+                    base + f'ns-admin/support/{fixture["support_id"]}/',
+                    wait_until='networkidle',
+                )
+                if not page.get_by_role('heading', name='Antwort schreiben').is_visible():
+                    raise AssertionError('admin support reply composer is not visible')
+                if not page.get_by_role('heading', name='Verlauf').is_visible():
+                    raise AssertionError('admin support conversation timeline is not visible')
+                reply_form = page.locator('form[action$="/reply/"]')
+                if reply_form.count() != 1 or not reply_form.locator('textarea[name="message"]').is_visible():
+                    raise AssertionError('admin support reply textarea/form is missing')
+                if 'Repräsentativer Browser-Smoke-Datensatz.' not in page.locator('.support-thread').inner_text():
+                    raise AssertionError('admin support thread does not show the original request')
 
             if role == 'portal':
                 page.goto(base + 'portal/profile/', wait_until='networkidle')
