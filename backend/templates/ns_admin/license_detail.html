@@ -33,12 +33,14 @@
 
     {% if can_write and license.company %}
       {% if active_assignment %}
-        <form method="post" action="{% url 'ns_admin:license_release' license.id %}" class="inline-form" data-confirm="Lizenzzuweisung wirklich freigeben? Aktive Geräte dieser Lizenz werden widerrufen.">
-          {% csrf_token %}
-          <button class="btn danger sm" type="submit">Zuweisung freigeben</button>
-        </form>
+        <div class="card-action-row end">
+          <form method="post" action="{% url 'ns_admin:license_release' license.id %}" class="inline-form" data-confirm="Lizenzzuweisung wirklich freigeben? Aktive Geräte dieser Lizenz werden widerrufen.">
+            {% csrf_token %}
+            <button class="btn danger sm" type="submit">Zuweisung freigeben</button>
+          </form>
+        </div>
       {% elif license.status == 'free' or license.status == 'active' %}
-        <form method="post" action="{% url 'ns_admin:license_assign' license.id %}" class="form">
+        <form method="post" action="{% url 'ns_admin:license_assign' license.id %}" class="form license-assignment-form">
           {% csrf_token %}
           <label>Aktiven Firmenbenutzer auswählen
             <select name="user_id" required>
@@ -48,7 +50,9 @@
               {% endfor %}
             </select>
           </label>
-          <button class="btn primary sm" type="submit">Lizenz zuweisen</button>
+          <div class="card-action-row end">
+            <button class="btn primary sm" type="submit">Lizenz zuweisen</button>
+          </div>
         </form>
       {% endif %}
     {% endif %}
