@@ -706,7 +706,7 @@
     button.addEventListener('click', () => {
       const step = Number(button.dataset.pmv2Edit);
       scrollToTarget(stepSection(step));
-      if (step === 4 && !free) {
+      if (step === 4) {
         window.setTimeout(() => {
           const firstMissing = requiredContextInputs()
             .find(input => !(input.value || '').trim());
@@ -811,7 +811,7 @@
     return input?.closest('.option')?.textContent.replace(/\s+/g,' ').trim() || 'Noch nicht gewählt';
   };
   const selectedFocus = () => {
-    const values = $('input[name="focus"]:checked', focusSection)
+    const values = $$('input[name="focus"]:checked', focusSection)
       .map(input => input.closest('.option')?.textContent.replace(/\s+/g,' ').trim())
       .filter(Boolean);
     return values.length ? values.join(' · ') : 'Noch nicht gewählt';
@@ -826,7 +826,7 @@
       if (current.secondary?.required) inputs.push($('#sourceContextInput', contextSection));
       return inputs.filter(Boolean);
     }
-    return $('.input-card.required .task-input', contextSection);
+    return $$('.input-card.required .task-input', contextSection);
   };
   const requiredContextLabel = input => {
     if (free && typeof spec === 'function') {
@@ -870,7 +870,7 @@
       taskSelected,
       taskSelected && missingContextLabels().length === 0,
       taskSelected && (audienceSection.classList.contains('hidden') || Boolean($('input[name="audience"]:checked'))),
-      taskSelected && $('input[name="focus"]:checked', focusSection).length > 0,
+      taskSelected && $$('input[name="focus"]:checked', focusSection).length > 0,
       taskSelected && outputComplete(),
     ];
   };
