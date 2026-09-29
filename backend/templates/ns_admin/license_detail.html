@@ -26,7 +26,10 @@
     <h2>Inhaber &amp; Zuweisung</h2>
     <div class="statusrow"><span>Unternehmen</span><strong>{{ license.company.name|default:'–' }}</strong></div>
     <div class="statusrow"><span>Privatkunde</span><strong>{{ license.owner_user.email|default:'–' }}</strong></div>
-    <div class="statusrow"><span>Zugewiesen an</span><strong>{% if active_assignment %}{{ active_assignment.user.email }}{% else %}Frei{% endif %}</strong></div>
+    <div class="statusrow"><span>Zugewiesen an</span><strong>{% if active_assignment %}{{ active_assignment.user.full_name|default:active_assignment.user.email }}{% elif license.owner_user %}{{ license.owner_user.full_name|default:license.owner_user.email }}{% else %}Frei{% endif %}</strong></div>
+    {% if active_assignment or license.owner_user %}
+      <div class="statusrow"><span>E-Mail</span><strong class="wrap-anywhere">{% if active_assignment %}{{ active_assignment.user.email }}{% else %}{{ license.owner_user.email }}{% endif %}</strong></div>
+    {% endif %}
 
     {% if can_write and license.company %}
       {% if active_assignment %}

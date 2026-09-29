@@ -1,6 +1,13 @@
-from django.test import RequestFactory, TestCase
+from datetime import timedelta
 
+from django.test import RequestFactory, TestCase
+from django.utils import timezone
+
+from apps.accounts.models import User
+from apps.catalog.models import Product
 from apps.companies.models import Company
+from apps.licenses.models import License, LicenseAssignment
+from .admin_views import _license_admin_queryset
 from .datagrid import DataGrid
 
 
@@ -64,3 +71,131 @@ class DataGridContractTests(TestCase):
         empty = self.build()
         self.assertEqual(empty.page.paginator.count, 0)
         self.assertFalse(empty.has_state)
+
+
+
+class LicenseAdminGridContractTests(TestCase):
+    def setUp(self):
+        self.factory = RequestFactory()
+        self.company = Company.objects.create(
+            customer_number='GRID-LIC-001',
+            name='Grid Lizenzkunde',
+            email='license-grid@example.test',
+            country='DE',
+        )
+        self.product_a = Product.objects.create(code='GRID-PRO-A', name='A Produkt')
+        self.product_z = Product.objects.create(code='GRID-PRO-Z', name='Z Produkt')
+        self.anna = User.objects.create_user(
+            email='anna@example.test',
+            first_name='Anna',
+            last_name='Becker',
+        )
+        self.berta = User.objects.create_user(
+            email='berta@example.test',
+            first_name='Berta',
+            last_name='Zimmer',
+        )
+        self.historical = User.objects.create_user(
+            email='historisch@example.test',
+            first_name='Historisch',
+            last_name='Alt',
+        )
+        self.license_anna = License.objects.create(
+            license_number='GRID-LIC-A',
+            company=self.company,
+            product=self.product_z,
+            status='active',
+        )
+        self.license_berta = License.objects.create(
+            license_number='GRID-LIC-B',
+            company=self.company,
+            product=self.product_a,
+            status='active',
+        )
+        self.license_free = License.objects.create(
+            license_number='GRID-LIC-FREE',
+            company=self.company,
+            product=self.product_a,
+            status='free',
+        )
+        LicenseAssignment.objects.create(license=self.license_anna, user=self.anna)
+        LicenseAssignment.objects.create(license=self.license_berta, user=self.berta)
+        LicenseAssignment.objects.create(
+            license=self.license_free,
+            user=self.historical,
+            ended_at=timezone.now() - timedelta(days=1),
+        )
+
+    def grid(self, query=''):
+        request = self.factory.get('/ns-admin/licenses/' + query)
+        return DataGrid(
+            request,
+            _license_admin_queryset(License.objects.filter(company=self.company)),
+            search_fields=(
+                'license_number',
+                'product__name',
+                'license_holder_name',
+                'license_holder_email',
+            ),
+            sort_fields={
+                'number': 'license_number',
+                'name': 'license_holder_name',
+                'product': 'product__name',
+                'expiry': 'valid_until',
+                'status': 'status',
+            },
+            default_sort='license_number',
+        ).build()
+
+    def test_current_holder_annotation_ignores_historical_assignments(self):
+        rows = {
+            row.license_number: row
+            for row in _license_admin_queryset(
+                License.objects.filter(company=self.company)
+            )
+        }
+        self.assertEqual(rows['GRID-LIC-A'].license_holder_name, 'Anna Becker')
+        self.assertEqual(rows['GRID-LIC-A'].license_holder_email, 'anna@example.test')
+        self.assertEqual(rows['GRID-LIC-B'].license_holder_name, 'Berta Zimmer')
+        self.assertEqual(rows['GRID-LIC-FREE'].license_holder_name, 'Frei')
+        self.assertEqual(rows['GRID-LIC-FREE'].license_holder_email, '')
+
+    def test_license_name_and_product_are_server_side_sortable_and_searchable(self):
+        by_name = self.grid('?sort=name&dir=asc')
+        self.assertEqual(
+            [row.license_number for row in by_name.page.object_list],
+            ['GRID-LIC-A', 'GRID-LIC-B', 'GRID-LIC-FREE'],
+        )
+        self.assertEqual(by_name.sort, 'name')
+
+        by_product = self.grid('?sort=product&dir=asc')
+        self.assertEqual(by_product.sort, 'product')
+        self.assertEqual(
+            [row.product.name for row in by_product.page.object_list],
+            ['A Produkt', 'A Produkt', 'Z Produkt'],
+        )
+
+        searched = self.grid('?q=Anna')
+        self.assertEqual(
+            [row.license_number for row in searched.page.object_list],
+            ['GRID-LIC-A'],
+        )
+
+    def test_admin_templates_expose_holder_name_and_separate_detail_email(self):
+        from django.conf import settings
+        from pathlib import Path
+
+        templates = Path(settings.BASE_DIR) / 'templates' / 'ns_admin'
+        company_grid = (templates / 'customer_grid.html').read_text(encoding='utf-8')
+        private_grid = (templates / 'private_customer_grid.html').read_text(encoding='utf-8')
+        detail = (templates / 'license_detail.html').read_text(encoding='utf-8')
+
+        for source in (company_grid, private_grid):
+            self.assertIn("sort_url request 'name'", source)
+            self.assertIn("sort_url request 'product'", source)
+            self.assertIn('data-label="Name"', source)
+            self.assertIn('license_holder_name', source)
+
+        self.assertIn('Zugewiesen an', detail)
+        self.assertIn('<span>E-Mail</span>', detail)
+        self.assertIn('class="wrap-anywhere"', detail)
