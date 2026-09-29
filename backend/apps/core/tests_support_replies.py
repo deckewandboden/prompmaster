@@ -43,9 +43,9 @@ class SupportReplyAdminTests(TestCase):
         EmailTemplate.objects.update_or_create(
             code='support_reply',
             defaults={
-                'subject': 'Antwort auf Ihre PromptMaster-Anfrage: {subject}',
+                'subject': 'PromptMaster: {subject}',
                 'body_text': (
-                    'Antwort auf {subject}\n\n{message}\n\nVorgang: {reference}'
+                    'Antwort auf {subject}\n\n{reply}\n\nVorgang: {reference}'
                 ),
                 'active': True,
             },
@@ -80,6 +80,7 @@ class SupportReplyAdminTests(TestCase):
         self.assertEqual(email.recipient, self.customer.email)
         self.assertEqual(email.status, 'queued')
         self.assertEqual(email.context['message'], message.body)
+        self.assertEqual(email.context['reply'], message.body)
 
         self.assertTrue(
             AuditEvent.objects.filter(
