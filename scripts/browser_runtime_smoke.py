@@ -19,7 +19,7 @@ BACKEND = ROOT / 'backend'
 sys.path.insert(0, str(BACKEND))
 
 from apps.prompts.free_legacy import AUDIENCE_DISPLAY, FORMAT_LABELS, FREE_RUNTIME_CONTRACTS  # noqa: E402
-from apps.prompts.free_surface import FREE_INPUT_META, FREE_SURFACE_PRO_CONTRACTS, FREE_TO_PRO_APP_CODE  # noqa: E402
+from apps.prompts.free_surface import FREE_INPUT_META, FREE_SURFACE_ALIAS_TO_PRO_ID, FREE_SURFACE_PRO_CONTRACTS, FREE_TO_PRO_APP_CODE  # noqa: E402
 
 RUNTIME = ROOT / 'backend/private_assets/promptmaster_pro_runtime.html'
 DATA = ROOT / 'backend/apps/prompts/data/pm20_golden_logic.json'
@@ -60,6 +60,8 @@ def mock_catalog() -> dict:
     free_data = json.loads(FREE_DATA.read_text(encoding='utf-8'))
     for item in free_data.get('tasks') or []:
         task_id = item['legacy_id']
+        if task_id in FREE_SURFACE_ALIAS_TO_PRO_ID:
+            continue
         runtime = FREE_RUNTIME_CONTRACTS[task_id]
         meta = FREE_INPUT_META[task_id]
         required = []
@@ -97,6 +99,8 @@ def mock_catalog() -> dict:
         })
 
     for task_id, contract in FREE_SURFACE_PRO_CONTRACTS.items():
+        if task_id in FREE_SURFACE_ALIAS_TO_PRO_ID:
+            continue
         surface_by_app.setdefault(contract['app_code'], []).append({
             'id': task_id,
             'title': contract['title'],
@@ -2566,7 +2570,7 @@ def run_backend_ui_smoke(browser, fixture=None) -> None:
                     raise AssertionError(
                         f'netstyle PromptMaster API access failed: {catalog_probe}'
                     )
-                if catalog_probe['body']['catalog'].get('task_count') != 227:
+                if catalog_probe['body']['catalog'].get('task_count') != 215:
                     raise AssertionError('netstyle PromptMaster catalog is incomplete')
                 staff_compose_probe = page.evaluate(
                     """async () => {
@@ -3065,7 +3069,7 @@ def main() -> int:
     executable = os.getenv('CHROMIUM_PATH') or shutil.which('chromium') or shutil.which('chromium-browser') or shutil.which('google-chrome')
     backend_fixture = _backend_fixture() if os.getenv('BACKEND_UI_BROWSER_SMOKE') == '1' else None
     catalog = mock_catalog()
-    if (catalog['application_count'], catalog['task_count']) != (34, 227):
+    if (catalog['application_count'], catalog['task_count']) != (34, 215):
         raise SystemExit('BROWSER SMOKE FAIL: catalog count drift')
     html = RUNTIME.read_text(encoding='utf-8')
     # Prevent all asset network access and inject the mocked API before product JS.
@@ -3086,8 +3090,8 @@ def main() -> int:
         if 'power_automate' not in app_ids or 'github_copilot' not in app_ids:
             raise AssertionError('expanded 34-app catalog is not visible')
 
-        # Exercise every catalog application and all 227 Pro task render paths:
-        # 194 PM20 plus the complete 33-card Free surface inheritance.
+        # Exercise every catalog application and all 215 Pro task render paths:
+        # 194 PM20 plus 21 genuinely additional Free-surface functions; 12 duplicates stay canonical PM20 cards.
         # tasks is covered by validate_prompt_runtime; this loop validates the
         # interactive DOM contract and dynamic field generation task-by-task.
         premium = page.locator('input[name="mslicense"][value="premium"]')
@@ -3115,11 +3119,11 @@ def main() -> int:
                         f'got {actual_fields}'
                     )
                 rendered_tasks += 1
-        if rendered_tasks != 227:
-            raise AssertionError(f'expected to exercise 227 Pro task render paths, got {rendered_tasks}')
+        if rendered_tasks != 215:
+            raise AssertionError(f'expected to exercise 215 Pro task render paths, got {rendered_tasks}')
 
         page.locator('[data-app="copilot_chat"]').click()
-        page.wait_for_function("document.querySelectorAll('#taskGrid [data-task]').length === 5")
+        page.wait_for_function("document.querySelectorAll('#taskGrid [data-task]').length === 6")
         page.locator('[data-task="PM20-001"]').click()
         page.locator('.task-input').first.fill('Wie verbessern wir den Support?')
         page.wait_for_function("document.querySelector('#promptOutput').value === 'SERVER TEST PROMPT'")
@@ -3174,7 +3178,7 @@ def main() -> int:
                 finally:
                     engine_browser.close()
 
-    print('BROWSER RUNTIME SMOKE OK: 34 apps / 227 task render paths (194 PM20 + 33 Free surface) + compose + rating/feedback + V2 Free/Pro layout in Chromium/Firefox/WebKit')
+    print('BROWSER RUNTIME SMOKE OK: 34 apps / 215 task render paths (194 PM20 + 21 unique Free additions; 12 aliases deduplicated) + compose + rating/feedback + V2 Free/Pro layout in Chromium/Firefox/WebKit')
     return 0
 
 
