@@ -19,6 +19,16 @@ FREE_TO_PRO_APP_CODE = {
 }
 
 
+AUDIENCE_DISPLAY = {
+    'self': 'Eigene Verwendung',
+    'customer': 'Kunde / extern',
+    'internal': 'Intern / Kolleg:innen',
+    'participants': 'Besprechungsteilnehmende',
+    'own_tasks': 'Eigene Aufgaben',
+    'team': 'Team / Projekt',
+}
+
+
 FREE_INPUT_META = {
     'chat_sum': {
         'primary': 'Was soll die Zusammenfassung leisten?',
