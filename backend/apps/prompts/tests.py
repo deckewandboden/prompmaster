@@ -344,17 +344,21 @@ class PromptApiTests(TestCase):
         self.assertEqual(response['Cache-Control'], 'no-store')
 
     @patch('apps.prompts.api._require_pro_access')
-    def test_every_free_surface_task_is_executable_in_pro(self, access):
+    def test_every_free_surface_function_has_one_executable_pro_implementation(self, access):
         catalog = self.client.get('/api/v1/prompts/?product=PRO').json()['catalog']
-        surface_tasks = [
+        all_tasks = [
             task
             for app in catalog['applications']
             for task in app['tasks']
-            if task['id'] in FREE_SURFACE_IDS
         ]
-        self.assertEqual(len(surface_tasks), 33)
+        by_id = {task['id']: task for task in all_tasks}
+        coverage_ids = set(FREE_SURFACE_UNIQUE_IDS) | set(FREE_SURFACE_ALIAS_TO_PRO_ID.values())
+        self.assertEqual(len(coverage_ids), 33)
+        self.assertTrue(coverage_ids.issubset(by_id))
+        self.assertFalse(set(FREE_SURFACE_ALIAS_TO_PRO_ID).intersection(by_id))
 
-        for task in surface_tasks:
+        for task_id in sorted(coverage_ids):
+            task = by_id[task_id]
             fields = {
                 label: f'Testwert für {label}'
                 for label in task.get('required') or []
