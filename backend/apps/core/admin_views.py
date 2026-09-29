@@ -2226,7 +2226,7 @@ def support_request_detail(request, pk):
     )
     thread_messages = list(
         support_request.messages
-        .select_related('author', 'email_message')
+        .select_related('author_user', 'notification_email')
         .order_by('created_at', 'id')
     )
     return render(
@@ -2270,10 +2270,11 @@ def support_request_reply(request, pk):
         )
         support_message = SupportMessage.objects.create(
             support_request=support_request,
-            direction='staff',
-            author=request.user,
+            sender_type='staff',
+            visibility='customer',
+            author_user=request.user,
             body=body,
-            email_message=email_message,
+            notification_email=email_message,
         )
         if support_request.status == 'new':
             support_request.status = 'in_progress'

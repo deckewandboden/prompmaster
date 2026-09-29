@@ -69,12 +69,13 @@ class SupportReplyAdminTests(TestCase):
         self.assertEqual(self.request_obj.status, 'in_progress')
 
         message = SupportMessage.objects.get(support_request=self.request_obj)
-        self.assertEqual(message.direction, 'staff')
-        self.assertEqual(message.author, self.admin)
+        self.assertEqual(message.sender_type, 'staff')
+        self.assertEqual(message.visibility, 'customer')
+        self.assertEqual(message.author_user, self.admin)
         self.assertEqual(message.body, 'Bitte Cache leeren und erneut anmelden.')
-        self.assertIsNotNone(message.email_message_id)
+        self.assertIsNotNone(message.notification_email_id)
 
-        email = EmailMessage.objects.get(pk=message.email_message_id)
+        email = EmailMessage.objects.get(pk=message.notification_email_id)
         self.assertEqual(email.template.code, 'support_reply')
         self.assertEqual(email.recipient, self.customer.email)
         self.assertEqual(email.status, 'queued')
