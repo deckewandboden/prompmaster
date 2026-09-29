@@ -1,33 +1,103 @@
 {% extends 'ns_admin/base.html' %}{% block content %}
 <div class="page-head">
-  <div><h1>{{ support_request.subject }}</h1><div class="sub">{{ support_request.get_category_display }} · {{ support_request.created_at|date:'d.m.Y H:i' }}</div></div>
+  <div>
+    <h1>{{ support_request.subject }}</h1>
+    <div class="sub">{{ support_request.get_category_display }} · {{ support_request.created_at|date:'d.m.Y H:i' }}</div>
+  </div>
   <a class="btn secondary" href="{% url 'ns_admin:support_requests' %}">Zurück</a>
 </div>
-<div class="grid two">
+
+<div class="grid two support-detail-grid">
   <div class="card">
     <h2>Anfrage</h2>
     <div class="statusrow"><span>Kunde</span><strong>{% if support_request.company %}{{ support_request.company.name }}{% else %}{{ support_request.user.full_name }}{% endif %}</strong></div>
-    <div class="statusrow"><span>Benutzer-ID</span><strong>{{ support_request.user_id }}</strong></div>
-    <div class="statusrow"><span>E-Mail</span><strong>{{ support_request.user.email }}</strong></div>
+    <div class="statusrow"><span>Benutzer-ID</span><strong class="wrap-anywhere">{{ support_request.user_id }}</strong></div>
+    <div class="statusrow"><span>E-Mail</span><strong class="wrap-anywhere">{{ support_request.user.email }}</strong></div>
     <div class="statusrow"><span>Lizenz</span><strong>{% if support_request.license %}{{ support_request.license.license_number }} · {{ support_request.license.product.name }}{% else %}–{% endif %}</strong></div>
     <div class="statusrow"><span>Status</span><strong>{{ support_request.get_status_display }}</strong></div>
     <div class="message-box">{{ support_request.message|linebreaksbr }}</div>
   </div>
-  {% if can_write %}
-  <div class="card">
-    <h2>Status ändern</h2>
-    <form method="post" action="{% url 'ns_admin:support_request_status' support_request.id %}" class="form">
-      {% csrf_token %}
-      <label>Status
-        <select name="status">
-          <option value="new" {% if support_request.status == 'new' %}selected{% endif %}>Neu</option>
-          <option value="in_progress" {% if support_request.status == 'in_progress' %}selected{% endif %}>In Bearbeitung</option>
-          <option value="closed" {% if support_request.status == 'closed' %}selected{% endif %}>Abgeschlossen</option>
-        </select>
-      </label>
-      <button class="btn primary" type="submit">Speichern</button>
-    </form>
+
+  <div class="support-side-stack">
+    {% if can_write %}
+    <div class="card">
+      <h2>Status ändern</h2>
+      <form method="post" action="{% url 'ns_admin:support_request_status' support_request.id %}" class="form">
+        {% csrf_token %}
+        <label>Status
+          <select name="status">
+            <option value="new" {% if support_request.status == 'new' %}selected{% endif %}>Neu</option>
+            <option value="in_progress" {% if support_request.status == 'in_progress' %}selected{% endif %}>In Bearbeitung</option>
+            <option value="closed" {% if support_request.status == 'closed' %}selected{% endif %}>Abgeschlossen</option>
+          </select>
+        </label>
+        <button class="btn primary" type="submit">Speichern</button>
+      </form>
+    </div>
+
+    <div class="card">
+      <h2>Antwort schreiben</h2>
+      <p class="muted small support-reply-help">Die Antwort wird im Verlauf gespeichert und per E-Mail an {{ support_request.user.email }} gesendet.</p>
+      <form method="post" action="{% url 'ns_admin:support_request_reply' support_request.id %}" class="form">
+        {% csrf_token %}
+        <label>Antwort
+          <textarea name="message" maxlength="10000" required placeholder="Antwort an den Kunden eingeben …"></textarea>
+        </label>
+        <div class="card-action-row end">
+          <button class="btn primary" type="submit">Antwort senden</button>
+        </div>
+      </form>
+    </div>
+    {% endif %}
   </div>
-  {% endif %}
+</div>
+
+<div class="card mt-14">
+  <div class="support-thread-head">
+    <div>
+      <h2>Verlauf</h2>
+      <div class="sub">Anfrage und alle netstyle-Antworten in zeitlicher Reihenfolge.</div>
+    </div>
+  </div>
+  <div class="support-thread">
+    <article class="support-thread-entry customer">
+      <div class="support-thread-meta">
+        <strong>{{ support_request.user.full_name|default:support_request.user.email }}</strong>
+        <span>Kunde · {{ support_request.created_at|date:'d.m.Y H:i' }}</span>
+      </div>
+      <div class="support-thread-body">{{ support_request.message|linebreaksbr }}</div>
+    </article>
+
+    {% for item in thread_messages %}
+      <article class="support-thread-entry {% if item.direction == 'staff' %}staff{% else %}customer{% endif %}">
+        <div class="support-thread-meta">
+          <strong>
+            {% if item.direction == 'staff' %}
+              {% if item.author %}{{ item.author.full_name|default:item.author.email }}{% else %}netstyle Support{% endif %}
+            {% else %}
+              {{ support_request.user.full_name|default:support_request.user.email }}
+            {% endif %}
+          </strong>
+          <span>{{ item.get_direction_display }} · {{ item.created_at|date:'d.m.Y H:i' }}</span>
+        </div>
+        <div class="support-thread-body">{{ item.body|linebreaksbr }}</div>
+        {% if item.email_message %}
+          <div class="support-thread-delivery">
+            E-Mail:
+            {% if item.email_message.status == 'sent' %}
+              <span class="badge ok">Gesendet</span>
+            {% elif item.email_message.status == 'failed' %}
+              <span class="badge bad">Fehlgeschlagen</span>
+            {% elif item.email_message.status == 'sending' %}
+              <span class="badge info">Wird gesendet</span>
+            {% else %}
+              <span class="badge warn">Warteschlange</span>
+            {% endif %}
+            <span class="muted">{{ item.email_message.recipient }}</span>
+          </div>
+        {% endif %}
+      </article>
+    {% endfor %}
+  </div>
 </div>
 {% endblock %}
