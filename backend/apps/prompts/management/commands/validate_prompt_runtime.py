@@ -9,12 +9,18 @@ from apps.contenthub.models import FAQEntry
 from apps.core.security import token_pair
 from apps.integrations.models import ServiceAccount
 from apps.prompts.free_legacy import compose_free_legacy
+from apps.prompts.free_surface import FREE_ACTUAL_IDS, FREE_PRO_PREVIEW_IDS, FREE_SURFACE_IDS
 from apps.prompts.lifecycle import run_test_case
 from apps.prompts.models import PromptApplication, PromptDefinition, PromptLegacyContract, PromptTestCase, PromptVersion
+from apps.prompts.services import (
+    catalog_snapshot,
+    compose_free_surface_pro_task,
+    compose_task,
+)
 
 
 class Command(BaseCommand):
-    help = 'Prüft die materialisierte PromptDomain, 194 Smoke-Tests, FAQ und MCP-Transport.'
+    help = 'Prüft 194 PM20-Definitionen, den 227-Aufgaben-Pro-Katalog, Smoke-Tests, FAQ und MCP-Transport.'
 
     def handle(self, *args, **options):
         counts = (
@@ -30,6 +36,63 @@ class Command(BaseCommand):
         )
         if counts != (34, 194, 16, 194, 194):
             raise CommandError(f'PromptDomain-Zähler falsch: {counts}')
+
+        pro_catalog = catalog_snapshot('PRO')
+        pro_tasks = [
+            task
+            for app in pro_catalog.get('applications') or []
+            for task in app.get('tasks') or []
+        ]
+        pro_ids = {task.get('id') for task in pro_tasks}
+        if (
+            pro_catalog.get('application_count') != 34
+            or pro_catalog.get('task_count') != 227
+            or len(pro_ids) != 227
+        ):
+            raise CommandError(
+                'Pro-Runtime-Katalog unvollständig: '
+                f"{pro_catalog.get('application_count')} Apps / "
+                f"{pro_catalog.get('task_count')} Tasks / "
+                f"{len(pro_ids)} eindeutige IDs"
+            )
+        missing_surface = set(FREE_SURFACE_IDS) - pro_ids
+        if missing_surface:
+            raise CommandError(
+                'Free→Pro-Parität verletzt; fehlende Aufgaben: '
+                + ', '.join(sorted(missing_surface))
+            )
+
+        expected_surface_counts = {
+            'copilot_chat': 4,
+            'outlook': 13,
+            'teams': 4,
+            'word': 4,
+            'excel': 4,
+            'powerpoint': 4,
+        }
+        for app in pro_catalog.get('applications') or []:
+            app_tasks = app.get('tasks') or []
+            app_ids = [task.get('id') for task in app_tasks]
+            if not app_tasks:
+                raise CommandError(f"Pro-App ohne Aufgaben: {app.get('code')}")
+            if len(app_ids) != len(set(app_ids)):
+                raise CommandError(f"Doppelte Task-ID in Pro-App: {app.get('code')}")
+            if not all(task.get('promptmaster_entitled') for task in app_tasks):
+                raise CommandError(f"Nicht freigeschaltete Aufgabe in Pro-App: {app.get('code')}")
+            inherited = [
+                task for task in app_tasks
+                if task.get('surface_origin') == 'FREE_1_2_4'
+            ]
+            expected_inherited = expected_surface_counts.get(app.get('code'), 0)
+            if len(inherited) != expected_inherited:
+                raise CommandError(
+                    f"Free→Pro-App-Parität falsch für {app.get('code')}: "
+                    f"{len(inherited)} statt {expected_inherited}"
+                )
+            self.stdout.write(
+                f"PRO_APP_AUDIT {app.get('code')}: "
+                f"total={len(app_tasks)} free_surface={len(inherited)}"
+            )
 
         legacy_contracts = list(
             PromptLegacyContract.objects.filter(source='FREE_1_2_4').order_by('legacy_id')
@@ -69,6 +132,92 @@ class Command(BaseCommand):
             or 'Free-Datenbankprobe' not in free_result.get('prompt', '')
         ):
             raise CommandError(f'Free-Datenbankkomposition fehlerhaft: {free_result}')
+
+        # Execute every task exposed by the Pro runtime through the same
+        # production composition path used by the API. This turns catalog
+        # presence into an executable contract: all 194 PM20 tasks plus all
+        # 33 tasks inherited from the reviewed Free surface must produce a
+        # complete prompt with a premium Microsoft tier.
+        legacy_by_id = {contract.legacy_id: contract for contract in legacy_contracts}
+        composed_total = 0
+        composed_by_app = {}
+        for app in pro_catalog.get('applications') or []:
+            app_code = app.get('code')
+            app_count = 0
+            for task in app.get('tasks') or []:
+                task_id = task.get('id')
+                fields = {
+                    label: f'Runtime-Validator {task_id}: {label}'
+                    for label in (task.get('required') or []) + (task.get('optional') or [])
+                }
+                payload = {
+                    'fields': fields,
+                    'audience': (task.get('audiences') or ['Management'])[0],
+                    'focus': (task.get('focus') or [])[:2],
+                    'output': (task.get('outputs') or ['Ergebnis'])[0],
+                    'source': (task.get('sources') or ['provided'])[0],
+                    'tone': 'professional',
+                    'detail': 'standard',
+                }
+
+                if task_id in FREE_ACTUAL_IDS:
+                    contract = legacy_by_id.get(task_id)
+                    if not contract:
+                        raise CommandError(
+                            f'Free→Pro-Kompositionsvertrag fehlt: {task_id}'
+                        )
+                    payload['primary'] = (
+                        f'Runtime-Validator {task_id}: Primärinhalt'
+                    )
+                    payload['secondary'] = (
+                        f'Runtime-Validator {task_id}: Sekundärinhalt'
+                    )
+                    result = compose_free_legacy(
+                        contract=contract,
+                        microsoft_tier='premium',
+                        payload=payload,
+                    )
+                    ready = result.get('ready')
+                    prompt = result.get('prompt') or ''
+                    progress = result.get('progress_percent')
+                elif task_id in FREE_PRO_PREVIEW_IDS:
+                    result = compose_free_surface_pro_task(
+                        task_id=task_id,
+                        microsoft_tier='premium',
+                        payload=payload,
+                    )
+                    ready = result.ready
+                    prompt = result.prompt
+                    progress = result.progress_percent
+                else:
+                    result = compose_task(
+                        task_id=task_id,
+                        microsoft_tier='premium',
+                        payload=payload,
+                        product_code='PRO',
+                    )
+                    ready = result.ready
+                    prompt = result.prompt
+                    progress = result.progress_percent
+
+                if not ready or not prompt.strip() or progress != 100:
+                    raise CommandError(
+                        f'Pro-Kompositionsaudit fehlgeschlagen für {app_code}/{task_id}: '
+                        f'ready={ready} progress={progress} prompt_len={len(prompt)}'
+                    )
+                app_count += 1
+                composed_total += 1
+
+            composed_by_app[app_code] = app_count
+
+        if composed_total != 227:
+            raise CommandError(
+                f'Pro-Kompositionsaudit unvollständig: {composed_total} statt 227 Aufgaben.'
+            )
+        for app_code, app_count in composed_by_app.items():
+            self.stdout.write(
+                f'PRO_APP_COMPOSE_AUDIT {app_code}: composed={app_count}'
+            )
 
         failed = []
         cases = PromptTestCase.objects.filter(
@@ -119,4 +268,4 @@ class Command(BaseCommand):
         finally:
             account.delete()
 
-        self.stdout.write(self.style.SUCCESS('PROMPT RUNTIME VALIDATION OK: 34 apps / 194 tasks / 194 smoke tests / MCP / FAQ'))
+        self.stdout.write(self.style.SUCCESS('PROMPT RUNTIME VALIDATION OK: 34 apps / 227 Pro tasks catalogued + 227/227 composed / 194 PM20 smoke tests / MCP / FAQ'))
