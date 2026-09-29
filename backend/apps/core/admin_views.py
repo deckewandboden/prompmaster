@@ -309,6 +309,7 @@ def leads(request):
         sort_fields={
             'number': 'lead_number',
             'customer': 'company_name',
+            'email': 'email',
             'status': 'status',
             'priority': 'priority',
             'assigned': 'assigned_to__last_name',
@@ -340,7 +341,7 @@ def leads(request):
             'columns': [
                 ('lead_number', 'Lead', 'number'),
                 ('customer_display', 'Interessent', 'customer'),
-                ('email', 'E-Mail', None),
+                ('email', 'E-Mail', 'email'),
                 ('status_name', 'Status', 'status'),
                 ('priority', 'Priorität', 'priority'),
                 ('assigned_name', 'Zuständig', 'assigned'),
@@ -634,7 +635,7 @@ def customers(request):
         request,
         Company.objects.all(),
         search_fields=('customer_number', 'name', 'email'),
-        sort_fields={'number': 'customer_number', 'name': 'name', 'created': 'created_at', 'status': 'status'},
+        sort_fields={'number': 'customer_number', 'name': 'name', 'email': 'email', 'created': 'created_at', 'status': 'status'},
         default_sort='name',
         filters={'status': 'status', 'country': 'country'},
     ).build()
@@ -655,7 +656,7 @@ def customers(request):
             'columns': [
                 ('customer_number', 'Kundennummer', 'number'),
                 ('name', 'Kunde', 'name'),
-                ('email', 'E-Mail', None),
+                ('email', 'E-Mail', 'email'),
                 ('status', 'Status', 'status'),
             ],
             'detail_route': 'ns_admin:customer_detail',
@@ -673,7 +674,7 @@ def private_customers(request):
         request,
         PrivateCustomerProfile.objects.select_related('user'),
         search_fields=('customer_number', 'user__email', 'user__first_name', 'user__last_name', 'city'),
-        sort_fields={'number': 'customer_number', 'name': 'user__last_name', 'email': 'user__email', 'created': 'created_at'},
+        sort_fields={'number': 'customer_number', 'name': 'user__last_name', 'email': 'user__email', 'country': 'country', 'created': 'created_at'},
         default_sort='user__last_name',
         filters={'country': 'country'},
     ).build()
@@ -695,7 +696,7 @@ def private_customers(request):
                 ('customer_number', 'Kundennummer', 'number'),
                 ('user', 'Kunde', 'name'),
                 ('user.email', 'E-Mail', 'email'),
-                ('country', 'Land', None),
+                ('country', 'Land', 'country'),
             ],
             'detail_route': 'ns_admin:private_customer_detail',
             'filter_options': [('country', 'Land', [('DE', 'Deutschland')])],
@@ -1999,6 +2000,7 @@ def legal_declarations(request):
         sort_fields={
             'date': 'submitted_at',
             'kind': 'kind',
+            'name': 'name',
             'email': 'email',
             'reference': 'contract_reference',
             'status': 'status',
@@ -2015,7 +2017,7 @@ def legal_declarations(request):
             'columns': [
                 ('submitted_at', 'Eingang', 'date'),
                 ('kind', 'Art', 'kind'),
-                ('name', 'Name', None),
+                ('name', 'Name', 'name'),
                 ('email', 'E-Mail', 'email'),
                 ('contract_reference', 'Vertragsbezug', 'reference'),
                 ('status', 'Status', 'status'),
