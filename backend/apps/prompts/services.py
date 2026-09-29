@@ -9,6 +9,7 @@ from .free_legacy import FORMAT_LABELS
 from .free_surface import (
     AUDIENCE_DISPLAY,
     FREE_INPUT_META,
+    FREE_SURFACE_ALIAS_TITLES,
     FREE_SURFACE_ALIAS_TO_PRO_ID,
     FREE_SURFACE_PRO_CONTRACTS,
     FREE_TO_PRO_APP_CODE,
@@ -531,7 +532,10 @@ def _prepend_free_surface_to_pro_catalog(apps: dict[str, dict], policy_version: 
                 field='task_id',
                 code='catalog_not_seeded',
             )
-        matches[0].setdefault('surface_aliases', []).append(surface_id)
+        task = matches[0]
+        task.setdefault('surface_aliases', []).append(surface_id)
+        task.setdefault('canonical_title', task['title'])
+        task['title'] = FREE_SURFACE_ALIAS_TITLES[surface_id]
 
 
 def catalog_snapshot(product_code: str = 'PRO') -> dict:

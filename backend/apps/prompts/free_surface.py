@@ -364,6 +364,27 @@ FREE_SURFACE_ALIAS_TO_PRO_ID = {
     'word_risk': 'PM20-019',
 }
 
+# The single canonical Pro card for each deduplicated alias must keep the exact
+# user-visible Free title.  This makes Free visibly a strict subset of Pro
+# without creating duplicate cards or duplicate prompt implementations.
+FREE_SURFACE_ALIAS_TITLES = {
+    'chat_sum': 'Inhalt zusammenfassen',
+    'chat_write': 'Text erstellen',
+    'out_reply': 'E-Mail-Antwort vorbereiten',
+    'teams_notes': 'Nachbereitung formulieren',
+    'teams_chat': 'Chat zusammenfassen',
+    'word_rewrite': 'Text verbessern',
+    'word_sum': 'Dokument zusammenfassen',
+    'chat_compare': 'Informationen vergleichen',
+    'out_thread': 'E-Mail-Verlauf analysieren',
+    'out_actions': 'Aufgaben und Termine extrahieren',
+    'out_meeting_prep': 'Besprechung vorbereiten',
+    'word_risk': 'Risiken und Lücken analysieren',
+}
+
+if set(FREE_SURFACE_ALIAS_TITLES) != set(FREE_SURFACE_ALIAS_TO_PRO_ID):
+    raise RuntimeError('Free→Pro alias title contract is incomplete.')
+
 FREE_SURFACE_ALIAS_IDS = frozenset(FREE_SURFACE_ALIAS_TO_PRO_ID)
 FREE_SURFACE_UNIQUE_IDS = FREE_SURFACE_IDS - FREE_SURFACE_ALIAS_IDS
 FREE_ACTUAL_UNIQUE_IDS = FREE_ACTUAL_IDS - FREE_SURFACE_ALIAS_IDS
