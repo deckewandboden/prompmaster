@@ -2545,15 +2545,82 @@ def run_backend_ui_smoke(browser, fixture=None) -> None:
                     raise AssertionError('admin dashboard must expose Free and Pro as new-tab launchers')
 
                 page.goto(base + 'ns-admin/orders/', wait_until='networkidle')
-                customer_sort = page.locator('th a', has_text='Kunde').first
+                customer_sort = page.locator('th a.sort-control', has_text='Kunde').first
                 if not customer_sort.is_visible():
-                    raise AssertionError('admin orders: customer column is not sortable')
+                    raise AssertionError('admin orders: customer column has no visible sort control')
+                if customer_sort.get_attribute('data-sort-state') != 'none':
+                    raise AssertionError('admin orders: untouched customer sort must start neutral')
+                neutral_icon = customer_sort.evaluate(
+                    "(el) => getComputedStyle(el, '::after').content"
+                )
+                if '⇅' not in neutral_icon:
+                    raise AssertionError(
+                        f'admin orders: neutral sort icon missing: {neutral_icon}'
+                    )
                 customer_sort.click()
                 page.wait_for_load_state('networkidle')
                 if 'sort=customer' not in page.url:
                     raise AssertionError(f'admin orders: customer sort did not activate: {page.url}')
+                customer_sort = page.locator('th a.sort-control', has_text='Kunde').first
+                if customer_sort.get_attribute('data-sort-state') != 'asc':
+                    raise AssertionError('admin orders: first customer sort must be ascending')
+                active_icon = customer_sort.evaluate(
+                    "(el) => getComputedStyle(el, '::after').content"
+                )
+                if '↑' not in active_icon:
+                    raise AssertionError(
+                        f'admin orders: active ascending icon missing: {active_icon}'
+                    )
                 if not page.get_by_role('link', name='Sortierung zurücksetzen').is_visible():
                     raise AssertionError('admin orders: explicit sort reset is missing')
+
+                page.goto(
+                    base + f'ns-admin/customers/{fixture["company_id"]}/licenses/',
+                    wait_until='networkidle',
+                )
+                license_sorts = page.locator(
+                    '.tablewrap thead a.sort-control[data-sort-mode="server"]'
+                )
+                if license_sorts.count() < 5:
+                    raise AssertionError(
+                        'admin customer licenses: visible sort controls are incomplete'
+                    )
+
+                page.goto(
+                    base + f'ns-admin/licenses/{fixture["license_id"]}/',
+                    wait_until='networkidle',
+                )
+                client_sorts = page.locator(
+                    '.tablewrap thead button.sort-control[data-sort-mode="client"]'
+                )
+                if client_sorts.count() < 5:
+                    raise AssertionError(
+                        'admin license detail: static period table lacks client sort controls'
+                    )
+                first_client_sort = client_sorts.first
+                if first_client_sort.get_attribute('data-sort-state') != 'none':
+                    raise AssertionError(
+                        'admin license detail: client sort must start neutral'
+                    )
+                client_neutral_icon = first_client_sort.evaluate(
+                    "(el) => getComputedStyle(el, '::after').content"
+                )
+                if '⇅' not in client_neutral_icon:
+                    raise AssertionError(
+                        f'admin license detail: neutral client sort icon missing: {client_neutral_icon}'
+                    )
+                first_client_sort.click()
+                if first_client_sort.get_attribute('data-sort-state') != 'asc':
+                    raise AssertionError(
+                        'admin license detail: first client sort click must be ascending'
+                    )
+                client_active_icon = first_client_sort.evaluate(
+                    "(el) => getComputedStyle(el, '::after').content"
+                )
+                if '↑' not in client_active_icon:
+                    raise AssertionError(
+                        f'admin license detail: active client sort icon missing: {client_active_icon}'
+                    )
 
                 page.goto(base + 'ns-admin/ops/', wait_until='networkidle')
                 ops_text = page.locator('body').inner_text()
