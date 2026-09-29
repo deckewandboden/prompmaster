@@ -13,7 +13,7 @@
 
 /* Sort controls are deliberately visible even before a sort is active.
    Every header link that carries ?sort= is upgraded by app.js. */
-.tablewrap thead th a.sort-control{
+.tablewrap thead th .sort-control{
   display:inline-flex;
   align-items:center;
   gap:6px;
@@ -26,7 +26,7 @@
   cursor:pointer;
   transition:background .15s ease,color .15s ease,box-shadow .15s ease;
 }
-.tablewrap thead th a.sort-control::after{
+.tablewrap thead th .sort-control::after{
   content:"⇅";
   display:inline-flex;
   align-items:center;
@@ -37,26 +37,35 @@
   color:#7f92a6;
   opacity:.9;
 }
-.tablewrap thead th a.sort-control[data-sort-state="asc"]::after{
+.tablewrap thead th .sort-control[data-sort-state="asc"]::after{
   content:"↑";
   color:#0b65e8;
   opacity:1;
 }
-.tablewrap thead th a.sort-control[data-sort-state="desc"]::after{
+.tablewrap thead th .sort-control[data-sort-state="desc"]::after{
   content:"↓";
   color:#0b65e8;
   opacity:1;
 }
-.tablewrap thead th a.sort-control[data-sort-state="asc"],
-.tablewrap thead th a.sort-control[data-sort-state="desc"]{
+.tablewrap thead th .sort-control[data-sort-state="asc"],
+.tablewrap thead th .sort-control[data-sort-state="desc"]{
   color:#173a61;
   background:#edf5ff;
   box-shadow:inset 0 0 0 1px #cfe3fb;
 }
-.tablewrap thead th a.sort-control:hover,
-.tablewrap thead th a.sort-control:focus-visible{
+.tablewrap thead th .sort-control:hover,
+.tablewrap thead th .sort-control:focus-visible{
   color:#0b65e8;
   background:#edf5ff;
   outline:none;
   box-shadow:inset 0 0 0 1px #bfdcff;
+}
+
+.tablewrap thead th button.sort-control{
+  appearance:none;
+  border:0;
+  font:inherit;
+  text-transform:inherit;
+  letter-spacing:inherit;
+  background:transparent;
 }
