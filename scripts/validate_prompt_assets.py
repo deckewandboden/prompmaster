@@ -9,10 +9,10 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 EXPECTED = {
-    ROOT / 'product/golden_masters/promptmaster_free.html': 'aada4fbb3461d3758c48ed808bf018716a53aa33baf81efb058412e63535b0a8',
+    ROOT / 'product/golden_masters/promptmaster_free.html': '10f2b65312c5d5b481f8563e7a0dbb2e838ecb1d940262309784f5fce374f228',
     ROOT / 'product/golden_masters/promptmaster_pro.html': 'aa7b2da53ba3cbcf9874b9b6f7381ea4c3e86ee1f9c09db186cbec6876a3c9cf',
     ROOT / 'backend/private_assets/promptmaster_pro.html': 'aa7b2da53ba3cbcf9874b9b6f7381ea4c3e86ee1f9c09db186cbec6876a3c9cf',
-    ROOT / 'backend/private_assets/promptmaster_free_reference.html': 'aada4fbb3461d3758c48ed808bf018716a53aa33baf81efb058412e63535b0a8',
+    ROOT / 'backend/private_assets/promptmaster_free_reference.html': '10f2b65312c5d5b481f8563e7a0dbb2e838ecb1d940262309784f5fce374f228',
     ROOT / 'backend/private_assets/promptmaster_pro_runtime.html': 'cfe4cc1483fa0df7a990a3ec9d3728a7dc1be824c082e9198f62147e09e43f97',
 }
 for path, expected in EXPECTED.items():
