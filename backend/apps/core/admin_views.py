@@ -2264,6 +2264,7 @@ def support_request_reply(request, pk):
             {
                 'subject': support_request.subject,
                 'message': body,
+                'reply': body,
                 'reference': str(support_request.id),
             },
             scope_user=support_request.user_id,
