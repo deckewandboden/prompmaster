@@ -2,6 +2,7 @@ from unittest.mock import patch
 
 from django.test import TestCase
 from django.urls import reverse
+from django.utils import timezone
 
 from apps.accounts.models import User
 from apps.audit.models import AuditEvent
@@ -49,6 +50,12 @@ class SupportReplyAdminTests(TestCase):
             },
         )
         self.client.force_login(self.admin)
+        session = self.client.session
+        session['security_version'] = self.admin.security_version
+        session['two_factor_ok'] = True
+        session['authenticated_at'] = timezone.now().timestamp()
+        session['last_activity_at'] = timezone.now().timestamp()
+        session.save()
 
     def test_staff_reply_is_persisted_mailed_audited_and_visible(self):
         response = self.client.post(
