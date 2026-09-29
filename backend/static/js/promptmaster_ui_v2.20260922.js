@@ -898,7 +898,7 @@
   };
   left.addEventListener('change', () => setTimeout(updateReview,0));
   left.addEventListener('input', event => {
-    if (event.target.matches('.task-input, input[name="focus"], input[name="audience"], select')) {
+    if (event.target.matches('.task-input, .context-textarea, input[name="focus"], input[name="audience"], select')) {
       setTimeout(updateReview,0);
     }
   });
