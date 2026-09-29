@@ -303,3 +303,8 @@ a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,te
   .support-thread-meta{display:grid;gap:4px}
   .support-thread-meta span{white-space:normal}
 }
+
+.license-owner-card{display:flex;flex-direction:column}
+.license-owner-card>.card-action-row{margin-top:auto}
+.license-owner-card>.license-assignment-form{display:flex;flex-direction:column;flex:1}
+.license-owner-card>.license-assignment-form>.card-action-row{margin-top:auto}
