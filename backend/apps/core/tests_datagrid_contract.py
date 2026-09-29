@@ -234,7 +234,7 @@ class LicenseAdminGridContractTests(TestCase):
 
         static_js = (Path(settings.BASE_DIR) / 'static' / 'js' / 'app.js').read_text(encoding='utf-8')
         static_css = (Path(settings.BASE_DIR) / 'static' / 'css' / 'datagrid.css').read_text(encoding='utf-8')
-        self.assertIn("data-sort-mode="client"", static_js)
-        self.assertIn("content:"⇅"", static_css)
-        self.assertIn("data-sort-state="asc"", static_css)
-        self.assertIn("data-sort-state="desc"", static_css)
+        self.assertIn("control.dataset.sortMode = 'client'", static_js)
+        self.assertIn('content:"⇅"', static_css)
+        self.assertIn('data-sort-state="asc"', static_css)
+        self.assertIn('data-sort-state="desc"', static_css)
