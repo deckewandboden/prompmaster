@@ -59,7 +59,7 @@ class RealProAccessTests(TestCase):
         self.assertTrue(cookie['httponly'])
         self.assertEqual(cookie['samesite'], 'Lax')
         self.assertEqual(DeviceRegistration.objects.filter(user=self.user).count(), 1)
-        self.assertEqual(self.client.get('/api/v1/prompts/').json()['catalog']['task_count'], 227)
+        self.assertEqual(self.client.get('/api/v1/prompts/').json()['catalog']['task_count'], 215)
         before = AuditEvent.objects.count()
         response = self.client.post('/api/v1/prompts/compose/', json.dumps({
             'product': 'PRO', 'task_id': 'PM20-001', 'microsoft_tier': 'chatbasic',

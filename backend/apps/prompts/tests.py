@@ -9,7 +9,7 @@ from django.utils import timezone
 from apps.catalog.models import ProductEntitlement
 
 from .composer_core import PromptValidationError, compose_prompt
-from .free_surface import FREE_SURFACE_IDS
+from .free_surface import FREE_SURFACE_ALIAS_TO_PRO_ID, FREE_SURFACE_IDS, FREE_SURFACE_UNIQUE_IDS
 from .models import (
     MicrosoftCapability,
     MicrosoftTier,
@@ -152,10 +152,10 @@ class PromptDomainSeedTests(TestCase):
     def test_pro_catalog_is_full_runtime_contract(self):
         snapshot = catalog_snapshot('PRO')
         self.assertEqual(snapshot['application_count'], 34)
-        self.assertEqual(snapshot['task_count'], 227)
+        self.assertEqual(snapshot['task_count'], 215)
         self.assertEqual(len(snapshot['applications']), 34)
         tasks = [task for app in snapshot['applications'] for task in app['tasks']]
-        self.assertEqual(len(tasks), 227)
+        self.assertEqual(len(tasks), 215)
         self.assertTrue(all(task['promptmaster_entitled'] for task in tasks))
         task = next(task for task in tasks if task['id'] == 'PM20-001')
         self.assertEqual(task['required'], ['Fragestellung'])
@@ -169,33 +169,45 @@ class PromptDomainSeedTests(TestCase):
         self.assertIn('copy', app)
         self.assertIn('access', app)
 
-    def test_pro_catalog_contains_every_task_visible_on_free_surface(self):
+    def test_pro_catalog_covers_free_surface_without_duplicate_cards(self):
         snapshot = catalog_snapshot('PRO')
         tasks = [task for app in snapshot['applications'] for task in app['tasks']]
-        ids = {task['id'] for task in tasks}
+        ids = [task['id'] for task in tasks]
+        id_set = set(ids)
+
         self.assertEqual(len(FREE_SURFACE_IDS), 33)
-        self.assertTrue(FREE_SURFACE_IDS.issubset(ids))
+        self.assertEqual(len(FREE_SURFACE_ALIAS_TO_PRO_ID), 12)
+        self.assertEqual(len(FREE_SURFACE_UNIQUE_IDS), 21)
+        self.assertTrue(FREE_SURFACE_UNIQUE_IDS.issubset(id_set))
+        self.assertTrue(set(FREE_SURFACE_ALIAS_TO_PRO_ID.values()).issubset(id_set))
+        self.assertFalse(set(FREE_SURFACE_ALIAS_TO_PRO_ID).intersection(id_set))
+        self.assertEqual(len(ids), len(id_set))
+
+        for surface_id, canonical_id in FREE_SURFACE_ALIAS_TO_PRO_ID.items():
+            canonical = [task for task in tasks if task['id'] == canonical_id]
+            self.assertEqual(len(canonical), 1, surface_id)
+            self.assertIn(surface_id, canonical[0].get('surface_aliases') or [])
 
         expected_surface_counts = {
-            'copilot_chat': 4,
-            'outlook': 13,
-            'teams': 4,
-            'word': 4,
+            'copilot_chat': 1,
+            'outlook': 9,
+            'teams': 2,
+            'word': 1,
             'excel': 4,
             'powerpoint': 4,
         }
         for app_code, expected in expected_surface_counts.items():
             app = next(app for app in snapshot['applications'] if app['code'] == app_code)
-            visible = [
+            inherited = [
                 task for task in app['tasks']
                 if task.get('surface_origin') == 'FREE_1_2_4'
             ]
             self.assertEqual(
-                len(visible),
+                len(inherited),
                 expected,
-                f'{app_code} hat nicht alle Free-Oberflächenaufgaben in Pro.',
+                f'{app_code} hat eine falsche Anzahl zusätzlicher Free-Funktionen in Pro.',
             )
-            self.assertTrue(all(task['promptmaster_entitled'] for task in visible))
+            self.assertTrue(all(task['promptmaster_entitled'] for task in inherited))
 
     def test_free_catalog_is_visible_but_unmapped_tasks_are_not_silently_entitled(self):
         snapshot = catalog_snapshot('FREE')
@@ -320,7 +332,7 @@ class PromptApiTests(TestCase):
         body = response.json()
         self.assertTrue(body['ok'])
         self.assertEqual(body['catalog']['application_count'], 34)
-        self.assertEqual(body['catalog']['task_count'], 227)
+        self.assertEqual(body['catalog']['task_count'], 215)
         self.assertEqual(len(body['catalog']['applications']), 34)
         first_task = body['catalog']['applications'][0]['tasks'][0]
         self.assertIn('required', first_task)
@@ -332,17 +344,21 @@ class PromptApiTests(TestCase):
         self.assertEqual(response['Cache-Control'], 'no-store')
 
     @patch('apps.prompts.api._require_pro_access')
-    def test_every_free_surface_task_is_executable_in_pro(self, access):
+    def test_every_free_surface_function_has_one_executable_pro_implementation(self, access):
         catalog = self.client.get('/api/v1/prompts/?product=PRO').json()['catalog']
-        surface_tasks = [
+        all_tasks = [
             task
             for app in catalog['applications']
             for task in app['tasks']
-            if task['id'] in FREE_SURFACE_IDS
         ]
-        self.assertEqual(len(surface_tasks), 33)
+        by_id = {task['id']: task for task in all_tasks}
+        coverage_ids = set(FREE_SURFACE_UNIQUE_IDS) | set(FREE_SURFACE_ALIAS_TO_PRO_ID.values())
+        self.assertEqual(len(coverage_ids), 33)
+        self.assertTrue(coverage_ids.issubset(by_id))
+        self.assertFalse(set(FREE_SURFACE_ALIAS_TO_PRO_ID).intersection(by_id))
 
-        for task in surface_tasks:
+        for task_id in sorted(coverage_ids):
+            task = by_id[task_id]
             fields = {
                 label: f'Testwert für {label}'
                 for label in task.get('required') or []
@@ -571,7 +587,7 @@ class InternalStaffPromptApiTests(TestCase):
         response = self.client.get('/api/v1/prompts/?product=PRO')
         self.assertEqual(response.status_code, 200)
         self.assertTrue(response.json()['ok'])
-        self.assertEqual(response.json()['catalog']['task_count'], 227)
+        self.assertEqual(response.json()['catalog']['task_count'], 215)
 
     def test_staff_can_compose_without_customer_license_or_device(self):
         response = self.client.post(

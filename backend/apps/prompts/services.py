@@ -5,9 +5,11 @@ from django.db.models import Prefetch
 from apps.catalog.models import Product, ProductEntitlement
 
 from .composer_core import PromptValidationError, compose_prompt
-from .free_legacy import AUDIENCE_DISPLAY, FORMAT_LABELS
+from .free_legacy import FORMAT_LABELS
 from .free_surface import (
+    AUDIENCE_DISPLAY,
     FREE_INPUT_META,
+    FREE_SURFACE_ALIAS_TO_PRO_ID,
     FREE_SURFACE_PRO_CONTRACTS,
     FREE_TO_PRO_APP_CODE,
 )
@@ -340,6 +342,14 @@ def build_free_legacy_pro_spec(task_id: str) -> dict:
     }
 
 
+def compose_free_legacy_pro_task(*, task_id: str, microsoft_tier: str, payload: dict):
+    tier = tier_by_code(microsoft_tier)
+    spec = build_free_legacy_pro_spec(task_id)
+    compose_payload = dict(payload or {})
+    compose_payload['microsoft_tier_rank'] = tier.rank
+    return compose_prompt(spec, compose_payload)
+
+
 def build_free_surface_pro_spec(task_id: str) -> dict:
     contract = FREE_SURFACE_PRO_CONTRACTS.get(task_id)
     if not contract:
@@ -470,6 +480,8 @@ def _prepend_free_surface_to_pro_catalog(apps: dict[str, dict], policy_version: 
         source='FREE_1_2_4',
     ).order_by('application_code', 'legacy_id')
     for contract in legacy_contracts:
+        if contract.legacy_id in FREE_SURFACE_ALIAS_TO_PRO_ID:
+            continue
         app_code = FREE_TO_PRO_APP_CODE.get(contract.application_code)
         if not app_code:
             continue
@@ -478,6 +490,8 @@ def _prepend_free_surface_to_pro_catalog(apps: dict[str, dict], policy_version: 
         )
 
     for task_id, contract in FREE_SURFACE_PRO_CONTRACTS.items():
+        if task_id in FREE_SURFACE_ALIAS_TO_PRO_ID:
+            continue
         surface_by_app.setdefault(contract['app_code'], []).append(
             _free_pro_preview_catalog_entry(task_id, contract, policy_version)
         )
@@ -500,6 +514,24 @@ def _prepend_free_surface_to_pro_catalog(apps: dict[str, dict], policy_version: 
                 code='catalog_not_seeded',
             )
         app['tasks'] = surface_tasks + app['tasks']
+
+    # Mark canonical PM20 tasks that cover a Free-surface function. They stay
+    # single cards in Pro; the alias metadata is for auditability only.
+    for surface_id, canonical_id in FREE_SURFACE_ALIAS_TO_PRO_ID.items():
+        matches = [
+            task
+            for app in apps.values()
+            for task in app['tasks']
+            if task['id'] == canonical_id
+        ]
+        if len(matches) != 1:
+            raise PromptValidationError(
+                f'Free/Pro-Paritätsfehler: Alias {surface_id} -> {canonical_id} '
+                f'hat {len(matches)} kanonische Treffer.',
+                field='task_id',
+                code='catalog_not_seeded',
+            )
+        matches[0].setdefault('surface_aliases', []).append(surface_id)
 
 
 def catalog_snapshot(product_code: str = 'PRO') -> dict:

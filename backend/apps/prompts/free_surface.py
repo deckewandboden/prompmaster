@@ -19,6 +19,16 @@ FREE_TO_PRO_APP_CODE = {
 }
 
 
+AUDIENCE_DISPLAY = {
+    'self': 'Eigene Verwendung',
+    'customer': 'Kunde / extern',
+    'internal': 'Intern / Kolleg:innen',
+    'participants': 'Besprechungsteilnehmende',
+    'own_tasks': 'Eigene Aufgaben',
+    'team': 'Team / Projekt',
+}
+
+
 FREE_INPUT_META = {
     'chat_sum': {
         'primary': 'Was soll die Zusammenfassung leisten?',
@@ -334,3 +344,27 @@ FREE_SURFACE_PRO_CONTRACTS = {
 FREE_PRO_PREVIEW_IDS = frozenset(FREE_SURFACE_PRO_CONTRACTS)
 FREE_ACTUAL_IDS = frozenset(FREE_INPUT_META)
 FREE_SURFACE_IDS = FREE_ACTUAL_IDS | FREE_PRO_PREVIEW_IDS
+
+# Free-surface functions that are already provided by an existing canonical
+# PM20 task in Pro. These aliases MUST NOT be inserted as a second Pro card.
+# The mapping is intentionally conservative: only clearly equivalent functions
+# are collapsed; broader/specialized Free-surface functions stay distinct.
+FREE_SURFACE_ALIAS_TO_PRO_ID = {
+    'chat_sum': 'PM20-003',
+    'chat_write': 'PM20-004',
+    'out_reply': 'PM20-007',
+    'teams_notes': 'PM20-012',
+    'teams_chat': 'PM20-011',
+    'word_rewrite': 'PM20-017',
+    'word_sum': 'PM20-018',
+    'chat_compare': 'PM20-002',
+    'out_thread': 'PM20-008',
+    'out_actions': 'PM20-009',
+    'out_meeting_prep': 'PM20-010',
+    'word_risk': 'PM20-019',
+}
+
+FREE_SURFACE_ALIAS_IDS = frozenset(FREE_SURFACE_ALIAS_TO_PRO_ID)
+FREE_SURFACE_UNIQUE_IDS = FREE_SURFACE_IDS - FREE_SURFACE_ALIAS_IDS
+FREE_ACTUAL_UNIQUE_IDS = FREE_ACTUAL_IDS - FREE_SURFACE_ALIAS_IDS
+FREE_PRO_PREVIEW_UNIQUE_IDS = FREE_PRO_PREVIEW_IDS - FREE_SURFACE_ALIAS_IDS

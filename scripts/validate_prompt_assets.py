@@ -64,4 +64,4 @@ for marker in (
         raise SystemExit(f'PROMPT ASSET FAIL: Pro rating feedback UX contract missing {marker!r}')
 
 subprocess.run([sys.executable, str(ROOT / 'scripts/build_pro_runtime.py'), '--check'], check=True)
-print('PROMPT ASSETS OK: immutable Free/Pro Golden Masters + 33-card Free surface parity + deterministic Pro server runtime + 34 apps / 194 PM20 + 33 inherited = 227 Pro tasks')
+print('PROMPT ASSETS OK: immutable Free/Pro Golden Masters + 33-card Free surface parity + deterministic Pro server runtime + 34 apps / 194 PM20 + 21 unique additions = 215 deduplicated Pro tasks')
