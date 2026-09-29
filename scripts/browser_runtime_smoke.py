@@ -18,8 +18,8 @@ ROOT = Path(__file__).resolve().parents[1]
 BACKEND = ROOT / 'backend'
 sys.path.insert(0, str(BACKEND))
 
-from apps.prompts.free_legacy import AUDIENCE_DISPLAY, FORMAT_LABELS, FREE_RUNTIME_CONTRACTS  # noqa: E402
-from apps.prompts.free_surface import FREE_INPUT_META, FREE_SURFACE_ALIAS_TO_PRO_ID, FREE_SURFACE_PRO_CONTRACTS, FREE_TO_PRO_APP_CODE  # noqa: E402
+from apps.prompts.free_legacy import FORMAT_LABELS, FREE_RUNTIME_CONTRACTS  # noqa: E402
+from apps.prompts.free_surface import AUDIENCE_DISPLAY, FREE_INPUT_META, FREE_SURFACE_ALIAS_TO_PRO_ID, FREE_SURFACE_PRO_CONTRACTS, FREE_TO_PRO_APP_CODE  # noqa: E402
 
 RUNTIME = ROOT / 'backend/private_assets/promptmaster_pro_runtime.html'
 DATA = ROOT / 'backend/apps/prompts/data/pm20_golden_logic.json'
