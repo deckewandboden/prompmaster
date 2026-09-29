@@ -1103,7 +1103,9 @@ $('copyBtn').addEventListener('click',async()=>{try{await navigator.clipboard.wr
         audiences:Array.isArray(task.audiences)?task.audiences:[],
         promptVersion:task.prompt_version??null,
         policyVersion:task.policy_version??null,
-        minimumTierRank:Number(task.minimum_tier_rank||0)
+        minimumTierRank:Number(task.minimum_tier_rank||0),
+        compatibilityKind:String(task.compatibility_kind||''),
+        surfaceOrigin:String(task.surface_origin||'')
       })).filter(task=>task.id);
       if(!tasks.length)continue;
 
@@ -1284,8 +1286,17 @@ $('copyBtn').addEventListener('click',async()=>{try{await navigator.clipboard.wr
       $('copyBtn').disabled=!result.ready;
       $('charInfo').textContent=result.prompt?`${result.prompt.length} Zeichen · Server v${result.prompt_version} / Policy v${result.policy_version}`:'';
       setProgress(result.progress_percent);
-      lastComposedTask=taskId;
-      ensureRatingUi();
+      const compatibilityTask=Boolean(taskObj()?.compatibilityKind);
+      if(compatibilityTask){
+        resetRatingState();
+        const ratingWrap=document.getElementById('pmRatingWrap');
+        if(ratingWrap)ratingWrap.hidden=true;
+      }else{
+        lastComposedTask=taskId;
+        ensureRatingUi();
+        const ratingWrap=document.getElementById('pmRatingWrap');
+        if(ratingWrap)ratingWrap.hidden=false;
+      }
     }catch(error){
       if(seq!==requestSeq || selectedTask!==taskId)return;
       $('promptOutput').value='';
