@@ -92,6 +92,7 @@ urlpatterns = [
     path('support/', v.support_requests, name='support_requests'),
     path('support/<uuid:pk>/', v.support_request_detail, name='support_request_detail'),
     path('support/<uuid:pk>/status/', v.support_request_status, name='support_request_status'),
+    path('support/<uuid:pk>/reply/', v.support_request_reply, name='support_request_reply'),
     path('audit/', v.audit, name='audit'),
     path('users/', v.roles, name='users'),
     path('roles/', v.roles, name='roles'),
