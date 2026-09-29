@@ -382,28 +382,42 @@
     </div>
     <div class="section-body">
       <div class="pmv2-review-grid">
-        <div class="pmv2-review-card">
+        <div class="pmv2-review-card" data-pmv2-review-card="app">
           <div class="pmv2-review-copy">
             <div class="pmv2-review-label">Anwendung</div>
             <div class="pmv2-review-value" data-pmv2-review="app">Noch nicht gewählt</div>
           </div>
           <button type="button" class="pmv2-review-edit" data-pmv2-edit="2">Bearbeiten</button>
         </div>
-        <div class="pmv2-review-card">
+        <div class="pmv2-review-card" data-pmv2-review-card="task">
           <div class="pmv2-review-copy">
             <div class="pmv2-review-label">Aufgabe</div>
             <div class="pmv2-review-value" data-pmv2-review="task">Noch nicht gewählt</div>
           </div>
           <button type="button" class="pmv2-review-edit" data-pmv2-edit="3">Bearbeiten</button>
         </div>
-        <div class="pmv2-review-card">
+        <div class="pmv2-review-card" data-pmv2-review-card="context">
+          <div class="pmv2-review-copy">
+            <div class="pmv2-review-label">Kontext / Pflichtangaben</div>
+            <div class="pmv2-review-value" data-pmv2-review="context">Noch nicht vollständig</div>
+          </div>
+          <button type="button" class="pmv2-review-edit" data-pmv2-edit="4">Bearbeiten</button>
+        </div>
+        <div class="pmv2-review-card" data-pmv2-review-card="audience">
           <div class="pmv2-review-copy">
             <div class="pmv2-review-label">Zielgruppe</div>
             <div class="pmv2-review-value" data-pmv2-review="audience">Noch nicht gewählt</div>
           </div>
           <button type="button" class="pmv2-review-edit" data-pmv2-edit="5">Bearbeiten</button>
         </div>
-        <div class="pmv2-review-card">
+        <div class="pmv2-review-card" data-pmv2-review-card="focus">
+          <div class="pmv2-review-copy">
+            <div class="pmv2-review-label">Schwerpunkt</div>
+            <div class="pmv2-review-value" data-pmv2-review="focus">Noch nicht gewählt</div>
+          </div>
+          <button type="button" class="pmv2-review-edit" data-pmv2-edit="6">Bearbeiten</button>
+        </div>
+        <div class="pmv2-review-card" data-pmv2-review-card="output">
           <div class="pmv2-review-copy">
             <div class="pmv2-review-label">Ausgabe</div>
             <div class="pmv2-review-value" data-pmv2-review="output">Noch nicht vollständig</div>
@@ -411,7 +425,7 @@
           <button type="button" class="pmv2-review-edit" data-pmv2-edit="7">Bearbeiten</button>
         </div>
       </div>
-      <div class="pmv2-review-note">Prüfe die Kerneinstellungen. Den vollständigen, tatsächlich erzeugten Prompt siehst du rechts und kannst ihn direkt kopieren.</div>
+      <div class="pmv2-review-note">Fehlende Pflichtangaben werden hier hervorgehoben. Mit „Bearbeiten“ springst du direkt zum betroffenen Schritt zurück.</div>
     </div>
   `;
   left.append(review);
@@ -689,7 +703,17 @@
     });
   });
   Array.from(review.querySelectorAll('[data-pmv2-edit]')).forEach(button => {
-    button.addEventListener('click', () => scrollToTarget(stepSection(Number(button.dataset.pmv2Edit))));
+    button.addEventListener('click', () => {
+      const step = Number(button.dataset.pmv2Edit);
+      scrollToTarget(stepSection(step));
+      if (step === 4) {
+        window.setTimeout(() => {
+          const firstMissing = requiredContextInputs()
+            .find(input => !(input.value || '').trim());
+          firstMissing?.focus({preventScroll:true});
+        }, 320);
+      }
+    });
   });
   Array.from(review.querySelectorAll('[data-pmv2-review-step]')).forEach(button => {
     button.addEventListener('click', () => {
@@ -780,8 +804,52 @@
   };
   const selectedTaskName = () => $('.task.selected .task-title')?.textContent.trim() || 'Noch nicht gewählt';
   const selectedAudience = () => {
+    if (!free && selectedTaskName() !== 'Noch nicht gewählt' && audienceSection.classList.contains('hidden')) {
+      return 'In der Aufgabe enthalten';
+    }
     const input = $('input[name="audience"]:checked');
     return input?.closest('.option')?.textContent.replace(/\s+/g,' ').trim() || 'Noch nicht gewählt';
+  };
+  const selectedFocus = () => {
+    const values = $$('input[name="focus"]:checked', focusSection)
+      .map(input => input.closest('.option')?.textContent.replace(/\s+/g,' ').trim())
+      .filter(Boolean);
+    return values.length ? values.join(' · ') : 'Noch nicht gewählt';
+  };
+  const requiredContextInputs = () => {
+    if (free) {
+      if (typeof spec !== 'function') return [];
+      const current = spec();
+      if (!current) return [];
+      const inputs = [];
+      if (current.primary?.required) inputs.push($('#goalInput', contextSection));
+      if (current.secondary?.required) inputs.push($('#sourceContextInput', contextSection));
+      return inputs.filter(Boolean);
+    }
+    return $$('.input-card.required .task-input', contextSection);
+  };
+  const requiredContextLabel = input => {
+    if (free && typeof spec === 'function') {
+      const current = spec();
+      if (input?.id === 'goalInput') return current?.primary?.label || 'Pflichtfeld';
+      if (input?.id === 'sourceContextInput') return current?.secondary?.label || 'Pflichtfeld';
+    }
+    const label = input.closest('.input-card')?.querySelector('label');
+    if (!label) return 'Pflichtfeld';
+    const clone = label.cloneNode(true);
+    clone.querySelector('.required-mark')?.remove();
+    return (clone.textContent || '').replace(/\s+/g,' ').trim() || 'Pflichtfeld';
+  };
+  const missingContextLabels = () => requiredContextInputs()
+    .filter(input => !(input.value || '').trim())
+    .map(requiredContextLabel);
+  const contextSummary = () => {
+    if (selectedTaskName() === 'Noch nicht gewählt') return 'Noch keine Aufgabe gewählt';
+    const requiredInputs = requiredContextInputs();
+    if (!requiredInputs.length) return 'Keine zusätzlichen Pflichtangaben';
+    const missing = missingContextLabels();
+    if (missing.length) return 'Pflichtangaben fehlen: ' + missing.join(', ');
+    return 'Alle Pflichtangaben vollständig';
   };
   const outputSummary = () => {
     const values = [$('#formatSelect'), $('#detailSelect'), $('#toneSelect')]
@@ -790,17 +858,53 @@
       .filter(value => value && !/^Bitte auswählen/i.test(value));
     return values.length ? values.join(' · ') : 'Noch nicht vollständig';
   };
+  const outputComplete = () => [$('#formatSelect'), $('#detailSelect'), $('#toneSelect')]
+    .filter(Boolean)
+    .every(select => Boolean(select.value));
+  const stepValidity = () => {
+    const hasLicenseSelector = Boolean($('input[name="mslicense"]'));
+    const taskSelected = selectedTaskName() !== 'Noch nicht gewählt';
+    return [
+      hasLicenseSelector ? Boolean($('input[name="mslicense"]:checked')) : true,
+      selectedAppName() !== 'Noch nicht gewählt',
+      taskSelected,
+      taskSelected && missingContextLabels().length === 0,
+      taskSelected && (audienceSection.classList.contains('hidden') || Boolean($('input[name="audience"]:checked'))),
+      taskSelected && $$('input[name="focus"]:checked', focusSection).length > 0,
+      taskSelected && outputComplete(),
+    ];
+  };
   const updateReview = () => {
     $('[data-pmv2-review="app"]', review).textContent = selectedAppName();
     $('[data-pmv2-review="task"]', review).textContent = selectedTaskName();
+    $('[data-pmv2-review="context"]', review).textContent = contextSummary();
     $('[data-pmv2-review="audience"]', review).textContent = selectedAudience();
+    $('[data-pmv2-review="focus"]', review).textContent = selectedFocus();
     $('[data-pmv2-review="output"]', review).textContent = outputSummary();
+
+    const validity = stepValidity();
+    const cardStep = {app:2,task:3,context:4,audience:5,focus:6,output:7};
+    Object.entries(cardStep).forEach(([name,step]) => {
+      const card = review.querySelector('[data-pmv2-review-card="' + name + '"]');
+      const value = review.querySelector('[data-pmv2-review="' + name + '"]');
+      const missing = selectedTaskName() !== 'Noch nicht gewählt' && !validity[step-1];
+      card?.classList.toggle('missing', missing);
+      value?.classList.toggle('missing', missing);
+      if (card) card.setAttribute('aria-invalid', String(missing));
+    });
+
     requestAnimationFrame(autoSizePrompt);
     setTimeout(autoSizePrompt, 180);
   };
   left.addEventListener('change', () => setTimeout(updateReview,0));
+  left.addEventListener('input', event => {
+    if (event.target.matches('.task-input, .context-textarea, input[name="focus"], input[name="audience"], select')) {
+      setTimeout(updateReview,0);
+    }
+  });
   left.addEventListener('click', () => setTimeout(updateReview,80));
   new MutationObserver(updateReview).observe(left,{subtree:true,attributes:true,attributeFilter:['class','checked','disabled']});
+  new MutationObserver(() => setTimeout(updateReview,0)).observe(contextSection,{subtree:true,childList:true});
   updateReview();
 
   const oldProgressText = $('#progressText');
@@ -810,11 +914,24 @@
   const updateFlow = () => {
     const raw = parseInt((oldProgressText?.textContent || '0').replace(/\D/g,''),10) || 0;
     const thresholds = free ? [0,12,28,43,57,72,88] : [0,8,20,38,55,70,86];
+    const validity = stepValidity();
+    const flagMissing = selectedTaskName() !== 'Noch nicht gewählt';
     Array.from(hero.querySelectorAll('.pmv2-flow-step')).forEach((button,index) => {
       button.classList.toggle('active', raw >= thresholds[index]);
+      const missing = flagMissing && !validity[index];
+      button.classList.toggle('missing', missing);
+      button.setAttribute('aria-invalid', String(missing));
     });
     Array.from(review.querySelectorAll('.pmv2-review-flow-step')).forEach((button,index) => {
       button.classList.toggle('active', raw >= thresholds[index]);
+      const missing = flagMissing && !validity[index];
+      button.classList.toggle('missing', missing);
+      button.setAttribute('aria-invalid', String(missing));
+      if (missing) {
+        button.title = 'Dieser Schritt ist noch nicht vollständig. Klicken zum Bearbeiten.';
+      } else {
+        button.removeAttribute('title');
+      }
     });
     if (reviewProgressText) reviewProgressText.textContent = raw + ' %';
     if (reviewProgressBar) {

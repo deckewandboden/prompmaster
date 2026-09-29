@@ -2915,6 +2915,11 @@ def _run_cross_browser_product_v2(browser, fixture: dict, engine: str) -> None:
                 markBackground:style?.backgroundImage || '',
                 guardVisible:!!guard && !guard.hidden,
                 guardText:(guard?.textContent || '').trim(),
+                reviewContextText:(document.querySelector('[data-pmv2-review="context"]')?.textContent || '').trim(),
+                reviewContextMissing:document.querySelector('[data-pmv2-review-card="context"]')?.classList.contains('missing') === true,
+                reviewStep4Missing:document.querySelector('.pmv2-review-flow-step[data-pmv2-review-step="4"]')?.classList.contains('missing') === true,
+                heroStep4Missing:document.querySelector('.pmv2-flow-step[data-pmv2-step="4"]')?.classList.contains('missing') === true,
+                reviewContextEditTarget:document.querySelector('[data-pmv2-review-card="context"] [data-pmv2-edit]')?.getAttribute('data-pmv2-edit') || '',
               };
             }"""
         )
@@ -2935,6 +2940,11 @@ def _run_cross_browser_product_v2(browser, fixture: dict, engine: str) -> None:
             or 'gradient' not in required_probe['markBackground']
             or not required_probe['guardVisible']
             or 'Pflichtfelder fehlen' not in required_probe['guardText']
+            or 'Pflichtangaben fehlen' not in required_probe['reviewContextText']
+            or not required_probe['reviewContextMissing']
+            or not required_probe['reviewStep4Missing']
+            or not required_probe['heroStep4Missing']
+            or required_probe['reviewContextEditTarget'] != '4'
         ):
             raise AssertionError(
                 f'{engine} Pro required-field guidance regressed: {required_probe}'
