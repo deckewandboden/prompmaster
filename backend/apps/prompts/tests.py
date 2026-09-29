@@ -9,7 +9,14 @@ from django.utils import timezone
 from apps.catalog.models import ProductEntitlement
 
 from .composer_core import PromptValidationError, compose_prompt
-from .free_surface import FREE_SURFACE_ALIAS_TO_PRO_ID, FREE_SURFACE_IDS, FREE_SURFACE_UNIQUE_IDS
+from .free_surface import (
+    FREE_SURFACE_ALIAS_TITLES,
+    FREE_SURFACE_ALIAS_TO_PRO_ID,
+    FREE_SURFACE_IDS,
+    FREE_SURFACE_PRO_CONTRACTS,
+    FREE_SURFACE_UNIQUE_IDS,
+    FREE_TO_PRO_APP_CODE,
+)
 from .models import (
     MicrosoftCapability,
     MicrosoftTier,
@@ -187,6 +194,32 @@ class PromptDomainSeedTests(TestCase):
             canonical = [task for task in tasks if task['id'] == canonical_id]
             self.assertEqual(len(canonical), 1, surface_id)
             self.assertIn(surface_id, canonical[0].get('surface_aliases') or [])
+            self.assertEqual(canonical[0]['title'], FREE_SURFACE_ALIAS_TITLES[surface_id])
+            self.assertTrue(canonical[0].get('canonical_title'))
+
+        # Visible parity is stricter than executable parity: every title shown
+        # on Free must be findable verbatim in the corresponding Pro app.
+        pro_titles_by_app = {
+            app['code']: {task['title'] for task in app['tasks']}
+            for app in snapshot['applications']
+        }
+        expected_visible = []
+        for contract in PromptLegacyContract.objects.filter(source='FREE_1_2_4'):
+            expected_visible.append((
+                FREE_TO_PRO_APP_CODE[contract.application_code],
+                contract.title,
+                contract.legacy_id,
+            ))
+        for surface_id, contract in FREE_SURFACE_PRO_CONTRACTS.items():
+            expected_visible.append((contract['app_code'], contract['title'], surface_id))
+
+        self.assertEqual(len(expected_visible), 33)
+        for app_code, title, surface_id in expected_visible:
+            self.assertIn(
+                title,
+                pro_titles_by_app[app_code],
+                f'{surface_id} fehlt in Pro sichtbar als „{title}“.',
+            )
 
         expected_surface_counts = {
             'copilot_chat': 1,
