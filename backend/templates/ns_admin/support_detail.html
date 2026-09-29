@@ -69,31 +69,31 @@
     </article>
 
     {% for item in thread_messages %}
-      <article class="support-thread-entry {% if item.direction == 'staff' %}staff{% else %}customer{% endif %}">
+      <article class="support-thread-entry {% if item.sender_type == 'staff' %}staff{% else %}customer{% endif %}">
         <div class="support-thread-meta">
           <strong>
-            {% if item.direction == 'staff' %}
-              {% if item.author %}{{ item.author.full_name|default:item.author.email }}{% else %}netstyle Support{% endif %}
+            {% if item.sender_type == 'staff' %}
+              {% if item.author_user %}{{ item.author_user.full_name|default:item.author_user.email }}{% else %}netstyle Support{% endif %}
             {% else %}
               {{ support_request.user.full_name|default:support_request.user.email }}
             {% endif %}
           </strong>
-          <span>{{ item.get_direction_display }} · {{ item.created_at|date:'d.m.Y H:i' }}</span>
+          <span>{{ item.get_sender_type_display }} · {{ item.created_at|date:'d.m.Y H:i' }}</span>
         </div>
         <div class="support-thread-body">{{ item.body|linebreaksbr }}</div>
-        {% if item.email_message %}
+        {% if item.notification_email %}
           <div class="support-thread-delivery">
             E-Mail:
-            {% if item.email_message.status == 'sent' %}
+            {% if item.notification_email.status == 'sent' %}
               <span class="badge ok">Gesendet</span>
-            {% elif item.email_message.status == 'failed' %}
+            {% elif item.notification_email.status == 'failed' %}
               <span class="badge bad">Fehlgeschlagen</span>
-            {% elif item.email_message.status == 'sending' %}
+            {% elif item.notification_email.status == 'sending' %}
               <span class="badge info">Wird gesendet</span>
             {% else %}
               <span class="badge warn">Warteschlange</span>
             {% endif %}
-            <span class="muted">{{ item.email_message.recipient }}</span>
+            <span class="muted">{{ item.notification_email.recipient }}</span>
           </div>
         {% endif %}
       </article>
