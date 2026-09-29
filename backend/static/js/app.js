@@ -53,6 +53,59 @@
   };
 
 
+  const initSortableHeaders = () => {
+    const current = new URL(window.location.href);
+    const activeSort = current.searchParams.get('sort') || '';
+    const activeDir = (current.searchParams.get('dir') || 'asc').toLowerCase() === 'desc' ? 'desc' : 'asc';
+
+    document.querySelectorAll('.tablewrap thead th a[href]').forEach((link) => {
+      let target;
+      try {
+        target = new URL(link.href, window.location.href);
+      } catch {
+        return;
+      }
+      const sortKey = target.searchParams.get('sort');
+      if (!sortKey) return;
+
+      // Older templates rendered arrows only after sorting. Remove those
+      // glyphs so the central, always-visible control is the single source.
+      link.querySelectorAll('span').forEach((span) => {
+        if (/^[↑↓]$/.test((span.textContent || '').trim())) span.remove();
+      });
+      Array.from(link.childNodes).forEach((node) => {
+        if (node.nodeType === Node.TEXT_NODE) {
+          node.nodeValue = (node.nodeValue || '').replace(/\s*[↑↓]\s*$/u, '');
+        }
+      });
+
+      link.classList.add('sort-control');
+      const active = sortKey === activeSort;
+      const state = active ? activeDir : 'none';
+      link.dataset.sortState = state;
+
+      const header = link.closest('th');
+      if (header) {
+        header.setAttribute(
+          'aria-sort',
+          active ? (activeDir === 'asc' ? 'ascending' : 'descending') : 'none'
+        );
+      }
+
+      const label = (link.textContent || '').trim();
+      link.setAttribute(
+        'aria-label',
+        active
+          ? `${label}, aktuell ${activeDir === 'asc' ? 'aufsteigend' : 'absteigend'} sortiert. Sortierreihenfolge ändern`
+          : `${label} sortieren`
+      );
+      link.title = active
+        ? `Sortierung ${activeDir === 'asc' ? 'aufsteigend' : 'absteigend'} – klicken zum Wechseln`
+        : 'Sortieren – klicken für aufsteigend';
+    });
+  };
+
+
   const initCopyControls = () => {
     document.querySelectorAll('[data-copy-target]').forEach((button) => {
       if (button.dataset.copyBound === '1') return;
@@ -177,6 +230,7 @@
 
   const initUi = () => {
     initDataGrids();
+    initSortableHeaders();
     initConfirmationDialogs();
     initCopyControls();
   };
