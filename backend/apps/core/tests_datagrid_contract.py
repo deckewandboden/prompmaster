@@ -199,3 +199,42 @@ class LicenseAdminGridContractTests(TestCase):
         self.assertIn('Zugewiesen an', detail)
         self.assertIn('<span>E-Mail</span>', detail)
         self.assertIn('class="wrap-anywhere"', detail)
+
+
+    def test_all_admin_datagrid_business_columns_have_sort_contracts(self):
+        from django.conf import settings
+        from pathlib import Path
+
+        templates = Path(settings.BASE_DIR) / 'templates' / 'ns_admin'
+        required = {
+            'audit.html': ('time', 'user', 'role', 'action', 'object', 'change'),
+            'email_log.html': ('date', 'recipient', 'template', 'subject', 'status'),
+            'features.html': ('code', 'name'),
+            'legal_deletions.html': ('date', 'email', 'status', 'note'),
+            'legal_documents.html': ('type', 'version', 'valid_from', 'active'),
+            'legal_retention.html': ('data_class', 'days', 'active'),
+            'mollie_events.html': ('date', 'payment', 'status', 'processed', 'retries', 'error'),
+            'payments.html': ('date', 'payment', 'order', 'amount', 'status'),
+            'support.html': ('date', 'category', 'subject', 'customer', 'status'),
+        }
+        for template_name, sort_keys in required.items():
+            source = (templates / template_name).read_text(encoding='utf-8')
+            for sort_key in sort_keys:
+                with self.subTest(template=template_name, sort_key=sort_key):
+                    self.assertIn(f"sort_url request '{sort_key}'", source)
+
+        ops = (templates / 'ops_grid.html').read_text(encoding='utf-8')
+        for sort_key in (
+            'status', 'date', 'size', 'reference',
+            'finished', 'backup',
+            'code', 'severity', 'message', 'active',
+        ):
+            with self.subTest(template='ops_grid.html', sort_key=sort_key):
+                self.assertIn(f"sort_url request '{sort_key}'", ops)
+
+        static_js = (Path(settings.BASE_DIR) / 'static' / 'js' / 'app.js').read_text(encoding='utf-8')
+        static_css = (Path(settings.BASE_DIR) / 'static' / 'css' / 'datagrid.css').read_text(encoding='utf-8')
+        self.assertIn("data-sort-mode="client"", static_js)
+        self.assertIn("content:"⇅"", static_css)
+        self.assertIn("data-sort-state="asc"", static_css)
+        self.assertIn("data-sort-state="desc"", static_css)
