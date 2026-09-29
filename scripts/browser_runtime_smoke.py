@@ -19,7 +19,7 @@ BACKEND = ROOT / 'backend'
 sys.path.insert(0, str(BACKEND))
 
 from apps.prompts.free_legacy import FORMAT_LABELS, FREE_RUNTIME_CONTRACTS  # noqa: E402
-from apps.prompts.free_surface import AUDIENCE_DISPLAY, FREE_INPUT_META, FREE_SURFACE_ALIAS_TO_PRO_ID, FREE_SURFACE_PRO_CONTRACTS, FREE_TO_PRO_APP_CODE  # noqa: E402
+from apps.prompts.free_surface import AUDIENCE_DISPLAY, FREE_INPUT_META, FREE_SURFACE_ALIAS_TITLES, FREE_SURFACE_ALIAS_TO_PRO_ID, FREE_SURFACE_PRO_CONTRACTS, FREE_TO_PRO_APP_CODE  # noqa: E402
 
 RUNTIME = ROOT / 'backend/private_assets/promptmaster_pro_runtime.html'
 DATA = ROOT / 'backend/apps/prompts/data/pm20_golden_logic.json'
@@ -128,6 +128,47 @@ def mock_catalog() -> dict:
         if app_code not in app_map:
             raise AssertionError(f'Free→Pro browser fixture references missing app {app_code}')
         app_map[app_code]['tasks'] = inherited + app_map[app_code]['tasks']
+
+    # Deduplicated aliases keep one canonical PM20 implementation but must use
+    # the exact title advertised on Free so users can visibly find every Free
+    # function in Pro.
+    for surface_id, canonical_id in FREE_SURFACE_ALIAS_TO_PRO_ID.items():
+        matches = [
+            task
+            for app in apps
+            for task in app['tasks']
+            if task['id'] == canonical_id
+        ]
+        if len(matches) != 1:
+            raise AssertionError(
+                f'Free→Pro browser alias {surface_id}->{canonical_id} '
+                f'has {len(matches)} canonical matches'
+            )
+        matches[0]['canonical_title'] = matches[0]['title']
+        matches[0]['title'] = FREE_SURFACE_ALIAS_TITLES[surface_id]
+        matches[0].setdefault('surface_aliases', []).append(surface_id)
+
+    expected_visible = []
+    for item in free_data.get('tasks') or []:
+        expected_visible.append((
+            FREE_TO_PRO_APP_CODE[item['app_code']],
+            item['title'],
+            item['legacy_id'],
+        ))
+    for surface_id, contract in FREE_SURFACE_PRO_CONTRACTS.items():
+        expected_visible.append((contract['app_code'], contract['title'], surface_id))
+    if len(expected_visible) != 33:
+        raise AssertionError(
+            f'Free→Pro browser visible parity expected 33 functions, '
+            f'got {len(expected_visible)}'
+        )
+    for app_code, title, surface_id in expected_visible:
+        titles = {task['title'] for task in app_map[app_code]['tasks']}
+        if title not in titles:
+            raise AssertionError(
+                f'Free→Pro browser visible parity missing '
+                f'{surface_id}/{app_code}: {title}'
+            )
 
     return {
         'product_code': 'PRO', 'policy_version': 1, 'source_labels': data.get('SRC_LABEL') or {},
@@ -3071,6 +3112,23 @@ def main() -> int:
     catalog = mock_catalog()
     if (catalog['application_count'], catalog['task_count']) != (34, 215):
         raise SystemExit('BROWSER SMOKE FAIL: catalog count drift')
+    visible_free_titles = {
+        app['code']: {task['title'] for task in app['tasks']}
+        for app in catalog['applications']
+    }
+    free_data = json.loads(FREE_DATA.read_text(encoding='utf-8'))
+    expected_visible = [
+        (FREE_TO_PRO_APP_CODE[item['app_code']], item['title'])
+        for item in free_data.get('tasks') or []
+    ] + [
+        (contract['app_code'], contract['title'])
+        for contract in FREE_SURFACE_PRO_CONTRACTS.values()
+    ]
+    if len(expected_visible) != 33 or any(
+        title not in visible_free_titles.get(app_code, set())
+        for app_code, title in expected_visible
+    ):
+        raise SystemExit('BROWSER SMOKE FAIL: 33/33 visible Free titles are not present in Pro')
     html = RUNTIME.read_text(encoding='utf-8')
     # Prevent all asset network access and inject the mocked API before product JS.
     html = html.replace('https://netstyle.de/public_pictures/netstyle%20Logo%20OHNE%20Netz%20FREIGESTELLT.png', 'data:image/gif;base64,R0lGODlhAQABAAAAACw=')
@@ -3178,7 +3236,7 @@ def main() -> int:
                 finally:
                     engine_browser.close()
 
-    print('BROWSER RUNTIME SMOKE OK: 34 apps / 215 task render paths (194 PM20 + 21 unique Free additions; 12 aliases deduplicated) + compose + rating/feedback + V2 Free/Pro layout in Chromium/Firefox/WebKit')
+    print('BROWSER RUNTIME SMOKE OK: 34 apps / 215 task render paths + 33/33 visible Free titles (12 canonical aliases, 21 unique additions) + compose + rating/feedback + V2 Free/Pro layout in Chromium/Firefox/WebKit')
     return 0
 
 
