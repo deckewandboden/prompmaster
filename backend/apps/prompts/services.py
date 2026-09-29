@@ -5,8 +5,9 @@ from django.db.models import Prefetch
 from apps.catalog.models import Product, ProductEntitlement
 
 from .composer_core import PromptValidationError, compose_prompt
-from .free_legacy import AUDIENCE_DISPLAY, FORMAT_LABELS
+from .free_legacy import FORMAT_LABELS
 from .free_surface import (
+    AUDIENCE_DISPLAY,
     FREE_INPUT_META,
     FREE_SURFACE_ALIAS_TO_PRO_ID,
     FREE_SURFACE_PRO_CONTRACTS,
