@@ -1422,7 +1422,7 @@ def customer_audit(request, pk):
         request,
         AuditEvent.objects.filter(audit_scope).select_related('actor'),
         search_fields=('action', 'object_type', 'object_id', 'actor__email'),
-        sort_fields={'time': 'created_at', 'action': 'action'},
+        sort_fields={'time': 'created_at', 'actor': 'actor__email', 'action': 'action', 'object': 'object_type'},
         default_sort='-created_at',
     ).build()
     return render(request, 'ns_admin/customer_grid.html', {'customer': customer, 'title': 'Audit', 'grid': grid, 'kind': 'audit', 'filter_options': []})
