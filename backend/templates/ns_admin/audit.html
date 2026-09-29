@@ -3,9 +3,9 @@
 {% include 'includes/grid_toolbar.html' %}
 <div class="tablewrap"><table><thead><tr>
 {% sort_url request 'time' grid.sort grid.direction as t %}<th><a href="{{ t }}">Zeit{% if grid.sort == 'time' %} {% if grid.direction == 'asc' %}↑{% else %}↓{% endif %}{% endif %}</a></th>
-<th>Benutzer</th><th>Rolle</th>
+{% sort_url request 'user' grid.sort grid.direction as u %}<th><a href="{{ u }}">Benutzer</a></th>{% sort_url request 'role' grid.sort grid.direction as r %}<th><a href="{{ r }}">Rolle</a></th>
 {% sort_url request 'action' grid.sort grid.direction as a %}<th><a href="{{ a }}">Aktion{% if grid.sort == 'action' %} {% if grid.direction == 'asc' %}↑{% else %}↓{% endif %}{% endif %}</a></th>
-<th>Objekt</th><th>Änderung</th></tr></thead><tbody>
+{% sort_url request 'object' grid.sort grid.direction as o %}<th><a href="{{ o }}">Objekt</a></th>{% sort_url request 'change' grid.sort grid.direction as c %}<th><a href="{{ c }}">Änderung</a></th></tr></thead><tbody>
 {% for e in grid.page %}<tr>
 <td data-label="Zeit">{{ e.created_at|date:'d.m.Y H:i:s' }}</td>
 <td data-label="Benutzer">{{ e.actor.email|default:'System' }}</td>
