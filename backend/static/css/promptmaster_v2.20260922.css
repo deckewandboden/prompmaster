@@ -783,6 +783,12 @@ body.pmv2 textarea{font-family:inherit}
 .pmv2 .modal-head h2{color:#fff!important;font-size:25px!important;line-height:1.16!important}
 .pmv2 .modal-head p{color:#d7d6e7!important;font-size:13px!important;line-height:1.45!important}
 .pmv2 .modal-body{color:#c7d4df!important;font-size:13px!important}
+.pmv2 .modal-body ul,
+.pmv2 .modal-body li{color:#dbe7f0!important}
+.pmv2 .price span,
+.pmv2 .pro-overview-price span{color:#a9bdcc!important}
+.pmv2 .modal-note,.pmv2 .compare-note{color:#b7c9d7!important}
+.pmv2-pro #taskGrid .task-meta{display:none!important}
 .pmv2 .modal-note,.pmv2 .compare-note{background:rgba(19,45,72,.62)!important;color:#91a7b8!important}
 .pmv2 .modal-actions .btn{min-height:44px!important;border-radius:10px!important}
 .pmv2 .modal-actions .primary{background:linear-gradient(100deg,#8735fa,#7664ff 42%,#31dcee)!important;color:#071225!important}
