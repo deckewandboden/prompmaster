@@ -773,7 +773,7 @@ def private_customer_portal_preview(request, pk):
 @staff_perm('customers.read', 'licenses.read')
 def private_customer_licenses(request, pk):
     profile = _private_customer(request, pk)
-    grid = DataGrid(request, profile.user.owned_licenses.select_related('product'), search_fields=('license_number', 'product__name'), sort_fields={'number':'license_number','expiry':'valid_until','status':'status'}, default_sort='valid_until', filters={'status':'status'}).build()
+    grid = DataGrid(request, _license_admin_queryset(profile.user.owned_licenses.all()), search_fields=('license_number', 'product__name', 'license_holder_name', 'license_holder_email'), sort_fields={'number':'license_number','name':'license_holder_name','product':'product__name','expiry':'valid_until','status':'status'}, default_sort='valid_until', filters={'status':'status'}).build()
     return render(request, 'ns_admin/private_customer_grid.html', {'profile': profile, 'title':'Lizenzen', 'kind':'licenses', 'grid':grid, 'filter_options':[('status','Status',License.STATUS)]})
 
 
@@ -784,7 +784,7 @@ def private_customer_devices(request, pk):
         request,
         profile.user.devices.select_related('license'),
         search_fields=('display_name', 'os_family', 'browser_family'),
-        sort_fields={'device': 'display_name', 'last': 'last_seen_at'},
+        sort_fields={'device': 'display_name', 'system': 'os_family', 'last': 'last_seen_at'},
         default_sort='-last_seen_at',
     ).build()
     return render(
@@ -826,7 +826,7 @@ def private_customer_orders(request, pk):
 @staff_perm('customers.read', 'payments.read')
 def private_customer_payments(request, pk):
     profile = _private_customer(request, pk)
-    grid = DataGrid(request, Payment.objects.filter(order__private_user=profile.user).select_related('order'), search_fields=('provider_payment_id','order__order_number'), sort_fields={'date':'created_at','amount':'amount','status':'status'}, default_sort='-created_at', filters={'status':'status'}).build()
+    grid = DataGrid(request, Payment.objects.filter(order__private_user=profile.user).select_related('order'), search_fields=('provider_payment_id','order__order_number'), sort_fields={'date':'created_at','payment':'provider_payment_id','order':'order__order_number','amount':'amount','status':'status'}, default_sort='-created_at', filters={'status':'status'}).build()
     return render(request, 'ns_admin/private_customer_grid.html', {'profile': profile, 'title':'Zahlungen', 'kind':'payments', 'grid':grid, 'filter_options':[('status','Status',PAYMENT_STATUS_CHOICES)]})
 
 
@@ -839,7 +839,7 @@ def private_customer_emails(request, pk):
             context__pm_scope_user_id=str(profile.user_id),
         ).select_related('template'),
         search_fields=('recipient', 'subject'),
-        sort_fields={'date': 'created_at', 'status': 'status'},
+        sort_fields={'date': 'created_at', 'recipient': 'recipient', 'subject': 'subject', 'status': 'status'},
         default_sort='-created_at',
         filters={'status': 'status'},
     ).build()
@@ -886,7 +886,7 @@ def private_customer_audit(request, pk):
         request,
         AuditEvent.objects.filter(audit_scope).select_related('actor'),
         search_fields=('action', 'object_type', 'object_id', 'actor__email'),
-        sort_fields={'time': 'created_at', 'action': 'action'},
+        sort_fields={'time': 'created_at', 'actor': 'actor__email', 'action': 'action', 'object': 'object_type'},
         default_sort='-created_at',
     ).build()
     return render(request, 'ns_admin/private_customer_grid.html', {'profile': profile, 'title':'Audit', 'kind':'audit', 'grid':grid, 'filter_options':[]})
@@ -1118,7 +1118,7 @@ def customer_users(request, pk):
         request,
         customer.memberships.select_related('user'),
         search_fields=('user__email', 'user__first_name', 'user__last_name'),
-        sort_fields={'name': 'user__last_name', 'email': 'user__email', 'role': 'role', 'created': 'created_at'},
+        sort_fields={'name': 'user__last_name', 'email': 'user__email', 'role': 'role', 'status': 'active', 'created': 'created_at'},
         default_sort='user__last_name',
         filters={'role': 'role', 'active': 'active'},
     ).build()
@@ -1232,9 +1232,9 @@ def customer_licenses(request, pk):
     customer = _customer(request, pk)
     grid = DataGrid(
         request,
-        customer.licenses.select_related('product'),
-        search_fields=('license_number', 'product__name'),
-        sort_fields={'number': 'license_number', 'expiry': 'valid_until', 'status': 'status'},
+        _license_admin_queryset(customer.licenses.all()),
+        search_fields=('license_number', 'product__name', 'license_holder_name', 'license_holder_email'),
+        sort_fields={'number': 'license_number', 'name': 'license_holder_name', 'product': 'product__name', 'expiry': 'valid_until', 'status': 'status'},
         default_sort='valid_until',
         filters={'status': 'status'},
     ).build()
@@ -1252,7 +1252,7 @@ def customer_devices(request, pk):
             license__company=customer,
         ).select_related('user', 'license'),
         search_fields=('display_name', 'user__email'),
-        sort_fields={'device': 'display_name', 'last': 'last_seen_at', 'user': 'user__email'},
+        sort_fields={'device': 'display_name', 'user': 'user__email', 'system': 'os_family', 'last': 'last_seen_at'},
         default_sort='-last_seen_at',
     ).build()
     return render(
@@ -1307,7 +1307,7 @@ def customer_payments(request, pk):
         request,
         Payment.objects.filter(order__company=customer).select_related('order'),
         search_fields=('provider_payment_id', 'order__order_number'),
-        sort_fields={'date': 'created_at', 'amount': 'amount', 'status': 'status'},
+        sort_fields={'date': 'created_at', 'payment': 'provider_payment_id', 'order': 'order__order_number', 'amount': 'amount', 'status': 'status'},
         default_sort='-created_at',
         filters={'status': 'status'},
     ).build()
@@ -1323,7 +1323,7 @@ def customer_emails(request, pk):
             context__pm_scope_company_id=str(customer.id),
         ).select_related('template'),
         search_fields=('recipient', 'subject'),
-        sort_fields={'date': 'created_at', 'status': 'status', 'recipient': 'recipient'},
+        sort_fields={'date': 'created_at', 'recipient': 'recipient', 'subject': 'subject', 'status': 'status'},
         default_sort='-created_at',
         filters={'status': 'status'},
     ).build()
@@ -1432,17 +1432,17 @@ def customer_audit(request, pk):
 def licenses(request):
     grid = DataGrid(
         request,
-        License.objects.select_related('company', 'owner_user', 'product'),
-        search_fields=('license_number', 'company__name', 'owner_user__email', 'product__name'),
-        sort_fields={'number': 'license_number', 'expiry': 'valid_until', 'status': 'status', 'company': 'company__name'},
+        _license_admin_queryset(),
+        search_fields=('license_number', 'company__name', 'owner_user__email', 'product__name', 'license_holder_name', 'license_holder_email'),
+        sort_fields={'number': 'license_number', 'name': 'license_holder_name', 'product': 'product__name', 'expiry': 'valid_until', 'status': 'status', 'company': 'company__name'},
         default_sort='valid_until',
         filters={'status': 'status', 'product': 'product__code'},
     ).build()
     products = [(p.code, p.name) for p in Product.objects.filter(active=True).order_by('name')]
-    export = _grid_export(request, grid, [('license_number', 'Lizenz-ID'), ('company.name', 'Unternehmen'), ('owner_user.email', 'Privatkunde'), ('product.name', 'Produkt'), ('valid_until', 'Ablauf'), ('status', 'Status')], 'promptmaster-lizenzen.csv')
+    export = _grid_export(request, grid, [('license_number', 'Lizenz-ID'), ('license_holder_name', 'Name'), ('company.name', 'Unternehmen'), ('owner_user.email', 'Privatkunde'), ('product.name', 'Produkt'), ('valid_until', 'Ablauf'), ('status', 'Status')], 'promptmaster-lizenzen.csv')
     if export:
         return export
-    return render(request, 'ns_admin/grid.html', {'title': 'Lizenzen', 'grid': grid, 'columns': [('license_number', 'Lizenz-ID', 'number'), ('company', 'Kunde', 'company'), ('product', 'Produkt', None), ('valid_until', 'Ablauf', 'expiry'), ('status', 'Status', 'status')], 'detail_route': 'ns_admin:license_detail', 'filter_options': [('status', 'Status', License.STATUS), ('product', 'Produkt', products)], 'export_enabled': True})
+    return render(request, 'ns_admin/grid.html', {'title': 'Lizenzen', 'grid': grid, 'columns': [('license_number', 'Lizenz-ID', 'number'), ('license_holder_name', 'Name', 'name'), ('company', 'Kunde', 'company'), ('product', 'Produkt', 'product'), ('valid_until', 'Ablauf', 'expiry'), ('status', 'Status', 'status')], 'detail_route': 'ns_admin:license_detail', 'filter_options': [('status', 'Status', License.STATUS), ('product', 'Produkt', products)], 'export_enabled': True})
 
 
 @staff_perm('licenses.read')
