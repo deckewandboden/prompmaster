@@ -13,7 +13,7 @@ EXPECTED = {
     ROOT / 'product/golden_masters/promptmaster_pro.html': 'aa7b2da53ba3cbcf9874b9b6f7381ea4c3e86ee1f9c09db186cbec6876a3c9cf',
     ROOT / 'backend/private_assets/promptmaster_pro.html': 'aa7b2da53ba3cbcf9874b9b6f7381ea4c3e86ee1f9c09db186cbec6876a3c9cf',
     ROOT / 'backend/private_assets/promptmaster_free_reference.html': 'aada4fbb3461d3758c48ed808bf018716a53aa33baf81efb058412e63535b0a8',
-    ROOT / 'backend/private_assets/promptmaster_pro_runtime.html': '4348a0a6c6f4aca1836f95cc5b481da5c36b68de6d2be1b520e20427188cd9c7',
+    ROOT / 'backend/private_assets/promptmaster_pro_runtime.html': 'cfe4cc1483fa0df7a990a3ec9d3728a7dc1be824c082e9198f62147e09e43f97',
 }
 for path, expected in EXPECTED.items():
     if not path.is_file():
@@ -64,4 +64,4 @@ for marker in (
         raise SystemExit(f'PROMPT ASSET FAIL: Pro rating feedback UX contract missing {marker!r}')
 
 subprocess.run([sys.executable, str(ROOT / 'scripts/build_pro_runtime.py'), '--check'], check=True)
-print('PROMPT ASSETS OK: immutable Free/Pro Golden Masters + Free 34-app/16-task visibility contract + deterministic Pro server runtime + 34 apps / 194 tasks')
+print('PROMPT ASSETS OK: immutable Free/Pro Golden Masters + 33-card Free surface parity + deterministic Pro server runtime + 34 apps / 194 PM20 + 33 inherited = 227 Pro tasks')
