@@ -1610,7 +1610,7 @@ def order_detail(request, pk):
 @staff_perm('payments.read')
 def payments(request):
     queryset = Payment.objects.select_related('order', 'order__company', 'order__private_user')
-    grid = DataGrid(request, queryset, search_fields=('provider_payment_id', 'order__order_number', 'order__company__name', 'order__private_user__email'), sort_fields={'date': 'created_at', 'amount': 'amount', 'status': 'status'}, default_sort='-created_at', filters={'status': 'status'}).build()
+    grid = DataGrid(request, queryset, search_fields=('provider_payment_id', 'order__order_number', 'order__company__name', 'order__private_user__email'), sort_fields={'date': 'created_at', 'payment': 'provider_payment_id', 'order': 'order__order_number', 'amount': 'amount', 'status': 'status'}, default_sort='-created_at', filters={'status': 'status'}).build()
     return render(
         request,
         'ns_admin/payments.html',
@@ -1740,7 +1740,7 @@ def email_template_edit(request, pk):
 
 @staff_perm('email.read')
 def email_log(request):
-    grid = DataGrid(request, EmailMessage.objects.select_related('template'), search_fields=('recipient', 'subject', 'template__code'), sort_fields={'date': 'created_at', 'recipient': 'recipient', 'status': 'status'}, default_sort='-created_at', filters={'status': 'status'}).build()
+    grid = DataGrid(request, EmailMessage.objects.select_related('template'), search_fields=('recipient', 'subject', 'template__code'), sort_fields={'date': 'created_at', 'recipient': 'recipient', 'template': 'template__code', 'subject': 'subject', 'status': 'status'}, default_sort='-created_at', filters={'status': 'status'}).build()
     return render(request, 'ns_admin/email_log.html', {'grid': grid, 'filter_options': [('status','Status',EMAIL_STATUS_CHOICES)]})
 
 
@@ -1790,7 +1790,7 @@ def mollie_config(request):
 
 @staff_perm('payments.read')
 def mollie_events(request):
-    grid = DataGrid(request, MollieEvent.objects.select_related('payment'), search_fields=('event_key', 'payment__provider_payment_id', 'provider_status'), sort_fields={'date': 'created_at', 'status': 'provider_status'}, default_sort='-created_at', filters={'provider_status': 'provider_status'}).build()
+    grid = DataGrid(request, MollieEvent.objects.select_related('payment'), search_fields=('event_key', 'payment__provider_payment_id', 'provider_status', 'error'), sort_fields={'date': 'created_at', 'payment': 'payment__provider_payment_id', 'status': 'provider_status', 'processed': 'processed_at', 'retries': 'retry_count', 'error': 'error'}, default_sort='-created_at', filters={'provider_status': 'provider_status'}).build()
     return render(request, 'ns_admin/mollie_events.html', {'grid': grid, 'filter_options': [('provider_status','Status',MOLLIE_STATUS_CHOICES)]})
 
 
@@ -1894,19 +1894,19 @@ def ops_database(request):
 
 @staff_perm('ops.read')
 def ops_backups(request):
-    grid = DataGrid(request, BackupRecord.objects.all(), search_fields=('status', 'provider_ref'), sort_fields={'date': 'finished_at', 'status': 'status', 'size': 'size_bytes'}, default_sort='-finished_at', filters={'status': 'status'}).build()
+    grid = DataGrid(request, BackupRecord.objects.all(), search_fields=('status', 'provider_ref'), sort_fields={'status': 'status', 'date': 'finished_at', 'size': 'size_bytes', 'reference': 'provider_ref'}, default_sort='-finished_at', filters={'status': 'status'}).build()
     return render(request, 'ns_admin/ops_grid.html', {'title': 'Backups', 'grid': grid, 'kind': 'backups', 'filter_options': []})
 
 
 @staff_perm('ops.read')
 def ops_restore_tests(request):
-    grid = DataGrid(request, RestoreTest.objects.all(), search_fields=('status', 'backup_ref'), sort_fields={'date': 'started_at', 'status': 'status'}, default_sort='-started_at', filters={'status': 'status'}).build()
+    grid = DataGrid(request, RestoreTest.objects.all(), search_fields=('status', 'backup_ref'), sort_fields={'status': 'status', 'date': 'started_at', 'finished': 'finished_at', 'backup': 'backup_ref'}, default_sort='-started_at', filters={'status': 'status'}).build()
     return render(request, 'ns_admin/ops_grid.html', {'title': 'Restore-Tests', 'grid': grid, 'kind': 'restores', 'filter_options': []})
 
 
 @staff_perm('ops.read')
 def ops_alerts(request):
-    grid = DataGrid(request, SystemAlert.objects.all(), search_fields=('code', 'message'), sort_fields={'date': 'created_at', 'severity': 'severity', 'active': 'active'}, default_sort='-created_at', filters={'severity': 'severity', 'active': 'active'}).build()
+    grid = DataGrid(request, SystemAlert.objects.all(), search_fields=('code', 'message'), sort_fields={'code': 'code', 'date': 'created_at', 'severity': 'severity', 'message': 'message', 'active': 'active'}, default_sort='-created_at', filters={'severity': 'severity', 'active': 'active'}).build()
     return render(request, 'ns_admin/ops_grid.html', {'title': 'Systemwarnungen', 'grid': grid, 'kind': 'alerts', 'filter_options': [('severity', 'Schweregrad', SystemAlert.SEVERITY), ('active', 'Status', [('True', 'Aktiv'), ('False', 'Erledigt')])]})
 
 
@@ -2144,7 +2144,7 @@ def deletion_requests(request):
         request,
         DeletionRequest.objects.select_related('user'),
         search_fields=('user__email', 'user__first_name', 'user__last_name', 'notes'),
-        sort_fields={'date': 'requested_at', 'status': 'status', 'email': 'user__email'},
+        sort_fields={'date': 'requested_at', 'email': 'user__email', 'status': 'status', 'note': 'notes'},
         default_sort='-requested_at',
         filters={'status': 'status'},
     ).build()
@@ -2184,11 +2184,28 @@ def deletion_request_reject(request, pk):
 
 @staff_perm('support.read')
 def support_requests(request):
+    support_queryset = (
+        SupportRequest.objects
+        .select_related('user', 'company', 'license', 'license__product')
+        .annotate(
+            customer_sort=Case(
+                When(company__isnull=False, then=F('company__name')),
+                default=Trim(
+                    Concat(
+                        Coalesce('user__first_name', Value('')),
+                        Value(' '),
+                        Coalesce('user__last_name', Value('')),
+                    )
+                ),
+                output_field=CharField(),
+            )
+        )
+    )
     grid = DataGrid(
         request,
-        SupportRequest.objects.select_related('user', 'company', 'license', 'license__product'),
+        support_queryset,
         search_fields=('subject', 'message', 'user__email', 'company__name'),
-        sort_fields={'date':'created_at','status':'status','category':'category','subject':'subject'},
+        sort_fields={'date':'created_at','category':'category','subject':'subject','customer':'customer_sort','status':'status'},
         default_sort='-created_at',
         filters={'status':'status','category':'category'},
     ).build()
@@ -2224,7 +2241,7 @@ def support_request_status(request, pk):
 
 @staff_perm('audit.read')
 def audit(request):
-    grid = DataGrid(request, AuditEvent.objects.select_related('actor'), search_fields=('action', 'object_type', 'object_id', 'actor__email'), sort_fields={'time': 'created_at', 'action': 'action'}, default_sort='-created_at', filters={'action': 'action'}).build()
+    grid = DataGrid(request, AuditEvent.objects.select_related('actor').annotate(changes_sort=Cast('changes', CharField())), search_fields=('action', 'object_type', 'object_id', 'actor__email', 'actor_role'), sort_fields={'time': 'created_at', 'user': 'actor__email', 'role': 'actor_role', 'action': 'action', 'object': 'object_type', 'change': 'changes_sort'}, default_sort='-created_at', filters={'action': 'action'}).build()
     export = _grid_export(request, grid, [('created_at', 'Zeit'), ('actor.email', 'Benutzer'), ('actor_role', 'Rolle'), ('action', 'Aktion'), ('object_type', 'Objekttyp'), ('object_id', 'Objekt-ID')], 'promptmaster-audit.csv')
     if export:
         return export
