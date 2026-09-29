@@ -1202,7 +1202,7 @@ def _check_product_v2_shell(page, label: str, width: int) -> None:
             raise AssertionError(
                 f'{label} {width}px: first configuration step starts too low: {metrics}'
             )
-    if metrics.get('reviewEditButtonCount') != 4:
+    if metrics.get('reviewEditButtonCount') != 6:
         raise AssertionError(
             f'{label} {width}px: Prompt-Check edit button set incomplete: {metrics}'
         )
