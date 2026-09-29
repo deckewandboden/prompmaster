@@ -9,6 +9,7 @@ from django.utils import timezone
 from apps.catalog.models import ProductEntitlement
 
 from .composer_core import PromptValidationError, compose_prompt
+from .free_surface import FREE_SURFACE_IDS
 from .models import (
     MicrosoftCapability,
     MicrosoftTier,
@@ -151,10 +152,10 @@ class PromptDomainSeedTests(TestCase):
     def test_pro_catalog_is_full_runtime_contract(self):
         snapshot = catalog_snapshot('PRO')
         self.assertEqual(snapshot['application_count'], 34)
-        self.assertEqual(snapshot['task_count'], 194)
+        self.assertEqual(snapshot['task_count'], 227)
         self.assertEqual(len(snapshot['applications']), 34)
         tasks = [task for app in snapshot['applications'] for task in app['tasks']]
-        self.assertEqual(len(tasks), 194)
+        self.assertEqual(len(tasks), 227)
         self.assertTrue(all(task['promptmaster_entitled'] for task in tasks))
         task = next(task for task in tasks if task['id'] == 'PM20-001')
         self.assertEqual(task['required'], ['Fragestellung'])
@@ -167,6 +168,34 @@ class PromptDomainSeedTests(TestCase):
         self.assertIn('rule', app)
         self.assertIn('copy', app)
         self.assertIn('access', app)
+
+    def test_pro_catalog_contains_every_task_visible_on_free_surface(self):
+        snapshot = catalog_snapshot('PRO')
+        tasks = [task for app in snapshot['applications'] for task in app['tasks']]
+        ids = {task['id'] for task in tasks}
+        self.assertEqual(len(FREE_SURFACE_IDS), 33)
+        self.assertTrue(FREE_SURFACE_IDS.issubset(ids))
+
+        expected_surface_counts = {
+            'copilot_chat': 4,
+            'outlook': 13,
+            'teams': 4,
+            'word': 4,
+            'excel': 4,
+            'powerpoint': 4,
+        }
+        for app_code, expected in expected_surface_counts.items():
+            app = next(app for app in snapshot['applications'] if app['code'] == app_code)
+            visible = [
+                task for task in app['tasks']
+                if task.get('surface_origin') == 'FREE_1_2_4'
+            ]
+            self.assertEqual(
+                len(visible),
+                expected,
+                f'{app_code} hat nicht alle Free-Oberflächenaufgaben in Pro.',
+            )
+            self.assertTrue(all(task['promptmaster_entitled'] for task in visible))
 
     def test_free_catalog_is_visible_but_unmapped_tasks_are_not_silently_entitled(self):
         snapshot = catalog_snapshot('FREE')
@@ -291,7 +320,7 @@ class PromptApiTests(TestCase):
         body = response.json()
         self.assertTrue(body['ok'])
         self.assertEqual(body['catalog']['application_count'], 34)
-        self.assertEqual(body['catalog']['task_count'], 194)
+        self.assertEqual(body['catalog']['task_count'], 227)
         self.assertEqual(len(body['catalog']['applications']), 34)
         first_task = body['catalog']['applications'][0]['tasks'][0]
         self.assertIn('required', first_task)
@@ -301,6 +330,50 @@ class PromptApiTests(TestCase):
         self.assertIn('outputs', first_task)
         self.assertIn('sources', first_task)
         self.assertEqual(response['Cache-Control'], 'no-store')
+
+    @patch('apps.prompts.api._require_pro_access')
+    def test_every_free_surface_task_is_executable_in_pro(self, access):
+        catalog = self.client.get('/api/v1/prompts/?product=PRO').json()['catalog']
+        surface_tasks = [
+            task
+            for app in catalog['applications']
+            for task in app['tasks']
+            if task['id'] in FREE_SURFACE_IDS
+        ]
+        self.assertEqual(len(surface_tasks), 33)
+
+        for task in surface_tasks:
+            fields = {
+                label: f'Testwert für {label}'
+                for label in task.get('required') or []
+            }
+            response = self.client.post(
+                '/api/v1/prompts/compose/',
+                data=json.dumps({
+                    'product': 'PRO',
+                    'task_id': task['id'],
+                    'microsoft_tier': 'premium',
+                    'input': {
+                        'fields': fields,
+                        'audience': (task.get('audiences') or ['Management'])[0],
+                        'focus': (task.get('focus') or [])[:1],
+                        'output': (task.get('outputs') or ['Ergebnis'])[0],
+                        'source': (task.get('sources') or ['provided'])[0],
+                        'tone': 'professional',
+                        'detail': 'standard',
+                    },
+                }),
+                content_type='application/json',
+            )
+            self.assertEqual(
+                response.status_code,
+                200,
+                f"{task['id']} konnte in Pro nicht ausgeführt werden: {response.content!r}",
+            )
+            body = response.json()
+            self.assertTrue(body['ok'], task['id'])
+            self.assertTrue(body['result']['ready'], task['id'])
+            self.assertTrue(body['result']['prompt'].strip(), task['id'])
 
     @patch('apps.prompts.api._require_pro_access')
     def test_compose_api_is_stateless(self, access):
@@ -498,7 +571,7 @@ class InternalStaffPromptApiTests(TestCase):
         response = self.client.get('/api/v1/prompts/?product=PRO')
         self.assertEqual(response.status_code, 200)
         self.assertTrue(response.json()['ok'])
-        self.assertEqual(response.json()['catalog']['task_count'], 194)
+        self.assertEqual(response.json()['catalog']['task_count'], 227)
 
     def test_staff_can_compose_without_customer_license_or_device(self):
         response = self.client.post(
