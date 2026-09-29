@@ -708,7 +708,7 @@
       scrollToTarget(stepSection(step));
       if (step === 4 && !free) {
         window.setTimeout(() => {
-          const firstMissing = $('.input-card.required .task-input', contextSection)
+          const firstMissing = requiredContextInputs()
             .find(input => !(input.value || '').trim());
           firstMissing?.focus({preventScroll:true});
         }, 320);
@@ -816,10 +816,24 @@
       .filter(Boolean);
     return values.length ? values.join(' · ') : 'Noch nicht gewählt';
   };
-  const requiredContextInputs = () => free
-    ? []
-    : $('.input-card.required .task-input', contextSection);
+  const requiredContextInputs = () => {
+    if (free) {
+      if (typeof spec !== 'function') return [];
+      const current = spec();
+      if (!current) return [];
+      const inputs = [];
+      if (current.primary?.required) inputs.push($('#goalInput', contextSection));
+      if (current.secondary?.required) inputs.push($('#sourceContextInput', contextSection));
+      return inputs.filter(Boolean);
+    }
+    return $('.input-card.required .task-input', contextSection);
+  };
   const requiredContextLabel = input => {
+    if (free && typeof spec === 'function') {
+      const current = spec();
+      if (input?.id === 'goalInput') return current?.primary?.label || 'Pflichtfeld';
+      if (input?.id === 'sourceContextInput') return current?.secondary?.label || 'Pflichtfeld';
+    }
     const label = input.closest('.input-card')?.querySelector('label');
     if (!label) return 'Pflichtfeld';
     const clone = label.cloneNode(true);
@@ -830,7 +844,6 @@
     .filter(input => !(input.value || '').trim())
     .map(requiredContextLabel);
   const contextSummary = () => {
-    if (free) return 'Free-Kontext geprüft';
     if (selectedTaskName() === 'Noch nicht gewählt') return 'Noch keine Aufgabe gewählt';
     const requiredInputs = requiredContextInputs();
     if (!requiredInputs.length) return 'Keine zusätzlichen Pflichtangaben';
@@ -855,7 +868,7 @@
       hasLicenseSelector ? Boolean($('input[name="mslicense"]:checked')) : true,
       selectedAppName() !== 'Noch nicht gewählt',
       taskSelected,
-      taskSelected && (free || missingContextLabels().length === 0),
+      taskSelected && missingContextLabels().length === 0,
       taskSelected && (audienceSection.classList.contains('hidden') || Boolean($('input[name="audience"]:checked'))),
       taskSelected && $('input[name="focus"]:checked', focusSection).length > 0,
       taskSelected && outputComplete(),
