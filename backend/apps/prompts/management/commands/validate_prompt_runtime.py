@@ -9,7 +9,15 @@ from apps.contenthub.models import FAQEntry
 from apps.core.security import token_pair
 from apps.integrations.models import ServiceAccount
 from apps.prompts.free_legacy import compose_free_legacy
-from apps.prompts.free_surface import FREE_ACTUAL_UNIQUE_IDS, FREE_PRO_PREVIEW_UNIQUE_IDS, FREE_SURFACE_ALIAS_TO_PRO_ID, FREE_SURFACE_UNIQUE_IDS
+from apps.prompts.free_surface import (
+    FREE_ACTUAL_UNIQUE_IDS,
+    FREE_PRO_PREVIEW_UNIQUE_IDS,
+    FREE_SURFACE_ALIAS_TITLES,
+    FREE_SURFACE_ALIAS_TO_PRO_ID,
+    FREE_SURFACE_PRO_CONTRACTS,
+    FREE_SURFACE_UNIQUE_IDS,
+    FREE_TO_PRO_APP_CODE,
+)
 from apps.prompts.lifecycle import run_test_case
 from apps.prompts.models import PromptApplication, PromptDefinition, PromptLegacyContract, PromptTestCase, PromptVersion
 from apps.prompts.services import (
@@ -66,6 +74,57 @@ class Command(BaseCommand):
                 f'missing_alias_targets={sorted(missing_alias_targets)} '
                 f'duplicate_alias_cards={sorted(duplicate_alias_cards)}'
             )
+
+        # Visible parity: every function title shown on Free must appear
+        # verbatim in the corresponding Pro app, while aliases still resolve
+        # to one canonical PM20 task rather than a duplicate card.
+        pro_titles_by_app = {
+            app.get('code'): {
+                task.get('title')
+                for task in (app.get('tasks') or [])
+            }
+            for app in (pro_catalog.get('applications') or [])
+        }
+        visible_expected = []
+        for contract in PromptLegacyContract.objects.filter(source='FREE_1_2_4'):
+            visible_expected.append((
+                FREE_TO_PRO_APP_CODE[contract.application_code],
+                contract.title,
+                contract.legacy_id,
+            ))
+        for surface_id, contract in FREE_SURFACE_PRO_CONTRACTS.items():
+            visible_expected.append((
+                contract['app_code'],
+                contract['title'],
+                surface_id,
+            ))
+        if len(visible_expected) != 33:
+            raise CommandError(
+                f'Free→Pro sichtbare Parität erwartet 33 Funktionen, '
+                f'hat aber {len(visible_expected)}.'
+            )
+        missing_visible = [
+            f'{surface_id}:{app_code}:{title}'
+            for app_code, title, surface_id in visible_expected
+            if title not in pro_titles_by_app.get(app_code, set())
+        ]
+        if missing_visible:
+            raise CommandError(
+                'Free→Pro sichtbare Funktionen fehlen: '
+                + ' | '.join(missing_visible)
+            )
+        for surface_id, canonical_id in FREE_SURFACE_ALIAS_TO_PRO_ID.items():
+            matches = [
+                task for task in pro_tasks
+                if task.get('id') == canonical_id
+            ]
+            if (
+                len(matches) != 1
+                or matches[0].get('title') != FREE_SURFACE_ALIAS_TITLES[surface_id]
+            ):
+                raise CommandError(
+                    f'Free→Pro Alias-Titel falsch: {surface_id} -> {canonical_id}'
+                )
 
         expected_surface_counts = {
             'copilot_chat': 1,
@@ -267,4 +326,4 @@ class Command(BaseCommand):
         finally:
             account.delete()
 
-        self.stdout.write(self.style.SUCCESS('PROMPT RUNTIME VALIDATION OK: 34 apps / 215 deduplicated Pro tasks catalogued + 215/215 composed / 33/33 Free-surface functions covered / 194 PM20 smoke tests / MCP / FAQ'))
+        self.stdout.write(self.style.SUCCESS('PROMPT RUNTIME VALIDATION OK: 34 apps / 215 deduplicated Pro tasks catalogued + 215/215 composed / 33/33 Free-surface functions visibly covered / 194 PM20 smoke tests / MCP / FAQ'))
