@@ -82,6 +82,12 @@ class Command(BaseCommand):
                 raise CommandError(f"Pro-App ohne Aufgaben: {app.get('code')}")
             if len(app_ids) != len(set(app_ids)):
                 raise CommandError(f"Doppelte Task-ID in Pro-App: {app.get('code')}")
+            normalized_titles = [
+                ' '.join(str(task.get('title') or '').casefold().split())
+                for task in app_tasks
+            ]
+            if len(normalized_titles) != len(set(normalized_titles)):
+                raise CommandError(f"Doppelter Prompt-Titel in Pro-App: {app.get('code')}")
             if not all(task.get('promptmaster_entitled') for task in app_tasks):
                 raise CommandError(f"Nicht freigeschaltete Aufgabe in Pro-App: {app.get('code')}")
             inherited = [
