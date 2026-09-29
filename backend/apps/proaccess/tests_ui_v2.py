@@ -40,16 +40,16 @@ class PromptMasterV2RouteIsolationTests(TestCase):
         current_html = current.content.decode('utf-8')
         legacy_html = legacy.content.decode('utf-8')
 
-        self.assertIn('/static/js/free_catalog_bridge.20260918.js?v=20260925-mobile17', current_html)
-        self.assertIn('/static/js/free_catalog_bridge.20260918.js?v=20260925-mobile17', legacy_html)
+        self.assertIn('/static/js/free_catalog_bridge.20260918.js?v=20260929-ui18', current_html)
+        self.assertIn('/static/js/free_catalog_bridge.20260918.js?v=20260929-ui18', legacy_html)
         self.assertRegex(
             current_html,
             r'<meta name="pm-free-compose" content="server" data-csrf="[A-Za-z0-9]+">',
         )
         self.assertNotIn('name="pm-free-compose"', legacy_html)
 
-        self.assertIn('/static/css/promptmaster_v2.20260922.css?v=20260925-mobile17', current_html)
-        self.assertIn('/static/js/promptmaster_ui_v2.20260922.js?v=20260925-mobile17', current_html)
+        self.assertIn('/static/css/promptmaster_v2.20260922.css?v=20260929-ui18', current_html)
+        self.assertIn('/static/js/promptmaster_ui_v2.20260922.js?v=20260929-ui18', current_html)
         self.assertNotIn('/static/css/promptmaster_v2.20260922.css', legacy_html)
         self.assertNotIn('/static/js/promptmaster_ui_v2.20260922.js', legacy_html)
 
@@ -68,10 +68,10 @@ class PromptMasterV2RouteIsolationTests(TestCase):
         self.assertIn(free_source_node, legacy_html)
 
         stripped = current_html.replace(
-            '<link rel="stylesheet" href="/static/css/promptmaster_v2.20260922.css?v=20260925-mobile17">',
+            '<link rel="stylesheet" href="/static/css/promptmaster_v2.20260922.css?v=20260929-ui18">',
             '',
         ).replace(
-            '<script src="/static/js/promptmaster_ui_v2.20260922.js?v=20260925-mobile17" defer></script>',
+            '<script src="/static/js/promptmaster_ui_v2.20260922.js?v=20260929-ui18" defer></script>',
             '',
         ).replace(
             'data:image/gif;base64,R0lGODlhAQABAAAAACw=',
@@ -95,8 +95,8 @@ class PromptMasterV2RouteIsolationTests(TestCase):
         current_html = current.content.decode('utf-8')
         legacy_html = legacy.content.decode('utf-8')
 
-        self.assertIn('/static/css/promptmaster_v2.20260922.css?v=20260925-mobile17', current_html)
-        self.assertIn('/static/js/promptmaster_ui_v2.20260922.js?v=20260925-mobile17', current_html)
+        self.assertIn('/static/css/promptmaster_v2.20260922.css?v=20260929-ui18', current_html)
+        self.assertIn('/static/js/promptmaster_ui_v2.20260922.js?v=20260929-ui18', current_html)
         self.assertNotIn('/static/css/promptmaster_v2.20260922.css', legacy_html)
         self.assertNotIn('/static/js/promptmaster_ui_v2.20260922.js', legacy_html)
 
@@ -166,6 +166,14 @@ class PromptMasterV2RouteIsolationTests(TestCase):
         self.assertIn('color:#050a14!important;', css)
         self.assertIn("cta.href = '/checkout/?quantity=1';", js)
         self.assertNotIn("cta.href = '/portal/licenses/buy/?quantity=1';", js)
+
+        # Presentation polish: technical lifecycle/source metadata stays in the
+        # runtime contract but is not shown on Pro task cards. Dark modal lists
+        # must explicitly override the legacy light-theme text color.
+        self.assertIn('.pmv2-pro #taskGrid .task-meta{display:none!important}', css)
+        self.assertIn('.pmv2 .modal-body li{color:#dbe7f0!important}', css)
+        self.assertIn('.pmv2 .price span,', css)
+        self.assertIn('color:#a9bdcc!important', css)
 
 
     def test_pro_legacy_route_keeps_the_same_authentication_boundary(self):
