@@ -5,12 +5,20 @@ from django.db.models import Prefetch
 from apps.catalog.models import Product, ProductEntitlement
 
 from .composer_core import PromptValidationError, compose_prompt
+from .free_legacy import AUDIENCE_DISPLAY, FORMAT_LABELS
+from .free_surface import (
+    FREE_INPUT_META,
+    FREE_SURFACE_PRO_CONTRACTS,
+    FREE_TO_PRO_APP_CODE,
+)
 from .models import (
     MicrosoftCapability,
     MicrosoftTier,
+    PromptApplication,
     PromptDefinition,
     PromptField,
     PromptOption,
+    PromptLegacyContract,
     PromptPolicySet,
     PromptVersion,
 )
@@ -219,6 +227,281 @@ def compose_task(*, task_id: str, microsoft_tier: str, payload: dict, product_co
     return compose_prompt(spec, compose_payload)
 
 
+
+def _policy_spec(policy: PromptPolicySet) -> dict:
+    return {
+        'version': policy.version,
+        'source_labels': policy.source_labels,
+        'source_instructions': policy.source_instructions,
+        'method_rules': policy.method_rules,
+        'quality_rules': policy.quality_rules,
+        'tone_rules': policy.tone_rules,
+        'detail_rules': policy.detail_rules,
+        'no_fabrication_rule': policy.no_fabrication_rule,
+    }
+
+
+def _surface_options(contract: dict) -> list[dict]:
+    options = []
+    for kind, key in (
+        ('source', 'sources'),
+        ('output', 'outputs'),
+        ('focus', 'focus'),
+        ('audience', 'audiences'),
+    ):
+        for index, value in enumerate(contract.get(key) or []):
+            options.append({
+                'kind': kind,
+                'value': value,
+                'label': value,
+                'sort_order': index,
+            })
+    return options
+
+
+def _surface_fields(contract: dict) -> list[dict]:
+    fields = []
+    for kind, key in (('required', 'required'), ('optional', 'optional')):
+        for index, label in enumerate(contract.get(key) or []):
+            fields.append({
+                'label': label,
+                'kind': kind,
+                'sort_order': index,
+                'optional_fragment': '',
+            })
+    return fields
+
+
+def build_free_legacy_pro_spec(task_id: str) -> dict:
+    contract = PromptLegacyContract.objects.filter(
+        source='FREE_1_2_4',
+        legacy_id=task_id,
+    ).first()
+    if not contract:
+        raise PromptValidationError(
+            'Free-Prompt-Aufgabe nicht veröffentlicht.',
+            field='task_id',
+            code='not_found',
+        )
+    app_code = FREE_TO_PRO_APP_CODE.get(contract.application_code)
+    app = PromptApplication.objects.filter(code=app_code, active=True).first()
+    if not app:
+        raise PromptValidationError(
+            'Prompt-Anwendung nicht veröffentlicht.',
+            field='task_id',
+            code='not_found',
+        )
+    entry = _free_legacy_catalog_entry(contract)
+    policy = active_policy()
+    fields = []
+    for kind, key in (('required', 'required'), ('optional', 'optional')):
+        for index, label in enumerate(entry[key]):
+            fields.append({
+                'label': label,
+                'kind': kind,
+                'sort_order': index,
+                'optional_fragment': '',
+            })
+    options = []
+    for kind, key in (
+        ('source', 'sources'),
+        ('output', 'outputs'),
+        ('focus', 'focus'),
+        ('audience', 'audiences'),
+    ):
+        for index, value in enumerate(entry[key]):
+            options.append({
+                'kind': kind,
+                'value': value,
+                'label': value,
+                'sort_order': index,
+            })
+    return {
+        'task_id': task_id,
+        'application': {
+            'code': app.code,
+            'name': app.name,
+            'rule': app.rule,
+            'minimum_tier_rank': 0,
+        },
+        'version': {
+            'version': 1,
+            'title': entry['title'],
+            'area': entry['area'],
+            'family': entry['family'],
+            'intent': entry['intent'],
+            'max_chars': None,
+            'context_template': '',
+            'minimum_tier_rank': entry['minimum_tier_rank'],
+            'fields': fields,
+            'options': options,
+        },
+        'policy': _policy_spec(policy),
+    }
+
+
+def build_free_surface_pro_spec(task_id: str) -> dict:
+    contract = FREE_SURFACE_PRO_CONTRACTS.get(task_id)
+    if not contract:
+        raise PromptValidationError(
+            'Prompt-Aufgabe nicht veröffentlicht.',
+            field='task_id',
+            code='not_found',
+        )
+    app = PromptApplication.objects.filter(
+        code=contract['app_code'],
+        active=True,
+    ).first()
+    if not app:
+        raise PromptValidationError(
+            'Prompt-Anwendung nicht veröffentlicht.',
+            field='task_id',
+            code='not_found',
+        )
+    policy = active_policy()
+    return {
+        'task_id': task_id,
+        'application': {
+            'code': app.code,
+            'name': app.name,
+            'rule': app.rule,
+            'minimum_tier_rank': 0,
+        },
+        'version': {
+            'version': 1,
+            'title': contract['title'],
+            'area': contract['area'],
+            'family': contract['family'],
+            'intent': contract['intent'],
+            'max_chars': None,
+            'context_template': '',
+            'minimum_tier_rank': int(contract.get('minimum_tier_rank') or 0),
+            'fields': _surface_fields(contract),
+            'options': _surface_options(contract),
+        },
+        'policy': _policy_spec(policy),
+    }
+
+
+def compose_free_surface_pro_task(*, task_id: str, microsoft_tier: str, payload: dict):
+    tier = tier_by_code(microsoft_tier)
+    spec = build_free_surface_pro_spec(task_id)
+    compose_payload = dict(payload or {})
+    compose_payload['microsoft_tier_rank'] = tier.rank
+    return compose_prompt(spec, compose_payload)
+
+
+def _free_legacy_catalog_entry(contract: PromptLegacyContract) -> dict:
+    runtime = (contract.payload or {}).get('runtime_contract') or {}
+    meta = FREE_INPUT_META.get(contract.legacy_id) or {}
+    primary = meta.get('primary') or 'Aufgabe / Kontext'
+    secondary = meta.get('secondary') or 'Zusätzliche Angaben'
+
+    required = []
+    optional = []
+    if runtime.get('primary_required'):
+        required.append(primary)
+    else:
+        optional.append(primary)
+    if runtime.get('secondary_required'):
+        required.append(secondary)
+    else:
+        optional.append(secondary)
+
+    return {
+        'id': contract.legacy_id,
+        'title': contract.title,
+        'intent': runtime.get('intent') or contract.title,
+        'required': required,
+        'optional': optional,
+        'area': (contract.payload or {}).get('area') or 'Free-Basis',
+        'family': runtime.get('family') or 'analysis',
+        'sources': ['provided'],
+        'outputs': [
+            FORMAT_LABELS.get(value, value)
+            for value in (runtime.get('formats') or [])
+        ],
+        'focus': list(runtime.get('focus') or []),
+        'audiences': [
+            AUDIENCE_DISPLAY.get(value, value)
+            for value in (runtime.get('audiences') or [])
+        ],
+        'access': None,
+        'status': 'FREE + PRO',
+        'maxChars': None,
+        'prompt_version': 'FREE_1_2_4',
+        'policy_version': 'FREE_1_2_4',
+        'minimum_tier_rank': int(runtime.get('minimum_tier_rank') or 0),
+        'promptmaster_entitled': True,
+        'compatibility_kind': 'free_legacy',
+        'surface_origin': 'FREE_1_2_4',
+    }
+
+
+def _free_pro_preview_catalog_entry(task_id: str, contract: dict, policy_version: int) -> dict:
+    return {
+        'id': task_id,
+        'title': contract['title'],
+        'intent': contract['intent'],
+        'required': list(contract.get('required') or []),
+        'optional': list(contract.get('optional') or []),
+        'area': contract.get('area') or 'Pro',
+        'family': contract.get('family') or 'analysis',
+        'sources': list(contract.get('sources') or ['provided']),
+        'outputs': list(contract.get('outputs') or ['Ergebnis']),
+        'focus': list(contract.get('focus') or []),
+        'audiences': list(contract.get('audiences') or []),
+        'access': None,
+        'status': 'PRO',
+        'maxChars': None,
+        'prompt_version': 1,
+        'policy_version': policy_version,
+        'minimum_tier_rank': int(contract.get('minimum_tier_rank') or 0),
+        'promptmaster_entitled': True,
+        'compatibility_kind': 'free_pro_preview',
+        'surface_origin': 'FREE_1_2_4',
+    }
+
+
+def _prepend_free_surface_to_pro_catalog(apps: dict[str, dict], policy_version: int) -> None:
+    surface_by_app: dict[str, list[dict]] = {}
+
+    legacy_contracts = PromptLegacyContract.objects.filter(
+        source='FREE_1_2_4',
+    ).order_by('application_code', 'legacy_id')
+    for contract in legacy_contracts:
+        app_code = FREE_TO_PRO_APP_CODE.get(contract.application_code)
+        if not app_code:
+            continue
+        surface_by_app.setdefault(app_code, []).append(
+            _free_legacy_catalog_entry(contract)
+        )
+
+    for task_id, contract in FREE_SURFACE_PRO_CONTRACTS.items():
+        surface_by_app.setdefault(contract['app_code'], []).append(
+            _free_pro_preview_catalog_entry(task_id, contract, policy_version)
+        )
+
+    for app_code, surface_tasks in surface_by_app.items():
+        app = apps.get(app_code)
+        if not app:
+            raise PromptValidationError(
+                f'Free/Pro-Paritätsfehler: Anwendung {app_code} fehlt im Pro-Katalog.',
+                field='application',
+                code='catalog_not_seeded',
+            )
+        existing_ids = {task['id'] for task in app['tasks']}
+        collisions = existing_ids.intersection(task['id'] for task in surface_tasks)
+        if collisions:
+            raise PromptValidationError(
+                'Free/Pro-Paritätsfehler: doppelte Task-IDs: '
+                + ', '.join(sorted(collisions)),
+                field='task_id',
+                code='catalog_not_seeded',
+            )
+        app['tasks'] = surface_tasks + app['tasks']
+
+
 def catalog_snapshot(product_code: str = 'PRO') -> dict:
     """Return the authoritative product catalog consumed by the Pro runtime.
 
@@ -333,6 +616,9 @@ def catalog_snapshot(product_code: str = 'PRO') -> dict:
                 'promptmaster_entitled': entitled,
             }
         )
+
+    if product_code == 'PRO':
+        _prepend_free_surface_to_pro_catalog(apps, policy.version)
 
     applications = sorted(apps.values(), key=lambda item: (item['sort_order'], item['name']))
     task_count = sum(len(app['tasks']) for app in applications)
