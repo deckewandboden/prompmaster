@@ -7,8 +7,8 @@ from django.contrib.auth.decorators import login_required
 from django.core import signing
 from django.core.exceptions import PermissionDenied, ValidationError
 from django.db import transaction
-from django.db.models import CharField, Count, Q, Sum
-from django.db.models.functions import Cast, Coalesce, Lower, TruncMonth
+from django.db.models import Case, CharField, Count, F, OuterRef, Q, Subquery, Sum, Value, When
+from django.db.models.functions import Cast, Coalesce, Concat, Lower, Trim, TruncMonth
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse
 from django.utils import timezone
@@ -26,7 +26,7 @@ from apps.devices.models import DeviceRegistration
 from apps.devices.services import revoke_device
 from apps.integrations.models import ServiceAccount
 from apps.legal.models import ConsumerContractDeclaration, DeletionRequest, LegalAcceptance, LegalDocument, RetentionPolicy
-from apps.licenses.models import License, LicenseAssignmentLink, LicenseTerm, LicenseUpgradeRequest
+from apps.licenses.models import License, LicenseAssignment, LicenseAssignmentLink, LicenseTerm, LicenseUpgradeRequest
 from apps.licenses.services import assign_license, block_license, release_license, unblock_license
 from apps.notifications.models import EmailMessage, EmailTemplate
 from apps.ops.metrics import caddy_health, certificate_status, snapshot
@@ -84,6 +84,64 @@ def staff_perm(*codes):
 
 
 PASSWORD_RESET_SALT = 'pm-password-reset'
+
+
+def _license_admin_queryset(queryset=None):
+    """License rows enriched with the current holder for admin grids.
+
+    Only the active assignment is considered; historical assignments must never
+    leak into the visible/sortable current-license owner column.
+    """
+    queryset = queryset if queryset is not None else License.objects.all()
+    active = (
+        LicenseAssignment.objects
+        .filter(license_id=OuterRef('pk'), ended_at__isnull=True)
+        .annotate(
+            holder_name=Case(
+                When(
+                    user__first_name='',
+                    user__last_name='',
+                    then=F('user__email'),
+                ),
+                default=Trim(
+                    Concat(
+                        Coalesce('user__first_name', Value('')),
+                        Value(' '),
+                        Coalesce('user__last_name', Value('')),
+                    )
+                ),
+                output_field=CharField(),
+            )
+        )
+    )
+    owner_name = Case(
+        When(owner_user__isnull=True, then=Value('Frei')),
+        When(
+            owner_user__first_name='',
+            owner_user__last_name='',
+            then=F('owner_user__email'),
+        ),
+        default=Trim(
+            Concat(
+                Coalesce('owner_user__first_name', Value('')),
+                Value(' '),
+                Coalesce('owner_user__last_name', Value('')),
+            )
+        ),
+        output_field=CharField(),
+    )
+    return (
+        queryset
+        .select_related('company', 'owner_user', 'product')
+        .annotate(
+            assigned_name=Subquery(active.values('holder_name')[:1]),
+            assigned_email=Subquery(active.values('user__email')[:1]),
+        )
+        .annotate(
+            license_holder_name=Coalesce('assigned_name', owner_name, Value('Frei')),
+            license_holder_email=Coalesce('assigned_email', 'owner_user__email', Value('')),
+        )
+    )
 PAYMENT_STATUS_CHOICES = [
     ('created', 'Erstellt'), ('open', 'Offen'), ('pending', 'Ausstehend'),
     ('authorized', 'Autorisiert'), ('paid', 'Bezahlt'), ('failed', 'Fehlgeschlagen'),
