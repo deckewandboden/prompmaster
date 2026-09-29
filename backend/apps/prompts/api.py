@@ -10,13 +10,14 @@ from apps.proaccess.services import active_product_assignment, has_internal_staf
 
 from .composer_core import PromptValidationError
 from .free_legacy import compose_free_legacy
-from .free_surface import FREE_INPUT_META, FREE_SURFACE_PRO_CONTRACTS
+from .free_surface import FREE_SURFACE_PRO_CONTRACTS
 from .models import PromptLegacyContract
 from .services import (
     build_free_legacy_pro_spec,
     build_free_surface_pro_spec,
     build_spec,
     catalog_snapshot,
+    compose_free_legacy_pro_task,
     compose_free_surface_pro_task,
     compose_task,
     published_version,
@@ -68,16 +69,6 @@ def catalog(request):
     return response
 
 
-
-
-def _legacy_pro_payload(task_id, payload):
-    normalized = dict(payload or {})
-    fields = normalized.get('fields') or {}
-    meta = FREE_INPUT_META.get(task_id) or {}
-    if isinstance(fields, dict):
-        normalized['primary'] = fields.get(meta.get('primary'), '')
-        normalized['secondary'] = fields.get(meta.get('secondary'), '')
-    return normalized
 
 
 def _public_spec(spec):
@@ -180,12 +171,23 @@ def compose(request):
                 legacy_id=task_id,
             ).first()
             if legacy:
-                result_payload = compose_free_legacy(
-                    contract=legacy,
+                result = compose_free_legacy_pro_task(
+                    task_id=task_id,
                     microsoft_tier=tier,
-                    payload=_legacy_pro_payload(task_id, payload),
+                    payload=payload,
                 )
-                result_payload['inherited_from'] = 'FREE'
+                result_payload = {
+                    'prompt': result.prompt,
+                    'ready': result.ready,
+                    'progress_percent': result.progress_percent,
+                    'task_id': result.task_id,
+                    'app_code': result.app_code,
+                    'policy_version': result.policy_version,
+                    'prompt_version': result.prompt_version,
+                    'persisted': False,
+                    'source': 'FreeLegacyProSpec',
+                    'inherited_from': 'FREE',
+                }
             elif task_id in FREE_SURFACE_PRO_CONTRACTS:
                 result = compose_free_surface_pro_task(
                     task_id=task_id,
