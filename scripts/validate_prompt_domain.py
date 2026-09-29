@@ -21,7 +21,7 @@ sys.path.insert(0, str(BACKEND))
 
 from apps.prompts.composer_core import PromptValidationError, compose_prompt  # noqa: E402
 from apps.prompts.free_legacy import FREE_RUNTIME_CONTRACTS, compose_free_legacy  # noqa: E402
-from apps.prompts.free_surface import FREE_PRO_PREVIEW_IDS, FREE_SURFACE_IDS  # noqa: E402
+from apps.prompts.free_surface import FREE_PRO_PREVIEW_IDS, FREE_SURFACE_ALIAS_TO_PRO_ID, FREE_SURFACE_IDS, FREE_SURFACE_UNIQUE_IDS  # noqa: E402
 
 DATA = BACKEND / 'apps' / 'prompts' / 'data' / 'pm20_golden_logic.json'
 FREE_DATA = BACKEND / 'apps' / 'prompts' / 'data' / 'free_legacy_tasks.json'
@@ -262,6 +262,15 @@ if visible_free_ids != set(FREE_SURFACE_IDS):
         'Complete Free surface differs from Pro compatibility contract: '
         f'{sorted(visible_free_ids ^ set(FREE_SURFACE_IDS))}'
     )
+if len(FREE_SURFACE_ALIAS_TO_PRO_ID) != 12:
+    fail(f'Expected 12 deduplicated Free→Pro aliases, got {len(FREE_SURFACE_ALIAS_TO_PRO_ID)}')
+if len(FREE_SURFACE_UNIQUE_IDS) != 21:
+    fail(f'Expected 21 genuinely additional Free-surface functions, got {len(FREE_SURFACE_UNIQUE_IDS)}')
+if not set(FREE_SURFACE_ALIAS_TO_PRO_ID).issubset(visible_free_ids):
+    fail('Free→Pro alias keys are not all present on the reviewed Free surface')
+missing_alias_targets = set(FREE_SURFACE_ALIAS_TO_PRO_ID.values()) - set(tasks)
+if missing_alias_targets:
+    fail(f'Free→Pro alias targets missing from PM20 catalog: {sorted(missing_alias_targets)}')
 for legacy_id in legacy_ids:
     runtime = FREE_RUNTIME_CONTRACTS.get(legacy_id) or {}
     if not runtime.get('intent') or not runtime.get('audiences') or not runtime.get('formats') or not runtime.get('focus'):
@@ -389,4 +398,4 @@ print('PROMPT DOMAIN VALIDATION OK')
 print(f'PM20 catalog: {len(apps)} apps / {len(tasks)} tasks / {len(context_specs)} handcrafted context specs')
 print(f'Free legacy preservation + DB composer smoke: {len(legacy_ids)}/16 contracts')
 print('Composer smoke: 194/194 PM20 tasks composed successfully with no unresolved placeholders')
-print('FREE→PRO SURFACE PARITY OK: 33/33 visible Free task cards contracted for Pro')
+print('FREE→PRO SURFACE PARITY OK: 33/33 Free-surface functions covered; 12 map to canonical PM20 tasks, 21 are unique Pro additions')
