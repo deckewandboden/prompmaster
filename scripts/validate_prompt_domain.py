@@ -222,6 +222,12 @@ if set(legacy_ids) != set(FREE_RUNTIME_CONTRACTS):
 
 
 free_html = FREE_GM.read_text(encoding='utf-8')
+if 'WEB Elementbau' in free_html:
+    fail('Public Free Golden Master contains customer-specific sample data: WEB Elementbau')
+if "btn.textContent='Kopiert ✓'" not in free_html:
+    fail('Free copy button must visibly confirm copying with Kopiert ✓')
+if "btn.textContent='Prompt kopieren'" not in free_html:
+    fail('Free copy button must reset its label after copy confirmation')
 free_app_start = free_html.find('const APP={')
 free_app_end = free_html.find('\n\nconst PRO_VISIBLE', free_app_start)
 if free_app_start < 0 or free_app_end < 0:
