@@ -57,7 +57,35 @@
     const current = new URL(window.location.href);
     const activeSort = current.searchParams.get('sort') || '';
     const activeDir = (current.searchParams.get('dir') || 'asc').toLowerCase() === 'desc' ? 'desc' : 'asc';
+    const collator = new Intl.Collator('de', {numeric: true, sensitivity: 'base'});
 
+    const setSortAccessibility = (control, state) => {
+      const header = control.closest('th');
+      if (header) {
+        header.setAttribute(
+          'aria-sort',
+          state === 'asc' ? 'ascending' : state === 'desc' ? 'descending' : 'none'
+        );
+      }
+      control.dataset.sortState = state;
+      const label = (control.dataset.sortLabel || control.textContent || '').trim();
+      control.setAttribute(
+        'aria-label',
+        state === 'asc'
+          ? `${label}, aktuell aufsteigend sortiert. Sortierreihenfolge ändern`
+          : state === 'desc'
+            ? `${label}, aktuell absteigend sortiert. Sortierreihenfolge ändern`
+            : `${label} sortieren`
+      );
+      control.title = state === 'asc'
+        ? 'Aufsteigend sortiert – klicken für absteigend'
+        : state === 'desc'
+          ? 'Absteigend sortiert – klicken für aufsteigend'
+          : 'Sortieren – klicken für aufsteigend';
+    };
+
+    // Server-side DataGrid sorting. These links keep pagination/filter/query
+    // semantics and only receive one common visible UI state here.
     document.querySelectorAll('.tablewrap thead th a[href]').forEach((link) => {
       let target;
       try {
@@ -80,28 +108,88 @@
       });
 
       link.classList.add('sort-control');
-      const active = sortKey === activeSort;
-      const state = active ? activeDir : 'none';
-      link.dataset.sortState = state;
+      link.dataset.sortMode = 'server';
+      link.dataset.sortLabel = (link.textContent || '').trim();
+      setSortAccessibility(link, sortKey === activeSort ? activeDir : 'none');
+    });
 
-      const header = link.closest('th');
-      if (header) {
-        header.setAttribute(
-          'aria-sort',
-          active ? (activeDir === 'asc' ? 'ascending' : 'descending') : 'none'
-        );
+    const normaliseSortValue = (raw) => {
+      const value = String(raw || '').replace(/\s+/g, ' ').trim();
+      if (!value) return {type: 'text', value: ''};
+
+      const dateMatch = value.match(/^(\d{1,2})\.(\d{1,2})\.(\d{4})(?:\s+(\d{1,2}):(\d{2}))?/);
+      if (dateMatch) {
+        const [, day, month, year, hour = '0', minute = '0'] = dateMatch;
+        return {
+          type: 'number',
+          value: Date.UTC(Number(year), Number(month) - 1, Number(day), Number(hour), Number(minute)),
+        };
       }
 
-      const label = (link.textContent || '').trim();
-      link.setAttribute(
-        'aria-label',
-        active
-          ? `${label}, aktuell ${activeDir === 'asc' ? 'aufsteigend' : 'absteigend'} sortiert. Sortierreihenfolge ändern`
-          : `${label} sortieren`
-      );
-      link.title = active
-        ? `Sortierung ${activeDir === 'asc' ? 'aufsteigend' : 'absteigend'} – klicken zum Wechseln`
-        : 'Sortieren – klicken für aufsteigend';
+      const numericCandidate = value
+        .replace(/\.(?=\d{3}(?:\D|$))/g, '')
+        .replace(',', '.')
+        .replace(/[^0-9+\-.]/g, '');
+      if (numericCandidate && /^[+-]?\d+(?:\.\d+)?$/.test(numericCandidate)) {
+        return {type: 'number', value: Number(numericCandidate)};
+      }
+
+      return {type: 'text', value};
+    };
+
+    const compareValues = (left, right) => {
+      if (left.type === 'number' && right.type === 'number') return left.value - right.value;
+      return collator.compare(String(left.value), String(right.value));
+    };
+
+    const excludedHeaders = /^(aktion|aktionen|erstattung)$/i;
+
+    // Static/detail tables do not have DataGrid query links. Give them the same
+    // visible sort affordance and sort the complete in-page tbody locally.
+    document.querySelectorAll('.tablewrap table').forEach((table) => {
+      if (table.querySelector('thead a[data-sort-mode="server"]')) return;
+      const body = table.tBodies?.[0];
+      if (!body) return;
+
+      Array.from(table.querySelectorAll('thead th')).forEach((header, index) => {
+        const label = (header.textContent || '').replace(/\s+/g, ' ').trim();
+        if (!label || excludedHeaders.test(label) || header.querySelector('button,select,input')) return;
+
+        const control = document.createElement('button');
+        control.type = 'button';
+        control.className = 'sort-control';
+        control.dataset.sortMode = 'client';
+        control.dataset.sortLabel = label;
+        control.textContent = label;
+        header.textContent = '';
+        header.append(control);
+        setSortAccessibility(control, 'none');
+
+        control.addEventListener('click', () => {
+          const nextState = control.dataset.sortState === 'asc' ? 'desc' : 'asc';
+          table.querySelectorAll('thead .sort-control[data-sort-mode="client"]').forEach((other) => {
+            if (other !== control) setSortAccessibility(other, 'none');
+          });
+
+          const rows = Array.from(body.rows);
+          const sortable = rows
+            .map((row, originalIndex) => ({row, originalIndex}))
+            .filter(({row}) => row.cells.length > index && !row.querySelector('td[colspan]'));
+
+          sortable.sort((a, b) => {
+            const leftCell = a.row.cells[index];
+            const rightCell = b.row.cells[index];
+            const left = normaliseSortValue(leftCell?.dataset.sortValue || leftCell?.textContent);
+            const right = normaliseSortValue(rightCell?.dataset.sortValue || rightCell?.textContent);
+            const result = compareValues(left, right);
+            return (nextState === 'asc' ? result : -result) || (a.originalIndex - b.originalIndex);
+          });
+
+          sortable.forEach(({row}) => body.append(row));
+          rows.filter((row) => row.querySelector('td[colspan]')).forEach((row) => body.append(row));
+          setSortAccessibility(control, nextState);
+        });
+      });
     });
   };
 
