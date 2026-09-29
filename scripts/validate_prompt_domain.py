@@ -30,7 +30,7 @@ FREE_GM = BACKEND / 'private_assets' / 'promptmaster_free_reference.html'
 PRODUCT_PRO_GM = ROOT / 'product' / 'golden_masters' / 'promptmaster_pro.html'
 PRODUCT_FREE_GM = ROOT / 'product' / 'golden_masters' / 'promptmaster_free.html'
 PRO_SHA = 'aa7b2da53ba3cbcf9874b9b6f7381ea4c3e86ee1f9c09db186cbec6876a3c9cf'
-FREE_SHA = 'aada4fbb3461d3758c48ed808bf018716a53aa33baf81efb058412e63535b0a8'
+FREE_SHA = '10f2b65312c5d5b481f8563e7a0dbb2e838ecb1d940262309784f5fce374f228'
 AUDIENCE_LABELS = {'Zielgruppe', 'Publikum', 'Empfängerrolle'}
 
 errors: list[str] = []
