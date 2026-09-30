@@ -528,6 +528,10 @@ class GeneralSettingsForm(forms.Form):
     backup_critical_hours = forms.IntegerField(min_value=2, max_value=720, initial=24, label='Backup kritisch in Stunden')
     restore_warning_days = forms.IntegerField(min_value=1, max_value=365, initial=35, label='Restore-Test-Warnung in Tagen')
 
+    def __init__(self, *args, graph_secret_configured=False, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.graph_secret_configured = graph_secret_configured
+
     def clean_mail_domain(self):
         value = self.cleaned_data.get('mail_domain', '').strip().lower().rstrip('.')
         if value and ('@' in value or ' ' in value or '.' not in value):
@@ -560,6 +564,11 @@ class GeneralSettingsForm(forms.Form):
             for field in ('graph_tenant_id', 'graph_client_id', 'graph_sender'):
                 if not data.get(field):
                     self.add_error(field, 'Für Microsoft Graph ist dieses Feld erforderlich.')
+            if not data.get('graph_client_secret') and not self.graph_secret_configured:
+                self.add_error(
+                    'graph_client_secret',
+                    'Für Microsoft Graph ist ein Client Secret erforderlich.',
+                )
 
         from_email = data.get('mail_from_email')
         mail_domain = data.get('mail_domain')
