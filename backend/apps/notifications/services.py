@@ -36,6 +36,34 @@ class SafeMailFailoverError(MailProviderError):
         super().__init__(f'{provider}: {original}')
 
 
+def _smtp_error_allows_failover(exc):
+    """Return True only when SMTP definitely did not accept the message.
+
+    Authentication failures are explicitly failover-safe. SMTP 4xx responses
+    are temporary rejections and are also safe to try on the next provider.
+    Permanent 5xx recipient/sender/data rejections stay on the normal retry/
+    failure path instead of blindly switching providers.
+    """
+    if isinstance(exc, smtplib.SMTPAuthenticationError):
+        return True
+    if isinstance(exc, smtplib.SMTPRecipientsRefused):
+        codes = []
+        for response in exc.recipients.values():
+            if isinstance(response, tuple) and response:
+                try:
+                    codes.append(int(response[0]))
+                except (TypeError, ValueError):
+                    return False
+        return bool(codes) and all(400 <= code < 500 for code in codes)
+    if isinstance(exc, smtplib.SMTPResponseException):
+        try:
+            code = int(exc.smtp_code)
+        except (TypeError, ValueError):
+            return False
+        return 400 <= code < 500
+    return False
+
+
 _ENCRYPTED_PREFIX = 'pm_enc:v1:'
 _SENSITIVE_CONTEXT_KEYS = {'url', 'link', 'token', 'message', 'reply'}
 _USER_SCOPED_TEMPLATES = {'verify_email', 'password_reset', 'staff_invite', 'checkout_activation'}
@@ -485,8 +513,11 @@ def _send_smtp(message, body, slot='smtp1'):
             smtplib.SMTPDataError,
             smtplib.SMTPAuthenticationError,
         ) as exc:
-            # These exceptions carry a definite SMTP rejection; no delivery occurred.
-            raise SafeMailFailoverError(slot, exc) from exc
+            if _smtp_error_allows_failover(exc):
+                # Authentication failed or the provider issued a temporary 4xx
+                # rejection; the message was definitely not accepted.
+                raise SafeMailFailoverError(slot, exc) from exc
+            raise
     finally:
         connection.close()
     return ''
