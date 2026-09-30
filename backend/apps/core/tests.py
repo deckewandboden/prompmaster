@@ -220,6 +220,123 @@ class StructuredLoggingTests(SimpleTestCase):
         self.assertTrue(response['X-Correlation-ID'])
 
 
+class MailIdentitySettingsTests(TestCase):
+    def test_runtime_mail_identity_falls_back_to_environment_sender(self):
+        from apps.notifications.services import get_mail_identity
+
+        with self.settings(DEFAULT_FROM_EMAIL='fallback@example.test'):
+            identity = get_mail_identity()
+
+        self.assertEqual(identity['from_email'], 'fallback@example.test')
+        self.assertEqual(identity['from_name'], '')
+        self.assertEqual(identity['reply_to'], '')
+
+    def test_smtp_delivery_uses_runtime_sender_name_and_reply_to(self):
+        from apps.core.settings_store import set_setting
+        from apps.notifications.services import _send_smtp
+
+        set_setting(
+            'mail_identity',
+            {
+                'from_email': 'promptmaster@decke-wand-boden.de',
+                'from_name': 'PromptMaster',
+                'reply_to': 'support@decke-wand-boden.de',
+                'domain': 'decke-wand-boden.de',
+                'spf_record': 'v=spf1 include:spf.protection.outlook.com -all',
+                'dkim_selector': 'selector1 / selector2',
+                'dkim_record': 'selector1._domainkey CNAME example',
+                'dmarc_record': 'v=DMARC1; p=reject',
+            },
+        )
+        message = SimpleNamespace(
+            subject='PromptMaster SMTP identity test',
+            recipient='recipient@example.test',
+        )
+
+        with patch('apps.notifications.services.get_connection') as get_connection:
+            connection = get_connection.return_value
+            with patch('apps.notifications.services.DjangoEmailMessage') as email_class:
+                email = email_class.return_value
+                _send_smtp(message, 'body')
+
+        get_connection.assert_called_once_with(
+            backend='django.core.mail.backends.smtp.EmailBackend',
+            host='mailpit',
+            port=1025,
+            username=None,
+            password=None,
+            use_tls=False,
+            timeout=20,
+        )
+        email_class.assert_called_once_with(
+            subject='PromptMaster SMTP identity test',
+            body='body',
+            from_email='PromptMaster <promptmaster@decke-wand-boden.de>',
+            to=['recipient@example.test'],
+            reply_to=['support@decke-wand-boden.de'],
+            connection=connection,
+        )
+        email.send.assert_called_once_with(fail_silently=False)
+
+    def test_general_settings_form_validates_sender_domain_and_dns_records(self):
+        from apps.core.admin_forms import GeneralSettingsForm
+
+        data = {
+            'support_email': 'support@example.test',
+            'mail_from_email': 'promptmaster@decke-wand-boden.de',
+            'mail_from_name': 'PromptMaster',
+            'mail_reply_to': '',
+            'mail_domain': 'promptmaster.ai',
+            'mail_spf_record': 'include:spf.protection.outlook.com',
+            'mail_dkim_selector': '',
+            'mail_dkim_record': '',
+            'mail_dmarc_record': 'p=reject',
+            'disk_warning': 80,
+            'disk_critical': 90,
+            'ram_warning': 80,
+            'ram_critical': 90,
+            'cpu_warning': 80,
+            'backup_warning_hours': 8,
+            'backup_critical_hours': 24,
+            'restore_warning_days': 35,
+        }
+        form = GeneralSettingsForm(data=data)
+
+        self.assertFalse(form.is_valid())
+        self.assertIn('mail_domain', form.errors)
+        self.assertIn('mail_spf_record', form.errors)
+        self.assertIn('mail_dmarc_record', form.errors)
+
+
+    def test_smtp_transport_uses_encrypted_secret_and_runtime_settings(self):
+        from apps.core.settings_store import set_setting
+        from apps.integrations.services import set_secret
+        from apps.notifications.services import get_smtp_transport
+
+        set_setting(
+            'mail_transport',
+            {
+                'host': 'smtp.ionos.de',
+                'port': 587,
+                'use_tls': True,
+                'username': 'promptmaster@decke-wand-boden.de',
+            },
+        )
+        set_secret('smtp_password', 'SMTP-Test-Secret-2026!')
+
+        transport = get_smtp_transport()
+
+        self.assertEqual(transport['host'], 'smtp.ionos.de')
+        self.assertEqual(transport['port'], 587)
+        self.assertTrue(transport['use_tls'])
+        self.assertEqual(
+            transport['username'],
+            'promptmaster@decke-wand-boden.de',
+        )
+        self.assertEqual(transport['password'], 'SMTP-Test-Secret-2026!')
+        self.assertTrue(transport['password_configured'])
+
+
 class NotificationReleaseTests(TestCase):
     def setUp(self):
         from apps.notifications.models import EmailTemplate

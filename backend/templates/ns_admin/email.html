@@ -1,7 +1,23 @@
 {% extends 'ns_admin/base.html' %}{% block content %}
-<div class="page-head"><div><h1>E-Mail</h1><div class="sub">Vorlagen, Versandstatus und Provider-Konfiguration.</div></div><a class="btn secondary" href="{% url 'ns_admin:email_log' %}">Versandprotokoll öffnen</a></div>
+<div class="page-head"><div><h1>E-Mail</h1><div class="sub">Vorlagen, Versandstatus und Provider-Konfiguration.</div></div><div class="row"><a class="btn secondary" href="{% url 'ns_admin:settings' %}">Absender &amp; DNS</a><a class="btn secondary" href="{% url 'ns_admin:email_log' %}">Versandprotokoll öffnen</a></div></div>
 <div class="grid two">
   <div class="card"><h2>Vorlagen</h2>{% for t in templates %}<div class="statusrow"><span><strong>{{ t.code }}</strong></span><span><span class="badge {% if t.active %}ok{% else %}warn{% endif %}">{% if t.active %}Aktiv{% else %}Inaktiv{% endif %}</span> <a class="btn secondary sm" href="{% url 'ns_admin:email_template_edit' t.id %}">Bearbeiten</a></span></div>{% empty %}<p class="muted">Keine E-Mail-Vorlagen vorhanden.</p>{% endfor %}</div>
-  <div class="card"><h2>Mail-System</h2><div class="statusrow"><span>Provider</span><strong>{{ provider }}</strong></div><div class="statusrow"><span>Status</span><span class="badge {% if provider_configured %}ok{% else %}warn{% endif %}">{% if provider_configured %}Konfiguriert{% else %}Unvollständig{% endif %}</span></div>{% if graph_sender %}<div class="statusrow"><span>Graph Absender</span><strong>{{ graph_sender }}</strong></div>{% endif %}<h3 class="mt-16">Letzte Versandvorgänge</h3>{% for m in recent %}<div class="statusrow"><span>{{ m.recipient }}<div class="tiny muted">{{ m.subject }}</div></span><strong>{{ m.status }}</strong></div>{% empty %}<p class="muted">Noch keine Versandvorgänge.</p>{% endfor %}</div>
+  <div class="card">
+    <h2>Mail-System</h2>
+    <div class="statusrow"><span>Provider</span><strong>{{ provider }}</strong></div>
+    <div class="statusrow"><span>Status</span><span class="badge {% if provider_configured %}ok{% else %}warn{% endif %}">{% if provider_configured %}Konfiguriert{% else %}Unvollständig{% endif %}</span></div>
+    <div class="statusrow"><span>Aktiver Absender</span><strong>{{ mail_identity.from_email }}</strong></div>
+    {% if mail_identity.from_name %}<div class="statusrow"><span>Anzeigename</span><strong>{{ mail_identity.from_name }}</strong></div>{% endif %}
+    {% if mail_identity.domain %}<div class="statusrow"><span>Mail-Domain</span><strong>{{ mail_identity.domain }}</strong></div>{% endif %}
+    {% if provider == 'smtp' or provider == 'mailpit' %}
+    <div class="statusrow"><span>SMTP-Server</span><strong>{{ smtp_transport.host }}:{{ smtp_transport.port }}</strong></div>
+    <div class="statusrow"><span>STARTTLS</span><strong>{% if smtp_transport.use_tls %}Ja{% else %}Nein{% endif %}</strong></div>
+    <div class="statusrow"><span>SMTP-Anmeldung</span><strong>{% if smtp_transport.username and smtp_transport.password_configured %}Konfiguriert{% elif smtp_transport.username %}Passwort fehlt{% else %}Ohne Anmeldung{% endif %}</strong></div>
+    {% endif %}
+    {% if graph_sender %}<div class="statusrow"><span>Graph Absender</span><strong>{{ graph_sender }}</strong></div>{% endif %}
+    <p class="small muted">SPF/DKIM/DMARC werden unter „Einstellungen“ als DNS-Sollwerte dokumentiert. Änderungen dort aktualisieren nicht automatisch den öffentlichen DNS.</p>
+    <h3 class="mt-16">Letzte Versandvorgänge</h3>
+    {% for m in recent %}<div class="statusrow"><span>{{ m.recipient }}<div class="tiny muted">{{ m.subject }}</div></span><strong>{{ m.status }}</strong></div>{% empty %}<p class="muted">Noch keine Versandvorgänge.</p>{% endfor %}
+  </div>
 </div>
 {% endblock %}

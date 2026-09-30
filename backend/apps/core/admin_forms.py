@@ -407,6 +407,83 @@ class MollieConfigForm(forms.Form):
 
 class GeneralSettingsForm(forms.Form):
     support_email = forms.EmailField(label='Support-Empfänger')
+    mail_from_email = forms.EmailField(
+        required=False,
+        label='Absender-E-Mail',
+        help_text='Aktive Absenderadresse für SMTP. Änderungen gelten ohne Container-Neustart.',
+    )
+    mail_from_name = forms.CharField(
+        max_length=120,
+        required=False,
+        label='Absender-Anzeigename',
+        help_text='Zum Beispiel PromptMaster.',
+    )
+    mail_reply_to = forms.EmailField(
+        required=False,
+        label='Antwortadresse',
+        help_text='Optional. Leer lassen, wenn Antworten an die Absenderadresse gehen sollen.',
+    )
+    mail_domain = forms.CharField(
+        max_length=253,
+        required=False,
+        label='Mail-Domain',
+        help_text='Domain des sichtbaren Absenders, z. B. decke-wand-boden.de oder später promptmaster.ai.',
+    )
+    mail_spf_record = forms.CharField(
+        max_length=1000,
+        required=False,
+        label='SPF Sollwert',
+        help_text='Dokumentierter DNS-Sollwert. Das Speichern ändert den öffentlichen DNS-Eintrag nicht.',
+    )
+    mail_dkim_selector = forms.CharField(
+        max_length=120,
+        required=False,
+        label='DKIM-Selector',
+        help_text='Optionaler Selector bzw. Hinweis auf die verwendeten Microsoft-365-DKIM-Selectoren.',
+    )
+    mail_dkim_record = forms.CharField(
+        max_length=4000,
+        required=False,
+        widget=forms.Textarea(attrs={'rows': 3}),
+        label='DKIM DNS Sollwert',
+        help_text='TXT-/CNAME-Sollwert oder beide Microsoft-365-DKIM-CNAMEs. Reine Dokumentation; DNS wird nicht automatisch verändert.',
+    )
+    mail_dmarc_record = forms.CharField(
+        max_length=1000,
+        required=False,
+        label='DMARC Sollwert',
+        help_text='Dokumentierter DNS-Sollwert für _dmarc.<Domain>.',
+    )
+    smtp_host = forms.CharField(
+        max_length=253,
+        required=False,
+        label='SMTP-Server',
+        help_text='Zum Beispiel smtp.ionos.de.',
+    )
+    smtp_port = forms.IntegerField(
+        min_value=1,
+        max_value=65535,
+        required=False,
+        label='SMTP-Port',
+        help_text='Für IONOS mit STARTTLS: 587.',
+    )
+    smtp_use_tls = forms.BooleanField(
+        required=False,
+        label='STARTTLS verwenden',
+    )
+    smtp_username = forms.CharField(
+        max_length=254,
+        required=False,
+        label='SMTP-Benutzername',
+        help_text='Bei IONOS normalerweise die vollständige E-Mail-Adresse.',
+    )
+    smtp_password = forms.CharField(
+        max_length=500,
+        required=False,
+        widget=forms.PasswordInput(render_value=False),
+        label='SMTP-Passwort',
+        help_text='Leer lassen, um das gespeicherte Passwort unverändert zu lassen.',
+    )
     disk_warning = forms.IntegerField(min_value=1, max_value=99, initial=80, label='Datenträger-Warnung in %')
     disk_critical = forms.IntegerField(min_value=2, max_value=100, initial=90, label='Datenträger kritisch in %')
     ram_warning = forms.IntegerField(min_value=1, max_value=99, initial=80, label='RAM-Warnung in %')
@@ -416,11 +493,38 @@ class GeneralSettingsForm(forms.Form):
     backup_critical_hours = forms.IntegerField(min_value=2, max_value=720, initial=24, label='Backup kritisch in Stunden')
     restore_warning_days = forms.IntegerField(min_value=1, max_value=365, initial=35, label='Restore-Test-Warnung in Tagen')
 
+    def clean_mail_domain(self):
+        value = self.cleaned_data.get('mail_domain', '').strip().lower().rstrip('.')
+        if value and ('@' in value or ' ' in value or '.' not in value):
+            raise forms.ValidationError('Bitte eine gültige Domain ohne @ eingeben.')
+        return value
+
+    def clean_mail_spf_record(self):
+        value = self.cleaned_data.get('mail_spf_record', '').strip()
+        if value and not value.lower().startswith('v=spf1 '):
+            raise forms.ValidationError('Ein SPF-Eintrag muss mit "v=spf1 " beginnen.')
+        return value
+
+    def clean_mail_dmarc_record(self):
+        value = self.cleaned_data.get('mail_dmarc_record', '').strip()
+        if value and not value.lower().startswith('v=dmarc1;'):
+            raise forms.ValidationError('Ein DMARC-Eintrag muss mit "v=DMARC1;" beginnen.')
+        return value
+
     def clean(self):
         data = super().clean()
         for warning, critical in [('disk_warning', 'disk_critical'), ('ram_warning', 'ram_critical'), ('backup_warning_hours', 'backup_critical_hours')]:
             if data.get(warning) is not None and data.get(critical) is not None and data[warning] >= data[critical]:
                 self.add_error(critical, 'Der kritische Wert muss über dem Warnwert liegen.')
+        from_email = data.get('mail_from_email')
+        mail_domain = data.get('mail_domain')
+        if from_email and mail_domain:
+            sender_domain = from_email.rsplit('@', 1)[-1].lower()
+            if sender_domain != mail_domain:
+                self.add_error(
+                    'mail_domain',
+                    'Die Mail-Domain muss zur Absender-E-Mail passen.',
+                )
         return data
 
 

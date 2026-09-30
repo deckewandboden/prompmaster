@@ -170,6 +170,8 @@ EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = os.getenv('SMTP_HOST', 'mailpit')
 EMAIL_PORT = int(os.getenv('SMTP_PORT', '1025'))
 EMAIL_USE_TLS = os.getenv('SMTP_USE_TLS', '0') == '1'
+EMAIL_HOST_USER = os.getenv('SMTP_USER', '')
+EMAIL_HOST_PASSWORD = os.getenv('SMTP_PASSWORD', '')
 DEFAULT_FROM_EMAIL = os.getenv('EMAIL_FROM', 'promptmaster@netstyle.de')
 EMAIL_TIMEOUT = 20
 

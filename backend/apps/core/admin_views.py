@@ -29,7 +29,7 @@ from apps.legal.models import ConsumerContractDeclaration, DeletionRequest, Lega
 from apps.licenses.models import License, LicenseAssignment, LicenseAssignmentLink, LicenseTerm, LicenseUpgradeRequest
 from apps.licenses.services import assign_license, block_license, release_license, unblock_license
 from apps.notifications.models import EmailMessage, EmailTemplate
-from apps.notifications.services import queue_email
+from apps.notifications.services import get_mail_identity, get_smtp_transport, queue_email
 from apps.ops.metrics import caddy_health, certificate_status, snapshot
 from apps.ops.models import BackupRecord, RestoreTest, SystemAlert
 from apps.orders.models import Order
@@ -1724,6 +1724,8 @@ def email(request):
             'provider': provider,
             'provider_configured': provider_configured,
             'graph_sender': settings.GRAPH_SENDER,
+            'mail_identity': get_mail_identity(),
+            'smtp_transport': get_smtp_transport(),
         },
     )
 
@@ -2459,8 +2461,27 @@ def user_role_remove(request, pk):
 @staff_perm('settings.read')
 def settings_view(request):
     values = get_setting('ops_thresholds', {}) or {}
+    mail_identity = get_mail_identity()
+    smtp_transport = get_smtp_transport()
+    fallback_from_domain = (
+        mail_identity['from_email'].rsplit('@', 1)[-1].lower()
+        if '@' in mail_identity['from_email']
+        else ''
+    )
     initial = {
         'support_email': get_setting('support_email', 'promptmaster@netstyle.de'),
+        'mail_from_email': mail_identity['from_email'],
+        'mail_from_name': mail_identity['from_name'],
+        'mail_reply_to': mail_identity['reply_to'],
+        'mail_domain': mail_identity['domain'] or fallback_from_domain,
+        'mail_spf_record': mail_identity['spf_record'],
+        'mail_dkim_selector': mail_identity['dkim_selector'],
+        'mail_dkim_record': mail_identity['dkim_record'],
+        'mail_dmarc_record': mail_identity['dmarc_record'],
+        'smtp_host': smtp_transport['host'],
+        'smtp_port': smtp_transport['port'],
+        'smtp_use_tls': smtp_transport['use_tls'],
+        'smtp_username': smtp_transport['username'],
         'disk_warning': values.get('disk_warning', 80),
         'disk_critical': values.get('disk_critical', 90),
         'ram_warning': values.get('ram_warning', 80),
@@ -2477,9 +2498,69 @@ def settings_view(request):
         if form.is_valid():
             data = form.cleaned_data.copy()
             support_email = data.pop('support_email')
+            current_mail_identity = get_mail_identity()
+
+            def configured_value(form_key, identity_key):
+                value = data.pop(form_key)
+                if form_key not in request.POST:
+                    return current_mail_identity[identity_key]
+                return value
+
+            mail_identity = {
+                'from_email': configured_value('mail_from_email', 'from_email'),
+                'from_name': configured_value('mail_from_name', 'from_name'),
+                'reply_to': configured_value('mail_reply_to', 'reply_to'),
+                'domain': configured_value('mail_domain', 'domain'),
+                'spf_record': configured_value('mail_spf_record', 'spf_record'),
+                'dkim_selector': configured_value('mail_dkim_selector', 'dkim_selector'),
+                'dkim_record': configured_value('mail_dkim_record', 'dkim_record'),
+                'dmarc_record': configured_value('mail_dmarc_record', 'dmarc_record'),
+            }
+            current_smtp = smtp_transport
+
+            def smtp_value(form_key, transport_key):
+                value = data.pop(form_key)
+                if form_key not in request.POST:
+                    return current_smtp[transport_key]
+                return value
+
+            mail_transport = {
+                'host': smtp_value('smtp_host', 'host'),
+                'port': smtp_value('smtp_port', 'port'),
+                'use_tls': smtp_value('smtp_use_tls', 'use_tls'),
+                'username': smtp_value('smtp_username', 'username'),
+            }
+            smtp_password = data.pop('smtp_password')
             set_setting('support_email', support_email, 'Empfänger des PromptMaster-Kontaktformulars')
+            set_setting(
+                'mail_identity',
+                mail_identity,
+                'Absenderidentität und dokumentierte DNS-Sollwerte für den PromptMaster-Mailversand',
+            )
+            set_setting(
+                'mail_transport',
+                mail_transport,
+                'SMTP-Transportkonfiguration für den PromptMaster-Mailversand',
+            )
+            if smtp_password:
+                from apps.integrations.services import set_secret
+                set_secret('smtp_password', smtp_password)
             set_setting('ops_thresholds', data, 'Warnschwellen für System & Betrieb')
-            write_audit(request.user, 'settings.updated', request.user, {'support_email': support_email, 'ops_thresholds': data}, request=request)
+            write_audit(
+                request.user,
+                'settings.updated',
+                request.user,
+                {
+                    'support_email': support_email,
+                    'mail_identity': mail_identity,
+                    'mail_transport': {
+                        **mail_transport,
+                        'password': '[UPDATED]' if smtp_password else '[UNCHANGED]',
+                    },
+                    'ops_thresholds': data,
+                },
+                request=request,
+            )
             messages.success(request, 'Einstellungen gespeichert.')
             return redirect('ns_admin:settings')
     return render(
