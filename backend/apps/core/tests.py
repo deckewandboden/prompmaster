@@ -369,6 +369,127 @@ class MailIdentitySettingsTests(TestCase):
         self.assertIn('graph_client_id', form.errors)
         self.assertIn('graph_sender', form.errors)
 
+    def test_mail_delivery_builds_ordered_failover_route(self):
+        from apps.core.settings_store import set_setting
+        from apps.notifications.services import get_mail_delivery
+
+        set_setting('mail_provider', 'graph')
+        set_setting(
+            'mail_delivery',
+            {
+                'mode': 'failover',
+                'primary': 'graph',
+                'fallback_1': 'smtp1',
+                'fallback_2': 'smtp2',
+            },
+        )
+
+        delivery = get_mail_delivery()
+
+        self.assertEqual(delivery['mode'], 'failover')
+        self.assertEqual(delivery['route'], ['graph', 'smtp1', 'smtp2'])
+
+    def test_smtp2_transport_uses_separate_encrypted_secret(self):
+        from apps.core.settings_store import set_setting
+        from apps.integrations.services import set_secret
+        from apps.notifications.services import get_smtp_transport
+
+        set_setting(
+            'mail_transport_2',
+            {
+                'host': 'smtp.fallback.example.test',
+                'port': 587,
+                'use_tls': True,
+                'username': 'fallback@example.test',
+            },
+        )
+        set_secret('smtp_password_2', 'SMTP2-Test-Secret-2026!')
+
+        transport = get_smtp_transport('smtp2')
+
+        self.assertEqual(transport['slot'], 'smtp2')
+        self.assertEqual(transport['host'], 'smtp.fallback.example.test')
+        self.assertEqual(transport['port'], 587)
+        self.assertTrue(transport['use_tls'])
+        self.assertEqual(transport['username'], 'fallback@example.test')
+        self.assertEqual(transport['password'], 'SMTP2-Test-Secret-2026!')
+        self.assertTrue(transport['password_configured'])
+
+    @patch('apps.notifications.services._send_smtp')
+    @patch('apps.notifications.services._send_graph')
+    def test_safe_graph_failure_falls_back_to_smtp1(self, send_graph, send_smtp):
+        from apps.core.settings_store import set_setting
+        from apps.notifications.models import EmailMessage
+        from apps.notifications.services import SafeMailFailoverError, send_now
+
+        set_setting(
+            'mail_delivery',
+            {
+                'mode': 'failover',
+                'primary': 'graph',
+                'fallback_1': 'smtp1',
+                'fallback_2': 'smtp2',
+            },
+        )
+        send_graph.side_effect = SafeMailFailoverError('graph', 'token endpoint unavailable')
+        send_smtp.return_value = ''
+        message = EmailMessage.objects.create(
+            recipient='recipient@example.test',
+            subject='Failover test',
+            context={},
+        )
+
+        send_now(message)
+
+        message.refresh_from_db()
+        self.assertEqual(message.status, 'sent')
+        self.assertEqual(message.provider_used, 'smtp1')
+        self.assertEqual(
+            message.delivery_attempts,
+            [
+                {
+                    'provider': 'graph',
+                    'result': 'failed-safe',
+                    'error': 'token endpoint unavailable',
+                },
+                {'provider': 'smtp1', 'result': 'sent'},
+            ],
+        )
+        send_smtp.assert_called_once_with(message, '', 'smtp1')
+
+    @patch('apps.notifications.services._send_smtp')
+    @patch('apps.notifications.services._send_graph')
+    def test_ambiguous_graph_failure_does_not_fail_over(self, send_graph, send_smtp):
+        from apps.core.settings_store import set_setting
+        from apps.notifications.models import EmailMessage
+        from apps.notifications.services import send_now
+
+        set_setting(
+            'mail_delivery',
+            {
+                'mode': 'failover',
+                'primary': 'graph',
+                'fallback_1': 'smtp1',
+                'fallback_2': 'smtp2',
+            },
+        )
+        send_graph.side_effect = RuntimeError('connection lost after send request')
+        message = EmailMessage.objects.create(
+            recipient='recipient@example.test',
+            subject='Ambiguous failover test',
+            context={},
+        )
+
+        with self.assertRaises(RuntimeError):
+            send_now(message)
+
+        message.refresh_from_db()
+        self.assertEqual(
+            message.delivery_attempts,
+            [{'provider': 'graph', 'result': 'failed-uncertain'}],
+        )
+        send_smtp.assert_not_called()
+
     def test_smtp_transport_uses_encrypted_secret_and_runtime_settings(self):
         from apps.core.settings_store import set_setting
         from apps.integrations.services import set_secret
