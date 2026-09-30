@@ -1,7 +1,6 @@
 import json
 import uuid
 
-from django.conf import settings
 from django.core.management.base import BaseCommand, CommandError
 
 from apps.core.models import SystemSetting
