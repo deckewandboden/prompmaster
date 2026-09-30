@@ -29,7 +29,7 @@ from apps.legal.models import ConsumerContractDeclaration, DeletionRequest, Lega
 from apps.licenses.models import License, LicenseAssignment, LicenseAssignmentLink, LicenseTerm, LicenseUpgradeRequest
 from apps.licenses.services import assign_license, block_license, release_license, unblock_license
 from apps.notifications.models import EmailMessage, EmailTemplate
-from apps.notifications.services import queue_email
+from apps.notifications.services import get_mail_identity, queue_email
 from apps.ops.metrics import caddy_health, certificate_status, snapshot
 from apps.ops.models import BackupRecord, RestoreTest, SystemAlert
 from apps.orders.models import Order
@@ -1724,6 +1724,7 @@ def email(request):
             'provider': provider,
             'provider_configured': provider_configured,
             'graph_sender': settings.GRAPH_SENDER,
+            'mail_identity': get_mail_identity(),
         },
     )
 
@@ -2459,8 +2460,22 @@ def user_role_remove(request, pk):
 @staff_perm('settings.read')
 def settings_view(request):
     values = get_setting('ops_thresholds', {}) or {}
+    mail_identity = get_mail_identity()
+    fallback_from_domain = (
+        mail_identity['from_email'].rsplit('@', 1)[-1].lower()
+        if '@' in mail_identity['from_email']
+        else ''
+    )
     initial = {
         'support_email': get_setting('support_email', 'promptmaster@netstyle.de'),
+        'mail_from_email': mail_identity['from_email'],
+        'mail_from_name': mail_identity['from_name'],
+        'mail_reply_to': mail_identity['reply_to'],
+        'mail_domain': mail_identity['domain'] or fallback_from_domain,
+        'mail_spf_record': mail_identity['spf_record'],
+        'mail_dkim_selector': mail_identity['dkim_selector'],
+        'mail_dkim_record': mail_identity['dkim_record'],
+        'mail_dmarc_record': mail_identity['dmarc_record'],
         'disk_warning': values.get('disk_warning', 80),
         'disk_critical': values.get('disk_critical', 90),
         'ram_warning': values.get('ram_warning', 80),
@@ -2477,9 +2492,34 @@ def settings_view(request):
         if form.is_valid():
             data = form.cleaned_data.copy()
             support_email = data.pop('support_email')
+            mail_identity = {
+                'from_email': data.pop('mail_from_email'),
+                'from_name': data.pop('mail_from_name'),
+                'reply_to': data.pop('mail_reply_to'),
+                'domain': data.pop('mail_domain'),
+                'spf_record': data.pop('mail_spf_record'),
+                'dkim_selector': data.pop('mail_dkim_selector'),
+                'dkim_record': data.pop('mail_dkim_record'),
+                'dmarc_record': data.pop('mail_dmarc_record'),
+            }
             set_setting('support_email', support_email, 'Empfänger des PromptMaster-Kontaktformulars')
+            set_setting(
+                'mail_identity',
+                mail_identity,
+                'Absenderidentität und dokumentierte DNS-Sollwerte für den PromptMaster-Mailversand',
+            )
             set_setting('ops_thresholds', data, 'Warnschwellen für System & Betrieb')
-            write_audit(request.user, 'settings.updated', request.user, {'support_email': support_email, 'ops_thresholds': data}, request=request)
+            write_audit(
+                request.user,
+                'settings.updated',
+                request.user,
+                {
+                    'support_email': support_email,
+                    'mail_identity': mail_identity,
+                    'ops_thresholds': data,
+                },
+                request=request,
+            )
             messages.success(request, 'Einstellungen gespeichert.')
             return redirect('ns_admin:settings')
     return render(
