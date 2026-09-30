@@ -4,7 +4,10 @@ import uuid
 from django.conf import settings
 from django.core.management.base import BaseCommand, CommandError
 
+from apps.core.models import SystemSetting
+from apps.core.settings_store import set_setting
 from apps.notifications.models import EmailMessage
+from apps.notifications.services import get_graph_transport, get_mail_provider
 from apps.notifications.tasks import send_email_message
 
 
@@ -35,17 +38,18 @@ class Command(BaseCommand):
                 f'Refusing external send. Pass --confirm {CONFIRM_VALUE} explicitly.'
             )
 
+        graph = get_graph_transport()
         required = {
-            'GRAPH_TENANT_ID': settings.GRAPH_TENANT_ID,
-            'GRAPH_CLIENT_ID': settings.GRAPH_CLIENT_ID,
-            'GRAPH_CLIENT_SECRET': settings.GRAPH_CLIENT_SECRET,
-            'GRAPH_SENDER': settings.GRAPH_SENDER,
+            'GRAPH_TENANT_ID': graph['tenant_id'],
+            'GRAPH_CLIENT_ID': graph['client_id'],
+            'GRAPH_CLIENT_SECRET': graph['client_secret'],
+            'GRAPH_SENDER': graph['sender'],
         }
         missing = sorted(name for name, value in required.items() if not value)
         if missing:
             raise CommandError('Missing Graph configuration: ' + ', '.join(missing))
-        if settings.EMAIL_PROVIDER.lower().strip() not in {'graph', 'microsoft_graph'}:
-            raise CommandError('EMAIL_PROVIDER must be graph or microsoft_graph for this gate.')
+        if get_mail_provider() != 'graph':
+            raise CommandError('Active mail provider must be Microsoft Graph for this gate.')
 
         recipient = options['recipient'].strip().lower()
         if '@' not in recipient:
@@ -65,7 +69,10 @@ class Command(BaseCommand):
                 f'result={result!r}, status={success.status!r}.'
             )
 
-        original_sender = settings.GRAPH_SENDER
+        original_sender = graph['sender']
+        graph_setting = SystemSetting.objects.filter(key='mail_graph').first()
+        original_graph_value = graph_setting.value if graph_setting else None
+        original_graph_description = graph_setting.description if graph_setting else ''
         failure = EmailMessage.objects.create(
             recipient=recipient,
             subject=f'PromptMaster Graph Failure Probe {probe_id}',
@@ -73,7 +80,15 @@ class Command(BaseCommand):
         )
         failure_exc = None
         try:
-            settings.GRAPH_SENDER = INVALID_SENDER
+            set_setting(
+                'mail_graph',
+                {
+                    'tenant_id': graph['tenant_id'],
+                    'client_id': graph['client_id'],
+                    'sender': INVALID_SENDER,
+                },
+                'Temporary Graph acceptance failure probe',
+            )
             try:
                 send_email_message.run(str(failure.id))
             except Exception as exc:
@@ -83,7 +98,14 @@ class Command(BaseCommand):
                     'Graph failure probe unexpectedly succeeded with an invalid sender.'
                 )
         finally:
-            settings.GRAPH_SENDER = original_sender
+            if original_graph_value is None:
+                SystemSetting.objects.filter(key='mail_graph').delete()
+            else:
+                set_setting(
+                    'mail_graph',
+                    original_graph_value,
+                    original_graph_description,
+                )
 
         failure.refresh_from_db()
         failure_status = _provider_http_status(failure_exc)
