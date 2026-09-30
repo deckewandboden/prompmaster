@@ -29,7 +29,7 @@ from apps.legal.models import ConsumerContractDeclaration, DeletionRequest, Lega
 from apps.licenses.models import License, LicenseAssignment, LicenseAssignmentLink, LicenseTerm, LicenseUpgradeRequest
 from apps.licenses.services import assign_license, block_license, release_license, unblock_license
 from apps.notifications.models import EmailMessage, EmailTemplate
-from apps.notifications.services import get_mail_identity, get_smtp_transport, queue_email
+from apps.notifications.services import get_graph_transport, get_mail_identity, get_mail_provider, get_smtp_transport, queue_email
 from apps.ops.metrics import caddy_health, certificate_status, snapshot
 from apps.ops.models import BackupRecord, RestoreTest, SystemAlert
 from apps.orders.models import Order
@@ -1699,20 +1699,22 @@ def product_price_add(request, pk):
 
 @staff_perm('email.read')
 def email(request):
-    provider = settings.EMAIL_PROVIDER.lower().strip()
+    provider = get_mail_provider()
+    smtp_transport = get_smtp_transport()
+    graph_transport = get_graph_transport()
     graph_configured = all(
         [
-            settings.GRAPH_TENANT_ID,
-            settings.GRAPH_CLIENT_ID,
-            settings.GRAPH_CLIENT_SECRET,
-            settings.GRAPH_SENDER,
+            graph_transport['tenant_id'],
+            graph_transport['client_id'],
+            graph_transport['client_secret_configured'],
+            graph_transport['sender'],
         ]
     )
     provider_configured = (
-        bool(settings.EMAIL_HOST)
-        if provider in {'smtp', 'mailpit'}
+        bool(smtp_transport['host'])
+        if provider == 'smtp'
         else graph_configured
-        if provider in {'graph', 'microsoft_graph'}
+        if provider == 'graph'
         else False
     )
     return render(
@@ -1723,9 +1725,10 @@ def email(request):
             'recent': EmailMessage.objects.select_related('template').order_by('-created_at')[:20],
             'provider': provider,
             'provider_configured': provider_configured,
-            'graph_sender': settings.GRAPH_SENDER,
+            'graph_sender': graph_transport['sender'],
+            'graph_transport': graph_transport,
             'mail_identity': get_mail_identity(),
-            'smtp_transport': get_smtp_transport(),
+            'smtp_transport': smtp_transport,
         },
     )
 
@@ -2462,7 +2465,9 @@ def user_role_remove(request, pk):
 def settings_view(request):
     values = get_setting('ops_thresholds', {}) or {}
     mail_identity = get_mail_identity()
+    mail_provider = get_mail_provider()
     smtp_transport = get_smtp_transport()
+    graph_transport = get_graph_transport()
     fallback_from_domain = (
         mail_identity['from_email'].rsplit('@', 1)[-1].lower()
         if '@' in mail_identity['from_email']
@@ -2470,6 +2475,7 @@ def settings_view(request):
     )
     initial = {
         'support_email': get_setting('support_email', 'promptmaster@netstyle.de'),
+        'mail_provider': mail_provider,
         'mail_from_email': mail_identity['from_email'],
         'mail_from_name': mail_identity['from_name'],
         'mail_reply_to': mail_identity['reply_to'],
@@ -2482,6 +2488,9 @@ def settings_view(request):
         'smtp_port': smtp_transport['port'],
         'smtp_use_tls': smtp_transport['use_tls'],
         'smtp_username': smtp_transport['username'],
+        'graph_tenant_id': graph_transport['tenant_id'],
+        'graph_client_id': graph_transport['client_id'],
+        'graph_sender': graph_transport['sender'],
         'disk_warning': values.get('disk_warning', 80),
         'disk_critical': values.get('disk_critical', 90),
         'ram_warning': values.get('ram_warning', 80),
@@ -2498,6 +2507,9 @@ def settings_view(request):
         if form.is_valid():
             data = form.cleaned_data.copy()
             support_email = data.pop('support_email')
+            selected_provider = data.pop('mail_provider')
+            if 'mail_provider' not in request.POST:
+                selected_provider = mail_provider
             current_mail_identity = get_mail_identity()
 
             def configured_value(form_key, identity_key):
@@ -2531,7 +2543,21 @@ def settings_view(request):
                 'username': smtp_value('smtp_username', 'username'),
             }
             smtp_password = data.pop('smtp_password')
+
+            def graph_value(form_key, transport_key):
+                value = data.pop(form_key)
+                if form_key not in request.POST:
+                    return graph_transport[transport_key]
+                return value
+
+            mail_graph = {
+                'tenant_id': graph_value('graph_tenant_id', 'tenant_id'),
+                'client_id': graph_value('graph_client_id', 'client_id'),
+                'sender': graph_value('graph_sender', 'sender'),
+            }
+            graph_client_secret = data.pop('graph_client_secret')
             set_setting('support_email', support_email, 'Empfänger des PromptMaster-Kontaktformulars')
+            set_setting('mail_provider', selected_provider, 'Aktiver Versandweg: SMTP oder Microsoft Graph')
             set_setting(
                 'mail_identity',
                 mail_identity,
@@ -2542,9 +2568,17 @@ def settings_view(request):
                 mail_transport,
                 'SMTP-Transportkonfiguration für den PromptMaster-Mailversand',
             )
-            if smtp_password:
+            set_setting(
+                'mail_graph',
+                mail_graph,
+                'Microsoft-Graph-Konfiguration für den PromptMaster-Mailversand',
+            )
+            if smtp_password or graph_client_secret:
                 from apps.integrations.services import set_secret
-                set_secret('smtp_password', smtp_password)
+                if smtp_password:
+                    set_secret('smtp_password', smtp_password)
+                if graph_client_secret:
+                    set_secret('graph_client_secret', graph_client_secret)
             set_setting('ops_thresholds', data, 'Warnschwellen für System & Betrieb')
             write_audit(
                 request.user,
@@ -2552,10 +2586,15 @@ def settings_view(request):
                 request.user,
                 {
                     'support_email': support_email,
+                    'mail_provider': selected_provider,
                     'mail_identity': mail_identity,
                     'mail_transport': {
                         **mail_transport,
                         'password': '[UPDATED]' if smtp_password else '[UNCHANGED]',
+                    },
+                    'mail_graph': {
+                        **mail_graph,
+                        'client_secret': '[UPDATED]' if graph_client_secret else '[UNCHANGED]',
                     },
                     'ops_thresholds': data,
                 },
