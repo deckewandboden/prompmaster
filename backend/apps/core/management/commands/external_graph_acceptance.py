@@ -6,7 +6,7 @@ from django.core.management.base import BaseCommand, CommandError
 from apps.core.models import SystemSetting
 from apps.core.settings_store import set_setting
 from apps.notifications.models import EmailMessage
-from apps.notifications.services import get_graph_transport, get_mail_provider
+from apps.notifications.services import get_graph_transport, get_mail_delivery
 from apps.notifications.tasks import send_email_message
 
 
@@ -47,8 +47,8 @@ class Command(BaseCommand):
         missing = sorted(name for name, value in required.items() if not value)
         if missing:
             raise CommandError('Missing Graph configuration: ' + ', '.join(missing))
-        if get_mail_provider() != 'graph':
-            raise CommandError('Active mail provider must be Microsoft Graph for this gate.')
+        if get_mail_delivery()['primary'] != 'graph':
+            raise CommandError('Primary mail provider must be Microsoft Graph for this gate.')
 
         recipient = options['recipient'].strip().lower()
         if '@' not in recipient:
@@ -72,6 +72,9 @@ class Command(BaseCommand):
         graph_setting = SystemSetting.objects.filter(key='mail_graph').first()
         original_graph_value = graph_setting.value if graph_setting else None
         original_graph_description = graph_setting.description if graph_setting else ''
+        delivery_setting = SystemSetting.objects.filter(key='mail_delivery').first()
+        original_delivery_value = delivery_setting.value if delivery_setting else None
+        original_delivery_description = delivery_setting.description if delivery_setting else ''
         failure = EmailMessage.objects.create(
             recipient=recipient,
             subject=f'PromptMaster Graph Failure Probe {probe_id}',
@@ -79,6 +82,16 @@ class Command(BaseCommand):
         )
         failure_exc = None
         try:
+            set_setting(
+                'mail_delivery',
+                {
+                    'mode': 'manual',
+                    'primary': 'graph',
+                    'fallback_1': '',
+                    'fallback_2': '',
+                },
+                'Temporary Graph acceptance routing probe',
+            )
             set_setting(
                 'mail_graph',
                 {
@@ -104,6 +117,14 @@ class Command(BaseCommand):
                     'mail_graph',
                     original_graph_value,
                     original_graph_description,
+                )
+            if original_delivery_value is None:
+                SystemSetting.objects.filter(key='mail_delivery').delete()
+            else:
+                set_setting(
+                    'mail_delivery',
+                    original_delivery_value,
+                    original_delivery_description,
                 )
 
         failure.refresh_from_db()
