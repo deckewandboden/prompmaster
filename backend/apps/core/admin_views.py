@@ -36,6 +36,7 @@ from apps.orders.models import Order
 from apps.payments.models import MollieEvent, Payment, Refund
 from apps.payments.services import calculate_refund, create_refund_request, submit_refund
 from apps.support.models import SupportMessage, SupportRequest
+from apps.support.services import add_staff_message
 from .admin_forms import (
     AdminCompanyForm,
     CustomerAdminInviteForm,
@@ -2257,43 +2258,42 @@ def support_request_reply(request, pk):
         messages.error(request, 'Die Antwort darf höchstens 10.000 Zeichen enthalten.')
         return redirect('ns_admin:support_request_detail', pk=pk)
 
-    with transaction.atomic():
-        email_message = queue_email(
-            'support_reply',
-            support_request.user.email,
-            {
-                'subject': support_request.subject,
-                'message': body,
-                'reply': body,
-                'reference': str(support_request.id),
-            },
-            scope_user=support_request.user_id,
+    result = add_staff_message(
+        support_request,
+        author=request.user,
+        body=body,
+        visibility='customer',
+        request=request,
+    )
+
+    if result['mail_suppressed']:
+        messages.success(
+            request,
+            'Kundenantwort gespeichert. Für Demo-Adressen wurde keine E-Mail versendet.',
         )
-        support_message = SupportMessage.objects.create(
-            support_request=support_request,
-            sender_type='staff',
-            visibility='customer',
-            author_user=request.user,
-            body=body,
-            notification_email=email_message,
+    elif result['mail_queued']:
+        messages.success(
+            request,
+            'Kundenantwort gespeichert und E-Mail-Benachrichtigung eingeplant.',
         )
-        if support_request.status == 'new':
-            support_request.status = 'in_progress'
-            support_request.save(update_fields=['status', 'updated_at'])
+    else:
+        messages.warning(
+            request,
+            'Kundenantwort gespeichert, E-Mail-Benachrichtigung konnte aber nicht eingeplant werden.',
+        )
+
+    if result['mail_error']:
         write_audit(
             request.user,
-            'support.reply_sent',
-            support_request,
+            'support.notification_queue_failed',
+            result['message'],
             {
-                'message_id': str(support_message.id),
-                'email_message_id': str(email_message.id),
-                'recipient': support_request.user.email,
-                'characters': len(body),
+                'support_request_id': str(support_request.pk),
+                'error_type': 'queue_failed',
             },
             request=request,
         )
 
-    messages.success(request, 'Antwort gespeichert und für den E-Mail-Versand eingeplant.')
     return redirect('ns_admin:support_request_detail', pk=pk)
 
 
