@@ -6,12 +6,13 @@ import requests
 from django.contrib.auth import get_user_model
 from django.db import transaction
 from django.conf import settings
-from django.core.mail import EmailMessage as DjangoEmailMessage
+from django.core.mail import EmailMessage as DjangoEmailMessage, get_connection
 from django.utils import timezone
 
 from apps.core.crypto import decrypt, encrypt
 from apps.core.security import token_hash
 from apps.core.settings_store import get_setting
+from apps.integrations.services import get_secret
 
 from .models import EmailMessage, EmailTemplate
 
@@ -46,6 +47,24 @@ def get_mail_identity():
         'dkim_selector': str(stored.get('dkim_selector') or '').strip(),
         'dkim_record': str(stored.get('dkim_record') or '').strip(),
         'dmarc_record': str(stored.get('dmarc_record') or '').strip(),
+    }
+
+
+def get_smtp_transport():
+    """Return runtime SMTP transport settings with encrypted password storage."""
+    stored = get_setting('mail_transport', {}) or {}
+    password = get_secret('smtp_password', settings.EMAIL_HOST_PASSWORD)
+    return {
+        'host': str(stored.get('host') or settings.EMAIL_HOST).strip(),
+        'port': int(stored.get('port') or settings.EMAIL_PORT),
+        'use_tls': bool(
+            stored.get('use_tls')
+            if 'use_tls' in stored
+            else settings.EMAIL_USE_TLS
+        ),
+        'username': str(stored.get('username') or settings.EMAIL_HOST_USER).strip(),
+        'password': password,
+        'password_configured': bool(password),
     }
 
 
@@ -341,6 +360,7 @@ def queue_email(code, recipient, context, *, scope_company=None, scope_user=None
 
 def _send_smtp(message, body):
     identity = get_mail_identity()
+    transport = get_smtp_transport()
     from_email = identity['from_email']
     from_header = (
         formataddr((identity['from_name'], from_email))
@@ -348,12 +368,22 @@ def _send_smtp(message, body):
         else from_email
     )
     reply_to = [identity['reply_to']] if identity['reply_to'] else None
+    connection = get_connection(
+        backend='django.core.mail.backends.smtp.EmailBackend',
+        host=transport['host'],
+        port=transport['port'],
+        username=transport['username'] or None,
+        password=transport['password'] or None,
+        use_tls=transport['use_tls'],
+        timeout=settings.EMAIL_TIMEOUT,
+    )
     email = DjangoEmailMessage(
         subject=message.subject,
         body=body,
         from_email=from_header,
         to=[message.recipient],
         reply_to=reply_to,
+        connection=connection,
     )
     email.send(fail_silently=False)
     return ''
