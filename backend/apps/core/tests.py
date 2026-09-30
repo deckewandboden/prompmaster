@@ -253,16 +253,28 @@ class MailIdentitySettingsTests(TestCase):
             recipient='recipient@example.test',
         )
 
-        with patch('apps.notifications.services.DjangoEmailMessage') as email_class:
-            email = email_class.return_value
-            _send_smtp(message, 'body')
+        with patch('apps.notifications.services.get_connection') as get_connection:
+            connection = get_connection.return_value
+            with patch('apps.notifications.services.DjangoEmailMessage') as email_class:
+                email = email_class.return_value
+                _send_smtp(message, 'body')
 
+        get_connection.assert_called_once_with(
+            backend='django.core.mail.backends.smtp.EmailBackend',
+            host='mailpit',
+            port=1025,
+            username=None,
+            password=None,
+            use_tls=False,
+            timeout=20,
+        )
         email_class.assert_called_once_with(
             subject='PromptMaster SMTP identity test',
             body='body',
             from_email='PromptMaster <promptmaster@decke-wand-boden.de>',
             to=['recipient@example.test'],
             reply_to=['support@decke-wand-boden.de'],
+            connection=connection,
         )
         email.send.assert_called_once_with(fail_silently=False)
 
@@ -294,6 +306,35 @@ class MailIdentitySettingsTests(TestCase):
         self.assertIn('mail_domain', form.errors)
         self.assertIn('mail_spf_record', form.errors)
         self.assertIn('mail_dmarc_record', form.errors)
+
+
+    def test_smtp_transport_uses_encrypted_secret_and_runtime_settings(self):
+        from apps.core.settings_store import set_setting
+        from apps.integrations.services import set_secret
+        from apps.notifications.services import get_smtp_transport
+
+        set_setting(
+            'mail_transport',
+            {
+                'host': 'smtp.ionos.de',
+                'port': 587,
+                'use_tls': True,
+                'username': 'promptmaster@decke-wand-boden.de',
+            },
+        )
+        set_secret('smtp_password', 'SMTP-Test-Secret-2026!')
+
+        transport = get_smtp_transport()
+
+        self.assertEqual(transport['host'], 'smtp.ionos.de')
+        self.assertEqual(transport['port'], 587)
+        self.assertTrue(transport['use_tls'])
+        self.assertEqual(
+            transport['username'],
+            'promptmaster@decke-wand-boden.de',
+        )
+        self.assertEqual(transport['password'], 'SMTP-Test-Secret-2026!')
+        self.assertTrue(transport['password_configured'])
 
 
 class NotificationReleaseTests(TestCase):
