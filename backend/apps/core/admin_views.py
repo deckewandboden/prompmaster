@@ -1713,8 +1713,14 @@ def email(request):
         ]
     )
     configured = {
-        'smtp1': bool(smtp_transport['host']),
-        'smtp2': bool(smtp_transport_2['host']),
+        'smtp1': bool(
+            smtp_transport['host']
+            and (not smtp_transport['username'] or smtp_transport['password_configured'])
+        ),
+        'smtp2': bool(
+            smtp_transport_2['host']
+            and (not smtp_transport_2['username'] or smtp_transport_2['password_configured'])
+        ),
         'graph': graph_configured,
     }
     provider_configured = all(configured.get(item, False) for item in delivery['route'])
