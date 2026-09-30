@@ -2326,7 +2326,7 @@ def run_backend_ui_smoke(browser, fixture=None) -> None:
                       };
                     }"""
                 )
-                if form_spacing['marginTop'] < 6:
+                if form_spacing['marginTop'] < 8:
                     raise AssertionError(
                         f'admin form label/field spacing is insufficient: {form_spacing}'
                     )
