@@ -432,15 +432,22 @@ def _send_graph(message, body):
     if not access_token:
         raise MailProviderError('Microsoft Graph did not return an access token')
 
+    identity = get_mail_identity()
+    graph_message = {
+        'subject': message.subject,
+        'body': {'contentType': 'Text', 'content': body},
+        'toRecipients': [{'emailAddress': {'address': message.recipient}}],
+    }
+    if identity['reply_to']:
+        graph_message['replyTo'] = [
+            {'emailAddress': {'address': identity['reply_to']}}
+        ]
+
     response = requests.post(
         f"https://graph.microsoft.com/v1.0/users/{graph['sender']}/sendMail",
         headers={'Authorization': f'Bearer {access_token}', 'Content-Type': 'application/json'},
         json={
-            'message': {
-                'subject': message.subject,
-                'body': {'contentType': 'Text', 'content': body},
-                'toRecipients': [{'emailAddress': {'address': message.recipient}}],
-            },
+            'message': graph_message,
             'saveToSentItems': True,
         },
         timeout=(5, 20),
