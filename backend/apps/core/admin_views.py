@@ -29,7 +29,7 @@ from apps.legal.models import ConsumerContractDeclaration, DeletionRequest, Lega
 from apps.licenses.models import License, LicenseAssignment, LicenseAssignmentLink, LicenseTerm, LicenseUpgradeRequest
 from apps.licenses.services import assign_license, block_license, release_license, unblock_license
 from apps.notifications.models import EmailMessage, EmailTemplate
-from apps.notifications.services import get_mail_identity, queue_email
+from apps.notifications.services import get_mail_identity, get_smtp_transport, queue_email
 from apps.ops.metrics import caddy_health, certificate_status, snapshot
 from apps.ops.models import BackupRecord, RestoreTest, SystemAlert
 from apps.orders.models import Order
@@ -1725,6 +1725,7 @@ def email(request):
             'provider_configured': provider_configured,
             'graph_sender': settings.GRAPH_SENDER,
             'mail_identity': get_mail_identity(),
+            'smtp_transport': get_smtp_transport(),
         },
     )
 
@@ -2476,6 +2477,10 @@ def settings_view(request):
         'mail_dkim_selector': mail_identity['dkim_selector'],
         'mail_dkim_record': mail_identity['dkim_record'],
         'mail_dmarc_record': mail_identity['dmarc_record'],
+        'smtp_host': get_smtp_transport()['host'],
+        'smtp_port': get_smtp_transport()['port'],
+        'smtp_use_tls': get_smtp_transport()['use_tls'],
+        'smtp_username': get_smtp_transport()['username'],
         'disk_warning': values.get('disk_warning', 80),
         'disk_critical': values.get('disk_critical', 90),
         'ram_warning': values.get('ram_warning', 80),
@@ -2510,12 +2515,35 @@ def settings_view(request):
                 'dkim_record': configured_value('mail_dkim_record', 'dkim_record'),
                 'dmarc_record': configured_value('mail_dmarc_record', 'dmarc_record'),
             }
+            current_smtp = get_smtp_transport()
+
+            def smtp_value(form_key, transport_key):
+                value = data.pop(form_key)
+                if form_key not in request.POST:
+                    return current_smtp[transport_key]
+                return value
+
+            mail_transport = {
+                'host': smtp_value('smtp_host', 'host'),
+                'port': smtp_value('smtp_port', 'port'),
+                'use_tls': smtp_value('smtp_use_tls', 'use_tls'),
+                'username': smtp_value('smtp_username', 'username'),
+            }
+            smtp_password = data.pop('smtp_password')
             set_setting('support_email', support_email, 'Empfänger des PromptMaster-Kontaktformulars')
             set_setting(
                 'mail_identity',
                 mail_identity,
                 'Absenderidentität und dokumentierte DNS-Sollwerte für den PromptMaster-Mailversand',
             )
+            set_setting(
+                'mail_transport',
+                mail_transport,
+                'SMTP-Transportkonfiguration für den PromptMaster-Mailversand',
+            )
+            if smtp_password:
+                from apps.integrations.services import set_secret
+                set_secret('smtp_password', smtp_password)
             set_setting('ops_thresholds', data, 'Warnschwellen für System & Betrieb')
             write_audit(
                 request.user,
@@ -2524,6 +2552,10 @@ def settings_view(request):
                 {
                     'support_email': support_email,
                     'mail_identity': mail_identity,
+                    'mail_transport': {
+                        **mail_transport,
+                        'password': '[UPDATED]' if smtp_password else '[UNCHANGED]',
+                    },
                     'ops_thresholds': data,
                 },
                 request=request,
