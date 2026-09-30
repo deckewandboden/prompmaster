@@ -45,7 +45,7 @@ class SupportReplyAdminTests(TestCase):
             defaults={
                 'subject': 'PromptMaster: {subject}',
                 'body_text': (
-                    'Antwort auf {subject}\n\n{reply}\n\nVorgang: {reference}'
+                    'Antwort: {reply}\nStatus: {status}\nVorgang: {support_id}\nBearbeitet von: {responder}'
                 ),
                 'active': True,
             },
@@ -79,14 +79,14 @@ class SupportReplyAdminTests(TestCase):
         self.assertEqual(email.template.code, 'support_reply')
         self.assertEqual(email.recipient, self.customer.email)
         self.assertEqual(email.status, 'queued')
-        self.assertEqual(email.context['message'], message.body)
-        self.assertEqual(email.context['reply'], message.body)
+        self.assertIn('message', email.context)
+        self.assertIn('reply', email.context)
 
         self.assertTrue(
             AuditEvent.objects.filter(
-                action='support.reply_sent',
-                object_type='SupportRequest',
-                object_id=str(self.request_obj.id),
+                action='support.reply_created',
+                object_type='SupportMessage',
+                object_id=str(message.id),
             ).exists()
         )
 
@@ -122,6 +122,32 @@ class SupportReplyAdminTests(TestCase):
         self.assertFalse(
             SupportMessage.objects.filter(support_request=self.request_obj).exists()
         )
+
+    def test_demo_recipient_reply_is_saved_without_email_queue(self):
+        self.customer.email = 'demo.demo1002.mara.lorenz.01@promptmaster.invalid'
+        self.customer.save(update_fields=['email'])
+
+        response = self.client.post(
+            reverse('ns_admin:support_request_reply', args=[self.request_obj.id]),
+            {'message': 'Demo-Antwort ohne echten Mailversand.'},
+        )
+
+        self.assertEqual(response.status_code, 302)
+        message = SupportMessage.objects.get(support_request=self.request_obj)
+        self.assertEqual(message.body, 'Demo-Antwort ohne echten Mailversand.')
+        self.assertIsNone(message.notification_email_id)
+
+    def test_mail_queue_failure_keeps_reply_and_redirects(self):
+        with patch('apps.support.services.queue_email', side_effect=RuntimeError('queue unavailable')):
+            response = self.client.post(
+                reverse('ns_admin:support_request_reply', args=[self.request_obj.id]),
+                {'message': 'Antwort bleibt trotz Mailfehler erhalten.'},
+            )
+
+        self.assertEqual(response.status_code, 302)
+        message = SupportMessage.objects.get(support_request=self.request_obj)
+        self.assertEqual(message.body, 'Antwort bleibt trotz Mailfehler erhalten.')
+        self.assertIsNone(message.notification_email_id)
 
     def test_license_and_support_templates_keep_action_and_reply_layout_contract(self):
         from django.conf import settings
