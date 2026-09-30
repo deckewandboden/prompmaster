@@ -2313,8 +2313,37 @@ def run_backend_ui_smoke(browser, fixture=None) -> None:
                 if not page.get_by_role('heading', name='Verlauf').is_visible():
                     raise AssertionError('admin support conversation timeline is not visible')
                 reply_form = page.locator('form[action$="/reply/"]')
-                if reply_form.count() != 1 or not reply_form.locator('textarea[name="message"]').is_visible():
+                reply_textarea = reply_form.locator('textarea[name="message"]')
+                if reply_form.count() != 1 or not reply_textarea.is_visible():
                     raise AssertionError('admin support reply textarea/form is missing')
+
+                form_spacing = reply_textarea.evaluate(
+                    """el => {
+                      const fieldStyle = getComputedStyle(el);
+                      return {
+                        marginTop: parseFloat(fieldStyle.marginTop || '0') || 0,
+                        outlineOffset: parseFloat(fieldStyle.outlineOffset || '0') || 0,
+                      };
+                    }"""
+                )
+                if form_spacing['marginTop'] < 8:
+                    raise AssertionError(
+                        f'admin form label/field spacing is insufficient: {form_spacing}'
+                    )
+
+                thread_gap = page.locator('.support-thread-card').evaluate(
+                    """card => {
+                      const grid = document.querySelector('.support-detail-grid');
+                      const cr = card.getBoundingClientRect();
+                      const gr = grid.getBoundingClientRect();
+                      return cr.top - gr.bottom;
+                    }"""
+                )
+                if thread_gap < 22:
+                    raise AssertionError(
+                        f'admin support conversation card gap is insufficient: {thread_gap}'
+                    )
+
                 if 'Repräsentativer Browser-Smoke-Datensatz.' not in page.locator('.support-thread').inner_text():
                     raise AssertionError('admin support thread does not show the original request')
 
@@ -2340,6 +2369,16 @@ def run_backend_ui_smoke(browser, fixture=None) -> None:
                     raise AssertionError(
                         f'portal profile: raw English/internal address labels visible: {flattened_labels}'
                     )
+
+                checkbox = page.locator('.form label > input[type="checkbox"]').first
+                if checkbox.count() and checkbox.is_visible():
+                    checkbox_label_display = checkbox.evaluate(
+                        "el => getComputedStyle(el.parentElement).display"
+                    )
+                    if checkbox_label_display == 'grid':
+                        raise AssertionError(
+                            'portal profile: inline checkbox label was broken by generic form spacing'
+                        )
 
                 company_response = page.goto(base + 'portal/company/', wait_until='networkidle')
                 if company_response and company_response.status == 200:
