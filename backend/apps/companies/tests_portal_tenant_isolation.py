@@ -8,8 +8,14 @@ from django.utils import timezone
 from apps.accounts.models import User
 from apps.catalog.models import Product
 from apps.companies.models import Company, Invitation, Membership
+from apps.core.security import token_hash
 from apps.devices.models import DeviceRegistration
-from apps.licenses.models import License, LicenseAssignment
+from apps.licenses.models import (
+    License,
+    LicenseAssignment,
+    LicenseAssignmentLink,
+    LicenseUpgradeRequest,
+)
 from apps.support.models import SupportMessage, SupportRequest
 
 
@@ -136,6 +142,23 @@ class CustomerPortalTenantIsolationTests(TestCase):
             invited_by=self.admin_b,
         )
 
+        self.upgrade_b = LicenseUpgradeRequest.objects.create(
+            user=self.member_b,
+            company=self.company_b,
+            product=self.product,
+            status='pending',
+            note='B requests Pro',
+        )
+        self.assignment_raw_b = 'portal-audit-assignment-token-b'
+        self.assignment_link_b = LicenseAssignmentLink.objects.create(
+            company=self.company_b,
+            license=self.license_b,
+            target_user=self.member_b,
+            token_hash=token_hash(self.assignment_raw_b),
+            expires_at=self.now + timedelta(hours=24),
+            created_by=self.admin_b,
+        )
+
     def _user(self, email, first, last, **extra):
         return User.objects.create_user(
             email,
@@ -180,6 +203,29 @@ class CustomerPortalTenantIsolationTests(TestCase):
         self.assertEqual(
             self.client.post(
                 reverse('portal:invitation_revoke', args=[self.invitation_b.pk])
+            ).status_code,
+            404,
+        )
+
+        self.assertEqual(
+            self.client.post(
+                reverse('portal:resolve_upgrade', args=[self.upgrade_b.pk, 'approve'])
+            ).status_code,
+            404,
+        )
+        self.assertEqual(
+            self.client.post(
+                reverse('portal:member_assign', args=[self.member_a.pk]),
+                {'license_id': str(self.license_b.pk)},
+            ).status_code,
+            404,
+        )
+        self.assertEqual(
+            self.client.post(
+                reverse(
+                    'portal:member_release',
+                    args=[self.member_b.pk, self.license_b.pk],
+                )
             ).status_code,
             404,
         )
@@ -233,6 +279,22 @@ class CustomerPortalTenantIsolationTests(TestCase):
                 reverse('portal:support_detail', args=[self.support_b_member.pk])
             ).status_code,
             404,
+        )
+
+    def test_assignment_capability_cannot_be_consumed_by_another_tenant_user(self):
+        self._login(self.member_a)
+        response = self.client.post(
+            reverse('portal:claim_assignment_link', args=[self.assignment_raw_b])
+        )
+        self.assertEqual(response.status_code, 200)
+        self.assignment_link_b.refresh_from_db()
+        self.assertIsNone(self.assignment_link_b.used_at)
+        self.assertFalse(
+            LicenseAssignment.objects.filter(
+                license=self.license_b,
+                user=self.member_a,
+                ended_at__isnull=True,
+            ).exists()
         )
 
     @patch('apps.companies.portal.queue_email', side_effect=RuntimeError('mail unavailable'))
