@@ -15,12 +15,24 @@ INVALID_SENDER = '00000000-0000-0000-0000-000000000000'
 
 
 def _provider_http_status(exc):
-    candidates = [exc, getattr(exc, 'exc', None)]
-    for candidate in candidates:
-        response = getattr(candidate, 'response', None) if candidate is not None else None
+    pending = [exc]
+    seen = set()
+    while pending:
+        candidate = pending.pop(0)
+        if candidate is None or id(candidate) in seen:
+            continue
+        seen.add(id(candidate))
+        response = getattr(candidate, 'response', None)
         status = getattr(response, 'status_code', None)
         if status:
             return status
+        pending.extend(
+            [
+                getattr(candidate, 'exc', None),
+                getattr(candidate, 'original', None),
+                getattr(candidate, '__cause__', None),
+            ]
+        )
     return None
 
 
