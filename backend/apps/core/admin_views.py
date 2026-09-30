@@ -2492,15 +2492,23 @@ def settings_view(request):
         if form.is_valid():
             data = form.cleaned_data.copy()
             support_email = data.pop('support_email')
+            current_mail_identity = get_mail_identity()
+
+            def configured_value(form_key, identity_key):
+                value = data.pop(form_key)
+                if form_key not in request.POST:
+                    return current_mail_identity[identity_key]
+                return value
+
             mail_identity = {
-                'from_email': data.pop('mail_from_email'),
-                'from_name': data.pop('mail_from_name'),
-                'reply_to': data.pop('mail_reply_to'),
-                'domain': data.pop('mail_domain'),
-                'spf_record': data.pop('mail_spf_record'),
-                'dkim_selector': data.pop('mail_dkim_selector'),
-                'dkim_record': data.pop('mail_dkim_record'),
-                'dmarc_record': data.pop('mail_dmarc_record'),
+                'from_email': configured_value('mail_from_email', 'from_email'),
+                'from_name': configured_value('mail_from_name', 'from_name'),
+                'reply_to': configured_value('mail_reply_to', 'reply_to'),
+                'domain': configured_value('mail_domain', 'domain'),
+                'spf_record': configured_value('mail_spf_record', 'spf_record'),
+                'dkim_selector': configured_value('mail_dkim_selector', 'dkim_selector'),
+                'dkim_record': configured_value('mail_dkim_record', 'dkim_record'),
+                'dmarc_record': configured_value('mail_dmarc_record', 'dmarc_record'),
             }
             set_setting('support_email', support_email, 'Empfänger des PromptMaster-Kontaktformulars')
             set_setting(
