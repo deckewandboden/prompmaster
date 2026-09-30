@@ -9,6 +9,11 @@
     <div class="statusrow"><span>Aktiver Absender</span><strong>{{ mail_identity.from_email }}</strong></div>
     {% if mail_identity.from_name %}<div class="statusrow"><span>Anzeigename</span><strong>{{ mail_identity.from_name }}</strong></div>{% endif %}
     {% if mail_identity.domain %}<div class="statusrow"><span>Mail-Domain</span><strong>{{ mail_identity.domain }}</strong></div>{% endif %}
+    {% if provider == 'smtp' or provider == 'mailpit' %}
+    <div class="statusrow"><span>SMTP-Server</span><strong>{{ smtp_transport.host }}:{{ smtp_transport.port }}</strong></div>
+    <div class="statusrow"><span>STARTTLS</span><strong>{% if smtp_transport.use_tls %}Ja{% else %}Nein{% endif %}</strong></div>
+    <div class="statusrow"><span>SMTP-Anmeldung</span><strong>{% if smtp_transport.username and smtp_transport.password_configured %}Konfiguriert{% elif smtp_transport.username %}Passwort fehlt{% else %}Ohne Anmeldung{% endif %}</strong></div>
+    {% endif %}
     {% if graph_sender %}<div class="statusrow"><span>Graph Absender</span><strong>{{ graph_sender }}</strong></div>{% endif %}
     <p class="small muted">SPF/DKIM/DMARC werden unter „Einstellungen“ als DNS-Sollwerte dokumentiert. Änderungen dort aktualisieren nicht automatisch den öffentlichen DNS.</p>
     <h3 class="mt-16">Letzte Versandvorgänge</h3>
