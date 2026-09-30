@@ -8,6 +8,7 @@ from apps.accounts.models import User
 from apps.audit.models import AuditEvent
 from apps.companies.models import Company
 from apps.notifications.models import EmailMessage, EmailTemplate
+from apps.notifications.services import _render_context
 from apps.support.models import SupportMessage, SupportRequest
 
 
@@ -45,7 +46,7 @@ class SupportReplyAdminTests(TestCase):
             defaults={
                 'subject': 'PromptMaster: {subject}',
                 'body_text': (
-                    'Antwort auf {subject}\n\n{reply}\n\nVorgang: {reference}'
+                    'Antwort: {reply}\nStatus: {status}\nVorgang: {support_id}\nBearbeitet von: {responder}'
                 ),
                 'active': True,
             },
