@@ -68,6 +68,28 @@ def get_smtp_transport():
     }
 
 
+def get_mail_provider():
+    provider = str(get_setting('mail_provider', settings.EMAIL_PROVIDER) or 'smtp').strip().lower()
+    if provider in {'mailpit'}:
+        return 'smtp'
+    if provider in {'microsoft_graph'}:
+        return 'graph'
+    return provider
+
+
+def get_graph_transport():
+    """Return runtime Microsoft Graph configuration with encrypted client secret."""
+    stored = get_setting('mail_graph', {}) or {}
+    secret = get_secret('graph_client_secret', settings.GRAPH_CLIENT_SECRET)
+    return {
+        'tenant_id': str(stored.get('tenant_id') or settings.GRAPH_TENANT_ID).strip(),
+        'client_id': str(stored.get('client_id') or settings.GRAPH_CLIENT_ID).strip(),
+        'client_secret': secret,
+        'sender': str(stored.get('sender') or settings.GRAPH_SENDER).strip(),
+        'client_secret_configured': bool(secret),
+    }
+
+
 def _extract_last_url_token(value):
     try:
         path = urlsplit(str(value or '')).path.rstrip('/')
@@ -390,15 +412,16 @@ def _send_smtp(message, body):
 
 
 def _send_graph(message, body):
-    required = [settings.GRAPH_TENANT_ID, settings.GRAPH_CLIENT_ID, settings.GRAPH_CLIENT_SECRET, settings.GRAPH_SENDER]
+    graph = get_graph_transport()
+    required = [graph['tenant_id'], graph['client_id'], graph['client_secret'], graph['sender']]
     if not all(required):
         raise MailProviderError('Microsoft Graph mail provider is not fully configured')
 
     token_response = requests.post(
-        f'https://login.microsoftonline.com/{settings.GRAPH_TENANT_ID}/oauth2/v2.0/token',
+        f"https://login.microsoftonline.com/{graph['tenant_id']}/oauth2/v2.0/token",
         data={
-            'client_id': settings.GRAPH_CLIENT_ID,
-            'client_secret': settings.GRAPH_CLIENT_SECRET,
+            'client_id': graph['client_id'],
+            'client_secret': graph['client_secret'],
             'scope': 'https://graph.microsoft.com/.default',
             'grant_type': 'client_credentials',
         },
@@ -410,7 +433,7 @@ def _send_graph(message, body):
         raise MailProviderError('Microsoft Graph did not return an access token')
 
     response = requests.post(
-        f'https://graph.microsoft.com/v1.0/users/{settings.GRAPH_SENDER}/sendMail',
+        f"https://graph.microsoft.com/v1.0/users/{graph['sender']}/sendMail",
         headers={'Authorization': f'Bearer {access_token}', 'Content-Type': 'application/json'},
         json={
             'message': {
@@ -438,10 +461,10 @@ def send_now(message):
     template = message.template
     context = _render_context(message.context)
     body = template.body_text.format(**context) if template else ''
-    provider = settings.EMAIL_PROVIDER.lower().strip()
-    if provider in {'smtp', 'mailpit'}:
+    provider = get_mail_provider()
+    if provider == 'smtp':
         reference = _send_smtp(message, body)
-    elif provider in {'graph', 'microsoft_graph'}:
+    elif provider == 'graph':
         reference = _send_graph(message, body)
     else:
         raise MailProviderError(f'Unsupported mail provider: {provider}')
