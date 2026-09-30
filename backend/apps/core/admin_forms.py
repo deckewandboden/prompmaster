@@ -610,44 +610,54 @@ class GeneralSettingsForm(forms.Form):
         for warning, critical in [('disk_warning', 'disk_critical'), ('ram_warning', 'ram_critical'), ('backup_warning_hours', 'backup_critical_hours')]:
             if data.get(warning) is not None and data.get(critical) is not None and data[warning] >= data[critical]:
                 self.add_error(critical, 'Der kritische Wert muss über dem Warnwert liegen.')
+        mail_config_submitted = any(
+            field in self.data
+            for field in (
+                'mail_delivery_mode',
+                'mail_provider',
+                'mail_fallback_1',
+                'mail_fallback_2',
+            )
+        )
         mode = data.get('mail_delivery_mode') or 'manual'
         provider = data.get('mail_provider') or 'smtp1'
         fallback_1 = data.get('mail_fallback_1') or ''
         fallback_2 = data.get('mail_fallback_2') or ''
         route = [provider]
-        if mode == 'failover':
-            for fallback in (fallback_1, fallback_2):
-                if fallback:
-                    route.append(fallback)
-            if len(route) == 1:
+        if mail_config_submitted:
+            if mode == 'failover':
+                for fallback in (fallback_1, fallback_2):
+                    if fallback:
+                        route.append(fallback)
+                if len(route) == 1:
+                    self.add_error(
+                        'mail_fallback_1',
+                        'Für den automatischen Modus muss mindestens ein Fallback gewählt werden.',
+                    )
+            duplicates = {item for item in route if route.count(item) > 1}
+            if duplicates:
                 self.add_error(
                     'mail_fallback_1',
-                    'Für den automatischen Modus muss mindestens ein Fallback gewählt werden.',
+                    'Ein Versandweg darf in der Kette nur einmal vorkommen.',
                 )
-        duplicates = {item for item in route if route.count(item) > 1}
-        if duplicates:
-            self.add_error(
-                'mail_fallback_1',
-                'Ein Versandweg darf in der Kette nur einmal vorkommen.',
-            )
 
-        if 'smtp1' in route:
-            for field in ('smtp_host', 'smtp_port'):
-                if not data.get(field):
-                    self.add_error(field, 'Für SMTP 1 ist dieses Feld erforderlich.')
-        if 'smtp2' in route:
-            for field in ('smtp2_host', 'smtp2_port'):
-                if not data.get(field):
-                    self.add_error(field, 'Für SMTP 2 ist dieses Feld erforderlich.')
-        if 'graph' in route:
-            for field in ('graph_tenant_id', 'graph_client_id', 'graph_sender'):
-                if not data.get(field):
-                    self.add_error(field, 'Für Microsoft Graph ist dieses Feld erforderlich.')
-            if not data.get('graph_client_secret') and not self.graph_secret_configured:
-                self.add_error(
-                    'graph_client_secret',
-                    'Für Microsoft Graph ist ein Client Secret erforderlich.',
-                )
+            if 'smtp1' in route:
+                for field in ('smtp_host', 'smtp_port'):
+                    if not data.get(field):
+                        self.add_error(field, 'Für SMTP 1 ist dieses Feld erforderlich.')
+            if 'smtp2' in route:
+                for field in ('smtp2_host', 'smtp2_port'):
+                    if not data.get(field):
+                        self.add_error(field, 'Für SMTP 2 ist dieses Feld erforderlich.')
+            if 'graph' in route:
+                for field in ('graph_tenant_id', 'graph_client_id', 'graph_sender'):
+                    if not data.get(field):
+                        self.add_error(field, 'Für Microsoft Graph ist dieses Feld erforderlich.')
+                if not data.get('graph_client_secret') and not self.graph_secret_configured:
+                    self.add_error(
+                        'graph_client_secret',
+                        'Für Microsoft Graph ist ein Client Secret erforderlich.',
+                    )
 
         from_email = data.get('mail_from_email')
         mail_domain = data.get('mail_domain')
