@@ -8,7 +8,6 @@ from apps.accounts.models import User
 from apps.audit.models import AuditEvent
 from apps.companies.models import Company
 from apps.notifications.models import EmailMessage, EmailTemplate
-from apps.notifications.services import _render_context
 from apps.support.models import SupportMessage, SupportRequest
 
 
@@ -123,6 +122,32 @@ class SupportReplyAdminTests(TestCase):
         self.assertFalse(
             SupportMessage.objects.filter(support_request=self.request_obj).exists()
         )
+
+    def test_demo_recipient_reply_is_saved_without_email_queue(self):
+        self.customer.email = 'demo.demo1002.mara.lorenz.01@promptmaster.invalid'
+        self.customer.save(update_fields=['email'])
+
+        response = self.client.post(
+            reverse('ns_admin:support_request_reply', args=[self.request_obj.id]),
+            {'message': 'Demo-Antwort ohne echten Mailversand.'},
+        )
+
+        self.assertEqual(response.status_code, 302)
+        message = SupportMessage.objects.get(support_request=self.request_obj)
+        self.assertEqual(message.body, 'Demo-Antwort ohne echten Mailversand.')
+        self.assertIsNone(message.notification_email_id)
+
+    def test_mail_queue_failure_keeps_reply_and_redirects(self):
+        with patch('apps.support.services.queue_email', side_effect=RuntimeError('queue unavailable')):
+            response = self.client.post(
+                reverse('ns_admin:support_request_reply', args=[self.request_obj.id]),
+                {'message': 'Antwort bleibt trotz Mailfehler erhalten.'},
+            )
+
+        self.assertEqual(response.status_code, 302)
+        message = SupportMessage.objects.get(support_request=self.request_obj)
+        self.assertEqual(message.body, 'Antwort bleibt trotz Mailfehler erhalten.')
+        self.assertIsNone(message.notification_email_id)
 
     def test_license_and_support_templates_keep_action_and_reply_layout_contract(self):
         from django.conf import settings
