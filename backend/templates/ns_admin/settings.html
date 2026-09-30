@@ -1,10 +1,54 @@
 {% extends 'ns_admin/base.html' %}{% block content %}
-<div class="page-head"><div><h1>Einstellungen</h1><div class="sub">Produktdefaults, Support und Betriebswarnschwellen.</div></div></div>
-<form method="post" class="form">{% csrf_token %}{{ form.non_field_errors }}<div class="grid two mb-14">
-  <div class="card"><h2>Lizenz-Defaults</h2>{% if pro_product %}<div class="statusrow"><span>Laufzeit</span><strong>{{ pro_product.default_license_days }} Tage</strong></div><div class="statusrow"><span>Geräte je Benutzer</span><strong>{{ pro_product.default_device_limit }}</strong></div><div class="statusrow"><span>Einladung</span><strong>{{ invitation_ttl_hours }} Stunden</strong></div><div class="statusrow"><span>Reminder</span><strong>T−{{ pro_product.reminder_1_days }} / T−{{ pro_product.reminder_2_days }}</strong></div><div class="statusrow"><span>Kritische Warnung</span><strong>T−{{ pro_product.critical_warning_days }}</strong></div><p class="small muted mb-0">Produktwerte werden unter „Produkte &amp; Preise“ gepflegt.</p>{% else %}<div class="alert warn">PromptMaster Pro ist nicht angelegt.</div>{% endif %}</div>
-  <div class="card"><h2>Support</h2><p class="muted">Empfänger des Kundenportal-Kontaktformulars.</p><div class="statusrow"><span>Kontaktformular</span><span class="badge ok">Aktiv</span></div><div class="form mt-12"><label>{{ form.support_email.label }}{{ form.support_email }}{{ form.support_email.errors }}</label></div></div>
+<div class="page-head"><div><h1>Einstellungen</h1><div class="sub">Produktdefaults, Support, E-Mail-Identität und Betriebswarnschwellen.</div></div></div>
+<form method="post" class="form">{% csrf_token %}{{ form.non_field_errors }}
+<div class="grid two mb-14">
+  <div class="card">
+    <h2>Lizenz-Defaults</h2>
+    {% if pro_product %}
+    <div class="statusrow"><span>Laufzeit</span><strong>{{ pro_product.default_license_days }} Tage</strong></div>
+    <div class="statusrow"><span>Geräte je Benutzer</span><strong>{{ pro_product.default_device_limit }}</strong></div>
+    <div class="statusrow"><span>Einladung</span><strong>{{ invitation_ttl_hours }} Stunden</strong></div>
+    <div class="statusrow"><span>Reminder</span><strong>T−{{ pro_product.reminder_1_days }} / T−{{ pro_product.reminder_2_days }}</strong></div>
+    <div class="statusrow"><span>Kritische Warnung</span><strong>T−{{ pro_product.critical_warning_days }}</strong></div>
+    <p class="small muted mb-0">Produktwerte werden unter „Produkte &amp; Preise“ gepflegt.</p>
+    {% else %}<div class="alert warn">PromptMaster Pro ist nicht angelegt.</div>{% endif %}
+  </div>
+  <div class="card">
+    <h2>Support</h2>
+    <p class="muted">Empfänger des Kundenportal-Kontaktformulars.</p>
+    <div class="statusrow"><span>Kontaktformular</span><span class="badge ok">Aktiv</span></div>
+    <div class="form mt-12"><label>{{ form.support_email.label }}{{ form.support_email }}{{ form.support_email.errors }}</label></div>
+  </div>
 </div>
-<div class="card"><h2>System &amp; Betrieb</h2><div class="form"><label>{{ form.cpu_warning.label }}{{ form.cpu_warning }}{{ form.cpu_warning.errors }}</label><div class="row"><label>{{ form.disk_warning.label }}{{ form.disk_warning }}{{ form.disk_warning.errors }}</label><label>{{ form.disk_critical.label }}{{ form.disk_critical }}{{ form.disk_critical.errors }}</label></div><div class="row"><label>{{ form.ram_warning.label }}{{ form.ram_warning }}{{ form.ram_warning.errors }}</label><label>{{ form.ram_critical.label }}{{ form.ram_critical }}{{ form.ram_critical.errors }}</label></div><div class="row"><label>{{ form.backup_warning_hours.label }}{{ form.backup_warning_hours }}{{ form.backup_warning_hours.errors }}</label><label>{{ form.backup_critical_hours.label }}{{ form.backup_critical_hours }}{{ form.backup_critical_hours.errors }}</label></div><label>{{ form.restore_warning_days.label }}{{ form.restore_warning_days }}{{ form.restore_warning_days.errors }}</label></div></div>
+
+<div class="card mb-14">
+  <h2>E-Mail-Absender &amp; Domain</h2>
+  <p class="muted">Die Absenderadresse wird beim SMTP-Versand direkt aus diesen Einstellungen gelesen. SPF, DKIM und DMARC sind hier als DNS-Sollwerte dokumentiert; das Speichern verändert keine DNS-Zone.</p>
+  <div class="form">
+    <div class="row">
+      <label>{{ form.mail_from_email.label }}{{ form.mail_from_email }}{{ form.mail_from_email.errors }}{% if form.mail_from_email.help_text %}<span class="tiny muted">{{ form.mail_from_email.help_text }}</span>{% endif %}</label>
+      <label>{{ form.mail_from_name.label }}{{ form.mail_from_name }}{{ form.mail_from_name.errors }}{% if form.mail_from_name.help_text %}<span class="tiny muted">{{ form.mail_from_name.help_text }}</span>{% endif %}</label>
+    </div>
+    <div class="row">
+      <label>{{ form.mail_reply_to.label }}{{ form.mail_reply_to }}{{ form.mail_reply_to.errors }}{% if form.mail_reply_to.help_text %}<span class="tiny muted">{{ form.mail_reply_to.help_text }}</span>{% endif %}</label>
+      <label>{{ form.mail_domain.label }}{{ form.mail_domain }}{{ form.mail_domain.errors }}{% if form.mail_domain.help_text %}<span class="tiny muted">{{ form.mail_domain.help_text }}</span>{% endif %}</label>
+    </div>
+    <label>{{ form.mail_spf_record.label }}{{ form.mail_spf_record }}{{ form.mail_spf_record.errors }}{% if form.mail_spf_record.help_text %}<span class="tiny muted">{{ form.mail_spf_record.help_text }}</span>{% endif %}</label>
+    <div class="row">
+      <label>{{ form.mail_dkim_selector.label }}{{ form.mail_dkim_selector }}{{ form.mail_dkim_selector.errors }}{% if form.mail_dkim_selector.help_text %}<span class="tiny muted">{{ form.mail_dkim_selector.help_text }}</span>{% endif %}</label>
+      <label>{{ form.mail_dmarc_record.label }}{{ form.mail_dmarc_record }}{{ form.mail_dmarc_record.errors }}{% if form.mail_dmarc_record.help_text %}<span class="tiny muted">{{ form.mail_dmarc_record.help_text }}</span>{% endif %}</label>
+    </div>
+    <label>{{ form.mail_dkim_record.label }}{{ form.mail_dkim_record }}{{ form.mail_dkim_record.errors }}{% if form.mail_dkim_record.help_text %}<span class="tiny muted">{{ form.mail_dkim_record.help_text }}</span>{% endif %}</label>
+  </div>
+</div>
+
+<div class="card"><h2>System &amp; Betrieb</h2><div class="form">
+  <label>{{ form.cpu_warning.label }}{{ form.cpu_warning }}{{ form.cpu_warning.errors }}</label>
+  <div class="row"><label>{{ form.disk_warning.label }}{{ form.disk_warning }}{{ form.disk_warning.errors }}</label><label>{{ form.disk_critical.label }}{{ form.disk_critical }}{{ form.disk_critical.errors }}</label></div>
+  <div class="row"><label>{{ form.ram_warning.label }}{{ form.ram_warning }}{{ form.ram_warning.errors }}</label><label>{{ form.ram_critical.label }}{{ form.ram_critical }}{{ form.ram_critical.errors }}</label></div>
+  <div class="row"><label>{{ form.backup_warning_hours.label }}{{ form.backup_warning_hours }}{{ form.backup_warning_hours.errors }}</label><label>{{ form.backup_critical_hours.label }}{{ form.backup_critical_hours }}{{ form.backup_critical_hours.errors }}</label></div>
+  <label>{{ form.restore_warning_days.label }}{{ form.restore_warning_days }}{{ form.restore_warning_days.errors }}</label>
+</div></div>
 {% if can_write %}<div class="page-actions mt-14"><button class="btn primary" type="submit">Einstellungen speichern</button></div>{% else %}<div class="alert info mt-14">Sie besitzen Leserechte, aber keine Berechtigung zum Ändern dieser Einstellungen.</div>{% endif %}
 </form>
 {% endblock %}
