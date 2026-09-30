@@ -2500,7 +2500,11 @@ def settings_view(request):
         'backup_critical_hours': values.get('backup_critical_hours', 24),
         'restore_warning_days': values.get('restore_warning_days', 35),
     }
-    form = GeneralSettingsForm(request.POST or None, initial=initial)
+    form = GeneralSettingsForm(
+        request.POST or None,
+        initial=initial,
+        graph_secret_configured=graph_transport['client_secret_configured'],
+    )
     if request.method == 'POST':
         if not has_perm(request.user, 'settings.write'):
             raise PermissionDenied
