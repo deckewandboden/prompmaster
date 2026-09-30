@@ -22,10 +22,17 @@
 </div>
 
 <div class="card mb-14">
-  <h2>E-Mail-Versandweg</h2>
-  <p class="muted">Wählen Sie den aktiven Versandweg. SMTP- und Microsoft-Graph-Konfiguration bleiben parallel gespeichert, damit ein späterer Providerwechsel ohne Neuaufbau möglich ist.</p>
+  <h2>E-Mail-Versandweg &amp; Fallback</h2>
+  <p class="muted">Alle Provider bleiben parallel gespeichert. Im manuellen Modus wird nur der primäre Versandweg verwendet. Im automatischen Modus wird bei eindeutig nicht zugestellten Fehlern in der festgelegten Reihenfolge weitergeschaltet; bei unklaren Fehlern erfolgt bewusst kein automatischer Fallback, um Doppelversand zu vermeiden.</p>
   <div class="form">
-    <label>{{ form.mail_provider.label }}{{ form.mail_provider }}{{ form.mail_provider.errors }}{% if form.mail_provider.help_text %}<span class="tiny muted">{{ form.mail_provider.help_text }}</span>{% endif %}</label>
+    <div class="row">
+      <label>{{ form.mail_delivery_mode.label }}{{ form.mail_delivery_mode }}{{ form.mail_delivery_mode.errors }}{% if form.mail_delivery_mode.help_text %}<span class="tiny muted">{{ form.mail_delivery_mode.help_text }}</span>{% endif %}</label>
+      <label>{{ form.mail_provider.label }}{{ form.mail_provider }}{{ form.mail_provider.errors }}{% if form.mail_provider.help_text %}<span class="tiny muted">{{ form.mail_provider.help_text }}</span>{% endif %}</label>
+    </div>
+    <div class="row">
+      <label>{{ form.mail_fallback_1.label }}{{ form.mail_fallback_1 }}{{ form.mail_fallback_1.errors }}</label>
+      <label>{{ form.mail_fallback_2.label }}{{ form.mail_fallback_2 }}{{ form.mail_fallback_2.errors }}</label>
+    </div>
   </div>
 </div>
 
@@ -51,8 +58,8 @@
 </div>
 
 <div class="card mb-14">
-  <h2>SMTP-Versand</h2>
-  <p class="muted">Transport zum Mailprovider. Das SMTP-Passwort wird verschlüsselt gespeichert und niemals wieder im Klartext angezeigt.</p>
+  <h2>SMTP 1</h2>
+  <p class="muted">Erster SMTP-Transport. Das Passwort wird verschlüsselt gespeichert und niemals wieder im Klartext angezeigt.</p>
   <div class="form">
     <div class="row">
       <label>{{ form.smtp_host.label }}{{ form.smtp_host }}{{ form.smtp_host.errors }}{% if form.smtp_host.help_text %}<span class="tiny muted">{{ form.smtp_host.help_text }}</span>{% endif %}</label>
@@ -64,6 +71,23 @@
     </div>
     <input type="hidden" name="smtp_use_tls" value="0">
     <label>{{ form.smtp_use_tls }} {{ form.smtp_use_tls.label }}{{ form.smtp_use_tls.errors }}</label>
+  </div>
+</div>
+
+<div class="card mb-14">
+  <h2>SMTP 2 · Fallback / Test</h2>
+  <p class="muted">Optionaler zweiter SMTP-Transport. Hier können Sie z. B. denselben SMTP-Relay eintragen, den auch Listmonk verwendet, und manuell oder automatisch zwischen SMTP 1 und SMTP 2 wechseln.</p>
+  <div class="form">
+    <div class="row">
+      <label>{{ form.smtp2_host.label }}{{ form.smtp2_host }}{{ form.smtp2_host.errors }}{% if form.smtp2_host.help_text %}<span class="tiny muted">{{ form.smtp2_host.help_text }}</span>{% endif %}</label>
+      <label>{{ form.smtp2_port.label }}{{ form.smtp2_port }}{{ form.smtp2_port.errors }}</label>
+    </div>
+    <div class="row">
+      <label>{{ form.smtp2_username.label }}{{ form.smtp2_username }}{{ form.smtp2_username.errors }}</label>
+      <label>{{ form.smtp2_password.label }}{{ form.smtp2_password }}{{ form.smtp2_password.errors }}{% if form.smtp2_password.help_text %}<span class="tiny muted">{{ form.smtp2_password.help_text }}</span>{% endif %}</label>
+    </div>
+    <input type="hidden" name="smtp2_use_tls" value="0">
+    <label>{{ form.smtp2_use_tls }} {{ form.smtp2_use_tls.label }}{{ form.smtp2_use_tls.errors }}</label>
   </div>
 </div>
 
