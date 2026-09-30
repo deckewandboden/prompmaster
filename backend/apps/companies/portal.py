@@ -32,7 +32,7 @@ from apps.orders.models import Order
 from apps.payments.models import Payment
 from apps.proaccess.services import active_product_assignment, assignment_expiry_context
 from apps.payments.mollie import MollieClient, MollieError
-from apps.support.models import SupportRequest
+from apps.support.models import SupportMessage, SupportRequest
 from .forms import CompanyForm, InviteForm, PrivateCustomerForm, SupportForm, UserProfileForm
 from .models import Invitation, Membership
 from .services import create_invitation, deactivate_company_member, reactivate_company_member, transfer_admin
@@ -850,9 +850,18 @@ def security(request):
     return render(request, 'portal/security.html')
 
 
+def _visible_support_requests(request):
+    company_obj, membership = _ctx(request)
+    if company_obj and membership and membership.role == 'admin':
+        queryset = SupportRequest.objects.filter(company=company_obj)
+    else:
+        queryset = SupportRequest.objects.filter(user=request.user)
+    return queryset, company_obj, membership
+
+
 @login_required
 def help_view(request):
-    company_obj, membership = _ctx(request)
+    history, company_obj, membership = _visible_support_requests(request)
     if company_obj and membership and membership.role == 'admin':
         visible_licenses = License.objects.filter(company=company_obj).select_related('product')
     elif company_obj:
@@ -874,21 +883,6 @@ def help_view(request):
             company=company_obj,
             **form.cleaned_data,
         )
-        queue_email(
-            'support_confirmation',
-            request.user.email,
-            {'subject': form.cleaned_data['subject']},
-        )
-        from apps.core.settings_store import get_setting
-        support_email = get_setting('support_email', 'promptmaster@netstyle.de')
-        queue_email('support_notification', support_email, {
-            'subject': form.cleaned_data['subject'],
-            'category': support_request.get_category_display(),
-            'customer': company_obj.name if company_obj else request.user.full_name,
-            'email': request.user.email,
-            'message': form.cleaned_data['message'],
-            'license': support_request.license.license_number if support_request.license else '–',
-        })
         audit(
             request.user,
             'support.created',
@@ -899,13 +893,48 @@ def help_view(request):
             },
             request=request,
         )
-        messages.success(request, 'Nachricht wurde übermittelt.')
-        return redirect('portal:help')
 
-    if company_obj and membership and membership.role == 'admin':
-        history = SupportRequest.objects.filter(company=company_obj)
-    else:
-        history = SupportRequest.objects.filter(user=request.user)
+        notification_failed = False
+        try:
+            queue_email(
+                'support_confirmation',
+                request.user.email,
+                {'subject': form.cleaned_data['subject']},
+            )
+        except Exception:
+            notification_failed = True
+            logger.exception(
+                'Support request persisted but customer confirmation could not be queued',
+                extra={'support_request_id': str(support_request.pk)},
+            )
+
+        from apps.core.settings_store import get_setting
+        support_email = get_setting('support_email', 'promptmaster@netstyle.de')
+        try:
+            queue_email('support_notification', support_email, {
+                'subject': form.cleaned_data['subject'],
+                'category': support_request.get_category_display(),
+                'customer': company_obj.name if company_obj else request.user.full_name,
+                'email': request.user.email,
+                'message': form.cleaned_data['message'],
+                'license': support_request.license.license_number if support_request.license else '–',
+            })
+        except Exception:
+            notification_failed = True
+            logger.exception(
+                'Support request persisted but staff notification could not be queued',
+                extra={'support_request_id': str(support_request.pk)},
+            )
+
+        if notification_failed:
+            messages.warning(
+                request,
+                'Nachricht wurde gespeichert. Eine E-Mail-Benachrichtigung konnte jedoch nicht eingeplant werden.',
+            )
+        else:
+            messages.success(request, 'Nachricht wurde übermittelt.')
+        return redirect('portal:support_detail', pk=support_request.pk)
+
     history = history.select_related('license', 'license__product')
     return render(
         request,
@@ -913,6 +942,31 @@ def help_view(request):
         {
             'form': form,
             'support_history': history.order_by('-created_at')[:100],
+        },
+    )
+
+
+@login_required
+def support_detail(request, pk):
+    visible, _company_obj, _membership = _visible_support_requests(request)
+    support_request = get_object_or_404(
+        visible.select_related('user', 'company', 'license', 'license__product'),
+        pk=pk,
+    )
+    thread_messages = (
+        SupportMessage.objects.filter(
+            support_request=support_request,
+            visibility='customer',
+        )
+        .select_related('author_user', 'notification_email')
+        .order_by('created_at', 'id')
+    )
+    return render(
+        request,
+        'portal/support_detail.html',
+        {
+            'support_request': support_request,
+            'thread_messages': thread_messages,
         },
     )
 
@@ -1141,14 +1195,10 @@ def renew(request, pk):
     from apps.orders.services import create_order
 
     company_obj, membership = _ctx(request)
-    if company_obj and membership and membership.role == 'admin':
+    if company_obj:
+        if not membership or membership.role != 'admin':
+            raise PermissionDenied
         visible = License.objects.filter(company=company_obj)
-    elif company_obj:
-        visible = License.objects.filter(
-            company=company_obj,
-            assignments__user=request.user,
-            assignments__ended_at__isnull=True,
-        ).distinct()
     else:
         visible = License.objects.filter(owner_user=request.user)
     license_obj = get_object_or_404(visible.select_related('product'), pk=pk)
@@ -1192,14 +1242,10 @@ def renew(request, pk):
 def renew_index(request):
     company_obj, membership = _ctx(request)
     queryset = License.objects.select_related('product')
-    if company_obj and membership and membership.role == 'admin':
+    if company_obj:
+        if not membership or membership.role != 'admin':
+            raise PermissionDenied
         queryset = queryset.filter(company=company_obj)
-    elif company_obj:
-        queryset = queryset.filter(
-            company=company_obj,
-            assignments__user=request.user,
-            assignments__ended_at__isnull=True,
-        ).distinct()
     else:
         queryset = queryset.filter(owner_user=request.user)
     queryset = queryset.exclude(
