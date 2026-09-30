@@ -24,7 +24,7 @@
 <a class="{% nav_class request 'company' %}" href="{% url 'portal:company' %}"><span class="ico">▥</span><span class="label">Unternehmen</span></a>
 {% endif %}
 <a class="{% nav_class request 'profile,security,privacy,more' %}" href="{% url 'portal:profile' %}"><span class="ico">⚙</span><span class="label">Einstellungen</span></a>
-<a class="{% nav_class request 'help' %}" href="{% url 'portal:help' %}"><span class="ico">?</span><span class="label">Hilfe &amp; Kontakt</span></a>
+<a class="{% nav_class request 'help,support_detail' %}" href="{% url 'portal:help' %}"><span class="ico">?</span><span class="label">Hilfe &amp; Kontakt</span></a>
 <a href="{% url 'accounts:logout' %}"><span class="ico">↪</span><span class="label">Abmelden</span></a>
 {% endblock %}
 {% block mobile %}
@@ -34,9 +34,9 @@
 <a class="{% nav_class request 'licenses,license_detail,renew,renew_index,claim_assignment_link' %}" href="{% url 'portal:licenses' %}"><b>▣</b>Lizenzen</a>
 <a class="{% nav_class request 'devices,device_revoke' %}" href="{% url 'portal:devices' %}"><b>▤</b>Geräte</a>
 {% if current_membership and current_membership.role == 'admin' %}
-<a class="{% nav_class request 'search,buy,orders,company,profile,security,privacy,help,more' %}" href="{% url 'portal:more' %}"><b>⋯</b>Mehr</a>
+<a class="{% nav_class request 'search,buy,orders,company,profile,security,privacy,help,support_detail,more' %}" href="{% url 'portal:more' %}"><b>⋯</b>Mehr</a>
 {% else %}
-<a class="{% nav_class request 'search,buy,orders,company,help,more' %}" href="{% url 'portal:more' %}"><b>⋯</b>Mehr</a>
+<a class="{% nav_class request 'search,buy,orders,company,help,support_detail,more' %}" href="{% url 'portal:more' %}"><b>⋯</b>Mehr</a>
 {% endif %}
 </div>
 {% endblock %}
