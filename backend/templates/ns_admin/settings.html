@@ -22,6 +22,14 @@
 </div>
 
 <div class="card mb-14">
+  <h2>E-Mail-Versandweg</h2>
+  <p class="muted">Wählen Sie den aktiven Versandweg. SMTP- und Microsoft-Graph-Konfiguration bleiben parallel gespeichert, damit ein späterer Providerwechsel ohne Neuaufbau möglich ist.</p>
+  <div class="form">
+    <label>{{ form.mail_provider.label }}{{ form.mail_provider }}{{ form.mail_provider.errors }}{% if form.mail_provider.help_text %}<span class="tiny muted">{{ form.mail_provider.help_text }}</span>{% endif %}</label>
+  </div>
+</div>
+
+<div class="card mb-14">
   <h2>E-Mail-Absender &amp; Domain</h2>
   <p class="muted">Die Absenderadresse wird beim SMTP-Versand direkt aus diesen Einstellungen gelesen. SPF, DKIM und DMARC sind hier als DNS-Sollwerte dokumentiert; das Speichern verändert keine DNS-Zone.</p>
   <div class="form">
@@ -56,6 +64,21 @@
     </div>
     <input type="hidden" name="smtp_use_tls" value="0">
     <label>{{ form.smtp_use_tls }} {{ form.smtp_use_tls.label }}{{ form.smtp_use_tls.errors }}</label>
+  </div>
+</div>
+
+<div class="card mb-14">
+  <h2>Microsoft 365 / Entra ID (Graph)</h2>
+  <p class="muted">Alternative zu SMTP für Exchange Online. Das Client Secret wird verschlüsselt gespeichert und niemals wieder im Klartext angezeigt.</p>
+  <div class="form">
+    <div class="row">
+      <label>{{ form.graph_tenant_id.label }}{{ form.graph_tenant_id }}{{ form.graph_tenant_id.errors }}{% if form.graph_tenant_id.help_text %}<span class="tiny muted">{{ form.graph_tenant_id.help_text }}</span>{% endif %}</label>
+      <label>{{ form.graph_client_id.label }}{{ form.graph_client_id }}{{ form.graph_client_id.errors }}{% if form.graph_client_id.help_text %}<span class="tiny muted">{{ form.graph_client_id.help_text }}</span>{% endif %}</label>
+    </div>
+    <div class="row">
+      <label>{{ form.graph_sender.label }}{{ form.graph_sender }}{{ form.graph_sender.errors }}{% if form.graph_sender.help_text %}<span class="tiny muted">{{ form.graph_sender.help_text }}</span>{% endif %}</label>
+      <label>{{ form.graph_client_secret.label }}{{ form.graph_client_secret }}{{ form.graph_client_secret.errors }}{% if form.graph_client_secret.help_text %}<span class="tiny muted">{{ form.graph_client_secret.help_text }}</span>{% endif %}</label>
+    </div>
   </div>
 </div>
 
