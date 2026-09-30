@@ -297,6 +297,29 @@ class CustomerPortalTenantIsolationTests(TestCase):
             ).exists()
         )
 
+    def test_internal_staff_and_inactive_company_are_blocked_from_customer_portal(self):
+        self._login(self.staff)
+        self.assertEqual(
+            self.client.get(reverse('portal:dashboard')).status_code,
+            403,
+        )
+
+        self.company_a.status = 'inactive'
+        self.company_a.save(update_fields=['status', 'updated_at'])
+        self._login(self.admin_a)
+        self.assertEqual(
+            self.client.get(reverse('portal:dashboard')).status_code,
+            403,
+        )
+        self.assertEqual(
+            self.client.get(reverse('portal:licenses')).status_code,
+            403,
+        )
+        self.assertEqual(
+            self.client.get(reverse('portal:help')).status_code,
+            403,
+        )
+
     @patch('apps.companies.portal.queue_email', side_effect=RuntimeError('mail unavailable'))
     def test_support_request_survives_notification_failure(self, _queue_email):
         self._login(self.member_a)
