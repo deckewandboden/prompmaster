@@ -408,6 +408,7 @@ class MollieConfigForm(forms.Form):
 class GeneralSettingsForm(forms.Form):
     support_email = forms.EmailField(label='Support-Empfänger')
     mail_from_email = forms.EmailField(
+        required=False,
         label='Absender-E-Mail',
         help_text='Aktive Absenderadresse für SMTP. Änderungen gelten ohne Container-Neustart.',
     )
@@ -424,6 +425,7 @@ class GeneralSettingsForm(forms.Form):
     )
     mail_domain = forms.CharField(
         max_length=253,
+        required=False,
         label='Mail-Domain',
         help_text='Domain des sichtbaren Absenders, z. B. decke-wand-boden.de oder später promptmaster.ai.',
     )
@@ -462,8 +464,8 @@ class GeneralSettingsForm(forms.Form):
     restore_warning_days = forms.IntegerField(min_value=1, max_value=365, initial=35, label='Restore-Test-Warnung in Tagen')
 
     def clean_mail_domain(self):
-        value = self.cleaned_data['mail_domain'].strip().lower().rstrip('.')
-        if '@' in value or ' ' in value or '.' not in value:
+        value = self.cleaned_data.get('mail_domain', '').strip().lower().rstrip('.')
+        if value and ('@' in value or ' ' in value or '.' not in value):
             raise forms.ValidationError('Bitte eine gültige Domain ohne @ eingeben.')
         return value
 
