@@ -1,0 +1,59 @@
+{% extends 'portal/base.html' %}
+{% block content %}
+<div class="page-head">
+  <div>
+    <h1>{{ support_request.subject }}</h1>
+    <div class="sub">{{ support_request.get_category_display }} · {{ support_request.created_at|date:'d.m.Y H:i' }}</div>
+  </div>
+  <a class="btn secondary" href="{% url 'portal:help' %}">Zurück</a>
+</div>
+
+<div class="grid two">
+  <section class="card">
+    <h2>Anfrage</h2>
+    <div class="statusrow"><span>Status</span><strong>{{ support_request.get_status_display }}</strong></div>
+    <div class="statusrow"><span>Lizenz</span><strong>{% if support_request.license %}{{ support_request.license.license_number }} · {{ support_request.license.product.name }}{% else %}–{% endif %}</strong></div>
+    <div class="message-box">{{ support_request.message|linebreaksbr }}</div>
+  </section>
+
+  <section class="card">
+    <h2>Bearbeitungsstand</h2>
+    <p class="muted">Hier sehen Sie ausschließlich Nachrichten, die für Sie bzw. Ihr Unternehmen bestimmt sind. Interne netstyle-Notizen werden nicht im Kundenportal angezeigt.</p>
+  </section>
+</div>
+
+<section class="card support-thread-card">
+  <div class="support-thread-head">
+    <div>
+      <h2>Verlauf</h2>
+      <div class="sub">Ihre Anfrage und alle für Kunden freigegebenen Antworten.</div>
+    </div>
+  </div>
+
+  <div class="support-thread">
+    <article class="support-thread-entry customer">
+      <div class="support-thread-meta">
+        <strong>{{ support_request.user.full_name|default:support_request.user.email }}</strong>
+        <span>Kunde · {{ support_request.created_at|date:'d.m.Y H:i' }}</span>
+      </div>
+      <div class="support-thread-body">{{ support_request.message|linebreaksbr }}</div>
+    </article>
+
+    {% for item in thread_messages %}
+      <article class="support-thread-entry {% if item.sender_type == 'staff' %}staff{% else %}customer{% endif %}">
+        <div class="support-thread-meta">
+          <strong>
+            {% if item.sender_type == 'staff' %}
+              netstyle Support
+            {% else %}
+              {{ support_request.user.full_name|default:support_request.user.email }}
+            {% endif %}
+          </strong>
+          <span>{{ item.get_sender_type_display }} · {{ item.created_at|date:'d.m.Y H:i' }}</span>
+        </div>
+        <div class="support-thread-body">{{ item.body|linebreaksbr }}</div>
+      </article>
+    {% endfor %}
+  </div>
+</section>
+{% endblock %}
