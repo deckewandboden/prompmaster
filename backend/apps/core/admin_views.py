@@ -2462,6 +2462,7 @@ def user_role_remove(request, pk):
 def settings_view(request):
     values = get_setting('ops_thresholds', {}) or {}
     mail_identity = get_mail_identity()
+    smtp_transport = get_smtp_transport()
     fallback_from_domain = (
         mail_identity['from_email'].rsplit('@', 1)[-1].lower()
         if '@' in mail_identity['from_email']
@@ -2477,10 +2478,10 @@ def settings_view(request):
         'mail_dkim_selector': mail_identity['dkim_selector'],
         'mail_dkim_record': mail_identity['dkim_record'],
         'mail_dmarc_record': mail_identity['dmarc_record'],
-        'smtp_host': get_smtp_transport()['host'],
-        'smtp_port': get_smtp_transport()['port'],
-        'smtp_use_tls': get_smtp_transport()['use_tls'],
-        'smtp_username': get_smtp_transport()['username'],
+        'smtp_host': smtp_transport['host'],
+        'smtp_port': smtp_transport['port'],
+        'smtp_use_tls': smtp_transport['use_tls'],
+        'smtp_username': smtp_transport['username'],
         'disk_warning': values.get('disk_warning', 80),
         'disk_critical': values.get('disk_critical', 90),
         'ram_warning': values.get('ram_warning', 80),
@@ -2515,7 +2516,7 @@ def settings_view(request):
                 'dkim_record': configured_value('mail_dkim_record', 'dkim_record'),
                 'dmarc_record': configured_value('mail_dmarc_record', 'dmarc_record'),
             }
-            current_smtp = get_smtp_transport()
+            current_smtp = smtp_transport
 
             def smtp_value(form_key, transport_key):
                 value = data.pop(form_key)
