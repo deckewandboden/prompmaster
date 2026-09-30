@@ -1718,6 +1718,12 @@ def email(request):
         'graph': graph_configured,
     }
     provider_configured = all(configured.get(item, False) for item in delivery['route'])
+    provider_labels = {
+        'smtp1': 'SMTP 1',
+        'smtp2': 'SMTP 2',
+        'graph': 'Microsoft 365 / Entra ID (Graph)',
+    }
+    delivery_route_labels = [provider_labels.get(item, item) for item in delivery['route']]
     return render(
         request,
         'ns_admin/email.html',
@@ -1726,6 +1732,8 @@ def email(request):
             'recent': EmailMessage.objects.select_related('template').order_by('-created_at')[:20],
             'provider': provider,
             'delivery': delivery,
+            'delivery_route_labels': delivery_route_labels,
+            'provider_labels': provider_labels,
             'provider_configured': provider_configured,
             'provider_configured_map': configured,
             'graph_sender': graph_transport['sender'],
@@ -1751,8 +1759,26 @@ def email_template_edit(request, pk):
 
 @staff_perm('email.read')
 def email_log(request):
-    grid = DataGrid(request, EmailMessage.objects.select_related('template'), search_fields=('recipient', 'subject', 'template__code'), sort_fields={'date': 'created_at', 'recipient': 'recipient', 'template': 'template__code', 'subject': 'subject', 'status': 'status'}, default_sort='-created_at', filters={'status': 'status'}).build()
-    return render(request, 'ns_admin/email_log.html', {'grid': grid, 'filter_options': [('status','Status',EMAIL_STATUS_CHOICES)]})
+    grid = DataGrid(
+        request,
+        EmailMessage.objects.select_related('template'),
+        search_fields=('recipient', 'subject', 'template__code', 'provider_used'),
+        sort_fields={
+            'date': 'created_at',
+            'recipient': 'recipient',
+            'template': 'template__code',
+            'subject': 'subject',
+            'provider': 'provider_used',
+            'status': 'status',
+        },
+        default_sort='-created_at',
+        filters={'status': 'status'},
+    ).build()
+    return render(
+        request,
+        'ns_admin/email_log.html',
+        {'grid': grid, 'filter_options': [('status', 'Status', EMAIL_STATUS_CHOICES)]},
+    )
 
 
 @staff_perm('payments.read')
