@@ -2318,6 +2318,15 @@ def run_backend_ui_smoke(browser, fixture=None) -> None:
                 if 'Repräsentativer Browser-Smoke-Datensatz.' not in page.locator('.support-thread').inner_text():
                     raise AssertionError('admin support thread does not show the original request')
 
+                smoke_reply = 'Browser-Smoke Support-Antwort erfolgreich gespeichert.'
+                reply_form.locator('textarea[name="message"]').fill(smoke_reply)
+                with page.expect_navigation(wait_until='networkidle'):
+                    reply_form.get_by_role('button', name='Antwort senden').click()
+                if page.url.endswith('/reply/'):
+                    raise AssertionError('admin support reply POST did not redirect to detail page')
+                if smoke_reply not in page.locator('.support-thread').inner_text():
+                    raise AssertionError('admin support reply is missing from conversation after submit')
+
             if role == 'portal':
                 page.goto(base + 'portal/profile/', wait_until='networkidle')
                 profile_labels = set(page.locator('label').all_text_contents())
