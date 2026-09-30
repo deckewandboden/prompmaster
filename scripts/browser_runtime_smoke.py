@@ -2319,17 +2319,14 @@ def run_backend_ui_smoke(browser, fixture=None) -> None:
 
                 form_spacing = reply_textarea.evaluate(
                     """el => {
-                      const label = el.closest('label');
-                      const labelStyle = getComputedStyle(label);
                       const fieldStyle = getComputedStyle(el);
                       return {
-                        labelDisplay: labelStyle.display,
-                        labelGap: parseFloat(labelStyle.rowGap || labelStyle.gap || '0') || 0,
+                        marginTop: parseFloat(fieldStyle.marginTop || '0') || 0,
                         outlineOffset: parseFloat(fieldStyle.outlineOffset || '0') || 0,
                       };
                     }"""
                 )
-                if form_spacing['labelDisplay'] != 'grid' or form_spacing['labelGap'] < 6:
+                if form_spacing['marginTop'] < 6:
                     raise AssertionError(
                         f'admin form label/field spacing is insufficient: {form_spacing}'
                     )
@@ -2372,6 +2369,16 @@ def run_backend_ui_smoke(browser, fixture=None) -> None:
                     raise AssertionError(
                         f'portal profile: raw English/internal address labels visible: {flattened_labels}'
                     )
+
+                checkbox = page.locator('.form label > input[type="checkbox"]').first
+                if checkbox.count() and checkbox.is_visible():
+                    checkbox_label_display = checkbox.evaluate(
+                        "el => getComputedStyle(el.parentElement).display"
+                    )
+                    if checkbox_label_display == 'grid':
+                        raise AssertionError(
+                            'portal profile: inline checkbox label was broken by generic form spacing'
+                        )
 
                 company_response = page.goto(base + 'portal/company/', wait_until='networkidle')
                 if company_response and company_response.status == 200:
