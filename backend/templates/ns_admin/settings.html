@@ -42,6 +42,23 @@
   </div>
 </div>
 
+<div class="card mb-14">
+  <h2>SMTP-Versand</h2>
+  <p class="muted">Transport zum Mailprovider. Das SMTP-Passwort wird verschlüsselt gespeichert und niemals wieder im Klartext angezeigt.</p>
+  <div class="form">
+    <div class="row">
+      <label>{{ form.smtp_host.label }}{{ form.smtp_host }}{{ form.smtp_host.errors }}{% if form.smtp_host.help_text %}<span class="tiny muted">{{ form.smtp_host.help_text }}</span>{% endif %}</label>
+      <label>{{ form.smtp_port.label }}{{ form.smtp_port }}{{ form.smtp_port.errors }}{% if form.smtp_port.help_text %}<span class="tiny muted">{{ form.smtp_port.help_text }}</span>{% endif %}</label>
+    </div>
+    <div class="row">
+      <label>{{ form.smtp_username.label }}{{ form.smtp_username }}{{ form.smtp_username.errors }}{% if form.smtp_username.help_text %}<span class="tiny muted">{{ form.smtp_username.help_text }}</span>{% endif %}</label>
+      <label>{{ form.smtp_password.label }}{{ form.smtp_password }}{{ form.smtp_password.errors }}{% if form.smtp_password.help_text %}<span class="tiny muted">{{ form.smtp_password.help_text }}</span>{% endif %}</label>
+    </div>
+    <input type="hidden" name="smtp_use_tls" value="0">
+    <label>{{ form.smtp_use_tls }} {{ form.smtp_use_tls.label }}{{ form.smtp_use_tls.errors }}</label>
+  </div>
+</div>
+
 <div class="card"><h2>System &amp; Betrieb</h2><div class="form">
   <label>{{ form.cpu_warning.label }}{{ form.cpu_warning }}{{ form.cpu_warning.errors }}</label>
   <div class="row"><label>{{ form.disk_warning.label }}{{ form.disk_warning }}{{ form.disk_warning.errors }}</label><label>{{ form.disk_critical.label }}{{ form.disk_critical }}{{ form.disk_critical.errors }}</label></div>
