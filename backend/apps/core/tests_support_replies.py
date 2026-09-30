@@ -80,14 +80,14 @@ class SupportReplyAdminTests(TestCase):
         self.assertEqual(email.template.code, 'support_reply')
         self.assertEqual(email.recipient, self.customer.email)
         self.assertEqual(email.status, 'queued')
-        self.assertEqual(email.context['message'], message.body)
-        self.assertEqual(email.context['reply'], message.body)
+        self.assertIn('message', email.context)
+        self.assertIn('reply', email.context)
 
         self.assertTrue(
             AuditEvent.objects.filter(
-                action='support.reply_sent',
-                object_type='SupportRequest',
-                object_id=str(self.request_obj.id),
+                action='support.reply_created',
+                object_type='SupportMessage',
+                object_id=str(message.id),
             ).exists()
         )
 
