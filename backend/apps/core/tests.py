@@ -490,6 +490,42 @@ class MailIdentitySettingsTests(TestCase):
         )
         send_smtp.assert_not_called()
 
+    def test_smtp_authentication_error_is_failover_safe(self):
+        import smtplib
+        from apps.notifications.services import _smtp_error_allows_failover
+
+        exc = smtplib.SMTPAuthenticationError(535, b'Authentication failed')
+        self.assertTrue(_smtp_error_allows_failover(exc))
+
+    def test_smtp_temporary_4xx_is_failover_safe_but_permanent_5xx_is_not(self):
+        import smtplib
+        from apps.notifications.services import _smtp_error_allows_failover
+
+        self.assertTrue(
+            _smtp_error_allows_failover(
+                smtplib.SMTPDataError(451, b'Temporary local problem')
+            )
+        )
+        self.assertFalse(
+            _smtp_error_allows_failover(
+                smtplib.SMTPDataError(550, b'Permanent rejection')
+            )
+        )
+        self.assertTrue(
+            _smtp_error_allows_failover(
+                smtplib.SMTPRecipientsRefused(
+                    {'recipient@example.test': (450, b'Mailbox busy')}
+                )
+            )
+        )
+        self.assertFalse(
+            _smtp_error_allows_failover(
+                smtplib.SMTPRecipientsRefused(
+                    {'recipient@example.test': (550, b'Unknown user')}
+                )
+            )
+        )
+
     def test_smtp_transport_uses_encrypted_secret_and_runtime_settings(self):
         from apps.core.settings_store import set_setting
         from apps.integrations.services import set_secret
