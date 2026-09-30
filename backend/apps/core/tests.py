@@ -308,6 +308,67 @@ class MailIdentitySettingsTests(TestCase):
         self.assertIn('mail_dmarc_record', form.errors)
 
 
+    def test_runtime_provider_and_graph_transport_use_db_settings(self):
+        from apps.core.settings_store import set_setting
+        from apps.integrations.services import set_secret
+        from apps.notifications.services import get_graph_transport, get_mail_provider
+
+        set_setting('mail_provider', 'graph')
+        set_setting(
+            'mail_graph',
+            {
+                'tenant_id': 'tenant-runtime',
+                'client_id': 'client-runtime',
+                'sender': 'promptmaster@netstyle.de',
+            },
+        )
+        set_secret('graph_client_secret', 'Graph-Test-Secret-2026!')
+
+        self.assertEqual(get_mail_provider(), 'graph')
+        graph = get_graph_transport()
+        self.assertEqual(graph['tenant_id'], 'tenant-runtime')
+        self.assertEqual(graph['client_id'], 'client-runtime')
+        self.assertEqual(graph['sender'], 'promptmaster@netstyle.de')
+        self.assertEqual(graph['client_secret'], 'Graph-Test-Secret-2026!')
+        self.assertTrue(graph['client_secret_configured'])
+
+    def test_graph_provider_requires_non_secret_identifiers_in_form(self):
+        from apps.core.admin_forms import GeneralSettingsForm
+
+        form = GeneralSettingsForm(
+            data={
+                'support_email': 'support@example.test',
+                'mail_provider': 'graph',
+                'mail_from_email': 'promptmaster@netstyle.de',
+                'mail_from_name': 'PromptMaster',
+                'mail_reply_to': '',
+                'mail_domain': 'netstyle.de',
+                'mail_spf_record': '',
+                'mail_dkim_selector': '',
+                'mail_dkim_record': '',
+                'mail_dmarc_record': '',
+                'smtp_host': '',
+                'smtp_port': '',
+                'smtp_username': '',
+                'graph_tenant_id': '',
+                'graph_client_id': '',
+                'graph_sender': '',
+                'disk_warning': 80,
+                'disk_critical': 90,
+                'ram_warning': 80,
+                'ram_critical': 90,
+                'cpu_warning': 80,
+                'backup_warning_hours': 8,
+                'backup_critical_hours': 24,
+                'restore_warning_days': 35,
+            }
+        )
+
+        self.assertFalse(form.is_valid())
+        self.assertIn('graph_tenant_id', form.errors)
+        self.assertIn('graph_client_id', form.errors)
+        self.assertIn('graph_sender', form.errors)
+
     def test_smtp_transport_uses_encrypted_secret_and_runtime_settings(self):
         from apps.core.settings_store import set_setting
         from apps.integrations.services import set_secret
