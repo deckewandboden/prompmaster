@@ -2313,8 +2313,40 @@ def run_backend_ui_smoke(browser, fixture=None) -> None:
                 if not page.get_by_role('heading', name='Verlauf').is_visible():
                     raise AssertionError('admin support conversation timeline is not visible')
                 reply_form = page.locator('form[action$="/reply/"]')
-                if reply_form.count() != 1 or not reply_form.locator('textarea[name="message"]').is_visible():
+                reply_textarea = reply_form.locator('textarea[name="message"]')
+                if reply_form.count() != 1 or not reply_textarea.is_visible():
                     raise AssertionError('admin support reply textarea/form is missing')
+
+                form_spacing = reply_textarea.evaluate(
+                    """el => {
+                      const label = el.closest('label');
+                      const labelStyle = getComputedStyle(label);
+                      const fieldStyle = getComputedStyle(el);
+                      return {
+                        labelDisplay: labelStyle.display,
+                        labelGap: parseFloat(labelStyle.rowGap || labelStyle.gap || '0') || 0,
+                        outlineOffset: parseFloat(fieldStyle.outlineOffset || '0') || 0,
+                      };
+                    }"""
+                )
+                if form_spacing['labelDisplay'] != 'grid' or form_spacing['labelGap'] < 6:
+                    raise AssertionError(
+                        f'admin form label/field spacing is insufficient: {form_spacing}'
+                    )
+
+                thread_gap = page.locator('.support-thread-card').evaluate(
+                    """card => {
+                      const grid = document.querySelector('.support-detail-grid');
+                      const cr = card.getBoundingClientRect();
+                      const gr = grid.getBoundingClientRect();
+                      return cr.top - gr.bottom;
+                    }"""
+                )
+                if thread_gap < 22:
+                    raise AssertionError(
+                        f'admin support conversation card gap is insufficient: {thread_gap}'
+                    )
+
                 if 'Repräsentativer Browser-Smoke-Datensatz.' not in page.locator('.support-thread').inner_text():
                     raise AssertionError('admin support thread does not show the original request')
 
