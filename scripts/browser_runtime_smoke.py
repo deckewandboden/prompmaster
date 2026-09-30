@@ -251,7 +251,7 @@ def _backend_fixture() -> dict:
     from apps.orders.models import Order, OrderItem
     from apps.payments.models import Payment
     from apps.prompts.models import PromptDefinition
-    from apps.support.models import SupportRequest
+    from apps.support.models import SupportMessage, SupportRequest
 
     now = timezone.now()
     password = 'BrowserSmoke!2026-Strong'
@@ -507,6 +507,19 @@ def _backend_fixture() -> dict:
             'message': 'Repräsentativer Browser-Smoke-Datensatz.',
             'status': 'new',
         },
+    )
+    SupportMessage.objects.filter(support_request=support_request).delete()
+    SupportMessage.objects.create(
+        support_request=support_request,
+        sender_type='staff',
+        visibility='customer',
+        body='Browser-Smoke sichtbare Kundenantwort.',
+    )
+    SupportMessage.objects.create(
+        support_request=support_request,
+        sender_type='staff',
+        visibility='internal',
+        body='BROWSER-SMOKE INTERNE NOTIZ DARF NICHT LEAKEN',
     )
 
     definition = PromptDefinition.objects.filter(active=True).prefetch_related('versions').order_by('task_id').first()
@@ -2024,6 +2037,7 @@ def run_backend_ui_smoke(browser, fixture=None) -> None:
             ('portal/profile/', 'Portal Einstellungen'),
             ('portal/security/', 'Portal Sicherheit'),
             ('portal/help/', 'Portal Hilfe'),
+            (f'portal/help/{fixture["support_id"]}/', 'Portal Supportverlauf'),
         ]
         admin_routes = [
             ('ns-admin/', 'Admin Dashboard'),
@@ -2108,6 +2122,12 @@ def run_backend_ui_smoke(browser, fixture=None) -> None:
         forbidden_admin = member_page.goto(base + 'ns-admin/', wait_until='networkidle')
         if not forbidden_admin or forbidden_admin.status != 403:
             raise AssertionError('customer member can enter the netstyle admin domain')
+        for forbidden_path in ('portal/team/', 'portal/orders/', 'portal/licenses/buy/', 'portal/licenses/renew/'):
+            denied_response = member_page.goto(base + forbidden_path, wait_until='networkidle')
+            if not denied_response or denied_response.status != 403:
+                raise AssertionError(
+                    f'company member reached admin/billing portal route: {forbidden_path}'
+                )
         member_context.close()
 
         # First-time netstyle admin MFA must finish inside the admin backend,
@@ -2357,6 +2377,16 @@ def run_backend_ui_smoke(browser, fixture=None) -> None:
                     raise AssertionError('admin support reply is missing from conversation after submit')
 
             if role == 'portal':
+                page.goto(
+                    base + f'portal/help/{fixture["support_id"]}/',
+                    wait_until='networkidle',
+                )
+                portal_thread = page.locator('.support-thread').inner_text()
+                if 'Browser-Smoke sichtbare Kundenantwort.' not in portal_thread:
+                    raise AssertionError('customer portal support thread misses customer-visible staff reply')
+                if 'BROWSER-SMOKE INTERNE NOTIZ DARF NICHT LEAKEN' in portal_thread:
+                    raise AssertionError('customer portal leaked internal support note')
+
                 page.goto(base + 'portal/profile/', wait_until='networkidle')
                 profile_labels = set(page.locator('label').all_text_contents())
                 flattened_labels = ' '.join(profile_labels)
