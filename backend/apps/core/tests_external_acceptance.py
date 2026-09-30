@@ -113,7 +113,9 @@ class ExternalGraphAcceptanceFlowTests(TestCase):
     @patch('apps.notifications.services._send_graph')
     def test_graph_acceptance_uses_persisted_success_and_real_retry_state_path(self, send_graph):
         def provider(message, _body):
-            if settings.GRAPH_SENDER == INVALID_SENDER:
+            from apps.notifications.services import get_graph_transport
+
+            if get_graph_transport()['sender'] == INVALID_SENDER:
                 response = requests.Response()
                 response.status_code = 404
                 response.url = 'https://graph.microsoft.com/v1.0/users/invalid/sendMail'
