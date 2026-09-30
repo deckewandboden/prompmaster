@@ -406,7 +406,18 @@ class MollieConfigForm(forms.Form):
 
 
 class GeneralSettingsForm(forms.Form):
+    MAIL_PROVIDER_CHOICES = [
+        ('smtp', 'SMTP (z. B. IONOS / externer Mailserver)'),
+        ('graph', 'Microsoft 365 / Entra ID (Microsoft Graph)'),
+    ]
+
     support_email = forms.EmailField(label='Support-Empfänger')
+    mail_provider = forms.ChoiceField(
+        choices=MAIL_PROVIDER_CHOICES,
+        required=False,
+        label='Versandweg',
+        help_text='SMTP und Microsoft Graph können parallel konfiguriert bleiben; aktiv ist nur der ausgewählte Versandweg.',
+    )
     mail_from_email = forms.EmailField(
         required=False,
         label='Absender-E-Mail',
@@ -484,6 +495,30 @@ class GeneralSettingsForm(forms.Form):
         label='SMTP-Passwort',
         help_text='Leer lassen, um das gespeicherte Passwort unverändert zu lassen.',
     )
+    graph_tenant_id = forms.CharField(
+        max_length=120,
+        required=False,
+        label='Entra Tenant ID',
+        help_text='Verzeichnis-/Mandanten-ID des Microsoft-365-Tenants.',
+    )
+    graph_client_id = forms.CharField(
+        max_length=120,
+        required=False,
+        label='Entra Client ID',
+        help_text='Anwendungs-/Client-ID der App-Registrierung.',
+    )
+    graph_sender = forms.EmailField(
+        required=False,
+        label='Microsoft-365-Absender',
+        help_text='Postfach, über das Microsoft Graph senden soll, z. B. promptmaster@netstyle.de.',
+    )
+    graph_client_secret = forms.CharField(
+        max_length=500,
+        required=False,
+        widget=forms.PasswordInput(render_value=False),
+        label='Entra Client Secret',
+        help_text='Leer lassen, um das gespeicherte Secret unverändert zu lassen.',
+    )
     disk_warning = forms.IntegerField(min_value=1, max_value=99, initial=80, label='Datenträger-Warnung in %')
     disk_critical = forms.IntegerField(min_value=2, max_value=100, initial=90, label='Datenträger kritisch in %')
     ram_warning = forms.IntegerField(min_value=1, max_value=99, initial=80, label='RAM-Warnung in %')
@@ -516,6 +551,16 @@ class GeneralSettingsForm(forms.Form):
         for warning, critical in [('disk_warning', 'disk_critical'), ('ram_warning', 'ram_critical'), ('backup_warning_hours', 'backup_critical_hours')]:
             if data.get(warning) is not None and data.get(critical) is not None and data[warning] >= data[critical]:
                 self.add_error(critical, 'Der kritische Wert muss über dem Warnwert liegen.')
+        provider = data.get('mail_provider')
+        if provider == 'smtp':
+            for field in ('smtp_host', 'smtp_port', 'smtp_username'):
+                if not data.get(field):
+                    self.add_error(field, 'Für SMTP ist dieses Feld erforderlich.')
+        elif provider == 'graph':
+            for field in ('graph_tenant_id', 'graph_client_id', 'graph_sender'):
+                if not data.get(field):
+                    self.add_error(field, 'Für Microsoft Graph ist dieses Feld erforderlich.')
+
         from_email = data.get('mail_from_email')
         mail_domain = data.get('mail_domain')
         if from_email and mail_domain:
