@@ -454,6 +454,36 @@ class GeneralSettingsForm(forms.Form):
         label='DMARC Sollwert',
         help_text='Dokumentierter DNS-Sollwert für _dmarc.<Domain>.',
     )
+    smtp_host = forms.CharField(
+        max_length=253,
+        required=False,
+        label='SMTP-Server',
+        help_text='Zum Beispiel smtp.ionos.de.',
+    )
+    smtp_port = forms.IntegerField(
+        min_value=1,
+        max_value=65535,
+        required=False,
+        label='SMTP-Port',
+        help_text='Für IONOS mit STARTTLS: 587.',
+    )
+    smtp_use_tls = forms.BooleanField(
+        required=False,
+        label='STARTTLS verwenden',
+    )
+    smtp_username = forms.CharField(
+        max_length=254,
+        required=False,
+        label='SMTP-Benutzername',
+        help_text='Bei IONOS normalerweise die vollständige E-Mail-Adresse.',
+    )
+    smtp_password = forms.CharField(
+        max_length=500,
+        required=False,
+        widget=forms.PasswordInput(render_value=False),
+        label='SMTP-Passwort',
+        help_text='Leer lassen, um das gespeicherte Passwort unverändert zu lassen.',
+    )
     disk_warning = forms.IntegerField(min_value=1, max_value=99, initial=80, label='Datenträger-Warnung in %')
     disk_critical = forms.IntegerField(min_value=2, max_value=100, initial=90, label='Datenträger kritisch in %')
     ram_warning = forms.IntegerField(min_value=1, max_value=99, initial=80, label='RAM-Warnung in %')
