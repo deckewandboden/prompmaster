@@ -140,23 +140,12 @@ def main() -> int:
                 if is_placeholder(values.get(key, '')):
                     fail(errors, f'{key} muss für Microsoft Graph gesetzt sein.')
         elif provider == 'smtp1':
-            if is_placeholder(values.get('SMTP_HOST', '')):
-                fail(errors, 'SMTP_HOST muss für produktiven SMTP-Versand gesetzt sein.')
-            try:
-                smtp_port = int(values.get('SMTP_PORT', '0'))
-            except ValueError:
-                smtp_port = 0
-            if not 1 <= smtp_port <= 65535:
-                fail(errors, 'SMTP_PORT muss für produktiven SMTP-Versand gültig sein.')
-            if values.get('SMTP_USE_TLS') != '1':
-                fail(errors, 'SMTP_USE_TLS muss für produktiven SMTP-Versand auf 1 stehen.')
-            if is_placeholder(values.get('SMTP_USER', '')):
-                fail(errors, 'SMTP_USER muss für produktiven SMTP-Versand gesetzt sein.')
-            if is_placeholder(values.get('SMTP_PASSWORD', '')):
-                fail(errors, 'SMTP_PASSWORD muss für produktiven SMTP-Versand gesetzt sein.')
-            from_email = values.get('EMAIL_FROM', '').strip()
-            if '@' not in from_email or is_placeholder(from_email):
-                fail(errors, 'EMAIL_FROM muss für produktiven SMTP-Versand eine reale Absenderadresse sein.')
+            # SMTP transport/identity may intentionally be stored in the encrypted
+            # runtime settings rather than .env. This static validator can only
+            # validate the baseline provider selector; deploy.sh performs the
+            # authoritative database-backed validate_mail_runtime gate after the
+            # data services are available.
+            pass
         mollie = values.get('MOLLIE_API_KEY', '')
         if not mollie.startswith('live_'):
             fail(errors, 'MOLLIE_API_KEY muss in Produktion ein Mollie-Live-Key (live_…) sein.')
