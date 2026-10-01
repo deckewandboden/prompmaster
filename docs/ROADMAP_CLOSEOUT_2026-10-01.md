@@ -22,6 +22,7 @@ changes alone.
 
 - system-wide admin form-spacing contract so selected controls/help/error text cannot overlap
 - durable Gmail plus-alias support for demo identities
+- dedicated netstyle presentation demo: DEMO-NETSTYLE, 12 active users, Rainer Spickermann as MFA-required company admin, 10 PRO licenses (9 assigned/1 free), 3 Free users, 3 synthetic orders (1/7/+2), 1 open PRO request and no outbound mail/provider calls
 - safe in-place demo-user readdress command that preserves user IDs/password hashes/relationships
 - one canonical default support-reply template contract, while the runtime remains backward compatible
 
