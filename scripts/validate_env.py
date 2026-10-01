@@ -135,16 +135,12 @@ def main() -> int:
                 'Production EMAIL_PROVIDER muss smtp/smtp1 oder graph/microsoft_graph sein. '
                 'Weitere Laufzeit-Fallbacks werden verschlüsselt über die Admin-Einstellungen verwaltet.',
             )
-        if provider == 'graph':
-            for key in ('GRAPH_TENANT_ID', 'GRAPH_CLIENT_ID', 'GRAPH_CLIENT_SECRET', 'GRAPH_SENDER'):
-                if is_placeholder(values.get(key, '')):
-                    fail(errors, f'{key} muss für Microsoft Graph gesetzt sein.')
-        elif provider == 'smtp1':
-            # SMTP transport/identity may intentionally be stored in the encrypted
-            # runtime settings rather than .env. This static validator can only
-            # validate the baseline provider selector; deploy.sh performs the
-            # authoritative database-backed validate_mail_runtime gate after the
-            # data services are available.
+        if provider in {'graph', 'smtp1'}:
+            # Provider-specific transport, identity and secrets may intentionally
+            # live in the encrypted runtime settings rather than .env. This static
+            # validator checks only the allowed baseline provider selector.
+            # deploy.sh performs the authoritative database-backed
+            # validate_mail_runtime gate after the data services are available.
             pass
         mollie = values.get('MOLLIE_API_KEY', '')
         if not mollie.startswith('live_'):
