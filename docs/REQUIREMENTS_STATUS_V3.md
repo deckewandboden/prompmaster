@@ -46,11 +46,18 @@ Intern automatisiert grün nachgewiesen:
 - Clean + idempotenter Bootstrap
 - Runtime Validation, HTTP Load, Backup-Restore-Recovery und External-Caddy-Rehearsal
 
+## Bereits produktiv nachgewiesen
+
+- Zielhost und öffentliche Domain/DNS/TLS über den externen Caddy-Pfad
+- realer SMTP1-Versand über IONOS mit externer Gmail-Zustellung
+- SPF, DKIM und DMARC jeweils PASS; TLS aktiv
+- sender-domain Message-ID statt Container-/Docker-Hostname
+- Google Postmaster Tools für `decke-wand-boden.de` verifiziert
+
 ## Extern/produktiv noch zu bestätigen
 
-- echter Zielhost inklusive Domain/DNS/TLS
 - Mollie Sandbox E2E über öffentlichen Webhook
-- realer Mail-Provider-E2E für das tatsächlich aktivierte Routing; Graph-RBAC nur wenn Graph aktiviert wird
+- Graph-E2E/Application-RBAC nur wenn Graph im finalen Routing tatsächlich aktiviert wird
 - externer S3/restic Backup-/Restore-Drill
 - reale Monitoring-/Alert-Empfänger und Notfallzugang
 - Rechtstexte / Steuerprüfung / menschliche Go-Live-Freigabe
