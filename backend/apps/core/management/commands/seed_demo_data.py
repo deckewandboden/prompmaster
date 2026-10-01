@@ -2,7 +2,6 @@ from __future__ import annotations
 
 import hashlib
 import io
-import os
 import secrets
 from datetime import timedelta
 from decimal import Decimal
@@ -33,8 +32,7 @@ from apps.support.models import SupportRequest
 
 
 DEMO_PREFIX = 'DEMO-'
-DEMO_EMAIL_BASE = os.getenv('PROMPTMASTER_DEMO_EMAIL_BASE', 'testnetstyle@gmail.com').strip().lower()
-LEGACY_DEMO_EMAIL_SUFFIX = '@promptmaster.invalid'
+DEMO_EMAIL_SUFFIX = '@promptmaster.invalid'
 GROSS_PRICE = Decimal('35.88')
 NET_PRICE = Decimal('30.15')
 TAX_RATE = Decimal('19.00')
@@ -45,7 +43,7 @@ COMPANIES = (
         'customer_number': 'DEMO-1001',
         'name': 'Musterwerk GmbH',
         'legal_form': 'GmbH',
-        'email': demo_email(301),
+        'email': 'info.musterwerk@promptmaster.invalid',
         'phone': '+49 271 5550101',
         'street': 'Beispielstraße',
         'house_number': '12',
@@ -60,7 +58,7 @@ COMPANIES = (
         'customer_number': 'DEMO-1002',
         'name': 'Westfalen Consulting GmbH',
         'legal_form': 'GmbH',
-        'email': demo_email(302),
+        'email': 'info.westfalen@promptmaster.invalid',
         'phone': '+49 231 5550202',
         'street': 'Testallee',
         'house_number': '8',
@@ -75,7 +73,7 @@ COMPANIES = (
         'customer_number': 'DEMO-1003',
         'name': 'Nordlicht Digital AG',
         'legal_form': 'AG',
-        'email': demo_email(303),
+        'email': 'info.nordlicht@promptmaster.invalid',
         'phone': '+49 40 5550303',
         'street': 'Demoweg',
         'house_number': '24',
@@ -90,7 +88,7 @@ COMPANIES = (
         'customer_number': 'DEMO-1004',
         'name': 'Südwest Logistik GmbH',
         'legal_form': 'GmbH',
-        'email': demo_email(304),
+        'email': 'info.suedwest@promptmaster.invalid',
         'phone': '+49 721 5550404',
         'street': 'Technologiepark',
         'house_number': '4',
@@ -105,7 +103,7 @@ COMPANIES = (
         'customer_number': 'DEMO-1005',
         'name': 'RheinMain Engineering KG',
         'legal_form': 'KG',
-        'email': demo_email(305),
+        'email': 'info.rheinmain@promptmaster.invalid',
         'phone': '+49 69 5550505',
         'street': 'Mainufer',
         'house_number': '55',
@@ -120,14 +118,14 @@ COMPANIES = (
 
 
 STAFF_ACCOUNTS = (
-    (demo_email(201), 'demo.superadmin1@promptmaster.invalid', 'Sarah', 'Administrator', 'superadmin', 'Superadmin'),
-    (demo_email(202), 'demo.superadmin2@promptmaster.invalid', 'Stefan', 'Administrator', 'superadmin', 'Superadmin'),
-    (demo_email(203), 'demo.support1@promptmaster.invalid', 'Sven', 'Support', 'support', 'Vertrieb / Support'),
-    (demo_email(204), 'demo.support2@promptmaster.invalid', 'Sabine', 'Kundenservice', 'support', 'Vertrieb / Support'),
-    (demo_email(205), 'demo.ops1@promptmaster.invalid', 'Olivia', 'Operations', 'ops', 'Technik / Operations'),
-    (demo_email(206), 'demo.ops2@promptmaster.invalid', 'Oliver', 'Technik', 'ops', 'Technik / Operations'),
-    (demo_email(207), 'demo.prompts1@promptmaster.invalid', 'Paula', 'Promptmanager', 'prompt_manager', 'Prompt Manager'),
-    (demo_email(208), 'demo.prompts2@promptmaster.invalid', 'Paul', 'Promptmanager', 'prompt_manager', 'Prompt Manager'),
+    (201, 'demo.superadmin1@promptmaster.invalid', 'Sarah', 'Administrator', 'superadmin', 'Superadmin'),
+    (202, 'demo.superadmin2@promptmaster.invalid', 'Stefan', 'Administrator', 'superadmin', 'Superadmin'),
+    (203, 'demo.support1@promptmaster.invalid', 'Sven', 'Support', 'support', 'Vertrieb / Support'),
+    (204, 'demo.support2@promptmaster.invalid', 'Sabine', 'Kundenservice', 'support', 'Vertrieb / Support'),
+    (205, 'demo.ops1@promptmaster.invalid', 'Olivia', 'Operations', 'ops', 'Technik / Operations'),
+    (206, 'demo.ops2@promptmaster.invalid', 'Oliver', 'Technik', 'ops', 'Technik / Operations'),
+    (207, 'demo.prompts1@promptmaster.invalid', 'Paula', 'Promptmanager', 'prompt_manager', 'Prompt Manager'),
+    (208, 'demo.prompts2@promptmaster.invalid', 'Paul', 'Promptmanager', 'prompt_manager', 'Prompt Manager'),
 )
 
 DEMO_FIRST_NAMES = (
@@ -155,11 +153,13 @@ DEMO_PURCHASE_AGES = {
 
 
 
-def demo_email(number: int) -> str:
-    """Return a stable Gmail plus-alias for a demo identity."""
-    if '@' not in DEMO_EMAIL_BASE:
-        raise CommandError('PROMPTMASTER_DEMO_EMAIL_BASE must be a valid e-mail address.')
-    local, domain = DEMO_EMAIL_BASE.rsplit('@', 1)
+def _plus_alias(base_email: str, number: int) -> str:
+    base_email = (base_email or '').strip().lower()
+    if '@' not in base_email:
+        raise CommandError('Die Demo-Basisadresse ist ungültig.')
+    local, domain = base_email.rsplit('@', 1)
+    if not local or not domain or '+' in local:
+        raise CommandError('Die Demo-Basisadresse muss eine ungetaggte E-Mail-Adresse sein.')
     return f'{local}+{int(number)}@{domain}'
 
 
@@ -187,9 +187,25 @@ class Command(BaseCommand):
                 'Verlaufsdaten in Production. Demo-Staff und Rechtstexte bleiben unberührt.'
             ),
         )
+        parser.add_argument(
+            '--demo-email-base',
+            default='',
+            help=(
+                'Optional: echte Gmail-Basisadresse für Demo-Benutzer. '
+                'Beispiel testnetstyle@gmail.com erzeugt testnetstyle+1@gmail.com usw.'
+            ),
+        )
 
     @transaction.atomic
     def handle(self, *args, **options):
+        self.demo_email_base = (options.get('demo_email_base') or '').strip().lower()
+        if self.demo_email_base and not self.demo_email_base.endswith('@gmail.com'):
+            raise CommandError(
+                '--demo-email-base ist derzeit ausschließlich für Gmail-Adressen vorgesehen.'
+            )
+        if self.demo_email_base:
+            _plus_alias(self.demo_email_base, 1)
+
         production_presentation = (
             settings.ENVIRONMENT == 'production'
             and options['allow_production_presentation']
@@ -268,13 +284,19 @@ class Command(BaseCommand):
         credentials = []
 
         if not production_presentation:
-            for email, legacy_email, first_name, last_name, role_code, role_label in STAFF_ACCOUNTS:
-                existing = User.objects.filter(email=email).first()
-                if existing is None:
-                    existing = User.objects.filter(email=legacy_email).first()
-                    if existing is not None:
-                        existing.email = email
-                        existing.save(update_fields=['email', 'updated_at'])
+            for alias_no, legacy_email, first_name, last_name, role_code, role_label in STAFF_ACCOUNTS:
+                email = (
+                    _plus_alias(self.demo_email_base, alias_no)
+                    if self.demo_email_base
+                    else legacy_email
+                )
+                if self.demo_email_base:
+                    existing = User.objects.filter(email=email).first()
+                    if existing is None:
+                        existing = User.objects.filter(email=legacy_email).first()
+                        if existing is not None:
+                            existing.email = email
+                            existing.save(update_fields=['email', 'updated_at'])
                 password = _password()
                 user = self._upsert_user(
                     email=email,
@@ -319,6 +341,10 @@ class Command(BaseCommand):
         self._seed_cross_function_demo_rows(company_users, private_users, now)
 
         self.stdout.write(self.style.SUCCESS('Demo-Daten erfolgreich gesetzt.'))
+        if self.demo_email_base:
+            self.stdout.write(
+                f'Demo-Mail aktiv: {self.demo_email_base} mit Gmail-Plus-Aliassen.'
+            )
         self.stdout.write(
             'Firmen: '
             + ', '.join(
@@ -417,22 +443,26 @@ class Command(BaseCommand):
             ]
             is_admin = index == 0
             legacy_email = (
-                f'demo.kunde{company_index}.admin{LEGACY_DEMO_EMAIL_SUFFIX}'
+                f'demo.kunde{company_index}.admin{DEMO_EMAIL_SUFFIX}'
                 if is_admin
-                else f'demo.kunde{company_index}.user{index + 1:02d}{LEGACY_DEMO_EMAIL_SUFFIX}'
+                else f'demo.kunde{company_index}.user{index + 1:02d}{DEMO_EMAIL_SUFFIX}'
             )
-            old_descriptive_email = (
+            descriptive_email = (
                 f'demo.{company_slug}.{first_name.lower()}.'
-                f'{last_name.lower()}.{index + 1:02d}{LEGACY_DEMO_EMAIL_SUFFIX}'
+                f'{last_name.lower()}.{index + 1:02d}{DEMO_EMAIL_SUFFIX}'
             )
-            if is_admin:
-                email = demo_email(company_index)
+            if self.demo_email_base:
+                if is_admin:
+                    alias_no = company_index
+                else:
+                    previous_members = sum(
+                        row['employees'] - 1
+                        for row in COMPANIES[:company_index - 1]
+                    )
+                    alias_no = 10 + previous_members + index
+                email = _plus_alias(self.demo_email_base, alias_no)
             else:
-                previous_members = sum(
-                    row['employees'] - 1
-                    for row in COMPANIES[:company_index - 1]
-                )
-                email = demo_email(10 + previous_members + index)
+                email = descriptive_email
             login_user = is_admin or index in {1, spec['employees'] - 1}
             password = _password() if login_user else None
             joined_days_ago = max(
@@ -446,9 +476,10 @@ class Command(BaseCommand):
             # reseeded after the realistic identity upgrade.
             user = User.objects.filter(email=email).first()
             if user is None:
-                user = User.objects.filter(
-                    email__in=[old_descriptive_email, legacy_email]
-                ).first()
+                candidates = [legacy_email]
+                if descriptive_email != email:
+                    candidates.insert(0, descriptive_email)
+                user = User.objects.filter(email__in=candidates).first()
                 if user is not None:
                     user.email = email
                     user.save(update_fields=['email', 'updated_at'])
@@ -795,7 +826,11 @@ class Command(BaseCommand):
                 token_hash=_sha('demo-open-invitation-westfalen'),
                 defaults={
                     'company': company,
-                    'email': demo_email(401),
+                    'email': (
+                        _plus_alias(self.demo_email_base, 401)
+                        if self.demo_email_base
+                        else 'eva.einladung.westfalen@promptmaster.invalid'
+                    ),
                     'first_name': 'Eva',
                     'last_name': 'Reimann',
                     'expires_at': now + timedelta(days=7),
@@ -913,11 +948,9 @@ class Command(BaseCommand):
         specs = (
             {
                 'customer_number': 'DEMO-P-2001',
-                'email': demo_email(101),
-                'legacy_emails': (
-                    'petra.hagedorn.privat@promptmaster.invalid',
-                    'demo.privat1@promptmaster.invalid',
-                ),
+                'email': 'petra.hagedorn.privat@promptmaster.invalid',
+                'legacy_email': 'demo.privat1@promptmaster.invalid',
+                'alias_no': 101,
                 'first_name': 'Petra',
                 'last_name': 'Hagedorn',
                 'street': 'Privatweg',
@@ -929,11 +962,9 @@ class Command(BaseCommand):
             },
             {
                 'customer_number': 'DEMO-P-2002',
-                'email': demo_email(102),
-                'legacy_emails': (
-                    'patrick.moeller.privat@promptmaster.invalid',
-                    'demo.privat2@promptmaster.invalid',
-                ),
+                'email': 'patrick.moeller.privat@promptmaster.invalid',
+                'legacy_email': 'demo.privat2@promptmaster.invalid',
+                'alias_no': 102,
                 'first_name': 'Patrick',
                 'last_name': 'Moeller',
                 'street': 'Teststraße',
@@ -945,11 +976,9 @@ class Command(BaseCommand):
             },
             {
                 'customer_number': 'DEMO-P-2003',
-                'email': demo_email(103),
-                'legacy_emails': (
-                    'pia.wendt.privat@promptmaster.invalid',
-                    'demo.privat3@promptmaster.invalid',
-                ),
+                'email': 'pia.wendt.privat@promptmaster.invalid',
+                'legacy_email': 'demo.privat3@promptmaster.invalid',
+                'alias_no': 103,
                 'first_name': 'Pia',
                 'last_name': 'Wendt',
                 'street': 'Musterallee',
@@ -962,17 +991,25 @@ class Command(BaseCommand):
         )
         users = {}
         for index, spec in enumerate(specs, start=1):
-            existing = User.objects.filter(email=spec['email']).first()
+            email = (
+                _plus_alias(self.demo_email_base, spec['alias_no'])
+                if self.demo_email_base
+                else spec['email']
+            )
+            existing = User.objects.filter(email=email).first()
             if existing is None:
-                existing = User.objects.filter(email__in=spec['legacy_emails']).first()
+                candidates = [spec['legacy_email']]
+                if spec['email'] != email:
+                    candidates.insert(0, spec['email'])
+                existing = User.objects.filter(email__in=candidates).first()
                 if existing is not None:
-                    existing.email = spec['email']
+                    existing.email = email
                     existing.save(update_fields=['email', 'updated_at'])
 
             password = _password()
             registered_at = now - timedelta(days=spec['registered_days'])
             user = self._upsert_user(
-                email=spec['email'],
+                email=email,
                 first_name=spec['first_name'],
                 last_name=spec['last_name'],
                 password=password,
@@ -1214,8 +1251,18 @@ class Command(BaseCommand):
         )
 
     def _seed_demo_leads(self, now):
-        support_one = User.objects.filter(email=demo_email(203)).first()
-        support_two = User.objects.filter(email=demo_email(204)).first()
+        support_one_email = (
+            _plus_alias(self.demo_email_base, 203)
+            if self.demo_email_base
+            else 'demo.support1@promptmaster.invalid'
+        )
+        support_two_email = (
+            _plus_alias(self.demo_email_base, 204)
+            if self.demo_email_base
+            else 'demo.support2@promptmaster.invalid'
+        )
+        support_one = User.objects.filter(email=support_one_email).first()
+        support_two = User.objects.filter(email=support_two_email).first()
         if support_one is None:
             support_one = User.objects.filter(
                 is_staff=True,
@@ -1240,7 +1287,7 @@ class Command(BaseCommand):
                 'company_name': 'Siegerland Automation GmbH',
                 'first_name': 'Lena',
                 'last_name': 'Althaus',
-                'email': demo_email(501),
+                'email': 'lena.althaus.siegerland@promptmaster.invalid',
                 'phone': '+49 271 5557001',
                 'source': 'website',
                 'status': 'new',
@@ -1256,7 +1303,7 @@ class Command(BaseCommand):
                 'company_name': 'Ruhrtal Beratung KG',
                 'first_name': 'Kai',
                 'last_name': 'Hensel',
-                'email': demo_email(502),
+                'email': 'kai.hensel.ruhrtal@promptmaster.invalid',
                 'phone': '+49 231 5557002',
                 'source': 'free',
                 'status': 'contacted',
@@ -1272,7 +1319,7 @@ class Command(BaseCommand):
                 'company_name': '',
                 'first_name': 'Paula',
                 'last_name': 'Westphal',
-                'email': demo_email(503),
+                'email': 'paula.westphal.prospekt@promptmaster.invalid',
                 'phone': '',
                 'source': 'contact',
                 'status': 'qualified',
@@ -1288,7 +1335,7 @@ class Command(BaseCommand):
                 'company_name': 'Mittelhessen Planung GmbH',
                 'first_name': 'Henrik',
                 'last_name': 'Sauer',
-                'email': demo_email(504),
+                'email': 'henrik.sauer.mittelhessen@promptmaster.invalid',
                 'phone': '+49 641 5557004',
                 'source': 'checkout',
                 'status': 'qualified',
@@ -1304,7 +1351,7 @@ class Command(BaseCommand):
                 'company_name': 'Südwest Prozess GmbH',
                 'first_name': 'Clara',
                 'last_name': 'Bender',
-                'email': demo_email(505),
+                'email': 'clara.bender.suedwest@promptmaster.invalid',
                 'phone': '+49 721 5557005',
                 'source': 'website',
                 'status': 'won',
@@ -1321,7 +1368,7 @@ class Command(BaseCommand):
                 'company_name': 'Rhein Data Services GmbH',
                 'first_name': 'Malte',
                 'last_name': 'Jansen',
-                'email': demo_email(506),
+                'email': 'malte.jansen.rheindata@promptmaster.invalid',
                 'phone': '+49 221 5557006',
                 'source': 'free',
                 'status': 'lost',
@@ -1337,7 +1384,7 @@ class Command(BaseCommand):
                 'company_name': 'Mainwerk Engineering GmbH',
                 'first_name': 'Theresa',
                 'last_name': 'Kappel',
-                'email': demo_email(507),
+                'email': 'theresa.kappel.mainwerk@promptmaster.invalid',
                 'phone': '+49 69 5557007',
                 'source': 'contact',
                 'status': 'won',
@@ -1354,7 +1401,7 @@ class Command(BaseCommand):
                 'company_name': 'Nordwest Handel GmbH',
                 'first_name': 'Oliver',
                 'last_name': 'Dreyer',
-                'email': demo_email(508),
+                'email': 'oliver.dreyer.nordwest@promptmaster.invalid',
                 'phone': '+49 421 5557008',
                 'source': 'other',
                 'status': 'lost',
