@@ -470,6 +470,22 @@ def queue_email(code, recipient, context, *, scope_company=None, scope_user=None
     return message
 
 
+def _smtp_message_id(message, identity):
+    """Return a stable RFC-style Message-ID using the configured sender domain.
+
+    Using the database UUID keeps the Message-ID stable across SMTP failover
+    attempts and avoids leaking ephemeral Docker/container hostnames.
+    """
+    domain = str(identity.get('domain') or '').strip().lower().rstrip('.')
+    if not domain:
+        from_email = str(identity.get('from_email') or '').strip()
+        domain = from_email.rsplit('@', 1)[-1].lower() if '@' in from_email else ''
+    if not domain:
+        domain = 'localhost'
+    identifier = str(getattr(message, 'id', '') or getattr(message, 'pk', '') or 'promptmaster')
+    return f'<{identifier}@{domain}>'
+
+
 def _send_smtp(message, body, slot='smtp1'):
     identity = get_mail_identity()
     transport = get_smtp_transport(slot)
@@ -503,6 +519,7 @@ def _send_smtp(message, body, slot='smtp1'):
             from_email=from_header,
             to=[message.recipient],
             reply_to=reply_to,
+            headers={'Message-ID': _smtp_message_id(message, identity)},
             connection=connection,
         )
         try:
