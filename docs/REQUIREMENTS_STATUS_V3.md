@@ -23,6 +23,8 @@ Stand 01.10.2026: SMTP1/SMTP2/Graph-Routing und sender-domain Message-ID sind co
 - MCP read/draft/test + health
 - zentrale FAQ-Verwaltung/API
 - CI-/Repo-/Runtime-Validatoren
+- dedizierte netstyle-Präsentationsdemo `DEMO-NETSTYLE` mit 12 aktiven Benutzern, 10 PRO-Lizenzen (9 zugewiesen/1 frei), 3 Free-Benutzern und 1 offener PRO-Anfrage; keine Provideraktionen
+- vereinheitlichter `support_reply`-Template-Vertrag und produktionsfähige SMTP1/SMTP2/Graph-Routingvalidierung
 
 ## Golden-Master-Status
 
