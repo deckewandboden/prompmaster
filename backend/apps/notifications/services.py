@@ -1,3 +1,5 @@
+import smtplib
+
 from email.utils import formataddr
 from string import Formatter
 from urllib.parse import unquote, urlsplit
@@ -25,6 +27,43 @@ class MailScopeInactive(MailProviderError):
     pass
 
 
+class SafeMailFailoverError(MailProviderError):
+    """A provider failure known to happen before successful message acceptance."""
+
+    def __init__(self, provider, original):
+        self.provider = provider
+        self.original = original
+        super().__init__(f'{provider}: {original}')
+
+
+def _smtp_error_allows_failover(exc):
+    """Return True only when SMTP definitely did not accept the message.
+
+    Authentication failures are explicitly failover-safe. SMTP 4xx responses
+    are temporary rejections and are also safe to try on the next provider.
+    Permanent 5xx recipient/sender/data rejections stay on the normal retry/
+    failure path instead of blindly switching providers.
+    """
+    if isinstance(exc, smtplib.SMTPAuthenticationError):
+        return True
+    if isinstance(exc, smtplib.SMTPRecipientsRefused):
+        codes = []
+        for response in exc.recipients.values():
+            if isinstance(response, tuple) and response:
+                try:
+                    codes.append(int(response[0]))
+                except (TypeError, ValueError):
+                    return False
+        return bool(codes) and all(400 <= code < 500 for code in codes)
+    if isinstance(exc, smtplib.SMTPResponseException):
+        try:
+            code = int(exc.smtp_code)
+        except (TypeError, ValueError):
+            return False
+        return 400 <= code < 500
+    return False
+
+
 _ENCRYPTED_PREFIX = 'pm_enc:v1:'
 _SENSITIVE_CONTEXT_KEYS = {'url', 'link', 'token', 'message', 'reply'}
 _USER_SCOPED_TEMPLATES = {'verify_email', 'password_reset', 'staff_invite', 'checkout_activation'}
@@ -50,21 +89,94 @@ def get_mail_identity():
     }
 
 
-def get_smtp_transport():
-    """Return runtime SMTP transport settings with encrypted password storage."""
-    stored = get_setting('mail_transport', {}) or {}
-    password = get_secret('smtp_password', settings.EMAIL_HOST_PASSWORD)
+def _normalize_provider(value):
+    value = str(value or '').strip().lower()
+    if value in {'smtp', 'mailpit'}:
+        return 'smtp1'
+    if value == 'microsoft_graph':
+        return 'graph'
+    return value
+
+
+def get_smtp_transport(slot='smtp1'):
+    """Return runtime SMTP transport settings for SMTP 1 or SMTP 2."""
+    slot = _normalize_provider(slot)
+    if slot not in {'smtp1', 'smtp2'}:
+        raise MailProviderError(f'Unknown SMTP slot: {slot}')
+    if slot == 'smtp1':
+        stored = get_setting('mail_transport', {}) or {}
+        password = get_secret('smtp_password', settings.EMAIL_HOST_PASSWORD)
+        fallback = {
+            'host': settings.EMAIL_HOST,
+            'port': settings.EMAIL_PORT,
+            'use_tls': settings.EMAIL_USE_TLS,
+            'username': settings.EMAIL_HOST_USER,
+        }
+    else:
+        stored = get_setting('mail_transport_2', {}) or {}
+        password = get_secret('smtp_password_2', '')
+        fallback = {
+            'host': '',
+            'port': 587,
+            'use_tls': True,
+            'username': '',
+        }
     return {
-        'host': str(stored.get('host') or settings.EMAIL_HOST).strip(),
-        'port': int(stored.get('port') or settings.EMAIL_PORT),
+        'slot': slot,
+        'host': str(stored.get('host') or fallback['host']).strip(),
+        'port': int(stored.get('port') or fallback['port']),
         'use_tls': bool(
             stored.get('use_tls')
             if 'use_tls' in stored
-            else settings.EMAIL_USE_TLS
+            else fallback['use_tls']
         ),
-        'username': str(stored.get('username') or settings.EMAIL_HOST_USER).strip(),
+        'username': str(stored.get('username') or fallback['username']).strip(),
         'password': password,
         'password_configured': bool(password),
+    }
+
+
+def get_mail_provider():
+    provider = _normalize_provider(
+        get_setting('mail_provider', settings.EMAIL_PROVIDER) or 'smtp1'
+    )
+    return provider or 'smtp1'
+
+
+def get_mail_delivery():
+    """Return manual/automatic provider routing in delivery order."""
+    stored = get_setting('mail_delivery', {}) or {}
+    mode = str(stored.get('mode') or 'manual').strip().lower()
+    if mode not in {'manual', 'failover'}:
+        mode = 'manual'
+    primary = _normalize_provider(stored.get('primary') or get_mail_provider()) or 'smtp1'
+    fallbacks = []
+    for key in ('fallback_1', 'fallback_2'):
+        provider = _normalize_provider(stored.get(key))
+        if provider and provider != primary and provider not in fallbacks:
+            fallbacks.append(provider)
+    route = [primary]
+    if mode == 'failover':
+        route.extend(fallbacks)
+    return {
+        'mode': mode,
+        'primary': primary,
+        'fallback_1': fallbacks[0] if len(fallbacks) > 0 else '',
+        'fallback_2': fallbacks[1] if len(fallbacks) > 1 else '',
+        'route': route,
+    }
+
+
+def get_graph_transport():
+    """Return runtime Microsoft Graph configuration with encrypted client secret."""
+    stored = get_setting('mail_graph', {}) or {}
+    secret = get_secret('graph_client_secret', settings.GRAPH_CLIENT_SECRET)
+    return {
+        'tenant_id': str(stored.get('tenant_id') or settings.GRAPH_TENANT_ID).strip(),
+        'client_id': str(stored.get('client_id') or settings.GRAPH_CLIENT_ID).strip(),
+        'client_secret': secret,
+        'sender': str(stored.get('sender') or settings.GRAPH_SENDER).strip(),
+        'client_secret_configured': bool(secret),
     }
 
 
@@ -358,9 +470,27 @@ def queue_email(code, recipient, context, *, scope_company=None, scope_user=None
     return message
 
 
-def _send_smtp(message, body):
+def _smtp_message_id(message, identity):
+    """Return a stable RFC-style Message-ID using the configured sender domain.
+
+    Using the database UUID keeps the Message-ID stable across SMTP failover
+    attempts and avoids leaking ephemeral Docker/container hostnames.
+    """
+    domain = str(identity.get('domain') or '').strip().lower().rstrip('.')
+    if not domain:
+        from_email = str(identity.get('from_email') or '').strip()
+        domain = from_email.rsplit('@', 1)[-1].lower() if '@' in from_email else ''
+    if not domain:
+        domain = 'localhost'
+    identifier = str(getattr(message, 'id', '') or getattr(message, 'pk', '') or 'promptmaster')
+    return f'<{identifier}@{domain}>'
+
+
+def _send_smtp(message, body, slot='smtp1'):
     identity = get_mail_identity()
-    transport = get_smtp_transport()
+    transport = get_smtp_transport(slot)
+    if not transport['host']:
+        raise SafeMailFailoverError(slot, 'SMTP host is not configured')
     from_email = identity['from_email']
     from_header = (
         formataddr((identity['from_name'], from_email))
@@ -377,57 +507,105 @@ def _send_smtp(message, body):
         use_tls=transport['use_tls'],
         timeout=settings.EMAIL_TIMEOUT,
     )
-    email = DjangoEmailMessage(
-        subject=message.subject,
-        body=body,
-        from_email=from_header,
-        to=[message.recipient],
-        reply_to=reply_to,
-        connection=connection,
-    )
-    email.send(fail_silently=False)
+    try:
+        connection.open()
+    except Exception as exc:
+        # The SMTP session did not open, so the message cannot have been accepted.
+        raise SafeMailFailoverError(slot, exc) from exc
+    try:
+        email = DjangoEmailMessage(
+            subject=message.subject,
+            body=body,
+            from_email=from_header,
+            to=[message.recipient],
+            reply_to=reply_to,
+            headers={'Message-ID': _smtp_message_id(message, identity)},
+            connection=connection,
+        )
+        try:
+            email.send(fail_silently=False)
+        except (
+            smtplib.SMTPRecipientsRefused,
+            smtplib.SMTPSenderRefused,
+            smtplib.SMTPDataError,
+            smtplib.SMTPAuthenticationError,
+        ) as exc:
+            if _smtp_error_allows_failover(exc):
+                # Authentication failed or the provider issued a temporary 4xx
+                # rejection; the message was definitely not accepted.
+                raise SafeMailFailoverError(slot, exc) from exc
+            raise
+    finally:
+        connection.close()
     return ''
 
 
 def _send_graph(message, body):
-    required = [settings.GRAPH_TENANT_ID, settings.GRAPH_CLIENT_ID, settings.GRAPH_CLIENT_SECRET, settings.GRAPH_SENDER]
+    graph = get_graph_transport()
+    required = [graph['tenant_id'], graph['client_id'], graph['client_secret'], graph['sender']]
     if not all(required):
-        raise MailProviderError('Microsoft Graph mail provider is not fully configured')
+        raise SafeMailFailoverError('graph', 'Microsoft Graph mail provider is not fully configured')
 
-    token_response = requests.post(
-        f'https://login.microsoftonline.com/{settings.GRAPH_TENANT_ID}/oauth2/v2.0/token',
-        data={
-            'client_id': settings.GRAPH_CLIENT_ID,
-            'client_secret': settings.GRAPH_CLIENT_SECRET,
-            'scope': 'https://graph.microsoft.com/.default',
-            'grant_type': 'client_credentials',
-        },
-        timeout=(5, 20),
-    )
-    token_response.raise_for_status()
-    access_token = token_response.json().get('access_token')
+    try:
+        token_response = requests.post(
+            f"https://login.microsoftonline.com/{graph['tenant_id']}/oauth2/v2.0/token",
+            data={
+                'client_id': graph['client_id'],
+                'client_secret': graph['client_secret'],
+                'scope': 'https://graph.microsoft.com/.default',
+                'grant_type': 'client_credentials',
+            },
+            timeout=(5, 20),
+        )
+        token_response.raise_for_status()
+        access_token = token_response.json().get('access_token')
+    except Exception as exc:
+        # No sendMail request has been made yet, so SMTP failover is safe.
+        raise SafeMailFailoverError('graph', exc) from exc
     if not access_token:
-        raise MailProviderError('Microsoft Graph did not return an access token')
+        raise SafeMailFailoverError('graph', 'Microsoft Graph did not return an access token')
+
+    identity = get_mail_identity()
+    graph_message = {
+        'subject': message.subject,
+        'body': {'contentType': 'Text', 'content': body},
+        'toRecipients': [{'emailAddress': {'address': message.recipient}}],
+    }
+    if identity['reply_to']:
+        graph_message['replyTo'] = [
+            {'emailAddress': {'address': identity['reply_to']}}
+        ]
 
     response = requests.post(
-        f'https://graph.microsoft.com/v1.0/users/{settings.GRAPH_SENDER}/sendMail',
+        f"https://graph.microsoft.com/v1.0/users/{graph['sender']}/sendMail",
         headers={'Authorization': f'Bearer {access_token}', 'Content-Type': 'application/json'},
         json={
-            'message': {
-                'subject': message.subject,
-                'body': {'contentType': 'Text', 'content': body},
-                'toRecipients': [{'emailAddress': {'address': message.recipient}}],
-            },
+            'message': graph_message,
             'saveToSentItems': True,
         },
         timeout=(5, 20),
     )
+    if 400 <= response.status_code < 500:
+        # A definite Graph rejection means the message was not accepted.
+        try:
+            response.raise_for_status()
+        except Exception as exc:
+            raise SafeMailFailoverError('graph', exc) from exc
     response.raise_for_status()
     if response.status_code != 202:
         raise MailProviderError(
             f'Microsoft Graph sendMail returned HTTP {response.status_code}; expected 202'
         )
     return response.headers.get('request-id', '')[:160]
+
+
+def _send_via_provider(provider, message, body):
+    provider = _normalize_provider(provider)
+    if provider in {'smtp1', 'smtp2'}:
+        return _send_smtp(message, body, provider)
+    if provider == 'graph':
+        return _send_graph(message, body)
+    raise SafeMailFailoverError(provider or 'unknown', 'Unsupported or empty mail provider')
 
 
 def send_now(message):
@@ -438,17 +616,54 @@ def send_now(message):
     template = message.template
     context = _render_context(message.context)
     body = template.body_text.format(**context) if template else ''
-    provider = settings.EMAIL_PROVIDER.lower().strip()
-    if provider in {'smtp', 'mailpit'}:
-        reference = _send_smtp(message, body)
-    elif provider in {'graph', 'microsoft_graph'}:
-        reference = _send_graph(message, body)
-    else:
-        raise MailProviderError(f'Unsupported mail provider: {provider}')
+    delivery = get_mail_delivery()
+    attempts = []
+    reference = ''
+    used_provider = ''
+    for index, provider in enumerate(delivery['route']):
+        try:
+            reference = _send_via_provider(provider, message, body)
+            used_provider = provider
+            attempts.append({'provider': provider, 'result': 'sent'})
+            break
+        except SafeMailFailoverError as exc:
+            attempts.append(
+                {
+                    'provider': provider,
+                    'result': 'failed-safe',
+                    'error': str(exc.original)[:240],
+                }
+            )
+            if delivery['mode'] != 'failover' or index == len(delivery['route']) - 1:
+                message.delivery_attempts = attempts
+                message.save(update_fields=['delivery_attempts', 'updated_at'])
+                raise
+            continue
+        except Exception:
+            # Ambiguous provider failures are intentionally not failed over:
+            # the upstream provider may already have accepted the message.
+            attempts.append({'provider': provider, 'result': 'failed-uncertain'})
+            message.delivery_attempts = attempts
+            message.save(update_fields=['delivery_attempts', 'updated_at'])
+            raise
+    if not used_provider:
+        raise MailProviderError('No configured mail provider completed delivery')
 
     message.status = 'sent'
     message.sent_at = timezone.now()
     message.provider_reference = reference
+    message.provider_used = used_provider
+    message.delivery_attempts = attempts
     message.error = ''
-    message.save(update_fields=['status', 'sent_at', 'provider_reference', 'error', 'updated_at'])
+    message.save(
+        update_fields=[
+            'status',
+            'sent_at',
+            'provider_reference',
+            'provider_used',
+            'delivery_attempts',
+            'error',
+            'updated_at',
+        ]
+    )
     return message

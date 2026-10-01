@@ -29,7 +29,7 @@ from apps.legal.models import ConsumerContractDeclaration, DeletionRequest, Lega
 from apps.licenses.models import License, LicenseAssignment, LicenseAssignmentLink, LicenseTerm, LicenseUpgradeRequest
 from apps.licenses.services import assign_license, block_license, release_license, unblock_license
 from apps.notifications.models import EmailMessage, EmailTemplate
-from apps.notifications.services import get_mail_identity, get_smtp_transport, queue_email
+from apps.notifications.services import get_graph_transport, get_mail_delivery, get_mail_identity, get_mail_provider, get_smtp_transport, queue_email
 from apps.ops.metrics import caddy_health, certificate_status, snapshot
 from apps.ops.models import BackupRecord, RestoreTest, SystemAlert
 from apps.orders.models import Order
@@ -1699,22 +1699,37 @@ def product_price_add(request, pk):
 
 @staff_perm('email.read')
 def email(request):
-    provider = settings.EMAIL_PROVIDER.lower().strip()
+    delivery = get_mail_delivery()
+    provider = delivery['primary']
+    smtp_transport = get_smtp_transport('smtp1')
+    smtp_transport_2 = get_smtp_transport('smtp2')
+    graph_transport = get_graph_transport()
     graph_configured = all(
         [
-            settings.GRAPH_TENANT_ID,
-            settings.GRAPH_CLIENT_ID,
-            settings.GRAPH_CLIENT_SECRET,
-            settings.GRAPH_SENDER,
+            graph_transport['tenant_id'],
+            graph_transport['client_id'],
+            graph_transport['client_secret_configured'],
+            graph_transport['sender'],
         ]
     )
-    provider_configured = (
-        bool(settings.EMAIL_HOST)
-        if provider in {'smtp', 'mailpit'}
-        else graph_configured
-        if provider in {'graph', 'microsoft_graph'}
-        else False
-    )
+    configured = {
+        'smtp1': bool(
+            smtp_transport['host']
+            and (not smtp_transport['username'] or smtp_transport['password_configured'])
+        ),
+        'smtp2': bool(
+            smtp_transport_2['host']
+            and (not smtp_transport_2['username'] or smtp_transport_2['password_configured'])
+        ),
+        'graph': graph_configured,
+    }
+    provider_configured = all(configured.get(item, False) for item in delivery['route'])
+    provider_labels = {
+        'smtp1': 'SMTP 1',
+        'smtp2': 'SMTP 2',
+        'graph': 'Microsoft 365 / Entra ID (Graph)',
+    }
+    delivery_route_labels = [provider_labels.get(item, item) for item in delivery['route']]
     return render(
         request,
         'ns_admin/email.html',
@@ -1722,10 +1737,16 @@ def email(request):
             'templates': EmailTemplate.objects.order_by('code'),
             'recent': EmailMessage.objects.select_related('template').order_by('-created_at')[:20],
             'provider': provider,
+            'delivery': delivery,
+            'delivery_route_labels': delivery_route_labels,
+            'provider_labels': provider_labels,
             'provider_configured': provider_configured,
-            'graph_sender': settings.GRAPH_SENDER,
+            'provider_configured_map': configured,
+            'graph_sender': graph_transport['sender'],
+            'graph_transport': graph_transport,
             'mail_identity': get_mail_identity(),
-            'smtp_transport': get_smtp_transport(),
+            'smtp_transport': smtp_transport,
+            'smtp_transport_2': smtp_transport_2,
         },
     )
 
@@ -1744,8 +1765,26 @@ def email_template_edit(request, pk):
 
 @staff_perm('email.read')
 def email_log(request):
-    grid = DataGrid(request, EmailMessage.objects.select_related('template'), search_fields=('recipient', 'subject', 'template__code'), sort_fields={'date': 'created_at', 'recipient': 'recipient', 'template': 'template__code', 'subject': 'subject', 'status': 'status'}, default_sort='-created_at', filters={'status': 'status'}).build()
-    return render(request, 'ns_admin/email_log.html', {'grid': grid, 'filter_options': [('status','Status',EMAIL_STATUS_CHOICES)]})
+    grid = DataGrid(
+        request,
+        EmailMessage.objects.select_related('template'),
+        search_fields=('recipient', 'subject', 'template__code', 'provider_used'),
+        sort_fields={
+            'date': 'created_at',
+            'recipient': 'recipient',
+            'template': 'template__code',
+            'subject': 'subject',
+            'provider': 'provider_used',
+            'status': 'status',
+        },
+        default_sort='-created_at',
+        filters={'status': 'status'},
+    ).build()
+    return render(
+        request,
+        'ns_admin/email_log.html',
+        {'grid': grid, 'filter_options': [('status', 'Status', EMAIL_STATUS_CHOICES)]},
+    )
 
 
 @staff_perm('payments.read')
@@ -2462,7 +2501,11 @@ def user_role_remove(request, pk):
 def settings_view(request):
     values = get_setting('ops_thresholds', {}) or {}
     mail_identity = get_mail_identity()
-    smtp_transport = get_smtp_transport()
+    mail_provider = get_mail_provider()
+    mail_delivery = get_mail_delivery()
+    smtp_transport = get_smtp_transport('smtp1')
+    smtp_transport_2 = get_smtp_transport('smtp2')
+    graph_transport = get_graph_transport()
     fallback_from_domain = (
         mail_identity['from_email'].rsplit('@', 1)[-1].lower()
         if '@' in mail_identity['from_email']
@@ -2470,6 +2513,10 @@ def settings_view(request):
     )
     initial = {
         'support_email': get_setting('support_email', 'promptmaster@netstyle.de'),
+        'mail_delivery_mode': mail_delivery['mode'],
+        'mail_provider': mail_delivery['primary'],
+        'mail_fallback_1': mail_delivery['fallback_1'],
+        'mail_fallback_2': mail_delivery['fallback_2'],
         'mail_from_email': mail_identity['from_email'],
         'mail_from_name': mail_identity['from_name'],
         'mail_reply_to': mail_identity['reply_to'],
@@ -2482,6 +2529,13 @@ def settings_view(request):
         'smtp_port': smtp_transport['port'],
         'smtp_use_tls': smtp_transport['use_tls'],
         'smtp_username': smtp_transport['username'],
+        'smtp2_host': smtp_transport_2['host'],
+        'smtp2_port': smtp_transport_2['port'],
+        'smtp2_use_tls': smtp_transport_2['use_tls'],
+        'smtp2_username': smtp_transport_2['username'],
+        'graph_tenant_id': graph_transport['tenant_id'],
+        'graph_client_id': graph_transport['client_id'],
+        'graph_sender': graph_transport['sender'],
         'disk_warning': values.get('disk_warning', 80),
         'disk_critical': values.get('disk_critical', 90),
         'ram_warning': values.get('ram_warning', 80),
@@ -2491,13 +2545,29 @@ def settings_view(request):
         'backup_critical_hours': values.get('backup_critical_hours', 24),
         'restore_warning_days': values.get('restore_warning_days', 35),
     }
-    form = GeneralSettingsForm(request.POST or None, initial=initial)
+    form = GeneralSettingsForm(
+        request.POST or None,
+        initial=initial,
+        graph_secret_configured=graph_transport['client_secret_configured'],
+    )
     if request.method == 'POST':
         if not has_perm(request.user, 'settings.write'):
             raise PermissionDenied
         if form.is_valid():
             data = form.cleaned_data.copy()
             support_email = data.pop('support_email')
+            selected_mode = data.pop('mail_delivery_mode') or mail_delivery['mode']
+            selected_provider = data.pop('mail_provider') or mail_delivery['primary']
+            selected_fallback_1 = data.pop('mail_fallback_1') or ''
+            selected_fallback_2 = data.pop('mail_fallback_2') or ''
+            if 'mail_provider' not in request.POST:
+                selected_provider = mail_delivery['primary']
+            if 'mail_delivery_mode' not in request.POST:
+                selected_mode = mail_delivery['mode']
+            if 'mail_fallback_1' not in request.POST:
+                selected_fallback_1 = mail_delivery['fallback_1']
+            if 'mail_fallback_2' not in request.POST:
+                selected_fallback_2 = mail_delivery['fallback_2']
             current_mail_identity = get_mail_identity()
 
             def configured_value(form_key, identity_key):
@@ -2531,7 +2601,47 @@ def settings_view(request):
                 'username': smtp_value('smtp_username', 'username'),
             }
             smtp_password = data.pop('smtp_password')
+
+            current_smtp_2 = smtp_transport_2
+
+            def smtp2_value(form_key, transport_key):
+                value = data.pop(form_key)
+                if form_key not in request.POST:
+                    return current_smtp_2[transport_key]
+                return value
+
+            mail_transport_2 = {
+                'host': smtp2_value('smtp2_host', 'host'),
+                'port': smtp2_value('smtp2_port', 'port'),
+                'use_tls': smtp2_value('smtp2_use_tls', 'use_tls'),
+                'username': smtp2_value('smtp2_username', 'username'),
+            }
+            smtp_password_2 = data.pop('smtp2_password')
+
+            def graph_value(form_key, transport_key):
+                value = data.pop(form_key)
+                if form_key not in request.POST:
+                    return graph_transport[transport_key]
+                return value
+
+            mail_graph = {
+                'tenant_id': graph_value('graph_tenant_id', 'tenant_id'),
+                'client_id': graph_value('graph_client_id', 'client_id'),
+                'sender': graph_value('graph_sender', 'sender'),
+            }
+            graph_client_secret = data.pop('graph_client_secret')
             set_setting('support_email', support_email, 'Empfänger des PromptMaster-Kontaktformulars')
+            set_setting('mail_provider', selected_provider, 'Primärer Mail-Versandweg')
+            set_setting(
+                'mail_delivery',
+                {
+                    'mode': selected_mode,
+                    'primary': selected_provider,
+                    'fallback_1': selected_fallback_1,
+                    'fallback_2': selected_fallback_2,
+                },
+                'Manuelle oder automatische Mail-Fallback-Kette',
+            )
             set_setting(
                 'mail_identity',
                 mail_identity,
@@ -2542,9 +2652,24 @@ def settings_view(request):
                 mail_transport,
                 'SMTP-Transportkonfiguration für den PromptMaster-Mailversand',
             )
-            if smtp_password:
+            set_setting(
+                'mail_transport_2',
+                mail_transport_2,
+                'Zweite SMTP-Transportkonfiguration für Fallback und Tests',
+            )
+            set_setting(
+                'mail_graph',
+                mail_graph,
+                'Microsoft-Graph-Konfiguration für den PromptMaster-Mailversand',
+            )
+            if smtp_password or smtp_password_2 or graph_client_secret:
                 from apps.integrations.services import set_secret
-                set_secret('smtp_password', smtp_password)
+                if smtp_password:
+                    set_secret('smtp_password', smtp_password)
+                if smtp_password_2:
+                    set_secret('smtp_password_2', smtp_password_2)
+                if graph_client_secret:
+                    set_secret('graph_client_secret', graph_client_secret)
             set_setting('ops_thresholds', data, 'Warnschwellen für System & Betrieb')
             write_audit(
                 request.user,
@@ -2552,10 +2677,25 @@ def settings_view(request):
                 request.user,
                 {
                     'support_email': support_email,
+                    'mail_provider': selected_provider,
+                    'mail_delivery': {
+                        'mode': selected_mode,
+                        'primary': selected_provider,
+                        'fallback_1': selected_fallback_1,
+                        'fallback_2': selected_fallback_2,
+                    },
                     'mail_identity': mail_identity,
                     'mail_transport': {
                         **mail_transport,
                         'password': '[UPDATED]' if smtp_password else '[UNCHANGED]',
+                    },
+                    'mail_transport_2': {
+                        **mail_transport_2,
+                        'password': '[UPDATED]' if smtp_password_2 else '[UNCHANGED]',
+                    },
+                    'mail_graph': {
+                        **mail_graph,
+                        'client_secret': '[UPDATED]' if graph_client_secret else '[UNCHANGED]',
                     },
                     'ops_thresholds': data,
                 },

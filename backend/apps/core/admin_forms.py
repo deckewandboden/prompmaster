@@ -406,7 +406,43 @@ class MollieConfigForm(forms.Form):
 
 
 class GeneralSettingsForm(forms.Form):
+    MAIL_PROVIDER_CHOICES = [
+        ('smtp1', 'SMTP 1'),
+        ('smtp2', 'SMTP 2'),
+        ('graph', 'Microsoft 365 / Entra ID (Microsoft Graph)'),
+    ]
+    MAIL_FALLBACK_CHOICES = [
+        ('', 'Kein weiterer Fallback'),
+        *MAIL_PROVIDER_CHOICES,
+    ]
+    MAIL_DELIVERY_MODE_CHOICES = [
+        ('manual', 'Manuell – nur den primären Versandweg verwenden'),
+        ('failover', 'Automatisch – bei sicherem Ausfall auf Fallback wechseln'),
+    ]
+
     support_email = forms.EmailField(label='Support-Empfänger')
+    mail_delivery_mode = forms.ChoiceField(
+        choices=MAIL_DELIVERY_MODE_CHOICES,
+        required=False,
+        label='Versandmodus',
+        help_text='Im automatischen Modus wird nur bei eindeutig nicht zugestellten Fehlern weitergeschaltet.',
+    )
+    mail_provider = forms.ChoiceField(
+        choices=MAIL_PROVIDER_CHOICES,
+        required=False,
+        label='Primärer Versandweg',
+        help_text='SMTP 1, SMTP 2 und Microsoft Graph bleiben parallel konfiguriert.',
+    )
+    mail_fallback_1 = forms.ChoiceField(
+        choices=MAIL_FALLBACK_CHOICES,
+        required=False,
+        label='Fallback 1',
+    )
+    mail_fallback_2 = forms.ChoiceField(
+        choices=MAIL_FALLBACK_CHOICES,
+        required=False,
+        label='Fallback 2',
+    )
     mail_from_email = forms.EmailField(
         required=False,
         label='Absender-E-Mail',
@@ -457,32 +493,86 @@ class GeneralSettingsForm(forms.Form):
     smtp_host = forms.CharField(
         max_length=253,
         required=False,
-        label='SMTP-Server',
+        label='SMTP 1 – Server',
         help_text='Zum Beispiel smtp.ionos.de.',
     )
     smtp_port = forms.IntegerField(
         min_value=1,
         max_value=65535,
         required=False,
-        label='SMTP-Port',
+        label='SMTP 1 – Port',
         help_text='Für IONOS mit STARTTLS: 587.',
     )
     smtp_use_tls = forms.BooleanField(
         required=False,
-        label='STARTTLS verwenden',
+        label='SMTP 1 – STARTTLS verwenden',
     )
     smtp_username = forms.CharField(
         max_length=254,
         required=False,
-        label='SMTP-Benutzername',
+        label='SMTP 1 – Benutzername',
         help_text='Bei IONOS normalerweise die vollständige E-Mail-Adresse.',
     )
     smtp_password = forms.CharField(
         max_length=500,
         required=False,
         widget=forms.PasswordInput(render_value=False),
-        label='SMTP-Passwort',
+        label='SMTP 1 – Passwort',
         help_text='Leer lassen, um das gespeicherte Passwort unverändert zu lassen.',
+    )
+    smtp2_host = forms.CharField(
+        max_length=253,
+        required=False,
+        label='SMTP 2 – Server',
+        help_text='Optionaler zweiter SMTP-Provider, z. B. derselbe Relay-Dienst wie bei Listmonk.',
+    )
+    smtp2_port = forms.IntegerField(
+        min_value=1,
+        max_value=65535,
+        required=False,
+        label='SMTP 2 – Port',
+        initial=587,
+    )
+    smtp2_use_tls = forms.BooleanField(
+        required=False,
+        label='SMTP 2 – STARTTLS verwenden',
+        initial=True,
+    )
+    smtp2_username = forms.CharField(
+        max_length=254,
+        required=False,
+        label='SMTP 2 – Benutzername',
+    )
+    smtp2_password = forms.CharField(
+        max_length=500,
+        required=False,
+        widget=forms.PasswordInput(render_value=False),
+        label='SMTP 2 – Passwort',
+        help_text='Leer lassen, um das gespeicherte Passwort unverändert zu lassen.',
+    )
+    graph_tenant_id = forms.CharField(
+        max_length=120,
+        required=False,
+        label='Entra Tenant ID',
+        help_text='Verzeichnis-/Mandanten-ID des Microsoft-365-Tenants.',
+    )
+    graph_client_id = forms.CharField(
+        max_length=120,
+        required=False,
+        label='Entra Client ID',
+        help_text='Anwendungs-/Client-ID der App-Registrierung.',
+    )
+    graph_sender = forms.EmailField(
+        required=False,
+        label='Microsoft-365-Absender',
+        help_text='Postfach, über das Microsoft Graph senden soll, z. B. promptmaster@netstyle.de.',
+    )
+    graph_client_secret = forms.CharField(
+        max_length=500,
+        required=False,
+        widget=forms.PasswordInput(render_value=False),
+        label='Entra Client Secret',
+        help_text='Leer lassen, um das gespeicherte Secret unverändert zu lassen.',
     )
     disk_warning = forms.IntegerField(min_value=1, max_value=99, initial=80, label='Datenträger-Warnung in %')
     disk_critical = forms.IntegerField(min_value=2, max_value=100, initial=90, label='Datenträger kritisch in %')
@@ -492,6 +582,10 @@ class GeneralSettingsForm(forms.Form):
     backup_warning_hours = forms.IntegerField(min_value=1, max_value=720, initial=8, label='Backup-Warnung in Stunden')
     backup_critical_hours = forms.IntegerField(min_value=2, max_value=720, initial=24, label='Backup kritisch in Stunden')
     restore_warning_days = forms.IntegerField(min_value=1, max_value=365, initial=35, label='Restore-Test-Warnung in Tagen')
+
+    def __init__(self, *args, graph_secret_configured=False, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.graph_secret_configured = graph_secret_configured
 
     def clean_mail_domain(self):
         value = self.cleaned_data.get('mail_domain', '').strip().lower().rstrip('.')
@@ -516,6 +610,55 @@ class GeneralSettingsForm(forms.Form):
         for warning, critical in [('disk_warning', 'disk_critical'), ('ram_warning', 'ram_critical'), ('backup_warning_hours', 'backup_critical_hours')]:
             if data.get(warning) is not None and data.get(critical) is not None and data[warning] >= data[critical]:
                 self.add_error(critical, 'Der kritische Wert muss über dem Warnwert liegen.')
+        mail_config_submitted = any(
+            field in self.data
+            for field in (
+                'mail_delivery_mode',
+                'mail_provider',
+                'mail_fallback_1',
+                'mail_fallback_2',
+            )
+        )
+        mode = data.get('mail_delivery_mode') or 'manual'
+        provider = data.get('mail_provider') or 'smtp1'
+        fallback_1 = data.get('mail_fallback_1') or ''
+        fallback_2 = data.get('mail_fallback_2') or ''
+        route = [provider]
+        if mail_config_submitted:
+            if mode == 'failover':
+                for fallback in (fallback_1, fallback_2):
+                    if fallback:
+                        route.append(fallback)
+                if len(route) == 1:
+                    self.add_error(
+                        'mail_fallback_1',
+                        'Für den automatischen Modus muss mindestens ein Fallback gewählt werden.',
+                    )
+            duplicates = {item for item in route if route.count(item) > 1}
+            if duplicates:
+                self.add_error(
+                    'mail_fallback_1',
+                    'Ein Versandweg darf in der Kette nur einmal vorkommen.',
+                )
+
+            if 'smtp1' in route:
+                for field in ('smtp_host', 'smtp_port'):
+                    if not data.get(field):
+                        self.add_error(field, 'Für SMTP 1 ist dieses Feld erforderlich.')
+            if 'smtp2' in route:
+                for field in ('smtp2_host', 'smtp2_port'):
+                    if not data.get(field):
+                        self.add_error(field, 'Für SMTP 2 ist dieses Feld erforderlich.')
+            if 'graph' in route:
+                for field in ('graph_tenant_id', 'graph_client_id', 'graph_sender'):
+                    if not data.get(field):
+                        self.add_error(field, 'Für Microsoft Graph ist dieses Feld erforderlich.')
+                if not data.get('graph_client_secret') and not self.graph_secret_configured:
+                    self.add_error(
+                        'graph_client_secret',
+                        'Für Microsoft Graph ist ein Client Secret erforderlich.',
+                    )
+
         from_email = data.get('mail_from_email')
         mail_domain = data.get('mail_domain')
         if from_email and mail_domain:

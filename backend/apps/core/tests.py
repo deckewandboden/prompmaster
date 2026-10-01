@@ -249,6 +249,7 @@ class MailIdentitySettingsTests(TestCase):
             },
         )
         message = SimpleNamespace(
+            id='smtp-test-42',
             subject='PromptMaster SMTP identity test',
             recipient='recipient@example.test',
         )
@@ -274,9 +275,24 @@ class MailIdentitySettingsTests(TestCase):
             from_email='PromptMaster <promptmaster@decke-wand-boden.de>',
             to=['recipient@example.test'],
             reply_to=['support@decke-wand-boden.de'],
+            headers={'Message-ID': '<smtp-test-42@decke-wand-boden.de>'},
             connection=connection,
         )
         email.send.assert_called_once_with(fail_silently=False)
+
+    def test_smtp_message_id_falls_back_to_from_domain(self):
+        from apps.notifications.services import _smtp_message_id
+
+        message = SimpleNamespace(id='message-123')
+        identity = {
+            'domain': '',
+            'from_email': 'promptmaster@decke-wand-boden.de',
+        }
+
+        self.assertEqual(
+            _smtp_message_id(message, identity),
+            '<message-123@decke-wand-boden.de>',
+        )
 
     def test_general_settings_form_validates_sender_domain_and_dns_records(self):
         from apps.core.admin_forms import GeneralSettingsForm
@@ -307,6 +323,224 @@ class MailIdentitySettingsTests(TestCase):
         self.assertIn('mail_spf_record', form.errors)
         self.assertIn('mail_dmarc_record', form.errors)
 
+
+    def test_runtime_provider_and_graph_transport_use_db_settings(self):
+        from apps.core.settings_store import set_setting
+        from apps.integrations.services import set_secret
+        from apps.notifications.services import get_graph_transport, get_mail_provider
+
+        set_setting('mail_provider', 'graph')
+        set_setting(
+            'mail_graph',
+            {
+                'tenant_id': 'tenant-runtime',
+                'client_id': 'client-runtime',
+                'sender': 'promptmaster@netstyle.de',
+            },
+        )
+        set_secret('graph_client_secret', 'Graph-Test-Secret-2026!')
+
+        self.assertEqual(get_mail_provider(), 'graph')
+        graph = get_graph_transport()
+        self.assertEqual(graph['tenant_id'], 'tenant-runtime')
+        self.assertEqual(graph['client_id'], 'client-runtime')
+        self.assertEqual(graph['sender'], 'promptmaster@netstyle.de')
+        self.assertEqual(graph['client_secret'], 'Graph-Test-Secret-2026!')
+        self.assertTrue(graph['client_secret_configured'])
+
+    def test_graph_provider_requires_non_secret_identifiers_in_form(self):
+        from apps.core.admin_forms import GeneralSettingsForm
+
+        form = GeneralSettingsForm(
+            data={
+                'support_email': 'support@example.test',
+                'mail_provider': 'graph',
+                'mail_from_email': 'promptmaster@netstyle.de',
+                'mail_from_name': 'PromptMaster',
+                'mail_reply_to': '',
+                'mail_domain': 'netstyle.de',
+                'mail_spf_record': '',
+                'mail_dkim_selector': '',
+                'mail_dkim_record': '',
+                'mail_dmarc_record': '',
+                'smtp_host': '',
+                'smtp_port': '',
+                'smtp_username': '',
+                'graph_tenant_id': '',
+                'graph_client_id': '',
+                'graph_sender': '',
+                'disk_warning': 80,
+                'disk_critical': 90,
+                'ram_warning': 80,
+                'ram_critical': 90,
+                'cpu_warning': 80,
+                'backup_warning_hours': 8,
+                'backup_critical_hours': 24,
+                'restore_warning_days': 35,
+            }
+        )
+
+        self.assertFalse(form.is_valid())
+        self.assertIn('graph_tenant_id', form.errors)
+        self.assertIn('graph_client_id', form.errors)
+        self.assertIn('graph_sender', form.errors)
+
+    def test_mail_delivery_builds_ordered_failover_route(self):
+        from apps.core.settings_store import set_setting
+        from apps.notifications.services import get_mail_delivery
+
+        set_setting('mail_provider', 'graph')
+        set_setting(
+            'mail_delivery',
+            {
+                'mode': 'failover',
+                'primary': 'graph',
+                'fallback_1': 'smtp1',
+                'fallback_2': 'smtp2',
+            },
+        )
+
+        delivery = get_mail_delivery()
+
+        self.assertEqual(delivery['mode'], 'failover')
+        self.assertEqual(delivery['route'], ['graph', 'smtp1', 'smtp2'])
+
+    def test_smtp2_transport_uses_separate_encrypted_secret(self):
+        from apps.core.settings_store import set_setting
+        from apps.integrations.services import set_secret
+        from apps.notifications.services import get_smtp_transport
+
+        set_setting(
+            'mail_transport_2',
+            {
+                'host': 'smtp.fallback.example.test',
+                'port': 587,
+                'use_tls': True,
+                'username': 'fallback@example.test',
+            },
+        )
+        set_secret('smtp_password_2', 'SMTP2-Test-Secret-2026!')
+
+        transport = get_smtp_transport('smtp2')
+
+        self.assertEqual(transport['slot'], 'smtp2')
+        self.assertEqual(transport['host'], 'smtp.fallback.example.test')
+        self.assertEqual(transport['port'], 587)
+        self.assertTrue(transport['use_tls'])
+        self.assertEqual(transport['username'], 'fallback@example.test')
+        self.assertEqual(transport['password'], 'SMTP2-Test-Secret-2026!')
+        self.assertTrue(transport['password_configured'])
+
+    @patch('apps.notifications.services._send_smtp')
+    @patch('apps.notifications.services._send_graph')
+    def test_safe_graph_failure_falls_back_to_smtp1(self, send_graph, send_smtp):
+        from apps.core.settings_store import set_setting
+        from apps.notifications.models import EmailMessage
+        from apps.notifications.services import SafeMailFailoverError, send_now
+
+        set_setting(
+            'mail_delivery',
+            {
+                'mode': 'failover',
+                'primary': 'graph',
+                'fallback_1': 'smtp1',
+                'fallback_2': 'smtp2',
+            },
+        )
+        send_graph.side_effect = SafeMailFailoverError('graph', 'token endpoint unavailable')
+        send_smtp.return_value = ''
+        message = EmailMessage.objects.create(
+            recipient='recipient@example.test',
+            subject='Failover test',
+            context={},
+        )
+
+        send_now(message)
+
+        message.refresh_from_db()
+        self.assertEqual(message.status, 'sent')
+        self.assertEqual(message.provider_used, 'smtp1')
+        self.assertEqual(
+            message.delivery_attempts,
+            [
+                {
+                    'provider': 'graph',
+                    'result': 'failed-safe',
+                    'error': 'token endpoint unavailable',
+                },
+                {'provider': 'smtp1', 'result': 'sent'},
+            ],
+        )
+        send_smtp.assert_called_once_with(message, '', 'smtp1')
+
+    @patch('apps.notifications.services._send_smtp')
+    @patch('apps.notifications.services._send_graph')
+    def test_ambiguous_graph_failure_does_not_fail_over(self, send_graph, send_smtp):
+        from apps.core.settings_store import set_setting
+        from apps.notifications.models import EmailMessage
+        from apps.notifications.services import send_now
+
+        set_setting(
+            'mail_delivery',
+            {
+                'mode': 'failover',
+                'primary': 'graph',
+                'fallback_1': 'smtp1',
+                'fallback_2': 'smtp2',
+            },
+        )
+        send_graph.side_effect = RuntimeError('connection lost after send request')
+        message = EmailMessage.objects.create(
+            recipient='recipient@example.test',
+            subject='Ambiguous failover test',
+            context={},
+        )
+
+        with self.assertRaises(RuntimeError):
+            send_now(message)
+
+        message.refresh_from_db()
+        self.assertEqual(
+            message.delivery_attempts,
+            [{'provider': 'graph', 'result': 'failed-uncertain'}],
+        )
+        send_smtp.assert_not_called()
+
+    def test_smtp_authentication_error_is_failover_safe(self):
+        import smtplib
+        from apps.notifications.services import _smtp_error_allows_failover
+
+        exc = smtplib.SMTPAuthenticationError(535, b'Authentication failed')
+        self.assertTrue(_smtp_error_allows_failover(exc))
+
+    def test_smtp_temporary_4xx_is_failover_safe_but_permanent_5xx_is_not(self):
+        import smtplib
+        from apps.notifications.services import _smtp_error_allows_failover
+
+        self.assertTrue(
+            _smtp_error_allows_failover(
+                smtplib.SMTPDataError(451, b'Temporary local problem')
+            )
+        )
+        self.assertFalse(
+            _smtp_error_allows_failover(
+                smtplib.SMTPDataError(550, b'Permanent rejection')
+            )
+        )
+        self.assertTrue(
+            _smtp_error_allows_failover(
+                smtplib.SMTPRecipientsRefused(
+                    {'recipient@example.test': (450, b'Mailbox busy')}
+                )
+            )
+        )
+        self.assertFalse(
+            _smtp_error_allows_failover(
+                smtplib.SMTPRecipientsRefused(
+                    {'recipient@example.test': (550, b'Unknown user')}
+                )
+            )
+        )
 
     def test_smtp_transport_uses_encrypted_secret_and_runtime_settings(self):
         from apps.core.settings_store import set_setting
