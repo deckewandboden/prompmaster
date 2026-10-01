@@ -39,6 +39,15 @@ def is_placeholder(value: str) -> bool:
     )
 
 
+def normalize_mail_provider(value: str) -> str:
+    provider = (value or '').strip().lower()
+    if provider in {'smtp', 'mailpit'}:
+        return 'smtp1'
+    if provider == 'microsoft_graph':
+        return 'graph'
+    return provider
+
+
 def check_fernet(value: str) -> bool:
     try:
         raw = base64.urlsafe_b64decode(value.encode('ascii'))
@@ -110,7 +119,8 @@ def main() -> int:
     if domain not in {'localhost', '127.0.0.1', ''} and f'https://{domain}' not in csrf:
         fail(errors, 'https://CADDY_DOMAIN muss in CSRF_TRUSTED_ORIGINS enthalten sein.')
 
-    provider = values.get('EMAIL_PROVIDER', '').strip().lower()
+    provider_raw = values.get('EMAIL_PROVIDER', '').strip().lower()
+    provider = normalize_mail_provider(provider_raw)
     if expected == 'production':
         vat_id = values.get('NETSTYLE_VAT_ID', '').replace(' ', '').upper()
         if not re.fullmatch(r'DE\d{9}', vat_id):
@@ -119,11 +129,34 @@ def main() -> int:
                 'NETSTYLE_VAT_ID muss für das produktive Impressum intern bestätigt '
                 'und im Format DE123456789 gesetzt sein.',
             )
-        if provider not in {'graph', 'microsoft_graph'}:
-            fail(errors, 'Production EMAIL_PROVIDER muss graph/microsoft_graph sein.')
-        for key in ('GRAPH_TENANT_ID', 'GRAPH_CLIENT_ID', 'GRAPH_CLIENT_SECRET', 'GRAPH_SENDER'):
-            if is_placeholder(values.get(key, '')):
-                fail(errors, f'{key} muss für Microsoft Graph gesetzt sein.')
+        if provider not in {'smtp1', 'graph'}:
+            fail(
+                errors,
+                'Production EMAIL_PROVIDER muss smtp/smtp1 oder graph/microsoft_graph sein. '
+                'Weitere Laufzeit-Fallbacks werden verschlüsselt über die Admin-Einstellungen verwaltet.',
+            )
+        if provider == 'graph':
+            for key in ('GRAPH_TENANT_ID', 'GRAPH_CLIENT_ID', 'GRAPH_CLIENT_SECRET', 'GRAPH_SENDER'):
+                if is_placeholder(values.get(key, '')):
+                    fail(errors, f'{key} muss für Microsoft Graph gesetzt sein.')
+        elif provider == 'smtp1':
+            if is_placeholder(values.get('SMTP_HOST', '')):
+                fail(errors, 'SMTP_HOST muss für produktiven SMTP-Versand gesetzt sein.')
+            try:
+                smtp_port = int(values.get('SMTP_PORT', '0'))
+            except ValueError:
+                smtp_port = 0
+            if not 1 <= smtp_port <= 65535:
+                fail(errors, 'SMTP_PORT muss für produktiven SMTP-Versand gültig sein.')
+            if values.get('SMTP_USE_TLS') != '1':
+                fail(errors, 'SMTP_USE_TLS muss für produktiven SMTP-Versand auf 1 stehen.')
+            if is_placeholder(values.get('SMTP_USER', '')):
+                fail(errors, 'SMTP_USER muss für produktiven SMTP-Versand gesetzt sein.')
+            if is_placeholder(values.get('SMTP_PASSWORD', '')):
+                fail(errors, 'SMTP_PASSWORD muss für produktiven SMTP-Versand gesetzt sein.')
+            from_email = values.get('EMAIL_FROM', '').strip()
+            if '@' not in from_email or is_placeholder(from_email):
+                fail(errors, 'EMAIL_FROM muss für produktiven SMTP-Versand eine reale Absenderadresse sein.')
         mollie = values.get('MOLLIE_API_KEY', '')
         if not mollie.startswith('live_'):
             fail(errors, 'MOLLIE_API_KEY muss in Produktion ein Mollie-Live-Key (live_…) sein.')
@@ -146,7 +179,7 @@ def main() -> int:
         # Staging must never accidentally use live payments.
         if values.get('MOLLIE_API_KEY', '').startswith('live_'):
             fail(errors, 'Staging darf keinen Mollie-Live-Key verwenden.')
-        if provider not in {'smtp', 'mailpit'}:
+        if provider_raw not in {'smtp', 'mailpit'}:
             fail(errors, 'Staging EMAIL_PROVIDER muss smtp/mailpit sein, damit keine echten Kundenmails versendet werden.')
         admin_password = values.get('INITIAL_ADMIN_PASSWORD', '')
         if is_placeholder(admin_password) or len(admin_password) < 12:
