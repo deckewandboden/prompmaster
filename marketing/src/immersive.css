@@ -19,14 +19,14 @@ nav .nav-cta { font-size:13px; padding:9px 20px; }
 .product { min-height:475px; display:flex; flex-direction:column; padding:28px 30px 22px; align-self:center; border:1px solid #56d3ff; border-radius:16px; background:linear-gradient(145deg,#04132ce8,#010d20e8); box-shadow:inset 0 0 22px #087caa24,0 0 7px #2bbbed6b,0 0 35px #087cad30; backdrop-filter:blur(14px); transition:transform .45s,box-shadow .45s,border-color .45s; }
 .product::before { content:""; position:absolute; left:20px; right:20px; top:0; height:1px; background:linear-gradient(90deg,transparent,#b6f5ff,transparent); }
 .product:hover,.product:focus-within { transform:translateY(-6px); box-shadow:inset 0 0 26px #0a75b530,0 0 12px #30c0f370,0 0 46px #057cb44d; }
-.product.pro { border-color:#ad70ef; background:linear-gradient(145deg,#0a092ce8,#08071de8); box-shadow:inset 0 0 25px #8040c921,0 0 7px #ab57ec75,0 0 40px #7322bd38; }
+.product.pro { border-color:#ad70ef; background:linear-gradient(145deg,#0a092ce8,#08071de8); box-shadow:inset 0 0 22px #8040c921,0 0 7px #ab57ec75,0 0 35px #7322bd38; }
 .product.pro:hover,.product.pro:focus-within { box-shadow:inset 0 0 26px #732eb035,0 0 12px #b773f57a,0 0 46px #6625bb50; }
 .product-heading { display:flex; gap:15px; align-items:center; margin-bottom:23px; }
 .product-heading svg { width:43px; height:43px; flex-shrink:0; color:#b1b8ff; }
 .pro .product-heading svg { color:#ad58f3; filter:drop-shadow(0 0 7px #813cc35c); }
 .product .edition { font-size:12px; font-weight:650; color:#f1f4ff; letter-spacing:.8px; display:block; line-height:1.5; }
 .product-heading strong { display:block; font-size:35px; line-height:1; font-weight:750; letter-spacing:-.5px; background:linear-gradient(180deg,#b5efff,#2fbefc); background-clip:text; -webkit-text-fill-color:transparent; }
-.pro .product-heading strong { background-image:linear-gradient(180deg,#ecc2ff,#bd65ff); }
+.pro .product-heading strong { background-image:linear-gradient(180deg,#ecc2ff,#4e00ff); }
 .product h2 { font-size:20px; line-height:1.32; font-weight:550; letter-spacing:-.3px; margin:0 0 18px; }
 .hero-features { list-style:none; padding:0; margin:0 0 24px; font-size:14px; line-height:1.6; color:#d7e6f6; }
 .hero-features li { position:relative; padding-left:22px; margin:8px 0; }
