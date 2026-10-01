@@ -81,6 +81,19 @@ class SupportReplyAdminTests(TestCase):
         self.assertEqual(email.status, 'queued')
         self.assertIn('message', email.context)
         self.assertIn('reply', email.context)
+        self.assertIn('status', email.context)
+        self.assertIn('support_id', email.context)
+        self.assertIn('responder', email.context)
+        self.assertIn('reference', email.context)
+        self.assertEqual(
+            email.template.body_text.format(**email.context),
+            (
+                'Antwort: Bitte Cache leeren und erneut anmelden.\n'
+                'Status: In Bearbeitung\n'
+                f'Vorgang: {self.request_obj.id}\n'
+                'Bearbeitet von: Support Admin'
+            ),
+        )
 
         self.assertTrue(
             AuditEvent.objects.filter(
