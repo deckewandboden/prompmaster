@@ -156,8 +156,9 @@ class Command(BaseCommand):
             user.email_verified_at = now
             user.two_factor_required = is_admin
             if is_admin:
-                admin_password = 'PmDemo-' + secrets.token_urlsafe(16)
-                user.set_password(admin_password)
+                if not user.pk or not user.has_usable_password():
+                    admin_password = 'PmDemo-' + secrets.token_urlsafe(16)
+                    user.set_password(admin_password)
                 user.totp_secret_enc = ''
                 user.last_totp_step = -1
             elif not user.pk:
@@ -333,7 +334,9 @@ class Command(BaseCommand):
             '3 Free-Benutzer · 3 Demo-Bestellungen · 1 offene PRO-Anfrage'
         ))
         self.stdout.write(f'Firmenadmin: {ADMIN_EMAIL}')
-        self.stdout.write(f'Temporäres Passwort: {admin_password}')
+        self.stdout.write(
+            f"Temporäres Passwort: {admin_password or 'unverändert (bereits gesetzt)'}"
+        )
         self.stdout.write('MFA: beim ersten Login erforderlich')
         self.stdout.write('E-Mail-Versand: keiner')
         self.stdout.write('Payment-Provider: keiner (nur synthetische demo-Datensätze)')
