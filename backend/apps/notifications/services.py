@@ -289,6 +289,10 @@ def reminder_recipient_scopes(license_obj):
 
         if not license_obj.company or license_obj.company.status != 'active':
             return recipients
+        if license_obj.company.customer_number == 'DEMO-NETSTYLE':
+            # The dedicated presentation tenant contains a real admin address
+            # but must never generate automatic outbound reminder traffic.
+            return recipients
         active_members = {
             row.user_id: row.user
             for row in Membership.objects.filter(
