@@ -1,6 +1,6 @@
 # GitHub Ready Status — konsolidierter Release-Stand
 
-Stand: 2026-09-23
+Stand: 2026-10-01
 
 ## Automatisiert grün nachgewiesen
 
@@ -37,7 +37,7 @@ Die Free-/Pro-Golden-Master bleiben hash-geschützt und unverändert; die V2-Int
 Die folgenden Gates können nicht durch normale CI ersetzt werden und bleiben bis zur realen Provider-/Infrastrukturabnahme offen:
 
 - Deployment auf dem tatsächlichen Zielhost inklusive öffentlicher Domain/DNS/TLS
-- Microsoft Graph Mail E2E inklusive Exchange Application-RBAC-Scope-Nachweis
+- realer Mail-Provider-E2E für das final aktivierte Routing; Exchange Application-RBAC nur falls Graph aktiviert wird
 - Mollie Sandbox E2E über den öffentlichen Webhook, inklusive Refund/Chargeback
 - externer S3/restic Backup-/Restore-Drill
 - reale Monitoring-/Alert-Empfänger und dokumentierter Notfallzugang
