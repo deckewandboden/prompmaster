@@ -1,6 +1,7 @@
 from unittest.mock import patch
 
 from django.test import TestCase
+from django.core.management import call_command
 from django.urls import reverse
 from django.utils import timezone
 
@@ -161,6 +162,27 @@ class SupportReplyAdminTests(TestCase):
         message = SupportMessage.objects.get(support_request=self.request_obj)
         self.assertEqual(message.body, 'Antwort bleibt trotz Mailfehler erhalten.')
         self.assertIsNone(message.notification_email_id)
+
+    def test_seed_defaults_support_reply_contract_matches_runtime_context(self):
+        call_command('seed_defaults', verbosity=0)
+        template = EmailTemplate.objects.get(code='support_reply')
+        self.assertEqual(template.subject, 'PromptMaster: {subject}')
+        for field in ('{reply}', '{status}', '{support_id}', '{responder}'):
+            self.assertIn(field, template.body_text)
+        context = {
+            'subject': 'Vertragstest',
+            'message': 'Antworttext',
+            'reply': 'Antworttext',
+            'responder': 'PromptMaster Support',
+            'status': 'In Bearbeitung',
+            'support_id': str(self.request_obj.id),
+            'reference': str(self.request_obj.id),
+        }
+        rendered = template.body_text.format(**context)
+        self.assertIn('Antworttext', rendered)
+        self.assertIn('In Bearbeitung', rendered)
+        self.assertIn(str(self.request_obj.id), rendered)
+        self.assertIn('PromptMaster Support', rendered)
 
     def test_license_and_support_templates_keep_action_and_reply_layout_contract(self):
         from django.conf import settings
