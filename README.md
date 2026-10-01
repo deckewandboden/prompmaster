@@ -130,6 +130,23 @@ unset INITIAL_ADMIN_PASSWORD INITIAL_ADMIN_EMAIL
 
 Das Passwort wird dabei **nicht** in `.env`, Git oder ein Repository-Artefakt geschrieben. Der neu angelegte Superadmin muss beim ersten Login 2FA einrichten. Für spätere Deployments wird `bootstrap_admin` nicht benötigt.
 
+## netstyle-Präsentationsdemo
+
+Die separate Präsentationsfirma wird bewusst über einen eigenen, explizit bestätigten
+Seed erzeugt. Der Seed versendet keine E-Mails und ruft keinen echten Payment-Provider auf.
+
+```bash
+docker compose exec -T web python manage.py seed_netstyle_presentation_demo \
+  --confirm NETSTYLE-PRESENTATION-DEMO
+```
+
+In einer Produktions-Präsentationsumgebung ist zusätzlich
+`--allow-production-presentation` erforderlich. Der Seed erzeugt
+`DEMO-NETSTYLE` mit 12 aktiven Benutzern, Rainer Spickermann als
+MFA-pflichtigem Firmenadministrator, 10 PRO-Lizenzen (9 zugewiesen/1 frei),
+3 Free-Benutzern, den drei synthetischen Bestellstufen 1/7/+2 und einer offenen
+PRO-Anfrage.
+
 ## Runtime Acceptance
 
 ```bash
