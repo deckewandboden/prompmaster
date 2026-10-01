@@ -80,7 +80,12 @@ def add_staff_message(
     recipient = (locked.user.email or '').strip().lower()
 
     if visibility == 'customer':
-        if is_demo_support_recipient(recipient):
+        presentation_demo = (
+            locked.company_id
+            and locked.company
+            and locked.company.customer_number == 'DEMO-NETSTYLE'
+        )
+        if is_demo_support_recipient(recipient) or presentation_demo:
             mail_suppressed = True
         else:
             try:
