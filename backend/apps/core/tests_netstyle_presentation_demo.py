@@ -118,6 +118,21 @@ class NetstylePresentationDemoTests(TestCase):
         self.assertIn('E-Mail-Versand: keiner', output)
         self.assertIn('Provider-Aufrufe: keine', output)
 
+    def test_automatic_license_reminders_are_suppressed(self):
+        from apps.notifications.services import reminder_recipient_scopes
+
+        self.seed()
+        license_obj = (
+            License.objects.filter(
+                company__customer_number='DEMO-NETSTYLE',
+                assignments__ended_at__isnull=True,
+            )
+            .select_related('company')
+            .first()
+        )
+        self.assertIsNotNone(license_obj)
+        self.assertEqual(reminder_recipient_scopes(license_obj), {})
+
     def test_seed_is_idempotent(self):
         self.seed()
         rainer = User.objects.get(email='rspickermann@netstyle.de')
