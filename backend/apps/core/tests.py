@@ -2,6 +2,7 @@ from datetime import timedelta
 import json
 import os
 import logging
+from pathlib import Path
 from types import SimpleNamespace
 from unittest.mock import Mock, patch
 
@@ -24,6 +25,24 @@ from .middleware import CorrelationIdMiddleware, JsonLogFormatter
 from .datagrid import DataGrid, csv_response
 from .security import token_hash, token_pair
 from .sensitive import SENSITIVE_REAUTH_SESSION_KEY
+
+
+class AdminFormSpacingCssContractTests(SimpleTestCase):
+    def test_global_form_spacing_contract_prevents_control_text_overlap(self):
+        from django.conf import settings
+
+        css = (
+            Path(settings.BASE_DIR) / 'static' / 'css' / 'app.css'
+        ).read_text(encoding='utf-8')
+
+        self.assertIn('System-wide admin form spacing contract', css)
+        self.assertIn('.form label{', css)
+        self.assertIn('display:grid;', css)
+        self.assertIn('.form label:has(>input[type=checkbox])', css)
+        self.assertIn('inline-size:18px;', css)
+        self.assertIn('margin:0!important;', css)
+        self.assertIn('.form .row{', css)
+        self.assertIn('row-gap:14px;', css)
 
 
 class SecurityTests(SimpleTestCase):
