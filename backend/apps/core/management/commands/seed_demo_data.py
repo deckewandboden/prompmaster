@@ -381,6 +381,7 @@ class Command(BaseCommand):
         verified_at=None,
     ):
         user = User.objects.filter(email=email).first()
+        is_new = user is None
         if user is None:
             user = User(
                 email=email,
@@ -399,7 +400,7 @@ class Command(BaseCommand):
             user.last_totp_step = -1
         if password:
             user.set_password(password)
-        elif not user.pk:
+        elif is_new:
             user.set_unusable_password()
         user.save()
         return user
