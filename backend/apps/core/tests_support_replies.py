@@ -151,6 +151,22 @@ class SupportReplyAdminTests(TestCase):
         self.assertEqual(message.body, 'Demo-Antwort ohne echten Mailversand.')
         self.assertIsNone(message.notification_email_id)
 
+    def test_netstyle_presentation_company_reply_is_saved_without_email_queue(self):
+        self.company.customer_number = 'DEMO-NETSTYLE'
+        self.company.save(update_fields=['customer_number', 'updated_at'])
+        self.customer.email = 'rspickermann@netstyle.de'
+        self.customer.save(update_fields=['email'])
+
+        response = self.client.post(
+            reverse('ns_admin:support_request_reply', args=[self.request_obj.id]),
+            {'message': 'Präsentationsantwort ohne echten Mailversand.'},
+        )
+
+        self.assertEqual(response.status_code, 302)
+        message = SupportMessage.objects.get(support_request=self.request_obj)
+        self.assertEqual(message.body, 'Präsentationsantwort ohne echten Mailversand.')
+        self.assertIsNone(message.notification_email_id)
+
     def test_mail_queue_failure_keeps_reply_and_redirects(self):
         with patch('apps.support.services.queue_email', side_effect=RuntimeError('queue unavailable')):
             response = self.client.post(
