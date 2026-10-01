@@ -3,7 +3,14 @@ from django.db import transaction
 
 from apps.accounts.models import User
 from apps.companies.models import Company, Invitation, Membership, PrivateCustomerProfile
-from apps.core.management.commands.seed_demo_data import STAFF_ACCOUNTS, _plus_alias, _sha
+from apps.core.management.commands.seed_demo_data import (
+    COMPANIES,
+    DEMO_FIRST_NAMES,
+    DEMO_LAST_NAMES,
+    STAFF_ACCOUNTS,
+    _plus_alias,
+    _sha,
+)
 
 
 CONFIRM_VALUE = 'READDRESS-DEMO-USERS'
@@ -53,39 +60,54 @@ class Command(BaseCommand):
                 user.save(update_fields=['email', 'updated_at'])
             changes.append((label, old, target))
 
-        companies = list(
-            Company.objects.filter(customer_number__startswith='DEMO-')
-            .order_by('customer_number')
-        )
-        if not companies:
-            raise CommandError('Keine DEMO-Unternehmen gefunden.')
+        companies = {
+            company.customer_number: company
+            for company in Company.objects.filter(
+                customer_number__in=[spec['customer_number'] for spec in COMPANIES]
+            )
+        }
+        if len(companies) != len(COMPANIES):
+            raise CommandError('Der vollständige DEMO-Unternehmensbestand ist nicht vorhanden.')
 
-        member_alias = 11
-        for company_index, company in enumerate(companies, start=1):
-            memberships = list(
-                Membership.objects.filter(company=company, active=True)
-                .select_related('user')
-                .order_by('created_at', 'user__email')
+        for company_index, spec in enumerate(COMPANIES, start=1):
+            company = companies[spec['customer_number']]
+            previous_people = sum(
+                row['employees'] for row in COMPANIES[:company_index - 1]
             )
-            admins = [row for row in memberships if row.role == 'admin']
-            if len(admins) != 1:
-                raise CommandError(
-                    f'{company.customer_number}: erwartet genau einen aktiven Demo-Admin.'
-                )
-            readdress(
-                admins[0].user,
-                company_index,
-                f'{company.customer_number} Admin',
+            previous_members = sum(
+                row['employees'] - 1 for row in COMPANIES[:company_index - 1]
             )
-            for membership in memberships:
-                if membership.pk == admins[0].pk:
-                    continue
-                readdress(
-                    membership.user,
-                    member_alias,
-                    f'{company.customer_number} Benutzer',
+            for index in range(spec['employees']):
+                global_index = previous_people + index
+                first_name = DEMO_FIRST_NAMES[
+                    global_index % len(DEMO_FIRST_NAMES)
+                ]
+                last_name = DEMO_LAST_NAMES[
+                    ((global_index * 7) + (global_index // len(DEMO_FIRST_NAMES)))
+                    % len(DEMO_LAST_NAMES)
+                ]
+                membership = (
+                    Membership.objects.filter(
+                        company=company,
+                        active=True,
+                        user__first_name=first_name,
+                        user__last_name=last_name,
+                    )
+                    .select_related('user')
+                    .first()
                 )
-                member_alias += 1
+                if membership is None:
+                    raise CommandError(
+                        f'{company.customer_number}: Demo-Benutzer '
+                        f'{first_name} {last_name} fehlt.'
+                    )
+                if index == 0:
+                    alias_no = company_index
+                    label = f'{company.customer_number} Admin'
+                else:
+                    alias_no = 10 + previous_members + index
+                    label = f'{company.customer_number} Benutzer'
+                readdress(membership.user, alias_no, label)
 
         private_profiles = list(
             PrivateCustomerProfile.objects.filter(
