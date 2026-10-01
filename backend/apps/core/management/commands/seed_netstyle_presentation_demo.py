@@ -138,6 +138,7 @@ class Command(BaseCommand):
         for index, (first_name, last_name, email) in enumerate(DEMO_PEOPLE):
             is_admin = index == 0
             user = User.objects.filter(email__iexact=email).first()
+            is_new = user is None
             if user and user.is_staff:
                 raise CommandError(
                     f'{email} ist ein interner Staff-Benutzer und darf nicht in die Kunden-Demo übernommen werden.'
@@ -164,12 +165,12 @@ class Command(BaseCommand):
             user.email_verified_at = now
             user.two_factor_required = is_admin
             if is_admin:
-                if not user.pk or not user.has_usable_password():
+                if is_new or not user.has_usable_password():
                     admin_password = 'PmDemo-' + secrets.token_urlsafe(16)
                     user.set_password(admin_password)
                 user.totp_secret_enc = ''
                 user.last_totp_step = -1
-            elif not user.pk:
+            elif is_new:
                 user.set_unusable_password()
             user.save()
 
