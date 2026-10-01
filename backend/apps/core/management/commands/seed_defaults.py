@@ -199,12 +199,15 @@ class Command(BaseCommand):
                 'Kategorie: {category}\nKunde: {customer}\nE-Mail: {email}\nLizenz: {license}\nBetreff: {subject}\n\n{message}',
             ),
             'support_reply': (
-                'Antwort auf Ihre PromptMaster-Anfrage: {subject}',
+                'PromptMaster: {subject}',
                 'Guten Tag,\n\n'
-                'wir haben auf Ihre PromptMaster-Anfrage „{subject}“ geantwortet:\n\n'
-                '{message}\n\n'
-                'Vorgang: {reference}\n\n'
-                'Viele Grüße\nIhr PromptMaster-Support',
+                'zu Ihrer PromptMaster-Anfrage "{subject}" gibt es eine neue Antwort:\n\n'
+                '{reply}\n\n'
+                'Status: {status}\n'
+                'Vorgangs-ID: {support_id}\n\n'
+                'Mit freundlichen Grüßen\n'
+                '{responder}\n'
+                'netstyle PromptMaster Support',
             ),
             'withdrawal_received': (
                 'PromptMaster – Eingang Ihres Widerrufs',
