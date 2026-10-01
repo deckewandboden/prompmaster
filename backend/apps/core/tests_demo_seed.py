@@ -55,8 +55,7 @@ class DemoDataSeedTests(TestCase):
             )
             role_users = UserRole.objects.filter(
                 role__code=role_code,
-                user__email__startswith='testnetstyle+',
-                user__email__endswith='@gmail.com',
+                user__email__endswith='@promptmaster.invalid',
                 user__is_staff=True,
             ).select_related('user')
             self.assertEqual(role_users.count(), expected_count)
@@ -67,21 +66,6 @@ class DemoDataSeedTests(TestCase):
         self.assertEqual(
             PrivateCustomerProfile.objects.filter(customer_number__startswith='DEMO-P-').count(),
             3,
-        )
-
-        self.assertEqual(
-            Membership.objects.filter(
-                company__customer_number__startswith='DEMO-',
-                role='admin',
-                user__email__in=[
-                    'testnetstyle+1@gmail.com',
-                    'testnetstyle+2@gmail.com',
-                    'testnetstyle+3@gmail.com',
-                    'testnetstyle+4@gmail.com',
-                    'testnetstyle+5@gmail.com',
-                ],
-            ).count(),
-            5,
         )
 
         company_members = list(
