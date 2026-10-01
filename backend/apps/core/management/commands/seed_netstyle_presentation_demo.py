@@ -125,6 +125,14 @@ class Command(BaseCommand):
             defaults={**COMPANY, 'status': 'active'},
         )
 
+        # If an older presentation seed left another company admin behind,
+        # deactivate that demo membership before assigning the canonical admin.
+        Membership.objects.filter(
+            company=company,
+            active=True,
+            role='admin',
+        ).exclude(user__email__iexact=ADMIN_EMAIL).update(active=False)
+
         users = []
         admin_password = None
         for index, (first_name, last_name, email) in enumerate(DEMO_PEOPLE):
