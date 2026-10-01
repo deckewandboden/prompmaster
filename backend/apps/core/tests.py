@@ -1,4 +1,5 @@
 from datetime import timedelta
+from io import StringIO
 import json
 import os
 import logging
@@ -6,9 +7,11 @@ from pathlib import Path
 from types import SimpleNamespace
 from unittest.mock import Mock, patch
 
+from django.core.management import call_command
+from django.core.management.base import CommandError
 from django.db import connection
 from django.http import HttpResponse
-from django.test import RequestFactory, SimpleTestCase, TestCase
+from django.test import RequestFactory, SimpleTestCase, TestCase, override_settings
 from django.test.utils import CaptureQueriesContext
 from unittest import skipUnless
 from django.utils import timezone
@@ -43,6 +46,41 @@ class AdminFormSpacingCssContractTests(SimpleTestCase):
         self.assertIn('margin:0!important;', css)
         self.assertIn('.form .row{', css)
         self.assertIn('row-gap:14px;', css)
+
+
+class MailRuntimeValidationTests(TestCase):
+    @override_settings(
+        EMAIL_PROVIDER='smtp',
+        EMAIL_HOST='smtp.example.test',
+        EMAIL_PORT=587,
+        EMAIL_USE_TLS=True,
+        EMAIL_HOST_USER='sender@example.test',
+        EMAIL_HOST_PASSWORD='smtp-secret',
+        DEFAULT_FROM_EMAIL='sender@example.test',
+    )
+    def test_runtime_mail_validation_accepts_tls_smtp_fallback(self):
+        output = StringIO()
+        call_command('validate_mail_runtime', require_tls=True, stdout=output)
+        self.assertIn('MAIL RUNTIME VALIDATION OK', output.getvalue())
+        self.assertIn('route=smtp1', output.getvalue())
+
+    @override_settings(
+        EMAIL_PROVIDER='smtp',
+        EMAIL_HOST='smtp.example.test',
+        EMAIL_PORT=587,
+        EMAIL_USE_TLS=False,
+        EMAIL_HOST_USER='sender@example.test',
+        EMAIL_HOST_PASSWORD='smtp-secret',
+        DEFAULT_FROM_EMAIL='sender@example.test',
+    )
+    def test_runtime_mail_validation_rejects_insecure_production_smtp(self):
+        with self.assertRaisesMessage(CommandError, 'MAIL RUNTIME VALIDATION FAIL'):
+            call_command(
+                'validate_mail_runtime',
+                require_tls=True,
+                stdout=StringIO(),
+                stderr=StringIO(),
+            )
 
 
 class SecurityTests(SimpleTestCase):
