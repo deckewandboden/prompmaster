@@ -92,7 +92,7 @@ class NetstylePresentationDemoTests(TestCase):
         self.assertEqual(
             Payment.objects.filter(
                 order__in=orders,
-                provider='demo',
+                provider='mollie',
                 status='paid',
             ).count(),
             3,
@@ -114,7 +114,7 @@ class NetstylePresentationDemoTests(TestCase):
         )
         self.assertEqual(EmailMessage.objects.count(), before_mail)
         self.assertIn('E-Mail-Versand: keiner', output)
-        self.assertIn('Payment-Provider: keiner', output)
+        self.assertIn('Provider-Aufrufe: keine', output)
 
     def test_seed_is_idempotent(self):
         self.seed()
