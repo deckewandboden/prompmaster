@@ -244,15 +244,16 @@ class Command(BaseCommand):
                     'product_name_snapshot': product.name,
                 },
             )
+            provider_payment_id = f"tr_demo_netstyle_{number.lower()}"
             Payment.objects.update_or_create(
-                provider_payment_id=f'demo_netstyle_{number.lower()}',
+                provider_payment_id=provider_payment_id,
                 defaults={
                     'order': order,
-                    'provider': 'demo',
+                    'provider': 'mollie',
                     'status': 'paid',
                     'amount': gross_total,
                     'currency': price.currency,
-                    'method': 'demo',
+                    'method': 'banktransfer' if number.endswith('0001') else 'creditcard',
                     'paid_at': purchased_at,
                     'failed_at': None,
                     'processed_paid': True,
@@ -266,7 +267,7 @@ class Command(BaseCommand):
             Order.objects.filter(pk=order.pk).update(created_at=purchased_at)
             OrderItem.objects.filter(pk=item.pk).update(created_at=purchased_at)
             Payment.objects.filter(
-                provider_payment_id=f'demo_netstyle_{number.lower()}'
+                provider_payment_id=provider_payment_id
             ).update(created_at=purchased_at)
             cohorts.extend([(item, purchased_at)] * quantity)
 
@@ -347,4 +348,4 @@ class Command(BaseCommand):
         )
         self.stdout.write('MFA: beim ersten Login erforderlich')
         self.stdout.write('E-Mail-Versand: keiner')
-        self.stdout.write('Payment-Provider: keiner (nur synthetische demo-Datensätze)')
+        self.stdout.write('Provider-Aufrufe: keine (nur synthetische Mollie-Demo-Datensätze)')
