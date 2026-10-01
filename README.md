@@ -2,7 +2,7 @@
 
 Konsolidierter Gesamtstand der belegbaren PromptMaster-Entwicklung mit Marketing-/Vertriebsfrontend, Free/Pro V2, Commercial Backend und erhaltener historischer Transfer-/Designprovenienz.
 
-> **Status 23.09.2026:** Der konsolidierte `main`-Stand hat die internen automatisierten Release-Gates vollständig bestanden: Shell-/Dependency-Security, 292 Django-Tests (6 absichtliche Performance-Skips), separates 100k-DataGrid-Gate, 34 Apps / 194 Tasks / 194 Prompt-Smokes, Chromium/Firefox/WebKit Browser-Smoke sowie Full-Stack-Bootstrap, Idempotenz, HTTP-Lasttest, Backup-Restore-Recovery und External-Caddy-Rehearsal. Eine echte Produktionsfreigabe erfordert zusätzlich die provider-/infrastrukturabhängigen Gates und die menschliche Freigabe aus `docs/RELEASE_GATES.md` und `docs/PRODUCTION_ACCEPTANCE.md`.
+> **Status 01.10.2026:** Der konsolidierte `main`-Stand hat die internen automatisierten Release-Gates vollständig bestanden: Shell-/Dependency-Security, 292 Django-Tests (6 absichtliche Performance-Skips), separates 100k-DataGrid-Gate, 34 Apps / 194 Tasks / 194 Prompt-Smokes, Chromium/Firefox/WebKit Browser-Smoke sowie Full-Stack-Bootstrap, Idempotenz, HTTP-Lasttest, Backup-Restore-Recovery und External-Caddy-Rehearsal. Eine echte Produktionsfreigabe erfordert zusätzlich die provider-/infrastrukturabhängigen Gates und die menschliche Freigabe aus `docs/RELEASE_GATES.md` und `docs/PRODUCTION_ACCEPTANCE.md`.
 
 Der vollständige Dateiindex liegt in `docs/COMPLETE_FILE_INVENTORY.md`; `FILE_MANIFEST.tsv` und `MANIFEST.json` sichern Pfad, Größe, SHA256 und Rolle jeder inventarisierten Repository-Datei. Die Original-Recovery-ZIPs der beiden zuletzt gelieferten Quellen sind unverändert unter `archive/source-packages/` enthalten.
 
@@ -16,6 +16,7 @@ Der vollständige Dateiindex liegt in `docs/COMPLETE_FILE_INVENTORY.md`; `FILE_M
 - `docs/RELEASE_GATES.md`
 - `docs/GITHUB_TRANSFER.md`
 - `docs/GITHUB_READY_STATUS.md`
+- `docs/ROADMAP_CLOSEOUT_2026-10-01.md`
 
 ## Enthaltene Hauptbereiche
 
@@ -43,6 +44,7 @@ Der vollständige Dateiindex liegt in `docs/COMPLETE_FILE_INVENTORY.md`; `FILE_M
 - internes MCP für read/draft/test; **kein Publish/Delete**
 - zentrale FAQ-Verwaltung/API
 - GitHub CI und Betriebs-/Validierungsskripte
+- dedizierte netstyle-Präsentationsdemo `DEMO-NETSTYLE` mit 12 Benutzern und synthetischer Lizenz-/Bestellhistorie ohne Provideraktionen
 
 ## Monorepo-Struktur
 
@@ -152,7 +154,7 @@ Die GitHub-/Docker-/Browser-/Security-/100k-Gates sind für den konsolidierten R
 
 - Deployment auf dem tatsächlichen Zielhost inklusive öffentlicher Domain/DNS/TLS
 - Mollie Sandbox E2E über den echten öffentlichen Webhook, einschließlich Refund/Chargeback
-- Microsoft Graph Mail E2E inklusive Exchange Application-RBAC-Scope-Nachweis
+- realer Mail-Provider-E2E für das final aktivierte SMTP/Graph-Routing; Exchange Application-RBAC zusätzlich nur falls Graph aktiviert wird
 - externer S3/restic Backup-/Restore-Drill
 - reale Monitoring-/Alert-Empfänger und dokumentierter Notfallzugang
 - Rechtstexte/Steuerprüfung und menschliche Produktionsfreigabe
