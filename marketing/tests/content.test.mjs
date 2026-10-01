@@ -74,3 +74,12 @@ test('Hauptnavigation benennt Free und Pro eindeutig',async()=>{
   assert.doesNotMatch(index,/href="\/#start">Produkte<\/a>/);
   assert.doesNotMatch(index,/href="\/#vergleich">Free vs\. Pro<\/a>/);
 });
+
+
+test('Pro-Kachel verwendet das PromptMaster-Dreieck statt der Krone',async()=>{
+  const index=await readFile('index.html','utf8');
+  assert.match(index,/class="brand-triangle-mark"/);
+  assert.match(index,/<image href="\/brand\/promptmaster-logo-hq\.png"/);
+  assert.doesNotMatch(index,/m7 15 10 8 7-15 7 15 10-8-6 21H13Z/);
+  assert.doesNotMatch(index,/M13 42h22/);
+});
