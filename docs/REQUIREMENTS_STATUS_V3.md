@@ -1,5 +1,7 @@
 # Requirements Status V3 — konsolidierter Release-Stand
 
+Stand 01.10.2026: SMTP1/SMTP2/Graph-Routing und sender-domain Message-ID sind code-seitig integriert; der finale Provider wird nach realem Routing abgenommen.
+
 ## Code-materialisiert
 
 - Commercial Django Backend aus RC10-Härtung
@@ -46,7 +48,7 @@ Intern automatisiert grün nachgewiesen:
 
 - echter Zielhost inklusive Domain/DNS/TLS
 - Mollie Sandbox E2E über öffentlichen Webhook
-- Microsoft Graph Mail E2E inklusive Exchange Application-RBAC
+- realer Mail-Provider-E2E für das tatsächlich aktivierte Routing; Graph-RBAC nur wenn Graph aktiviert wird
 - externer S3/restic Backup-/Restore-Drill
 - reale Monitoring-/Alert-Empfänger und Notfallzugang
 - Rechtstexte / Steuerprüfung / menschliche Go-Live-Freigabe
