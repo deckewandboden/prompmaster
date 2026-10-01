@@ -118,7 +118,11 @@ class NetstylePresentationDemoTests(TestCase):
 
     def test_seed_is_idempotent(self):
         self.seed()
+        rainer = User.objects.get(email='rspickermann@netstyle.de')
+        first_password_hash = rainer.password
         self.seed()
+        rainer.refresh_from_db()
+        self.assertEqual(rainer.password, first_password_hash)
 
         company = Company.objects.get(customer_number='DEMO-NETSTYLE')
         self.assertEqual(Membership.objects.filter(company=company, active=True).count(), 12)
