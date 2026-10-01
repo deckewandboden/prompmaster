@@ -32,13 +32,20 @@ Der aktuelle konsolidierte Release-Stand wurde auf einem realen GitHub-Actions-R
 
 Die Free-/Pro-Golden-Master bleiben hash-geschützt und unverändert; die V2-Integration ist additiv.
 
+## Bereits produktiv nachgewiesen
+
+- Zielhost und öffentliche Domain/DNS/TLS über den externen Caddy-Pfad
+- SMTP1 über IONOS mit realer externer Gmail-Zustellung
+- SPF/DKIM/DMARC jeweils PASS und TLS aktiv
+- sender-domain Message-ID im real zugestellten Header
+- Google Postmaster Tools für `decke-wand-boden.de` verifiziert
+
 ## Produktiv noch extern abzunehmen
 
-Die folgenden Gates können nicht durch normale CI ersetzt werden und bleiben bis zur realen Provider-/Infrastrukturabnahme offen:
+Die folgenden Gates können nicht durch normale CI ersetzt werden und bleiben offen:
 
-- Deployment auf dem tatsächlichen Zielhost inklusive öffentlicher Domain/DNS/TLS
-- realer Mail-Provider-E2E für das final aktivierte Routing; Exchange Application-RBAC nur falls Graph aktiviert wird
 - Mollie Sandbox E2E über den öffentlichen Webhook, inklusive Refund/Chargeback
+- Graph-E2E/Application-RBAC nur falls Graph im finalen Routing tatsächlich aktiviert wird
 - externer S3/restic Backup-/Restore-Drill
 - reale Monitoring-/Alert-Empfänger und dokumentierter Notfallzugang
 - cAdvisor-Host-Trust-Boundary bewusst akzeptieren oder nach realem Staging-Test technisch ersetzen
