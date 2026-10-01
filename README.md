@@ -165,13 +165,24 @@ Ein-Kommando-Preflight/Initialisierung:
 
 Siehe `docs/GITHUB_TRANSFER.md`. Das Repository ist für einen privaten GitHub-Erstimport vorbereitet; `.env`, `.bootstrap-credentials`, Secrets, DB-/Backup-Artefakte und lokale Runtime-Daten gehören nicht ins Repository.
 
+## Bereits produktiv nachgewiesen
+
+- Zielhost und öffentliche Domain/DNS/TLS über den externen Caddy-Pfad
+- realer SMTP1-Versand über IONOS an Gmail
+- SPF, DKIM und DMARC jeweils PASS; TLS aktiv
+- sender-domain Message-ID im produktiven Versand
+- Google Postmaster Tools für `decke-wand-boden.de` verifiziert
+
+Die aktuelle Gmail-Spamklassifizierung des neuen Absenders wird als
+Deliverability-/Reputationsthema verfolgt und ist kein offener
+Authentifizierungs- oder PromptMaster-Codefehler.
+
 ## Noch extern zu bestätigen
 
-Die GitHub-/Docker-/Browser-/Security-/100k-Gates sind für den konsolidierten Release-Stand automatisiert grün nachgewiesen. **Nicht durch CI ersetzbar** und deshalb vor einem echten Go-Live weiterhin extern abzunehmen sind:
+Die GitHub-/Docker-/Browser-/Security-/100k-Gates sind automatisiert abgedeckt. Noch offen sind:
 
-- Deployment auf dem tatsächlichen Zielhost inklusive öffentlicher Domain/DNS/TLS
 - Mollie Sandbox E2E über den echten öffentlichen Webhook, einschließlich Refund/Chargeback
-- realer Mail-Provider-E2E für das final aktivierte SMTP/Graph-Routing; Exchange Application-RBAC zusätzlich nur falls Graph aktiviert wird
+- Graph-E2E/Application-RBAC nur falls Graph im finalen Routing tatsächlich aktiviert wird
 - externer S3/restic Backup-/Restore-Drill
 - reale Monitoring-/Alert-Empfänger und dokumentierter Notfallzugang
 - Rechtstexte/Steuerprüfung und menschliche Produktionsfreigabe
