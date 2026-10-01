@@ -5,7 +5,7 @@ import unittest
 import yaml
 
 from validate_runtime_config import ROOT, validate
-from validate_env import is_external_s3_repository
+from validate_env import is_external_s3_repository, normalize_mail_provider
 
 
 class RuntimeConfigTests(unittest.TestCase):
@@ -39,6 +39,13 @@ class RuntimeConfigTests(unittest.TestCase):
     def test_cadvisor_mount_write_access_is_rejected(self):
         self.base['services']['cadvisor']['volumes'][0] = '/:/rootfs'
         self.assertTrue(validate(self.base, self.production))
+
+    def test_mail_provider_normalization(self):
+        self.assertEqual(normalize_mail_provider('smtp'), 'smtp1')
+        self.assertEqual(normalize_mail_provider('mailpit'), 'smtp1')
+        self.assertEqual(normalize_mail_provider('smtp1'), 'smtp1')
+        self.assertEqual(normalize_mail_provider('microsoft_graph'), 'graph')
+        self.assertEqual(normalize_mail_provider('graph'), 'graph')
 
     def test_external_restic_repository_accepts_canonical_tls_forms(self):
         self.assertTrue(is_external_s3_repository('s3:https://s3.example.net/promptmaster'))
