@@ -97,6 +97,54 @@ class DemoDataSeedTests(TestCase):
         self.assertIn('TEMPORÄRE DEMO-ZUGÄNGE', output)
         self.assertIn('Der vorhandene echte Superadmin bleibt unverändert', output)
 
+    def test_seed_can_migrate_demo_users_to_gmail_plus_aliases(self):
+        self.seed()
+
+        output = io.StringIO()
+        call_command(
+            'seed_demo_data',
+            demo_email_base='testnetstyle@gmail.com',
+            stdout=output,
+        )
+
+        for company_index in range(1, 6):
+            company = Company.objects.get(customer_number=f'DEMO-{1000 + company_index}')
+            admin = Membership.objects.get(
+                company=company,
+                active=True,
+                role='admin',
+            ).user
+            self.assertEqual(
+                admin.email,
+                f'testnetstyle+{company_index}@gmail.com',
+            )
+
+        private_emails = {
+            profile.customer_number: profile.user.email
+            for profile in PrivateCustomerProfile.objects.select_related('user').filter(
+                customer_number__startswith='DEMO-P-'
+            )
+        }
+        self.assertEqual(
+            private_emails,
+            {
+                'DEMO-P-2001': 'testnetstyle+101@gmail.com',
+                'DEMO-P-2002': 'testnetstyle+102@gmail.com',
+                'DEMO-P-2003': 'testnetstyle+103@gmail.com',
+            },
+        )
+        self.assertEqual(
+            Membership.objects.filter(
+                company__customer_number__startswith='DEMO-',
+                active=True,
+            ).count(),
+            91,
+        )
+        self.assertIn(
+            'Demo-Mail aktiv: testnetstyle@gmail.com mit Gmail-Plus-Aliassen.',
+            output.getvalue(),
+        )
+
     def test_seed_populates_cross_function_states_and_is_idempotent(self):
         self.seed()
         first_counts = {
