@@ -145,6 +145,34 @@ class DemoDataSeedTests(TestCase):
             output.getvalue(),
         )
 
+    def test_readdress_command_preserves_demo_user_identity_and_password(self):
+        self.seed()
+        company = Company.objects.get(customer_number='DEMO-1001')
+        admin = Membership.objects.get(
+            company=company,
+            active=True,
+            role='admin',
+        ).user
+        original_pk = admin.pk
+        original_password_hash = admin.password
+
+        output = io.StringIO()
+        call_command(
+            'readdress_demo_users',
+            base_email='testnetstyle@gmail.com',
+            confirm='READDRESS-DEMO-USERS',
+            stdout=output,
+        )
+
+        admin.refresh_from_db()
+        self.assertEqual(admin.pk, original_pk)
+        self.assertEqual(admin.password, original_password_hash)
+        self.assertEqual(admin.email, 'testnetstyle+1@gmail.com')
+        self.assertIn(
+            'Demo-Benutzer auf Gmail-Plus-Aliasse umgestellt.',
+            output.getvalue(),
+        )
+
     def test_seed_populates_cross_function_states_and_is_idempotent(self):
         self.seed()
         first_counts = {
