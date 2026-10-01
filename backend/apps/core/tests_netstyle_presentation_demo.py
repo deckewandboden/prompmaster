@@ -49,6 +49,8 @@ class NetstylePresentationDemoTests(TestCase):
         self.assertTrue(rainer.is_active)
         self.assertFalse(rainer.is_staff)
         self.assertTrue(rainer.two_factor_required)
+        self.assertTrue(rainer.has_usable_password())
+        self.assertNotIn('unverändert (bereits gesetzt)', output)
         self.assertEqual(
             memberships.get(role='admin').user_id,
             rainer.id,
