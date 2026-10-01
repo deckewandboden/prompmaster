@@ -15,7 +15,7 @@ from apps.core.management.commands.external_mollie_acceptance import Command as 
 from apps.notifications.models import EmailMessage
 
 
-class ExternalAcceptanceSafetyTests(SimpleTestCase):
+class ExternalAcceptanceSafetyTests(TestCase):
 
     def test_graph_acceptance_requires_explicit_confirmation(self):
         with self.assertRaises(CommandError):
