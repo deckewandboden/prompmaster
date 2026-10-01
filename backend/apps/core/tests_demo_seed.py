@@ -84,6 +84,18 @@ class DemoDataSeedTests(TestCase):
             len(company_members),
         )
 
+        # Non-login demo users must never receive an accidental usable empty password.
+        non_login_members = [
+            user
+            for user in company_members
+            if not user.check_password('') and not user.has_usable_password()
+        ]
+        self.assertGreater(
+            len(non_login_members),
+            0,
+            'At least the display-only demo identities must have unusable passwords.',
+        )
+
         paid_demo_orders = Order.objects.filter(
             order_number__startswith='DEMO-',
             status='paid',
