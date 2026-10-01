@@ -26,7 +26,7 @@ nav .nav-cta { font-size:13px; padding:9px 20px; }
 .pro .product-heading svg { color:#ad58f3; filter:drop-shadow(0 0 7px #813cc35c); }
 .product .edition { font-size:12px; font-weight:650; color:#f1f4ff; letter-spacing:.8px; display:block; line-height:1.5; }
 .product-heading strong { display:block; font-size:35px; line-height:1; font-weight:750; letter-spacing:-.5px; background:linear-gradient(180deg,#b5efff,#2fbefc); background-clip:text; -webkit-text-fill-color:transparent; }
-.pro .product-heading strong { background-image:linear-gradient(180deg,#ecc2ff,#bd65ff); }
+.pro .product-heading strong { background-image:linear-gradient(180deg,#ecc2ff,#4e00ff); }
 .product h2 { font-size:20px; line-height:1.32; font-weight:550; letter-spacing:-.3px; margin:0 0 18px; }
 .hero-features { list-style:none; padding:0; margin:0 0 24px; font-size:14px; line-height:1.6; color:#d7e6f6; }
 .hero-features li { position:relative; padding-left:22px; margin:8px 0; }
