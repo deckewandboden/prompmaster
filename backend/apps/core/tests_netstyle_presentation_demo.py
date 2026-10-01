@@ -148,6 +148,36 @@ class NetstylePresentationDemoTests(TestCase):
             1,
         )
 
+    def test_existing_demo_admin_is_replaced_safely(self):
+        company = Company.objects.create(
+            customer_number='DEMO-NETSTYLE',
+            name='Altbestand Demo',
+            email='old.demo@promptmaster.invalid',
+            country='DE',
+        )
+        old_admin = User.objects.create_user(
+            email='old.demo.admin@promptmaster.invalid',
+            password='OldDemoPassword123!',
+            first_name='Alt',
+            last_name='Admin',
+        )
+        Membership.objects.create(
+            company=company,
+            user=old_admin,
+            role='admin',
+            active=True,
+        )
+
+        self.seed()
+
+        company.refresh_from_db()
+        admins = Membership.objects.filter(company=company, active=True, role='admin')
+        self.assertEqual(admins.count(), 1)
+        self.assertEqual(admins.get().user.email, 'rspickermann@netstyle.de')
+        self.assertFalse(
+            Membership.objects.get(company=company, user=old_admin).active
+        )
+
     @override_settings(ENVIRONMENT='production')
     def test_production_requires_explicit_presentation_flag(self):
         with self.assertRaisesMessage(CommandError, '--allow-production-presentation'):
