@@ -83,6 +83,21 @@ class MailRuntimeValidationTests(TestCase):
             )
 
 
+    @override_settings(
+        EMAIL_PROVIDER='graph',
+        GRAPH_TENANT_ID='tenant-test',
+        GRAPH_CLIENT_ID='client-test',
+        GRAPH_CLIENT_SECRET='graph-secret',
+        GRAPH_SENDER='sender@example.test',
+        DEFAULT_FROM_EMAIL='sender@example.test',
+    )
+    def test_runtime_mail_validation_accepts_graph_fallback(self):
+        output = StringIO()
+        call_command('validate_mail_runtime', require_tls=True, stdout=output)
+        self.assertIn('MAIL RUNTIME VALIDATION OK', output.getvalue())
+        self.assertIn('route=graph', output.getvalue())
+
+
 class SecurityTests(SimpleTestCase):
     def test_token_hash(self):
         raw, hashed = token_pair()
