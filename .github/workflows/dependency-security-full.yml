@@ -2,7 +2,7 @@ name: PromptMaster Full Dependency Security
 
 on:
   push:
-    branches: ['**']
+    branches: [main]
   pull_request:
 
 permissions:
