@@ -249,6 +249,7 @@ class MailIdentitySettingsTests(TestCase):
             },
         )
         message = SimpleNamespace(
+            id='smtp-test-42',
             subject='PromptMaster SMTP identity test',
             recipient='recipient@example.test',
         )
@@ -274,9 +275,24 @@ class MailIdentitySettingsTests(TestCase):
             from_email='PromptMaster <promptmaster@decke-wand-boden.de>',
             to=['recipient@example.test'],
             reply_to=['support@decke-wand-boden.de'],
+            headers={'Message-ID': '<smtp-test-42@decke-wand-boden.de>'},
             connection=connection,
         )
         email.send.assert_called_once_with(fail_silently=False)
+
+    def test_smtp_message_id_falls_back_to_from_domain(self):
+        from apps.notifications.services import _smtp_message_id
+
+        message = SimpleNamespace(id='message-123')
+        identity = {
+            'domain': '',
+            'from_email': 'promptmaster@decke-wand-boden.de',
+        }
+
+        self.assertEqual(
+            _smtp_message_id(message, identity),
+            '<message-123@decke-wand-boden.de>',
+        )
 
     def test_general_settings_form_validates_sender_domain_and_dns_records(self):
         from apps.core.admin_forms import GeneralSettingsForm
