@@ -2,7 +2,32 @@
 
 Diese Datei beschreibt ausschließlich die Gates, die reale Provider-/Infrastrukturzugänge benötigen. Secrets werden niemals ins Repository geschrieben.
 
+## Mailversand — SMTP oder Microsoft Graph
+
+PromptMaster unterstützt produktiv SMTP1, optional SMTP2 und Microsoft Graph. Der
+für den Release tatsächlich gewählte Primärprovider muss real gegen einen externen
+Empfänger abgenommen werden. Ein nicht verwendeter Provider ist kein Go-Live-Blocker.
+
+### SMTP-Abnahme
+
+Für SMTP muss der produktive Pfad über einen persistierten `EmailMessage`-Datensatz
+laufen. Zu dokumentieren sind mindestens:
+
+- `status=sent`, `retry_count=0` und der tatsächlich verwendete Provider;
+- reale Zustellung an einen externen Empfänger;
+- SPF, DKIM und DMARC beim Empfänger jeweils `PASS`;
+- TLS auf dem Provider-Hop;
+- `From`, `Return-Path` und `Reply-To` passend zur freigegebenen Absenderidentität;
+- Message-ID mit der konfigurierten Absenderdomain statt eines Container-/Docker-Hostnamens.
+
+Spam-/Inbox-Klassifizierung wird separat als Deliverability/Reputation beobachtet und
+ist nicht mit erfolgreicher technischer Authentifizierung gleichzusetzen.
+
 ## Microsoft Graph
+
+Microsoft Graph ist nur dann ein verpflichtendes externes Gate, wenn Graph im finalen
+Routing tatsächlich als Primär- oder Failover-Provider aktiviert wird.
+
 
 Voraussetzungen:
 

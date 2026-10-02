@@ -483,7 +483,7 @@ def invite(request):
             form.add_error('email', exc.messages[0])
         else:
             url = request.build_absolute_uri(reverse('accounts:accept_invitation', args=[raw]))
-            queue_email('invite', invitation.email, {'url': url})
+            queue_email('invite', invitation.email, {'url': url}, scope_company=company)
             messages.success(request, 'Einladung wurde versendet.')
             return redirect('portal:invitations')
     return render(request, 'portal/form.html', {'title': 'Benutzer einladen', 'form': form})
@@ -557,6 +557,8 @@ def request_pro_upgrade(request):
                     'upgrade_request',
                     admin.user.email,
                     {'user': request.user.full_name, 'email': request.user.email, 'product': product.name},
+                    scope_company=company_obj,
+                    scope_user=admin.user_id,
                 )
             messages.success(request, 'Ihre Pro-Anfrage wurde an den Firmenadministrator gesendet.')
         else:
@@ -586,6 +588,8 @@ def resolve_upgrade(request, pk, decision):
             'upgrade_request_resolved',
             row.user.email,
             {'product': row.product.name, 'status': row.get_status_display()},
+            scope_company=company_obj,
+            scope_user=row.user_id,
         )
         messages.success(request, f'Pro-Anfrage: {row.get_status_display()}.')
     return redirect('portal:team')
@@ -900,6 +904,8 @@ def help_view(request):
                 'support_confirmation',
                 request.user.email,
                 {'subject': form.cleaned_data['subject']},
+                scope_company=company_obj,
+                scope_user=request.user.id,
             )
         except Exception:
             notification_failed = True
@@ -918,7 +924,7 @@ def help_view(request):
                 'email': request.user.email,
                 'message': form.cleaned_data['message'],
                 'license': support_request.license.license_number if support_request.license else '–',
-            })
+            }, scope_company=company_obj)
         except Exception:
             notification_failed = True
             logger.exception(
@@ -1293,7 +1299,7 @@ def invitation_resend(request, pk):
         messages.error(request, exc.messages[0])
     else:
         url = request.build_absolute_uri(reverse('accounts:accept_invitation', args=[raw]))
-        queue_email('invite', invitation.email, {'url': url})
+        queue_email('invite', invitation.email, {'url': url}, scope_company=company_obj)
         messages.success(request, 'Neue Einladung versendet.')
     return redirect('portal:invitations')
 
@@ -1378,6 +1384,8 @@ def member_assignment_link(request, user_id):
         'assignment_link',
         member.user.email,
         {'url': claim_url, 'license': license_obj.license_number, 'expiry': link.expires_at},
+        scope_company=company_obj,
+        scope_user=member.user_id,
     )
     messages.success(request, 'Sicherer Zuordnungslink wurde erzeugt und an den Benutzer versendet.')
     return render(

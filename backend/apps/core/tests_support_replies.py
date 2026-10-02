@@ -1,6 +1,7 @@
 from unittest.mock import patch
 
 from django.test import TestCase
+from django.core.management import call_command
 from django.urls import reverse
 from django.utils import timezone
 
@@ -81,6 +82,24 @@ class SupportReplyAdminTests(TestCase):
         self.assertEqual(email.status, 'queued')
         self.assertIn('message', email.context)
         self.assertIn('reply', email.context)
+        self.assertIn('status', email.context)
+        self.assertIn('support_id', email.context)
+        self.assertIn('responder', email.context)
+        self.assertIn('reference', email.context)
+
+        # Persisted support body/reply values are encrypted at rest. Render the
+        # delivery context through the same decrypting path used by mail send.
+        from apps.notifications.services import _render_context
+        rendered_context = _render_context(email.context)
+        self.assertEqual(
+            email.template.body_text.format(**rendered_context),
+            (
+                'Antwort: Bitte Cache leeren und erneut anmelden.\n'
+                'Status: In Bearbeitung\n'
+                f'Vorgang: {self.request_obj.id}\n'
+                'Bearbeitet von: Support Admin'
+            ),
+        )
 
         self.assertTrue(
             AuditEvent.objects.filter(
@@ -137,6 +156,22 @@ class SupportReplyAdminTests(TestCase):
         self.assertEqual(message.body, 'Demo-Antwort ohne echten Mailversand.')
         self.assertIsNone(message.notification_email_id)
 
+    def test_netstyle_presentation_company_reply_is_saved_without_email_queue(self):
+        self.company.customer_number = 'DEMO-NETSTYLE'
+        self.company.save(update_fields=['customer_number', 'updated_at'])
+        self.customer.email = 'rspickermann@netstyle.de'
+        self.customer.save(update_fields=['email'])
+
+        response = self.client.post(
+            reverse('ns_admin:support_request_reply', args=[self.request_obj.id]),
+            {'message': 'Präsentationsantwort ohne echten Mailversand.'},
+        )
+
+        self.assertEqual(response.status_code, 302)
+        message = SupportMessage.objects.get(support_request=self.request_obj)
+        self.assertEqual(message.body, 'Präsentationsantwort ohne echten Mailversand.')
+        self.assertIsNone(message.notification_email_id)
+
     def test_mail_queue_failure_keeps_reply_and_redirects(self):
         with patch('apps.support.services.queue_email', side_effect=RuntimeError('queue unavailable')):
             response = self.client.post(
@@ -148,6 +183,27 @@ class SupportReplyAdminTests(TestCase):
         message = SupportMessage.objects.get(support_request=self.request_obj)
         self.assertEqual(message.body, 'Antwort bleibt trotz Mailfehler erhalten.')
         self.assertIsNone(message.notification_email_id)
+
+    def test_seed_defaults_support_reply_contract_matches_runtime_context(self):
+        call_command('seed_defaults', verbosity=0)
+        template = EmailTemplate.objects.get(code='support_reply')
+        self.assertEqual(template.subject, 'PromptMaster: {subject}')
+        for field in ('{reply}', '{status}', '{support_id}', '{responder}'):
+            self.assertIn(field, template.body_text)
+        context = {
+            'subject': 'Vertragstest',
+            'message': 'Antworttext',
+            'reply': 'Antworttext',
+            'responder': 'PromptMaster Support',
+            'status': 'In Bearbeitung',
+            'support_id': str(self.request_obj.id),
+            'reference': str(self.request_obj.id),
+        }
+        rendered = template.body_text.format(**context)
+        self.assertIn('Antworttext', rendered)
+        self.assertIn('In Bearbeitung', rendered)
+        self.assertIn(str(self.request_obj.id), rendered)
+        self.assertIn('PromptMaster Support', rendered)
 
     def test_license_and_support_templates_keep_action_and_reply_layout_contract(self):
         from django.conf import settings

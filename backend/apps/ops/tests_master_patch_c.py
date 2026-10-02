@@ -7,6 +7,7 @@ from django.test import TestCase
 
 from .models import BackupRecord, RestoreTest
 from .tasks import DEFAULT_THRESHOLDS, _backup_state, _restore_state, _thresholds
+from .api import _integration_payload
 
 
 class OpsStatusFailSafeTests(TestCase):
@@ -77,3 +78,69 @@ class OpsStatusFailSafeTests(TestCase):
     def test_non_mapping_threshold_settings_use_complete_defaults(self):
         with patch('apps.ops.tasks.get_setting', return_value=['bad', 'shape']):
             self.assertEqual(_thresholds(), DEFAULT_THRESHOLDS)
+
+
+class IntegrationMailRuntimeStatusTests(TestCase):
+    @patch('apps.ops.api.certificate_status', return_value={'status': 'ok'})
+    @patch('apps.ops.api._mcp_payload', return_value={'status': 'ok'})
+    @patch('apps.notifications.services.get_smtp_transport')
+    @patch('apps.notifications.services.get_mail_delivery')
+    def test_ops_status_uses_effective_runtime_smtp_route(
+        self, delivery, smtp_transport, _mcp, _certificate
+    ):
+        delivery.return_value = {
+            'mode': 'manual',
+            'primary': 'smtp1',
+            'fallback_1': '',
+            'fallback_2': '',
+            'route': ['smtp1'],
+        }
+        smtp_transport.return_value = {
+            'host': 'smtp.ionos.de',
+            'port': 587,
+            'use_tls': True,
+            'username': 'promptmaster@example.test',
+            'password_configured': True,
+        }
+
+        payload = _integration_payload()
+
+        self.assertEqual(payload['mail']['provider'], 'smtp1')
+        self.assertEqual(payload['mail']['route'], ['smtp1'])
+        self.assertTrue(payload['mail']['configured'])
+
+    @patch('apps.ops.api.certificate_status', return_value={'status': 'ok'})
+    @patch('apps.ops.api._mcp_payload', return_value={'status': 'ok'})
+    @patch('apps.notifications.services.get_smtp_transport')
+    @patch('apps.notifications.services.get_mail_delivery')
+    def test_ops_status_fails_closed_when_active_fallback_is_incomplete(
+        self, delivery, smtp_transport, _mcp, _certificate
+    ):
+        delivery.return_value = {
+            'mode': 'failover',
+            'primary': 'smtp1',
+            'fallback_1': 'smtp2',
+            'fallback_2': '',
+            'route': ['smtp1', 'smtp2'],
+        }
+        smtp_transport.side_effect = [
+            {
+                'host': 'smtp.ionos.de',
+                'port': 587,
+                'use_tls': True,
+                'username': 'promptmaster@example.test',
+                'password_configured': True,
+            },
+            {
+                'host': '',
+                'port': 587,
+                'use_tls': True,
+                'username': '',
+                'password_configured': False,
+            },
+        ]
+
+        payload = _integration_payload()
+
+        self.assertEqual(payload['mail']['route'], ['smtp1', 'smtp2'])
+        self.assertFalse(payload['mail']['configured'])

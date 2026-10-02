@@ -118,14 +118,14 @@ COMPANIES = (
 
 
 STAFF_ACCOUNTS = (
-    ('demo.superadmin1@promptmaster.invalid', 'Sarah', 'Administrator', 'superadmin', 'Superadmin'),
-    ('demo.superadmin2@promptmaster.invalid', 'Stefan', 'Administrator', 'superadmin', 'Superadmin'),
-    ('demo.support1@promptmaster.invalid', 'Sven', 'Support', 'support', 'Vertrieb / Support'),
-    ('demo.support2@promptmaster.invalid', 'Sabine', 'Kundenservice', 'support', 'Vertrieb / Support'),
-    ('demo.ops1@promptmaster.invalid', 'Olivia', 'Operations', 'ops', 'Technik / Operations'),
-    ('demo.ops2@promptmaster.invalid', 'Oliver', 'Technik', 'ops', 'Technik / Operations'),
-    ('demo.prompts1@promptmaster.invalid', 'Paula', 'Promptmanager', 'prompt_manager', 'Prompt Manager'),
-    ('demo.prompts2@promptmaster.invalid', 'Paul', 'Promptmanager', 'prompt_manager', 'Prompt Manager'),
+    (201, 'demo.superadmin1@promptmaster.invalid', 'Sarah', 'Administrator', 'superadmin', 'Superadmin'),
+    (202, 'demo.superadmin2@promptmaster.invalid', 'Stefan', 'Administrator', 'superadmin', 'Superadmin'),
+    (203, 'demo.support1@promptmaster.invalid', 'Sven', 'Support', 'support', 'Vertrieb / Support'),
+    (204, 'demo.support2@promptmaster.invalid', 'Sabine', 'Kundenservice', 'support', 'Vertrieb / Support'),
+    (205, 'demo.ops1@promptmaster.invalid', 'Olivia', 'Operations', 'ops', 'Technik / Operations'),
+    (206, 'demo.ops2@promptmaster.invalid', 'Oliver', 'Technik', 'ops', 'Technik / Operations'),
+    (207, 'demo.prompts1@promptmaster.invalid', 'Paula', 'Promptmanager', 'prompt_manager', 'Prompt Manager'),
+    (208, 'demo.prompts2@promptmaster.invalid', 'Paul', 'Promptmanager', 'prompt_manager', 'Prompt Manager'),
 )
 
 DEMO_FIRST_NAMES = (
@@ -153,6 +153,16 @@ DEMO_PURCHASE_AGES = {
 
 
 
+def _plus_alias(base_email: str, number: int) -> str:
+    base_email = (base_email or '').strip().lower()
+    if '@' not in base_email:
+        raise CommandError('Die Demo-Basisadresse ist ungültig.')
+    local, domain = base_email.rsplit('@', 1)
+    if not local or not domain or '+' in local:
+        raise CommandError('Die Demo-Basisadresse muss eine ungetaggte E-Mail-Adresse sein.')
+    return f'{local}+{int(number)}@{domain}'
+
+
 def _password():
     return 'PmDemo-' + secrets.token_urlsafe(16)
 
@@ -177,9 +187,25 @@ class Command(BaseCommand):
                 'Verlaufsdaten in Production. Demo-Staff und Rechtstexte bleiben unberührt.'
             ),
         )
+        parser.add_argument(
+            '--demo-email-base',
+            default='',
+            help=(
+                'Optional: echte Gmail-Basisadresse für Demo-Benutzer. '
+                'Beispiel testnetstyle@gmail.com erzeugt testnetstyle+1@gmail.com usw.'
+            ),
+        )
 
     @transaction.atomic
     def handle(self, *args, **options):
+        self.demo_email_base = (options.get('demo_email_base') or '').strip().lower()
+        if self.demo_email_base and not self.demo_email_base.endswith('@gmail.com'):
+            raise CommandError(
+                '--demo-email-base ist derzeit ausschließlich für Gmail-Adressen vorgesehen.'
+            )
+        if self.demo_email_base:
+            _plus_alias(self.demo_email_base, 1)
+
         production_presentation = (
             settings.ENVIRONMENT == 'production'
             and options['allow_production_presentation']
@@ -258,7 +284,19 @@ class Command(BaseCommand):
         credentials = []
 
         if not production_presentation:
-            for email, first_name, last_name, role_code, role_label in STAFF_ACCOUNTS:
+            for alias_no, legacy_email, first_name, last_name, role_code, role_label in STAFF_ACCOUNTS:
+                email = (
+                    _plus_alias(self.demo_email_base, alias_no)
+                    if self.demo_email_base
+                    else legacy_email
+                )
+                if self.demo_email_base:
+                    existing = User.objects.filter(email=email).first()
+                    if existing is None:
+                        existing = User.objects.filter(email=legacy_email).first()
+                        if existing is not None:
+                            existing.email = email
+                            existing.save(update_fields=['email', 'updated_at'])
                 password = _password()
                 user = self._upsert_user(
                     email=email,
@@ -303,6 +341,10 @@ class Command(BaseCommand):
         self._seed_cross_function_demo_rows(company_users, private_users, now)
 
         self.stdout.write(self.style.SUCCESS('Demo-Daten erfolgreich gesetzt.'))
+        if self.demo_email_base:
+            self.stdout.write(
+                f'Demo-Mail aktiv: {self.demo_email_base} mit Gmail-Plus-Aliassen.'
+            )
         self.stdout.write(
             'Firmen: '
             + ', '.join(
@@ -339,6 +381,7 @@ class Command(BaseCommand):
         verified_at=None,
     ):
         user = User.objects.filter(email=email).first()
+        is_new = user is None
         if user is None:
             user = User(
                 email=email,
@@ -357,7 +400,7 @@ class Command(BaseCommand):
             user.last_totp_step = -1
         if password:
             user.set_password(password)
-        elif not user.pk:
+        elif is_new:
             user.set_unusable_password()
         user.save()
         return user
@@ -405,10 +448,22 @@ class Command(BaseCommand):
                 if is_admin
                 else f'demo.kunde{company_index}.user{index + 1:02d}{DEMO_EMAIL_SUFFIX}'
             )
-            email = (
+            descriptive_email = (
                 f'demo.{company_slug}.{first_name.lower()}.'
                 f'{last_name.lower()}.{index + 1:02d}{DEMO_EMAIL_SUFFIX}'
             )
+            if self.demo_email_base:
+                if is_admin:
+                    alias_no = company_index
+                else:
+                    previous_members = sum(
+                        row['employees'] - 1
+                        for row in COMPANIES[:company_index - 1]
+                    )
+                    alias_no = 10 + previous_members + index
+                email = _plus_alias(self.demo_email_base, alias_no)
+            else:
+                email = descriptive_email
             login_user = is_admin or index in {1, spec['employees'] - 1}
             password = _password() if login_user else None
             joined_days_ago = max(
@@ -422,7 +477,10 @@ class Command(BaseCommand):
             # reseeded after the realistic identity upgrade.
             user = User.objects.filter(email=email).first()
             if user is None:
-                user = User.objects.filter(email=legacy_email).first()
+                candidates = [legacy_email]
+                if descriptive_email != email:
+                    candidates.insert(0, descriptive_email)
+                user = User.objects.filter(email__in=candidates).first()
                 if user is not None:
                     user.email = email
                     user.save(update_fields=['email', 'updated_at'])
@@ -769,7 +827,11 @@ class Command(BaseCommand):
                 token_hash=_sha('demo-open-invitation-westfalen'),
                 defaults={
                     'company': company,
-                    'email': 'eva.einladung.westfalen@promptmaster.invalid',
+                    'email': (
+                        _plus_alias(self.demo_email_base, 401)
+                        if self.demo_email_base
+                        else 'eva.einladung.westfalen@promptmaster.invalid'
+                    ),
                     'first_name': 'Eva',
                     'last_name': 'Reimann',
                     'expires_at': now + timedelta(days=7),
@@ -889,6 +951,7 @@ class Command(BaseCommand):
                 'customer_number': 'DEMO-P-2001',
                 'email': 'petra.hagedorn.privat@promptmaster.invalid',
                 'legacy_email': 'demo.privat1@promptmaster.invalid',
+                'alias_no': 101,
                 'first_name': 'Petra',
                 'last_name': 'Hagedorn',
                 'street': 'Privatweg',
@@ -902,6 +965,7 @@ class Command(BaseCommand):
                 'customer_number': 'DEMO-P-2002',
                 'email': 'patrick.moeller.privat@promptmaster.invalid',
                 'legacy_email': 'demo.privat2@promptmaster.invalid',
+                'alias_no': 102,
                 'first_name': 'Patrick',
                 'last_name': 'Moeller',
                 'street': 'Teststraße',
@@ -915,6 +979,7 @@ class Command(BaseCommand):
                 'customer_number': 'DEMO-P-2003',
                 'email': 'pia.wendt.privat@promptmaster.invalid',
                 'legacy_email': 'demo.privat3@promptmaster.invalid',
+                'alias_no': 103,
                 'first_name': 'Pia',
                 'last_name': 'Wendt',
                 'street': 'Musterallee',
@@ -927,17 +992,25 @@ class Command(BaseCommand):
         )
         users = {}
         for index, spec in enumerate(specs, start=1):
-            existing = User.objects.filter(email=spec['email']).first()
+            email = (
+                _plus_alias(self.demo_email_base, spec['alias_no'])
+                if self.demo_email_base
+                else spec['email']
+            )
+            existing = User.objects.filter(email=email).first()
             if existing is None:
-                existing = User.objects.filter(email=spec['legacy_email']).first()
+                candidates = [spec['legacy_email']]
+                if spec['email'] != email:
+                    candidates.insert(0, spec['email'])
+                existing = User.objects.filter(email__in=candidates).first()
                 if existing is not None:
-                    existing.email = spec['email']
+                    existing.email = email
                     existing.save(update_fields=['email', 'updated_at'])
 
             password = _password()
             registered_at = now - timedelta(days=spec['registered_days'])
             user = self._upsert_user(
-                email=spec['email'],
+                email=email,
                 first_name=spec['first_name'],
                 last_name=spec['last_name'],
                 password=password,
@@ -1179,12 +1252,18 @@ class Command(BaseCommand):
         )
 
     def _seed_demo_leads(self, now):
-        support_one = User.objects.filter(
-            email='demo.support1@promptmaster.invalid'
-        ).first()
-        support_two = User.objects.filter(
-            email='demo.support2@promptmaster.invalid'
-        ).first()
+        support_one_email = (
+            _plus_alias(self.demo_email_base, 203)
+            if self.demo_email_base
+            else 'demo.support1@promptmaster.invalid'
+        )
+        support_two_email = (
+            _plus_alias(self.demo_email_base, 204)
+            if self.demo_email_base
+            else 'demo.support2@promptmaster.invalid'
+        )
+        support_one = User.objects.filter(email=support_one_email).first()
+        support_two = User.objects.filter(email=support_two_email).first()
         if support_one is None:
             support_one = User.objects.filter(
                 is_staff=True,

@@ -126,6 +126,8 @@ log "Datenservices starten"
 docker compose "${F[@]}" up -d postgres redis
 log "Django Systemcheck"
 docker compose "${F[@]}" run --rm web python manage.py check
+log "Wirksames Mail-Routing prüfen"
+docker compose "${F[@]}" run --rm web python manage.py validate_mail_runtime --require-tls
 log "Uncommitted migrations ausschließen"
 docker compose "${F[@]}" run --rm web python manage.py makemigrations --check --dry-run
 log "Tests ausführen"

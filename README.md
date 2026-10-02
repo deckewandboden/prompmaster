@@ -2,7 +2,7 @@
 
 Konsolidierter Gesamtstand der belegbaren PromptMaster-Entwicklung mit Marketing-/Vertriebsfrontend, Free/Pro V2, Commercial Backend und erhaltener historischer Transfer-/Designprovenienz.
 
-> **Status 23.09.2026:** Der konsolidierte `main`-Stand hat die internen automatisierten Release-Gates vollständig bestanden: Shell-/Dependency-Security, 292 Django-Tests (6 absichtliche Performance-Skips), separates 100k-DataGrid-Gate, 34 Apps / 194 Tasks / 194 Prompt-Smokes, Chromium/Firefox/WebKit Browser-Smoke sowie Full-Stack-Bootstrap, Idempotenz, HTTP-Lasttest, Backup-Restore-Recovery und External-Caddy-Rehearsal. Eine echte Produktionsfreigabe erfordert zusätzlich die provider-/infrastrukturabhängigen Gates und die menschliche Freigabe aus `docs/RELEASE_GATES.md` und `docs/PRODUCTION_ACCEPTANCE.md`.
+> **Status 01.10.2026:** Der konsolidierte `main`-Stand hat die internen automatisierten Release-Gates vollständig bestanden: Shell-/Dependency-Security, vollständige Django-Testsuite (6 absichtliche Performance-Skips), separates 100k-DataGrid-Gate, 34 Apps / 194 Tasks / 194 Prompt-Smokes, Chromium/Firefox/WebKit Browser-Smoke sowie Full-Stack-Bootstrap, Idempotenz, HTTP-Lasttest, Backup-Restore-Recovery und External-Caddy-Rehearsal. Eine echte Produktionsfreigabe erfordert zusätzlich die provider-/infrastrukturabhängigen Gates und die menschliche Freigabe aus `docs/RELEASE_GATES.md` und `docs/PRODUCTION_ACCEPTANCE.md`.
 
 Der vollständige Dateiindex liegt in `docs/COMPLETE_FILE_INVENTORY.md`; `FILE_MANIFEST.tsv` und `MANIFEST.json` sichern Pfad, Größe, SHA256 und Rolle jeder inventarisierten Repository-Datei. Die Original-Recovery-ZIPs der beiden zuletzt gelieferten Quellen sind unverändert unter `archive/source-packages/` enthalten.
 
@@ -16,6 +16,7 @@ Der vollständige Dateiindex liegt in `docs/COMPLETE_FILE_INVENTORY.md`; `FILE_M
 - `docs/RELEASE_GATES.md`
 - `docs/GITHUB_TRANSFER.md`
 - `docs/GITHUB_READY_STATUS.md`
+- `docs/ROADMAP_CLOSEOUT_2026-10-01.md`
 
 ## Enthaltene Hauptbereiche
 
@@ -43,6 +44,7 @@ Der vollständige Dateiindex liegt in `docs/COMPLETE_FILE_INVENTORY.md`; `FILE_M
 - internes MCP für read/draft/test; **kein Publish/Delete**
 - zentrale FAQ-Verwaltung/API
 - GitHub CI und Betriebs-/Validierungsskripte
+- dedizierte netstyle-Präsentationsdemo `DEMO-NETSTYLE` mit 12 Benutzern und synthetischer Lizenz-/Bestellhistorie ohne Provideraktionen
 
 ## Monorepo-Struktur
 
@@ -128,6 +130,23 @@ unset INITIAL_ADMIN_PASSWORD INITIAL_ADMIN_EMAIL
 
 Das Passwort wird dabei **nicht** in `.env`, Git oder ein Repository-Artefakt geschrieben. Der neu angelegte Superadmin muss beim ersten Login 2FA einrichten. Für spätere Deployments wird `bootstrap_admin` nicht benötigt.
 
+## netstyle-Präsentationsdemo
+
+Die separate Präsentationsfirma wird bewusst über einen eigenen, explizit bestätigten
+Seed erzeugt. Der Seed versendet keine E-Mails und ruft keinen echten Payment-Provider auf.
+
+```bash
+docker compose exec -T web python manage.py seed_netstyle_presentation_demo \
+  --confirm NETSTYLE-PRESENTATION-DEMO
+```
+
+In einer Produktions-Präsentationsumgebung ist zusätzlich
+`--allow-production-presentation` erforderlich. Der Seed erzeugt
+`DEMO-NETSTYLE` mit 12 aktiven Benutzern, Rainer Spickermann als
+MFA-pflichtigem Firmenadministrator, 10 PRO-Lizenzen (9 zugewiesen/1 frei),
+3 Free-Benutzern, den drei synthetischen Bestellstufen 1/7/+2 und einer offenen
+PRO-Anfrage.
+
 ## Runtime Acceptance
 
 ```bash
@@ -146,13 +165,24 @@ Ein-Kommando-Preflight/Initialisierung:
 
 Siehe `docs/GITHUB_TRANSFER.md`. Das Repository ist für einen privaten GitHub-Erstimport vorbereitet; `.env`, `.bootstrap-credentials`, Secrets, DB-/Backup-Artefakte und lokale Runtime-Daten gehören nicht ins Repository.
 
+## Bereits produktiv nachgewiesen
+
+- Zielhost und öffentliche Domain/DNS/TLS über den externen Caddy-Pfad
+- realer SMTP1-Versand über IONOS an Gmail
+- SPF, DKIM und DMARC jeweils PASS; TLS aktiv
+- sender-domain Message-ID im produktiven Versand
+- Google Postmaster Tools für `decke-wand-boden.de` verifiziert
+
+Die aktuelle Gmail-Spamklassifizierung des neuen Absenders wird als
+Deliverability-/Reputationsthema verfolgt und ist kein offener
+Authentifizierungs- oder PromptMaster-Codefehler.
+
 ## Noch extern zu bestätigen
 
-Die GitHub-/Docker-/Browser-/Security-/100k-Gates sind für den konsolidierten Release-Stand automatisiert grün nachgewiesen. **Nicht durch CI ersetzbar** und deshalb vor einem echten Go-Live weiterhin extern abzunehmen sind:
+Die GitHub-/Docker-/Browser-/Security-/100k-Gates sind automatisiert abgedeckt. Noch offen sind:
 
-- Deployment auf dem tatsächlichen Zielhost inklusive öffentlicher Domain/DNS/TLS
 - Mollie Sandbox E2E über den echten öffentlichen Webhook, einschließlich Refund/Chargeback
-- Microsoft Graph Mail E2E inklusive Exchange Application-RBAC-Scope-Nachweis
+- Graph-E2E/Application-RBAC nur falls Graph im finalen Routing tatsächlich aktiviert wird
 - externer S3/restic Backup-/Restore-Drill
 - reale Monitoring-/Alert-Empfänger und dokumentierter Notfallzugang
 - Rechtstexte/Steuerprüfung und menschliche Produktionsfreigabe

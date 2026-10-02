@@ -39,6 +39,15 @@ def is_placeholder(value: str) -> bool:
     )
 
 
+def normalize_mail_provider(value: str) -> str:
+    provider = (value or '').strip().lower()
+    if provider in {'smtp', 'mailpit'}:
+        return 'smtp1'
+    if provider == 'microsoft_graph':
+        return 'graph'
+    return provider
+
+
 def check_fernet(value: str) -> bool:
     try:
         raw = base64.urlsafe_b64decode(value.encode('ascii'))
@@ -110,7 +119,8 @@ def main() -> int:
     if domain not in {'localhost', '127.0.0.1', ''} and f'https://{domain}' not in csrf:
         fail(errors, 'https://CADDY_DOMAIN muss in CSRF_TRUSTED_ORIGINS enthalten sein.')
 
-    provider = values.get('EMAIL_PROVIDER', '').strip().lower()
+    provider_raw = values.get('EMAIL_PROVIDER', '').strip().lower()
+    provider = normalize_mail_provider(provider_raw)
     if expected == 'production':
         vat_id = values.get('NETSTYLE_VAT_ID', '').replace(' ', '').upper()
         if not re.fullmatch(r'DE\d{9}', vat_id):
@@ -119,11 +129,19 @@ def main() -> int:
                 'NETSTYLE_VAT_ID muss für das produktive Impressum intern bestätigt '
                 'und im Format DE123456789 gesetzt sein.',
             )
-        if provider not in {'graph', 'microsoft_graph'}:
-            fail(errors, 'Production EMAIL_PROVIDER muss graph/microsoft_graph sein.')
-        for key in ('GRAPH_TENANT_ID', 'GRAPH_CLIENT_ID', 'GRAPH_CLIENT_SECRET', 'GRAPH_SENDER'):
-            if is_placeholder(values.get(key, '')):
-                fail(errors, f'{key} muss für Microsoft Graph gesetzt sein.')
+        if provider not in {'smtp1', 'graph'}:
+            fail(
+                errors,
+                'Production EMAIL_PROVIDER muss smtp/smtp1 oder graph/microsoft_graph sein. '
+                'Weitere Laufzeit-Fallbacks werden verschlüsselt über die Admin-Einstellungen verwaltet.',
+            )
+        if provider in {'graph', 'smtp1'}:
+            # Provider-specific transport, identity and secrets may intentionally
+            # live in the encrypted runtime settings rather than .env. This static
+            # validator checks only the allowed baseline provider selector.
+            # deploy.sh performs the authoritative database-backed
+            # validate_mail_runtime gate after the data services are available.
+            pass
         mollie = values.get('MOLLIE_API_KEY', '')
         if not mollie.startswith('live_'):
             fail(errors, 'MOLLIE_API_KEY muss in Produktion ein Mollie-Live-Key (live_…) sein.')
@@ -146,7 +164,7 @@ def main() -> int:
         # Staging must never accidentally use live payments.
         if values.get('MOLLIE_API_KEY', '').startswith('live_'):
             fail(errors, 'Staging darf keinen Mollie-Live-Key verwenden.')
-        if provider not in {'smtp', 'mailpit'}:
+        if provider_raw not in {'smtp', 'mailpit'}:
             fail(errors, 'Staging EMAIL_PROVIDER muss smtp/mailpit sein, damit keine echten Kundenmails versendet werden.')
         admin_password = values.get('INITIAL_ADMIN_PASSWORD', '')
         if is_placeholder(admin_password) or len(admin_password) < 12:

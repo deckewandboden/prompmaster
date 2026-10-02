@@ -421,6 +421,12 @@ class GeneralSettingsForm(forms.Form):
     ]
 
     support_email = forms.EmailField(label='Support-Empfänger')
+    ops_alert_recipients = forms.CharField(
+        required=False,
+        widget=forms.Textarea(attrs={'rows': 3}),
+        label='Monitoring-Alarmempfänger',
+        help_text='Eine oder mehrere E-Mail-Adressen, getrennt durch Zeilenumbruch, Komma oder Semikolon.',
+    )
     mail_delivery_mode = forms.ChoiceField(
         choices=MAIL_DELIVERY_MODE_CHOICES,
         required=False,
@@ -586,6 +592,21 @@ class GeneralSettingsForm(forms.Form):
     def __init__(self, *args, graph_secret_configured=False, **kwargs):
         super().__init__(*args, **kwargs)
         self.graph_secret_configured = graph_secret_configured
+
+    def clean_ops_alert_recipients(self):
+        raw = self.cleaned_data.get('ops_alert_recipients', '')
+        parts = [
+            item.strip().lower()
+            for item in raw.replace(';', '\n').replace(',', '\n').splitlines()
+            if item.strip()
+        ]
+        validator = forms.EmailField()
+        normalized = []
+        for item in parts:
+            email = validator.clean(item)
+            if email not in normalized:
+                normalized.append(email)
+        return '\n'.join(normalized)
 
     def clean_mail_domain(self):
         value = self.cleaned_data.get('mail_domain', '').strip().lower().rstrip('.')

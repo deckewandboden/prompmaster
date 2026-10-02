@@ -3,6 +3,7 @@ import smtplib
 from email.utils import formataddr
 from string import Formatter
 from urllib.parse import unquote, urlsplit
+from uuid import UUID
 
 import requests
 from django.contrib.auth import get_user_model
@@ -67,6 +68,7 @@ def _smtp_error_allows_failover(exc):
 _ENCRYPTED_PREFIX = 'pm_enc:v1:'
 _SENSITIVE_CONTEXT_KEYS = {'url', 'link', 'token', 'message', 'reply'}
 _USER_SCOPED_TEMPLATES = {'verify_email', 'password_reset', 'staff_invite', 'checkout_activation'}
+PRESENTATION_DEMO_CUSTOMER_NUMBERS = {'DEMO-NETSTYLE'}
 
 
 def get_mail_identity():
@@ -227,6 +229,51 @@ def _infer_message_scope(code, recipient, context, scope_company, scope_user):
     return scope_company, scope_user
 
 
+def _scope_uuid(value):
+    """Return a UUID for model instances/UUID-like scope values, else None.
+
+    Scope metadata is also used by release-contract tests and may contain
+    opaque external identifiers. Presentation-mail suppression must therefore
+    stay fail-open for non-database scope tokens instead of raising a Django
+    ValidationError while queueing an otherwise valid message.
+    """
+    raw = getattr(value, 'pk', value)
+    if raw in (None, ''):
+        return None
+    try:
+        return UUID(str(raw))
+    except (TypeError, ValueError, AttributeError):
+        return None
+
+
+def _presentation_mail_suppressed(scope_company=None, scope_user=None) -> bool:
+    from apps.companies.models import Company, Membership
+
+    if scope_company is not None:
+        customer_number = getattr(scope_company, 'customer_number', None)
+        if customer_number is not None:
+            if str(customer_number) in PRESENTATION_DEMO_CUSTOMER_NUMBERS:
+                return True
+        else:
+            company_id = _scope_uuid(scope_company)
+            if company_id and Company.objects.filter(
+                pk=company_id,
+                customer_number__in=PRESENTATION_DEMO_CUSTOMER_NUMBERS,
+            ).exists():
+                return True
+
+    if scope_user is not None:
+        user_id = _scope_uuid(scope_user)
+        if user_id:
+            return Membership.objects.filter(
+                user_id=user_id,
+                active=True,
+                company__customer_number__in=PRESENTATION_DEMO_CUSTOMER_NUMBERS,
+            ).exists()
+
+    return False
+
+
 def _protect_context(context):
     stored = dict(context or {})
     for key, value in list(stored.items()):
@@ -288,6 +335,10 @@ def reminder_recipient_scopes(license_obj):
         from apps.companies.models import Membership
 
         if not license_obj.company or license_obj.company.status != 'active':
+            return recipients
+        if license_obj.company.customer_number == 'DEMO-NETSTYLE':
+            # The dedicated presentation tenant contains a real admin address
+            # but must never generate automatic outbound reminder traffic.
             return recipients
         active_members = {
             row.user_id: row.user
@@ -459,12 +510,22 @@ def queue_email(code, recipient, context, *, scope_company=None, scope_user=None
             getattr(scope_user, 'pk', scope_user)
         )
 
+    suppressed = _presentation_mail_suppressed(scope_company, scope_user)
     message = EmailMessage.objects.create(
         template=template,
         recipient=recipient,
         subject=subject,
         context=stored_context,
+        status='suppressed' if suppressed else 'queued',
+        error=(
+            'Outbound mail suppressed for presentation demo tenant.'
+            if suppressed
+            else ''
+        ),
     )
+    if suppressed:
+        return message
+
     from .tasks import send_email_message
     transaction.on_commit(lambda: send_email_message.delay(str(message.id)), robust=True)
     return message

@@ -1,6 +1,6 @@
 # GitHub Ready Status — konsolidierter Release-Stand
 
-Stand: 2026-09-23
+Stand: 2026-10-01
 
 ## Automatisiert grün nachgewiesen
 
@@ -16,7 +16,7 @@ Der aktuelle konsolidierte Release-Stand wurde auf einem realen GitHub-Actions-R
 - Free: 16 Legacy-Verträge erhalten; V2 unter `/free/`
 - Pro: 34/194 serverseitiger Katalog; V2 unter `/pro/app/`
 - Legacy-/Rollback-Routen: `/free-old/` und `/pro-old/`
-- **292 Django-Tests**, davon 6 absichtliche Skips für das separat ausgeführte 100k-Performance-Gate
+- **vollständige Django-Testsuite**, davon 6 absichtliche Skips für das separat ausgeführte 100k-Performance-Gate
 - separates **100.000-Zeilen-DataGrid-Acceptance-Gate**
 - Compose-Konfiguration
 - Backend-/Caddy-/Backup-Docker-Build
@@ -32,13 +32,20 @@ Der aktuelle konsolidierte Release-Stand wurde auf einem realen GitHub-Actions-R
 
 Die Free-/Pro-Golden-Master bleiben hash-geschützt und unverändert; die V2-Integration ist additiv.
 
+## Bereits produktiv nachgewiesen
+
+- Zielhost und öffentliche Domain/DNS/TLS über den externen Caddy-Pfad
+- SMTP1 über IONOS mit realer externer Gmail-Zustellung
+- SPF/DKIM/DMARC jeweils PASS und TLS aktiv
+- sender-domain Message-ID im real zugestellten Header
+- Google Postmaster Tools für `decke-wand-boden.de` verifiziert
+
 ## Produktiv noch extern abzunehmen
 
-Die folgenden Gates können nicht durch normale CI ersetzt werden und bleiben bis zur realen Provider-/Infrastrukturabnahme offen:
+Die folgenden Gates können nicht durch normale CI ersetzt werden und bleiben offen:
 
-- Deployment auf dem tatsächlichen Zielhost inklusive öffentlicher Domain/DNS/TLS
-- Microsoft Graph Mail E2E inklusive Exchange Application-RBAC-Scope-Nachweis
 - Mollie Sandbox E2E über den öffentlichen Webhook, inklusive Refund/Chargeback
+- Graph-E2E/Application-RBAC nur falls Graph im finalen Routing tatsächlich aktiviert wird
 - externer S3/restic Backup-/Restore-Drill
 - reale Monitoring-/Alert-Empfänger und dokumentierter Notfallzugang
 - cAdvisor-Host-Trust-Boundary bewusst akzeptieren oder nach realem Staging-Test technisch ersetzen

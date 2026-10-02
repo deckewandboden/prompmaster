@@ -71,7 +71,7 @@ Die ausführbaren Abnahmeschritte stehen in `docs/PRODUCTION_ACCEPTANCE.md`. Die
   - echter Webhook / Paid-Aktivierung,
   - Refund über den produktiven Refund-Service,
   - Chargeback über die separate Mollie-Chargeback-Ressource (`reversedAt=null`) und – sofern die verwendete Mollie-Testumgebung ihn anbietet – Chargeback-Reversal über denselben Chargeback mit gesetztem `reversedAt`.
-- Microsoft Graph über `external_graph_acceptance`:
+- Mailprovider-Abnahme: SMTP über realen `EmailMessage`-/Taskpfad; Microsoft Graph zusätzlich über `external_graph_acceptance`, falls Graph im finalen Routing aktiviert ist:
   - Exchange-Application-RBAC für `Application Mail.Send`,
   - positiver `InScope`-Nachweis für `GRAPH_SENDER` und negativer Kontrollpostfach-Nachweis,
   - kein paralleler unbeschränkter Entra-`Mail.Send`-Grant,

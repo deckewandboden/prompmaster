@@ -78,3 +78,8 @@ backend/apps/legal/management/commands/seed_legal_documents_2026.py	0	0	active-b
 backend/apps/legal/tests_public_legal.py	0	0	test
 backend/templates/ns_admin/legal_declaration_detail.html	0	0	active-backend
 backend/apps/notifications/migrations/0002_emailmessage_delivery_routing.py	0	text-not-byte-validated	active-backend
+backend/apps/core/management/commands/readdress_demo_users.py	0	text-not-byte-validated	active-backend
+docs/ROADMAP_CLOSEOUT_2026-10-01.md	0	text-not-byte-validated	documentation
+backend/apps/core/management/commands/validate_mail_runtime.py	0	text-not-byte-validated	active-backend
+backend/apps/core/management/commands/seed_netstyle_presentation_demo.py	0	text-not-byte-validated	active-backend
+backend/apps/core/tests_netstyle_presentation_demo.py	0	text-not-byte-validated	test

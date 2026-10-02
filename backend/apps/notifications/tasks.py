@@ -77,6 +77,8 @@ def send_email_message(self, message_id):
         )
         if message.status == 'sent':
             return 'already-sent'
+        if message.status == 'suppressed':
+            return 'suppressed'
         if not message_scope_active(message):
             return _suppress_inactive_scope(message)
         if message.status == 'sending' and message.updated_at > timezone.now() - timedelta(minutes=10):

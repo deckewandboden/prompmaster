@@ -1,5 +1,5 @@
 from django.conf import settings
-from django.core.checks import Error, Warning, register
+from django.core.checks import Error, register
 
 
 @register()
@@ -15,6 +15,7 @@ def promptmaster_configuration_checks(app_configs, **kwargs):
     if settings.ENVIRONMENT == 'production':
         if not settings.SESSION_COOKIE_SECURE or not settings.CSRF_COOKIE_SECURE:
             issues.append(Error('Secure Cookies müssen in Produktion aktiv sein.', id='promptmaster.E004'))
-        if settings.EMAIL_PROVIDER.lower() not in {'graph', 'microsoft_graph'}:
-            issues.append(Warning('Produktiv ist Microsoft Graph als Mailprovider vorgesehen.', id='promptmaster.W001'))
+        # Mail routing may intentionally live in encrypted runtime settings and
+        # may use SMTP1/SMTP2 or Graph. The authoritative provider check is the
+        # database-backed validate_mail_runtime deploy gate.
     return issues

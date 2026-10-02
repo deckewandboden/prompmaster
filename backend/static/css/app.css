@@ -309,3 +309,78 @@ a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,te
 .license-owner-card>.card-action-row{margin-top:auto}
 .license-owner-card>.license-assignment-form{display:flex;flex-direction:column;flex:1}
 .license-owner-card>.license-assignment-form>.card-action-row{margin-top:auto}
+
+
+/* System-wide admin form spacing contract.
+   Every field reserves its own vertical flow; controls, help text and errors
+   must never overlap labels or neighbouring fields. Checkbox/radio labels use
+   a dedicated inline layout so the selected control cannot cover its text. */
+.form,
+.form .row,
+.form label,
+.form p{min-width:0}
+.form .row>*{min-width:0}
+.form label{
+  display:grid;
+  gap:8px;
+  align-content:start;
+  line-height:1.4;
+  overflow-wrap:anywhere;
+}
+.form label>input:not([type=checkbox]):not([type=radio]),
+.form label>select,
+.form label>textarea{
+  margin-top:0!important;
+}
+.form input,
+.form select,
+.form textarea{
+  min-width:0;
+  max-width:100%;
+}
+.form label>.tiny,
+.form label>.helptext{
+  display:block;
+  margin:0;
+  font-weight:400;
+  line-height:1.45;
+  overflow-wrap:anywhere;
+}
+.form label>.errorlist,
+.form p>.errorlist{
+  margin:0;
+  line-height:1.4;
+  overflow-wrap:anywhere;
+}
+.form label:has(>input[type=checkbox]),
+.form label:has(>input[type=radio]){
+  display:flex;
+  align-items:flex-start;
+  gap:10px;
+  flex-wrap:wrap;
+  min-height:24px;
+  line-height:1.45;
+}
+.form label>input[type=checkbox],
+.form label>input[type=radio]{
+  inline-size:18px;
+  block-size:18px;
+  min-inline-size:18px;
+  min-block-size:18px;
+  flex:0 0 18px;
+  margin:0!important;
+  padding:0!important;
+}
+.form label:has(>input[type=checkbox])>.errorlist,
+.form label:has(>input[type=radio])>.errorlist{
+  flex:1 0 100%;
+  margin-left:28px;
+}
+.form .row{
+  align-items:start;
+  row-gap:14px;
+}
+@media(max-width:700px){
+  .form{gap:14px}
+  .form .row{row-gap:14px}
+}

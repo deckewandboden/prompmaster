@@ -1,13 +1,17 @@
 from datetime import timedelta
+from io import StringIO
 import json
 import os
 import logging
+from pathlib import Path
 from types import SimpleNamespace
 from unittest.mock import Mock, patch
 
+from django.core.management import call_command
+from django.core.management.base import CommandError
 from django.db import connection
 from django.http import HttpResponse
-from django.test import RequestFactory, SimpleTestCase, TestCase
+from django.test import RequestFactory, SimpleTestCase, TestCase, override_settings
 from django.test.utils import CaptureQueriesContext
 from unittest import skipUnless
 from django.utils import timezone
@@ -24,6 +28,74 @@ from .middleware import CorrelationIdMiddleware, JsonLogFormatter
 from .datagrid import DataGrid, csv_response
 from .security import token_hash, token_pair
 from .sensitive import SENSITIVE_REAUTH_SESSION_KEY
+
+
+class AdminFormSpacingCssContractTests(SimpleTestCase):
+    def test_global_form_spacing_contract_prevents_control_text_overlap(self):
+        from django.conf import settings
+
+        css = (
+            Path(settings.BASE_DIR) / 'static' / 'css' / 'app.css'
+        ).read_text(encoding='utf-8')
+
+        self.assertIn('System-wide admin form spacing contract', css)
+        self.assertIn('.form label{', css)
+        self.assertIn('display:grid;', css)
+        self.assertIn('.form label:has(>input[type=checkbox])', css)
+        self.assertIn('inline-size:18px;', css)
+        self.assertIn('margin:0!important;', css)
+        self.assertIn('.form .row{', css)
+        self.assertIn('row-gap:14px;', css)
+
+
+class MailRuntimeValidationTests(TestCase):
+    @override_settings(
+        EMAIL_PROVIDER='smtp',
+        EMAIL_HOST='smtp.example.test',
+        EMAIL_PORT=587,
+        EMAIL_USE_TLS=True,
+        EMAIL_HOST_USER='sender@example.test',
+        EMAIL_HOST_PASSWORD='smtp-secret',
+        DEFAULT_FROM_EMAIL='sender@example.test',
+    )
+    def test_runtime_mail_validation_accepts_tls_smtp_fallback(self):
+        output = StringIO()
+        call_command('validate_mail_runtime', require_tls=True, stdout=output)
+        self.assertIn('MAIL RUNTIME VALIDATION OK', output.getvalue())
+        self.assertIn('route=smtp1', output.getvalue())
+
+    @override_settings(
+        EMAIL_PROVIDER='smtp',
+        EMAIL_HOST='smtp.example.test',
+        EMAIL_PORT=587,
+        EMAIL_USE_TLS=False,
+        EMAIL_HOST_USER='sender@example.test',
+        EMAIL_HOST_PASSWORD='smtp-secret',
+        DEFAULT_FROM_EMAIL='sender@example.test',
+    )
+    def test_runtime_mail_validation_rejects_insecure_production_smtp(self):
+        with self.assertRaisesMessage(CommandError, 'MAIL RUNTIME VALIDATION FAIL'):
+            call_command(
+                'validate_mail_runtime',
+                require_tls=True,
+                stdout=StringIO(),
+                stderr=StringIO(),
+            )
+
+
+    @override_settings(
+        EMAIL_PROVIDER='graph',
+        GRAPH_TENANT_ID='tenant-test',
+        GRAPH_CLIENT_ID='client-test',
+        GRAPH_CLIENT_SECRET='graph-secret',
+        GRAPH_SENDER='sender@example.test',
+        DEFAULT_FROM_EMAIL='sender@example.test',
+    )
+    def test_runtime_mail_validation_accepts_graph_fallback(self):
+        output = StringIO()
+        call_command('validate_mail_runtime', require_tls=True, stdout=output)
+        self.assertIn('MAIL RUNTIME VALIDATION OK', output.getvalue())
+        self.assertIn('route=graph', output.getvalue())
 
 
 class SecurityTests(SimpleTestCase):
@@ -738,6 +810,53 @@ class AdminDashboardRegressionTests(TestCase):
             tax_total='5.73',
             idempotency_key='dashboard-order-1',
         )
+
+    @patch('apps.core.admin_views.get_graph_transport')
+    @patch('apps.core.admin_views.get_smtp_transport')
+    @patch('apps.core.admin_views.get_mail_delivery')
+    @patch('apps.core.admin_views.snapshot', return_value={})
+    def test_dashboard_reports_effective_runtime_mail_route(
+        self, _snapshot, delivery, smtp_transport, graph_transport
+    ):
+        delivery.return_value = {
+            'mode': 'failover',
+            'primary': 'smtp1',
+            'fallback_1': 'smtp2',
+            'fallback_2': '',
+            'route': ['smtp1', 'smtp2'],
+        }
+        smtp_transport.side_effect = [
+            {
+                'host': 'smtp.ionos.de',
+                'port': 587,
+                'use_tls': True,
+                'username': 'promptmaster@example.test',
+                'password_configured': True,
+            },
+            {
+                'host': 'smtp2.example.test',
+                'port': 587,
+                'use_tls': True,
+                'username': 'backup@example.test',
+                'password_configured': True,
+            },
+        ]
+        graph_transport.return_value = {
+            'tenant_id': '',
+            'client_id': '',
+            'client_secret_configured': False,
+            'sender': '',
+        }
+
+        response = self.client.get('/ns-admin/')
+
+        self.assertEqual(response.status_code, 200)
+        status = response.context['integration_status']
+        self.assertEqual(status['mail_provider'], 'smtp1')
+        self.assertEqual(status['mail_mode'], 'failover')
+        self.assertEqual(status['mail_route'], ['smtp1', 'smtp2'])
+        self.assertTrue(status['mail_configured'])
+        self.assertFalse(status['graph_configured'])
 
     @patch('apps.core.admin_views.snapshot', return_value={})
     def test_dashboard_css_percentages_are_locale_neutral_and_counts_align(self, _snapshot):
