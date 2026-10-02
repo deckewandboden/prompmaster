@@ -122,11 +122,40 @@ def _mcp_payload():
 
 def _integration_payload():
     from apps.integrations.services import get_secret
+    from apps.notifications.services import (
+        get_graph_transport,
+        get_mail_delivery,
+        get_smtp_transport,
+    )
 
     mollie_configured = bool(get_secret('mollie_api_key', settings.MOLLIE_API_KEY))
-    mail_configured = bool(settings.EMAIL_PROVIDER == 'smtp' or (
-        settings.GRAPH_TENANT_ID and settings.GRAPH_CLIENT_ID and settings.GRAPH_SENDER
-    ))
+
+    delivery = get_mail_delivery()
+
+    def provider_ready(provider):
+        if provider in {'smtp1', 'smtp2'}:
+            transport = get_smtp_transport(provider)
+            return bool(
+                transport['host']
+                and 1 <= int(transport['port']) <= 65535
+                and (
+                    not transport['username']
+                    or transport['password_configured']
+                )
+            )
+        if provider == 'graph':
+            graph = get_graph_transport()
+            return bool(
+                graph['tenant_id']
+                and graph['client_id']
+                and graph['client_secret_configured']
+                and graph['sender']
+            )
+        return False
+
+    mail_configured = bool(delivery['route']) and all(
+        provider_ready(provider) for provider in delivery['route']
+    )
     hostname = settings.CADDY_DOMAIN.split(':', 1)[0] if settings.CADDY_DOMAIN else ''
     return {
         'mollie': {
@@ -136,7 +165,9 @@ def _integration_payload():
             ).count(),
         },
         'mail': {
-            'provider': settings.EMAIL_PROVIDER,
+            'provider': delivery['primary'],
+            'mode': delivery['mode'],
+            'route': delivery['route'],
             'configured': mail_configured,
             'failures_24h': EmailMessage.objects.filter(
                 status='failed', created_at__gte=timezone.now() - timedelta(hours=24)
