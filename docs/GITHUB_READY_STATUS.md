@@ -16,7 +16,7 @@ Der aktuelle konsolidierte Release-Stand wurde auf einem realen GitHub-Actions-R
 - Free: 16 Legacy-Verträge erhalten; V2 unter `/free/`
 - Pro: 34/194 serverseitiger Katalog; V2 unter `/pro/app/`
 - Legacy-/Rollback-Routen: `/free-old/` und `/pro-old/`
-- **292 Django-Tests**, davon 6 absichtliche Skips für das separat ausgeführte 100k-Performance-Gate
+- **379 Django-Tests**, davon 6 absichtliche Skips für das separat ausgeführte 100k-Performance-Gate
 - separates **100.000-Zeilen-DataGrid-Acceptance-Gate**
 - Compose-Konfiguration
 - Backend-/Caddy-/Backup-Docker-Build
