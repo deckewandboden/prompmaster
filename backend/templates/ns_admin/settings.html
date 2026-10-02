@@ -107,6 +107,7 @@
 </div>
 
 <div class="card"><h2>System &amp; Betrieb</h2><div class="form">
+  <label>{{ form.ops_alert_recipients.label }}{{ form.ops_alert_recipients }}{{ form.ops_alert_recipients.errors }}{% if form.ops_alert_recipients.help_text %}<span class="tiny muted">{{ form.ops_alert_recipients.help_text }}</span>{% endif %}</label>
   <label>{{ form.cpu_warning.label }}{{ form.cpu_warning }}{{ form.cpu_warning.errors }}</label>
   <div class="row"><label>{{ form.disk_warning.label }}{{ form.disk_warning }}{{ form.disk_warning.errors }}</label><label>{{ form.disk_critical.label }}{{ form.disk_critical }}{{ form.disk_critical.errors }}</label></div>
   <div class="row"><label>{{ form.ram_warning.label }}{{ form.ram_warning }}{{ form.ram_warning.errors }}</label><label>{{ form.ram_critical.label }}{{ form.ram_critical }}{{ form.ram_critical.errors }}</label></div>
