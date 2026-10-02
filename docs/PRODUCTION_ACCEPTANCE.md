@@ -68,6 +68,11 @@ Das Gate gilt erst als bestanden, wenn der Command JSON mit `"status": "ok"` lie
 
 ## Mollie Testmodus
 
+Eine Produktionsinstanz darf für technische Pre-Go-Live-Abnahmen ohne Mollie-Key laufen.
+Solange kein Mollie-Key konfiguriert ist, sind providerbasierte Zahlungen nicht verfügbar.
+Vor dem kommerziellen Go-Live des automatischen Pro-Kaufs ist die folgende Mollie-Abnahme
+verpflichtend.
+
 Der Acceptance-Command akzeptiert ausschließlich API-Keys mit `test_`-Präfix. Live-Keys werden abgelehnt. Die `--base-url` muss eine öffentlich erreichbare HTTPS-Adresse sein; `localhost`, lokale/Test-Domains sowie private/Loopback-IP-Adressen werden bereits vor der Provider-Aktion abgelehnt, weil Mollie den Webhook sonst nicht real zurückrufen könnte.
 
 ### 1. Echten PromptMaster-Kauf starten
@@ -127,7 +132,13 @@ Der Command akzeptiert hierfür weder ein lokales Datenbank-Umschreiben noch nur
 
 ## Externes S3/restic + echter Restore-Drill
 
-Voraussetzungen in der Deployment-Umgebung:
+Der reguläre Stack kann zunächst das persistente Docker-Volume `/repository` als lokales
+Restic-Ziel verwenden. Das schützt gegen Anwendungs-/Datenbankfehler, ist aber kein
+Off-Host-Disaster-Recovery. Externes S3 und AWS-kompatible Zugangsdaten sind deshalb für
+den technischen Pre-Go-Live-Deploy optional, bleiben aber vor der endgültigen
+Disaster-Recovery-/Go-Live-Freigabe ein separates Acceptance-Gate.
+
+Voraussetzungen für die **externe** S3-Abnahme:
 
 - `RESTIC_REPOSITORY=s3:...`
 - `RESTIC_PASSWORD`
