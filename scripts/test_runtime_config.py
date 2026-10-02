@@ -67,6 +67,17 @@ class RuntimeConfigTests(unittest.TestCase):
             with self.subTest(value=value):
                 self.assertFalse(is_external_s3_repository(value))
 
+    def test_production_deploy_tests_disable_https_redirect_only_for_test_container(self):
+        deploy = (ROOT / 'scripts' / 'deploy.sh').read_text()
+        expected = (
+            'docker compose "${F[@]}" run --rm \\\n'
+            '  -e SECURE_SSL_REDIRECT=0 \\\n'
+            '  -e SESSION_COOKIE_SECURE=0 \\\n'
+            '  -e CSRF_COOKIE_SECURE=0 \\\n'
+            '  web python manage.py test'
+        )
+        self.assertIn(expected, deploy)
+
     def test_missing_beat_writable_path_is_rejected(self):
         self.base['services']['beat']['tmpfs'] = []
         self.assertTrue(validate(self.base, self.production))

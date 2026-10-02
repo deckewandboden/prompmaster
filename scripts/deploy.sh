@@ -131,7 +131,11 @@ docker compose "${F[@]}" run --rm web python manage.py validate_mail_runtime --r
 log "Uncommitted migrations ausschließen"
 docker compose "${F[@]}" run --rm web python manage.py makemigrations --check --dry-run
 log "Tests ausführen"
-docker compose "${F[@]}" run --rm web python manage.py test
+docker compose "${F[@]}" run --rm \
+  -e SECURE_SSL_REDIRECT=0 \
+  -e SESSION_COOKIE_SECURE=0 \
+  -e CSRF_COOKIE_SECURE=0 \
+  web python manage.py test
 log "Pre-Migration-Backup erstellen"
 docker compose "${F[@]}" stop backup >/dev/null 2>&1 || true
 docker compose "${F[@]}" run --rm -e BACKUP_ONCE=1 backup
