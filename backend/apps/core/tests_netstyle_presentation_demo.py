@@ -147,6 +147,19 @@ class NetstylePresentationDemoTests(TestCase):
         )
         delay.assert_not_called()
 
+        # User-scoped account mail must also remain inside the presentation
+        # tenant even when the caller does not explicitly pass the company.
+        with patch('apps.notifications.tasks.send_email_message.delay') as user_delay:
+            user_scoped = queue_email(
+                'support_confirmation',
+                rainer.email,
+                {'subject': 'Benutzerbezogene Präsentationsprobe'},
+                scope_user=rainer,
+            )
+
+        self.assertEqual(user_scoped.status, 'suppressed')
+        user_delay.assert_not_called()
+
     def test_automatic_license_reminders_are_suppressed(self):
         from apps.notifications.services import reminder_recipient_scopes
 
