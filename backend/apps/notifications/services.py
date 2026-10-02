@@ -228,19 +228,28 @@ def _infer_message_scope(code, recipient, context, scope_company, scope_user):
     return scope_company, scope_user
 
 
-def _presentation_mail_suppressed(scope_company) -> bool:
-    if scope_company is None:
-        return False
-    customer_number = getattr(scope_company, 'customer_number', None)
-    if customer_number is not None:
-        return str(customer_number) in PRESENTATION_DEMO_CUSTOMER_NUMBERS
+def _presentation_mail_suppressed(scope_company=None, scope_user=None) -> bool:
+    from apps.companies.models import Company, Membership
 
-    from apps.companies.models import Company
+    if scope_company is not None:
+        customer_number = getattr(scope_company, 'customer_number', None)
+        if customer_number is not None:
+            if str(customer_number) in PRESENTATION_DEMO_CUSTOMER_NUMBERS:
+                return True
+        elif Company.objects.filter(
+            pk=getattr(scope_company, 'pk', scope_company),
+            customer_number__in=PRESENTATION_DEMO_CUSTOMER_NUMBERS,
+        ).exists():
+            return True
 
-    return Company.objects.filter(
-        pk=getattr(scope_company, 'pk', scope_company),
-        customer_number__in=PRESENTATION_DEMO_CUSTOMER_NUMBERS,
-    ).exists()
+    if scope_user is not None:
+        return Membership.objects.filter(
+            user_id=getattr(scope_user, 'pk', scope_user),
+            active=True,
+            company__customer_number__in=PRESENTATION_DEMO_CUSTOMER_NUMBERS,
+        ).exists()
+
+    return False
 
 
 def _protect_context(context):
@@ -479,7 +488,7 @@ def queue_email(code, recipient, context, *, scope_company=None, scope_user=None
             getattr(scope_user, 'pk', scope_user)
         )
 
-    suppressed = _presentation_mail_suppressed(scope_company)
+    suppressed = _presentation_mail_suppressed(scope_company, scope_user)
     message = EmailMessage.objects.create(
         template=template,
         recipient=recipient,
