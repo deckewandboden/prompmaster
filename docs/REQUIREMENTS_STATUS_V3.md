@@ -38,7 +38,7 @@ Intern automatisiert grün nachgewiesen:
 
 - vollständiger Docker-/Compose-Full-Stack auf GitHub Runner
 - PostgreSQL/Redis/Celery Runtime
-- 379 Django-Tests
+- 380 Django-Tests
 - separate 100k DataGrid Acceptance
 - Browser-Smoke in Chromium, Firefox und WebKit
 - Security-/Tenant-Regressionen einschließlich explizitem Kunden-/User-Scope für E-Mail-Historien und tenant-spezifischem Audit-Scope
