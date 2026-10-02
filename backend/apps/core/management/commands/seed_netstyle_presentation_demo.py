@@ -168,8 +168,12 @@ class Command(BaseCommand):
                 if is_new or not user.has_usable_password():
                     admin_password = 'PmDemo-' + secrets.token_urlsafe(16)
                     user.set_password(admin_password)
-                user.totp_secret_enc = ''
-                user.last_totp_step = -1
+                # Re-seeding presentation data must never destroy an already
+                # configured MFA identity. Initialize replay state only for a
+                # brand-new demo administrator.
+                if is_new:
+                    user.totp_secret_enc = ''
+                    user.last_totp_step = -1
             elif is_new:
                 user.set_unusable_password()
             user.save()
