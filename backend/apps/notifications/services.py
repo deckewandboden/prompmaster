@@ -67,6 +67,7 @@ def _smtp_error_allows_failover(exc):
 _ENCRYPTED_PREFIX = 'pm_enc:v1:'
 _SENSITIVE_CONTEXT_KEYS = {'url', 'link', 'token', 'message', 'reply'}
 _USER_SCOPED_TEMPLATES = {'verify_email', 'password_reset', 'staff_invite', 'checkout_activation'}
+PRESENTATION_DEMO_CUSTOMER_NUMBERS = {'DEMO-NETSTYLE'}
 
 
 def get_mail_identity():
@@ -225,6 +226,21 @@ def _infer_message_scope(code, recipient, context, scope_company, scope_user):
                 scope_user = link.target_user_id
 
     return scope_company, scope_user
+
+
+def _presentation_mail_suppressed(scope_company) -> bool:
+    if scope_company is None:
+        return False
+    customer_number = getattr(scope_company, 'customer_number', None)
+    if customer_number is not None:
+        return str(customer_number) in PRESENTATION_DEMO_CUSTOMER_NUMBERS
+
+    from apps.companies.models import Company
+
+    return Company.objects.filter(
+        pk=getattr(scope_company, 'pk', scope_company),
+        customer_number__in=PRESENTATION_DEMO_CUSTOMER_NUMBERS,
+    ).exists()
 
 
 def _protect_context(context):
@@ -463,12 +479,22 @@ def queue_email(code, recipient, context, *, scope_company=None, scope_user=None
             getattr(scope_user, 'pk', scope_user)
         )
 
+    suppressed = _presentation_mail_suppressed(scope_company)
     message = EmailMessage.objects.create(
         template=template,
         recipient=recipient,
         subject=subject,
         context=stored_context,
+        status='suppressed' if suppressed else 'queued',
+        error=(
+            'Outbound mail suppressed for presentation demo tenant.'
+            if suppressed
+            else ''
+        ),
     )
+    if suppressed:
+        return message
+
     from .tasks import send_email_message
     transaction.on_commit(lambda: send_email_message.delay(str(message.id)), robust=True)
     return message
