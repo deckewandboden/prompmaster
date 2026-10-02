@@ -154,6 +154,7 @@ PAYMENT_STATUS_CHOICES = [
 EMAIL_STATUS_CHOICES = [
     ('queued', 'Warteschlange'), ('sending', 'Wird gesendet'),
     ('sent', 'Gesendet'), ('failed', 'Fehlgeschlagen'),
+    ('suppressed', 'Unterdrückt'),
 ]
 MOLLIE_STATUS_CHOICES = PAYMENT_STATUS_CHOICES + [('error', 'Verarbeitungsfehler'), ('recovered', 'Fehler behoben')]
 
