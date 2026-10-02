@@ -2339,14 +2339,19 @@ def run_backend_ui_smoke(browser, fixture=None) -> None:
 
                 form_spacing = reply_textarea.evaluate(
                     """el => {
-                      const fieldStyle = getComputedStyle(el);
+                      const label = el.closest('label');
+                      if (!label) return {rowGap: 0, clearance: -1};
+                      const labelStyle = getComputedStyle(label);
+                      const labelRect = label.getBoundingClientRect();
+                      const fieldRect = el.getBoundingClientRect();
+                      const lineHeight = parseFloat(labelStyle.lineHeight || '0') || 0;
                       return {
-                        marginTop: parseFloat(fieldStyle.marginTop || '0') || 0,
-                        outlineOffset: parseFloat(fieldStyle.outlineOffset || '0') || 0,
+                        rowGap: parseFloat(labelStyle.rowGap || labelStyle.gap || '0') || 0,
+                        clearance: fieldRect.top - (labelRect.top + lineHeight),
                       };
                     }"""
                 )
-                if form_spacing['marginTop'] < 8:
+                if form_spacing['rowGap'] < 8 or form_spacing['clearance'] < 6:
                     raise AssertionError(
                         f'admin form label/field spacing is insufficient: {form_spacing}'
                     )
