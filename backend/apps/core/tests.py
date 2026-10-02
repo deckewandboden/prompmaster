@@ -811,6 +811,53 @@ class AdminDashboardRegressionTests(TestCase):
             idempotency_key='dashboard-order-1',
         )
 
+    @patch('apps.core.admin_views.get_graph_transport')
+    @patch('apps.core.admin_views.get_smtp_transport')
+    @patch('apps.core.admin_views.get_mail_delivery')
+    @patch('apps.core.admin_views.snapshot', return_value={})
+    def test_dashboard_reports_effective_runtime_mail_route(
+        self, _snapshot, delivery, smtp_transport, graph_transport
+    ):
+        delivery.return_value = {
+            'mode': 'failover',
+            'primary': 'smtp1',
+            'fallback_1': 'smtp2',
+            'fallback_2': '',
+            'route': ['smtp1', 'smtp2'],
+        }
+        smtp_transport.side_effect = [
+            {
+                'host': 'smtp.ionos.de',
+                'port': 587,
+                'use_tls': True,
+                'username': 'promptmaster@example.test',
+                'password_configured': True,
+            },
+            {
+                'host': 'smtp2.example.test',
+                'port': 587,
+                'use_tls': True,
+                'username': 'backup@example.test',
+                'password_configured': True,
+            },
+        ]
+        graph_transport.return_value = {
+            'tenant_id': '',
+            'client_id': '',
+            'client_secret_configured': False,
+            'sender': '',
+        }
+
+        response = self.client.get('/ns-admin/')
+
+        self.assertEqual(response.status_code, 200)
+        status = response.context['integration_status']
+        self.assertEqual(status['mail_provider'], 'smtp1')
+        self.assertEqual(status['mail_mode'], 'failover')
+        self.assertEqual(status['mail_route'], ['smtp1', 'smtp2'])
+        self.assertTrue(status['mail_configured'])
+        self.assertFalse(status['graph_configured'])
+
     @patch('apps.core.admin_views.snapshot', return_value={})
     def test_dashboard_css_percentages_are_locale_neutral_and_counts_align(self, _snapshot):
         response = self.client.get('/ns-admin/')
