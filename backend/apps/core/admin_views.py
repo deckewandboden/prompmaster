@@ -2541,6 +2541,7 @@ def settings_view(request):
     )
     initial = {
         'support_email': get_setting('support_email', 'promptmaster@netstyle.de'),
+        'ops_alert_recipients': get_setting('ops_alert_recipients', ''),
         'mail_delivery_mode': mail_delivery['mode'],
         'mail_provider': mail_delivery['primary'],
         'mail_fallback_1': mail_delivery['fallback_1'],
@@ -2584,6 +2585,7 @@ def settings_view(request):
         if form.is_valid():
             data = form.cleaned_data.copy()
             support_email = data.pop('support_email')
+            ops_alert_recipients = data.pop('ops_alert_recipients')
             selected_mode = data.pop('mail_delivery_mode') or mail_delivery['mode']
             selected_provider = data.pop('mail_provider') or mail_delivery['primary']
             selected_fallback_1 = data.pop('mail_fallback_1') or ''
@@ -2659,6 +2661,11 @@ def settings_view(request):
             }
             graph_client_secret = data.pop('graph_client_secret')
             set_setting('support_email', support_email, 'Empfänger des PromptMaster-Kontaktformulars')
+            set_setting(
+                'ops_alert_recipients',
+                ops_alert_recipients,
+                'E-Mail-Empfänger für neue und gelöste PromptMaster-Systemwarnungen',
+            )
             set_setting('mail_provider', selected_provider, 'Primärer Mail-Versandweg')
             set_setting(
                 'mail_delivery',
@@ -2705,6 +2712,7 @@ def settings_view(request):
                 request.user,
                 {
                     'support_email': support_email,
+                    'ops_alert_recipients': ops_alert_recipients,
                     'mail_provider': selected_provider,
                     'mail_delivery': {
                         'mode': selected_mode,
