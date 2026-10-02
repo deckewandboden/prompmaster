@@ -86,8 +86,13 @@ class SupportReplyAdminTests(TestCase):
         self.assertIn('support_id', email.context)
         self.assertIn('responder', email.context)
         self.assertIn('reference', email.context)
+
+        # Persisted support body/reply values are encrypted at rest. Render the
+        # delivery context through the same decrypting path used by mail send.
+        from apps.notifications.services import _render_context
+        rendered_context = _render_context(email.context)
         self.assertEqual(
-            email.template.body_text.format(**email.context),
+            email.template.body_text.format(**rendered_context),
             (
                 'Antwort: Bitte Cache leeren und erneut anmelden.\n'
                 'Status: In Bearbeitung\n'
