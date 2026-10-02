@@ -3,6 +3,7 @@ import smtplib
 from email.utils import formataddr
 from string import Formatter
 from urllib.parse import unquote, urlsplit
+from uuid import UUID
 
 import requests
 from django.contrib.auth import get_user_model
@@ -228,6 +229,23 @@ def _infer_message_scope(code, recipient, context, scope_company, scope_user):
     return scope_company, scope_user
 
 
+def _scope_uuid(value):
+    """Return a UUID for model instances/UUID-like scope values, else None.
+
+    Scope metadata is also used by release-contract tests and may contain
+    opaque external identifiers. Presentation-mail suppression must therefore
+    stay fail-open for non-database scope tokens instead of raising a Django
+    ValidationError while queueing an otherwise valid message.
+    """
+    raw = getattr(value, 'pk', value)
+    if raw in (None, ''):
+        return None
+    try:
+        return UUID(str(raw))
+    except (TypeError, ValueError, AttributeError):
+        return None
+
+
 def _presentation_mail_suppressed(scope_company=None, scope_user=None) -> bool:
     from apps.companies.models import Company, Membership
 
@@ -236,18 +254,22 @@ def _presentation_mail_suppressed(scope_company=None, scope_user=None) -> bool:
         if customer_number is not None:
             if str(customer_number) in PRESENTATION_DEMO_CUSTOMER_NUMBERS:
                 return True
-        elif Company.objects.filter(
-            pk=getattr(scope_company, 'pk', scope_company),
-            customer_number__in=PRESENTATION_DEMO_CUSTOMER_NUMBERS,
-        ).exists():
-            return True
+        else:
+            company_id = _scope_uuid(scope_company)
+            if company_id and Company.objects.filter(
+                pk=company_id,
+                customer_number__in=PRESENTATION_DEMO_CUSTOMER_NUMBERS,
+            ).exists():
+                return True
 
     if scope_user is not None:
-        return Membership.objects.filter(
-            user_id=getattr(scope_user, 'pk', scope_user),
-            active=True,
-            company__customer_number__in=PRESENTATION_DEMO_CUSTOMER_NUMBERS,
-        ).exists()
+        user_id = _scope_uuid(scope_user)
+        if user_id:
+            return Membership.objects.filter(
+                user_id=user_id,
+                active=True,
+                company__customer_number__in=PRESENTATION_DEMO_CUSTOMER_NUMBERS,
+            ).exists()
 
     return False
 
