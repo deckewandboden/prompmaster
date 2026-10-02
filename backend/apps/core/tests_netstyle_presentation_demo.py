@@ -1,3 +1,4 @@
+from unittest.mock import patch
 import io
 
 from django.core.management import call_command
@@ -117,6 +118,34 @@ class NetstylePresentationDemoTests(TestCase):
         self.assertEqual(EmailMessage.objects.count(), before_mail)
         self.assertIn('E-Mail-Versand: keiner', output)
         self.assertIn('Provider-Aufrufe: keine', output)
+
+    def test_company_scoped_mail_is_persisted_as_suppressed(self):
+        from apps.notifications.services import queue_email
+
+        self.seed()
+        company = Company.objects.get(customer_number='DEMO-NETSTYLE')
+        rainer = User.objects.get(email='rspickermann@netstyle.de')
+
+        with patch('apps.notifications.tasks.send_email_message.delay') as delay:
+            message = queue_email(
+                'support_confirmation',
+                rainer.email,
+                {'subject': 'Präsentationsprobe'},
+                scope_company=company,
+                scope_user=rainer,
+            )
+
+        self.assertEqual(message.status, 'suppressed')
+        self.assertIn('presentation demo tenant', message.error.lower())
+        self.assertEqual(
+            str(message.context.get('pm_scope_company_id')),
+            str(company.id),
+        )
+        self.assertEqual(
+            str(message.context.get('pm_scope_user_id')),
+            str(rainer.id),
+        )
+        delay.assert_not_called()
 
     def test_automatic_license_reminders_are_suppressed(self):
         from apps.notifications.services import reminder_recipient_scopes
