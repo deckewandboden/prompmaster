@@ -249,6 +249,42 @@ def dashboard(request):
     active_alerts = list(SystemAlert.objects.filter(active=True)[:8]) if rights['ops'] else []
     open_support_count = SupportRequest.objects.exclude(status='closed').count() if rights['support'] else None
 
+    integration_status = {}
+    if rights['ops']:
+        mail_delivery = get_mail_delivery()
+        smtp1 = get_smtp_transport('smtp1')
+        smtp2 = get_smtp_transport('smtp2')
+        graph = get_graph_transport()
+        configured = {
+            'smtp1': bool(
+                smtp1['host']
+                and (not smtp1['username'] or smtp1['password_configured'])
+            ),
+            'smtp2': bool(
+                smtp2['host']
+                and (not smtp2['username'] or smtp2['password_configured'])
+            ),
+            'graph': bool(
+                graph['tenant_id']
+                and graph['client_id']
+                and graph['client_secret_configured']
+                and graph['sender']
+            ),
+        }
+        integration_status = {
+            'mollie': bool(
+                get_setting('mollie_profile_id', '') or settings.MOLLIE_PROFILE_ID
+            ),
+            'mail_provider': mail_delivery['primary'],
+            'mail_mode': mail_delivery['mode'],
+            'mail_route': mail_delivery['route'],
+            'mail_configured': bool(mail_delivery['route']) and all(
+                configured.get(provider, False)
+                for provider in mail_delivery['route']
+            ),
+            'graph_configured': configured['graph'],
+        }
+
     context = {
         'rights': rights,
         'customers': Company.objects.count() + PrivateCustomerProfile.objects.count() if rights['customers'] else None,
@@ -277,16 +313,7 @@ def dashboard(request):
         'ops': snapshot() if rights['ops'] else {},
         'backup': BackupRecord.objects.order_by('-finished_at', '-created_at').first() if rights['ops'] else None,
         'restore': RestoreTest.objects.order_by('-started_at').first() if rights['ops'] else None,
-        'integration_status': {
-            'mollie': bool(get_setting('mollie_profile_id', '') or settings.MOLLIE_PROFILE_ID),
-            'mail_provider': settings.EMAIL_PROVIDER,
-            'graph_configured': bool(
-                settings.GRAPH_TENANT_ID
-                and settings.GRAPH_CLIENT_ID
-                and settings.GRAPH_CLIENT_SECRET
-                and settings.GRAPH_SENDER
-            ),
-        } if rights['ops'] else {},
+        'integration_status': integration_status,
         'recent_orders': Order.objects.select_related('company', 'private_user').order_by('-created_at')[:8] if rights['orders'] else [],
         'expiring': License.objects.select_related('company', 'owner_user', 'product').filter(valid_until__gt=now).order_by('valid_until')[:8] if rights['licenses'] else [],
     }
