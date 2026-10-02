@@ -56,6 +56,11 @@ def check_fernet(value: str) -> bool:
         return False
 
 
+def is_local_restic_repository(value: str) -> bool:
+    """Accept the built-in persistent Docker volume used by the backup service."""
+    return (value or '').strip() == '/repository'
+
+
 def is_external_s3_repository(value: str) -> bool:
     """Accept only canonical TLS-protected restic S3 repository forms."""
     repo = (value or '').strip()
@@ -84,6 +89,7 @@ def main() -> int:
     path = Path(args.env_file)
     values = parse_env(path)
     errors: list[str] = []
+    warnings: list[str] = []
 
     expected = args.environment
     if values.get('ENVIRONMENT', '').strip().lower() != expected:
@@ -142,22 +148,38 @@ def main() -> int:
             # deploy.sh performs the authoritative database-backed
             # validate_mail_runtime gate after the data services are available.
             pass
-        mollie = values.get('MOLLIE_API_KEY', '')
-        if not mollie.startswith('live_'):
-            fail(errors, 'MOLLIE_API_KEY muss in Produktion ein Mollie-Live-Key (live_…) sein.')
+        mollie = values.get('MOLLIE_API_KEY', '').strip()
+        if mollie and not mollie.startswith('live_'):
+            fail(errors, 'Wenn MOLLIE_API_KEY gesetzt ist, muss er in Produktion ein Mollie-Live-Key (live_…) sein.')
+        elif not mollie:
+            warnings.append(
+                'MOLLIE_API_KEY ist nicht gesetzt; Mollie-Zahlungen sind bis zur Provider-Konfiguration nicht verfügbar.'
+            )
 
-        repo = values.get('RESTIC_REPOSITORY', '')
-        if is_placeholder(repo) or not is_external_s3_repository(repo):
+        repo = values.get('RESTIC_REPOSITORY', '').strip()
+        if is_placeholder(repo):
             fail(
                 errors,
-                'RESTIC_REPOSITORY muss in Produktion ein kanonisches TLS-S3-Ziel sein '
+                'RESTIC_REPOSITORY muss gesetzt sein: lokal /repository oder externes TLS-S3 '
+                '(s3:https://host/bucket bzw. s3:s3.<region>.amazonaws.com/bucket).',
+            )
+        elif is_local_restic_repository(repo):
+            warnings.append(
+                'RESTIC_REPOSITORY=/repository verwendet nur das persistente lokale Docker-Volume; '
+                'ein externes Off-Host-Backup bleibt ein separates Go-Live-/Disaster-Recovery-Gate.'
+            )
+        elif is_external_s3_repository(repo):
+            for key in ('AWS_ACCESS_KEY_ID', 'AWS_SECRET_ACCESS_KEY'):
+                if is_placeholder(values.get(key, '')):
+                    fail(errors, f'{key} muss für ein externes S3-Production-Backup gesetzt sein.')
+        else:
+            fail(
+                errors,
+                'RESTIC_REPOSITORY muss /repository oder ein kanonisches TLS-S3-Ziel sein '
                 '(s3:https://host/bucket oder s3:s3.<region>.amazonaws.com/bucket).',
             )
         if is_placeholder(values.get('RESTIC_PASSWORD', '')) or len(values.get('RESTIC_PASSWORD', '')) < 20:
             fail(errors, 'RESTIC_PASSWORD muss sicher gesetzt sein.')
-        for key in ('AWS_ACCESS_KEY_ID', 'AWS_SECRET_ACCESS_KEY'):
-            if is_placeholder(values.get(key, '')):
-                fail(errors, f'{key} muss für Production-Backup gesetzt sein.')
         if values.get('INITIAL_ADMIN_PASSWORD', '') not in {'', 'DISABLED'}:
             fail(errors, 'INITIAL_ADMIN_PASSWORD darf nach Bootstrap in Produktion nicht aktiv konfiguriert bleiben.')
     else:
@@ -174,6 +196,8 @@ def main() -> int:
         for item in errors:
             print(f'[FEHLER] {item}', file=sys.stderr)
         return 1
+    for item in warnings:
+        print(f'[WARNUNG] {item}')
     print(f'ENV VALIDATION OK ({expected})')
     return 0
 
