@@ -5,7 +5,7 @@ import unittest
 import yaml
 
 from validate_runtime_config import ROOT, validate
-from validate_env import is_external_s3_repository, normalize_mail_provider
+from validate_env import is_external_s3_repository, is_local_restic_repository, normalize_mail_provider
 
 
 class RuntimeConfigTests(unittest.TestCase):
@@ -46,6 +46,11 @@ class RuntimeConfigTests(unittest.TestCase):
         self.assertEqual(normalize_mail_provider('smtp1'), 'smtp1')
         self.assertEqual(normalize_mail_provider('microsoft_graph'), 'graph')
         self.assertEqual(normalize_mail_provider('graph'), 'graph')
+
+    def test_local_restic_repository_accepts_only_builtin_volume(self):
+        self.assertTrue(is_local_restic_repository('/repository'))
+        self.assertFalse(is_local_restic_repository('/tmp/repository'))
+        self.assertFalse(is_local_restic_repository('s3:https://s3.example.net/promptmaster'))
 
     def test_external_restic_repository_accepts_canonical_tls_forms(self):
         self.assertTrue(is_external_s3_repository('s3:https://s3.example.net/promptmaster'))
