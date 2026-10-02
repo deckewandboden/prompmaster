@@ -166,9 +166,15 @@ class NetstylePresentationDemoTests(TestCase):
         self.seed()
         rainer = User.objects.get(email='rspickermann@netstyle.de')
         first_password_hash = rainer.password
+        rainer.totp_secret_enc = 'already-configured-presentation-mfa'
+        rainer.last_totp_step = 42
+        rainer.save(update_fields=['totp_secret_enc', 'last_totp_step', 'updated_at'])
+
         self.seed()
         rainer.refresh_from_db()
         self.assertEqual(rainer.password, first_password_hash)
+        self.assertEqual(rainer.totp_secret_enc, 'already-configured-presentation-mfa')
+        self.assertEqual(rainer.last_totp_step, 42)
 
         company = Company.objects.get(customer_number='DEMO-NETSTYLE')
         self.assertEqual(Membership.objects.filter(company=company, active=True).count(), 12)
