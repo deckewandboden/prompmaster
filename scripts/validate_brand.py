@@ -17,9 +17,9 @@ SKIP_FILES = {
 FORBIDDEN = ("PromptMaster", "PROMPTMASTER", "Promptmaster", "Prompt Master")
 LEGACY_ASSET_TOKENS = (
     "promptmaster-logo-",
-    "promptmaster_v2.",
-    "promptmaster_brand_hq.",
-    "promptmaster_ui_v2.",
+    "promptmaster_v2",
+    "promptmaster_brand_hq",
+    "promptmaster_ui_v2",
     "promptmaster_free_reference.html",
     "promptmaster_pro_runtime.html",
     "promptmaster_pro.html",
