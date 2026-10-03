@@ -1,6 +1,6 @@
 | `backend/templates/ns_admin/service_account_token.html` | 603 | `e925718eca563cf3199d428f3e858c216e6823838923b4bc0a287ca1d276a954` || `backend/templates/ns_admin/api.html` | 1235 | `da72eb8c5979e8f13c9c6331a2aaf4cfce6dee86fb352ff7fb393c77e67d04fc` || `backend/apps/core/tests.py` | 6784 | `124513218876c4455b00a8d63fdaee52f2d9573dd365e74cfff09508fb106975` || `backend/apps/core/admin_urls.py` | 5846 | `c06689e8b4a809e5e8513c8f80269c2d7aad6a914e2a80d0d369f796e9789ee9` || `backend/apps/core/admin_views.py` | 54457 | `1ed8a0b89d68d4a9a9f95017a3175aca0a46a0a6d61f56743ee59ba57a6bec04` |# Vollständiges Datei-Inventar — PROMPTFINISHER RC14
 
-Erfasst: **518 Dateien** (Manifest-/Inventardateien selbst ausgenommen), **20,539,721 Byte**.
+Erfasst: **518 Dateien** (Manifest-/Inventardateien selbst ausgenommen), **20,540,037 Byte**.
 
 Maschinenlesbar: `FILE_MANIFEST.tsv` und `MANIFEST.json`.
 
@@ -462,7 +462,7 @@ Maschinenlesbar: `FILE_MANIFEST.tsv` und `MANIFEST.json`.
 | `scripts/test_backup_restore.sh` | 1531 | `0541a5ebc0184231bd1439793cfc4a41b4a26817cfdb005c9f36534050af88a1` |
 | `scripts/test_runtime_config.py` | 1666 | `342993a4ef369f3e2810f4691cd3e65a6d1ebf6e2fbb5f9381b1ed9eae85afe7` |
 | `scripts/update.sh` | 102 | `75036bf3dc461ba0d307d05faa1d1ad3317c8657071ea532a3b9bc5dfbe2a786` |
-| `scripts/validate_brand.py` | 1850 | `4c659a5aab0f98a77bf99642c0cfc4701629a6ef355a2541117f34ee17ed817d` |
+| `scripts/validate_brand.py` | 2166 | `19495f29089f9dcb8530700790b0ff9f8b6a92ed465b84d615ad8cebf7713bd2` |
 | `scripts/validate_env.py` | 5909 | `fb52eb72749c7ad402885a0ab8ee5f87bc5e0d96f002e3b6318d3b099f391ec1` |
 | `scripts/validate_manifest.py` | 5115 | `bafc14c5ae5cfc66aa42a1429c5b2c7743053d58961a0c02586b50044712ad9b` |
 | `scripts/validate_marketing.py` | 2832 | `1b38181beab072008432474fbf71189f34583f1f4c4f9e17c97487285522fc15` |
