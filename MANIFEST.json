@@ -2272,7 +2272,7 @@
       "role": "documentation"
     },
     {
-      "path": "docs/recovery/PromptMaster_FORENSIC_LIBRARY_AND_ARCHIVE_SCAN_2026-09-12.md",
+      "path": "docs/recovery/PROMPTFINISHER_FORENSIC_LIBRARY_AND_ARCHIVE_SCAN_2026-09-12.md",
       "size": 6852,
       "sha256": "15c9e8e9f0cbc4fe7c5dfe0f3e2e872ccdd9e8379059000dda5fdaba32495326",
       "role": "documentation"
@@ -3100,13 +3100,13 @@
       "role": "repository-root"
     },
     {
-      "path": "tools/recovery/v13-exact-exporter/PromptMaster_v13_EXAKT_exportieren.cmd",
+      "path": "tools/recovery/v13-exact-exporter/PROMPTFINISHER_v13_EXAKT_exportieren.cmd",
       "size": 298,
       "sha256": "ccef1271973a6381439d13384f0b787bbde4314c0763e705750002c00c7f331e",
       "role": "recovery-tool"
     },
     {
-      "path": "tools/recovery/v13-exact-exporter/PromptMaster_v13_EXAKT_exportieren.ps1",
+      "path": "tools/recovery/v13-exact-exporter/PROMPTFINISHER_v13_EXAKT_exportieren.ps1",
       "size": 7538,
       "sha256": "357e641b945e63ea473617dc58ac7b8c83167723509d04cae06c5104d3f52321",
       "role": "recovery-tool"
