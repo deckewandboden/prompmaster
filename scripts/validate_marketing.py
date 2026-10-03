@@ -12,7 +12,7 @@ required = [
     'index.html', 'package.json', 'package-lock.json', 'vite.marketing.config.js',
     'src/main.js', 'src/content.js', 'src/head.js', 'src/head-canvas2d.js', 'src/style.css', 'src/immersive.css',
     'public/models/head.glb', 'public/models/night-landscape.png',
-    'public/brand/design-reference.jpeg', 'public/brand/promptmaster-logo-clean.svg', 'public/brand/promptmaster-logo-hq.png', 'public/integration-patch.js',
+    'public/brand/design-reference.jpeg', 'public/brand/promptfinisher-logo-clean.svg', 'public/brand/promptfinisher-logo-hq.png', 'public/integration-patch.js',
     'dist/index.html', 'dist/integration-patch.js', 'dist/models/head.glb',
 ]
 missing = [name for name in required if not (MARKETING / name).exists()]
@@ -35,11 +35,11 @@ source = (MARKETING / 'src/content.js').read_text(encoding='utf-8')
 index = (MARKETING / 'index.html').read_text(encoding='utf-8')
 patch = (MARKETING / 'public/integration-patch.js').read_text(encoding='utf-8')
 immersive_css = (MARKETING / 'src/immersive.css').read_text(encoding='utf-8')
-if "url('/brand/promptmaster-logo-hq.png')" not in immersive_css:
+if "url('/brand/promptfinisher-logo-hq.png')" not in immersive_css:
     raise SystemExit('MARKETING VALIDATION FAIL: active header/footer do not use approved HQ logo')
 if "background-image:url('/brand/design-reference.jpeg')" in immersive_css:
     raise SystemExit('MARKETING VALIDATION FAIL: screenshot-cropped logo regression returned')
-marketing_logo = (MARKETING / 'public/brand/promptmaster-logo-clean.svg').read_text(encoding='utf-8')
+marketing_logo = (MARKETING / 'public/brand/promptfinisher-logo-clean.svg').read_text(encoding='utf-8')
 for marker in ('width="315" height="55"', 'viewBox="0 7 315 55"', 'width="315" height="62"', 'data:image/png;base64,'):
     if marker not in marketing_logo:
         raise SystemExit(f'MARKETING VALIDATION FAIL: approved cropped PROMPTFINISHER artwork missing {marker}')

@@ -228,11 +228,11 @@ Maschinenlesbar: `FILE_MANIFEST.tsv` und `MANIFEST.json`.
 | `backend/config/urls.py` | 1689 | `391594b133ccc7b9edef4edfc1c170a9d0d057a1e73c8a192ff4541914da0054` |
 | `backend/config/wsgi.py` | 161 | `25d3ac3de67e7a1e20c9cfed54bf208a378c7e634f426239c36c63cbabc22f36` |
 | `backend/manage.py` | 239 | `9bba94f103ecf4d96b7bb92b4efd737352b65e003b6d0d5dc20c2a97cb62e13f` |
-| `backend/private_assets/promptmaster_free_reference.html` | 110812 | `aada4fbb3461d3758c48ed808bf018716a53aa33baf81efb058412e63535b0a8` |
-| `backend/private_assets/promptmaster_pro.html` | 233404 | `aa7b2da53ba3cbcf9874b9b6f7381ea4c3e86ee1f9c09db186cbec6876a3c9cf` |
-| `backend/private_assets/promptmaster_pro_runtime.html` | 248805 | `29da4bb38b121ef585d07711e4e30966f1ae37089ffc01be048de7a2e821ebba` |
+| `backend/private_assets/promptfinisher_free_reference.html` | 110812 | `aada4fbb3461d3758c48ed808bf018716a53aa33baf81efb058412e63535b0a8` |
+| `backend/private_assets/promptfinisher_pro.html` | 233404 | `aa7b2da53ba3cbcf9874b9b6f7381ea4c3e86ee1f9c09db186cbec6876a3c9cf` |
+| `backend/private_assets/promptfinisher_pro_runtime.html` | 248805 | `29da4bb38b121ef585d07711e4e30966f1ae37089ffc01be048de7a2e821ebba` |
 | `backend/private_assets/README.md` | 303 | `260b610cc91d48508721f57752adabf25a442b8ab111bbee54a111a751d8ab16` |
-| `backend/static/brand/promptmaster-logo-reference.png` | 17905 | `5848c7bc83fa903f9eb2de1b8a3c8443a9dca937cf3659494d2db2d5a26ff231` |
+| `backend/static/brand/promptfinisher-logo-reference.png` | 17905 | `5848c7bc83fa903f9eb2de1b8a3c8443a9dca937cf3659494d2db2d5a26ff231` |
 | `backend/static/css/app.css` | 9727 | `a0a74b3b25428c383c9c288be594e764e76319b27bfc74f2a7de9e165e4f5c7e` |
 | `backend/templates/app_shell.html` | 1062 | `7f7c3ebacd4e8c15a621656c8dc4ca2fe760c63833079836dd6d54dd279bcbe6` |
 | `backend/templates/auth/accept_invitation.html` | 1216 | `6f8563b0a815f54c31141767dc52c295dd67d7f47eebd1f875e61d4a9b976082` |
@@ -481,8 +481,8 @@ Maschinenlesbar: `FILE_MANIFEST.tsv` und `MANIFEST.json`.
 
 | Pfad | Größe | SHA256 |
 |---|---:|---|
-| `product/golden_masters/promptmaster_free.html` | 110812 | `aada4fbb3461d3758c48ed808bf018716a53aa33baf81efb058412e63535b0a8` |
-| `product/golden_masters/promptmaster_pro.html` | 233404 | `aa7b2da53ba3cbcf9874b9b6f7381ea4c3e86ee1f9c09db186cbec6876a3c9cf` |
+| `product/golden_masters/promptfinisher_free.html` | 110812 | `aada4fbb3461d3758c48ed808bf018716a53aa33baf81efb058412e63535b0a8` |
+| `product/golden_masters/promptfinisher_pro.html` | 233404 | `aa7b2da53ba3cbcf9874b9b6f7381ea4c3e86ee1f9c09db186cbec6876a3c9cf` |
 | `product/golden_masters/SHA256SUMS.txt` | 177 | `b33327f70e01297aa8bf29058651f9bb4a3349731c50533d7415eb0a46bde6ac` |
 | `product/runtime/pro_server_bridge.js` | 15382 | `8637cb60a75f7bcf965492d1f7f0876abde37156c957d7289857a54543fe99fb` |
 

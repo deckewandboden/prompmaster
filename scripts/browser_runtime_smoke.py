@@ -21,7 +21,7 @@ sys.path.insert(0, str(BACKEND))
 from apps.prompts.free_legacy import FORMAT_LABELS, FREE_RUNTIME_CONTRACTS  # noqa: E402
 from apps.prompts.free_surface import AUDIENCE_DISPLAY, FREE_INPUT_META, FREE_SURFACE_ALIAS_TITLES, FREE_SURFACE_ALIAS_TO_PRO_ID, FREE_SURFACE_PRO_CONTRACTS, FREE_TO_PRO_APP_CODE  # noqa: E402
 
-RUNTIME = ROOT / 'backend/private_assets/promptmaster_pro_runtime.html'
+RUNTIME = ROOT / 'backend/private_assets/promptfinisher_pro_runtime.html'
 DATA = ROOT / 'backend/apps/prompts/data/pm20_golden_logic.json'
 FREE_DATA = ROOT / 'backend/apps/prompts/data/free_legacy_tasks.json'
 
@@ -842,7 +842,7 @@ def _check_backend_page(page, base: str, path: str, width: int, label: str) -> N
         raise AssertionError(
             f'{label} {width}px: browser-native confirm handlers still active: {metrics["inlineConfirmForms"]}'
         )
-    if metrics['brandLogoPath'] != '/static/brand/promptmaster-logo-hq.png':
+    if metrics['brandLogoPath'] != '/static/brand/promptfinisher-logo-hq.png':
         raise AssertionError(
             f'{label} {width}px: legacy brand asset active: {metrics["brandLogoPath"]}'
         )
@@ -952,7 +952,7 @@ def _check_public_page(page, base: str, path: str, width: int, label: str) -> No
             f'{label} {width}px: public POST forms without CSRF: {metrics["postFormsMissingCsrf"]}'
         )
     if metrics['loginLogoPath']:
-        if metrics['loginLogoPath'] != '/static/brand/promptmaster-logo-hq.png':
+        if metrics['loginLogoPath'] != '/static/brand/promptfinisher-logo-hq.png':
             raise AssertionError(
                 f'{label} {width}px: legacy auth logo asset active: {metrics["loginLogoPath"]}'
             )
@@ -1125,7 +1125,7 @@ def _check_product_v2_shell(page, label: str, width: int) -> None:
         )
     if metrics['headerLeft'] < -1 or metrics['headerRight'] > metrics['innerWidth'] + 1:
         raise AssertionError(f'{label} {width}px: V2 header leaves viewport: {metrics}')
-    if metrics['logoPath'] != '/static/brand/promptmaster-logo-hq.png':
+    if metrics['logoPath'] != '/static/brand/promptfinisher-logo-hq.png':
         raise AssertionError(f'{label} {width}px: V2 legacy logo active: {metrics["logoPath"]}')
     if metrics['logoNaturalWidth'] < 1000:
         raise AssertionError(f'{label} {width}px: V2 logo source too small: {metrics["logoNaturalWidth"]}')
@@ -1553,7 +1553,7 @@ def run_backend_ui_smoke(browser, fixture=None) -> None:
         if (
             not v2_free_layout['left']
             or not v2_free_layout['right']
-            or v2_free_layout['logoPath'] != '/static/brand/promptmaster-logo-hq.png'
+            or v2_free_layout['logoPath'] != '/static/brand/promptfinisher-logo-hq.png'
             or v2_free_layout['logoNaturalWidth'] < 1000
             or v2_free_layout['logoNaturalHeight'] < 250
             or v2_free_layout['bodyOverflowY'] not in {'auto', 'scroll'}
@@ -2140,7 +2140,7 @@ def run_backend_ui_smoke(browser, fixture=None) -> None:
         first_page.locator('input[name="password"]').press('Enter')
         first_page.wait_for_url('**/auth/2fa/setup/**')
         setup_logo = first_page.locator('.login-logo img')
-        if '/static/brand/promptmaster-logo-hq.png' not in setup_logo.get_attribute('src'):
+        if '/static/brand/promptfinisher-logo-hq.png' not in setup_logo.get_attribute('src'):
             raise AssertionError('first-time MFA still uses the low-resolution logo asset')
         if first_page.locator('[data-copy-target]').count() != 2:
             raise AssertionError('first-time MFA copy controls missing')
@@ -2259,7 +2259,7 @@ def run_backend_ui_smoke(browser, fixture=None) -> None:
 
             if role == 'admin':
                 admin_logo = page.locator('.sidebar .brand img')
-                if '/static/brand/promptmaster-logo-hq.png' not in admin_logo.get_attribute('src'):
+                if '/static/brand/promptfinisher-logo-hq.png' not in admin_logo.get_attribute('src'):
                     raise AssertionError('admin shell still uses the low-resolution logo asset')
 
                 page.goto(

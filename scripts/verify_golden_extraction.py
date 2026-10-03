@@ -13,7 +13,7 @@ import sys
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
-PRO = ROOT / 'backend/private_assets/promptmaster_pro.html'
+PRO = ROOT / 'backend/private_assets/promptfinisher_pro.html'
 DATA = ROOT / 'backend/apps/prompts/data/pm20_golden_logic.json'
 EXPECTED_SHA = 'a18375946c7081034cd6b9d70a1f4e3b843c51e03230477cae246b6c4bf0f95f'
 

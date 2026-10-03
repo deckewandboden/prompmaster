@@ -15,7 +15,7 @@ from apps.prompts.free_surface import FREE_SURFACE_ALIAS_TO_PRO_ID, FREE_SURFACE
 
 CATALOG = ROOT / 'backend/apps/prompts/data/pm20_golden_logic.json'
 BRIDGE = ROOT / 'product/runtime/pro_server_bridge.js'
-RUNTIME = ROOT / 'backend/private_assets/promptmaster_pro_runtime.html'
+RUNTIME = ROOT / 'backend/private_assets/promptfinisher_pro_runtime.html'
 SERVICE = ROOT / 'backend/apps/prompts/services.py'
 
 catalog = json.loads(CATALOG.read_text(encoding='utf-8'))

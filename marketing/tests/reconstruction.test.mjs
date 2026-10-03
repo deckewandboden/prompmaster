@@ -151,7 +151,7 @@ test('marketing header uses dedicated approved HQ logo artwork',()=>{
   assert.match(css,/\/brand\/promptmaster-logo-hq\.png/);
   assert.doesNotMatch(css,/\/brand\/promptmaster-logo-clean\.svg/);
   assert.doesNotMatch(css,/background-image:url\('\/brand\/design-reference\.jpeg'\)/);
-  assert.equal(gitBlobSha('public/brand/promptmaster-logo-hq.png'),'87be29848672ddac093e49cae479ec9dcc1e43ff');
+  assert.equal(gitBlobSha('public/brand/promptfinisher-logo-hq.png'),'87be29848672ddac093e49cae479ec9dcc1e43ff');
 });
 
 test('header and footer use the same HQ logo and share one visible left baseline',()=>{

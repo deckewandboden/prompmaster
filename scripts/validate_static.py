@@ -132,11 +132,11 @@ for name in ('prometheus', 'node-exporter', 'cadvisor', 'postgres-exporter'):
 # 6) Required release files.
 required = [
     'backend/config/settings.py','backend/config/urls.py','backend/apps/core/datagrid.py',
-    'backend/private_assets/promptmaster_pro.html',
+    'backend/private_assets/promptfinisher_pro.html',
     'backend/apps/payments/services.py','backend/apps/ops/api.py','backend/apps/proaccess/views.py',
     'backend/templates/portal/base.html','backend/templates/ns_admin/base.html',
-    'backend/static/brand/promptmaster-logo-reference.png',
-    'backend/static/brand/promptmaster-logo-clean.svg','backend/static/brand/promptmaster-logo-hq.png','scripts/runtime_validate.sh',
+    'backend/static/brand/promptfinisher-logo-reference.png',
+    'backend/static/brand/promptfinisher-logo-clean.svg','backend/static/brand/promptfinisher-logo-hq.png','scripts/runtime_validate.sh',
     'backend/apps/prompts/models.py','backend/apps/prompts/composer_core.py',
     'backend/apps/prompts/free_legacy.py',
     'backend/apps/prompts/services.py','backend/apps/prompts/api.py','backend/apps/prompts/api_urls.py',
@@ -144,7 +144,7 @@ required = [
     'backend/apps/prompts/data/pm20_golden_logic.json','backend/apps/prompts/data/free_legacy_tasks.json',
     'backend/apps/prompts/migrations/0001_initial.py','scripts/verify_golden_extraction.py','scripts/validate_prompt_domain.py',
     'docs/PROMPT_DOMAIN_AND_COMPOSER.md','docs/FREE_LEGACY_MAPPING_STATUS.md',
-    'product/golden_masters/promptmaster_free.html','product/golden_masters/promptmaster_pro.html',
+    'product/golden_masters/promptfinisher_free.html','product/golden_masters/promptfinisher_pro.html',
     'product/golden_masters/SHA256SUMS.txt',
     'SPEC.md','AGENTS.md','README.md',
 ]
@@ -154,7 +154,7 @@ for rel in required:
 
 # 7) PROMPTFINISHER branding regression guards.
 # The 239x47 PNG is retained byte-exactly for legacy rollback routes only.
-logo = ROOT/'backend/static/brand/promptmaster-logo-reference.png'
+logo = ROOT/'backend/static/brand/promptfinisher-logo-reference.png'
 if logo.exists():
     data = logo.read_bytes()
     expected_sha = '5848c7bc83fa903f9eb2de1b8a3c8443a9dca937cf3659494d2db2d5a26ff231'
@@ -169,7 +169,7 @@ if logo.exists():
     except Exception as exc:
         fail(f'Legacy logo metadata invalid: {exc}')
 
-clean_logo = ROOT/'backend/static/brand/promptmaster-logo-clean.svg'
+clean_logo = ROOT/'backend/static/brand/promptfinisher-logo-clean.svg'
 clean_svg = clean_logo.read_text(encoding='utf-8')
 # The approved mark is the recovered 315x62 master artwork, cropped by the SVG
 # viewBox to remove the historic top-edge line. Do not redraw the wordmark with
@@ -187,24 +187,24 @@ active_brand_files = (
     ROOT/'backend/templates/app_shell.html',
     ROOT/'backend/templates/auth/login.html',
     ROOT/'backend/templates/auth/two_factor_setup.html',
-    ROOT/'backend/static/js/promptmaster_ui_v2.20260922.js',
+    ROOT/'backend/static/js/promptfinisher_ui_v2.20260922.js',
 )
 for path in active_brand_files:
     text = path.read_text(encoding='utf-8')
-    if 'promptmaster-logo-hq.png' not in text:
+    if 'promptfinisher-logo-hq.png' not in text:
         fail(f'Active UI does not use approved HQ PROMPTFINISHER logo: {path.relative_to(ROOT)}')
 
 proaccess_views = (ROOT/'backend/apps/proaccess/views.py').read_text(encoding='utf-8')
 for token in (
     "V2_ASSET_REV = b'",
-    'promptmaster_v2.20260922.css?v=',
-    'promptmaster_ui_v2.20260922.js?v=',
+    'promptfinisher_v2.20260922.css?v=',
+    'promptfinisher_ui_v2.20260922.js?v=',
     'free_catalog_bridge.20260918.js?v=',
 ):
     if token not in proaccess_views:
         fail(f'Immutable-static cache busting invariant missing from proaccess views: {token}')
 
-v2_js = (ROOT/'backend/static/js/promptmaster_ui_v2.20260922.js').read_text(encoding='utf-8')
+v2_js = (ROOT/'backend/static/js/promptfinisher_ui_v2.20260922.js').read_text(encoding='utf-8')
 for token in (
     "'Prompt-Check'",
     'Microsoft-Copilot-Lizenz anfragen',
@@ -212,7 +212,7 @@ for token in (
     'pmv2-prompt-tall',
     'pmv2LicenseKeyboardBound',
     'pmv2LicenseObserver',
-    'promptmaster-logo-hq.png?v=20260925-hq1',
+    'promptfinisher-logo-hq.png?v=20260925-hq1',
     'syncRequiredFieldState',
     'PFLICHTFELD',
     "if (mark.textContent !== 'PFLICHTFELD')",
@@ -235,7 +235,7 @@ for token in ('initConfirmationDialogs', 'pm-confirm-backdrop', 'data-copy-targe
 for template in sorted((ROOT/'backend/templates').rglob('*.html')):
     template_text = template.read_text(encoding='utf-8')
     rel = template.relative_to(ROOT)
-    if 'promptmaster-logo-reference.png' in template_text:
+    if 'promptfinisher-logo-reference.png' in template_text:
         fail(f'Active template still uses legacy low-resolution logo: {rel}')
     if 'return confirm(' in template_text:
         fail(f'Active template still uses browser-native confirm(): {rel}')
@@ -257,7 +257,7 @@ for token in (
     if token not in css:
         fail(f'Design-system invariant missing from app.css: {token}')
 
-v2_css = (ROOT/'backend/static/css/promptmaster_v2.20260922.css').read_text(encoding='utf-8')
+v2_css = (ROOT/'backend/static/css/promptfinisher_v2.20260922.css').read_text(encoding='utf-8')
 for token in (
     '/* V2 screenshot regression hardening 2026-09-24 */',
     '.pmv2 .option > span',
@@ -501,16 +501,16 @@ for caddy_path in (ROOT / 'Caddyfile', ROOT / 'Caddyfile.external'):
     caddy_text = caddy_path.read_text(encoding='utf-8')
     for token in (
         '@mutable_product_static path',
-        '/static/css/promptmaster_v2.20260922.css',
-        '/static/js/promptmaster_ui_v2.20260922.js',
+        '/static/css/promptfinisher_v2.20260922.css',
+        '/static/js/promptfinisher_ui_v2.20260922.js',
         '/static/js/free_catalog_bridge.20260918.js',
-        '/static/brand/promptmaster-logo-clean.svg',
+        '/static/brand/promptfinisher-logo-clean.svg',
         'Cache-Control "no-cache, must-revalidate"',
     ):
         if token not in caddy_text:
             fail(f'{caddy_path.name} mutable product-static cache contract missing: {token}')
 
-pro_asset = ROOT / 'backend/private_assets/promptmaster_pro.html'
+pro_asset = ROOT / 'backend/private_assets/promptfinisher_pro.html'
 approved_pro_sha = 'a18375946c7081034cd6b9d70a1f4e3b843c51e03230477cae246b6c4bf0f95f'
 if pro_asset.exists() and hashlib.sha256(pro_asset.read_bytes()).hexdigest() != approved_pro_sha:
     fail('PROMPTFINISHER Pro Golden Master hash differs from approved 2026-09-12 artifact')

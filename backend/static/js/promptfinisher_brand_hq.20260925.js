@@ -4,7 +4,7 @@
   const apply = () => {
     const logo = document.querySelector('.pmv2-brand img');
     if (!logo) return false;
-    logo.src = '/static/brand/promptmaster-logo-hq.png?v=20260925-hq1';
+    logo.src = '/static/brand/promptfinisher-logo-hq.png?v=20260925-hq1';
     logo.alt = 'PROMPTFINISHER';
     logo.decoding = 'async';
     logo.draggable = false;

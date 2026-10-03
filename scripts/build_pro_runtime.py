@@ -6,9 +6,9 @@ import hashlib
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
-GOLDEN = ROOT / 'product' / 'golden_masters' / 'promptmaster_pro.html'
+GOLDEN = ROOT / 'product' / 'golden_masters' / 'promptfinisher_pro.html'
 BRIDGE = ROOT / 'product' / 'runtime' / 'pro_server_bridge.js'
-OUTPUT = ROOT / 'backend' / 'private_assets' / 'promptmaster_pro_runtime.html'
+OUTPUT = ROOT / 'backend' / 'private_assets' / 'promptfinisher_pro_runtime.html'
 GOLDEN_SHA256 = 'a18375946c7081034cd6b9d70a1f4e3b843c51e03230477cae246b6c4bf0f95f'
 
 

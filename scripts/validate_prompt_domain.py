@@ -25,10 +25,10 @@ from apps.prompts.free_surface import FREE_PRO_PREVIEW_IDS, FREE_SURFACE_ALIAS_T
 
 DATA = BACKEND / 'apps' / 'prompts' / 'data' / 'pm20_golden_logic.json'
 FREE_DATA = BACKEND / 'apps' / 'prompts' / 'data' / 'free_legacy_tasks.json'
-PRO_GM = BACKEND / 'private_assets' / 'promptmaster_pro.html'
-FREE_GM = BACKEND / 'private_assets' / 'promptmaster_free_reference.html'
-PRODUCT_PRO_GM = ROOT / 'product' / 'golden_masters' / 'promptmaster_pro.html'
-PRODUCT_FREE_GM = ROOT / 'product' / 'golden_masters' / 'promptmaster_free.html'
+PRO_GM = BACKEND / 'private_assets' / 'promptfinisher_pro.html'
+FREE_GM = BACKEND / 'private_assets' / 'promptfinisher_free_reference.html'
+PRODUCT_PRO_GM = ROOT / 'product' / 'golden_masters' / 'promptfinisher_pro.html'
+PRODUCT_FREE_GM = ROOT / 'product' / 'golden_masters' / 'promptfinisher_free.html'
 PRO_SHA = 'a18375946c7081034cd6b9d70a1f4e3b843c51e03230477cae246b6c4bf0f95f'
 FREE_SHA = '8162be1e62b5d4503e6fb54180636e886b7e11106205f64626339f6c90a35ac1'
 AUDIENCE_LABELS = {'Zielgruppe', 'Publikum', 'Empfängerrolle'}

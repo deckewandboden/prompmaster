@@ -1558,19 +1558,19 @@
       "role": "active-backend"
     },
     {
-      "path": "backend/private_assets/promptmaster_free_reference.html",
+      "path": "backend/private_assets/promptfinisher_free_reference.html",
       "size": 110812,
       "sha256": "aada4fbb3461d3758c48ed808bf018716a53aa33baf81efb058412e63535b0a8",
       "role": "active-backend"
     },
     {
-      "path": "backend/private_assets/promptmaster_pro_runtime.html",
+      "path": "backend/private_assets/promptfinisher_pro_runtime.html",
       "size": 248805,
       "sha256": "29da4bb38b121ef585d07711e4e30966f1ae37089ffc01be048de7a2e821ebba",
       "role": "active-backend"
     },
     {
-      "path": "backend/private_assets/promptmaster_pro.html",
+      "path": "backend/private_assets/promptfinisher_pro.html",
       "size": 233404,
       "sha256": "aa7b2da53ba3cbcf9874b9b6f7381ea4c3e86ee1f9c09db186cbec6876a3c9cf",
       "role": "active-backend"
@@ -1582,7 +1582,7 @@
       "role": "active-backend"
     },
     {
-      "path": "backend/static/brand/promptmaster-logo-reference.png",
+      "path": "backend/static/brand/promptfinisher-logo-reference.png",
       "size": 17905,
       "sha256": "5848c7bc83fa903f9eb2de1b8a3c8443a9dca937cf3659494d2db2d5a26ff231",
       "role": "active-backend"
@@ -2896,13 +2896,13 @@
       "role": "active-operations"
     },
     {
-      "path": "product/golden_masters/promptmaster_free.html",
+      "path": "product/golden_masters/promptfinisher_free.html",
       "size": 110812,
       "sha256": "aada4fbb3461d3758c48ed808bf018716a53aa33baf81efb058412e63535b0a8",
       "role": "active-product"
     },
     {
-      "path": "product/golden_masters/promptmaster_pro.html",
+      "path": "product/golden_masters/promptfinisher_pro.html",
       "size": 233404,
       "sha256": "aa7b2da53ba3cbcf9874b9b6f7381ea4c3e86ee1f9c09db186cbec6876a3c9cf",
       "role": "active-product"

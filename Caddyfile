@@ -93,7 +93,7 @@
     # injected into preserved Golden-Master HTML. They must therefore revalidate
     # instead of inheriting the one-year immutable policy used by fingerprinted
     # Django static assets.
-    @mutable_product_static path /static/css/promptmaster_v2.20260922.css /static/js/promptmaster_ui_v2.20260922.js /static/js/free_catalog_bridge.20260918.js /static/js/promptmaster_brand_hq.20260925.js /static/brand/promptmaster-logo-clean.svg /static/brand/promptmaster-logo-hq.png
+    @mutable_product_static path /static/css/promptfinisher_v2.20260922.css /static/js/promptfinisher_ui_v2.20260922.js /static/js/free_catalog_bridge.20260918.js /static/js/promptfinisher_brand_hq.20260925.js /static/brand/promptfinisher-logo-clean.svg /static/brand/promptfinisher-logo-hq.png
     handle @mutable_product_static {
         uri strip_prefix /static
         root * /srv/static

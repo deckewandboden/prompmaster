@@ -36,8 +36,8 @@ required = [
     'backend/apps/mcp_internal/views.py',
     'backend/apps/contenthub/models.py',
 
-    'product/golden_masters/promptmaster_free.html',
-    'product/golden_masters/promptmaster_pro.html',
+    'product/golden_masters/promptfinisher_free.html',
+    'product/golden_masters/promptfinisher_pro.html',
 
     'scripts/bootstrap.sh',
     'scripts/deploy.sh',

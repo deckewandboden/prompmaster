@@ -27,7 +27,7 @@ Der aktuell integrierte Marketing-Source ist der **neueste physisch vollständig
 
 ### PROMPTFINISHER Free
 
-- exakter Golden Master unter `product/golden_masters/promptmaster_free.html`
+- exakter Golden Master unter `product/golden_masters/promptfinisher_free.html`
 - SHA256: `aada4fbb3461d3758c48ed808bf018716a53aa33baf81efb058412e63535b0a8`
 - öffentlich ohne Login über `/free/` als V2-Oberfläche
 - bewahrte Legacy-/Rollback-Ansicht unter `/free-old/`
@@ -35,7 +35,7 @@ Der aktuell integrierte Marketing-Source ist der **neueste physisch vollständig
 
 ### PROMPTFINISHER Pro
 
-- exakter Golden Master unter `product/golden_masters/promptmaster_pro.html`
+- exakter Golden Master unter `product/golden_masters/promptfinisher_pro.html`
 - SHA256: `a18375946c7081034cd6b9d70a1f4e3b843c51e03230477cae246b6c4bf0f95f`
 - V2-Runtime unter `/pro/app/`; Login + aktive Lizenz + gültiges Gerät serverseitig erforderlich
 - bewahrte Legacy-/Rollback-Runtime unter `/pro-old/` mit derselben Auth-/Entitlement-Grenze
