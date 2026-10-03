@@ -14,6 +14,7 @@ SKIP_FILES = {
     "MANIFEST.json",
     "docs/COMPLETE_FILE_INVENTORY.md",
     "scripts/rebrand_promptfinisher.py",
+    "scripts/validate_brand.py",
 }
 REPLACEMENTS = (
     ("Prompt Master", "PROMPTFINISHER"),
