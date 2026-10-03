@@ -32,7 +32,7 @@ urlpatterns = [
     path('api/v1/content/', include('apps.contenthub.api_urls')),
 ]
 
-# The stock Django admin bypasses parts of PromptMaster's service-layer
+# The stock Django admin bypasses parts of PROMPTFINISHER's service-layer
 # business rules. It is a staging/development fallback only; production uses
 # the permission-aware netstyle admin frontend exclusively.
 if getattr(settings, 'ENVIRONMENT', 'development') != 'production':

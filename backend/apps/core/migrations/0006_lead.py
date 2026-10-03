@@ -26,7 +26,7 @@ class Migration(migrations.Migration):
                 ('last_name', models.CharField(blank=True, max_length=120)),
                 ('email', models.EmailField(max_length=254)),
                 ('phone', models.CharField(blank=True, max_length=60)),
-                ('source', models.CharField(choices=[('website', 'Website'), ('free', 'PromptMaster Free'), ('checkout', 'Checkout'), ('contact', 'Kontaktanfrage'), ('manual', 'Manuell'), ('other', 'Sonstiges')], default='manual', max_length=30)),
+                ('source', models.CharField(choices=[('website', 'Website'), ('free', 'PROMPTFINISHER Free'), ('checkout', 'Checkout'), ('contact', 'Kontaktanfrage'), ('manual', 'Manuell'), ('other', 'Sonstiges')], default='manual', max_length=30)),
                 ('status', models.CharField(choices=[('new', 'Neu'), ('contacted', 'Kontaktiert'), ('qualified', 'Qualifiziert'), ('won', 'Gewonnen'), ('lost', 'Verloren')], db_index=True, default='new', max_length=30)),
                 ('priority', models.CharField(choices=[('low', 'Niedrig'), ('normal', 'Normal'), ('high', 'Hoch')], default='normal', max_length=20)),
                 ('notes', models.TextField(blank=True)),

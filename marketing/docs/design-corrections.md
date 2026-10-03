@@ -2,7 +2,7 @@
 
 ## Preisquelle
 
-Im Chat „netsyle CoPilot Promptmaster“ (6a9a89ee-e8dc-83eb-b1d7-990ce5ebf6f3) wurde vom Benutzer ausdrücklich festgelegt:
+Im Chat „netsyle CoPilot PROMPTFINISHER“ (6a9a89ee-e8dc-83eb-b1d7-990ce5ebf6f3) wurde vom Benutzer ausdrücklich festgelegt:
 
 > Preise müssen 2,99 inklusive Mehrwertsuer sein und ist immer für 12 Monate
 

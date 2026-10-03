@@ -3,7 +3,7 @@ export function normalizeQuantity(value, max=500) {
   return Number.isFinite(n)?Math.min(max,Math.max(1,Math.trunc(n))):1;
 }
 export function quote(catalog, value) {
-  const product=catalog.products.find(p=>p.id==='PROMPTMASTER_PRO');
+  const product=catalog.products.find(p=>p.id==='PROMPTFINISHER_PRO');
   if(
     !product ||
     catalog.priceBasis!=='gross' ||

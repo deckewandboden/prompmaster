@@ -58,7 +58,7 @@ required = [
     'marketing/public/models/head.glb',
 
     'archive/chat-transfer-2026-09-12/00_START_HERE.md',
-    'tools/recovery/v13-exact-exporter/PromptMaster_v13_EXAKT_exportieren.ps1',
+    'tools/recovery/v13-exact-exporter/PROMPTFINISHER_v13_EXAKT_exportieren.ps1',
 ]
 
 

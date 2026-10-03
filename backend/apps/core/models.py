@@ -84,7 +84,7 @@ class Lead(TimeStampedModel):
     ]
     SOURCE = [
         ('website', 'Website'),
-        ('free', 'PromptMaster Free'),
+        ('free', 'PROMPTFINISHER Free'),
         ('checkout', 'Checkout'),
         ('contact', 'Kontaktanfrage'),
         ('manual', 'Manuell'),

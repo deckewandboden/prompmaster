@@ -6,7 +6,7 @@ Stand: 2026-09-13
 
 Der Pro-Golden-Master enthält 34 Apps / 194 PM20-Tasks, rendert in seiner historischen Browserlogik jedoch nur 16 App-Kacheln. Gleichzeitig existiert seit RC11 eine zentrale versionierte PromptDomain.
 
-RC13 macht die PromptDomain zur Laufzeit zur einzigen Katalogquelle für PromptMaster Pro:
+RC13 macht die PromptDomain zur Laufzeit zur einzigen Katalogquelle für PROMPTFINISHER Pro:
 
 - `GET /api/v1/prompts/?product=PRO` liefert den vollständigen veröffentlichten Runtime-Vertrag einschließlich Pflicht-/Optionalfeldern, Audience, Focus, Output und Source.
 - Die abgeleitete Pro-Runtime lädt diesen Katalog beim Start und arbeitet fail-closed, solange er nicht verfügbar ist.

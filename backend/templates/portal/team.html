@@ -2,8 +2,8 @@
 <div class="page-head"><div><h1>Mein Team</h1><div class="sub">Benutzer, Einladungen, Lizenzen und Geräte verwalten.</div></div><div class="page-actions"><a class="btn secondary" href="{% url 'portal:invitations' %}">Einladungen</a><a class="btn primary" href="{% url 'portal:invite' %}">+ Benutzer hinzufügen</a></div></div>
 <div class="grid kpis">
   <div class="card kpi"><div>Team-Mitglieder</div><div class="value">{{ team_count }}</div><div class="small muted">aktive Benutzer</div></div>
-  <div class="card purple kpi"><div>PromptMaster Pro</div><div class="value">{{ pro_count }}</div><div class="small muted">{{ free_license_count }} Pro-Lizenz{% if free_license_count != 1 %}en{% endif %} noch frei</div></div>
-  <div class="card kpi"><div>PromptMaster Free</div><div class="value">{{ free_user_count }}</div><div class="small muted">aktive Benutzer ohne Pro-Zuweisung</div></div>
+  <div class="card purple kpi"><div>PROMPTFINISHER Pro</div><div class="value">{{ pro_count }}</div><div class="small muted">{{ free_license_count }} Pro-Lizenz{% if free_license_count != 1 %}en{% endif %} noch frei</div></div>
+  <div class="card kpi"><div>PROMPTFINISHER Free</div><div class="value">{{ free_user_count }}</div><div class="small muted">aktive Benutzer ohne Pro-Zuweisung</div></div>
   <div class="card kpi"><div>Geräte</div><div class="value">{{ device_count }}{% if device_capacity %} / {{ device_capacity }}{% endif %}</div><div class="small muted">registriert / Kapazität</div></div>
 </div>
 {% include 'includes/grid_toolbar.html' %}

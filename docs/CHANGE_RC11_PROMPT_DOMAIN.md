@@ -5,7 +5,7 @@
 
 ## Änderung
 
-Der bisherige RC10-Zustand lieferte PromptMaster Pro nach Lizenz-/Geräteprüfung als private statische Golden-Master-Datei aus. Die eigentliche Promptlogik war nicht als zentrale Server-Domain materialisiert.
+Der bisherige RC10-Zustand lieferte PROMPTFINISHER Pro nach Lizenz-/Geräteprüfung als private statische Golden-Master-Datei aus. Die eigentliche Promptlogik war nicht als zentrale Server-Domain materialisiert.
 
 RC11 ergänzt additiv:
 
@@ -29,7 +29,7 @@ RC11 ergänzt additiv:
 - PROMPT-054 — task-spezifische Ausgabeformate
 - PROMPT-055 — Schwerpunkte/Empfohlen
 - PGEN-003 — zentraler Katalog
-- PGEN-004/PGEN-005 — Microsoft-Tier getrennt vom PromptMaster-Entitlement
+- PGEN-004/PGEN-005 — Microsoft-Tier getrennt vom PROMPTFINISHER-Entitlement
 - PGEN-006/PGEN-007 — task-spezifische Felder und Prompt-Metadaten
 - PGEN-010/PGEN-011 — Qualitätsregeln / ausformulierte Prompts
 

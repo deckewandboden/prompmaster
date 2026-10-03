@@ -6,14 +6,14 @@ $Commit = "d36033bdfc87ee5dbacd8459c8cca919ec2f2b45"
 $ExpectedArchiveHash = "dda92890a920cc0c659bbdcd44b3a29192ca539178137ff308881daf45c6bb09"
 $Project = Join-Path $env:USERPROFILE ".codex\.chatgpt-projects\g-p-6a9bc9d40244819194fa6e2dc5d637ac\promptmaster-commercial\frontend"
 $Desktop = [Environment]::GetFolderPath("Desktop")
-$OutDir = Join-Path $Desktop "PromptMaster-v13-EXAKT"
+$OutDir = Join-Path $Desktop "PROMPTFINISHER-v13-EXAKT"
 $Worktree = Join-Path $env:TEMP ("promptmaster-v13-" + [guid]::NewGuid().ToString("N"))
-$SourceZip = Join-Path $OutDir "PromptMaster-v13-SOURCE-EXAKT-d36033.zip"
+$SourceZip = Join-Path $OutDir "PROMPTFINISHER-v13-SOURCE-EXAKT-d36033.zip"
 $DeployTar = Join-Path $OutDir "promptmaster-depth-v13.tar.gz"
 $Manifest = Join-Path $OutDir "V13-MASTERINFO.txt"
 
 Write-Host ""
-Write-Host "PromptMaster v13 – EXAKTER EXPORT" -ForegroundColor Cyan
+Write-Host "PROMPTFINISHER v13 – EXAKTER EXPORT" -ForegroundColor Cyan
 Write-Host "Commit: $Commit"
 Write-Host ""
 
@@ -137,7 +137,7 @@ try {
     }
 
     $info = @"
-PROMPTMASTER COMMERCIAL – VERBINDLICHER MASTERSTAND V13
+PROMPTFINISHER COMMERCIAL – VERBINDLICHER MASTERSTAND V13
 =======================================================
 
 Git-Commit:

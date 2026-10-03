@@ -2396,7 +2396,7 @@ def audit(request):
 @staff_perm('roles.read')
 def roles(request):
     descriptions = {
-        'superadmin': 'Uneingeschränkte Rechte auf alle PromptMaster-Verwaltungsbereiche.',
+        'superadmin': 'Uneingeschränkte Rechte auf alle PROMPTFINISHER-Verwaltungsbereiche.',
         'support': 'Kunden, Lizenzen, Geräte, Bestellungen, Zahlungen, E-Mail und Support.',
         'ops': 'Monitoring, Backups, Operations API, Logs und Systemstatus.',
         'prompt_manager': 'Prompt Studio, Prompt-Lifecycle, Qualität und zentrale Inhalte.',
@@ -2660,11 +2660,11 @@ def settings_view(request):
                 'sender': graph_value('graph_sender', 'sender'),
             }
             graph_client_secret = data.pop('graph_client_secret')
-            set_setting('support_email', support_email, 'Empfänger des PromptMaster-Kontaktformulars')
+            set_setting('support_email', support_email, 'Empfänger des PROMPTFINISHER-Kontaktformulars')
             set_setting(
                 'ops_alert_recipients',
                 ops_alert_recipients,
-                'E-Mail-Empfänger für neue und gelöste PromptMaster-Systemwarnungen',
+                'E-Mail-Empfänger für neue und gelöste PROMPTFINISHER-Systemwarnungen',
             )
             set_setting('mail_provider', selected_provider, 'Primärer Mail-Versandweg')
             set_setting(
@@ -2680,12 +2680,12 @@ def settings_view(request):
             set_setting(
                 'mail_identity',
                 mail_identity,
-                'Absenderidentität und dokumentierte DNS-Sollwerte für den PromptMaster-Mailversand',
+                'Absenderidentität und dokumentierte DNS-Sollwerte für den PROMPTFINISHER-Mailversand',
             )
             set_setting(
                 'mail_transport',
                 mail_transport,
-                'SMTP-Transportkonfiguration für den PromptMaster-Mailversand',
+                'SMTP-Transportkonfiguration für den PROMPTFINISHER-Mailversand',
             )
             set_setting(
                 'mail_transport_2',
@@ -2695,7 +2695,7 @@ def settings_view(request):
             set_setting(
                 'mail_graph',
                 mail_graph,
-                'Microsoft-Graph-Konfiguration für den PromptMaster-Mailversand',
+                'Microsoft-Graph-Konfiguration für den PROMPTFINISHER-Mailversand',
             )
             if smtp_password or smtp_password_2 or graph_client_secret:
                 from apps.integrations.services import set_secret

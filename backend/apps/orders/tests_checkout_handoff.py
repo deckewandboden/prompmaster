@@ -43,7 +43,7 @@ class PurchaseHandoffTests(TestCase):
         )
         self.product = Product.objects.create(
             code='PRO',
-            name='PromptMaster Pro',
+            name='PROMPTFINISHER Pro',
             default_license_days=365,
             default_device_limit=2,
             reminder_1_days=60,
@@ -160,7 +160,7 @@ class PublicCheckoutFlowTests(TestCase):
         now = timezone.now()
         self.product = Product.objects.create(
             code='PRO',
-            name='PromptMaster Pro',
+            name='PROMPTFINISHER Pro',
             default_license_days=365,
             default_device_limit=2,
             reminder_1_days=60,

@@ -1,11 +1,11 @@
-Ja. Der aktuelle Funktionsstand ist ausreichend, um **den kompletten Marketing-Content jetzt verbindlich festzuschreiben**. Die aktuelle PromptMaster-Version bestätigt: Free enthält Copilot Chat, Outlook, Teams, Word, Excel und PowerPoint; Pro ergänzt zehn weitere Anwendungen sowie erweiterte Analysefunktionen, Zielgruppen, Schwerpunkte, Ausgabeformate und app-spezifische Business-Prompts. fileciteturn6file2 Außerdem bleibt PromptMaster regel-/bausteinbasiert; die eigentliche Ausführung erfolgt in Microsoft Copilot. fileciteturn7file0
+Ja. Der aktuelle Funktionsstand ist ausreichend, um **den kompletten Marketing-Content jetzt verbindlich festzuschreiben**. Die aktuelle PROMPTFINISHER-Version bestätigt: Free enthält Copilot Chat, Outlook, Teams, Word, Excel und PowerPoint; Pro ergänzt zehn weitere Anwendungen sowie erweiterte Analysefunktionen, Zielgruppen, Schwerpunkte, Ausgabeformate und app-spezifische Business-Prompts. fileciteturn6file2 Außerdem bleibt PROMPTFINISHER regel-/bausteinbasiert; die eigentliche Ausführung erfolgt in Microsoft Copilot. fileciteturn7file0
 
 Und ja: **„Erfolgsgeschichten“, „10.000+ zufriedene Nutzer“, Video-Button und „DEINE IDEEN, UNSERE KI …“ fliegen komplett raus.** Dafür gibt es keinerlei Grundlage.
 
 Hier ist der Content-Freeze für die Marketingseite:
 
-:::writing{variant="document" id="60417" title="PromptMaster Marketing-Website – Content Freeze V1"}
-# PromptMaster Marketing-Website
+:::writing{variant="document" id="60417" title="PROMPTFINISHER Marketing-Website – Content Freeze V1"}
+# PROMPTFINISHER Marketing-Website
 ## Verbindlicher Content Freeze V1
 
 ---
@@ -14,7 +14,7 @@ Hier ist der Content-Freeze für die Marketingseite:
 
 ### Logo
 
-**PROMPTMASTER**  
+**PROMPTFINISHER**
 *by netstyle*
 
 ### Navigation
@@ -29,7 +29,7 @@ Hier ist der Content-Freeze für die Marketingseite:
 
 **Anmelden**
 
-**PromptMaster Free starten**
+**PROMPTFINISHER Free starten**
 
 ---
 
@@ -41,13 +41,13 @@ Hier ist der Content-Freeze für die Marketingseite:
 
 ## Subheadline
 
-PromptMaster führt dich strukturiert von deiner Aufgabe bis zum fertigen Copilot-Prompt – klar, vollständig und auf den jeweiligen Anwendungsfall abgestimmt.
+PROMPTFINISHER führt dich strukturiert von deiner Aufgabe bis zum fertigen Copilot-Prompt – klar, vollständig und auf den jeweiligen Anwendungsfall abgestimmt.
 
 ---
 
 ## Linke Produktkarte
 
-### PROMPTMASTER FREE
+### PROMPTFINISHER FREE
 
 **Einfach starten. Kostenlos nutzen.**
 
@@ -73,7 +73,7 @@ Dauerhaft kostenlos.
 
 ### CTA
 
-**PromptMaster Free starten**
+**PROMPTFINISHER Free starten**
 
 Sekundär:
 
@@ -105,11 +105,11 @@ Der Kopf reagiert unmittelbar auf den Mauszeiger.
 
 Maus nach links:
 
-→ Kopf und Blickrichtung bewegen sich subtil Richtung PromptMaster Free.
+→ Kopf und Blickrichtung bewegen sich subtil Richtung PROMPTFINISHER Free.
 
 Maus nach rechts:
 
-→ Kopf und Blickrichtung bewegen sich subtil Richtung PromptMaster Pro.
+→ Kopf und Blickrichtung bewegen sich subtil Richtung PROMPTFINISHER Pro.
 
 Maus nach oben/unten:
 
@@ -143,7 +143,7 @@ Der bisherige Text
 
 wird vollständig entfernt.
 
-Er ist sachlich falsch, weil PromptMaster selbst keine eigene KI bereitstellt.
+Er ist sachlich falsch, weil PROMPTFINISHER selbst keine eigene KI bereitstellt.
 
 ## Verbindlicher Hero-Kernsatz
 
@@ -157,7 +157,7 @@ Darunter optional klein:
 
 # 5. RECHTE PRODUKTKARTE
 
-### PROMPTMASTER PRO
+### PROMPTFINISHER PRO
 
 **Mehr Möglichkeiten. Mehr Präzision.**
 
@@ -186,7 +186,7 @@ zzgl. gesetzlicher MwSt.
 
 ### CTA
 
-**PromptMaster Pro kaufen**
+**PROMPTFINISHER Pro kaufen**
 
 Sekundär:
 
@@ -204,15 +204,15 @@ Stattdessen vier überprüfbare Produkteigenschaften:
 
 ### Für Microsoft Copilot entwickelt
 
-PromptMaster erstellt strukturierte Prompts für unterschiedliche Microsoft-Copilot-Anwendungen.
+PROMPTFINISHER erstellt strukturierte Prompts für unterschiedliche Microsoft-Copilot-Anwendungen.
 
 ### Keine eigene KI erforderlich
 
-PromptMaster erstellt den Prompt regel- und bausteinbasiert. Die Ausführung erfolgt anschließend in Microsoft Copilot.
+PROMPTFINISHER erstellt den Prompt regel- und bausteinbasiert. Die Ausführung erfolgt anschließend in Microsoft Copilot.
 
 ### Prompt-Erstellung im Browser
 
-Die eigentliche Prompt-Zusammenstellung erfolgt innerhalb der PromptMaster-Anwendung.
+Die eigentliche Prompt-Zusammenstellung erfolgt innerhalb der PROMPTFINISHER-Anwendung.
 
 ### Sofort einsetzbar
 
@@ -220,7 +220,7 @@ Prompt erstellen, kopieren und direkt in Microsoft Copilot verwenden.
 
 ---
 
-# 7. SECTION – WAS IST PROMPTMASTER?
+# 7. SECTION – WAS IST PROMPTFINISHER?
 
 ## Überschrift
 
@@ -228,21 +228,21 @@ Prompt erstellen, kopieren und direkt in Microsoft Copilot verwenden.
 
 ## Text
 
-Microsoft Copilot kann nur mit den Informationen und Anweisungen arbeiten, die du ihm gibst. Genau hier setzt PromptMaster an.
+Microsoft Copilot kann nur mit den Informationen und Anweisungen arbeiten, die du ihm gibst. Genau hier setzt PROMPTFINISHER an.
 
-Statt einen Prompt von Grund auf selbst formulieren zu müssen, führt dich PromptMaster Schritt für Schritt durch die relevanten Entscheidungen.
+Statt einen Prompt von Grund auf selbst formulieren zu müssen, führt dich PROMPTFINISHER Schritt für Schritt durch die relevanten Entscheidungen.
 
-Du wählst Anwendung, Aufgabe, Zielgruppe, Schwerpunkte und gewünschtes Ergebnis. PromptMaster setzt daraus einen strukturierten, auf den jeweiligen Anwendungsfall abgestimmten Prompt zusammen.
+Du wählst Anwendung, Aufgabe, Zielgruppe, Schwerpunkte und gewünschtes Ergebnis. PROMPTFINISHER setzt daraus einen strukturierten, auf den jeweiligen Anwendungsfall abgestimmten Prompt zusammen.
 
 Diesen kannst du anschließend direkt in Microsoft Copilot verwenden.
 
 ### CTA
 
-**PromptMaster Free ausprobieren**
+**PROMPTFINISHER Free ausprobieren**
 
 ---
 
-# 8. SECTION – SO FUNKTIONIERT PROMPTMASTER
+# 8. SECTION – SO FUNKTIONIERT PROMPTFINISHER
 
 ## Überschrift
 
@@ -250,7 +250,7 @@ Diesen kannst du anschließend direkt in Microsoft Copilot verwenden.
 
 ## Einleitung
 
-Kein Prompt-Engineering-Kurs. Kein Rätselraten. PromptMaster strukturiert die Aufgabe in nachvollziehbare Schritte.
+Kein Prompt-Engineering-Kurs. Kein Rätselraten. PROMPTFINISHER strukturiert die Aufgabe in nachvollziehbare Schritte.
 
 ---
 
@@ -260,7 +260,7 @@ Kein Prompt-Engineering-Kurs. Kein Rätselraten. PromptMaster strukturiert die A
 
 Wähle, ob du mit Microsoft Copilot Chat oder einer Microsoft-365-Copilot-Umgebung arbeitest.
 
-PromptMaster berücksichtigt die jeweils verfügbaren Möglichkeiten.
+PROMPTFINISHER berücksichtigt die jeweils verfügbaren Möglichkeiten.
 
 ---
 
@@ -279,7 +279,7 @@ Beispielsweise:
 - Excel
 - PowerPoint
 
-PromptMaster Pro erweitert diese Auswahl um zusätzliche Microsoft-Anwendungen.
+PROMPTFINISHER Pro erweitert diese Auswahl um zusätzliche Microsoft-Anwendungen.
 
 ---
 
@@ -337,7 +337,7 @@ Je nach Anwendung beispielsweise:
 
 Bestimme, wie das Ergebnis aufgebaut werden soll.
 
-PromptMaster Pro bietet zusätzliche professionelle Ausgabeformen wie beispielsweise:
+PROMPTFINISHER Pro bietet zusätzliche professionelle Ausgabeformen wie beispielsweise:
 
 - strukturierte Berichte
 - Tabellen
@@ -350,7 +350,7 @@ PromptMaster Pro bietet zusätzliche professionelle Ausgabeformen wie beispielsw
 
 ### Prompt kopieren
 
-PromptMaster erstellt aus deinen Einstellungen einen vollständigen Prompt.
+PROMPTFINISHER erstellt aus deinen Einstellungen einen vollständigen Prompt.
 
 Ein Klick auf:
 
@@ -366,7 +366,7 @@ und du kannst ihn direkt in Microsoft Copilot einsetzen.
 
 # Für die Anwendungen, in denen du tatsächlich arbeitest.
 
-### PromptMaster Free
+### PROMPTFINISHER Free
 
 - Copilot Chat
 - Outlook
@@ -375,7 +375,7 @@ und du kannst ihn direkt in Microsoft Copilot einsetzen.
 - Excel
 - PowerPoint
 
-### PromptMaster Pro zusätzlich
+### PROMPTFINISHER Pro zusätzlich
 
 - OneNote
 - OneDrive
@@ -396,7 +396,7 @@ und du kannst ihn direkt in Microsoft Copilot einsetzen.
 
 # Welche Version passt zu dir?
 
-| Funktion | PromptMaster Free | PromptMaster Pro |
+| Funktion | PROMPTFINISHER Free | PROMPTFINISHER Pro |
 |---|---|---|
 | Copilot Chat | ✓ | ✓ |
 | Outlook | ✓ | ✓ |
@@ -418,11 +418,11 @@ und du kannst ihn direkt in Microsoft Copilot einsetzen.
 
 ### CTA Pro
 
-**PromptMaster Pro kaufen**
+**PROMPTFINISHER Pro kaufen**
 
 ---
 
-# 11. SECTION – WARUM PROMPTMASTER?
+# 11. SECTION – WARUM PROMPTFINISHER?
 
 ## Überschrift
 
@@ -430,13 +430,13 @@ und du kannst ihn direkt in Microsoft Copilot einsetzen.
 
 ### Struktur statt leerem Eingabefeld
 
-PromptMaster führt dich durch die Informationen, die für einen guten Prompt relevant sind.
+PROMPTFINISHER führt dich durch die Informationen, die für einen guten Prompt relevant sind.
 
 ### Anwendungsspezifisch
 
 Ein guter Outlook-Prompt benötigt andere Informationen als eine Excel-Analyse oder eine PowerPoint-Aufgabe.
 
-PromptMaster berücksichtigt diese Unterschiede.
+PROMPTFINISHER berücksichtigt diese Unterschiede.
 
 ### Wiederholbar
 
@@ -448,7 +448,7 @@ Du musst keine komplizierten Prompt-Techniken oder Fachbegriffe beherrschen.
 
 ### Direkt für Microsoft Copilot
 
-PromptMaster erstellt keinen eigenen KI-Output. Es erstellt den Prompt, mit dem du anschließend in Microsoft Copilot arbeitest.
+PROMPTFINISHER erstellt keinen eigenen KI-Output. Es erstellt den Prompt, mit dem du anschließend in Microsoft Copilot arbeitest.
 
 ---
 
@@ -456,11 +456,11 @@ PromptMaster erstellt keinen eigenen KI-Output. Es erstellt den Prompt, mit dem 
 
 ## Überschrift
 
-# PromptMaster Pro wächst mit deinem Unternehmen.
+# PROMPTFINISHER Pro wächst mit deinem Unternehmen.
 
 ## Text
 
-Du entscheidest selbst, wie viele Benutzer PromptMaster Pro verwenden sollen.
+Du entscheidest selbst, wie viele Benutzer PROMPTFINISHER Pro verwenden sollen.
 
 Kaufe zunächst beispielsweise zwei Lizenzen und erweitere später jederzeit um zusätzliche Benutzer.
 
@@ -487,7 +487,7 @@ Im Kundenportal verwaltest du deine verfügbaren Lizenzen selbst.
 
 ### Produkt
 
-**PromptMaster Pro**
+**PROMPTFINISHER Pro**
 
 ### Benutzerzahl
 
@@ -519,7 +519,7 @@ jeweils zzgl. gesetzlicher MwSt.
 
 ### CTA
 
-**[Anzahl] PromptMaster-Pro-Lizenzen kaufen**
+**[Anzahl] PROMPTFINISHER-Pro-Lizenzen kaufen**
 
 ---
 
@@ -531,7 +531,7 @@ jeweils zzgl. gesetzlicher MwSt.
 
 ## Text
 
-PromptMaster Pro wird für zwölf Monate lizenziert.
+PROMPTFINISHER Pro wird für zwölf Monate lizenziert.
 
 Es gibt in der ersten Version keine automatische Vertragsverlängerung.
 
@@ -539,7 +539,7 @@ Vor Ablauf erinnern wir den zuständigen Administrator rechtzeitig an die bevors
 
 Die Lizenz kann anschließend direkt über das Kundenportal um weitere zwölf Monate verlängert werden.
 
-Ohne Verlängerung endet der Zugang zu PromptMaster Pro nach Ablauf der Lizenzperiode.
+Ohne Verlängerung endet der Zugang zu PROMPTFINISHER Pro nach Ablauf der Lizenzperiode.
 
 Das Kundenkonto bleibt bestehen.
 
@@ -555,7 +555,7 @@ Das Kundenkonto bleibt bestehen.
 
 Du musst dich beim ersten Kauf nicht auf eine endgültige Benutzerzahl festlegen.
 
-Wenn weitere Mitarbeiter PromptMaster Pro nutzen sollen, kaufst du zusätzliche Lizenzen direkt über dein bestehendes Kundenkonto.
+Wenn weitere Mitarbeiter PROMPTFINISHER Pro nutzen sollen, kaufst du zusätzliche Lizenzen direkt über dein bestehendes Kundenkonto.
 
 ### Beispiel
 
@@ -583,11 +583,11 @@ Unternehmensdaten und bestehende Benutzer bleiben erhalten.
 
 ## Überschrift
 
-# Deine PromptMaster-Lizenzen unter Kontrolle.
+# Deine PROMPTFINISHER-Lizenzen unter Kontrolle.
 
 ## Inhalt
 
-Im PromptMaster-Kundenportal verwaltest du:
+Im PROMPTFINISHER-Kundenportal verwaltest du:
 
 - Benutzer
 - Pro-Lizenzen
@@ -607,11 +607,11 @@ Der Unternehmensadministrator entscheidet selbst, welcher Mitarbeiter eine verf�
 
 ## Überschrift
 
-# PromptMaster macht aus deiner Aufgabe einen Prompt – nicht aus deinen Daten ein neues Geschäftsmodell.
+# PROMPTFINISHER macht aus deiner Aufgabe einen Prompt – nicht aus deinen Daten ein neues Geschäftsmodell.
 
 ## Text
 
-PromptMaster selbst verwendet kein eigenes KI-Modell zur Verarbeitung des erstellten Prompts.
+PROMPTFINISHER selbst verwendet kein eigenes KI-Modell zur Verarbeitung des erstellten Prompts.
 
 Die eigentliche KI-Verarbeitung findet erst statt, wenn du den erzeugten Prompt in Microsoft Copilot verwendest.
 
@@ -626,7 +626,7 @@ Prompttexte werden nicht für Marketingprofile verwendet.
 - serverseitige Lizenzprüfung
 - getrennte Benutzer- und Administratorrechte
 - sichere Zahlungsabwicklung über einen spezialisierten Zahlungsdienstleister
-- keine Speicherung von Kreditkarteninformationen durch PromptMaster
+- keine Speicherung von Kreditkarteninformationen durch PROMPTFINISHER
 
 ---
 
@@ -640,30 +640,30 @@ Prompttexte werden nicht für Marketingprofile verwendet.
 
 Die Zahlungsabwicklung erfolgt über Mollie.
 
-Abhängig von den für PromptMaster aktivierten Zahlungsmethoden können beispielsweise angeboten werden:
+Abhängig von den für PROMPTFINISHER aktivierten Zahlungsmethoden können beispielsweise angeboten werden:
 
 - PayPal
 - Kredit-/Debitkarte
 - SEPA
 - weitere unterstützte Online-Zahlungsmethoden
 
-Nach bestätigter Zahlung werden die gekauften PromptMaster-Pro-Lizenzen automatisch deinem Kundenkonto zugeordnet.
+Nach bestätigter Zahlung werden die gekauften PROMPTFINISHER-Pro-Lizenzen automatisch deinem Kundenkonto zugeordnet.
 
 ---
 
 # 19. FAQ
 
-## Was ist PromptMaster?
+## Was ist PROMPTFINISHER?
 
-PromptMaster ist ein strukturierter Prompt-Assistent für Microsoft Copilot. Du wählst Anwendung, Aufgabe und weitere Anforderungen aus. PromptMaster erstellt daraus einen vollständigen Prompt, den du anschließend in Microsoft Copilot verwenden kannst.
+PROMPTFINISHER ist ein strukturierter Prompt-Assistent für Microsoft Copilot. Du wählst Anwendung, Aufgabe und weitere Anforderungen aus. PROMPTFINISHER erstellt daraus einen vollständigen Prompt, den du anschließend in Microsoft Copilot verwenden kannst.
 
 ---
 
-## Ist PromptMaster selbst eine KI?
+## Ist PROMPTFINISHER selbst eine KI?
 
 Nein.
 
-PromptMaster verwendet keine eigene KI, um deine Aufgabe auszuführen. Die Prompts werden regel- und bausteinbasiert erstellt.
+PROMPTFINISHER verwendet keine eigene KI, um deine Aufgabe auszuführen. Die Prompts werden regel- und bausteinbasiert erstellt.
 
 Die eigentliche KI-Ausführung erfolgt anschließend in Microsoft Copilot.
 
@@ -673,29 +673,29 @@ Die eigentliche KI-Ausführung erfolgt anschließend in Microsoft Copilot.
 
 Ja.
 
-PromptMaster erstellt den Prompt. Für dessen Ausführung benötigst du einen passenden Zugang zu Microsoft Copilot.
+PROMPTFINISHER erstellt den Prompt. Für dessen Ausführung benötigst du einen passenden Zugang zu Microsoft Copilot.
 
-PromptMaster enthält keine Microsoft-Copilot-Lizenz.
+PROMPTFINISHER enthält keine Microsoft-Copilot-Lizenz.
 
 ---
 
-## Funktioniert PromptMaster mit Copilot Chat?
+## Funktioniert PROMPTFINISHER mit Copilot Chat?
 
 Ja.
 
-PromptMaster berücksichtigt sowohl Anwendungsfälle für Copilot Chat als auch Funktionen, die eine entsprechende Microsoft-365-Copilot-Umgebung voraussetzen.
+PROMPTFINISHER berücksichtigt sowohl Anwendungsfälle für Copilot Chat als auch Funktionen, die eine entsprechende Microsoft-365-Copilot-Umgebung voraussetzen.
 
 ---
 
-## Was kostet PromptMaster Free?
+## Was kostet PROMPTFINISHER Free?
 
-PromptMaster Free ist kostenlos.
+PROMPTFINISHER Free ist kostenlos.
 
 ---
 
-## Was kostet PromptMaster Pro?
+## Was kostet PROMPTFINISHER Pro?
 
-PromptMaster Pro kostet aktuell **2,99 € netto pro Benutzer und Monat**.
+PROMPTFINISHER Pro kostet aktuell **2,99 € netto pro Benutzer und Monat**.
 
 Die Lizenzlaufzeit beträgt zwölf Monate und wird jährlich im Voraus berechnet.
 
@@ -713,7 +713,7 @@ Die Abrechnung erfolgt für die vollständige zwölfmonatige Lizenzperiode.
 
 ---
 
-## Verlängert sich PromptMaster Pro automatisch?
+## Verlängert sich PROMPTFINISHER Pro automatisch?
 
 In der ersten Version nein.
 
@@ -723,7 +723,7 @@ Vor Ablauf erhält der zuständige Administrator Erinnerungen und kann die Lizen
 
 ## Was passiert, wenn ich nicht verlängere?
 
-Nach Ablauf wird der Zugriff auf PromptMaster Pro gesperrt.
+Nach Ablauf wird der Zugriff auf PROMPTFINISHER Pro gesperrt.
 
 Dein Kundenkonto bleibt bestehen, sodass du die Lizenz auch später erneut verlängern kannst.
 
@@ -759,43 +759,43 @@ Die zugewiesene Lizenz kann dem Benutzer entzogen und anschließend einem andere
 
 ---
 
-## Kann ich PromptMaster auf mehreren Geräten benutzen?
+## Kann ich PROMPTFINISHER auf mehreren Geräten benutzen?
 
-PromptMaster Pro verwendet ein Benutzer- und Gerätemodell.
+PROMPTFINISHER Pro verwendet ein Benutzer- und Gerätemodell.
 
 Die konkret zulässige Anzahl registrierter Geräte wird in den Lizenzbedingungen festgelegt und kann zentral administriert werden.
 
 ---
 
-## Muss PromptMaster installiert werden?
+## Muss PROMPTFINISHER installiert werden?
 
 Nein.
 
-PromptMaster wird als Webanwendung im Browser genutzt.
+PROMPTFINISHER wird als Webanwendung im Browser genutzt.
 
 ---
 
-## Werden meine Prompts auf einem PromptMaster-KI-Server analysiert?
+## Werden meine Prompts auf einem PROMPTFINISHER-KI-Server analysiert?
 
 Nein.
 
-PromptMaster verwendet kein eigenes KI-Modell für die Ausführung deiner Aufgabe.
+PROMPTFINISHER verwendet kein eigenes KI-Modell für die Ausführung deiner Aufgabe.
 
 Die KI-Verarbeitung erfolgt erst in der von dir verwendeten Microsoft-Copilot-Umgebung.
 
 ---
 
-## Werden meine Zahlungsdaten bei PromptMaster gespeichert?
+## Werden meine Zahlungsdaten bei PROMPTFINISHER gespeichert?
 
-Sensible Zahlungsinformationen wie Kreditkartendaten werden nicht von PromptMaster selbst verarbeitet oder gespeichert.
+Sensible Zahlungsinformationen wie Kreditkartendaten werden nicht von PROMPTFINISHER selbst verarbeitet oder gespeichert.
 
 Die Zahlungsabwicklung erfolgt über einen spezialisierten Payment-Anbieter.
 
 ---
 
-## Gibt es zukünftig weitere PromptMaster-Versionen?
+## Gibt es zukünftig weitere PROMPTFINISHER-Versionen?
 
-Die PromptMaster-Plattform ist technisch für zusätzliche Produktvarianten vorbereitet.
+Die PROMPTFINISHER-Plattform ist technisch für zusätzliche Produktvarianten vorbereitet.
 
 Welche weiteren Editionen angeboten werden, wird abhängig von der weiteren Produktentwicklung entschieden.
 
@@ -809,9 +809,9 @@ Eine bereits abgeschlossene Bestellung behält selbstverständlich den für dies
 
 ---
 
-## Was unterscheidet PromptMaster Pro von Free?
+## Was unterscheidet PROMPTFINISHER Pro von Free?
 
-Pro erweitert PromptMaster insbesondere um zusätzliche Microsoft-Anwendungen, umfangreichere Aufgaben, zusätzliche Zielgruppen, erweiterte Schwerpunkte, professionelle Ausgabeformate und app-spezifische Business-Prompts.
+Pro erweitert PROMPTFINISHER insbesondere um zusätzliche Microsoft-Anwendungen, umfangreichere Aufgaben, zusätzliche Zielgruppen, erweiterte Schwerpunkte, professionelle Ausgabeformate und app-spezifische Business-Prompts.
 
 ---
 
@@ -823,15 +823,15 @@ Pro erweitert PromptMaster insbesondere um zusätzliche Microsoft-Anwendungen, u
 
 ## Text
 
-Teste PromptMaster Free direkt im Browser oder statte dein Team mit PromptMaster Pro aus.
+Teste PROMPTFINISHER Free direkt im Browser oder statte dein Team mit PROMPTFINISHER Pro aus.
 
 ### CTA 1
 
-**PromptMaster Free starten**
+**PROMPTFINISHER Free starten**
 
 ### CTA 2
 
-**PromptMaster Pro kaufen**
+**PROMPTFINISHER Pro kaufen**
 
 ### Link
 
@@ -841,7 +841,7 @@ Teste PromptMaster Free direkt im Browser oder statte dein Team mit PromptMaster
 
 # 21. FOOTER
 
-### PromptMaster
+### PROMPTFINISHER
 
 - Funktionen
 - Free
@@ -864,7 +864,7 @@ Teste PromptMaster Free direkt im Browser oder statte dein Team mit PromptMaster
 
 ### Abschluss
 
-**PromptMaster by netstyle**
+**PROMPTFINISHER by netstyle**
 
 *Bessere Prompts für Microsoft Copilot.*
 
@@ -881,7 +881,7 @@ Auf der Marketing-Website dürfen derzeit nicht erscheinen:
 - erfundene Bewertungen
 - Sternebewertungen ohne Datenbasis
 - „unsere KI“
-- Aussagen, PromptMaster führe selbst KI-Aufgaben aus
+- Aussagen, PROMPTFINISHER führe selbst KI-Aufgaben aus
 - „Video ansehen“
 - Play-Button im Hero
 - erfundene KI-Modelle
@@ -897,7 +897,7 @@ Desktop:
 
 ```text id="pmhero1"
 ┌──────────────────────────────────────────────────────────────┐
-│ PROMPTMASTER                       Funktionen ...  Anmelden │
+│ PROMPTFINISHER                       Funktionen ...  Anmelden │
 │                                                              │
 │      FREE              INTERAKTIVER KOPF              PRO    │
 │                                                              │

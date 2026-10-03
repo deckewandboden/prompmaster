@@ -19,7 +19,7 @@ class PriceAndRenewalContractTests(TestCase):
         self.now = timezone.now()
         self.product = Product.objects.create(
             code='PRO-PRICE-CONTRACT',
-            name='PromptMaster Pro Price Contract',
+            name='PROMPTFINISHER Pro Price Contract',
             default_license_days=365,
             default_device_limit=2,
             reminder_1_days=60,

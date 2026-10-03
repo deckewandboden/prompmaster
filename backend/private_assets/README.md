@@ -1,6 +1,6 @@
-# Private PromptMaster application assets
+# Private PROMPTFINISHER application assets
 
-The exact approved PromptMaster Pro Golden Master must be installed here as:
+The exact approved PROMPTFINISHER Pro Golden Master must be installed here as:
 
 `promptmaster_pro.html`
 

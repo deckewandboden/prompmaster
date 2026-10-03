@@ -7,7 +7,7 @@ if [[ ! -d .git ]]; then
   git branch -M main
 fi
 if ! git config user.name >/dev/null 2>&1; then
-  git config user.name "${PM_GIT_AUTHOR_NAME:-PromptMaster Build}"
+  git config user.name "${PM_GIT_AUTHOR_NAME:-PROMPTFINISHER Build}"
 fi
 if ! git config user.email >/dev/null 2>&1; then
   git config user.email "${PM_GIT_AUTHOR_EMAIL:-promptmaster-build@local.invalid}"
@@ -16,7 +16,7 @@ git add -A
 if git diff --cached --quiet; then
   echo "Git-Arbeitsbaum ist bereits für den Erstimport vorbereitet; keine neuen Änderungen."
 else
-  git commit -m "PromptMaster Commercial GitHub RC13"
+  git commit -m "PROMPTFINISHER Commercial GitHub RC13"
 fi
 if ! git show-ref --verify --quiet refs/heads/staging; then
   git branch staging main

@@ -236,7 +236,7 @@ class NotificationSecurityTests(TestCase):
 class GraphProviderContractTests(TestCase):
     def _message(self):
         return SimpleNamespace(
-            subject='PromptMaster Graph contract test',
+            subject='PROMPTFINISHER Graph contract test',
             recipient='recipient@example.test',
         )
 

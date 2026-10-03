@@ -1,4 +1,4 @@
-# PromptMaster Commercial — Marketing-Frontend
+# PROMPTFINISHER Commercial — Marketing-Frontend
 
 Separate Marketing-Anwendung. Die bestehenden Free-/Pro-Produkte werden weder erzeugt noch verändert.
 

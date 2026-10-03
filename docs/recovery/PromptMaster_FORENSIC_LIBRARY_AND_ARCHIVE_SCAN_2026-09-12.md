@@ -1,11 +1,11 @@
-# PromptMaster – Forensischer File-Library-/Archiv-Scan
+# PROMPTFINISHER – Forensischer File-Library-/Archiv-Scan
 
 Datum: 2026-09-12
-Ziel: Verlustfreie Rekonstruktion aller greifbaren PromptMaster-Quellen als Grundlage für einen vollständigen lauffähigen Integrationsstand.
+Ziel: Verlustfreie Rekonstruktion aller greifbaren PROMPTFINISHER-Quellen als Grundlage für einen vollständigen lauffähigen Integrationsstand.
 
 ## 1. Physisch materialisierte Archive vollständig gelesen
 
-Der rekursive Archivscanner hat alle in `/mnt/data` greifbaren PromptMaster-Archive geöffnet, verschachtelte Archive ebenfalls entpackt und alle eindeutigen Text-/Code-Dateien zeilenweise gelesen. Binärdateien wurden inventarisiert und gehasht.
+Der rekursive Archivscanner hat alle in `/mnt/data` greifbaren PROMPTFINISHER-Archive geöffnet, verschachtelte Archive ebenfalls entpackt und alle eindeutigen Text-/Code-Dateien zeilenweise gelesen. Binärdateien wurden inventarisiert und gehasht.
 
 - Archiv-Records inkl. verschachtelter/duplizierter Archive: **18**
 - Datei-Records über alle Archive: **4.341**
@@ -17,18 +17,18 @@ Der rekursive Archivscanner hat alle in `/mnt/data` greifbaren PromptMaster-Arch
 
 ## 2. Geöffnete/rekursiv geprüfte Hauptarchive
 
-- `PromptMaster_FORENSIC_RECOVERY_AND_SOURCE_INDEX_2026-09-12(1).zip`
-- `PromptMaster_PROJECT_TRANSFER_RC10_2026-09-12.zip`
-- `PromptMaster_MASTER_PROJECT_RECONSTRUCTION_PREMERGE_2026-09-12.zip`
-- darin: `PromptMaster_PROJECT_TRANSFER_FINAL_FROM_ORIGINAL_CHAT_2026-09-12.zip`
-- darin: `PromptMaster-Commercial-Sicherung-2026-09-06.zip`
-- darin: `PromptMaster_PROJECT_TRANSFER_GOLDEN_INTEGRATED_2026-09-12.zip`
-- darin: `PromptMaster_PROJECT_TRANSFER_FULL_2026-09-12.zip`
-- darin: `PromptMaster_PROJECT_TRANSFER_CHAT_6aa43192_FINAL_2026-09-12.zip`
-- darin: `PromptMaster_UI_Prototype_V1_1.zip`
-- darin: `PromptMaster_UI_Prototype_V1_1_FIXED.zip`
-- `PromptMaster_CHAT_RECOVERY_ALL_AVAILABLE_2026-09-12(1).zip`
-- `PromptMaster_COMPLETE_PROJECT_TRANSFER_2026-09-12(1).zip`
+- `PROMPTFINISHER_FORENSIC_RECOVERY_AND_SOURCE_INDEX_2026-09-12(1).zip`
+- `PROMPTFINISHER_PROJECT_TRANSFER_RC10_2026-09-12.zip`
+- `PROMPTFINISHER_MASTER_PROJECT_RECONSTRUCTION_PREMERGE_2026-09-12.zip`
+- darin: `PROMPTFINISHER_PROJECT_TRANSFER_FINAL_FROM_ORIGINAL_CHAT_2026-09-12.zip`
+- darin: `PROMPTFINISHER-Commercial-Sicherung-2026-09-06.zip`
+- darin: `PROMPTFINISHER_PROJECT_TRANSFER_GOLDEN_INTEGRATED_2026-09-12.zip`
+- darin: `PROMPTFINISHER_PROJECT_TRANSFER_FULL_2026-09-12.zip`
+- darin: `PROMPTFINISHER_PROJECT_TRANSFER_CHAT_6aa43192_FINAL_2026-09-12.zip`
+- darin: `PROMPTFINISHER_UI_Prototype_V1_1.zip`
+- darin: `PROMPTFINISHER_UI_Prototype_V1_1_FIXED.zip`
+- `PROMPTFINISHER_CHAT_RECOVERY_ALL_AVAILABLE_2026-09-12(1).zip`
+- `PROMPTFINISHER_COMPLETE_PROJECT_TRANSFER_2026-09-12(1).zip`
 
 Duplikate wurden anhand SHA256 erkannt und nicht fälschlich als neue Quellen gewertet.
 
@@ -40,7 +40,7 @@ Duplikate wurden anhand SHA256 erkannt und nicht fälschlich als neue Quellen ge
 - Aktuelle Free-/Pro-Golden-Master sind bytegenau vorhanden und gehasht.
 - Aktueller Pro-Katalog: 34 Apps / 194 Tasks.
 - Free-Kernumfang: 16 Free-Tasks; historische Free-/Pro-Stände sind zusätzlich erhalten.
-- Marketing-Source-Snapshot vom 06.09. ist vollständig erhalten und entspricht bytegenau der verschachtelten Sicherung `PromptMaster-Commercial-Sicherung-2026-09-06.zip`.
+- Marketing-Source-Snapshot vom 06.09. ist vollständig erhalten und entspricht bytegenau der verschachtelten Sicherung `PROMPTFINISHER-Commercial-Sicherung-2026-09-06.zip`.
 - Marketing-Worklog enthält die Commit-/Archiv-Provenienz für V13/V14/V15.
 - Master Spec V1.0 mit 162 Requirement-Records, 92er Branch-Matrix und zusätzlichen Cross-Chat-Anforderungen sind erhalten.
 
@@ -63,24 +63,24 @@ Die Begriffe erscheinen in Requirements, Transfer-/Gap-Dokumenten und dem späte
 
 ## 4. File-Library-Rekonstruktion
 
-Die File Library wurde mit Datums-, Namens- und Inhaltsabfragen über den relevanten PromptMaster-Zeitraum durchsucht. Zusätzlich wurden lange HTML-/Textquellen per Vollansicht geöffnet, soweit das File-Library-System sie ausliefert.
+Die File Library wurde mit Datums-, Namens- und Inhaltsabfragen über den relevanten PROMPTFINISHER-Zeitraum durchsucht. Zusätzlich wurden lange HTML-/Textquellen per Vollansicht geöffnet, soweit das File-Library-System sie ausliefert.
 
 Wesentliche wiedergefundene Produktquellen:
 
-- `netstyle_CopilotPromptMaster_PRO_1.1.html` – Legacy-Stand mit 160 Szenarien
-- `netstyle_CopilotPromptMaster_PRO_3.3_PROMPTS_APP_SPEZIFISCH.html`
-- `netstyle_CopilotPromptMaster_Free_V1.2.1_KORRIGIERT.html`
-- `netstyle_CopilotPromptMaster_Free_V1.2.4_PROMPTS_AUSFORMULIERT.html`
+- `netstyle_CopilotPROMPTFINISHER_PRO_1.1.html` – Legacy-Stand mit 160 Szenarien
+- `netstyle_CopilotPROMPTFINISHER_PRO_3.3_PROMPTS_APP_SPEZIFISCH.html`
+- `netstyle_CopilotPROMPTFINISHER_Free_V1.2.1_KORRIGIERT.html`
+- `netstyle_CopilotPROMPTFINISHER_Free_V1.2.4_PROMPTS_AUSFORMULIERT.html`
 - `DOC-20260905-WA0007.html`
-- `netstyle_PromptMaster_Expanded_Apps_Demo.html`
+- `netstyle_PROMPTFINISHER_Expanded_Apps_Demo.html`
 - historische V7/V8/V9/V10/V11/V15/V19/V20 usw.
 - Marketing-Worklogs `markdown.md eingefügt`
-- `PromptMaster Commercial.txt`
+- `PROMPTFINISHER Commercial.txt`
 - `SPEC.md`, `bootstrap.sh`, `compose.yaml`, UI-Prototypen und weitere Phase-2-Artefakte
 
 ### Wichtiger RC1-Fund
 
-Ein späteres `README.md` mit Titel **„PromptMaster Commercial Platform — GitHub Release Candidate 1“** ist vorhanden. Es behauptet einen bereits konsolidierten RC1 mit:
+Ein späteres `README.md` mit Titel **„PROMPTFINISHER Commercial Platform — GitHub Release Candidate 1“** ist vorhanden. Es behauptet einen bereits konsolidierten RC1 mit:
 
 - zentraler Prompt-Domain
 - 34 Apps / 194 Tasks
@@ -118,4 +118,4 @@ Da der behauptete spätere RC1-Code nicht physisch wiederhergestellt werden konn
 
 ## 7. Grenze der File-Library-API
 
-Die File-Library-Suche kann den bereitgestellten UI-Collection-Link nicht als Ordner-Iterator öffnen und liefert keine garantierte vollständige Liste aller unsichtbaren Collection-Einträge. Deshalb wird nicht behauptet, dass ein im UI eventuell verborgenes und von der Suche nie ausgeliefertes Objekt physisch gelesen wurde. Alle **von der File Library ausgelieferten PromptMaster-relevanten Quellen** wurden jedoch gezielt ausgewertet; alle **im Runtime-Dateisystem vorhandenen Archive** wurden vollständig rekursiv geöffnet und zeilenweise bzw. binär-forensisch verarbeitet.
+Die File-Library-Suche kann den bereitgestellten UI-Collection-Link nicht als Ordner-Iterator öffnen und liefert keine garantierte vollständige Liste aller unsichtbaren Collection-Einträge. Deshalb wird nicht behauptet, dass ein im UI eventuell verborgenes und von der Suche nie ausgeliefertes Objekt physisch gelesen wurde. Alle **von der File Library ausgelieferten PROMPTFINISHER-relevanten Quellen** wurden jedoch gezielt ausgewertet; alle **im Runtime-Dateisystem vorhandenen Archive** wurden vollständig rekursiv geöffnet und zeilenweise bzw. binär-forensisch verarbeitet.

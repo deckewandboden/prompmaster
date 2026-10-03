@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Optional browser smoke for the derived Pro runtime without network access.
 
-The test injects a deterministic in-page fetch stub before PromptMaster code is
+The test injects a deterministic in-page fetch stub before PROMPTFINISHER code is
 executed. It validates the 34-app server catalog bridge, task rendering,
 server-compose payload and deliberate rating/feedback flow.
 """
@@ -858,8 +858,8 @@ def _check_backend_page(page, base: str, path: str, width: int, label: str) -> N
     if width <= 700:
         if metrics['sidebarDisplay'] != 'none':
             raise AssertionError(f'{label} {width}px: sidebar must be hidden')
-        if metrics['mobileTitleDisplay'] == 'none' or not metrics['mobileTitleText'].startswith('PROMPTMASTER'):
-            raise AssertionError(f'{label} {width}px: PromptMaster mobile header missing')
+        if metrics['mobileTitleDisplay'] == 'none' or not metrics['mobileTitleText'].startswith('PROMPTFINISHER'):
+            raise AssertionError(f'{label} {width}px: PROMPTFINISHER mobile header missing')
         if metrics['mobileMenuDisplay'] == 'none':
             raise AssertionError(f'{label} {width}px: mobile bottom navigation missing')
         if metrics['mobileMenuCount'] != 5:
@@ -1711,10 +1711,10 @@ def run_backend_ui_smoke(browser, fixture=None) -> None:
         if 'Power Automate' not in public_page.locator('#proModal').inner_text():
             raise AssertionError('Free runtime: locked app does not open its Pro explanation')
         pro_modal_text = public_page.locator('#proModal').inner_text()
-        if 'CopilotPromptMaster' in pro_modal_text:
+        if 'CopilotPROMPTFINISHER' in pro_modal_text:
             raise AssertionError(f'Free V2 Pro modal exposes legacy brand naming: {pro_modal_text}')
         pro_purchase = public_page.locator('#proModal .modal-actions a.btn').first
-        if 'PromptMaster Pro kaufen' not in pro_modal_text:
+        if 'PROMPTFINISHER Pro kaufen' not in pro_modal_text:
             raise AssertionError('Free V2 Pro modal CTA does not offer direct purchase')
         pro_purchase_contract = public_page.evaluate(
             """() => {
@@ -1906,7 +1906,7 @@ def run_backend_ui_smoke(browser, fixture=None) -> None:
             or general_modal_probe['scrollTop'] <= 5
             or general_modal_probe['tileBackground'] in {'rgb(250, 251, 253)', 'rgb(255, 255, 255)'}
             or general_modal_probe['compareBackground'] == 'rgb(255, 255, 255)'
-            or general_modal_probe['ctaText'] != 'PromptMaster Pro kaufen'
+            or general_modal_probe['ctaText'] != 'PROMPTFINISHER Pro kaufen'
             or general_modal_probe['ctaPath'] != '/checkout/'
             or general_modal_probe['ctaSearch'] != '?quantity=1'
         ):
@@ -2455,14 +2455,14 @@ def run_backend_ui_smoke(browser, fixture=None) -> None:
                 page.set_viewport_size({'width': 1440, 'height': 1000})
                 customer_pro = page.goto(base + 'pro/', wait_until='networkidle')
                 if not customer_pro or customer_pro.status != 200:
-                    raise AssertionError('licensed customer admin cannot reach PromptMaster Pro flow')
+                    raise AssertionError('licensed customer admin cannot reach PROMPTFINISHER Pro flow')
                 if '/pro/device/register/' not in page.url:
                     raise AssertionError(
                         f'new customer browser did not enter device registration: {page.url}'
                     )
                 device_name = page.locator('input[name="display_name"]')
                 if not device_name.is_visible():
-                    raise AssertionError('PromptMaster Pro device registration form is missing')
+                    raise AssertionError('PROMPTFINISHER Pro device registration form is missing')
                 device_name.fill('Browser Smoke Firefox/Edge')
                 device_name.press('Enter')
                 page.wait_for_url('**/pro/app/')
@@ -2485,7 +2485,7 @@ def run_backend_ui_smoke(browser, fixture=None) -> None:
                 direct_pro_apps = page.locator('#catalog .app-card').count()
                 if direct_pro_apps != 34:
                     raise AssertionError(
-                        f'PromptMaster Pro V2 must expose all 34 apps directly, got {direct_pro_apps}'
+                        f'PROMPTFINISHER Pro V2 must expose all 34 apps directly, got {direct_pro_apps}'
                     )
 
                 pro_fixed_probe = page.evaluate(
@@ -2524,7 +2524,7 @@ def run_backend_ui_smoke(browser, fixture=None) -> None:
                     or pro_fixed_probe['stickyError'] > 5
                 ):
                     raise AssertionError(
-                        f'PromptMaster Pro V2 single-scroll sticky panel invalid: {pro_fixed_probe}'
+                        f'PROMPTFINISHER Pro V2 single-scroll sticky panel invalid: {pro_fixed_probe}'
                     )
                 page.locator('#resetBtn').click()
                 page.wait_for_function("window.scrollY < 3")
@@ -2539,7 +2539,7 @@ def run_backend_ui_smoke(browser, fixture=None) -> None:
                 )
                 if customer_catalog_probe['status'] != 200 or not customer_catalog_probe['body'].get('ok'):
                     raise AssertionError(
-                        f'customer PromptMaster API access failed: {customer_catalog_probe}'
+                        f'customer PROMPTFINISHER API access failed: {customer_catalog_probe}'
                     )
                 customer_compose_probe = page.evaluate(
                     """async () => {
@@ -2566,7 +2566,7 @@ def run_backend_ui_smoke(browser, fixture=None) -> None:
                           input: {
                             fields: {
                               Fragestellung: 'Browser Kundenfunktionstest',
-                              Kontext: 'PromptMaster Kundenbackend'
+                              Kontext: 'PROMPTFINISHER Kundenbackend'
                             },
                             audience: 'Management',
                             focus: ['Primärquellen'],
@@ -2595,7 +2595,7 @@ def run_backend_ui_smoke(browser, fixture=None) -> None:
                     not in (customer_compose_probe.get('body') or {}).get('result', {}).get('prompt', '')
                 ):
                     raise AssertionError(
-                        f'customer PromptMaster compose failed: {customer_compose_probe}'
+                        f'customer PROMPTFINISHER compose failed: {customer_compose_probe}'
                     )
             else:
                 page.set_viewport_size({'width': 1440, 'height': 1000})
@@ -2635,7 +2635,7 @@ def run_backend_ui_smoke(browser, fixture=None) -> None:
                     """() => {
                       const links = [...document.querySelectorAll('a')];
                       const pick = label => links.find(a => a.textContent.trim().includes(label));
-                      return Object.fromEntries(['PromptMaster Pro', 'PromptMaster Free'].map(label => {
+                      return Object.fromEntries(['PROMPTFINISHER Pro', 'PROMPTFINISHER Free'].map(label => {
                         const a = pick(label);
                         return [label, a ? {
                           path: new URL(a.href).pathname,
@@ -2646,8 +2646,8 @@ def run_backend_ui_smoke(browser, fixture=None) -> None:
                     }"""
                 )
                 expected_launchers = {
-                    'PromptMaster Pro': '/pro/',
-                    'PromptMaster Free': '/free/',
+                    'PROMPTFINISHER Pro': '/pro/',
+                    'PROMPTFINISHER Free': '/free/',
                 }
                 for label, path in expected_launchers.items():
                     row = launcher_contract.get(label)
@@ -2775,7 +2775,7 @@ def run_backend_ui_smoke(browser, fixture=None) -> None:
                 page.set_viewport_size({'width': 1440, 'height': 1000})
                 pro_response = page.goto(base + 'pro/', wait_until='networkidle')
                 if not pro_response or pro_response.status != 200:
-                    raise AssertionError('netstyle staff cannot open PromptMaster Pro')
+                    raise AssertionError('netstyle staff cannot open PROMPTFINISHER Pro')
                 page.wait_for_function("document.body.dataset.pmv2Ready === '1'", timeout=15000)
                 utility_paths = set(page.locator('.pmv2-header-actions a').evaluate_all(
                     "els => els.map(e => new URL(e.href).pathname)"
@@ -2796,10 +2796,10 @@ def run_backend_ui_smoke(browser, fixture=None) -> None:
                 )
                 if catalog_probe['status'] != 200 or not catalog_probe['body'].get('ok'):
                     raise AssertionError(
-                        f'netstyle PromptMaster API access failed: {catalog_probe}'
+                        f'netstyle PROMPTFINISHER API access failed: {catalog_probe}'
                     )
                 if catalog_probe['body']['catalog'].get('task_count') != 215:
-                    raise AssertionError('netstyle PromptMaster catalog is incomplete')
+                    raise AssertionError('netstyle PROMPTFINISHER catalog is incomplete')
                 staff_compose_probe = page.evaluate(
                     """async () => {
                       const runtimeSource = [...document.scripts]
@@ -2825,7 +2825,7 @@ def run_backend_ui_smoke(browser, fixture=None) -> None:
                           input: {
                             fields: {
                               Fragestellung: 'Browser netstyle Funktionstest',
-                              Kontext: 'PromptMaster Adminbackend'
+                              Kontext: 'PROMPTFINISHER Adminbackend'
                             },
                             audience: 'Management',
                             focus: ['Primärquellen'],
@@ -2854,7 +2854,7 @@ def run_backend_ui_smoke(browser, fixture=None) -> None:
                     not in (staff_compose_probe.get('body') or {}).get('result', {}).get('prompt', '')
                 ):
                     raise AssertionError(
-                        f'netstyle PromptMaster compose failed: {staff_compose_probe}'
+                        f'netstyle PROMPTFINISHER compose failed: {staff_compose_probe}'
                     )
 
                 for width, height in ((360,800),(390,844),(768,1024),(1440,1000),(1920,1080)):
@@ -3208,7 +3208,7 @@ def _run_cross_browser_product_v2(browser, fixture: dict, engine: str) -> None:
             )
 
         context.close()
-        print(f'{engine.upper()} PROMPTMASTER V2 UI OK')
+        print(f'{engine.upper()} PROMPTFINISHER V2 UI OK')
     finally:
         if process.poll() is None:
             process.terminate()

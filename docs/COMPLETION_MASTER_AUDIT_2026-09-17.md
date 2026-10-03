@@ -1,4 +1,4 @@
-# PromptMaster Completion Master Audit — 2026-09-17
+# PROMPTFINISHER Completion Master Audit — 2026-09-17
 
 Baseline for this audit: `ba6798b0f386528542dbda77d3b745ca1c977d7f` on `completion-audit-integration`.
 
@@ -167,16 +167,16 @@ The existing `.github/workflows/ci.yml` already contains PostgreSQL/Redis, migra
 
 The repository-controlled completion state, including the hardened external-acceptance harnesses, is evidenced on final code commit `5921c2d9b8577bb05ad0a87d25d7ad2655603883`, executed on real GitHub-hosted runners:
 
-- **PromptMaster CI** — run `35345936338`: all four jobs green (`test`, `security`, `browser-smoke`, `full-stack`).
+- **PROMPTFINISHER CI** — run `35345936338`: all four jobs green (`test`, `security`, `browser-smoke`, `full-stack`).
   - `test`: Marketing tests/lint/build, strict static repository guards, migration drift, migrations/seeds, Prompt runtime sanity, complete Django/PostgreSQL suite, external-acceptance safety/invariant regressions, 100k DataGrid, Compose validation, collectstatic and Docker builds.
   - `browser-smoke`: public auth/legal pages, customer portal, company-admin flows, private-customer admin flows, netstyle admin, Prompt Studio, tenant-safe searches, complete mobile navigation, responsive coverage, overflow/overlap guards and Marketing browser smoke.
   - `full-stack`: clean bootstrap, production filesystem restrictions, monitoring/runtime validation, backup/restore failure propagation and recovery.
   - `security`: Python dependency audit and complete Marketing dependency audit.
-- **PromptMaster Full Dependency Security** — run `35345936397`: green.
-- **PromptMaster Shell Syntax** — run `35345936369`: green.
+- **PROMPTFINISHER Full Dependency Security** — run `35345936397`: green.
+- **PROMPTFINISHER Shell Syntax** — run `35345936369`: green.
 
 The external release harnesses are executable and fail closed:
-- **Mollie** accepts only `test_` API keys, uses the real portal checkout/provider/webhook/refund paths, and now additionally requires the provider payload itself to report `mode=test`, the provider `metadata.order_id` to match the locally created order, and the stored provider `webhookUrl` to match the expected public PromptMaster webhook. Provider/local state agreement, processed webhook events, refund totals and downstream license/order business state are all required before an external state can be accepted.
+- **Mollie** accepts only `test_` API keys, uses the real portal checkout/provider/webhook/refund paths, and now additionally requires the provider payload itself to report `mode=test`, the provider `metadata.order_id` to match the locally created order, and the stored provider `webhookUrl` to match the expected public PROMPTFINISHER webhook. Provider/local state agreement, processed webhook events, refund totals and downstream license/order business state are all required before an external state can be accepted.
 - **Microsoft Graph** uses the persisted production `EmailMessage`/task path, exercises a real success send and a real provider failure with persisted retry/error state, and the production release gate additionally requires Exchange Application RBAC scope evidence: `Application Mail.Send` must be in scope for `GRAPH_SENDER`, out of scope for a control mailbox, and no parallel unrestricted Entra `Mail.Send` application grant may bypass that scope.
 - **External S3/restic** requires an explicit confirmation value and a TLS-protected external S3 target. The acceptance script rejects local, placeholder and insecure `s3:http://` targets, pauses an already-running regular backup service to prevent a concurrent snapshot from falsifying the evidence, verifies PostgreSQL readiness, proves that a new `promptmaster-db` snapshot ID was created, runs the isolated PostgreSQL restore/integrity check, requires a non-empty restore `backup_ref`, and restores the regular backup service on exit.
 - **Monitoring trust boundary** is repository- and runtime-validated: Prometheus/cAdvisor publish no host ports, use the internal `monitor` network, cAdvisor keeps the documented read-only host mounts, images are pinned, and runtime validation requires Prometheus targets `node`, `postgres`, `cadvisor` and `django` to be `UP`.

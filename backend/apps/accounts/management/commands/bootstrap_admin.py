@@ -7,7 +7,7 @@ from apps.accounts.models import Role, User, UserRole
 
 
 class Command(BaseCommand):
-    help = 'Create the initial PromptMaster superadmin exactly once.'
+    help = 'Create the initial PROMPTFINISHER superadmin exactly once.'
 
     @transaction.atomic
     def handle(self, *args, **options):
@@ -23,7 +23,7 @@ class Command(BaseCommand):
             user = User.objects.create_superuser(
                 email=email,
                 password=password,
-                first_name=os.getenv('INITIAL_ADMIN_FIRST_NAME', 'PromptMaster').strip() or 'PromptMaster',
+                first_name=os.getenv('INITIAL_ADMIN_FIRST_NAME', 'PROMPTFINISHER').strip() or 'PROMPTFINISHER',
                 last_name=os.getenv('INITIAL_ADMIN_LAST_NAME', 'Admin').strip() or 'Admin',
                 two_factor_required=True,
             )

@@ -181,7 +181,7 @@ test('hero and marketing copy use recovered V15 decisions',()=>{
   const index=read('index.html');
   const content=read('src/content.js');
   assert.doesNotMatch(index,/Aus deiner Aufgabe wird ein präziser Copilot-Prompt/i);
-  assert.doesNotMatch(index,/WENIGE KLICKS|EIN PROMPT, DER SITZT|PromptMaster entdecken/);
+  assert.doesNotMatch(index,/WENIGE KLICKS|EIN PROMPT, DER SITZT|PROMPTFINISHER entdecken/);
   assert.match(index,/<div class="hero-center"><h1 class="sr-only">Hol mehr aus Microsoft Copilot heraus\.<\/h1><\/div>/);
   assert.match(index,/Erweiterter Copilot-Katalog/);
   assert.match(index,/Laufende Weiterentwicklungen inklusive/);

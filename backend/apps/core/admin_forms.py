@@ -119,7 +119,7 @@ class LeadConvertCompanyForm(forms.Form):
         value = self.cleaned_data['email'].strip().lower()
         if User.objects.filter(email__iexact=value).exists():
             raise forms.ValidationError(
-                'Diese E-Mail-Adresse gehört bereits zu einem PromptMaster-Konto.'
+                'Diese E-Mail-Adresse gehört bereits zu einem PROMPTFINISHER-Konto.'
             )
         if Company.objects.filter(email__iexact=value).exists():
             raise forms.ValidationError(
@@ -137,7 +137,7 @@ class CustomerAdminInviteForm(forms.Form):
         value = self.cleaned_data['email'].strip().lower()
         if User.objects.filter(email__iexact=value).exists():
             raise forms.ValidationError(
-                'Diese E-Mail-Adresse gehört bereits zu einem PromptMaster-Konto.'
+                'Diese E-Mail-Adresse gehört bereits zu einem PROMPTFINISHER-Konto.'
             )
         return value
 
@@ -458,7 +458,7 @@ class GeneralSettingsForm(forms.Form):
         max_length=120,
         required=False,
         label='Absender-Anzeigename',
-        help_text='Zum Beispiel PromptMaster.',
+        help_text='Zum Beispiel PROMPTFINISHER.',
     )
     mail_reply_to = forms.EmailField(
         required=False,

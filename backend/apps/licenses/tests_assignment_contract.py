@@ -23,7 +23,7 @@ class LicenseAssignmentContractTests(TestCase):
         self.now = timezone.now()
         self.product = Product.objects.create(
             code='PRO-ASSIGN',
-            name='PromptMaster Pro Assignment Test',
+            name='PROMPTFINISHER Pro Assignment Test',
             default_license_days=365,
             default_device_limit=2,
             reminder_1_days=60,
@@ -192,7 +192,7 @@ class CustomerAdminSelfActivationTests(TestCase):
         self.now = timezone.now()
         self.product = Product.objects.create(
             code='PRO-SELF-ACTIVATE',
-            name='PromptMaster Pro Self Activation',
+            name='PROMPTFINISHER Pro Self Activation',
             default_license_days=365,
             default_device_limit=2,
             reminder_1_days=60,
@@ -201,7 +201,7 @@ class CustomerAdminSelfActivationTests(TestCase):
         )
         feature, _ = Feature.objects.get_or_create(
             code=PRO_ACCESS_FEATURE,
-            defaults={'name': 'PromptMaster Pro Runtime'},
+            defaults={'name': 'PROMPTFINISHER Pro Runtime'},
         )
         ProductEntitlement.objects.create(
             product=self.product,

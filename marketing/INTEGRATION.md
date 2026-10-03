@@ -1,4 +1,4 @@
-# Marketing-Integration in PromptMaster Commercial
+# Marketing-Integration in PROMPTFINISHER Commercial
 
 Dieser Ordner stammt aus der vollständigen Marketing-Sicherung vom 06.09.2026 und ist der aktuell vollständig physisch vorhandene Marketing-Source-Tree.
 

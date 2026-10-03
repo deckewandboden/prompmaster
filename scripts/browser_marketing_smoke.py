@@ -858,7 +858,7 @@ def main() -> int:
             )
             if (
                 checkout_probe['path'] != '/checkout/'
-                or checkout_probe['h1'] != 'PromptMaster Pro kaufen.'
+                or checkout_probe['h1'] != 'PROMPTFINISHER Pro kaufen.'
                 or checkout_probe['quantity'] != '3'
                 or checkout_probe['hiddenQuantity'] != '3'
                 or not checkout_probe['companyDefault']

@@ -15,7 +15,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 PRO = ROOT / 'backend/private_assets/promptmaster_pro.html'
 DATA = ROOT / 'backend/apps/prompts/data/pm20_golden_logic.json'
-EXPECTED_SHA = 'aa7b2da53ba3cbcf9874b9b6f7381ea4c3e86ee1f9c09db186cbec6876a3c9cf'
+EXPECTED_SHA = 'a18375946c7081034cd6b9d70a1f4e3b843c51e03230477cae246b6c4bf0f95f'
 
 
 def extract_object(text: str, name: str) -> str:

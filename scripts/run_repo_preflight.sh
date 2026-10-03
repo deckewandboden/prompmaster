@@ -15,7 +15,7 @@ fi
 command -v docker >/dev/null 2>&1 || { echo "[FEHLER] Docker fehlt" >&2; exit 1; }
 docker compose version >/dev/null 2>&1 || { echo "[FEHLER] Docker Compose Plugin fehlt" >&2; exit 1; }
 
-printf '[PromptMaster validator] Build reproduzierbares Validator-Image\n'
+printf '[PROMPTFINISHER validator] Build reproduzierbares Validator-Image\n'
 docker build -q -f Dockerfile.validator -t "$IMAGE" . >/dev/null
 
 uid="$(id -u)"
@@ -36,7 +36,7 @@ cleanup() {
 trap cleanup EXIT
 
 if [[ "$PREPARE" == "--prepare-env" ]]; then
-  printf '[PromptMaster validator] Staging-Umgebung vorbereiten\n'
+  printf '[PROMPTFINISHER validator] Staging-Umgebung vorbereiten\n'
   docker run "${common[@]}" -w /repo "$IMAGE" python scripts/prepare_env.py
 elif [[ -n "$PREPARE" ]]; then
   echo "[FEHLER] Unbekannte Option: $PREPARE" >&2
@@ -45,14 +45,14 @@ fi
 
 [[ -f .env ]] || { echo "[FEHLER] .env fehlt" >&2; exit 1; }
 
-printf '[PromptMaster validator] Marketing aus sauberem npm ci bauen und testen\n'
+printf '[PROMPTFINISHER validator] Marketing aus sauberem npm ci bauen und testen\n'
 docker run "${common[@]}" -w /repo/marketing "$IMAGE" sh -lc \
   'npm ci --no-audit --no-fund && npm test && npm run build'
 
-printf '[PromptMaster validator] Repository-Preflight\n'
+printf '[PROMPTFINISHER validator] Repository-Preflight\n'
 docker run "${common[@]}" -w /repo "$IMAGE" python scripts/github_preflight.py
 
-printf '[PromptMaster validator] Environment-Validierung (%s)\n' "$ENVIRONMENT"
+printf '[PROMPTFINISHER validator] Environment-Validierung (%s)\n' "$ENVIRONMENT"
 docker run "${common[@]}" -w /repo "$IMAGE" python scripts/validate_env.py --environment "$ENVIRONMENT"
 
-printf '[PromptMaster validator] OK\n'
+printf '[PROMPTFINISHER validator] OK\n'
