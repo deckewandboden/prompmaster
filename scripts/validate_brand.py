@@ -15,6 +15,17 @@ SKIP_FILES = {
     "scripts/validate_brand.py",
 }
 FORBIDDEN = ("PromptMaster", "PROMPTMASTER", "Promptmaster", "Prompt Master")
+LEGACY_ASSET_TOKENS = (
+    "promptmaster-logo-",
+    "promptmaster_v2.",
+    "promptmaster_brand_hq.",
+    "promptmaster_ui_v2.",
+    "promptmaster_free_reference.html",
+    "promptmaster_pro_runtime.html",
+    "promptmaster_pro.html",
+    "promptmaster_free.html",
+    "promptmaster-commercial-marketing",
+)
 
 
 def tracked_files() -> list[str]:
@@ -44,7 +55,7 @@ for rel in tracked_files():
         text = path.read_text(encoding="utf-8")
     except UnicodeDecodeError:
         continue
-    for token in FORBIDDEN:
+    for token in FORBIDDEN + LEGACY_ASSET_TOKENS:
         if token in text:
             lines = [
                 str(index)
