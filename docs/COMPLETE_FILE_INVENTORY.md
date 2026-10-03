@@ -508,7 +508,7 @@ Maschinenlesbar: `FILE_MANIFEST.tsv` und `MANIFEST.json`.
 | `docs/recovery/marketing-2026-09-06/free-live-reference.html` | 71799 | `a7586690d84ad4a549ac7e1498fdd0333b36c9c024ab5b7a98044a2b689b7f52` |
 | `docs/recovery/marketing-2026-09-06/pflichtenheft-reference.md` | 21194 | `8a5e4efcd698eba9f49ea70c76da09765dc5ac30420e7d82e653c7e5ae5a4b5e` |
 | `docs/recovery/NEW_INPUTS_FORENSIC_ANALYSIS.md` | 40159 | `45a9827be5be654f9fa22533721f72d0a784c3c2ae062db001ca5a58d09f928f` |
-| `docs/recovery/PromptMaster_FORENSIC_LIBRARY_AND_ARCHIVE_SCAN_2026-09-12.md` | 6852 | `15c9e8e9f0cbc4fe7c5dfe0f3e2e872ccdd9e8379059000dda5fdaba32495326` |
+| `docs/recovery/PROMPTFINISHER_FORENSIC_LIBRARY_AND_ARCHIVE_SCAN_2026-09-12.md` | 6852 | `15c9e8e9f0cbc4fe7c5dfe0f3e2e872ccdd9e8379059000dda5fdaba32495326` |
 | `docs/RELEASE_GATES.md` | 2323 | `86508aad791e67d02628c1ff840f681674990e656a83fdbcbe9730e342a77b8a` |
 | `docs/REQUIREMENTS_STATUS_V3.md` | 1387 | `c8a00e1af07c6032f7b45c679f88defc7693e5a6650330dfb5ac2595e2237123` |
 | `docs/SOURCE_OF_TRUTH.md` | 2059 | `01408c2217b1cffe1e4e45ba5418882416f491a466272da55dbb6a27942d63ae` |
@@ -559,8 +559,8 @@ Maschinenlesbar: `FILE_MANIFEST.tsv` und `MANIFEST.json`.
 
 | Pfad | Größe | SHA256 |
 |---|---:|---|
-| `tools/recovery/v13-exact-exporter/PromptMaster_v13_EXAKT_exportieren.cmd` | 298 | `ccef1271973a6381439d13384f0b787bbde4314c0763e705750002c00c7f331e` |
-| `tools/recovery/v13-exact-exporter/PromptMaster_v13_EXAKT_exportieren.ps1` | 7538 | `357e641b945e63ea473617dc58ac7b8c83167723509d04cae06c5104d3f52321` |
+| `tools/recovery/v13-exact-exporter/PROMPTFINISHER_v13_EXAKT_exportieren.cmd` | 298 | `ccef1271973a6381439d13384f0b787bbde4314c0763e705750002c00c7f331e` |
+| `tools/recovery/v13-exact-exporter/PROMPTFINISHER_v13_EXAKT_exportieren.ps1` | 7538 | `357e641b945e63ea473617dc58ac7b8c83167723509d04cae06c5104d3f52321` |
 | `tools/recovery/v13-exact-exporter/README.txt` | 492 | `98d56838c1fd5cef19098eb1c52ecda42e2f4bdb2c9a355f736e961e4975d660` |
 
 ## repository-root
