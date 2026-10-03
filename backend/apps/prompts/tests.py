@@ -3,7 +3,7 @@ from unittest.mock import patch
 
 from django.contrib.auth import get_user_model
 from django.core.management import call_command
-from django.test import Client, SimpleTestCase, TestCase
+from django.test import Client, SimpleTestCase, TestCase, override_settings
 from django.utils import timezone
 
 from apps.catalog.models import ProductEntitlement
@@ -132,6 +132,7 @@ class PromptDomainSeedTests(TestCase):
         self.assertEqual(PromptLegacyContract.objects.filter(source='FREE_1_2_4').count(), 16)
         self.assertEqual(PromptTestCase.objects.filter(name='system-smoke').count(), 194)
 
+    @override_settings(SECURE_SSL_REDIRECT=True)
     def test_runtime_validator_ignores_archived_smoke_tests(self):
         definition = PromptDefinition.objects.get(task_id='PM20-001')
         source = PromptVersion.objects.get(definition=definition, lifecycle='PUBLISHED')
