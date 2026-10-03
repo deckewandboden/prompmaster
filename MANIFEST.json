@@ -2,7 +2,7 @@
   "project": "PROMPTFINISHER Commercial RC14 Full Repository",
   "generated_at": "2026-09-15T17:09:08.547879+00:00",
   "file_count_excluding_manifest_files": 518,
-  "total_bytes_excluding_manifest_files": 20563666,
+  "total_bytes_excluding_manifest_files": 20563663,
   "roles": {
     "active-backend": 311,
     "active-ci": 1,
@@ -3029,8 +3029,8 @@
     },
     {
       "path": "scripts/validate_brand.py",
-      "size": 2166,
-      "sha256": "19495f29089f9dcb8530700790b0ff9f8b6a92ed465b84d615ad8cebf7713bd2",
+      "size": 2163,
+      "sha256": "fe740411c46afaf8c4af5074cba74fca907a557797ccb3d98abc7b2b17371494",
       "role": "active-operations"
     },
     {
