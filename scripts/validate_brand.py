@@ -11,6 +11,8 @@ SKIP_FILES = {
     "FILE_MANIFEST_AUDIT.tsv",
     "MANIFEST.json",
     "docs/COMPLETE_FILE_INVENTORY.md",
+    "scripts/rebrand_promptfinisher.py",
+    "scripts/validate_brand.py",
 }
 FORBIDDEN = ("PromptMaster", "PROMPTMASTER", "Promptmaster", "Prompt Master")
 
