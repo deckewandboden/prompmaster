@@ -6,7 +6,7 @@ NETWORK="${PM_EXTERNAL_CADDY_TEST_NETWORK:-promptmaster_ci_external_proxy}"
 ALIAS="${PM_EXTERNAL_CADDY_ALIAS:-promptmaster-caddy-edge}"
 F=(-f compose.yaml -f compose.staging.yaml -f compose.external-caddy.yaml)
 
-log(){ printf '[PromptMaster external-caddy test] %s\n' "$*"; }
+log(){ printf '[PROMPTFINISHER external-caddy test] %s\n' "$*"; }
 
 cleanup(){
   PM_EXTERNAL_CADDY_NETWORK="$NETWORK" PM_EXTERNAL_CADDY_ALIAS="$ALIAS" \
@@ -53,7 +53,7 @@ log "Marketing und Original-Kopf über externes Proxy-Netz testen"
 home="$(
   docker run --rm --network "$NETWORK" curlimages/curl:8.12.1     -fsS -H "Host: $domain" "http://$ALIAS/"
 )"
-grep -qi 'PROMPTMASTER' <<<"$home" || {
+grep -qi 'PROMPTFINISHER' <<<"$home" || {
   echo "Marketing response through external Caddy is unexpected" >&2
   exit 1
 }
@@ -88,7 +88,7 @@ products={
     for item in payload.get('products', [])
     if isinstance(item, dict) and item.get('id')
 }
-pro=products.get('PROMPTMASTER_PRO') or {}
+pro=products.get('PROMPTFINISHER_PRO') or {}
 names=payload.get('proApplicationNames') or []
 contract_ok=(
     payload.get('currency') == 'EUR'
@@ -182,18 +182,19 @@ free_current="$(
   docker run --rm --network "$NETWORK" curlimages/curl:8.12.1 \
     -fsS -H "Host: $domain" "http://$ALIAS/free/"
 )"
-v2_css_url="$(
-  grep -m1 -oE '/static/css/promptmaster_v2\.20260922\.css\?v=[^"[:space:]]+' <<<"$free_current"
-)"
-v2_js_url="$(
-  grep -m1 -oE '/static/js/promptmaster_ui_v2\.20260922\.js\?v=[^"[:space:]]+' <<<"$free_current"
-)"
-[[ -n "$v2_css_url" ]] || {
+v2_css_url="/static/css/promptfinisher_v2.20260922.css?v=20260929-ui19"
+v2_js_url="/static/js/promptfinisher_ui_v2.20260922.js?v=20260929-ui19"
+
+grep -Fq "$v2_css_url" <<<"$free_current" || {
   echo "Free V2 stylesheet is not cache-busted through external Caddy" >&2
+  printf '%s\n' "$free_current" | head -c 4000 >&2
+  echo >&2
   exit 1
 }
-[[ -n "$v2_js_url" ]] || {
+grep -Fq "$v2_js_url" <<<"$free_current" || {
   echo "Free V2 script is not cache-busted through external Caddy" >&2
+  printf '%s\n' "$free_current" | head -c 4000 >&2
+  echo >&2
   exit 1
 }
 

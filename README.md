@@ -1,6 +1,6 @@
-# PromptMaster Commercial Platform — konsolidierter Release-Stand
+# PROMPTFINISHER Commercial Platform — konsolidierter Release-Stand
 
-Konsolidierter Gesamtstand der belegbaren PromptMaster-Entwicklung mit Marketing-/Vertriebsfrontend, Free/Pro V2, Commercial Backend und erhaltener historischer Transfer-/Designprovenienz.
+Konsolidierter Gesamtstand der belegbaren PROMPTFINISHER-Entwicklung mit Marketing-/Vertriebsfrontend, Free/Pro V2, Commercial Backend und erhaltener historischer Transfer-/Designprovenienz.
 
 > **Status 01.10.2026:** Der konsolidierte `main`-Stand hat die internen automatisierten Release-Gates vollständig bestanden: Shell-/Dependency-Security, vollständige Django-Testsuite (6 absichtliche Performance-Skips), separates 100k-DataGrid-Gate, 34 Apps / 194 Tasks / 194 Prompt-Smokes, Chromium/Firefox/WebKit Browser-Smoke sowie Full-Stack-Bootstrap, Idempotenz, HTTP-Lasttest, Backup-Restore-Recovery und External-Caddy-Rehearsal. Eine echte Produktionsfreigabe erfordert zusätzlich die provider-/infrastrukturabhängigen Gates und die menschliche Freigabe aus `docs/RELEASE_GATES.md` und `docs/PRODUCTION_ACCEPTANCE.md`.
 
@@ -37,7 +37,7 @@ Der vollständige Dateiindex liegt in `docs/COMPLETE_FILE_INVENTORY.md`; `FILE_M
 - Operations / Backup / Restore-Test / Worker / Beat
 - zentrale Prompt-Domain mit 34 Apps / 194 PM20 Tasks
 - 16 Free-Kernaufgaben als Legacy-Verträge
-- Microsoft Tier / Capabilities getrennt von PromptMaster-Entitlements
+- Microsoft Tier / Capabilities getrennt von PROMPTFINISHER-Entitlements
 - stateless serverseitiger Prompt Composer
 - Prompt Studio / Testfälle / Versionen / Lifecycle
 - 1–5-Sterne-Ratings / Qualitätsanalyse / Drop-Erkennung
@@ -62,14 +62,14 @@ Die vollständige Zusammenfassung steht in `docs/COMPLETE_PROJECT_SUMMARY.md`; d
 Die exakten aktuellen Free-/Pro-Dateien liegen unter `product/golden_masters/` und werden per SHA256 geschützt.
 
 - Free: `aada4fbb3461d3758c48ed808bf018716a53aa33baf81efb058412e63535b0a8`
-- Pro: `aa7b2da53ba3cbcf9874b9b6f7381ea4c3e86ee1f9c09db186cbec6876a3c9cf`
+- Pro: `a18375946c7081034cd6b9d70a1f4e3b843c51e03230477cae246b6c4bf0f95f`
 
 Der aktuelle Pro-Golden-Master ist PM20 mit **34 Apps / 194 Tasks**. PM11-160 bleibt historische Provenienz und wird nicht als aktuelle Produktdatei rekonstruiert. Die produktive Pro-Runtime ist eine deterministische, hash-geschützte Ableitung des unveränderten Golden Masters und lädt ihren sichtbaren 34/194-Katalog aus der veröffentlichten serverseitigen PromptDomain.
 
 ## Zentrale Endpunkte
 
-- PromptMaster Free V2: `/free/`
-- PromptMaster Pro V2: `/pro/app/`
+- PROMPTFINISHER Free V2: `/free/`
+- PROMPTFINISHER Pro V2: `/pro/app/`
 - Free Legacy/Rollback: `/free-old/`
 - Pro Legacy/Rollback: `/pro-old/`
 - Kundenportal: `/portal/dashboard/`
@@ -175,7 +175,7 @@ Siehe `docs/GITHUB_TRANSFER.md`. Das Repository ist für einen privaten GitHub-E
 
 Die aktuelle Gmail-Spamklassifizierung des neuen Absenders wird als
 Deliverability-/Reputationsthema verfolgt und ist kein offener
-Authentifizierungs- oder PromptMaster-Codefehler.
+Authentifizierungs- oder PROMPTFINISHER-Codefehler.
 
 ## Noch extern zu bestätigen
 

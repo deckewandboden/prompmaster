@@ -144,7 +144,7 @@ def endpoint(request):
                 'protocolVersion': PROTOCOL_VERSION,
                 'capabilities': {'tools': {'listChanged': False}},
                 'serverInfo': SERVER_INFO,
-                'instructions': 'Interner PromptMaster-MCP. Erlaubt: read/draft/test. Kein publish/delete.',
+                'instructions': 'Interner PROMPTFINISHER-MCP. Erlaubt: read/draft/test. Kein publish/delete.',
             },
             request_id=request_id,
             request=request,

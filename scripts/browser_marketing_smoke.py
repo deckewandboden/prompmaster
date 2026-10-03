@@ -115,7 +115,7 @@ def main() -> int:
         DIST / 'models' / 'head.glb',
         DIST / 'models' / 'night-landscape.png',
         DIST / 'brand' / 'design-reference.jpeg',
-        DIST / 'brand' / 'promptmaster-logo-clean.svg',
+        DIST / 'brand' / 'promptfinisher-logo-clean.svg',
     )
     missing = [str(path.relative_to(ROOT)) for path in required_assets if not path.is_file()]
     if missing:
@@ -339,9 +339,9 @@ def main() -> int:
                     fail(f'{width}px: Nachtlandschaft ist nicht geladen')
                 if metrics['headerPosition'] != 'fixed':
                     fail(f'{width}px: Marketing-Navigation ist nicht fixiert')
-                if 'promptmaster-logo-hq.png' not in metrics['logoImage']:
+                if 'promptfinisher-logo-hq.png' not in metrics['logoImage']:
                     fail(f'{width}px: Marketing-Header verwendet nicht das freigegebene HQ-Logo-Asset')
-                if 'promptmaster-logo-clean.svg' in metrics['logoImage']:
+                if 'promptfinisher-logo-clean.svg' in metrics['logoImage']:
                     fail(f'{width}px: Marketing-Header verwendet wieder das alte SVG-Logo')
                 if 'design-reference.jpeg' in metrics['logoImage']:
                     fail(f'{width}px: Marketing-Header verwendet wieder den Screenshot-Logo-Crop')
@@ -858,7 +858,7 @@ def main() -> int:
             )
             if (
                 checkout_probe['path'] != '/checkout/'
-                or checkout_probe['h1'] != 'PromptMaster Pro kaufen.'
+                or checkout_probe['h1'] != 'PROMPTFINISHER Pro kaufen.'
                 or checkout_probe['quantity'] != '3'
                 or checkout_probe['hiddenQuantity'] != '3'
                 or not checkout_probe['companyDefault']

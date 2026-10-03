@@ -10,7 +10,7 @@ for(const route of routes){
   await mkdir('dist/'+route,{recursive:true});
   let routeHtml=html;
   if(!['pro','preise','vergleich'].includes(route)){
-    routeHtml=routeHtml.replace(/<main id="main">[\s\S]*?<\/main>/,'<main id="main"><section class="route-page"><h1>PromptMaster · Vorschau</h1><p>Diese Funktion ist noch nicht freigeschaltet. Für weitere Informationen aktiviere bitte JavaScript.</p><a class="button secondary" href="/">Zur Startseite →</a></section></main>');
+    routeHtml=routeHtml.replace(/<main id="main">[\s\S]*?<\/main>/,'<main id="main"><section class="route-page"><h1>PROMPTFINISHER · Vorschau</h1><p>Diese Funktion ist noch nicht freigeschaltet. Für weitere Informationen aktiviere bitte JavaScript.</p><a class="button secondary" href="/">Zur Startseite →</a></section></main>');
   }
   await writeFile('dist/'+route+'/index.html',routeHtml);
 }

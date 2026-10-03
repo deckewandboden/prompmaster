@@ -10,12 +10,12 @@ from apps.prompts.models import PromptApplication
 class PublicMarketingCatalogTests(TestCase):
     def setUp(self):
         self.free = Product.objects.create(
-            code='FREE', name='PromptMaster Free', active=True, visible=True,
+            code='FREE', name='PROMPTFINISHER Free', active=True, visible=True,
             purchasable=False, default_license_days=365, default_device_limit=1,
             reminder_1_days=60, reminder_2_days=30, critical_warning_days=7,
         )
         self.pro = Product.objects.create(
-            code='PRO', name='PromptMaster Pro', active=True, visible=True,
+            code='PRO', name='PROMPTFINISHER Pro', active=True, visible=True,
             purchasable=True, default_license_days=365, default_device_limit=2,
             reminder_1_days=60, reminder_2_days=30, critical_warning_days=7,
         )
@@ -38,7 +38,7 @@ class PublicMarketingCatalogTests(TestCase):
         self.assertTrue(payload['loginEnabled'])
         self.assertEqual(payload['proApplicationCount'], 2)
         self.assertEqual(payload['proApplicationNames'], ['Copilot Chat', 'Outlook'])
-        pro = next(p for p in payload['products'] if p['id'] == 'PROMPTMASTER_PRO')
+        pro = next(p for p in payload['products'] if p['id'] == 'PROMPTFINISHER_PRO')
         self.assertEqual(pro['monthlyGrossCents'], 299)
         self.assertEqual(pro['annualGrossCents'], 3588)
         self.assertEqual(pro['termDays'], 365)
@@ -51,7 +51,7 @@ class PublicMarketingCatalogTests(TestCase):
         self.assertEqual(response.status_code, 200)
         payload = response.json()
         self.assertFalse(payload['checkoutEnabled'])
-        pro = next(p for p in payload['products'] if p['id'] == 'PROMPTMASTER_PRO')
+        pro = next(p for p in payload['products'] if p['id'] == 'PROMPTFINISHER_PRO')
         self.assertTrue(pro['purchasable'])
         self.assertEqual(pro['monthlyGrossCents'], 299)
         self.assertEqual(pro['annualGrossCents'], 3588)

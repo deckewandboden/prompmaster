@@ -143,7 +143,7 @@ def contract_withdrawal(request):
             'page_title': 'Vertrag widerrufen',
             'eyebrow': 'WIDERRUFSFUNKTION',
             'intro': (
-                'Mit diesem Formular können Verbraucher einen über PromptMaster '
+                'Mit diesem Formular können Verbraucher einen über PROMPTFINISHER '
                 'geschlossenen Fernabsatzvertrag widerrufen.'
             ),
             'notice': (
@@ -225,7 +225,7 @@ def contract_cancellation(request):
             'page_title': 'Verträge hier kündigen',
             'eyebrow': 'KÜNDIGUNGSFUNKTION',
             'intro': (
-                'Hier können Verbraucher einen über PromptMaster geschlossenen '
+                'Hier können Verbraucher einen über PROMPTFINISHER geschlossenen '
                 'Laufzeitvertrag ordentlich oder außerordentlich kündigen.'
             ),
             'notice': (
@@ -348,7 +348,7 @@ def public_checkout_start(request):
             messages.info(
                 request,
                 'Für diese E-Mail-Adresse besteht bereits ein noch nicht aktiviertes '
-                'PromptMaster-Konto. Bitte setzen Sie zuerst Ihr Passwort zurück.',
+                'PROMPTFINISHER-Konto. Bitte setzen Sie zuerst Ihr Passwort zurück.',
             )
             return redirect(
                 f"{reverse('accounts:password_reset')}?{urlencode({'checkout': 1})}"
@@ -356,7 +356,7 @@ def public_checkout_start(request):
 
         messages.info(
             request,
-            'Für diese E-Mail-Adresse besteht bereits ein PromptMaster-Konto. Bitte anmelden.',
+            'Für diese E-Mail-Adresse besteht bereits ein PROMPTFINISHER-Konto. Bitte anmelden.',
         )
         next_url = f"{reverse('portal:buy')}?{urlencode({'quantity': quantity})}"
         return redirect(
@@ -487,7 +487,7 @@ def public_checkout_start(request):
             payload = MollieClient().create_payment(
                 amount=order.gross_total,
                 currency=order.currency,
-                description=f'PromptMaster {order.order_number}',
+                description=f'PROMPTFINISHER {order.order_number}',
                 redirect_url=request.build_absolute_uri('/checkout/success/'),
                 webhook_url=request.build_absolute_uri(
                     reverse('payments:mollie_webhook')
@@ -518,7 +518,7 @@ def public_checkout_start(request):
     except IntegrityError:
         messages.info(
             request,
-            'Für diese E-Mail-Adresse besteht bereits ein PromptMaster-Konto. Bitte anmelden.',
+            'Für diese E-Mail-Adresse besteht bereits ein PROMPTFINISHER-Konto. Bitte anmelden.',
         )
         next_url = f"{reverse('portal:buy')}?{urlencode({'quantity': quantity})}"
         return redirect(
@@ -586,9 +586,9 @@ def public_catalog(request):
         'taxBasisPoints': tax_basis_points,
         'market': 'DE',
         'products': [
-            {'id': 'PROMPTMASTER_FREE', 'monthlyGrossCents': 0, 'annualGrossCents': 0, 'termDays': 0, 'active': bool(free)},
+            {'id': 'PROMPTFINISHER_FREE', 'monthlyGrossCents': 0, 'annualGrossCents': 0, 'termDays': 0, 'active': bool(free)},
             {
-                'id': 'PROMPTMASTER_PRO',
+                'id': 'PROMPTFINISHER_PRO',
                 'monthlyGrossCents': cents(monthly_gross),
                 'annualGrossCents': cents(annual_gross),
                 'termDays': int(pro.default_license_days) if pro else 0,

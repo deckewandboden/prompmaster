@@ -1,4 +1,4 @@
-/* PromptMaster V2 presentation shell.
+/* PROMPTFINISHER V2 presentation shell.
  * Additive only: moves the existing Golden-Master/runtime DOM without
  * replacing product state, prompt composition, entitlements or event handlers.
  */
@@ -30,7 +30,7 @@
   };
   const missing = Object.entries(required).filter(([,node]) => !node).map(([name]) => name);
   if (missing.length) {
-    console.error('PromptMaster V2 shell not activated; required DOM missing:', missing);
+    console.error('PROMPTFINISHER V2 shell not activated; required DOM missing:', missing);
     return;
   }
 
@@ -70,7 +70,7 @@
 
   ensureProCatalogSearch();
 
-  /* PromptMaster Pro task layout is fully data-driven.
+  /* PROMPTFINISHER Pro task layout is fully data-driven.
      Standalone category headings are converted into compact labels inside each
      task card. The task chooser itself remains one flat CSS grid, so every
      current and future task is placed left/right in row-major order:
@@ -137,19 +137,19 @@
     }
   }
 
-  const normalizePromptMasterBrand = root => {
+  const normalizePROMPTFINISHERBrand = root => {
     if (!root) return;
     const walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT);
     const nodes = [];
     while (walker.nextNode()) nodes.push(walker.currentNode);
     nodes.forEach(node => {
       const value = node.nodeValue || '';
-      const next = value.replaceAll('CopilotPromptMaster', 'PromptMaster');
+      const next = value.replaceAll('CopilotPROMPTFINISHER', 'PROMPTFINISHER');
       if (next !== value) node.nodeValue = next;
     });
   };
 
-  document.title = free ? 'PromptMaster Free | Microsoft Copilot' : 'PromptMaster Pro | Microsoft Copilot';
+  document.title = free ? 'PROMPTFINISHER Free | Microsoft Copilot' : 'PROMPTFINISHER Pro | Microsoft Copilot';
 
   const utilityLinks = Array.from(document.querySelectorAll('.utility a')).map(a => ({
     href: a.getAttribute('href') || '',
@@ -165,7 +165,7 @@
   header.className = 'pmv2-header';
   header.innerHTML = `
     <div class="pmv2-brand">
-      <img src="/static/brand/promptmaster-logo-hq.png?v=20260925-hq1" alt="PromptMaster">
+      <img src="/static/brand/promptfinisher-logo-hq.png?v=20260925-hq1" alt="PROMPTFINISHER">
       <span class="pmv2-edition pmv2-edition-${edition}">${edition.toUpperCase()}</span>
     </div>
     <div class="pmv2-header-spacer"></div>
@@ -178,7 +178,7 @@
     const cta = document.createElement('button');
     cta.type = 'button';
     cta.className = 'pmv2-header-cta';
-    cta.textContent = 'PromptMaster Pro entdecken →';
+    cta.textContent = 'PROMPTFINISHER Pro entdecken →';
     cta.addEventListener('click', () => {
       if (topProCard) topProCard.click();
       else $('#generalProModal')?.classList.add('open');
@@ -207,7 +207,7 @@
     ? 'Sag Copilot genauer, was du brauchst.'
     : 'Mehr aus Microsoft Copilot. Mit System.';
   const subline = free
-    ? 'PromptMaster macht aus deinem Anliegen Schritt für Schritt einen klaren, direkt einsetzbaren Prompt – kostenlos im Browser.'
+    ? 'PROMPTFINISHER macht aus deinem Anliegen Schritt für Schritt einen klaren, direkt einsetzbaren Prompt – kostenlos im Browser.'
     : '34 Copilot-Bereiche, präzise Aufgabenführung und professionelle Ausgabeformate – für Prompts, die im Arbeitsalltag sofort weiterhelfen.';
   const flowNames = ['Copilot-Stufe','Anwendung','Aufgabe','Kontext','Zielgruppe','Schwerpunkt','Prompt-Check'];
   hero.innerHTML = `
@@ -568,18 +568,18 @@
     window.addEventListener('pm-free-catalog-ready', ensureFreeProToggle);
 
     const freeHeading = $('#freeApps')?.previousElementSibling?.querySelector('h3');
-    if (freeHeading) freeHeading.textContent = 'PromptMaster Free';
+    if (freeHeading) freeHeading.textContent = 'PROMPTFINISHER Free';
     const proHeading = $('.pmv2-free-pro-block .catalog-head h3');
-    if (proHeading) proHeading.textContent = 'Weitere Anwendungen mit PromptMaster Pro';
+    if (proHeading) proHeading.textContent = 'Weitere Anwendungen mit PROMPTFINISHER Pro';
 
     const generalProModal = $('#generalProModal');
     const proModal = $('#proModal');
-    normalizePromptMasterBrand(generalProModal);
-    normalizePromptMasterBrand(proModal);
+    normalizePROMPTFINISHERBrand(generalProModal);
+    normalizePROMPTFINISHERBrand(proModal);
 
     const configureProPurchaseCta = cta => {
       if (!cta) return;
-      cta.textContent = 'PromptMaster Pro kaufen';
+      cta.textContent = 'PROMPTFINISHER Pro kaufen';
       cta.href = '/checkout/?quantity=1';
       cta.removeAttribute('target');
       cta.removeAttribute('rel');
@@ -592,7 +592,7 @@
     const licenseModal = $('#businessModal');
     const licenseContact = licenseModal?.querySelector('.modal-actions a[href*="netstyle.de/kontakt"]');
     const normalizeLicenseModal = () => {
-      normalizePromptMasterBrand(licenseModal);
+      normalizePROMPTFINISHERBrand(licenseModal);
       const tierSwitch = $('#switchBusinessBtn', licenseModal);
       const tierSwitchText = (tierSwitch?.textContent || '').trim();
       if (licenseContact) {
@@ -604,7 +604,7 @@
         }
       }
       const licenseNote = $('.modal-note', licenseModal);
-      const licenseNoteText = 'Microsoft-Copilot-Lizenzen werden separat von PromptMaster lizenziert. Die gewählte Stufe beschreibt ausschließlich den Microsoft-Copilot-Kontext, für den der Prompt optimiert wird.';
+      const licenseNoteText = 'Microsoft-Copilot-Lizenzen werden separat von PROMPTFINISHER lizenziert. Die gewählte Stufe beschreibt ausschließlich den Microsoft-Copilot-Kontext, für den der Prompt optimiert wird.';
       if (licenseNote && licenseNote.textContent !== licenseNoteText) {
         licenseNote.textContent = licenseNoteText;
       }
@@ -622,12 +622,12 @@
     if (proModalTitle && proModalSubtitle) {
       const modalObserver = new MutationObserver(() => {
         const title = proModalTitle.textContent.trim();
-        if (title.startsWith('CopilotPromptMaster Pro für ') || title.startsWith('PromptMaster Pro für ')) {
-          const app = title.replace(/^CopilotPromptMaster Pro für |^PromptMaster Pro für /,'');
-          proModalTitle.textContent = app + ' mit PromptMaster Pro nutzen';
+        if (title.startsWith('CopilotPROMPTFINISHER Pro für ') || title.startsWith('PROMPTFINISHER Pro für ')) {
+          const app = title.replace(/^CopilotPROMPTFINISHER Pro für |^PROMPTFINISHER Pro für /,'');
+          proModalTitle.textContent = app + ' mit PROMPTFINISHER Pro nutzen';
           proModalSubtitle.textContent = 'Nutze den erweiterten Copilot-Katalog und passe Prompts noch genauer an deinen Arbeitsbereich an.';
         }
-        normalizePromptMasterBrand(proModal);
+        normalizePROMPTFINISHERBrand(proModal);
         configureProPurchaseCta(proModalCta);
       });
       modalObserver.observe(proModalTitle,{childList:true,subtree:true,characterData:true});
@@ -646,7 +646,7 @@
     }
   }
 
-  normalizePromptMasterBrand(footer);
+  normalizePROMPTFINISHERBrand(footer);
 
   document.body.insertBefore(header, document.body.firstChild);
   header.insertAdjacentElement('afterend', hero);

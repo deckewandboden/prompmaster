@@ -1,7 +1,7 @@
 {% extends 'base.html' %}{% load static %}{% block body %}
 <div class="login-wrap"><div class="login-card">
-<div class="login-logo"><img src="{% static 'brand/promptmaster-logo-hq.png' %}" width="239" height="47" alt="PromptMaster by netstyle"></div>
-<h1>Einladung annehmen</h1><p class="muted">{{ invitation.company.name }} lädt Sie zu PromptMaster ein.</p>
+<div class="login-logo"><img src="{% static 'brand/promptfinisher-logo-hq.png' %}" width="239" height="47" alt="PROMPTFINISHER by netstyle"></div>
+<h1>Einladung annehmen</h1><p class="muted">{{ invitation.company.name }} lädt Sie zu PROMPTFINISHER ein.</p>
 <form method="post" class="form">{% csrf_token %}
 {{ form.non_field_errors }}
 <label>Vorname{{ form.first_name }}{{ form.first_name.errors }}</label>

@@ -29,15 +29,15 @@ PREVIOUS_SHA=""
 STAMP="$(date -u +%Y%m%dT%H%M%SZ)"
 BACKUP_STATUS_FILE="$STATE_DIR/pre-deploy-backup-${STAMP}.json"
 
-log(){ printf '[PromptMaster deploy] %s\n' "$*"; }
+log(){ printf '[PROMPTFINISHER deploy] %s\n' "$*"; }
 
 rollback_help(){
   local line="${1:-unknown}"
-  printf '\n[PromptMaster deploy] FEHLER in Zeile %s. Deployment NICHT freigegeben.\n' "$line" >&2
-  printf '[PromptMaster deploy] Datenbankmigrationen werden NICHT automatisch rückwärts ausgeführt.\n' >&2
+  printf '\n[PROMPTFINISHER deploy] FEHLER in Zeile %s. Deployment NICHT freigegeben.\n' "$line" >&2
+  printf '[PROMPTFINISHER deploy] Datenbankmigrationen werden NICHT automatisch rückwärts ausgeführt.\n' >&2
   if [[ -n "$PREVIOUS_SHA" && "$PREVIOUS_SHA" != "source-archive" ]]; then
-    printf '[PromptMaster deploy] Last-known-good Git SHA: %s\n' "$PREVIOUS_SHA" >&2
-    printf '[PromptMaster deploy] Code-Rollback nach Ursachenprüfung:\n' >&2
+    printf '[PROMPTFINISHER deploy] Last-known-good Git SHA: %s\n' "$PREVIOUS_SHA" >&2
+    printf '[PROMPTFINISHER deploy] Code-Rollback nach Ursachenprüfung:\n' >&2
     printf '  git checkout %s\n' "$PREVIOUS_SHA" >&2
     if [[ -n "${EXTERNAL_CADDY_NETWORK:-}" ]]; then
       printf '  PM_EXTERNAL_CADDY_NETWORK=%s ./scripts/deploy.sh\n' "$EXTERNAL_CADDY_NETWORK" >&2
@@ -45,13 +45,13 @@ rollback_help(){
       printf '  ./scripts/deploy.sh\n' >&2
     fi
   else
-    printf '[PromptMaster deploy] Kein verwendbarer last-known-good Git SHA protokolliert; vorherigen freigegebenen Release-Tag/Commit verwenden.\n' >&2
+    printf '[PROMPTFINISHER deploy] Kein verwendbarer last-known-good Git SHA protokolliert; vorherigen freigegebenen Release-Tag/Commit verwenden.\n' >&2
   fi
   if [[ -s "$BACKUP_STATUS_FILE" ]]; then
-    printf '[PromptMaster deploy] Pre-Deploy-Backupstatus: %s\n' "$BACKUP_STATUS_FILE" >&2
-    printf '[PromptMaster deploy] Falls ein DB-Restore erforderlich ist: erst Anwendung stoppen, Backup verifizieren und den dokumentierten Restore-Prozess verwenden.\n' >&2
+    printf '[PROMPTFINISHER deploy] Pre-Deploy-Backupstatus: %s\n' "$BACKUP_STATUS_FILE" >&2
+    printf '[PROMPTFINISHER deploy] Falls ein DB-Restore erforderlich ist: erst Anwendung stoppen, Backup verifizieren und den dokumentierten Restore-Prozess verwenden.\n' >&2
   else
-    printf '[PromptMaster deploy] Kein verifizierter Pre-Deploy-Backupstatus protokolliert. Keine destruktiven Rollback-Schritte ausführen.\n' >&2
+    printf '[PROMPTFINISHER deploy] Kein verifizierter Pre-Deploy-Backupstatus protokolliert. Keine destruktiven Rollback-Schritte ausführen.\n' >&2
   fi
 }
 trap 'rollback_help "$LINENO"' ERR
@@ -95,13 +95,13 @@ assert_external_caddy_ports_closed(){
   [[ -n "${EXTERNAL_CADDY_NETWORK:-}" ]] || return 0
   local cid bindings
   cid="$(docker compose "${F[@]}" ps -q caddy 2>/dev/null || true)"
-  [[ -n "$cid" ]] || { echo "[PromptMaster deploy] Caddy-Container fehlt für Host-Port-Prüfung" >&2; return 1; }
+  [[ -n "$cid" ]] || { echo "[PROMPTFINISHER deploy] Caddy-Container fehlt für Host-Port-Prüfung" >&2; return 1; }
   bindings="$(
     docker inspect "$cid" --format '{{range $port, $bindings := .NetworkSettings.Ports}}{{if $bindings}}{{range $bindings}}{{println $port .HostIp .HostPort}}{{end}}{{end}}{{end}}' |
       awk '$1=="80/tcp" || $1=="443/tcp"'
   )"
-  [[ -z "$bindings" ]] || { echo "[PromptMaster deploy] External-Caddy-Modus veröffentlicht unerwartet Host-Port 80/443: $bindings" >&2; return 1; }
-  log "Host-Port-Gate OK: PromptMaster veröffentlicht 80/443 nicht auf dem Host"
+  [[ -z "$bindings" ]] || { echo "[PROMPTFINISHER deploy] External-Caddy-Modus veröffentlicht unerwartet Host-Port 80/443: $bindings" >&2; return 1; }
+  log "Host-Port-Gate OK: PROMPTFINISHER veröffentlicht 80/443 nicht auf dem Host"
 }
 
 bash scripts/run_repo_preflight.sh production
@@ -113,9 +113,9 @@ if [[ -z "$EXTERNAL_CADDY_NETWORK" && -f .env ]]; then
 fi
 if [[ -n "$EXTERNAL_CADDY_NETWORK" ]]; then
   export PM_EXTERNAL_CADDY_NETWORK="$EXTERNAL_CADDY_NETWORK"
-  docker network inspect "$EXTERNAL_CADDY_NETWORK" >/dev/null 2>&1 || { echo "[PromptMaster deploy] Externes Reverse-Proxy-Netz fehlt: $EXTERNAL_CADDY_NETWORK" >&2; exit 1; }
+  docker network inspect "$EXTERNAL_CADDY_NETWORK" >/dev/null 2>&1 || { echo "[PROMPTFINISHER deploy] Externes Reverse-Proxy-Netz fehlt: $EXTERNAL_CADDY_NETWORK" >&2; exit 1; }
   F+=(-f compose.external-caddy.yaml)
-  log "External-Caddy-Modus aktiv: $EXTERNAL_CADDY_NETWORK · keine PromptMaster-Host-Ports 80/443"
+  log "External-Caddy-Modus aktiv: $EXTERNAL_CADDY_NETWORK · keine PROMPTFINISHER-Host-Ports 80/443"
 fi
 log "Deploy ${CURRENT_SHA} · bisheriger last-known-good: ${PREVIOUS_SHA:-keiner}"
 log "Compose-Konfiguration prüfen"

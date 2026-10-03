@@ -8,14 +8,14 @@ from django.urls import reverse
 from apps.accounts.models import User
 
 
-class PromptMasterV2RouteIsolationTests(TestCase):
+class PROMPTFINISHERV2RouteIsolationTests(TestCase):
     """Protect the redesign/legacy split without touching Golden Master bytes."""
 
     def _staff_session(self):
         user = User.objects.create_user(
             'pm-v2-staff@example.test',
-            'PromptMaster-V2-Strong-Password-2026!',
-            first_name='PromptMaster',
+            'PROMPTFINISHER-V2-Strong-Password-2026!',
+            first_name='PROMPTFINISHER',
             last_name='V2',
             is_staff=True,
             two_factor_required=True,
@@ -48,10 +48,10 @@ class PromptMasterV2RouteIsolationTests(TestCase):
         )
         self.assertNotIn('name="pm-free-compose"', legacy_html)
 
-        self.assertIn('/static/css/promptmaster_v2.20260922.css?v=20260929-ui19', current_html)
-        self.assertIn('/static/js/promptmaster_ui_v2.20260922.js?v=20260929-ui19', current_html)
-        self.assertNotIn('/static/css/promptmaster_v2.20260922.css', legacy_html)
-        self.assertNotIn('/static/js/promptmaster_ui_v2.20260922.js', legacy_html)
+        self.assertIn('/static/css/promptfinisher_v2.20260922.css?v=20260929-ui19', current_html)
+        self.assertIn('/static/js/promptfinisher_ui_v2.20260922.js?v=20260929-ui19', current_html)
+        self.assertNotIn('/static/css/promptfinisher_v2.20260922.css', legacy_html)
+        self.assertNotIn('/static/js/promptfinisher_ui_v2.20260922.js', legacy_html)
 
         remote_logo = (
             'https://netstyle.de/public_pictures/'
@@ -68,10 +68,10 @@ class PromptMasterV2RouteIsolationTests(TestCase):
         self.assertIn(free_source_node, legacy_html)
 
         stripped = current_html.replace(
-            '<link rel="stylesheet" href="/static/css/promptmaster_v2.20260922.css?v=20260929-ui19">',
+            '<link rel="stylesheet" href="/static/css/promptfinisher_v2.20260922.css?v=20260929-ui19">',
             '',
         ).replace(
-            '<script src="/static/js/promptmaster_ui_v2.20260922.js?v=20260929-ui19" defer></script>',
+            '<script src="/static/js/promptfinisher_ui_v2.20260922.js?v=20260929-ui19" defer></script>',
             '',
         ).replace(
             'data:image/gif;base64,R0lGODlhAQABAAAAACw=',
@@ -95,10 +95,10 @@ class PromptMasterV2RouteIsolationTests(TestCase):
         current_html = current.content.decode('utf-8')
         legacy_html = legacy.content.decode('utf-8')
 
-        self.assertIn('/static/css/promptmaster_v2.20260922.css?v=20260929-ui19', current_html)
-        self.assertIn('/static/js/promptmaster_ui_v2.20260922.js?v=20260929-ui19', current_html)
-        self.assertNotIn('/static/css/promptmaster_v2.20260922.css', legacy_html)
-        self.assertNotIn('/static/js/promptmaster_ui_v2.20260922.js', legacy_html)
+        self.assertIn('/static/css/promptfinisher_v2.20260922.css?v=20260929-ui19', current_html)
+        self.assertIn('/static/js/promptfinisher_ui_v2.20260922.js?v=20260929-ui19', current_html)
+        self.assertNotIn('/static/css/promptfinisher_v2.20260922.css', legacy_html)
+        self.assertNotIn('/static/js/promptfinisher_ui_v2.20260922.js', legacy_html)
 
         remote_logo = (
             'https://netstyle.de/public_pictures/'
@@ -134,8 +134,8 @@ class PromptMasterV2RouteIsolationTests(TestCase):
     def test_pro_v2_tasks_use_one_flat_balanced_grid_with_category_labels(self):
         from django.conf import settings
 
-        js = (settings.BASE_DIR / 'static' / 'js' / 'promptmaster_ui_v2.20260922.js').read_text(encoding='utf-8')
-        css = (settings.BASE_DIR / 'static' / 'css' / 'promptmaster_v2.20260922.css').read_text(encoding='utf-8')
+        js = (settings.BASE_DIR / 'static' / 'js' / 'promptfinisher_ui_v2.20260922.js').read_text(encoding='utf-8')
+        css = (settings.BASE_DIR / 'static' / 'css' / 'promptfinisher_v2.20260922.css').read_text(encoding='utf-8')
 
         # One generic layout for every app/category shape: category headings are
         # converted to per-card labels and the cards themselves stay flat.

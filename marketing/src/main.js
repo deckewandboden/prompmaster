@@ -3,7 +3,7 @@ import {quote,normalizeQuantity,money} from './pricing.js';
 const toggle=document.querySelector('.menu-toggle');
 toggle.addEventListener('click',()=>{const open=toggle.getAttribute('aria-expanded')!=='true';toggle.setAttribute('aria-expanded',String(open));document.querySelector('nav').classList.toggle('open',open)});
 document.querySelectorAll('nav a').forEach(a=>a.addEventListener('click',()=>{toggle.setAttribute('aria-expanded','false');document.querySelector('nav').classList.remove('open')}));
-const fallbackCatalog={currency:'EUR',priceBasis:'gross',taxBasisPoints:1900,market:'DE',products:[{id:'PROMPTMASTER_FREE',monthlyGrossCents:0,annualGrossCents:0,termDays:0},{id:'PROMPTMASTER_PRO',monthlyGrossCents:299,annualGrossCents:3588,termDays:365}],maxQuantity:500,checkoutEnabled:false,loginEnabled:false,freeUrl:null};
+const fallbackCatalog={currency:'EUR',priceBasis:'gross',taxBasisPoints:1900,market:'DE',products:[{id:'PROMPTFINISHER_FREE',monthlyGrossCents:0,annualGrossCents:0,termDays:0},{id:'PROMPTFINISHER_PRO',monthlyGrossCents:299,annualGrossCents:3588,termDays:365}],maxQuantity:500,checkoutEnabled:false,loginEnabled:false,freeUrl:null};
 const motionReduced=matchMedia('(prefers-reduced-motion:reduce)');
 let scrollQueued=false;
 const syncScene=()=>{
@@ -82,7 +82,7 @@ async function initializePricing(){
         history.replaceState(null,'','/checkout/?quantity='+q.quantity);
       }else if(catalog.checkoutEnabled===true){
         buy.removeAttribute('aria-disabled');
-        buy.textContent=q.quantity+' PromptMaster-Pro-'+(q.quantity===1?'Lizenz':'Lizenzen')+' kaufen ↗';
+        buy.textContent=q.quantity+' PROMPTFINISHER-Pro-'+(q.quantity===1?'Lizenz':'Lizenzen')+' kaufen ↗';
         buy.href='/checkout/?quantity='+q.quantity;
       }else{
         buy.removeAttribute('href');
@@ -148,32 +148,32 @@ if(home){
   const legal={'/impressum':'Impressum','/datenschutz':'Datenschutz','/lizenzbedingungen':'Lizenzbedingungen','/agb':'AGB','/widerruf':'Widerrufsbelehrung','/barrierefreiheit':'Barrierefreiheit'};
   let title,body;
   if(path==='/checkout'){
-    title='PromptMaster Pro kaufen.';
+    title='PROMPTFINISHER Pro kaufen.';
     const requestedQuantity=normalizeQuantity(new URLSearchParams(location.search).get('quantity')||1,fallbackCatalog.maxQuantity);
     document.querySelector('main').innerHTML=checkoutPage(requestedQuantity);
     body=null;
   }else if(path==='/checkout/success'){
     title='Zahlung wird bestätigt.';
-    body='<span class="status-badge">PROMPTMASTER PRO</span><h1>Zahlung wird bestätigt.</h1><p>Mollie hat dich zu PromptMaster zurückgeführt. Sobald die Zahlung serverseitig bestätigt wurde, werden deine Pro-Lizenzen automatisch aktiviert.</p><p>Bei einem neu angelegten Kundenkonto erhältst du anschließend eine E-Mail, über die du dein Passwort festlegst und den Zugang aktivierst.</p><a class="button" href="/auth/login/">Zum Kundenkonto →</a><a class="button secondary" href="/">Zur Startseite →</a>';
+    body='<span class="status-badge">PROMPTFINISHER PRO</span><h1>Zahlung wird bestätigt.</h1><p>Mollie hat dich zu PROMPTFINISHER zurückgeführt. Sobald die Zahlung serverseitig bestätigt wurde, werden deine Pro-Lizenzen automatisch aktiviert.</p><p>Bei einem neu angelegten Kundenkonto erhältst du anschließend eine E-Mail, über die du dein Passwort festlegst und den Zugang aktivierst.</p><a class="button" href="/auth/login/">Zum Kundenkonto →</a><a class="button secondary" href="/">Zur Startseite →</a>';
   }else if(path==='/login'||path==='/portal'||path==='/app/pro'){
-    title='Willkommen bei PromptMaster.';
-    body='<p>Melde dich an, um Kundenportal und PromptMaster Pro zu öffnen.</p><a class="button" href="/auth/login/">Zur Anmeldung →</a><a class="button secondary" href="/">Zur Marketingseite →</a>';
+    title='Willkommen bei PROMPTFINISHER.';
+    body='<p>Melde dich an, um Kundenportal und PROMPTFINISHER Pro zu öffnen.</p><a class="button" href="/auth/login/">Zur Anmeldung →</a><a class="button secondary" href="/">Zur Marketingseite →</a>';
   }else if(path==='/free'){
-    title='PromptMaster Free.';
-    body='<p>Einfach starten. Kostenlos nutzen.</p><a class="button" href="/free/">PromptMaster Free starten →</a><a class="button secondary" href="/#funktionen">Free kennenlernen →</a>';
+    title='PROMPTFINISHER Free.';
+    body='<p>Einfach starten. Kostenlos nutzen.</p><a class="button" href="/free/">PROMPTFINISHER Free starten →</a><a class="button secondary" href="/#funktionen">Free kennenlernen →</a>';
   }else if(legal[path]){
     title=legal[path];
-    body='<p>PromptMaster stellt die jeweils gültigen Rechtstexte versioniert über die Commercial-Plattform bereit.</p><a class="text-link" href="/">← Zurück zur Startseite</a>';
+    body='<p>PROMPTFINISHER stellt die jeweils gültigen Rechtstexte versioniert über die Commercial-Plattform bereit.</p><a class="text-link" href="/">← Zurück zur Startseite</a>';
   }else if(path==='/kontakt'||path==='/unternehmen'){
-    title=path==='/kontakt'?'Kontakt zu netstyle.':'PromptMaster by netstyle.';
-    body='<p>PromptMaster by netstyle – bessere Prompts für Microsoft Copilot.</p><a class="text-link" href="/">← Zurück zur Startseite</a>';
+    title=path==='/kontakt'?'Kontakt zu netstyle.':'PROMPTFINISHER by netstyle.';
+    body='<p>PROMPTFINISHER by netstyle – bessere Prompts für Microsoft Copilot.</p><a class="text-link" href="/">← Zurück zur Startseite</a>';
   }else{
     title='Diese Seite gibt es nicht.';
     body='<p>Über die Startseite findest du Funktionen, Preise und Antworten auf deine Fragen.</p><a class="button secondary" href="/">Zur Startseite →</a>';
   }
-  document.title=title+' | PromptMaster by netstyle';
+  document.title=title+' | PROMPTFINISHER by netstyle';
   if(body!==null){
-    document.querySelector('main').innerHTML='<section class="route-page"><span class="status-badge">PromptMaster</span><h1>'+title+'</h1>'+body+'</section>';
+    document.querySelector('main').innerHTML='<section class="route-page"><span class="status-badge">PROMPTFINISHER</span><h1>'+title+'</h1>'+body+'</section>';
   }
 }
 

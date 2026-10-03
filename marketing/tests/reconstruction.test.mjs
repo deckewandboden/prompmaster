@@ -148,18 +148,18 @@ test('non-WebGL fallback keeps the actual head visible without camera access',()
 
 test('marketing header uses dedicated approved HQ logo artwork',()=>{
   const css=read('src/immersive.css');
-  assert.match(css,/\/brand\/promptmaster-logo-hq\.png/);
-  assert.doesNotMatch(css,/\/brand\/promptmaster-logo-clean\.svg/);
+  assert.match(css,/\/brand\/promptfinisher-logo-hq\.png/);
+  assert.doesNotMatch(css,/\/brand\/promptfinisher-logo-clean\.svg/);
   assert.doesNotMatch(css,/background-image:url\('\/brand\/design-reference\.jpeg'\)/);
-  assert.equal(gitBlobSha('public/brand/promptmaster-logo-hq.png'),'87be29848672ddac093e49cae479ec9dcc1e43ff');
+  assert.equal(gitBlobSha('public/brand/promptfinisher-logo-hq.png'),'87be29848672ddac093e49cae479ec9dcc1e43ff');
 });
 
 test('header and footer use the same HQ logo and share one visible left baseline',()=>{
   const content=read('src/content.js');
   const css=read('src/immersive.css');
   assert.match(content,/footer=.*class="brand"[^]*class="logo-crop"/);
-  assert.match(css,/background-image:url\('\/brand\/promptmaster-logo-hq\.png'\)/);
-  assert.doesNotMatch(css,/promptmaster-logo-clean\.svg/);
+  assert.match(css,/background-image:url\('\/brand\/promptfinisher-logo-hq\.png'\)/);
+  assert.doesNotMatch(css,/promptfinisher-logo-clean\.svg/);
   assert.match(css,/@media\(min-width:651px\)\{[^]*header\{[^]*padding-left:calc\(6% - 24px\)/);
   assert.match(css,/#footer \.footer-grid>div:first-child \.brand\{[^]*margin-left:-24px/);
 });
@@ -181,7 +181,7 @@ test('hero and marketing copy use recovered V15 decisions',()=>{
   const index=read('index.html');
   const content=read('src/content.js');
   assert.doesNotMatch(index,/Aus deiner Aufgabe wird ein präziser Copilot-Prompt/i);
-  assert.doesNotMatch(index,/WENIGE KLICKS|EIN PROMPT, DER SITZT|PromptMaster entdecken/);
+  assert.doesNotMatch(index,/WENIGE KLICKS|EIN PROMPT, DER SITZT|PROMPTFINISHER entdecken/);
   assert.match(index,/<div class="hero-center"><h1 class="sr-only">Hol mehr aus Microsoft Copilot heraus\.<\/h1><\/div>/);
   assert.match(index,/Erweiterter Copilot-Katalog/);
   assert.match(index,/Laufende Weiterentwicklungen inklusive/);

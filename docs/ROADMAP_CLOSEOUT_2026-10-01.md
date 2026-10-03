@@ -1,4 +1,4 @@
-# PromptMaster Roadmap Closeout — 2026-10-01
+# PROMPTFINISHER Roadmap Closeout — 2026-10-01
 
 This document consolidates the late-September/1-October closeout work and separates
 code-complete items from provider/human acceptance that cannot be completed by source
@@ -15,8 +15,8 @@ changes alone.
 - checkout/legal/customer data model and 365-day license behavior
 - configurable mail identity, SMTP1/SMTP2/Microsoft Graph routing and conservative failover
 - stable SMTP Message-ID using the configured sender domain
-- PromptMaster triangle branding on the public Pro card; crown removed
-- Pro title gradient aligned to the PromptMaster triangle
+- PROMPTFINISHER triangle branding on the public Pro card; crown removed
+- Pro title gradient aligned to the PROMPTFINISHER triangle
 
 ## Included in this closeout branch
 
@@ -28,7 +28,7 @@ changes alone.
 
 ## Production facts already verified
 
-- public PromptMaster target is deployed behind the external Caddy setup
+- public PROMPTFINISHER target is deployed behind the external Caddy setup
 - real IONOS SMTP submission works
 - real Gmail delivery works
 - SPF passes
@@ -41,7 +41,7 @@ changes alone.
 Gmail spam placement for a fresh recipient was reproduced even with SPF/DKIM/DMARC/TLS
 and the corrected Message-ID. A manually sent message from the new
 promptmaster@decke-wand-boden.de sender was also placed in spam. This is therefore tracked
-as sender/deliverability reputation, not as an unresolved PromptMaster application defect.
+as sender/deliverability reputation, not as an unresolved PROMPTFINISHER application defect.
 
 ## Remaining external / human acceptance
 
@@ -52,7 +52,7 @@ These are not source-code defects and require real provider/operator evidence:
 2. External restic/S3 backup + isolated restore drill against the final production repository.
 3. Monitoring/alert recipients and emergency-access procedure verified with real recipients.
 4. Human legal/tax review of the production legal texts and checkout wording.
-5. Brand/name decision: the product name PromptMaster remains intentionally unchanged for now.
+5. Brand/name decision: the product name PROMPTFINISHER remains intentionally unchanged for now.
 6. Gmail/Postmaster reputation observation after real, non-synthetic traffic; do not use repeated
    artificial bursts as a deliverability benchmark.
 

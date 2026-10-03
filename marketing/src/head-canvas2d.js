@@ -340,7 +340,7 @@ export async function initCanvasHead({sourceCanvas,stage,fallback}){
   let cloud;
   try{cloud=await modelCloud(mobile?8200:22000);}
   catch(error){
-    console.error('Originaler PromptMaster-Kopf konnte nicht geladen werden; kein Ersatzkopf wird erzeugt.',error);
+    console.error('Originaler PROMPTFINISHER-Kopf konnte nicht geladen werden; kein Ersatzkopf wird erzeugt.',error);
     fallback.classList.remove('canvas-fallback');
     fallback.hidden=true;
     stage.dataset.headRenderer='original-unavailable';

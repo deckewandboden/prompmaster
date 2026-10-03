@@ -1,4 +1,4 @@
-name: PromptMaster CI
+name: PROMPTFINISHER CI
 
 on:
   push:

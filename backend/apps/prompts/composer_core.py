@@ -118,7 +118,7 @@ def _validate_choice(value: str, allowed: list[str], field: str) -> str:
 
 
 def compose_prompt(spec: dict[str, Any], payload: dict[str, Any]) -> ComposeResult:
-    """Compose a PromptMaster prompt from a versioned catalog specification.
+    """Compose a PROMPTFINISHER prompt from a versioned catalog specification.
 
     `spec` is produced by the Django service layer from PromptDefinition,
     PromptVersion, PromptField, PromptOption, MicrosoftCapability and the active

@@ -18,7 +18,7 @@ CONFIRM_VALUE = 'READDRESS-DEMO-USERS'
 
 class Command(BaseCommand):
     help = (
-        'Stellt bestehende PromptMaster-Demo-Benutzer auf Gmail-Plus-Aliasse um, '
+        'Stellt bestehende PROMPTFINISHER-Demo-Benutzer auf Gmail-Plus-Aliasse um, '
         'ohne Passwörter oder Benutzerbeziehungen zu verändern.'
     )
 

@@ -1,7 +1,7 @@
-# PromptMaster Commercial Platform
+# PROMPTFINISHER Commercial Platform
 ## MASTER-SPEZIFIKATION V1.0 — SOURCE OF TRUTH
 
-**Projekt:** PromptMaster Commercial Platform  
+**Projekt:** PROMPTFINISHER Commercial Platform
 **Organisation:** netstyle  
 **Status:** FUNCTION / ARCHITECTURE FREEZE V1.0  
 **Datum:** 11.09.2026  
@@ -13,7 +13,7 @@
 
 ## 0.1 Source of Truth
 
-Dieses Dokument ist ab V1.0 die verbindliche funktionale und technische Spezifikation für die Commercial-Plattform von PromptMaster.
+Dieses Dokument ist ab V1.0 die verbindliche funktionale und technische Spezifikation für die Commercial-Plattform von PROMPTFINISHER.
 
 Bei Widersprüchen gilt:
 
@@ -65,9 +65,9 @@ Die Plattform wird gebaut als:
 
 # 1. Produktumfang
 
-## PM-PROD-001 — PromptMaster Free
+## PM-PROD-001 — PROMPTFINISHER Free
 
-PromptMaster Free:
+PROMPTFINISHER Free:
 
 - bleibt ohne Benutzerkonto nutzbar
 - ist direkt über die Marketingseite erreichbar
@@ -79,9 +79,9 @@ PromptMaster Free:
 
 **Out of Scope Commercial Backend:** interne Prompt-Logik von Free.
 
-## PM-PROD-002 — PromptMaster Pro
+## PM-PROD-002 — PROMPTFINISHER Pro
 
-PromptMaster Pro:
+PROMPTFINISHER Pro:
 
 - ist eine Webanwendung
 - benötigt Benutzeranmeldung
@@ -90,7 +90,7 @@ PromptMaster Pro:
 - Lizenzprüfung erfolgt serverseitig
 - Lizenzrechte dürfen nicht ausschließlich über JavaScript geschützt werden
 - Microsoft Copilot ist separat erforderlich
-- PromptMaster selbst betreibt kein eigenes KI-Modell für die eigentliche Prompt-Verarbeitung
+- PROMPTFINISHER selbst betreibt kein eigenes KI-Modell für die eigentliche Prompt-Verarbeitung
 
 ## PM-PROD-003 — zukünftige Produkte
 
@@ -103,7 +103,7 @@ Später müssen ohne grundlegenden Codeumbau angelegt werden können:
 - Premium
 - Team
 - Enterprise
-- weitere PromptMaster-Varianten
+- weitere PROMPTFINISHER-Varianten
 - weitere netstyle-Softwareprodukte
 
 Dafür existieren generische Produkt-, Preis- und Entitlement-Modelle.
@@ -175,7 +175,7 @@ Wird eine bereits abgelaufene Lizenz reaktiviert:
 
 ## PM-LIC-004 — keine automatische Verlängerung
 
-PromptMaster Pro verlängert sich nicht automatisch.
+PROMPTFINISHER Pro verlängert sich nicht automatisch.
 
 Ohne Verlängerung:
 
@@ -377,7 +377,7 @@ Das Limit wird als Produktkonfiguration gespeichert.
 
 ## PM-DEV-002 — technische Definition
 
-PromptMaster ist browserbasiert.
+PROMPTFINISHER ist browserbasiert.
 
 Ohne lokalen Agenten ist eine 100 % sichere physische Geräteidentifikation nicht möglich.
 
@@ -479,7 +479,7 @@ Initial:
 
 V1 verwendet Mollie.
 
-PromptMaster speichert keine Kreditkarteninformationen.
+PROMPTFINISHER speichert keine Kreditkarteninformationen.
 
 ## PM-PAY-002 — Checkout
 
@@ -537,7 +537,7 @@ Jede gekaufte Lizenz erhält:
 
 ## PM-PAY-006 — keine eigene Rechnungsengine
 
-PromptMaster erzeugt:
+PROMPTFINISHER erzeugt:
 
 - keine eigenen Rechnungsnummern
 - keine eigenen Rechnungs-PDFs
@@ -545,7 +545,7 @@ PromptMaster erzeugt:
 
 Rechnungs-/Belegprozess wird über Mollie bzw. dessen dafür vorgesehenen Funktionen abgewickelt.
 
-PromptMaster speichert nur erforderliche Referenzen/Statusdaten.
+PROMPTFINISHER speichert nur erforderliche Referenzen/Statusdaten.
 
 ---
 
@@ -709,13 +709,13 @@ Zeigt:
 - freie Lizenz-Hinweise
 - offene Zahlungsprobleme nur bei Handlungsbedarf
 - Unternehmensdatenwarnung nur bei Bedarf
-- PromptMaster Pro starten, sofern eigener User aktive Lizenz besitzt
+- PROMPTFINISHER Pro starten, sofern eigener User aktive Lizenz besitzt
 
 ## PM-PORTAL-003 — Firmenadmin ohne eigene Pro-Lizenz
 
 Firmenadmin darf Portal verwalten, ohne selbst Pro-Seat zu belegen.
 
-PromptMaster-Startbutton wird nur gezeigt, wenn eigene gültige Pro-Zuweisung besteht.
+PROMPTFINISHER-Startbutton wird nur gezeigt, wenn eigene gültige Pro-Zuweisung besteht.
 
 ## PM-PORTAL-004 — Team
 

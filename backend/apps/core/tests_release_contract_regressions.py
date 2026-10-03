@@ -27,7 +27,7 @@ class PriceAndRenewalReleaseRegressionTests(TestCase):
         self.now = timezone.now()
         self.product = Product.objects.create(
             code='PRO-PRICE-RELEASE-GATE',
-            name='PromptMaster Pro Price Release Gate',
+            name='PROMPTFINISHER Pro Price Release Gate',
             default_license_days=365,
             default_device_limit=2,
             reminder_1_days=60,
@@ -193,7 +193,7 @@ class ReminderIdempotencyReleaseRegressionTests(TestCase):
         self.now = timezone.now()
         self.product = Product.objects.create(
             code='PRO-REMINDER-RELEASE-GATE',
-            name='PromptMaster Pro Reminder Release Gate',
+            name='PROMPTFINISHER Pro Reminder Release Gate',
             default_license_days=365,
             default_device_limit=2,
             reminder_1_days=60,

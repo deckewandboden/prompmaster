@@ -1,13 +1,13 @@
 {% extends 'base.html' %}{% load static %}{% block body %}
 <div class="shell {% block shell_class %}{% endblock %}">
   <aside class="sidebar">
-    <a class="brand" href="{% block home_url %}/{% endblock %}"><img src="{% static 'brand/promptmaster-logo-hq.png' %}" alt="PromptMaster"></a>
+    <a class="brand" href="{% block home_url %}/{% endblock %}"><img src="{% static 'brand/promptfinisher-logo-hq.png' %}" alt="PROMPTFINISHER"></a>
     <nav class="nav">{% block nav %}{% endblock %}</nav>
     <div class="side-footer">{% block side_footer %}{% endblock %}</div>
   </aside>
   <main class="main">
     <div class="topbar">
-      <div class="mobile-title">{% block mobile_title %}PROMPTMASTER{% endblock %}</div>
+      <div class="mobile-title">{% block mobile_title %}PROMPTFINISHER{% endblock %}</div>
       <div class="search"><form method="get" action="{% block search_action %}{{ request.path }}{% endblock %}"><input name="q" value="{{ request.GET.q|default:'' }}" placeholder="{% block search_placeholder %}Suchen …{% endblock %}" aria-label="Suchen"></form></div>
       <div class="userbox">
         <div class="avatar">{{ request.user.first_name|slice:':1' }}{{ request.user.last_name|slice:':1' }}</div>

@@ -185,7 +185,7 @@ def _consumer_contract_confirmation_context(order, payment):
     item_summary = '; '.join(
         f'{item.quantity} × {item.product_name_snapshot or item.product.name}'
         for item in items
-    ) or 'PromptMaster Pro'
+    ) or 'PROMPTFINISHER Pro'
 
     durations = sorted({
         int(item.product.default_license_days)
@@ -684,7 +684,7 @@ def submit_refund(refund):
             row.payment.provider_payment_id,
             attempt.amount,
             row.payment.currency,
-            f'PromptMaster Erstattung {row.term.license.license_number}',
+            f'PROMPTFINISHER Erstattung {row.term.license.license_number}',
             attempt.idempotency_key,
         )
     except MollieError as exc:

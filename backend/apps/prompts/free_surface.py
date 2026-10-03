@@ -1,7 +1,7 @@
-"""Compatibility contract between the visible Free surface and PromptMaster Pro.
+"""Compatibility contract between the visible Free surface and PROMPTFINISHER Pro.
 
 Every task card shown in the reviewed Free 1.2.4 surface must be executable in
-PromptMaster Pro.  The 16 actual Free tasks remain backed by persisted
+PROMPTFINISHER Pro.  The 16 actual Free tasks remain backed by persisted
 PromptLegacyContract rows.  The 17 purple Pro-preview cards are explicit
 server-side compatibility contracts so the Free marketing surface can never
 advertise a task that the paid product does not provide.
@@ -97,7 +97,7 @@ FREE_INPUT_META = {
 }
 
 
-# These are the 17 purple PromptMaster-Pro cards shown on the Free surface.
+# These are the 17 purple PROMPTFINISHER-Pro cards shown on the Free surface.
 # They are deliberately task-specific rather than aliases with hidden semantics.
 FREE_SURFACE_PRO_CONTRACTS = {
     'chat_compare': {

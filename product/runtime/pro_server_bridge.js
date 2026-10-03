@@ -1,4 +1,4 @@
-/* PromptMaster Pro runtime bridge.
+/* PROMPTFINISHER Pro runtime bridge.
  * The byte-exact Golden Master remains untouched. This bridge is appended to a
  * derived runtime asset. At runtime it replaces the embedded catalog with the
  * authoritative published PromptDomain catalog, then routes composition and

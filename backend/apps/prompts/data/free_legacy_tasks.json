@@ -1,6 +1,6 @@
 {
-  "source": "promptmaster_free.html",
-  "source_sha256": "10f2b65312c5d5b481f8563e7a0dbb2e838ecb1d940262309784f5fce374f228",
+  "source": "promptfinisher_free.html",
+  "source_sha256": "8162be1e62b5d4503e6fb54180636e886b7e11106205f64626339f6c90a35ac1",
   "tasks": [
     {
       "legacy_id": "chat_sum",

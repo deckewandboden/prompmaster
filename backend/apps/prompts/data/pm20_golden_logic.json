@@ -2462,7 +2462,7 @@
       "icon": "V",
       "color": "#7a35c7",
       "copy": "Videos per natürlicher Sprache erstellen, Skripte entwickeln und Entwürfe anschließend in Clipchamp bearbeiten.",
-      "access": "Ab M365 Copilot (Basic) in PromptMaster freigegeben. Voraussetzung für die tatsächliche Nutzung: geeigneter Microsoft-365-Plan, Zugriff auf Copilot Chat und im Tenant aktiviertes Clipchamp.",
+      "access": "Ab M365 Copilot (Basic) in PROMPTFINISHER freigegeben. Voraussetzung für die tatsächliche Nutzung: geeigneter Microsoft-365-Plan, Zugriff auf Copilot Chat und im Tenant aktiviertes Clipchamp.",
       "status": "GA",
       "target": "Microsoft Copilot Create / Clipchamp",
       "rule": "Beschreibe Inhalt, Zielgruppe, Länge, Format und visuelle Richtung konkret. Verwende nur ausdrücklich bereitgestellte Marken- oder Medienangaben.",
@@ -7465,7 +7465,7 @@
       "icon": "Pg",
       "color": "#5f46c7",
       "copy": "Copilot-Ergebnisse in langlebige Seiten überführen, weiterentwickeln und strukturieren.",
-      "access": "Ab M365 Copilot (Basic) in PromptMaster freigegeben. Voraussetzung für die tatsächliche Nutzung: Arbeits-/Schulkonto mit SharePoint- oder OneDrive-Speicher.",
+      "access": "Ab M365 Copilot (Basic) in PROMPTFINISHER freigegeben. Voraussetzung für die tatsächliche Nutzung: Arbeits-/Schulkonto mit SharePoint- oder OneDrive-Speicher.",
       "status": "GA",
       "target": "Microsoft Copilot – Pages",
       "rule": "Arbeite mit der aktuellen Copilot Page und dem verbundenen Chatkontext. Erhalte belegte Inhalte unverändert und kennzeichne neue Ergänzungen oder Schlussfolgerungen eindeutig.",
@@ -7668,7 +7668,7 @@
       "icon": "NB",
       "color": "#5c2d91",
       "copy": "Quellengebundene Analyse und Synthese innerhalb eines Copilot Notebooks.",
-      "access": "Ab M365 Copilot (Basic) in PromptMaster freigegeben. Voraussetzung für die tatsächliche Nutzung: Copilot/Copilot Chat sowie ein SharePoint- oder OneDrive-Serviceplan zum Erstellen von Notebooks.",
+      "access": "Ab M365 Copilot (Basic) in PROMPTFINISHER freigegeben. Voraussetzung für die tatsächliche Nutzung: Copilot/Copilot Chat sowie ein SharePoint- oder OneDrive-Serviceplan zum Erstellen von Notebooks.",
       "status": "GA",
       "target": "Microsoft Copilot – Notebooks",
       "rule": "Beziehe Antworten ausschließlich auf die Referenzen des aktuellen Copilot Notebooks. Trenne belegte Notebook-Inhalte, daraus abgeleitete Schlussfolgerungen und verbleibende Informationslücken klar.",
@@ -8699,8 +8699,8 @@
     }
   },
   "_meta": {
-    "source_file": "promptmaster_pro.html",
-    "source_sha256": "aa7b2da53ba3cbcf9874b9b6f7381ea4c3e86ee1f9c09db186cbec6876a3c9cf",
+    "source_file": "promptfinisher_pro.html",
+    "source_sha256": "a18375946c7081034cd6b9d70a1f4e3b843c51e03230477cae246b6c4bf0f95f",
     "application_count": 34,
     "task_count": 194,
     "context_spec_count": 80

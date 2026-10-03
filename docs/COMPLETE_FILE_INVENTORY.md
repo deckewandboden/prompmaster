@@ -1,6 +1,6 @@
-| `backend/templates/ns_admin/service_account_token.html` | 603 | `e925718eca563cf3199d428f3e858c216e6823838923b4bc0a287ca1d276a954` || `backend/templates/ns_admin/api.html` | 1235 | `da72eb8c5979e8f13c9c6331a2aaf4cfce6dee86fb352ff7fb393c77e67d04fc` || `backend/apps/core/tests.py` | 6784 | `124513218876c4455b00a8d63fdaee52f2d9573dd365e74cfff09508fb106975` || `backend/apps/core/admin_urls.py` | 5846 | `c06689e8b4a809e5e8513c8f80269c2d7aad6a914e2a80d0d369f796e9789ee9` || `backend/apps/core/admin_views.py` | 54457 | `1ed8a0b89d68d4a9a9f95017a3175aca0a46a0a6d61f56743ee59ba57a6bec04` |# Vollständiges Datei-Inventar — PromptMaster RC14
+| `backend/templates/ns_admin/service_account_token.html` | 603 | `e925718eca563cf3199d428f3e858c216e6823838923b4bc0a287ca1d276a954` || `backend/templates/ns_admin/api.html` | 1235 | `da72eb8c5979e8f13c9c6331a2aaf4cfce6dee86fb352ff7fb393c77e67d04fc` || `backend/apps/core/tests.py` | 6784 | `124513218876c4455b00a8d63fdaee52f2d9573dd365e74cfff09508fb106975` || `backend/apps/core/admin_urls.py` | 5846 | `c06689e8b4a809e5e8513c8f80269c2d7aad6a914e2a80d0d369f796e9789ee9` || `backend/apps/core/admin_views.py` | 54457 | `1ed8a0b89d68d4a9a9f95017a3175aca0a46a0a6d61f56743ee59ba57a6bec04` |# Vollständiges Datei-Inventar — PROMPTFINISHER RC14
 
-Erfasst: **517 Dateien** (Manifest-/Inventardateien selbst ausgenommen), **20,537,871 Byte**.
+Erfasst: **518 Dateien** (Manifest-/Inventardateien selbst ausgenommen), **20,540,034 Byte**.
 
 Maschinenlesbar: `FILE_MANIFEST.tsv` und `MANIFEST.json`.
 
@@ -228,11 +228,11 @@ Maschinenlesbar: `FILE_MANIFEST.tsv` und `MANIFEST.json`.
 | `backend/config/urls.py` | 1689 | `391594b133ccc7b9edef4edfc1c170a9d0d057a1e73c8a192ff4541914da0054` |
 | `backend/config/wsgi.py` | 161 | `25d3ac3de67e7a1e20c9cfed54bf208a378c7e634f426239c36c63cbabc22f36` |
 | `backend/manage.py` | 239 | `9bba94f103ecf4d96b7bb92b4efd737352b65e003b6d0d5dc20c2a97cb62e13f` |
-| `backend/private_assets/promptmaster_free_reference.html` | 110812 | `aada4fbb3461d3758c48ed808bf018716a53aa33baf81efb058412e63535b0a8` |
-| `backend/private_assets/promptmaster_pro.html` | 233404 | `aa7b2da53ba3cbcf9874b9b6f7381ea4c3e86ee1f9c09db186cbec6876a3c9cf` |
-| `backend/private_assets/promptmaster_pro_runtime.html` | 248805 | `29da4bb38b121ef585d07711e4e30966f1ae37089ffc01be048de7a2e821ebba` |
+| `backend/private_assets/promptfinisher_free_reference.html` | 110812 | `aada4fbb3461d3758c48ed808bf018716a53aa33baf81efb058412e63535b0a8` |
+| `backend/private_assets/promptfinisher_pro.html` | 233404 | `aa7b2da53ba3cbcf9874b9b6f7381ea4c3e86ee1f9c09db186cbec6876a3c9cf` |
+| `backend/private_assets/promptfinisher_pro_runtime.html` | 248805 | `29da4bb38b121ef585d07711e4e30966f1ae37089ffc01be048de7a2e821ebba` |
 | `backend/private_assets/README.md` | 303 | `260b610cc91d48508721f57752adabf25a442b8ab111bbee54a111a751d8ab16` |
-| `backend/static/brand/promptmaster-logo-reference.png` | 17905 | `5848c7bc83fa903f9eb2de1b8a3c8443a9dca937cf3659494d2db2d5a26ff231` |
+| `backend/static/brand/promptfinisher-logo-reference.png` | 17905 | `5848c7bc83fa903f9eb2de1b8a3c8443a9dca937cf3659494d2db2d5a26ff231` |
 | `backend/static/css/app.css` | 9727 | `a0a74b3b25428c383c9c288be594e764e76319b27bfc74f2a7de9e165e4f5c7e` |
 | `backend/templates/app_shell.html` | 1062 | `7f7c3ebacd4e8c15a621656c8dc4ca2fe760c63833079836dd6d54dd279bcbe6` |
 | `backend/templates/auth/accept_invitation.html` | 1216 | `6f8563b0a815f54c31141767dc52c295dd67d7f47eebd1f875e61d4a9b976082` |
@@ -438,7 +438,7 @@ Maschinenlesbar: `FILE_MANIFEST.tsv` und `MANIFEST.json`.
 
 ## active-operations
 
-31 Dateien.
+32 Dateien.
 
 | Pfad | Größe | SHA256 |
 |---|---:|---|
@@ -462,6 +462,7 @@ Maschinenlesbar: `FILE_MANIFEST.tsv` und `MANIFEST.json`.
 | `scripts/test_backup_restore.sh` | 1531 | `0541a5ebc0184231bd1439793cfc4a41b4a26817cfdb005c9f36534050af88a1` |
 | `scripts/test_runtime_config.py` | 1666 | `342993a4ef369f3e2810f4691cd3e65a6d1ebf6e2fbb5f9381b1ed9eae85afe7` |
 | `scripts/update.sh` | 102 | `75036bf3dc461ba0d307d05faa1d1ad3317c8657071ea532a3b9bc5dfbe2a786` |
+| `scripts/validate_brand.py` | 2163 | `fe740411c46afaf8c4af5074cba74fca907a557797ccb3d98abc7b2b17371494` |
 | `scripts/validate_env.py` | 5909 | `fb52eb72749c7ad402885a0ab8ee5f87bc5e0d96f002e3b6318d3b099f391ec1` |
 | `scripts/validate_manifest.py` | 5115 | `bafc14c5ae5cfc66aa42a1429c5b2c7743053d58961a0c02586b50044712ad9b` |
 | `scripts/validate_marketing.py` | 2832 | `1b38181beab072008432474fbf71189f34583f1f4c4f9e17c97487285522fc15` |
@@ -480,8 +481,8 @@ Maschinenlesbar: `FILE_MANIFEST.tsv` und `MANIFEST.json`.
 
 | Pfad | Größe | SHA256 |
 |---|---:|---|
-| `product/golden_masters/promptmaster_free.html` | 110812 | `aada4fbb3461d3758c48ed808bf018716a53aa33baf81efb058412e63535b0a8` |
-| `product/golden_masters/promptmaster_pro.html` | 233404 | `aa7b2da53ba3cbcf9874b9b6f7381ea4c3e86ee1f9c09db186cbec6876a3c9cf` |
+| `product/golden_masters/promptfinisher_free.html` | 110812 | `aada4fbb3461d3758c48ed808bf018716a53aa33baf81efb058412e63535b0a8` |
+| `product/golden_masters/promptfinisher_pro.html` | 233404 | `aa7b2da53ba3cbcf9874b9b6f7381ea4c3e86ee1f9c09db186cbec6876a3c9cf` |
 | `product/golden_masters/SHA256SUMS.txt` | 177 | `b33327f70e01297aa8bf29058651f9bb4a3349731c50533d7415eb0a46bde6ac` |
 | `product/runtime/pro_server_bridge.js` | 15382 | `8637cb60a75f7bcf965492d1f7f0876abde37156c957d7289857a54543fe99fb` |
 
@@ -508,7 +509,7 @@ Maschinenlesbar: `FILE_MANIFEST.tsv` und `MANIFEST.json`.
 | `docs/recovery/marketing-2026-09-06/free-live-reference.html` | 71799 | `a7586690d84ad4a549ac7e1498fdd0333b36c9c024ab5b7a98044a2b689b7f52` |
 | `docs/recovery/marketing-2026-09-06/pflichtenheft-reference.md` | 21194 | `8a5e4efcd698eba9f49ea70c76da09765dc5ac30420e7d82e653c7e5ae5a4b5e` |
 | `docs/recovery/NEW_INPUTS_FORENSIC_ANALYSIS.md` | 40159 | `45a9827be5be654f9fa22533721f72d0a784c3c2ae062db001ca5a58d09f928f` |
-| `docs/recovery/PromptMaster_FORENSIC_LIBRARY_AND_ARCHIVE_SCAN_2026-09-12.md` | 6852 | `15c9e8e9f0cbc4fe7c5dfe0f3e2e872ccdd9e8379059000dda5fdaba32495326` |
+| `docs/recovery/PROMPTFINISHER_FORENSIC_LIBRARY_AND_ARCHIVE_SCAN_2026-09-12.md` | 6852 | `15c9e8e9f0cbc4fe7c5dfe0f3e2e872ccdd9e8379059000dda5fdaba32495326` |
 | `docs/RELEASE_GATES.md` | 2323 | `86508aad791e67d02628c1ff840f681674990e656a83fdbcbe9730e342a77b8a` |
 | `docs/REQUIREMENTS_STATUS_V3.md` | 1387 | `c8a00e1af07c6032f7b45c679f88defc7693e5a6650330dfb5ac2595e2237123` |
 | `docs/SOURCE_OF_TRUTH.md` | 2059 | `01408c2217b1cffe1e4e45ba5418882416f491a466272da55dbb6a27942d63ae` |
@@ -559,8 +560,8 @@ Maschinenlesbar: `FILE_MANIFEST.tsv` und `MANIFEST.json`.
 
 | Pfad | Größe | SHA256 |
 |---|---:|---|
-| `tools/recovery/v13-exact-exporter/PromptMaster_v13_EXAKT_exportieren.cmd` | 298 | `ccef1271973a6381439d13384f0b787bbde4314c0763e705750002c00c7f331e` |
-| `tools/recovery/v13-exact-exporter/PromptMaster_v13_EXAKT_exportieren.ps1` | 7538 | `357e641b945e63ea473617dc58ac7b8c83167723509d04cae06c5104d3f52321` |
+| `tools/recovery/v13-exact-exporter/PROMPTFINISHER_v13_EXAKT_exportieren.cmd` | 298 | `ccef1271973a6381439d13384f0b787bbde4314c0763e705750002c00c7f331e` |
+| `tools/recovery/v13-exact-exporter/PROMPTFINISHER_v13_EXAKT_exportieren.ps1` | 7538 | `357e641b945e63ea473617dc58ac7b8c83167723509d04cae06c5104d3f52321` |
 | `tools/recovery/v13-exact-exporter/README.txt` | 492 | `98d56838c1fd5cef19098eb1c52ecda42e2f4bdb2c9a355f736e961e4975d660` |
 
 ## repository-root

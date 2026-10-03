@@ -24,7 +24,7 @@ def navigation(request):
             can_start_pro = bool(getattr(user, 'is_staff', False) and getattr(user, 'is_active', False))
             internal_staff = can_start_pro
     return {
-        "pm_environment": "PromptMaster",
+        "pm_environment": "PROMPTFINISHER",
         "current_membership": membership,
         "pm_can_start_pro": can_start_pro,
         "pm_internal_staff": internal_staff,

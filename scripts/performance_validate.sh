@@ -10,11 +10,11 @@ PREFIX="${PM_PERFORMANCE_PREFIX:-PMPERF}"
 FILES=(-f compose.yaml -f compose.staging.yaml)
 [[ -f .env ]] || { echo '[FAIL] .env fehlt' >&2; exit 1; }
 
-echo "[PromptMaster performance] Seed: ${COUNT} Zeilen je Kernliste"
+echo "[PROMPTFINISHER performance] Seed: ${COUNT} Zeilen je Kernliste"
 docker compose "${FILES[@]}" exec -T web \
   python manage.py seed_performance --count "$COUNT" --prefix "$PREFIX"
 
-echo "[PromptMaster performance] Benchmark: p95 <= ${MAX_MS} ms"
+echo "[PROMPTFINISHER performance] Benchmark: p95 <= ${MAX_MS} ms"
 docker compose "${FILES[@]}" exec -T web \
   python manage.py performance_smoke \
     --prefix "$PREFIX" \

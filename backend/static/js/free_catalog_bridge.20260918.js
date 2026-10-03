@@ -1,4 +1,4 @@
-/* PromptMaster Free catalog bridge.
+/* PROMPTFINISHER Free catalog bridge.
  * The byte-exact FREE 1.2.4 Golden Master remains immutable. This additive
  * bridge updates only catalog visibility: the six reviewed Free apps/tasks
  * keep their existing local logic, while every other application from the
@@ -33,13 +33,13 @@
     const id=syntheticId(sourceApp.code);
     centralBySyntheticId.set(id,sourceApp);
     const color=safeColor(sourceApp.color);
-    return '<div class="app locked" role="button" tabindex="0" data-appwrap="'+html(id)+'" data-central-code="'+html(sourceApp.code)+'" data-prolocked="1" data-licenselocked="0" aria-label="'+html((sourceApp.name||sourceApp.code)+' – PromptMaster Pro')+'">'
+    return '<div class="app locked" role="button" tabindex="0" data-appwrap="'+html(id)+'" data-central-code="'+html(sourceApp.code)+'" data-prolocked="1" data-licenselocked="0" aria-label="'+html((sourceApp.name||sourceApp.code)+' – PROMPTFINISHER Pro')+'">'
       +'<span class="app-card">'
       +'<span class="lock-pill">PRO</span>'
       +'<span class="app-icon" style="background:linear-gradient(180deg,'+color+','+color+'dd)">'+html(sourceApp.icon||String(sourceApp.name||'?').slice(0,1))+'</span>'
       +'<span class="app-name">'+html(sourceApp.name||sourceApp.code)+'</span>'
-      +'<span class="app-copy">'+html(sourceApp.copy||'Weitere PromptMaster-Pro-Funktionen für diesen Copilot-Bereich.')+'</span>'
-      +'<span class="app-footer"><span class="tag pro">PROMPTMASTER PRO</span></span>'
+      +'<span class="app-copy">'+html(sourceApp.copy||'Weitere PROMPTFINISHER-Pro-Funktionen für diesen Copilot-Bereich.')+'</span>'
+      +'<span class="app-footer"><span class="tag pro">PROMPTFINISHER PRO</span></span>'
       +'</span></div>';
   }
 
@@ -47,8 +47,8 @@
   showProModal=function(appId){
     const sourceApp=centralBySyntheticId.get(appId);
     if(!sourceApp)return originalShowProModal(appId);
-    document.getElementById('proModalTitle').textContent='CopilotPromptMaster Pro für '+(sourceApp.name||sourceApp.code);
-    document.getElementById('proModalSubtitle').textContent='Dieser Bereich ist im vollständigen PromptMaster-Pro-Katalog enthalten.';
+    document.getElementById('proModalTitle').textContent='CopilotPROMPTFINISHER Pro für '+(sourceApp.name||sourceApp.code);
+    document.getElementById('proModalSubtitle').textContent='Dieser Bereich ist im vollständigen PROMPTFINISHER-Pro-Katalog enthalten.';
     document.getElementById('proModalList').innerHTML=[
       'aufgabenspezifische Prompt-Assistenten verwenden',
       'professionelle Ausgabeformate und Schwerpunkte nutzen',
@@ -121,7 +121,7 @@
         detail:{applicationCount:apps.length,freeApplicationCount:6,lockedApplicationCount:extras.length}
       }));
     }catch(error){
-      console.error('PromptMaster Free: zentraler Sichtbarkeitskatalog nicht verfügbar.',error);
+      console.error('PROMPTFINISHER Free: zentraler Sichtbarkeitskatalog nicht verfügbar.',error);
       // Fail usable: FREE 1.2.4 remains functional with its immutable local
       // catalog. We never unlock a task because of a catalog fetch failure.
       centralApplications=null;
