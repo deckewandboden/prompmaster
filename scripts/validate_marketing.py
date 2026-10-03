@@ -22,7 +22,7 @@ if missing:
 catalog = json.loads((MARKETING / 'public/catalog.json').read_text(encoding='utf-8'))
 if catalog.get('priceBasis') != 'gross' or catalog.get('market') != 'DE':
     raise SystemExit('MARKETING VALIDATION FAIL: static fallback catalog contract drift')
-pro = next((p for p in catalog.get('products', []) if p.get('id') == 'PROMPTMASTER_PRO'), None)
+pro = next((p for p in catalog.get('products', []) if p.get('id') == 'PROMPTFINISHER_PRO'), None)
 if (
     not pro
     or pro.get('monthlyGrossCents') != 299
@@ -42,7 +42,7 @@ if "background-image:url('/brand/design-reference.jpeg')" in immersive_css:
 marketing_logo = (MARKETING / 'public/brand/promptmaster-logo-clean.svg').read_text(encoding='utf-8')
 for marker in ('width="315" height="55"', 'viewBox="0 7 315 55"', 'width="315" height="62"', 'data:image/png;base64,'):
     if marker not in marketing_logo:
-        raise SystemExit(f'MARKETING VALIDATION FAIL: approved cropped PromptMaster artwork missing {marker}')
+        raise SystemExit(f'MARKETING VALIDATION FAIL: approved cropped PROMPTFINISHER artwork missing {marker}')
 pro_apps_match = re.search(r"const proApps=\[(.*?)\];", source, re.S)
 if not pro_apps_match:
     raise SystemExit('MARKETING VALIDATION FAIL: Pro application catalog missing')

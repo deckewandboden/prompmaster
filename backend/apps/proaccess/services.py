@@ -9,7 +9,7 @@ LEGACY_DEVICE_COOKIE = 'pm_device'
 
 
 def has_internal_staff_access(user):
-    """Internal netstyle identities may use PromptMaster Pro without a customer seat.
+    """Internal netstyle identities may use PROMPTFINISHER Pro without a customer seat.
 
     Staff accounts are a separate security domain: they cannot belong to a
     customer tenant and are protected by the mandatory staff MFA flow.

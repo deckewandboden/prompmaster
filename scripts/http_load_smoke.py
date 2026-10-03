@@ -21,7 +21,7 @@ def fetch(path):
     started = time.perf_counter()
     request = urllib.request.Request(
         BASE + path,
-        headers={'User-Agent': 'PromptMaster-Release-Load-Smoke/1.0', 'Accept': '*/*'},
+        headers={'User-Agent': 'PROMPTFINISHER-Release-Load-Smoke/1.0', 'Accept': '*/*'},
     )
     try:
         with urllib.request.urlopen(request, timeout=TIMEOUT, context=SSL_CONTEXT) as response:
@@ -43,7 +43,7 @@ def validate_once(path):
             for item in payload.get('products', [])
             if isinstance(item, dict) and item.get('id')
         }
-        pro = products.get('PROMPTMASTER_PRO') or {}
+        pro = products.get('PROMPTFINISHER_PRO') or {}
         names = payload.get('proApplicationNames') or []
         contract_ok = (
             payload.get('currency') == 'EUR'

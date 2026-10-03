@@ -21,7 +21,7 @@ REFUND_CONFIRM = 'CREATE-MOLLIE-TEST-REFUND'
 
 
 class Command(BaseCommand):
-    help = 'Run staged acceptance against Mollie test mode using PromptMaster production code paths.'
+    help = 'Run staged acceptance against Mollie test mode using PROMPTFINISHER production code paths.'
 
     def add_arguments(self, parser):
         parser.add_argument('action', choices=['start', 'verify', 'refund'])
@@ -201,7 +201,7 @@ class Command(BaseCommand):
         try:
             return Payment.objects.select_related('order').get(provider_payment_id=payment_id)
         except Payment.DoesNotExist as exc:
-            raise CommandError('No local PromptMaster payment exists for this Mollie ID.') from exc
+            raise CommandError('No local PROMPTFINISHER payment exists for this Mollie ID.') from exc
 
     def _provider_chargeback_state(self, payment, payload):
         if payload is None:
@@ -463,7 +463,7 @@ class Command(BaseCommand):
         refund = create_refund_request(
             term=term,
             actor=actor,
-            reason='PromptMaster external Mollie acceptance',
+            reason='PROMPTFINISHER external Mollie acceptance',
         )
         refund = submit_refund(refund)
         self.stdout.write(json.dumps({

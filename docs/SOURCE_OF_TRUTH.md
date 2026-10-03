@@ -1,4 +1,4 @@
-# PromptMaster Commercial — Source of Truth
+# PROMPTFINISHER Commercial — Source of Truth
 
 Stand: 2026-09-23
 
@@ -29,7 +29,7 @@ Provider-/Infrastruktur- und Human-Gates aus `docs/PRODUCTION_ACCEPTANCE.md` und
 ## Produkt-Golden-Master
 
 - Free SHA256: `aada4fbb3461d3758c48ed808bf018716a53aa33baf81efb058412e63535b0a8`
-- Pro SHA256: `aa7b2da53ba3cbcf9874b9b6f7381ea4c3e86ee1f9c09db186cbec6876a3c9cf`
+- Pro SHA256: `a18375946c7081034cd6b9d70a1f4e3b843c51e03230477cae246b6c4bf0f95f`
 - aktueller Pro-Katalog: 34 Apps / 194 PM20-Tasks
 - PM11-160: historische Legacy-Produktgeneration, kein Downgrade-Ziel
 
@@ -38,7 +38,7 @@ Provider-/Infrastruktur- und Human-Gates aus `docs/PRODUCTION_ACCEPTANCE.md` und
 Der aktuelle Code materialisiert die später rekonstruierten Prompt-Anforderungen:
 
 - `PromptDefinition` / `PromptVersion`
-- Microsoft Tier / Capability getrennt von PromptMaster-Entitlements
+- Microsoft Tier / Capability getrennt von PROMPTFINISHER-Entitlements
 - serverseitiger stateless Composer
 - No-Code Prompt Studio
 - Testfälle und Lifecycle

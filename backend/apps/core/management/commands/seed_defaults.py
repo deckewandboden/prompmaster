@@ -63,8 +63,8 @@ class Command(BaseCommand):
         product, _ = Product.objects.get_or_create(
             code='PRO',
             defaults={
-                'name': 'PromptMaster Pro',
-                'description': 'PromptMaster Pro',
+                'name': 'PROMPTFINISHER Pro',
+                'description': 'PROMPTFINISHER Pro',
                 'default_license_days': 365,
                 'default_device_limit': 2,
                 'reminder_1_days': 60,
@@ -74,7 +74,7 @@ class Command(BaseCommand):
         )
         pro_feature, _ = Feature.objects.get_or_create(
             code=PRO_ACCESS_FEATURE,
-            defaults={'name': 'PromptMaster Pro Runtime'},
+            defaults={'name': 'PROMPTFINISHER Pro Runtime'},
         )
         ProductEntitlement.objects.update_or_create(
             product=product,
@@ -117,40 +117,40 @@ class Command(BaseCommand):
                 'Bitte bestätigen Sie Ihre E-Mail-Adresse: {url}',
             ),
             'password_reset': (
-                'PromptMaster Passwort zurücksetzen',
+                'PROMPTFINISHER Passwort zurücksetzen',
                 'Sie können Ihr Passwort innerhalb einer Stunde zurücksetzen: {url}',
             ),
             'checkout_activation': (
-                'PromptMaster Pro Zugang aktivieren',
-                'Ihre Zahlung wurde bestätigt. Legen Sie innerhalb von 7 Tagen Ihr Passwort fest und aktivieren Sie damit Ihren PromptMaster-Zugang: {url}',
+                'PROMPTFINISHER Pro Zugang aktivieren',
+                'Ihre Zahlung wurde bestätigt. Legen Sie innerhalb von 7 Tagen Ihr Passwort fest und aktivieren Sie damit Ihren PROMPTFINISHER-Zugang: {url}',
             ),
             'staff_invite': (
-                'PromptMaster netstyle-Zugang einrichten',
-                'Ihr netstyle PromptMaster-Administrationszugang wurde angelegt. Legen Sie innerhalb einer Stunde Ihr Passwort fest: {url}',
+                'PROMPTFINISHER netstyle-Zugang einrichten',
+                'Ihr netstyle PROMPTFINISHER-Administrationszugang wurde angelegt. Legen Sie innerhalb einer Stunde Ihr Passwort fest: {url}',
             ),
             'invite': (
-                'Ihre PromptMaster-Einladung',
-                'Sie wurden zu PromptMaster eingeladen. Der Link ist 24 Stunden gültig: {url}',
+                'Ihre PROMPTFINISHER-Einladung',
+                'Sie wurden zu PROMPTFINISHER eingeladen. Der Link ist 24 Stunden gültig: {url}',
             ),
             't60': (
-                'PromptMaster-Lizenz läuft in 60 Tagen ab',
+                'PROMPTFINISHER-Lizenz läuft in 60 Tagen ab',
                 'Ihre Lizenz {license} läuft am {expiry} ab.',
             ),
             't30': (
-                'PromptMaster-Lizenz läuft in 30 Tagen ab',
+                'PROMPTFINISHER-Lizenz läuft in 30 Tagen ab',
                 'Ihre Lizenz {license} läuft am {expiry} ab.',
             ),
             'license_expired': (
-                'PromptMaster-Lizenz abgelaufen',
+                'PROMPTFINISHER-Lizenz abgelaufen',
                 'Ihre Lizenz {license} ist am {expiry} abgelaufen. Der Pro-Zugriff ist bis zur Verlängerung gesperrt.',
             ),
             'payment_confirmed': (
-                'PromptMaster-Zahlung bestätigt',
+                'PROMPTFINISHER-Zahlung bestätigt',
                 'Ihre Zahlung für Bestellung {order} über {amount} {currency} wurde bestätigt.',
             ),
             'contract_confirmation': (
-                'PromptMaster – Vertragsbestätigung {order}',
-                'Ihre Vertragsbestätigung für PromptMaster Pro\n\n'
+                'PROMPTFINISHER – Vertragsbestätigung {order}',
+                'Ihre Vertragsbestätigung für PROMPTFINISHER Pro\n\n'
                 'Anbieter: netstyle Informationstechnik GmbH, Am Bühl 2, 57223 Kreuztal\n'
                 'Bestellung: {order}\n'
                 'Vertragsdatum / Zahlungsbestätigung: {contract_date}\n'
@@ -163,54 +163,54 @@ class Command(BaseCommand):
                 'Diese E-Mail dient als Vertragsbestätigung auf einem dauerhaften Datenträger.',
             ),
             'payment_failed': (
-                'PromptMaster-Zahlung nicht erfolgreich',
+                'PROMPTFINISHER-Zahlung nicht erfolgreich',
                 'Die Zahlung für Bestellung {order} konnte nicht erfolgreich abgeschlossen werden. Status: {status}.',
             ),
             'license_renewed': (
-                'PromptMaster-Lizenz verlängert',
+                'PROMPTFINISHER-Lizenz verlängert',
                 'Ihre Lizenz {license} wurde erfolgreich bis {expiry} verlängert.',
             ),
             'refund_confirmed': (
-                'PromptMaster-Erstattung bestätigt',
+                'PROMPTFINISHER-Erstattung bestätigt',
                 'Die Erstattung über {amount} {currency} für Lizenz {license} wurde bestätigt.',
             ),
             'chargeback_review': (
-                'PromptMaster-Zahlung muss geklärt werden',
+                'PROMPTFINISHER-Zahlung muss geklärt werden',
                 'Für Bestellung {order} wurde eine Zahlungsrückbuchung gemeldet. Betroffene Lizenzzugriffe wurden vorläufig gesperrt.',
             ),
             'assignment_link': (
-                'PromptMaster-Lizenz zuordnen',
+                'PROMPTFINISHER-Lizenz zuordnen',
                 'Für Sie wurde die Lizenz {license} vorbereitet. Der sichere Link ist bis {expiry} gültig: {url}',
             ),
             'upgrade_request': (
-                'PromptMaster Pro angefragt',
+                'PROMPTFINISHER Pro angefragt',
                 '{user} ({email}) bittet um Zuweisung von {product}.',
             ),
             'upgrade_request_resolved': (
-                'PromptMaster Pro-Anfrage bearbeitet',
+                'PROMPTFINISHER Pro-Anfrage bearbeitet',
                 'Ihre Anfrage für {product} wurde bearbeitet: {status}.',
             ),
             'support_confirmation': (
-                'Ihre PromptMaster-Anfrage',
+                'Ihre PROMPTFINISHER-Anfrage',
                 'Wir haben Ihre Anfrage erhalten: {subject}',
             ),
             'support_notification': (
-                'Neue PromptMaster-Supportanfrage',
+                'Neue PROMPTFINISHER-Supportanfrage',
                 'Kategorie: {category}\nKunde: {customer}\nE-Mail: {email}\nLizenz: {license}\nBetreff: {subject}\n\n{message}',
             ),
             'support_reply': (
-                'PromptMaster: {subject}',
+                'PROMPTFINISHER: {subject}',
                 'Guten Tag,\n\n'
-                'zu Ihrer PromptMaster-Anfrage "{subject}" gibt es eine neue Antwort:\n\n'
+                'zu Ihrer PROMPTFINISHER-Anfrage "{subject}" gibt es eine neue Antwort:\n\n'
                 '{reply}\n\n'
                 'Status: {status}\n'
                 'Vorgangs-ID: {support_id}\n\n'
                 'Mit freundlichen Grüßen\n'
                 '{responder}\n'
-                'netstyle PromptMaster Support',
+                'netstyle PROMPTFINISHER Support',
             ),
             'withdrawal_received': (
-                'PromptMaster – Eingang Ihres Widerrufs',
+                'PROMPTFINISHER – Eingang Ihres Widerrufs',
                 'Guten Tag {name},\n\nwir bestätigen den Eingang Ihres Widerrufs.\n'
                 'Vertrag / Bestellung / Kundennummer: {contract_reference}\n'
                 'Eingang: {submitted_at}\n'
@@ -218,7 +218,7 @@ class Command(BaseCommand):
                 'Diese Nachricht dokumentiert den elektronischen Eingang Ihrer Erklärung.',
             ),
             'cancellation_received': (
-                'PromptMaster – Eingang Ihrer Kündigung',
+                'PROMPTFINISHER – Eingang Ihrer Kündigung',
                 'Guten Tag {name},\n\nwir bestätigen den Eingang Ihrer Kündigung.\n'
                 'Art: {cancellation_kind}\n'
                 'Vertrag / Bestellung / Kundennummer: {contract_reference}\n'

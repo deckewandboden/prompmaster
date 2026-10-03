@@ -174,13 +174,13 @@ class LoginLockoutTests(TestCase):
             '/auth/login/',
             {'email': self.email, 'password': 'Wrong-Password-42!'},
             REMOTE_ADDR='203.0.113.55',
-            HTTP_USER_AGENT='PromptMaster-Security-Test/1.0',
+            HTTP_USER_AGENT='PROMPTFINISHER-Security-Test/1.0',
             HTTP_X_CORRELATION_ID='auth-lockout-test-001',
         )
         self.assertEqual(response.status_code, 200)
         event = AuditEvent.objects.get(actor=self.user, action='auth.login_failed')
         self.assertEqual(event.ip, '203.0.113.55')
-        self.assertEqual(event.user_agent, 'PromptMaster-Security-Test/1.0')
+        self.assertEqual(event.user_agent, 'PROMPTFINISHER-Security-Test/1.0')
         self.assertEqual(event.correlation_id, 'auth-lockout-test-001')
 
     def test_successful_login_clears_account_failure_counter(self):

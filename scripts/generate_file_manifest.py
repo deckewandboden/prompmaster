@@ -67,7 +67,7 @@ TSV.write_text(
 )
 summary = Counter(f['role'] for f in files)
 JSON_OUT.write_text(json.dumps({
-    'project': 'PromptMaster Commercial RC14 Full Repository',
+    'project': 'PROMPTFINISHER Commercial RC14 Full Repository',
     'generated_at': datetime.now(timezone.utc).isoformat(),
     'file_count_excluding_manifest_files': len(files),
     'total_bytes_excluding_manifest_files': sum(f['size'] for f in files),
@@ -79,7 +79,7 @@ groups = defaultdict(list)
 for f in files:
     groups[f['role']].append(f)
 lines = [
-    '# Vollständiges Datei-Inventar — PromptMaster RC14', '',
+    '# Vollständiges Datei-Inventar — PROMPTFINISHER RC14', '',
     f"Erfasst: **{len(files)} Dateien** (Manifest-/Inventardateien selbst ausgenommen), **{sum(f['size'] for f in files):,} Byte**.", '',
     'Maschinenlesbar: `FILE_MANIFEST.tsv` und `MANIFEST.json`.', '',
 ]

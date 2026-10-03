@@ -44,7 +44,7 @@ def _require_pro_access(request):
         raise PromptValidationError('Bitte E-Mail-Adresse bestätigen.', code='email_verification_required')
     assignment = active_product_assignment(request.user, 'PRO')
     if not assignment:
-        raise PromptValidationError('Aktive PromptMaster-Pro-Lizenz erforderlich.', code='license_required')
+        raise PromptValidationError('Aktive PROMPTFINISHER-Pro-Lizenz erforderlich.', code='license_required')
     device = validate_device_token(
         request.user,
         request.COOKIES.get(DEVICE_COOKIE, ''),
@@ -108,7 +108,7 @@ def task_detail(request, task_id):
             else:
                 if not task_entitled(product, task_id):
                     raise PromptValidationError(
-                        'Diese Prompt-Aufgabe ist für das ausgewählte PromptMaster-Produkt nicht freigeschaltet.',
+                        'Diese Prompt-Aufgabe ist für das ausgewählte PROMPTFINISHER-Produkt nicht freigeschaltet.',
                         field='task_id',
                         code='entitlement_required',
                     )
@@ -116,7 +116,7 @@ def task_detail(request, task_id):
         else:
             if not task_entitled(product, task_id):
                 raise PromptValidationError(
-                    'Diese Prompt-Aufgabe ist für das ausgewählte PromptMaster-Produkt nicht freigeschaltet.',
+                    'Diese Prompt-Aufgabe ist für das ausgewählte PROMPTFINISHER-Produkt nicht freigeschaltet.',
                     field='task_id',
                     code='entitlement_required',
                 )

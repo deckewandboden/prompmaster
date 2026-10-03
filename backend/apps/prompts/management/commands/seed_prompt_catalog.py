@@ -71,7 +71,7 @@ class Command(BaseCommand):
                 defaults={
                     'name': TIER_NAMES.get(code, code),
                     'rank': int(rank),
-                    'description': 'Aus dem aktuellen PromptMaster-Pro-Golden-Master importiert.',
+                    'description': 'Aus dem aktuellen PROMPTFINISHER-Pro-Golden-Master importiert.',
                     'active': True,
                 },
             )
@@ -102,8 +102,8 @@ class Command(BaseCommand):
         pro, _ = Product.objects.get_or_create(
             code='PRO',
             defaults={
-                'name': 'PromptMaster Pro',
-                'description': 'PromptMaster Pro',
+                'name': 'PROMPTFINISHER Pro',
+                'description': 'PROMPTFINISHER Pro',
                 'default_license_days': 365,
                 'default_device_limit': 2,
                 'reminder_1_days': 60,
@@ -114,8 +114,8 @@ class Command(BaseCommand):
         Product.objects.get_or_create(
             code='FREE',
             defaults={
-                'name': 'PromptMaster Free',
-                'description': 'PromptMaster Free – ohne Konto nutzbar',
+                'name': 'PROMPTFINISHER Free',
+                'description': 'PROMPTFINISHER Free – ohne Konto nutzbar',
                 'active': True,
                 'visible': True,
                 'purchasable': False,

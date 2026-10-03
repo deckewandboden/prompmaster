@@ -792,7 +792,7 @@ class Command(BaseCommand):
                 status='pending',
                 defaults={
                     'company': company,
-                    'note': 'Demo: Mitarbeiter benötigt PromptMaster Pro für tägliche Copilot-Aufgaben.',
+                    'note': 'Demo: Mitarbeiter benötigt PROMPTFINISHER Pro für tägliche Copilot-Aufgaben.',
                 },
             )
             LicenseUpgradeRequest.objects.filter(pk=upgrade.pk).update(

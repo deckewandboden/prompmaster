@@ -9,7 +9,7 @@ ROOT = Path(__file__).resolve().parents[1]
 GOLDEN = ROOT / 'product' / 'golden_masters' / 'promptmaster_pro.html'
 BRIDGE = ROOT / 'product' / 'runtime' / 'pro_server_bridge.js'
 OUTPUT = ROOT / 'backend' / 'private_assets' / 'promptmaster_pro_runtime.html'
-GOLDEN_SHA256 = 'aa7b2da53ba3cbcf9874b9b6f7381ea4c3e86ee1f9c09db186cbec6876a3c9cf'
+GOLDEN_SHA256 = 'a18375946c7081034cd6b9d70a1f4e3b843c51e03230477cae246b6c4bf0f95f'
 
 
 def sha(data: bytes) -> str:

@@ -1,4 +1,4 @@
-/* PromptMaster Commercial integration bridge.
+/* PROMPTFINISHER Commercial integration bridge.
  * Keeps the recovered marketing snapshot visually intact while synchronizing
  * product metadata with the live Django catalog when deployed behind Caddy.
  */
@@ -41,7 +41,7 @@
 
     document.querySelectorAll('.footer-bottom span').forEach(span => {
       if (span.textContent.includes('Vorschau · Kauf und Anmeldung noch nicht freigeschaltet')) {
-        span.textContent = 'Kauf und Anmeldung über die PromptMaster Commercial Platform';
+        span.textContent = 'Kauf und Anmeldung über die PROMPTFINISHER Commercial Platform';
       }
     });
   };

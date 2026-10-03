@@ -88,7 +88,7 @@ def _recovery_continue_context(request, user):
     if user.is_staff:
         continue_label = 'Zum netstyle Admin-Backend →'
     elif continue_url.startswith('/pro/'):
-        continue_label = 'PromptMaster Pro öffnen →'
+        continue_label = 'PROMPTFINISHER Pro öffnen →'
     else:
         continue_label = 'Zum Kundenportal →'
     return {
@@ -317,8 +317,8 @@ def two_factor_setup(request):
             context.update(_recovery_continue_context(request, request.user))
             return render(request, 'auth/recovery_codes.html', context)
         messages.error(request, 'Code ungültig.')
-    label = quote(f'PromptMaster:{request.user.email}', safe='')
-    uri = f'otpauth://totp/{label}?secret={secret}&issuer=PromptMaster'
+    label = quote(f'PROMPTFINISHER:{request.user.email}', safe='')
+    uri = f'otpauth://totp/{label}?secret={secret}&issuer=PROMPTFINISHER'
     return render(request, 'auth/two_factor_setup.html', {'secret': secret, 'uri': uri})
 
 

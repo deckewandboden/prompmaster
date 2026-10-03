@@ -40,7 +40,7 @@ def _inject_v2_ui(data: bytes) -> bytes:
     )
     data = data.replace(remote_logo, transparent_pixel)
     if data.count(head_marker) != 1 or data.count(body_marker) != 1:
-        raise GoldenMasterIntegrityError('PromptMaster V2 injection markers are not unique.')
+        raise GoldenMasterIntegrityError('PROMPTFINISHER V2 injection markers are not unique.')
     data = data.replace(head_marker, V2_STYLE + head_marker, 1)
     data = data.replace(body_marker, V2_SCRIPT + body_marker, 1)
     return data
@@ -127,7 +127,7 @@ def launch(request):
         return redirect('proaccess:content')
     assignment, device = _access(request)
     if not assignment:
-        messages.error(request, 'Für dieses Benutzerkonto ist keine aktive PromptMaster-Pro-Lizenz zugewiesen.')
+        messages.error(request, 'Für dieses Benutzerkonto ist keine aktive PROMPTFINISHER-Pro-Lizenz zugewiesen.')
         return redirect('portal:licenses')
     if not device:
         return redirect('proaccess:register_device')
@@ -211,12 +211,12 @@ def _pro_runtime_response(request, *, ui_v2=False):
     try:
         data = read_verified_asset(settings.PRO_RUNTIME_PATH, settings.PRO_RUNTIME_SHA256)
     except GoldenMasterIntegrityError:
-        logger.exception('PromptMaster Pro runtime asset failed integrity validation')
+        logger.exception('PROMPTFINISHER Pro runtime asset failed integrity validation')
         return render(request, 'proaccess/asset_missing.html', status=503)
     csrf_token = get_token(request)
     marker = b'__PM_CSRF_TOKEN__'
     if marker not in data:
-        logger.error('PromptMaster Pro runtime asset is missing CSRF placeholder')
+        logger.error('PROMPTFINISHER Pro runtime asset is missing CSRF placeholder')
         return render(request, 'proaccess/asset_missing.html', status=503)
     data = data.replace(marker, csrf_token.encode('ascii'))
 
@@ -225,7 +225,7 @@ def _pro_runtime_response(request, *, ui_v2=False):
     # directly in Pro can return to their own security domain or sign out.
     utility_marker = b'<div class="utility"><div class="max">'
     if utility_marker not in data:
-        logger.error('PromptMaster Pro runtime asset is missing utility navigation marker')
+        logger.error('PROMPTFINISHER Pro runtime asset is missing utility navigation marker')
         return render(request, 'proaccess/asset_missing.html', status=503)
     workspace_url = (
         reverse('ns_admin:dashboard')
@@ -244,7 +244,7 @@ def _pro_runtime_response(request, *, ui_v2=False):
         try:
             data = _inject_v2_ui(data)
         except GoldenMasterIntegrityError:
-            logger.exception('PromptMaster Pro V2 UI injection failed')
+            logger.exception('PROMPTFINISHER Pro V2 UI injection failed')
             return render(request, 'proaccess/asset_missing.html', status=503)
 
     response = HttpResponse(data, content_type='text/html; charset=utf-8')
@@ -277,21 +277,21 @@ def _free_runtime_response(request, *, ui_v2=False):
     try:
         data = read_verified_asset(settings.FREE_GOLDEN_MASTER_PATH, settings.FREE_GOLDEN_MASTER_SHA256)
     except GoldenMasterIntegrityError:
-        logger.exception('PromptMaster Free Golden Master failed integrity validation')
-        return HttpResponse('PromptMaster Free ist vorübergehend nicht verfügbar.', status=503)
+        logger.exception('PROMPTFINISHER Free Golden Master failed integrity validation')
+        return HttpResponse('PROMPTFINISHER Free ist vorübergehend nicht verfügbar.', status=503)
 
     marker = b'</body></html>'
     bridge = b'<script src="/static/js/free_catalog_bridge.20260918.js?v=' + V2_ASSET_REV + b'" defer></script>'
     if data.count(marker) != 1:
-        logger.error('PromptMaster Free Golden Master has unexpected closing markup')
-        return HttpResponse('PromptMaster Free ist vorübergehend nicht verfügbar.', status=503)
+        logger.error('PROMPTFINISHER Free Golden Master has unexpected closing markup')
+        return HttpResponse('PROMPTFINISHER Free ist vorübergehend nicht verfügbar.', status=503)
     data = data.replace(marker, bridge + marker)
 
     if ui_v2:
         head_marker = b'</head>'
         if data.count(head_marker) != 1:
-            logger.error('PromptMaster Free Golden Master has unexpected head markup')
-            return HttpResponse('PromptMaster Free ist vorübergehend nicht verfügbar.', status=503)
+            logger.error('PROMPTFINISHER Free Golden Master has unexpected head markup')
+            return HttpResponse('PROMPTFINISHER Free ist vorübergehend nicht verfügbar.', status=503)
         csrf_token = get_token(request).encode('ascii')
         compose_marker = (
             b'<meta name="pm-free-compose" content="server" data-csrf="'
@@ -303,8 +303,8 @@ def _free_runtime_response(request, *, ui_v2=False):
         try:
             data = _inject_v2_ui(data)
         except GoldenMasterIntegrityError:
-            logger.exception('PromptMaster Free V2 UI injection failed')
-            return HttpResponse('PromptMaster Free ist vorübergehend nicht verfügbar.', status=503)
+            logger.exception('PROMPTFINISHER Free V2 UI injection failed')
+            return HttpResponse('PROMPTFINISHER Free ist vorübergehend nicht verfügbar.', status=503)
 
     response = HttpResponse(data, content_type='text/html; charset=utf-8')
     response['Cache-Control'] = (

@@ -69,7 +69,7 @@ class Command(BaseCommand):
         probe_id = uuid.uuid4().hex
         success = EmailMessage.objects.create(
             recipient=recipient,
-            subject=f'PromptMaster Graph Acceptance {probe_id}',
+            subject=f'PROMPTFINISHER Graph Acceptance {probe_id}',
             context={},
         )
         result = send_email_message.run(str(success.id))
@@ -89,7 +89,7 @@ class Command(BaseCommand):
         original_delivery_description = delivery_setting.description if delivery_setting else ''
         failure = EmailMessage.objects.create(
             recipient=recipient,
-            subject=f'PromptMaster Graph Failure Probe {probe_id}',
+            subject=f'PROMPTFINISHER Graph Failure Probe {probe_id}',
             context={},
         )
         failure_exc = None

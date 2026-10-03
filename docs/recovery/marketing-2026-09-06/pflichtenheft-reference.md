@@ -1,32 +1,32 @@
-Ja. Ich habe die Architektur noch einmal kritisch gegen eure aktuelle PromptMaster-Datei, aktuelle Frameworkstände, Three.js, Zahlungsabwicklung, Lizenzlogik, Authentifizierung und die deutsche E-Rechnungsentwicklung geprüft.
+Ja. Ich habe die Architektur noch einmal kritisch gegen eure aktuelle PROMPTFINISHER-Datei, aktuelle Frameworkstände, Three.js, Zahlungsabwicklung, Lizenzlogik, Authentifizierung und die deutsche E-Rechnungsentwicklung geprüft.
 
 Eine Korrektur vorweg: Die Bibliothek heißt **Three.js**, nicht Tree.js. Three.js rendert aktuell über WebGL 2 und unterstützt Punktwolken direkt. Genau damit lässt sich der von dir beschriebene „Jarvis-Kopf“ aus tausenden leuchtenden Punkten bauen. citeturn173158search4turn173158search12
 
 Das folgende Pflichtenheft würde ich als **verbindliche technische Basis** für die spätere Umsetzung verwenden.
 
-:::writing{variant="document" id="58341" title="Pflichtenheft PromptMaster Commercial – Version 1.0"}
-# Pflichtenheft PromptMaster Commercial
+:::writing{variant="document" id="58341" title="Pflichtenheft PROMPTFINISHER Commercial – Version 1.0"}
+# Pflichtenheft PROMPTFINISHER Commercial
 ## Verkaufsplattform, Lizenzierung, Kundenportal und netstyle-Administration
 
-**Projekt:** PromptMaster by netstyle  
+**Projekt:** PROMPTFINISHER by netstyle
 **Dokumentstatus:** Technische Baseline V1.0  
 **Stand:** 05.09.2026  
-**Ziel:** Kommerzialisierung von PromptMaster Free und PromptMaster Pro, ohne die eigentliche PromptMaster-Produktlogik neu zu entwickeln.
+**Ziel:** Kommerzialisierung von PROMPTFINISHER Free und PROMPTFINISHER Pro, ohne die eigentliche PROMPTFINISHER-Produktlogik neu zu entwickeln.
 
 ---
 
 # 1. Grundsatzentscheidung
 
-PromptMaster wird künftig aus zwei grundsätzlich getrennten Ebenen bestehen:
+PROMPTFINISHER wird künftig aus zwei grundsätzlich getrennten Ebenen bestehen:
 
 ### Ebene A – die bestehenden Produkte
 
-- PromptMaster Free
-- PromptMaster Pro
+- PROMPTFINISHER Free
+- PROMPTFINISHER Pro
 
 Diese Anwendungen bleiben hinsichtlich ihrer Prompt-Logik, Auswahlmechanismen und eigentlichen Bedienoberfläche unverändert.
 
-Die aktuell vorliegende PromptMaster-Version bestätigt, dass die Anwendung vollständig browserseitig arbeitet: HTML, CSS und JavaScript erzeugen den Prompt lokal; PromptMaster selbst benötigt keine KI-API und verarbeitet die eingegebenen Inhalte nicht auf einem externen PromptMaster-Server. fileciteturn4file0
+Die aktuell vorliegende PROMPTFINISHER-Version bestätigt, dass die Anwendung vollständig browserseitig arbeitet: HTML, CSS und JavaScript erzeugen den Prompt lokal; PROMPTFINISHER selbst benötigt keine KI-API und verarbeitet die eingegebenen Inhalte nicht auf einem externen PROMPTFINISHER-Server. fileciteturn4file0
 
 ### Ebene B – die neue Commercial-Plattform
 
@@ -70,7 +70,7 @@ Neu entwickelt werden:
 - Ausgabeoptionen
 - Qualitätsregeln
 - Prompt-Kopieren-Funktion
-- bestehendes PromptMaster-Produktdesign
+- bestehendes PROMPTFINISHER-Produktdesign
 
 Diese Komponenten werden als **Golden Master** eingefroren.
 
@@ -79,10 +79,10 @@ Vor Beginn der Commercial-Entwicklung wird für die endgültige Free- und Pro-Da
 Beispiel:
 
 ```text
-PromptMaster-Free-final.html
+PROMPTFINISHER-Free-final.html
 SHA256: ...
 
-PromptMaster-Pro-final.html
+PROMPTFINISHER-Pro-final.html
 SHA256: ...
 ```
 
@@ -123,13 +123,13 @@ Sollwert:
 
 Der letzte Punkt ist wichtig:
 
-Wenn ein Browser PromptMaster Pro ausführen soll, muss der Browser HTML und JavaScript erhalten.
+Wenn ein Browser PROMPTFINISHER Pro ausführen soll, muss der Browser HTML und JavaScript erhalten.
 
 Ein berechtigter Benutzer kann theoretisch Browser-Entwicklertools verwenden und JavaScript speichern.
 
 **Lizenzkontrolle ist möglich. Absoluter Quellcode-Kopierschutz einer vollständig clientseitigen Webanwendung ist nicht möglich.**
 
-Eine echte technische Verlagerung der Promptlogik auf den Server würde dieses Problem lösen, würde aber gegen die Vorgabe verstoßen, PromptMaster selbst unverändert zu lassen.
+Eine echte technische Verlagerung der Promptlogik auf den Server würde dieses Problem lösen, würde aber gegen die Vorgabe verstoßen, PROMPTFINISHER selbst unverändert zu lassen.
 
 Für V1 wird deshalb festgelegt:
 
@@ -160,7 +160,7 @@ Minifizierung/Obfuscation kann später als zusätzliche Hürde eingesetzt werden
     ┌────────┼───────────┐
     │        │           │
     ▼        ▼           ▼
-Marketing   Portal   PromptMaster Gate
+Marketing   Portal   PROMPTFINISHER Gate
     │        │           │
 Checkout   Admin         ▼
     │                  PRO HTML
@@ -210,7 +210,7 @@ Damit vermeiden wir die Entwicklung fundamentaler Sicherheitsfunktionen von Grun
 
 **Kein React/Next.js-Zwang.**
 
-Für PromptMaster wäre das in V1 unnötige Komplexität.
+Für PROMPTFINISHER wäre das in V1 unnötige Komplexität.
 
 Wir verwenden:
 
@@ -237,14 +237,14 @@ Die Datenbank enthält ausschließlich Commercial-Daten.
 ### Nicht gespeichert werden:
 
 - Prompttexte
-- Eingaben in PromptMaster
+- Eingaben in PROMPTFINISHER
 - kopierte Prompts
-- ausgewählte PromptMaster-Schwerpunkte
+- ausgewählte PROMPTFINISHER-Schwerpunkte
 - Microsoft-Copilot-Inhalte
 
 Damit bleibt das bestehende Datenschutzprinzip erhalten:
 
-> PromptMaster verarbeitet die eigentlichen Prompt-Inhalte weiterhin lokal im Browser.
+> PROMPTFINISHER verarbeitet die eigentlichen Prompt-Inhalte weiterhin lokal im Browser.
 
 ---
 
@@ -319,7 +319,7 @@ Firewall
 443 / 80
    │
    ▼
-PromptMaster VM
+PROMPTFINISHER VM
 ```
 
 PostgreSQL erhält:
@@ -372,9 +372,9 @@ Keine komplizierte Subdomain-Landschaft in V1.
 
 # 10. Öffentliche Website – Designkonzept
 
-Die Marketingseite erhält bewusst ein anderes Erscheinungsbild als die eigentliche PromptMaster-Anwendung.
+Die Marketingseite erhält bewusst ein anderes Erscheinungsbild als die eigentliche PROMPTFINISHER-Anwendung.
 
-PromptMaster selbst bleibt sachlich.
+PROMPTFINISHER selbst bleibt sachlich.
 
 Die Verkaufswebsite wird:
 
@@ -387,7 +387,7 @@ Die Verkaufswebsite wird:
 - ohne „Gaming“-Optik
 - ohne kitschige KI-Roboter
 
-Die aktuelle PromptMaster-Version verwendet bereits die netstyle-nahe Farbwelt:
+Die aktuelle PROMPTFINISHER-Version verwendet bereits die netstyle-nahe Farbwelt:
 
 ```text
 #30399a
@@ -524,14 +524,14 @@ Desktop:
 Header:
 
 ```text
-netstyle | PromptMaster
+netstyle | PROMPTFINISHER
 
 Funktionen
 Free vs. Pro
 Preise
 FAQ
 
-[PromptMaster Free]
+[PROMPTFINISHER Free]
 [Anmelden]
 ```
 
@@ -539,7 +539,7 @@ FAQ
 
 # 15. Startseite – Buttons
 
-## Button: „PromptMaster Free starten“
+## Button: „PROMPTFINISHER Free starten“
 
 Route:
 
@@ -549,7 +549,7 @@ Route:
 
 Aktion:
 
-Bestehendes PromptMaster Free wird geladen.
+Bestehendes PROMPTFINISHER Free wird geladen.
 
 Keine Registrierung.
 
@@ -557,7 +557,7 @@ Keine Datenbankabfrage erforderlich.
 
 ---
 
-## Button: „PromptMaster Pro entdecken“
+## Button: „PROMPTFINISHER Pro entdecken“
 
 Aktion:
 
@@ -585,7 +585,7 @@ Scroll:
 
 ---
 
-## Button: „PromptMaster Pro kaufen“
+## Button: „PROMPTFINISHER Pro kaufen“
 
 Aktion:
 
@@ -610,7 +610,7 @@ Aktion:
 Darstellung:
 
 ```text
-PromptMaster Pro
+PROMPTFINISHER Pro
 
 Benutzer
 
@@ -685,7 +685,7 @@ Felder:
 
 ```text
 Produkt:
-PromptMaster Pro
+PROMPTFINISHER Pro
 
 Anzahl:
 8
@@ -793,7 +793,7 @@ SEPA-Lastschrift kann nach vollständigem Mandatstest aktiviert werden.
 
 # 23. Zahlungsdaten
 
-PromptMaster speichert niemals:
+PROMPTFINISHER speichert niemals:
 
 - Kreditkartennummer
 - CVV
@@ -823,7 +823,7 @@ Mollie
 Webhook
    │
    ▼
-PromptMaster Backend
+PROMPTFINISHER Backend
    │
    ▼
 Payment erneut über Mollie API prüfen
@@ -891,7 +891,7 @@ Das reduziert das Projekt erheblich.
 
 Derzeit gelten in Deutschland Übergangsregeln zur E-Rechnung; bis Ende 2026 können Rechnungsaussteller grundsätzlich noch sonstige Rechnungen verwenden, bei bestimmten kleineren Unternehmen verlängert sich die Frist bis Ende 2027. Danach wird die strukturierte E-Rechnung im inländischen B2B-Bereich zunehmend zwingend. citeturn661439view1turn661439view3
 
-Deshalb muss PromptMaster von Anfang an E-Rechnungsfähigkeit berücksichtigen.
+Deshalb muss PROMPTFINISHER von Anfang an E-Rechnungsfähigkeit berücksichtigen.
 
 ---
 
@@ -950,7 +950,7 @@ Entweder alles erfolgreich oder keine Teilaktivierung.
 Produkt:
 
 ```text
-PROMPTMASTER_PRO
+PROMPTFINISHER_PRO
 ```
 
 Lizenztyp:
@@ -975,7 +975,7 @@ Organisation:
 Muster GmbH
 
 Produkt:
-PromptMaster Pro
+PROMPTFINISHER Pro
 
 Seats:
 8

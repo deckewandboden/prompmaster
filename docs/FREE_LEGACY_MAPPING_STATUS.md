@@ -35,7 +35,7 @@ Das fehlende PM20-Mapping blockiert **nicht mehr** die serverseitige Free-Kompos
 4. `/free-old/` bleibt als unveränderte Rollback-/Referenzroute beim lokalen Golden-Master-Composer.
 5. Die Free-Komposition bleibt zustandslos; Promptinhalte werden nicht persistiert.
 
-Damit kommt auch **PromptMaster Free im aktuellen Produkt aus der Prompt-Datenbank**, ohne eine fachlich nicht belegte Free→PM20-Zuordnung zu erfinden.
+Damit kommt auch **PROMPTFINISHER Free im aktuellen Produkt aus der Prompt-Datenbank**, ohne eine fachlich nicht belegte Free→PM20-Zuordnung zu erfinden.
 
 ## PM20-Mapping bleibt offen
 

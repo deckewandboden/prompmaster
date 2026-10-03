@@ -2,7 +2,7 @@
 set -Eeuo pipefail
 cd "$(dirname "$0")/.."
 fail(){ echo "[FEHLER] $*" >&2; exit 1; }
-log(){ echo "[PromptMaster] $*"; }
+log(){ echo "[PROMPTFINISHER] $*"; }
 
 os="$(uname -s 2>/dev/null || true)"
 arch="$(uname -m 2>/dev/null || true)"
@@ -48,7 +48,7 @@ assert_external_caddy_ports_closed(){
       awk '$1=="80/tcp" || $1=="443/tcp"'
   )"
   [[ -z "$bindings" ]] || fail "External-Caddy-Modus veröffentlicht unerwartet Host-Port 80/443: $bindings"
-  log "Host-Port-Gate OK: PromptMaster veröffentlicht 80/443 nicht auf dem Host"
+  log "Host-Port-Gate OK: PROMPTFINISHER veröffentlicht 80/443 nicht auf dem Host"
 }
 
 log "Sauberer Repository-/Marketing-Preflight ohne Host-Python/Node-Abhängigkeit"
@@ -95,7 +95,7 @@ if [[ -n "$EXTERNAL_CADDY_NETWORK" ]]; then
   export PM_EXTERNAL_CADDY_NETWORK="$EXTERNAL_CADDY_NETWORK"
   docker network inspect "$EXTERNAL_CADDY_NETWORK" >/dev/null 2>&1 || fail "Externes Reverse-Proxy-Netz fehlt: $EXTERNAL_CADDY_NETWORK"
   F+=(-f compose.external-caddy.yaml)
-  log "Externes TLS-Reverse-Proxy-Netz: $EXTERNAL_CADDY_NETWORK · PromptMaster veröffentlicht keine Host-Ports 80/443"
+  log "Externes TLS-Reverse-Proxy-Netz: $EXTERNAL_CADDY_NETWORK · PROMPTFINISHER veröffentlicht keine Host-Ports 80/443"
 fi
 log "Compose-Konfiguration"; docker compose "${F[@]}" config >/dev/null
 log "Build"; docker compose "${F[@]}" build
@@ -157,7 +157,7 @@ if [[ -n "$EXTERNAL_CADDY_NETWORK" ]]; then
     "wget -qO- --header='Host: ${CADDY_DOMAIN}' http://127.0.0.1/auth/login/ >/dev/null" \
     || fail "External-Caddy kann /auth/login/ nicht fehlerfrei über promptmaster-web-internal erreichen"
   docker compose "${F[@]}" exec -T caddy sh -c \
-    "wget -qO- --header='Host: ${CADDY_DOMAIN}' http://127.0.0.1/catalog.json | grep -q 'PROMPTMASTER_PRO'" \
+    "wget -qO- --header='Host: ${CADDY_DOMAIN}' http://127.0.0.1/catalog.json | grep -q 'PROMPTFINISHER_PRO'" \
     || fail "External-Caddy kann /catalog.json nicht fehlerfrei über promptmaster-web-internal erreichen"
   log "External-Caddy Upstream-Gate OK: Login und Katalog ohne HTTP-400"
 fi

@@ -8,14 +8,14 @@ from django.urls import reverse
 from apps.accounts.models import User
 
 
-class PromptMasterV2RouteIsolationTests(TestCase):
+class PROMPTFINISHERV2RouteIsolationTests(TestCase):
     """Protect the redesign/legacy split without touching Golden Master bytes."""
 
     def _staff_session(self):
         user = User.objects.create_user(
             'pm-v2-staff@example.test',
-            'PromptMaster-V2-Strong-Password-2026!',
-            first_name='PromptMaster',
+            'PROMPTFINISHER-V2-Strong-Password-2026!',
+            first_name='PROMPTFINISHER',
             last_name='V2',
             is_staff=True,
             two_factor_required=True,

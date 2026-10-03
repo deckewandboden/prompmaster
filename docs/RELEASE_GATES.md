@@ -67,7 +67,7 @@ Die ausführbaren Abnahmeschritte stehen in `docs/PRODUCTION_ACCEPTANCE.md`. Die
 - Mollie Sandbox über `external_mollie_acceptance`:
   - echter Portal-Kauf ausschließlich mit `test_`-API-Key,
   - Mollie muss den Providerdatensatz selbst mit `mode=test` zurückliefern,
-  - `metadata.order_id` und öffentliche `webhookUrl` müssen zum lokalen PromptMaster-Kauf passen,
+  - `metadata.order_id` und öffentliche `webhookUrl` müssen zum lokalen PROMPTFINISHER-Kauf passen,
   - echter Webhook / Paid-Aktivierung,
   - Refund über den produktiven Refund-Service,
   - Chargeback über die separate Mollie-Chargeback-Ressource (`reversedAt=null`) und – sofern die verwendete Mollie-Testumgebung ihn anbietet – Chargeback-Reversal über denselben Chargeback mit gesetztem `reversedAt`.

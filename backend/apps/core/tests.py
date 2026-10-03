@@ -311,7 +311,7 @@ class MailIdentitySettingsTests(TestCase):
             'mail_identity',
             {
                 'from_email': 'promptmaster@decke-wand-boden.de',
-                'from_name': 'PromptMaster',
+                'from_name': 'PROMPTFINISHER',
                 'reply_to': 'support@decke-wand-boden.de',
                 'domain': 'decke-wand-boden.de',
                 'spf_record': 'v=spf1 include:spf.protection.outlook.com -all',
@@ -322,7 +322,7 @@ class MailIdentitySettingsTests(TestCase):
         )
         message = SimpleNamespace(
             id='smtp-test-42',
-            subject='PromptMaster SMTP identity test',
+            subject='PROMPTFINISHER SMTP identity test',
             recipient='recipient@example.test',
         )
 
@@ -342,9 +342,9 @@ class MailIdentitySettingsTests(TestCase):
             timeout=20,
         )
         email_class.assert_called_once_with(
-            subject='PromptMaster SMTP identity test',
+            subject='PROMPTFINISHER SMTP identity test',
             body='body',
-            from_email='PromptMaster <promptmaster@decke-wand-boden.de>',
+            from_email='PROMPTFINISHER <promptmaster@decke-wand-boden.de>',
             to=['recipient@example.test'],
             reply_to=['support@decke-wand-boden.de'],
             headers={'Message-ID': '<smtp-test-42@decke-wand-boden.de>'},
@@ -372,7 +372,7 @@ class MailIdentitySettingsTests(TestCase):
         data = {
             'support_email': 'support@example.test',
             'mail_from_email': 'promptmaster@decke-wand-boden.de',
-            'mail_from_name': 'PromptMaster',
+            'mail_from_name': 'PROMPTFINISHER',
             'mail_reply_to': '',
             'mail_domain': 'promptmaster.ai',
             'mail_spf_record': 'include:spf.protection.outlook.com',
@@ -428,7 +428,7 @@ class MailIdentitySettingsTests(TestCase):
                 'support_email': 'support@example.test',
                 'mail_provider': 'graph',
                 'mail_from_email': 'promptmaster@netstyle.de',
-                'mail_from_name': 'PromptMaster',
+                'mail_from_name': 'PROMPTFINISHER',
                 'mail_reply_to': '',
                 'mail_domain': 'netstyle.de',
                 'mail_spf_record': '',
@@ -786,7 +786,7 @@ class AdminDashboardRegressionTests(TestCase):
             email='dashboard@example.test',
             status='active',
         )
-        self.product = Product.objects.create(code='DASH-PRO', name='PromptMaster Pro Test')
+        self.product = Product.objects.create(code='DASH-PRO', name='PROMPTFINISHER Pro Test')
         now = timezone.now()
         License.objects.create(
             company=self.company,

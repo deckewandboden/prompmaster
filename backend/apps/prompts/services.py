@@ -219,7 +219,7 @@ def task_entitled(product_code: str, task_id: str) -> bool:
 def compose_task(*, task_id: str, microsoft_tier: str, payload: dict, product_code: str = 'PRO'):
     if not task_entitled(product_code, task_id):
         raise PromptValidationError(
-            'Diese Prompt-Aufgabe ist für das ausgewählte PromptMaster-Produkt nicht freigeschaltet.',
+            'Diese Prompt-Aufgabe ist für das ausgewählte PROMPTFINISHER-Produkt nicht freigeschaltet.',
             field='task_id',
             code='entitlement_required',
         )

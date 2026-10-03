@@ -1,6 +1,6 @@
 /* V2 owns scroll timing explicitly in JavaScript. */
 html{scroll-behavior:auto!important}
-/* PromptMaster V2 visual layer.
+/* PROMPTFINISHER V2 visual layer.
  * Loaded only on the redesigned routes. Golden-Master markup and logic stay intact.
  */
 :root{
@@ -458,7 +458,7 @@ body.pmv2 textarea{font-family:inherit}
 .pmv2 .task-copy{display:block!important;color:#91a5b6!important;font-size:12px!important;line-height:1.52!important;margin:0!important}
 .pmv2 .task-badges,.pmv2 .task-meta{margin-top:9px!important}
 
-/* PromptMaster Pro uses one flat two-column task grid.
+/* PROMPTFINISHER Pro uses one flat two-column task grid.
    Category information lives inside each card as a compact overline label, so
    headings can no longer create ragged columns or large vertical gaps. */
 .pmv2-pro .task-grid{

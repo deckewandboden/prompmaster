@@ -276,7 +276,7 @@ class PromptDomainSeedTests(TestCase):
                 microsoft_tier='m365basic',
                 product_code='PRO',
                 payload={
-                    'fields': {'Projekt / Thema': 'PromptMaster'},
+                    'fields': {'Projekt / Thema': 'PROMPTFINISHER'},
                     'audience': 'Management',
                     'focus': ['Kernaussagen'],
                     'output': 'Statusbericht',
@@ -434,7 +434,7 @@ class PromptApiTests(TestCase):
                 'task_id': 'PM20-001',
                 'microsoft_tier': 'chatbasic',
                 'input': {
-                    'fields': {'Fragestellung': 'Was ist neu?', 'Kontext': 'PromptMaster'},
+                    'fields': {'Fragestellung': 'Was ist neu?', 'Kontext': 'PROMPTFINISHER'},
                     'audience': 'Management',
                     'focus': ['Primärquellen'],
                     'output': 'Fundierte Antwort',

@@ -1,4 +1,4 @@
-# PromptMaster Commercial — konsolidierter Release-Stand
+# PROMPTFINISHER Commercial — konsolidierter Release-Stand
 
 Stand: 2026-09-23
 
@@ -8,7 +8,7 @@ Der aktuelle Repository-Inhalt wird maschinenlesbar durch `FILE_MANIFEST.tsv` un
 
 ## Ziel dieses Repositorys
 
-Dieses Repository führt die bis jetzt physisch wiedergefundenen und rekonstruierten PromptMaster-Quellen zu einem einzigen Git-/Docker-fähigen Monorepo zusammen. Aktive Produktquellen und historische Wiederherstellungsartefakte sind bewusst getrennt, damit alte Prototypen oder Dokumentationshüllen nicht versehentlich als produktiver Code ausgeführt werden.
+Dieses Repository führt die bis jetzt physisch wiedergefundenen und rekonstruierten PROMPTFINISHER-Quellen zu einem einzigen Git-/Docker-fähigen Monorepo zusammen. Aktive Produktquellen und historische Wiederherstellungsartefakte sind bewusst getrennt, damit alte Prototypen oder Dokumentationshüllen nicht versehentlich als produktiver Code ausgeführt werden.
 
 ## Aktive Laufzeitbereiche
 
@@ -25,7 +25,7 @@ Dieses Repository führt die bis jetzt physisch wiedergefundenen und rekonstruie
 
 Der aktuell integrierte Marketing-Source ist der **neueste physisch vollständig vorhandene Marketing-Quellbaum**. Er wird nicht fälschlich als bytegenaues V15 bezeichnet. Die belegte V13/V14/V15-Provenienz bleibt unter `docs/SOURCE_OF_TRUTH.md` dokumentiert.
 
-### PromptMaster Free
+### PROMPTFINISHER Free
 
 - exakter Golden Master unter `product/golden_masters/promptmaster_free.html`
 - SHA256: `aada4fbb3461d3758c48ed808bf018716a53aa33baf81efb058412e63535b0a8`
@@ -33,10 +33,10 @@ Der aktuell integrierte Marketing-Source ist der **neueste physisch vollständig
 - bewahrte Legacy-/Rollback-Ansicht unter `/free-old/`
 - 16 Free-Legacy-Verträge sind serverseitig als Referenz gesichert
 
-### PromptMaster Pro
+### PROMPTFINISHER Pro
 
 - exakter Golden Master unter `product/golden_masters/promptmaster_pro.html`
-- SHA256: `aa7b2da53ba3cbcf9874b9b6f7381ea4c3e86ee1f9c09db186cbec6876a3c9cf`
+- SHA256: `a18375946c7081034cd6b9d70a1f4e3b843c51e03230477cae246b6c4bf0f95f`
 - V2-Runtime unter `/pro/app/`; Login + aktive Lizenz + gültiges Gerät serverseitig erforderlich
 - bewahrte Legacy-/Rollback-Runtime unter `/pro-old/` mit derselben Auth-/Entitlement-Grenze
 - abgeleitete Runtime nutzt die zentrale PromptDomain
@@ -82,7 +82,7 @@ Der aktuell integrierte Marketing-Source ist der **neueste physisch vollständig
 
 ## Historische / forensische Quellen
 
-`archive/chat-transfer-2026-09-12/` enthält den **kompletten extrahierten Inhalt** von `PromptMaster_CHAT_TRANSFER_LATEST_2026-09-12(2).zip`, inklusive:
+`archive/chat-transfer-2026-09-12/` enthält den **kompletten extrahierten Inhalt** von `PROMPTFINISHER_CHAT_TRANSFER_LATEST_2026-09-12(2).zip`, inklusive:
 
 - Master-Spezifikation
 - RC8-Dokumentationshülle
@@ -101,10 +101,10 @@ Diese Dateien sind Provenienz/Abnahmehilfe und **nicht** die aktive Runtime.
 
 | Quelle | Größe | SHA256 | Verwendung |
 |---|---:|---|---|
-| `PromptMaster_GITHUB_RC13_READY_2026-09-13.zip` | 635.773 B | `e3d514cc405136078f67271b6aabca0f18bffc525d74d84558f374cbf935ee70` | aktive Backend-/Produktbasis |
-| `PromptMaster-Commercial-Sicherung-2026-09-06(1).zip` | 5.168.035 B | `196220ab78971cf86b9e391c3abcd3ebcfa761bd24b1408cfb0d3c7e7d715b3d` | aktives Marketing + Recovery-Dokumente |
-| `PromptMaster_CHAT_TRANSFER_LATEST_2026-09-12(2).zip` | 14.411.033 B | `fcf33456e75fb9064ff9fdd01b7ae8307675717f5d57391c7b2981d8c8ee710d` | vollständig als historische Referenz archiviert |
-| `PromptMaster_v13_EXAKT_Exporter_v2(1).zip` | 3.760 B | `9ddee1b7652156f64eb5b3596a43379f61617b34bc59077451de4e8d2e75e3cc` | Recovery-Werkzeug |
+| `PROMPTFINISHER_GITHUB_RC13_READY_2026-09-13.zip` | 635.773 B | `e3d514cc405136078f67271b6aabca0f18bffc525d74d84558f374cbf935ee70` | aktive Backend-/Produktbasis |
+| `PROMPTFINISHER-Commercial-Sicherung-2026-09-06(1).zip` | 5.168.035 B | `196220ab78971cf86b9e391c3abcd3ebcfa761bd24b1408cfb0d3c7e7d715b3d` | aktives Marketing + Recovery-Dokumente |
+| `PROMPTFINISHER_CHAT_TRANSFER_LATEST_2026-09-12(2).zip` | 14.411.033 B | `fcf33456e75fb9064ff9fdd01b7ae8307675717f5d57391c7b2981d8c8ee710d` | vollständig als historische Referenz archiviert |
+| `PROMPTFINISHER_v13_EXAKT_Exporter_v2(1).zip` | 3.760 B | `9ddee1b7652156f64eb5b3596a43379f61617b34bc59077451de4e8d2e75e3cc` | Recovery-Werkzeug |
 
 ## Deployment-Topologie
 

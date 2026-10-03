@@ -335,7 +335,7 @@ class Command(BaseCommand):
             status='pending',
             defaults={
                 'company': company,
-                'note': 'Präsentationsdemo: Free-Benutzer beantragt PromptMaster Pro.',
+                'note': 'Präsentationsdemo: Free-Benutzer beantragt PROMPTFINISHER Pro.',
                 'resolved_by': None,
                 'resolved_at': None,
                 'assigned_license': None,

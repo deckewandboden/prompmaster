@@ -503,7 +503,7 @@ def activate_my_pro(request):
         return redirect('portal:dashboard')
     current = active_product_assignment(request.user, 'PRO')
     if current:
-        messages.info(request, 'PromptMaster Pro ist für Ihr Benutzerkonto bereits aktiviert.')
+        messages.info(request, 'PROMPTFINISHER Pro ist für Ihr Benutzerkonto bereits aktiviert.')
         return redirect('proaccess:launch')
 
     candidates = (
@@ -522,11 +522,11 @@ def activate_my_pro(request):
     # SELECT DISTINCT ... FOR UPDATE.
     license_obj = next((row for row in candidates if has_current_term(row)), None)
     if not license_obj:
-        messages.error(request, 'Es ist keine freie gültige PromptMaster-Pro-Lizenz verfügbar.')
+        messages.error(request, 'Es ist keine freie gültige PROMPTFINISHER-Pro-Lizenz verfügbar.')
         return redirect('portal:dashboard')
 
     assign_license(license_obj, request.user, request.user)
-    messages.success(request, 'PromptMaster Pro wurde Ihrem Administrator-Konto zugewiesen.')
+    messages.success(request, 'PROMPTFINISHER Pro wurde Ihrem Administrator-Konto zugewiesen.')
     return redirect('proaccess:launch')
 
 
@@ -562,7 +562,7 @@ def request_pro_upgrade(request):
                 )
             messages.success(request, 'Ihre Pro-Anfrage wurde an den Firmenadministrator gesendet.')
         else:
-            messages.info(request, 'Für PromptMaster Pro besteht bereits eine offene Anfrage.')
+            messages.info(request, 'Für PROMPTFINISHER Pro besteht bereits eine offene Anfrage.')
     return redirect('portal:dashboard')
 
 
@@ -1014,7 +1014,7 @@ def privacy_delete_request(request):
 
 @login_required
 def privacy_export(request):
-    """Export the authenticated user's PromptMaster personal data as JSON.
+    """Export the authenticated user's PROMPTFINISHER personal data as JSON.
 
     The export deliberately excludes secrets, device tokens, provider payloads
     and unrelated tenant/member data. Company metadata is included only as the
@@ -1171,7 +1171,7 @@ def buy(request):
             response = _start_mollie_checkout(
                 request,
                 order,
-                f'PromptMaster {order.order_number}',
+                f'PROMPTFINISHER {order.order_number}',
                 {'order_id': str(order.id)},
             )
             if response:

@@ -47,13 +47,13 @@ test('Pro-Kachel auf der Startseite führt zum Lizenzrechner',async()=>{
 test('öffentliche Checkout-Seite enthält den vereinbarten Neukunden-Kaufaufbau',async()=>{
   const html=checkoutPage(7);
   const main=await readFile('src/main.js','utf8');
-  assert.match(html,/PromptMaster Pro kaufen/);
+  assert.match(html,/PROMPTFINISHER Pro kaufen/);
   assert.match(html,/value="company" checked/);
   assert.match(html,/value="private"/);
   for(const field of ['first_name','last_name','email','company_name','legal_form','vat_id','tax_number','street','house_number','postal_code','city','country']){
     assert.match(html,new RegExp('name="'+field+'"'));
   }
-  assert.match(html,/Bereits|Schon bei PromptMaster registriert/);
+  assert.match(html,/Bereits|Schon bei PROMPTFINISHER registriert/);
   assert.match(html,/Zahlungspflichtig kaufen/);
   assert.match(html,/Mollie/);
   assert.match(html,/Keine automatische Verlängerung|keine automatische Verlängerung/);
@@ -66,7 +66,7 @@ test('öffentliche Checkout-Seite enthält den vereinbarten Neukunden-Kaufaufbau
 
 test('Hauptnavigation benennt Free und Pro eindeutig',async()=>{
   const index=await readFile('index.html','utf8');
-  assert.match(index,/href="\/#start">PromptMaster Free &amp; Pro<\/a>/);
+  assert.match(index,/href="\/#start">PROMPTFINISHER Free &amp; Pro<\/a>/);
   assert.match(index,/href="\/#funktionen">Funktionen<\/a>/);
   assert.match(index,/href="\/#preise">Preise<\/a>/);
   assert.match(index,/href="\/#vergleich">Vergleich<\/a>/);
@@ -76,7 +76,7 @@ test('Hauptnavigation benennt Free und Pro eindeutig',async()=>{
 });
 
 
-test('Pro-Kachel verwendet das PromptMaster-Dreieck statt der Krone',async()=>{
+test('Pro-Kachel verwendet das PROMPTFINISHER-Dreieck statt der Krone',async()=>{
   const index=await readFile('index.html','utf8');
   assert.match(index,/class="brand-triangle-mark"/);
   assert.match(index,/<image href="\/brand\/promptmaster-logo-hq\.png"/);

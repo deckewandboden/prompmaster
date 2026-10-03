@@ -6,13 +6,13 @@ def ensure_support_reply_template(apps, schema_editor):
     EmailTemplate.objects.get_or_create(
         code='support_reply',
         defaults={
-            'subject': 'PromptMaster: {subject}',
+            'subject': 'PROMPTFINISHER: {subject}',
             'body_text': (
                 'Guten Tag,\n\n'
-                'wir haben auf Ihre PromptMaster-Anfrage „{subject}“ geantwortet:\n\n'
+                'wir haben auf Ihre PROMPTFINISHER-Anfrage „{subject}“ geantwortet:\n\n'
                 '{message}\n\n'
                 'Vorgang: {reference}\n\n'
-                'Viele Grüße\nIhr PromptMaster-Support'
+                'Viele Grüße\nIhr PROMPTFINISHER-Support'
             ),
             'active': True,
         },

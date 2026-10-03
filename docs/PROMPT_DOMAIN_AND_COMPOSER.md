@@ -4,7 +4,7 @@
 
 Der Prompt-Kern wurde aus dem **aktuellen, hash-geschützten Pro-Golden-Master** materialisiert. Er umfasst 34 Anwendungen und 194 eindeutige PM20-Tasks. Die Golden-Master-Datei selbst wird nicht verändert.
 
-- Pro SHA256: `aa7b2da53ba3cbcf9874b9b6f7381ea4c3e86ee1f9c09db186cbec6876a3c9cf`
+- Pro SHA256: `a18375946c7081034cd6b9d70a1f4e3b843c51e03230477cae246b6c4bf0f95f`
 - Free SHA256: `aada4fbb3461d3758c48ed808bf018716a53aa33baf81efb058412e63535b0a8`
 - PM20-Extrakt: `backend/apps/prompts/data/pm20_golden_logic.json`
 - Free-Provenienz: `backend/apps/prompts/data/free_legacy_tasks.json`
@@ -19,16 +19,16 @@ Der Prompt-Kern wurde aus dem **aktuellen, hash-geschützten Pro-Golden-Master**
 - `PromptVersion` — versionierter Task-Inhalt mit Lifecycle `DRAFT → TEST → REVIEW → APPROVED → PUBLISHED → ARCHIVED`; jede Version ist an ein Policy-Set und an einen App-Regel-Snapshot gebunden.
 - `PromptField` — Pflicht-/Optionalfelder.
 - `PromptOption` — Source/Output/Focus/Audience.
-- `MicrosoftTier` / `MicrosoftCapability` — Microsoft-Lizenz-/Capability-Schicht unabhängig vom PromptMaster-Produktentitlement.
+- `MicrosoftTier` / `MicrosoftCapability` — Microsoft-Lizenz-/Capability-Schicht unabhängig vom PROMPTFINISHER-Produktentitlement.
 - `PromptLegacyContract` — revisionssichere historische Free-/PM11-Verträge ohne stilles ID-Umschreiben.
 
 Pro PromptDefinition darf die Datenbank höchstens eine `PUBLISHED` Version gleichzeitig enthalten. Prompt-Versionen pinnen ihr Policy-Set; spätere globale Regeländerungen verändern daher bereits veröffentlichte Versionen nicht rückwirkend.
 
 ## Entitlements
 
-PromptMaster-Produktrecht und Microsoft-Tier werden getrennt geprüft:
+PROMPTFINISHER-Produktrecht und Microsoft-Tier werden getrennt geprüft:
 
-1. `ProductEntitlement(prompt.task.<PM20-ID>)` muss für das gewählte PromptMaster-Produkt aktiv sein.
+1. `ProductEntitlement(prompt.task.<PM20-ID>)` muss für das gewählte PROMPTFINISHER-Produkt aktiv sein.
 2. Microsoft-Tier muss mindestens den App-/Task-Capability-Rang erfüllen.
 
 Seed-Tiers aus dem Golden Master:

@@ -1,5 +1,5 @@
 {% extends 'portal/base.html' %}{% load pm %}{% block content %}
-<div class="page-head"><div><h1>Bestellungen &amp; Zahlungen</h1><div class="sub">Mollie übernimmt die Zahlungsabwicklung; PromptMaster erzeugt keine eigene Rechnungsengine.</div></div></div>
+<div class="page-head"><div><h1>Bestellungen &amp; Zahlungen</h1><div class="sub">Mollie übernimmt die Zahlungsabwicklung; PROMPTFINISHER erzeugt keine eigene Rechnungsengine.</div></div></div>
 {% include 'includes/grid_toolbar.html' %}
 <div class="tablewrap"><table><thead><tr>
 {% sort_url request 'number' grid.sort grid.direction as u_number %}<th><a href="{{ u_number }}">Bestellung{% if grid.sort == 'number' %} {% if grid.direction == 'asc' %}↑{% else %}↓{% endif %}{% endif %}</a></th>

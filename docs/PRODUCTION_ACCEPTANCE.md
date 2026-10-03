@@ -4,7 +4,7 @@ Diese Datei beschreibt ausschließlich die Gates, die reale Provider-/Infrastruk
 
 ## Mailversand — SMTP oder Microsoft Graph
 
-PromptMaster unterstützt produktiv SMTP1, optional SMTP2 und Microsoft Graph. Der
+PROMPTFINISHER unterstützt produktiv SMTP1, optional SMTP2 und Microsoft Graph. Der
 für den Release tatsächlich gewählte Primärprovider muss real gegen einen externen
 Empfänger abgenommen werden. Ein nicht verwendeter Provider ist kein Go-Live-Blocker.
 
@@ -37,7 +37,7 @@ Voraussetzungen:
 - `GRAPH_CLIENT_SECRET`
 - `GRAPH_SENDER`
 - Microsoft Graph App-only-Authentifizierung über die konfigurierte Entra-App
-- in Exchange Online eine **Application-RBAC**-Zuweisung `Application Mail.Send`, deren Ressourcenbereich ausschließlich das tatsächlich benötigte PromptMaster-Absenderpostfach umfasst
+- in Exchange Online eine **Application-RBAC**-Zuweisung `Application Mail.Send`, deren Ressourcenbereich ausschließlich das tatsächlich benötigte PROMPTFINISHER-Absenderpostfach umfasst
 - **kein zusätzlicher unbeschränkter Entra-`Mail.Send`-Application-Grant**, wenn Application RBAC die wirksame Postfachbegrenzung liefern soll; Entra- und Exchange-RBAC-Berechtigungen sind additiv
 
 ### Postfachbereich vor dem Versand nachweisen
@@ -75,7 +75,7 @@ verpflichtend.
 
 Der Acceptance-Command akzeptiert ausschließlich API-Keys mit `test_`-Präfix. Live-Keys werden abgelehnt. Die `--base-url` muss eine öffentlich erreichbare HTTPS-Adresse sein; `localhost`, lokale/Test-Domains sowie private/Loopback-IP-Adressen werden bereits vor der Provider-Aktion abgelehnt, weil Mollie den Webhook sonst nicht real zurückrufen könnte.
 
-### 1. Echten PromptMaster-Kauf starten
+### 1. Echten PROMPTFINISHER-Kauf starten
 
 Der Benutzer muss ein normal nutzbarer Staging-Kunde mit verifizierter E-Mail, vollständigen Rechnungsdaten und den benötigten Rechtstexten/Steuerregeln sein.
 
@@ -86,9 +86,9 @@ docker compose exec -T web python manage.py external_mollie_acceptance start \
   --confirm CREATE-MOLLIE-TEST-PAYMENT
 ```
 
-Der Command verwendet den echten Portal-POST `/portal/licenses/buy/`. Er akzeptiert den Lauf nur, wenn Mollie den angelegten Payment-Datensatz selbst mit `mode=test` zurückliefert, `metadata.order_id` exakt auf die lokal erzeugte Bestellung zeigt und die von Mollie gespeicherte `webhookUrl` exakt dem öffentlichen PromptMaster-Webhook der angegebenen Base-URL entspricht. Erwartete Ausgabe: `payment_id`, `order`, `checkout_url`, `provider_mode=test`, `webhook_url` und ggf. `change_payment_state_url`.
+Der Command verwendet den echten Portal-POST `/portal/licenses/buy/`. Er akzeptiert den Lauf nur, wenn Mollie den angelegten Payment-Datensatz selbst mit `mode=test` zurückliefert, `metadata.order_id` exakt auf die lokal erzeugte Bestellung zeigt und die von Mollie gespeicherte `webhookUrl` exakt dem öffentlichen PROMPTFINISHER-Webhook der angegebenen Base-URL entspricht. Erwartete Ausgabe: `payment_id`, `order`, `checkout_url`, `provider_mode=test`, `webhook_url` und ggf. `change_payment_state_url`.
 
-Die `checkout_url` im Mollie-Testmodus öffnen und den Teststatus auf **paid** setzen. Mollie muss anschließend den echten PromptMaster-Webhook aufrufen.
+Die `checkout_url` im Mollie-Testmodus öffnen und den Teststatus auf **paid** setzen. Mollie muss anschließend den echten PROMPTFINISHER-Webhook aufrufen.
 
 ### 2. Webhook und Aktivierung prüfen
 
@@ -120,7 +120,7 @@ docker compose exec -T web python manage.py external_mollie_acceptance verify \
   --expect chargeback
 ```
 
-Ein Chargeback-Reversal darf **nur** dann als bestanden markiert werden, wenn Mollie für denselben Chargeback einen gesetzten `reversedAt`-Zeitpunkt liefert und dieser Zustand über den öffentlichen Webhook erneut in PromptMaster verarbeitet wurde. Der Acceptance-Command verlangt dabei gleichzeitig den Provider-Chargeback-Zustand, einen verarbeiteten lokalen `chargeback_reversed`-Event und wieder freigegebene betroffene Lizenzen. Mollie dokumentiert für den Testmodus ausdrücklich das Erzeugen von Refunds und Chargebacks über `changePaymentState`; ein jederzeit verfügbarer manueller Reversal-Schalter ist dagegen nicht garantiert. Falls die verwendete Mollie-Testumgebung einen Reversal-Pfad anbietet, anschließend prüfen:
+Ein Chargeback-Reversal darf **nur** dann als bestanden markiert werden, wenn Mollie für denselben Chargeback einen gesetzten `reversedAt`-Zeitpunkt liefert und dieser Zustand über den öffentlichen Webhook erneut in PROMPTFINISHER verarbeitet wurde. Der Acceptance-Command verlangt dabei gleichzeitig den Provider-Chargeback-Zustand, einen verarbeiteten lokalen `chargeback_reversed`-Event und wieder freigegebene betroffene Lizenzen. Mollie dokumentiert für den Testmodus ausdrücklich das Erzeugen von Refunds und Chargebacks über `changePaymentState`; ein jederzeit verfügbarer manueller Reversal-Schalter ist dagegen nicht garantiert. Falls die verwendete Mollie-Testumgebung einen Reversal-Pfad anbietet, anschließend prüfen:
 
 ```bash
 docker compose exec -T web python manage.py external_mollie_acceptance verify \

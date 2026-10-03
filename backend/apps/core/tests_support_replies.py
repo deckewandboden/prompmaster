@@ -44,7 +44,7 @@ class SupportReplyAdminTests(TestCase):
         EmailTemplate.objects.update_or_create(
             code='support_reply',
             defaults={
-                'subject': 'PromptMaster: {subject}',
+                'subject': 'PROMPTFINISHER: {subject}',
                 'body_text': (
                     'Antwort: {reply}\nStatus: {status}\nVorgang: {support_id}\nBearbeitet von: {responder}'
                 ),
@@ -187,14 +187,14 @@ class SupportReplyAdminTests(TestCase):
     def test_seed_defaults_support_reply_contract_matches_runtime_context(self):
         call_command('seed_defaults', verbosity=0)
         template = EmailTemplate.objects.get(code='support_reply')
-        self.assertEqual(template.subject, 'PromptMaster: {subject}')
+        self.assertEqual(template.subject, 'PROMPTFINISHER: {subject}')
         for field in ('{reply}', '{status}', '{support_id}', '{responder}'):
             self.assertIn(field, template.body_text)
         context = {
             'subject': 'Vertragstest',
             'message': 'Antworttext',
             'reply': 'Antworttext',
-            'responder': 'PromptMaster Support',
+            'responder': 'PROMPTFINISHER Support',
             'status': 'In Bearbeitung',
             'support_id': str(self.request_obj.id),
             'reference': str(self.request_obj.id),
@@ -203,7 +203,7 @@ class SupportReplyAdminTests(TestCase):
         self.assertIn('Antworttext', rendered)
         self.assertIn('In Bearbeitung', rendered)
         self.assertIn(str(self.request_obj.id), rendered)
-        self.assertIn('PromptMaster Support', rendered)
+        self.assertIn('PROMPTFINISHER Support', rendered)
 
     def test_license_and_support_templates_keep_action_and_reply_layout_contract(self):
         from django.conf import settings

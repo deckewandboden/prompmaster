@@ -14,7 +14,7 @@ VERSION = '2026-09-28'
 
 class Command(BaseCommand):
     help = (
-        'Installiert die geprüften PromptMaster-Rechtstexte mit Stand 28.09.2026 '
+        'Installiert die geprüften PROMPTFINISHER-Rechtstexte mit Stand 28.09.2026 '
         'und aktiviert sie versioniert.'
     )
 
@@ -91,10 +91,10 @@ Umsatzsteuer-Identifikationsnummer gemäß § 27a UStG:
 {vat_id or '[intern zu ergänzen]'}
 
 Verantwortlich für journalistisch-redaktionelle Inhalte
-Soweit PromptMaster journalistisch-redaktionelle Inhalte im Sinne von § 18 Abs. 2 Medienstaatsvertrag anbietet, sind die Geschäftsführer Rainer Spickermann, Jürgen Gastes und Thomas Bode, Anschrift wie oben, verantwortlich.
+Soweit PROMPTFINISHER journalistisch-redaktionelle Inhalte im Sinne von § 18 Abs. 2 Medienstaatsvertrag anbietet, sind die Geschäftsführer Rainer Spickermann, Jürgen Gastes und Thomas Bode, Anschrift wie oben, verantwortlich.
 
 Kontakt
-Für Fragen zu PromptMaster erreichen Sie uns unter info@netstyle.de oder telefonisch unter +49 2732 5928-0.
+Für Fragen zu PROMPTFINISHER erreichen Sie uns unter info@netstyle.de oder telefonisch unter +49 2732 5928-0.
 
 {dispute_text}
 
@@ -102,10 +102,10 @@ Hinweis zur früheren EU-Online-Streitbeilegungsplattform
 Die frühere europäische Plattform zur Online-Streitbeilegung (OS-Plattform) wurde eingestellt. Ein Verweis auf diese Plattform wird daher nicht mehr bereitgestellt.
 
 Urheber- und Kennzeichenrechte
-Inhalte, Marken, Logos und sonstige geschützte Bestandteile von PromptMaster dürfen nur im Rahmen der gesetzlichen Vorschriften oder mit Zustimmung des jeweiligen Rechteinhabers genutzt werden. Rechte an Microsoft, Microsoft 365, Copilot und weiteren bezeichneten Produkten liegen bei den jeweiligen Rechteinhabern. PromptMaster ist ein Angebot der netstyle Informationstechnik GmbH.
+Inhalte, Marken, Logos und sonstige geschützte Bestandteile von PROMPTFINISHER dürfen nur im Rahmen der gesetzlichen Vorschriften oder mit Zustimmung des jeweiligen Rechteinhabers genutzt werden. Rechte an Microsoft, Microsoft 365, Copilot und weiteren bezeichneten Produkten liegen bei den jeweiligen Rechteinhabern. PROMPTFINISHER ist ein Angebot der netstyle Informationstechnik GmbH.
 """
 
-        privacy = """Datenschutzerklärung für PromptMaster
+        privacy = """Datenschutzerklärung für PROMPTFINISHER
 
 Stand: 28.09.2026
 
@@ -130,7 +130,7 @@ Am Bühl 2
 57223 Kreuztal
 E-Mail: CContreras@netstyle.de
 
-3. Welche Daten PromptMaster verarbeitet
+3. Welche Daten PROMPTFINISHER verarbeitet
 Je nach Nutzung verarbeiten wir insbesondere:
 - technische Verbindungs- und Sicherheitsdaten, etwa IP-Adresse, Zeitpunkt, Browser-/User-Agent-Informationen sowie Sicherheits- und Auditereignisse,
 - Konto- und Kontaktdaten wie Name, E-Mail-Adresse und gegebenenfalls Telefonnummer,
@@ -142,26 +142,26 @@ Je nach Nutzung verarbeiten wir insbesondere:
 - Erklärungen zu Widerruf, Kündigung und Datenschutzrechten,
 - E-Mail-Versand- und Zustellinformationen.
 
-Zahlungsdaten wie vollständige Kreditkartennummern werden nicht bei PromptMaster gespeichert. Die eigentliche Zahlungsdateneingabe erfolgt beim Zahlungsdienstleister.
+Zahlungsdaten wie vollständige Kreditkartennummern werden nicht bei PROMPTFINISHER gespeichert. Die eigentliche Zahlungsdateneingabe erfolgt beim Zahlungsdienstleister.
 
 4. Zwecke und Rechtsgrundlagen
 Wir verarbeiten personenbezogene Daten insbesondere
-- zur Vertragsanbahnung, Vertragserfüllung, Bereitstellung von PromptMaster, Lizenzverwaltung, Abrechnung und Support auf Grundlage von Art. 6 Abs. 1 Buchst. b DSGVO,
+- zur Vertragsanbahnung, Vertragserfüllung, Bereitstellung von PROMPTFINISHER, Lizenzverwaltung, Abrechnung und Support auf Grundlage von Art. 6 Abs. 1 Buchst. b DSGVO,
 - zur Erfüllung gesetzlicher Aufbewahrungs-, Nachweis-, Steuer-, Handels- und Verbraucherschutzpflichten auf Grundlage von Art. 6 Abs. 1 Buchst. c DSGVO,
 - zur Absicherung des Dienstes, Verhinderung von Missbrauch, Fehleranalyse, IT-Sicherheit, Protokollierung und Durchsetzung berechtigter Ansprüche auf Grundlage von Art. 6 Abs. 1 Buchst. f DSGVO,
 - auf Grundlage einer Einwilligung nach Art. 6 Abs. 1 Buchst. a DSGVO, soweit wir für eine konkrete Verarbeitung eine Einwilligung einholen.
 
 5. Prompt-Erstellung und Microsoft Copilot
-PromptMaster unterstützt bei der Erstellung strukturierter Prompts. Die Ausführung des fertigen Prompts in Microsoft Copilot erfolgt außerhalb von PromptMaster und unterliegt den Bedingungen und Datenschutzhinweisen des vom Nutzer eingesetzten Microsoft-Dienstes. PromptMaster verkauft keine personenbezogenen Daten an Werbenetzwerke und erstellt aus Prompt-Inhalten keine Werbeprofile.
+PROMPTFINISHER unterstützt bei der Erstellung strukturierter Prompts. Die Ausführung des fertigen Prompts in Microsoft Copilot erfolgt außerhalb von PROMPTFINISHER und unterliegt den Bedingungen und Datenschutzhinweisen des vom Nutzer eingesetzten Microsoft-Dienstes. PROMPTFINISHER verkauft keine personenbezogenen Daten an Werbenetzwerke und erstellt aus Prompt-Inhalten keine Werbeprofile.
 
 6. Zahlungsabwicklung über Mollie
-Für Zahlungen nutzen wir Mollie. Im Rahmen der Zahlungsabwicklung werden die hierfür erforderlichen Bestell- und Zahlungsinformationen an Mollie übermittelt. Die Eingabe sensibler Zahlungsinstrumentdaten erfolgt auf den Systemen von Mollie. Mollie verarbeitet Zahlungsdaten im Rahmen seiner eigenen gesetzlichen und datenschutzrechtlichen Verantwortlichkeit. PromptMaster speichert insbesondere Zahlungsstatus, Betrag, Bestellbezug und Provider-Referenzen, soweit dies für Vertragsabwicklung, Nachweis und Buchhaltung erforderlich ist.
+Für Zahlungen nutzen wir Mollie. Im Rahmen der Zahlungsabwicklung werden die hierfür erforderlichen Bestell- und Zahlungsinformationen an Mollie übermittelt. Die Eingabe sensibler Zahlungsinstrumentdaten erfolgt auf den Systemen von Mollie. Mollie verarbeitet Zahlungsdaten im Rahmen seiner eigenen gesetzlichen und datenschutzrechtlichen Verantwortlichkeit. PROMPTFINISHER speichert insbesondere Zahlungsstatus, Betrag, Bestellbezug und Provider-Referenzen, soweit dies für Vertragsabwicklung, Nachweis und Buchhaltung erforderlich ist.
 
 7. E-Mail-Versand
 Wir verwenden E-Mail zur Kontoverifizierung, Passwort- und Sicherheitskommunikation, Vertragsabwicklung, Lizenzinformation, Support, Zahlungsinformation sowie zur gesetzlich erforderlichen Bestätigung von Widerrufs- und Kündigungserklärungen. Je nach technischer Konfiguration erfolgt der Versand über den von netstyle eingesetzten Mailserver bzw. Microsoft Graph.
 
 8. Cookies und lokale Speicherung
-PromptMaster verwendet technisch notwendige Cookies bzw. vergleichbare Mechanismen für Anmeldung, Sitzungsschutz, CSRF-Schutz, Sicherheit und den sicheren Checkout. Nach dem derzeitigen technischen Stand setzt die öffentliche PromptMaster-Marketingseite keine Werbe-, Profiling- oder Webanalyse-Cookies ein. Für ausschließlich technisch erforderliche Speicherung und Zugriffe ist keine Einwilligung über einen Marketing-Cookie-Banner erforderlich. Werden künftig optionale Analyse- oder Marketingdienste eingeführt, wird die Einwilligungssteuerung vor deren Aktivierung entsprechend angepasst.
+PROMPTFINISHER verwendet technisch notwendige Cookies bzw. vergleichbare Mechanismen für Anmeldung, Sitzungsschutz, CSRF-Schutz, Sicherheit und den sicheren Checkout. Nach dem derzeitigen technischen Stand setzt die öffentliche PROMPTFINISHER-Marketingseite keine Werbe-, Profiling- oder Webanalyse-Cookies ein. Für ausschließlich technisch erforderliche Speicherung und Zugriffe ist keine Einwilligung über einen Marketing-Cookie-Banner erforderlich. Werden künftig optionale Analyse- oder Marketingdienste eingeführt, wird die Einwilligungssteuerung vor deren Aktivierung entsprechend angepasst.
 
 9. Empfänger und Kategorien von Empfängern
 Daten können im erforderlichen Umfang an folgende Empfänger übermittelt werden:
@@ -199,7 +199,7 @@ Telefon: 0211 38424-0
 E-Mail: poststelle@ldi.nrw.de
 
 14. Sicherheit
-PromptMaster setzt angemessene technische und organisatorische Maßnahmen ein. Dazu gehören insbesondere verschlüsselte Übertragung, rollenbasierte Berechtigungen, sichere Sitzungen, CSRF-Schutz, serverseitige Lizenzprüfung, Protokollierung sicherheitsrelevanter Vorgänge und getrennte Administrationsbereiche.
+PROMPTFINISHER setzt angemessene technische und organisatorische Maßnahmen ein. Dazu gehören insbesondere verschlüsselte Übertragung, rollenbasierte Berechtigungen, sichere Sitzungen, CSRF-Schutz, serverseitige Lizenzprüfung, Protokollierung sicherheitsrelevanter Vorgänge und getrennte Administrationsbereiche.
 
 15. Änderungen
 Wir passen diese Datenschutzerklärung an, wenn sich Funktionen, Empfänger, Rechtslage oder technische Verarbeitung wesentlich ändern. Die jeweils aktive Fassung wird versioniert bereitgestellt.
@@ -223,7 +223,7 @@ Deutschland
 Telefon: +49 2732 5928-0
 E-Mail: info@netstyle.de
 
-mittels einer eindeutigen Erklärung über Ihren Entschluss, diesen Vertrag zu widerrufen, informieren. Sie können dafür die auf PromptMaster bereitgestellte elektronische Widerrufsfunktion „Vertrag widerrufen“ verwenden. Die Nutzung dieser Funktion ist nicht verpflichtend; ein Widerruf kann auch auf anderem eindeutigem Weg erklärt werden.
+mittels einer eindeutigen Erklärung über Ihren Entschluss, diesen Vertrag zu widerrufen, informieren. Sie können dafür die auf PROMPTFINISHER bereitgestellte elektronische Widerrufsfunktion „Vertrag widerrufen“ verwenden. Die Nutzung dieser Funktion ist nicht verpflichtend; ein Widerruf kann auch auf anderem eindeutigem Weg erklärt werden.
 
 Zur Wahrung der Widerrufsfrist reicht es aus, dass Sie die Mitteilung über die Ausübung des Widerrufsrechts vor Ablauf der Widerrufsfrist absenden.
 
@@ -231,7 +231,7 @@ Folgen des Widerrufs
 Wenn Sie diesen Vertrag widerrufen, haben wir Ihnen alle Zahlungen, die wir von Ihnen im Zusammenhang mit dem widerrufenen Vertrag erhalten haben, unverzüglich und spätestens binnen vierzehn Tagen ab dem Tag zurückzuzahlen, an dem die Mitteilung über Ihren Widerruf bei uns eingegangen ist. Für die Rückzahlung verwenden wir grundsätzlich dasselbe Zahlungsmittel, das Sie bei der ursprünglichen Transaktion eingesetzt haben, sofern nicht ausdrücklich etwas anderes vereinbart wurde und Ihnen dadurch keine Kosten entstehen.
 
 Vorzeitiger Leistungsbeginn
-PromptMaster Pro ist eine digitale Dienstleistung, die nach bestätigter Zahlung kurzfristig bereitgestellt wird. Wenn Sie ausdrücklich verlangen, dass wir vor Ablauf der Widerrufsfrist mit der Leistung beginnen, und Sie den Vertrag später wirksam widerrufen, kann nach den gesetzlichen Voraussetzungen Wertersatz für die bis zum Widerruf erbrachten Leistungen geschuldet sein.
+PROMPTFINISHER Pro ist eine digitale Dienstleistung, die nach bestätigter Zahlung kurzfristig bereitgestellt wird. Wenn Sie ausdrücklich verlangen, dass wir vor Ablauf der Widerrufsfrist mit der Leistung beginnen, und Sie den Vertrag später wirksam widerrufen, kann nach den gesetzlichen Voraussetzungen Wertersatz für die bis zum Widerruf erbrachten Leistungen geschuldet sein.
 
 Elektronische Widerrufsfunktion
 Unter /vertrag-widerrufen/ steht während der Widerrufsfrist eine elektronische Widerrufsfunktion zur Verfügung. Nach Absenden über „Widerruf bestätigen“ erhalten Sie unverzüglich eine elektronische Eingangsbestätigung mit Inhalt, Datum und Uhrzeit Ihrer Erklärung.
@@ -245,7 +245,7 @@ Am Bühl 2
 57223 Kreuztal
 E-Mail: info@netstyle.de
 
-Hiermit widerrufe ich den von mir abgeschlossenen Vertrag über PromptMaster Pro.
+Hiermit widerrufe ich den von mir abgeschlossenen Vertrag über PROMPTFINISHER Pro.
 
 Bestellt / Vertrag geschlossen am:
 Name:
@@ -255,27 +255,27 @@ Datum:
 Unterschrift (nur bei Mitteilung auf Papier):
 """
 
-        terms = f"""Allgemeine Geschäftsbedingungen für PromptMaster
+        terms = f"""Allgemeine Geschäftsbedingungen für PROMPTFINISHER
 
 Stand: 28.09.2026
 
 1. Anbieter und Geltungsbereich
-Anbieter von PromptMaster ist die netstyle Informationstechnik GmbH, Am Bühl 2, 57223 Kreuztal. Diese AGB gelten für die Nutzung von PromptMaster Free und für Verträge über PromptMaster Pro. Gegenüber Verbrauchern gelten zwingende gesetzliche Verbraucherschutzvorschriften vorrangig.
+Anbieter von PROMPTFINISHER ist die netstyle Informationstechnik GmbH, Am Bühl 2, 57223 Kreuztal. Diese AGB gelten für die Nutzung von PROMPTFINISHER Free und für Verträge über PROMPTFINISHER Pro. Gegenüber Verbrauchern gelten zwingende gesetzliche Verbraucherschutzvorschriften vorrangig.
 
 2. Leistungsbeschreibung
-PromptMaster unterstützt Nutzer bei der strukturierten Erstellung von Prompts für Microsoft Copilot und weitere im Produkt bezeichnete Microsoft-Anwendungen. PromptMaster ist kein Bestandteil von Microsoft und ersetzt keine erforderliche Microsoft-Lizenz. Funktionsumfang, unterstützte Anwendungen und technische Voraussetzungen ergeben sich aus der jeweils aktuellen Produktbeschreibung.
+PROMPTFINISHER unterstützt Nutzer bei der strukturierten Erstellung von Prompts für Microsoft Copilot und weitere im Produkt bezeichnete Microsoft-Anwendungen. PROMPTFINISHER ist kein Bestandteil von Microsoft und ersetzt keine erforderliche Microsoft-Lizenz. Funktionsumfang, unterstützte Anwendungen und technische Voraussetzungen ergeben sich aus der jeweils aktuellen Produktbeschreibung.
 
-3. PromptMaster Free
-PromptMaster Free kann im jeweils bereitgestellten Funktionsumfang ohne Entgelt genutzt werden. Ein Anspruch auf dauerhafte Bereitstellung bestimmter kostenloser Funktionen besteht nur im Rahmen zwingender gesetzlicher Vorgaben.
+3. PROMPTFINISHER Free
+PROMPTFINISHER Free kann im jeweils bereitgestellten Funktionsumfang ohne Entgelt genutzt werden. Ein Anspruch auf dauerhafte Bereitstellung bestimmter kostenloser Funktionen besteht nur im Rahmen zwingender gesetzlicher Vorgaben.
 
-4. PromptMaster Pro
-PromptMaster Pro ist eine entgeltliche digitale Dienstleistung. Pro-Lizenzen werden je Benutzer bzw. Lizenzplatz für die beim Kauf angegebene Laufzeit bereitgestellt. Nach aktuellem Produktmodell beträgt die Laufzeit exakt 365 Tage. Es erfolgt keine automatische kostenpflichtige Verlängerung. Eine Verlängerung erfordert eine neue ausdrückliche Bestellung.
+4. PROMPTFINISHER Pro
+PROMPTFINISHER Pro ist eine entgeltliche digitale Dienstleistung. Pro-Lizenzen werden je Benutzer bzw. Lizenzplatz für die beim Kauf angegebene Laufzeit bereitgestellt. Nach aktuellem Produktmodell beträgt die Laufzeit exakt 365 Tage. Es erfolgt keine automatische kostenpflichtige Verlängerung. Eine Verlängerung erfordert eine neue ausdrückliche Bestellung.
 
 5. Vertragsschluss
 Die Darstellung auf der Webseite ist eine Aufforderung zur Abgabe einer Bestellung. Der Kunde wählt Lizenzanzahl und Kundentyp, gibt die erforderlichen Daten ein und gibt über die eindeutig als zahlungspflichtig gekennzeichnete Schaltfläche eine verbindliche Bestellung ab. Der Vertrag kommt nach erfolgreicher Annahme und Zahlungsabwicklung entsprechend dem im Checkout dargestellten Ablauf zustande. Der Vertragsinhalt und die zugeordneten Rechtsdokumentversionen werden technisch protokolliert.
 
 6. Preise und Zahlung
-Es gelten die im Checkout unmittelbar vor Abgabe der Bestellung angezeigten Preise. Verbraucherpreise werden einschließlich der gesetzlichen Umsatzsteuer angezeigt. Die Abrechnung für PromptMaster Pro erfolgt nach aktuellem Produktmodell für die gesamte 365-Tage-Laufzeit im Voraus. Die Zahlungsabwicklung erfolgt über Mollie und die im Checkout angebotenen Zahlungsmethoden.
+Es gelten die im Checkout unmittelbar vor Abgabe der Bestellung angezeigten Preise. Verbraucherpreise werden einschließlich der gesetzlichen Umsatzsteuer angezeigt. Die Abrechnung für PROMPTFINISHER Pro erfolgt nach aktuellem Produktmodell für die gesamte 365-Tage-Laufzeit im Voraus. Die Zahlungsabwicklung erfolgt über Mollie und die im Checkout angebotenen Zahlungsmethoden.
 
 7. Bereitstellung und Benutzerkonto
 Nach bestätigter Zahlung werden die erworbenen Lizenzen dem Kundenkonto zugeordnet. Bei Unternehmenskunden verwaltet der Firmenadministrator die Benutzer und Lizenzzuweisungen. Zugangsdaten sind geheim zu halten und dürfen nicht mit unberechtigten Dritten geteilt werden.
@@ -293,13 +293,13 @@ Verlangt ein Verbraucher im Checkout ausdrücklich den Beginn der digitalen Dien
 Eine Pro-Lizenz endet nach Ablauf der vereinbarten Laufzeit, wenn keine Verlängerung bestellt wurde. Die gesetzlichen Rechte zur außerordentlichen Kündigung bleiben unberührt. Verbraucher können eine Kündigungserklärung über die dauerhaft erreichbare Funktion /vertraege-kuendigen/ abgeben. Bei fehlender Angabe eines Beendigungszeitpunkts wird eine Kündigung im Zweifel zum frühestmöglichen rechtlich wirksamen Zeitpunkt behandelt.
 
 12. Änderungen und Aktualisierungen
-netstyle darf PromptMaster weiterentwickeln und aktualisieren. Gegenüber Verbrauchern bleiben die gesetzlichen Rechte bei digitalen Produkten unberührt. Erforderliche Aktualisierungen einschließlich Sicherheitsaktualisierungen werden im gesetzlich geschuldeten Zeitraum bereitgestellt. Wesentliche nachteilige Änderungen richten sich nach den dafür geltenden gesetzlichen Voraussetzungen.
+netstyle darf PROMPTFINISHER weiterentwickeln und aktualisieren. Gegenüber Verbrauchern bleiben die gesetzlichen Rechte bei digitalen Produkten unberührt. Erforderliche Aktualisierungen einschließlich Sicherheitsaktualisierungen werden im gesetzlich geschuldeten Zeitraum bereitgestellt. Wesentliche nachteilige Änderungen richten sich nach den dafür geltenden gesetzlichen Voraussetzungen.
 
 13. Verfügbarkeit
-netstyle betreibt PromptMaster mit angemessener Sorgfalt. Wartung, Sicherheitsmaßnahmen, Störungen von Netzen und Diensten Dritter sowie Ereignisse außerhalb des zumutbaren Einflussbereichs können die Verfügbarkeit vorübergehend einschränken. Zwingende gesetzliche Ansprüche bleiben unberührt.
+netstyle betreibt PROMPTFINISHER mit angemessener Sorgfalt. Wartung, Sicherheitsmaßnahmen, Störungen von Netzen und Diensten Dritter sowie Ereignisse außerhalb des zumutbaren Einflussbereichs können die Verfügbarkeit vorübergehend einschränken. Zwingende gesetzliche Ansprüche bleiben unberührt.
 
 14. Ergebnisse und Microsoft-Dienste
-PromptMaster erzeugt Hilfestellungen und strukturierte Prompts. Ein bestimmtes Ergebnis bei Microsoft Copilot wird nicht garantiert. Inhalt, Verfügbarkeit und Leistungsumfang von Microsoft-Diensten unterliegen den Bedingungen des jeweiligen Anbieters.
+PROMPTFINISHER erzeugt Hilfestellungen und strukturierte Prompts. Ein bestimmtes Ergebnis bei Microsoft Copilot wird nicht garantiert. Inhalt, Verfügbarkeit und Leistungsumfang von Microsoft-Diensten unterliegen den Bedingungen des jeweiligen Anbieters.
 
 15. Pflichten des Kunden
 Der Kunde ist für die Richtigkeit seiner Angaben, die Sicherheit seiner Konten und die rechtmäßige Nutzung eingegebener Inhalte verantwortlich. Es dürfen insbesondere keine rechtswidrigen Inhalte, fremden Zugangsdaten oder Inhalte verarbeitet werden, für deren Nutzung keine Berechtigung besteht.
@@ -311,7 +311,7 @@ Für Verbraucher gelten die gesetzlichen Vorschriften für digitale Produkte, in
 netstyle haftet unbeschränkt bei Vorsatz und grober Fahrlässigkeit, bei schuldhafter Verletzung von Leben, Körper oder Gesundheit, nach dem Produkthaftungsgesetz sowie im Umfang ausdrücklich übernommener Garantien. Bei leicht fahrlässiger Verletzung wesentlicher Vertragspflichten ist die Haftung auf den vertragstypischen, vorhersehbaren Schaden begrenzt. Im Übrigen ist die Haftung bei leichter Fahrlässigkeit ausgeschlossen, soweit gesetzlich zulässig. Zwingende Verbraucherrechte bleiben unberührt.
 
 18. Datenschutz
-Informationen zur Verarbeitung personenbezogener Daten enthält die jeweils aktuelle PromptMaster-Datenschutzerklärung.
+Informationen zur Verarbeitung personenbezogener Daten enthält die jeweils aktuelle PROMPTFINISHER-Datenschutzerklärung.
 
 19. Verbraucherstreitbeilegung
 {dispute_text.replace('Verbraucherstreitbeilegung\n', '')}
@@ -323,17 +323,17 @@ Es gilt deutsches Recht unter Ausschluss des UN-Kaufrechts. Bei Verbrauchern gil
 Sollte eine Bestimmung unwirksam sein oder werden, bleiben die übrigen Bestimmungen wirksam. An die Stelle einer unwirksamen Bestimmung treten die gesetzlichen Regelungen.
 """
 
-        license_terms = """Lizenz- und Nutzungsbedingungen für PromptMaster
+        license_terms = """Lizenz- und Nutzungsbedingungen für PROMPTFINISHER
 
 Stand: 28.09.2026
 
 1. Gegenstand
-Diese Lizenz- und Nutzungsbedingungen regeln die Nutzung von PromptMaster Free und PromptMaster Pro ergänzend zu den AGB.
+Diese Lizenz- und Nutzungsbedingungen regeln die Nutzung von PROMPTFINISHER Free und PROMPTFINISHER Pro ergänzend zu den AGB.
 
 2. Nutzungsrecht
-Während der jeweiligen Bereitstellungs- bzw. Lizenzdauer erhält der berechtigte Nutzer ein einfaches, nicht ausschließliches, nicht übertragbares Recht, PromptMaster über die bereitgestellte Webanwendung für eigene rechtmäßige Zwecke zu verwenden.
+Während der jeweiligen Bereitstellungs- bzw. Lizenzdauer erhält der berechtigte Nutzer ein einfaches, nicht ausschließliches, nicht übertragbares Recht, PROMPTFINISHER über die bereitgestellte Webanwendung für eigene rechtmäßige Zwecke zu verwenden.
 
-3. PromptMaster Pro und Lizenzplätze
+3. PROMPTFINISHER Pro und Lizenzplätze
 Ein Pro-Lizenzplatz darf zu einem Zeitpunkt nur einem berechtigten Nutzer zugeordnet sein. Bei Unternehmenskonten kann der Firmenadministrator einen Lizenzplatz innerhalb des eigenen Unternehmens freigeben und einem anderen berechtigten Mitarbeiter neu zuordnen. Die technische Lizenzhistorie bleibt aus Nachweis- und Sicherheitsgründen erhalten.
 
 4. Geräte
@@ -342,7 +342,7 @@ Soweit ein Produkt ein Gerätelimit vorsieht, darf die Nutzung nur innerhalb des
 5. Nicht gestattete Nutzung
 Nicht gestattet sind insbesondere
 - die Weitergabe persönlicher Zugangsdaten an unberechtigte Dritte,
-- die entgeltliche oder unentgeltliche Weitervermietung oder der Weiterverkauf einzelner PromptMaster-Zugänge ohne Zustimmung von netstyle,
+- die entgeltliche oder unentgeltliche Weitervermietung oder der Weiterverkauf einzelner PROMPTFINISHER-Zugänge ohne Zustimmung von netstyle,
 - das Umgehen technischer Lizenz-, Zugriffs- oder Sicherheitsmechanismen,
 - automatisierte missbräuchliche Zugriffe, die Sicherheit oder Stabilität beeinträchtigen,
 - die Nutzung für rechtswidrige Zwecke.
@@ -353,7 +353,7 @@ Gesetzlich zwingend erlaubte Handlungen bleiben unberührt.
 Der Nutzer behält seine Rechte an selbst eingegebenen Inhalten. Er ist dafür verantwortlich, dass er zur Verarbeitung und Nutzung der eingegebenen Informationen berechtigt ist. Besonders schutzbedürftige oder vertrauliche Daten sollen nur eingegeben werden, wenn dies für den jeweiligen Anwendungsfall erforderlich und organisatorisch zulässig ist.
 
 7. Microsoft und Drittprodukte
-Microsoft, Microsoft 365, Copilot und andere genannte Drittprodukte sind nicht Bestandteil der PromptMaster-Lizenz. Erforderliche Lizenzen, Konten und Berechtigungen für Drittprodukte sind vom Nutzer bzw. seinem Unternehmen selbst bereitzustellen.
+Microsoft, Microsoft 365, Copilot und andere genannte Drittprodukte sind nicht Bestandteil der PROMPTFINISHER-Lizenz. Erforderliche Lizenzen, Konten und Berechtigungen für Drittprodukte sind vom Nutzer bzw. seinem Unternehmen selbst bereitzustellen.
 
 8. Updates und Weiterentwicklung
 Während einer aktiven Pro-Laufzeit stehen die im Produkt enthaltenen allgemeinen Weiterentwicklungen im Rahmen des jeweiligen Produkts zur Verfügung. Gegenüber Verbrauchern gelten zusätzlich die gesetzlichen Aktualisierungspflichten für digitale Produkte einschließlich erforderlicher Sicherheitsaktualisierungen.
@@ -362,15 +362,15 @@ Während einer aktiven Pro-Laufzeit stehen die im Produkt enthaltenen allgemeine
 Das Recht zur Nutzung von Pro-Funktionen endet mit Ablauf der bezahlten Lizenzperiode, soweit keine Verlängerung erfolgt. Das Kundenkonto kann für Verwaltung, Historie und erneuten Lizenzerwerb bestehen bleiben. Gesetzliche Rückabwicklungs-, Widerrufs- und Kündigungsrechte bleiben unberührt.
 
 10. Schutzrechte
-PromptMaster, Software, Gestaltung, Datenstrukturen und Inhalte sind im Rahmen der anwendbaren Schutzrechte geschützt. Diese Bedingungen übertragen keine Eigentums- oder Schutzrechte an der Software selbst.
+PROMPTFINISHER, Software, Gestaltung, Datenstrukturen und Inhalte sind im Rahmen der anwendbaren Schutzrechte geschützt. Diese Bedingungen übertragen keine Eigentums- oder Schutzrechte an der Software selbst.
 """
 
-        accessibility = """Information zur Barrierefreiheit von PromptMaster
+        accessibility = """Information zur Barrierefreiheit von PROMPTFINISHER
 
 Stand: 28.09.2026
 
 1. Anbieter und Dienstleistung
-PromptMaster ist eine webbasierte digitale Dienstleistung der netstyle Informationstechnik GmbH, Am Bühl 2, 57223 Kreuztal. Die Anwendung unterstützt Nutzer dabei, strukturierte Prompts für Microsoft Copilot zu erstellen. PromptMaster Pro kann online bestellt, bezahlt, aktiviert und über ein Kundenportal verwaltet werden.
+PROMPTFINISHER ist eine webbasierte digitale Dienstleistung der netstyle Informationstechnik GmbH, Am Bühl 2, 57223 Kreuztal. Die Anwendung unterstützt Nutzer dabei, strukturierte Prompts für Microsoft Copilot zu erstellen. PROMPTFINISHER Pro kann online bestellt, bezahlt, aktiviert und über ein Kundenportal verwaltet werden.
 
 2. Durchführung der Dienstleistung
 Die wesentlichen Schritte sind:
@@ -380,13 +380,13 @@ Die wesentlichen Schritte sind:
 - Bestätigung der Vertragsinformationen,
 - Weiterleitung zur sicheren Zahlungsabwicklung,
 - Aktivierung des Kundenkontos und der Lizenzen,
-- Nutzung von PromptMaster und Verwaltung von Benutzern, Lizenzen, Geräten und Bestellungen.
+- Nutzung von PROMPTFINISHER und Verwaltung von Benutzern, Lizenzen, Geräten und Bestellungen.
 
 3. Barrierefreiheitsanforderungen
-Für den elektronischen Geschäftsverkehr berücksichtigt PromptMaster die anwendbaren Anforderungen des Barrierefreiheitsstärkungsgesetzes (BFSG) und der hierzu erlassenen Verordnung. Ziel ist, Informationen, Identifizierungs-, Authentifizierungs-, Sicherheits- und Zahlungsfunktionen so anzubieten, dass sie wahrnehmbar, bedienbar, verständlich und robust nutzbar sind.
+Für den elektronischen Geschäftsverkehr berücksichtigt PROMPTFINISHER die anwendbaren Anforderungen des Barrierefreiheitsstärkungsgesetzes (BFSG) und der hierzu erlassenen Verordnung. Ziel ist, Informationen, Identifizierungs-, Authentifizierungs-, Sicherheits- und Zahlungsfunktionen so anzubieten, dass sie wahrnehmbar, bedienbar, verständlich und robust nutzbar sind.
 
 4. Umgesetzte Maßnahmen
-PromptMaster verwendet unter anderem:
+PROMPTFINISHER verwendet unter anderem:
 - semantische HTML-Strukturen und beschriftete Formularfelder,
 - Tastaturbedienbarkeit der wesentlichen Formulare und Funktionen,
 - verständliche Überschriften und Navigationsbezeichnungen,
@@ -400,7 +400,7 @@ PromptMaster verwendet unter anderem:
 Die öffentliche Marketingseite kann dekorative grafische beziehungsweise animierte Elemente enthalten. Diese sind für Abschluss, Verwaltung und Nutzung eines Vertrags nicht erforderlich. Wesentliche Produkt-, Preis- und Vertragsinformationen werden zusätzlich textlich bereitgestellt.
 
 6. Laufende Prüfung
-PromptMaster wird technisch weiterentwickelt. Festgestellte Barrieren werden bewertet und im Rahmen der gesetzlichen Anforderungen behoben. Diese Information beruht auf einer internen technischen Bewertung und ersetzt keine förmliche Zertifizierung.
+PROMPTFINISHER wird technisch weiterentwickelt. Festgestellte Barrieren werden bewertet und im Rahmen der gesetzlichen Anforderungen behoben. Diese Information beruht auf einer internen technischen Bewertung und ersetzt keine förmliche Zertifizierung.
 
 7. Feedback und Kontakt
 Wenn Sie eine Barriere feststellen oder Informationen in einer besser zugänglichen Form benötigen, wenden Sie sich bitte an:
@@ -422,7 +422,7 @@ Telefon: +49 391 289 230 23
 E-Mail: kontakt@mlbf-barrierefrei.de
 
 9. Erstellung und Überprüfung
-Erstellt am 28.09.2026. Die Angaben werden bei wesentlichen Änderungen an PromptMaster oder den gesetzlichen Anforderungen überprüft und aktualisiert.
+Erstellt am 28.09.2026. Die Angaben werden bei wesentlichen Änderungen an PROMPTFINISHER oder den gesetzlichen Anforderungen überprüft und aktualisiert.
 """
 
         documents = {
@@ -452,7 +452,7 @@ Erstellt am 28.09.2026. Die Angaben werden bei wesentlichen Änderungen an Promp
 
         templates = {
             'withdrawal_received': (
-                'PromptMaster – Eingang Ihres Widerrufs',
+                'PROMPTFINISHER – Eingang Ihres Widerrufs',
                 'Guten Tag {name},\n\nwir bestätigen den Eingang Ihres Widerrufs.\n'
                 'Vertrag / Bestellung / Kundennummer: {contract_reference}\n'
                 'Eingang: {submitted_at}\n'
@@ -460,7 +460,7 @@ Erstellt am 28.09.2026. Die Angaben werden bei wesentlichen Änderungen an Promp
                 'Diese Nachricht dokumentiert den elektronischen Eingang Ihrer Erklärung.',
             ),
             'cancellation_received': (
-                'PromptMaster – Eingang Ihrer Kündigung',
+                'PROMPTFINISHER – Eingang Ihrer Kündigung',
                 'Guten Tag {name},\n\nwir bestätigen den Eingang Ihrer Kündigung.\n'
                 'Art: {cancellation_kind}\n'
                 'Vertrag / Bestellung / Kundennummer: {contract_reference}\n'
@@ -483,7 +483,7 @@ Erstellt am 28.09.2026. Die Angaben werden bei wesentlichen Änderungen an Promp
 
         self.stdout.write(
             self.style.SUCCESS(
-                f'PromptMaster-Rechtstexte {VERSION} aktiviert: '
+                f'PROMPTFINISHER-Rechtstexte {VERSION} aktiviert: '
                 + ', '.join(documents.keys())
             )
         )
