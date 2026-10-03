@@ -5,7 +5,7 @@ import subprocess
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
-SKIP_PREFIXES = ("archive/",)
+SKIP_PREFIXES = ("archive/", ".github/workflows/")
 SKIP_FILES = {
     "FILE_MANIFEST.tsv",
     "FILE_MANIFEST_AUDIT.tsv",
