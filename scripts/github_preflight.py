@@ -26,6 +26,7 @@ def run(*args: str) -> None:
 # ---------------------------------------------------------------------------
 
 checks = [
+    ('python', 'scripts/validate_brand.py'),
     ('python', 'scripts/validate_runtime_config.py'),
     ('python', 'scripts/test_runtime_config.py'),
     (
