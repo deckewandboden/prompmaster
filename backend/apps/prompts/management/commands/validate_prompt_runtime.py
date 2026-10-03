@@ -302,13 +302,14 @@ class Command(BaseCommand):
         try:
             host = next((value for value in settings.ALLOWED_HOSTS if value not in {'*', ''}), 'localhost')
             client = Client(HTTP_HOST=host, HTTP_AUTHORIZATION=f'Bearer {raw}')
-            health = client.get('/api/v1/mcp/health/')
+            health = client.get('/api/v1/mcp/health/', secure=True)
             if health.status_code != 200 or health.json().get('status') != 'ok':
                 raise CommandError(f'MCP health fehlgeschlagen: {health.status_code} {health.content[:500]!r}')
             initialize = client.post(
                 '/api/v1/mcp/',
                 data=json.dumps({'jsonrpc': '2.0', 'id': 1, 'method': 'initialize', 'params': {}}),
                 content_type='application/json',
+                secure=True,
             )
             if initialize.status_code != 200:
                 raise CommandError(f'MCP initialize fehlgeschlagen: {initialize.status_code}')
@@ -316,11 +317,12 @@ class Command(BaseCommand):
                 '/api/v1/mcp/',
                 data=json.dumps({'jsonrpc': '2.0', 'id': 2, 'method': 'tools/list', 'params': {}}),
                 content_type='application/json',
+                secure=True,
             )
             names = {row['name'] for row in tools.json().get('result', {}).get('tools', [])}
             if names != {'prompt.read', 'prompt.draft', 'prompt.test'}:
                 raise CommandError(f'MCP Tools unerwartet: {sorted(names)}')
-            faq = client.get('/api/v1/content/faqs/')
+            faq = client.get('/api/v1/content/faqs/', secure=True)
             if faq.status_code != 200 or faq.json().get('count', 0) < 6:
                 raise CommandError('FAQ API fehlgeschlagen.')
         finally:
