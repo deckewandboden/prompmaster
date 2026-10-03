@@ -35,9 +35,8 @@ violations: list[str] = []
 for rel in tracked_files():
     if rel in SKIP_FILES or any(rel.startswith(prefix) for prefix in SKIP_PREFIXES):
         continue
-    for token in FORBIDDEN:
-        if token in rel:
-            violations.append(f"{rel}: obsolete product name in active path")
+    if "promptmaster" in rel.casefold():
+        violations.append(f"{rel}: obsolete product name in active path")
     path = ROOT / rel
     if not path.is_file():
         continue
