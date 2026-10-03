@@ -90,6 +90,28 @@ old_hashes = {
 files = active_text_files()
 changed, replaced = replace_everywhere(files, REPLACEMENTS)
 
+# Newly changed branding lines must satisfy git diff --check. Some historical
+# Markdown sources used two trailing spaces for a hard line break; once the
+# line is changed by the rename, remove only that trailing whitespace.
+whitespace_changed = 0
+for path in files:
+    text = path.read_text(encoding="utf-8")
+    lines = text.splitlines(keepends=True)
+    updated_lines = []
+    touched = False
+    for line in lines:
+        ending = "\n" if line.endswith("\n") else ""
+        body = line[:-1] if ending else line
+        if "PROMPTFINISHER" in body:
+            clean = body.rstrip(" \t")
+            if clean != body:
+                touched = True
+            body = clean
+        updated_lines.append(body + ending)
+    if touched:
+        path.write_text("".join(updated_lines), encoding="utf-8")
+        whitespace_changed += 1
+
 new_hashes = {
     rel: sha256(ROOT / rel)
     for rel in HASH_TARGETS
@@ -123,6 +145,7 @@ if inventory.is_file():
 print(
     "REBRAND OK: "
     f"{changed} content file(s), {replaced} product-name replacement(s), "
+    f"{whitespace_changed} whitespace-normalized file(s), "
     f"{hash_changed} hash-reference file(s), {hash_replaced} hash replacement(s)"
 )
 for rel in HASH_TARGETS:
