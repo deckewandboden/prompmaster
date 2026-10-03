@@ -317,6 +317,7 @@ class Command(BaseCommand):
                 '/api/v1/mcp/',
                 data=json.dumps({'jsonrpc': '2.0', 'id': 2, 'method': 'tools/list', 'params': {}}),
                 content_type='application/json',
+                secure=True,
             )
             names = {row['name'] for row in tools.json().get('result', {}).get('tools', [])}
             if names != {'prompt.read', 'prompt.draft', 'prompt.test'}:
