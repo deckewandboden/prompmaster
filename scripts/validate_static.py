@@ -277,7 +277,7 @@ for token in (
     'overflow-y:auto!important',
 ):
     if token not in v2_css:
-        fail(f'V2 screenshot regression invariant missing from promptmaster_v2 CSS: {token}')
+        fail(f'V2 screenshot regression invariant missing from promptfinisher_v2 CSS: {token}')
 
 # 8) Every model app must have concrete initial migrations; migration CreateModel
 # names must cover all concrete model classes defined by that app.
