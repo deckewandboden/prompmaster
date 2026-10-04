@@ -16,6 +16,7 @@ class User(TimeStampedModel,AbstractBaseUser,PermissionsMixin):
     two_factor_required=models.BooleanField(default=False); totp_secret_enc=models.TextField(blank=True); last_security_change_at=models.DateTimeField(null=True,blank=True)
     security_version=models.PositiveBigIntegerField(default=1)
     last_totp_step=models.BigIntegerField(default=-1)
+    ui_language=models.CharField(max_length=10,default='de')
     objects=UserManager(); USERNAME_FIELD='email'; REQUIRED_FIELDS=[]
     def __str__(self): return self.email
     @property
