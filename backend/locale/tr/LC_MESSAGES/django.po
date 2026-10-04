@@ -251,3 +251,158 @@ msgstr "Arama veya filtre sonucu yok."
 msgid "Filter zurücksetzen"
 msgstr "Filtreleri sıfırla"
 
+msgid "+ Benutzer hinzufügen"
+msgstr "+ Kullanıcı ekle"
+
+msgid "AGB"
+msgstr "Genel şartlar"
+
+msgid "Abbrechen"
+msgstr "İptal"
+
+msgid "Administrator übertragen"
+msgstr "Yöneticiyi devret"
+
+msgid "Aktiv"
+msgstr "Aktif"
+
+msgid "Aktive Mitglieder"
+msgstr "Aktif üyeler"
+
+msgid "Anzahl"
+msgstr "Adet"
+
+msgid "Bestellungen & Zahlungen öffnen"
+msgstr "Siparişleri ve ödemeleri aç"
+
+msgid "Checkout"
+msgstr "Ödeme"
+
+msgid "Datenschutz"
+msgstr "Gizlilik"
+
+msgid "Der Link wurde per E-Mail versendet."
+msgstr "Bağlantı e-posta ile gönderildi."
+
+msgid "Firmen-Administrator"
+msgstr "Şirket yöneticisi"
+
+msgid "Gerät entfernen"
+msgstr "Cihazı kaldır"
+
+msgid "Geräteslots der aktiven PROMPTFINISHER-Pro-Lizenzen."
+msgstr "Aktif PROMPTFINISHER Pro lisanslarının cihaz yuvaları."
+
+msgid "Gerätewechsel"
+msgstr "Cihaz değişikliği"
+
+msgid "Gesamt"
+msgstr "Toplam"
+
+msgid "Jetzt verlängern"
+msgstr "Şimdi yenile"
+
+msgid "Kein Pro-Zugriff für dieses Benutzerkonto."
+msgstr "Bu kullanıcı hesabı için Pro erişimi yok."
+
+msgid "Kein aktiver Firmenadministrator gefunden."
+msgstr "Aktif şirket yöneticisi bulunamadı."
+
+msgid "Keine Geräte."
+msgstr "Cihaz yok."
+
+msgid "Link zur Kontrolle"
+msgstr "Kontrol bağlantısı"
+
+msgid "Lizenz jetzt zuordnen"
+msgstr "Lisansı şimdi ata"
+
+msgid "Lizenz verlängern"
+msgstr "Lisansı yenile"
+
+msgid "Lizenzbedingungen"
+msgstr "Lisans koşulları"
+
+msgid "Lizenzen insgesamt"
+msgstr "Toplam lisans"
+
+msgid "Lizenzstatus"
+msgstr "Lisans durumu"
+
+msgid "Lizenzzuordnung bestätigen"
+msgstr "Lisans atamasını onayla"
+
+msgid "Nächster Ablauf"
+msgstr "Sonraki sona erme"
+
+msgid "PROMPTFINISHER PRO"
+msgstr "PROMPTFINISHER PRO"
+
+msgid "PROMPTFINISHER Pro für mich aktivieren"
+msgstr "PROMPTFINISHER Pro'yu benim için etkinleştir"
+
+msgid "PROMPTFINISHER Pro starten →"
+msgstr "PROMPTFINISHER Pro'yu başlat →"
+
+msgid "Pro anfragen"
+msgstr "Pro talep et"
+
+msgid "Sicherer PROMPTFINISHER-Zuordnungslink."
+msgstr "Güvenli PROMPTFINISHER atama bağlantısı."
+
+msgid "Speichern"
+msgstr "Kaydet"
+
+msgid "Stammdaten, Steuerdaten und Firmen-Administrator."
+msgstr "Ana veriler, vergi bilgileri ve şirket yöneticisi."
+
+msgid "Team öffnen"
+msgstr "Ekibi aç"
+
+msgid "Team- und Lizenzverwaltung"
+msgstr "Ekip ve lisans yönetimi"
+
+msgid "Unternehmensdaten"
+msgstr "Şirket bilgileri"
+
+msgid "Unternehmensdaten bearbeiten"
+msgstr "Şirket bilgilerini düzenle"
+
+msgid "Unternehmensdaten unvollständig."
+msgstr "Şirket bilgileri eksik."
+
+msgid "Updates während Laufzeit"
+msgstr "Süre boyunca güncellemeler"
+
+msgid "Widerruf"
+msgstr "Cayma"
+
+msgid "Widerrufen"
+msgstr "İptal edildi"
+
+msgid "Zahlungen mit Handlungsbedarf"
+msgstr "İşlem gerektiren ödemeler"
+
+msgid "Zahlungspflichtig kaufen →"
+msgstr "Ödeme yükümlülüğüyle satın al →"
+
+msgid "Zuordnungslink erzeugt"
+msgstr "Atama bağlantısı oluşturuldu"
+
+msgid "Zurück zum Benutzer"
+msgstr "Kullanıcıya dön"
+
+msgid "aktiv"
+msgstr "aktif"
+
+msgid "enthalten"
+msgstr "dahil"
+
+msgid "inkl. MwSt."
+msgstr "KDV dahil"
+
+msgid "registriert"
+msgstr "kayıtlı"
+
+msgid "Änderungen werden erst nach erfolgreicher Validierung gespeichert."
+msgstr "Değişiklikler yalnızca başarılı doğrulamadan sonra kaydedilir."
