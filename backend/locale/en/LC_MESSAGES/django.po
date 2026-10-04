@@ -757,3 +757,117 @@ msgstr "active users without Pro assignment"
 
 msgid "registriert / Kapazität"
 msgstr "registered / capacity"
+
+msgid "Die vorbereitete Lizenz wird Ihrem aktuell angemeldeten Benutzerkonto zugeordnet. Der Link kann anschließend nicht erneut verwendet werden."
+msgstr "The prepared license will be assigned to your currently signed-in user account. The link cannot be used again afterwards."
+
+msgid "Gültig bis %(expiry)s. Der Link ist tenantgebunden, für genau diesen Benutzer bestimmt und nur einmal verwendbar."
+msgstr "Valid until %(expiry)s. The link is tenant-bound, intended for exactly this user and can be used only once."
+
+msgid "Jede neue Lizenz startet nach erfolgreicher Zahlung mit eigener 365-Tage-Laufzeit."
+msgstr "Each new license starts its own 365-day term after successful payment."
+
+msgid "inkl. MwSt. · %(days)s Tage"
+msgstr "incl. VAT · %(days)s days"
+
+msgid "%(limit)s Geräte je Benutzer"
+msgstr "%(limit)s devices per user"
+
+msgid "Preis nicht verfügbar"
+msgstr "Price unavailable"
+
+msgid "V1: exakt ein aktiver Firmenadministrator. Eine Übertragung ist nur auf ein aktives Team-Mitglied möglich."
+msgstr "V1: exactly one active company administrator. Transfer is only possible to an active team member."
+
+msgid "Ihre eigenen Geräteslots können Sie hier selbst verwalten."
+msgstr "You can manage your own device slots here."
+
+msgid "Geräteslots werden durch den Firmenadministrator verwaltet."
+msgstr "Device slots are managed by the company administrator."
+
+msgid "Widerrufene Geräte bleiben als Historie erhalten."
+msgstr "Revoked devices remain in the history."
+
+msgid "Zuletzt %(seen)s"
+msgstr "Last seen %(seen)s"
+
+msgid "Gerät wirklich entfernen?"
+msgstr "Really remove device?"
+
+msgid "Konto, Unternehmen, Benutzer-ID und Zeitpunkt werden automatisch zugeordnet. Optional kann eine für Ihr Konto sichtbare Lizenz mitgesendet werden. Passwörter, Tokens oder andere unnötige sensitive Daten werden nicht übernommen."
+msgstr "Account, company, user ID and timestamp are assigned automatically. Optionally, a license visible to your account can be included. Passwords, tokens or other unnecessary sensitive data are not included."
+
+msgid "Exportieren Sie die zu Ihrem Benutzer gespeicherten PROMPTFINISHER-Daten als JSON. Secrets und Daten anderer Benutzer werden nicht exportiert."
+msgstr "Export the PROMPTFINISHER data stored for your user as JSON. Secrets and data of other users are not exported."
+
+msgid "Ihre Löschanfrage vom %(requested)s ist bereits erfasst. Status: %(status)s."
+msgstr "Your deletion request from %(requested)s has already been recorded. Status: %(status)s."
+
+msgid "Sie können die Löschung Ihres PROMPTFINISHER-Kontos anfordern. Gesetzlich erforderliche Geschäfts- und Nachweisdaten werden nur im erforderlichen Umfang weiter aufbewahrt bzw. anonymisiert. Firmenadministratoren müssen ihre Administratorrolle vor der Verarbeitung übertragen."
+msgstr "You can request deletion of your PROMPTFINISHER account. Legally required business and evidence data will only be retained or anonymized to the extent required. Company administrators must transfer their administrator role before processing."
+
+msgid "Ich möchte die Löschung meines Kontos verbindlich anfordern."
+msgstr "I want to make a binding request to delete my account."
+
+msgid "Guten Morgen, %(first_name)s"
+msgstr "Good morning, %(first_name)s"
+
+msgid "Privatkonto"
+msgstr "Private account"
+
+msgid "Unternehmensadministrator"
+msgstr "Company administrator"
+
+msgid "%(assigned)s vergeben · %(free)s verfügbar"
+msgstr "%(assigned)s assigned · %(free)s available"
+
+msgid "%(free)s frei · %(expiring)s läuft bald ab"
+msgstr "%(free)s free · %(expiring)s expiring soon"
+
+msgid "Tage"
+msgstr "days"
+
+msgid "kein Ablauf"
+msgstr "no expiry"
+
+msgid "Eine Lizenz läuft in %(days)s Tagen ab."
+msgstr "A license expires in %(days)s days."
+
+msgid "freie Pro-Lizenzen"
+msgstr "free Pro licenses"
+
+msgid "Freie Pro-Lizenzen können Team-Mitgliedern zugewiesen werden."
+msgstr "Free Pro licenses can be assigned to team members."
+
+msgid "Für Kauf/Abrechnung fehlen: %(fields)s."
+msgstr "Missing for purchase/billing: %(fields)s."
+
+msgid "Tage verbleibend"
+msgstr "days remaining"
+
+msgid "Deine Lizenz läuft am %(expiry)s ab."
+msgstr "Your license expires on %(expiry)s."
+
+msgid "Es ist eine freie Pro-Lizenz verfügbar."
+msgstr "A free Pro license is available."
+
+msgid "Aktuell ist keine freie Pro-Lizenz verfügbar. Kaufen Sie eine weitere Lizenz oder geben Sie eine bestehende Lizenz frei."
+msgstr "No free Pro license is currently available. Buy another license or release an existing one."
+
+msgid "Ihre Pro-Anfrage ist bereits offen."
+msgstr "Your Pro request is already open."
+
+msgid "Für den Pro-Zugriff benötigen Sie eine aktive PROMPTFINISHER-Pro-Lizenz."
+msgstr "You need an active PROMPTFINISHER Pro license for Pro access."
+
+msgid "Portal durchsuchen"
+msgstr "Search portal"
+
+msgid "Geben Sie einen Suchbegriff ein. Firmenadministratoren können nach Teammitgliedern, E-Mail-Adressen und Lizenzen suchen; andere Benutzer sehen ausschließlich ihre eigene Lizenzsicht."
+msgstr "Enter a search term. Company administrators can search team members, email addresses and licenses; other users only see their own license view."
+
+msgid "Kunde"
+msgstr "Customer"
+
+msgid "Pro-Lizenzen noch frei"
+msgstr "Pro licenses still free"
