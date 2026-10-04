@@ -1,10 +1,10 @@
 {
   "project": "PROMPTFINISHER Commercial RC14 Full Repository",
-  "generated_at": "2026-10-04T12:49:30.026Z",
-  "file_count_excluding_manifest_files": 524,
-  "total_bytes_excluding_manifest_files": 20720195,
+  "generated_at": "2026-10-04T12:50:17.514Z",
+  "file_count_excluding_manifest_files": 525,
+  "total_bytes_excluding_manifest_files": 20741781,
   "roles": {
-    "active-backend": 317,
+    "active-backend": 318,
     "active-ci": 1,
     "active-marketing": 99,
     "active-operations": 32,
@@ -1631,8 +1631,8 @@
     },
     {
       "path": "backend/templates/app_shell.html",
-      "size": 1062,
-      "sha256": "7f7c3ebacd4e8c15a621656c8dc4ca2fe760c63833079836dd6d54dd279bcbe6",
+      "size": 1499,
+      "sha256": "08382a971d7fc4f70a542f95ad48527099530cab22946c27aafc68672a417f61",
       "role": "active-backend"
     },
     {
@@ -1655,8 +1655,8 @@
     },
     {
       "path": "backend/templates/auth/login.html",
-      "size": 502,
-      "sha256": "c90d0d08f57ed08b875e612e59f2358ebdf58542292e7edb52e4d1861e93f275",
+      "size": 893,
+      "sha256": "aff80387e3704a8ed673c4be39e2e5e0ebe5aa3d7bc6e75874d047ea856d2853",
       "role": "active-backend"
     },
     {
@@ -1703,8 +1703,8 @@
     },
     {
       "path": "backend/templates/auth/register.html",
-      "size": 728,
-      "sha256": "494d047563a651234c1b4a995a0e2767e792a830a5ca2e151173d67da5e09506",
+      "size": 2978,
+      "sha256": "b87e5d989a29ae49ea5cef80b587fea10054b15b98a7e1abb889d5b9851e1286",
       "role": "active-backend"
     },
     {
@@ -1727,14 +1727,20 @@
     },
     {
       "path": "backend/templates/base.html",
-      "size": 316,
-      "sha256": "be126fd05da864270df4661737e8707015f3724acc52fcba18f3944bb4da2616",
+      "size": 559,
+      "sha256": "3c639ffd28dbf6310d5804ea0acaeb94db8173da4ae3a77a730196a1fd7002b8",
       "role": "active-backend"
     },
     {
       "path": "backend/templates/includes/grid_toolbar.html",
-      "size": 2391,
-      "sha256": "da53bad0adffef400100582b26f9d8795da8016ed9bd0edf6850d60b2378023a",
+      "size": 3465,
+      "sha256": "b20d7c95f4d758c0facb4dfbe0be480075f45c6deec506eb9835c073ac7fc95b",
+      "role": "active-backend"
+    },
+    {
+      "path": "backend/templates/includes/language_switcher.html",
+      "size": 974,
+      "sha256": "091e17499539c7c018d1ee9d724b35dcdb7cd986c4c2b7bd338f5d45655d32d8",
       "role": "active-backend"
     },
     {
@@ -1763,8 +1769,8 @@
     },
     {
       "path": "backend/templates/ns_admin/base.html",
-      "size": 3248,
-      "sha256": "293485cc7d3ceb03b9336ec78950226353b38a6b2963dc29b8de4146f0429a29",
+      "size": 7414,
+      "sha256": "17f63fbb0ee0a25b00fd0989d0899c9acf7a4c9cb336c21cd61b56189f597118",
       "role": "active-backend"
     },
     {
@@ -2033,56 +2039,56 @@
     },
     {
       "path": "backend/templates/portal/assignment_link_claim.html",
-      "size": 566,
-      "sha256": "a39bbeda37b510cb314f250526dc9f0a124ef84ee5fb4bf1a666c09969d66cb4",
+      "size": 673,
+      "sha256": "a24236c8fee54daad321cda7b580806a35713517018daf04ce650a6dbe2c0f9e",
       "role": "active-backend"
     },
     {
       "path": "backend/templates/portal/assignment_link_created.html",
-      "size": 680,
-      "sha256": "565668800add9f18cec7b761eb345926e3d7f130001d6977eb3b9d460422c4be",
+      "size": 821,
+      "sha256": "1b44f2100bc8ecde9027c9648ab3e9ec5fd62928c40ca0321b0b1a567d01fd84",
       "role": "active-backend"
     },
     {
       "path": "backend/templates/portal/base.html",
-      "size": 2093,
-      "sha256": "b516c0d8dcdb6b13a993911784481a6bfa1454f44d610f5e23d2f656f2ee5699",
+      "size": 4995,
+      "sha256": "12824f8ef25154bab446e12b469ad39977e52474967bd86982b2b9862ecc53e7",
       "role": "active-backend"
     },
     {
       "path": "backend/templates/portal/buy.html",
-      "size": 900,
-      "sha256": "f1335e7d9e4419e389f2bd430c6f8a7365c8ba48e633f46a81d8bf2ea24bb2dd",
+      "size": 3834,
+      "sha256": "1c44d80708aa27aa5c460093f8626f5354c4744972d97b148250acfe25d9a2fc",
       "role": "active-backend"
     },
     {
       "path": "backend/templates/portal/company.html",
-      "size": 316,
-      "sha256": "3d06e7f4815076397a242fb19dbbb82b93da4f24488c5e082df1651e9f97fcb4",
+      "size": 1240,
+      "sha256": "e5593ddd3d53fb6f0a4cea488de242293986281c323f3d72321dd9e32ad463d1",
       "role": "active-backend"
     },
     {
       "path": "backend/templates/portal/dashboard.html",
-      "size": 2417,
-      "sha256": "c501cded809039460ffed35fc3c020f1f505c4ee22d652a22487e80e2c9f2836",
+      "size": 6308,
+      "sha256": "463acec3d365679741fd442868844fd643bbca03bdc7cf8e52019587e80fc8ac",
       "role": "active-backend"
     },
     {
       "path": "backend/templates/portal/devices.html",
-      "size": 1697,
-      "sha256": "568c397fb7b70263c41bdb7c8ce8b612461275d77bd52accd46916730014e54e",
+      "size": 1783,
+      "sha256": "079f3ea5f81aba6a52d0d40fceceec169be8b87155b007857455a6c5c5e2dae6",
       "role": "active-backend"
     },
     {
       "path": "backend/templates/portal/form.html",
-      "size": 226,
-      "sha256": "6da7e44a5e00b6421ea15a531563f5f2f51734890126400e237db99399fe2f0d",
+      "size": 466,
+      "sha256": "850b3dd54905940dbdf61cff8d2f0421e41f1d97dfed709c1e8c581be616a674",
       "role": "active-backend"
     },
     {
       "path": "backend/templates/portal/help.html",
-      "size": 1077,
-      "sha256": "8d1bef9f32b29f8a7794d83cc6feb02d2079e165913cdeb7834b753d1b7863d0",
+      "size": 1903,
+      "sha256": "492f5861acebd0e6553b7f3285f09f80974143679a40dac7b745f7fbcfc09585",
       "role": "active-backend"
     },
     {
