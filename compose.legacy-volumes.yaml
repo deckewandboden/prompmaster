@@ -1,5 +1,5 @@
 # Production adoption overlay for pre-existing physical volumes from the
-# former PromptMaster Compose project. It is added by scripts/deploy.sh only
+# previous Compose project. It is added by scripts/deploy.sh only
 # when the complete legacy volume set already exists.
 volumes:
   postgres_data:
