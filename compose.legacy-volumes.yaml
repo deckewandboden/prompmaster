@@ -1,0 +1,31 @@
+# Production adoption overlay for pre-existing physical volumes from the
+# previous Compose project. It is added by scripts/deploy.sh only
+# when the complete legacy volume set already exists.
+volumes:
+  postgres_data:
+    external: true
+    name: promptmaster_postgres_data
+  redis_data:
+    external: true
+    name: promptmaster_redis_data
+  static_data:
+    external: true
+    name: promptmaster_static_data
+  caddy_data:
+    external: true
+    name: promptmaster_caddy_data
+  caddy_config:
+    external: true
+    name: promptmaster_caddy_config
+  prometheus_data:
+    external: true
+    name: promptmaster_prometheus_data
+  backup_status:
+    external: true
+    name: promptmaster_backup_status
+  backup_repository:
+    external: true
+    name: promptmaster_backup_repository
+  export_data:
+    external: true
+    name: promptmaster_export_data

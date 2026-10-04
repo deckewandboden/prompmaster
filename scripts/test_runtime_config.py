@@ -4,7 +4,7 @@ import unittest
 
 import yaml
 
-from validate_runtime_config import ROOT, validate
+from validate_runtime_config import ROOT, validate, validate_legacy_volume_overlay
 from validate_env import is_external_s3_repository, is_local_restic_repository, normalize_mail_provider
 
 
@@ -32,6 +32,12 @@ class RuntimeConfigTests(unittest.TestCase):
         for key, physical_name in expected.items():
             with self.subTest(volume=key):
                 self.assertEqual(self.base['volumes'][key]['name'], physical_name)
+
+    def test_promptfinisher_legacy_volume_overlay_is_external_and_complete(self):
+        self.assertEqual(validate_legacy_volume_overlay(), [])
+        deploy = (ROOT / 'scripts' / 'deploy.sh').read_text()
+        self.assertIn('if [[ -f "$LAST_SUCCESS_FILE" ]]', deploy)
+        self.assertIn('F+=(-f compose.legacy-volumes.yaml)', deploy)
 
     def test_promptfinisher_backup_transition_keeps_legacy_restore_fallback(self):
         backup = (ROOT / 'backup' / 'backup.sh').read_text()
