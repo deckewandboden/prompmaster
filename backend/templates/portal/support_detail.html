@@ -1,32 +1,32 @@
-{% extends 'portal/base.html' %}
+{% extends 'portal/base.html' %}{% load i18n %}
 {% block content %}
 <div class="page-head">
   <div>
     <h1>{{ support_request.subject }}</h1>
     <div class="sub">{{ support_request.get_category_display }} · {{ support_request.created_at|date:'d.m.Y H:i' }}</div>
   </div>
-  <a class="btn secondary" href="{% url 'portal:help' %}">Zurück</a>
+  <a class="btn secondary" href="{% url 'portal:help' %}">{% translate "Zurück" %}</a>
 </div>
 
 <div class="grid two">
   <section class="card">
-    <h2>Anfrage</h2>
-    <div class="statusrow"><span>Status</span><strong>{{ support_request.get_status_display }}</strong></div>
-    <div class="statusrow"><span>Lizenz</span><strong>{% if support_request.license %}{{ support_request.license.license_number }} · {{ support_request.license.product.name }}{% else %}–{% endif %}</strong></div>
+    <h2>{% translate "Anfrage" %}</h2>
+    <div class="statusrow"><span>{% translate "Status" %}</span><strong>{{ support_request.get_status_display }}</strong></div>
+    <div class="statusrow"><span>{% translate "Lizenz" %}</span><strong>{% if support_request.license %}{{ support_request.license.license_number }} · {{ support_request.license.product.name }}{% else %}–{% endif %}</strong></div>
     <div class="message-box">{{ support_request.message|linebreaksbr }}</div>
   </section>
 
   <section class="card">
-    <h2>Bearbeitungsstand</h2>
-    <p class="muted">Hier sehen Sie ausschließlich Nachrichten, die für Sie bzw. Ihr Unternehmen bestimmt sind. Interne netstyle-Notizen werden nicht im Kundenportal angezeigt.</p>
+    <h2>{% translate "Bearbeitungsstand" %}</h2>
+    <p class="muted">{% translate "Hier sehen Sie ausschließlich Nachrichten, die für Sie bzw. Ihr Unternehmen bestimmt sind. Interne netstyle-Notizen werden nicht im Kundenportal angezeigt." %}</p>
   </section>
 </div>
 
 <section class="card support-thread-card">
   <div class="support-thread-head">
     <div>
-      <h2>Verlauf</h2>
-      <div class="sub">Ihre Anfrage und alle für Kunden freigegebenen Antworten.</div>
+      <h2>{% translate "Verlauf" %}</h2>
+      <div class="sub">{% translate "Ihre Anfrage und alle für Kunden freigegebenen Antworten." %}</div>
     </div>
   </div>
 
