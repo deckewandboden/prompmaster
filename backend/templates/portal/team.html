@@ -2,14 +2,14 @@
 <div class="page-head"><div><h1>{% translate "Mein Team" %}</h1><div class="sub">{% translate "Benutzer, Einladungen, Lizenzen und Geräte verwalten." %}</div></div><div class="page-actions"><a class="btn secondary" href="{% url 'portal:invitations' %}">{% translate "Einladungen" %}</a><a class="btn primary" href="{% url 'portal:invite' %}">{% translate "+ Benutzer hinzufügen" %}</a></div></div>
 <div class="grid kpis">
   <div class="card kpi"><div>{% translate "Team-Mitglieder" %}</div><div class="value">{{ team_count }}</div><div class="small muted">{% translate "aktive Benutzer" %}</div></div>
-  <div class="card purple kpi"><div>{% translate "PROMPTFINISHER Pro" %}</div><div class="value">{{ pro_count }}</div><div class="small muted">{{ free_license_count }} Pro-Lizenz{% if free_license_count != 1 %}en{% endif %} noch frei</div></div>
+  <div class="card purple kpi"><div>{% translate "PROMPTFINISHER Pro" %}</div><div class="value">{{ pro_count }}</div><div class="small muted">{{ free_license_count }} {% translate "Pro-Lizenzen noch frei" %}</div></div>
   <div class="card kpi"><div>{% translate "PROMPTFINISHER Free" %}</div><div class="value">{{ free_user_count }}</div><div class="small muted">{% translate "aktive Benutzer ohne Pro-Zuweisung" %}</div></div>
   <div class="card kpi"><div>{% translate "Geräte" %}</div><div class="value">{{ device_count }}{% if device_capacity %} / {{ device_capacity }}{% endif %}</div><div class="small muted">{% translate "registriert / Kapazität" %}</div></div>
 </div>
 {% include 'includes/grid_toolbar.html' %}
 <div class="tablewrap"><table><thead><tr>
 {% sort_url request 'name' grid.sort grid.direction as u_name %}<th><a href="{{ u_name }}">{% translate "Benutzer" %}{% if grid.sort == 'name' %} {% if grid.direction == 'asc' %}↑{% else %}↓{% endif %}{% endif %}</a></th>
-{% sort_url request 'email' grid.sort grid.direction as u_email %}<th><a href="{{ u_email }}">E-Mail{% if grid.sort == 'email' %} {% if grid.direction == 'asc' %}↑{% else %}↓{% endif %}{% endif %}</a></th>
+{% sort_url request 'email' grid.sort grid.direction as u_email %}<th><a href="{{ u_email }}">{% translate "E-Mail" %}{% if grid.sort == 'email' %} {% if grid.direction == 'asc' %}↑{% else %}↓{% endif %}{% endif %}</a></th>
 <th>{% translate "Lizenz" %}</th><th>{% translate "Geräte" %}</th><th>{% translate "Status" %}</th>
 {% sort_url request 'last' grid.sort grid.direction as u_last %}<th><a href="{{ u_last }}">{% translate "Zuletzt aktiv" %}{% if grid.sort == 'last' %} {% if grid.direction == 'asc' %}↑{% else %}↓{% endif %}{% endif %}</a></th>
 <th>{% translate "Aktion" %}</th></tr></thead><tbody>
