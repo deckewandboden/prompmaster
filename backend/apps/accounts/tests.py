@@ -328,7 +328,7 @@ class UiLanguagePreferenceTests(TestCase):
         self.assertEqual(settings.LANGUAGE_CODE, 'de')
 
     def test_anonymous_language_switch_sets_cookie_and_preserves_safe_destination(self):
-        response = self.client.post(
+        response = self.client.get(
             reverse('accounts:set_ui_language'),
             {'language': 'es', 'next': '/auth/login/'},
         )
@@ -344,7 +344,15 @@ class UiLanguagePreferenceTests(TestCase):
             last_name='User',
         )
         self.client.force_login(user)
-        response = self.client.post(
+        from django.utils import timezone
+        session = self.client.session
+        now = timezone.now().timestamp()
+        session['security_version'] = user.security_version
+        session['authenticated_at'] = now
+        session['last_activity_at'] = now
+        session['two_factor_ok'] = True
+        session.save()
+        response = self.client.get(
             reverse('accounts:set_ui_language'),
             {'language': 'pt', 'next': '/'},
         )
@@ -354,7 +362,7 @@ class UiLanguagePreferenceTests(TestCase):
         self.assertEqual(response.cookies['promptfinisher_language'].value, 'pt')
 
     def test_unknown_language_fails_closed_to_german_and_blocks_external_next(self):
-        response = self.client.post(
+        response = self.client.get(
             reverse('accounts:set_ui_language'),
             {'language': 'xx', 'next': 'https://evil.example/'},
         )
