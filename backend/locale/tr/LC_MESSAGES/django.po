@@ -1,0 +1,211 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: PROMPTFINISHER\n"
+"Language: tr\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+msgid "Sprache auswählen"
+msgstr "Dil seç"
+
+msgid "Sprache"
+msgstr "Dil"
+
+msgid "Suchen …"
+msgstr "Ara …"
+
+msgid "Suchen"
+msgstr "Ara"
+
+msgid "Lead, Kunde, Benutzer, Lizenz-ID oder E-Mail suchen …"
+msgstr "Potansiyel müşteri, müşteri, kullanıcı, lisans kimliği veya e-posta ara …"
+
+msgid "Superadmin"
+msgstr "Süper yönetici"
+
+msgid "netstyle Benutzer"
+msgstr "netstyle kullanıcısı"
+
+msgid "netstyle Admin-Backend"
+msgstr "netstyle yönetim paneli"
+
+msgid "Übersicht"
+msgstr "Genel bakış"
+
+msgid "Leads"
+msgstr "Potansiyel müşteriler"
+
+msgid "Kunden"
+msgstr "Müşteriler"
+
+msgid "Lizenzen"
+msgstr "Lisanslar"
+
+msgid "Bestellungen"
+msgstr "Siparişler"
+
+msgid "Zahlungen"
+msgstr "Ödemeler"
+
+msgid "Produkte & Preise"
+msgstr "Ürünler ve fiyatlar"
+
+msgid "Prompt Studio"
+msgstr "Prompt Studio"
+
+msgid "FAQ & Inhalte"
+msgstr "SSS ve içerikler"
+
+msgid "E-Mail"
+msgstr "E-posta"
+
+msgid "Mollie"
+msgstr "Mollie"
+
+msgid "Statistiken"
+msgstr "İstatistikler"
+
+msgid "System & Betrieb"
+msgstr "Sistem ve işletim"
+
+msgid "API & Integrationen"
+msgstr "API ve entegrasyonlar"
+
+msgid "Datenschutz & Recht"
+msgstr "Gizlilik ve hukuk"
+
+msgid "Kontaktanfragen"
+msgstr "İletişim talepleri"
+
+msgid "Protokolle"
+msgstr "Kayıtlar"
+
+msgid "Benutzer & Rollen"
+msgstr "Kullanıcılar ve roller"
+
+msgid "Einstellungen"
+msgstr "Ayarlar"
+
+msgid "Abmelden"
+msgstr "Çıkış yap"
+
+msgid "Home"
+msgstr "Ana sayfa"
+
+msgid "System"
+msgstr "Sistem"
+
+msgid "Logs"
+msgstr "Kayıtlar"
+
+msgid "Mehr"
+msgstr "Daha fazla"
+
+msgid "Kundenportal"
+msgstr "Müşteri portalı"
+
+msgid "KUNDENPORTAL"
+msgstr "MÜŞTERİ PORTALI"
+
+msgid "Benutzer, E-Mail oder Lizenz suchen …"
+msgstr "Kullanıcı, e-posta veya lisans ara …"
+
+msgid "Lizenz suchen …"
+msgstr "Lisans ara …"
+
+msgid "Privatkunde"
+msgstr "Bireysel müşteri"
+
+msgid "Dashboard"
+msgstr "Kontrol paneli"
+
+msgid "Mein Team"
+msgstr "Ekibim"
+
+msgid "Weitere Lizenzen kaufen"
+msgstr "Daha fazla lisans satın al"
+
+msgid "Geräte"
+msgstr "Cihazlar"
+
+msgid "Bestellungen & Zahlungen"
+msgstr "Siparişler ve ödemeler"
+
+msgid "Unternehmen"
+msgstr "Şirket"
+
+msgid "Hilfe & Kontakt"
+msgstr "Yardım ve iletişim"
+
+msgid "Team"
+msgstr "Ekip"
+
+msgid "Anmelden"
+msgstr "Giriş yap"
+
+msgid "Ein Zugang für PROMPTFINISHER, Kundenportal und netstyle Admin"
+msgstr "PROMPTFINISHER, müşteri portalı ve netstyle yönetimi için tek hesap"
+
+msgid "Noch kein Konto? Konto erstellen"
+msgstr "Henüz hesabınız yok mu? Hesap oluştur"
+
+msgid "Passwort vergessen?"
+msgstr "Parolanızı mı unuttunuz?"
+
+msgid "Konto anlegen"
+msgstr "Hesap oluştur"
+
+msgid "Registrieren"
+msgstr "Kayıt ol"
+
+msgid "Unternehmensadministratoren richten anschließend verpflichtend 2FA ein."
+msgstr "Şirket yöneticileri daha sonra 2FA kurmalıdır."
+
+msgid "Bereits registriert?"
+msgstr "Zaten kayıtlı mısınız?"
+
+msgid "Zur Anmeldung"
+msgstr "Girişe git"
+
+msgid "E-Mail-Adresse"
+msgstr "E-posta adresi"
+
+msgid "Passwort"
+msgstr "Parola"
+
+msgid "Bestätigungscode"
+msgstr "Doğrulama kodu"
+
+msgid "Kundentyp"
+msgstr "Müşteri türü"
+
+msgid "Privat"
+msgstr "Bireysel"
+
+msgid "Vorname"
+msgstr "Ad"
+
+msgid "Nachname"
+msgstr "Soyad"
+
+msgid "Firmenname"
+msgstr "Şirket adı"
+
+msgid "AGB gelesen und akzeptiert"
+msgstr "Şartlar okundu ve kabul edildi"
+
+msgid "Datenschutzerklärung zur Kenntnis genommen"
+msgstr "Gizlilik politikası kabul edildi"
+
+msgid "Passwort zur Bestätigung"
+msgstr "Onay için parola"
+
+msgid "Administratorübertragung verbindlich bestätigen"
+msgstr "Yönetici devrini onayla"
+
+msgid "Neues Passwort"
+msgstr "Yeni parola"
+
+msgid "Passwort wiederholen"
+msgstr "Parolayı tekrarla"
+
