@@ -619,3 +619,141 @@ msgstr "Aç"
 
 msgid "≤30 Tage"
 msgstr "≤30 gün"
+
+msgid "2FA einrichten"
+msgstr "2FA kur"
+
+msgid "2FA schützt den Zugriff mit einem zusätzlichen zeitbasierten Einmalcode."
+msgstr "2FA, erişimi zamana dayalı ek bir tek kullanımlık kodla korur."
+
+msgid "Ablehnen"
+msgstr "Reddet"
+
+msgid "Aktive Lizenzen"
+msgstr "Aktif lisanslar"
+
+msgid "Aktuelles Ende"
+msgstr "Mevcut bitiş"
+
+msgid "Anfrage"
+msgstr "Talep"
+
+msgid "Bearbeitungsstand"
+msgstr "İşlem durumu"
+
+msgid "Benutzer deaktivieren"
+msgstr "Kullanıcıyı devre dışı bırak"
+
+msgid "Benutzer löschen"
+msgstr "Kullanıcıyı sil"
+
+msgid "Benutzer reaktivieren"
+msgstr "Kullanıcıyı yeniden etkinleştir"
+
+msgid "Benutzer, Einladungen, Lizenzen und Geräte verwalten."
+msgstr "Kullanıcıları, davetleri, lisansları ve cihazları yönetin."
+
+msgid "Die Suche bleibt auf Ihren eigenen Mandanten- und Lizenzbereich begrenzt."
+msgstr "Arama kendi kuruluş ve lisans kapsamınızla sınırlıdır."
+
+msgid "Ein Passwortwechsel erfolgt über einen zeitlich begrenzten, einmal verwendbaren Link an Ihre hinterlegte E-Mail-Adresse."
+msgstr "Parola değişikliği, kayıtlı e-posta adresinize gönderilen süreli ve tek kullanımlık bağlantı üzerinden yapılır."
+
+msgid "Free"
+msgstr "Free"
+
+msgid "Freie Lizenz zuweisen"
+msgstr "Boş lisans ata"
+
+msgid "Freigeben"
+msgstr "Serbest bırak"
+
+msgid "Genehmigen"
+msgstr "Onayla"
+
+msgid "Hier sehen Sie ausschließlich Nachrichten, die für Sie bzw. Ihr Unternehmen bestimmt sind. Interne netstyle-Notizen werden nicht im Kundenportal angezeigt."
+msgstr "Burada yalnızca size veya şirketinize yönelik mesajları görürsünüz. Dahili netstyle notları müşteri portalında gösterilmez."
+
+msgid "Ihre Anfrage und alle für Kunden freigegebenen Antworten."
+msgstr "Talebiniz ve müşteriler için yayımlanan tüm yanıtlar."
+
+msgid "Inaktiv"
+msgstr "Pasif"
+
+msgid "Keine Benutzer gefunden."
+msgstr "Kullanıcı bulunamadı."
+
+msgid "Keine Lizenz zugewiesen."
+msgstr "Lisans atanmadı."
+
+msgid "Keine Lizenzen gefunden."
+msgstr "Lisans bulunamadı."
+
+msgid "Keine freie Lizenz."
+msgstr "Boş lisans yok."
+
+msgid "Keine verlängerbare Lizenz vorhanden."
+msgstr "Yenilenebilir lisans yok."
+
+msgid "Mitarbeiter"
+msgstr "Çalışan"
+
+msgid "Noch nie"
+msgstr "Hiç"
+
+msgid "Offene Pro-Anfragen"
+msgstr "Açık Pro talepleri"
+
+msgid "PROMPTFINISHER Free"
+msgstr "PROMPTFINISHER Free"
+
+msgid "PROMPTFINISHER Pro"
+msgstr "PROMPTFINISHER Pro"
+
+msgid "Passwort zurücksetzen"
+msgstr "Parolayı sıfırla"
+
+msgid "Recovery-Codes neu erzeugen"
+msgstr "Kurtarma kodlarını yeniden oluştur"
+
+msgid "Seit"
+msgstr "Başlangıç"
+
+msgid "Sicheren Link senden"
+msgstr "Güvenli bağlantı gönder"
+
+msgid "Team-Mitglieder"
+msgstr "Ekip üyeleri"
+
+msgid "Verlauf"
+msgstr "Geçmiş"
+
+msgid "Wählen Sie die Lizenz, deren bestehende Restlaufzeit um weitere 365 Tage verlängert werden soll."
+msgstr "Kalan süresi 365 gün daha uzatılacak lisansı seçin."
+
+msgid "Zahlungspflichtig verlängern →"
+msgstr "Ödeme yükümlülüğüyle yenile →"
+
+msgid "Zuletzt aktiv"
+msgstr "Son aktif"
+
+msgid "Zurück zu Einstellungen"
+msgstr "Ayarlara dön"
+
+msgid "Zurück zu Lizenzen"
+msgstr "Lisanslara dön"
+
+msgid "Zuweisen"
+msgstr "Ata"
+
+msgid "Zwei-Faktor-Authentifizierung und Recovery-Codes verwalten."
+msgstr "İki faktörlü kimlik doğrulama ve kurtarma kodlarını yönetin."
+
+msgid "aktive Benutzer"
+msgstr "aktif kullanıcılar"
+
+msgid "aktive Benutzer ohne Pro-Zuweisung"
+msgstr "Pro ataması olmayan aktif kullanıcılar"
+
+msgid "registriert / Kapazität"
+msgstr "kayıtlı / kapasite"
