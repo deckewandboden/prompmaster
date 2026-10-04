@@ -619,3 +619,141 @@ msgstr "Open"
 
 msgid "≤30 Tage"
 msgstr "≤30 days"
+
+msgid "2FA einrichten"
+msgstr "Set up 2FA"
+
+msgid "2FA schützt den Zugriff mit einem zusätzlichen zeitbasierten Einmalcode."
+msgstr "2FA protects access with an additional time-based one-time code."
+
+msgid "Ablehnen"
+msgstr "Reject"
+
+msgid "Aktive Lizenzen"
+msgstr "Active licenses"
+
+msgid "Aktuelles Ende"
+msgstr "Current end date"
+
+msgid "Anfrage"
+msgstr "Request"
+
+msgid "Bearbeitungsstand"
+msgstr "Processing status"
+
+msgid "Benutzer deaktivieren"
+msgstr "Deactivate user"
+
+msgid "Benutzer löschen"
+msgstr "Delete user"
+
+msgid "Benutzer reaktivieren"
+msgstr "Reactivate user"
+
+msgid "Benutzer, Einladungen, Lizenzen und Geräte verwalten."
+msgstr "Manage users, invitations, licenses and devices."
+
+msgid "Die Suche bleibt auf Ihren eigenen Mandanten- und Lizenzbereich begrenzt."
+msgstr "Search remains limited to your own tenant and license scope."
+
+msgid "Ein Passwortwechsel erfolgt über einen zeitlich begrenzten, einmal verwendbaren Link an Ihre hinterlegte E-Mail-Adresse."
+msgstr "A password change is performed via a time-limited, single-use link sent to your registered email address."
+
+msgid "Free"
+msgstr "Free"
+
+msgid "Freie Lizenz zuweisen"
+msgstr "Assign free license"
+
+msgid "Freigeben"
+msgstr "Release"
+
+msgid "Genehmigen"
+msgstr "Approve"
+
+msgid "Hier sehen Sie ausschließlich Nachrichten, die für Sie bzw. Ihr Unternehmen bestimmt sind. Interne netstyle-Notizen werden nicht im Kundenportal angezeigt."
+msgstr "Here you only see messages intended for you or your company. Internal netstyle notes are not shown in the customer portal."
+
+msgid "Ihre Anfrage und alle für Kunden freigegebenen Antworten."
+msgstr "Your request and all replies released for customers."
+
+msgid "Inaktiv"
+msgstr "Inactive"
+
+msgid "Keine Benutzer gefunden."
+msgstr "No users found."
+
+msgid "Keine Lizenz zugewiesen."
+msgstr "No license assigned."
+
+msgid "Keine Lizenzen gefunden."
+msgstr "No licenses found."
+
+msgid "Keine freie Lizenz."
+msgstr "No free license."
+
+msgid "Keine verlängerbare Lizenz vorhanden."
+msgstr "No renewable license available."
+
+msgid "Mitarbeiter"
+msgstr "Employee"
+
+msgid "Noch nie"
+msgstr "Never"
+
+msgid "Offene Pro-Anfragen"
+msgstr "Open Pro requests"
+
+msgid "PROMPTFINISHER Free"
+msgstr "PROMPTFINISHER Free"
+
+msgid "PROMPTFINISHER Pro"
+msgstr "PROMPTFINISHER Pro"
+
+msgid "Passwort zurücksetzen"
+msgstr "Reset password"
+
+msgid "Recovery-Codes neu erzeugen"
+msgstr "Regenerate recovery codes"
+
+msgid "Seit"
+msgstr "Since"
+
+msgid "Sicheren Link senden"
+msgstr "Send secure link"
+
+msgid "Team-Mitglieder"
+msgstr "Team members"
+
+msgid "Verlauf"
+msgstr "History"
+
+msgid "Wählen Sie die Lizenz, deren bestehende Restlaufzeit um weitere 365 Tage verlängert werden soll."
+msgstr "Select the license whose remaining term should be extended by another 365 days."
+
+msgid "Zahlungspflichtig verlängern →"
+msgstr "Renew with payment obligation →"
+
+msgid "Zuletzt aktiv"
+msgstr "Last active"
+
+msgid "Zurück zu Einstellungen"
+msgstr "Back to settings"
+
+msgid "Zurück zu Lizenzen"
+msgstr "Back to licenses"
+
+msgid "Zuweisen"
+msgstr "Assign"
+
+msgid "Zwei-Faktor-Authentifizierung und Recovery-Codes verwalten."
+msgstr "Manage two-factor authentication and recovery codes."
+
+msgid "aktive Benutzer"
+msgstr "active users"
+
+msgid "aktive Benutzer ohne Pro-Zuweisung"
+msgstr "active users without Pro assignment"
+
+msgid "registriert / Kapazität"
+msgstr "registered / capacity"
