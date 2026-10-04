@@ -2,13 +2,15 @@
 set -Eeuo pipefail
 
 status_dir=/status
-work_dir=/tmp/pmbackup
+work_dir=/tmp/promptfinisher-backup
 mkdir -p "$status_dir" "$work_dir"
 
 backup_interval="${BACKUP_INTERVAL_SECONDS:-21600}"
 prune_interval="${PRUNE_INTERVAL_SECONDS:-86400}"
 restore_interval="${RESTORE_TEST_INTERVAL_SECONDS:-2592000}"
 backup_once="${BACKUP_ONCE:-0}"
+primary_backup_tag="promptfinisher-db"
+legacy_backup_tag="promptmaster-db"
 
 # restic's S3 backend uses AWS_DEFAULT_REGION. Keep the historical S3_REGION
 # variable as a compatibility alias so existing deployments do not silently
@@ -49,7 +51,7 @@ run_restore_test() (
   # A subshell scopes EXIT cleanup to this restore, including error exits.
   local started finished root restore_target dump="" pgdata sock port=55432 count status=failed detail=""
   started="$(date -u +%Y%m%dT%H%M%SZ)"
-  root="$(mktemp -d /tmp/pm-restore.XXXXXX)"
+  root="$(mktemp -d /tmp/promptfinisher-restore.XXXXXX)"
   chown root:postgres "$root"
   chmod 0750 "$root"
   restore_target="$root/restore"
@@ -65,9 +67,16 @@ run_restore_test() (
   }
   trap cleanup_restore EXIT
 
-  if ! restic restore latest --tag promptmaster-db --target "$restore_target" >/dev/null; then
-    detail="restic_restore_failed"
-  else
+  if ! restic restore latest --tag "$primary_backup_tag" --target "$restore_target" >/dev/null 2>&1; then
+    rm -rf "$restore_target"
+    mkdir -p "$restore_target"
+    chmod 0700 "$restore_target"
+    if ! restic restore latest --tag "$legacy_backup_tag" --target "$restore_target" >/dev/null; then
+      detail="restic_restore_failed"
+    fi
+  fi
+
+  if [[ -z "$detail" ]]; then
     dump="$(find "$restore_target" -type f -name '*.dump' -print -quit)"
     if [[ -z "$dump" ]]; then
       detail="dump_missing"
@@ -103,14 +112,14 @@ ensure_repository
 
 while true; do
   ts="$(date -u +%Y%m%dT%H%M%SZ)"
-  dump="$work_dir/promptmaster-${ts}.dump"
+  dump="$work_dir/promptfinisher-${ts}.dump"
 
   if pg_dump -Fc -f "$dump"; then
     size="$(stat -c '%s' "$dump" 2>/dev/null || echo 0)"
-    if restic backup "$dump" --tag promptmaster-db; then
+    if restic backup "$dump" --tag "$primary_backup_tag"; then
       json_status "$status_dir/last-backup.json" verifying "$ts" "$size" "$(basename "$dump")"
       if stamp_due "$status_dir/last-prune-at" "$prune_interval"; then
-        if restic forget --prune --tag promptmaster-db --keep-daily 14 --keep-weekly 8 --keep-monthly 6; then
+        if restic forget --prune --tag "$primary_backup_tag" --keep-daily 14 --keep-weekly 8 --keep-monthly 6; then
           write_stamp "$status_dir/last-prune-at"
         else
           echo "WARNUNG: Restic-Retention/Prune fehlgeschlagen; Backup selbst war erfolgreich." >&2
