@@ -5,14 +5,18 @@ cd "$(dirname "$0")/.."
 : "${RESTIC_PASSWORD:?RESTIC_PASSWORD fehlt}"
 
 tmp="$(mktemp -d)"
-container="pm-restore-test-$$-${RANDOM}"
+container="promptfinisher-restore-test-$-${RANDOM}"
 cleanup(){
   docker rm -f "$container" >/dev/null 2>&1 || true
   rm -rf "$tmp"
 }
 trap cleanup EXIT
 
-restic restore latest --tag promptmaster-db --target "$tmp"
+if ! restic restore latest --tag promptfinisher-db --target "$tmp"; then
+  rm -rf "$tmp"
+  tmp="$(mktemp -d)"
+  restic restore latest --tag promptmaster-db --target "$tmp"
+fi
 # -print -quit avoids a find|head pipeline that can fail with SIGPIPE under
 # `set -o pipefail` when more than one matching dump exists.
 dump="$(find "$tmp" -name '*.dump' -type f -print -quit)"

@@ -5,6 +5,7 @@ services:
     networks:
       edge:
         aliases:
+          - promptfinisher-web-internal
           - promptmaster-web-internal
       app: {}
       data: {}
@@ -19,7 +20,8 @@ services:
       monitor: {}
       external_caddy:
         aliases:
-          - ${PM_EXTERNAL_CADDY_ALIAS:-promptmaster-caddy-edge}
+          - ${PM_EXTERNAL_CADDY_ALIAS:-promptfinisher-caddy-edge}
+          - promptmaster-caddy-edge
 
 networks:
   external_caddy:

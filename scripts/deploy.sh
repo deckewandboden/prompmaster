@@ -28,6 +28,10 @@ PREVIOUS_SHA=""
 [[ -f "$LAST_SUCCESS_FILE" ]] && PREVIOUS_SHA="$(tr -d '[:space:]' < "$LAST_SUCCESS_FILE")"
 STAMP="$(date -u +%Y%m%dT%H%M%SZ)"
 BACKUP_STATUS_FILE="$STATE_DIR/pre-deploy-backup-${STAMP}.json"
+LEGACY_CUTOVER_BACKUP_STATUS_FILE="$STATE_DIR/pre-infra-rebrand-backup-${STAMP}.json"
+LEGACY_COMPOSE_PROJECT="promptmaster"
+CURRENT_COMPOSE_PROJECT="promptfinisher"
+CUTOVER_PERFORMED=0
 
 log(){ printf '[PROMPTFINISHER deploy] %s\n' "$*"; }
 
@@ -37,6 +41,13 @@ rollback_help(){
   printf '[PROMPTFINISHER deploy] Datenbankmigrationen werden NICHT automatisch rückwärts ausgeführt.\n' >&2
   if [[ -n "$PREVIOUS_SHA" && "$PREVIOUS_SHA" != "source-archive" ]]; then
     printf '[PROMPTFINISHER deploy] Last-known-good Git SHA: %s\n' "$PREVIOUS_SHA" >&2
+    if [[ "$CUTOVER_PERFORMED" == "1" ]]; then
+      printf '[PROMPTFINISHER deploy] Infrastruktur-Cutover wurde bereits ausgeführt. Vor einem Code-Rollback MUSS zuerst der neue PROMPTFINISHER-Stack ohne Volume-Löschung gestoppt werden:\n' >&2
+      printf '  docker compose' >&2
+      printf ' %q' "${F[@]}" >&2
+      printf ' down --remove-orphans\n' >&2
+      printf '[PROMPTFINISHER deploy] Erst danach den alten Release-Stand auschecken/starten. Niemals -v/--volumes verwenden.\n' >&2
+    fi
     printf '[PROMPTFINISHER deploy] Code-Rollback nach Ursachenprüfung:\n' >&2
     printf '  git checkout %s\n' "$PREVIOUS_SHA" >&2
     if [[ -n "${EXTERNAL_CADDY_NETWORK:-}" ]]; then
@@ -50,8 +61,11 @@ rollback_help(){
   if [[ -s "$BACKUP_STATUS_FILE" ]]; then
     printf '[PROMPTFINISHER deploy] Pre-Deploy-Backupstatus: %s\n' "$BACKUP_STATUS_FILE" >&2
     printf '[PROMPTFINISHER deploy] Falls ein DB-Restore erforderlich ist: erst Anwendung stoppen, Backup verifizieren und den dokumentierten Restore-Prozess verwenden.\n' >&2
+  elif [[ -s "$LEGACY_CUTOVER_BACKUP_STATUS_FILE" ]]; then
+    printf '[PROMPTFINISHER deploy] Verifizierter Infrastruktur-Cutover-Backupstatus: %s\n' "$LEGACY_CUTOVER_BACKUP_STATUS_FILE" >&2
+    printf '[PROMPTFINISHER deploy] Falls ein DB-Restore erforderlich ist: erst alle neuen Container stoppen, Backup verifizieren und den dokumentierten Restore-Prozess verwenden.\n' >&2
   else
-    printf '[PROMPTFINISHER deploy] Kein verifizierter Pre-Deploy-Backupstatus protokolliert. Keine destruktiven Rollback-Schritte ausführen.\n' >&2
+    printf '[PROMPTFINISHER deploy] Kein verifizierter Pre-Deploy-/Cutover-Backupstatus protokolliert. Keine destruktiven Rollback-Schritte ausführen.\n' >&2
   fi
 }
 trap 'rollback_help "$LINENO"' ERR
@@ -91,6 +105,70 @@ wait_beat(){
   return 1
 }
 
+migrate_legacy_compose_project_if_needed(){
+  local legacy_ids legacy_postgres_id legacy_postgres_health new_ids
+
+  legacy_ids="$(docker ps -aq --filter "label=com.docker.compose.project=${LEGACY_COMPOSE_PROJECT}" | tr '\n' ' ')"
+  [[ -n "${legacy_ids// /}" ]] || return 0
+
+  new_ids="$(docker ps -aq --filter "label=com.docker.compose.project=${CURRENT_COMPOSE_PROJECT}" | tr '\n' ' ')"
+  if [[ -n "${new_ids// /}" ]]; then
+    echo "[PROMPTFINISHER deploy] Gemischter Compose-Zustand erkannt: Legacy- und PROMPTFINISHER-Container existieren gleichzeitig. Automatischer Cutover wird verweigert." >&2
+    return 1
+  fi
+
+  legacy_postgres_id="$(docker ps -q \
+    --filter "label=com.docker.compose.project=${LEGACY_COMPOSE_PROJECT}" \
+    --filter "label=com.docker.compose.service=postgres" | head -n1)"
+
+  [[ -n "$legacy_postgres_id" ]] || {
+    echo "[PROMPTFINISHER deploy] Legacy-Container existieren, aber der alte PostgreSQL-Container läuft nicht. Cutover wird fail-closed abgebrochen." >&2
+    return 1
+  }
+
+  legacy_postgres_health="$(docker inspect "$legacy_postgres_id" --format '{{if .State.Health}}{{.State.Health.Status}}{{else}}{{.State.Status}}{{end}}')"
+  [[ "$legacy_postgres_health" == "healthy" ]] || {
+    echo "[PROMPTFINISHER deploy] Legacy-PostgreSQL ist nicht healthy: $legacy_postgres_health" >&2
+    return 1
+  }
+
+  log "Einmaliger Infrastruktur-Cutover: verifizierten Backup-Snapshot im Legacy-Stack erstellen"
+  docker compose -p "$LEGACY_COMPOSE_PROJECT" "${F[@]}" stop backup >/dev/null 2>&1 || true
+  docker compose -p "$LEGACY_COMPOSE_PROJECT" "${F[@]}" run --rm \
+    -e BACKUP_ONCE=1 \
+    -e RESTORE_TEST_INTERVAL_SECONDS=0 \
+    backup
+  docker compose -p "$LEGACY_COMPOSE_PROJECT" "${F[@]}" run --rm --no-deps \
+    --entrypoint /bin/sh backup -ec 'cat /status/last-backup.json' > "$LEGACY_CUTOVER_BACKUP_STATUS_FILE"
+
+  python3 - "$LEGACY_CUTOVER_BACKUP_STATUS_FILE" <<'PY'
+import json, pathlib, sys
+p = pathlib.Path(sys.argv[1])
+data = json.loads(p.read_text(encoding='utf-8'))
+if data.get('status') != 'ok':
+    raise SystemExit(f"Legacy-Cutover-Backup ist nicht OK: {data.get('status')}")
+print(f"Legacy-Cutover-Backup OK: {data.get('timestamp', 'unknown')}")
+PY
+
+  log "Legacy-Compose-Projekt ohne Volume-Löschung herunterfahren"
+  docker compose -p "$LEGACY_COMPOSE_PROJECT" "${F[@]}" down --remove-orphans
+
+  if docker ps -q --filter "label=com.docker.compose.project=${LEGACY_COMPOSE_PROJECT}" | grep -q .; then
+    echo "[PROMPTFINISHER deploy] Legacy-Container laufen nach dem Cutover weiterhin; neuer Stack wird nicht gestartet." >&2
+    return 1
+  fi
+
+  if docker ps -q \
+      --filter "label=com.docker.compose.project=${LEGACY_COMPOSE_PROJECT}" \
+      --filter "label=com.docker.compose.service=postgres" | grep -q .; then
+    echo "[PROMPTFINISHER deploy] Legacy-PostgreSQL läuft weiterhin; Volume-Doppelzugriff verhindert." >&2
+    return 1
+  fi
+
+  CUTOVER_PERFORMED=1
+  log "Legacy-Stack gestoppt; persistente Volumes bleiben erhalten und werden vom PROMPTFINISHER-Stack übernommen"
+}
+
 assert_external_caddy_ports_closed(){
   [[ -n "${EXTERNAL_CADDY_NETWORK:-}" ]] || return 0
   local cid bindings
@@ -122,6 +200,7 @@ log "Compose-Konfiguration prüfen"
 docker compose "${F[@]}" config >/dev/null
 log "Images bauen"
 docker compose "${F[@]}" build
+migrate_legacy_compose_project_if_needed
 log "Datenservices starten"
 docker compose "${F[@]}" up -d postgres redis
 log "Django Systemcheck"
@@ -137,7 +216,7 @@ docker compose "${F[@]}" run --rm \
 log "Pre-Migration-Backup erstellen"
 docker compose "${F[@]}" stop backup >/dev/null 2>&1 || true
 docker compose "${F[@]}" run --rm -e BACKUP_ONCE=1 backup
-docker compose "${F[@]}" run --rm --no-deps web sh -c 'cat /var/run/promptmaster-backup/last-backup.json' > "$BACKUP_STATUS_FILE"
+docker compose "${F[@]}" run --rm --no-deps web sh -c 'cat /var/run/promptfinisher-backup/last-backup.json' > "$BACKUP_STATUS_FILE"
 python3 - "$BACKUP_STATUS_FILE" <<'PY'
 import json, pathlib, sys
 p = pathlib.Path(sys.argv[1])

@@ -32,7 +32,7 @@ snapshot_id() {
     if [ -z "${AWS_DEFAULT_REGION:-}" ] && [ -n "${S3_REGION:-}" ]; then
       export AWS_DEFAULT_REGION="$S3_REGION"
     fi
-    restic snapshots --json --tag promptmaster-db 2>/dev/null \
+    restic snapshots --json --tag promptfinisher-db 2>/dev/null \
       | grep -Eo "\\"id\\"[[:space:]]*:[[:space:]]*\\"[^\\"]*\\"" \
       | tail -n 1 \
       | cut -d "\\"" -f 4
@@ -81,7 +81,7 @@ docker compose "${F[@]}" run --rm --no-deps \
 
 after_snapshot="$(snapshot_id)"
 if [[ -z "$after_snapshot" ]]; then
-  echo "External restic backup returned no promptmaster-db snapshot id." >&2
+  echo "External restic backup returned no promptfinisher-db snapshot id." >&2
   exit 4
 fi
 if [[ -n "$before_snapshot" && "$after_snapshot" == "$before_snapshot" ]]; then
@@ -96,7 +96,7 @@ docker compose "${F[@]}" run --rm --no-deps --entrypoint /bin/sh backup -ec '
   grep -q "\"status\":\"ok\"" /status/last-backup.json
   grep -q "\"status\":\"ok\"" /status/last-restore.json
   grep -Eq "\\"backup_ref\\"[[:space:]]*:[[:space:]]*\\"[^\\"]+\\"" /status/last-restore.json
-  restic snapshots --json --tag promptmaster-db >/tmp/external-snapshots.json
+  restic snapshots --json --tag promptfinisher-db >/tmp/external-snapshots.json
   grep -Eq "\\"id\\"[[:space:]]*:" /tmp/external-snapshots.json
 '
 echo "external_snapshot_id=$after_snapshot"

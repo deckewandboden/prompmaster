@@ -14,8 +14,8 @@ from apps.payments.models import MollieEvent
 from .metrics import caddy_health, celery_worker_status, prometheus_targets, snapshot
 from .models import BackupRecord, BeatHeartbeat, RestoreTest, SystemAlert, TaskFailure, WorkerHeartbeat
 
-BACKUP_STATUS = Path('/var/run/promptmaster-backup/last-backup.json')
-RESTORE_STATUS = Path('/var/run/promptmaster-backup/last-restore.json')
+BACKUP_STATUS = Path('/var/run/promptfinisher-backup/last-backup.json')
+RESTORE_STATUS = Path('/var/run/promptfinisher-backup/last-restore.json')
 MANAGED_PREFIXES = (
     'disk.', 'ram.', 'cpu.', 'backup.', 'restore.', 'mail.', 'mollie.',
     'service.', 'worker.', 'beat.', 'queue.', 'task.',
