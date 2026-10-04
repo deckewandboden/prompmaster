@@ -1,21 +1,21 @@
-{% extends 'portal/base.html' %}
+{% extends 'portal/base.html' %}{% load i18n %}
 {% block content %}
-<div class="page-head"><div><h1>Hilfe & Kontakt</h1><p class="sub">Direkter Kontakt zu netstyle und Verlauf Ihrer Anfragen.</p></div></div>
+<div class="page-head"><div><h1>{% translate "Hilfe & Kontakt" %}</h1><p class="sub">{% translate "Direkter Kontakt zu netstyle und Verlauf Ihrer Anfragen." %}</p></div></div>
 <div class="grid two">
   <div class="card">
-    <h2>Kontaktformular</h2>
-    <form method="post" class="form">{% csrf_token %}{{ form.as_p }}<button type="submit" class="btn primary">Nachricht senden</button></form>
+    <h2>{% translate "Kontaktformular" %}</h2>
+    <form method="post" class="form">{% csrf_token %}{{ form.as_p }}<button type="submit" class="btn primary">{% translate "Nachricht senden" %}</button></form>
   </div>
   <div class="card">
-    <h2>Automatischer Kontext</h2>
+    <h2>{% translate "Automatischer Kontext" %}</h2>
     <p class="muted">Konto, Unternehmen, Benutzer-ID und Zeitpunkt werden automatisch zugeordnet. Optional kann eine für Ihr Konto sichtbare Lizenz mitgesendet werden. Passwörter, Tokens oder andere unnötige sensitive Daten werden nicht übernommen.</p>
   </div>
 </div>
 <div class="card mt-14">
-  <h2>Supporthistorie</h2>
+  <h2>{% translate "Supporthistorie" %}</h2>
   <div class="tablewrap">
     <table>
-      <thead><tr><th>Datum</th><th>Kategorie</th><th>Betreff</th><th>Lizenz</th><th>Status</th></tr></thead>
+      <thead><tr><th>{% translate "Datum" %}</th><th>{% translate "Kategorie" %}</th><th>{% translate "Betreff" %}</th><th>{% translate "Lizenz" %}</th><th>{% translate "Status" %}</th></tr></thead>
       <tbody>
       {% for row in support_history %}
         <tr>
@@ -26,7 +26,7 @@
           <td data-label="Status">{{ row.get_status_display }}</td>
         </tr>
       {% empty %}
-        <tr><td colspan="5">Noch keine Anfragen vorhanden.</td></tr>
+        <tr><td colspan="5">{% translate "Noch keine Anfragen vorhanden." %}</td></tr>
       {% endfor %}
       </tbody>
     </table>
