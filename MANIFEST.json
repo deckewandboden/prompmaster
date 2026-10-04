@@ -1,10 +1,10 @@
 {
   "project": "PROMPTFINISHER Commercial RC14 Full Repository",
-  "generated_at": "2026-10-04T12:50:17.514Z",
-  "file_count_excluding_manifest_files": 525,
-  "total_bytes_excluding_manifest_files": 20741781,
+  "generated_at": "2026-10-04T12:51:05.462Z",
+  "file_count_excluding_manifest_files": 530,
+  "total_bytes_excluding_manifest_files": 20956796,
   "roles": {
-    "active-backend": 318,
+    "active-backend": 323,
     "active-ci": 1,
     "active-marketing": 99,
     "active-operations": 32,
@@ -2093,50 +2093,80 @@
     },
     {
       "path": "backend/templates/portal/invitations.html",
-      "size": 1831,
-      "sha256": "e3fc15c9a9534b26410cffb8742abd740dbf235e351a25d0b827072319a634f5",
+      "size": 2078,
+      "sha256": "cb199d8dbb90d651d1f3d9ea65be3c4b751cb324435182bf0d934d0da5b31b88",
+      "role": "active-backend"
+    },
+    {
+      "path": "backend/templates/portal/license_detail.html",
+      "size": 3099,
+      "sha256": "c170e2e6d24decc30c1c4366000486e1f7c9089419166826561cd2081b1ee5a4",
       "role": "active-backend"
     },
     {
       "path": "backend/templates/portal/licenses.html",
-      "size": 1879,
-      "sha256": "21b04e50a7c05a201beec24560361368fd635f8d022e72cc5f829f0b4894b71a",
+      "size": 2026,
+      "sha256": "a4deab036dae0996657d48db0631c2a53c7eb60844d706a8080dd8b17e91c2ef",
+      "role": "active-backend"
+    },
+    {
+      "path": "backend/templates/portal/more.html",
+      "size": 2402,
+      "sha256": "caa531841e877a0967ef1bc8d647b264371b267a88d46f8b08c280f8f5e330b2",
       "role": "active-backend"
     },
     {
       "path": "backend/templates/portal/orders.html",
-      "size": 1642,
-      "sha256": "86bcd1b171a94e8716b9ba0e6e3039990301faa21943c7248e0e04b120c9876e",
+      "size": 2454,
+      "sha256": "3e9bd105c93df4e7a856163ff888c338468500c8ddba020e7a36f3478f90b566",
       "role": "active-backend"
     },
     {
       "path": "backend/templates/portal/profile.html",
-      "size": 2133,
-      "sha256": "3ca029bef3e5dc359195687bfa52272362a5eae34b112512c23bfae997827375",
+      "size": 2496,
+      "sha256": "7fcd886a8affa522c56f427785035df2728cc8d596b34a233e1537a409491e7d",
+      "role": "active-backend"
+    },
+    {
+      "path": "backend/templates/portal/renew_index.html",
+      "size": 1365,
+      "sha256": "65ba3886710619dda676bd0a92a265d5d01bf8ffde754b6f10c8526cc4cdeec6",
       "role": "active-backend"
     },
     {
       "path": "backend/templates/portal/renew.html",
-      "size": 788,
-      "sha256": "cdf24527050777f927ee446e11eb5e4139303a69a792f03cf59c7ba860ac6a31",
+      "size": 1079,
+      "sha256": "14256423b2af66a6343ab9e544980d66c2a02a23613858a0c0ca3b9d0924ab63",
+      "role": "active-backend"
+    },
+    {
+      "path": "backend/templates/portal/search.html",
+      "size": 2069,
+      "sha256": "b788d6b53b8cdba21417684f7718365238544d4e285926f4ca3496fc564abda5",
       "role": "active-backend"
     },
     {
       "path": "backend/templates/portal/security.html",
-      "size": 357,
-      "sha256": "ab26737e33f2d55622e372bc6220610c044464d29fe6004f5bd8cbc99f282df1",
+      "size": 1535,
+      "sha256": "3a03298595f25cef3d528f0029ad364bfa60c33269e9ccdaa002ed3defdba1e0",
+      "role": "active-backend"
+    },
+    {
+      "path": "backend/templates/portal/support_detail.html",
+      "size": 2608,
+      "sha256": "cb0f15e39e2cbb4922770c0c5ae3000adeb35252eab0737e62e7541ec3414d6b",
       "role": "active-backend"
     },
     {
       "path": "backend/templates/portal/team_member.html",
-      "size": 1975,
-      "sha256": "dd31bc5dd1a93c66dd6e8d6e339a16353845b1ac9df2dff79932e1eb3aee0d5e",
+      "size": 2898,
+      "sha256": "05f2e5cb1049841d9d4d8a86cbe6422e791b7ccb54c748b05fc2313781e378df",
       "role": "active-backend"
     },
     {
       "path": "backend/templates/portal/team.html",
-      "size": 2393,
-      "sha256": "52bd8ad5cc77b3310e497b20ab2b67d3191cf84aaabc9407acee29d2858d0500",
+      "size": 4742,
+      "sha256": "a928adcef4ef73eaaaec6f31fc221c4e2b2e6aee5f14c193d131857a0b0a3c96",
       "role": "active-backend"
     },
     {
@@ -2993,8 +3023,8 @@
     },
     {
       "path": "scripts/browser_runtime_smoke.py",
-      "size": 7502,
-      "sha256": "1802d41cd48ed94611036c4463cf89c18941f172ad7bcb5ae2f2936161287d72",
+      "size": 173425,
+      "sha256": "e4967aa8baea3672d7b5c75ade9f144498996a3ec8cdea9727a96ec3bc6b71df",
       "role": "active-operations"
     },
     {
@@ -3131,8 +3161,8 @@
     },
     {
       "path": "scripts/validate_static.py",
-      "size": 22281,
-      "sha256": "13e134096521ed213c085b11d3c69acd9d8f01f053d6a49d0685d2abc393cc87",
+      "size": 53520,
+      "sha256": "ec6b7b8b1d0475201a830dd8017385847ef0f6f8d98c966be6c97b31339c4bf9",
       "role": "active-operations"
     },
     {
