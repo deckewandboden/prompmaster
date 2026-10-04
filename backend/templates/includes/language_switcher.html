@@ -1,8 +1,7 @@
 {% load i18n %}
 {% get_current_language as current_language %}
 {% get_available_languages as available_languages %}
-<form method="post" action="{% url 'accounts:set_ui_language' %}" class="language-switcher" aria-label="{% translate 'Sprache auswählen' %}">
-  {% csrf_token %}
+<form method="get" action="{% url 'accounts:set_ui_language' %}" class="language-switcher" aria-label="{% translate 'Sprache auswählen' %}">
   <input type="hidden" name="next" value="{{ request.get_full_path }}">
   <label>
     <span>{% translate "Sprache" %}</span>
