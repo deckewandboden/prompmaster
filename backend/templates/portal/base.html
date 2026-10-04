@@ -3,7 +3,7 @@
 {% block title %}PROMPTFINISHER · {% translate "Kundenportal" %}{% endblock %}
 {% block shell_class %}portal-shell{% endblock %}
 {% block mobile_title %}PROMPTFINISHER<small>{% translate "KUNDENPORTAL" %}</small>{% endblock %}
-{% block search_placeholder %}{% if current_membership and current_membership.role == 'admin' %}{% translate "Benutzer, E-Mail oder {% translate "Lizenz suchen …" %}" %}{% else %}Lizenz suchen …{% endif %}{% endblock %}
+{% block search_placeholder %}{% if current_membership and current_membership.role == 'admin' %}{% translate "Benutzer, E-Mail oder Lizenz suchen …" %}{% else %}{% translate "Lizenz suchen …" %}{% endif %}{% endblock %}
 {% block search_action %}{% url 'portal:search' %}{% endblock %}
 {% block user_meta %}{% if current_membership %}{{ current_membership.get_role_display }}{% else %}{% translate "Privatkunde" %}{% endif %}{% endblock %}
 {% block side_footer %}{% if current_membership %}{{ current_membership.company.name }}<br>{{ current_membership.get_role_display }}{% else %}PROMPTFINISHER Kundenportal<br><a href="/vertrag-widerrufen/">Vertrag widerrufen</a><br><a href="/vertraege-kuendigen/">Verträge hier kündigen</a>{% endif %}<br><a href="/impressum/">Impressum</a> · <a href="/datenschutz/">Datenschutz</a><br><a href="/agb/">AGB</a> · <a href="/lizenzbedingungen/">Lizenzbedingungen</a><br><a href="/barrierefreiheit/">Barrierefreiheit</a>{% endblock %}
