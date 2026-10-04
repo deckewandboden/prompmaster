@@ -871,3 +871,6 @@ msgstr "Müşteri"
 
 msgid "Pro-Lizenzen noch frei"
 msgstr "Pro lisansı hâlâ boş"
+
+msgid "Verlängern"
+msgstr "Uzat"
