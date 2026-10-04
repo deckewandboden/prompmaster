@@ -50,17 +50,17 @@ class RuntimeConfigTests(unittest.TestCase):
     def test_local_restic_repository_accepts_only_builtin_volume(self):
         self.assertTrue(is_local_restic_repository('/repository'))
         self.assertFalse(is_local_restic_repository('/tmp/repository'))
-        self.assertFalse(is_local_restic_repository('s3:https://s3.example.net/promptmaster'))
+        self.assertFalse(is_local_restic_repository('s3:https://s3.example.net/promptfinisher'))
 
     def test_external_restic_repository_accepts_canonical_tls_forms(self):
-        self.assertTrue(is_external_s3_repository('s3:https://s3.example.net/promptmaster'))
-        self.assertTrue(is_external_s3_repository('s3:s3.eu-central-1.amazonaws.com/promptmaster'))
-        self.assertTrue(is_external_s3_repository('s3:s3.amazonaws.com/promptmaster'))
+        self.assertTrue(is_external_s3_repository('s3:https://s3.example.net/promptfinisher'))
+        self.assertTrue(is_external_s3_repository('s3:s3.eu-central-1.amazonaws.com/promptfinisher'))
+        self.assertTrue(is_external_s3_repository('s3:s3.amazonaws.com/promptfinisher'))
 
     def test_external_restic_repository_rejects_noncanonical_or_insecure_forms(self):
         for value in (
-            's3://s3.example.net/promptmaster',
-            's3:http://s3.example.net/promptmaster',
+            's3://s3.example.net/promptfinisher',
+            's3:http://s3.example.net/promptfinisher',
             's3:https://s3.example.net',
             '/local/repository',
         ):
