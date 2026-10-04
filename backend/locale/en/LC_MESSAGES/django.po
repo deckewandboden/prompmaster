@@ -1,0 +1,211 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: PROMPTFINISHER\n"
+"Language: en\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+msgid "Sprache auswählen"
+msgstr "Select language"
+
+msgid "Sprache"
+msgstr "Language"
+
+msgid "Suchen …"
+msgstr "Search …"
+
+msgid "Suchen"
+msgstr "Search"
+
+msgid "Lead, Kunde, Benutzer, Lizenz-ID oder E-Mail suchen …"
+msgstr "Search lead, customer, user, license ID or email …"
+
+msgid "Superadmin"
+msgstr "Super admin"
+
+msgid "netstyle Benutzer"
+msgstr "netstyle user"
+
+msgid "netstyle Admin-Backend"
+msgstr "netstyle admin backend"
+
+msgid "Übersicht"
+msgstr "Overview"
+
+msgid "Leads"
+msgstr "Leads"
+
+msgid "Kunden"
+msgstr "Customers"
+
+msgid "Lizenzen"
+msgstr "Licenses"
+
+msgid "Bestellungen"
+msgstr "Orders"
+
+msgid "Zahlungen"
+msgstr "Payments"
+
+msgid "Produkte & Preise"
+msgstr "Products & pricing"
+
+msgid "Prompt Studio"
+msgstr "Prompt Studio"
+
+msgid "FAQ & Inhalte"
+msgstr "FAQ & content"
+
+msgid "E-Mail"
+msgstr "Email"
+
+msgid "Mollie"
+msgstr "Mollie"
+
+msgid "Statistiken"
+msgstr "Statistics"
+
+msgid "System & Betrieb"
+msgstr "System & operations"
+
+msgid "API & Integrationen"
+msgstr "API & integrations"
+
+msgid "Datenschutz & Recht"
+msgstr "Privacy & legal"
+
+msgid "Kontaktanfragen"
+msgstr "Contact requests"
+
+msgid "Protokolle"
+msgstr "Logs"
+
+msgid "Benutzer & Rollen"
+msgstr "Users & roles"
+
+msgid "Einstellungen"
+msgstr "Settings"
+
+msgid "Abmelden"
+msgstr "Sign out"
+
+msgid "Home"
+msgstr "Home"
+
+msgid "System"
+msgstr "System"
+
+msgid "Logs"
+msgstr "Logs"
+
+msgid "Mehr"
+msgstr "More"
+
+msgid "Kundenportal"
+msgstr "Customer portal"
+
+msgid "KUNDENPORTAL"
+msgstr "CUSTOMER PORTAL"
+
+msgid "Benutzer, E-Mail oder Lizenz suchen …"
+msgstr "Search user, email or license …"
+
+msgid "Lizenz suchen …"
+msgstr "Search license …"
+
+msgid "Privatkunde"
+msgstr "Private customer"
+
+msgid "Dashboard"
+msgstr "Dashboard"
+
+msgid "Mein Team"
+msgstr "My team"
+
+msgid "Weitere Lizenzen kaufen"
+msgstr "Buy more licenses"
+
+msgid "Geräte"
+msgstr "Devices"
+
+msgid "Bestellungen & Zahlungen"
+msgstr "Orders & payments"
+
+msgid "Unternehmen"
+msgstr "Company"
+
+msgid "Hilfe & Kontakt"
+msgstr "Help & contact"
+
+msgid "Team"
+msgstr "Team"
+
+msgid "Anmelden"
+msgstr "Sign in"
+
+msgid "Ein Zugang für PROMPTFINISHER, Kundenportal und netstyle Admin"
+msgstr "One account for PROMPTFINISHER, customer portal and netstyle admin"
+
+msgid "Noch kein Konto? Konto erstellen"
+msgstr "No account yet? Create account"
+
+msgid "Passwort vergessen?"
+msgstr "Forgot password?"
+
+msgid "Konto anlegen"
+msgstr "Create account"
+
+msgid "Registrieren"
+msgstr "Register"
+
+msgid "Unternehmensadministratoren richten anschließend verpflichtend 2FA ein."
+msgstr "Company administrators must then set up 2FA."
+
+msgid "Bereits registriert?"
+msgstr "Already registered?"
+
+msgid "Zur Anmeldung"
+msgstr "Go to sign in"
+
+msgid "E-Mail-Adresse"
+msgstr "Email address"
+
+msgid "Passwort"
+msgstr "Password"
+
+msgid "Bestätigungscode"
+msgstr "Verification code"
+
+msgid "Kundentyp"
+msgstr "Customer type"
+
+msgid "Privat"
+msgstr "Private"
+
+msgid "Vorname"
+msgstr "First name"
+
+msgid "Nachname"
+msgstr "Last name"
+
+msgid "Firmenname"
+msgstr "Company name"
+
+msgid "AGB gelesen und akzeptiert"
+msgstr "Terms read and accepted"
+
+msgid "Datenschutzerklärung zur Kenntnis genommen"
+msgstr "Privacy policy acknowledged"
+
+msgid "Passwort zur Bestätigung"
+msgstr "Password for confirmation"
+
+msgid "Administratorübertragung verbindlich bestätigen"
+msgstr "Confirm administrator transfer"
+
+msgid "Neues Passwort"
+msgstr "New password"
+
+msgid "Passwort wiederholen"
+msgstr "Repeat password"
+
