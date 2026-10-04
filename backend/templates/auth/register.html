@@ -1,8 +1,8 @@
-{% extends 'base.html' %}{% load static %}{% block body %}
+{% extends 'base.html' %}{% load static i18n %}{% block body %}
 <div class="login-wrap">
   <div class="login-card">
     <div class="login-logo"><img src="{% static 'brand/promptfinisher-logo-hq.png' %}" width="239" height="47" alt="PROMPTFINISHER by netstyle"></div>
-    <h1>Konto anlegen</h1>
+    <h1>{% translate "Konto anlegen" %}</h1>
     <p class="small muted">Bitte lesen Sie vor der Registrierung die <a href="{% url 'legal_public' 'terms' %}" target="_blank" rel="noopener">AGB</a> und die <a href="{% url 'legal_public' 'privacy' %}" target="_blank" rel="noopener">Datenschutzerklärung</a>.</p>
     <form method="post" class="form">
       {% csrf_token %}
@@ -18,10 +18,10 @@
       </div>
       <label class="check-row" for="{{ form.accept_terms.id_for_label }}">{{ form.accept_terms }}<span>{{ form.accept_terms.label }}</span>{{ form.accept_terms.errors }}</label>
       <label class="check-row" for="{{ form.accept_privacy.id_for_label }}">{{ form.accept_privacy }}<span>{{ form.accept_privacy.label }}</span>{{ form.accept_privacy.errors }}</label>
-      <button type="submit" class="btn primary">Registrieren</button>
+      <button type="submit" class="btn primary">{% translate "Registrieren" %}</button>
     </form>
-    <p class="small muted">Unternehmensadministratoren richten anschließend verpflichtend 2FA ein.</p>
-    <p class="small muted">Bereits registriert? <a href="{% url 'accounts:login' %}{% if next %}?next={{ next|urlencode }}{% endif %}">Zur Anmeldung</a></p>
+    <p class="small muted">{% translate "Unternehmensadministratoren richten anschließend verpflichtend 2FA ein." %}</p>
+    <p class="small muted">{% translate "Bereits registriert?" %} <a href="{% url 'accounts:login' %}{% if next %}?next={{ next|urlencode }}{% endif %}">{% translate "Zur Anmeldung" %}</a></p>
   </div>
 </div>
 <script>
