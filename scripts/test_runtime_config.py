@@ -131,6 +131,13 @@ class RuntimeConfigTests(unittest.TestCase):
         self.assertIn('label=com.docker.compose.project=${LEGACY_COMPOSE_PROJECT}', deploy)
         self.assertIn('label=com.docker.compose.project=${CURRENT_COMPOSE_PROJECT}', deploy)
 
+    def test_ops_runtime_reads_promptfinisher_backup_status_path(self):
+        for rel in ('backend/apps/ops/tasks.py', 'backend/apps/ops/api.py'):
+            with self.subTest(path=rel):
+                source = (ROOT / rel).read_text()
+                self.assertIn('/var/run/promptfinisher-backup', source)
+                self.assertNotIn('/var/run/promptmaster-backup', source)
+
     def test_missing_beat_writable_path_is_rejected(self):
         self.base['services']['beat']['tmpfs'] = []
         self.assertTrue(validate(self.base, self.production))
