@@ -1,0 +1,873 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: PROMPTFINISHER\n"
+"Language: es\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+msgid "Sprache auswählen"
+msgstr "Seleccionar idioma"
+
+msgid "Sprache"
+msgstr "Idioma"
+
+msgid "Suchen …"
+msgstr "Buscar …"
+
+msgid "Suchen"
+msgstr "Buscar"
+
+msgid "Lead, Kunde, Benutzer, Lizenz-ID oder E-Mail suchen …"
+msgstr "Buscar lead, cliente, usuario, ID de licencia o correo …"
+
+msgid "Superadmin"
+msgstr "Superadministrador"
+
+msgid "netstyle Benutzer"
+msgstr "Usuario de netstyle"
+
+msgid "netstyle Admin-Backend"
+msgstr "Administración de netstyle"
+
+msgid "Übersicht"
+msgstr "Resumen"
+
+msgid "Leads"
+msgstr "Leads"
+
+msgid "Kunden"
+msgstr "Clientes"
+
+msgid "Lizenzen"
+msgstr "Licencias"
+
+msgid "Bestellungen"
+msgstr "Pedidos"
+
+msgid "Zahlungen"
+msgstr "Pagos"
+
+msgid "Produkte & Preise"
+msgstr "Productos y precios"
+
+msgid "Prompt Studio"
+msgstr "Prompt Studio"
+
+msgid "FAQ & Inhalte"
+msgstr "FAQ y contenidos"
+
+msgid "E-Mail"
+msgstr "Correo electrónico"
+
+msgid "Mollie"
+msgstr "Mollie"
+
+msgid "Statistiken"
+msgstr "Estadísticas"
+
+msgid "System & Betrieb"
+msgstr "Sistema y operación"
+
+msgid "API & Integrationen"
+msgstr "API e integraciones"
+
+msgid "Datenschutz & Recht"
+msgstr "Privacidad y legal"
+
+msgid "Kontaktanfragen"
+msgstr "Solicitudes de contacto"
+
+msgid "Protokolle"
+msgstr "Registros"
+
+msgid "Benutzer & Rollen"
+msgstr "Usuarios y roles"
+
+msgid "Einstellungen"
+msgstr "Configuración"
+
+msgid "Abmelden"
+msgstr "Cerrar sesión"
+
+msgid "Home"
+msgstr "Inicio"
+
+msgid "System"
+msgstr "Sistema"
+
+msgid "Logs"
+msgstr "Registros"
+
+msgid "Mehr"
+msgstr "Más"
+
+msgid "Kundenportal"
+msgstr "Portal de clientes"
+
+msgid "KUNDENPORTAL"
+msgstr "PORTAL DE CLIENTES"
+
+msgid "Benutzer, E-Mail oder Lizenz suchen …"
+msgstr "Buscar usuario, correo o licencia …"
+
+msgid "Lizenz suchen …"
+msgstr "Buscar licencia …"
+
+msgid "Privatkunde"
+msgstr "Cliente particular"
+
+msgid "Dashboard"
+msgstr "Panel"
+
+msgid "Mein Team"
+msgstr "Mi equipo"
+
+msgid "Weitere Lizenzen kaufen"
+msgstr "Comprar más licencias"
+
+msgid "Geräte"
+msgstr "Dispositivos"
+
+msgid "Bestellungen & Zahlungen"
+msgstr "Pedidos y pagos"
+
+msgid "Unternehmen"
+msgstr "Empresa"
+
+msgid "Hilfe & Kontakt"
+msgstr "Ayuda y contacto"
+
+msgid "Team"
+msgstr "Equipo"
+
+msgid "Anmelden"
+msgstr "Iniciar sesión"
+
+msgid "Ein Zugang für PROMPTFINISHER, Kundenportal und netstyle Admin"
+msgstr "Una cuenta para PROMPTFINISHER, el portal de clientes y la administración de netstyle"
+
+msgid "Noch kein Konto? Konto erstellen"
+msgstr "¿Aún no tiene cuenta? Crear cuenta"
+
+msgid "Passwort vergessen?"
+msgstr "¿Olvidó la contraseña?"
+
+msgid "Konto anlegen"
+msgstr "Crear cuenta"
+
+msgid "Registrieren"
+msgstr "Registrarse"
+
+msgid "Unternehmensadministratoren richten anschließend verpflichtend 2FA ein."
+msgstr "Los administradores de empresa deben configurar después la autenticación 2FA."
+
+msgid "Bereits registriert?"
+msgstr "¿Ya está registrado?"
+
+msgid "Zur Anmeldung"
+msgstr "Ir al inicio de sesión"
+
+msgid "E-Mail-Adresse"
+msgstr "Correo electrónico"
+
+msgid "Passwort"
+msgstr "Contraseña"
+
+msgid "Bestätigungscode"
+msgstr "Código de verificación"
+
+msgid "Kundentyp"
+msgstr "Tipo de cliente"
+
+msgid "Privat"
+msgstr "Particular"
+
+msgid "Vorname"
+msgstr "Nombre"
+
+msgid "Nachname"
+msgstr "Apellidos"
+
+msgid "Firmenname"
+msgstr "Nombre de la empresa"
+
+msgid "AGB gelesen und akzeptiert"
+msgstr "Términos leídos y aceptados"
+
+msgid "Datenschutzerklärung zur Kenntnis genommen"
+msgstr "Política de privacidad reconocida"
+
+msgid "Passwort zur Bestätigung"
+msgstr "Contraseña para confirmar"
+
+msgid "Administratorübertragung verbindlich bestätigen"
+msgstr "Confirmar transferencia de administrador"
+
+msgid "Neues Passwort"
+msgstr "Nueva contraseña"
+
+msgid "Passwort wiederholen"
+msgstr "Repetir contraseña"
+
+msgid "Tabellenfilter"
+msgstr "Filtros de tabla"
+
+msgid "Tabelle durchsuchen"
+msgstr "Buscar en la tabla"
+
+msgid "Alle"
+msgstr "Todos"
+
+msgid "Seitengröße"
+msgstr "Tamaño de página"
+
+msgid "Spalten"
+msgstr "Columnas"
+
+msgid "Anwenden"
+msgstr "Aplicar"
+
+msgid "CSV exportieren"
+msgstr "Exportar CSV"
+
+msgid "Sortierung zurücksetzen"
+msgstr "Restablecer orden"
+
+msgid "Alles zurücksetzen"
+msgstr "Restablecer todo"
+
+msgid "Daten werden geladen …"
+msgstr "Cargando datos …"
+
+msgid "Aktive Filter"
+msgstr "Filtros activos"
+
+msgid "Suche"
+msgstr "Búsqueda"
+
+msgid "Keine Such- oder Filtertreffer."
+msgstr "No hay resultados de búsqueda o filtro."
+
+msgid "Filter zurücksetzen"
+msgstr "Restablecer filtros"
+
+msgid "+ Benutzer hinzufügen"
+msgstr "+ Añadir usuario"
+
+msgid "AGB"
+msgstr "Términos y condiciones"
+
+msgid "Abbrechen"
+msgstr "Cancelar"
+
+msgid "Administrator übertragen"
+msgstr "Transferir administrador"
+
+msgid "Aktiv"
+msgstr "Activo"
+
+msgid "Aktive Mitglieder"
+msgstr "Miembros activos"
+
+msgid "Anzahl"
+msgstr "Cantidad"
+
+msgid "Bestellungen & Zahlungen öffnen"
+msgstr "Abrir pedidos y pagos"
+
+msgid "Checkout"
+msgstr "Pago"
+
+msgid "Datenschutz"
+msgstr "Privacidad"
+
+msgid "Der Link wurde per E-Mail versendet."
+msgstr "El enlace se envió por correo electrónico."
+
+msgid "Firmen-Administrator"
+msgstr "Administrador de empresa"
+
+msgid "Gerät entfernen"
+msgstr "Eliminar dispositivo"
+
+msgid "Geräteslots der aktiven PROMPTFINISHER-Pro-Lizenzen."
+msgstr "Ranuras de dispositivo de licencias PROMPTFINISHER Pro activas."
+
+msgid "Gerätewechsel"
+msgstr "Cambio de dispositivo"
+
+msgid "Gesamt"
+msgstr "Total"
+
+msgid "Jetzt verlängern"
+msgstr "Renovar ahora"
+
+msgid "Kein Pro-Zugriff für dieses Benutzerkonto."
+msgstr "Sin acceso Pro para esta cuenta de usuario."
+
+msgid "Kein aktiver Firmenadministrator gefunden."
+msgstr "No se encontró un administrador de empresa activo."
+
+msgid "Keine Geräte."
+msgstr "No hay dispositivos."
+
+msgid "Link zur Kontrolle"
+msgstr "Enlace para comprobación"
+
+msgid "Lizenz jetzt zuordnen"
+msgstr "Asignar licencia ahora"
+
+msgid "Lizenz verlängern"
+msgstr "Renovar licencia"
+
+msgid "Lizenzbedingungen"
+msgstr "Condiciones de licencia"
+
+msgid "Lizenzen insgesamt"
+msgstr "Licencias totales"
+
+msgid "Lizenzstatus"
+msgstr "Estado de licencia"
+
+msgid "Lizenzzuordnung bestätigen"
+msgstr "Confirmar asignación de licencia"
+
+msgid "Nächster Ablauf"
+msgstr "Próximo vencimiento"
+
+msgid "PROMPTFINISHER PRO"
+msgstr "PROMPTFINISHER PRO"
+
+msgid "PROMPTFINISHER Pro für mich aktivieren"
+msgstr "Activar PROMPTFINISHER Pro para mí"
+
+msgid "PROMPTFINISHER Pro starten →"
+msgstr "Iniciar PROMPTFINISHER Pro →"
+
+msgid "Pro anfragen"
+msgstr "Solicitar Pro"
+
+msgid "Sicherer PROMPTFINISHER-Zuordnungslink."
+msgstr "Enlace seguro de asignación de PROMPTFINISHER."
+
+msgid "Speichern"
+msgstr "Guardar"
+
+msgid "Stammdaten, Steuerdaten und Firmen-Administrator."
+msgstr "Datos maestros, datos fiscales y administrador de empresa."
+
+msgid "Team öffnen"
+msgstr "Abrir equipo"
+
+msgid "Team- und Lizenzverwaltung"
+msgstr "Gestión de equipo y licencias"
+
+msgid "Unternehmensdaten"
+msgstr "Datos de la empresa"
+
+msgid "Unternehmensdaten bearbeiten"
+msgstr "Editar datos de la empresa"
+
+msgid "Unternehmensdaten unvollständig."
+msgstr "Datos de la empresa incompletos."
+
+msgid "Updates während Laufzeit"
+msgstr "Actualizaciones durante la vigencia"
+
+msgid "Widerruf"
+msgstr "Desistimiento"
+
+msgid "Widerrufen"
+msgstr "Revocado"
+
+msgid "Zahlungen mit Handlungsbedarf"
+msgstr "Pagos que requieren acción"
+
+msgid "Zahlungspflichtig kaufen →"
+msgstr "Comprar con obligación de pago →"
+
+msgid "Zuordnungslink erzeugt"
+msgstr "Enlace de asignación creado"
+
+msgid "Zurück zum Benutzer"
+msgstr "Volver al usuario"
+
+msgid "aktiv"
+msgstr "activo"
+
+msgid "enthalten"
+msgstr "incluido"
+
+msgid "inkl. MwSt."
+msgstr "IVA incluido"
+
+msgid "registriert"
+msgstr "registrados"
+
+msgid "Änderungen werden erst nach erfolgreicher Validierung gespeichert."
+msgstr "Los cambios se guardan solo tras una validación correcta."
+
+msgid "+ Lizenz kaufen"
+msgstr "+ Comprar licencia"
+
+msgid "Ablauf"
+msgstr "Vencimiento"
+
+msgid "Adresse"
+msgstr "Dirección"
+
+msgid "Aktion"
+msgstr "Acción"
+
+msgid "Aktive Geräte"
+msgstr "Dispositivos activos"
+
+msgid "Automatischer Kontext"
+msgstr "Contexto automático"
+
+msgid "Barrierefreiheit"
+msgstr "Accesibilidad"
+
+msgid "Benutzer"
+msgstr "Usuario"
+
+msgid "Bestellung"
+msgstr "Pedido"
+
+msgid "Betrag"
+msgstr "Importe"
+
+msgid "Betreff"
+msgstr "Asunto"
+
+msgid "Browser"
+msgstr "Navegador"
+
+msgid "Datenauskunft"
+msgstr "Acceso a datos"
+
+msgid "Datum"
+msgstr "Fecha"
+
+msgid "Direkter Kontakt zu netstyle und Verlauf Ihrer Anfragen."
+msgstr "Contacto directo con netstyle e historial de sus solicitudes."
+
+msgid "Einladungen"
+msgstr "Invitaciones"
+
+msgid "Einladungen sind 24 Stunden gültig und einmal verwendbar."
+msgstr "Las invitaciones son válidas durante 24 horas y solo pueden usarse una vez."
+
+msgid "Frei"
+msgstr "Libre"
+
+msgid "Gerät"
+msgstr "Dispositivo"
+
+msgid "Gültig ab"
+msgstr "Válido desde"
+
+msgid "Gültig bis"
+msgstr "Válido hasta"
+
+msgid "Impressum"
+msgstr "Aviso legal"
+
+msgid "Jeder Seat läuft mit individueller Laufzeit."
+msgstr "Cada licencia tiene su propio periodo de vigencia."
+
+msgid "Kategorie"
+msgstr "Categoría"
+
+msgid "Keine Bestellungen."
+msgstr "No hay pedidos."
+
+msgid "Keine Einladungen."
+msgstr "No hay invitaciones."
+
+msgid "Keine Lizenzen."
+msgstr "No hay licencias."
+
+msgid "Keine aktiven Geräte."
+msgstr "No hay dispositivos activos."
+
+msgid "Kontaktformular"
+msgstr "Formulario de contacto"
+
+msgid "Konto & Hilfe"
+msgstr "Cuenta y ayuda"
+
+msgid "Kontolöschung"
+msgstr "Eliminación de cuenta"
+
+msgid "Kontolöschung anfordern"
+msgstr "Solicitar eliminación de cuenta"
+
+msgid "Laufzeit"
+msgstr "Vigencia"
+
+msgid "Lizenz"
+msgstr "Licencia"
+
+msgid "Lizenz-ID"
+msgstr "ID de licencia"
+
+msgid "Lizenzdaten"
+msgstr "Datos de licencia"
+
+msgid "Meine Daten exportieren"
+msgstr "Exportar mis datos"
+
+msgid "Mollie übernimmt die Zahlungsabwicklung; PROMPTFINISHER erzeugt keine eigene Rechnungsengine."
+msgstr "Mollie procesa los pagos; PROMPTFINISHER no utiliza un motor de facturación propio."
+
+msgid "Mollie-Referenz"
+msgstr "Referencia Mollie"
+
+msgid "Nachricht senden"
+msgstr "Enviar mensaje"
+
+msgid "Name"
+msgstr "Nombre"
+
+msgid "Neu senden"
+msgstr "Reenviar"
+
+msgid "Nicht eingerichtet"
+msgstr "No configurado"
+
+msgid "Noch keine Anfragen vorhanden."
+msgstr "Aún no hay solicitudes."
+
+msgid "Noch keine Reminder für den aktuellen Ablaufzeitpunkt."
+msgstr "Aún no hay recordatorios para la fecha de vencimiento actual."
+
+msgid "PROMPTFINISHER Pro öffnen"
+msgstr "Abrir PROMPTFINISHER Pro"
+
+msgid "Produkt"
+msgstr "Producto"
+
+msgid "Produkt / Menge"
+msgstr "Producto / cantidad"
+
+msgid "Profil"
+msgstr "Perfil"
+
+msgid "Profil, Adresse, Kontosicherheit und Datenauskunft."
+msgstr "Perfil, dirección, seguridad de la cuenta y acceso a datos."
+
+msgid "Rechtliches"
+msgstr "Legal"
+
+msgid "Reminder"
+msgstr "Recordatorio"
+
+msgid "Resttage"
+msgstr "Días restantes"
+
+msgid "Sicherheit"
+msgstr "Seguridad"
+
+msgid "Sicherheit verwalten"
+msgstr "Gestionar seguridad"
+
+msgid "Status"
+msgstr "Estado"
+
+msgid "Supporthistorie"
+msgstr "Historial de soporte"
+
+msgid "Verbraucherrechte"
+msgstr "Derechos del consumidor"
+
+msgid "Vertrag widerrufen"
+msgstr "Desistir del contrato"
+
+msgid "Verträge hier kündigen"
+msgstr "Cancelar contratos aquí"
+
+msgid "Verwaltung & Abrechnung"
+msgstr "Administración y facturación"
+
+msgid "Weitere Bereiche Ihres Kundenportals."
+msgstr "Otras áreas de su portal de clientes."
+
+msgid "Widerrufsbelehrung"
+msgstr "Información sobre desistimiento"
+
+msgid "Zahlung"
+msgstr "Pago"
+
+msgid "Zugewiesen"
+msgstr "Asignadas"
+
+msgid "Zuletzt gesehen"
+msgstr "Visto por última vez"
+
+msgid "Zurück"
+msgstr "Volver"
+
+msgid "Zuweisung"
+msgstr "Asignación"
+
+msgid "Zwei-Faktor-Authentifizierung"
+msgstr "Autenticación de dos factores"
+
+msgid "Öffnen"
+msgstr "Abrir"
+
+msgid "≤30 Tage"
+msgstr "≤30 días"
+
+msgid "2FA einrichten"
+msgstr "Configurar 2FA"
+
+msgid "2FA schützt den Zugriff mit einem zusätzlichen zeitbasierten Einmalcode."
+msgstr "2FA protege el acceso con un código de un solo uso basado en tiempo."
+
+msgid "Ablehnen"
+msgstr "Rechazar"
+
+msgid "Aktive Lizenzen"
+msgstr "Licencias activas"
+
+msgid "Aktuelles Ende"
+msgstr "Fin actual"
+
+msgid "Anfrage"
+msgstr "Solicitud"
+
+msgid "Bearbeitungsstand"
+msgstr "Estado de tramitación"
+
+msgid "Benutzer deaktivieren"
+msgstr "Desactivar usuario"
+
+msgid "Benutzer löschen"
+msgstr "Eliminar usuario"
+
+msgid "Benutzer reaktivieren"
+msgstr "Reactivar usuario"
+
+msgid "Benutzer, Einladungen, Lizenzen und Geräte verwalten."
+msgstr "Gestionar usuarios, invitaciones, licencias y dispositivos."
+
+msgid "Die Suche bleibt auf Ihren eigenen Mandanten- und Lizenzbereich begrenzt."
+msgstr "La búsqueda se limita a su propio ámbito de organización y licencias."
+
+msgid "Ein Passwortwechsel erfolgt über einen zeitlich begrenzten, einmal verwendbaren Link an Ihre hinterlegte E-Mail-Adresse."
+msgstr "El cambio de contraseña se realiza mediante un enlace temporal de un solo uso enviado a su correo registrado."
+
+msgid "Free"
+msgstr "Free"
+
+msgid "Freie Lizenz zuweisen"
+msgstr "Asignar licencia libre"
+
+msgid "Freigeben"
+msgstr "Liberar"
+
+msgid "Genehmigen"
+msgstr "Aprobar"
+
+msgid "Hier sehen Sie ausschließlich Nachrichten, die für Sie bzw. Ihr Unternehmen bestimmt sind. Interne netstyle-Notizen werden nicht im Kundenportal angezeigt."
+msgstr "Aquí solo verá mensajes destinados a usted o a su empresa. Las notas internas de netstyle no se muestran en el portal de clientes."
+
+msgid "Ihre Anfrage und alle für Kunden freigegebenen Antworten."
+msgstr "Su solicitud y todas las respuestas publicadas para clientes."
+
+msgid "Inaktiv"
+msgstr "Inactivo"
+
+msgid "Keine Benutzer gefunden."
+msgstr "No se encontraron usuarios."
+
+msgid "Keine Lizenz zugewiesen."
+msgstr "No hay licencia asignada."
+
+msgid "Keine Lizenzen gefunden."
+msgstr "No se encontraron licencias."
+
+msgid "Keine freie Lizenz."
+msgstr "No hay licencia libre."
+
+msgid "Keine verlängerbare Lizenz vorhanden."
+msgstr "No hay licencia renovable disponible."
+
+msgid "Mitarbeiter"
+msgstr "Empleado"
+
+msgid "Noch nie"
+msgstr "Nunca"
+
+msgid "Offene Pro-Anfragen"
+msgstr "Solicitudes Pro abiertas"
+
+msgid "PROMPTFINISHER Free"
+msgstr "PROMPTFINISHER Free"
+
+msgid "PROMPTFINISHER Pro"
+msgstr "PROMPTFINISHER Pro"
+
+msgid "Passwort zurücksetzen"
+msgstr "Restablecer contraseña"
+
+msgid "Recovery-Codes neu erzeugen"
+msgstr "Regenerar códigos de recuperación"
+
+msgid "Seit"
+msgstr "Desde"
+
+msgid "Sicheren Link senden"
+msgstr "Enviar enlace seguro"
+
+msgid "Team-Mitglieder"
+msgstr "Miembros del equipo"
+
+msgid "Verlauf"
+msgstr "Historial"
+
+msgid "Wählen Sie die Lizenz, deren bestehende Restlaufzeit um weitere 365 Tage verlängert werden soll."
+msgstr "Seleccione la licencia cuyo periodo restante debe ampliarse otros 365 días."
+
+msgid "Zahlungspflichtig verlängern →"
+msgstr "Renovar con obligación de pago →"
+
+msgid "Zuletzt aktiv"
+msgstr "Última actividad"
+
+msgid "Zurück zu Einstellungen"
+msgstr "Volver a configuración"
+
+msgid "Zurück zu Lizenzen"
+msgstr "Volver a licencias"
+
+msgid "Zuweisen"
+msgstr "Asignar"
+
+msgid "Zwei-Faktor-Authentifizierung und Recovery-Codes verwalten."
+msgstr "Gestionar autenticación de dos factores y códigos de recuperación."
+
+msgid "aktive Benutzer"
+msgstr "usuarios activos"
+
+msgid "aktive Benutzer ohne Pro-Zuweisung"
+msgstr "usuarios activos sin asignación Pro"
+
+msgid "registriert / Kapazität"
+msgstr "registrados / capacidad"
+
+msgid "Die vorbereitete Lizenz wird Ihrem aktuell angemeldeten Benutzerkonto zugeordnet. Der Link kann anschließend nicht erneut verwendet werden."
+msgstr "La licencia preparada se asignará a la cuenta de usuario con la que ha iniciado sesión. Después, el enlace no podrá volver a utilizarse."
+
+msgid "Gültig bis %(expiry)s. Der Link ist tenantgebunden, für genau diesen Benutzer bestimmt und nur einmal verwendbar."
+msgstr "Válido hasta %(expiry)s. El enlace está vinculado a la organización, destinado exactamente a este usuario y solo puede utilizarse una vez."
+
+msgid "Jede neue Lizenz startet nach erfolgreicher Zahlung mit eigener 365-Tage-Laufzeit."
+msgstr "Cada nueva licencia inicia su propio periodo de 365 días tras el pago correcto."
+
+msgid "inkl. MwSt. · %(days)s Tage"
+msgstr "IVA incluido · %(days)s días"
+
+msgid "%(limit)s Geräte je Benutzer"
+msgstr "%(limit)s dispositivos por usuario"
+
+msgid "Preis nicht verfügbar"
+msgstr "Precio no disponible"
+
+msgid "V1: exakt ein aktiver Firmenadministrator. Eine Übertragung ist nur auf ein aktives Team-Mitglied möglich."
+msgstr "V1: exactamente un administrador de empresa activo. La transferencia solo es posible a un miembro activo del equipo."
+
+msgid "Ihre eigenen Geräteslots können Sie hier selbst verwalten."
+msgstr "Aquí puede gestionar sus propias ranuras de dispositivo."
+
+msgid "Geräteslots werden durch den Firmenadministrator verwaltet."
+msgstr "Las ranuras de dispositivo son gestionadas por el administrador de empresa."
+
+msgid "Widerrufene Geräte bleiben als Historie erhalten."
+msgstr "Los dispositivos revocados permanecen en el historial."
+
+msgid "Zuletzt %(seen)s"
+msgstr "Última vez %(seen)s"
+
+msgid "Gerät wirklich entfernen?"
+msgstr "¿Eliminar realmente el dispositivo?"
+
+msgid "Konto, Unternehmen, Benutzer-ID und Zeitpunkt werden automatisch zugeordnet. Optional kann eine für Ihr Konto sichtbare Lizenz mitgesendet werden. Passwörter, Tokens oder andere unnötige sensitive Daten werden nicht übernommen."
+msgstr "La cuenta, empresa, ID de usuario y fecha se asignan automáticamente. Opcionalmente puede incluirse una licencia visible para su cuenta. No se incluyen contraseñas, tokens ni otros datos sensibles innecesarios."
+
+msgid "Exportieren Sie die zu Ihrem Benutzer gespeicherten PROMPTFINISHER-Daten als JSON. Secrets und Daten anderer Benutzer werden nicht exportiert."
+msgstr "Exporte como JSON los datos de PROMPTFINISHER almacenados para su usuario. No se exportan secretos ni datos de otros usuarios."
+
+msgid "Ihre Löschanfrage vom %(requested)s ist bereits erfasst. Status: %(status)s."
+msgstr "Su solicitud de eliminación del %(requested)s ya está registrada. Estado: %(status)s."
+
+msgid "Sie können die Löschung Ihres PROMPTFINISHER-Kontos anfordern. Gesetzlich erforderliche Geschäfts- und Nachweisdaten werden nur im erforderlichen Umfang weiter aufbewahrt bzw. anonymisiert. Firmenadministratoren müssen ihre Administratorrolle vor der Verarbeitung übertragen."
+msgstr "Puede solicitar la eliminación de su cuenta PROMPTFINISHER. Los datos comerciales y probatorios exigidos legalmente solo se conservarán o anonimizarán en la medida necesaria. Los administradores de empresa deben transferir su rol antes del procesamiento."
+
+msgid "Ich möchte die Löschung meines Kontos verbindlich anfordern."
+msgstr "Quiero solicitar de forma vinculante la eliminación de mi cuenta."
+
+msgid "Guten Morgen, %(first_name)s"
+msgstr "Buenos días, %(first_name)s"
+
+msgid "Privatkonto"
+msgstr "Cuenta particular"
+
+msgid "Unternehmensadministrator"
+msgstr "Administrador de empresa"
+
+msgid "%(assigned)s vergeben · %(free)s verfügbar"
+msgstr "%(assigned)s asignadas · %(free)s disponibles"
+
+msgid "%(free)s frei · %(expiring)s läuft bald ab"
+msgstr "%(free)s libres · %(expiring)s vencen pronto"
+
+msgid "Tage"
+msgstr "días"
+
+msgid "kein Ablauf"
+msgstr "sin vencimiento"
+
+msgid "Eine Lizenz läuft in %(days)s Tagen ab."
+msgstr "Una licencia vence en %(days)s días."
+
+msgid "freie Pro-Lizenzen"
+msgstr "licencias Pro libres"
+
+msgid "Freie Pro-Lizenzen können Team-Mitgliedern zugewiesen werden."
+msgstr "Las licencias Pro libres pueden asignarse a miembros del equipo."
+
+msgid "Für Kauf/Abrechnung fehlen: %(fields)s."
+msgstr "Faltan para compra/facturación: %(fields)s."
+
+msgid "Tage verbleibend"
+msgstr "días restantes"
+
+msgid "Deine Lizenz läuft am %(expiry)s ab."
+msgstr "Su licencia vence el %(expiry)s."
+
+msgid "Es ist eine freie Pro-Lizenz verfügbar."
+msgstr "Hay una licencia Pro libre disponible."
+
+msgid "Aktuell ist keine freie Pro-Lizenz verfügbar. Kaufen Sie eine weitere Lizenz oder geben Sie eine bestehende Lizenz frei."
+msgstr "Actualmente no hay ninguna licencia Pro libre. Compre otra licencia o libere una existente."
+
+msgid "Ihre Pro-Anfrage ist bereits offen."
+msgstr "Su solicitud Pro ya está abierta."
+
+msgid "Für den Pro-Zugriff benötigen Sie eine aktive PROMPTFINISHER-Pro-Lizenz."
+msgstr "Necesita una licencia PROMPTFINISHER Pro activa para acceder a Pro."
+
+msgid "Portal durchsuchen"
+msgstr "Buscar en el portal"
+
+msgid "Geben Sie einen Suchbegriff ein. Firmenadministratoren können nach Teammitgliedern, E-Mail-Adressen und Lizenzen suchen; andere Benutzer sehen ausschließlich ihre eigene Lizenzsicht."
+msgstr "Introduzca un término de búsqueda. Los administradores de empresa pueden buscar miembros del equipo, correos y licencias; los demás usuarios solo ven sus propias licencias."
+
+msgid "Kunde"
+msgstr "Cliente"
+
+msgid "Pro-Lizenzen noch frei"
+msgstr "licencias Pro aún libres"

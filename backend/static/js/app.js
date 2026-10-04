@@ -1,4 +1,89 @@
 (() => {
+  const language = (document.documentElement.lang || 'de').toLowerCase().split('-')[0];
+  const translations = {
+    de: {
+      loading: 'Daten werden geladen …',
+      sortAscAria: (label) => `${label}, aktuell aufsteigend sortiert. Sortierreihenfolge ändern`,
+      sortDescAria: (label) => `${label}, aktuell absteigend sortiert. Sortierreihenfolge ändern`,
+      sortAria: (label) => `${label} sortieren`,
+      sortAscTitle: 'Aufsteigend sortiert – klicken für absteigend',
+      sortDescTitle: 'Absteigend sortiert – klicken für aufsteigend',
+      sortTitle: 'Sortieren – klicken für aufsteigend',
+      copied: 'Kopiert ✓',
+      securityCheck: 'Sicherheitsabfrage',
+      confirmAction: 'Aktion bestätigen',
+      cancel: 'Abbrechen',
+      confirm: 'Bestätigen',
+      confirmDefault: 'Möchten Sie diese Aktion wirklich ausführen?',
+      confirmBinding: 'Verbindlich bestätigen',
+    },
+    en: {
+      loading: 'Loading data …',
+      sortAscAria: (label) => `${label}, currently sorted ascending. Change sort order`,
+      sortDescAria: (label) => `${label}, currently sorted descending. Change sort order`,
+      sortAria: (label) => `Sort ${label}`,
+      sortAscTitle: 'Sorted ascending – click for descending',
+      sortDescTitle: 'Sorted descending – click for ascending',
+      sortTitle: 'Sort – click for ascending',
+      copied: 'Copied ✓',
+      securityCheck: 'Security check',
+      confirmAction: 'Confirm action',
+      cancel: 'Cancel',
+      confirm: 'Confirm',
+      confirmDefault: 'Do you really want to perform this action?',
+      confirmBinding: 'Confirm binding action',
+    },
+    es: {
+      loading: 'Cargando datos …',
+      sortAscAria: (label) => `${label}, orden ascendente. Cambiar orden`,
+      sortDescAria: (label) => `${label}, orden descendente. Cambiar orden`,
+      sortAria: (label) => `Ordenar ${label}`,
+      sortAscTitle: 'Orden ascendente – clic para descendente',
+      sortDescTitle: 'Orden descendente – clic para ascendente',
+      sortTitle: 'Ordenar – clic para ascendente',
+      copied: 'Copiado ✓',
+      securityCheck: 'Comprobación de seguridad',
+      confirmAction: 'Confirmar acción',
+      cancel: 'Cancelar',
+      confirm: 'Confirmar',
+      confirmDefault: '¿Desea realmente realizar esta acción?',
+      confirmBinding: 'Confirmar de forma vinculante',
+    },
+    pt: {
+      loading: 'A carregar dados …',
+      sortAscAria: (label) => `${label}, ordenação ascendente. Alterar ordenação`,
+      sortDescAria: (label) => `${label}, ordenação descendente. Alterar ordenação`,
+      sortAria: (label) => `Ordenar ${label}`,
+      sortAscTitle: 'Ordenação ascendente – clicar para descendente',
+      sortDescTitle: 'Ordenação descendente – clicar para ascendente',
+      sortTitle: 'Ordenar – clicar para ascendente',
+      copied: 'Copiado ✓',
+      securityCheck: 'Verificação de segurança',
+      confirmAction: 'Confirmar ação',
+      cancel: 'Cancelar',
+      confirm: 'Confirmar',
+      confirmDefault: 'Pretende realmente executar esta ação?',
+      confirmBinding: 'Confirmar de forma vinculativa',
+    },
+    tr: {
+      loading: 'Veriler yükleniyor …',
+      sortAscAria: (label) => `${label}, artan sıralı. Sıralamayı değiştir`,
+      sortDescAria: (label) => `${label}, azalan sıralı. Sıralamayı değiştir`,
+      sortAria: (label) => `${label} sırala`,
+      sortAscTitle: 'Artan sıralı – azalan için tıklayın',
+      sortDescTitle: 'Azalan sıralı – artan için tıklayın',
+      sortTitle: 'Sırala – artan için tıklayın',
+      copied: 'Kopyalandı ✓',
+      securityCheck: 'Güvenlik kontrolü',
+      confirmAction: 'İşlemi onayla',
+      cancel: 'İptal',
+      confirm: 'Onayla',
+      confirmDefault: 'Bu işlemi gerçekten gerçekleştirmek istiyor musunuz?',
+      confirmBinding: 'Bağlayıcı olarak onayla',
+    },
+  };
+  const text = translations[language] || translations.de;
+
   const initDataGrids = () => {
     document.querySelectorAll('form[data-datagrid]').forEach((form) => {
       const search = form.querySelector('[data-grid-search]');
@@ -9,7 +94,7 @@
         form.setAttribute('aria-busy', 'true');
         if (status) {
           status.hidden = false;
-          status.textContent = 'Daten werden geladen …';
+          status.textContent = text.loading;
         }
       };
 
@@ -72,16 +157,16 @@
       control.setAttribute(
         'aria-label',
         state === 'asc'
-          ? `${label}, aktuell aufsteigend sortiert. Sortierreihenfolge ändern`
+          ? text.sortAscAria(label)
           : state === 'desc'
-            ? `${label}, aktuell absteigend sortiert. Sortierreihenfolge ändern`
-            : `${label} sortieren`
+            ? text.sortDescAria(label)
+            : text.sortAria(label)
       );
       control.title = state === 'asc'
-        ? 'Aufsteigend sortiert – klicken für absteigend'
+        ? text.sortAscTitle
         : state === 'desc'
-          ? 'Absteigend sortiert – klicken für aufsteigend'
-          : 'Sortieren – klicken für aufsteigend';
+          ? text.sortDescTitle
+          : text.sortTitle;
     };
 
     // Server-side DataGrid sorting. These links keep pagination/filter/query
@@ -194,6 +279,22 @@
   };
 
 
+  const initLanguageSwitcher = () => {
+    document.querySelectorAll('[data-language-switcher]').forEach((container) => {
+      const select = container.querySelector('[data-language-select]');
+      if (!select || select.dataset.languageBound === '1') return;
+      select.dataset.languageBound = '1';
+      select.addEventListener('change', () => {
+        const action = container.dataset.action || '/auth/language/';
+        const target = new URL(action, window.location.origin);
+        target.searchParams.set('language', select.value);
+        target.searchParams.set('next', container.dataset.next || window.location.pathname + window.location.search);
+        window.location.assign(target.pathname + target.search);
+      });
+    });
+  };
+
+
   const initCopyControls = () => {
     document.querySelectorAll('[data-copy-target]').forEach((button) => {
       if (button.dataset.copyBound === '1') return;
@@ -206,7 +307,7 @@
         const original = button.textContent;
         try {
           await navigator.clipboard.writeText(value);
-          button.textContent = 'Kopiert ✓';
+          button.textContent = text.copied;
         } catch {
           const range = document.createRange();
           range.selectNodeContents(target);
@@ -215,7 +316,7 @@
           selection.addRange(range);
           document.execCommand('copy');
           selection.removeAllRanges();
-          button.textContent = 'Kopiert ✓';
+          button.textContent = text.copied;
         }
         window.setTimeout(() => { button.textContent = original; }, 1200);
       });
@@ -240,13 +341,13 @@
     backdrop.innerHTML = `
       <div class="pm-confirm-dialog" role="alertdialog" aria-modal="true" aria-labelledby="pmConfirmTitle" aria-describedby="pmConfirmText">
         <div class="pm-confirm-head">
-          <div class="pm-confirm-kicker">Sicherheitsabfrage</div>
-          <h2 id="pmConfirmTitle">Aktion bestätigen</h2>
+          <div class="pm-confirm-kicker">${text.securityCheck}</div>
+          <h2 id="pmConfirmTitle">${text.confirmAction}</h2>
         </div>
         <div class="pm-confirm-body" id="pmConfirmText"></div>
         <div class="pm-confirm-actions">
-          <button type="button" class="btn secondary" data-confirm-cancel>Abbrechen</button>
-          <button type="button" class="btn danger" data-confirm-ok>Bestätigen</button>
+          <button type="button" class="btn secondary" data-confirm-cancel>${text.cancel}</button>
+          <button type="button" class="btn danger" data-confirm-ok>${text.confirm}</button>
         </div>
       </div>
     `;
@@ -271,11 +372,11 @@
       pendingForm = form;
       pendingSubmitter = submitter || null;
       previousFocus = document.activeElement;
-      textNode.textContent = form.dataset.confirm || 'Möchten Sie diese Aktion wirklich ausführen?';
+      textNode.textContent = form.dataset.confirm || text.confirmDefault;
       const destructive = submitter?.classList.contains('danger');
       confirm.classList.toggle('danger', destructive);
       confirm.classList.toggle('primary', !destructive);
-      confirm.textContent = destructive ? 'Verbindlich bestätigen' : 'Bestätigen';
+      confirm.textContent = destructive ? text.confirmBinding : text.confirm;
       backdrop.hidden = false;
       document.body.style.overflow = 'hidden';
       cancel.focus();
@@ -317,6 +418,7 @@
   };
 
   const initUi = () => {
+    initLanguageSwitcher();
     initDataGrids();
     initSortableHeaders();
     initConfirmationDialogs();

@@ -1,34 +1,34 @@
-{% extends 'portal/base.html' %}
+{% extends 'portal/base.html' %}{% load i18n %}
 {% block content %}
-<div class="page-head"><div><h1>Mehr</h1><div class="sub">Weitere Bereiche Ihres Kundenportals.</div></div></div>
+<div class="page-head"><div><h1>{% translate "Mehr" %}</h1><div class="sub">{% translate "Weitere Bereiche Ihres Kundenportals." %}</div></div></div>
 <div class="grid two">
-  <div class="card"><h2>Konto &amp; Hilfe</h2><div class="list">
-    {% if pm_can_start_pro %}<a class="btn primary" href="{% url 'proaccess:launch' %}">PROMPTFINISHER Pro öffnen</a>{% endif %}
-    <a class="btn secondary" href="{% url 'portal:search' %}">Suche</a>
-    <a class="btn secondary" href="{% url 'portal:profile' %}">Einstellungen</a>
-    <a class="btn secondary" href="{% url 'portal:security' %}">Sicherheit</a>
+  <div class="card"><h2>{% translate "Konto & Hilfe" %}</h2><div class="list">
+    {% if pm_can_start_pro %}<a class="btn primary" href="{% url 'proaccess:launch' %}">{% translate "PROMPTFINISHER Pro öffnen" %}</a>{% endif %}
+    <a class="btn secondary" href="{% url 'portal:search' %}">{% translate "Suche" %}</a>
+    <a class="btn secondary" href="{% url 'portal:profile' %}">{% translate "Einstellungen" %}</a>
+    <a class="btn secondary" href="{% url 'portal:security' %}">{% translate "Sicherheit" %}</a>
     <a class="btn secondary" href="{% url 'portal:help' %}">Hilfe &amp; Kontakt</a>
-    <a class="btn secondary" href="{% url 'accounts:logout' %}">Abmelden</a>
+    <a class="btn secondary" href="{% url 'accounts:logout' %}">{% translate "Abmelden" %}</a>
   </div></div>
   {% if membership and membership.role == 'admin' or not membership %}
-  <div class="card"><h2>Verwaltung &amp; Abrechnung</h2><div class="list">
-    <a class="btn secondary" href="{% url 'portal:buy' %}">Weitere Lizenzen kaufen</a>
-    <a class="btn secondary" href="{% url 'portal:orders' %}">Bestellungen &amp; Zahlungen</a>
+  <div class="card"><h2>{% translate "Verwaltung & Abrechnung" %}</h2><div class="list">
+    <a class="btn secondary" href="{% url 'portal:buy' %}">{% translate "Weitere Lizenzen kaufen" %}</a>
+    <a class="btn secondary" href="{% url 'portal:orders' %}">{% translate "Bestellungen & Zahlungen" %}</a>
     {% if membership and membership.role == 'admin' %}<a class="btn secondary" href="{% url 'portal:company' %}">Unternehmen</a>{% endif %}
   </div></div>
   {% endif %}
-  <div class="card"><h2>Rechtliches</h2><div class="list">
-    <a class="btn secondary" href="/impressum/">Impressum</a>
+  <div class="card"><h2>{% translate "Rechtliches" %}</h2><div class="list">
+    <a class="btn secondary" href="/impressum/">{% translate "Impressum" %}</a>
     <a class="btn secondary" href="/datenschutz/">Datenschutz</a>
     <a class="btn secondary" href="/agb/">AGB</a>
     <a class="btn secondary" href="/lizenzbedingungen/">Lizenzbedingungen</a>
-    <a class="btn secondary" href="/barrierefreiheit/">Barrierefreiheit</a>
+    <a class="btn secondary" href="/barrierefreiheit/">{% translate "Barrierefreiheit" %}</a>
   </div></div>
   {% if not membership %}
-  <div class="card"><h2>Verbraucherrechte</h2><div class="list">
-    <a class="btn secondary" href="/widerruf/">Widerrufsbelehrung</a>
-    <a class="btn secondary" href="/vertrag-widerrufen/">Vertrag widerrufen</a>
-    <a class="btn secondary" href="/vertraege-kuendigen/">Verträge hier kündigen</a>
+  <div class="card"><h2>{% translate "Verbraucherrechte" %}</h2><div class="list">
+    <a class="btn secondary" href="/widerruf/">{% translate "Widerrufsbelehrung" %}</a>
+    <a class="btn secondary" href="/vertrag-widerrufen/">{% translate "Vertrag widerrufen" %}</a>
+    <a class="btn secondary" href="/vertraege-kuendigen/">{% translate "Verträge hier kündigen" %}</a>
   </div></div>
   {% endif %}
 </div>

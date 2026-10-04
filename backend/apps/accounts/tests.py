@@ -310,3 +310,62 @@ class LogoutWorkspaceRoutingTests(TestCase):
         response = self.client.get(reverse('accounts:logout'))
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, 'href="/portal/dashboard/"')
+
+
+class UiLanguagePreferenceTests(TestCase):
+    def test_supported_languages_are_exact_product_contract(self):
+        from django.conf import settings
+        self.assertEqual(
+            list(settings.LANGUAGES),
+            [
+                ('de', 'Deutsch'),
+                ('en', 'English'),
+                ('es', 'Español'),
+                ('pt', 'Português'),
+                ('tr', 'Türkçe'),
+            ],
+        )
+        self.assertEqual(settings.LANGUAGE_CODE, 'de')
+
+    def test_anonymous_language_switch_sets_cookie_and_preserves_safe_destination(self):
+        response = self.client.get(
+            reverse('accounts:set_ui_language'),
+            {'language': 'es', 'next': '/auth/login/'},
+        )
+        self.assertEqual(response.status_code, 302)
+        self.assertEqual(response.url, '/auth/login/')
+        self.assertEqual(response.cookies['promptfinisher_language'].value, 'es')
+
+    def test_authenticated_language_switch_is_persisted_on_user(self):
+        user = User.objects.create_user(
+            email='language-user@example.test',
+            password='Language-Test-Password-2026!',
+            first_name='Language',
+            last_name='User',
+        )
+        self.client.force_login(user)
+        from django.utils import timezone
+        session = self.client.session
+        now = timezone.now().timestamp()
+        session['security_version'] = user.security_version
+        session['authenticated_at'] = now
+        session['last_activity_at'] = now
+        session['two_factor_ok'] = True
+        session.save()
+        response = self.client.get(
+            reverse('accounts:set_ui_language'),
+            {'language': 'pt', 'next': '/'},
+        )
+        self.assertEqual(response.status_code, 302)
+        user.refresh_from_db()
+        self.assertEqual(user.ui_language, 'pt')
+        self.assertEqual(response.cookies['promptfinisher_language'].value, 'pt')
+
+    def test_unknown_language_fails_closed_to_german_and_blocks_external_next(self):
+        response = self.client.get(
+            reverse('accounts:set_ui_language'),
+            {'language': 'xx', 'next': 'https://evil.example/'},
+        )
+        self.assertEqual(response.status_code, 302)
+        self.assertEqual(response.url, '/')
+        self.assertEqual(response.cookies['promptfinisher_language'].value, 'de')

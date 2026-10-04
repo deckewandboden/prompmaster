@@ -1,0 +1,873 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: PROMPTFINISHER\n"
+"Language: en\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+msgid "Sprache auswählen"
+msgstr "Select language"
+
+msgid "Sprache"
+msgstr "Language"
+
+msgid "Suchen …"
+msgstr "Search …"
+
+msgid "Suchen"
+msgstr "Search"
+
+msgid "Lead, Kunde, Benutzer, Lizenz-ID oder E-Mail suchen …"
+msgstr "Search lead, customer, user, license ID or email …"
+
+msgid "Superadmin"
+msgstr "Super admin"
+
+msgid "netstyle Benutzer"
+msgstr "netstyle user"
+
+msgid "netstyle Admin-Backend"
+msgstr "netstyle admin backend"
+
+msgid "Übersicht"
+msgstr "Overview"
+
+msgid "Leads"
+msgstr "Leads"
+
+msgid "Kunden"
+msgstr "Customers"
+
+msgid "Lizenzen"
+msgstr "Licenses"
+
+msgid "Bestellungen"
+msgstr "Orders"
+
+msgid "Zahlungen"
+msgstr "Payments"
+
+msgid "Produkte & Preise"
+msgstr "Products & pricing"
+
+msgid "Prompt Studio"
+msgstr "Prompt Studio"
+
+msgid "FAQ & Inhalte"
+msgstr "FAQ & content"
+
+msgid "E-Mail"
+msgstr "Email"
+
+msgid "Mollie"
+msgstr "Mollie"
+
+msgid "Statistiken"
+msgstr "Statistics"
+
+msgid "System & Betrieb"
+msgstr "System & operations"
+
+msgid "API & Integrationen"
+msgstr "API & integrations"
+
+msgid "Datenschutz & Recht"
+msgstr "Privacy & legal"
+
+msgid "Kontaktanfragen"
+msgstr "Contact requests"
+
+msgid "Protokolle"
+msgstr "Logs"
+
+msgid "Benutzer & Rollen"
+msgstr "Users & roles"
+
+msgid "Einstellungen"
+msgstr "Settings"
+
+msgid "Abmelden"
+msgstr "Sign out"
+
+msgid "Home"
+msgstr "Home"
+
+msgid "System"
+msgstr "System"
+
+msgid "Logs"
+msgstr "Logs"
+
+msgid "Mehr"
+msgstr "More"
+
+msgid "Kundenportal"
+msgstr "Customer portal"
+
+msgid "KUNDENPORTAL"
+msgstr "CUSTOMER PORTAL"
+
+msgid "Benutzer, E-Mail oder Lizenz suchen …"
+msgstr "Search user, email or license …"
+
+msgid "Lizenz suchen …"
+msgstr "Search license …"
+
+msgid "Privatkunde"
+msgstr "Private customer"
+
+msgid "Dashboard"
+msgstr "Dashboard"
+
+msgid "Mein Team"
+msgstr "My team"
+
+msgid "Weitere Lizenzen kaufen"
+msgstr "Buy more licenses"
+
+msgid "Geräte"
+msgstr "Devices"
+
+msgid "Bestellungen & Zahlungen"
+msgstr "Orders & payments"
+
+msgid "Unternehmen"
+msgstr "Company"
+
+msgid "Hilfe & Kontakt"
+msgstr "Help & contact"
+
+msgid "Team"
+msgstr "Team"
+
+msgid "Anmelden"
+msgstr "Sign in"
+
+msgid "Ein Zugang für PROMPTFINISHER, Kundenportal und netstyle Admin"
+msgstr "One account for PROMPTFINISHER, customer portal and netstyle admin"
+
+msgid "Noch kein Konto? Konto erstellen"
+msgstr "No account yet? Create account"
+
+msgid "Passwort vergessen?"
+msgstr "Forgot password?"
+
+msgid "Konto anlegen"
+msgstr "Create account"
+
+msgid "Registrieren"
+msgstr "Register"
+
+msgid "Unternehmensadministratoren richten anschließend verpflichtend 2FA ein."
+msgstr "Company administrators must then set up 2FA."
+
+msgid "Bereits registriert?"
+msgstr "Already registered?"
+
+msgid "Zur Anmeldung"
+msgstr "Go to sign in"
+
+msgid "E-Mail-Adresse"
+msgstr "Email address"
+
+msgid "Passwort"
+msgstr "Password"
+
+msgid "Bestätigungscode"
+msgstr "Verification code"
+
+msgid "Kundentyp"
+msgstr "Customer type"
+
+msgid "Privat"
+msgstr "Private"
+
+msgid "Vorname"
+msgstr "First name"
+
+msgid "Nachname"
+msgstr "Last name"
+
+msgid "Firmenname"
+msgstr "Company name"
+
+msgid "AGB gelesen und akzeptiert"
+msgstr "Terms read and accepted"
+
+msgid "Datenschutzerklärung zur Kenntnis genommen"
+msgstr "Privacy policy acknowledged"
+
+msgid "Passwort zur Bestätigung"
+msgstr "Password for confirmation"
+
+msgid "Administratorübertragung verbindlich bestätigen"
+msgstr "Confirm administrator transfer"
+
+msgid "Neues Passwort"
+msgstr "New password"
+
+msgid "Passwort wiederholen"
+msgstr "Repeat password"
+
+msgid "Tabellenfilter"
+msgstr "Table filters"
+
+msgid "Tabelle durchsuchen"
+msgstr "Search table"
+
+msgid "Alle"
+msgstr "All"
+
+msgid "Seitengröße"
+msgstr "Page size"
+
+msgid "Spalten"
+msgstr "Columns"
+
+msgid "Anwenden"
+msgstr "Apply"
+
+msgid "CSV exportieren"
+msgstr "Export CSV"
+
+msgid "Sortierung zurücksetzen"
+msgstr "Reset sorting"
+
+msgid "Alles zurücksetzen"
+msgstr "Reset all"
+
+msgid "Daten werden geladen …"
+msgstr "Loading data …"
+
+msgid "Aktive Filter"
+msgstr "Active filters"
+
+msgid "Suche"
+msgstr "Search"
+
+msgid "Keine Such- oder Filtertreffer."
+msgstr "No search or filter results."
+
+msgid "Filter zurücksetzen"
+msgstr "Reset filters"
+
+msgid "+ Benutzer hinzufügen"
+msgstr "+ Add user"
+
+msgid "AGB"
+msgstr "Terms and conditions"
+
+msgid "Abbrechen"
+msgstr "Cancel"
+
+msgid "Administrator übertragen"
+msgstr "Transfer administrator"
+
+msgid "Aktiv"
+msgstr "Active"
+
+msgid "Aktive Mitglieder"
+msgstr "Active members"
+
+msgid "Anzahl"
+msgstr "Quantity"
+
+msgid "Bestellungen & Zahlungen öffnen"
+msgstr "Open orders & payments"
+
+msgid "Checkout"
+msgstr "Checkout"
+
+msgid "Datenschutz"
+msgstr "Privacy"
+
+msgid "Der Link wurde per E-Mail versendet."
+msgstr "The link was sent by email."
+
+msgid "Firmen-Administrator"
+msgstr "Company administrator"
+
+msgid "Gerät entfernen"
+msgstr "Remove device"
+
+msgid "Geräteslots der aktiven PROMPTFINISHER-Pro-Lizenzen."
+msgstr "Device slots of active PROMPTFINISHER Pro licenses."
+
+msgid "Gerätewechsel"
+msgstr "Device change"
+
+msgid "Gesamt"
+msgstr "Total"
+
+msgid "Jetzt verlängern"
+msgstr "Renew now"
+
+msgid "Kein Pro-Zugriff für dieses Benutzerkonto."
+msgstr "No Pro access for this user account."
+
+msgid "Kein aktiver Firmenadministrator gefunden."
+msgstr "No active company administrator found."
+
+msgid "Keine Geräte."
+msgstr "No devices."
+
+msgid "Link zur Kontrolle"
+msgstr "Link for verification"
+
+msgid "Lizenz jetzt zuordnen"
+msgstr "Assign license now"
+
+msgid "Lizenz verlängern"
+msgstr "Renew license"
+
+msgid "Lizenzbedingungen"
+msgstr "License terms"
+
+msgid "Lizenzen insgesamt"
+msgstr "Total licenses"
+
+msgid "Lizenzstatus"
+msgstr "License status"
+
+msgid "Lizenzzuordnung bestätigen"
+msgstr "Confirm license assignment"
+
+msgid "Nächster Ablauf"
+msgstr "Next expiry"
+
+msgid "PROMPTFINISHER PRO"
+msgstr "PROMPTFINISHER PRO"
+
+msgid "PROMPTFINISHER Pro für mich aktivieren"
+msgstr "Activate PROMPTFINISHER Pro for me"
+
+msgid "PROMPTFINISHER Pro starten →"
+msgstr "Start PROMPTFINISHER Pro →"
+
+msgid "Pro anfragen"
+msgstr "Request Pro"
+
+msgid "Sicherer PROMPTFINISHER-Zuordnungslink."
+msgstr "Secure PROMPTFINISHER assignment link."
+
+msgid "Speichern"
+msgstr "Save"
+
+msgid "Stammdaten, Steuerdaten und Firmen-Administrator."
+msgstr "Master data, tax data and company administrator."
+
+msgid "Team öffnen"
+msgstr "Open team"
+
+msgid "Team- und Lizenzverwaltung"
+msgstr "Team and license management"
+
+msgid "Unternehmensdaten"
+msgstr "Company data"
+
+msgid "Unternehmensdaten bearbeiten"
+msgstr "Edit company data"
+
+msgid "Unternehmensdaten unvollständig."
+msgstr "Company data incomplete."
+
+msgid "Updates während Laufzeit"
+msgstr "Updates during term"
+
+msgid "Widerruf"
+msgstr "Withdrawal"
+
+msgid "Widerrufen"
+msgstr "Revoked"
+
+msgid "Zahlungen mit Handlungsbedarf"
+msgstr "Payments requiring action"
+
+msgid "Zahlungspflichtig kaufen →"
+msgstr "Buy with payment obligation →"
+
+msgid "Zuordnungslink erzeugt"
+msgstr "Assignment link created"
+
+msgid "Zurück zum Benutzer"
+msgstr "Back to user"
+
+msgid "aktiv"
+msgstr "active"
+
+msgid "enthalten"
+msgstr "included"
+
+msgid "inkl. MwSt."
+msgstr "incl. VAT"
+
+msgid "registriert"
+msgstr "registered"
+
+msgid "Änderungen werden erst nach erfolgreicher Validierung gespeichert."
+msgstr "Changes are saved only after successful validation."
+
+msgid "+ Lizenz kaufen"
+msgstr "+ Buy license"
+
+msgid "Ablauf"
+msgstr "Expiry"
+
+msgid "Adresse"
+msgstr "Address"
+
+msgid "Aktion"
+msgstr "Action"
+
+msgid "Aktive Geräte"
+msgstr "Active devices"
+
+msgid "Automatischer Kontext"
+msgstr "Automatic context"
+
+msgid "Barrierefreiheit"
+msgstr "Accessibility"
+
+msgid "Benutzer"
+msgstr "User"
+
+msgid "Bestellung"
+msgstr "Order"
+
+msgid "Betrag"
+msgstr "Amount"
+
+msgid "Betreff"
+msgstr "Subject"
+
+msgid "Browser"
+msgstr "Browser"
+
+msgid "Datenauskunft"
+msgstr "Data access"
+
+msgid "Datum"
+msgstr "Date"
+
+msgid "Direkter Kontakt zu netstyle und Verlauf Ihrer Anfragen."
+msgstr "Direct contact with netstyle and history of your requests."
+
+msgid "Einladungen"
+msgstr "Invitations"
+
+msgid "Einladungen sind 24 Stunden gültig und einmal verwendbar."
+msgstr "Invitations are valid for 24 hours and can be used once."
+
+msgid "Frei"
+msgstr "Free"
+
+msgid "Gerät"
+msgstr "Device"
+
+msgid "Gültig ab"
+msgstr "Valid from"
+
+msgid "Gültig bis"
+msgstr "Valid until"
+
+msgid "Impressum"
+msgstr "Legal notice"
+
+msgid "Jeder Seat läuft mit individueller Laufzeit."
+msgstr "Each seat has its own individual term."
+
+msgid "Kategorie"
+msgstr "Category"
+
+msgid "Keine Bestellungen."
+msgstr "No orders."
+
+msgid "Keine Einladungen."
+msgstr "No invitations."
+
+msgid "Keine Lizenzen."
+msgstr "No licenses."
+
+msgid "Keine aktiven Geräte."
+msgstr "No active devices."
+
+msgid "Kontaktformular"
+msgstr "Contact form"
+
+msgid "Konto & Hilfe"
+msgstr "Account & help"
+
+msgid "Kontolöschung"
+msgstr "Account deletion"
+
+msgid "Kontolöschung anfordern"
+msgstr "Request account deletion"
+
+msgid "Laufzeit"
+msgstr "Term"
+
+msgid "Lizenz"
+msgstr "License"
+
+msgid "Lizenz-ID"
+msgstr "License ID"
+
+msgid "Lizenzdaten"
+msgstr "License data"
+
+msgid "Meine Daten exportieren"
+msgstr "Export my data"
+
+msgid "Mollie übernimmt die Zahlungsabwicklung; PROMPTFINISHER erzeugt keine eigene Rechnungsengine."
+msgstr "Mollie handles payment processing; PROMPTFINISHER does not operate its own invoicing engine."
+
+msgid "Mollie-Referenz"
+msgstr "Mollie reference"
+
+msgid "Nachricht senden"
+msgstr "Send message"
+
+msgid "Name"
+msgstr "Name"
+
+msgid "Neu senden"
+msgstr "Resend"
+
+msgid "Nicht eingerichtet"
+msgstr "Not configured"
+
+msgid "Noch keine Anfragen vorhanden."
+msgstr "No requests yet."
+
+msgid "Noch keine Reminder für den aktuellen Ablaufzeitpunkt."
+msgstr "No reminders yet for the current expiry date."
+
+msgid "PROMPTFINISHER Pro öffnen"
+msgstr "Open PROMPTFINISHER Pro"
+
+msgid "Produkt"
+msgstr "Product"
+
+msgid "Produkt / Menge"
+msgstr "Product / quantity"
+
+msgid "Profil"
+msgstr "Profile"
+
+msgid "Profil, Adresse, Kontosicherheit und Datenauskunft."
+msgstr "Profile, address, account security and data access."
+
+msgid "Rechtliches"
+msgstr "Legal"
+
+msgid "Reminder"
+msgstr "Reminder"
+
+msgid "Resttage"
+msgstr "Days remaining"
+
+msgid "Sicherheit"
+msgstr "Security"
+
+msgid "Sicherheit verwalten"
+msgstr "Manage security"
+
+msgid "Status"
+msgstr "Status"
+
+msgid "Supporthistorie"
+msgstr "Support history"
+
+msgid "Verbraucherrechte"
+msgstr "Consumer rights"
+
+msgid "Vertrag widerrufen"
+msgstr "Withdraw contract"
+
+msgid "Verträge hier kündigen"
+msgstr "Cancel contracts here"
+
+msgid "Verwaltung & Abrechnung"
+msgstr "Administration & billing"
+
+msgid "Weitere Bereiche Ihres Kundenportals."
+msgstr "Additional areas of your customer portal."
+
+msgid "Widerrufsbelehrung"
+msgstr "Withdrawal information"
+
+msgid "Zahlung"
+msgstr "Payment"
+
+msgid "Zugewiesen"
+msgstr "Assigned"
+
+msgid "Zuletzt gesehen"
+msgstr "Last seen"
+
+msgid "Zurück"
+msgstr "Back"
+
+msgid "Zuweisung"
+msgstr "Assignment"
+
+msgid "Zwei-Faktor-Authentifizierung"
+msgstr "Two-factor authentication"
+
+msgid "Öffnen"
+msgstr "Open"
+
+msgid "≤30 Tage"
+msgstr "≤30 days"
+
+msgid "2FA einrichten"
+msgstr "Set up 2FA"
+
+msgid "2FA schützt den Zugriff mit einem zusätzlichen zeitbasierten Einmalcode."
+msgstr "2FA protects access with an additional time-based one-time code."
+
+msgid "Ablehnen"
+msgstr "Reject"
+
+msgid "Aktive Lizenzen"
+msgstr "Active licenses"
+
+msgid "Aktuelles Ende"
+msgstr "Current end date"
+
+msgid "Anfrage"
+msgstr "Request"
+
+msgid "Bearbeitungsstand"
+msgstr "Processing status"
+
+msgid "Benutzer deaktivieren"
+msgstr "Deactivate user"
+
+msgid "Benutzer löschen"
+msgstr "Delete user"
+
+msgid "Benutzer reaktivieren"
+msgstr "Reactivate user"
+
+msgid "Benutzer, Einladungen, Lizenzen und Geräte verwalten."
+msgstr "Manage users, invitations, licenses and devices."
+
+msgid "Die Suche bleibt auf Ihren eigenen Mandanten- und Lizenzbereich begrenzt."
+msgstr "Search remains limited to your own tenant and license scope."
+
+msgid "Ein Passwortwechsel erfolgt über einen zeitlich begrenzten, einmal verwendbaren Link an Ihre hinterlegte E-Mail-Adresse."
+msgstr "A password change is performed via a time-limited, single-use link sent to your registered email address."
+
+msgid "Free"
+msgstr "Free"
+
+msgid "Freie Lizenz zuweisen"
+msgstr "Assign free license"
+
+msgid "Freigeben"
+msgstr "Release"
+
+msgid "Genehmigen"
+msgstr "Approve"
+
+msgid "Hier sehen Sie ausschließlich Nachrichten, die für Sie bzw. Ihr Unternehmen bestimmt sind. Interne netstyle-Notizen werden nicht im Kundenportal angezeigt."
+msgstr "Here you only see messages intended for you or your company. Internal netstyle notes are not shown in the customer portal."
+
+msgid "Ihre Anfrage und alle für Kunden freigegebenen Antworten."
+msgstr "Your request and all replies released for customers."
+
+msgid "Inaktiv"
+msgstr "Inactive"
+
+msgid "Keine Benutzer gefunden."
+msgstr "No users found."
+
+msgid "Keine Lizenz zugewiesen."
+msgstr "No license assigned."
+
+msgid "Keine Lizenzen gefunden."
+msgstr "No licenses found."
+
+msgid "Keine freie Lizenz."
+msgstr "No free license."
+
+msgid "Keine verlängerbare Lizenz vorhanden."
+msgstr "No renewable license available."
+
+msgid "Mitarbeiter"
+msgstr "Employee"
+
+msgid "Noch nie"
+msgstr "Never"
+
+msgid "Offene Pro-Anfragen"
+msgstr "Open Pro requests"
+
+msgid "PROMPTFINISHER Free"
+msgstr "PROMPTFINISHER Free"
+
+msgid "PROMPTFINISHER Pro"
+msgstr "PROMPTFINISHER Pro"
+
+msgid "Passwort zurücksetzen"
+msgstr "Reset password"
+
+msgid "Recovery-Codes neu erzeugen"
+msgstr "Regenerate recovery codes"
+
+msgid "Seit"
+msgstr "Since"
+
+msgid "Sicheren Link senden"
+msgstr "Send secure link"
+
+msgid "Team-Mitglieder"
+msgstr "Team members"
+
+msgid "Verlauf"
+msgstr "History"
+
+msgid "Wählen Sie die Lizenz, deren bestehende Restlaufzeit um weitere 365 Tage verlängert werden soll."
+msgstr "Select the license whose remaining term should be extended by another 365 days."
+
+msgid "Zahlungspflichtig verlängern →"
+msgstr "Renew with payment obligation →"
+
+msgid "Zuletzt aktiv"
+msgstr "Last active"
+
+msgid "Zurück zu Einstellungen"
+msgstr "Back to settings"
+
+msgid "Zurück zu Lizenzen"
+msgstr "Back to licenses"
+
+msgid "Zuweisen"
+msgstr "Assign"
+
+msgid "Zwei-Faktor-Authentifizierung und Recovery-Codes verwalten."
+msgstr "Manage two-factor authentication and recovery codes."
+
+msgid "aktive Benutzer"
+msgstr "active users"
+
+msgid "aktive Benutzer ohne Pro-Zuweisung"
+msgstr "active users without Pro assignment"
+
+msgid "registriert / Kapazität"
+msgstr "registered / capacity"
+
+msgid "Die vorbereitete Lizenz wird Ihrem aktuell angemeldeten Benutzerkonto zugeordnet. Der Link kann anschließend nicht erneut verwendet werden."
+msgstr "The prepared license will be assigned to your currently signed-in user account. The link cannot be used again afterwards."
+
+msgid "Gültig bis %(expiry)s. Der Link ist tenantgebunden, für genau diesen Benutzer bestimmt und nur einmal verwendbar."
+msgstr "Valid until %(expiry)s. The link is tenant-bound, intended for exactly this user and can be used only once."
+
+msgid "Jede neue Lizenz startet nach erfolgreicher Zahlung mit eigener 365-Tage-Laufzeit."
+msgstr "Each new license starts its own 365-day term after successful payment."
+
+msgid "inkl. MwSt. · %(days)s Tage"
+msgstr "incl. VAT · %(days)s days"
+
+msgid "%(limit)s Geräte je Benutzer"
+msgstr "%(limit)s devices per user"
+
+msgid "Preis nicht verfügbar"
+msgstr "Price unavailable"
+
+msgid "V1: exakt ein aktiver Firmenadministrator. Eine Übertragung ist nur auf ein aktives Team-Mitglied möglich."
+msgstr "V1: exactly one active company administrator. Transfer is only possible to an active team member."
+
+msgid "Ihre eigenen Geräteslots können Sie hier selbst verwalten."
+msgstr "You can manage your own device slots here."
+
+msgid "Geräteslots werden durch den Firmenadministrator verwaltet."
+msgstr "Device slots are managed by the company administrator."
+
+msgid "Widerrufene Geräte bleiben als Historie erhalten."
+msgstr "Revoked devices remain in the history."
+
+msgid "Zuletzt %(seen)s"
+msgstr "Last seen %(seen)s"
+
+msgid "Gerät wirklich entfernen?"
+msgstr "Really remove device?"
+
+msgid "Konto, Unternehmen, Benutzer-ID und Zeitpunkt werden automatisch zugeordnet. Optional kann eine für Ihr Konto sichtbare Lizenz mitgesendet werden. Passwörter, Tokens oder andere unnötige sensitive Daten werden nicht übernommen."
+msgstr "Account, company, user ID and timestamp are assigned automatically. Optionally, a license visible to your account can be included. Passwords, tokens or other unnecessary sensitive data are not included."
+
+msgid "Exportieren Sie die zu Ihrem Benutzer gespeicherten PROMPTFINISHER-Daten als JSON. Secrets und Daten anderer Benutzer werden nicht exportiert."
+msgstr "Export the PROMPTFINISHER data stored for your user as JSON. Secrets and data of other users are not exported."
+
+msgid "Ihre Löschanfrage vom %(requested)s ist bereits erfasst. Status: %(status)s."
+msgstr "Your deletion request from %(requested)s has already been recorded. Status: %(status)s."
+
+msgid "Sie können die Löschung Ihres PROMPTFINISHER-Kontos anfordern. Gesetzlich erforderliche Geschäfts- und Nachweisdaten werden nur im erforderlichen Umfang weiter aufbewahrt bzw. anonymisiert. Firmenadministratoren müssen ihre Administratorrolle vor der Verarbeitung übertragen."
+msgstr "You can request deletion of your PROMPTFINISHER account. Legally required business and evidence data will only be retained or anonymized to the extent required. Company administrators must transfer their administrator role before processing."
+
+msgid "Ich möchte die Löschung meines Kontos verbindlich anfordern."
+msgstr "I want to make a binding request to delete my account."
+
+msgid "Guten Morgen, %(first_name)s"
+msgstr "Good morning, %(first_name)s"
+
+msgid "Privatkonto"
+msgstr "Private account"
+
+msgid "Unternehmensadministrator"
+msgstr "Company administrator"
+
+msgid "%(assigned)s vergeben · %(free)s verfügbar"
+msgstr "%(assigned)s assigned · %(free)s available"
+
+msgid "%(free)s frei · %(expiring)s läuft bald ab"
+msgstr "%(free)s free · %(expiring)s expiring soon"
+
+msgid "Tage"
+msgstr "days"
+
+msgid "kein Ablauf"
+msgstr "no expiry"
+
+msgid "Eine Lizenz läuft in %(days)s Tagen ab."
+msgstr "A license expires in %(days)s days."
+
+msgid "freie Pro-Lizenzen"
+msgstr "free Pro licenses"
+
+msgid "Freie Pro-Lizenzen können Team-Mitgliedern zugewiesen werden."
+msgstr "Free Pro licenses can be assigned to team members."
+
+msgid "Für Kauf/Abrechnung fehlen: %(fields)s."
+msgstr "Missing for purchase/billing: %(fields)s."
+
+msgid "Tage verbleibend"
+msgstr "days remaining"
+
+msgid "Deine Lizenz läuft am %(expiry)s ab."
+msgstr "Your license expires on %(expiry)s."
+
+msgid "Es ist eine freie Pro-Lizenz verfügbar."
+msgstr "A free Pro license is available."
+
+msgid "Aktuell ist keine freie Pro-Lizenz verfügbar. Kaufen Sie eine weitere Lizenz oder geben Sie eine bestehende Lizenz frei."
+msgstr "No free Pro license is currently available. Buy another license or release an existing one."
+
+msgid "Ihre Pro-Anfrage ist bereits offen."
+msgstr "Your Pro request is already open."
+
+msgid "Für den Pro-Zugriff benötigen Sie eine aktive PROMPTFINISHER-Pro-Lizenz."
+msgstr "You need an active PROMPTFINISHER Pro license for Pro access."
+
+msgid "Portal durchsuchen"
+msgstr "Search portal"
+
+msgid "Geben Sie einen Suchbegriff ein. Firmenadministratoren können nach Teammitgliedern, E-Mail-Adressen und Lizenzen suchen; andere Benutzer sehen ausschließlich ihre eigene Lizenzsicht."
+msgstr "Enter a search term. Company administrators can search team members, email addresses and licenses; other users only see their own license view."
+
+msgid "Kunde"
+msgstr "Customer"
+
+msgid "Pro-Lizenzen noch frei"
+msgstr "Pro licenses still free"

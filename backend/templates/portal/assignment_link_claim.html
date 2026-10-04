@@ -1,4 +1,4 @@
-{% extends 'portal/base.html' %}{% block content %}
-<div class="page-head"><div><h1>Lizenzzuordnung bestätigen</h1><div class="sub">Sicherer PROMPTFINISHER-Zuordnungslink.</div></div></div>
-<div class="card"><p>Die vorbereitete Lizenz wird Ihrem aktuell angemeldeten Benutzerkonto zugeordnet. Der Link kann anschließend nicht erneut verwendet werden.</p><form method="post">{% csrf_token %}<button class="btn primary" type="submit">Lizenz jetzt zuordnen</button> <a class="btn secondary" href="{% url 'portal:dashboard' %}">Abbrechen</a></form></div>
+{% extends 'portal/base.html' %}{% load i18n %}{% block content %}
+<div class="page-head"><div><h1>{% translate "Lizenzzuordnung bestätigen" %}</h1><div class="sub">{% translate "Sicherer PROMPTFINISHER-Zuordnungslink." %}</div></div></div>
+<div class="card"><p>{% translate "Die vorbereitete Lizenz wird Ihrem aktuell angemeldeten Benutzerkonto zugeordnet. Der Link kann anschließend nicht erneut verwendet werden." %}</p><form method="post">{% csrf_token %}<button class="btn primary" type="submit">{% translate "Lizenz jetzt zuordnen" %}</button> <a class="btn secondary" href="{% url 'portal:dashboard' %}">{% translate "Abbrechen" %}</a></form></div>
 {% endblock %}

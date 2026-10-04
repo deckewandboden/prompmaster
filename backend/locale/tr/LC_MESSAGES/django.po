@@ -1,0 +1,873 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: PROMPTFINISHER\n"
+"Language: tr\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+msgid "Sprache auswählen"
+msgstr "Dil seç"
+
+msgid "Sprache"
+msgstr "Dil"
+
+msgid "Suchen …"
+msgstr "Ara …"
+
+msgid "Suchen"
+msgstr "Ara"
+
+msgid "Lead, Kunde, Benutzer, Lizenz-ID oder E-Mail suchen …"
+msgstr "Potansiyel müşteri, müşteri, kullanıcı, lisans kimliği veya e-posta ara …"
+
+msgid "Superadmin"
+msgstr "Süper yönetici"
+
+msgid "netstyle Benutzer"
+msgstr "netstyle kullanıcısı"
+
+msgid "netstyle Admin-Backend"
+msgstr "netstyle yönetim paneli"
+
+msgid "Übersicht"
+msgstr "Genel bakış"
+
+msgid "Leads"
+msgstr "Potansiyel müşteriler"
+
+msgid "Kunden"
+msgstr "Müşteriler"
+
+msgid "Lizenzen"
+msgstr "Lisanslar"
+
+msgid "Bestellungen"
+msgstr "Siparişler"
+
+msgid "Zahlungen"
+msgstr "Ödemeler"
+
+msgid "Produkte & Preise"
+msgstr "Ürünler ve fiyatlar"
+
+msgid "Prompt Studio"
+msgstr "Prompt Studio"
+
+msgid "FAQ & Inhalte"
+msgstr "SSS ve içerikler"
+
+msgid "E-Mail"
+msgstr "E-posta"
+
+msgid "Mollie"
+msgstr "Mollie"
+
+msgid "Statistiken"
+msgstr "İstatistikler"
+
+msgid "System & Betrieb"
+msgstr "Sistem ve işletim"
+
+msgid "API & Integrationen"
+msgstr "API ve entegrasyonlar"
+
+msgid "Datenschutz & Recht"
+msgstr "Gizlilik ve hukuk"
+
+msgid "Kontaktanfragen"
+msgstr "İletişim talepleri"
+
+msgid "Protokolle"
+msgstr "Kayıtlar"
+
+msgid "Benutzer & Rollen"
+msgstr "Kullanıcılar ve roller"
+
+msgid "Einstellungen"
+msgstr "Ayarlar"
+
+msgid "Abmelden"
+msgstr "Çıkış yap"
+
+msgid "Home"
+msgstr "Ana sayfa"
+
+msgid "System"
+msgstr "Sistem"
+
+msgid "Logs"
+msgstr "Kayıtlar"
+
+msgid "Mehr"
+msgstr "Daha fazla"
+
+msgid "Kundenportal"
+msgstr "Müşteri portalı"
+
+msgid "KUNDENPORTAL"
+msgstr "MÜŞTERİ PORTALI"
+
+msgid "Benutzer, E-Mail oder Lizenz suchen …"
+msgstr "Kullanıcı, e-posta veya lisans ara …"
+
+msgid "Lizenz suchen …"
+msgstr "Lisans ara …"
+
+msgid "Privatkunde"
+msgstr "Bireysel müşteri"
+
+msgid "Dashboard"
+msgstr "Kontrol paneli"
+
+msgid "Mein Team"
+msgstr "Ekibim"
+
+msgid "Weitere Lizenzen kaufen"
+msgstr "Daha fazla lisans satın al"
+
+msgid "Geräte"
+msgstr "Cihazlar"
+
+msgid "Bestellungen & Zahlungen"
+msgstr "Siparişler ve ödemeler"
+
+msgid "Unternehmen"
+msgstr "Şirket"
+
+msgid "Hilfe & Kontakt"
+msgstr "Yardım ve iletişim"
+
+msgid "Team"
+msgstr "Ekip"
+
+msgid "Anmelden"
+msgstr "Giriş yap"
+
+msgid "Ein Zugang für PROMPTFINISHER, Kundenportal und netstyle Admin"
+msgstr "PROMPTFINISHER, müşteri portalı ve netstyle yönetimi için tek hesap"
+
+msgid "Noch kein Konto? Konto erstellen"
+msgstr "Henüz hesabınız yok mu? Hesap oluştur"
+
+msgid "Passwort vergessen?"
+msgstr "Parolanızı mı unuttunuz?"
+
+msgid "Konto anlegen"
+msgstr "Hesap oluştur"
+
+msgid "Registrieren"
+msgstr "Kayıt ol"
+
+msgid "Unternehmensadministratoren richten anschließend verpflichtend 2FA ein."
+msgstr "Şirket yöneticileri daha sonra 2FA kurmalıdır."
+
+msgid "Bereits registriert?"
+msgstr "Zaten kayıtlı mısınız?"
+
+msgid "Zur Anmeldung"
+msgstr "Girişe git"
+
+msgid "E-Mail-Adresse"
+msgstr "E-posta adresi"
+
+msgid "Passwort"
+msgstr "Parola"
+
+msgid "Bestätigungscode"
+msgstr "Doğrulama kodu"
+
+msgid "Kundentyp"
+msgstr "Müşteri türü"
+
+msgid "Privat"
+msgstr "Bireysel"
+
+msgid "Vorname"
+msgstr "Ad"
+
+msgid "Nachname"
+msgstr "Soyad"
+
+msgid "Firmenname"
+msgstr "Şirket adı"
+
+msgid "AGB gelesen und akzeptiert"
+msgstr "Şartlar okundu ve kabul edildi"
+
+msgid "Datenschutzerklärung zur Kenntnis genommen"
+msgstr "Gizlilik politikası kabul edildi"
+
+msgid "Passwort zur Bestätigung"
+msgstr "Onay için parola"
+
+msgid "Administratorübertragung verbindlich bestätigen"
+msgstr "Yönetici devrini onayla"
+
+msgid "Neues Passwort"
+msgstr "Yeni parola"
+
+msgid "Passwort wiederholen"
+msgstr "Parolayı tekrarla"
+
+msgid "Tabellenfilter"
+msgstr "Tablo filtreleri"
+
+msgid "Tabelle durchsuchen"
+msgstr "Tabloda ara"
+
+msgid "Alle"
+msgstr "Tümü"
+
+msgid "Seitengröße"
+msgstr "Sayfa boyutu"
+
+msgid "Spalten"
+msgstr "Sütunlar"
+
+msgid "Anwenden"
+msgstr "Uygula"
+
+msgid "CSV exportieren"
+msgstr "CSV dışa aktar"
+
+msgid "Sortierung zurücksetzen"
+msgstr "Sıralamayı sıfırla"
+
+msgid "Alles zurücksetzen"
+msgstr "Tümünü sıfırla"
+
+msgid "Daten werden geladen …"
+msgstr "Veriler yükleniyor …"
+
+msgid "Aktive Filter"
+msgstr "Etkin filtreler"
+
+msgid "Suche"
+msgstr "Arama"
+
+msgid "Keine Such- oder Filtertreffer."
+msgstr "Arama veya filtre sonucu yok."
+
+msgid "Filter zurücksetzen"
+msgstr "Filtreleri sıfırla"
+
+msgid "+ Benutzer hinzufügen"
+msgstr "+ Kullanıcı ekle"
+
+msgid "AGB"
+msgstr "Genel şartlar"
+
+msgid "Abbrechen"
+msgstr "İptal"
+
+msgid "Administrator übertragen"
+msgstr "Yöneticiyi devret"
+
+msgid "Aktiv"
+msgstr "Aktif"
+
+msgid "Aktive Mitglieder"
+msgstr "Aktif üyeler"
+
+msgid "Anzahl"
+msgstr "Adet"
+
+msgid "Bestellungen & Zahlungen öffnen"
+msgstr "Siparişleri ve ödemeleri aç"
+
+msgid "Checkout"
+msgstr "Ödeme"
+
+msgid "Datenschutz"
+msgstr "Gizlilik"
+
+msgid "Der Link wurde per E-Mail versendet."
+msgstr "Bağlantı e-posta ile gönderildi."
+
+msgid "Firmen-Administrator"
+msgstr "Şirket yöneticisi"
+
+msgid "Gerät entfernen"
+msgstr "Cihazı kaldır"
+
+msgid "Geräteslots der aktiven PROMPTFINISHER-Pro-Lizenzen."
+msgstr "Aktif PROMPTFINISHER Pro lisanslarının cihaz yuvaları."
+
+msgid "Gerätewechsel"
+msgstr "Cihaz değişikliği"
+
+msgid "Gesamt"
+msgstr "Toplam"
+
+msgid "Jetzt verlängern"
+msgstr "Şimdi yenile"
+
+msgid "Kein Pro-Zugriff für dieses Benutzerkonto."
+msgstr "Bu kullanıcı hesabı için Pro erişimi yok."
+
+msgid "Kein aktiver Firmenadministrator gefunden."
+msgstr "Aktif şirket yöneticisi bulunamadı."
+
+msgid "Keine Geräte."
+msgstr "Cihaz yok."
+
+msgid "Link zur Kontrolle"
+msgstr "Kontrol bağlantısı"
+
+msgid "Lizenz jetzt zuordnen"
+msgstr "Lisansı şimdi ata"
+
+msgid "Lizenz verlängern"
+msgstr "Lisansı yenile"
+
+msgid "Lizenzbedingungen"
+msgstr "Lisans koşulları"
+
+msgid "Lizenzen insgesamt"
+msgstr "Toplam lisans"
+
+msgid "Lizenzstatus"
+msgstr "Lisans durumu"
+
+msgid "Lizenzzuordnung bestätigen"
+msgstr "Lisans atamasını onayla"
+
+msgid "Nächster Ablauf"
+msgstr "Sonraki sona erme"
+
+msgid "PROMPTFINISHER PRO"
+msgstr "PROMPTFINISHER PRO"
+
+msgid "PROMPTFINISHER Pro für mich aktivieren"
+msgstr "PROMPTFINISHER Pro'yu benim için etkinleştir"
+
+msgid "PROMPTFINISHER Pro starten →"
+msgstr "PROMPTFINISHER Pro'yu başlat →"
+
+msgid "Pro anfragen"
+msgstr "Pro talep et"
+
+msgid "Sicherer PROMPTFINISHER-Zuordnungslink."
+msgstr "Güvenli PROMPTFINISHER atama bağlantısı."
+
+msgid "Speichern"
+msgstr "Kaydet"
+
+msgid "Stammdaten, Steuerdaten und Firmen-Administrator."
+msgstr "Ana veriler, vergi bilgileri ve şirket yöneticisi."
+
+msgid "Team öffnen"
+msgstr "Ekibi aç"
+
+msgid "Team- und Lizenzverwaltung"
+msgstr "Ekip ve lisans yönetimi"
+
+msgid "Unternehmensdaten"
+msgstr "Şirket bilgileri"
+
+msgid "Unternehmensdaten bearbeiten"
+msgstr "Şirket bilgilerini düzenle"
+
+msgid "Unternehmensdaten unvollständig."
+msgstr "Şirket bilgileri eksik."
+
+msgid "Updates während Laufzeit"
+msgstr "Süre boyunca güncellemeler"
+
+msgid "Widerruf"
+msgstr "Cayma"
+
+msgid "Widerrufen"
+msgstr "İptal edildi"
+
+msgid "Zahlungen mit Handlungsbedarf"
+msgstr "İşlem gerektiren ödemeler"
+
+msgid "Zahlungspflichtig kaufen →"
+msgstr "Ödeme yükümlülüğüyle satın al →"
+
+msgid "Zuordnungslink erzeugt"
+msgstr "Atama bağlantısı oluşturuldu"
+
+msgid "Zurück zum Benutzer"
+msgstr "Kullanıcıya dön"
+
+msgid "aktiv"
+msgstr "aktif"
+
+msgid "enthalten"
+msgstr "dahil"
+
+msgid "inkl. MwSt."
+msgstr "KDV dahil"
+
+msgid "registriert"
+msgstr "kayıtlı"
+
+msgid "Änderungen werden erst nach erfolgreicher Validierung gespeichert."
+msgstr "Değişiklikler yalnızca başarılı doğrulamadan sonra kaydedilir."
+
+msgid "+ Lizenz kaufen"
+msgstr "+ Lisans satın al"
+
+msgid "Ablauf"
+msgstr "Sona erme"
+
+msgid "Adresse"
+msgstr "Adres"
+
+msgid "Aktion"
+msgstr "İşlem"
+
+msgid "Aktive Geräte"
+msgstr "Aktif cihazlar"
+
+msgid "Automatischer Kontext"
+msgstr "Otomatik bağlam"
+
+msgid "Barrierefreiheit"
+msgstr "Erişilebilirlik"
+
+msgid "Benutzer"
+msgstr "Kullanıcı"
+
+msgid "Bestellung"
+msgstr "Sipariş"
+
+msgid "Betrag"
+msgstr "Tutar"
+
+msgid "Betreff"
+msgstr "Konu"
+
+msgid "Browser"
+msgstr "Tarayıcı"
+
+msgid "Datenauskunft"
+msgstr "Veri erişimi"
+
+msgid "Datum"
+msgstr "Tarih"
+
+msgid "Direkter Kontakt zu netstyle und Verlauf Ihrer Anfragen."
+msgstr "netstyle ile doğrudan iletişim ve taleplerinizin geçmişi."
+
+msgid "Einladungen"
+msgstr "Davetler"
+
+msgid "Einladungen sind 24 Stunden gültig und einmal verwendbar."
+msgstr "Davetler 24 saat geçerlidir ve yalnızca bir kez kullanılabilir."
+
+msgid "Frei"
+msgstr "Boş"
+
+msgid "Gerät"
+msgstr "Cihaz"
+
+msgid "Gültig ab"
+msgstr "Başlangıç tarihi"
+
+msgid "Gültig bis"
+msgstr "Geçerlilik sonu"
+
+msgid "Impressum"
+msgstr "Yasal bildirim"
+
+msgid "Jeder Seat läuft mit individueller Laufzeit."
+msgstr "Her kullanıcı lisansının kendine ait bir süresi vardır."
+
+msgid "Kategorie"
+msgstr "Kategori"
+
+msgid "Keine Bestellungen."
+msgstr "Sipariş yok."
+
+msgid "Keine Einladungen."
+msgstr "Davet yok."
+
+msgid "Keine Lizenzen."
+msgstr "Lisans yok."
+
+msgid "Keine aktiven Geräte."
+msgstr "Aktif cihaz yok."
+
+msgid "Kontaktformular"
+msgstr "İletişim formu"
+
+msgid "Konto & Hilfe"
+msgstr "Hesap ve yardım"
+
+msgid "Kontolöschung"
+msgstr "Hesap silme"
+
+msgid "Kontolöschung anfordern"
+msgstr "Hesap silme talep et"
+
+msgid "Laufzeit"
+msgstr "Süre"
+
+msgid "Lizenz"
+msgstr "Lisans"
+
+msgid "Lizenz-ID"
+msgstr "Lisans kimliği"
+
+msgid "Lizenzdaten"
+msgstr "Lisans bilgileri"
+
+msgid "Meine Daten exportieren"
+msgstr "Verilerimi dışa aktar"
+
+msgid "Mollie übernimmt die Zahlungsabwicklung; PROMPTFINISHER erzeugt keine eigene Rechnungsengine."
+msgstr "Ödeme işlemlerini Mollie yürütür; PROMPTFINISHER kendi faturalama motorunu kullanmaz."
+
+msgid "Mollie-Referenz"
+msgstr "Mollie referansı"
+
+msgid "Nachricht senden"
+msgstr "Mesaj gönder"
+
+msgid "Name"
+msgstr "Ad"
+
+msgid "Neu senden"
+msgstr "Yeniden gönder"
+
+msgid "Nicht eingerichtet"
+msgstr "Yapılandırılmadı"
+
+msgid "Noch keine Anfragen vorhanden."
+msgstr "Henüz talep yok."
+
+msgid "Noch keine Reminder für den aktuellen Ablaufzeitpunkt."
+msgstr "Mevcut sona erme tarihi için henüz hatırlatıcı yok."
+
+msgid "PROMPTFINISHER Pro öffnen"
+msgstr "PROMPTFINISHER Pro'yu aç"
+
+msgid "Produkt"
+msgstr "Ürün"
+
+msgid "Produkt / Menge"
+msgstr "Ürün / adet"
+
+msgid "Profil"
+msgstr "Profil"
+
+msgid "Profil, Adresse, Kontosicherheit und Datenauskunft."
+msgstr "Profil, adres, hesap güvenliği ve veri erişimi."
+
+msgid "Rechtliches"
+msgstr "Yasal"
+
+msgid "Reminder"
+msgstr "Hatırlatıcı"
+
+msgid "Resttage"
+msgstr "Kalan gün"
+
+msgid "Sicherheit"
+msgstr "Güvenlik"
+
+msgid "Sicherheit verwalten"
+msgstr "Güvenliği yönet"
+
+msgid "Status"
+msgstr "Durum"
+
+msgid "Supporthistorie"
+msgstr "Destek geçmişi"
+
+msgid "Verbraucherrechte"
+msgstr "Tüketici hakları"
+
+msgid "Vertrag widerrufen"
+msgstr "Sözleşmeden cay"
+
+msgid "Verträge hier kündigen"
+msgstr "Sözleşmeleri burada feshet"
+
+msgid "Verwaltung & Abrechnung"
+msgstr "Yönetim ve faturalama"
+
+msgid "Weitere Bereiche Ihres Kundenportals."
+msgstr "Müşteri portalınızın diğer alanları."
+
+msgid "Widerrufsbelehrung"
+msgstr "Cayma bilgileri"
+
+msgid "Zahlung"
+msgstr "Ödeme"
+
+msgid "Zugewiesen"
+msgstr "Atanmış"
+
+msgid "Zuletzt gesehen"
+msgstr "Son görülme"
+
+msgid "Zurück"
+msgstr "Geri"
+
+msgid "Zuweisung"
+msgstr "Atama"
+
+msgid "Zwei-Faktor-Authentifizierung"
+msgstr "İki faktörlü kimlik doğrulama"
+
+msgid "Öffnen"
+msgstr "Aç"
+
+msgid "≤30 Tage"
+msgstr "≤30 gün"
+
+msgid "2FA einrichten"
+msgstr "2FA kur"
+
+msgid "2FA schützt den Zugriff mit einem zusätzlichen zeitbasierten Einmalcode."
+msgstr "2FA, erişimi zamana dayalı ek bir tek kullanımlık kodla korur."
+
+msgid "Ablehnen"
+msgstr "Reddet"
+
+msgid "Aktive Lizenzen"
+msgstr "Aktif lisanslar"
+
+msgid "Aktuelles Ende"
+msgstr "Mevcut bitiş"
+
+msgid "Anfrage"
+msgstr "Talep"
+
+msgid "Bearbeitungsstand"
+msgstr "İşlem durumu"
+
+msgid "Benutzer deaktivieren"
+msgstr "Kullanıcıyı devre dışı bırak"
+
+msgid "Benutzer löschen"
+msgstr "Kullanıcıyı sil"
+
+msgid "Benutzer reaktivieren"
+msgstr "Kullanıcıyı yeniden etkinleştir"
+
+msgid "Benutzer, Einladungen, Lizenzen und Geräte verwalten."
+msgstr "Kullanıcıları, davetleri, lisansları ve cihazları yönetin."
+
+msgid "Die Suche bleibt auf Ihren eigenen Mandanten- und Lizenzbereich begrenzt."
+msgstr "Arama kendi kuruluş ve lisans kapsamınızla sınırlıdır."
+
+msgid "Ein Passwortwechsel erfolgt über einen zeitlich begrenzten, einmal verwendbaren Link an Ihre hinterlegte E-Mail-Adresse."
+msgstr "Parola değişikliği, kayıtlı e-posta adresinize gönderilen süreli ve tek kullanımlık bağlantı üzerinden yapılır."
+
+msgid "Free"
+msgstr "Free"
+
+msgid "Freie Lizenz zuweisen"
+msgstr "Boş lisans ata"
+
+msgid "Freigeben"
+msgstr "Serbest bırak"
+
+msgid "Genehmigen"
+msgstr "Onayla"
+
+msgid "Hier sehen Sie ausschließlich Nachrichten, die für Sie bzw. Ihr Unternehmen bestimmt sind. Interne netstyle-Notizen werden nicht im Kundenportal angezeigt."
+msgstr "Burada yalnızca size veya şirketinize yönelik mesajları görürsünüz. Dahili netstyle notları müşteri portalında gösterilmez."
+
+msgid "Ihre Anfrage und alle für Kunden freigegebenen Antworten."
+msgstr "Talebiniz ve müşteriler için yayımlanan tüm yanıtlar."
+
+msgid "Inaktiv"
+msgstr "Pasif"
+
+msgid "Keine Benutzer gefunden."
+msgstr "Kullanıcı bulunamadı."
+
+msgid "Keine Lizenz zugewiesen."
+msgstr "Lisans atanmadı."
+
+msgid "Keine Lizenzen gefunden."
+msgstr "Lisans bulunamadı."
+
+msgid "Keine freie Lizenz."
+msgstr "Boş lisans yok."
+
+msgid "Keine verlängerbare Lizenz vorhanden."
+msgstr "Yenilenebilir lisans yok."
+
+msgid "Mitarbeiter"
+msgstr "Çalışan"
+
+msgid "Noch nie"
+msgstr "Hiç"
+
+msgid "Offene Pro-Anfragen"
+msgstr "Açık Pro talepleri"
+
+msgid "PROMPTFINISHER Free"
+msgstr "PROMPTFINISHER Free"
+
+msgid "PROMPTFINISHER Pro"
+msgstr "PROMPTFINISHER Pro"
+
+msgid "Passwort zurücksetzen"
+msgstr "Parolayı sıfırla"
+
+msgid "Recovery-Codes neu erzeugen"
+msgstr "Kurtarma kodlarını yeniden oluştur"
+
+msgid "Seit"
+msgstr "Başlangıç"
+
+msgid "Sicheren Link senden"
+msgstr "Güvenli bağlantı gönder"
+
+msgid "Team-Mitglieder"
+msgstr "Ekip üyeleri"
+
+msgid "Verlauf"
+msgstr "Geçmiş"
+
+msgid "Wählen Sie die Lizenz, deren bestehende Restlaufzeit um weitere 365 Tage verlängert werden soll."
+msgstr "Kalan süresi 365 gün daha uzatılacak lisansı seçin."
+
+msgid "Zahlungspflichtig verlängern →"
+msgstr "Ödeme yükümlülüğüyle yenile →"
+
+msgid "Zuletzt aktiv"
+msgstr "Son aktif"
+
+msgid "Zurück zu Einstellungen"
+msgstr "Ayarlara dön"
+
+msgid "Zurück zu Lizenzen"
+msgstr "Lisanslara dön"
+
+msgid "Zuweisen"
+msgstr "Ata"
+
+msgid "Zwei-Faktor-Authentifizierung und Recovery-Codes verwalten."
+msgstr "İki faktörlü kimlik doğrulama ve kurtarma kodlarını yönetin."
+
+msgid "aktive Benutzer"
+msgstr "aktif kullanıcılar"
+
+msgid "aktive Benutzer ohne Pro-Zuweisung"
+msgstr "Pro ataması olmayan aktif kullanıcılar"
+
+msgid "registriert / Kapazität"
+msgstr "kayıtlı / kapasite"
+
+msgid "Die vorbereitete Lizenz wird Ihrem aktuell angemeldeten Benutzerkonto zugeordnet. Der Link kann anschließend nicht erneut verwendet werden."
+msgstr "Hazırlanan lisans, şu anda oturum açmış kullanıcı hesabınıza atanacaktır. Bağlantı daha sonra tekrar kullanılamaz."
+
+msgid "Gültig bis %(expiry)s. Der Link ist tenantgebunden, für genau diesen Benutzer bestimmt und nur einmal verwendbar."
+msgstr "%(expiry)s tarihine kadar geçerlidir. Bağlantı kuruluşa bağlıdır, yalnızca bu kullanıcı içindir ve bir kez kullanılabilir."
+
+msgid "Jede neue Lizenz startet nach erfolgreicher Zahlung mit eigener 365-Tage-Laufzeit."
+msgstr "Her yeni lisans, başarılı ödemeden sonra kendi 365 günlük süresini başlatır."
+
+msgid "inkl. MwSt. · %(days)s Tage"
+msgstr "KDV dahil · %(days)s gün"
+
+msgid "%(limit)s Geräte je Benutzer"
+msgstr "Kullanıcı başına %(limit)s cihaz"
+
+msgid "Preis nicht verfügbar"
+msgstr "Fiyat mevcut değil"
+
+msgid "V1: exakt ein aktiver Firmenadministrator. Eine Übertragung ist nur auf ein aktives Team-Mitglied möglich."
+msgstr "V1: tam olarak bir aktif şirket yöneticisi. Devir yalnızca aktif bir ekip üyesine yapılabilir."
+
+msgid "Ihre eigenen Geräteslots können Sie hier selbst verwalten."
+msgstr "Kendi cihaz yuvalarınızı buradan yönetebilirsiniz."
+
+msgid "Geräteslots werden durch den Firmenadministrator verwaltet."
+msgstr "Cihaz yuvaları şirket yöneticisi tarafından yönetilir."
+
+msgid "Widerrufene Geräte bleiben als Historie erhalten."
+msgstr "İptal edilen cihazlar geçmişte saklanır."
+
+msgid "Zuletzt %(seen)s"
+msgstr "Son görülme %(seen)s"
+
+msgid "Gerät wirklich entfernen?"
+msgstr "Cihaz gerçekten kaldırılsın mı?"
+
+msgid "Konto, Unternehmen, Benutzer-ID und Zeitpunkt werden automatisch zugeordnet. Optional kann eine für Ihr Konto sichtbare Lizenz mitgesendet werden. Passwörter, Tokens oder andere unnötige sensitive Daten werden nicht übernommen."
+msgstr "Hesap, şirket, kullanıcı kimliği ve zaman otomatik olarak atanır. İsteğe bağlı olarak hesabınızda görünen bir lisans eklenebilir. Parolalar, tokenlar veya gereksiz hassas veriler eklenmez."
+
+msgid "Exportieren Sie die zu Ihrem Benutzer gespeicherten PROMPTFINISHER-Daten als JSON. Secrets und Daten anderer Benutzer werden nicht exportiert."
+msgstr "Kullanıcınız için saklanan PROMPTFINISHER verilerini JSON olarak dışa aktarın. Gizli bilgiler ve diğer kullanıcıların verileri dışa aktarılmaz."
+
+msgid "Ihre Löschanfrage vom %(requested)s ist bereits erfasst. Status: %(status)s."
+msgstr "%(requested)s tarihli silme talebiniz zaten kaydedildi. Durum: %(status)s."
+
+msgid "Sie können die Löschung Ihres PROMPTFINISHER-Kontos anfordern. Gesetzlich erforderliche Geschäfts- und Nachweisdaten werden nur im erforderlichen Umfang weiter aufbewahrt bzw. anonymisiert. Firmenadministratoren müssen ihre Administratorrolle vor der Verarbeitung übertragen."
+msgstr "PROMPTFINISHER hesabınızın silinmesini talep edebilirsiniz. Yasal olarak gerekli iş ve kanıt verileri yalnızca gereken ölçüde saklanır veya anonimleştirilir. Şirket yöneticileri işlem öncesinde yönetici rollerini devretmelidir."
+
+msgid "Ich möchte die Löschung meines Kontos verbindlich anfordern."
+msgstr "Hesabımın silinmesini kesin olarak talep etmek istiyorum."
+
+msgid "Guten Morgen, %(first_name)s"
+msgstr "Günaydın, %(first_name)s"
+
+msgid "Privatkonto"
+msgstr "Bireysel hesap"
+
+msgid "Unternehmensadministrator"
+msgstr "Şirket yöneticisi"
+
+msgid "%(assigned)s vergeben · %(free)s verfügbar"
+msgstr "%(assigned)s atanmış · %(free)s kullanılabilir"
+
+msgid "%(free)s frei · %(expiring)s läuft bald ab"
+msgstr "%(free)s boş · %(expiring)s yakında sona eriyor"
+
+msgid "Tage"
+msgstr "gün"
+
+msgid "kein Ablauf"
+msgstr "sona erme yok"
+
+msgid "Eine Lizenz läuft in %(days)s Tagen ab."
+msgstr "Bir lisans %(days)s gün içinde sona eriyor."
+
+msgid "freie Pro-Lizenzen"
+msgstr "boş Pro lisansları"
+
+msgid "Freie Pro-Lizenzen können Team-Mitgliedern zugewiesen werden."
+msgstr "Boş Pro lisansları ekip üyelerine atanabilir."
+
+msgid "Für Kauf/Abrechnung fehlen: %(fields)s."
+msgstr "Satın alma/faturalama için eksik: %(fields)s."
+
+msgid "Tage verbleibend"
+msgstr "gün kaldı"
+
+msgid "Deine Lizenz läuft am %(expiry)s ab."
+msgstr "Lisansınız %(expiry)s tarihinde sona eriyor."
+
+msgid "Es ist eine freie Pro-Lizenz verfügbar."
+msgstr "Boş bir Pro lisansı mevcut."
+
+msgid "Aktuell ist keine freie Pro-Lizenz verfügbar. Kaufen Sie eine weitere Lizenz oder geben Sie eine bestehende Lizenz frei."
+msgstr "Şu anda boş Pro lisansı yok. Yeni bir lisans satın alın veya mevcut bir lisansı serbest bırakın."
+
+msgid "Ihre Pro-Anfrage ist bereits offen."
+msgstr "Pro talebiniz zaten açık."
+
+msgid "Für den Pro-Zugriff benötigen Sie eine aktive PROMPTFINISHER-Pro-Lizenz."
+msgstr "Pro erişimi için aktif bir PROMPTFINISHER Pro lisansına ihtiyacınız var."
+
+msgid "Portal durchsuchen"
+msgstr "Portalda ara"
+
+msgid "Geben Sie einen Suchbegriff ein. Firmenadministratoren können nach Teammitgliedern, E-Mail-Adressen und Lizenzen suchen; andere Benutzer sehen ausschließlich ihre eigene Lizenzsicht."
+msgstr "Bir arama terimi girin. Şirket yöneticileri ekip üyelerini, e-posta adreslerini ve lisansları arayabilir; diğer kullanıcılar yalnızca kendi lisans görünümünü görür."
+
+msgid "Kunde"
+msgstr "Müşteri"
+
+msgid "Pro-Lizenzen noch frei"
+msgstr "Pro lisansı hâlâ boş"
