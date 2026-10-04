@@ -2,8 +2,8 @@
 set -Eeuo pipefail
 cd "$(dirname "$0")/.."
 
-NETWORK="${PM_EXTERNAL_CADDY_TEST_NETWORK:-promptmaster_ci_external_proxy}"
-ALIAS="${PM_EXTERNAL_CADDY_ALIAS:-promptmaster-caddy-edge}"
+NETWORK="${PM_EXTERNAL_CADDY_TEST_NETWORK:-promptfinisher_ci_external_proxy}"
+ALIAS="${PM_EXTERNAL_CADDY_ALIAS:-promptfinisher-caddy-edge}"
 F=(-f compose.yaml -f compose.staging.yaml -f compose.external-caddy.yaml)
 
 log(){ printf '[PROMPTFINISHER external-caddy test] %s\n' "$*"; }
