@@ -1,14 +1,26 @@
 {% load i18n %}
 {% get_current_language as current_language %}
 {% get_available_languages as available_languages %}
-<form method="get" action="{% url 'accounts:set_ui_language' %}" class="language-switcher" aria-label="{% translate 'Sprache auswählen' %}">
-  <input type="hidden" name="next" value="{{ request.get_full_path }}">
+<div
+  class="language-switcher"
+  data-language-switcher
+  data-action="{% url 'accounts:set_ui_language' %}"
+  data-next="{{ request.get_full_path }}"
+  aria-label="{% translate 'Sprache auswählen' %}"
+>
   <label>
     <span>{% translate "Sprache" %}</span>
-    <select name="language" onchange="this.form.submit()" aria-label="{% translate 'Sprache' %}">
+    <select name="language" data-language-select aria-label="{% translate 'Sprache' %}">
       {% for code,name in available_languages %}
         <option value="{{ code }}" {% if code == current_language %}selected{% endif %}>{{ name }}</option>
       {% endfor %}
     </select>
   </label>
-</form>
+  <noscript>
+    <span class="language-links">
+      {% for code,name in available_languages %}
+        <a href="{% url 'accounts:set_ui_language' %}?language={{ code|urlencode }}&next={{ request.get_full_path|urlencode }}">{{ name }}</a>{% if not forloop.last %} · {% endif %}
+      {% endfor %}
+    </span>
+  </noscript>
+</div>
