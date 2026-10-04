@@ -209,3 +209,45 @@ msgstr "Nueva contraseña"
 msgid "Passwort wiederholen"
 msgstr "Repetir contraseña"
 
+msgid "Tabellenfilter"
+msgstr "Filtros de tabla"
+
+msgid "Tabelle durchsuchen"
+msgstr "Buscar en la tabla"
+
+msgid "Alle"
+msgstr "Todos"
+
+msgid "Seitengröße"
+msgstr "Tamaño de página"
+
+msgid "Spalten"
+msgstr "Columnas"
+
+msgid "Anwenden"
+msgstr "Aplicar"
+
+msgid "CSV exportieren"
+msgstr "Exportar CSV"
+
+msgid "Sortierung zurücksetzen"
+msgstr "Restablecer orden"
+
+msgid "Alles zurücksetzen"
+msgstr "Restablecer todo"
+
+msgid "Daten werden geladen …"
+msgstr "Cargando datos …"
+
+msgid "Aktive Filter"
+msgstr "Filtros activos"
+
+msgid "Suche"
+msgstr "Búsqueda"
+
+msgid "Keine Such- oder Filtertreffer."
+msgstr "No hay resultados de búsqueda o filtro."
+
+msgid "Filter zurücksetzen"
+msgstr "Restablecer filtros"
+
