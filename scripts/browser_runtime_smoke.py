@@ -1438,6 +1438,39 @@ def run_backend_ui_smoke(browser, fixture=None) -> None:
 
         public_context = browser.new_context(viewport={'width': 1440, 'height': 900})
         public_page = public_context.new_page()
+
+        # Real compiled-catalog acceptance: all five supported UI languages
+        # must change actual rendered copy, not merely cookie/config state.
+        language_contract = {
+            'de': 'Anmelden',
+            'en': 'Sign in',
+            'es': 'Iniciar sesión',
+            'pt': 'Iniciar sessão',
+            'tr': 'Giriş yap',
+        }
+        for language, expected_heading in language_contract.items():
+            response = public_page.goto(base + 'auth/login/', wait_until='networkidle')
+            if not response or response.status != 200:
+                raise AssertionError(f'language smoke {language}: login page failed')
+            switcher = public_page.locator('.language-switcher select[name="language"]')
+            if not switcher.is_visible():
+                raise AssertionError(f'language smoke {language}: selector missing')
+            with public_page.expect_navigation(wait_until='networkidle'):
+                switcher.select_option(language)
+            html_lang = public_page.locator('html').get_attribute('lang')
+            heading = public_page.locator('h1').inner_text().strip()
+            selected = switcher.input_value()
+            if html_lang != language or heading != expected_heading or selected != language:
+                raise AssertionError(
+                    f'language smoke {language}: html={html_lang!r}, '
+                    f'heading={heading!r}, selected={selected!r}'
+                )
+
+        # Return the anonymous browser to German before the existing public
+        # acceptance so all historical German copy assertions remain stable.
+        with public_page.expect_navigation(wait_until='networkidle'):
+            public_page.locator('.language-switcher select[name="language"]').select_option('de')
+
         public_routes = [
             ('auth/login/', 'Login'),
             ('auth/register/', 'Registrierung'),
