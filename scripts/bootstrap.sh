@@ -155,10 +155,10 @@ if [[ -n "$EXTERNAL_CADDY_NETWORK" ]]; then
   log "External-Caddy Upstream-Gate"
   docker compose "${F[@]}" exec -T caddy sh -c \
     "wget -qO- --header='Host: ${CADDY_DOMAIN}' http://127.0.0.1/auth/login/ >/dev/null" \
-    || fail "External-Caddy kann /auth/login/ nicht fehlerfrei über promptmaster-web-internal erreichen"
+    || fail "External-Caddy kann /auth/login/ nicht fehlerfrei über promptfinisher-web-internal erreichen"
   docker compose "${F[@]}" exec -T caddy sh -c \
     "wget -qO- --header='Host: ${CADDY_DOMAIN}' http://127.0.0.1/catalog.json | grep -q 'PROMPTFINISHER_PRO'" \
-    || fail "External-Caddy kann /catalog.json nicht fehlerfrei über promptmaster-web-internal erreichen"
+    || fail "External-Caddy kann /catalog.json nicht fehlerfrei über promptfinisher-web-internal erreichen"
   log "External-Caddy Upstream-Gate OK: Login und Katalog ohne HTTP-400"
 fi
 log "Django Ready"; docker compose "${F[@]}" exec -T web curl -fsS http://127.0.0.1:8000/health/ready/ >/dev/null
