@@ -35,6 +35,35 @@ CUTOVER_PERFORMED=0
 
 log(){ printf '[PROMPTFINISHER deploy] %s\n' "$*"; }
 
+run_with_heartbeat(){
+  local label="$1"
+  shift
+  local interval="${PM_DEPLOY_HEARTBEAT_SECONDS:-30}"
+  local start now next pid status
+  [[ "$interval" =~ ^[1-9][0-9]*$ ]] || { log "Ungültiges PM_DEPLOY_HEARTBEAT_SECONDS=$interval"; return 2; }
+  start="$(date +%s)"
+  next="$interval"
+  "$@" &
+  pid=$!
+  while kill -0 "$pid" 2>/dev/null; do
+    sleep 5
+    now="$(date +%s)"
+    if (( now - start >= next )) && kill -0 "$pid" 2>/dev/null; then
+      log "$label läuft weiter · $((now - start))s"
+      next=$((next + interval))
+    fi
+  done
+  if wait "$pid"; then
+    now="$(date +%s)"
+    log "$label abgeschlossen · $((now - start))s"
+    return 0
+  fi
+  status=$?
+  now="$(date +%s)"
+  log "$label fehlgeschlagen · $((now - start))s · Exit $status"
+  return "$status"
+}
+
 if [[ -f "$LAST_SUCCESS_FILE" ]]; then
   F+=(-f compose.legacy-volumes.yaml)
   log "Persistente Produktionsvolumes werden als bestehende externe Volumes übernommen"
@@ -215,9 +244,10 @@ docker compose "${F[@]}" run --rm web python manage.py validate_mail_runtime --r
 log "Uncommitted migrations ausschließen"
 docker compose "${F[@]}" run --rm web python manage.py makemigrations --check --dry-run
 log "Tests ausführen"
-docker compose "${F[@]}" run --rm \
-  -e SECURE_SSL_REDIRECT=0 \
-  web python manage.py test
+run_with_heartbeat "Django-Testlauf" \
+  docker compose "${F[@]}" run --rm \
+    -e SECURE_SSL_REDIRECT=0 \
+    web python manage.py test
 log "Pre-Migration-Backup erstellen"
 docker compose "${F[@]}" stop backup >/dev/null 2>&1 || true
 docker compose "${F[@]}" run --rm -e BACKUP_ONCE=1 backup
