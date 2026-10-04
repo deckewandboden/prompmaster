@@ -31,6 +31,7 @@ BACKUP_STATUS_FILE="$STATE_DIR/pre-deploy-backup-${STAMP}.json"
 LEGACY_CUTOVER_BACKUP_STATUS_FILE="$STATE_DIR/pre-infra-rebrand-backup-${STAMP}.json"
 LEGACY_COMPOSE_PROJECT="promptmaster"
 CURRENT_COMPOSE_PROJECT="promptfinisher"
+CUTOVER_PERFORMED=0
 
 log(){ printf '[PROMPTFINISHER deploy] %s\n' "$*"; }
 
@@ -40,6 +41,13 @@ rollback_help(){
   printf '[PROMPTFINISHER deploy] Datenbankmigrationen werden NICHT automatisch rückwärts ausgeführt.\n' >&2
   if [[ -n "$PREVIOUS_SHA" && "$PREVIOUS_SHA" != "source-archive" ]]; then
     printf '[PROMPTFINISHER deploy] Last-known-good Git SHA: %s\n' "$PREVIOUS_SHA" >&2
+    if [[ "$CUTOVER_PERFORMED" == "1" ]]; then
+      printf '[PROMPTFINISHER deploy] Infrastruktur-Cutover wurde bereits ausgeführt. Vor einem Code-Rollback MUSS zuerst der neue PROMPTFINISHER-Stack ohne Volume-Löschung gestoppt werden:\n' >&2
+      printf '  docker compose' >&2
+      printf ' %q' "${F[@]}" >&2
+      printf ' down --remove-orphans\n' >&2
+      printf '[PROMPTFINISHER deploy] Erst danach den alten Release-Stand auschecken/starten. Niemals -v/--volumes verwenden.\n' >&2
+    fi
     printf '[PROMPTFINISHER deploy] Code-Rollback nach Ursachenprüfung:\n' >&2
     printf '  git checkout %s\n' "$PREVIOUS_SHA" >&2
     if [[ -n "${EXTERNAL_CADDY_NETWORK:-}" ]]; then
@@ -154,6 +162,7 @@ PY
     return 1
   fi
 
+  CUTOVER_PERFORMED=1
   log "Legacy-Stack gestoppt; persistente Volumes bleiben erhalten und werden vom PROMPTFINISHER-Stack übernommen"
 }
 
