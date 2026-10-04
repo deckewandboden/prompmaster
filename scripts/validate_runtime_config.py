@@ -57,11 +57,36 @@ def validate(compose, production):
     return errors
 
 
+def validate_legacy_volume_overlay():
+    errors = []
+    overlay = yaml.safe_load((ROOT / 'compose.legacy-volumes.yaml').read_text())
+    volumes = overlay.get('volumes', {})
+    expected = {
+        'postgres_data': 'promptmaster_postgres_data',
+        'redis_data': 'promptmaster_redis_data',
+        'static_data': 'promptmaster_static_data',
+        'caddy_data': 'promptmaster_caddy_data',
+        'caddy_config': 'promptmaster_caddy_config',
+        'prometheus_data': 'promptmaster_prometheus_data',
+        'backup_status': 'promptmaster_backup_status',
+        'backup_repository': 'promptmaster_backup_repository',
+        'export_data': 'promptmaster_export_data',
+    }
+    for key, physical_name in expected.items():
+        config = volumes.get(key, {})
+        if config.get('external') is not True:
+            errors.append(f'{key} must be external in legacy volume overlay')
+        if config.get('name') != physical_name:
+            errors.append(f'{key} must retain physical volume {physical_name}')
+    return errors
+
+
 def main():
     errors = validate(
         yaml.safe_load((ROOT / 'compose.yaml').read_text()),
         yaml.safe_load((ROOT / 'compose.production.yaml').read_text()),
     )
+    errors.extend(validate_legacy_volume_overlay())
     for name in ('Dockerfile', 'backup.sh', '.dockerignore'):
         path = f'backup/{name}'
         if not (ROOT / path).is_file():
