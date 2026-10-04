@@ -871,3 +871,6 @@ msgstr "Customer"
 
 msgid "Pro-Lizenzen noch frei"
 msgstr "Pro licenses still free"
+
+msgid "Verlängern"
+msgstr "Extend"
