@@ -1,4 +1,4 @@
-name: promptmaster
+name: promptfinisher
 services:
   postgres:
     image: postgres:18-alpine
@@ -37,7 +37,7 @@ services:
       redis: {condition: service_healthy}
     volumes:
       - static_data:/app/staticfiles
-      - backup_status:/var/run/promptmaster-backup:ro
+      - backup_status:/var/run/promptfinisher-backup:ro
       - export_data:/app/exports
     networks: [edge, app, data, monitor]
     healthcheck:
@@ -54,7 +54,7 @@ services:
       postgres: {condition: service_healthy}
       redis: {condition: service_healthy}
     volumes:
-      - backup_status:/var/run/promptmaster-backup:ro
+      - backup_status:/var/run/promptfinisher-backup:ro
       - export_data:/app/exports
     networks: [app, data, monitor]
     healthcheck:
@@ -164,15 +164,26 @@ services:
       start_period: 120s
     restart: unless-stopped
 volumes:
+  # Legacy physical volume names are retained deliberately so the infrastructure
+  # rebrand does not detach or recreate production data.
   postgres_data:
+    name: promptmaster_postgres_data
   redis_data:
+    name: promptmaster_redis_data
   static_data:
+    name: promptmaster_static_data
   caddy_data:
+    name: promptmaster_caddy_data
   caddy_config:
+    name: promptmaster_caddy_config
   prometheus_data:
+    name: promptmaster_prometheus_data
   backup_status:
+    name: promptmaster_backup_status
   backup_repository:
+    name: promptmaster_backup_repository
   export_data:
+    name: promptmaster_export_data
 networks:
   edge:
   app:
