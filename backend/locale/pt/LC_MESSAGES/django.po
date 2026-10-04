@@ -251,3 +251,158 @@ msgstr "Sem resultados de pesquisa ou filtro."
 msgid "Filter zurücksetzen"
 msgstr "Repor filtros"
 
+msgid "+ Benutzer hinzufügen"
+msgstr "+ Adicionar utilizador"
+
+msgid "AGB"
+msgstr "Termos e condições"
+
+msgid "Abbrechen"
+msgstr "Cancelar"
+
+msgid "Administrator übertragen"
+msgstr "Transferir administrador"
+
+msgid "Aktiv"
+msgstr "Ativo"
+
+msgid "Aktive Mitglieder"
+msgstr "Membros ativos"
+
+msgid "Anzahl"
+msgstr "Quantidade"
+
+msgid "Bestellungen & Zahlungen öffnen"
+msgstr "Abrir encomendas e pagamentos"
+
+msgid "Checkout"
+msgstr "Checkout"
+
+msgid "Datenschutz"
+msgstr "Privacidade"
+
+msgid "Der Link wurde per E-Mail versendet."
+msgstr "A ligação foi enviada por e-mail."
+
+msgid "Firmen-Administrator"
+msgstr "Administrador da empresa"
+
+msgid "Gerät entfernen"
+msgstr "Remover dispositivo"
+
+msgid "Geräteslots der aktiven PROMPTFINISHER-Pro-Lizenzen."
+msgstr "Slots de dispositivo das licenças PROMPTFINISHER Pro ativas."
+
+msgid "Gerätewechsel"
+msgstr "Troca de dispositivo"
+
+msgid "Gesamt"
+msgstr "Total"
+
+msgid "Jetzt verlängern"
+msgstr "Renovar agora"
+
+msgid "Kein Pro-Zugriff für dieses Benutzerkonto."
+msgstr "Sem acesso Pro para esta conta de utilizador."
+
+msgid "Kein aktiver Firmenadministrator gefunden."
+msgstr "Não foi encontrado um administrador da empresa ativo."
+
+msgid "Keine Geräte."
+msgstr "Sem dispositivos."
+
+msgid "Link zur Kontrolle"
+msgstr "Ligação para verificação"
+
+msgid "Lizenz jetzt zuordnen"
+msgstr "Atribuir licença agora"
+
+msgid "Lizenz verlängern"
+msgstr "Renovar licença"
+
+msgid "Lizenzbedingungen"
+msgstr "Termos de licença"
+
+msgid "Lizenzen insgesamt"
+msgstr "Total de licenças"
+
+msgid "Lizenzstatus"
+msgstr "Estado da licença"
+
+msgid "Lizenzzuordnung bestätigen"
+msgstr "Confirmar atribuição da licença"
+
+msgid "Nächster Ablauf"
+msgstr "Próxima expiração"
+
+msgid "PROMPTFINISHER PRO"
+msgstr "PROMPTFINISHER PRO"
+
+msgid "PROMPTFINISHER Pro für mich aktivieren"
+msgstr "Ativar PROMPTFINISHER Pro para mim"
+
+msgid "PROMPTFINISHER Pro starten →"
+msgstr "Iniciar PROMPTFINISHER Pro →"
+
+msgid "Pro anfragen"
+msgstr "Pedir Pro"
+
+msgid "Sicherer PROMPTFINISHER-Zuordnungslink."
+msgstr "Ligação segura de atribuição PROMPTFINISHER."
+
+msgid "Speichern"
+msgstr "Guardar"
+
+msgid "Stammdaten, Steuerdaten und Firmen-Administrator."
+msgstr "Dados mestre, dados fiscais e administrador da empresa."
+
+msgid "Team öffnen"
+msgstr "Abrir equipa"
+
+msgid "Team- und Lizenzverwaltung"
+msgstr "Gestão de equipa e licenças"
+
+msgid "Unternehmensdaten"
+msgstr "Dados da empresa"
+
+msgid "Unternehmensdaten bearbeiten"
+msgstr "Editar dados da empresa"
+
+msgid "Unternehmensdaten unvollständig."
+msgstr "Dados da empresa incompletos."
+
+msgid "Updates während Laufzeit"
+msgstr "Atualizações durante a vigência"
+
+msgid "Widerruf"
+msgstr "Direito de livre resolução"
+
+msgid "Widerrufen"
+msgstr "Revogado"
+
+msgid "Zahlungen mit Handlungsbedarf"
+msgstr "Pagamentos que requerem ação"
+
+msgid "Zahlungspflichtig kaufen →"
+msgstr "Comprar com obrigação de pagamento →"
+
+msgid "Zuordnungslink erzeugt"
+msgstr "Ligação de atribuição criada"
+
+msgid "Zurück zum Benutzer"
+msgstr "Voltar ao utilizador"
+
+msgid "aktiv"
+msgstr "ativo"
+
+msgid "enthalten"
+msgstr "incluído"
+
+msgid "inkl. MwSt."
+msgstr "IVA incluído"
+
+msgid "registriert"
+msgstr "registados"
+
+msgid "Änderungen werden erst nach erfolgreicher Validierung gespeichert."
+msgstr "As alterações só são guardadas após validação bem-sucedida."
