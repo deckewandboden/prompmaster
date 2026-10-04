@@ -61,8 +61,11 @@ rollback_help(){
   if [[ -s "$BACKUP_STATUS_FILE" ]]; then
     printf '[PROMPTFINISHER deploy] Pre-Deploy-Backupstatus: %s\n' "$BACKUP_STATUS_FILE" >&2
     printf '[PROMPTFINISHER deploy] Falls ein DB-Restore erforderlich ist: erst Anwendung stoppen, Backup verifizieren und den dokumentierten Restore-Prozess verwenden.\n' >&2
+  elif [[ -s "$LEGACY_CUTOVER_BACKUP_STATUS_FILE" ]]; then
+    printf '[PROMPTFINISHER deploy] Verifizierter Infrastruktur-Cutover-Backupstatus: %s\n' "$LEGACY_CUTOVER_BACKUP_STATUS_FILE" >&2
+    printf '[PROMPTFINISHER deploy] Falls ein DB-Restore erforderlich ist: erst alle neuen Container stoppen, Backup verifizieren und den dokumentierten Restore-Prozess verwenden.\n' >&2
   else
-    printf '[PROMPTFINISHER deploy] Kein verifizierter Pre-Deploy-Backupstatus protokolliert. Keine destruktiven Rollback-Schritte ausführen.\n' >&2
+    printf '[PROMPTFINISHER deploy] Kein verifizierter Pre-Deploy-/Cutover-Backupstatus protokolliert. Keine destruktiven Rollback-Schritte ausführen.\n' >&2
   fi
 }
 trap 'rollback_help "$LINENO"' ERR
