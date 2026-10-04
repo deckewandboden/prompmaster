@@ -2146,7 +2146,24 @@ def run_backend_ui_smoke(browser, fixture=None) -> None:
             fixture['password'],
             '/portal/dashboard/',
         )
+        # Authenticated preference must persist and translate the actual
+        # customer portal, not only the public login surface.
+        member_page.goto(base + 'portal/dashboard/', wait_until='networkidle')
+        member_language = member_page.locator('.language-switcher select[name="language"]')
+        with member_page.expect_navigation(wait_until='networkidle'):
+            member_language.select_option('tr')
+        if member_page.locator('html').get_attribute('lang') != 'tr':
+            raise AssertionError('authenticated portal language did not switch to Turkish')
+        portal_nav_text = member_page.locator('.nav').inner_text()
+        if 'Lisanslar' not in portal_nav_text or 'Cihazlar' not in portal_nav_text:
+            raise AssertionError(
+                f'authenticated portal Turkish navigation missing: {portal_nav_text}'
+            )
+        if 'Günaydın' not in member_page.locator('h1').inner_text():
+            raise AssertionError('authenticated portal dashboard greeting was not translated')
         member_page.goto(base + 'portal/more/', wait_until='networkidle')
+        if member_page.locator('.language-switcher select[name="language"]').input_value() != 'tr':
+            raise AssertionError('authenticated portal language preference was not persisted')
         member_hrefs = set(member_page.locator('.content a').evaluate_all(
             "els => els.map(e => new URL(e.href).pathname)"
         ))
