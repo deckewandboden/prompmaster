@@ -406,3 +406,216 @@ msgstr "registados"
 
 msgid "Änderungen werden erst nach erfolgreicher Validierung gespeichert."
 msgstr "As alterações só são guardadas após validação bem-sucedida."
+
+msgid "+ Lizenz kaufen"
+msgstr "+ Comprar licença"
+
+msgid "Ablauf"
+msgstr "Expiração"
+
+msgid "Adresse"
+msgstr "Morada"
+
+msgid "Aktion"
+msgstr "Ação"
+
+msgid "Aktive Geräte"
+msgstr "Dispositivos ativos"
+
+msgid "Automatischer Kontext"
+msgstr "Contexto automático"
+
+msgid "Barrierefreiheit"
+msgstr "Acessibilidade"
+
+msgid "Benutzer"
+msgstr "Utilizador"
+
+msgid "Bestellung"
+msgstr "Encomenda"
+
+msgid "Betrag"
+msgstr "Montante"
+
+msgid "Betreff"
+msgstr "Assunto"
+
+msgid "Browser"
+msgstr "Navegador"
+
+msgid "Datenauskunft"
+msgstr "Acesso aos dados"
+
+msgid "Datum"
+msgstr "Data"
+
+msgid "Direkter Kontakt zu netstyle und Verlauf Ihrer Anfragen."
+msgstr "Contacto direto com a netstyle e histórico dos seus pedidos."
+
+msgid "Einladungen"
+msgstr "Convites"
+
+msgid "Einladungen sind 24 Stunden gültig und einmal verwendbar."
+msgstr "Os convites são válidos durante 24 horas e só podem ser usados uma vez."
+
+msgid "Frei"
+msgstr "Livre"
+
+msgid "Gerät"
+msgstr "Dispositivo"
+
+msgid "Gültig ab"
+msgstr "Válido a partir de"
+
+msgid "Gültig bis"
+msgstr "Válido até"
+
+msgid "Impressum"
+msgstr "Informação legal"
+
+msgid "Jeder Seat läuft mit individueller Laufzeit."
+msgstr "Cada licença tem o seu próprio período de vigência."
+
+msgid "Kategorie"
+msgstr "Categoria"
+
+msgid "Keine Bestellungen."
+msgstr "Sem encomendas."
+
+msgid "Keine Einladungen."
+msgstr "Sem convites."
+
+msgid "Keine Lizenzen."
+msgstr "Sem licenças."
+
+msgid "Keine aktiven Geräte."
+msgstr "Sem dispositivos ativos."
+
+msgid "Kontaktformular"
+msgstr "Formulário de contacto"
+
+msgid "Konto & Hilfe"
+msgstr "Conta e ajuda"
+
+msgid "Kontolöschung"
+msgstr "Eliminação da conta"
+
+msgid "Kontolöschung anfordern"
+msgstr "Pedir eliminação da conta"
+
+msgid "Laufzeit"
+msgstr "Vigência"
+
+msgid "Lizenz"
+msgstr "Licença"
+
+msgid "Lizenz-ID"
+msgstr "ID da licença"
+
+msgid "Lizenzdaten"
+msgstr "Dados da licença"
+
+msgid "Meine Daten exportieren"
+msgstr "Exportar os meus dados"
+
+msgid "Mollie übernimmt die Zahlungsabwicklung; PROMPTFINISHER erzeugt keine eigene Rechnungsengine."
+msgstr "A Mollie processa os pagamentos; o PROMPTFINISHER não utiliza um motor próprio de faturação."
+
+msgid "Mollie-Referenz"
+msgstr "Referência Mollie"
+
+msgid "Nachricht senden"
+msgstr "Enviar mensagem"
+
+msgid "Name"
+msgstr "Nome"
+
+msgid "Neu senden"
+msgstr "Reenviar"
+
+msgid "Nicht eingerichtet"
+msgstr "Não configurado"
+
+msgid "Noch keine Anfragen vorhanden."
+msgstr "Ainda não existem pedidos."
+
+msgid "Noch keine Reminder für den aktuellen Ablaufzeitpunkt."
+msgstr "Ainda não existem lembretes para a data de expiração atual."
+
+msgid "PROMPTFINISHER Pro öffnen"
+msgstr "Abrir PROMPTFINISHER Pro"
+
+msgid "Produkt"
+msgstr "Produto"
+
+msgid "Produkt / Menge"
+msgstr "Produto / quantidade"
+
+msgid "Profil"
+msgstr "Perfil"
+
+msgid "Profil, Adresse, Kontosicherheit und Datenauskunft."
+msgstr "Perfil, morada, segurança da conta e acesso aos dados."
+
+msgid "Rechtliches"
+msgstr "Legal"
+
+msgid "Reminder"
+msgstr "Lembrete"
+
+msgid "Resttage"
+msgstr "Dias restantes"
+
+msgid "Sicherheit"
+msgstr "Segurança"
+
+msgid "Sicherheit verwalten"
+msgstr "Gerir segurança"
+
+msgid "Status"
+msgstr "Estado"
+
+msgid "Supporthistorie"
+msgstr "Histórico de suporte"
+
+msgid "Verbraucherrechte"
+msgstr "Direitos do consumidor"
+
+msgid "Vertrag widerrufen"
+msgstr "Resolver o contrato"
+
+msgid "Verträge hier kündigen"
+msgstr "Cancelar contratos aqui"
+
+msgid "Verwaltung & Abrechnung"
+msgstr "Administração e faturação"
+
+msgid "Weitere Bereiche Ihres Kundenportals."
+msgstr "Outras áreas do seu portal do cliente."
+
+msgid "Widerrufsbelehrung"
+msgstr "Informação sobre livre resolução"
+
+msgid "Zahlung"
+msgstr "Pagamento"
+
+msgid "Zugewiesen"
+msgstr "Atribuídas"
+
+msgid "Zuletzt gesehen"
+msgstr "Visto pela última vez"
+
+msgid "Zurück"
+msgstr "Voltar"
+
+msgid "Zuweisung"
+msgstr "Atribuição"
+
+msgid "Zwei-Faktor-Authentifizierung"
+msgstr "Autenticação de dois fatores"
+
+msgid "Öffnen"
+msgstr "Abrir"
+
+msgid "≤30 Tage"
+msgstr "≤30 dias"
