@@ -1,14 +1,14 @@
-{% extends 'portal/base.html' %}{% block content %}
+{% extends 'portal/base.html' %}{% load i18n %}{% block content %}
 <div class="page-head">
   <div>
-    <h1>Lizenz verlängern</h1>
-    <div class="sub">Wählen Sie die Lizenz, deren bestehende Restlaufzeit um weitere 365 Tage verlängert werden soll.</div>
+    <h1>{% translate "Lizenz verlängern" %}</h1>
+    <div class="sub">{% translate "Wählen Sie die Lizenz, deren bestehende Restlaufzeit um weitere 365 Tage verlängert werden soll." %}</div>
   </div>
-  <a class="btn secondary" href="{% url 'portal:licenses' %}">Zurück zu Lizenzen</a>
+  <a class="btn secondary" href="{% url 'portal:licenses' %}">{% translate "Zurück zu Lizenzen" %}</a>
 </div>
 <div class="tablewrap">
   <table>
-    <thead><tr><th>Lizenz-ID</th><th>Produkt</th><th>Status</th><th>Gültig bis</th><th>Aktion</th></tr></thead>
+    <thead><tr><th>{% translate "Lizenz-ID" %}</th><th>{% translate "Produkt" %}</th><th>{% translate "Status" %}</th><th>{% translate "Gültig bis" %}</th><th>{% translate "Aktion" %}</th></tr></thead>
     <tbody>
     {% for license in licenses %}
       <tr>
@@ -16,10 +16,10 @@
         <td data-label="Produkt">{{ license.product.name }}</td>
         <td data-label="Status">{{ license.get_status_display }}</td>
         <td data-label="Gültig bis">{{ license.valid_until|date:'d.m.Y H:i'|default:'–' }}</td>
-        <td data-label="Aktion"><a class="btn primary sm" href="{% url 'portal:renew' license.id %}">Verlängern</a></td>
+        <td data-label="Aktion"><a class="btn primary sm" href="{% url 'portal:renew' license.id %}">{% translate "Verlängern" %}</a></td>
       </tr>
     {% empty %}
-      <tr><td colspan="5" class="empty">Keine verlängerbare Lizenz vorhanden.</td></tr>
+      <tr><td colspan="5" class="empty">{% translate "Keine verlängerbare Lizenz vorhanden." %}</td></tr>
     {% endfor %}
     </tbody>
   </table>
