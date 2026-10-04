@@ -108,6 +108,7 @@ LANGUAGES = [
 ]
 LANGUAGE_COOKIE_NAME = 'promptfinisher_language'
 LANGUAGE_COOKIE_AGE = 365 * 24 * 60 * 60
+LOCALE_PATHS = [BASE_DIR / 'locale']
 TIME_ZONE = 'Europe/Berlin'
 USE_I18N = True
 USE_TZ = True
