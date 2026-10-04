@@ -871,3 +871,6 @@ msgstr "Cliente"
 
 msgid "Pro-Lizenzen noch frei"
 msgstr "licencias Pro aún libres"
+
+msgid "Verlängern"
+msgstr "Renovar"
