@@ -757,3 +757,117 @@ msgstr "usuarios activos sin asignación Pro"
 
 msgid "registriert / Kapazität"
 msgstr "registrados / capacidad"
+
+msgid "Die vorbereitete Lizenz wird Ihrem aktuell angemeldeten Benutzerkonto zugeordnet. Der Link kann anschließend nicht erneut verwendet werden."
+msgstr "La licencia preparada se asignará a la cuenta de usuario con la que ha iniciado sesión. Después, el enlace no podrá volver a utilizarse."
+
+msgid "Gültig bis %(expiry)s. Der Link ist tenantgebunden, für genau diesen Benutzer bestimmt und nur einmal verwendbar."
+msgstr "Válido hasta %(expiry)s. El enlace está vinculado a la organización, destinado exactamente a este usuario y solo puede utilizarse una vez."
+
+msgid "Jede neue Lizenz startet nach erfolgreicher Zahlung mit eigener 365-Tage-Laufzeit."
+msgstr "Cada nueva licencia inicia su propio periodo de 365 días tras el pago correcto."
+
+msgid "inkl. MwSt. · %(days)s Tage"
+msgstr "IVA incluido · %(days)s días"
+
+msgid "%(limit)s Geräte je Benutzer"
+msgstr "%(limit)s dispositivos por usuario"
+
+msgid "Preis nicht verfügbar"
+msgstr "Precio no disponible"
+
+msgid "V1: exakt ein aktiver Firmenadministrator. Eine Übertragung ist nur auf ein aktives Team-Mitglied möglich."
+msgstr "V1: exactamente un administrador de empresa activo. La transferencia solo es posible a un miembro activo del equipo."
+
+msgid "Ihre eigenen Geräteslots können Sie hier selbst verwalten."
+msgstr "Aquí puede gestionar sus propias ranuras de dispositivo."
+
+msgid "Geräteslots werden durch den Firmenadministrator verwaltet."
+msgstr "Las ranuras de dispositivo son gestionadas por el administrador de empresa."
+
+msgid "Widerrufene Geräte bleiben als Historie erhalten."
+msgstr "Los dispositivos revocados permanecen en el historial."
+
+msgid "Zuletzt %(seen)s"
+msgstr "Última vez %(seen)s"
+
+msgid "Gerät wirklich entfernen?"
+msgstr "¿Eliminar realmente el dispositivo?"
+
+msgid "Konto, Unternehmen, Benutzer-ID und Zeitpunkt werden automatisch zugeordnet. Optional kann eine für Ihr Konto sichtbare Lizenz mitgesendet werden. Passwörter, Tokens oder andere unnötige sensitive Daten werden nicht übernommen."
+msgstr "La cuenta, empresa, ID de usuario y fecha se asignan automáticamente. Opcionalmente puede incluirse una licencia visible para su cuenta. No se incluyen contraseñas, tokens ni otros datos sensibles innecesarios."
+
+msgid "Exportieren Sie die zu Ihrem Benutzer gespeicherten PROMPTFINISHER-Daten als JSON. Secrets und Daten anderer Benutzer werden nicht exportiert."
+msgstr "Exporte como JSON los datos de PROMPTFINISHER almacenados para su usuario. No se exportan secretos ni datos de otros usuarios."
+
+msgid "Ihre Löschanfrage vom %(requested)s ist bereits erfasst. Status: %(status)s."
+msgstr "Su solicitud de eliminación del %(requested)s ya está registrada. Estado: %(status)s."
+
+msgid "Sie können die Löschung Ihres PROMPTFINISHER-Kontos anfordern. Gesetzlich erforderliche Geschäfts- und Nachweisdaten werden nur im erforderlichen Umfang weiter aufbewahrt bzw. anonymisiert. Firmenadministratoren müssen ihre Administratorrolle vor der Verarbeitung übertragen."
+msgstr "Puede solicitar la eliminación de su cuenta PROMPTFINISHER. Los datos comerciales y probatorios exigidos legalmente solo se conservarán o anonimizarán en la medida necesaria. Los administradores de empresa deben transferir su rol antes del procesamiento."
+
+msgid "Ich möchte die Löschung meines Kontos verbindlich anfordern."
+msgstr "Quiero solicitar de forma vinculante la eliminación de mi cuenta."
+
+msgid "Guten Morgen, %(first_name)s"
+msgstr "Buenos días, %(first_name)s"
+
+msgid "Privatkonto"
+msgstr "Cuenta particular"
+
+msgid "Unternehmensadministrator"
+msgstr "Administrador de empresa"
+
+msgid "%(assigned)s vergeben · %(free)s verfügbar"
+msgstr "%(assigned)s asignadas · %(free)s disponibles"
+
+msgid "%(free)s frei · %(expiring)s läuft bald ab"
+msgstr "%(free)s libres · %(expiring)s vencen pronto"
+
+msgid "Tage"
+msgstr "días"
+
+msgid "kein Ablauf"
+msgstr "sin vencimiento"
+
+msgid "Eine Lizenz läuft in %(days)s Tagen ab."
+msgstr "Una licencia vence en %(days)s días."
+
+msgid "freie Pro-Lizenzen"
+msgstr "licencias Pro libres"
+
+msgid "Freie Pro-Lizenzen können Team-Mitgliedern zugewiesen werden."
+msgstr "Las licencias Pro libres pueden asignarse a miembros del equipo."
+
+msgid "Für Kauf/Abrechnung fehlen: %(fields)s."
+msgstr "Faltan para compra/facturación: %(fields)s."
+
+msgid "Tage verbleibend"
+msgstr "días restantes"
+
+msgid "Deine Lizenz läuft am %(expiry)s ab."
+msgstr "Su licencia vence el %(expiry)s."
+
+msgid "Es ist eine freie Pro-Lizenz verfügbar."
+msgstr "Hay una licencia Pro libre disponible."
+
+msgid "Aktuell ist keine freie Pro-Lizenz verfügbar. Kaufen Sie eine weitere Lizenz oder geben Sie eine bestehende Lizenz frei."
+msgstr "Actualmente no hay ninguna licencia Pro libre. Compre otra licencia o libere una existente."
+
+msgid "Ihre Pro-Anfrage ist bereits offen."
+msgstr "Su solicitud Pro ya está abierta."
+
+msgid "Für den Pro-Zugriff benötigen Sie eine aktive PROMPTFINISHER-Pro-Lizenz."
+msgstr "Necesita una licencia PROMPTFINISHER Pro activa para acceder a Pro."
+
+msgid "Portal durchsuchen"
+msgstr "Buscar en el portal"
+
+msgid "Geben Sie einen Suchbegriff ein. Firmenadministratoren können nach Teammitgliedern, E-Mail-Adressen und Lizenzen suchen; andere Benutzer sehen ausschließlich ihre eigene Lizenzsicht."
+msgstr "Introduzca un término de búsqueda. Los administradores de empresa pueden buscar miembros del equipo, correos y licencias; los demás usuarios solo ven sus propias licencias."
+
+msgid "Kunde"
+msgstr "Cliente"
+
+msgid "Pro-Lizenzen noch frei"
+msgstr "licencias Pro aún libres"
