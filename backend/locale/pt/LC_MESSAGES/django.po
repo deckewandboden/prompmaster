@@ -619,3 +619,141 @@ msgstr "Abrir"
 
 msgid "≤30 Tage"
 msgstr "≤30 dias"
+
+msgid "2FA einrichten"
+msgstr "Configurar 2FA"
+
+msgid "2FA schützt den Zugriff mit einem zusätzlichen zeitbasierten Einmalcode."
+msgstr "A 2FA protege o acesso com um código adicional de utilização única baseado no tempo."
+
+msgid "Ablehnen"
+msgstr "Rejeitar"
+
+msgid "Aktive Lizenzen"
+msgstr "Licenças ativas"
+
+msgid "Aktuelles Ende"
+msgstr "Fim atual"
+
+msgid "Anfrage"
+msgstr "Pedido"
+
+msgid "Bearbeitungsstand"
+msgstr "Estado de processamento"
+
+msgid "Benutzer deaktivieren"
+msgstr "Desativar utilizador"
+
+msgid "Benutzer löschen"
+msgstr "Eliminar utilizador"
+
+msgid "Benutzer reaktivieren"
+msgstr "Reativar utilizador"
+
+msgid "Benutzer, Einladungen, Lizenzen und Geräte verwalten."
+msgstr "Gerir utilizadores, convites, licenças e dispositivos."
+
+msgid "Die Suche bleibt auf Ihren eigenen Mandanten- und Lizenzbereich begrenzt."
+msgstr "A pesquisa fica limitada ao seu próprio âmbito de organização e licenças."
+
+msgid "Ein Passwortwechsel erfolgt über einen zeitlich begrenzten, einmal verwendbaren Link an Ihre hinterlegte E-Mail-Adresse."
+msgstr "A alteração da palavra-passe é feita através de uma ligação temporária de utilização única enviada para o seu e-mail registado."
+
+msgid "Free"
+msgstr "Free"
+
+msgid "Freie Lizenz zuweisen"
+msgstr "Atribuir licença livre"
+
+msgid "Freigeben"
+msgstr "Libertar"
+
+msgid "Genehmigen"
+msgstr "Aprovar"
+
+msgid "Hier sehen Sie ausschließlich Nachrichten, die für Sie bzw. Ihr Unternehmen bestimmt sind. Interne netstyle-Notizen werden nicht im Kundenportal angezeigt."
+msgstr "Aqui vê apenas mensagens destinadas a si ou à sua empresa. As notas internas da netstyle não são apresentadas no portal do cliente."
+
+msgid "Ihre Anfrage und alle für Kunden freigegebenen Antworten."
+msgstr "O seu pedido e todas as respostas disponibilizadas aos clientes."
+
+msgid "Inaktiv"
+msgstr "Inativo"
+
+msgid "Keine Benutzer gefunden."
+msgstr "Não foram encontrados utilizadores."
+
+msgid "Keine Lizenz zugewiesen."
+msgstr "Nenhuma licença atribuída."
+
+msgid "Keine Lizenzen gefunden."
+msgstr "Não foram encontradas licenças."
+
+msgid "Keine freie Lizenz."
+msgstr "Nenhuma licença livre."
+
+msgid "Keine verlängerbare Lizenz vorhanden."
+msgstr "Nenhuma licença renovável disponível."
+
+msgid "Mitarbeiter"
+msgstr "Colaborador"
+
+msgid "Noch nie"
+msgstr "Nunca"
+
+msgid "Offene Pro-Anfragen"
+msgstr "Pedidos Pro em aberto"
+
+msgid "PROMPTFINISHER Free"
+msgstr "PROMPTFINISHER Free"
+
+msgid "PROMPTFINISHER Pro"
+msgstr "PROMPTFINISHER Pro"
+
+msgid "Passwort zurücksetzen"
+msgstr "Repor palavra-passe"
+
+msgid "Recovery-Codes neu erzeugen"
+msgstr "Gerar novamente códigos de recuperação"
+
+msgid "Seit"
+msgstr "Desde"
+
+msgid "Sicheren Link senden"
+msgstr "Enviar ligação segura"
+
+msgid "Team-Mitglieder"
+msgstr "Membros da equipa"
+
+msgid "Verlauf"
+msgstr "Histórico"
+
+msgid "Wählen Sie die Lizenz, deren bestehende Restlaufzeit um weitere 365 Tage verlängert werden soll."
+msgstr "Selecione a licença cujo período restante deve ser prolongado por mais 365 dias."
+
+msgid "Zahlungspflichtig verlängern →"
+msgstr "Renovar com obrigação de pagamento →"
+
+msgid "Zuletzt aktiv"
+msgstr "Última atividade"
+
+msgid "Zurück zu Einstellungen"
+msgstr "Voltar às definições"
+
+msgid "Zurück zu Lizenzen"
+msgstr "Voltar às licenças"
+
+msgid "Zuweisen"
+msgstr "Atribuir"
+
+msgid "Zwei-Faktor-Authentifizierung und Recovery-Codes verwalten."
+msgstr "Gerir autenticação de dois fatores e códigos de recuperação."
+
+msgid "aktive Benutzer"
+msgstr "utilizadores ativos"
+
+msgid "aktive Benutzer ohne Pro-Zuweisung"
+msgstr "utilizadores ativos sem atribuição Pro"
+
+msgid "registriert / Kapazität"
+msgstr "registados / capacidade"
