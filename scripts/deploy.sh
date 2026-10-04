@@ -35,6 +35,11 @@ CUTOVER_PERFORMED=0
 
 log(){ printf '[PROMPTFINISHER deploy] %s\n' "$*"; }
 
+if [[ -f "$LAST_SUCCESS_FILE" ]]; then
+  F+=(-f compose.legacy-volumes.yaml)
+  log "Persistente Produktionsvolumes werden als bestehende externe Volumes übernommen"
+fi
+
 rollback_help(){
   local line="${1:-unknown}"
   printf '\n[PROMPTFINISHER deploy] FEHLER in Zeile %s. Deployment NICHT freigegeben.\n' "$line" >&2
