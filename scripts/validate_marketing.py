@@ -105,7 +105,7 @@ for config_text, label in ((caddy, 'Caddyfile'), (external_caddy, 'Caddyfile.ext
     for needle in ('@sensitive_source', '/.env', '/.git/*', '/Dockerfile', '/compose.yaml', 'respond 404'):
         if needle not in config_text:
             raise SystemExit(f'MARKETING VALIDATION FAIL: {label} sensitive-path guard missing {needle}')
-for needle in ('http://{$CADDY_DOMAIN}', 'promptmaster-web-internal:8000', 'trusted_proxies static private_ranges', 'trusted_proxies_strict', 'header_up X-Forwarded-Proto https', 'header_up X-Forwarded-For {client_ip}'):
+for needle in ('http://{$CADDY_DOMAIN}', 'promptfinisher-web-internal:8000', 'trusted_proxies static private_ranges', 'trusted_proxies_strict', 'header_up X-Forwarded-Proto https', 'header_up X-Forwarded-For {client_ip}'):
     if needle not in external_caddy:
         raise SystemExit(f'MARKETING VALIDATION FAIL: external Caddy bridge missing {needle}')
 if 'reverse_proxy web:8000' in external_caddy:
