@@ -406,3 +406,216 @@ msgstr "registered"
 
 msgid "Änderungen werden erst nach erfolgreicher Validierung gespeichert."
 msgstr "Changes are saved only after successful validation."
+
+msgid "+ Lizenz kaufen"
+msgstr "+ Buy license"
+
+msgid "Ablauf"
+msgstr "Expiry"
+
+msgid "Adresse"
+msgstr "Address"
+
+msgid "Aktion"
+msgstr "Action"
+
+msgid "Aktive Geräte"
+msgstr "Active devices"
+
+msgid "Automatischer Kontext"
+msgstr "Automatic context"
+
+msgid "Barrierefreiheit"
+msgstr "Accessibility"
+
+msgid "Benutzer"
+msgstr "User"
+
+msgid "Bestellung"
+msgstr "Order"
+
+msgid "Betrag"
+msgstr "Amount"
+
+msgid "Betreff"
+msgstr "Subject"
+
+msgid "Browser"
+msgstr "Browser"
+
+msgid "Datenauskunft"
+msgstr "Data access"
+
+msgid "Datum"
+msgstr "Date"
+
+msgid "Direkter Kontakt zu netstyle und Verlauf Ihrer Anfragen."
+msgstr "Direct contact with netstyle and history of your requests."
+
+msgid "Einladungen"
+msgstr "Invitations"
+
+msgid "Einladungen sind 24 Stunden gültig und einmal verwendbar."
+msgstr "Invitations are valid for 24 hours and can be used once."
+
+msgid "Frei"
+msgstr "Free"
+
+msgid "Gerät"
+msgstr "Device"
+
+msgid "Gültig ab"
+msgstr "Valid from"
+
+msgid "Gültig bis"
+msgstr "Valid until"
+
+msgid "Impressum"
+msgstr "Legal notice"
+
+msgid "Jeder Seat läuft mit individueller Laufzeit."
+msgstr "Each seat has its own individual term."
+
+msgid "Kategorie"
+msgstr "Category"
+
+msgid "Keine Bestellungen."
+msgstr "No orders."
+
+msgid "Keine Einladungen."
+msgstr "No invitations."
+
+msgid "Keine Lizenzen."
+msgstr "No licenses."
+
+msgid "Keine aktiven Geräte."
+msgstr "No active devices."
+
+msgid "Kontaktformular"
+msgstr "Contact form"
+
+msgid "Konto & Hilfe"
+msgstr "Account & help"
+
+msgid "Kontolöschung"
+msgstr "Account deletion"
+
+msgid "Kontolöschung anfordern"
+msgstr "Request account deletion"
+
+msgid "Laufzeit"
+msgstr "Term"
+
+msgid "Lizenz"
+msgstr "License"
+
+msgid "Lizenz-ID"
+msgstr "License ID"
+
+msgid "Lizenzdaten"
+msgstr "License data"
+
+msgid "Meine Daten exportieren"
+msgstr "Export my data"
+
+msgid "Mollie übernimmt die Zahlungsabwicklung; PROMPTFINISHER erzeugt keine eigene Rechnungsengine."
+msgstr "Mollie handles payment processing; PROMPTFINISHER does not operate its own invoicing engine."
+
+msgid "Mollie-Referenz"
+msgstr "Mollie reference"
+
+msgid "Nachricht senden"
+msgstr "Send message"
+
+msgid "Name"
+msgstr "Name"
+
+msgid "Neu senden"
+msgstr "Resend"
+
+msgid "Nicht eingerichtet"
+msgstr "Not configured"
+
+msgid "Noch keine Anfragen vorhanden."
+msgstr "No requests yet."
+
+msgid "Noch keine Reminder für den aktuellen Ablaufzeitpunkt."
+msgstr "No reminders yet for the current expiry date."
+
+msgid "PROMPTFINISHER Pro öffnen"
+msgstr "Open PROMPTFINISHER Pro"
+
+msgid "Produkt"
+msgstr "Product"
+
+msgid "Produkt / Menge"
+msgstr "Product / quantity"
+
+msgid "Profil"
+msgstr "Profile"
+
+msgid "Profil, Adresse, Kontosicherheit und Datenauskunft."
+msgstr "Profile, address, account security and data access."
+
+msgid "Rechtliches"
+msgstr "Legal"
+
+msgid "Reminder"
+msgstr "Reminder"
+
+msgid "Resttage"
+msgstr "Days remaining"
+
+msgid "Sicherheit"
+msgstr "Security"
+
+msgid "Sicherheit verwalten"
+msgstr "Manage security"
+
+msgid "Status"
+msgstr "Status"
+
+msgid "Supporthistorie"
+msgstr "Support history"
+
+msgid "Verbraucherrechte"
+msgstr "Consumer rights"
+
+msgid "Vertrag widerrufen"
+msgstr "Withdraw contract"
+
+msgid "Verträge hier kündigen"
+msgstr "Cancel contracts here"
+
+msgid "Verwaltung & Abrechnung"
+msgstr "Administration & billing"
+
+msgid "Weitere Bereiche Ihres Kundenportals."
+msgstr "Additional areas of your customer portal."
+
+msgid "Widerrufsbelehrung"
+msgstr "Withdrawal information"
+
+msgid "Zahlung"
+msgstr "Payment"
+
+msgid "Zugewiesen"
+msgstr "Assigned"
+
+msgid "Zuletzt gesehen"
+msgstr "Last seen"
+
+msgid "Zurück"
+msgstr "Back"
+
+msgid "Zuweisung"
+msgstr "Assignment"
+
+msgid "Zwei-Faktor-Authentifizierung"
+msgstr "Two-factor authentication"
+
+msgid "Öffnen"
+msgstr "Open"
+
+msgid "≤30 Tage"
+msgstr "≤30 days"
