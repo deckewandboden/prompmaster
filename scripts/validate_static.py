@@ -1080,6 +1080,63 @@ release_gates = (ROOT/'docs/RELEASE_GATES.md').read_text(encoding='utf-8')
 if 'docs/PRODUCTION_ACCEPTANCE.md' not in release_gates:
     fail('Release gates do not reference the executable production acceptance procedure')
 
+# 23) PROMPTFINISHER customer-facing UI language contract.
+portal_dir = ROOT / 'backend/templates/portal'
+portal_templates = sorted(portal_dir.glob('*.html'))
+for path in portal_templates:
+    text = path.read_text(encoding='utf-8')
+    if path.name != 'base.html' and 'load i18n' not in text:
+        fail(f'Customer portal template missing i18n load: {path.relative_to(ROOT)}')
+
+mandatory_translations = (
+    'Anmelden',
+    'Lizenzen',
+    'Geräte',
+    'Weitere Lizenzen kaufen',
+    'Bestellungen & Zahlungen',
+    'Sicherheit',
+    'Mein Team',
+    'Speichern',
+    'Öffnen',
+    'Verlängern',
+    'Keine Lizenzen.',
+    'Guten Morgen, %(first_name)s',
+)
+for language in ('en', 'es', 'pt', 'tr'):
+    po_path = ROOT / 'backend/locale' / language / 'LC_MESSAGES/django.po'
+    if not po_path.exists():
+        fail(f'UI locale catalog missing: {language}')
+        continue
+    po_text = po_path.read_text(encoding='utf-8')
+    for msgid in mandatory_translations:
+        escaped = msgid.replace('\\', '\\\\').replace('"', '\\"')
+        match = re.search(
+            rf'^msgid "{re.escape(escaped)}"\\nmsgstr "([^"]*)"    print('\n'.join(f'[FAIL] {e}' for e in errors))
+    print(f'\nSTATIC VALIDATION FAILED: {len(errors)} issue(s)')
+    sys.exit(1)
+print('STATIC VALIDATION OK')
+,
+            po_text,
+            flags=re.MULTILINE,
+        )
+        if not match or not match.group(1).strip():
+            fail(f'UI locale translation missing: {language} / {msgid}')
+
+for needle in (
+    '>Speichern<',
+    '>Öffnen<',
+    '>Verlängern<',
+    '>Keine Lizenzen.<',
+    '>Keine Geräte.<',
+):
+    offenders = [
+        path.relative_to(ROOT)
+        for path in portal_templates
+        if needle in path.read_text(encoding='utf-8')
+    ]
+    if offenders:
+        fail(f'Untranslated customer portal core copy {needle}: {offenders}')
+
 
 if errors:
     print('\n'.join(f'[FAIL] {e}' for e in errors))
