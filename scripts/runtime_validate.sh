@@ -7,7 +7,7 @@ command -v docker >/dev/null 2>&1 || fail "docker fehlt auf diesem Host"; docker
 bash scripts/run_repo_preflight.sh staging
 FILES=(-f compose.yaml -f compose.staging.yaml)
 docker compose -f compose.yaml -f compose.production.yaml config >/dev/null
-PM_EXTERNAL_CADDY_NETWORK=promptmaster-ci-external docker compose -f compose.yaml -f compose.production.yaml -f compose.external-caddy.yaml config >/dev/null
+PM_EXTERNAL_CADDY_NETWORK=promptfinisher-ci-external docker compose -f compose.yaml -f compose.production.yaml -f compose.external-caddy.yaml config >/dev/null
 # Exercise production filesystem restrictions with safe staging integrations.
 if [[ "${PM_VALIDATE_READ_ONLY:-0}" == 1 ]]; then FILES+=(-f compose.production.yaml); fi
 docker compose "${FILES[@]}" config >/dev/null; docker compose "${FILES[@]}" build; docker compose "${FILES[@]}" up -d postgres redis mailpit
@@ -90,13 +90,13 @@ for i in $(seq 1 20); do BEAT_OK="$(docker compose "${FILES[@]}" exec -T web pyt
 docker compose "${FILES[@]}" ps
 docker compose "${FILES[@]}" exec -T web python manage.py shell -c "from pathlib import Path; import hashlib; from django.conf import settings; p=Path(settings.PRO_GOLDEN_MASTER_PATH); expected='a18375946c7081034cd6b9d70a1f4e3b843c51e03230477cae246b6c4bf0f95f'; actual=hashlib.sha256(p.read_bytes()).hexdigest() if p.is_file() else ''; print('PRO_GOLDEN_MASTER_OK' if actual==expected else f'PRO_GOLDEN_MASTER_FAIL:{actual}'); raise SystemExit(0 if actual==expected else 1)"
 for i in $(seq 1 40); do
-  BACKUP_OK="$(docker compose "${FILES[@]}" exec -T web python -c "import json,pathlib; p=pathlib.Path('/var/run/promptmaster-backup/last-backup.json'); print('1' if p.is_file() and json.loads(p.read_text()).get('status')=='ok' else '0')" 2>/dev/null | tail -n1 | tr -d '\r')"
+  BACKUP_OK="$(docker compose "${FILES[@]}" exec -T web python -c "import json,pathlib; p=pathlib.Path('/var/run/promptfinisher-backup/last-backup.json'); print('1' if p.is_file() and json.loads(p.read_text()).get('status')=='ok' else '0')" 2>/dev/null | tail -n1 | tr -d '\r')"
   [[ "$BACKUP_OK" == 1 ]] && break
   [[ "$i" -lt 40 ]] || fail "Staging-Backup blieb rot"
   sleep 3
 done
 for i in $(seq 1 40); do
-  RESTORE_OK="$(docker compose "${FILES[@]}" exec -T web python -c "import json,pathlib; p=pathlib.Path('/var/run/promptmaster-backup/last-restore.json'); print('1' if p.is_file() and json.loads(p.read_text()).get('status')=='ok' else '0')" 2>/dev/null | tail -n1 | tr -d '\r')"
+  RESTORE_OK="$(docker compose "${FILES[@]}" exec -T web python -c "import json,pathlib; p=pathlib.Path('/var/run/promptfinisher-backup/last-restore.json'); print('1' if p.is_file() and json.loads(p.read_text()).get('status')=='ok' else '0')" 2>/dev/null | tail -n1 | tr -d '\r')"
   [[ "$RESTORE_OK" == 1 ]] && break
   [[ "$i" -lt 40 ]] || fail "Staging-Restore-Test blieb rot"
   sleep 3
