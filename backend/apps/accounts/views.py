@@ -11,7 +11,7 @@ from django.db import IntegrityError, transaction
 from django.shortcuts import redirect, render
 from django.urls import reverse
 from django.utils import timezone, translation
-from django.views.decorators.http import require_POST
+from django.views.decorators.http import require_http_methods
 
 from apps.companies.models import Company, Membership, PrivateCustomerProfile
 from apps.core.crypto import decrypt, encrypt
@@ -110,9 +110,10 @@ def _new_recovery_codes(user):
     return codes
 
 
-@require_POST
+@require_http_methods(['GET', 'POST'])
 def set_ui_language(request):
-    language = (request.POST.get('language') or '').strip().lower()
+    params = request.GET if request.method == 'GET' else request.POST
+    language = (params.get('language') or '').strip().lower()
     supported = {code for code, _label in settings.LANGUAGES}
     if language not in supported:
         language = settings.LANGUAGE_CODE
@@ -123,7 +124,7 @@ def set_ui_language(request):
 
     translation.activate(language)
     request.LANGUAGE_CODE = language
-    destination = _safe_next(request, request.POST.get('next')) or '/'
+    destination = _safe_next(request, params.get('next')) or '/'
     response = redirect(destination)
     response.set_cookie(
         settings.LANGUAGE_COOKIE_NAME,
