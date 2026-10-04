@@ -209,3 +209,45 @@ msgstr "New password"
 msgid "Passwort wiederholen"
 msgstr "Repeat password"
 
+msgid "Tabellenfilter"
+msgstr "Table filters"
+
+msgid "Tabelle durchsuchen"
+msgstr "Search table"
+
+msgid "Alle"
+msgstr "All"
+
+msgid "Seitengröße"
+msgstr "Page size"
+
+msgid "Spalten"
+msgstr "Columns"
+
+msgid "Anwenden"
+msgstr "Apply"
+
+msgid "CSV exportieren"
+msgstr "Export CSV"
+
+msgid "Sortierung zurücksetzen"
+msgstr "Reset sorting"
+
+msgid "Alles zurücksetzen"
+msgstr "Reset all"
+
+msgid "Daten werden geladen …"
+msgstr "Loading data …"
+
+msgid "Aktive Filter"
+msgstr "Active filters"
+
+msgid "Suche"
+msgstr "Search"
+
+msgid "Keine Such- oder Filtertreffer."
+msgstr "No search or filter results."
+
+msgid "Filter zurücksetzen"
+msgstr "Reset filters"
+
