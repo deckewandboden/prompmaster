@@ -251,3 +251,158 @@ msgstr "No search or filter results."
 msgid "Filter zurücksetzen"
 msgstr "Reset filters"
 
+msgid "+ Benutzer hinzufügen"
+msgstr "+ Add user"
+
+msgid "AGB"
+msgstr "Terms and conditions"
+
+msgid "Abbrechen"
+msgstr "Cancel"
+
+msgid "Administrator übertragen"
+msgstr "Transfer administrator"
+
+msgid "Aktiv"
+msgstr "Active"
+
+msgid "Aktive Mitglieder"
+msgstr "Active members"
+
+msgid "Anzahl"
+msgstr "Quantity"
+
+msgid "Bestellungen & Zahlungen öffnen"
+msgstr "Open orders & payments"
+
+msgid "Checkout"
+msgstr "Checkout"
+
+msgid "Datenschutz"
+msgstr "Privacy"
+
+msgid "Der Link wurde per E-Mail versendet."
+msgstr "The link was sent by email."
+
+msgid "Firmen-Administrator"
+msgstr "Company administrator"
+
+msgid "Gerät entfernen"
+msgstr "Remove device"
+
+msgid "Geräteslots der aktiven PROMPTFINISHER-Pro-Lizenzen."
+msgstr "Device slots of active PROMPTFINISHER Pro licenses."
+
+msgid "Gerätewechsel"
+msgstr "Device change"
+
+msgid "Gesamt"
+msgstr "Total"
+
+msgid "Jetzt verlängern"
+msgstr "Renew now"
+
+msgid "Kein Pro-Zugriff für dieses Benutzerkonto."
+msgstr "No Pro access for this user account."
+
+msgid "Kein aktiver Firmenadministrator gefunden."
+msgstr "No active company administrator found."
+
+msgid "Keine Geräte."
+msgstr "No devices."
+
+msgid "Link zur Kontrolle"
+msgstr "Link for verification"
+
+msgid "Lizenz jetzt zuordnen"
+msgstr "Assign license now"
+
+msgid "Lizenz verlängern"
+msgstr "Renew license"
+
+msgid "Lizenzbedingungen"
+msgstr "License terms"
+
+msgid "Lizenzen insgesamt"
+msgstr "Total licenses"
+
+msgid "Lizenzstatus"
+msgstr "License status"
+
+msgid "Lizenzzuordnung bestätigen"
+msgstr "Confirm license assignment"
+
+msgid "Nächster Ablauf"
+msgstr "Next expiry"
+
+msgid "PROMPTFINISHER PRO"
+msgstr "PROMPTFINISHER PRO"
+
+msgid "PROMPTFINISHER Pro für mich aktivieren"
+msgstr "Activate PROMPTFINISHER Pro for me"
+
+msgid "PROMPTFINISHER Pro starten →"
+msgstr "Start PROMPTFINISHER Pro →"
+
+msgid "Pro anfragen"
+msgstr "Request Pro"
+
+msgid "Sicherer PROMPTFINISHER-Zuordnungslink."
+msgstr "Secure PROMPTFINISHER assignment link."
+
+msgid "Speichern"
+msgstr "Save"
+
+msgid "Stammdaten, Steuerdaten und Firmen-Administrator."
+msgstr "Master data, tax data and company administrator."
+
+msgid "Team öffnen"
+msgstr "Open team"
+
+msgid "Team- und Lizenzverwaltung"
+msgstr "Team and license management"
+
+msgid "Unternehmensdaten"
+msgstr "Company data"
+
+msgid "Unternehmensdaten bearbeiten"
+msgstr "Edit company data"
+
+msgid "Unternehmensdaten unvollständig."
+msgstr "Company data incomplete."
+
+msgid "Updates während Laufzeit"
+msgstr "Updates during term"
+
+msgid "Widerruf"
+msgstr "Withdrawal"
+
+msgid "Widerrufen"
+msgstr "Revoked"
+
+msgid "Zahlungen mit Handlungsbedarf"
+msgstr "Payments requiring action"
+
+msgid "Zahlungspflichtig kaufen →"
+msgstr "Buy with payment obligation →"
+
+msgid "Zuordnungslink erzeugt"
+msgstr "Assignment link created"
+
+msgid "Zurück zum Benutzer"
+msgstr "Back to user"
+
+msgid "aktiv"
+msgstr "active"
+
+msgid "enthalten"
+msgstr "included"
+
+msgid "inkl. MwSt."
+msgstr "incl. VAT"
+
+msgid "registriert"
+msgstr "registered"
+
+msgid "Änderungen werden erst nach erfolgreicher Validierung gespeichert."
+msgstr "Changes are saved only after successful validation."
