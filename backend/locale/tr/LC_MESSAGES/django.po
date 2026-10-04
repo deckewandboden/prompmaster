@@ -757,3 +757,117 @@ msgstr "Pro ataması olmayan aktif kullanıcılar"
 
 msgid "registriert / Kapazität"
 msgstr "kayıtlı / kapasite"
+
+msgid "Die vorbereitete Lizenz wird Ihrem aktuell angemeldeten Benutzerkonto zugeordnet. Der Link kann anschließend nicht erneut verwendet werden."
+msgstr "Hazırlanan lisans, şu anda oturum açmış kullanıcı hesabınıza atanacaktır. Bağlantı daha sonra tekrar kullanılamaz."
+
+msgid "Gültig bis %(expiry)s. Der Link ist tenantgebunden, für genau diesen Benutzer bestimmt und nur einmal verwendbar."
+msgstr "%(expiry)s tarihine kadar geçerlidir. Bağlantı kuruluşa bağlıdır, yalnızca bu kullanıcı içindir ve bir kez kullanılabilir."
+
+msgid "Jede neue Lizenz startet nach erfolgreicher Zahlung mit eigener 365-Tage-Laufzeit."
+msgstr "Her yeni lisans, başarılı ödemeden sonra kendi 365 günlük süresini başlatır."
+
+msgid "inkl. MwSt. · %(days)s Tage"
+msgstr "KDV dahil · %(days)s gün"
+
+msgid "%(limit)s Geräte je Benutzer"
+msgstr "Kullanıcı başına %(limit)s cihaz"
+
+msgid "Preis nicht verfügbar"
+msgstr "Fiyat mevcut değil"
+
+msgid "V1: exakt ein aktiver Firmenadministrator. Eine Übertragung ist nur auf ein aktives Team-Mitglied möglich."
+msgstr "V1: tam olarak bir aktif şirket yöneticisi. Devir yalnızca aktif bir ekip üyesine yapılabilir."
+
+msgid "Ihre eigenen Geräteslots können Sie hier selbst verwalten."
+msgstr "Kendi cihaz yuvalarınızı buradan yönetebilirsiniz."
+
+msgid "Geräteslots werden durch den Firmenadministrator verwaltet."
+msgstr "Cihaz yuvaları şirket yöneticisi tarafından yönetilir."
+
+msgid "Widerrufene Geräte bleiben als Historie erhalten."
+msgstr "İptal edilen cihazlar geçmişte saklanır."
+
+msgid "Zuletzt %(seen)s"
+msgstr "Son görülme %(seen)s"
+
+msgid "Gerät wirklich entfernen?"
+msgstr "Cihaz gerçekten kaldırılsın mı?"
+
+msgid "Konto, Unternehmen, Benutzer-ID und Zeitpunkt werden automatisch zugeordnet. Optional kann eine für Ihr Konto sichtbare Lizenz mitgesendet werden. Passwörter, Tokens oder andere unnötige sensitive Daten werden nicht übernommen."
+msgstr "Hesap, şirket, kullanıcı kimliği ve zaman otomatik olarak atanır. İsteğe bağlı olarak hesabınızda görünen bir lisans eklenebilir. Parolalar, tokenlar veya gereksiz hassas veriler eklenmez."
+
+msgid "Exportieren Sie die zu Ihrem Benutzer gespeicherten PROMPTFINISHER-Daten als JSON. Secrets und Daten anderer Benutzer werden nicht exportiert."
+msgstr "Kullanıcınız için saklanan PROMPTFINISHER verilerini JSON olarak dışa aktarın. Gizli bilgiler ve diğer kullanıcıların verileri dışa aktarılmaz."
+
+msgid "Ihre Löschanfrage vom %(requested)s ist bereits erfasst. Status: %(status)s."
+msgstr "%(requested)s tarihli silme talebiniz zaten kaydedildi. Durum: %(status)s."
+
+msgid "Sie können die Löschung Ihres PROMPTFINISHER-Kontos anfordern. Gesetzlich erforderliche Geschäfts- und Nachweisdaten werden nur im erforderlichen Umfang weiter aufbewahrt bzw. anonymisiert. Firmenadministratoren müssen ihre Administratorrolle vor der Verarbeitung übertragen."
+msgstr "PROMPTFINISHER hesabınızın silinmesini talep edebilirsiniz. Yasal olarak gerekli iş ve kanıt verileri yalnızca gereken ölçüde saklanır veya anonimleştirilir. Şirket yöneticileri işlem öncesinde yönetici rollerini devretmelidir."
+
+msgid "Ich möchte die Löschung meines Kontos verbindlich anfordern."
+msgstr "Hesabımın silinmesini kesin olarak talep etmek istiyorum."
+
+msgid "Guten Morgen, %(first_name)s"
+msgstr "Günaydın, %(first_name)s"
+
+msgid "Privatkonto"
+msgstr "Bireysel hesap"
+
+msgid "Unternehmensadministrator"
+msgstr "Şirket yöneticisi"
+
+msgid "%(assigned)s vergeben · %(free)s verfügbar"
+msgstr "%(assigned)s atanmış · %(free)s kullanılabilir"
+
+msgid "%(free)s frei · %(expiring)s läuft bald ab"
+msgstr "%(free)s boş · %(expiring)s yakında sona eriyor"
+
+msgid "Tage"
+msgstr "gün"
+
+msgid "kein Ablauf"
+msgstr "sona erme yok"
+
+msgid "Eine Lizenz läuft in %(days)s Tagen ab."
+msgstr "Bir lisans %(days)s gün içinde sona eriyor."
+
+msgid "freie Pro-Lizenzen"
+msgstr "boş Pro lisansları"
+
+msgid "Freie Pro-Lizenzen können Team-Mitgliedern zugewiesen werden."
+msgstr "Boş Pro lisansları ekip üyelerine atanabilir."
+
+msgid "Für Kauf/Abrechnung fehlen: %(fields)s."
+msgstr "Satın alma/faturalama için eksik: %(fields)s."
+
+msgid "Tage verbleibend"
+msgstr "gün kaldı"
+
+msgid "Deine Lizenz läuft am %(expiry)s ab."
+msgstr "Lisansınız %(expiry)s tarihinde sona eriyor."
+
+msgid "Es ist eine freie Pro-Lizenz verfügbar."
+msgstr "Boş bir Pro lisansı mevcut."
+
+msgid "Aktuell ist keine freie Pro-Lizenz verfügbar. Kaufen Sie eine weitere Lizenz oder geben Sie eine bestehende Lizenz frei."
+msgstr "Şu anda boş Pro lisansı yok. Yeni bir lisans satın alın veya mevcut bir lisansı serbest bırakın."
+
+msgid "Ihre Pro-Anfrage ist bereits offen."
+msgstr "Pro talebiniz zaten açık."
+
+msgid "Für den Pro-Zugriff benötigen Sie eine aktive PROMPTFINISHER-Pro-Lizenz."
+msgstr "Pro erişimi için aktif bir PROMPTFINISHER Pro lisansına ihtiyacınız var."
+
+msgid "Portal durchsuchen"
+msgstr "Portalda ara"
+
+msgid "Geben Sie einen Suchbegriff ein. Firmenadministratoren können nach Teammitgliedern, E-Mail-Adressen und Lizenzen suchen; andere Benutzer sehen ausschließlich ihre eigene Lizenzsicht."
+msgstr "Bir arama terimi girin. Şirket yöneticileri ekip üyelerini, e-posta adreslerini ve lisansları arayabilir; diğer kullanıcılar yalnızca kendi lisans görünümünü görür."
+
+msgid "Kunde"
+msgstr "Müşteri"
+
+msgid "Pro-Lizenzen noch frei"
+msgstr "Pro lisansı hâlâ boş"
