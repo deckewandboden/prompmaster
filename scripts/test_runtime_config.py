@@ -110,6 +110,14 @@ class RuntimeConfigTests(unittest.TestCase):
         self.assertNotIn('SESSION_COOKIE_SECURE=0', test_block)
         self.assertNotIn('CSRF_COOKIE_SECURE=0', test_block)
 
+    def test_production_deploy_reports_heartbeat_during_long_django_tests(self):
+        deploy = (ROOT / 'scripts' / 'deploy.sh').read_text()
+        self.assertIn('run_with_heartbeat(){', deploy)
+        self.assertIn('PM_DEPLOY_HEARTBEAT_SECONDS:-30', deploy)
+        self.assertIn('run_with_heartbeat "Django-Testlauf"', deploy)
+        self.assertIn('web python manage.py test', deploy)
+        self.assertIn('return "$status"', deploy)
+
     def test_infra_rebrand_cutover_is_fail_closed_and_preserves_volumes(self):
         deploy = (ROOT / 'scripts' / 'deploy.sh').read_text()
         self.assertIn('LEGACY_COMPOSE_PROJECT="promptmaster"', deploy)
