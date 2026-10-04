@@ -209,3 +209,45 @@ msgstr "Yeni parola"
 msgid "Passwort wiederholen"
 msgstr "Parolayı tekrarla"
 
+msgid "Tabellenfilter"
+msgstr "Tablo filtreleri"
+
+msgid "Tabelle durchsuchen"
+msgstr "Tabloda ara"
+
+msgid "Alle"
+msgstr "Tümü"
+
+msgid "Seitengröße"
+msgstr "Sayfa boyutu"
+
+msgid "Spalten"
+msgstr "Sütunlar"
+
+msgid "Anwenden"
+msgstr "Uygula"
+
+msgid "CSV exportieren"
+msgstr "CSV dışa aktar"
+
+msgid "Sortierung zurücksetzen"
+msgstr "Sıralamayı sıfırla"
+
+msgid "Alles zurücksetzen"
+msgstr "Tümünü sıfırla"
+
+msgid "Daten werden geladen …"
+msgstr "Veriler yükleniyor …"
+
+msgid "Aktive Filter"
+msgstr "Etkin filtreler"
+
+msgid "Suche"
+msgstr "Arama"
+
+msgid "Keine Such- oder Filtertreffer."
+msgstr "Arama veya filtre sonucu yok."
+
+msgid "Filter zurücksetzen"
+msgstr "Filtreleri sıfırla"
+
