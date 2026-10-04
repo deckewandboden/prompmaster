@@ -16,6 +16,31 @@ class RuntimeConfigTests(unittest.TestCase):
     def test_current_configuration(self):
         self.assertEqual(validate(self.base, self.production), [])
 
+    def test_promptfinisher_infrastructure_rebrand_preserves_legacy_volumes(self):
+        self.assertEqual(self.base['name'], 'promptfinisher')
+        expected = {
+            'postgres_data': 'promptmaster_postgres_data',
+            'redis_data': 'promptmaster_redis_data',
+            'static_data': 'promptmaster_static_data',
+            'caddy_data': 'promptmaster_caddy_data',
+            'caddy_config': 'promptmaster_caddy_config',
+            'prometheus_data': 'promptmaster_prometheus_data',
+            'backup_status': 'promptmaster_backup_status',
+            'backup_repository': 'promptmaster_backup_repository',
+            'export_data': 'promptmaster_export_data',
+        }
+        for key, physical_name in expected.items():
+            with self.subTest(volume=key):
+                self.assertEqual(self.base['volumes'][key]['name'], physical_name)
+
+    def test_promptfinisher_backup_transition_keeps_legacy_restore_fallback(self):
+        backup = (ROOT / 'backup' / 'backup.sh').read_text()
+        self.assertIn('primary_backup_tag="promptfinisher-db"', backup)
+        self.assertIn('legacy_backup_tag="promptmaster-db"', backup)
+        self.assertIn('restic backup "$dump" --tag "$primary_backup_tag"', backup)
+        self.assertIn('restic restore latest --tag "$legacy_backup_tag"', backup)
+        self.assertIn('promptfinisher-${ts}.dump', backup)
+
     def test_old_postgres_mount_is_rejected(self):
         self.base['services']['postgres']['volumes'] = ['postgres_data:/var/lib/postgresql/data']
         self.assertTrue(validate(self.base, self.production))
