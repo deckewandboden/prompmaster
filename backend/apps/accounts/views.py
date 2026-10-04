@@ -1,6 +1,7 @@
 import secrets
 from urllib.parse import quote, urlencode, urlsplit
 
+from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth import login, logout
 from django.contrib.auth.decorators import login_required
@@ -9,7 +10,8 @@ from django.core import signing
 from django.db import IntegrityError, transaction
 from django.shortcuts import redirect, render
 from django.urls import reverse
-from django.utils import timezone
+from django.utils import timezone, translation
+from django.views.decorators.http import require_POST
 
 from apps.companies.models import Company, Membership, PrivateCustomerProfile
 from apps.core.crypto import decrypt, encrypt
@@ -106,6 +108,32 @@ def _new_recovery_codes(user):
         [RecoveryCode(user=user, code_hash=make_password(code)) for code in codes]
     )
     return codes
+
+
+@require_POST
+def set_ui_language(request):
+    language = (request.POST.get('language') or '').strip().lower()
+    supported = {code for code, _label in settings.LANGUAGES}
+    if language not in supported:
+        language = settings.LANGUAGE_CODE
+
+    if request.user.is_authenticated and request.user.ui_language != language:
+        request.user.ui_language = language
+        request.user.save(update_fields=['ui_language', 'updated_at'])
+
+    translation.activate(language)
+    request.LANGUAGE_CODE = language
+    destination = _safe_next(request, request.POST.get('next')) or '/'
+    response = redirect(destination)
+    response.set_cookie(
+        settings.LANGUAGE_COOKIE_NAME,
+        language,
+        max_age=settings.LANGUAGE_COOKIE_AGE,
+        secure=settings.SESSION_COOKIE_SECURE,
+        httponly=False,
+        samesite='Lax',
+    )
+    return response
 
 
 def login_view(request):
