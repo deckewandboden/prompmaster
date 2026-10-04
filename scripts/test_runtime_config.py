@@ -104,6 +104,26 @@ class RuntimeConfigTests(unittest.TestCase):
         self.assertNotIn('SESSION_COOKIE_SECURE=0', test_block)
         self.assertNotIn('CSRF_COOKIE_SECURE=0', test_block)
 
+    def test_infra_rebrand_cutover_is_fail_closed_and_preserves_volumes(self):
+        deploy = (ROOT / 'scripts' / 'deploy.sh').read_text()
+        self.assertIn('LEGACY_COMPOSE_PROJECT="promptmaster"', deploy)
+        self.assertIn('CURRENT_COMPOSE_PROJECT="promptfinisher"', deploy)
+        self.assertIn('Legacy-Cutover-Backup OK', deploy)
+        self.assertIn('docker compose -p "$LEGACY_COMPOSE_PROJECT" "${F[@]}" down --remove-orphans', deploy)
+        self.assertNotIn('down --remove-orphans -v', deploy)
+        self.assertNotIn('down -v', deploy)
+        self.assertIn('Legacy-PostgreSQL läuft weiterhin; Volume-Doppelzugriff verhindert.', deploy)
+
+        cutover = deploy.index('migrate_legacy_compose_project_if_needed')
+        data_start = deploy.index('log "Datenservices starten"')
+        self.assertLess(cutover, data_start)
+
+    def test_infra_rebrand_refuses_mixed_legacy_and_new_compose_projects(self):
+        deploy = (ROOT / 'scripts' / 'deploy.sh').read_text()
+        self.assertIn('Gemischter Compose-Zustand erkannt', deploy)
+        self.assertIn('label=com.docker.compose.project=${LEGACY_COMPOSE_PROJECT}', deploy)
+        self.assertIn('label=com.docker.compose.project=${CURRENT_COMPOSE_PROJECT}', deploy)
+
     def test_missing_beat_writable_path_is_rejected(self):
         self.base['services']['beat']['tmpfs'] = []
         self.assertTrue(validate(self.base, self.production))
