@@ -743,9 +743,14 @@ for needle in (
 ):
     if needle not in company_forms:
         fail(f'German customer form label missing: {needle}')
-for needle in ("label='Vorname'", "label='Nachname'", "label='E-Mail-Adresse'", "label='Passwort'"):
-    if needle not in account_forms:
-        fail(f'German account form label missing: {needle}')
+for label in ('Vorname', 'Nachname', 'E-Mail-Adresse', 'Passwort'):
+    accepted = (
+        f"label='{label}'",
+        f"label=_('{label}')",
+        f'label=_("{label}")',
+    )
+    if not any(needle in account_forms for needle in accepted):
+        fail(f"German account form label missing: label={label!r}")
 
 for needle in (
     "'container_count': 'count(container_last_seen{image!=\"\"})'",
