@@ -3,6 +3,7 @@ from unittest.mock import patch
 
 from django.contrib.auth import get_user_model
 from django.core.management import call_command
+from django.core.management.base import CommandError
 from django.test import Client, SimpleTestCase, TestCase, override_settings
 from django.utils import timezone
 
@@ -295,6 +296,34 @@ class PromptDomainSeedTests(TestCase):
         version.definition.application.rule = 'NEUE APP-REGEL, DIE ALTE VERSION NICHT VERÄNDERN DARF'
         version.definition.application.save(update_fields=['rule', 'updated_at'])
         self.assertEqual(build_spec('PM20-001')['application']['rule'], original_rule)
+
+    def test_reseed_accepts_verified_promptfinisher_rebrand_provenance(self):
+        old_sha = 'aa7b2da53ba3cbcf9874b9b6f7381ea4c3e86ee1f9c09db186cbec6876a3c9cf'
+        new_sha = 'a18375946c7081034cd6b9d70a1f4e3b843c51e03230477cae246b6c4bf0f95f'
+        version = PromptVersion.objects.get(definition__task_id='PM20-001', version=1)
+        policy = PromptPolicySet.objects.get(name='PM20 Golden Master', version=1)
+        version.source_sha256 = old_sha
+        version.save(update_fields=['source_sha256', 'updated_at'])
+        policy.source_sha256 = old_sha
+        policy.save(update_fields=['source_sha256', 'updated_at'])
+
+        call_command('seed_prompt_catalog', verbosity=0)
+
+        version.refresh_from_db()
+        policy.refresh_from_db()
+        self.assertEqual(version.source_sha256, new_sha)
+        self.assertEqual(policy.source_sha256, new_sha)
+
+    def test_reseed_still_rejects_unknown_prompt_source(self):
+        version = PromptVersion.objects.get(definition__task_id='PM20-001', version=1)
+        version.source_sha256 = 'f' * 64
+        version.save(update_fields=['source_sha256', 'updated_at'])
+
+        with self.assertRaisesMessage(
+            CommandError,
+            'PM20-001 v1 stammt aus anderer Quelle; kein stilles Überschreiben.',
+        ):
+            call_command('seed_prompt_catalog', verbosity=0)
 
     def test_reseed_does_not_reactivate_v1_over_newer_published_version(self):
         definition = PromptDefinition.objects.get(task_id='PM20-001')
