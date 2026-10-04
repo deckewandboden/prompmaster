@@ -83,3 +83,9 @@ docs/ROADMAP_CLOSEOUT_2026-10-01.md	0	text-not-byte-validated	documentation
 backend/apps/core/management/commands/validate_mail_runtime.py	0	text-not-byte-validated	active-backend
 backend/apps/core/management/commands/seed_netstyle_presentation_demo.py	0	text-not-byte-validated	active-backend
 backend/apps/core/tests_netstyle_presentation_demo.py	0	text-not-byte-validated	test
+backend/apps/accounts/migrations/0004_user_ui_language.py	0	text-not-byte-validated	active-backend
+backend/locale/en/LC_MESSAGES/django.po	0	text-not-byte-validated	active-backend
+backend/locale/es/LC_MESSAGES/django.po	0	text-not-byte-validated	active-backend
+backend/locale/pt/LC_MESSAGES/django.po	0	text-not-byte-validated	active-backend
+backend/locale/tr/LC_MESSAGES/django.po	0	text-not-byte-validated	active-backend
+backend/templates/includes/language_switcher.html	0	text-not-byte-validated	active-backend

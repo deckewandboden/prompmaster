@@ -1,18 +1,18 @@
-{% extends 'portal/base.html' %}{% block content %}
-<div class="page-head"><div><h1>Einstellungen</h1><div class="sub">Profil, Adresse, Kontosicherheit und Datenauskunft.</div></div></div>
+{% extends 'portal/base.html' %}{% load i18n %}{% block content %}
+<div class="page-head"><div><h1>{% translate "Einstellungen" %}</h1><div class="sub">{% translate "Profil, Adresse, Kontosicherheit und Datenauskunft." %}</div></div></div>
 <div class="grid two">
-  <div class="card"><h2>Profil</h2><form method="post" class="form">{% csrf_token %}{{ form.as_p }}{% if private_form %}<h3>Adresse</h3>{{ private_form.as_p }}{% endif %}<button class="btn primary" type="submit">Speichern</button></form></div>
-  <div class="card"><h2>Sicherheit</h2><div class="statusrow"><span>E-Mail</span><strong>{{ request.user.email }}</strong></div><div class="statusrow"><span>Zwei-Faktor-Authentifizierung</span>{% if request.user.totp_secret_enc %}<span class="badge ok">Aktiv</span>{% else %}<span class="badge warn">Nicht eingerichtet</span>{% endif %}</div><a class="btn secondary" href="{% url 'portal:security' %}">Sicherheit verwalten</a></div>
+  <div class="card"><h2>{% translate "Profil" %}</h2><form method="post" class="form">{% csrf_token %}{{ form.as_p }}{% if private_form %}<h3>{% translate "Adresse" %}</h3>{{ private_form.as_p }}{% endif %}<button class="btn primary" type="submit">{% translate "Speichern" %}</button></form></div>
+  <div class="card"><h2>{% translate "Sicherheit" %}</h2><div class="statusrow"><span>{% translate "E-Mail" %}</span><strong>{{ request.user.email }}</strong></div><div class="statusrow"><span>{% translate "Zwei-Faktor-Authentifizierung" %}</span>{% if request.user.totp_secret_enc %}<span class="badge ok">Aktiv</span>{% else %}<span class="badge warn">{% translate "Nicht eingerichtet" %}</span>{% endif %}</div><a class="btn secondary" href="{% url 'portal:security' %}">{% translate "Sicherheit verwalten" %}</a></div>
 </div>
-<div class="card mt-14"><h2>Datenauskunft</h2><p class="muted">Exportieren Sie die zu Ihrem Benutzer gespeicherten PROMPTFINISHER-Daten als JSON. Secrets und Daten anderer Benutzer werden nicht exportiert.</p><a class="btn secondary" href="{% url 'portal:privacy_export' %}">Meine Daten exportieren</a></div>
-<div class="card mt-14"><h2>Kontolöschung</h2>
+<div class="card mt-14"><h2>{% translate "Datenauskunft" %}</h2><p class="muted">{% translate "Exportieren Sie die zu Ihrem Benutzer gespeicherten PROMPTFINISHER-Daten als JSON. Secrets und Daten anderer Benutzer werden nicht exportiert." %}</p><a class="btn secondary" href="{% url 'portal:privacy_export' %}">{% translate "Meine Daten exportieren" %}</a></div>
+<div class="card mt-14"><h2>{% translate "Kontolöschung" %}</h2>
 {% if pending_deletion %}
-<p class="muted">Ihre Löschanfrage vom {{ pending_deletion.requested_at }} ist bereits erfasst. Status: {{ pending_deletion.get_status_display }}.</p>
+<p class="muted">{% blocktrans with requested=pending_deletion.requested_at status=pending_deletion.get_status_display %}Ihre Löschanfrage vom {{ requested }} ist bereits erfasst. Status: {{ status }}.{% endblocktrans %}</p>
 {% else %}
-<p class="muted">Sie können die Löschung Ihres PROMPTFINISHER-Kontos anfordern. Gesetzlich erforderliche Geschäfts- und Nachweisdaten werden nur im erforderlichen Umfang weiter aufbewahrt bzw. anonymisiert. Firmenadministratoren müssen ihre Administratorrolle vor der Verarbeitung übertragen.</p>
+<p class="muted">{% translate "Sie können die Löschung Ihres PROMPTFINISHER-Kontos anfordern. Gesetzlich erforderliche Geschäfts- und Nachweisdaten werden nur im erforderlichen Umfang weiter aufbewahrt bzw. anonymisiert. Firmenadministratoren müssen ihre Administratorrolle vor der Verarbeitung übertragen." %}</p>
 <form method="post" action="{% url 'portal:privacy_delete_request' %}" class="form">{% csrf_token %}
-<label><input type="checkbox" name="confirm" value="1" required> Ich möchte die Löschung meines Kontos verbindlich anfordern.</label>
-<button class="btn secondary" type="submit">Kontolöschung anfordern</button>
+<label><input type="checkbox" name="confirm" value="1" required> {% translate "Ich möchte die Löschung meines Kontos verbindlich anfordern." %}</label>
+<button class="btn secondary" type="submit">{% translate "Kontolöschung anfordern" %}</button>
 </form>
 {% endif %}
 </div>

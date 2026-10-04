@@ -50,6 +50,7 @@ MIDDLEWARE = [
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
+    'apps.accounts.middleware.UserLanguagePreferenceMiddleware',
     'apps.accounts.middleware.TwoFactorEnforcementMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
@@ -97,7 +98,17 @@ AUTH_PASSWORD_VALIDATORS = [
     {'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator'},
 ]
 
-LANGUAGE_CODE = 'de-de'
+LANGUAGE_CODE = 'de'
+LANGUAGES = [
+    ('de', 'Deutsch'),
+    ('en', 'English'),
+    ('es', 'Español'),
+    ('pt', 'Português'),
+    ('tr', 'Türkçe'),
+]
+LANGUAGE_COOKIE_NAME = 'promptfinisher_language'
+LANGUAGE_COOKIE_AGE = 365 * 24 * 60 * 60
+LOCALE_PATHS = [BASE_DIR / 'locale']
 TIME_ZONE = 'Europe/Berlin'
 USE_I18N = True
 USE_TZ = True
