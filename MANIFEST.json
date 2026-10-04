@@ -1,10 +1,10 @@
 {
   "project": "PROMPTFINISHER Commercial RC14 Full Repository",
-  "generated_at": "2026-09-15T17:09:08.547879+00:00",
-  "file_count_excluding_manifest_files": 518,
-  "total_bytes_excluding_manifest_files": 20563663,
+  "generated_at": "2026-10-04T12:49:30.026Z",
+  "file_count_excluding_manifest_files": 524,
+  "total_bytes_excluding_manifest_files": 20720195,
   "roles": {
-    "active-backend": 311,
+    "active-backend": 317,
     "active-ci": 1,
     "active-marketing": 99,
     "active-operations": 32,
@@ -35,8 +35,8 @@
     },
     {
       "path": ".github/workflows/ci.yml",
-      "size": 6305,
-      "sha256": "6069fe207e86ee71c73550a76aab66e59b279ce922a77b4190e4f6fed0fbda0a",
+      "size": 11799,
+      "sha256": "a9cfb807a016e492763695c9c0cace49c6cd5d6594dd6181d306a5b2edb8d70d",
       "role": "active-ci"
     },
     {
@@ -275,8 +275,8 @@
     },
     {
       "path": "backend/apps/accounts/forms.py",
-      "size": 3230,
-      "sha256": "46fb507f77a1376418d9dba1248eae7b586b0958baeeccd49d0bde9a1fef4363",
+      "size": 4947,
+      "sha256": "481c26b556bc21d496c6ec8f72ac2e92fa0bf45a6a6212ac56c5bd79b34c84f0",
       "role": "active-backend"
     },
     {
@@ -299,8 +299,8 @@
     },
     {
       "path": "backend/apps/accounts/middleware.py",
-      "size": 2977,
-      "sha256": "fc602a8ab52d2419d27dfc9cc68d5a7b8b73f5795ce1719c67d5c3935abfc463",
+      "size": 6978,
+      "sha256": "0464926b29bed48402fa649598bbd005e31c11380f86e3443700df93e04623a5",
       "role": "active-backend"
     },
     {
@@ -328,9 +328,15 @@
       "role": "active-backend"
     },
     {
+      "path": "backend/apps/accounts/migrations/0004_user_ui_language.py",
+      "size": 357,
+      "sha256": "c3f52ca99b0b97d263a7719ee989425af6374ab5aba87ac8587ff74a94783523",
+      "role": "active-backend"
+    },
+    {
       "path": "backend/apps/accounts/models.py",
-      "size": 2623,
-      "sha256": "78f6480cac68070e3fdd5e89e5c22aa45403ae94d2f20511ce03961d3b1b6b63",
+      "size": 2827,
+      "sha256": "a892d3d157ea1c7e093ce0f318585de11d71b70f1e65f060b8d69211a3c641c4",
       "role": "active-backend"
     },
     {
@@ -353,8 +359,8 @@
     },
     {
       "path": "backend/apps/accounts/tests.py",
-      "size": 356,
-      "sha256": "a3d9928c67add4d28170f4384d066621ddccf692c77c4ce73e8c2eab6b42d1a6",
+      "size": 15174,
+      "sha256": "883a4ed2d15ae983ee10a0e088a69bebb00c24b7473451b6423994875aebf73f",
       "role": "active-backend"
     },
     {
@@ -365,14 +371,14 @@
     },
     {
       "path": "backend/apps/accounts/urls.py",
-      "size": 822,
-      "sha256": "ee957faaef55e00f47be4f3b924f2a7f28c679d58bb0548b22f7467f14e81e50",
+      "size": 993,
+      "sha256": "fdab1b7fdd7483bda1e71f343f0b7d3bec106c8cd54688f7ec2548263cd6d63e",
       "role": "active-backend"
     },
     {
       "path": "backend/apps/accounts/views.py",
-      "size": 17888,
-      "sha256": "22fef67aeeb11f2e849e9aafe0cddef7330312ad29e0512b7cab992b66aae172",
+      "size": 26415,
+      "sha256": "da6ac1b4545505b630c28cff2a795f9d92e18c1992100e339a0c19b01001d890",
       "role": "active-backend"
     },
     {
@@ -1535,8 +1541,8 @@
     },
     {
       "path": "backend/config/settings.py",
-      "size": 8155,
-      "sha256": "8b57aa8b8900f829b1954dcd026f55024765ed7123433ac07fce7a9ef0c9fe79",
+      "size": 9048,
+      "sha256": "d4187e6f5d25532c7578cc7ad0b76f390576a0d0fb45af59e3ef40d4630049ef",
       "role": "active-backend"
     },
     {
@@ -1549,6 +1555,30 @@
       "path": "backend/config/wsgi.py",
       "size": 161,
       "sha256": "25d3ac3de67e7a1e20c9cfed54bf208a378c7e634f426239c36c63cbabc22f36",
+      "role": "active-backend"
+    },
+    {
+      "path": "backend/locale/en/LC_MESSAGES/django.po",
+      "size": 19743,
+      "sha256": "58c279aec3197cbdc0aac70a51df124412392c9a2dc559ed7fea4ffed180c281",
+      "role": "active-backend"
+    },
+    {
+      "path": "backend/locale/es/LC_MESSAGES/django.po",
+      "size": 21047,
+      "sha256": "b40484ececc2d09b000ee99bc7dddb37804f3e5e481c59027656f551c5cd921b",
+      "role": "active-backend"
+    },
+    {
+      "path": "backend/locale/pt/LC_MESSAGES/django.po",
+      "size": 21224,
+      "sha256": "23dd9d2b2b96c490b65b67de57f2134c1183626136ce20d5cf7e764870e41b92",
+      "role": "active-backend"
+    },
+    {
+      "path": "backend/locale/tr/LC_MESSAGES/django.po",
+      "size": 20616,
+      "sha256": "89ca813e7827b4f957b70dffaf19da8b0dd6c51920e35b03a5d4e855576e10f9",
       "role": "active-backend"
     },
     {
@@ -1589,8 +1619,14 @@
     },
     {
       "path": "backend/static/css/app.css",
-      "size": 9727,
-      "sha256": "a0a74b3b25428c383c9c288be594e764e76319b27bfc74f2a7de9e165e4f5c7e",
+      "size": 30453,
+      "sha256": "914bdf811b15866fb71e35cf8e10ac98a58df5988e0809958edd41febd763f87",
+      "role": "active-backend"
+    },
+    {
+      "path": "backend/static/js/app.js",
+      "size": 16912,
+      "sha256": "08fb0f141c2e1a3dc1ca80f21df0b37a661cdf53c7305e107171707471630ff2",
       "role": "active-backend"
     },
     {
@@ -2159,8 +2195,8 @@
     },
     {
       "path": "Dockerfile",
-      "size": 672,
-      "sha256": "f7d131ec42cb4503cba4775915838c477b43e4c8f1727289b8849fde04b11494",
+      "size": 754,
+      "sha256": "ea8c7a133f9ae98d493e05cadbdcffc483d91c198b1d1604af245115d33d3e7a",
       "role": "repository-root"
     },
     {
