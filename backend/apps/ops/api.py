@@ -16,7 +16,7 @@ from .auth import service_account
 from .metrics import caddy_health, celery_worker_status, certificate_status, prometheus_targets, snapshot
 from .models import BeatHeartbeat, RestoreTest, TaskFailure, WorkerHeartbeat
 
-BACKUP_STATUS = Path('/var/run/promptmaster-backup/last-backup.json')
+BACKUP_STATUS = Path('/var/run/promptfinisher-backup/last-backup.json')
 
 
 def _json(payload, status=200):
