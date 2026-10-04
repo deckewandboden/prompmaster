@@ -30,6 +30,11 @@ DATA_DIR = Path(__file__).resolve().parents[2] / 'data'
 CATALOG_FILE = DATA_DIR / 'pm20_golden_logic.json'
 FREE_LEGACY_FILE = DATA_DIR / 'free_legacy_tasks.json'
 
+# Exact one-time provenance transition for the verified product rebrand.
+# The PM20 catalog changed only in branding metadata/text, not task logic.
+PRE_REBRAND_SOURCE_SHA256 = 'aa7b2da53ba3cbcf9874b9b6f7381ea4c3e86ee1f9c09db186cbec6876a3c9cf'
+PROMPTFINISHER_REBRAND_SOURCE_SHA256 = 'a18375946c7081034cd6b9d70a1f4e3b843c51e03230477cae246b6c4bf0f95f'
+
 TIER_NAMES = {
     'chatbasic': 'Copilot Chat',
     'm365basic': 'M365 Copilot (Basic)',
@@ -193,7 +198,14 @@ class Command(BaseCommand):
                     # Same frozen source SHA: repair deterministic seed state,
                     # but never overwrite a version from a different source.
                     if version.source_sha256 != expected_sha:
-                        raise CommandError(f'{task_id} v1 stammt aus anderer Quelle; kein stilles Überschreiben.')
+                        verified_rebrand_transition = (
+                            version.source_sha256 == PRE_REBRAND_SOURCE_SHA256
+                            and expected_sha == PROMPTFINISHER_REBRAND_SOURCE_SHA256
+                        )
+                        if verified_rebrand_transition:
+                            version.source_sha256 = expected_sha
+                        else:
+                            raise CommandError(f'{task_id} v1 stammt aus anderer Quelle; kein stilles Überschreiben.')
                     newer_published_exists = PromptVersion.objects.filter(
                         definition=definition, lifecycle='PUBLISHED'
                     ).exclude(pk=version.pk).exists()
