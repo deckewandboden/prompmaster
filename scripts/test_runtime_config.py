@@ -118,6 +118,13 @@ class RuntimeConfigTests(unittest.TestCase):
         data_start = deploy.index('log "Datenservices starten"')
         self.assertLess(cutover, data_start)
 
+    def test_infra_rebrand_rollback_requires_new_stack_stop_without_volumes(self):
+        deploy = (ROOT / 'scripts' / 'deploy.sh').read_text()
+        self.assertIn('CUTOVER_PERFORMED=1', deploy)
+        self.assertIn('Vor einem Code-Rollback MUSS zuerst der neue PROMPTFINISHER-Stack', deploy)
+        self.assertIn('down --remove-orphans', deploy)
+        self.assertIn('Niemals -v/--volumes verwenden.', deploy)
+
     def test_infra_rebrand_refuses_mixed_legacy_and_new_compose_projects(self):
         deploy = (ROOT / 'scripts' / 'deploy.sh').read_text()
         self.assertIn('Gemischter Compose-Zustand erkannt', deploy)
