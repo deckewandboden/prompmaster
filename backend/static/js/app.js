@@ -279,6 +279,22 @@
   };
 
 
+  const initLanguageSwitcher = () => {
+    document.querySelectorAll('[data-language-switcher]').forEach((container) => {
+      const select = container.querySelector('[data-language-select]');
+      if (!select || select.dataset.languageBound === '1') return;
+      select.dataset.languageBound = '1';
+      select.addEventListener('change', () => {
+        const action = container.dataset.action || '/auth/language/';
+        const target = new URL(action, window.location.origin);
+        target.searchParams.set('language', select.value);
+        target.searchParams.set('next', container.dataset.next || window.location.pathname + window.location.search);
+        window.location.assign(target.pathname + target.search);
+      });
+    });
+  };
+
+
   const initCopyControls = () => {
     document.querySelectorAll('[data-copy-target]').forEach((button) => {
       if (button.dataset.copyBound === '1') return;
@@ -402,6 +418,7 @@
   };
 
   const initUi = () => {
+    initLanguageSwitcher();
     initDataGrids();
     initSortableHeaders();
     initConfirmationDialogs();
