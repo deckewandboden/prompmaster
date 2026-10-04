@@ -76,7 +76,7 @@ http://{$CADDY_DOMAIN} {
     }
 
     handle /catalog.json {
-        reverse_proxy promptmaster-web-internal:8000 {
+        reverse_proxy promptfinisher-web-internal:8000 {
             header_up Host {http.request.host}
             header_up X-Forwarded-Host {http.request.host}
             header_up X-Forwarded-Proto https
@@ -91,7 +91,7 @@ http://{$CADDY_DOMAIN} {
         request_body {
             max_size 64KB
         }
-        reverse_proxy promptmaster-web-internal:8000 {
+        reverse_proxy promptfinisher-web-internal:8000 {
             header_up Host {http.request.host}
             header_up X-Forwarded-Host {http.request.host}
             header_up X-Forwarded-Proto https
@@ -134,7 +134,7 @@ http://{$CADDY_DOMAIN} {
         path /auth /auth/* /free /free/* /free-old /free-old/* /pro /pro/* /pro-old /pro-old/* /portal/* /ns-admin /ns-admin/* /api /api/* /health/* /legal/* /vertrag-widerrufen /vertrag-widerrufen/* /vertraege-kuendigen /vertraege-kuendigen/*
     }
     handle @django {
-        reverse_proxy promptmaster-web-internal:8000 {
+        reverse_proxy promptfinisher-web-internal:8000 {
             header_up Host {http.request.host}
             header_up X-Forwarded-Host {http.request.host}
             header_up X-Forwarded-Proto https
