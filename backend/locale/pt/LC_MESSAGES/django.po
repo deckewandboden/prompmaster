@@ -209,3 +209,45 @@ msgstr "Nova palavra-passe"
 msgid "Passwort wiederholen"
 msgstr "Repetir palavra-passe"
 
+msgid "Tabellenfilter"
+msgstr "Filtros da tabela"
+
+msgid "Tabelle durchsuchen"
+msgstr "Pesquisar na tabela"
+
+msgid "Alle"
+msgstr "Todos"
+
+msgid "Seitengröße"
+msgstr "Tamanho da página"
+
+msgid "Spalten"
+msgstr "Colunas"
+
+msgid "Anwenden"
+msgstr "Aplicar"
+
+msgid "CSV exportieren"
+msgstr "Exportar CSV"
+
+msgid "Sortierung zurücksetzen"
+msgstr "Repor ordenação"
+
+msgid "Alles zurücksetzen"
+msgstr "Repor tudo"
+
+msgid "Daten werden geladen …"
+msgstr "A carregar dados …"
+
+msgid "Aktive Filter"
+msgstr "Filtros ativos"
+
+msgid "Suche"
+msgstr "Pesquisa"
+
+msgid "Keine Such- oder Filtertreffer."
+msgstr "Sem resultados de pesquisa ou filtro."
+
+msgid "Filter zurücksetzen"
+msgstr "Repor filtros"
+
