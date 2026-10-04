@@ -1110,15 +1110,8 @@ for language in ('en', 'es', 'pt', 'tr'):
     po_text = po_path.read_text(encoding='utf-8')
     for msgid in mandatory_translations:
         escaped = msgid.replace('\\', '\\\\').replace('"', '\\"')
-        match = re.search(
-            rf'^msgid "{re.escape(escaped)}"\\nmsgstr "([^"]*)"    print('\n'.join(f'[FAIL] {e}' for e in errors))
-    print(f'\nSTATIC VALIDATION FAILED: {len(errors)} issue(s)')
-    sys.exit(1)
-print('STATIC VALIDATION OK')
-,
-            po_text,
-            flags=re.MULTILINE,
-        )
+        pattern = rf'^msgid "{re.escape(escaped)}"\nmsgstr "([^"]*)"$'
+        match = re.search(pattern, po_text, flags=re.MULTILINE)
         if not match or not match.group(1).strip():
             fail(f'UI locale translation missing: {language} / {msgid}')
 
