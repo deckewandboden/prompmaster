@@ -17,7 +17,7 @@
     </select>
   </label>
   <noscript>
-    <span class="language-links">
+    <span>
       {% for code,name in available_languages %}
         <a href="{% url 'accounts:set_ui_language' %}?language={{ code|urlencode }}&next={{ request.get_full_path|urlencode }}">{{ name }}</a>{% if not forloop.last %} · {% endif %}
       {% endfor %}
