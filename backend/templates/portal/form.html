@@ -1,4 +1,4 @@
-{% extends 'portal/base.html' %}{% block content %}
-<div class="page-head"><div><h1>{{ title }}</h1><div class="sub">Änderungen werden erst nach erfolgreicher Validierung gespeichert.</div></div></div>
-<div class="card form-card"><form method="post" class="form">{% csrf_token %}{{ form.as_p }}<div class="form-actions"><button class="btn primary" type="submit">Speichern</button></div></form></div>
+{% extends 'portal/base.html' %}{% load i18n %}{% block content %}
+<div class="page-head"><div><h1>{{ title }}</h1><div class="sub">{% translate "Änderungen werden erst nach erfolgreicher Validierung gespeichert." %}</div></div></div>
+<div class="card form-card"><form method="post" class="form">{% csrf_token %}{{ form.as_p }}<div class="form-actions"><button class="btn primary" type="submit">{% translate "Speichern" %}</button></div></form></div>
 {% endblock %}

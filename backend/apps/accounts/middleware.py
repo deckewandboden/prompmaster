@@ -5,7 +5,7 @@ from django.contrib.auth import logout
 from django.core.exceptions import PermissionDenied
 from django.shortcuts import redirect
 from django.urls import Resolver404, resolve, reverse
-from django.utils import timezone
+from django.utils import timezone, translation
 
 from apps.core.security import check_rate
 from apps.core.sensitive import (
@@ -13,6 +13,23 @@ from apps.core.sensitive import (
     safe_internal_return_url,
     sensitive_reauth_is_fresh,
 )
+
+
+class UserLanguagePreferenceMiddleware:
+    """Apply a persisted authenticated UI language after AuthenticationMiddleware."""
+
+    def __init__(self, get_response):
+        self.get_response = get_response
+
+    def __call__(self, request):
+        user = getattr(request, 'user', None)
+        language = getattr(user, 'ui_language', '') if getattr(user, 'is_authenticated', False) else ''
+        supported = {code for code, _label in settings.LANGUAGES}
+        if language in supported:
+            translation.activate(language)
+            request.LANGUAGE_CODE = language
+        response = self.get_response(request)
+        return response
 
 
 class TwoFactorEnforcementMiddleware:
