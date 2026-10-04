@@ -406,3 +406,216 @@ msgstr "kayıtlı"
 
 msgid "Änderungen werden erst nach erfolgreicher Validierung gespeichert."
 msgstr "Değişiklikler yalnızca başarılı doğrulamadan sonra kaydedilir."
+
+msgid "+ Lizenz kaufen"
+msgstr "+ Lisans satın al"
+
+msgid "Ablauf"
+msgstr "Sona erme"
+
+msgid "Adresse"
+msgstr "Adres"
+
+msgid "Aktion"
+msgstr "İşlem"
+
+msgid "Aktive Geräte"
+msgstr "Aktif cihazlar"
+
+msgid "Automatischer Kontext"
+msgstr "Otomatik bağlam"
+
+msgid "Barrierefreiheit"
+msgstr "Erişilebilirlik"
+
+msgid "Benutzer"
+msgstr "Kullanıcı"
+
+msgid "Bestellung"
+msgstr "Sipariş"
+
+msgid "Betrag"
+msgstr "Tutar"
+
+msgid "Betreff"
+msgstr "Konu"
+
+msgid "Browser"
+msgstr "Tarayıcı"
+
+msgid "Datenauskunft"
+msgstr "Veri erişimi"
+
+msgid "Datum"
+msgstr "Tarih"
+
+msgid "Direkter Kontakt zu netstyle und Verlauf Ihrer Anfragen."
+msgstr "netstyle ile doğrudan iletişim ve taleplerinizin geçmişi."
+
+msgid "Einladungen"
+msgstr "Davetler"
+
+msgid "Einladungen sind 24 Stunden gültig und einmal verwendbar."
+msgstr "Davetler 24 saat geçerlidir ve yalnızca bir kez kullanılabilir."
+
+msgid "Frei"
+msgstr "Boş"
+
+msgid "Gerät"
+msgstr "Cihaz"
+
+msgid "Gültig ab"
+msgstr "Başlangıç tarihi"
+
+msgid "Gültig bis"
+msgstr "Geçerlilik sonu"
+
+msgid "Impressum"
+msgstr "Yasal bildirim"
+
+msgid "Jeder Seat läuft mit individueller Laufzeit."
+msgstr "Her kullanıcı lisansının kendine ait bir süresi vardır."
+
+msgid "Kategorie"
+msgstr "Kategori"
+
+msgid "Keine Bestellungen."
+msgstr "Sipariş yok."
+
+msgid "Keine Einladungen."
+msgstr "Davet yok."
+
+msgid "Keine Lizenzen."
+msgstr "Lisans yok."
+
+msgid "Keine aktiven Geräte."
+msgstr "Aktif cihaz yok."
+
+msgid "Kontaktformular"
+msgstr "İletişim formu"
+
+msgid "Konto & Hilfe"
+msgstr "Hesap ve yardım"
+
+msgid "Kontolöschung"
+msgstr "Hesap silme"
+
+msgid "Kontolöschung anfordern"
+msgstr "Hesap silme talep et"
+
+msgid "Laufzeit"
+msgstr "Süre"
+
+msgid "Lizenz"
+msgstr "Lisans"
+
+msgid "Lizenz-ID"
+msgstr "Lisans kimliği"
+
+msgid "Lizenzdaten"
+msgstr "Lisans bilgileri"
+
+msgid "Meine Daten exportieren"
+msgstr "Verilerimi dışa aktar"
+
+msgid "Mollie übernimmt die Zahlungsabwicklung; PROMPTFINISHER erzeugt keine eigene Rechnungsengine."
+msgstr "Ödeme işlemlerini Mollie yürütür; PROMPTFINISHER kendi faturalama motorunu kullanmaz."
+
+msgid "Mollie-Referenz"
+msgstr "Mollie referansı"
+
+msgid "Nachricht senden"
+msgstr "Mesaj gönder"
+
+msgid "Name"
+msgstr "Ad"
+
+msgid "Neu senden"
+msgstr "Yeniden gönder"
+
+msgid "Nicht eingerichtet"
+msgstr "Yapılandırılmadı"
+
+msgid "Noch keine Anfragen vorhanden."
+msgstr "Henüz talep yok."
+
+msgid "Noch keine Reminder für den aktuellen Ablaufzeitpunkt."
+msgstr "Mevcut sona erme tarihi için henüz hatırlatıcı yok."
+
+msgid "PROMPTFINISHER Pro öffnen"
+msgstr "PROMPTFINISHER Pro'yu aç"
+
+msgid "Produkt"
+msgstr "Ürün"
+
+msgid "Produkt / Menge"
+msgstr "Ürün / adet"
+
+msgid "Profil"
+msgstr "Profil"
+
+msgid "Profil, Adresse, Kontosicherheit und Datenauskunft."
+msgstr "Profil, adres, hesap güvenliği ve veri erişimi."
+
+msgid "Rechtliches"
+msgstr "Yasal"
+
+msgid "Reminder"
+msgstr "Hatırlatıcı"
+
+msgid "Resttage"
+msgstr "Kalan gün"
+
+msgid "Sicherheit"
+msgstr "Güvenlik"
+
+msgid "Sicherheit verwalten"
+msgstr "Güvenliği yönet"
+
+msgid "Status"
+msgstr "Durum"
+
+msgid "Supporthistorie"
+msgstr "Destek geçmişi"
+
+msgid "Verbraucherrechte"
+msgstr "Tüketici hakları"
+
+msgid "Vertrag widerrufen"
+msgstr "Sözleşmeden cay"
+
+msgid "Verträge hier kündigen"
+msgstr "Sözleşmeleri burada feshet"
+
+msgid "Verwaltung & Abrechnung"
+msgstr "Yönetim ve faturalama"
+
+msgid "Weitere Bereiche Ihres Kundenportals."
+msgstr "Müşteri portalınızın diğer alanları."
+
+msgid "Widerrufsbelehrung"
+msgstr "Cayma bilgileri"
+
+msgid "Zahlung"
+msgstr "Ödeme"
+
+msgid "Zugewiesen"
+msgstr "Atanmış"
+
+msgid "Zuletzt gesehen"
+msgstr "Son görülme"
+
+msgid "Zurück"
+msgstr "Geri"
+
+msgid "Zuweisung"
+msgstr "Atama"
+
+msgid "Zwei-Faktor-Authentifizierung"
+msgstr "İki faktörlü kimlik doğrulama"
+
+msgid "Öffnen"
+msgstr "Aç"
+
+msgid "≤30 Tage"
+msgstr "≤30 gün"
