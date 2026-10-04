@@ -1,0 +1,211 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: PROMPTFINISHER\n"
+"Language: pt\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+msgid "Sprache auswählen"
+msgstr "Selecionar idioma"
+
+msgid "Sprache"
+msgstr "Idioma"
+
+msgid "Suchen …"
+msgstr "Pesquisar …"
+
+msgid "Suchen"
+msgstr "Pesquisar"
+
+msgid "Lead, Kunde, Benutzer, Lizenz-ID oder E-Mail suchen …"
+msgstr "Pesquisar lead, cliente, utilizador, ID de licença ou e-mail …"
+
+msgid "Superadmin"
+msgstr "Superadministrador"
+
+msgid "netstyle Benutzer"
+msgstr "Utilizador netstyle"
+
+msgid "netstyle Admin-Backend"
+msgstr "Administração netstyle"
+
+msgid "Übersicht"
+msgstr "Visão geral"
+
+msgid "Leads"
+msgstr "Leads"
+
+msgid "Kunden"
+msgstr "Clientes"
+
+msgid "Lizenzen"
+msgstr "Licenças"
+
+msgid "Bestellungen"
+msgstr "Encomendas"
+
+msgid "Zahlungen"
+msgstr "Pagamentos"
+
+msgid "Produkte & Preise"
+msgstr "Produtos e preços"
+
+msgid "Prompt Studio"
+msgstr "Prompt Studio"
+
+msgid "FAQ & Inhalte"
+msgstr "FAQ e conteúdos"
+
+msgid "E-Mail"
+msgstr "E-mail"
+
+msgid "Mollie"
+msgstr "Mollie"
+
+msgid "Statistiken"
+msgstr "Estatísticas"
+
+msgid "System & Betrieb"
+msgstr "Sistema e operação"
+
+msgid "API & Integrationen"
+msgstr "API e integrações"
+
+msgid "Datenschutz & Recht"
+msgstr "Privacidade e legal"
+
+msgid "Kontaktanfragen"
+msgstr "Pedidos de contacto"
+
+msgid "Protokolle"
+msgstr "Registos"
+
+msgid "Benutzer & Rollen"
+msgstr "Utilizadores e funções"
+
+msgid "Einstellungen"
+msgstr "Definições"
+
+msgid "Abmelden"
+msgstr "Terminar sessão"
+
+msgid "Home"
+msgstr "Início"
+
+msgid "System"
+msgstr "Sistema"
+
+msgid "Logs"
+msgstr "Registos"
+
+msgid "Mehr"
+msgstr "Mais"
+
+msgid "Kundenportal"
+msgstr "Portal do cliente"
+
+msgid "KUNDENPORTAL"
+msgstr "PORTAL DO CLIENTE"
+
+msgid "Benutzer, E-Mail oder Lizenz suchen …"
+msgstr "Pesquisar utilizador, e-mail ou licença …"
+
+msgid "Lizenz suchen …"
+msgstr "Pesquisar licença …"
+
+msgid "Privatkunde"
+msgstr "Cliente particular"
+
+msgid "Dashboard"
+msgstr "Painel"
+
+msgid "Mein Team"
+msgstr "A minha equipa"
+
+msgid "Weitere Lizenzen kaufen"
+msgstr "Comprar mais licenças"
+
+msgid "Geräte"
+msgstr "Dispositivos"
+
+msgid "Bestellungen & Zahlungen"
+msgstr "Encomendas e pagamentos"
+
+msgid "Unternehmen"
+msgstr "Empresa"
+
+msgid "Hilfe & Kontakt"
+msgstr "Ajuda e contacto"
+
+msgid "Team"
+msgstr "Equipa"
+
+msgid "Anmelden"
+msgstr "Iniciar sessão"
+
+msgid "Ein Zugang für PROMPTFINISHER, Kundenportal und netstyle Admin"
+msgstr "Uma conta para PROMPTFINISHER, portal do cliente e administração netstyle"
+
+msgid "Noch kein Konto? Konto erstellen"
+msgstr "Ainda não tem conta? Criar conta"
+
+msgid "Passwort vergessen?"
+msgstr "Esqueceu a palavra-passe?"
+
+msgid "Konto anlegen"
+msgstr "Criar conta"
+
+msgid "Registrieren"
+msgstr "Registar"
+
+msgid "Unternehmensadministratoren richten anschließend verpflichtend 2FA ein."
+msgstr "Os administradores da empresa têm de configurar 2FA em seguida."
+
+msgid "Bereits registriert?"
+msgstr "Já está registado?"
+
+msgid "Zur Anmeldung"
+msgstr "Ir para iniciar sessão"
+
+msgid "E-Mail-Adresse"
+msgstr "Endereço de e-mail"
+
+msgid "Passwort"
+msgstr "Palavra-passe"
+
+msgid "Bestätigungscode"
+msgstr "Código de confirmação"
+
+msgid "Kundentyp"
+msgstr "Tipo de cliente"
+
+msgid "Privat"
+msgstr "Particular"
+
+msgid "Vorname"
+msgstr "Nome próprio"
+
+msgid "Nachname"
+msgstr "Apelido"
+
+msgid "Firmenname"
+msgstr "Nome da empresa"
+
+msgid "AGB gelesen und akzeptiert"
+msgstr "Termos lidos e aceites"
+
+msgid "Datenschutzerklärung zur Kenntnis genommen"
+msgstr "Política de privacidade reconhecida"
+
+msgid "Passwort zur Bestätigung"
+msgstr "Palavra-passe para confirmação"
+
+msgid "Administratorübertragung verbindlich bestätigen"
+msgstr "Confirmar transferência de administrador"
+
+msgid "Neues Passwort"
+msgstr "Nova palavra-passe"
+
+msgid "Passwort wiederholen"
+msgstr "Repetir palavra-passe"
+
