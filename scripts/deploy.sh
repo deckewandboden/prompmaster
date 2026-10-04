@@ -137,7 +137,7 @@ docker compose "${F[@]}" run --rm \
 log "Pre-Migration-Backup erstellen"
 docker compose "${F[@]}" stop backup >/dev/null 2>&1 || true
 docker compose "${F[@]}" run --rm -e BACKUP_ONCE=1 backup
-docker compose "${F[@]}" run --rm --no-deps web sh -c 'cat /var/run/promptmaster-backup/last-backup.json' > "$BACKUP_STATUS_FILE"
+docker compose "${F[@]}" run --rm --no-deps web sh -c 'cat /var/run/promptfinisher-backup/last-backup.json' > "$BACKUP_STATUS_FILE"
 python3 - "$BACKUP_STATUS_FILE" <<'PY'
 import json, pathlib, sys
 p = pathlib.Path(sys.argv[1])
