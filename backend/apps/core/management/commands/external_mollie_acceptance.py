@@ -11,6 +11,7 @@ from django.test import Client
 from django.utils import timezone
 
 from apps.companies.models import Membership
+from apps.core.settings_store import get_setting
 from apps.payments.mollie import MollieClient
 from apps.payments.models import MollieEvent, Payment
 from apps.payments.services import create_refund_request, submit_refund
@@ -24,7 +25,7 @@ class Command(BaseCommand):
     help = 'Run staged acceptance against Mollie test mode using PROMPTFINISHER production code paths.'
 
     def add_arguments(self, parser):
-        parser.add_argument('action', choices=['start', 'verify', 'refund'])
+        parser.add_argument('action', choices=['start', 'verify', 'refund', 'probe-live'])
         parser.add_argument('--user-email')
         parser.add_argument('--payment-id')
         parser.add_argument('--base-url')
@@ -44,13 +45,53 @@ class Command(BaseCommand):
         return client
 
     def handle(self, *args, **options):
-        client = self._client()
         action = options['action']
+        if action == 'probe-live':
+            return self._probe_live()
+        client = self._client()
         if action == 'start':
             return self._start(client, options)
         if action == 'verify':
             return self._verify(client, options)
         return self._refund(options)
+
+    def _probe_live(self):
+        client = MollieClient()
+        if not client.key:
+            raise CommandError('Mollie API key is not configured in runtime settings or .env.')
+        if not client.key.startswith('live_'):
+            raise CommandError('Mollie live probe requires the effective live_ API key.')
+
+        expected_profile = str(
+            get_setting('mollie_profile_id', settings.MOLLIE_PROFILE_ID) or ''
+        ).strip()
+        if not expected_profile:
+            raise CommandError('Mollie profile ID is not configured.')
+
+        profile = client.get_current_profile()
+        if not isinstance(profile, dict):
+            raise CommandError('Mollie returned an invalid current profile payload.')
+        if str(profile.get('resource') or '') != 'profile':
+            raise CommandError('Mollie current profile payload has an unexpected resource type.')
+        mode = str(profile.get('mode') or '').strip().lower()
+        if mode != 'live':
+            raise CommandError(
+                f'Mollie current profile must be live, got {mode or "missing"!r}.'
+            )
+        actual_profile = str(profile.get('id') or '').strip()
+        if actual_profile != expected_profile:
+            raise CommandError(
+                f'Mollie runtime profile mismatch: configured {expected_profile!r}, '
+                f'provider returned {actual_profile or "missing"!r}.'
+            )
+
+        self.stdout.write(json.dumps({
+            'status': 'ok',
+            'mode': mode,
+            'profile_id': actual_profile,
+            'profile_name': str(profile.get('name') or ''),
+            'check': 'read-only current profile',
+        }, sort_keys=True))
 
     def _base_url(self, options):
         raw = (options.get('base_url') or '').strip()
