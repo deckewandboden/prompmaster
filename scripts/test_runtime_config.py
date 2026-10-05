@@ -139,12 +139,11 @@ class RuntimeConfigTests(unittest.TestCase):
     def test_standard_production_validation_keeps_go_live_dependencies_as_warnings(self):
         self.assertEqual(self._run_env_validator(self._production_env_text()), 0)
 
-    def test_strict_go_live_validation_rejects_missing_mollie_and_local_only_backup(self):
+    def test_strict_go_live_validation_rejects_local_only_backup(self):
         self.assertEqual(self._run_env_validator(self._production_env_text(), require_go_live=True), 1)
 
-    def test_strict_go_live_validation_accepts_live_mollie_and_external_tls_s3_config(self):
+    def test_strict_go_live_validation_accepts_external_tls_s3_without_forcing_env_mollie_secret(self):
         text = self._production_env_text(
-            mollie='live_runtime_acceptance_key',
             repository='s3:https://s3.test.net/promptfinisher',
             aws_key='AKIA_PROMPTFINISHER_TEST',
             aws_secret='external-backup-secret-value',
