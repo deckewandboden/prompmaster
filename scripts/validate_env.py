@@ -88,7 +88,7 @@ def main() -> int:
     ap.add_argument(
         '--require-go-live',
         action='store_true',
-        help='Production only: treat missing live payments and off-host backup as hard go-live failures.',
+        help='Production only: require an external TLS-S3 backup target; Mollie live runtime is checked separately.',
     )
     args = ap.parse_args()
     path = Path(args.env_file)
@@ -157,11 +157,10 @@ def main() -> int:
         if mollie and not mollie.startswith('live_'):
             fail(errors, 'Wenn MOLLIE_API_KEY gesetzt ist, muss er in Produktion ein Mollie-Live-Key (live_…) sein.')
         elif not mollie:
-            message = 'MOLLIE_API_KEY ist nicht gesetzt; Mollie-Zahlungen sind bis zur Provider-Konfiguration nicht verfügbar.'
-            if args.require_go_live:
-                fail(errors, message)
-            else:
-                warnings.append(message)
+            warnings.append(
+                'MOLLIE_API_KEY ist nicht in .env gesetzt; der wirksame Mollie-Schlüssel kann '
+                'verschlüsselt in den Runtime-Einstellungen liegen und muss separat geprüft werden.'
+            )
 
         repo = values.get('RESTIC_REPOSITORY', '').strip()
         if is_placeholder(repo):
