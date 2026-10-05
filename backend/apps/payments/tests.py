@@ -1,8 +1,11 @@
 from datetime import timedelta
 from decimal import Decimal
+from io import StringIO
 from types import SimpleNamespace
 from unittest.mock import patch
 
+from django.core.management import call_command
+from django.core.management.base import CommandError
 from django.test import SimpleTestCase, TestCase
 from django.utils import timezone
 
@@ -11,6 +14,7 @@ from apps.catalog.models import Product, ProductPrice
 from apps.licenses.models import License, LicenseTerm
 from apps.orders.models import Order, OrderItem
 
+from .mollie import MollieClient
 from .models import MollieEvent, Payment
 from .services import calculate_refund, process_provider_state
 
@@ -37,6 +41,74 @@ class RefundMathTests(SimpleTestCase):
         days, amount = calculate_refund(term, now=now)
         self.assertEqual(days, 100)
         self.assertEqual(amount, Decimal('9.83'))
+
+
+class MollieLiveProbeTests(SimpleTestCase):
+    def test_current_profile_uses_read_only_profiles_me_endpoint(self):
+        client = MollieClient(key='live_probe_key')
+        payload = {'resource': 'profile', 'id': 'pfl_probe', 'mode': 'live'}
+        with patch.object(client, '_request', return_value=payload) as request:
+            self.assertEqual(client.get_current_profile(), payload)
+        request.assert_called_once_with('GET', '/profiles/me')
+
+    def test_live_probe_accepts_matching_runtime_profile_without_exposing_key(self):
+        fake = SimpleNamespace(
+            key='live_runtime_secret',
+            get_current_profile=lambda: {
+                'resource': 'profile',
+                'id': 'pfl_runtime',
+                'mode': 'live',
+                'name': 'PROMPTFINISHER',
+            },
+        )
+        out = StringIO()
+        with (
+            patch(
+                'apps.core.management.commands.external_mollie_acceptance.MollieClient',
+                return_value=fake,
+            ),
+            patch(
+                'apps.core.management.commands.external_mollie_acceptance.get_setting',
+                return_value='pfl_runtime',
+            ),
+        ):
+            call_command('external_mollie_acceptance', 'probe-live', stdout=out)
+
+        rendered = out.getvalue()
+        self.assertIn('"status": "ok"', rendered)
+        self.assertIn('"profile_id": "pfl_runtime"', rendered)
+        self.assertNotIn(fake.key, rendered)
+
+    def test_live_probe_refuses_test_key(self):
+        fake = SimpleNamespace(key='test_runtime_secret')
+        with patch(
+            'apps.core.management.commands.external_mollie_acceptance.MollieClient',
+            return_value=fake,
+        ):
+            with self.assertRaisesMessage(CommandError, 'requires the effective live_ API key'):
+                call_command('external_mollie_acceptance', 'probe-live')
+
+    def test_live_probe_rejects_profile_mismatch(self):
+        fake = SimpleNamespace(
+            key='live_runtime_secret',
+            get_current_profile=lambda: {
+                'resource': 'profile',
+                'id': 'pfl_provider',
+                'mode': 'live',
+            },
+        )
+        with (
+            patch(
+                'apps.core.management.commands.external_mollie_acceptance.MollieClient',
+                return_value=fake,
+            ),
+            patch(
+                'apps.core.management.commands.external_mollie_acceptance.get_setting',
+                return_value='pfl_configured',
+            ),
+        ):
+            with self.assertRaisesMessage(CommandError, 'runtime profile mismatch'):
+                call_command('external_mollie_acceptance', 'probe-live')
 
 
 class MollieStateIntegrationTests(TestCase):
