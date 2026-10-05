@@ -1,11 +1,15 @@
 """Regression tests for invalid runtime configurations, without Docker."""
+import base64
 import copy
+import sys
+import tempfile
 import unittest
+from unittest.mock import patch
 
 import yaml
 
 from validate_runtime_config import ROOT, validate, validate_legacy_volume_overlay
-from validate_env import is_external_s3_repository, is_local_restic_repository, normalize_mail_provider
+from validate_env import is_external_s3_repository, is_local_restic_repository, main as validate_env_main, normalize_mail_provider
 
 
 class RuntimeConfigTests(unittest.TestCase):
@@ -97,6 +101,56 @@ class RuntimeConfigTests(unittest.TestCase):
         ):
             with self.subTest(value=value):
                 self.assertFalse(is_external_s3_repository(value))
+
+    def _production_env_text(self, *, mollie='', repository='/repository', aws_key='', aws_secret='', region=''):
+        fernet = base64.urlsafe_b64encode(b'x' * 32).decode('ascii')
+        return '\n'.join([
+            'ENVIRONMENT=production',
+            'CADDY_DOMAIN=promptfinisher.test.net',
+            'DJANGO_SECRET_KEY=' + ('s' * 48),
+            'POSTGRES_PASSWORD=' + ('p' * 24),
+            'APP_ENCRYPTION_KEY=' + fernet,
+            'SESSION_COOKIE_SECURE=1',
+            'CSRF_COOKIE_SECURE=1',
+            'SECURE_SSL_REDIRECT=1',
+            'ALLOWED_HOSTS=promptfinisher.test.net',
+            'CSRF_TRUSTED_ORIGINS=https://promptfinisher.test.net',
+            'NETSTYLE_VAT_ID=DE815319970',
+            'EMAIL_PROVIDER=smtp1',
+            'MOLLIE_API_KEY=' + mollie,
+            'RESTIC_REPOSITORY=' + repository,
+            'RESTIC_PASSWORD=' + ('r' * 24),
+            'AWS_ACCESS_KEY_ID=' + aws_key,
+            'AWS_SECRET_ACCESS_KEY=' + aws_secret,
+            'AWS_DEFAULT_REGION=' + region,
+            'INITIAL_ADMIN_PASSWORD=DISABLED',
+        ]) + '\n'
+
+    def _run_env_validator(self, text, *, require_go_live=False):
+        with tempfile.NamedTemporaryFile('w', encoding='utf-8', delete=True) as handle:
+            handle.write(text)
+            handle.flush()
+            argv = ['validate_env.py', '--environment', 'production', '--env-file', handle.name]
+            if require_go_live:
+                argv.append('--require-go-live')
+            with patch.object(sys, 'argv', argv):
+                return validate_env_main()
+
+    def test_standard_production_validation_keeps_go_live_dependencies_as_warnings(self):
+        self.assertEqual(self._run_env_validator(self._production_env_text()), 0)
+
+    def test_strict_go_live_validation_rejects_missing_mollie_and_local_only_backup(self):
+        self.assertEqual(self._run_env_validator(self._production_env_text(), require_go_live=True), 1)
+
+    def test_strict_go_live_validation_accepts_live_mollie_and_external_tls_s3_config(self):
+        text = self._production_env_text(
+            mollie='live_runtime_acceptance_key',
+            repository='s3:https://s3.test.net/promptfinisher',
+            aws_key='AKIA_PROMPTFINISHER_TEST',
+            aws_secret='external-backup-secret-value',
+            region='eu-central-1',
+        )
+        self.assertEqual(self._run_env_validator(text, require_go_live=True), 0)
 
     def test_production_deploy_tests_disable_only_ssl_redirect_for_test_container(self):
         deploy = (ROOT / 'scripts' / 'deploy.sh').read_text()
