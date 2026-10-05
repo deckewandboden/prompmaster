@@ -85,6 +85,11 @@ def main() -> int:
     ap = argparse.ArgumentParser()
     ap.add_argument('--environment', choices=('staging', 'production'), required=True)
     ap.add_argument('--env-file', default=str(ENV_FILE))
+    ap.add_argument(
+        '--require-go-live',
+        action='store_true',
+        help='Production only: treat missing live payments and off-host backup as hard go-live failures.',
+    )
     args = ap.parse_args()
     path = Path(args.env_file)
     values = parse_env(path)
@@ -152,9 +157,11 @@ def main() -> int:
         if mollie and not mollie.startswith('live_'):
             fail(errors, 'Wenn MOLLIE_API_KEY gesetzt ist, muss er in Produktion ein Mollie-Live-Key (live_…) sein.')
         elif not mollie:
-            warnings.append(
-                'MOLLIE_API_KEY ist nicht gesetzt; Mollie-Zahlungen sind bis zur Provider-Konfiguration nicht verfügbar.'
-            )
+            message = 'MOLLIE_API_KEY ist nicht gesetzt; Mollie-Zahlungen sind bis zur Provider-Konfiguration nicht verfügbar.'
+            if args.require_go_live:
+                fail(errors, message)
+            else:
+                warnings.append(message)
 
         repo = values.get('RESTIC_REPOSITORY', '').strip()
         if is_placeholder(repo):
@@ -164,14 +171,22 @@ def main() -> int:
                 '(s3:https://host/bucket bzw. s3:s3.<region>.amazonaws.com/bucket).',
             )
         elif is_local_restic_repository(repo):
-            warnings.append(
+            message = (
                 'RESTIC_REPOSITORY=/repository verwendet nur das persistente lokale Docker-Volume; '
                 'ein externes Off-Host-Backup bleibt ein separates Go-Live-/Disaster-Recovery-Gate.'
             )
+            if args.require_go_live:
+                fail(errors, message)
+            else:
+                warnings.append(message)
         elif is_external_s3_repository(repo):
             for key in ('AWS_ACCESS_KEY_ID', 'AWS_SECRET_ACCESS_KEY'):
                 if is_placeholder(values.get(key, '')):
                     fail(errors, f'{key} muss für ein externes S3-Production-Backup gesetzt sein.')
+            if args.require_go_live:
+                region = values.get('AWS_DEFAULT_REGION', '').strip() or values.get('S3_REGION', '').strip()
+                if is_placeholder(region):
+                    fail(errors, 'AWS_DEFAULT_REGION oder S3_REGION muss für das externe Production-Backup gesetzt sein.')
         else:
             fail(
                 errors,
@@ -191,6 +206,9 @@ def main() -> int:
         admin_password = values.get('INITIAL_ADMIN_PASSWORD', '')
         if is_placeholder(admin_password) or len(admin_password) < 12:
             fail(errors, 'INITIAL_ADMIN_PASSWORD muss im Staging mindestens 12 Zeichen lang und kein Platzhalter sein.')
+
+    if args.require_go_live and expected != 'production':
+        fail(errors, '--require-go-live darf nur zusammen mit --environment production verwendet werden.')
 
     if errors:
         for item in errors:
