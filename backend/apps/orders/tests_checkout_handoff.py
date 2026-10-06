@@ -473,6 +473,8 @@ class PublicCheckoutFlowTests(TestCase):
         self.assertEqual(Order.objects.filter(private_user=user).count(), 1)
 
     def test_checkout_csrf_endpoint_supports_http_only_cookie_flow(self):
+        IntegrationSecret.objects.filter(code='mollie_api_key').delete()
+        set_setting('mollie_profile_id', '')
         client = self.client_class(enforce_csrf_checks=True)
         token_response = client.get('/api/v1/checkout/csrf/')
         self.assertEqual(token_response.status_code, 200)
