@@ -747,12 +747,66 @@ def _record_refund_attempt_error(refund_id, attempt_id, exc):
 
 def submit_refund(refund):
     row, attempt = _prepare_refund_attempt(refund.pk)
+    client = MollieClient()
 
     # Once Mollie returned a provider refund ID, never POST the refund again.
     # Reconcile the existing provider object instead.
     if attempt.provider_refund_id or row.provider_refund_id:
         reconcile_refunds(row.payment)
         return Refund.objects.get(pk=row.pk)
+
+    response = None
+    if attempt.status == 'ambiguous':
+        provider_payload = client.list_refunds(row.payment.provider_payment_id)
+        provider_rows = (
+            (provider_payload.get('_embedded') or {}).get('refunds') or []
+        )
+        matches = []
+        for provider_row in provider_rows:
+            metadata = provider_row.get('metadata') or {}
+            if not isinstance(metadata, dict):
+                continue
+            if (
+                str(metadata.get('promptfinisher_refund_id') or '') == str(row.id)
+                and str(metadata.get('promptfinisher_attempt_id') or '')
+                == str(attempt.id)
+            ):
+                matches.append(provider_row)
+        if len(matches) > 1:
+            raise ValidationError(
+                'Mollie meldet mehrere Erstattungen für denselben lokalen Versuch. '
+                'Automatische Wiederholung wurde gestoppt.'
+            )
+        if matches:
+            response = matches[0]
+            linked_payment = str(response.get('paymentId') or '')
+            if (
+                linked_payment
+                and linked_payment != row.payment.provider_payment_id
+            ):
+                raise ValidationError(
+                    'Der gefundene Mollie-Refund gehört nicht zur erwarteten Zahlung.'
+                )
+            amount_data = response.get('amount') or {}
+            try:
+                provider_amount = Decimal(
+                    str(amount_data.get('value'))
+                ).quantize(CENT)
+            except Exception as exc:
+                raise ValidationError(
+                    'Mollie meldet einen ungültigen Refund-Betrag.'
+                ) from exc
+            provider_currency = str(
+                amount_data.get('currency') or ''
+            ).upper()
+            if (
+                provider_amount != attempt.amount.quantize(CENT)
+                or provider_currency != row.payment.currency.upper()
+            ):
+                raise ValidationError(
+                    'Der gefundene Mollie-Refund stimmt nicht mit Betrag/Währung '
+                    'des lokalen Refund-Versuchs überein.'
+                )
 
     # Mollie only guarantees Idempotency-Key replay for one hour. Retrying an
     # unresolved request after that cache window could create a second partial
@@ -776,17 +830,22 @@ def submit_refund(refund):
             'prüfen; die Erstattung wird nicht automatisch erneut gesendet.'
         )
 
-    try:
-        response = MollieClient().create_refund(
-            row.payment.provider_payment_id,
-            attempt.amount,
-            row.payment.currency,
-            f'PROMPTFINISHER Erstattung {row.term.license.license_number}',
-            attempt.idempotency_key,
-        )
-    except MollieError as exc:
-        _record_refund_attempt_error(row.pk, attempt.pk, exc)
-        raise
+    if response is None:
+        try:
+            response = client.create_refund(
+                row.payment.provider_payment_id,
+                attempt.amount,
+                row.payment.currency,
+                f'PROMPTFINISHER Erstattung {row.term.license.license_number}',
+                attempt.idempotency_key,
+                metadata={
+                    'promptfinisher_refund_id': str(row.id),
+                    'promptfinisher_attempt_id': str(attempt.id),
+                },
+            )
+        except MollieError as exc:
+            _record_refund_attempt_error(row.pk, attempt.pk, exc)
+            raise
 
     provider_id = str(response.get('id') or '')[:100]
     provider_status = str(response.get('status') or 'pending').lower()
