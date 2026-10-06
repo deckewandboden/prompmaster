@@ -247,6 +247,14 @@ class RuntimeConfigTests(unittest.TestCase):
         self.assertNotIn('SESSION_COOKIE_SECURE=0', test_block)
         self.assertNotIn('CSRF_COOKIE_SECURE=0', test_block)
 
+    def test_production_deploy_waits_for_cadvisor_before_last_known_good(self):
+        deploy = (ROOT / 'scripts' / 'deploy.sh').read_text()
+        self.assertIn('wait_service_runtime(){', deploy)
+        self.assertIn('wait_service_runtime cadvisor 60 2', deploy)
+        wait_index = deploy.index('wait_service_runtime cadvisor 60 2')
+        last_success_index = deploy.index('> "$LAST_SUCCESS_FILE.tmp"')
+        self.assertLess(wait_index, last_success_index)
+
     def test_production_deploy_reports_heartbeat_and_preserves_test_exit_code(self):
         deploy = (ROOT / 'scripts' / 'deploy.sh').read_text()
         self.assertIn('run_with_heartbeat(){', deploy)
