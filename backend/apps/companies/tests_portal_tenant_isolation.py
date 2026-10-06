@@ -376,6 +376,91 @@ class CustomerPortalTenantIsolationTests(TestCase):
         stale_session_response = member_session.get(reverse('portal:dashboard'))
         self.assertIn(stale_session_response.status_code, {302, 403})
 
+    def test_member_lifecycle_blocks_private_owned_license_without_private_profile(self):
+        private_license = License.objects.create(
+            owner_user=self.member_a,
+            product=self.product,
+            status='active',
+            valid_from=self.now - timedelta(days=1),
+            valid_until=self.now + timedelta(days=30),
+        )
+        membership = Membership.objects.get(company=self.company_a, user=self.member_a)
+        assignment = LicenseAssignment.objects.get(
+            license=self.license_a,
+            user=self.member_a,
+            ended_at__isnull=True,
+        )
+
+        self._login(self.admin_a)
+
+        deactivate = self.client.post(
+            reverse('portal:member_deactivate', args=[self.member_a.pk])
+        )
+        self.assertEqual(deactivate.status_code, 302)
+
+        self.member_a.refresh_from_db()
+        membership.refresh_from_db()
+        assignment.refresh_from_db()
+        self.device_a.refresh_from_db()
+        private_license.refresh_from_db()
+
+        self.assertTrue(self.member_a.is_active)
+        self.assertTrue(membership.active)
+        self.assertIsNone(assignment.ended_at)
+        self.assertIsNone(self.device_a.revoked_at)
+        self.assertEqual(private_license.status, 'active')
+
+        delete = self.client.post(
+            reverse('portal:member_delete', args=[self.member_a.pk]),
+            {'confirm': '1'},
+        )
+        self.assertEqual(delete.status_code, 302)
+
+        self.member_a.refresh_from_db()
+        membership.refresh_from_db()
+        self.assertTrue(self.member_a.is_active)
+        self.assertTrue(membership.active)
+        self.assertEqual(self.member_a.email, 'member-a@example.test')
+        self.assertFalse(
+            DeletionRequest.objects.filter(user=self.member_a).exists()
+        )
+
+    def test_reactivation_blocks_private_owned_license_without_private_profile(self):
+        legacy_user = self._user(
+            'legacy-private-license@example.test',
+            'Legacy',
+            'Owner',
+        )
+        legacy_user.is_active = False
+        legacy_user.save(update_fields=['is_active', 'updated_at'])
+        membership = Membership.objects.create(
+            company=self.company_a,
+            user=legacy_user,
+            role='member',
+            active=False,
+        )
+        private_license = License.objects.create(
+            owner_user=legacy_user,
+            product=self.product,
+            status='active',
+            valid_from=self.now - timedelta(days=1),
+            valid_until=self.now + timedelta(days=30),
+        )
+
+        self._login(self.admin_a)
+        response = self.client.post(
+            reverse('portal:member_reactivate', args=[legacy_user.pk])
+        )
+        self.assertEqual(response.status_code, 302)
+
+        legacy_user.refresh_from_db()
+        membership.refresh_from_db()
+        private_license.refresh_from_db()
+
+        self.assertFalse(legacy_user.is_active)
+        self.assertFalse(membership.active)
+        self.assertEqual(private_license.status, 'active')
+
     def test_company_member_cannot_reach_company_admin_and_billing_actions(self):
         self._login(self.member_a)
 
