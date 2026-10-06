@@ -288,6 +288,27 @@ class CustomerPortalTenantIsolationTests(TestCase):
                     active=True,
                 )
 
+        historical_membership = Membership.objects.create(
+            company=self.company_b,
+            user=self.member_a,
+            role='member',
+            active=False,
+        )
+        historical_delete = self.client.post(
+            reverse('portal:member_delete', args=[self.member_a.pk]),
+            {'confirm': '1'},
+        )
+        self.assertEqual(historical_delete.status_code, 302)
+        self.member_a.refresh_from_db()
+        membership.refresh_from_db()
+        self.assertEqual(self.member_a.email, original_email)
+        self.assertTrue(self.member_a.is_active)
+        self.assertTrue(membership.active)
+        self.assertFalse(
+            DeletionRequest.objects.filter(user=self.member_a).exists()
+        )
+        historical_membership.delete()
+
         private_profile = PrivateCustomerProfile.objects.create(
             user=self.member_a,
             customer_number='PORTAL-PRIVATE-SHARED',
