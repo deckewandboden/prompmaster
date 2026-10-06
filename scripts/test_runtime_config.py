@@ -1,6 +1,7 @@
 """Regression tests for invalid runtime configurations, without Docker."""
 import base64
 import copy
+import subprocess
 import sys
 import tempfile
 import unittest
@@ -255,6 +256,33 @@ class RuntimeConfigTests(unittest.TestCase):
         self.assertIn('else\n    status=$?', deploy)
         self.assertIn('return "$status"', deploy)
         self.assertNotIn('fi\n  status=$?\n  now="$(date +%s)"', deploy)
+
+    def test_production_deploy_heartbeat_propagates_real_child_failure(self):
+        deploy = (ROOT / 'scripts' / 'deploy.sh').read_text()
+        start = deploy.index('run_with_heartbeat(){')
+        end_marker = '\n}\n\nif [[ -f "$LAST_SUCCESS_FILE" ]]'
+        end = deploy.index(end_marker, start) + 3
+        heartbeat = deploy[start:end]
+        probe = (
+            'log(){ printf "%s\\n" "$*"; }\n'
+            + heartbeat
+            + '\nset +e\n'
+            + 'run_with_heartbeat "Probe" bash -c "exit 7"\n'
+            + 'status=$?\n'
+            + 'printf "STATUS=%s\\n" "$status"\n'
+            + 'exit "$status"\n'
+        )
+        result = subprocess.run(
+            ['bash', '-c', probe],
+            capture_output=True,
+            text=True,
+            timeout=15,
+            check=False,
+        )
+        self.assertEqual(result.returncode, 7)
+        self.assertIn('Probe fehlgeschlagen', result.stdout)
+        self.assertIn('Exit 7', result.stdout)
+        self.assertIn('STATUS=7', result.stdout)
 
     def test_infra_rebrand_cutover_is_fail_closed_and_preserves_volumes(self):
         deploy = (ROOT / 'scripts' / 'deploy.sh').read_text()
