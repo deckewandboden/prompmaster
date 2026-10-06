@@ -103,6 +103,74 @@ class MollieConfigurationSafetyTests(SimpleTestCase):
         self.assertFalse(caught.exception.ambiguous)
 
 
+class MollieRuntimeReadinessTests(SimpleTestCase):
+    @override_settings(ENVIRONMENT='production', MOLLIE_API_KEY='')
+    def test_production_credentials_do_not_enable_checkout_without_explicit_gate(self):
+        with (
+            patch(
+                'apps.integrations.services.get_secret',
+                return_value='live_runtime_key',
+            ),
+            patch(
+                'apps.core.settings_store.get_setting',
+                side_effect=lambda key, default=None: (
+                    'pfl_runtime'
+                    if key == 'mollie_profile_id'
+                    else False
+                    if key == 'mollie_checkout_enabled'
+                    else default
+                ),
+            ),
+        ):
+            from apps.payments.mollie import mollie_runtime_ready
+
+            self.assertFalse(mollie_runtime_ready())
+
+    @override_settings(ENVIRONMENT='production', MOLLIE_API_KEY='')
+    def test_production_checkout_requires_explicit_approved_gate(self):
+        with (
+            patch(
+                'apps.integrations.services.get_secret',
+                return_value='live_runtime_key',
+            ),
+            patch(
+                'apps.core.settings_store.get_setting',
+                side_effect=lambda key, default=None: (
+                    'pfl_runtime'
+                    if key == 'mollie_profile_id'
+                    else True
+                    if key == 'mollie_checkout_enabled'
+                    else default
+                ),
+            ),
+        ):
+            from apps.payments.mollie import mollie_runtime_ready
+
+            self.assertTrue(mollie_runtime_ready())
+
+    @override_settings(ENVIRONMENT='staging', MOLLIE_API_KEY='')
+    def test_staging_test_checkout_does_not_require_production_approval_gate(self):
+        with (
+            patch(
+                'apps.integrations.services.get_secret',
+                return_value='test_runtime_key',
+            ),
+            patch(
+                'apps.core.settings_store.get_setting',
+                side_effect=lambda key, default=None: (
+                    'pfl_runtime'
+                    if key == 'mollie_profile_id'
+                    else False
+                    if key == 'mollie_checkout_enabled'
+                    else default
+                ),
+            ),
+        ):
+            from apps.payments.mollie import mollie_runtime_ready
+
+            self.assertTrue(mollie_runtime_ready())
+
+
 class MollieRefundPaginationTests(SimpleTestCase):
     @override_settings(ENVIRONMENT='staging')
     def test_refund_listing_follows_safe_mollie_pagination(self):
