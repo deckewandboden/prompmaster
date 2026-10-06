@@ -65,7 +65,7 @@ jobs:
           docker build -f Dockerfile.caddy -t promptfinisher-caddy:ci .
           docker build -t promptfinisher-backup:ci ./backup
 
-      - name: Scan all production runtime images for fixable high and critical CVEs
+      - name: Scan actual production container root filesystems for fixable high and critical CVEs
         run: |
           set -Eeuo pipefail
           images=(
@@ -80,15 +80,40 @@ jobs:
             "prometheuscommunity/postgres-exporter:v0.20.1"
           )
 
+          workdir="$(mktemp -d)"
+          cleanup() {
+            rm -rf "$workdir"
+          }
+          trap cleanup EXIT
+
           for image in "${images[@]}"; do
             echo "============================================================"
-            echo "TRIVY IMAGE GATE: $image"
+            echo "TRIVY ROOTFS GATE: $image"
             echo "============================================================"
-            trivy image \
+
+            docker image inspect "$image" >/dev/null 2>&1 || docker pull "$image"
+
+            safe_name="$(printf '%s' "$image" | tr '/:' '__')"
+            rootfs="$workdir/$safe_name"
+            mkdir -p "$rootfs"
+
+            cid="$(docker create "$image")"
+            docker export "$cid" | tar -C "$rootfs" -xf -
+            docker rm "$cid" >/dev/null
+
+            trivy rootfs \
               --scanners vuln \
               --severity HIGH,CRITICAL \
               --ignore-unfixed \
+              --skip-files '**/*.spdx' \
+              --skip-files '**/*.spdx.json' \
+              --skip-files '**/*.cdx' \
+              --skip-files '**/*.cdx.json' \
+              --config="" \
+              --ignorefile="" \
               --exit-code 1 \
               --timeout 10m \
-              "$image"
+              "$rootfs"
+
+            rm -rf "$rootfs"
           done
