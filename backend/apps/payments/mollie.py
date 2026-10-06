@@ -1,3 +1,5 @@
+import hashlib
+
 import requests
 from urllib.parse import urlsplit
 
@@ -7,6 +9,16 @@ from django.conf import settings
 # Mollie caches Idempotency-Key results for one hour. Keep automatic retries
 # comfortably inside that provider window.
 MOLLIE_IDEMPOTENCY_SAFE_RETRY_SECONDS = 55 * 60
+
+
+def mollie_config_fingerprint(key, profile_id):
+    key = (key or '').strip()
+    profile_id = (profile_id or '').strip()
+    if not key or not profile_id:
+        return ''
+    return hashlib.sha256(
+        f'{profile_id}\0{key}'.encode('utf-8')
+    ).hexdigest()
 
 
 def mollie_runtime_ready():
@@ -33,7 +45,15 @@ def mollie_runtime_ready():
     ).strip().lower()
     if environment == 'production':
         checkout_enabled = get_setting('mollie_checkout_enabled', False) is True
-        return key.startswith('live_') and checkout_enabled
+        approved_fingerprint = str(
+            get_setting('mollie_checkout_approval_fingerprint', '') or ''
+        ).strip()
+        current_fingerprint = mollie_config_fingerprint(key, profile_id)
+        return (
+            key.startswith('live_')
+            and checkout_enabled
+            and approved_fingerprint == current_fingerprint
+        )
     return key.startswith('test_')
 
 
