@@ -12,6 +12,7 @@ def validate(compose, production):
     errors = []
     services = compose['services']
     postgres = services['postgres']
+    redis = services['redis']
     if postgres.get('image') != 'promptfinisher-postgres:18-alpine-hardened':
         errors.append('Hardened PostgreSQL 18 image required')
     if postgres.get('build') != {'context': '.', 'dockerfile': 'Dockerfile.postgres'}:
@@ -24,6 +25,12 @@ def validate(compose, production):
         errors.append('PostgreSQL must have no published ports and use only data')
     if not compose['networks']['data'].get('internal') or not postgres.get('healthcheck'):
         errors.append('Internal data network and PostgreSQL healthcheck required')
+    if redis.get('image') != 'promptfinisher-redis:7-alpine-hardened':
+        errors.append('Hardened Redis 7 image required')
+    if redis.get('build') != {'context': '.', 'dockerfile': 'Dockerfile.redis'}:
+        errors.append('Redis must build from tracked Dockerfile.redis')
+    if redis.get('ports') or redis.get('networks') != ['data']:
+        errors.append('Redis must have no published ports and use only data')
     if services['backup'].get('build') != './backup':
         errors.append('Backup build context must be ./backup')
     monitor = compose.get('networks', {}).get('monitor', {})
@@ -89,16 +96,17 @@ def main():
         yaml.safe_load((ROOT / 'compose.production.yaml').read_text()),
     )
     errors.extend(validate_legacy_volume_overlay())
-    postgres_dockerfile = ROOT / 'Dockerfile.postgres'
-    if not postgres_dockerfile.is_file():
-        errors.append('Missing hardened PostgreSQL build input: Dockerfile.postgres')
-    else:
+    for runtime_file in ('Dockerfile.postgres', 'Dockerfile.redis'):
+        runtime_path = ROOT / runtime_file
+        if not runtime_path.is_file():
+            errors.append(f'Missing hardened runtime build input: {runtime_file}')
+            continue
         tracked = subprocess.run(
-            ['git', 'ls-files', '--error-unmatch', 'Dockerfile.postgres'], cwd=ROOT,
+            ['git', 'ls-files', '--error-unmatch', runtime_file], cwd=ROOT,
             capture_output=True,
         )
         if tracked.returncode:
-            errors.append('Hardened PostgreSQL Dockerfile is not Git-tracked')
+            errors.append(f'Hardened runtime Dockerfile is not Git-tracked: {runtime_file}')
 
     for name in ('Dockerfile', 'backup.sh', '.dockerignore'):
         path = f'backup/{name}'
