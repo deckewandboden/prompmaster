@@ -120,19 +120,31 @@ class MollieClient:
     def get_payment(self, payment_id):
         return self._request('GET', f'/payments/{payment_id}')
 
-    def create_refund(self, payment_id, amount, currency, description, idempotency_key):
+    def create_refund(
+        self,
+        payment_id,
+        amount,
+        currency,
+        description,
+        idempotency_key,
+        *,
+        metadata=None,
+    ):
+        body = {
+            'amount': {'currency': currency, 'value': f'{amount:.2f}'},
+            'description': description,
+        }
+        if metadata is not None:
+            body['metadata'] = metadata
         return self._request(
             'POST',
             f'/payments/{payment_id}/refunds',
             headers={'Idempotency-Key': idempotency_key},
-            json={
-                'amount': {'currency': currency, 'value': f'{amount:.2f}'},
-                'description': description,
-            },
+            json=body,
         )
 
     def list_refunds(self, payment_id):
-        return self._request('GET', f'/payments/{payment_id}/refunds')
+        return self._request('GET', f'/payments/{payment_id}/refunds?limit=250')
 
     def list_chargebacks(self, payment_id):
         return self._request('GET', f'/payments/{payment_id}/chargebacks')
