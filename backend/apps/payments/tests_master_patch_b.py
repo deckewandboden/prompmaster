@@ -159,6 +159,52 @@ class RefundRetryStateMachineTests(TestCase):
 
     @patch('apps.payments.services._queue_after_commit')
     @patch('apps.payments.services.calculate_refund')
+    @patch('apps.payments.services.MollieClient.create_refund')
+    def test_ambiguous_refund_is_not_reposted_after_idempotency_window(
+        self, provider, calculate, _mail
+    ):
+        calculate.return_value = (300, Decimal('30.00'))
+        refund = create_refund_request(term=self.term, actor=self.user)
+        provider.side_effect = MollieError('timeout', ambiguous=True)
+        with self.assertRaises(MollieError):
+            submit_refund(refund)
+
+        attempt = refund.attempts.get(number=1)
+        attempt.submitted_at = timezone.now() - timedelta(minutes=56)
+        attempt.save(update_fields=['submitted_at', 'updated_at'])
+
+        provider.side_effect = None
+        provider.return_value = {'id': 're_must_not_be_created', 'status': 'pending'}
+        with self.assertRaises(ValidationError):
+            submit_refund(refund)
+        self.assertEqual(provider.call_count, 1)
+
+    @patch('apps.payments.services._queue_after_commit')
+    @patch('apps.payments.services.calculate_refund')
+    @patch('apps.payments.services.MollieClient.list_refunds')
+    @patch('apps.payments.services.MollieClient.create_refund')
+    def test_submitted_refund_with_provider_id_is_reconciled_not_reposted(
+        self, create_provider, list_provider, calculate, _mail
+    ):
+        calculate.return_value = (300, Decimal('30.00'))
+        refund = create_refund_request(term=self.term, actor=self.user)
+        create_provider.return_value = {'id': 're_existing_pending', 'status': 'pending'}
+        submit_refund(refund)
+        self.assertEqual(create_provider.call_count, 1)
+
+        list_provider.return_value = {
+            '_embedded': {
+                'refunds': [
+                    {'id': 're_existing_pending', 'status': 'pending'}
+                ]
+            }
+        }
+        submit_refund(refund)
+        self.assertEqual(create_provider.call_count, 1)
+        self.assertEqual(list_provider.call_count, 1)
+
+    @patch('apps.payments.services._queue_after_commit')
+    @patch('apps.payments.services.calculate_refund')
     @patch('apps.payments.services.MollieClient.list_refunds')
     @patch('apps.payments.services.MollieClient.create_refund')
     def test_provider_canceled_refund_can_be_retried_without_duplicate_attempt(
