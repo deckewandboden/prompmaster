@@ -119,7 +119,10 @@ services:
     networks: [monitor]
     restart: unless-stopped
   node-exporter:
-    image: prom/node-exporter:v1.12.1
+    build:
+      context: .
+      dockerfile: Dockerfile.node-exporter
+    image: promptfinisher-node-exporter:1.12.1-hardened
     command: ["--path.rootfs=/host"]
     pid: host
     volumes: ["/:/host:ro,rslave"]
