@@ -21,6 +21,8 @@ RUN wget -q https://sourceforge.net/projects/perfmon2/files/libpfm4/libpfm-4.11.
 WORKDIR /src
 RUN go get golang.org/x/crypto@v0.55.0 google.golang.org/grpc@v1.83.2 \
     && go mod tidy \
+    && (cd lib && go get golang.org/x/crypto@v0.55.0 google.golang.org/grpc@v1.83.2 && go mod tidy) \
+    && (cd cmd && go get golang.org/x/crypto@v0.55.0 google.golang.org/grpc@v1.83.2 && go mod tidy) \
     && export GO_TAGS="libpfm,netgo" \
     && GO_CGO_ENABLED=1 GO_FLAGS="-tags=$GO_TAGS" ./build/build.sh \
     && test -x /src/_output/cadvisor
