@@ -72,6 +72,9 @@ class MollieClient:
             },
         )
 
+    def get_current_profile(self):
+        return self._request('GET', '/profiles/me')
+
     def get_payment(self, payment_id):
         return self._request('GET', f'/payments/{payment_id}')
 
