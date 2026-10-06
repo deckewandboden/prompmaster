@@ -35,6 +35,11 @@ def validate(compose, production):
         errors.append('Backup build context must be ./backup')
     if services.get('prometheus', {}).get('image') != 'prom/prometheus:v3.15.0':
         errors.append('Prometheus must remain pinned to the security-accepted v3.15.0 image')
+    node_exporter = services.get('node-exporter', {})
+    if node_exporter.get('image') != 'promptfinisher-node-exporter:1.12.1-hardened':
+        errors.append('Hardened node_exporter 1.12.1 image required')
+    if node_exporter.get('build') != {'context': '.', 'dockerfile': 'Dockerfile.node-exporter'}:
+        errors.append('node_exporter must build from tracked Dockerfile.node-exporter')
     monitor = compose.get('networks', {}).get('monitor', {})
     cadvisor = services.get('cadvisor', {})
     if monitor.get('internal') is not True:
@@ -98,7 +103,7 @@ def main():
         yaml.safe_load((ROOT / 'compose.production.yaml').read_text()),
     )
     errors.extend(validate_legacy_volume_overlay())
-    for runtime_file in ('Dockerfile.postgres', 'Dockerfile.redis'):
+    for runtime_file in ('Dockerfile.postgres', 'Dockerfile.redis', 'Dockerfile.node-exporter'):
         runtime_path = ROOT / runtime_file
         if not runtime_path.is_file():
             errors.append(f'Missing hardened runtime build input: {runtime_file}')
