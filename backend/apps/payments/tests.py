@@ -72,6 +72,37 @@ class MollieConfigurationSafetyTests(SimpleTestCase):
             MollieClient(key='live_runtime_key')
 
 
+    @override_settings(ENVIRONMENT='staging')
+    def test_conflict_timeout_and_rate_limit_are_ambiguous_provider_outcomes(self):
+        client = MollieClient(key='test_http_classification')
+        for status_code in (408, 409, 429, 500, 503):
+            with self.subTest(status_code=status_code):
+                response = MagicMock()
+                response.ok = False
+                response.status_code = status_code
+                with patch(
+                    'apps.payments.mollie.requests.request',
+                    return_value=response,
+                ):
+                    with self.assertRaises(MollieError) as caught:
+                        client._request('POST', '/payments')
+                self.assertTrue(caught.exception.ambiguous)
+
+    @override_settings(ENVIRONMENT='staging')
+    def test_validation_4xx_remains_deterministic(self):
+        client = MollieClient(key='test_http_classification')
+        response = MagicMock()
+        response.ok = False
+        response.status_code = 422
+        with patch(
+            'apps.payments.mollie.requests.request',
+            return_value=response,
+        ):
+            with self.assertRaises(MollieError) as caught:
+                client._request('POST', '/payments')
+        self.assertFalse(caught.exception.ambiguous)
+
+
 class MollieRefundPaginationTests(SimpleTestCase):
     @override_settings(ENVIRONMENT='staging')
     def test_refund_listing_follows_safe_mollie_pagination(self):
