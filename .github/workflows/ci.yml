@@ -232,6 +232,7 @@ jobs:
           PM_LOAD_BASE_URL: https://localhost
           PM_LOAD_WORKERS: '32'
           PM_LOAD_REQUESTS: '640'
+          PM_LOAD_EXPECT_CHECKOUT_ENABLED: '0'
         run: python3 scripts/http_load_smoke.py
       - name: Re-run bootstrap idempotently
         env:
