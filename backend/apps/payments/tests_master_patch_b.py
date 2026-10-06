@@ -125,9 +125,10 @@ class RefundRetryStateMachineTests(TestCase):
 
     @patch('apps.payments.services._queue_after_commit')
     @patch('apps.payments.services.calculate_refund')
+    @patch('apps.payments.services.MollieClient.list_refunds')
     @patch('apps.payments.services.MollieClient.create_refund')
     def test_ambiguous_failure_reuses_same_quote_and_idempotency_key(
-        self, provider, calculate, _mail
+        self, provider, list_provider, calculate, _mail
     ):
         calculate.return_value = (300, Decimal('30.00'))
         refund = create_refund_request(term=self.term, actor=self.user)
@@ -146,6 +147,7 @@ class RefundRetryStateMachineTests(TestCase):
         self.assertEqual(same_refund.amount, Decimal('30.00'))
         self.assertEqual(same_refund.remaining_days, 300)
 
+        list_provider.return_value = {'_embedded': {'refunds': []}}
         provider.side_effect = None
         provider.return_value = {'id': 're_ambiguous_1', 'status': 'refunded'}
         submit_refund(same_refund)
@@ -159,9 +161,10 @@ class RefundRetryStateMachineTests(TestCase):
 
     @patch('apps.payments.services._queue_after_commit')
     @patch('apps.payments.services.calculate_refund')
+    @patch('apps.payments.services.MollieClient.list_refunds')
     @patch('apps.payments.services.MollieClient.create_refund')
     def test_ambiguous_refund_is_not_reposted_after_idempotency_window(
-        self, provider, calculate, _mail
+        self, provider, list_provider, calculate, _mail
     ):
         calculate.return_value = (300, Decimal('30.00'))
         refund = create_refund_request(term=self.term, actor=self.user)
@@ -173,11 +176,72 @@ class RefundRetryStateMachineTests(TestCase):
         attempt.submitted_at = timezone.now() - timedelta(minutes=56)
         attempt.save(update_fields=['submitted_at', 'updated_at'])
 
+        list_provider.return_value = {'_embedded': {'refunds': []}}
         provider.side_effect = None
         provider.return_value = {'id': 're_must_not_be_created', 'status': 'pending'}
         with self.assertRaises(ValidationError):
             submit_refund(refund)
         self.assertEqual(provider.call_count, 1)
+
+    @patch('apps.payments.services._queue_after_commit')
+    @patch('apps.payments.services.calculate_refund')
+    @patch('apps.payments.services.MollieClient.list_refunds')
+    @patch('apps.payments.services.MollieClient.create_refund')
+    def test_ambiguous_refund_is_recovered_by_metadata_without_repost(
+        self,
+        create_provider,
+        list_provider,
+        calculate,
+        _mail,
+    ):
+        calculate.return_value = (300, Decimal('30.00'))
+        refund = create_refund_request(term=self.term, actor=self.user)
+        create_provider.side_effect = MollieError('timeout', ambiguous=True)
+        with self.assertRaises(MollieError):
+            submit_refund(refund)
+
+        refund.refresh_from_db()
+        attempt = refund.attempts.get(number=1)
+        attempt.submitted_at = timezone.now() - timedelta(minutes=70)
+        attempt.save(update_fields=['submitted_at', 'updated_at'])
+
+        list_provider.return_value = {
+            '_embedded': {
+                'refunds': [{
+                    'id': 're_metadata_recovered',
+                    'paymentId': self.payment.provider_payment_id,
+                    'status': 'refunded',
+                    'amount': {
+                        'value': '30.00',
+                        'currency': self.payment.currency,
+                    },
+                    'metadata': {
+                        'promptfinisher_refund_id': str(refund.id),
+                        'promptfinisher_attempt_id': str(attempt.id),
+                    },
+                }]
+            }
+        }
+        create_provider.side_effect = None
+
+        recovered = submit_refund(refund)
+        recovered.refresh_from_db()
+        attempt.refresh_from_db()
+        self.term.refresh_from_db()
+
+        self.assertEqual(create_provider.call_count, 1)
+        self.assertEqual(list_provider.call_count, 1)
+        self.assertEqual(recovered.status, 'succeeded')
+        self.assertEqual(
+            recovered.provider_refund_id,
+            're_metadata_recovered',
+        )
+        self.assertEqual(attempt.status, 'succeeded')
+        self.assertEqual(
+            attempt.provider_refund_id,
+            're_metadata_recovered',
+        )
+        self.assertEqual(self.term.status, 'refunded')
 
     @patch('apps.payments.services._queue_after_commit')
     @patch('apps.payments.services.calculate_refund')
