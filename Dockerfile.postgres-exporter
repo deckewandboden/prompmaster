@@ -1,0 +1,22 @@
+FROM golang:1.26.6-alpine AS build
+
+ARG POSTGRES_EXPORTER_COMMIT=867fbcac31cd18c143e244190ea9168cca069827
+
+RUN apk add --no-cache git ca-certificates \
+    && git clone https://github.com/prometheus-community/postgres_exporter.git /src \
+    && cd /src \
+    && git checkout "$POSTGRES_EXPORTER_COMMIT" \
+    && test "$(git rev-parse HEAD)" = "$POSTGRES_EXPORTER_COMMIT"
+
+WORKDIR /src
+RUN go get golang.org/x/crypto@v0.55.0 \
+    && go mod tidy \
+    && CGO_ENABLED=0 GOOS=linux go build \
+       -trimpath \
+       -ldflags="-s -w -X github.com/prometheus/common/version.Version=0.20.1 -X github.com/prometheus/common/version.Revision=$POSTGRES_EXPORTER_COMMIT" \
+       -o /out/postgres_exporter ./cmd/postgres_exporter
+
+FROM prometheuscommunity/postgres-exporter:v0.20.1
+USER root
+COPY --from=build /out/postgres_exporter /bin/postgres_exporter
+USER nobody
