@@ -1,7 +1,10 @@
 name: promptfinisher
 services:
   postgres:
-    image: postgres:18-alpine
+    build:
+      context: .
+      dockerfile: Dockerfile.postgres
+    image: promptfinisher-postgres:18-alpine-hardened
     environment:
       POSTGRES_DB: ${POSTGRES_DB}
       POSTGRES_USER: ${POSTGRES_USER}
