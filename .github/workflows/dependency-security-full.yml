@@ -67,6 +67,7 @@ jobs:
           docker build -f Dockerfile.redis -t promptfinisher-redis:ci .
           docker build -f Dockerfile.node-exporter -t promptfinisher-node-exporter:ci .
           docker build -f Dockerfile.cadvisor -t promptfinisher-cadvisor:ci .
+          docker build -f Dockerfile.postgres-exporter -t promptfinisher-postgres-exporter:ci .
           docker build -t promptfinisher-backup:ci ./backup
 
       - name: Scan actual production container root filesystems for fixable high and critical CVEs
@@ -81,7 +82,7 @@ jobs:
             "prom/prometheus:v3.15.0"
             "promptfinisher-node-exporter:ci"
             "promptfinisher-cadvisor:ci"
-            "prometheuscommunity/postgres-exporter:v0.20.1"
+            "promptfinisher-postgres-exporter:ci"
           )
 
           workdir="$(mktemp -d)"
