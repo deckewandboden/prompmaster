@@ -1,6 +1,7 @@
 """Regression tests for invalid runtime configurations, without Docker."""
 import base64
 import copy
+import subprocess
 import sys
 import tempfile
 import unittest
@@ -230,26 +231,58 @@ class RuntimeConfigTests(unittest.TestCase):
         )
         self.assertEqual(self._run_env_validator(text, require_go_live=True), 0)
 
-    def test_production_deploy_tests_disable_only_ssl_redirect_for_test_container(self):
+    def test_production_deploy_runs_django_suite_in_isolated_test_environment(self):
         deploy = (ROOT / 'scripts' / 'deploy.sh').read_text()
         expected = (
             'run_with_heartbeat "Django-Testlauf" \\\n'
             '  docker compose "${F[@]}" run --rm \\\n'
+            '    -e ENVIRONMENT=test \\\n'
             '    -e SECURE_SSL_REDIRECT=0 \\\n'
             '    web python manage.py test'
         )
         self.assertIn(expected, deploy)
         test_block = deploy.split('log "Tests ausführen"', 1)[1].split('log "Pre-Migration-Backup erstellen"', 1)[0]
+        self.assertIn('-e ENVIRONMENT=test', test_block)
+        self.assertNotIn('ENVIRONMENT=production', test_block)
         self.assertNotIn('SESSION_COOKIE_SECURE=0', test_block)
         self.assertNotIn('CSRF_COOKIE_SECURE=0', test_block)
 
-    def test_production_deploy_reports_heartbeat_during_long_django_tests(self):
+    def test_production_deploy_reports_heartbeat_and_preserves_test_exit_code(self):
         deploy = (ROOT / 'scripts' / 'deploy.sh').read_text()
         self.assertIn('run_with_heartbeat(){', deploy)
         self.assertIn('PM_DEPLOY_HEARTBEAT_SECONDS:-30', deploy)
         self.assertIn('run_with_heartbeat "Django-Testlauf"', deploy)
         self.assertIn('web python manage.py test', deploy)
+        self.assertIn('else\n    status=$?', deploy)
         self.assertIn('return "$status"', deploy)
+        self.assertNotIn('fi\n  status=$?\n  now="$(date +%s)"', deploy)
+
+    def test_production_deploy_heartbeat_propagates_real_child_failure(self):
+        deploy = (ROOT / 'scripts' / 'deploy.sh').read_text()
+        start = deploy.index('run_with_heartbeat(){')
+        end_marker = '\n}\n\nif [[ -f "$LAST_SUCCESS_FILE" ]]'
+        end = deploy.index(end_marker, start) + 3
+        heartbeat = deploy[start:end]
+        probe = (
+            'log(){ printf "%s\\n" "$*"; }\n'
+            + heartbeat
+            + '\nset +e\n'
+            + 'run_with_heartbeat "Probe" bash -c "exit 7"\n'
+            + 'status=$?\n'
+            + 'printf "STATUS=%s\\n" "$status"\n'
+            + 'exit "$status"\n'
+        )
+        result = subprocess.run(
+            ['bash', '-c', probe],
+            capture_output=True,
+            text=True,
+            timeout=15,
+            check=False,
+        )
+        self.assertEqual(result.returncode, 7)
+        self.assertIn('Probe fehlgeschlagen', result.stdout)
+        self.assertIn('Exit 7', result.stdout)
+        self.assertIn('STATUS=7', result.stdout)
 
     def test_infra_rebrand_cutover_is_fail_closed_and_preserves_volumes(self):
         deploy = (ROOT / 'scripts' / 'deploy.sh').read_text()

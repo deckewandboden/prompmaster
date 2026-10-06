@@ -57,11 +57,12 @@ run_with_heartbeat(){
     now="$(date +%s)"
     log "$label abgeschlossen · $((now - start))s"
     return 0
+  else
+    status=$?
+    now="$(date +%s)"
+    log "$label fehlgeschlagen · $((now - start))s · Exit $status"
+    return "$status"
   fi
-  status=$?
-  now="$(date +%s)"
-  log "$label fehlgeschlagen · $((now - start))s · Exit $status"
-  return "$status"
 }
 
 if [[ -f "$LAST_SUCCESS_FILE" ]]; then
@@ -246,6 +247,7 @@ docker compose "${F[@]}" run --rm web python manage.py makemigrations --check --
 log "Tests ausführen"
 run_with_heartbeat "Django-Testlauf" \
   docker compose "${F[@]}" run --rm \
+    -e ENVIRONMENT=test \
     -e SECURE_SSL_REDIRECT=0 \
     web python manage.py test
 log "Pre-Migration-Backup erstellen"
