@@ -12,7 +12,7 @@ from django.utils import timezone
 
 from apps.companies.models import Membership
 from apps.core.settings_store import get_setting, set_setting
-from apps.payments.mollie import MollieClient
+from apps.payments.mollie import MollieClient, mollie_config_fingerprint
 from apps.payments.models import MollieEvent, Payment
 from apps.payments.services import create_refund_request, submit_refund
 
@@ -137,6 +137,14 @@ class Command(BaseCommand):
                 description=(
                     'Explicit production checkout approval after successful '
                     'Mollie live-readiness probe.'
+                ),
+            )
+            set_setting(
+                'mollie_checkout_approval_fingerprint',
+                mollie_config_fingerprint(client.key, actual_profile),
+                description=(
+                    'SHA-256 binding of the approved Mollie profile and API key; '
+                    'contains no plaintext secret.'
                 ),
             )
 
