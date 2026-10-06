@@ -144,12 +144,13 @@ def _start_mollie_checkout(request, order, description, metadata):
         if age_seconds >= MOLLIE_IDEMPOTENCY_SAFE_RETRY_SECONDS:
             order.status = 'failed'
             order.save(update_fields=['status', 'updated_at'])
-            raise ValidationError(
+            messages.error(
+                request,
                 'Ein früherer Mollie-Zahlungsstart konnte nicht sicher bestätigt '
-                'werden. Nach Ablauf des sicheren Idempotenzfensters wird dieser '
-                'Provider-Request nicht automatisch erneut gesendet. Bitte starten '
-                'Sie den Kauf erneut.'
+                'werden. Nach Ablauf des sicheren Idempotenzfensters wurde er '
+                'nicht erneut gesendet. Bitte starten Sie den Kauf erneut.',
             )
+            return None
 
     existing_payment = order.payments.order_by('-created_at').first()
     if existing_payment and existing_payment.status in {
