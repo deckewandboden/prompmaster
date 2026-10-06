@@ -1,4 +1,6 @@
 import requests
+from urllib.parse import urlsplit
+
 from django.conf import settings
 
 
@@ -144,7 +146,69 @@ class MollieClient:
         )
 
     def list_refunds(self, payment_id):
-        return self._request('GET', f'/payments/{payment_id}/refunds?limit=250')
+        path = f'/payments/{payment_id}/refunds?limit=250'
+        rows = []
+        first_payload = None
+        seen = set()
+        base_parts = urlsplit(self.base)
+        api_prefix = base_parts.path.rstrip('/')
+
+        for _ in range(20):
+            if path in seen:
+                raise MollieError(
+                    'Mollie refund pagination loop detected',
+                    ambiguous=False,
+                )
+            seen.add(path)
+            payload = self._request('GET', path)
+            if not isinstance(payload, dict):
+                raise MollieError(
+                    'Mollie returned invalid refund list data',
+                    ambiguous=False,
+                )
+            if first_payload is None:
+                first_payload = payload
+            page_rows = (payload.get('_embedded') or {}).get('refunds') or []
+            if not isinstance(page_rows, list):
+                raise MollieError(
+                    'Mollie returned invalid refund rows',
+                    ambiguous=False,
+                )
+            rows.extend(page_rows)
+
+            next_href = (
+                ((payload.get('_links') or {}).get('next') or {}).get('href') or ''
+            ).strip()
+            if not next_href:
+                result = dict(first_payload or {})
+                embedded = dict(result.get('_embedded') or {})
+                embedded['refunds'] = rows
+                result['_embedded'] = embedded
+                result['count'] = len(rows)
+                return result
+
+            parsed = urlsplit(next_href)
+            if parsed.scheme or parsed.netloc:
+                if (
+                    parsed.scheme != base_parts.scheme
+                    or parsed.netloc != base_parts.netloc
+                ):
+                    raise MollieError(
+                        'Mollie refund pagination returned an unexpected host',
+                        ambiguous=False,
+                    )
+            if not parsed.path.startswith(f'{api_prefix}/'):
+                raise MollieError(
+                    'Mollie refund pagination returned an unexpected API path',
+                    ambiguous=False,
+                )
+            relative_path = parsed.path[len(api_prefix):]
+            path = relative_path + (f'?{parsed.query}' if parsed.query else '')
+
+        raise MollieError(
+            'Mollie refund pagination exceeded the safety limit',
+            ambiguous=False,
+        )
 
     def list_chargebacks(self, payment_id):
         return self._request('GET', f'/payments/{payment_id}/chargebacks')
