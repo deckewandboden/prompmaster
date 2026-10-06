@@ -157,6 +157,188 @@ class PurchaseHandoffTests(TestCase):
         self.assertEqual(license_obj.valid_until, original_valid_until)
 
     @patch('apps.companies.portal.MollieClient.create_payment')
+    def test_portal_checkout_ambiguous_create_replays_same_order_and_request(
+        self,
+        create_payment,
+    ):
+        create_payment.side_effect = [
+            MollieError('timeout', ambiguous=True),
+            {
+                'id': 'tr_portal_ambiguous_recovered',
+                'status': 'open',
+                '_links': {
+                    'checkout': {
+                        'href': 'https://checkout.example.test/portal-recovered'
+                    }
+                },
+            },
+        ]
+        payload = {
+            'quantity': '2',
+            'accept_terms': 'on',
+            'accept_privacy': 'on',
+            'accept_license': 'on',
+        }
+
+        first = self.client.post('/portal/licenses/buy/?quantity=2', payload)
+        self.assertEqual(first.status_code, 200)
+        order = Order.objects.get(company=self.company)
+        order.refresh_from_db()
+        self.assertEqual(order.status, 'draft')
+        self.assertIn(
+            'provider_create_ambiguous_at',
+            order.billing_snapshot,
+        )
+        first_request = create_payment.call_args_list[0].kwargs
+
+        second = self.client.post('/portal/licenses/buy/?quantity=2', payload)
+        self.assertEqual(second.status_code, 302)
+        self.assertEqual(
+            second.url,
+            'https://checkout.example.test/portal-recovered',
+        )
+        self.assertEqual(create_payment.call_count, 2)
+        self.assertEqual(
+            create_payment.call_args_list[1].kwargs,
+            first_request,
+        )
+        self.assertEqual(Order.objects.filter(company=self.company).count(), 1)
+
+        order.refresh_from_db()
+        self.assertEqual(order.status, 'payment_open')
+        self.assertNotIn(
+            'provider_create_ambiguous_at',
+            order.billing_snapshot,
+        )
+        self.assertEqual(
+            Payment.objects.get(order=order).provider_payment_id,
+            'tr_portal_ambiguous_recovered',
+        )
+
+    @patch('apps.companies.portal.MollieClient.create_payment')
+    def test_portal_checkout_expired_ambiguous_attempt_is_not_reposted_and_key_rotates(
+        self,
+        create_payment,
+    ):
+        create_payment.side_effect = MollieError('timeout', ambiguous=True)
+        payload = {
+            'quantity': '1',
+            'accept_terms': 'on',
+            'accept_privacy': 'on',
+            'accept_license': 'on',
+        }
+
+        first = self.client.post('/portal/licenses/buy/?quantity=1', payload)
+        self.assertEqual(first.status_code, 200)
+        order = Order.objects.get(company=self.company)
+        session_key = 'checkout_key:buy:PRO'
+        original_checkout_key = self.client.session[session_key]
+
+        snapshot = dict(order.billing_snapshot)
+        snapshot['provider_create_ambiguous_at'] = (
+            timezone.now() - timedelta(minutes=56)
+        ).timestamp()
+        order.billing_snapshot = snapshot
+        order.save(update_fields=['billing_snapshot', 'updated_at'])
+
+        second = self.client.post('/portal/licenses/buy/?quantity=1', payload)
+        self.assertEqual(second.status_code, 200)
+        self.assertEqual(create_payment.call_count, 1)
+        order.refresh_from_db()
+        self.assertEqual(order.status, 'failed')
+        self.assertNotEqual(
+            self.client.session[session_key],
+            original_checkout_key,
+        )
+
+        create_payment.side_effect = None
+        create_payment.return_value = {
+            'id': 'tr_portal_fresh_after_expiry',
+            'status': 'open',
+            '_links': {
+                'checkout': {
+                    'href': 'https://checkout.example.test/fresh-after-expiry'
+                }
+            },
+        }
+        third = self.client.post('/portal/licenses/buy/?quantity=1', payload)
+        self.assertEqual(third.status_code, 302)
+        self.assertEqual(
+            third.url,
+            'https://checkout.example.test/fresh-after-expiry',
+        )
+        self.assertEqual(create_payment.call_count, 2)
+        self.assertEqual(Order.objects.filter(company=self.company).count(), 2)
+
+    @patch('apps.companies.portal.MollieClient.create_payment')
+    def test_portal_renewal_ambiguous_create_replays_same_order_and_request(
+        self,
+        create_payment,
+    ):
+        now = timezone.now()
+        ProductPrice.objects.create(
+            product=self.product,
+            price_type='renewal',
+            gross_amount=Decimal('35.88'),
+            currency='EUR',
+            valid_from=now - timedelta(minutes=1),
+        )
+        license_obj = License.objects.create(
+            company=self.company,
+            product=self.product,
+            status='active',
+            valid_from=now - timedelta(days=30),
+            valid_until=now + timedelta(days=30),
+        )
+        create_payment.side_effect = [
+            MollieError('timeout', ambiguous=True),
+            {
+                'id': 'tr_renew_ambiguous_recovered',
+                'status': 'open',
+                '_links': {
+                    'checkout': {
+                        'href': 'https://checkout.example.test/renew-recovered'
+                    }
+                },
+            },
+        ]
+        payload = {
+            'accept_terms': 'on',
+            'accept_privacy': 'on',
+            'accept_license': 'on',
+        }
+
+        first = self.client.post(
+            f'/portal/licenses/{license_obj.pk}/renew/',
+            payload,
+        )
+        self.assertEqual(first.status_code, 200)
+        order = OrderItem.objects.get(target_license=license_obj).order
+        self.assertEqual(order.status, 'draft')
+        first_request = create_payment.call_args_list[0].kwargs
+
+        second = self.client.post(
+            f'/portal/licenses/{license_obj.pk}/renew/',
+            payload,
+        )
+        self.assertEqual(second.status_code, 302)
+        self.assertEqual(
+            second.url,
+            'https://checkout.example.test/renew-recovered',
+        )
+        self.assertEqual(create_payment.call_count, 2)
+        self.assertEqual(
+            create_payment.call_args_list[1].kwargs,
+            first_request,
+        )
+        self.assertEqual(
+            OrderItem.objects.filter(target_license=license_obj).count(),
+            1,
+        )
+        order.refresh_from_db()
+        self.assertEqual(order.status, 'payment_open')
+
+    @patch('apps.companies.portal.MollieClient.create_payment')
     def test_checkout_creates_order_and_payment_for_selected_quantity(self, create_payment):
         create_payment.return_value = {
             'id': 'tr_checkout_handoff',
