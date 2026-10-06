@@ -12,6 +12,7 @@ from django.test import SimpleTestCase, TestCase, override_settings
 
 from apps.core.management.commands.external_graph_acceptance import INVALID_SENDER
 from apps.core.management.commands.external_mollie_acceptance import Command as MollieAcceptanceCommand
+from apps.core.models import SystemSetting
 from apps.notifications.models import EmailMessage
 
 
@@ -99,6 +100,70 @@ class ExternalAcceptanceSafetyTests(TestCase):
                     confirm='WRONG',
                     stdout=StringIO(),
                 )
+
+
+    def test_mollie_live_activation_requires_explicit_confirmation(self):
+        with self.assertRaisesMessage(
+            CommandError,
+            'Refusing to enable live checkout',
+        ):
+            call_command(
+                'external_mollie_acceptance',
+                'activate-live',
+                confirm='WRONG',
+                stdout=StringIO(),
+            )
+        self.assertFalse(
+            SystemSetting.objects.filter(
+                key='mollie_checkout_enabled',
+                value=True,
+            ).exists()
+        )
+
+    def test_mollie_live_activation_sets_gate_only_after_successful_probe(self):
+        fake = MagicMock()
+        fake.key = 'live_runtime_secret'
+        fake.get_current_profile.return_value = {
+            'resource': 'profile',
+            'id': 'pfl_runtime',
+            'mode': 'live',
+            'name': 'PROMPTFINISHER',
+            'status': 'verified',
+            'review': None,
+        }
+        fake.list_methods.return_value = {
+            '_embedded': {
+                'methods': [
+                    {'id': 'creditcard', 'status': 'activated'},
+                ]
+            }
+        }
+        out = StringIO()
+        with (
+            patch(
+                'apps.core.management.commands.external_mollie_acceptance.MollieClient',
+                return_value=fake,
+            ),
+            patch(
+                'apps.core.management.commands.external_mollie_acceptance.get_setting',
+                return_value='pfl_runtime',
+            ),
+        ):
+            call_command(
+                'external_mollie_acceptance',
+                'activate-live',
+                confirm='ENABLE-MOLLIE-LIVE-CHECKOUT',
+                stdout=out,
+            )
+
+        gate = SystemSetting.objects.get(key='mollie_checkout_enabled')
+        self.assertIs(gate.value, True)
+        payload = json.loads(out.getvalue())
+        self.assertTrue(payload['checkout_enabled'])
+        self.assertEqual(payload['profile_status'], 'verified')
+        self.assertEqual(payload['activated_methods'], ['creditcard'])
+        fake.get_current_profile.assert_called_once_with()
+        fake.list_methods.assert_called_once_with()
 
 
 @override_settings(
