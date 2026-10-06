@@ -12,6 +12,7 @@ from django.test import SimpleTestCase, TestCase, override_settings
 from django.utils import timezone
 
 from apps.accounts.models import User
+from apps.audit.models import AuditEvent
 from apps.core.management.commands.external_graph_acceptance import INVALID_SENDER
 from apps.core.management.commands.external_mollie_acceptance import Command as MollieAcceptanceCommand
 from apps.core.models import SystemSetting
@@ -164,6 +165,15 @@ class ExternalAcceptanceSafetyTests(TestCase):
         self.assertTrue(payload['checkout_enabled'])
         self.assertEqual(payload['profile_status'], 'verified')
         self.assertEqual(payload['activated_methods'], ['creditcard'])
+        self.assertTrue(
+            AuditEvent.objects.filter(
+                action='mollie.checkout_enabled',
+                object_type='SystemSetting',
+                object_id=str(gate.id),
+                changes__checkout_enabled=True,
+                changes__profile_id='pfl_runtime',
+            ).exists()
+        )
         fake.get_current_profile.assert_called_once_with()
         fake.list_methods.assert_called_once_with()
 
