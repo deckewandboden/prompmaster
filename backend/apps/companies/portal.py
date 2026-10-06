@@ -1222,12 +1222,13 @@ def renew(request, pk):
     checkout_session_key, checkout_key = _checkout_key(request, f'renew:{license_obj.id}')
     form = RenewalForm(request.POST or None, require_withdrawal=private_customer)
     checkout_available = mollie_runtime_ready()
+    form_valid = form.is_valid() if request.method == 'POST' else False
     if request.method == 'POST' and not checkout_available:
         form.add_error(
             None,
             'Der Zahlungsdienst ist derzeit noch nicht verfügbar. Bitte versuchen Sie es später erneut.',
         )
-    if request.method == 'POST' and checkout_available and form.is_valid():
+    if request.method == 'POST' and checkout_available and form_valid:
         try:
             documents = _active_legal_documents(private_customer=private_customer)
             order = create_order(user=request.user, product=license_obj.product, quantity=1, target_license=license_obj, idempotency_key=checkout_key)
