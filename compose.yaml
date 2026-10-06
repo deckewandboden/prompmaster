@@ -111,7 +111,7 @@ services:
       start_period: 15s
     restart: unless-stopped
   prometheus:
-    image: prom/prometheus:v3.13.3
+    image: prom/prometheus:v3.15.0
     command: ["--config.file=/etc/prometheus/prometheus.yml","--storage.tsdb.retention.time=30d"]
     volumes:
       - ./monitoring/prometheus.yml:/etc/prometheus/prometheus.yml:ro
