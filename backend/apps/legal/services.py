@@ -53,9 +53,9 @@ def process_deletion_request(deletion, *, actor, request=None, scope_company=Non
         scoped_company_id = getattr(scope_company, 'pk', scope_company)
         if not any(link.company_id == scoped_company_id for link in active_memberships):
             raise ValidationError('Benutzer ist in dieser Firma nicht aktiv.')
-        if any(link.company_id != scoped_company_id for link in active_memberships):
+        if Membership.objects.filter(user=user).exclude(company_id=scoped_company_id).exists():
             raise ValidationError(
-                'Benutzer gehört weiteren aktiven Firmen an und kann hier nicht global '
+                'Benutzer besitzt einen weiteren Firmenkontext und kann hier nicht global '
                 'gelöscht werden. Bitte nur die Mitgliedschaft dieser Firma deaktivieren.'
             )
         if (
