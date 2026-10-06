@@ -28,8 +28,13 @@ def mollie_runtime_ready():
 
     if not key or not profile_id:
         return False
-    environment = str(getattr(settings, 'ENVIRONMENT', 'development') or '').strip().lower()
-    return key.startswith('live_') if environment == 'production' else key.startswith('test_')
+    environment = str(
+        getattr(settings, 'ENVIRONMENT', 'development') or ''
+    ).strip().lower()
+    if environment == 'production':
+        checkout_enabled = get_setting('mollie_checkout_enabled', False) is True
+        return key.startswith('live_') and checkout_enabled
+    return key.startswith('test_')
 
 
 
