@@ -51,6 +51,29 @@ class RuntimeConfigTests(unittest.TestCase):
         self.assertIn('restic restore latest --tag "$legacy_backup_tag"', backup)
         self.assertIn('promptfinisher-${ts}.dump', backup)
 
+    def test_redis_runtime_uses_hardened_patched_image(self):
+        redis = self.base['services']['redis']
+        self.assertEqual(redis['image'], 'promptfinisher-redis:7-alpine-hardened')
+        self.assertEqual(
+            redis['build'],
+            {'context': '.', 'dockerfile': 'Dockerfile.redis'},
+        )
+        dockerfile = (ROOT / 'Dockerfile.redis').read_text()
+        self.assertIn('FROM redis:7-alpine', dockerfile)
+        self.assertIn('apk upgrade --no-cache', dockerfile)
+
+    def test_postgres_runtime_uses_hardened_gosu_free_image(self):
+        postgres = self.base['services']['postgres']
+        self.assertEqual(postgres['image'], 'promptfinisher-postgres:18-alpine-hardened')
+        self.assertEqual(
+            postgres['build'],
+            {'context': '.', 'dockerfile': 'Dockerfile.postgres'},
+        )
+        dockerfile = (ROOT / 'Dockerfile.postgres').read_text()
+        self.assertIn('apk add --no-cache su-exec', dockerfile)
+        self.assertIn('exec su-exec postgres', dockerfile)
+        self.assertIn('rm -f /usr/local/bin/gosu', dockerfile)
+
     def test_old_postgres_mount_is_rejected(self):
         self.base['services']['postgres']['volumes'] = ['postgres_data:/var/lib/postgresql/data']
         self.assertTrue(validate(self.base, self.production))
@@ -59,9 +82,65 @@ class RuntimeConfigTests(unittest.TestCase):
         self.base['services']['postgres']['ports'] = ['5432:5432']
         self.assertTrue(validate(self.base, self.production))
 
+    def test_postgres_exporter_runtime_is_rebuilt_with_patched_go_toolchain(self):
+        exporter = self.base['services']['postgres-exporter']
+        self.assertEqual(
+            exporter['image'],
+            'promptfinisher-postgres-exporter:0.20.1-hardened',
+        )
+        self.assertEqual(
+            exporter['build'],
+            {'context': '.', 'dockerfile': 'Dockerfile.postgres-exporter'},
+        )
+        dockerfile = (ROOT / 'Dockerfile.postgres-exporter').read_text()
+        self.assertIn('FROM golang:1.26.6-alpine AS build', dockerfile)
+        self.assertIn('867fbcac31cd18c143e244190ea9168cca069827', dockerfile)
+        self.assertIn('golang.org/x/crypto@v0.55.0', dockerfile)
+        self.assertIn('FROM prometheuscommunity/postgres-exporter:v0.20.1', dockerfile)
+
+    def test_node_exporter_runtime_is_rebuilt_with_patched_go_toolchain(self):
+        node_exporter = self.base['services']['node-exporter']
+        self.assertEqual(
+            node_exporter['image'],
+            'promptfinisher-node-exporter:1.12.1-hardened',
+        )
+        self.assertEqual(
+            node_exporter['build'],
+            {'context': '.', 'dockerfile': 'Dockerfile.node-exporter'},
+        )
+        dockerfile = (ROOT / 'Dockerfile.node-exporter').read_text()
+        self.assertIn('FROM golang:1.26.6-alpine AS build', dockerfile)
+        self.assertIn('6044da783597cc3b57aef7580ddcdcff58a4ee99', dockerfile)
+        self.assertIn('golang.org/x/crypto@v0.55.0', dockerfile)
+        self.assertIn('FROM scratch', dockerfile)
+
+    def test_prometheus_runtime_is_security_accepted_version(self):
+        self.assertEqual(
+            self.base['services']['prometheus']['image'],
+            'prom/prometheus:v3.15.0',
+        )
+
     def test_public_monitoring_network_is_rejected(self):
         self.base['networks']['monitor']['internal'] = False
         self.assertTrue(validate(self.base, self.production))
+
+    def test_cadvisor_runtime_is_rebuilt_with_patched_go_dependencies(self):
+        cadvisor = self.base['services']['cadvisor']
+        self.assertEqual(
+            cadvisor['image'],
+            'promptfinisher-cadvisor:0.60.6-hardened',
+        )
+        self.assertEqual(
+            cadvisor['build'],
+            {'context': '.', 'dockerfile': 'Dockerfile.cadvisor'},
+        )
+        dockerfile = (ROOT / 'Dockerfile.cadvisor').read_text()
+        self.assertIn('FROM golang:1.26.6-alpine3.23 AS build', dockerfile)
+        self.assertIn('5bf5d43ac6f60d7ee36a13b4d5b4a78ad2d0abc7', dockerfile)
+        self.assertIn('golang.org/x/crypto@v0.55.0', dockerfile)
+        self.assertIn('google.golang.org/grpc@v1.83.2', dockerfile)
+        self.assertIn('FROM ghcr.io/google/cadvisor:v0.60.6', dockerfile)
+        self.assertIn('apk upgrade --no-cache', dockerfile)
 
     def test_cadvisor_public_port_is_rejected(self):
         self.base['services']['cadvisor']['ports'] = ['8080:8080']
@@ -204,6 +283,13 @@ class RuntimeConfigTests(unittest.TestCase):
         self.assertNotIn('header_up X-Forwarded-Host', source)
         self.assertIn('header_up X-Forwarded-Proto https', source)
         self.assertIn('header_up X-Forwarded-For {client_ip}', source)
+
+    def test_external_caddy_pre_mollie_rehearsal_expects_checkout_disabled(self):
+        script = (ROOT / 'scripts' / 'test_external_caddy_mode.sh').read_text()
+        workflow = (ROOT / '.github' / 'workflows' / 'ci.yml').read_text()
+        self.assertIn('PM_EXTERNAL_CADDY_EXPECT_CHECKOUT_ENABLED', script)
+        self.assertIn("payload.get('checkoutEnabled') is expect_checkout_enabled", script)
+        self.assertIn("PM_EXTERNAL_CADDY_EXPECT_CHECKOUT_ENABLED: '0'", workflow)
 
     def test_ops_runtime_reads_promptfinisher_backup_status_path(self):
         for rel in ('backend/apps/ops/tasks.py', 'backend/apps/ops/api.py'):

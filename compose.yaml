@@ -1,7 +1,10 @@
 name: promptfinisher
 services:
   postgres:
-    image: postgres:18-alpine
+    build:
+      context: .
+      dockerfile: Dockerfile.postgres
+    image: promptfinisher-postgres:18-alpine-hardened
     environment:
       POSTGRES_DB: ${POSTGRES_DB}
       POSTGRES_USER: ${POSTGRES_USER}
@@ -15,7 +18,10 @@ services:
       retries: 10
     restart: unless-stopped
   redis:
-    image: redis:7-alpine
+    build:
+      context: .
+      dockerfile: Dockerfile.redis
+    image: promptfinisher-redis:7-alpine-hardened
     command: ["redis-server","--appendonly","yes","--save","60","1000"]
     volumes: [redis_data:/data]
     networks: [data]
@@ -105,7 +111,7 @@ services:
       start_period: 15s
     restart: unless-stopped
   prometheus:
-    image: prom/prometheus:v3.13.3
+    image: prom/prometheus:v3.15.0
     command: ["--config.file=/etc/prometheus/prometheus.yml","--storage.tsdb.retention.time=30d"]
     volumes:
       - ./monitoring/prometheus.yml:/etc/prometheus/prometheus.yml:ro
@@ -113,14 +119,20 @@ services:
     networks: [monitor]
     restart: unless-stopped
   node-exporter:
-    image: prom/node-exporter:v1.12.1
+    build:
+      context: .
+      dockerfile: Dockerfile.node-exporter
+    image: promptfinisher-node-exporter:1.12.1-hardened
     command: ["--path.rootfs=/host"]
     pid: host
     volumes: ["/:/host:ro,rslave"]
     networks: [monitor]
     restart: unless-stopped
   cadvisor:
-    image: ghcr.io/google/cadvisor:v0.60.5
+    build:
+      context: .
+      dockerfile: Dockerfile.cadvisor
+    image: promptfinisher-cadvisor:0.60.6-hardened
     privileged: true
     volumes:
       - /:/rootfs:ro
@@ -131,7 +143,10 @@ services:
     networks: [monitor]
     restart: unless-stopped
   postgres-exporter:
-    image: prometheuscommunity/postgres-exporter:v0.20.1
+    build:
+      context: .
+      dockerfile: Dockerfile.postgres-exporter
+    image: promptfinisher-postgres-exporter:0.20.1-hardened
     environment:
       DATA_SOURCE_NAME: postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@postgres:5432/${POSTGRES_DB}?sslmode=disable
     depends_on:

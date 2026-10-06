@@ -705,3 +705,80 @@ class PromptStudioLifecycleTests(TestCase):
         rating, _ = save_rating(user=self.user, version=version, stars=5, feedback='muss verschwinden')
         self.assertEqual(rating.feedback, '')
         self.assertEqual(PromptRating.objects.filter(user=self.user, version=version).count(), 1)
+
+
+class PromptStudioHttpActionTests(TestCase):
+    @classmethod
+    def setUpTestData(cls):
+        call_command('seed_defaults', verbosity=0)
+        call_command('seed_prompt_catalog', verbosity=0)
+        cls.staff = get_user_model().objects.create_superuser(
+            email='prompt-studio-http@example.invalid',
+            password='Prompt-Studio-HTTP-Password-2026!',
+            first_name='Prompt',
+            last_name='Studio',
+        )
+        cls.staff.two_factor_required = False
+        cls.staff.save(update_fields=['two_factor_required', 'updated_at'])
+
+    def setUp(self):
+        self.client.force_login(self.staff)
+        session = self.client.session
+        session['security_version'] = self.staff.security_version
+        session['two_factor_ok'] = True
+        session['authenticated_at'] = timezone.now().timestamp()
+        session['last_activity_at'] = timezone.now().timestamp()
+        session.save()
+
+    def test_draft_test_lifecycle_and_testcase_buttons_execute_real_http_actions(self):
+        definition = PromptDefinition.objects.get(task_id='PM20-001')
+        source = definition.versions.get(lifecycle='PUBLISHED')
+
+        create = self.client.post(
+            f'/ns-admin/prompt-studio/{definition.task_id}/draft/',
+            {'source_version': str(source.pk)},
+        )
+        self.assertEqual(create.status_code, 302)
+        draft = definition.versions.filter(lifecycle='DRAFT').order_by('-version').first()
+        self.assertIsNotNone(draft)
+
+        run_all = self.client.post(
+            f'/ns-admin/prompt-studio/version/{draft.pk}/tests/run/'
+        )
+        self.assertEqual(run_all.status_code, 302)
+        draft.refresh_from_db()
+        case = draft.test_cases.filter(enabled=True).first()
+        self.assertIsNotNone(case)
+        case.refresh_from_db()
+        self.assertIn(case.last_status, {'PASSED', 'FAILED', 'ERROR'})
+
+        transition_response = self.client.post(
+            f'/ns-admin/prompt-studio/version/{draft.pk}/lifecycle/TEST/'
+        )
+        self.assertEqual(transition_response.status_code, 302)
+        draft.refresh_from_db()
+        self.assertEqual(draft.lifecycle, 'TEST')
+
+        run_one = self.client.post(
+            f'/ns-admin/prompt-studio/tests/{case.pk}/run/'
+        )
+        self.assertEqual(run_one.status_code, 302)
+        case.refresh_from_db()
+        self.assertIn(case.last_status, {'PASSED', 'FAILED', 'ERROR'})
+
+        delete = self.client.post(
+            f'/ns-admin/prompt-studio/tests/{case.pk}/delete/'
+        )
+        self.assertEqual(delete.status_code, 302)
+        self.assertFalse(PromptTestCase.objects.filter(pk=case.pk).exists())
+
+    def test_prompt_studio_mutation_routes_do_not_execute_on_get(self):
+        definition = PromptDefinition.objects.get(task_id='PM20-001')
+        source = definition.versions.get(lifecycle='PUBLISHED')
+        before = definition.versions.count()
+        response = self.client.get(
+            f'/ns-admin/prompt-studio/{definition.task_id}/draft/',
+            {'source_version': str(source.pk)},
+        )
+        self.assertEqual(response.status_code, 403)
+        self.assertEqual(definition.versions.count(), before)

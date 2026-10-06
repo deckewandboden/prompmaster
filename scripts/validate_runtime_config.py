@@ -12,8 +12,11 @@ def validate(compose, production):
     errors = []
     services = compose['services']
     postgres = services['postgres']
-    if not postgres.get('image', '').startswith('postgres:18'):
-        errors.append('PostgreSQL 18 image required')
+    redis = services['redis']
+    if postgres.get('image') != 'promptfinisher-postgres:18-alpine-hardened':
+        errors.append('Hardened PostgreSQL 18 image required')
+    if postgres.get('build') != {'context': '.', 'dockerfile': 'Dockerfile.postgres'}:
+        errors.append('PostgreSQL must build from tracked Dockerfile.postgres')
     if postgres.get('volumes') != ['postgres_data:/var/lib/postgresql']:
         errors.append('PostgreSQL 18 must reuse postgres_data at /var/lib/postgresql')
     if 'PGDATA' in postgres.get('environment', {}):
@@ -22,14 +25,34 @@ def validate(compose, production):
         errors.append('PostgreSQL must have no published ports and use only data')
     if not compose['networks']['data'].get('internal') or not postgres.get('healthcheck'):
         errors.append('Internal data network and PostgreSQL healthcheck required')
+    if redis.get('image') != 'promptfinisher-redis:7-alpine-hardened':
+        errors.append('Hardened Redis 7 image required')
+    if redis.get('build') != {'context': '.', 'dockerfile': 'Dockerfile.redis'}:
+        errors.append('Redis must build from tracked Dockerfile.redis')
+    if redis.get('ports') or redis.get('networks') != ['data']:
+        errors.append('Redis must have no published ports and use only data')
     if services['backup'].get('build') != './backup':
         errors.append('Backup build context must be ./backup')
+    if services.get('prometheus', {}).get('image') != 'prom/prometheus:v3.15.0':
+        errors.append('Prometheus must remain pinned to the security-accepted v3.15.0 image')
+    postgres_exporter = services.get('postgres-exporter', {})
+    if postgres_exporter.get('image') != 'promptfinisher-postgres-exporter:0.20.1-hardened':
+        errors.append('Hardened postgres_exporter 0.20.1 image required')
+    if postgres_exporter.get('build') != {'context': '.', 'dockerfile': 'Dockerfile.postgres-exporter'}:
+        errors.append('postgres_exporter must build from tracked Dockerfile.postgres-exporter')
+    node_exporter = services.get('node-exporter', {})
+    if node_exporter.get('image') != 'promptfinisher-node-exporter:1.12.1-hardened':
+        errors.append('Hardened node_exporter 1.12.1 image required')
+    if node_exporter.get('build') != {'context': '.', 'dockerfile': 'Dockerfile.node-exporter'}:
+        errors.append('node_exporter must build from tracked Dockerfile.node-exporter')
     monitor = compose.get('networks', {}).get('monitor', {})
     cadvisor = services.get('cadvisor', {})
     if monitor.get('internal') is not True:
         errors.append('Monitoring network must remain internal')
-    if cadvisor.get('image') != 'ghcr.io/google/cadvisor:v0.60.5':
-        errors.append('cAdvisor image must remain explicitly pinned')
+    if cadvisor.get('image') != 'promptfinisher-cadvisor:0.60.6-hardened':
+        errors.append('Hardened cAdvisor 0.60.6 image required')
+    if cadvisor.get('build') != {'context': '.', 'dockerfile': 'Dockerfile.cadvisor'}:
+        errors.append('cAdvisor must build from tracked Dockerfile.cadvisor')
     if cadvisor.get('privileged') is not True:
         errors.append('cAdvisor host trust boundary changed; staging validation and release decision required')
     if cadvisor.get('networks') != ['monitor'] or cadvisor.get('ports'):
@@ -87,6 +110,18 @@ def main():
         yaml.safe_load((ROOT / 'compose.production.yaml').read_text()),
     )
     errors.extend(validate_legacy_volume_overlay())
+    for runtime_file in ('Dockerfile.postgres', 'Dockerfile.redis', 'Dockerfile.node-exporter', 'Dockerfile.cadvisor', 'Dockerfile.postgres-exporter'):
+        runtime_path = ROOT / runtime_file
+        if not runtime_path.is_file():
+            errors.append(f'Missing hardened runtime build input: {runtime_file}')
+            continue
+        tracked = subprocess.run(
+            ['git', 'ls-files', '--error-unmatch', runtime_file], cwd=ROOT,
+            capture_output=True,
+        )
+        if tracked.returncode:
+            errors.append(f'Hardened runtime Dockerfile is not Git-tracked: {runtime_file}')
+
     for name in ('Dockerfile', 'backup.sh', '.dockerignore'):
         path = f'backup/{name}'
         if not (ROOT / path).is_file():

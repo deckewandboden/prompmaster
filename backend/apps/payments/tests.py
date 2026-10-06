@@ -6,15 +6,16 @@ from unittest.mock import patch
 
 from django.core.management import call_command
 from django.core.management.base import CommandError
-from django.test import SimpleTestCase, TestCase
+from django.test import SimpleTestCase, TestCase, override_settings
 from django.utils import timezone
 
 from apps.accounts.models import User
+from apps.core.admin_forms import MollieConfigForm
 from apps.catalog.models import Product, ProductPrice
 from apps.licenses.models import License, LicenseTerm
 from apps.orders.models import Order, OrderItem
 
-from .mollie import MollieClient
+from .mollie import MollieClient, MollieError
 from .models import MollieEvent, Payment
 from .services import calculate_refund, process_provider_state
 
@@ -43,7 +44,36 @@ class RefundMathTests(SimpleTestCase):
         self.assertEqual(amount, Decimal('9.83'))
 
 
+class MollieConfigurationSafetyTests(SimpleTestCase):
+    @override_settings(ENVIRONMENT='production')
+    def test_production_form_accepts_only_live_keys(self):
+        valid = MollieConfigForm({'profile_id': 'pfl_live', 'api_key': 'live_valid_key'})
+        self.assertTrue(valid.is_valid(), valid.errors)
+        invalid = MollieConfigForm({'profile_id': 'pfl_live', 'api_key': 'test_wrong_mode'})
+        self.assertFalse(invalid.is_valid())
+        self.assertIn('api_key', invalid.errors)
+
+    @override_settings(ENVIRONMENT='staging')
+    def test_nonproduction_form_accepts_only_test_keys(self):
+        valid = MollieConfigForm({'profile_id': 'pfl_test', 'api_key': 'test_valid_key'})
+        self.assertTrue(valid.is_valid(), valid.errors)
+        invalid = MollieConfigForm({'profile_id': 'pfl_test', 'api_key': 'live_wrong_mode'})
+        self.assertFalse(invalid.is_valid())
+        self.assertIn('api_key', invalid.errors)
+
+    @override_settings(ENVIRONMENT='production')
+    def test_production_client_rejects_runtime_test_key(self):
+        with self.assertRaisesMessage(MollieError, 'Production requires a Mollie live API key'):
+            MollieClient(key='test_runtime_key')
+
+    @override_settings(ENVIRONMENT='staging')
+    def test_nonproduction_client_rejects_runtime_live_key(self):
+        with self.assertRaisesMessage(MollieError, 'Non-production environments refuse Mollie live API keys'):
+            MollieClient(key='live_runtime_key')
+
+
 class MollieLiveProbeTests(SimpleTestCase):
+    @override_settings(ENVIRONMENT='production')
     def test_current_profile_uses_read_only_profiles_me_endpoint(self):
         client = MollieClient(key='live_probe_key')
         payload = {'resource': 'profile', 'id': 'pfl_probe', 'mode': 'live'}

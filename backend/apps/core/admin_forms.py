@@ -1,6 +1,7 @@
 from decimal import Decimal
 
 from django import forms
+from django.conf import settings
 from django.utils import timezone
 
 from apps.accounts.models import Permission, Role, User
@@ -403,6 +404,22 @@ class MollieConfigForm(forms.Form):
         label='API-Schlüssel',
         help_text='Leer lassen, um den bestehenden Schlüssel unverändert zu lassen.',
     )
+
+    def clean_api_key(self):
+        key = (self.cleaned_data.get('api_key') or '').strip()
+        if not key:
+            return ''
+        environment = str(getattr(settings, 'ENVIRONMENT', 'development') or '').strip().lower()
+        if environment == 'production':
+            if not key.startswith('live_'):
+                raise forms.ValidationError(
+                    'In Produktion ist ausschließlich ein Mollie-Live-Key (live_…) zulässig.'
+                )
+        elif not key.startswith('test_'):
+            raise forms.ValidationError(
+                'Außerhalb der Produktion ist ausschließlich ein Mollie-Test-Key (test_…) zulässig.'
+            )
+        return key
 
 
 class GeneralSettingsForm(forms.Form):

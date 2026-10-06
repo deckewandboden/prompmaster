@@ -2,6 +2,30 @@ import requests
 from django.conf import settings
 
 
+def mollie_runtime_ready():
+    """Return True only when the effective runtime payment configuration is usable.
+
+    Secrets may live encrypted in the database, so this deliberately checks the
+    same effective sources as MollieClient rather than only settings/.env.
+    """
+    try:
+        from apps.core.settings_store import get_setting
+        from apps.integrations.services import get_secret
+
+        key = (get_secret('mollie_api_key', settings.MOLLIE_API_KEY) or '').strip()
+        profile_id = (
+            get_setting('mollie_profile_id', settings.MOLLIE_PROFILE_ID) or ''
+        ).strip()
+    except Exception:
+        return False
+
+    if not key or not profile_id:
+        return False
+    environment = str(getattr(settings, 'ENVIRONMENT', 'development') or '').strip().lower()
+    return key.startswith('live_') if environment == 'production' else key.startswith('test_')
+
+
+
 class MollieError(RuntimeError):
     """Sanitised provider error with retry-safety classification.
 
@@ -23,7 +47,20 @@ class MollieClient:
         if key is None:
             from apps.integrations.services import get_secret
             key = get_secret('mollie_api_key', settings.MOLLIE_API_KEY)
-        self.key = key
+        self.key = (key or '').strip()
+
+        if self.key:
+            environment = str(getattr(settings, 'ENVIRONMENT', 'development') or '').strip().lower()
+            if environment == 'production' and not self.key.startswith('live_'):
+                raise MollieError(
+                    'Production requires a Mollie live API key',
+                    ambiguous=False,
+                )
+            if environment != 'production' and self.key.startswith('live_'):
+                raise MollieError(
+                    'Non-production environments refuse Mollie live API keys',
+                    ambiguous=False,
+                )
 
     def _request(self, method, path, **kwargs):
         if not self.key:

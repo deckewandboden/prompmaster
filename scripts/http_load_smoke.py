@@ -13,6 +13,9 @@ BASE = os.getenv('PM_LOAD_BASE_URL', 'https://localhost').rstrip('/')
 WORKERS = int(os.getenv('PM_LOAD_WORKERS', '32'))
 REQUESTS = int(os.getenv('PM_LOAD_REQUESTS', '640'))
 TIMEOUT = float(os.getenv('PM_LOAD_TIMEOUT', '12'))
+EXPECT_CHECKOUT_ENABLED = os.getenv('PM_LOAD_EXPECT_CHECKOUT_ENABLED', '1').strip().lower() in {
+    '1', 'true', 'yes', 'on'
+}
 PATHS = ('/', '/health/live/', '/health/ready/', '/catalog.json', '/auth/login/')
 SSL_CONTEXT = ssl._create_unverified_context() if BASE.startswith('https://localhost') else None
 
@@ -51,7 +54,7 @@ def validate_once(path):
             and payload.get('taxBasisPoints') == 1900
             and payload.get('market') == 'DE'
             and payload.get('maxQuantity') == 500
-            and payload.get('checkoutEnabled') is True
+            and payload.get('checkoutEnabled') is EXPECT_CHECKOUT_ENABLED
             and payload.get('loginEnabled') is True
             and payload.get('proApplicationCount') == 34
             and len(names) == 34

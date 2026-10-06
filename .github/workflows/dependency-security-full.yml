@@ -43,3 +43,82 @@ jobs:
           # intentionally pruned by npm ci on Linux and can otherwise make the
           # legacy quick-audit endpoint reject an otherwise valid lockfile.
           npm audit --package-lock-only --audit-level=high
+
+
+  container-security:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Install pinned Trivy
+        uses: aquasecurity/setup-trivy@81e514348e19b6112ce2a7e3ecbafe19c1e1f567 # v0.3.1
+        with:
+          version: v0.75.0
+          cache: true
+
+      - name: Build deployable PROMPTFINISHER images
+        run: |
+          set -Eeuo pipefail
+          docker build -t promptfinisher-web:ci .
+          docker build -f Dockerfile.caddy -t promptfinisher-caddy:ci .
+          docker build -f Dockerfile.postgres -t promptfinisher-postgres:ci .
+          docker build -f Dockerfile.redis -t promptfinisher-redis:ci .
+          docker build -f Dockerfile.node-exporter -t promptfinisher-node-exporter:ci .
+          docker build -f Dockerfile.cadvisor -t promptfinisher-cadvisor:ci .
+          docker build -f Dockerfile.postgres-exporter -t promptfinisher-postgres-exporter:ci .
+          docker build -t promptfinisher-backup:ci ./backup
+
+      - name: Scan actual production container root filesystems for fixable high and critical CVEs
+        run: |
+          set -Eeuo pipefail
+          images=(
+            "promptfinisher-web:ci"
+            "promptfinisher-caddy:ci"
+            "promptfinisher-backup:ci"
+            "promptfinisher-postgres:ci"
+            "promptfinisher-redis:ci"
+            "prom/prometheus:v3.15.0"
+            "promptfinisher-node-exporter:ci"
+            "promptfinisher-cadvisor:ci"
+            "promptfinisher-postgres-exporter:ci"
+          )
+
+          workdir="$(mktemp -d)"
+          cleanup() {
+            rm -rf "$workdir"
+          }
+          trap cleanup EXIT
+
+          for image in "${images[@]}"; do
+            echo "============================================================"
+            echo "TRIVY ROOTFS GATE: $image"
+            echo "============================================================"
+
+            docker image inspect "$image" >/dev/null 2>&1 || docker pull "$image"
+
+            safe_name="$(printf '%s' "$image" | tr '/:' '__')"
+            rootfs="$workdir/$safe_name"
+            mkdir -p "$rootfs"
+
+            cid="$(docker create "$image")"
+            docker export "$cid" | tar -C "$rootfs" -xf -
+            docker rm "$cid" >/dev/null
+
+            trivy rootfs \
+              --scanners vuln \
+              --severity HIGH,CRITICAL \
+              --ignore-unfixed \
+              --skip-files '**/*.spdx' \
+              --skip-files '**/*.spdx.json' \
+              --skip-files '**/*.cdx' \
+              --skip-files '**/*.cdx.json' \
+              --config="" \
+              --ignorefile="" \
+              --exit-code 1 \
+              --timeout 10m \
+              "$rootfs"
+
+            rm -rf "$rootfs"
+          done

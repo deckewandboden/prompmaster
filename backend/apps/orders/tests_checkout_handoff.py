@@ -3,13 +3,17 @@ from urllib.parse import urlsplit
 from unittest.mock import patch
 
 from django.core.cache import cache
-from django.test import TestCase
+from django.test import TestCase, override_settings
 from django.utils import timezone
 
 from apps.accounts.models import User
 from apps.catalog.models import Product, ProductPrice, TaxRule
 from apps.companies.models import Company, Membership
+from apps.core.settings_store import set_setting
+from apps.integrations.models import IntegrationSecret
+from apps.integrations.services import set_secret
 from apps.legal.models import LegalDocument
+from apps.licenses.models import License
 from apps.orders.models import Order
 from apps.orders.services import MAX_PURCHASE_QUANTITY
 from apps.payments.models import Payment
@@ -78,6 +82,8 @@ class PurchaseHandoffTests(TestCase):
         session['authenticated_at'] = now.timestamp()
         session['last_activity_at'] = now.timestamp()
         session.save()
+        set_secret('mollie_api_key', 'test_checkout_handoff_key')
+        set_setting('mollie_profile_id', 'pfl_checkout_handoff')
 
     def test_marketing_quantity_is_prefilled_and_clamped_to_backend_limit(self):
         response = self.client.get('/portal/licenses/buy/?quantity=7')
@@ -95,6 +101,25 @@ class PurchaseHandoffTests(TestCase):
         response = self.client.get('/portal/licenses/buy/?quantity=invalid')
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.context['form'].initial['quantity'], 1)
+
+    @override_settings(ENVIRONMENT='staging', MOLLIE_API_KEY='')
+    def test_portal_checkout_without_mollie_fails_closed_without_payment_or_license(self):
+        IntegrationSecret.objects.filter(code='mollie_api_key').delete()
+        set_setting('mollie_profile_id', '')
+        response = self.client.post(
+            '/portal/licenses/buy/?quantity=2',
+            {
+                'quantity': '2',
+                'accept_terms': 'on',
+                'accept_privacy': 'on',
+                'accept_license': 'on',
+            },
+        )
+        self.assertEqual(response.status_code, 200)
+        self.assertFalse(Order.objects.filter(company=self.company).exists())
+        self.assertFalse(Payment.objects.exists())
+        self.assertFalse(License.objects.filter(company=self.company).exists())
+        self.assertContains(response, 'Der Zahlungsdienst ist derzeit noch nicht verfügbar')
 
     @patch('apps.companies.portal.MollieClient.create_payment')
     def test_checkout_creates_order_and_payment_for_selected_quantity(self, create_payment):
@@ -189,6 +214,8 @@ class PublicCheckoutFlowTests(TestCase):
                 valid_from=now,
                 active=True,
             )
+        set_secret('mollie_api_key', 'test_public_checkout_key')
+        set_setting('mollie_profile_id', 'pfl_public_checkout')
 
     @staticmethod
     def company_payload(quantity='3', email='new-company@example.test'):
@@ -237,6 +264,22 @@ class PublicCheckoutFlowTests(TestCase):
             'accept_withdrawal': 'on',
             'request_early_performance': 'on',
         }
+
+    @override_settings(ENVIRONMENT='staging', MOLLIE_API_KEY='')
+    def test_public_checkout_without_mollie_rolls_back_customer_order_and_payment(self):
+        IntegrationSecret.objects.filter(code='mollie_api_key').delete()
+        set_setting('mollie_profile_id', '')
+        email = 'no-mollie-public@example.test'
+        response = self.client.post(
+            '/api/v1/checkout/start/',
+            self.company_payload(email=email),
+        )
+        self.assertEqual(response.status_code, 302)
+        self.assertIn('error=payment', response.url)
+        self.assertFalse(User.objects.filter(email=email).exists())
+        self.assertFalse(Order.objects.filter(company__email=email).exists())
+        self.assertFalse(Payment.objects.exists())
+        self.assertFalse(License.objects.exists())
 
     @patch('apps.payments.mollie.MollieClient.create_payment')
     def test_public_company_checkout_creates_customer_order_and_payment(self, create_payment):
@@ -430,6 +473,8 @@ class PublicCheckoutFlowTests(TestCase):
         self.assertEqual(Order.objects.filter(private_user=user).count(), 1)
 
     def test_checkout_csrf_endpoint_supports_http_only_cookie_flow(self):
+        IntegrationSecret.objects.filter(code='mollie_api_key').delete()
+        set_setting('mollie_profile_id', '')
         client = self.client_class(enforce_csrf_checks=True)
         token_response = client.get('/api/v1/checkout/csrf/')
         self.assertEqual(token_response.status_code, 200)
