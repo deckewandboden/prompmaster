@@ -44,8 +44,10 @@ def validate(compose, production):
     cadvisor = services.get('cadvisor', {})
     if monitor.get('internal') is not True:
         errors.append('Monitoring network must remain internal')
-    if cadvisor.get('image') != 'ghcr.io/google/cadvisor:v0.60.5':
-        errors.append('cAdvisor image must remain explicitly pinned')
+    if cadvisor.get('image') != 'promptfinisher-cadvisor:0.60.6-hardened':
+        errors.append('Hardened cAdvisor 0.60.6 image required')
+    if cadvisor.get('build') != {'context': '.', 'dockerfile': 'Dockerfile.cadvisor'}:
+        errors.append('cAdvisor must build from tracked Dockerfile.cadvisor')
     if cadvisor.get('privileged') is not True:
         errors.append('cAdvisor host trust boundary changed; staging validation and release decision required')
     if cadvisor.get('networks') != ['monitor'] or cadvisor.get('ports'):
@@ -103,7 +105,7 @@ def main():
         yaml.safe_load((ROOT / 'compose.production.yaml').read_text()),
     )
     errors.extend(validate_legacy_volume_overlay())
-    for runtime_file in ('Dockerfile.postgres', 'Dockerfile.redis', 'Dockerfile.node-exporter'):
+    for runtime_file in ('Dockerfile.postgres', 'Dockerfile.redis', 'Dockerfile.node-exporter', 'Dockerfile.cadvisor'):
         runtime_path = ROOT / runtime_file
         if not runtime_path.is_file():
             errors.append(f'Missing hardened runtime build input: {runtime_file}')
