@@ -11,7 +11,7 @@ from django.test import Client
 from django.utils import timezone
 
 from apps.companies.models import Membership
-from apps.core.settings_store import get_setting
+from apps.core.settings_store import get_setting, set_setting
 from apps.payments.mollie import MollieClient
 from apps.payments.models import MollieEvent, Payment
 from apps.payments.services import create_refund_request, submit_refund
@@ -19,13 +19,14 @@ from apps.payments.services import create_refund_request, submit_refund
 
 START_CONFIRM = 'CREATE-MOLLIE-TEST-PAYMENT'
 REFUND_CONFIRM = 'CREATE-MOLLIE-TEST-REFUND'
+LIVE_ENABLE_CONFIRM = 'ENABLE-MOLLIE-LIVE-CHECKOUT'
 
 
 class Command(BaseCommand):
     help = 'Run staged acceptance against Mollie test mode using PROMPTFINISHER production code paths.'
 
     def add_arguments(self, parser):
-        parser.add_argument('action', choices=['start', 'verify', 'refund', 'probe-live'])
+        parser.add_argument('action', choices=['start', 'verify', 'refund', 'probe-live', 'activate-live'])
         parser.add_argument('--user-email')
         parser.add_argument('--payment-id')
         parser.add_argument('--base-url')
@@ -50,6 +51,13 @@ class Command(BaseCommand):
         action = options['action']
         if action == 'probe-live':
             return self._probe_live()
+        if action == 'activate-live':
+            if options.get('confirm') != LIVE_ENABLE_CONFIRM:
+                raise CommandError(
+                    'Refusing to enable live checkout. Pass '
+                    f'--confirm {LIVE_ENABLE_CONFIRM}.'
+                )
+            return self._probe_live(enable_checkout=True)
         client = self._client()
         if action == 'start':
             return self._start(client, options)
@@ -57,7 +65,7 @@ class Command(BaseCommand):
             return self._verify(client, options)
         return self._refund(options)
 
-    def _probe_live(self):
+    def _probe_live(self, *, enable_checkout=False):
         client = MollieClient()
         if not client.key:
             raise CommandError('Mollie API key is not configured in runtime settings or .env.')
@@ -122,6 +130,16 @@ class Command(BaseCommand):
             else ''
         )
 
+        if enable_checkout:
+            set_setting(
+                'mollie_checkout_enabled',
+                True,
+                description=(
+                    'Explicit production checkout approval after successful '
+                    'Mollie live-readiness probe.'
+                ),
+            )
+
         self.stdout.write(json.dumps({
             'status': 'ok',
             'mode': mode,
@@ -130,7 +148,12 @@ class Command(BaseCommand):
             'profile_status': profile_status,
             'review_status': review_status or None,
             'activated_methods': activated_methods,
-            'check': 'read-only live profile and payment methods',
+            'checkout_enabled': bool(enable_checkout),
+            'check': (
+                'live checkout enabled after read-only provider checks'
+                if enable_checkout
+                else 'read-only live profile and payment methods'
+            ),
         }, sort_keys=True))
 
     def _checkout_payload(self, user):
