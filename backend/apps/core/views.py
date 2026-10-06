@@ -272,7 +272,12 @@ def public_checkout_start(request):
     from apps.legal.models import LegalAcceptance, LegalDocument
     from apps.orders.forms import PublicCheckoutForm
     from apps.orders.services import MAX_PURCHASE_QUANTITY, create_order
-    from apps.payments.mollie import (MOLLIE_IDEMPOTENCY_SAFE_RETRY_SECONDS, MollieClient, MollieError, mollie_runtime_ready)
+    from apps.payments.mollie import (
+        MOLLIE_IDEMPOTENCY_SAFE_RETRY_SECONDS,
+        MollieClient,
+        MollieError,
+        mollie_runtime_ready,
+    )
     from apps.payments.models import Payment
 
     def start_provider_payment(order):
