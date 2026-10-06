@@ -37,12 +37,14 @@ class Command(BaseCommand):
         parser.add_argument('--confirm')
 
     def _client(self):
-        client = MollieClient()
-        if not client.key:
+        from apps.integrations.services import get_secret
+
+        key = (get_secret('mollie_api_key', settings.MOLLIE_API_KEY) or '').strip()
+        if not key:
             raise CommandError('MOLLIE_API_KEY is not configured.')
-        if not client.key.startswith('test_'):
+        if not key.startswith('test_'):
             raise CommandError('External Mollie acceptance refuses non-test API keys.')
-        return client
+        return MollieClient(key=key)
 
     def handle(self, *args, **options):
         action = options['action']
