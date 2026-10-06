@@ -1150,18 +1150,19 @@ def buy(request):
         initial_quantity = 1
     initial_quantity = max(1, min(MAX_PURCHASE_QUANTITY, initial_quantity))
     form = PurchaseForm(
-        request.POST or None,
+        request.POST if request.method == 'POST' else None,
         initial={'quantity': initial_quantity},
         require_withdrawal=private_customer,
     )
     checkout_available = mollie_runtime_ready()
+    form_valid = form.is_valid() if request.method == 'POST' else False
     if request.method == 'POST' and not checkout_available:
         form.add_error(
             None,
             'Der Zahlungsdienst ist derzeit noch nicht verfügbar. Bitte versuchen Sie es später erneut.',
         )
 
-    if request.method == 'POST' and checkout_available and form.is_valid():
+    if request.method == 'POST' and checkout_available and form_valid:
         try:
             documents = _active_legal_documents(private_customer=private_customer)
             order = create_order(user=request.user, product=product, quantity=form.cleaned_data['quantity'], idempotency_key=checkout_key)
@@ -1220,7 +1221,10 @@ def renew(request, pk):
 
     private_customer = license_obj.owner_user_id == request.user.id
     checkout_session_key, checkout_key = _checkout_key(request, f'renew:{license_obj.id}')
-    form = RenewalForm(request.POST or None, require_withdrawal=private_customer)
+    form = RenewalForm(
+        request.POST if request.method == 'POST' else None,
+        require_withdrawal=private_customer,
+    )
     checkout_available = mollie_runtime_ready()
     form_valid = form.is_valid() if request.method == 'POST' else False
     if request.method == 'POST' and not checkout_available:
