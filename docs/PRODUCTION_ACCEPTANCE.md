@@ -138,7 +138,7 @@ Nach erfolgreicher Sandbox-Abnahme und erst nachdem der Mollie-Account produktiv
 docker compose exec -T web python manage.py external_mollie_acceptance probe-live
 ```
 
-Das Gate ist nur bestanden, wenn der Command JSON mit `"status": "ok"` liefert und gleichzeitig nachweist:
+Das Probe-Gate ist nur bestanden, wenn der Command JSON mit `"status": "ok"` liefert und gleichzeitig nachweist:
 
 - der effektive Runtime-Key ist ein `live_`-Key;
 - `GET /v2/profiles/me` liefert exakt die konfigurierte Profil-ID;
@@ -146,7 +146,18 @@ Das Gate ist nur bestanden, wenn der Command JSON mit `"status": "ok"` liefert u
 - `profile.status=verified`;
 - `GET /v2/methods?sequenceType=oneoff` liefert mindestens eine Zahlart mit `status=activated`.
 
-Die Probe erstellt **keine** Zahlung, Erstattung oder sonstige Provider-Mutation. Ein Profil mit `unverified`/`blocked` oder ohne aktivierte Live-Zahlart bleibt Go-Live-blockierend.
+Die Probe erstellt **keine** Zahlung, Erstattung oder sonstige Provider-Mutation. Ein Profil mit `unverified`/`blocked` oder ohne aktivierte Live-Zahlart bleibt Go-Live-blockierend. Auch nach erfolgreichem `probe-live` bleibt der öffentliche Produktiv-Checkout absichtlich gesperrt.
+
+Erst die bewusste finale Freigabe aktiviert neue echte Käufe:
+
+```bash
+docker compose exec -T web python manage.py external_mollie_acceptance activate-live \
+  --confirm ENABLE-MOLLIE-LIVE-CHECKOUT
+```
+
+`activate-live` wiederholt dieselben read-only Providerprüfungen und setzt nur nach vollständigem Erfolg den lokalen Gate-Wert `mollie_checkout_enabled=true`. Jede spätere Änderung an Mollie-Profil-ID oder API-Key setzt diese Freigabe automatisch wieder auf `false`.
+
+Eine sofortige Notabschaltung ist im Netstyle-Backend auf der Mollie-Seite über **„Produktiv-Checkout sperren“** möglich. Sie verhindert neue Kaufstarts, ohne bestehende Payment-Webhooks, Refunds oder Reconciliation abzuschalten.
 
 ## Externes S3/restic + echter Restore-Drill
 
