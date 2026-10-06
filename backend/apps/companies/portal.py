@@ -31,7 +31,7 @@ from apps.notifications.services import queue_email
 from apps.orders.models import Order
 from apps.payments.models import Payment
 from apps.proaccess.services import active_product_assignment, assignment_expiry_context
-from apps.payments.mollie import MollieClient, MollieError
+from apps.payments.mollie import MollieClient, MollieError, mollie_runtime_ready
 from apps.support.models import SupportMessage, SupportRequest
 from .forms import CompanyForm, InviteForm, PrivateCustomerForm, SupportForm, UserProfileForm
 from .models import Invitation, Membership
@@ -1154,8 +1154,14 @@ def buy(request):
         initial={'quantity': initial_quantity},
         require_withdrawal=private_customer,
     )
+    checkout_available = mollie_runtime_ready()
+    if request.method == 'POST' and not checkout_available:
+        form.add_error(
+            None,
+            'Der Zahlungsdienst ist derzeit noch nicht verfügbar. Bitte versuchen Sie es später erneut.',
+        )
 
-    if request.method == 'POST' and form.is_valid():
+    if request.method == 'POST' and checkout_available and form.is_valid():
         try:
             documents = _active_legal_documents(private_customer=private_customer)
             order = create_order(user=request.user, product=product, quantity=form.cleaned_data['quantity'], idempotency_key=checkout_key)
@@ -1191,6 +1197,7 @@ def buy(request):
             'product': product,
             'price': price,
             'unit_price_cents': int(price.gross_amount * 100) if price else None,
+            'checkout_available': checkout_available,
         },
     )
 
@@ -1214,7 +1221,13 @@ def renew(request, pk):
     private_customer = license_obj.owner_user_id == request.user.id
     checkout_session_key, checkout_key = _checkout_key(request, f'renew:{license_obj.id}')
     form = RenewalForm(request.POST or None, require_withdrawal=private_customer)
-    if request.method == 'POST' and form.is_valid():
+    checkout_available = mollie_runtime_ready()
+    if request.method == 'POST' and not checkout_available:
+        form.add_error(
+            None,
+            'Der Zahlungsdienst ist derzeit noch nicht verfügbar. Bitte versuchen Sie es später erneut.',
+        )
+    if request.method == 'POST' and checkout_available and form.is_valid():
         try:
             documents = _active_legal_documents(private_customer=private_customer)
             order = create_order(user=request.user, product=license_obj.product, quantity=1, target_license=license_obj, idempotency_key=checkout_key)
@@ -1241,7 +1254,11 @@ def renew(request, pk):
         except Exception:
             logger.exception('Renewal checkout failed')
             form.add_error(None, 'Verlängerung konnte nicht vorbereitet werden.')
-    return render(request, 'portal/renew.html', {'form': form, 'license': license_obj})
+    return render(
+        request,
+        'portal/renew.html',
+        {'form': form, 'license': license_obj, 'checkout_available': checkout_available},
+    )
 
 
 @login_required
