@@ -23,7 +23,20 @@ class MollieClient:
         if key is None:
             from apps.integrations.services import get_secret
             key = get_secret('mollie_api_key', settings.MOLLIE_API_KEY)
-        self.key = key
+        self.key = (key or '').strip()
+
+        if self.key:
+            environment = str(getattr(settings, 'ENVIRONMENT', 'development') or '').strip().lower()
+            if environment == 'production' and not self.key.startswith('live_'):
+                raise MollieError(
+                    'Production requires a Mollie live API key',
+                    ambiguous=False,
+                )
+            if environment != 'production' and self.key.startswith('live_'):
+                raise MollieError(
+                    'Non-production environments refuse Mollie live API keys',
+                    ambiguous=False,
+                )
 
     def _request(self, method, path, **kwargs):
         if not self.key:
