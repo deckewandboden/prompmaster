@@ -4,6 +4,7 @@ from celery import shared_task
 from django.db.models import Q
 
 from .mollie import MollieClient
+from .models import Payment
 from .services import process_provider_state, reconcile_refunds, record_webhook_failure
 
 logger = logging.getLogger(__name__)
