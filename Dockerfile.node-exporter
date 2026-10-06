@@ -1,0 +1,24 @@
+FROM golang:1.26.6-alpine AS build
+
+ARG NODE_EXPORTER_COMMIT=6044da783597cc3b57aef7580ddcdcff58a4ee99
+
+RUN apk add --no-cache git ca-certificates \
+    && git clone https://github.com/prometheus/node_exporter.git /src \
+    && cd /src \
+    && git checkout "$NODE_EXPORTER_COMMIT" \
+    && test "$(git rev-parse HEAD)" = "$NODE_EXPORTER_COMMIT"
+
+WORKDIR /src
+
+RUN go get golang.org/x/crypto@v0.55.0 \
+    && go mod tidy \
+    && CGO_ENABLED=0 GOOS=linux go build \
+       -trimpath \
+       -ldflags="-s -w -X github.com/prometheus/common/version.Version=1.12.1 -X github.com/prometheus/common/version.Revision=$NODE_EXPORTER_COMMIT" \
+       -o /out/node_exporter .
+
+FROM scratch
+COPY --from=build /out/node_exporter /bin/node_exporter
+EXPOSE 9100
+USER 65534:65534
+ENTRYPOINT ["/bin/node_exporter"]
