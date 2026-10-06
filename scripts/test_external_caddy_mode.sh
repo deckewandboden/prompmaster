@@ -4,6 +4,11 @@ cd "$(dirname "$0")/.."
 
 NETWORK="${PM_EXTERNAL_CADDY_TEST_NETWORK:-promptfinisher_ci_external_proxy}"
 ALIAS="${PM_EXTERNAL_CADDY_ALIAS:-promptfinisher-caddy-edge}"
+EXPECT_CHECKOUT_ENABLED="${PM_EXTERNAL_CADDY_EXPECT_CHECKOUT_ENABLED:-1}"
+[[ "$EXPECT_CHECKOUT_ENABLED" == "0" || "$EXPECT_CHECKOUT_ENABLED" == "1" ]] || {
+  echo "PM_EXTERNAL_CADDY_EXPECT_CHECKOUT_ENABLED must be 0 or 1" >&2
+  exit 2
+}
 F=(-f compose.yaml -f compose.staging.yaml -f compose.external-caddy.yaml)
 
 log(){ printf '[PROMPTFINISHER external-caddy test] %s\n' "$*"; }
@@ -80,9 +85,10 @@ catalog="$(
   docker run --rm --network "$NETWORK" curlimages/curl:8.12.1 \
     -fsS -H "Host: $domain" "http://$ALIAS/catalog.json"
 )"
-python3 - "$catalog" <<'PY'
+python3 - "$catalog" "$EXPECT_CHECKOUT_ENABLED" <<'PY'
 import json, sys
 payload=json.loads(sys.argv[1])
+expect_checkout_enabled = sys.argv[2] == '1'
 products={
     item.get('id'): item
     for item in payload.get('products', [])
@@ -96,7 +102,7 @@ contract_ok=(
     and payload.get('taxBasisPoints') == 1900
     and payload.get('market') == 'DE'
     and payload.get('maxQuantity') == 500
-    and payload.get('checkoutEnabled') is True
+    and payload.get('checkoutEnabled') is expect_checkout_enabled
     and payload.get('loginEnabled') is True
     and payload.get('proApplicationCount') == 34
     and len(names) == 34
