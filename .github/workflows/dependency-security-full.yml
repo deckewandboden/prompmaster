@@ -63,6 +63,7 @@ jobs:
           set -Eeuo pipefail
           docker build -t promptfinisher-web:ci .
           docker build -f Dockerfile.caddy -t promptfinisher-caddy:ci .
+          docker build -f Dockerfile.postgres -t promptfinisher-postgres:ci .
           docker build -t promptfinisher-backup:ci ./backup
 
       - name: Scan actual production container root filesystems for fixable high and critical CVEs
@@ -72,7 +73,7 @@ jobs:
             "promptfinisher-web:ci"
             "promptfinisher-caddy:ci"
             "promptfinisher-backup:ci"
-            "postgres:18-alpine"
+            "promptfinisher-postgres:ci"
             "redis:7-alpine"
             "prom/prometheus:v3.13.3"
             "prom/node-exporter:v1.12.1"
