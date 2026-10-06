@@ -42,7 +42,11 @@ def reconcile_mollie_unsettled_states(limit=100):
     payment_ids = list(
         Payment.objects.filter(
             Q(status='chargeback')
-            | Q(refunds__status='submitted')
+            | (
+                Q(refunds__status='submitted')
+                & Q(refunds__provider_refund_id__isnull=False)
+                & ~Q(refunds__provider_refund_id='')
+            )
         )
         .distinct()
         .order_by('updated_at')
