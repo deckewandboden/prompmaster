@@ -43,3 +43,52 @@ jobs:
           # intentionally pruned by npm ci on Linux and can otherwise make the
           # legacy quick-audit endpoint reject an otherwise valid lockfile.
           npm audit --package-lock-only --audit-level=high
+
+
+  container-security:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Install pinned Trivy
+        uses: aquasecurity/setup-trivy@81e514348e19b6112ce2a7e3ecbafe19c1e1f567 # v0.3.1
+        with:
+          version: v0.75.0
+          cache: true
+
+      - name: Build deployable PROMPTFINISHER images
+        run: |
+          set -Eeuo pipefail
+          docker build -t promptfinisher-web:ci .
+          docker build -f Dockerfile.caddy -t promptfinisher-caddy:ci .
+          docker build -t promptfinisher-backup:ci ./backup
+
+      - name: Scan all production runtime images for fixable high and critical CVEs
+        run: |
+          set -Eeuo pipefail
+          images=(
+            "promptfinisher-web:ci"
+            "promptfinisher-caddy:ci"
+            "promptfinisher-backup:ci"
+            "postgres:18-alpine"
+            "redis:7-alpine"
+            "prom/prometheus:v3.13.3"
+            "prom/node-exporter:v1.12.1"
+            "ghcr.io/google/cadvisor:v0.60.5"
+            "prometheuscommunity/postgres-exporter:v0.20.1"
+          )
+
+          for image in "${images[@]}"; do
+            echo "============================================================"
+            echo "TRIVY IMAGE GATE: $image"
+            echo "============================================================"
+            trivy image \
+              --scanners vuln \
+              --severity HIGH,CRITICAL \
+              --ignore-unfixed \
+              --exit-code 1 \
+              --timeout 10m \
+              "$image"
+          done
