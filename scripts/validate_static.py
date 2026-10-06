@@ -1025,7 +1025,7 @@ if all(path.exists() for path in acceptance_files.values()):
     production_acceptance = acceptance_files['docs'].read_text(encoding='utf-8')
 
     for needle in (
-        "client.key.startswith('test_')",
+        "key.startswith('test_')",
         'CREATE-MOLLIE-TEST-PAYMENT',
         'CREATE-MOLLIE-TEST-REFUND',
         'publicly reachable HTTPS hostname',
