@@ -18,7 +18,10 @@ services:
       retries: 10
     restart: unless-stopped
   redis:
-    image: redis:7-alpine
+    build:
+      context: .
+      dockerfile: Dockerfile.redis
+    image: promptfinisher-redis:7-alpine-hardened
     command: ["redis-server","--appendonly","yes","--save","60","1000"]
     volumes: [redis_data:/data]
     networks: [data]
