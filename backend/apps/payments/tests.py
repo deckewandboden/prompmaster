@@ -15,7 +15,7 @@ from apps.catalog.models import Product, ProductPrice
 from apps.licenses.models import License, LicenseTerm
 from apps.orders.models import Order, OrderItem
 
-from .mollie import MollieClient, MollieError
+from .mollie import MollieClient, MollieError, mollie_config_fingerprint
 from .models import MollieEvent, Payment, Refund
 from .services import calculate_refund, process_provider_state
 
@@ -127,7 +127,11 @@ class MollieRuntimeReadinessTests(SimpleTestCase):
             self.assertFalse(mollie_runtime_ready())
 
     @override_settings(ENVIRONMENT='production', MOLLIE_API_KEY='')
-    def test_production_checkout_requires_explicit_approved_gate(self):
+    def test_production_checkout_requires_explicit_credential_bound_gate(self):
+        fingerprint = mollie_config_fingerprint(
+            'live_runtime_key',
+            'pfl_runtime',
+        )
         with (
             patch(
                 'apps.integrations.services.get_secret',
@@ -140,6 +144,8 @@ class MollieRuntimeReadinessTests(SimpleTestCase):
                     if key == 'mollie_profile_id'
                     else True
                     if key == 'mollie_checkout_enabled'
+                    else fingerprint
+                    if key == 'mollie_checkout_approval_fingerprint'
                     else default
                 ),
             ),
@@ -147,6 +153,34 @@ class MollieRuntimeReadinessTests(SimpleTestCase):
             from apps.payments.mollie import mollie_runtime_ready
 
             self.assertTrue(mollie_runtime_ready())
+
+    @override_settings(ENVIRONMENT='production', MOLLIE_API_KEY='')
+    def test_rotated_live_key_invalidates_previous_checkout_approval(self):
+        old_fingerprint = mollie_config_fingerprint(
+            'live_old_key',
+            'pfl_runtime',
+        )
+        with (
+            patch(
+                'apps.integrations.services.get_secret',
+                return_value='live_rotated_key',
+            ),
+            patch(
+                'apps.core.settings_store.get_setting',
+                side_effect=lambda key, default=None: (
+                    'pfl_runtime'
+                    if key == 'mollie_profile_id'
+                    else True
+                    if key == 'mollie_checkout_enabled'
+                    else old_fingerprint
+                    if key == 'mollie_checkout_approval_fingerprint'
+                    else default
+                ),
+            ),
+        ):
+            from apps.payments.mollie import mollie_runtime_ready
+
+            self.assertFalse(mollie_runtime_ready())
 
     @override_settings(ENVIRONMENT='staging', MOLLIE_API_KEY='')
     def test_staging_test_checkout_does_not_require_production_approval_gate(self):
