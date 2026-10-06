@@ -272,7 +272,7 @@ def public_checkout_start(request):
     from apps.legal.models import LegalAcceptance, LegalDocument
     from apps.orders.forms import PublicCheckoutForm
     from apps.orders.services import MAX_PURCHASE_QUANTITY, create_order
-    from apps.payments.mollie import MollieClient, MollieError, mollie_runtime_ready
+    from apps.payments.mollie import (MOLLIE_IDEMPOTENCY_SAFE_RETRY_SECONDS, MollieClient, MollieError, mollie_runtime_ready)
     from apps.payments.models import Payment
 
     def start_provider_payment(order):
@@ -424,7 +424,7 @@ def public_checkout_start(request):
 
             if ambiguous_order is not None and ambiguous_started_at is not None:
                 age_seconds = timezone.now().timestamp() - ambiguous_started_at
-                if age_seconds < 55 * 60:
+                if age_seconds < MOLLIE_IDEMPOTENCY_SAFE_RETRY_SECONDS:
                     try:
                         with transaction.atomic():
                             locked_order = (
