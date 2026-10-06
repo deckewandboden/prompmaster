@@ -189,6 +189,17 @@ def deactivate_company_member(*, company, member, actor, request=None):
     if locked.role == 'admin':
         raise ValidationError('Firmenadministrator zuerst übertragen.')
 
+    if hasattr(locked.user, 'private_customer'):
+        raise ValidationError(
+            'Dieser Benutzer besitzt zusätzlich einen Privatkundenkontext und kann '
+            'durch einen Firmenadministrator nicht global deaktiviert werden.'
+        )
+    if Membership.objects.filter(user=locked.user, active=True).exclude(pk=locked.pk).exists():
+        raise ValidationError(
+            'Dieser Benutzer gehört einem weiteren aktiven Unternehmen an und kann '
+            'hier nicht global deaktiviert werden.'
+        )
+
     assignments = list(
         LicenseAssignment.objects.select_for_update()
         .filter(
