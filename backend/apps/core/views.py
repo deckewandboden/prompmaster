@@ -272,7 +272,7 @@ def public_checkout_start(request):
     from apps.legal.models import LegalAcceptance, LegalDocument
     from apps.orders.forms import PublicCheckoutForm
     from apps.orders.services import MAX_PURCHASE_QUANTITY, create_order
-    from apps.payments.mollie import MollieClient, MollieError
+    from apps.payments.mollie import MollieClient, MollieError, mollie_runtime_ready
     from apps.payments.models import Payment
 
     limited = check_rate(request, 'public-checkout', 10, 3600)
@@ -296,6 +296,10 @@ def public_checkout_start(request):
     if not form.is_valid():
         return redirect(
             f"/checkout/?{urlencode({'quantity': fallback_quantity, 'error': 'invalid'})}"
+        )
+    if not mollie_runtime_ready():
+        return redirect(
+            f"/checkout/?{urlencode({'quantity': fallback_quantity, 'error': 'payment'})}"
         )
 
     data = form.cleaned_data
@@ -551,6 +555,7 @@ def public_catalog(request):
     from apps.catalog.models import Product, TaxRule
     from apps.catalog.services import current_price
     from apps.orders.services import MAX_PURCHASE_QUANTITY
+    from apps.payments.mollie import mollie_runtime_ready
     from apps.prompts.models import PromptApplication
 
     now = timezone.now()
@@ -597,7 +602,9 @@ def public_catalog(request):
             },
         ],
         'maxQuantity': MAX_PURCHASE_QUANTITY,
-        'checkoutEnabled': bool(pro and pro.purchasable and pro_price),
+        'checkoutEnabled': bool(
+            pro and pro.purchasable and pro_price and mollie_runtime_ready()
+        ),
         'companyRequireVatId': bool(company_tax and company_tax.require_vat_id),
         'companyRequireTaxNumber': bool(
             company_tax and company_tax.require_tax_number
