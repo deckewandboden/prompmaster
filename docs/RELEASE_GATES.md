@@ -76,6 +76,7 @@ Die ausführbaren Abnahmeschritte stehen in `docs/PRODUCTION_ACCEPTANCE.md`. Die
   - `mode=live` und `profile.status=verified`,
   - mindestens eine über `GET /v2/methods?sequenceType=oneoff` als `activated` gemeldete Live-Zahlart,
   - ausschließlich read-only; keine echte Live-Zahlung als Teil dieses technischen Probes.
+- Mollie kommerzielle Freigabe separat über `external_mollie_acceptance activate-live --confirm ENABLE-MOLLIE-LIVE-CHECKOUT`; Credentials allein dürfen den Produktiv-Checkout nicht öffnen. Konfigurationsänderungen widerrufen die Freigabe automatisch; die Netstyle-Mollie-Seite bietet zusätzlich eine sofortige Checkout-Sperre.
 - Mailprovider-Abnahme: SMTP über realen `EmailMessage`-/Taskpfad; Microsoft Graph zusätzlich über `external_graph_acceptance`, falls Graph im finalen Routing aktiviert ist:
   - Exchange-Application-RBAC für `Application Mail.Send`,
   - positiver `InScope`-Nachweis für `GRAPH_SENDER` und negativer Kontrollpostfach-Nachweis,
