@@ -147,6 +147,33 @@ class ExternalGraphAcceptanceFlowTests(TestCase):
 
 class ExternalMollieAcceptanceInvariantTests(SimpleTestCase):
 
+    def test_mollie_acceptance_company_checkout_payload_matches_required_form(self):
+        user = MagicMock()
+        user.company_memberships.filter.return_value.exists.return_value = True
+
+        payload = MollieAcceptanceCommand()._checkout_payload(user)
+
+        self.assertEqual(payload['quantity'], '1')
+        self.assertEqual(payload['accept_terms'], 'on')
+        self.assertEqual(payload['accept_privacy'], 'on')
+        self.assertEqual(payload['accept_license'], 'on')
+        self.assertNotIn('accept_withdrawal', payload)
+        self.assertNotIn('request_early_performance', payload)
+
+    def test_mollie_acceptance_private_checkout_payload_matches_required_form(self):
+        user = MagicMock()
+        user.company_memberships.filter.return_value.exists.return_value = False
+        user.private_customer = MagicMock()
+
+        payload = MollieAcceptanceCommand()._checkout_payload(user)
+
+        self.assertEqual(payload['quantity'], '1')
+        self.assertEqual(payload['accept_terms'], 'on')
+        self.assertEqual(payload['accept_privacy'], 'on')
+        self.assertEqual(payload['accept_license'], 'on')
+        self.assertEqual(payload['accept_withdrawal'], 'on')
+        self.assertEqual(payload['request_early_performance'], 'on')
+
     def test_mollie_acceptance_requires_provider_test_mode(self):
         payment = MagicMock()
         payment.order_id = 'order-1'
