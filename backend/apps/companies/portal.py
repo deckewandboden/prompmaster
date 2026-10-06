@@ -1512,22 +1512,27 @@ def member_delete(request, user_id):
         messages.error(request, 'Firmenadministrator zuerst übertragen.')
         return redirect('portal:team_member', user_id=user_id)
 
-    with transaction.atomic():
-        member = (
-            Membership.objects.select_for_update()
-            .select_related('user')
-            .get(pk=member.pk)
-        )
-        deletion = DeletionRequest.objects.create(
-            user=member.user,
-            status='processing',
-            notes=f'Durch Firmenadministrator {request.user.id} ausgelöst.',
-        )
-        process_deletion_request(
-            deletion,
-            actor=request.user,
-            request=request,
-        )
+    try:
+        with transaction.atomic():
+            member = (
+                Membership.objects.select_for_update()
+                .select_related('user')
+                .get(pk=member.pk)
+            )
+            deletion = DeletionRequest.objects.create(
+                user=member.user,
+                status='processing',
+                notes=f'Durch Firmenadministrator {request.user.id} ausgelöst.',
+            )
+            process_deletion_request(
+                deletion,
+                actor=request.user,
+                request=request,
+                scope_company=company_obj,
+            )
+    except ValidationError as exc:
+        messages.error(request, exc.messages[0])
+        return redirect('portal:team_member', user_id=user_id)
 
     messages.success(
         request,
