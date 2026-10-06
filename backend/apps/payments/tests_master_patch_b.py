@@ -141,6 +141,13 @@ class RefundRetryStateMachineTests(TestCase):
         original_key = attempt.idempotency_key
         self.assertEqual(refund.status, 'submitted')
         self.assertEqual(attempt.status, 'ambiguous')
+        self.assertEqual(
+            provider.call_args.kwargs['metadata'],
+            {
+                'promptfinisher_refund_id': str(refund.id),
+                'promptfinisher_attempt_id': str(attempt.id),
+            },
+        )
 
         calculate.return_value = (200, Decimal('20.00'))
         same_refund = create_refund_request(term=self.term, actor=self.user)
