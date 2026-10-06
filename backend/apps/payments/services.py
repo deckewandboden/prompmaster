@@ -20,6 +20,10 @@ from .models import MollieEvent, Payment, Refund, RefundAttempt
 from .mollie import MollieClient, MollieError
 
 CENT = Decimal('0.01')
+# Mollie caches Idempotency-Key responses for one hour. Stop automatic
+# re-submission before that boundary so an old ambiguous request can never be
+# executed twice as a new partial refund.
+MOLLIE_IDEMPOTENCY_RETRY_WINDOW = timedelta(minutes=55)
 STATUS_MAP = {
     'created': 'created',
     'open': 'open',
@@ -709,6 +713,35 @@ def _record_refund_attempt_error(refund_id, attempt_id, exc):
 
 def submit_refund(refund):
     row, attempt = _prepare_refund_attempt(refund.pk)
+
+    # Once Mollie returned a provider refund ID, never POST the refund again.
+    # Reconcile the existing provider object instead.
+    if attempt.provider_refund_id or row.provider_refund_id:
+        reconcile_refunds(row.payment)
+        return Refund.objects.get(pk=row.pk)
+
+    # Mollie only guarantees Idempotency-Key replay for one hour. Retrying an
+    # unresolved request after that cache window could create a second partial
+    # refund, so fail closed and require provider-side verification.
+    if (
+        attempt.status in {'submitted', 'ambiguous'}
+        and timezone.now() - attempt.submitted_at >= MOLLIE_IDEMPOTENCY_RETRY_WINDOW
+    ):
+        audit(
+            None,
+            'refund.provider_attempt_manual_review',
+            row,
+            {
+                'attempt': attempt.number,
+                'reason': 'idempotency_window_expired',
+            },
+        )
+        raise ValidationError(
+            'Der Ausgang des Mollie-Erstattungsversuchs ist unklar und der sichere '
+            'Idempotenz-Zeitraum ist abgelaufen. Bitte zuerst den Mollie-Status '
+            'prüfen; die Erstattung wird nicht automatisch erneut gesendet.'
+        )
+
     try:
         response = MollieClient().create_refund(
             row.payment.provider_payment_id,
