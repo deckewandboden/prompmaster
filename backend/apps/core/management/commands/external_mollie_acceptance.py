@@ -6,6 +6,7 @@ from urllib.parse import urlsplit
 from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.core.management.base import BaseCommand, CommandError
+from django.db import transaction
 from django.db.models import Sum
 from django.test import Client
 from django.utils import timezone
@@ -131,36 +132,37 @@ class Command(BaseCommand):
         )
 
         if enable_checkout:
-            gate = set_setting(
-                'mollie_checkout_enabled',
-                True,
-                description=(
-                    'Explicit production checkout approval after successful '
-                    'Mollie live-readiness probe.'
-                ),
-            )
-            set_setting(
-                'mollie_checkout_approval_fingerprint',
-                mollie_config_fingerprint(client.key, actual_profile),
-                description=(
-                    'SHA-256 binding of the approved Mollie profile and API key; '
-                    'contains no plaintext secret.'
-                ),
-            )
             from apps.audit.services import audit
 
-            audit(
-                None,
-                'mollie.checkout_enabled',
-                gate,
-                {
-                    'checkout_enabled': True,
-                    'profile_id': actual_profile,
-                    'profile_status': profile_status,
-                    'activated_methods': activated_methods,
-                    'source': 'external_mollie_acceptance.activate-live',
-                },
-            )
+            with transaction.atomic():
+                gate = set_setting(
+                    'mollie_checkout_enabled',
+                    True,
+                    description=(
+                        'Explicit production checkout approval after successful '
+                        'Mollie live-readiness probe.'
+                    ),
+                )
+                set_setting(
+                    'mollie_checkout_approval_fingerprint',
+                    mollie_config_fingerprint(client.key, actual_profile),
+                    description=(
+                        'SHA-256 binding of the approved Mollie profile and API key; '
+                        'contains no plaintext secret.'
+                    ),
+                )
+                audit(
+                    None,
+                    'mollie.checkout_enabled',
+                    gate,
+                    {
+                        'checkout_enabled': True,
+                        'profile_id': actual_profile,
+                        'profile_status': profile_status,
+                        'activated_methods': activated_methods,
+                        'source': 'external_mollie_acceptance.activate-live',
+                    },
+                )
 
         self.stdout.write(json.dumps({
             'status': 'ok',
