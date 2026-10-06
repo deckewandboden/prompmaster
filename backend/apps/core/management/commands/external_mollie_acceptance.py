@@ -95,6 +95,22 @@ class Command(BaseCommand):
             'check': 'read-only current profile',
         }, sort_keys=True))
 
+    def _checkout_payload(self, user):
+        payload = {
+            'quantity': '1',
+            'accept_terms': 'on',
+            'accept_privacy': 'on',
+            'accept_license': 'on',
+        }
+        if not user.company_memberships.filter(active=True).exists():
+            if not hasattr(user, 'private_customer'):
+                raise CommandError(
+                    'Private acceptance user has no PrivateCustomerProfile.'
+                )
+            payload['accept_withdrawal'] = 'on'
+            payload['request_early_performance'] = 'on'
+        return payload
+
     def _base_url(self, options):
         raw = (options.get('base_url') or '').strip()
         if not raw and settings.CADDY_DOMAIN:
@@ -180,15 +196,7 @@ class Command(BaseCommand):
         session['last_activity_at'] = now_ts
         session.save()
 
-        payload = {
-            'quantity': '1',
-            'accept_terms': 'on',
-            'accept_privacy': 'on',
-        }
-        if not user.company_memberships.filter(active=True).exists():
-            if not hasattr(user, 'private_customer'):
-                raise CommandError('Private acceptance user has no PrivateCustomerProfile.')
-            payload['accept_withdrawal'] = 'on'
+        payload = self._checkout_payload(user)
 
         response = client_http.post(
             '/portal/licenses/buy/',
