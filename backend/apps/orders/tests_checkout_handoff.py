@@ -3,13 +3,14 @@ from urllib.parse import urlsplit
 from unittest.mock import patch
 
 from django.core.cache import cache
-from django.test import TestCase
+from django.test import TestCase, override_settings
 from django.utils import timezone
 
 from apps.accounts.models import User
 from apps.catalog.models import Product, ProductPrice, TaxRule
 from apps.companies.models import Company, Membership
 from apps.legal.models import LegalDocument
+from apps.licenses.models import License
 from apps.orders.models import Order
 from apps.orders.services import MAX_PURCHASE_QUANTITY
 from apps.payments.models import Payment
@@ -95,6 +96,24 @@ class PurchaseHandoffTests(TestCase):
         response = self.client.get('/portal/licenses/buy/?quantity=invalid')
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.context['form'].initial['quantity'], 1)
+
+    @override_settings(ENVIRONMENT='staging', MOLLIE_API_KEY='')
+    def test_portal_checkout_without_mollie_fails_closed_without_payment_or_license(self):
+        response = self.client.post(
+            '/portal/licenses/buy/?quantity=2',
+            {
+                'quantity': '2',
+                'accept_terms': 'on',
+                'accept_privacy': 'on',
+                'accept_license': 'on',
+            },
+        )
+        self.assertEqual(response.status_code, 200)
+        order = Order.objects.get(company=self.company)
+        self.assertEqual(order.status, 'failed')
+        self.assertFalse(Payment.objects.filter(order=order).exists())
+        self.assertFalse(License.objects.filter(company=self.company).exists())
+        self.assertContains(response, 'Die Zahlung konnte nicht gestartet werden')
 
     @patch('apps.companies.portal.MollieClient.create_payment')
     def test_checkout_creates_order_and_payment_for_selected_quantity(self, create_payment):
@@ -237,6 +256,20 @@ class PublicCheckoutFlowTests(TestCase):
             'accept_withdrawal': 'on',
             'request_early_performance': 'on',
         }
+
+    @override_settings(ENVIRONMENT='staging', MOLLIE_API_KEY='')
+    def test_public_checkout_without_mollie_rolls_back_customer_order_and_payment(self):
+        email = 'no-mollie-public@example.test'
+        response = self.client.post(
+            '/api/v1/checkout/start/',
+            self.company_payload(email=email),
+        )
+        self.assertEqual(response.status_code, 302)
+        self.assertIn('error=payment', response.url)
+        self.assertFalse(User.objects.filter(email=email).exists())
+        self.assertFalse(Order.objects.filter(company__email=email).exists())
+        self.assertFalse(Payment.objects.exists())
+        self.assertFalse(License.objects.exists())
 
     @patch('apps.payments.mollie.MollieClient.create_payment')
     def test_public_company_checkout_creates_customer_order_and_payment(self, create_payment):
