@@ -12,6 +12,8 @@ from apps.companies.models import Company, Invitation, Membership, PrivateCustom
 from apps.devices.models import DeviceRegistration
 from apps.legal.models import DeletionRequest, LegalAcceptance
 from apps.core.crypto import encrypt
+from apps.core.settings_store import set_setting
+from apps.integrations.services import set_secret
 from apps.licenses.models import License, LicenseAssignment, LicenseAssignmentLink, LicenseUpgradeRequest
 from apps.accounts.totp import new_secret
 from apps.payments.models import Payment
@@ -25,6 +27,8 @@ class DemoEstateFunctionalAcceptanceTests(TestCase):
         output = io.StringIO()
         call_command('seed_demo_data', stdout=output)
         cls.seed_output = output.getvalue()
+        set_secret('mollie_api_key', 'test_demo_acceptance_key')
+        set_setting('mollie_profile_id', 'pfl_demo_acceptance')
         cls.credentials = {}
         for line in cls.seed_output.splitlines():
             if '@promptmaster.invalid' not in line or '|' not in line:
