@@ -93,3 +93,4 @@ compose.legacy-volumes.yaml	0	text-not-byte-validated	active-operations
 Dockerfile.postgres	0	text-not-byte-validated	active-operations
 Dockerfile.redis	0	text-not-byte-validated	active-operations
 Dockerfile.node-exporter	0	text-not-byte-validated	active-operations
+Dockerfile.cadvisor	0	text-not-byte-validated	active-operations
