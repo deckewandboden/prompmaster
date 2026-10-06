@@ -4,6 +4,8 @@ from django.test import TestCase
 from django.utils import timezone
 
 from apps.catalog.models import Product, ProductPrice, TaxRule
+from apps.core.settings_store import set_setting
+from apps.integrations.services import set_secret
 from apps.prompts.models import PromptApplication
 
 
@@ -26,6 +28,8 @@ class PublicMarketingCatalogTests(TestCase):
         TaxRule.objects.create(country='DE', customer_type='company', tax_rate=Decimal('19.00'), active=True)
         PromptApplication.objects.create(code='copilot_chat', name='Copilot Chat', sort_order=0)
         PromptApplication.objects.create(code='outlook', name='Outlook', sort_order=1)
+        set_secret('mollie_api_key', 'test_marketing_catalog_key')
+        set_setting('mollie_profile_id', 'pfl_marketing_catalog')
 
     def test_public_catalog_matches_marketing_contract(self):
         response = self.client.get('/catalog.json')
