@@ -82,6 +82,12 @@ class RuntimeConfigTests(unittest.TestCase):
         self.base['services']['postgres']['ports'] = ['5432:5432']
         self.assertTrue(validate(self.base, self.production))
 
+    def test_prometheus_runtime_is_security_accepted_version(self):
+        self.assertEqual(
+            self.base['services']['prometheus']['image'],
+            'prom/prometheus:v3.15.0',
+        )
+
     def test_public_monitoring_network_is_rejected(self):
         self.base['networks']['monitor']['internal'] = False
         self.assertTrue(validate(self.base, self.production))
