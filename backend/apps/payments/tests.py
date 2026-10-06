@@ -72,6 +72,65 @@ class MollieConfigurationSafetyTests(SimpleTestCase):
             MollieClient(key='live_runtime_key')
 
 
+class MollieRefundPaginationTests(SimpleTestCase):
+    @override_settings(ENVIRONMENT='staging')
+    def test_refund_listing_follows_safe_mollie_pagination(self):
+        client = MollieClient(key='test_refund_pagination')
+        pages = [
+            {
+                'count': 1,
+                '_embedded': {'refunds': [{'id': 're_page_1'}]},
+                '_links': {
+                    'next': {
+                        'href': (
+                            'https://api.mollie.com/v2/payments/tr_page/refunds'
+                            '?from=re_page_1&limit=250'
+                        )
+                    }
+                },
+            },
+            {
+                'count': 1,
+                '_embedded': {'refunds': [{'id': 're_page_2'}]},
+                '_links': {'next': None},
+            },
+        ]
+        with patch.object(client, '_request', side_effect=pages) as request:
+            payload = client.list_refunds('tr_page')
+
+        self.assertEqual(
+            [row['id'] for row in payload['_embedded']['refunds']],
+            ['re_page_1', 're_page_2'],
+        )
+        self.assertEqual(payload['count'], 2)
+        self.assertEqual(request.call_count, 2)
+        request.assert_any_call(
+            'GET',
+            '/payments/tr_page/refunds?from=re_page_1&limit=250',
+        )
+
+    @override_settings(ENVIRONMENT='staging')
+    def test_refund_listing_rejects_foreign_pagination_host(self):
+        client = MollieClient(key='test_refund_pagination')
+        payload = {
+            '_embedded': {'refunds': []},
+            '_links': {
+                'next': {
+                    'href': (
+                        'https://attacker.example/v2/payments/tr_page/refunds'
+                        '?from=re_bad&limit=250'
+                    )
+                }
+            },
+        }
+        with patch.object(client, '_request', return_value=payload):
+            with self.assertRaisesMessage(
+                MollieError,
+                'unexpected host',
+            ):
+                client.list_refunds('tr_page')
+
+
 class MollieReconciliationScheduleTests(SimpleTestCase):
     def test_unsettled_reconciliation_is_scheduled(self):
         from django.conf import settings
