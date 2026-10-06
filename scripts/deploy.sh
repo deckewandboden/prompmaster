@@ -116,6 +116,31 @@ wait_web_ready(){
   return 1
 }
 
+wait_service_runtime(){
+  local service="$1"
+  local attempts="${2:-60}"
+  local delay="${3:-2}"
+  local i cid state health
+  for i in $(seq 1 "$attempts"); do
+    cid="$(docker compose "${F[@]}" ps -q "$service" 2>/dev/null || true)"
+    if [[ -n "$cid" ]]; then
+      state="$(docker inspect "$cid" --format '{{.State.Status}}' 2>/dev/null || true)"
+      health="$(docker inspect "$cid" --format '{{if .State.Health}}{{.State.Health.Status}}{{else}}none{{end}}' 2>/dev/null || true)"
+      if [[ "$state" == "running" && ( "$health" == "healthy" || "$health" == "none" ) ]]; then
+        return 0
+      fi
+    fi
+    sleep "$delay"
+  done
+
+  printf '[PROMPTFINISHER deploy] Service %s wurde nicht rechtzeitig bereit.\n' "$service" >&2
+  if [[ -n "${cid:-}" ]]; then
+    docker inspect "$cid" --format '{{json .State.Health}}' >&2 2>/dev/null || true
+    docker logs --tail 100 "$cid" >&2 2>/dev/null || true
+  fi
+  return 1
+}
+
 wait_worker(){
   local i reply
   for i in $(seq 1 20); do
@@ -285,6 +310,8 @@ wait_beat
 log "Caddy-Konfiguration prüfen"
 docker compose "${F[@]}" exec -T caddy caddy validate --config /etc/caddy/Caddyfile >/dev/null
 assert_external_caddy_ports_closed
+log "cAdvisor Runtime-Health abwarten"
+wait_service_runtime cadvisor 60 2
 log "Containerstatus"
 docker compose "${F[@]}" ps
 printf '%s\n' "$CURRENT_SHA" > "$LAST_SUCCESS_FILE.tmp"

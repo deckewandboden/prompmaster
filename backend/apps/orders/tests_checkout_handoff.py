@@ -15,6 +15,7 @@ from apps.integrations.models import IntegrationSecret
 from apps.integrations.services import set_secret
 from apps.legal.models import LegalDocument
 from apps.licenses.models import License
+from apps.orders.forms import PublicCheckoutForm
 from apps.orders.models import Order, OrderItem
 from apps.orders.services import MAX_PURCHASE_QUANTITY
 from apps.payments.models import Payment
@@ -182,6 +183,38 @@ class PurchaseHandoffTests(TestCase):
         self.assertEqual(payment.provider_payment_id, 'tr_checkout_handoff')
         self.assertEqual(payment.amount, Decimal('251.16'))
         self.assertEqual(create_payment.call_args.kwargs['amount'], Decimal('251.16'))
+
+
+class PublicCheckoutFormValidationTests(TestCase):
+    def test_private_early_performance_missing_has_one_clear_error(self):
+        form = PublicCheckoutForm(
+            data={
+                'quantity': '1',
+                'customer_type': 'private',
+                'first_name': 'Privat',
+                'last_name': 'Kunde',
+                'email': 'private-validation@example.test',
+                'phone': '',
+                'company_name': '',
+                'legal_form': '',
+                'vat_id': '',
+                'tax_number': '',
+                'street': 'Testweg',
+                'house_number': '1',
+                'postal_code': '57072',
+                'city': 'Siegen',
+                'country': 'DE',
+                'accept_terms': 'on',
+                'accept_privacy': 'on',
+                'accept_license': 'on',
+                'accept_withdrawal': 'on',
+            }
+        )
+        self.assertFalse(form.is_valid())
+        self.assertEqual(
+            list(form.errors['request_early_performance']),
+            ['Bitte bestätigen Sie den gewünschten Leistungsbeginn vor Ablauf der Widerrufsfrist.'],
+        )
 
 
 class PublicCatalogPurchaseLimitTests(TestCase):

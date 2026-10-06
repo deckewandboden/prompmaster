@@ -20,6 +20,10 @@ from .models import MollieEvent, Payment, Refund, RefundAttempt
 from .mollie import MollieClient, MollieError
 
 CENT = Decimal('0.01')
+# Mollie caches Idempotency-Key responses for one hour. Stop automatic
+# re-submission before that boundary so an old ambiguous request can never be
+# executed twice as a new partial refund.
+MOLLIE_IDEMPOTENCY_RETRY_WINDOW = timedelta(minutes=55)
 STATUS_MAP = {
     'created': 'created',
     'open': 'open',
@@ -258,6 +262,22 @@ def _locked_order_licenses(order, *, active_terms_only=False):
     return License.objects.select_for_update().filter(pk__in=license_ids).order_by('pk')
 
 
+def _accounted_provider_refund_amount(payment):
+    """Return provider refunds already mapped to a local refund workflow.
+
+    A submitted refund is accounted only after Mollie returned a concrete
+    provider refund ID. This distinguishes our own in-flight refund from a
+    refund created manually in Mollie or by another integration.
+    """
+    total = Decimal('0.00')
+    for status, provider_id, amount in payment.refunds.filter(
+        status__in=['submitted', 'succeeded']
+    ).values_list('status', 'provider_refund_id', 'amount'):
+        if status == 'succeeded' or provider_id:
+            total += amount
+    return total.quantize(CENT)
+
+
 @transaction.atomic
 def process_provider_state(payment_id, payload, *, chargebacks_payload=None):
     payment = Payment.objects.select_for_update().get(provider_payment_id=payment_id)
@@ -307,6 +327,36 @@ def process_provider_state(payment_id, payload, *, chargebacks_payload=None):
             }
             else 'paid'
         )
+    elif (
+        base_status in {'created', 'open', 'pending', 'authorized', 'unknown'}
+        and (payment.processed_paid or payment.order.status == 'paid')
+    ):
+        # A late non-terminal or previously unknown provider snapshot must not
+        # reopen a payment that already activated entitlements locally.
+        status = (
+            previous_status
+            if previous_status in {
+                'paid', 'refunded_partial', 'refunded_full',
+                'chargeback', 'chargeback_reversed',
+            }
+            else 'paid'
+        )
+    elif (
+        base_status == 'paid'
+        and previous_status in {'refunded_partial', 'refunded_full'}
+        and refunded_amount == 0
+    ):
+        # A stale payment representation from before the refund must not erase
+        # an already reconciled local refund state.
+        status = previous_status
+    elif (
+        base_status == 'paid'
+        and previous_status == 'chargeback'
+        and chargeback_state is None
+    ):
+        # Chargeback reversal is accepted only when the canonical chargeback
+        # list explicitly reports a reversed chargeback.
+        status = 'chargeback'
 
     event_key = f'{payment_id}:{status}:{refunded}:{remaining}'[:180]
     event, _ = MollieEvent.objects.get_or_create(
@@ -370,6 +420,25 @@ def process_provider_state(payment_id, payload, *, chargebacks_payload=None):
                 license_obj.status = 'payment_review'
                 license_obj.save(update_fields=['status', 'updated_at'])
                 audit(None, 'license.chargeback_review', license_obj, {'payment': payment.provider_payment_id})
+    elif status in {'refunded_partial', 'refunded_full'}:
+        accounted_refund = _accounted_provider_refund_amount(payment)
+        untracked_refund = max(refunded_amount - accounted_refund, Decimal('0.00'))
+        if untracked_refund > 0:
+            for license_obj in _locked_order_licenses(payment.order, active_terms_only=True):
+                if license_obj.status not in {'refunded', 'blocked', 'payment_review'}:
+                    license_obj.status = 'payment_review'
+                    license_obj.save(update_fields=['status', 'updated_at'])
+                    audit(
+                        None,
+                        'license.untracked_provider_refund_review',
+                        license_obj,
+                        {
+                            'payment': payment.provider_payment_id,
+                            'provider_refunded_amount': str(refunded_amount),
+                            'accounted_refund_amount': str(accounted_refund),
+                            'untracked_refund_amount': str(untracked_refund),
+                        },
+                    )
     elif base_status == 'paid':
         if status == 'chargeback_reversed':
             now = timezone.now()
@@ -679,6 +748,35 @@ def _record_refund_attempt_error(refund_id, attempt_id, exc):
 
 def submit_refund(refund):
     row, attempt = _prepare_refund_attempt(refund.pk)
+
+    # Once Mollie returned a provider refund ID, never POST the refund again.
+    # Reconcile the existing provider object instead.
+    if attempt.provider_refund_id or row.provider_refund_id:
+        reconcile_refunds(row.payment)
+        return Refund.objects.get(pk=row.pk)
+
+    # Mollie only guarantees Idempotency-Key replay for one hour. Retrying an
+    # unresolved request after that cache window could create a second partial
+    # refund, so fail closed and require provider-side verification.
+    if (
+        attempt.status in {'submitted', 'ambiguous'}
+        and timezone.now() - attempt.submitted_at >= MOLLIE_IDEMPOTENCY_RETRY_WINDOW
+    ):
+        audit(
+            None,
+            'refund.provider_attempt_manual_review',
+            row,
+            {
+                'attempt': attempt.number,
+                'reason': 'idempotency_window_expired',
+            },
+        )
+        raise ValidationError(
+            'Der Ausgang des Mollie-Erstattungsversuchs ist unklar und der sichere '
+            'Idempotenz-Zeitraum ist abgelaufen. Bitte zuerst den Mollie-Status '
+            'prüfen; die Erstattung wird nicht automatisch erneut gesendet.'
+        )
+
     try:
         response = MollieClient().create_refund(
             row.payment.provider_payment_id,

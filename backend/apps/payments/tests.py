@@ -16,7 +16,7 @@ from apps.licenses.models import License, LicenseTerm
 from apps.orders.models import Order, OrderItem
 
 from .mollie import MollieClient, MollieError
-from .models import MollieEvent, Payment
+from .models import MollieEvent, Payment, Refund
 from .services import calculate_refund, process_provider_state
 
 
@@ -370,6 +370,130 @@ class MollieStateIntegrationTests(TestCase):
                 self.assertEqual(self.payment.status, 'paid')
                 self.assertTrue(self.payment.processed_paid)
                 self.assertIn(license_obj.status, {'active', 'free'})
+
+    @patch('apps.payments.services._queue_after_commit')
+    def test_stale_nonterminal_or_unknown_webhook_cannot_reopen_paid_payment(self, _mail):
+        process_provider_state(
+            self.payment.provider_payment_id,
+            self.payload('paid'),
+            chargebacks_payload=self.chargebacks(),
+        )
+        license_obj = License.objects.get(owner_user=self.user)
+
+        for stale_status in ('created', 'open', 'pending', 'authorized', 'future_status'):
+            with self.subTest(stale_status=stale_status):
+                process_provider_state(
+                    self.payment.provider_payment_id,
+                    self.payload(stale_status),
+                    chargebacks_payload=self.chargebacks(),
+                )
+                self.order.refresh_from_db()
+                self.payment.refresh_from_db()
+                license_obj.refresh_from_db()
+                self.assertEqual(self.order.status, 'paid')
+                self.assertEqual(self.payment.status, 'paid')
+                self.assertTrue(self.payment.processed_paid)
+                self.assertIn(license_obj.status, {'active', 'free'})
+
+    @patch('apps.payments.services._queue_after_commit')
+    def test_stale_paid_snapshot_cannot_erase_local_refund_state(self, _mail):
+        process_provider_state(
+            self.payment.provider_payment_id,
+            self.payload('paid'),
+            chargebacks_payload=self.chargebacks(),
+        )
+        self.payment.refresh_from_db()
+        self.payment.status = 'refunded_partial'
+        self.payment.save(update_fields=['status', 'updated_at'])
+
+        process_provider_state(
+            self.payment.provider_payment_id,
+            self.payload('paid'),
+            chargebacks_payload=self.chargebacks(),
+        )
+        self.payment.refresh_from_db()
+        self.assertEqual(self.payment.status, 'refunded_partial')
+
+    @patch('apps.payments.services._queue_after_commit')
+    def test_empty_chargeback_list_cannot_silently_clear_active_chargeback(self, _mail):
+        process_provider_state(
+            self.payment.provider_payment_id,
+            self.payload('paid'),
+            chargebacks_payload=self.chargebacks(),
+        )
+        process_provider_state(
+            self.payment.provider_payment_id,
+            self.payload('paid'),
+            chargebacks_payload=self.chargebacks(self.chargeback()),
+        )
+        self.payment.refresh_from_db()
+        self.assertEqual(self.payment.status, 'chargeback')
+
+        process_provider_state(
+            self.payment.provider_payment_id,
+            self.payload('paid'),
+            chargebacks_payload=self.chargebacks(),
+        )
+        self.payment.refresh_from_db()
+        self.assertEqual(self.payment.status, 'chargeback')
+
+    @patch('apps.payments.services._queue_after_commit')
+    def test_untracked_provider_refund_quarantines_active_license(self, _mail):
+        paid = self.payload('paid')
+        paid['amountRefunded'] = {'value': '0.00', 'currency': 'EUR'}
+        process_provider_state(
+            self.payment.provider_payment_id,
+            paid,
+            chargebacks_payload=self.chargebacks(),
+        )
+        license_obj = License.objects.get(owner_user=self.user)
+        self.assertEqual(license_obj.status, 'active')
+
+        provider_refund = self.payload('paid')
+        provider_refund['amountRefunded'] = {'value': '10.00', 'currency': 'EUR'}
+        process_provider_state(
+            self.payment.provider_payment_id,
+            provider_refund,
+            chargebacks_payload=self.chargebacks(),
+        )
+
+        self.payment.refresh_from_db()
+        license_obj.refresh_from_db()
+        self.assertEqual(self.payment.status, 'refunded_partial')
+        self.assertEqual(license_obj.status, 'payment_review')
+
+    @patch('apps.payments.services._queue_after_commit')
+    def test_locally_tracked_provider_refund_does_not_trigger_untracked_quarantine(self, _mail):
+        paid = self.payload('paid')
+        paid['amountRefunded'] = {'value': '0.00', 'currency': 'EUR'}
+        process_provider_state(
+            self.payment.provider_payment_id,
+            paid,
+            chargebacks_payload=self.chargebacks(),
+        )
+        license_obj = License.objects.get(owner_user=self.user)
+        term = LicenseTerm.objects.get(license=license_obj)
+
+        Refund.objects.create(
+            term=term,
+            payment=self.payment,
+            provider_refund_id='re_locally_tracked',
+            amount=Decimal('10.00'),
+            remaining_days=100,
+            status='submitted',
+        )
+        provider_refund = self.payload('paid')
+        provider_refund['amountRefunded'] = {'value': '10.00', 'currency': 'EUR'}
+        process_provider_state(
+            self.payment.provider_payment_id,
+            provider_refund,
+            chargebacks_payload=self.chargebacks(),
+        )
+
+        self.payment.refresh_from_db()
+        license_obj.refresh_from_db()
+        self.assertEqual(self.payment.status, 'refunded_partial')
+        self.assertEqual(license_obj.status, 'active')
 
     @patch('apps.payments.services._queue_after_commit')
     def test_chargeback_blocks_license_and_reversal_restores_access_state(self, _mail):
