@@ -2,7 +2,7 @@ from datetime import timedelta
 from decimal import Decimal
 from io import StringIO
 from types import SimpleNamespace
-from unittest.mock import patch
+from unittest.mock import MagicMock, patch
 
 from django.core.management import call_command
 from django.core.management.base import CommandError
