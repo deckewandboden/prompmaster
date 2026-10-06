@@ -15,7 +15,7 @@ from apps.integrations.models import IntegrationSecret
 from apps.integrations.services import set_secret
 from apps.legal.models import LegalDocument
 from apps.licenses.models import License
-from apps.orders.models import Order
+from apps.orders.models import Order, OrderItem
 from apps.orders.services import MAX_PURCHASE_QUANTITY
 from apps.payments.models import Payment
 
@@ -147,7 +147,7 @@ class PurchaseHandoffTests(TestCase):
             response,
             'Der Zahlungsdienst ist derzeit noch nicht verfügbar',
         )
-        self.assertFalse(Order.objects.filter(target_license=license_obj).exists())
+        self.assertFalse(OrderItem.objects.filter(target_license=license_obj).exists())
         self.assertFalse(Payment.objects.exists())
 
         license_obj.refresh_from_db()
