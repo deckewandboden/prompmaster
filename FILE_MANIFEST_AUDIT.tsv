@@ -91,6 +91,7 @@ backend/locale/tr/LC_MESSAGES/django.po	0	text-not-byte-validated	active-backend
 backend/templates/includes/language_switcher.html	0	text-not-byte-validated	active-backend
 compose.legacy-volumes.yaml	0	text-not-byte-validated	active-operations
 Dockerfile.postgres	0	text-not-byte-validated	active-operations
+Dockerfile.postgres-exporter	0	text-not-byte-validated	active-operations
 Dockerfile.redis	0	text-not-byte-validated	active-operations
 Dockerfile.node-exporter	0	text-not-byte-validated	active-operations
 Dockerfile.cadvisor	0	text-not-byte-validated	active-operations
