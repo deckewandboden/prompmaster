@@ -51,6 +51,17 @@ class RuntimeConfigTests(unittest.TestCase):
         self.assertIn('restic restore latest --tag "$legacy_backup_tag"', backup)
         self.assertIn('promptfinisher-${ts}.dump', backup)
 
+    def test_redis_runtime_uses_hardened_patched_image(self):
+        redis = self.base['services']['redis']
+        self.assertEqual(redis['image'], 'promptfinisher-redis:7-alpine-hardened')
+        self.assertEqual(
+            redis['build'],
+            {'context': '.', 'dockerfile': 'Dockerfile.redis'},
+        )
+        dockerfile = (ROOT / 'Dockerfile.redis').read_text()
+        self.assertIn('FROM redis:7-alpine', dockerfile)
+        self.assertIn('apk upgrade --no-cache', dockerfile)
+
     def test_postgres_runtime_uses_hardened_gosu_free_image(self):
         postgres = self.base['services']['postgres']
         self.assertEqual(postgres['image'], 'promptfinisher-postgres:18-alpine-hardened')
