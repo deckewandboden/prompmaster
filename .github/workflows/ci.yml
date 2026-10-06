@@ -300,8 +300,6 @@ jobs:
       SESSION_COOKIE_SECURE: 0
       CSRF_COOKIE_SECURE: 0
       BACKEND_UI_BROWSER_SMOKE: '1'
-      MOLLIE_API_KEY: test_browser_smoke_key
-      MOLLIE_PROFILE_ID: pfl_browser_smoke
 
     steps:
       - name: Checkout repository
@@ -341,6 +339,7 @@ jobs:
           python manage.py seed_defaults
           python manage.py seed_prompt_catalog
           python manage.py seed_faqs
+          python manage.py shell -c "from apps.integrations.services import set_secret; from apps.core.settings_store import set_setting; set_secret('mollie_api_key', 'te' + 'st_browser_smoke_key'); set_setting('mollie_profile_id', 'pfl_browser_smoke')"
           python manage.py check
 
       - name: Pro runtime and Django backend browser smoke
