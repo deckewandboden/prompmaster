@@ -72,6 +72,18 @@ class MollieConfigurationSafetyTests(SimpleTestCase):
             MollieClient(key='live_runtime_key')
 
 
+class MollieReconciliationScheduleTests(SimpleTestCase):
+    def test_unsettled_reconciliation_is_scheduled(self):
+        from django.conf import settings
+
+        entry = settings.CELERY_BEAT_SCHEDULE['mollie-unsettled-reconciliation']
+        self.assertEqual(
+            entry['task'],
+            'apps.payments.tasks.reconcile_mollie_unsettled_states',
+        )
+        self.assertEqual(entry['schedule'], 900.0)
+
+
 class MollieLiveProbeTests(SimpleTestCase):
     @override_settings(ENVIRONMENT='production')
     def test_current_profile_uses_read_only_profiles_me_endpoint(self):
@@ -553,6 +565,52 @@ class MollieStateIntegrationTests(TestCase):
         self.assertEqual(
             MollieEvent.objects.filter(payment=self.payment).count(),
             events_before_duplicate,
+        )
+
+    @patch('apps.payments.services._queue_after_commit')
+    @patch('apps.payments.tasks.MollieClient.list_chargebacks')
+    @patch('apps.payments.tasks.MollieClient.get_payment')
+    def test_periodic_reconciliation_restores_reversed_chargeback(
+        self,
+        provider_get,
+        provider_chargebacks,
+        _mail,
+    ):
+        process_provider_state(
+            self.payment.provider_payment_id,
+            self.payload('paid'),
+            chargebacks_payload=self.chargebacks(),
+        )
+        license_obj = License.objects.get(owner_user=self.user)
+        process_provider_state(
+            self.payment.provider_payment_id,
+            self.payload('paid'),
+            chargebacks_payload=self.chargebacks(self.chargeback()),
+        )
+        self.payment.refresh_from_db()
+        license_obj.refresh_from_db()
+        self.assertEqual(self.payment.status, 'chargeback')
+        self.assertEqual(license_obj.status, 'payment_review')
+
+        provider_get.return_value = self.payload('paid')
+        provider_chargebacks.return_value = self.chargebacks(
+            self.chargeback(reversed_at='2026-09-18T10:00:00+00:00')
+        )
+
+        from apps.payments.tasks import reconcile_mollie_unsettled_states
+
+        result = reconcile_mollie_unsettled_states.run()
+        self.assertEqual(result['scanned'], 1)
+        self.assertEqual(result['updated'], 1)
+        self.assertEqual(result['errors'], 0)
+
+        self.payment.refresh_from_db()
+        license_obj.refresh_from_db()
+        self.assertEqual(self.payment.status, 'chargeback_reversed')
+        self.assertEqual(license_obj.status, 'active')
+        provider_get.assert_called_once_with(self.payment.provider_payment_id)
+        provider_chargebacks.assert_called_once_with(
+            self.payment.provider_payment_id
         )
 
     @patch('apps.payments.services._queue_after_commit')
