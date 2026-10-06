@@ -76,7 +76,7 @@ jobs:
             "promptfinisher-backup:ci"
             "promptfinisher-postgres:ci"
             "promptfinisher-redis:ci"
-            "prom/prometheus:v3.13.3"
+            "prom/prometheus:v3.15.0"
             "prom/node-exporter:v1.12.1"
             "ghcr.io/google/cadvisor:v0.60.5"
             "prometheuscommunity/postgres-exporter:v0.20.1"
