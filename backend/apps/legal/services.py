@@ -4,16 +4,16 @@ from django.utils import timezone
 
 from apps.accounts.security import bump_security_version
 from apps.audit.services import audit
-from apps.companies.models import Membership
+from apps.companies.models import Membership, PrivateCustomerProfile
 from apps.devices.models import DeviceRegistration
-from apps.licenses.models import LicenseAssignment
+from apps.licenses.models import License, LicenseAssignment
 from apps.licenses.services import release_license
 
 from .models import DeletionRequest
 
 
 @transaction.atomic
-def process_deletion_request(deletion, *, actor, request=None):
+def process_deletion_request(deletion, *, actor, request=None, scope_company=None):
     """Deactivate and anonymize an approved customer account deletion request.
 
     Financial/order, legal acceptance and append-only audit records are retained
@@ -48,6 +48,24 @@ def process_deletion_request(deletion, *, actor, request=None):
     )
     if any(link.role == 'admin' for link in active_memberships):
         raise ValidationError('Firmenadministrator muss vor der Löschung übertragen werden.')
+
+    if scope_company is not None:
+        scoped_company_id = getattr(scope_company, 'pk', scope_company)
+        if not any(link.company_id == scoped_company_id for link in active_memberships):
+            raise ValidationError('Benutzer ist in dieser Firma nicht aktiv.')
+        if any(link.company_id != scoped_company_id for link in active_memberships):
+            raise ValidationError(
+                'Benutzer gehört weiteren aktiven Firmen an und kann hier nicht global '
+                'gelöscht werden. Bitte nur die Mitgliedschaft dieser Firma deaktivieren.'
+            )
+        if (
+            PrivateCustomerProfile.objects.filter(user=user).exists()
+            or License.objects.filter(owner_user=user).exists()
+        ):
+            raise ValidationError(
+                'Benutzer besitzt zusätzlich einen privaten Kunden- oder Lizenzkontext '
+                'und kann durch einen Firmenadministrator nicht global gelöscht werden.'
+            )
 
     # End active assignments via the canonical service so license state and
     # device revocation stay consistent and audited in one place.
