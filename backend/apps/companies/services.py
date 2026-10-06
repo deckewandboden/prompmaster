@@ -147,9 +147,10 @@ def reactivate_company_member(*, company, member, actor, request=None):
         raise ValidationError(
             'Interne netstyle Benutzer dürfen nicht über ein Kundenunternehmen reaktiviert werden.'
         )
-    if hasattr(user, 'private_customer'):
+    if hasattr(user, 'private_customer') or user.owned_licenses.exists():
         raise ValidationError(
-            'Ein Privatkundenkonto kann nicht als Firmenmitglied reaktiviert werden.'
+            'Ein Benutzer mit privatem Kunden- oder Lizenzkontext kann nicht '
+            'als Firmenmitglied reaktiviert werden.'
         )
     if Membership.objects.filter(user=user, active=True).exclude(pk=locked.pk).exists():
         raise ValidationError('Der Benutzer gehört bereits zu einem anderen aktiven Unternehmen.')
@@ -188,6 +189,17 @@ def deactivate_company_member(*, company, member, actor, request=None):
         )
     if locked.role == 'admin':
         raise ValidationError('Firmenadministrator zuerst übertragen.')
+
+    if hasattr(locked.user, 'private_customer') or locked.user.owned_licenses.exists():
+        raise ValidationError(
+            'Dieser Benutzer besitzt zusätzlich einen privaten Kunden- oder Lizenzkontext '
+            'und kann durch einen Firmenadministrator nicht global deaktiviert werden.'
+        )
+    if Membership.objects.filter(user=locked.user, active=True).exclude(pk=locked.pk).exists():
+        raise ValidationError(
+            'Dieser Benutzer gehört einem weiteren aktiven Unternehmen an und kann '
+            'hier nicht global deaktiviert werden.'
+        )
 
     assignments = list(
         LicenseAssignment.objects.select_for_update()

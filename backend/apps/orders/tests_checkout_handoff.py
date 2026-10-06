@@ -1,3 +1,4 @@
+from datetime import timedelta
 from decimal import Decimal
 from urllib.parse import urlsplit
 from unittest.mock import patch
@@ -14,7 +15,7 @@ from apps.integrations.models import IntegrationSecret
 from apps.integrations.services import set_secret
 from apps.legal.models import LegalDocument
 from apps.licenses.models import License
-from apps.orders.models import Order
+from apps.orders.models import Order, OrderItem
 from apps.orders.services import MAX_PURCHASE_QUANTITY
 from apps.payments.models import Payment
 
@@ -120,6 +121,38 @@ class PurchaseHandoffTests(TestCase):
         self.assertFalse(Payment.objects.exists())
         self.assertFalse(License.objects.filter(company=self.company).exists())
         self.assertContains(response, 'Der Zahlungsdienst ist derzeit noch nicht verfügbar')
+
+    @override_settings(ENVIRONMENT='staging', MOLLIE_API_KEY='')
+    def test_renewal_without_mollie_fails_closed_without_order_payment_or_term_change(self):
+        now = timezone.now()
+        license_obj = License.objects.create(
+            company=self.company,
+            product=self.product,
+            status='active',
+            valid_from=now - timedelta(days=1),
+            valid_until=now + timedelta(days=30),
+        )
+        original_valid_until = license_obj.valid_until
+
+        IntegrationSecret.objects.filter(code='mollie_api_key').delete()
+        set_setting('mollie_profile_id', '')
+
+        response = self.client.post(
+            f'/portal/licenses/{license_obj.pk}/renew/',
+            {},
+        )
+
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(
+            response,
+            'Der Zahlungsdienst ist derzeit noch nicht verfügbar',
+        )
+        self.assertFalse(OrderItem.objects.filter(target_license=license_obj).exists())
+        self.assertFalse(Payment.objects.exists())
+
+        license_obj.refresh_from_db()
+        self.assertEqual(license_obj.status, 'active')
+        self.assertEqual(license_obj.valid_until, original_valid_until)
 
     @patch('apps.companies.portal.MollieClient.create_payment')
     def test_checkout_creates_order_and_payment_for_selected_quantity(self, create_payment):

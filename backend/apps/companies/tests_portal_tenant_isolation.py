@@ -1,15 +1,17 @@
 from datetime import timedelta
 from unittest.mock import patch
 
+from django.db import IntegrityError, transaction
 from django.test import TestCase
 from django.urls import reverse
 from django.utils import timezone
 
 from apps.accounts.models import User
 from apps.catalog.models import Product
-from apps.companies.models import Company, Invitation, Membership
+from apps.companies.models import Company, Invitation, Membership, PrivateCustomerProfile
 from apps.core.security import token_hash
 from apps.devices.models import DeviceRegistration
+from apps.legal.models import DeletionRequest
 from apps.licenses.models import (
     License,
     LicenseAssignment,
@@ -229,6 +231,256 @@ class CustomerPortalTenantIsolationTests(TestCase):
             ).status_code,
             404,
         )
+
+    def test_member_delete_is_post_only_tenant_scoped_admin_safe_and_fully_anonymizes(self):
+        member_session = self.client_class()
+        member_session.force_login(self.member_a)
+        member_session_data = member_session.session
+        member_session_data['security_version'] = self.member_a.security_version
+        member_session_data['authenticated_at'] = self.now.timestamp()
+        member_session_data['last_activity_at'] = self.now.timestamp()
+        member_session_data.save()
+
+        original_email = self.member_a.email
+        original_security_version = self.member_a.security_version
+        assignment = LicenseAssignment.objects.get(
+            license=self.license_a,
+            user=self.member_a,
+            ended_at__isnull=True,
+        )
+        membership = Membership.objects.get(company=self.company_a, user=self.member_a)
+
+        self._login(self.admin_a)
+
+        get_response = self.client.get(
+            reverse('portal:member_delete', args=[self.member_a.pk])
+        )
+        self.assertEqual(get_response.status_code, 403)
+        self.member_a.refresh_from_db()
+        self.assertEqual(self.member_a.email, original_email)
+        self.assertTrue(membership.active)
+
+        foreign = self.client.post(
+            reverse('portal:member_delete', args=[self.member_b.pk]),
+            {'confirm': '1'},
+        )
+        self.assertEqual(foreign.status_code, 404)
+        self.member_b.refresh_from_db()
+        self.assertTrue(self.member_b.is_active)
+
+        admin_delete = self.client.post(
+            reverse('portal:member_delete', args=[self.admin_a.pk]),
+            {'confirm': '1'},
+        )
+        self.assertEqual(admin_delete.status_code, 302)
+        self.admin_a.refresh_from_db()
+        self.assertTrue(self.admin_a.is_active)
+        self.assertFalse(
+            DeletionRequest.objects.filter(user=self.admin_a).exists()
+        )
+
+        with self.assertRaises(IntegrityError):
+            with transaction.atomic():
+                Membership.objects.create(
+                    company=self.company_b,
+                    user=self.member_a,
+                    role='member',
+                    active=True,
+                )
+
+        historical_membership = Membership.objects.create(
+            company=self.company_b,
+            user=self.member_a,
+            role='member',
+            active=False,
+        )
+        historical_delete = self.client.post(
+            reverse('portal:member_delete', args=[self.member_a.pk]),
+            {'confirm': '1'},
+        )
+        self.assertEqual(historical_delete.status_code, 302)
+        self.member_a.refresh_from_db()
+        membership.refresh_from_db()
+        self.assertEqual(self.member_a.email, original_email)
+        self.assertTrue(self.member_a.is_active)
+        self.assertTrue(membership.active)
+        self.assertFalse(
+            DeletionRequest.objects.filter(user=self.member_a).exists()
+        )
+        historical_membership.delete()
+
+        private_profile = PrivateCustomerProfile.objects.create(
+            user=self.member_a,
+            customer_number='PORTAL-PRIVATE-SHARED',
+            street='Privatweg',
+            house_number='1',
+            postal_code='57072',
+            city='Siegen',
+            country='DE',
+        )
+        private_deactivate = self.client.post(
+            reverse('portal:member_deactivate', args=[self.member_a.pk])
+        )
+        self.assertEqual(private_deactivate.status_code, 302)
+        self.member_a.refresh_from_db()
+        membership.refresh_from_db()
+        assignment.refresh_from_db()
+        self.device_a.refresh_from_db()
+        self.assertTrue(self.member_a.is_active)
+        self.assertTrue(membership.active)
+        self.assertIsNone(assignment.ended_at)
+        self.assertIsNone(self.device_a.revoked_at)
+
+        private_delete = self.client.post(
+            reverse('portal:member_delete', args=[self.member_a.pk]),
+            {'confirm': '1'},
+        )
+        self.assertEqual(private_delete.status_code, 302)
+        self.member_a.refresh_from_db()
+        membership.refresh_from_db()
+        assignment.refresh_from_db()
+        self.device_a.refresh_from_db()
+        self.assertEqual(self.member_a.email, original_email)
+        self.assertTrue(self.member_a.is_active)
+        self.assertTrue(membership.active)
+        self.assertIsNone(assignment.ended_at)
+        self.assertIsNone(self.device_a.revoked_at)
+        self.assertFalse(
+            DeletionRequest.objects.filter(user=self.member_a).exists()
+        )
+        private_profile.delete()
+
+        unconfirmed = self.client.post(
+            reverse('portal:member_delete', args=[self.member_a.pk]),
+            {'confirm': '0'},
+        )
+        self.assertEqual(unconfirmed.status_code, 302)
+        self.member_a.refresh_from_db()
+        self.assertEqual(self.member_a.email, original_email)
+
+        response = self.client.post(
+            reverse('portal:member_delete', args=[self.member_a.pk]),
+            {'confirm': '1'},
+        )
+        self.assertEqual(response.status_code, 302)
+        self.assertEqual(response.url, reverse('portal:team'))
+
+        self.member_a.refresh_from_db()
+        membership.refresh_from_db()
+        assignment.refresh_from_db()
+        self.device_a.refresh_from_db()
+        self.license_a.refresh_from_db()
+
+        deletion = DeletionRequest.objects.get(user=self.member_a)
+        self.assertEqual(deletion.status, 'completed')
+        self.assertIsNotNone(deletion.completed_at)
+
+        self.assertFalse(membership.active)
+        self.assertIsNotNone(assignment.ended_at)
+        self.assertIsNotNone(self.device_a.revoked_at)
+        self.assertNotEqual(self.license_a.status, 'active')
+
+        self.assertFalse(self.member_a.is_active)
+        self.assertFalse(self.member_a.is_staff)
+        self.assertEqual(self.member_a.first_name, '')
+        self.assertEqual(self.member_a.last_name, '')
+        self.assertEqual(
+            self.member_a.email,
+            f'deleted+{self.member_a.id.hex}@invalid.local',
+        )
+        self.assertIsNone(self.member_a.email_verified_at)
+        self.assertFalse(self.member_a.has_usable_password())
+        self.assertFalse(self.member_a.two_factor_required)
+        self.assertEqual(self.member_a.totp_secret_enc, '')
+        self.assertGreater(self.member_a.security_version, original_security_version)
+
+        stale_session_response = member_session.get(reverse('portal:dashboard'))
+        self.assertIn(stale_session_response.status_code, {302, 403})
+
+    def test_member_lifecycle_blocks_private_owned_license_without_private_profile(self):
+        private_license = License.objects.create(
+            owner_user=self.member_a,
+            product=self.product,
+            status='active',
+            valid_from=self.now - timedelta(days=1),
+            valid_until=self.now + timedelta(days=30),
+        )
+        membership = Membership.objects.get(company=self.company_a, user=self.member_a)
+        assignment = LicenseAssignment.objects.get(
+            license=self.license_a,
+            user=self.member_a,
+            ended_at__isnull=True,
+        )
+
+        self._login(self.admin_a)
+
+        deactivate = self.client.post(
+            reverse('portal:member_deactivate', args=[self.member_a.pk])
+        )
+        self.assertEqual(deactivate.status_code, 302)
+
+        self.member_a.refresh_from_db()
+        membership.refresh_from_db()
+        assignment.refresh_from_db()
+        self.device_a.refresh_from_db()
+        private_license.refresh_from_db()
+
+        self.assertTrue(self.member_a.is_active)
+        self.assertTrue(membership.active)
+        self.assertIsNone(assignment.ended_at)
+        self.assertIsNone(self.device_a.revoked_at)
+        self.assertEqual(private_license.status, 'active')
+
+        delete = self.client.post(
+            reverse('portal:member_delete', args=[self.member_a.pk]),
+            {'confirm': '1'},
+        )
+        self.assertEqual(delete.status_code, 302)
+
+        self.member_a.refresh_from_db()
+        membership.refresh_from_db()
+        self.assertTrue(self.member_a.is_active)
+        self.assertTrue(membership.active)
+        self.assertEqual(self.member_a.email, 'member-a@example.test')
+        self.assertFalse(
+            DeletionRequest.objects.filter(user=self.member_a).exists()
+        )
+
+    def test_reactivation_blocks_private_owned_license_without_private_profile(self):
+        legacy_user = self._user(
+            'legacy-private-license@example.test',
+            'Legacy',
+            'Owner',
+        )
+        legacy_user.is_active = False
+        legacy_user.save(update_fields=['is_active', 'updated_at'])
+        membership = Membership.objects.create(
+            company=self.company_a,
+            user=legacy_user,
+            role='member',
+            active=False,
+        )
+        private_license = License.objects.create(
+            owner_user=legacy_user,
+            product=self.product,
+            status='active',
+            valid_from=self.now - timedelta(days=1),
+            valid_until=self.now + timedelta(days=30),
+        )
+
+        self._login(self.admin_a)
+        response = self.client.post(
+            reverse('portal:member_reactivate', args=[legacy_user.pk])
+        )
+        self.assertEqual(response.status_code, 302)
+
+        legacy_user.refresh_from_db()
+        membership.refresh_from_db()
+        private_license.refresh_from_db()
+
+        self.assertFalse(legacy_user.is_active)
+        self.assertFalse(membership.active)
+        self.assertEqual(private_license.status, 'active')
 
     def test_company_member_cannot_reach_company_admin_and_billing_actions(self):
         self._login(self.member_a)
