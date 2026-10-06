@@ -9,9 +9,13 @@ from django.core.management import call_command
 from django.core.management.base import CommandError
 from django.conf import settings
 from django.test import SimpleTestCase, TestCase, override_settings
+from django.utils import timezone
 
+from apps.accounts.models import User
+from apps.audit.models import AuditEvent
 from apps.core.management.commands.external_graph_acceptance import INVALID_SENDER
 from apps.core.management.commands.external_mollie_acceptance import Command as MollieAcceptanceCommand
+from apps.core.models import SystemSetting
 from apps.notifications.models import EmailMessage
 
 
@@ -101,6 +105,124 @@ class ExternalAcceptanceSafetyTests(TestCase):
                 )
 
 
+    def test_mollie_live_activation_requires_explicit_confirmation(self):
+        with self.assertRaisesMessage(
+            CommandError,
+            'Refusing to enable live checkout',
+        ):
+            call_command(
+                'external_mollie_acceptance',
+                'activate-live',
+                confirm='WRONG',
+                stdout=StringIO(),
+            )
+        self.assertFalse(
+            SystemSetting.objects.filter(
+                key='mollie_checkout_enabled',
+                value=True,
+            ).exists()
+        )
+
+    def test_mollie_live_activation_sets_gate_only_after_successful_probe(self):
+        fake = MagicMock()
+        fake.key = 'live_runtime_secret'
+        fake.get_current_profile.return_value = {
+            'resource': 'profile',
+            'id': 'pfl_runtime',
+            'mode': 'live',
+            'name': 'PROMPTFINISHER',
+            'status': 'verified',
+            'review': None,
+        }
+        fake.list_methods.return_value = {
+            '_embedded': {
+                'methods': [
+                    {'id': 'creditcard', 'status': 'activated'},
+                ]
+            }
+        }
+        out = StringIO()
+        with (
+            patch(
+                'apps.core.management.commands.external_mollie_acceptance.MollieClient',
+                return_value=fake,
+            ),
+            patch(
+                'apps.core.management.commands.external_mollie_acceptance.get_setting',
+                return_value='pfl_runtime',
+            ),
+        ):
+            call_command(
+                'external_mollie_acceptance',
+                'activate-live',
+                confirm='ENABLE-MOLLIE-LIVE-CHECKOUT',
+                stdout=out,
+            )
+
+        gate = SystemSetting.objects.get(key='mollie_checkout_enabled')
+        self.assertIs(gate.value, True)
+        payload = json.loads(out.getvalue())
+        self.assertTrue(payload['checkout_enabled'])
+        self.assertEqual(payload['profile_status'], 'verified')
+        self.assertEqual(payload['activated_methods'], ['creditcard'])
+        self.assertTrue(
+            AuditEvent.objects.filter(
+                action='mollie.checkout_enabled',
+                object_type='SystemSetting',
+                object_id=str(gate.id),
+                changes__checkout_enabled=True,
+                changes__profile_id='pfl_runtime',
+            ).exists()
+        )
+        fake.get_current_profile.assert_called_once_with()
+        fake.list_methods.assert_called_once_with()
+
+
+class MollieAdminCheckoutGateTests(TestCase):
+    def setUp(self):
+        self.admin = User.objects.create_superuser(
+            email='mollie-admin@example.test',
+            password='Mollie-Admin-Password-2026!',
+            first_name='Mollie',
+            last_name='Admin',
+            email_verified_at=timezone.now(),
+            two_factor_required=False,
+        )
+        self.client.force_login(self.admin)
+        session = self.client.session
+        session['security_version'] = self.admin.security_version
+        session['authenticated_at'] = timezone.now().timestamp()
+        session['last_activity_at'] = timezone.now().timestamp()
+        session.save()
+
+    def test_mollie_admin_shows_and_executes_checkout_emergency_stop(self):
+        SystemSetting.objects.update_or_create(
+            key='mollie_checkout_enabled',
+            defaults={'value': True},
+        )
+
+        page = self.client.get('/ns-admin/mollie/')
+        self.assertEqual(page.status_code, 200)
+        self.assertContains(page, 'Produktiv-Checkout sperren')
+        self.assertContains(page, '/ns-admin/mollie/checkout/disable/')
+
+        response = self.client.post('/ns-admin/mollie/checkout/disable/')
+        self.assertEqual(response.status_code, 302)
+        self.assertEqual(response.url, '/ns-admin/mollie/')
+        gate = SystemSetting.objects.get(key='mollie_checkout_enabled')
+        self.assertIs(gate.value, False)
+
+    def test_mollie_checkout_emergency_stop_refuses_get(self):
+        SystemSetting.objects.update_or_create(
+            key='mollie_checkout_enabled',
+            defaults={'value': True},
+        )
+        response = self.client.get('/ns-admin/mollie/checkout/disable/')
+        self.assertEqual(response.status_code, 405)
+        gate = SystemSetting.objects.get(key='mollie_checkout_enabled')
+        self.assertIs(gate.value, True)
+
+
 @override_settings(
     EMAIL_PROVIDER='graph',
     GRAPH_TENANT_ID='tenant-test',
@@ -146,6 +268,33 @@ class ExternalGraphAcceptanceFlowTests(TestCase):
 
 
 class ExternalMollieAcceptanceInvariantTests(SimpleTestCase):
+
+    def test_mollie_acceptance_company_checkout_payload_matches_required_form(self):
+        user = MagicMock()
+        user.company_memberships.filter.return_value.exists.return_value = True
+
+        payload = MollieAcceptanceCommand()._checkout_payload(user)
+
+        self.assertEqual(payload['quantity'], '1')
+        self.assertEqual(payload['accept_terms'], 'on')
+        self.assertEqual(payload['accept_privacy'], 'on')
+        self.assertEqual(payload['accept_license'], 'on')
+        self.assertNotIn('accept_withdrawal', payload)
+        self.assertNotIn('request_early_performance', payload)
+
+    def test_mollie_acceptance_private_checkout_payload_matches_required_form(self):
+        user = MagicMock()
+        user.company_memberships.filter.return_value.exists.return_value = False
+        user.private_customer = MagicMock()
+
+        payload = MollieAcceptanceCommand()._checkout_payload(user)
+
+        self.assertEqual(payload['quantity'], '1')
+        self.assertEqual(payload['accept_terms'], 'on')
+        self.assertEqual(payload['accept_privacy'], 'on')
+        self.assertEqual(payload['accept_license'], 'on')
+        self.assertEqual(payload['accept_withdrawal'], 'on')
+        self.assertEqual(payload['request_early_performance'], 'on')
 
     def test_mollie_acceptance_requires_provider_test_mode(self):
         payment = MagicMock()

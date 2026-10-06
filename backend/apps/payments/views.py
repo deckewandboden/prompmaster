@@ -23,10 +23,11 @@ def mollie_webhook(request):
 
     # Never turn an unauthenticated public webhook into an arbitrary Mollie API
     # oracle/amplifier. Only provider IDs already linked to one of our orders
-    # are eligible for a canonical provider fetch. A very early legitimate
-    # webhook can be retried by Mollie once the local payment row exists.
+    # are eligible for a canonical provider fetch. Mollie recommends returning
+    # 200 even for unknown IDs so the endpoint does not disclose whether a
+    # provider identifier exists locally and does not trigger pointless retries.
     if not Payment.objects.filter(provider_payment_id=payment_id).exists():
-        return HttpResponse(status=404)
+        return HttpResponse('OK')
 
     try:
         client = MollieClient()

@@ -65,6 +65,7 @@ urlpatterns = [
     path('email/templates/<uuid:pk>/', v.email_template_edit, name='email_template_edit'),
     path('mollie/', v.mollie, name='mollie'),
     path('mollie/config/', v.mollie_config, name='mollie_config'),
+    path('mollie/checkout/disable/', v.mollie_checkout_disable, name='mollie_checkout_disable'),
     path('mollie/events/', v.mollie_events, name='mollie_events'),
     path('statistics/', v.stats, name='stats'),
     path('ops/', v.ops, name='ops'),

@@ -2,7 +2,7 @@ from datetime import timedelta
 from decimal import Decimal
 from io import StringIO
 from types import SimpleNamespace
-from unittest.mock import patch
+from unittest.mock import MagicMock, patch
 
 from django.core.management import call_command
 from django.core.management.base import CommandError
@@ -15,7 +15,7 @@ from apps.catalog.models import Product, ProductPrice
 from apps.licenses.models import License, LicenseTerm
 from apps.orders.models import Order, OrderItem
 
-from .mollie import MollieClient, MollieError
+from .mollie import MollieClient, MollieError, mollie_config_fingerprint
 from .models import MollieEvent, Payment, Refund
 from .services import calculate_refund, process_provider_state
 
@@ -72,6 +72,210 @@ class MollieConfigurationSafetyTests(SimpleTestCase):
             MollieClient(key='live_runtime_key')
 
 
+    @override_settings(ENVIRONMENT='staging')
+    def test_conflict_timeout_and_rate_limit_are_ambiguous_provider_outcomes(self):
+        client = MollieClient(key='test_http_classification')
+        for status_code in (408, 409, 429, 500, 503):
+            with self.subTest(status_code=status_code):
+                response = MagicMock()
+                response.ok = False
+                response.status_code = status_code
+                with patch(
+                    'apps.payments.mollie.requests.request',
+                    return_value=response,
+                ):
+                    with self.assertRaises(MollieError) as caught:
+                        client._request('POST', '/payments')
+                self.assertTrue(caught.exception.ambiguous)
+
+    @override_settings(ENVIRONMENT='staging')
+    def test_validation_4xx_remains_deterministic(self):
+        client = MollieClient(key='test_http_classification')
+        response = MagicMock()
+        response.ok = False
+        response.status_code = 422
+        with patch(
+            'apps.payments.mollie.requests.request',
+            return_value=response,
+        ):
+            with self.assertRaises(MollieError) as caught:
+                client._request('POST', '/payments')
+        self.assertFalse(caught.exception.ambiguous)
+
+
+class MollieRuntimeReadinessTests(SimpleTestCase):
+    @override_settings(ENVIRONMENT='production', MOLLIE_API_KEY='')
+    def test_production_credentials_do_not_enable_checkout_without_explicit_gate(self):
+        with (
+            patch(
+                'apps.integrations.services.get_secret',
+                return_value='live_runtime_key',
+            ),
+            patch(
+                'apps.core.settings_store.get_setting',
+                side_effect=lambda key, default=None: (
+                    'pfl_runtime'
+                    if key == 'mollie_profile_id'
+                    else False
+                    if key == 'mollie_checkout_enabled'
+                    else default
+                ),
+            ),
+        ):
+            from apps.payments.mollie import mollie_runtime_ready
+
+            self.assertFalse(mollie_runtime_ready())
+
+    @override_settings(ENVIRONMENT='production', MOLLIE_API_KEY='')
+    def test_production_checkout_requires_explicit_credential_bound_gate(self):
+        fingerprint = mollie_config_fingerprint(
+            'live_runtime_key',
+            'pfl_runtime',
+        )
+        with (
+            patch(
+                'apps.integrations.services.get_secret',
+                return_value='live_runtime_key',
+            ),
+            patch(
+                'apps.core.settings_store.get_setting',
+                side_effect=lambda key, default=None: (
+                    'pfl_runtime'
+                    if key == 'mollie_profile_id'
+                    else True
+                    if key == 'mollie_checkout_enabled'
+                    else fingerprint
+                    if key == 'mollie_checkout_approval_fingerprint'
+                    else default
+                ),
+            ),
+        ):
+            from apps.payments.mollie import mollie_runtime_ready
+
+            self.assertTrue(mollie_runtime_ready())
+
+    @override_settings(ENVIRONMENT='production', MOLLIE_API_KEY='')
+    def test_rotated_live_key_invalidates_previous_checkout_approval(self):
+        old_fingerprint = mollie_config_fingerprint(
+            'live_old_key',
+            'pfl_runtime',
+        )
+        with (
+            patch(
+                'apps.integrations.services.get_secret',
+                return_value='live_rotated_key',
+            ),
+            patch(
+                'apps.core.settings_store.get_setting',
+                side_effect=lambda key, default=None: (
+                    'pfl_runtime'
+                    if key == 'mollie_profile_id'
+                    else True
+                    if key == 'mollie_checkout_enabled'
+                    else old_fingerprint
+                    if key == 'mollie_checkout_approval_fingerprint'
+                    else default
+                ),
+            ),
+        ):
+            from apps.payments.mollie import mollie_runtime_ready
+
+            self.assertFalse(mollie_runtime_ready())
+
+    @override_settings(ENVIRONMENT='staging', MOLLIE_API_KEY='')
+    def test_staging_test_checkout_does_not_require_production_approval_gate(self):
+        with (
+            patch(
+                'apps.integrations.services.get_secret',
+                return_value='test_runtime_key',
+            ),
+            patch(
+                'apps.core.settings_store.get_setting',
+                side_effect=lambda key, default=None: (
+                    'pfl_runtime'
+                    if key == 'mollie_profile_id'
+                    else False
+                    if key == 'mollie_checkout_enabled'
+                    else default
+                ),
+            ),
+        ):
+            from apps.payments.mollie import mollie_runtime_ready
+
+            self.assertTrue(mollie_runtime_ready())
+
+
+class MollieRefundPaginationTests(SimpleTestCase):
+    @override_settings(ENVIRONMENT='staging')
+    def test_refund_listing_follows_safe_mollie_pagination(self):
+        client = MollieClient(key='test_refund_pagination')
+        pages = [
+            {
+                'count': 1,
+                '_embedded': {'refunds': [{'id': 're_page_1'}]},
+                '_links': {
+                    'next': {
+                        'href': (
+                            'https://api.mollie.com/v2/payments/tr_page/refunds'
+                            '?from=re_page_1&limit=250'
+                        )
+                    }
+                },
+            },
+            {
+                'count': 1,
+                '_embedded': {'refunds': [{'id': 're_page_2'}]},
+                '_links': {'next': None},
+            },
+        ]
+        with patch.object(client, '_request', side_effect=pages) as request:
+            payload = client.list_refunds('tr_page')
+
+        self.assertEqual(
+            [row['id'] for row in payload['_embedded']['refunds']],
+            ['re_page_1', 're_page_2'],
+        )
+        self.assertEqual(payload['count'], 2)
+        self.assertEqual(request.call_count, 2)
+        request.assert_any_call(
+            'GET',
+            '/payments/tr_page/refunds?from=re_page_1&limit=250',
+        )
+
+    @override_settings(ENVIRONMENT='staging')
+    def test_refund_listing_rejects_foreign_pagination_host(self):
+        client = MollieClient(key='test_refund_pagination')
+        payload = {
+            '_embedded': {'refunds': []},
+            '_links': {
+                'next': {
+                    'href': (
+                        'https://attacker.example/v2/payments/tr_page/refunds'
+                        '?from=re_bad&limit=250'
+                    )
+                }
+            },
+        }
+        with patch.object(client, '_request', return_value=payload):
+            with self.assertRaisesMessage(
+                MollieError,
+                'unexpected host',
+            ):
+                client.list_refunds('tr_page')
+
+
+class MollieReconciliationScheduleTests(SimpleTestCase):
+    def test_unsettled_reconciliation_is_scheduled(self):
+        from django.conf import settings
+
+        entry = settings.CELERY_BEAT_SCHEDULE['mollie-unsettled-reconciliation']
+        self.assertEqual(
+            entry['task'],
+            'apps.payments.tasks.reconcile_mollie_unsettled_states',
+        )
+        self.assertEqual(entry['schedule'], 900.0)
+
+
 class MollieLiveProbeTests(SimpleTestCase):
     @override_settings(ENVIRONMENT='production')
     def test_current_profile_uses_read_only_profiles_me_endpoint(self):
@@ -81,6 +285,18 @@ class MollieLiveProbeTests(SimpleTestCase):
             self.assertEqual(client.get_current_profile(), payload)
         request.assert_called_once_with('GET', '/profiles/me')
 
+    @override_settings(ENVIRONMENT='production')
+    def test_live_methods_probe_uses_oneoff_endpoint(self):
+        client = MollieClient(key='live_probe_key')
+        payload = {
+            '_embedded': {
+                'methods': [{'id': 'creditcard', 'status': 'activated'}]
+            }
+        }
+        with patch.object(client, '_request', return_value=payload) as request:
+            self.assertEqual(client.list_methods(), payload)
+        request.assert_called_once_with('GET', '/methods?sequenceType=oneoff')
+
     def test_live_probe_accepts_matching_runtime_profile_without_exposing_key(self):
         fake = SimpleNamespace(
             key='live_runtime_secret',
@@ -89,6 +305,16 @@ class MollieLiveProbeTests(SimpleTestCase):
                 'id': 'pfl_runtime',
                 'mode': 'live',
                 'name': 'PROMPTFINISHER',
+                'status': 'verified',
+                'review': None,
+            },
+            list_methods=lambda: {
+                '_embedded': {
+                    'methods': [
+                        {'id': 'creditcard', 'status': 'activated'},
+                        {'id': 'paypal', 'status': 'activated'},
+                    ]
+                }
             },
         )
         out = StringIO()
@@ -107,6 +333,9 @@ class MollieLiveProbeTests(SimpleTestCase):
         rendered = out.getvalue()
         self.assertIn('"status": "ok"', rendered)
         self.assertIn('"profile_id": "pfl_runtime"', rendered)
+        self.assertIn('"profile_status": "verified"', rendered)
+        self.assertIn('"creditcard"', rendered)
+        self.assertIn('"paypal"', rendered)
         self.assertNotIn(fake.key, rendered)
 
     def test_live_probe_refuses_test_key(self):
@@ -125,6 +354,12 @@ class MollieLiveProbeTests(SimpleTestCase):
                 'resource': 'profile',
                 'id': 'pfl_provider',
                 'mode': 'live',
+                'status': 'verified',
+            },
+            list_methods=lambda: {
+                '_embedded': {
+                    'methods': [{'id': 'creditcard', 'status': 'activated'}]
+                }
             },
         )
         with (
@@ -138,6 +373,68 @@ class MollieLiveProbeTests(SimpleTestCase):
             ),
         ):
             with self.assertRaisesMessage(CommandError, 'runtime profile mismatch'):
+                call_command('external_mollie_acceptance', 'probe-live')
+
+
+    def test_live_probe_rejects_unverified_profile(self):
+        fake = SimpleNamespace(
+            key='live_runtime_secret',
+            get_current_profile=lambda: {
+                'resource': 'profile',
+                'id': 'pfl_runtime',
+                'mode': 'live',
+                'status': 'unverified',
+            },
+            list_methods=lambda: {
+                '_embedded': {
+                    'methods': [{'id': 'creditcard', 'status': 'activated'}]
+                }
+            },
+        )
+        with (
+            patch(
+                'apps.core.management.commands.external_mollie_acceptance.MollieClient',
+                return_value=fake,
+            ),
+            patch(
+                'apps.core.management.commands.external_mollie_acceptance.get_setting',
+                return_value='pfl_runtime',
+            ),
+        ):
+            with self.assertRaisesMessage(CommandError, 'not verified'):
+                call_command('external_mollie_acceptance', 'probe-live')
+
+    def test_live_probe_rejects_profile_without_activated_oneoff_method(self):
+        fake = SimpleNamespace(
+            key='live_runtime_secret',
+            get_current_profile=lambda: {
+                'resource': 'profile',
+                'id': 'pfl_runtime',
+                'mode': 'live',
+                'status': 'verified',
+            },
+            list_methods=lambda: {
+                '_embedded': {
+                    'methods': [
+                        {'id': 'paypal', 'status': 'pending-review'},
+                    ]
+                }
+            },
+        )
+        with (
+            patch(
+                'apps.core.management.commands.external_mollie_acceptance.MollieClient',
+                return_value=fake,
+            ),
+            patch(
+                'apps.core.management.commands.external_mollie_acceptance.get_setting',
+                return_value='pfl_runtime',
+            ),
+        ):
+            with self.assertRaisesMessage(
+                CommandError,
+                'no activated one-off payment method',
+            ):
                 call_command('external_mollie_acceptance', 'probe-live')
 
 
@@ -214,7 +511,7 @@ class MollieStateIntegrationTests(TestCase):
             'reversedAt': reversed_at,
         }
 
-    def test_unknown_webhook_id_does_not_call_provider_api(self):
+    def test_unknown_webhook_id_returns_neutral_success_without_provider_api(self):
         with (
             patch('apps.payments.views.MollieClient.get_payment') as provider_get,
             patch('apps.payments.views.MollieClient.list_chargebacks') as provider_chargebacks,
@@ -223,7 +520,8 @@ class MollieStateIntegrationTests(TestCase):
                 '/api/webhooks/mollie/',
                 {'id': 'tr_unknown_payment'},
             )
-        self.assertEqual(response.status_code, 404)
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.content, b'OK')
         provider_get.assert_not_called()
         provider_chargebacks.assert_not_called()
 
@@ -556,6 +854,52 @@ class MollieStateIntegrationTests(TestCase):
         )
 
     @patch('apps.payments.services._queue_after_commit')
+    @patch('apps.payments.tasks.MollieClient.list_chargebacks')
+    @patch('apps.payments.tasks.MollieClient.get_payment')
+    def test_periodic_reconciliation_restores_reversed_chargeback(
+        self,
+        provider_get,
+        provider_chargebacks,
+        _mail,
+    ):
+        process_provider_state(
+            self.payment.provider_payment_id,
+            self.payload('paid'),
+            chargebacks_payload=self.chargebacks(),
+        )
+        license_obj = License.objects.get(owner_user=self.user)
+        process_provider_state(
+            self.payment.provider_payment_id,
+            self.payload('paid'),
+            chargebacks_payload=self.chargebacks(self.chargeback()),
+        )
+        self.payment.refresh_from_db()
+        license_obj.refresh_from_db()
+        self.assertEqual(self.payment.status, 'chargeback')
+        self.assertEqual(license_obj.status, 'payment_review')
+
+        provider_get.return_value = self.payload('paid')
+        provider_chargebacks.return_value = self.chargebacks(
+            self.chargeback(reversed_at='2026-09-18T10:00:00+00:00')
+        )
+
+        from apps.payments.tasks import reconcile_mollie_unsettled_states
+
+        result = reconcile_mollie_unsettled_states.run()
+        self.assertEqual(result['scanned'], 1)
+        self.assertEqual(result['updated'], 1)
+        self.assertEqual(result['errors'], 0)
+
+        self.payment.refresh_from_db()
+        license_obj.refresh_from_db()
+        self.assertEqual(self.payment.status, 'chargeback_reversed')
+        self.assertEqual(license_obj.status, 'active')
+        provider_get.assert_called_once_with(self.payment.provider_payment_id)
+        provider_chargebacks.assert_called_once_with(
+            self.payment.provider_payment_id
+        )
+
+    @patch('apps.payments.services._queue_after_commit')
     def test_foreign_chargeback_reference_is_rejected(self, _mail):
         from django.core.exceptions import ValidationError
 
@@ -571,6 +915,46 @@ class MollieStateIntegrationTests(TestCase):
         self.assertEqual(self.payment.status, 'open')
         self.assertFalse(self.payment.processed_paid)
 
+
+    @patch('apps.payments.services._queue_after_commit')
+    def test_provider_payment_id_mismatch_is_rejected(self, _mail):
+        from django.core.exceptions import ValidationError
+
+        wrong = self.payload('paid')
+        wrong['id'] = 'tr_different_payment'
+        with self.assertRaisesMessage(
+            ValidationError,
+            'Payment-ID',
+        ):
+            process_provider_state(
+                self.payment.provider_payment_id,
+                wrong,
+                chargebacks_payload=self.chargebacks(),
+            )
+        self.payment.refresh_from_db()
+        self.assertEqual(self.payment.status, 'open')
+        self.assertFalse(self.payment.processed_paid)
+        self.assertFalse(License.objects.filter(owner_user=self.user).exists())
+
+    @patch('apps.payments.services._queue_after_commit')
+    def test_provider_order_metadata_mismatch_is_rejected(self, _mail):
+        from django.core.exceptions import ValidationError
+
+        wrong = self.payload('paid')
+        wrong['metadata'] = {'order_id': '00000000-0000-0000-0000-000000000000'}
+        with self.assertRaisesMessage(
+            ValidationError,
+            'andere Bestellung',
+        ):
+            process_provider_state(
+                self.payment.provider_payment_id,
+                wrong,
+                chargebacks_payload=self.chargebacks(),
+            )
+        self.payment.refresh_from_db()
+        self.assertEqual(self.payment.status, 'open')
+        self.assertFalse(self.payment.processed_paid)
+        self.assertFalse(License.objects.filter(owner_user=self.user).exists())
 
     @patch('apps.payments.services._queue_after_commit')
     def test_provider_amount_or_currency_mismatch_is_rejected(self, _mail):

@@ -6,26 +6,28 @@ from urllib.parse import urlsplit
 from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.core.management.base import BaseCommand, CommandError
+from django.db import transaction
 from django.db.models import Sum
 from django.test import Client
 from django.utils import timezone
 
 from apps.companies.models import Membership
-from apps.core.settings_store import get_setting
-from apps.payments.mollie import MollieClient
+from apps.core.settings_store import get_setting, set_setting
+from apps.payments.mollie import MollieClient, mollie_config_fingerprint
 from apps.payments.models import MollieEvent, Payment
 from apps.payments.services import create_refund_request, submit_refund
 
 
 START_CONFIRM = 'CREATE-MOLLIE-TEST-PAYMENT'
 REFUND_CONFIRM = 'CREATE-MOLLIE-TEST-REFUND'
+LIVE_ENABLE_CONFIRM = 'ENABLE-MOLLIE-LIVE-CHECKOUT'
 
 
 class Command(BaseCommand):
     help = 'Run staged acceptance against Mollie test mode using PROMPTFINISHER production code paths.'
 
     def add_arguments(self, parser):
-        parser.add_argument('action', choices=['start', 'verify', 'refund', 'probe-live'])
+        parser.add_argument('action', choices=['start', 'verify', 'refund', 'probe-live', 'activate-live'])
         parser.add_argument('--user-email')
         parser.add_argument('--payment-id')
         parser.add_argument('--base-url')
@@ -50,6 +52,13 @@ class Command(BaseCommand):
         action = options['action']
         if action == 'probe-live':
             return self._probe_live()
+        if action == 'activate-live':
+            if options.get('confirm') != LIVE_ENABLE_CONFIRM:
+                raise CommandError(
+                    'Refusing to enable live checkout. Pass '
+                    f'--confirm {LIVE_ENABLE_CONFIRM}.'
+                )
+            return self._probe_live(enable_checkout=True)
         client = self._client()
         if action == 'start':
             return self._start(client, options)
@@ -57,7 +66,7 @@ class Command(BaseCommand):
             return self._verify(client, options)
         return self._refund(options)
 
-    def _probe_live(self):
+    def _probe_live(self, *, enable_checkout=False):
         client = MollieClient()
         if not client.key:
             raise CommandError('Mollie API key is not configured in runtime settings or .env.')
@@ -87,13 +96,105 @@ class Command(BaseCommand):
                 f'provider returned {actual_profile or "missing"!r}.'
             )
 
+        profile_status = str(profile.get('status') or '').strip().lower()
+        if profile_status != 'verified':
+            raise CommandError(
+                'Mollie live profile is not verified: '
+                f'{profile_status or "missing"!r}.'
+            )
+
+        methods_payload = client.list_methods()
+        if not isinstance(methods_payload, dict):
+            raise CommandError('Mollie returned an invalid live payment-method payload.')
+        methods = (methods_payload.get('_embedded') or {}).get('methods') or []
+        if not isinstance(methods, list):
+            raise CommandError('Mollie returned an invalid live payment-method list.')
+
+        activated_methods = sorted({
+            str(method.get('id') or '').strip()
+            for method in methods
+            if (
+                isinstance(method, dict)
+                and str(method.get('status') or '').strip().lower() == 'activated'
+                and str(method.get('id') or '').strip()
+            )
+        })
+        if not activated_methods:
+            raise CommandError(
+                'Mollie live profile has no activated one-off payment method.'
+            )
+
+        review = profile.get('review')
+        review_status = (
+            str(review.get('status') or '').strip().lower()
+            if isinstance(review, dict)
+            else ''
+        )
+
+        if enable_checkout:
+            from apps.audit.services import audit
+
+            with transaction.atomic():
+                gate = set_setting(
+                    'mollie_checkout_enabled',
+                    True,
+                    description=(
+                        'Explicit production checkout approval after successful '
+                        'Mollie live-readiness probe.'
+                    ),
+                )
+                set_setting(
+                    'mollie_checkout_approval_fingerprint',
+                    mollie_config_fingerprint(client.key, actual_profile),
+                    description=(
+                        'SHA-256 binding of the approved Mollie profile and API key; '
+                        'contains no plaintext secret.'
+                    ),
+                )
+                audit(
+                    None,
+                    'mollie.checkout_enabled',
+                    gate,
+                    {
+                        'checkout_enabled': True,
+                        'profile_id': actual_profile,
+                        'profile_status': profile_status,
+                        'activated_methods': activated_methods,
+                        'source': 'external_mollie_acceptance.activate-live',
+                    },
+                )
+
         self.stdout.write(json.dumps({
             'status': 'ok',
             'mode': mode,
             'profile_id': actual_profile,
             'profile_name': str(profile.get('name') or ''),
-            'check': 'read-only current profile',
+            'profile_status': profile_status,
+            'review_status': review_status or None,
+            'activated_methods': activated_methods,
+            'checkout_enabled': bool(enable_checkout),
+            'check': (
+                'live checkout enabled after read-only provider checks'
+                if enable_checkout
+                else 'read-only live profile and payment methods'
+            ),
         }, sort_keys=True))
+
+    def _checkout_payload(self, user):
+        payload = {
+            'quantity': '1',
+            'accept_terms': 'on',
+            'accept_privacy': 'on',
+            'accept_license': 'on',
+        }
+        if not user.company_memberships.filter(active=True).exists():
+            if not hasattr(user, 'private_customer'):
+                raise CommandError(
+                    'Private acceptance user has no PrivateCustomerProfile.'
+                )
+            payload['accept_withdrawal'] = 'on'
+            payload['request_early_performance'] = 'on'
+        return payload
 
     def _base_url(self, options):
         raw = (options.get('base_url') or '').strip()
@@ -180,15 +281,7 @@ class Command(BaseCommand):
         session['last_activity_at'] = now_ts
         session.save()
 
-        payload = {
-            'quantity': '1',
-            'accept_terms': 'on',
-            'accept_privacy': 'on',
-        }
-        if not user.company_memberships.filter(active=True).exists():
-            if not hasattr(user, 'private_customer'):
-                raise CommandError('Private acceptance user has no PrivateCustomerProfile.')
-            payload['accept_withdrawal'] = 'on'
+        payload = self._checkout_payload(user)
 
         response = client_http.post(
             '/portal/licenses/buy/',

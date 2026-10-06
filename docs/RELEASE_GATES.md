@@ -71,6 +71,12 @@ Die ausführbaren Abnahmeschritte stehen in `docs/PRODUCTION_ACCEPTANCE.md`. Die
   - echter Webhook / Paid-Aktivierung,
   - Refund über den produktiven Refund-Service,
   - Chargeback über die separate Mollie-Chargeback-Ressource (`reversedAt=null`) und – sofern die verwendete Mollie-Testumgebung ihn anbietet – Chargeback-Reversal über denselben Chargeback mit gesetztem `reversedAt`.
+- Mollie Produktions-Readiness über `external_mollie_acceptance probe-live`:
+  - effektiver `live_`-Key und exakt passende konfigurierte Profil-ID,
+  - `mode=live` und `profile.status=verified`,
+  - mindestens eine über `GET /v2/methods?sequenceType=oneoff` als `activated` gemeldete Live-Zahlart,
+  - ausschließlich read-only; keine echte Live-Zahlung als Teil dieses technischen Probes.
+- Mollie kommerzielle Freigabe separat über `external_mollie_acceptance activate-live --confirm ENABLE-MOLLIE-LIVE-CHECKOUT`; Credentials allein dürfen den Produktiv-Checkout nicht öffnen. Konfigurationsänderungen widerrufen die Freigabe automatisch; die Netstyle-Mollie-Seite bietet zusätzlich eine sofortige Checkout-Sperre.
 - Mailprovider-Abnahme: SMTP über realen `EmailMessage`-/Taskpfad; Microsoft Graph zusätzlich über `external_graph_acceptance`, falls Graph im finalen Routing aktiviert ist:
   - Exchange-Application-RBAC für `Application Mail.Send`,
   - positiver `InScope`-Nachweis für `GRAPH_SENDER` und negativer Kontrollpostfach-Nachweis,

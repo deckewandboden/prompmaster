@@ -272,8 +272,72 @@ def public_checkout_start(request):
     from apps.legal.models import LegalAcceptance, LegalDocument
     from apps.orders.forms import PublicCheckoutForm
     from apps.orders.services import MAX_PURCHASE_QUANTITY, create_order
-    from apps.payments.mollie import MollieClient, MollieError, mollie_runtime_ready
+    from apps.payments.mollie import (
+        MOLLIE_IDEMPOTENCY_SAFE_RETRY_SECONDS,
+        MollieClient,
+        MollieError,
+        mollie_runtime_ready,
+    )
     from apps.payments.models import Payment
+
+    def start_provider_payment(order):
+        """Create or safely replay the exact Mollie payment request for an order."""
+        snapshot = dict(order.billing_snapshot or {})
+        provider_request = snapshot.get('mollie_create_request')
+        if not isinstance(provider_request, dict):
+            provider_request = {
+                'description': f'PROMPTFINISHER {order.order_number}',
+                'redirect_url': request.build_absolute_uri('/checkout/success/'),
+                'webhook_url': request.build_absolute_uri(
+                    reverse('payments:mollie_webhook')
+                ),
+                'metadata': {'order_id': str(order.id)},
+            }
+            snapshot['mollie_create_request'] = provider_request
+            order.billing_snapshot = snapshot
+            order.save(update_fields=['billing_snapshot', 'updated_at'])
+
+        payload = MollieClient().create_payment(
+            amount=order.gross_total,
+            currency=order.currency,
+            description=provider_request['description'],
+            redirect_url=provider_request['redirect_url'],
+            webhook_url=provider_request['webhook_url'],
+            metadata=provider_request['metadata'],
+            idempotency_key=order.idempotency_key,
+        )
+        payment_id = str(payload.get('id') or '')[:100]
+        checkout_url = (
+            (((payload.get('_links') or {}).get('checkout') or {}).get('href') or '')
+            .strip()
+        )
+        if not payment_id or not checkout_url.startswith('https://'):
+            raise MollieError(
+                'Mollie response is missing payment ID or secure checkout URL'
+            )
+
+        payment, created = Payment.objects.get_or_create(
+            provider_payment_id=payment_id,
+            defaults={
+                'order': order,
+                'status': str(payload.get('status') or 'open')[:40],
+                'amount': order.gross_total,
+                'currency': order.currency,
+                'last_provider_payload': payload,
+            },
+        )
+        if payment.order_id != order.id:
+            raise MollieError('Mollie payment ID is already linked to another order')
+        if not created:
+            payment.last_provider_payload = payload
+            payment.save(update_fields=['last_provider_payload', 'updated_at'])
+
+        snapshot = dict(order.billing_snapshot or {})
+        snapshot.pop('provider_create_ambiguous_at', None)
+        order.billing_snapshot = snapshot
+        order.status = 'payment_open'
+        order.save(update_fields=['billing_snapshot', 'status', 'updated_at'])
+        return checkout_url
 
     limited = check_rate(request, 'public-checkout', 10, 3600)
     if limited:
@@ -348,6 +412,49 @@ def public_checkout_start(request):
 
             if public_orders.filter(status='paid').exists():
                 return redirect('/checkout/success/?state=paid')
+
+            ambiguous_order = None
+            ambiguous_started_at = None
+            for candidate in public_orders.order_by('-created_at')[:10]:
+                marker = (candidate.billing_snapshot or {}).get(
+                    'provider_create_ambiguous_at'
+                )
+                if marker is not None:
+                    ambiguous_order = candidate
+                    try:
+                        ambiguous_started_at = float(marker)
+                    except (TypeError, ValueError):
+                        ambiguous_started_at = None
+                    break
+
+            if ambiguous_order is not None and ambiguous_started_at is not None:
+                age_seconds = timezone.now().timestamp() - ambiguous_started_at
+                if age_seconds < MOLLIE_IDEMPOTENCY_SAFE_RETRY_SECONDS:
+                    try:
+                        with transaction.atomic():
+                            locked_order = (
+                                Order.objects.select_for_update()
+                                .get(pk=ambiguous_order.pk)
+                            )
+                            checkout_url = start_provider_payment(locked_order)
+                        request.session['public_checkout_key'] = secrets.token_urlsafe(24)
+                        return redirect(checkout_url)
+                    except MollieError as exc:
+                        if exc.ambiguous:
+                            return redirect(
+                                f"/checkout/?{urlencode({'quantity': quantity, 'error': 'payment'})}"
+                            )
+                        ambiguous_order.status = 'failed'
+                        ambiguous_order.save(update_fields=['status', 'updated_at'])
+                else:
+                    ambiguous_order.status = 'failed'
+                    ambiguous_order.save(update_fields=['status', 'updated_at'])
+                    messages.warning(
+                        request,
+                        'Ein früherer Zahlungsstart konnte nicht sicher bestätigt werden '
+                        'und wird nach Ablauf des Mollie-Idempotenzfensters nicht erneut '
+                        'gesendet.',
+                    )
 
             messages.info(
                 request,
@@ -488,37 +595,19 @@ def public_checkout_start(request):
                     evidence=evidence,
                 )
 
-            payload = MollieClient().create_payment(
-                amount=order.gross_total,
-                currency=order.currency,
-                description=f'PROMPTFINISHER {order.order_number}',
-                redirect_url=request.build_absolute_uri('/checkout/success/'),
-                webhook_url=request.build_absolute_uri(
-                    reverse('payments:mollie_webhook')
-                ),
-                metadata={'order_id': str(order.id)},
-                idempotency_key=order.idempotency_key,
-            )
-            payment_id = str(payload.get('id') or '')[:100]
-            checkout_url = (
-                (((payload.get('_links') or {}).get('checkout') or {}).get('href') or '')
-                .strip()
-            )
-            if not payment_id or not checkout_url.startswith('https://'):
-                raise MollieError(
-                    'Mollie response is missing payment ID or secure checkout URL'
+            try:
+                checkout_url = start_provider_payment(order)
+            except MollieError as exc:
+                if not exc.ambiguous:
+                    raise
+                snapshot = dict(order.billing_snapshot or {})
+                snapshot['provider_create_ambiguous_at'] = timezone.now().timestamp()
+                order.billing_snapshot = snapshot
+                order.status = 'draft'
+                order.save(
+                    update_fields=['billing_snapshot', 'status', 'updated_at']
                 )
-
-            Payment.objects.create(
-                provider_payment_id=payment_id,
-                order=order,
-                status=str(payload.get('status') or 'open')[:40],
-                amount=order.gross_total,
-                currency=order.currency,
-                last_provider_payload=payload,
-            )
-            order.status = 'payment_open'
-            order.save(update_fields=['status', 'updated_at'])
+                checkout_url = None
     except IntegrityError:
         messages.info(
             request,
@@ -536,6 +625,11 @@ def public_checkout_start(request):
         import logging
 
         logging.getLogger(__name__).exception('Public checkout failed')
+        return redirect(
+            f"/checkout/?{urlencode({'quantity': quantity, 'error': 'payment'})}"
+        )
+
+    if not checkout_url:
         return redirect(
             f"/checkout/?{urlencode({'quantity': quantity, 'error': 'payment'})}"
         )

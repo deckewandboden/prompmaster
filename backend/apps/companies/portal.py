@@ -31,7 +31,12 @@ from apps.notifications.services import queue_email
 from apps.orders.models import Order
 from apps.payments.models import Payment
 from apps.proaccess.services import active_product_assignment, assignment_expiry_context
-from apps.payments.mollie import MollieClient, MollieError, mollie_runtime_ready
+from apps.payments.mollie import (
+    MOLLIE_IDEMPOTENCY_SAFE_RETRY_SECONDS,
+    MollieClient,
+    MollieError,
+    mollie_runtime_ready,
+)
 from apps.support.models import SupportMessage, SupportRequest
 from .forms import CompanyForm, InviteForm, PrivateCustomerForm, SupportForm, UserProfileForm
 from .models import Invitation, Membership
@@ -115,25 +120,70 @@ def _rotate_checkout_key(request, session_key):
 
 
 def _start_mollie_checkout(request, order, description, metadata):
+    snapshot = dict(order.billing_snapshot or {})
+    provider_request = snapshot.get('mollie_create_request')
+    if not isinstance(provider_request, dict):
+        provider_request = {
+            'description': description,
+            'redirect_url': request.build_absolute_uri(reverse('portal:orders')),
+            'webhook_url': request.build_absolute_uri(
+                reverse('payments:mollie_webhook')
+            ),
+            'metadata': metadata,
+        }
+        snapshot['mollie_create_request'] = provider_request
+        order.billing_snapshot = snapshot
+        order.save(update_fields=['billing_snapshot', 'updated_at'])
+
+    marker = snapshot.get('provider_create_ambiguous_at')
+    if marker is not None:
+        try:
+            age_seconds = timezone.now().timestamp() - float(marker)
+        except (TypeError, ValueError):
+            age_seconds = MOLLIE_IDEMPOTENCY_SAFE_RETRY_SECONDS
+        if age_seconds >= MOLLIE_IDEMPOTENCY_SAFE_RETRY_SECONDS:
+            order.status = 'failed'
+            order.save(update_fields=['status', 'updated_at'])
+            messages.error(
+                request,
+                'Ein früherer Mollie-Zahlungsstart konnte nicht sicher bestätigt '
+                'werden. Nach Ablauf des sicheren Idempotenzfensters wurde er '
+                'nicht erneut gesendet. Bitte starten Sie den Kauf erneut.',
+            )
+            return None
+
+    existing_payment = order.payments.order_by('-created_at').first()
+    if existing_payment and existing_payment.status in {
+        'created', 'open', 'pending', 'authorized'
+    }:
+        checkout_url = (
+            (((existing_payment.last_provider_payload or {}).get('_links') or {})
+             .get('checkout') or {})
+            .get('href') or ''
+        ).strip()
+        if checkout_url.startswith('https://'):
+            return redirect(checkout_url)
+
     try:
-        existing_payment = order.payments.order_by('-created_at').first()
-        if existing_payment and existing_payment.status in {'created', 'open', 'pending'}:
-            checkout_url = ((((existing_payment.last_provider_payload or {}).get('_links') or {}).get('checkout') or {}).get('href') or '').strip()
-            if checkout_url.startswith('https://'):
-                return redirect(checkout_url)
         payload = MollieClient().create_payment(
             amount=order.gross_total,
             currency=order.currency,
-            description=description,
-            redirect_url=request.build_absolute_uri(reverse('portal:orders')),
-            webhook_url=request.build_absolute_uri(reverse('payments:mollie_webhook')),
-            metadata=metadata,
+            description=provider_request['description'],
+            redirect_url=provider_request['redirect_url'],
+            webhook_url=provider_request['webhook_url'],
+            metadata=provider_request['metadata'],
             idempotency_key=order.idempotency_key,
         )
         payment_id = str(payload.get('id') or '')[:100]
-        checkout_url = (((payload.get('_links') or {}).get('checkout') or {}).get('href') or '').strip()
+        checkout_url = (
+            (((payload.get('_links') or {}).get('checkout') or {}).get('href') or '')
+            .strip()
+        )
         if not payment_id or not checkout_url.startswith('https://'):
-            raise MollieError('Mollie response is missing payment ID or secure checkout URL')
+            raise MollieError(
+                'Mollie response is missing payment ID or secure checkout URL'
+            )
+
         payment, created = Payment.objects.get_or_create(
             provider_payment_id=payment_id,
             defaults={
@@ -145,18 +195,56 @@ def _start_mollie_checkout(request, order, description, metadata):
             },
         )
         if payment.order_id != order.id:
-            raise MollieError('Mollie payment ID is already linked to another order')
+            raise MollieError(
+                'Mollie payment ID is already linked to another order'
+            )
         if not created:
             payment.last_provider_payload = payload
             payment.save(update_fields=['last_provider_payload', 'updated_at'])
+
+        snapshot = dict(order.billing_snapshot or {})
+        snapshot.pop('provider_create_ambiguous_at', None)
+        order.billing_snapshot = snapshot
         order.status = 'payment_open'
-        order.save(update_fields=['status', 'updated_at'])
+        order.save(
+            update_fields=['billing_snapshot', 'status', 'updated_at']
+        )
         return redirect(checkout_url)
-    except Exception as exc:
-        logger.exception('Could not create Mollie checkout for order %s', order.order_number)
+    except MollieError as exc:
+        if exc.ambiguous:
+            snapshot = dict(order.billing_snapshot or {})
+            snapshot.setdefault(
+                'provider_create_ambiguous_at',
+                timezone.now().timestamp(),
+            )
+            order.billing_snapshot = snapshot
+            order.status = 'draft'
+            order.save(
+                update_fields=['billing_snapshot', 'status', 'updated_at']
+            )
+        else:
+            order.status = 'failed'
+            order.save(update_fields=['status', 'updated_at'])
+        logger.exception(
+            'Could not create Mollie checkout for order %s',
+            order.order_number,
+        )
+        messages.error(
+            request,
+            'Die Zahlung konnte nicht gestartet werden. Es wurde nichts freigeschaltet.',
+        )
+        return None
+    except Exception:
+        logger.exception(
+            'Could not persist Mollie checkout for order %s',
+            order.order_number,
+        )
         order.status = 'failed'
         order.save(update_fields=['status', 'updated_at'])
-        messages.error(request, 'Die Zahlung konnte nicht gestartet werden. Es wurde nichts freigeschaltet.')
+        messages.error(
+            request,
+            'Die Zahlung konnte nicht gestartet werden. Es wurde nichts freigeschaltet.',
+        )
         return None
 
 
@@ -1184,6 +1272,9 @@ def buy(request):
             if response:
                 _rotate_checkout_key(request, checkout_session_key)
                 return response
+            order.refresh_from_db(fields=['status'])
+            if order.status == 'failed':
+                _rotate_checkout_key(request, checkout_session_key)
         except ValidationError as exc:
             form.add_error(None, exc.messages[0])
         except Exception:
@@ -1254,6 +1345,9 @@ def renew(request, pk):
             if response:
                 _rotate_checkout_key(request, checkout_session_key)
                 return response
+            order.refresh_from_db(fields=['status'])
+            if order.status == 'failed':
+                _rotate_checkout_key(request, checkout_session_key)
         except ValidationError as exc:
             form.add_error(None, exc.messages[0])
         except Exception:

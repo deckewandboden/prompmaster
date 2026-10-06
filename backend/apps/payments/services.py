@@ -17,13 +17,12 @@ from apps.devices.models import DeviceRegistration
 from apps.licenses.models import License, LicenseAssignment, LicenseTerm
 from apps.orders.models import Order
 from .models import MollieEvent, Payment, Refund, RefundAttempt
-from .mollie import MollieClient, MollieError
+from .mollie import MollieClient, MollieError, MOLLIE_IDEMPOTENCY_SAFE_RETRY_SECONDS
 
 CENT = Decimal('0.01')
-# Mollie caches Idempotency-Key responses for one hour. Stop automatic
-# re-submission before that boundary so an old ambiguous request can never be
-# executed twice as a new partial refund.
-MOLLIE_IDEMPOTENCY_RETRY_WINDOW = timedelta(minutes=55)
+MOLLIE_IDEMPOTENCY_RETRY_WINDOW = timedelta(
+    seconds=MOLLIE_IDEMPOTENCY_SAFE_RETRY_SECONDS
+)
 STATUS_MAP = {
     'created': 'created',
     'open': 'open',
@@ -283,6 +282,20 @@ def process_provider_state(payment_id, payload, *, chargebacks_payload=None):
     payment = Payment.objects.select_for_update().get(provider_payment_id=payment_id)
     order = Order.objects.select_related('private_user', 'company').get(pk=payment.order_id)
     payment.order = order
+
+    provider_payment_id = str(payload.get('id') or '').strip()
+    if provider_payment_id != payment_id:
+        raise ValidationError(
+            'Mollie-Payment-ID stimmt nicht mit der erwarteten Zahlung überein.'
+        )
+    metadata = payload.get('metadata')
+    if isinstance(metadata, dict):
+        provider_order_id = str(metadata.get('order_id') or '').strip()
+        if provider_order_id and provider_order_id != str(payment.order_id):
+            raise ValidationError(
+                'Mollie-Metadaten verweisen auf eine andere Bestellung.'
+            )
+
     provider_amount, provider_currency = _provider_amount(payload)
     if provider_amount != payment.amount.quantize(CENT) or provider_currency != payment.currency.upper():
         raise ValidationError('Mollie-Betrag oder Währung stimmen nicht mit der Bestellung überein.')
@@ -748,6 +761,7 @@ def _record_refund_attempt_error(refund_id, attempt_id, exc):
 
 def submit_refund(refund):
     row, attempt = _prepare_refund_attempt(refund.pk)
+    client = MollieClient()
 
     # Once Mollie returned a provider refund ID, never POST the refund again.
     # Reconcile the existing provider object instead.
@@ -755,11 +769,65 @@ def submit_refund(refund):
         reconcile_refunds(row.payment)
         return Refund.objects.get(pk=row.pk)
 
+    response = None
+    if attempt.status == 'ambiguous':
+        provider_payload = client.list_refunds(row.payment.provider_payment_id)
+        provider_rows = (
+            (provider_payload.get('_embedded') or {}).get('refunds') or []
+        )
+        matches = []
+        for provider_row in provider_rows:
+            metadata = provider_row.get('metadata') or {}
+            if not isinstance(metadata, dict):
+                continue
+            if (
+                str(metadata.get('promptfinisher_refund_id') or '') == str(row.id)
+                and str(metadata.get('promptfinisher_attempt_id') or '')
+                == str(attempt.id)
+            ):
+                matches.append(provider_row)
+        if len(matches) > 1:
+            raise ValidationError(
+                'Mollie meldet mehrere Erstattungen für denselben lokalen Versuch. '
+                'Automatische Wiederholung wurde gestoppt.'
+            )
+        if matches:
+            response = matches[0]
+            linked_payment = str(response.get('paymentId') or '')
+            if (
+                linked_payment
+                and linked_payment != row.payment.provider_payment_id
+            ):
+                raise ValidationError(
+                    'Der gefundene Mollie-Refund gehört nicht zur erwarteten Zahlung.'
+                )
+            amount_data = response.get('amount') or {}
+            try:
+                provider_amount = Decimal(
+                    str(amount_data.get('value'))
+                ).quantize(CENT)
+            except Exception as exc:
+                raise ValidationError(
+                    'Mollie meldet einen ungültigen Refund-Betrag.'
+                ) from exc
+            provider_currency = str(
+                amount_data.get('currency') or ''
+            ).upper()
+            if (
+                provider_amount != attempt.amount.quantize(CENT)
+                or provider_currency != row.payment.currency.upper()
+            ):
+                raise ValidationError(
+                    'Der gefundene Mollie-Refund stimmt nicht mit Betrag/Währung '
+                    'des lokalen Refund-Versuchs überein.'
+                )
+
     # Mollie only guarantees Idempotency-Key replay for one hour. Retrying an
     # unresolved request after that cache window could create a second partial
     # refund, so fail closed and require provider-side verification.
     if (
-        attempt.status in {'submitted', 'ambiguous'}
+        response is None
+        and attempt.status in {'submitted', 'ambiguous'}
         and timezone.now() - attempt.submitted_at >= MOLLIE_IDEMPOTENCY_RETRY_WINDOW
     ):
         audit(
@@ -777,17 +845,22 @@ def submit_refund(refund):
             'prüfen; die Erstattung wird nicht automatisch erneut gesendet.'
         )
 
-    try:
-        response = MollieClient().create_refund(
-            row.payment.provider_payment_id,
-            attempt.amount,
-            row.payment.currency,
-            f'PROMPTFINISHER Erstattung {row.term.license.license_number}',
-            attempt.idempotency_key,
-        )
-    except MollieError as exc:
-        _record_refund_attempt_error(row.pk, attempt.pk, exc)
-        raise
+    if response is None:
+        try:
+            response = client.create_refund(
+                row.payment.provider_payment_id,
+                attempt.amount,
+                row.payment.currency,
+                f'PROMPTFINISHER Erstattung {row.term.license.license_number}',
+                attempt.idempotency_key,
+                metadata={
+                    'promptfinisher_refund_id': str(row.id),
+                    'promptfinisher_attempt_id': str(attempt.id),
+                },
+            )
+        except MollieError as exc:
+            _record_refund_attempt_error(row.pk, attempt.pk, exc)
+            raise
 
     provider_id = str(response.get('id') or '')[:100]
     provider_status = str(response.get('status') or 'pending').lower()

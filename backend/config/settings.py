@@ -167,6 +167,10 @@ CELERY_BEAT_SCHEDULE = {
     'license-state-sync': {'task': 'apps.notifications.tasks.sync_license_states', 'schedule': 300.0},
     'license-reminders': {'task': 'apps.notifications.tasks.schedule_license_reminders', 'schedule': 3600.0},
     'email-queue-recovery': {'task': 'apps.notifications.tasks.dispatch_queued_emails', 'schedule': 300.0},
+    'mollie-unsettled-reconciliation': {
+        'task': 'apps.payments.tasks.reconcile_mollie_unsettled_states',
+        'schedule': 900.0,
+    },
     'ops-alerts': {'task': 'apps.ops.tasks.refresh_alerts', 'schedule': 300.0},
     'worker-heartbeat': {'task': 'apps.ops.tasks.worker_heartbeat', 'schedule': 60.0},
     'beat-heartbeat': {'task': 'apps.ops.tasks.beat_heartbeat', 'schedule': 60.0},
