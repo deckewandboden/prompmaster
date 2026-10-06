@@ -812,7 +812,8 @@ def submit_refund(refund):
     # unresolved request after that cache window could create a second partial
     # refund, so fail closed and require provider-side verification.
     if (
-        attempt.status in {'submitted', 'ambiguous'}
+        response is None
+        and attempt.status in {'submitted', 'ambiguous'}
         and timezone.now() - attempt.submitted_at >= MOLLIE_IDEMPOTENCY_RETRY_WINDOW
     ):
         audit(
