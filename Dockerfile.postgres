@@ -1,0 +1,7 @@
+FROM postgres:18-alpine
+
+RUN apk add --no-cache su-exec \
+    && grep -Fq 'exec gosu postgres "$BASH_SOURCE" "$@"' /usr/local/bin/docker-entrypoint.sh \
+    && sed -i 's/exec gosu postgres "$BASH_SOURCE" "$@"/exec su-exec postgres "$BASH_SOURCE" "$@"/' /usr/local/bin/docker-entrypoint.sh \
+    && grep -Fq 'exec su-exec postgres "$BASH_SOURCE" "$@"' /usr/local/bin/docker-entrypoint.sh \
+    && rm -f /usr/local/bin/gosu
