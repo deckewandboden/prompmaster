@@ -1,6 +1,7 @@
 from datetime import timedelta
 from unittest.mock import patch
 
+from django.db import IntegrityError, transaction
 from django.test import TestCase
 from django.urls import reverse
 from django.utils import timezone
@@ -278,37 +279,14 @@ class CustomerPortalTenantIsolationTests(TestCase):
             DeletionRequest.objects.filter(user=self.admin_a).exists()
         )
 
-        shared_membership = Membership.objects.create(
-            company=self.company_b,
-            user=self.member_a,
-            role='member',
-            active=True,
-        )
-        shared_delete = self.client.post(
-            reverse('portal:member_delete', args=[self.member_a.pk]),
-            {'confirm': '1'},
-        )
-        self.assertEqual(shared_delete.status_code, 302)
-        self.assertEqual(
-            shared_delete.url,
-            reverse('portal:team_member', args=[self.member_a.pk]),
-        )
-        self.member_a.refresh_from_db()
-        membership.refresh_from_db()
-        shared_membership.refresh_from_db()
-        assignment.refresh_from_db()
-        self.device_a.refresh_from_db()
-        self.assertEqual(self.member_a.email, original_email)
-        self.assertTrue(self.member_a.is_active)
-        self.assertTrue(membership.active)
-        self.assertTrue(shared_membership.active)
-        self.assertIsNone(assignment.ended_at)
-        self.assertIsNone(self.device_a.revoked_at)
-        self.assertFalse(
-            DeletionRequest.objects.filter(user=self.member_a).exists()
-        )
-        shared_membership.active = False
-        shared_membership.save(update_fields=['active', 'updated_at'])
+        with self.assertRaises(IntegrityError):
+            with transaction.atomic():
+                Membership.objects.create(
+                    company=self.company_b,
+                    user=self.member_a,
+                    role='member',
+                    active=True,
+                )
 
         private_profile = PrivateCustomerProfile.objects.create(
             user=self.member_a,
@@ -319,6 +297,19 @@ class CustomerPortalTenantIsolationTests(TestCase):
             city='Siegen',
             country='DE',
         )
+        private_deactivate = self.client.post(
+            reverse('portal:member_deactivate', args=[self.member_a.pk])
+        )
+        self.assertEqual(private_deactivate.status_code, 302)
+        self.member_a.refresh_from_db()
+        membership.refresh_from_db()
+        assignment.refresh_from_db()
+        self.device_a.refresh_from_db()
+        self.assertTrue(self.member_a.is_active)
+        self.assertTrue(membership.active)
+        self.assertIsNone(assignment.ended_at)
+        self.assertIsNone(self.device_a.revoked_at)
+
         private_delete = self.client.post(
             reverse('portal:member_delete', args=[self.member_a.pk]),
             {'confirm': '1'},
