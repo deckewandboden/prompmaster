@@ -12,8 +12,10 @@ def validate(compose, production):
     errors = []
     services = compose['services']
     postgres = services['postgres']
-    if not postgres.get('image', '').startswith('postgres:18'):
-        errors.append('PostgreSQL 18 image required')
+    if postgres.get('image') != 'promptfinisher-postgres:18-alpine-hardened':
+        errors.append('Hardened PostgreSQL 18 image required')
+    if postgres.get('build') != {'context': '.', 'dockerfile': 'Dockerfile.postgres'}:
+        errors.append('PostgreSQL must build from tracked Dockerfile.postgres')
     if postgres.get('volumes') != ['postgres_data:/var/lib/postgresql']:
         errors.append('PostgreSQL 18 must reuse postgres_data at /var/lib/postgresql')
     if 'PGDATA' in postgres.get('environment', {}):
@@ -87,6 +89,17 @@ def main():
         yaml.safe_load((ROOT / 'compose.production.yaml').read_text()),
     )
     errors.extend(validate_legacy_volume_overlay())
+    postgres_dockerfile = ROOT / 'Dockerfile.postgres'
+    if not postgres_dockerfile.is_file():
+        errors.append('Missing hardened PostgreSQL build input: Dockerfile.postgres')
+    else:
+        tracked = subprocess.run(
+            ['git', 'ls-files', '--error-unmatch', 'Dockerfile.postgres'], cwd=ROOT,
+            capture_output=True,
+        )
+        if tracked.returncode:
+            errors.append('Hardened PostgreSQL Dockerfile is not Git-tracked')
+
     for name in ('Dockerfile', 'backup.sh', '.dockerignore'):
         path = f'backup/{name}'
         if not (ROOT / path).is_file():
