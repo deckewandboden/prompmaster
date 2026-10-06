@@ -92,3 +92,4 @@ backend/templates/includes/language_switcher.html	0	text-not-byte-validated	acti
 compose.legacy-volumes.yaml	0	text-not-byte-validated	active-operations
 Dockerfile.postgres	0	text-not-byte-validated	active-operations
 Dockerfile.redis	0	text-not-byte-validated	active-operations
+Dockerfile.node-exporter	0	text-not-byte-validated	active-operations
