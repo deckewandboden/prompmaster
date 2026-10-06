@@ -1834,6 +1834,7 @@ def mollie(request):
         {
             'profile_id': profile,
             'configured': bool(api_key and profile),
+            'checkout_enabled': get_setting('mollie_checkout_enabled', False) is True,
             'mode': mode,
             'webhook_base': request.build_absolute_uri('/').rstrip('/'),
             'payments': Payment.objects.order_by('-created_at')[:20],
@@ -1853,6 +1854,14 @@ def mollie_config(request):
         set_setting('mollie_profile_id', form.cleaned_data['profile_id'])
         if form.cleaned_data['api_key']:
             set_secret('mollie_api_key', form.cleaned_data['api_key'])
+        set_setting(
+            'mollie_checkout_enabled',
+            False,
+            description=(
+                'Reset automatically after Mollie configuration changes; '
+                'activate again only after live-readiness acceptance.'
+            ),
+        )
         write_audit(request.user, 'mollie.configuration_updated', request.user, {'profile_id': form.cleaned_data['profile_id'], 'api_key': '[REDACTED]' if form.cleaned_data['api_key'] else 'unchanged'}, request=request)
         messages.success(request, 'Mollie-Konfiguration gespeichert.')
         return redirect('ns_admin:mollie')
