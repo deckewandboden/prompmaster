@@ -87,9 +87,15 @@ class MollieClient:
             # accepted the command. Never create a fresh idempotency key here.
             raise MollieError('Mollie request failed', ambiguous=True) from exc
         if not response.ok:
-            # 5xx can occur after Mollie accepted/processed the request. 4xx is
-            # a deterministic rejection of this exact attempt.
-            ambiguous = response.status_code >= 500
+            # 5xx and timeout/rate/conflict responses can occur while the
+            # provider-side outcome is still unknown. In particular Mollie
+            # documents 409 for a duplicate idempotent request while the first
+            # request is still being processed. Never rotate a financial
+            # idempotency key for these outcomes.
+            ambiguous = (
+                response.status_code >= 500
+                or response.status_code in {408, 409, 429}
+            )
             raise MollieError(
                 f'Mollie HTTP {response.status_code}',
                 ambiguous=ambiguous,
