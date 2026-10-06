@@ -300,6 +300,8 @@ jobs:
       SESSION_COOKIE_SECURE: 0
       CSRF_COOKIE_SECURE: 0
       BACKEND_UI_BROWSER_SMOKE: '1'
+      MOLLIE_API_KEY: test_browser_smoke_key
+      MOLLIE_PROFILE_ID: pfl_browser_smoke
 
     steps:
       - name: Checkout repository
