@@ -33,6 +33,8 @@ def validate(compose, production):
         errors.append('Redis must have no published ports and use only data')
     if services['backup'].get('build') != './backup':
         errors.append('Backup build context must be ./backup')
+    if services.get('prometheus', {}).get('image') != 'prom/prometheus:v3.15.0':
+        errors.append('Prometheus must remain pinned to the security-accepted v3.15.0 image')
     monitor = compose.get('networks', {}).get('monitor', {})
     cadvisor = services.get('cadvisor', {})
     if monitor.get('internal') is not True:
