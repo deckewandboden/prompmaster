@@ -307,6 +307,36 @@ def process_provider_state(payment_id, payload, *, chargebacks_payload=None):
             }
             else 'paid'
         )
+    elif (
+        base_status in {'created', 'open', 'pending', 'authorized', 'unknown'}
+        and (payment.processed_paid or payment.order.status == 'paid')
+    ):
+        # A late non-terminal or previously unknown provider snapshot must not
+        # reopen a payment that already activated entitlements locally.
+        status = (
+            previous_status
+            if previous_status in {
+                'paid', 'refunded_partial', 'refunded_full',
+                'chargeback', 'chargeback_reversed',
+            }
+            else 'paid'
+        )
+    elif (
+        base_status == 'paid'
+        and previous_status in {'refunded_partial', 'refunded_full'}
+        and refunded_amount == 0
+    ):
+        # A stale payment representation from before the refund must not erase
+        # an already reconciled local refund state.
+        status = previous_status
+    elif (
+        base_status == 'paid'
+        and previous_status == 'chargeback'
+        and chargeback_state is None
+    ):
+        # Chargeback reversal is accepted only when the canonical chargeback
+        # list explicitly reports a reversed chargeback.
+        status = 'chargeback'
 
     event_key = f'{payment_id}:{status}:{refunded}:{remaining}'[:180]
     event, _ = MollieEvent.objects.get_or_create(
