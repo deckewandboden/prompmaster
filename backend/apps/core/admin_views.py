@@ -12,6 +12,7 @@ from django.db.models.functions import Cast, Coalesce, Concat, Lower, Trim, Trun
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse
 from django.utils import timezone
+from django.views.decorators.http import require_POST
 
 from apps.accounts.models import Role, User, UserRole
 from apps.accounts.security import bump_security_version
@@ -1866,6 +1867,25 @@ def mollie_config(request):
         messages.success(request, 'Mollie-Konfiguration gespeichert.')
         return redirect('ns_admin:mollie')
     return render(request, 'ns_admin/form.html', {'title': 'Mollie konfigurieren', 'form': form, 'cancel_url': reverse('ns_admin:mollie')})
+
+
+@staff_perm('settings.write')
+@require_POST
+def mollie_checkout_disable(request):
+    set_setting(
+        'mollie_checkout_enabled',
+        False,
+        description='Production checkout disabled explicitly from netstyle admin.',
+    )
+    write_audit(
+        request.user,
+        'mollie.checkout_disabled',
+        request.user,
+        {'checkout_enabled': False},
+        request=request,
+    )
+    messages.success(request, 'Mollie-Produktiv-Checkout wurde gesperrt.')
+    return redirect('ns_admin:mollie')
 
 
 @staff_perm('payments.read')
