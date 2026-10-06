@@ -82,6 +82,22 @@ class RuntimeConfigTests(unittest.TestCase):
         self.base['services']['postgres']['ports'] = ['5432:5432']
         self.assertTrue(validate(self.base, self.production))
 
+    def test_postgres_exporter_runtime_is_rebuilt_with_patched_go_toolchain(self):
+        exporter = self.base['services']['postgres-exporter']
+        self.assertEqual(
+            exporter['image'],
+            'promptfinisher-postgres-exporter:0.20.1-hardened',
+        )
+        self.assertEqual(
+            exporter['build'],
+            {'context': '.', 'dockerfile': 'Dockerfile.postgres-exporter'},
+        )
+        dockerfile = (ROOT / 'Dockerfile.postgres-exporter').read_text()
+        self.assertIn('FROM golang:1.26.6-alpine AS build', dockerfile)
+        self.assertIn('867fbcac31cd18c143e244190ea9168cca069827', dockerfile)
+        self.assertIn('golang.org/x/crypto@v0.55.0', dockerfile)
+        self.assertIn('FROM prometheuscommunity/postgres-exporter:v0.20.1', dockerfile)
+
     def test_node_exporter_runtime_is_rebuilt_with_patched_go_toolchain(self):
         node_exporter = self.base['services']['node-exporter']
         self.assertEqual(
