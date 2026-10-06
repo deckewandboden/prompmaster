@@ -1863,6 +1863,11 @@ def mollie_config(request):
                 'activate again only after live-readiness acceptance.'
             ),
         )
+        set_setting(
+            'mollie_checkout_approval_fingerprint',
+            '',
+            description='Cleared after Mollie configuration changes.',
+        )
         write_audit(request.user, 'mollie.configuration_updated', request.user, {'profile_id': form.cleaned_data['profile_id'], 'api_key': '[REDACTED]' if form.cleaned_data['api_key'] else 'unchanged'}, request=request)
         messages.success(request, 'Mollie-Konfiguration gespeichert.')
         return redirect('ns_admin:mollie')
