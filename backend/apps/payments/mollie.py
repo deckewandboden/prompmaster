@@ -125,6 +125,9 @@ class MollieClient:
     def get_current_profile(self):
         return self._request('GET', '/profiles/me')
 
+    def list_methods(self):
+        return self._request('GET', '/methods?sequenceType=oneoff')
+
     def get_payment(self, payment_id):
         return self._request('GET', f'/payments/{payment_id}')
 
