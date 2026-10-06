@@ -14,9 +14,10 @@ from apps.accounts.models import Role, User, UserRole
 from apps.catalog.models import Feature, Product, ProductPrice
 from apps.companies.models import Company, Membership, PrivateCustomerProfile
 from apps.core.crypto import encrypt
-from apps.core.settings_store import get_setting
+from apps.core.settings_store import get_setting, set_setting
 from apps.core.sensitive import SENSITIVE_REAUTH_SESSION_KEY
 from apps.integrations.models import ServiceAccount
+from apps.integrations.services import set_secret
 from apps.legal.models import DeletionRequest, LegalDocument, RetentionPolicy
 from apps.licenses.models import License, LicenseAssignment, LicenseTerm
 from apps.notifications.models import EmailMessage, EmailTemplate
@@ -31,6 +32,8 @@ class RegistrationPurchaseReleaseAcceptanceTests(TestCase):
 
     def setUp(self):
         call_command('seed_defaults', verbosity=0, stdout=io.StringIO())
+        set_secret('mollie_api_key', 'test_release_acceptance_key')
+        set_setting('mollie_profile_id', 'pfl_release_acceptance_runtime')
         now = timezone.now() - timedelta(minutes=1)
         for kind in ('terms', 'privacy', 'withdrawal', 'license'):
             LegalDocument.objects.create(
