@@ -1275,9 +1275,6 @@ def buy(request):
             order.refresh_from_db(fields=['status'])
             if order.status == 'failed':
                 _rotate_checkout_key(request, checkout_session_key)
-            order.refresh_from_db(fields=['status'])
-            if order.status == 'failed':
-                _rotate_checkout_key(request, checkout_session_key)
         except ValidationError as exc:
             form.add_error(None, exc.messages[0])
         except Exception:
@@ -1348,6 +1345,9 @@ def renew(request, pk):
             if response:
                 _rotate_checkout_key(request, checkout_session_key)
                 return response
+            order.refresh_from_db(fields=['status'])
+            if order.status == 'failed':
+                _rotate_checkout_key(request, checkout_session_key)
         except ValidationError as exc:
             form.add_error(None, exc.messages[0])
         except Exception:
