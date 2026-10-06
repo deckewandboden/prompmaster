@@ -87,12 +87,50 @@ class Command(BaseCommand):
                 f'provider returned {actual_profile or "missing"!r}.'
             )
 
+        profile_status = str(profile.get('status') or '').strip().lower()
+        if profile_status != 'verified':
+            raise CommandError(
+                'Mollie live profile is not verified: '
+                f'{profile_status or "missing"!r}.'
+            )
+
+        methods_payload = client.list_methods()
+        if not isinstance(methods_payload, dict):
+            raise CommandError('Mollie returned an invalid live payment-method payload.')
+        methods = (methods_payload.get('_embedded') or {}).get('methods') or []
+        if not isinstance(methods, list):
+            raise CommandError('Mollie returned an invalid live payment-method list.')
+
+        activated_methods = sorted({
+            str(method.get('id') or '').strip()
+            for method in methods
+            if (
+                isinstance(method, dict)
+                and str(method.get('status') or '').strip().lower() == 'activated'
+                and str(method.get('id') or '').strip()
+            )
+        })
+        if not activated_methods:
+            raise CommandError(
+                'Mollie live profile has no activated one-off payment method.'
+            )
+
+        review = profile.get('review')
+        review_status = (
+            str(review.get('status') or '').strip().lower()
+            if isinstance(review, dict)
+            else ''
+        )
+
         self.stdout.write(json.dumps({
             'status': 'ok',
             'mode': mode,
             'profile_id': actual_profile,
             'profile_name': str(profile.get('name') or ''),
-            'check': 'read-only current profile',
+            'profile_status': profile_status,
+            'review_status': review_status or None,
+            'activated_methods': activated_methods,
+            'check': 'read-only live profile and payment methods',
         }, sort_keys=True))
 
     def _checkout_payload(self, user):
