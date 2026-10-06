@@ -108,6 +108,24 @@ class RuntimeConfigTests(unittest.TestCase):
         self.base['networks']['monitor']['internal'] = False
         self.assertTrue(validate(self.base, self.production))
 
+    def test_cadvisor_runtime_is_rebuilt_with_patched_go_dependencies(self):
+        cadvisor = self.base['services']['cadvisor']
+        self.assertEqual(
+            cadvisor['image'],
+            'promptfinisher-cadvisor:0.60.6-hardened',
+        )
+        self.assertEqual(
+            cadvisor['build'],
+            {'context': '.', 'dockerfile': 'Dockerfile.cadvisor'},
+        )
+        dockerfile = (ROOT / 'Dockerfile.cadvisor').read_text()
+        self.assertIn('FROM golang:1.26.6-alpine3.23 AS build', dockerfile)
+        self.assertIn('5bf5d43ac6f60d7ee36a13b4d5b4a78ad2d0abc7', dockerfile)
+        self.assertIn('golang.org/x/crypto@v0.55.0', dockerfile)
+        self.assertIn('google.golang.org/grpc@v1.83.2', dockerfile)
+        self.assertIn('FROM ghcr.io/google/cadvisor:v0.60.6', dockerfile)
+        self.assertIn('apk upgrade --no-cache', dockerfile)
+
     def test_cadvisor_public_port_is_rejected(self):
         self.base['services']['cadvisor']['ports'] = ['8080:8080']
         self.assertTrue(validate(self.base, self.production))
