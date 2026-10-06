@@ -17,13 +17,12 @@ from apps.devices.models import DeviceRegistration
 from apps.licenses.models import License, LicenseAssignment, LicenseTerm
 from apps.orders.models import Order
 from .models import MollieEvent, Payment, Refund, RefundAttempt
-from .mollie import MollieClient, MollieError
+from .mollie import MollieClient, MollieError, MOLLIE_IDEMPOTENCY_SAFE_RETRY_SECONDS
 
 CENT = Decimal('0.01')
-# Mollie caches Idempotency-Key responses for one hour. Stop automatic
-# re-submission before that boundary so an old ambiguous request can never be
-# executed twice as a new partial refund.
-MOLLIE_IDEMPOTENCY_RETRY_WINDOW = timedelta(minutes=55)
+MOLLIE_IDEMPOTENCY_RETRY_WINDOW = timedelta(
+    seconds=MOLLIE_IDEMPOTENCY_SAFE_RETRY_SECONDS
+)
 STATUS_MAP = {
     'created': 'created',
     'open': 'open',
