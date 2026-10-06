@@ -2,6 +2,11 @@ import requests
 from django.conf import settings
 
 
+# Mollie caches Idempotency-Key results for one hour. Keep automatic retries
+# comfortably inside that provider window.
+MOLLIE_IDEMPOTENCY_SAFE_RETRY_SECONDS = 55 * 60
+
+
 def mollie_runtime_ready():
     """Return True only when the effective runtime payment configuration is usable.
 
