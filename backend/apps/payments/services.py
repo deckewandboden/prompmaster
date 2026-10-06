@@ -262,6 +262,22 @@ def _locked_order_licenses(order, *, active_terms_only=False):
     return License.objects.select_for_update().filter(pk__in=license_ids).order_by('pk')
 
 
+def _accounted_provider_refund_amount(payment):
+    """Return provider refunds already mapped to a local refund workflow.
+
+    A submitted refund is accounted only after Mollie returned a concrete
+    provider refund ID. This distinguishes our own in-flight refund from a
+    refund created manually in Mollie or by another integration.
+    """
+    total = Decimal('0.00')
+    for status, provider_id, amount in payment.refunds.filter(
+        status__in=['submitted', 'succeeded']
+    ).values_list('status', 'provider_refund_id', 'amount'):
+        if status == 'succeeded' or provider_id:
+            total += amount
+    return total.quantize(CENT)
+
+
 @transaction.atomic
 def process_provider_state(payment_id, payload, *, chargebacks_payload=None):
     payment = Payment.objects.select_for_update().get(provider_payment_id=payment_id)
@@ -404,6 +420,25 @@ def process_provider_state(payment_id, payload, *, chargebacks_payload=None):
                 license_obj.status = 'payment_review'
                 license_obj.save(update_fields=['status', 'updated_at'])
                 audit(None, 'license.chargeback_review', license_obj, {'payment': payment.provider_payment_id})
+    elif status in {'refunded_partial', 'refunded_full'}:
+        accounted_refund = _accounted_provider_refund_amount(payment)
+        untracked_refund = max(refunded_amount - accounted_refund, Decimal('0.00'))
+        if untracked_refund > 0:
+            for license_obj in _locked_order_licenses(payment.order, active_terms_only=True):
+                if license_obj.status not in {'refunded', 'blocked', 'payment_review'}:
+                    license_obj.status = 'payment_review'
+                    license_obj.save(update_fields=['status', 'updated_at'])
+                    audit(
+                        None,
+                        'license.untracked_provider_refund_review',
+                        license_obj,
+                        {
+                            'payment': payment.provider_payment_id,
+                            'provider_refunded_amount': str(refunded_amount),
+                            'accounted_refund_amount': str(accounted_refund),
+                            'untracked_refund_amount': str(untracked_refund),
+                        },
+                    )
     elif base_status == 'paid':
         if status == 'chargeback_reversed':
             now = timezone.now()
