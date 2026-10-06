@@ -372,6 +372,72 @@ class MollieStateIntegrationTests(TestCase):
                 self.assertIn(license_obj.status, {'active', 'free'})
 
     @patch('apps.payments.services._queue_after_commit')
+    def test_stale_nonterminal_or_unknown_webhook_cannot_reopen_paid_payment(self, _mail):
+        process_provider_state(
+            self.payment.provider_payment_id,
+            self.payload('paid'),
+            chargebacks_payload=self.chargebacks(),
+        )
+        license_obj = License.objects.get(owner_user=self.user)
+
+        for stale_status in ('created', 'open', 'pending', 'authorized', 'future_status'):
+            with self.subTest(stale_status=stale_status):
+                process_provider_state(
+                    self.payment.provider_payment_id,
+                    self.payload(stale_status),
+                    chargebacks_payload=self.chargebacks(),
+                )
+                self.order.refresh_from_db()
+                self.payment.refresh_from_db()
+                license_obj.refresh_from_db()
+                self.assertEqual(self.order.status, 'paid')
+                self.assertEqual(self.payment.status, 'paid')
+                self.assertTrue(self.payment.processed_paid)
+                self.assertIn(license_obj.status, {'active', 'free'})
+
+    @patch('apps.payments.services._queue_after_commit')
+    def test_stale_paid_snapshot_cannot_erase_local_refund_state(self, _mail):
+        process_provider_state(
+            self.payment.provider_payment_id,
+            self.payload('paid'),
+            chargebacks_payload=self.chargebacks(),
+        )
+        self.payment.refresh_from_db()
+        self.payment.status = 'refunded_partial'
+        self.payment.save(update_fields=['status', 'updated_at'])
+
+        process_provider_state(
+            self.payment.provider_payment_id,
+            self.payload('paid'),
+            chargebacks_payload=self.chargebacks(),
+        )
+        self.payment.refresh_from_db()
+        self.assertEqual(self.payment.status, 'refunded_partial')
+
+    @patch('apps.payments.services._queue_after_commit')
+    def test_empty_chargeback_list_cannot_silently_clear_active_chargeback(self, _mail):
+        process_provider_state(
+            self.payment.provider_payment_id,
+            self.payload('paid'),
+            chargebacks_payload=self.chargebacks(),
+        )
+        process_provider_state(
+            self.payment.provider_payment_id,
+            self.payload('paid'),
+            chargebacks_payload=self.chargebacks(self.chargeback()),
+        )
+        self.payment.refresh_from_db()
+        self.assertEqual(self.payment.status, 'chargeback')
+
+        process_provider_state(
+            self.payment.provider_payment_id,
+            self.payload('paid'),
+            chargebacks_payload=self.chargebacks(),
+        )
+        self.payment.refresh_from_db()
+        self.assertEqual(self.payment.status, 'chargeback')
+
+    @patch('apps.payments.services._queue_after_commit')
     def test_chargeback_blocks_license_and_reversal_restores_access_state(self, _mail):
         process_provider_state(
             self.payment.provider_payment_id,
