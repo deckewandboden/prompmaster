@@ -51,6 +51,18 @@ class RuntimeConfigTests(unittest.TestCase):
         self.assertIn('restic restore latest --tag "$legacy_backup_tag"', backup)
         self.assertIn('promptfinisher-${ts}.dump', backup)
 
+    def test_postgres_runtime_uses_hardened_gosu_free_image(self):
+        postgres = self.base['services']['postgres']
+        self.assertEqual(postgres['image'], 'promptfinisher-postgres:18-alpine-hardened')
+        self.assertEqual(
+            postgres['build'],
+            {'context': '.', 'dockerfile': 'Dockerfile.postgres'},
+        )
+        dockerfile = (ROOT / 'Dockerfile.postgres').read_text()
+        self.assertIn('apk add --no-cache su-exec', dockerfile)
+        self.assertIn('exec su-exec postgres', dockerfile)
+        self.assertIn('rm -f /usr/local/bin/gosu', dockerfile)
+
     def test_old_postgres_mount_is_rejected(self):
         self.base['services']['postgres']['volumes'] = ['postgres_data:/var/lib/postgresql/data']
         self.assertTrue(validate(self.base, self.production))
