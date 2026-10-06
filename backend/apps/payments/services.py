@@ -282,6 +282,20 @@ def process_provider_state(payment_id, payload, *, chargebacks_payload=None):
     payment = Payment.objects.select_for_update().get(provider_payment_id=payment_id)
     order = Order.objects.select_related('private_user', 'company').get(pk=payment.order_id)
     payment.order = order
+
+    provider_payment_id = str(payload.get('id') or '').strip()
+    if provider_payment_id != payment_id:
+        raise ValidationError(
+            'Mollie-Payment-ID stimmt nicht mit der erwarteten Zahlung überein.'
+        )
+    metadata = payload.get('metadata')
+    if isinstance(metadata, dict):
+        provider_order_id = str(metadata.get('order_id') or '').strip()
+        if provider_order_id and provider_order_id != str(payment.order_id):
+            raise ValidationError(
+                'Mollie-Metadaten verweisen auf eine andere Bestellung.'
+            )
+
     provider_amount, provider_currency = _provider_amount(payload)
     if provider_amount != payment.amount.quantize(CENT) or provider_currency != payment.currency.upper():
         raise ValidationError('Mollie-Betrag oder Währung stimmen nicht mit der Bestellung überein.')
