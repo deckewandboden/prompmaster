@@ -183,6 +183,18 @@ class MollieLiveProbeTests(SimpleTestCase):
             self.assertEqual(client.get_current_profile(), payload)
         request.assert_called_once_with('GET', '/profiles/me')
 
+    @override_settings(ENVIRONMENT='production')
+    def test_live_methods_probe_uses_oneoff_endpoint(self):
+        client = MollieClient(key='live_probe_key')
+        payload = {
+            '_embedded': {
+                'methods': [{'id': 'creditcard', 'status': 'activated'}]
+            }
+        }
+        with patch.object(client, '_request', return_value=payload) as request:
+            self.assertEqual(client.list_methods(), payload)
+        request.assert_called_once_with('GET', '/methods?sequenceType=oneoff')
+
     def test_live_probe_accepts_matching_runtime_profile_without_exposing_key(self):
         fake = SimpleNamespace(
             key='live_runtime_secret',
@@ -191,6 +203,16 @@ class MollieLiveProbeTests(SimpleTestCase):
                 'id': 'pfl_runtime',
                 'mode': 'live',
                 'name': 'PROMPTFINISHER',
+                'status': 'verified',
+                'review': None,
+            },
+            list_methods=lambda: {
+                '_embedded': {
+                    'methods': [
+                        {'id': 'creditcard', 'status': 'activated'},
+                        {'id': 'paypal', 'status': 'activated'},
+                    ]
+                }
             },
         )
         out = StringIO()
@@ -209,6 +231,9 @@ class MollieLiveProbeTests(SimpleTestCase):
         rendered = out.getvalue()
         self.assertIn('"status": "ok"', rendered)
         self.assertIn('"profile_id": "pfl_runtime"', rendered)
+        self.assertIn('"profile_status": "verified"', rendered)
+        self.assertIn('"creditcard"', rendered)
+        self.assertIn('"paypal"', rendered)
         self.assertNotIn(fake.key, rendered)
 
     def test_live_probe_refuses_test_key(self):
@@ -227,6 +252,12 @@ class MollieLiveProbeTests(SimpleTestCase):
                 'resource': 'profile',
                 'id': 'pfl_provider',
                 'mode': 'live',
+                'status': 'verified',
+            },
+            list_methods=lambda: {
+                '_embedded': {
+                    'methods': [{'id': 'creditcard', 'status': 'activated'}]
+                }
             },
         )
         with (
@@ -240,6 +271,68 @@ class MollieLiveProbeTests(SimpleTestCase):
             ),
         ):
             with self.assertRaisesMessage(CommandError, 'runtime profile mismatch'):
+                call_command('external_mollie_acceptance', 'probe-live')
+
+
+    def test_live_probe_rejects_unverified_profile(self):
+        fake = SimpleNamespace(
+            key='live_runtime_secret',
+            get_current_profile=lambda: {
+                'resource': 'profile',
+                'id': 'pfl_runtime',
+                'mode': 'live',
+                'status': 'unverified',
+            },
+            list_methods=lambda: {
+                '_embedded': {
+                    'methods': [{'id': 'creditcard', 'status': 'activated'}]
+                }
+            },
+        )
+        with (
+            patch(
+                'apps.core.management.commands.external_mollie_acceptance.MollieClient',
+                return_value=fake,
+            ),
+            patch(
+                'apps.core.management.commands.external_mollie_acceptance.get_setting',
+                return_value='pfl_runtime',
+            ),
+        ):
+            with self.assertRaisesMessage(CommandError, 'not verified'):
+                call_command('external_mollie_acceptance', 'probe-live')
+
+    def test_live_probe_rejects_profile_without_activated_oneoff_method(self):
+        fake = SimpleNamespace(
+            key='live_runtime_secret',
+            get_current_profile=lambda: {
+                'resource': 'profile',
+                'id': 'pfl_runtime',
+                'mode': 'live',
+                'status': 'verified',
+            },
+            list_methods=lambda: {
+                '_embedded': {
+                    'methods': [
+                        {'id': 'paypal', 'status': 'pending-review'},
+                    ]
+                }
+            },
+        )
+        with (
+            patch(
+                'apps.core.management.commands.external_mollie_acceptance.MollieClient',
+                return_value=fake,
+            ),
+            patch(
+                'apps.core.management.commands.external_mollie_acceptance.get_setting',
+                return_value='pfl_runtime',
+            ),
+        ):
+            with self.assertRaisesMessage(
+                CommandError,
+                'no activated one-off payment method',
+            ):
                 call_command('external_mollie_acceptance', 'probe-live')
 
 
