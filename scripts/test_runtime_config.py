@@ -284,6 +284,13 @@ class RuntimeConfigTests(unittest.TestCase):
         self.assertIn('header_up X-Forwarded-Proto https', source)
         self.assertIn('header_up X-Forwarded-For {client_ip}', source)
 
+    def test_external_caddy_pre_mollie_rehearsal_expects_checkout_disabled(self):
+        script = (ROOT / 'scripts' / 'test_external_caddy_mode.sh').read_text()
+        workflow = (ROOT / '.github' / 'workflows' / 'ci.yml').read_text()
+        self.assertIn('PM_EXTERNAL_CADDY_EXPECT_CHECKOUT_ENABLED', script)
+        self.assertIn("payload.get('checkoutEnabled') is expect_checkout_enabled", script)
+        self.assertIn("PM_EXTERNAL_CADDY_EXPECT_CHECKOUT_ENABLED: '0'", workflow)
+
     def test_ops_runtime_reads_promptfinisher_backup_status_path(self):
         for rel in ('backend/apps/ops/tasks.py', 'backend/apps/ops/api.py'):
             with self.subTest(path=rel):
