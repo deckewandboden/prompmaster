@@ -15,7 +15,7 @@ from apps.catalog.models import Product, ProductPrice
 from apps.licenses.models import License, LicenseTerm
 from apps.orders.models import Order, OrderItem
 
-from .mollie import MollieClient
+from .mollie import MollieClient, MollieError
 from .models import MollieEvent, Payment
 from .services import calculate_refund, process_provider_state
 
