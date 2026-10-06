@@ -917,6 +917,46 @@ class MollieStateIntegrationTests(TestCase):
 
 
     @patch('apps.payments.services._queue_after_commit')
+    def test_provider_payment_id_mismatch_is_rejected(self, _mail):
+        from django.core.exceptions import ValidationError
+
+        wrong = self.payload('paid')
+        wrong['id'] = 'tr_different_payment'
+        with self.assertRaisesMessage(
+            ValidationError,
+            'Payment-ID',
+        ):
+            process_provider_state(
+                self.payment.provider_payment_id,
+                wrong,
+                chargebacks_payload=self.chargebacks(),
+            )
+        self.payment.refresh_from_db()
+        self.assertEqual(self.payment.status, 'open')
+        self.assertFalse(self.payment.processed_paid)
+        self.assertFalse(License.objects.filter(owner_user=self.user).exists())
+
+    @patch('apps.payments.services._queue_after_commit')
+    def test_provider_order_metadata_mismatch_is_rejected(self, _mail):
+        from django.core.exceptions import ValidationError
+
+        wrong = self.payload('paid')
+        wrong['metadata'] = {'order_id': '00000000-0000-0000-0000-000000000000'}
+        with self.assertRaisesMessage(
+            ValidationError,
+            'andere Bestellung',
+        ):
+            process_provider_state(
+                self.payment.provider_payment_id,
+                wrong,
+                chargebacks_payload=self.chargebacks(),
+            )
+        self.payment.refresh_from_db()
+        self.assertEqual(self.payment.status, 'open')
+        self.assertFalse(self.payment.processed_paid)
+        self.assertFalse(License.objects.filter(owner_user=self.user).exists())
+
+    @patch('apps.payments.services._queue_after_commit')
     def test_provider_amount_or_currency_mismatch_is_rejected(self, _mail):
         from django.core.exceptions import ValidationError
 
