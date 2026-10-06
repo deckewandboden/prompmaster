@@ -129,7 +129,10 @@ services:
     networks: [monitor]
     restart: unless-stopped
   cadvisor:
-    image: ghcr.io/google/cadvisor:v0.60.5
+    build:
+      context: .
+      dockerfile: Dockerfile.cadvisor
+    image: promptfinisher-cadvisor:0.60.6-hardened
     privileged: true
     volumes:
       - /:/rootfs:ro
