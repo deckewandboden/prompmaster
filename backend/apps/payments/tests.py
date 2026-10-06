@@ -511,7 +511,7 @@ class MollieStateIntegrationTests(TestCase):
             'reversedAt': reversed_at,
         }
 
-    def test_unknown_webhook_id_does_not_call_provider_api(self):
+    def test_unknown_webhook_id_returns_neutral_success_without_provider_api(self):
         with (
             patch('apps.payments.views.MollieClient.get_payment') as provider_get,
             patch('apps.payments.views.MollieClient.list_chargebacks') as provider_chargebacks,
@@ -520,7 +520,8 @@ class MollieStateIntegrationTests(TestCase):
                 '/api/webhooks/mollie/',
                 {'id': 'tr_unknown_payment'},
             )
-        self.assertEqual(response.status_code, 404)
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.content, b'OK')
         provider_get.assert_not_called()
         provider_chargebacks.assert_not_called()
 
