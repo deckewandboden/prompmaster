@@ -9,7 +9,9 @@ from django.core.management import call_command
 from django.core.management.base import CommandError
 from django.conf import settings
 from django.test import SimpleTestCase, TestCase, override_settings
+from django.utils import timezone
 
+from apps.accounts.models import User
 from apps.core.management.commands.external_graph_acceptance import INVALID_SENDER
 from apps.core.management.commands.external_mollie_acceptance import Command as MollieAcceptanceCommand
 from apps.core.models import SystemSetting
@@ -164,6 +166,51 @@ class ExternalAcceptanceSafetyTests(TestCase):
         self.assertEqual(payload['activated_methods'], ['creditcard'])
         fake.get_current_profile.assert_called_once_with()
         fake.list_methods.assert_called_once_with()
+
+
+class MollieAdminCheckoutGateTests(TestCase):
+    def setUp(self):
+        self.admin = User.objects.create_superuser(
+            email='mollie-admin@example.test',
+            password='Mollie-Admin-Password-2026!',
+            first_name='Mollie',
+            last_name='Admin',
+            email_verified_at=timezone.now(),
+            two_factor_required=False,
+        )
+        self.client.force_login(self.admin)
+        session = self.client.session
+        session['security_version'] = self.admin.security_version
+        session['authenticated_at'] = timezone.now().timestamp()
+        session['last_activity_at'] = timezone.now().timestamp()
+        session.save()
+
+    def test_mollie_admin_shows_and_executes_checkout_emergency_stop(self):
+        SystemSetting.objects.update_or_create(
+            key='mollie_checkout_enabled',
+            defaults={'value': True},
+        )
+
+        page = self.client.get('/ns-admin/mollie/')
+        self.assertEqual(page.status_code, 200)
+        self.assertContains(page, 'Produktiv-Checkout sperren')
+        self.assertContains(page, '/ns-admin/mollie/checkout/disable/')
+
+        response = self.client.post('/ns-admin/mollie/checkout/disable/')
+        self.assertEqual(response.status_code, 302)
+        self.assertEqual(response.url, '/ns-admin/mollie/')
+        gate = SystemSetting.objects.get(key='mollie_checkout_enabled')
+        self.assertIs(gate.value, False)
+
+    def test_mollie_checkout_emergency_stop_refuses_get(self):
+        SystemSetting.objects.update_or_create(
+            key='mollie_checkout_enabled',
+            defaults={'value': True},
+        )
+        response = self.client.get('/ns-admin/mollie/checkout/disable/')
+        self.assertEqual(response.status_code, 405)
+        gate = SystemSetting.objects.get(key='mollie_checkout_enabled')
+        self.assertIs(gate.value, True)
 
 
 @override_settings(
