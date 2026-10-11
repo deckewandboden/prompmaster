@@ -125,6 +125,7 @@ class RuntimeConfigTests(unittest.TestCase):
         dockerfile = (ROOT / 'Dockerfile.prometheus').read_text()
         for required in (
             'golang:1.27.2-alpine3.23',
+            'apk add --no-cache bash',
             'git clone --depth 1 --branch v3.15.0',
             "grep -Eq '^5241a27'",
             'sha256sum -c ui.sha256',
