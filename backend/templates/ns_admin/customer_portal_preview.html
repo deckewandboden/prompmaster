@@ -8,32 +8,32 @@
 {% block side_footer %}Kundenportal-Vorschau<br>{{ preview_subtitle }}{% endblock %}
 
 {% block nav %}
-<a class="{% if preview_section == 'dashboard' %}active{% endif %}" href="{{ request.path }}?section=dashboard"><span class="ico">⌂</span><span class="label">Dashboard</span></a>
-{% if preview_kind == 'company' %}
-<a class="{% if preview_section == 'team' %}active{% endif %}" href="{{ request.path }}?section=team"><span class="ico">♙</span><span class="label">Mein Team</span></a>
+<a class="{% if preview_section == 'dashboard' %}active{% endif %}" href="{{ request.path }}?user={{ preview_user_id|urlencode }}&amp;section=dashboard"><span class="ico">⌂</span><span class="label">Dashboard</span></a>
+{% if preview_kind == 'company' and preview_is_company_admin %}
+<a class="{% if preview_section == 'team' %}active{% endif %}" href="{{ request.path }}?user={{ preview_user_id|urlencode }}&amp;section=team"><span class="ico">♙</span><span class="label">Mein Team</span></a>
 {% endif %}
-<a class="{% if preview_section == 'licenses' %}active{% endif %}" href="{{ request.path }}?section=licenses"><span class="ico">▣</span><span class="label">Lizenzen</span></a>
-<a class="{% if preview_section == 'devices' %}active{% endif %}" href="{{ request.path }}?section=devices"><span class="ico">▤</span><span class="label">Geräte</span></a>
-<a class="{% if preview_section == 'orders' %}active{% endif %}" href="{{ request.path }}?section=orders"><span class="ico">▧</span><span class="label">Bestellungen &amp; Zahlungen</span></a>
-{% if preview_kind == 'company' %}
-<a class="{% if preview_section == 'company' %}active{% endif %}" href="{{ request.path }}?section=company"><span class="ico">▥</span><span class="label">Unternehmen</span></a>
+<a class="{% if preview_section == 'licenses' %}active{% endif %}" href="{{ request.path }}?user={{ preview_user_id|urlencode }}&amp;section=licenses"><span class="ico">▣</span><span class="label">Lizenzen</span></a>
+<a class="{% if preview_section == 'devices' %}active{% endif %}" href="{{ request.path }}?user={{ preview_user_id|urlencode }}&amp;section=devices"><span class="ico">▤</span><span class="label">Geräte</span></a>
+{% if preview_kind != 'company' or preview_is_company_admin %}<a class="{% if preview_section == 'orders' %}active{% endif %}" href="{{ request.path }}?user={{ preview_user_id|urlencode }}&amp;section=orders"><span class="ico">▧</span><span class="label">Bestellungen &amp; Zahlungen</span></a>{% endif %}
+{% if preview_kind == 'company' and preview_is_company_admin %}
+<a class="{% if preview_section == 'company' %}active{% endif %}" href="{{ request.path }}?user={{ preview_user_id|urlencode }}&amp;section=company"><span class="ico">▥</span><span class="label">Unternehmen</span></a>
 {% else %}
-<a class="{% if preview_section == 'profile' %}active{% endif %}" href="{{ request.path }}?section=profile"><span class="ico">⚙</span><span class="label">Einstellungen</span></a>
+<a class="{% if preview_section == 'profile' %}active{% endif %}" href="{{ request.path }}?user={{ preview_user_id|urlencode }}&amp;section=profile"><span class="ico">⚙</span><span class="label">Einstellungen</span></a>
 {% endif %}
-<a class="{% if preview_section == 'more' %}active{% endif %}" href="{{ request.path }}?section=more"><span class="ico">?</span><span class="label">Hilfe &amp; Kontakt</span></a>
+<a class="{% if preview_section == 'more' %}active{% endif %}" href="{{ request.path }}?user={{ preview_user_id|urlencode }}&amp;section=more"><span class="ico">?</span><span class="label">Hilfe &amp; Kontakt</span></a>
 {% endblock %}
 
 {% block mobile %}
 <div class="mobile-menu">
-<a class="{% if preview_section == 'dashboard' %}active{% endif %}" href="{{ request.path }}?section=dashboard"><b>⌂</b>Home</a>
-{% if preview_kind == 'company' %}
-<a class="{% if preview_section == 'team' %}active{% endif %}" href="{{ request.path }}?section=team"><b>♙</b>Team</a>
+<a class="{% if preview_section == 'dashboard' %}active{% endif %}" href="{{ request.path }}?user={{ preview_user_id|urlencode }}&amp;section=dashboard"><b>⌂</b>Home</a>
+{% if preview_kind == 'company' and preview_is_company_admin %}
+<a class="{% if preview_section == 'team' %}active{% endif %}" href="{{ request.path }}?user={{ preview_user_id|urlencode }}&amp;section=team"><b>♙</b>Team</a>
 {% else %}
-<a class="{% if preview_section == 'profile' %}active{% endif %}" href="{{ request.path }}?section=profile"><b>⚙</b>Einstellungen</a>
+<a class="{% if preview_section == 'profile' %}active{% endif %}" href="{{ request.path }}?user={{ preview_user_id|urlencode }}&amp;section=profile"><b>⚙</b>Einstellungen</a>
 {% endif %}
-<a class="{% if preview_section == 'licenses' %}active{% endif %}" href="{{ request.path }}?section=licenses"><b>▣</b>Lizenzen</a>
-<a class="{% if preview_section == 'devices' %}active{% endif %}" href="{{ request.path }}?section=devices"><b>▤</b>Geräte</a>
-<a class="{% if preview_section == 'orders' or preview_section == 'company' or preview_section == 'more' %}active{% endif %}" href="{{ request.path }}?section=more"><b>⋯</b>Mehr</a>
+<a class="{% if preview_section == 'licenses' %}active{% endif %}" href="{{ request.path }}?user={{ preview_user_id|urlencode }}&amp;section=licenses"><b>▣</b>Lizenzen</a>
+<a class="{% if preview_section == 'devices' %}active{% endif %}" href="{{ request.path }}?user={{ preview_user_id|urlencode }}&amp;section=devices"><b>▤</b>Geräte</a>
+<a class="{% if preview_section == 'orders' or preview_section == 'company' or preview_section == 'more' %}active{% endif %}" href="{{ request.path }}?user={{ preview_user_id|urlencode }}&amp;section=more"><b>⋯</b>Mehr</a>
 </div>
 {% endblock %}
 
@@ -47,7 +47,38 @@
   </div>
   <a class="btn secondary" href="{% url back_route back_pk %}">Zurück zum netstyle Kundendetail</a>
 </div>
-<div class="alert info"><strong>Read-only Kundenansicht.</strong> Diese Seite verwendet bewusst das Kundenportal-Layout, aber keine Session-Impersonation. Schreibaktionen, Käufe und Kontosicherheitsaktionen sind in der Vorschau deaktiviert.</div>
+<div class="alert info"><strong>Read-only Kundenansicht.</strong> Die Daten entsprechen dem ausgewählten Kundenkonto und seiner Rolle. Dies ist eine Ansichtsvorschau, keine Kundensitzung: Interaktionen, Zahlungs- und Sicherheitsaktionen sind nicht ausführbar.</div>
+{% if preview_kind == 'company' %}
+<div class="card mt-14">
+  <div class="page-head">
+    <div><h2>Perspektive auswählen</h2><p class="muted small">Nur aktive Benutzer dieses Unternehmens. Rollen und Zugriffsrechte werden berücksichtigt.</p></div>
+    <form method="get" class="toolbar">
+      <input type="hidden" name="section" value="{{ preview_section }}">
+      <label for="preview_user">Kundenbenutzer
+        <select id="preview_user" name="user" onchange="this.form.submit()">
+          {% for membership in preview_selectable_members %}
+          <option value="{{ membership.user_id }}" {% if membership.user_id|stringformat:"s" == preview_user_id %}selected{% endif %}>{{ membership.user.full_name|default:membership.user.email }} · {{ membership.get_role_display }}</option>
+          {% empty %}<option value="">Keine aktiven Benutzer vorhanden</option>{% endfor %}
+        </select>
+      </label>
+      <button type="submit" class="btn secondary sm">Ansicht wechseln</button>
+    </form>
+  </div>
+  <div class="small muted">Angezeigte Rolle: <strong>{{ preview_selected_role|default:"keine aktive Rolle" }}</strong>{% if preview_user %} · {{ preview_user.email }}{% endif %}</div>
+</div>
+{% endif %}
+{% if preview_can_write_customer and preview_kind == 'company' %}
+<div class="card mt-14">
+  <h2>Kundenverwaltung</h2>
+  <p class="muted small">Änderungen erfolgen ausschließlich in den berechtigungsgeschützten Administrationsmasken mit Auditierung – nicht in der Kundenansicht.</p>
+  <div class="toolbar">
+    <a class="btn secondary sm" href="{% url 'ns_admin:customer_company' back_pk %}">Unternehmensdaten bearbeiten</a>
+    <a class="btn secondary sm" href="{% url 'ns_admin:customer_users' back_pk %}">Benutzer und Rollen verwalten</a>
+    {% if preview_can_view_licenses %}<a class="btn secondary sm" href="{% url 'ns_admin:customer_licenses' back_pk %}">Lizenzen verwalten</a>{% endif %}
+    <a class="btn secondary sm" href="{% url 'ns_admin:customer_devices' back_pk %}">Geräte verwalten</a>
+  </div>
+</div>
+{% endif %}
 
 {% if preview_section == 'dashboard' %}
 <div class="grid kpis mt-14">
@@ -64,7 +95,7 @@
     <div class="statusrow"><span>Kontotyp</span><strong>{% if preview_kind == 'company' %}Unternehmen{% else %}Privatkunde{% endif %}</strong></div>
     {% if preview_user %}<div class="statusrow"><span>Portal-Benutzer</span><strong>{{ preview_user.email }}</strong></div>{% endif %}
     {% if preview_company %}<div class="statusrow"><span>Unternehmen</span><strong>{{ preview_company.name }}</strong></div>{% endif %}
-    <div class="statusrow"><span>Aktive Benutzer</span><strong>{{ member_count }}</strong></div>
+    {% if preview_is_company_admin %}<div class="statusrow"><span>Aktive Benutzer</span><strong>{{ member_count }}</strong></div>{% endif %}
   </div>
   <div class="card">
     <h2>Bestand</h2>
@@ -74,7 +105,7 @@
   </div>
 </div>
 
-{% elif preview_section == 'team' and preview_kind == 'company' %}
+{% elif preview_section == 'team' and preview_kind == 'company' and preview_is_company_admin %}
 <div class="card mt-14"><h2>Mein Team</h2>
 <table><thead><tr><th>Name</th><th>E-Mail</th><th>Rolle</th><th>Status</th></tr></thead><tbody>
 {% for membership in preview_members %}<tr><td data-label="Name">{{ membership.user.full_name }}</td><td data-label="E-Mail">{{ membership.user.email }}</td><td data-label="Rolle">{{ membership.get_role_display }}</td><td data-label="Status">{% if membership.active %}Aktiv{% else %}Inaktiv{% endif %}</td></tr>{% empty %}<tr><td data-label="Hinweis" colspan="4">Keine Benutzer vorhanden.</td></tr>{% endfor %}
@@ -104,11 +135,14 @@
 {% else %}<div class="muted">Keine netstyle-Berechtigung zum Anzeigen der Bestelldaten.</div>{% endif %}
 </div>
 
-{% elif preview_section == 'company' and preview_kind == 'company' %}
+{% elif preview_section == 'company' and preview_kind == 'company' and preview_is_company_admin %}
 <div class="grid two mt-14">
   <div class="card"><h2>Unternehmen</h2><div class="statusrow"><span>Name</span><strong>{{ preview_company.name }}</strong></div><div class="statusrow"><span>Rechtsform</span><strong>{{ preview_company.legal_form|default:"–" }}</strong></div><div class="statusrow"><span>E-Mail</span><strong>{{ preview_company.email }}</strong></div><div class="statusrow"><span>Telefon</span><strong>{{ preview_company.phone|default:"–" }}</strong></div></div>
   <div class="card"><h2>Rechnungsanschrift</h2><div class="statusrow"><span>Adresse</span><strong>{{ preview_company.street }} {{ preview_company.house_number }}</strong></div><div class="statusrow"><span>Ort</span><strong>{{ preview_company.postal_code }} {{ preview_company.city }}</strong></div><div class="statusrow"><span>Land</span><strong>{{ preview_company.country }}</strong></div><div class="statusrow"><span>USt-IdNr.</span><strong>{{ preview_company.vat_id|default:"–" }}</strong></div></div>
 </div>
+
+{% elif preview_kind == 'company' and not preview_is_company_admin and preview_section == 'more' %}
+<div class="card mt-14"><h2>Benutzerkonto</h2><div class="statusrow"><span>Name</span><strong>{{ preview_user.full_name }}</strong></div><div class="statusrow"><span>E-Mail</span><strong>{{ preview_user.email }}</strong></div><div class="statusrow"><span>Rolle</span><strong>{{ preview_selected_role }}</strong></div><p class="muted">Teamverwaltung, Bestellungen und Unternehmensdaten sind für diese Rolle nicht freigegeben.</p></div>
 
 {% elif preview_section == 'profile' and preview_kind == 'private' %}
 <div class="grid two mt-14">
