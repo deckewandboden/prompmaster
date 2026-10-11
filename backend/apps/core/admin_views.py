@@ -1016,7 +1016,7 @@ def customer_portal_preview(request, pk):
 
     selected_user = selected_member.user if selected_member else None
     as_company_admin = bool(selected_member and selected_member.role == 'admin')
-    allowed_sections = {'dashboard', 'licenses', 'devices', 'more'}
+    allowed_sections = {'dashboard', 'licenses', 'devices', 'more', 'profile'}
     if as_company_admin:
         allowed_sections.update({'team', 'orders', 'company'})
     preview_section = request.GET.get('section', 'dashboard')
