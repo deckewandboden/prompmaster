@@ -1111,3 +1111,12 @@ msgstr "Destek notu"
 
 msgid "Für echte Schreibaktionen oder einen vollständigen Login-Test muss ein eigener Nicht-Staff-Testkunde verwendet werden. Die Vorschau übernimmt niemals die Identität des Kunden."
 msgstr "Gerçek değişiklikleri veya tam oturum açmayı test etmek için personel olmayan ayrı bir test müşterisi kullanın. Bu önizleme hiçbir zaman müşteri kimliğini devralmaz."
+
+msgid "Noch keine Lizenzen."
+msgstr "Henüz lisans yok."
+
+msgid "Alle Bestellungen"
+msgstr "Tüm siparişler"
+
+msgid "Firmenkonto"
+msgstr "Şirket hesabı"
