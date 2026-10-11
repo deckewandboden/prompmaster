@@ -18,6 +18,12 @@ PHRASES = ROOT / 'product/i18n/free_pro_visible_strings.json'
 SCRIPT = ROOT / 'backend/static/js/promptfinisher_product_i18n.20261011.js'
 REPORT = ROOT / 'docs/FREE_PRO_I18N_DRAFT_REPORT.md'
 TARGETS = ('en', 'es', 'pt', 'tr', 'ru', 'pl', 'fr', 'it', 'nl')
+# Official application names are trademarks, never UI strings for NMT.
+IMMUTABLE_BRAND_LABELS = frozenset({
+    'Word', 'Excel', 'PowerPoint', 'Outlook', 'Teams', 'OneNote',
+    'OneDrive', 'SharePoint', 'Power BI', 'Power Apps', 'Power Automate',
+    'Copilot Studio', 'Clipchamp', 'Whiteboard', 'Power Pages',
+})
 PROTECTED = re.compile(
     r'PROMPTFINISHER|Microsoft 365 Copilot|Microsoft Copilot'
     r'|Copilot Chat|M365 Copilot|netstyle|Mollie'
@@ -77,6 +83,10 @@ def main() -> None:
         source_fallbacks = 0
         for original in phrases:
             entry = existing.setdefault(original, {})
+            if original in IMMUTABLE_BRAND_LABELS:
+                # Override even pre-existing machine translations for brand-only labels.
+                entry[locale] = original
+                continue
             if entry.get(locale):
                 continue  # Manually curated translations take precedence
             translation = safe_translate(original, de_en)
