@@ -874,3 +874,78 @@ msgstr "licencias Pro aún libres"
 
 msgid "Verlängern"
 msgstr "Renovar"
+
+msgid "Geschäft, Handlungsbedarf und Systemstatus auf einen Blick."
+msgstr "Negocio, tareas pendientes y estado del sistema de un vistazo."
+
+msgid "PROMPTFINISHER Pro öffnen →"
+msgstr "Abrir PROMPTFINISHER Pro →"
+
+msgid "PROMPTFINISHER Free öffnen →"
+msgstr "Abrir PROMPTFINISHER Free →"
+
+msgid "System gesund"
+msgstr "Sistema operativo"
+
+msgid "Prüfung erforderlich"
+msgstr "Revisión necesaria"
+
+msgid "Kunden gesamt"
+msgstr "Total de clientes"
+
+msgid "Offene Leads"
+msgstr "Contactos potenciales abiertos"
+
+msgid "Lead-Pipeline öffnen"
+msgstr "Abrir embudo de clientes potenciales"
+
+msgid "Ablauf unter 30 Tagen"
+msgstr "Vence en menos de 30 días"
+
+msgid "laufen in weniger als 60 Tagen ab"
+msgstr "vencen en menos de 60 días"
+
+msgid "Umsatz 30 Tage"
+msgstr "Ingresos de 30 días"
+
+msgid "Umsatzentwicklung"
+msgstr "Evolución de ingresos"
+
+msgid "Umsatzentwicklung der letzten Monate"
+msgstr "Evolución de ingresos de los últimos meses"
+
+msgid "Noch keine bezahlten Bestellungen im Auswertungszeitraum."
+msgstr "Todavía no hay pedidos pagados en el periodo analizado."
+
+msgid "Lizenzen nach Produkt"
+msgstr "Licencias por producto"
+
+msgid "Handlungsbedarf"
+msgstr "Acciones pendientes"
+
+msgid "Lizenzen laufen in weniger als 30 Tagen ab."
+msgstr "Las licencias vencen en menos de 30 días."
+
+msgid "fehlgeschlagene Zahlungen"
+msgstr "pagos fallidos"
+
+msgid "Chargebacks"
+msgstr "Contracargos"
+
+msgid "offene Kontaktanfragen"
+msgstr "solicitudes de contacto abiertas"
+
+msgid "Kein aktueller Handlungsbedarf."
+msgstr "No se requiere ninguna acción por el momento."
+
+msgid "Letzte Bestellungen"
+msgstr "Últimos pedidos"
+
+msgid "Nächste Lizenzabläufe"
+msgstr "Próximos vencimientos de licencias"
+
+msgid "Keine bevorstehenden Abläufe."
+msgstr "No hay vencimientos próximos."
+
+msgid "Alle Lizenzen"
+msgstr "Todas las licencias"
