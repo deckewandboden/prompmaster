@@ -64,6 +64,7 @@ jobs:
           docker build -t promptfinisher-web:ci .
           docker build -f Dockerfile.caddy -t promptfinisher-caddy:ci .
           docker build -f Dockerfile.postgres -t promptfinisher-postgres:ci .
+          docker build -f Dockerfile.prometheus -t promptfinisher-prometheus:ci .
           docker build -f Dockerfile.redis -t promptfinisher-redis:ci .
           docker build -f Dockerfile.node-exporter -t promptfinisher-node-exporter:ci .
           docker build -f Dockerfile.cadvisor -t promptfinisher-cadvisor:ci .
@@ -79,7 +80,7 @@ jobs:
             "promptfinisher-backup:ci"
             "promptfinisher-postgres:ci"
             "promptfinisher-redis:ci"
-            "prom/prometheus:v3.15.0"
+            "promptfinisher-prometheus:ci"
             "promptfinisher-node-exporter:ci"
             "promptfinisher-cadvisor:ci"
             "promptfinisher-postgres-exporter:ci"
