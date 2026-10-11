@@ -6,6 +6,18 @@ COPY marketing/ ./
 RUN npm test && npm run build
 
 # Keep Caddy on a security-patched, explicit upstream release.
+# Rebuild Caddy against patched Go 1.26.9 and x/net v0.60.0.
+# Official Caddy 2.11.6 image still contains Go 1.26.8 and x/net v0.59.0
+# (CVE-2026-78667/78669/97031), despite the upstream image version.
+FROM golang:1.26.9-alpine AS patched-caddy-build
+WORKDIR /src
+RUN go mod init netstyle.invalid/caddy-rebuild \
+ && go get github.com/caddyserver/caddy/v2/cmd/caddy@v2.11.6 \
+ && go get golang.org/x/net@v0.60.0 \
+ && CGO_ENABLED=0 go build -trimpath -ldflags="-s -w" -o /caddy-patched github.com/caddyserver/caddy/v2/cmd/caddy \
+ && go version -m /caddy-patched | grep -E 'golang.org/x/net[[:space:]]+v0[.]60[.]0'
+
 FROM caddy:2.11.6-alpine
+COPY --from=patched-caddy-build /caddy-patched /usr/bin/caddy
 COPY Caddyfile /etc/caddy/Caddyfile
 COPY --from=marketing-build /src/dist /srv/marketing
