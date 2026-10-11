@@ -100,7 +100,7 @@
 
   async function hydrateFreeCatalog(){
     try{
-      const response=await fetch('/api/v1/prompts/?product=FREE',{credentials:'same-origin',cache:'no-store'});
+      const response=await fetch('/api/v1/prompts/free/',{credentials:'same-origin',cache:'no-store'});
       const data=await response.json();
       if(!response.ok||!data?.ok)throw new Error(data?.error?.message||'Katalog konnte nicht geladen werden.');
       const catalog=data.catalog||{};
@@ -191,7 +191,7 @@
 
     async function composeFromDatabase(sequence,taskId,input){
       try{
-        const response=await fetch('/api/v1/prompts/compose/',{
+        const response=await fetch('/api/v1/prompts/free/compose/',{
           method:'POST',
           credentials:'same-origin',
           cache:'no-store',
