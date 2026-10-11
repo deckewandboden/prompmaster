@@ -1,6 +1,7 @@
 """Regression: Free works anonymously and never weakens Pro authentication."""
 
 import json
+from unittest.mock import patch
 
 from django.core.management import call_command
 from django.test import Client, TestCase
@@ -146,3 +147,38 @@ class PublicFreeAccessTests(TestCase):
         self.assertEqual(client.get('/pro/app/').status_code, 302)
         self.assertEqual(client.session.get('two_factor_ok'), False)
 
+
+    def test_free_prompt_answer_language_is_validated_and_default_is_unchanged(self):
+        payload = {
+            'product': 'FREE',
+            'task_id': self.legacy_id,
+            'microsoft_tier': 'chatbasic',
+            'input': {'primary': 'Testfall'},
+        }
+        def request(language=None):
+            body = dict(payload)
+            if language is not None:
+                body['output_language'] = language
+            return self.client.post(
+                '/api/v1/prompts/free/compose/',
+                json.dumps(body),
+                content_type='application/json',
+            )
+
+        original = {'prompt': 'GOLDEN_PROMPT_UNCHANGED', 'ready': True}
+        with patch('apps.prompts.api.compose_free_legacy', return_value=original.copy()):
+            german = request()
+            self.assertEqual(german.status_code, 200)
+            self.assertEqual(german.json()['result']['prompt'], original['prompt'])
+            self.assertEqual(german.json()['result']['output_language'], 'de')
+            polish = request('pl')
+            self.assertEqual(polish.status_code, 200)
+            self.assertTrue(polish.json()['result']['prompt'].startswith(original['prompt']))
+            self.assertIn('Polski', polish.json()['result']['prompt'])
+            self.assertIn('AUSGABESPRACHE', polish.json()['result']['prompt'])
+            self.assertEqual(polish.json()['result']['output_language'], 'pl')
+            invalid = request('not_a_language')
+            self.assertEqual(invalid.status_code, 400)
+            self.assertEqual(invalid.json()['error']['field'], 'output_language')
+            malicious = request('<script>')
+            self.assertEqual(malicious.status_code, 400)
