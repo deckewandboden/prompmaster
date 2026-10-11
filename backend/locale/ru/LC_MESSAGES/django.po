@@ -1118,3 +1118,6 @@ msgstr "Примечание службы поддержки"
 
 msgid "Für echte Schreibaktionen oder einen vollständigen Login-Test muss ein eigener Nicht-Staff-Testkunde verwendet werden. Die Vorschau übernimmt niemals die Identität des Kunden."
 msgstr "Для проверки реальных изменений или полного входа используйте отдельную тестовую учётную запись клиента без прав персонала. Предпросмотр никогда не принимает личность клиента."
+
+msgid "Firmenkonto"
+msgstr "Корпоративная учётная запись"
