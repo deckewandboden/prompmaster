@@ -33,8 +33,18 @@ def validate(compose, production):
         errors.append('Redis must have no published ports and use only data')
     if services['backup'].get('build') != './backup':
         errors.append('Backup build context must be ./backup')
-    if services.get('prometheus', {}).get('image') != 'prom/prometheus:v3.15.0':
-        errors.append('Prometheus must remain pinned to the security-accepted v3.15.0 image')
+    prometheus = services.get('prometheus', {})
+    if prometheus.get('image') != 'promptfinisher-prometheus:3.15.0-patched':
+        errors.append('Prometheus must use the pinned, security-patched v3.15.0 build')
+    if prometheus.get('build') != {'context': '.', 'dockerfile': 'Dockerfile.prometheus'}:
+        errors.append('Prometheus must build from tracked Dockerfile.prometheus')
+    if prometheus.get('volumes') != [
+        './monitoring/prometheus.yml:/etc/prometheus/prometheus.yml:ro',
+        'prometheus_data:/prometheus',
+    ]:
+        errors.append('Prometheus must preserve read-only config and existing metrics volume')
+    if prometheus.get('networks') != ['monitor'] or prometheus.get('ports'):
+        errors.append('Prometheus must use only the internal monitor network, with no public ports')
     postgres_exporter = services.get('postgres-exporter', {})
     if postgres_exporter.get('image') != 'promptfinisher-postgres-exporter:0.20.1-hardened':
         errors.append('Hardened postgres_exporter 0.20.1 image required')
@@ -110,7 +120,7 @@ def main():
         yaml.safe_load((ROOT / 'compose.production.yaml').read_text()),
     )
     errors.extend(validate_legacy_volume_overlay())
-    for runtime_file in ('Dockerfile.postgres', 'Dockerfile.redis', 'Dockerfile.node-exporter', 'Dockerfile.cadvisor', 'Dockerfile.postgres-exporter'):
+    for runtime_file in ('Dockerfile.postgres', 'Dockerfile.redis', 'Dockerfile.node-exporter', 'Dockerfile.cadvisor', 'Dockerfile.postgres-exporter', 'Dockerfile.prometheus'):
         runtime_path = ROOT / runtime_file
         if not runtime_path.is_file():
             errors.append(f'Missing hardened runtime build input: {runtime_file}')
