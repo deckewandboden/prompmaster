@@ -24,11 +24,13 @@ jobs:
         shell: bash
         run: |
           set -Eeuo pipefail
+          # One-time job removes itself before computing the final exact inventory.
+          rm .github/workflows/sync-file-inventory.yml
           python3 scripts/generate_file_manifest.py
           # Existing generator adds an extra empty markdown line; trim it
           # before the repository's git diff --check whitespace gate.
           python3 -c "from pathlib import Path; p=Path('docs/COMPLETE_FILE_INVENTORY.md'); p.write_text(p.read_text(encoding='utf-8').rstrip(chr(10))+chr(10),encoding='utf-8')"
-          git add -- FILE_MANIFEST.tsv MANIFEST.json docs/COMPLETE_FILE_INVENTORY.md
+          git add -- FILE_MANIFEST.tsv MANIFEST.json docs/COMPLETE_FILE_INVENTORY.md .github/workflows/sync-file-inventory.yml
           git diff --cached --check
           if git diff --cached --quiet; then
             echo "Inventory already up to date."
