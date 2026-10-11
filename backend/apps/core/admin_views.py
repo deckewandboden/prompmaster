@@ -1,4 +1,5 @@
 from datetime import timedelta
+from uuid import UUID
 from functools import wraps
 
 from django.contrib import messages
@@ -988,58 +989,99 @@ def customer_company(request, pk):
 
 @staff_perm('customers.read')
 def customer_portal_preview(request, pk):
+    """Read-only, tenant-scoped customer portal snapshot for a selected account.
+
+    Mirrors actual customer portal authorization boundaries without logging in
+    as that account. Changes remain in existing audited staff admin endpoints.
+    """
     customer = _customer(request, pk)
     can_licenses = has_perm(request.user, 'licenses.read')
     can_orders = has_perm(request.user, 'orders.read')
-    allowed_sections = {'dashboard', 'team', 'licenses', 'devices', 'orders', 'company', 'more'}
-    preview_section = request.GET.get('section', 'dashboard')
-    if preview_section not in allowed_sections:
-        preview_section = 'dashboard'
-
-    licenses = (
-        customer.licenses.select_related('product').order_by('valid_until', 'license_number')
-        if can_licenses else None
-    )
+    can_write_customer = has_perm(request.user, 'customers.write')
     members = (
         customer.memberships.filter(active=True)
         .select_related('user')
         .order_by('user__last_name', 'user__first_name', 'user__email')
     )
-    devices = (
-        DeviceRegistration.objects.filter(
+    admin_member = members.filter(role='admin').first()
+    selected_member = admin_member or members.first()
+    requested_user = request.GET.get('user', '').strip()
+    if requested_user:
+        try:
+            user_uuid = UUID(requested_user)
+        except (ValueError, AttributeError):
+            user_uuid = None
+        if user_uuid is not None:
+            selected_member = members.filter(user_id=user_uuid).first() or selected_member
+
+    selected_user = selected_member.user if selected_member else None
+    as_company_admin = bool(selected_member and selected_member.role == 'admin')
+    allowed_sections = {'dashboard', 'licenses', 'devices', 'more'}
+    if as_company_admin:
+        allowed_sections.update({'team', 'orders', 'company'})
+    preview_section = request.GET.get('section', 'dashboard')
+    if preview_section not in allowed_sections:
+        preview_section = 'dashboard'
+
+    licenses = customer.licenses.select_related('product')
+    if not as_company_admin:
+        licenses = (
+            licenses.filter(
+                assignments__user=selected_user,
+                assignments__ended_at__isnull=True,
+            ).distinct()
+            if selected_user is not None
+            else licenses.none()
+        )
+    if not can_licenses:
+        licenses = licenses.none()
+
+    devices = DeviceRegistration.objects.filter(
+        license__company=customer,
+        revoked_at__isnull=True,
+    )
+    if as_company_admin:
+        devices = devices.filter(
             user__company_memberships__company=customer,
             user__company_memberships__active=True,
-            license__company=customer,
-            revoked_at__isnull=True,
         )
-        .select_related('user', 'license')
-        .distinct()
-        .order_by('-last_seen_at')
-    )
-    orders = (
-        customer.orders.prefetch_related('payments').order_by('-created_at')
-        if can_orders else None
-    )
+    elif selected_user is not None:
+        devices = devices.filter(user=selected_user)
+    else:
+        devices = devices.none()
+    devices = devices.select_related('user', 'license').distinct().order_by('-last_seen_at')
+
+    orders = customer.orders.prefetch_related('payments').order_by('-created_at')
+    if not as_company_admin or not can_orders:
+        orders = orders.none()
     now = timezone.now()
-    admin_membership = members.filter(role='admin').first()
     return render(request, 'ns_admin/customer_portal_preview.html', {
         'preview_kind': 'company',
         'preview_section': preview_section,
         'preview_title': customer.name,
         'preview_subtitle': f'{customer.customer_number} · Firmenkonto',
-        'preview_user': admin_membership.user if admin_membership else None,
+        'preview_user': selected_user,
+        'preview_user_id': str(selected_user.pk) if selected_user else '',
+        'preview_selected_role': selected_member.get_role_display() if selected_member else '',
+        'preview_is_company_admin': as_company_admin,
+        'preview_selectable_members': members,
+        'preview_can_write_customer': can_write_customer,
+        'preview_can_view_licenses': can_licenses,
+        'preview_can_view_orders': can_orders and as_company_admin,
         'preview_company': customer,
-        'preview_members': members[:20],
-        'preview_licenses': licenses[:20] if licenses is not None else None,
-        'preview_devices': devices[:20],
-        'preview_orders': orders[:20] if orders is not None else None,
+        'preview_members': customer.memberships.select_related('user').order_by(
+            'user__last_name', 'user__first_name', 'user__email'
+        ) if as_company_admin else customer.memberships.none(),
+        'preview_licenses': licenses.order_by('valid_until', 'license_number')[:100],
+        'preview_devices': devices[:100],
+        'preview_orders': orders[:100],
         'license_total': licenses.count() if can_licenses else None,
         'license_free': licenses.filter(status='free', valid_until__gt=now).count() if can_licenses else None,
         'license_active': licenses.filter(status='active', valid_until__gt=now).count() if can_licenses else None,
         'expiring_30': licenses.filter(valid_until__gt=now, valid_until__lte=now + timedelta(days=30)).count() if can_licenses else None,
         'device_count': devices.count(),
-        'order_count': orders.count() if can_orders else None,
-        'member_count': members.count(),
+        'order_count': orders.count() if can_orders and as_company_admin else None,
+        'member_count': members.count() if as_company_admin else None,
         'back_route': 'ns_admin:customer_detail',
         'back_pk': customer.pk,
     })
