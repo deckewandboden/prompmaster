@@ -141,6 +141,15 @@ class TwoFactorEnforcementMiddleware:
         # and account routes continue through the full security policy below.
         if request.method in self.public_free_methods.get(request.path_info, ()):
             return self.get_response(request)
+        # Free may be visited with a pending 2FA login. Its language selector
+        # must only be able to return to the exact public Free routes. This
+        # never exempts Pro, staff, account, POST or generic API operations.
+        if (
+            request.path_info == '/auth/language/'
+            and request.method == 'GET'
+            and request.GET.get('next') in {'/free/', '/free-old/'}
+        ):
+            return self.get_response(request)
 
         user = getattr(request, 'user', None)
         if not user or not user.is_authenticated:
