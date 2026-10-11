@@ -1,11 +1,11 @@
 {
   "project": "PROMPTFINISHER Commercial RC14 Full Repository",
-  "generated_at": "2026-10-11T09:33:52.963553+00:00",
-  "file_count_excluding_manifest_files": 644,
-  "total_bytes_excluding_manifest_files": 26260131,
+  "generated_at": "2026-10-11T09:34:35.758774+00:00",
+  "file_count_excluding_manifest_files": 643,
+  "total_bytes_excluding_manifest_files": 26258423,
   "roles": {
     "active-backend": 410,
-    "active-ci": 4,
+    "active-ci": 3,
     "active-marketing": 104,
     "active-operations": 37,
     "active-product": 4,
@@ -49,12 +49,6 @@
       "path": ".github/workflows/shell-syntax.yml",
       "size": 1355,
       "sha256": "2b299080b18f8bf31b48f999d9187e188e1fead7fc051f60b1ada3939312143f",
-      "role": "active-ci"
-    },
-    {
-      "path": ".github/workflows/sync-file-inventory.yml",
-      "size": 1708,
-      "sha256": "f9148ff9f441b25df16d28c1f0423d66a9f17c5e546a7c44d87ebc49e4931b49",
       "role": "active-ci"
     },
     {

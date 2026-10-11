@@ -1,6 +1,6 @@
 # Vollständiges Datei-Inventar — PROMPTFINISHER RC14
 
-Erfasst: **644 Dateien** (Manifest-/Inventardateien selbst ausgenommen), **26,260,131 Byte**.
+Erfasst: **643 Dateien** (Manifest-/Inventardateien selbst ausgenommen), **26,258,423 Byte**.
 
 Maschinenlesbar: `FILE_MANIFEST.tsv` und `MANIFEST.json`.
 
@@ -423,14 +423,13 @@ Maschinenlesbar: `FILE_MANIFEST.tsv` und `MANIFEST.json`.
 
 ## active-ci
 
-4 Dateien.
+3 Dateien.
 
 | Pfad | Größe | SHA256 |
 |---|---:|---|
 | `.github/workflows/ci.yml` | 12170 | `f4648d68c0ca0ae0432b26e450d5e33746081ff278f1a1ac8b471ffacb7fa598` |
 | `.github/workflows/dependency-security-full.yml` | 4134 | `73ac0f865b3fc0c5a07ca78340eb14e04aa7c5c3246f55c3d75c502e654bcd62` |
 | `.github/workflows/shell-syntax.yml` | 1355 | `2b299080b18f8bf31b48f999d9187e188e1fead7fc051f60b1ada3939312143f` |
-| `.github/workflows/sync-file-inventory.yml` | 1708 | `f9148ff9f441b25df16d28c1f0423d66a9f17c5e546a7c44d87ebc49e4931b49` |
 
 ## active-marketing
 
