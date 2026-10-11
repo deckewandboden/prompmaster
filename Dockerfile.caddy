@@ -14,10 +14,10 @@ WORKDIR /src
 RUN printf '%s\n' \
       'package main' \
       'import (' \
-      '    "github.com/caddyserver/caddy/v2/cmd"' \
+      '    caddycmd "github.com/caddyserver/caddy/v2/cmd"' \
       '    _ "github.com/caddyserver/caddy/v2/modules/standard"' \
       ')' \
-      'func main() { cmd.Main() }' > main.go \
+      'func main() { caddycmd.Main() }' > main.go \
     && go mod init promptfinisher.local/caddy \
     && go get github.com/caddyserver/caddy/v2@v2.11.7 \
     && go get golang.org/x/net@v0.60.0 \
