@@ -949,3 +949,84 @@ msgstr "Yaklaşan sona erme yok."
 
 msgid "Alle Lizenzen"
 msgstr "Tüm lisanslar"
+
+msgid "Kundenportal-Vorschau"
+msgstr "Müşteri portalı önizlemesi"
+
+msgid "KUNDENPORTAL · VORSCHAU"
+msgstr "MÜŞTERİ PORTALI · ÖNİZLEME"
+
+msgid "Read-only Vorschau …"
+msgstr "Salt okunur önizleme …"
+
+msgid "Support-Vorschau"
+msgstr "Destek önizlemesi"
+
+msgid "Zurück zum netstyle Kundendetail"
+msgstr "netstyle müşteri ayrıntılarına dön"
+
+msgid "Read-only Kundenansicht."
+msgstr "Salt okunur müşteri görünümü."
+
+msgid "Die Daten entsprechen dem ausgewählten Kundenkonto und seiner Rolle. Dies ist eine Ansichtsvorschau, keine Kundensitzung: Interaktionen, Zahlungs- und Sicherheitsaktionen sind nicht ausführbar."
+msgstr "Veriler seçilen müşteri hesabına ve rolüne göre sınırlandırılmıştır. Bu bir önizlemedir, müşteri oturumu değildir; etkileşim, ödeme ve güvenlik işlemleri devre dışıdır."
+
+msgid "Perspektive auswählen"
+msgstr "Görünüm seç"
+
+msgid "Nur aktive Benutzer dieses Unternehmens. Rollen und Zugriffsrechte werden berücksichtigt."
+msgstr "Yalnızca bu şirketin aktif kullanıcıları. Roller ve erişim hakları dikkate alınır."
+
+msgid "Kundenbenutzer"
+msgstr "Müşteri kullanıcısı"
+
+msgid "Keine aktiven Benutzer vorhanden"
+msgstr "Aktif kullanıcı bulunmuyor"
+
+msgid "Ansicht wechseln"
+msgstr "Görünümü değiştir"
+
+msgid "Angezeigte Rolle:"
+msgstr "Gösterilen rol:"
+
+msgid "Kundenverwaltung"
+msgstr "Müşteri yönetimi"
+
+msgid "Änderungen erfolgen ausschließlich in den berechtigungsgeschützten Administrationsmasken mit Auditierung – nicht in der Kundenansicht."
+msgstr "Değişiklikler yalnızca yetkilendirilmiş ve denetlenen yönetim ekranlarında yapılır; müşteri görünümünde yapılamaz."
+
+msgid "Benutzer und Rollen verwalten"
+msgstr "Kullanıcıları ve rolleri yönet"
+
+msgid "Lizenzen verwalten"
+msgstr "Lisansları yönet"
+
+msgid "Geräte verwalten"
+msgstr "Cihazları yönet"
+
+msgid "gesamt"
+msgstr "toplam"
+
+msgid "frei"
+msgstr "boş"
+
+msgid "Ablauf ≤30 Tage"
+msgstr "≤30 gün içinde sona eriyor"
+
+msgid "Konto"
+msgstr "Hesap"
+
+msgid "Kontotyp"
+msgstr "Hesap türü"
+
+msgid "Portal-Benutzer"
+msgstr "Portal kullanıcısı"
+
+msgid "Aktive Benutzer"
+msgstr "Aktif kullanıcılar"
+
+msgid "Bestand"
+msgstr "Mevcut durum"
+
+msgid "Freie Lizenzen"
+msgstr "Boş lisanslar"
