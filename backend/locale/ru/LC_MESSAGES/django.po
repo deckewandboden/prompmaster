@@ -227,3 +227,303 @@ msgstr "Ближайших окончаний нет."
 
 msgid "Alle Lizenzen"
 msgstr "Все лицензии"
+
+msgid "Anmelden"
+msgstr "Войти"
+
+msgid "Ein Zugang für PROMPTFINISHER, Kundenportal und netstyle Admin"
+msgstr "Единая учётная запись для PROMPTFINISHER, клиентского портала и администрирования netstyle"
+
+msgid "Noch kein Konto? Konto erstellen"
+msgstr "Нет учётной записи? Зарегистрироваться"
+
+msgid "Passwort vergessen?"
+msgstr "Забыли пароль?"
+
+msgid "Konto anlegen"
+msgstr "Создать учётную запись"
+
+msgid "Registrieren"
+msgstr "Зарегистрироваться"
+
+msgid "Unternehmensadministratoren richten anschließend verpflichtend 2FA ein."
+msgstr "Администраторы компаний затем должны обязательно настроить двухфакторную аутентификацию."
+
+msgid "Bereits registriert?"
+msgstr "Уже зарегистрированы?"
+
+msgid "Zur Anmeldung"
+msgstr "Перейти ко входу"
+
+msgid "E-Mail-Adresse"
+msgstr "Адрес эл. почты"
+
+msgid "Passwort"
+msgstr "Пароль"
+
+msgid "Bestätigungscode"
+msgstr "Код подтверждения"
+
+msgid "Kundentyp"
+msgstr "Тип клиента"
+
+msgid "Privat"
+msgstr "Частное лицо"
+
+msgid "Vorname"
+msgstr "Имя"
+
+msgid "Nachname"
+msgstr "Фамилия"
+
+msgid "Firmenname"
+msgstr "Название компании"
+
+msgid "AGB gelesen und akzeptiert"
+msgstr "Условия использования прочитаны и приняты"
+
+msgid "Datenschutzerklärung zur Kenntnis genommen"
+msgstr "Политика конфиденциальности прочитана"
+
+msgid "Passwort zur Bestätigung"
+msgstr "Пароль для подтверждения"
+
+msgid "Administratorübertragung verbindlich bestätigen"
+msgstr "Подтвердить передачу прав администратора"
+
+msgid "Neues Passwort"
+msgstr "Новый пароль"
+
+msgid "Passwort wiederholen"
+msgstr "Повторите пароль"
+
+msgid "Tabellenfilter"
+msgstr "Фильтры таблицы"
+
+msgid "Tabelle durchsuchen"
+msgstr "Поиск по таблице"
+
+msgid "Alle"
+msgstr "Все"
+
+msgid "Seitengröße"
+msgstr "Размер страницы"
+
+msgid "Spalten"
+msgstr "Столбцы"
+
+msgid "Anwenden"
+msgstr "Применить"
+
+msgid "CSV exportieren"
+msgstr "Экспорт в CSV"
+
+msgid "Sortierung zurücksetzen"
+msgstr "Сбросить сортировку"
+
+msgid "Alles zurücksetzen"
+msgstr "Сбросить всё"
+
+msgid "Daten werden geladen …"
+msgstr "Загрузка данных …"
+
+msgid "Aktive Filter"
+msgstr "Активные фильтры"
+
+msgid "Suche"
+msgstr "Поиск"
+
+msgid "Keine Such- oder Filtertreffer."
+msgstr "По запросу ничего не найдено."
+
+msgid "Filter zurücksetzen"
+msgstr "Сбросить фильтры"
+
+msgid "+ Benutzer hinzufügen"
+msgstr "+ Добавить пользователя"
+
+msgid "AGB"
+msgstr "Условия использования"
+
+msgid "Abbrechen"
+msgstr "Отмена"
+
+msgid "Administrator übertragen"
+msgstr "Передать права администратора"
+
+msgid "Aktiv"
+msgstr "Активна"
+
+msgid "Aktive Mitglieder"
+msgstr "Активные участники"
+
+msgid "Anzahl"
+msgstr "Количество"
+
+msgid "Bestellungen & Zahlungen öffnen"
+msgstr "Открыть заказы и платежи"
+
+msgid "Checkout"
+msgstr "Оформление заказа"
+
+msgid "Datenschutz"
+msgstr "Конфиденциальность"
+
+msgid "Der Link wurde per E-Mail versendet."
+msgstr "Ссылка отправлена по электронной почте."
+
+msgid "Firmen-Administrator"
+msgstr "Администратор компании"
+
+msgid "Gerät entfernen"
+msgstr "Удалить устройство"
+
+msgid "Geräteslots der aktiven PROMPTFINISHER-Pro-Lizenzen."
+msgstr "Слоты устройств для активных лицензий PROMPTFINISHER Pro."
+
+msgid "Gerätewechsel"
+msgstr "Смена устройства"
+
+msgid "Gesamt"
+msgstr "Итого"
+
+msgid "Jetzt verlängern"
+msgstr "Продлить сейчас"
+
+msgid "Kein Pro-Zugriff für dieses Benutzerkonto."
+msgstr "Нет доступа к Pro для этой учётной записи."
+
+msgid "Kein aktiver Firmenadministrator gefunden."
+msgstr "Активный администратор компании не найден."
+
+msgid "Keine Geräte."
+msgstr "Нет устройств."
+
+msgid "Link zur Kontrolle"
+msgstr "Ссылка для проверки"
+
+msgid "Lizenz jetzt zuordnen"
+msgstr "Назначить лицензию сейчас"
+
+msgid "Lizenz verlängern"
+msgstr "Продлить лицензию"
+
+msgid "Lizenzbedingungen"
+msgstr "Лицензионные условия"
+
+msgid "Lizenzen insgesamt"
+msgstr "Всего лицензий"
+
+msgid "Lizenzstatus"
+msgstr "Статус лицензии"
+
+msgid "Lizenzzuordnung bestätigen"
+msgstr "Подтвердить назначение лицензии"
+
+msgid "Nächster Ablauf"
+msgstr "Ближайшее окончание"
+
+msgid "PROMPTFINISHER PRO"
+msgstr "PROMPTFINISHER PRO"
+
+msgid "PROMPTFINISHER Pro für mich aktivieren"
+msgstr "Активировать PROMPTFINISHER Pro для себя"
+
+msgid "PROMPTFINISHER Pro starten →"
+msgstr "Запустить PROMPTFINISHER Pro →"
+
+msgid "Pro anfragen"
+msgstr "Запросить Pro"
+
+msgid "Sicherer PROMPTFINISHER-Zuordnungslink."
+msgstr "Безопасная ссылка назначения PROMPTFINISHER."
+
+msgid "Speichern"
+msgstr "Сохранить"
+
+msgid "Stammdaten, Steuerdaten und Firmen-Administrator."
+msgstr "Реквизиты, налоговые данные и администратор компании."
+
+msgid "Team öffnen"
+msgstr "Открыть команду"
+
+msgid "Team- und Lizenzverwaltung"
+msgstr "Управление командой и лицензиями"
+
+msgid "Unternehmensdaten"
+msgstr "Данные компании"
+
+msgid "Unternehmensdaten bearbeiten"
+msgstr "Редактировать данные компании"
+
+msgid "Unternehmensdaten unvollständig."
+msgstr "Данные компании заполнены не полностью."
+
+msgid "Updates während Laufzeit"
+msgstr "Обновления в течение срока действия"
+
+msgid "Widerruf"
+msgstr "Отказ от договора"
+
+msgid "Widerrufen"
+msgstr "Отозвать"
+
+msgid "Zahlungen mit Handlungsbedarf"
+msgstr "Платежи, требующие внимания"
+
+msgid "Zahlungspflichtig kaufen →"
+msgstr "Купить с обязательством оплаты →"
+
+msgid "Zuordnungslink erzeugt"
+msgstr "Ссылка назначения создана"
+
+msgid "Zurück zum Benutzer"
+msgstr "Назад к пользователю"
+
+msgid "aktiv"
+msgstr "активна"
+
+msgid "enthalten"
+msgstr "включено"
+
+msgid "inkl. MwSt."
+msgstr "вкл. НДС"
+
+msgid "registriert"
+msgstr "зарегистрировано"
+
+msgid "Änderungen werden erst nach erfolgreicher Validierung gespeichert."
+msgstr "Изменения сохраняются только после успешной проверки."
+
+msgid "+ Lizenz kaufen"
+msgstr "+ Купить лицензию"
+
+msgid "Ablauf"
+msgstr "Окончание срока"
+
+msgid "Adresse"
+msgstr "Адрес"
+
+msgid "Aktion"
+msgstr "Действие"
+
+msgid "Aktive Geräte"
+msgstr "Активные устройства"
+
+msgid "Automatischer Kontext"
+msgstr "Автоматический контекст"
+
+msgid "Barrierefreiheit"
+msgstr "Доступность"
+
+msgid "Benutzer"
+msgstr "Пользователь"
+
+msgid "Bestellung"
+msgstr "Заказ"
+
+msgid "Betrag"
+msgstr "Сумма"
+
+msgid "Betreff"
+msgstr "Тема"
