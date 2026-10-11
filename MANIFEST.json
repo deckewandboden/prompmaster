@@ -1,15 +1,15 @@
 {
   "project": "PROMPTFINISHER Commercial RC14 Full Repository",
-  "generated_at": "2026-10-11T10:54:19.051209+00:00",
-  "file_count_excluding_manifest_files": 651,
-  "total_bytes_excluding_manifest_files": 26481489,
+  "generated_at": "2026-10-11T11:12:24.380646+00:00",
+  "file_count_excluding_manifest_files": 654,
+  "total_bytes_excluding_manifest_files": 26654769,
   "roles": {
     "active-backend": 417,
     "active-ci": 3,
     "active-marketing": 104,
-    "active-operations": 38,
-    "active-product": 4,
-    "documentation": 25,
+    "active-operations": 39,
+    "active-product": 5,
+    "documentation": 26,
     "historical-reference": 33,
     "recovery-tool": 3,
     "repository-root": 24
@@ -389,8 +389,8 @@
     },
     {
       "path": "backend/apps/accounts/middleware.py",
-      "size": 7825,
-      "sha256": "7a9249e3a5e7d5360f227962e612627269b5da8c84dbfb95887abb773ce2f29d",
+      "size": 8285,
+      "sha256": "c69577318a4d3547dc66512968002eef95459f2da00f6eed3896d94f4c49f47e",
       "role": "active-backend"
     },
     {
@@ -443,8 +443,8 @@
     },
     {
       "path": "backend/apps/accounts/tests_free_public.py",
-      "size": 5739,
-      "sha256": "dbb80fe52f4cdae007740e1c902a9ea3598360a40189beb46f35445b98812a35",
+      "size": 6539,
+      "sha256": "96b8fb012b9d4b82024e5b5802a2b2ee9c93e9462885f9dbc83e218527cac86e",
       "role": "active-backend"
     },
     {
@@ -1067,8 +1067,8 @@
     },
     {
       "path": "backend/apps/core/tests_i18n_admin.py",
-      "size": 2831,
-      "sha256": "e6a2bd575d7f7731039c015da22ebb93b339dbe4237389d4cbbc232f99b005d8",
+      "size": 2886,
+      "sha256": "b0716df20f4b91b03762732c815a01cf5c9dd7c4b3ca73785439c8cb30b1f8eb",
       "role": "active-backend"
     },
     {
@@ -2213,8 +2213,8 @@
     },
     {
       "path": "backend/static/js/promptfinisher_product_i18n.20261011.js",
-      "size": 25464,
-      "sha256": "cb952a0351877bd0e2be1b14cfb4e8c27cad7a7a9814d92881a3bfd3a515d78f",
+      "size": 176840,
+      "sha256": "b6821812466e9b7508b7f00641d4582caa5b9c5a55c534da18e726c814a03e6c",
       "role": "active-backend"
     },
     {
@@ -2935,6 +2935,12 @@
       "path": "docs/FREE_LEGACY_MAPPING_STATUS.md",
       "size": 2083,
       "sha256": "d7f8713629b6f7795a9f25f25ef0b0bc947340bf59bca30e9d40e572be571a91",
+      "role": "documentation"
+    },
+    {
+      "path": "docs/FREE_PRO_I18N_DRAFT_REPORT.md",
+      "size": 629,
+      "sha256": "60c45e9eaccff68af61e7181d1c71d002187adba208d3ce190ec74558770e359",
       "role": "documentation"
     },
     {
@@ -3688,6 +3694,12 @@
       "role": "active-product"
     },
     {
+      "path": "product/i18n/free_pro_visible_strings.json",
+      "size": 15081,
+      "sha256": "7691e0ef4df8c848f2170c4533b7e726d5965dd6830a2e9d91e15cd4566da0ae",
+      "role": "active-product"
+    },
+    {
       "path": "product/runtime/pro_server_bridge.js",
       "size": 16535,
       "sha256": "9b9c0d09d03cbf2cee841406fe6ef46bb78c988e4a313d1edfa553a48595e027",
@@ -3757,6 +3769,12 @@
       "path": "scripts/generate_file_manifest.py",
       "size": 3464,
       "sha256": "5bf14f39220d20174fd76e9e2dbc254bd6c5f7693c9cd3188ec01b0ad86be2cf",
+      "role": "active-operations"
+    },
+    {
+      "path": "scripts/generate_product_ui_locales.py",
+      "size": 4879,
+      "sha256": "82e723b805143a30d4087847a7b5d4def6c035f4c4f3ee5676879802e5882229",
       "role": "active-operations"
     },
     {
