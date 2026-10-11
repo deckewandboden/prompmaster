@@ -949,3 +949,84 @@ msgstr "Sem vencimentos próximos."
 
 msgid "Alle Lizenzen"
 msgstr "Todas as licenças"
+
+msgid "Kundenportal-Vorschau"
+msgstr "Pré-visualização do portal do cliente"
+
+msgid "KUNDENPORTAL · VORSCHAU"
+msgstr "PORTAL DO CLIENTE · PRÉ-VISUALIZAÇÃO"
+
+msgid "Read-only Vorschau …"
+msgstr "Pré-visualização só de leitura …"
+
+msgid "Support-Vorschau"
+msgstr "Pré-visualização de suporte"
+
+msgid "Zurück zum netstyle Kundendetail"
+msgstr "Voltar aos dados do cliente na netstyle"
+
+msgid "Read-only Kundenansicht."
+msgstr "Vista do cliente só de leitura."
+
+msgid "Die Daten entsprechen dem ausgewählten Kundenkonto und seiner Rolle. Dies ist eine Ansichtsvorschau, keine Kundensitzung: Interaktionen, Zahlungs- und Sicherheitsaktionen sind nicht ausführbar."
+msgstr "Os dados correspondem à conta e função do cliente selecionado. É uma pré-visualização, não uma sessão de cliente: interações, pagamentos e ações de segurança estão desativados."
+
+msgid "Perspektive auswählen"
+msgstr "Selecionar perspetiva"
+
+msgid "Nur aktive Benutzer dieses Unternehmens. Rollen und Zugriffsrechte werden berücksichtigt."
+msgstr "Apenas utilizadores ativos desta empresa. São respeitadas as funções e permissões."
+
+msgid "Kundenbenutzer"
+msgstr "Utilizador do cliente"
+
+msgid "Keine aktiven Benutzer vorhanden"
+msgstr "Não existem utilizadores ativos"
+
+msgid "Ansicht wechseln"
+msgstr "Alterar vista"
+
+msgid "Angezeigte Rolle:"
+msgstr "Função apresentada:"
+
+msgid "Kundenverwaltung"
+msgstr "Administração de clientes"
+
+msgid "Änderungen erfolgen ausschließlich in den berechtigungsgeschützten Administrationsmasken mit Auditierung – nicht in der Kundenansicht."
+msgstr "As alterações só são feitas em formulários de administração protegidos por permissões e auditados, nunca na vista do cliente."
+
+msgid "Benutzer und Rollen verwalten"
+msgstr "Gerir utilizadores e funções"
+
+msgid "Lizenzen verwalten"
+msgstr "Gerir licenças"
+
+msgid "Geräte verwalten"
+msgstr "Gerir dispositivos"
+
+msgid "gesamt"
+msgstr "total"
+
+msgid "frei"
+msgstr "livres"
+
+msgid "Ablauf ≤30 Tage"
+msgstr "Expiram em ≤30 dias"
+
+msgid "Konto"
+msgstr "Conta"
+
+msgid "Kontotyp"
+msgstr "Tipo de conta"
+
+msgid "Portal-Benutzer"
+msgstr "Utilizador do portal"
+
+msgid "Aktive Benutzer"
+msgstr "Utilizadores ativos"
+
+msgid "Bestand"
+msgstr "Inventário"
+
+msgid "Freie Lizenzen"
+msgstr "Licenças livres"
