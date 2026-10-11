@@ -424,3 +424,10 @@ a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,te
   .language-switcher label>span{display:none}
   .language-switcher select{min-width:92px}
 }
+
+/* PROMPTFINISHER 2026-10-11: the narrow sidebar uses the precise original mark,
+   instead of clipping the full-width logo (which has left-side padding). */
+@media (min-width:701px) and (max-width:1100px) {
+  .sidebar .brand {background-image:url('/static/brand/promptfinisher-mark.png?v=20261011-logo1');background-repeat:no-repeat;background-position:center;background-size:48px 48px}
+  .sidebar .brand img {opacity:0}
+}
