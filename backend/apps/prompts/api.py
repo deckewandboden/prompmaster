@@ -275,7 +275,7 @@ def compose(request):
     ):
         language_name = languages[output_language]
         result_payload['prompt'] += (
-            '\\n\\nAUSGABESPRACHE: Formuliere das Ergebnis in der Sprache '
+            '\n\nAUSGABESPRACHE: Formuliere das Ergebnis in der Sprache '
             + language_name
             + '. Verwende diese Sprache auch für Überschriften und Tabellen. '
               'Eigennamen, wörtliche Zitate, Code und Dateinamen bleiben bei Bedarf unverändert.'
