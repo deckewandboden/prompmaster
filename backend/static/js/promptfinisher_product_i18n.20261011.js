@@ -79,7 +79,8 @@
   const updateAttributes = root => {
     const elements = [root, ...root.querySelectorAll('[placeholder],[title],[aria-label]')];
     for (const element of elements) {
-      if (element.closest(notUi)) continue;
+      // Input hints are UI; input values and generated prompt text remain unchanged.
+      if (element.closest('script,style,[contenteditable],[data-pf-untranslated],.user-supplied,.user-content')) continue;
       for (const attribute of ['placeholder', 'title', 'aria-label']) {
         const original = element.getAttribute(attribute);
         if (original && Object.hasOwn(TEXT, original.trim())) {
