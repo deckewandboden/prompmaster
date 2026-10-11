@@ -1111,3 +1111,12 @@ msgstr "Support notice"
 
 msgid "Für echte Schreibaktionen oder einen vollständigen Login-Test muss ein eigener Nicht-Staff-Testkunde verwendet werden. Die Vorschau übernimmt niemals die Identität des Kunden."
 msgstr "For real write operations or a full login test, use a dedicated non-staff test customer. This preview never assumes a customer's identity."
+
+msgid "Noch keine Lizenzen."
+msgstr "No licenses yet."
+
+msgid "Alle Bestellungen"
+msgstr "All orders"
+
+msgid "Firmenkonto"
+msgstr "Company account"
