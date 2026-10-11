@@ -24,8 +24,8 @@ TARGETS = {
 }
 # Keep machine translators from altering format placeholders and product names.
 PROTECTED = re.compile(
-    r"%(?:\\([A-Za-z_][A-Za-z0-9_]*\\))?[-+0-9.]*[dfs]"
-    r"|\\{[A-Za-z_][A-Za-z0-9_]*\\}"
+    r"%[(][A-Za-z_][A-Za-z0-9_]*[)][a-zA-Z]"
+    r"|[{][A-Za-z_][A-Za-z0-9_]*[}]"
     r"|PROMPTFINISHER|Microsoft 365 Copilot|Microsoft Copilot"
     r"|Mollie|netstyle",
     re.IGNORECASE,
@@ -56,6 +56,9 @@ def translate_preserving(value: str, translator) -> tuple[str, bool]:
         translated = translated.replace(marker, original)
     if sorted(PROTECTED.findall(translated)) != sorted(PROTECTED.findall(value)):
         return value, False
+    named = re.compile(r"%[(][A-Za-z_][A-Za-z0-9_]*[)][a-zA-Z]")
+    if sorted(named.findall(translated)) != sorted(named.findall(value)):
+        return value, False
     if not translated.strip() or len(translated) > max(4500, 4 * len(value)):
         return value, False
     return translated.strip(), True
@@ -78,6 +81,11 @@ def main(codes: list[str]) -> None:
         print(f"Installing offline Argos en->{code} model", flush=True)
         argostranslate.package.install_from_path(model.download())
         translator = argostranslate.translate.get_translation_from_codes("en", code)
+        existing_path = ROOT / "backend/locale" / code / "LC_MESSAGES/django.po"
+        existing = (
+            {item.msgid: item.msgstr for item in polib.pofile(str(existing_path))}
+            if existing_path.is_file() else {}
+        )
         out = polib.POFile()
         out.metadata = dict(catalog.metadata)
         out.metadata.update({
@@ -93,7 +101,13 @@ def main(codes: list[str]) -> None:
             src = entry.msgstr or entry.msgid
             if not src:
                 continue
-            translated, valid = translate_preserving(src, translator)
+            previous = existing.get(entry.msgid, '')
+            expected = sorted(re.findall(r"%[(][A-Za-z_][A-Za-z0-9_]*[)][a-zA-Z]", entry.msgid))
+            actual = sorted(re.findall(r"%[(][A-Za-z_][A-Za-z0-9_]*[)][a-zA-Z]", previous))
+            if previous and expected == actual:
+                translated, valid = previous, True  # protect editorial corrections
+            else:
+                translated, valid = translate_preserving(src, translator)
             if not valid:
                 fallbacks += 1
             elif translated != src:
@@ -104,7 +118,12 @@ def main(codes: list[str]) -> None:
                 occurrences=entry.occurrences,
                 comment=entry.comment,
                 tcomment=entry.tcomment,
-                flags=[flag for flag in entry.flags if flag != "fuzzy"],
+                flags=sorted(set(
+                    [flag for flag in entry.flags if flag != "fuzzy"] +
+                    (["python-format"] if re.search(
+                        r"%[(][A-Za-z_][A-Za-z0-9_]*[)][a-zA-Z]", entry.msgid
+                    ) else [])
+                )),
             ))
         target = ROOT / "backend/locale" / code / "LC_MESSAGES/django.po"
         target.parent.mkdir(parents=True, exist_ok=True)
