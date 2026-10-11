@@ -54,6 +54,16 @@ class TwoFactorEnforcementMiddleware:
         '/api/webhooks/mollie/',
     )
 
+    # Free is an anonymous product, including its dedicated catalog/composer.
+    # Scope by exact path AND method: never exempt the generic prompt API or
+    # paid Pro endpoints from login, 2FA, or session-version enforcement.
+    public_free_methods = {
+        '/free/': frozenset({'GET', 'HEAD'}),
+        '/free-old/': frozenset({'GET', 'HEAD'}),
+        '/api/v1/prompts/free/': frozenset({'GET', 'HEAD'}),
+        '/api/v1/prompts/free/compose/': frozenset({'POST'}),
+    }
+
     direct_password_reauth_views = {
         'ns_admin:customer_admin_transfer',
     }
@@ -126,6 +136,12 @@ class TwoFactorEnforcementMiddleware:
         return redirect(reverse('ns_admin:sensitive_reauth'))
 
     def __call__(self, request):
+        # The public Free flow must not redirect a visitor who happens to have
+        # an unfinished or stale authenticated session to login/2FA. All paid
+        # and account routes continue through the full security policy below.
+        if request.method in self.public_free_methods.get(request.path_info, ()):
+            return self.get_response(request)
+
         user = getattr(request, 'user', None)
         if not user or not user.is_authenticated:
             return self.get_response(request)
