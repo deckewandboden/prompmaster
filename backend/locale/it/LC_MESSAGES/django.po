@@ -36,13 +36,13 @@ msgid "Übersicht"
 msgstr "Panoramica"
 
 msgid "Leads"
-msgstr "Piombo"
+msgstr "Contatti potenziali"
 
 msgid "Kunden"
 msgstr "Clienti"
 
 msgid "Lizenzen"
-msgstr "Le licenze"
+msgstr "Licenze"
 
 msgid "Bestellungen"
 msgstr "Ordini"
@@ -90,7 +90,7 @@ msgid "Einstellungen"
 msgstr "Impostazioni impostazioni"
 
 msgid "Abmelden"
-msgstr "Firma"
+msgstr "Esci"
 
 msgid "Home"
 msgstr "Home"
@@ -105,16 +105,16 @@ msgid "Mehr"
 msgstr "Altro"
 
 msgid "Kundenportal"
-msgstr "Portale del cliente"
+msgstr "Portale clienti"
 
 msgid "KUNDENPORTAL"
-msgstr "PORTI DOGANALI"
+msgstr "PORTALE CLIENTI"
 
 msgid "Benutzer, E-Mail oder Lizenz suchen …"
 msgstr "Ricerca utente, email o licenza ..."
 
 msgid "Lizenz suchen …"
-msgstr "Patente di ricerca..."
+msgstr "Cerca una licenza …"
 
 msgid "Privatkunde"
 msgstr "Cliente privato"
@@ -144,7 +144,7 @@ msgid "Team"
 msgstr "Team"
 
 msgid "Anmelden"
-msgstr "Firma"
+msgstr "Accedi"
 
 msgid "Ein Zugang für PROMPTFINISHER, Kundenportal und netstyle Admin"
 msgstr ""
@@ -160,7 +160,7 @@ msgid "Konto anlegen"
 msgstr "Crea account"
 
 msgid "Registrieren"
-msgstr "Registrazione"
+msgstr "Registrati"
 
 msgid ""
 "Unternehmensadministratoren richten anschließend verpflichtend 2FA ein."
@@ -281,7 +281,7 @@ msgid "Bestellungen & Zahlungen öffnen"
 msgstr "Ordini e pagamenti aperti"
 
 msgid "Checkout"
-msgstr "Checkout"
+msgstr "Pagamento"
 
 msgid "Datenschutz"
 msgstr "Privacy"
@@ -477,7 +477,7 @@ msgid "Gültig bis"
 msgstr "Valido fino a quando"
 
 msgid "Impressum"
-msgstr "Avviso legale"
+msgstr "Note legali"
 
 msgid "Jeder Seat läuft mit individueller Laufzeit."
 msgstr "Ogni sedile ha un proprio termine individuale."
@@ -604,7 +604,7 @@ msgid "Weitere Bereiche Ihres Kundenportals."
 msgstr "Ulteriori aree del tuo portale clienti."
 
 msgid "Widerrufsbelehrung"
-msgstr "Informazioni di prelievo"
+msgstr "Informativa sul diritto di recesso"
 
 msgid "Zahlung"
 msgstr "Pagamento"
@@ -678,7 +678,7 @@ msgstr ""
 "limitato al tuo indirizzo email registrato."
 
 msgid "Free"
-msgstr "Gratis"
+msgstr "Free"
 
 msgid "Freie Lizenz zuweisen"
 msgstr "Assegna licenza gratuita"
@@ -728,7 +728,7 @@ msgid "Offene Pro-Anfragen"
 msgstr "Le richieste di Open Pro"
 
 msgid "PROMPTFINISHER Free"
-msgstr "PROMPTFINISHER Gratis"
+msgstr "PROMPTFINISHER Free"
 
 msgid "PROMPTFINISHER Pro"
 msgstr "PROMPTFINISHER Pro"
@@ -952,10 +952,10 @@ msgid "Geschäft, Handlungsbedarf und Systemstatus auf einen Blick."
 msgstr "Affari, oggetti di azione e stato di sistema a colpo d'occhio."
 
 msgid "PROMPTFINISHER Pro öffnen →"
-msgstr "Open PROMPTFINISHER Pro →"
+msgstr "Apri PROMPTFINISHER Pro →"
 
 msgid "PROMPTFINISHER Free öffnen →"
-msgstr "Open PROMPTFINISHER Gratis →"
+msgstr "Apri PROMPTFINISHER Free →"
 
 msgid "System gesund"
 msgstr "Sistema sano"
@@ -970,7 +970,7 @@ msgid "Offene Leads"
 msgstr "Porte aperte"
 
 msgid "Lead-Pipeline öffnen"
-msgstr "Conduttura di piombo aperta"
+msgstr "Apri la pipeline dei contatti"
 
 msgid "Ablauf unter 30 Tagen"
 msgstr "Scade entro 30 giorni"
@@ -1220,7 +1220,7 @@ msgstr ""
 "l'identità di un cliente."
 
 msgid "Noch keine Lizenzen."
-msgstr "Ancora nessuna licenza."
+msgstr "Nessuna licenza al momento."
 
 msgid "Alle Bestellungen"
 msgstr "Tutti gli ordini"
