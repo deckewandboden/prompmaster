@@ -1,0 +1,31 @@
+# Rebuild the pinned upstream Prometheus 3.15.0 code with security-patched
+# Go, x/net and the official checksum-verified 3.15.0 browser UI.
+# This is kept independent of the application and Caddy images.
+FROM golang:1.27.2-alpine3.23 AS prometheus-patched-build
+ENV GOTOOLCHAIN=local GOMAXPROCS=2 GOFLAGS=-p=2
+RUN apk add --no-cache ca-certificates curl git make tar
+WORKDIR /src
+
+RUN git clone --depth 1 --branch v3.15.0 https://github.com/prometheus/prometheus.git . \
+    && git rev-parse HEAD | grep -Eq '^5241a27'
+
+RUN curl --fail --location --retry 3 --output /tmp/sha256sums.txt \
+      https://github.com/prometheus/prometheus/releases/download/v3.15.0/sha256sums.txt \
+    && curl --fail --location --retry 3 --output /tmp/prometheus-web-ui-3.15.0.tar.gz \
+      https://github.com/prometheus/prometheus/releases/download/v3.15.0/prometheus-web-ui-3.15.0.tar.gz \
+    && grep ' prometheus-web-ui-3.15.0.tar.gz$' /tmp/sha256sums.txt > /tmp/ui.sha256 \
+    && cd /tmp && sha256sum --check ui.sha256 \
+    && cd /src && tar -xzf /tmp/prometheus-web-ui-3.15.0.tar.gz -C web/ui
+
+RUN go get golang.org/x/net@v0.60.0 \
+    && go mod tidy \
+    && make PREBUILT_ASSETS_STATIC_DIR=web/ui/static build \
+    && go version -m /src/prometheus | grep -F 'go1.27.2' \
+    && go version -m /src/prometheus | grep -F 'golang.org/x/net' | grep -F 'v0.60.0' \
+    && go version -m /src/promtool | grep -F 'go1.27.2'
+
+# Retain the upstream image's user, ports, config paths and data volume.
+# Both compiled Go binaries are replaced; do not leave vulnerable binaries.
+FROM prom/prometheus:v3.15.0
+COPY --from=prometheus-patched-build /src/prometheus /bin/prometheus
+COPY --from=prometheus-patched-build /src/promtool /bin/promtool
