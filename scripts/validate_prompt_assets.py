@@ -46,7 +46,8 @@ for marker in (
     "application_count",
     "count!==34",
     "extras.length!==28",
-    "/api/v1/prompts/?product=FREE",
+    "/api/v1/prompts/free/",
+    "/api/v1/prompts/free/compose/",
     "data-prolocked=\"1\"",
 ):
     if marker not in free_bridge:
