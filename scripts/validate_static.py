@@ -153,35 +153,36 @@ for rel in required:
         fail(f'Missing {rel}')
 
 # 7) PROMPTFINISHER branding regression guards.
-# The 239x47 PNG is retained byte-exactly for legacy rollback routes only.
+# New 2048x305 artwork is the approved original for all active routes.
+# Immutable product Golden Masters are validated separately.
 logo = ROOT/'backend/static/brand/promptfinisher-logo-reference.png'
 if logo.exists():
     data = logo.read_bytes()
-    expected_sha = '5848c7bc83fa903f9eb2de1b8a3c8443a9dca937cf3659494d2db2d5a26ff231'
+    expected_sha = '851c75f6297b7b2a61d45721dbcb70ce6f0a9c66deba86c16c8daf376ab97ec3'
     if hashlib.sha256(data).hexdigest() != expected_sha:
-        fail('Legacy PROMPTFINISHER logo hash differs from approved 239x47 reference')
+        fail('PROMPTFINISHER logo hash differs from approved original 2048x305 artwork')
     try:
         if data[:8] != b'\x89PNG\r\n\x1a\n':
             raise ValueError('not png')
         width, height = struct.unpack('>II', data[16:24])
-        if (width, height) != (239, 47):
-            fail(f'Legacy PROMPTFINISHER logo dimensions are {width}x{height}, expected 239x47')
+        if (width, height) != (2048, 305):
+            fail(f'PROMPTFINISHER logo dimensions are {width}x{height}, expected 2048x305')
     except Exception as exc:
-        fail(f'Legacy logo metadata invalid: {exc}')
+        fail(f'PROMPTFINISHER logo metadata invalid: {exc}')
 
 clean_logo = ROOT/'backend/static/brand/promptfinisher-logo-clean.svg'
 clean_svg = clean_logo.read_text(encoding='utf-8')
-# The approved mark is the recovered 315x62 master artwork, cropped by the SVG
-# viewBox to remove the historic top-edge line. Do not redraw the wordmark with
-# substitute fonts: exact artwork fidelity is more important than pretending
-# the recovered raster master is native vector geometry.
+# SVG embeds the approved 2048x305 PNG without modifying or redrawing the mark.
+# Its SHA256 is pinned to the reviewed original brand package.
 for token in (
-    'width="315"', 'height="55"', 'viewBox="0 7 315 55"',
-    '<image x="0" y="0" width="315" height="62"',
+    'width="2048"', 'height="305"', 'viewBox="0 0 2048 305"',
+    '<image width="2048" height="305"',
     'data:image/png;base64,',
 ):
     if token not in clean_svg:
         fail(f'Clean PROMPTFINISHER logo invariant missing: {token}')
+if hashlib.sha256(clean_logo.read_bytes()).hexdigest() != '93f343364800fb5072d7c4dfce4a7b9f349b77c0d3fa2a919c45d08fc8c49bf2':
+    fail('Clean PROMPTFINISHER logo SVG differs from approved brand package')
 
 active_brand_files = (
     ROOT/'backend/templates/app_shell.html',
@@ -212,7 +213,7 @@ for token in (
     'pmv2-prompt-tall',
     'pmv2LicenseKeyboardBound',
     'pmv2LicenseObserver',
-    'promptfinisher-logo-hq.png?v=20260925-hq1',
+    'promptfinisher-logo-hq.png?v=20261011-logo1',
     'syncRequiredFieldState',
     'PFLICHTFELD',
     "if (mark.textContent !== 'PFLICHTFELD')",
