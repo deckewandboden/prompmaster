@@ -261,7 +261,7 @@ msgid "+ Benutzer hinzufügen"
 msgstr "+ Dodaj użytkownika"
 
 msgid "AGB"
-msgstr "Warunki"
+msgstr "Ogólne warunki handlowe"
 
 msgid "Abbrechen"
 msgstr "Anuluj"
@@ -285,7 +285,7 @@ msgid "Checkout"
 msgstr "Finalizacja zakupu"
 
 msgid "Datenschutz"
-msgstr "Prywatność"
+msgstr "Ochrona danych"
 
 msgid "Der Link wurde per E-Mail versendet."
 msgstr "Link wysłano pocztą elektroniczną."
@@ -390,7 +390,7 @@ msgid "Zahlungen mit Handlungsbedarf"
 msgstr "Płatności wymagające działania"
 
 msgid "Zahlungspflichtig kaufen →"
-msgstr "Kup z obowiązkiem płatności →"
+msgstr "Kup z obowiązkiem zapłaty →"
 
 msgid "Zuordnungslink erzeugt"
 msgstr "Utworzony link do przypisania"
@@ -897,7 +897,7 @@ msgid "freie Pro-Lizenzen"
 msgstr "wolne licencje Pro"
 
 msgid "Freie Pro-Lizenzen können Team-Mitgliedern zugewiesen werden."
-msgstr "Bezpłatne licencje Pro mogą być przypisane członkom zespołu."
+msgstr "Dostępne, nieprzypisane licencje Pro można przydzielić członkom zespołu."
 
 msgid "Für Kauf/Abrechnung fehlen: %(fields)s."
 msgstr "Brakuje danych do zakupu/rozliczenia: %(fields)s."
@@ -1013,7 +1013,7 @@ msgid "Letzte Bestellungen"
 msgstr "Ostatnie zamówienia"
 
 msgid "Nächste Lizenzabläufe"
-msgstr "Nadchodzące wypłaty licencji"
+msgstr "Najbliższe terminy wygaśnięcia licencji"
 
 msgid "Keine bevorstehenden Abläufe."
 msgstr "Żadnych przyszłych wygód."
@@ -1148,7 +1148,7 @@ msgid "Telefon"
 msgstr "Telefon"
 
 msgid "Rechnungsanschrift"
-msgstr "Adres rachunku"
+msgstr "Adres do faktury"
 
 msgid "Ort"
 msgstr "Miasto"
