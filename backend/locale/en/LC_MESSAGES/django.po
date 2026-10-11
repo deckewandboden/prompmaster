@@ -949,3 +949,84 @@ msgstr "No upcoming expirations."
 
 msgid "Alle Lizenzen"
 msgstr "All licenses"
+
+msgid "Kundenportal-Vorschau"
+msgstr "Customer portal preview"
+
+msgid "KUNDENPORTAL · VORSCHAU"
+msgstr "CUSTOMER PORTAL · PREVIEW"
+
+msgid "Read-only Vorschau …"
+msgstr "Read-only preview …"
+
+msgid "Support-Vorschau"
+msgstr "Support preview"
+
+msgid "Zurück zum netstyle Kundendetail"
+msgstr "Back to netstyle customer details"
+
+msgid "Read-only Kundenansicht."
+msgstr "Read-only customer view."
+
+msgid "Die Daten entsprechen dem ausgewählten Kundenkonto und seiner Rolle. Dies ist eine Ansichtsvorschau, keine Kundensitzung: Interaktionen, Zahlungs- und Sicherheitsaktionen sind nicht ausführbar."
+msgstr "Data is scoped to the selected customer account and role. This is a preview, not a customer session: interactions, payments and security actions are disabled."
+
+msgid "Perspektive auswählen"
+msgstr "Select viewing perspective"
+
+msgid "Nur aktive Benutzer dieses Unternehmens. Rollen und Zugriffsrechte werden berücksichtigt."
+msgstr "Only active users from this company. Roles and access rights are respected."
+
+msgid "Kundenbenutzer"
+msgstr "Customer user"
+
+msgid "Keine aktiven Benutzer vorhanden"
+msgstr "No active users available"
+
+msgid "Ansicht wechseln"
+msgstr "Change view"
+
+msgid "Angezeigte Rolle:"
+msgstr "Displayed role:"
+
+msgid "Kundenverwaltung"
+msgstr "Customer administration"
+
+msgid "Änderungen erfolgen ausschließlich in den berechtigungsgeschützten Administrationsmasken mit Auditierung – nicht in der Kundenansicht."
+msgstr "Changes are made only through permission-protected, audited administration forms, not the customer preview."
+
+msgid "Benutzer und Rollen verwalten"
+msgstr "Manage users and roles"
+
+msgid "Lizenzen verwalten"
+msgstr "Manage licenses"
+
+msgid "Geräte verwalten"
+msgstr "Manage devices"
+
+msgid "gesamt"
+msgstr "total"
+
+msgid "frei"
+msgstr "available"
+
+msgid "Ablauf ≤30 Tage"
+msgstr "Expiring within 30 days"
+
+msgid "Konto"
+msgstr "Account"
+
+msgid "Kontotyp"
+msgstr "Account type"
+
+msgid "Portal-Benutzer"
+msgstr "Portal user"
+
+msgid "Aktive Benutzer"
+msgstr "Active users"
+
+msgid "Bestand"
+msgstr "Overview of holdings"
+
+msgid "Freie Lizenzen"
+msgstr "Available licenses"
