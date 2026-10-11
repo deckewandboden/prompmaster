@@ -1111,3 +1111,12 @@ msgstr "Aviso de soporte"
 
 msgid "Für echte Schreibaktionen oder einen vollständigen Login-Test muss ein eigener Nicht-Staff-Testkunde verwendet werden. Die Vorschau übernimmt niemals die Identität des Kunden."
 msgstr "Para probar cambios reales o el inicio de sesión completo, utilice un cliente de prueba independiente sin permisos de personal. Esta vista nunca asume la identidad del cliente."
+
+msgid "Noch keine Lizenzen."
+msgstr "Aún no hay licencias."
+
+msgid "Alle Bestellungen"
+msgstr "Todos los pedidos"
+
+msgid "Firmenkonto"
+msgstr "Cuenta de empresa"
