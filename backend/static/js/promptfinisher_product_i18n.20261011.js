@@ -51,12 +51,30 @@
     + 'padding:4px 22px 4px 9px;border:1px solid #9caec0;border-radius:9px;'
     + 'background:#fff;color:#102b43;font-size:12px;font-weight:650;cursor:pointer}'
     + '@media(max-width:700px){.pmv2-language{flex-basis:108px}.pmv2-language select{width:108px}}'
-    + '@media(max-width:620px){.pmv2-header{height:auto!important;min-height:62px!important;'
-    + 'padding-top:7px!important;padding-bottom:7px!important;flex-wrap:wrap!important;row-gap:7px!important}'
-    + '.pmv2-header-actions{flex:1 1 150px;flex-wrap:wrap;justify-content:flex-end;min-width:0}'
-    + '.pmv2-header-spacer{display:none!important}.pmv2-language{flex:0 0 108px}}'
-    + '@media(max-width:370px){.pmv2-header-actions{flex-basis:100%;justify-content:space-between}}';
+    + '@media(max-width:620px){.pmv2-header{height:62px!important;min-height:62px!important;'
+    + 'padding:0 8px!important;flex-wrap:nowrap!important;row-gap:0!important}'
+    + '.pmv2-header-actions{display:flex;flex:0 1 auto;gap:4px!important;flex-wrap:nowrap!important;min-width:0}'
+    + '.pmv2-header-spacer{display:none!important}.pmv2-header-cta{flex:0 0 56px;'
+    + 'width:56px;max-width:56px!important;min-height:34px!important;padding:0 3px!important;'
+    + 'font-size:0!important}.pmv2-header-cta::after{content:attr(data-pf-short);font-size:10px;'
+    + 'font-weight:800;white-space:nowrap}.pmv2-logout{display:inline-flex;flex:0 0 30px;'
+    + 'align-items:center;justify-content:center;font-size:0!important}.pmv2-logout::after{'
+    + 'content:"⎋";font-size:20px;line-height:1}'
+    + '.pmv2-language{flex:0 0 96px}.pmv2-language select{width:96px}}'
+    + '@media(max-width:390px){.pmv2-brand img{width:108px!important}'
+    + '.pmv2-edition{display:none!important}.pmv2-language{flex-basis:88px}'
+    + '.pmv2-language select{width:88px;font-size:11px}}';
   document.head.append(style);
+  // Keep each header action accessible and clickable at 320–390px while
+  // retaining the <=70px mobile header height required by browser tests.
+  for (const cta of document.querySelectorAll('.pmv2-header-actions .pmv2-header-cta')) {
+    cta.dataset.pfShort = cta.tagName === 'BUTTON' ? 'Pro →' : 'Portal ↗';
+    cta.setAttribute('aria-label', cta.textContent.trim());
+  }
+  for (const logout of document.querySelectorAll('.pmv2-header-actions .pmv2-logout')) {
+    logout.setAttribute('aria-label', t('Abmelden'));
+    logout.setAttribute('title', t('Abmelden'));
+  }
   if (locale === 'de') return;
   // Only non-editable UI labels are translated. Application/task IDs,
   // input values and the completed prompt remain untouched.
