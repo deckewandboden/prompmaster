@@ -1,6 +1,6 @@
 # Vollständiges Datei-Inventar — PROMPTFINISHER RC14
 
-Erfasst: **655 Dateien** (Manifest-/Inventardateien selbst ausgenommen), **26,787,448 Byte**.
+Erfasst: **655 Dateien** (Manifest-/Inventardateien selbst ausgenommen), **27,015,984 Byte**.
 
 Maschinenlesbar: `FILE_MANIFEST.tsv` und `MANIFEST.json`.
 
@@ -299,10 +299,10 @@ Maschinenlesbar: `FILE_MANIFEST.tsv` und `MANIFEST.json`.
 | `backend/config/wsgi.py` | 161 | `25d3ac3de67e7a1e20c9cfed54bf208a378c7e634f426239c36c63cbabc22f36` |
 | `backend/locale/en/LC_MESSAGES/django.po` | 25895 | `e595502723ef4fae7f2926d38e72549e648984f3eecb611ea5d2a5b690f00e9c` |
 | `backend/locale/es/LC_MESSAGES/django.po` | 27669 | `78c7efe70046936954be19762606482e1d702c6240fe22cadc03651b2a158829` |
-| `backend/locale/fr/LC_MESSAGES/django.po` | 28933 | `2479bb657ccdae18e6056aae3ce9c3587cc42e8d4de8e9b9dc4cf413b0a53b0d` |
-| `backend/locale/it/LC_MESSAGES/django.po` | 28006 | `4cc8dcd2e2d3c5643f9c0387f8c09e81f9a8ede574457cd5f40bef64c859937c` |
-| `backend/locale/nl/LC_MESSAGES/django.po` | 27589 | `0cd62952d60dc13672fe8ced4f58cbd65286c4c537a4c9fc3afbfe00eab31085` |
-| `backend/locale/pl/LC_MESSAGES/django.po` | 28059 | `451d2cd899ca65ff6befb367c5cfa8b551c641964348370edb1d0e22c4e7ae8a` |
+| `backend/locale/fr/LC_MESSAGES/django.po` | 28974 | `2e3a8011b17549a3ce88046ad774a3fbeae9b6281c6e8ab1f0f656c4f0699431` |
+| `backend/locale/it/LC_MESSAGES/django.po` | 28052 | `ff5259225f6ddc9d0a73f56cb0bd058a2758c2ecf072f6c57bbf2630f80f7fd8` |
+| `backend/locale/nl/LC_MESSAGES/django.po` | 27628 | `29130493b2467d0830e9d771a9a095535fe2a5c96b321de6b446ac03c834c310` |
+| `backend/locale/pl/LC_MESSAGES/django.po` | 28101 | `ca60a2be1b9f272ddc7d39eacd1e33d45a1f896c4732b087e7eea22c17155557` |
 | `backend/locale/pt/LC_MESSAGES/django.po` | 27914 | `f2e07041c05aaaafe4e269d010a00c10ca5c7f3a300bec6387b568e51f6e8298` |
 | `backend/locale/ru/LC_MESSAGES/django.po` | 36109 | `7943141df982295ee5f3a8969001b9da6430cb0c4894410c9e471f7d466f19da` |
 | `backend/locale/tr/LC_MESSAGES/django.po` | 27161 | `6b65a42d7dbc28bdc2fdd58aef76ec190a572f93b198fd9d2357cd1ae538a15e` |
@@ -322,7 +322,7 @@ Maschinenlesbar: `FILE_MANIFEST.tsv` und `MANIFEST.json`.
 | `backend/static/js/app.js` | 16912 | `08fb0f141c2e1a3dc1ca80f21df0b37a661cdf53c7305e107171707471630ff2` |
 | `backend/static/js/free_catalog_bridge.20260918.js` | 11421 | `badeeeeb29275c67404712f61f4398fe17640cc1b61ae274382aa06c55ec1c85` |
 | `backend/static/js/promptfinisher_brand_hq.20260925.js` | 487 | `937e23ef5c5566d71f345eec533d11ff6fde9eece6cca7595d3f80b267b1f172` |
-| `backend/static/js/promptfinisher_product_i18n.20261011.js` | 293449 | `8e5c005793aab87296ce30f006b6e154fd7a76909132e779b8390a5dcfd13891` |
+| `backend/static/js/promptfinisher_product_i18n.20261011.js` | 503435 | `a9e6d7e1e315241de9ccac77c1441db166d6e6461dda6149e82f983916890dab` |
 | `backend/static/js/promptfinisher_ui_v2.20260922.js` | 43298 | `e18ab6ee016f09d683ef34719b1c88dd395eb1905b0709ec14a498f69905aad1` |
 | `backend/templates/403.html` | 264 | `1de8a9eaf34d2e358d90e66a590b3b2a4b4d886b4c60c42efbec1c2f1eb59ccd` |
 | `backend/templates/500.html` | 332 | `5e99d45b238a6d36c44f77983534c246a951cc8b295c7dc7b3b66bec6cdfbb01` |
@@ -605,7 +605,7 @@ Maschinenlesbar: `FILE_MANIFEST.tsv` und `MANIFEST.json`.
 | `product/golden_masters/SHA256SUMS.txt` | 181 | `aa3c942b2c493c23c83d971cb42a3ac823bbcca4a993682d6f89022a3cd83d56` |
 | `product/golden_masters/promptfinisher_free.html` | 110901 | `8162be1e62b5d4503e6fb54180636e886b7e11106205f64626339f6c90a35ac1` |
 | `product/golden_masters/promptfinisher_pro.html` | 233430 | `a18375946c7081034cd6b9d70a1f4e3b843c51e03230477cae246b6c4bf0f95f` |
-| `product/i18n/free_pro_visible_strings.json` | 25440 | `4f7650e666d9c3c4846a470c899040ae4818fbe13d1388600a9a1428eee65791` |
+| `product/i18n/free_pro_visible_strings.json` | 43814 | `bddc774b4d0f4173c8e109488496e2f40429b0ad5515b205dd47746d58605727` |
 | `product/runtime/pro_server_bridge.js` | 16535 | `9b9c0d09d03cbf2cee841406fe6ef46bb78c988e4a313d1edfa553a48595e027` |
 
 ## documentation
@@ -622,7 +622,7 @@ Maschinenlesbar: `FILE_MANIFEST.tsv` und `MANIFEST.json`.
 | `docs/COMPLETE_PROJECT_SUMMARY.md` | 7994 | `0618d8445e00fee0df2327185e8b539b32ccc85c9a2221613864cd33ce35ecc0` |
 | `docs/COMPLETION_MASTER_AUDIT_2026-09-17.md` | 13933 | `5016fae5d24129361f9a58025e9420437da15d6d735b9acec02cd921eeefb4b8` |
 | `docs/FREE_LEGACY_MAPPING_STATUS.md` | 2083 | `d7f8713629b6f7795a9f25f25ef0b0bc947340bf59bca30e9d40e572be571a91` |
-| `docs/FREE_PRO_I18N_DRAFT_REPORT.md` | 612 | `9db2d8ef641cbed9aedafc0eccee5adb67aa036560efff1afc838ce1013e1c4a` |
+| `docs/FREE_PRO_I18N_DRAFT_REPORT.md` | 620 | `7237b4491b8003f6f6090754edc7e7c8ff6bfd48418d5098a5aac3c873b5b8b0` |
 | `docs/GITHUB_READY_STATUS.md` | 2787 | `93611bec4de0443a2ac3d6bd91b800df58f3e4129c6ec1feaa381a1072e55231` |
 | `docs/GITHUB_TRANSFER.md` | 1010 | `101072d2565c77b4d27c430cda9680476bf836d3e85ed788413bbed69fd66333` |
 | `docs/MERGE_PROVENANCE.md` | 2070 | `7c7f4dcf463bf76697836014550098a37b58c50bb8d43ac99af3a2e386946ee6` |
