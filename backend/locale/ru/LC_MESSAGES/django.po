@@ -1,0 +1,229 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: PROMPTFINISHER\n"
+"Language: ru\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<12 || n%100>14) ? 1 : 2);\n"
+
+msgid "Sprache auswählen"
+msgstr "Выбрать язык"
+
+msgid "Sprache"
+msgstr "Язык"
+
+msgid "Suchen …"
+msgstr "Поиск …"
+
+msgid "Suchen"
+msgstr "Поиск"
+
+msgid "Lead, Kunde, Benutzer, Lizenz-ID oder E-Mail suchen …"
+msgstr "Поиск по лидам, клиентам, пользователям, ID лицензии или эл. почте …"
+
+msgid "Superadmin"
+msgstr "Суперадминистратор"
+
+msgid "netstyle Benutzer"
+msgstr "Пользователь netstyle"
+
+msgid "netstyle Admin-Backend"
+msgstr "Панель администрирования netstyle"
+
+msgid "Übersicht"
+msgstr "Обзор"
+
+msgid "Leads"
+msgstr "Лиды"
+
+msgid "Kunden"
+msgstr "Клиенты"
+
+msgid "Lizenzen"
+msgstr "Лицензии"
+
+msgid "Bestellungen"
+msgstr "Заказы"
+
+msgid "Zahlungen"
+msgstr "Платежи"
+
+msgid "Produkte & Preise"
+msgstr "Продукты и цены"
+
+msgid "Prompt Studio"
+msgstr "Студия промптов"
+
+msgid "FAQ & Inhalte"
+msgstr "FAQ и контент"
+
+msgid "E-Mail"
+msgstr "Эл. почта"
+
+msgid "Mollie"
+msgstr "Mollie"
+
+msgid "Statistiken"
+msgstr "Статистика"
+
+msgid "System & Betrieb"
+msgstr "Система и эксплуатация"
+
+msgid "API & Integrationen"
+msgstr "API и интеграции"
+
+msgid "Datenschutz & Recht"
+msgstr "Конфиденциальность и право"
+
+msgid "Kontaktanfragen"
+msgstr "Обращения"
+
+msgid "Protokolle"
+msgstr "Журналы"
+
+msgid "Benutzer & Rollen"
+msgstr "Пользователи и роли"
+
+msgid "Einstellungen"
+msgstr "Настройки"
+
+msgid "Abmelden"
+msgstr "Выйти"
+
+msgid "Home"
+msgstr "Главная"
+
+msgid "System"
+msgstr "Система"
+
+msgid "Logs"
+msgstr "Журналы"
+
+msgid "Mehr"
+msgstr "Ещё"
+
+msgid "Kundenportal"
+msgstr "Клиентский портал"
+
+msgid "KUNDENPORTAL"
+msgstr "КЛИЕНТСКИЙ ПОРТАЛ"
+
+msgid "Benutzer, E-Mail oder Lizenz suchen …"
+msgstr "Поиск пользователя, электронной почты или лицензии …"
+
+msgid "Lizenz suchen …"
+msgstr "Поиск лицензии …"
+
+msgid "Privatkunde"
+msgstr "Частный клиент"
+
+msgid "Dashboard"
+msgstr "Панель управления"
+
+msgid "Mein Team"
+msgstr "Моя команда"
+
+msgid "Weitere Lizenzen kaufen"
+msgstr "Купить дополнительные лицензии"
+
+msgid "Geräte"
+msgstr "Устройства"
+
+msgid "Bestellungen & Zahlungen"
+msgstr "Заказы и платежи"
+
+msgid "Unternehmen"
+msgstr "Компания"
+
+msgid "Hilfe & Kontakt"
+msgstr "Помощь и связь"
+
+msgid "Team"
+msgstr "Команда"
+
+msgid "Geschäft, Handlungsbedarf und Systemstatus auf einen Blick."
+msgstr "Бизнес, необходимые действия и состояние системы — краткий обзор."
+
+msgid "PROMPTFINISHER Pro öffnen →"
+msgstr "Открыть PROMPTFINISHER Pro →"
+
+msgid "PROMPTFINISHER Free öffnen →"
+msgstr "Открыть PROMPTFINISHER Free →"
+
+msgid "System gesund"
+msgstr "Система работает нормально"
+
+msgid "Prüfung erforderlich"
+msgstr "Требуется проверка"
+
+msgid "Kunden gesamt"
+msgstr "Всего клиентов"
+
+msgid "Offene Leads"
+msgstr "Открытые лиды"
+
+msgid "Lead-Pipeline öffnen"
+msgstr "Открыть воронку лидов"
+
+msgid "Aktive Lizenzen"
+msgstr "Активные лицензии"
+
+msgid "Ablauf unter 30 Tagen"
+msgstr "Истекает менее чем через 30 дней"
+
+msgid "laufen in weniger als 60 Tagen ab"
+msgstr "истекают менее чем через 60 дней"
+
+msgid "Umsatz 30 Tage"
+msgstr "Выручка за 30 дней"
+
+msgid "Umsatzentwicklung"
+msgstr "Динамика выручки"
+
+msgid "Umsatzentwicklung der letzten Monate"
+msgstr "Динамика выручки за последние месяцы"
+
+msgid "Noch keine bezahlten Bestellungen im Auswertungszeitraum."
+msgstr "За отчётный период пока нет оплаченных заказов."
+
+msgid "Lizenzen nach Produkt"
+msgstr "Лицензии по продуктам"
+
+msgid "Noch keine Lizenzen."
+msgstr "Лицензий пока нет."
+
+msgid "Handlungsbedarf"
+msgstr "Требуются действия"
+
+msgid "Lizenzen laufen in weniger als 30 Tagen ab."
+msgstr "Срок действия лицензий истекает менее чем через 30 дней."
+
+msgid "fehlgeschlagene Zahlungen"
+msgstr "неудачные платежи"
+
+msgid "Chargebacks"
+msgstr "Возвратные платежи"
+
+msgid "offene Kontaktanfragen"
+msgstr "открытые обращения"
+
+msgid "Kein aktueller Handlungsbedarf."
+msgstr "Сейчас действий не требуется."
+
+msgid "Letzte Bestellungen"
+msgstr "Последние заказы"
+
+msgid "Keine Bestellungen."
+msgstr "Заказов нет."
+
+msgid "Alle Bestellungen"
+msgstr "Все заказы"
+
+msgid "Nächste Lizenzabläufe"
+msgstr "Ближайшие окончания лицензий"
+
+msgid "Keine bevorstehenden Abläufe."
+msgstr "Ближайших окончаний нет."
+
+msgid "Alle Lizenzen"
+msgstr "Все лицензии"
