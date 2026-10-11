@@ -310,6 +310,7 @@
         product:'PRO',
         task_id:taskId,
         microsoft_tier:msLicense(),
+        output_language:window.PF_PRODUCT_LOCALE?.code || 'de',
         input:inputPayload()
       });
       if(seq!==requestSeq || selectedTask!==taskId)return;

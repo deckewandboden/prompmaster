@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import json
 
+from django.conf import settings
 from django.http import JsonResponse
 from django.views.decorators.http import require_GET, require_POST
 
@@ -160,6 +161,13 @@ def compose(request):
 
     product = str(body.get('product') or 'PRO').upper()
     try:
+        output_language = body.get('output_language') or 'de'
+        if not isinstance(output_language, str):
+            raise PromptValidationError('Ungültige Ausgabesprache.', field='output_language', code='choice')
+        output_language = output_language.strip().lower()
+        languages = dict(settings.LANGUAGES)
+        if output_language not in languages:
+            raise PromptValidationError('Nicht unterstützte Ausgabesprache.', field='output_language', code='choice')
         task_id = str(body.get('task_id') or '').strip()
         if not task_id:
             raise PromptValidationError('task_id fehlt.', field='task_id', code='required')
@@ -257,6 +265,22 @@ def compose(request):
             status = 404
         return _error(exc, status)
 
+    # This additive instruction governs Copilot's *answer* language without
+    # modifying any Golden Master, entitlement policy or task instruction.
+    # Existing German/default responses remain byte-for-byte unchanged.
+    if (
+        output_language != 'de'
+        and result_payload.get('ready')
+        and result_payload.get('prompt')
+    ):
+        language_name = languages[output_language]
+        result_payload['prompt'] += (
+            '\n\nAUSGABESPRACHE: Formuliere das Ergebnis in der Sprache '
+            + language_name
+            + '. Verwende diese Sprache auch für Überschriften und Tabellen. '
+              'Eigennamen, wörtliche Zitate, Code und Dateinamen bleiben bei Bedarf unverändert.'
+        )
+    result_payload['output_language'] = output_language
     response = JsonResponse({'ok': True, 'result': result_payload})
     response['Cache-Control'] = 'no-store'
     return response
