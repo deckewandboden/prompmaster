@@ -260,7 +260,7 @@ msgid "+ Benutzer hinzufügen"
 msgstr "+ Ajouter un utilisateur"
 
 msgid "AGB"
-msgstr "Termes et conditions"
+msgstr "Conditions générales"
 
 msgid "Abbrechen"
 msgstr "Annuler"
@@ -284,7 +284,7 @@ msgid "Checkout"
 msgstr "Paiement"
 
 msgid "Datenschutz"
-msgstr "Vie privée"
+msgstr "Protection des données"
 
 msgid "Der Link wurde per E-Mail versendet."
 msgstr "Le lien a été envoyé par courriel."
@@ -389,7 +389,7 @@ msgid "Zahlungen mit Handlungsbedarf"
 msgstr "Paiements nécessitant une action"
 
 msgid "Zahlungspflichtig kaufen →"
-msgstr "Acheter avec obligation de paiement →"
+msgstr "Commander avec obligation de paiement →"
 
 msgid "Zuordnungslink erzeugt"
 msgstr "Lien d'attribution créé"
@@ -906,8 +906,7 @@ msgid "freie Pro-Lizenzen"
 msgstr "licences Pro gratuites"
 
 msgid "Freie Pro-Lizenzen können Team-Mitgliedern zugewiesen werden."
-msgstr ""
-"Les licences Free Pro peuvent être attribuées aux membres de l'équipe."
+msgstr "Les licences Pro disponibles et non attribuées peuvent être affectées aux membres de l’équipe."
 
 msgid "Für Kauf/Abrechnung fehlen: %(fields)s."
 msgstr "Informations manquantes pour l'achat/la facturation : %(fields)s."
@@ -1024,7 +1023,7 @@ msgid "Letzte Bestellungen"
 msgstr "Commandes récentes"
 
 msgid "Nächste Lizenzabläufe"
-msgstr "Expiration prochaine de la licence"
+msgstr "Prochaines expirations des licences"
 
 msgid "Keine bevorstehenden Abläufe."
 msgstr "Pas d'expiration à venir."
