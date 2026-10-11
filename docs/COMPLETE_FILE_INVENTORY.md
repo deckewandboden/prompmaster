@@ -1,6 +1,6 @@
 # Vollständiges Datei-Inventar — PROMPTFINISHER RC14
 
-Erfasst: **654 Dateien** (Manifest-/Inventardateien selbst ausgenommen), **26,654,769 Byte**.
+Erfasst: **654 Dateien** (Manifest-/Inventardateien selbst ausgenommen), **26,781,805 Byte**.
 
 Maschinenlesbar: `FILE_MANIFEST.tsv` und `MANIFEST.json`.
 
@@ -322,7 +322,7 @@ Maschinenlesbar: `FILE_MANIFEST.tsv` und `MANIFEST.json`.
 | `backend/static/js/app.js` | 16912 | `08fb0f141c2e1a3dc1ca80f21df0b37a661cdf53c7305e107171707471630ff2` |
 | `backend/static/js/free_catalog_bridge.20260918.js` | 11421 | `badeeeeb29275c67404712f61f4398fe17640cc1b61ae274382aa06c55ec1c85` |
 | `backend/static/js/promptfinisher_brand_hq.20260925.js` | 487 | `937e23ef5c5566d71f345eec533d11ff6fde9eece6cca7595d3f80b267b1f172` |
-| `backend/static/js/promptfinisher_product_i18n.20261011.js` | 176840 | `b6821812466e9b7508b7f00641d4582caa5b9c5a55c534da18e726c814a03e6c` |
+| `backend/static/js/promptfinisher_product_i18n.20261011.js` | 293449 | `8e5c005793aab87296ce30f006b6e154fd7a76909132e779b8390a5dcfd13891` |
 | `backend/static/js/promptfinisher_ui_v2.20260922.js` | 43298 | `e18ab6ee016f09d683ef34719b1c88dd395eb1905b0709ec14a498f69905aad1` |
 | `backend/templates/403.html` | 264 | `1de8a9eaf34d2e358d90e66a590b3b2a4b4d886b4c60c42efbec1c2f1eb59ccd` |
 | `backend/templates/500.html` | 332 | `5e99d45b238a6d36c44f77983534c246a951cc8b295c7dc7b3b66bec6cdfbb01` |
@@ -604,7 +604,7 @@ Maschinenlesbar: `FILE_MANIFEST.tsv` und `MANIFEST.json`.
 | `product/golden_masters/SHA256SUMS.txt` | 181 | `aa3c942b2c493c23c83d971cb42a3ac823bbcca4a993682d6f89022a3cd83d56` |
 | `product/golden_masters/promptfinisher_free.html` | 110901 | `8162be1e62b5d4503e6fb54180636e886b7e11106205f64626339f6c90a35ac1` |
 | `product/golden_masters/promptfinisher_pro.html` | 233430 | `a18375946c7081034cd6b9d70a1f4e3b843c51e03230477cae246b6c4bf0f95f` |
-| `product/i18n/free_pro_visible_strings.json` | 15081 | `7691e0ef4df8c848f2170c4533b7e726d5965dd6830a2e9d91e15cd4566da0ae` |
+| `product/i18n/free_pro_visible_strings.json` | 25440 | `4f7650e666d9c3c4846a470c899040ae4818fbe13d1388600a9a1428eee65791` |
 | `product/runtime/pro_server_bridge.js` | 16535 | `9b9c0d09d03cbf2cee841406fe6ef46bb78c988e4a313d1edfa553a48595e027` |
 
 ## documentation
@@ -621,7 +621,7 @@ Maschinenlesbar: `FILE_MANIFEST.tsv` und `MANIFEST.json`.
 | `docs/COMPLETE_PROJECT_SUMMARY.md` | 7994 | `0618d8445e00fee0df2327185e8b539b32ccc85c9a2221613864cd33ce35ecc0` |
 | `docs/COMPLETION_MASTER_AUDIT_2026-09-17.md` | 13933 | `5016fae5d24129361f9a58025e9420437da15d6d735b9acec02cd921eeefb4b8` |
 | `docs/FREE_LEGACY_MAPPING_STATUS.md` | 2083 | `d7f8713629b6f7795a9f25f25ef0b0bc947340bf59bca30e9d40e572be571a91` |
-| `docs/FREE_PRO_I18N_DRAFT_REPORT.md` | 629 | `60c45e9eaccff68af61e7181d1c71d002187adba208d3ce190ec74558770e359` |
+| `docs/FREE_PRO_I18N_DRAFT_REPORT.md` | 629 | `60d0b7c94c3bf2c8fdb09381691e7cb76f1661b8cebb7796fcc1e69abea977a4` |
 | `docs/GITHUB_READY_STATUS.md` | 2787 | `93611bec4de0443a2ac3d6bd91b800df58f3e4129c6ec1feaa381a1072e55231` |
 | `docs/GITHUB_TRANSFER.md` | 1010 | `101072d2565c77b4d27c430cda9680476bf836d3e85ed788413bbed69fd66333` |
 | `docs/MERGE_PROVENANCE.md` | 2070 | `7c7f4dcf463bf76697836014550098a37b58c50bb8d43ac99af3a2e386946ee6` |
@@ -704,7 +704,7 @@ Maschinenlesbar: `FILE_MANIFEST.tsv` und `MANIFEST.json`.
 | `Caddyfile` | 4942 | `802f1cd259e9ff1c91dc54e37f9a2be7b98d4a0106ea8a52d714cb2f2b1bdcdc` |
 | `Caddyfile.external` | 5946 | `255f550fb61077383741867916ed1806ffc81bb530d0ab5b6f516c3d1ad1a824` |
 | `Dockerfile` | 831 | `dc21487ea9caad5d8d21b4d460ecf97255cf7e226baa3051d6e0cfc1c9df93c5` |
-| `Dockerfile.caddy` | 281 | `3222f69f1bd3a6537a6ec6d5d537f8ae5ab7112cc7a7a55a4949fbe8afb5001c` |
+| `Dockerfile.caddy` | 349 | `39768bf3e1303c6bdbcbb49ae2079876f89cc836785cc6c2fe04b658451d9542` |
 | `Dockerfile.cadvisor` | 1420 | `7b6904b666f85cc97ec43eb9bbe46ae90c94792f8ceca248ddac928482dc323b` |
 | `Dockerfile.node-exporter` | 800 | `87f6c07ef013955c1f28917d4f25825932e71b7e8d6dc7f6ee742d9b554753b6` |
 | `Dockerfile.postgres` | 422 | `a55f13c67dfa8b80821f303ba16c65046de3fce34ce320e48e01b0fcad628933` |

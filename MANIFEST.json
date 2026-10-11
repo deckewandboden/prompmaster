@@ -1,8 +1,8 @@
 {
   "project": "PROMPTFINISHER Commercial RC14 Full Repository",
-  "generated_at": "2026-10-11T11:12:24.380646+00:00",
+  "generated_at": "2026-10-11T11:28:51.189665+00:00",
   "file_count_excluding_manifest_files": 654,
-  "total_bytes_excluding_manifest_files": 26654769,
+  "total_bytes_excluding_manifest_files": 26781805,
   "roles": {
     "active-backend": 417,
     "active-ci": 3,
@@ -83,8 +83,8 @@
     },
     {
       "path": "Dockerfile.caddy",
-      "size": 281,
-      "sha256": "3222f69f1bd3a6537a6ec6d5d537f8ae5ab7112cc7a7a55a4949fbe8afb5001c",
+      "size": 349,
+      "sha256": "39768bf3e1303c6bdbcbb49ae2079876f89cc836785cc6c2fe04b658451d9542",
       "role": "repository-root"
     },
     {
@@ -2213,8 +2213,8 @@
     },
     {
       "path": "backend/static/js/promptfinisher_product_i18n.20261011.js",
-      "size": 176840,
-      "sha256": "b6821812466e9b7508b7f00641d4582caa5b9c5a55c534da18e726c814a03e6c",
+      "size": 293449,
+      "sha256": "8e5c005793aab87296ce30f006b6e154fd7a76909132e779b8390a5dcfd13891",
       "role": "active-backend"
     },
     {
@@ -2940,7 +2940,7 @@
     {
       "path": "docs/FREE_PRO_I18N_DRAFT_REPORT.md",
       "size": 629,
-      "sha256": "60c45e9eaccff68af61e7181d1c71d002187adba208d3ce190ec74558770e359",
+      "sha256": "60d0b7c94c3bf2c8fdb09381691e7cb76f1661b8cebb7796fcc1e69abea977a4",
       "role": "documentation"
     },
     {
@@ -3695,8 +3695,8 @@
     },
     {
       "path": "product/i18n/free_pro_visible_strings.json",
-      "size": 15081,
-      "sha256": "7691e0ef4df8c848f2170c4533b7e726d5965dd6830a2e9d91e15cd4566da0ae",
+      "size": 25440,
+      "sha256": "4f7650e666d9c3c4846a470c899040ae4818fbe13d1388600a9a1428eee65791",
       "role": "active-product"
     },
     {
