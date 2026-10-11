@@ -527,3 +527,222 @@ msgstr "Сумма"
 
 msgid "Betreff"
 msgstr "Тема"
+
+msgid "Browser"
+msgstr "Браузер"
+
+msgid "Datenauskunft"
+msgstr "Предоставление персональных данных"
+
+msgid "Datum"
+msgstr "Дата"
+
+msgid "Direkter Kontakt zu netstyle und Verlauf Ihrer Anfragen."
+msgstr "Прямая связь с netstyle и история ваших обращений."
+
+msgid "Einladungen"
+msgstr "Приглашения"
+
+msgid "Einladungen sind 24 Stunden gültig und einmal verwendbar."
+msgstr "Приглашения действительны 24 часа и могут быть использованы только один раз."
+
+msgid "Frei"
+msgstr "Свободна"
+
+msgid "Gerät"
+msgstr "Устройство"
+
+msgid "Gültig ab"
+msgstr "Действует с"
+
+msgid "Gültig bis"
+msgstr "Действует до"
+
+msgid "Impressum"
+msgstr "Выходные данные"
+
+msgid "Jeder Seat läuft mit individueller Laufzeit."
+msgstr "Каждое место имеет индивидуальный срок действия."
+
+msgid "Kategorie"
+msgstr "Категория"
+
+msgid "Keine Einladungen."
+msgstr "Нет приглашений."
+
+msgid "Keine Lizenzen."
+msgstr "Нет лицензий."
+
+msgid "Keine aktiven Geräte."
+msgstr "Нет активных устройств."
+
+msgid "Kontaktformular"
+msgstr "Контактная форма"
+
+msgid "Konto & Hilfe"
+msgstr "Учётная запись и помощь"
+
+msgid "Kontolöschung"
+msgstr "Удаление учётной записи"
+
+msgid "Kontolöschung anfordern"
+msgstr "Запросить удаление учётной записи"
+
+msgid "Laufzeit"
+msgstr "Срок действия"
+
+msgid "Lizenz"
+msgstr "Лицензия"
+
+msgid "Lizenz-ID"
+msgstr "ID лицензии"
+
+msgid "Lizenzdaten"
+msgstr "Данные лицензии"
+
+msgid "Meine Daten exportieren"
+msgstr "Экспортировать мои данные"
+
+msgid "Mollie übernimmt die Zahlungsabwicklung; PROMPTFINISHER erzeugt keine eigene Rechnungsengine."
+msgstr "Платежи обрабатывает Mollie; PROMPTFINISHER не создаёт собственные счета-фактуры."
+
+msgid "Mollie-Referenz"
+msgstr "Ссылка Mollie"
+
+msgid "Nachricht senden"
+msgstr "Отправить сообщение"
+
+msgid "Name"
+msgstr "Имя"
+
+msgid "Neu senden"
+msgstr "Отправить повторно"
+
+msgid "Nicht eingerichtet"
+msgstr "Не настроено"
+
+msgid "Noch keine Anfragen vorhanden."
+msgstr "Обращений пока нет."
+
+msgid "Noch keine Reminder für den aktuellen Ablaufzeitpunkt."
+msgstr "Напоминаний для текущего срока действия пока нет."
+
+msgid "PROMPTFINISHER Pro öffnen"
+msgstr "Открыть PROMPTFINISHER Pro"
+
+msgid "Produkt"
+msgstr "Продукт"
+
+msgid "Produkt / Menge"
+msgstr "Продукт / количество"
+
+msgid "Profil"
+msgstr "Профиль"
+
+msgid "Profil, Adresse, Kontosicherheit und Datenauskunft."
+msgstr "Профиль, адрес, безопасность учётной записи и предоставление данных."
+
+msgid "Rechtliches"
+msgstr "Правовая информация"
+
+msgid "Reminder"
+msgstr "Напоминание"
+
+msgid "Resttage"
+msgstr "Осталось дней"
+
+msgid "Sicherheit"
+msgstr "Безопасность"
+
+msgid "Sicherheit verwalten"
+msgstr "Управление безопасностью"
+
+msgid "Status"
+msgstr "Статус"
+
+msgid "Supporthistorie"
+msgstr "История обращений в поддержку"
+
+msgid "Verbraucherrechte"
+msgstr "Права потребителей"
+
+msgid "Vertrag widerrufen"
+msgstr "Отказаться от договора"
+
+msgid "Verträge hier kündigen"
+msgstr "Расторгнуть договоры здесь"
+
+msgid "Verwaltung & Abrechnung"
+msgstr "Управление и расчёты"
+
+msgid "Weitere Bereiche Ihres Kundenportals."
+msgstr "Другие разделы клиентского портала."
+
+msgid "Widerrufsbelehrung"
+msgstr "Информация о праве отказа"
+
+msgid "Zahlung"
+msgstr "Платёж"
+
+msgid "Zugewiesen"
+msgstr "Назначена"
+
+msgid "Zuletzt gesehen"
+msgstr "Последний контакт"
+
+msgid "Zurück"
+msgstr "Назад"
+
+msgid "Zuweisung"
+msgstr "Назначение"
+
+msgid "Zwei-Faktor-Authentifizierung"
+msgstr "Двухфакторная аутентификация"
+
+msgid "Öffnen"
+msgstr "Открыть"
+
+msgid "≤30 Tage"
+msgstr "≤30 дней"
+
+msgid "2FA einrichten"
+msgstr "Настроить 2FA"
+
+msgid "2FA schützt den Zugriff mit einem zusätzlichen zeitbasierten Einmalcode."
+msgstr "2FA защищает доступ дополнительным одноразовым кодом с ограниченным сроком действия."
+
+msgid "Ablehnen"
+msgstr "Отклонить"
+
+msgid "Aktuelles Ende"
+msgstr "Текущая дата окончания"
+
+msgid "Anfrage"
+msgstr "Обращение"
+
+msgid "Bearbeitungsstand"
+msgstr "Статус обработки"
+
+msgid "Benutzer deaktivieren"
+msgstr "Деактивировать пользователя"
+
+msgid "Benutzer löschen"
+msgstr "Удалить пользователя"
+
+msgid "Benutzer reaktivieren"
+msgstr "Повторно активировать пользователя"
+
+msgid "Benutzer, Einladungen, Lizenzen und Geräte verwalten."
+msgstr "Управление пользователями, приглашениями, лицензиями и устройствами."
+
+msgid "Die Suche bleibt auf Ihren eigenen Mandanten- und Lizenzbereich begrenzt."
+msgstr "Поиск ограничен вашей компанией и вашими лицензиями."
+
+msgid "Ein Passwortwechsel erfolgt über einen zeitlich begrenzten, einmal verwendbaren Link an Ihre hinterlegte E-Mail-Adresse."
+msgstr "Смена пароля осуществляется по одноразовой ссылке с ограниченным сроком действия, отправленной на зарегистрированный адрес эл. почты."
+
+msgid "Free"
+msgstr "Free"
+
+msgid "Freie Lizenz zuweisen"
+msgstr "Назначить свободную лицензию"
