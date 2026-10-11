@@ -1030,3 +1030,84 @@ msgstr "Mevcut durum"
 
 msgid "Freie Lizenzen"
 msgstr "Boş lisanslar"
+
+msgid "Rolle"
+msgstr "Rol"
+
+msgid "Hinweis"
+msgstr "Not"
+
+msgid "Keine Benutzer vorhanden."
+msgstr "Kullanıcı bulunmuyor."
+
+msgid "Keine Lizenzen vorhanden."
+msgstr "Lisans bulunmuyor."
+
+msgid "Keine netstyle-Berechtigung zum Anzeigen der Lizenzdaten."
+msgstr "netstyle yetkileriniz lisans verilerini görüntülemeye izin vermiyor."
+
+msgid "Keine aktiven Geräte vorhanden."
+msgstr "Aktif cihaz bulunmuyor."
+
+msgid "Keine Bestellungen vorhanden."
+msgstr "Sipariş bulunmuyor."
+
+msgid "Keine netstyle-Berechtigung zum Anzeigen der Bestelldaten."
+msgstr "netstyle yetkileriniz sipariş verilerini görüntülemeye izin vermiyor."
+
+msgid "Rechtsform"
+msgstr "Şirket türü"
+
+msgid "Telefon"
+msgstr "Telefon"
+
+msgid "Rechnungsanschrift"
+msgstr "Fatura adresi"
+
+msgid "Ort"
+msgstr "Şehir"
+
+msgid "Land"
+msgstr "Ülke"
+
+msgid "USt-IdNr."
+msgstr "KDV kimlik numarası"
+
+msgid "Mein Profil"
+msgstr "Profilim"
+
+msgid "Dies ist eine Leseansicht. Passwort, Zwei-Faktor-Authentifizierung und persönliche Einstellungen kann nur der angemeldete Kundenbenutzer selbst ändern."
+msgstr "Bu görünüm salt okunurdur. Parola, iki faktörlü kimlik doğrulama ve kişisel ayarlar yalnızca oturum açmış müşteri kullanıcısı tarafından değiştirilebilir."
+
+msgid "Benutzerkonto"
+msgstr "Kullanıcı hesabı"
+
+msgid "Teamverwaltung, Bestellungen und Unternehmensdaten sind für diese Rolle nicht freigegeben."
+msgstr "Bu rol ekip yönetimine, siparişlere ve şirket bilgilerine erişemez."
+
+msgid "Anschrift"
+msgstr "Adres"
+
+msgid "Weitere Bereiche"
+msgstr "Diğer bölümler"
+
+msgid "Kontoeinstellungen"
+msgstr "Hesap ayarları"
+
+msgid "Read-only"
+msgstr "Salt okunur"
+
+msgid "Sicherheit / 2FA"
+msgstr "Güvenlik / 2FA"
+
+msgid "nicht impersoniert"
+msgstr "kimlik taklidi yok"
+
+msgid "nicht ausführbar"
+msgstr "kullanılamaz"
+
+msgid "Support-Hinweis"
+msgstr "Destek notu"
+
+msgid "Für echte Schreibaktionen oder einen vollständigen Login-Test muss ein eigener Nicht-Staff-Testkunde verwendet werden. Die Vorschau übernimmt niemals die Identität des Kunden."
+msgstr "Gerçek değişiklikleri veya tam oturum açmayı test etmek için personel olmayan ayrı bir test müşterisi kullanın. Bu önizleme hiçbir zaman müşteri kimliğini devralmaz."
