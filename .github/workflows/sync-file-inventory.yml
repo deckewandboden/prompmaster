@@ -1,0 +1,37 @@
+name: PROMPTFINISHER one-time file inventory refresh
+on:
+  push:
+    branches:
+      - fix/promptfinisher-public-free-and-logo-20261011
+    paths:
+      - .github/workflows/sync-file-inventory.yml
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  regenerate:
+    if: github.repository == 'deckewandboden/prompmaster' && github.ref == 'refs/heads/fix/promptfinisher-public-free-and-logo-20261011'
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: fix/promptfinisher-public-free-and-logo-20261011
+          persist-credentials: true
+      - name: Regenerate canonical file manifest using repository generator
+        shell: bash
+        run: |
+          set -Eeuo pipefail
+          python3 scripts/generate_file_manifest.py
+          git add -- FILE_MANIFEST.tsv MANIFEST.json docs/COMPLETE_FILE_INVENTORY.md
+          git diff --cached --check
+          if git diff --cached --quiet; then
+            echo "Inventory already up to date."
+            exit 0
+          fi
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git commit -m "chore(manifest): regenerate inventory for approved branding and Free security patch"
+          git push origin HEAD:fix/promptfinisher-public-free-and-logo-20261011
