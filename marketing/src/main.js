@@ -160,7 +160,7 @@ if(home){
     body='<p>Melde dich an, um Kundenportal und PROMPTFINISHER Pro zu öffnen.</p><a class="button" href="/auth/login/">Zur Anmeldung →</a><a class="button secondary" href="/">Zur Marketingseite →</a>';
   }else if(path==='/free'){
     title='PROMPTFINISHER Free.';
-    body='<p>Einfach starten. Kostenlos nutzen.</p><a class="button" href="/free/">PROMPTFINISHER Free starten →</a><a class="button secondary" href="/#funktionen">Free kennenlernen →</a>';
+    body='<p>Einfach starten. Kostenlos nutzen.</p><a class="button" href="/free/" target="_blank" rel="noopener noreferrer">PROMPTFINISHER Free starten →</a><a class="button secondary" href="/#funktionen">Free kennenlernen →</a>';
   }else if(legal[path]){
     title=legal[path];
     body='<p>PROMPTFINISHER stellt die jeweils gültigen Rechtstexte versioniert über die Commercial-Plattform bereit.</p><a class="text-link" href="/">← Zurück zur Startseite</a>';
