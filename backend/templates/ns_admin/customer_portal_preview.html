@@ -141,6 +141,9 @@
   <div class="card"><h2>Rechnungsanschrift</h2><div class="statusrow"><span>Adresse</span><strong>{{ preview_company.street }} {{ preview_company.house_number }}</strong></div><div class="statusrow"><span>Ort</span><strong>{{ preview_company.postal_code }} {{ preview_company.city }}</strong></div><div class="statusrow"><span>Land</span><strong>{{ preview_company.country }}</strong></div><div class="statusrow"><span>USt-IdNr.</span><strong>{{ preview_company.vat_id|default:"–" }}</strong></div></div>
 </div>
 
+{% elif preview_section == 'profile' and preview_kind == 'company' and not preview_is_company_admin %}
+<div class="card mt-14"><h2>Mein Profil</h2><div class="statusrow"><span>Name</span><strong>{{ preview_user.full_name }}</strong></div><div class="statusrow"><span>E-Mail</span><strong>{{ preview_user.email }}</strong></div><div class="statusrow"><span>Rolle</span><strong>{{ preview_selected_role }}</strong></div><p class="muted">Dies ist eine Leseansicht. Passwort, Zwei-Faktor-Authentifizierung und persönliche Einstellungen kann nur der angemeldete Kundenbenutzer selbst ändern.</p></div>
+
 {% elif preview_kind == 'company' and not preview_is_company_admin and preview_section == 'more' %}
 <div class="card mt-14"><h2>Benutzerkonto</h2><div class="statusrow"><span>Name</span><strong>{{ preview_user.full_name }}</strong></div><div class="statusrow"><span>E-Mail</span><strong>{{ preview_user.email }}</strong></div><div class="statusrow"><span>Rolle</span><strong>{{ preview_selected_role }}</strong></div><p class="muted">Teamverwaltung, Bestellungen und Unternehmensdaten sind für diese Rolle nicht freigegeben.</p></div>
 
