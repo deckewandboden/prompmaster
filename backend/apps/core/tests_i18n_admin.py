@@ -16,7 +16,7 @@ PAGES = (
     'ns_admin/dashboard.html',
     'ns_admin/customer_portal_preview.html',
 )
-TRANSLATE_PATTERN = re.compile(r'{%\\s*translate\\s+([\\'"])(.*?)\\1\\s*%}')
+TRANSLATE_PATTERN = re.compile(r'''{%\s*translate\s+(['"])(.*?)\1\s*%}''')
 
 
 class AdminInternationalizationContractTests(SimpleTestCase):
