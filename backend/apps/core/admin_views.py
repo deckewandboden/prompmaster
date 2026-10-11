@@ -13,6 +13,7 @@ from django.db.models.functions import Cast, Coalesce, Concat, Lower, Trim, Trun
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse
 from django.utils import timezone
+from django.utils.translation import gettext as _
 from django.views.decorators.http import require_POST
 
 from apps.accounts.models import Role, User, UserRole
@@ -1059,7 +1060,7 @@ def customer_portal_preview(request, pk):
         'preview_kind': 'company',
         'preview_section': preview_section,
         'preview_title': customer.name,
-        'preview_subtitle': f'{customer.customer_number} · Firmenkonto',
+        'preview_subtitle': f'{customer.customer_number} · {_("Firmenkonto")}',
         'preview_user': selected_user,
         'preview_user_id': str(selected_user.pk) if selected_user else '',
         'preview_selected_role': selected_member.get_role_display() if selected_member else '',
