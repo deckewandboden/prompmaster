@@ -11,7 +11,7 @@ from django.test import SimpleTestCase
 from django.conf import settings
 
 ROOT = Path(__file__).resolve().parents[2]
-LOCALES = ('en', 'es', 'pt', 'tr', 'ru')
+LOCALES = ('en', 'es', 'pt', 'tr', 'ru', 'pl', 'fr', 'it', 'nl')
 PAGES = (
     'ns_admin/dashboard.html',
     'ns_admin/customer_portal_preview.html',
@@ -20,13 +20,13 @@ TRANSLATE_PATTERN = re.compile(r'''{%\s*translate\s+(['"])(.*?)\1\s*%}''')
 
 
 class AdminInternationalizationContractTests(SimpleTestCase):
-    def test_six_user_languages_are_offered(self):
+    def test_ten_user_languages_are_offered(self):
         self.assertEqual(
             {code for code, _ in settings.LANGUAGES},
-            {'de', 'en', 'es', 'pt', 'tr', 'ru'},
+            {'de', 'en', 'es', 'pt', 'tr', 'ru', 'pl', 'fr', 'it', 'nl'},
         )
 
-    def test_all_dashboard_and_preview_labels_have_five_real_translations(self):
+    def test_all_dashboard_and_preview_labels_have_nine_real_translations(self):
         keys = set()
         for page in PAGES:
             path = ROOT / 'templates' / page
