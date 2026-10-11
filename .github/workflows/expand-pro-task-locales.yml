@@ -1,0 +1,64 @@
+name: PROMPTFINISHER temporary Pro task locale expansion
+on:
+  push:
+    branches: [fix/promptfinisher-public-free-and-logo-20261011]
+    paths: [.github/workflows/expand-pro-task-locales.yml]
+
+permissions:
+  contents: write
+
+jobs:
+  translate-pro-task-labels:
+    if: github.repository == 'deckewandboden/prompmaster' && github.ref == 'refs/heads/fix/promptfinisher-public-free-and-logo-20261011'
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    env:
+      OMP_NUM_THREADS: '2'
+      ARGOS_DEVICE_TYPE: cpu
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: fix/promptfinisher-public-free-and-logo-20261011
+          persist-credentials: true
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Translate new Pro task names offline
+        run: |
+          set -Eeuo pipefail
+          python -m pip install "argostranslate>=1.9,<2.0"
+          python scripts/generate_product_ui_locales.py
+      - name: Validate all catalog names and golden master integrity
+        run: |
+          set -Eeuo pipefail
+          python - <<'PY'
+          import json,re
+          from pathlib import Path
+          data=json.loads(Path('product/i18n/free_pro_visible_strings.json').read_text(encoding='utf-8'))
+          text=Path('backend/static/js/promptfinisher_product_i18n.20261011.js').read_text(encoding='utf-8')
+          m=re.search('(  const TEXT=)({.*?})(;' + chr(10) + '  const language = )',text,re.S)
+          assert m
+          translations=json.loads(m[2])
+          assert len(data['terms'])>=550
+          for key in data['terms']:
+              for code in ('en','es','pt','tr','ru','pl','fr','it','nl'):
+                  assert translations[key].get(code), (key, code)
+          print('PASS',len(data['terms']),'catalogued user-facing source labels translated to nine locales')
+          PY
+          python scripts/verify_golden_extraction.py
+      - name: Refresh tracked inventory and remove temporary workflow
+        run: |
+          set -Eeuo pipefail
+          rm .github/workflows/expand-pro-task-locales.yml
+          python scripts/generate_file_manifest.py
+          python -c "from pathlib import Path; p=Path('docs/COMPLETE_FILE_INVENTORY.md'); p.write_text(p.read_text(encoding='utf-8').rstrip(chr(10))+chr(10),encoding='utf-8')"
+          git add -- .github/workflows/expand-pro-task-locales.yml \
+            backend/static/js/promptfinisher_product_i18n.20261011.js \
+            docs/FREE_PRO_I18N_DRAFT_REPORT.md \
+            product/i18n/free_pro_visible_strings.json \
+            FILE_MANIFEST.tsv MANIFEST.json docs/COMPLETE_FILE_INVENTORY.md
+          git diff --cached --check
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git commit -m "i18n: translate all Pro task titles and application copy into nine locales"
+          git push origin HEAD:fix/promptfinisher-public-free-and-logo-20261011
