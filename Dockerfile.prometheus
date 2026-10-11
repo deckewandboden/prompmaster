@@ -3,7 +3,7 @@
 # This is kept independent of the application and Caddy images.
 FROM golang:1.27.2-alpine3.23 AS prometheus-patched-build
 ENV GOTOOLCHAIN=local GOMAXPROCS=2 GOFLAGS=-p=2
-RUN apk add --no-cache ca-certificates curl git make tar
+RUN apk add --no-cache bash ca-certificates curl git make tar
 WORKDIR /src
 
 RUN git clone --depth 1 --branch v3.15.0 https://github.com/prometheus/prometheus.git . \
