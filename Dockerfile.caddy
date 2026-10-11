@@ -12,7 +12,8 @@ RUN npm test && npm run build
 FROM golang:1.26.9-alpine AS patched-caddy-build
 WORKDIR /src
 RUN go mod init netstyle.invalid/caddy-rebuild \
- && go get github.com/caddyserver/caddy/v2@v2.11.6 golang.org/x/net@v0.60.0 \
+ && go get github.com/caddyserver/caddy/v2/cmd/caddy@v2.11.6 \
+ && go get golang.org/x/net@v0.60.0 \
  && CGO_ENABLED=0 go build -trimpath -ldflags="-s -w" -o /caddy-patched github.com/caddyserver/caddy/v2/cmd/caddy \
  && go version -m /caddy-patched | grep -F "golang.org/x/net v0.60.0"
 
