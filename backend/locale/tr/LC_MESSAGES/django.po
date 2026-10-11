@@ -874,3 +874,78 @@ msgstr "Pro lisansı hâlâ boş"
 
 msgid "Verlängern"
 msgstr "Uzat"
+
+msgid "Geschäft, Handlungsbedarf und Systemstatus auf einen Blick."
+msgstr "İş, yapılması gerekenler ve sistem durumu bir bakışta."
+
+msgid "PROMPTFINISHER Pro öffnen →"
+msgstr "PROMPTFINISHER Pro'yu aç →"
+
+msgid "PROMPTFINISHER Free öffnen →"
+msgstr "PROMPTFINISHER Free'yi aç →"
+
+msgid "System gesund"
+msgstr "Sistem sağlıklı"
+
+msgid "Prüfung erforderlich"
+msgstr "Kontrol gerekli"
+
+msgid "Kunden gesamt"
+msgstr "Toplam müşteri"
+
+msgid "Offene Leads"
+msgstr "Açık potansiyel müşteriler"
+
+msgid "Lead-Pipeline öffnen"
+msgstr "Potansiyel müşteri sürecini aç"
+
+msgid "Ablauf unter 30 Tagen"
+msgstr "30 günden kısa sürede sona erer"
+
+msgid "laufen in weniger als 60 Tagen ab"
+msgstr "60 günden kısa sürede sona erecek"
+
+msgid "Umsatz 30 Tage"
+msgstr "30 günlük ciro"
+
+msgid "Umsatzentwicklung"
+msgstr "Ciro gelişimi"
+
+msgid "Umsatzentwicklung der letzten Monate"
+msgstr "Son aylardaki ciro değişimi"
+
+msgid "Noch keine bezahlten Bestellungen im Auswertungszeitraum."
+msgstr "Raporlama döneminde henüz ödenmiş sipariş yok."
+
+msgid "Lizenzen nach Produkt"
+msgstr "Ürüne göre lisanslar"
+
+msgid "Handlungsbedarf"
+msgstr "İşlem gerekli"
+
+msgid "Lizenzen laufen in weniger als 30 Tagen ab."
+msgstr "Lisansların süresi 30 günden kısa sürede doluyor."
+
+msgid "fehlgeschlagene Zahlungen"
+msgstr "başarısız ödemeler"
+
+msgid "Chargebacks"
+msgstr "Ters ibrazlar"
+
+msgid "offene Kontaktanfragen"
+msgstr "açık iletişim talepleri"
+
+msgid "Kein aktueller Handlungsbedarf."
+msgstr "Şu anda yapılması gereken işlem yok."
+
+msgid "Letzte Bestellungen"
+msgstr "Son siparişler"
+
+msgid "Nächste Lizenzabläufe"
+msgstr "Yaklaşan lisans bitişleri"
+
+msgid "Keine bevorstehenden Abläufe."
+msgstr "Yaklaşan sona erme yok."
+
+msgid "Alle Lizenzen"
+msgstr "Tüm lisanslar"
