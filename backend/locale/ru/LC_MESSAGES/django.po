@@ -746,3 +746,213 @@ msgstr "Free"
 
 msgid "Freie Lizenz zuweisen"
 msgstr "Назначить свободную лицензию"
+
+msgid "Freigeben"
+msgstr "Освободить"
+
+msgid "Genehmigen"
+msgstr "Одобрить"
+
+msgid "Hier sehen Sie ausschließlich Nachrichten, die für Sie bzw. Ihr Unternehmen bestimmt sind. Interne netstyle-Notizen werden nicht im Kundenportal angezeigt."
+msgstr "Здесь показаны только сообщения, предназначенные вам или вашей компании. Внутренние заметки netstyle не отображаются в клиентском портале."
+
+msgid "Ihre Anfrage und alle für Kunden freigegebenen Antworten."
+msgstr "Ваше обращение и все ответы, доступные клиентам."
+
+msgid "Inaktiv"
+msgstr "Неактивна"
+
+msgid "Keine Benutzer gefunden."
+msgstr "Пользователи не найдены."
+
+msgid "Keine Lizenz zugewiesen."
+msgstr "Лицензия не назначена."
+
+msgid "Keine Lizenzen gefunden."
+msgstr "Лицензии не найдены."
+
+msgid "Keine freie Lizenz."
+msgstr "Свободных лицензий нет."
+
+msgid "Keine verlängerbare Lizenz vorhanden."
+msgstr "Нет лицензий для продления."
+
+msgid "Mitarbeiter"
+msgstr "Сотрудник"
+
+msgid "Noch nie"
+msgstr "Никогда"
+
+msgid "Offene Pro-Anfragen"
+msgstr "Открытые запросы Pro"
+
+msgid "PROMPTFINISHER Free"
+msgstr "PROMPTFINISHER Free"
+
+msgid "PROMPTFINISHER Pro"
+msgstr "PROMPTFINISHER Pro"
+
+msgid "Passwort zurücksetzen"
+msgstr "Сбросить пароль"
+
+msgid "Recovery-Codes neu erzeugen"
+msgstr "Создать новые коды восстановления"
+
+msgid "Seit"
+msgstr "С"
+
+msgid "Sicheren Link senden"
+msgstr "Отправить защищённую ссылку"
+
+msgid "Team-Mitglieder"
+msgstr "Участники команды"
+
+msgid "Verlauf"
+msgstr "История"
+
+msgid "Wählen Sie die Lizenz, deren bestehende Restlaufzeit um weitere 365 Tage verlängert werden soll."
+msgstr "Выберите лицензию, срок которой нужно продлить ещё на 365 дней."
+
+msgid "Zahlungspflichtig verlängern →"
+msgstr "Продлить с обязательством оплаты →"
+
+msgid "Zuletzt aktiv"
+msgstr "Последняя активность"
+
+msgid "Zurück zu Einstellungen"
+msgstr "Назад к настройкам"
+
+msgid "Zurück zu Lizenzen"
+msgstr "Назад к лицензиям"
+
+msgid "Zuweisen"
+msgstr "Назначить"
+
+msgid "Zwei-Faktor-Authentifizierung und Recovery-Codes verwalten."
+msgstr "Управление двухфакторной аутентификацией и кодами восстановления."
+
+msgid "aktive Benutzer"
+msgstr "активные пользователи"
+
+msgid "aktive Benutzer ohne Pro-Zuweisung"
+msgstr "активные пользователи без назначения Pro"
+
+msgid "registriert / Kapazität"
+msgstr "зарегистрировано / вместимость"
+
+msgid "Die vorbereitete Lizenz wird Ihrem aktuell angemeldeten Benutzerkonto zugeordnet. Der Link kann anschließend nicht erneut verwendet werden."
+msgstr "Подготовленная лицензия будет назначена вашей текущей учётной записи. После использования ссылка станет недействительной."
+
+msgid "Gültig bis %(expiry)s. Der Link ist tenantgebunden, für genau diesen Benutzer bestimmt und nur einmal verwendbar."
+msgstr "Действует до %(expiry)s. Ссылка привязана к организации, предназначена только этому пользователю и может быть использована один раз."
+
+msgid "Jede neue Lizenz startet nach erfolgreicher Zahlung mit eigener 365-Tage-Laufzeit."
+msgstr "Каждая новая лицензия начинает собственный срок в 365 дней после успешной оплаты."
+
+msgid "inkl. MwSt. · %(days)s Tage"
+msgstr "вкл. НДС · %(days)s дней"
+
+msgid "%(limit)s Geräte je Benutzer"
+msgstr "%(limit)s устройств на пользователя"
+
+msgid "Preis nicht verfügbar"
+msgstr "Цена недоступна"
+
+msgid "V1: exakt ein aktiver Firmenadministrator. Eine Übertragung ist nur auf ein aktives Team-Mitglied möglich."
+msgstr "V1: только один активный администратор компании. Передача возможна только активному участнику команды."
+
+msgid "Ihre eigenen Geräteslots können Sie hier selbst verwalten."
+msgstr "Здесь можно самостоятельно управлять слотами собственных устройств."
+
+msgid "Geräteslots werden durch den Firmenadministrator verwaltet."
+msgstr "Слотами устройств управляет администратор компании."
+
+msgid "Widerrufene Geräte bleiben als Historie erhalten."
+msgstr "Отозванные устройства сохраняются в истории."
+
+msgid "Zuletzt %(seen)s"
+msgstr "Последний контакт: %(seen)s"
+
+msgid "Gerät wirklich entfernen?"
+msgstr "Вы действительно хотите удалить устройство?"
+
+msgid "Konto, Unternehmen, Benutzer-ID und Zeitpunkt werden automatisch zugeordnet. Optional kann eine für Ihr Konto sichtbare Lizenz mitgesendet werden. Passwörter, Tokens oder andere unnötige sensitive Daten werden nicht übernommen."
+msgstr "Учётная запись, компания, ID пользователя и время определяются автоматически. При необходимости можно добавить лицензию, доступную вашей учётной записи. Пароли, токены и другие ненужные конфиденциальные данные не передаются."
+
+msgid "Exportieren Sie die zu Ihrem Benutzer gespeicherten PROMPTFINISHER-Daten als JSON. Secrets und Daten anderer Benutzer werden nicht exportiert."
+msgstr "Экспортируйте данные PROMPTFINISHER, сохранённые о вас, в формате JSON. Секреты и данные других пользователей не экспортируются."
+
+msgid "Ihre Löschanfrage vom %(requested)s ist bereits erfasst. Status: %(status)s."
+msgstr "Ваш запрос на удаление от %(requested)s уже зарегистрирован. Статус: %(status)s."
+
+msgid "Sie können die Löschung Ihres PROMPTFINISHER-Kontos anfordern. Gesetzlich erforderliche Geschäfts- und Nachweisdaten werden nur im erforderlichen Umfang weiter aufbewahrt bzw. anonymisiert. Firmenadministratoren müssen ihre Administratorrolle vor der Verarbeitung übertragen."
+msgstr "Вы можете запросить удаление учётной записи PROMPTFINISHER. Обязательные по закону деловые и подтверждающие данные будут храниться только в необходимом объёме либо обезличиваться. Администраторы компаний должны сначала передать свою роль."
+
+msgid "Ich möchte die Löschung meines Kontos verbindlich anfordern."
+msgstr "Я подтверждаю запрос на удаление моей учётной записи."
+
+msgid "Guten Morgen, %(first_name)s"
+msgstr "Доброе утро, %(first_name)s"
+
+msgid "Privatkonto"
+msgstr "Личный кабинет"
+
+msgid "Unternehmensadministrator"
+msgstr "Администратор компании"
+
+msgid "%(assigned)s vergeben · %(free)s verfügbar"
+msgstr "%(assigned)s назначено · %(free)s доступно"
+
+msgid "%(free)s frei · %(expiring)s läuft bald ab"
+msgstr "%(free)s свободно · %(expiring)s скоро истекает"
+
+msgid "Tage"
+msgstr "Дней"
+
+msgid "kein Ablauf"
+msgstr "нет окончания срока"
+
+msgid "Eine Lizenz läuft in %(days)s Tagen ab."
+msgstr "Срок действия лицензии истекает через %(days)s дней."
+
+msgid "freie Pro-Lizenzen"
+msgstr "свободные лицензии Pro"
+
+msgid "Freie Pro-Lizenzen können Team-Mitgliedern zugewiesen werden."
+msgstr "Свободные лицензии Pro можно назначить участникам команды."
+
+msgid "Für Kauf/Abrechnung fehlen: %(fields)s."
+msgstr "Для покупки и выставления счёта не хватает следующих данных: %(fields)s."
+
+msgid "Tage verbleibend"
+msgstr "дней осталось"
+
+msgid "Deine Lizenz läuft am %(expiry)s ab."
+msgstr "Срок действия вашей лицензии истекает %(expiry)s."
+
+msgid "Es ist eine freie Pro-Lizenz verfügbar."
+msgstr "Доступна одна свободная лицензия Pro."
+
+msgid "Aktuell ist keine freie Pro-Lizenz verfügbar. Kaufen Sie eine weitere Lizenz oder geben Sie eine bestehende Lizenz frei."
+msgstr "Свободных лицензий Pro сейчас нет. Купите дополнительную лицензию или освободите существующую."
+
+msgid "Ihre Pro-Anfrage ist bereits offen."
+msgstr "Ваш запрос Pro уже открыт."
+
+msgid "Für den Pro-Zugriff benötigen Sie eine aktive PROMPTFINISHER-Pro-Lizenz."
+msgstr "Для доступа к Pro требуется действующая лицензия PROMPTFINISHER Pro."
+
+msgid "Portal durchsuchen"
+msgstr "Поиск по порталу"
+
+msgid "Geben Sie einen Suchbegriff ein. Firmenadministratoren können nach Teammitgliedern, E-Mail-Adressen und Lizenzen suchen; andere Benutzer sehen ausschließlich ihre eigene Lizenzsicht."
+msgstr "Введите поисковый запрос. Администраторы компаний могут искать участников команды, адреса эл. почты и лицензии; другие пользователи видят только собственные лицензии."
+
+msgid "Kunde"
+msgstr "Клиент"
+
+msgid "Pro-Lizenzen noch frei"
+msgstr "Осталось свободных лицензий Pro"
+
+msgid "Verlängern"
+msgstr "Продлить"
