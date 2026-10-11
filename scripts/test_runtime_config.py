@@ -115,11 +115,40 @@ class RuntimeConfigTests(unittest.TestCase):
         self.assertIn('golang.org/x/crypto@v0.55.0', dockerfile)
         self.assertIn('FROM scratch', dockerfile)
 
-    def test_prometheus_runtime_is_security_accepted_version(self):
+    def test_prometheus_runtime_is_pinned_and_rebuilt_with_patched_go(self):
+        prometheus = self.base['services']['prometheus']
+        self.assertEqual(prometheus['image'], 'promptfinisher-prometheus:3.15.0-patched')
         self.assertEqual(
-            self.base['services']['prometheus']['image'],
-            'prom/prometheus:v3.15.0',
+            prometheus['build'],
+            {'context': '.', 'dockerfile': 'Dockerfile.prometheus'},
         )
+        dockerfile = (ROOT / 'Dockerfile.prometheus').read_text()
+        for required in (
+            'golang:1.27.2-alpine3.23',
+            'git clone --depth 1 --branch v3.15.0',
+            "grep -Eq '^5241a27'",
+            'sha256sum --check ui.sha256',
+            'golang.org/x/net@v0.60.0',
+            'COPY --from=prometheus-patched-build /src/prometheus /bin/prometheus',
+            'COPY --from=prometheus-patched-build /src/promtool /bin/promtool',
+        ):
+            with self.subTest(requirement=required):
+                self.assertIn(required, dockerfile)
+
+    def test_prometheus_unsafe_runtime_variants_are_rejected(self):
+        variants = (
+            ('image', 'prom/prometheus:v3.15.0'),
+            ('image', 'prom/prometheus:latest'),
+            ('build', {'context': '.', 'dockerfile': 'Dockerfile.caddy'}),
+            ('volumes', ['prometheus_data:/prometheus']),
+            ('networks', ['edge']),
+            ('ports', ['9090:9090']),
+        )
+        for field, value in variants:
+            with self.subTest(field=field, value=str(value)):
+                config = copy.deepcopy(self.base)
+                config['services']['prometheus'][field] = value
+                self.assertTrue(validate(config, self.production))
 
     def test_public_monitoring_network_is_rejected(self):
         self.base['networks']['monitor']['internal'] = False
