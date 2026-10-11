@@ -260,7 +260,7 @@ msgid "+ Benutzer hinzufügen"
 msgstr "+ Aggiungi utente"
 
 msgid "AGB"
-msgstr "Termini e condizioni"
+msgstr "Termini e condizioni generali"
 
 msgid "Abbrechen"
 msgstr "Annulla"
@@ -284,7 +284,7 @@ msgid "Checkout"
 msgstr "Pagamento"
 
 msgid "Datenschutz"
-msgstr "Privacy"
+msgstr "Protezione dei dati"
 
 msgid "Der Link wurde per E-Mail versendet."
 msgstr "Il link è stato inviato via e-mail."
@@ -389,7 +389,7 @@ msgid "Zahlungen mit Handlungsbedarf"
 msgstr "Pagamenti che richiedono un'azione"
 
 msgid "Zahlungspflichtig kaufen →"
-msgstr "Acquistare con obbligo di pagamento →"
+msgstr "Acquista con obbligo di pagamento →"
 
 msgid "Zuordnungslink erzeugt"
 msgstr "Link di assegnazione creato"
@@ -898,7 +898,7 @@ msgid "freie Pro-Lizenzen"
 msgstr "licenze Pro gratuite"
 
 msgid "Freie Pro-Lizenzen können Team-Mitgliedern zugewiesen werden."
-msgstr "Le licenze Free Pro possono essere assegnate ai membri del team."
+msgstr "Le licenze Pro disponibili e non assegnate possono essere attribuite ai membri del team."
 
 msgid "Für Kauf/Abrechnung fehlen: %(fields)s."
 msgstr "Dati mancanti per acquisto/fatturazione: %(fields)s."
@@ -1015,7 +1015,7 @@ msgid "Letzte Bestellungen"
 msgstr "Ordini recenti"
 
 msgid "Nächste Lizenzabläufe"
-msgstr "Prossima scadenza di licenza"
+msgstr "Prossime scadenze delle licenze"
 
 msgid "Keine bevorstehenden Abläufe."
 msgstr "Nessuna prossima espulsione."
