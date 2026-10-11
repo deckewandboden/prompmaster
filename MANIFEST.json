@@ -1,8 +1,8 @@
 {
   "project": "PROMPTFINISHER Commercial RC14 Full Repository",
-  "generated_at": "2026-10-11T11:47:12.713084+00:00",
+  "generated_at": "2026-10-11T12:13:56.230834+00:00",
   "file_count_excluding_manifest_files": 655,
-  "total_bytes_excluding_manifest_files": 26787448,
+  "total_bytes_excluding_manifest_files": 27054869,
   "roles": {
     "active-backend": 417,
     "active-ci": 3,
@@ -2075,26 +2075,26 @@
     },
     {
       "path": "backend/locale/fr/LC_MESSAGES/django.po",
-      "size": 28933,
-      "sha256": "2479bb657ccdae18e6056aae3ce9c3587cc42e8d4de8e9b9dc4cf413b0a53b0d",
+      "size": 28974,
+      "sha256": "2e3a8011b17549a3ce88046ad774a3fbeae9b6281c6e8ab1f0f656c4f0699431",
       "role": "active-backend"
     },
     {
       "path": "backend/locale/it/LC_MESSAGES/django.po",
-      "size": 28006,
-      "sha256": "4cc8dcd2e2d3c5643f9c0387f8c09e81f9a8ede574457cd5f40bef64c859937c",
+      "size": 28052,
+      "sha256": "ff5259225f6ddc9d0a73f56cb0bd058a2758c2ecf072f6c57bbf2630f80f7fd8",
       "role": "active-backend"
     },
     {
       "path": "backend/locale/nl/LC_MESSAGES/django.po",
-      "size": 27589,
-      "sha256": "0cd62952d60dc13672fe8ced4f58cbd65286c4c537a4c9fc3afbfe00eab31085",
+      "size": 27628,
+      "sha256": "29130493b2467d0830e9d771a9a095535fe2a5c96b321de6b446ac03c834c310",
       "role": "active-backend"
     },
     {
       "path": "backend/locale/pl/LC_MESSAGES/django.po",
-      "size": 28059,
-      "sha256": "451d2cd899ca65ff6befb367c5cfa8b551c641964348370edb1d0e22c4e7ae8a",
+      "size": 28101,
+      "sha256": "ca60a2be1b9f272ddc7d39eacd1e33d45a1f896c4732b087e7eea22c17155557",
       "role": "active-backend"
     },
     {
@@ -2213,8 +2213,8 @@
     },
     {
       "path": "backend/static/js/promptfinisher_product_i18n.20261011.js",
-      "size": 293449,
-      "sha256": "8e5c005793aab87296ce30f006b6e154fd7a76909132e779b8390a5dcfd13891",
+      "size": 538947,
+      "sha256": "537c46208e76e36f956f6ee7317b6e94812e0c23b38529aab749d175ec18d4ed",
       "role": "active-backend"
     },
     {
@@ -2939,8 +2939,8 @@
     },
     {
       "path": "docs/FREE_PRO_I18N_DRAFT_REPORT.md",
-      "size": 612,
-      "sha256": "9db2d8ef641cbed9aedafc0eccee5adb67aa036560efff1afc838ce1013e1c4a",
+      "size": 621,
+      "sha256": "19f3703288bf9578dcb478e585bc7f8f168a8fa5b350b92b5cbbae611200d19c",
       "role": "documentation"
     },
     {
@@ -3695,8 +3695,8 @@
     },
     {
       "path": "product/i18n/free_pro_visible_strings.json",
-      "size": 25440,
-      "sha256": "4f7650e666d9c3c4846a470c899040ae4818fbe13d1388600a9a1428eee65791",
+      "size": 47186,
+      "sha256": "5da0cf429f213c29e36f53e9eb3a0c12e258902b7b43855c55d368fcac29aab7",
       "role": "active-product"
     },
     {
