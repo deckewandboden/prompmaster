@@ -1030,3 +1030,84 @@ msgstr "Overview of holdings"
 
 msgid "Freie Lizenzen"
 msgstr "Available licenses"
+
+msgid "Rolle"
+msgstr "Role"
+
+msgid "Hinweis"
+msgstr "Note"
+
+msgid "Keine Benutzer vorhanden."
+msgstr "No users available."
+
+msgid "Keine Lizenzen vorhanden."
+msgstr "No licenses available."
+
+msgid "Keine netstyle-Berechtigung zum Anzeigen der Lizenzdaten."
+msgstr "Your netstyle permissions do not allow viewing license data."
+
+msgid "Keine aktiven Geräte vorhanden."
+msgstr "No active devices available."
+
+msgid "Keine Bestellungen vorhanden."
+msgstr "No orders available."
+
+msgid "Keine netstyle-Berechtigung zum Anzeigen der Bestelldaten."
+msgstr "Your netstyle permissions do not allow viewing order data."
+
+msgid "Rechtsform"
+msgstr "Legal form"
+
+msgid "Telefon"
+msgstr "Phone"
+
+msgid "Rechnungsanschrift"
+msgstr "Billing address"
+
+msgid "Ort"
+msgstr "City"
+
+msgid "Land"
+msgstr "Country"
+
+msgid "USt-IdNr."
+msgstr "VAT ID"
+
+msgid "Mein Profil"
+msgstr "My profile"
+
+msgid "Dies ist eine Leseansicht. Passwort, Zwei-Faktor-Authentifizierung und persönliche Einstellungen kann nur der angemeldete Kundenbenutzer selbst ändern."
+msgstr "This is a read-only view. Only the signed-in customer user can change their password, two-factor authentication and personal settings."
+
+msgid "Benutzerkonto"
+msgstr "User account"
+
+msgid "Teamverwaltung, Bestellungen und Unternehmensdaten sind für diese Rolle nicht freigegeben."
+msgstr "Team management, orders and company details are not available to this role."
+
+msgid "Anschrift"
+msgstr "Postal address"
+
+msgid "Weitere Bereiche"
+msgstr "Additional sections"
+
+msgid "Kontoeinstellungen"
+msgstr "Account settings"
+
+msgid "Read-only"
+msgstr "Read-only"
+
+msgid "Sicherheit / 2FA"
+msgstr "Security / 2FA"
+
+msgid "nicht impersoniert"
+msgstr "no impersonation"
+
+msgid "nicht ausführbar"
+msgstr "unavailable"
+
+msgid "Support-Hinweis"
+msgstr "Support notice"
+
+msgid "Für echte Schreibaktionen oder einen vollständigen Login-Test muss ein eigener Nicht-Staff-Testkunde verwendet werden. Die Vorschau übernimmt niemals die Identität des Kunden."
+msgstr "For real write operations or a full login test, use a dedicated non-staff test customer. This preview never assumes a customer's identity."
