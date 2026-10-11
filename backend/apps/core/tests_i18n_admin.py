@@ -4,6 +4,7 @@ This audits the entire dashboard and customer preview instead of only side
 navigation. Other admin modules remain separately tracked for i18n coverage.
 """
 from pathlib import Path
+from ast import literal_eval
 import re
 
 from django.template.loader import get_template
@@ -17,6 +18,42 @@ PAGES = (
     'ns_admin/customer_portal_preview.html',
 )
 TRANSLATE_PATTERN = re.compile(r'''{%\s*translate\s+(['"])(.*?)\1\s*%}''')
+
+
+PLACEHOLDER_PATTERN = re.compile(r'%\(([A-Za-z_][A-Za-z_0-9]*)\)[a-zA-Z]')
+
+
+def catalog_translations(path: Path) -> dict[str, str]:
+    """Read gettext PO continuations, not just single-line msgid/msgstr pairs."""
+    entries = {}
+    source = None
+    target = ''
+    section = None
+
+    def commit():
+        if source:
+            if source in entries:
+                raise AssertionError('Duplicate gettext key: ' + source)
+            entries[source] = target
+
+    for line in path.read_text(encoding='utf-8').splitlines():
+        if line.startswith('msgid '):
+            commit()
+            source = literal_eval(line[len('msgid '):])
+            target = ''
+            section = 'source'
+        elif line.startswith('msgstr '):
+            target = literal_eval(line[len('msgstr '):])
+            section = 'target'
+        elif line.startswith('"') and section:
+            value = literal_eval(line)
+            if section == 'source':
+                source += value
+            else:
+                target += value
+    commit()
+    return entries
+
 
 
 class AdminInternationalizationContractTests(SimpleTestCase):
@@ -35,12 +72,25 @@ class AdminInternationalizationContractTests(SimpleTestCase):
             get_template(page)  # Django parser must accept all our tags
         self.assertGreaterEqual(len(keys), 110)
         for code in LOCALES:
-            po = (ROOT / 'locale' / code / 'LC_MESSAGES' / 'django.po').read_text(encoding='utf-8')
+            translations = catalog_translations(
+                ROOT / 'locale' / code / 'LC_MESSAGES' / 'django.po'
+            )
             for key in sorted(keys):
-                escaped = key.replace('\\', '\\\\').replace('"', '\\"')
-                pattern = re.escape('msgid "' + escaped + '"') + chr(10) + r'msgstr "(?!")'
                 with self.subTest(language=code, label=key):
-                    self.assertRegex(po, pattern)
+                    self.assertIn(key, translations)
+                    self.assertTrue(translations[key])
+
+    def test_all_locale_format_placeholders_are_preserved(self):
+        for code in LOCALES:
+            translations = catalog_translations(
+                ROOT / 'locale' / code / 'LC_MESSAGES' / 'django.po'
+            )
+            for key, target in translations.items():
+                expected = sorted(PLACEHOLDER_PATTERN.findall(key))
+                actual = sorted(PLACEHOLDER_PATTERN.findall(target))
+                with self.subTest(language=code, label=key):
+                    self.assertEqual(expected, actual,
+                        'Named interpolation placeholders must never be translated.')
 
     def test_language_picker_is_in_flex_header_and_never_overlays_avatar(self):
         shell = (ROOT / 'templates/app_shell.html').read_text(encoding='utf-8')
