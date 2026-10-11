@@ -38,7 +38,7 @@ class AdminInternationalizationContractTests(SimpleTestCase):
             po = (ROOT / 'locale' / code / 'LC_MESSAGES' / 'django.po').read_text(encoding='utf-8')
             for key in sorted(keys):
                 escaped = key.replace('\\', '\\\\').replace('"', '\\"')
-                pattern = re.escape('msgid "' + escaped + '"') + r'\\nmsgstr "(?!")'
+                pattern = re.escape('msgid "' + escaped + '"') + chr(10) + r'msgstr "(?!")'
                 with self.subTest(language=code, label=key):
                     self.assertRegex(po, pattern)
 
