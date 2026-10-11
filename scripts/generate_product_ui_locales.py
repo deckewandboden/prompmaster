@@ -21,10 +21,10 @@ TARGETS = ('en', 'es', 'pt', 'tr', 'ru', 'pl', 'fr', 'it', 'nl')
 PROTECTED = re.compile(
     r'PROMPTFINISHER|Microsoft 365 Copilot|Microsoft Copilot'
     r'|Copilot Chat|M365 Copilot|netstyle|Mollie'
-    r'|%\\([A-Za-z_][A-Za-z_0-9]*\\)[a-z]|\\{[A-Za-z_][A-Za-z_0-9]*\\}',
+    r'|%[(][A-Za-z_][A-Za-z_0-9]*[)][a-z]|[{][A-Za-z_][A-Za-z_0-9]*[}]',
     re.I,
 )
-BLOCK = re.compile(r'(  const TEXT=)(\\{[\\s\\S]*?\\})(;\\n  const language = )')
+BLOCK = re.compile('(  const TEXT=)({.*?})(;' + chr(10) + '  const language = )', re.S)
 
 
 def install_model(available, src: str, dst: str) -> None:
