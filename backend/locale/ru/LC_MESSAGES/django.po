@@ -956,3 +956,84 @@ msgstr "Осталось свободных лицензий Pro"
 
 msgid "Verlängern"
 msgstr "Продлить"
+
+msgid "Kundenportal-Vorschau"
+msgstr "Предпросмотр клиентского портала"
+
+msgid "KUNDENPORTAL · VORSCHAU"
+msgstr "КЛИЕНТСКИЙ ПОРТАЛ · ПРЕДПРОСМОТР"
+
+msgid "Read-only Vorschau …"
+msgstr "Предпросмотр только для чтения …"
+
+msgid "Support-Vorschau"
+msgstr "Предпросмотр для поддержки"
+
+msgid "Zurück zum netstyle Kundendetail"
+msgstr "Назад к данным клиента netstyle"
+
+msgid "Read-only Kundenansicht."
+msgstr "Просмотр клиента только для чтения."
+
+msgid "Die Daten entsprechen dem ausgewählten Kundenkonto und seiner Rolle. Dies ist eine Ansichtsvorschau, keine Kundensitzung: Interaktionen, Zahlungs- und Sicherheitsaktionen sind nicht ausführbar."
+msgstr "Данные ограничены выбранной учётной записью клиента и его ролью. Это предпросмотр, а не сеанс клиента: интерактивные действия, платежи и операции безопасности отключены."
+
+msgid "Perspektive auswählen"
+msgstr "Выбрать представление"
+
+msgid "Nur aktive Benutzer dieses Unternehmens. Rollen und Zugriffsrechte werden berücksichtigt."
+msgstr "Только активные пользователи этой компании. Роли и права доступа учитываются."
+
+msgid "Kundenbenutzer"
+msgstr "Пользователь клиента"
+
+msgid "Keine aktiven Benutzer vorhanden"
+msgstr "Нет активных пользователей"
+
+msgid "Ansicht wechseln"
+msgstr "Сменить представление"
+
+msgid "Angezeigte Rolle:"
+msgstr "Отображаемая роль:"
+
+msgid "Kundenverwaltung"
+msgstr "Управление клиентом"
+
+msgid "Änderungen erfolgen ausschließlich in den berechtigungsgeschützten Administrationsmasken mit Auditierung – nicht in der Kundenansicht."
+msgstr "Изменения выполняются только через административные формы с проверкой прав и аудитом, а не в предпросмотре клиента."
+
+msgid "Benutzer und Rollen verwalten"
+msgstr "Управлять пользователями и ролями"
+
+msgid "Lizenzen verwalten"
+msgstr "Управлять лицензиями"
+
+msgid "Geräte verwalten"
+msgstr "Управлять устройствами"
+
+msgid "gesamt"
+msgstr "всего"
+
+msgid "frei"
+msgstr "свободно"
+
+msgid "Ablauf ≤30 Tage"
+msgstr "Истекают в течение 30 дней"
+
+msgid "Konto"
+msgstr "Учётная запись"
+
+msgid "Kontotyp"
+msgstr "Тип учётной записи"
+
+msgid "Portal-Benutzer"
+msgstr "Пользователь портала"
+
+msgid "Aktive Benutzer"
+msgstr "Активные пользователи"
+
+msgid "Bestand"
+msgstr "Ресурсы"
+
+msgid "Freie Lizenzen"
+msgstr "Свободные лицензии"
