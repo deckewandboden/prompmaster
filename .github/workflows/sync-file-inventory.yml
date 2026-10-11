@@ -25,6 +25,9 @@ jobs:
         run: |
           set -Eeuo pipefail
           python3 scripts/generate_file_manifest.py
+          # Existing generator adds an extra empty markdown line; trim it
+          # before the repository's git diff --check whitespace gate.
+          python3 -c "from pathlib import Path; p=Path('docs/COMPLETE_FILE_INVENTORY.md'); p.write_text(p.read_text(encoding='utf-8').rstrip('\\n')+'\\n',encoding='utf-8')"
           git add -- FILE_MANIFEST.tsv MANIFEST.json docs/COMPLETE_FILE_INVENTORY.md
           git diff --cached --check
           if git diff --cached --quiet; then
