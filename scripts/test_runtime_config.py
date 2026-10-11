@@ -127,7 +127,7 @@ class RuntimeConfigTests(unittest.TestCase):
             'golang:1.27.2-alpine3.23',
             'git clone --depth 1 --branch v3.15.0',
             "grep -Eq '^5241a27'",
-            'sha256sum --check ui.sha256',
+            'sha256sum -c ui.sha256',
             'golang.org/x/net@v0.60.0',
             'COPY --from=prometheus-patched-build /src/prometheus /bin/prometheus',
             'COPY --from=prometheus-patched-build /src/promtool /bin/promtool',
