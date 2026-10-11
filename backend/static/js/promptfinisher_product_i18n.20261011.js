@@ -50,12 +50,19 @@
     + '.pmv2-language select{box-sizing:border-box;width:136px;max-width:100%;height:36px;'
     + 'padding:4px 22px 4px 9px;border:1px solid #9caec0;border-radius:9px;'
     + 'background:#fff;color:#102b43;font-size:12px;font-weight:650;cursor:pointer}'
-    + '@media(max-width:700px){.pmv2-language{flex-basis:110px}.pmv2-language select{width:110px}}';
+    + '@media(max-width:700px){.pmv2-language{flex-basis:108px}.pmv2-language select{width:108px}}'
+    + '@media(max-width:620px){.pmv2-header{height:auto!important;min-height:62px!important;'
+    + 'padding-top:7px!important;padding-bottom:7px!important;flex-wrap:wrap!important;row-gap:7px!important}'
+    + '.pmv2-header-actions{flex:1 1 150px;flex-wrap:wrap;justify-content:flex-end;min-width:0}'
+    + '.pmv2-header-spacer{display:none!important}.pmv2-language{flex:0 0 108px}}'
+    + '@media(max-width:370px){.pmv2-header-actions{flex-basis:100%;justify-content:space-between}}';
   document.head.append(style);
   if (locale === 'de') return;
+  // Only non-editable UI labels are translated. Application/task IDs,
+  // input values and the completed prompt remain untouched.
   const notUi = 'script,style,textarea,input,option,[contenteditable],'
-    + '.task,.app,.app-card,.task-card,.input-card,.option,.option-card,'
-    + '#promptOutput,#pmv2PromptOutput,.pmv2-review-value';
+    + '#promptOutput,#pmv2PromptOutput,.pmv2-review-value,'
+    + '.user-supplied,.user-content,[data-pf-untranslated]';
   const matches = text => {
     const trimmed = (text || '').trim();
     return trimmed && Object.hasOwn(TEXT, trimmed) ? t(trimmed) : null;
@@ -69,22 +76,36 @@
       node.nodeValue = original.replace(original.trim(), translated);
     }
   };
+  const updateAttributes = root => {
+    const elements = [root, ...root.querySelectorAll('[placeholder],[title],[aria-label]')];
+    for (const element of elements) {
+      if (element.closest(notUi)) continue;
+      for (const attribute of ['placeholder', 'title', 'aria-label']) {
+        const original = element.getAttribute(attribute);
+        if (original && Object.hasOwn(TEXT, original.trim())) {
+          const translated = t(original.trim());
+          if (translated !== original.trim()) element.setAttribute(attribute, translated);
+        }
+      }
+    }
+  };
   const walk = root => {
     if (!root) return;
     const walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT);
     while (walker.nextNode()) updateNode(walker.currentNode);
+    updateAttributes(root);
   };
   const roots = [...document.querySelectorAll('.pmv2-header,.pmv2-hero,.pmv2-workspace')];
   roots.forEach(walk);
   let pending = false;
   const observer = new MutationObserver(records => {
     if (pending) return;
-    if (!records.some(record => record.type === 'childList')) return;
+    if (!records.some(record => record.type === 'childList' || record.type === 'characterData')) return;
     pending = true;
     queueMicrotask(() => {
       pending = false;
       roots.forEach(walk);
     });
   });
-  roots.forEach(root => observer.observe(root, {subtree:true,childList:true}));
+  roots.forEach(root => observer.observe(root, {subtree:true,childList:true,characterData:true}));
 })();
