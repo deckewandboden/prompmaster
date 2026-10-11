@@ -1,0 +1,35 @@
+name: PROMPTFINISHER temporary admin i18n inventory refresh
+on:
+  push:
+    branches:
+      - fix/promptfinisher-public-free-and-logo-20261011
+    paths:
+      - .github/workflows/refresh-admin-i18n-inventory.yml
+
+permissions:
+  contents: write
+
+jobs:
+  regenerate:
+    if: github.repository == 'deckewandboden/prompmaster' && github.ref == 'refs/heads/fix/promptfinisher-public-free-and-logo-20261011'
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: fix/promptfinisher-public-free-and-logo-20261011
+          persist-credentials: true
+      - name: Refresh final manifest without retaining temporary workflow
+        shell: bash
+        run: |
+          set -Eeuo pipefail
+          rm .github/workflows/refresh-admin-i18n-inventory.yml
+          python3 scripts/generate_file_manifest.py
+          python3 -c "from pathlib import Path; p=Path('docs/COMPLETE_FILE_INVENTORY.md'); p.write_text(p.read_text(encoding='utf-8').rstrip(chr(10))+chr(10),encoding='utf-8')"
+          git add -- .github/workflows/refresh-admin-i18n-inventory.yml FILE_MANIFEST.tsv MANIFEST.json docs/COMPLETE_FILE_INVENTORY.md
+          git diff --cached --check
+          if git diff --cached --quiet; then exit 0; fi
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git commit -m "chore(i18n): regenerate complete file inventory for Russian locale and admin checks"
+          git push origin HEAD:fix/promptfinisher-public-free-and-logo-20261011
