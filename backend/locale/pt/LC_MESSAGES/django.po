@@ -1030,3 +1030,84 @@ msgstr "Inventário"
 
 msgid "Freie Lizenzen"
 msgstr "Licenças livres"
+
+msgid "Rolle"
+msgstr "Função"
+
+msgid "Hinweis"
+msgstr "Nota"
+
+msgid "Keine Benutzer vorhanden."
+msgstr "Não existem utilizadores."
+
+msgid "Keine Lizenzen vorhanden."
+msgstr "Não existem licenças."
+
+msgid "Keine netstyle-Berechtigung zum Anzeigen der Lizenzdaten."
+msgstr "As suas permissões netstyle não permitem consultar dados de licenças."
+
+msgid "Keine aktiven Geräte vorhanden."
+msgstr "Não existem dispositivos ativos."
+
+msgid "Keine Bestellungen vorhanden."
+msgstr "Não existem encomendas."
+
+msgid "Keine netstyle-Berechtigung zum Anzeigen der Bestelldaten."
+msgstr "As suas permissões netstyle não permitem consultar dados de encomendas."
+
+msgid "Rechtsform"
+msgstr "Forma jurídica"
+
+msgid "Telefon"
+msgstr "Telefone"
+
+msgid "Rechnungsanschrift"
+msgstr "Morada de faturação"
+
+msgid "Ort"
+msgstr "Localidade"
+
+msgid "Land"
+msgstr "País"
+
+msgid "USt-IdNr."
+msgstr "N.º de IVA"
+
+msgid "Mein Profil"
+msgstr "O meu perfil"
+
+msgid "Dies ist eine Leseansicht. Passwort, Zwei-Faktor-Authentifizierung und persönliche Einstellungen kann nur der angemeldete Kundenbenutzer selbst ändern."
+msgstr "Esta é uma vista só de leitura. Só o utilizador do cliente autenticado pode alterar a palavra-passe, autenticação de dois fatores e definições pessoais."
+
+msgid "Benutzerkonto"
+msgstr "Conta de utilizador"
+
+msgid "Teamverwaltung, Bestellungen und Unternehmensdaten sind für diese Rolle nicht freigegeben."
+msgstr "Esta função não permite aceder à gestão da equipa, encomendas ou dados da empresa."
+
+msgid "Anschrift"
+msgstr "Morada"
+
+msgid "Weitere Bereiche"
+msgstr "Outras secções"
+
+msgid "Kontoeinstellungen"
+msgstr "Definições da conta"
+
+msgid "Read-only"
+msgstr "Só de leitura"
+
+msgid "Sicherheit / 2FA"
+msgstr "Segurança / 2FA"
+
+msgid "nicht impersoniert"
+msgstr "sem personificação"
+
+msgid "nicht ausführbar"
+msgstr "indisponível"
+
+msgid "Support-Hinweis"
+msgstr "Aviso de suporte"
+
+msgid "Für echte Schreibaktionen oder einen vollständigen Login-Test muss ein eigener Nicht-Staff-Testkunde verwendet werden. Die Vorschau übernimmt niemals die Identität des Kunden."
+msgstr "Para testar alterações reais ou o início de sessão completo, utilize um cliente de teste independente sem privilégios internos. Esta pré-visualização nunca assume a identidade do cliente."
