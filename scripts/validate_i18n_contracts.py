@@ -82,7 +82,7 @@ def main() -> None:
     # Product names must never be translated as ordinary dictionary words.
     bundle = (ROOT / 'backend/static/js/promptfinisher_product_i18n.20261011.js'
               ).read_text(encoding='utf-8')
-    prefix, delimiter = '  const TEXT=', ';\\n  const language = '
+    prefix, delimiter = '  const TEXT=', ';\n  const language = '
     if prefix not in bundle or delimiter not in bundle:
         raise SystemExit('I18N FAIL: product UI dictionary markers missing')
     catalog = json.loads(bundle.split(prefix, 1)[1].split(delimiter, 1)[0])
