@@ -792,9 +792,7 @@ msgstr ""
 msgid ""
 "Gültig bis %(expiry)s. Der Link ist tenantgebunden, für genau diesen "
 "Benutzer bestimmt und nur einmal verwendbar."
-msgstr ""
-"Geldig tot %(expiry)s. De link is huurdergebonden, bedoeld voor precies deze"
-" gebruiker en kan slechts eenmaal gebruikt worden."
+msgstr "Geldig tot %(expiry)s. De link is gekoppeld aan de organisatie, uitsluitend bedoeld voor deze gebruiker en slechts één keer bruikbaar."
 
 msgid ""
 "Jede neue Lizenz startet nach erfolgreicher Zahlung mit eigener 365-Tage-"
@@ -804,10 +802,10 @@ msgstr ""
 "betaling."
 
 msgid "inkl. MwSt. · %(days)s Tage"
-msgstr "incl. BTW · %(dagen) dagen"
+msgstr "incl. btw · %(days)s dagen"
 
 msgid "%(limit)s Geräte je Benutzer"
-msgstr "%(limit) apparaten per gebruiker"
+msgstr "%(limit)s apparaten per gebruiker"
 
 msgid "Preis nicht verfügbar"
 msgstr "Prijs niet beschikbaar"
@@ -829,7 +827,7 @@ msgid "Widerrufene Geräte bleiben als Historie erhalten."
 msgstr "Ingetrokken apparaten blijven in de geschiedenis."
 
 msgid "Zuletzt %(seen)s"
-msgstr "Laatst gezien %(gezien)"
+msgstr "Laatst gezien: %(seen)s"
 
 msgid "Gerät wirklich entfernen?"
 msgstr "Echt een apparaat verwijderen?"
@@ -855,9 +853,7 @@ msgstr ""
 
 msgid ""
 "Ihre Löschanfrage vom %(requested)s ist bereits erfasst. Status: %(status)s."
-msgstr ""
-"Uw verwijderingsverzoek van %(verzoek)s is al geregistreerd. Status: "
-"%(status)s."
+msgstr "Uw verwijderingsverzoek van %(requested)s is al geregistreerd. Status: %(status)s."
 
 msgid ""
 "Sie können die Löschung Ihres PROMPTFINISHER-Kontos anfordern. Gesetzlich "
@@ -874,7 +870,7 @@ msgid "Ich möchte die Löschung meines Kontos verbindlich anfordern."
 msgstr "Ik wil een bindend verzoek indienen om mijn account te verwijderen."
 
 msgid "Guten Morgen, %(first_name)s"
-msgstr "Goedemorgen, %(first name)s"
+msgstr "Goedemorgen, %(first_name)s"
 
 msgid "Privatkonto"
 msgstr "Particuliere rekening"
@@ -883,10 +879,10 @@ msgid "Unternehmensadministrator"
 msgstr "Bedrijfsbeheerder"
 
 msgid "%(assigned)s vergeben · %(free)s verfügbar"
-msgstr "%(toegewezen) toegewezen · %(vrij) beschikbaar"
+msgstr "%(assigned)s toegewezen · %(free)s beschikbaar"
 
 msgid "%(free)s frei · %(expiring)s läuft bald ab"
-msgstr "%(free)s vrij · %(expiring) loopt binnenkort af"
+msgstr "%(free)s vrij · %(expiring)s verlopen binnenkort"
 
 msgid "Tage"
 msgstr "dagen"
@@ -895,7 +891,7 @@ msgid "kein Ablauf"
 msgstr "geen vervaldatum"
 
 msgid "Eine Lizenz läuft in %(days)s Tagen ab."
-msgstr "Een licentie verloopt in %(dagen) dagen."
+msgstr "Een licentie verloopt over %(days)s dagen."
 
 msgid "freie Pro-Lizenzen"
 msgstr "gratis Pro licenties"
@@ -904,13 +900,13 @@ msgid "Freie Pro-Lizenzen können Team-Mitgliedern zugewiesen werden."
 msgstr "Gratis Pro licenties kunnen worden toegewezen aan teamleden."
 
 msgid "Für Kauf/Abrechnung fehlen: %(fields)s."
-msgstr "Ontbrekend voor aankoop/facturering: %(fields)s."
+msgstr "Ontbrekende gegevens voor aankoop/facturering: %(fields)s."
 
 msgid "Tage verbleibend"
 msgstr "resterende dagen"
 
 msgid "Deine Lizenz läuft am %(expiry)s ab."
-msgstr "Uw licentie vervalt op %(expiry)s."
+msgstr "Uw licentie verloopt op %(expiry)s."
 
 msgid "Es ist eine freie Pro-Lizenz verfügbar."
 msgstr "Een gratis Pro licentie is beschikbaar."
