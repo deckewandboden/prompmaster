@@ -1,10 +1,10 @@
 {
   "project": "PROMPTFINISHER Commercial RC14 Full Repository",
-  "generated_at": "2026-10-11T09:34:35.758774+00:00",
-  "file_count_excluding_manifest_files": 643,
-  "total_bytes_excluding_manifest_files": 26258423,
+  "generated_at": "2026-10-11T10:35:02.725394+00:00",
+  "file_count_excluding_manifest_files": 645,
+  "total_bytes_excluding_manifest_files": 26337805,
   "roles": {
-    "active-backend": 410,
+    "active-backend": 412,
     "active-ci": 3,
     "active-marketing": 104,
     "active-operations": 37,
@@ -126,7 +126,7 @@
     {
       "path": "FILE_MANIFEST_AUDIT.tsv",
       "size": 10295,
-      "sha256": "4d24435e4f931b4946afeb7dc1f32b9fcd1127e3abc47375759217650fc7d0d1",
+      "sha256": "c0e5036621bd11ff800d8eec7690fc6e507b4f9606dedd3a29ccb6963dbd0d5c",
       "role": "repository-root"
     },
     {
@@ -809,8 +809,8 @@
     },
     {
       "path": "backend/apps/core/admin_views.py",
-      "size": 119424,
-      "sha256": "e26c4bb5746eeea5a5bc85a6f7be461566f2054151ed67b94151510083694db8",
+      "size": 121494,
+      "sha256": "abf288b15587a4c7753dc93417efbde16a82c5ba2a74492734a6248fcd4b4b2a",
       "role": "active-backend"
     },
     {
@@ -1066,6 +1066,12 @@
       "role": "active-backend"
     },
     {
+      "path": "backend/apps/core/tests_i18n_admin.py",
+      "size": 2831,
+      "sha256": "e6a2bd575d7f7731039c015da22ebb93b339dbe4237389d4cbbc232f99b005d8",
+      "role": "active-backend"
+    },
+    {
       "path": "backend/apps/core/tests_leads.py",
       "size": 18566,
       "sha256": "35e5db9658eab9ba49b725c922998309e19c1640bdc0fc860e39bdd56b8d730b",
@@ -1079,8 +1085,8 @@
     },
     {
       "path": "backend/apps/core/tests_master_patch_a.py",
-      "size": 10837,
-      "sha256": "7f740327840ba5aa45f6f72969239927eafbcd68a907f7fe5d470e1d76136e8a",
+      "size": 13567,
+      "sha256": "2b6e68c9a7896ca6616037f48d5699d0a35b0eeb11222f6d426e81ea3c861305",
       "role": "active-backend"
     },
     {
@@ -2039,8 +2045,8 @@
     },
     {
       "path": "backend/config/settings.py",
-      "size": 9196,
-      "sha256": "3e88a0e65dd1d24be71b146cf7b3296dc53f5fb02985e923cb7222ecd5d1ce30",
+      "size": 9226,
+      "sha256": "498752989e0de29342951600f67f709c1054b893f1cade576629317fa8f188c5",
       "role": "active-backend"
     },
     {
@@ -2057,26 +2063,32 @@
     },
     {
       "path": "backend/locale/en/LC_MESSAGES/django.po",
-      "size": 19780,
-      "sha256": "72b904a5b09d915381cdb454a0463b3a7895be2a9f8148deac708a9d970e4b89",
+      "size": 25895,
+      "sha256": "e595502723ef4fae7f2926d38e72549e648984f3eecb611ea5d2a5b690f00e9c",
       "role": "active-backend"
     },
     {
       "path": "backend/locale/es/LC_MESSAGES/django.po",
-      "size": 21085,
-      "sha256": "ca558f7e3ed678568e586196e443a7a77546c6bddf2225653b364e6b902c1ad5",
+      "size": 27669,
+      "sha256": "78c7efe70046936954be19762606482e1d702c6240fe22cadc03651b2a158829",
       "role": "active-backend"
     },
     {
       "path": "backend/locale/pt/LC_MESSAGES/django.po",
-      "size": 21262,
-      "sha256": "1d4899e98400b752b98bdcd08b89307f8c1f5adbc1868dce839688aa4ffb7a86",
+      "size": 27914,
+      "sha256": "f2e07041c05aaaafe4e269d010a00c10ca5c7f3a300bec6387b568e51f6e8298",
+      "role": "active-backend"
+    },
+    {
+      "path": "backend/locale/ru/LC_MESSAGES/django.po",
+      "size": 36109,
+      "sha256": "7943141df982295ee5f3a8969001b9da6430cb0c4894410c9e471f7d466f19da",
       "role": "active-backend"
     },
     {
       "path": "backend/locale/tr/LC_MESSAGES/django.po",
-      "size": 20651,
-      "sha256": "0445861cc229fc6b045ee581c4e0eb66719fe26cc32c079a190b10c77b1c9121",
+      "size": 27161,
+      "sha256": "6b65a42d7dbc28bdc2fdd58aef76ec190a572f93b198fd9d2357cd1ae538a15e",
       "role": "active-backend"
     },
     {
@@ -2141,8 +2153,8 @@
     },
     {
       "path": "backend/static/css/app.css",
-      "size": 30878,
-      "sha256": "a5abc260bf86aebbe05c7afee49cc86d57e8e85b5a6f95634f5a38469b7b2fc5",
+      "size": 31740,
+      "sha256": "702b4f1d572ecb840190b08bfc1d87b29a338e339807371c73fc66d0f0ecfdbf",
       "role": "active-backend"
     },
     {
@@ -2195,8 +2207,8 @@
     },
     {
       "path": "backend/templates/app_shell.html",
-      "size": 1516,
-      "sha256": "7d9ee657523e032c0d482155734783fe795f6f60daa8501d4d20ad6e40d62d31",
+      "size": 1644,
+      "sha256": "0cc796d9b6cab8c63969deea606fe4ded1e53fe72ac331342c54e82f51688e60",
       "role": "active-backend"
     },
     {
@@ -2291,8 +2303,8 @@
     },
     {
       "path": "backend/templates/base.html",
-      "size": 686,
-      "sha256": "7b27431d91e984dced7b5503fe809bc06126c0eeb589ebcf6cc7f247b8ad6749",
+      "size": 727,
+      "sha256": "dbb237cf937415e3eaeb14e9be1ecf67bafd5edda98540580ce5f70574c79aad",
       "role": "active-backend"
     },
     {
@@ -2303,8 +2315,8 @@
     },
     {
       "path": "backend/templates/includes/language_switcher.html",
-      "size": 974,
-      "sha256": "091e17499539c7c018d1ee9d724b35dcdb7cd986c4c2b7bd338f5d45655d32d8",
+      "size": 1017,
+      "sha256": "1db5a47e68e8e7645848f6f63536d1929b5b0323a6a7e6db0e5e03dceb5710f5",
       "role": "active-backend"
     },
     {
@@ -2381,8 +2393,8 @@
     },
     {
       "path": "backend/templates/ns_admin/customer_portal_preview.html",
-      "size": 10831,
-      "sha256": "eb8aaecea5033e9b639c70f2ce73d6e86ed21584066bdcf9db46ef2b5ce85fa8",
+      "size": 17356,
+      "sha256": "e51a8a6bdeee165189c977785936571abecef51a1fd4680dd691d30fb669aa16",
       "role": "active-backend"
     },
     {
@@ -2393,8 +2405,8 @@
     },
     {
       "path": "backend/templates/ns_admin/dashboard.html",
-      "size": 5771,
-      "sha256": "7c0ec4a18854d33591d362d603b47b61ff728da7bd577daee6b58d88cc4395a7",
+      "size": 6210,
+      "sha256": "582d55d54c0aab7a67c31514dd33266133bcc9c9968a48826726683eb752d09a",
       "role": "active-backend"
     },
     {
@@ -3419,8 +3431,8 @@
     },
     {
       "path": "marketing/index.html",
-      "size": 4110,
-      "sha256": "04553f5989bfdd48201b059eb7aaee0299881674fea064d35daee763788f0e89",
+      "size": 4194,
+      "sha256": "b55a6895e678a64926df576ca89c1dd51cb00d4345cd7421c83299c4cbddd56c",
       "role": "active-marketing"
     },
     {
@@ -3539,8 +3551,8 @@
     },
     {
       "path": "marketing/src/content.js",
-      "size": 21910,
-      "sha256": "1ec38e0c0fa746a7fa0f7fd3b92dcb050d5889dacf5cf9ece50a8c6d2410255d",
+      "size": 22078,
+      "sha256": "a98e9e50337c532638a0530cac68fc0386aa0bbc9594769956656acde8c73f17",
       "role": "active-marketing"
     },
     {
@@ -3569,8 +3581,8 @@
     },
     {
       "path": "marketing/src/main.js",
-      "size": 14492,
-      "sha256": "73ffd73a015190dfc382a86ed69f6e6e25f578643fb6c8473d1f457918e1dee6",
+      "size": 14534,
+      "sha256": "8693eae4c5b141623560d2b13c26fdbcc3c52871ace02f74a994c24133a50ef6",
       "role": "active-marketing"
     },
     {
@@ -3587,8 +3599,8 @@
     },
     {
       "path": "marketing/tests/content.test.mjs",
-      "size": 4578,
-      "sha256": "f431574c98ac574ceb1a46ecbff87ad1866ad3f8d2bd8ed6aadf9b426a9c21e5",
+      "size": 5720,
+      "sha256": "28a9acf8169bd356e0d71db9e5ce6e1e89ba9f209efa6aeb24805707c358fd51",
       "role": "active-marketing"
     },
     {
@@ -3707,8 +3719,8 @@
     },
     {
       "path": "scripts/generate_file_manifest.py",
-      "size": 3187,
-      "sha256": "ad1450ab6c61929acebb6d8ecdb608be2c18cf175fc9051c0673e228ee76ce5a",
+      "size": 3464,
+      "sha256": "5bf14f39220d20174fd76e9e2dbc254bd6c5f7693c9cd3188ec01b0ad86be2cf",
       "role": "active-operations"
     },
     {
