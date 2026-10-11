@@ -1,6 +1,6 @@
 # Vollständiges Datei-Inventar — PROMPTFINISHER RC14
 
-Erfasst: **654 Dateien** (Manifest-/Inventardateien selbst ausgenommen), **26,654,769 Byte**.
+Erfasst: **655 Dateien** (Manifest-/Inventardateien selbst ausgenommen), **26,672,896 Byte**.
 
 Maschinenlesbar: `FILE_MANIFEST.tsv` und `MANIFEST.json`.
 
@@ -27,7 +27,7 @@ Maschinenlesbar: `FILE_MANIFEST.tsv` und `MANIFEST.json`.
 | `backend/apps/accounts/models.py` | 2827 | `a892d3d157ea1c7e093ce0f318585de11d71b70f1e65f060b8d69211a3c641c4` |
 | `backend/apps/accounts/security.py` | 4003 | `aa6d3a5a6811156dc0db570f09d97d2206759c3b55e876fec2124a951e2527e7` |
 | `backend/apps/accounts/tests.py` | 15174 | `883a4ed2d15ae983ee10a0e088a69bebb00c24b7473451b6423994875aebf73f` |
-| `backend/apps/accounts/tests_free_public.py` | 6539 | `96b8fb012b9d4b82024e5b5802a2b2ee9c93e9462885f9dbc83e218527cac86e` |
+| `backend/apps/accounts/tests_free_public.py` | 8296 | `11b47a76a1fa922624eddfa0a24365c202083c6654fb7abc4232187145218931` |
 | `backend/apps/accounts/tests_invitation_http.py` | 8286 | `6a82c9dfbf2b9792708590f04fac9e49a4a32def0b54afd80666372fb3a5b626` |
 | `backend/apps/accounts/tests_security.py` | 12261 | `da8ac0559297cc634da2d30597c10225d2604a1e8681eee2ccba371f6def1abf` |
 | `backend/apps/accounts/totp.py` | 906 | `100b45dbb78aa2a3cbf9025ace81348bf8059a304b41eb305677f9dfca3e502a` |
@@ -255,7 +255,7 @@ Maschinenlesbar: `FILE_MANIFEST.tsv` und `MANIFEST.json`.
 | `backend/apps/proaccess/views.py` | 13465 | `02a8e3020e0095991f9a8768d73acac4702c597eeb7a4bd9c9acaf329be13d85` |
 | `backend/apps/prompts/__init__.py` | 0 | `e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855` |
 | `backend/apps/prompts/admin.py` | 488 | `3bbbd50b2bd2f976cfde1fe3329789aa78a289c08bf9c39645613120907293ea` |
-| `backend/apps/prompts/api.py` | 12216 | `b4ef1cd0e1a39740ea392c7cb9192366895b7bd92f7c8a322e4733965b4f3549` |
+| `backend/apps/prompts/api.py` | 13527 | `472d6dd5ee707a7802e6904f5b55190e005835bf83316859d40ed80b832341aa` |
 | `backend/apps/prompts/api_urls.py` | 433 | `8542524f1ef12339beae79676f88e8eb362a7c69b54141ff9d4adca840177668` |
 | `backend/apps/prompts/apps.py` | 186 | `e854562f7d46cee776c8680a37f1713ede2e069061797b158ccc6bfd8517812b` |
 | `backend/apps/prompts/composer_core.py` | 10105 | `00882e7c7ee9c2c363bc03536e76d1fb18b9b3485f07a5607646e062cc94730e` |
@@ -310,7 +310,7 @@ Maschinenlesbar: `FILE_MANIFEST.tsv` und `MANIFEST.json`.
 | `backend/private_assets/README.md` | 309 | `51302d1205b09fb6422dd85fbb6ee2a76fcbfd0f769b5f0d5db9f8b72f7bb9cc` |
 | `backend/private_assets/promptfinisher_free_reference.html` | 110901 | `8162be1e62b5d4503e6fb54180636e886b7e11106205f64626339f6c90a35ac1` |
 | `backend/private_assets/promptfinisher_pro.html` | 233430 | `a18375946c7081034cd6b9d70a1f4e3b843c51e03230477cae246b6c4bf0f95f` |
-| `backend/private_assets/promptfinisher_pro_runtime.html` | 249984 | `a78e3b29a3a4649e152e777f94ee5c4ed0f711f2deb24b789ccfaf9562d8df2b` |
+| `backend/private_assets/promptfinisher_pro_runtime.html` | 250048 | `e0794d44ce924d272c6f2752ca9ddce3531667a38f525f67dc54408f5c6be915` |
 | `backend/static/brand/promptfinisher-favicon.svg` | 24026 | `385cda4f3555e28f045b950d7fdad7c508f2750811b4ac5732091915808744b4` |
 | `backend/static/brand/promptfinisher-logo-clean.svg` | 911185 | `93f343364800fb5072d7c4dfce4a7b9f349b77c0d3fa2a919c45d08fc8c49bf2` |
 | `backend/static/brand/promptfinisher-logo-hq.png` | 683218 | `851c75f6297b7b2a61d45721dbcb70ce6f0a9c66deba86c16c8daf376ab97ec3` |
@@ -320,9 +320,9 @@ Maschinenlesbar: `FILE_MANIFEST.tsv` und `MANIFEST.json`.
 | `backend/static/css/datagrid.css` | 1896 | `7de6d9235059a0f9d4903b802da86b470c5ce40aaffe6ffefacc4d0b433d2951` |
 | `backend/static/css/promptfinisher_v2.20260922.css` | 62316 | `8ae45bd50c1c86c6f0f1efb4c2db388d4772c48360e96fefab703a97c604a16e` |
 | `backend/static/js/app.js` | 16912 | `08fb0f141c2e1a3dc1ca80f21df0b37a661cdf53c7305e107171707471630ff2` |
-| `backend/static/js/free_catalog_bridge.20260918.js` | 11421 | `badeeeeb29275c67404712f61f4398fe17640cc1b61ae274382aa06c55ec1c85` |
+| `backend/static/js/free_catalog_bridge.20260918.js` | 11489 | `cf0867f98fb98a617418bb3fcb3c5b726b590c669b54aba7049bd81a7fff533d` |
 | `backend/static/js/promptfinisher_brand_hq.20260925.js` | 487 | `937e23ef5c5566d71f345eec533d11ff6fde9eece6cca7595d3f80b267b1f172` |
-| `backend/static/js/promptfinisher_product_i18n.20261011.js` | 176840 | `b6821812466e9b7508b7f00641d4582caa5b9c5a55c534da18e726c814a03e6c` |
+| `backend/static/js/promptfinisher_product_i18n.20261011.js` | 178267 | `62487f58dc9d2e9a00eb16f81f86d4beffc85e63872d1ded1a6095dc33c7907c` |
 | `backend/static/js/promptfinisher_ui_v2.20260922.js` | 43298 | `e18ab6ee016f09d683ef34719b1c88dd395eb1905b0709ec14a498f69905aad1` |
 | `backend/templates/403.html` | 264 | `1de8a9eaf34d2e358d90e66a590b3b2a4b4d886b4c60c42efbec1c2f1eb59ccd` |
 | `backend/templates/500.html` | 332 | `5e99d45b238a6d36c44f77983534c246a951cc8b295c7dc7b3b66bec6cdfbb01` |
@@ -430,12 +430,13 @@ Maschinenlesbar: `FILE_MANIFEST.tsv` und `MANIFEST.json`.
 
 ## active-ci
 
-3 Dateien.
+4 Dateien.
 
 | Pfad | Größe | SHA256 |
 |---|---:|---|
 | `.github/workflows/ci.yml` | 12170 | `f4648d68c0ca0ae0432b26e450d5e33746081ff278f1a1ac8b471ffacb7fa598` |
 | `.github/workflows/dependency-security-full.yml` | 4134 | `73ac0f865b3fc0c5a07ca78340eb14e04aa7c5c3246f55c3d75c502e654bcd62` |
+| `.github/workflows/expand-pro-task-locales.yml` | 3009 | `d0eca08d849bd654e7ad8eeff107442b13b944013acefc2c91136d53bb897bc5` |
 | `.github/workflows/shell-syntax.yml` | 1355 | `2b299080b18f8bf31b48f999d9187e188e1fead7fc051f60b1ada3939312143f` |
 
 ## active-marketing
@@ -604,8 +605,8 @@ Maschinenlesbar: `FILE_MANIFEST.tsv` und `MANIFEST.json`.
 | `product/golden_masters/SHA256SUMS.txt` | 181 | `aa3c942b2c493c23c83d971cb42a3ac823bbcca4a993682d6f89022a3cd83d56` |
 | `product/golden_masters/promptfinisher_free.html` | 110901 | `8162be1e62b5d4503e6fb54180636e886b7e11106205f64626339f6c90a35ac1` |
 | `product/golden_masters/promptfinisher_pro.html` | 233430 | `a18375946c7081034cd6b9d70a1f4e3b843c51e03230477cae246b6c4bf0f95f` |
-| `product/i18n/free_pro_visible_strings.json` | 15081 | `7691e0ef4df8c848f2170c4533b7e726d5965dd6830a2e9d91e15cd4566da0ae` |
-| `product/runtime/pro_server_bridge.js` | 16535 | `9b9c0d09d03cbf2cee841406fe6ef46bb78c988e4a313d1edfa553a48595e027` |
+| `product/i18n/free_pro_visible_strings.json` | 25440 | `4f7650e666d9c3c4846a470c899040ae4818fbe13d1388600a9a1428eee65791` |
+| `product/runtime/pro_server_bridge.js` | 16599 | `1c84cda130e71460be3fa93e877381683dd6bdd821446653c1db3f6997a40ecf` |
 
 ## documentation
 
@@ -704,7 +705,7 @@ Maschinenlesbar: `FILE_MANIFEST.tsv` und `MANIFEST.json`.
 | `Caddyfile` | 4942 | `802f1cd259e9ff1c91dc54e37f9a2be7b98d4a0106ea8a52d714cb2f2b1bdcdc` |
 | `Caddyfile.external` | 5946 | `255f550fb61077383741867916ed1806ffc81bb530d0ab5b6f516c3d1ad1a824` |
 | `Dockerfile` | 831 | `dc21487ea9caad5d8d21b4d460ecf97255cf7e226baa3051d6e0cfc1c9df93c5` |
-| `Dockerfile.caddy` | 281 | `3222f69f1bd3a6537a6ec6d5d537f8ae5ab7112cc7a7a55a4949fbe8afb5001c` |
+| `Dockerfile.caddy` | 349 | `39768bf3e1303c6bdbcbb49ae2079876f89cc836785cc6c2fe04b658451d9542` |
 | `Dockerfile.cadvisor` | 1420 | `7b6904b666f85cc97ec43eb9bbe46ae90c94792f8ceca248ddac928482dc323b` |
 | `Dockerfile.node-exporter` | 800 | `87f6c07ef013955c1f28917d4f25825932e71b7e8d6dc7f6ee742d9b554753b6` |
 | `Dockerfile.postgres` | 422 | `a55f13c67dfa8b80821f303ba16c65046de3fce34ce320e48e01b0fcad628933` |

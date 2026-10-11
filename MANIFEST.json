@@ -1,11 +1,11 @@
 {
   "project": "PROMPTFINISHER Commercial RC14 Full Repository",
-  "generated_at": "2026-10-11T11:12:24.380646+00:00",
-  "file_count_excluding_manifest_files": 654,
-  "total_bytes_excluding_manifest_files": 26654769,
+  "generated_at": "2026-10-11T11:34:20.787571+00:00",
+  "file_count_excluding_manifest_files": 655,
+  "total_bytes_excluding_manifest_files": 26672896,
   "roles": {
     "active-backend": 417,
-    "active-ci": 3,
+    "active-ci": 4,
     "active-marketing": 104,
     "active-operations": 39,
     "active-product": 5,
@@ -46,6 +46,12 @@
       "role": "active-ci"
     },
     {
+      "path": ".github/workflows/expand-pro-task-locales.yml",
+      "size": 3009,
+      "sha256": "d0eca08d849bd654e7ad8eeff107442b13b944013acefc2c91136d53bb897bc5",
+      "role": "active-ci"
+    },
+    {
       "path": ".github/workflows/shell-syntax.yml",
       "size": 1355,
       "sha256": "2b299080b18f8bf31b48f999d9187e188e1fead7fc051f60b1ada3939312143f",
@@ -83,8 +89,8 @@
     },
     {
       "path": "Dockerfile.caddy",
-      "size": 281,
-      "sha256": "3222f69f1bd3a6537a6ec6d5d537f8ae5ab7112cc7a7a55a4949fbe8afb5001c",
+      "size": 349,
+      "sha256": "39768bf3e1303c6bdbcbb49ae2079876f89cc836785cc6c2fe04b658451d9542",
       "role": "repository-root"
     },
     {
@@ -443,8 +449,8 @@
     },
     {
       "path": "backend/apps/accounts/tests_free_public.py",
-      "size": 6539,
-      "sha256": "96b8fb012b9d4b82024e5b5802a2b2ee9c93e9462885f9dbc83e218527cac86e",
+      "size": 8296,
+      "sha256": "11b47a76a1fa922624eddfa0a24365c202083c6654fb7abc4232187145218931",
       "role": "active-backend"
     },
     {
@@ -1811,8 +1817,8 @@
     },
     {
       "path": "backend/apps/prompts/api.py",
-      "size": 12216,
-      "sha256": "b4ef1cd0e1a39740ea392c7cb9192366895b7bd92f7c8a322e4733965b4f3549",
+      "size": 13527,
+      "sha256": "472d6dd5ee707a7802e6904f5b55190e005835bf83316859d40ed80b832341aa",
       "role": "active-backend"
     },
     {
@@ -2141,8 +2147,8 @@
     },
     {
       "path": "backend/private_assets/promptfinisher_pro_runtime.html",
-      "size": 249984,
-      "sha256": "a78e3b29a3a4649e152e777f94ee5c4ed0f711f2deb24b789ccfaf9562d8df2b",
+      "size": 250048,
+      "sha256": "e0794d44ce924d272c6f2752ca9ddce3531667a38f525f67dc54408f5c6be915",
       "role": "active-backend"
     },
     {
@@ -2201,8 +2207,8 @@
     },
     {
       "path": "backend/static/js/free_catalog_bridge.20260918.js",
-      "size": 11421,
-      "sha256": "badeeeeb29275c67404712f61f4398fe17640cc1b61ae274382aa06c55ec1c85",
+      "size": 11489,
+      "sha256": "cf0867f98fb98a617418bb3fcb3c5b726b590c669b54aba7049bd81a7fff533d",
       "role": "active-backend"
     },
     {
@@ -2213,8 +2219,8 @@
     },
     {
       "path": "backend/static/js/promptfinisher_product_i18n.20261011.js",
-      "size": 176840,
-      "sha256": "b6821812466e9b7508b7f00641d4582caa5b9c5a55c534da18e726c814a03e6c",
+      "size": 178267,
+      "sha256": "62487f58dc9d2e9a00eb16f81f86d4beffc85e63872d1ded1a6095dc33c7907c",
       "role": "active-backend"
     },
     {
@@ -3695,14 +3701,14 @@
     },
     {
       "path": "product/i18n/free_pro_visible_strings.json",
-      "size": 15081,
-      "sha256": "7691e0ef4df8c848f2170c4533b7e726d5965dd6830a2e9d91e15cd4566da0ae",
+      "size": 25440,
+      "sha256": "4f7650e666d9c3c4846a470c899040ae4818fbe13d1388600a9a1428eee65791",
       "role": "active-product"
     },
     {
       "path": "product/runtime/pro_server_bridge.js",
-      "size": 16535,
-      "sha256": "9b9c0d09d03cbf2cee841406fe6ef46bb78c988e4a313d1edfa553a48595e027",
+      "size": 16599,
+      "sha256": "1c84cda130e71460be3fa93e877381683dd6bdd821446653c1db3f6997a40ecf",
       "role": "active-product"
     },
     {
