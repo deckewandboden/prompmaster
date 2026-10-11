@@ -1030,3 +1030,84 @@ msgstr "Inventario"
 
 msgid "Freie Lizenzen"
 msgstr "Licencias libres"
+
+msgid "Rolle"
+msgstr "Función"
+
+msgid "Hinweis"
+msgstr "Aviso"
+
+msgid "Keine Benutzer vorhanden."
+msgstr "No hay usuarios."
+
+msgid "Keine Lizenzen vorhanden."
+msgstr "No hay licencias."
+
+msgid "Keine netstyle-Berechtigung zum Anzeigen der Lizenzdaten."
+msgstr "Sus permisos de netstyle no permiten ver los datos de licencias."
+
+msgid "Keine aktiven Geräte vorhanden."
+msgstr "No hay dispositivos activos."
+
+msgid "Keine Bestellungen vorhanden."
+msgstr "No hay pedidos."
+
+msgid "Keine netstyle-Berechtigung zum Anzeigen der Bestelldaten."
+msgstr "Sus permisos de netstyle no permiten ver los datos de pedidos."
+
+msgid "Rechtsform"
+msgstr "Forma jurídica"
+
+msgid "Telefon"
+msgstr "Teléfono"
+
+msgid "Rechnungsanschrift"
+msgstr "Dirección de facturación"
+
+msgid "Ort"
+msgstr "Localidad"
+
+msgid "Land"
+msgstr "País"
+
+msgid "USt-IdNr."
+msgstr "N.º IVA"
+
+msgid "Mein Profil"
+msgstr "Mi perfil"
+
+msgid "Dies ist eine Leseansicht. Passwort, Zwei-Faktor-Authentifizierung und persönliche Einstellungen kann nur der angemeldete Kundenbenutzer selbst ändern."
+msgstr "Es una vista de solo lectura. Solo el usuario del cliente con sesión iniciada puede modificar su contraseña, autenticación de dos factores y ajustes personales."
+
+msgid "Benutzerkonto"
+msgstr "Cuenta de usuario"
+
+msgid "Teamverwaltung, Bestellungen und Unternehmensdaten sind für diese Rolle nicht freigegeben."
+msgstr "Esta función no permite acceder a la gestión de equipos, los pedidos ni los datos de empresa."
+
+msgid "Anschrift"
+msgstr "Dirección postal"
+
+msgid "Weitere Bereiche"
+msgstr "Otras secciones"
+
+msgid "Kontoeinstellungen"
+msgstr "Configuración de la cuenta"
+
+msgid "Read-only"
+msgstr "Solo lectura"
+
+msgid "Sicherheit / 2FA"
+msgstr "Seguridad / 2FA"
+
+msgid "nicht impersoniert"
+msgstr "sin suplantación de identidad"
+
+msgid "nicht ausführbar"
+msgstr "no disponible"
+
+msgid "Support-Hinweis"
+msgstr "Aviso de soporte"
+
+msgid "Für echte Schreibaktionen oder einen vollständigen Login-Test muss ein eigener Nicht-Staff-Testkunde verwendet werden. Die Vorschau übernimmt niemals die Identität des Kunden."
+msgstr "Para probar cambios reales o el inicio de sesión completo, utilice un cliente de prueba independiente sin permisos de personal. Esta vista nunca asume la identidad del cliente."
