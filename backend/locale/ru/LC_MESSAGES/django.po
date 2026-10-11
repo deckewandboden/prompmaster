@@ -1037,3 +1037,84 @@ msgstr "Ресурсы"
 
 msgid "Freie Lizenzen"
 msgstr "Свободные лицензии"
+
+msgid "Rolle"
+msgstr "Роль"
+
+msgid "Hinweis"
+msgstr "Примечание"
+
+msgid "Keine Benutzer vorhanden."
+msgstr "Пользователей нет."
+
+msgid "Keine Lizenzen vorhanden."
+msgstr "Лицензий нет."
+
+msgid "Keine netstyle-Berechtigung zum Anzeigen der Lizenzdaten."
+msgstr "Ваши права netstyle не позволяют просматривать данные лицензий."
+
+msgid "Keine aktiven Geräte vorhanden."
+msgstr "Нет активных устройств."
+
+msgid "Keine Bestellungen vorhanden."
+msgstr "Заказов нет."
+
+msgid "Keine netstyle-Berechtigung zum Anzeigen der Bestelldaten."
+msgstr "Ваши права netstyle не позволяют просматривать данные заказов."
+
+msgid "Rechtsform"
+msgstr "Организационно-правовая форма"
+
+msgid "Telefon"
+msgstr "Телефон"
+
+msgid "Rechnungsanschrift"
+msgstr "Адрес для выставления счёта"
+
+msgid "Ort"
+msgstr "Город"
+
+msgid "Land"
+msgstr "Страна"
+
+msgid "USt-IdNr."
+msgstr "Номер плательщика НДС"
+
+msgid "Mein Profil"
+msgstr "Мой профиль"
+
+msgid "Dies ist eine Leseansicht. Passwort, Zwei-Faktor-Authentifizierung und persönliche Einstellungen kann nur der angemeldete Kundenbenutzer selbst ändern."
+msgstr "Это представление только для чтения. Пароль, двухфакторную аутентификацию и личные настройки может изменить только сам вошедший пользователь клиента."
+
+msgid "Benutzerkonto"
+msgstr "Учётная запись пользователя"
+
+msgid "Teamverwaltung, Bestellungen und Unternehmensdaten sind für diese Rolle nicht freigegeben."
+msgstr "Для этой роли недоступны управление командой, заказы и данные компании."
+
+msgid "Anschrift"
+msgstr "Почтовый адрес"
+
+msgid "Weitere Bereiche"
+msgstr "Другие разделы"
+
+msgid "Kontoeinstellungen"
+msgstr "Настройки учётной записи"
+
+msgid "Read-only"
+msgstr "Только для чтения"
+
+msgid "Sicherheit / 2FA"
+msgstr "Безопасность / 2FA"
+
+msgid "nicht impersoniert"
+msgstr "без подмены личности"
+
+msgid "nicht ausführbar"
+msgstr "недоступно"
+
+msgid "Support-Hinweis"
+msgstr "Примечание службы поддержки"
+
+msgid "Für echte Schreibaktionen oder einen vollständigen Login-Test muss ein eigener Nicht-Staff-Testkunde verwendet werden. Die Vorschau übernimmt niemals die Identität des Kunden."
+msgstr "Для проверки реальных изменений или полного входа используйте отдельную тестовую учётную запись клиента без прав персонала. Предпросмотр никогда не принимает личность клиента."
