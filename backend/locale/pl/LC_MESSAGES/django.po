@@ -793,9 +793,7 @@ msgstr ""
 msgid ""
 "Gültig bis %(expiry)s. Der Link ist tenantgebunden, für genau diesen "
 "Benutzer bestimmt und nur einmal verwendbar."
-msgstr ""
-"Ważne do% (termin ważności) s. Link jest związany natent-, przeznaczony "
-"dokładnie dla tego użytkownika i może być używany tylko raz."
+msgstr "Ważne do %(expiry)s. Link jest przypisany do organizacji, przeznaczony wyłącznie dla tego użytkownika i jednorazowy."
 
 msgid ""
 "Jede neue Lizenz startet nach erfolgreicher Zahlung mit eigener 365-Tage-"
@@ -805,10 +803,10 @@ msgstr ""
 "płatności."
 
 msgid "inkl. MwSt. · %(days)s Tage"
-msgstr "w tym VAT ·% (dni) dni"
+msgstr "w tym VAT · %(days)s dni"
 
 msgid "%(limit)s Geräte je Benutzer"
-msgstr "% (limit) urządzeń na użytkownika"
+msgstr "%(limit)s urządzeń na użytkownika"
 
 msgid "Preis nicht verfügbar"
 msgstr "Cena niedostępna"
@@ -830,7 +828,7 @@ msgid "Widerrufene Geräte bleiben als Historie erhalten."
 msgstr "Odwrócone urządzenia pozostają w historii."
 
 msgid "Zuletzt %(seen)s"
-msgstr "Ostatnio widziana% (widziana) s"
+msgstr "Ostatnio: %(seen)s"
 
 msgid "Gerät wirklich entfernen?"
 msgstr "Naprawdę usunąć urządzenie?"
@@ -855,9 +853,7 @@ msgstr ""
 
 msgid ""
 "Ihre Löschanfrage vom %(requested)s ist bereits erfasst. Status: %(status)s."
-msgstr ""
-"Twój wniosek o usunięcie z% (wymagane) s został już zarejestrowany. Status:%"
-" (status) s."
+msgstr "Twój wniosek o usunięcie z dnia %(requested)s został już zarejestrowany. Status: %(status)s."
 
 msgid ""
 "Sie können die Löschung Ihres PROMPTFINISHER-Kontos anfordern. Gesetzlich "
@@ -874,7 +870,7 @@ msgid "Ich möchte die Löschung meines Kontos verbindlich anfordern."
 msgstr "Chcę złożyć wiążącą prośbę o usunięcie mojego konta."
 
 msgid "Guten Morgen, %(first_name)s"
-msgstr "Dzień dobry,% (imię _ imię) s"
+msgstr "Dzień dobry, %(first_name)s"
 
 msgid "Privatkonto"
 msgstr "Konto prywatne"
@@ -883,10 +879,10 @@ msgid "Unternehmensadministrator"
 msgstr "Administrator przedsiębiorstwa"
 
 msgid "%(assigned)s vergeben · %(free)s verfügbar"
-msgstr "% (przypisane) s przypisane ·% (wolne) s dostępne"
+msgstr "%(assigned)s przypisanych · %(free)s dostępnych"
 
 msgid "%(free)s frei · %(expiring)s läuft bald ab"
-msgstr "% (wolne) s wolne ·% (wygasające) s wygasające wkrótce"
+msgstr "%(free)s wolnych · %(expiring)s wkrótce wygaśnie"
 
 msgid "Tage"
 msgstr "dni"
@@ -895,7 +891,7 @@ msgid "kein Ablauf"
 msgstr "brak ważności"
 
 msgid "Eine Lizenz läuft in %(days)s Tagen ab."
-msgstr "Licencja wygasa w ciągu dni% (dni)."
+msgstr "Licencja wygaśnie za %(days)s dni."
 
 msgid "freie Pro-Lizenzen"
 msgstr "wolne licencje Pro"
@@ -904,13 +900,13 @@ msgid "Freie Pro-Lizenzen können Team-Mitgliedern zugewiesen werden."
 msgstr "Bezpłatne licencje Pro mogą być przypisane członkom zespołu."
 
 msgid "Für Kauf/Abrechnung fehlen: %(fields)s."
-msgstr "Brak do zakupu / fakturowania:% (pola) s."
+msgstr "Brakuje danych do zakupu/rozliczenia: %(fields)s."
 
 msgid "Tage verbleibend"
 msgstr "dni pozostałe"
 
 msgid "Deine Lizenz läuft am %(expiry)s ab."
-msgstr "Twoje prawo jazdy wygasa w% (wygaśnięcie) s."
+msgstr "Twoja licencja wygasa dnia %(expiry)s."
 
 msgid "Es ist eine freie Pro-Lizenz verfügbar."
 msgstr "Bezpłatna licencja Pro jest dostępna."
