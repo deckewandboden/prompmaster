@@ -283,7 +283,7 @@ msgid "Checkout"
 msgstr "Afrekenen"
 
 msgid "Datenschutz"
-msgstr "Privacy"
+msgstr "Gegevensbescherming"
 
 msgid "Der Link wurde per E-Mail versendet."
 msgstr "De link werd per e-mail verzonden."
@@ -388,7 +388,7 @@ msgid "Zahlungen mit Handlungsbedarf"
 msgstr "Betalingen waarvoor actie vereist is"
 
 msgid "Zahlungspflichtig kaufen →"
-msgstr "Kopen met betalingsverplichting →"
+msgstr "Bestellen met betalingsverplichting →"
 
 msgid "Zuordnungslink erzeugt"
 msgstr "Opdracht koppeling aangemaakt"
@@ -897,7 +897,7 @@ msgid "freie Pro-Lizenzen"
 msgstr "gratis Pro licenties"
 
 msgid "Freie Pro-Lizenzen können Team-Mitgliedern zugewiesen werden."
-msgstr "Gratis Pro licenties kunnen worden toegewezen aan teamleden."
+msgstr "Beschikbare, nog niet toegewezen Pro-licenties kunnen aan teamleden worden toegewezen."
 
 msgid "Für Kauf/Abrechnung fehlen: %(fields)s."
 msgstr "Ontbrekende gegevens voor aankoop/facturering: %(fields)s."
@@ -1013,7 +1013,7 @@ msgid "Letzte Bestellungen"
 msgstr "Recente bestellingen"
 
 msgid "Nächste Lizenzabläufe"
-msgstr "Binnenkort verlopen de licenties"
+msgstr "Eerstvolgende licentievervaldatums"
 
 msgid "Keine bevorstehenden Abläufe."
 msgstr "Geen aankomende afloop."
@@ -1147,7 +1147,7 @@ msgid "Telefon"
 msgstr "Telefoon"
 
 msgid "Rechnungsanschrift"
-msgstr "Factureringsadres"
+msgstr "Factuuradres"
 
 msgid "Ort"
 msgstr "Stad"
