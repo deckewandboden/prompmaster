@@ -1,13 +1,13 @@
 {
   "project": "PROMPTFINISHER Commercial RC14 Full Repository",
-  "generated_at": "2026-10-11T11:28:51.189665+00:00",
-  "file_count_excluding_manifest_files": 654,
-  "total_bytes_excluding_manifest_files": 26781805,
+  "generated_at": "2026-10-11T11:47:12.713084+00:00",
+  "file_count_excluding_manifest_files": 655,
+  "total_bytes_excluding_manifest_files": 26787448,
   "roles": {
     "active-backend": 417,
     "active-ci": 3,
     "active-marketing": 104,
-    "active-operations": 39,
+    "active-operations": 40,
     "active-product": 5,
     "documentation": 26,
     "historical-reference": 33,
@@ -1067,8 +1067,8 @@
     },
     {
       "path": "backend/apps/core/tests_i18n_admin.py",
-      "size": 2886,
-      "sha256": "b0716df20f4b91b03762732c815a01cf5c9dd7c4b3ca73785439c8cb30b1f8eb",
+      "size": 4529,
+      "sha256": "0e8114b0b8bcb8d5603dcdd79ef44c493fa9a7f8e561df41e1b75129d4275dcb",
       "role": "active-backend"
     },
     {
@@ -2075,26 +2075,26 @@
     },
     {
       "path": "backend/locale/fr/LC_MESSAGES/django.po",
-      "size": 28891,
-      "sha256": "5bd9c427c66cf0aeaba4bb909a77b8403485172f3dc01793c48a94a55df615e6",
+      "size": 28933,
+      "sha256": "2479bb657ccdae18e6056aae3ce9c3587cc42e8d4de8e9b9dc4cf413b0a53b0d",
       "role": "active-backend"
     },
     {
       "path": "backend/locale/it/LC_MESSAGES/django.po",
-      "size": 28017,
-      "sha256": "568e99618ff0764f197e83354275b9d45566145c8b75408a1af8bc2fe0bec67c",
+      "size": 28006,
+      "sha256": "4cc8dcd2e2d3c5643f9c0387f8c09e81f9a8ede574457cd5f40bef64c859937c",
       "role": "active-backend"
     },
     {
       "path": "backend/locale/nl/LC_MESSAGES/django.po",
-      "size": 27546,
-      "sha256": "d5d3b2cd52398b50b296e0433b047fe6b7f7d0f9a205b2bc35d8f96d6d7dd777",
+      "size": 27589,
+      "sha256": "0cd62952d60dc13672fe8ced4f58cbd65286c4c537a4c9fc3afbfe00eab31085",
       "role": "active-backend"
     },
     {
       "path": "backend/locale/pl/LC_MESSAGES/django.po",
-      "size": 28070,
-      "sha256": "e17232b71b217a43abf0d39b5eb349a7502890928da2fe59fae42e0ce980eb6b",
+      "size": 28059,
+      "sha256": "451d2cd899ca65ff6befb367c5cfa8b551c641964348370edb1d0e22c4e7ae8a",
       "role": "active-backend"
     },
     {
@@ -2939,8 +2939,8 @@
     },
     {
       "path": "docs/FREE_PRO_I18N_DRAFT_REPORT.md",
-      "size": 629,
-      "sha256": "60d0b7c94c3bf2c8fdb09381691e7cb76f1661b8cebb7796fcc1e69abea977a4",
+      "size": 612,
+      "sha256": "9db2d8ef641cbed9aedafc0eccee5adb67aa036560efff1afc838ce1013e1c4a",
       "role": "documentation"
     },
     {
@@ -3761,8 +3761,8 @@
     },
     {
       "path": "scripts/generate_additional_locales.py",
-      "size": 4909,
-      "sha256": "0f242038390c0f2d99a97781703aef74fe5e8622f48d8d4d60a03d89269a8a46",
+      "size": 5918,
+      "sha256": "aa64402dd59f47d3cb6618d9e86e8d99bc88fd0d7c83314772c52374a3da0a8d",
       "role": "active-operations"
     },
     {
@@ -3773,14 +3773,14 @@
     },
     {
       "path": "scripts/generate_product_ui_locales.py",
-      "size": 4879,
-      "sha256": "82e723b805143a30d4087847a7b5d4def6c035f4c4f3ee5676879802e5882229",
+      "size": 4870,
+      "sha256": "2700a0b7781cab0192444c67faa02202be47e2a2d17e5c4649661f3ed2637b5e",
       "role": "active-operations"
     },
     {
       "path": "scripts/github_preflight.py",
-      "size": 3454,
-      "sha256": "78bd6dd51b54b8c96346305fb34f436def496452e56aac5bdc94331b04998ff3",
+      "size": 3508,
+      "sha256": "6816bf92c169cfa382a33844c2992a9ddce0d0b1335990395a6170ae0cf9cf05",
       "role": "active-operations"
     },
     {
@@ -3859,6 +3859,12 @@
       "path": "scripts/validate_env.py",
       "size": 9569,
       "sha256": "96de128b9bbe8addaf0a65969c61c59966097e61c576809918f02b59d4cc7def",
+      "role": "active-operations"
+    },
+    {
+      "path": "scripts/validate_i18n_contracts.py",
+      "size": 2900,
+      "sha256": "736bd734abd9916bdc6feecaac7fb6d3563a99ab7a22d4f2f47bfa3b6bef0e81",
       "role": "active-operations"
     },
     {

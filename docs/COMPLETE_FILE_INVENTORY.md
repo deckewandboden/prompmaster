@@ -1,6 +1,6 @@
 # Vollständiges Datei-Inventar — PROMPTFINISHER RC14
 
-Erfasst: **654 Dateien** (Manifest-/Inventardateien selbst ausgenommen), **26,781,805 Byte**.
+Erfasst: **655 Dateien** (Manifest-/Inventardateien selbst ausgenommen), **26,787,448 Byte**.
 
 Maschinenlesbar: `FILE_MANIFEST.tsv` und `MANIFEST.json`.
 
@@ -131,7 +131,7 @@ Maschinenlesbar: `FILE_MANIFEST.tsv` und `MANIFEST.json`.
 | `backend/apps/core/tests_e2e_coreflow.py` | 22579 | `b2789b91f11b4ce0a7ebe970bc4b65dda49ac913f890860e7877310e2b9342ca` |
 | `backend/apps/core/tests_exports.py` | 10505 | `17d51e5acd611a575f6faa0749970a77eb1d367b46f6f0e34563d519d186e8c3` |
 | `backend/apps/core/tests_external_acceptance.py` | 17724 | `41342244210f6ea299655a367f04834b6863c76b0aeee798e569ced081de7ac7` |
-| `backend/apps/core/tests_i18n_admin.py` | 2886 | `b0716df20f4b91b03762732c815a01cf5c9dd7c4b3ca73785439c8cb30b1f8eb` |
+| `backend/apps/core/tests_i18n_admin.py` | 4529 | `0e8114b0b8bcb8d5603dcdd79ef44c493fa9a7f8e561df41e1b75129d4275dcb` |
 | `backend/apps/core/tests_leads.py` | 18566 | `35e5db9658eab9ba49b725c922998309e19c1640bdc0fc860e39bdd56b8d730b` |
 | `backend/apps/core/tests_marketing_integration.py` | 3466 | `f21e11276f9ff1a8b8c4797ccfc83d4dbce24257c268ce0e0af3d5332d343715` |
 | `backend/apps/core/tests_master_patch_a.py` | 13567 | `2b6e68c9a7896ca6616037f48d5699d0a35b0eeb11222f6d426e81ea3c861305` |
@@ -299,10 +299,10 @@ Maschinenlesbar: `FILE_MANIFEST.tsv` und `MANIFEST.json`.
 | `backend/config/wsgi.py` | 161 | `25d3ac3de67e7a1e20c9cfed54bf208a378c7e634f426239c36c63cbabc22f36` |
 | `backend/locale/en/LC_MESSAGES/django.po` | 25895 | `e595502723ef4fae7f2926d38e72549e648984f3eecb611ea5d2a5b690f00e9c` |
 | `backend/locale/es/LC_MESSAGES/django.po` | 27669 | `78c7efe70046936954be19762606482e1d702c6240fe22cadc03651b2a158829` |
-| `backend/locale/fr/LC_MESSAGES/django.po` | 28891 | `5bd9c427c66cf0aeaba4bb909a77b8403485172f3dc01793c48a94a55df615e6` |
-| `backend/locale/it/LC_MESSAGES/django.po` | 28017 | `568e99618ff0764f197e83354275b9d45566145c8b75408a1af8bc2fe0bec67c` |
-| `backend/locale/nl/LC_MESSAGES/django.po` | 27546 | `d5d3b2cd52398b50b296e0433b047fe6b7f7d0f9a205b2bc35d8f96d6d7dd777` |
-| `backend/locale/pl/LC_MESSAGES/django.po` | 28070 | `e17232b71b217a43abf0d39b5eb349a7502890928da2fe59fae42e0ce980eb6b` |
+| `backend/locale/fr/LC_MESSAGES/django.po` | 28933 | `2479bb657ccdae18e6056aae3ce9c3587cc42e8d4de8e9b9dc4cf413b0a53b0d` |
+| `backend/locale/it/LC_MESSAGES/django.po` | 28006 | `4cc8dcd2e2d3c5643f9c0387f8c09e81f9a8ede574457cd5f40bef64c859937c` |
+| `backend/locale/nl/LC_MESSAGES/django.po` | 27589 | `0cd62952d60dc13672fe8ced4f58cbd65286c4c537a4c9fc3afbfe00eab31085` |
+| `backend/locale/pl/LC_MESSAGES/django.po` | 28059 | `451d2cd899ca65ff6befb367c5cfa8b551c641964348370edb1d0e22c4e7ae8a` |
 | `backend/locale/pt/LC_MESSAGES/django.po` | 27914 | `f2e07041c05aaaafe4e269d010a00c10ca5c7f3a300bec6387b568e51f6e8298` |
 | `backend/locale/ru/LC_MESSAGES/django.po` | 36109 | `7943141df982295ee5f3a8969001b9da6430cb0c4894410c9e471f7d466f19da` |
 | `backend/locale/tr/LC_MESSAGES/django.po` | 27161 | `6b65a42d7dbc28bdc2fdd58aef76ec190a572f93b198fd9d2357cd1ae538a15e` |
@@ -551,7 +551,7 @@ Maschinenlesbar: `FILE_MANIFEST.tsv` und `MANIFEST.json`.
 
 ## active-operations
 
-39 Dateien.
+40 Dateien.
 
 | Pfad | Größe | SHA256 |
 |---|---:|---|
@@ -567,10 +567,10 @@ Maschinenlesbar: `FILE_MANIFEST.tsv` und `MANIFEST.json`.
 | `scripts/deploy.sh` | 14230 | `264a1130203c26a3621a11a186b0557c9aba3aef9f47aeab91fd3e7b467ce09f` |
 | `scripts/diagnose.sh` | 137 | `86b08add1d4a6baa7b65e86be9ff9d193f1ba16e1e8f965297953d8bfeb127f5` |
 | `scripts/external_backup_acceptance.sh` | 3464 | `a4d50752ea041528dfb7e22670469001f090fbb1b2f12bfae7ff59306709fed7` |
-| `scripts/generate_additional_locales.py` | 4909 | `0f242038390c0f2d99a97781703aef74fe5e8622f48d8d4d60a03d89269a8a46` |
+| `scripts/generate_additional_locales.py` | 5918 | `aa64402dd59f47d3cb6618d9e86e8d99bc88fd0d7c83314772c52374a3da0a8d` |
 | `scripts/generate_file_manifest.py` | 3464 | `5bf14f39220d20174fd76e9e2dbc254bd6c5f7693c9cd3188ec01b0ad86be2cf` |
-| `scripts/generate_product_ui_locales.py` | 4879 | `82e723b805143a30d4087847a7b5d4def6c035f4c4f3ee5676879802e5882229` |
-| `scripts/github_preflight.py` | 3454 | `78bd6dd51b54b8c96346305fb34f436def496452e56aac5bdc94331b04998ff3` |
+| `scripts/generate_product_ui_locales.py` | 4870 | `2700a0b7781cab0192444c67faa02202be47e2a2d17e5c4649661f3ed2637b5e` |
+| `scripts/github_preflight.py` | 3508 | `6816bf92c169cfa382a33844c2992a9ddce0d0b1335990395a6170ae0cf9cf05` |
 | `scripts/github_prepare.sh` | 863 | `ae6a7ff71839dbb9457f78960fb8fe96bb1a762a8f2a999a4b3a1e1e12ec2f91` |
 | `scripts/http_load_smoke.py` | 4397 | `7652866cb90f78673b9e7267f30533029b751276f8994403111570e5de63ec6f` |
 | `scripts/performance_validate.sh` | 816 | `1939d07c94136b45731f91da4dd375a407acafc2fd6b3826cab781ea7f549c70` |
@@ -584,6 +584,7 @@ Maschinenlesbar: `FILE_MANIFEST.tsv` und `MANIFEST.json`.
 | `scripts/update.sh` | 102 | `75036bf3dc461ba0d307d05faa1d1ad3317c8657071ea532a3b9bc5dfbe2a786` |
 | `scripts/validate_brand.py` | 2163 | `fe740411c46afaf8c4af5074cba74fca907a557797ccb3d98abc7b2b17371494` |
 | `scripts/validate_env.py` | 9569 | `96de128b9bbe8addaf0a65969c61c59966097e61c576809918f02b59d4cc7def` |
+| `scripts/validate_i18n_contracts.py` | 2900 | `736bd734abd9916bdc6feecaac7fb6d3563a99ab7a22d4f2f47bfa3b6bef0e81` |
 | `scripts/validate_manifest.py` | 5660 | `7ef46c831ed18122cc671e90676312f1eadc782213867bf4445c2a521d27d2a8` |
 | `scripts/validate_marketing.py` | 7681 | `c17400189e219f40b86cbf7d05e0a7f97dda4bac7416afcf7bef52cb4a7e0558` |
 | `scripts/validate_prompt_assets.py` | 3513 | `2a49b177452a2306e684a1673cda9d6032a84027ff5f959ca8920e9c6b2ebdb0` |
@@ -621,7 +622,7 @@ Maschinenlesbar: `FILE_MANIFEST.tsv` und `MANIFEST.json`.
 | `docs/COMPLETE_PROJECT_SUMMARY.md` | 7994 | `0618d8445e00fee0df2327185e8b539b32ccc85c9a2221613864cd33ce35ecc0` |
 | `docs/COMPLETION_MASTER_AUDIT_2026-09-17.md` | 13933 | `5016fae5d24129361f9a58025e9420437da15d6d735b9acec02cd921eeefb4b8` |
 | `docs/FREE_LEGACY_MAPPING_STATUS.md` | 2083 | `d7f8713629b6f7795a9f25f25ef0b0bc947340bf59bca30e9d40e572be571a91` |
-| `docs/FREE_PRO_I18N_DRAFT_REPORT.md` | 629 | `60d0b7c94c3bf2c8fdb09381691e7cb76f1661b8cebb7796fcc1e69abea977a4` |
+| `docs/FREE_PRO_I18N_DRAFT_REPORT.md` | 612 | `9db2d8ef641cbed9aedafc0eccee5adb67aa036560efff1afc838ce1013e1c4a` |
 | `docs/GITHUB_READY_STATUS.md` | 2787 | `93611bec4de0443a2ac3d6bd91b800df58f3e4129c6ec1feaa381a1072e55231` |
 | `docs/GITHUB_TRANSFER.md` | 1010 | `101072d2565c77b4d27c430cda9680476bf836d3e85ed788413bbed69fd66333` |
 | `docs/MERGE_PROVENANCE.md` | 2070 | `7c7f4dcf463bf76697836014550098a37b58c50bb8d43ac99af3a2e386946ee6` |

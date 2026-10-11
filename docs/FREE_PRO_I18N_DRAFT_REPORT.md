@@ -1,1 +1,17 @@
-# Free/Pro UI locale catalog audit (draft)\n\nTranslations generated locally using offline Argos language models.\nTerminology, punctuation, meaning and layout require native QA before release.\nThe original Golden Masters, prompt composition policies, task IDs and license checks are deliberately unchanged.\n\n| Language | Extracted source phrases | Generated | Unchanged source |\n|---|---:|---:|---:|\n| en | 559 | 266 | 47 |\n| es | 559 | 290 | 23 |\n| pt | 559 | 309 | 4 |\n| tr | 559 | 301 | 12 |\n| ru | 559 | 307 | 6 |\n| pl | 559 | 303 | 10 |\n| fr | 559 | 302 | 11 |\n| it | 559 | 302 | 11 |\n| nl | 559 | 301 | 12 |\n
+# Free/Pro UI locale catalog audit (draft)
+
+Translations generated locally using offline Argos language models.
+Terminology, punctuation, meaning and layout require native QA before release.
+The original Golden Masters, prompt composition policies, task IDs and license checks are deliberately unchanged.
+
+| Language | Extracted source phrases | Generated | Unchanged source |
+|---|---:|---:|---:|
+| en | 559 | 266 | 47 |
+| es | 559 | 290 | 23 |
+| pt | 559 | 309 | 4 |
+| tr | 559 | 301 | 12 |
+| ru | 559 | 307 | 6 |
+| pl | 559 | 303 | 10 |
+| fr | 559 | 302 | 11 |
+| it | 559 | 302 | 11 |
+| nl | 559 | 301 | 12 |
