@@ -105,6 +105,7 @@ LANGUAGES = [
     ('es', 'Español'),
     ('pt', 'Português'),
     ('tr', 'Türkçe'),
+    ('ru', 'Русский'),
 ]
 LANGUAGE_COOKIE_NAME = 'promptfinisher_language'
 LANGUAGE_COOKIE_AGE = 365 * 24 * 60 * 60
