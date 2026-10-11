@@ -6,12 +6,12 @@ The original Golden Masters, prompt composition policies, task IDs and license c
 
 | Language | Extracted source phrases | Generated | Unchanged source |
 |---|---:|---:|---:|
-| en | 559 | 266 | 47 |
-| es | 559 | 290 | 23 |
-| pt | 559 | 309 | 4 |
-| tr | 559 | 301 | 12 |
-| ru | 559 | 307 | 6 |
-| pl | 559 | 303 | 10 |
-| fr | 559 | 302 | 11 |
-| it | 559 | 302 | 11 |
-| nl | 559 | 301 | 12 |
+| en | 1357 | 727 | 67 |
+| es | 1357 | 776 | 18 |
+| pt | 1357 | 789 | 5 |
+| tr | 1357 | 772 | 22 |
+| ru | 1357 | 794 | 0 |
+| pl | 1357 | 782 | 12 |
+| fr | 1357 | 784 | 10 |
+| it | 1357 | 786 | 8 |
+| nl | 1357 | 774 | 20 |
