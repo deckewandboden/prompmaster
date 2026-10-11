@@ -36,13 +36,13 @@ msgid "Übersicht"
 msgstr "Overzicht"
 
 msgid "Leads"
-msgstr "Lood"
+msgstr "Leads"
 
 msgid "Kunden"
 msgstr "Klanten"
 
 msgid "Lizenzen"
-msgstr "Vergunningen"
+msgstr "Licenties"
 
 msgid "Bestellungen"
 msgstr "Beschikkingen"
@@ -105,16 +105,16 @@ msgid "Mehr"
 msgstr "Meer"
 
 msgid "Kundenportal"
-msgstr "Klantportaal"
+msgstr "Klantenportaal"
 
 msgid "KUNDENPORTAL"
-msgstr "PORTAL VAN DE KLANT"
+msgstr "KLANTENPORTAAL"
 
 msgid "Benutzer, E-Mail oder Lizenz suchen …"
 msgstr "Zoek gebruiker, e-mail of licentie ..."
 
 msgid "Lizenz suchen …"
-msgstr "Zoekvergunning ..."
+msgstr "Licentie zoeken …"
 
 msgid "Privatkunde"
 msgstr "Particuliere klant"
@@ -144,7 +144,7 @@ msgid "Team"
 msgstr "Team"
 
 msgid "Anmelden"
-msgstr "Aanmelden"
+msgstr "Inloggen"
 
 msgid "Ein Zugang für PROMPTFINISHER, Kundenportal und netstyle Admin"
 msgstr "Een rekening voor PROMPTFINISHER, klantenportaal en netstyle admin"
@@ -159,7 +159,7 @@ msgid "Konto anlegen"
 msgstr "Account aanmaken"
 
 msgid "Registrieren"
-msgstr "Register"
+msgstr "Registreren"
 
 msgid ""
 "Unternehmensadministratoren richten anschließend verpflichtend 2FA ein."
@@ -475,7 +475,7 @@ msgid "Gültig bis"
 msgstr "Geldig tot"
 
 msgid "Impressum"
-msgstr "Mededeling"
+msgstr "Colofon"
 
 msgid "Jeder Seat läuft mit individueller Laufzeit."
 msgstr "Elke zetel heeft zijn eigen individuele term."
@@ -484,13 +484,13 @@ msgid "Kategorie"
 msgstr "Categorie"
 
 msgid "Keine Bestellungen."
-msgstr "Geen orders."
+msgstr "Geen bestellingen."
 
 msgid "Keine Einladungen."
 msgstr "Geen uitnodigingen."
 
 msgid "Keine Lizenzen."
-msgstr "Geen rijbewijs."
+msgstr "Geen licenties."
 
 msgid "Keine aktiven Geräte."
 msgstr "Geen actieve apparaten."
@@ -602,7 +602,7 @@ msgid "Weitere Bereiche Ihres Kundenportals."
 msgstr "Extra gebieden van uw klantenportaal."
 
 msgid "Widerrufsbelehrung"
-msgstr "Ophoudinformatie"
+msgstr "Informatie over het herroepingsrecht"
 
 msgid "Zahlung"
 msgstr "Betaling"
@@ -675,7 +675,7 @@ msgstr ""
 "naar uw geregistreerde e-mailadres."
 
 msgid "Free"
-msgstr "Vrij"
+msgstr "Free"
 
 msgid "Freie Lizenz zuweisen"
 msgstr "Vrije licentie toewijzen"
@@ -725,7 +725,7 @@ msgid "Offene Pro-Anfragen"
 msgstr "Pro-verzoeken openen"
 
 msgid "PROMPTFINISHER Free"
-msgstr "PROMPTFINISHER Vrij"
+msgstr "PROMPTFINISHER Free"
 
 msgid "PROMPTFINISHER Pro"
 msgstr "PROMPTFINISHER Pro"
@@ -950,10 +950,10 @@ msgid "Geschäft, Handlungsbedarf und Systemstatus auf einen Blick."
 msgstr "Bedrijfs-, actie- en systeemstatus in één oogopslag."
 
 msgid "PROMPTFINISHER Pro öffnen →"
-msgstr "Open PROMPTFINISHER →"
+msgstr "PROMPTFINISHER Pro openen →"
 
 msgid "PROMPTFINISHER Free öffnen →"
-msgstr "Open PROMPTFINISHER Vrij →"
+msgstr "PROMPTFINISHER Free openen →"
 
 msgid "System gesund"
 msgstr "Systeem gezond"
@@ -968,7 +968,7 @@ msgid "Offene Leads"
 msgstr "Open leads"
 
 msgid "Lead-Pipeline öffnen"
-msgstr "Open loodpijpleiding"
+msgstr "Leadpijplijn openen"
 
 msgid "Ablauf unter 30 Tagen"
 msgstr "Vervalt binnen 30 dagen"
@@ -1213,7 +1213,7 @@ msgstr ""
 "identiteit van een klant."
 
 msgid "Noch keine Lizenzen."
-msgstr "Nog geen rijbewijs."
+msgstr "Nog geen licenties."
 
 msgid "Alle Bestellungen"
 msgstr "Alle bestellingen"
