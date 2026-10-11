@@ -1,0 +1,1228 @@
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: PROMPTFINISHER\n"
+"Language: pl\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=3; plural=(n==1 ? 0 : (n%10>=2 && n%10<=4 && (n%100<12 || n%100>14)) ? 1 : 2);\n"
+"X-Translation-Method: Argos offline machine translation - editorial QA pending\n"
+
+msgid "Sprache auswählen"
+msgstr "Wybierz język"
+
+msgid "Sprache"
+msgstr "Język"
+
+msgid "Suchen …"
+msgstr "Szukaj..."
+
+msgid "Suchen"
+msgstr "Szukaj"
+
+msgid "Lead, Kunde, Benutzer, Lizenz-ID oder E-Mail suchen …"
+msgstr ""
+"Prowadzenie wyszukiwania, klient, użytkownik, identyfikator licencji lub "
+"e-mail..."
+
+msgid "Superadmin"
+msgstr "Super admin"
+
+msgid "netstyle Benutzer"
+msgstr "Użytkownik netstyle"
+
+msgid "netstyle Admin-Backend"
+msgstr "netstyle admin backend"
+
+msgid "Übersicht"
+msgstr "Przegląd"
+
+msgid "Leads"
+msgstr "Liście"
+
+msgid "Kunden"
+msgstr "Klienci"
+
+msgid "Lizenzen"
+msgstr "Licencje"
+
+msgid "Bestellungen"
+msgstr "Zamówienia"
+
+msgid "Zahlungen"
+msgstr "Płatności"
+
+msgid "Produkte & Preise"
+msgstr "Produkty i ceny"
+
+msgid "Prompt Studio"
+msgstr "Prompt Studio"
+
+msgid "FAQ & Inhalte"
+msgstr "& Zawartość FAQ"
+
+msgid "E-Mail"
+msgstr "E-mail"
+
+msgid "Mollie"
+msgstr "Mollie"
+
+msgid "Statistiken"
+msgstr "Statystyki"
+
+msgid "System & Betrieb"
+msgstr "System i operacje"
+
+msgid "API & Integrationen"
+msgstr "API & integracje"
+
+msgid "Datenschutz & Recht"
+msgstr "Prywatność i prawo"
+
+msgid "Kontaktanfragen"
+msgstr "Wnioski o kontakt"
+
+msgid "Protokolle"
+msgstr "Logi"
+
+msgid "Benutzer & Rollen"
+msgstr "Użytkownicy i role"
+
+msgid "Einstellungen"
+msgstr "Ustawienia"
+
+msgid "Abmelden"
+msgstr "Podpisz"
+
+msgid "Home"
+msgstr "Spis treści"
+
+msgid "System"
+msgstr "System"
+
+msgid "Logs"
+msgstr "Logi"
+
+msgid "Mehr"
+msgstr "Więcej"
+
+msgid "Kundenportal"
+msgstr "Portal klienta"
+
+msgid "KUNDENPORTAL"
+msgstr "PORTAL CELNY"
+
+msgid "Benutzer, E-Mail oder Lizenz suchen …"
+msgstr "Wyszukaj użytkownika, email lub licencję..."
+
+msgid "Lizenz suchen …"
+msgstr "Prawo jazdy..."
+
+msgid "Privatkunde"
+msgstr "Klient prywatny"
+
+msgid "Dashboard"
+msgstr "Deska rozdzielcza"
+
+msgid "Mein Team"
+msgstr "Mój zespół"
+
+msgid "Weitere Lizenzen kaufen"
+msgstr "Kup więcej licencji"
+
+msgid "Geräte"
+msgstr "Urządzenia"
+
+msgid "Bestellungen & Zahlungen"
+msgstr "Zamówienia i płatności"
+
+msgid "Unternehmen"
+msgstr "Przedsiębiorstwo"
+
+msgid "Hilfe & Kontakt"
+msgstr "Pomoc i kontakt"
+
+msgid "Team"
+msgstr "Zespół"
+
+msgid "Anmelden"
+msgstr "Podpisz"
+
+msgid "Ein Zugang für PROMPTFINISHER, Kundenportal und netstyle Admin"
+msgstr "Jedno konto dla PROMPTFINISHER, portal klienta i netstyle admin"
+
+msgid "Noch kein Konto? Konto erstellen"
+msgstr "Nie masz jeszcze konta? Utwórz konto"
+
+msgid "Passwort vergessen?"
+msgstr "Zapomniałeś hasła?"
+
+msgid "Konto anlegen"
+msgstr "Utwórz konto"
+
+msgid "Registrieren"
+msgstr "Rejestr"
+
+msgid ""
+"Unternehmensadministratoren richten anschließend verpflichtend 2FA ein."
+msgstr "Administratorzy firm muszą następnie założyć 2FA."
+
+msgid "Bereits registriert?"
+msgstr "Już zarejestrowany?"
+
+msgid "Zur Anmeldung"
+msgstr "Wpisz się."
+
+msgid "E-Mail-Adresse"
+msgstr "Adres e-mail"
+
+msgid "Passwort"
+msgstr "Hasło"
+
+msgid "Bestätigungscode"
+msgstr "Kod weryfikacji"
+
+msgid "Kundentyp"
+msgstr "Typ klienta"
+
+msgid "Privat"
+msgstr "Prywatne"
+
+msgid "Vorname"
+msgstr "Imię"
+
+msgid "Nachname"
+msgstr "Nazwisko"
+
+msgid "Firmenname"
+msgstr "Nazwa przedsiębiorstwa"
+
+msgid "AGB gelesen und akzeptiert"
+msgstr "Terminy odczytywane i akceptowane"
+
+msgid "Datenschutzerklärung zur Kenntnis genommen"
+msgstr "Polityka prywatności potwierdzona"
+
+msgid "Passwort zur Bestätigung"
+msgstr "Hasło do potwierdzenia"
+
+msgid "Administratorübertragung verbindlich bestätigen"
+msgstr "Potwierdź przekazanie administratora"
+
+msgid "Neues Passwort"
+msgstr "Nowe hasło"
+
+msgid "Passwort wiederholen"
+msgstr "Powtórz hasło"
+
+msgid "Tabellenfilter"
+msgstr "Filtry stołowe"
+
+msgid "Tabelle durchsuchen"
+msgstr "Tabela wyszukiwania"
+
+msgid "Alle"
+msgstr "Wszystkie"
+
+msgid "Seitengröße"
+msgstr "Rozmiar strony"
+
+msgid "Spalten"
+msgstr "Kolumny"
+
+msgid "Anwenden"
+msgstr "Zastosuj"
+
+msgid "CSV exportieren"
+msgstr "Eksport CSV"
+
+msgid "Sortierung zurücksetzen"
+msgstr "Zmień sortowanie"
+
+msgid "Alles zurücksetzen"
+msgstr "Reset all"
+
+msgid "Daten werden geladen …"
+msgstr "Ładowanie danych..."
+
+msgid "Aktive Filter"
+msgstr "Aktywne filtry"
+
+msgid "Suche"
+msgstr "Szukaj"
+
+msgid "Keine Such- oder Filtertreffer."
+msgstr "Brak wyników wyszukiwania lub filtrowania."
+
+msgid "Filter zurücksetzen"
+msgstr "Resetuj filtry"
+
+msgid "+ Benutzer hinzufügen"
+msgstr "+ Dodaj użytkownika"
+
+msgid "AGB"
+msgstr "Warunki"
+
+msgid "Abbrechen"
+msgstr "Anuluj"
+
+msgid "Administrator übertragen"
+msgstr "Administrator transferu"
+
+msgid "Aktiv"
+msgstr "Aktywne"
+
+msgid "Aktive Mitglieder"
+msgstr "Aktywni członkowie"
+
+msgid "Anzahl"
+msgstr "Ilość"
+
+msgid "Bestellungen & Zahlungen öffnen"
+msgstr "Otwórz zlecenia i płatności"
+
+msgid "Checkout"
+msgstr "Kontrola"
+
+msgid "Datenschutz"
+msgstr "Prywatność"
+
+msgid "Der Link wurde per E-Mail versendet."
+msgstr "Link wysłano pocztą elektroniczną."
+
+msgid "Firmen-Administrator"
+msgstr "Administrator przedsiębiorstwa"
+
+msgid "Gerät entfernen"
+msgstr "Usuń urządzenie"
+
+msgid "Geräteslots der aktiven PROMPTFINISHER-Pro-Lizenzen."
+msgstr "Szczeliny urządzenia aktywnego PROMPTFINISHER Pro licencje."
+
+msgid "Gerätewechsel"
+msgstr "Zmiana urządzenia"
+
+msgid "Gesamt"
+msgstr "Ogółem"
+
+msgid "Jetzt verlängern"
+msgstr "Odnowij teraz"
+
+msgid "Kein Pro-Zugriff für dieses Benutzerkonto."
+msgstr "Brak dostępu Pro dla tego konta użytkownika."
+
+msgid "Kein aktiver Firmenadministrator gefunden."
+msgstr "Nie znaleziono aktywnego administratora firmy."
+
+msgid "Keine Geräte."
+msgstr "Żadnych urządzeń."
+
+msgid "Link zur Kontrolle"
+msgstr "Odniesienie do weryfikacji"
+
+msgid "Lizenz jetzt zuordnen"
+msgstr "Przypisz licencję"
+
+msgid "Lizenz verlängern"
+msgstr "Odnowienie licencji"
+
+msgid "Lizenzbedingungen"
+msgstr "Warunki licencji"
+
+msgid "Lizenzen insgesamt"
+msgstr "Licencje ogółem"
+
+msgid "Lizenzstatus"
+msgstr "Status licencji"
+
+msgid "Lizenzzuordnung bestätigen"
+msgstr "Potwierdź przypisanie licencji"
+
+msgid "Nächster Ablauf"
+msgstr "Następny okres ważności"
+
+msgid "PROMPTFINISHER PRO"
+msgstr "PROMPTFINISHER PRO"
+
+msgid "PROMPTFINISHER Pro für mich aktivieren"
+msgstr "Aktywacja PROMPTFINISHER Pro dla mnie"
+
+msgid "PROMPTFINISHER Pro starten →"
+msgstr "Start PROMPTFINISHER Pro →"
+
+msgid "Pro anfragen"
+msgstr "Prośba Pro"
+
+msgid "Sicherer PROMPTFINISHER-Zuordnungslink."
+msgstr "Bezpieczne połączenie przydziału PROMPTFINISHER."
+
+msgid "Speichern"
+msgstr "Zapisz"
+
+msgid "Stammdaten, Steuerdaten und Firmen-Administrator."
+msgstr "Dane podstawowe, dane podatkowe i administrator przedsiębiorstwa."
+
+msgid "Team öffnen"
+msgstr "Zespół otwarty"
+
+msgid "Team- und Lizenzverwaltung"
+msgstr "Zarządzanie zespołami i licencjami"
+
+msgid "Unternehmensdaten"
+msgstr "Dane przedsiębiorstwa"
+
+msgid "Unternehmensdaten bearbeiten"
+msgstr "Edytuj dane firmy"
+
+msgid "Unternehmensdaten unvollständig."
+msgstr "Dane firmy niekompletne."
+
+msgid "Updates während Laufzeit"
+msgstr "Aktualizacje w trakcie okresu"
+
+msgid "Widerruf"
+msgstr "Wycofanie"
+
+msgid "Widerrufen"
+msgstr "Odwołany"
+
+msgid "Zahlungen mit Handlungsbedarf"
+msgstr "Płatności wymagające działania"
+
+msgid "Zahlungspflichtig kaufen →"
+msgstr "Kup z obowiązkiem płatności →"
+
+msgid "Zuordnungslink erzeugt"
+msgstr "Utworzony link do przypisania"
+
+msgid "Zurück zum Benutzer"
+msgstr "Powrót do użytkownika"
+
+msgid "aktiv"
+msgstr "aktywny"
+
+msgid "enthalten"
+msgstr "włączone"
+
+msgid "inkl. MwSt."
+msgstr "w tym VAT"
+
+msgid "registriert"
+msgstr "zarejestrowany"
+
+msgid "Änderungen werden erst nach erfolgreicher Validierung gespeichert."
+msgstr "Zmiany są zapisywane dopiero po pomyślnym zatwierdzeniu."
+
+msgid "+ Lizenz kaufen"
+msgstr "+ Kup licencję"
+
+msgid "Ablauf"
+msgstr "Termin ważności"
+
+msgid "Adresse"
+msgstr "Adres"
+
+msgid "Aktion"
+msgstr "Działanie"
+
+msgid "Aktive Geräte"
+msgstr "Urządzenia aktywne"
+
+msgid "Automatischer Kontext"
+msgstr "Kontekst automatyczny"
+
+msgid "Barrierefreiheit"
+msgstr "Dostępność"
+
+msgid "Benutzer"
+msgstr "Użytkownik"
+
+msgid "Bestellung"
+msgstr "Zamówienie"
+
+msgid "Betrag"
+msgstr "Kwota"
+
+msgid "Betreff"
+msgstr "Przedmiot"
+
+msgid "Browser"
+msgstr "Przeglądarka"
+
+msgid "Datenauskunft"
+msgstr "Dostęp do danych"
+
+msgid "Datum"
+msgstr "Data"
+
+msgid "Direkter Kontakt zu netstyle und Verlauf Ihrer Anfragen."
+msgstr "Bezpośredni kontakt z netstyle i historia swoich żądań."
+
+msgid "Einladungen"
+msgstr "Zaproszenia"
+
+msgid "Einladungen sind 24 Stunden gültig und einmal verwendbar."
+msgstr "Zaproszenia są ważne przez 24 godziny i mogą być stosowane raz."
+
+msgid "Frei"
+msgstr "Wolne"
+
+msgid "Gerät"
+msgstr "Urządzenie"
+
+msgid "Gültig ab"
+msgstr "Ważny od"
+
+msgid "Gültig bis"
+msgstr "Ważne do"
+
+msgid "Impressum"
+msgstr "Ogłoszenie prawne"
+
+msgid "Jeder Seat läuft mit individueller Laufzeit."
+msgstr "Każde siedzenie ma swój własny termin."
+
+msgid "Kategorie"
+msgstr "Kategoria"
+
+msgid "Keine Bestellungen."
+msgstr "Żadnych rozkazów."
+
+msgid "Keine Einladungen."
+msgstr "Żadnych zaproszeń."
+
+msgid "Keine Lizenzen."
+msgstr "Żadnych licencji."
+
+msgid "Keine aktiven Geräte."
+msgstr "Brak aktywnych urządzeń."
+
+msgid "Kontaktformular"
+msgstr "Formularz kontaktowy"
+
+msgid "Konto & Hilfe"
+msgstr "Konto i pomoc"
+
+msgid "Kontolöschung"
+msgstr "Usunięcie rachunku"
+
+msgid "Kontolöschung anfordern"
+msgstr "Żądaj usunięcia rachunku"
+
+msgid "Laufzeit"
+msgstr "Termin"
+
+msgid "Lizenz"
+msgstr "Licencja"
+
+msgid "Lizenz-ID"
+msgstr "Identyfikator licencji"
+
+msgid "Lizenzdaten"
+msgstr "Dane licencyjne"
+
+msgid "Meine Daten exportieren"
+msgstr "Eksportuj moje dane"
+
+msgid ""
+"Mollie übernimmt die Zahlungsabwicklung; PROMPTFINISHER erzeugt keine eigene"
+" Rechnungsengine."
+msgstr ""
+"Mollie obsługuje przetwarzanie płatności; PROMPTFINISHER nie obsługuje "
+"własnego silnika fakturowania."
+
+msgid "Mollie-Referenz"
+msgstr "Mollie reference"
+
+msgid "Nachricht senden"
+msgstr "Wyślij wiadomość"
+
+msgid "Name"
+msgstr "Nazwa"
+
+msgid "Neu senden"
+msgstr "Przywróć"
+
+msgid "Nicht eingerichtet"
+msgstr "Nie skonfigurowano"
+
+msgid "Noch keine Anfragen vorhanden."
+msgstr "Na razie żadnych próśb."
+
+msgid "Noch keine Reminder für den aktuellen Ablaufzeitpunkt."
+msgstr "Brak przypomnień dotyczących aktualnego terminu ważności."
+
+msgid "PROMPTFINISHER Pro öffnen"
+msgstr "Otwarte PROMPTFINISHER Pro"
+
+msgid "Produkt"
+msgstr "Produkt"
+
+msgid "Produkt / Menge"
+msgstr "Produkt / ilość"
+
+msgid "Profil"
+msgstr "Profil"
+
+msgid "Profil, Adresse, Kontosicherheit und Datenauskunft."
+msgstr "Profil, adres, bezpieczeństwo konta i dostęp do danych."
+
+msgid "Rechtliches"
+msgstr "Prawne"
+
+msgid "Reminder"
+msgstr "Nagłówek"
+
+msgid "Resttage"
+msgstr "Pozostałe dni"
+
+msgid "Sicherheit"
+msgstr "Bezpieczeństwo"
+
+msgid "Sicherheit verwalten"
+msgstr "Zarządzanie bezpieczeństwem"
+
+msgid "Status"
+msgstr "Stan"
+
+msgid "Supporthistorie"
+msgstr "Historia wsparcia"
+
+msgid "Verbraucherrechte"
+msgstr "Prawa konsumentów"
+
+msgid "Vertrag widerrufen"
+msgstr "Wycofanie umowy"
+
+msgid "Verträge hier kündigen"
+msgstr "Anuluj umowy tutaj"
+
+msgid "Verwaltung & Abrechnung"
+msgstr "Administracja i rozliczanie"
+
+msgid "Weitere Bereiche Ihres Kundenportals."
+msgstr "Dodatkowe obszary portalu klienta."
+
+msgid "Widerrufsbelehrung"
+msgstr "Informacje o wycofaniu"
+
+msgid "Zahlung"
+msgstr "Płatność"
+
+msgid "Zugewiesen"
+msgstr "Przyznane"
+
+msgid "Zuletzt gesehen"
+msgstr "Ostatnio widziana"
+
+msgid "Zurück"
+msgstr "Tył"
+
+msgid "Zuweisung"
+msgstr "Przydział"
+
+msgid "Zwei-Faktor-Authentifizierung"
+msgstr "Uwierzytelnianie dwóch czynników"
+
+msgid "Öffnen"
+msgstr "Otwórz"
+
+msgid "≤30 Tage"
+msgstr "≤ 30 dni"
+
+msgid "2FA einrichten"
+msgstr "Utwórz 2FA"
+
+msgid ""
+"2FA schützt den Zugriff mit einem zusätzlichen zeitbasierten Einmalcode."
+msgstr "2FA chroni dostęp z dodatkowym kodem czasu."
+
+msgid "Ablehnen"
+msgstr "Odrzuć"
+
+msgid "Aktive Lizenzen"
+msgstr "Licencje aktywne"
+
+msgid "Aktuelles Ende"
+msgstr "Bieżąca data końcowa"
+
+msgid "Anfrage"
+msgstr "Wniosek"
+
+msgid "Bearbeitungsstand"
+msgstr "Status przetwarzania"
+
+msgid "Benutzer deaktivieren"
+msgstr "Wyłącz użytkownika"
+
+msgid "Benutzer löschen"
+msgstr "Usuń użytkownika"
+
+msgid "Benutzer reaktivieren"
+msgstr "Reaktywuj użytkownika"
+
+msgid "Benutzer, Einladungen, Lizenzen und Geräte verwalten."
+msgstr "Zarządzanie użytkownikami, zaproszeniami, licencjami i urządzeniami."
+
+msgid ""
+"Die Suche bleibt auf Ihren eigenen Mandanten- und Lizenzbereich begrenzt."
+msgstr "Wyszukiwanie ogranicza się do własnego najemcy i zakresu licencji."
+
+msgid ""
+"Ein Passwortwechsel erfolgt über einen zeitlich begrenzten, einmal "
+"verwendbaren Link an Ihre hinterlegte E-Mail-Adresse."
+msgstr ""
+"Zmiana hasła jest wykonywana za pomocą ograniczonego czasu, single- use link"
+" wysłanego na zarejestrowany adres e-mail."
+
+msgid "Free"
+msgstr "Wolne"
+
+msgid "Freie Lizenz zuweisen"
+msgstr "Przypisz bezpłatną licencję"
+
+msgid "Freigeben"
+msgstr "Zwolnienie"
+
+msgid "Genehmigen"
+msgstr "Zatwierdzenie"
+
+msgid ""
+"Hier sehen Sie ausschließlich Nachrichten, die für Sie bzw. Ihr Unternehmen "
+"bestimmt sind. Interne netstyle-Notizen werden nicht im Kundenportal "
+"angezeigt."
+msgstr ""
+"Tutaj można zobaczyć tylko wiadomości przeznaczone dla Ciebie lub Twojej "
+"firmy. Wewnętrzne notatki netstyle nie są wyświetlane w portalu klienta."
+
+msgid "Ihre Anfrage und alle für Kunden freigegebenen Antworten."
+msgstr "Twoja prośba i wszystkie odpowiedzi udostępnione dla klientów."
+
+msgid "Inaktiv"
+msgstr "Nieaktywne"
+
+msgid "Keine Benutzer gefunden."
+msgstr "Nie znaleziono żadnych użytkowników."
+
+msgid "Keine Lizenz zugewiesen."
+msgstr "Brak licencji."
+
+msgid "Keine Lizenzen gefunden."
+msgstr "Nie znaleziono licencji."
+
+msgid "Keine freie Lizenz."
+msgstr "Bez darmowej licencji."
+
+msgid "Keine verlängerbare Lizenz vorhanden."
+msgstr "Brak licencji odnawialnej."
+
+msgid "Mitarbeiter"
+msgstr "Pracownik"
+
+msgid "Noch nie"
+msgstr "Nigdy"
+
+msgid "Offene Pro-Anfragen"
+msgstr "Otwórz żądania Pro"
+
+msgid "PROMPTFINISHER Free"
+msgstr "PROMPTFINISHER Wolne"
+
+msgid "PROMPTFINISHER Pro"
+msgstr "PROMPTFINISHER Pro"
+
+msgid "Passwort zurücksetzen"
+msgstr "Zmień hasło"
+
+msgid "Recovery-Codes neu erzeugen"
+msgstr "Przywróć kody odzysku"
+
+msgid "Seit"
+msgstr "Od"
+
+msgid "Sicheren Link senden"
+msgstr "Wyślij bezpieczny link"
+
+msgid "Team-Mitglieder"
+msgstr "Członkowie zespołu"
+
+msgid "Verlauf"
+msgstr "Historia"
+
+msgid ""
+"Wählen Sie die Lizenz, deren bestehende Restlaufzeit um weitere 365 Tage "
+"verlängert werden soll."
+msgstr ""
+"Wybierz licencję, której pozostały termin powinien zostać przedłużony o "
+"kolejne 365 dni."
+
+msgid "Zahlungspflichtig verlängern →"
+msgstr "Odnawiaj z obowiązkiem płatności →"
+
+msgid "Zuletzt aktiv"
+msgstr "Ostatni aktywny"
+
+msgid "Zurück zu Einstellungen"
+msgstr "Powrót do ustawień"
+
+msgid "Zurück zu Lizenzen"
+msgstr "Powrót do licencji"
+
+msgid "Zuweisen"
+msgstr "Przypisz"
+
+msgid "Zwei-Faktor-Authentifizierung und Recovery-Codes verwalten."
+msgstr "Zarządzaj kodami uwierzytelniania i odzyskiwania dwóch czynników."
+
+msgid "aktive Benutzer"
+msgstr "użytkownicy aktywni"
+
+msgid "aktive Benutzer ohne Pro-Zuweisung"
+msgstr "aktywnych użytkowników bez przydziału Pro"
+
+msgid "registriert / Kapazität"
+msgstr "zarejestrowana / zdolność przewozowa"
+
+msgid ""
+"Die vorbereitete Lizenz wird Ihrem aktuell angemeldeten Benutzerkonto "
+"zugeordnet. Der Link kann anschließend nicht erneut verwendet werden."
+msgstr ""
+"Przygotowana licencja zostanie przypisana do Twojego aktualnie podpisanego "
+"konta użytkownika. Link nie może być ponownie użyty."
+
+msgid ""
+"Gültig bis %(expiry)s. Der Link ist tenantgebunden, für genau diesen "
+"Benutzer bestimmt und nur einmal verwendbar."
+msgstr ""
+"Ważne do% (termin ważności) s. Link jest związany natent-, przeznaczony "
+"dokładnie dla tego użytkownika i może być używany tylko raz."
+
+msgid ""
+"Jede neue Lizenz startet nach erfolgreicher Zahlung mit eigener 365-Tage-"
+"Laufzeit."
+msgstr ""
+"Każda nowa licencja rozpoczyna swój własny 365-dniowy termin po pomyślnej "
+"płatności."
+
+msgid "inkl. MwSt. · %(days)s Tage"
+msgstr "w tym VAT ·% (dni) dni"
+
+msgid "%(limit)s Geräte je Benutzer"
+msgstr "% (limit) urządzeń na użytkownika"
+
+msgid "Preis nicht verfügbar"
+msgstr "Cena niedostępna"
+
+msgid ""
+"V1: exakt ein aktiver Firmenadministrator. Eine Übertragung ist nur auf ein "
+"aktives Team-Mitglied möglich."
+msgstr ""
+"V1: dokładnie jeden aktywny administrator firmy. Transfer jest możliwy tylko"
+" dla aktywnego członka zespołu."
+
+msgid "Ihre eigenen Geräteslots können Sie hier selbst verwalten."
+msgstr "Tutaj możesz zarządzać własnymi szczelinami urządzeń."
+
+msgid "Geräteslots werden durch den Firmenadministrator verwaltet."
+msgstr "Szczeliny urządzeń są zarządzane przez administratora firmy."
+
+msgid "Widerrufene Geräte bleiben als Historie erhalten."
+msgstr "Odwrócone urządzenia pozostają w historii."
+
+msgid "Zuletzt %(seen)s"
+msgstr "Ostatnio widziana% (widziana) s"
+
+msgid "Gerät wirklich entfernen?"
+msgstr "Naprawdę usunąć urządzenie?"
+
+msgid ""
+"Konto, Unternehmen, Benutzer-ID und Zeitpunkt werden automatisch zugeordnet."
+" Optional kann eine für Ihr Konto sichtbare Lizenz mitgesendet werden. "
+"Passwörter, Tokens oder andere unnötige sensitive Daten werden nicht "
+"übernommen."
+msgstr ""
+"Konto, firma, identyfikator użytkownika i znacznik czasu są przypisane "
+"automatycznie. Opcjonalnie, licencja widoczna na Twoim koncie może być "
+"włączona. Nie uwzględniono haseł, żetonów lub innych niepotrzebnych danych "
+"wrażliwych."
+
+msgid ""
+"Exportieren Sie die zu Ihrem Benutzer gespeicherten PROMPTFINISHER-Daten als"
+" JSON. Secrets und Daten anderer Benutzer werden nicht exportiert."
+msgstr ""
+"Eksportuj dane PROMPTFINISHER przechowywane dla użytkownika jako JSON. "
+"Tajemnice i dane innych użytkowników nie są eksportowane."
+
+msgid ""
+"Ihre Löschanfrage vom %(requested)s ist bereits erfasst. Status: %(status)s."
+msgstr ""
+"Twój wniosek o usunięcie z% (wymagane) s został już zarejestrowany. Status:%"
+" (status) s."
+
+msgid ""
+"Sie können die Löschung Ihres PROMPTFINISHER-Kontos anfordern. Gesetzlich "
+"erforderliche Geschäfts- und Nachweisdaten werden nur im erforderlichen "
+"Umfang weiter aufbewahrt bzw. anonymisiert. Firmenadministratoren müssen "
+"ihre Administratorrolle vor der Verarbeitung übertragen."
+msgstr ""
+"Możesz poprosić o usunięcie swojego konta PROMPTFINISHER. Prawnie wymagane "
+"dane biznesowe i dowodowe będą zatrzymywane lub anonimowane jedynie w "
+"wymaganym zakresie. Administratorzy firmy muszą przenieść swoją rolę "
+"administratora przed przetwarzaniem."
+
+msgid "Ich möchte die Löschung meines Kontos verbindlich anfordern."
+msgstr "Chcę złożyć wiążącą prośbę o usunięcie mojego konta."
+
+msgid "Guten Morgen, %(first_name)s"
+msgstr "Dzień dobry,% (imię _ imię) s"
+
+msgid "Privatkonto"
+msgstr "Konto prywatne"
+
+msgid "Unternehmensadministrator"
+msgstr "Administrator przedsiębiorstwa"
+
+msgid "%(assigned)s vergeben · %(free)s verfügbar"
+msgstr "% (przypisane) s przypisane ·% (wolne) s dostępne"
+
+msgid "%(free)s frei · %(expiring)s läuft bald ab"
+msgstr "% (wolne) s wolne ·% (wygasające) s wygasające wkrótce"
+
+msgid "Tage"
+msgstr "dni"
+
+msgid "kein Ablauf"
+msgstr "brak ważności"
+
+msgid "Eine Lizenz läuft in %(days)s Tagen ab."
+msgstr "Licencja wygasa w ciągu dni% (dni)."
+
+msgid "freie Pro-Lizenzen"
+msgstr "wolne licencje Pro"
+
+msgid "Freie Pro-Lizenzen können Team-Mitgliedern zugewiesen werden."
+msgstr "Bezpłatne licencje Pro mogą być przypisane członkom zespołu."
+
+msgid "Für Kauf/Abrechnung fehlen: %(fields)s."
+msgstr "Brak do zakupu / fakturowania:% (pola) s."
+
+msgid "Tage verbleibend"
+msgstr "dni pozostałe"
+
+msgid "Deine Lizenz läuft am %(expiry)s ab."
+msgstr "Twoje prawo jazdy wygasa w% (wygaśnięcie) s."
+
+msgid "Es ist eine freie Pro-Lizenz verfügbar."
+msgstr "Bezpłatna licencja Pro jest dostępna."
+
+msgid ""
+"Aktuell ist keine freie Pro-Lizenz verfügbar. Kaufen Sie eine weitere Lizenz"
+" oder geben Sie eine bestehende Lizenz frei."
+msgstr ""
+"Obecnie nie jest dostępna bezpłatna licencja Pro. Kup inną licencję lub "
+"wypuść istniejącą."
+
+msgid "Ihre Pro-Anfrage ist bereits offen."
+msgstr "Prośba Pro jest już otwarta."
+
+msgid ""
+"Für den Pro-Zugriff benötigen Sie eine aktive PROMPTFINISHER-Pro-Lizenz."
+msgstr "Potrzebujesz aktywnego PROMPTFINISHER Licencja Pro dla Pro access."
+
+msgid "Portal durchsuchen"
+msgstr "Portal wyszukiwania"
+
+msgid ""
+"Geben Sie einen Suchbegriff ein. Firmenadministratoren können nach "
+"Teammitgliedern, E-Mail-Adressen und Lizenzen suchen; andere Benutzer sehen "
+"ausschließlich ihre eigene Lizenzsicht."
+msgstr ""
+"Wprowadź termin wyszukiwania. Administratorzy firmy mogą przeszukiwać "
+"członków zespołu, adresy e-mail i licencje; inni użytkownicy widzą tylko "
+"własny widok licencji."
+
+msgid "Kunde"
+msgstr "Klient"
+
+msgid "Pro-Lizenzen noch frei"
+msgstr "Pro licencje nadal za darmo"
+
+msgid "Verlängern"
+msgstr "Rozszerzenie"
+
+msgid "Geschäft, Handlungsbedarf und Systemstatus auf einen Blick."
+msgstr "Biznes, pozycje akcji i status systemu w skrócie."
+
+msgid "PROMPTFINISHER Pro öffnen →"
+msgstr "Otwarte PROMPTFINISHER Pro →"
+
+msgid "PROMPTFINISHER Free öffnen →"
+msgstr "Otwarte PROMPTFINISHER Darmowe →"
+
+msgid "System gesund"
+msgstr "Zdrowy system"
+
+msgid "Prüfung erforderlich"
+msgstr "Wymagany przegląd"
+
+msgid "Kunden gesamt"
+msgstr "Klienci ogółem"
+
+msgid "Offene Leads"
+msgstr "Otwórz prowadnice"
+
+msgid "Lead-Pipeline öffnen"
+msgstr "Gazociąg otwarty"
+
+msgid "Ablauf unter 30 Tagen"
+msgstr "Wygasa w ciągu 30 dni"
+
+msgid "laufen in weniger als 60 Tagen ab"
+msgstr "wygasa w ciągu 60 dni"
+
+msgid "Umsatz 30 Tage"
+msgstr "Dochody, 30 dni"
+
+msgid "Umsatzentwicklung"
+msgstr "Rozwój dochodów"
+
+msgid "Umsatzentwicklung der letzten Monate"
+msgstr "Tendencja dochodowa w ostatnich miesiącach"
+
+msgid "Noch keine bezahlten Bestellungen im Auswertungszeitraum."
+msgstr "Brak płatnych zleceń w okresie sprawozdawczym."
+
+msgid "Lizenzen nach Produkt"
+msgstr "Licencje według produktów"
+
+msgid "Handlungsbedarf"
+msgstr "Wymagane działania"
+
+msgid "Lizenzen laufen in weniger als 30 Tagen ab."
+msgstr "Licencje wygasają za mniej niż 30 dni."
+
+msgid "fehlgeschlagene Zahlungen"
+msgstr "płatności nieudane"
+
+msgid "Chargebacks"
+msgstr "Opłaty"
+
+msgid "offene Kontaktanfragen"
+msgstr "otwarte wnioski o kontakt"
+
+msgid "Kein aktueller Handlungsbedarf."
+msgstr "Obecnie nie są wymagane żadne działania."
+
+msgid "Letzte Bestellungen"
+msgstr "Ostatnie zamówienia"
+
+msgid "Nächste Lizenzabläufe"
+msgstr "Nadchodzące wypłaty licencji"
+
+msgid "Keine bevorstehenden Abläufe."
+msgstr "Żadnych przyszłych wygód."
+
+msgid "Alle Lizenzen"
+msgstr "Wszystkie licencje"
+
+msgid "Kundenportal-Vorschau"
+msgstr "Podgląd portalu klienta"
+
+msgid "KUNDENPORTAL · VORSCHAU"
+msgstr "PORTAŁ CELNY · PRZEGLĄD"
+
+msgid "Read-only Vorschau …"
+msgstr "Read - tylko podgląd..."
+
+msgid "Support-Vorschau"
+msgstr "Podgląd wsparcia"
+
+msgid "Zurück zum netstyle Kundendetail"
+msgstr "Powrót do szczegółów klienta netstyle"
+
+msgid "Read-only Kundenansicht."
+msgstr "Read - tylko widok klienta."
+
+msgid ""
+"Die Daten entsprechen dem ausgewählten Kundenkonto und seiner Rolle. Dies "
+"ist eine Ansichtsvorschau, keine Kundensitzung: Interaktionen, Zahlungs- und"
+" Sicherheitsaktionen sind nicht ausführbar."
+msgstr ""
+"Dane są analizowane na wybranym koncie klienta i jego roli. Jest to podgląd,"
+" a nie sesja klienta: interakcje, płatności i działania bezpieczeństwa są "
+"wyłączone."
+
+msgid "Perspektive auswählen"
+msgstr "Wybierz perspektywę przeglądania"
+
+msgid ""
+"Nur aktive Benutzer dieses Unternehmens. Rollen und Zugriffsrechte werden "
+"berücksichtigt."
+msgstr ""
+"Tylko aktywni użytkownicy z tej firmy. Przestrzega się praw dostępu i ról."
+
+msgid "Kundenbenutzer"
+msgstr "Użytkownik klienta"
+
+msgid "Keine aktiven Benutzer vorhanden"
+msgstr "Brak aktywnych użytkowników"
+
+msgid "Ansicht wechseln"
+msgstr "Zmień widok"
+
+msgid "Angezeigte Rolle:"
+msgstr "Rolę wyświetlaną:"
+
+msgid "Kundenverwaltung"
+msgstr "Administracja klienta"
+
+msgid ""
+"Änderungen erfolgen ausschließlich in den berechtigungsgeschützten "
+"Administrationsmasken mit Auditierung – nicht in der Kundenansicht."
+msgstr ""
+"Zmiany są dokonywane tylko za pomocą formularzy administracyjnych "
+"chronionych uprawnieniem, a nie podglądu klienta."
+
+msgid "Benutzer und Rollen verwalten"
+msgstr "Zarządzanie użytkownikami i rolami"
+
+msgid "Lizenzen verwalten"
+msgstr "Zarządzanie licencjami"
+
+msgid "Geräte verwalten"
+msgstr "Zarządzanie urządzeniami"
+
+msgid "gesamt"
+msgstr "ogółem"
+
+msgid "frei"
+msgstr "dostępne"
+
+msgid "Ablauf ≤30 Tage"
+msgstr "Wygaśnięcie w ciągu 30 dni"
+
+msgid "Konto"
+msgstr "Konto"
+
+msgid "Kontotyp"
+msgstr "Rodzaj rachunku"
+
+msgid "Portal-Benutzer"
+msgstr "Użytkownik portalu"
+
+msgid "Aktive Benutzer"
+msgstr "Aktywni użytkownicy"
+
+msgid "Bestand"
+msgstr "Przegląd gospodarstw"
+
+msgid "Freie Lizenzen"
+msgstr "Dostępne licencje"
+
+msgid "Rolle"
+msgstr "Rola"
+
+msgid "Hinweis"
+msgstr "Uwaga"
+
+msgid "Keine Benutzer vorhanden."
+msgstr "Brak dostępnych użytkowników."
+
+msgid "Keine Lizenzen vorhanden."
+msgstr "Brak licencji."
+
+msgid "Keine netstyle-Berechtigung zum Anzeigen der Lizenzdaten."
+msgstr ""
+"Twoje uprawnienia netstyle nie pozwalają na przeglądanie danych licencji."
+
+msgid "Keine aktiven Geräte vorhanden."
+msgstr "Brak aktywnych urządzeń."
+
+msgid "Keine Bestellungen vorhanden."
+msgstr "Brak zamówień."
+
+msgid "Keine netstyle-Berechtigung zum Anzeigen der Bestelldaten."
+msgstr ""
+"Twoje uprawnienia netstyle nie pozwalają na przeglądanie danych zamówienia."
+
+msgid "Rechtsform"
+msgstr "Forma prawna"
+
+msgid "Telefon"
+msgstr "Telefon"
+
+msgid "Rechnungsanschrift"
+msgstr "Adres rachunku"
+
+msgid "Ort"
+msgstr "Miasto"
+
+msgid "Land"
+msgstr "Kraj"
+
+msgid "USt-IdNr."
+msgstr "Identyfikator VAT"
+
+msgid "Mein Profil"
+msgstr "Mój profil"
+
+msgid ""
+"Dies ist eine Leseansicht. Passwort, Zwei-Faktor-Authentifizierung und "
+"persönliche Einstellungen kann nur der angemeldete Kundenbenutzer selbst "
+"ändern."
+msgstr ""
+"To jest widok tylko do odczytu. Tylko użytkownik-signed- in klienta może "
+"zmienić swoje hasło, uwierzytelnianie dwóch czynników oraz ustawienia "
+"osobiste."
+
+msgid "Benutzerkonto"
+msgstr "Konto użytkowników"
+
+msgid ""
+"Teamverwaltung, Bestellungen und Unternehmensdaten sind für diese Rolle "
+"nicht freigegeben."
+msgstr ""
+"Zarządzanie zespołami, zamówienia i szczegóły firmy nie są dostępne do tej "
+"roli."
+
+msgid "Anschrift"
+msgstr "Adres pocztowy"
+
+msgid "Weitere Bereiche"
+msgstr "Dodatkowe sekcje"
+
+msgid "Kontoeinstellungen"
+msgstr "Ustawienia konta"
+
+msgid "Read-only"
+msgstr "Read- only"
+
+msgid "Sicherheit / 2FA"
+msgstr "Bezpieczeństwo / 2FA"
+
+msgid "nicht impersoniert"
+msgstr "bez podszywania się"
+
+msgid "nicht ausführbar"
+msgstr "niedostępny"
+
+msgid "Support-Hinweis"
+msgstr "Ogłoszenie o wsparciu"
+
+msgid ""
+"Für echte Schreibaktionen oder einen vollständigen Login-Test muss ein "
+"eigener Nicht-Staff-Testkunde verwendet werden. Die Vorschau übernimmt "
+"niemals die Identität des Kunden."
+msgstr ""
+"Dla prawdziwych operacji zapisu lub pełnego testu logowania, należy użyć "
+"dedykowanego klienta test non-staff. Ten podgląd nigdy nie zakłada "
+"tożsamości klienta."
+
+msgid "Noch keine Lizenzen."
+msgstr "Nie ma jeszcze licencji."
+
+msgid "Alle Bestellungen"
+msgstr "Wszystkie zamówienia"
+
+msgid "Firmenkonto"
+msgstr "Rachunek przedsiębiorstwa"

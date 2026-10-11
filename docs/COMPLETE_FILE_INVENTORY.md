@@ -1,12 +1,12 @@
 # Vollständiges Datei-Inventar — PROMPTFINISHER RC14
 
-Erfasst: **645 Dateien** (Manifest-/Inventardateien selbst ausgenommen), **26,337,805 Byte**.
+Erfasst: **651 Dateien** (Manifest-/Inventardateien selbst ausgenommen), **26,481,489 Byte**.
 
 Maschinenlesbar: `FILE_MANIFEST.tsv` und `MANIFEST.json`.
 
 ## active-backend
 
-412 Dateien.
+417 Dateien.
 
 | Pfad | Größe | SHA256 |
 |---|---:|---|
@@ -250,9 +250,9 @@ Maschinenlesbar: `FILE_MANIFEST.tsv` und `MANIFEST.json`.
 | `backend/apps/proaccess/services.py` | 3295 | `e02174366991f473f3b2beea24af3f6e4d0d1e0d24a51df01ab8d4c1818c51f0` |
 | `backend/apps/proaccess/tests.py` | 2397 | `a2baec3ad4203e02cff809b967afcbe1e6eb495225aa08c9e620884ef3f7b8e6` |
 | `backend/apps/proaccess/tests_integration.py` | 8936 | `6b0ff48e7144e6f7b36a8dff2297de8459faf66d6b60a3ae081eacda7f495ca2` |
-| `backend/apps/proaccess/tests_ui_v2.py` | 8918 | `83c543c0e3ac7165a29ee57fb08854a777a918d23f2bdf88643f0219de998521` |
+| `backend/apps/proaccess/tests_ui_v2.py` | 9472 | `d20b67845f63382635d7853b258523e46e1bb94cf6c32b6bcc5d40c1402c112c` |
 | `backend/apps/proaccess/urls.py` | 342 | `a2d116fdb431956a07347fab0018fae54b9f32a2573259411bd8b37831c63037` |
-| `backend/apps/proaccess/views.py` | 13329 | `b62db64d31a50a75fbbdb60f54b8832a0f3f33013c55cb73e188c07a9460ad97` |
+| `backend/apps/proaccess/views.py` | 13465 | `02a8e3020e0095991f9a8768d73acac4702c597eeb7a4bd9c9acaf329be13d85` |
 | `backend/apps/prompts/__init__.py` | 0 | `e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855` |
 | `backend/apps/prompts/admin.py` | 488 | `3bbbd50b2bd2f976cfde1fe3329789aa78a289c08bf9c39645613120907293ea` |
 | `backend/apps/prompts/api.py` | 12216 | `b4ef1cd0e1a39740ea392c7cb9192366895b7bd92f7c8a322e4733965b4f3549` |
@@ -294,11 +294,15 @@ Maschinenlesbar: `FILE_MANIFEST.tsv` und `MANIFEST.json`.
 | `backend/config/__init__.py` | 64 | `40e9457320576e0813c9ec166611e979252a367aede83677fe5626398648cedc` |
 | `backend/config/asgi.py` | 161 | `e66806d324f24440dc47c97b9a870686dc47e2f5879aa61d1df7bb1c028bf25b` |
 | `backend/config/celery.py` | 221 | `99c9d65218b5b7ec9416eed0fb746644ca7aa90fe27223f166df94cea3fd6982` |
-| `backend/config/settings.py` | 9226 | `498752989e0de29342951600f67f709c1054b893f1cade576629317fa8f188c5` |
+| `backend/config/settings.py` | 9323 | `23980c4bc89e6ba5b6d4685a1f1edaefd9d1c34f07297201e17ac122c616ba1c` |
 | `backend/config/urls.py` | 2197 | `1a8a5764854042ae091eb5ff91e908873af6cf7f6b2681a30e39a1067530f685` |
 | `backend/config/wsgi.py` | 161 | `25d3ac3de67e7a1e20c9cfed54bf208a378c7e634f426239c36c63cbabc22f36` |
 | `backend/locale/en/LC_MESSAGES/django.po` | 25895 | `e595502723ef4fae7f2926d38e72549e648984f3eecb611ea5d2a5b690f00e9c` |
 | `backend/locale/es/LC_MESSAGES/django.po` | 27669 | `78c7efe70046936954be19762606482e1d702c6240fe22cadc03651b2a158829` |
+| `backend/locale/fr/LC_MESSAGES/django.po` | 28891 | `5bd9c427c66cf0aeaba4bb909a77b8403485172f3dc01793c48a94a55df615e6` |
+| `backend/locale/it/LC_MESSAGES/django.po` | 28017 | `568e99618ff0764f197e83354275b9d45566145c8b75408a1af8bc2fe0bec67c` |
+| `backend/locale/nl/LC_MESSAGES/django.po` | 27546 | `d5d3b2cd52398b50b296e0433b047fe6b7f7d0f9a205b2bc35d8f96d6d7dd777` |
+| `backend/locale/pl/LC_MESSAGES/django.po` | 28070 | `e17232b71b217a43abf0d39b5eb349a7502890928da2fe59fae42e0ce980eb6b` |
 | `backend/locale/pt/LC_MESSAGES/django.po` | 27914 | `f2e07041c05aaaafe4e269d010a00c10ca5c7f3a300bec6387b568e51f6e8298` |
 | `backend/locale/ru/LC_MESSAGES/django.po` | 36109 | `7943141df982295ee5f3a8969001b9da6430cb0c4894410c9e471f7d466f19da` |
 | `backend/locale/tr/LC_MESSAGES/django.po` | 27161 | `6b65a42d7dbc28bdc2fdd58aef76ec190a572f93b198fd9d2357cd1ae538a15e` |
@@ -318,6 +322,7 @@ Maschinenlesbar: `FILE_MANIFEST.tsv` und `MANIFEST.json`.
 | `backend/static/js/app.js` | 16912 | `08fb0f141c2e1a3dc1ca80f21df0b37a661cdf53c7305e107171707471630ff2` |
 | `backend/static/js/free_catalog_bridge.20260918.js` | 11421 | `badeeeeb29275c67404712f61f4398fe17640cc1b61ae274382aa06c55ec1c85` |
 | `backend/static/js/promptfinisher_brand_hq.20260925.js` | 487 | `937e23ef5c5566d71f345eec533d11ff6fde9eece6cca7595d3f80b267b1f172` |
+| `backend/static/js/promptfinisher_product_i18n.20261011.js` | 25464 | `cb952a0351877bd0e2be1b14cfb4e8c27cad7a7a9814d92881a3bfd3a515d78f` |
 | `backend/static/js/promptfinisher_ui_v2.20260922.js` | 43298 | `e18ab6ee016f09d683ef34719b1c88dd395eb1905b0709ec14a498f69905aad1` |
 | `backend/templates/403.html` | 264 | `1de8a9eaf34d2e358d90e66a590b3b2a4b4d886b4c60c42efbec1c2f1eb59ccd` |
 | `backend/templates/500.html` | 332 | `5e99d45b238a6d36c44f77983534c246a951cc8b295c7dc7b3b66bec6cdfbb01` |
@@ -546,7 +551,7 @@ Maschinenlesbar: `FILE_MANIFEST.tsv` und `MANIFEST.json`.
 
 ## active-operations
 
-37 Dateien.
+38 Dateien.
 
 | Pfad | Größe | SHA256 |
 |---|---:|---|
@@ -562,6 +567,7 @@ Maschinenlesbar: `FILE_MANIFEST.tsv` und `MANIFEST.json`.
 | `scripts/deploy.sh` | 14230 | `264a1130203c26a3621a11a186b0557c9aba3aef9f47aeab91fd3e7b467ce09f` |
 | `scripts/diagnose.sh` | 137 | `86b08add1d4a6baa7b65e86be9ff9d193f1ba16e1e8f965297953d8bfeb127f5` |
 | `scripts/external_backup_acceptance.sh` | 3464 | `a4d50752ea041528dfb7e22670469001f090fbb1b2f12bfae7ff59306709fed7` |
+| `scripts/generate_additional_locales.py` | 4909 | `0f242038390c0f2d99a97781703aef74fe5e8622f48d8d4d60a03d89269a8a46` |
 | `scripts/generate_file_manifest.py` | 3464 | `5bf14f39220d20174fd76e9e2dbc254bd6c5f7693c9cd3188ec01b0ad86be2cf` |
 | `scripts/github_preflight.py` | 3454 | `78bd6dd51b54b8c96346305fb34f436def496452e56aac5bdc94331b04998ff3` |
 | `scripts/github_prepare.sh` | 863 | `ae6a7ff71839dbb9457f78960fb8fe96bb1a762a8f2a999a4b3a1e1e12ec2f91` |

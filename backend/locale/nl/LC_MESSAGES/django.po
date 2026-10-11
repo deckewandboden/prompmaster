@@ -1,0 +1,1226 @@
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: PROMPTFINISHER\n"
+"Language: nl\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n!=1);\n"
+"X-Translation-Method: Argos offline machine translation - editorial QA pending\n"
+
+msgid "Sprache auswählen"
+msgstr "Taal selecteren"
+
+msgid "Sprache"
+msgstr "Taal"
+
+msgid "Suchen …"
+msgstr "Zoeken ..."
+
+msgid "Suchen"
+msgstr "Zoeken"
+
+msgid "Lead, Kunde, Benutzer, Lizenz-ID oder E-Mail suchen …"
+msgstr "Zoek lood, klant, gebruiker, licentie ID of e-mail ..."
+
+msgid "Superadmin"
+msgstr "Super admin"
+
+msgid "netstyle Benutzer"
+msgstr "netstyle gebruiker"
+
+msgid "netstyle Admin-Backend"
+msgstr "netstyle admin backend"
+
+msgid "Übersicht"
+msgstr "Overzicht"
+
+msgid "Leads"
+msgstr "Lood"
+
+msgid "Kunden"
+msgstr "Klanten"
+
+msgid "Lizenzen"
+msgstr "Vergunningen"
+
+msgid "Bestellungen"
+msgstr "Beschikkingen"
+
+msgid "Zahlungen"
+msgstr "Betalingen"
+
+msgid "Produkte & Preise"
+msgstr "Producten & prijzen"
+
+msgid "Prompt Studio"
+msgstr "Prompt Studio"
+
+msgid "FAQ & Inhalte"
+msgstr "Veelgestelde vragen & inhoud"
+
+msgid "E-Mail"
+msgstr "E-mail"
+
+msgid "Mollie"
+msgstr "Mollie"
+
+msgid "Statistiken"
+msgstr "Statistieken"
+
+msgid "System & Betrieb"
+msgstr "Systeembewerkingen"
+
+msgid "API & Integrationen"
+msgstr "API & integraties"
+
+msgid "Datenschutz & Recht"
+msgstr "Privacy & legaal"
+
+msgid "Kontaktanfragen"
+msgstr "Contactverzoeken"
+
+msgid "Protokolle"
+msgstr "Logs"
+
+msgid "Benutzer & Rollen"
+msgstr "Gebruikersfuncties"
+
+msgid "Einstellungen"
+msgstr "Instellingen"
+
+msgid "Abmelden"
+msgstr "Afmelden"
+
+msgid "Home"
+msgstr "Begin"
+
+msgid "System"
+msgstr "Systeem"
+
+msgid "Logs"
+msgstr "Logs"
+
+msgid "Mehr"
+msgstr "Meer"
+
+msgid "Kundenportal"
+msgstr "Klantportaal"
+
+msgid "KUNDENPORTAL"
+msgstr "PORTAL VAN DE KLANT"
+
+msgid "Benutzer, E-Mail oder Lizenz suchen …"
+msgstr "Zoek gebruiker, e-mail of licentie ..."
+
+msgid "Lizenz suchen …"
+msgstr "Zoekvergunning ..."
+
+msgid "Privatkunde"
+msgstr "Particuliere klant"
+
+msgid "Dashboard"
+msgstr "Dashboard"
+
+msgid "Mein Team"
+msgstr "Mijn team"
+
+msgid "Weitere Lizenzen kaufen"
+msgstr "Koop meer licenties"
+
+msgid "Geräte"
+msgstr "Apparaten"
+
+msgid "Bestellungen & Zahlungen"
+msgstr "Orders & betalingen"
+
+msgid "Unternehmen"
+msgstr "Onderneming"
+
+msgid "Hilfe & Kontakt"
+msgstr "Hulp & contact"
+
+msgid "Team"
+msgstr "Team"
+
+msgid "Anmelden"
+msgstr "Aanmelden"
+
+msgid "Ein Zugang für PROMPTFINISHER, Kundenportal und netstyle Admin"
+msgstr "Een rekening voor PROMPTFINISHER, klantenportaal en netstyle admin"
+
+msgid "Noch kein Konto? Konto erstellen"
+msgstr "Nog geen rekening? Account aanmaken"
+
+msgid "Passwort vergessen?"
+msgstr "Wachtwoord vergeten?"
+
+msgid "Konto anlegen"
+msgstr "Account aanmaken"
+
+msgid "Registrieren"
+msgstr "Register"
+
+msgid ""
+"Unternehmensadministratoren richten anschließend verpflichtend 2FA ein."
+msgstr "Bedrijfsbeheerders moeten vervolgens 2FA instellen."
+
+msgid "Bereits registriert?"
+msgstr "Al geregistreerd?"
+
+msgid "Zur Anmeldung"
+msgstr "Ga je aanmelden."
+
+msgid "E-Mail-Adresse"
+msgstr "E-mailadres"
+
+msgid "Passwort"
+msgstr "Wachtwoord"
+
+msgid "Bestätigungscode"
+msgstr "Verificatiecode"
+
+msgid "Kundentyp"
+msgstr "Type klant"
+
+msgid "Privat"
+msgstr "Privé"
+
+msgid "Vorname"
+msgstr "Voornaam"
+
+msgid "Nachname"
+msgstr "Achternaam"
+
+msgid "Firmenname"
+msgstr "Bedrijfsnaam"
+
+msgid "AGB gelesen und akzeptiert"
+msgstr "Voorwaarden gelezen en geaccepteerd"
+
+msgid "Datenschutzerklärung zur Kenntnis genommen"
+msgstr "Privacybeleid erkend"
+
+msgid "Passwort zur Bestätigung"
+msgstr "Wachtwoord voor bevestiging"
+
+msgid "Administratorübertragung verbindlich bestätigen"
+msgstr "Administratoroverdracht bevestigen"
+
+msgid "Neues Passwort"
+msgstr "Nieuw wachtwoord"
+
+msgid "Passwort wiederholen"
+msgstr "Wachtwoord herhalen"
+
+msgid "Tabellenfilter"
+msgstr "Tabelfilters"
+
+msgid "Tabelle durchsuchen"
+msgstr "Zoektabel"
+
+msgid "Alle"
+msgstr "Alles"
+
+msgid "Seitengröße"
+msgstr "Paginagrootte"
+
+msgid "Spalten"
+msgstr "Kolommen"
+
+msgid "Anwenden"
+msgstr "Toepassen"
+
+msgid "CSV exportieren"
+msgstr "CSV exporteren"
+
+msgid "Sortierung zurücksetzen"
+msgstr "Sorteren resetten"
+
+msgid "Alles zurücksetzen"
+msgstr "Alles resetten"
+
+msgid "Daten werden geladen …"
+msgstr "Gegevens laden ..."
+
+msgid "Aktive Filter"
+msgstr "Actieve filters"
+
+msgid "Suche"
+msgstr "Zoeken"
+
+msgid "Keine Such- oder Filtertreffer."
+msgstr "Geen zoek- of filterresultaten."
+
+msgid "Filter zurücksetzen"
+msgstr "Filters resetten"
+
+msgid "+ Benutzer hinzufügen"
+msgstr "+ Gebruiker toevoegen"
+
+msgid "AGB"
+msgstr "Algemene voorwaarden"
+
+msgid "Abbrechen"
+msgstr "Annuleren"
+
+msgid "Administrator übertragen"
+msgstr "Transferbeheerder"
+
+msgid "Aktiv"
+msgstr "Actief"
+
+msgid "Aktive Mitglieder"
+msgstr "Actieve leden"
+
+msgid "Anzahl"
+msgstr "Hoeveelheid"
+
+msgid "Bestellungen & Zahlungen öffnen"
+msgstr "Bestellingen & betalingen openen"
+
+msgid "Checkout"
+msgstr "Afrekenen"
+
+msgid "Datenschutz"
+msgstr "Privacy"
+
+msgid "Der Link wurde per E-Mail versendet."
+msgstr "De link werd per e-mail verzonden."
+
+msgid "Firmen-Administrator"
+msgstr "Bedrijfsbeheerder"
+
+msgid "Gerät entfernen"
+msgstr "Apparaat verwijderen"
+
+msgid "Geräteslots der aktiven PROMPTFINISHER-Pro-Lizenzen."
+msgstr "Apparaatslots van actieve PROMPTFINISHER Pro-licenties."
+
+msgid "Gerätewechsel"
+msgstr "Apparaatverandering"
+
+msgid "Gesamt"
+msgstr "Totaal"
+
+msgid "Jetzt verlängern"
+msgstr "Vernieuw nu"
+
+msgid "Kein Pro-Zugriff für dieses Benutzerkonto."
+msgstr "Geen Pro toegang voor dit gebruikersaccount."
+
+msgid "Kein aktiver Firmenadministrator gefunden."
+msgstr "Geen actieve bedrijfsleider gevonden."
+
+msgid "Keine Geräte."
+msgstr "Geen apparaten."
+
+msgid "Link zur Kontrolle"
+msgstr "Link voor verificatie"
+
+msgid "Lizenz jetzt zuordnen"
+msgstr "Licentie nu toewijzen"
+
+msgid "Lizenz verlängern"
+msgstr "Vernieuw licentie"
+
+msgid "Lizenzbedingungen"
+msgstr "Licentievoorwaarden"
+
+msgid "Lizenzen insgesamt"
+msgstr "Totaal vergunningen"
+
+msgid "Lizenzstatus"
+msgstr "Licentiestatus"
+
+msgid "Lizenzzuordnung bestätigen"
+msgstr "Bevestig licentietoewijzing"
+
+msgid "Nächster Ablauf"
+msgstr "Volgende vervaldatum"
+
+msgid "PROMPTFINISHER PRO"
+msgstr "PROMPTFINISHER PRO"
+
+msgid "PROMPTFINISHER Pro für mich aktivieren"
+msgstr "PROMPTFINISHER activeren Pro voor mij"
+
+msgid "PROMPTFINISHER Pro starten →"
+msgstr "PROMPTFINISHER starten →"
+
+msgid "Pro anfragen"
+msgstr "Verzoek Pro"
+
+msgid "Sicherer PROMPTFINISHER-Zuordnungslink."
+msgstr "Veilige PROMPTFINISHER toewijzingslink."
+
+msgid "Speichern"
+msgstr "Opslaan"
+
+msgid "Stammdaten, Steuerdaten und Firmen-Administrator."
+msgstr "Mastergegevens, belastinggegevens en bedrijfsbeheerder."
+
+msgid "Team öffnen"
+msgstr "Open team"
+
+msgid "Team- und Lizenzverwaltung"
+msgstr "Team- en licentiebeheer"
+
+msgid "Unternehmensdaten"
+msgstr "Bedrijfsgegevens"
+
+msgid "Unternehmensdaten bearbeiten"
+msgstr "Bedrijfsgegevens bewerken"
+
+msgid "Unternehmensdaten unvollständig."
+msgstr "Bedrijfsgegevens onvolledig."
+
+msgid "Updates während Laufzeit"
+msgstr "Updates tijdens de looptijd"
+
+msgid "Widerruf"
+msgstr "Intrekking"
+
+msgid "Widerrufen"
+msgstr "Ingetrokken"
+
+msgid "Zahlungen mit Handlungsbedarf"
+msgstr "Betalingen waarvoor actie vereist is"
+
+msgid "Zahlungspflichtig kaufen →"
+msgstr "Kopen met betalingsverplichting →"
+
+msgid "Zuordnungslink erzeugt"
+msgstr "Opdracht koppeling aangemaakt"
+
+msgid "Zurück zum Benutzer"
+msgstr "Terug naar gebruiker"
+
+msgid "aktiv"
+msgstr "actief"
+
+msgid "enthalten"
+msgstr "inbegrepen"
+
+msgid "inkl. MwSt."
+msgstr "incl. btw"
+
+msgid "registriert"
+msgstr "geregistreerd"
+
+msgid "Änderungen werden erst nach erfolgreicher Validierung gespeichert."
+msgstr "Wijzigingen worden pas opgeslagen na een succesvolle validatie."
+
+msgid "+ Lizenz kaufen"
+msgstr "+ Koop licentie"
+
+msgid "Ablauf"
+msgstr "Einde"
+
+msgid "Adresse"
+msgstr "Adres"
+
+msgid "Aktion"
+msgstr "Actie"
+
+msgid "Aktive Geräte"
+msgstr "Actieve hulpmiddelen"
+
+msgid "Automatischer Kontext"
+msgstr "Automatische context"
+
+msgid "Barrierefreiheit"
+msgstr "Toegankelijkheid"
+
+msgid "Benutzer"
+msgstr "Gebruiker"
+
+msgid "Bestellung"
+msgstr "Beschikking"
+
+msgid "Betrag"
+msgstr "Bedrag"
+
+msgid "Betreff"
+msgstr "Onderwerp"
+
+msgid "Browser"
+msgstr "Browser"
+
+msgid "Datenauskunft"
+msgstr "Toegang tot gegevens"
+
+msgid "Datum"
+msgstr "Datum"
+
+msgid "Direkter Kontakt zu netstyle und Verlauf Ihrer Anfragen."
+msgstr "Direct contact met netstyle en geschiedenis van uw verzoeken."
+
+msgid "Einladungen"
+msgstr "Uitnodigingen"
+
+msgid "Einladungen sind 24 Stunden gültig und einmal verwendbar."
+msgstr "Uitnodigingen zijn 24 uur geldig en kunnen eenmalig worden gebruikt."
+
+msgid "Frei"
+msgstr "Vrij"
+
+msgid "Gerät"
+msgstr "Apparaat"
+
+msgid "Gültig ab"
+msgstr "Geldig vanaf"
+
+msgid "Gültig bis"
+msgstr "Geldig tot"
+
+msgid "Impressum"
+msgstr "Mededeling"
+
+msgid "Jeder Seat läuft mit individueller Laufzeit."
+msgstr "Elke zetel heeft zijn eigen individuele term."
+
+msgid "Kategorie"
+msgstr "Categorie"
+
+msgid "Keine Bestellungen."
+msgstr "Geen orders."
+
+msgid "Keine Einladungen."
+msgstr "Geen uitnodigingen."
+
+msgid "Keine Lizenzen."
+msgstr "Geen rijbewijs."
+
+msgid "Keine aktiven Geräte."
+msgstr "Geen actieve apparaten."
+
+msgid "Kontaktformular"
+msgstr "Contactformulier"
+
+msgid "Konto & Hilfe"
+msgstr "Accounthulp"
+
+msgid "Kontolöschung"
+msgstr "Account verwijderen"
+
+msgid "Kontolöschung anfordern"
+msgstr "Verzoek om verwijdering van account"
+
+msgid "Laufzeit"
+msgstr "Termijn"
+
+msgid "Lizenz"
+msgstr "Licentie"
+
+msgid "Lizenz-ID"
+msgstr "Licentie-ID"
+
+msgid "Lizenzdaten"
+msgstr "Licentiegegevens"
+
+msgid "Meine Daten exportieren"
+msgstr "Mijn gegevens exporteren"
+
+msgid ""
+"Mollie übernimmt die Zahlungsabwicklung; PROMPTFINISHER erzeugt keine eigene"
+" Rechnungsengine."
+msgstr ""
+"Mollie verwerkt de verwerking van betalingen; PROMPTFINISHER heeft geen "
+"eigen facturatiemotor."
+
+msgid "Mollie-Referenz"
+msgstr "Mollie-referentie"
+
+msgid "Nachricht senden"
+msgstr "Bericht versturen"
+
+msgid "Name"
+msgstr "Naam"
+
+msgid "Neu senden"
+msgstr "Opnieuw verzenden"
+
+msgid "Nicht eingerichtet"
+msgstr "Niet geconfigureerd"
+
+msgid "Noch keine Anfragen vorhanden."
+msgstr "Nog geen verzoek."
+
+msgid "Noch keine Reminder für den aktuellen Ablaufzeitpunkt."
+msgstr "Nog geen herinneringen voor de huidige vervaldatum."
+
+msgid "PROMPTFINISHER Pro öffnen"
+msgstr "Open PROMPTFINISHER Pro"
+
+msgid "Produkt"
+msgstr "Product"
+
+msgid "Produkt / Menge"
+msgstr "Product / hoeveelheid"
+
+msgid "Profil"
+msgstr "Profiel"
+
+msgid "Profil, Adresse, Kontosicherheit und Datenauskunft."
+msgstr "Profiel, adres, accountbeveiliging en toegang tot gegevens."
+
+msgid "Rechtliches"
+msgstr "Juridisch"
+
+msgid "Reminder"
+msgstr "Herinnering"
+
+msgid "Resttage"
+msgstr "Resterende dagen"
+
+msgid "Sicherheit"
+msgstr "Beveiliging"
+
+msgid "Sicherheit verwalten"
+msgstr "Beveiliging beheren"
+
+msgid "Status"
+msgstr "Status"
+
+msgid "Supporthistorie"
+msgstr "Geschiedenis ondersteunen"
+
+msgid "Verbraucherrechte"
+msgstr "Consumentenrechten"
+
+msgid "Vertrag widerrufen"
+msgstr "Contract intrekken"
+
+msgid "Verträge hier kündigen"
+msgstr "Annuleren contracten hier"
+
+msgid "Verwaltung & Abrechnung"
+msgstr "Administratie & facturering"
+
+msgid "Weitere Bereiche Ihres Kundenportals."
+msgstr "Extra gebieden van uw klantenportaal."
+
+msgid "Widerrufsbelehrung"
+msgstr "Ophoudinformatie"
+
+msgid "Zahlung"
+msgstr "Betaling"
+
+msgid "Zugewiesen"
+msgstr "Toegewezen"
+
+msgid "Zuletzt gesehen"
+msgstr "Laatst gezien"
+
+msgid "Zurück"
+msgstr "Terug"
+
+msgid "Zuweisung"
+msgstr "Toewijzing"
+
+msgid "Zwei-Faktor-Authentifizierung"
+msgstr "Two-factor authenticatie"
+
+msgid "Öffnen"
+msgstr "Open"
+
+msgid "≤30 Tage"
+msgstr "≤ 30 dagen"
+
+msgid "2FA einrichten"
+msgstr "2FA instellen"
+
+msgid ""
+"2FA schützt den Zugriff mit einem zusätzlichen zeitbasierten Einmalcode."
+msgstr ""
+"2FA beschermt toegang met een extra op tijd gebaseerde eenmalige code."
+
+msgid "Ablehnen"
+msgstr "Weigeren"
+
+msgid "Aktive Lizenzen"
+msgstr "Actieve licenties"
+
+msgid "Aktuelles Ende"
+msgstr "Huidige einddatum"
+
+msgid "Anfrage"
+msgstr "Verzoek"
+
+msgid "Bearbeitungsstand"
+msgstr "Verwerkingsstatus"
+
+msgid "Benutzer deaktivieren"
+msgstr "Gebruiker uitschakelen"
+
+msgid "Benutzer löschen"
+msgstr "Gebruiker verwijderen"
+
+msgid "Benutzer reaktivieren"
+msgstr "Gebruiker opnieuw activeren"
+
+msgid "Benutzer, Einladungen, Lizenzen und Geräte verwalten."
+msgstr "Beheer gebruikers, uitnodigingen, licenties en apparaten."
+
+msgid ""
+"Die Suche bleibt auf Ihren eigenen Mandanten- und Lizenzbereich begrenzt."
+msgstr "Zoeken blijft beperkt tot uw eigen huurder en licentie scope."
+
+msgid ""
+"Ein Passwortwechsel erfolgt über einen zeitlich begrenzten, einmal "
+"verwendbaren Link an Ihre hinterlegte E-Mail-Adresse."
+msgstr ""
+"Een wachtwoordwijziging wordt uitgevoerd via een tijdelijke, eenmalige link "
+"naar uw geregistreerde e-mailadres."
+
+msgid "Free"
+msgstr "Vrij"
+
+msgid "Freie Lizenz zuweisen"
+msgstr "Vrije licentie toewijzen"
+
+msgid "Freigeben"
+msgstr "Loslaten"
+
+msgid "Genehmigen"
+msgstr "Goedkeuring"
+
+msgid ""
+"Hier sehen Sie ausschließlich Nachrichten, die für Sie bzw. Ihr Unternehmen "
+"bestimmt sind. Interne netstyle-Notizen werden nicht im Kundenportal "
+"angezeigt."
+msgstr ""
+"Hier zie je alleen berichten voor u of uw bedrijf. Interne netstyle tonen "
+"worden niet getoond in het klantenportaal."
+
+msgid "Ihre Anfrage und alle für Kunden freigegebenen Antworten."
+msgstr "Uw verzoek en alle antwoorden vrijgegeven voor klanten."
+
+msgid "Inaktiv"
+msgstr "Inactief"
+
+msgid "Keine Benutzer gefunden."
+msgstr "Geen gebruikers gevonden."
+
+msgid "Keine Lizenz zugewiesen."
+msgstr "Geen vergunning toegewezen."
+
+msgid "Keine Lizenzen gefunden."
+msgstr "Geen licenties gevonden."
+
+msgid "Keine freie Lizenz."
+msgstr "Geen vrije licentie."
+
+msgid "Keine verlängerbare Lizenz vorhanden."
+msgstr "Geen duurzame licentie beschikbaar."
+
+msgid "Mitarbeiter"
+msgstr "Werknemer"
+
+msgid "Noch nie"
+msgstr "Nooit"
+
+msgid "Offene Pro-Anfragen"
+msgstr "Pro-verzoeken openen"
+
+msgid "PROMPTFINISHER Free"
+msgstr "PROMPTFINISHER Vrij"
+
+msgid "PROMPTFINISHER Pro"
+msgstr "PROMPTFINISHER Pro"
+
+msgid "Passwort zurücksetzen"
+msgstr "Wachtwoord resetten"
+
+msgid "Recovery-Codes neu erzeugen"
+msgstr "Herstelcodes regenereren"
+
+msgid "Seit"
+msgstr "Sinds"
+
+msgid "Sicheren Link senden"
+msgstr "Stuur beveiligde link"
+
+msgid "Team-Mitglieder"
+msgstr "Teamleden"
+
+msgid "Verlauf"
+msgstr "Historie"
+
+msgid ""
+"Wählen Sie die Lizenz, deren bestehende Restlaufzeit um weitere 365 Tage "
+"verlängert werden soll."
+msgstr ""
+"Selecteer de licentie waarvan de resterende termijn met 365 dagen verlengd "
+"moet worden."
+
+msgid "Zahlungspflichtig verlängern →"
+msgstr "Vernieuwen met betalingsverplichting →"
+
+msgid "Zuletzt aktiv"
+msgstr "Laatst actief"
+
+msgid "Zurück zu Einstellungen"
+msgstr "Terug naar instellingen"
+
+msgid "Zurück zu Lizenzen"
+msgstr "Terug naar licenties"
+
+msgid "Zuweisen"
+msgstr "Toewijzen"
+
+msgid "Zwei-Faktor-Authentifizierung und Recovery-Codes verwalten."
+msgstr "Beheer twee-factor authenticatie en herstel codes."
+
+msgid "aktive Benutzer"
+msgstr "actieve gebruikers"
+
+msgid "aktive Benutzer ohne Pro-Zuweisung"
+msgstr "actieve gebruikers zonder Pro-toewijzing"
+
+msgid "registriert / Kapazität"
+msgstr "geregistreerd / capaciteit"
+
+msgid ""
+"Die vorbereitete Lizenz wird Ihrem aktuell angemeldeten Benutzerkonto "
+"zugeordnet. Der Link kann anschließend nicht erneut verwendet werden."
+msgstr ""
+"De voorbereide licentie wordt toegewezen aan uw momenteel ingelogde "
+"gebruikersaccount. De link kan achteraf niet meer worden gebruikt."
+
+msgid ""
+"Gültig bis %(expiry)s. Der Link ist tenantgebunden, für genau diesen "
+"Benutzer bestimmt und nur einmal verwendbar."
+msgstr ""
+"Geldig tot %(expiry)s. De link is huurdergebonden, bedoeld voor precies deze"
+" gebruiker en kan slechts eenmaal gebruikt worden."
+
+msgid ""
+"Jede neue Lizenz startet nach erfolgreicher Zahlung mit eigener 365-Tage-"
+"Laufzeit."
+msgstr ""
+"Elke nieuwe licentie begint zijn eigen 365-dagen termijn na succesvolle "
+"betaling."
+
+msgid "inkl. MwSt. · %(days)s Tage"
+msgstr "incl. BTW · %(dagen) dagen"
+
+msgid "%(limit)s Geräte je Benutzer"
+msgstr "%(limit) apparaten per gebruiker"
+
+msgid "Preis nicht verfügbar"
+msgstr "Prijs niet beschikbaar"
+
+msgid ""
+"V1: exakt ein aktiver Firmenadministrator. Eine Übertragung ist nur auf ein "
+"aktives Team-Mitglied möglich."
+msgstr ""
+"V1: precies één actieve bedrijfsleider. Transfer is alleen mogelijk naar een"
+" actief teamlid."
+
+msgid "Ihre eigenen Geräteslots können Sie hier selbst verwalten."
+msgstr "U kunt hier uw eigen apparaatslots beheren."
+
+msgid "Geräteslots werden durch den Firmenadministrator verwaltet."
+msgstr "Apparaatslots worden beheerd door de beheerder van het bedrijf."
+
+msgid "Widerrufene Geräte bleiben als Historie erhalten."
+msgstr "Ingetrokken apparaten blijven in de geschiedenis."
+
+msgid "Zuletzt %(seen)s"
+msgstr "Laatst gezien %(gezien)"
+
+msgid "Gerät wirklich entfernen?"
+msgstr "Echt een apparaat verwijderen?"
+
+msgid ""
+"Konto, Unternehmen, Benutzer-ID und Zeitpunkt werden automatisch zugeordnet."
+" Optional kann eine für Ihr Konto sichtbare Lizenz mitgesendet werden. "
+"Passwörter, Tokens oder andere unnötige sensitive Daten werden nicht "
+"übernommen."
+msgstr ""
+"Account, bedrijf, gebruikers-ID en tijdstempel worden automatisch "
+"toegewezen. Optioneel kan een voor uw account zichtbare licentie worden "
+"opgenomen. Wachtwoorden, tokens of andere onnodige gevoelige gegevens zijn "
+"niet inbegrepen."
+
+msgid ""
+"Exportieren Sie die zu Ihrem Benutzer gespeicherten PROMPTFINISHER-Daten als"
+" JSON. Secrets und Daten anderer Benutzer werden nicht exportiert."
+msgstr ""
+"Exporteer de PROMPTFINISHER gegevens die zijn opgeslagen voor uw gebruiker "
+"als JSON. Geheimen en gegevens van andere gebruikers worden niet "
+"geëxporteerd."
+
+msgid ""
+"Ihre Löschanfrage vom %(requested)s ist bereits erfasst. Status: %(status)s."
+msgstr ""
+"Uw verwijderingsverzoek van %(verzoek)s is al geregistreerd. Status: "
+"%(status)s."
+
+msgid ""
+"Sie können die Löschung Ihres PROMPTFINISHER-Kontos anfordern. Gesetzlich "
+"erforderliche Geschäfts- und Nachweisdaten werden nur im erforderlichen "
+"Umfang weiter aufbewahrt bzw. anonymisiert. Firmenadministratoren müssen "
+"ihre Administratorrolle vor der Verarbeitung übertragen."
+msgstr ""
+"U kunt verzoeken om verwijdering van uw PROMPTFINISHER-account. Juridisch "
+"vereiste bedrijfs- en bewijsgegevens worden alleen bewaard of geanonimiseerd"
+" voor zover dit vereist is. Bedrijfsbeheerders moeten hun beheerdersrol "
+"overdragen voordat ze worden verwerkt."
+
+msgid "Ich möchte die Löschung meines Kontos verbindlich anfordern."
+msgstr "Ik wil een bindend verzoek indienen om mijn account te verwijderen."
+
+msgid "Guten Morgen, %(first_name)s"
+msgstr "Goedemorgen, %(first name)s"
+
+msgid "Privatkonto"
+msgstr "Particuliere rekening"
+
+msgid "Unternehmensadministrator"
+msgstr "Bedrijfsbeheerder"
+
+msgid "%(assigned)s vergeben · %(free)s verfügbar"
+msgstr "%(toegewezen) toegewezen · %(vrij) beschikbaar"
+
+msgid "%(free)s frei · %(expiring)s läuft bald ab"
+msgstr "%(free)s vrij · %(expiring) loopt binnenkort af"
+
+msgid "Tage"
+msgstr "dagen"
+
+msgid "kein Ablauf"
+msgstr "geen vervaldatum"
+
+msgid "Eine Lizenz läuft in %(days)s Tagen ab."
+msgstr "Een licentie verloopt in %(dagen) dagen."
+
+msgid "freie Pro-Lizenzen"
+msgstr "gratis Pro licenties"
+
+msgid "Freie Pro-Lizenzen können Team-Mitgliedern zugewiesen werden."
+msgstr "Gratis Pro licenties kunnen worden toegewezen aan teamleden."
+
+msgid "Für Kauf/Abrechnung fehlen: %(fields)s."
+msgstr "Ontbrekend voor aankoop/facturering: %(fields)s."
+
+msgid "Tage verbleibend"
+msgstr "resterende dagen"
+
+msgid "Deine Lizenz läuft am %(expiry)s ab."
+msgstr "Uw licentie vervalt op %(expiry)s."
+
+msgid "Es ist eine freie Pro-Lizenz verfügbar."
+msgstr "Een gratis Pro licentie is beschikbaar."
+
+msgid ""
+"Aktuell ist keine freie Pro-Lizenz verfügbar. Kaufen Sie eine weitere Lizenz"
+" oder geben Sie eine bestehende Lizenz frei."
+msgstr ""
+"Er is momenteel geen gratis Pro-licentie beschikbaar. Koop een andere "
+"licentie of geef een bestaande vrij."
+
+msgid "Ihre Pro-Anfrage ist bereits offen."
+msgstr "Je prof verzoek is al open."
+
+msgid ""
+"Für den Pro-Zugriff benötigen Sie eine aktive PROMPTFINISHER-Pro-Lizenz."
+msgstr ""
+"U heeft een actieve PROMPTFINISHER nodig Pro licentie voor Pro toegang."
+
+msgid "Portal durchsuchen"
+msgstr "Zoekportaal"
+
+msgid ""
+"Geben Sie einen Suchbegriff ein. Firmenadministratoren können nach "
+"Teammitgliedern, E-Mail-Adressen und Lizenzen suchen; andere Benutzer sehen "
+"ausschließlich ihre eigene Lizenzsicht."
+msgstr ""
+"Voer een zoekterm. Bedrijfsbeheerders kunnen teamleden, e-mailadressen en "
+"licenties zoeken; andere gebruikers zien alleen hun eigen licentieweergave."
+
+msgid "Kunde"
+msgstr "Klant"
+
+msgid "Pro-Lizenzen noch frei"
+msgstr "Pro licenties nog steeds gratis"
+
+msgid "Verlängern"
+msgstr "Extenderen"
+
+msgid "Geschäft, Handlungsbedarf und Systemstatus auf einen Blick."
+msgstr "Bedrijfs-, actie- en systeemstatus in één oogopslag."
+
+msgid "PROMPTFINISHER Pro öffnen →"
+msgstr "Open PROMPTFINISHER →"
+
+msgid "PROMPTFINISHER Free öffnen →"
+msgstr "Open PROMPTFINISHER Vrij →"
+
+msgid "System gesund"
+msgstr "Systeem gezond"
+
+msgid "Prüfung erforderlich"
+msgstr "Evaluatie vereist"
+
+msgid "Kunden gesamt"
+msgstr "Totaal klanten"
+
+msgid "Offene Leads"
+msgstr "Open leads"
+
+msgid "Lead-Pipeline öffnen"
+msgstr "Open loodpijpleiding"
+
+msgid "Ablauf unter 30 Tagen"
+msgstr "Vervalt binnen 30 dagen"
+
+msgid "laufen in weniger als 60 Tagen ab"
+msgstr "vervallen binnen 60 dagen"
+
+msgid "Umsatz 30 Tage"
+msgstr "Ontvangsten, 30 dagen"
+
+msgid "Umsatzentwicklung"
+msgstr "Ontwikkeling van de ontvangsten"
+
+msgid "Umsatzentwicklung der letzten Monate"
+msgstr "Ontwikkeling van de inkomsten in de afgelopen maanden"
+
+msgid "Noch keine bezahlten Bestellungen im Auswertungszeitraum."
+msgstr "Nog geen betaalde orders in de verslagperiode."
+
+msgid "Lizenzen nach Produkt"
+msgstr "Vergunningen per product"
+
+msgid "Handlungsbedarf"
+msgstr "Vereiste actie"
+
+msgid "Lizenzen laufen in weniger als 30 Tagen ab."
+msgstr "Vergunningen verlopen binnen 30 dagen."
+
+msgid "fehlgeschlagene Zahlungen"
+msgstr "mislukte betalingen"
+
+msgid "Chargebacks"
+msgstr "Teruggave"
+
+msgid "offene Kontaktanfragen"
+msgstr "open contactverzoeken"
+
+msgid "Kein aktueller Handlungsbedarf."
+msgstr "Er is momenteel geen actie vereist."
+
+msgid "Letzte Bestellungen"
+msgstr "Recente bestellingen"
+
+msgid "Nächste Lizenzabläufe"
+msgstr "Binnenkort verlopen de licenties"
+
+msgid "Keine bevorstehenden Abläufe."
+msgstr "Geen aankomende afloop."
+
+msgid "Alle Lizenzen"
+msgstr "Alle licenties"
+
+msgid "Kundenportal-Vorschau"
+msgstr "Voorbeeld van het klantenportaal"
+
+msgid "KUNDENPORTAL · VORSCHAU"
+msgstr "PORTAL VAN DE KLANT · VOORUITZICHT"
+
+msgid "Read-only Vorschau …"
+msgstr "Alleen-lezen preview ..."
+
+msgid "Support-Vorschau"
+msgstr "Ondersteuningsvoorbeeld"
+
+msgid "Zurück zum netstyle Kundendetail"
+msgstr "Terug naar netstyle klantgegevens"
+
+msgid "Read-only Kundenansicht."
+msgstr "Alleen-lezen klantweergave."
+
+msgid ""
+"Die Daten entsprechen dem ausgewählten Kundenkonto und seiner Rolle. Dies "
+"ist eine Ansichtsvorschau, keine Kundensitzung: Interaktionen, Zahlungs- und"
+" Sicherheitsaktionen sind nicht ausführbar."
+msgstr ""
+"Gegevens zijn toegankelijk voor de geselecteerde klantaccount en rol. Dit is"
+" een preview, geen klantsessie: interacties, betalingen en "
+"beveiligingsmaatregelen zijn uitgeschakeld."
+
+msgid "Perspektive auswählen"
+msgstr "Selecteer weergaveperspectief"
+
+msgid ""
+"Nur aktive Benutzer dieses Unternehmens. Rollen und Zugriffsrechte werden "
+"berücksichtigt."
+msgstr ""
+"Alleen actieve gebruikers van dit bedrijf. Rol en toegangsrechten worden "
+"geëerbiedigd."
+
+msgid "Kundenbenutzer"
+msgstr "Klantgebruiker"
+
+msgid "Keine aktiven Benutzer vorhanden"
+msgstr "Geen actieve gebruikers beschikbaar"
+
+msgid "Ansicht wechseln"
+msgstr "Beeld wijzigen"
+
+msgid "Angezeigte Rolle:"
+msgstr "Getoonde rol:"
+
+msgid "Kundenverwaltung"
+msgstr "Klantadministratie"
+
+msgid ""
+"Änderungen erfolgen ausschließlich in den berechtigungsgeschützten "
+"Administrationsmasken mit Auditierung – nicht in der Kundenansicht."
+msgstr ""
+"Wijzigingen worden alleen doorgevoerd door middel van door toestemming "
+"beschermde, gecontroleerde administratieve formulieren, niet door de klant."
+
+msgid "Benutzer und Rollen verwalten"
+msgstr "Gebruikers en rollen beheren"
+
+msgid "Lizenzen verwalten"
+msgstr "Beheer licenties"
+
+msgid "Geräte verwalten"
+msgstr "Devices beheren"
+
+msgid "gesamt"
+msgstr "Totaal"
+
+msgid "frei"
+msgstr "beschikbaar"
+
+msgid "Ablauf ≤30 Tage"
+msgstr "Verlopen binnen 30 dagen"
+
+msgid "Konto"
+msgstr "Account"
+
+msgid "Kontotyp"
+msgstr "Accounttype"
+
+msgid "Portal-Benutzer"
+msgstr "Portaalgebruiker"
+
+msgid "Aktive Benutzer"
+msgstr "Actieve gebruikers"
+
+msgid "Bestand"
+msgstr "Overzicht van de bedrijven"
+
+msgid "Freie Lizenzen"
+msgstr "Beschikbare licenties"
+
+msgid "Rolle"
+msgstr "Rol"
+
+msgid "Hinweis"
+msgstr "Opmerking"
+
+msgid "Keine Benutzer vorhanden."
+msgstr "Geen gebruikers beschikbaar."
+
+msgid "Keine Lizenzen vorhanden."
+msgstr "Geen licenties beschikbaar."
+
+msgid "Keine netstyle-Berechtigung zum Anzeigen der Lizenzdaten."
+msgstr "Uw netstyle-rechten staan geen licentiegegevens toe."
+
+msgid "Keine aktiven Geräte vorhanden."
+msgstr "Geen actieve apparaten beschikbaar."
+
+msgid "Keine Bestellungen vorhanden."
+msgstr "Geen orders beschikbaar."
+
+msgid "Keine netstyle-Berechtigung zum Anzeigen der Bestelldaten."
+msgstr "Uw netstyle-rechten staan het bekijken van ordergegevens niet toe."
+
+msgid "Rechtsform"
+msgstr "Rechtsvorm"
+
+msgid "Telefon"
+msgstr "Telefoon"
+
+msgid "Rechnungsanschrift"
+msgstr "Factureringsadres"
+
+msgid "Ort"
+msgstr "Stad"
+
+msgid "Land"
+msgstr "Land"
+
+msgid "USt-IdNr."
+msgstr "BTW-ID"
+
+msgid "Mein Profil"
+msgstr "Mijn profiel"
+
+msgid ""
+"Dies ist eine Leseansicht. Passwort, Zwei-Faktor-Authentifizierung und "
+"persönliche Einstellungen kann nur der angemeldete Kundenbenutzer selbst "
+"ändern."
+msgstr ""
+"Dit is een alleen-lezen weergave. Alleen de ingelogde klant kan zijn "
+"wachtwoord, twee-factor authenticatie en persoonlijke instellingen wijzigen."
+
+msgid "Benutzerkonto"
+msgstr "Gebruikersaccount"
+
+msgid ""
+"Teamverwaltung, Bestellungen und Unternehmensdaten sind für diese Rolle "
+"nicht freigegeben."
+msgstr ""
+"Teammanagement, orders en bedrijfsgegevens zijn niet beschikbaar voor deze "
+"rol."
+
+msgid "Anschrift"
+msgstr "Postadres"
+
+msgid "Weitere Bereiche"
+msgstr "Aanvullende secties"
+
+msgid "Kontoeinstellungen"
+msgstr "Accountinstellingen"
+
+msgid "Read-only"
+msgstr "Alleen-lezen"
+
+msgid "Sicherheit / 2FA"
+msgstr "Beveiliging / 2FA"
+
+msgid "nicht impersoniert"
+msgstr "geen imitatie"
+
+msgid "nicht ausführbar"
+msgstr "niet beschikbaar"
+
+msgid "Support-Hinweis"
+msgstr "Bericht van ondersteuning"
+
+msgid ""
+"Für echte Schreibaktionen oder einen vollständigen Login-Test muss ein "
+"eigener Nicht-Staff-Testkunde verwendet werden. Die Vorschau übernimmt "
+"niemals die Identität des Kunden."
+msgstr ""
+"Voor echte schrijfbewerkingen of een volledige inlogtest, gebruik een "
+"speciale niet-personeelstestklant. Deze preview gaat nooit uit van de "
+"identiteit van een klant."
+
+msgid "Noch keine Lizenzen."
+msgstr "Nog geen rijbewijs."
+
+msgid "Alle Bestellungen"
+msgstr "Alle bestellingen"
+
+msgid "Firmenkonto"
+msgstr "Bedrijfsrekening"

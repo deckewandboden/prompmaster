@@ -1,0 +1,1243 @@
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: PROMPTFINISHER\n"
+"Language: fr\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n>1);\n"
+"X-Translation-Method: Argos offline machine translation - editorial QA pending\n"
+
+msgid "Sprache auswählen"
+msgstr "Sélectionner la langue"
+
+msgid "Sprache"
+msgstr "Langue"
+
+msgid "Suchen …"
+msgstr "Rechercher ..."
+
+msgid "Suchen"
+msgstr "Rechercher"
+
+msgid "Lead, Kunde, Benutzer, Lizenz-ID oder E-Mail suchen …"
+msgstr ""
+"Lead de recherche, client, utilisateur, identifiant de licence ou email ..."
+
+msgid "Superadmin"
+msgstr "Super administrateur"
+
+msgid "netstyle Benutzer"
+msgstr "Utilisateur netstyle"
+
+msgid "netstyle Admin-Backend"
+msgstr "netstyle moteur d'administration"
+
+msgid "Übersicht"
+msgstr "Aperçu général"
+
+msgid "Leads"
+msgstr "plombs"
+
+msgid "Kunden"
+msgstr "Clients"
+
+msgid "Lizenzen"
+msgstr "Licences"
+
+msgid "Bestellungen"
+msgstr "Ordonnances"
+
+msgid "Zahlungen"
+msgstr "Paiements"
+
+msgid "Produkte & Preise"
+msgstr "Produits & prix"
+
+msgid "Prompt Studio"
+msgstr "Prompt Studio"
+
+msgid "FAQ & Inhalte"
+msgstr "FAQ & contenu"
+
+msgid "E-Mail"
+msgstr "Courriel"
+
+msgid "Mollie"
+msgstr "Mollie"
+
+msgid "Statistiken"
+msgstr "Statistiques"
+
+msgid "System & Betrieb"
+msgstr "Système & opérations"
+
+msgid "API & Integrationen"
+msgstr "API & intégrations"
+
+msgid "Datenschutz & Recht"
+msgstr "Vie privée et juridique"
+
+msgid "Kontaktanfragen"
+msgstr "Demandes de contact"
+
+msgid "Protokolle"
+msgstr "Registres"
+
+msgid "Benutzer & Rollen"
+msgstr "Utilisateurs & rôles"
+
+msgid "Einstellungen"
+msgstr "Paramètres"
+
+msgid "Abmelden"
+msgstr "Déconnexion"
+
+msgid "Home"
+msgstr "Sommaire"
+
+msgid "System"
+msgstr "Système"
+
+msgid "Logs"
+msgstr "Registres"
+
+msgid "Mehr"
+msgstr "Plus"
+
+msgid "Kundenportal"
+msgstr "Portail client"
+
+msgid "KUNDENPORTAL"
+msgstr "PORTAL CUStomER"
+
+msgid "Benutzer, E-Mail oder Lizenz suchen …"
+msgstr "Rechercher utilisateur, email ou licence ..."
+
+msgid "Lizenz suchen …"
+msgstr "Licence de recherche ..."
+
+msgid "Privatkunde"
+msgstr "Client privé"
+
+msgid "Dashboard"
+msgstr "Tableau de bord"
+
+msgid "Mein Team"
+msgstr "Mon équipe"
+
+msgid "Weitere Lizenzen kaufen"
+msgstr "Acheter plus de licences"
+
+msgid "Geräte"
+msgstr "Dispositifs"
+
+msgid "Bestellungen & Zahlungen"
+msgstr "Commandes et paiements"
+
+msgid "Unternehmen"
+msgstr "Société"
+
+msgid "Hilfe & Kontakt"
+msgstr "Aide & contact"
+
+msgid "Team"
+msgstr "Équipe"
+
+msgid "Anmelden"
+msgstr "Connexion"
+
+msgid "Ein Zugang für PROMPTFINISHER, Kundenportal und netstyle Admin"
+msgstr "Un compte pour PROMPTFINISHER, portail client et netstyle admin"
+
+msgid "Noch kein Konto? Konto erstellen"
+msgstr "Pas encore de compte ? Créer un compte"
+
+msgid "Passwort vergessen?"
+msgstr "Mot de passe oublié ?"
+
+msgid "Konto anlegen"
+msgstr "Créer un compte"
+
+msgid "Registrieren"
+msgstr "Registre"
+
+msgid ""
+"Unternehmensadministratoren richten anschließend verpflichtend 2FA ein."
+msgstr "Les administrateurs de l'entreprise doivent alors créer 2FA."
+
+msgid "Bereits registriert?"
+msgstr "Déjà enregistré ?"
+
+msgid "Zur Anmeldung"
+msgstr "Aller à la connexion"
+
+msgid "E-Mail-Adresse"
+msgstr "Adresse électronique"
+
+msgid "Passwort"
+msgstr "Mot de passe"
+
+msgid "Bestätigungscode"
+msgstr "Code de vérification"
+
+msgid "Kundentyp"
+msgstr "Type de client"
+
+msgid "Privat"
+msgstr "Privé"
+
+msgid "Vorname"
+msgstr "Prénom"
+
+msgid "Nachname"
+msgstr "Nom"
+
+msgid "Firmenname"
+msgstr "Nom de la société"
+
+msgid "AGB gelesen und akzeptiert"
+msgstr "Termes lus et acceptés"
+
+msgid "Datenschutzerklärung zur Kenntnis genommen"
+msgstr "Politique de confidentialité reconnue"
+
+msgid "Passwort zur Bestätigung"
+msgstr "Mot de passe pour confirmation"
+
+msgid "Administratorübertragung verbindlich bestätigen"
+msgstr "Confirmer le transfert de l'administrateur"
+
+msgid "Neues Passwort"
+msgstr "Nouveau mot de passe"
+
+msgid "Passwort wiederholen"
+msgstr "Répéter le mot de passe"
+
+msgid "Tabellenfilter"
+msgstr "Filtres de table"
+
+msgid "Tabelle durchsuchen"
+msgstr "Tableau de recherche"
+
+msgid "Alle"
+msgstr "Tous"
+
+msgid "Seitengröße"
+msgstr "Taille des pages"
+
+msgid "Spalten"
+msgstr "Colonnes"
+
+msgid "Anwenden"
+msgstr "Appliquer"
+
+msgid "CSV exportieren"
+msgstr "Exportation CSV"
+
+msgid "Sortierung zurücksetzen"
+msgstr "Réinitialiser le tri"
+
+msgid "Alles zurücksetzen"
+msgstr "Tout réinitialiser"
+
+msgid "Daten werden geladen …"
+msgstr "Chargement des données ..."
+
+msgid "Aktive Filter"
+msgstr "Filtres actifs"
+
+msgid "Suche"
+msgstr "Rechercher"
+
+msgid "Keine Such- oder Filtertreffer."
+msgstr "Aucun résultat de recherche ou de filtrage."
+
+msgid "Filter zurücksetzen"
+msgstr "Réinitialiser les filtres"
+
+msgid "+ Benutzer hinzufügen"
+msgstr "+ Ajouter un utilisateur"
+
+msgid "AGB"
+msgstr "Termes et conditions"
+
+msgid "Abbrechen"
+msgstr "Annuler"
+
+msgid "Administrator übertragen"
+msgstr "Administrateur de transfert"
+
+msgid "Aktiv"
+msgstr "Actif"
+
+msgid "Aktive Mitglieder"
+msgstr "Membres actifs"
+
+msgid "Anzahl"
+msgstr "Quantité"
+
+msgid "Bestellungen & Zahlungen öffnen"
+msgstr "Ouverture des commandes et des paiements"
+
+msgid "Checkout"
+msgstr "Départ"
+
+msgid "Datenschutz"
+msgstr "Vie privée"
+
+msgid "Der Link wurde per E-Mail versendet."
+msgstr "Le lien a été envoyé par courriel."
+
+msgid "Firmen-Administrator"
+msgstr "Administrateur de la société"
+
+msgid "Gerät entfernen"
+msgstr "Supprimer le périphérique"
+
+msgid "Geräteslots der aktiven PROMPTFINISHER-Pro-Lizenzen."
+msgstr "Fentes de périphériques de PROMPTFINISHER actif Licences pro."
+
+msgid "Gerätewechsel"
+msgstr "Changement de périphérique"
+
+msgid "Gesamt"
+msgstr "Total général"
+
+msgid "Jetzt verlängern"
+msgstr "Renouveler maintenant"
+
+msgid "Kein Pro-Zugriff für dieses Benutzerkonto."
+msgstr "Aucun accès Pro pour ce compte utilisateur."
+
+msgid "Kein aktiver Firmenadministrator gefunden."
+msgstr "Aucun administrateur actif trouvé."
+
+msgid "Keine Geräte."
+msgstr "Pas de dispositifs."
+
+msgid "Link zur Kontrolle"
+msgstr "Lien pour la vérification"
+
+msgid "Lizenz jetzt zuordnen"
+msgstr "Attribuer la licence maintenant"
+
+msgid "Lizenz verlängern"
+msgstr "Renouveler la licence"
+
+msgid "Lizenzbedingungen"
+msgstr "Termes de licence"
+
+msgid "Lizenzen insgesamt"
+msgstr "Total des licences"
+
+msgid "Lizenzstatus"
+msgstr "État de la licence"
+
+msgid "Lizenzzuordnung bestätigen"
+msgstr "Confirmer l'attribution de licence"
+
+msgid "Nächster Ablauf"
+msgstr "Prochaine échéance"
+
+msgid "PROMPTFINISHER PRO"
+msgstr "PROMPTFINISHER PRO"
+
+msgid "PROMPTFINISHER Pro für mich aktivieren"
+msgstr "Activer PROMPTFINISHER Pro pour moi"
+
+msgid "PROMPTFINISHER Pro starten →"
+msgstr "Démarrer PROMPTFINISHER Pro →"
+
+msgid "Pro anfragen"
+msgstr "Demande Pro"
+
+msgid "Sicherer PROMPTFINISHER-Zuordnungslink."
+msgstr "Sécurisez le lien d'affectation PROMPTFINISHER."
+
+msgid "Speichern"
+msgstr "Enregistrer"
+
+msgid "Stammdaten, Steuerdaten und Firmen-Administrator."
+msgstr "Données de base, données fiscales et administrateur d'entreprise."
+
+msgid "Team öffnen"
+msgstr "Équipe ouverte"
+
+msgid "Team- und Lizenzverwaltung"
+msgstr "Gestion des équipes et des licences"
+
+msgid "Unternehmensdaten"
+msgstr "Données de l'entreprise"
+
+msgid "Unternehmensdaten bearbeiten"
+msgstr "Modifier les données de l'entreprise"
+
+msgid "Unternehmensdaten unvollständig."
+msgstr "Données de l'entreprise incomplètes."
+
+msgid "Updates während Laufzeit"
+msgstr "Mises à jour en cours de mandat"
+
+msgid "Widerruf"
+msgstr "Retrait"
+
+msgid "Widerrufen"
+msgstr "Révisé"
+
+msgid "Zahlungen mit Handlungsbedarf"
+msgstr "Paiements nécessitant une action"
+
+msgid "Zahlungspflichtig kaufen →"
+msgstr "Acheter avec obligation de paiement →"
+
+msgid "Zuordnungslink erzeugt"
+msgstr "Lien d'attribution créé"
+
+msgid "Zurück zum Benutzer"
+msgstr "Retour à l'utilisateur"
+
+msgid "aktiv"
+msgstr "actif"
+
+msgid "enthalten"
+msgstr "inclus"
+
+msgid "inkl. MwSt."
+msgstr "TVA comprise"
+
+msgid "registriert"
+msgstr "enregistrés"
+
+msgid "Änderungen werden erst nach erfolgreicher Validierung gespeichert."
+msgstr ""
+"Les modifications ne sont enregistrées qu'après une validation réussie."
+
+msgid "+ Lizenz kaufen"
+msgstr "+ Acheter une licence"
+
+msgid "Ablauf"
+msgstr "Expiration"
+
+msgid "Adresse"
+msgstr "Adresse"
+
+msgid "Aktion"
+msgstr "Décision"
+
+msgid "Aktive Geräte"
+msgstr "Dispositifs actifs"
+
+msgid "Automatischer Kontext"
+msgstr "Contexte automatique"
+
+msgid "Barrierefreiheit"
+msgstr "Accessibilité"
+
+msgid "Benutzer"
+msgstr "Utilisateur"
+
+msgid "Bestellung"
+msgstr "Ordre"
+
+msgid "Betrag"
+msgstr "Montant"
+
+msgid "Betreff"
+msgstr "Sujet"
+
+msgid "Browser"
+msgstr "Navigateur"
+
+msgid "Datenauskunft"
+msgstr "Accès aux données"
+
+msgid "Datum"
+msgstr "Date"
+
+msgid "Direkter Kontakt zu netstyle und Verlauf Ihrer Anfragen."
+msgstr "Contact direct avec netstyle et historique de vos demandes."
+
+msgid "Einladungen"
+msgstr "Invitations"
+
+msgid "Einladungen sind 24 Stunden gültig und einmal verwendbar."
+msgstr ""
+"Les invitations sont valides pendant 24 heures et peuvent être utilisées une"
+" fois."
+
+msgid "Frei"
+msgstr "Gratuit"
+
+msgid "Gerät"
+msgstr "Appareil"
+
+msgid "Gültig ab"
+msgstr "Valable à partir"
+
+msgid "Gültig bis"
+msgstr "Valable jusqu'à"
+
+msgid "Impressum"
+msgstr "Avis juridique"
+
+msgid "Jeder Seat läuft mit individueller Laufzeit."
+msgstr "Chaque siège a son propre mandat."
+
+msgid "Kategorie"
+msgstr "Catégorie"
+
+msgid "Keine Bestellungen."
+msgstr "Pas d'ordre."
+
+msgid "Keine Einladungen."
+msgstr "Pas d'invitations."
+
+msgid "Keine Lizenzen."
+msgstr "Pas de licence."
+
+msgid "Keine aktiven Geräte."
+msgstr "Pas de dispositifs actifs."
+
+msgid "Kontaktformular"
+msgstr "Formulaire de contact"
+
+msgid "Konto & Hilfe"
+msgstr "Compte & aide"
+
+msgid "Kontolöschung"
+msgstr "Suppression du compte"
+
+msgid "Kontolöschung anfordern"
+msgstr "Demander la suppression du compte"
+
+msgid "Laufzeit"
+msgstr "Durée"
+
+msgid "Lizenz"
+msgstr "Licence"
+
+msgid "Lizenz-ID"
+msgstr "Numéro de licence"
+
+msgid "Lizenzdaten"
+msgstr "Données de licence"
+
+msgid "Meine Daten exportieren"
+msgstr "Exporter mes données"
+
+msgid ""
+"Mollie übernimmt die Zahlungsabwicklung; PROMPTFINISHER erzeugt keine eigene"
+" Rechnungsengine."
+msgstr ""
+"Mollie gère le traitement des paiements; PROMPTFINISHER n'utilise pas son "
+"propre moteur de facturation."
+
+msgid "Mollie-Referenz"
+msgstr "Mollie Référence"
+
+msgid "Nachricht senden"
+msgstr "Envoyer un message"
+
+msgid "Name"
+msgstr "Nom"
+
+msgid "Neu senden"
+msgstr "Renvoyer"
+
+msgid "Nicht eingerichtet"
+msgstr "Non configuré"
+
+msgid "Noch keine Anfragen vorhanden."
+msgstr "Pas encore de demande."
+
+msgid "Noch keine Reminder für den aktuellen Ablaufzeitpunkt."
+msgstr "Aucun rappel pour la date d'expiration actuelle."
+
+msgid "PROMPTFINISHER Pro öffnen"
+msgstr "Ouvrir PROMPTFINISHER Pour"
+
+msgid "Produkt"
+msgstr "Produit"
+
+msgid "Produkt / Menge"
+msgstr "Produit / quantité"
+
+msgid "Profil"
+msgstr "Profil"
+
+msgid "Profil, Adresse, Kontosicherheit und Datenauskunft."
+msgstr "Profil, adresse, sécurité du compte et accès aux données."
+
+msgid "Rechtliches"
+msgstr "Droit"
+
+msgid "Reminder"
+msgstr "Rappel"
+
+msgid "Resttage"
+msgstr "Jours restant"
+
+msgid "Sicherheit"
+msgstr "Sécurité"
+
+msgid "Sicherheit verwalten"
+msgstr "Gérer la sécurité"
+
+msgid "Status"
+msgstr "État"
+
+msgid "Supporthistorie"
+msgstr "Historique du soutien"
+
+msgid "Verbraucherrechte"
+msgstr "Droits des consommateurs"
+
+msgid "Vertrag widerrufen"
+msgstr "Contrat de retrait"
+
+msgid "Verträge hier kündigen"
+msgstr "Annuler les contrats ici"
+
+msgid "Verwaltung & Abrechnung"
+msgstr "Administration et facturation"
+
+msgid "Weitere Bereiche Ihres Kundenportals."
+msgstr "Zones supplémentaires de votre portail client."
+
+msgid "Widerrufsbelehrung"
+msgstr "Informations sur le retrait"
+
+msgid "Zahlung"
+msgstr "Paiement"
+
+msgid "Zugewiesen"
+msgstr "Affecté"
+
+msgid "Zuletzt gesehen"
+msgstr "Dernière vue"
+
+msgid "Zurück"
+msgstr "Précédent"
+
+msgid "Zuweisung"
+msgstr "Attribution"
+
+msgid "Zwei-Faktor-Authentifizierung"
+msgstr "Authentification à deux facteurs"
+
+msgid "Öffnen"
+msgstr "Ouvrir"
+
+msgid "≤30 Tage"
+msgstr "≤ 30 jours"
+
+msgid "2FA einrichten"
+msgstr "Mettre en place 2FA"
+
+msgid ""
+"2FA schützt den Zugriff mit einem zusätzlichen zeitbasierten Einmalcode."
+msgstr "2FA protège l'accès avec un code ponctuel supplémentaire."
+
+msgid "Ablehnen"
+msgstr "Rejet"
+
+msgid "Aktive Lizenzen"
+msgstr "Licences actives"
+
+msgid "Aktuelles Ende"
+msgstr "Date de clôture actuelle"
+
+msgid "Anfrage"
+msgstr "Demande"
+
+msgid "Bearbeitungsstand"
+msgstr "État du traitement"
+
+msgid "Benutzer deaktivieren"
+msgstr "Désactiver l' utilisateur"
+
+msgid "Benutzer löschen"
+msgstr "Supprimer l' utilisateur"
+
+msgid "Benutzer reaktivieren"
+msgstr "Réactiver l' utilisateur"
+
+msgid "Benutzer, Einladungen, Lizenzen und Geräte verwalten."
+msgstr ""
+"Gérer les utilisateurs, les invitations, les licences et les appareils."
+
+msgid ""
+"Die Suche bleibt auf Ihren eigenen Mandanten- und Lizenzbereich begrenzt."
+msgstr ""
+"La recherche reste limitée à votre propre locataire et la portée de la "
+"licence."
+
+msgid ""
+"Ein Passwortwechsel erfolgt über einen zeitlich begrenzten, einmal "
+"verwendbaren Link an Ihre hinterlegte E-Mail-Adresse."
+msgstr ""
+"Un changement de mot de passe est effectué via un lien à usage unique limité"
+" dans le temps envoyé à votre adresse email enregistrée."
+
+msgid "Free"
+msgstr "Gratuit"
+
+msgid "Freie Lizenz zuweisen"
+msgstr "Assigner une licence libre"
+
+msgid "Freigeben"
+msgstr "Libération"
+
+msgid "Genehmigen"
+msgstr "Approuver"
+
+msgid ""
+"Hier sehen Sie ausschließlich Nachrichten, die für Sie bzw. Ihr Unternehmen "
+"bestimmt sind. Interne netstyle-Notizen werden nicht im Kundenportal "
+"angezeigt."
+msgstr ""
+"Ici vous ne voyez que les messages destinés à vous ou votre entreprise. Les "
+"notes internes netstyle ne sont pas affichées dans le portail client."
+
+msgid "Ihre Anfrage und alle für Kunden freigegebenen Antworten."
+msgstr "Votre demande et toutes les réponses publiées pour les clients."
+
+msgid "Inaktiv"
+msgstr "Inactif"
+
+msgid "Keine Benutzer gefunden."
+msgstr "Aucun utilisateur trouvé."
+
+msgid "Keine Lizenz zugewiesen."
+msgstr "Aucune licence attribuée."
+
+msgid "Keine Lizenzen gefunden."
+msgstr "Aucune licence trouvée."
+
+msgid "Keine freie Lizenz."
+msgstr "Pas de licence gratuite."
+
+msgid "Keine verlängerbare Lizenz vorhanden."
+msgstr "Aucune licence renouvelable disponible."
+
+msgid "Mitarbeiter"
+msgstr "Employé"
+
+msgid "Noch nie"
+msgstr "Jamais"
+
+msgid "Offene Pro-Anfragen"
+msgstr "Ouvrir les requêtes Pro"
+
+msgid "PROMPTFINISHER Free"
+msgstr "PROMPTFINISHER Gratuit"
+
+msgid "PROMPTFINISHER Pro"
+msgstr "PROMPTFINISHER Pour"
+
+msgid "Passwort zurücksetzen"
+msgstr "Réinitialiser le mot de passe"
+
+msgid "Recovery-Codes neu erzeugen"
+msgstr "Codes de récupération pour la régénération"
+
+msgid "Seit"
+msgstr "Depuis"
+
+msgid "Sicheren Link senden"
+msgstr "Envoyer un lien sécurisé"
+
+msgid "Team-Mitglieder"
+msgstr "Membres de l'équipe"
+
+msgid "Verlauf"
+msgstr "Historique"
+
+msgid ""
+"Wählen Sie die Lizenz, deren bestehende Restlaufzeit um weitere 365 Tage "
+"verlängert werden soll."
+msgstr ""
+"Sélectionnez la licence dont la durée restante devrait être prolongée de 365"
+" jours."
+
+msgid "Zahlungspflichtig verlängern →"
+msgstr "Renouveler avec l'obligation de paiement →"
+
+msgid "Zuletzt aktiv"
+msgstr "Dernière activité"
+
+msgid "Zurück zu Einstellungen"
+msgstr "Retour aux paramètres"
+
+msgid "Zurück zu Lizenzen"
+msgstr "Retour aux licences"
+
+msgid "Zuweisen"
+msgstr "Attribution"
+
+msgid "Zwei-Faktor-Authentifizierung und Recovery-Codes verwalten."
+msgstr ""
+"Gérer les codes d'authentification et de récupération à deux facteurs."
+
+msgid "aktive Benutzer"
+msgstr "utilisateurs actifs"
+
+msgid "aktive Benutzer ohne Pro-Zuweisung"
+msgstr "utilisateurs actifs sans affectation Pro"
+
+msgid "registriert / Kapazität"
+msgstr "enregistrement / capacité"
+
+msgid ""
+"Die vorbereitete Lizenz wird Ihrem aktuell angemeldeten Benutzerkonto "
+"zugeordnet. Der Link kann anschließend nicht erneut verwendet werden."
+msgstr ""
+"La licence préparée sera attribuée à votre compte utilisateur actuellement "
+"connecté. Le lien ne peut plus être utilisé après."
+
+msgid ""
+"Gültig bis %(expiry)s. Der Link ist tenantgebunden, für genau diesen "
+"Benutzer bestimmt und nur einmal verwendbar."
+msgstr ""
+"Valable jusqu'à %(expiration). Le lien est lié au locataire, destiné "
+"exactement à cet utilisateur et ne peut être utilisé qu'une seule fois."
+
+msgid ""
+"Jede neue Lizenz startet nach erfolgreicher Zahlung mit eigener 365-Tage-"
+"Laufzeit."
+msgstr ""
+"Chaque nouvelle licence commence sa propre période de 365 jours après le "
+"paiement réussi."
+
+msgid "inkl. MwSt. · %(days)s Tage"
+msgstr "TVA incluse · %(jours) jours"
+
+msgid "%(limit)s Geräte je Benutzer"
+msgstr "%(limite)s appareils par utilisateur"
+
+msgid "Preis nicht verfügbar"
+msgstr "Prix indisponible"
+
+msgid ""
+"V1: exakt ein aktiver Firmenadministrator. Eine Übertragung ist nur auf ein "
+"aktives Team-Mitglied möglich."
+msgstr ""
+"V1 : exactement un administrateur actif de la société. Le transfert n'est "
+"possible qu'à un membre actif de l'équipe."
+
+msgid "Ihre eigenen Geräteslots können Sie hier selbst verwalten."
+msgstr "Vous pouvez gérer vos propres fentes d'appareil ici."
+
+msgid "Geräteslots werden durch den Firmenadministrator verwaltet."
+msgstr ""
+"Les créneaux des appareils sont gérés par l'administrateur de l'entreprise."
+
+msgid "Widerrufene Geräte bleiben als Historie erhalten."
+msgstr "Les appareils annulés restent dans l'histoire."
+
+msgid "Zuletzt %(seen)s"
+msgstr "Dernière vue %(s)s"
+
+msgid "Gerät wirklich entfernen?"
+msgstr "Vraiment enlever l'appareil ?"
+
+msgid ""
+"Konto, Unternehmen, Benutzer-ID und Zeitpunkt werden automatisch zugeordnet."
+" Optional kann eine für Ihr Konto sichtbare Lizenz mitgesendet werden. "
+"Passwörter, Tokens oder andere unnötige sensitive Daten werden nicht "
+"übernommen."
+msgstr ""
+"Le compte, l'entreprise, l'identifiant utilisateur et l'horodatage sont "
+"attribués automatiquement. En option, une licence visible sur votre compte "
+"peut être incluse. Les mots de passe, jetons ou autres données sensibles "
+"inutiles ne sont pas inclus."
+
+msgid ""
+"Exportieren Sie die zu Ihrem Benutzer gespeicherten PROMPTFINISHER-Daten als"
+" JSON. Secrets und Daten anderer Benutzer werden nicht exportiert."
+msgstr ""
+"Exportez les données PROMPTFINISHER stockées pour votre utilisateur sous "
+"JSON. Les secrets et les données des autres utilisateurs ne sont pas "
+"exportés."
+
+msgid ""
+"Ihre Löschanfrage vom %(requested)s ist bereits erfasst. Status: %(status)s."
+msgstr ""
+"Votre requête de suppression de %(requested)s a déjà été enregistrée. État :"
+" %(statut)s."
+
+msgid ""
+"Sie können die Löschung Ihres PROMPTFINISHER-Kontos anfordern. Gesetzlich "
+"erforderliche Geschäfts- und Nachweisdaten werden nur im erforderlichen "
+"Umfang weiter aufbewahrt bzw. anonymisiert. Firmenadministratoren müssen "
+"ihre Administratorrolle vor der Verarbeitung übertragen."
+msgstr ""
+"Vous pouvez demander la suppression de votre compte PROMPTFINISHER. Les "
+"données commerciales et les données probantes requises par la loi ne seront "
+"conservées ou anonymisées que dans la mesure requise. Les administrateurs de"
+" l'entreprise doivent transférer leur rôle d'administrateur avant le "
+"traitement."
+
+msgid "Ich möchte die Löschung meines Kontos verbindlich anfordern."
+msgstr "Je veux faire une demande contraignante pour supprimer mon compte."
+
+msgid "Guten Morgen, %(first_name)s"
+msgstr "Bonjour, %(premier nom)s"
+
+msgid "Privatkonto"
+msgstr "Compte privé"
+
+msgid "Unternehmensadministrator"
+msgstr "Administrateur de la société"
+
+msgid "%(assigned)s vergeben · %(free)s verfügbar"
+msgstr "%(attribué) attribué · %(gratuit) disponible"
+
+msgid "%(free)s frei · %(expiring)s läuft bald ab"
+msgstr "%(gratuit)s libre · %(expirant)s expirant bientôt"
+
+msgid "Tage"
+msgstr "jours"
+
+msgid "kein Ablauf"
+msgstr "pas d'expiration"
+
+msgid "Eine Lizenz läuft in %(days)s Tagen ab."
+msgstr "Une licence expire en %(jours) jours."
+
+msgid "freie Pro-Lizenzen"
+msgstr "licences Pro gratuites"
+
+msgid "Freie Pro-Lizenzen können Team-Mitgliedern zugewiesen werden."
+msgstr ""
+"Les licences Free Pro peuvent être attribuées aux membres de l'équipe."
+
+msgid "Für Kauf/Abrechnung fehlen: %(fields)s."
+msgstr "Manque d'achat/facturation : %(champs)."
+
+msgid "Tage verbleibend"
+msgstr "jours restant"
+
+msgid "Deine Lizenz läuft am %(expiry)s ab."
+msgstr "Votre licence expire sur %(expiry)."
+
+msgid "Es ist eine freie Pro-Lizenz verfügbar."
+msgstr "Une licence Pro gratuite est disponible."
+
+msgid ""
+"Aktuell ist keine freie Pro-Lizenz verfügbar. Kaufen Sie eine weitere Lizenz"
+" oder geben Sie eine bestehende Lizenz frei."
+msgstr ""
+"Aucune licence Pro gratuite n'est actuellement disponible. Achetez une autre"
+" licence ou relâchez une licence existante."
+
+msgid "Ihre Pro-Anfrage ist bereits offen."
+msgstr "Votre demande Pro est déjà ouverte."
+
+msgid ""
+"Für den Pro-Zugriff benötigen Sie eine aktive PROMPTFINISHER-Pro-Lizenz."
+msgstr ""
+"Vous avez besoin d'un PROMPTFINISHER actif Licence Pro pour accès Pro."
+
+msgid "Portal durchsuchen"
+msgstr "Portail de recherche"
+
+msgid ""
+"Geben Sie einen Suchbegriff ein. Firmenadministratoren können nach "
+"Teammitgliedern, E-Mail-Adressen und Lizenzen suchen; andere Benutzer sehen "
+"ausschließlich ihre eigene Lizenzsicht."
+msgstr ""
+"Saisissez un terme de recherche. Les administrateurs de l'entreprise peuvent"
+" rechercher les membres de l'équipe, les adresses e-mail et les licences; "
+"les autres utilisateurs ne voient que leur propre vue de licence."
+
+msgid "Kunde"
+msgstr "Client"
+
+msgid "Pro-Lizenzen noch frei"
+msgstr "Licences Pro toujours gratuites"
+
+msgid "Verlängern"
+msgstr "Élargir"
+
+msgid "Geschäft, Handlungsbedarf und Systemstatus auf einen Blick."
+msgstr "Affaires, actions et statut du système en un coup d'oeil."
+
+msgid "PROMPTFINISHER Pro öffnen →"
+msgstr "Ouvrir PROMPTFINISHER Pro →"
+
+msgid "PROMPTFINISHER Free öffnen →"
+msgstr "Ouvrir PROMPTFINISHER → gratuit"
+
+msgid "System gesund"
+msgstr "Système sain"
+
+msgid "Prüfung erforderlich"
+msgstr "Révision requise"
+
+msgid "Kunden gesamt"
+msgstr "Total des clients"
+
+msgid "Offene Leads"
+msgstr "Ouvrir les pistes"
+
+msgid "Lead-Pipeline öffnen"
+msgstr "Ouvrir le pipeline de plomb"
+
+msgid "Ablauf unter 30 Tagen"
+msgstr "Expire dans les 30 jours"
+
+msgid "laufen in weniger als 60 Tagen ab"
+msgstr "expire dans les 60 jours"
+
+msgid "Umsatz 30 Tage"
+msgstr "Recettes, 30 jours"
+
+msgid "Umsatzentwicklung"
+msgstr "Développement des recettes"
+
+msgid "Umsatzentwicklung der letzten Monate"
+msgstr "Tendances des revenus au cours des derniers mois"
+
+msgid "Noch keine bezahlten Bestellungen im Auswertungszeitraum."
+msgstr "Aucune commande payée pour l'instant."
+
+msgid "Lizenzen nach Produkt"
+msgstr "Licences par produit"
+
+msgid "Handlungsbedarf"
+msgstr "Mesures à prendre"
+
+msgid "Lizenzen laufen in weniger als 30 Tagen ab."
+msgstr "Les licences expirent en moins de 30 jours."
+
+msgid "fehlgeschlagene Zahlungen"
+msgstr "en retard de paiement"
+
+msgid "Chargebacks"
+msgstr "Remboursements"
+
+msgid "offene Kontaktanfragen"
+msgstr "demandes de contact ouvertes"
+
+msgid "Kein aktueller Handlungsbedarf."
+msgstr "Aucune mesure n'est actuellement requise."
+
+msgid "Letzte Bestellungen"
+msgstr "Commandes récentes"
+
+msgid "Nächste Lizenzabläufe"
+msgstr "Expiration prochaine de la licence"
+
+msgid "Keine bevorstehenden Abläufe."
+msgstr "Pas d'expiration à venir."
+
+msgid "Alle Lizenzen"
+msgstr "Toutes les licences"
+
+msgid "Kundenportal-Vorschau"
+msgstr "Aperçu du portail client"
+
+msgid "KUNDENPORTAL · VORSCHAU"
+msgstr "PORTAL DU CUStomER · PRÉVUE"
+
+msgid "Read-only Vorschau …"
+msgstr "Aperçu en lecture seule ..."
+
+msgid "Support-Vorschau"
+msgstr "Aperçu de l'aide"
+
+msgid "Zurück zum netstyle Kundendetail"
+msgstr "Retour aux coordonnées du client netstyle"
+
+msgid "Read-only Kundenansicht."
+msgstr "Vue en lecture seule du client."
+
+msgid ""
+"Die Daten entsprechen dem ausgewählten Kundenkonto und seiner Rolle. Dies "
+"ist eine Ansichtsvorschau, keine Kundensitzung: Interaktionen, Zahlungs- und"
+" Sicherheitsaktionen sind nicht ausführbar."
+msgstr ""
+"Les données sont portées sur le compte client sélectionné et son rôle. Ceci "
+"est un aperçu, pas une session client: les interactions, les paiements et "
+"les actions de sécurité sont désactivés."
+
+msgid "Perspektive auswählen"
+msgstr "Sélectionner la perspective d'affichage"
+
+msgid ""
+"Nur aktive Benutzer dieses Unternehmens. Rollen und Zugriffsrechte werden "
+"berücksichtigt."
+msgstr ""
+"Seuls les utilisateurs actifs de cette entreprise. Les rôles et les droits "
+"d'accès sont respectés."
+
+msgid "Kundenbenutzer"
+msgstr "Utilisateur client"
+
+msgid "Keine aktiven Benutzer vorhanden"
+msgstr "Aucun utilisateur actif disponible"
+
+msgid "Ansicht wechseln"
+msgstr "Modifier la vue"
+
+msgid "Angezeigte Rolle:"
+msgstr "Rôle affiché :"
+
+msgid "Kundenverwaltung"
+msgstr "Administration des clients"
+
+msgid ""
+"Änderungen erfolgen ausschließlich in den berechtigungsgeschützten "
+"Administrationsmasken mit Auditierung – nicht in der Kundenansicht."
+msgstr ""
+"Les modifications ne sont effectuées que par le biais de formulaires "
+"d'administration protégés par la permission et vérifiés, et non par l'aperçu"
+" du client."
+
+msgid "Benutzer und Rollen verwalten"
+msgstr "Gérer les utilisateurs et les rôles"
+
+msgid "Lizenzen verwalten"
+msgstr "Gérer les licences"
+
+msgid "Geräte verwalten"
+msgstr "Gérer les périphériques"
+
+msgid "gesamt"
+msgstr "Total général"
+
+msgid "frei"
+msgstr "disponibles"
+
+msgid "Ablauf ≤30 Tage"
+msgstr "Expiration dans les 30 jours"
+
+msgid "Konto"
+msgstr "Compte"
+
+msgid "Kontotyp"
+msgstr "Type de compte"
+
+msgid "Portal-Benutzer"
+msgstr "Utilisateur du portail"
+
+msgid "Aktive Benutzer"
+msgstr "Usagers actifs"
+
+msgid "Bestand"
+msgstr "Aperçu des exploitations"
+
+msgid "Freie Lizenzen"
+msgstr "Licences disponibles"
+
+msgid "Rolle"
+msgstr "Rôle"
+
+msgid "Hinweis"
+msgstr "Remarque"
+
+msgid "Keine Benutzer vorhanden."
+msgstr "Aucun utilisateur disponible."
+
+msgid "Keine Lizenzen vorhanden."
+msgstr "Aucune licence disponible."
+
+msgid "Keine netstyle-Berechtigung zum Anzeigen der Lizenzdaten."
+msgstr ""
+"Vos permissions netstyle ne permettent pas la visualisation des données de "
+"licence."
+
+msgid "Keine aktiven Geräte vorhanden."
+msgstr "Aucun dispositif actif disponible."
+
+msgid "Keine Bestellungen vorhanden."
+msgstr "Aucune commande disponible."
+
+msgid "Keine netstyle-Berechtigung zum Anzeigen der Bestelldaten."
+msgstr ""
+"Vos permissions netstyle ne permettent pas de visualiser les données de "
+"l'ordre."
+
+msgid "Rechtsform"
+msgstr "Forme juridique"
+
+msgid "Telefon"
+msgstr "Téléphone"
+
+msgid "Rechnungsanschrift"
+msgstr "Adresse de facturation"
+
+msgid "Ort"
+msgstr "Ville"
+
+msgid "Land"
+msgstr "Pays"
+
+msgid "USt-IdNr."
+msgstr "Numéro de TVA"
+
+msgid "Mein Profil"
+msgstr "Mon profil"
+
+msgid ""
+"Dies ist eine Leseansicht. Passwort, Zwei-Faktor-Authentifizierung und "
+"persönliche Einstellungen kann nur der angemeldete Kundenbenutzer selbst "
+"ändern."
+msgstr ""
+"C'est une vue en lecture seule. Seul l'utilisateur client connecté peut "
+"modifier son mot de passe, son authentification à deux facteurs et ses "
+"paramètres personnels."
+
+msgid "Benutzerkonto"
+msgstr "Compte utilisateur"
+
+msgid ""
+"Teamverwaltung, Bestellungen und Unternehmensdaten sind für diese Rolle "
+"nicht freigegeben."
+msgstr ""
+"La gestion d'équipe, les commandes et les détails de l'entreprise ne sont "
+"pas disponibles pour ce rôle."
+
+msgid "Anschrift"
+msgstr "Adresse postale"
+
+msgid "Weitere Bereiche"
+msgstr "Sections supplémentaires"
+
+msgid "Kontoeinstellungen"
+msgstr "Paramètres du compte"
+
+msgid "Read-only"
+msgstr "En lecture seule"
+
+msgid "Sicherheit / 2FA"
+msgstr "Sécurité / 2FA"
+
+msgid "nicht impersoniert"
+msgstr "aucune imitation"
+
+msgid "nicht ausführbar"
+msgstr "non disponible"
+
+msgid "Support-Hinweis"
+msgstr "Avis de soutien"
+
+msgid ""
+"Für echte Schreibaktionen oder einen vollständigen Login-Test muss ein "
+"eigener Nicht-Staff-Testkunde verwendet werden. Die Vorschau übernimmt "
+"niemals die Identität des Kunden."
+msgstr ""
+"Pour de vraies opérations d'écriture ou un test de connexion complet, "
+"utilisez un client de test dédié non-personnel. Cet aperçu ne prend jamais "
+"l'identité d'un client."
+
+msgid "Noch keine Lizenzen."
+msgstr "Pas encore de licence."
+
+msgid "Alle Bestellungen"
+msgstr "Toutes les commandes"
+
+msgid "Firmenkonto"
+msgstr "Compte d'entreprise"
