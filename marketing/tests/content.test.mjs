@@ -95,15 +95,15 @@ test('Alle Links von der Marketingseite zu Free öffnen einen neuen Tab ohne Zug
     ['Free-Fallback',main,1],
   ];
   for(const [label,html,expected] of pages){
-    const links=[...html.matchAll(/<a\\b[^>]*\\bhref="\\/free\\/"[^>]*>/g)].map(match=>match[0]);
+    const links=[...html.matchAll(/<a\b[^>]*\bhref="\/free\/"[^>]*>/g)].map(match=>match[0]);
     assert.equal(links.length,expected,label+': unerwartete Anzahl Free-Links');
     for(const link of links){
-      assert.match(link,/\\btarget="_blank"/,label+': Free muss in neuem Tab öffnen');
-      assert.match(link,/\\brel="[^"]*\\bnoopener\\b[^"]*"/,label+': opener muss isoliert bleiben');
-      assert.match(link,/\\brel="[^"]*\\bnoreferrer\\b[^"]*"/,label+': Referrer-Schutz fehlt');
+      assert.match(link,/\btarget="_blank"/,label+': Free muss in neuem Tab öffnen');
+      assert.match(link,/\brel="[^"]*\bnoopener\b[^"]*"/,label+': opener muss isoliert bleiben');
+      assert.match(link,/\brel="[^"]*\bnoreferrer\b[^"]*"/,label+': Referrer-Schutz fehlt');
     }
   }
-  const proLink=index.match(/<a\\b[^>]*class="button pro-calculator-link"[^>]*>/)?.[0];
+  const proLink=index.match(/<a\b[^>]*class="button pro-calculator-link"[^>]*>/)?.[0];
   assert.ok(proLink,'Pro-Rechner-CTA fehlt');
   assert.doesNotMatch(proLink,/target="_blank"/,'Pro-Rechner bleibt im aktuellen Tab');
 });
