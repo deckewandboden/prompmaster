@@ -132,3 +132,17 @@ class PublicFreeAccessTests(TestCase):
         token = client.cookies['csrftoken'].value
         allowed = self._compose(client, HTTP_X_CSRFTOKEN=token)
         self.assertEqual(allowed.status_code, 200, allowed.content)
+
+    def test_pending_2fa_can_change_free_language_but_not_bypass_account_security(self):
+        client = self._pending_session()
+        response = client.get('/auth/language/', {'language': 'pl', 'next': '/free/'})
+        self.assertEqual(response.status_code, 302)
+        self.assertEqual(response.url, '/free/')
+        self.assertEqual(response.cookies['promptfinisher_language'].value, 'pl')
+        self.assertEqual(client.get('/free/').status_code, 200)
+        protected = client.get('/auth/language/', {'language': 'pl', 'next': '/pro/app/'})
+        self.assertEqual(protected.status_code, 302)
+        self.assertEqual(protected.url, '/auth/2fa/')
+        self.assertEqual(client.get('/pro/app/').status_code, 302)
+        self.assertEqual(client.session.get('two_factor_ok'), False)
+
