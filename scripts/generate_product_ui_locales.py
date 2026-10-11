@@ -97,14 +97,14 @@ def main() -> None:
     script = script[:match.start(2)] + result + script[match.end(2):]
     SCRIPT.write_text(script, encoding='utf-8')
     REPORT.write_text(
-        '# Free/Pro UI locale catalog audit (draft)\\n\\n'
-        'Translations generated locally using offline Argos language models.\\n'
-        'Terminology, punctuation, meaning and layout require native QA before release.\\n'
+        '# Free/Pro UI locale catalog audit (draft)\n\n'
+        'Translations generated locally using offline Argos language models.\n'
+        'Terminology, punctuation, meaning and layout require native QA before release.\n'
         'The original Golden Masters, prompt composition policies, task IDs and '
-        'license checks are deliberately unchanged.\\n\\n'
-        '| Language | Extracted source phrases | Generated | Unchanged source |\\n'
-        '|---|---:|---:|---:|\\n'
-        + ''.join(f'| {a} | {b} | {c} | {d} |\\n' for a,b,c,d in summary),
+        'license checks are deliberately unchanged.\n\n'
+        '| Language | Extracted source phrases | Generated | Unchanged source |\n'
+        '|---|---:|---:|---:|\n'
+        + ''.join(f'| {a} | {b} | {c} | {d} |\n' for a,b,c,d in summary),
         encoding='utf-8',
     )
 
