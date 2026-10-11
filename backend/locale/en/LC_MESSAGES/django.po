@@ -874,3 +874,78 @@ msgstr "Pro licenses still free"
 
 msgid "Verlängern"
 msgstr "Extend"
+
+msgid "Geschäft, Handlungsbedarf und Systemstatus auf einen Blick."
+msgstr "Business, action items and system status at a glance."
+
+msgid "PROMPTFINISHER Pro öffnen →"
+msgstr "Open PROMPTFINISHER Pro →"
+
+msgid "PROMPTFINISHER Free öffnen →"
+msgstr "Open PROMPTFINISHER Free →"
+
+msgid "System gesund"
+msgstr "System healthy"
+
+msgid "Prüfung erforderlich"
+msgstr "Review required"
+
+msgid "Kunden gesamt"
+msgstr "Total customers"
+
+msgid "Offene Leads"
+msgstr "Open leads"
+
+msgid "Lead-Pipeline öffnen"
+msgstr "Open lead pipeline"
+
+msgid "Ablauf unter 30 Tagen"
+msgstr "Expires within 30 days"
+
+msgid "laufen in weniger als 60 Tagen ab"
+msgstr "expire within 60 days"
+
+msgid "Umsatz 30 Tage"
+msgstr "Revenue, 30 days"
+
+msgid "Umsatzentwicklung"
+msgstr "Revenue development"
+
+msgid "Umsatzentwicklung der letzten Monate"
+msgstr "Revenue trend over recent months"
+
+msgid "Noch keine bezahlten Bestellungen im Auswertungszeitraum."
+msgstr "No paid orders in the reporting period yet."
+
+msgid "Lizenzen nach Produkt"
+msgstr "Licenses by product"
+
+msgid "Handlungsbedarf"
+msgstr "Action required"
+
+msgid "Lizenzen laufen in weniger als 30 Tagen ab."
+msgstr "Licenses expire in less than 30 days."
+
+msgid "fehlgeschlagene Zahlungen"
+msgstr "failed payments"
+
+msgid "Chargebacks"
+msgstr "Chargebacks"
+
+msgid "offene Kontaktanfragen"
+msgstr "open contact requests"
+
+msgid "Kein aktueller Handlungsbedarf."
+msgstr "No action currently required."
+
+msgid "Letzte Bestellungen"
+msgstr "Recent orders"
+
+msgid "Nächste Lizenzabläufe"
+msgstr "Upcoming license expirations"
+
+msgid "Keine bevorstehenden Abläufe."
+msgstr "No upcoming expirations."
+
+msgid "Alle Lizenzen"
+msgstr "All licenses"
