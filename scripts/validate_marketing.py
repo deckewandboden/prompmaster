@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 from __future__ import annotations
 
+import hashlib
 import json
 import re
 from pathlib import Path
@@ -35,14 +36,17 @@ source = (MARKETING / 'src/content.js').read_text(encoding='utf-8')
 index = (MARKETING / 'index.html').read_text(encoding='utf-8')
 patch = (MARKETING / 'public/integration-patch.js').read_text(encoding='utf-8')
 immersive_css = (MARKETING / 'src/immersive.css').read_text(encoding='utf-8')
-if "url('/brand/promptfinisher-logo-hq.png')" not in immersive_css:
+if "url('/brand/promptfinisher-logo-hq.png?v=20261011-logo1')" not in immersive_css:
     raise SystemExit('MARKETING VALIDATION FAIL: active header/footer do not use approved HQ logo')
 if "background-image:url('/brand/design-reference.jpeg')" in immersive_css:
     raise SystemExit('MARKETING VALIDATION FAIL: screenshot-cropped logo regression returned')
 marketing_logo = (MARKETING / 'public/brand/promptfinisher-logo-clean.svg').read_text(encoding='utf-8')
-for marker in ('width="315" height="55"', 'viewBox="0 7 315 55"', 'width="315" height="62"', 'data:image/png;base64,'):
+for marker in ('width="2048" height="305"', 'viewBox="0 0 2048 305"', 'data:image/png;base64,'):
     if marker not in marketing_logo:
         raise SystemExit(f'MARKETING VALIDATION FAIL: approved cropped PROMPTFINISHER artwork missing {marker}')
+approved_logo_sha = '851c75f6297b7b2a61d45721dbcb70ce6f0a9c66deba86c16c8daf376ab97ec3'
+if hashlib.sha256((MARKETING / 'public/brand/promptfinisher-logo-hq.png').read_bytes()).hexdigest() != approved_logo_sha:
+    raise SystemExit('MARKETING VALIDATION FAIL: approved original PROMPTFINISHER artwork hash mismatch')
 pro_apps_match = re.search(r"const proApps=\[(.*?)\];", source, re.S)
 if not pro_apps_match:
     raise SystemExit('MARKETING VALIDATION FAIL: Pro application catalog missing')
