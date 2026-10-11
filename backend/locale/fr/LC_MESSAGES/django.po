@@ -37,7 +37,7 @@ msgid "Übersicht"
 msgstr "Aperçu général"
 
 msgid "Leads"
-msgstr "plombs"
+msgstr "Prospects"
 
 msgid "Kunden"
 msgstr "Clients"
@@ -91,7 +91,7 @@ msgid "Einstellungen"
 msgstr "Paramètres"
 
 msgid "Abmelden"
-msgstr "Déconnexion"
+msgstr "Se déconnecter"
 
 msgid "Home"
 msgstr "Sommaire"
@@ -109,13 +109,13 @@ msgid "Kundenportal"
 msgstr "Portail client"
 
 msgid "KUNDENPORTAL"
-msgstr "PORTAL CUStomER"
+msgstr "PORTAIL CLIENT"
 
 msgid "Benutzer, E-Mail oder Lizenz suchen …"
 msgstr "Rechercher utilisateur, email ou licence ..."
 
 msgid "Lizenz suchen …"
-msgstr "Licence de recherche ..."
+msgstr "Rechercher une licence …"
 
 msgid "Privatkunde"
 msgstr "Client privé"
@@ -145,7 +145,7 @@ msgid "Team"
 msgstr "Équipe"
 
 msgid "Anmelden"
-msgstr "Connexion"
+msgstr "Se connecter"
 
 msgid "Ein Zugang für PROMPTFINISHER, Kundenportal und netstyle Admin"
 msgstr "Un compte pour PROMPTFINISHER, portail client et netstyle admin"
@@ -160,7 +160,7 @@ msgid "Konto anlegen"
 msgstr "Créer un compte"
 
 msgid "Registrieren"
-msgstr "Registre"
+msgstr "S'inscrire"
 
 msgid ""
 "Unternehmensadministratoren richten anschließend verpflichtend 2FA ein."
@@ -281,7 +281,7 @@ msgid "Bestellungen & Zahlungen öffnen"
 msgstr "Ouverture des commandes et des paiements"
 
 msgid "Checkout"
-msgstr "Départ"
+msgstr "Paiement"
 
 msgid "Datenschutz"
 msgstr "Vie privée"
@@ -479,7 +479,7 @@ msgid "Gültig bis"
 msgstr "Valable jusqu'à"
 
 msgid "Impressum"
-msgstr "Avis juridique"
+msgstr "Mentions légales"
 
 msgid "Jeder Seat läuft mit individueller Laufzeit."
 msgstr "Chaque siège a son propre mandat."
@@ -488,13 +488,13 @@ msgid "Kategorie"
 msgstr "Catégorie"
 
 msgid "Keine Bestellungen."
-msgstr "Pas d'ordre."
+msgstr "Aucune commande."
 
 msgid "Keine Einladungen."
 msgstr "Pas d'invitations."
 
 msgid "Keine Lizenzen."
-msgstr "Pas de licence."
+msgstr "Aucune licence."
 
 msgid "Keine aktiven Geräte."
 msgstr "Pas de dispositifs actifs."
@@ -606,7 +606,7 @@ msgid "Weitere Bereiche Ihres Kundenportals."
 msgstr "Zones supplémentaires de votre portail client."
 
 msgid "Widerrufsbelehrung"
-msgstr "Informations sur le retrait"
+msgstr "Informations sur le droit de rétractation"
 
 msgid "Zahlung"
 msgstr "Paiement"
@@ -618,7 +618,7 @@ msgid "Zuletzt gesehen"
 msgstr "Dernière vue"
 
 msgid "Zurück"
-msgstr "Précédent"
+msgstr "Retour"
 
 msgid "Zuweisung"
 msgstr "Attribution"
@@ -681,7 +681,7 @@ msgstr ""
 " dans le temps envoyé à votre adresse email enregistrée."
 
 msgid "Free"
-msgstr "Gratuit"
+msgstr "Free"
 
 msgid "Freie Lizenz zuweisen"
 msgstr "Assigner une licence libre"
@@ -731,10 +731,10 @@ msgid "Offene Pro-Anfragen"
 msgstr "Ouvrir les requêtes Pro"
 
 msgid "PROMPTFINISHER Free"
-msgstr "PROMPTFINISHER Gratuit"
+msgstr "PROMPTFINISHER Free"
 
 msgid "PROMPTFINISHER Pro"
-msgstr "PROMPTFINISHER Pour"
+msgstr "PROMPTFINISHER Pro"
 
 msgid "Passwort zurücksetzen"
 msgstr "Réinitialiser le mot de passe"
@@ -964,7 +964,7 @@ msgid "PROMPTFINISHER Pro öffnen →"
 msgstr "Ouvrir PROMPTFINISHER Pro →"
 
 msgid "PROMPTFINISHER Free öffnen →"
-msgstr "Ouvrir PROMPTFINISHER → gratuit"
+msgstr "Ouvrir PROMPTFINISHER Free →"
 
 msgid "System gesund"
 msgstr "Système sain"
@@ -979,7 +979,7 @@ msgid "Offene Leads"
 msgstr "Ouvrir les pistes"
 
 msgid "Lead-Pipeline öffnen"
-msgstr "Ouvrir le pipeline de plomb"
+msgstr "Ouvrir le pipeline commercial"
 
 msgid "Ablauf unter 30 Tagen"
 msgstr "Expire dans les 30 jours"
@@ -1230,7 +1230,7 @@ msgstr ""
 "l'identité d'un client."
 
 msgid "Noch keine Lizenzen."
-msgstr "Pas encore de licence."
+msgstr "Aucune licence pour le moment."
 
 msgid "Alle Bestellungen"
 msgstr "Toutes les commandes"
