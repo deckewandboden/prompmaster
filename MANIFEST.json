@@ -1,8 +1,8 @@
 {
   "project": "PROMPTFINISHER Commercial RC14 Full Repository",
-  "generated_at": "2026-10-11T09:33:32.883561+00:00",
+  "generated_at": "2026-10-11T09:33:52.963553+00:00",
   "file_count_excluding_manifest_files": 644,
-  "total_bytes_excluding_manifest_files": 26260127,
+  "total_bytes_excluding_manifest_files": 26260131,
   "roles": {
     "active-backend": 410,
     "active-ci": 4,
@@ -53,8 +53,8 @@
     },
     {
       "path": ".github/workflows/sync-file-inventory.yml",
-      "size": 1704,
-      "sha256": "a155f14bb470dff2fc126e67eb390649940a84f5e781b6db80d48b0fd993cd00",
+      "size": 1708,
+      "sha256": "f9148ff9f441b25df16d28c1f0423d66a9f17c5e546a7c44d87ebc49e4931b49",
       "role": "active-ci"
     },
     {
