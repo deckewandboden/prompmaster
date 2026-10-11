@@ -5,6 +5,7 @@ RUN npm ci
 COPY marketing/ ./
 RUN npm test && npm run build
 
-FROM caddy:2-alpine
+# Keep Caddy on a security-patched, explicit upstream release.
+FROM caddy:2.11.6-alpine
 COPY Caddyfile /etc/caddy/Caddyfile
 COPY --from=marketing-build /src/dist /srv/marketing
