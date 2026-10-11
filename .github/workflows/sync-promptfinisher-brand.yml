@@ -1,0 +1,84 @@
+name: PROMPTFINISHER approved brand sync
+on:
+  push:
+    branches:
+      - fix/promptfinisher-public-free-and-logo-20261011
+    paths:
+      - .github/workflows/sync-promptfinisher-brand.yml
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: promptfinisher-brand-sync
+  cancel-in-progress: false
+
+jobs:
+  copy-approved-artwork:
+    if: github.repository == 'deckewandboden/prompmaster' && github.ref == 'refs/heads/fix/promptfinisher-public-free-and-logo-20261011'
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - name: Checkout feature branch
+        uses: actions/checkout@v4
+        with:
+          ref: fix/promptfinisher-public-free-and-logo-20261011
+          persist-credentials: true
+      - name: Retrieve byte-exact live artwork using pinned SHA256
+        shell: bash
+        run: |
+          set -Eeuo pipefail
+          umask 077
+          mkdir -p /tmp/pf-brand
+          ROOT="https://promptmaster.decke-wand-boden.de"
+          curl -fsSL --proto '=https' --tlsv1.2 --retry 3 --connect-timeout 10 --max-time 50 "$ROOT/brand/promptfinisher-logo-hq.png?v=20261011-logo1" -o /tmp/pf-brand/logo.png
+          curl -fsSL --proto '=https' --tlsv1.2 --retry 3 --connect-timeout 10 --max-time 50 "$ROOT/brand/promptfinisher-logo-clean.svg?v=20261011-logo1" -o /tmp/pf-brand/logo.svg
+          curl -fsSL --proto '=https' --tlsv1.2 --retry 3 --connect-timeout 10 --max-time 50 "$ROOT/favicon.svg?v=20261011-logo1" -o /tmp/pf-brand/favicon.svg
+          curl -fsSL --proto '=https' --tlsv1.2 --retry 3 --connect-timeout 10 --max-time 50 "$ROOT/favicon.png?v=20261011-logo1" -o /tmp/pf-brand/favicon.png
+          curl -fsSL --proto '=https' --tlsv1.2 --retry 3 --connect-timeout 10 --max-time 50 "$ROOT/static/brand/promptfinisher-mark.png?v=20261011-logo1" -o /tmp/pf-brand/mark.png
+          cd /tmp/pf-brand
+          printf '%s\n' \
+            '851c75f6297b7b2a61d45721dbcb70ce6f0a9c66deba86c16c8daf376ab97ec3  logo.png' \
+            '93f343364800fb5072d7c4dfce4a7b9f349b77c0d3fa2a919c45d08fc8c49bf2  logo.svg' \
+            '385cda4f3555e28f045b950d7fdad7c508f2750811b4ac5732091915808744b4  favicon.svg' \
+            '7aab199d29db80296b1565a4fa4cb2858765e619436a7b3deb5c127673b7caed  favicon.png' \
+            'a5a053df4984066a8847d3515a78c210803328d63cd20e44758e7ca96c4add45  mark.png' \
+             | sha256sum --check --strict
+      - name: Commit reviewed artwork only to PR branch
+        shell: bash
+        run: |
+          set -Eeuo pipefail
+          cp /tmp/pf-brand/logo.png marketing/public/brand/promptfinisher-logo-hq.png
+          cp /tmp/pf-brand/logo.png backend/static/brand/promptfinisher-logo-hq.png
+          cp /tmp/pf-brand/logo.png backend/static/brand/promptfinisher-logo-reference.png
+          cp /tmp/pf-brand/logo.svg marketing/public/brand/promptfinisher-logo-clean.svg
+          cp /tmp/pf-brand/logo.svg backend/static/brand/promptfinisher-logo-clean.svg
+          cp /tmp/pf-brand/favicon.svg marketing/public/favicon.svg
+          cp /tmp/pf-brand/favicon.svg backend/static/brand/promptfinisher-favicon.svg
+          cp /tmp/pf-brand/favicon.png marketing/public/favicon.png
+          cp /tmp/pf-brand/mark.png backend/static/brand/promptfinisher-mark.png
+          git add -- \
+            marketing/public/brand/promptfinisher-logo-hq.png \
+            backend/static/brand/promptfinisher-logo-hq.png \
+            backend/static/brand/promptfinisher-logo-reference.png \
+            marketing/public/brand/promptfinisher-logo-clean.svg \
+            backend/static/brand/promptfinisher-logo-clean.svg \
+            marketing/public/favicon.svg \
+            backend/static/brand/promptfinisher-favicon.svg \
+            marketing/public/favicon.png \
+            backend/static/brand/promptfinisher-mark.png
+          git diff --cached --check
+          if git diff --cached --quiet; then
+            echo "Approved artwork already synchronized."
+            exit 0
+          fi
+          FILE_COUNT="$(git diff --cached --name-only | wc -l)"
+          if [ "$FILE_COUNT" -ne 9 ]; then
+            echo "Expected precisely nine changed approved assets, got $FILE_COUNT"
+            exit 1
+          fi
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git commit -m "brand: synchronize nine SHA256-verified approved logo assets"
+          git push origin HEAD:fix/promptfinisher-public-free-and-logo-20261011
