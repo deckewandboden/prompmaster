@@ -1261,3 +1261,75 @@ msgstr "Tipo"
 
 msgid "Vertragsbezug"
 msgstr "Referência do contrato"
+
+msgid "Datengetriebene Produkt-, Laufzeit-, Geräte-, Reminder- und Entitlement-Konfiguration."
+msgstr "Configuração baseada em dados de produtos, durações, dispositivos, lembretes e direitos de acesso."
+
+msgid "Features"
+msgstr "Funcionalidades"
+
+msgid "Produkt anlegen"
+msgstr "Criar produto"
+
+msgid "AKTIV"
+msgstr "ATIVO"
+
+msgid "INAKTIV"
+msgstr "INATIVO"
+
+msgid "aktueller Neukaufpreis"
+msgstr "preço atual de nova compra"
+
+msgid "nicht konfiguriert"
+msgstr "não configurado"
+
+msgid "Verlängerung"
+msgstr "Renovação"
+
+msgid "Sichtbar / kaufbar"
+msgstr "Visível / disponível para compra"
+
+msgid "Ja"
+msgstr "Sim"
+
+msgid "Nein"
+msgstr "Não"
+
+msgid "Bearbeiten"
+msgstr "Editar"
+
+msgid "Noch keine Produkte."
+msgstr "Ainda não existem produtos."
+
+msgid "Rollenbasierte Rechte; für alle netstyle Benutzer ist 2FA Pflicht."
+msgstr "Permissões baseadas em funções; a autenticação de dois fatores é obrigatória para todos os utilizadores netstyle."
+
+msgid "Rolle zuweisen"
+msgstr "Atribuir função"
+
+msgid "netstyle Benutzer anlegen"
+msgstr "Criar utilizador netstyle"
+
+msgid "Berechtigungen"
+msgstr "Permissões"
+
+msgid "Sicherheitsvorgabe"
+msgstr "Requisito de segurança"
+
+msgid "2FA Pflicht"
+msgstr "2FA obrigatória"
+
+msgid "Keine Rolle"
+msgstr "Sem função"
+
+msgid "2FA aktiv"
+msgstr "2FA ativada"
+
+msgid "2FA einzurichten"
+msgstr "Configurar 2FA"
+
+msgid "2FA dieses Benutzers zurücksetzen?"
+msgstr "Repor a 2FA deste utilizador?"
+
+msgid "2FA zurücksetzen"
+msgstr "Repor 2FA"
