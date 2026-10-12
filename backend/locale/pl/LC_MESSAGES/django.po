@@ -2611,3 +2611,63 @@ msgstr "ukończony"
 
 msgid "nicht verfügbar"
 msgstr "niedostępne"
+
+msgid "Disk {value}% belegt"
+msgstr "Zajętość dysku: {value}%"
+
+msgid "RAM {value}% belegt"
+msgstr "Wykorzystanie RAM: {value}%"
+
+msgid "CPU 10-Minuten-Mittel {value}%"
+msgstr "Średnie użycie CPU z 10 minut: {value}%"
+
+msgid "Kein auswertbarer Backupstatus verfügbar"
+msgstr "Brak możliwego do oceny stanu kopii zapasowej"
+
+msgid "Letztes Backup meldet Status {value}"
+msgstr "Status ostatniej kopii zapasowej: {value}"
+
+msgid "Backup ist {value} Stunden alt"
+msgstr "Kopia zapasowa ma {value} godz."
+
+msgid "Restore-Statusdatei ist nicht auswertbar"
+msgstr "Nie można odczytać pliku statusu przywracania"
+
+msgid "Noch kein Restore-Test protokolliert"
+msgstr "Nie zarejestrowano jeszcze testu przywracania"
+
+msgid "Letzter Restore-Test war nicht erfolgreich"
+msgstr "Ostatni test przywracania zakończył się niepowodzeniem"
+
+msgid "Letzter Restore-Test ist {value} Tage alt"
+msgstr "Od ostatniego testu przywracania minęło {value} dni"
+
+msgid "Monitoring-Ziel {value} ist nicht erreichbar"
+msgstr "Cel monitorowania {value} jest niedostępny"
+
+msgid "Monitoring-Ziel {value} liefert keinen Status"
+msgstr "Cel monitorowania {value} nie zwraca statusu"
+
+msgid "Caddy Healthcheck ist nicht erreichbar"
+msgstr "Kontrola kondycji Caddy jest niedostępna"
+
+msgid "Kein Celery Worker beantwortet den aktiven Ping"
+msgstr "Żaden proces Celery worker nie odpowiada na aktywny ping"
+
+msgid "Celery Beat-Heartbeat älter als {value} Minuten"
+msgstr "Sygnał Celery Beat ma ponad {value} min"
+
+msgid "Celery Queue-Tiefe kann nicht gelesen werden"
+msgstr "Nie można odczytać długości kolejki Celery"
+
+msgid "Celery Queue enthält {value} wartende Jobs"
+msgstr "W kolejce Celery czeka {value} zadań"
+
+msgid "{value} fehlgeschlagene Hintergrundjobs in 24 Stunden"
+msgstr "Nieudane zadania w tle w ciągu 24 godzin: {value}"
+
+msgid "{value} E-Mail-Fehler in 24 Stunden"
+msgstr "Błędy e-mail w ciągu 24 godzin: {value}"
+
+msgid "{value} Mollie-Verarbeitungsfehler in 24 Stunden"
+msgstr "Błędy przetwarzania Mollie w ciągu 24 godzin: {value}"
