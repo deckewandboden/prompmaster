@@ -3528,3 +3528,27 @@ msgstr "Tipo di oggetto"
 
 msgid "Objekt-ID"
 msgstr "ID oggetto"
+
+msgid "Lead anlegen"
+msgstr "Crea lead"
+
+msgid "Lead %(lead_number)s zuweisen"
+msgstr "Assegna lead %(lead_number)s"
+
+msgid "Firmenadministrator einladen · %(company)s"
+msgstr "Invita amministratore aziendale · %(company)s"
+
+msgid "Feature bearbeiten"
+msgstr "Modifica funzionalità"
+
+msgid "Preisversion · %(product)s"
+msgstr "Versione del prezzo · %(product)s"
+
+msgid "Rechtsdokument bearbeiten"
+msgstr "Modifica documento legale"
+
+msgid "Retention-Policy bearbeiten"
+msgstr "Modifica politica di conservazione"
+
+msgid "Rolle · %(name)s"
+msgstr "Ruolo · %(name)s"
