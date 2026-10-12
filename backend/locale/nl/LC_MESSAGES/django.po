@@ -1220,3 +1220,84 @@ msgstr "Alle bestellingen"
 
 msgid "Firmenkonto"
 msgstr "Bedrijfsrekening"
+
+msgid "Serverseitige Suche, Filter, Sortierung und Pagination."
+msgstr "Zoeken, filteren, sorteren en pagineren op de server."
+
+msgid "Neu anlegen"
+msgstr "Nieuw aanmaken"
+
+msgid "Privatkunden"
+msgstr "Particuliere klanten"
+
+msgid "aufsteigend"
+msgstr "oplopend"
+
+msgid "absteigend"
+msgstr "aflopend"
+
+msgid "Keine Datensätze für die aktuelle Auswahl."
+msgstr "Geen records voor de huidige selectie."
+
+msgid "Änderungen werden serverseitig validiert und – sofern sicherheits- oder geschäftskritisch – protokolliert."
+msgstr "Wijzigingen worden op de server gevalideerd en gelogd als ze beveiligings- of bedrijfskritiek zijn."
+
+msgid "Zusätzliche Sicherheitsfreigabe."
+msgstr "Aanvullende beveiligingscontrole."
+
+msgid "Bestätigen Sie Ihr eigenes Passwort. Die Freigabe gilt anschließend ausschließlich für wenige Minuten und nur für geschützte Admin-Aktionen."
+msgstr "Bevestig je eigen wachtwoord. De toestemming geldt daarna slechts enkele minuten en alleen voor beveiligde beheerdersacties."
+
+msgid "Bestätigen"
+msgstr "Bevestigen"
+
+msgid "Kompakte Geschäftszahlen innerhalb Ihrer Berechtigungen."
+msgstr "Beknopte bedrijfscijfers binnen je toegangsrechten."
+
+msgid "Neue Kunden · 30 Tage"
+msgstr "Nieuwe klanten · 30 dagen"
+
+msgid "Verlängerungsanteil"
+msgstr "Aandeel verlengingen"
+
+msgid "Verlängerungsterms"
+msgstr "verlengingsperioden"
+
+msgid "Refund-Quote"
+msgstr "Terugbetalingspercentage"
+
+msgid "Anteil refundierter Lizenzterms"
+msgstr "Aandeel terugbetaalde licentieperioden"
+
+msgid "Ø Lizenzen / Firma"
+msgstr "Gem. licenties / bedrijf"
+
+msgid "Firmenkundenbestand"
+msgstr "Zakelijk klantenbestand"
+
+msgid "Umsatz letzte 30 Tage"
+msgstr "Omzet afgelopen 30 dagen"
+
+msgid "Bestellungen gesamt"
+msgstr "bestellingen totaal"
+
+msgid "Lizenzen gesamt"
+msgstr "Totaal licenties"
+
+msgid "inkl. aktiv, frei, abgelaufen und historisch"
+msgstr "inclusief actieve, vrije, verlopen en historische"
+
+msgid "Anfragen aus dem Kundenportal; V1 verwendet bewusst kein Ticketsystem."
+msgstr "Verzoeken vanuit het klantenportaal; V1 gebruikt bewust geen ticketsysteem."
+
+msgid "Keine Kontaktanfragen."
+msgstr "Geen contactverzoeken."
+
+msgid "Globale Suche"
+msgstr "Globaal zoeken"
+
+msgid "Ergebnisse für"
+msgstr "Resultaten voor"
+
+msgid "Keine Treffer."
+msgstr "Geen resultaten."
