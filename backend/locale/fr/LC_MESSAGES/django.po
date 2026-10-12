@@ -1599,3 +1599,78 @@ msgstr "Signal de présence du worker"
 
 msgid "Beat-Heartbeat"
 msgstr "Signal de présence de Beat"
+
+msgid "Zahlungsprovider, Webhook und letzte Zahlungsereignisse."
+msgstr "Prestataire de paiement, webhook et derniers événements de paiement."
+
+msgid "Mollie konfigurieren"
+msgstr "Configurer Mollie"
+
+msgid "Konfiguration"
+msgstr "Configuration"
+
+msgid "Konfiguriert"
+msgstr "Configuré"
+
+msgid "Unvollständig"
+msgstr "Incomplet"
+
+msgid "Produktiv-Checkout"
+msgstr "Paiement en production"
+
+msgid "Freigegeben"
+msgstr "Autorisé"
+
+msgid "Modus"
+msgstr "Mode"
+
+msgid "Profile ID"
+msgstr "ID de profil"
+
+msgid "API Key"
+msgstr "Clé API"
+
+msgid "nicht gesetzt"
+msgstr "non défini"
+
+msgid "Live-Zugangsdaten sind hinterlegt, der Kunden-Checkout bleibt jedoch gesperrt, bis die Live-Readiness geprüft und ausdrücklich freigegeben wurde."
+msgstr "Les identifiants de production sont enregistrés, mais le paiement client reste bloqué jusqu'à vérification de la préparation et autorisation explicite."
+
+msgid "Basis-URL"
+msgstr "URL de base"
+
+msgid "Endpoint"
+msgstr "Point de terminaison"
+
+msgid "Letztes Event"
+msgstr "Dernier événement"
+
+msgid "noch keines"
+msgstr "aucun pour le moment"
+
+msgid "Webhook-Ereignisse öffnen"
+msgstr "Ouvrir les événements webhook"
+
+msgid "Notabschaltung"
+msgstr "Arrêt d'urgence"
+
+msgid "Sperrt neue Mollie-Käufe sofort. Bestehende Zahlungen und Webhooks bleiben weiter verarbeitbar."
+msgstr "Bloque immédiatement les nouveaux achats Mollie. Les paiements et webhooks existants restent traitables."
+
+msgid "Produktiv-Checkout sperren"
+msgstr "Bloquer le paiement en production"
+
+msgid "Letzte Zahlungen"
+msgstr "Paiements récents"
+
+msgid "Noch keine Zahlungen."
+msgstr "Aucun paiement pour le moment."
+
+msgid "Letzte Webhook-Events"
+msgstr "Événements webhook récents"
+
+msgid "offen"
+msgstr "en attente"
+
+msgid "Noch keine Webhook-Ereignisse."
+msgstr "Aucun événement webhook pour le moment."
