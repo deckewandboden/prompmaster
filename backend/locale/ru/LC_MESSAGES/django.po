@@ -1751,3 +1751,36 @@ msgstr "Проверить/оформить возврат"
 
 msgid "Keine Lizenzperioden vorhanden."
 msgstr "Периоды действия лицензии отсутствуют."
+
+msgid "E-Mail-Protokoll"
+msgstr "Журнал электронной почты"
+
+msgid "Versandstatus, tatsächlich verwendeter Provider und Fallback-Versuche ohne vertrauliche Nachrichtentexte oder Secrets."
+msgstr "Статус отправки, фактически использованный провайдер и попытки резервной доставки — без конфиденциального содержимого писем и секретов."
+
+msgid "Empfänger"
+msgstr "Получатель"
+
+msgid "Vorlage"
+msgstr "Шаблон"
+
+msgid "Provider"
+msgstr "Провайдер"
+
+msgid "Versuche"
+msgstr "Попытки"
+
+msgid "Gesendet"
+msgstr "Отправлено"
+
+msgid "Wird gesendet"
+msgstr "Отправка"
+
+msgid "Unterdrückt"
+msgstr "Подавлено"
+
+msgid "Warteschlange"
+msgstr "В очереди"
+
+msgid "Keine E-Mails gefunden."
+msgstr "Письма не найдены."
