@@ -3338,3 +3338,66 @@ msgstr "Rol verwijderd."
 
 msgid "Benutzerstatus aktualisiert."
 msgstr "Gebruikersstatus bijgewerkt."
+
+msgid "Lead gespeichert."
+msgstr "Lead opgeslagen."
+
+msgid "Lead-Zuständigkeit aktualisiert."
+msgstr "Leadverantwoordelijke bijgewerkt."
+
+msgid "Gerät wurde widerrufen."
+msgstr "Apparaattoegang ingetrokken."
+
+msgid "Unternehmensdaten gespeichert."
+msgstr "Bedrijfsgegevens opgeslagen."
+
+msgid "Benutzer deaktiviert; Lizenz- und Gerätezugänge wurden freigegeben."
+msgstr "Gebruiker gedeactiveerd; licentie- en apparaattoegang vrijgegeven."
+
+msgid "Die Lizenz ist bereits frei."
+msgstr "De licentie is al niet toegewezen."
+
+msgid "Lizenzzuweisung wurde freigegeben."
+msgstr "Licentietoewijzing vrijgegeven."
+
+msgid "Lizenz wurde entsperrt."
+msgstr "Licentie gedeblokkeerd."
+
+msgid "Lizenz wurde gesperrt; vorhandene Gerätezugänge wurden widerrufen."
+msgstr "Licentie geblokkeerd; bestaande apparaattoegang ingetrokken."
+
+msgid "Produkt angelegt. Legen Sie anschließend Preisversionen an."
+msgstr "Product aangemaakt. Voeg vervolgens prijsversies toe."
+
+msgid "Feature gespeichert."
+msgstr "Functie opgeslagen."
+
+msgid "Produkt gespeichert."
+msgstr "Product opgeslagen."
+
+msgid "Neue Preisversion angelegt."
+msgstr "Nieuwe prijsversie aangemaakt."
+
+msgid "E-Mail-Vorlage gespeichert."
+msgstr "E-mailsjabloon opgeslagen."
+
+msgid "Mollie-Konfiguration gespeichert."
+msgstr "Mollie-configuratie opgeslagen."
+
+msgid "Service Account gesperrt."
+msgstr "Serviceaccount geblokkeerd."
+
+msgid "Verbrauchererklärung aktualisiert."
+msgstr "Consumentenverklaring bijgewerkt."
+
+msgid "Rechtsdokument gespeichert."
+msgstr "Juridisch document opgeslagen."
+
+msgid "Retention-Policy gespeichert."
+msgstr "Bewaarbeleid opgeslagen."
+
+msgid "Löschanfrage verarbeitet und Konto anonymisiert."
+msgstr "Verwijderverzoek verwerkt en account geanonimiseerd."
+
+msgid "Löschanfrage abgelehnt."
+msgstr "Verwijderverzoek afgewezen."
