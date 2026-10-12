@@ -3422,3 +3422,27 @@ msgstr "Тип объекта"
 
 msgid "Objekt-ID"
 msgstr "Идентификатор объекта"
+
+msgid "Lead anlegen"
+msgstr "Создать лид"
+
+msgid "Lead %(lead_number)s zuweisen"
+msgstr "Назначить лид %(lead_number)s"
+
+msgid "Firmenadministrator einladen · %(company)s"
+msgstr "Пригласить администратора компании · %(company)s"
+
+msgid "Feature bearbeiten"
+msgstr "Изменить функцию"
+
+msgid "Preisversion · %(product)s"
+msgstr "Версия цены · %(product)s"
+
+msgid "Rechtsdokument bearbeiten"
+msgstr "Изменить юридический документ"
+
+msgid "Retention-Policy bearbeiten"
+msgstr "Изменить политику хранения"
+
+msgid "Rolle · %(name)s"
+msgstr "Роль · %(name)s"
