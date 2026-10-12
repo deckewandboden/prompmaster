@@ -1350,3 +1350,30 @@ msgstr "Identifiant de paiement"
 
 msgid "Keine Zahlungen gefunden."
 msgstr "Aucun paiement trouvé."
+
+msgid "Lead"
+msgstr "Prospect"
+
+msgid "Interessent"
+msgstr "Prospect"
+
+msgid "Priorität"
+msgstr "Priorité"
+
+msgid "Zuständig"
+msgstr "Responsable"
+
+msgid "Erstellt"
+msgstr "Créé"
+
+msgid "Kundennummer"
+msgstr "Numéro de client"
+
+msgid "Eingang"
+msgstr "Reçu"
+
+msgid "Art"
+msgstr "Type"
+
+msgid "Vertragsbezug"
+msgstr "Référence du contrat"
