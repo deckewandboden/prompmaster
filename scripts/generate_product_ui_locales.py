@@ -25,6 +25,8 @@ IMMUTABLE_BRAND_LABELS = frozenset({
     'Copilot Studio', 'Clipchamp', 'Whiteboard', 'Power Pages',
     'Microsoft Security Copilot', 'Microsoft 365 Copilot Business',
     'Copilot Chat (Basic)', 'M365 Copilot (Basic)',
+    'Microsoft Forms', 'Microsoft Planner', 'Microsoft Fabric',
+    'Microsoft Copilot in Azure', 'Workplace Analytics', 'Copilot Analytics',
 })
 PROTECTED = re.compile(
     '|'.join(
