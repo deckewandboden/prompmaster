@@ -3445,3 +3445,33 @@ msgstr "Edit retention policy"
 
 msgid "Rolle · %(name)s"
 msgstr "Role · %(name)s"
+
+msgid "Firmenadministrator"
+msgstr "Company administrator"
+
+msgid "Entwurf"
+msgstr "Draft"
+
+msgid "Zahlung offen"
+msgstr "Payment pending"
+
+msgid "Zahlung prüfen"
+msgstr "Review payment"
+
+msgid "Refundiert"
+msgstr "Refunded"
+
+msgid "Abgelehnt"
+msgstr "Rejected"
+
+msgid "Eingegangen"
+msgstr "Received"
+
+msgid "Kündigung"
+msgstr "Cancellation"
+
+msgid "Für Kunden sichtbar"
+msgstr "Visible to customers"
+
+msgid "Interne Notiz"
+msgstr "Internal note"
