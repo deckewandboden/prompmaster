@@ -1439,14 +1439,19 @@ def run_backend_ui_smoke(browser, fixture=None) -> None:
         public_context = browser.new_context(viewport={'width': 1440, 'height': 900})
         public_page = public_context.new_page()
 
-        # Real compiled-catalog acceptance: all five supported UI languages
-        # must change actual rendered copy, not merely cookie/config state.
+        # Compiled-catalog browser acceptance for all ten UI languages.
+        # Check rendered text, html lang and the chosen selector value.
         language_contract = {
             'de': 'Anmelden',
             'en': 'Sign in',
             'es': 'Iniciar sesión',
             'pt': 'Iniciar sessão',
             'tr': 'Giriş yap',
+            'ru': 'Войти',
+            'pl': 'Zaloguj się',
+            'fr': 'Se connecter',
+            'it': 'Accedi',
+            'nl': 'Inloggen',
         }
         for language, expected_heading in language_contract.items():
             response = public_page.goto(base + 'auth/login/', wait_until='networkidle')
@@ -2308,6 +2313,40 @@ def run_backend_ui_smoke(browser, fixture=None) -> None:
             )
 
             if role == 'admin':
+                # Verify actual gettext_lazy form labels after login, not
+                # merely the public language selector or navigation menu.
+                # Restore German before historical admin UI assertions.
+                form_locales = {
+                    'en': 'Assigned to',
+                    'ru': 'Ответственный',
+                    'pl': 'Odpowiedzialny',
+                    'nl': 'Verantwoordelijke',
+                }
+                form_response = page.goto(base + 'ns-admin/leads/new/', wait_until='networkidle')
+                if not form_response or form_response.status != 200:
+                    raise AssertionError('admin locale smoke: lead form unavailable')
+                for language, expected_label in form_locales.items():
+                    switcher = page.locator('.language-switcher select[name="language"]')
+                    if not switcher.is_visible():
+                        raise AssertionError('admin locale smoke: language selector missing')
+                    with page.expect_navigation(wait_until='networkidle'):
+                        switcher.select_option(language)
+                    label = page.locator('label[for="id_assigned_to"]')
+                    if label.count() != 1:
+                        raise AssertionError('admin locale smoke: assigned-to field missing')
+                    actual = label.inner_text().strip().rstrip(':').strip()
+                    selected = page.locator('.language-switcher select[name="language"]').input_value()
+                    html_lang = page.locator('html').get_attribute('lang')
+                    if actual != expected_label or selected != language or html_lang != language:
+                        raise AssertionError(
+                            f'admin locale smoke {language}: label={actual!r}, '
+                            f'selected={selected!r}, html={html_lang!r}'
+                        )
+                with page.expect_navigation(wait_until='networkidle'):
+                    page.locator('.language-switcher select[name="language"]').select_option('de')
+                if page.locator('html').get_attribute('lang') != 'de':
+                    raise AssertionError('admin locale smoke: German reset failed')
+
                 admin_logo = page.locator('.sidebar .brand img')
                 if '/static/brand/promptfinisher-logo-hq.png' not in admin_logo.get_attribute('src'):
                     raise AssertionError('admin shell still uses the low-resolution logo asset')
