@@ -998,6 +998,61 @@ class AdminInternationalizationContractTests(SimpleTestCase):
                     catalog['Lizenz wurde entsperrt.'],
                 )
 
+
+    def test_admin_dynamic_feedback_format_keys_are_localized(self):
+        import ast
+        from django.utils.translation import gettext, override
+
+        source = (ROOT / 'apps/core/admin_views.py').read_text(encoding='utf-8')
+        tree = ast.parse(source)
+        translated = {
+            node.args[0].value
+            for node in ast.walk(tree)
+            if isinstance(node, ast.Call)
+            and isinstance(node.func, ast.Name)
+            and node.func.id == '_'
+            and node.args
+            and isinstance(node.args[0], ast.Constant)
+            and isinstance(node.args[0].value, str)
+        }
+        texts = (
+            'Dieser Lead ist bereits einem Kunden zugeordnet.',
+            'Einladung für den Firmenadministrator wurde gesendet.',
+            'Kundenantwort gespeichert. Für Demo-Adressen wurde keine E-Mail versendet.',
+            'Kundenantwort gespeichert und E-Mail-Benachrichtigung eingeplant.',
+            'Kundenantwort gespeichert, E-Mail-Benachrichtigung konnte aber nicht eingeplant werden.',
+            'netstyle Benutzer angelegt; Einrichtungslink wurde per E-Mail versendet.',
+            'Privatkunden werden aus rechtlichen Gründen über Registrierung/Checkout angelegt; der Lead kann dort anschließend als gewonnen abgeschlossen werden.',
+            'Lead wurde in einen Firmenkunden umgewandelt. Der Ansprechpartner hat eine sichere Einladung erhalten.',
+            'Lead %(lead_number)s angelegt.',
+            'Lead %(lead_number)s gelöscht.',
+            'Firmenadministrator wurde auf %(email)s übertragen.',
+            'Lizenz wurde %(email)s zugewiesen.',
+        )
+        self.assertEqual(len(texts), 12)
+        self.assertTrue(set(texts).issubset(translated))
+        for language in LOCALES:
+            catalog = catalog_translations(
+                ROOT / 'locale' / language / 'LC_MESSAGES' / 'django.po'
+            )
+            for text in texts:
+                with self.subTest(language=language, text=text):
+                    translated_text = catalog.get(text)
+                    self.assertTrue(translated_text)
+                    if '%(lead_number)s' in text:
+                        self.assertIn('%(lead_number)s', translated_text)
+                    if '%(email)s' in text:
+                        self.assertIn('%(email)s', translated_text)
+            with override(language):
+                rendered = gettext('Lead %(lead_number)s angelegt.') % {
+                    'lead_number': 'L-2026-123',
+                }
+                self.assertIn('L-2026-123', rendered)
+                rendered = gettext('Lizenz wurde %(email)s zugewiesen.') % {
+                    'email': 'customer@example.test',
+                }
+                self.assertIn('customer@example.test', rendered)
+
     def test_language_picker_is_in_flex_header_and_never_overlays_avatar(self):
         shell = (ROOT / 'templates/app_shell.html').read_text(encoding='utf-8')
         base = (ROOT / 'templates/base.html').read_text(encoding='utf-8')
