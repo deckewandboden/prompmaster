@@ -1201,3 +1201,36 @@ msgstr "Results for"
 
 msgid "Keine Treffer."
 msgstr "No matches."
+
+msgid "Append-only Auditlog für administrative und geschäftskritische Änderungen."
+msgstr "Append-only audit log for administrative and business-critical changes."
+
+msgid "Zeit"
+msgstr "Time"
+
+msgid "Objekt"
+msgstr "Object"
+
+msgid "Änderung"
+msgstr "Change"
+
+msgid "Keine Audit-Einträge."
+msgstr "No audit entries."
+
+msgid "Mollie-Zahlungsstatus, Beträge, Refunds und Chargebacks."
+msgstr "Mollie payment statuses, amounts, refunds and chargebacks."
+
+msgid "Bezahlt"
+msgstr "Paid"
+
+msgid "Offen"
+msgstr "Open"
+
+msgid "Fehlgeschlagen"
+msgstr "Failed"
+
+msgid "Payment-ID"
+msgstr "Payment ID"
+
+msgid "Keine Zahlungen gefunden."
+msgstr "No payments found."
