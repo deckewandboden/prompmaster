@@ -13,7 +13,7 @@ from django.db.models.functions import Cast, Coalesce, Concat, Lower, Trim, Trun
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse
 from django.utils import timezone
-from django.utils.translation import gettext as _
+from django.utils.translation import gettext as _, gettext_lazy as _lazy
 from django.views.decorators.http import require_POST
 
 from apps.accounts.models import Role, User, UserRole
@@ -148,18 +148,18 @@ def _license_admin_queryset(queryset=None):
         )
     )
 PAYMENT_STATUS_CHOICES = [
-    ('created', 'Erstellt'), ('open', 'Offen'), ('pending', 'Ausstehend'),
-    ('authorized', 'Autorisiert'), ('paid', 'Bezahlt'), ('failed', 'Fehlgeschlagen'),
-    ('canceled', 'Storniert'), ('expired', 'Abgelaufen'),
-    ('refunded_partial', 'Teilweise erstattet'), ('refunded_full', 'Vollständig erstattet'),
-    ('chargeback', 'Chargeback'), ('chargeback_reversed', 'Chargeback zurückgenommen'), ('unknown', 'Unbekannt'),
+    ('created', _lazy('Erstellt')), ('open', _lazy('Offen')), ('pending', _lazy('Ausstehend')),
+    ('authorized', _lazy('Autorisiert')), ('paid', _lazy('Bezahlt')), ('failed', _lazy('Fehlgeschlagen')),
+    ('canceled', _lazy('Storniert')), ('expired', _lazy('Abgelaufen')),
+    ('refunded_partial', _lazy('Teilweise erstattet')), ('refunded_full', _lazy('Vollständig erstattet')),
+    ('chargeback', _lazy('Chargeback')), ('chargeback_reversed', _lazy('Chargeback zurückgenommen')), ('unknown', _lazy('Unbekannt')),
 ]
 EMAIL_STATUS_CHOICES = [
-    ('queued', 'Warteschlange'), ('sending', 'Wird gesendet'),
-    ('sent', 'Gesendet'), ('failed', 'Fehlgeschlagen'),
-    ('suppressed', 'Unterdrückt'),
+    ('queued', _lazy('Warteschlange')), ('sending', _lazy('Wird gesendet')),
+    ('sent', _lazy('Gesendet')), ('failed', _lazy('Fehlgeschlagen')),
+    ('suppressed', _lazy('Unterdrückt')),
 ]
-MOLLIE_STATUS_CHOICES = PAYMENT_STATUS_CHOICES + [('error', 'Verarbeitungsfehler'), ('recovered', 'Fehler behoben')]
+MOLLIE_STATUS_CHOICES = PAYMENT_STATUS_CHOICES + [('error', _lazy('Verarbeitungsfehler')), ('recovered', _lazy('Fehler behoben'))]
 
 
 def _active_superadmin_count():
@@ -875,7 +875,7 @@ def private_customer_emails(request, pk):
         default_sort='-created_at',
         filters={'status': 'status'},
     ).build()
-    return render(request, 'ns_admin/private_customer_grid.html', {'profile': profile, 'title':'E-Mail-Historie', 'kind':'emails', 'grid':grid, 'filter_options':[('status',_('Status'),EMAIL_STATUS_CHOICES)]})
+    return render(request, 'ns_admin/private_customer_grid.html', {'profile': profile, 'title':_('E-Mail-Historie'), 'kind':'emails', 'grid':grid, 'filter_options':[('status',_('Status'),EMAIL_STATUS_CHOICES)]})
 
 
 @staff_perm('customers.read', 'audit.read')
@@ -1400,7 +1400,7 @@ def customer_emails(request, pk):
         default_sort='-created_at',
         filters={'status': 'status'},
     ).build()
-    return render(request, 'ns_admin/customer_grid.html', {'customer': customer, 'title': 'E-Mail-Historie', 'grid': grid, 'kind': 'emails', 'filter_options': [('status',_('Status'),EMAIL_STATUS_CHOICES)]})
+    return render(request, 'ns_admin/customer_grid.html', {'customer': customer, 'title': _('E-Mail-Historie'), 'grid': grid, 'kind': 'emails', 'filter_options': [('status',_('Status'),EMAIL_STATUS_CHOICES)]})
 
 
 @staff_perm('customers.read', 'legal.read')
@@ -1632,7 +1632,7 @@ def license_refund(request, pk, term_id):
         except (ValidationError, Exception) as exc:
             # Provider errors are intentionally surfaced as a safe generic UI
             # message while detailed stack traces remain in server logs.
-            messages.error(request, str(exc) if isinstance(exc, ValidationError) else 'Erstattung konnte nicht an Mollie übermittelt werden.')
+            messages.error(request, str(exc) if isinstance(exc, ValidationError) else _('Erstattung konnte nicht an Mollie übermittelt werden.'))
         else:
             messages.success(request, _("Erstattung wurde an Mollie übermittelt."))
     else:
@@ -2578,7 +2578,7 @@ def user_role_assign(request):
         write_audit(request.user, 'user_role.assigned', link, {'user': str(link.user_id), 'role': link.role.code}, request=request)
         messages.success(request, _("Rolle zugewiesen."))
         return redirect('ns_admin:roles')
-    return render(request, 'ns_admin/form.html', {'title': 'netstyle Rolle zuweisen', 'form': form, 'cancel_url': reverse('ns_admin:roles')})
+    return render(request, 'ns_admin/form.html', {'title': _('netstyle Rolle zuweisen'), 'form': form, 'cancel_url': reverse('ns_admin:roles')})
 
 
 @staff_perm('roles.write')
