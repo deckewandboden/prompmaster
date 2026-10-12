@@ -2111,3 +2111,69 @@ msgstr "vanaf"
 
 msgid "Keine Preisversionen."
 msgstr "Geen prijsversies."
+
+msgid "Zentrale Prompt-Domain · 34 Apps · 194 PM20-Aufgaben · versioniert und serverseitig komponiert."
+msgstr "Centrale promptomgeving · 34 apps · 194 PM20-taken · versiebeheer en samenstelling op de server."
+
+msgid "Qualität"
+msgstr "Kwaliteit"
+
+msgid "Task-ID, App oder Titel suchen …"
+msgstr "Zoek taak-ID, app of titel …"
+
+msgid "Task"
+msgstr "Taak"
+
+msgid "Anwendung"
+msgstr "Toepassing"
+
+msgid "Veröffentlicht"
+msgstr "Gepubliceerd"
+
+msgid "Offene Versionen"
+msgstr "Openstaande versies"
+
+msgid "keine"
+msgstr "geen"
+
+msgid "noch keine Daten"
+msgstr "nog geen gegevens"
+
+msgid "Keine Prompt-Aufgaben gefunden."
+msgstr "Geen prompttaken gevonden."
+
+msgid "Prompt-Qualität"
+msgstr "Promptkwaliteit"
+
+msgid "1–5-Sterne-Ratings · Recent Average · Drop-Erkennung · Aufgabenliste."
+msgstr "Beoordelingen van 1 tot 5 sterren · recent gemiddelde · dalingsdetectie · takenlijst."
+
+msgid "Schwellen"
+msgstr "Drempels"
+
+msgid "Analyse aktualisieren"
+msgstr "Analyse vernieuwen"
+
+msgid "Kritisch"
+msgstr "Kritiek"
+
+msgid "Warnung"
+msgstr "Waarschuwing"
+
+msgid "Beobachten"
+msgstr "Bewaken"
+
+msgid "OK"
+msgstr "OK"
+
+msgid "App"
+msgstr "App"
+
+msgid "Recent Avg"
+msgstr "Recent gemiddelde"
+
+msgid "Previous Avg"
+msgstr "Vorig gemiddelde"
+
+msgid "Drop"
+msgstr "Daling"
