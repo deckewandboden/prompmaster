@@ -2817,3 +2817,93 @@ msgstr "Ordinamento"
 
 msgid "Technisches Problem"
 msgstr "Problema tecnico"
+
+msgid "Aktuelle Stichprobengröße"
+msgstr "Dimensione del campione recente"
+
+msgid "App-Regel-Snapshot"
+msgstr "Istantanea regole dell'app"
+
+msgid "Ausgabeformen"
+msgstr "Formati di output"
+
+msgid "Beispiel: {\"microsoft_tier\":\"premium\",\"payload\":{\"fields\":{...}}}"
+msgstr "Esempio: {\"microsoft_tier\":\"premium\",\"payload\":{\"fields\":{...}}}"
+
+msgid "Bereich"
+msgstr "Area"
+
+msgid "Darf nicht enthalten"
+msgstr "Non deve contenere"
+
+msgid "Ein Feld pro Zeile. Optionales Fragment: Feldname ||| Text mit {value}."
+msgstr "Un campo per riga. Frammento facoltativo: nome campo ||| testo con {value}."
+
+msgid "Ein Pflichtfeld pro Zeile."
+msgstr "Un campo obbligatorio per riga."
+
+msgid "Eingabedaten (JSON)"
+msgstr "Dati di input (JSON)"
+
+msgid "Familie"
+msgstr "Famiglia"
+
+msgid "Feldbezeichnungen müssen innerhalb einer Prompt-Version eindeutig sein."
+msgstr "Le etichette dei campi devono essere univoche all'interno di una versione del prompt."
+
+msgid "Kontextvorlage"
+msgstr "Modello di contesto"
+
+msgid "Kritisch bei Abfall"
+msgstr "Soglia di calo critico"
+
+msgid "Kritischer Durchschnitt"
+msgstr "Media critica"
+
+msgid "Maximale Zeichen"
+msgstr "Numero massimo di caratteri"
+
+msgid "Microsoft-Lizenzstufe"
+msgstr "Livello di licenza Microsoft"
+
+msgid "Mindestanzahl Stichproben"
+msgstr "Numero minimo di campioni"
+
+msgid "Mindestdurchschnitt"
+msgstr "Media minima"
+
+msgid "Muss enthalten"
+msgstr "Deve contenere"
+
+msgid "Nur DRAFT-Versionen dürfen inhaltlich bearbeitet werden."
+msgstr "È possibile modificare solo le versioni DRAFT."
+
+msgid "Payload muss ein JSON-Objekt sein."
+msgstr "Il payload deve essere un oggetto JSON."
+
+msgid "Quellen"
+msgstr "Fonti"
+
+msgid "Schwerpunkte"
+msgstr "Aree di interesse"
+
+msgid "Test-Payload (JSON)"
+msgstr "Payload di test (JSON)"
+
+msgid "Test-Payload muss ein JSON-Objekt sein."
+msgstr "Il payload di test deve essere un oggetto JSON."
+
+msgid "Ungültiges JSON: %(error)s"
+msgstr "JSON non valido: %(error)s"
+
+msgid "Vorherige Stichprobengröße"
+msgstr "Dimensione del campione precedente"
+
+msgid "Warnung bei Abfall"
+msgstr "Soglia di avviso per calo"
+
+msgid "Ziel / Intent"
+msgstr "Obiettivo / intento"
+
+msgid "Zielgruppen"
+msgstr "Destinatari"
