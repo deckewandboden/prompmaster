@@ -1885,3 +1885,12 @@ msgstr "W kolejce"
 
 msgid "Keine E-Mails gefunden."
 msgstr "Nie znaleziono wiadomości e-mail."
+
+msgid "Kundenbereiche"
+msgstr "Sekcje klientów"
+
+msgid "Privatkundenbereiche"
+msgstr "Sekcje klientów indywidualnych"
+
+msgid "Audit"
+msgstr "Audyt"
