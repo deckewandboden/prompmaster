@@ -1783,3 +1783,12 @@ msgstr "Kuyrukta"
 
 msgid "Keine E-Mails gefunden."
 msgstr "E-posta bulunamadı."
+
+msgid "Kundenbereiche"
+msgstr "Müşteri bölümleri"
+
+msgid "Privatkundenbereiche"
+msgstr "Bireysel müşteri bölümleri"
+
+msgid "Audit"
+msgstr "Denetim"
