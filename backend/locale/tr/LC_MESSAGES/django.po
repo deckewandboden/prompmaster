@@ -3379,3 +3379,45 @@ msgstr "netstyle rolü ata"
 
 msgid "Erstattung konnte nicht an Mollie übermittelt werden."
 msgstr "Geri ödeme Mollie'ye gönderilemedi."
+
+msgid "Nachrichtentext"
+msgstr "Mesaj metni"
+
+msgid "Rollenname"
+msgstr "Rol adı"
+
+msgid "Lead %(lead_number)s löschen"
+msgstr "%(lead_number)s numaralı potansiyel müşteriyi sil"
+
+msgid "Lead %(lead_number)s in Kunden umwandeln"
+msgstr "%(lead_number)s numaralı potansiyel müşteriyi müşteriye dönüştür"
+
+msgid "Firmenadministrator übertragen · %(email)s"
+msgstr "Şirket yöneticisini aktar · %(email)s"
+
+msgid "E-Mail-Vorlage · %(code)s"
+msgstr "E-posta şablonu · %(code)s"
+
+msgid "Löschanfrage ablehnen"
+msgstr "Silme talebini reddet"
+
+msgid "Uneingeschränkte Rechte auf alle PROMPTFINISHER-Verwaltungsbereiche."
+msgstr "Tüm PROMPTFINISHER yönetim alanlarına sınırsız erişim."
+
+msgid "Kunden, Lizenzen, Geräte, Bestellungen, Zahlungen, E-Mail und Support."
+msgstr "Müşteriler, lisanslar, cihazlar, siparişler, ödemeler, e-posta ve destek."
+
+msgid "Monitoring, Backups, Operations API, Logs und Systemstatus."
+msgstr "İzleme, yedekler, operasyon API'si, günlükler ve sistem durumu."
+
+msgid "Prompt Studio, Prompt-Lifecycle, Qualität und zentrale Inhalte."
+msgstr "Prompt Studio, prompt yaşam döngüsü, kalite ve merkezi içerikler."
+
+msgid "Berechtigungen werden über die zugewiesenen Capabilities gesteuert."
+msgstr "İzinler, atanmış yetkinliklere göre yönetilir."
+
+msgid "Objekttyp"
+msgstr "Nesne türü"
+
+msgid "Objekt-ID"
+msgstr "Nesne kimliği"
