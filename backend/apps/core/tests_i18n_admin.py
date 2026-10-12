@@ -27,6 +27,9 @@ PAGES = (
     'ns_admin/features.html',
     'ns_admin/roles.html',
     'ns_admin/legal.html',
+    'ns_admin/api.html',
+    'ns_admin/ops_services.html',
+    'ns_admin/mollie.html',
 )
 TRANSLATE_PATTERN = re.compile(r'''{%\s*translate\s+(['"])(.*?)\1\s*%}''')
 
@@ -147,6 +150,22 @@ class AdminInternationalizationContractTests(SimpleTestCase):
                 )
                 with self.subTest(language=code, text=source_text):
                     self.assertTrue(translations.get(source_text))
+
+    def test_mollie_live_checkout_and_service_account_warnings_are_translated(self):
+        cases = (
+            ('ns_admin/mollie.html', 'Produktiv-Checkout sperren'),
+            ('ns_admin/mollie.html', 'Notabschaltung'),
+            ('ns_admin/mollie.html', 'Live-Zugangsdaten sind hinterlegt, der Kunden-Checkout bleibt jedoch gesperrt, bis die Live-Readiness geprüft und ausdrücklich freigegeben wurde.'),
+            ('ns_admin/api.html', 'Service Account wirklich sperren?'),
+            ('ns_admin/api.html', 'Token rotieren'),
+        )
+        for page, phrase in cases:
+            source = (ROOT / 'templates' / page).read_text(encoding='utf-8')
+            with self.subTest(page=page, phrase=phrase):
+                self.assertIn(phrase, source)
+                for locale in LOCALES:
+                    terms = catalog_translations(ROOT / 'locale' / locale / 'LC_MESSAGES' / 'django.po')
+                    self.assertTrue(terms.get(phrase), 'Dangerous operations must never show untranslated confirmations')
 
     def test_language_picker_is_in_flex_header_and_never_overlays_avatar(self):
         shell = (ROOT / 'templates/app_shell.html').read_text(encoding='utf-8')
