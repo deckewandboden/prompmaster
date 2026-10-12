@@ -2686,3 +2686,27 @@ msgstr "I have read the withdrawal information"
 
 msgid "Zum Beispiel Bestellnummer oder Kundennummer."
 msgstr "For example, an order number or customer number."
+
+msgid "Gerätename"
+msgstr "Device name"
+
+msgid "Keine konkrete Lizenz"
+msgstr "No specific license"
+
+msgid "Lizenz (optional)"
+msgstr "License (optional)"
+
+msgid "Nachricht"
+msgstr "Message"
+
+msgid "Schlüssel"
+msgstr "Key"
+
+msgid "Sonstiges"
+msgstr "Other"
+
+msgid "Sortierung"
+msgstr "Sort order"
+
+msgid "Technisches Problem"
+msgstr "Technical issue"
