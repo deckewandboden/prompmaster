@@ -2373,3 +2373,195 @@ msgstr "Risultato"
 
 msgid "Deterministischer Feld-Fallback"
 msgstr "Valore di riserva deterministico del campo"
+
+msgid "10-Min.-Ø:"
+msgstr "Media 10 min:"
+
+msgid "Aktive Warnungen"
+msgstr "Avvisi attivi"
+
+msgid "App-Version"
+msgstr "Versione applicazione"
+
+msgid "Architektur"
+msgstr "Architettura"
+
+msgid "Backup & Restore"
+msgstr "Backup e ripristino"
+
+msgid "Backups öffnen"
+msgstr "Apri backup"
+
+msgid "Betriebszustand, Plattformdienste, Integrationen und Datensicherung."
+msgstr "Stato operativo, servizi della piattaforma, integrazioni e backup."
+
+msgid "CPU-Kerne"
+msgstr "Core CPU"
+
+msgid "Caddy"
+msgstr "Caddy"
+
+msgid "Celery Beat"
+msgstr "Celery Beat"
+
+msgid "Celery Worker"
+msgstr "Celery Worker"
+
+msgid "Container-CPU aktuell"
+msgstr "CPU attuale dei container"
+
+msgid "Container-RAM gesamt"
+msgstr "RAM totale dei container"
+
+msgid "DB-Verbindungen"
+msgstr "Connessioni database"
+
+msgid "Dateiobjekte (Inodes) belegt"
+msgstr "Inode utilizzati"
+
+msgid "Dateiobjekte (Inodes) verfügbar"
+msgstr "Inode disponibili"
+
+msgid "Datenbank & Jobs"
+msgstr "Database e processi"
+
+msgid "Datenbank öffnen"
+msgstr "Apri database"
+
+msgid "Datenträger / gesamt"
+msgstr "Disco / totale"
+
+msgid "Datenträger / verfügbar"
+msgstr "Disco / disponibile"
+
+msgid "Datenträger / verwendet"
+msgstr "Disco / utilizzato"
+
+msgid "Definitionen"
+msgstr "Definizioni"
+
+msgid "Dienste & Integrationen"
+msgstr "Servizi e integrazioni"
+
+msgid "Dienste öffnen"
+msgstr "Apri servizi"
+
+msgid "Diese Werte stammen aus cAdvisor und beziehen sich auf Docker-Container. Die VM-Werte oben stammen aus node_exporter und beziehen sich auf die gesamte Docker-Host-VM."
+msgstr "Questi valori provengono da cAdvisor e si riferiscono ai container Docker. I valori della VM sopra provengono da node_exporter e riguardano l'intera VM host Docker."
+
+msgid "Docker"
+msgstr "Docker"
+
+msgid "Docker-Container"
+msgstr "Container Docker"
+
+msgid "Erkannte Container"
+msgstr "Container rilevati"
+
+msgid "Fehler / 24 h"
+msgstr "Errori / 24 h"
+
+msgid "Git Commit"
+msgstr "Commit Git"
+
+msgid "Host & Release"
+msgstr "Host e rilascio"
+
+msgid "Inodes sind Dateisystem-Einträge für Dateien und Verzeichnisse. Sind sie ausgeschöpft, können trotz freiem Speicher keine neuen Dateien angelegt werden."
+msgstr "Gli inode sono voci del file system per file e directory. Se si esauriscono, non è possibile creare nuovi file anche se rimane spazio libero su disco."
+
+msgid "Keine aktiven Systemwarnungen."
+msgstr "Nessun avviso di sistema attivo."
+
+msgid "Letzter Restore-Test"
+msgstr "Ultimo test di ripristino"
+
+msgid "Letztes Backup"
+msgstr "Ultimo backup"
+
+msgid "Letztes Deployment"
+msgstr "Ultimo deployment"
+
+msgid "Load:"
+msgstr "Carico:"
+
+msgid "Messbereich"
+msgstr "Ambito di misurazione"
+
+msgid "Messquelle"
+msgstr "Fonte delle misure"
+
+msgid "Messwert-Erklärung"
+msgstr "Spiegazione delle metriche"
+
+msgid "OS / Kernel"
+msgstr "Sistema operativo / kernel"
+
+msgid "PostgreSQL"
+msgstr "PostgreSQL"
+
+msgid "Prompt MCP"
+msgstr "Prompt MCP"
+
+msgid "RAM gesamt"
+msgstr "RAM totale"
+
+msgid "RAM verfügbar"
+msgstr "RAM disponibile"
+
+msgid "RAM verwendet"
+msgstr "RAM utilizzata"
+
+msgid "Restore-Tests öffnen"
+msgstr "Apri test di ripristino"
+
+msgid "TLS-Zertifikat"
+msgstr "Certificato TLS"
+
+msgid "Umgebung"
+msgstr "Ambiente"
+
+msgid "Uptime"
+msgstr "Tempo di attività"
+
+msgid "VM-CPU aktuell"
+msgstr "CPU attuale della VM"
+
+msgid "VM-Datenträger /"
+msgstr "Disco VM /"
+
+msgid "VM-RAM"
+msgstr "RAM VM"
+
+msgid "VM-Speicher & Dateisystem"
+msgstr "Memoria VM e file system"
+
+msgid "Verwendetes Backup"
+msgstr "Backup utilizzato"
+
+msgid "Warnungen öffnen"
+msgstr "Apri avvisi"
+
+msgid "geschützt"
+msgstr "protetto"
+
+msgid "healthy"
+msgstr "operativo"
+
+msgid "konfiguriert"
+msgstr "configurato"
+
+msgid "nicht erreichbar"
+msgstr "non raggiungibile"
+
+msgid "nicht protokolliert"
+msgstr "non registrato"
+
+msgid "und ist die für neue Prozesse realistisch nutzbare Speichermenge. „Inodes“ sind Dateisystem-Einträge; ein niedriger Belegungsgrad ist unkritisch."
+msgstr "e indica la memoria realisticamente disponibile per nuovi processi. Gli inode sono voci del file system; un basso livello di utilizzo non è problematico."
+
+msgid "verfügbar von"
+msgstr "disponibili su"
+
+msgid "„RAM verfügbar“ entspricht Linux"
+msgstr "«RAM disponibile» corrisponde al valore Linux"
