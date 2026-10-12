@@ -4,9 +4,12 @@ This audits the entire dashboard and customer preview instead of only side
 navigation. Other admin modules remain separately tracked for i18n coverage.
 """
 from pathlib import Path
+from types import SimpleNamespace
+from unittest.mock import patch
 from ast import literal_eval
 import re
 
+from django.template import Context, Template
 from django.template.loader import get_template
 from django.test import SimpleTestCase
 from django.conf import settings
@@ -415,6 +418,83 @@ class AdminInternationalizationContractTests(SimpleTestCase):
             )
             with self.subTest(locale=code):
                 self.assertTrue(catalog.get('nicht verfügbar'))
+
+
+    def test_ops_alert_catalog_has_complete_safe_interpolation(self):
+        from apps.core.templatetags.pm import _OPS_ALERT_RULES
+        self.assertEqual(len(_OPS_ALERT_RULES), 20)
+        source_texts = [entry[2] for entry in _OPS_ALERT_RULES]
+        self.assertEqual(len(set(source_texts)), 20)
+        for language in LOCALES:
+            catalog = catalog_translations(
+                ROOT / 'locale' / language / 'LC_MESSAGES' / 'django.po'
+            )
+            for source_text in source_texts:
+                with self.subTest(locale=language, source=source_text):
+                    self.assertIn(source_text, catalog)
+                    self.assertTrue(catalog[source_text])
+                    expected = source_text.count('{value}')
+                    self.assertEqual(catalog[source_text].count('{value}'), expected)
+                    self.assertNotIn('{', catalog[source_text].replace('{value}', ''))
+                    self.assertNotIn('}', catalog[source_text].replace('{value}', ''))
+
+    def test_ops_alert_display_contract(self):
+        from apps.core.templatetags.pm import ops_alert_display
+        examples = (
+            ('disk.critical', 'Disk 90.5% belegt', '90.5'),
+            ('disk.warning', 'Disk 82.0% belegt', '82.0'),
+            ('ram.warning', 'RAM 81.1% belegt', '81.1'),
+            ('cpu.warning', 'CPU 10-Minuten-Mittel 93.0%', '93.0'),
+            ('backup.unavailable', 'Kein auswertbarer Backupstatus verfügbar', None),
+            ('backup.failed', 'Letztes Backup meldet Status failed', 'failed'),
+            ('backup.critical', 'Backup ist 33.2 Stunden alt', '33.2'),
+            ('restore.unavailable', 'Restore-Statusdatei ist nicht auswertbar', None),
+            ('restore.missing', 'Noch kein Restore-Test protokolliert', None),
+            ('restore.failed', 'Letzter Restore-Test war nicht erfolgreich', None),
+            ('restore.old', 'Letzter Restore-Test ist 42 Tage alt', '42'),
+            ('service.node-exporter.down', 'Monitoring-Ziel node-exporter ist nicht erreichbar', 'node-exporter'),
+            ('service.prometheus.unknown', 'Monitoring-Ziel prometheus liefert keinen Status', 'prometheus'),
+            ('service.caddy.down', 'Caddy Healthcheck ist nicht erreichbar', None),
+            ('worker.ping', 'Kein Celery Worker beantwortet den aktiven Ping', None),
+            ('beat.heartbeat', 'Celery Beat-Heartbeat älter als 5 Minuten', '5'),
+            ('queue.unavailable', 'Celery Queue-Tiefe kann nicht gelesen werden', None),
+            ('queue.backlog', 'Celery Queue enthält 120 wartende Jobs', '120'),
+            ('task.failures', '7 fehlgeschlagene Hintergrundjobs in 24 Stunden', '7'),
+            ('mail.failures', '3 E-Mail-Fehler in 24 Stunden', '3'),
+            ('mollie.failures', '2 Mollie-Verarbeitungsfehler in 24 Stunden', '2'),
+        )
+        with patch(
+            'apps.core.templatetags.pm.gettext',
+            side_effect=lambda s: 'LOCALIZED ' + s,
+        ):
+            for code, message, variable in examples:
+                with self.subTest(code=code):
+                    output = ops_alert_display(SimpleNamespace(code=code, message=message))
+                    self.assertTrue(output.startswith('LOCALIZED '), output)
+                    if variable and code != 'backup.failed':
+                        self.assertIn(variable, output)
+                    self.assertNotIn('{value}', output)
+        # Unknown and mismatched messages must not be transformed.
+        for code, message in (
+            ('custom.disk', 'Manueller Hinweis'),
+            ('disk.warning', 'RAM 90% belegt'),
+            ('service.caddy.down', 'Administrativer Sonderhinweis'),
+            ('', '<img src=x onerror=alert(1)>'),
+        ):
+            alert = SimpleNamespace(code=code, message=message)
+            self.assertEqual(ops_alert_display(alert), message)
+        with patch('apps.core.templatetags.pm.gettext', return_value='bad {placeholder}'):
+            alert = SimpleNamespace(code='disk.warning', message='Disk 88.0% belegt')
+            self.assertEqual(ops_alert_display(alert), alert.message)
+        rendered = Template('{% load pm %}{{ item|ops_alert_display }}').render(
+            Context({'item': SimpleNamespace(
+                code='custom', message='<img src=x onerror=alert(1)>',
+            )})
+        )
+        self.assertIn('&lt;img', rendered)
+        self.assertNotIn('<img', rendered)
+        self.assertIn('{{ a|ops_alert_display }}',
+            (ROOT / 'templates/ns_admin/ops.html').read_text(encoding='utf-8'))
 
     def test_language_picker_is_in_flex_header_and_never_overlays_avatar(self):
         shell = (ROOT / 'templates/app_shell.html').read_text(encoding='utf-8')
