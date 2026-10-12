@@ -2238,3 +2238,60 @@ msgstr "Alternativa a SMTP per Exchange Online. Il segreto client viene conserva
 
 msgid "Sie besitzen Leserechte, aber keine Berechtigung zum Ändern dieser Einstellungen."
 msgstr "Hai accesso in sola lettura e non puoi modificare queste impostazioni."
+
+msgid "Bewertungen"
+msgstr "Valutazioni"
+
+msgid "Deterministischer Composer-Test ohne Speicherung des erzeugten Prompttexts."
+msgstr "Test deterministico del compositore senza memorizzare il testo del prompt generato."
+
+msgid "Draft aus letzter Version"
+msgstr "Crea una bozza dall'ultima versione"
+
+msgid "Draft speichern"
+msgstr "Salva bozza"
+
+msgid "Keine Version vorhanden."
+msgstr "Nessuna versione disponibile."
+
+msgid "Konfigurierbare Schwellen für Recent Average und Drop-Erkennung."
+msgstr "Soglie configurabili per la media recente e il rilevamento dei cali."
+
+msgid "No-Code Editor. Nur DRAFT-Versionen sind inhaltlich veränderbar."
+msgstr "Editor senza codice. È possibile modificare solo le versioni DRAFT."
+
+msgid "Noch keine Qualitäts-Snapshots. Analyse ausführen oder Ratings erfassen."
+msgstr "Nessuna istantanea della qualità. Esegui un'analisi o registra valutazioni."
+
+msgid "Policy"
+msgstr "Criteri"
+
+msgid "Qualität:"
+msgstr "Qualità:"
+
+msgid "Qualitätsschwellen"
+msgstr "Soglie di qualità"
+
+msgid "Ratings"
+msgstr "Valutazioni"
+
+msgid "Testfall"
+msgstr "Caso di test"
+
+msgid "Testfall speichern"
+msgstr "Salva caso di test"
+
+msgid "Tests"
+msgstr "Test"
+
+msgid "Titel"
+msgstr "Titolo"
+
+msgid "Zur Übersicht"
+msgstr "Torna alla panoramica"
+
+msgid "bearbeiten"
+msgstr "modifica"
+
+msgid "zentrale PromptDefinition"
+msgstr "PromptDefinition centrale"
