@@ -2195,3 +2195,39 @@ msgstr "Kritieke waarschuwing"
 
 msgid "Einstellungen speichern"
 msgstr "Instellingen opslaan"
+
+msgid "Produktdefaults, Support, E-Mail-Identität und Betriebswarnschwellen."
+msgstr "Productstandaarden, ondersteuning, e-mailidentiteit en waarschuwingsdrempels."
+
+msgid "Produktwerte werden unter „Produkte & Preise“ gepflegt."
+msgstr "Productwaarden worden beheerd onder 'Producten en prijzen'."
+
+msgid "PROMPTFINISHER Pro ist nicht angelegt."
+msgstr "PROMPTFINISHER Pro is niet aangemaakt."
+
+msgid "Empfänger des Kundenportal-Kontaktformulars."
+msgstr "Ontvanger van het contactformulier in het klantenportaal."
+
+msgid "E-Mail-Versandweg & Fallback"
+msgstr "E-mailverzending en failover"
+
+msgid "Alle Provider bleiben parallel gespeichert. Im manuellen Modus wird nur der primäre Versandweg verwendet. Im automatischen Modus wird bei eindeutig nicht zugestellten Fehlern in der festgelegten Reihenfolge weitergeschaltet; bei unklaren Fehlern erfolgt bewusst kein automatischer Fallback, um Doppelversand zu vermeiden."
+msgstr "Alle providers blijven opgeslagen. De handmatige modus gebruikt alleen de primaire verzendroute. De automatische modus schakelt uitsluitend bij bevestigde niet-aflevering in de ingestelde volgorde door; onduidelijke fouten veroorzaken geen failover om dubbele verzending te voorkomen."
+
+msgid "E-Mail-Absender & Domain"
+msgstr "E-mailafzender en domein"
+
+msgid "Die Absenderadresse wird beim SMTP-Versand direkt aus diesen Einstellungen gelesen. SPF, DKIM und DMARC sind hier als DNS-Sollwerte dokumentiert; das Speichern verändert keine DNS-Zone."
+msgstr "Het SMTP-afzenderadres wordt rechtstreeks uit deze instellingen gelezen. SPF, DKIM en DMARC staan hier als beoogde DNS-records; opslaan wijzigt geen DNS-zone."
+
+msgid "Erster SMTP-Transport. Das Passwort wird verschlüsselt gespeichert und niemals wieder im Klartext angezeigt."
+msgstr "Primair SMTP-transport. Het wachtwoord wordt versleuteld opgeslagen en nooit meer als platte tekst weergegeven."
+
+msgid "Optionaler zweiter SMTP-Transport. Hier können Sie z. B. denselben SMTP-Relay eintragen, den auch Listmonk verwendet, und manuell oder automatisch zwischen SMTP 1 und SMTP 2 wechseln."
+msgstr "Optioneel tweede SMTP-transport. Je kunt bijvoorbeeld dezelfde SMTP-relay gebruiken als Listmonk en handmatig of automatisch tussen SMTP 1 en SMTP 2 wisselen."
+
+msgid "Alternative zu SMTP für Exchange Online. Das Client Secret wird verschlüsselt gespeichert und niemals wieder im Klartext angezeigt."
+msgstr "Alternatief voor SMTP bij Exchange Online. Het clientgeheim wordt versleuteld opgeslagen en nooit meer als platte tekst weergegeven."
+
+msgid "Sie besitzen Leserechte, aber keine Berechtigung zum Ändern dieser Einstellungen."
+msgstr "Je hebt alleen-lezen-toegang en mag deze instellingen niet wijzigen."
