@@ -1234,3 +1234,30 @@ msgstr "ID do pagamento"
 
 msgid "Keine Zahlungen gefunden."
 msgstr "Não foram encontrados pagamentos."
+
+msgid "Lead"
+msgstr "Potencial cliente"
+
+msgid "Interessent"
+msgstr "Interessado"
+
+msgid "Priorität"
+msgstr "Prioridade"
+
+msgid "Zuständig"
+msgstr "Responsável"
+
+msgid "Erstellt"
+msgstr "Criado"
+
+msgid "Kundennummer"
+msgstr "Número de cliente"
+
+msgid "Eingang"
+msgstr "Recebido"
+
+msgid "Art"
+msgstr "Tipo"
+
+msgid "Vertragsbezug"
+msgstr "Referência do contrato"
