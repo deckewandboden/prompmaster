@@ -1396,3 +1396,90 @@ msgstr "Código"
 
 msgid "Keine Features."
 msgstr "Sem funcionalidades."
+
+msgid "Geschützte Operations-Schnittstellen und Service Accounts."
+msgstr "Interfaces de operações protegidas e contas de serviço."
+
+msgid "Service Account anlegen"
+msgstr "Criar conta de serviço"
+
+msgid "Operations API"
+msgstr "API de operações"
+
+msgid "Zugriff ausschließlich über aktive Service Accounts mit passendem Scope. Tokens werden nur einmal bei Erstellung bzw. Rotation angezeigt."
+msgstr "O acesso está limitado a contas de serviço ativas com o âmbito adequado. Os tokens só são apresentados uma vez, ao criar ou rodar."
+
+msgid "Service Accounts"
+msgstr "Contas de serviço"
+
+msgid "Gesperrt"
+msgstr "Bloqueado"
+
+msgid "Token rotieren"
+msgstr "Rodar token"
+
+msgid "Service Account wirklich sperren?"
+msgstr "Bloquear esta conta de serviço?"
+
+msgid "Sperren"
+msgstr "Bloquear"
+
+msgid "Noch keine Service Accounts."
+msgstr "Ainda não existem contas de serviço."
+
+msgid "Dienste"
+msgstr "Serviços"
+
+msgid "Status der internen Plattformdienste."
+msgstr "Estado dos serviços internos da plataforma."
+
+msgid "Systemübersicht"
+msgstr "Visão geral do sistema"
+
+msgid "Host"
+msgstr "Host"
+
+msgid "Hostname"
+msgstr "Nome do host"
+
+msgid "Kernel"
+msgstr "Kernel"
+
+msgid "Healthy"
+msgstr "Saudável"
+
+msgid "Nicht erreichbar"
+msgstr "Inacessível"
+
+msgid "Datenbank"
+msgstr "Base de dados"
+
+msgid "Verbindungen"
+msgstr "Ligações"
+
+msgid "Größe"
+msgstr "Tamanho"
+
+msgid "Background Jobs"
+msgstr "Tarefas em segundo plano"
+
+msgid "Heartbeat fehlt"
+msgstr "Heartbeat em falta"
+
+msgid "Queue"
+msgstr "Fila"
+
+msgid "Fehlgeschlagene Jobs 24 h"
+msgstr "Tarefas falhadas em 24 h"
+
+msgid "Worker"
+msgstr "Worker"
+
+msgid "Antwortende Worker"
+msgstr "Workers que respondem"
+
+msgid "Worker-Heartbeat"
+msgstr "Heartbeat do worker"
+
+msgid "Beat-Heartbeat"
+msgstr "Heartbeat do Beat"
