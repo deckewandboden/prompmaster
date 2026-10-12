@@ -1743,3 +1743,42 @@ msgstr "Invii recenti"
 
 msgid "Noch keine Versandvorgänge."
 msgstr "Ancora nessun invio."
+
+msgid "Zur Kundenliste"
+msgstr "Torna all'elenco clienti"
+
+msgid "Zur Privatkundenliste"
+msgstr "Torna ai clienti privati"
+
+msgid "Kundendaten"
+msgstr "Dati del cliente"
+
+msgid "Stammdaten"
+msgstr "Dati anagrafici"
+
+msgid "Unternehmensdaten speichern"
+msgstr "Salva i dati aziendali"
+
+msgid "Firma"
+msgstr "Azienda"
+
+msgid "Steuernummer"
+msgstr "Codice fiscale"
+
+msgid "Änderungen erfolgen serverseitig mit Berechtigungsprüfung und werden im Audit protokolliert. Steuerfelder werden anhand der aktiven Steuerregel für Land und Kundentyp validiert."
+msgstr "Le modifiche vengono applicate sul server previa verifica dei permessi e registrate nel log di audit. I campi fiscali vengono convalidati secondo la regola attiva per Paese e tipo di cliente."
+
+msgid "Rechtsakzeptanzen"
+msgstr "Accettazioni dei documenti legali"
+
+msgid "Version"
+msgstr "Versione"
+
+msgid "Keine Rechtsakzeptanzen protokolliert."
+msgstr "Nessuna accettazione di documenti legali registrata."
+
+msgid "Keine Löschanfragen."
+msgstr "Nessuna richiesta di cancellazione."
+
+msgid "Alle Löschanfragen"
+msgstr "Tutte le richieste di cancellazione"
