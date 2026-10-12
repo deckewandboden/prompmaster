@@ -158,12 +158,20 @@ class AdminInternationalizationContractTests(SimpleTestCase):
         source = (ROOT / 'apps/core/admin_views.py').read_text(encoding='utf-8')
         blocks = re.findall(r"'columns':\s*\[([\s\S]*?)\]", source)
         labels = set()
+        wrapped_labels = set()
         for block in blocks:
-            labels.update(re.findall(
-                r"\(\s*'[^']+'\s*,\s*'([^']+)'\s*,\s*'[^']+'\s*\)",
+            for wrapper, label in re.findall(
+                r"\(\s*'[^']+'\s*,\s*(_\()?\s*'([^']+)'\)?\s*,\s*'[^']+'\s*\)",
                 block,
-            ))
+            ):
+                labels.add(label)
+                if wrapper:
+                    wrapped_labels.add(label)
         self.assertGreaterEqual(len(labels), 20)
+        # The source labels must be present in the catalogs AND translated
+        # at render time. Do not accept a catalog-only internationalization.
+        for required in ('Status', 'Name', 'Kunde', 'Produkt', 'Betrag', 'Datum'):
+            self.assertIn(required, wrapped_labels)
         for code in LOCALES:
             translations = catalog_translations(
                 ROOT / 'locale' / code / 'LC_MESSAGES' / 'django.po'
