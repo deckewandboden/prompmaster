@@ -1236,3 +1236,84 @@ msgstr "Toutes les commandes"
 
 msgid "Firmenkonto"
 msgstr "Compte d'entreprise"
+
+msgid "Serverseitige Suche, Filter, Sortierung und Pagination."
+msgstr "Recherche, filtrage, tri et pagination côté serveur."
+
+msgid "Neu anlegen"
+msgstr "Créer"
+
+msgid "Privatkunden"
+msgstr "Clients particuliers"
+
+msgid "aufsteigend"
+msgstr "croissant"
+
+msgid "absteigend"
+msgstr "décroissant"
+
+msgid "Keine Datensätze für die aktuelle Auswahl."
+msgstr "Aucun enregistrement pour la sélection actuelle."
+
+msgid "Änderungen werden serverseitig validiert und – sofern sicherheits- oder geschäftskritisch – protokolliert."
+msgstr "Les modifications sont validées côté serveur et journalisées si elles sont critiques pour la sécurité ou l'activité."
+
+msgid "Zusätzliche Sicherheitsfreigabe."
+msgstr "Vérification de sécurité supplémentaire."
+
+msgid "Bestätigen Sie Ihr eigenes Passwort. Die Freigabe gilt anschließend ausschließlich für wenige Minuten und nur für geschützte Admin-Aktionen."
+msgstr "Confirmez votre propre mot de passe. L'autorisation ne reste valable que quelques minutes et uniquement pour les actions d'administration protégées."
+
+msgid "Bestätigen"
+msgstr "Confirmer"
+
+msgid "Kompakte Geschäftszahlen innerhalb Ihrer Berechtigungen."
+msgstr "Indicateurs commerciaux synthétiques selon vos autorisations."
+
+msgid "Neue Kunden · 30 Tage"
+msgstr "Nouveaux clients · 30 jours"
+
+msgid "Verlängerungsanteil"
+msgstr "Part des renouvellements"
+
+msgid "Verlängerungsterms"
+msgstr "périodes de renouvellement"
+
+msgid "Refund-Quote"
+msgstr "Taux de remboursement"
+
+msgid "Anteil refundierter Lizenzterms"
+msgstr "Part des périodes de licence remboursées"
+
+msgid "Ø Lizenzen / Firma"
+msgstr "Moy. licences / entreprise"
+
+msgid "Firmenkundenbestand"
+msgstr "Portefeuille de clients professionnels"
+
+msgid "Umsatz letzte 30 Tage"
+msgstr "Chiffre d'affaires des 30 derniers jours"
+
+msgid "Bestellungen gesamt"
+msgstr "commandes au total"
+
+msgid "Lizenzen gesamt"
+msgstr "Total des licences"
+
+msgid "inkl. aktiv, frei, abgelaufen und historisch"
+msgstr "y compris actives, disponibles, expirées et historiques"
+
+msgid "Anfragen aus dem Kundenportal; V1 verwendet bewusst kein Ticketsystem."
+msgstr "Demandes du portail client ; la V1 n'utilise volontairement pas de système de tickets."
+
+msgid "Keine Kontaktanfragen."
+msgstr "Aucune demande de contact."
+
+msgid "Globale Suche"
+msgstr "Recherche globale"
+
+msgid "Ergebnisse für"
+msgstr "Résultats pour"
+
+msgid "Keine Treffer."
+msgstr "Aucun résultat."
