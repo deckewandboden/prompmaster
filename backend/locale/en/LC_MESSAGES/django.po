@@ -1261,3 +1261,75 @@ msgstr "Type"
 
 msgid "Vertragsbezug"
 msgstr "Contract reference"
+
+msgid "Datengetriebene Produkt-, Laufzeit-, Geräte-, Reminder- und Entitlement-Konfiguration."
+msgstr "Data-driven configuration of products, terms, devices, reminders and entitlements."
+
+msgid "Features"
+msgstr "Features"
+
+msgid "Produkt anlegen"
+msgstr "Create product"
+
+msgid "AKTIV"
+msgstr "ACTIVE"
+
+msgid "INAKTIV"
+msgstr "INACTIVE"
+
+msgid "aktueller Neukaufpreis"
+msgstr "current new-purchase price"
+
+msgid "nicht konfiguriert"
+msgstr "not configured"
+
+msgid "Verlängerung"
+msgstr "Renewal"
+
+msgid "Sichtbar / kaufbar"
+msgstr "Visible / purchasable"
+
+msgid "Ja"
+msgstr "Yes"
+
+msgid "Nein"
+msgstr "No"
+
+msgid "Bearbeiten"
+msgstr "Edit"
+
+msgid "Noch keine Produkte."
+msgstr "No products yet."
+
+msgid "Rollenbasierte Rechte; für alle netstyle Benutzer ist 2FA Pflicht."
+msgstr "Role-based permissions; two-factor authentication is mandatory for all netstyle users."
+
+msgid "Rolle zuweisen"
+msgstr "Assign role"
+
+msgid "netstyle Benutzer anlegen"
+msgstr "Create netstyle user"
+
+msgid "Berechtigungen"
+msgstr "Permissions"
+
+msgid "Sicherheitsvorgabe"
+msgstr "Security requirement"
+
+msgid "2FA Pflicht"
+msgstr "2FA mandatory"
+
+msgid "Keine Rolle"
+msgstr "No role"
+
+msgid "2FA aktiv"
+msgstr "2FA enabled"
+
+msgid "2FA einzurichten"
+msgstr "2FA setup required"
+
+msgid "2FA dieses Benutzers zurücksetzen?"
+msgstr "Reset this user's 2FA?"
+
+msgid "2FA zurücksetzen"
+msgstr "Reset 2FA"
