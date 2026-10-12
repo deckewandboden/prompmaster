@@ -4,6 +4,7 @@ import json
 
 from django import forms
 from django.core.exceptions import ValidationError
+from django.utils.translation import gettext_lazy as _
 
 from .models import PromptTestCase, PromptVersion
 
@@ -16,31 +17,31 @@ class PromptVersionEditorForm(forms.ModelForm):
     required_fields = forms.CharField(
         required=False,
         widget=forms.Textarea(attrs={'rows': 6}),
-        label='Pflichtfelder',
-        help_text='Ein Pflichtfeld pro Zeile.',
+        label=_("Pflichtfelder"),
+        help_text=_("Ein Pflichtfeld pro Zeile."),
     )
     optional_fields = forms.CharField(
         required=False,
         widget=forms.Textarea(attrs={'rows': 6}),
-        label='Optionale Felder',
-        help_text='Ein Feld pro Zeile. Optionales Fragment: Feldname ||| Text mit {value}.',
+        label=_("Optionale Felder"),
+        help_text=_("Ein Feld pro Zeile. Optionales Fragment: Feldname ||| Text mit {value}."),
     )
-    sources = forms.CharField(required=False, widget=forms.Textarea(attrs={'rows': 5}), label='Quellen')
-    outputs = forms.CharField(required=False, widget=forms.Textarea(attrs={'rows': 5}), label='Ausgabeformen')
-    focuses = forms.CharField(required=False, widget=forms.Textarea(attrs={'rows': 5}), label='Schwerpunkte')
-    audiences = forms.CharField(required=False, widget=forms.Textarea(attrs={'rows': 5}), label='Zielgruppen')
+    sources = forms.CharField(required=False, widget=forms.Textarea(attrs={'rows': 5}), label=_("Quellen"))
+    outputs = forms.CharField(required=False, widget=forms.Textarea(attrs={'rows': 5}), label=_("Ausgabeformen"))
+    focuses = forms.CharField(required=False, widget=forms.Textarea(attrs={'rows': 5}), label=_("Schwerpunkte"))
+    audiences = forms.CharField(required=False, widget=forms.Textarea(attrs={'rows': 5}), label=_("Zielgruppen"))
 
     class Meta:
         model = PromptVersion
         fields = ['title', 'area', 'family', 'intent', 'max_chars', 'context_template', 'app_rule_snapshot']
         labels = {
-            'title': 'Titel',
-            'area': 'Bereich',
-            'family': 'Familie',
-            'intent': 'Ziel / Intent',
-            'max_chars': 'Maximale Zeichen',
-            'context_template': 'Kontextvorlage',
-            'app_rule_snapshot': 'App-Regel-Snapshot',
+            'title': _("Titel"),
+            'area': _("Bereich"),
+            'family': _("Familie"),
+            'intent': _("Ziel / Intent"),
+            'max_chars': _("Maximale Zeichen"),
+            'context_template': _("Kontextvorlage"),
+            'app_rule_snapshot': _("App-Regel-Snapshot"),
         }
         widgets = {
             'intent': forms.Textarea(attrs={'rows': 7}),
@@ -66,12 +67,12 @@ class PromptVersionEditorForm(forms.ModelForm):
     def clean(self):
         cleaned = super().clean()
         if self.instance and self.instance.lifecycle != 'DRAFT':
-            raise ValidationError('Nur DRAFT-Versionen dürfen inhaltlich bearbeitet werden.')
+            raise ValidationError(_("Nur DRAFT-Versionen dürfen inhaltlich bearbeitet werden."))
         required = _lines(cleaned.get('required_fields'))
         optional_rows = _lines(cleaned.get('optional_fields'))
         labels = required + [row.split('|||', 1)[0].strip() for row in optional_rows]
         if len(labels) != len(set(labels)):
-            raise ValidationError('Feldbezeichnungen müssen innerhalb einer Prompt-Version eindeutig sein.')
+            raise ValidationError(_("Feldbezeichnungen müssen innerhalb einer Prompt-Version eindeutig sein."))
         return cleaned
 
     def save_related_prompt_structure(self, version):
@@ -110,17 +111,17 @@ class PromptVersionEditorForm(forms.ModelForm):
 
 class PromptTestCaseForm(forms.ModelForm):
     input_payload_text = forms.CharField(
-        label='Test-Payload (JSON)',
+        label=_("Test-Payload (JSON)"),
         widget=forms.Textarea(attrs={'rows': 12}),
-        help_text='Beispiel: {"microsoft_tier":"premium","payload":{"fields":{...}}}',
+        help_text=_("Beispiel: {\"microsoft_tier\":\"premium\",\"payload\":{\"fields\":{...}}}"),
     )
-    expected_contains_text = forms.CharField(required=False, label='Muss enthalten', widget=forms.Textarea(attrs={'rows': 5}))
-    expected_not_contains_text = forms.CharField(required=False, label='Darf nicht enthalten', widget=forms.Textarea(attrs={'rows': 5}))
+    expected_contains_text = forms.CharField(required=False, label=_("Muss enthalten"), widget=forms.Textarea(attrs={'rows': 5}))
+    expected_not_contains_text = forms.CharField(required=False, label=_("Darf nicht enthalten"), widget=forms.Textarea(attrs={'rows': 5}))
 
     class Meta:
         model = PromptTestCase
         fields = ['name', 'enabled', 'sort_order']
-        labels = {'name': 'Name', 'enabled': 'Aktiv', 'sort_order': 'Sortierung'}
+        labels = {'name': _("Name"), 'enabled': _("Aktiv"), 'sort_order': _("Sortierung")}
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -147,9 +148,9 @@ class PromptTestCaseForm(forms.ModelForm):
         try:
             payload = json.loads(raw)
         except json.JSONDecodeError as exc:
-            raise ValidationError(f'Ungültiges JSON: {exc}') from exc
+            raise ValidationError(_('Ungültiges JSON: %(error)s') % {'error': exc}) from exc
         if not isinstance(payload, dict):
-            raise ValidationError('Test-Payload muss ein JSON-Objekt sein.')
+            raise ValidationError(_("Test-Payload muss ein JSON-Objekt sein."))
         return payload
 
     def save(self, commit=True):
@@ -164,18 +165,18 @@ class PromptTestCaseForm(forms.ModelForm):
 
 class PromptPreviewForm(forms.Form):
     microsoft_tier = forms.ChoiceField(
-        label='Microsoft-Lizenzstufe',
+        label=_("Microsoft-Lizenzstufe"),
         choices=[('chatbasic', 'Copilot Chat'), ('m365basic', 'M365 Copilot (Basic)'), ('premium', 'Microsoft 365 Copilot Business')]
     )
-    payload_json = forms.CharField(label='Eingabedaten (JSON)', widget=forms.Textarea(attrs={'rows': 18}))
+    payload_json = forms.CharField(label=_("Eingabedaten (JSON)"), widget=forms.Textarea(attrs={'rows': 18}))
 
     def clean_payload_json(self):
         try:
             value = json.loads(self.cleaned_data['payload_json'])
         except json.JSONDecodeError as exc:
-            raise ValidationError(f'Ungültiges JSON: {exc}') from exc
+            raise ValidationError(_('Ungültiges JSON: %(error)s') % {'error': exc}) from exc
         if not isinstance(value, dict):
-            raise ValidationError('Payload muss ein JSON-Objekt sein.')
+            raise ValidationError(_("Payload muss ein JSON-Objekt sein."))
         return value
 
 
@@ -188,12 +189,12 @@ class PromptQualityPolicyForm(forms.ModelForm):
             'recent_sample_size', 'previous_sample_size', 'minimum_samples',
         ]
         labels = {
-            'name': 'Name',
-            'minimum_average': 'Mindestdurchschnitt',
-            'critical_average': 'Kritischer Durchschnitt',
-            'warning_drop': 'Warnung bei Abfall',
-            'critical_drop': 'Kritisch bei Abfall',
-            'recent_sample_size': 'Aktuelle Stichprobengröße',
-            'previous_sample_size': 'Vorherige Stichprobengröße',
-            'minimum_samples': 'Mindestanzahl Stichproben',
+            'name': _("Name"),
+            'minimum_average': _("Mindestdurchschnitt"),
+            'critical_average': _("Kritischer Durchschnitt"),
+            'warning_drop': _("Warnung bei Abfall"),
+            'critical_drop': _("Kritisch bei Abfall"),
+            'recent_sample_size': _("Aktuelle Stichprobengröße"),
+            'previous_sample_size': _("Vorherige Stichprobengröße"),
+            'minimum_samples': _("Mindestanzahl Stichproben"),
         }
