@@ -2366,3 +2366,195 @@ msgstr "Resultaat"
 
 msgid "Deterministischer Feld-Fallback"
 msgstr "Deterministische terugvalwaarde voor het veld"
+
+msgid "10-Min.-Ø:"
+msgstr "Gem. over 10 min:"
+
+msgid "Aktive Warnungen"
+msgstr "Actieve waarschuwingen"
+
+msgid "App-Version"
+msgstr "Appversie"
+
+msgid "Architektur"
+msgstr "Architectuur"
+
+msgid "Backup & Restore"
+msgstr "Back-up en herstel"
+
+msgid "Backups öffnen"
+msgstr "Back-ups openen"
+
+msgid "Betriebszustand, Plattformdienste, Integrationen und Datensicherung."
+msgstr "Bedrijfsstatus, platformdiensten, integraties en back-ups."
+
+msgid "CPU-Kerne"
+msgstr "CPU-kernen"
+
+msgid "Caddy"
+msgstr "Caddy"
+
+msgid "Celery Beat"
+msgstr "Celery Beat"
+
+msgid "Celery Worker"
+msgstr "Celery Worker"
+
+msgid "Container-CPU aktuell"
+msgstr "Huidig CPU-gebruik containers"
+
+msgid "Container-RAM gesamt"
+msgstr "Totaal RAM-gebruik containers"
+
+msgid "DB-Verbindungen"
+msgstr "Databaseverbindingen"
+
+msgid "Dateiobjekte (Inodes) belegt"
+msgstr "Gebruikte inodes"
+
+msgid "Dateiobjekte (Inodes) verfügbar"
+msgstr "Beschikbare inodes"
+
+msgid "Datenbank & Jobs"
+msgstr "Database en taken"
+
+msgid "Datenbank öffnen"
+msgstr "Database openen"
+
+msgid "Datenträger / gesamt"
+msgstr "Schijf / totaal"
+
+msgid "Datenträger / verfügbar"
+msgstr "Schijf / beschikbaar"
+
+msgid "Datenträger / verwendet"
+msgstr "Schijf / gebruikt"
+
+msgid "Definitionen"
+msgstr "Definities"
+
+msgid "Dienste & Integrationen"
+msgstr "Diensten en integraties"
+
+msgid "Dienste öffnen"
+msgstr "Diensten openen"
+
+msgid "Diese Werte stammen aus cAdvisor und beziehen sich auf Docker-Container. Die VM-Werte oben stammen aus node_exporter und beziehen sich auf die gesamte Docker-Host-VM."
+msgstr "Deze waarden komen uit cAdvisor en hebben betrekking op Docker-containers. De VM-waarden hierboven komen uit node_exporter en gelden voor de volledige Docker-host-VM."
+
+msgid "Docker"
+msgstr "Docker"
+
+msgid "Docker-Container"
+msgstr "Docker-containers"
+
+msgid "Erkannte Container"
+msgstr "Gedetecteerde containers"
+
+msgid "Fehler / 24 h"
+msgstr "Fouten / 24 uur"
+
+msgid "Git Commit"
+msgstr "Git-commit"
+
+msgid "Host & Release"
+msgstr "Host en release"
+
+msgid "Inodes sind Dateisystem-Einträge für Dateien und Verzeichnisse. Sind sie ausgeschöpft, können trotz freiem Speicher keine neuen Dateien angelegt werden."
+msgstr "Inodes zijn bestandssysteemvermeldingen voor bestanden en mappen. Als ze opraken, kunnen er geen nieuwe bestanden worden gemaakt, zelfs als er nog schijfruimte vrij is."
+
+msgid "Keine aktiven Systemwarnungen."
+msgstr "Geen actieve systeemwaarschuwingen."
+
+msgid "Letzter Restore-Test"
+msgstr "Laatste hersteltest"
+
+msgid "Letztes Backup"
+msgstr "Laatste back-up"
+
+msgid "Letztes Deployment"
+msgstr "Laatste implementatie"
+
+msgid "Load:"
+msgstr "Belasting:"
+
+msgid "Messbereich"
+msgstr "Meetbereik"
+
+msgid "Messquelle"
+msgstr "Meetbron"
+
+msgid "Messwert-Erklärung"
+msgstr "Toelichting op meetwaarden"
+
+msgid "OS / Kernel"
+msgstr "OS / kernel"
+
+msgid "PostgreSQL"
+msgstr "PostgreSQL"
+
+msgid "Prompt MCP"
+msgstr "Prompt MCP"
+
+msgid "RAM gesamt"
+msgstr "Totaal RAM"
+
+msgid "RAM verfügbar"
+msgstr "Beschikbaar RAM"
+
+msgid "RAM verwendet"
+msgstr "Gebruikt RAM"
+
+msgid "Restore-Tests öffnen"
+msgstr "Hersteltests openen"
+
+msgid "TLS-Zertifikat"
+msgstr "TLS-certificaat"
+
+msgid "Umgebung"
+msgstr "Omgeving"
+
+msgid "Uptime"
+msgstr "Uptime"
+
+msgid "VM-CPU aktuell"
+msgstr "Huidig VM-CPU-gebruik"
+
+msgid "VM-Datenträger /"
+msgstr "VM-schijf /"
+
+msgid "VM-RAM"
+msgstr "VM-RAM"
+
+msgid "VM-Speicher & Dateisystem"
+msgstr "VM-geheugen en bestandssysteem"
+
+msgid "Verwendetes Backup"
+msgstr "Gebruikte back-up"
+
+msgid "Warnungen öffnen"
+msgstr "Waarschuwingen openen"
+
+msgid "geschützt"
+msgstr "beveiligd"
+
+msgid "healthy"
+msgstr "gezond"
+
+msgid "konfiguriert"
+msgstr "geconfigureerd"
+
+msgid "nicht erreichbar"
+msgstr "niet bereikbaar"
+
+msgid "nicht protokolliert"
+msgstr "niet geregistreerd"
+
+msgid "und ist die für neue Prozesse realistisch nutzbare Speichermenge. „Inodes“ sind Dateisystem-Einträge; ein niedriger Belegungsgrad ist unkritisch."
+msgstr "en is de hoeveelheid geheugen die realistisch beschikbaar is voor nieuwe processen. Inodes zijn bestandssysteemvermeldingen; een laag gebruik is geen probleem."
+
+msgid "verfügbar von"
+msgstr "beschikbaar van"
+
+msgid "„RAM verfügbar“ entspricht Linux"
+msgstr "‘Beschikbaar RAM’ komt overeen met Linux"
