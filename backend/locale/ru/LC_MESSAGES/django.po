@@ -1811,3 +1811,72 @@ msgstr "Администратор компании"
 
 msgid "Gerätezugang wirklich widerrufen?"
 msgstr "Действительно отозвать доступ устройства?"
+
+msgid "Mollie Events"
+msgstr "События Mollie"
+
+msgid "Idempotent verarbeitete Provider-Zustandsänderungen."
+msgstr "Изменения состояния провайдера, обработанные идемпотентно."
+
+msgid "Providerstatus"
+msgstr "Статус провайдера"
+
+msgid "Verarbeitet"
+msgstr "Обработано"
+
+msgid "Retries"
+msgstr "Повторные попытки"
+
+msgid "Fehler"
+msgstr "Ошибка"
+
+msgid "Keine Mollie Events gefunden."
+msgstr "События Mollie не найдены."
+
+msgid "DSGVO-Workflow mit kontrollierter Anonymisierung und Erhalt rechtlich erforderlicher Historie."
+msgstr "Процедура GDPR с контролируемой анонимизацией и сохранением юридически обязательной истории."
+
+msgid "Angefordert"
+msgstr "Запрошено"
+
+msgid "Notiz"
+msgstr "Примечание"
+
+msgid "Konto wirklich anonymisieren?"
+msgstr "Действительно анонимизировать эту учётную запись?"
+
+msgid "Verarbeiten"
+msgstr "Обработать"
+
+msgid "Retention Policies"
+msgstr "Политики хранения"
+
+msgid "Nur freigegebene Datenklassen können automatisiert bereinigt werden."
+msgstr "Автоматически очищать можно только утверждённые классы данных."
+
+msgid "Datenklasse"
+msgstr "Класс данных"
+
+msgid "Keine Policies."
+msgstr "Политик нет."
+
+msgid "Versionierte AGB, Datenschutz-, Widerrufs- und Lizenztexte."
+msgstr "Версионные условия использования, документы о конфиденциальности, отказе и лицензиях."
+
+msgid "Typ"
+msgstr "Тип"
+
+msgid "Keine Dokumente."
+msgstr "Документов нет."
+
+msgid "Read-only PostgreSQL-Betriebsdaten."
+msgstr "Эксплуатационные данные PostgreSQL только для чтения."
+
+msgid "DB-Größe"
+msgstr "Размер базы данных"
+
+msgid "Retention-Policy anlegen"
+msgstr "Создать политику хранения"
+
+msgid "Rechtsdokument anlegen"
+msgstr "Создать юридический документ"
