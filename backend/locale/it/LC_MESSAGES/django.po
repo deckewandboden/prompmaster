@@ -1308,3 +1308,36 @@ msgstr "Risultati per"
 
 msgid "Keine Treffer."
 msgstr "Nessun risultato."
+
+msgid "Append-only Auditlog für administrative und geschäftskritische Änderungen."
+msgstr "Registro di audit in sola aggiunta per modifiche amministrative e critiche per l'attività."
+
+msgid "Zeit"
+msgstr "Ora"
+
+msgid "Objekt"
+msgstr "Oggetto"
+
+msgid "Änderung"
+msgstr "Modifica"
+
+msgid "Keine Audit-Einträge."
+msgstr "Nessuna voce di audit."
+
+msgid "Mollie-Zahlungsstatus, Beträge, Refunds und Chargebacks."
+msgstr "Stati dei pagamenti Mollie, importi, rimborsi e storni."
+
+msgid "Bezahlt"
+msgstr "Pagato"
+
+msgid "Offen"
+msgstr "Aperto"
+
+msgid "Fehlgeschlagen"
+msgstr "Non riuscito"
+
+msgid "Payment-ID"
+msgstr "ID pagamento"
+
+msgid "Keine Zahlungen gefunden."
+msgstr "Nessun pagamento trovato."
