@@ -2826,3 +2826,93 @@ msgstr "Ordre de tri"
 
 msgid "Technisches Problem"
 msgstr "Problème technique"
+
+msgid "Aktuelle Stichprobengröße"
+msgstr "Taille de l’échantillon récent"
+
+msgid "App-Regel-Snapshot"
+msgstr "Instantané des règles de l’application"
+
+msgid "Ausgabeformen"
+msgstr "Formats de sortie"
+
+msgid "Beispiel: {\"microsoft_tier\":\"premium\",\"payload\":{\"fields\":{...}}}"
+msgstr "Exemple : {\"microsoft_tier\":\"premium\",\"payload\":{\"fields\":{...}}}"
+
+msgid "Bereich"
+msgstr "Domaine"
+
+msgid "Darf nicht enthalten"
+msgstr "Ne doit pas contenir"
+
+msgid "Ein Feld pro Zeile. Optionales Fragment: Feldname ||| Text mit {value}."
+msgstr "Un champ par ligne. Fragment facultatif : nom du champ ||| texte contenant {value}."
+
+msgid "Ein Pflichtfeld pro Zeile."
+msgstr "Un champ obligatoire par ligne."
+
+msgid "Eingabedaten (JSON)"
+msgstr "Données d’entrée (JSON)"
+
+msgid "Familie"
+msgstr "Famille"
+
+msgid "Feldbezeichnungen müssen innerhalb einer Prompt-Version eindeutig sein."
+msgstr "Les noms de champs doivent être uniques dans une version du prompt."
+
+msgid "Kontextvorlage"
+msgstr "Modèle de contexte"
+
+msgid "Kritisch bei Abfall"
+msgstr "Seuil de baisse critique"
+
+msgid "Kritischer Durchschnitt"
+msgstr "Moyenne critique"
+
+msgid "Maximale Zeichen"
+msgstr "Nombre maximal de caractères"
+
+msgid "Microsoft-Lizenzstufe"
+msgstr "Niveau de licence Microsoft"
+
+msgid "Mindestanzahl Stichproben"
+msgstr "Nombre minimal d’échantillons"
+
+msgid "Mindestdurchschnitt"
+msgstr "Moyenne minimale"
+
+msgid "Muss enthalten"
+msgstr "Doit contenir"
+
+msgid "Nur DRAFT-Versionen dürfen inhaltlich bearbeitet werden."
+msgstr "Seules les versions DRAFT peuvent être modifiées."
+
+msgid "Payload muss ein JSON-Objekt sein."
+msgstr "Le payload doit être un objet JSON."
+
+msgid "Quellen"
+msgstr "Sources"
+
+msgid "Schwerpunkte"
+msgstr "Axes prioritaires"
+
+msgid "Test-Payload (JSON)"
+msgstr "Payload de test (JSON)"
+
+msgid "Test-Payload muss ein JSON-Objekt sein."
+msgstr "Le payload de test doit être un objet JSON."
+
+msgid "Ungültiges JSON: %(error)s"
+msgstr "JSON invalide : %(error)s"
+
+msgid "Vorherige Stichprobengröße"
+msgstr "Taille de l’échantillon précédent"
+
+msgid "Warnung bei Abfall"
+msgstr "Seuil d’alerte de baisse"
+
+msgid "Ziel / Intent"
+msgstr "Objectif / intention"
+
+msgid "Zielgruppen"
+msgstr "Publics cibles"
