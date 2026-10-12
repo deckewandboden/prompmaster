@@ -764,7 +764,14 @@ class AdminInternationalizationContractTests(SimpleTestCase):
             and isinstance(call.args[0], ast.Constant)
             and isinstance(call.args[0].value, str)
         }
-        self.assertEqual(len(gettext_sources), 100)
+        # This contract must grow with newly localized form labels rather than
+        # fail whenever a previously hard-coded German label is corrected.
+        self.assertGreaterEqual(len(gettext_sources), 100)
+        self.assertTrue(
+            {'Betreff', 'Nachrichtentext', 'Aktiv', 'Rollenname'}
+            .issubset(gettext_sources),
+            'Mail template and role form labels must remain gettext-marked.',
+        )
         for lang in LOCALES:
             catalog = catalog_translations(
                 ROOT / 'locale' / lang / 'LC_MESSAGES' / 'django.po'
