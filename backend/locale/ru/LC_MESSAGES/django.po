@@ -2096,3 +2096,39 @@ msgstr "Критическое предупреждение"
 
 msgid "Einstellungen speichern"
 msgstr "Сохранить настройки"
+
+msgid "Produktdefaults, Support, E-Mail-Identität und Betriebswarnschwellen."
+msgstr "Настройки продукта по умолчанию, поддержка, почтовая идентификация и пороги предупреждений."
+
+msgid "Produktwerte werden unter „Produkte & Preise“ gepflegt."
+msgstr "Параметры продуктов редактируются в разделе «Продукты и цены»."
+
+msgid "PROMPTFINISHER Pro ist nicht angelegt."
+msgstr "PROMPTFINISHER Pro ещё не создан."
+
+msgid "Empfänger des Kundenportal-Kontaktformulars."
+msgstr "Получатель сообщений из контактной формы клиентского портала."
+
+msgid "E-Mail-Versandweg & Fallback"
+msgstr "Маршрут отправки почты и резервный переход"
+
+msgid "Alle Provider bleiben parallel gespeichert. Im manuellen Modus wird nur der primäre Versandweg verwendet. Im automatischen Modus wird bei eindeutig nicht zugestellten Fehlern in der festgelegten Reihenfolge weitergeschaltet; bei unklaren Fehlern erfolgt bewusst kein automatischer Fallback, um Doppelversand zu vermeiden."
+msgstr "Все провайдеры сохраняются параллельно. В ручном режиме используется только основной маршрут. Автоматический режим переключается на следующего провайдера в установленном порядке лишь при подтверждённой недоставке; неоднозначные ошибки не вызывают переключения во избежание повторной отправки."
+
+msgid "E-Mail-Absender & Domain"
+msgstr "Отправитель и домен почты"
+
+msgid "Die Absenderadresse wird beim SMTP-Versand direkt aus diesen Einstellungen gelesen. SPF, DKIM und DMARC sind hier als DNS-Sollwerte dokumentiert; das Speichern verändert keine DNS-Zone."
+msgstr "Адрес отправителя SMTP берётся непосредственно из этих настроек. SPF, DKIM и DMARC указаны здесь как целевые записи DNS; сохранение не изменяет зоны DNS."
+
+msgid "Erster SMTP-Transport. Das Passwort wird verschlüsselt gespeichert und niemals wieder im Klartext angezeigt."
+msgstr "Основной SMTP-транспорт. Пароль хранится в зашифрованном виде и больше никогда не отображается открытым текстом."
+
+msgid "Optionaler zweiter SMTP-Transport. Hier können Sie z. B. denselben SMTP-Relay eintragen, den auch Listmonk verwendet, und manuell oder automatisch zwischen SMTP 1 und SMTP 2 wechseln."
+msgstr "Необязательный второй SMTP-транспорт. Можно указать, например, тот же SMTP-релей, что использует Listmonk, и переключаться между SMTP 1 и SMTP 2 вручную или автоматически."
+
+msgid "Alternative zu SMTP für Exchange Online. Das Client Secret wird verschlüsselt gespeichert und niemals wieder im Klartext angezeigt."
+msgstr "Альтернатива SMTP для Exchange Online. Секрет клиента хранится в зашифрованном виде и больше никогда не показывается открытым текстом."
+
+msgid "Sie besitzen Leserechte, aber keine Berechtigung zum Ändern dieser Einstellungen."
+msgstr "У вас есть доступ только для чтения без права изменять эти настройки."
