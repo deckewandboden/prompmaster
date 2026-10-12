@@ -3238,3 +3238,66 @@ msgstr "Função removida."
 
 msgid "Benutzerstatus aktualisiert."
 msgstr "Estado do utilizador atualizado."
+
+msgid "Lead gespeichert."
+msgstr "Lead guardado."
+
+msgid "Lead-Zuständigkeit aktualisiert."
+msgstr "Responsável pelo lead atualizado."
+
+msgid "Gerät wurde widerrufen."
+msgstr "Acesso ao dispositivo revogado."
+
+msgid "Unternehmensdaten gespeichert."
+msgstr "Dados da empresa guardados."
+
+msgid "Benutzer deaktiviert; Lizenz- und Gerätezugänge wurden freigegeben."
+msgstr "Utilizador desativado; os acessos a licenças e dispositivos foram libertados."
+
+msgid "Die Lizenz ist bereits frei."
+msgstr "A licença já não está atribuída."
+
+msgid "Lizenzzuweisung wurde freigegeben."
+msgstr "Atribuição da licença libertada."
+
+msgid "Lizenz wurde entsperrt."
+msgstr "Licença desbloqueada."
+
+msgid "Lizenz wurde gesperrt; vorhandene Gerätezugänge wurden widerrufen."
+msgstr "Licença bloqueada; os acessos a dispositivos existentes foram revogados."
+
+msgid "Produkt angelegt. Legen Sie anschließend Preisversionen an."
+msgstr "Produto criado. Em seguida, adicione versões de preço."
+
+msgid "Feature gespeichert."
+msgstr "Funcionalidade guardada."
+
+msgid "Produkt gespeichert."
+msgstr "Produto guardado."
+
+msgid "Neue Preisversion angelegt."
+msgstr "Nova versão de preço criada."
+
+msgid "E-Mail-Vorlage gespeichert."
+msgstr "Modelo de e-mail guardado."
+
+msgid "Mollie-Konfiguration gespeichert."
+msgstr "Configuração Mollie guardada."
+
+msgid "Service Account gesperrt."
+msgstr "Conta de serviço bloqueada."
+
+msgid "Verbrauchererklärung aktualisiert."
+msgstr "Declaração do consumidor atualizada."
+
+msgid "Rechtsdokument gespeichert."
+msgstr "Documento jurídico guardado."
+
+msgid "Retention-Policy gespeichert."
+msgstr "Política de retenção guardada."
+
+msgid "Löschanfrage verarbeitet und Konto anonymisiert."
+msgstr "Pedido de eliminação processado e conta anonimizada."
+
+msgid "Löschanfrage abgelehnt."
+msgstr "Pedido de eliminação rejeitado."
