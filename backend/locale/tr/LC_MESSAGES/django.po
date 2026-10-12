@@ -1261,3 +1261,75 @@ msgstr "Tür"
 
 msgid "Vertragsbezug"
 msgstr "Sözleşme referansı"
+
+msgid "Datengetriebene Produkt-, Laufzeit-, Geräte-, Reminder- und Entitlement-Konfiguration."
+msgstr "Ürün, süre, cihaz, hatırlatıcı ve yetkilendirmelerin veri odaklı yapılandırması."
+
+msgid "Features"
+msgstr "Özellikler"
+
+msgid "Produkt anlegen"
+msgstr "Ürün oluştur"
+
+msgid "AKTIV"
+msgstr "AKTİF"
+
+msgid "INAKTIV"
+msgstr "PASİF"
+
+msgid "aktueller Neukaufpreis"
+msgstr "güncel yeni satın alma fiyatı"
+
+msgid "nicht konfiguriert"
+msgstr "yapılandırılmadı"
+
+msgid "Verlängerung"
+msgstr "Yenileme"
+
+msgid "Sichtbar / kaufbar"
+msgstr "Görünür / satın alınabilir"
+
+msgid "Ja"
+msgstr "Evet"
+
+msgid "Nein"
+msgstr "Hayır"
+
+msgid "Bearbeiten"
+msgstr "Düzenle"
+
+msgid "Noch keine Produkte."
+msgstr "Henüz ürün yok."
+
+msgid "Rollenbasierte Rechte; für alle netstyle Benutzer ist 2FA Pflicht."
+msgstr "Rol tabanlı yetkiler; tüm netstyle kullanıcıları için iki faktörlü kimlik doğrulama zorunludur."
+
+msgid "Rolle zuweisen"
+msgstr "Rol ata"
+
+msgid "netstyle Benutzer anlegen"
+msgstr "netstyle kullanıcısı oluştur"
+
+msgid "Berechtigungen"
+msgstr "İzinler"
+
+msgid "Sicherheitsvorgabe"
+msgstr "Güvenlik gereksinimi"
+
+msgid "2FA Pflicht"
+msgstr "2FA zorunlu"
+
+msgid "Keine Rolle"
+msgstr "Rol yok"
+
+msgid "2FA aktiv"
+msgstr "2FA etkin"
+
+msgid "2FA einzurichten"
+msgstr "2FA kurulumu gerekli"
+
+msgid "2FA dieses Benutzers zurücksetzen?"
+msgstr "Bu kullanıcının 2FA'sı sıfırlansın mı?"
+
+msgid "2FA zurücksetzen"
+msgstr "2FA'yı sıfırla"
