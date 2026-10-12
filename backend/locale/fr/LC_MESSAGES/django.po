@@ -1908,3 +1908,21 @@ msgstr "Sections des clients particuliers"
 
 msgid "Audit"
 msgstr "Audit"
+
+msgid "Zuletzt"
+msgstr "Dernière activité"
+
+msgid "Akteur"
+msgstr "Auteur"
+
+msgid "Admin übertragen"
+msgstr "Transférer le rôle d'administrateur"
+
+msgid "Benutzer wirklich deaktivieren? Lizenzen und Gerätezugänge werden freigegeben."
+msgstr "Voulez-vous vraiment désactiver cet utilisateur ? Les licences et les accès des appareils seront libérés."
+
+msgid "Firmenadmin"
+msgstr "Administrateur de l'entreprise"
+
+msgid "Gerätezugang wirklich widerrufen?"
+msgstr "Voulez-vous vraiment révoquer l'accès de cet appareil ?"
