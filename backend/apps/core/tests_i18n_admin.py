@@ -31,6 +31,13 @@ PAGES = (
     'ns_admin/ops_services.html',
     'ns_admin/mollie.html',
     'ns_admin/email.html',
+    'ns_admin/customer_detail.html',
+    'ns_admin/private_customer_detail.html',
+    'ns_admin/customer_company.html',
+    'ns_admin/customer_privacy.html',
+    'ns_admin/order_detail.html',
+    'ns_admin/license_detail.html',
+    'ns_admin/email_log.html',
 )
 TRANSLATE_PATTERN = re.compile(r'''{%\s*translate\s+(['"])(.*?)\1\s*%}''')
 
@@ -182,6 +189,33 @@ class AdminInternationalizationContractTests(SimpleTestCase):
                 catalog = catalog_translations(ROOT / 'locale' / code / 'LC_MESSAGES' / 'django.po')
                 with self.subTest(language=code, term=term):
                     self.assertTrue(catalog.get(term), 'Email safety notice must be localized')
+
+    def test_license_and_refund_confirmation_dialogs_are_localized(self):
+        source = (ROOT / 'templates/ns_admin/license_detail.html').read_text(encoding='utf-8')
+        critical = (
+            'Lizenzstatus wirklich ändern?',
+            'Lizenzzuweisung wirklich freigeben? Aktive Geräte dieser Lizenz werden widerrufen.',
+            'Erstattung wirklich verbindlich über Mollie auslösen?',
+        )
+        for phrase in critical:
+            self.assertIn("data-confirm=\"{% translate '" + phrase + "' %}\"", source)
+            for code in LOCALES:
+                translations = catalog_translations(
+                    ROOT / 'locale' / code / 'LC_MESSAGES' / 'django.po'
+                )
+                with self.subTest(locale=code, phrase=phrase):
+                    self.assertTrue(translations.get(phrase))
+
+    def test_email_log_statuses_have_translations(self):
+        source = (ROOT / 'templates/ns_admin/email_log.html').read_text(encoding='utf-8')
+        for phrase in ('Gesendet', 'Fehlgeschlagen', 'Wird gesendet', 'Unterdrückt', 'Warteschlange'):
+            self.assertIn("{% translate '" + phrase + "' %}", source)
+            for code in LOCALES:
+                translations = catalog_translations(
+                    ROOT / 'locale' / code / 'LC_MESSAGES' / 'django.po'
+                )
+                with self.subTest(locale=code, status=phrase):
+                    self.assertTrue(translations.get(phrase))
 
     def test_language_picker_is_in_flex_header_and_never_overlays_avatar(self):
         shell = (ROOT / 'templates/app_shell.html').read_text(encoding='utf-8')
