@@ -1303,3 +1303,36 @@ msgstr "Wyniki dla"
 
 msgid "Keine Treffer."
 msgstr "Brak wyników."
+
+msgid "Append-only Auditlog für administrative und geschäftskritische Änderungen."
+msgstr "Dziennik audytu z wyłącznie dopisywanymi wpisami dla zmian administracyjnych i krytycznych dla firmy."
+
+msgid "Zeit"
+msgstr "Czas"
+
+msgid "Objekt"
+msgstr "Obiekt"
+
+msgid "Änderung"
+msgstr "Zmiana"
+
+msgid "Keine Audit-Einträge."
+msgstr "Brak wpisów audytu."
+
+msgid "Mollie-Zahlungsstatus, Beträge, Refunds und Chargebacks."
+msgstr "Statusy płatności Mollie, kwoty, zwroty i obciążenia zwrotne."
+
+msgid "Bezahlt"
+msgstr "Opłacone"
+
+msgid "Offen"
+msgstr "Otwarte"
+
+msgid "Fehlgeschlagen"
+msgstr "Nieudane"
+
+msgid "Payment-ID"
+msgstr "Identyfikator płatności"
+
+msgid "Keine Zahlungen gefunden."
+msgstr "Nie znaleziono płatności."
