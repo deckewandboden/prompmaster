@@ -57,7 +57,7 @@
       <label for="preview_user">{% translate 'Kundenbenutzer' %}
         <select id="preview_user" name="user" onchange="this.form.submit()">
           {% for membership in preview_selectable_members %}
-          <option value="{{ membership.user_id }}" {% if membership.user_id|stringformat:"s" == preview_user_id %}selected{% endif %}>{{ membership.user.full_name|default:membership.user.email }} · {{ membership.get_role_display }}</option>
+          <option value="{{ membership.user_id }}" {% if membership.user_id|stringformat:"s" == preview_user_id %}selected{% endif %}>{{ membership.user.full_name|default:membership.user.email }} · {% translate membership.get_role_display %}</option>
           {% empty %}<option value="">{% translate 'Keine aktiven Benutzer vorhanden' %}</option>{% endfor %}
         </select>
       </label>
@@ -108,14 +108,14 @@
 {% elif preview_section == 'team' and preview_kind == 'company' and preview_is_company_admin %}
 <div class="card mt-14"><h2>{% translate 'Mein Team' %}</h2>
 <table><thead><tr><th>{% translate 'Name' %}</th><th>{% translate 'E-Mail' %}</th><th>{% translate 'Rolle' %}</th><th>{% translate 'Status' %}</th></tr></thead><tbody>
-{% for membership in preview_members %}<tr><td data-label="{% translate 'Name' %}">{{ membership.user.full_name }}</td><td data-label="{% translate 'E-Mail' %}">{{ membership.user.email }}</td><td data-label="{% translate 'Rolle' %}">{{ membership.get_role_display }}</td><td data-label="{% translate 'Status' %}">{% if membership.active %}{% translate 'Aktiv' %}{% else %}{% translate 'Inaktiv' %}{% endif %}</td></tr>{% empty %}<tr><td data-label="{% translate 'Hinweis' %}" colspan="4">{% translate 'Keine Benutzer vorhanden.' %}</td></tr>{% endfor %}
+{% for membership in preview_members %}<tr><td data-label="{% translate 'Name' %}">{{ membership.user.full_name }}</td><td data-label="{% translate 'E-Mail' %}">{{ membership.user.email }}</td><td data-label="{% translate 'Rolle' %}">{% translate membership.get_role_display %}</td><td data-label="{% translate 'Status' %}">{% if membership.active %}{% translate 'Aktiv' %}{% else %}{% translate 'Inaktiv' %}{% endif %}</td></tr>{% empty %}<tr><td data-label="{% translate 'Hinweis' %}" colspan="4">{% translate 'Keine Benutzer vorhanden.' %}</td></tr>{% endfor %}
 </tbody></table></div>
 
 {% elif preview_section == 'licenses' %}
 <div class="card mt-14"><h2>{% translate 'Lizenzen' %}</h2>
 {% if can_licenses %}
 <table><thead><tr><th>{% translate 'Lizenz' %}</th><th>{% translate 'Produkt' %}</th><th>{% translate 'Status' %}</th><th>{% translate 'Gültig bis' %}</th></tr></thead><tbody>
-{% for license in preview_licenses %}<tr><td data-label="{% translate 'Lizenz' %}">{{ license.license_number }}</td><td data-label="{% translate 'Produkt' %}">{{ license.product.name }}</td><td data-label="{% translate 'Status' %}">{{ license.get_status_display }}</td><td data-label="{% translate 'Gültig bis' %}">{{ license.valid_until|date:"d.m.Y" }}</td></tr>{% empty %}<tr><td data-label="{% translate 'Hinweis' %}" colspan="4">{% translate 'Keine Lizenzen vorhanden.' %}</td></tr>{% endfor %}
+{% for license in preview_licenses %}<tr><td data-label="{% translate 'Lizenz' %}">{{ license.license_number }}</td><td data-label="{% translate 'Produkt' %}">{{ license.product.name }}</td><td data-label="{% translate 'Status' %}">{% translate license.get_status_display %}</td><td data-label="{% translate 'Gültig bis' %}">{{ license.valid_until|date:"d.m.Y" }}</td></tr>{% empty %}<tr><td data-label="{% translate 'Hinweis' %}" colspan="4">{% translate 'Keine Lizenzen vorhanden.' %}</td></tr>{% endfor %}
 </tbody></table>
 {% else %}<div class="muted">{% translate 'Keine netstyle-Berechtigung zum Anzeigen der Lizenzdaten.' %}</div>{% endif %}
 </div>
@@ -130,7 +130,7 @@
 <div class="card mt-14"><h2>{% translate 'Bestellungen & Zahlungen' %}</h2>
 {% if can_orders %}
 <table><thead><tr><th>{% translate 'Bestellung' %}</th><th>{% translate 'Datum' %}</th><th>{% translate 'Status' %}</th><th>{% translate 'Gesamt' %}</th></tr></thead><tbody>
-{% for order in preview_orders %}<tr><td data-label="{% translate 'Bestellung' %}">{{ order.order_number }}</td><td data-label="{% translate 'Datum' %}">{{ order.created_at|date:"d.m.Y H:i" }}</td><td data-label="{% translate 'Status' %}">{{ order.get_status_display }}</td><td data-label="{% translate 'Gesamt' %}">{{ order.gross_total }} {{ order.currency }}</td></tr>{% empty %}<tr><td data-label="{% translate 'Hinweis' %}" colspan="4">{% translate 'Keine Bestellungen vorhanden.' %}</td></tr>{% endfor %}
+{% for order in preview_orders %}<tr><td data-label="{% translate 'Bestellung' %}">{{ order.order_number }}</td><td data-label="{% translate 'Datum' %}">{{ order.created_at|date:"d.m.Y H:i" }}</td><td data-label="{% translate 'Status' %}">{% translate order.get_status_display %}</td><td data-label="{% translate 'Gesamt' %}">{{ order.gross_total }} {{ order.currency }}</td></tr>{% empty %}<tr><td data-label="{% translate 'Hinweis' %}" colspan="4">{% translate 'Keine Bestellungen vorhanden.' %}</td></tr>{% endfor %}
 </tbody></table>
 {% else %}<div class="muted">{% translate 'Keine netstyle-Berechtigung zum Anzeigen der Bestelldaten.' %}</div>{% endif %}
 </div>
