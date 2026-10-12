@@ -687,6 +687,49 @@ class AdminInternationalizationContractTests(SimpleTestCase):
         self.assertTrue(FAQEntryForm().fields['question'].label)
         self.assertTrue(DeviceRegistrationForm().fields['display_name'].label)
 
+
+    def test_prompt_studio_forms_translate_labels_and_validation_errors(self):
+        import ast
+        from apps.prompts.forms import PromptPreviewForm
+        source = (ROOT / 'apps/prompts/forms.py').read_text(encoding='utf-8')
+        syntax = ast.parse(source)
+        phrases = {
+            node.args[0].value
+            for node in ast.walk(syntax)
+            if isinstance(node, ast.Call)
+            and isinstance(node.func, ast.Name)
+            and node.func.id == '_'
+            and node.args
+            and isinstance(node.args[0], ast.Constant)
+            and isinstance(node.args[0].value, str)
+        }
+        self.assertEqual(len(phrases), 36)
+        for language in LOCALES:
+            catalog = catalog_translations(
+                ROOT / 'locale' / language / 'LC_MESSAGES' / 'django.po'
+            )
+            for phrase in phrases:
+                with self.subTest(locale=language, phrase=phrase):
+                    self.assertTrue(catalog.get(phrase))
+            self.assertIn('%(error)s', catalog['Ungültiges JSON: %(error)s'])
+            self.assertIn('{value}', catalog[
+                'Ein Feld pro Zeile. Optionales Fragment: Feldname ||| Text mit {value}.'
+            ])
+            self.assertIn('"microsoft_tier"', catalog[
+                'Beispiel: {"microsoft_tier":"premium","payload":{"fields":{...}}}'
+            ])
+        self.assertEqual(source.count("raise ValidationError(_('Ungültiges JSON: %(error)s')"), 2)
+        self.assertIn("lifecycle != 'DRAFT'", source)
+        self.assertIn("len(labels) != len(set(labels))", source)
+        self.assertIn("('chatbasic', 'Copilot Chat')", source)
+        self.assertIn("('premium', 'Microsoft 365 Copilot Business')", source)
+        form = PromptPreviewForm(data={
+            'microsoft_tier': 'chatbasic',
+            'payload_json': '[]',
+        })
+        self.assertFalse(form.is_valid())
+        self.assertIn('payload_json', form.errors)
+
     def test_language_picker_is_in_flex_header_and_never_overlays_avatar(self):
         shell = (ROOT / 'templates/app_shell.html').read_text(encoding='utf-8')
         base = (ROOT / 'templates/base.html').read_text(encoding='utf-8')
