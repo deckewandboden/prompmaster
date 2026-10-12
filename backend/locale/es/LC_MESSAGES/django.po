@@ -3301,3 +3301,39 @@ msgstr "Solicitud de eliminación procesada y cuenta anonimizada."
 
 msgid "Löschanfrage abgelehnt."
 msgstr "Solicitud de eliminación rechazada."
+
+msgid "Dieser Lead ist bereits einem Kunden zugeordnet."
+msgstr "Este lead ya está asignado a un cliente."
+
+msgid "Einladung für den Firmenadministrator wurde gesendet."
+msgstr "Se ha enviado la invitación para el administrador de la empresa."
+
+msgid "Kundenantwort gespeichert. Für Demo-Adressen wurde keine E-Mail versendet."
+msgstr "Respuesta guardada. No se envió correo a direcciones de demostración."
+
+msgid "Kundenantwort gespeichert und E-Mail-Benachrichtigung eingeplant."
+msgstr "Respuesta guardada y notificación por correo programada."
+
+msgid "Kundenantwort gespeichert, E-Mail-Benachrichtigung konnte aber nicht eingeplant werden."
+msgstr "Respuesta guardada, pero no se pudo programar la notificación por correo."
+
+msgid "netstyle Benutzer angelegt; Einrichtungslink wurde per E-Mail versendet."
+msgstr "Usuario netstyle creado; enlace de configuración enviado por correo."
+
+msgid "Privatkunden werden aus rechtlichen Gründen über Registrierung/Checkout angelegt; der Lead kann dort anschließend als gewonnen abgeschlossen werden."
+msgstr "Por motivos legales, los clientes particulares se crean mediante registro/pago; después puede marcarse el lead como ganado."
+
+msgid "Lead wurde in einen Firmenkunden umgewandelt. Der Ansprechpartner hat eine sichere Einladung erhalten."
+msgstr "Lead convertido en cliente empresarial. El contacto recibió una invitación segura."
+
+msgid "Lead %(lead_number)s angelegt."
+msgstr "Lead %(lead_number)s creado."
+
+msgid "Lead %(lead_number)s gelöscht."
+msgstr "Lead %(lead_number)s eliminado."
+
+msgid "Firmenadministrator wurde auf %(email)s übertragen."
+msgstr "Función de administrador de empresa transferida a %(email)s."
+
+msgid "Lizenz wurde %(email)s zugewiesen."
+msgstr "Licencia asignada a %(email)s."
