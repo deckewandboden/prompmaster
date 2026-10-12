@@ -1810,3 +1810,72 @@ msgstr "Şirket yöneticisi"
 
 msgid "Gerätezugang wirklich widerrufen?"
 msgstr "Cihaz erişimi gerçekten iptal edilsin mi?"
+
+msgid "Mollie Events"
+msgstr "Mollie olayları"
+
+msgid "Idempotent verarbeitete Provider-Zustandsänderungen."
+msgstr "İdempotent olarak işlenen sağlayıcı durum değişiklikleri."
+
+msgid "Providerstatus"
+msgstr "Sağlayıcı durumu"
+
+msgid "Verarbeitet"
+msgstr "İşlendi"
+
+msgid "Retries"
+msgstr "Yeniden denemeler"
+
+msgid "Fehler"
+msgstr "Hata"
+
+msgid "Keine Mollie Events gefunden."
+msgstr "Mollie olayı bulunamadı."
+
+msgid "DSGVO-Workflow mit kontrollierter Anonymisierung und Erhalt rechtlich erforderlicher Historie."
+msgstr "Yasal olarak gerekli kayıtlar korunurken kontrollü anonimleştirme sağlayan GDPR süreci."
+
+msgid "Angefordert"
+msgstr "Talep edildi"
+
+msgid "Notiz"
+msgstr "Not"
+
+msgid "Konto wirklich anonymisieren?"
+msgstr "Bu hesap gerçekten anonimleştirilsin mi?"
+
+msgid "Verarbeiten"
+msgstr "İşle"
+
+msgid "Retention Policies"
+msgstr "Saklama politikaları"
+
+msgid "Nur freigegebene Datenklassen können automatisiert bereinigt werden."
+msgstr "Yalnızca onaylı veri sınıfları otomatik olarak temizlenebilir."
+
+msgid "Datenklasse"
+msgstr "Veri sınıfı"
+
+msgid "Keine Policies."
+msgstr "Politika yok."
+
+msgid "Versionierte AGB, Datenschutz-, Widerrufs- und Lizenztexte."
+msgstr "Sürüm kontrollü genel şartlar, gizlilik, cayma ve lisans metinleri."
+
+msgid "Typ"
+msgstr "Tür"
+
+msgid "Keine Dokumente."
+msgstr "Belge yok."
+
+msgid "Read-only PostgreSQL-Betriebsdaten."
+msgstr "Salt okunur PostgreSQL işletim verileri."
+
+msgid "DB-Größe"
+msgstr "Veritabanı boyutu"
+
+msgid "Retention-Policy anlegen"
+msgstr "Saklama politikası oluştur"
+
+msgid "Rechtsdokument anlegen"
+msgstr "Hukuki belge oluştur"
