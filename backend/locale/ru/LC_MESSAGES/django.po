@@ -2078,3 +2078,21 @@ msgstr "Предыдущее среднее"
 
 msgid "Drop"
 msgstr "Падение"
+
+msgid "Lizenz-Defaults"
+msgstr "Параметры лицензий по умолчанию"
+
+msgid "Geräte je Benutzer"
+msgstr "Устройств на пользователя"
+
+msgid "Einladung"
+msgstr "Приглашение"
+
+msgid "Stunden"
+msgstr "часов"
+
+msgid "Kritische Warnung"
+msgstr "Критическое предупреждение"
+
+msgid "Einstellungen speichern"
+msgstr "Сохранить настройки"
