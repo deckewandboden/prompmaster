@@ -1912,3 +1912,72 @@ msgstr "Administrator firmy"
 
 msgid "Gerätezugang wirklich widerrufen?"
 msgstr "Na pewno cofnąć dostęp urządzenia?"
+
+msgid "Mollie Events"
+msgstr "Zdarzenia Mollie"
+
+msgid "Idempotent verarbeitete Provider-Zustandsänderungen."
+msgstr "Zmiany stanu dostawcy przetwarzane idempotentnie."
+
+msgid "Providerstatus"
+msgstr "Status dostawcy"
+
+msgid "Verarbeitet"
+msgstr "Przetworzone"
+
+msgid "Retries"
+msgstr "Ponowne próby"
+
+msgid "Fehler"
+msgstr "Błąd"
+
+msgid "Keine Mollie Events gefunden."
+msgstr "Nie znaleziono zdarzeń Mollie."
+
+msgid "DSGVO-Workflow mit kontrollierter Anonymisierung und Erhalt rechtlich erforderlicher Historie."
+msgstr "Proces RODO z kontrolowaną anonimizacją i zachowaniem prawnie wymaganej historii."
+
+msgid "Angefordert"
+msgstr "Zażądano"
+
+msgid "Notiz"
+msgstr "Notatka"
+
+msgid "Konto wirklich anonymisieren?"
+msgstr "Na pewno zanonimizować to konto?"
+
+msgid "Verarbeiten"
+msgstr "Przetwórz"
+
+msgid "Retention Policies"
+msgstr "Zasady retencji"
+
+msgid "Nur freigegebene Datenklassen können automatisiert bereinigt werden."
+msgstr "Tylko zatwierdzone klasy danych mogą być automatycznie czyszczone."
+
+msgid "Datenklasse"
+msgstr "Klasa danych"
+
+msgid "Keine Policies."
+msgstr "Brak zasad."
+
+msgid "Versionierte AGB, Datenschutz-, Widerrufs- und Lizenztexte."
+msgstr "Wersjonowane regulaminy, teksty dotyczące prywatności, odstąpienia i licencji."
+
+msgid "Typ"
+msgstr "Typ"
+
+msgid "Keine Dokumente."
+msgstr "Brak dokumentów."
+
+msgid "Read-only PostgreSQL-Betriebsdaten."
+msgstr "Dane operacyjne PostgreSQL tylko do odczytu."
+
+msgid "DB-Größe"
+msgstr "Rozmiar bazy danych"
+
+msgid "Retention-Policy anlegen"
+msgstr "Utwórz zasadę retencji"
+
+msgid "Rechtsdokument anlegen"
+msgstr "Utwórz dokument prawny"
