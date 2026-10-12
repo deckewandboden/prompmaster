@@ -943,6 +943,61 @@ class AdminInternationalizationContractTests(SimpleTestCase):
                     catalog['Erstattung wurde an Mollie übermittelt.'],
                 )
 
+
+    def test_standard_admin_feedback_uses_nine_compiled_catalogs(self):
+        import ast
+        from django.utils.translation import gettext, override
+        source = (ROOT / 'apps/core/admin_views.py').read_text(encoding='utf-8')
+        tree = ast.parse(source)
+        translatable = {
+            call.args[0].value
+            for call in ast.walk(tree)
+            if isinstance(call, ast.Call)
+            and isinstance(call.func, ast.Name)
+            and call.func.id == '_'
+            and call.args
+            and isinstance(call.args[0], ast.Constant)
+            and isinstance(call.args[0].value, str)
+        }
+        required = (
+            'Lead gespeichert.',
+            'Lead-Zuständigkeit aktualisiert.',
+            'Gerät wurde widerrufen.',
+            'Unternehmensdaten gespeichert.',
+            'Benutzer deaktiviert; Lizenz- und Gerätezugänge wurden freigegeben.',
+            'Die Lizenz ist bereits frei.',
+            'Lizenzzuweisung wurde freigegeben.',
+            'Lizenz wurde entsperrt.',
+            'Lizenz wurde gesperrt; vorhandene Gerätezugänge wurden widerrufen.',
+            'Produkt angelegt. Legen Sie anschließend Preisversionen an.',
+            'Feature gespeichert.',
+            'Produkt gespeichert.',
+            'Neue Preisversion angelegt.',
+            'E-Mail-Vorlage gespeichert.',
+            'Mollie-Konfiguration gespeichert.',
+            'Service Account gesperrt.',
+            'Verbrauchererklärung aktualisiert.',
+            'Rechtsdokument gespeichert.',
+            'Retention-Policy gespeichert.',
+            'Löschanfrage verarbeitet und Konto anonymisiert.',
+            'Löschanfrage abgelehnt.',
+        )
+        self.assertEqual(len(required), 21)
+        self.assertEqual(len(set(required)), 21)
+        self.assertTrue(set(required).issubset(translatable))
+        for language in LOCALES:
+            catalog = catalog_translations(
+                ROOT / 'locale' / language / 'LC_MESSAGES' / 'django.po'
+            )
+            for message in required:
+                with self.subTest(language=language, message=message):
+                    self.assertTrue(catalog.get(message))
+            with override(language):
+                self.assertEqual(
+                    gettext('Lizenz wurde entsperrt.'),
+                    catalog['Lizenz wurde entsperrt.'],
+                )
+
     def test_language_picker_is_in_flex_header_and_never_overlays_avatar(self):
         shell = (ROOT / 'templates/app_shell.html').read_text(encoding='utf-8')
         base = (ROOT / 'templates/base.html').read_text(encoding='utf-8')
