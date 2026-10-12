@@ -2458,3 +2458,51 @@ msgstr "available out of"
 
 msgid "„RAM verfügbar“ entspricht Linux"
 msgstr "“Available RAM” corresponds to Linux"
+
+msgid "not_configured"
+msgstr "not configured"
+
+msgid "unknown"
+msgstr "unknown"
+
+msgid "ok"
+msgstr "OK"
+
+msgid "warning"
+msgstr "warning"
+
+msgid "unavailable"
+msgstr "unavailable"
+
+msgid "degraded"
+msgstr "degraded"
+
+msgid "success"
+msgstr "successful"
+
+msgid "failed"
+msgstr "failed"
+
+msgid "running"
+msgstr "running"
+
+msgid "critical"
+msgstr "critical"
+
+msgid "passed"
+msgstr "passed"
+
+msgid "error"
+msgstr "error"
+
+msgid "skipped"
+msgstr "skipped"
+
+msgid "in_progress"
+msgstr "in progress"
+
+msgid "no_data"
+msgstr "no data"
+
+msgid "completed"
+msgstr "completed"
