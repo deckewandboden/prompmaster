@@ -3238,3 +3238,66 @@ msgstr "Rol kaldırıldı."
 
 msgid "Benutzerstatus aktualisiert."
 msgstr "Kullanıcı durumu güncellendi."
+
+msgid "Lead gespeichert."
+msgstr "Potansiyel müşteri kaydedildi."
+
+msgid "Lead-Zuständigkeit aktualisiert."
+msgstr "Potansiyel müşteri sorumlusu güncellendi."
+
+msgid "Gerät wurde widerrufen."
+msgstr "Cihaz erişimi iptal edildi."
+
+msgid "Unternehmensdaten gespeichert."
+msgstr "Şirket bilgileri kaydedildi."
+
+msgid "Benutzer deaktiviert; Lizenz- und Gerätezugänge wurden freigegeben."
+msgstr "Kullanıcı devre dışı bırakıldı; lisans ve cihaz erişimleri serbest bırakıldı."
+
+msgid "Die Lizenz ist bereits frei."
+msgstr "Lisans zaten atanmamış."
+
+msgid "Lizenzzuweisung wurde freigegeben."
+msgstr "Lisans ataması serbest bırakıldı."
+
+msgid "Lizenz wurde entsperrt."
+msgstr "Lisansın engeli kaldırıldı."
+
+msgid "Lizenz wurde gesperrt; vorhandene Gerätezugänge wurden widerrufen."
+msgstr "Lisans engellendi; mevcut cihaz erişimleri iptal edildi."
+
+msgid "Produkt angelegt. Legen Sie anschließend Preisversionen an."
+msgstr "Ürün oluşturuldu. Ardından fiyat sürümleri ekleyin."
+
+msgid "Feature gespeichert."
+msgstr "Özellik kaydedildi."
+
+msgid "Produkt gespeichert."
+msgstr "Ürün kaydedildi."
+
+msgid "Neue Preisversion angelegt."
+msgstr "Yeni fiyat sürümü oluşturuldu."
+
+msgid "E-Mail-Vorlage gespeichert."
+msgstr "E-posta şablonu kaydedildi."
+
+msgid "Mollie-Konfiguration gespeichert."
+msgstr "Mollie yapılandırması kaydedildi."
+
+msgid "Service Account gesperrt."
+msgstr "Hizmet hesabı engellendi."
+
+msgid "Verbrauchererklärung aktualisiert."
+msgstr "Tüketici beyanı güncellendi."
+
+msgid "Rechtsdokument gespeichert."
+msgstr "Hukuki belge kaydedildi."
+
+msgid "Retention-Policy gespeichert."
+msgstr "Saklama politikası kaydedildi."
+
+msgid "Löschanfrage verarbeitet und Konto anonymisiert."
+msgstr "Silme talebi işlendi ve hesap anonimleştirildi."
+
+msgid "Löschanfrage abgelehnt."
+msgstr "Silme talebi reddedildi."
