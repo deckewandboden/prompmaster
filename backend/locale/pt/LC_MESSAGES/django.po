@@ -2077,3 +2077,57 @@ msgstr "Média anterior"
 
 msgid "Drop"
 msgstr "Queda"
+
+msgid "Produktdefaults, Support, E-Mail-Identität und Betriebswarnschwellen."
+msgstr "Predefinições do produto, suporte, identidade de e-mail e limites de alerta operacional."
+
+msgid "Lizenz-Defaults"
+msgstr "Predefinições de licenças"
+
+msgid "Geräte je Benutzer"
+msgstr "Dispositivos por utilizador"
+
+msgid "Einladung"
+msgstr "Convite"
+
+msgid "Stunden"
+msgstr "horas"
+
+msgid "Kritische Warnung"
+msgstr "Aviso crítico"
+
+msgid "Produktwerte werden unter „Produkte & Preise“ gepflegt."
+msgstr "Os valores dos produtos são mantidos em «Produtos e preços»."
+
+msgid "PROMPTFINISHER Pro ist nicht angelegt."
+msgstr "O PROMPTFINISHER Pro ainda não foi criado."
+
+msgid "Empfänger des Kundenportal-Kontaktformulars."
+msgstr "Destinatário do formulário de contacto do portal do cliente."
+
+msgid "E-Mail-Versandweg & Fallback"
+msgstr "Via de envio de e-mail e contingência"
+
+msgid "Alle Provider bleiben parallel gespeichert. Im manuellen Modus wird nur der primäre Versandweg verwendet. Im automatischen Modus wird bei eindeutig nicht zugestellten Fehlern in der festgelegten Reihenfolge weitergeschaltet; bei unklaren Fehlern erfolgt bewusst kein automatischer Fallback, um Doppelversand zu vermeiden."
+msgstr "Todos os fornecedores permanecem guardados. O modo manual usa apenas a via principal. O modo automático passa ao fornecedor seguinte pela ordem definida só após confirmação de não entrega; falhas ambíguas não ativam a contingência, para evitar envios duplicados."
+
+msgid "E-Mail-Absender & Domain"
+msgstr "Remetente e domínio de e-mail"
+
+msgid "Die Absenderadresse wird beim SMTP-Versand direkt aus diesen Einstellungen gelesen. SPF, DKIM und DMARC sind hier als DNS-Sollwerte dokumentiert; das Speichern verändert keine DNS-Zone."
+msgstr "O endereço do remetente SMTP é lido diretamente destas definições. SPF, DKIM e DMARC são documentados aqui como registos DNS pretendidos; guardar não altera nenhuma zona DNS."
+
+msgid "Erster SMTP-Transport. Das Passwort wird verschlüsselt gespeichert und niemals wieder im Klartext angezeigt."
+msgstr "Transporte SMTP principal. A palavra-passe é guardada de forma encriptada e nunca volta a ser mostrada em texto simples."
+
+msgid "Optionaler zweiter SMTP-Transport. Hier können Sie z. B. denselben SMTP-Relay eintragen, den auch Listmonk verwendet, und manuell oder automatisch zwischen SMTP 1 und SMTP 2 wechseln."
+msgstr "Transporte SMTP secundário opcional. Pode usar, por exemplo, o mesmo relay SMTP que o Listmonk e alternar manual ou automaticamente entre SMTP 1 e SMTP 2."
+
+msgid "Alternative zu SMTP für Exchange Online. Das Client Secret wird verschlüsselt gespeichert und niemals wieder im Klartext angezeigt."
+msgstr "Alternativa ao SMTP para Exchange Online. O segredo do cliente é guardado de forma encriptada e nunca volta a ser mostrado em texto simples."
+
+msgid "Einstellungen speichern"
+msgstr "Guardar definições"
+
+msgid "Sie besitzen Leserechte, aber keine Berechtigung zum Ändern dieser Einstellungen."
+msgstr "Tem acesso apenas de leitura e não pode alterar estas definições."
