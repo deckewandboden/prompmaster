@@ -1558,3 +1558,81 @@ msgstr "pendiente"
 
 msgid "Noch keine Webhook-Ereignisse."
 msgstr "Todavía no hay eventos de webhook."
+
+msgid "Vorlagen, Versandstatus, Provider und Fallback-Kette."
+msgstr "Plantillas, estado de envío, proveedores y cadena de respaldo."
+
+msgid "Absender & Provider"
+msgstr "Remitente y proveedor"
+
+msgid "Versandprotokoll öffnen"
+msgstr "Abrir registro de envíos"
+
+msgid "Vorlagen"
+msgstr "Plantillas"
+
+msgid "Keine E-Mail-Vorlagen vorhanden."
+msgstr "No hay plantillas de correo electrónico."
+
+msgid "Mail-System"
+msgstr "Sistema de correo"
+
+msgid "Versandmodus"
+msgstr "Modo de envío"
+
+msgid "Automatischer Fallback"
+msgstr "Respaldo automático"
+
+msgid "Manuell"
+msgstr "Manual"
+
+msgid "Primär"
+msgstr "Principal"
+
+msgid "Reihenfolge"
+msgstr "Orden"
+
+msgid "Status der Kette"
+msgstr "Estado de la cadena"
+
+msgid "Aktiver Absender"
+msgstr "Remitente activo"
+
+msgid "Anzeigename"
+msgstr "Nombre para mostrar"
+
+msgid "Mail-Domain"
+msgstr "Dominio de correo"
+
+msgid "Server"
+msgstr "Servidor"
+
+msgid "Anmeldung"
+msgstr "Autenticación"
+
+msgid "Passwort fehlt"
+msgstr "Falta la contraseña"
+
+msgid "Ohne Anmeldung"
+msgstr "Sin autenticación"
+
+msgid "Nicht konfiguriert"
+msgstr "Sin configurar"
+
+msgid "Fehlt"
+msgstr "Falta"
+
+msgid "Graph Absender"
+msgstr "Remitente de Graph"
+
+msgid "Automatischer Fallback erfolgt nur bei eindeutig nicht zugestellten Fehlern. Bei unklaren Fehlern wird nicht automatisch weitergeschaltet, damit dieselbe E-Mail nicht versehentlich doppelt versendet wird."
+msgstr "La conmutación automática solo se realiza cuando se confirma que el mensaje no se ha entregado. Los errores ambiguos no activan otro proveedor, para evitar enviar dos veces el mismo correo."
+
+msgid "SPF/DKIM/DMARC werden unter „Einstellungen“ als DNS-Sollwerte dokumentiert. Änderungen dort aktualisieren nicht automatisch den öffentlichen DNS."
+msgstr "Los valores DNS previstos para SPF/DKIM/DMARC se documentan en Configuración. Los cambios allí no actualizan automáticamente el DNS público."
+
+msgid "Letzte Versandvorgänge"
+msgstr "Envíos recientes"
+
+msgid "Noch keine Versandvorgänge."
+msgstr "Todavía no hay envíos."
