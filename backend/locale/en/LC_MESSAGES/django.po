@@ -2077,3 +2077,57 @@ msgstr "Previous avg."
 
 msgid "Drop"
 msgstr "Drop"
+
+msgid "Produktdefaults, Support, E-Mail-Identität und Betriebswarnschwellen."
+msgstr "Product defaults, support, email identity and operational alert thresholds."
+
+msgid "Lizenz-Defaults"
+msgstr "License defaults"
+
+msgid "Geräte je Benutzer"
+msgstr "Devices per user"
+
+msgid "Einladung"
+msgstr "Invitation"
+
+msgid "Stunden"
+msgstr "hours"
+
+msgid "Kritische Warnung"
+msgstr "Critical warning"
+
+msgid "Produktwerte werden unter „Produkte & Preise“ gepflegt."
+msgstr "Product values are maintained under “Products & Prices”."
+
+msgid "PROMPTFINISHER Pro ist nicht angelegt."
+msgstr "PROMPTFINISHER Pro has not been created."
+
+msgid "Empfänger des Kundenportal-Kontaktformulars."
+msgstr "Recipient of the customer portal contact form."
+
+msgid "E-Mail-Versandweg & Fallback"
+msgstr "Email delivery route & failover"
+
+msgid "Alle Provider bleiben parallel gespeichert. Im manuellen Modus wird nur der primäre Versandweg verwendet. Im automatischen Modus wird bei eindeutig nicht zugestellten Fehlern in der festgelegten Reihenfolge weitergeschaltet; bei unklaren Fehlern erfolgt bewusst kein automatischer Fallback, um Doppelversand zu vermeiden."
+msgstr "All providers remain saved in parallel. Manual mode uses only the primary delivery route. Automatic mode switches to the next provider in the configured order only after confirmed non-delivery; ambiguous errors do not trigger failover, to avoid duplicate messages."
+
+msgid "E-Mail-Absender & Domain"
+msgstr "Email sender & domain"
+
+msgid "Die Absenderadresse wird beim SMTP-Versand direkt aus diesen Einstellungen gelesen. SPF, DKIM und DMARC sind hier als DNS-Sollwerte dokumentiert; das Speichern verändert keine DNS-Zone."
+msgstr "The SMTP sender address is read directly from these settings. SPF, DKIM and DMARC are documented here as target DNS records; saving does not modify any DNS zone."
+
+msgid "Erster SMTP-Transport. Das Passwort wird verschlüsselt gespeichert und niemals wieder im Klartext angezeigt."
+msgstr "Primary SMTP transport. The password is stored encrypted and is never shown in plaintext again."
+
+msgid "Optionaler zweiter SMTP-Transport. Hier können Sie z. B. denselben SMTP-Relay eintragen, den auch Listmonk verwendet, und manuell oder automatisch zwischen SMTP 1 und SMTP 2 wechseln."
+msgstr "Optional secondary SMTP transport. You can use, for example, the same SMTP relay as Listmonk and switch manually or automatically between SMTP 1 and SMTP 2."
+
+msgid "Alternative zu SMTP für Exchange Online. Das Client Secret wird verschlüsselt gespeichert und niemals wieder im Klartext angezeigt."
+msgstr "Alternative to SMTP for Exchange Online. The client secret is stored encrypted and never shown in plaintext again."
+
+msgid "Einstellungen speichern"
+msgstr "Save settings"
+
+msgid "Sie besitzen Leserechte, aber keine Berechtigung zum Ändern dieser Einstellungen."
+msgstr "You have read-only access and cannot change these settings."
