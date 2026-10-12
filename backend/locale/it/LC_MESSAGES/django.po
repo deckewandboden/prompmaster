@@ -3552,3 +3552,33 @@ msgstr "Modifica politica di conservazione"
 
 msgid "Rolle · %(name)s"
 msgstr "Ruolo · %(name)s"
+
+msgid "Firmenadministrator"
+msgstr "Amministratore aziendale"
+
+msgid "Entwurf"
+msgstr "Bozza"
+
+msgid "Zahlung offen"
+msgstr "Pagamento in sospeso"
+
+msgid "Zahlung prüfen"
+msgstr "Verifica pagamento"
+
+msgid "Refundiert"
+msgstr "Rimborsato"
+
+msgid "Abgelehnt"
+msgstr "Rifiutato"
+
+msgid "Eingegangen"
+msgstr "Ricevuto"
+
+msgid "Kündigung"
+msgstr "Disdetta del contratto"
+
+msgid "Für Kunden sichtbar"
+msgstr "Visibile ai clienti"
+
+msgid "Interne Notiz"
+msgstr "Nota interna"
