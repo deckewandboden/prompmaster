@@ -2509,3 +2509,63 @@ msgstr "completado"
 
 msgid "nicht verfügbar"
 msgstr "no disponible"
+
+msgid "Disk {value}% belegt"
+msgstr "Uso de disco: {value}%"
+
+msgid "RAM {value}% belegt"
+msgstr "Uso de RAM: {value}%"
+
+msgid "CPU 10-Minuten-Mittel {value}%"
+msgstr "Media de CPU de 10 minutos: {value}%"
+
+msgid "Kein auswertbarer Backupstatus verfügbar"
+msgstr "No hay un estado de copia de seguridad evaluable"
+
+msgid "Letztes Backup meldet Status {value}"
+msgstr "La última copia de seguridad indica el estado {value}"
+
+msgid "Backup ist {value} Stunden alt"
+msgstr "La copia de seguridad tiene {value} horas"
+
+msgid "Restore-Statusdatei ist nicht auswertbar"
+msgstr "No se puede evaluar el archivo de estado de restauración"
+
+msgid "Noch kein Restore-Test protokolliert"
+msgstr "Todavía no se ha registrado ninguna prueba de restauración"
+
+msgid "Letzter Restore-Test war nicht erfolgreich"
+msgstr "La última prueba de restauración no se completó correctamente"
+
+msgid "Letzter Restore-Test ist {value} Tage alt"
+msgstr "La última prueba de restauración se realizó hace {value} días"
+
+msgid "Monitoring-Ziel {value} ist nicht erreichbar"
+msgstr "El objetivo de monitorización {value} no es accesible"
+
+msgid "Monitoring-Ziel {value} liefert keinen Status"
+msgstr "El objetivo de monitorización {value} no informa de su estado"
+
+msgid "Caddy Healthcheck ist nicht erreichbar"
+msgstr "La comprobación de estado de Caddy no es accesible"
+
+msgid "Kein Celery Worker beantwortet den aktiven Ping"
+msgstr "Ningún proceso de Celery responde al ping activo"
+
+msgid "Celery Beat-Heartbeat älter als {value} Minuten"
+msgstr "El latido de Celery Beat tiene más de {value} minutos"
+
+msgid "Celery Queue-Tiefe kann nicht gelesen werden"
+msgstr "No se puede leer la profundidad de la cola de Celery"
+
+msgid "Celery Queue enthält {value} wartende Jobs"
+msgstr "La cola de Celery contiene {value} trabajos pendientes"
+
+msgid "{value} fehlgeschlagene Hintergrundjobs in 24 Stunden"
+msgstr "{value} trabajos en segundo plano fallidos en 24 horas"
+
+msgid "{value} E-Mail-Fehler in 24 Stunden"
+msgstr "{value} errores de correo electrónico en 24 horas"
+
+msgid "{value} Mollie-Verarbeitungsfehler in 24 Stunden"
+msgstr "{value} errores de procesamiento de Mollie en 24 horas"
