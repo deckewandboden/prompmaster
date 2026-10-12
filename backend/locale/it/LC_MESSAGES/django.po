@@ -2184,3 +2184,21 @@ msgstr "Media precedente"
 
 msgid "Drop"
 msgstr "Calo"
+
+msgid "Lizenz-Defaults"
+msgstr "Impostazioni predefinite licenze"
+
+msgid "Geräte je Benutzer"
+msgstr "Dispositivi per utente"
+
+msgid "Einladung"
+msgstr "Invito"
+
+msgid "Stunden"
+msgstr "ore"
+
+msgid "Kritische Warnung"
+msgstr "Avviso critico"
+
+msgid "Einstellungen speichern"
+msgstr "Salva impostazioni"
