@@ -1866,3 +1866,36 @@ msgstr "Vérifier/déclencher le remboursement"
 
 msgid "Keine Lizenzperioden vorhanden."
 msgstr "Aucune période de licence."
+
+msgid "E-Mail-Protokoll"
+msgstr "Journal des e-mails"
+
+msgid "Versandstatus, tatsächlich verwendeter Provider und Fallback-Versuche ohne vertrauliche Nachrichtentexte oder Secrets."
+msgstr "Statut d'envoi, fournisseur réellement utilisé et tentatives de secours, sans contenu confidentiel des messages ni secrets."
+
+msgid "Empfänger"
+msgstr "Destinataire"
+
+msgid "Vorlage"
+msgstr "Modèle"
+
+msgid "Provider"
+msgstr "Fournisseur"
+
+msgid "Versuche"
+msgstr "Tentatives"
+
+msgid "Gesendet"
+msgstr "Envoyé"
+
+msgid "Wird gesendet"
+msgstr "En cours d'envoi"
+
+msgid "Unterdrückt"
+msgstr "Supprimé"
+
+msgid "Warteschlange"
+msgstr "En file d'attente"
+
+msgid "Keine E-Mails gefunden."
+msgstr "Aucun e-mail trouvé."
