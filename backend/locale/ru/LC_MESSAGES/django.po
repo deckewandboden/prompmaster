@@ -2510,3 +2510,63 @@ msgstr "завершено"
 
 msgid "nicht verfügbar"
 msgstr "недоступно"
+
+msgid "Disk {value}% belegt"
+msgstr "Использование диска: {value}%"
+
+msgid "RAM {value}% belegt"
+msgstr "Использование ОЗУ: {value}%"
+
+msgid "CPU 10-Minuten-Mittel {value}%"
+msgstr "Средняя загрузка ЦП за 10 минут: {value}%"
+
+msgid "Kein auswertbarer Backupstatus verfügbar"
+msgstr "Нет пригодных для анализа сведений о состоянии резервного копирования"
+
+msgid "Letztes Backup meldet Status {value}"
+msgstr "Состояние последней резервной копии: {value}"
+
+msgid "Backup ist {value} Stunden alt"
+msgstr "Возраст резервной копии: {value} ч"
+
+msgid "Restore-Statusdatei ist nicht auswertbar"
+msgstr "Не удалось обработать файл состояния восстановления"
+
+msgid "Noch kein Restore-Test protokolliert"
+msgstr "Тест восстановления ещё не зарегистрирован"
+
+msgid "Letzter Restore-Test war nicht erfolgreich"
+msgstr "Последний тест восстановления завершился неудачно"
+
+msgid "Letzter Restore-Test ist {value} Tage alt"
+msgstr "Последний тест восстановления был {value} дн. назад"
+
+msgid "Monitoring-Ziel {value} ist nicht erreichbar"
+msgstr "Цель мониторинга {value} недоступна"
+
+msgid "Monitoring-Ziel {value} liefert keinen Status"
+msgstr "Цель мониторинга {value} не сообщает состояние"
+
+msgid "Caddy Healthcheck ist nicht erreichbar"
+msgstr "Проверка работоспособности Caddy недоступна"
+
+msgid "Kein Celery Worker beantwortet den aktiven Ping"
+msgstr "Ни один обработчик Celery не отвечает на активную проверку"
+
+msgid "Celery Beat-Heartbeat älter als {value} Minuten"
+msgstr "Сигнал Celery Beat старше {value} мин."
+
+msgid "Celery Queue-Tiefe kann nicht gelesen werden"
+msgstr "Не удалось получить длину очереди Celery"
+
+msgid "Celery Queue enthält {value} wartende Jobs"
+msgstr "В очереди Celery ожидают {value} заданий"
+
+msgid "{value} fehlgeschlagene Hintergrundjobs in 24 Stunden"
+msgstr "Ошибок фоновых задач за 24 часа: {value}"
+
+msgid "{value} E-Mail-Fehler in 24 Stunden"
+msgstr "Ошибок электронной почты за 24 часа: {value}"
+
+msgid "{value} Mollie-Verarbeitungsfehler in 24 Stunden"
+msgstr "Ошибок обработки Mollie за 24 часа: {value}"
