@@ -1636,3 +1636,42 @@ msgstr "Son gönderim işlemleri"
 
 msgid "Noch keine Versandvorgänge."
 msgstr "Henüz gönderim işlemi yok."
+
+msgid "Zur Kundenliste"
+msgstr "Müşteri listesine dön"
+
+msgid "Zur Privatkundenliste"
+msgstr "Bireysel müşteri listesine dön"
+
+msgid "Kundendaten"
+msgstr "Müşteri bilgileri"
+
+msgid "Stammdaten"
+msgstr "Ana veriler"
+
+msgid "Unternehmensdaten speichern"
+msgstr "Şirket bilgilerini kaydet"
+
+msgid "Firma"
+msgstr "Şirket"
+
+msgid "Steuernummer"
+msgstr "Vergi numarası"
+
+msgid "Änderungen erfolgen serverseitig mit Berechtigungsprüfung und werden im Audit protokolliert. Steuerfelder werden anhand der aktiven Steuerregel für Land und Kundentyp validiert."
+msgstr "Değişiklikler sunucuda yetki kontrolüyle yapılır ve denetim günlüğüne kaydedilir. Vergi alanları, ülke ve müşteri türü için geçerli vergi kuralına göre doğrulanır."
+
+msgid "Rechtsakzeptanzen"
+msgstr "Hukuki belge onayları"
+
+msgid "Version"
+msgstr "Sürüm"
+
+msgid "Keine Rechtsakzeptanzen protokolliert."
+msgstr "Kayıtlı hukuki belge onayı yok."
+
+msgid "Keine Löschanfragen."
+msgstr "Silme talebi yok."
+
+msgid "Alle Löschanfragen"
+msgstr "Tüm silme talepleri"
