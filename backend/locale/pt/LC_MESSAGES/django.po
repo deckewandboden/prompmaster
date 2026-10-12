@@ -2587,3 +2587,102 @@ msgstr "Filtro"
 
 msgid "Seite"
 msgstr "página"
+
+msgid "AGB akzeptieren"
+msgstr "Aceitar os termos e condições"
+
+msgid "Anmeldung fehlgeschlagen."
+msgstr "Falha ao iniciar sessão."
+
+msgid "Anmeldung fehlgeschlagen. Bitte später erneut versuchen."
+msgstr "Falha ao iniciar sessão. Tente novamente mais tarde."
+
+msgid "Anzahl Lizenzen"
+msgstr "Número de licenças"
+
+msgid "Art der Kündigung"
+msgstr "Tipo de rescisão"
+
+msgid "Außerordentliche Kündigung"
+msgstr "Rescisão extraordinária"
+
+msgid "Bei einer außerordentlichen Kündigung ist der Kündigungsgrund erforderlich."
+msgstr "É necessário indicar o motivo da rescisão extraordinária."
+
+msgid "Bestellnummer"
+msgstr "Número da encomenda"
+
+msgid "Bitte bestätigen Sie den gewünschten Leistungsbeginn vor Ablauf der Widerrufsfrist."
+msgstr "Confirme que solicita o início do serviço antes do fim do prazo de livre resolução."
+
+msgid "Bitte bestätigen Sie die Widerrufsbelehrung."
+msgstr "Confirme que tomou conhecimento da informação sobre o direito de livre resolução."
+
+msgid "Datenschutzhinweise zur Kenntnis genommen"
+msgstr "Tomei conhecimento do aviso de privacidade"
+
+msgid "Deutschland"
+msgstr "Alemanha"
+
+msgid "Die Bestellnummer finden Sie in Ihrer Bestell- bzw. Zahlungsbestätigung."
+msgstr "Pode encontrar o número da encomenda na confirmação da encomenda ou do pagamento."
+
+msgid "E-Mail-Adresse für die Eingangsbestätigung"
+msgstr "Endereço de e-mail para confirmação de receção"
+
+msgid "E-Mail-Adresse für die Kündigungsbestätigung"
+msgstr "Endereço de e-mail para confirmação da rescisão"
+
+msgid "Firmenname erforderlich."
+msgstr "O nome da empresa é obrigatório."
+
+msgid "Gewünschter Beendigungszeitpunkt"
+msgstr "Data de cessação pretendida"
+
+msgid "Hausnummer"
+msgstr "Número de porta"
+
+msgid "Kündigungsgrund"
+msgstr "Motivo da rescisão"
+
+msgid "Leer lassen für den frühestmöglichen Zeitpunkt."
+msgstr "Deixe em branco para a data mais próxima possível."
+
+msgid "Leistungsbeginn vor Ablauf der Widerrufsfrist ausdrücklich verlangt"
+msgstr "Solicito expressamente o início do serviço antes do fim do prazo de livre resolução"
+
+msgid "Lizenzbedingungen akzeptieren"
+msgstr "Aceitar as condições da licença"
+
+msgid "Ordentliche Kündigung"
+msgstr "Rescisão ordinária"
+
+msgid "PLZ"
+msgstr "Código postal"
+
+msgid "Passwörter stimmen nicht überein."
+msgstr "As palavras-passe não coincidem."
+
+msgid "Steuernummer ist für diese Steuerregel erforderlich."
+msgstr "Esta regra fiscal exige um número fiscal."
+
+msgid "Straße"
+msgstr "Rua"
+
+msgid "USt-IdNr. ist für diese Steuerregel erforderlich."
+msgstr "Esta regra fiscal exige um número de IVA."
+
+msgid "Unternehmensname ist erforderlich."
+msgstr "O nome da empresa é obrigatório."
+
+msgid "Vertrag / Bestellung / Kundennummer"
+msgstr "Contrato / encomenda / número de cliente"
+
+msgid "Vor- und Nachname"
+msgstr "Nome e apelido"
+
+msgid "Widerrufsinformation zur Kenntnis genommen"
+msgstr "Tomei conhecimento da informação sobre o direito de livre resolução"
+
+msgid "Zum Beispiel Bestellnummer oder Kundennummer."
+msgstr "Por exemplo, número de encomenda ou de cliente."
