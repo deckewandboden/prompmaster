@@ -2689,3 +2689,102 @@ msgstr "Filtr"
 
 msgid "Seite"
 msgstr "strona"
+
+msgid "AGB akzeptieren"
+msgstr "Akceptuję regulamin"
+
+msgid "Anmeldung fehlgeschlagen."
+msgstr "Logowanie nie powiodło się."
+
+msgid "Anmeldung fehlgeschlagen. Bitte später erneut versuchen."
+msgstr "Logowanie nie powiodło się. Spróbuj ponownie później."
+
+msgid "Anzahl Lizenzen"
+msgstr "Liczba licencji"
+
+msgid "Art der Kündigung"
+msgstr "Rodzaj wypowiedzenia"
+
+msgid "Außerordentliche Kündigung"
+msgstr "Wypowiedzenie nadzwyczajne"
+
+msgid "Bei einer außerordentlichen Kündigung ist der Kündigungsgrund erforderlich."
+msgstr "W przypadku wypowiedzenia nadzwyczajnego należy podać powód."
+
+msgid "Bestellnummer"
+msgstr "Numer zamówienia"
+
+msgid "Bitte bestätigen Sie den gewünschten Leistungsbeginn vor Ablauf der Widerrufsfrist."
+msgstr "Potwierdź żądanie rozpoczęcia świadczenia usługi przed upływem terminu odstąpienia od umowy."
+
+msgid "Bitte bestätigen Sie die Widerrufsbelehrung."
+msgstr "Potwierdź zapoznanie się z informacją o prawie odstąpienia od umowy."
+
+msgid "Datenschutzhinweise zur Kenntnis genommen"
+msgstr "Zapoznałem(-am) się z informacją o ochronie danych"
+
+msgid "Deutschland"
+msgstr "Niemcy"
+
+msgid "Die Bestellnummer finden Sie in Ihrer Bestell- bzw. Zahlungsbestätigung."
+msgstr "Numer zamówienia znajdziesz w potwierdzeniu zamówienia lub płatności."
+
+msgid "E-Mail-Adresse für die Eingangsbestätigung"
+msgstr "Adres e-mail do potwierdzenia otrzymania"
+
+msgid "E-Mail-Adresse für die Kündigungsbestätigung"
+msgstr "Adres e-mail do potwierdzenia wypowiedzenia"
+
+msgid "Firmenname erforderlich."
+msgstr "Nazwa firmy jest wymagana."
+
+msgid "Gewünschter Beendigungszeitpunkt"
+msgstr "Wnioskowana data zakończenia"
+
+msgid "Hausnummer"
+msgstr "Numer domu"
+
+msgid "Kündigungsgrund"
+msgstr "Powód wypowiedzenia"
+
+msgid "Leer lassen für den frühestmöglichen Zeitpunkt."
+msgstr "Pozostaw puste, aby wybrać najwcześniejszy możliwy termin."
+
+msgid "Leistungsbeginn vor Ablauf der Widerrufsfrist ausdrücklich verlangt"
+msgstr "Wyraźnie żądam rozpoczęcia świadczenia usługi przed upływem terminu odstąpienia od umowy"
+
+msgid "Lizenzbedingungen akzeptieren"
+msgstr "Akceptuję warunki licencji"
+
+msgid "Ordentliche Kündigung"
+msgstr "Wypowiedzenie zwykłe"
+
+msgid "PLZ"
+msgstr "Kod pocztowy"
+
+msgid "Passwörter stimmen nicht überein."
+msgstr "Hasła nie są zgodne."
+
+msgid "Steuernummer ist für diese Steuerregel erforderlich."
+msgstr "Dla tej reguły podatkowej wymagany jest numer podatkowy."
+
+msgid "Straße"
+msgstr "Ulica"
+
+msgid "USt-IdNr. ist für diese Steuerregel erforderlich."
+msgstr "Dla tej reguły podatkowej wymagany jest numer VAT UE."
+
+msgid "Unternehmensname ist erforderlich."
+msgstr "Nazwa firmy jest wymagana."
+
+msgid "Vertrag / Bestellung / Kundennummer"
+msgstr "Umowa / zamówienie / numer klienta"
+
+msgid "Vor- und Nachname"
+msgstr "Imię i nazwisko"
+
+msgid "Widerrufsinformation zur Kenntnis genommen"
+msgstr "Zapoznałem(-am) się z informacją o prawie odstąpienia od umowy"
+
+msgid "Zum Beispiel Bestellnummer oder Kundennummer."
+msgstr "Na przykład numer zamówienia lub numer klienta."
