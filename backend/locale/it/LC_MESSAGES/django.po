@@ -1227,3 +1227,84 @@ msgstr "Tutti gli ordini"
 
 msgid "Firmenkonto"
 msgstr "Account aziendale"
+
+msgid "Serverseitige Suche, Filter, Sortierung und Pagination."
+msgstr "Ricerca, filtri, ordinamento e paginazione lato server."
+
+msgid "Neu anlegen"
+msgstr "Crea nuovo"
+
+msgid "Privatkunden"
+msgstr "Clienti privati"
+
+msgid "aufsteigend"
+msgstr "crescente"
+
+msgid "absteigend"
+msgstr "decrescente"
+
+msgid "Keine Datensätze für die aktuelle Auswahl."
+msgstr "Nessun record per la selezione attuale."
+
+msgid "Änderungen werden serverseitig validiert und – sofern sicherheits- oder geschäftskritisch – protokolliert."
+msgstr "Le modifiche sono convalidate sul server e registrate se critiche per la sicurezza o l'attività."
+
+msgid "Zusätzliche Sicherheitsfreigabe."
+msgstr "Verifica di sicurezza aggiuntiva."
+
+msgid "Bestätigen Sie Ihr eigenes Passwort. Die Freigabe gilt anschließend ausschließlich für wenige Minuten und nur für geschützte Admin-Aktionen."
+msgstr "Conferma la tua password. L'autorizzazione vale solo per pochi minuti e solo per le azioni amministrative protette."
+
+msgid "Bestätigen"
+msgstr "Conferma"
+
+msgid "Kompakte Geschäftszahlen innerhalb Ihrer Berechtigungen."
+msgstr "Indicatori aziendali sintetici secondo le tue autorizzazioni."
+
+msgid "Neue Kunden · 30 Tage"
+msgstr "Nuovi clienti · 30 giorni"
+
+msgid "Verlängerungsanteil"
+msgstr "Quota rinnovi"
+
+msgid "Verlängerungsterms"
+msgstr "periodi di rinnovo"
+
+msgid "Refund-Quote"
+msgstr "Tasso di rimborso"
+
+msgid "Anteil refundierter Lizenzterms"
+msgstr "Quota di periodi di licenza rimborsati"
+
+msgid "Ø Lizenzen / Firma"
+msgstr "Media licenze / azienda"
+
+msgid "Firmenkundenbestand"
+msgstr "Clientela aziendale"
+
+msgid "Umsatz letzte 30 Tage"
+msgstr "Ricavi ultimi 30 giorni"
+
+msgid "Bestellungen gesamt"
+msgstr "ordini complessivi"
+
+msgid "Lizenzen gesamt"
+msgstr "Totale licenze"
+
+msgid "inkl. aktiv, frei, abgelaufen und historisch"
+msgstr "incluse attive, disponibili, scadute e storiche"
+
+msgid "Anfragen aus dem Kundenportal; V1 verwendet bewusst kein Ticketsystem."
+msgstr "Richieste dal portale clienti; la V1 non usa volutamente un sistema di ticket."
+
+msgid "Keine Kontaktanfragen."
+msgstr "Nessuna richiesta di contatto."
+
+msgid "Globale Suche"
+msgstr "Ricerca globale"
+
+msgid "Ergebnisse für"
+msgstr "Risultati per"
+
+msgid "Keine Treffer."
+msgstr "Nessun risultato."
