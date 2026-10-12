@@ -1336,3 +1336,30 @@ msgstr "Identyfikator płatności"
 
 msgid "Keine Zahlungen gefunden."
 msgstr "Nie znaleziono płatności."
+
+msgid "Lead"
+msgstr "Lead"
+
+msgid "Interessent"
+msgstr "Potencjalny klient"
+
+msgid "Priorität"
+msgstr "Priorytet"
+
+msgid "Zuständig"
+msgstr "Odpowiedzialny"
+
+msgid "Erstellt"
+msgstr "Utworzono"
+
+msgid "Kundennummer"
+msgstr "Numer klienta"
+
+msgid "Eingang"
+msgstr "Otrzymano"
+
+msgid "Art"
+msgstr "Rodzaj"
+
+msgid "Vertragsbezug"
+msgstr "Odniesienie do umowy"
