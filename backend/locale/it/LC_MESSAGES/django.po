@@ -1782,3 +1782,78 @@ msgstr "Nessuna richiesta di cancellazione."
 
 msgid "Alle Löschanfragen"
 msgstr "Tutte le richieste di cancellazione"
+
+msgid "Bestellung vom"
+msgstr "Ordine del"
+
+msgid "Zurück zur Liste"
+msgstr "Torna all'elenco"
+
+msgid "Brutto"
+msgstr "Lordo"
+
+msgid "Steuer"
+msgstr "Imposta"
+
+msgid "Keine Zahlung erfasst."
+msgstr "Nessun pagamento registrato."
+
+msgid "Positionen"
+msgstr "Voci"
+
+msgid "Menge"
+msgstr "Quantità"
+
+msgid "Einzelpreis"
+msgstr "Prezzo unitario"
+
+msgid "Lizenzstatus wirklich ändern?"
+msgstr "Modificare davvero lo stato di questa licenza?"
+
+msgid "Lizenz entsperren"
+msgstr "Sblocca licenza"
+
+msgid "Lizenz sperren"
+msgstr "Blocca licenza"
+
+msgid "Inhaber & Zuweisung"
+msgstr "Titolare e assegnazione"
+
+msgid "Zugewiesen an"
+msgstr "Assegnata a"
+
+msgid "Lizenzzuweisung wirklich freigeben? Aktive Geräte dieser Lizenz werden widerrufen."
+msgstr "Rilasciare davvero l'assegnazione della licenza? I dispositivi attivi associati verranno revocati."
+
+msgid "Zuweisung freigeben"
+msgstr "Rilascia assegnazione"
+
+msgid "Aktiven Firmenbenutzer auswählen"
+msgstr "Seleziona utente aziendale attivo"
+
+msgid "Bitte auswählen"
+msgstr "Seleziona"
+
+msgid "Lizenz zuweisen"
+msgstr "Assegna licenza"
+
+msgid "Lizenzperioden"
+msgstr "Periodi di licenza"
+
+msgid "Von"
+msgstr "Da"
+
+msgid "Bis"
+msgstr "A"
+
+msgid "Erstattung"
+msgstr "Rimborso"
+
+msgid "Erstattung wirklich verbindlich über Mollie auslösen?"
+msgstr "Vuoi davvero avviare un rimborso vincolante tramite Mollie?"
+
+msgid "Erstattung prüfen/auslösen"
+msgstr "Verifica/avvia rimborso"
+
+msgid "Keine Lizenzperioden vorhanden."
+msgstr "Nessun periodo di licenza disponibile."
