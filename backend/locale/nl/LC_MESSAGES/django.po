@@ -3272,3 +3272,69 @@ msgstr "Bijvoorbeeld PROMPTFINISHER."
 
 msgid "Zum Beispiel smtp.ionos.de."
 msgstr "Bijvoorbeeld smtp.ionos.de."
+
+msgid "Das eigene netstyle Konto kann hier nicht deaktiviert werden."
+msgstr "U kunt hier uw eigen netstyle-account niet deactiveren."
+
+msgid "Der letzte aktive Superadmin kann nicht deaktiviert werden."
+msgstr "De laatste actieve superbeheerder kan niet worden gedeactiveerd."
+
+msgid "Die eigene 2FA wird nicht über die Admin-Fremdverwaltung zurückgesetzt."
+msgstr "U kunt uw eigen 2FA niet resetten via het beheer van andere accounts."
+
+msgid "2FA zurückgesetzt. Der Benutzer muss sie beim nächsten Login neu einrichten."
+msgstr "2FA is gereset. De gebruiker moet dit bij de volgende aanmelding opnieuw instellen."
+
+msgid "Die eigene Superadmin-Rolle kann nicht hier entfernt werden."
+msgstr "U kunt hier uw eigen superbeheerdersrol niet verwijderen."
+
+msgid "Die letzte aktive Superadmin-Berechtigung kann nicht entfernt werden."
+msgstr "De laatste actieve superbeheerdersbevoegdheid kan niet worden verwijderd."
+
+msgid "Ein gesperrter Service Account kann nicht rotiert werden."
+msgstr "Een geblokkeerd serviceaccount kan niet worden geroteerd."
+
+msgid "Mollie-Produktiv-Checkout wurde gesperrt."
+msgstr "De Mollie-productiecheckout is geblokkeerd."
+
+msgid "Bestätigung für die Erstattung fehlt."
+msgstr "Bevestiging voor terugbetaling ontbreekt."
+
+msgid "Erstattung wurde an Mollie übermittelt."
+msgstr "Het terugbetalingsverzoek is naar Mollie verzonden."
+
+msgid "Für dieses Unternehmen existiert bereits ein aktiver Firmenadministrator."
+msgstr "Dit bedrijf heeft al een actieve bedrijfsbeheerder."
+
+msgid "Dieser Benutzer ist bereits Firmenadministrator."
+msgstr "Deze gebruiker is al bedrijfsbeheerder."
+
+msgid "Ungültiger Supportstatus."
+msgstr "Ongeldige supportstatus."
+
+msgid "Ungültiger Bearbeitungsstatus."
+msgstr "Ongeldige verwerkingsstatus."
+
+msgid "Bitte eine Antwort eingeben."
+msgstr "Voer een antwoord in."
+
+msgid "Die Antwort darf höchstens 10.000 Zeichen enthalten."
+msgstr "Het antwoord mag niet langer zijn dan 10.000 tekens."
+
+msgid "Status aktualisiert."
+msgstr "Status bijgewerkt."
+
+msgid "Einstellungen gespeichert."
+msgstr "Instellingen opgeslagen."
+
+msgid "Rolle gespeichert."
+msgstr "Rol opgeslagen."
+
+msgid "Rolle zugewiesen."
+msgstr "Rol toegewezen."
+
+msgid "Rolle entfernt."
+msgstr "Rol verwijderd."
+
+msgid "Benutzerstatus aktualisiert."
+msgstr "Gebruikersstatus bijgewerkt."
