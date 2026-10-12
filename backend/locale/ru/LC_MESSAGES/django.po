@@ -2960,3 +2960,216 @@ msgstr "Публиковать"
 
 msgid "Währung"
 msgstr "Валюта"
+
+msgid "Absender-Anzeigename"
+msgstr "Отображаемое имя отправителя"
+
+msgid "Absender-E-Mail"
+msgstr "Адрес электронной почты отправителя"
+
+msgid "Aktive Absenderadresse für SMTP. Änderungen gelten ohne Container-Neustart."
+msgstr "Активный адрес отправителя SMTP. Изменения вступают в силу без перезапуска контейнеров."
+
+msgid "Antwortadresse"
+msgstr "Адрес для ответа"
+
+msgid "Anwendungs-/Client-ID der App-Registrierung."
+msgstr "Идентификатор приложения/клиента из регистрации приложения."
+
+msgid "Automatisch – bei sicherem Ausfall auf Fallback wechseln"
+msgstr "Автоматически — переключаться на резервный канал при подтверждённом сбое"
+
+msgid "Backup kritisch in Stunden"
+msgstr "Критический возраст резервной копии (часы)"
+
+msgid "Backup-Warnung in Stunden"
+msgstr "Предупреждение о возрасте резервной копии (часы)"
+
+msgid "Begründung optional"
+msgstr "Причина (необязательно)"
+
+msgid "Bei IONOS normalerweise die vollständige E-Mail-Adresse."
+msgstr "Для IONOS обычно используется полный адрес электронной почты."
+
+msgid "Bitte eine gültige Domain ohne @ eingeben."
+msgstr "Введите действительный домен без @."
+
+msgid "CPU-Warnung in %"
+msgstr "Порог предупреждения CPU в %"
+
+msgid "DKIM DNS Sollwert"
+msgstr "Целевое значение DNS DKIM"
+
+msgid "DKIM-Selector"
+msgstr "Селектор DKIM"
+
+msgid "DMARC Sollwert"
+msgstr "Целевое значение DMARC"
+
+msgid "Datenträger kritisch in %"
+msgstr "Критическая загрузка диска в %"
+
+msgid "Datenträger-Warnung in %"
+msgstr "Предупреждение о загрузке диска в %"
+
+msgid "Der kritische Wert muss über dem Warnwert liegen."
+msgstr "Критический порог должен быть выше порога предупреждения."
+
+msgid "Die Mail-Domain muss zur Absender-E-Mail passen."
+msgstr "Почтовый домен должен совпадать с адресом отправителя."
+
+msgid "Dokumentierter DNS-Sollwert für _dmarc.<Domain>."
+msgstr "Документированное целевое значение DNS для _dmarc.<Domain>."
+
+msgid "Dokumentierter DNS-Sollwert. Das Speichern ändert den öffentlichen DNS-Eintrag nicht."
+msgstr "Документированное целевое значение DNS. Сохранение не изменяет публичную запись DNS."
+
+msgid "Domain des sichtbaren Absenders, z. B. decke-wand-boden.de oder später promptmaster.ai."
+msgstr "Домен видимого отправителя, например decke-wand-boden.de или позднее promptmaster.ai."
+
+msgid "Ein DMARC-Eintrag muss mit \"v=DMARC1;\" beginnen."
+msgstr "Запись DMARC должна начинаться с \"v=DMARC1;\"."
+
+msgid "Ein SPF-Eintrag muss mit \"v=spf1 \" beginnen."
+msgstr "Запись SPF должна начинаться с \"v=spf1 \"."
+
+msgid "Ein Versandweg darf in der Kette nur einmal vorkommen."
+msgstr "Каждый маршрут отправки может встречаться в цепочке только один раз."
+
+msgid "Eine oder mehrere E-Mail-Adressen, getrennt durch Zeilenumbruch, Komma oder Semikolon."
+msgstr "Один или несколько адресов электронной почты через новую строку, запятую или точку с запятой."
+
+msgid "Entra Client ID"
+msgstr "Идентификатор клиента Entra"
+
+msgid "Entra Client Secret"
+msgstr "Секрет клиента Entra"
+
+msgid "Entra Tenant ID"
+msgstr "Идентификатор арендатора Entra"
+
+msgid "Erstattung verbindlich über Mollie auslösen"
+msgstr "Подтвердить возврат через Mollie"
+
+msgid "Fallback 1"
+msgstr "Резервный канал 1"
+
+msgid "Fallback 2"
+msgstr "Резервный канал 2"
+
+msgid "Für IONOS mit STARTTLS: 587."
+msgstr "Для IONOS с STARTTLS: 587."
+
+msgid "Für Microsoft Graph ist dieses Feld erforderlich."
+msgstr "Это поле обязательно для Microsoft Graph."
+
+msgid "Für Microsoft Graph ist ein Client Secret erforderlich."
+msgstr "Для Microsoft Graph необходим секрет клиента."
+
+msgid "Für SMTP 1 ist dieses Feld erforderlich."
+msgstr "Это поле обязательно для SMTP 1."
+
+msgid "Für SMTP 2 ist dieses Feld erforderlich."
+msgstr "Это поле обязательно для SMTP 2."
+
+msgid "Für den automatischen Modus muss mindestens ein Fallback gewählt werden."
+msgstr "Для автоматического режима выберите хотя бы один резервный канал."
+
+msgid "Im automatischen Modus wird nur bei eindeutig nicht zugestellten Fehlern weitergeschaltet."
+msgstr "Автоматический режим переключается только при подтверждённой недоставке."
+
+msgid "Kein weiterer Fallback"
+msgstr "Без дополнительного резерва"
+
+msgid "Leer lassen, um das gespeicherte Passwort unverändert zu lassen."
+msgstr "Оставьте пустым, чтобы сохранить сохранённый пароль."
+
+msgid "Leer lassen, um das gespeicherte Secret unverändert zu lassen."
+msgstr "Оставьте пустым, чтобы сохранить текущий секрет."
+
+msgid "Manuell – nur den primären Versandweg verwenden"
+msgstr "Вручную — только основной канал отправки"
+
+msgid "Microsoft-365-Absender"
+msgstr "Отправитель Microsoft 365"
+
+msgid "Monitoring-Alarmempfänger"
+msgstr "Получатели оповещений мониторинга"
+
+msgid "Neuer Schlüssel"
+msgstr "Новый ключ"
+
+msgid "Optional. Leer lassen, wenn Antworten an die Absenderadresse gehen sollen."
+msgstr "Необязательно. Оставьте пустым, если ответы должны приходить отправителю."
+
+msgid "Optionaler Selector bzw. Hinweis auf die verwendeten Microsoft-365-DKIM-Selectoren."
+msgstr "Необязательный селектор или указание используемых селекторов DKIM Microsoft 365."
+
+msgid "Optionaler zweiter SMTP-Provider, z. B. derselbe Relay-Dienst wie bei Listmonk."
+msgstr "Необязательный второй провайдер SMTP, например тот же ретранслятор, что и у Listmonk."
+
+msgid "Postfach, über das Microsoft Graph senden soll, z. B. promptmaster@netstyle.de."
+msgstr "Почтовый ящик для отправки через Microsoft Graph, например promptmaster@netstyle.de."
+
+msgid "Primärer Versandweg"
+msgstr "Основной канал отправки"
+
+msgid "RAM kritisch in %"
+msgstr "Критическое использование ОЗУ в %"
+
+msgid "RAM-Warnung in %"
+msgstr "Предупреждение об использовании ОЗУ в %"
+
+msgid "Restore-Test-Warnung in Tagen"
+msgstr "Предупреждение о возрасте теста восстановления (дни)"
+
+msgid "SMTP 1 – Benutzername"
+msgstr "SMTP 1 – Имя пользователя"
+
+msgid "SMTP 1 – Passwort"
+msgstr "SMTP 1 – Пароль"
+
+msgid "SMTP 1 – Port"
+msgstr "SMTP 1 – Порт"
+
+msgid "SMTP 1 – STARTTLS verwenden"
+msgstr "SMTP 1 – Использовать STARTTLS"
+
+msgid "SMTP 1 – Server"
+msgstr "SMTP 1 – Сервер"
+
+msgid "SMTP 1, SMTP 2 und Microsoft Graph bleiben parallel konfiguriert."
+msgstr "SMTP 1, SMTP 2 и Microsoft Graph остаются настроенными параллельно."
+
+msgid "SMTP 2 – Benutzername"
+msgstr "SMTP 2 – Имя пользователя"
+
+msgid "SMTP 2 – Passwort"
+msgstr "SMTP 2 – Пароль"
+
+msgid "SMTP 2 – Port"
+msgstr "SMTP 2 – Порт"
+
+msgid "SMTP 2 – STARTTLS verwenden"
+msgstr "SMTP 2 – Использовать STARTTLS"
+
+msgid "SMTP 2 – Server"
+msgstr "SMTP 2 – Сервер"
+
+msgid "SPF Sollwert"
+msgstr "Целевое значение SPF"
+
+msgid "Support-Empfänger"
+msgstr "Получатель запросов поддержки"
+
+msgid "TXT-/CNAME-Sollwert oder beide Microsoft-365-DKIM-CNAMEs. Reine Dokumentation; DNS wird nicht automatisch verändert."
+msgstr "Целевое значение TXT/CNAME или обе CNAME-записи DKIM Microsoft 365. Только документация; DNS не изменяется автоматически."
+
+msgid "Verzeichnis-/Mandanten-ID des Microsoft-365-Tenants."
+msgstr "Идентификатор каталога/арендатора Microsoft 365."
+
+msgid "Zum Beispiel PROMPTFINISHER."
+msgstr "Например, PROMPTFINISHER."
+
+msgid "Zum Beispiel smtp.ionos.de."
+msgstr "Например, smtp.ionos.de."
