@@ -1092,7 +1092,7 @@ def customer_portal_preview(request, pk):
 def customer_admin_invite(request, pk):
     customer = _customer(request, pk)
     if customer.memberships.filter(active=True, role='admin').exists():
-        messages.info(request, 'Für dieses Unternehmen existiert bereits ein aktiver Firmenadministrator.')
+        messages.info(request, _("Für dieses Unternehmen existiert bereits ein aktiver Firmenadministrator."))
         return redirect('ns_admin:customer_users', pk=customer.pk)
 
     pending = (
@@ -1131,7 +1131,7 @@ def customer_admin_invite(request, pk):
                 locked = Company.objects.select_for_update().get(pk=customer.pk)
                 if locked.memberships.filter(active=True, role='admin').exists():
                     raise ValidationError(
-                        'Für dieses Unternehmen existiert bereits ein aktiver Firmenadministrator.'
+                        _("Für dieses Unternehmen existiert bereits ein aktiver Firmenadministrator.")
                     )
                 replaced_invites = 0
                 for pending_invite in pending_admin_invites:
@@ -1237,7 +1237,7 @@ def customer_admin_transfer(request, pk, user_id):
         active=True,
     )
     if target.pk == current_admin.pk:
-        messages.info(request, 'Dieser Benutzer ist bereits Firmenadministrator.')
+        messages.info(request, _("Dieser Benutzer ist bereits Firmenadministrator."))
         return redirect('ns_admin:customer_users', pk=customer.pk)
 
     form = SupportAdminTransferForm(request.POST or None)
@@ -1636,9 +1636,9 @@ def license_refund(request, pk, term_id):
             # message while detailed stack traces remain in server logs.
             messages.error(request, str(exc) if isinstance(exc, ValidationError) else 'Erstattung konnte nicht an Mollie übermittelt werden.')
         else:
-            messages.success(request, 'Erstattung wurde an Mollie übermittelt.')
+            messages.success(request, _("Erstattung wurde an Mollie übermittelt."))
     else:
-        messages.error(request, 'Bestätigung für die Erstattung fehlt.')
+        messages.error(request, _("Bestätigung für die Erstattung fehlt."))
     return redirect('ns_admin:license_detail', pk=pk)
 
 
@@ -1932,7 +1932,7 @@ def mollie_checkout_disable(request):
         {'checkout_enabled': False},
         request=request,
     )
-    messages.success(request, 'Mollie-Produktiv-Checkout wurde gesperrt.')
+    messages.success(request, _("Mollie-Produktiv-Checkout wurde gesperrt."))
     return redirect('ns_admin:mollie')
 
 
@@ -2097,7 +2097,7 @@ def service_account_rotate(request, pk):
         raise PermissionDenied
     account = get_object_or_404(ServiceAccount.objects.select_for_update(), pk=pk)
     if not account.active:
-        messages.error(request, 'Ein gesperrter Service Account kann nicht rotiert werden.')
+        messages.error(request, _("Ein gesperrter Service Account kann nicht rotiert werden."))
         return redirect('ns_admin:api')
     raw, hashed = token_pair()
     account.token_hash = hashed
@@ -2189,7 +2189,7 @@ def legal_declaration_detail(request, pk):
         status = (request.POST.get('status') or '').strip()
         allowed = {value for value, _label in ConsumerContractDeclaration.STATUS}
         if status not in allowed:
-            messages.error(request, 'Ungültiger Bearbeitungsstatus.')
+            messages.error(request, _("Ungültiger Bearbeitungsstatus."))
             return redirect('ns_admin:legal_declaration_detail', pk=declaration.pk)
         declaration.status = status
         declaration.internal_notes = (request.POST.get('internal_notes') or '').strip()[:10000]
@@ -2398,10 +2398,10 @@ def support_request_reply(request, pk):
     )
     body = (request.POST.get('message') or '').strip()
     if not body:
-        messages.error(request, 'Bitte eine Antwort eingeben.')
+        messages.error(request, _("Bitte eine Antwort eingeben."))
         return redirect('ns_admin:support_request_detail', pk=pk)
     if len(body) > 10000:
-        messages.error(request, 'Die Antwort darf höchstens 10.000 Zeichen enthalten.')
+        messages.error(request, _("Die Antwort darf höchstens 10.000 Zeichen enthalten."))
         return redirect('ns_admin:support_request_detail', pk=pk)
 
     result = add_staff_message(
@@ -2451,13 +2451,13 @@ def support_request_status(request, pk):
     status = (request.POST.get('status') or '').strip()
     allowed = {value for value, _label in SupportRequest.STATUS}
     if status not in allowed:
-        messages.error(request, 'Ungültiger Supportstatus.')
+        messages.error(request, _("Ungültiger Supportstatus."))
         return redirect('ns_admin:support_request_detail', pk=pk)
     previous = support_request.status
     support_request.status = status
     support_request.save(update_fields=['status','updated_at'])
     write_audit(request.user, 'support.status_changed', support_request, {'before':previous,'after':status}, request=request)
-    messages.success(request, 'Status aktualisiert.')
+    messages.success(request, _("Status aktualisiert."))
     return redirect('ns_admin:support_request_detail', pk=pk)
 
 
@@ -2518,10 +2518,10 @@ def staff_user_toggle(request, pk):
         raise PermissionDenied
     target = get_object_or_404(User, pk=pk, is_staff=True)
     if target.pk == request.user.pk:
-        messages.error(request, 'Das eigene netstyle Konto kann hier nicht deaktiviert werden.')
+        messages.error(request, _("Das eigene netstyle Konto kann hier nicht deaktiviert werden."))
         return redirect('ns_admin:roles')
     if target.is_active and (target.is_superuser or target.role_links.filter(role__code='superadmin', role__active=True).exists()) and _active_superadmin_count() <= 1:
-        messages.error(request, 'Der letzte aktive Superadmin kann nicht deaktiviert werden.')
+        messages.error(request, _("Der letzte aktive Superadmin kann nicht deaktiviert werden."))
         return redirect('ns_admin:roles')
     target.is_active = not target.is_active
     if target.is_active:
@@ -2529,7 +2529,7 @@ def staff_user_toggle(request, pk):
     target.save(update_fields=['is_active', 'two_factor_required', 'updated_at'])
     bump_security_version(target)
     write_audit(request.user, 'staff_user.activated' if target.is_active else 'staff_user.deactivated', target, {}, request=request)
-    messages.success(request, 'Benutzerstatus aktualisiert.')
+    messages.success(request, _("Benutzerstatus aktualisiert."))
     return redirect('ns_admin:roles')
 
 
@@ -2539,7 +2539,7 @@ def staff_user_reset_2fa(request, pk):
         raise PermissionDenied
     target = get_object_or_404(User, pk=pk, is_staff=True)
     if target.pk == request.user.pk:
-        messages.error(request, 'Die eigene 2FA wird nicht über die Admin-Fremdverwaltung zurückgesetzt.')
+        messages.error(request, _("Die eigene 2FA wird nicht über die Admin-Fremdverwaltung zurückgesetzt."))
         return redirect('ns_admin:roles')
     target.totp_secret_enc = ''
     target.two_factor_required = True
@@ -2547,7 +2547,7 @@ def staff_user_reset_2fa(request, pk):
     target.recovery_codes.all().delete()
     bump_security_version(target)
     write_audit(request.user, 'staff_user.2fa_reset', target, {}, request=request)
-    messages.success(request, '2FA zurückgesetzt. Der Benutzer muss sie beim nächsten Login neu einrichten.')
+    messages.success(request, _("2FA zurückgesetzt. Der Benutzer muss sie beim nächsten Login neu einrichten."))
     return redirect('ns_admin:roles')
 
 
@@ -2561,7 +2561,7 @@ def role_edit(request, pk):
             return render(request, 'ns_admin/form.html', {'title': f'Rolle · {role.name}', 'form': form, 'cancel_url': reverse('ns_admin:roles')})
         saved = form.save()
         write_audit(request.user, 'role.updated', saved, {'fields': list(form.changed_data)}, request=request)
-        messages.success(request, 'Rolle gespeichert.')
+        messages.success(request, _("Rolle gespeichert."))
         return redirect('ns_admin:roles')
     return render(request, 'ns_admin/form.html', {'title': f'Rolle · {role.name}', 'form': form, 'cancel_url': reverse('ns_admin:roles')})
 
@@ -2578,7 +2578,7 @@ def user_role_assign(request):
                 target_user.save(update_fields=['two_factor_required', 'updated_at'])
             bump_security_version(target_user)
         write_audit(request.user, 'user_role.assigned', link, {'user': str(link.user_id), 'role': link.role.code}, request=request)
-        messages.success(request, 'Rolle zugewiesen.')
+        messages.success(request, _("Rolle zugewiesen."))
         return redirect('ns_admin:roles')
     return render(request, 'ns_admin/form.html', {'title': 'netstyle Rolle zuweisen', 'form': form, 'cancel_url': reverse('ns_admin:roles')})
 
@@ -2589,16 +2589,16 @@ def user_role_remove(request, pk):
         raise PermissionDenied
     link = get_object_or_404(UserRole.objects.select_related('user', 'role'), pk=pk)
     if link.user_id == request.user.id and link.role.code == 'superadmin':
-        messages.error(request, 'Die eigene Superadmin-Rolle kann nicht hier entfernt werden.')
+        messages.error(request, _("Die eigene Superadmin-Rolle kann nicht hier entfernt werden."))
         return redirect('ns_admin:roles')
     if link.role.code == 'superadmin' and link.user.is_active and _active_superadmin_count() <= 1:
-        messages.error(request, 'Die letzte aktive Superadmin-Berechtigung kann nicht entfernt werden.')
+        messages.error(request, _("Die letzte aktive Superadmin-Berechtigung kann nicht entfernt werden."))
         return redirect('ns_admin:roles')
     target_user = link.user
     write_audit(request.user, 'user_role.removed', link, {'user': str(link.user_id), 'role': link.role.code}, request=request)
     link.delete()
     bump_security_version(target_user)
-    messages.success(request, 'Rolle entfernt.')
+    messages.success(request, _("Rolle entfernt."))
     return redirect('ns_admin:roles')
 
 
@@ -2814,7 +2814,7 @@ def settings_view(request):
                 },
                 request=request,
             )
-            messages.success(request, 'Einstellungen gespeichert.')
+            messages.success(request, _("Einstellungen gespeichert."))
             return redirect('ns_admin:settings')
     return render(
         request,
