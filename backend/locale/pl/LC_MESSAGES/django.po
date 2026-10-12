@@ -1852,3 +1852,36 @@ msgstr "Sprawdź/wykonaj zwrot"
 
 msgid "Keine Lizenzperioden vorhanden."
 msgstr "Brak okresów licencji."
+
+msgid "E-Mail-Protokoll"
+msgstr "Dziennik e-mail"
+
+msgid "Versandstatus, tatsächlich verwendeter Provider und Fallback-Versuche ohne vertrauliche Nachrichtentexte oder Secrets."
+msgstr "Status dostarczenia, rzeczywiście użyty dostawca i próby przełączenia bez poufnej treści wiadomości i danych tajnych."
+
+msgid "Empfänger"
+msgstr "Odbiorca"
+
+msgid "Vorlage"
+msgstr "Szablon"
+
+msgid "Provider"
+msgstr "Dostawca"
+
+msgid "Versuche"
+msgstr "Próby"
+
+msgid "Gesendet"
+msgstr "Wysłano"
+
+msgid "Wird gesendet"
+msgstr "Wysyłanie"
+
+msgid "Unterdrückt"
+msgstr "Wstrzymane"
+
+msgid "Warteschlange"
+msgstr "W kolejce"
+
+msgid "Keine E-Mails gefunden."
+msgstr "Nie znaleziono wiadomości e-mail."
