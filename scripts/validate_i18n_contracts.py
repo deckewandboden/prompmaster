@@ -144,6 +144,7 @@ def main() -> None:
                 )
     protected_copilot_ui = (
         '1. Welche Microsoft-Copilot-Version nutzen Sie?',
+        '1. Welche Copilot-Stufe zeigt Microsoft für Ihr Konto an?',
         'Alle erzeugten Prompts können direkt in Microsoft Copilot verwendet werden. Die Verfügbarkeit einzelner Microsoft-Funktionen hängt von Microsoft-Lizenz, Tenant und Rollout ab.',
         'Diese Funktion benötigt eine andere Microsoft-Copilot-Stufe.',
         'Microsoft-Copilot-Stufe erforderlich',
@@ -202,6 +203,24 @@ def main() -> None:
         'Umsetzung': 'Uygulama',
         'Video': 'Video',
         'Zusammenfassung': 'Özet',
+        "Daten, Kennzahlen, Auffälligkeiten und Trends auswerten": "Verileri, temel göstergeleri, anormallikleri ve eğilimleri analiz et",
+        "Datenschutz": "Veri koruma",
+        "Offene Punkte": "Açık konular",
+        "PROMPT BEREIT": "PROMPT HAZIR",
+        "Schließen": "Kapat",
+        "teilweise": "Kısmen",
+        "Ausdrücke": "İfadeler",
+        "Chats & Kanäle": "Sohbetler ve kanallar",
+        "Datenanalyse": "Veri analizi",
+        "Datenmodell": "Veri modeli",
+        "Exposure": "Maruziyetler",
+        "Flow debuggen": "Akış hatalarını ayıkla",
+        "Formeln": "Formüller",
+        "Lead bewerten": "Potansiyel müşteriyi değerlendir",
+        "Modell": "Model",
+        "Optimierung": "İyileştirme",
+        "Viva Glint": "Viva Glint",
+        "1. Welche Copilot-Stufe zeigt Microsoft für Ihr Konto an?": "1. Hesabınızda hangi Microsoft Copilot seviyesi görünüyor?",
     }
     for source, expected in turkish_quality.items():
         if catalog.get(source, {}).get('tr') != expected:
@@ -217,7 +236,7 @@ def main() -> None:
         'için güvenli Microsoft Copilot sohbeti.'
     ):
         raise SystemExit('I18N FAIL tr: Copilot Chat product description drift')
-    print('I18N TURKISH QUALITY PASS: 19 reviewed terms and whole-word repetition gate')
+    print('I18N TURKISH QUALITY PASS: 37 reviewed terms and whole-word repetition gate')
 
     # The protected Free/Pro runtime uses stable option values for composer
     # semantics. Translate only the visible text of explicitly-valued options.
