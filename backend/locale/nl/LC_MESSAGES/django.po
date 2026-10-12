@@ -1892,3 +1892,21 @@ msgstr "Onderdelen particuliere klanten"
 
 msgid "Audit"
 msgstr "Audit"
+
+msgid "Zuletzt"
+msgstr "Laatst gezien"
+
+msgid "Akteur"
+msgstr "Actor"
+
+msgid "Admin übertragen"
+msgstr "Beheerdersrol overdragen"
+
+msgid "Benutzer wirklich deaktivieren? Lizenzen und Gerätezugänge werden freigegeben."
+msgstr "Deze gebruiker echt deactiveren? Licenties en apparaattoegang worden vrijgegeven."
+
+msgid "Firmenadmin"
+msgstr "Bedrijfsbeheerder"
+
+msgid "Gerätezugang wirklich widerrufen?"
+msgstr "Apparaattoegang echt intrekken?"
