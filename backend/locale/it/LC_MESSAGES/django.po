@@ -2793,3 +2793,27 @@ msgstr "Ho preso visione delle informazioni sul diritto di recesso"
 
 msgid "Zum Beispiel Bestellnummer oder Kundennummer."
 msgstr "Ad esempio, numero d'ordine o numero cliente."
+
+msgid "Gerätename"
+msgstr "Nome dispositivo"
+
+msgid "Keine konkrete Lizenz"
+msgstr "Nessuna licenza specifica"
+
+msgid "Lizenz (optional)"
+msgstr "Licenza (facoltativa)"
+
+msgid "Nachricht"
+msgstr "Messaggio"
+
+msgid "Schlüssel"
+msgstr "Chiave"
+
+msgid "Sonstiges"
+msgstr "Altro"
+
+msgid "Sortierung"
+msgstr "Ordinamento"
+
+msgid "Technisches Problem"
+msgstr "Problema tecnico"
