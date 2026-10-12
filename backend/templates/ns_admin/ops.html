@@ -114,7 +114,7 @@
   <section class="card">
     <h2>{% translate 'Aktive Warnungen' %}</h2>
     {% for a in alerts %}
-      <div class="statusrow"><span>{{ a.message }}</span><span class="badge {% if a.severity == 'critical' %}bad{% else %}warn{% endif %}">{% translate a.severity %}</span></div>
+      <div class="statusrow"><span>{{ a|ops_alert_display }}</span><span class="badge {% if a.severity == 'critical' %}bad{% else %}warn{% endif %}">{% translate a.severity %}</span></div>
     {% empty %}
       <div class="alert">{% translate 'Keine aktiven Systemwarnungen.' %}</div>
     {% endfor %}
