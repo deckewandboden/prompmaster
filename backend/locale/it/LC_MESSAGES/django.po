@@ -3345,3 +3345,66 @@ msgstr "Ruolo rimosso."
 
 msgid "Benutzerstatus aktualisiert."
 msgstr "Stato utente aggiornato."
+
+msgid "Lead gespeichert."
+msgstr "Lead salvato."
+
+msgid "Lead-Zuständigkeit aktualisiert."
+msgstr "Responsabile del lead aggiornato."
+
+msgid "Gerät wurde widerrufen."
+msgstr "Accesso del dispositivo revocato."
+
+msgid "Unternehmensdaten gespeichert."
+msgstr "Dati aziendali salvati."
+
+msgid "Benutzer deaktiviert; Lizenz- und Gerätezugänge wurden freigegeben."
+msgstr "Utente disattivato; accessi a licenze e dispositivi rilasciati."
+
+msgid "Die Lizenz ist bereits frei."
+msgstr "La licenza è già non assegnata."
+
+msgid "Lizenzzuweisung wurde freigegeben."
+msgstr "Assegnazione della licenza rilasciata."
+
+msgid "Lizenz wurde entsperrt."
+msgstr "Licenza sbloccata."
+
+msgid "Lizenz wurde gesperrt; vorhandene Gerätezugänge wurden widerrufen."
+msgstr "Licenza bloccata; accessi esistenti dei dispositivi revocati."
+
+msgid "Produkt angelegt. Legen Sie anschließend Preisversionen an."
+msgstr "Prodotto creato. Aggiungi poi le versioni dei prezzi."
+
+msgid "Feature gespeichert."
+msgstr "Funzionalità salvata."
+
+msgid "Produkt gespeichert."
+msgstr "Prodotto salvato."
+
+msgid "Neue Preisversion angelegt."
+msgstr "Nuova versione del prezzo creata."
+
+msgid "E-Mail-Vorlage gespeichert."
+msgstr "Modello e-mail salvato."
+
+msgid "Mollie-Konfiguration gespeichert."
+msgstr "Configurazione Mollie salvata."
+
+msgid "Service Account gesperrt."
+msgstr "Account di servizio bloccato."
+
+msgid "Verbrauchererklärung aktualisiert."
+msgstr "Dichiarazione del consumatore aggiornata."
+
+msgid "Rechtsdokument gespeichert."
+msgstr "Documento legale salvato."
+
+msgid "Retention-Policy gespeichert."
+msgstr "Criterio di conservazione salvato."
+
+msgid "Löschanfrage verarbeitet und Konto anonymisiert."
+msgstr "Richiesta di cancellazione elaborata e account anonimizzato."
+
+msgid "Löschanfrage abgelehnt."
+msgstr "Richiesta di cancellazione respinta."
