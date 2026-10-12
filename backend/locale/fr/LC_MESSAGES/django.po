@@ -2247,3 +2247,60 @@ msgstr "Alternative à SMTP pour Exchange Online. Le secret client est stocké c
 
 msgid "Sie besitzen Leserechte, aber keine Berechtigung zum Ändern dieser Einstellungen."
 msgstr "Vous disposez d'un accès en lecture seule et ne pouvez pas modifier ces paramètres."
+
+msgid "Bewertungen"
+msgstr "Évaluations"
+
+msgid "Deterministischer Composer-Test ohne Speicherung des erzeugten Prompttexts."
+msgstr "Test déterministe du composeur sans stockage du texte du prompt généré."
+
+msgid "Draft aus letzter Version"
+msgstr "Créer un brouillon à partir de la dernière version"
+
+msgid "Draft speichern"
+msgstr "Enregistrer le brouillon"
+
+msgid "Keine Version vorhanden."
+msgstr "Aucune version disponible."
+
+msgid "Konfigurierbare Schwellen für Recent Average und Drop-Erkennung."
+msgstr "Seuils configurables pour la moyenne récente et la détection des baisses."
+
+msgid "No-Code Editor. Nur DRAFT-Versionen sind inhaltlich veränderbar."
+msgstr "Éditeur sans code. Seules les versions DRAFT peuvent être modifiées."
+
+msgid "Noch keine Qualitäts-Snapshots. Analyse ausführen oder Ratings erfassen."
+msgstr "Aucun instantané de qualité. Lancez une analyse ou saisissez des évaluations."
+
+msgid "Policy"
+msgstr "Politique"
+
+msgid "Qualität:"
+msgstr "Qualité :"
+
+msgid "Qualitätsschwellen"
+msgstr "Seuils de qualité"
+
+msgid "Ratings"
+msgstr "Évaluations"
+
+msgid "Testfall"
+msgstr "Cas de test"
+
+msgid "Testfall speichern"
+msgstr "Enregistrer le cas de test"
+
+msgid "Tests"
+msgstr "Tests"
+
+msgid "Titel"
+msgstr "Titre"
+
+msgid "Zur Übersicht"
+msgstr "Retour à la vue d’ensemble"
+
+msgid "bearbeiten"
+msgstr "modifier"
+
+msgid "zentrale PromptDefinition"
+msgstr "PromptDefinition centrale"
