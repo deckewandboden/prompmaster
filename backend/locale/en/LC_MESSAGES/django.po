@@ -2131,3 +2131,60 @@ msgstr "Save settings"
 
 msgid "Sie besitzen Leserechte, aber keine Berechtigung zum Ändern dieser Einstellungen."
 msgstr "You have read-only access and cannot change these settings."
+
+msgid "Bewertungen"
+msgstr "Ratings"
+
+msgid "Deterministischer Composer-Test ohne Speicherung des erzeugten Prompttexts."
+msgstr "Deterministic composer test without storing the generated prompt text."
+
+msgid "Draft aus letzter Version"
+msgstr "Create draft from latest version"
+
+msgid "Draft speichern"
+msgstr "Save draft"
+
+msgid "Keine Version vorhanden."
+msgstr "No version available."
+
+msgid "Konfigurierbare Schwellen für Recent Average und Drop-Erkennung."
+msgstr "Configurable thresholds for recent average and decline detection."
+
+msgid "No-Code Editor. Nur DRAFT-Versionen sind inhaltlich veränderbar."
+msgstr "No-code editor. Only DRAFT versions can be modified."
+
+msgid "Noch keine Qualitäts-Snapshots. Analyse ausführen oder Ratings erfassen."
+msgstr "No quality snapshots yet. Run an analysis or record ratings."
+
+msgid "Policy"
+msgstr "Policy"
+
+msgid "Qualität:"
+msgstr "Quality:"
+
+msgid "Qualitätsschwellen"
+msgstr "Quality thresholds"
+
+msgid "Ratings"
+msgstr "Ratings"
+
+msgid "Testfall"
+msgstr "Test case"
+
+msgid "Testfall speichern"
+msgstr "Save test case"
+
+msgid "Tests"
+msgstr "Tests"
+
+msgid "Titel"
+msgstr "Title"
+
+msgid "Zur Übersicht"
+msgstr "Back to overview"
+
+msgid "bearbeiten"
+msgstr "edit"
+
+msgid "zentrale PromptDefinition"
+msgstr "Central PromptDefinition"
