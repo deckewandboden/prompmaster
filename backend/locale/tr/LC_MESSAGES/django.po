@@ -2959,3 +2959,216 @@ msgstr "Yayımla"
 
 msgid "Währung"
 msgstr "Para birimi"
+
+msgid "Absender-Anzeigename"
+msgstr "Gönderen görünen adı"
+
+msgid "Absender-E-Mail"
+msgstr "Gönderen e-posta adresi"
+
+msgid "Aktive Absenderadresse für SMTP. Änderungen gelten ohne Container-Neustart."
+msgstr "Etkin SMTP gönderici adresi. Değişiklikler konteyner yeniden başlatılmadan geçerlidir."
+
+msgid "Antwortadresse"
+msgstr "Yanıt adresi"
+
+msgid "Anwendungs-/Client-ID der App-Registrierung."
+msgstr "Uygulama kaydının uygulama/istemci kimliği."
+
+msgid "Automatisch – bei sicherem Ausfall auf Fallback wechseln"
+msgstr "Otomatik – kesin arızada yedek yola geç"
+
+msgid "Backup kritisch in Stunden"
+msgstr "Kritik yedekleme yaşı (saat)"
+
+msgid "Backup-Warnung in Stunden"
+msgstr "Yedekleme uyarı yaşı (saat)"
+
+msgid "Begründung optional"
+msgstr "Gerekçe (isteğe bağlı)"
+
+msgid "Bei IONOS normalerweise die vollständige E-Mail-Adresse."
+msgstr "IONOS için genellikle tam e-posta adresini kullanın."
+
+msgid "Bitte eine gültige Domain ohne @ eingeben."
+msgstr "@ içermeyen geçerli bir alan adı girin."
+
+msgid "CPU-Warnung in %"
+msgstr "CPU uyarı eşiği (%)"
+
+msgid "DKIM DNS Sollwert"
+msgstr "DKIM DNS hedef değeri"
+
+msgid "DKIM-Selector"
+msgstr "DKIM seçicisi"
+
+msgid "DMARC Sollwert"
+msgstr "DMARC hedef değeri"
+
+msgid "Datenträger kritisch in %"
+msgstr "Kritik disk kullanımı (%)"
+
+msgid "Datenträger-Warnung in %"
+msgstr "Disk kullanımı uyarısı (%)"
+
+msgid "Der kritische Wert muss über dem Warnwert liegen."
+msgstr "Kritik eşik, uyarı eşiğinden yüksek olmalıdır."
+
+msgid "Die Mail-Domain muss zur Absender-E-Mail passen."
+msgstr "Posta alan adı, gönderen e-posta adresiyle eşleşmelidir."
+
+msgid "Dokumentierter DNS-Sollwert für _dmarc.<Domain>."
+msgstr "_dmarc.<Domain> için belgelenmiş DNS hedef değeri."
+
+msgid "Dokumentierter DNS-Sollwert. Das Speichern ändert den öffentlichen DNS-Eintrag nicht."
+msgstr "Belgelenmiş DNS hedef değeri. Kaydetme, genel DNS kaydını değiştirmez."
+
+msgid "Domain des sichtbaren Absenders, z. B. decke-wand-boden.de oder später promptmaster.ai."
+msgstr "Görünen gönderenin alan adı; örn. decke-wand-boden.de veya daha sonra promptmaster.ai."
+
+msgid "Ein DMARC-Eintrag muss mit \"v=DMARC1;\" beginnen."
+msgstr "DMARC kaydı \"v=DMARC1;\" ile başlamalıdır."
+
+msgid "Ein SPF-Eintrag muss mit \"v=spf1 \" beginnen."
+msgstr "SPF kaydı \"v=spf1 \" ile başlamalıdır."
+
+msgid "Ein Versandweg darf in der Kette nur einmal vorkommen."
+msgstr "Her gönderim yolu zincirde yalnızca bir kez kullanılabilir."
+
+msgid "Eine oder mehrere E-Mail-Adressen, getrennt durch Zeilenumbruch, Komma oder Semikolon."
+msgstr "Satır sonu, virgül veya noktalı virgülle ayrılmış bir veya daha fazla e-posta adresi."
+
+msgid "Entra Client ID"
+msgstr "Entra istemci kimliği"
+
+msgid "Entra Client Secret"
+msgstr "Entra istemci gizli anahtarı"
+
+msgid "Entra Tenant ID"
+msgstr "Entra kiracı kimliği"
+
+msgid "Erstattung verbindlich über Mollie auslösen"
+msgstr "Mollie üzerinden para iadesini onayla"
+
+msgid "Fallback 1"
+msgstr "Yedek yol 1"
+
+msgid "Fallback 2"
+msgstr "Yedek yol 2"
+
+msgid "Für IONOS mit STARTTLS: 587."
+msgstr "STARTTLS kullanan IONOS için: 587."
+
+msgid "Für Microsoft Graph ist dieses Feld erforderlich."
+msgstr "Bu alan Microsoft Graph için zorunludur."
+
+msgid "Für Microsoft Graph ist ein Client Secret erforderlich."
+msgstr "Microsoft Graph için bir istemci gizli anahtarı gereklidir."
+
+msgid "Für SMTP 1 ist dieses Feld erforderlich."
+msgstr "Bu alan SMTP 1 için zorunludur."
+
+msgid "Für SMTP 2 ist dieses Feld erforderlich."
+msgstr "Bu alan SMTP 2 için zorunludur."
+
+msgid "Für den automatischen Modus muss mindestens ein Fallback gewählt werden."
+msgstr "Otomatik mod için en az bir yedek yol seçin."
+
+msgid "Im automatischen Modus wird nur bei eindeutig nicht zugestellten Fehlern weitergeschaltet."
+msgstr "Otomatik mod, yalnızca teslim edilmediği kesinleşen hatalarda diğer yola geçer."
+
+msgid "Kein weiterer Fallback"
+msgstr "Başka yedek yol yok"
+
+msgid "Leer lassen, um das gespeicherte Passwort unverändert zu lassen."
+msgstr "Kayıtlı parolayı değiştirmemek için boş bırakın."
+
+msgid "Leer lassen, um das gespeicherte Secret unverändert zu lassen."
+msgstr "Kayıtlı gizli anahtarı değiştirmemek için boş bırakın."
+
+msgid "Manuell – nur den primären Versandweg verwenden"
+msgstr "Manuel – yalnızca birincil gönderim yolunu kullan"
+
+msgid "Microsoft-365-Absender"
+msgstr "Microsoft 365 göndericisi"
+
+msgid "Monitoring-Alarmempfänger"
+msgstr "İzleme alarmı alıcıları"
+
+msgid "Neuer Schlüssel"
+msgstr "Yeni anahtar"
+
+msgid "Optional. Leer lassen, wenn Antworten an die Absenderadresse gehen sollen."
+msgstr "İsteğe bağlı. Yanıtların gönderen adresine gitmesi için boş bırakın."
+
+msgid "Optionaler Selector bzw. Hinweis auf die verwendeten Microsoft-365-DKIM-Selectoren."
+msgstr "İsteğe bağlı seçici veya kullanılan Microsoft 365 DKIM seçicileri hakkında not."
+
+msgid "Optionaler zweiter SMTP-Provider, z. B. derselbe Relay-Dienst wie bei Listmonk."
+msgstr "İsteğe bağlı ikinci SMTP sağlayıcısı, örn. Listmonk ile aynı aktarma hizmeti."
+
+msgid "Postfach, über das Microsoft Graph senden soll, z. B. promptmaster@netstyle.de."
+msgstr "Microsoft Graph'ın gönderim için kullanacağı posta kutusu, örn. promptmaster@netstyle.de."
+
+msgid "Primärer Versandweg"
+msgstr "Birincil gönderim yolu"
+
+msgid "RAM kritisch in %"
+msgstr "Kritik RAM kullanımı (%)"
+
+msgid "RAM-Warnung in %"
+msgstr "RAM kullanımı uyarısı (%)"
+
+msgid "Restore-Test-Warnung in Tagen"
+msgstr "Geri yükleme testi uyarı yaşı (gün)"
+
+msgid "SMTP 1 – Benutzername"
+msgstr "SMTP 1 – Kullanıcı adı"
+
+msgid "SMTP 1 – Passwort"
+msgstr "SMTP 1 – Parola"
+
+msgid "SMTP 1 – Port"
+msgstr "SMTP 1 – Port"
+
+msgid "SMTP 1 – STARTTLS verwenden"
+msgstr "SMTP 1 – STARTTLS kullan"
+
+msgid "SMTP 1 – Server"
+msgstr "SMTP 1 – Sunucu"
+
+msgid "SMTP 1, SMTP 2 und Microsoft Graph bleiben parallel konfiguriert."
+msgstr "SMTP 1, SMTP 2 ve Microsoft Graph paralel yapılandırılmış kalır."
+
+msgid "SMTP 2 – Benutzername"
+msgstr "SMTP 2 – Kullanıcı adı"
+
+msgid "SMTP 2 – Passwort"
+msgstr "SMTP 2 – Parola"
+
+msgid "SMTP 2 – Port"
+msgstr "SMTP 2 – Port"
+
+msgid "SMTP 2 – STARTTLS verwenden"
+msgstr "SMTP 2 – STARTTLS kullan"
+
+msgid "SMTP 2 – Server"
+msgstr "SMTP 2 – Sunucu"
+
+msgid "SPF Sollwert"
+msgstr "SPF hedef değeri"
+
+msgid "Support-Empfänger"
+msgstr "Destek alıcısı"
+
+msgid "TXT-/CNAME-Sollwert oder beide Microsoft-365-DKIM-CNAMEs. Reine Dokumentation; DNS wird nicht automatisch verändert."
+msgstr "TXT/CNAME hedef değeri veya iki Microsoft 365 DKIM CNAME kaydı. Yalnızca belgelendirme; DNS otomatik değişmez."
+
+msgid "Verzeichnis-/Mandanten-ID des Microsoft-365-Tenants."
+msgstr "Microsoft 365 kiracısının dizin/kiracı kimliği."
+
+msgid "Zum Beispiel PROMPTFINISHER."
+msgstr "Örneğin PROMPTFINISHER."
+
+msgid "Zum Beispiel smtp.ionos.de."
+msgstr "Örneğin smtp.ionos.de."
