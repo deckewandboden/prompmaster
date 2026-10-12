@@ -3302,3 +3302,39 @@ msgstr "Запрос на удаление обработан, учётная з
 
 msgid "Löschanfrage abgelehnt."
 msgstr "Запрос на удаление отклонён."
+
+msgid "Dieser Lead ist bereits einem Kunden zugeordnet."
+msgstr "Этот лид уже связан с клиентом."
+
+msgid "Einladung für den Firmenadministrator wurde gesendet."
+msgstr "Приглашение администратору компании отправлено."
+
+msgid "Kundenantwort gespeichert. Für Demo-Adressen wurde keine E-Mail versendet."
+msgstr "Ответ клиенту сохранён. На демонстрационные адреса письма не отправлялись."
+
+msgid "Kundenantwort gespeichert und E-Mail-Benachrichtigung eingeplant."
+msgstr "Ответ клиенту сохранён, уведомление по электронной почте поставлено в очередь."
+
+msgid "Kundenantwort gespeichert, E-Mail-Benachrichtigung konnte aber nicht eingeplant werden."
+msgstr "Ответ клиенту сохранён, но уведомление по электронной почте не удалось поставить в очередь."
+
+msgid "netstyle Benutzer angelegt; Einrichtungslink wurde per E-Mail versendet."
+msgstr "Пользователь netstyle создан; ссылка настройки отправлена по электронной почте."
+
+msgid "Privatkunden werden aus rechtlichen Gründen über Registrierung/Checkout angelegt; der Lead kann dort anschließend als gewonnen abgeschlossen werden."
+msgstr "По юридическим причинам частные клиенты создаются через регистрацию/оформление заказа; затем лид можно отметить как успешный."
+
+msgid "Lead wurde in einen Firmenkunden umgewandelt. Der Ansprechpartner hat eine sichere Einladung erhalten."
+msgstr "Лид преобразован в корпоративного клиента. Контактному лицу отправлено защищённое приглашение."
+
+msgid "Lead %(lead_number)s angelegt."
+msgstr "Лид %(lead_number)s создан."
+
+msgid "Lead %(lead_number)s gelöscht."
+msgstr "Лид %(lead_number)s удалён."
+
+msgid "Firmenadministrator wurde auf %(email)s übertragen."
+msgstr "Роль администратора компании передана пользователю %(email)s."
+
+msgid "Lizenz wurde %(email)s zugewiesen."
+msgstr "Лицензия назначена пользователю %(email)s."
