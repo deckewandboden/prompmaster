@@ -1939,3 +1939,75 @@ msgstr "Solicitud y todas las respuestas de netstyle en orden cronológico."
 
 msgid "netstyle Support"
 msgstr "Soporte de netstyle"
+
+msgid "FAQ bearbeiten"
+msgstr "Editar pregunta frecuente"
+
+msgid "FAQ anlegen"
+msgstr "Crear pregunta frecuente"
+
+msgid "Zentraler Content-Baustein."
+msgstr "Componente de contenido central."
+
+msgid "FAQ-Verwaltung"
+msgstr "Gestión de preguntas frecuentes"
+
+msgid "Zentrale FAQ-Inhalte für Marketing und Produktoberflächen."
+msgstr "Contenido central de preguntas frecuentes para marketing e interfaces de productos."
+
+msgid "Frage suchen …"
+msgstr "Buscar preguntas …"
+
+msgid "Alle Zielgruppen"
+msgstr "Todos los públicos"
+
+msgid "Filtern"
+msgstr "Filtrar"
+
+msgid "Zurücksetzen"
+msgstr "Restablecer"
+
+msgid "Key"
+msgstr "Clave"
+
+msgid "Frage"
+msgstr "Pregunta"
+
+msgid "Zielgruppe"
+msgstr "Público objetivo"
+
+msgid "Keine FAQ-Einträge."
+msgstr "No hay preguntas frecuentes."
+
+msgid "Service Account Token"
+msgstr "Token de cuenta de servicio"
+
+msgid "erstellt"
+msgstr "creado"
+
+msgid "Token jetzt sicher speichern."
+msgstr "Guarda ahora este token de forma segura."
+
+msgid "Er wird danach nicht erneut im Klartext angezeigt; ein alter Token ist nach einer Rotation sofort ungültig."
+msgstr "No se volverá a mostrar en texto claro; un token anterior deja de ser válido inmediatamente después de su rotación."
+
+msgid "Zur API-Verwaltung"
+msgstr "Volver a gestión de API"
+
+msgid "Produktcode"
+msgstr "Código de producto"
+
+msgid "Preisversion anlegen"
+msgstr "Crear versión de precio"
+
+msgid "Produktkonfiguration"
+msgstr "Configuración del producto"
+
+msgid "Preisversionen"
+msgstr "Versiones de precio"
+
+msgid "ab"
+msgstr "desde"
+
+msgid "Keine Preisversionen."
+msgstr "No hay versiones de precio."
