@@ -2011,3 +2011,69 @@ msgstr "itibaren"
 
 msgid "Keine Preisversionen."
 msgstr "Fiyat sürümü yok."
+
+msgid "Zentrale Prompt-Domain · 34 Apps · 194 PM20-Aufgaben · versioniert und serverseitig komponiert."
+msgstr "Merkezi prompt alanı · 34 uygulama · 194 PM20 görevi · sürümlü ve sunucuda oluşturulur."
+
+msgid "Qualität"
+msgstr "Kalite"
+
+msgid "Task-ID, App oder Titel suchen …"
+msgstr "Görev kimliği, uygulama veya başlık ara …"
+
+msgid "Task"
+msgstr "Görev"
+
+msgid "Anwendung"
+msgstr "Uygulama"
+
+msgid "Veröffentlicht"
+msgstr "Yayımlandı"
+
+msgid "Offene Versionen"
+msgstr "Açık sürümler"
+
+msgid "keine"
+msgstr "yok"
+
+msgid "noch keine Daten"
+msgstr "henüz veri yok"
+
+msgid "Keine Prompt-Aufgaben gefunden."
+msgstr "Prompt görevi bulunamadı."
+
+msgid "Prompt-Qualität"
+msgstr "Prompt kalitesi"
+
+msgid "1–5-Sterne-Ratings · Recent Average · Drop-Erkennung · Aufgabenliste."
+msgstr "1–5 yıldız değerlendirmesi · güncel ortalama · düşüş algılama · görev listesi."
+
+msgid "Schwellen"
+msgstr "Eşikler"
+
+msgid "Analyse aktualisieren"
+msgstr "Analizi güncelle"
+
+msgid "Kritisch"
+msgstr "Kritik"
+
+msgid "Warnung"
+msgstr "Uyarı"
+
+msgid "Beobachten"
+msgstr "İzle"
+
+msgid "OK"
+msgstr "Tamam"
+
+msgid "App"
+msgstr "Uygulama"
+
+msgid "Recent Avg"
+msgstr "Güncel ort."
+
+msgid "Previous Avg"
+msgstr "Önceki ort."
+
+msgid "Drop"
+msgstr "Düşüş"
