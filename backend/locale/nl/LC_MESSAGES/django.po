@@ -2669,3 +2669,21 @@ msgstr "{value} e-mailfouten in 24 uur"
 
 msgid "{value} Mollie-Verarbeitungsfehler in 24 Stunden"
 msgstr "{value} Mollie-verwerkingsfouten in 24 uur"
+
+msgid "Backups"
+msgstr "Back-ups"
+
+msgid "Restore-Tests"
+msgstr "Hersteltests"
+
+msgid "Systemwarnungen"
+msgstr "Systeemwaarschuwingen"
+
+msgid "Erledigt"
+msgstr "Opgelost"
+
+msgid "Filter"
+msgstr "Filter"
+
+msgid "Seite"
+msgstr "pagina"
