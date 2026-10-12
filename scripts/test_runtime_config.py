@@ -110,9 +110,12 @@ class RuntimeConfigTests(unittest.TestCase):
             {'context': '.', 'dockerfile': 'Dockerfile.node-exporter'},
         )
         dockerfile = (ROOT / 'Dockerfile.node-exporter').read_text()
-        self.assertIn('FROM golang:1.26.6-alpine AS build', dockerfile)
+        self.assertIn('FROM golang:1.27.2-alpine3.23 AS build', dockerfile)
         self.assertIn('6044da783597cc3b57aef7580ddcdcff58a4ee99', dockerfile)
         self.assertIn('golang.org/x/crypto@v0.55.0', dockerfile)
+        self.assertIn('golang.org/x/net@v0.60.0', dockerfile)
+        self.assertIn("go version -m /out/node_exporter | grep -F 'go1.27.2'", dockerfile)
+        self.assertIn("grep -F 'golang.org/x/net' | grep -F 'v0.60.0'", dockerfile)
         self.assertIn('FROM scratch', dockerfile)
 
     def test_prometheus_runtime_is_pinned_and_rebuilt_with_patched_go(self):
