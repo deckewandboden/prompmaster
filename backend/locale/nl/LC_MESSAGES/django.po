@@ -3545,3 +3545,33 @@ msgstr "Bewaarbeleid bewerken"
 
 msgid "Rolle · %(name)s"
 msgstr "Rol · %(name)s"
+
+msgid "Firmenadministrator"
+msgstr "Bedrijfsbeheerder"
+
+msgid "Entwurf"
+msgstr "Concept"
+
+msgid "Zahlung offen"
+msgstr "Betaling openstaand"
+
+msgid "Zahlung prüfen"
+msgstr "Betaling controleren"
+
+msgid "Refundiert"
+msgstr "Terugbetaald"
+
+msgid "Abgelehnt"
+msgstr "Afgewezen"
+
+msgid "Eingegangen"
+msgstr "Ontvangen"
+
+msgid "Kündigung"
+msgstr "Opzegging van de overeenkomst"
+
+msgid "Für Kunden sichtbar"
+msgstr "Zichtbaar voor klanten"
+
+msgid "Interne Notiz"
+msgstr "Interne notitie"
