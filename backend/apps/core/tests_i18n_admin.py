@@ -28,6 +28,7 @@ PAGES = (
     'ns_admin/roles.html',
     'ns_admin/legal.html',
     'ns_admin/api.html',
+    'ns_admin/ops.html',
     'ns_admin/ops_services.html',
     'ns_admin/mollie.html',
     'ns_admin/email.html',
@@ -359,6 +360,36 @@ class AdminInternationalizationContractTests(SimpleTestCase):
         self.assertIn("{% translate 'Deterministischer Feld-Fallback' as context_fallback %}", source)
         self.assertIn("|default:context_fallback", source)
         self.assertIn('data-label="{% translate \'Name\' %}"', source)
+
+    def test_ops_dashboard_has_full_static_and_status_i18n_coverage(self):
+        source = (ROOT / 'templates/ns_admin/ops.html').read_text(encoding='utf-8')
+        self.assertIn("{% load pm i18n %}", source)
+        labels = (
+            'System & Betrieb', 'Aktive Warnungen', 'Dateiobjekte (Inodes) verfügbar',
+            'Betriebszustand, Plattformdienste, Integrationen und Datensicherung.',
+            'Inodes sind Dateisystem-Einträge für Dateien und Verzeichnisse. Sind sie ausgeschöpft, können trotz freiem Speicher keine neuen Dateien angelegt werden.',
+            'Diese Werte stammen aus cAdvisor und beziehen sich auf Docker-Container. Die VM-Werte oben stammen aus node_exporter und beziehen sich auf die gesamte Docker-Host-VM.',
+            'Letztes Backup', 'Letzter Restore-Test', 'nicht erreichbar',
+            'nicht protokolliert', 'Heartbeat fehlt', 'konfiguriert',
+        )
+        for label in labels:
+            with self.subTest(label=label):
+                self.assertIn("{% translate '" + label + "' %}", source)
+                for code in LOCALES:
+                    translations = catalog_translations(
+                        ROOT / 'locale' / code / 'LC_MESSAGES' / 'django.po'
+                    )
+                    self.assertTrue(translations.get(label))
+        for runtime_name in (
+            'database.status', 'certificate.status', 'integrations.mcp.status',
+            'latest_backup.status', 'latest_restore.status', 'a.severity',
+        ):
+            self.assertIn('{% translate ' + runtime_name + ' %}', source)
+        self.assertIn("{% translate 'nicht gesetzt' as ops_unset_label %}", source)
+        self.assertIn('|default:ops_unset_label', source)
+        self.assertIn("{% if certificate.status %}{% translate certificate.status %}{% else %}–{% endif %}", source)
+        self.assertEqual(source.count("|date:'SHORT_DATETIME_FORMAT'"), 2)
+        self.assertNotIn("|date:'d.m.Y H:i'", source)
 
     def test_language_picker_is_in_flex_header_and_never_overlays_avatar(self):
         shell = (ROOT / 'templates/app_shell.html').read_text(encoding='utf-8')
