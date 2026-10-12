@@ -1926,3 +1926,72 @@ msgstr "Administrateur de l'entreprise"
 
 msgid "Gerätezugang wirklich widerrufen?"
 msgstr "Voulez-vous vraiment révoquer l'accès de cet appareil ?"
+
+msgid "Mollie Events"
+msgstr "Événements Mollie"
+
+msgid "Idempotent verarbeitete Provider-Zustandsänderungen."
+msgstr "Changements d'état du fournisseur traités de façon idempotente."
+
+msgid "Providerstatus"
+msgstr "Statut du fournisseur"
+
+msgid "Verarbeitet"
+msgstr "Traité"
+
+msgid "Retries"
+msgstr "Nouvelles tentatives"
+
+msgid "Fehler"
+msgstr "Erreur"
+
+msgid "Keine Mollie Events gefunden."
+msgstr "Aucun événement Mollie trouvé."
+
+msgid "DSGVO-Workflow mit kontrollierter Anonymisierung und Erhalt rechtlich erforderlicher Historie."
+msgstr "Processus RGPD avec anonymisation contrôlée et conservation des historiques légalement requis."
+
+msgid "Angefordert"
+msgstr "Demandé"
+
+msgid "Notiz"
+msgstr "Note"
+
+msgid "Konto wirklich anonymisieren?"
+msgstr "Voulez-vous vraiment anonymiser ce compte ?"
+
+msgid "Verarbeiten"
+msgstr "Traiter"
+
+msgid "Retention Policies"
+msgstr "Politiques de conservation"
+
+msgid "Nur freigegebene Datenklassen können automatisiert bereinigt werden."
+msgstr "Seules les classes de données approuvées peuvent être purgées automatiquement."
+
+msgid "Datenklasse"
+msgstr "Classe de données"
+
+msgid "Keine Policies."
+msgstr "Aucune politique."
+
+msgid "Versionierte AGB, Datenschutz-, Widerrufs- und Lizenztexte."
+msgstr "Documents versionnés : conditions générales, confidentialité, rétractation et licences."
+
+msgid "Typ"
+msgstr "Type"
+
+msgid "Keine Dokumente."
+msgstr "Aucun document."
+
+msgid "Read-only PostgreSQL-Betriebsdaten."
+msgstr "Données d'exploitation PostgreSQL en lecture seule."
+
+msgid "DB-Größe"
+msgstr "Taille de la base de données"
+
+msgid "Retention-Policy anlegen"
+msgstr "Créer une politique de conservation"
+
+msgid "Rechtsdokument anlegen"
+msgstr "Créer un document juridique"
