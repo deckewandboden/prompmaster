@@ -2569,3 +2569,21 @@ msgstr "Son 24 saatte {value} e-posta hatası"
 
 msgid "{value} Mollie-Verarbeitungsfehler in 24 Stunden"
 msgstr "Son 24 saatte {value} Mollie işleme hatası"
+
+msgid "Backups"
+msgstr "Yedeklemeler"
+
+msgid "Restore-Tests"
+msgstr "Geri yükleme testleri"
+
+msgid "Systemwarnungen"
+msgstr "Sistem uyarıları"
+
+msgid "Erledigt"
+msgstr "Çözüldü"
+
+msgid "Filter"
+msgstr "Filtre"
+
+msgid "Seite"
+msgstr "sayfa"
