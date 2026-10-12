@@ -61,6 +61,7 @@ PAGES = (
     'ns_admin/prompt_studio/quality_policy.html',
     'ns_admin/prompt_studio/testcase_edit.html',
     'ns_admin/prompt_studio/version_edit.html',
+    'ns_admin/prompt_studio/version_detail.html',
 )
 TRANSLATE_PATTERN = re.compile(r'''{%\s*translate\s+(['"])(.*?)\1\s*%}''')
 
@@ -341,6 +342,23 @@ class AdminInternationalizationContractTests(SimpleTestCase):
                 )
                 with self.subTest(language=code, phrase=phrase):
                     self.assertTrue(locale.get(phrase))
+
+    def test_prompt_studio_version_detail_localizes_release_actions_and_labels(self):
+        source = (ROOT / 'templates/ns_admin/prompt_studio/version_detail.html').read_text(encoding='utf-8')
+        self.assertIn("{% load i18n %}", source)
+        for label in (
+            'Versionen', 'Archivieren', 'Testfälle', 'Alle Tests ausführen',
+            'Löschen', 'Prompt testen', 'Noch kein Testfall. Vor Übergang zu TEST muss mindestens einer angelegt werden.',
+        ):
+            self.assertIn("{% translate '" + label + "' %}", source)
+            for code in LOCALES:
+                translations = catalog_translations(
+                    ROOT / 'locale' / code / 'LC_MESSAGES' / 'django.po'
+                )
+                self.assertTrue(translations.get(label))
+        self.assertIn("{% translate 'Deterministischer Feld-Fallback' as context_fallback %}", source)
+        self.assertIn("|default:context_fallback", source)
+        self.assertIn('data-label="{% translate \'Name\' %}"', source)
 
     def test_language_picker_is_in_flex_header_and_never_overlays_avatar(self):
         shell = (ROOT / 'templates/app_shell.html').read_text(encoding='utf-8')
