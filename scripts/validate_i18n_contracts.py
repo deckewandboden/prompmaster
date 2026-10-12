@@ -143,6 +143,27 @@ def main() -> None:
                 'выключать', 'wyłączone', 'départ', 'uit',
             )):
                 raise SystemExit(f'I18N FAIL {code}: availability tier mistranslated as disabled')
+    # License warnings are action-critical: keep both the complete Microsoft
+    # product name and an explicit requirement word in every translated label.
+    requirement_words = {
+        'en': 'REQUIRED', 'es': 'REQUIERE', 'pt': 'NECESSÁRIO',
+        'tr': 'GEREKLİ', 'ru': 'ТРЕБУЕТСЯ', 'pl': 'WYMAGANY',
+        'fr': 'REQUIS', 'it': 'RICHIESTO', 'nl': 'VEREIST',
+    }
+    for source, official in (
+        ('M365 COPILOT (BASIC) ERFORDERLICH', 'M365 COPILOT (BASIC)'),
+        ('MICROSOFT 365 COPILOT BUSINESS ERFORDERLICH',
+         'MICROSOFT 365 COPILOT BUSINESS'),
+    ):
+        for code in LOCALES:
+            label = catalog[source][code]
+            if official not in label or requirement_words[code] not in label.upper():
+                raise SystemExit(
+                    f'I18N FAIL {code}: licensing requirement lost: '
+                    f'{source!r} => {label!r}'
+                )
+    print('I18N LICENSE REQUIREMENT PASS: two license gates x nine languages')
+
     print('I18N PHRASE QUALITY PASS: no fused brand tokens or runaway word repetitions')
 
     print(f'I18N PRODUCT LABELS PASS: {len(BRAND_LABELS)} brands x {len(LOCALES)} locales')
