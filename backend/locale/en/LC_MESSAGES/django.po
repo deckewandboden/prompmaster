@@ -3337,3 +3337,45 @@ msgstr "Company administrator role transferred to %(email)s."
 
 msgid "Lizenz wurde %(email)s zugewiesen."
 msgstr "License assigned to %(email)s."
+
+msgid "Ausstehend"
+msgstr "Pending"
+
+msgid "Autorisiert"
+msgstr "Authorized"
+
+msgid "Storniert"
+msgstr "Canceled"
+
+msgid "Abgelaufen"
+msgstr "Expired"
+
+msgid "Teilweise erstattet"
+msgstr "Partially refunded"
+
+msgid "Vollständig erstattet"
+msgstr "Fully refunded"
+
+msgid "Chargeback"
+msgstr "Chargeback"
+
+msgid "Chargeback zurückgenommen"
+msgstr "Chargeback reversed"
+
+msgid "Unbekannt"
+msgstr "Unknown"
+
+msgid "Verarbeitungsfehler"
+msgstr "Processing error"
+
+msgid "Fehler behoben"
+msgstr "Error resolved"
+
+msgid "E-Mail-Historie"
+msgstr "Email history"
+
+msgid "netstyle Rolle zuweisen"
+msgstr "Assign netstyle role"
+
+msgid "Erstattung konnte nicht an Mollie übermittelt werden."
+msgstr "Refund could not be submitted to Mollie."
