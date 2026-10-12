@@ -2587,3 +2587,102 @@ msgstr "Filtro"
 
 msgid "Seite"
 msgstr "página"
+
+msgid "AGB akzeptieren"
+msgstr "Aceptar las condiciones generales"
+
+msgid "Anmeldung fehlgeschlagen."
+msgstr "Error al iniciar sesión."
+
+msgid "Anmeldung fehlgeschlagen. Bitte später erneut versuchen."
+msgstr "Error al iniciar sesión. Inténtelo de nuevo más tarde."
+
+msgid "Anzahl Lizenzen"
+msgstr "Número de licencias"
+
+msgid "Art der Kündigung"
+msgstr "Tipo de rescisión"
+
+msgid "Außerordentliche Kündigung"
+msgstr "Rescisión extraordinaria"
+
+msgid "Bei einer außerordentlichen Kündigung ist der Kündigungsgrund erforderlich."
+msgstr "Para una rescisión extraordinaria debe indicar el motivo."
+
+msgid "Bestellnummer"
+msgstr "Número de pedido"
+
+msgid "Bitte bestätigen Sie den gewünschten Leistungsbeginn vor Ablauf der Widerrufsfrist."
+msgstr "Confirme que solicita el inicio del servicio antes de que finalice el plazo de desistimiento."
+
+msgid "Bitte bestätigen Sie die Widerrufsbelehrung."
+msgstr "Confirme que ha leído la información sobre el derecho de desistimiento."
+
+msgid "Datenschutzhinweise zur Kenntnis genommen"
+msgstr "He leído el aviso de privacidad"
+
+msgid "Deutschland"
+msgstr "Alemania"
+
+msgid "Die Bestellnummer finden Sie in Ihrer Bestell- bzw. Zahlungsbestätigung."
+msgstr "Encontrará el número de pedido en la confirmación de pedido o de pago."
+
+msgid "E-Mail-Adresse für die Eingangsbestätigung"
+msgstr "Correo electrónico para confirmar la recepción"
+
+msgid "E-Mail-Adresse für die Kündigungsbestätigung"
+msgstr "Correo electrónico para la confirmación de rescisión"
+
+msgid "Firmenname erforderlich."
+msgstr "Debe indicar el nombre de la empresa."
+
+msgid "Gewünschter Beendigungszeitpunkt"
+msgstr "Fecha de finalización solicitada"
+
+msgid "Hausnummer"
+msgstr "Número del inmueble"
+
+msgid "Kündigungsgrund"
+msgstr "Motivo de rescisión"
+
+msgid "Leer lassen für den frühestmöglichen Zeitpunkt."
+msgstr "Déjelo en blanco para la fecha más próxima posible."
+
+msgid "Leistungsbeginn vor Ablauf der Widerrufsfrist ausdrücklich verlangt"
+msgstr "Solicito expresamente el inicio del servicio antes de que finalice el plazo de desistimiento"
+
+msgid "Lizenzbedingungen akzeptieren"
+msgstr "Aceptar las condiciones de licencia"
+
+msgid "Ordentliche Kündigung"
+msgstr "Rescisión ordinaria"
+
+msgid "PLZ"
+msgstr "Código postal"
+
+msgid "Passwörter stimmen nicht überein."
+msgstr "Las contraseñas no coinciden."
+
+msgid "Steuernummer ist für diese Steuerregel erforderlich."
+msgstr "Esta regla fiscal requiere un número de identificación fiscal."
+
+msgid "Straße"
+msgstr "Calle"
+
+msgid "USt-IdNr. ist für diese Steuerregel erforderlich."
+msgstr "Esta regla fiscal requiere un número de IVA."
+
+msgid "Unternehmensname ist erforderlich."
+msgstr "El nombre de la empresa es obligatorio."
+
+msgid "Vertrag / Bestellung / Kundennummer"
+msgstr "Contrato / pedido / número de cliente"
+
+msgid "Vor- und Nachname"
+msgstr "Nombre y apellidos"
+
+msgid "Widerrufsinformation zur Kenntnis genommen"
+msgstr "He leído la información sobre el derecho de desistimiento"
+
+msgid "Zum Beispiel Bestellnummer oder Kundennummer."
+msgstr "Por ejemplo, un número de pedido o de cliente."
