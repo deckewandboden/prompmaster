@@ -1738,3 +1738,42 @@ msgstr "Ostatnie wysyłki"
 
 msgid "Noch keine Versandvorgänge."
 msgstr "Brak wysyłek."
+
+msgid "Zur Kundenliste"
+msgstr "Wróć do listy klientów"
+
+msgid "Zur Privatkundenliste"
+msgstr "Wróć do klientów indywidualnych"
+
+msgid "Kundendaten"
+msgstr "Dane klienta"
+
+msgid "Stammdaten"
+msgstr "Dane podstawowe"
+
+msgid "Unternehmensdaten speichern"
+msgstr "Zapisz dane firmy"
+
+msgid "Firma"
+msgstr "Firma"
+
+msgid "Steuernummer"
+msgstr "Numer podatkowy"
+
+msgid "Änderungen erfolgen serverseitig mit Berechtigungsprüfung und werden im Audit protokolliert. Steuerfelder werden anhand der aktiven Steuerregel für Land und Kundentyp validiert."
+msgstr "Zmiany są wykonywane na serwerze po sprawdzeniu uprawnień i rejestrowane w dzienniku audytu. Pola podatkowe są weryfikowane według obowiązujących zasad dla kraju i typu klienta."
+
+msgid "Rechtsakzeptanzen"
+msgstr "Akceptacje dokumentów prawnych"
+
+msgid "Version"
+msgstr "Wersja"
+
+msgid "Keine Rechtsakzeptanzen protokolliert."
+msgstr "Brak zarejestrowanych akceptacji dokumentów prawnych."
+
+msgid "Keine Löschanfragen."
+msgstr "Brak wniosków o usunięcie."
+
+msgid "Alle Löschanfragen"
+msgstr "Wszystkie wnioski o usunięcie"
