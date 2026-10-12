@@ -3421,3 +3421,27 @@ msgstr "Nesne türü"
 
 msgid "Objekt-ID"
 msgstr "Nesne kimliği"
+
+msgid "Lead anlegen"
+msgstr "Potansiyel müşteri oluştur"
+
+msgid "Lead %(lead_number)s zuweisen"
+msgstr "%(lead_number)s numaralı potansiyel müşteriyi ata"
+
+msgid "Firmenadministrator einladen · %(company)s"
+msgstr "Şirket yöneticisini davet et · %(company)s"
+
+msgid "Feature bearbeiten"
+msgstr "Özelliği düzenle"
+
+msgid "Preisversion · %(product)s"
+msgstr "Fiyat sürümü · %(product)s"
+
+msgid "Rechtsdokument bearbeiten"
+msgstr "Hukuki belgeyi düzenle"
+
+msgid "Retention-Policy bearbeiten"
+msgstr "Saklama politikasını düzenle"
+
+msgid "Rolle · %(name)s"
+msgstr "Rol · %(name)s"
