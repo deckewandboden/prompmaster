@@ -479,6 +479,7 @@ class AdminInternationalizationContractTests(SimpleTestCase):
             ('custom.disk', 'Manueller Hinweis'),
             ('disk.warning', 'RAM 90% belegt'),
             ('service.caddy.down', 'Administrativer Sonderhinweis'),
+            ('service.node-exporter.down', 'Monitoring-Ziel prometheus ist nicht erreichbar'),
             ('', '<img src=x onerror=alert(1)>'),
         ):
             alert = SimpleNamespace(code=code, message=message)
