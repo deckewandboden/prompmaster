@@ -19,6 +19,8 @@ BRAND_LABELS = (
     'Copilot Studio', 'Clipchamp', 'Whiteboard', 'Power Pages',
     'Microsoft Security Copilot', 'Microsoft 365 Copilot Business',
     'Copilot Chat (Basic)', 'M365 Copilot (Basic)',
+    'Microsoft Forms', 'Microsoft Planner', 'Microsoft Fabric',
+    'Microsoft Copilot in Azure', 'Workplace Analytics', 'Copilot Analytics',
 )
 PLACEHOLDER = re.compile(r'%[(]([A-Za-z_][A-Za-z0-9_]*)[)][a-zA-Z]')
 
