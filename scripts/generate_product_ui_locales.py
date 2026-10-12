@@ -25,7 +25,11 @@ IMMUTABLE_BRAND_LABELS = frozenset({
     'Copilot Studio', 'Clipchamp', 'Whiteboard', 'Power Pages',
 })
 PROTECTED = re.compile(
-    r'PROMPTFINISHER|Microsoft 365 Copilot|Microsoft Copilot'
+    '|'.join(
+        re.escape(brand)
+        for brand in sorted(IMMUTABLE_BRAND_LABELS, key=lambda name: (-len(name), name))
+    ) +
+    r'|PROMPTFINISHER|Microsoft 365 Copilot|Microsoft Copilot'
     r'|Copilot Chat|M365 Copilot|netstyle|Mollie'
     r'|%[(][A-Za-z_][A-Za-z_0-9]*[)][a-z]|[{][A-Za-z_][A-Za-z_0-9]*[}]',
     re.I,
