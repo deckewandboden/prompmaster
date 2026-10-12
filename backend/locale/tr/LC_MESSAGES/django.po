@@ -2188,3 +2188,81 @@ msgstr "düzenle"
 
 msgid "zentrale PromptDefinition"
 msgstr "Merkezi PromptDefinition"
+
+msgid "Versionen"
+msgstr "Sürümler"
+
+msgid "Tests / Ratings"
+msgstr "Testler / değerlendirmeler"
+
+msgid "Lifecycle"
+msgstr "Yaşam döngüsü"
+
+msgid "Archivieren"
+msgstr "Arşivle"
+
+msgid "Publish ist nur über den Human-in-the-loop-Lifecycle möglich. Tests werden vor REVIEW und PUBLISH erneut ausgeführt."
+msgstr "Yayınlama yalnızca insan denetimli yaşam döngüsü üzerinden mümkündür. Testler REVIEW ve PUBLISH öncesinde yeniden çalıştırılır."
+
+msgid "Definition"
+msgstr "Tanım"
+
+msgid "Family"
+msgstr "Aile"
+
+msgid "Area"
+msgstr "Alan"
+
+msgid "Max. Zeichen"
+msgstr "Azami karakter"
+
+msgid "Intent"
+msgstr "Amaç"
+
+msgid "Kontexttemplate"
+msgstr "Bağlam şablonu"
+
+msgid "Felder & Optionen"
+msgstr "Alanlar ve seçenekler"
+
+msgid "Pflichtfelder"
+msgstr "Zorunlu alanlar"
+
+msgid "Keine"
+msgstr "Yok"
+
+msgid "Optionale Felder"
+msgstr "İsteğe bağlı alanlar"
+
+msgid "Auswahloptionen"
+msgstr "Seçim seçenekleri"
+
+msgid "Testfälle"
+msgstr "Test senaryoları"
+
+msgid "Tests sind Bestandteil des Release-Gates einer Prompt-Version."
+msgstr "Testler, bir istem sürümünün yayın onayının parçasıdır."
+
+msgid "Alle Tests ausführen"
+msgstr "Tüm testleri çalıştır"
+
+msgid "Testen"
+msgstr "Test et"
+
+msgid "Löschen"
+msgstr "Sil"
+
+msgid "Noch kein Testfall. Vor Übergang zu TEST muss mindestens einer angelegt werden."
+msgstr "Henüz test senaryosu yok. TEST aşamasına geçmeden önce en az bir tane oluşturun."
+
+msgid "Preview / Test-Komposition"
+msgstr "Önizleme / test bileşimi"
+
+msgid "Prompt testen"
+msgstr "İstemi test et"
+
+msgid "Ergebnis"
+msgstr "Sonuç"
+
+msgid "Deterministischer Feld-Fallback"
+msgstr "Deterministik alan yedeği"
