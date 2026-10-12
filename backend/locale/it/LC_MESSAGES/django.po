@@ -1899,3 +1899,21 @@ msgstr "Sezioni clienti privati"
 
 msgid "Audit"
 msgstr "Audit"
+
+msgid "Zuletzt"
+msgstr "Ultima attività"
+
+msgid "Akteur"
+msgstr "Autore"
+
+msgid "Admin übertragen"
+msgstr "Trasferisci ruolo amministratore"
+
+msgid "Benutzer wirklich deaktivieren? Lizenzen und Gerätezugänge werden freigegeben."
+msgstr "Disattivare davvero questo utente? Le licenze e gli accessi dei dispositivi verranno rilasciati."
+
+msgid "Firmenadmin"
+msgstr "Amministratore aziendale"
+
+msgid "Gerätezugang wirklich widerrufen?"
+msgstr "Revocare davvero l'accesso del dispositivo?"
