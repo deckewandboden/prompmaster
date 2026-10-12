@@ -3547,3 +3547,33 @@ msgstr "Edytuj politykę retencji"
 
 msgid "Rolle · %(name)s"
 msgstr "Rola · %(name)s"
+
+msgid "Firmenadministrator"
+msgstr "Administrator firmy"
+
+msgid "Entwurf"
+msgstr "Wersja robocza"
+
+msgid "Zahlung offen"
+msgstr "Oczekiwanie na płatność"
+
+msgid "Zahlung prüfen"
+msgstr "Sprawdź płatność"
+
+msgid "Refundiert"
+msgstr "Zwrócono środki"
+
+msgid "Abgelehnt"
+msgstr "Odrzucono"
+
+msgid "Eingegangen"
+msgstr "Otrzymano"
+
+msgid "Kündigung"
+msgstr "Wypowiedzenie umowy"
+
+msgid "Für Kunden sichtbar"
+msgstr "Widoczne dla klientów"
+
+msgid "Interne Notiz"
+msgstr "Notatka wewnętrzna"
