@@ -2587,3 +2587,102 @@ msgstr "Filtre"
 
 msgid "Seite"
 msgstr "sayfa"
+
+msgid "AGB akzeptieren"
+msgstr "Şartlar ve koşulları kabul et"
+
+msgid "Anmeldung fehlgeschlagen."
+msgstr "Oturum açma başarısız."
+
+msgid "Anmeldung fehlgeschlagen. Bitte später erneut versuchen."
+msgstr "Oturum açma başarısız. Lütfen daha sonra tekrar deneyin."
+
+msgid "Anzahl Lizenzen"
+msgstr "Lisans sayısı"
+
+msgid "Art der Kündigung"
+msgstr "Fesih türü"
+
+msgid "Außerordentliche Kündigung"
+msgstr "Olağanüstü fesih"
+
+msgid "Bei einer außerordentlichen Kündigung ist der Kündigungsgrund erforderlich."
+msgstr "Olağanüstü fesih için gerekçe belirtilmelidir."
+
+msgid "Bestellnummer"
+msgstr "Sipariş numarası"
+
+msgid "Bitte bestätigen Sie den gewünschten Leistungsbeginn vor Ablauf der Widerrufsfrist."
+msgstr "Lütfen cayma süresi sona ermeden hizmetin başlamasını talep ettiğinizi onaylayın."
+
+msgid "Bitte bestätigen Sie die Widerrufsbelehrung."
+msgstr "Lütfen cayma hakkı bilgilendirmesini okuduğunuzu onaylayın."
+
+msgid "Datenschutzhinweise zur Kenntnis genommen"
+msgstr "Gizlilik bildirimini okudum"
+
+msgid "Deutschland"
+msgstr "Almanya"
+
+msgid "Die Bestellnummer finden Sie in Ihrer Bestell- bzw. Zahlungsbestätigung."
+msgstr "Sipariş numaranızı sipariş veya ödeme onayınızda bulabilirsiniz."
+
+msgid "E-Mail-Adresse für die Eingangsbestätigung"
+msgstr "Alındı onayı için e-posta adresi"
+
+msgid "E-Mail-Adresse für die Kündigungsbestätigung"
+msgstr "Fesih onayı için e-posta adresi"
+
+msgid "Firmenname erforderlich."
+msgstr "Şirket adı zorunludur."
+
+msgid "Gewünschter Beendigungszeitpunkt"
+msgstr "Talep edilen sona erme tarihi"
+
+msgid "Hausnummer"
+msgstr "Bina numarası"
+
+msgid "Kündigungsgrund"
+msgstr "Fesih gerekçesi"
+
+msgid "Leer lassen für den frühestmöglichen Zeitpunkt."
+msgstr "Mümkün olan en erken tarih için boş bırakın."
+
+msgid "Leistungsbeginn vor Ablauf der Widerrufsfrist ausdrücklich verlangt"
+msgstr "Hizmetin cayma süresi bitmeden başlamasını açıkça talep ediyorum"
+
+msgid "Lizenzbedingungen akzeptieren"
+msgstr "Lisans koşullarını kabul et"
+
+msgid "Ordentliche Kündigung"
+msgstr "Olağan fesih"
+
+msgid "PLZ"
+msgstr "Posta kodu"
+
+msgid "Passwörter stimmen nicht überein."
+msgstr "Parolalar eşleşmiyor."
+
+msgid "Steuernummer ist für diese Steuerregel erforderlich."
+msgstr "Bu vergi kuralı için vergi numarası gereklidir."
+
+msgid "Straße"
+msgstr "Sokak"
+
+msgid "USt-IdNr. ist für diese Steuerregel erforderlich."
+msgstr "Bu vergi kuralı için KDV kimlik numarası gereklidir."
+
+msgid "Unternehmensname ist erforderlich."
+msgstr "Şirket adı zorunludur."
+
+msgid "Vertrag / Bestellung / Kundennummer"
+msgstr "Sözleşme / sipariş / müşteri numarası"
+
+msgid "Vor- und Nachname"
+msgstr "Ad ve soyadı"
+
+msgid "Widerrufsinformation zur Kenntnis genommen"
+msgstr "Cayma hakkı bilgilendirmesini okudum"
+
+msgid "Zum Beispiel Bestellnummer oder Kundennummer."
+msgstr "Örneğin sipariş veya müşteri numarası."
