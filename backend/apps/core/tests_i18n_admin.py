@@ -23,6 +23,10 @@ PAGES = (
     'ns_admin/search.html',
     'ns_admin/audit.html',
     'ns_admin/payments.html',
+    'ns_admin/products.html',
+    'ns_admin/features.html',
+    'ns_admin/roles.html',
+    'ns_admin/legal.html',
 )
 TRANSLATE_PATTERN = re.compile(r'''{%\s*translate\s+(['"])(.*?)\1\s*%}''')
 
@@ -77,7 +81,7 @@ class AdminInternationalizationContractTests(SimpleTestCase):
             source = path.read_text(encoding='utf-8')
             keys.update(match.group(2) for match in TRANSLATE_PATTERN.finditer(source))
             get_template(page)  # Django parser must accept all our tags
-        self.assertGreaterEqual(len(keys), 160)
+        self.assertGreaterEqual(len(keys), 195)
         for code in LOCALES:
             translations = catalog_translations(
                 ROOT / 'locale' / code / 'LC_MESSAGES' / 'django.po'
@@ -129,6 +133,20 @@ class AdminInternationalizationContractTests(SimpleTestCase):
                 with self.subTest(language=code, column=label):
                     self.assertTrue(translations.get(label),
                                     'Dynamic admin grid headings must be translated')
+
+    def test_admin_security_confirmations_are_translated(self):
+        role_html = (ROOT / 'templates/ns_admin/roles.html').read_text(encoding='utf-8')
+        for source_text in (
+            '2FA dieses Benutzers zurücksetzen?',
+            'Benutzerstatus wirklich ändern?',
+        ):
+            self.assertIn("data-confirm=\"{% translate '" + source_text + "' %}\"", role_html)
+            for code in LOCALES:
+                translations = catalog_translations(
+                    ROOT / 'locale' / code / 'LC_MESSAGES' / 'django.po'
+                )
+                with self.subTest(language=code, text=source_text):
+                    self.assertTrue(translations.get(source_text))
 
     def test_language_picker_is_in_flex_header_and_never_overlays_avatar(self):
         shell = (ROOT / 'templates/app_shell.html').read_text(encoding='utf-8')
