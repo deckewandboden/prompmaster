@@ -2801,3 +2801,162 @@ msgstr "Цель / намерение"
 
 msgid "Zielgruppen"
 msgstr "Целевые аудитории"
+
+msgid "API-Schlüssel"
+msgstr "Ключ API"
+
+msgid "Ablauf optional"
+msgstr "Срок действия (необязательно)"
+
+msgid "Außerhalb der Produktion ist ausschließlich ein Mollie-Test-Key (test_…) zulässig."
+msgstr "Вне производственной среды разрешён только тестовый ключ Mollie (test_…)."
+
+msgid "Begründung"
+msgstr "Обоснование"
+
+msgid "Beschreibung"
+msgstr "Описание"
+
+msgid "Bruttopreis"
+msgstr "Цена с налогом"
+
+msgid "Der Datensatz wird revisionssicher ausgeblendet und im Audit protokolliert."
+msgstr "Запись будет скрыта с сохранением журнала аудита."
+
+msgid "Diese E-Mail-Adresse gehört bereits zu einem PROMPTFINISHER-Konto."
+msgstr "Этот адрес электронной почты уже принадлежит учётной записи PROMPTFINISHER."
+
+msgid "Diese E-Mail-Adresse ist bereits einem Firmenkunden zugeordnet."
+msgstr "Этот адрес электронной почты уже закреплён за корпоративным клиентом."
+
+msgid "Diese E-Mail-Adresse ist bereits registriert."
+msgstr "Этот адрес электронной почты уже зарегистрирован."
+
+msgid "Dokumenttyp"
+msgstr "Тип документа"
+
+msgid "E-Mail des Firmenadministrators"
+msgstr "Эл. почта администратора компании"
+
+msgid "Eigenes Passwort erneut eingeben"
+msgstr "Введите свой пароль повторно"
+
+msgid "Erinnerung 1 · Tage vorher"
+msgstr "Напоминание 1 · За сколько дней"
+
+msgid "Erinnerung 2 · Tage vorher"
+msgstr "Напоминание 2 · За сколько дней"
+
+msgid "Erstatten"
+msgstr "Возместить"
+
+msgid "Für Unternehmens-Leads ist der Unternehmensname erforderlich."
+msgstr "Для корпоративных лидов необходимо название компании."
+
+msgid "Für diese Datenklasse existiert kein freigegebener Lösch-Handler."
+msgstr "Для этого класса данных нет утверждённого обработчика удаления."
+
+msgid "Für diese E-Mail-Adresse existiert bereits ein aktiver Lead."
+msgstr "Для этого адреса электронной почты уже существует активный лид."
+
+msgid "Identität und Berechtigung des Ansprechpartners wurden geprüft"
+msgstr "Личность и полномочия контактного лица проверены"
+
+msgid "In Kunde umwandeln"
+msgstr "Преобразовать в клиента"
+
+msgid "In Produktion ist ausschließlich ein Mollie-Live-Key (live_…) zulässig."
+msgstr "В производственной среде разрешён только рабочий ключ Mollie (live_…)."
+
+msgid "Inhalt"
+msgstr "Содержимое"
+
+msgid "Interne Notiz zur Prüfung (optional)"
+msgstr "Внутренняя заметка о проверке (необязательно)"
+
+msgid "Interne Notizen"
+msgstr "Внутренние заметки"
+
+msgid "Kaufbar"
+msgstr "Доступно к покупке"
+
+msgid "Kritische Warnung · Tage vorher"
+msgstr "Критическое предупреждение · За сколько дней"
+
+msgid "Lead in Firmenkunden umwandeln und Einladungslink senden"
+msgstr "Преобразовать лид в корпоративного клиента и отправить ссылку-приглашение"
+
+msgid "Lead wirklich löschen"
+msgstr "Подтвердить удаление лида"
+
+msgid "Lead-Typ"
+msgstr "Тип лида"
+
+msgid "Leer lassen, um den bestehenden Schlüssel unverändert zu lassen."
+msgstr "Оставьте пустым, чтобы сохранить текущий ключ без изменений."
+
+msgid "Lesen"
+msgstr "Читать"
+
+msgid "Löschung erst nach dieser Anzahl Tage. Rechtliche Aufbewahrungsfristen separat prüfen."
+msgstr "Удалять только по истечении указанного числа дней. Законные сроки хранения проверяйте отдельно."
+
+msgid "Neukauf"
+msgstr "Новая покупка"
+
+msgid "Nicht zugewiesen"
+msgstr "Не назначено"
+
+msgid "Nächste Aktion"
+msgstr "Следующее действие"
+
+msgid "Operations lesen"
+msgstr "Просмотр операций"
+
+msgid "Preistyp"
+msgstr "Тип цены"
+
+msgid "Prompt-Drafts erzeugen"
+msgstr "Создавать черновики промптов"
+
+msgid "Prompt-Tests ausführen"
+msgstr "Запускать тесты промптов"
+
+msgid "Prompts erzeugen"
+msgstr "Создавать промпты"
+
+msgid "Prompts lesen"
+msgstr "Читать промпты"
+
+msgid "Qualität verwalten"
+msgstr "Управлять качеством"
+
+msgid "Quelle"
+msgstr "Источник"
+
+msgid "Reminder 1 muss vor Reminder 2 liegen (größere Tageszahl)."
+msgstr "Напоминание 1 должно быть раньше напоминания 2 (большее число дней)."
+
+msgid "Reminder 2 muss vor der kritischen Warnphase liegen."
+msgstr "Напоминание 2 должно быть до периода критического предупреждения."
+
+msgid "Sicherheitsbestätigung des aktuell angemeldeten netstyle Benutzers."
+msgstr "Подтверждение безопасности текущего пользователя netstyle."
+
+msgid "Sichtbar"
+msgstr "Видимый"
+
+msgid "Standard-Laufzeit in Tagen"
+msgstr "Срок действия по умолчанию (дни)"
+
+msgid "Unternehmensname"
+msgstr "Название компании"
+
+msgid "Unterstützt: expired_invitations, email_messages, revoked_devices, resolved_system_alerts, resolved_task_failures, expired_sessions."
+msgstr "Поддерживаются: expired_invitations, email_messages, revoked_devices, resolved_system_alerts, resolved_task_failures, expired_sessions."
+
+msgid "Veröffentlichen"
+msgstr "Публиковать"
+
+msgid "Währung"
+msgstr "Валюта"
