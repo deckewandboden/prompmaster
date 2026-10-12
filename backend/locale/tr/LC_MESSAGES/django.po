@@ -2458,3 +2458,51 @@ msgstr "toplamın kullanılabilir kısmı:"
 
 msgid "„RAM verfügbar“ entspricht Linux"
 msgstr "“Kullanılabilir RAM” Linux'taki"
+
+msgid "not_configured"
+msgstr "yapılandırılmadı"
+
+msgid "unknown"
+msgstr "bilinmiyor"
+
+msgid "ok"
+msgstr "normal"
+
+msgid "warning"
+msgstr "uyarı"
+
+msgid "unavailable"
+msgstr "kullanılamıyor"
+
+msgid "degraded"
+msgstr "performansı düşmüş"
+
+msgid "success"
+msgstr "başarılı"
+
+msgid "failed"
+msgstr "başarısız"
+
+msgid "running"
+msgstr "çalışıyor"
+
+msgid "critical"
+msgstr "kritik"
+
+msgid "passed"
+msgstr "geçti"
+
+msgid "error"
+msgstr "hata"
+
+msgid "skipped"
+msgstr "atlandı"
+
+msgid "in_progress"
+msgstr "devam ediyor"
+
+msgid "no_data"
+msgstr "veri yok"
+
+msgid "completed"
+msgstr "tamamlandı"
