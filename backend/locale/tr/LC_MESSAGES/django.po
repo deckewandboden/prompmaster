@@ -2077,3 +2077,21 @@ msgstr "Önceki ort."
 
 msgid "Drop"
 msgstr "Düşüş"
+
+msgid "Lizenz-Defaults"
+msgstr "Lisans varsayılanları"
+
+msgid "Geräte je Benutzer"
+msgstr "Kullanıcı başına cihazlar"
+
+msgid "Einladung"
+msgstr "Davet"
+
+msgid "Stunden"
+msgstr "saat"
+
+msgid "Kritische Warnung"
+msgstr "Kritik uyarı"
+
+msgid "Einstellungen speichern"
+msgstr "Ayarları kaydet"
