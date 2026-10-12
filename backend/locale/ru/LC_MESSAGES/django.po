@@ -1121,3 +1121,84 @@ msgstr "Для проверки реальных изменений или по�
 
 msgid "Firmenkonto"
 msgstr "Корпоративная учётная запись"
+
+msgid "Serverseitige Suche, Filter, Sortierung und Pagination."
+msgstr "Поиск, фильтрация, сортировка и разбиение на страницы на сервере."
+
+msgid "Neu anlegen"
+msgstr "Создать"
+
+msgid "Privatkunden"
+msgstr "Частные клиенты"
+
+msgid "aufsteigend"
+msgstr "по возрастанию"
+
+msgid "absteigend"
+msgstr "по убыванию"
+
+msgid "Keine Datensätze für die aktuelle Auswahl."
+msgstr "Для текущего выбора записей нет."
+
+msgid "Änderungen werden serverseitig validiert und – sofern sicherheits- oder geschäftskritisch – protokolliert."
+msgstr "Изменения проверяются на сервере и протоколируются, если критичны для безопасности или бизнеса."
+
+msgid "Zusätzliche Sicherheitsfreigabe."
+msgstr "Дополнительная проверка безопасности."
+
+msgid "Bestätigen Sie Ihr eigenes Passwort. Die Freigabe gilt anschließend ausschließlich für wenige Minuten und nur für geschützte Admin-Aktionen."
+msgstr "Подтвердите свой пароль. Разрешение действует лишь несколько минут и только для защищённых действий администратора."
+
+msgid "Bestätigen"
+msgstr "Подтвердить"
+
+msgid "Kompakte Geschäftszahlen innerhalb Ihrer Berechtigungen."
+msgstr "Основные бизнес-показатели в пределах ваших прав доступа."
+
+msgid "Neue Kunden · 30 Tage"
+msgstr "Новые клиенты · 30 дней"
+
+msgid "Verlängerungsanteil"
+msgstr "Доля продлений"
+
+msgid "Verlängerungsterms"
+msgstr "периодов продления"
+
+msgid "Refund-Quote"
+msgstr "Доля возвратов"
+
+msgid "Anteil refundierter Lizenzterms"
+msgstr "Доля возвращённых лицензионных периодов"
+
+msgid "Ø Lizenzen / Firma"
+msgstr "Среднее число лицензий на компанию"
+
+msgid "Firmenkundenbestand"
+msgstr "База корпоративных клиентов"
+
+msgid "Umsatz letzte 30 Tage"
+msgstr "Выручка за последние 30 дней"
+
+msgid "Bestellungen gesamt"
+msgstr "всего заказов"
+
+msgid "Lizenzen gesamt"
+msgstr "Всего лицензий"
+
+msgid "inkl. aktiv, frei, abgelaufen und historisch"
+msgstr "включая активные, свободные, истёкшие и архивные"
+
+msgid "Anfragen aus dem Kundenportal; V1 verwendet bewusst kein Ticketsystem."
+msgstr "Запросы из клиентского портала; в V1 система заявок намеренно не используется."
+
+msgid "Keine Kontaktanfragen."
+msgstr "Нет обращений."
+
+msgid "Globale Suche"
+msgstr "Глобальный поиск"
+
+msgid "Ergebnisse für"
+msgstr "Результаты для"
+
+msgid "Keine Treffer."
+msgstr "Совпадений нет."
