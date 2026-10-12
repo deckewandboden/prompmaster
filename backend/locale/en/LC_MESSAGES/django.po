@@ -3172,3 +3172,69 @@ msgstr "For example, PROMPTFINISHER."
 
 msgid "Zum Beispiel smtp.ionos.de."
 msgstr "For example, smtp.ionos.de."
+
+msgid "Das eigene netstyle Konto kann hier nicht deaktiviert werden."
+msgstr "You cannot deactivate your own netstyle account here."
+
+msgid "Der letzte aktive Superadmin kann nicht deaktiviert werden."
+msgstr "The last active superadmin cannot be deactivated."
+
+msgid "Die eigene 2FA wird nicht über die Admin-Fremdverwaltung zurückgesetzt."
+msgstr "You cannot reset your own 2FA through the admin account-management function."
+
+msgid "2FA zurückgesetzt. Der Benutzer muss sie beim nächsten Login neu einrichten."
+msgstr "2FA has been reset. The user must set it up again at the next sign-in."
+
+msgid "Die eigene Superadmin-Rolle kann nicht hier entfernt werden."
+msgstr "You cannot remove your own superadmin role here."
+
+msgid "Die letzte aktive Superadmin-Berechtigung kann nicht entfernt werden."
+msgstr "The last active superadmin authorization cannot be removed."
+
+msgid "Ein gesperrter Service Account kann nicht rotiert werden."
+msgstr "A blocked service account cannot be rotated."
+
+msgid "Mollie-Produktiv-Checkout wurde gesperrt."
+msgstr "Mollie production checkout has been disabled."
+
+msgid "Bestätigung für die Erstattung fehlt."
+msgstr "Refund confirmation is missing."
+
+msgid "Erstattung wurde an Mollie übermittelt."
+msgstr "The refund request was submitted to Mollie."
+
+msgid "Für dieses Unternehmen existiert bereits ein aktiver Firmenadministrator."
+msgstr "This company already has an active company administrator."
+
+msgid "Dieser Benutzer ist bereits Firmenadministrator."
+msgstr "This user is already a company administrator."
+
+msgid "Ungültiger Supportstatus."
+msgstr "Invalid support status."
+
+msgid "Ungültiger Bearbeitungsstatus."
+msgstr "Invalid processing status."
+
+msgid "Bitte eine Antwort eingeben."
+msgstr "Please enter a reply."
+
+msgid "Die Antwort darf höchstens 10.000 Zeichen enthalten."
+msgstr "The reply must not exceed 10,000 characters."
+
+msgid "Status aktualisiert."
+msgstr "Status updated."
+
+msgid "Einstellungen gespeichert."
+msgstr "Settings saved."
+
+msgid "Rolle gespeichert."
+msgstr "Role saved."
+
+msgid "Rolle zugewiesen."
+msgstr "Role assigned."
+
+msgid "Rolle entfernt."
+msgstr "Role removed."
+
+msgid "Benutzerstatus aktualisiert."
+msgstr "User status updated."
