@@ -255,7 +255,7 @@ class EmailTemplateForm(forms.ModelForm):
     class Meta:
         model = EmailTemplate
         fields = ['subject', 'body_text', 'active']
-        labels = {'subject': 'Betreff', 'body_text': 'Nachrichtentext', 'active': 'Aktiv'}
+        labels = {'subject': _('Betreff'), 'body_text': _('Nachrichtentext'), 'active': _('Aktiv')}
 
 
 class ServiceAccountForm(forms.Form):
@@ -362,7 +362,7 @@ class RoleForm(forms.ModelForm):
     class Meta:
         model = Role
         fields = ['name', 'active', 'permissions']
-        labels = {'name': 'Rollenname', 'active': 'Aktiv'}
+        labels = {'name': _('Rollenname'), 'active': _('Aktiv')}
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
