@@ -3337,3 +3337,45 @@ msgstr "Função de administrador da empresa transferida para %(email)s."
 
 msgid "Lizenz wurde %(email)s zugewiesen."
 msgstr "Licença atribuída a %(email)s."
+
+msgid "Ausstehend"
+msgstr "Pendente"
+
+msgid "Autorisiert"
+msgstr "Autorizado"
+
+msgid "Storniert"
+msgstr "Cancelado"
+
+msgid "Abgelaufen"
+msgstr "Expirado"
+
+msgid "Teilweise erstattet"
+msgstr "Reembolsado parcialmente"
+
+msgid "Vollständig erstattet"
+msgstr "Reembolsado integralmente"
+
+msgid "Chargeback"
+msgstr "Estorno de pagamento"
+
+msgid "Chargeback zurückgenommen"
+msgstr "Estorno revertido"
+
+msgid "Unbekannt"
+msgstr "Desconhecido"
+
+msgid "Verarbeitungsfehler"
+msgstr "Erro de processamento"
+
+msgid "Fehler behoben"
+msgstr "Erro resolvido"
+
+msgid "E-Mail-Historie"
+msgstr "Histórico de e-mails"
+
+msgid "netstyle Rolle zuweisen"
+msgstr "Atribuir função netstyle"
+
+msgid "Erstattung konnte nicht an Mollie übermittelt werden."
+msgstr "Não foi possível enviar o reembolso à Mollie."
