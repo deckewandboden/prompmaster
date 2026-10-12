@@ -30,6 +30,7 @@ PAGES = (
     'ns_admin/api.html',
     'ns_admin/ops_services.html',
     'ns_admin/mollie.html',
+    'ns_admin/email.html',
 )
 TRANSLATE_PATTERN = re.compile(r'''{%\s*translate\s+(['"])(.*?)\1\s*%}''')
 
@@ -166,6 +167,21 @@ class AdminInternationalizationContractTests(SimpleTestCase):
                 for locale in LOCALES:
                     terms = catalog_translations(ROOT / 'locale' / locale / 'LC_MESSAGES' / 'django.po')
                     self.assertTrue(terms.get(phrase), 'Dangerous operations must never show untranslated confirmations')
+
+    def test_mail_failover_critical_texts_are_translated(self):
+        source = (ROOT / 'templates/ns_admin/email.html').read_text(encoding='utf-8')
+        terms = (
+            'Automatischer Fallback erfolgt nur bei eindeutig nicht zugestellten Fehlern. Bei unklaren Fehlern wird nicht automatisch weitergeschaltet, damit dieselbe E-Mail nicht versehentlich doppelt versendet wird.',
+            'SPF/DKIM/DMARC werden unter „Einstellungen“ als DNS-Sollwerte dokumentiert. Änderungen dort aktualisieren nicht automatisch den öffentlichen DNS.',
+            'Passwort fehlt',
+            'Nicht konfiguriert',
+        )
+        for term in terms:
+            self.assertIn(term, source)
+            for code in LOCALES:
+                catalog = catalog_translations(ROOT / 'locale' / code / 'LC_MESSAGES' / 'django.po')
+                with self.subTest(language=code, term=term):
+                    self.assertTrue(catalog.get(term), 'Email safety notice must be localized')
 
     def test_language_picker_is_in_flex_header_and_never_overlays_avatar(self):
         shell = (ROOT / 'templates/app_shell.html').read_text(encoding='utf-8')
