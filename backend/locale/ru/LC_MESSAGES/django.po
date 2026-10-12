@@ -1202,3 +1202,36 @@ msgstr "Результаты для"
 
 msgid "Keine Treffer."
 msgstr "Совпадений нет."
+
+msgid "Append-only Auditlog für administrative und geschäftskritische Änderungen."
+msgstr "Неизменяемый журнал аудита административных и критически важных изменений."
+
+msgid "Zeit"
+msgstr "Время"
+
+msgid "Objekt"
+msgstr "Объект"
+
+msgid "Änderung"
+msgstr "Изменение"
+
+msgid "Keine Audit-Einträge."
+msgstr "Записей аудита нет."
+
+msgid "Mollie-Zahlungsstatus, Beträge, Refunds und Chargebacks."
+msgstr "Статусы платежей Mollie, суммы, возвраты и оспоренные платежи."
+
+msgid "Bezahlt"
+msgstr "Оплачено"
+
+msgid "Offen"
+msgstr "Открыто"
+
+msgid "Fehlgeschlagen"
+msgstr "Не выполнено"
+
+msgid "Payment-ID"
+msgstr "ID платежа"
+
+msgid "Keine Zahlungen gefunden."
+msgstr "Платежи не найдены."
