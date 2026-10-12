@@ -3172,3 +3172,69 @@ msgstr "Örneğin PROMPTFINISHER."
 
 msgid "Zum Beispiel smtp.ionos.de."
 msgstr "Örneğin smtp.ionos.de."
+
+msgid "Das eigene netstyle Konto kann hier nicht deaktiviert werden."
+msgstr "Kendi netstyle hesabınızı buradan devre dışı bırakamazsınız."
+
+msgid "Der letzte aktive Superadmin kann nicht deaktiviert werden."
+msgstr "Son etkin süper yönetici devre dışı bırakılamaz."
+
+msgid "Die eigene 2FA wird nicht über die Admin-Fremdverwaltung zurückgesetzt."
+msgstr "Kendi 2FA'nızı yönetici kullanıcı yönetimi üzerinden sıfırlayamazsınız."
+
+msgid "2FA zurückgesetzt. Der Benutzer muss sie beim nächsten Login neu einrichten."
+msgstr "2FA sıfırlandı. Kullanıcı bir sonraki girişte yeniden kurmalıdır."
+
+msgid "Die eigene Superadmin-Rolle kann nicht hier entfernt werden."
+msgstr "Kendi süper yönetici rolünüzü buradan kaldıramazsınız."
+
+msgid "Die letzte aktive Superadmin-Berechtigung kann nicht entfernt werden."
+msgstr "Son etkin süper yönetici yetkisi kaldırılamaz."
+
+msgid "Ein gesperrter Service Account kann nicht rotiert werden."
+msgstr "Engellenmiş hizmet hesabının anahtarı yenilenemez."
+
+msgid "Mollie-Produktiv-Checkout wurde gesperrt."
+msgstr "Mollie canlı ödeme akışı engellendi."
+
+msgid "Bestätigung für die Erstattung fehlt."
+msgstr "İade onayı eksik."
+
+msgid "Erstattung wurde an Mollie übermittelt."
+msgstr "İade talebi Mollie'ye iletildi."
+
+msgid "Für dieses Unternehmen existiert bereits ein aktiver Firmenadministrator."
+msgstr "Bu şirketin zaten etkin bir şirket yöneticisi var."
+
+msgid "Dieser Benutzer ist bereits Firmenadministrator."
+msgstr "Bu kullanıcı zaten şirket yöneticisi."
+
+msgid "Ungültiger Supportstatus."
+msgstr "Geçersiz destek durumu."
+
+msgid "Ungültiger Bearbeitungsstatus."
+msgstr "Geçersiz işlem durumu."
+
+msgid "Bitte eine Antwort eingeben."
+msgstr "Lütfen bir yanıt girin."
+
+msgid "Die Antwort darf höchstens 10.000 Zeichen enthalten."
+msgstr "Yanıt en fazla 10.000 karakter olabilir."
+
+msgid "Status aktualisiert."
+msgstr "Durum güncellendi."
+
+msgid "Einstellungen gespeichert."
+msgstr "Ayarlar kaydedildi."
+
+msgid "Rolle gespeichert."
+msgstr "Rol kaydedildi."
+
+msgid "Rolle zugewiesen."
+msgstr "Rol atandı."
+
+msgid "Rolle entfernt."
+msgstr "Rol kaldırıldı."
+
+msgid "Benutzerstatus aktualisiert."
+msgstr "Kullanıcı durumu güncellendi."
