@@ -215,6 +215,28 @@ grep -qiE '^cache-control: .*no-cache.*must-revalidate' <<<"$mutable_headers" ||
   exit 1
 }
 
+log "Language bundle cache policy through external Caddy testen"
+i18n_js_url="/static/js/promptfinisher_product_i18n.20261011.js?v=20261011-logo1"
+if [[ "$free_current" != *"$i18n_js_url"* ]]; then
+  echo "Free V2 localization script missing in external Caddy response" >&2
+  exit 1
+fi
+i18n_headers="$(
+  docker run --rm --network "$NETWORK" curlimages/curl:8.12.1 \
+    -sS -D - -o /dev/null -H "Host: $domain" \
+    "http://$ALIAS$i18n_js_url"
+)"
+grep -qiE '^HTTP/[0-9.]+ 200' <<<"$i18n_headers" || {
+  echo "Localization script not served with HTTP 200" >&2
+  printf '%s\n' "$i18n_headers" >&2
+  exit 1
+}
+grep -qiE '^cache-control: .*no-cache.*must-revalidate' <<<"$i18n_headers" || {
+  echo "Localization script still inherits immutable caching" >&2
+  printf '%s\n' "$i18n_headers" >&2
+  exit 1
+}
+
 log "Legacy Free/Pro routes through external Caddy testen"
 free_old="$(
   docker run --rm --network "$NETWORK" curlimages/curl:8.12.1 \
