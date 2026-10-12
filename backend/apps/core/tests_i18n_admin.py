@@ -1124,6 +1124,14 @@ class AdminInternationalizationContractTests(SimpleTestCase):
             'Prompt Studio, Prompt-Lifecycle, Qualität und zentrale Inhalte.',
             'Berechtigungen werden über die zugewiesenen Capabilities gesteuert.',
             'Objekttyp', 'Objekt-ID',
+            'Lead anlegen',
+            'Lead %(lead_number)s zuweisen',
+            'Firmenadministrator einladen · %(company)s',
+            'Feature bearbeiten',
+            'Preisversion · %(product)s',
+            'Rechtsdokument bearbeiten',
+            'Retention-Policy bearbeiten',
+            'Rolle · %(name)s',
         )
         for key in required:
             self.assertIn('_(' + repr(key) + ')', view_source + form_source)
@@ -1141,6 +1149,9 @@ class AdminInternationalizationContractTests(SimpleTestCase):
                                 'lead_number': 'L-2026-567',
                                 'email': 'example@example.test',
                                 'code': 'WELCOME',
+                                'company': 'Acme GmbH',
+                                'product': 'PROMPTFINISHER Pro',
+                                'name': 'Support',
                             }
                             formatted = gettext(key) % arguments
                             self.assertTrue(any(item in formatted for item in arguments.values()))
