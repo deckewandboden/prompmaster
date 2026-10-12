@@ -113,6 +113,36 @@ def main() -> None:
                 checked += 1
     print(f'I18N EMBEDDED BRAND LABELS PASS: {checked} preserved product names')
 
+    # Reject broken word boundaries introduced by chained offline translations.
+    # These names are indivisible trademarks and must never stick to a word.
+    fused_brand = re.compile(
+        r'(?:Copilot Chat|M365 Copilot|PROMPTFINISHER|netstyle|SharePoint|OneDrive)'
+        r'(?=[A-Za-zÀ-ÿА-Яа-я])'
+    )
+    repeated_machine_word = re.compile(r'\b([A-Za-z]{2,})(?:\s+\1){4,}\b', re.I)
+    for phrase, variants in catalog.items():
+        for code in LOCALES:
+            translation = variants.get(code, '')
+            if fused_brand.search(translation):
+                raise SystemExit(
+                    f'I18N FAIL {code}: product name concatenated to text: '
+                    f'{phrase!r} => {translation[:160]!r}'
+                )
+            if repeated_machine_word.search(translation):
+                raise SystemExit(
+                    f'I18N FAIL {code}: repeated machine-translation token: '
+                    f'{phrase!r} => {translation[:160]!r}'
+                )
+    for phrase in ('ab Copilot Chat (Basic)', 'ab M365 Copilot (Basic)'):
+        for code in LOCALES:
+            label = catalog[phrase][code]
+            if any(label.lower().startswith(prefix) for prefix in (
+                'off', 'apagado', 'desligado', 'kapalı',
+                'выключать', 'wyłączone', 'départ', 'uit',
+            )):
+                raise SystemExit(f'I18N FAIL {code}: availability tier mistranslated as disabled')
+    print('I18N PHRASE QUALITY PASS: no fused brand tokens or runaway word repetitions')
+
     print(f'I18N PRODUCT LABELS PASS: {len(BRAND_LABELS)} brands x {len(LOCALES)} locales')
     print('I18N CONTRACTS PASS: 10 UI languages incl. DE source')
 
