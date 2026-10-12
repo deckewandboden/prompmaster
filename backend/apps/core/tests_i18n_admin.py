@@ -49,6 +49,11 @@ PAGES = (
     'ns_admin/ops_database.html',
     'ns_admin/ops_grid.html',
     'ns_admin/support_detail.html',
+    'ns_admin/base.html',
+    'ns_admin/content/faq_edit.html',
+    'ns_admin/content/faq_list.html',
+    'ns_admin/service_account_token.html',
+    'ns_admin/product_edit.html',
 )
 TRANSLATE_PATTERN = re.compile(r'''{%\s*translate\s+(['"])(.*?)\1\s*%}''')
 
@@ -293,6 +298,23 @@ class AdminInternationalizationContractTests(SimpleTestCase):
                     ROOT / 'locale' / code / 'LC_MESSAGES' / 'django.po'
                 )
                 with self.subTest(language=code, phrase=phrase):
+                    self.assertTrue(translations.get(phrase))
+
+    def test_one_time_service_token_warnings_are_localized(self):
+        source = (ROOT / 'templates/ns_admin/service_account_token.html').read_text(encoding='utf-8')
+        phrases = (
+            'Token jetzt sicher speichern.',
+            'Er wird danach nicht erneut im Klartext angezeigt; ein alter Token ist nach einer Rotation sofort ungültig.',
+            'Zur API-Verwaltung',
+        )
+        self.assertIn('{{ token }}', source)
+        for phrase in phrases:
+            self.assertIn("{% translate '" + phrase + "' %}", source)
+            for code in LOCALES:
+                translations = catalog_translations(
+                    ROOT / 'locale' / code / 'LC_MESSAGES' / 'django.po'
+                )
+                with self.subTest(locale=code, phrase=phrase):
                     self.assertTrue(translations.get(phrase))
 
     def test_language_picker_is_in_flex_header_and_never_overlays_avatar(self):
