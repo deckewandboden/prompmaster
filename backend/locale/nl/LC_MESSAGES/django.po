@@ -2558,3 +2558,51 @@ msgstr "beschikbaar van"
 
 msgid "„RAM verfügbar“ entspricht Linux"
 msgstr "‘Beschikbaar RAM’ komt overeen met Linux"
+
+msgid "not_configured"
+msgstr "niet geconfigureerd"
+
+msgid "unknown"
+msgstr "onbekend"
+
+msgid "ok"
+msgstr "OK"
+
+msgid "warning"
+msgstr "waarschuwing"
+
+msgid "unavailable"
+msgstr "niet beschikbaar"
+
+msgid "degraded"
+msgstr "verminderde werking"
+
+msgid "success"
+msgstr "geslaagd"
+
+msgid "failed"
+msgstr "mislukt"
+
+msgid "running"
+msgstr "wordt uitgevoerd"
+
+msgid "critical"
+msgstr "kritiek"
+
+msgid "passed"
+msgstr "geslaagd"
+
+msgid "error"
+msgstr "fout"
+
+msgid "skipped"
+msgstr "overgeslagen"
+
+msgid "in_progress"
+msgstr "bezig"
+
+msgid "no_data"
+msgstr "geen gegevens"
+
+msgid "completed"
+msgstr "afgerond"
