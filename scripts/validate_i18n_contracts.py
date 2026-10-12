@@ -148,7 +148,7 @@ def main() -> None:
     # German source phrases in the dynamic UI catalog can contain perfectly
     # valid Turkish repetitions (e.g. "adım adım" = step by step). All other
     # consecutive repeated whole words signal broken offline translation.
-    doubled_word = re.compile(r'(?<!\\w)(\\w{2,})(?:\\s+\\1)+(?!\\w)', re.I)
+    doubled_word = re.compile(r'(?<!\w)(\w{2,})(?:\s+\1)+(?!\w)', re.I)
     for phrase, translations in catalog.items():
         for code in LOCALES:
             value = translations.get(code, '')
