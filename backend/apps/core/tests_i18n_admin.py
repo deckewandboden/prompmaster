@@ -847,6 +847,14 @@ class AdminInternationalizationContractTests(SimpleTestCase):
             'mail_provider': 'smtp1',
             'smtp_host': 'smtp.example.test',
             'smtp_port': '587',
+            'disk_warning': 80,
+            'disk_critical': 90,
+            'ram_warning': 80,
+            'ram_critical': 90,
+            'cpu_warning': 80,
+            'backup_warning_hours': 8,
+            'backup_critical_hours': 24,
+            'restore_warning_days': 35,
         }
         no_fallback = GeneralSettingsForm(data={
             **base, 'mail_delivery_mode': 'failover',
@@ -865,7 +873,7 @@ class AdminInternationalizationContractTests(SimpleTestCase):
         self.assertFalse(invalid_spf.is_valid())
         self.assertIn('mail_spf_record', invalid_spf.errors)
         graph_missing = GeneralSettingsForm(data={
-            'support_email': 'ops@example.test',
+            **base,
             'mail_delivery_mode': 'manual', 'mail_provider': 'graph',
         })
         self.assertFalse(graph_missing.is_valid())
