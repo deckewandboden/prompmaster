@@ -3421,3 +3421,27 @@ msgstr "Object type"
 
 msgid "Objekt-ID"
 msgstr "Object ID"
+
+msgid "Lead anlegen"
+msgstr "Create lead"
+
+msgid "Lead %(lead_number)s zuweisen"
+msgstr "Assign lead %(lead_number)s"
+
+msgid "Firmenadministrator einladen · %(company)s"
+msgstr "Invite company administrator · %(company)s"
+
+msgid "Feature bearbeiten"
+msgstr "Edit feature"
+
+msgid "Preisversion · %(product)s"
+msgstr "Price version · %(product)s"
+
+msgid "Rechtsdokument bearbeiten"
+msgstr "Edit legal document"
+
+msgid "Retention-Policy bearbeiten"
+msgstr "Edit retention policy"
+
+msgid "Rolle · %(name)s"
+msgstr "Role · %(name)s"
