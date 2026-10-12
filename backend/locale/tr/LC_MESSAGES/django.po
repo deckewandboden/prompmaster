@@ -1201,3 +1201,36 @@ msgstr "Sonuçlar:"
 
 msgid "Keine Treffer."
 msgstr "Sonuç bulunamadı."
+
+msgid "Append-only Auditlog für administrative und geschäftskritische Änderungen."
+msgstr "Yönetimsel ve iş açısından kritik değişiklikler için yalnızca eklemeli denetim kaydı."
+
+msgid "Zeit"
+msgstr "Saat"
+
+msgid "Objekt"
+msgstr "Nesne"
+
+msgid "Änderung"
+msgstr "Değişiklik"
+
+msgid "Keine Audit-Einträge."
+msgstr "Denetim kaydı yok."
+
+msgid "Mollie-Zahlungsstatus, Beträge, Refunds und Chargebacks."
+msgstr "Mollie ödeme durumları, tutarlar, iadeler ve ters ibrazlar."
+
+msgid "Bezahlt"
+msgstr "Ödendi"
+
+msgid "Offen"
+msgstr "Açık"
+
+msgid "Fehlgeschlagen"
+msgstr "Başarısız"
+
+msgid "Payment-ID"
+msgstr "Ödeme kimliği"
+
+msgid "Keine Zahlungen gefunden."
+msgstr "Ödeme bulunamadı."
