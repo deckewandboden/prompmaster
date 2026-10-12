@@ -2012,3 +2012,69 @@ msgstr "с"
 
 msgid "Keine Preisversionen."
 msgstr "Версий цен нет."
+
+msgid "Zentrale Prompt-Domain · 34 Apps · 194 PM20-Aufgaben · versioniert und serverseitig komponiert."
+msgstr "Центральная система промптов · 34 приложения · 194 задачи PM20 · версионирование и серверная компоновка."
+
+msgid "Qualität"
+msgstr "Качество"
+
+msgid "Task-ID, App oder Titel suchen …"
+msgstr "Поиск по ID задачи, приложению или названию …"
+
+msgid "Task"
+msgstr "Задача"
+
+msgid "Anwendung"
+msgstr "Приложение"
+
+msgid "Veröffentlicht"
+msgstr "Опубликовано"
+
+msgid "Offene Versionen"
+msgstr "Открытые версии"
+
+msgid "keine"
+msgstr "нет"
+
+msgid "noch keine Daten"
+msgstr "данных пока нет"
+
+msgid "Keine Prompt-Aufgaben gefunden."
+msgstr "Задачи промптов не найдены."
+
+msgid "Prompt-Qualität"
+msgstr "Качество промптов"
+
+msgid "1–5-Sterne-Ratings · Recent Average · Drop-Erkennung · Aufgabenliste."
+msgstr "Оценки от 1 до 5 звёзд · недавнее среднее · выявление снижения · список задач."
+
+msgid "Schwellen"
+msgstr "Пороги"
+
+msgid "Analyse aktualisieren"
+msgstr "Обновить анализ"
+
+msgid "Kritisch"
+msgstr "Критично"
+
+msgid "Warnung"
+msgstr "Предупреждение"
+
+msgid "Beobachten"
+msgstr "Наблюдать"
+
+msgid "OK"
+msgstr "ОК"
+
+msgid "App"
+msgstr "Приложение"
+
+msgid "Recent Avg"
+msgstr "Недавнее среднее"
+
+msgid "Previous Avg"
+msgstr "Предыдущее среднее"
+
+msgid "Drop"
+msgstr "Падение"
