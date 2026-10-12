@@ -171,7 +171,7 @@ def main() -> None:
             value = variants.get(code, '')
             if not value.strip():
                 raise SystemExit(f'I18N FAIL {code}: empty response-style choice {key!r}')
-            if re.search(r'\\b(\\w{2,})(?:\\s+\\1)\\b', value, flags=re.I):
+            if re.search(r'\b(\w{2,})(?:\s+\1)\b', value, flags=re.I):
                 raise SystemExit(
                     f'I18N FAIL {code}: repeated response-style choice {key!r}: {value!r}'
                 )
