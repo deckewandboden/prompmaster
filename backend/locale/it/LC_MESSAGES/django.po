@@ -1986,3 +1986,63 @@ msgstr "Crea criterio di conservazione"
 
 msgid "Rechtsdokument anlegen"
 msgstr "Crea documento legale"
+
+msgid "Fertig"
+msgstr "Completato"
+
+msgid "Referenz"
+msgstr "Riferimento"
+
+msgid "Start"
+msgstr "Inizio"
+
+msgid "Ende"
+msgstr "Fine"
+
+msgid "Backup"
+msgstr "Backup"
+
+msgid "Schweregrad"
+msgstr "Gravità"
+
+msgid "Meldung"
+msgstr "Messaggio"
+
+msgid "Keine Datensätze gefunden."
+msgstr "Nessun record trovato."
+
+msgid "Benutzer-ID"
+msgstr "ID utente"
+
+msgid "Status ändern"
+msgstr "Modifica stato"
+
+msgid "Neu"
+msgstr "Nuovo"
+
+msgid "In Bearbeitung"
+msgstr "In lavorazione"
+
+msgid "Abgeschlossen"
+msgstr "Chiuso"
+
+msgid "Antwort schreiben"
+msgstr "Scrivi una risposta"
+
+msgid "Die Antwort wird im Verlauf gespeichert und per E-Mail versendet an:"
+msgstr "La risposta viene salvata nella cronologia e inviata via e-mail a:"
+
+msgid "Antwort"
+msgstr "Risposta"
+
+msgid "Antwort an den Kunden eingeben …"
+msgstr "Inserisci la risposta al cliente …"
+
+msgid "Antwort senden"
+msgstr "Invia risposta"
+
+msgid "Anfrage und alle netstyle-Antworten in zeitlicher Reihenfolge."
+msgstr "Richiesta e tutte le risposte netstyle in ordine cronologico."
+
+msgid "netstyle Support"
+msgstr "Assistenza netstyle"
