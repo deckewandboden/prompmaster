@@ -1334,3 +1334,30 @@ msgstr "Betalings-ID"
 
 msgid "Keine Zahlungen gefunden."
 msgstr "Geen betalingen gevonden."
+
+msgid "Lead"
+msgstr "Lead"
+
+msgid "Interessent"
+msgstr "Geïnteresseerde"
+
+msgid "Priorität"
+msgstr "Prioriteit"
+
+msgid "Zuständig"
+msgstr "Verantwoordelijke"
+
+msgid "Erstellt"
+msgstr "Aangemaakt"
+
+msgid "Kundennummer"
+msgstr "Klantnummer"
+
+msgid "Eingang"
+msgstr "Ontvangen"
+
+msgid "Art"
+msgstr "Soort"
+
+msgid "Vertragsbezug"
+msgstr "Contractreferentie"
