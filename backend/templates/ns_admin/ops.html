@@ -1,122 +1,122 @@
-{% extends 'ns_admin/base.html' %}{% load pm %}{% block content %}
+{% extends 'ns_admin/base.html' %}{% load pm i18n %}{% block content %}{% translate 'nicht gesetzt' as ops_unset_label %}
 <div class="page-head">
   <div>
-    <h1>System &amp; Betrieb</h1>
-    <div class="sub">Betriebszustand, Plattformdienste, Integrationen und Datensicherung.</div>
+    <h1>{% translate 'System & Betrieb' %}</h1>
+    <div class="sub">{% translate 'Betriebszustand, Plattformdienste, Integrationen und Datensicherung.' %}</div>
   </div>
   <div class="page-actions">
-    <a class="btn secondary" href="{% url 'ns_admin:ops_services' %}">Dienste öffnen</a>
-    <a class="btn secondary" href="{% url 'ns_admin:ops_database' %}">Datenbank öffnen</a>
-    <a class="btn secondary" href="{% url 'ns_admin:ops_alerts' %}">Warnungen öffnen</a>
+    <a class="btn secondary" href="{% url 'ns_admin:ops_services' %}">{% translate 'Dienste öffnen' %}</a>
+    <a class="btn secondary" href="{% url 'ns_admin:ops_database' %}">{% translate 'Datenbank öffnen' %}</a>
+    <a class="btn secondary" href="{% url 'ns_admin:ops_alerts' %}">{% translate 'Warnungen öffnen' %}</a>
   </div>
 </div>
 
 <div class="grid kpis">
   <div class="card">
-    <div>VM-CPU aktuell</div>
+    <div>{% translate 'VM-CPU aktuell' %}</div>
     <div class="value">{% if ops.cpu_current_percent != None %}{{ ops.cpu_current_percent|floatformat:1 }}%{% else %}–{% endif %}</div>
-    <div class="small muted">10-Min.-Ø: {% if ops.cpu_percent != None %}{{ ops.cpu_percent|floatformat:1 }}%{% else %}–{% endif %}</div>
+    <div class="small muted">{% translate '10-Min.-Ø:' %} {% if ops.cpu_percent != None %}{{ ops.cpu_percent|floatformat:1 }}%{% else %}–{% endif %}</div>
   </div>
   <div class="card">
-    <div>VM-RAM</div>
+    <div>{% translate 'VM-RAM' %}</div>
     <div class="value">{{ ops.memory_percent|floatformat:1|default:'–' }}{% if ops.memory_percent != None %}%{% endif %}</div>
-    <div class="small muted">{{ ops.memory_available|human_bytes }} verfügbar von {{ ops.memory_total|human_bytes }}</div>
+    <div class="small muted">{{ ops.memory_available|human_bytes }} {% translate 'verfügbar von' %} {{ ops.memory_total|human_bytes }}</div>
   </div>
   <div class="card">
-    <div>VM-Datenträger /</div>
+    <div>{% translate 'VM-Datenträger /' %}</div>
     <div class="value">{{ ops.disk_percent|floatformat:1|default:'–' }}{% if ops.disk_percent != None %}%{% endif %}</div>
-    <div class="small muted">{{ ops.disk_available|human_bytes }} verfügbar von {{ ops.disk_total|human_bytes }}</div>
+    <div class="small muted">{{ ops.disk_available|human_bytes }} {% translate 'verfügbar von' %} {{ ops.disk_total|human_bytes }}</div>
   </div>
   <div class="card">
-    <div>Uptime</div>
+    <div>{% translate 'Uptime' %}</div>
     <div class="value">{% if ops.uptime_seconds != None %}{{ ops.uptime_seconds|floatformat:0 }} s{% else %}–{% endif %}</div>
-    <div class="small muted">Load: {{ ops.load1|floatformat:2|default:'–' }} / {{ ops.load5|floatformat:2|default:'–' }} / {{ ops.load15|floatformat:2|default:'–' }}</div>
+    <div class="small muted">{% translate 'Load:' %} {{ ops.load1|floatformat:2|default:'–' }} / {{ ops.load5|floatformat:2|default:'–' }} / {{ ops.load15|floatformat:2|default:'–' }}</div>
   </div>
 </div>
 
 <div class="grid two mt-14">
   <section class="card">
-    <h2>Host &amp; Release</h2>
-    <div class="statusrow"><span>Umgebung</span><strong>{{ environment }}</strong></div>
-    <div class="statusrow"><span>Hostname</span><strong>{{ ops.host.hostname|default:'–' }}</strong></div>
-    <div class="statusrow"><span>OS / Kernel</span><strong>{{ ops.host.os|default:'–' }} · {{ ops.host.kernel|default:'–' }}</strong></div>
-    <div class="statusrow"><span>Architektur</span><strong>{{ ops.host.machine|default:'–' }}</strong></div>
-    <div class="statusrow"><span>Messbereich</span><strong>{{ ops.scope_label|default:'Docker-Host-VM' }}</strong></div>
-    <div class="statusrow"><span>Messquelle</span><strong>{{ ops.source_label|default:'Prometheus · node_exporter / cAdvisor' }}</strong></div>
-    <div class="statusrow"><span>Docker</span><strong>{{ ops.docker_version|default:'–' }}</strong></div>
-    <div class="statusrow"><span>App-Version</span><strong>{{ app_version|default:'–' }}</strong></div>
-    <div class="statusrow"><span>Git Commit</span><strong class="wrap-value">{{ git_sha|default:'–' }}</strong></div>
-    <div class="statusrow"><span>Letztes Deployment</span><strong>{{ deployed_at|default:'nicht gesetzt' }}</strong></div>
+    <h2>{% translate 'Host & Release' %}</h2>
+    <div class="statusrow"><span>{% translate 'Umgebung' %}</span><strong>{{ environment }}</strong></div>
+    <div class="statusrow"><span>{% translate 'Hostname' %}</span><strong>{{ ops.host.hostname|default:'–' }}</strong></div>
+    <div class="statusrow"><span>{% translate 'OS / Kernel' %}</span><strong>{{ ops.host.os|default:'–' }} · {{ ops.host.kernel|default:'–' }}</strong></div>
+    <div class="statusrow"><span>{% translate 'Architektur' %}</span><strong>{{ ops.host.machine|default:'–' }}</strong></div>
+    <div class="statusrow"><span>{% translate 'Messbereich' %}</span><strong>{{ ops.scope_label|default:'Docker-Host-VM' }}</strong></div>
+    <div class="statusrow"><span>{% translate 'Messquelle' %}</span><strong>{{ ops.source_label|default:'Prometheus · node_exporter / cAdvisor' }}</strong></div>
+    <div class="statusrow"><span>{% translate 'Docker' %}</span><strong>{{ ops.docker_version|default:'–' }}</strong></div>
+    <div class="statusrow"><span>{% translate 'App-Version' %}</span><strong>{{ app_version|default:'–' }}</strong></div>
+    <div class="statusrow"><span>{% translate 'Git Commit' %}</span><strong class="wrap-value">{{ git_sha|default:'–' }}</strong></div>
+    <div class="statusrow"><span>{% translate 'Letztes Deployment' %}</span><strong>{{ deployed_at|default:ops_unset_label }}</strong></div>
   </section>
 
   <section class="card">
-    <h2>VM-Speicher &amp; Dateisystem</h2>
-    <div class="statusrow"><span>RAM gesamt</span><strong>{{ ops.memory_total|human_bytes }}</strong></div>
-    <div class="statusrow"><span>RAM verwendet</span><strong>{{ ops.memory_used|human_bytes }}</strong></div>
-    <div class="statusrow"><span>RAM verfügbar</span><strong>{{ ops.memory_available|human_bytes }}</strong></div>
-    <div class="statusrow"><span>Datenträger / gesamt</span><strong>{{ ops.disk_total|human_bytes }}</strong></div>
-    <div class="statusrow"><span>Datenträger / verwendet</span><strong>{{ ops.disk_used|human_bytes }}</strong></div>
-    <div class="statusrow"><span>Datenträger / verfügbar</span><strong>{{ ops.disk_available|human_bytes }}</strong></div>
-    <div class="statusrow"><span>Dateiobjekte (Inodes) verfügbar <span title="Inodes sind Dateisystem-Einträge für Dateien und Verzeichnisse. Sind sie ausgeschöpft, können trotz freiem Speicher keine neuen Dateien angelegt werden.">ⓘ</span></span><strong>{% if ops.inodes_free != None %}{{ ops.inodes_free|floatformat:0 }}{% else %}–{% endif %}</strong></div>
-    <div class="statusrow"><span>Dateiobjekte (Inodes) belegt</span><strong>{% if ops.inode_percent != None %}{{ ops.inode_percent|floatformat:1 }}%{% else %}–{% endif %}</strong></div>
+    <h2>{% translate 'VM-Speicher & Dateisystem' %}</h2>
+    <div class="statusrow"><span>{% translate 'RAM gesamt' %}</span><strong>{{ ops.memory_total|human_bytes }}</strong></div>
+    <div class="statusrow"><span>{% translate 'RAM verwendet' %}</span><strong>{{ ops.memory_used|human_bytes }}</strong></div>
+    <div class="statusrow"><span>{% translate 'RAM verfügbar' %}</span><strong>{{ ops.memory_available|human_bytes }}</strong></div>
+    <div class="statusrow"><span>{% translate 'Datenträger / gesamt' %}</span><strong>{{ ops.disk_total|human_bytes }}</strong></div>
+    <div class="statusrow"><span>{% translate 'Datenträger / verwendet' %}</span><strong>{{ ops.disk_used|human_bytes }}</strong></div>
+    <div class="statusrow"><span>{% translate 'Datenträger / verfügbar' %}</span><strong>{{ ops.disk_available|human_bytes }}</strong></div>
+    <div class="statusrow"><span>{% translate 'Dateiobjekte (Inodes) verfügbar' %} <span title="{% translate 'Inodes sind Dateisystem-Einträge für Dateien und Verzeichnisse. Sind sie ausgeschöpft, können trotz freiem Speicher keine neuen Dateien angelegt werden.' %}">ⓘ</span></span><strong>{% if ops.inodes_free != None %}{{ ops.inodes_free|floatformat:0 }}{% else %}–{% endif %}</strong></div>
+    <div class="statusrow"><span>{% translate 'Dateiobjekte (Inodes) belegt' %}</span><strong>{% if ops.inode_percent != None %}{{ ops.inode_percent|floatformat:1 }}%{% else %}–{% endif %}</strong></div>
   </section>
 </div>
 
 <div class="grid two mt-14">
   <section class="card">
-    <h2>Docker-Container</h2>
-    <div class="statusrow"><span>Erkannte Container</span><strong>{% if ops.container_count != None %}{{ ops.container_count|floatformat:0 }}{% else %}–{% endif %}</strong></div>
-    <div class="statusrow"><span>Container-RAM gesamt</span><strong>{{ ops.container_memory_used|human_bytes }}</strong></div>
-    <div class="statusrow"><span>Container-CPU aktuell</span><strong>{% if ops.container_cpu_cores != None %}{{ ops.container_cpu_cores|floatformat:2 }} CPU-Kerne{% else %}–{% endif %}</strong></div>
-    <p class="small muted mb-0">Diese Werte stammen aus cAdvisor und beziehen sich auf Docker-Container. Die VM-Werte oben stammen aus node_exporter und beziehen sich auf die gesamte Docker-Host-VM.</p>
+    <h2>{% translate 'Docker-Container' %}</h2>
+    <div class="statusrow"><span>{% translate 'Erkannte Container' %}</span><strong>{% if ops.container_count != None %}{{ ops.container_count|floatformat:0 }}{% else %}–{% endif %}</strong></div>
+    <div class="statusrow"><span>{% translate 'Container-RAM gesamt' %}</span><strong>{{ ops.container_memory_used|human_bytes }}</strong></div>
+    <div class="statusrow"><span>{% translate 'Container-CPU aktuell' %}</span><strong>{% if ops.container_cpu_cores != None %}{{ ops.container_cpu_cores|floatformat:2 }} {% translate 'CPU-Kerne' %}{% else %}–{% endif %}</strong></div>
+    <p class="small muted mb-0">{% translate 'Diese Werte stammen aus cAdvisor und beziehen sich auf Docker-Container. Die VM-Werte oben stammen aus node_exporter und beziehen sich auf die gesamte Docker-Host-VM.' %}</p>
   </section>
   <section class="card">
-    <h2>Messwert-Erklärung</h2>
-    <p class="small muted mb-0">„RAM verfügbar“ entspricht Linux <code>MemAvailable</code> und ist die für neue Prozesse realistisch nutzbare Speichermenge. „Inodes“ sind Dateisystem-Einträge; ein niedriger Belegungsgrad ist unkritisch.</p>
-  </section>
-</div>
-
-<div class="grid two mt-14">
-  <section class="card">
-    <h2>Datenbank &amp; Jobs</h2>
-    <div class="statusrow"><span>PostgreSQL</span><span class="badge {% if database.status == 'ok' %}ok{% else %}bad{% endif %}">{{ database.status }}</span></div>
-    <div class="statusrow"><span>DB-Größe</span><strong>{{ database.size_bytes|human_bytes }}</strong></div>
-    <div class="statusrow"><span>DB-Verbindungen</span><strong>{{ database.connections|default:'–' }}</strong></div>
-    <div class="statusrow"><span>Celery Worker</span><span class="badge {% if services.worker %}ok{% else %}bad{% endif %}">{% if services.worker %}healthy{% else %}nicht erreichbar{% endif %}</span></div>
-    <div class="statusrow"><span>Celery Beat</span><span class="badge {% if services.beat %}ok{% else %}bad{% endif %}">{% if services.beat %}healthy{% else %}Heartbeat fehlt{% endif %}</span></div>
-    <div class="statusrow"><span>Queue</span><strong>{{ services.queue_depth|default:'–' }}</strong></div>
-    <div class="statusrow"><span>Fehlgeschlagene Jobs 24 h</span><strong>{{ services.failed_jobs_24h }}</strong></div>
-  </section>
-
-  <section class="card">
-    <h2>Dienste &amp; Integrationen</h2>
-    <div class="statusrow"><span>Caddy</span><span class="badge {% if caddy_ok %}ok{% else %}bad{% endif %}">{% if caddy_ok %}healthy{% else %}nicht erreichbar{% endif %}</span></div>
-    <div class="statusrow"><span>TLS-Zertifikat</span><strong>{{ certificate.status|default:'–' }}{% if certificate.days_remaining != None %} · {{ certificate.days_remaining }} Tage{% endif %}</strong></div>
-    <div class="statusrow"><span>Mollie</span><strong>{% if integrations.mollie.configured %}konfiguriert{% else %}nicht konfiguriert{% endif %} · {{ integrations.mollie.failures_24h }} Fehler / 24 h</strong></div>
-    <div class="statusrow"><span>E-Mail</span><strong>{{ integrations.mail.provider }} · {% if integrations.mail.configured %}konfiguriert{% else %}nicht konfiguriert{% endif %} · {{ integrations.mail.failures_24h }} Fehler / 24 h</strong></div>
-    <div class="statusrow"><span>Operations API</span><strong>/api/v1/ops/ · geschützt</strong></div>
-    <div class="statusrow"><span>Prompt MCP</span><strong>{{ integrations.mcp.status }} · {{ integrations.mcp.definitions|default:'–' }} Definitionen</strong></div>
+    <h2>{% translate 'Messwert-Erklärung' %}</h2>
+    <p class="small muted mb-0">{% translate '„RAM verfügbar“ entspricht Linux' %} <code>MemAvailable</code> {% translate 'und ist die für neue Prozesse realistisch nutzbare Speichermenge. „Inodes“ sind Dateisystem-Einträge; ein niedriger Belegungsgrad ist unkritisch.' %}</p>
   </section>
 </div>
 
 <div class="grid two mt-14">
   <section class="card">
-    <h2>Backup &amp; Restore</h2>
-    <div class="statusrow"><span>Letztes Backup</span><strong>{% if latest_backup %}{{ latest_backup.status }} · {{ latest_backup.finished_at|date:'d.m.Y H:i' }} · {{ latest_backup.size_bytes|human_bytes }}{% else %}nicht protokolliert{% endif %}</strong></div>
-    <div class="statusrow"><span>Letzter Restore-Test</span><strong>{% if latest_restore %}{{ latest_restore.status }} · {{ latest_restore.started_at|date:'d.m.Y H:i' }}{% else %}nicht protokolliert{% endif %}</strong></div>
-    {% if latest_restore %}<div class="statusrow"><span>Verwendetes Backup</span><strong>{{ latest_restore.backup_ref|default:'–' }}</strong></div>{% endif %}
+    <h2>{% translate 'Datenbank & Jobs' %}</h2>
+    <div class="statusrow"><span>{% translate 'PostgreSQL' %}</span><span class="badge {% if database.status == 'ok' %}ok{% else %}bad{% endif %}">{% translate database.status %}</span></div>
+    <div class="statusrow"><span>{% translate 'DB-Größe' %}</span><strong>{{ database.size_bytes|human_bytes }}</strong></div>
+    <div class="statusrow"><span>{% translate 'DB-Verbindungen' %}</span><strong>{{ database.connections|default:'–' }}</strong></div>
+    <div class="statusrow"><span>{% translate 'Celery Worker' %}</span><span class="badge {% if services.worker %}ok{% else %}bad{% endif %}">{% if services.worker %}{% translate 'healthy' %}{% else %}{% translate 'nicht erreichbar' %}{% endif %}</span></div>
+    <div class="statusrow"><span>{% translate 'Celery Beat' %}</span><span class="badge {% if services.beat %}ok{% else %}bad{% endif %}">{% if services.beat %}{% translate 'healthy' %}{% else %}{% translate 'Heartbeat fehlt' %}{% endif %}</span></div>
+    <div class="statusrow"><span>{% translate 'Queue' %}</span><strong>{{ services.queue_depth|default:'–' }}</strong></div>
+    <div class="statusrow"><span>{% translate 'Fehlgeschlagene Jobs 24 h' %}</span><strong>{{ services.failed_jobs_24h }}</strong></div>
+  </section>
+
+  <section class="card">
+    <h2>{% translate 'Dienste & Integrationen' %}</h2>
+    <div class="statusrow"><span>{% translate 'Caddy' %}</span><span class="badge {% if caddy_ok %}ok{% else %}bad{% endif %}">{% if caddy_ok %}{% translate 'healthy' %}{% else %}{% translate 'nicht erreichbar' %}{% endif %}</span></div>
+    <div class="statusrow"><span>{% translate 'TLS-Zertifikat' %}</span><strong>{% translate certificate.status %}{% if certificate.days_remaining != None %} · {{ certificate.days_remaining }} {% translate 'Tage' %}{% endif %}</strong></div>
+    <div class="statusrow"><span>{% translate 'Mollie' %}</span><strong>{% if integrations.mollie.configured %}{% translate 'konfiguriert' %}{% else %}{% translate 'nicht konfiguriert' %}{% endif %} · {{ integrations.mollie.failures_24h }} {% translate 'Fehler / 24 h' %}</strong></div>
+    <div class="statusrow"><span>{% translate 'E-Mail' %}</span><strong>{{ integrations.mail.provider }} · {% if integrations.mail.configured %}{% translate 'konfiguriert' %}{% else %}{% translate 'nicht konfiguriert' %}{% endif %} · {{ integrations.mail.failures_24h }} {% translate 'Fehler / 24 h' %}</strong></div>
+    <div class="statusrow"><span>{% translate 'Operations API' %}</span><strong>/api/v1/ops/ · {% translate 'geschützt' %}</strong></div>
+    <div class="statusrow"><span>{% translate 'Prompt MCP' %}</span><strong>{% translate integrations.mcp.status %} · {{ integrations.mcp.definitions|default:'–' }} {% translate 'Definitionen' %}</strong></div>
+  </section>
+</div>
+
+<div class="grid two mt-14">
+  <section class="card">
+    <h2>{% translate 'Backup & Restore' %}</h2>
+    <div class="statusrow"><span>{% translate 'Letztes Backup' %}</span><strong>{% if latest_backup %}{% translate latest_backup.status %} · {{ latest_backup.finished_at|date:'d.m.Y H:i' }} · {{ latest_backup.size_bytes|human_bytes }}{% else %}{% translate 'nicht protokolliert' %}{% endif %}</strong></div>
+    <div class="statusrow"><span>{% translate 'Letzter Restore-Test' %}</span><strong>{% if latest_restore %}{% translate latest_restore.status %} · {{ latest_restore.started_at|date:'d.m.Y H:i' }}{% else %}{% translate 'nicht protokolliert' %}{% endif %}</strong></div>
+    {% if latest_restore %}<div class="statusrow"><span>{% translate 'Verwendetes Backup' %}</span><strong>{{ latest_restore.backup_ref|default:'–' }}</strong></div>{% endif %}
     <div class="page-actions mt-12">
-      <a class="btn secondary sm" href="{% url 'ns_admin:ops_backups' %}">Backups öffnen</a>
-      <a class="btn secondary sm" href="{% url 'ns_admin:ops_restore_tests' %}">Restore-Tests öffnen</a>
+      <a class="btn secondary sm" href="{% url 'ns_admin:ops_backups' %}">{% translate 'Backups öffnen' %}</a>
+      <a class="btn secondary sm" href="{% url 'ns_admin:ops_restore_tests' %}">{% translate 'Restore-Tests öffnen' %}</a>
     </div>
   </section>
 
   <section class="card">
-    <h2>Aktive Warnungen</h2>
+    <h2>{% translate 'Aktive Warnungen' %}</h2>
     {% for a in alerts %}
-      <div class="statusrow"><span>{{ a.message }}</span><span class="badge {% if a.severity == 'critical' %}bad{% else %}warn{% endif %}">{{ a.severity }}</span></div>
+      <div class="statusrow"><span>{{ a.message }}</span><span class="badge {% if a.severity == 'critical' %}bad{% else %}warn{% endif %}">{% translate a.severity %}</span></div>
     {% empty %}
-      <div class="alert">Keine aktiven Systemwarnungen.</div>
+      <div class="alert">{% translate 'Keine aktiven Systemwarnungen.' %}</div>
     {% endfor %}
   </section>
 </div>
