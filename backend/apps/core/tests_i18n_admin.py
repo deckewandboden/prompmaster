@@ -876,6 +876,65 @@ class AdminInternationalizationContractTests(SimpleTestCase):
         })
         self.assertTrue(good.is_valid(), good.errors.as_text())
 
+
+    def test_critical_admin_flash_feedback_has_all_language_catalogs(self):
+        import ast
+        from django.utils.translation import override, gettext
+        admin_view_source = (ROOT / 'apps/core/admin_views.py').read_text(encoding='utf-8')
+        translated = {
+            call.args[0].value
+            for call in ast.walk(ast.parse(admin_view_source))
+            if isinstance(call, ast.Call)
+            and isinstance(call.func, ast.Name)
+            and call.func.id == '_'
+            and call.args
+            and isinstance(call.args[0], ast.Constant)
+            and isinstance(call.args[0].value, str)
+        }
+        critical = (
+            'Das eigene netstyle Konto kann hier nicht deaktiviert werden.',
+            'Der letzte aktive Superadmin kann nicht deaktiviert werden.',
+            'Die eigene 2FA wird nicht über die Admin-Fremdverwaltung zurückgesetzt.',
+            '2FA zurückgesetzt. Der Benutzer muss sie beim nächsten Login neu einrichten.',
+            'Die eigene Superadmin-Rolle kann nicht hier entfernt werden.',
+            'Die letzte aktive Superadmin-Berechtigung kann nicht entfernt werden.',
+            'Ein gesperrter Service Account kann nicht rotiert werden.',
+            'Mollie-Produktiv-Checkout wurde gesperrt.',
+            'Bestätigung für die Erstattung fehlt.',
+            'Erstattung wurde an Mollie übermittelt.',
+            'Für dieses Unternehmen existiert bereits ein aktiver Firmenadministrator.',
+            'Dieser Benutzer ist bereits Firmenadministrator.',
+            'Ungültiger Supportstatus.',
+            'Ungültiger Bearbeitungsstatus.',
+            'Bitte eine Antwort eingeben.',
+            'Die Antwort darf höchstens 10.000 Zeichen enthalten.',
+            'Status aktualisiert.',
+            'Einstellungen gespeichert.',
+            'Rolle gespeichert.',
+            'Rolle zugewiesen.',
+            'Rolle entfernt.',
+            'Benutzerstatus aktualisiert.',
+        )
+        self.assertEqual(len(critical), 22)
+        self.assertEqual(len(set(critical)), 22)
+        self.assertTrue(set(critical).issubset(translated))
+        for language in LOCALES:
+            catalog = catalog_translations(
+                ROOT / 'locale' / language / 'LC_MESSAGES' / 'django.po'
+            )
+            for source in critical:
+                with self.subTest(language=language, source=source):
+                    self.assertTrue(catalog.get(source))
+            with override(language):
+                self.assertEqual(
+                    gettext('Der letzte aktive Superadmin kann nicht deaktiviert werden.'),
+                    catalog['Der letzte aktive Superadmin kann nicht deaktiviert werden.'],
+                )
+                self.assertEqual(
+                    gettext('Erstattung wurde an Mollie übermittelt.'),
+                    catalog['Erstattung wurde an Mollie übermittelt.'],
+                )
+
     def test_language_picker_is_in_flex_header_and_never_overlays_avatar(self):
         shell = (ROOT / 'templates/app_shell.html').read_text(encoding='utf-8')
         base = (ROOT / 'templates/base.html').read_text(encoding='utf-8')
