@@ -3521,3 +3521,27 @@ msgstr "Objecttype"
 
 msgid "Objekt-ID"
 msgstr "Object-ID"
+
+msgid "Lead anlegen"
+msgstr "Lead aanmaken"
+
+msgid "Lead %(lead_number)s zuweisen"
+msgstr "Lead %(lead_number)s toewijzen"
+
+msgid "Firmenadministrator einladen · %(company)s"
+msgstr "Bedrijfsbeheerder uitnodigen · %(company)s"
+
+msgid "Feature bearbeiten"
+msgstr "Functie bewerken"
+
+msgid "Preisversion · %(product)s"
+msgstr "Prijsversie · %(product)s"
+
+msgid "Rechtsdokument bearbeiten"
+msgstr "Juridisch document bewerken"
+
+msgid "Retention-Policy bearbeiten"
+msgstr "Bewaarbeleid bewerken"
+
+msgid "Rolle · %(name)s"
+msgstr "Rol · %(name)s"
