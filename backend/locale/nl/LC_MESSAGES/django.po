@@ -2288,3 +2288,81 @@ msgstr "bewerken"
 
 msgid "zentrale PromptDefinition"
 msgstr "Centrale PromptDefinition"
+
+msgid "Versionen"
+msgstr "Versies"
+
+msgid "Tests / Ratings"
+msgstr "Tests / beoordelingen"
+
+msgid "Lifecycle"
+msgstr "Levenscyclus"
+
+msgid "Archivieren"
+msgstr "Archiveren"
+
+msgid "Publish ist nur über den Human-in-the-loop-Lifecycle möglich. Tests werden vor REVIEW und PUBLISH erneut ausgeführt."
+msgstr "Publiceren is alleen mogelijk via de levenscyclus met menselijke controle. Tests worden opnieuw uitgevoerd vóór REVIEW en PUBLISH."
+
+msgid "Definition"
+msgstr "Definitie"
+
+msgid "Family"
+msgstr "Familie"
+
+msgid "Area"
+msgstr "Gebied"
+
+msgid "Max. Zeichen"
+msgstr "Max. tekens"
+
+msgid "Intent"
+msgstr "Intentie"
+
+msgid "Kontexttemplate"
+msgstr "Contextsjabloon"
+
+msgid "Felder & Optionen"
+msgstr "Velden en opties"
+
+msgid "Pflichtfelder"
+msgstr "Verplichte velden"
+
+msgid "Keine"
+msgstr "Geen"
+
+msgid "Optionale Felder"
+msgstr "Optionele velden"
+
+msgid "Auswahloptionen"
+msgstr "Selectieopties"
+
+msgid "Testfälle"
+msgstr "Testgevallen"
+
+msgid "Tests sind Bestandteil des Release-Gates einer Prompt-Version."
+msgstr "Tests maken deel uit van de vrijgavecriteria voor een promptversie."
+
+msgid "Alle Tests ausführen"
+msgstr "Alle tests uitvoeren"
+
+msgid "Testen"
+msgstr "Testen"
+
+msgid "Löschen"
+msgstr "Verwijderen"
+
+msgid "Noch kein Testfall. Vor Übergang zu TEST muss mindestens einer angelegt werden."
+msgstr "Nog geen testgeval. Maak er minimaal één aan voordat u naar TEST gaat."
+
+msgid "Preview / Test-Komposition"
+msgstr "Voorbeeld / testcompositie"
+
+msgid "Prompt testen"
+msgstr "Prompt testen"
+
+msgid "Ergebnis"
+msgstr "Resultaat"
+
+msgid "Deterministischer Feld-Fallback"
+msgstr "Deterministische terugvalwaarde voor het veld"
