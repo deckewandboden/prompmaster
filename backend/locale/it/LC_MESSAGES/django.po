@@ -2202,3 +2202,39 @@ msgstr "Avviso critico"
 
 msgid "Einstellungen speichern"
 msgstr "Salva impostazioni"
+
+msgid "Produktdefaults, Support, E-Mail-Identität und Betriebswarnschwellen."
+msgstr "Impostazioni predefinite del prodotto, supporto, identità e-mail e soglie di avviso operativo."
+
+msgid "Produktwerte werden unter „Produkte & Preise“ gepflegt."
+msgstr "I valori dei prodotti si gestiscono in «Prodotti e prezzi»."
+
+msgid "PROMPTFINISHER Pro ist nicht angelegt."
+msgstr "PROMPTFINISHER Pro non è stato creato."
+
+msgid "Empfänger des Kundenportal-Kontaktformulars."
+msgstr "Destinatario del modulo di contatto del portale clienti."
+
+msgid "E-Mail-Versandweg & Fallback"
+msgstr "Instradamento e-mail e failover"
+
+msgid "Alle Provider bleiben parallel gespeichert. Im manuellen Modus wird nur der primäre Versandweg verwendet. Im automatischen Modus wird bei eindeutig nicht zugestellten Fehlern in der festgelegten Reihenfolge weitergeschaltet; bei unklaren Fehlern erfolgt bewusst kein automatischer Fallback, um Doppelversand zu vermeiden."
+msgstr "Tutti i provider restano memorizzati. La modalità manuale usa solo il canale principale. La modalità automatica passa al provider successivo nell'ordine definito soltanto in caso di mancata consegna confermata; gli errori ambigui non attivano il failover per evitare invii duplicati."
+
+msgid "E-Mail-Absender & Domain"
+msgstr "Mittente e dominio e-mail"
+
+msgid "Die Absenderadresse wird beim SMTP-Versand direkt aus diesen Einstellungen gelesen. SPF, DKIM und DMARC sind hier als DNS-Sollwerte dokumentiert; das Speichern verändert keine DNS-Zone."
+msgstr "L'indirizzo del mittente SMTP viene letto direttamente da queste impostazioni. SPF, DKIM e DMARC sono documentati come record DNS previsti; il salvataggio non modifica alcuna zona DNS."
+
+msgid "Erster SMTP-Transport. Das Passwort wird verschlüsselt gespeichert und niemals wieder im Klartext angezeigt."
+msgstr "Trasporto SMTP principale. La password viene conservata cifrata e non viene mai più mostrata in chiaro."
+
+msgid "Optionaler zweiter SMTP-Transport. Hier können Sie z. B. denselben SMTP-Relay eintragen, den auch Listmonk verwendet, und manuell oder automatisch zwischen SMTP 1 und SMTP 2 wechseln."
+msgstr "Secondo trasporto SMTP facoltativo. È possibile usare, per esempio, lo stesso relay SMTP di Listmonk e passare manualmente o automaticamente tra SMTP 1 e SMTP 2."
+
+msgid "Alternative zu SMTP für Exchange Online. Das Client Secret wird verschlüsselt gespeichert und niemals wieder im Klartext angezeigt."
+msgstr "Alternativa a SMTP per Exchange Online. Il segreto client viene conservato cifrato e non viene mai più mostrato in chiaro."
+
+msgid "Sie besitzen Leserechte, aber keine Berechtigung zum Ändern dieser Einstellungen."
+msgstr "Hai accesso in sola lettura e non puoi modificare queste impostazioni."
