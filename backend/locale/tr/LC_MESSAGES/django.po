@@ -3445,3 +3445,33 @@ msgstr "Saklama politikasını düzenle"
 
 msgid "Rolle · %(name)s"
 msgstr "Rol · %(name)s"
+
+msgid "Firmenadministrator"
+msgstr "Şirket yöneticisi"
+
+msgid "Entwurf"
+msgstr "Taslak"
+
+msgid "Zahlung offen"
+msgstr "Ödeme bekleniyor"
+
+msgid "Zahlung prüfen"
+msgstr "Ödemeyi incele"
+
+msgid "Refundiert"
+msgstr "İade edildi"
+
+msgid "Abgelehnt"
+msgstr "Reddedildi"
+
+msgid "Eingegangen"
+msgstr "Alındı"
+
+msgid "Kündigung"
+msgstr "Sözleşme feshi"
+
+msgid "Für Kunden sichtbar"
+msgstr "Müşterilere görünür"
+
+msgid "Interne Notiz"
+msgstr "Dahili not"
