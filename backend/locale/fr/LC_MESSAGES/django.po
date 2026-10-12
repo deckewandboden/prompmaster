@@ -2193,3 +2193,21 @@ msgstr "Moyenne précédente"
 
 msgid "Drop"
 msgstr "Baisse"
+
+msgid "Lizenz-Defaults"
+msgstr "Paramètres de licence par défaut"
+
+msgid "Geräte je Benutzer"
+msgstr "Appareils par utilisateur"
+
+msgid "Einladung"
+msgstr "Invitation"
+
+msgid "Stunden"
+msgstr "heures"
+
+msgid "Kritische Warnung"
+msgstr "Alerte critique"
+
+msgid "Einstellungen speichern"
+msgstr "Enregistrer les paramètres"
