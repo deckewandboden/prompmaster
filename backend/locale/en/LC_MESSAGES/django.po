@@ -2959,3 +2959,216 @@ msgstr "Publish"
 
 msgid "Währung"
 msgstr "Currency"
+
+msgid "Absender-Anzeigename"
+msgstr "Sender display name"
+
+msgid "Absender-E-Mail"
+msgstr "Sender email"
+
+msgid "Aktive Absenderadresse für SMTP. Änderungen gelten ohne Container-Neustart."
+msgstr "Active SMTP sender address. Changes take effect without restarting containers."
+
+msgid "Antwortadresse"
+msgstr "Reply-to address"
+
+msgid "Anwendungs-/Client-ID der App-Registrierung."
+msgstr "Application/client ID of the app registration."
+
+msgid "Automatisch – bei sicherem Ausfall auf Fallback wechseln"
+msgstr "Automatic – switch to fallback after a confirmed failure"
+
+msgid "Backup kritisch in Stunden"
+msgstr "Critical backup age in hours"
+
+msgid "Backup-Warnung in Stunden"
+msgstr "Backup warning age in hours"
+
+msgid "Begründung optional"
+msgstr "Reason (optional)"
+
+msgid "Bei IONOS normalerweise die vollständige E-Mail-Adresse."
+msgstr "For IONOS, normally use the full email address."
+
+msgid "Bitte eine gültige Domain ohne @ eingeben."
+msgstr "Enter a valid domain without @."
+
+msgid "CPU-Warnung in %"
+msgstr "CPU warning threshold in %"
+
+msgid "DKIM DNS Sollwert"
+msgstr "DKIM DNS target value"
+
+msgid "DKIM-Selector"
+msgstr "DKIM selector"
+
+msgid "DMARC Sollwert"
+msgstr "DMARC target value"
+
+msgid "Datenträger kritisch in %"
+msgstr "Critical disk usage in %"
+
+msgid "Datenträger-Warnung in %"
+msgstr "Disk usage warning in %"
+
+msgid "Der kritische Wert muss über dem Warnwert liegen."
+msgstr "The critical threshold must be higher than the warning threshold."
+
+msgid "Die Mail-Domain muss zur Absender-E-Mail passen."
+msgstr "The mail domain must match the sender email address."
+
+msgid "Dokumentierter DNS-Sollwert für _dmarc.<Domain>."
+msgstr "Documented DNS target value for _dmarc.<Domain>."
+
+msgid "Dokumentierter DNS-Sollwert. Das Speichern ändert den öffentlichen DNS-Eintrag nicht."
+msgstr "Documented DNS target value. Saving does not modify the public DNS record."
+
+msgid "Domain des sichtbaren Absenders, z. B. decke-wand-boden.de oder später promptmaster.ai."
+msgstr "Domain of the visible sender, e.g. decke-wand-boden.de or later promptmaster.ai."
+
+msgid "Ein DMARC-Eintrag muss mit \"v=DMARC1;\" beginnen."
+msgstr "A DMARC record must begin with \"v=DMARC1;\"."
+
+msgid "Ein SPF-Eintrag muss mit \"v=spf1 \" beginnen."
+msgstr "An SPF record must begin with \"v=spf1 \"."
+
+msgid "Ein Versandweg darf in der Kette nur einmal vorkommen."
+msgstr "Each delivery route may appear only once in the chain."
+
+msgid "Eine oder mehrere E-Mail-Adressen, getrennt durch Zeilenumbruch, Komma oder Semikolon."
+msgstr "One or more email addresses separated by a newline, comma or semicolon."
+
+msgid "Entra Client ID"
+msgstr "Entra Client ID"
+
+msgid "Entra Client Secret"
+msgstr "Entra Client Secret"
+
+msgid "Entra Tenant ID"
+msgstr "Entra Tenant ID"
+
+msgid "Erstattung verbindlich über Mollie auslösen"
+msgstr "Confirm refund through Mollie"
+
+msgid "Fallback 1"
+msgstr "Fallback 1"
+
+msgid "Fallback 2"
+msgstr "Fallback 2"
+
+msgid "Für IONOS mit STARTTLS: 587."
+msgstr "For IONOS with STARTTLS: 587."
+
+msgid "Für Microsoft Graph ist dieses Feld erforderlich."
+msgstr "This field is required for Microsoft Graph."
+
+msgid "Für Microsoft Graph ist ein Client Secret erforderlich."
+msgstr "A client secret is required for Microsoft Graph."
+
+msgid "Für SMTP 1 ist dieses Feld erforderlich."
+msgstr "This field is required for SMTP 1."
+
+msgid "Für SMTP 2 ist dieses Feld erforderlich."
+msgstr "This field is required for SMTP 2."
+
+msgid "Für den automatischen Modus muss mindestens ein Fallback gewählt werden."
+msgstr "Select at least one fallback for automatic mode."
+
+msgid "Im automatischen Modus wird nur bei eindeutig nicht zugestellten Fehlern weitergeschaltet."
+msgstr "Automatic mode switches routes only for confirmed non-delivery failures."
+
+msgid "Kein weiterer Fallback"
+msgstr "No additional fallback"
+
+msgid "Leer lassen, um das gespeicherte Passwort unverändert zu lassen."
+msgstr "Leave blank to keep the stored password unchanged."
+
+msgid "Leer lassen, um das gespeicherte Secret unverändert zu lassen."
+msgstr "Leave blank to keep the stored secret unchanged."
+
+msgid "Manuell – nur den primären Versandweg verwenden"
+msgstr "Manual – use primary delivery route only"
+
+msgid "Microsoft-365-Absender"
+msgstr "Microsoft 365 sender"
+
+msgid "Monitoring-Alarmempfänger"
+msgstr "Monitoring alert recipients"
+
+msgid "Neuer Schlüssel"
+msgstr "New key"
+
+msgid "Optional. Leer lassen, wenn Antworten an die Absenderadresse gehen sollen."
+msgstr "Optional. Leave blank to send replies to the sender address."
+
+msgid "Optionaler Selector bzw. Hinweis auf die verwendeten Microsoft-365-DKIM-Selectoren."
+msgstr "Optional selector or note about Microsoft 365 DKIM selectors in use."
+
+msgid "Optionaler zweiter SMTP-Provider, z. B. derselbe Relay-Dienst wie bei Listmonk."
+msgstr "Optional second SMTP provider, e.g. the same relay service used by Listmonk."
+
+msgid "Postfach, über das Microsoft Graph senden soll, z. B. promptmaster@netstyle.de."
+msgstr "Mailbox used by Microsoft Graph for sending, e.g. promptmaster@netstyle.de."
+
+msgid "Primärer Versandweg"
+msgstr "Primary delivery route"
+
+msgid "RAM kritisch in %"
+msgstr "Critical RAM usage in %"
+
+msgid "RAM-Warnung in %"
+msgstr "RAM usage warning in %"
+
+msgid "Restore-Test-Warnung in Tagen"
+msgstr "Restore test warning age in days"
+
+msgid "SMTP 1 – Benutzername"
+msgstr "SMTP 1 – Username"
+
+msgid "SMTP 1 – Passwort"
+msgstr "SMTP 1 – Password"
+
+msgid "SMTP 1 – Port"
+msgstr "SMTP 1 – Port"
+
+msgid "SMTP 1 – STARTTLS verwenden"
+msgstr "SMTP 1 – Use STARTTLS"
+
+msgid "SMTP 1 – Server"
+msgstr "SMTP 1 – Server"
+
+msgid "SMTP 1, SMTP 2 und Microsoft Graph bleiben parallel konfiguriert."
+msgstr "SMTP 1, SMTP 2 and Microsoft Graph remain configured in parallel."
+
+msgid "SMTP 2 – Benutzername"
+msgstr "SMTP 2 – Username"
+
+msgid "SMTP 2 – Passwort"
+msgstr "SMTP 2 – Password"
+
+msgid "SMTP 2 – Port"
+msgstr "SMTP 2 – Port"
+
+msgid "SMTP 2 – STARTTLS verwenden"
+msgstr "SMTP 2 – Use STARTTLS"
+
+msgid "SMTP 2 – Server"
+msgstr "SMTP 2 – Server"
+
+msgid "SPF Sollwert"
+msgstr "SPF target value"
+
+msgid "Support-Empfänger"
+msgstr "Support recipient"
+
+msgid "TXT-/CNAME-Sollwert oder beide Microsoft-365-DKIM-CNAMEs. Reine Dokumentation; DNS wird nicht automatisch verändert."
+msgstr "TXT/CNAME target value or both Microsoft 365 DKIM CNAMEs. For documentation only; DNS is not changed automatically."
+
+msgid "Verzeichnis-/Mandanten-ID des Microsoft-365-Tenants."
+msgstr "Directory/tenant ID of the Microsoft 365 tenant."
+
+msgid "Zum Beispiel PROMPTFINISHER."
+msgstr "For example, PROMPTFINISHER."
+
+msgid "Zum Beispiel smtp.ionos.de."
+msgstr "For example, smtp.ionos.de."
