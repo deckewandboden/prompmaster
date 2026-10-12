@@ -3338,3 +3338,45 @@ msgstr "Роль администратора компании передана 
 
 msgid "Lizenz wurde %(email)s zugewiesen."
 msgstr "Лицензия назначена пользователю %(email)s."
+
+msgid "Ausstehend"
+msgstr "В ожидании"
+
+msgid "Autorisiert"
+msgstr "Авторизован"
+
+msgid "Storniert"
+msgstr "Отменён"
+
+msgid "Abgelaufen"
+msgstr "Срок истёк"
+
+msgid "Teilweise erstattet"
+msgstr "Частично возмещено"
+
+msgid "Vollständig erstattet"
+msgstr "Полностью возмещено"
+
+msgid "Chargeback"
+msgstr "Возврат платежа (чарджбэк)"
+
+msgid "Chargeback zurückgenommen"
+msgstr "Оспаривание платежа отменено"
+
+msgid "Unbekannt"
+msgstr "Неизвестно"
+
+msgid "Verarbeitungsfehler"
+msgstr "Ошибка обработки"
+
+msgid "Fehler behoben"
+msgstr "Ошибка устранена"
+
+msgid "E-Mail-Historie"
+msgstr "История электронной почты"
+
+msgid "netstyle Rolle zuweisen"
+msgstr "Назначить роль netstyle"
+
+msgid "Erstattung konnte nicht an Mollie übermittelt werden."
+msgstr "Не удалось отправить запрос на возврат средств в Mollie."
