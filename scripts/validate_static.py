@@ -741,7 +741,7 @@ for needle in (
     "customer_sort=Lower(",
     "'customer': 'customer_sort'",
     "customer_display=Coalesce('company__name', 'private_user__email', output_field=CharField())",
-    "('customer_display', 'Kunde', 'customer')",
+    "('customer_display', _('Kunde'), 'customer')",
 ):
     if needle not in admin_views:
         fail(f'Order customer sorting contract missing: {needle}')
