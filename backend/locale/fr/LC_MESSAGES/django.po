@@ -1899,3 +1899,12 @@ msgstr "En file d'attente"
 
 msgid "Keine E-Mails gefunden."
 msgstr "Aucun e-mail trouvé."
+
+msgid "Kundenbereiche"
+msgstr "Sections clients"
+
+msgid "Privatkundenbereiche"
+msgstr "Sections des clients particuliers"
+
+msgid "Audit"
+msgstr "Audit"
