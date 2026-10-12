@@ -174,9 +174,7 @@ def main() -> None:
             value = translations.get(code, '')
             for match in doubled_word.finditer(value):
                 idiomatic_step_by_step = (
-                    code == 'tr'
-                    and phrase.startswith('PROMPTFINISHER macht aus deinem Anliegen Schritt für Schritt')
-                    and match.group(0).casefold() == 'adım adım'
+                    code == 'tr' and match.group(0).casefold() == 'adım adım'
                 )
                 if not idiomatic_step_by_step:
                     raise SystemExit(
