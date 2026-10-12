@@ -193,11 +193,11 @@ class LicenseAdminGridContractTests(TestCase):
         for source in (company_grid, private_grid):
             self.assertIn("sort_url request 'name'", source)
             self.assertIn("sort_url request 'product'", source)
-            self.assertIn('data-label="Name"', source)
+            self.assertIn('data-label="{% translate \'Name\' %}"', source)
             self.assertIn('license_holder_name', source)
 
         self.assertIn('Zugewiesen an', detail)
-        self.assertIn('<span>E-Mail</span>', detail)
+        self.assertIn('<span>{% translate \'E-Mail\' %}</span>', detail)
         self.assertIn('class="wrap-anywhere"', detail)
 
 
