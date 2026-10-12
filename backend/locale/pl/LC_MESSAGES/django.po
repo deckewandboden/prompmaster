@@ -2788,3 +2788,27 @@ msgstr "Zapoznałem(-am) się z informacją o prawie odstąpienia od umowy"
 
 msgid "Zum Beispiel Bestellnummer oder Kundennummer."
 msgstr "Na przykład numer zamówienia lub numer klienta."
+
+msgid "Gerätename"
+msgstr "Nazwa urządzenia"
+
+msgid "Keine konkrete Lizenz"
+msgstr "Brak konkretnej licencji"
+
+msgid "Lizenz (optional)"
+msgstr "Licencja (opcjonalnie)"
+
+msgid "Nachricht"
+msgstr "Wiadomość"
+
+msgid "Schlüssel"
+msgstr "Klucz"
+
+msgid "Sonstiges"
+msgstr "Inne"
+
+msgid "Sortierung"
+msgstr "Kolejność sortowania"
+
+msgid "Technisches Problem"
+msgstr "Problem techniczny"
