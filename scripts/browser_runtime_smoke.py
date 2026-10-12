@@ -1409,6 +1409,114 @@ def _browser_register_verify_to_buy(
             raise AssertionError(f'checkout legal acceptance missing after registration: {name}')
 
 
+def _browser_product_locale_acceptance(page, base: str, product: str) -> None:
+    """Exercise every supported product language in Chromium with screenshot evidence.
+
+    This is deliberately presentation-only: the composer option value is an
+    immutable contract, while its visible label and header must be localized.
+    Use a narrow viewport to catch long-language header/CTA collisions.
+    """
+    expected = {
+        'de': 'Professionell',
+        'en': 'Professional',
+        'es': 'Profesional',
+        'pt': 'Profissional',
+        'tr': 'Profesyonel',
+        'ru': 'Профессиональный',
+        'pl': 'Profesjonalny',
+        'fr': 'Professionnel',
+        'it': 'Professionale',
+        'nl': 'Professioneel',
+    }
+    route = 'free/' if product == 'free' else 'pro/app/'
+    evidence = ROOT / 'browser-artifacts'
+    evidence.mkdir(parents=True, exist_ok=True)
+    page.set_viewport_size({'width': 390, 'height': 844})
+    response = page.goto(base + route, wait_until='networkidle')
+    if not response or response.status != 200:
+        raise AssertionError(f'{product} locale matrix: {route} not available')
+
+    for code, expected_tone in expected.items():
+        selector = page.locator('select[data-pf-product-language]')
+        selector.wait_for(state='visible', timeout=15000)
+        if selector.input_value() != code:
+            with page.expect_navigation(wait_until='networkidle'):
+                selector.select_option(code)
+
+        page.wait_for_function(
+            """({lang, tone}) => {
+                const option = document.querySelector(
+                    '#toneSelect option[value="professional"]'
+                );
+                return document.documentElement.lang === lang
+                    && window.PF_PRODUCT_LOCALE?.code === lang
+                    && option?.textContent.trim() === tone;
+            }""",
+            arg={'lang': code, 'tone': expected_tone},
+            timeout=15000,
+        )
+        metrics = page.evaluate(
+            """() => {
+                const brand = document.querySelector('.pmv2-brand img');
+                const locale = document.querySelector('.pmv2-language');
+                const select = document.querySelector('select[data-pf-product-language]');
+                const option = document.querySelector('#toneSelect option[value="professional"]');
+                const cta = document.querySelector('.pmv2-header-actions .pmv2-header-cta');
+                const a = brand?.getBoundingClientRect();
+                const b = locale?.getBoundingClientRect();
+                const c = cta?.getBoundingClientRect();
+                const overlap = (left, right) => Boolean(left && right
+                    && Math.min(left.right, right.right) - Math.max(left.left, right.left) > 1
+                    && Math.min(left.bottom, right.bottom) - Math.max(left.top, right.top) > 1);
+                return {
+                    selected: select?.value || '',
+                    lang: document.documentElement.lang,
+                    locale: window.PF_PRODUCT_LOCALE?.code || '',
+                    optionText: option?.textContent.trim() || '',
+                    optionValue: option?.value || '',
+                    optionDisabled: Boolean(option?.disabled),
+                    hasHeader: Boolean(a && b),
+                    logoLocaleCollision: overlap(a, b),
+                    localeCtaCollision: overlap(b, c),
+                    languageLeft: b?.left ?? -1,
+                    languageRight: b?.right ?? -1,
+                    viewportWidth: innerWidth,
+                    documentWidth: document.documentElement.scrollWidth,
+                };
+            }"""
+        )
+        if (
+            metrics['selected'] != code
+            or metrics['lang'] != code
+            or metrics['locale'] != code
+            or metrics['optionText'] != expected_tone
+            or metrics['optionValue'] != 'professional'
+            or metrics['optionDisabled']
+            or not metrics['hasHeader']
+            or metrics['logoLocaleCollision']
+            or metrics['localeCtaCollision']
+            or metrics['languageLeft'] < -1
+            or metrics['languageRight'] > 391
+            or metrics['documentWidth'] > 391
+        ):
+            raise AssertionError(
+                f'{product} locale/responsive contract {code}: {metrics}'
+            )
+        page.screenshot(
+            path=str(evidence / f'{product}-{code}-390.png'),
+            full_page=False,
+            animations='disabled',
+        )
+
+    # Language preferences persist through auth; never let this acceptance
+    # contaminate existing historical German-language assertions.
+    selector = page.locator('select[data-pf-product-language]')
+    if selector.input_value() != 'de':
+        with page.expect_navigation(wait_until='networkidle'):
+            selector.select_option('de')
+    page.set_viewport_size({'width': 1440, 'height': 1000})
+
+
 def run_backend_ui_smoke(browser, fixture=None) -> None:
     if os.getenv('BACKEND_UI_BROWSER_SMOKE') != '1':
         return
@@ -2054,43 +2162,7 @@ def run_backend_ui_smoke(browser, fixture=None) -> None:
             public_page.wait_for_function("document.body.classList.contains('pmv2')")
             _check_product_v2_shell(public_page, 'Free V2 responsive shell', width)
 
-        # Exercise actual Free V2 select labels after the locale switch.
-        # Text can change; explicit option values must never change because
-        # the database-backed composer depends on those identifiers.
-        for language, expected in (
-            ('tr', 'Profesyonel'),
-            ('nl', 'Professioneel'),
-        ):
-            public_page.goto(base + 'auth/login/', wait_until='networkidle')
-            with public_page.expect_navigation(wait_until='networkidle'):
-                public_page.locator(
-                    '.language-switcher select[name="language"]'
-                ).select_option(language)
-            response = public_page.goto(base + 'free/', wait_until='networkidle')
-            if not response or response.status != 200:
-                raise AssertionError(f'Free localized option {language}: route unavailable')
-            public_page.wait_for_function(
-                """expected => {
-                    const option = document.querySelector(
-                        '#toneSelect option[value="professional"]'
-                    );
-                    return option && option.textContent.trim() === expected;
-                }""",
-                arg=expected,
-                timeout=15000,
-            )
-            option_state = public_page.evaluate(
-                """() => {
-                    const option = document.querySelector(
-                        '#toneSelect option[value="professional"]'
-                    );
-                    return { label: option?.textContent.trim(), value: option?.value };
-                }"""
-            )
-            if option_state != {'label': expected, 'value': 'professional'}:
-                raise AssertionError(
-                    f'Free localized option {language}: {option_state}'
-                )
+        _browser_product_locale_acceptance(public_page, base, 'free')
 
         public_context.close()
 
@@ -2351,6 +2423,7 @@ def run_backend_ui_smoke(browser, fixture=None) -> None:
             )
 
             if role == 'admin':
+                _browser_product_locale_acceptance(page, base, 'pro')
                 # Verify actual gettext_lazy form labels after login, not
                 # merely the public language selector or navigation menu.
                 # Restore German before historical admin UI assertions.
