@@ -2560,3 +2560,51 @@ msgstr "dostępne z"
 
 msgid "„RAM verfügbar“ entspricht Linux"
 msgstr "„Dostępna pamięć RAM” odpowiada wartości Linux"
+
+msgid "not_configured"
+msgstr "nieskonfigurowany"
+
+msgid "unknown"
+msgstr "nieznany"
+
+msgid "ok"
+msgstr "OK"
+
+msgid "warning"
+msgstr "ostrzeżenie"
+
+msgid "unavailable"
+msgstr "niedostępny"
+
+msgid "degraded"
+msgstr "ograniczona sprawność"
+
+msgid "success"
+msgstr "powodzenie"
+
+msgid "failed"
+msgstr "niepowodzenie"
+
+msgid "running"
+msgstr "w toku"
+
+msgid "critical"
+msgstr "krytyczny"
+
+msgid "passed"
+msgstr "zaliczony"
+
+msgid "error"
+msgstr "błąd"
+
+msgid "skipped"
+msgstr "pominięty"
+
+msgid "in_progress"
+msgstr "w toku"
+
+msgid "no_data"
+msgstr "brak danych"
+
+msgid "completed"
+msgstr "ukończony"
