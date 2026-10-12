@@ -1222,3 +1222,84 @@ msgstr "Wszystkie zamówienia"
 
 msgid "Firmenkonto"
 msgstr "Rachunek przedsiębiorstwa"
+
+msgid "Serverseitige Suche, Filter, Sortierung und Pagination."
+msgstr "Wyszukiwanie, filtrowanie, sortowanie i stronicowanie po stronie serwera."
+
+msgid "Neu anlegen"
+msgstr "Utwórz nowy"
+
+msgid "Privatkunden"
+msgstr "Klienci indywidualni"
+
+msgid "aufsteigend"
+msgstr "rosnąco"
+
+msgid "absteigend"
+msgstr "malejąco"
+
+msgid "Keine Datensätze für die aktuelle Auswahl."
+msgstr "Brak rekordów dla bieżącego wyboru."
+
+msgid "Änderungen werden serverseitig validiert und – sofern sicherheits- oder geschäftskritisch – protokolliert."
+msgstr "Zmiany są weryfikowane na serwerze i rejestrowane, jeśli są krytyczne dla bezpieczeństwa lub firmy."
+
+msgid "Zusätzliche Sicherheitsfreigabe."
+msgstr "Dodatkowa weryfikacja bezpieczeństwa."
+
+msgid "Bestätigen Sie Ihr eigenes Passwort. Die Freigabe gilt anschließend ausschließlich für wenige Minuten und nur für geschützte Admin-Aktionen."
+msgstr "Potwierdź własne hasło. Zatwierdzenie jest ważne tylko przez kilka minut i tylko dla chronionych działań administratora."
+
+msgid "Bestätigen"
+msgstr "Potwierdź"
+
+msgid "Kompakte Geschäftszahlen innerhalb Ihrer Berechtigungen."
+msgstr "Najważniejsze wskaźniki biznesowe w zakresie Twoich uprawnień."
+
+msgid "Neue Kunden · 30 Tage"
+msgstr "Nowi klienci · 30 dni"
+
+msgid "Verlängerungsanteil"
+msgstr "Udział odnowień"
+
+msgid "Verlängerungsterms"
+msgstr "okresów odnowienia"
+
+msgid "Refund-Quote"
+msgstr "Odsetek zwrotów"
+
+msgid "Anteil refundierter Lizenzterms"
+msgstr "Udział zwróconych okresów licencji"
+
+msgid "Ø Lizenzen / Firma"
+msgstr "Śr. liczba licencji na firmę"
+
+msgid "Firmenkundenbestand"
+msgstr "Baza klientów firmowych"
+
+msgid "Umsatz letzte 30 Tage"
+msgstr "Przychody z ostatnich 30 dni"
+
+msgid "Bestellungen gesamt"
+msgstr "zamówień łącznie"
+
+msgid "Lizenzen gesamt"
+msgstr "Łączna liczba licencji"
+
+msgid "inkl. aktiv, frei, abgelaufen und historisch"
+msgstr "w tym aktywne, wolne, wygasłe i historyczne"
+
+msgid "Anfragen aus dem Kundenportal; V1 verwendet bewusst kein Ticketsystem."
+msgstr "Zgłoszenia z portalu klienta; w wersji V1 celowo nie używamy systemu zgłoszeń."
+
+msgid "Keine Kontaktanfragen."
+msgstr "Brak zgłoszeń kontaktowych."
+
+msgid "Globale Suche"
+msgstr "Wyszukiwanie globalne"
+
+msgid "Ergebnisse für"
+msgstr "Wyniki dla"
+
+msgid "Keine Treffer."
+msgstr "Brak wyników."
