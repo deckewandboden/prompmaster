@@ -2189,3 +2189,81 @@ msgstr "изменить"
 
 msgid "zentrale PromptDefinition"
 msgstr "Центральное определение PromptDefinition"
+
+msgid "Versionen"
+msgstr "Версии"
+
+msgid "Tests / Ratings"
+msgstr "Тесты / оценки"
+
+msgid "Lifecycle"
+msgstr "Жизненный цикл"
+
+msgid "Archivieren"
+msgstr "Архивировать"
+
+msgid "Publish ist nur über den Human-in-the-loop-Lifecycle möglich. Tests werden vor REVIEW und PUBLISH erneut ausgeführt."
+msgstr "Публикация возможна только через жизненный цикл с участием человека. Перед REVIEW и PUBLISH тесты запускаются повторно."
+
+msgid "Definition"
+msgstr "Определение"
+
+msgid "Family"
+msgstr "Семейство"
+
+msgid "Area"
+msgstr "Область"
+
+msgid "Max. Zeichen"
+msgstr "Макс. символов"
+
+msgid "Intent"
+msgstr "Намерение"
+
+msgid "Kontexttemplate"
+msgstr "Шаблон контекста"
+
+msgid "Felder & Optionen"
+msgstr "Поля и параметры"
+
+msgid "Pflichtfelder"
+msgstr "Обязательные поля"
+
+msgid "Keine"
+msgstr "Нет"
+
+msgid "Optionale Felder"
+msgstr "Необязательные поля"
+
+msgid "Auswahloptionen"
+msgstr "Варианты выбора"
+
+msgid "Testfälle"
+msgstr "Тестовые случаи"
+
+msgid "Tests sind Bestandteil des Release-Gates einer Prompt-Version."
+msgstr "Тесты являются обязательной частью допуска к выпуску версии промпта."
+
+msgid "Alle Tests ausführen"
+msgstr "Запустить все тесты"
+
+msgid "Testen"
+msgstr "Тестировать"
+
+msgid "Löschen"
+msgstr "Удалить"
+
+msgid "Noch kein Testfall. Vor Übergang zu TEST muss mindestens einer angelegt werden."
+msgstr "Тестовых случаев пока нет. Создайте хотя бы один перед переходом в TEST."
+
+msgid "Preview / Test-Komposition"
+msgstr "Предпросмотр / тестовая композиция"
+
+msgid "Prompt testen"
+msgstr "Тестировать промпт"
+
+msgid "Ergebnis"
+msgstr "Результат"
+
+msgid "Deterministischer Feld-Fallback"
+msgstr "Детерминированное резервное значение поля"
