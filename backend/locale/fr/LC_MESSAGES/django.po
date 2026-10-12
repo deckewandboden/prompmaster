@@ -1752,3 +1752,42 @@ msgstr "Envois récents"
 
 msgid "Noch keine Versandvorgänge."
 msgstr "Aucun envoi pour le moment."
+
+msgid "Zur Kundenliste"
+msgstr "Retour à la liste des clients"
+
+msgid "Zur Privatkundenliste"
+msgstr "Retour aux clients particuliers"
+
+msgid "Kundendaten"
+msgstr "Données du client"
+
+msgid "Stammdaten"
+msgstr "Données de base"
+
+msgid "Unternehmensdaten speichern"
+msgstr "Enregistrer les informations de l'entreprise"
+
+msgid "Firma"
+msgstr "Entreprise"
+
+msgid "Steuernummer"
+msgstr "Numéro fiscal"
+
+msgid "Änderungen erfolgen serverseitig mit Berechtigungsprüfung und werden im Audit protokolliert. Steuerfelder werden anhand der aktiven Steuerregel für Land und Kundentyp validiert."
+msgstr "Les modifications sont effectuées côté serveur après vérification des autorisations et consignées dans le journal d'audit. Les champs fiscaux sont validés selon la règle applicable au pays et au type de client."
+
+msgid "Rechtsakzeptanzen"
+msgstr "Acceptations des documents juridiques"
+
+msgid "Version"
+msgstr "Version"
+
+msgid "Keine Rechtsakzeptanzen protokolliert."
+msgstr "Aucune acceptation de document juridique enregistrée."
+
+msgid "Keine Löschanfragen."
+msgstr "Aucune demande de suppression."
+
+msgid "Alle Löschanfragen"
+msgstr "Toutes les demandes de suppression"
