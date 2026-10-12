@@ -2609,3 +2609,63 @@ msgstr "afgerond"
 
 msgid "nicht verfügbar"
 msgstr "niet beschikbaar"
+
+msgid "Disk {value}% belegt"
+msgstr "Schijfgebruik: {value}%"
+
+msgid "RAM {value}% belegt"
+msgstr "RAM-gebruik: {value}%"
+
+msgid "CPU 10-Minuten-Mittel {value}%"
+msgstr "Gemiddeld CPU-gebruik over 10 minuten: {value}%"
+
+msgid "Kein auswertbarer Backupstatus verfügbar"
+msgstr "Geen bruikbare back-upstatus beschikbaar"
+
+msgid "Letztes Backup meldet Status {value}"
+msgstr "Laatste back-up meldt status {value}"
+
+msgid "Backup ist {value} Stunden alt"
+msgstr "De back-up is {value} uur oud"
+
+msgid "Restore-Statusdatei ist nicht auswertbar"
+msgstr "Het herstelstatusbestand kan niet worden uitgelezen"
+
+msgid "Noch kein Restore-Test protokolliert"
+msgstr "Er is nog geen hersteltest geregistreerd"
+
+msgid "Letzter Restore-Test war nicht erfolgreich"
+msgstr "De laatste hersteltest is mislukt"
+
+msgid "Letzter Restore-Test ist {value} Tage alt"
+msgstr "De laatste hersteltest is {value} dagen oud"
+
+msgid "Monitoring-Ziel {value} ist nicht erreichbar"
+msgstr "Monitoringdoel {value} is niet bereikbaar"
+
+msgid "Monitoring-Ziel {value} liefert keinen Status"
+msgstr "Monitoringdoel {value} geeft geen status door"
+
+msgid "Caddy Healthcheck ist nicht erreichbar"
+msgstr "De Caddy-statuscontrole is niet bereikbaar"
+
+msgid "Kein Celery Worker beantwortet den aktiven Ping"
+msgstr "Geen Celery-worker reageert op de actieve ping"
+
+msgid "Celery Beat-Heartbeat älter als {value} Minuten"
+msgstr "Het Celery Beat-heartbeat is ouder dan {value} minuten"
+
+msgid "Celery Queue-Tiefe kann nicht gelesen werden"
+msgstr "De lengte van de Celery-wachtrij kan niet worden gelezen"
+
+msgid "Celery Queue enthält {value} wartende Jobs"
+msgstr "De Celery-wachtrij bevat {value} wachtende taken"
+
+msgid "{value} fehlgeschlagene Hintergrundjobs in 24 Stunden"
+msgstr "{value} achtergrondtaken mislukt in 24 uur"
+
+msgid "{value} E-Mail-Fehler in 24 Stunden"
+msgstr "{value} e-mailfouten in 24 uur"
+
+msgid "{value} Mollie-Verarbeitungsfehler in 24 Stunden"
+msgstr "{value} Mollie-verwerkingsfouten in 24 uur"
