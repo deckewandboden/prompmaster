@@ -1558,3 +1558,81 @@ msgstr "open"
 
 msgid "Noch keine Webhook-Ereignisse."
 msgstr "No webhook events yet."
+
+msgid "Vorlagen, Versandstatus, Provider und Fallback-Kette."
+msgstr "Templates, delivery status, providers and failover chain."
+
+msgid "Absender & Provider"
+msgstr "Sender & provider"
+
+msgid "Versandprotokoll öffnen"
+msgstr "Open delivery log"
+
+msgid "Vorlagen"
+msgstr "Templates"
+
+msgid "Keine E-Mail-Vorlagen vorhanden."
+msgstr "No email templates available."
+
+msgid "Mail-System"
+msgstr "Mail system"
+
+msgid "Versandmodus"
+msgstr "Delivery mode"
+
+msgid "Automatischer Fallback"
+msgstr "Automatic failover"
+
+msgid "Manuell"
+msgstr "Manual"
+
+msgid "Primär"
+msgstr "Primary"
+
+msgid "Reihenfolge"
+msgstr "Order"
+
+msgid "Status der Kette"
+msgstr "Chain status"
+
+msgid "Aktiver Absender"
+msgstr "Active sender"
+
+msgid "Anzeigename"
+msgstr "Display name"
+
+msgid "Mail-Domain"
+msgstr "Mail domain"
+
+msgid "Server"
+msgstr "Server"
+
+msgid "Anmeldung"
+msgstr "Authentication"
+
+msgid "Passwort fehlt"
+msgstr "Password missing"
+
+msgid "Ohne Anmeldung"
+msgstr "No authentication"
+
+msgid "Nicht konfiguriert"
+msgstr "Not configured"
+
+msgid "Fehlt"
+msgstr "Missing"
+
+msgid "Graph Absender"
+msgstr "Graph sender"
+
+msgid "Automatischer Fallback erfolgt nur bei eindeutig nicht zugestellten Fehlern. Bei unklaren Fehlern wird nicht automatisch weitergeschaltet, damit dieselbe E-Mail nicht versehentlich doppelt versendet wird."
+msgstr "Automatic failover occurs only after confirmed non-delivery. Ambiguous failures do not trigger automatic switching, to avoid accidentally sending the same email twice."
+
+msgid "SPF/DKIM/DMARC werden unter „Einstellungen“ als DNS-Sollwerte dokumentiert. Änderungen dort aktualisieren nicht automatisch den öffentlichen DNS."
+msgstr "SPF/DKIM/DMARC target DNS records are documented under Settings. Changes there do not automatically update public DNS."
+
+msgid "Letzte Versandvorgänge"
+msgstr "Recent delivery attempts"
+
+msgid "Noch keine Versandvorgänge."
+msgstr "No delivery attempts yet."
