@@ -2054,6 +2054,44 @@ def run_backend_ui_smoke(browser, fixture=None) -> None:
             public_page.wait_for_function("document.body.classList.contains('pmv2')")
             _check_product_v2_shell(public_page, 'Free V2 responsive shell', width)
 
+        # Exercise actual Free V2 select labels after the locale switch.
+        # Text can change; explicit option values must never change because
+        # the database-backed composer depends on those identifiers.
+        for language, expected in (
+            ('tr', 'Profesyonel'),
+            ('nl', 'Professioneel'),
+        ):
+            public_page.goto(base + 'auth/login/', wait_until='networkidle')
+            with public_page.expect_navigation(wait_until='networkidle'):
+                public_page.locator(
+                    '.language-switcher select[name="language"]'
+                ).select_option(language)
+            response = public_page.goto(base + 'free/', wait_until='networkidle')
+            if not response or response.status != 200:
+                raise AssertionError(f'Free localized option {language}: route unavailable')
+            public_page.wait_for_function(
+                """expected => {
+                    const option = document.querySelector(
+                        '#toneSelect option[value="professional"]'
+                    );
+                    return option && option.textContent.trim() === expected;
+                }""",
+                arg=expected,
+                timeout=15000,
+            )
+            option_state = public_page.evaluate(
+                """() => {
+                    const option = document.querySelector(
+                        '#toneSelect option[value="professional"]'
+                    );
+                    return { label: option?.textContent.trim(), value: option?.value };
+                }"""
+            )
+            if option_state != {'label': expected, 'value': 'professional'}:
+                raise AssertionError(
+                    f'Free localized option {language}: {option_state}'
+                )
+
         public_context.close()
 
         portal_routes = [
