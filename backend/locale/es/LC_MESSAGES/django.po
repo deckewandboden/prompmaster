@@ -1396,3 +1396,90 @@ msgstr "Código"
 
 msgid "Keine Features."
 msgstr "No hay funciones."
+
+msgid "Geschützte Operations-Schnittstellen und Service Accounts."
+msgstr "Interfaces de operaciones protegidas y cuentas de servicio."
+
+msgid "Service Account anlegen"
+msgstr "Crear cuenta de servicio"
+
+msgid "Operations API"
+msgstr "API de operaciones"
+
+msgid "Zugriff ausschließlich über aktive Service Accounts mit passendem Scope. Tokens werden nur einmal bei Erstellung bzw. Rotation angezeigt."
+msgstr "El acceso está limitado a cuentas de servicio activas con el ámbito adecuado. Los tokens solo se muestran una vez, al crearse o renovarse."
+
+msgid "Service Accounts"
+msgstr "Cuentas de servicio"
+
+msgid "Gesperrt"
+msgstr "Bloqueado"
+
+msgid "Token rotieren"
+msgstr "Rotar token"
+
+msgid "Service Account wirklich sperren?"
+msgstr "¿Bloquear realmente esta cuenta de servicio?"
+
+msgid "Sperren"
+msgstr "Bloquear"
+
+msgid "Noch keine Service Accounts."
+msgstr "Todavía no hay cuentas de servicio."
+
+msgid "Dienste"
+msgstr "Servicios"
+
+msgid "Status der internen Plattformdienste."
+msgstr "Estado de los servicios internos de la plataforma."
+
+msgid "Systemübersicht"
+msgstr "Resumen del sistema"
+
+msgid "Host"
+msgstr "Host"
+
+msgid "Hostname"
+msgstr "Nombre de host"
+
+msgid "Kernel"
+msgstr "Núcleo"
+
+msgid "Healthy"
+msgstr "Correcto"
+
+msgid "Nicht erreichbar"
+msgstr "No disponible"
+
+msgid "Datenbank"
+msgstr "Base de datos"
+
+msgid "Verbindungen"
+msgstr "Conexiones"
+
+msgid "Größe"
+msgstr "Tamaño"
+
+msgid "Background Jobs"
+msgstr "Tareas en segundo plano"
+
+msgid "Heartbeat fehlt"
+msgstr "Falta la señal de actividad"
+
+msgid "Queue"
+msgstr "Cola"
+
+msgid "Fehlgeschlagene Jobs 24 h"
+msgstr "Tareas fallidas en 24 h"
+
+msgid "Worker"
+msgstr "Worker"
+
+msgid "Antwortende Worker"
+msgstr "Workers que responden"
+
+msgid "Worker-Heartbeat"
+msgstr "Señal de actividad del worker"
+
+msgid "Beat-Heartbeat"
+msgstr "Señal de actividad de Beat"
