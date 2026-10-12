@@ -2703,3 +2703,102 @@ msgstr "Filtre"
 
 msgid "Seite"
 msgstr "page"
+
+msgid "AGB akzeptieren"
+msgstr "Accepter les conditions générales"
+
+msgid "Anmeldung fehlgeschlagen."
+msgstr "Échec de la connexion."
+
+msgid "Anmeldung fehlgeschlagen. Bitte später erneut versuchen."
+msgstr "Échec de la connexion. Veuillez réessayer plus tard."
+
+msgid "Anzahl Lizenzen"
+msgstr "Nombre de licences"
+
+msgid "Art der Kündigung"
+msgstr "Type de résiliation"
+
+msgid "Außerordentliche Kündigung"
+msgstr "Résiliation extraordinaire"
+
+msgid "Bei einer außerordentlichen Kündigung ist der Kündigungsgrund erforderlich."
+msgstr "Une justification est requise pour une résiliation extraordinaire."
+
+msgid "Bestellnummer"
+msgstr "Numéro de commande"
+
+msgid "Bitte bestätigen Sie den gewünschten Leistungsbeginn vor Ablauf der Widerrufsfrist."
+msgstr "Veuillez confirmer votre demande de début de prestation avant la fin du délai de rétractation."
+
+msgid "Bitte bestätigen Sie die Widerrufsbelehrung."
+msgstr "Veuillez confirmer avoir pris connaissance des informations sur le droit de rétractation."
+
+msgid "Datenschutzhinweise zur Kenntnis genommen"
+msgstr "J’ai pris connaissance de la notice de confidentialité"
+
+msgid "Deutschland"
+msgstr "Allemagne"
+
+msgid "Die Bestellnummer finden Sie in Ihrer Bestell- bzw. Zahlungsbestätigung."
+msgstr "Le numéro de commande figure dans votre confirmation de commande ou de paiement."
+
+msgid "E-Mail-Adresse für die Eingangsbestätigung"
+msgstr "Adresse e-mail pour l’accusé de réception"
+
+msgid "E-Mail-Adresse für die Kündigungsbestätigung"
+msgstr "Adresse e-mail pour la confirmation de résiliation"
+
+msgid "Firmenname erforderlich."
+msgstr "Le nom de l’entreprise est obligatoire."
+
+msgid "Gewünschter Beendigungszeitpunkt"
+msgstr "Date de résiliation souhaitée"
+
+msgid "Hausnummer"
+msgstr "Numéro de rue"
+
+msgid "Kündigungsgrund"
+msgstr "Motif de résiliation"
+
+msgid "Leer lassen für den frühestmöglichen Zeitpunkt."
+msgstr "Laissez vide pour choisir la date la plus proche possible."
+
+msgid "Leistungsbeginn vor Ablauf der Widerrufsfrist ausdrücklich verlangt"
+msgstr "Je demande expressément le début de la prestation avant la fin du délai de rétractation"
+
+msgid "Lizenzbedingungen akzeptieren"
+msgstr "Accepter les conditions de licence"
+
+msgid "Ordentliche Kündigung"
+msgstr "Résiliation ordinaire"
+
+msgid "PLZ"
+msgstr "Code postal"
+
+msgid "Passwörter stimmen nicht überein."
+msgstr "Les mots de passe ne correspondent pas."
+
+msgid "Steuernummer ist für diese Steuerregel erforderlich."
+msgstr "Un numéro fiscal est requis pour cette règle fiscale."
+
+msgid "Straße"
+msgstr "Rue"
+
+msgid "USt-IdNr. ist für diese Steuerregel erforderlich."
+msgstr "Un numéro de TVA est requis pour cette règle fiscale."
+
+msgid "Unternehmensname ist erforderlich."
+msgstr "Le nom de l’entreprise est obligatoire."
+
+msgid "Vertrag / Bestellung / Kundennummer"
+msgstr "Contrat / commande / numéro de client"
+
+msgid "Vor- und Nachname"
+msgstr "Prénom et nom"
+
+msgid "Widerrufsinformation zur Kenntnis genommen"
+msgstr "J’ai pris connaissance des informations sur le droit de rétractation"
+
+msgid "Zum Beispiel Bestellnummer oder Kundennummer."
+msgstr "Par exemple, le numéro de commande ou de client."
