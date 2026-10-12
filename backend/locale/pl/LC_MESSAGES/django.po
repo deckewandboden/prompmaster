@@ -2671,3 +2671,21 @@ msgstr "Błędy e-mail w ciągu 24 godzin: {value}"
 
 msgid "{value} Mollie-Verarbeitungsfehler in 24 Stunden"
 msgstr "Błędy przetwarzania Mollie w ciągu 24 godzin: {value}"
+
+msgid "Backups"
+msgstr "Kopie zapasowe"
+
+msgid "Restore-Tests"
+msgstr "Testy przywracania"
+
+msgid "Systemwarnungen"
+msgstr "Alerty systemowe"
+
+msgid "Erledigt"
+msgstr "Rozwiązane"
+
+msgid "Filter"
+msgstr "Filtr"
+
+msgid "Seite"
+msgstr "strona"
