@@ -3401,3 +3401,39 @@ msgstr "Verwijderverzoek verwerkt en account geanonimiseerd."
 
 msgid "Löschanfrage abgelehnt."
 msgstr "Verwijderverzoek afgewezen."
+
+msgid "Dieser Lead ist bereits einem Kunden zugeordnet."
+msgstr "Deze lead is al aan een klant gekoppeld."
+
+msgid "Einladung für den Firmenadministrator wurde gesendet."
+msgstr "Uitnodiging voor de bedrijfsbeheerder verzonden."
+
+msgid "Kundenantwort gespeichert. Für Demo-Adressen wurde keine E-Mail versendet."
+msgstr "Klantantwoord opgeslagen. Er is geen e-mail naar demo-adressen verzonden."
+
+msgid "Kundenantwort gespeichert und E-Mail-Benachrichtigung eingeplant."
+msgstr "Klantantwoord opgeslagen en e-mailmelding ingepland."
+
+msgid "Kundenantwort gespeichert, E-Mail-Benachrichtigung konnte aber nicht eingeplant werden."
+msgstr "Klantantwoord opgeslagen, maar e-mailmelding kon niet worden ingepland."
+
+msgid "netstyle Benutzer angelegt; Einrichtungslink wurde per E-Mail versendet."
+msgstr "netstyle-gebruiker aangemaakt; instellink per e-mail verzonden."
+
+msgid "Privatkunden werden aus rechtlichen Gründen über Registrierung/Checkout angelegt; der Lead kann dort anschließend als gewonnen abgeschlossen werden."
+msgstr "Om juridische redenen worden particuliere klanten aangemaakt via registratie/checkout; daarna kan de lead als gewonnen worden afgesloten."
+
+msgid "Lead wurde in einen Firmenkunden umgewandelt. Der Ansprechpartner hat eine sichere Einladung erhalten."
+msgstr "Lead omgezet naar zakelijke klant. De contactpersoon heeft een veilige uitnodiging ontvangen."
+
+msgid "Lead %(lead_number)s angelegt."
+msgstr "Lead %(lead_number)s aangemaakt."
+
+msgid "Lead %(lead_number)s gelöscht."
+msgstr "Lead %(lead_number)s verwijderd."
+
+msgid "Firmenadministrator wurde auf %(email)s übertragen."
+msgstr "Bedrijfsbeheerdersrol overgedragen aan %(email)s."
+
+msgid "Lizenz wurde %(email)s zugewiesen."
+msgstr "Licentie toegewezen aan %(email)s."
