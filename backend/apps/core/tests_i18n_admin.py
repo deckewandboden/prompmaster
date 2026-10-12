@@ -1104,6 +1104,55 @@ class AdminInternationalizationContractTests(SimpleTestCase):
                             self.assertEqual(str(lazy_label), catalog[source])
 
 
+    def test_admin_action_titles_role_descriptions_and_form_labels_are_localized(self):
+        from django.utils.translation import gettext, override
+        from apps.core.admin_forms import EmailTemplateForm, RoleForm
+
+        view_source = (ROOT / 'apps/core/admin_views.py').read_text(encoding='utf-8')
+        form_source = (ROOT / 'apps/core/admin_forms.py').read_text(encoding='utf-8')
+        required = (
+            'Nachrichtentext',
+            'Rollenname',
+            'Lead %(lead_number)s löschen',
+            'Lead %(lead_number)s in Kunden umwandeln',
+            'Firmenadministrator übertragen · %(email)s',
+            'E-Mail-Vorlage · %(code)s',
+            'Löschanfrage ablehnen',
+            'Uneingeschränkte Rechte auf alle PROMPTFINISHER-Verwaltungsbereiche.',
+            'Kunden, Lizenzen, Geräte, Bestellungen, Zahlungen, E-Mail und Support.',
+            'Monitoring, Backups, Operations API, Logs und Systemstatus.',
+            'Prompt Studio, Prompt-Lifecycle, Qualität und zentrale Inhalte.',
+            'Berechtigungen werden über die zugewiesenen Capabilities gesteuert.',
+            'Objekttyp', 'Objekt-ID',
+        )
+        for key in required:
+            self.assertIn('_(' + repr(key) + ')', view_source + form_source)
+        for language in LOCALES:
+            catalog = catalog_translations(
+                ROOT / 'locale' / language / 'LC_MESSAGES' / 'django.po'
+            )
+            with override(language):
+                for key in required:
+                    with self.subTest(language=language, key=key):
+                        self.assertTrue(catalog.get(key))
+                        self.assertEqual(gettext(key), catalog[key])
+                        if '%(' in key:
+                            arguments = {
+                                'lead_number': 'L-2026-567',
+                                'email': 'example@example.test',
+                                'code': 'WELCOME',
+                            }
+                            formatted = gettext(key) % arguments
+                            self.assertTrue(any(item in formatted for item in arguments.values()))
+                self.assertEqual(
+                    str(EmailTemplateForm().fields['body_text'].label),
+                    catalog['Nachrichtentext'],
+                )
+                self.assertEqual(
+                    str(RoleForm().fields['name'].label),
+                    catalog['Rollenname'],
+                )
+
     def test_language_picker_is_in_flex_header_and_never_overlays_avatar(self):
         shell = (ROOT / 'templates/app_shell.html').read_text(encoding='utf-8')
         base = (ROOT / 'templates/base.html').read_text(encoding='utf-8')
