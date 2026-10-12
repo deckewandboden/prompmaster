@@ -752,16 +752,23 @@ for needle in ('Sortierung zurücksetzen', 'Alles zurücksetzen'):
     if needle not in grid_toolbar:
         fail(f'Datagrid reset action missing: {needle}')
 
-for needle in (
-    "'phone': 'Telefon'",
-    "'street': 'Straße'",
-    "'house_number': 'Hausnummer'",
-    "'postal_code': 'PLZ'",
-    "'city': 'Ort'",
-    "'country': 'Land'",
+# Both historical literal labels and gettext-wrapped source labels are valid.
+# Preserve the exact expected field/label mapping across both forms.
+for field, label in (
+    ('phone', 'Telefon'),
+    ('street', 'Straße'),
+    ('house_number', 'Hausnummer'),
+    ('postal_code', 'PLZ'),
+    ('city', 'Ort'),
+    ('country', 'Land'),
 ):
-    if needle not in company_forms:
-        fail(f'German customer form label missing: {needle}')
+    accepted = (
+        f"'{field}': '{label}'",
+        f"'{field}': _('{label}')",
+        f"""'{field}': _("{label}")""",
+    )
+    if not any(needle in company_forms for needle in accepted):
+        fail(f'German customer form label missing: {field} -> {label}')
 for label in ('Vorname', 'Nachname', 'E-Mail-Adresse', 'Passwort'):
     accepted = (
         f"label='{label}'",
