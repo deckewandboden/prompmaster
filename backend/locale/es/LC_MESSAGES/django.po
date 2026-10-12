@@ -3445,3 +3445,33 @@ msgstr "Editar política de conservación"
 
 msgid "Rolle · %(name)s"
 msgstr "Rol · %(name)s"
+
+msgid "Firmenadministrator"
+msgstr "Administrador de empresa"
+
+msgid "Entwurf"
+msgstr "Borrador"
+
+msgid "Zahlung offen"
+msgstr "Pago pendiente"
+
+msgid "Zahlung prüfen"
+msgstr "Revisar pago"
+
+msgid "Refundiert"
+msgstr "Reembolsado"
+
+msgid "Abgelehnt"
+msgstr "Rechazado"
+
+msgid "Eingegangen"
+msgstr "Recibido"
+
+msgid "Kündigung"
+msgstr "Cancelación del contrato"
+
+msgid "Für Kunden sichtbar"
+msgstr "Visible para clientes"
+
+msgid "Interne Notiz"
+msgstr "Nota interna"
