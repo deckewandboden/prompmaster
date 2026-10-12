@@ -2266,3 +2266,195 @@ msgstr "Result"
 
 msgid "Deterministischer Feld-Fallback"
 msgstr "Deterministic field fallback"
+
+msgid "10-Min.-Ø:"
+msgstr "10-min avg:"
+
+msgid "Aktive Warnungen"
+msgstr "Active alerts"
+
+msgid "App-Version"
+msgstr "App version"
+
+msgid "Architektur"
+msgstr "Architecture"
+
+msgid "Backup & Restore"
+msgstr "Backup & restore"
+
+msgid "Backups öffnen"
+msgstr "Open backups"
+
+msgid "Betriebszustand, Plattformdienste, Integrationen und Datensicherung."
+msgstr "Operational status, platform services, integrations and backups."
+
+msgid "CPU-Kerne"
+msgstr "CPU cores"
+
+msgid "Caddy"
+msgstr "Caddy"
+
+msgid "Celery Beat"
+msgstr "Celery Beat"
+
+msgid "Celery Worker"
+msgstr "Celery Worker"
+
+msgid "Container-CPU aktuell"
+msgstr "Current container CPU"
+
+msgid "Container-RAM gesamt"
+msgstr "Total container RAM"
+
+msgid "DB-Verbindungen"
+msgstr "Database connections"
+
+msgid "Dateiobjekte (Inodes) belegt"
+msgstr "Inodes used"
+
+msgid "Dateiobjekte (Inodes) verfügbar"
+msgstr "Inodes available"
+
+msgid "Datenbank & Jobs"
+msgstr "Database & jobs"
+
+msgid "Datenbank öffnen"
+msgstr "Open database"
+
+msgid "Datenträger / gesamt"
+msgstr "Disk / total"
+
+msgid "Datenträger / verfügbar"
+msgstr "Disk / available"
+
+msgid "Datenträger / verwendet"
+msgstr "Disk / used"
+
+msgid "Definitionen"
+msgstr "Definitions"
+
+msgid "Dienste & Integrationen"
+msgstr "Services & integrations"
+
+msgid "Dienste öffnen"
+msgstr "Open services"
+
+msgid "Diese Werte stammen aus cAdvisor und beziehen sich auf Docker-Container. Die VM-Werte oben stammen aus node_exporter und beziehen sich auf die gesamte Docker-Host-VM."
+msgstr "These metrics come from cAdvisor and refer to Docker containers. The VM metrics above come from node_exporter and cover the entire Docker host VM."
+
+msgid "Docker"
+msgstr "Docker"
+
+msgid "Docker-Container"
+msgstr "Docker containers"
+
+msgid "Erkannte Container"
+msgstr "Detected containers"
+
+msgid "Fehler / 24 h"
+msgstr "Errors / 24 h"
+
+msgid "Git Commit"
+msgstr "Git commit"
+
+msgid "Host & Release"
+msgstr "Host & release"
+
+msgid "Inodes sind Dateisystem-Einträge für Dateien und Verzeichnisse. Sind sie ausgeschöpft, können trotz freiem Speicher keine neuen Dateien angelegt werden."
+msgstr "Inodes are filesystem entries for files and directories. Once exhausted, no new files can be created even if free disk space remains."
+
+msgid "Keine aktiven Systemwarnungen."
+msgstr "No active system alerts."
+
+msgid "Letzter Restore-Test"
+msgstr "Last restore test"
+
+msgid "Letztes Backup"
+msgstr "Last backup"
+
+msgid "Letztes Deployment"
+msgstr "Last deployment"
+
+msgid "Load:"
+msgstr "Load:"
+
+msgid "Messbereich"
+msgstr "Measurement scope"
+
+msgid "Messquelle"
+msgstr "Measurement source"
+
+msgid "Messwert-Erklärung"
+msgstr "Metric explanation"
+
+msgid "OS / Kernel"
+msgstr "OS / kernel"
+
+msgid "PostgreSQL"
+msgstr "PostgreSQL"
+
+msgid "Prompt MCP"
+msgstr "Prompt MCP"
+
+msgid "RAM gesamt"
+msgstr "Total RAM"
+
+msgid "RAM verfügbar"
+msgstr "Available RAM"
+
+msgid "RAM verwendet"
+msgstr "Used RAM"
+
+msgid "Restore-Tests öffnen"
+msgstr "Open restore tests"
+
+msgid "TLS-Zertifikat"
+msgstr "TLS certificate"
+
+msgid "Umgebung"
+msgstr "Environment"
+
+msgid "Uptime"
+msgstr "Uptime"
+
+msgid "VM-CPU aktuell"
+msgstr "Current VM CPU"
+
+msgid "VM-Datenträger /"
+msgstr "VM disk /"
+
+msgid "VM-RAM"
+msgstr "VM RAM"
+
+msgid "VM-Speicher & Dateisystem"
+msgstr "VM memory & filesystem"
+
+msgid "Verwendetes Backup"
+msgstr "Backup used"
+
+msgid "Warnungen öffnen"
+msgstr "Open alerts"
+
+msgid "geschützt"
+msgstr "protected"
+
+msgid "healthy"
+msgstr "healthy"
+
+msgid "konfiguriert"
+msgstr "configured"
+
+msgid "nicht erreichbar"
+msgstr "unreachable"
+
+msgid "nicht protokolliert"
+msgstr "not logged"
+
+msgid "und ist die für neue Prozesse realistisch nutzbare Speichermenge. „Inodes“ sind Dateisystem-Einträge; ein niedriger Belegungsgrad ist unkritisch."
+msgstr "and represents the amount of memory realistically available to new processes. Inodes are filesystem entries; low inode usage is not a concern."
+
+msgid "verfügbar von"
+msgstr "available out of"
+
+msgid "„RAM verfügbar“ entspricht Linux"
+msgstr "“Available RAM” corresponds to Linux"
