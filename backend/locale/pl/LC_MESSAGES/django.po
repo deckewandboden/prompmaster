@@ -1435,3 +1435,66 @@ msgstr "Zresetować 2FA tego użytkownika?"
 
 msgid "2FA zurücksetzen"
 msgstr "Zresetuj 2FA"
+
+msgid "Benutzerstatus wirklich ändern?"
+msgstr "Na pewno zmienić status użytkownika?"
+
+msgid "Deaktivieren"
+msgstr "Dezaktywuj"
+
+msgid "Aktivieren"
+msgstr "Aktywuj"
+
+msgid "Keine netstyle Benutzer."
+msgstr "Brak użytkowników netstyle."
+
+msgid "Rechtsdokumente, Aufbewahrung und Löschanforderungen."
+msgstr "Dokumenty prawne, przechowywanie danych i wnioski o usunięcie."
+
+msgid "Rechtsdokumente"
+msgstr "Dokumenty prawne"
+
+msgid "Noch keine Rechtstexte hinterlegt."
+msgstr "Nie dodano jeszcze tekstów prawnych."
+
+msgid "Rechtsdokumente verwalten"
+msgstr "Zarządzaj dokumentami prawnymi"
+
+msgid "Verbrauchererklärungen"
+msgstr "Oświadczenia konsumentów"
+
+msgid "Offene Widerrufe / Kündigungen"
+msgstr "Otwarte odstąpienia / wypowiedzenia"
+
+msgid "Widerrufe & Kündigungen"
+msgstr "Odstąpienia i wypowiedzenia"
+
+msgid "Retention / Löschung"
+msgstr "Retencja / usuwanie"
+
+msgid "Aktive Retention-Policies"
+msgstr "Aktywne zasady retencji"
+
+msgid "Offene Löschanfragen"
+msgstr "Otwarte wnioski o usunięcie"
+
+msgid "Retention-Policies"
+msgstr "Zasady retencji"
+
+msgid "Löschanfragen"
+msgstr "Wnioski o usunięcie"
+
+msgid "Features / Entitlements"
+msgstr "Funkcje / uprawnienia"
+
+msgid "Wiederverwendbare Funktionsrechte für heutige und zukünftige Produkte."
+msgstr "Wielokrotnego użytku uprawnienia do funkcji obecnych i przyszłych produktów."
+
+msgid "Feature anlegen"
+msgstr "Utwórz funkcję"
+
+msgid "Code"
+msgstr "Kod"
+
+msgid "Keine Features."
+msgstr "Brak funkcji."
