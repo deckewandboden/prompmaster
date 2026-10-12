@@ -3337,3 +3337,45 @@ msgstr "Şirket yöneticiliği %(email)s adresine devredildi."
 
 msgid "Lizenz wurde %(email)s zugewiesen."
 msgstr "Lisans %(email)s adresine atandı."
+
+msgid "Ausstehend"
+msgstr "Beklemede"
+
+msgid "Autorisiert"
+msgstr "Yetkilendirildi"
+
+msgid "Storniert"
+msgstr "İptal edildi"
+
+msgid "Abgelaufen"
+msgstr "Süresi doldu"
+
+msgid "Teilweise erstattet"
+msgstr "Kısmen iade edildi"
+
+msgid "Vollständig erstattet"
+msgstr "Tamamen iade edildi"
+
+msgid "Chargeback"
+msgstr "Ters ibraz"
+
+msgid "Chargeback zurückgenommen"
+msgstr "Ters ibraz iptal edildi"
+
+msgid "Unbekannt"
+msgstr "Bilinmiyor"
+
+msgid "Verarbeitungsfehler"
+msgstr "İşleme hatası"
+
+msgid "Fehler behoben"
+msgstr "Hata giderildi"
+
+msgid "E-Mail-Historie"
+msgstr "E-posta geçmişi"
+
+msgid "netstyle Rolle zuweisen"
+msgstr "netstyle rolü ata"
+
+msgid "Erstattung konnte nicht an Mollie übermittelt werden."
+msgstr "Geri ödeme Mollie'ye gönderilemedi."
