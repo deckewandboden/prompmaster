@@ -2055,3 +2055,75 @@ msgstr "Demande et toutes les réponses de netstyle dans l'ordre chronologique."
 
 msgid "netstyle Support"
 msgstr "Assistance netstyle"
+
+msgid "FAQ bearbeiten"
+msgstr "Modifier la FAQ"
+
+msgid "FAQ anlegen"
+msgstr "Créer une FAQ"
+
+msgid "Zentraler Content-Baustein."
+msgstr "Composant de contenu central."
+
+msgid "FAQ-Verwaltung"
+msgstr "Gestion des FAQ"
+
+msgid "Zentrale FAQ-Inhalte für Marketing und Produktoberflächen."
+msgstr "FAQ centralisées pour le marketing et les interfaces produit."
+
+msgid "Frage suchen …"
+msgstr "Rechercher des questions …"
+
+msgid "Alle Zielgruppen"
+msgstr "Tous les publics"
+
+msgid "Filtern"
+msgstr "Filtrer"
+
+msgid "Zurücksetzen"
+msgstr "Réinitialiser"
+
+msgid "Key"
+msgstr "Clé"
+
+msgid "Frage"
+msgstr "Question"
+
+msgid "Zielgruppe"
+msgstr "Public cible"
+
+msgid "Keine FAQ-Einträge."
+msgstr "Aucune entrée FAQ."
+
+msgid "Service Account Token"
+msgstr "Jeton de compte de service"
+
+msgid "erstellt"
+msgstr "créé"
+
+msgid "Token jetzt sicher speichern."
+msgstr "Enregistrez ce jeton en lieu sûr dès maintenant."
+
+msgid "Er wird danach nicht erneut im Klartext angezeigt; ein alter Token ist nach einer Rotation sofort ungültig."
+msgstr "Il ne sera plus affiché en clair ; l'ancien jeton devient immédiatement invalide après rotation."
+
+msgid "Zur API-Verwaltung"
+msgstr "Retour à la gestion API"
+
+msgid "Produktcode"
+msgstr "Code produit"
+
+msgid "Preisversion anlegen"
+msgstr "Créer une version de prix"
+
+msgid "Produktkonfiguration"
+msgstr "Configuration du produit"
+
+msgid "Preisversionen"
+msgstr "Versions de prix"
+
+msgid "ab"
+msgstr "à partir de"
+
+msgid "Keine Preisversionen."
+msgstr "Aucune version de prix."
