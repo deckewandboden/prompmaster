@@ -1890,3 +1890,12 @@ msgstr "In coda"
 
 msgid "Keine E-Mails gefunden."
 msgstr "Nessuna e-mail trovata."
+
+msgid "Kundenbereiche"
+msgstr "Sezioni clienti"
+
+msgid "Privatkundenbereiche"
+msgstr "Sezioni clienti privati"
+
+msgid "Audit"
+msgstr "Audit"
