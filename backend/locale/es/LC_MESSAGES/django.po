@@ -2188,3 +2188,81 @@ msgstr "editar"
 
 msgid "zentrale PromptDefinition"
 msgstr "PromptDefinition central"
+
+msgid "Versionen"
+msgstr "Versiones"
+
+msgid "Tests / Ratings"
+msgstr "Pruebas / valoraciones"
+
+msgid "Lifecycle"
+msgstr "Ciclo de vida"
+
+msgid "Archivieren"
+msgstr "Archivar"
+
+msgid "Publish ist nur über den Human-in-the-loop-Lifecycle möglich. Tests werden vor REVIEW und PUBLISH erneut ausgeführt."
+msgstr "La publicación solo es posible mediante el ciclo de vida con supervisión humana. Las pruebas se repiten antes de REVIEW y PUBLISH."
+
+msgid "Definition"
+msgstr "Definición"
+
+msgid "Family"
+msgstr "Familia"
+
+msgid "Area"
+msgstr "Área"
+
+msgid "Max. Zeichen"
+msgstr "Máx. caracteres"
+
+msgid "Intent"
+msgstr "Intención"
+
+msgid "Kontexttemplate"
+msgstr "Plantilla de contexto"
+
+msgid "Felder & Optionen"
+msgstr "Campos y opciones"
+
+msgid "Pflichtfelder"
+msgstr "Campos obligatorios"
+
+msgid "Keine"
+msgstr "Ninguno"
+
+msgid "Optionale Felder"
+msgstr "Campos opcionales"
+
+msgid "Auswahloptionen"
+msgstr "Opciones de selección"
+
+msgid "Testfälle"
+msgstr "Casos de prueba"
+
+msgid "Tests sind Bestandteil des Release-Gates einer Prompt-Version."
+msgstr "Las pruebas forman parte de los requisitos de publicación de una versión del prompt."
+
+msgid "Alle Tests ausführen"
+msgstr "Ejecutar todas las pruebas"
+
+msgid "Testen"
+msgstr "Probar"
+
+msgid "Löschen"
+msgstr "Eliminar"
+
+msgid "Noch kein Testfall. Vor Übergang zu TEST muss mindestens einer angelegt werden."
+msgstr "Todavía no hay casos de prueba. Cree al menos uno antes de pasar a TEST."
+
+msgid "Preview / Test-Komposition"
+msgstr "Vista previa / composición de prueba"
+
+msgid "Prompt testen"
+msgstr "Probar prompt"
+
+msgid "Ergebnis"
+msgstr "Resultado"
+
+msgid "Deterministischer Feld-Fallback"
+msgstr "Valor de respaldo determinista para el campo"
