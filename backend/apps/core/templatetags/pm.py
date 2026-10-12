@@ -149,6 +149,11 @@ def ops_alert_display(alert):
         if match is None:
             continue
         params = match.groupdict()
+        if code.startswith('service.') and params.get('value'):
+            # Never display a different monitoring target than the stored alert code.
+            target = code[len('service.'):].rsplit('.', 1)[0]
+            if params['value'] != target:
+                continue
         if code == 'backup.failed' and params.get('value'):
             params['value'] = gettext(params['value'])
         try:
