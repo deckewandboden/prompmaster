@@ -3279,3 +3279,69 @@ msgstr "Ad esempio, PROMPTFINISHER."
 
 msgid "Zum Beispiel smtp.ionos.de."
 msgstr "Ad esempio, smtp.ionos.de."
+
+msgid "Das eigene netstyle Konto kann hier nicht deaktiviert werden."
+msgstr "Non puoi disattivare qui il tuo account netstyle."
+
+msgid "Der letzte aktive Superadmin kann nicht deaktiviert werden."
+msgstr "L'ultimo superamministratore attivo non può essere disattivato."
+
+msgid "Die eigene 2FA wird nicht über die Admin-Fremdverwaltung zurückgesetzt."
+msgstr "Non puoi reimpostare la tua 2FA dalla gestione amministrativa degli altri account."
+
+msgid "2FA zurückgesetzt. Der Benutzer muss sie beim nächsten Login neu einrichten."
+msgstr "La 2FA è stata reimpostata. L'utente deve configurarla al prossimo accesso."
+
+msgid "Die eigene Superadmin-Rolle kann nicht hier entfernt werden."
+msgstr "Non puoi rimuovere qui il tuo ruolo di superamministratore."
+
+msgid "Die letzte aktive Superadmin-Berechtigung kann nicht entfernt werden."
+msgstr "Non è possibile rimuovere l'ultima autorizzazione attiva da superamministratore."
+
+msgid "Ein gesperrter Service Account kann nicht rotiert werden."
+msgstr "Non è possibile ruotare le credenziali di un account di servizio bloccato."
+
+msgid "Mollie-Produktiv-Checkout wurde gesperrt."
+msgstr "Il checkout Mollie di produzione è stato bloccato."
+
+msgid "Bestätigung für die Erstattung fehlt."
+msgstr "Manca la conferma del rimborso."
+
+msgid "Erstattung wurde an Mollie übermittelt."
+msgstr "La richiesta di rimborso è stata inviata a Mollie."
+
+msgid "Für dieses Unternehmen existiert bereits ein aktiver Firmenadministrator."
+msgstr "Questa azienda dispone già di un amministratore attivo."
+
+msgid "Dieser Benutzer ist bereits Firmenadministrator."
+msgstr "Questo utente è già amministratore aziendale."
+
+msgid "Ungültiger Supportstatus."
+msgstr "Stato dell'assistenza non valido."
+
+msgid "Ungültiger Bearbeitungsstatus."
+msgstr "Stato di elaborazione non valido."
+
+msgid "Bitte eine Antwort eingeben."
+msgstr "Inserisci una risposta."
+
+msgid "Die Antwort darf höchstens 10.000 Zeichen enthalten."
+msgstr "La risposta non deve superare i 10.000 caratteri."
+
+msgid "Status aktualisiert."
+msgstr "Stato aggiornato."
+
+msgid "Einstellungen gespeichert."
+msgstr "Impostazioni salvate."
+
+msgid "Rolle gespeichert."
+msgstr "Ruolo salvato."
+
+msgid "Rolle zugewiesen."
+msgstr "Ruolo assegnato."
+
+msgid "Rolle entfernt."
+msgstr "Ruolo rimosso."
+
+msgid "Benutzerstatus aktualisiert."
+msgstr "Stato utente aggiornato."
