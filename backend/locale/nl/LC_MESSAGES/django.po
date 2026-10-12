@@ -1910,3 +1910,72 @@ msgstr "Bedrijfsbeheerder"
 
 msgid "Gerätezugang wirklich widerrufen?"
 msgstr "Apparaattoegang echt intrekken?"
+
+msgid "Mollie Events"
+msgstr "Mollie-gebeurtenissen"
+
+msgid "Idempotent verarbeitete Provider-Zustandsänderungen."
+msgstr "Idempotent verwerkte statuswijzigingen van de provider."
+
+msgid "Providerstatus"
+msgstr "Providerstatus"
+
+msgid "Verarbeitet"
+msgstr "Verwerkt"
+
+msgid "Retries"
+msgstr "Nieuwe pogingen"
+
+msgid "Fehler"
+msgstr "Fout"
+
+msgid "Keine Mollie Events gefunden."
+msgstr "Geen Mollie-gebeurtenissen gevonden."
+
+msgid "DSGVO-Workflow mit kontrollierter Anonymisierung und Erhalt rechtlich erforderlicher Historie."
+msgstr "AVG-proces met gecontroleerde anonimisering en behoud van wettelijk verplichte historie."
+
+msgid "Angefordert"
+msgstr "Aangevraagd"
+
+msgid "Notiz"
+msgstr "Notitie"
+
+msgid "Konto wirklich anonymisieren?"
+msgstr "Dit account echt anonimiseren?"
+
+msgid "Verarbeiten"
+msgstr "Verwerken"
+
+msgid "Retention Policies"
+msgstr "Bewaarbeleid"
+
+msgid "Nur freigegebene Datenklassen können automatisiert bereinigt werden."
+msgstr "Alleen goedgekeurde gegevensklassen kunnen automatisch worden opgeschoond."
+
+msgid "Datenklasse"
+msgstr "Gegevensklasse"
+
+msgid "Keine Policies."
+msgstr "Geen beleidsregels."
+
+msgid "Versionierte AGB, Datenschutz-, Widerrufs- und Lizenztexte."
+msgstr "Versies van algemene voorwaarden, privacyverklaringen, herroepings- en licentieteksten."
+
+msgid "Typ"
+msgstr "Type"
+
+msgid "Keine Dokumente."
+msgstr "Geen documenten."
+
+msgid "Read-only PostgreSQL-Betriebsdaten."
+msgstr "Alleen-lezen PostgreSQL-bedrijfsgegevens."
+
+msgid "DB-Größe"
+msgstr "Databasegrootte"
+
+msgid "Retention-Policy anlegen"
+msgstr "Bewaarbeleid aanmaken"
+
+msgid "Rechtsdokument anlegen"
+msgstr "Juridisch document aanmaken"
