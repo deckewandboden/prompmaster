@@ -2802,3 +2802,27 @@ msgstr "J’ai pris connaissance des informations sur le droit de rétractation"
 
 msgid "Zum Beispiel Bestellnummer oder Kundennummer."
 msgstr "Par exemple, le numéro de commande ou de client."
+
+msgid "Gerätename"
+msgstr "Nom de l’appareil"
+
+msgid "Keine konkrete Lizenz"
+msgstr "Aucune licence particulière"
+
+msgid "Lizenz (optional)"
+msgstr "Licence (facultatif)"
+
+msgid "Nachricht"
+msgstr "Message"
+
+msgid "Schlüssel"
+msgstr "Clé"
+
+msgid "Sonstiges"
+msgstr "Autre"
+
+msgid "Sortierung"
+msgstr "Ordre de tri"
+
+msgid "Technisches Problem"
+msgstr "Problème technique"
