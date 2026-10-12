@@ -2266,3 +2266,195 @@ msgstr "Resultado"
 
 msgid "Deterministischer Feld-Fallback"
 msgstr "Valor alternativo determinístico do campo"
+
+msgid "10-Min.-Ø:"
+msgstr "Média de 10 min:"
+
+msgid "Aktive Warnungen"
+msgstr "Alertas ativos"
+
+msgid "App-Version"
+msgstr "Versão da aplicação"
+
+msgid "Architektur"
+msgstr "Arquitetura"
+
+msgid "Backup & Restore"
+msgstr "Cópia de segurança e restauro"
+
+msgid "Backups öffnen"
+msgstr "Abrir cópias de segurança"
+
+msgid "Betriebszustand, Plattformdienste, Integrationen und Datensicherung."
+msgstr "Estado operacional, serviços da plataforma, integrações e cópias de segurança."
+
+msgid "CPU-Kerne"
+msgstr "Núcleos de CPU"
+
+msgid "Caddy"
+msgstr "Caddy"
+
+msgid "Celery Beat"
+msgstr "Celery Beat"
+
+msgid "Celery Worker"
+msgstr "Celery Worker"
+
+msgid "Container-CPU aktuell"
+msgstr "CPU atual dos contentores"
+
+msgid "Container-RAM gesamt"
+msgstr "RAM total dos contentores"
+
+msgid "DB-Verbindungen"
+msgstr "Ligações à base de dados"
+
+msgid "Dateiobjekte (Inodes) belegt"
+msgstr "Inodes utilizados"
+
+msgid "Dateiobjekte (Inodes) verfügbar"
+msgstr "Inodes disponíveis"
+
+msgid "Datenbank & Jobs"
+msgstr "Base de dados e tarefas"
+
+msgid "Datenbank öffnen"
+msgstr "Abrir base de dados"
+
+msgid "Datenträger / gesamt"
+msgstr "Disco / total"
+
+msgid "Datenträger / verfügbar"
+msgstr "Disco / disponível"
+
+msgid "Datenträger / verwendet"
+msgstr "Disco / utilizado"
+
+msgid "Definitionen"
+msgstr "Definições"
+
+msgid "Dienste & Integrationen"
+msgstr "Serviços e integrações"
+
+msgid "Dienste öffnen"
+msgstr "Abrir serviços"
+
+msgid "Diese Werte stammen aus cAdvisor und beziehen sich auf Docker-Container. Die VM-Werte oben stammen aus node_exporter und beziehen sich auf die gesamte Docker-Host-VM."
+msgstr "Estas métricas provêm do cAdvisor e referem-se aos contentores Docker. As métricas da VM acima provêm do node_exporter e abrangem toda a VM anfitriã do Docker."
+
+msgid "Docker"
+msgstr "Docker"
+
+msgid "Docker-Container"
+msgstr "Contentores Docker"
+
+msgid "Erkannte Container"
+msgstr "Contentores detetados"
+
+msgid "Fehler / 24 h"
+msgstr "Erros / 24 h"
+
+msgid "Git Commit"
+msgstr "Commit Git"
+
+msgid "Host & Release"
+msgstr "Host e versão"
+
+msgid "Inodes sind Dateisystem-Einträge für Dateien und Verzeichnisse. Sind sie ausgeschöpft, können trotz freiem Speicher keine neuen Dateien angelegt werden."
+msgstr "Os inodes são entradas do sistema de ficheiros para ficheiros e diretórios. Se se esgotarem, não é possível criar novos ficheiros mesmo que exista espaço livre em disco."
+
+msgid "Keine aktiven Systemwarnungen."
+msgstr "Não existem alertas de sistema ativos."
+
+msgid "Letzter Restore-Test"
+msgstr "Último teste de restauro"
+
+msgid "Letztes Backup"
+msgstr "Última cópia de segurança"
+
+msgid "Letztes Deployment"
+msgstr "Última implementação"
+
+msgid "Load:"
+msgstr "Carga:"
+
+msgid "Messbereich"
+msgstr "Âmbito da medição"
+
+msgid "Messquelle"
+msgstr "Fonte de medição"
+
+msgid "Messwert-Erklärung"
+msgstr "Explicação das métricas"
+
+msgid "OS / Kernel"
+msgstr "SO / kernel"
+
+msgid "PostgreSQL"
+msgstr "PostgreSQL"
+
+msgid "Prompt MCP"
+msgstr "Prompt MCP"
+
+msgid "RAM gesamt"
+msgstr "RAM total"
+
+msgid "RAM verfügbar"
+msgstr "RAM disponível"
+
+msgid "RAM verwendet"
+msgstr "RAM utilizada"
+
+msgid "Restore-Tests öffnen"
+msgstr "Abrir testes de restauro"
+
+msgid "TLS-Zertifikat"
+msgstr "Certificado TLS"
+
+msgid "Umgebung"
+msgstr "Ambiente"
+
+msgid "Uptime"
+msgstr "Tempo de atividade"
+
+msgid "VM-CPU aktuell"
+msgstr "CPU atual da VM"
+
+msgid "VM-Datenträger /"
+msgstr "Disco da VM /"
+
+msgid "VM-RAM"
+msgstr "RAM da VM"
+
+msgid "VM-Speicher & Dateisystem"
+msgstr "Memória e sistema de ficheiros da VM"
+
+msgid "Verwendetes Backup"
+msgstr "Cópia de segurança utilizada"
+
+msgid "Warnungen öffnen"
+msgstr "Abrir alertas"
+
+msgid "geschützt"
+msgstr "protegido"
+
+msgid "healthy"
+msgstr "operacional"
+
+msgid "konfiguriert"
+msgstr "configurado"
+
+msgid "nicht erreichbar"
+msgstr "indisponível"
+
+msgid "nicht protokolliert"
+msgstr "não registado"
+
+msgid "und ist die für neue Prozesse realistisch nutzbare Speichermenge. „Inodes“ sind Dateisystem-Einträge; ein niedriger Belegungsgrad ist unkritisch."
+msgstr "e representa a memória efetivamente disponível para novos processos. Os inodes são entradas do sistema de ficheiros; uma baixa utilização não constitui problema."
+
+msgid "verfügbar von"
+msgstr "disponíveis de"
+
+msgid "„RAM verfügbar“ entspricht Linux"
+msgstr "«RAM disponível» corresponde ao valor de Linux"
