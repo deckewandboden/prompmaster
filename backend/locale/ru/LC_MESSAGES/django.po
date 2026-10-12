@@ -1940,3 +1940,75 @@ msgstr "Запрос и все ответы netstyle в хронологичес
 
 msgid "netstyle Support"
 msgstr "Поддержка netstyle"
+
+msgid "FAQ bearbeiten"
+msgstr "Изменить FAQ"
+
+msgid "FAQ anlegen"
+msgstr "Создать FAQ"
+
+msgid "Zentraler Content-Baustein."
+msgstr "Центральный элемент контента."
+
+msgid "FAQ-Verwaltung"
+msgstr "Управление FAQ"
+
+msgid "Zentrale FAQ-Inhalte für Marketing und Produktoberflächen."
+msgstr "Централизованные FAQ для маркетинга и интерфейсов продукта."
+
+msgid "Frage suchen …"
+msgstr "Поиск вопросов …"
+
+msgid "Alle Zielgruppen"
+msgstr "Все аудитории"
+
+msgid "Filtern"
+msgstr "Фильтровать"
+
+msgid "Zurücksetzen"
+msgstr "Сбросить"
+
+msgid "Key"
+msgstr "Ключ"
+
+msgid "Frage"
+msgstr "Вопрос"
+
+msgid "Zielgruppe"
+msgstr "Целевая аудитория"
+
+msgid "Keine FAQ-Einträge."
+msgstr "Записей FAQ нет."
+
+msgid "Service Account Token"
+msgstr "Токен сервисной учётной записи"
+
+msgid "erstellt"
+msgstr "создан"
+
+msgid "Token jetzt sicher speichern."
+msgstr "Сохраните этот токен в безопасном месте прямо сейчас."
+
+msgid "Er wird danach nicht erneut im Klartext angezeigt; ein alter Token ist nach einer Rotation sofort ungültig."
+msgstr "Позже токен больше не будет показан открытым текстом; прежний токен становится недействительным сразу после замены."
+
+msgid "Zur API-Verwaltung"
+msgstr "К управлению API"
+
+msgid "Produktcode"
+msgstr "Код продукта"
+
+msgid "Preisversion anlegen"
+msgstr "Создать версию цены"
+
+msgid "Produktkonfiguration"
+msgstr "Конфигурация продукта"
+
+msgid "Preisversionen"
+msgstr "Версии цен"
+
+msgid "ab"
+msgstr "с"
+
+msgid "Keine Preisversionen."
+msgstr "Версий цен нет."
