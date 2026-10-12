@@ -1496,3 +1496,90 @@ msgstr "Code"
 
 msgid "Keine Features."
 msgstr "Geen functies."
+
+msgid "Geschützte Operations-Schnittstellen und Service Accounts."
+msgstr "Beveiligde beheerinterfaces en serviceaccounts."
+
+msgid "Service Account anlegen"
+msgstr "Serviceaccount aanmaken"
+
+msgid "Operations API"
+msgstr "Beheer-API"
+
+msgid "Zugriff ausschließlich über aktive Service Accounts mit passendem Scope. Tokens werden nur einmal bei Erstellung bzw. Rotation angezeigt."
+msgstr "Toegang uitsluitend via actieve serviceaccounts met het juiste bereik. Tokens worden alleen bij aanmaak of rotatie eenmaal getoond."
+
+msgid "Service Accounts"
+msgstr "Serviceaccounts"
+
+msgid "Gesperrt"
+msgstr "Geblokkeerd"
+
+msgid "Token rotieren"
+msgstr "Token roteren"
+
+msgid "Service Account wirklich sperren?"
+msgstr "Dit serviceaccount echt blokkeren?"
+
+msgid "Sperren"
+msgstr "Blokkeren"
+
+msgid "Noch keine Service Accounts."
+msgstr "Nog geen serviceaccounts."
+
+msgid "Dienste"
+msgstr "Diensten"
+
+msgid "Status der internen Plattformdienste."
+msgstr "Status van interne platformdiensten."
+
+msgid "Systemübersicht"
+msgstr "Systeemoverzicht"
+
+msgid "Host"
+msgstr "Host"
+
+msgid "Hostname"
+msgstr "Hostnaam"
+
+msgid "Kernel"
+msgstr "Kernel"
+
+msgid "Healthy"
+msgstr "Gezond"
+
+msgid "Nicht erreichbar"
+msgstr "Niet bereikbaar"
+
+msgid "Datenbank"
+msgstr "Database"
+
+msgid "Verbindungen"
+msgstr "Verbindingen"
+
+msgid "Größe"
+msgstr "Grootte"
+
+msgid "Background Jobs"
+msgstr "Achtergrondtaken"
+
+msgid "Heartbeat fehlt"
+msgstr "Heartbeat ontbreekt"
+
+msgid "Queue"
+msgstr "Wachtrij"
+
+msgid "Fehlgeschlagene Jobs 24 h"
+msgstr "Mislukte taken in 24 uur"
+
+msgid "Worker"
+msgstr "Worker"
+
+msgid "Antwortende Worker"
+msgstr "Reagerende workers"
+
+msgid "Worker-Heartbeat"
+msgstr "Worker-heartbeat"
+
+msgid "Beat-Heartbeat"
+msgstr "Beat-heartbeat"
