@@ -1262,3 +1262,75 @@ msgstr "Тип"
 
 msgid "Vertragsbezug"
 msgstr "Ссылка на договор"
+
+msgid "Datengetriebene Produkt-, Laufzeit-, Geräte-, Reminder- und Entitlement-Konfiguration."
+msgstr "Настройка продуктов, сроков, устройств, напоминаний и прав доступа на основе данных."
+
+msgid "Features"
+msgstr "Функции"
+
+msgid "Produkt anlegen"
+msgstr "Создать продукт"
+
+msgid "AKTIV"
+msgstr "АКТИВНО"
+
+msgid "INAKTIV"
+msgstr "НЕАКТИВНО"
+
+msgid "aktueller Neukaufpreis"
+msgstr "текущая цена новой покупки"
+
+msgid "nicht konfiguriert"
+msgstr "не настроено"
+
+msgid "Verlängerung"
+msgstr "Продление"
+
+msgid "Sichtbar / kaufbar"
+msgstr "Видно / доступно для покупки"
+
+msgid "Ja"
+msgstr "Да"
+
+msgid "Nein"
+msgstr "Нет"
+
+msgid "Bearbeiten"
+msgstr "Изменить"
+
+msgid "Noch keine Produkte."
+msgstr "Продуктов пока нет."
+
+msgid "Rollenbasierte Rechte; für alle netstyle Benutzer ist 2FA Pflicht."
+msgstr "Права доступа на основе ролей; двухфакторная аутентификация обязательна для всех пользователей netstyle."
+
+msgid "Rolle zuweisen"
+msgstr "Назначить роль"
+
+msgid "netstyle Benutzer anlegen"
+msgstr "Создать пользователя netstyle"
+
+msgid "Berechtigungen"
+msgstr "Разрешения"
+
+msgid "Sicherheitsvorgabe"
+msgstr "Требование безопасности"
+
+msgid "2FA Pflicht"
+msgstr "2FA обязательна"
+
+msgid "Keine Rolle"
+msgstr "Нет роли"
+
+msgid "2FA aktiv"
+msgstr "2FA включена"
+
+msgid "2FA einzurichten"
+msgstr "Требуется настройка 2FA"
+
+msgid "2FA dieses Benutzers zurücksetzen?"
+msgstr "Сбросить 2FA этого пользователя?"
+
+msgid "2FA zurücksetzen"
+msgstr "Сбросить 2FA"
