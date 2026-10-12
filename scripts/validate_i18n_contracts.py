@@ -123,11 +123,16 @@ def main() -> None:
         r'(?:Copilot Chat|M365 Copilot|PROMPTFINISHER|netstyle|SharePoint|OneDrive)'
         r'(?=[A-Za-zÀ-ÿА-Яа-я])'
     )
+    fused_microsoft_brand = re.compile(
+        r'(?i)(?:(?<=\\w)Microsoft\\s+Copilot|'
+        r'Microsoft\\s+Copilot(?=\\w)|'
+        r'(?<=\\w)M365\\s+Copilot|M365\\s+Copilot(?=\\w))'
+    )
     repeated_machine_word = re.compile(r'\b([A-Za-z]{2,})(?:\s+\1){4,}\b', re.I)
     for phrase, variants in catalog.items():
         for code in LOCALES:
             translation = variants.get(code, '')
-            if fused_brand.search(translation):
+            if fused_brand.search(translation) or fused_microsoft_brand.search(translation):
                 raise SystemExit(
                     f'I18N FAIL {code}: product name concatenated to text: '
                     f'{phrase!r} => {translation[:160]!r}'
@@ -137,6 +142,21 @@ def main() -> None:
                     f'I18N FAIL {code}: repeated machine-translation token: '
                     f'{phrase!r} => {translation[:160]!r}'
                 )
+    protected_copilot_ui = (
+        '1. Welche Microsoft-Copilot-Version nutzen Sie?',
+        'Alle erzeugten Prompts können direkt in Microsoft Copilot verwendet werden. Die Verfügbarkeit einzelner Microsoft-Funktionen hängt von Microsoft-Lizenz, Tenant und Rollout ab.',
+        'Diese Funktion benötigt eine andere Microsoft-Copilot-Stufe.',
+        'Microsoft-Copilot-Stufe erforderlich',
+    )
+    for source in protected_copilot_ui:
+        for code in LOCALES:
+            translated = catalog.get(source, {}).get(code, '')
+            if 'Microsoft Copilot' not in translated:
+                raise SystemExit(
+                    f'I18N FAIL {code}: protected Copilot name missing in {source!r}'
+                )
+    print('I18N COPILOT PHRASES PASS: no concatenated brand names')
+
     for phrase in ('ab Copilot Chat (Basic)', 'ab M365 Copilot (Basic)'):
         for code in LOCALES:
             label = catalog[phrase][code]
