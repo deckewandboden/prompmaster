@@ -113,11 +113,11 @@ class AdminInternationalizationContractTests(SimpleTestCase):
 
     def test_dynamic_admin_grid_headers_resolve_in_every_locale(self):
         source = (ROOT / 'apps/core/admin_views.py').read_text(encoding='utf-8')
-        blocks = re.findall(r"'columns':\\s*\\[([\\s\\S]*?)\\]", source)
+        blocks = re.findall(r"'columns':\s*\[([\s\S]*?)\]", source)
         labels = set()
         for block in blocks:
             labels.update(re.findall(
-                r"\\(\\s*'[^']+'\\s*,\\s*'([^']+)'\\s*,\\s*'[^']+'\\s*\\)",
+                r"\(\s*'[^']+'\s*,\s*'([^']+)'\s*,\s*'[^']+'\s*\)",
                 block,
             ))
         self.assertGreaterEqual(len(labels), 20)
