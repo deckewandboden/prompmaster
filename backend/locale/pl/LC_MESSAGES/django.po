@@ -1363,3 +1363,75 @@ msgstr "Rodzaj"
 
 msgid "Vertragsbezug"
 msgstr "Odniesienie do umowy"
+
+msgid "Datengetriebene Produkt-, Laufzeit-, Geräte-, Reminder- und Entitlement-Konfiguration."
+msgstr "Konfiguracja produktów, okresów, urządzeń, przypomnień i uprawnień oparta na danych."
+
+msgid "Features"
+msgstr "Funkcje"
+
+msgid "Produkt anlegen"
+msgstr "Utwórz produkt"
+
+msgid "AKTIV"
+msgstr "AKTYWNE"
+
+msgid "INAKTIV"
+msgstr "NIEAKTYWNE"
+
+msgid "aktueller Neukaufpreis"
+msgstr "aktualna cena nowego zakupu"
+
+msgid "nicht konfiguriert"
+msgstr "nieskonfigurowane"
+
+msgid "Verlängerung"
+msgstr "Odnowienie"
+
+msgid "Sichtbar / kaufbar"
+msgstr "Widoczne / dostępne do zakupu"
+
+msgid "Ja"
+msgstr "Tak"
+
+msgid "Nein"
+msgstr "Nie"
+
+msgid "Bearbeiten"
+msgstr "Edytuj"
+
+msgid "Noch keine Produkte."
+msgstr "Nie ma jeszcze produktów."
+
+msgid "Rollenbasierte Rechte; für alle netstyle Benutzer ist 2FA Pflicht."
+msgstr "Uprawnienia oparte na rolach; uwierzytelnianie dwuskładnikowe jest obowiązkowe dla wszystkich użytkowników netstyle."
+
+msgid "Rolle zuweisen"
+msgstr "Przypisz rolę"
+
+msgid "netstyle Benutzer anlegen"
+msgstr "Utwórz użytkownika netstyle"
+
+msgid "Berechtigungen"
+msgstr "Uprawnienia"
+
+msgid "Sicherheitsvorgabe"
+msgstr "Wymóg bezpieczeństwa"
+
+msgid "2FA Pflicht"
+msgstr "2FA obowiązkowe"
+
+msgid "Keine Rolle"
+msgstr "Brak roli"
+
+msgid "2FA aktiv"
+msgstr "2FA włączone"
+
+msgid "2FA einzurichten"
+msgstr "Wymagana konfiguracja 2FA"
+
+msgid "2FA dieses Benutzers zurücksetzen?"
+msgstr "Zresetować 2FA tego użytkownika?"
+
+msgid "2FA zurücksetzen"
+msgstr "Zresetuj 2FA"
