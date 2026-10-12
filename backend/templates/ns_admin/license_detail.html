@@ -1,57 +1,57 @@
-{% extends 'ns_admin/base.html' %}{% load pm %}{% block content %}
+{% extends 'ns_admin/base.html' %}{% load pm i18n %}{% block content %}
 {% user_has_perm request.user 'payments.read' as can_payments %}{% user_has_perm request.user 'orders.read' as can_orders %}
 <div class="page-head">
   <div><h1>{{ license.license_number }}</h1><div class="sub">{{ license.product.name }} · {% if license.company %}{{ license.company.name }}{% else %}{{ license.owner_user.email }}{% endif %}</div></div>
-  <a class="btn secondary" href="{% url 'ns_admin:licenses' %}">Zurück zur Liste</a>
+  <a class="btn secondary" href="{% url 'ns_admin:licenses' %}">{% translate 'Zurück zur Liste' %}</a>
 </div>
 
 <div class="grid two">
   <div class="card">
-    <h2>Lizenz</h2>
-    <div class="statusrow"><span>Status</span><strong>{{ license.get_status_display }}</strong></div>
-    <div class="statusrow"><span>Gültig ab</span><strong>{{ license.valid_from|date:'d.m.Y H:i'|default:'–' }}</strong></div>
-    <div class="statusrow"><span>Gültig bis</span><strong>{{ license.valid_until|date:'d.m.Y H:i'|default:'–' }}</strong></div>
-    <div class="statusrow"><span>Produkt</span><strong>{{ license.product.name }}</strong></div>
+    <h2>{% translate 'Lizenz' %}</h2>
+    <div class="statusrow"><span>{% translate 'Status' %}</span><strong>{{ license.get_status_display }}</strong></div>
+    <div class="statusrow"><span>{% translate 'Gültig ab' %}</span><strong>{{ license.valid_from|date:'d.m.Y H:i'|default:'–' }}</strong></div>
+    <div class="statusrow"><span>{% translate 'Gültig bis' %}</span><strong>{{ license.valid_until|date:'d.m.Y H:i'|default:'–' }}</strong></div>
+    <div class="statusrow"><span>{% translate 'Produkt' %}</span><strong>{{ license.product.name }}</strong></div>
     {% if can_write and license.status != 'payment_review' and license.status != 'refunded' %}
       <div class="card-action-row">
-        <form method="post" action="{% url 'ns_admin:license_block_toggle' license.id %}" class="inline-form" data-confirm="Lizenzstatus wirklich ändern?">
+        <form method="post" action="{% url 'ns_admin:license_block_toggle' license.id %}" class="inline-form" data-confirm="{% translate 'Lizenzstatus wirklich ändern?' %}">
           {% csrf_token %}
-          <button class="btn {% if license.status == 'blocked' %}primary{% else %}danger{% endif %} sm" type="submit">{% if license.status == 'blocked' %}Lizenz entsperren{% else %}Lizenz sperren{% endif %}</button>
+          <button class="btn {% if license.status == 'blocked' %}primary{% else %}danger{% endif %} sm" type="submit">{% if license.status == 'blocked' %}{% translate 'Lizenz entsperren' %}{% else %}{% translate 'Lizenz sperren' %}{% endif %}</button>
         </form>
       </div>
     {% endif %}
   </div>
 
   <div class="card license-owner-card">
-    <h2>Inhaber &amp; Zuweisung</h2>
-    <div class="statusrow"><span>Unternehmen</span><strong>{{ license.company.name|default:'–' }}</strong></div>
-    <div class="statusrow"><span>Privatkunde</span><strong>{{ license.owner_user.email|default:'–' }}</strong></div>
-    <div class="statusrow"><span>Zugewiesen an</span><strong>{% if active_assignment %}{{ active_assignment.user.full_name|default:active_assignment.user.email }}{% elif license.owner_user %}{{ license.owner_user.full_name|default:license.owner_user.email }}{% else %}Frei{% endif %}</strong></div>
+    <h2>{% translate 'Inhaber & Zuweisung' %}</h2>
+    <div class="statusrow"><span>{% translate 'Unternehmen' %}</span><strong>{{ license.company.name|default:'–' }}</strong></div>
+    <div class="statusrow"><span>{% translate 'Privatkunde' %}</span><strong>{{ license.owner_user.email|default:'–' }}</strong></div>
+    <div class="statusrow"><span>{% translate 'Zugewiesen an' %}</span><strong>{% if active_assignment %}{{ active_assignment.user.full_name|default:active_assignment.user.email }}{% elif license.owner_user %}{{ license.owner_user.full_name|default:license.owner_user.email }}{% else %}{% translate 'Frei' %}{% endif %}</strong></div>
     {% if active_assignment or license.owner_user %}
-      <div class="statusrow"><span>E-Mail</span><strong class="wrap-anywhere">{% if active_assignment %}{{ active_assignment.user.email }}{% else %}{{ license.owner_user.email }}{% endif %}</strong></div>
+      <div class="statusrow"><span>{% translate 'E-Mail' %}</span><strong class="wrap-anywhere">{% if active_assignment %}{{ active_assignment.user.email }}{% else %}{{ license.owner_user.email }}{% endif %}</strong></div>
     {% endif %}
 
     {% if can_write and license.company %}
       {% if active_assignment %}
         <div class="card-action-row end">
-          <form method="post" action="{% url 'ns_admin:license_release' license.id %}" class="inline-form" data-confirm="Lizenzzuweisung wirklich freigeben? Aktive Geräte dieser Lizenz werden widerrufen.">
+          <form method="post" action="{% url 'ns_admin:license_release' license.id %}" class="inline-form" data-confirm="{% translate 'Lizenzzuweisung wirklich freigeben? Aktive Geräte dieser Lizenz werden widerrufen.' %}">
             {% csrf_token %}
-            <button class="btn danger sm" type="submit">Zuweisung freigeben</button>
+            <button class="btn danger sm" type="submit">{% translate 'Zuweisung freigeben' %}</button>
           </form>
         </div>
       {% elif license.status == 'free' or license.status == 'active' %}
         <form method="post" action="{% url 'ns_admin:license_assign' license.id %}" class="form license-assignment-form">
           {% csrf_token %}
-          <label>Aktiven Firmenbenutzer auswählen
+          <label>{% translate 'Aktiven Firmenbenutzer auswählen' %}
             <select name="user_id" required>
-              <option value="">Bitte auswählen</option>
+              <option value="">{% translate 'Bitte auswählen' %}</option>
               {% for member in eligible_members %}
                 <option value="{{ member.user_id }}">{{ member.user.full_name }} · {{ member.user.email }}</option>
               {% endfor %}
             </select>
           </label>
           <div class="card-action-row end">
-            <button class="btn primary sm" type="submit">Lizenz zuweisen</button>
+            <button class="btn primary sm" type="submit">{% translate 'Lizenz zuweisen' %}</button>
           </div>
         </form>
       {% endif %}
@@ -60,31 +60,31 @@
 </div>
 
 <div class="card mt-14">
-  <h2>Lizenzperioden</h2>
+  <h2>{% translate 'Lizenzperioden' %}</h2>
   <div class="tablewrap">
     <table>
-      <thead><tr><th>Von</th><th>Bis</th>{% if can_payments %}<th>Bezahlt</th>{% endif %}<th>Status</th>{% if can_orders %}<th>Bestellung</th>{% endif %}<th>Erstattung</th></tr></thead>
+      <thead><tr><th>{% translate 'Von' %}</th><th>{% translate 'Bis' %}</th>{% if can_payments %}<th>{% translate 'Bezahlt' %}</th>{% endif %}<th>{% translate 'Status' %}</th>{% if can_orders %}<th>{% translate 'Bestellung' %}</th>{% endif %}<th>{% translate 'Erstattung' %}</th></tr></thead>
       <tbody>
       {% for term in terms %}
         <tr>
-          <td data-label="Von">{{ term.valid_from|date:'d.m.Y H:i' }}</td>
-          <td data-label="Bis">{{ term.valid_until|date:'d.m.Y H:i' }}</td>
-          {% if can_payments %}<td data-label="Bezahlt">{{ term.paid_gross_amount }} €</td>{% endif %}
-          <td data-label="Status">{{ term.get_status_display }}</td>
-          {% if can_orders %}<td data-label="Bestellung">{{ term.order_item.order.order_number }}</td>{% endif %}
-          <td data-label="Erstattung">
+          <td data-label="{% translate 'Von' %}">{{ term.valid_from|date:'d.m.Y H:i' }}</td>
+          <td data-label="{% translate 'Bis' %}">{{ term.valid_until|date:'d.m.Y H:i' }}</td>
+          {% if can_payments %}<td data-label="{% translate 'Bezahlt' %}">{{ term.paid_gross_amount }} €</td>{% endif %}
+          <td data-label="{% translate 'Status' %}">{{ term.get_status_display }}</td>
+          {% if can_orders %}<td data-label="{% translate 'Bestellung' %}">{{ term.order_item.order.order_number }}</td>{% endif %}
+          <td data-label="{% translate 'Erstattung' %}">
             {% if term.status == 'active' and can_refund %}
-              <form method="post" action="{% url 'ns_admin:license_refund' license.id term.id %}" class="inline-form" data-confirm="Erstattung wirklich verbindlich über Mollie auslösen?">
+              <form method="post" action="{% url 'ns_admin:license_refund' license.id term.id %}" class="inline-form" data-confirm="{% translate 'Erstattung wirklich verbindlich über Mollie auslösen?' %}">
                 {% csrf_token %}
                 <input type="hidden" name="confirm" value="on">
                 <input type="hidden" name="reason" value="">
-                <button class="btn danger sm" type="submit">Erstattung prüfen/auslösen</button>
+                <button class="btn danger sm" type="submit">{% translate 'Erstattung prüfen/auslösen' %}</button>
               </form>
             {% else %}–{% endif %}
           </td>
         </tr>
       {% empty %}
-        <tr><td colspan="6" class="empty">Keine Lizenzperioden vorhanden.</td></tr>
+        <tr><td colspan="6" class="empty">{% translate 'Keine Lizenzperioden vorhanden.' %}</td></tr>
       {% endfor %}
       </tbody>
     </table>
