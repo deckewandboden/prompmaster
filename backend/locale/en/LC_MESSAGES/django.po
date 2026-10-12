@@ -1810,3 +1810,72 @@ msgstr "Company admin"
 
 msgid "Gerätezugang wirklich widerrufen?"
 msgstr "Really revoke device access?"
+
+msgid "Mollie Events"
+msgstr "Mollie events"
+
+msgid "Idempotent verarbeitete Provider-Zustandsänderungen."
+msgstr "Idempotently processed provider status changes."
+
+msgid "Providerstatus"
+msgstr "Provider status"
+
+msgid "Verarbeitet"
+msgstr "Processed"
+
+msgid "Retries"
+msgstr "Retries"
+
+msgid "Fehler"
+msgstr "Error"
+
+msgid "Keine Mollie Events gefunden."
+msgstr "No Mollie events found."
+
+msgid "DSGVO-Workflow mit kontrollierter Anonymisierung und Erhalt rechtlich erforderlicher Historie."
+msgstr "GDPR workflow with controlled anonymization while retaining legally required records."
+
+msgid "Angefordert"
+msgstr "Requested"
+
+msgid "Notiz"
+msgstr "Note"
+
+msgid "Konto wirklich anonymisieren?"
+msgstr "Really anonymize this account?"
+
+msgid "Verarbeiten"
+msgstr "Process"
+
+msgid "Retention Policies"
+msgstr "Retention policies"
+
+msgid "Nur freigegebene Datenklassen können automatisiert bereinigt werden."
+msgstr "Only approved data classes can be cleaned up automatically."
+
+msgid "Datenklasse"
+msgstr "Data class"
+
+msgid "Keine Policies."
+msgstr "No policies."
+
+msgid "Versionierte AGB, Datenschutz-, Widerrufs- und Lizenztexte."
+msgstr "Versioned terms and conditions, privacy, withdrawal and license documents."
+
+msgid "Typ"
+msgstr "Type"
+
+msgid "Keine Dokumente."
+msgstr "No documents."
+
+msgid "Read-only PostgreSQL-Betriebsdaten."
+msgstr "Read-only PostgreSQL operational data."
+
+msgid "DB-Größe"
+msgstr "Database size"
+
+msgid "Retention-Policy anlegen"
+msgstr "Create retention policy"
+
+msgid "Rechtsdokument anlegen"
+msgstr "Create legal document"
