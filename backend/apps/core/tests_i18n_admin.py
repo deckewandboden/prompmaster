@@ -528,6 +528,115 @@ class AdminInternationalizationContractTests(SimpleTestCase):
                 with self.subTest(language=code, term=term):
                     self.assertTrue(catalog.get(term))
 
+
+    def test_checkout_legal_account_form_localization(self):
+        from apps.accounts.forms import LoginForm, RegistrationForm, PasswordResetConfirmForm
+        from apps.legal.forms import WithdrawalDeclarationForm, CancellationDeclarationForm
+        from apps.orders.forms import PurchaseForm, RenewalForm, PublicCheckoutForm
+
+        files = (
+            ROOT / 'apps/orders/forms.py',
+            ROOT / 'apps/legal/forms.py',
+            ROOT / 'apps/accounts/forms.py',
+        )
+        messages = set()
+        for path in files:
+            source = path.read_text(encoding='utf-8')
+            self.assertIn('from django.utils.translation import gettext_lazy as _', source)
+            self.assertNotIn('forms.BooleanField(,', source)
+            messages.update(re.findall(r"_\\('([^']+)'\\)", source))
+        self.assertGreaterEqual(len(messages), 55)
+        for language in LOCALES:
+            catalog = catalog_translations(
+                ROOT / 'locale' / language / 'LC_MESSAGES' / 'django.po'
+            )
+            for message in messages:
+                with self.subTest(locale=language, message=message):
+                    self.assertTrue(catalog.get(message))
+
+        purchase = PurchaseForm(require_withdrawal=True)
+        renewal = RenewalForm(require_withdrawal=True)
+        checkout = PublicCheckoutForm()
+        cancellation = CancellationDeclarationForm()
+        withdrawal = WithdrawalDeclarationForm()
+        self.assertTrue(purchase.fields['accept_withdrawal'].required)
+        self.assertTrue(renewal.fields['accept_withdrawal'].required)
+        self.assertFalse(PurchaseForm().fields.get('accept_withdrawal'))
+        self.assertTrue(checkout.fields['first_name'].label)
+        self.assertTrue(checkout.fields['request_early_performance'].label)
+        self.assertEqual(
+            [code for code, _ in cancellation.fields['cancellation_kind'].choices],
+            ['', 'ordinary', 'extraordinary'],
+        )
+        self.assertTrue(withdrawal.fields['contract_reference'].help_text)
+        self.assertTrue(LoginForm().fields['email'].label)
+        self.assertTrue(RegistrationForm().fields['company_name'].label)
+        self.assertTrue(PasswordResetConfirmForm().fields['password_repeat'].label)
+
+    def test_checkout_and_cancellation_validation_contract_remains_intact(self):
+        from types import SimpleNamespace
+        from unittest.mock import patch as patch_module
+        from apps.orders.forms import PublicCheckoutForm
+        from apps.legal.forms import CancellationDeclarationForm, WithdrawalDeclarationForm
+        from apps.accounts.forms import PasswordResetConfirmForm
+
+        base = {
+            'quantity': 1,
+            'first_name': 'Test',
+            'last_name': 'Customer',
+            'email': 'form-contract@example.test',
+            'street': 'Example Street',
+            'postal_code': '12345',
+            'city': 'Example City',
+            'country': 'DE',
+            'accept_terms': 'on',
+            'accept_privacy': 'on',
+            'accept_license': 'on',
+        }
+        private = PublicCheckoutForm(data={**base, 'customer_type': 'private'})
+        self.assertFalse(private.is_valid())
+        self.assertIn('accept_withdrawal', private.errors)
+        self.assertIn('request_early_performance', private.errors)
+        valid_private = PublicCheckoutForm(data={
+            **base, 'customer_type': 'private',
+            'accept_withdrawal': 'on', 'request_early_performance': 'on',
+        })
+        self.assertTrue(valid_private.is_valid(), valid_private.errors.as_text())
+
+        with patch_module('apps.orders.forms.TaxRule.objects.filter') as tax_query:
+            tax_query.return_value.first.return_value = SimpleNamespace(
+                require_vat_id=True, require_tax_number=True,
+            )
+            company = PublicCheckoutForm(data={**base, 'customer_type': 'company'})
+            self.assertFalse(company.is_valid())
+            self.assertIn('company_name', company.errors)
+            self.assertIn('vat_id', company.errors)
+            self.assertIn('tax_number', company.errors)
+
+        base_legal = {
+            'name': 'Test Customer',
+            'email': 'form-contract@example.test',
+            'contract_reference': 'ORDER-TEST-123',
+        }
+        self.assertTrue(
+            WithdrawalDeclarationForm(data=base_legal).is_valid()
+        )
+        extraordinary = CancellationDeclarationForm(data={
+            **base_legal, 'cancellation_kind': 'extraordinary',
+        })
+        self.assertFalse(extraordinary.is_valid())
+        self.assertIn('reason', extraordinary.errors)
+        ordinary = CancellationDeclarationForm(data={
+            **base_legal, 'cancellation_kind': 'ordinary',
+        })
+        self.assertTrue(ordinary.is_valid(), ordinary.errors.as_text())
+        different_passwords = PasswordResetConfirmForm(data={
+            'password': 'AveryStrong2026Pass!',
+            'password_repeat': 'AnotherStrong2026Pass!',
+        })
+        self.assertFalse(different_passwords.is_valid())
+        self.assertIn('password_repeat', different_passwords.errors)
+
     def test_language_picker_is_in_flex_header_and_never_overlays_avatar(self):
         shell = (ROOT / 'templates/app_shell.html').read_text(encoding='utf-8')
         base = (ROOT / 'templates/base.html').read_text(encoding='utf-8')
