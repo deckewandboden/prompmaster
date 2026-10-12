@@ -3486,3 +3486,45 @@ msgstr "Assegna ruolo netstyle"
 
 msgid "Erstattung konnte nicht an Mollie übermittelt werden."
 msgstr "Impossibile inviare il rimborso a Mollie."
+
+msgid "Nachrichtentext"
+msgstr "Testo del messaggio"
+
+msgid "Rollenname"
+msgstr "Nome del ruolo"
+
+msgid "Lead %(lead_number)s löschen"
+msgstr "Elimina lead %(lead_number)s"
+
+msgid "Lead %(lead_number)s in Kunden umwandeln"
+msgstr "Converti lead %(lead_number)s in cliente"
+
+msgid "Firmenadministrator übertragen · %(email)s"
+msgstr "Trasferisci amministratore aziendale · %(email)s"
+
+msgid "E-Mail-Vorlage · %(code)s"
+msgstr "Modello e-mail · %(code)s"
+
+msgid "Löschanfrage ablehnen"
+msgstr "Rifiuta richiesta di eliminazione"
+
+msgid "Uneingeschränkte Rechte auf alle PROMPTFINISHER-Verwaltungsbereiche."
+msgstr "Accesso illimitato a tutte le aree amministrative di PROMPTFINISHER."
+
+msgid "Kunden, Lizenzen, Geräte, Bestellungen, Zahlungen, E-Mail und Support."
+msgstr "Clienti, licenze, dispositivi, ordini, pagamenti, e-mail e assistenza."
+
+msgid "Monitoring, Backups, Operations API, Logs und Systemstatus."
+msgstr "Monitoraggio, backup, API operativa, registri e stato del sistema."
+
+msgid "Prompt Studio, Prompt-Lifecycle, Qualität und zentrale Inhalte."
+msgstr "Prompt Studio, ciclo di vita dei prompt, qualità e contenuti centralizzati."
+
+msgid "Berechtigungen werden über die zugewiesenen Capabilities gesteuert."
+msgstr "Le autorizzazioni sono gestite dalle capacità assegnate."
+
+msgid "Objekttyp"
+msgstr "Tipo di oggetto"
+
+msgid "Objekt-ID"
+msgstr "ID oggetto"
