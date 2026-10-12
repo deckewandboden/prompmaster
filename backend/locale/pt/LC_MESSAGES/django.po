@@ -1333,3 +1333,66 @@ msgstr "Repor a 2FA deste utilizador?"
 
 msgid "2FA zurücksetzen"
 msgstr "Repor 2FA"
+
+msgid "Benutzerstatus wirklich ändern?"
+msgstr "Pretende mesmo alterar o estado do utilizador?"
+
+msgid "Deaktivieren"
+msgstr "Desativar"
+
+msgid "Aktivieren"
+msgstr "Ativar"
+
+msgid "Keine netstyle Benutzer."
+msgstr "Não existem utilizadores netstyle."
+
+msgid "Rechtsdokumente, Aufbewahrung und Löschanforderungen."
+msgstr "Documentos jurídicos, retenção e pedidos de eliminação."
+
+msgid "Rechtsdokumente"
+msgstr "Documentos jurídicos"
+
+msgid "Noch keine Rechtstexte hinterlegt."
+msgstr "Ainda não foram adicionados textos jurídicos."
+
+msgid "Rechtsdokumente verwalten"
+msgstr "Gerir documentos jurídicos"
+
+msgid "Verbrauchererklärungen"
+msgstr "Declarações dos consumidores"
+
+msgid "Offene Widerrufe / Kündigungen"
+msgstr "Desistências / rescisões pendentes"
+
+msgid "Widerrufe & Kündigungen"
+msgstr "Desistências e rescisões"
+
+msgid "Retention / Löschung"
+msgstr "Retenção / eliminação"
+
+msgid "Aktive Retention-Policies"
+msgstr "Políticas de retenção ativas"
+
+msgid "Offene Löschanfragen"
+msgstr "Pedidos de eliminação pendentes"
+
+msgid "Retention-Policies"
+msgstr "Políticas de retenção"
+
+msgid "Löschanfragen"
+msgstr "Pedidos de eliminação"
+
+msgid "Features / Entitlements"
+msgstr "Funcionalidades / direitos de acesso"
+
+msgid "Wiederverwendbare Funktionsrechte für heutige und zukünftige Produkte."
+msgstr "Direitos de funcionalidades reutilizáveis para produtos atuais e futuros."
+
+msgid "Feature anlegen"
+msgstr "Criar funcionalidade"
+
+msgid "Code"
+msgstr "Código"
+
+msgid "Keine Features."
+msgstr "Sem funcionalidades."
