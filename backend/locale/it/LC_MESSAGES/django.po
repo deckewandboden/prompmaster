@@ -1665,3 +1665,81 @@ msgstr "in attesa"
 
 msgid "Noch keine Webhook-Ereignisse."
 msgstr "Ancora nessun evento webhook."
+
+msgid "Vorlagen, Versandstatus, Provider und Fallback-Kette."
+msgstr "Modelli, stato dell'invio, provider e catena di failover."
+
+msgid "Absender & Provider"
+msgstr "Mittente e provider"
+
+msgid "Versandprotokoll öffnen"
+msgstr "Apri registro degli invii"
+
+msgid "Vorlagen"
+msgstr "Modelli"
+
+msgid "Keine E-Mail-Vorlagen vorhanden."
+msgstr "Nessun modello e-mail disponibile."
+
+msgid "Mail-System"
+msgstr "Sistema e-mail"
+
+msgid "Versandmodus"
+msgstr "Modalità di invio"
+
+msgid "Automatischer Fallback"
+msgstr "Failover automatico"
+
+msgid "Manuell"
+msgstr "Manuale"
+
+msgid "Primär"
+msgstr "Primario"
+
+msgid "Reihenfolge"
+msgstr "Ordine"
+
+msgid "Status der Kette"
+msgstr "Stato della catena"
+
+msgid "Aktiver Absender"
+msgstr "Mittente attivo"
+
+msgid "Anzeigename"
+msgstr "Nome visualizzato"
+
+msgid "Mail-Domain"
+msgstr "Dominio e-mail"
+
+msgid "Server"
+msgstr "Server"
+
+msgid "Anmeldung"
+msgstr "Autenticazione"
+
+msgid "Passwort fehlt"
+msgstr "Password mancante"
+
+msgid "Ohne Anmeldung"
+msgstr "Senza autenticazione"
+
+msgid "Nicht konfiguriert"
+msgstr "Non configurato"
+
+msgid "Fehlt"
+msgstr "Mancante"
+
+msgid "Graph Absender"
+msgstr "Mittente Graph"
+
+msgid "Automatischer Fallback erfolgt nur bei eindeutig nicht zugestellten Fehlern. Bei unklaren Fehlern wird nicht automatisch weitergeschaltet, damit dieselbe E-Mail nicht versehentlich doppelt versendet wird."
+msgstr "Il failover automatico avviene solo in caso di mancata consegna confermata. Gli errori ambigui non attivano il passaggio automatico, per evitare l'invio duplicato dello stesso messaggio."
+
+msgid "SPF/DKIM/DMARC werden unter „Einstellungen“ als DNS-Sollwerte dokumentiert. Änderungen dort aktualisieren nicht automatisch den öffentlichen DNS."
+msgstr "I record DNS previsti per SPF/DKIM/DMARC sono documentati in Impostazioni. Le modifiche non aggiornano automaticamente il DNS pubblico."
+
+msgid "Letzte Versandvorgänge"
+msgstr "Invii recenti"
+
+msgid "Noch keine Versandvorgänge."
+msgstr "Ancora nessun invio."
