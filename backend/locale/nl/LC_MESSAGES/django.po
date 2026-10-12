@@ -2786,3 +2786,27 @@ msgstr "Ik heb de informatie over het herroepingsrecht gelezen"
 
 msgid "Zum Beispiel Bestellnummer oder Kundennummer."
 msgstr "Bijvoorbeeld een bestelnummer of klantnummer."
+
+msgid "Gerätename"
+msgstr "Apparaatnaam"
+
+msgid "Keine konkrete Lizenz"
+msgstr "Geen specifieke licentie"
+
+msgid "Lizenz (optional)"
+msgstr "Licentie (optioneel)"
+
+msgid "Nachricht"
+msgstr "Bericht"
+
+msgid "Schlüssel"
+msgstr "Sleutel"
+
+msgid "Sonstiges"
+msgstr "Overig"
+
+msgid "Sortierung"
+msgstr "Sorteervolgorde"
+
+msgid "Technisches Problem"
+msgstr "Technisch probleem"
