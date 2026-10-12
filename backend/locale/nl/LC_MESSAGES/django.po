@@ -2900,3 +2900,162 @@ msgstr "Doel / intentie"
 
 msgid "Zielgruppen"
 msgstr "Doelgroepen"
+
+msgid "API-Schlüssel"
+msgstr "API-sleutel"
+
+msgid "Ablauf optional"
+msgstr "Optionele vervaldatum"
+
+msgid "Außerhalb der Produktion ist ausschließlich ein Mollie-Test-Key (test_…) zulässig."
+msgstr "Buiten productie is uitsluitend een Mollie-testsleutel (test_…) toegestaan."
+
+msgid "Begründung"
+msgstr "Motivering"
+
+msgid "Beschreibung"
+msgstr "Beschrijving"
+
+msgid "Bruttopreis"
+msgstr "Brutoprijs"
+
+msgid "Der Datensatz wird revisionssicher ausgeblendet und im Audit protokolliert."
+msgstr "Het record wordt verborgen met behoud van een auditspoor."
+
+msgid "Diese E-Mail-Adresse gehört bereits zu einem PROMPTFINISHER-Konto."
+msgstr "Dit e-mailadres is al gekoppeld aan een PROMPTFINISHER-account."
+
+msgid "Diese E-Mail-Adresse ist bereits einem Firmenkunden zugeordnet."
+msgstr "Dit e-mailadres is al gekoppeld aan een zakelijke klant."
+
+msgid "Diese E-Mail-Adresse ist bereits registriert."
+msgstr "Dit e-mailadres is al geregistreerd."
+
+msgid "Dokumenttyp"
+msgstr "Documenttype"
+
+msgid "E-Mail des Firmenadministrators"
+msgstr "E-mailadres bedrijfsbeheerder"
+
+msgid "Eigenes Passwort erneut eingeben"
+msgstr "Voer uw wachtwoord opnieuw in"
+
+msgid "Erinnerung 1 · Tage vorher"
+msgstr "Herinnering 1 · Dagen vooraf"
+
+msgid "Erinnerung 2 · Tage vorher"
+msgstr "Herinnering 2 · Dagen vooraf"
+
+msgid "Erstatten"
+msgstr "Terugbetalen"
+
+msgid "Für Unternehmens-Leads ist der Unternehmensname erforderlich."
+msgstr "Voor zakelijke leads is een bedrijfsnaam verplicht."
+
+msgid "Für diese Datenklasse existiert kein freigegebener Lösch-Handler."
+msgstr "Er is geen goedgekeurde verwijderhandler voor deze gegevensklasse."
+
+msgid "Für diese E-Mail-Adresse existiert bereits ein aktiver Lead."
+msgstr "Er bestaat al een actieve lead voor dit e-mailadres."
+
+msgid "Identität und Berechtigung des Ansprechpartners wurden geprüft"
+msgstr "Identiteit en bevoegdheid van de contactpersoon zijn gecontroleerd"
+
+msgid "In Kunde umwandeln"
+msgstr "Omzetten naar klant"
+
+msgid "In Produktion ist ausschließlich ein Mollie-Live-Key (live_…) zulässig."
+msgstr "In productie is uitsluitend een Mollie-live-sleutel (live_…) toegestaan."
+
+msgid "Inhalt"
+msgstr "Inhoud"
+
+msgid "Interne Notiz zur Prüfung (optional)"
+msgstr "Interne verificatienotitie (optioneel)"
+
+msgid "Interne Notizen"
+msgstr "Interne notities"
+
+msgid "Kaufbar"
+msgstr "Koopbaar"
+
+msgid "Kritische Warnung · Tage vorher"
+msgstr "Kritieke waarschuwing · Dagen vooraf"
+
+msgid "Lead in Firmenkunden umwandeln und Einladungslink senden"
+msgstr "Lead omzetten naar zakelijke klant en uitnodigingslink versturen"
+
+msgid "Lead wirklich löschen"
+msgstr "Verwijderen van lead bevestigen"
+
+msgid "Lead-Typ"
+msgstr "Leadtype"
+
+msgid "Leer lassen, um den bestehenden Schlüssel unverändert zu lassen."
+msgstr "Laat leeg om de bestaande sleutel ongewijzigd te laten."
+
+msgid "Lesen"
+msgstr "Lezen"
+
+msgid "Löschung erst nach dieser Anzahl Tage. Rechtliche Aufbewahrungsfristen separat prüfen."
+msgstr "Pas verwijderen na dit aantal dagen. Controleer wettelijke bewaartermijnen afzonderlijk."
+
+msgid "Neukauf"
+msgstr "Nieuwe aankoop"
+
+msgid "Nicht zugewiesen"
+msgstr "Niet toegewezen"
+
+msgid "Nächste Aktion"
+msgstr "Volgende actie"
+
+msgid "Operations lesen"
+msgstr "Operations lezen"
+
+msgid "Preistyp"
+msgstr "Prijstype"
+
+msgid "Prompt-Drafts erzeugen"
+msgstr "Promptconcepten maken"
+
+msgid "Prompt-Tests ausführen"
+msgstr "Prompttests uitvoeren"
+
+msgid "Prompts erzeugen"
+msgstr "Prompts maken"
+
+msgid "Prompts lesen"
+msgstr "Prompts lezen"
+
+msgid "Qualität verwalten"
+msgstr "Kwaliteit beheren"
+
+msgid "Quelle"
+msgstr "Bron"
+
+msgid "Reminder 1 muss vor Reminder 2 liegen (größere Tageszahl)."
+msgstr "Herinnering 1 moet vóór herinnering 2 plaatsvinden (groter aantal dagen)."
+
+msgid "Reminder 2 muss vor der kritischen Warnphase liegen."
+msgstr "Herinnering 2 moet vóór de kritieke waarschuwingsperiode plaatsvinden."
+
+msgid "Sicherheitsbestätigung des aktuell angemeldeten netstyle Benutzers."
+msgstr "Beveiligingsbevestiging door de momenteel ingelogde netstyle-gebruiker."
+
+msgid "Sichtbar"
+msgstr "Zichtbaar"
+
+msgid "Standard-Laufzeit in Tagen"
+msgstr "Standaardlooptijd in dagen"
+
+msgid "Unternehmensname"
+msgstr "Bedrijfsnaam"
+
+msgid "Unterstützt: expired_invitations, email_messages, revoked_devices, resolved_system_alerts, resolved_task_failures, expired_sessions."
+msgstr "Ondersteund: expired_invitations, email_messages, revoked_devices, resolved_system_alerts, resolved_task_failures, expired_sessions."
+
+msgid "Veröffentlichen"
+msgstr "Publiceren"
+
+msgid "Währung"
+msgstr "Valuta"
