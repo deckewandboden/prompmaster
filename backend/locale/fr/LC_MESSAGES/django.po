@@ -3561,3 +3561,33 @@ msgstr "Modifier la politique de conservation"
 
 msgid "Rolle · %(name)s"
 msgstr "Rôle · %(name)s"
+
+msgid "Firmenadministrator"
+msgstr "Administrateur de l’entreprise"
+
+msgid "Entwurf"
+msgstr "Brouillon"
+
+msgid "Zahlung offen"
+msgstr "Paiement en attente"
+
+msgid "Zahlung prüfen"
+msgstr "Vérifier le paiement"
+
+msgid "Refundiert"
+msgstr "Remboursé"
+
+msgid "Abgelehnt"
+msgstr "Rejeté"
+
+msgid "Eingegangen"
+msgstr "Reçu"
+
+msgid "Kündigung"
+msgstr "Résiliation du contrat"
+
+msgid "Für Kunden sichtbar"
+msgstr "Visible par les clients"
+
+msgid "Interne Notiz"
+msgstr "Note interne"
