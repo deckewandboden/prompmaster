@@ -91,7 +91,7 @@
   <section class="card">
     <h2>{% translate 'Dienste & Integrationen' %}</h2>
     <div class="statusrow"><span>{% translate 'Caddy' %}</span><span class="badge {% if caddy_ok %}ok{% else %}bad{% endif %}">{% if caddy_ok %}{% translate 'healthy' %}{% else %}{% translate 'nicht erreichbar' %}{% endif %}</span></div>
-    <div class="statusrow"><span>{% translate 'TLS-Zertifikat' %}</span><strong>{% translate certificate.status %}{% if certificate.days_remaining != None %} · {{ certificate.days_remaining }} {% translate 'Tage' %}{% endif %}</strong></div>
+    <div class="statusrow"><span>{% translate 'TLS-Zertifikat' %}</span><strong>{% if certificate.status %}{% translate certificate.status %}{% else %}–{% endif %}{% if certificate.days_remaining != None %} · {{ certificate.days_remaining }} {% translate 'Tage' %}{% endif %}</strong></div>
     <div class="statusrow"><span>{% translate 'Mollie' %}</span><strong>{% if integrations.mollie.configured %}{% translate 'konfiguriert' %}{% else %}{% translate 'nicht konfiguriert' %}{% endif %} · {{ integrations.mollie.failures_24h }} {% translate 'Fehler / 24 h' %}</strong></div>
     <div class="statusrow"><span>{% translate 'E-Mail' %}</span><strong>{{ integrations.mail.provider }} · {% if integrations.mail.configured %}{% translate 'konfiguriert' %}{% else %}{% translate 'nicht konfiguriert' %}{% endif %} · {{ integrations.mail.failures_24h }} {% translate 'Fehler / 24 h' %}</strong></div>
     <div class="statusrow"><span>{% translate 'Operations API' %}</span><strong>/api/v1/ops/ · {% translate 'geschützt' %}</strong></div>
@@ -102,8 +102,8 @@
 <div class="grid two mt-14">
   <section class="card">
     <h2>{% translate 'Backup & Restore' %}</h2>
-    <div class="statusrow"><span>{% translate 'Letztes Backup' %}</span><strong>{% if latest_backup %}{% translate latest_backup.status %} · {{ latest_backup.finished_at|date:'d.m.Y H:i' }} · {{ latest_backup.size_bytes|human_bytes }}{% else %}{% translate 'nicht protokolliert' %}{% endif %}</strong></div>
-    <div class="statusrow"><span>{% translate 'Letzter Restore-Test' %}</span><strong>{% if latest_restore %}{% translate latest_restore.status %} · {{ latest_restore.started_at|date:'d.m.Y H:i' }}{% else %}{% translate 'nicht protokolliert' %}{% endif %}</strong></div>
+    <div class="statusrow"><span>{% translate 'Letztes Backup' %}</span><strong>{% if latest_backup %}{% translate latest_backup.status %} · {{ latest_backup.finished_at|date:'SHORT_DATETIME_FORMAT' }} · {{ latest_backup.size_bytes|human_bytes }}{% else %}{% translate 'nicht protokolliert' %}{% endif %}</strong></div>
+    <div class="statusrow"><span>{% translate 'Letzter Restore-Test' %}</span><strong>{% if latest_restore %}{% translate latest_restore.status %} · {{ latest_restore.started_at|date:'SHORT_DATETIME_FORMAT' }}{% else %}{% translate 'nicht protokolliert' %}{% endif %}</strong></div>
     {% if latest_restore %}<div class="statusrow"><span>{% translate 'Verwendetes Backup' %}</span><strong>{{ latest_restore.backup_ref|default:'–' }}</strong></div>{% endif %}
     <div class="page-actions mt-12">
       <a class="btn secondary sm" href="{% url 'ns_admin:ops_backups' %}">{% translate 'Backups öffnen' %}</a>
