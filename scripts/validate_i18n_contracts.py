@@ -124,9 +124,9 @@ def main() -> None:
         r'(?=[A-Za-zÀ-ÿА-Яа-я])'
     )
     fused_microsoft_brand = re.compile(
-        r'(?i)(?:(?<=\\w)Microsoft\\s+Copilot|'
-        r'Microsoft\\s+Copilot(?=\\w)|'
-        r'(?<=\\w)M365\\s+Copilot|M365\\s+Copilot(?=\\w))'
+        r'(?i)(?:(?<=\w)Microsoft\s+Copilot|'
+        r'Microsoft\s+Copilot(?=\w)|'
+        r'(?<=\w)M365\s+Copilot|M365\s+Copilot(?=\w))'
     )
     repeated_machine_word = re.compile(r'\b([A-Za-z]{2,})(?:\s+\1){4,}\b', re.I)
     for phrase, variants in catalog.items():
