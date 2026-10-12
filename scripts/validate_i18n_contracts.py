@@ -145,6 +145,60 @@ def main() -> None:
                 'выключать', 'wyłączone', 'départ', 'uit',
             )):
                 raise SystemExit(f'I18N FAIL {code}: availability tier mistranslated as disabled')
+    # German source phrases in the dynamic UI catalog can contain perfectly
+    # valid Turkish repetitions (e.g. "adım adım" = step by step). All other
+    # consecutive repeated whole words signal broken offline translation.
+    doubled_word = re.compile(r'(?<!\\w)(\\w{2,})(?:\\s+\\1)+(?!\\w)', re.I)
+    for phrase, translations in catalog.items():
+        for code in LOCALES:
+            value = translations.get(code, '')
+            for match in doubled_word.finditer(value):
+                idiomatic_step_by_step = (
+                    code == 'tr'
+                    and phrase.startswith('PROMPTFINISHER macht aus deinem Anliegen Schritt für Schritt')
+                    and match.group(0).casefold() == 'adım adım'
+                )
+                if not idiomatic_step_by_step:
+                    raise SystemExit(
+                        f'I18N FAIL {code}: repeated localized word in '
+                        f'{phrase!r}: {match.group(0)!r}'
+                    )
+    turkish_quality = {
+        'Kalender': 'Takvim',
+        'Nächsten Termin prüfen': 'Sonraki randevuyu kontrol et',
+        'optional': 'İsteğe bağlı',
+        'Agent': 'Ajan',
+        'Analytics': 'Analitik',
+        'Architecture': 'Mimari',
+        'Audio': 'Ses',
+        'Coding': 'Kodlama',
+        'Kommunikation': 'İletişim',
+        'Notebook-Code erzeugen': 'Not defteri kodu oluştur',
+        'Präsentation': 'Sunum',
+        'Prompt-Abnahmetest erstellen': 'Prompt kabul testi oluştur',
+        'Recherche': 'Araştırma',
+        'Sales': 'Satış',
+        'Stärken identifizieren': 'Güçlü yönleri belirle',
+        'Umsetzung': 'Uygulama',
+        'Video': 'Video',
+        'Zusammenfassung': 'Özet',
+    }
+    for source, expected in turkish_quality.items():
+        if catalog.get(source, {}).get('tr') != expected:
+            raise SystemExit(
+                f'I18N FAIL tr: reviewed UI term {source!r} changed unexpectedly'
+            )
+    checked_chat = (
+        'Sicherer Microsoft-Copilot-Chat für Recherche, Inhalte, Analyse '
+        'und gezielt bereitgestellte Dateien.'
+    )
+    if catalog.get(checked_chat, {}).get('tr') != (
+        'Araştırma, içerik, analiz ve özel olarak sağlanan dosyalar '
+        'için güvenli Microsoft Copilot sohbeti.'
+    ):
+        raise SystemExit('I18N FAIL tr: Copilot Chat product description drift')
+    print('I18N TURKISH QUALITY PASS: 19 reviewed terms and whole-word repetition gate')
+
     # The protected Free/Pro runtime uses stable option values for composer
     # semantics. Translate only the visible text of explicitly-valued options.
     tone_keys = (
