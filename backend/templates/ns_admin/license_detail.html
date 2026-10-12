@@ -8,7 +8,7 @@
 <div class="grid two">
   <div class="card">
     <h2>{% translate 'Lizenz' %}</h2>
-    <div class="statusrow"><span>{% translate 'Status' %}</span><strong>{{ license.get_status_display }}</strong></div>
+    <div class="statusrow"><span>{% translate 'Status' %}</span><strong>{% translate license.get_status_display %}</strong></div>
     <div class="statusrow"><span>{% translate 'Gültig ab' %}</span><strong>{{ license.valid_from|date:'d.m.Y H:i'|default:'–' }}</strong></div>
     <div class="statusrow"><span>{% translate 'Gültig bis' %}</span><strong>{{ license.valid_until|date:'d.m.Y H:i'|default:'–' }}</strong></div>
     <div class="statusrow"><span>{% translate 'Produkt' %}</span><strong>{{ license.product.name }}</strong></div>
@@ -70,7 +70,7 @@
           <td data-label="{% translate 'Von' %}">{{ term.valid_from|date:'d.m.Y H:i' }}</td>
           <td data-label="{% translate 'Bis' %}">{{ term.valid_until|date:'d.m.Y H:i' }}</td>
           {% if can_payments %}<td data-label="{% translate 'Bezahlt' %}">{{ term.paid_gross_amount }} €</td>{% endif %}
-          <td data-label="{% translate 'Status' %}">{{ term.get_status_display }}</td>
+          <td data-label="{% translate 'Status' %}">{% translate term.get_status_display %}</td>
           {% if can_orders %}<td data-label="{% translate 'Bestellung' %}">{{ term.order_item.order.order_number }}</td>{% endif %}
           <td data-label="{% translate 'Erstattung' %}">
             {% if term.status == 'active' and can_refund %}
