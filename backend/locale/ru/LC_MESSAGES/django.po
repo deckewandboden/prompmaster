@@ -3446,3 +3446,33 @@ msgstr "Изменить политику хранения"
 
 msgid "Rolle · %(name)s"
 msgstr "Роль · %(name)s"
+
+msgid "Firmenadministrator"
+msgstr "Администратор компании"
+
+msgid "Entwurf"
+msgstr "Черновик"
+
+msgid "Zahlung offen"
+msgstr "Ожидается оплата"
+
+msgid "Zahlung prüfen"
+msgstr "Проверить платёж"
+
+msgid "Refundiert"
+msgstr "Возмещено"
+
+msgid "Abgelehnt"
+msgstr "Отклонено"
+
+msgid "Eingegangen"
+msgstr "Получено"
+
+msgid "Kündigung"
+msgstr "Расторжение договора"
+
+msgid "Für Kunden sichtbar"
+msgstr "Видно клиентам"
+
+msgid "Interne Notiz"
+msgstr "Внутренняя заметка"
