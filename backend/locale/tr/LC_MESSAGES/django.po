@@ -2506,3 +2506,6 @@ msgstr "veri yok"
 
 msgid "completed"
 msgstr "tamamlandı"
+
+msgid "nicht verfügbar"
+msgstr "kullanılamıyor"
