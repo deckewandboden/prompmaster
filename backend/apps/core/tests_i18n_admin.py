@@ -544,7 +544,7 @@ class AdminInternationalizationContractTests(SimpleTestCase):
             source = path.read_text(encoding='utf-8')
             self.assertIn('from django.utils.translation import gettext_lazy as _', source)
             self.assertNotIn('forms.BooleanField(,', source)
-            messages.update(re.findall(r"_\\('([^']+)'\\)", source))
+            messages.update(re.findall(r"_\('([^']+)'\)", source))
         self.assertGreaterEqual(len(messages), 55)
         for language in LOCALES:
             catalog = catalog_translations(
@@ -566,7 +566,7 @@ class AdminInternationalizationContractTests(SimpleTestCase):
         self.assertTrue(checkout.fields['request_early_performance'].label)
         self.assertEqual(
             [code for code, _ in cancellation.fields['cancellation_kind'].choices],
-            ['', 'ordinary', 'extraordinary'],
+            ['ordinary', 'extraordinary'],
         )
         self.assertTrue(withdrawal.fields['contract_reference'].help_text)
         self.assertTrue(LoginForm().fields['email'].label)
