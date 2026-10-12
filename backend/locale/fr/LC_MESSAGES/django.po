@@ -3354,3 +3354,66 @@ msgstr "Rôle retiré."
 
 msgid "Benutzerstatus aktualisiert."
 msgstr "Statut de l’utilisateur mis à jour."
+
+msgid "Lead gespeichert."
+msgstr "Prospect enregistré."
+
+msgid "Lead-Zuständigkeit aktualisiert."
+msgstr "Responsable du prospect mis à jour."
+
+msgid "Gerät wurde widerrufen."
+msgstr "Accès de l’appareil révoqué."
+
+msgid "Unternehmensdaten gespeichert."
+msgstr "Données de l’entreprise enregistrées."
+
+msgid "Benutzer deaktiviert; Lizenz- und Gerätezugänge wurden freigegeben."
+msgstr "Utilisateur désactivé ; les accès aux licences et aux appareils ont été libérés."
+
+msgid "Die Lizenz ist bereits frei."
+msgstr "La licence est déjà non attribuée."
+
+msgid "Lizenzzuweisung wurde freigegeben."
+msgstr "Attribution de licence libérée."
+
+msgid "Lizenz wurde entsperrt."
+msgstr "Licence débloquée."
+
+msgid "Lizenz wurde gesperrt; vorhandene Gerätezugänge wurden widerrufen."
+msgstr "Licence bloquée ; les accès existants aux appareils ont été révoqués."
+
+msgid "Produkt angelegt. Legen Sie anschließend Preisversionen an."
+msgstr "Produit créé. Ajoutez ensuite des versions de prix."
+
+msgid "Feature gespeichert."
+msgstr "Fonctionnalité enregistrée."
+
+msgid "Produkt gespeichert."
+msgstr "Produit enregistré."
+
+msgid "Neue Preisversion angelegt."
+msgstr "Nouvelle version de prix créée."
+
+msgid "E-Mail-Vorlage gespeichert."
+msgstr "Modèle d’e-mail enregistré."
+
+msgid "Mollie-Konfiguration gespeichert."
+msgstr "Configuration Mollie enregistrée."
+
+msgid "Service Account gesperrt."
+msgstr "Compte de service bloqué."
+
+msgid "Verbrauchererklärung aktualisiert."
+msgstr "Déclaration du consommateur mise à jour."
+
+msgid "Rechtsdokument gespeichert."
+msgstr "Document juridique enregistré."
+
+msgid "Retention-Policy gespeichert."
+msgstr "Politique de conservation enregistrée."
+
+msgid "Löschanfrage verarbeitet und Konto anonymisiert."
+msgstr "Demande de suppression traitée et compte anonymisé."
+
+msgid "Löschanfrage abgelehnt."
+msgstr "Demande de suppression rejetée."
