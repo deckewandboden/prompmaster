@@ -2812,3 +2812,93 @@ msgstr "Kolejność sortowania"
 
 msgid "Technisches Problem"
 msgstr "Problem techniczny"
+
+msgid "Aktuelle Stichprobengröße"
+msgstr "Rozmiar bieżącej próby"
+
+msgid "App-Regel-Snapshot"
+msgstr "Migawka reguł aplikacji"
+
+msgid "Ausgabeformen"
+msgstr "Formaty wyjściowe"
+
+msgid "Beispiel: {\"microsoft_tier\":\"premium\",\"payload\":{\"fields\":{...}}}"
+msgstr "Przykład: {\"microsoft_tier\":\"premium\",\"payload\":{\"fields\":{...}}}"
+
+msgid "Bereich"
+msgstr "Obszar"
+
+msgid "Darf nicht enthalten"
+msgstr "Nie może zawierać"
+
+msgid "Ein Feld pro Zeile. Optionales Fragment: Feldname ||| Text mit {value}."
+msgstr "Jedno pole na wiersz. Opcjonalny fragment: nazwa pola ||| tekst z {value}."
+
+msgid "Ein Pflichtfeld pro Zeile."
+msgstr "Jedno wymagane pole na wiersz."
+
+msgid "Eingabedaten (JSON)"
+msgstr "Dane wejściowe (JSON)"
+
+msgid "Familie"
+msgstr "Rodzina"
+
+msgid "Feldbezeichnungen müssen innerhalb einer Prompt-Version eindeutig sein."
+msgstr "Nazwy pól muszą być unikalne w danej wersji promptu."
+
+msgid "Kontextvorlage"
+msgstr "Szablon kontekstu"
+
+msgid "Kritisch bei Abfall"
+msgstr "Próg spadku krytycznego"
+
+msgid "Kritischer Durchschnitt"
+msgstr "Średnia krytyczna"
+
+msgid "Maximale Zeichen"
+msgstr "Maksymalna liczba znaków"
+
+msgid "Microsoft-Lizenzstufe"
+msgstr "Poziom licencji Microsoft"
+
+msgid "Mindestanzahl Stichproben"
+msgstr "Minimalna liczba próbek"
+
+msgid "Mindestdurchschnitt"
+msgstr "Minimalna średnia"
+
+msgid "Muss enthalten"
+msgstr "Musi zawierać"
+
+msgid "Nur DRAFT-Versionen dürfen inhaltlich bearbeitet werden."
+msgstr "Edytować można tylko wersje DRAFT."
+
+msgid "Payload muss ein JSON-Objekt sein."
+msgstr "Payload musi być obiektem JSON."
+
+msgid "Quellen"
+msgstr "Źródła"
+
+msgid "Schwerpunkte"
+msgstr "Obszary tematyczne"
+
+msgid "Test-Payload (JSON)"
+msgstr "Dane testowe (JSON)"
+
+msgid "Test-Payload muss ein JSON-Objekt sein."
+msgstr "Dane testowe muszą być obiektem JSON."
+
+msgid "Ungültiges JSON: %(error)s"
+msgstr "Nieprawidłowy JSON: %(error)s"
+
+msgid "Vorherige Stichprobengröße"
+msgstr "Rozmiar poprzedniej próby"
+
+msgid "Warnung bei Abfall"
+msgstr "Próg ostrzegawczy spadku"
+
+msgid "Ziel / Intent"
+msgstr "Cel / intencja"
+
+msgid "Zielgruppen"
+msgstr "Grupy docelowe"
