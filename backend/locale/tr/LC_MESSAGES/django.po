@@ -3301,3 +3301,39 @@ msgstr "Silme talebi işlendi ve hesap anonimleştirildi."
 
 msgid "Löschanfrage abgelehnt."
 msgstr "Silme talebi reddedildi."
+
+msgid "Dieser Lead ist bereits einem Kunden zugeordnet."
+msgstr "Bu potansiyel müşteri zaten bir müşteriye atanmış."
+
+msgid "Einladung für den Firmenadministrator wurde gesendet."
+msgstr "Şirket yöneticisi davetiyesi gönderildi."
+
+msgid "Kundenantwort gespeichert. Für Demo-Adressen wurde keine E-Mail versendet."
+msgstr "Müşteri yanıtı kaydedildi. Demo adreslerine e-posta gönderilmedi."
+
+msgid "Kundenantwort gespeichert und E-Mail-Benachrichtigung eingeplant."
+msgstr "Müşteri yanıtı kaydedildi ve e-posta bildirimi kuyruğa alındı."
+
+msgid "Kundenantwort gespeichert, E-Mail-Benachrichtigung konnte aber nicht eingeplant werden."
+msgstr "Müşteri yanıtı kaydedildi ancak e-posta bildirimi kuyruğa alınamadı."
+
+msgid "netstyle Benutzer angelegt; Einrichtungslink wurde per E-Mail versendet."
+msgstr "netstyle kullanıcısı oluşturuldu; kurulum bağlantısı e-postayla gönderildi."
+
+msgid "Privatkunden werden aus rechtlichen Gründen über Registrierung/Checkout angelegt; der Lead kann dort anschließend als gewonnen abgeschlossen werden."
+msgstr "Yasal nedenlerle bireysel müşteriler kayıt/ödeme sürecinde oluşturulur; ardından potansiyel müşteri kazanıldı olarak tamamlanabilir."
+
+msgid "Lead wurde in einen Firmenkunden umgewandelt. Der Ansprechpartner hat eine sichere Einladung erhalten."
+msgstr "Potansiyel müşteri kurumsal müşteriye dönüştürüldü. İlgili kişiye güvenli davet gönderildi."
+
+msgid "Lead %(lead_number)s angelegt."
+msgstr "Potansiyel müşteri %(lead_number)s oluşturuldu."
+
+msgid "Lead %(lead_number)s gelöscht."
+msgstr "Potansiyel müşteri %(lead_number)s silindi."
+
+msgid "Firmenadministrator wurde auf %(email)s übertragen."
+msgstr "Şirket yöneticiliği %(email)s adresine devredildi."
+
+msgid "Lizenz wurde %(email)s zugewiesen."
+msgstr "Lisans %(email)s adresine atandı."
