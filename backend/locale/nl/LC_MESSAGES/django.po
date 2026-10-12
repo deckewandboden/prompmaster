@@ -1433,3 +1433,66 @@ msgstr "2FA van deze gebruiker opnieuw instellen?"
 
 msgid "2FA zurücksetzen"
 msgstr "2FA opnieuw instellen"
+
+msgid "Benutzerstatus wirklich ändern?"
+msgstr "De gebruikersstatus echt wijzigen?"
+
+msgid "Deaktivieren"
+msgstr "Deactiveren"
+
+msgid "Aktivieren"
+msgstr "Activeren"
+
+msgid "Keine netstyle Benutzer."
+msgstr "Geen netstyle-gebruikers."
+
+msgid "Rechtsdokumente, Aufbewahrung und Löschanforderungen."
+msgstr "Juridische documenten, bewaartermijnen en verwijderverzoeken."
+
+msgid "Rechtsdokumente"
+msgstr "Juridische documenten"
+
+msgid "Noch keine Rechtstexte hinterlegt."
+msgstr "Er zijn nog geen juridische teksten toegevoegd."
+
+msgid "Rechtsdokumente verwalten"
+msgstr "Juridische documenten beheren"
+
+msgid "Verbrauchererklärungen"
+msgstr "Consumentenverklaringen"
+
+msgid "Offene Widerrufe / Kündigungen"
+msgstr "Openstaande herroepingen / opzeggingen"
+
+msgid "Widerrufe & Kündigungen"
+msgstr "Herroepingen en opzeggingen"
+
+msgid "Retention / Löschung"
+msgstr "Bewaren / verwijderen"
+
+msgid "Aktive Retention-Policies"
+msgstr "Actieve bewaarbeleidsregels"
+
+msgid "Offene Löschanfragen"
+msgstr "Openstaande verwijderverzoeken"
+
+msgid "Retention-Policies"
+msgstr "Bewaarbeleid"
+
+msgid "Löschanfragen"
+msgstr "Verwijderverzoeken"
+
+msgid "Features / Entitlements"
+msgstr "Functies / rechten"
+
+msgid "Wiederverwendbare Funktionsrechte für heutige und zukünftige Produkte."
+msgstr "Herbruikbare functierechten voor huidige en toekomstige producten."
+
+msgid "Feature anlegen"
+msgstr "Functie aanmaken"
+
+msgid "Code"
+msgstr "Code"
+
+msgid "Keine Features."
+msgstr "Geen functies."
