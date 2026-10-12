@@ -2686,3 +2686,27 @@ msgstr "He leído la información sobre el derecho de desistimiento"
 
 msgid "Zum Beispiel Bestellnummer oder Kundennummer."
 msgstr "Por ejemplo, un número de pedido o de cliente."
+
+msgid "Gerätename"
+msgstr "Nombre del dispositivo"
+
+msgid "Keine konkrete Lizenz"
+msgstr "Ninguna licencia específica"
+
+msgid "Lizenz (optional)"
+msgstr "Licencia (opcional)"
+
+msgid "Nachricht"
+msgstr "Mensaje"
+
+msgid "Schlüssel"
+msgstr "Clave"
+
+msgid "Sonstiges"
+msgstr "Otros"
+
+msgid "Sortierung"
+msgstr "Ordenación"
+
+msgid "Technisches Problem"
+msgstr "Problema técnico"
