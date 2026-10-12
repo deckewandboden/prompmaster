@@ -1512,3 +1512,90 @@ msgstr "Code"
 
 msgid "Keine Features."
 msgstr "Aucune fonctionnalité."
+
+msgid "Geschützte Operations-Schnittstellen und Service Accounts."
+msgstr "Interfaces d'exploitation protégées et comptes de service."
+
+msgid "Service Account anlegen"
+msgstr "Créer un compte de service"
+
+msgid "Operations API"
+msgstr "API d'exploitation"
+
+msgid "Zugriff ausschließlich über aktive Service Accounts mit passendem Scope. Tokens werden nur einmal bei Erstellung bzw. Rotation angezeigt."
+msgstr "Accès réservé aux comptes de service actifs disposant du périmètre requis. Les jetons ne sont affichés qu'une fois à leur création ou rotation."
+
+msgid "Service Accounts"
+msgstr "Comptes de service"
+
+msgid "Gesperrt"
+msgstr "Bloqué"
+
+msgid "Token rotieren"
+msgstr "Renouveler le jeton"
+
+msgid "Service Account wirklich sperren?"
+msgstr "Voulez-vous vraiment bloquer ce compte de service ?"
+
+msgid "Sperren"
+msgstr "Bloquer"
+
+msgid "Noch keine Service Accounts."
+msgstr "Aucun compte de service pour le moment."
+
+msgid "Dienste"
+msgstr "Services"
+
+msgid "Status der internen Plattformdienste."
+msgstr "État des services internes de la plateforme."
+
+msgid "Systemübersicht"
+msgstr "Vue d'ensemble du système"
+
+msgid "Host"
+msgstr "Hôte"
+
+msgid "Hostname"
+msgstr "Nom d'hôte"
+
+msgid "Kernel"
+msgstr "Noyau"
+
+msgid "Healthy"
+msgstr "Opérationnel"
+
+msgid "Nicht erreichbar"
+msgstr "Inaccessible"
+
+msgid "Datenbank"
+msgstr "Base de données"
+
+msgid "Verbindungen"
+msgstr "Connexions"
+
+msgid "Größe"
+msgstr "Taille"
+
+msgid "Background Jobs"
+msgstr "Tâches en arrière-plan"
+
+msgid "Heartbeat fehlt"
+msgstr "Signal de présence manquant"
+
+msgid "Queue"
+msgstr "File d'attente"
+
+msgid "Fehlgeschlagene Jobs 24 h"
+msgstr "Tâches échouées sur 24 h"
+
+msgid "Worker"
+msgstr "Worker"
+
+msgid "Antwortende Worker"
+msgstr "Workers qui répondent"
+
+msgid "Worker-Heartbeat"
+msgstr "Signal de présence du worker"
+
+msgid "Beat-Heartbeat"
+msgstr "Signal de présence de Beat"
