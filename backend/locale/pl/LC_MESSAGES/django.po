@@ -1894,3 +1894,21 @@ msgstr "Sekcje klientów indywidualnych"
 
 msgid "Audit"
 msgstr "Audyt"
+
+msgid "Zuletzt"
+msgstr "Ostatnio"
+
+msgid "Akteur"
+msgstr "Wykonawca"
+
+msgid "Admin übertragen"
+msgstr "Przekaż rolę administratora"
+
+msgid "Benutzer wirklich deaktivieren? Lizenzen und Gerätezugänge werden freigegeben."
+msgstr "Na pewno dezaktywować użytkownika? Licencje i dostęp urządzeń zostaną zwolnione."
+
+msgid "Firmenadmin"
+msgstr "Administrator firmy"
+
+msgid "Gerätezugang wirklich widerrufen?"
+msgstr "Na pewno cofnąć dostęp urządzenia?"
