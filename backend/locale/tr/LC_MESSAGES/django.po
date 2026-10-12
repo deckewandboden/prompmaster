@@ -1675,3 +1675,78 @@ msgstr "Silme talebi yok."
 
 msgid "Alle Löschanfragen"
 msgstr "Tüm silme talepleri"
+
+msgid "Bestellung vom"
+msgstr "Sipariş tarihi"
+
+msgid "Zurück zur Liste"
+msgstr "Listeye dön"
+
+msgid "Brutto"
+msgstr "Brüt"
+
+msgid "Steuer"
+msgstr "Vergi"
+
+msgid "Keine Zahlung erfasst."
+msgstr "Kayıtlı ödeme yok."
+
+msgid "Positionen"
+msgstr "Kalemler"
+
+msgid "Menge"
+msgstr "Miktar"
+
+msgid "Einzelpreis"
+msgstr "Birim fiyat"
+
+msgid "Lizenzstatus wirklich ändern?"
+msgstr "Bu lisansın durumu gerçekten değiştirilsin mi?"
+
+msgid "Lizenz entsperren"
+msgstr "Lisans engelini kaldır"
+
+msgid "Lizenz sperren"
+msgstr "Lisansı engelle"
+
+msgid "Inhaber & Zuweisung"
+msgstr "Sahip ve atama"
+
+msgid "Zugewiesen an"
+msgstr "Atanan kişi"
+
+msgid "Lizenzzuweisung wirklich freigeben? Aktive Geräte dieser Lizenz werden widerrufen."
+msgstr "Bu lisans ataması gerçekten kaldırılsın mı? Bu lisansa bağlı etkin cihazların erişimi iptal edilecektir."
+
+msgid "Zuweisung freigeben"
+msgstr "Atamayı kaldır"
+
+msgid "Aktiven Firmenbenutzer auswählen"
+msgstr "Etkin şirket kullanıcısı seç"
+
+msgid "Bitte auswählen"
+msgstr "Lütfen seçin"
+
+msgid "Lizenz zuweisen"
+msgstr "Lisans ata"
+
+msgid "Lizenzperioden"
+msgstr "Lisans dönemleri"
+
+msgid "Von"
+msgstr "Başlangıç"
+
+msgid "Bis"
+msgstr "Bitiş"
+
+msgid "Erstattung"
+msgstr "İade"
+
+msgid "Erstattung wirklich verbindlich über Mollie auslösen?"
+msgstr "Mollie üzerinden bağlayıcı iade işlemi gerçekten başlatılsın mı?"
+
+msgid "Erstattung prüfen/auslösen"
+msgstr "İadeyi incele/başlat"
+
+msgid "Keine Lizenzperioden vorhanden."
+msgstr "Lisans dönemi yok."
