@@ -2687,3 +2687,102 @@ msgstr "Filter"
 
 msgid "Seite"
 msgstr "pagina"
+
+msgid "AGB akzeptieren"
+msgstr "Algemene voorwaarden accepteren"
+
+msgid "Anmeldung fehlgeschlagen."
+msgstr "Aanmelden mislukt."
+
+msgid "Anmeldung fehlgeschlagen. Bitte später erneut versuchen."
+msgstr "Aanmelden mislukt. Probeer het later opnieuw."
+
+msgid "Anzahl Lizenzen"
+msgstr "Aantal licenties"
+
+msgid "Art der Kündigung"
+msgstr "Soort opzegging"
+
+msgid "Außerordentliche Kündigung"
+msgstr "Buitengewone opzegging"
+
+msgid "Bei einer außerordentlichen Kündigung ist der Kündigungsgrund erforderlich."
+msgstr "Bij buitengewone opzegging is een reden verplicht."
+
+msgid "Bestellnummer"
+msgstr "Bestelnummer"
+
+msgid "Bitte bestätigen Sie den gewünschten Leistungsbeginn vor Ablauf der Widerrufsfrist."
+msgstr "Bevestig dat u verzoekt om de dienstverlening te starten vóór het einde van de herroepingstermijn."
+
+msgid "Bitte bestätigen Sie die Widerrufsbelehrung."
+msgstr "Bevestig dat u de informatie over het herroepingsrecht hebt gelezen."
+
+msgid "Datenschutzhinweise zur Kenntnis genommen"
+msgstr "Ik heb de privacyverklaring gelezen"
+
+msgid "Deutschland"
+msgstr "Duitsland"
+
+msgid "Die Bestellnummer finden Sie in Ihrer Bestell- bzw. Zahlungsbestätigung."
+msgstr "U vindt het bestelnummer in uw bestel- of betalingsbevestiging."
+
+msgid "E-Mail-Adresse für die Eingangsbestätigung"
+msgstr "E-mailadres voor ontvangstbevestiging"
+
+msgid "E-Mail-Adresse für die Kündigungsbestätigung"
+msgstr "E-mailadres voor opzeggingsbevestiging"
+
+msgid "Firmenname erforderlich."
+msgstr "Bedrijfsnaam is verplicht."
+
+msgid "Gewünschter Beendigungszeitpunkt"
+msgstr "Gewenste einddatum"
+
+msgid "Hausnummer"
+msgstr "Huisnummer"
+
+msgid "Kündigungsgrund"
+msgstr "Reden van opzegging"
+
+msgid "Leer lassen für den frühestmöglichen Zeitpunkt."
+msgstr "Laat leeg voor de eerstmogelijke datum."
+
+msgid "Leistungsbeginn vor Ablauf der Widerrufsfrist ausdrücklich verlangt"
+msgstr "Ik verzoek uitdrukkelijk om de dienstverlening te starten vóór het einde van de herroepingstermijn"
+
+msgid "Lizenzbedingungen akzeptieren"
+msgstr "Licentievoorwaarden accepteren"
+
+msgid "Ordentliche Kündigung"
+msgstr "Reguliere opzegging"
+
+msgid "PLZ"
+msgstr "Postcode"
+
+msgid "Passwörter stimmen nicht überein."
+msgstr "Wachtwoorden komen niet overeen."
+
+msgid "Steuernummer ist für diese Steuerregel erforderlich."
+msgstr "Voor deze belastingregel is een fiscaal nummer verplicht."
+
+msgid "Straße"
+msgstr "Straat"
+
+msgid "USt-IdNr. ist für diese Steuerregel erforderlich."
+msgstr "Voor deze belastingregel is een btw-identificatienummer verplicht."
+
+msgid "Unternehmensname ist erforderlich."
+msgstr "Bedrijfsnaam is verplicht."
+
+msgid "Vertrag / Bestellung / Kundennummer"
+msgstr "Contract / bestelling / klantnummer"
+
+msgid "Vor- und Nachname"
+msgstr "Voor- en achternaam"
+
+msgid "Widerrufsinformation zur Kenntnis genommen"
+msgstr "Ik heb de informatie over het herroepingsrecht gelezen"
+
+msgid "Zum Beispiel Bestellnummer oder Kundennummer."
+msgstr "Bijvoorbeeld een bestelnummer of klantnummer."
