@@ -1333,3 +1333,66 @@ msgstr "¿Restablecer la 2FA de este usuario?"
 
 msgid "2FA zurücksetzen"
 msgstr "Restablecer 2FA"
+
+msgid "Benutzerstatus wirklich ändern?"
+msgstr "¿Cambiar realmente el estado del usuario?"
+
+msgid "Deaktivieren"
+msgstr "Desactivar"
+
+msgid "Aktivieren"
+msgstr "Activar"
+
+msgid "Keine netstyle Benutzer."
+msgstr "No hay usuarios de netstyle."
+
+msgid "Rechtsdokumente, Aufbewahrung und Löschanforderungen."
+msgstr "Documentos legales, conservación y solicitudes de eliminación."
+
+msgid "Rechtsdokumente"
+msgstr "Documentos legales"
+
+msgid "Noch keine Rechtstexte hinterlegt."
+msgstr "Todavía no se han añadido textos legales."
+
+msgid "Rechtsdokumente verwalten"
+msgstr "Gestionar documentos legales"
+
+msgid "Verbrauchererklärungen"
+msgstr "Declaraciones de consumidores"
+
+msgid "Offene Widerrufe / Kündigungen"
+msgstr "Desistimientos y cancelaciones pendientes"
+
+msgid "Widerrufe & Kündigungen"
+msgstr "Desistimientos y cancelaciones"
+
+msgid "Retention / Löschung"
+msgstr "Conservación / eliminación"
+
+msgid "Aktive Retention-Policies"
+msgstr "Políticas de conservación activas"
+
+msgid "Offene Löschanfragen"
+msgstr "Solicitudes de eliminación pendientes"
+
+msgid "Retention-Policies"
+msgstr "Políticas de conservación"
+
+msgid "Löschanfragen"
+msgstr "Solicitudes de eliminación"
+
+msgid "Features / Entitlements"
+msgstr "Funciones / derechos de acceso"
+
+msgid "Wiederverwendbare Funktionsrechte für heutige und zukünftige Produkte."
+msgstr "Derechos de funciones reutilizables para productos actuales y futuros."
+
+msgid "Feature anlegen"
+msgstr "Crear función"
+
+msgid "Code"
+msgstr "Código"
+
+msgid "Keine Features."
+msgstr "No hay funciones."
