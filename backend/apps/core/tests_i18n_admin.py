@@ -391,6 +391,20 @@ class AdminInternationalizationContractTests(SimpleTestCase):
         self.assertEqual(source.count("|date:'SHORT_DATETIME_FORMAT'"), 2)
         self.assertNotIn("|date:'d.m.Y H:i'", source)
 
+    def test_ops_runtime_codes_are_available_in_all_languages(self):
+        codes = (
+            'not_configured', 'unknown', 'ok', 'warning', 'unavailable',
+            'degraded', 'success', 'failed', 'running', 'critical',
+            'passed', 'error', 'skipped', 'in_progress', 'no_data', 'completed',
+        )
+        for code in LOCALES:
+            catalog = catalog_translations(
+                ROOT / 'locale' / code / 'LC_MESSAGES' / 'django.po'
+            )
+            for status_code in codes:
+                with self.subTest(locale=code, status=status_code):
+                    self.assertTrue(catalog.get(status_code))
+
     def test_language_picker_is_in_flex_header_and_never_overlays_avatar(self):
         shell = (ROOT / 'templates/app_shell.html').read_text(encoding='utf-8')
         base = (ROOT / 'templates/base.html').read_text(encoding='utf-8')
