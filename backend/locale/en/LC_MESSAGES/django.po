@@ -1333,3 +1333,66 @@ msgstr "Reset this user's 2FA?"
 
 msgid "2FA zurücksetzen"
 msgstr "Reset 2FA"
+
+msgid "Benutzerstatus wirklich ändern?"
+msgstr "Really change the user's status?"
+
+msgid "Deaktivieren"
+msgstr "Deactivate"
+
+msgid "Aktivieren"
+msgstr "Activate"
+
+msgid "Keine netstyle Benutzer."
+msgstr "No netstyle users."
+
+msgid "Rechtsdokumente, Aufbewahrung und Löschanforderungen."
+msgstr "Legal documents, retention and deletion requests."
+
+msgid "Rechtsdokumente"
+msgstr "Legal documents"
+
+msgid "Noch keine Rechtstexte hinterlegt."
+msgstr "No legal texts have been added yet."
+
+msgid "Rechtsdokumente verwalten"
+msgstr "Manage legal documents"
+
+msgid "Verbrauchererklärungen"
+msgstr "Consumer declarations"
+
+msgid "Offene Widerrufe / Kündigungen"
+msgstr "Pending withdrawals / cancellations"
+
+msgid "Widerrufe & Kündigungen"
+msgstr "Withdrawals & cancellations"
+
+msgid "Retention / Löschung"
+msgstr "Retention / deletion"
+
+msgid "Aktive Retention-Policies"
+msgstr "Active retention policies"
+
+msgid "Offene Löschanfragen"
+msgstr "Pending deletion requests"
+
+msgid "Retention-Policies"
+msgstr "Retention policies"
+
+msgid "Löschanfragen"
+msgstr "Deletion requests"
+
+msgid "Features / Entitlements"
+msgstr "Features / entitlements"
+
+msgid "Wiederverwendbare Funktionsrechte für heutige und zukünftige Produkte."
+msgstr "Reusable feature entitlements for current and future products."
+
+msgid "Feature anlegen"
+msgstr "Create feature"
+
+msgid "Code"
+msgstr "Code"
+
+msgid "Keine Features."
+msgstr "No features."
