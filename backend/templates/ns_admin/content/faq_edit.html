@@ -1,5 +1,5 @@
-{% extends 'ns_admin/base.html' %}
+{% extends 'ns_admin/base.html' %}{% load i18n %}
 {% block content %}
-<div class="page-head"><div><h1>{% if faq %}FAQ bearbeiten{% else %}FAQ anlegen{% endif %}</h1><p class="sub">Zentraler Content-Baustein.</p></div></div>
-<div class="card"><form method="post" class="form">{% csrf_token %}{{ form.as_p }}<div><button class="btn primary" type="submit">Speichern</button> <a class="btn secondary" href="{% url 'content_admin:faqs' %}">Abbrechen</a></div></form></div>
+<div class="page-head"><div><h1>{% if faq %}{% translate 'FAQ bearbeiten' %}{% else %}{% translate 'FAQ anlegen' %}{% endif %}</h1><p class="sub">{% translate 'Zentraler Content-Baustein.' %}</p></div></div>
+<div class="card"><form method="post" class="form">{% csrf_token %}{{ form.as_p }}<div><button class="btn primary" type="submit">{% translate 'Speichern' %}</button> <a class="btn secondary" href="{% url 'content_admin:faqs' %}">{% translate 'Abbrechen' %}</a></div></form></div>
 {% endblock %}
