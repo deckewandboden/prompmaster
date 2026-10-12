@@ -3479,3 +3479,45 @@ msgstr "netstyle-rol toewijzen"
 
 msgid "Erstattung konnte nicht an Mollie übermittelt werden."
 msgstr "Terugbetaling kon niet naar Mollie worden verzonden."
+
+msgid "Nachrichtentext"
+msgstr "Berichttekst"
+
+msgid "Rollenname"
+msgstr "Rolnaam"
+
+msgid "Lead %(lead_number)s löschen"
+msgstr "Lead %(lead_number)s verwijderen"
+
+msgid "Lead %(lead_number)s in Kunden umwandeln"
+msgstr "Lead %(lead_number)s omzetten naar klant"
+
+msgid "Firmenadministrator übertragen · %(email)s"
+msgstr "Bedrijfsbeheerder overdragen · %(email)s"
+
+msgid "E-Mail-Vorlage · %(code)s"
+msgstr "E-mailsjabloon · %(code)s"
+
+msgid "Löschanfrage ablehnen"
+msgstr "Verwijderingsverzoek afwijzen"
+
+msgid "Uneingeschränkte Rechte auf alle PROMPTFINISHER-Verwaltungsbereiche."
+msgstr "Onbeperkte toegang tot alle beheeronderdelen van PROMPTFINISHER."
+
+msgid "Kunden, Lizenzen, Geräte, Bestellungen, Zahlungen, E-Mail und Support."
+msgstr "Klanten, licenties, apparaten, bestellingen, betalingen, e-mail en ondersteuning."
+
+msgid "Monitoring, Backups, Operations API, Logs und Systemstatus."
+msgstr "Bewaking, back-ups, Operations API, logboeken en systeemstatus."
+
+msgid "Prompt Studio, Prompt-Lifecycle, Qualität und zentrale Inhalte."
+msgstr "Prompt Studio, promptlevenscyclus, kwaliteit en centrale inhoud."
+
+msgid "Berechtigungen werden über die zugewiesenen Capabilities gesteuert."
+msgstr "Machtigingen worden beheerd via toegewezen bevoegdheden."
+
+msgid "Objekttyp"
+msgstr "Objecttype"
+
+msgid "Objekt-ID"
+msgstr "Object-ID"
