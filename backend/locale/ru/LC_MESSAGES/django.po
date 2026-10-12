@@ -1334,3 +1334,66 @@ msgstr "Сбросить 2FA этого пользователя?"
 
 msgid "2FA zurücksetzen"
 msgstr "Сбросить 2FA"
+
+msgid "Benutzerstatus wirklich ändern?"
+msgstr "Действительно изменить статус пользователя?"
+
+msgid "Deaktivieren"
+msgstr "Деактивировать"
+
+msgid "Aktivieren"
+msgstr "Активировать"
+
+msgid "Keine netstyle Benutzer."
+msgstr "Нет пользователей netstyle."
+
+msgid "Rechtsdokumente, Aufbewahrung und Löschanforderungen."
+msgstr "Юридические документы, хранение и запросы на удаление."
+
+msgid "Rechtsdokumente"
+msgstr "Юридические документы"
+
+msgid "Noch keine Rechtstexte hinterlegt."
+msgstr "Юридические тексты ещё не добавлены."
+
+msgid "Rechtsdokumente verwalten"
+msgstr "Управлять юридическими документами"
+
+msgid "Verbrauchererklärungen"
+msgstr "Заявления потребителей"
+
+msgid "Offene Widerrufe / Kündigungen"
+msgstr "Открытые отказы / расторжения"
+
+msgid "Widerrufe & Kündigungen"
+msgstr "Отказы и расторжения"
+
+msgid "Retention / Löschung"
+msgstr "Хранение / удаление"
+
+msgid "Aktive Retention-Policies"
+msgstr "Активные политики хранения"
+
+msgid "Offene Löschanfragen"
+msgstr "Открытые запросы на удаление"
+
+msgid "Retention-Policies"
+msgstr "Политики хранения"
+
+msgid "Löschanfragen"
+msgstr "Запросы на удаление"
+
+msgid "Features / Entitlements"
+msgstr "Функции / права доступа"
+
+msgid "Wiederverwendbare Funktionsrechte für heutige und zukünftige Produkte."
+msgstr "Повторно используемые права на функции текущих и будущих продуктов."
+
+msgid "Feature anlegen"
+msgstr "Создать функцию"
+
+msgid "Code"
+msgstr "Код"
+
+msgid "Keine Features."
+msgstr "Нет функций."
