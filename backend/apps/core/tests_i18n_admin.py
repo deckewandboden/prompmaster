@@ -737,7 +737,7 @@ class AdminInternationalizationContractTests(SimpleTestCase):
         from django.test import override_settings
         from apps.core.admin_forms import (
             LeadForm, ProductForm, PriceVersionForm, ServiceAccountForm,
-            PermissionChoiceField, MollieConfigForm, PERMISSION_DOMAIN_LABELS,
+            RoleForm, MollieConfigForm, PERMISSION_DOMAIN_LABELS,
             PERMISSION_ACTION_LABELS,
         )
 
@@ -776,7 +776,7 @@ class AdminInternationalizationContractTests(SimpleTestCase):
         )
         self.assertEqual(str(PERMISSION_DOMAIN_LABELS['customers']), 'Kunden')
         self.assertEqual(str(PERMISSION_ACTION_LABELS['read']), 'Lesen')
-        perm = PermissionChoiceField(queryset=None)
+        perm = RoleForm.base_fields['permissions']
         display = perm.label_from_instance(Row(name='', code='customers.read'))
         self.assertIn('(customers.read)', display)
         named = perm.label_from_instance(Row(name='External label', code='customers.read'))
