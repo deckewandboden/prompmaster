@@ -1792,3 +1792,21 @@ msgstr "Bireysel müşteri bölümleri"
 
 msgid "Audit"
 msgstr "Denetim"
+
+msgid "Zuletzt"
+msgstr "Son görülme"
+
+msgid "Akteur"
+msgstr "İşlemi yapan"
+
+msgid "Admin übertragen"
+msgstr "Yönetici rolünü devret"
+
+msgid "Benutzer wirklich deaktivieren? Lizenzen und Gerätezugänge werden freigegeben."
+msgstr "Bu kullanıcı gerçekten devre dışı bırakılsın mı? Lisanslar ve cihaz erişimleri serbest bırakılacaktır."
+
+msgid "Firmenadmin"
+msgstr "Şirket yöneticisi"
+
+msgid "Gerätezugang wirklich widerrufen?"
+msgstr "Cihaz erişimi gerçekten iptal edilsin mi?"
