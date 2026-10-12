@@ -2095,3 +2095,39 @@ msgstr "Kritik uyarı"
 
 msgid "Einstellungen speichern"
 msgstr "Ayarları kaydet"
+
+msgid "Produktdefaults, Support, E-Mail-Identität und Betriebswarnschwellen."
+msgstr "Ürün varsayılanları, destek, e-posta kimliği ve sistem uyarı eşikleri."
+
+msgid "Produktwerte werden unter „Produkte & Preise“ gepflegt."
+msgstr "Ürün değerleri “Ürünler ve Fiyatlar” bölümünde yönetilir."
+
+msgid "PROMPTFINISHER Pro ist nicht angelegt."
+msgstr "PROMPTFINISHER Pro henüz oluşturulmadı."
+
+msgid "Empfänger des Kundenportal-Kontaktformulars."
+msgstr "Müşteri portalındaki iletişim formunun alıcısı."
+
+msgid "E-Mail-Versandweg & Fallback"
+msgstr "E-posta gönderim yolu ve yedek yönlendirme"
+
+msgid "Alle Provider bleiben parallel gespeichert. Im manuellen Modus wird nur der primäre Versandweg verwendet. Im automatischen Modus wird bei eindeutig nicht zugestellten Fehlern in der festgelegten Reihenfolge weitergeschaltet; bei unklaren Fehlern erfolgt bewusst kein automatischer Fallback, um Doppelversand zu vermeiden."
+msgstr "Tüm sağlayıcılar kayıtlı kalır. Manuel mod yalnızca birincil gönderim yolunu kullanır. Otomatik modda yalnızca kesin teslim edilmeme durumunda belirtilen sırayla sonraki sağlayıcıya geçilir; belirsiz hatalarda çift gönderimi önlemek için otomatik geçiş yapılmaz."
+
+msgid "E-Mail-Absender & Domain"
+msgstr "E-posta göndereni ve alan adı"
+
+msgid "Die Absenderadresse wird beim SMTP-Versand direkt aus diesen Einstellungen gelesen. SPF, DKIM und DMARC sind hier als DNS-Sollwerte dokumentiert; das Speichern verändert keine DNS-Zone."
+msgstr "SMTP gönderen adresi doğrudan bu ayarlardan okunur. SPF, DKIM ve DMARC burada hedef DNS kayıtları olarak belgelenir; kaydetme hiçbir DNS bölgesini değiştirmez."
+
+msgid "Erster SMTP-Transport. Das Passwort wird verschlüsselt gespeichert und niemals wieder im Klartext angezeigt."
+msgstr "Birincil SMTP aktarımı. Parola şifrelenerek saklanır ve daha sonra düz metin olarak gösterilmez."
+
+msgid "Optionaler zweiter SMTP-Transport. Hier können Sie z. B. denselben SMTP-Relay eintragen, den auch Listmonk verwendet, und manuell oder automatisch zwischen SMTP 1 und SMTP 2 wechseln."
+msgstr "İsteğe bağlı ikinci SMTP aktarımı. Örneğin Listmonk ile aynı SMTP geçiş sunucusunu kullanabilir, SMTP 1 ve SMTP 2 arasında manuel veya otomatik geçiş yapabilirsiniz."
+
+msgid "Alternative zu SMTP für Exchange Online. Das Client Secret wird verschlüsselt gespeichert und niemals wieder im Klartext angezeigt."
+msgstr "Exchange Online için SMTP alternatifi. İstemci gizli anahtarı şifrelenerek saklanır ve daha sonra düz metin olarak gösterilmez."
+
+msgid "Sie besitzen Leserechte, aber keine Berechtigung zum Ändern dieser Einstellungen."
+msgstr "Salt okunur erişiminiz var; bu ayarları değiştirme yetkiniz yok."
