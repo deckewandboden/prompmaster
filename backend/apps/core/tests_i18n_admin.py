@@ -1185,11 +1185,11 @@ class AdminInternationalizationContractTests(SimpleTestCase):
             for name in names:
                 self.assertNotRegex(
                     markup,
-                    r'{{\\s*\\w+\\.get_' + name + r'_display\\s*}}',
+                    r'\{\{\s*\w+\.get_' + name + r'_display\s*\}\}',
                     'Model choice display bypasses active language in ' + page,
                 )
                 total += len(re.findall(
-                    r'{%\\s*translate\\s+\\w+\\.get_' + name + r'_display\\s*%}',
+                    r'\{%\s*translate\s+\w+\.get_' + name + r'_display\s*%\}',
                     markup,
                 ))
         self.assertGreaterEqual(total, 15)
