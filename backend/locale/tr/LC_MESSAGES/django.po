@@ -2509,3 +2509,63 @@ msgstr "tamamlandı"
 
 msgid "nicht verfügbar"
 msgstr "kullanılamıyor"
+
+msgid "Disk {value}% belegt"
+msgstr "Disk kullanımı: %{value}"
+
+msgid "RAM {value}% belegt"
+msgstr "RAM kullanımı: %{value}"
+
+msgid "CPU 10-Minuten-Mittel {value}%"
+msgstr "10 dakikalık ortalama CPU kullanımı: %{value}"
+
+msgid "Kein auswertbarer Backupstatus verfügbar"
+msgstr "Değerlendirilebilir yedekleme durumu yok"
+
+msgid "Letztes Backup meldet Status {value}"
+msgstr "Son yedekleme durumu: {value}"
+
+msgid "Backup ist {value} Stunden alt"
+msgstr "Yedekleme {value} saat önce oluşturuldu"
+
+msgid "Restore-Statusdatei ist nicht auswertbar"
+msgstr "Geri yükleme durum dosyası değerlendirilemiyor"
+
+msgid "Noch kein Restore-Test protokolliert"
+msgstr "Henüz geri yükleme testi kaydedilmedi"
+
+msgid "Letzter Restore-Test war nicht erfolgreich"
+msgstr "Son geri yükleme testi başarısız oldu"
+
+msgid "Letzter Restore-Test ist {value} Tage alt"
+msgstr "Son geri yükleme testi {value} gün önce yapıldı"
+
+msgid "Monitoring-Ziel {value} ist nicht erreichbar"
+msgstr "İzleme hedefi {value} erişilemiyor"
+
+msgid "Monitoring-Ziel {value} liefert keinen Status"
+msgstr "İzleme hedefi {value} durum bildirmiyor"
+
+msgid "Caddy Healthcheck ist nicht erreichbar"
+msgstr "Caddy sağlık denetimine erişilemiyor"
+
+msgid "Kein Celery Worker beantwortet den aktiven Ping"
+msgstr "Hiçbir Celery worker etkin ping'e yanıt vermiyor"
+
+msgid "Celery Beat-Heartbeat älter als {value} Minuten"
+msgstr "Celery Beat durum sinyali {value} dakikadan eski"
+
+msgid "Celery Queue-Tiefe kann nicht gelesen werden"
+msgstr "Celery kuyruk uzunluğu okunamıyor"
+
+msgid "Celery Queue enthält {value} wartende Jobs"
+msgstr "Celery kuyruğunda {value} bekleyen iş var"
+
+msgid "{value} fehlgeschlagene Hintergrundjobs in 24 Stunden"
+msgstr "Son 24 saatte {value} arka plan işi başarısız oldu"
+
+msgid "{value} E-Mail-Fehler in 24 Stunden"
+msgstr "Son 24 saatte {value} e-posta hatası"
+
+msgid "{value} Mollie-Verarbeitungsfehler in 24 Stunden"
+msgstr "Son 24 saatte {value} Mollie işleme hatası"
