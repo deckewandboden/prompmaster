@@ -1750,3 +1750,36 @@ msgstr "Verificar/emitir reembolso"
 
 msgid "Keine Lizenzperioden vorhanden."
 msgstr "Não existem períodos de licença."
+
+msgid "E-Mail-Protokoll"
+msgstr "Registo de e-mail"
+
+msgid "Versandstatus, tatsächlich verwendeter Provider und Fallback-Versuche ohne vertrauliche Nachrichtentexte oder Secrets."
+msgstr "Estado de envio, fornecedor efetivamente utilizado e tentativas de contingência, sem conteúdos confidenciais nem segredos."
+
+msgid "Empfänger"
+msgstr "Destinatário"
+
+msgid "Vorlage"
+msgstr "Modelo"
+
+msgid "Provider"
+msgstr "Fornecedor"
+
+msgid "Versuche"
+msgstr "Tentativas"
+
+msgid "Gesendet"
+msgstr "Enviado"
+
+msgid "Wird gesendet"
+msgstr "A enviar"
+
+msgid "Unterdrückt"
+msgstr "Suprimido"
+
+msgid "Warteschlange"
+msgstr "Em fila"
+
+msgid "Keine E-Mails gefunden."
+msgstr "Não foram encontrados e-mails."
