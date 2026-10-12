@@ -2810,3 +2810,93 @@ msgstr "Sorteervolgorde"
 
 msgid "Technisches Problem"
 msgstr "Technisch probleem"
+
+msgid "Aktuelle Stichprobengröße"
+msgstr "Omvang recente steekproef"
+
+msgid "App-Regel-Snapshot"
+msgstr "Momentopname van appregels"
+
+msgid "Ausgabeformen"
+msgstr "Uitvoerformaten"
+
+msgid "Beispiel: {\"microsoft_tier\":\"premium\",\"payload\":{\"fields\":{...}}}"
+msgstr "Voorbeeld: {\"microsoft_tier\":\"premium\",\"payload\":{\"fields\":{...}}}"
+
+msgid "Bereich"
+msgstr "Gebied"
+
+msgid "Darf nicht enthalten"
+msgstr "Mag niet bevatten"
+
+msgid "Ein Feld pro Zeile. Optionales Fragment: Feldname ||| Text mit {value}."
+msgstr "Eén veld per regel. Optioneel fragment: veldnaam ||| tekst met {value}."
+
+msgid "Ein Pflichtfeld pro Zeile."
+msgstr "Eén verplicht veld per regel."
+
+msgid "Eingabedaten (JSON)"
+msgstr "Invoergegevens (JSON)"
+
+msgid "Familie"
+msgstr "Familie"
+
+msgid "Feldbezeichnungen müssen innerhalb einer Prompt-Version eindeutig sein."
+msgstr "Veldnamen moeten uniek zijn binnen een promptversie."
+
+msgid "Kontextvorlage"
+msgstr "Contextsjabloon"
+
+msgid "Kritisch bei Abfall"
+msgstr "Drempel voor kritieke daling"
+
+msgid "Kritischer Durchschnitt"
+msgstr "Kritiek gemiddelde"
+
+msgid "Maximale Zeichen"
+msgstr "Maximumaantal tekens"
+
+msgid "Microsoft-Lizenzstufe"
+msgstr "Microsoft-licentieniveau"
+
+msgid "Mindestanzahl Stichproben"
+msgstr "Minimumaantal steekproeven"
+
+msgid "Mindestdurchschnitt"
+msgstr "Minimaal gemiddelde"
+
+msgid "Muss enthalten"
+msgstr "Moet bevatten"
+
+msgid "Nur DRAFT-Versionen dürfen inhaltlich bearbeitet werden."
+msgstr "Alleen DRAFT-versies mogen worden bewerkt."
+
+msgid "Payload muss ein JSON-Objekt sein."
+msgstr "De payload moet een JSON-object zijn."
+
+msgid "Quellen"
+msgstr "Bronnen"
+
+msgid "Schwerpunkte"
+msgstr "Aandachtsgebieden"
+
+msgid "Test-Payload (JSON)"
+msgstr "Testpayload (JSON)"
+
+msgid "Test-Payload muss ein JSON-Objekt sein."
+msgstr "De testpayload moet een JSON-object zijn."
+
+msgid "Ungültiges JSON: %(error)s"
+msgstr "Ongeldige JSON: %(error)s"
+
+msgid "Vorherige Stichprobengröße"
+msgstr "Omvang vorige steekproef"
+
+msgid "Warnung bei Abfall"
+msgstr "Waarschuwingsdrempel bij daling"
+
+msgid "Ziel / Intent"
+msgstr "Doel / intentie"
+
+msgid "Zielgruppen"
+msgstr "Doelgroepen"
