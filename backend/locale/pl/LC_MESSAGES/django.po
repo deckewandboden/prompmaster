@@ -3274,3 +3274,69 @@ msgstr "Na przykład PROMPTFINISHER."
 
 msgid "Zum Beispiel smtp.ionos.de."
 msgstr "Na przykład smtp.ionos.de."
+
+msgid "Das eigene netstyle Konto kann hier nicht deaktiviert werden."
+msgstr "Nie można tutaj dezaktywować własnego konta netstyle."
+
+msgid "Der letzte aktive Superadmin kann nicht deaktiviert werden."
+msgstr "Nie można dezaktywować ostatniego aktywnego superadministratora."
+
+msgid "Die eigene 2FA wird nicht über die Admin-Fremdverwaltung zurückgesetzt."
+msgstr "Nie możesz resetować własnego 2FA przez administrację innymi kontami."
+
+msgid "2FA zurückgesetzt. Der Benutzer muss sie beim nächsten Login neu einrichten."
+msgstr "2FA zresetowano. Użytkownik musi skonfigurować je przy następnym logowaniu."
+
+msgid "Die eigene Superadmin-Rolle kann nicht hier entfernt werden."
+msgstr "Nie można tutaj usunąć własnej roli superadministratora."
+
+msgid "Die letzte aktive Superadmin-Berechtigung kann nicht entfernt werden."
+msgstr "Nie można usunąć ostatniego aktywnego uprawnienia superadministratora."
+
+msgid "Ein gesperrter Service Account kann nicht rotiert werden."
+msgstr "Nie można rotować klucza zablokowanego konta usługi."
+
+msgid "Mollie-Produktiv-Checkout wurde gesperrt."
+msgstr "Produkcyjna finalizacja zakupu Mollie została zablokowana."
+
+msgid "Bestätigung für die Erstattung fehlt."
+msgstr "Brakuje potwierdzenia zwrotu środków."
+
+msgid "Erstattung wurde an Mollie übermittelt."
+msgstr "Żądanie zwrotu wysłano do Mollie."
+
+msgid "Für dieses Unternehmen existiert bereits ein aktiver Firmenadministrator."
+msgstr "Dla tej firmy istnieje już aktywny administrator."
+
+msgid "Dieser Benutzer ist bereits Firmenadministrator."
+msgstr "Ten użytkownik jest już administratorem firmy."
+
+msgid "Ungültiger Supportstatus."
+msgstr "Nieprawidłowy status zgłoszenia."
+
+msgid "Ungültiger Bearbeitungsstatus."
+msgstr "Nieprawidłowy status przetwarzania."
+
+msgid "Bitte eine Antwort eingeben."
+msgstr "Wpisz odpowiedź."
+
+msgid "Die Antwort darf höchstens 10.000 Zeichen enthalten."
+msgstr "Odpowiedź nie może przekraczać 10 000 znaków."
+
+msgid "Status aktualisiert."
+msgstr "Status zaktualizowany."
+
+msgid "Einstellungen gespeichert."
+msgstr "Ustawienia zapisane."
+
+msgid "Rolle gespeichert."
+msgstr "Rola zapisana."
+
+msgid "Rolle zugewiesen."
+msgstr "Rola przypisana."
+
+msgid "Rolle entfernt."
+msgstr "Rola usunięta."
+
+msgid "Benutzerstatus aktualisiert."
+msgstr "Status użytkownika zaktualizowany."
