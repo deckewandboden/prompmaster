@@ -1558,3 +1558,81 @@ msgstr "açık"
 
 msgid "Noch keine Webhook-Ereignisse."
 msgstr "Henüz webhook olayı yok."
+
+msgid "Vorlagen, Versandstatus, Provider und Fallback-Kette."
+msgstr "Şablonlar, gönderim durumu, sağlayıcılar ve yedek yönlendirme zinciri."
+
+msgid "Absender & Provider"
+msgstr "Gönderen ve sağlayıcı"
+
+msgid "Versandprotokoll öffnen"
+msgstr "Gönderim günlüğünü aç"
+
+msgid "Vorlagen"
+msgstr "Şablonlar"
+
+msgid "Keine E-Mail-Vorlagen vorhanden."
+msgstr "E-posta şablonu yok."
+
+msgid "Mail-System"
+msgstr "E-posta sistemi"
+
+msgid "Versandmodus"
+msgstr "Gönderim modu"
+
+msgid "Automatischer Fallback"
+msgstr "Otomatik yedek yönlendirme"
+
+msgid "Manuell"
+msgstr "Manuel"
+
+msgid "Primär"
+msgstr "Birincil"
+
+msgid "Reihenfolge"
+msgstr "Sıra"
+
+msgid "Status der Kette"
+msgstr "Zincir durumu"
+
+msgid "Aktiver Absender"
+msgstr "Etkin gönderen"
+
+msgid "Anzeigename"
+msgstr "Görünen ad"
+
+msgid "Mail-Domain"
+msgstr "E-posta alan adı"
+
+msgid "Server"
+msgstr "Sunucu"
+
+msgid "Anmeldung"
+msgstr "Kimlik doğrulama"
+
+msgid "Passwort fehlt"
+msgstr "Parola eksik"
+
+msgid "Ohne Anmeldung"
+msgstr "Kimlik doğrulamasız"
+
+msgid "Nicht konfiguriert"
+msgstr "Yapılandırılmadı"
+
+msgid "Fehlt"
+msgstr "Eksik"
+
+msgid "Graph Absender"
+msgstr "Graph göndereni"
+
+msgid "Automatischer Fallback erfolgt nur bei eindeutig nicht zugestellten Fehlern. Bei unklaren Fehlern wird nicht automatisch weitergeschaltet, damit dieselbe E-Mail nicht versehentlich doppelt versendet wird."
+msgstr "Otomatik yedek yönlendirme yalnızca teslim edilmediği kesinleşen hatalarda çalışır. Belirsiz hatalarda aynı e-postanın yanlışlıkla iki kez gönderilmemesi için otomatik geçiş yapılmaz."
+
+msgid "SPF/DKIM/DMARC werden unter „Einstellungen“ als DNS-Sollwerte dokumentiert. Änderungen dort aktualisieren nicht automatisch den öffentlichen DNS."
+msgstr "SPF/DKIM/DMARC için hedef DNS kayıtları Ayarlar bölümünde belgelenir. Oradaki değişiklikler genel DNS kayıtlarını otomatik olarak güncellemez."
+
+msgid "Letzte Versandvorgänge"
+msgstr "Son gönderim işlemleri"
+
+msgid "Noch keine Versandvorgänge."
+msgstr "Henüz gönderim işlemi yok."
