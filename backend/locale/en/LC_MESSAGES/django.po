@@ -1120,3 +1120,84 @@ msgstr "All orders"
 
 msgid "Firmenkonto"
 msgstr "Company account"
+
+msgid "Serverseitige Suche, Filter, Sortierung und Pagination."
+msgstr "Server-side search, filtering, sorting and pagination."
+
+msgid "Neu anlegen"
+msgstr "Create new"
+
+msgid "Privatkunden"
+msgstr "Individual customers"
+
+msgid "aufsteigend"
+msgstr "ascending"
+
+msgid "absteigend"
+msgstr "descending"
+
+msgid "Keine Datensätze für die aktuelle Auswahl."
+msgstr "No records for the current selection."
+
+msgid "Änderungen werden serverseitig validiert und – sofern sicherheits- oder geschäftskritisch – protokolliert."
+msgstr "Changes are validated on the server and logged if security- or business-critical."
+
+msgid "Zusätzliche Sicherheitsfreigabe."
+msgstr "Additional security verification."
+
+msgid "Bestätigen Sie Ihr eigenes Passwort. Die Freigabe gilt anschließend ausschließlich für wenige Minuten und nur für geschützte Admin-Aktionen."
+msgstr "Confirm your own password. Approval then remains valid for only a few minutes and only for protected admin actions."
+
+msgid "Bestätigen"
+msgstr "Confirm"
+
+msgid "Kompakte Geschäftszahlen innerhalb Ihrer Berechtigungen."
+msgstr "Key business figures within your permissions."
+
+msgid "Neue Kunden · 30 Tage"
+msgstr "New customers · 30 days"
+
+msgid "Verlängerungsanteil"
+msgstr "Renewal share"
+
+msgid "Verlängerungsterms"
+msgstr "renewal periods"
+
+msgid "Refund-Quote"
+msgstr "Refund rate"
+
+msgid "Anteil refundierter Lizenzterms"
+msgstr "Share of refunded license periods"
+
+msgid "Ø Lizenzen / Firma"
+msgstr "Avg. licenses / company"
+
+msgid "Firmenkundenbestand"
+msgstr "Business customer base"
+
+msgid "Umsatz letzte 30 Tage"
+msgstr "Revenue in the last 30 days"
+
+msgid "Bestellungen gesamt"
+msgstr "total orders"
+
+msgid "Lizenzen gesamt"
+msgstr "Total licenses"
+
+msgid "inkl. aktiv, frei, abgelaufen und historisch"
+msgstr "including active, available, expired and historical"
+
+msgid "Anfragen aus dem Kundenportal; V1 verwendet bewusst kein Ticketsystem."
+msgstr "Requests from the customer portal; V1 intentionally does not use a ticket system."
+
+msgid "Keine Kontaktanfragen."
+msgstr "No contact requests."
+
+msgid "Globale Suche"
+msgstr "Global search"
+
+msgid "Ergebnisse für"
+msgstr "Results for"
+
+msgid "Keine Treffer."
+msgstr "No matches."
