@@ -1857,3 +1857,36 @@ msgstr "Verifica/avvia rimborso"
 
 msgid "Keine Lizenzperioden vorhanden."
 msgstr "Nessun periodo di licenza disponibile."
+
+msgid "E-Mail-Protokoll"
+msgstr "Registro e-mail"
+
+msgid "Versandstatus, tatsächlich verwendeter Provider und Fallback-Versuche ohne vertrauliche Nachrichtentexte oder Secrets."
+msgstr "Stato dell'invio, provider effettivamente utilizzato e tentativi di failover, senza contenuti riservati dei messaggi né segreti."
+
+msgid "Empfänger"
+msgstr "Destinatario"
+
+msgid "Vorlage"
+msgstr "Modello"
+
+msgid "Provider"
+msgstr "Provider"
+
+msgid "Versuche"
+msgstr "Tentativi"
+
+msgid "Gesendet"
+msgstr "Inviato"
+
+msgid "Wird gesendet"
+msgstr "Invio in corso"
+
+msgid "Unterdrückt"
+msgstr "Soppresso"
+
+msgid "Warteschlange"
+msgstr "In coda"
+
+msgid "Keine E-Mails gefunden."
+msgstr "Nessuna e-mail trovata."
