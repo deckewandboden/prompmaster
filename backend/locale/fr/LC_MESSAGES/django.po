@@ -2382,3 +2382,195 @@ msgstr "Résultat"
 
 msgid "Deterministischer Feld-Fallback"
 msgstr "Valeur de repli déterministe du champ"
+
+msgid "10-Min.-Ø:"
+msgstr "Moy. sur 10 min :"
+
+msgid "Aktive Warnungen"
+msgstr "Alertes actives"
+
+msgid "App-Version"
+msgstr "Version de l’application"
+
+msgid "Architektur"
+msgstr "Architecture"
+
+msgid "Backup & Restore"
+msgstr "Sauvegarde et restauration"
+
+msgid "Backups öffnen"
+msgstr "Ouvrir les sauvegardes"
+
+msgid "Betriebszustand, Plattformdienste, Integrationen und Datensicherung."
+msgstr "État de fonctionnement, services de la plateforme, intégrations et sauvegardes."
+
+msgid "CPU-Kerne"
+msgstr "Cœurs CPU"
+
+msgid "Caddy"
+msgstr "Caddy"
+
+msgid "Celery Beat"
+msgstr "Celery Beat"
+
+msgid "Celery Worker"
+msgstr "Celery Worker"
+
+msgid "Container-CPU aktuell"
+msgstr "CPU actuelle des conteneurs"
+
+msgid "Container-RAM gesamt"
+msgstr "RAM totale des conteneurs"
+
+msgid "DB-Verbindungen"
+msgstr "Connexions à la base de données"
+
+msgid "Dateiobjekte (Inodes) belegt"
+msgstr "Inodes utilisés"
+
+msgid "Dateiobjekte (Inodes) verfügbar"
+msgstr "Inodes disponibles"
+
+msgid "Datenbank & Jobs"
+msgstr "Base de données et tâches"
+
+msgid "Datenbank öffnen"
+msgstr "Ouvrir la base de données"
+
+msgid "Datenträger / gesamt"
+msgstr "Disque / total"
+
+msgid "Datenträger / verfügbar"
+msgstr "Disque / disponible"
+
+msgid "Datenträger / verwendet"
+msgstr "Disque / utilisé"
+
+msgid "Definitionen"
+msgstr "Définitions"
+
+msgid "Dienste & Integrationen"
+msgstr "Services et intégrations"
+
+msgid "Dienste öffnen"
+msgstr "Ouvrir les services"
+
+msgid "Diese Werte stammen aus cAdvisor und beziehen sich auf Docker-Container. Die VM-Werte oben stammen aus node_exporter und beziehen sich auf die gesamte Docker-Host-VM."
+msgstr "Ces mesures proviennent de cAdvisor et concernent les conteneurs Docker. Les mesures de la VM ci-dessus proviennent de node_exporter et couvrent toute la VM hôte Docker."
+
+msgid "Docker"
+msgstr "Docker"
+
+msgid "Docker-Container"
+msgstr "Conteneurs Docker"
+
+msgid "Erkannte Container"
+msgstr "Conteneurs détectés"
+
+msgid "Fehler / 24 h"
+msgstr "Erreurs / 24 h"
+
+msgid "Git Commit"
+msgstr "Commit Git"
+
+msgid "Host & Release"
+msgstr "Hôte et version"
+
+msgid "Inodes sind Dateisystem-Einträge für Dateien und Verzeichnisse. Sind sie ausgeschöpft, können trotz freiem Speicher keine neuen Dateien angelegt werden."
+msgstr "Les inodes sont des entrées du système de fichiers pour les fichiers et répertoires. Une fois épuisés, aucun nouveau fichier ne peut être créé, même si de l’espace disque reste disponible."
+
+msgid "Keine aktiven Systemwarnungen."
+msgstr "Aucune alerte système active."
+
+msgid "Letzter Restore-Test"
+msgstr "Dernier test de restauration"
+
+msgid "Letztes Backup"
+msgstr "Dernière sauvegarde"
+
+msgid "Letztes Deployment"
+msgstr "Dernier déploiement"
+
+msgid "Load:"
+msgstr "Charge :"
+
+msgid "Messbereich"
+msgstr "Périmètre des mesures"
+
+msgid "Messquelle"
+msgstr "Source des mesures"
+
+msgid "Messwert-Erklärung"
+msgstr "Explication des mesures"
+
+msgid "OS / Kernel"
+msgstr "OS / noyau"
+
+msgid "PostgreSQL"
+msgstr "PostgreSQL"
+
+msgid "Prompt MCP"
+msgstr "Prompt MCP"
+
+msgid "RAM gesamt"
+msgstr "RAM totale"
+
+msgid "RAM verfügbar"
+msgstr "RAM disponible"
+
+msgid "RAM verwendet"
+msgstr "RAM utilisée"
+
+msgid "Restore-Tests öffnen"
+msgstr "Ouvrir les tests de restauration"
+
+msgid "TLS-Zertifikat"
+msgstr "Certificat TLS"
+
+msgid "Umgebung"
+msgstr "Environnement"
+
+msgid "Uptime"
+msgstr "Durée de fonctionnement"
+
+msgid "VM-CPU aktuell"
+msgstr "CPU actuelle de la VM"
+
+msgid "VM-Datenträger /"
+msgstr "Disque VM /"
+
+msgid "VM-RAM"
+msgstr "RAM VM"
+
+msgid "VM-Speicher & Dateisystem"
+msgstr "Mémoire VM et système de fichiers"
+
+msgid "Verwendetes Backup"
+msgstr "Sauvegarde utilisée"
+
+msgid "Warnungen öffnen"
+msgstr "Ouvrir les alertes"
+
+msgid "geschützt"
+msgstr "protégé"
+
+msgid "healthy"
+msgstr "opérationnel"
+
+msgid "konfiguriert"
+msgstr "configuré"
+
+msgid "nicht erreichbar"
+msgstr "injoignable"
+
+msgid "nicht protokolliert"
+msgstr "non journalisé"
+
+msgid "und ist die für neue Prozesse realistisch nutzbare Speichermenge. „Inodes“ sind Dateisystem-Einträge; ein niedriger Belegungsgrad ist unkritisch."
+msgstr "et correspond à la mémoire réellement disponible pour de nouveaux processus. Les inodes sont des entrées du système de fichiers ; un faible taux d’utilisation n’est pas préoccupant."
+
+msgid "verfügbar von"
+msgstr "disponibles sur"
+
+msgid "„RAM verfügbar“ entspricht Linux"
+msgstr "« RAM disponible » correspond à la valeur Linux"
