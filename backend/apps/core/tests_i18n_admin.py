@@ -16,6 +16,11 @@ LOCALES = ('en', 'es', 'pt', 'tr', 'ru', 'pl', 'fr', 'it', 'nl')
 PAGES = (
     'ns_admin/dashboard.html',
     'ns_admin/customer_portal_preview.html',
+    'ns_admin/grid.html',
+    'ns_admin/form.html',
+    'ns_admin/stats.html',
+    'ns_admin/support.html',
+    'ns_admin/search.html',
 )
 TRANSLATE_PATTERN = re.compile(r'''{%\s*translate\s+(['"])(.*?)\1\s*%}''')
 
@@ -91,6 +96,16 @@ class AdminInternationalizationContractTests(SimpleTestCase):
                 with self.subTest(language=code, label=key):
                     self.assertEqual(expected, actual,
                         'Named interpolation placeholders must never be translated.')
+
+    def test_shared_admin_templates_use_runtime_translation_for_dynamic_grid_columns(self):
+        grid = (ROOT / 'templates/ns_admin/grid.html').read_text(encoding='utf-8')
+        for token in (
+            "{% translate label %}",
+            'data-label="{% translate label %}"',
+            "{% translate 'aufsteigend' %}",
+            "{% translate 'absteigend' %}",
+        ):
+            self.assertIn(token, grid, 'Shared grid must localize visible table metadata')
 
     def test_language_picker_is_in_flex_header_and_never_overlays_avatar(self):
         shell = (ROOT / 'templates/app_shell.html').read_text(encoding='utf-8')
