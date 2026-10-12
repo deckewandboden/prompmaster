@@ -2011,3 +2011,69 @@ msgstr "from"
 
 msgid "Keine Preisversionen."
 msgstr "No price versions."
+
+msgid "Zentrale Prompt-Domain · 34 Apps · 194 PM20-Aufgaben · versioniert und serverseitig komponiert."
+msgstr "Central prompt domain · 34 apps · 194 PM20 tasks · versioned and composed on the server."
+
+msgid "Qualität"
+msgstr "Quality"
+
+msgid "Task-ID, App oder Titel suchen …"
+msgstr "Search task ID, app or title …"
+
+msgid "Task"
+msgstr "Task"
+
+msgid "Anwendung"
+msgstr "Application"
+
+msgid "Veröffentlicht"
+msgstr "Published"
+
+msgid "Offene Versionen"
+msgstr "Open versions"
+
+msgid "keine"
+msgstr "none"
+
+msgid "noch keine Daten"
+msgstr "no data yet"
+
+msgid "Keine Prompt-Aufgaben gefunden."
+msgstr "No prompt tasks found."
+
+msgid "Prompt-Qualität"
+msgstr "Prompt quality"
+
+msgid "1–5-Sterne-Ratings · Recent Average · Drop-Erkennung · Aufgabenliste."
+msgstr "1–5-star ratings · recent average · drop detection · task list."
+
+msgid "Schwellen"
+msgstr "Thresholds"
+
+msgid "Analyse aktualisieren"
+msgstr "Refresh analysis"
+
+msgid "Kritisch"
+msgstr "Critical"
+
+msgid "Warnung"
+msgstr "Warning"
+
+msgid "Beobachten"
+msgstr "Watch"
+
+msgid "OK"
+msgstr "OK"
+
+msgid "App"
+msgstr "App"
+
+msgid "Recent Avg"
+msgstr "Recent avg."
+
+msgid "Previous Avg"
+msgstr "Previous avg."
+
+msgid "Drop"
+msgstr "Drop"
