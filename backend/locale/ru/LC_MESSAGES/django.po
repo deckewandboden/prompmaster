@@ -2687,3 +2687,27 @@ msgstr "Я ознакомился(-лась) с информацией о пра
 
 msgid "Zum Beispiel Bestellnummer oder Kundennummer."
 msgstr "Например, номер заказа или номер клиента."
+
+msgid "Gerätename"
+msgstr "Имя устройства"
+
+msgid "Keine konkrete Lizenz"
+msgstr "Без конкретной лицензии"
+
+msgid "Lizenz (optional)"
+msgstr "Лицензия (необязательно)"
+
+msgid "Nachricht"
+msgstr "Сообщение"
+
+msgid "Schlüssel"
+msgstr "Ключ"
+
+msgid "Sonstiges"
+msgstr "Другое"
+
+msgid "Sortierung"
+msgstr "Сортировка"
+
+msgid "Technisches Problem"
+msgstr "Техническая проблема"
