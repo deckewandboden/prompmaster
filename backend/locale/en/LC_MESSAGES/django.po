@@ -1636,3 +1636,42 @@ msgstr "Recent delivery attempts"
 
 msgid "Noch keine Versandvorgänge."
 msgstr "No delivery attempts yet."
+
+msgid "Zur Kundenliste"
+msgstr "Back to customer list"
+
+msgid "Zur Privatkundenliste"
+msgstr "Back to individual customers"
+
+msgid "Kundendaten"
+msgstr "Customer details"
+
+msgid "Stammdaten"
+msgstr "Master data"
+
+msgid "Unternehmensdaten speichern"
+msgstr "Save company details"
+
+msgid "Firma"
+msgstr "Company"
+
+msgid "Steuernummer"
+msgstr "Tax number"
+
+msgid "Änderungen erfolgen serverseitig mit Berechtigungsprüfung und werden im Audit protokolliert. Steuerfelder werden anhand der aktiven Steuerregel für Land und Kundentyp validiert."
+msgstr "Changes are applied on the server with permission checks and recorded in the audit log. Tax fields are validated against the active tax rule for the country and customer type."
+
+msgid "Rechtsakzeptanzen"
+msgstr "Legal document acceptances"
+
+msgid "Version"
+msgstr "Version"
+
+msgid "Keine Rechtsakzeptanzen protokolliert."
+msgstr "No legal document acceptances recorded."
+
+msgid "Keine Löschanfragen."
+msgstr "No deletion requests."
+
+msgid "Alle Löschanfragen"
+msgstr "All deletion requests"
