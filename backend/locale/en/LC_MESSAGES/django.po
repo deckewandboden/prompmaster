@@ -1675,3 +1675,78 @@ msgstr "No deletion requests."
 
 msgid "Alle Löschanfragen"
 msgstr "All deletion requests"
+
+msgid "Bestellung vom"
+msgstr "Order dated"
+
+msgid "Zurück zur Liste"
+msgstr "Back to list"
+
+msgid "Brutto"
+msgstr "Gross"
+
+msgid "Steuer"
+msgstr "Tax"
+
+msgid "Keine Zahlung erfasst."
+msgstr "No payment recorded."
+
+msgid "Positionen"
+msgstr "Line items"
+
+msgid "Menge"
+msgstr "Quantity"
+
+msgid "Einzelpreis"
+msgstr "Unit price"
+
+msgid "Lizenzstatus wirklich ändern?"
+msgstr "Really change this license's status?"
+
+msgid "Lizenz entsperren"
+msgstr "Unblock license"
+
+msgid "Lizenz sperren"
+msgstr "Block license"
+
+msgid "Inhaber & Zuweisung"
+msgstr "Owner & assignment"
+
+msgid "Zugewiesen an"
+msgstr "Assigned to"
+
+msgid "Lizenzzuweisung wirklich freigeben? Aktive Geräte dieser Lizenz werden widerrufen."
+msgstr "Really release this license assignment? Active devices linked to this license will be revoked."
+
+msgid "Zuweisung freigeben"
+msgstr "Release assignment"
+
+msgid "Aktiven Firmenbenutzer auswählen"
+msgstr "Select active company user"
+
+msgid "Bitte auswählen"
+msgstr "Please select"
+
+msgid "Lizenz zuweisen"
+msgstr "Assign license"
+
+msgid "Lizenzperioden"
+msgstr "License periods"
+
+msgid "Von"
+msgstr "From"
+
+msgid "Bis"
+msgstr "Until"
+
+msgid "Erstattung"
+msgstr "Refund"
+
+msgid "Erstattung wirklich verbindlich über Mollie auslösen?"
+msgstr "Really submit a binding refund through Mollie?"
+
+msgid "Erstattung prüfen/auslösen"
+msgstr "Review/issue refund"
+
+msgid "Keine Lizenzperioden vorhanden."
+msgstr "No license periods available."
