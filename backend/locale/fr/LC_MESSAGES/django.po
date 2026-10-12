@@ -2622,3 +2622,6 @@ msgstr "aucune donnée"
 
 msgid "completed"
 msgstr "terminé"
+
+msgid "nicht verfügbar"
+msgstr "indisponible"
