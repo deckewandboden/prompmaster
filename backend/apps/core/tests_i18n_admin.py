@@ -497,6 +497,37 @@ class AdminInternationalizationContractTests(SimpleTestCase):
         self.assertIn('{{ a|ops_alert_display }}',
             (ROOT / 'templates/ns_admin/ops.html').read_text(encoding='utf-8'))
 
+
+    def test_ops_alert_grid_and_shared_toolbar_are_localized(self):
+        grid = (ROOT / 'templates/ns_admin/ops_grid.html').read_text(encoding='utf-8')
+        toolbar = (ROOT / 'templates/includes/grid_toolbar.html').read_text(encoding='utf-8')
+        self.assertIn('{{ row|ops_alert_display }}', grid)
+        self.assertNotIn('{{ row.message }}', grid)
+        self.assertNotIn('{{ row.severity }}', grid)
+        self.assertEqual(grid.count('{% translate row.status %}'), 2)
+        self.assertIn('{% translate row.severity %}', grid)
+        self.assertEqual(grid.count("|date:'SHORT_DATETIME_FORMAT'"), 3)
+        self.assertNotIn("|date:'d.m.Y H:i'", grid)
+        for phrase in (
+            '{% translate label as translated_filter_label %}',
+            '{% translate text %}',
+            '{% translate "Seite" %}',
+            '{% translate label %}',
+            '{% translate display %}',
+            '{% translate \'Filter\' %}',
+        ):
+            self.assertIn(phrase, toolbar)
+        self.assertNotIn('aria-label="{{ label }} filtern"', toolbar)
+        get_template('ns_admin/ops_grid.html')
+        get_template('includes/grid_toolbar.html')
+        for code in LOCALES:
+            catalog = catalog_translations(
+                ROOT / 'locale' / code / 'LC_MESSAGES' / 'django.po'
+            )
+            for term in ('Backups', 'Restore-Tests', 'Systemwarnungen', 'Erledigt', 'Filter', 'Seite'):
+                with self.subTest(language=code, term=term):
+                    self.assertTrue(catalog.get(term))
+
     def test_language_picker_is_in_flex_header_and_never_overlays_avatar(self):
         shell = (ROOT / 'templates/app_shell.html').read_text(encoding='utf-8')
         base = (ROOT / 'templates/base.html').read_text(encoding='utf-8')
