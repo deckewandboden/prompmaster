@@ -1061,6 +1061,49 @@ class AdminInternationalizationContractTests(SimpleTestCase):
                 }
                 self.assertIn('customer@example.test', rendered)
 
+    def test_payment_email_and_mollie_status_choices_follow_active_locale(self):
+        from django.utils.translation import override
+        from apps.core.admin_views import (
+            PAYMENT_STATUS_CHOICES, EMAIL_STATUS_CHOICES, MOLLIE_STATUS_CHOICES,
+        )
+
+        all_choices = (PAYMENT_STATUS_CHOICES, EMAIL_STATUS_CHOICES, MOLLIE_STATUS_CHOICES)
+        expected_codes = (
+            ('created', 'open', 'pending', 'authorized', 'paid', 'failed',
+             'canceled', 'expired', 'refunded_partial', 'refunded_full',
+             'chargeback', 'chargeback_reversed', 'unknown'),
+            ('queued', 'sending', 'sent', 'failed', 'suppressed'),
+            ('created', 'open', 'pending', 'authorized', 'paid', 'failed',
+             'canceled', 'expired', 'refunded_partial', 'refunded_full',
+             'chargeback', 'chargeback_reversed', 'unknown', 'error', 'recovered'),
+        )
+        with override('de'):
+            source_labels = tuple(
+                [(code, str(label)) for code, label in choices]
+                for choices in all_choices
+            )
+        self.assertEqual(
+            tuple(tuple(code for code, _ in choices) for choices in all_choices),
+            expected_codes,
+            'Localization must not change provider status identifiers.',
+        )
+        for choices in all_choices:
+            for _, label in choices:
+                self.assertNotIsInstance(
+                    label, str, 'Status label was eagerly frozen at module import.'
+                )
+        for language in LOCALES:
+            catalog = catalog_translations(
+                ROOT / 'locale' / language / 'LC_MESSAGES' / 'django.po'
+            )
+            with override(language):
+                for source_group, choices in zip(source_labels, all_choices):
+                    for (_, source), (_, lazy_label) in zip(source_group, choices):
+                        with self.subTest(language=language, status=source):
+                            self.assertIn(source, catalog)
+                            self.assertEqual(str(lazy_label), catalog[source])
+
+
     def test_language_picker_is_in_flex_header_and_never_overlays_avatar(self):
         shell = (ROOT / 'templates/app_shell.html').read_text(encoding='utf-8')
         base = (ROOT / 'templates/base.html').read_text(encoding='utf-8')
