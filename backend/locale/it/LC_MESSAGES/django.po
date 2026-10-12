@@ -3444,3 +3444,45 @@ msgstr "Ruolo di amministratore aziendale trasferito a %(email)s."
 
 msgid "Lizenz wurde %(email)s zugewiesen."
 msgstr "Licenza assegnata a %(email)s."
+
+msgid "Ausstehend"
+msgstr "In attesa"
+
+msgid "Autorisiert"
+msgstr "Autorizzato"
+
+msgid "Storniert"
+msgstr "Annullato"
+
+msgid "Abgelaufen"
+msgstr "Scaduto"
+
+msgid "Teilweise erstattet"
+msgstr "Rimborso parziale"
+
+msgid "Vollständig erstattet"
+msgstr "Rimborso completo"
+
+msgid "Chargeback"
+msgstr "Storno di addebito"
+
+msgid "Chargeback zurückgenommen"
+msgstr "Storno di addebito annullato"
+
+msgid "Unbekannt"
+msgstr "Sconosciuto"
+
+msgid "Verarbeitungsfehler"
+msgstr "Errore di elaborazione"
+
+msgid "Fehler behoben"
+msgstr "Errore risolto"
+
+msgid "E-Mail-Historie"
+msgstr "Cronologia e-mail"
+
+msgid "netstyle Rolle zuweisen"
+msgstr "Assegna ruolo netstyle"
+
+msgid "Erstattung konnte nicht an Mollie übermittelt werden."
+msgstr "Impossibile inviare il rimborso a Mollie."
