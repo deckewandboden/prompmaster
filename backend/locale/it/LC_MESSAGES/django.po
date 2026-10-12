@@ -2613,3 +2613,6 @@ msgstr "nessun dato"
 
 msgid "completed"
 msgstr "completato"
+
+msgid "nicht verfügbar"
+msgstr "non disponibile"
