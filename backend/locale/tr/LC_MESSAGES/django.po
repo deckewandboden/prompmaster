@@ -1879,3 +1879,63 @@ msgstr "Saklama politikası oluştur"
 
 msgid "Rechtsdokument anlegen"
 msgstr "Hukuki belge oluştur"
+
+msgid "Fertig"
+msgstr "Tamamlandı"
+
+msgid "Referenz"
+msgstr "Referans"
+
+msgid "Start"
+msgstr "Başlangıç"
+
+msgid "Ende"
+msgstr "Bitiş"
+
+msgid "Backup"
+msgstr "Yedekleme"
+
+msgid "Schweregrad"
+msgstr "Önem derecesi"
+
+msgid "Meldung"
+msgstr "İleti"
+
+msgid "Keine Datensätze gefunden."
+msgstr "Kayıt bulunamadı."
+
+msgid "Benutzer-ID"
+msgstr "Kullanıcı kimliği"
+
+msgid "Status ändern"
+msgstr "Durumu değiştir"
+
+msgid "Neu"
+msgstr "Yeni"
+
+msgid "In Bearbeitung"
+msgstr "İşleniyor"
+
+msgid "Abgeschlossen"
+msgstr "Kapatıldı"
+
+msgid "Antwort schreiben"
+msgstr "Yanıt yaz"
+
+msgid "Die Antwort wird im Verlauf gespeichert und per E-Mail versendet an:"
+msgstr "Yanıt görüşme geçmişine kaydedilir ve şu adrese e-posta ile gönderilir:"
+
+msgid "Antwort"
+msgstr "Yanıt"
+
+msgid "Antwort an den Kunden eingeben …"
+msgstr "Müşteriye yanıt yazın …"
+
+msgid "Antwort senden"
+msgstr "Yanıt gönder"
+
+msgid "Anfrage und alle netstyle-Antworten in zeitlicher Reihenfolge."
+msgstr "Talep ve tüm netstyle yanıtları tarih sırasıyla."
+
+msgid "netstyle Support"
+msgstr "netstyle Destek"
