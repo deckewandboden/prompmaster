@@ -3437,3 +3437,45 @@ msgstr "Bedrijfsbeheerdersrol overgedragen aan %(email)s."
 
 msgid "Lizenz wurde %(email)s zugewiesen."
 msgstr "Licentie toegewezen aan %(email)s."
+
+msgid "Ausstehend"
+msgstr "In afwachting"
+
+msgid "Autorisiert"
+msgstr "Geautoriseerd"
+
+msgid "Storniert"
+msgstr "Geannuleerd"
+
+msgid "Abgelaufen"
+msgstr "Verlopen"
+
+msgid "Teilweise erstattet"
+msgstr "Gedeeltelijk terugbetaald"
+
+msgid "Vollständig erstattet"
+msgstr "Volledig terugbetaald"
+
+msgid "Chargeback"
+msgstr "Chargeback"
+
+msgid "Chargeback zurückgenommen"
+msgstr "Chargeback teruggedraaid"
+
+msgid "Unbekannt"
+msgstr "Onbekend"
+
+msgid "Verarbeitungsfehler"
+msgstr "Verwerkingsfout"
+
+msgid "Fehler behoben"
+msgstr "Fout opgelost"
+
+msgid "E-Mail-Historie"
+msgstr "E-mailgeschiedenis"
+
+msgid "netstyle Rolle zuweisen"
+msgstr "netstyle-rol toewijzen"
+
+msgid "Erstattung konnte nicht an Mollie übermittelt werden."
+msgstr "Terugbetaling kon niet naar Mollie worden verzonden."
