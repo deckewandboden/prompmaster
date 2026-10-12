@@ -95,6 +95,24 @@ def main() -> None:
                     f'I18N FAIL: product label {brand!r} mutated in {code}: '
                     f'{catalog[brand].get(code)!r}'
                 )
+    # Official application names must also survive inside descriptions and
+    # task titles, not just when they occupy the whole translation key.
+    checked = 0
+    for original, translations in catalog.items():
+        embedded = [brand for brand in BRAND_LABELS if brand in original]
+        if not embedded:
+            continue
+        for code in LOCALES:
+            rendered = translations.get(code, '')
+            for brand in embedded:
+                if brand not in rendered:
+                    raise SystemExit(
+                        f'I18N FAIL {code}: protected product name {brand!r} '
+                        f'missing from translated phrase {original!r}'
+                    )
+                checked += 1
+    print(f'I18N EMBEDDED BRAND LABELS PASS: {checked} preserved product names')
+
     print(f'I18N PRODUCT LABELS PASS: {len(BRAND_LABELS)} brands x {len(LOCALES)} locales')
     print('I18N CONTRACTS PASS: 10 UI languages incl. DE source')
 
