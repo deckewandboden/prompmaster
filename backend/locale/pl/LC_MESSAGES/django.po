@@ -3481,3 +3481,45 @@ msgstr "Przypisz rolę netstyle"
 
 msgid "Erstattung konnte nicht an Mollie übermittelt werden."
 msgstr "Nie udało się przesłać zwrotu do Mollie."
+
+msgid "Nachrichtentext"
+msgstr "Treść wiadomości"
+
+msgid "Rollenname"
+msgstr "Nazwa roli"
+
+msgid "Lead %(lead_number)s löschen"
+msgstr "Usuń lead %(lead_number)s"
+
+msgid "Lead %(lead_number)s in Kunden umwandeln"
+msgstr "Przekształć lead %(lead_number)s w klienta"
+
+msgid "Firmenadministrator übertragen · %(email)s"
+msgstr "Przekaż uprawnienia administratora firmy · %(email)s"
+
+msgid "E-Mail-Vorlage · %(code)s"
+msgstr "Szablon wiadomości e-mail · %(code)s"
+
+msgid "Löschanfrage ablehnen"
+msgstr "Odrzuć wniosek o usunięcie"
+
+msgid "Uneingeschränkte Rechte auf alle PROMPTFINISHER-Verwaltungsbereiche."
+msgstr "Nieograniczony dostęp do wszystkich obszarów administracyjnych PROMPTFINISHER."
+
+msgid "Kunden, Lizenzen, Geräte, Bestellungen, Zahlungen, E-Mail und Support."
+msgstr "Klienci, licencje, urządzenia, zamówienia, płatności, e-mail i wsparcie."
+
+msgid "Monitoring, Backups, Operations API, Logs und Systemstatus."
+msgstr "Monitorowanie, kopie zapasowe, API operacji, dzienniki i stan systemu."
+
+msgid "Prompt Studio, Prompt-Lifecycle, Qualität und zentrale Inhalte."
+msgstr "Prompt Studio, cykl życia promptów, jakość i centralne treści."
+
+msgid "Berechtigungen werden über die zugewiesenen Capabilities gesteuert."
+msgstr "Uprawnienia są kontrolowane przez przypisane możliwości."
+
+msgid "Objekttyp"
+msgstr "Typ obiektu"
+
+msgid "Objekt-ID"
+msgstr "Identyfikator obiektu"
