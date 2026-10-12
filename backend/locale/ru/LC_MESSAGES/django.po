@@ -1235,3 +1235,30 @@ msgstr "ID платежа"
 
 msgid "Keine Zahlungen gefunden."
 msgstr "Платежи не найдены."
+
+msgid "Lead"
+msgstr "Лид"
+
+msgid "Interessent"
+msgstr "Потенциальный клиент"
+
+msgid "Priorität"
+msgstr "Приоритет"
+
+msgid "Zuständig"
+msgstr "Ответственный"
+
+msgid "Erstellt"
+msgstr "Создано"
+
+msgid "Kundennummer"
+msgstr "Номер клиента"
+
+msgid "Eingang"
+msgstr "Получено"
+
+msgid "Art"
+msgstr "Тип"
+
+msgid "Vertragsbezug"
+msgstr "Ссылка на договор"
