@@ -405,6 +405,17 @@ class AdminInternationalizationContractTests(SimpleTestCase):
                 with self.subTest(locale=code, status=status_code):
                     self.assertTrue(catalog.get(status_code))
 
+    def test_shared_memory_formatter_translates_unavailable_values(self):
+        source = (ROOT / 'apps/core/templatetags/pm.py').read_text(encoding='utf-8')
+        self.assertIn("from django.utils.translation import gettext as _", source)
+        self.assertIn("return _(\'nicht verfügbar\')", source)
+        for code in LOCALES:
+            catalog = catalog_translations(
+                ROOT / 'locale' / code / 'LC_MESSAGES' / 'django.po'
+            )
+            with self.subTest(locale=code):
+                self.assertTrue(catalog.get('nicht verfügbar'))
+
     def test_language_picker_is_in_flex_header_and_never_overlays_avatar(self):
         shell = (ROOT / 'templates/app_shell.html').read_text(encoding='utf-8')
         base = (ROOT / 'templates/base.html').read_text(encoding='utf-8')
