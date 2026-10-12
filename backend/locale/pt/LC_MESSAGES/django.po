@@ -1792,3 +1792,21 @@ msgstr "Áreas dos clientes particulares"
 
 msgid "Audit"
 msgstr "Auditoria"
+
+msgid "Zuletzt"
+msgstr "Última vez"
+
+msgid "Akteur"
+msgstr "Interveniente"
+
+msgid "Admin übertragen"
+msgstr "Transferir administrador"
+
+msgid "Benutzer wirklich deaktivieren? Lizenzen und Gerätezugänge werden freigegeben."
+msgstr "Desativar realmente este utilizador? As licenças e o acesso dos dispositivos serão libertados."
+
+msgid "Firmenadmin"
+msgstr "Administrador da empresa"
+
+msgid "Gerätezugang wirklich widerrufen?"
+msgstr "Revogar realmente o acesso do dispositivo?"
