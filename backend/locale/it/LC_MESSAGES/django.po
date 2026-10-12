@@ -2118,3 +2118,69 @@ msgstr "dal"
 
 msgid "Keine Preisversionen."
 msgstr "Nessuna versione di prezzo."
+
+msgid "Zentrale Prompt-Domain · 34 Apps · 194 PM20-Aufgaben · versioniert und serverseitig komponiert."
+msgstr "Dominio centralizzato dei prompt · 34 app · 194 attività PM20 · versioni e composizione lato server."
+
+msgid "Qualität"
+msgstr "Qualità"
+
+msgid "Task-ID, App oder Titel suchen …"
+msgstr "Cerca ID attività, app o titolo …"
+
+msgid "Task"
+msgstr "Attività"
+
+msgid "Anwendung"
+msgstr "Applicazione"
+
+msgid "Veröffentlicht"
+msgstr "Pubblicato"
+
+msgid "Offene Versionen"
+msgstr "Versioni aperte"
+
+msgid "keine"
+msgstr "nessuna"
+
+msgid "noch keine Daten"
+msgstr "nessun dato disponibile"
+
+msgid "Keine Prompt-Aufgaben gefunden."
+msgstr "Nessuna attività prompt trovata."
+
+msgid "Prompt-Qualität"
+msgstr "Qualità dei prompt"
+
+msgid "1–5-Sterne-Ratings · Recent Average · Drop-Erkennung · Aufgabenliste."
+msgstr "Valutazioni da 1 a 5 stelle · media recente · rilevamento cali · elenco attività."
+
+msgid "Schwellen"
+msgstr "Soglie"
+
+msgid "Analyse aktualisieren"
+msgstr "Aggiorna analisi"
+
+msgid "Kritisch"
+msgstr "Critico"
+
+msgid "Warnung"
+msgstr "Avviso"
+
+msgid "Beobachten"
+msgstr "Monitorare"
+
+msgid "OK"
+msgstr "OK"
+
+msgid "App"
+msgstr "App"
+
+msgid "Recent Avg"
+msgstr "Media recente"
+
+msgid "Previous Avg"
+msgstr "Media precedente"
+
+msgid "Drop"
+msgstr "Calo"
