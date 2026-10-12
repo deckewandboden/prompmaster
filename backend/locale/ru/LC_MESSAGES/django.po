@@ -3380,3 +3380,45 @@ msgstr "Назначить роль netstyle"
 
 msgid "Erstattung konnte nicht an Mollie übermittelt werden."
 msgstr "Не удалось отправить запрос на возврат средств в Mollie."
+
+msgid "Nachrichtentext"
+msgstr "Текст сообщения"
+
+msgid "Rollenname"
+msgstr "Название роли"
+
+msgid "Lead %(lead_number)s löschen"
+msgstr "Удалить лид %(lead_number)s"
+
+msgid "Lead %(lead_number)s in Kunden umwandeln"
+msgstr "Преобразовать лид %(lead_number)s в клиента"
+
+msgid "Firmenadministrator übertragen · %(email)s"
+msgstr "Передать роль администратора компании · %(email)s"
+
+msgid "E-Mail-Vorlage · %(code)s"
+msgstr "Шаблон письма · %(code)s"
+
+msgid "Löschanfrage ablehnen"
+msgstr "Отклонить запрос на удаление"
+
+msgid "Uneingeschränkte Rechte auf alle PROMPTFINISHER-Verwaltungsbereiche."
+msgstr "Неограниченный доступ ко всем разделам администрирования PROMPTFINISHER."
+
+msgid "Kunden, Lizenzen, Geräte, Bestellungen, Zahlungen, E-Mail und Support."
+msgstr "Клиенты, лицензии, устройства, заказы, платежи, электронная почта и поддержка."
+
+msgid "Monitoring, Backups, Operations API, Logs und Systemstatus."
+msgstr "Мониторинг, резервные копии, API операций, журналы и состояние системы."
+
+msgid "Prompt Studio, Prompt-Lifecycle, Qualität und zentrale Inhalte."
+msgstr "Prompt Studio, жизненный цикл промптов, качество и общий контент."
+
+msgid "Berechtigungen werden über die zugewiesenen Capabilities gesteuert."
+msgstr "Права доступа определяются назначенными разрешениями."
+
+msgid "Objekttyp"
+msgstr "Тип объекта"
+
+msgid "Objekt-ID"
+msgstr "Идентификатор объекта"
