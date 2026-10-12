@@ -3239,3 +3239,66 @@ msgstr "Роль удалена."
 
 msgid "Benutzerstatus aktualisiert."
 msgstr "Статус пользователя обновлён."
+
+msgid "Lead gespeichert."
+msgstr "Лид сохранён."
+
+msgid "Lead-Zuständigkeit aktualisiert."
+msgstr "Ответственный за лид обновлён."
+
+msgid "Gerät wurde widerrufen."
+msgstr "Доступ устройства отозван."
+
+msgid "Unternehmensdaten gespeichert."
+msgstr "Данные компании сохранены."
+
+msgid "Benutzer deaktiviert; Lizenz- und Gerätezugänge wurden freigegeben."
+msgstr "Пользователь отключён; доступ к лицензиям и устройствам освобождён."
+
+msgid "Die Lizenz ist bereits frei."
+msgstr "Лицензия уже не назначена."
+
+msgid "Lizenzzuweisung wurde freigegeben."
+msgstr "Назначение лицензии снято."
+
+msgid "Lizenz wurde entsperrt."
+msgstr "Лицензия разблокирована."
+
+msgid "Lizenz wurde gesperrt; vorhandene Gerätezugänge wurden widerrufen."
+msgstr "Лицензия заблокирована; существующий доступ устройств отозван."
+
+msgid "Produkt angelegt. Legen Sie anschließend Preisversionen an."
+msgstr "Продукт создан. Затем добавьте версии цен."
+
+msgid "Feature gespeichert."
+msgstr "Функция сохранена."
+
+msgid "Produkt gespeichert."
+msgstr "Продукт сохранён."
+
+msgid "Neue Preisversion angelegt."
+msgstr "Создана новая версия цены."
+
+msgid "E-Mail-Vorlage gespeichert."
+msgstr "Шаблон письма сохранён."
+
+msgid "Mollie-Konfiguration gespeichert."
+msgstr "Настройки Mollie сохранены."
+
+msgid "Service Account gesperrt."
+msgstr "Служебная учётная запись заблокирована."
+
+msgid "Verbrauchererklärung aktualisiert."
+msgstr "Заявление потребителя обновлено."
+
+msgid "Rechtsdokument gespeichert."
+msgstr "Юридический документ сохранён."
+
+msgid "Retention-Policy gespeichert."
+msgstr "Политика хранения сохранена."
+
+msgid "Löschanfrage verarbeitet und Konto anonymisiert."
+msgstr "Запрос на удаление обработан, учётная запись обезличена."
+
+msgid "Löschanfrage abgelehnt."
+msgstr "Запрос на удаление отклонён."
