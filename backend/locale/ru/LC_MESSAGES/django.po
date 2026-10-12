@@ -1880,3 +1880,63 @@ msgstr "Создать политику хранения"
 
 msgid "Rechtsdokument anlegen"
 msgstr "Создать юридический документ"
+
+msgid "Fertig"
+msgstr "Завершено"
+
+msgid "Referenz"
+msgstr "Ссылка"
+
+msgid "Start"
+msgstr "Начало"
+
+msgid "Ende"
+msgstr "Конец"
+
+msgid "Backup"
+msgstr "Резервная копия"
+
+msgid "Schweregrad"
+msgstr "Серьёзность"
+
+msgid "Meldung"
+msgstr "Сообщение"
+
+msgid "Keine Datensätze gefunden."
+msgstr "Записи не найдены."
+
+msgid "Benutzer-ID"
+msgstr "ID пользователя"
+
+msgid "Status ändern"
+msgstr "Изменить статус"
+
+msgid "Neu"
+msgstr "Новый"
+
+msgid "In Bearbeitung"
+msgstr "В обработке"
+
+msgid "Abgeschlossen"
+msgstr "Закрыто"
+
+msgid "Antwort schreiben"
+msgstr "Написать ответ"
+
+msgid "Die Antwort wird im Verlauf gespeichert und per E-Mail versendet an:"
+msgstr "Ответ сохраняется в истории переписки и отправляется по электронной почте:"
+
+msgid "Antwort"
+msgstr "Ответ"
+
+msgid "Antwort an den Kunden eingeben …"
+msgstr "Введите ответ клиенту …"
+
+msgid "Antwort senden"
+msgstr "Отправить ответ"
+
+msgid "Anfrage und alle netstyle-Antworten in zeitlicher Reihenfolge."
+msgstr "Запрос и все ответы netstyle в хронологическом порядке."
+
+msgid "netstyle Support"
+msgstr "Поддержка netstyle"
