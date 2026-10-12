@@ -1791,3 +1791,78 @@ msgstr "Aucune demande de suppression."
 
 msgid "Alle Löschanfragen"
 msgstr "Toutes les demandes de suppression"
+
+msgid "Bestellung vom"
+msgstr "Commande du"
+
+msgid "Zurück zur Liste"
+msgstr "Retour à la liste"
+
+msgid "Brutto"
+msgstr "Brut"
+
+msgid "Steuer"
+msgstr "Taxe"
+
+msgid "Keine Zahlung erfasst."
+msgstr "Aucun paiement enregistré."
+
+msgid "Positionen"
+msgstr "Lignes de commande"
+
+msgid "Menge"
+msgstr "Quantité"
+
+msgid "Einzelpreis"
+msgstr "Prix unitaire"
+
+msgid "Lizenzstatus wirklich ändern?"
+msgstr "Voulez-vous vraiment modifier le statut de cette licence ?"
+
+msgid "Lizenz entsperren"
+msgstr "Débloquer la licence"
+
+msgid "Lizenz sperren"
+msgstr "Bloquer la licence"
+
+msgid "Inhaber & Zuweisung"
+msgstr "Titulaire et attribution"
+
+msgid "Zugewiesen an"
+msgstr "Attribuée à"
+
+msgid "Lizenzzuweisung wirklich freigeben? Aktive Geräte dieser Lizenz werden widerrufen."
+msgstr "Voulez-vous vraiment libérer cette attribution de licence ? Les appareils actifs associés seront révoqués."
+
+msgid "Zuweisung freigeben"
+msgstr "Libérer l'attribution"
+
+msgid "Aktiven Firmenbenutzer auswählen"
+msgstr "Sélectionner un utilisateur actif de l'entreprise"
+
+msgid "Bitte auswählen"
+msgstr "Veuillez sélectionner"
+
+msgid "Lizenz zuweisen"
+msgstr "Attribuer une licence"
+
+msgid "Lizenzperioden"
+msgstr "Périodes de licence"
+
+msgid "Von"
+msgstr "Du"
+
+msgid "Bis"
+msgstr "Au"
+
+msgid "Erstattung"
+msgstr "Remboursement"
+
+msgid "Erstattung wirklich verbindlich über Mollie auslösen?"
+msgstr "Voulez-vous vraiment déclencher un remboursement ferme via Mollie ?"
+
+msgid "Erstattung prüfen/auslösen"
+msgstr "Vérifier/déclencher le remboursement"
+
+msgid "Keine Lizenzperioden vorhanden."
+msgstr "Aucune période de licence."
