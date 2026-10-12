@@ -1301,3 +1301,36 @@ msgstr "Resultaten voor"
 
 msgid "Keine Treffer."
 msgstr "Geen resultaten."
+
+msgid "Append-only Auditlog für administrative und geschäftskritische Änderungen."
+msgstr "Alleen-aanvulbaar auditlogboek voor administratieve en bedrijfskritische wijzigingen."
+
+msgid "Zeit"
+msgstr "Tijd"
+
+msgid "Objekt"
+msgstr "Object"
+
+msgid "Änderung"
+msgstr "Wijziging"
+
+msgid "Keine Audit-Einträge."
+msgstr "Geen auditvermeldingen."
+
+msgid "Mollie-Zahlungsstatus, Beträge, Refunds und Chargebacks."
+msgstr "Mollie-betaalstatussen, bedragen, terugbetalingen en terugboekingen."
+
+msgid "Bezahlt"
+msgstr "Betaald"
+
+msgid "Offen"
+msgstr "Openstaand"
+
+msgid "Fehlgeschlagen"
+msgstr "Mislukt"
+
+msgid "Payment-ID"
+msgstr "Betalings-ID"
+
+msgid "Keine Zahlungen gefunden."
+msgstr "Geen betalingen gevonden."
