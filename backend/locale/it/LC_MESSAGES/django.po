@@ -3408,3 +3408,39 @@ msgstr "Richiesta di cancellazione elaborata e account anonimizzato."
 
 msgid "Löschanfrage abgelehnt."
 msgstr "Richiesta di cancellazione respinta."
+
+msgid "Dieser Lead ist bereits einem Kunden zugeordnet."
+msgstr "Questo lead è già associato a un cliente."
+
+msgid "Einladung für den Firmenadministrator wurde gesendet."
+msgstr "Invito all'amministratore aziendale inviato."
+
+msgid "Kundenantwort gespeichert. Für Demo-Adressen wurde keine E-Mail versendet."
+msgstr "Risposta al cliente salvata. Nessuna e-mail inviata agli indirizzi demo."
+
+msgid "Kundenantwort gespeichert und E-Mail-Benachrichtigung eingeplant."
+msgstr "Risposta al cliente salvata e notifica e-mail programmata."
+
+msgid "Kundenantwort gespeichert, E-Mail-Benachrichtigung konnte aber nicht eingeplant werden."
+msgstr "Risposta al cliente salvata, ma non è stato possibile programmare la notifica e-mail."
+
+msgid "netstyle Benutzer angelegt; Einrichtungslink wurde per E-Mail versendet."
+msgstr "Utente netstyle creato; link di configurazione inviato via e-mail."
+
+msgid "Privatkunden werden aus rechtlichen Gründen über Registrierung/Checkout angelegt; der Lead kann dort anschließend als gewonnen abgeschlossen werden."
+msgstr "Per motivi legali, i clienti privati vengono creati durante registrazione/checkout; successivamente il lead può essere segnato come acquisito."
+
+msgid "Lead wurde in einen Firmenkunden umgewandelt. Der Ansprechpartner hat eine sichere Einladung erhalten."
+msgstr "Lead convertito in cliente aziendale. Il referente ha ricevuto un invito sicuro."
+
+msgid "Lead %(lead_number)s angelegt."
+msgstr "Lead %(lead_number)s creato."
+
+msgid "Lead %(lead_number)s gelöscht."
+msgstr "Lead %(lead_number)s eliminato."
+
+msgid "Firmenadministrator wurde auf %(email)s übertragen."
+msgstr "Ruolo di amministratore aziendale trasferito a %(email)s."
+
+msgid "Lizenz wurde %(email)s zugewiesen."
+msgstr "Licenza assegnata a %(email)s."
