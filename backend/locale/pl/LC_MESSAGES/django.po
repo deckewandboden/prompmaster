@@ -3403,3 +3403,39 @@ msgstr "Żądanie usunięcia zrealizowane, konto zanonimizowane."
 
 msgid "Löschanfrage abgelehnt."
 msgstr "Żądanie usunięcia odrzucone."
+
+msgid "Dieser Lead ist bereits einem Kunden zugeordnet."
+msgstr "Ten lead jest już przypisany do klienta."
+
+msgid "Einladung für den Firmenadministrator wurde gesendet."
+msgstr "Wysłano zaproszenie dla administratora firmy."
+
+msgid "Kundenantwort gespeichert. Für Demo-Adressen wurde keine E-Mail versendet."
+msgstr "Odpowiedź dla klienta zapisana. Nie wysłano e-maili na adresy demonstracyjne."
+
+msgid "Kundenantwort gespeichert und E-Mail-Benachrichtigung eingeplant."
+msgstr "Odpowiedź dla klienta zapisana, powiadomienie e-mail zaplanowane."
+
+msgid "Kundenantwort gespeichert, E-Mail-Benachrichtigung konnte aber nicht eingeplant werden."
+msgstr "Odpowiedź dla klienta zapisana, ale nie udało się zaplanować powiadomienia e-mail."
+
+msgid "netstyle Benutzer angelegt; Einrichtungslink wurde per E-Mail versendet."
+msgstr "Użytkownik netstyle utworzony; link konfiguracji wysłany e-mailem."
+
+msgid "Privatkunden werden aus rechtlichen Gründen über Registrierung/Checkout angelegt; der Lead kann dort anschließend als gewonnen abgeschlossen werden."
+msgstr "Ze względów prawnych klientów indywidualnych tworzy się podczas rejestracji/zakupu; następnie lead można oznaczyć jako wygrany."
+
+msgid "Lead wurde in einen Firmenkunden umgewandelt. Der Ansprechpartner hat eine sichere Einladung erhalten."
+msgstr "Lead przekształcony w klienta firmowego. Osoba kontaktowa otrzymała bezpieczne zaproszenie."
+
+msgid "Lead %(lead_number)s angelegt."
+msgstr "Lead %(lead_number)s utworzony."
+
+msgid "Lead %(lead_number)s gelöscht."
+msgstr "Lead %(lead_number)s usunięty."
+
+msgid "Firmenadministrator wurde auf %(email)s übertragen."
+msgstr "Rola administratora firmy przekazana do %(email)s."
+
+msgid "Lizenz wurde %(email)s zugewiesen."
+msgstr "Licencja przypisana do %(email)s."
