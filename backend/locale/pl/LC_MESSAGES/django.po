@@ -3340,3 +3340,66 @@ msgstr "Rola usunięta."
 
 msgid "Benutzerstatus aktualisiert."
 msgstr "Status użytkownika zaktualizowany."
+
+msgid "Lead gespeichert."
+msgstr "Lead zapisany."
+
+msgid "Lead-Zuständigkeit aktualisiert."
+msgstr "Zaktualizowano osobę odpowiedzialną za lead."
+
+msgid "Gerät wurde widerrufen."
+msgstr "Dostęp urządzenia cofnięty."
+
+msgid "Unternehmensdaten gespeichert."
+msgstr "Dane firmy zapisane."
+
+msgid "Benutzer deaktiviert; Lizenz- und Gerätezugänge wurden freigegeben."
+msgstr "Użytkownik dezaktywowany; zwolniono dostęp do licencji i urządzeń."
+
+msgid "Die Lizenz ist bereits frei."
+msgstr "Licencja jest już nieprzypisana."
+
+msgid "Lizenzzuweisung wurde freigegeben."
+msgstr "Przypisanie licencji zwolnione."
+
+msgid "Lizenz wurde entsperrt."
+msgstr "Licencja odblokowana."
+
+msgid "Lizenz wurde gesperrt; vorhandene Gerätezugänge wurden widerrufen."
+msgstr "Licencja zablokowana; cofnięto istniejący dostęp urządzeń."
+
+msgid "Produkt angelegt. Legen Sie anschließend Preisversionen an."
+msgstr "Produkt utworzony. Następnie dodaj wersje cen."
+
+msgid "Feature gespeichert."
+msgstr "Funkcja zapisana."
+
+msgid "Produkt gespeichert."
+msgstr "Produkt zapisany."
+
+msgid "Neue Preisversion angelegt."
+msgstr "Utworzono nową wersję ceny."
+
+msgid "E-Mail-Vorlage gespeichert."
+msgstr "Szablon e-mail zapisany."
+
+msgid "Mollie-Konfiguration gespeichert."
+msgstr "Konfiguracja Mollie zapisana."
+
+msgid "Service Account gesperrt."
+msgstr "Konto usługi zablokowane."
+
+msgid "Verbrauchererklärung aktualisiert."
+msgstr "Oświadczenie konsumenta zaktualizowane."
+
+msgid "Rechtsdokument gespeichert."
+msgstr "Dokument prawny zapisany."
+
+msgid "Retention-Policy gespeichert."
+msgstr "Polityka retencji zapisana."
+
+msgid "Löschanfrage verarbeitet und Konto anonymisiert."
+msgstr "Żądanie usunięcia zrealizowane, konto zanonimizowane."
+
+msgid "Löschanfrage abgelehnt."
+msgstr "Żądanie usunięcia odrzucone."
