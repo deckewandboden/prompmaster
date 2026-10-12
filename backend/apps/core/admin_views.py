@@ -419,7 +419,7 @@ def lead_new(request):
             },
             request=request,
         )
-        messages.success(request, f'Lead {lead.lead_number} angelegt.')
+        messages.success(request, _('Lead %(lead_number)s angelegt.') % {'lead_number': lead.lead_number})
         return redirect('ns_admin:lead_detail', pk=lead.pk)
     return render(
         request,
@@ -549,7 +549,7 @@ def lead_delete(request, pk):
             },
             request=request,
         )
-        messages.success(request, f'Lead {lead.lead_number} gelöscht.')
+        messages.success(request, _('Lead %(lead_number)s gelöscht.') % {'lead_number': lead.lead_number})
         return redirect('ns_admin:leads')
     return render(
         request,
@@ -566,13 +566,12 @@ def lead_delete(request, pk):
 def lead_convert_company(request, pk):
     lead = _lead(pk)
     if lead.converted_company_id:
-        messages.info(request, 'Dieser Lead ist bereits einem Kunden zugeordnet.')
+        messages.info(request, _("Dieser Lead ist bereits einem Kunden zugeordnet."))
         return redirect('ns_admin:customer_detail', pk=lead.converted_company_id)
     if lead.kind != 'company':
         messages.error(
             request,
-            'Privatkunden werden aus rechtlichen Gründen über Registrierung/Checkout angelegt; '
-            'der Lead kann dort anschließend als gewonnen abgeschlossen werden.',
+            _("Privatkunden werden aus rechtlichen Gründen über Registrierung/Checkout angelegt; der Lead kann dort anschließend als gewonnen abgeschlossen werden."),
         )
         return redirect('ns_admin:lead_detail', pk=lead.pk)
 
@@ -646,8 +645,7 @@ def lead_convert_company(request, pk):
 
         messages.success(
             request,
-            'Lead wurde in einen Firmenkunden umgewandelt. '
-            'Der Ansprechpartner hat eine sichere Einladung erhalten.',
+            _("Lead wurde in einen Firmenkunden umgewandelt. Der Ansprechpartner hat eine sichere Einladung erhalten."),
         )
         return redirect('ns_admin:customer_detail', pk=company.pk)
 
@@ -1171,7 +1169,7 @@ def customer_admin_invite(request, pk):
         else:
             messages.success(
                 request,
-                'Einladung für den Firmenadministrator wurde gesendet.',
+                _("Einladung für den Firmenadministrator wurde gesendet."),
             )
             return redirect('ns_admin:customer_users', pk=customer.pk)
 
@@ -1259,7 +1257,7 @@ def customer_admin_transfer(request, pk, user_id):
         else:
             messages.success(
                 request,
-                f'Firmenadministrator wurde auf {target.user.email} übertragen.',
+                _('Firmenadministrator wurde auf %(email)s übertragen.') % {'email': target.user.email},
             )
             return redirect('ns_admin:customer_users', pk=customer.pk)
 
@@ -1586,7 +1584,7 @@ def license_assign(request, pk):
     except ValidationError as exc:
         messages.error(request, exc.messages[0])
     else:
-        messages.success(request, f'Lizenz wurde {member.user.email} zugewiesen.')
+        messages.success(request, _('Lizenz wurde %(email)s zugewiesen.') % {'email': member.user.email})
     return redirect('ns_admin:license_detail', pk=license_obj.pk)
 
 
@@ -2415,17 +2413,17 @@ def support_request_reply(request, pk):
     if result['mail_suppressed']:
         messages.success(
             request,
-            'Kundenantwort gespeichert. Für Demo-Adressen wurde keine E-Mail versendet.',
+            _("Kundenantwort gespeichert. Für Demo-Adressen wurde keine E-Mail versendet."),
         )
     elif result['mail_queued']:
         messages.success(
             request,
-            'Kundenantwort gespeichert und E-Mail-Benachrichtigung eingeplant.',
+            _("Kundenantwort gespeichert und E-Mail-Benachrichtigung eingeplant."),
         )
     else:
         messages.warning(
             request,
-            'Kundenantwort gespeichert, E-Mail-Benachrichtigung konnte aber nicht eingeplant werden.',
+            _("Kundenantwort gespeichert, E-Mail-Benachrichtigung konnte aber nicht eingeplant werden."),
         )
 
     if result['mail_error']:
@@ -2507,7 +2505,7 @@ def staff_user_create(request):
             link = UserRole.objects.create(user=user, role=form.cleaned_data['role'])
             write_audit(request.user, 'staff_user.created', user, {'role': link.role.code}, request=request)
             transaction.on_commit(lambda: _send_staff_setup_email(request, user), robust=True)
-        messages.success(request, 'netstyle Benutzer angelegt; Einrichtungslink wurde per E-Mail versendet.')
+        messages.success(request, _("netstyle Benutzer angelegt; Einrichtungslink wurde per E-Mail versendet."))
         return redirect('ns_admin:roles')
     return render(request, 'ns_admin/form.html', {'title': 'netstyle Benutzer anlegen', 'form': form, 'cancel_url': reverse('ns_admin:roles')})
 
