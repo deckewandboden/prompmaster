@@ -1201,3 +1201,36 @@ msgstr "Resultados para"
 
 msgid "Keine Treffer."
 msgstr "Sem resultados."
+
+msgid "Append-only Auditlog für administrative und geschäftskritische Änderungen."
+msgstr "Registo de auditoria imutável das alterações administrativas e críticas para o negócio."
+
+msgid "Zeit"
+msgstr "Hora"
+
+msgid "Objekt"
+msgstr "Objeto"
+
+msgid "Änderung"
+msgstr "Alteração"
+
+msgid "Keine Audit-Einträge."
+msgstr "Sem registos de auditoria."
+
+msgid "Mollie-Zahlungsstatus, Beträge, Refunds und Chargebacks."
+msgstr "Estados de pagamento Mollie, montantes, reembolsos e estornos."
+
+msgid "Bezahlt"
+msgstr "Pago"
+
+msgid "Offen"
+msgstr "Em aberto"
+
+msgid "Fehlgeschlagen"
+msgstr "Falhado"
+
+msgid "Payment-ID"
+msgstr "ID do pagamento"
+
+msgid "Keine Zahlungen gefunden."
+msgstr "Não foram encontrados pagamentos."
