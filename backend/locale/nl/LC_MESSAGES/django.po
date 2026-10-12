@@ -2177,3 +2177,21 @@ msgstr "Vorig gemiddelde"
 
 msgid "Drop"
 msgstr "Daling"
+
+msgid "Lizenz-Defaults"
+msgstr "Licentiestandaarden"
+
+msgid "Geräte je Benutzer"
+msgstr "Apparaten per gebruiker"
+
+msgid "Einladung"
+msgstr "Uitnodiging"
+
+msgid "Stunden"
+msgstr "uur"
+
+msgid "Kritische Warnung"
+msgstr "Kritieke waarschuwing"
+
+msgid "Einstellungen speichern"
+msgstr "Instellingen opslaan"
