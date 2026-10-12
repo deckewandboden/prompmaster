@@ -2616,3 +2616,63 @@ msgstr "completato"
 
 msgid "nicht verfügbar"
 msgstr "non disponibile"
+
+msgid "Disk {value}% belegt"
+msgstr "Utilizzo del disco: {value}%"
+
+msgid "RAM {value}% belegt"
+msgstr "Utilizzo RAM: {value}%"
+
+msgid "CPU 10-Minuten-Mittel {value}%"
+msgstr "Media CPU su 10 minuti: {value}%"
+
+msgid "Kein auswertbarer Backupstatus verfügbar"
+msgstr "Nessuno stato di backup valutabile disponibile"
+
+msgid "Letztes Backup meldet Status {value}"
+msgstr "Stato dell'ultimo backup: {value}"
+
+msgid "Backup ist {value} Stunden alt"
+msgstr "Il backup risale a {value} ore fa"
+
+msgid "Restore-Statusdatei ist nicht auswertbar"
+msgstr "Impossibile valutare il file di stato del ripristino"
+
+msgid "Noch kein Restore-Test protokolliert"
+msgstr "Nessun test di ripristino ancora registrato"
+
+msgid "Letzter Restore-Test war nicht erfolgreich"
+msgstr "L'ultimo test di ripristino non è riuscito"
+
+msgid "Letzter Restore-Test ist {value} Tage alt"
+msgstr "L'ultimo test di ripristino risale a {value} giorni fa"
+
+msgid "Monitoring-Ziel {value} ist nicht erreichbar"
+msgstr "La destinazione di monitoraggio {value} non è raggiungibile"
+
+msgid "Monitoring-Ziel {value} liefert keinen Status"
+msgstr "La destinazione di monitoraggio {value} non restituisce alcuno stato"
+
+msgid "Caddy Healthcheck ist nicht erreichbar"
+msgstr "Il controllo dello stato di Caddy non è raggiungibile"
+
+msgid "Kein Celery Worker beantwortet den aktiven Ping"
+msgstr "Nessun worker Celery risponde al ping attivo"
+
+msgid "Celery Beat-Heartbeat älter als {value} Minuten"
+msgstr "L'heartbeat di Celery Beat risale a più di {value} minuti fa"
+
+msgid "Celery Queue-Tiefe kann nicht gelesen werden"
+msgstr "Impossibile leggere la lunghezza della coda Celery"
+
+msgid "Celery Queue enthält {value} wartende Jobs"
+msgstr "La coda Celery contiene {value} processi in attesa"
+
+msgid "{value} fehlgeschlagene Hintergrundjobs in 24 Stunden"
+msgstr "{value} processi in background non riusciti nelle ultime 24 ore"
+
+msgid "{value} E-Mail-Fehler in 24 Stunden"
+msgstr "{value} errori e-mail nelle ultime 24 ore"
+
+msgid "{value} Mollie-Verarbeitungsfehler in 24 Stunden"
+msgstr "{value} errori di elaborazione Mollie nelle ultime 24 ore"
