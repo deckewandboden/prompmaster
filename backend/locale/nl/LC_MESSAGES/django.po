@@ -2231,3 +2231,60 @@ msgstr "Alternatief voor SMTP bij Exchange Online. Het clientgeheim wordt versle
 
 msgid "Sie besitzen Leserechte, aber keine Berechtigung zum Ändern dieser Einstellungen."
 msgstr "Je hebt alleen-lezen-toegang en mag deze instellingen niet wijzigen."
+
+msgid "Bewertungen"
+msgstr "Beoordelingen"
+
+msgid "Deterministischer Composer-Test ohne Speicherung des erzeugten Prompttexts."
+msgstr "Deterministische compositortest zonder de gegenereerde prompttekst op te slaan."
+
+msgid "Draft aus letzter Version"
+msgstr "Concept maken van de nieuwste versie"
+
+msgid "Draft speichern"
+msgstr "Concept opslaan"
+
+msgid "Keine Version vorhanden."
+msgstr "Geen versie beschikbaar."
+
+msgid "Konfigurierbare Schwellen für Recent Average und Drop-Erkennung."
+msgstr "Instelbare drempels voor het recente gemiddelde en het detecteren van dalingen."
+
+msgid "No-Code Editor. Nur DRAFT-Versionen sind inhaltlich veränderbar."
+msgstr "No-code-editor. Alleen DRAFT-versies kunnen worden gewijzigd."
+
+msgid "Noch keine Qualitäts-Snapshots. Analyse ausführen oder Ratings erfassen."
+msgstr "Nog geen kwaliteitsmomentopnamen. Voer een analyse uit of registreer beoordelingen."
+
+msgid "Policy"
+msgstr "Beleid"
+
+msgid "Qualität:"
+msgstr "Kwaliteit:"
+
+msgid "Qualitätsschwellen"
+msgstr "Kwaliteitsdrempels"
+
+msgid "Ratings"
+msgstr "Beoordelingen"
+
+msgid "Testfall"
+msgstr "Testgeval"
+
+msgid "Testfall speichern"
+msgstr "Testgeval opslaan"
+
+msgid "Tests"
+msgstr "Tests"
+
+msgid "Titel"
+msgstr "Titel"
+
+msgid "Zur Übersicht"
+msgstr "Terug naar overzicht"
+
+msgid "bearbeiten"
+msgstr "bewerken"
+
+msgid "zentrale PromptDefinition"
+msgstr "Centrale PromptDefinition"
