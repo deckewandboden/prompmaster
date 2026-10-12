@@ -169,6 +169,42 @@ def main() -> None:
     print('I18N PHRASE QUALITY PASS: no fused brand tokens or runaway word repetitions')
 
     print(f'I18N PRODUCT LABELS PASS: {len(BRAND_LABELS)} brands x {len(LOCALES)} locales')
+    # The live Django Pro catalog is seeded from this frozen runtime source.
+    # Verify visible app metadata and task-selection labels (not hidden prompt
+    # instructions, IDs or user inputs) cannot silently fall back to German.
+    logic_path = ROOT / 'backend/apps/prompts/data/pm20_golden_logic.json'
+    app_definitions = json.loads(logic_path.read_text(encoding='utf-8'))['APP']
+    if len(app_definitions) != 34:
+        raise SystemExit(f'I18N FAIL: expected 34 application definitions, got {len(app_definitions)}')
+    total_tasks = sum(len(app['tasks']) for app in app_definitions.values())
+    if total_tasks != 194:
+        raise SystemExit(f'I18N FAIL: expected 194 catalog tasks, got {total_tasks}')
+    categories = {
+        'app name': {app['name'] for app in app_definitions.values()},
+        'app description': {app['copy'] for app in app_definitions.values()},
+        'app licensing': {app['access'] for app in app_definitions.values()},
+        'task title': {
+            task['title'] for app in app_definitions.values() for task in app['tasks']
+        },
+        'task area': {
+            task['area'] for app in app_definitions.values() for task in app['tasks']
+        },
+    }
+    for category, values in categories.items():
+        for phrase in values:
+            if phrase not in catalog:
+                raise SystemExit(f'I18N FAIL: missing {category} string: {phrase!r}')
+            for code in LOCALES:
+                if not catalog[phrase].get(code, '').strip():
+                    raise SystemExit(
+                        f'I18N FAIL {code}: untranslated {category} label: {phrase!r}'
+                    )
+    print(
+        'I18N LIVE APP CATALOG PASS: 34 apps / 194 tasks; '
+        + ', '.join(f'{name}={len(values)}' for name, values in categories.items())
+        + ' across nine target locales'
+    )
+
     print('I18N CONTRACTS PASS: 10 UI languages incl. DE source')
 
 
