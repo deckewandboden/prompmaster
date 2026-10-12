@@ -1850,3 +1850,36 @@ msgstr "Terugbetaling controleren/starten"
 
 msgid "Keine Lizenzperioden vorhanden."
 msgstr "Geen licentieperioden beschikbaar."
+
+msgid "E-Mail-Protokoll"
+msgstr "E-maillogboek"
+
+msgid "Versandstatus, tatsächlich verwendeter Provider und Fallback-Versuche ohne vertrauliche Nachrichtentexte oder Secrets."
+msgstr "Verzendstatus, daadwerkelijk gebruikte provider en failoverpogingen, zonder vertrouwelijke berichtinhoud of geheimen."
+
+msgid "Empfänger"
+msgstr "Ontvanger"
+
+msgid "Vorlage"
+msgstr "Sjabloon"
+
+msgid "Provider"
+msgstr "Provider"
+
+msgid "Versuche"
+msgstr "Pogingen"
+
+msgid "Gesendet"
+msgstr "Verzonden"
+
+msgid "Wird gesendet"
+msgstr "Wordt verzonden"
+
+msgid "Unterdrückt"
+msgstr "Onderdrukt"
+
+msgid "Warteschlange"
+msgstr "In wachtrij"
+
+msgid "Keine E-Mails gefunden."
+msgstr "Geen e-mails gevonden."
