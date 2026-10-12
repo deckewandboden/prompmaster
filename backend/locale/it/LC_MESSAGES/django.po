@@ -1368,3 +1368,75 @@ msgstr "Tipo"
 
 msgid "Vertragsbezug"
 msgstr "Riferimento contrattuale"
+
+msgid "Datengetriebene Produkt-, Laufzeit-, Geräte-, Reminder- und Entitlement-Konfiguration."
+msgstr "Configurazione basata sui dati di prodotti, durate, dispositivi, promemoria e autorizzazioni."
+
+msgid "Features"
+msgstr "Funzionalità"
+
+msgid "Produkt anlegen"
+msgstr "Crea prodotto"
+
+msgid "AKTIV"
+msgstr "ATTIVO"
+
+msgid "INAKTIV"
+msgstr "INATTIVO"
+
+msgid "aktueller Neukaufpreis"
+msgstr "prezzo attuale per un nuovo acquisto"
+
+msgid "nicht konfiguriert"
+msgstr "non configurato"
+
+msgid "Verlängerung"
+msgstr "Rinnovo"
+
+msgid "Sichtbar / kaufbar"
+msgstr "Visibile / acquistabile"
+
+msgid "Ja"
+msgstr "Sì"
+
+msgid "Nein"
+msgstr "No"
+
+msgid "Bearbeiten"
+msgstr "Modifica"
+
+msgid "Noch keine Produkte."
+msgstr "Nessun prodotto per ora."
+
+msgid "Rollenbasierte Rechte; für alle netstyle Benutzer ist 2FA Pflicht."
+msgstr "Permessi basati sui ruoli; l'autenticazione a due fattori è obbligatoria per tutti gli utenti netstyle."
+
+msgid "Rolle zuweisen"
+msgstr "Assegna ruolo"
+
+msgid "netstyle Benutzer anlegen"
+msgstr "Crea utente netstyle"
+
+msgid "Berechtigungen"
+msgstr "Autorizzazioni"
+
+msgid "Sicherheitsvorgabe"
+msgstr "Requisito di sicurezza"
+
+msgid "2FA Pflicht"
+msgstr "2FA obbligatoria"
+
+msgid "Keine Rolle"
+msgstr "Nessun ruolo"
+
+msgid "2FA aktiv"
+msgstr "2FA attiva"
+
+msgid "2FA einzurichten"
+msgstr "Configurazione 2FA necessaria"
+
+msgid "2FA dieses Benutzers zurücksetzen?"
+msgstr "Reimpostare la 2FA di questo utente?"
+
+msgid "2FA zurücksetzen"
+msgstr "Reimposta 2FA"
