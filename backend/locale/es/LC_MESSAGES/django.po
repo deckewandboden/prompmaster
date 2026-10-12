@@ -1783,3 +1783,12 @@ msgstr "En cola"
 
 msgid "Keine E-Mails gefunden."
 msgstr "No se encontraron correos."
+
+msgid "Kundenbereiche"
+msgstr "Secciones de clientes"
+
+msgid "Privatkundenbereiche"
+msgstr "Secciones de clientes particulares"
+
+msgid "Audit"
+msgstr "Auditoría"
