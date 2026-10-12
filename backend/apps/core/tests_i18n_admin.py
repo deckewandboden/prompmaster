@@ -1176,6 +1176,10 @@ class AdminInternationalizationContractTests(SimpleTestCase):
             'ns_admin/legal_documents.html',
             'ns_admin/order_detail.html',
             'ns_admin/license_detail.html',
+            'ns_admin/payments.html',
+            'ns_admin/customer_detail.html',
+            'ns_admin/customer_portal_preview.html',
+            'ns_admin/legal.html',
         )
         names = ('role', 'status', 'category', 'kind', 'sender_type', 'doc_type')
         total = 0
@@ -1192,7 +1196,7 @@ class AdminInternationalizationContractTests(SimpleTestCase):
                     r'\{%\s*translate\s+\w+\.get_' + name + r'_display\s*%\}',
                     markup,
                 ))
-        self.assertGreaterEqual(total, 15)
+        self.assertGreaterEqual(total, 21)
         required = (
             'Firmenadministrator', 'Entwurf', 'Zahlung offen',
             'Zahlung prüfen', 'Refundiert', 'Abgelehnt', 'Eingegangen',
@@ -1213,6 +1217,30 @@ class AdminInternationalizationContractTests(SimpleTestCase):
                 self.assertEqual(
                     compiled_template.render(Context({'row': sample})),
                     translations['Zahlung offen'],
+                )
+
+    def test_mollie_event_statuses_are_localized_and_unknown_values_remain_visible(self):
+        from apps.core.admin_views import MOLLIE_STATUS_CHOICES
+        from django.utils.translation import override
+
+        source = (ROOT / 'templates/ns_admin/mollie_events.html').read_text(encoding='utf-8')
+        view = (ROOT / 'apps/core/admin_views.py').read_text(encoding='utf-8')
+        self.assertIn('mollie_status_labels|get_item:e.provider_status|default:e.provider_status', source)
+        self.assertIn("'mollie_status_labels': dict(MOLLIE_STATUS_CHOICES)", view)
+        renderer = Template('{% load pm %}{{ labels|get_item:status|default:status }}')
+        labels = dict(MOLLIE_STATUS_CHOICES)
+        for code in LOCALES:
+            catalog = catalog_translations(
+                ROOT / 'locale' / code / 'LC_MESSAGES' / 'django.po'
+            )
+            with override(code):
+                for status, label in MOLLIE_STATUS_CHOICES:
+                    rendered = renderer.render(Context({'labels': labels, 'status': status}))
+                    with self.subTest(language=code, status=status):
+                        self.assertEqual(rendered, catalog[str(label)] if str(label) in catalog else rendered)
+                self.assertEqual(
+                    renderer.render(Context({'labels': labels, 'status': 'custom_provider_status'})),
+                    'custom_provider_status',
                 )
 
     def test_language_picker_is_in_flex_header_and_never_overlays_avatar(self):
