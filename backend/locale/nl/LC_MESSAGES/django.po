@@ -1775,3 +1775,78 @@ msgstr "Geen verwijderverzoeken."
 
 msgid "Alle Löschanfragen"
 msgstr "Alle verwijderverzoeken"
+
+msgid "Bestellung vom"
+msgstr "Bestelling van"
+
+msgid "Zurück zur Liste"
+msgstr "Terug naar lijst"
+
+msgid "Brutto"
+msgstr "Bruto"
+
+msgid "Steuer"
+msgstr "Belasting"
+
+msgid "Keine Zahlung erfasst."
+msgstr "Geen betaling geregistreerd."
+
+msgid "Positionen"
+msgstr "Orderregels"
+
+msgid "Menge"
+msgstr "Aantal"
+
+msgid "Einzelpreis"
+msgstr "Eenheidsprijs"
+
+msgid "Lizenzstatus wirklich ändern?"
+msgstr "De status van deze licentie echt wijzigen?"
+
+msgid "Lizenz entsperren"
+msgstr "Licentie deblokkeren"
+
+msgid "Lizenz sperren"
+msgstr "Licentie blokkeren"
+
+msgid "Inhaber & Zuweisung"
+msgstr "Eigenaar en toewijzing"
+
+msgid "Zugewiesen an"
+msgstr "Toegewezen aan"
+
+msgid "Lizenzzuweisung wirklich freigeben? Aktive Geräte dieser Lizenz werden widerrufen."
+msgstr "De licentietoewijzing echt vrijgeven? Actieve apparaten die aan deze licentie zijn gekoppeld worden ingetrokken."
+
+msgid "Zuweisung freigeben"
+msgstr "Toewijzing vrijgeven"
+
+msgid "Aktiven Firmenbenutzer auswählen"
+msgstr "Actieve bedrijfsgebruiker selecteren"
+
+msgid "Bitte auswählen"
+msgstr "Maak een keuze"
+
+msgid "Lizenz zuweisen"
+msgstr "Licentie toewijzen"
+
+msgid "Lizenzperioden"
+msgstr "Licentieperioden"
+
+msgid "Von"
+msgstr "Van"
+
+msgid "Bis"
+msgstr "Tot"
+
+msgid "Erstattung"
+msgstr "Terugbetaling"
+
+msgid "Erstattung wirklich verbindlich über Mollie auslösen?"
+msgstr "Definitief een terugbetaling via Mollie starten?"
+
+msgid "Erstattung prüfen/auslösen"
+msgstr "Terugbetaling controleren/starten"
+
+msgid "Keine Lizenzperioden vorhanden."
+msgstr "Geen licentieperioden beschikbaar."
