@@ -357,9 +357,9 @@ def leads(request):
         [
             ('lead_number', 'Lead'),
             ('customer_display', 'Interessent'),
-            ('email', 'E-Mail'),
-            ('status_name', 'Status'),
-            ('assigned_name', 'Zuständig'),
+            ('email', _('E-Mail')),
+            ('status_name', _('Status')),
+            ('assigned_name', _('Zuständig')),
         ],
         'promptmaster-leads.csv',
     )
@@ -374,17 +374,17 @@ def leads(request):
             'columns': [
                 ('lead_number', 'Lead', 'number'),
                 ('customer_display', 'Interessent', 'customer'),
-                ('email', 'E-Mail', 'email'),
-                ('status_name', 'Status', 'status'),
-                ('priority', 'Priorität', 'priority'),
-                ('assigned_name', 'Zuständig', 'assigned'),
+                ('email', _('E-Mail'), 'email'),
+                ('status_name', _('Status'), 'status'),
+                ('priority', _('Priorität'), 'priority'),
+                ('assigned_name', _('Zuständig'), 'assigned'),
                 ('created_at', 'Erstellt', 'created'),
             ],
             'detail_route': 'ns_admin:lead_detail',
             'filter_options': [
-                ('status', 'Status', Lead.STATUS),
+                ('status', _('Status'), Lead.STATUS),
                 ('source', 'Quelle', Lead.SOURCE),
-                ('priority', 'Priorität', Lead.PRIORITY),
+                ('priority', _('Priorität'), Lead.PRIORITY),
             ],
             'export_enabled': True,
             'primary_action_url': reverse('ns_admin:lead_new') if has_perm(request.user, 'leads.write') else '',
@@ -673,7 +673,7 @@ def customers(request):
     export = _grid_export(
         request,
         grid,
-        [('customer_number', 'Kundennummer'), ('name', 'Kunde'), ('email', 'E-Mail'), ('status', 'Status')],
+        [('customer_number', _('Kundennummer')), ('name', _('Kunde')), ('email', _('E-Mail')), ('status', _('Status'))],
         'promptmaster-kunden.csv',
     )
     if export:
@@ -682,16 +682,16 @@ def customers(request):
         request,
         'ns_admin/grid.html',
         {
-            'title': 'Kunden',
+            'title': _('Kunden'),
             'grid': grid,
             'columns': [
-                ('customer_number', 'Kundennummer', 'number'),
-                ('name', 'Kunde', 'name'),
-                ('email', 'E-Mail', 'email'),
-                ('status', 'Status', 'status'),
+                ('customer_number', _('Kundennummer'), 'number'),
+                ('name', _('Kunde'), 'name'),
+                ('email', _('E-Mail'), 'email'),
+                ('status', _('Status'), 'status'),
             ],
             'detail_route': 'ns_admin:customer_detail',
-            'filter_options': [('status', 'Status', Company.STATUS), ('country', 'Land', [('DE', 'Deutschland')])],
+            'filter_options': [('status', _('Status'), Company.STATUS), ('country', _('Land'), [('DE', _('Deutschland'))])],
             'export_enabled': True,
             'customer_tabs': True,
             'customer_type': 'company',
@@ -712,7 +712,7 @@ def private_customers(request):
     export = _grid_export(
         request,
         grid,
-        [('customer_number', 'Kundennummer'), ('user.full_name', 'Name'), ('user.email', 'E-Mail'), ('country', 'Land')],
+        [('customer_number', _('Kundennummer')), ('user.full_name', _('Name')), ('user.email', _('E-Mail')), ('country', _('Land'))],
         'promptmaster-privatkunden.csv',
     )
     if export:
@@ -724,13 +724,13 @@ def private_customers(request):
             'title': 'Privatkunden',
             'grid': grid,
             'columns': [
-                ('customer_number', 'Kundennummer', 'number'),
-                ('user', 'Kunde', 'name'),
-                ('user.email', 'E-Mail', 'email'),
-                ('country', 'Land', 'country'),
+                ('customer_number', _('Kundennummer'), 'number'),
+                ('user', _('Kunde'), 'name'),
+                ('user.email', _('E-Mail'), 'email'),
+                ('country', _('Land'), 'country'),
             ],
             'detail_route': 'ns_admin:private_customer_detail',
-            'filter_options': [('country', 'Land', [('DE', 'Deutschland')])],
+            'filter_options': [('country', _('Land'), [('DE', _('Deutschland'))])],
             'export_enabled': True,
             'customer_tabs': True,
             'customer_type': 'private',
@@ -806,7 +806,7 @@ def private_customer_portal_preview(request, pk):
 def private_customer_licenses(request, pk):
     profile = _private_customer(request, pk)
     grid = DataGrid(request, _license_admin_queryset(profile.user.owned_licenses.all()), search_fields=('license_number', 'product__name', 'license_holder_name', 'license_holder_email'), sort_fields={'number':'license_number','name':'license_holder_name','product':'product__name','expiry':'valid_until','status':'status'}, default_sort='valid_until', filters={'status':'status'}).build()
-    return render(request, 'ns_admin/private_customer_grid.html', {'profile': profile, 'title':'Lizenzen', 'kind':'licenses', 'grid':grid, 'filter_options':[('status','Status',License.STATUS)]})
+    return render(request, 'ns_admin/private_customer_grid.html', {'profile': profile, 'title':_('Lizenzen'), 'kind':'licenses', 'grid':grid, 'filter_options':[('status',_('Status'),License.STATUS)]})
 
 
 @staff_perm('customers.read')
@@ -824,7 +824,7 @@ def private_customer_devices(request, pk):
         'ns_admin/private_customer_grid.html',
         {
             'profile': profile,
-            'title': 'Geräte',
+            'title': _('Geräte'),
             'kind': 'devices',
             'grid': grid,
             'filter_options': [],
@@ -852,14 +852,14 @@ def private_customer_device_revoke(request, pk, device_id):
 def private_customer_orders(request, pk):
     profile = _private_customer(request, pk)
     grid = DataGrid(request, profile.user.private_orders.all(), search_fields=('order_number',), sort_fields={'number':'order_number','date':'created_at','amount':'gross_total','status':'status'}, default_sort='-created_at', filters={'status':'status'}).build()
-    return render(request, 'ns_admin/private_customer_grid.html', {'profile': profile, 'title':'Bestellungen', 'kind':'orders', 'grid':grid, 'filter_options':[('status','Status',Order.STATUS)]})
+    return render(request, 'ns_admin/private_customer_grid.html', {'profile': profile, 'title':_('Bestellungen'), 'kind':'orders', 'grid':grid, 'filter_options':[('status',_('Status'),Order.STATUS)]})
 
 
 @staff_perm('customers.read', 'payments.read')
 def private_customer_payments(request, pk):
     profile = _private_customer(request, pk)
     grid = DataGrid(request, Payment.objects.filter(order__private_user=profile.user).select_related('order'), search_fields=('provider_payment_id','order__order_number'), sort_fields={'date':'created_at','payment':'provider_payment_id','order':'order__order_number','amount':'amount','status':'status'}, default_sort='-created_at', filters={'status':'status'}).build()
-    return render(request, 'ns_admin/private_customer_grid.html', {'profile': profile, 'title':'Zahlungen', 'kind':'payments', 'grid':grid, 'filter_options':[('status','Status',PAYMENT_STATUS_CHOICES)]})
+    return render(request, 'ns_admin/private_customer_grid.html', {'profile': profile, 'title':_('Zahlungen'), 'kind':'payments', 'grid':grid, 'filter_options':[('status',_('Status'),PAYMENT_STATUS_CHOICES)]})
 
 
 @staff_perm('customers.read', 'email.read')
@@ -875,7 +875,7 @@ def private_customer_emails(request, pk):
         default_sort='-created_at',
         filters={'status': 'status'},
     ).build()
-    return render(request, 'ns_admin/private_customer_grid.html', {'profile': profile, 'title':'E-Mail-Historie', 'kind':'emails', 'grid':grid, 'filter_options':[('status','Status',EMAIL_STATUS_CHOICES)]})
+    return render(request, 'ns_admin/private_customer_grid.html', {'profile': profile, 'title':'E-Mail-Historie', 'kind':'emails', 'grid':grid, 'filter_options':[('status',_('Status'),EMAIL_STATUS_CHOICES)]})
 
 
 @staff_perm('customers.read', 'audit.read')
@@ -1200,12 +1200,12 @@ def customer_users(request, pk):
         'ns_admin/customer_grid.html',
         {
             'customer': customer,
-            'title': 'Benutzer',
+            'title': _('Benutzer'),
             'grid': grid,
             'kind': 'users',
             'filter_options': [
-                ('role', 'Rolle', Membership.ROLE),
-                ('active', 'Status', [('True', 'Aktiv'), ('False', 'Inaktiv')]),
+                ('role', _('Rolle'), Membership.ROLE),
+                ('active', _('Status'), [('True', _('Aktiv')), ('False', _('Inaktiv'))]),
             ],
             'can_manage_users': has_perm(request.user, 'customers.write'),
             'has_active_admin': customer.memberships.filter(active=True, role='admin').exists(),
@@ -1311,7 +1311,7 @@ def customer_licenses(request, pk):
         default_sort='valid_until',
         filters={'status': 'status'},
     ).build()
-    return render(request, 'ns_admin/customer_grid.html', {'customer': customer, 'title': 'Lizenzen', 'grid': grid, 'kind': 'licenses', 'filter_options': [('status', 'Status', License.STATUS)]})
+    return render(request, 'ns_admin/customer_grid.html', {'customer': customer, 'title': _('Lizenzen'), 'grid': grid, 'kind': 'licenses', 'filter_options': [('status', _('Status'), License.STATUS)]})
 
 
 @staff_perm('customers.read')
@@ -1333,7 +1333,7 @@ def customer_devices(request, pk):
         'ns_admin/customer_grid.html',
         {
             'customer': customer,
-            'title': 'Geräte',
+            'title': _('Geräte'),
             'grid': grid,
             'kind': 'devices',
             'filter_options': [],
@@ -1370,7 +1370,7 @@ def customer_orders(request, pk):
         default_sort='-created_at',
         filters={'status': 'status'},
     ).build()
-    return render(request, 'ns_admin/customer_grid.html', {'customer': customer, 'title': 'Bestellungen', 'grid': grid, 'kind': 'orders', 'filter_options': [('status', 'Status', Order.STATUS)]})
+    return render(request, 'ns_admin/customer_grid.html', {'customer': customer, 'title': _('Bestellungen'), 'grid': grid, 'kind': 'orders', 'filter_options': [('status', _('Status'), Order.STATUS)]})
 
 
 @staff_perm('customers.read', 'payments.read')
@@ -1384,7 +1384,7 @@ def customer_payments(request, pk):
         default_sort='-created_at',
         filters={'status': 'status'},
     ).build()
-    return render(request, 'ns_admin/customer_grid.html', {'customer': customer, 'title': 'Zahlungen', 'grid': grid, 'kind': 'payments', 'filter_options': [('status','Status',PAYMENT_STATUS_CHOICES)]})
+    return render(request, 'ns_admin/customer_grid.html', {'customer': customer, 'title': _('Zahlungen'), 'grid': grid, 'kind': 'payments', 'filter_options': [('status',_('Status'),PAYMENT_STATUS_CHOICES)]})
 
 
 @staff_perm('customers.read', 'email.read')
@@ -1400,7 +1400,7 @@ def customer_emails(request, pk):
         default_sort='-created_at',
         filters={'status': 'status'},
     ).build()
-    return render(request, 'ns_admin/customer_grid.html', {'customer': customer, 'title': 'E-Mail-Historie', 'grid': grid, 'kind': 'emails', 'filter_options': [('status','Status',EMAIL_STATUS_CHOICES)]})
+    return render(request, 'ns_admin/customer_grid.html', {'customer': customer, 'title': 'E-Mail-Historie', 'grid': grid, 'kind': 'emails', 'filter_options': [('status',_('Status'),EMAIL_STATUS_CHOICES)]})
 
 
 @staff_perm('customers.read', 'legal.read')
@@ -1512,10 +1512,10 @@ def licenses(request):
         filters={'status': 'status', 'product': 'product__code'},
     ).build()
     products = [(p.code, p.name) for p in Product.objects.filter(active=True).order_by('name')]
-    export = _grid_export(request, grid, [('license_number', 'Lizenz-ID'), ('license_holder_name', 'Name'), ('company.name', 'Unternehmen'), ('owner_user.email', 'Privatkunde'), ('product.name', 'Produkt'), ('valid_until', 'Ablauf'), ('status', 'Status')], 'promptmaster-lizenzen.csv')
+    export = _grid_export(request, grid, [('license_number', _('Lizenz-ID')), ('license_holder_name', _('Name')), ('company.name', _('Unternehmen')), ('owner_user.email', _('Privatkunde')), ('product.name', _('Produkt')), ('valid_until', _('Ablauf')), ('status', _('Status'))], 'promptmaster-lizenzen.csv')
     if export:
         return export
-    return render(request, 'ns_admin/grid.html', {'title': 'Lizenzen', 'grid': grid, 'columns': [('license_number', 'Lizenz-ID', 'number'), ('license_holder_name', 'Name', 'name'), ('company', 'Kunde', 'company'), ('product', 'Produkt', 'product'), ('valid_until', 'Ablauf', 'expiry'), ('status', 'Status', 'status')], 'detail_route': 'ns_admin:license_detail', 'filter_options': [('status', 'Status', License.STATUS), ('product', 'Produkt', products)], 'export_enabled': True})
+    return render(request, 'ns_admin/grid.html', {'title': _('Lizenzen'), 'grid': grid, 'columns': [('license_number', _('Lizenz-ID'), 'number'), ('license_holder_name', _('Name'), 'name'), ('company', _('Kunde'), 'company'), ('product', _('Produkt'), 'product'), ('valid_until', _('Ablauf'), 'expiry'), ('status', _('Status'), 'status')], 'detail_route': 'ns_admin:license_detail', 'filter_options': [('status', _('Status'), License.STATUS), ('product', _('Produkt'), products)], 'export_enabled': True})
 
 
 @staff_perm('licenses.read')
@@ -1663,10 +1663,10 @@ def orders(request):
         default_sort='-created_at',
         filters={'status': 'status'},
     ).build()
-    export = _grid_export(request, grid, [('order_number', 'Bestellung'), ('company.name', 'Unternehmen'), ('private_user.email', 'Privatkunde'), ('gross_total', 'Betrag'), ('status', 'Status'), ('created_at', 'Datum')], 'promptmaster-bestellungen.csv')
+    export = _grid_export(request, grid, [('order_number', 'Bestellung'), ('company.name', _('Unternehmen')), ('private_user.email', _('Privatkunde')), ('gross_total', _('Betrag')), ('status', _('Status')), ('created_at', _('Datum'))], 'promptmaster-bestellungen.csv')
     if export:
         return export
-    return render(request, 'ns_admin/grid.html', {'title': 'Bestellungen', 'grid': grid, 'columns': [('order_number', 'Bestellung', 'number'), ('customer_display', 'Kunde', 'customer'), ('gross_total', 'Betrag', 'amount'), ('status', 'Status', 'status'), ('created_at', 'Datum', 'date')], 'detail_route': 'ns_admin:order_detail', 'filter_options': [('status', 'Status', Order.STATUS)], 'export_enabled': True})
+    return render(request, 'ns_admin/grid.html', {'title': _('Bestellungen'), 'grid': grid, 'columns': [('order_number', 'Bestellung', 'number'), ('customer_display', _('Kunde'), 'customer'), ('gross_total', _('Betrag'), 'amount'), ('status', _('Status'), 'status'), ('created_at', _('Datum'), 'date')], 'detail_route': 'ns_admin:order_detail', 'filter_options': [('status', _('Status'), Order.STATUS)], 'export_enabled': True})
 
 
 @staff_perm('orders.read')
@@ -1688,7 +1688,7 @@ def payments(request):
         'ns_admin/payments.html',
         {
             'grid': grid,
-            'filter_options': [('status','Status',PAYMENT_STATUS_CHOICES)],
+            'filter_options': [('status',_('Status'),PAYMENT_STATUS_CHOICES)],
             'payment_counts': {
                 'paid': Payment.objects.filter(status='paid').count(),
                 'open': Payment.objects.filter(status__in=['created', 'open', 'pending', 'authorized']).count(),
@@ -1853,7 +1853,7 @@ def email_log(request):
     return render(
         request,
         'ns_admin/email_log.html',
-        {'grid': grid, 'filter_options': [('status', 'Status', EMAIL_STATUS_CHOICES)]},
+        {'grid': grid, 'filter_options': [('status', _('Status'), EMAIL_STATUS_CHOICES)]},
     )
 
 
@@ -1937,7 +1937,7 @@ def mollie_checkout_disable(request):
 @staff_perm('payments.read')
 def mollie_events(request):
     grid = DataGrid(request, MollieEvent.objects.select_related('payment'), search_fields=('event_key', 'payment__provider_payment_id', 'provider_status', 'error'), sort_fields={'date': 'created_at', 'payment': 'payment__provider_payment_id', 'status': 'provider_status', 'processed': 'processed_at', 'retries': 'retry_count', 'error': 'error'}, default_sort='-created_at', filters={'provider_status': 'provider_status'}).build()
-    return render(request, 'ns_admin/mollie_events.html', {'grid': grid, 'filter_options': [('provider_status','Status',MOLLIE_STATUS_CHOICES)]})
+    return render(request, 'ns_admin/mollie_events.html', {'grid': grid, 'filter_options': [('provider_status',_('Status'),MOLLIE_STATUS_CHOICES)]})
 
 
 @staff_perm()
@@ -2053,7 +2053,7 @@ def ops_restore_tests(request):
 @staff_perm('ops.read')
 def ops_alerts(request):
     grid = DataGrid(request, SystemAlert.objects.all(), search_fields=('code', 'message'), sort_fields={'code': 'code', 'date': 'created_at', 'severity': 'severity', 'message': 'message', 'active': 'active'}, default_sort='-created_at', filters={'severity': 'severity', 'active': 'active'}).build()
-    return render(request, 'ns_admin/ops_grid.html', {'title': 'Systemwarnungen', 'grid': grid, 'kind': 'alerts', 'filter_options': [('severity', 'Schweregrad', SystemAlert.SEVERITY), ('active', 'Status', [('True', 'Aktiv'), ('False', 'Erledigt')])]})
+    return render(request, 'ns_admin/ops_grid.html', {'title': _('Systemwarnungen'), 'grid': grid, 'kind': 'alerts', 'filter_options': [('severity', _('Schweregrad'), SystemAlert.SEVERITY), ('active', _('Status'), [('True', _('Aktiv')), ('False', _('Erledigt'))])]})
 
 
 @staff_perm('api.read')
@@ -2163,14 +2163,14 @@ def legal_declarations(request):
             'columns': [
                 ('submitted_at', 'Eingang', 'date'),
                 ('kind', 'Art', 'kind'),
-                ('name', 'Name', 'name'),
-                ('email', 'E-Mail', 'email'),
+                ('name', _('Name'), 'name'),
+                ('email', _('E-Mail'), 'email'),
                 ('contract_reference', 'Vertragsbezug', 'reference'),
-                ('status', 'Status', 'status'),
+                ('status', _('Status'), 'status'),
             ],
             'filter_options': [
                 ('kind', 'Art', ConsumerContractDeclaration.KIND),
-                ('status', 'Status', ConsumerContractDeclaration.STATUS),
+                ('status', _('Status'), ConsumerContractDeclaration.STATUS),
             ],
             'detail_route': 'ns_admin:legal_declaration_detail',
         },
@@ -2228,7 +2228,7 @@ def legal_documents(request):
         default_sort='doc_type',
         filters={'doc_type': 'doc_type', 'active': 'active'},
     ).build()
-    return render(request, 'ns_admin/legal_documents.html', {'grid': grid, 'filter_options': [('doc_type', 'Typ', LegalDocument.DOC_TYPES), ('active', 'Status', [('True', 'Aktiv'), ('False', 'Inaktiv')])]})
+    return render(request, 'ns_admin/legal_documents.html', {'grid': grid, 'filter_options': [('doc_type', 'Typ', LegalDocument.DOC_TYPES), ('active', _('Status'), [('True', _('Aktiv')), ('False', _('Inaktiv'))])]})
 
 
 @staff_perm('legal.write')
@@ -2269,7 +2269,7 @@ def retention_policies(request):
         default_sort='data_class',
         filters={'active': 'active'},
     ).build()
-    return render(request, 'ns_admin/legal_retention.html', {'grid': grid, 'filter_options': [('active', 'Status', [('True', 'Aktiv'), ('False', 'Inaktiv')])]})
+    return render(request, 'ns_admin/legal_retention.html', {'grid': grid, 'filter_options': [('active', _('Status'), [('True', _('Aktiv')), ('False', _('Inaktiv'))])]})
 
 
 @staff_perm('legal.write')
@@ -2294,7 +2294,7 @@ def deletion_requests(request):
         default_sort='-requested_at',
         filters={'status': 'status'},
     ).build()
-    return render(request, 'ns_admin/legal_deletions.html', {'grid': grid, 'filter_options': [('status','Status', DeletionRequest.STATUS)]})
+    return render(request, 'ns_admin/legal_deletions.html', {'grid': grid, 'filter_options': [('status',_('Status'), DeletionRequest.STATUS)]})
 
 
 @staff_perm('legal.write')
@@ -2357,7 +2357,7 @@ def support_requests(request):
     ).build()
     return render(request, 'ns_admin/support.html', {
         'grid': grid,
-        'filter_options': [('status','Status',SupportRequest.STATUS),('category','Kategorie',SupportRequest.CATEGORY)],
+        'filter_options': [('status',_('Status'),SupportRequest.STATUS),('category','Kategorie',SupportRequest.CATEGORY)],
     })
 
 
@@ -2462,7 +2462,7 @@ def support_request_status(request, pk):
 @staff_perm('audit.read')
 def audit(request):
     grid = DataGrid(request, AuditEvent.objects.select_related('actor').annotate(changes_sort=Cast('changes', CharField())), search_fields=('action', 'object_type', 'object_id', 'actor__email', 'actor_role'), sort_fields={'time': 'created_at', 'user': 'actor__email', 'role': 'actor_role', 'action': 'action', 'object': 'object_type', 'change': 'changes_sort'}, default_sort='-created_at', filters={'action': 'action'}).build()
-    export = _grid_export(request, grid, [('created_at', 'Zeit'), ('actor.email', 'Benutzer'), ('actor_role', 'Rolle'), ('action', 'Aktion'), ('object_type', 'Objekttyp'), ('object_id', 'Objekt-ID')], 'promptmaster-audit.csv')
+    export = _grid_export(request, grid, [('created_at', 'Zeit'), ('actor.email', _('Benutzer')), ('actor_role', _('Rolle')), ('action', 'Aktion'), ('object_type', 'Objekttyp'), ('object_id', 'Objekt-ID')], 'promptmaster-audit.csv')
     if export:
         return export
     return render(request, 'ns_admin/audit.html', {'grid': grid, 'filter_options': [], 'export_enabled': True})
@@ -2507,7 +2507,7 @@ def staff_user_create(request):
             transaction.on_commit(lambda: _send_staff_setup_email(request, user), robust=True)
         messages.success(request, _("netstyle Benutzer angelegt; Einrichtungslink wurde per E-Mail versendet."))
         return redirect('ns_admin:roles')
-    return render(request, 'ns_admin/form.html', {'title': 'netstyle Benutzer anlegen', 'form': form, 'cancel_url': reverse('ns_admin:roles')})
+    return render(request, 'ns_admin/form.html', {'title': _('netstyle Benutzer anlegen'), 'form': form, 'cancel_url': reverse('ns_admin:roles')})
 
 
 @staff_perm('roles.write')
