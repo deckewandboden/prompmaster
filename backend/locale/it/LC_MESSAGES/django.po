@@ -1440,3 +1440,66 @@ msgstr "Reimpostare la 2FA di questo utente?"
 
 msgid "2FA zurücksetzen"
 msgstr "Reimposta 2FA"
+
+msgid "Benutzerstatus wirklich ändern?"
+msgstr "Vuoi davvero modificare lo stato dell'utente?"
+
+msgid "Deaktivieren"
+msgstr "Disattiva"
+
+msgid "Aktivieren"
+msgstr "Attiva"
+
+msgid "Keine netstyle Benutzer."
+msgstr "Nessun utente netstyle."
+
+msgid "Rechtsdokumente, Aufbewahrung und Löschanforderungen."
+msgstr "Documenti legali, conservazione e richieste di cancellazione."
+
+msgid "Rechtsdokumente"
+msgstr "Documenti legali"
+
+msgid "Noch keine Rechtstexte hinterlegt."
+msgstr "Non sono ancora stati aggiunti testi legali."
+
+msgid "Rechtsdokumente verwalten"
+msgstr "Gestisci documenti legali"
+
+msgid "Verbrauchererklärungen"
+msgstr "Dichiarazioni dei consumatori"
+
+msgid "Offene Widerrufe / Kündigungen"
+msgstr "Recessi / disdette aperti"
+
+msgid "Widerrufe & Kündigungen"
+msgstr "Recessi e disdette"
+
+msgid "Retention / Löschung"
+msgstr "Conservazione / cancellazione"
+
+msgid "Aktive Retention-Policies"
+msgstr "Criteri di conservazione attivi"
+
+msgid "Offene Löschanfragen"
+msgstr "Richieste di cancellazione aperte"
+
+msgid "Retention-Policies"
+msgstr "Criteri di conservazione"
+
+msgid "Löschanfragen"
+msgstr "Richieste di cancellazione"
+
+msgid "Features / Entitlements"
+msgstr "Funzionalità / diritti"
+
+msgid "Wiederverwendbare Funktionsrechte für heutige und zukünftige Produkte."
+msgstr "Diritti riutilizzabili sulle funzionalità dei prodotti attuali e futuri."
+
+msgid "Feature anlegen"
+msgstr "Crea funzionalità"
+
+msgid "Code"
+msgstr "Codice"
+
+msgid "Keine Features."
+msgstr "Nessuna funzionalità."
