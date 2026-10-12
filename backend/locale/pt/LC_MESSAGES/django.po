@@ -3172,3 +3172,69 @@ msgstr "Por exemplo, PROMPTFINISHER."
 
 msgid "Zum Beispiel smtp.ionos.de."
 msgstr "Por exemplo, smtp.ionos.de."
+
+msgid "Das eigene netstyle Konto kann hier nicht deaktiviert werden."
+msgstr "Não pode desativar aqui a sua própria conta netstyle."
+
+msgid "Der letzte aktive Superadmin kann nicht deaktiviert werden."
+msgstr "Não é possível desativar o último superadministrador ativo."
+
+msgid "Die eigene 2FA wird nicht über die Admin-Fremdverwaltung zurückgesetzt."
+msgstr "Não pode repor a sua própria 2FA através da gestão administrativa de outras contas."
+
+msgid "2FA zurückgesetzt. Der Benutzer muss sie beim nächsten Login neu einrichten."
+msgstr "A 2FA foi reposta. O utilizador tem de configurá-la novamente na próxima sessão."
+
+msgid "Die eigene Superadmin-Rolle kann nicht hier entfernt werden."
+msgstr "Não pode remover aqui a sua própria função de superadministrador."
+
+msgid "Die letzte aktive Superadmin-Berechtigung kann nicht entfernt werden."
+msgstr "Não é possível remover a última autorização ativa de superadministrador."
+
+msgid "Ein gesperrter Service Account kann nicht rotiert werden."
+msgstr "Não é possível rodar as credenciais de uma conta de serviço bloqueada."
+
+msgid "Mollie-Produktiv-Checkout wurde gesperrt."
+msgstr "O checkout de produção Mollie foi bloqueado."
+
+msgid "Bestätigung für die Erstattung fehlt."
+msgstr "Falta a confirmação do reembolso."
+
+msgid "Erstattung wurde an Mollie übermittelt."
+msgstr "O pedido de reembolso foi enviado à Mollie."
+
+msgid "Für dieses Unternehmen existiert bereits ein aktiver Firmenadministrator."
+msgstr "Esta empresa já tem um administrador ativo."
+
+msgid "Dieser Benutzer ist bereits Firmenadministrator."
+msgstr "Este utilizador já é administrador da empresa."
+
+msgid "Ungültiger Supportstatus."
+msgstr "Estado de suporte inválido."
+
+msgid "Ungültiger Bearbeitungsstatus."
+msgstr "Estado de processamento inválido."
+
+msgid "Bitte eine Antwort eingeben."
+msgstr "Introduza uma resposta."
+
+msgid "Die Antwort darf höchstens 10.000 Zeichen enthalten."
+msgstr "A resposta não pode exceder 10 000 caracteres."
+
+msgid "Status aktualisiert."
+msgstr "Estado atualizado."
+
+msgid "Einstellungen gespeichert."
+msgstr "Definições guardadas."
+
+msgid "Rolle gespeichert."
+msgstr "Função guardada."
+
+msgid "Rolle zugewiesen."
+msgstr "Função atribuída."
+
+msgid "Rolle entfernt."
+msgstr "Função removida."
+
+msgid "Benutzerstatus aktualisiert."
+msgstr "Estado do utilizador atualizado."
