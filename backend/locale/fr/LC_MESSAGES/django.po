@@ -1995,3 +1995,63 @@ msgstr "Créer une politique de conservation"
 
 msgid "Rechtsdokument anlegen"
 msgstr "Créer un document juridique"
+
+msgid "Fertig"
+msgstr "Terminé"
+
+msgid "Referenz"
+msgstr "Référence"
+
+msgid "Start"
+msgstr "Début"
+
+msgid "Ende"
+msgstr "Fin"
+
+msgid "Backup"
+msgstr "Sauvegarde"
+
+msgid "Schweregrad"
+msgstr "Gravité"
+
+msgid "Meldung"
+msgstr "Message"
+
+msgid "Keine Datensätze gefunden."
+msgstr "Aucun enregistrement trouvé."
+
+msgid "Benutzer-ID"
+msgstr "Identifiant utilisateur"
+
+msgid "Status ändern"
+msgstr "Modifier le statut"
+
+msgid "Neu"
+msgstr "Nouveau"
+
+msgid "In Bearbeitung"
+msgstr "En cours"
+
+msgid "Abgeschlossen"
+msgstr "Clôturé"
+
+msgid "Antwort schreiben"
+msgstr "Rédiger une réponse"
+
+msgid "Die Antwort wird im Verlauf gespeichert und per E-Mail versendet an:"
+msgstr "La réponse est enregistrée dans l'historique et envoyée par e-mail à :"
+
+msgid "Antwort"
+msgstr "Réponse"
+
+msgid "Antwort an den Kunden eingeben …"
+msgstr "Saisissez la réponse au client …"
+
+msgid "Antwort senden"
+msgstr "Envoyer la réponse"
+
+msgid "Anfrage und alle netstyle-Antworten in zeitlicher Reihenfolge."
+msgstr "Demande et toutes les réponses de netstyle dans l'ordre chronologique."
+
+msgid "netstyle Support"
+msgstr "Assistance netstyle"
