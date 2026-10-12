@@ -2132,3 +2132,60 @@ msgstr "Альтернатива SMTP для Exchange Online. Секрет кл�
 
 msgid "Sie besitzen Leserechte, aber keine Berechtigung zum Ändern dieser Einstellungen."
 msgstr "У вас есть доступ только для чтения без права изменять эти настройки."
+
+msgid "Bewertungen"
+msgstr "Оценки"
+
+msgid "Deterministischer Composer-Test ohne Speicherung des erzeugten Prompttexts."
+msgstr "Детерминированный тест компоновщика без сохранения созданного текста промпта."
+
+msgid "Draft aus letzter Version"
+msgstr "Создать черновик из последней версии"
+
+msgid "Draft speichern"
+msgstr "Сохранить черновик"
+
+msgid "Keine Version vorhanden."
+msgstr "Нет доступных версий."
+
+msgid "Konfigurierbare Schwellen für Recent Average und Drop-Erkennung."
+msgstr "Настраиваемые пороги для среднего за последний период и обнаружения падения."
+
+msgid "No-Code Editor. Nur DRAFT-Versionen sind inhaltlich veränderbar."
+msgstr "Редактор без кода. Изменять содержимое можно только у версий DRAFT."
+
+msgid "Noch keine Qualitäts-Snapshots. Analyse ausführen oder Ratings erfassen."
+msgstr "Снимков качества пока нет. Запустите анализ или добавьте оценки."
+
+msgid "Policy"
+msgstr "Политика"
+
+msgid "Qualität:"
+msgstr "Качество:"
+
+msgid "Qualitätsschwellen"
+msgstr "Пороги качества"
+
+msgid "Ratings"
+msgstr "Оценки"
+
+msgid "Testfall"
+msgstr "Тестовый случай"
+
+msgid "Testfall speichern"
+msgstr "Сохранить тестовый случай"
+
+msgid "Tests"
+msgstr "Тесты"
+
+msgid "Titel"
+msgstr "Название"
+
+msgid "Zur Übersicht"
+msgstr "К обзору"
+
+msgid "bearbeiten"
+msgstr "изменить"
+
+msgid "zentrale PromptDefinition"
+msgstr "Центральное определение PromptDefinition"
