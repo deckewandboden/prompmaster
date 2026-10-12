@@ -1750,3 +1750,36 @@ msgstr "Review/issue refund"
 
 msgid "Keine Lizenzperioden vorhanden."
 msgstr "No license periods available."
+
+msgid "E-Mail-Protokoll"
+msgstr "Email log"
+
+msgid "Versandstatus, tatsächlich verwendeter Provider und Fallback-Versuche ohne vertrauliche Nachrichtentexte oder Secrets."
+msgstr "Delivery status, actual provider used and failover attempts, without confidential message contents or secrets."
+
+msgid "Empfänger"
+msgstr "Recipient"
+
+msgid "Vorlage"
+msgstr "Template"
+
+msgid "Provider"
+msgstr "Provider"
+
+msgid "Versuche"
+msgstr "Attempts"
+
+msgid "Gesendet"
+msgstr "Sent"
+
+msgid "Wird gesendet"
+msgstr "Sending"
+
+msgid "Unterdrückt"
+msgstr "Suppressed"
+
+msgid "Warteschlange"
+msgstr "Queued"
+
+msgid "Keine E-Mails gefunden."
+msgstr "No emails found."
