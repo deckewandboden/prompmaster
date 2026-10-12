@@ -2800,3 +2800,162 @@ msgstr "Goal / intent"
 
 msgid "Zielgruppen"
 msgstr "Target audiences"
+
+msgid "API-Schlüssel"
+msgstr "API key"
+
+msgid "Ablauf optional"
+msgstr "Optional expiration"
+
+msgid "Außerhalb der Produktion ist ausschließlich ein Mollie-Test-Key (test_…) zulässig."
+msgstr "Only a Mollie test key (test_…) is permitted outside production."
+
+msgid "Begründung"
+msgstr "Reason"
+
+msgid "Beschreibung"
+msgstr "Description"
+
+msgid "Bruttopreis"
+msgstr "Gross price"
+
+msgid "Der Datensatz wird revisionssicher ausgeblendet und im Audit protokolliert."
+msgstr "The record will be hidden with an audit trail."
+
+msgid "Diese E-Mail-Adresse gehört bereits zu einem PROMPTFINISHER-Konto."
+msgstr "This email address already belongs to a PROMPTFINISHER account."
+
+msgid "Diese E-Mail-Adresse ist bereits einem Firmenkunden zugeordnet."
+msgstr "This email address is already assigned to a business customer."
+
+msgid "Diese E-Mail-Adresse ist bereits registriert."
+msgstr "This email address is already registered."
+
+msgid "Dokumenttyp"
+msgstr "Document type"
+
+msgid "E-Mail des Firmenadministrators"
+msgstr "Company administrator email"
+
+msgid "Eigenes Passwort erneut eingeben"
+msgstr "Re-enter your password"
+
+msgid "Erinnerung 1 · Tage vorher"
+msgstr "Reminder 1 · Days before"
+
+msgid "Erinnerung 2 · Tage vorher"
+msgstr "Reminder 2 · Days before"
+
+msgid "Erstatten"
+msgstr "Refund"
+
+msgid "Für Unternehmens-Leads ist der Unternehmensname erforderlich."
+msgstr "A company name is required for business leads."
+
+msgid "Für diese Datenklasse existiert kein freigegebener Lösch-Handler."
+msgstr "No approved deletion handler exists for this data class."
+
+msgid "Für diese E-Mail-Adresse existiert bereits ein aktiver Lead."
+msgstr "An active lead already exists for this email address."
+
+msgid "Identität und Berechtigung des Ansprechpartners wurden geprüft"
+msgstr "Contact identity and authorization have been verified"
+
+msgid "In Kunde umwandeln"
+msgstr "Convert to customer"
+
+msgid "In Produktion ist ausschließlich ein Mollie-Live-Key (live_…) zulässig."
+msgstr "Only a Mollie live key (live_…) is permitted in production."
+
+msgid "Inhalt"
+msgstr "Content"
+
+msgid "Interne Notiz zur Prüfung (optional)"
+msgstr "Internal verification note (optional)"
+
+msgid "Interne Notizen"
+msgstr "Internal notes"
+
+msgid "Kaufbar"
+msgstr "Purchasable"
+
+msgid "Kritische Warnung · Tage vorher"
+msgstr "Critical warning · Days before"
+
+msgid "Lead in Firmenkunden umwandeln und Einladungslink senden"
+msgstr "Convert lead to business customer and send invitation link"
+
+msgid "Lead wirklich löschen"
+msgstr "Confirm lead deletion"
+
+msgid "Lead-Typ"
+msgstr "Lead type"
+
+msgid "Leer lassen, um den bestehenden Schlüssel unverändert zu lassen."
+msgstr "Leave blank to keep the current key unchanged."
+
+msgid "Lesen"
+msgstr "Read"
+
+msgid "Löschung erst nach dieser Anzahl Tage. Rechtliche Aufbewahrungsfristen separat prüfen."
+msgstr "Delete only after this number of days. Check statutory retention periods separately."
+
+msgid "Neukauf"
+msgstr "New purchase"
+
+msgid "Nicht zugewiesen"
+msgstr "Unassigned"
+
+msgid "Nächste Aktion"
+msgstr "Next action"
+
+msgid "Operations lesen"
+msgstr "Read operations"
+
+msgid "Preistyp"
+msgstr "Price type"
+
+msgid "Prompt-Drafts erzeugen"
+msgstr "Create prompt drafts"
+
+msgid "Prompt-Tests ausführen"
+msgstr "Run prompt tests"
+
+msgid "Prompts erzeugen"
+msgstr "Create prompts"
+
+msgid "Prompts lesen"
+msgstr "Read prompts"
+
+msgid "Qualität verwalten"
+msgstr "Manage quality"
+
+msgid "Quelle"
+msgstr "Source"
+
+msgid "Reminder 1 muss vor Reminder 2 liegen (größere Tageszahl)."
+msgstr "Reminder 1 must occur before Reminder 2 (greater number of days)."
+
+msgid "Reminder 2 muss vor der kritischen Warnphase liegen."
+msgstr "Reminder 2 must occur before the critical warning period."
+
+msgid "Sicherheitsbestätigung des aktuell angemeldeten netstyle Benutzers."
+msgstr "Security confirmation by the currently signed-in netstyle user."
+
+msgid "Sichtbar"
+msgstr "Visible"
+
+msgid "Standard-Laufzeit in Tagen"
+msgstr "Default term in days"
+
+msgid "Unternehmensname"
+msgstr "Company name"
+
+msgid "Unterstützt: expired_invitations, email_messages, revoked_devices, resolved_system_alerts, resolved_task_failures, expired_sessions."
+msgstr "Supported: expired_invitations, email_messages, revoked_devices, resolved_system_alerts, resolved_task_failures, expired_sessions."
+
+msgid "Veröffentlichen"
+msgstr "Publish"
+
+msgid "Währung"
+msgstr "Currency"
