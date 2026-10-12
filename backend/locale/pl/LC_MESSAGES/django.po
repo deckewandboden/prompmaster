@@ -2113,3 +2113,69 @@ msgstr "od"
 
 msgid "Keine Preisversionen."
 msgstr "Brak wersji cen."
+
+msgid "Zentrale Prompt-Domain · 34 Apps · 194 PM20-Aufgaben · versioniert und serverseitig komponiert."
+msgstr "Centralny obszar promptów · 34 aplikacje · 194 zadania PM20 · wersjonowanie i składanie po stronie serwera."
+
+msgid "Qualität"
+msgstr "Jakość"
+
+msgid "Task-ID, App oder Titel suchen …"
+msgstr "Szukaj ID zadania, aplikacji lub tytułu …"
+
+msgid "Task"
+msgstr "Zadanie"
+
+msgid "Anwendung"
+msgstr "Aplikacja"
+
+msgid "Veröffentlicht"
+msgstr "Opublikowano"
+
+msgid "Offene Versionen"
+msgstr "Otwarte wersje"
+
+msgid "keine"
+msgstr "brak"
+
+msgid "noch keine Daten"
+msgstr "brak danych"
+
+msgid "Keine Prompt-Aufgaben gefunden."
+msgstr "Nie znaleziono zadań promptów."
+
+msgid "Prompt-Qualität"
+msgstr "Jakość promptów"
+
+msgid "1–5-Sterne-Ratings · Recent Average · Drop-Erkennung · Aufgabenliste."
+msgstr "Oceny od 1 do 5 gwiazdek · ostatnia średnia · wykrywanie spadków · lista zadań."
+
+msgid "Schwellen"
+msgstr "Progi"
+
+msgid "Analyse aktualisieren"
+msgstr "Odśwież analizę"
+
+msgid "Kritisch"
+msgstr "Krytyczny"
+
+msgid "Warnung"
+msgstr "Ostrzeżenie"
+
+msgid "Beobachten"
+msgstr "Obserwuj"
+
+msgid "OK"
+msgstr "OK"
+
+msgid "App"
+msgstr "Aplikacja"
+
+msgid "Recent Avg"
+msgstr "Ostatnia średnia"
+
+msgid "Previous Avg"
+msgstr "Poprzednia średnia"
+
+msgid "Drop"
+msgstr "Spadek"
