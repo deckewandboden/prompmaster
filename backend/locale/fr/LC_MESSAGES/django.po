@@ -3288,3 +3288,69 @@ msgstr "Par exemple, PROMPTFINISHER."
 
 msgid "Zum Beispiel smtp.ionos.de."
 msgstr "Par exemple, smtp.ionos.de."
+
+msgid "Das eigene netstyle Konto kann hier nicht deaktiviert werden."
+msgstr "Vous ne pouvez pas désactiver ici votre propre compte netstyle."
+
+msgid "Der letzte aktive Superadmin kann nicht deaktiviert werden."
+msgstr "Le dernier superadministrateur actif ne peut pas être désactivé."
+
+msgid "Die eigene 2FA wird nicht über die Admin-Fremdverwaltung zurückgesetzt."
+msgstr "Vous ne pouvez pas réinitialiser votre propre 2FA depuis la gestion administrative des autres comptes."
+
+msgid "2FA zurückgesetzt. Der Benutzer muss sie beim nächsten Login neu einrichten."
+msgstr "La 2FA a été réinitialisée. L’utilisateur doit la configurer lors de sa prochaine connexion."
+
+msgid "Die eigene Superadmin-Rolle kann nicht hier entfernt werden."
+msgstr "Vous ne pouvez pas retirer ici votre propre rôle de superadministrateur."
+
+msgid "Die letzte aktive Superadmin-Berechtigung kann nicht entfernt werden."
+msgstr "La dernière autorisation active de superadministrateur ne peut pas être retirée."
+
+msgid "Ein gesperrter Service Account kann nicht rotiert werden."
+msgstr "Impossible de renouveler les identifiants d’un compte de service bloqué."
+
+msgid "Mollie-Produktiv-Checkout wurde gesperrt."
+msgstr "Le paiement Mollie en production a été désactivé."
+
+msgid "Bestätigung für die Erstattung fehlt."
+msgstr "La confirmation du remboursement manque."
+
+msgid "Erstattung wurde an Mollie übermittelt."
+msgstr "La demande de remboursement a été transmise à Mollie."
+
+msgid "Für dieses Unternehmen existiert bereits ein aktiver Firmenadministrator."
+msgstr "Cette entreprise dispose déjà d’un administrateur actif."
+
+msgid "Dieser Benutzer ist bereits Firmenadministrator."
+msgstr "Cet utilisateur est déjà administrateur de l’entreprise."
+
+msgid "Ungültiger Supportstatus."
+msgstr "Statut de support non valide."
+
+msgid "Ungültiger Bearbeitungsstatus."
+msgstr "Statut de traitement non valide."
+
+msgid "Bitte eine Antwort eingeben."
+msgstr "Veuillez saisir une réponse."
+
+msgid "Die Antwort darf höchstens 10.000 Zeichen enthalten."
+msgstr "La réponse ne doit pas dépasser 10 000 caractères."
+
+msgid "Status aktualisiert."
+msgstr "Statut mis à jour."
+
+msgid "Einstellungen gespeichert."
+msgstr "Paramètres enregistrés."
+
+msgid "Rolle gespeichert."
+msgstr "Rôle enregistré."
+
+msgid "Rolle zugewiesen."
+msgstr "Rôle attribué."
+
+msgid "Rolle entfernt."
+msgstr "Rôle retiré."
+
+msgid "Benutzerstatus aktualisiert."
+msgstr "Statut de l’utilisateur mis à jour."
