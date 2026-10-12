@@ -2686,3 +2686,27 @@ msgstr "Cayma hakkı bilgilendirmesini okudum"
 
 msgid "Zum Beispiel Bestellnummer oder Kundennummer."
 msgstr "Örneğin sipariş veya müşteri numarası."
+
+msgid "Gerätename"
+msgstr "Cihaz adı"
+
+msgid "Keine konkrete Lizenz"
+msgstr "Belirli bir lisans yok"
+
+msgid "Lizenz (optional)"
+msgstr "Lisans (isteğe bağlı)"
+
+msgid "Nachricht"
+msgstr "Mesaj"
+
+msgid "Schlüssel"
+msgstr "Anahtar"
+
+msgid "Sonstiges"
+msgstr "Diğer"
+
+msgid "Sortierung"
+msgstr "Sıralama"
+
+msgid "Technisches Problem"
+msgstr "Teknik sorun"
