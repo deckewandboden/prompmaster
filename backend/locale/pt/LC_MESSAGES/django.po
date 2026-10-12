@@ -1675,3 +1675,78 @@ msgstr "Não existem pedidos de eliminação."
 
 msgid "Alle Löschanfragen"
 msgstr "Todos os pedidos de eliminação"
+
+msgid "Bestellung vom"
+msgstr "Encomenda de"
+
+msgid "Zurück zur Liste"
+msgstr "Voltar à lista"
+
+msgid "Brutto"
+msgstr "Bruto"
+
+msgid "Steuer"
+msgstr "Imposto"
+
+msgid "Keine Zahlung erfasst."
+msgstr "Nenhum pagamento registado."
+
+msgid "Positionen"
+msgstr "Itens"
+
+msgid "Menge"
+msgstr "Quantidade"
+
+msgid "Einzelpreis"
+msgstr "Preço unitário"
+
+msgid "Lizenzstatus wirklich ändern?"
+msgstr "Alterar realmente o estado desta licença?"
+
+msgid "Lizenz entsperren"
+msgstr "Desbloquear licença"
+
+msgid "Lizenz sperren"
+msgstr "Bloquear licença"
+
+msgid "Inhaber & Zuweisung"
+msgstr "Titular e atribuição"
+
+msgid "Zugewiesen an"
+msgstr "Atribuída a"
+
+msgid "Lizenzzuweisung wirklich freigeben? Aktive Geräte dieser Lizenz werden widerrufen."
+msgstr "Libertar realmente a atribuição desta licença? Os dispositivos ativos associados serão revogados."
+
+msgid "Zuweisung freigeben"
+msgstr "Libertar atribuição"
+
+msgid "Aktiven Firmenbenutzer auswählen"
+msgstr "Selecionar utilizador ativo da empresa"
+
+msgid "Bitte auswählen"
+msgstr "Selecione"
+
+msgid "Lizenz zuweisen"
+msgstr "Atribuir licença"
+
+msgid "Lizenzperioden"
+msgstr "Períodos de licença"
+
+msgid "Von"
+msgstr "De"
+
+msgid "Bis"
+msgstr "Até"
+
+msgid "Erstattung"
+msgstr "Reembolso"
+
+msgid "Erstattung wirklich verbindlich über Mollie auslösen?"
+msgstr "Confirma a emissão definitiva do reembolso através da Mollie?"
+
+msgid "Erstattung prüfen/auslösen"
+msgstr "Verificar/emitir reembolso"
+
+msgid "Keine Lizenzperioden vorhanden."
+msgstr "Não existem períodos de licença."
