@@ -2267,3 +2267,195 @@ msgstr "Результат"
 
 msgid "Deterministischer Feld-Fallback"
 msgstr "Детерминированное резервное значение поля"
+
+msgid "10-Min.-Ø:"
+msgstr "Среднее за 10 мин:"
+
+msgid "Aktive Warnungen"
+msgstr "Активные оповещения"
+
+msgid "App-Version"
+msgstr "Версия приложения"
+
+msgid "Architektur"
+msgstr "Архитектура"
+
+msgid "Backup & Restore"
+msgstr "Резервное копирование и восстановление"
+
+msgid "Backups öffnen"
+msgstr "Открыть резервные копии"
+
+msgid "Betriebszustand, Plattformdienste, Integrationen und Datensicherung."
+msgstr "Состояние системы, службы платформы, интеграции и резервное копирование."
+
+msgid "CPU-Kerne"
+msgstr "Ядер ЦП"
+
+msgid "Caddy"
+msgstr "Caddy"
+
+msgid "Celery Beat"
+msgstr "Celery Beat"
+
+msgid "Celery Worker"
+msgstr "Celery Worker"
+
+msgid "Container-CPU aktuell"
+msgstr "Текущая загрузка ЦП контейнеров"
+
+msgid "Container-RAM gesamt"
+msgstr "Общая память контейнеров"
+
+msgid "DB-Verbindungen"
+msgstr "Подключения к базе данных"
+
+msgid "Dateiobjekte (Inodes) belegt"
+msgstr "Использованные inode"
+
+msgid "Dateiobjekte (Inodes) verfügbar"
+msgstr "Доступные inode"
+
+msgid "Datenbank & Jobs"
+msgstr "База данных и задания"
+
+msgid "Datenbank öffnen"
+msgstr "Открыть базу данных"
+
+msgid "Datenträger / gesamt"
+msgstr "Диск / всего"
+
+msgid "Datenträger / verfügbar"
+msgstr "Диск / доступно"
+
+msgid "Datenträger / verwendet"
+msgstr "Диск / использовано"
+
+msgid "Definitionen"
+msgstr "Определения"
+
+msgid "Dienste & Integrationen"
+msgstr "Службы и интеграции"
+
+msgid "Dienste öffnen"
+msgstr "Открыть службы"
+
+msgid "Diese Werte stammen aus cAdvisor und beziehen sich auf Docker-Container. Die VM-Werte oben stammen aus node_exporter und beziehen sich auf die gesamte Docker-Host-VM."
+msgstr "Эти показатели поступают из cAdvisor и относятся к контейнерам Docker. Показатели ВМ выше поступают из node_exporter и охватывают всю виртуальную машину хоста Docker."
+
+msgid "Docker"
+msgstr "Docker"
+
+msgid "Docker-Container"
+msgstr "Контейнеры Docker"
+
+msgid "Erkannte Container"
+msgstr "Обнаруженные контейнеры"
+
+msgid "Fehler / 24 h"
+msgstr "Ошибки / 24 ч"
+
+msgid "Git Commit"
+msgstr "Коммит Git"
+
+msgid "Host & Release"
+msgstr "Хост и выпуск"
+
+msgid "Inodes sind Dateisystem-Einträge für Dateien und Verzeichnisse. Sind sie ausgeschöpft, können trotz freiem Speicher keine neuen Dateien angelegt werden."
+msgstr "Inode — записи файловой системы для файлов и каталогов. При их исчерпании создавать новые файлы нельзя, даже если на диске осталось свободное место."
+
+msgid "Keine aktiven Systemwarnungen."
+msgstr "Нет активных системных оповещений."
+
+msgid "Letzter Restore-Test"
+msgstr "Последний тест восстановления"
+
+msgid "Letztes Backup"
+msgstr "Последняя резервная копия"
+
+msgid "Letztes Deployment"
+msgstr "Последнее развертывание"
+
+msgid "Load:"
+msgstr "Нагрузка:"
+
+msgid "Messbereich"
+msgstr "Область измерения"
+
+msgid "Messquelle"
+msgstr "Источник измерений"
+
+msgid "Messwert-Erklärung"
+msgstr "Пояснения к показателям"
+
+msgid "OS / Kernel"
+msgstr "ОС / ядро"
+
+msgid "PostgreSQL"
+msgstr "PostgreSQL"
+
+msgid "Prompt MCP"
+msgstr "Prompt MCP"
+
+msgid "RAM gesamt"
+msgstr "Всего ОЗУ"
+
+msgid "RAM verfügbar"
+msgstr "Доступно ОЗУ"
+
+msgid "RAM verwendet"
+msgstr "Использовано ОЗУ"
+
+msgid "Restore-Tests öffnen"
+msgstr "Открыть тесты восстановления"
+
+msgid "TLS-Zertifikat"
+msgstr "Сертификат TLS"
+
+msgid "Umgebung"
+msgstr "Среда"
+
+msgid "Uptime"
+msgstr "Время работы"
+
+msgid "VM-CPU aktuell"
+msgstr "Текущая загрузка ЦП ВМ"
+
+msgid "VM-Datenträger /"
+msgstr "Диск ВМ /"
+
+msgid "VM-RAM"
+msgstr "ОЗУ ВМ"
+
+msgid "VM-Speicher & Dateisystem"
+msgstr "Память ВМ и файловая система"
+
+msgid "Verwendetes Backup"
+msgstr "Использованная резервная копия"
+
+msgid "Warnungen öffnen"
+msgstr "Открыть оповещения"
+
+msgid "geschützt"
+msgstr "защищено"
+
+msgid "healthy"
+msgstr "исправно"
+
+msgid "konfiguriert"
+msgstr "настроено"
+
+msgid "nicht erreichbar"
+msgstr "недоступно"
+
+msgid "nicht protokolliert"
+msgstr "не зарегистрировано"
+
+msgid "und ist die für neue Prozesse realistisch nutzbare Speichermenge. „Inodes“ sind Dateisystem-Einträge; ein niedriger Belegungsgrad ist unkritisch."
+msgstr "и обозначает объем памяти, реально доступный новым процессам. Inode — записи файловой системы; низкий уровень их использования не вызывает опасений."
+
+msgid "verfügbar von"
+msgstr "доступно из"
+
+msgid "„RAM verfügbar“ entspricht Linux"
+msgstr "«Доступно ОЗУ» соответствует значению Linux"
