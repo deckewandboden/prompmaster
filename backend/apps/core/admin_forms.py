@@ -3,6 +3,7 @@ from decimal import Decimal
 from django import forms
 from django.conf import settings
 from django.utils import timezone
+from django.utils.translation import gettext_lazy as _
 
 from apps.accounts.models import Permission, Role, User
 from apps.companies.forms import CompanyForm
@@ -17,8 +18,8 @@ class LeadForm(forms.ModelForm):
     assigned_to = forms.ModelChoiceField(
         queryset=User.objects.none(),
         required=False,
-        label='Zuständig',
-        empty_label='Nicht zugewiesen',
+        label=_("Zuständig"),
+        empty_label=_("Nicht zugewiesen"),
     )
 
     class Meta:
@@ -28,17 +29,17 @@ class LeadForm(forms.ModelForm):
             'source', 'status', 'priority', 'assigned_to', 'next_action_at', 'notes',
         ]
         labels = {
-            'kind': 'Lead-Typ',
-            'company_name': 'Unternehmen',
-            'first_name': 'Vorname',
-            'last_name': 'Nachname',
-            'email': 'E-Mail',
-            'phone': 'Telefon',
-            'source': 'Quelle',
-            'status': 'Status',
-            'priority': 'Priorität',
-            'next_action_at': 'Nächste Aktion',
-            'notes': 'Interne Notizen',
+            'kind': _("Lead-Typ"),
+            'company_name': _("Unternehmen"),
+            'first_name': _("Vorname"),
+            'last_name': _("Nachname"),
+            'email': _("E-Mail"),
+            'phone': _("Telefon"),
+            'source': _("Quelle"),
+            'status': _("Status"),
+            'priority': _("Priorität"),
+            'next_action_at': _("Nächste Aktion"),
+            'notes': _("Interne Notizen"),
         }
         widgets = {
             'next_action_at': forms.DateTimeInput(attrs={'type': 'datetime-local'}),
@@ -55,7 +56,7 @@ class LeadForm(forms.ModelForm):
     def clean(self):
         data = super().clean()
         if data.get('kind') == 'company' and not (data.get('company_name') or '').strip():
-            self.add_error('company_name', 'Für Unternehmens-Leads ist der Unternehmensname erforderlich.')
+            self.add_error('company_name', _("Für Unternehmens-Leads ist der Unternehmensname erforderlich."))
         return data
 
 
@@ -69,7 +70,7 @@ class LeadForm(forms.ModelForm):
             duplicates = duplicates.exclude(pk=self.instance.pk)
         if duplicates.exists():
             raise forms.ValidationError(
-                'Für diese E-Mail-Adresse existiert bereits ein aktiver Lead.'
+                _("Für diese E-Mail-Adresse existiert bereits ein aktiver Lead.")
             )
         return value
 
@@ -78,8 +79,8 @@ class LeadAssignForm(forms.Form):
     assigned_to = forms.ModelChoiceField(
         queryset=User.objects.none(),
         required=False,
-        label='Zuständig',
-        empty_label='Nicht zugewiesen',
+        label=_("Zuständig"),
+        empty_label=_("Nicht zugewiesen"),
     )
 
     def __init__(self, *args, **kwargs):
@@ -92,27 +93,27 @@ class LeadAssignForm(forms.Form):
 
 class LeadDeleteForm(forms.Form):
     confirm = forms.BooleanField(
-        label='Lead wirklich löschen',
-        help_text='Der Datensatz wird revisionssicher ausgeblendet und im Audit protokolliert.',
+        label=_("Lead wirklich löschen"),
+        help_text=_("Der Datensatz wird revisionssicher ausgeblendet und im Audit protokolliert."),
     )
 
 
 class LeadConvertCompanyForm(forms.Form):
-    company_name = forms.CharField(max_length=200, label='Unternehmensname')
-    legal_form = forms.CharField(max_length=80, required=False, label='Rechtsform')
-    email = forms.EmailField(label='E-Mail des Firmenadministrators')
-    first_name = forms.CharField(max_length=120, label='Vorname')
-    last_name = forms.CharField(max_length=120, label='Nachname')
-    phone = forms.CharField(max_length=60, required=False, label='Telefon')
-    street = forms.CharField(max_length=160, required=False, label='Straße')
-    house_number = forms.CharField(max_length=40, required=False, label='Hausnummer')
-    postal_code = forms.CharField(max_length=20, required=False, label='PLZ')
-    city = forms.CharField(max_length=120, required=False, label='Ort')
-    country = forms.CharField(max_length=2, initial='DE', label='Land')
-    vat_id = forms.CharField(max_length=40, required=False, label='USt-IdNr.')
-    tax_number = forms.CharField(max_length=60, required=False, label='Steuernummer')
+    company_name = forms.CharField(max_length=200, label=_("Unternehmensname"))
+    legal_form = forms.CharField(max_length=80, required=False, label=_("Rechtsform"))
+    email = forms.EmailField(label=_("E-Mail des Firmenadministrators"))
+    first_name = forms.CharField(max_length=120, label=_("Vorname"))
+    last_name = forms.CharField(max_length=120, label=_("Nachname"))
+    phone = forms.CharField(max_length=60, required=False, label=_("Telefon"))
+    street = forms.CharField(max_length=160, required=False, label=_("Straße"))
+    house_number = forms.CharField(max_length=40, required=False, label=_("Hausnummer"))
+    postal_code = forms.CharField(max_length=20, required=False, label=_("PLZ"))
+    city = forms.CharField(max_length=120, required=False, label=_("Ort"))
+    country = forms.CharField(max_length=2, initial='DE', label=_("Land"))
+    vat_id = forms.CharField(max_length=40, required=False, label=_("USt-IdNr."))
+    tax_number = forms.CharField(max_length=60, required=False, label=_("Steuernummer"))
     confirm = forms.BooleanField(
-        label='Lead in Firmenkunden umwandeln und Einladungslink senden',
+        label=_("Lead in Firmenkunden umwandeln und Einladungslink senden"),
     )
 
 
@@ -120,25 +121,25 @@ class LeadConvertCompanyForm(forms.Form):
         value = self.cleaned_data['email'].strip().lower()
         if User.objects.filter(email__iexact=value).exists():
             raise forms.ValidationError(
-                'Diese E-Mail-Adresse gehört bereits zu einem PROMPTFINISHER-Konto.'
+                _("Diese E-Mail-Adresse gehört bereits zu einem PROMPTFINISHER-Konto.")
             )
         if Company.objects.filter(email__iexact=value).exists():
             raise forms.ValidationError(
-                'Diese E-Mail-Adresse ist bereits einem Firmenkunden zugeordnet.'
+                _("Diese E-Mail-Adresse ist bereits einem Firmenkunden zugeordnet.")
             )
         return value
 
 
 class CustomerAdminInviteForm(forms.Form):
-    email = forms.EmailField(label='E-Mail des Firmenadministrators')
-    first_name = forms.CharField(max_length=120, label='Vorname')
-    last_name = forms.CharField(max_length=120, label='Nachname')
+    email = forms.EmailField(label=_("E-Mail des Firmenadministrators"))
+    first_name = forms.CharField(max_length=120, label=_("Vorname"))
+    last_name = forms.CharField(max_length=120, label=_("Nachname"))
 
     def clean_email(self):
         value = self.cleaned_data['email'].strip().lower()
         if User.objects.filter(email__iexact=value).exists():
             raise forms.ValidationError(
-                'Diese E-Mail-Adresse gehört bereits zu einem PROMPTFINISHER-Konto.'
+                _("Diese E-Mail-Adresse gehört bereits zu einem PROMPTFINISHER-Konto.")
             )
         return value
 
@@ -146,18 +147,18 @@ class CustomerAdminInviteForm(forms.Form):
 class SupportAdminTransferForm(forms.Form):
     password = forms.CharField(
         widget=forms.PasswordInput(render_value=False),
-        label='Eigenes Passwort erneut eingeben',
-        help_text='Sicherheitsbestätigung des aktuell angemeldeten netstyle Benutzers.',
+        label=_("Eigenes Passwort erneut eingeben"),
+        help_text=_("Sicherheitsbestätigung des aktuell angemeldeten netstyle Benutzers."),
     )
     identity_verified = forms.BooleanField(
         required=True,
-        label='Identität und Berechtigung des Ansprechpartners wurden geprüft',
+        label=_("Identität und Berechtigung des Ansprechpartners wurden geprüft"),
     )
     note = forms.CharField(
         required=False,
         max_length=500,
         widget=forms.Textarea(attrs={'rows': 3}),
-        label='Interne Notiz zur Prüfung (optional)',
+        label=_("Interne Notiz zur Prüfung (optional)"),
     )
 
 
@@ -169,7 +170,7 @@ class AdminCompanyForm(CompanyForm):
 class ProductForm(forms.ModelForm):
     features = forms.ModelMultipleChoiceField(
         queryset=Feature.objects.none(), required=False, widget=forms.CheckboxSelectMultiple,
-        label='Features / Entitlements',
+        label=_("Features / Entitlements"),
     )
 
     class Meta:
@@ -180,17 +181,17 @@ class ProductForm(forms.ModelForm):
             'reminder_2_days', 'critical_warning_days',
         ]
         labels = {
-            'code': 'Produktcode',
-            'name': 'Name',
-            'description': 'Beschreibung',
-            'active': 'Aktiv',
-            'visible': 'Sichtbar',
-            'purchasable': 'Kaufbar',
-            'default_license_days': 'Standard-Laufzeit in Tagen',
-            'default_device_limit': 'Geräte je Benutzer',
-            'reminder_1_days': 'Erinnerung 1 · Tage vorher',
-            'reminder_2_days': 'Erinnerung 2 · Tage vorher',
-            'critical_warning_days': 'Kritische Warnung · Tage vorher',
+            'code': _("Produktcode"),
+            'name': _("Name"),
+            'description': _("Beschreibung"),
+            'active': _("Aktiv"),
+            'visible': _("Sichtbar"),
+            'purchasable': _("Kaufbar"),
+            'default_license_days': _("Standard-Laufzeit in Tagen"),
+            'default_device_limit': _("Geräte je Benutzer"),
+            'reminder_1_days': _("Erinnerung 1 · Tage vorher"),
+            'reminder_2_days': _("Erinnerung 2 · Tage vorher"),
+            'critical_warning_days': _("Kritische Warnung · Tage vorher"),
         }
 
     def __init__(self, *args, **kwargs):
@@ -224,9 +225,9 @@ class ProductForm(forms.ModelForm):
         r2 = data.get('reminder_2_days')
         critical = data.get('critical_warning_days')
         if None not in (r1, r2) and r1 <= r2:
-            self.add_error('reminder_1_days', 'Reminder 1 muss vor Reminder 2 liegen (größere Tageszahl).')
+            self.add_error('reminder_1_days', _("Reminder 1 muss vor Reminder 2 liegen (größere Tageszahl)."))
         if None not in (r2, critical) and r2 <= critical:
-            self.add_error('reminder_2_days', 'Reminder 2 muss vor der kritischen Warnphase liegen.')
+            self.add_error('reminder_2_days', _("Reminder 2 muss vor der kritischen Warnphase liegen."))
         return data
 
 
@@ -241,10 +242,10 @@ class FeatureForm(forms.ModelForm):
 
 
 class PriceVersionForm(forms.Form):
-    price_type = forms.ChoiceField(label='Preistyp', choices=[('new', 'Neukauf'), ('renewal', 'Verlängerung')])
-    gross_amount = forms.DecimalField(min_value=Decimal('0.00'), decimal_places=2, max_digits=10, label='Bruttopreis')
-    currency = forms.CharField(max_length=3, initial='EUR', label='Währung')
-    valid_from = forms.DateTimeField(initial=timezone.now, label='Gültig ab')
+    price_type = forms.ChoiceField(label=_("Preistyp"), choices=[('new', _("Neukauf")), ('renewal', _("Verlängerung"))])
+    gross_amount = forms.DecimalField(min_value=Decimal('0.00'), decimal_places=2, max_digits=10, label=_("Bruttopreis"))
+    currency = forms.CharField(max_length=3, initial='EUR', label=_("Währung"))
+    valid_from = forms.DateTimeField(initial=timezone.now, label=_("Gültig ab"))
 
     def clean_currency(self):
         return self.cleaned_data['currency'].strip().upper()
@@ -259,14 +260,14 @@ class EmailTemplateForm(forms.ModelForm):
 
 class ServiceAccountForm(forms.Form):
     SCOPE_CHOICES = [
-        ('ops.read', 'Operations lesen'),
-        ('prompt.read', 'Prompts lesen'),
-        ('prompt.draft', 'Prompt-Drafts erzeugen'),
-        ('prompt.test', 'Prompt-Tests ausführen'),
+        ('ops.read', _("Operations lesen")),
+        ('prompt.read', _("Prompts lesen")),
+        ('prompt.draft', _("Prompt-Drafts erzeugen")),
+        ('prompt.test', _("Prompt-Tests ausführen")),
     ]
-    name = forms.CharField(max_length=120, label='Name')
-    scopes = forms.MultipleChoiceField(label='Berechtigungen', choices=SCOPE_CHOICES, initial=['ops.read'])
-    expires_at = forms.DateTimeField(required=False, label='Ablauf optional')
+    name = forms.CharField(max_length=120, label=_("Name"))
+    scopes = forms.MultipleChoiceField(label=_("Berechtigungen"), choices=SCOPE_CHOICES, initial=['ops.read'])
+    expires_at = forms.DateTimeField(required=False, label=_("Ablauf optional"))
 
 
 class LegalDocumentForm(forms.ModelForm):
@@ -274,11 +275,11 @@ class LegalDocumentForm(forms.ModelForm):
         model = LegalDocument
         fields = ['doc_type', 'version', 'content', 'valid_from', 'active']
         labels = {
-            'doc_type': 'Dokumenttyp',
-            'version': 'Version',
-            'content': 'Inhalt',
-            'valid_from': 'Gültig ab',
-            'active': 'Aktiv',
+            'doc_type': _("Dokumenttyp"),
+            'version': _("Version"),
+            'content': _("Inhalt"),
+            'valid_from': _("Gültig ab"),
+            'active': _("Aktiv"),
         }
 
 
@@ -288,8 +289,8 @@ class RetentionPolicyForm(forms.ModelForm):
         fields = ['data_class', 'retain_days', 'active']
         labels = {'data_class': 'Datenklasse', 'retain_days': 'Aufbewahrung in Tagen', 'active': 'Aktiv'}
         help_texts = {
-            'data_class': 'Unterstützt: expired_invitations, email_messages, revoked_devices, resolved_system_alerts, resolved_task_failures, expired_sessions.',
-            'retain_days': 'Löschung erst nach dieser Anzahl Tage. Rechtliche Aufbewahrungsfristen separat prüfen.',
+            'data_class': _("Unterstützt: expired_invitations, email_messages, revoked_devices, resolved_system_alerts, resolved_task_failures, expired_sessions."),
+            'retain_days': _("Löschung erst nach dieser Anzahl Tage. Rechtliche Aufbewahrungsfristen separat prüfen."),
         }
 
     ALLOWED_DATA_CLASSES = {
@@ -300,43 +301,43 @@ class RetentionPolicyForm(forms.ModelForm):
     def clean_data_class(self):
         value = self.cleaned_data['data_class'].strip()
         if value not in self.ALLOWED_DATA_CLASSES:
-            raise forms.ValidationError('Für diese Datenklasse existiert kein freigegebener Lösch-Handler.')
+            raise forms.ValidationError(_("Für diese Datenklasse existiert kein freigegebener Lösch-Handler."))
         return value
 
 
 class DeletionRejectForm(forms.Form):
-    notes = forms.CharField(widget=forms.Textarea, max_length=5000, label='Begründung')
+    notes = forms.CharField(widget=forms.Textarea, max_length=5000, label=_("Begründung"))
 
 
 PERMISSION_DOMAIN_LABELS = {
-    'customers': 'Kunden',
-    'leads': 'Leads',
-    'licenses': 'Lizenzen',
-    'devices': 'Geräte',
-    'orders': 'Bestellungen',
-    'payments': 'Zahlungen',
-    'products': 'Produkte & Preise',
-    'email': 'E-Mail',
-    'ops': 'System & Betrieb',
-    'api': 'API & Integrationen',
-    'roles': 'Benutzer & Rollen',
-    'legal': 'Datenschutz & Recht',
-    'support': 'Kontaktanfragen',
-    'audit': 'Protokolle',
-    'settings': 'Einstellungen',
-    'prompts': 'Prompt Studio',
-    'content': 'FAQ & Inhalte',
+    'customers': _("Kunden"),
+    'leads': _("Leads"),
+    'licenses': _("Lizenzen"),
+    'devices': _("Geräte"),
+    'orders': _("Bestellungen"),
+    'payments': _("Zahlungen"),
+    'products': _("Produkte & Preise"),
+    'email': _("E-Mail"),
+    'ops': _("System & Betrieb"),
+    'api': _("API & Integrationen"),
+    'roles': _("Benutzer & Rollen"),
+    'legal': _("Datenschutz & Recht"),
+    'support': _("Kontaktanfragen"),
+    'audit': _("Protokolle"),
+    'settings': _("Einstellungen"),
+    'prompts': _("Prompt Studio"),
+    'content': _("FAQ & Inhalte"),
 }
 PERMISSION_ACTION_LABELS = {
-    'read': 'Lesen',
-    'assign': 'Zuweisen',
-    'convert': 'In Kunde umwandeln',
-    'delete': 'Löschen',
-    'write': 'Bearbeiten',
-    'refund': 'Erstatten',
-    'compose': 'Prompts erzeugen',
-    'publish': 'Veröffentlichen',
-    'quality': 'Qualität verwalten',
+    'read': _("Lesen"),
+    'assign': _("Zuweisen"),
+    'convert': _("In Kunde umwandeln"),
+    'delete': _("Löschen"),
+    'write': _("Bearbeiten"),
+    'refund': _("Erstatten"),
+    'compose': _("Prompts erzeugen"),
+    'publish': _("Veröffentlichen"),
+    'quality': _("Qualität verwalten"),
 }
 
 
@@ -355,7 +356,7 @@ class RoleForm(forms.ModelForm):
         queryset=Permission.objects.none(),
         required=False,
         widget=forms.CheckboxSelectMultiple,
-        label='Berechtigungen',
+        label=_("Berechtigungen"),
     )
 
     class Meta:
@@ -369,10 +370,10 @@ class RoleForm(forms.ModelForm):
 
 
 class StaffUserCreateForm(forms.Form):
-    email = forms.EmailField(label='E-Mail')
-    first_name = forms.CharField(max_length=120, label='Vorname')
-    last_name = forms.CharField(max_length=120, label='Nachname')
-    role = forms.ModelChoiceField(queryset=Role.objects.none(), label='Rolle')
+    email = forms.EmailField(label=_("E-Mail"))
+    first_name = forms.CharField(max_length=120, label=_("Vorname"))
+    last_name = forms.CharField(max_length=120, label=_("Nachname"))
+    role = forms.ModelChoiceField(queryset=Role.objects.none(), label=_("Rolle"))
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -381,13 +382,13 @@ class StaffUserCreateForm(forms.Form):
     def clean_email(self):
         value = self.cleaned_data['email'].strip().lower()
         if User.objects.filter(email__iexact=value).exists():
-            raise forms.ValidationError('Diese E-Mail-Adresse ist bereits registriert.')
+            raise forms.ValidationError(_("Diese E-Mail-Adresse ist bereits registriert."))
         return value
 
 
 class StaffUserRoleForm(forms.Form):
-    user = forms.ModelChoiceField(queryset=User.objects.none(), label='Benutzer')
-    role = forms.ModelChoiceField(queryset=Role.objects.none(), label='Rolle')
+    user = forms.ModelChoiceField(queryset=User.objects.none(), label=_("Benutzer"))
+    role = forms.ModelChoiceField(queryset=Role.objects.none(), label=_("Rolle"))
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -396,13 +397,13 @@ class StaffUserRoleForm(forms.Form):
 
 
 class MollieConfigForm(forms.Form):
-    profile_id = forms.CharField(max_length=120, required=False, label='Profile ID')
+    profile_id = forms.CharField(max_length=120, required=False, label=_("Profile ID"))
     api_key = forms.CharField(
         max_length=255,
         required=False,
         widget=forms.PasswordInput(render_value=False),
-        label='API-Schlüssel',
-        help_text='Leer lassen, um den bestehenden Schlüssel unverändert zu lassen.',
+        label=_("API-Schlüssel"),
+        help_text=_("Leer lassen, um den bestehenden Schlüssel unverändert zu lassen."),
     )
 
     def clean_api_key(self):
@@ -413,11 +414,11 @@ class MollieConfigForm(forms.Form):
         if environment == 'production':
             if not key.startswith('live_'):
                 raise forms.ValidationError(
-                    'In Produktion ist ausschließlich ein Mollie-Live-Key (live_…) zulässig.'
+                    _("In Produktion ist ausschließlich ein Mollie-Live-Key (live_…) zulässig.")
                 )
         elif not key.startswith('test_'):
             raise forms.ValidationError(
-                'Außerhalb der Produktion ist ausschließlich ein Mollie-Test-Key (test_…) zulässig.'
+                _("Außerhalb der Produktion ist ausschließlich ein Mollie-Test-Key (test_…) zulässig.")
             )
         return key
 
