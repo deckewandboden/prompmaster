@@ -38,6 +38,10 @@ PAGES = (
     'ns_admin/order_detail.html',
     'ns_admin/license_detail.html',
     'ns_admin/email_log.html',
+    'ns_admin/includes_customer_nav.html',
+    'ns_admin/includes_private_customer_nav.html',
+    'ns_admin/customer_grid.html',
+    'ns_admin/private_customer_grid.html',
 )
 TRANSLATE_PATTERN = re.compile(r'''{%\s*translate\s+(['"])(.*?)\1\s*%}''')
 
@@ -216,6 +220,48 @@ class AdminInternationalizationContractTests(SimpleTestCase):
                 )
                 with self.subTest(locale=code, status=phrase):
                     self.assertTrue(translations.get(phrase))
+
+    def test_customer_grids_protect_device_revocation_and_user_disable_prompts(self):
+        paths = ('ns_admin/customer_grid.html', 'ns_admin/private_customer_grid.html')
+        messages = (
+            'Benutzer wirklich deaktivieren? Lizenzen und Gerätezugänge werden freigegeben.',
+            'Gerätezugang wirklich widerrufen?',
+        )
+        for path in paths:
+            source = (ROOT / 'templates' / path).read_text(encoding='utf-8')
+            self.assertIn("{% translate title %}", source)
+            self.assertIn("{% translate 'Aktion' %}", source)
+            self.assertIn(
+                "data-confirm=\"{% translate 'Gerätezugang wirklich widerrufen?' %}\"",
+                source,
+            )
+            if path.endswith('/customer_grid.html'):
+                self.assertIn(
+                    "data-confirm=\"{% translate 'Benutzer wirklich deaktivieren? Lizenzen und Gerätezugänge werden freigegeben.' %}\"",
+                    source,
+                )
+        for code in LOCALES:
+            catalog = catalog_translations(
+                ROOT / 'locale' / code / 'LC_MESSAGES' / 'django.po'
+            )
+            for phrase in messages:
+                with self.subTest(language=code, message=phrase):
+                    self.assertTrue(catalog.get(phrase))
+
+    def test_customer_navigation_has_localized_accessible_labels(self):
+        for page, label in (
+            ('ns_admin/includes_customer_nav.html', 'Kundenbereiche'),
+            ('ns_admin/includes_private_customer_nav.html', 'Privatkundenbereiche'),
+        ):
+            source = (ROOT / 'templates' / page).read_text(encoding='utf-8')
+            self.assertIn("aria-label=\"{% translate '" + label + "' %}\"", source)
+            self.assertIn("{% translate 'Übersicht' %}", source)
+            for code in LOCALES:
+                catalog = catalog_translations(
+                    ROOT / 'locale' / code / 'LC_MESSAGES' / 'django.po'
+                )
+                with self.subTest(page=page, language=code):
+                    self.assertTrue(catalog.get(label))
 
     def test_language_picker_is_in_flex_header_and_never_overlays_avatar(self):
         shell = (ROOT / 'templates/app_shell.html').read_text(encoding='utf-8')
