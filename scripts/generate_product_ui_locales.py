@@ -23,6 +23,8 @@ IMMUTABLE_BRAND_LABELS = frozenset({
     'Word', 'Excel', 'PowerPoint', 'Outlook', 'Teams', 'OneNote',
     'OneDrive', 'SharePoint', 'Power BI', 'Power Apps', 'Power Automate',
     'Copilot Studio', 'Clipchamp', 'Whiteboard', 'Power Pages',
+    'Microsoft Security Copilot', 'Microsoft 365 Copilot Business',
+    'Copilot Chat (Basic)', 'M365 Copilot (Basic)',
 })
 PROTECTED = re.compile(
     '|'.join(
