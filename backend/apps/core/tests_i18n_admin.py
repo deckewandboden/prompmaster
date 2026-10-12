@@ -1229,6 +1229,8 @@ class AdminInternationalizationContractTests(SimpleTestCase):
         self.assertIn("'mollie_status_labels': dict(MOLLIE_STATUS_CHOICES)", view)
         renderer = Template('{% load pm %}{{ labels|get_item:status|default:status }}')
         labels = dict(MOLLIE_STATUS_CHOICES)
+        with override('de'):
+            source_labels = {status: str(label) for status, label in MOLLIE_STATUS_CHOICES}
         for code in LOCALES:
             catalog = catalog_translations(
                 ROOT / 'locale' / code / 'LC_MESSAGES' / 'django.po'
@@ -1237,7 +1239,8 @@ class AdminInternationalizationContractTests(SimpleTestCase):
                 for status, label in MOLLIE_STATUS_CHOICES:
                     rendered = renderer.render(Context({'labels': labels, 'status': status}))
                     with self.subTest(language=code, status=status):
-                        self.assertEqual(rendered, catalog[str(label)] if str(label) in catalog else rendered)
+                        self.assertIn(source_labels[status], catalog)
+                        self.assertEqual(rendered, catalog[source_labels[status]])
                 self.assertEqual(
                     renderer.render(Context({'labels': labels, 'status': 'custom_provider_status'})),
                     'custom_provider_status',
