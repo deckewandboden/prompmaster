@@ -2588,3 +2588,102 @@ msgstr "Фильтр"
 
 msgid "Seite"
 msgstr "страница"
+
+msgid "AGB akzeptieren"
+msgstr "Принять условия использования"
+
+msgid "Anmeldung fehlgeschlagen."
+msgstr "Не удалось войти в систему."
+
+msgid "Anmeldung fehlgeschlagen. Bitte später erneut versuchen."
+msgstr "Не удалось войти. Повторите попытку позже."
+
+msgid "Anzahl Lizenzen"
+msgstr "Количество лицензий"
+
+msgid "Art der Kündigung"
+msgstr "Тип расторжения"
+
+msgid "Außerordentliche Kündigung"
+msgstr "Досрочное расторжение по особым основаниям"
+
+msgid "Bei einer außerordentlichen Kündigung ist der Kündigungsgrund erforderlich."
+msgstr "Для расторжения по особым основаниям необходимо указать причину."
+
+msgid "Bestellnummer"
+msgstr "Номер заказа"
+
+msgid "Bitte bestätigen Sie den gewünschten Leistungsbeginn vor Ablauf der Widerrufsfrist."
+msgstr "Подтвердите запрос на начало оказания услуги до окончания срока отказа от договора."
+
+msgid "Bitte bestätigen Sie die Widerrufsbelehrung."
+msgstr "Подтвердите ознакомление с информацией о праве на отказ от договора."
+
+msgid "Datenschutzhinweise zur Kenntnis genommen"
+msgstr "Я ознакомился(-лась) с уведомлением о конфиденциальности"
+
+msgid "Deutschland"
+msgstr "Германия"
+
+msgid "Die Bestellnummer finden Sie in Ihrer Bestell- bzw. Zahlungsbestätigung."
+msgstr "Номер заказа указан в подтверждении заказа или платежа."
+
+msgid "E-Mail-Adresse für die Eingangsbestätigung"
+msgstr "Адрес электронной почты для подтверждения получения"
+
+msgid "E-Mail-Adresse für die Kündigungsbestätigung"
+msgstr "Адрес электронной почты для подтверждения расторжения"
+
+msgid "Firmenname erforderlich."
+msgstr "Необходимо указать название компании."
+
+msgid "Gewünschter Beendigungszeitpunkt"
+msgstr "Желаемая дата прекращения"
+
+msgid "Hausnummer"
+msgstr "Номер дома"
+
+msgid "Kündigungsgrund"
+msgstr "Причина расторжения"
+
+msgid "Leer lassen für den frühestmöglichen Zeitpunkt."
+msgstr "Оставьте пустым, чтобы выбрать самую раннюю возможную дату."
+
+msgid "Leistungsbeginn vor Ablauf der Widerrufsfrist ausdrücklich verlangt"
+msgstr "Я прямо прошу начать оказание услуги до окончания срока отказа от договора"
+
+msgid "Lizenzbedingungen akzeptieren"
+msgstr "Принять условия лицензии"
+
+msgid "Ordentliche Kündigung"
+msgstr "Расторжение в обычном порядке"
+
+msgid "PLZ"
+msgstr "Почтовый индекс"
+
+msgid "Passwörter stimmen nicht überein."
+msgstr "Пароли не совпадают."
+
+msgid "Steuernummer ist für diese Steuerregel erforderlich."
+msgstr "Для этого налогового правила необходим налоговый номер."
+
+msgid "Straße"
+msgstr "Улица"
+
+msgid "USt-IdNr. ist für diese Steuerregel erforderlich."
+msgstr "Для этого налогового правила необходим номер плательщика НДС."
+
+msgid "Unternehmensname ist erforderlich."
+msgstr "Необходимо указать название компании."
+
+msgid "Vertrag / Bestellung / Kundennummer"
+msgstr "Договор / заказ / номер клиента"
+
+msgid "Vor- und Nachname"
+msgstr "Имя и фамилия"
+
+msgid "Widerrufsinformation zur Kenntnis genommen"
+msgstr "Я ознакомился(-лась) с информацией о праве на отказ от договора"
+
+msgid "Zum Beispiel Bestellnummer oder Kundennummer."
+msgstr "Например, номер заказа или номер клиента."
