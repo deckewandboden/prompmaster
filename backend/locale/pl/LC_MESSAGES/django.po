@@ -2608,3 +2608,6 @@ msgstr "brak danych"
 
 msgid "completed"
 msgstr "ukończony"
+
+msgid "nicht verfügbar"
+msgstr "niedostępne"
