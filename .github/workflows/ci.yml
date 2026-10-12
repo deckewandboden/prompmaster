@@ -119,6 +119,12 @@ jobs:
         working-directory: backend
         run: python manage.py validate_prompt_runtime
 
+      - name: Compile Django translations for language runtime tests
+        working-directory: backend
+        run: |
+          sudo apt-get install -y gettext
+          python manage.py compilemessages --verbosity 0
+
       - name: Django checks and tests
         working-directory: backend
         run: |
