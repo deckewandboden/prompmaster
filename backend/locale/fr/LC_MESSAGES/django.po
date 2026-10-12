@@ -3537,3 +3537,27 @@ msgstr "Type d’objet"
 
 msgid "Objekt-ID"
 msgstr "ID de l’objet"
+
+msgid "Lead anlegen"
+msgstr "Créer un prospect"
+
+msgid "Lead %(lead_number)s zuweisen"
+msgstr "Affecter le prospect %(lead_number)s"
+
+msgid "Firmenadministrator einladen · %(company)s"
+msgstr "Inviter l’administrateur de l’entreprise · %(company)s"
+
+msgid "Feature bearbeiten"
+msgstr "Modifier une fonctionnalité"
+
+msgid "Preisversion · %(product)s"
+msgstr "Version tarifaire · %(product)s"
+
+msgid "Rechtsdokument bearbeiten"
+msgstr "Modifier le document juridique"
+
+msgid "Retention-Policy bearbeiten"
+msgstr "Modifier la politique de conservation"
+
+msgid "Rolle · %(name)s"
+msgstr "Rôle · %(name)s"
