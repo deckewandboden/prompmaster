@@ -3379,3 +3379,45 @@ msgstr "Atribuir função netstyle"
 
 msgid "Erstattung konnte nicht an Mollie übermittelt werden."
 msgstr "Não foi possível enviar o reembolso à Mollie."
+
+msgid "Nachrichtentext"
+msgstr "Texto da mensagem"
+
+msgid "Rollenname"
+msgstr "Nome da função"
+
+msgid "Lead %(lead_number)s löschen"
+msgstr "Eliminar lead %(lead_number)s"
+
+msgid "Lead %(lead_number)s in Kunden umwandeln"
+msgstr "Converter lead %(lead_number)s em cliente"
+
+msgid "Firmenadministrator übertragen · %(email)s"
+msgstr "Transferir administrador da empresa · %(email)s"
+
+msgid "E-Mail-Vorlage · %(code)s"
+msgstr "Modelo de e-mail · %(code)s"
+
+msgid "Löschanfrage ablehnen"
+msgstr "Rejeitar pedido de eliminação"
+
+msgid "Uneingeschränkte Rechte auf alle PROMPTFINISHER-Verwaltungsbereiche."
+msgstr "Acesso irrestrito a todas as áreas de administração do PROMPTFINISHER."
+
+msgid "Kunden, Lizenzen, Geräte, Bestellungen, Zahlungen, E-Mail und Support."
+msgstr "Clientes, licenças, dispositivos, encomendas, pagamentos, e-mail e suporte."
+
+msgid "Monitoring, Backups, Operations API, Logs und Systemstatus."
+msgstr "Monitorização, cópias de segurança, API de operações, registos e estado do sistema."
+
+msgid "Prompt Studio, Prompt-Lifecycle, Qualität und zentrale Inhalte."
+msgstr "Prompt Studio, ciclo de vida dos prompts, qualidade e conteúdos centrais."
+
+msgid "Berechtigungen werden über die zugewiesenen Capabilities gesteuert."
+msgstr "As permissões são controladas pelas capacidades atribuídas."
+
+msgid "Objekttyp"
+msgstr "Tipo de objeto"
+
+msgid "Objekt-ID"
+msgstr "ID do objeto"
