@@ -1483,3 +1483,78 @@ msgstr "İşleyici heartbeat"
 
 msgid "Beat-Heartbeat"
 msgstr "Beat heartbeat"
+
+msgid "Zahlungsprovider, Webhook und letzte Zahlungsereignisse."
+msgstr "Ödeme sağlayıcısı, webhook ve son ödeme olayları."
+
+msgid "Mollie konfigurieren"
+msgstr "Mollie'yi yapılandır"
+
+msgid "Konfiguration"
+msgstr "Yapılandırma"
+
+msgid "Konfiguriert"
+msgstr "Yapılandırıldı"
+
+msgid "Unvollständig"
+msgstr "Eksik"
+
+msgid "Produktiv-Checkout"
+msgstr "Canlı ödeme işlemi"
+
+msgid "Freigegeben"
+msgstr "Etkinleştirildi"
+
+msgid "Modus"
+msgstr "Mod"
+
+msgid "Profile ID"
+msgstr "Profil kimliği"
+
+msgid "API Key"
+msgstr "API anahtarı"
+
+msgid "nicht gesetzt"
+msgstr "ayarlanmadı"
+
+msgid "Live-Zugangsdaten sind hinterlegt, der Kunden-Checkout bleibt jedoch gesperrt, bis die Live-Readiness geprüft und ausdrücklich freigegeben wurde."
+msgstr "Canlı erişim bilgileri kayıtlıdır; ancak canlı kullanıma hazırlık doğrulanıp açıkça onaylanana kadar müşteri ödeme işlemleri engelli kalır."
+
+msgid "Basis-URL"
+msgstr "Temel URL"
+
+msgid "Endpoint"
+msgstr "Uç nokta"
+
+msgid "Letztes Event"
+msgstr "Son olay"
+
+msgid "noch keines"
+msgstr "henüz yok"
+
+msgid "Webhook-Ereignisse öffnen"
+msgstr "Webhook olaylarını aç"
+
+msgid "Notabschaltung"
+msgstr "Acil kapatma"
+
+msgid "Sperrt neue Mollie-Käufe sofort. Bestehende Zahlungen und Webhooks bleiben weiter verarbeitbar."
+msgstr "Yeni Mollie satın almalarını hemen engeller. Mevcut ödemeler ve webhook'lar işlenmeye devam edebilir."
+
+msgid "Produktiv-Checkout sperren"
+msgstr "Canlı ödemeyi devre dışı bırak"
+
+msgid "Letzte Zahlungen"
+msgstr "Son ödemeler"
+
+msgid "Noch keine Zahlungen."
+msgstr "Henüz ödeme yok."
+
+msgid "Letzte Webhook-Events"
+msgstr "Son webhook olayları"
+
+msgid "offen"
+msgstr "açık"
+
+msgid "Noch keine Webhook-Ereignisse."
+msgstr "Henüz webhook olayı yok."
