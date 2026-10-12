@@ -1783,3 +1783,12 @@ msgstr "Queued"
 
 msgid "Keine E-Mails gefunden."
 msgstr "No emails found."
+
+msgid "Kundenbereiche"
+msgstr "Customer sections"
+
+msgid "Privatkundenbereiche"
+msgstr "Individual customer sections"
+
+msgid "Audit"
+msgstr "Audit"
