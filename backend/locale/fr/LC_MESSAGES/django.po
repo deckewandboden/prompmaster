@@ -1674,3 +1674,81 @@ msgstr "en attente"
 
 msgid "Noch keine Webhook-Ereignisse."
 msgstr "Aucun événement webhook pour le moment."
+
+msgid "Vorlagen, Versandstatus, Provider und Fallback-Kette."
+msgstr "Modèles, statut d'envoi, fournisseurs et chaîne de secours."
+
+msgid "Absender & Provider"
+msgstr "Expéditeur et fournisseur"
+
+msgid "Versandprotokoll öffnen"
+msgstr "Ouvrir le journal des envois"
+
+msgid "Vorlagen"
+msgstr "Modèles"
+
+msgid "Keine E-Mail-Vorlagen vorhanden."
+msgstr "Aucun modèle d'e-mail disponible."
+
+msgid "Mail-System"
+msgstr "Système de messagerie"
+
+msgid "Versandmodus"
+msgstr "Mode d'envoi"
+
+msgid "Automatischer Fallback"
+msgstr "Basculement automatique"
+
+msgid "Manuell"
+msgstr "Manuel"
+
+msgid "Primär"
+msgstr "Principal"
+
+msgid "Reihenfolge"
+msgstr "Ordre"
+
+msgid "Status der Kette"
+msgstr "État de la chaîne"
+
+msgid "Aktiver Absender"
+msgstr "Expéditeur actif"
+
+msgid "Anzeigename"
+msgstr "Nom d'affichage"
+
+msgid "Mail-Domain"
+msgstr "Domaine de messagerie"
+
+msgid "Server"
+msgstr "Serveur"
+
+msgid "Anmeldung"
+msgstr "Authentification"
+
+msgid "Passwort fehlt"
+msgstr "Mot de passe manquant"
+
+msgid "Ohne Anmeldung"
+msgstr "Sans authentification"
+
+msgid "Nicht konfiguriert"
+msgstr "Non configuré"
+
+msgid "Fehlt"
+msgstr "Manquant"
+
+msgid "Graph Absender"
+msgstr "Expéditeur Graph"
+
+msgid "Automatischer Fallback erfolgt nur bei eindeutig nicht zugestellten Fehlern. Bei unklaren Fehlern wird nicht automatisch weitergeschaltet, damit dieselbe E-Mail nicht versehentlich doppelt versendet wird."
+msgstr "Le basculement automatique n'a lieu que si la non-livraison est confirmée. En cas d'erreur ambiguë, aucun changement automatique n'est effectué pour éviter l'envoi accidentel du même e-mail deux fois."
+
+msgid "SPF/DKIM/DMARC werden unter „Einstellungen“ als DNS-Sollwerte dokumentiert. Änderungen dort aktualisieren nicht automatisch den öffentlichen DNS."
+msgstr "Les enregistrements DNS attendus pour SPF/DKIM/DMARC sont documentés dans Paramètres. Les modifications n'actualisent pas automatiquement le DNS public."
+
+msgid "Letzte Versandvorgänge"
+msgstr "Envois récents"
+
+msgid "Noch keine Versandvorgänge."
+msgstr "Aucun envoi pour le moment."
