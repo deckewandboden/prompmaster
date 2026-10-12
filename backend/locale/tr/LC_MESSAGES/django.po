@@ -2710,3 +2710,93 @@ msgstr "Sıralama"
 
 msgid "Technisches Problem"
 msgstr "Teknik sorun"
+
+msgid "Aktuelle Stichprobengröße"
+msgstr "Güncel örneklem boyutu"
+
+msgid "App-Regel-Snapshot"
+msgstr "Uygulama kuralı anlık görüntüsü"
+
+msgid "Ausgabeformen"
+msgstr "Çıktı biçimleri"
+
+msgid "Beispiel: {\"microsoft_tier\":\"premium\",\"payload\":{\"fields\":{...}}}"
+msgstr "Örnek: {\"microsoft_tier\":\"premium\",\"payload\":{\"fields\":{...}}}"
+
+msgid "Bereich"
+msgstr "Alan"
+
+msgid "Darf nicht enthalten"
+msgstr "İçermemeli"
+
+msgid "Ein Feld pro Zeile. Optionales Fragment: Feldname ||| Text mit {value}."
+msgstr "Her satıra bir alan. İsteğe bağlı parça: alan adı ||| {value} içeren metin."
+
+msgid "Ein Pflichtfeld pro Zeile."
+msgstr "Her satıra bir zorunlu alan."
+
+msgid "Eingabedaten (JSON)"
+msgstr "Girdi verileri (JSON)"
+
+msgid "Familie"
+msgstr "Aile"
+
+msgid "Feldbezeichnungen müssen innerhalb einer Prompt-Version eindeutig sein."
+msgstr "Alan etiketleri aynı prompt sürümünde benzersiz olmalıdır."
+
+msgid "Kontextvorlage"
+msgstr "Bağlam şablonu"
+
+msgid "Kritisch bei Abfall"
+msgstr "Kritik düşüş eşiği"
+
+msgid "Kritischer Durchschnitt"
+msgstr "Kritik ortalama"
+
+msgid "Maximale Zeichen"
+msgstr "Maksimum karakter sayısı"
+
+msgid "Microsoft-Lizenzstufe"
+msgstr "Microsoft lisans düzeyi"
+
+msgid "Mindestanzahl Stichproben"
+msgstr "Asgari örnek sayısı"
+
+msgid "Mindestdurchschnitt"
+msgstr "Minimum ortalama"
+
+msgid "Muss enthalten"
+msgstr "İçermeli"
+
+msgid "Nur DRAFT-Versionen dürfen inhaltlich bearbeitet werden."
+msgstr "Yalnızca DRAFT sürümleri düzenlenebilir."
+
+msgid "Payload muss ein JSON-Objekt sein."
+msgstr "Payload bir JSON nesnesi olmalıdır."
+
+msgid "Quellen"
+msgstr "Kaynaklar"
+
+msgid "Schwerpunkte"
+msgstr "Odak alanları"
+
+msgid "Test-Payload (JSON)"
+msgstr "Test payload'u (JSON)"
+
+msgid "Test-Payload muss ein JSON-Objekt sein."
+msgstr "Test payload'u bir JSON nesnesi olmalıdır."
+
+msgid "Ungültiges JSON: %(error)s"
+msgstr "Geçersiz JSON: %(error)s"
+
+msgid "Vorherige Stichprobengröße"
+msgstr "Önceki örneklem boyutu"
+
+msgid "Warnung bei Abfall"
+msgstr "Uyarı düşüş eşiği"
+
+msgid "Ziel / Intent"
+msgstr "Hedef / amaç"
+
+msgid "Zielgruppen"
+msgstr "Hedef kitleler"
