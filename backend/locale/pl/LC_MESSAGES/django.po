@@ -3523,3 +3523,27 @@ msgstr "Typ obiektu"
 
 msgid "Objekt-ID"
 msgstr "Identyfikator obiektu"
+
+msgid "Lead anlegen"
+msgstr "Utwórz lead"
+
+msgid "Lead %(lead_number)s zuweisen"
+msgstr "Przypisz lead %(lead_number)s"
+
+msgid "Firmenadministrator einladen · %(company)s"
+msgstr "Zaproś administratora firmy · %(company)s"
+
+msgid "Feature bearbeiten"
+msgstr "Edytuj funkcję"
+
+msgid "Preisversion · %(product)s"
+msgstr "Wersja cenowa · %(product)s"
+
+msgid "Rechtsdokument bearbeiten"
+msgstr "Edytuj dokument prawny"
+
+msgid "Retention-Policy bearbeiten"
+msgstr "Edytuj politykę retencji"
+
+msgid "Rolle · %(name)s"
+msgstr "Rola · %(name)s"
