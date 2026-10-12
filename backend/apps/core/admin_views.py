@@ -369,7 +369,7 @@ def leads(request):
         request,
         'ns_admin/grid.html',
         {
-            'title': 'Leads',
+            'title': _('Leads'),
             'grid': grid,
             'columns': [
                 ('lead_number', 'Lead', 'number'),
@@ -425,7 +425,7 @@ def lead_new(request):
         request,
         'ns_admin/form.html',
         {
-            'title': 'Lead anlegen',
+            'title': _('Lead anlegen'),
             'form': form,
             'cancel_url': reverse('ns_admin:leads'),
         },
@@ -525,7 +525,7 @@ def lead_assign(request, pk):
         request,
         'ns_admin/form.html',
         {
-            'title': f'{lead.lead_number} zuweisen',
+            'title': _('Lead %(lead_number)s zuweisen') % {'lead_number': lead.lead_number},
             'form': form,
             'cancel_url': reverse('ns_admin:lead_detail', args=[lead.pk]),
         },
@@ -721,7 +721,7 @@ def private_customers(request):
         request,
         'ns_admin/grid.html',
         {
-            'title': 'Privatkunden',
+            'title': _('Privatkunden'),
             'grid': grid,
             'columns': [
                 ('customer_number', _('Kundennummer'), 'number'),
@@ -782,7 +782,7 @@ def private_customer_portal_preview(request, pk):
         'preview_kind': 'private',
         'preview_section': preview_section,
         'preview_title': user.full_name or user.email,
-        'preview_subtitle': f'{profile.customer_number} · Privatkonto',
+        'preview_subtitle': f'{profile.customer_number} · {_("Privatkonto")}',
         'preview_user': user,
         'preview_company': None,
         'preview_profile': profile,
@@ -921,7 +921,7 @@ def private_customer_audit(request, pk):
         sort_fields={'time': 'created_at', 'actor': 'actor__email', 'action': 'action', 'object': 'object_type'},
         default_sort='-created_at',
     ).build()
-    return render(request, 'ns_admin/private_customer_grid.html', {'profile': profile, 'title':'Audit', 'kind':'audit', 'grid':grid, 'filter_options':[]})
+    return render(request, 'ns_admin/private_customer_grid.html', {'profile': profile, 'title':_('Audit'), 'kind':'audit', 'grid':grid, 'filter_options':[]})
 
 
 def _customer(request, pk):
@@ -1177,7 +1177,7 @@ def customer_admin_invite(request, pk):
         request,
         'ns_admin/form.html',
         {
-            'title': f'Firmenadministrator einladen · {customer.name}',
+            'title': _('Firmenadministrator einladen · %(company)s') % {'company': customer.name},
             'form': form,
             'cancel_url': reverse('ns_admin:customer_users', args=[customer.pk]),
         },
@@ -1498,7 +1498,7 @@ def customer_audit(request, pk):
         sort_fields={'time': 'created_at', 'actor': 'actor__email', 'action': 'action', 'object': 'object_type'},
         default_sort='-created_at',
     ).build()
-    return render(request, 'ns_admin/customer_grid.html', {'customer': customer, 'title': 'Audit', 'grid': grid, 'kind': 'audit', 'filter_options': []})
+    return render(request, 'ns_admin/customer_grid.html', {'customer': customer, 'title': _('Audit'), 'grid': grid, 'kind': 'audit', 'filter_options': []})
 
 
 @staff_perm('licenses.read')
@@ -1663,10 +1663,10 @@ def orders(request):
         default_sort='-created_at',
         filters={'status': 'status'},
     ).build()
-    export = _grid_export(request, grid, [('order_number', 'Bestellung'), ('company.name', _('Unternehmen')), ('private_user.email', _('Privatkunde')), ('gross_total', _('Betrag')), ('status', _('Status')), ('created_at', _('Datum'))], 'promptmaster-bestellungen.csv')
+    export = _grid_export(request, grid, [('order_number', _('Bestellung')), ('company.name', _('Unternehmen')), ('private_user.email', _('Privatkunde')), ('gross_total', _('Betrag')), ('status', _('Status')), ('created_at', _('Datum'))], 'promptmaster-bestellungen.csv')
     if export:
         return export
-    return render(request, 'ns_admin/grid.html', {'title': _('Bestellungen'), 'grid': grid, 'columns': [('order_number', 'Bestellung', 'number'), ('customer_display', _('Kunde'), 'customer'), ('gross_total', _('Betrag'), 'amount'), ('status', _('Status'), 'status'), ('created_at', _('Datum'), 'date')], 'detail_route': 'ns_admin:order_detail', 'filter_options': [('status', _('Status'), Order.STATUS)], 'export_enabled': True})
+    return render(request, 'ns_admin/grid.html', {'title': _('Bestellungen'), 'grid': grid, 'columns': [('order_number', _('Bestellung'), 'number'), ('customer_display', _('Kunde'), 'customer'), ('gross_total', _('Betrag'), 'amount'), ('status', _('Status'), 'status'), ('created_at', _('Datum'), 'date')], 'detail_route': 'ns_admin:order_detail', 'filter_options': [('status', _('Status'), Order.STATUS)], 'export_enabled': True})
 
 
 @staff_perm('orders.read')
@@ -1736,7 +1736,7 @@ def feature_edit(request, pk=None):
         write_audit(request.user, 'feature.saved', saved, {'code': saved.code}, request=request)
         messages.success(request, _("Feature gespeichert."))
         return redirect('ns_admin:features')
-    return render(request, 'ns_admin/form.html', {'title':'Feature bearbeiten' if feature else 'Feature anlegen', 'form':form, 'cancel_url': reverse('ns_admin:features')})
+    return render(request, 'ns_admin/form.html', {'title': _('Feature bearbeiten') if feature else _('Feature anlegen'), 'form':form, 'cancel_url': reverse('ns_admin:features')})
 
 
 @staff_perm('products.write')
@@ -1764,7 +1764,7 @@ def product_price_add(request, pk):
             write_audit(request.user, 'product.price_created', price, {'gross_amount': str(price.gross_amount), 'type': price.price_type}, request=request)
             messages.success(request, _("Neue Preisversion angelegt."))
             return redirect('ns_admin:product_edit', pk=pk)
-    return render(request, 'ns_admin/form.html', {'title': f'Preisversion · {product.name}', 'form': form, 'cancel_url': reverse('ns_admin:product_edit', args=[product.pk])})
+    return render(request, 'ns_admin/form.html', {'title': _('Preisversion · %(product)s') % {'product': product.name}, 'form': form, 'cancel_url': reverse('ns_admin:product_edit', args=[product.pk])})
 
 
 @staff_perm('email.read')
@@ -1912,7 +1912,7 @@ def mollie_config(request):
         write_audit(request.user, 'mollie.configuration_updated', request.user, {'profile_id': form.cleaned_data['profile_id'], 'api_key': '[REDACTED]' if form.cleaned_data['api_key'] else 'unchanged'}, request=request)
         messages.success(request, _("Mollie-Konfiguration gespeichert."))
         return redirect('ns_admin:mollie')
-    return render(request, 'ns_admin/form.html', {'title': 'Mollie konfigurieren', 'form': form, 'cancel_url': reverse('ns_admin:mollie')})
+    return render(request, 'ns_admin/form.html', {'title': _('Mollie konfigurieren'), 'form': form, 'cancel_url': reverse('ns_admin:mollie')})
 
 
 @staff_perm('settings.write')
@@ -2041,13 +2041,13 @@ def ops_database(request):
 @staff_perm('ops.read')
 def ops_backups(request):
     grid = DataGrid(request, BackupRecord.objects.all(), search_fields=('status', 'provider_ref'), sort_fields={'status': 'status', 'date': 'finished_at', 'size': 'size_bytes', 'reference': 'provider_ref'}, default_sort='-finished_at', filters={'status': 'status'}).build()
-    return render(request, 'ns_admin/ops_grid.html', {'title': 'Backups', 'grid': grid, 'kind': 'backups', 'filter_options': []})
+    return render(request, 'ns_admin/ops_grid.html', {'title': _('Backups'), 'grid': grid, 'kind': 'backups', 'filter_options': []})
 
 
 @staff_perm('ops.read')
 def ops_restore_tests(request):
     grid = DataGrid(request, RestoreTest.objects.all(), search_fields=('status', 'backup_ref'), sort_fields={'status': 'status', 'date': 'started_at', 'finished': 'finished_at', 'backup': 'backup_ref'}, default_sort='-started_at', filters={'status': 'status'}).build()
-    return render(request, 'ns_admin/ops_grid.html', {'title': 'Restore-Tests', 'grid': grid, 'kind': 'restores', 'filter_options': []})
+    return render(request, 'ns_admin/ops_grid.html', {'title': _('Restore-Tests'), 'grid': grid, 'kind': 'restores', 'filter_options': []})
 
 
 @staff_perm('ops.read')
@@ -2085,7 +2085,7 @@ def service_account_create(request):
             'ns_admin/service_account_token.html',
             {'account': account, 'token': raw, 'token_action': 'erstellt'},
         )
-    return render(request, 'ns_admin/form.html', {'title': 'Service Account anlegen', 'form': form, 'cancel_url': reverse('ns_admin:api')})
+    return render(request, 'ns_admin/form.html', {'title': _('Service Account anlegen'), 'form': form, 'cancel_url': reverse('ns_admin:api')})
 
 
 @staff_perm('api.write')
@@ -2228,7 +2228,7 @@ def legal_documents(request):
         default_sort='doc_type',
         filters={'doc_type': 'doc_type', 'active': 'active'},
     ).build()
-    return render(request, 'ns_admin/legal_documents.html', {'grid': grid, 'filter_options': [('doc_type', 'Typ', LegalDocument.DOC_TYPES), ('active', _('Status'), [('True', _('Aktiv')), ('False', _('Inaktiv'))])]})
+    return render(request, 'ns_admin/legal_documents.html', {'grid': grid, 'filter_options': [('doc_type', _('Typ'), LegalDocument.DOC_TYPES), ('active', _('Status'), [('True', _('Aktiv')), ('False', _('Inaktiv'))])]})
 
 
 @staff_perm('legal.write')
@@ -2256,7 +2256,7 @@ def legal_document_edit(request, pk=None):
         write_audit(request.user, 'legal_document.saved', saved, {'version': saved.version, 'active': saved.active}, request=request)
         messages.success(request, _("Rechtsdokument gespeichert."))
         return redirect('ns_admin:legal_documents')
-    return render(request, 'ns_admin/form.html', {'title': 'Rechtsdokument bearbeiten' if document else 'Rechtsdokument anlegen', 'form': form, 'cancel_url': reverse('ns_admin:legal_documents')})
+    return render(request, 'ns_admin/form.html', {'title': _('Rechtsdokument bearbeiten') if document else _('Rechtsdokument anlegen'), 'form': form, 'cancel_url': reverse('ns_admin:legal_documents')})
 
 
 @staff_perm('legal.read')
@@ -2281,7 +2281,7 @@ def retention_policy_edit(request, pk=None):
         write_audit(request.user, 'retention_policy.saved', saved, {'data_class': saved.data_class, 'retain_days': saved.retain_days, 'active': saved.active}, request=request)
         messages.success(request, _("Retention-Policy gespeichert."))
         return redirect('ns_admin:retention_policies')
-    return render(request, 'ns_admin/form.html', {'title': 'Retention-Policy bearbeiten' if policy else 'Retention-Policy anlegen', 'form': form, 'cancel_url': reverse('ns_admin:retention_policies')})
+    return render(request, 'ns_admin/form.html', {'title': _('Retention-Policy bearbeiten') if policy else _('Retention-Policy anlegen'), 'form': form, 'cancel_url': reverse('ns_admin:retention_policies')})
 
 
 @staff_perm('legal.read')
@@ -2357,7 +2357,7 @@ def support_requests(request):
     ).build()
     return render(request, 'ns_admin/support.html', {
         'grid': grid,
-        'filter_options': [('status',_('Status'),SupportRequest.STATUS),('category','Kategorie',SupportRequest.CATEGORY)],
+        'filter_options': [('status',_('Status'),SupportRequest.STATUS),('category',_('Kategorie'),SupportRequest.CATEGORY)],
     })
 
 
@@ -2556,12 +2556,12 @@ def role_edit(request, pk):
     if request.method == 'POST' and form.is_valid():
         if role.code == 'superadmin' and not form.cleaned_data.get('active') and _active_superadmin_count() <= 1:
             form.add_error('active', 'Der letzte aktive Superadmin darf nicht deaktiviert werden.')
-            return render(request, 'ns_admin/form.html', {'title': f'Rolle · {role.name}', 'form': form, 'cancel_url': reverse('ns_admin:roles')})
+            return render(request, 'ns_admin/form.html', {'title': _('Rolle · %(name)s') % {'name': role.name}, 'form': form, 'cancel_url': reverse('ns_admin:roles')})
         saved = form.save()
         write_audit(request.user, 'role.updated', saved, {'fields': list(form.changed_data)}, request=request)
         messages.success(request, _("Rolle gespeichert."))
         return redirect('ns_admin:roles')
-    return render(request, 'ns_admin/form.html', {'title': f'Rolle · {role.name}', 'form': form, 'cancel_url': reverse('ns_admin:roles')})
+    return render(request, 'ns_admin/form.html', {'title': _('Rolle · %(name)s') % {'name': role.name}, 'form': form, 'cancel_url': reverse('ns_admin:roles')})
 
 
 @staff_perm('roles.write')
