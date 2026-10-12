@@ -1676,3 +1676,78 @@ msgstr "Запросов на удаление нет."
 
 msgid "Alle Löschanfragen"
 msgstr "Все запросы на удаление"
+
+msgid "Bestellung vom"
+msgstr "Заказ от"
+
+msgid "Zurück zur Liste"
+msgstr "Вернуться к списку"
+
+msgid "Brutto"
+msgstr "Брутто"
+
+msgid "Steuer"
+msgstr "Налог"
+
+msgid "Keine Zahlung erfasst."
+msgstr "Нет зарегистрированных платежей."
+
+msgid "Positionen"
+msgstr "Позиции"
+
+msgid "Menge"
+msgstr "Количество"
+
+msgid "Einzelpreis"
+msgstr "Цена за единицу"
+
+msgid "Lizenzstatus wirklich ändern?"
+msgstr "Действительно изменить статус этой лицензии?"
+
+msgid "Lizenz entsperren"
+msgstr "Разблокировать лицензию"
+
+msgid "Lizenz sperren"
+msgstr "Заблокировать лицензию"
+
+msgid "Inhaber & Zuweisung"
+msgstr "Владелец и назначение"
+
+msgid "Zugewiesen an"
+msgstr "Назначено"
+
+msgid "Lizenzzuweisung wirklich freigeben? Aktive Geräte dieser Lizenz werden widerrufen."
+msgstr "Действительно снять назначение лицензии? Доступ активных устройств этой лицензии будет отозван."
+
+msgid "Zuweisung freigeben"
+msgstr "Снять назначение"
+
+msgid "Aktiven Firmenbenutzer auswählen"
+msgstr "Выбрать активного пользователя компании"
+
+msgid "Bitte auswählen"
+msgstr "Выберите"
+
+msgid "Lizenz zuweisen"
+msgstr "Назначить лицензию"
+
+msgid "Lizenzperioden"
+msgstr "Периоды действия лицензии"
+
+msgid "Von"
+msgstr "От"
+
+msgid "Bis"
+msgstr "До"
+
+msgid "Erstattung"
+msgstr "Возврат"
+
+msgid "Erstattung wirklich verbindlich über Mollie auslösen?"
+msgstr "Действительно инициировать обязательный к исполнению возврат через Mollie?"
+
+msgid "Erstattung prüfen/auslösen"
+msgstr "Проверить/оформить возврат"
+
+msgid "Keine Lizenzperioden vorhanden."
+msgstr "Периоды действия лицензии отсутствуют."
