@@ -1917,3 +1917,72 @@ msgstr "Amministratore aziendale"
 
 msgid "Gerätezugang wirklich widerrufen?"
 msgstr "Revocare davvero l'accesso del dispositivo?"
+
+msgid "Mollie Events"
+msgstr "Eventi Mollie"
+
+msgid "Idempotent verarbeitete Provider-Zustandsänderungen."
+msgstr "Modifiche di stato del provider elaborate in modo idempotente."
+
+msgid "Providerstatus"
+msgstr "Stato del provider"
+
+msgid "Verarbeitet"
+msgstr "Elaborato"
+
+msgid "Retries"
+msgstr "Nuovi tentativi"
+
+msgid "Fehler"
+msgstr "Errore"
+
+msgid "Keine Mollie Events gefunden."
+msgstr "Nessun evento Mollie trovato."
+
+msgid "DSGVO-Workflow mit kontrollierter Anonymisierung und Erhalt rechtlich erforderlicher Historie."
+msgstr "Procedura GDPR con anonimizzazione controllata e conservazione delle registrazioni richieste dalla legge."
+
+msgid "Angefordert"
+msgstr "Richiesto"
+
+msgid "Notiz"
+msgstr "Nota"
+
+msgid "Konto wirklich anonymisieren?"
+msgstr "Anonimizzare davvero questo account?"
+
+msgid "Verarbeiten"
+msgstr "Elabora"
+
+msgid "Retention Policies"
+msgstr "Politiche di conservazione"
+
+msgid "Nur freigegebene Datenklassen können automatisiert bereinigt werden."
+msgstr "Solo le classi di dati approvate possono essere eliminate automaticamente."
+
+msgid "Datenklasse"
+msgstr "Classe di dati"
+
+msgid "Keine Policies."
+msgstr "Nessuna politica."
+
+msgid "Versionierte AGB, Datenschutz-, Widerrufs- und Lizenztexte."
+msgstr "Testi versionati di condizioni generali, privacy, recesso e licenze."
+
+msgid "Typ"
+msgstr "Tipo"
+
+msgid "Keine Dokumente."
+msgstr "Nessun documento."
+
+msgid "Read-only PostgreSQL-Betriebsdaten."
+msgstr "Dati operativi PostgreSQL in sola lettura."
+
+msgid "DB-Größe"
+msgstr "Dimensione database"
+
+msgid "Retention-Policy anlegen"
+msgstr "Crea criterio di conservazione"
+
+msgid "Rechtsdokument anlegen"
+msgstr "Crea documento legale"
