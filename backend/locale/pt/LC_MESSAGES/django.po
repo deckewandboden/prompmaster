@@ -1483,3 +1483,78 @@ msgstr "Heartbeat do worker"
 
 msgid "Beat-Heartbeat"
 msgstr "Heartbeat do Beat"
+
+msgid "Zahlungsprovider, Webhook und letzte Zahlungsereignisse."
+msgstr "Fornecedor de pagamentos, webhook e últimos eventos de pagamento."
+
+msgid "Mollie konfigurieren"
+msgstr "Configurar Mollie"
+
+msgid "Konfiguration"
+msgstr "Configuração"
+
+msgid "Konfiguriert"
+msgstr "Configurado"
+
+msgid "Unvollständig"
+msgstr "Incompleto"
+
+msgid "Produktiv-Checkout"
+msgstr "Checkout de produção"
+
+msgid "Freigegeben"
+msgstr "Autorizado"
+
+msgid "Modus"
+msgstr "Modo"
+
+msgid "Profile ID"
+msgstr "ID do perfil"
+
+msgid "API Key"
+msgstr "Chave de API"
+
+msgid "nicht gesetzt"
+msgstr "não definido"
+
+msgid "Live-Zugangsdaten sind hinterlegt, der Kunden-Checkout bleibt jedoch gesperrt, bis die Live-Readiness geprüft und ausdrücklich freigegeben wurde."
+msgstr "As credenciais de produção estão guardadas, mas o checkout dos clientes continua bloqueado até que a preparação para produção seja verificada e expressamente aprovada."
+
+msgid "Basis-URL"
+msgstr "URL base"
+
+msgid "Endpoint"
+msgstr "Endpoint"
+
+msgid "Letztes Event"
+msgstr "Último evento"
+
+msgid "noch keines"
+msgstr "ainda nenhum"
+
+msgid "Webhook-Ereignisse öffnen"
+msgstr "Abrir eventos webhook"
+
+msgid "Notabschaltung"
+msgstr "Desativação de emergência"
+
+msgid "Sperrt neue Mollie-Käufe sofort. Bestehende Zahlungen und Webhooks bleiben weiter verarbeitbar."
+msgstr "Bloqueia imediatamente novas compras através da Mollie. Os pagamentos e webhooks existentes continuam a poder ser processados."
+
+msgid "Produktiv-Checkout sperren"
+msgstr "Bloquear checkout de produção"
+
+msgid "Letzte Zahlungen"
+msgstr "Pagamentos recentes"
+
+msgid "Noch keine Zahlungen."
+msgstr "Ainda não existem pagamentos."
+
+msgid "Letzte Webhook-Events"
+msgstr "Eventos webhook recentes"
+
+msgid "offen"
+msgstr "pendente"
+
+msgid "Noch keine Webhook-Ereignisse."
+msgstr "Ainda não existem eventos webhook."
