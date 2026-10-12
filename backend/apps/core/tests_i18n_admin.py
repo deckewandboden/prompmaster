@@ -637,6 +637,56 @@ class AdminInternationalizationContractTests(SimpleTestCase):
         self.assertFalse(different_passwords.is_valid())
         self.assertIn('password_repeat', different_passwords.errors)
 
+
+    def test_customer_support_and_device_forms_have_localized_labels(self):
+        from apps.companies.forms import (
+            InviteForm, CompanyForm, PrivateCustomerForm, SupportForm, UserProfileForm,
+        )
+        from apps.contenthub.forms import FAQEntryForm
+        from apps.proaccess.forms import DeviceRegistrationForm
+
+        form_files = (
+            ROOT / 'apps/companies/forms.py',
+            ROOT / 'apps/contenthub/forms.py',
+            ROOT / 'apps/proaccess/forms.py',
+        )
+        phrases = set()
+        for path in form_files:
+            source = path.read_text(encoding='utf-8')
+            self.assertIn('from django.utils.translation import gettext_lazy as _', source)
+            phrases.update(re.findall(r"_\('([^']+)'\)", source))
+        self.assertEqual(len(phrases), 33)
+        for language in LOCALES:
+            catalog = catalog_translations(
+                ROOT / 'locale' / language / 'LC_MESSAGES' / 'django.po'
+            )
+            for phrase in phrases:
+                with self.subTest(locale=language, phrase=phrase):
+                    self.assertTrue(catalog.get(phrase))
+
+        self.assertEqual(
+            [value for value, _ in SupportForm().fields['category'].choices],
+            ['license', 'payment', 'user', 'device', 'technical', 'privacy', 'other'],
+        )
+        support = SupportForm(data={
+            'category': 'technical',
+            'subject': 'Test issue',
+            'message': 'The sign-in button does not respond.',
+        })
+        self.assertTrue(support.is_valid(), support.errors.as_text())
+        invalid = SupportForm(data={
+            'category': 'technical', 'subject': '', 'message': '',
+        })
+        self.assertFalse(invalid.is_valid())
+        self.assertIn('subject', invalid.errors)
+        self.assertIn('message', invalid.errors)
+        self.assertTrue(InviteForm().fields['first_name'].label)
+        self.assertTrue(CompanyForm().fields['vat_id'].label)
+        self.assertTrue(PrivateCustomerForm().fields['postal_code'].label)
+        self.assertTrue(UserProfileForm().fields['last_name'].label)
+        self.assertTrue(FAQEntryForm().fields['question'].label)
+        self.assertTrue(DeviceRegistrationForm().fields['display_name'].label)
+
     def test_language_picker_is_in_flex_header_and_never_overlays_avatar(self):
         shell = (ROOT / 'templates/app_shell.html').read_text(encoding='utf-8')
         base = (ROOT / 'templates/base.html').read_text(encoding='utf-8')
