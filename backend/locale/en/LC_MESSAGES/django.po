@@ -1939,3 +1939,75 @@ msgstr "Request and all netstyle replies in chronological order."
 
 msgid "netstyle Support"
 msgstr "netstyle Support"
+
+msgid "FAQ bearbeiten"
+msgstr "Edit FAQ"
+
+msgid "FAQ anlegen"
+msgstr "Create FAQ"
+
+msgid "Zentraler Content-Baustein."
+msgstr "Central content component."
+
+msgid "FAQ-Verwaltung"
+msgstr "FAQ management"
+
+msgid "Zentrale FAQ-Inhalte für Marketing und Produktoberflächen."
+msgstr "Central FAQ content for marketing and product interfaces."
+
+msgid "Frage suchen …"
+msgstr "Search questions …"
+
+msgid "Alle Zielgruppen"
+msgstr "All audiences"
+
+msgid "Filtern"
+msgstr "Filter"
+
+msgid "Zurücksetzen"
+msgstr "Reset"
+
+msgid "Key"
+msgstr "Key"
+
+msgid "Frage"
+msgstr "Question"
+
+msgid "Zielgruppe"
+msgstr "Audience"
+
+msgid "Keine FAQ-Einträge."
+msgstr "No FAQ entries."
+
+msgid "Service Account Token"
+msgstr "Service account token"
+
+msgid "erstellt"
+msgstr "created"
+
+msgid "Token jetzt sicher speichern."
+msgstr "Save this token securely now."
+
+msgid "Er wird danach nicht erneut im Klartext angezeigt; ein alter Token ist nach einer Rotation sofort ungültig."
+msgstr "It will not be shown again in plaintext; an old token becomes invalid immediately after rotation."
+
+msgid "Zur API-Verwaltung"
+msgstr "Back to API management"
+
+msgid "Produktcode"
+msgstr "Product code"
+
+msgid "Preisversion anlegen"
+msgstr "Create price version"
+
+msgid "Produktkonfiguration"
+msgstr "Product configuration"
+
+msgid "Preisversionen"
+msgstr "Price versions"
+
+msgid "ab"
+msgstr "from"
+
+msgid "Keine Preisversionen."
+msgstr "No price versions."
