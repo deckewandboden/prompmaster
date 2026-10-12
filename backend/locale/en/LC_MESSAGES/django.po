@@ -2569,3 +2569,21 @@ msgstr "{value} email errors in 24 hours"
 
 msgid "{value} Mollie-Verarbeitungsfehler in 24 Stunden"
 msgstr "{value} Mollie processing errors in 24 hours"
+
+msgid "Backups"
+msgstr "Backups"
+
+msgid "Restore-Tests"
+msgstr "Restore tests"
+
+msgid "Systemwarnungen"
+msgstr "System alerts"
+
+msgid "Erledigt"
+msgstr "Resolved"
+
+msgid "Filter"
+msgstr "Filter"
+
+msgid "Seite"
+msgstr "page"
