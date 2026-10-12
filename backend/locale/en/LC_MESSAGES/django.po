@@ -3301,3 +3301,39 @@ msgstr "Deletion request processed and account anonymized."
 
 msgid "Löschanfrage abgelehnt."
 msgstr "Deletion request rejected."
+
+msgid "Dieser Lead ist bereits einem Kunden zugeordnet."
+msgstr "This lead is already assigned to a customer."
+
+msgid "Einladung für den Firmenadministrator wurde gesendet."
+msgstr "Company administrator invitation sent."
+
+msgid "Kundenantwort gespeichert. Für Demo-Adressen wurde keine E-Mail versendet."
+msgstr "Customer reply saved. No email was sent to demo addresses."
+
+msgid "Kundenantwort gespeichert und E-Mail-Benachrichtigung eingeplant."
+msgstr "Customer reply saved and email notification queued."
+
+msgid "Kundenantwort gespeichert, E-Mail-Benachrichtigung konnte aber nicht eingeplant werden."
+msgstr "Customer reply saved, but the email notification could not be queued."
+
+msgid "netstyle Benutzer angelegt; Einrichtungslink wurde per E-Mail versendet."
+msgstr "netstyle user created; setup link sent by email."
+
+msgid "Privatkunden werden aus rechtlichen Gründen über Registrierung/Checkout angelegt; der Lead kann dort anschließend als gewonnen abgeschlossen werden."
+msgstr "For legal reasons, private customers are created through registration/checkout; the lead can then be marked as won."
+
+msgid "Lead wurde in einen Firmenkunden umgewandelt. Der Ansprechpartner hat eine sichere Einladung erhalten."
+msgstr "Lead converted to a business customer. The contact received a secure invitation."
+
+msgid "Lead %(lead_number)s angelegt."
+msgstr "Lead %(lead_number)s created."
+
+msgid "Lead %(lead_number)s gelöscht."
+msgstr "Lead %(lead_number)s deleted."
+
+msgid "Firmenadministrator wurde auf %(email)s übertragen."
+msgstr "Company administrator role transferred to %(email)s."
+
+msgid "Lizenz wurde %(email)s zugewiesen."
+msgstr "License assigned to %(email)s."
