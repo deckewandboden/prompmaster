@@ -1979,3 +1979,63 @@ msgstr "Bewaarbeleid aanmaken"
 
 msgid "Rechtsdokument anlegen"
 msgstr "Juridisch document aanmaken"
+
+msgid "Fertig"
+msgstr "Voltooid"
+
+msgid "Referenz"
+msgstr "Referentie"
+
+msgid "Start"
+msgstr "Start"
+
+msgid "Ende"
+msgstr "Einde"
+
+msgid "Backup"
+msgstr "Back-up"
+
+msgid "Schweregrad"
+msgstr "Ernst"
+
+msgid "Meldung"
+msgstr "Melding"
+
+msgid "Keine Datensätze gefunden."
+msgstr "Geen records gevonden."
+
+msgid "Benutzer-ID"
+msgstr "Gebruikers-ID"
+
+msgid "Status ändern"
+msgstr "Status wijzigen"
+
+msgid "Neu"
+msgstr "Nieuw"
+
+msgid "In Bearbeitung"
+msgstr "In behandeling"
+
+msgid "Abgeschlossen"
+msgstr "Afgesloten"
+
+msgid "Antwort schreiben"
+msgstr "Antwoord schrijven"
+
+msgid "Die Antwort wird im Verlauf gespeichert und per E-Mail versendet an:"
+msgstr "Het antwoord wordt opgeslagen in de conversatiegeschiedenis en per e-mail verzonden naar:"
+
+msgid "Antwort"
+msgstr "Antwoord"
+
+msgid "Antwort an den Kunden eingeben …"
+msgstr "Antwoord aan de klant invoeren …"
+
+msgid "Antwort senden"
+msgstr "Antwoord verzenden"
+
+msgid "Anfrage und alle netstyle-Antworten in zeitlicher Reihenfolge."
+msgstr "Verzoek en alle netstyle-antwoorden in chronologische volgorde."
+
+msgid "netstyle Support"
+msgstr "netstyle Support"
