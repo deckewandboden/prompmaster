@@ -55,6 +55,12 @@ PAGES = (
     'ns_admin/service_account_token.html',
     'ns_admin/product_edit.html',
     'ns_admin/settings.html',
+    'ns_admin/prompt_studio/definition_detail.html',
+    'ns_admin/prompt_studio/index.html',
+    'ns_admin/prompt_studio/quality.html',
+    'ns_admin/prompt_studio/quality_policy.html',
+    'ns_admin/prompt_studio/testcase_edit.html',
+    'ns_admin/prompt_studio/version_edit.html',
 )
 TRANSLATE_PATTERN = re.compile(r'''{%\s*translate\s+(['"])(.*?)\1\s*%}''')
 
