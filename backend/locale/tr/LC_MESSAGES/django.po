@@ -1234,3 +1234,30 @@ msgstr "Ödeme kimliği"
 
 msgid "Keine Zahlungen gefunden."
 msgstr "Ödeme bulunamadı."
+
+msgid "Lead"
+msgstr "Potansiyel müşteri"
+
+msgid "Interessent"
+msgstr "İlgilenen kişi"
+
+msgid "Priorität"
+msgstr "Öncelik"
+
+msgid "Zuständig"
+msgstr "Sorumlu"
+
+msgid "Erstellt"
+msgstr "Oluşturuldu"
+
+msgid "Kundennummer"
+msgstr "Müşteri numarası"
+
+msgid "Eingang"
+msgstr "Alındı"
+
+msgid "Art"
+msgstr "Tür"
+
+msgid "Vertragsbezug"
+msgstr "Sözleşme referansı"
