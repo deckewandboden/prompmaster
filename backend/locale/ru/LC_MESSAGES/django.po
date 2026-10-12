@@ -1397,3 +1397,90 @@ msgstr "Код"
 
 msgid "Keine Features."
 msgstr "Нет функций."
+
+msgid "Geschützte Operations-Schnittstellen und Service Accounts."
+msgstr "Защищённые интерфейсы управления и сервисные учётные записи."
+
+msgid "Service Account anlegen"
+msgstr "Создать сервисную учётную запись"
+
+msgid "Operations API"
+msgstr "API управления"
+
+msgid "Zugriff ausschließlich über aktive Service Accounts mit passendem Scope. Tokens werden nur einmal bei Erstellung bzw. Rotation angezeigt."
+msgstr "Доступ возможен только через активные сервисные учётные записи с нужной областью прав. Токены показываются один раз при создании или замене."
+
+msgid "Service Accounts"
+msgstr "Сервисные учётные записи"
+
+msgid "Gesperrt"
+msgstr "Заблокировано"
+
+msgid "Token rotieren"
+msgstr "Заменить токен"
+
+msgid "Service Account wirklich sperren?"
+msgstr "Действительно заблокировать сервисную учётную запись?"
+
+msgid "Sperren"
+msgstr "Заблокировать"
+
+msgid "Noch keine Service Accounts."
+msgstr "Сервисных учётных записей пока нет."
+
+msgid "Dienste"
+msgstr "Службы"
+
+msgid "Status der internen Plattformdienste."
+msgstr "Состояние внутренних служб платформы."
+
+msgid "Systemübersicht"
+msgstr "Обзор системы"
+
+msgid "Host"
+msgstr "Хост"
+
+msgid "Hostname"
+msgstr "Имя хоста"
+
+msgid "Kernel"
+msgstr "Ядро"
+
+msgid "Healthy"
+msgstr "Исправно"
+
+msgid "Nicht erreichbar"
+msgstr "Недоступно"
+
+msgid "Datenbank"
+msgstr "База данных"
+
+msgid "Verbindungen"
+msgstr "Подключения"
+
+msgid "Größe"
+msgstr "Размер"
+
+msgid "Background Jobs"
+msgstr "Фоновые задания"
+
+msgid "Heartbeat fehlt"
+msgstr "Нет сигнала активности"
+
+msgid "Queue"
+msgstr "Очередь"
+
+msgid "Fehlgeschlagene Jobs 24 h"
+msgstr "Ошибки заданий за 24 ч"
+
+msgid "Worker"
+msgstr "Обработчик"
+
+msgid "Antwortende Worker"
+msgstr "Отвечающие обработчики"
+
+msgid "Worker-Heartbeat"
+msgstr "Сигнал обработчика"
+
+msgid "Beat-Heartbeat"
+msgstr "Сигнал Beat"
