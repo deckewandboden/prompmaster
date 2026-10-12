@@ -3439,3 +3439,45 @@ msgstr "Rola administratora firmy przekazana do %(email)s."
 
 msgid "Lizenz wurde %(email)s zugewiesen."
 msgstr "Licencja przypisana do %(email)s."
+
+msgid "Ausstehend"
+msgstr "Oczekujące"
+
+msgid "Autorisiert"
+msgstr "Autoryzowane"
+
+msgid "Storniert"
+msgstr "Anulowane"
+
+msgid "Abgelaufen"
+msgstr "Wygasłe"
+
+msgid "Teilweise erstattet"
+msgstr "Częściowo zwrócone"
+
+msgid "Vollständig erstattet"
+msgstr "W pełni zwrócone"
+
+msgid "Chargeback"
+msgstr "Obciążenie zwrotne"
+
+msgid "Chargeback zurückgenommen"
+msgstr "Obciążenie zwrotne cofnięte"
+
+msgid "Unbekannt"
+msgstr "Nieznane"
+
+msgid "Verarbeitungsfehler"
+msgstr "Błąd przetwarzania"
+
+msgid "Fehler behoben"
+msgstr "Błąd usunięty"
+
+msgid "E-Mail-Historie"
+msgstr "Historia wiadomości e-mail"
+
+msgid "netstyle Rolle zuweisen"
+msgstr "Przypisz rolę netstyle"
+
+msgid "Erstattung konnte nicht an Mollie übermittelt werden."
+msgstr "Nie udało się przesłać zwrotu do Mollie."
