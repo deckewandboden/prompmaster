@@ -2131,3 +2131,60 @@ msgstr "Exchange Online için SMTP alternatifi. İstemci gizli anahtarı şifrel
 
 msgid "Sie besitzen Leserechte, aber keine Berechtigung zum Ändern dieser Einstellungen."
 msgstr "Salt okunur erişiminiz var; bu ayarları değiştirme yetkiniz yok."
+
+msgid "Bewertungen"
+msgstr "Değerlendirmeler"
+
+msgid "Deterministischer Composer-Test ohne Speicherung des erzeugten Prompttexts."
+msgstr "Oluşturulan istem metnini kaydetmeden yapılan deterministik oluşturucu testi."
+
+msgid "Draft aus letzter Version"
+msgstr "Son sürümden taslak oluştur"
+
+msgid "Draft speichern"
+msgstr "Taslağı kaydet"
+
+msgid "Keine Version vorhanden."
+msgstr "Kullanılabilir sürüm yok."
+
+msgid "Konfigurierbare Schwellen für Recent Average und Drop-Erkennung."
+msgstr "Son dönem ortalaması ve düşüş tespiti için yapılandırılabilir eşikler."
+
+msgid "No-Code Editor. Nur DRAFT-Versionen sind inhaltlich veränderbar."
+msgstr "Kodsuz düzenleyici. Yalnızca DRAFT sürümleri düzenlenebilir."
+
+msgid "Noch keine Qualitäts-Snapshots. Analyse ausführen oder Ratings erfassen."
+msgstr "Henüz kalite anlık görüntüsü yok. Analiz çalıştırın veya değerlendirme kaydedin."
+
+msgid "Policy"
+msgstr "Politika"
+
+msgid "Qualität:"
+msgstr "Kalite:"
+
+msgid "Qualitätsschwellen"
+msgstr "Kalite eşikleri"
+
+msgid "Ratings"
+msgstr "Değerlendirmeler"
+
+msgid "Testfall"
+msgstr "Test senaryosu"
+
+msgid "Testfall speichern"
+msgstr "Test senaryosunu kaydet"
+
+msgid "Tests"
+msgstr "Testler"
+
+msgid "Titel"
+msgstr "Başlık"
+
+msgid "Zur Übersicht"
+msgstr "Genel bakışa dön"
+
+msgid "bearbeiten"
+msgstr "düzenle"
+
+msgid "zentrale PromptDefinition"
+msgstr "Merkezi PromptDefinition"
