@@ -21,6 +21,8 @@ PAGES = (
     'ns_admin/stats.html',
     'ns_admin/support.html',
     'ns_admin/search.html',
+    'ns_admin/audit.html',
+    'ns_admin/payments.html',
 )
 TRANSLATE_PATTERN = re.compile(r'''{%\s*translate\s+(['"])(.*?)\1\s*%}''')
 
@@ -68,14 +70,14 @@ class AdminInternationalizationContractTests(SimpleTestCase):
             {'de', 'en', 'es', 'pt', 'tr', 'ru', 'pl', 'fr', 'it', 'nl'},
         )
 
-    def test_all_dashboard_and_preview_labels_have_nine_real_translations(self):
+    def test_admin_primary_pages_have_nine_real_translations(self):
         keys = set()
         for page in PAGES:
             path = ROOT / 'templates' / page
             source = path.read_text(encoding='utf-8')
             keys.update(match.group(2) for match in TRANSLATE_PATTERN.finditer(source))
             get_template(page)  # Django parser must accept all our tags
-        self.assertGreaterEqual(len(keys), 110)
+        self.assertGreaterEqual(len(keys), 160)
         for code in LOCALES:
             translations = catalog_translations(
                 ROOT / 'locale' / code / 'LC_MESSAGES' / 'django.po'
