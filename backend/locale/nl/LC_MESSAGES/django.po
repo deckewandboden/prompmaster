@@ -1736,3 +1736,42 @@ msgstr "Recente verzendpogingen"
 
 msgid "Noch keine Versandvorgänge."
 msgstr "Nog geen verzendpogingen."
+
+msgid "Zur Kundenliste"
+msgstr "Terug naar klantenlijst"
+
+msgid "Zur Privatkundenliste"
+msgstr "Terug naar particuliere klanten"
+
+msgid "Kundendaten"
+msgstr "Klantgegevens"
+
+msgid "Stammdaten"
+msgstr "Stamgegevens"
+
+msgid "Unternehmensdaten speichern"
+msgstr "Bedrijfsgegevens opslaan"
+
+msgid "Firma"
+msgstr "Bedrijf"
+
+msgid "Steuernummer"
+msgstr "Fiscaal nummer"
+
+msgid "Änderungen erfolgen serverseitig mit Berechtigungsprüfung und werden im Audit protokolliert. Steuerfelder werden anhand der aktiven Steuerregel für Land und Kundentyp validiert."
+msgstr "Wijzigingen worden op de server uitgevoerd na controle van rechten en vastgelegd in het auditlogboek. Belastingvelden worden gevalideerd volgens de geldende regel voor het land en klanttype."
+
+msgid "Rechtsakzeptanzen"
+msgstr "Acceptaties van juridische documenten"
+
+msgid "Version"
+msgstr "Versie"
+
+msgid "Keine Rechtsakzeptanzen protokolliert."
+msgstr "Geen acceptaties van juridische documenten vastgelegd."
+
+msgid "Keine Löschanfragen."
+msgstr "Geen verwijderverzoeken."
+
+msgid "Alle Löschanfragen"
+msgstr "Alle verwijderverzoeken"
