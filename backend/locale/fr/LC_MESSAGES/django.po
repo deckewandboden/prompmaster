@@ -2304,3 +2304,81 @@ msgstr "modifier"
 
 msgid "zentrale PromptDefinition"
 msgstr "PromptDefinition centrale"
+
+msgid "Versionen"
+msgstr "Versions"
+
+msgid "Tests / Ratings"
+msgstr "Tests / évaluations"
+
+msgid "Lifecycle"
+msgstr "Cycle de vie"
+
+msgid "Archivieren"
+msgstr "Archiver"
+
+msgid "Publish ist nur über den Human-in-the-loop-Lifecycle möglich. Tests werden vor REVIEW und PUBLISH erneut ausgeführt."
+msgstr "La publication n'est possible que via le cycle de validation humaine. Les tests sont relancés avant REVIEW et PUBLISH."
+
+msgid "Definition"
+msgstr "Définition"
+
+msgid "Family"
+msgstr "Famille"
+
+msgid "Area"
+msgstr "Domaine"
+
+msgid "Max. Zeichen"
+msgstr "Caractères max."
+
+msgid "Intent"
+msgstr "Intention"
+
+msgid "Kontexttemplate"
+msgstr "Modèle de contexte"
+
+msgid "Felder & Optionen"
+msgstr "Champs et options"
+
+msgid "Pflichtfelder"
+msgstr "Champs obligatoires"
+
+msgid "Keine"
+msgstr "Aucun"
+
+msgid "Optionale Felder"
+msgstr "Champs facultatifs"
+
+msgid "Auswahloptionen"
+msgstr "Options de sélection"
+
+msgid "Testfälle"
+msgstr "Cas de test"
+
+msgid "Tests sind Bestandteil des Release-Gates einer Prompt-Version."
+msgstr "Les tests font partie des critères de publication d'une version de prompt."
+
+msgid "Alle Tests ausführen"
+msgstr "Exécuter tous les tests"
+
+msgid "Testen"
+msgstr "Tester"
+
+msgid "Löschen"
+msgstr "Supprimer"
+
+msgid "Noch kein Testfall. Vor Übergang zu TEST muss mindestens einer angelegt werden."
+msgstr "Aucun cas de test. Créez-en au moins un avant de passer à TEST."
+
+msgid "Preview / Test-Komposition"
+msgstr "Aperçu / composition de test"
+
+msgid "Prompt testen"
+msgstr "Tester le prompt"
+
+msgid "Ergebnis"
+msgstr "Résultat"
+
+msgid "Deterministischer Feld-Fallback"
+msgstr "Valeur de repli déterministe du champ"
