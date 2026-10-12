@@ -1879,3 +1879,63 @@ msgstr "Create retention policy"
 
 msgid "Rechtsdokument anlegen"
 msgstr "Create legal document"
+
+msgid "Fertig"
+msgstr "Completed"
+
+msgid "Referenz"
+msgstr "Reference"
+
+msgid "Start"
+msgstr "Start"
+
+msgid "Ende"
+msgstr "End"
+
+msgid "Backup"
+msgstr "Backup"
+
+msgid "Schweregrad"
+msgstr "Severity"
+
+msgid "Meldung"
+msgstr "Message"
+
+msgid "Keine Datensätze gefunden."
+msgstr "No records found."
+
+msgid "Benutzer-ID"
+msgstr "User ID"
+
+msgid "Status ändern"
+msgstr "Change status"
+
+msgid "Neu"
+msgstr "New"
+
+msgid "In Bearbeitung"
+msgstr "In progress"
+
+msgid "Abgeschlossen"
+msgstr "Closed"
+
+msgid "Antwort schreiben"
+msgstr "Write reply"
+
+msgid "Die Antwort wird im Verlauf gespeichert und per E-Mail versendet an:"
+msgstr "The reply is saved in the conversation history and sent by email to:"
+
+msgid "Antwort"
+msgstr "Reply"
+
+msgid "Antwort an den Kunden eingeben …"
+msgstr "Enter reply to customer …"
+
+msgid "Antwort senden"
+msgstr "Send reply"
+
+msgid "Anfrage und alle netstyle-Antworten in zeitlicher Reihenfolge."
+msgstr "Request and all netstyle replies in chronological order."
+
+msgid "netstyle Support"
+msgstr "netstyle Support"
