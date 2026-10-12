@@ -2676,3 +2676,21 @@ msgstr "{value} errori e-mail nelle ultime 24 ore"
 
 msgid "{value} Mollie-Verarbeitungsfehler in 24 Stunden"
 msgstr "{value} errori di elaborazione Mollie nelle ultime 24 ore"
+
+msgid "Backups"
+msgstr "Backup"
+
+msgid "Restore-Tests"
+msgstr "Test di ripristino"
+
+msgid "Systemwarnungen"
+msgstr "Avvisi di sistema"
+
+msgid "Erledigt"
+msgstr "Risolto"
+
+msgid "Filter"
+msgstr "Filtro"
+
+msgid "Seite"
+msgstr "pagina"
