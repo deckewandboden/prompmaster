@@ -1793,3 +1793,21 @@ msgstr "Разделы частных клиентов"
 
 msgid "Audit"
 msgstr "Аудит"
+
+msgid "Zuletzt"
+msgstr "Последний раз"
+
+msgid "Akteur"
+msgstr "Исполнитель"
+
+msgid "Admin übertragen"
+msgstr "Передать роль администратора"
+
+msgid "Benutzer wirklich deaktivieren? Lizenzen und Gerätezugänge werden freigegeben."
+msgstr "Действительно деактивировать пользователя? Лицензии и доступ устройств будут освобождены."
+
+msgid "Firmenadmin"
+msgstr "Администратор компании"
+
+msgid "Gerätezugang wirklich widerrufen?"
+msgstr "Действительно отозвать доступ устройства?"
