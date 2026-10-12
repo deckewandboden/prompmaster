@@ -774,8 +774,10 @@ class AdminInternationalizationContractTests(SimpleTestCase):
             [value for value, _ in ServiceAccountForm.SCOPE_CHOICES],
             ['ops.read', 'prompt.read', 'prompt.draft', 'prompt.test'],
         )
-        self.assertEqual(str(PERMISSION_DOMAIN_LABELS['customers']), 'Kunden')
-        self.assertEqual(str(PERMISSION_ACTION_LABELS['read']), 'Lesen')
+        from django.utils.translation import override
+        with override('de'):
+            self.assertEqual(str(PERMISSION_DOMAIN_LABELS['customers']), 'Kunden')
+            self.assertEqual(str(PERMISSION_ACTION_LABELS['read']), 'Lesen')
         perm = RoleForm.base_fields['permissions']
         display = perm.label_from_instance(Row(name='', code='customers.read'))
         self.assertIn('(customers.read)', display)
