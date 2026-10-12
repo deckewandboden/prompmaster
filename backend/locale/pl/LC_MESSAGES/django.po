@@ -1981,3 +1981,63 @@ msgstr "Utwórz zasadę retencji"
 
 msgid "Rechtsdokument anlegen"
 msgstr "Utwórz dokument prawny"
+
+msgid "Fertig"
+msgstr "Zakończono"
+
+msgid "Referenz"
+msgstr "Odnośnik"
+
+msgid "Start"
+msgstr "Początek"
+
+msgid "Ende"
+msgstr "Koniec"
+
+msgid "Backup"
+msgstr "Kopia zapasowa"
+
+msgid "Schweregrad"
+msgstr "Waga"
+
+msgid "Meldung"
+msgstr "Komunikat"
+
+msgid "Keine Datensätze gefunden."
+msgstr "Nie znaleziono rekordów."
+
+msgid "Benutzer-ID"
+msgstr "ID użytkownika"
+
+msgid "Status ändern"
+msgstr "Zmień status"
+
+msgid "Neu"
+msgstr "Nowy"
+
+msgid "In Bearbeitung"
+msgstr "W trakcie"
+
+msgid "Abgeschlossen"
+msgstr "Zamknięte"
+
+msgid "Antwort schreiben"
+msgstr "Napisz odpowiedź"
+
+msgid "Die Antwort wird im Verlauf gespeichert und per E-Mail versendet an:"
+msgstr "Odpowiedź zostanie zapisana w historii i wysłana e-mailem do:"
+
+msgid "Antwort"
+msgstr "Odpowiedź"
+
+msgid "Antwort an den Kunden eingeben …"
+msgstr "Wpisz odpowiedź dla klienta …"
+
+msgid "Antwort senden"
+msgstr "Wyślij odpowiedź"
+
+msgid "Anfrage und alle netstyle-Antworten in zeitlicher Reihenfolge."
+msgstr "Zgłoszenie i wszystkie odpowiedzi netstyle w kolejności chronologicznej."
+
+msgid "netstyle Support"
+msgstr "Wsparcie netstyle"
