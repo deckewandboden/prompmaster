@@ -2710,3 +2710,93 @@ msgstr "Sort order"
 
 msgid "Technisches Problem"
 msgstr "Technical issue"
+
+msgid "Aktuelle Stichprobengröße"
+msgstr "Recent sample size"
+
+msgid "App-Regel-Snapshot"
+msgstr "App rule snapshot"
+
+msgid "Ausgabeformen"
+msgstr "Output formats"
+
+msgid "Beispiel: {\"microsoft_tier\":\"premium\",\"payload\":{\"fields\":{...}}}"
+msgstr "Example: {\"microsoft_tier\":\"premium\",\"payload\":{\"fields\":{...}}}"
+
+msgid "Bereich"
+msgstr "Area"
+
+msgid "Darf nicht enthalten"
+msgstr "Must not contain"
+
+msgid "Ein Feld pro Zeile. Optionales Fragment: Feldname ||| Text mit {value}."
+msgstr "One field per line. Optional fragment: field name ||| text containing {value}."
+
+msgid "Ein Pflichtfeld pro Zeile."
+msgstr "One required field per line."
+
+msgid "Eingabedaten (JSON)"
+msgstr "Input data (JSON)"
+
+msgid "Familie"
+msgstr "Family"
+
+msgid "Feldbezeichnungen müssen innerhalb einer Prompt-Version eindeutig sein."
+msgstr "Field labels must be unique within a prompt version."
+
+msgid "Kontextvorlage"
+msgstr "Context template"
+
+msgid "Kritisch bei Abfall"
+msgstr "Critical drop threshold"
+
+msgid "Kritischer Durchschnitt"
+msgstr "Critical average"
+
+msgid "Maximale Zeichen"
+msgstr "Maximum characters"
+
+msgid "Microsoft-Lizenzstufe"
+msgstr "Microsoft license tier"
+
+msgid "Mindestanzahl Stichproben"
+msgstr "Minimum sample count"
+
+msgid "Mindestdurchschnitt"
+msgstr "Minimum average"
+
+msgid "Muss enthalten"
+msgstr "Must contain"
+
+msgid "Nur DRAFT-Versionen dürfen inhaltlich bearbeitet werden."
+msgstr "Only DRAFT versions may be edited."
+
+msgid "Payload muss ein JSON-Objekt sein."
+msgstr "Payload must be a JSON object."
+
+msgid "Quellen"
+msgstr "Sources"
+
+msgid "Schwerpunkte"
+msgstr "Focus areas"
+
+msgid "Test-Payload (JSON)"
+msgstr "Test payload (JSON)"
+
+msgid "Test-Payload muss ein JSON-Objekt sein."
+msgstr "Test payload must be a JSON object."
+
+msgid "Ungültiges JSON: %(error)s"
+msgstr "Invalid JSON: %(error)s"
+
+msgid "Vorherige Stichprobengröße"
+msgstr "Previous sample size"
+
+msgid "Warnung bei Abfall"
+msgstr "Warning drop threshold"
+
+msgid "Ziel / Intent"
+msgstr "Goal / intent"
+
+msgid "Zielgruppen"
+msgstr "Target audiences"
