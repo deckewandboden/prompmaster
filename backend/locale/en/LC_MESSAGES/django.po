@@ -1234,3 +1234,30 @@ msgstr "Payment ID"
 
 msgid "Keine Zahlungen gefunden."
 msgstr "No payments found."
+
+msgid "Lead"
+msgstr "Lead"
+
+msgid "Interessent"
+msgstr "Prospect"
+
+msgid "Priorität"
+msgstr "Priority"
+
+msgid "Zuständig"
+msgstr "Assigned to"
+
+msgid "Erstellt"
+msgstr "Created"
+
+msgid "Kundennummer"
+msgstr "Customer number"
+
+msgid "Eingang"
+msgstr "Received"
+
+msgid "Art"
+msgstr "Type"
+
+msgid "Vertragsbezug"
+msgstr "Contract reference"
