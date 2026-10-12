@@ -1559,3 +1559,81 @@ msgstr "ожидает обработки"
 
 msgid "Noch keine Webhook-Ereignisse."
 msgstr "Событий вебхуков пока нет."
+
+msgid "Vorlagen, Versandstatus, Provider und Fallback-Kette."
+msgstr "Шаблоны, статус отправки, провайдеры и цепочка резервной доставки."
+
+msgid "Absender & Provider"
+msgstr "Отправитель и провайдер"
+
+msgid "Versandprotokoll öffnen"
+msgstr "Открыть журнал отправки"
+
+msgid "Vorlagen"
+msgstr "Шаблоны"
+
+msgid "Keine E-Mail-Vorlagen vorhanden."
+msgstr "Шаблонов писем нет."
+
+msgid "Mail-System"
+msgstr "Почтовая система"
+
+msgid "Versandmodus"
+msgstr "Режим доставки"
+
+msgid "Automatischer Fallback"
+msgstr "Автоматический резервный переход"
+
+msgid "Manuell"
+msgstr "Вручную"
+
+msgid "Primär"
+msgstr "Основной"
+
+msgid "Reihenfolge"
+msgstr "Порядок"
+
+msgid "Status der Kette"
+msgstr "Состояние цепочки"
+
+msgid "Aktiver Absender"
+msgstr "Активный отправитель"
+
+msgid "Anzeigename"
+msgstr "Отображаемое имя"
+
+msgid "Mail-Domain"
+msgstr "Почтовый домен"
+
+msgid "Server"
+msgstr "Сервер"
+
+msgid "Anmeldung"
+msgstr "Аутентификация"
+
+msgid "Passwort fehlt"
+msgstr "Пароль отсутствует"
+
+msgid "Ohne Anmeldung"
+msgstr "Без аутентификации"
+
+msgid "Nicht konfiguriert"
+msgstr "Не настроено"
+
+msgid "Fehlt"
+msgstr "Отсутствует"
+
+msgid "Graph Absender"
+msgstr "Отправитель Graph"
+
+msgid "Automatischer Fallback erfolgt nur bei eindeutig nicht zugestellten Fehlern. Bei unklaren Fehlern wird nicht automatisch weitergeschaltet, damit dieselbe E-Mail nicht versehentlich doppelt versendet wird."
+msgstr "Автоматический переход на резервного провайдера выполняется только при подтверждённой недоставке. При неоднозначной ошибке переключение не происходит, чтобы случайно не отправить письмо дважды."
+
+msgid "SPF/DKIM/DMARC werden unter „Einstellungen“ als DNS-Sollwerte dokumentiert. Änderungen dort aktualisieren nicht automatisch den öffentlichen DNS."
+msgstr "Ожидаемые DNS-записи SPF/DKIM/DMARC описаны в настройках. Изменения там не обновляют автоматически публичный DNS."
+
+msgid "Letzte Versandvorgänge"
+msgstr "Последние отправки"
+
+msgid "Noch keine Versandvorgänge."
+msgstr "Отправок пока нет."
