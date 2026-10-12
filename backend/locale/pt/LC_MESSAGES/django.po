@@ -1558,3 +1558,81 @@ msgstr "pendente"
 
 msgid "Noch keine Webhook-Ereignisse."
 msgstr "Ainda não existem eventos webhook."
+
+msgid "Vorlagen, Versandstatus, Provider und Fallback-Kette."
+msgstr "Modelos, estado de envio, fornecedores e cadeia de contingência."
+
+msgid "Absender & Provider"
+msgstr "Remetente e fornecedor"
+
+msgid "Versandprotokoll öffnen"
+msgstr "Abrir registo de envios"
+
+msgid "Vorlagen"
+msgstr "Modelos"
+
+msgid "Keine E-Mail-Vorlagen vorhanden."
+msgstr "Não existem modelos de e-mail."
+
+msgid "Mail-System"
+msgstr "Sistema de e-mail"
+
+msgid "Versandmodus"
+msgstr "Modo de envio"
+
+msgid "Automatischer Fallback"
+msgstr "Comutação automática"
+
+msgid "Manuell"
+msgstr "Manual"
+
+msgid "Primär"
+msgstr "Principal"
+
+msgid "Reihenfolge"
+msgstr "Ordem"
+
+msgid "Status der Kette"
+msgstr "Estado da cadeia"
+
+msgid "Aktiver Absender"
+msgstr "Remetente ativo"
+
+msgid "Anzeigename"
+msgstr "Nome a apresentar"
+
+msgid "Mail-Domain"
+msgstr "Domínio de e-mail"
+
+msgid "Server"
+msgstr "Servidor"
+
+msgid "Anmeldung"
+msgstr "Autenticação"
+
+msgid "Passwort fehlt"
+msgstr "Palavra-passe em falta"
+
+msgid "Ohne Anmeldung"
+msgstr "Sem autenticação"
+
+msgid "Nicht konfiguriert"
+msgstr "Não configurado"
+
+msgid "Fehlt"
+msgstr "Em falta"
+
+msgid "Graph Absender"
+msgstr "Remetente Graph"
+
+msgid "Automatischer Fallback erfolgt nur bei eindeutig nicht zugestellten Fehlern. Bei unklaren Fehlern wird nicht automatisch weitergeschaltet, damit dieselbe E-Mail nicht versehentlich doppelt versendet wird."
+msgstr "A comutação automática só ocorre em caso de não entrega confirmada. Falhas ambíguas não acionam outro fornecedor para evitar o envio duplicado do mesmo e-mail."
+
+msgid "SPF/DKIM/DMARC werden unter „Einstellungen“ als DNS-Sollwerte dokumentiert. Änderungen dort aktualisieren nicht automatisch den öffentlichen DNS."
+msgstr "Os valores DNS pretendidos para SPF/DKIM/DMARC são documentados nas Definições. Alterações aí não atualizam automaticamente o DNS público."
+
+msgid "Letzte Versandvorgänge"
+msgstr "Envios recentes"
+
+msgid "Noch keine Versandvorgänge."
+msgstr "Ainda não existem envios."
