@@ -2570,3 +2570,21 @@ msgstr "Ошибок электронной почты за 24 часа: {value}
 
 msgid "{value} Mollie-Verarbeitungsfehler in 24 Stunden"
 msgstr "Ошибок обработки Mollie за 24 часа: {value}"
+
+msgid "Backups"
+msgstr "Резервные копии"
+
+msgid "Restore-Tests"
+msgstr "Тесты восстановления"
+
+msgid "Systemwarnungen"
+msgstr "Системные оповещения"
+
+msgid "Erledigt"
+msgstr "Устранено"
+
+msgid "Filter"
+msgstr "Фильтр"
+
+msgid "Seite"
+msgstr "страница"
