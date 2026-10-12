@@ -2039,3 +2039,75 @@ msgstr "Verzoek en alle netstyle-antwoorden in chronologische volgorde."
 
 msgid "netstyle Support"
 msgstr "netstyle Support"
+
+msgid "FAQ bearbeiten"
+msgstr "FAQ bewerken"
+
+msgid "FAQ anlegen"
+msgstr "FAQ aanmaken"
+
+msgid "Zentraler Content-Baustein."
+msgstr "Centrale inhoudscomponent."
+
+msgid "FAQ-Verwaltung"
+msgstr "FAQ-beheer"
+
+msgid "Zentrale FAQ-Inhalte für Marketing und Produktoberflächen."
+msgstr "Centrale FAQ-inhoud voor marketing en productinterfaces."
+
+msgid "Frage suchen …"
+msgstr "Vragen zoeken …"
+
+msgid "Alle Zielgruppen"
+msgstr "Alle doelgroepen"
+
+msgid "Filtern"
+msgstr "Filteren"
+
+msgid "Zurücksetzen"
+msgstr "Resetten"
+
+msgid "Key"
+msgstr "Sleutel"
+
+msgid "Frage"
+msgstr "Vraag"
+
+msgid "Zielgruppe"
+msgstr "Doelgroep"
+
+msgid "Keine FAQ-Einträge."
+msgstr "Geen FAQ-vermeldingen."
+
+msgid "Service Account Token"
+msgstr "Serviceaccount-token"
+
+msgid "erstellt"
+msgstr "aangemaakt"
+
+msgid "Token jetzt sicher speichern."
+msgstr "Sla dit token nu veilig op."
+
+msgid "Er wird danach nicht erneut im Klartext angezeigt; ein alter Token ist nach einer Rotation sofort ungültig."
+msgstr "Het token wordt daarna niet opnieuw als platte tekst getoond; het oude token is na rotatie direct ongeldig."
+
+msgid "Zur API-Verwaltung"
+msgstr "Terug naar API-beheer"
+
+msgid "Produktcode"
+msgstr "Productcode"
+
+msgid "Preisversion anlegen"
+msgstr "Prijsversie aanmaken"
+
+msgid "Produktkonfiguration"
+msgstr "Productconfiguratie"
+
+msgid "Preisversionen"
+msgstr "Prijsversies"
+
+msgid "ab"
+msgstr "vanaf"
+
+msgid "Keine Preisversionen."
+msgstr "Geen prijsversies."
