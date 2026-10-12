@@ -3173,3 +3173,69 @@ msgstr "Например, PROMPTFINISHER."
 
 msgid "Zum Beispiel smtp.ionos.de."
 msgstr "Например, smtp.ionos.de."
+
+msgid "Das eigene netstyle Konto kann hier nicht deaktiviert werden."
+msgstr "Здесь нельзя отключить свою учётную запись netstyle."
+
+msgid "Der letzte aktive Superadmin kann nicht deaktiviert werden."
+msgstr "Нельзя отключить последнего активного суперадминистратора."
+
+msgid "Die eigene 2FA wird nicht über die Admin-Fremdverwaltung zurückgesetzt."
+msgstr "Нельзя сбросить собственную 2FA через администрирование других пользователей."
+
+msgid "2FA zurückgesetzt. Der Benutzer muss sie beim nächsten Login neu einrichten."
+msgstr "2FA сброшена. Пользователь должен настроить её при следующем входе."
+
+msgid "Die eigene Superadmin-Rolle kann nicht hier entfernt werden."
+msgstr "Нельзя удалить собственную роль суперадминистратора здесь."
+
+msgid "Die letzte aktive Superadmin-Berechtigung kann nicht entfernt werden."
+msgstr "Нельзя удалить последнее активное право суперадминистратора."
+
+msgid "Ein gesperrter Service Account kann nicht rotiert werden."
+msgstr "Нельзя ротировать ключ заблокированной служебной учётной записи."
+
+msgid "Mollie-Produktiv-Checkout wurde gesperrt."
+msgstr "Рабочая касса Mollie заблокирована."
+
+msgid "Bestätigung für die Erstattung fehlt."
+msgstr "Отсутствует подтверждение возврата средств."
+
+msgid "Erstattung wurde an Mollie übermittelt."
+msgstr "Запрос на возврат отправлен в Mollie."
+
+msgid "Für dieses Unternehmen existiert bereits ein aktiver Firmenadministrator."
+msgstr "У этой компании уже есть активный администратор."
+
+msgid "Dieser Benutzer ist bereits Firmenadministrator."
+msgstr "Этот пользователь уже является администратором компании."
+
+msgid "Ungültiger Supportstatus."
+msgstr "Недопустимый статус обращения в поддержку."
+
+msgid "Ungültiger Bearbeitungsstatus."
+msgstr "Недопустимый статус обработки."
+
+msgid "Bitte eine Antwort eingeben."
+msgstr "Введите ответ."
+
+msgid "Die Antwort darf höchstens 10.000 Zeichen enthalten."
+msgstr "Ответ не должен превышать 10 000 символов."
+
+msgid "Status aktualisiert."
+msgstr "Статус обновлён."
+
+msgid "Einstellungen gespeichert."
+msgstr "Настройки сохранены."
+
+msgid "Rolle gespeichert."
+msgstr "Роль сохранена."
+
+msgid "Rolle zugewiesen."
+msgstr "Роль назначена."
+
+msgid "Rolle entfernt."
+msgstr "Роль удалена."
+
+msgid "Benutzerstatus aktualisiert."
+msgstr "Статус пользователя обновлён."
