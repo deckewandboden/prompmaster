@@ -2606,3 +2606,6 @@ msgstr "geen gegevens"
 
 msgid "completed"
 msgstr "afgerond"
+
+msgid "nicht verfügbar"
+msgstr "niet beschikbaar"
