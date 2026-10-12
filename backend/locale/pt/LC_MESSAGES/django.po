@@ -1783,3 +1783,12 @@ msgstr "Em fila"
 
 msgid "Keine E-Mails gefunden."
 msgstr "Não foram encontrados e-mails."
+
+msgid "Kundenbereiche"
+msgstr "Áreas dos clientes"
+
+msgid "Privatkundenbereiche"
+msgstr "Áreas dos clientes particulares"
+
+msgid "Audit"
+msgstr "Auditoria"
