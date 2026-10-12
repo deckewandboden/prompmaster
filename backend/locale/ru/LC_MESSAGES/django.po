@@ -1784,3 +1784,12 @@ msgstr "В очереди"
 
 msgid "Keine E-Mails gefunden."
 msgstr "Письма не найдены."
+
+msgid "Kundenbereiche"
+msgstr "Разделы клиентов"
+
+msgid "Privatkundenbereiche"
+msgstr "Разделы частных клиентов"
+
+msgid "Audit"
+msgstr "Аудит"
