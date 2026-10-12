@@ -94,9 +94,11 @@ class RuntimeConfigTests(unittest.TestCase):
             {'context': '.', 'dockerfile': 'Dockerfile.postgres-exporter'},
         )
         dockerfile = (ROOT / 'Dockerfile.postgres-exporter').read_text()
-        self.assertIn('FROM golang:1.26.6-alpine AS build', dockerfile)
+        self.assertIn('FROM golang:1.27.2-alpine3.23 AS build', dockerfile)
         self.assertIn('867fbcac31cd18c143e244190ea9168cca069827', dockerfile)
         self.assertIn('golang.org/x/crypto@v0.55.0', dockerfile)
+        self.assertIn('golang.org/x/net@v0.60.0', dockerfile)
+        self.assertIn("go version -m /out/postgres_exporter | grep -F 'go1.27.2'", dockerfile)
         self.assertIn('FROM prometheuscommunity/postgres-exporter:v0.20.1', dockerfile)
 
     def test_node_exporter_runtime_is_rebuilt_with_patched_go_toolchain(self):
@@ -169,9 +171,11 @@ class RuntimeConfigTests(unittest.TestCase):
             {'context': '.', 'dockerfile': 'Dockerfile.cadvisor'},
         )
         dockerfile = (ROOT / 'Dockerfile.cadvisor').read_text()
-        self.assertIn('FROM golang:1.26.6-alpine3.23 AS build', dockerfile)
+        self.assertIn('FROM golang:1.27.2-alpine3.23 AS build', dockerfile)
         self.assertIn('5bf5d43ac6f60d7ee36a13b4d5b4a78ad2d0abc7', dockerfile)
         self.assertIn('golang.org/x/crypto@v0.55.0', dockerfile)
+        self.assertIn('golang.org/x/net@v0.60.0', dockerfile)
+        self.assertIn("go version -m /src/_output/cadvisor | grep -F 'go1.27.2'", dockerfile)
         self.assertIn('google.golang.org/grpc@v1.83.2', dockerfile)
         self.assertIn('FROM ghcr.io/google/cadvisor:v0.60.6', dockerfile)
         self.assertIn('apk upgrade --no-cache', dockerfile)
