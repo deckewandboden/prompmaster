@@ -1164,6 +1164,57 @@ class AdminInternationalizationContractTests(SimpleTestCase):
                     catalog['Rollenname'],
                 )
 
+    def test_model_choice_statuses_translate_at_render_time_in_nine_locales(self):
+        from django.utils.translation import override
+
+        pages = (
+            'ns_admin/customer_grid.html',
+            'ns_admin/private_customer_grid.html',
+            'ns_admin/support.html',
+            'ns_admin/support_detail.html',
+            'ns_admin/legal_deletions.html',
+            'ns_admin/legal_documents.html',
+            'ns_admin/order_detail.html',
+            'ns_admin/license_detail.html',
+        )
+        names = ('role', 'status', 'category', 'kind', 'sender_type', 'doc_type')
+        total = 0
+        for page in pages:
+            markup = (ROOT / 'templates' / page).read_text(encoding='utf-8')
+            self.assertIn('i18n %}', markup, page)
+            for name in names:
+                self.assertNotRegex(
+                    markup,
+                    r'{{\\s*\\w+\\.get_' + name + r'_display\\s*}}',
+                    'Model choice display bypasses active language in ' + page,
+                )
+                total += len(re.findall(
+                    r'{%\\s*translate\\s+\\w+\\.get_' + name + r'_display\\s*%}',
+                    markup,
+                ))
+        self.assertGreaterEqual(total, 15)
+        required = (
+            'Firmenadministrator', 'Entwurf', 'Zahlung offen',
+            'Zahlung prüfen', 'Refundiert', 'Abgelehnt', 'Eingegangen',
+            'Kündigung', 'Für Kunden sichtbar', 'Interne Notiz',
+        )
+        compiled_template = Template(
+            '{% load i18n %}{% translate row.get_status_display %}'
+        )
+        sample = SimpleNamespace(get_status_display=lambda: 'Zahlung offen')
+        for code in LOCALES:
+            translations = catalog_translations(
+                ROOT / 'locale' / code / 'LC_MESSAGES' / 'django.po'
+            )
+            with override(code):
+                for key in required:
+                    with self.subTest(language=code, source=key):
+                        self.assertTrue(translations.get(key))
+                self.assertEqual(
+                    compiled_template.render(Context({'row': sample})),
+                    translations['Zahlung offen'],
+                )
+
     def test_language_picker_is_in_flex_header_and_never_overlays_avatar(self):
         shell = (ROOT / 'templates/app_shell.html').read_text(encoding='utf-8')
         base = (ROOT / 'templates/base.html').read_text(encoding='utf-8')
