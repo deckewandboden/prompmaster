@@ -2800,3 +2800,162 @@ msgstr "Objetivo / intención"
 
 msgid "Zielgruppen"
 msgstr "Públicos objetivo"
+
+msgid "API-Schlüssel"
+msgstr "Clave API"
+
+msgid "Ablauf optional"
+msgstr "Caducidad opcional"
+
+msgid "Außerhalb der Produktion ist ausschließlich ein Mollie-Test-Key (test_…) zulässig."
+msgstr "Fuera de producción solo se permite una clave de prueba de Mollie (test_…)."
+
+msgid "Begründung"
+msgstr "Motivo"
+
+msgid "Beschreibung"
+msgstr "Descripción"
+
+msgid "Bruttopreis"
+msgstr "Precio bruto"
+
+msgid "Der Datensatz wird revisionssicher ausgeblendet und im Audit protokolliert."
+msgstr "El registro se ocultará y quedará documentado en la auditoría."
+
+msgid "Diese E-Mail-Adresse gehört bereits zu einem PROMPTFINISHER-Konto."
+msgstr "Esta dirección de correo ya pertenece a una cuenta PROMPTFINISHER."
+
+msgid "Diese E-Mail-Adresse ist bereits einem Firmenkunden zugeordnet."
+msgstr "Esta dirección de correo ya está asignada a un cliente empresarial."
+
+msgid "Diese E-Mail-Adresse ist bereits registriert."
+msgstr "Esta dirección de correo ya está registrada."
+
+msgid "Dokumenttyp"
+msgstr "Tipo de documento"
+
+msgid "E-Mail des Firmenadministrators"
+msgstr "Correo del administrador de la empresa"
+
+msgid "Eigenes Passwort erneut eingeben"
+msgstr "Vuelva a introducir su contraseña"
+
+msgid "Erinnerung 1 · Tage vorher"
+msgstr "Recordatorio 1 · Días antes"
+
+msgid "Erinnerung 2 · Tage vorher"
+msgstr "Recordatorio 2 · Días antes"
+
+msgid "Erstatten"
+msgstr "Reembolsar"
+
+msgid "Für Unternehmens-Leads ist der Unternehmensname erforderlich."
+msgstr "Los leads empresariales deben indicar el nombre de la empresa."
+
+msgid "Für diese Datenklasse existiert kein freigegebener Lösch-Handler."
+msgstr "No existe un controlador de eliminación aprobado para esta clase de datos."
+
+msgid "Für diese E-Mail-Adresse existiert bereits ein aktiver Lead."
+msgstr "Ya existe un lead activo para esta dirección de correo."
+
+msgid "Identität und Berechtigung des Ansprechpartners wurden geprüft"
+msgstr "Se ha verificado la identidad y autorización del contacto"
+
+msgid "In Kunde umwandeln"
+msgstr "Convertir en cliente"
+
+msgid "In Produktion ist ausschließlich ein Mollie-Live-Key (live_…) zulässig."
+msgstr "En producción solo se permite una clave Mollie activa (live_…)."
+
+msgid "Inhalt"
+msgstr "Contenido"
+
+msgid "Interne Notiz zur Prüfung (optional)"
+msgstr "Nota interna de verificación (opcional)"
+
+msgid "Interne Notizen"
+msgstr "Notas internas"
+
+msgid "Kaufbar"
+msgstr "Disponible para compra"
+
+msgid "Kritische Warnung · Tage vorher"
+msgstr "Alerta crítica · Días antes"
+
+msgid "Lead in Firmenkunden umwandeln und Einladungslink senden"
+msgstr "Convertir el lead en cliente empresarial y enviar un enlace de invitación"
+
+msgid "Lead wirklich löschen"
+msgstr "Confirmar la eliminación del lead"
+
+msgid "Lead-Typ"
+msgstr "Tipo de lead"
+
+msgid "Leer lassen, um den bestehenden Schlüssel unverändert zu lassen."
+msgstr "Déjelo en blanco para mantener la clave actual sin cambios."
+
+msgid "Lesen"
+msgstr "Leer"
+
+msgid "Löschung erst nach dieser Anzahl Tage. Rechtliche Aufbewahrungsfristen separat prüfen."
+msgstr "Eliminar solo después de estos días. Compruebe por separado los plazos legales de conservación."
+
+msgid "Neukauf"
+msgstr "Nueva compra"
+
+msgid "Nicht zugewiesen"
+msgstr "Sin asignar"
+
+msgid "Nächste Aktion"
+msgstr "Próxima acción"
+
+msgid "Operations lesen"
+msgstr "Leer operaciones"
+
+msgid "Preistyp"
+msgstr "Tipo de precio"
+
+msgid "Prompt-Drafts erzeugen"
+msgstr "Crear borradores de prompts"
+
+msgid "Prompt-Tests ausführen"
+msgstr "Ejecutar pruebas de prompts"
+
+msgid "Prompts erzeugen"
+msgstr "Crear prompts"
+
+msgid "Prompts lesen"
+msgstr "Leer prompts"
+
+msgid "Qualität verwalten"
+msgstr "Gestionar calidad"
+
+msgid "Quelle"
+msgstr "Fuente"
+
+msgid "Reminder 1 muss vor Reminder 2 liegen (größere Tageszahl)."
+msgstr "El recordatorio 1 debe preceder al recordatorio 2 (mayor número de días)."
+
+msgid "Reminder 2 muss vor der kritischen Warnphase liegen."
+msgstr "El recordatorio 2 debe preceder al período de alerta crítica."
+
+msgid "Sicherheitsbestätigung des aktuell angemeldeten netstyle Benutzers."
+msgstr "Confirmación de seguridad del usuario netstyle conectado."
+
+msgid "Sichtbar"
+msgstr "Visible"
+
+msgid "Standard-Laufzeit in Tagen"
+msgstr "Duración predeterminada en días"
+
+msgid "Unternehmensname"
+msgstr "Nombre de la empresa"
+
+msgid "Unterstützt: expired_invitations, email_messages, revoked_devices, resolved_system_alerts, resolved_task_failures, expired_sessions."
+msgstr "Admitidos: expired_invitations, email_messages, revoked_devices, resolved_system_alerts, resolved_task_failures, expired_sessions."
+
+msgid "Veröffentlichen"
+msgstr "Publicar"
+
+msgid "Währung"
+msgstr "Moneda"
