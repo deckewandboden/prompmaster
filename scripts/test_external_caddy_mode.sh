@@ -188,18 +188,18 @@ free_current="$(
   docker run --rm --network "$NETWORK" curlimages/curl:8.12.1 \
     -fsS -H "Host: $domain" "http://$ALIAS/free/"
 )"
-v2_css_url="/static/css/promptfinisher_v2.20260922.css?v=20260929-ui19"
-v2_js_url="/static/js/promptfinisher_ui_v2.20260922.js?v=20260929-ui19"
+v2_css_url="/static/css/promptfinisher_v2.20260922.css?v=20261011-logo1"
+v2_js_url="/static/js/promptfinisher_ui_v2.20260922.js?v=20261011-logo1"
 
 grep -Fq "$v2_css_url" <<<"$free_current" || {
   echo "Free V2 stylesheet is not cache-busted through external Caddy" >&2
-  printf '%s\n' "$free_current" | head -c 4000 >&2
+  printf '%.4000s\n' "$free_current" >&2
   echo >&2
   exit 1
 }
 grep -Fq "$v2_js_url" <<<"$free_current" || {
   echo "Free V2 script is not cache-busted through external Caddy" >&2
-  printf '%s\n' "$free_current" | head -c 4000 >&2
+  printf '%.4000s\n' "$free_current" >&2
   echo >&2
   exit 1
 }
