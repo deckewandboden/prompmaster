@@ -2266,3 +2266,195 @@ msgstr "Sonuç"
 
 msgid "Deterministischer Feld-Fallback"
 msgstr "Deterministik alan yedeği"
+
+msgid "10-Min.-Ø:"
+msgstr "10 dk. ort.:"
+
+msgid "Aktive Warnungen"
+msgstr "Etkin uyarılar"
+
+msgid "App-Version"
+msgstr "Uygulama sürümü"
+
+msgid "Architektur"
+msgstr "Mimari"
+
+msgid "Backup & Restore"
+msgstr "Yedekleme ve geri yükleme"
+
+msgid "Backups öffnen"
+msgstr "Yedeklemeleri aç"
+
+msgid "Betriebszustand, Plattformdienste, Integrationen und Datensicherung."
+msgstr "Çalışma durumu, platform hizmetleri, entegrasyonlar ve yedeklemeler."
+
+msgid "CPU-Kerne"
+msgstr "CPU çekirdeği"
+
+msgid "Caddy"
+msgstr "Caddy"
+
+msgid "Celery Beat"
+msgstr "Celery Beat"
+
+msgid "Celery Worker"
+msgstr "Celery Worker"
+
+msgid "Container-CPU aktuell"
+msgstr "Güncel konteyner CPU kullanımı"
+
+msgid "Container-RAM gesamt"
+msgstr "Toplam konteyner RAM'i"
+
+msgid "DB-Verbindungen"
+msgstr "Veritabanı bağlantıları"
+
+msgid "Dateiobjekte (Inodes) belegt"
+msgstr "Kullanılan inode'lar"
+
+msgid "Dateiobjekte (Inodes) verfügbar"
+msgstr "Kullanılabilir inode'lar"
+
+msgid "Datenbank & Jobs"
+msgstr "Veritabanı ve işler"
+
+msgid "Datenbank öffnen"
+msgstr "Veritabanını aç"
+
+msgid "Datenträger / gesamt"
+msgstr "Disk / toplam"
+
+msgid "Datenträger / verfügbar"
+msgstr "Disk / kullanılabilir"
+
+msgid "Datenträger / verwendet"
+msgstr "Disk / kullanılan"
+
+msgid "Definitionen"
+msgstr "Tanımlar"
+
+msgid "Dienste & Integrationen"
+msgstr "Hizmetler ve entegrasyonlar"
+
+msgid "Dienste öffnen"
+msgstr "Hizmetleri aç"
+
+msgid "Diese Werte stammen aus cAdvisor und beziehen sich auf Docker-Container. Die VM-Werte oben stammen aus node_exporter und beziehen sich auf die gesamte Docker-Host-VM."
+msgstr "Bu ölçümler cAdvisor'dan gelir ve Docker konteynerlerini kapsar. Yukarıdaki VM ölçümleri node_exporter'dan gelir ve tüm Docker ana makine sanal makinesini kapsar."
+
+msgid "Docker"
+msgstr "Docker"
+
+msgid "Docker-Container"
+msgstr "Docker konteynerleri"
+
+msgid "Erkannte Container"
+msgstr "Algılanan konteynerler"
+
+msgid "Fehler / 24 h"
+msgstr "Hata / 24 sa."
+
+msgid "Git Commit"
+msgstr "Git commit'i"
+
+msgid "Host & Release"
+msgstr "Ana makine ve sürüm"
+
+msgid "Inodes sind Dateisystem-Einträge für Dateien und Verzeichnisse. Sind sie ausgeschöpft, können trotz freiem Speicher keine neuen Dateien angelegt werden."
+msgstr "Inode'lar dosya ve dizinler için dosya sistemi kayıtlarıdır. Tükendiklerinde diskte boş alan bulunsa bile yeni dosya oluşturulamaz."
+
+msgid "Keine aktiven Systemwarnungen."
+msgstr "Etkin sistem uyarısı yok."
+
+msgid "Letzter Restore-Test"
+msgstr "Son geri yükleme testi"
+
+msgid "Letztes Backup"
+msgstr "Son yedekleme"
+
+msgid "Letztes Deployment"
+msgstr "Son dağıtım"
+
+msgid "Load:"
+msgstr "Yük:"
+
+msgid "Messbereich"
+msgstr "Ölçüm kapsamı"
+
+msgid "Messquelle"
+msgstr "Ölçüm kaynağı"
+
+msgid "Messwert-Erklärung"
+msgstr "Ölçüm açıklaması"
+
+msgid "OS / Kernel"
+msgstr "İşletim sistemi / çekirdek"
+
+msgid "PostgreSQL"
+msgstr "PostgreSQL"
+
+msgid "Prompt MCP"
+msgstr "Prompt MCP"
+
+msgid "RAM gesamt"
+msgstr "Toplam RAM"
+
+msgid "RAM verfügbar"
+msgstr "Kullanılabilir RAM"
+
+msgid "RAM verwendet"
+msgstr "Kullanılan RAM"
+
+msgid "Restore-Tests öffnen"
+msgstr "Geri yükleme testlerini aç"
+
+msgid "TLS-Zertifikat"
+msgstr "TLS sertifikası"
+
+msgid "Umgebung"
+msgstr "Ortam"
+
+msgid "Uptime"
+msgstr "Çalışma süresi"
+
+msgid "VM-CPU aktuell"
+msgstr "Güncel VM CPU kullanımı"
+
+msgid "VM-Datenträger /"
+msgstr "VM diski /"
+
+msgid "VM-RAM"
+msgstr "VM RAM"
+
+msgid "VM-Speicher & Dateisystem"
+msgstr "VM belleği ve dosya sistemi"
+
+msgid "Verwendetes Backup"
+msgstr "Kullanılan yedekleme"
+
+msgid "Warnungen öffnen"
+msgstr "Uyarıları aç"
+
+msgid "geschützt"
+msgstr "korumalı"
+
+msgid "healthy"
+msgstr "sağlıklı"
+
+msgid "konfiguriert"
+msgstr "yapılandırıldı"
+
+msgid "nicht erreichbar"
+msgstr "erişilemiyor"
+
+msgid "nicht protokolliert"
+msgstr "kaydedilmedi"
+
+msgid "und ist die für neue Prozesse realistisch nutzbare Speichermenge. „Inodes“ sind Dateisystem-Einträge; ein niedriger Belegungsgrad ist unkritisch."
+msgstr "ve yeni süreçler için gerçekçi olarak kullanılabilir bellek miktarını belirtir. Inode'lar dosya sistemi kayıtlarıdır; düşük kullanım oranı sorun değildir."
+
+msgid "verfügbar von"
+msgstr "toplamın kullanılabilir kısmı:"
+
+msgid "„RAM verfügbar“ entspricht Linux"
+msgstr "“Kullanılabilir RAM” Linux'taki"
