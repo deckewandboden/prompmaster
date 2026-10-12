@@ -2686,3 +2686,27 @@ msgstr "Tomei conhecimento da informação sobre o direito de livre resolução"
 
 msgid "Zum Beispiel Bestellnummer oder Kundennummer."
 msgstr "Por exemplo, número de encomenda ou de cliente."
+
+msgid "Gerätename"
+msgstr "Nome do dispositivo"
+
+msgid "Keine konkrete Lizenz"
+msgstr "Nenhuma licença específica"
+
+msgid "Lizenz (optional)"
+msgstr "Licença (opcional)"
+
+msgid "Nachricht"
+msgstr "Mensagem"
+
+msgid "Schlüssel"
+msgstr "Chave"
+
+msgid "Sonstiges"
+msgstr "Outros"
+
+msgid "Sortierung"
+msgstr "Ordenação"
+
+msgid "Technisches Problem"
+msgstr "Problema técnico"
