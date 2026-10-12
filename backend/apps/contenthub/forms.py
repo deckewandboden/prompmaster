@@ -1,4 +1,5 @@
 from django import forms
+from django.utils.translation import gettext_lazy as _
 
 from .models import FAQEntry
 
@@ -8,11 +9,11 @@ class FAQEntryForm(forms.ModelForm):
         model = FAQEntry
         fields = ['key', 'question', 'answer', 'audience', 'sort_order', 'active']
         labels = {
-            'key': 'Schlüssel',
-            'question': 'Frage',
-            'answer': 'Antwort',
-            'audience': 'Zielgruppe',
-            'sort_order': 'Sortierung',
-            'active': 'Aktiv',
+            'key': _('Schlüssel'),
+            'question': _('Frage'),
+            'answer': _('Antwort'),
+            'audience': _('Zielgruppe'),
+            'sort_order': _('Sortierung'),
+            'active': _('Aktiv'),
         }
         widgets = {'answer': forms.Textarea(attrs={'rows': 8})}
