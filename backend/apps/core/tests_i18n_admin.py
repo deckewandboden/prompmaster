@@ -730,6 +730,69 @@ class AdminInternationalizationContractTests(SimpleTestCase):
         self.assertFalse(form.is_valid())
         self.assertIn('payload_json', form.errors)
 
+
+    def test_core_admin_forms_permission_and_product_i18n(self):
+        import ast
+        from types import SimpleNamespace as Row
+        from django.test import override_settings
+        from apps.core.admin_forms import (
+            LeadForm, ProductForm, PriceVersionForm, ServiceAccountForm,
+            PermissionChoiceField, MollieConfigForm, PERMISSION_DOMAIN_LABELS,
+            PERMISSION_ACTION_LABELS,
+        )
+
+        source = (ROOT / 'apps/core/admin_forms.py').read_text(encoding='utf-8')
+        self.assertIn('from django.utils.translation import gettext_lazy as _', source)
+        # The first admin group is fully localized; mail and other settings
+        # below the GeneralSettingsForm boundary have a separate audit.
+        first_group = source.split('class GeneralSettingsForm(forms.Form):', 1)[0]
+        gettext_sources = {
+            call.args[0].value
+            for call in ast.walk(ast.parse(first_group))
+            if isinstance(call, ast.Call)
+            and isinstance(call.func, ast.Name)
+            and call.func.id == '_'
+            and call.args
+            and isinstance(call.args[0], ast.Constant)
+            and isinstance(call.args[0].value, str)
+        }
+        self.assertEqual(len(gettext_sources), 100)
+        for lang in LOCALES:
+            catalog = catalog_translations(
+                ROOT / 'locale' / lang / 'LC_MESSAGES' / 'django.po'
+            )
+            for msgid in gettext_sources:
+                with self.subTest(language=lang, msgid=msgid):
+                    self.assertTrue(catalog.get(msgid))
+
+        # IDs, permission codes, and payment key prefixes are never translated.
+        self.assertEqual(
+            [value for value, _ in PriceVersionForm().fields['price_type'].choices],
+            ['new', 'renewal'],
+        )
+        self.assertEqual(
+            [value for value, _ in ServiceAccountForm.SCOPE_CHOICES],
+            ['ops.read', 'prompt.read', 'prompt.draft', 'prompt.test'],
+        )
+        self.assertEqual(str(PERMISSION_DOMAIN_LABELS['customers']), 'Kunden')
+        self.assertEqual(str(PERMISSION_ACTION_LABELS['read']), 'Lesen')
+        perm = PermissionChoiceField(queryset=None)
+        display = perm.label_from_instance(Row(name='', code='customers.read'))
+        self.assertIn('(customers.read)', display)
+        named = perm.label_from_instance(Row(name='External label', code='customers.read'))
+        self.assertEqual(named, 'External label (customers.read)')
+        self.assertTrue(LeadForm.base_fields['assigned_to'].label)
+        self.assertTrue(ProductForm.base_fields['features'].label)
+
+        with override_settings(ENVIRONMENT='production'):
+            invalid = MollieConfigForm(data={'api_key': 'test_example'})
+            self.assertFalse(invalid.is_valid())
+            self.assertIn('api_key', invalid.errors)
+        with override_settings(ENVIRONMENT='development'):
+            invalid = MollieConfigForm(data={'api_key': 'live_example'})
+            self.assertFalse(invalid.is_valid())
+            self.assertIn('api_key', invalid.errors)
+
     def test_language_picker_is_in_flex_header_and_never_overlays_avatar(self):
         shell = (ROOT / 'templates/app_shell.html').read_text(encoding='utf-8')
         base = (ROOT / 'templates/base.html').read_text(encoding='utf-8')
