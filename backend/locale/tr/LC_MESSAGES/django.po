@@ -1750,3 +1750,36 @@ msgstr "İadeyi incele/başlat"
 
 msgid "Keine Lizenzperioden vorhanden."
 msgstr "Lisans dönemi yok."
+
+msgid "E-Mail-Protokoll"
+msgstr "E-posta günlüğü"
+
+msgid "Versandstatus, tatsächlich verwendeter Provider und Fallback-Versuche ohne vertrauliche Nachrichtentexte oder Secrets."
+msgstr "Gönderim durumu, fiilen kullanılan sağlayıcı ve yedek yönlendirme denemeleri; gizli mesaj içeriği veya kimlik bilgileri gösterilmez."
+
+msgid "Empfänger"
+msgstr "Alıcı"
+
+msgid "Vorlage"
+msgstr "Şablon"
+
+msgid "Provider"
+msgstr "Sağlayıcı"
+
+msgid "Versuche"
+msgstr "Denemeler"
+
+msgid "Gesendet"
+msgstr "Gönderildi"
+
+msgid "Wird gesendet"
+msgstr "Gönderiliyor"
+
+msgid "Unterdrückt"
+msgstr "Bastırıldı"
+
+msgid "Warteschlange"
+msgstr "Kuyrukta"
+
+msgid "Keine E-Mails gefunden."
+msgstr "E-posta bulunamadı."
