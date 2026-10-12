@@ -1792,3 +1792,21 @@ msgstr "Individual customer sections"
 
 msgid "Audit"
 msgstr "Audit"
+
+msgid "Zuletzt"
+msgstr "Last seen"
+
+msgid "Akteur"
+msgstr "Actor"
+
+msgid "Admin übertragen"
+msgstr "Transfer admin role"
+
+msgid "Benutzer wirklich deaktivieren? Lizenzen und Gerätezugänge werden freigegeben."
+msgstr "Really deactivate this user? Licenses and device access will be released."
+
+msgid "Firmenadmin"
+msgstr "Company admin"
+
+msgid "Gerätezugang wirklich widerrufen?"
+msgstr "Really revoke device access?"
