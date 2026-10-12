@@ -2711,3 +2711,93 @@ msgstr "Сортировка"
 
 msgid "Technisches Problem"
 msgstr "Техническая проблема"
+
+msgid "Aktuelle Stichprobengröße"
+msgstr "Размер текущей выборки"
+
+msgid "App-Regel-Snapshot"
+msgstr "Снимок правил приложения"
+
+msgid "Ausgabeformen"
+msgstr "Форматы вывода"
+
+msgid "Beispiel: {\"microsoft_tier\":\"premium\",\"payload\":{\"fields\":{...}}}"
+msgstr "Пример: {\"microsoft_tier\":\"premium\",\"payload\":{\"fields\":{...}}}"
+
+msgid "Bereich"
+msgstr "Область"
+
+msgid "Darf nicht enthalten"
+msgstr "Не должно содержать"
+
+msgid "Ein Feld pro Zeile. Optionales Fragment: Feldname ||| Text mit {value}."
+msgstr "По одному полю на строку. Необязательный фрагмент: имя поля ||| текст с {value}."
+
+msgid "Ein Pflichtfeld pro Zeile."
+msgstr "Одно обязательное поле на строку."
+
+msgid "Eingabedaten (JSON)"
+msgstr "Входные данные (JSON)"
+
+msgid "Familie"
+msgstr "Семейство"
+
+msgid "Feldbezeichnungen müssen innerhalb einer Prompt-Version eindeutig sein."
+msgstr "Названия полей должны быть уникальными в пределах версии промпта."
+
+msgid "Kontextvorlage"
+msgstr "Шаблон контекста"
+
+msgid "Kritisch bei Abfall"
+msgstr "Порог критического снижения"
+
+msgid "Kritischer Durchschnitt"
+msgstr "Критическое среднее"
+
+msgid "Maximale Zeichen"
+msgstr "Максимум символов"
+
+msgid "Microsoft-Lizenzstufe"
+msgstr "Уровень лицензии Microsoft"
+
+msgid "Mindestanzahl Stichproben"
+msgstr "Минимальное количество выборок"
+
+msgid "Mindestdurchschnitt"
+msgstr "Минимальное среднее"
+
+msgid "Muss enthalten"
+msgstr "Должно содержать"
+
+msgid "Nur DRAFT-Versionen dürfen inhaltlich bearbeitet werden."
+msgstr "Редактировать можно только версии DRAFT."
+
+msgid "Payload muss ein JSON-Objekt sein."
+msgstr "Полезная нагрузка должна быть объектом JSON."
+
+msgid "Quellen"
+msgstr "Источники"
+
+msgid "Schwerpunkte"
+msgstr "Направления"
+
+msgid "Test-Payload (JSON)"
+msgstr "Тестовые данные (JSON)"
+
+msgid "Test-Payload muss ein JSON-Objekt sein."
+msgstr "Тестовые данные должны быть объектом JSON."
+
+msgid "Ungültiges JSON: %(error)s"
+msgstr "Некорректный JSON: %(error)s"
+
+msgid "Vorherige Stichprobengröße"
+msgstr "Размер предыдущей выборки"
+
+msgid "Warnung bei Abfall"
+msgstr "Порог предупреждения о снижении"
+
+msgid "Ziel / Intent"
+msgstr "Цель / намерение"
+
+msgid "Zielgruppen"
+msgstr "Целевые аудитории"
