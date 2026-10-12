@@ -2459,3 +2459,51 @@ msgstr "доступно из"
 
 msgid "„RAM verfügbar“ entspricht Linux"
 msgstr "«Доступно ОЗУ» соответствует значению Linux"
+
+msgid "not_configured"
+msgstr "не настроено"
+
+msgid "unknown"
+msgstr "неизвестно"
+
+msgid "ok"
+msgstr "норма"
+
+msgid "warning"
+msgstr "предупреждение"
+
+msgid "unavailable"
+msgstr "недоступно"
+
+msgid "degraded"
+msgstr "работает с ограничениями"
+
+msgid "success"
+msgstr "успешно"
+
+msgid "failed"
+msgstr "ошибка"
+
+msgid "running"
+msgstr "выполняется"
+
+msgid "critical"
+msgstr "критично"
+
+msgid "passed"
+msgstr "пройдено"
+
+msgid "error"
+msgstr "ошибка"
+
+msgid "skipped"
+msgstr "пропущено"
+
+msgid "in_progress"
+msgstr "выполняется"
+
+msgid "no_data"
+msgstr "нет данных"
+
+msgid "completed"
+msgstr "завершено"
