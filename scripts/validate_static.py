@@ -504,12 +504,30 @@ for caddy_path in (ROOT / 'Caddyfile', ROOT / 'Caddyfile.external'):
         '@mutable_product_static path',
         '/static/css/promptfinisher_v2.20260922.css',
         '/static/js/promptfinisher_ui_v2.20260922.js',
+        '/static/js/promptfinisher_product_i18n.20261011.js',
         '/static/js/free_catalog_bridge.20260918.js',
         '/static/brand/promptfinisher-logo-clean.svg',
         'Cache-Control "no-cache, must-revalidate"',
     ):
         if token not in caddy_text:
             fail(f'{caddy_path.name} mutable product-static cache contract missing: {token}')
+
+# The public and external-Caddy routes must serve the *same* mutable
+# Free/Pro resources with short revalidation. A missing item in either path
+# would silently inherit the one-year immutable fallback.
+mutable_sets = []
+for caddy_path in (ROOT / 'Caddyfile', ROOT / 'Caddyfile.external'):
+    caddy_source = caddy_path.read_text(encoding='utf-8')
+    marker = '@mutable_product_static path '
+    if caddy_source.count(marker) != 1:
+        fail(f'{caddy_path.name} must declare exactly one mutable product matcher')
+    route_line = caddy_source.split(marker, 1)[1].splitlines()[0]
+    route_set = set(route_line.split())
+    if len(route_set) != len(route_line.split()):
+        fail(f'{caddy_path.name} contains duplicate mutable product routes')
+    mutable_sets.append(route_set)
+if mutable_sets[0] != mutable_sets[1]:
+    fail('Caddy mutable product static routes differ between standard and external proxy mode')
 
 pro_asset = ROOT / 'backend/private_assets/promptfinisher_pro.html'
 approved_pro_sha = 'a18375946c7081034cd6b9d70a1f4e3b843c51e03230477cae246b6c4bf0f95f'
