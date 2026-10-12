@@ -1,4 +1,5 @@
 from django import template
+from django.utils.translation import gettext as _
 
 register = template.Library()
 
@@ -111,7 +112,7 @@ def human_bytes(value):
     try:
         number = float(value)
     except (TypeError, ValueError):
-        return 'nicht verfügbar'
+        return _('nicht verfügbar')
     units = ('B', 'KB', 'MB', 'GB', 'TB', 'PB')
     for unit in units:
         if abs(number) < 1024 or unit == units[-1]:
