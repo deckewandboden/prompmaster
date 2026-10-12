@@ -1637,3 +1637,42 @@ msgstr "Последние отправки"
 
 msgid "Noch keine Versandvorgänge."
 msgstr "Отправок пока нет."
+
+msgid "Zur Kundenliste"
+msgstr "К списку клиентов"
+
+msgid "Zur Privatkundenliste"
+msgstr "К списку частных клиентов"
+
+msgid "Kundendaten"
+msgstr "Данные клиента"
+
+msgid "Stammdaten"
+msgstr "Основные данные"
+
+msgid "Unternehmensdaten speichern"
+msgstr "Сохранить данные компании"
+
+msgid "Firma"
+msgstr "Компания"
+
+msgid "Steuernummer"
+msgstr "Налоговый номер"
+
+msgid "Änderungen erfolgen serverseitig mit Berechtigungsprüfung und werden im Audit protokolliert. Steuerfelder werden anhand der aktiven Steuerregel für Land und Kundentyp validiert."
+msgstr "Изменения выполняются на сервере с проверкой прав доступа и записываются в журнал аудита. Налоговые поля проверяются по действующим правилам для страны и типа клиента."
+
+msgid "Rechtsakzeptanzen"
+msgstr "Принятие юридических документов"
+
+msgid "Version"
+msgstr "Версия"
+
+msgid "Keine Rechtsakzeptanzen protokolliert."
+msgstr "Подтверждения принятия юридических документов не зарегистрированы."
+
+msgid "Keine Löschanfragen."
+msgstr "Запросов на удаление нет."
+
+msgid "Alle Löschanfragen"
+msgstr "Все запросы на удаление"
