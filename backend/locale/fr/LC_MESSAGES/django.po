@@ -3453,3 +3453,45 @@ msgstr "Rôle d’administrateur de l’entreprise transféré à %(email)s."
 
 msgid "Lizenz wurde %(email)s zugewiesen."
 msgstr "Licence attribuée à %(email)s."
+
+msgid "Ausstehend"
+msgstr "En attente"
+
+msgid "Autorisiert"
+msgstr "Autorisé"
+
+msgid "Storniert"
+msgstr "Annulé"
+
+msgid "Abgelaufen"
+msgstr "Expiré"
+
+msgid "Teilweise erstattet"
+msgstr "Partiellement remboursé"
+
+msgid "Vollständig erstattet"
+msgstr "Intégralement remboursé"
+
+msgid "Chargeback"
+msgstr "Rétrofacturation"
+
+msgid "Chargeback zurückgenommen"
+msgstr "Rétrofacturation annulée"
+
+msgid "Unbekannt"
+msgstr "Inconnu"
+
+msgid "Verarbeitungsfehler"
+msgstr "Erreur de traitement"
+
+msgid "Fehler behoben"
+msgstr "Erreur résolue"
+
+msgid "E-Mail-Historie"
+msgstr "Historique des e-mails"
+
+msgid "netstyle Rolle zuweisen"
+msgstr "Attribuer un rôle netstyle"
+
+msgid "Erstattung konnte nicht an Mollie übermittelt werden."
+msgstr "Impossible d’envoyer le remboursement à Mollie."
