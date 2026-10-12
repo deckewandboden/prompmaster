@@ -2458,3 +2458,51 @@ msgstr "disponíveis de"
 
 msgid "„RAM verfügbar“ entspricht Linux"
 msgstr "«RAM disponível» corresponde ao valor de Linux"
+
+msgid "not_configured"
+msgstr "não configurado"
+
+msgid "unknown"
+msgstr "desconhecido"
+
+msgid "ok"
+msgstr "OK"
+
+msgid "warning"
+msgstr "aviso"
+
+msgid "unavailable"
+msgstr "indisponível"
+
+msgid "degraded"
+msgstr "degradado"
+
+msgid "success"
+msgstr "concluído com êxito"
+
+msgid "failed"
+msgstr "falhou"
+
+msgid "running"
+msgstr "em execução"
+
+msgid "critical"
+msgstr "crítico"
+
+msgid "passed"
+msgstr "aprovado"
+
+msgid "error"
+msgstr "erro"
+
+msgid "skipped"
+msgstr "ignorado"
+
+msgid "in_progress"
+msgstr "em curso"
+
+msgid "no_data"
+msgstr "sem dados"
+
+msgid "completed"
+msgstr "concluído"
