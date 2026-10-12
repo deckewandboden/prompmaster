@@ -2506,3 +2506,6 @@ msgstr "sin datos"
 
 msgid "completed"
 msgstr "completado"
+
+msgid "nicht verfügbar"
+msgstr "no disponible"
