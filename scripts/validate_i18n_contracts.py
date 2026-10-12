@@ -145,6 +145,48 @@ def main() -> None:
                 'выключать', 'wyłączone', 'départ', 'uit',
             )):
                 raise SystemExit(f'I18N FAIL {code}: availability tier mistranslated as disabled')
+    # The protected Free/Pro runtime uses stable option values for composer
+    # semantics. Translate only the visible text of explicitly-valued options.
+    tone_keys = (
+        'Kompakt', 'Standard', 'Detailliert', 'Professionell', 'Sachlich',
+        'Management', 'Technisch', 'Direkt', 'Freundlich',
+    )
+    tone_examples = {
+        ('Standard', 'tr'): 'Standart',
+        ('Detailliert', 'tr'): 'Ayrıntılı',
+        ('Detailliert', 'fr'): 'Détaillé',
+        ('Sachlich', 'tr'): 'Nesnel',
+        ('Sachlich', 'nl'): 'Zakelijk',
+        ('Sachlich', 'pl'): 'Rzeczowy',
+        ('Management', 'tr'): 'Yönetim',
+        ('Management', 'nl'): 'Management',
+        ('Freundlich', 'es'): 'Amable',
+        ('Freundlich', 'tr'): 'Samimi',
+    }
+    for key in tone_keys:
+        variants = catalog.get(key)
+        if not variants:
+            raise SystemExit(f'I18N FAIL: missing response-style choice {key!r}')
+        for code in LOCALES:
+            value = variants.get(code, '')
+            if not value.strip():
+                raise SystemExit(f'I18N FAIL {code}: empty response-style choice {key!r}')
+            if re.search(r'\\b(\\w{2,})(?:\\s+\\1)\\b', value, flags=re.I):
+                raise SystemExit(
+                    f'I18N FAIL {code}: repeated response-style choice {key!r}: {value!r}'
+                )
+    for (key, code), expected in tone_examples.items():
+        if catalog[key][code] != expected:
+            raise SystemExit(
+                f'I18N FAIL {code}: response-style term {key!r} must be {expected!r}, '
+                f'got {catalog[key][code]!r}'
+            )
+    if "'script,style,textarea,input,option,[contenteditable],'" in bundle:
+        raise SystemExit('I18N FAIL: visible select option labels excluded from translation')
+    if "if (option && !option.hasAttribute('value')) return;" not in bundle:
+        raise SystemExit('I18N FAIL: select options without a stable value must be protected')
+    print('I18N RESPONSE STYLE PASS: nine controls x nine locales, stable option values')
+
     # License warnings are action-critical: keep both the complete Microsoft
     # product name and an explicit requirement word in every translated label.
     requirement_words = {
