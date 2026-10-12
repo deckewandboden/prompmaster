@@ -1396,3 +1396,90 @@ msgstr "Kod"
 
 msgid "Keine Features."
 msgstr "Özellik yok."
+
+msgid "Geschützte Operations-Schnittstellen und Service Accounts."
+msgstr "Korumalı operasyon arabirimleri ve hizmet hesapları."
+
+msgid "Service Account anlegen"
+msgstr "Hizmet hesabı oluştur"
+
+msgid "Operations API"
+msgstr "Operasyon API'si"
+
+msgid "Zugriff ausschließlich über aktive Service Accounts mit passendem Scope. Tokens werden nur einmal bei Erstellung bzw. Rotation angezeigt."
+msgstr "Erişim yalnızca uygun kapsama sahip etkin hizmet hesaplarıyla mümkündür. Token'lar oluşturulurken veya yenilenirken yalnızca bir kez gösterilir."
+
+msgid "Service Accounts"
+msgstr "Hizmet hesapları"
+
+msgid "Gesperrt"
+msgstr "Engellendi"
+
+msgid "Token rotieren"
+msgstr "Token'ı yenile"
+
+msgid "Service Account wirklich sperren?"
+msgstr "Bu hizmet hesabı gerçekten engellensin mi?"
+
+msgid "Sperren"
+msgstr "Engelle"
+
+msgid "Noch keine Service Accounts."
+msgstr "Henüz hizmet hesabı yok."
+
+msgid "Dienste"
+msgstr "Hizmetler"
+
+msgid "Status der internen Plattformdienste."
+msgstr "Dahili platform hizmetlerinin durumu."
+
+msgid "Systemübersicht"
+msgstr "Sistem genel görünümü"
+
+msgid "Host"
+msgstr "Ana makine"
+
+msgid "Hostname"
+msgstr "Ana makine adı"
+
+msgid "Kernel"
+msgstr "Çekirdek"
+
+msgid "Healthy"
+msgstr "Sağlıklı"
+
+msgid "Nicht erreichbar"
+msgstr "Erişilemiyor"
+
+msgid "Datenbank"
+msgstr "Veritabanı"
+
+msgid "Verbindungen"
+msgstr "Bağlantılar"
+
+msgid "Größe"
+msgstr "Boyut"
+
+msgid "Background Jobs"
+msgstr "Arka plan işleri"
+
+msgid "Heartbeat fehlt"
+msgstr "Heartbeat yok"
+
+msgid "Queue"
+msgstr "Kuyruk"
+
+msgid "Fehlgeschlagene Jobs 24 h"
+msgstr "Son 24 saatte başarısız işler"
+
+msgid "Worker"
+msgstr "İşleyici"
+
+msgid "Antwortende Worker"
+msgstr "Yanıt veren işleyiciler"
+
+msgid "Worker-Heartbeat"
+msgstr "İşleyici heartbeat"
+
+msgid "Beat-Heartbeat"
+msgstr "Beat heartbeat"
