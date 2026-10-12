@@ -1660,3 +1660,81 @@ msgstr "otwarte"
 
 msgid "Noch keine Webhook-Ereignisse."
 msgstr "Brak zdarzeń webhooków."
+
+msgid "Vorlagen, Versandstatus, Provider und Fallback-Kette."
+msgstr "Szablony, stan wysyłki, dostawcy i łańcuch awaryjny."
+
+msgid "Absender & Provider"
+msgstr "Nadawca i dostawca"
+
+msgid "Versandprotokoll öffnen"
+msgstr "Otwórz dziennik wysyłki"
+
+msgid "Vorlagen"
+msgstr "Szablony"
+
+msgid "Keine E-Mail-Vorlagen vorhanden."
+msgstr "Brak szablonów wiadomości e-mail."
+
+msgid "Mail-System"
+msgstr "System poczty"
+
+msgid "Versandmodus"
+msgstr "Tryb wysyłki"
+
+msgid "Automatischer Fallback"
+msgstr "Automatyczne przełączanie awaryjne"
+
+msgid "Manuell"
+msgstr "Ręczny"
+
+msgid "Primär"
+msgstr "Główny"
+
+msgid "Reihenfolge"
+msgstr "Kolejność"
+
+msgid "Status der Kette"
+msgstr "Stan łańcucha"
+
+msgid "Aktiver Absender"
+msgstr "Aktywny nadawca"
+
+msgid "Anzeigename"
+msgstr "Nazwa wyświetlana"
+
+msgid "Mail-Domain"
+msgstr "Domena poczty"
+
+msgid "Server"
+msgstr "Serwer"
+
+msgid "Anmeldung"
+msgstr "Uwierzytelnianie"
+
+msgid "Passwort fehlt"
+msgstr "Brak hasła"
+
+msgid "Ohne Anmeldung"
+msgstr "Bez uwierzytelniania"
+
+msgid "Nicht konfiguriert"
+msgstr "Nie skonfigurowano"
+
+msgid "Fehlt"
+msgstr "Brak"
+
+msgid "Graph Absender"
+msgstr "Nadawca Graph"
+
+msgid "Automatischer Fallback erfolgt nur bei eindeutig nicht zugestellten Fehlern. Bei unklaren Fehlern wird nicht automatisch weitergeschaltet, damit dieselbe E-Mail nicht versehentlich doppelt versendet wird."
+msgstr "Automatyczne przełączenie następuje tylko przy potwierdzonym braku dostarczenia. Niejasne błędy nie powodują automatycznej zmiany dostawcy, aby uniknąć podwójnej wysyłki wiadomości."
+
+msgid "SPF/DKIM/DMARC werden unter „Einstellungen“ als DNS-Sollwerte dokumentiert. Änderungen dort aktualisieren nicht automatisch den öffentlichen DNS."
+msgstr "Docelowe rekordy DNS SPF/DKIM/DMARC są opisane w Ustawieniach. Zmiany tam nie aktualizują automatycznie publicznego DNS."
+
+msgid "Letzte Versandvorgänge"
+msgstr "Ostatnie wysyłki"
+
+msgid "Noch keine Versandvorgänge."
+msgstr "Brak wysyłek."
