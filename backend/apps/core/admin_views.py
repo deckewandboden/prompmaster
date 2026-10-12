@@ -481,7 +481,7 @@ def lead_detail(request, pk):
                 {'changes': changes},
                 request=request,
             )
-        messages.success(request, 'Lead gespeichert.')
+        messages.success(request, _("Lead gespeichert."))
         return redirect('ns_admin:lead_detail', pk=saved.pk)
 
     return render(
@@ -519,7 +519,7 @@ def lead_assign(request, pk):
             },
             request=request,
         )
-        messages.success(request, 'Lead-Zuständigkeit aktualisiert.')
+        messages.success(request, _("Lead-Zuständigkeit aktualisiert."))
         return redirect('ns_admin:lead_detail', pk=lead.pk)
     return render(
         request,
@@ -846,7 +846,7 @@ def private_customer_device_revoke(request, pk, device_id):
         user=profile.user,
     )
     revoke_device(device, request.user, request=request)
-    messages.success(request, 'Gerät wurde widerrufen.')
+    messages.success(request, _("Gerät wurde widerrufen."))
     return redirect('ns_admin:private_customer_devices', pk=profile.pk)
 
 
@@ -978,7 +978,7 @@ def customer_company(request, pk):
                 {'changes': changes},
                 request=request,
             )
-        messages.success(request, 'Unternehmensdaten gespeichert.')
+        messages.success(request, _("Unternehmensdaten gespeichert."))
         return redirect('ns_admin:customer_company', pk=saved.pk)
 
     return render(
@@ -1297,7 +1297,7 @@ def customer_user_deactivate(request, pk, user_id):
     else:
         messages.success(
             request,
-            'Benutzer deaktiviert; Lizenz- und Gerätezugänge wurden freigegeben.',
+            _("Benutzer deaktiviert; Lizenz- und Gerätezugänge wurden freigegeben."),
         )
     return redirect('ns_admin:customer_users', pk=customer.pk)
 
@@ -1357,7 +1357,7 @@ def customer_device_revoke(request, pk, device_id):
         license__company=customer,
     )
     revoke_device(device, request.user, request=request)
-    messages.success(request, 'Gerät wurde widerrufen.')
+    messages.success(request, _("Gerät wurde widerrufen."))
     return redirect('ns_admin:customer_devices', pk=customer.pk)
 
 
@@ -1596,10 +1596,10 @@ def license_release(request, pk):
         raise PermissionDenied
     license_obj = get_object_or_404(License, pk=pk)
     if not license_obj.assignments.filter(ended_at__isnull=True).exists():
-        messages.info(request, 'Die Lizenz ist bereits frei.')
+        messages.info(request, _("Die Lizenz ist bereits frei."))
         return redirect('ns_admin:license_detail', pk=license_obj.pk)
     release_license(license_obj, request.user)
-    messages.success(request, 'Lizenzzuweisung wurde freigegeben.')
+    messages.success(request, _("Lizenzzuweisung wurde freigegeben."))
     return redirect('ns_admin:license_detail', pk=license_obj.pk)
 
 
@@ -1611,10 +1611,10 @@ def license_block_toggle(request, pk):
     try:
         if license_obj.status == 'blocked':
             unblock_license(license_obj, request.user, request=request)
-            messages.success(request, 'Lizenz wurde entsperrt.')
+            messages.success(request, _("Lizenz wurde entsperrt."))
         else:
             block_license(license_obj, request.user, request=request)
-            messages.success(request, 'Lizenz wurde gesperrt; vorhandene Gerätezugänge wurden widerrufen.')
+            messages.success(request, _("Lizenz wurde gesperrt; vorhandene Gerätezugänge wurden widerrufen."))
     except ValidationError as exc:
         messages.error(request, exc.messages[0])
     return redirect('ns_admin:license_detail', pk=pk)
@@ -1718,7 +1718,7 @@ def product_new(request):
     if request.method == 'POST' and form.is_valid():
         saved = form.save()
         write_audit(request.user, 'product.created', saved, {'code': saved.code}, request=request)
-        messages.success(request, 'Produkt angelegt. Legen Sie anschließend Preisversionen an.')
+        messages.success(request, _("Produkt angelegt. Legen Sie anschließend Preisversionen an."))
         return redirect('ns_admin:product_edit', pk=saved.pk)
     return render(request, 'ns_admin/form.html', {'title': 'Produkt anlegen', 'form': form, 'cancel_url': reverse('ns_admin:products')})
 
@@ -1736,7 +1736,7 @@ def feature_edit(request, pk=None):
     if request.method == 'POST' and form.is_valid():
         saved = form.save()
         write_audit(request.user, 'feature.saved', saved, {'code': saved.code}, request=request)
-        messages.success(request, 'Feature gespeichert.')
+        messages.success(request, _("Feature gespeichert."))
         return redirect('ns_admin:features')
     return render(request, 'ns_admin/form.html', {'title':'Feature bearbeiten' if feature else 'Feature anlegen', 'form':form, 'cancel_url': reverse('ns_admin:features')})
 
@@ -1748,7 +1748,7 @@ def product_edit(request, pk):
     if request.method == 'POST' and form.is_valid():
         saved = form.save()
         write_audit(request.user, 'product.updated', saved, {'fields': list(form.changed_data)}, request=request)
-        messages.success(request, 'Produkt gespeichert.')
+        messages.success(request, _("Produkt gespeichert."))
         return redirect('ns_admin:product_edit', pk=pk)
     return render(request, 'ns_admin/product_edit.html', {'product': product, 'form': form, 'prices': product.prices.order_by('-valid_from')})
 
@@ -1764,7 +1764,7 @@ def product_price_add(request, pk):
             form.add_error(None, exc.messages[0])
         else:
             write_audit(request.user, 'product.price_created', price, {'gross_amount': str(price.gross_amount), 'type': price.price_type}, request=request)
-            messages.success(request, 'Neue Preisversion angelegt.')
+            messages.success(request, _("Neue Preisversion angelegt."))
             return redirect('ns_admin:product_edit', pk=pk)
     return render(request, 'ns_admin/form.html', {'title': f'Preisversion · {product.name}', 'form': form, 'cancel_url': reverse('ns_admin:product_edit', args=[product.pk])})
 
@@ -1830,7 +1830,7 @@ def email_template_edit(request, pk):
     if request.method == 'POST' and form.is_valid():
         saved = form.save()
         write_audit(request.user, 'email_template.updated', saved, {'fields': list(form.changed_data)}, request=request)
-        messages.success(request, 'E-Mail-Vorlage gespeichert.')
+        messages.success(request, _("E-Mail-Vorlage gespeichert."))
         return redirect('ns_admin:email')
     return render(request, 'ns_admin/form.html', {'title': f'E-Mail-Vorlage · {template.code}', 'form': form, 'cancel_url': reverse('ns_admin:email')})
 
@@ -1912,7 +1912,7 @@ def mollie_config(request):
             description='Cleared after Mollie configuration changes.',
         )
         write_audit(request.user, 'mollie.configuration_updated', request.user, {'profile_id': form.cleaned_data['profile_id'], 'api_key': '[REDACTED]' if form.cleaned_data['api_key'] else 'unchanged'}, request=request)
-        messages.success(request, 'Mollie-Konfiguration gespeichert.')
+        messages.success(request, _("Mollie-Konfiguration gespeichert."))
         return redirect('ns_admin:mollie')
     return render(request, 'ns_admin/form.html', {'title': 'Mollie konfigurieren', 'form': form, 'cancel_url': reverse('ns_admin:mollie')})
 
@@ -2119,7 +2119,7 @@ def service_account_revoke(request, pk):
     account.active = False
     account.save(update_fields=['active', 'updated_at'])
     write_audit(request.user, 'service_account.revoked', account, {}, request=request)
-    messages.success(request, 'Service Account gesperrt.')
+    messages.success(request, _("Service Account gesperrt."))
     return redirect('ns_admin:api')
 
 
@@ -2206,7 +2206,7 @@ def legal_declaration_detail(request, pk):
             {'kind': declaration.kind, 'status': status},
             request=request,
         )
-        messages.success(request, 'Verbrauchererklärung aktualisiert.')
+        messages.success(request, _("Verbrauchererklärung aktualisiert."))
         return redirect('ns_admin:legal_declaration_detail', pk=declaration.pk)
 
     return render(
@@ -2256,7 +2256,7 @@ def legal_document_edit(request, pk=None):
             saved.save()
             form.save_m2m()
         write_audit(request.user, 'legal_document.saved', saved, {'version': saved.version, 'active': saved.active}, request=request)
-        messages.success(request, 'Rechtsdokument gespeichert.')
+        messages.success(request, _("Rechtsdokument gespeichert."))
         return redirect('ns_admin:legal_documents')
     return render(request, 'ns_admin/form.html', {'title': 'Rechtsdokument bearbeiten' if document else 'Rechtsdokument anlegen', 'form': form, 'cancel_url': reverse('ns_admin:legal_documents')})
 
@@ -2281,7 +2281,7 @@ def retention_policy_edit(request, pk=None):
     if request.method == 'POST' and form.is_valid():
         saved = form.save()
         write_audit(request.user, 'retention_policy.saved', saved, {'data_class': saved.data_class, 'retain_days': saved.retain_days, 'active': saved.active}, request=request)
-        messages.success(request, 'Retention-Policy gespeichert.')
+        messages.success(request, _("Retention-Policy gespeichert."))
         return redirect('ns_admin:retention_policies')
     return render(request, 'ns_admin/form.html', {'title': 'Retention-Policy bearbeiten' if policy else 'Retention-Policy anlegen', 'form': form, 'cancel_url': reverse('ns_admin:retention_policies')})
 
@@ -2310,7 +2310,7 @@ def deletion_request_process(request, pk):
     except ValidationError as exc:
         messages.error(request, exc.messages[0])
     else:
-        messages.success(request, 'Löschanfrage verarbeitet und Konto anonymisiert.')
+        messages.success(request, _("Löschanfrage verarbeitet und Konto anonymisiert."))
     return redirect('ns_admin:deletion_requests')
 
 
@@ -2325,7 +2325,7 @@ def deletion_request_reject(request, pk):
         except ValidationError as exc:
             form.add_error(None, exc.messages[0])
         else:
-            messages.success(request, 'Löschanfrage abgelehnt.')
+            messages.success(request, _("Löschanfrage abgelehnt."))
             return redirect('ns_admin:deletion_requests')
     return render(request, 'ns_admin/form.html', {'title': 'Löschanfrage ablehnen', 'form': form, 'cancel_url': reverse('ns_admin:deletion_requests')})
 
