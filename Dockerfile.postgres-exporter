@@ -10,7 +10,7 @@ RUN apk add --no-cache git ca-certificates \
     && test "$(git rev-parse HEAD)" = "$POSTGRES_EXPORTER_COMMIT"
 
 WORKDIR /src
-RUN go get golang.org/x/crypto@v0.55.0 golang.org/x/net@v0.60.0 \
+RUN go get golang.org/x/crypto@v0.57.0 golang.org/x/net@v0.60.0 \
     && go mod tidy \
     && CGO_ENABLED=0 GOOS=linux go build \
        -trimpath \
