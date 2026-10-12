@@ -54,6 +54,7 @@ PAGES = (
     'ns_admin/content/faq_list.html',
     'ns_admin/service_account_token.html',
     'ns_admin/product_edit.html',
+    'ns_admin/settings.html',
 )
 TRANSLATE_PATTERN = re.compile(r'''{%\s*translate\s+(['"])(.*?)\1\s*%}''')
 
@@ -316,6 +317,24 @@ class AdminInternationalizationContractTests(SimpleTestCase):
                 )
                 with self.subTest(locale=code, phrase=phrase):
                     self.assertTrue(translations.get(phrase))
+
+    def test_settings_privacy_and_failover_warnings_are_localized(self):
+        source = (ROOT / 'templates/ns_admin/settings.html').read_text(encoding='utf-8')
+        critical = (
+            'Alle Provider bleiben parallel gespeichert. Im manuellen Modus wird nur der primäre Versandweg verwendet. Im automatischen Modus wird bei eindeutig nicht zugestellten Fehlern in der festgelegten Reihenfolge weitergeschaltet; bei unklaren Fehlern erfolgt bewusst kein automatischer Fallback, um Doppelversand zu vermeiden.',
+            'Die Absenderadresse wird beim SMTP-Versand direkt aus diesen Einstellungen gelesen. SPF, DKIM und DMARC sind hier als DNS-Sollwerte dokumentiert; das Speichern verändert keine DNS-Zone.',
+            'Erster SMTP-Transport. Das Passwort wird verschlüsselt gespeichert und niemals wieder im Klartext angezeigt.',
+            'Alternative zu SMTP für Exchange Online. Das Client Secret wird verschlüsselt gespeichert und niemals wieder im Klartext angezeigt.',
+            'Sie besitzen Leserechte, aber keine Berechtigung zum Ändern dieser Einstellungen.',
+        )
+        for phrase in critical:
+            self.assertIn("{% translate '" + phrase + "' %}", source)
+            for code in LOCALES:
+                locale = catalog_translations(
+                    ROOT / 'locale' / code / 'LC_MESSAGES' / 'django.po'
+                )
+                with self.subTest(language=code, phrase=phrase):
+                    self.assertTrue(locale.get(phrase))
 
     def test_language_picker_is_in_flex_header_and_never_overlays_avatar(self):
         shell = (ROOT / 'templates/app_shell.html').read_text(encoding='utf-8')
