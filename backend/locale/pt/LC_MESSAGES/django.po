@@ -1120,3 +1120,84 @@ msgstr "Todas as encomendas"
 
 msgid "Firmenkonto"
 msgstr "Conta empresarial"
+
+msgid "Serverseitige Suche, Filter, Sortierung und Pagination."
+msgstr "Pesquisa, filtros, ordenação e paginação no servidor."
+
+msgid "Neu anlegen"
+msgstr "Criar novo"
+
+msgid "Privatkunden"
+msgstr "Clientes particulares"
+
+msgid "aufsteigend"
+msgstr "ascendente"
+
+msgid "absteigend"
+msgstr "descendente"
+
+msgid "Keine Datensätze für die aktuelle Auswahl."
+msgstr "Não existem registos para a seleção atual."
+
+msgid "Änderungen werden serverseitig validiert und – sofern sicherheits- oder geschäftskritisch – protokolliert."
+msgstr "As alterações são validadas no servidor e registadas quando são críticas para a segurança ou o negócio."
+
+msgid "Zusätzliche Sicherheitsfreigabe."
+msgstr "Verificação de segurança adicional."
+
+msgid "Bestätigen Sie Ihr eigenes Passwort. Die Freigabe gilt anschließend ausschließlich für wenige Minuten und nur für geschützte Admin-Aktionen."
+msgstr "Confirme a sua própria palavra-passe. A autorização só será válida durante alguns minutos e para ações administrativas protegidas."
+
+msgid "Bestätigen"
+msgstr "Confirmar"
+
+msgid "Kompakte Geschäftszahlen innerhalb Ihrer Berechtigungen."
+msgstr "Indicadores de negócio resumidos de acordo com as suas permissões."
+
+msgid "Neue Kunden · 30 Tage"
+msgstr "Novos clientes · 30 dias"
+
+msgid "Verlängerungsanteil"
+msgstr "Percentagem de renovações"
+
+msgid "Verlängerungsterms"
+msgstr "períodos de renovação"
+
+msgid "Refund-Quote"
+msgstr "Taxa de reembolsos"
+
+msgid "Anteil refundierter Lizenzterms"
+msgstr "Percentagem de períodos de licença reembolsados"
+
+msgid "Ø Lizenzen / Firma"
+msgstr "Média de licenças / empresa"
+
+msgid "Firmenkundenbestand"
+msgstr "Base de clientes empresariais"
+
+msgid "Umsatz letzte 30 Tage"
+msgstr "Receita dos últimos 30 dias"
+
+msgid "Bestellungen gesamt"
+msgstr "encomendas no total"
+
+msgid "Lizenzen gesamt"
+msgstr "Total de licenças"
+
+msgid "inkl. aktiv, frei, abgelaufen und historisch"
+msgstr "incluindo ativas, disponíveis, expiradas e históricas"
+
+msgid "Anfragen aus dem Kundenportal; V1 verwendet bewusst kein Ticketsystem."
+msgstr "Pedidos do portal do cliente; a V1 não utiliza intencionalmente um sistema de tickets."
+
+msgid "Keine Kontaktanfragen."
+msgstr "Sem pedidos de contacto."
+
+msgid "Globale Suche"
+msgstr "Pesquisa global"
+
+msgid "Ergebnisse für"
+msgstr "Resultados para"
+
+msgid "Keine Treffer."
+msgstr "Sem resultados."
