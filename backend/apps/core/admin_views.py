@@ -555,7 +555,7 @@ def lead_delete(request, pk):
         request,
         'ns_admin/form.html',
         {
-            'title': f'{lead.lead_number} löschen',
+            'title': _('Lead %(lead_number)s löschen') % {'lead_number': lead.lead_number},
             'form': form,
             'cancel_url': reverse('ns_admin:lead_detail', args=[lead.pk]),
         },
@@ -653,7 +653,7 @@ def lead_convert_company(request, pk):
         request,
         'ns_admin/form.html',
         {
-            'title': f'{lead.lead_number} in Kunden umwandeln',
+            'title': _('Lead %(lead_number)s in Kunden umwandeln') % {'lead_number': lead.lead_number},
             'form': form,
             'cancel_url': reverse('ns_admin:lead_detail', args=[lead.pk]),
         },
@@ -1265,7 +1265,7 @@ def customer_admin_transfer(request, pk, user_id):
         request,
         'ns_admin/form.html',
         {
-            'title': f'Firmenadministrator übertragen · {target.user.email}',
+            'title': _('Firmenadministrator übertragen · %(email)s') % {'email': target.user.email},
             'form': form,
             'cancel_url': reverse('ns_admin:customer_users', args=[customer.pk]),
         },
@@ -1718,7 +1718,7 @@ def product_new(request):
         write_audit(request.user, 'product.created', saved, {'code': saved.code}, request=request)
         messages.success(request, _("Produkt angelegt. Legen Sie anschließend Preisversionen an."))
         return redirect('ns_admin:product_edit', pk=saved.pk)
-    return render(request, 'ns_admin/form.html', {'title': 'Produkt anlegen', 'form': form, 'cancel_url': reverse('ns_admin:products')})
+    return render(request, 'ns_admin/form.html', {'title': _('Produkt anlegen'), 'form': form, 'cancel_url': reverse('ns_admin:products')})
 
 
 @staff_perm('products.read')
@@ -1830,7 +1830,7 @@ def email_template_edit(request, pk):
         write_audit(request.user, 'email_template.updated', saved, {'fields': list(form.changed_data)}, request=request)
         messages.success(request, _("E-Mail-Vorlage gespeichert."))
         return redirect('ns_admin:email')
-    return render(request, 'ns_admin/form.html', {'title': f'E-Mail-Vorlage · {template.code}', 'form': form, 'cancel_url': reverse('ns_admin:email')})
+    return render(request, 'ns_admin/form.html', {'title': _('E-Mail-Vorlage · %(code)s') % {'code': template.code}, 'form': form, 'cancel_url': reverse('ns_admin:email')})
 
 
 @staff_perm('email.read')
@@ -2158,18 +2158,18 @@ def legal_declarations(request):
         request,
         'ns_admin/grid.html',
         {
-            'title': 'Widerrufe & Kündigungen',
+            'title': _('Widerrufe & Kündigungen'),
             'grid': grid,
             'columns': [
-                ('submitted_at', 'Eingang', 'date'),
-                ('kind', 'Art', 'kind'),
+                ('submitted_at', _('Eingang'), 'date'),
+                ('kind', _('Art'), 'kind'),
                 ('name', _('Name'), 'name'),
                 ('email', _('E-Mail'), 'email'),
-                ('contract_reference', 'Vertragsbezug', 'reference'),
+                ('contract_reference', _('Vertragsbezug'), 'reference'),
                 ('status', _('Status'), 'status'),
             ],
             'filter_options': [
-                ('kind', 'Art', ConsumerContractDeclaration.KIND),
+                ('kind', _('Art'), ConsumerContractDeclaration.KIND),
                 ('status', _('Status'), ConsumerContractDeclaration.STATUS),
             ],
             'detail_route': 'ns_admin:legal_declaration_detail',
@@ -2325,7 +2325,7 @@ def deletion_request_reject(request, pk):
         else:
             messages.success(request, _("Löschanfrage abgelehnt."))
             return redirect('ns_admin:deletion_requests')
-    return render(request, 'ns_admin/form.html', {'title': 'Löschanfrage ablehnen', 'form': form, 'cancel_url': reverse('ns_admin:deletion_requests')})
+    return render(request, 'ns_admin/form.html', {'title': _('Löschanfrage ablehnen'), 'form': form, 'cancel_url': reverse('ns_admin:deletion_requests')})
 
 
 @staff_perm('support.read')
@@ -2462,7 +2462,7 @@ def support_request_status(request, pk):
 @staff_perm('audit.read')
 def audit(request):
     grid = DataGrid(request, AuditEvent.objects.select_related('actor').annotate(changes_sort=Cast('changes', CharField())), search_fields=('action', 'object_type', 'object_id', 'actor__email', 'actor_role'), sort_fields={'time': 'created_at', 'user': 'actor__email', 'role': 'actor_role', 'action': 'action', 'object': 'object_type', 'change': 'changes_sort'}, default_sort='-created_at', filters={'action': 'action'}).build()
-    export = _grid_export(request, grid, [('created_at', 'Zeit'), ('actor.email', _('Benutzer')), ('actor_role', _('Rolle')), ('action', 'Aktion'), ('object_type', 'Objekttyp'), ('object_id', 'Objekt-ID')], 'promptmaster-audit.csv')
+    export = _grid_export(request, grid, [('created_at', _('Zeit')), ('actor.email', _('Benutzer')), ('actor_role', _('Rolle')), ('action', _('Aktion')), ('object_type', _('Objekttyp')), ('object_id', _('Objekt-ID'))], 'promptmaster-audit.csv')
     if export:
         return export
     return render(request, 'ns_admin/audit.html', {'grid': grid, 'filter_options': [], 'export_enabled': True})
@@ -2471,16 +2471,16 @@ def audit(request):
 @staff_perm('roles.read')
 def roles(request):
     descriptions = {
-        'superadmin': 'Uneingeschränkte Rechte auf alle PROMPTFINISHER-Verwaltungsbereiche.',
-        'support': 'Kunden, Lizenzen, Geräte, Bestellungen, Zahlungen, E-Mail und Support.',
-        'ops': 'Monitoring, Backups, Operations API, Logs und Systemstatus.',
-        'prompt_manager': 'Prompt Studio, Prompt-Lifecycle, Qualität und zentrale Inhalte.',
+        'superadmin': _('Uneingeschränkte Rechte auf alle PROMPTFINISHER-Verwaltungsbereiche.'),
+        'support': _('Kunden, Lizenzen, Geräte, Bestellungen, Zahlungen, E-Mail und Support.'),
+        'ops': _('Monitoring, Backups, Operations API, Logs und Systemstatus.'),
+        'prompt_manager': _('Prompt Studio, Prompt-Lifecycle, Qualität und zentrale Inhalte.'),
     }
     role_rows = list(Role.objects.prefetch_related('permissions').order_by('name'))
     for role in role_rows:
         role.display_description = descriptions.get(
             role.code,
-            'Berechtigungen werden über die zugewiesenen Capabilities gesteuert.',
+            _('Berechtigungen werden über die zugewiesenen Capabilities gesteuert.'),
         )
     return render(request, 'ns_admin/roles.html', {
         'roles': role_rows,
