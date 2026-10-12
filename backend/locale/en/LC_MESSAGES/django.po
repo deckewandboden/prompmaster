@@ -2509,3 +2509,63 @@ msgstr "completed"
 
 msgid "nicht verfügbar"
 msgstr "not available"
+
+msgid "Disk {value}% belegt"
+msgstr "Disk usage: {value}%"
+
+msgid "RAM {value}% belegt"
+msgstr "RAM usage: {value}%"
+
+msgid "CPU 10-Minuten-Mittel {value}%"
+msgstr "CPU 10-minute average: {value}%"
+
+msgid "Kein auswertbarer Backupstatus verfügbar"
+msgstr "No usable backup status available"
+
+msgid "Letztes Backup meldet Status {value}"
+msgstr "Latest backup reports status {value}"
+
+msgid "Backup ist {value} Stunden alt"
+msgstr "Backup is {value} hours old"
+
+msgid "Restore-Statusdatei ist nicht auswertbar"
+msgstr "Restore status file cannot be evaluated"
+
+msgid "Noch kein Restore-Test protokolliert"
+msgstr "No restore test recorded yet"
+
+msgid "Letzter Restore-Test war nicht erfolgreich"
+msgstr "Latest restore test was unsuccessful"
+
+msgid "Letzter Restore-Test ist {value} Tage alt"
+msgstr "Latest restore test was {value} days ago"
+
+msgid "Monitoring-Ziel {value} ist nicht erreichbar"
+msgstr "Monitoring target {value} is unreachable"
+
+msgid "Monitoring-Ziel {value} liefert keinen Status"
+msgstr "Monitoring target {value} provides no status"
+
+msgid "Caddy Healthcheck ist nicht erreichbar"
+msgstr "Caddy health check is unreachable"
+
+msgid "Kein Celery Worker beantwortet den aktiven Ping"
+msgstr "No Celery worker responds to the active ping"
+
+msgid "Celery Beat-Heartbeat älter als {value} Minuten"
+msgstr "Celery Beat heartbeat is more than {value} minutes old"
+
+msgid "Celery Queue-Tiefe kann nicht gelesen werden"
+msgstr "Celery queue depth cannot be read"
+
+msgid "Celery Queue enthält {value} wartende Jobs"
+msgstr "Celery queue contains {value} pending jobs"
+
+msgid "{value} fehlgeschlagene Hintergrundjobs in 24 Stunden"
+msgstr "{value} background jobs failed in 24 hours"
+
+msgid "{value} E-Mail-Fehler in 24 Stunden"
+msgstr "{value} email errors in 24 hours"
+
+msgid "{value} Mollie-Verarbeitungsfehler in 24 Stunden"
+msgstr "{value} Mollie processing errors in 24 hours"
