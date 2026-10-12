@@ -1939,3 +1939,75 @@ msgstr "Talep ve tüm netstyle yanıtları tarih sırasıyla."
 
 msgid "netstyle Support"
 msgstr "netstyle Destek"
+
+msgid "FAQ bearbeiten"
+msgstr "SSS düzenle"
+
+msgid "FAQ anlegen"
+msgstr "SSS oluştur"
+
+msgid "Zentraler Content-Baustein."
+msgstr "Merkezi içerik bileşeni."
+
+msgid "FAQ-Verwaltung"
+msgstr "SSS yönetimi"
+
+msgid "Zentrale FAQ-Inhalte für Marketing und Produktoberflächen."
+msgstr "Pazarlama ve ürün arayüzleri için merkezi SSS içerikleri."
+
+msgid "Frage suchen …"
+msgstr "Soru ara …"
+
+msgid "Alle Zielgruppen"
+msgstr "Tüm hedef kitleler"
+
+msgid "Filtern"
+msgstr "Filtrele"
+
+msgid "Zurücksetzen"
+msgstr "Sıfırla"
+
+msgid "Key"
+msgstr "Anahtar"
+
+msgid "Frage"
+msgstr "Soru"
+
+msgid "Zielgruppe"
+msgstr "Hedef kitle"
+
+msgid "Keine FAQ-Einträge."
+msgstr "SSS kaydı yok."
+
+msgid "Service Account Token"
+msgstr "Hizmet hesabı token'ı"
+
+msgid "erstellt"
+msgstr "oluşturuldu"
+
+msgid "Token jetzt sicher speichern."
+msgstr "Bu token'ı şimdi güvenli biçimde saklayın."
+
+msgid "Er wird danach nicht erneut im Klartext angezeigt; ein alter Token ist nach einer Rotation sofort ungültig."
+msgstr "Token daha sonra düz metin olarak tekrar gösterilmez; yenilemeden sonra eski token hemen geçersiz olur."
+
+msgid "Zur API-Verwaltung"
+msgstr "API yönetimine dön"
+
+msgid "Produktcode"
+msgstr "Ürün kodu"
+
+msgid "Preisversion anlegen"
+msgstr "Fiyat sürümü oluştur"
+
+msgid "Produktkonfiguration"
+msgstr "Ürün yapılandırması"
+
+msgid "Preisversionen"
+msgstr "Fiyat sürümleri"
+
+msgid "ab"
+msgstr "itibaren"
+
+msgid "Keine Preisversionen."
+msgstr "Fiyat sürümü yok."
