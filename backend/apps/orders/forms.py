@@ -76,9 +76,9 @@ class PublicCheckoutForm(forms.Form):
     postal_code = forms.CharField(max_length=20, label=_('PLZ'))
     city = forms.CharField(max_length=120, label=_('Ort'))
     country = forms.ChoiceField(choices=(('DE', _('Deutschland')),), label=_('Land'))
-    accept_terms = forms.BooleanField(, label=_('AGB akzeptieren'))
-    accept_privacy = forms.BooleanField(, label=_('Datenschutzhinweise zur Kenntnis genommen'))
-    accept_license = forms.BooleanField(, label=_('Lizenzbedingungen akzeptieren'))
+    accept_terms = forms.BooleanField(label=_('AGB akzeptieren'))
+    accept_privacy = forms.BooleanField(label=_('Datenschutzhinweise zur Kenntnis genommen'))
+    accept_license = forms.BooleanField(label=_('Lizenzbedingungen akzeptieren'))
     accept_withdrawal = forms.BooleanField(required=False, label=_('Widerrufsinformation zur Kenntnis genommen'))
     request_early_performance = forms.BooleanField(required=False, label=_('Leistungsbeginn vor Ablauf der Widerrufsfrist ausdrücklich verlangt'))
 
