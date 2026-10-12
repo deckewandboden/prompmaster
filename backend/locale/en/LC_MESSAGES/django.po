@@ -2587,3 +2587,102 @@ msgstr "Filter"
 
 msgid "Seite"
 msgstr "page"
+
+msgid "AGB akzeptieren"
+msgstr "Accept terms and conditions"
+
+msgid "Anmeldung fehlgeschlagen."
+msgstr "Sign-in failed."
+
+msgid "Anmeldung fehlgeschlagen. Bitte später erneut versuchen."
+msgstr "Sign-in failed. Please try again later."
+
+msgid "Anzahl Lizenzen"
+msgstr "Number of licenses"
+
+msgid "Art der Kündigung"
+msgstr "Type of cancellation"
+
+msgid "Außerordentliche Kündigung"
+msgstr "Extraordinary cancellation"
+
+msgid "Bei einer außerordentlichen Kündigung ist der Kündigungsgrund erforderlich."
+msgstr "A reason is required for extraordinary cancellation."
+
+msgid "Bestellnummer"
+msgstr "Order number"
+
+msgid "Bitte bestätigen Sie den gewünschten Leistungsbeginn vor Ablauf der Widerrufsfrist."
+msgstr "Please confirm your request for service to start before the withdrawal period expires."
+
+msgid "Bitte bestätigen Sie die Widerrufsbelehrung."
+msgstr "Please acknowledge the withdrawal information."
+
+msgid "Datenschutzhinweise zur Kenntnis genommen"
+msgstr "I have read the privacy notice"
+
+msgid "Deutschland"
+msgstr "Germany"
+
+msgid "Die Bestellnummer finden Sie in Ihrer Bestell- bzw. Zahlungsbestätigung."
+msgstr "You can find the order number in your order or payment confirmation."
+
+msgid "E-Mail-Adresse für die Eingangsbestätigung"
+msgstr "Email address for acknowledgement of receipt"
+
+msgid "E-Mail-Adresse für die Kündigungsbestätigung"
+msgstr "Email address for cancellation confirmation"
+
+msgid "Firmenname erforderlich."
+msgstr "Company name is required."
+
+msgid "Gewünschter Beendigungszeitpunkt"
+msgstr "Requested termination date"
+
+msgid "Hausnummer"
+msgstr "House number"
+
+msgid "Kündigungsgrund"
+msgstr "Reason for cancellation"
+
+msgid "Leer lassen für den frühestmöglichen Zeitpunkt."
+msgstr "Leave blank for the earliest possible date."
+
+msgid "Leistungsbeginn vor Ablauf der Widerrufsfrist ausdrücklich verlangt"
+msgstr "I expressly request service to begin before the withdrawal period expires"
+
+msgid "Lizenzbedingungen akzeptieren"
+msgstr "Accept license terms"
+
+msgid "Ordentliche Kündigung"
+msgstr "Ordinary cancellation"
+
+msgid "PLZ"
+msgstr "Postal code"
+
+msgid "Passwörter stimmen nicht überein."
+msgstr "Passwords do not match."
+
+msgid "Steuernummer ist für diese Steuerregel erforderlich."
+msgstr "A tax number is required for this tax rule."
+
+msgid "Straße"
+msgstr "Street"
+
+msgid "USt-IdNr. ist für diese Steuerregel erforderlich."
+msgstr "A VAT ID is required for this tax rule."
+
+msgid "Unternehmensname ist erforderlich."
+msgstr "Company name is required."
+
+msgid "Vertrag / Bestellung / Kundennummer"
+msgstr "Contract / order / customer number"
+
+msgid "Vor- und Nachname"
+msgstr "First and last name"
+
+msgid "Widerrufsinformation zur Kenntnis genommen"
+msgstr "I have read the withdrawal information"
+
+msgid "Zum Beispiel Bestellnummer oder Kundennummer."
+msgstr "For example, an order number or customer number."
