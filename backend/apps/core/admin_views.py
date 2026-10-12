@@ -1937,7 +1937,7 @@ def mollie_checkout_disable(request):
 @staff_perm('payments.read')
 def mollie_events(request):
     grid = DataGrid(request, MollieEvent.objects.select_related('payment'), search_fields=('event_key', 'payment__provider_payment_id', 'provider_status', 'error'), sort_fields={'date': 'created_at', 'payment': 'payment__provider_payment_id', 'status': 'provider_status', 'processed': 'processed_at', 'retries': 'retry_count', 'error': 'error'}, default_sort='-created_at', filters={'provider_status': 'provider_status'}).build()
-    return render(request, 'ns_admin/mollie_events.html', {'grid': grid, 'filter_options': [('provider_status',_('Status'),MOLLIE_STATUS_CHOICES)]})
+    return render(request, 'ns_admin/mollie_events.html', {'grid': grid, 'filter_options': [('provider_status',_('Status'),MOLLIE_STATUS_CHOICES)], 'mollie_status_labels': dict(MOLLIE_STATUS_CHOICES)})
 
 
 @staff_perm()
