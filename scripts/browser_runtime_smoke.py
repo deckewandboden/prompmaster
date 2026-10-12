@@ -2347,6 +2347,66 @@ def run_backend_ui_smoke(browser, fixture=None) -> None:
                 if page.locator('html').get_attribute('lang') != 'de':
                     raise AssertionError('admin locale smoke: German reset failed')
 
+                # Geometry regression for the original language/PA-avatar collision.
+                # Inspect rendered rectangles at desktop, tablet and narrow mobile
+                # widths; do not infer correctness from fixed CSS widths alone.
+                def _check_admin_language_header(width: int, language: str) -> None:
+                    page.set_viewport_size({'width': width, 'height': 900})
+                    response = page.goto(base + 'ns-admin/leads/new/', wait_until='networkidle')
+                    if not response or response.status != 200:
+                        raise AssertionError(
+                            f'admin header {width}px {language}: lead editor unavailable'
+                        )
+                    if language != 'de':
+                        with page.expect_navigation(wait_until='networkidle'):
+                            page.locator('.language-switcher select[name="language"]').select_option(language)
+                    metrics = page.evaluate(
+                        """() => {
+                            const locale = document.querySelector('.topbar-locale .language-switcher');
+                            const select = document.querySelector('.topbar-locale select[name="language"]');
+                            const avatar = document.querySelector('.topbar .userbox .avatar');
+                            if (!locale || !select || !avatar) return {missing:true};
+                            const a = locale.getBoundingClientRect();
+                            const b = avatar.getBoundingClientRect();
+                            const overlap = Math.min(a.right, b.right) - Math.max(a.left, b.left) > 1
+                              && Math.min(a.bottom, b.bottom) - Math.max(a.top, b.top) > 1;
+                            return {
+                                missing:false,
+                                viewport:innerWidth,
+                                selected:select.value,
+                                htmlLang:document.documentElement.lang,
+                                width:a.width,
+                                left:a.left,
+                                right:a.right,
+                                avatarLeft:b.left,
+                                avatarRight:b.right,
+                                overlap,
+                            };
+                        }"""
+                    )
+                    expected_width = 112 if width <= 700 else (140 if width <= 1050 else 154)
+                    if (
+                        metrics.get('missing')
+                        or metrics.get('selected') != language
+                        or metrics.get('htmlLang') != language
+                        or abs(metrics.get('width', 0) - expected_width) > 4
+                        or metrics.get('left', -1) < -1
+                        or metrics.get('right', width + 10) > width + 1
+                        or metrics.get('avatarRight', width + 10) > width + 1
+                        or metrics.get('overlap')
+                    ):
+                        raise AssertionError(
+                            f'admin header geometry {width}px {language}: {metrics}'
+                        )
+                for header_width in (360, 390, 768, 1440):
+                    _check_admin_language_header(header_width, 'de')
+                # Dutch is long enough to expose selector expansion on mobile.
+                _check_admin_language_header(390, 'nl')
+                with page.expect_navigation(wait_until='networkidle'):
+                    page.locator('.language-switcher select[name="language"]').select_option('de')
+                page.set_viewport_size({'width': 1440, 'height': 1000})
+                page.goto(base + 'ns-admin/', wait_until='networkidle')
+
                 admin_logo = page.locator('.sidebar .brand img')
                 if '/static/brand/promptfinisher-logo-hq.png' not in admin_logo.get_attribute('src'):
                     raise AssertionError('admin shell still uses the low-resolution logo asset')
