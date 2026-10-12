@@ -1361,3 +1361,75 @@ msgstr "Soort"
 
 msgid "Vertragsbezug"
 msgstr "Contractreferentie"
+
+msgid "Datengetriebene Produkt-, Laufzeit-, Geräte-, Reminder- und Entitlement-Konfiguration."
+msgstr "Datagestuurde configuratie van producten, looptijden, apparaten, herinneringen en rechten."
+
+msgid "Features"
+msgstr "Functies"
+
+msgid "Produkt anlegen"
+msgstr "Product aanmaken"
+
+msgid "AKTIV"
+msgstr "ACTIEF"
+
+msgid "INAKTIV"
+msgstr "INACTIEF"
+
+msgid "aktueller Neukaufpreis"
+msgstr "huidige prijs voor nieuwe aankoop"
+
+msgid "nicht konfiguriert"
+msgstr "niet ingesteld"
+
+msgid "Verlängerung"
+msgstr "Verlenging"
+
+msgid "Sichtbar / kaufbar"
+msgstr "Zichtbaar / te koop"
+
+msgid "Ja"
+msgstr "Ja"
+
+msgid "Nein"
+msgstr "Nee"
+
+msgid "Bearbeiten"
+msgstr "Bewerken"
+
+msgid "Noch keine Produkte."
+msgstr "Nog geen producten."
+
+msgid "Rollenbasierte Rechte; für alle netstyle Benutzer ist 2FA Pflicht."
+msgstr "Rechten op basis van rollen; tweefactorauthenticatie is verplicht voor alle netstyle-gebruikers."
+
+msgid "Rolle zuweisen"
+msgstr "Rol toewijzen"
+
+msgid "netstyle Benutzer anlegen"
+msgstr "netstyle-gebruiker aanmaken"
+
+msgid "Berechtigungen"
+msgstr "Machtigingen"
+
+msgid "Sicherheitsvorgabe"
+msgstr "Beveiligingseis"
+
+msgid "2FA Pflicht"
+msgstr "2FA verplicht"
+
+msgid "Keine Rolle"
+msgstr "Geen rol"
+
+msgid "2FA aktiv"
+msgstr "2FA ingeschakeld"
+
+msgid "2FA einzurichten"
+msgstr "2FA instellen vereist"
+
+msgid "2FA dieses Benutzers zurücksetzen?"
+msgstr "2FA van deze gebruiker opnieuw instellen?"
+
+msgid "2FA zurücksetzen"
+msgstr "2FA opnieuw instellen"
