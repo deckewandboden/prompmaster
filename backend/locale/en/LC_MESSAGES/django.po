@@ -1396,3 +1396,90 @@ msgstr "Code"
 
 msgid "Keine Features."
 msgstr "No features."
+
+msgid "Geschützte Operations-Schnittstellen und Service Accounts."
+msgstr "Protected operations interfaces and service accounts."
+
+msgid "Service Account anlegen"
+msgstr "Create service account"
+
+msgid "Operations API"
+msgstr "Operations API"
+
+msgid "Zugriff ausschließlich über aktive Service Accounts mit passendem Scope. Tokens werden nur einmal bei Erstellung bzw. Rotation angezeigt."
+msgstr "Access is restricted to active service accounts with the required scope. Tokens are displayed only once, when created or rotated."
+
+msgid "Service Accounts"
+msgstr "Service accounts"
+
+msgid "Gesperrt"
+msgstr "Blocked"
+
+msgid "Token rotieren"
+msgstr "Rotate token"
+
+msgid "Service Account wirklich sperren?"
+msgstr "Really block this service account?"
+
+msgid "Sperren"
+msgstr "Block"
+
+msgid "Noch keine Service Accounts."
+msgstr "No service accounts yet."
+
+msgid "Dienste"
+msgstr "Services"
+
+msgid "Status der internen Plattformdienste."
+msgstr "Status of internal platform services."
+
+msgid "Systemübersicht"
+msgstr "System overview"
+
+msgid "Host"
+msgstr "Host"
+
+msgid "Hostname"
+msgstr "Hostname"
+
+msgid "Kernel"
+msgstr "Kernel"
+
+msgid "Healthy"
+msgstr "Healthy"
+
+msgid "Nicht erreichbar"
+msgstr "Unreachable"
+
+msgid "Datenbank"
+msgstr "Database"
+
+msgid "Verbindungen"
+msgstr "Connections"
+
+msgid "Größe"
+msgstr "Size"
+
+msgid "Background Jobs"
+msgstr "Background jobs"
+
+msgid "Heartbeat fehlt"
+msgstr "Heartbeat missing"
+
+msgid "Queue"
+msgstr "Queue"
+
+msgid "Fehlgeschlagene Jobs 24 h"
+msgstr "Failed jobs in 24 h"
+
+msgid "Worker"
+msgstr "Worker"
+
+msgid "Antwortende Worker"
+msgstr "Responding workers"
+
+msgid "Worker-Heartbeat"
+msgstr "Worker heartbeat"
+
+msgid "Beat-Heartbeat"
+msgstr "Beat heartbeat"
