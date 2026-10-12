@@ -795,6 +795,87 @@ class AdminInternationalizationContractTests(SimpleTestCase):
             self.assertFalse(invalid.is_valid())
             self.assertIn('api_key', invalid.errors)
 
+
+    def test_admin_mail_monitoring_settings_localization(self):
+        import ast
+        from apps.core.admin_forms import GeneralSettingsForm, RefundForm, IntegrationSecretForm
+
+        source = (ROOT / 'apps/core/admin_forms.py').read_text(encoding='utf-8')
+        settings_scope = source.split('class GeneralSettingsForm(forms.Form):', 1)[1]
+        translated = {
+            node.args[0].value
+            for node in ast.walk(ast.parse('class GeneralSettingsForm(forms.Form):' + settings_scope))
+            if isinstance(node, ast.Call)
+            and isinstance(node.func, ast.Name)
+            and node.func.id == '_'
+            and node.args
+            and isinstance(node.args[0], ast.Constant)
+            and isinstance(node.args[0].value, str)
+        }
+        self.assertEqual(len(translated), 73)
+        for language in LOCALES:
+            catalog = catalog_translations(
+                ROOT / 'locale' / language / 'LC_MESSAGES' / 'django.po'
+            )
+            for key in translated:
+                with self.subTest(language=language, key=key):
+                    self.assertTrue(catalog.get(key))
+            self.assertIn('v=spf1 ', catalog['Ein SPF-Eintrag muss mit "v=spf1 " beginnen.'])
+            self.assertIn('v=DMARC1;', catalog['Ein DMARC-Eintrag muss mit "v=DMARC1;" beginnen.'])
+            self.assertIn('_dmarc.<Domain>', catalog['Dokumentierter DNS-Sollwert für _dmarc.<Domain>.'])
+            self.assertIn('promptmaster@netstyle.de', catalog[
+                'Postfach, über das Microsoft Graph senden soll, z. B. promptmaster@netstyle.de.'
+            ])
+
+        self.assertEqual(
+            [key for key, _ in GeneralSettingsForm.MAIL_PROVIDER_CHOICES],
+            ['smtp1', 'smtp2', 'graph'],
+        )
+        self.assertEqual(
+            [key for key, _ in GeneralSettingsForm.MAIL_DELIVERY_MODE_CHOICES],
+            ['manual', 'failover'],
+        )
+        self.assertFalse(GeneralSettingsForm.base_fields['smtp_password'].widget.render_value)
+        self.assertFalse(GeneralSettingsForm.base_fields['graph_client_secret'].widget.render_value)
+        self.assertTrue(RefundForm.base_fields['confirm'].required)
+        self.assertTrue(IntegrationSecretForm.base_fields['value'].required)
+
+    def test_admin_mail_fallback_and_dns_validation_unchanged(self):
+        from apps.core.admin_forms import GeneralSettingsForm
+        base = {
+            'support_email': 'ops@example.test',
+            'mail_provider': 'smtp1',
+            'smtp_host': 'smtp.example.test',
+            'smtp_port': '587',
+        }
+        no_fallback = GeneralSettingsForm(data={
+            **base, 'mail_delivery_mode': 'failover',
+        })
+        self.assertFalse(no_fallback.is_valid())
+        self.assertIn('mail_fallback_1', no_fallback.errors)
+        duplicate_route = GeneralSettingsForm(data={
+            **base, 'mail_delivery_mode': 'failover',
+            'mail_fallback_1': 'smtp1',
+        })
+        self.assertFalse(duplicate_route.is_valid())
+        self.assertIn('mail_fallback_1', duplicate_route.errors)
+        invalid_spf = GeneralSettingsForm(data={
+            **base, 'mail_delivery_mode': 'manual', 'mail_spf_record': 'invalid',
+        })
+        self.assertFalse(invalid_spf.is_valid())
+        self.assertIn('mail_spf_record', invalid_spf.errors)
+        graph_missing = GeneralSettingsForm(data={
+            'support_email': 'ops@example.test',
+            'mail_delivery_mode': 'manual', 'mail_provider': 'graph',
+        })
+        self.assertFalse(graph_missing.is_valid())
+        for required_field in ('graph_tenant_id', 'graph_client_id', 'graph_sender', 'graph_client_secret'):
+            self.assertIn(required_field, graph_missing.errors)
+        good = GeneralSettingsForm(data={
+            **base, 'mail_delivery_mode': 'manual',
+        })
+        self.assertTrue(good.is_valid(), good.errors.as_text())
+
     def test_language_picker_is_in_flex_header_and_never_overlays_avatar(self):
         shell = (ROOT / 'templates/app_shell.html').read_text(encoding='utf-8')
         base = (ROOT / 'templates/base.html').read_text(encoding='utf-8')
