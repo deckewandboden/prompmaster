@@ -1636,3 +1636,42 @@ msgstr "Envios recentes"
 
 msgid "Noch keine Versandvorgänge."
 msgstr "Ainda não existem envios."
+
+msgid "Zur Kundenliste"
+msgstr "Voltar à lista de clientes"
+
+msgid "Zur Privatkundenliste"
+msgstr "Voltar aos clientes particulares"
+
+msgid "Kundendaten"
+msgstr "Dados do cliente"
+
+msgid "Stammdaten"
+msgstr "Dados principais"
+
+msgid "Unternehmensdaten speichern"
+msgstr "Guardar dados da empresa"
+
+msgid "Firma"
+msgstr "Empresa"
+
+msgid "Steuernummer"
+msgstr "Número fiscal"
+
+msgid "Änderungen erfolgen serverseitig mit Berechtigungsprüfung und werden im Audit protokolliert. Steuerfelder werden anhand der aktiven Steuerregel für Land und Kundentyp validiert."
+msgstr "As alterações são efetuadas no servidor com verificação de permissões e registadas na auditoria. Os campos fiscais são validados segundo a regra fiscal em vigor para o país e tipo de cliente."
+
+msgid "Rechtsakzeptanzen"
+msgstr "Aceitações de documentos legais"
+
+msgid "Version"
+msgstr "Versão"
+
+msgid "Keine Rechtsakzeptanzen protokolliert."
+msgstr "Não existem aceitações de documentos legais registadas."
+
+msgid "Keine Löschanfragen."
+msgstr "Não existem pedidos de eliminação."
+
+msgid "Alle Löschanfragen"
+msgstr "Todos os pedidos de eliminação"
