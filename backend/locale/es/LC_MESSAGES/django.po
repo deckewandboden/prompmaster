@@ -2131,3 +2131,60 @@ msgstr "Guardar configuración"
 
 msgid "Sie besitzen Leserechte, aber keine Berechtigung zum Ändern dieser Einstellungen."
 msgstr "Tienes acceso de solo lectura y no puedes modificar esta configuración."
+
+msgid "Bewertungen"
+msgstr "Valoraciones"
+
+msgid "Deterministischer Composer-Test ohne Speicherung des erzeugten Prompttexts."
+msgstr "Prueba determinista del compositor sin almacenar el texto del prompt generado."
+
+msgid "Draft aus letzter Version"
+msgstr "Crear borrador a partir de la última versión"
+
+msgid "Draft speichern"
+msgstr "Guardar borrador"
+
+msgid "Keine Version vorhanden."
+msgstr "No hay ninguna versión disponible."
+
+msgid "Konfigurierbare Schwellen für Recent Average und Drop-Erkennung."
+msgstr "Umbrales configurables para la media reciente y la detección de caídas."
+
+msgid "No-Code Editor. Nur DRAFT-Versionen sind inhaltlich veränderbar."
+msgstr "Editor sin código. Solo se pueden modificar las versiones DRAFT."
+
+msgid "Noch keine Qualitäts-Snapshots. Analyse ausführen oder Ratings erfassen."
+msgstr "Todavía no hay instantáneas de calidad. Ejecute un análisis o registre valoraciones."
+
+msgid "Policy"
+msgstr "Política"
+
+msgid "Qualität:"
+msgstr "Calidad:"
+
+msgid "Qualitätsschwellen"
+msgstr "Umbrales de calidad"
+
+msgid "Ratings"
+msgstr "Valoraciones"
+
+msgid "Testfall"
+msgstr "Caso de prueba"
+
+msgid "Testfall speichern"
+msgstr "Guardar caso de prueba"
+
+msgid "Tests"
+msgstr "Pruebas"
+
+msgid "Titel"
+msgstr "Título"
+
+msgid "Zur Übersicht"
+msgstr "Volver al resumen"
+
+msgid "bearbeiten"
+msgstr "editar"
+
+msgid "zentrale PromptDefinition"
+msgstr "PromptDefinition central"
