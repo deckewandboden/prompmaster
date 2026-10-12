@@ -2,7 +2,7 @@
 <div class="page-head">
   <div>
     <h1>{{ support_request.subject }}</h1>
-    <div class="sub">{{ support_request.get_category_display }} · {{ support_request.created_at|date:'d.m.Y H:i' }}</div>
+    <div class="sub">{% translate support_request.get_category_display %} · {{ support_request.created_at|date:'d.m.Y H:i' }}</div>
   </div>
   <a class="btn secondary" href="{% url 'ns_admin:support_requests' %}">{% translate 'Zurück' %}</a>
 </div>
@@ -14,7 +14,7 @@
     <div class="statusrow"><span>{% translate 'Benutzer-ID' %}</span><strong class="wrap-anywhere">{{ support_request.user_id }}</strong></div>
     <div class="statusrow"><span>{% translate 'E-Mail' %}</span><strong class="wrap-anywhere">{{ support_request.user.email }}</strong></div>
     <div class="statusrow"><span>{% translate 'Lizenz' %}</span><strong>{% if support_request.license %}{{ support_request.license.license_number }} · {{ support_request.license.product.name }}{% else %}–{% endif %}</strong></div>
-    <div class="statusrow"><span>{% translate 'Status' %}</span><strong>{{ support_request.get_status_display }}</strong></div>
+    <div class="statusrow"><span>{% translate 'Status' %}</span><strong>{% translate support_request.get_status_display %}</strong></div>
     <div class="message-box">{{ support_request.message|linebreaksbr }}</div>
   </div>
 
@@ -78,7 +78,7 @@
               {{ support_request.user.full_name|default:support_request.user.email }}
             {% endif %}
           </strong>
-          <span>{{ item.get_sender_type_display }} · {{ item.created_at|date:'d.m.Y H:i' }}</span>
+          <span>{% translate item.get_sender_type_display %} · {{ item.created_at|date:'d.m.Y H:i' }}</span>
         </div>
         <div class="support-thread-body">{{ item.body|linebreaksbr }}</div>
         {% if item.notification_email %}
