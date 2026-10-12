@@ -1777,3 +1777,78 @@ msgstr "Brak wniosków o usunięcie."
 
 msgid "Alle Löschanfragen"
 msgstr "Wszystkie wnioski o usunięcie"
+
+msgid "Bestellung vom"
+msgstr "Zamówienie z dnia"
+
+msgid "Zurück zur Liste"
+msgstr "Wróć do listy"
+
+msgid "Brutto"
+msgstr "Brutto"
+
+msgid "Steuer"
+msgstr "Podatek"
+
+msgid "Keine Zahlung erfasst."
+msgstr "Nie zarejestrowano płatności."
+
+msgid "Positionen"
+msgstr "Pozycje"
+
+msgid "Menge"
+msgstr "Ilość"
+
+msgid "Einzelpreis"
+msgstr "Cena jednostkowa"
+
+msgid "Lizenzstatus wirklich ändern?"
+msgstr "Na pewno zmienić status tej licencji?"
+
+msgid "Lizenz entsperren"
+msgstr "Odblokuj licencję"
+
+msgid "Lizenz sperren"
+msgstr "Zablokuj licencję"
+
+msgid "Inhaber & Zuweisung"
+msgstr "Właściciel i przypisanie"
+
+msgid "Zugewiesen an"
+msgstr "Przypisano do"
+
+msgid "Lizenzzuweisung wirklich freigeben? Aktive Geräte dieser Lizenz werden widerrufen."
+msgstr "Na pewno zwolnić przypisanie licencji? Aktywne urządzenia powiązane z licencją zostaną unieważnione."
+
+msgid "Zuweisung freigeben"
+msgstr "Zwolnij przypisanie"
+
+msgid "Aktiven Firmenbenutzer auswählen"
+msgstr "Wybierz aktywnego użytkownika firmy"
+
+msgid "Bitte auswählen"
+msgstr "Wybierz"
+
+msgid "Lizenz zuweisen"
+msgstr "Przypisz licencję"
+
+msgid "Lizenzperioden"
+msgstr "Okresy licencji"
+
+msgid "Von"
+msgstr "Od"
+
+msgid "Bis"
+msgstr "Do"
+
+msgid "Erstattung"
+msgstr "Zwrot"
+
+msgid "Erstattung wirklich verbindlich über Mollie auslösen?"
+msgstr "Czy na pewno zlecić wiążący zwrot płatności przez Mollie?"
+
+msgid "Erstattung prüfen/auslösen"
+msgstr "Sprawdź/wykonaj zwrot"
+
+msgid "Keine Lizenzperioden vorhanden."
+msgstr "Brak okresów licencji."
