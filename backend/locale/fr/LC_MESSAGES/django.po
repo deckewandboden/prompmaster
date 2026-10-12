@@ -3417,3 +3417,39 @@ msgstr "Demande de suppression traitée et compte anonymisé."
 
 msgid "Löschanfrage abgelehnt."
 msgstr "Demande de suppression rejetée."
+
+msgid "Dieser Lead ist bereits einem Kunden zugeordnet."
+msgstr "Ce prospect est déjà associé à un client."
+
+msgid "Einladung für den Firmenadministrator wurde gesendet."
+msgstr "Invitation de l’administrateur de l’entreprise envoyée."
+
+msgid "Kundenantwort gespeichert. Für Demo-Adressen wurde keine E-Mail versendet."
+msgstr "Réponse au client enregistrée. Aucun e-mail envoyé aux adresses de démonstration."
+
+msgid "Kundenantwort gespeichert und E-Mail-Benachrichtigung eingeplant."
+msgstr "Réponse au client enregistrée et notification e-mail programmée."
+
+msgid "Kundenantwort gespeichert, E-Mail-Benachrichtigung konnte aber nicht eingeplant werden."
+msgstr "Réponse au client enregistrée, mais la notification e-mail n’a pas pu être programmée."
+
+msgid "netstyle Benutzer angelegt; Einrichtungslink wurde per E-Mail versendet."
+msgstr "Utilisateur netstyle créé ; lien de configuration envoyé par e-mail."
+
+msgid "Privatkunden werden aus rechtlichen Gründen über Registrierung/Checkout angelegt; der Lead kann dort anschließend als gewonnen abgeschlossen werden."
+msgstr "Pour des raisons juridiques, les clients particuliers sont créés lors de l’inscription/paiement ; le prospect peut ensuite être marqué comme gagné."
+
+msgid "Lead wurde in einen Firmenkunden umgewandelt. Der Ansprechpartner hat eine sichere Einladung erhalten."
+msgstr "Prospect converti en client professionnel. Le contact a reçu une invitation sécurisée."
+
+msgid "Lead %(lead_number)s angelegt."
+msgstr "Prospect %(lead_number)s créé."
+
+msgid "Lead %(lead_number)s gelöscht."
+msgstr "Prospect %(lead_number)s supprimé."
+
+msgid "Firmenadministrator wurde auf %(email)s übertragen."
+msgstr "Rôle d’administrateur de l’entreprise transféré à %(email)s."
+
+msgid "Lizenz wurde %(email)s zugewiesen."
+msgstr "Licence attribuée à %(email)s."
