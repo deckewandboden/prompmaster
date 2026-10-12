@@ -2011,3 +2011,69 @@ msgstr "desde"
 
 msgid "Keine Preisversionen."
 msgstr "No hay versiones de precio."
+
+msgid "Zentrale Prompt-Domain · 34 Apps · 194 PM20-Aufgaben · versioniert und serverseitig komponiert."
+msgstr "Dominio central de prompts · 34 aplicaciones · 194 tareas PM20 · versionado y compuesto en el servidor."
+
+msgid "Qualität"
+msgstr "Calidad"
+
+msgid "Task-ID, App oder Titel suchen …"
+msgstr "Buscar ID de tarea, aplicación o título …"
+
+msgid "Task"
+msgstr "Tarea"
+
+msgid "Anwendung"
+msgstr "Aplicación"
+
+msgid "Veröffentlicht"
+msgstr "Publicado"
+
+msgid "Offene Versionen"
+msgstr "Versiones pendientes"
+
+msgid "keine"
+msgstr "ninguna"
+
+msgid "noch keine Daten"
+msgstr "todavía no hay datos"
+
+msgid "Keine Prompt-Aufgaben gefunden."
+msgstr "No se encontraron tareas de prompts."
+
+msgid "Prompt-Qualität"
+msgstr "Calidad de prompts"
+
+msgid "1–5-Sterne-Ratings · Recent Average · Drop-Erkennung · Aufgabenliste."
+msgstr "Valoraciones de 1 a 5 estrellas · media reciente · detección de caídas · lista de tareas."
+
+msgid "Schwellen"
+msgstr "Umbrales"
+
+msgid "Analyse aktualisieren"
+msgstr "Actualizar análisis"
+
+msgid "Kritisch"
+msgstr "Crítico"
+
+msgid "Warnung"
+msgstr "Advertencia"
+
+msgid "Beobachten"
+msgstr "Observar"
+
+msgid "OK"
+msgstr "Correcto"
+
+msgid "App"
+msgstr "Aplicación"
+
+msgid "Recent Avg"
+msgstr "Media reciente"
+
+msgid "Previous Avg"
+msgstr "Media anterior"
+
+msgid "Drop"
+msgstr "Caída"
