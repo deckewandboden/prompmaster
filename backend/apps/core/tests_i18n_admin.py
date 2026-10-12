@@ -42,6 +42,13 @@ PAGES = (
     'ns_admin/includes_private_customer_nav.html',
     'ns_admin/customer_grid.html',
     'ns_admin/private_customer_grid.html',
+    'ns_admin/mollie_events.html',
+    'ns_admin/legal_deletions.html',
+    'ns_admin/legal_retention.html',
+    'ns_admin/legal_documents.html',
+    'ns_admin/ops_database.html',
+    'ns_admin/ops_grid.html',
+    'ns_admin/support_detail.html',
 )
 TRANSLATE_PATTERN = re.compile(r'''{%\s*translate\s+(['"])(.*?)\1\s*%}''')
 
@@ -262,6 +269,31 @@ class AdminInternationalizationContractTests(SimpleTestCase):
                 )
                 with self.subTest(page=page, language=code):
                     self.assertTrue(catalog.get(label))
+
+    def test_gdpr_anonymization_confirmation_is_translated(self):
+        source = (ROOT / 'templates/ns_admin/legal_deletions.html').read_text(encoding='utf-8')
+        phrase = 'Konto wirklich anonymisieren?'
+        self.assertIn("data-confirm=\"{% translate '" + phrase + "' %}\"", source)
+        for code in LOCALES:
+            translations = catalog_translations(
+                ROOT / 'locale' / code / 'LC_MESSAGES' / 'django.po'
+            )
+            with self.subTest(language=code):
+                self.assertTrue(translations.get(phrase))
+
+    def test_support_reply_and_email_statuses_are_localized(self):
+        source = (ROOT / 'templates/ns_admin/support_detail.html').read_text(encoding='utf-8')
+        for phrase in (
+            'Antwort senden', 'Antwort an den Kunden eingeben …',
+            'Gesendet', 'Fehlgeschlagen', 'Wird gesendet', 'Warteschlange',
+        ):
+            self.assertIn("{% translate '" + phrase + "' %}", source)
+            for code in LOCALES:
+                translations = catalog_translations(
+                    ROOT / 'locale' / code / 'LC_MESSAGES' / 'django.po'
+                )
+                with self.subTest(language=code, phrase=phrase):
+                    self.assertTrue(translations.get(phrase))
 
     def test_language_picker_is_in_flex_header_and_never_overlays_avatar(self):
         shell = (ROOT / 'templates/app_shell.html').read_text(encoding='utf-8')
