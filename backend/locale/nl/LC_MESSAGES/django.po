@@ -1883,3 +1883,12 @@ msgstr "In wachtrij"
 
 msgid "Keine E-Mails gefunden."
 msgstr "Geen e-mails gevonden."
+
+msgid "Kundenbereiche"
+msgstr "Klantonderdelen"
+
+msgid "Privatkundenbereiche"
+msgstr "Onderdelen particuliere klanten"
+
+msgid "Audit"
+msgstr "Audit"
