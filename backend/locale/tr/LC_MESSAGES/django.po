@@ -1333,3 +1333,66 @@ msgstr "Bu kullanıcının 2FA'sı sıfırlansın mı?"
 
 msgid "2FA zurücksetzen"
 msgstr "2FA'yı sıfırla"
+
+msgid "Benutzerstatus wirklich ändern?"
+msgstr "Kullanıcı durumu gerçekten değiştirilsin mi?"
+
+msgid "Deaktivieren"
+msgstr "Devre dışı bırak"
+
+msgid "Aktivieren"
+msgstr "Etkinleştir"
+
+msgid "Keine netstyle Benutzer."
+msgstr "netstyle kullanıcısı yok."
+
+msgid "Rechtsdokumente, Aufbewahrung und Löschanforderungen."
+msgstr "Hukuki belgeler, saklama süreleri ve silme talepleri."
+
+msgid "Rechtsdokumente"
+msgstr "Hukuki belgeler"
+
+msgid "Noch keine Rechtstexte hinterlegt."
+msgstr "Henüz hukuki metin eklenmedi."
+
+msgid "Rechtsdokumente verwalten"
+msgstr "Hukuki belgeleri yönet"
+
+msgid "Verbrauchererklärungen"
+msgstr "Tüketici beyanları"
+
+msgid "Offene Widerrufe / Kündigungen"
+msgstr "Bekleyen cayma / fesih talepleri"
+
+msgid "Widerrufe & Kündigungen"
+msgstr "Cayma ve fesihler"
+
+msgid "Retention / Löschung"
+msgstr "Saklama / silme"
+
+msgid "Aktive Retention-Policies"
+msgstr "Etkin saklama politikaları"
+
+msgid "Offene Löschanfragen"
+msgstr "Bekleyen silme talepleri"
+
+msgid "Retention-Policies"
+msgstr "Saklama politikaları"
+
+msgid "Löschanfragen"
+msgstr "Silme talepleri"
+
+msgid "Features / Entitlements"
+msgstr "Özellikler / yetkiler"
+
+msgid "Wiederverwendbare Funktionsrechte für heutige und zukünftige Produkte."
+msgstr "Mevcut ve gelecekteki ürünler için yeniden kullanılabilir özellik yetkileri."
+
+msgid "Feature anlegen"
+msgstr "Özellik oluştur"
+
+msgid "Code"
+msgstr "Kod"
+
+msgid "Keine Features."
+msgstr "Özellik yok."
