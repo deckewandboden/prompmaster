@@ -1120,3 +1120,84 @@ msgstr "Tüm siparişler"
 
 msgid "Firmenkonto"
 msgstr "Şirket hesabı"
+
+msgid "Serverseitige Suche, Filter, Sortierung und Pagination."
+msgstr "Sunucu tarafında arama, filtreleme, sıralama ve sayfalama."
+
+msgid "Neu anlegen"
+msgstr "Yeni oluştur"
+
+msgid "Privatkunden"
+msgstr "Bireysel müşteriler"
+
+msgid "aufsteigend"
+msgstr "artan"
+
+msgid "absteigend"
+msgstr "azalan"
+
+msgid "Keine Datensätze für die aktuelle Auswahl."
+msgstr "Geçerli seçim için kayıt yok."
+
+msgid "Änderungen werden serverseitig validiert und – sofern sicherheits- oder geschäftskritisch – protokolliert."
+msgstr "Değişiklikler sunucuda doğrulanır; güvenlik veya iş açısından kritikse kaydedilir."
+
+msgid "Zusätzliche Sicherheitsfreigabe."
+msgstr "Ek güvenlik doğrulaması."
+
+msgid "Bestätigen Sie Ihr eigenes Passwort. Die Freigabe gilt anschließend ausschließlich für wenige Minuten und nur für geschützte Admin-Aktionen."
+msgstr "Kendi parolanızı doğrulayın. Onay yalnızca birkaç dakika ve korumalı yönetici işlemleri için geçerli olacaktır."
+
+msgid "Bestätigen"
+msgstr "Onayla"
+
+msgid "Kompakte Geschäftszahlen innerhalb Ihrer Berechtigungen."
+msgstr "Yetkileriniz kapsamında özet iş göstergeleri."
+
+msgid "Neue Kunden · 30 Tage"
+msgstr "Yeni müşteriler · 30 gün"
+
+msgid "Verlängerungsanteil"
+msgstr "Yenileme oranı"
+
+msgid "Verlängerungsterms"
+msgstr "yenileme dönemleri"
+
+msgid "Refund-Quote"
+msgstr "İade oranı"
+
+msgid "Anteil refundierter Lizenzterms"
+msgstr "İade edilen lisans dönemlerinin oranı"
+
+msgid "Ø Lizenzen / Firma"
+msgstr "Şirket başına ortalama lisans"
+
+msgid "Firmenkundenbestand"
+msgstr "Kurumsal müşteri tabanı"
+
+msgid "Umsatz letzte 30 Tage"
+msgstr "Son 30 gün geliri"
+
+msgid "Bestellungen gesamt"
+msgstr "toplam sipariş"
+
+msgid "Lizenzen gesamt"
+msgstr "Toplam lisans"
+
+msgid "inkl. aktiv, frei, abgelaufen und historisch"
+msgstr "etkin, boşta, süresi dolmuş ve geçmiş lisanslar dahil"
+
+msgid "Anfragen aus dem Kundenportal; V1 verwendet bewusst kein Ticketsystem."
+msgstr "Müşteri portalından gelen talepler; V1 sürümünde bilerek bilet sistemi kullanılmaz."
+
+msgid "Keine Kontaktanfragen."
+msgstr "İletişim talebi yok."
+
+msgid "Globale Suche"
+msgstr "Genel arama"
+
+msgid "Ergebnisse für"
+msgstr "Sonuçlar:"
+
+msgid "Keine Treffer."
+msgstr "Sonuç bulunamadı."
