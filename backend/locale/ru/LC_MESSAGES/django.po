@@ -1484,3 +1484,78 @@ msgstr "Сигнал обработчика"
 
 msgid "Beat-Heartbeat"
 msgstr "Сигнал Beat"
+
+msgid "Zahlungsprovider, Webhook und letzte Zahlungsereignisse."
+msgstr "Платёжный провайдер, вебхук и последние события платежей."
+
+msgid "Mollie konfigurieren"
+msgstr "Настроить Mollie"
+
+msgid "Konfiguration"
+msgstr "Настройка"
+
+msgid "Konfiguriert"
+msgstr "Настроено"
+
+msgid "Unvollständig"
+msgstr "Не завершено"
+
+msgid "Produktiv-Checkout"
+msgstr "Рабочая оплата"
+
+msgid "Freigegeben"
+msgstr "Разрешено"
+
+msgid "Modus"
+msgstr "Режим"
+
+msgid "Profile ID"
+msgstr "ID профиля"
+
+msgid "API Key"
+msgstr "Ключ API"
+
+msgid "nicht gesetzt"
+msgstr "не задано"
+
+msgid "Live-Zugangsdaten sind hinterlegt, der Kunden-Checkout bleibt jedoch gesperrt, bis die Live-Readiness geprüft und ausdrücklich freigegeben wurde."
+msgstr "Рабочие учётные данные сохранены, но оплата клиентами остаётся заблокированной до проверки готовности и явного разрешения."
+
+msgid "Basis-URL"
+msgstr "Базовый URL"
+
+msgid "Endpoint"
+msgstr "Конечная точка"
+
+msgid "Letztes Event"
+msgstr "Последнее событие"
+
+msgid "noch keines"
+msgstr "пока нет"
+
+msgid "Webhook-Ereignisse öffnen"
+msgstr "Открыть события вебхуков"
+
+msgid "Notabschaltung"
+msgstr "Аварийное отключение"
+
+msgid "Sperrt neue Mollie-Käufe sofort. Bestehende Zahlungen und Webhooks bleiben weiter verarbeitbar."
+msgstr "Немедленно блокирует новые покупки через Mollie. Существующие платежи и вебхуки продолжат обрабатываться."
+
+msgid "Produktiv-Checkout sperren"
+msgstr "Заблокировать рабочую оплату"
+
+msgid "Letzte Zahlungen"
+msgstr "Последние платежи"
+
+msgid "Noch keine Zahlungen."
+msgstr "Платежей пока нет."
+
+msgid "Letzte Webhook-Events"
+msgstr "Последние события вебхуков"
+
+msgid "offen"
+msgstr "ожидает обработки"
+
+msgid "Noch keine Webhook-Ereignisse."
+msgstr "Событий вебхуков пока нет."
