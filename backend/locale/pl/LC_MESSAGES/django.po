@@ -2368,3 +2368,195 @@ msgstr "Wynik"
 
 msgid "Deterministischer Feld-Fallback"
 msgstr "Deterministyczna wartość zastępcza pola"
+
+msgid "10-Min.-Ø:"
+msgstr "Śr. z 10 min:"
+
+msgid "Aktive Warnungen"
+msgstr "Aktywne alerty"
+
+msgid "App-Version"
+msgstr "Wersja aplikacji"
+
+msgid "Architektur"
+msgstr "Architektura"
+
+msgid "Backup & Restore"
+msgstr "Kopie zapasowe i przywracanie"
+
+msgid "Backups öffnen"
+msgstr "Otwórz kopie zapasowe"
+
+msgid "Betriebszustand, Plattformdienste, Integrationen und Datensicherung."
+msgstr "Stan działania, usługi platformy, integracje i kopie zapasowe."
+
+msgid "CPU-Kerne"
+msgstr "Rdzeni CPU"
+
+msgid "Caddy"
+msgstr "Caddy"
+
+msgid "Celery Beat"
+msgstr "Celery Beat"
+
+msgid "Celery Worker"
+msgstr "Celery Worker"
+
+msgid "Container-CPU aktuell"
+msgstr "Bieżące użycie CPU kontenerów"
+
+msgid "Container-RAM gesamt"
+msgstr "Łączna pamięć RAM kontenerów"
+
+msgid "DB-Verbindungen"
+msgstr "Połączenia z bazą danych"
+
+msgid "Dateiobjekte (Inodes) belegt"
+msgstr "Wykorzystane i-węzły"
+
+msgid "Dateiobjekte (Inodes) verfügbar"
+msgstr "Dostępne i-węzły"
+
+msgid "Datenbank & Jobs"
+msgstr "Baza danych i zadania"
+
+msgid "Datenbank öffnen"
+msgstr "Otwórz bazę danych"
+
+msgid "Datenträger / gesamt"
+msgstr "Dysk / łącznie"
+
+msgid "Datenträger / verfügbar"
+msgstr "Dysk / dostępne"
+
+msgid "Datenträger / verwendet"
+msgstr "Dysk / używane"
+
+msgid "Definitionen"
+msgstr "Definicje"
+
+msgid "Dienste & Integrationen"
+msgstr "Usługi i integracje"
+
+msgid "Dienste öffnen"
+msgstr "Otwórz usługi"
+
+msgid "Diese Werte stammen aus cAdvisor und beziehen sich auf Docker-Container. Die VM-Werte oben stammen aus node_exporter und beziehen sich auf die gesamte Docker-Host-VM."
+msgstr "Te dane pochodzą z cAdvisor i dotyczą kontenerów Docker. Dane maszyny wirtualnej powyżej pochodzą z node_exporter i obejmują całą maszynę wirtualną hosta Docker."
+
+msgid "Docker"
+msgstr "Docker"
+
+msgid "Docker-Container"
+msgstr "Kontenery Docker"
+
+msgid "Erkannte Container"
+msgstr "Wykryte kontenery"
+
+msgid "Fehler / 24 h"
+msgstr "Błędy / 24 godz."
+
+msgid "Git Commit"
+msgstr "Commit Git"
+
+msgid "Host & Release"
+msgstr "Host i wydanie"
+
+msgid "Inodes sind Dateisystem-Einträge für Dateien und Verzeichnisse. Sind sie ausgeschöpft, können trotz freiem Speicher keine neuen Dateien angelegt werden."
+msgstr "I-węzły to wpisy systemu plików dotyczące plików i katalogów. Po ich wyczerpaniu nie można tworzyć nowych plików, nawet jeśli na dysku jest wolne miejsce."
+
+msgid "Keine aktiven Systemwarnungen."
+msgstr "Brak aktywnych alertów systemowych."
+
+msgid "Letzter Restore-Test"
+msgstr "Ostatni test przywracania"
+
+msgid "Letztes Backup"
+msgstr "Ostatnia kopia zapasowa"
+
+msgid "Letztes Deployment"
+msgstr "Ostatnie wdrożenie"
+
+msgid "Load:"
+msgstr "Obciążenie:"
+
+msgid "Messbereich"
+msgstr "Zakres pomiaru"
+
+msgid "Messquelle"
+msgstr "Źródło pomiaru"
+
+msgid "Messwert-Erklärung"
+msgstr "Objaśnienia metryk"
+
+msgid "OS / Kernel"
+msgstr "System / jądro"
+
+msgid "PostgreSQL"
+msgstr "PostgreSQL"
+
+msgid "Prompt MCP"
+msgstr "Prompt MCP"
+
+msgid "RAM gesamt"
+msgstr "Łącznie RAM"
+
+msgid "RAM verfügbar"
+msgstr "Dostępna pamięć RAM"
+
+msgid "RAM verwendet"
+msgstr "Używana pamięć RAM"
+
+msgid "Restore-Tests öffnen"
+msgstr "Otwórz testy przywracania"
+
+msgid "TLS-Zertifikat"
+msgstr "Certyfikat TLS"
+
+msgid "Umgebung"
+msgstr "Środowisko"
+
+msgid "Uptime"
+msgstr "Czas działania"
+
+msgid "VM-CPU aktuell"
+msgstr "Bieżące użycie CPU VM"
+
+msgid "VM-Datenträger /"
+msgstr "Dysk VM /"
+
+msgid "VM-RAM"
+msgstr "RAM VM"
+
+msgid "VM-Speicher & Dateisystem"
+msgstr "Pamięć VM i system plików"
+
+msgid "Verwendetes Backup"
+msgstr "Użyta kopia zapasowa"
+
+msgid "Warnungen öffnen"
+msgstr "Otwórz alerty"
+
+msgid "geschützt"
+msgstr "chroniony"
+
+msgid "healthy"
+msgstr "sprawny"
+
+msgid "konfiguriert"
+msgstr "skonfigurowano"
+
+msgid "nicht erreichbar"
+msgstr "niedostępny"
+
+msgid "nicht protokolliert"
+msgstr "brak zapisu"
+
+msgid "und ist die für neue Prozesse realistisch nutzbare Speichermenge. „Inodes“ sind Dateisystem-Einträge; ein niedriger Belegungsgrad ist unkritisch."
+msgstr "i oznacza ilość pamięci realnie dostępną dla nowych procesów. I-węzły to wpisy systemu plików; niski poziom ich wykorzystania nie stanowi problemu."
+
+msgid "verfügbar von"
+msgstr "dostępne z"
+
+msgid "„RAM verfügbar“ entspricht Linux"
+msgstr "„Dostępna pamięć RAM” odpowiada wartości Linux"
