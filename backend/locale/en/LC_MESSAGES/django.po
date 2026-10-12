@@ -3238,3 +3238,66 @@ msgstr "Role removed."
 
 msgid "Benutzerstatus aktualisiert."
 msgstr "User status updated."
+
+msgid "Lead gespeichert."
+msgstr "Lead saved."
+
+msgid "Lead-Zuständigkeit aktualisiert."
+msgstr "Lead assignment updated."
+
+msgid "Gerät wurde widerrufen."
+msgstr "Device access revoked."
+
+msgid "Unternehmensdaten gespeichert."
+msgstr "Company details saved."
+
+msgid "Benutzer deaktiviert; Lizenz- und Gerätezugänge wurden freigegeben."
+msgstr "User deactivated; license and device access released."
+
+msgid "Die Lizenz ist bereits frei."
+msgstr "The license is already unassigned."
+
+msgid "Lizenzzuweisung wurde freigegeben."
+msgstr "License assignment released."
+
+msgid "Lizenz wurde entsperrt."
+msgstr "License unblocked."
+
+msgid "Lizenz wurde gesperrt; vorhandene Gerätezugänge wurden widerrufen."
+msgstr "License blocked; existing device access revoked."
+
+msgid "Produkt angelegt. Legen Sie anschließend Preisversionen an."
+msgstr "Product created. Next, add price versions."
+
+msgid "Feature gespeichert."
+msgstr "Feature saved."
+
+msgid "Produkt gespeichert."
+msgstr "Product saved."
+
+msgid "Neue Preisversion angelegt."
+msgstr "New price version created."
+
+msgid "E-Mail-Vorlage gespeichert."
+msgstr "Email template saved."
+
+msgid "Mollie-Konfiguration gespeichert."
+msgstr "Mollie configuration saved."
+
+msgid "Service Account gesperrt."
+msgstr "Service account blocked."
+
+msgid "Verbrauchererklärung aktualisiert."
+msgstr "Consumer declaration updated."
+
+msgid "Rechtsdokument gespeichert."
+msgstr "Legal document saved."
+
+msgid "Retention-Policy gespeichert."
+msgstr "Retention policy saved."
+
+msgid "Löschanfrage verarbeitet und Konto anonymisiert."
+msgstr "Deletion request processed and account anonymized."
+
+msgid "Löschanfrage abgelehnt."
+msgstr "Deletion request rejected."
