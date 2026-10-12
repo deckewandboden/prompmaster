@@ -2800,3 +2800,162 @@ msgstr "Hedef / amaç"
 
 msgid "Zielgruppen"
 msgstr "Hedef kitleler"
+
+msgid "API-Schlüssel"
+msgstr "API anahtarı"
+
+msgid "Ablauf optional"
+msgstr "İsteğe bağlı sona erme"
+
+msgid "Außerhalb der Produktion ist ausschließlich ein Mollie-Test-Key (test_…) zulässig."
+msgstr "Üretim ortamı dışında yalnızca Mollie test anahtarı (test_…) kullanılabilir."
+
+msgid "Begründung"
+msgstr "Gerekçe"
+
+msgid "Beschreibung"
+msgstr "Açıklama"
+
+msgid "Bruttopreis"
+msgstr "Brüt fiyat"
+
+msgid "Der Datensatz wird revisionssicher ausgeblendet und im Audit protokolliert."
+msgstr "Kayıt, denetim izi korunarak gizlenir."
+
+msgid "Diese E-Mail-Adresse gehört bereits zu einem PROMPTFINISHER-Konto."
+msgstr "Bu e-posta adresi zaten bir PROMPTFINISHER hesabına ait."
+
+msgid "Diese E-Mail-Adresse ist bereits einem Firmenkunden zugeordnet."
+msgstr "Bu e-posta adresi zaten bir kurumsal müşteriye atanmış."
+
+msgid "Diese E-Mail-Adresse ist bereits registriert."
+msgstr "Bu e-posta adresi zaten kayıtlı."
+
+msgid "Dokumenttyp"
+msgstr "Belge türü"
+
+msgid "E-Mail des Firmenadministrators"
+msgstr "Şirket yöneticisinin e-posta adresi"
+
+msgid "Eigenes Passwort erneut eingeben"
+msgstr "Parolanızı yeniden girin"
+
+msgid "Erinnerung 1 · Tage vorher"
+msgstr "Hatırlatma 1 · Gün önce"
+
+msgid "Erinnerung 2 · Tage vorher"
+msgstr "Hatırlatma 2 · Gün önce"
+
+msgid "Erstatten"
+msgstr "İade et"
+
+msgid "Für Unternehmens-Leads ist der Unternehmensname erforderlich."
+msgstr "Kurumsal potansiyel müşteriler için şirket adı gereklidir."
+
+msgid "Für diese Datenklasse existiert kein freigegebener Lösch-Handler."
+msgstr "Bu veri sınıfı için onaylı bir silme işleyicisi yok."
+
+msgid "Für diese E-Mail-Adresse existiert bereits ein aktiver Lead."
+msgstr "Bu e-posta adresi için zaten etkin bir potansiyel müşteri kaydı var."
+
+msgid "Identität und Berechtigung des Ansprechpartners wurden geprüft"
+msgstr "İlgili kişinin kimliği ve yetkisi doğrulandı"
+
+msgid "In Kunde umwandeln"
+msgstr "Müşteriye dönüştür"
+
+msgid "In Produktion ist ausschließlich ein Mollie-Live-Key (live_…) zulässig."
+msgstr "Üretim ortamında yalnızca Mollie canlı anahtarı (live_…) kullanılabilir."
+
+msgid "Inhalt"
+msgstr "İçerik"
+
+msgid "Interne Notiz zur Prüfung (optional)"
+msgstr "Dahili doğrulama notu (isteğe bağlı)"
+
+msgid "Interne Notizen"
+msgstr "Dahili notlar"
+
+msgid "Kaufbar"
+msgstr "Satın alınabilir"
+
+msgid "Kritische Warnung · Tage vorher"
+msgstr "Kritik uyarı · Gün önce"
+
+msgid "Lead in Firmenkunden umwandeln und Einladungslink senden"
+msgstr "Potansiyel müşteriyi kurumsal müşteriye dönüştür ve davet bağlantısı gönder"
+
+msgid "Lead wirklich löschen"
+msgstr "Potansiyel müşteri kaydını silmeyi onayla"
+
+msgid "Lead-Typ"
+msgstr "Potansiyel müşteri türü"
+
+msgid "Leer lassen, um den bestehenden Schlüssel unverändert zu lassen."
+msgstr "Mevcut anahtarı değiştirmemek için boş bırakın."
+
+msgid "Lesen"
+msgstr "Oku"
+
+msgid "Löschung erst nach dieser Anzahl Tage. Rechtliche Aufbewahrungsfristen separat prüfen."
+msgstr "Silme ancak belirtilen gün sayısından sonra yapılır. Yasal saklama sürelerini ayrıca kontrol edin."
+
+msgid "Neukauf"
+msgstr "Yeni satın alma"
+
+msgid "Nicht zugewiesen"
+msgstr "Atanmamış"
+
+msgid "Nächste Aktion"
+msgstr "Sonraki işlem"
+
+msgid "Operations lesen"
+msgstr "Operasyonları oku"
+
+msgid "Preistyp"
+msgstr "Fiyat türü"
+
+msgid "Prompt-Drafts erzeugen"
+msgstr "Prompt taslakları oluştur"
+
+msgid "Prompt-Tests ausführen"
+msgstr "Prompt testlerini çalıştır"
+
+msgid "Prompts erzeugen"
+msgstr "Prompt oluştur"
+
+msgid "Prompts lesen"
+msgstr "Promptları oku"
+
+msgid "Qualität verwalten"
+msgstr "Kaliteyi yönet"
+
+msgid "Quelle"
+msgstr "Kaynak"
+
+msgid "Reminder 1 muss vor Reminder 2 liegen (größere Tageszahl)."
+msgstr "Hatırlatma 1, Hatırlatma 2'den önce olmalıdır (daha büyük gün sayısı)."
+
+msgid "Reminder 2 muss vor der kritischen Warnphase liegen."
+msgstr "Hatırlatma 2, kritik uyarı döneminden önce olmalıdır."
+
+msgid "Sicherheitsbestätigung des aktuell angemeldeten netstyle Benutzers."
+msgstr "Şu anda oturum açmış netstyle kullanıcısının güvenlik onayı."
+
+msgid "Sichtbar"
+msgstr "Görünür"
+
+msgid "Standard-Laufzeit in Tagen"
+msgstr "Varsayılan süre (gün)"
+
+msgid "Unternehmensname"
+msgstr "Şirket adı"
+
+msgid "Unterstützt: expired_invitations, email_messages, revoked_devices, resolved_system_alerts, resolved_task_failures, expired_sessions."
+msgstr "Desteklenenler: expired_invitations, email_messages, revoked_devices, resolved_system_alerts, resolved_task_failures, expired_sessions."
+
+msgid "Veröffentlichen"
+msgstr "Yayımla"
+
+msgid "Währung"
+msgstr "Para birimi"
