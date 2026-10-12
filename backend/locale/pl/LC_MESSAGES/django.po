@@ -2233,3 +2233,60 @@ msgstr "Alternatywa dla SMTP w Exchange Online. Klucz tajny klienta jest przecho
 
 msgid "Sie besitzen Leserechte, aber keine Berechtigung zum Ändern dieser Einstellungen."
 msgstr "Masz dostęp tylko do odczytu i nie możesz zmieniać tych ustawień."
+
+msgid "Bewertungen"
+msgstr "Oceny"
+
+msgid "Deterministischer Composer-Test ohne Speicherung des erzeugten Prompttexts."
+msgstr "Deterministyczny test kompozytora bez zapisywania wygenerowanego tekstu promptu."
+
+msgid "Draft aus letzter Version"
+msgstr "Utwórz wersję roboczą z najnowszej wersji"
+
+msgid "Draft speichern"
+msgstr "Zapisz wersję roboczą"
+
+msgid "Keine Version vorhanden."
+msgstr "Brak dostępnych wersji."
+
+msgid "Konfigurierbare Schwellen für Recent Average und Drop-Erkennung."
+msgstr "Konfigurowalne progi dla średniej z ostatniego okresu i wykrywania spadków."
+
+msgid "No-Code Editor. Nur DRAFT-Versionen sind inhaltlich veränderbar."
+msgstr "Edytor bez kodowania. Zmieniać można wyłącznie wersje DRAFT."
+
+msgid "Noch keine Qualitäts-Snapshots. Analyse ausführen oder Ratings erfassen."
+msgstr "Brak zapisanych wyników jakości. Uruchom analizę lub dodaj oceny."
+
+msgid "Policy"
+msgstr "Polityka"
+
+msgid "Qualität:"
+msgstr "Jakość:"
+
+msgid "Qualitätsschwellen"
+msgstr "Progi jakości"
+
+msgid "Ratings"
+msgstr "Oceny"
+
+msgid "Testfall"
+msgstr "Przypadek testowy"
+
+msgid "Testfall speichern"
+msgstr "Zapisz przypadek testowy"
+
+msgid "Tests"
+msgstr "Testy"
+
+msgid "Titel"
+msgstr "Tytuł"
+
+msgid "Zur Übersicht"
+msgstr "Powrót do przeglądu"
+
+msgid "bearbeiten"
+msgstr "edytuj"
+
+msgid "zentrale PromptDefinition"
+msgstr "Centralna definicja PromptDefinition"
