@@ -1,5 +1,5 @@
 {% extends 'ns_admin/base.html' %}{% load pm i18n %}{% block content %}
-<div class="page-head"><div><h1>{{ title }}</h1><div class="sub">{% translate 'Serverseitige Suche, Filter, Sortierung und Pagination.' %}</div></div>{% if primary_action_url %}<div><a class="btn primary" href="{{ primary_action_url }}">{% if primary_action_label %}{{ primary_action_label }}{% else %}{% translate 'Neu anlegen' %}{% endif %}</a></div>{% endif %}</div>
+<div class="page-head"><div><h1>{% translate title %}</h1><div class="sub">{% translate 'Serverseitige Suche, Filter, Sortierung und Pagination.' %}</div></div>{% if primary_action_url %}<div><a class="btn primary" href="{{ primary_action_url }}">{% if primary_action_label %}{% translate primary_action_label %}{% else %}{% translate 'Neu anlegen' %}{% endif %}</a></div>{% endif %}</div>
 {% if customer_tabs %}<nav class="subnav" aria-label="{% translate 'Kundentyp' %}"><a class="{% if customer_type == 'company' %}active{% endif %}" href="{% url 'ns_admin:customers' %}">{% translate "Unternehmen" %}</a><a class="{% if customer_type == 'private' %}active{% endif %}" href="{% url 'ns_admin:private_customers' %}">{% translate "Privatkunden" %}</a></nav>{% endif %}
 {% include 'includes/grid_toolbar.html' %}
 <div class="tablewrap"><table class="data-grid"><thead><tr>
