@@ -1658,3 +1658,81 @@ msgstr "open"
 
 msgid "Noch keine Webhook-Ereignisse."
 msgstr "Nog geen webhookgebeurtenissen."
+
+msgid "Vorlagen, Versandstatus, Provider und Fallback-Kette."
+msgstr "Sjablonen, verzendstatus, providers en failoverketen."
+
+msgid "Absender & Provider"
+msgstr "Afzender en provider"
+
+msgid "Versandprotokoll öffnen"
+msgstr "Verzendlog openen"
+
+msgid "Vorlagen"
+msgstr "Sjablonen"
+
+msgid "Keine E-Mail-Vorlagen vorhanden."
+msgstr "Geen e-mailsjablonen beschikbaar."
+
+msgid "Mail-System"
+msgstr "Mailsysteem"
+
+msgid "Versandmodus"
+msgstr "Verzendmodus"
+
+msgid "Automatischer Fallback"
+msgstr "Automatische failover"
+
+msgid "Manuell"
+msgstr "Handmatig"
+
+msgid "Primär"
+msgstr "Primair"
+
+msgid "Reihenfolge"
+msgstr "Volgorde"
+
+msgid "Status der Kette"
+msgstr "Ketenstatus"
+
+msgid "Aktiver Absender"
+msgstr "Actieve afzender"
+
+msgid "Anzeigename"
+msgstr "Weergavenaam"
+
+msgid "Mail-Domain"
+msgstr "Maildomein"
+
+msgid "Server"
+msgstr "Server"
+
+msgid "Anmeldung"
+msgstr "Aanmelding"
+
+msgid "Passwort fehlt"
+msgstr "Wachtwoord ontbreekt"
+
+msgid "Ohne Anmeldung"
+msgstr "Zonder aanmelding"
+
+msgid "Nicht konfiguriert"
+msgstr "Niet geconfigureerd"
+
+msgid "Fehlt"
+msgstr "Ontbreekt"
+
+msgid "Graph Absender"
+msgstr "Graph-afzender"
+
+msgid "Automatischer Fallback erfolgt nur bei eindeutig nicht zugestellten Fehlern. Bei unklaren Fehlern wird nicht automatisch weitergeschaltet, damit dieselbe E-Mail nicht versehentlich doppelt versendet wird."
+msgstr "Automatische failover gebeurt alleen bij bevestigde niet-aflevering. Bij onduidelijke fouten wordt niet automatisch overgeschakeld om te voorkomen dat dezelfde e-mail per ongeluk tweemaal wordt verzonden."
+
+msgid "SPF/DKIM/DMARC werden unter „Einstellungen“ als DNS-Sollwerte dokumentiert. Änderungen dort aktualisieren nicht automatisch den öffentlichen DNS."
+msgstr "De beoogde DNS-records voor SPF/DKIM/DMARC staan onder Instellingen. Wijzigingen daar passen de openbare DNS niet automatisch aan."
+
+msgid "Letzte Versandvorgänge"
+msgstr "Recente verzendpogingen"
+
+msgid "Noch keine Versandvorgänge."
+msgstr "Nog geen verzendpogingen."
