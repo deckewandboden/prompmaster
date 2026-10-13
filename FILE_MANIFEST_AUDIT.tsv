@@ -102,3 +102,6 @@ scripts/test_staging_readiness.py	0	text-not-byte-validated	test
 scripts/go_live.sh	0	text-not-byte-validated	active-operations
 scripts/test_go_live.py	0	text-not-byte-validated	test
 docs/GO_LIVE_PR73.md	0	text-not-byte-validated	documentation
+scripts/offline_recovery_drill.py	0	text-not-byte-validated	active-operations
+scripts/test_offline_recovery_drill.py	0	text-not-byte-validated	test
+docs/OFFLINE_RECOVERY_PR73.md	0	text-not-byte-validated	documentation
