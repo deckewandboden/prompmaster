@@ -14,7 +14,8 @@ Auf einem **eigenen Staging-Host** separaten Checkout erstellen, `.env` mit Stag
 
 ```bash
 cd /pfad/zum/eigenen/promptfinisher-staging-checkout
-SHA="$(git rev-parse HEAD)"
+# Exakte, zuvor auf GitHub grün geprüfte vollständige PR-Commit-SHA einsetzen:
+SHA="<FREIGEGEBENE_40_STELLIGE_GITHUB_SHA>"
 python3 scripts/staging_readiness.py . --expected-sha "$SHA"
 ```
 
