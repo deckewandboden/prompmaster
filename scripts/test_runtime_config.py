@@ -232,9 +232,46 @@ class RuntimeConfigTests(unittest.TestCase):
             's3:http://s3.example.net/promptfinisher',
             's3:https://s3.example.net',
             '/local/repository',
+            's3:https://localhost/promptfinisher',
+            's3:https://LOCALHOST./promptfinisher',
+            's3:https://backup.localhost/promptfinisher',
+            's3:https://minio.local/promptfinisher',
+            's3:https://host.docker.internal/promptfinisher',
+            's3:https://gateway.docker.internal/promptfinisher',
+            's3:https://127.0.0.1:9000/promptfinisher',
+            's3:https://127.9.8.7/promptfinisher',
+            's3:https://0.0.0.0/promptfinisher',
+            's3:https://169.254.1.1/promptfinisher',
+            's3:https://[::1]/promptfinisher',
+            's3:https://[fe80::1]/promptfinisher',
+            's3:https://username:password@s3.example.net/promptfinisher',
+            's3:https://s3.example.net/promptfinisher?token=secret',
+            's3:https://s3.example.net/promptfinisher#fragment',
+            's3:https://s3.example.net:invalid/promptfinisher',
+            's3:https://s3.example.net:99999/promptfinisher',
+            's3:https://[bad-ipv6/promptfinisher',
+            's3:https://s3.example.net/',
         ):
             with self.subTest(value=value):
                 self.assertFalse(is_external_s3_repository(value))
+
+    def test_external_restic_repository_allows_nonlocal_tls_ports_and_ip(self):
+        for value in (
+            's3:https://backup.netstyle.de:9443/offsite',
+            's3:https://192.0.2.17:443/backups',
+            's3:https://s3.example.net/nested/path',
+        ):
+            with self.subTest(value=value):
+                self.assertTrue(is_external_s3_repository(value))
+
+    def test_strict_go_live_rejects_loopback_s3_despite_valid_aws_credentials(self):
+        text = self._production_env_text(
+            repository='s3:https://localhost:9000/promptfinisher',
+            aws_key='AKIA_PROMPTFINISHER_TEST',
+            aws_secret='external-backup-secret-value',
+            region='eu-central-1',
+        )
+        self.assertEqual(self._run_env_validator(text, require_go_live=True), 1)
 
     def _production_env_text(self, *, mollie='', repository='/repository', aws_key='', aws_secret='', region=''):
         fernet = base64.urlsafe_b64encode(b'x' * 32).decode('ascii')
