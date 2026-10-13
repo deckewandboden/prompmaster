@@ -1475,6 +1475,19 @@ def _browser_product_locale_acceptance(page, base: str, product: str) -> None:
                     optionText: option?.textContent.trim() || '',
                     optionValue: option?.value || '',
                     optionDisabled: Boolean(option?.disabled),
+                    languageTextFits: (() => {
+                        if (!select || !select.selectedOptions.length) return false;
+                        const css = getComputedStyle(select);
+                        const canvas = document.createElement('canvas');
+                        const context = canvas.getContext('2d');
+                        if (!context) return false;
+                        context.font = css.font;
+                        const required = context.measureText(
+                            select.selectedOptions[0].textContent.trim()
+                        ).width + parseFloat(css.paddingLeft)
+                            + parseFloat(css.paddingRight) + 10;
+                        return required <= select.getBoundingClientRect().width + 1;
+                    })(),
                     hasHeader: Boolean(a && b),
                     logoLocaleCollision: overlap(a, b),
                     localeCtaCollision: overlap(b, c),
@@ -1492,6 +1505,7 @@ def _browser_product_locale_acceptance(page, base: str, product: str) -> None:
             or metrics['optionText'] != expected_tone
             or metrics['optionValue'] != 'professional'
             or metrics['optionDisabled']
+            or not metrics['languageTextFits']
             or not metrics['hasHeader']
             or metrics['logoLocaleCollision']
             or metrics['localeCtaCollision']
@@ -1507,6 +1521,45 @@ def _browser_product_locale_acceptance(page, base: str, product: str) -> None:
             full_page=False,
             animations='disabled',
         )
+
+    # Narrowest supported phone width: the longest language name must still
+    # be readable without colliding with the Pro/Portal and logout controls.
+    page.set_viewport_size({'width': 320, 'height': 760})
+    smallest = page.evaluate(
+        """() => {
+            const select = document.querySelector('select[data-pf-product-language]');
+            const brand = document.querySelector('.pmv2-brand img');
+            const cta = document.querySelector('.pmv2-header-actions .pmv2-header-cta');
+            const logout = document.querySelector('.pmv2-logout');
+            const style = select && getComputedStyle(select);
+            const canvas = document.createElement('canvas');
+            const ctx = canvas.getContext('2d');
+            if (ctx && style) ctx.font = style.font;
+            const required = !ctx || !select || !style ? Infinity
+                : ctx.measureText(select.selectedOptions[0]?.textContent.trim() || '').width
+                  + parseFloat(style.paddingLeft) + parseFloat(style.paddingRight) + 10;
+            const b = brand?.getBoundingClientRect();
+            const l = select?.getBoundingClientRect();
+            const c = cta?.getBoundingClientRect();
+            const o = logout?.getBoundingClientRect();
+            return {
+                language: select?.value,
+                fullName: select?.selectedOptions[0]?.textContent.trim(),
+                fits: Boolean(l && required <= l.width + 1),
+                noOverlap: Boolean(b && l && c && o && b.right <= l.left + 1
+                    && l.right <= c.left + 1 && c.right <= o.left + 1
+                    && o.right <= 321),
+            };
+        }"""
+    )
+    if smallest != {'language': 'nl', 'fullName': 'Nederlands',
+                    'fits': True, 'noOverlap': True}:
+        raise AssertionError(f'{product} 320px language-selector contract: {smallest}')
+    page.screenshot(
+        path=str(evidence / f'{product}-nl-320.png'),
+        full_page=False,
+        animations='disabled',
+    )
 
     # Language preferences persist through auth; never let this acceptance
     # contaminate existing historical German-language assertions.
