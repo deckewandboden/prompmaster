@@ -129,14 +129,18 @@ def check(root, expected_sha):
     env_config(root, failures)
     if os.getenv('DOCKER_HOST') or os.getenv('DOCKER_CONTEXT'):
         failures.append('DOCKER_HOST/DOCKER_CONTEXT: kein Fremd-Daemon erlaubt')
+        return failures, passed
     context = output(['docker', 'context', 'inspect'], failures, 'Docker-Kontext unlesbar')
-    if context is not None:
-        try:
-            record = json.loads(context)
-            if len(record) != 1 or record[0]['Endpoints']['docker']['Host'] != 'unix:///var/run/docker.sock':
-                failures.append('Docker-Kontext ist nicht der lokale System-Daemon')
-        except (KeyError, ValueError, TypeError):
-            failures.append('Docker-Kontext ungültig')
+    if context is None:
+        return failures, passed
+    try:
+        record = json.loads(context)
+        if len(record) != 1 or record[0]['Endpoints']['docker']['Host'] != 'unix:///var/run/docker.sock':
+            failures.append('Docker-Kontext ist nicht der lokale System-Daemon')
+            return failures, passed
+    except (KeyError, ValueError, TypeError):
+        failures.append('Docker-Kontext ungültig')
+        return failures, passed
     config = output(['docker', 'compose', '-f', 'compose.yaml', '-f',
                      'compose.staging.yaml', 'config', '--format', 'json'],
                     failures, 'Compose-Konfiguration unlesbar', root)
