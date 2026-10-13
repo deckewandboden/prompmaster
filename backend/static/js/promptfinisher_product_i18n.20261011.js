@@ -48,9 +48,9 @@
   const style = document.createElement('style');
   style.textContent = '.pmv2-language{display:flex;align-items:center;flex:0 0 136px;min-width:0}'
     + '.pmv2-language select{box-sizing:border-box;width:136px;max-width:100%;height:36px;'
-    + 'padding:4px 22px 4px 9px;border:1px solid #9caec0;border-radius:9px;'
-    + 'background:#fff;color:#102b43;font-size:12px;font-weight:650;cursor:pointer}'
-    + '@media(max-width:700px){.pmv2-language{flex-basis:108px}.pmv2-language select{width:108px}}'
+    + 'padding:4px 22px 4px 9px!important;border:1px solid #9caec0;border-radius:9px;'
+    + 'background:#fff;color:#102b43;font-size:12px!important;font-weight:650;cursor:pointer}'
+    + '@media(max-width:700px){.pmv2-language{flex-basis:128px}.pmv2-language select{width:128px}}'
     + '@media(max-width:620px){.pmv2-header{height:62px!important;min-height:62px!important;'
     + 'padding:0 8px!important;flex-wrap:nowrap!important;row-gap:0!important}'
     + '.pmv2-header-actions{display:flex;flex:0 1 auto;gap:4px!important;flex-wrap:nowrap!important;min-width:0}'
@@ -60,10 +60,15 @@
     + 'font-weight:800;white-space:nowrap}.pmv2-logout{display:inline-flex;flex:0 0 30px;'
     + 'align-items:center;justify-content:center;font-size:0!important}.pmv2-logout::after{'
     + 'content:"⎋";font-size:20px;line-height:1}'
-    + '.pmv2-language{flex:0 0 96px}.pmv2-language select{width:96px}}'
+    + '.pmv2-language{flex:0 0 128px}.pmv2-language select{width:128px;font-size:11px!important}}'
     + '@media(max-width:390px){.pmv2-brand img{width:108px!important}'
-    + '.pmv2-edition{display:none!important}.pmv2-language{flex-basis:88px}'
-    + '.pmv2-language select{width:88px;font-size:11px}}';
+    + '.pmv2-edition{display:none!important}.pmv2-language{flex-basis:128px}'
+    + '.pmv2-language select{width:128px;font-size:11px!important}}'
+    + '@media(max-width:359px){.pmv2-brand img{width:90px!important}'
+    + '.pmv2-language{flex-basis:112px}.pmv2-language select{width:112px;'
+    + 'font-size:10px!important;padding:4px 16px 4px 5px!important}'
+    + '.pmv2-header-cta{flex-basis:50px;width:50px;max-width:50px!important}'
+    + '.pmv2-logout{flex-basis:26px}}';
   document.head.append(style);
   // Keep each header action accessible and clickable at 320–390px while
   // retaining the <=70px mobile header height required by browser tests.
