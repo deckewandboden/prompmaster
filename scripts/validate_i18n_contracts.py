@@ -338,6 +338,87 @@ def main() -> None:
                 )
     print('I18N AVAILABILITY STATES PASS: 4 status labels x 9 languages')
 
+    # Reviewed critical app-access, prompt, and workflow instructions.
+    # In particular, 'Pull Request' is a software term, not a pulling action,
+    # and an email supplement must not invert the source's negative condition.
+    reviewed_action_labels = {
+      "Pull Request prüfen": {
+        "en": "Review Pull Request",
+        "es": "Revisar Pull Request",
+        "pt": "Rever Pull Request",
+        "tr": "Pull Request'i incele",
+        "ru": "Проверить Pull Request",
+        "pl": "Sprawdź Pull Request",
+        "fr": "Examiner la Pull Request",
+        "it": "Esaminare la Pull Request",
+        "nl": "Pull Request controleren"
+      },
+      "Diese Anwendung ist mit Ihrer aktuellen Auswahl nicht freigeschaltet.": {
+        "en": "This application is not unlocked with your current selection.",
+        "es": "Esta aplicación no está desbloqueada con su selección actual.",
+        "pt": "Este aplicativo não está desbloqueado com sua seleção atual.",
+        "tr": "Bu uygulama mevcut seçiminizle kullanıma açık değil.",
+        "ru": "Это приложение не разблокировано с вашим текущим выбором.",
+        "pl": "Ta aplikacja nie jest odblokowana przy obecnym wyborze.",
+        "fr": "Cette application n'est pas déverrouillée avec votre sélection actuelle.",
+        "it": "Questa applicazione non è sbloccata con la selezione corrente.",
+        "nl": "Deze toepassing is niet ontgrendeld met uw huidige selectie."
+      },
+      "Optional. Ergänzen Sie nur Informationen, die nicht bereits aus der E-Mail hervorgehen.": {
+        "en": "Optional. Add only information that is not already included in the email.",
+        "es": "Opcional. Añada solo información que no figure ya en el correo electrónico.",
+        "pt": "Opcional. Acrescente apenas informações que ainda não constem do e-mail.",
+        "tr": "İsteğe bağlı. Yalnızca e-postada zaten yer almayan bilgileri ekleyin.",
+        "ru": "Необязательно. Добавляйте только сведения, которых ещё нет в электронном письме.",
+        "pl": "Opcjonalnie. Dodaj tylko informacje, których nie ma jeszcze w wiadomości e-mail.",
+        "fr": "Facultatif. Ajoutez uniquement les informations qui ne figurent pas déjà dans l'e-mail.",
+        "it": "Facoltativo. Aggiungi solo informazioni non già presenti nell'e-mail.",
+        "nl": "Optioneel. Voeg alleen informatie toe die nog niet in de e-mail staat."
+      },
+      "Azure-Ressourcen entwerfen, betreiben, optimieren und Fehler analysieren.": {
+        "en": "Design, operate, and optimize Azure resources, and analyze errors.",
+        "es": "Diseñar, administrar y optimizar recursos de Azure y analizar errores.",
+        "pt": "Conceber, gerir e otimizar recursos do Azure e analisar erros.",
+        "tr": "Azure kaynaklarını tasarlayın, yönetin, optimize edin ve hataları analiz edin.",
+        "ru": "Проектировать, эксплуатировать и оптимизировать ресурсы Azure, анализировать ошибки.",
+        "pl": "Projektuj, obsługuj i optymalizuj zasoby Azure oraz analizuj błędy.",
+        "fr": "Concevoir, exploiter et optimiser les ressources Azure, puis analyser les erreurs.",
+        "it": "Progettare, gestire e ottimizzare le risorse Azure e analizzare gli errori.",
+        "nl": "Azure-resources ontwerpen, beheren en optimaliseren en fouten analyseren."
+      },
+      "Bericht prüfen": {
+        "en": "Review report",
+        "es": "Revisar el informe",
+        "pt": "Rever o relatório",
+        "tr": "Raporu incele",
+        "ru": "Проверить отчёт",
+        "pl": "Sprawdź raport",
+        "fr": "Examiner le rapport",
+        "it": "Esaminare il rapporto",
+        "nl": "Rapport controleren"
+      },
+      "Nächsten Termin prüfen": {
+        "en": "Check next appointment",
+        "es": "Comprobar la próxima cita",
+        "pt": "Verificar o próximo compromisso",
+        "tr": "Sonraki randevuyu kontrol et",
+        "ru": "Проверить следующую встречу",
+        "pl": "Sprawdź następny termin",
+        "fr": "Vérifier le prochain rendez-vous",
+        "it": "Verificare il prossimo appuntamento",
+        "nl": "Volgende afspraak controleren"
+      }
+    }
+    for source, target_locales in reviewed_action_labels.items():
+        for locale in LOCALES:
+            current = catalog.get(source, {}).get(locale)
+            if current != target_locales[locale]:
+                raise SystemExit(
+                    f'I18N FAIL {locale}: reviewed action {source!r}: '
+                    f'{current!r} != {target_locales[locale]!r}'
+                )
+    print('I18N REVIEWED ACTIONS PASS: 6 critical source texts x 9 languages')
+
     # License warnings are action-critical: keep both the complete Microsoft
     # product name and an explicit requirement word in every translated label.
     requirement_words = {
