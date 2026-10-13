@@ -3582,3 +3582,12 @@ msgstr "Visibile ai clienti"
 
 msgid "Interne Notiz"
 msgstr "Nota interna"
+
+msgid "Bitte lesen Sie vor der Registrierung die <a href=\"%(terms_url)s\" target=\"_blank\" rel=\"noopener\">AGB</a> und die <a href=\"%(privacy_url)s\" target=\"_blank\" rel=\"noopener\">Datenschutzerklärung</a>."
+msgstr "Prima di registrarti, leggi i <a href=\"%(terms_url)s\" target=\"_blank\" rel=\"noopener\">Termini e condizioni</a> e l'<a href=\"%(privacy_url)s\" target=\"_blank\" rel=\"noopener\">Informativa sulla privacy</a>."
+
+msgid "Admin-Einladung neu senden"
+msgstr "Invia di nuovo l’invito all’amministratore"
+
+msgid "Firmenadministrator einladen"
+msgstr "Invita l’amministratore aziendale"

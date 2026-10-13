@@ -3475,3 +3475,12 @@ msgstr "Müşterilere görünür"
 
 msgid "Interne Notiz"
 msgstr "Dahili not"
+
+msgid "Bitte lesen Sie vor der Registrierung die <a href=\"%(terms_url)s\" target=\"_blank\" rel=\"noopener\">AGB</a> und die <a href=\"%(privacy_url)s\" target=\"_blank\" rel=\"noopener\">Datenschutzerklärung</a>."
+msgstr "Kaydolmadan önce <a href=\"%(terms_url)s\" target=\"_blank\" rel=\"noopener\">Kullanım Koşulları</a> ve <a href=\"%(privacy_url)s\" target=\"_blank\" rel=\"noopener\">Gizlilik Politikası</a> belgelerini okuyun."
+
+msgid "Admin-Einladung neu senden"
+msgstr "Yönetici davetini yeniden gönder"
+
+msgid "Firmenadministrator einladen"
+msgstr "Şirket yöneticisini davet et"

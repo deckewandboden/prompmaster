@@ -3,7 +3,9 @@
   <div class="login-card">
     <div class="login-logo"><img src="{% static 'brand/promptfinisher-logo-hq.png' %}?v=20261011-logo1" width="239" height="47" alt="PROMPTFINISHER by netstyle"></div>
     <h1>{% translate "Konto anlegen" %}</h1>
-    <p class="small muted">Bitte lesen Sie vor der Registrierung die <a href="{% url 'legal_public' 'terms' %}" target="_blank" rel="noopener">AGB</a> und die <a href="{% url 'legal_public' 'privacy' %}" target="_blank" rel="noopener">Datenschutzerklärung</a>.</p>
+    {% url 'legal_public' 'terms' as terms_url %}
+    {% url 'legal_public' 'privacy' as privacy_url %}
+    <p class="small muted">{% blocktranslate trimmed with terms_url=terms_url privacy_url=privacy_url %}Bitte lesen Sie vor der Registrierung die <a href="{{ terms_url }}" target="_blank" rel="noopener">AGB</a> und die <a href="{{ privacy_url }}" target="_blank" rel="noopener">Datenschutzerklärung</a>.{% endblocktranslate %}</p>
     <form method="post" class="form">
       {% csrf_token %}
       <input type="hidden" name="next" value="{{ next }}">

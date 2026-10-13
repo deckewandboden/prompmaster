@@ -3575,3 +3575,12 @@ msgstr "Zichtbaar voor klanten"
 
 msgid "Interne Notiz"
 msgstr "Interne notitie"
+
+msgid "Bitte lesen Sie vor der Registrierung die <a href=\"%(terms_url)s\" target=\"_blank\" rel=\"noopener\">AGB</a> und die <a href=\"%(privacy_url)s\" target=\"_blank\" rel=\"noopener\">Datenschutzerklärung</a>."
+msgstr "Lees vóór registratie de <a href=\"%(terms_url)s\" target=\"_blank\" rel=\"noopener\">Algemene voorwaarden</a> en het <a href=\"%(privacy_url)s\" target=\"_blank\" rel=\"noopener\">Privacybeleid</a>."
+
+msgid "Admin-Einladung neu senden"
+msgstr "Beheerdersuitnodiging opnieuw versturen"
+
+msgid "Firmenadministrator einladen"
+msgstr "Bedrijfsbeheerder uitnodigen"

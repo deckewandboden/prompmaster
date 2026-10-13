@@ -1270,3 +1270,37 @@ class AdminInternationalizationContractTests(SimpleTestCase):
         self.assertIn('preview_selectable_members', source)
         self.assertNotIn('method="post"', source)
         self.assertNotIn('force_login', source)
+
+
+    def test_registration_legal_notice_translates_and_keeps_both_safe_links(self):
+        source = (ROOT / 'templates/auth/register.html').read_text(encoding='utf-8')
+        get_template('auth/register.html')
+        self.assertIn("{% url 'legal_public' 'terms' as terms_url %}", source)
+        self.assertIn("{% url 'legal_public' 'privacy' as privacy_url %}", source)
+        self.assertIn('{% blocktranslate trimmed with terms_url=terms_url privacy_url=privacy_url %}', source)
+        key = "Bitte lesen Sie vor der Registrierung die <a href=\"%(terms_url)s\" target=\"_blank\" rel=\"noopener\">AGB</a> und die <a href=\"%(privacy_url)s\" target=\"_blank\" rel=\"noopener\">Datenschutzerklärung</a>."
+        for code in LOCALES:
+            catalog = catalog_translations(ROOT / 'locale' / code / 'LC_MESSAGES' / 'django.po')
+            translated = catalog.get(key, '')
+            with self.subTest(language=code):
+                self.assertTrue(translated, 'Legal registration notice is not localized')
+                self.assertNotEqual(translated, key)
+                for token in ('%(terms_url)s', '%(privacy_url)s'):
+                    self.assertEqual(translated.count(token), 1)
+                self.assertEqual(translated.count('<a '), 2)
+                self.assertEqual(translated.count('</a>'), 2)
+                self.assertEqual(translated.count('target="_blank"'), 2)
+                self.assertEqual(translated.count('rel="noopener"'), 2)
+
+    def test_customer_admin_invitation_buttons_translate_in_all_languages(self):
+        source = (ROOT / 'templates/ns_admin/customer_grid.html').read_text(encoding='utf-8')
+        get_template('ns_admin/customer_grid.html')
+        labels = ('Admin-Einladung neu senden', 'Firmenadministrator einladen')
+        for label in labels:
+            self.assertIn("{% translate '" + label + "' %}", source)
+        for code in LOCALES:
+            catalog = catalog_translations(ROOT / 'locale' / code / 'LC_MESSAGES' / 'django.po')
+            for label in labels:
+                with self.subTest(language=code, label=label):
+                    self.assertTrue(catalog.get(label), 'Admin invitation action is not localized')
+                    self.assertNotEqual(catalog[label], label)

@@ -3475,3 +3475,12 @@ msgstr "Visible to customers"
 
 msgid "Interne Notiz"
 msgstr "Internal note"
+
+msgid "Bitte lesen Sie vor der Registrierung die <a href=\"%(terms_url)s\" target=\"_blank\" rel=\"noopener\">AGB</a> und die <a href=\"%(privacy_url)s\" target=\"_blank\" rel=\"noopener\">Datenschutzerklärung</a>."
+msgstr "Before registering, please read the <a href=\"%(terms_url)s\" target=\"_blank\" rel=\"noopener\">Terms and Conditions</a> and the <a href=\"%(privacy_url)s\" target=\"_blank\" rel=\"noopener\">Privacy Policy</a>."
+
+msgid "Admin-Einladung neu senden"
+msgstr "Resend admin invitation"
+
+msgid "Firmenadministrator einladen"
+msgstr "Invite company administrator"
