@@ -76,6 +76,12 @@ esac
         self.assertEqual(response.returncode, 0, response.stderr)
         self.assertIn('MOCK_DEPLOY_INVOKED GIT_SHA=' + SHA, response.stdout)
 
+    def test_inherited_stale_git_sha_cannot_mislabel_release(self):
+        self.env['GIT_SHA'] = 'b' * 40
+        response = self.invoke()
+        self.assertEqual(response.returncode, 0, response.stderr)
+        self.assertIn('MOCK_DEPLOY_INVOKED GIT_SHA=' + SHA, response.stdout)
+
     def test_requires_execution_approval(self):
         self.env.pop('PM_EXECUTE_GO_LIVE')
         self.blocked()
