@@ -33,5 +33,8 @@ fi
 [[ "$#" -eq 0 ]] || fail 'Unbekanntes Argument (zulässig: --verify-only).'
 [[ "${PM_EXECUTE_GO_LIVE:-}" == YES ]] || fail 'Für tatsächliches Deployment PM_EXECUTE_GO_LIVE=YES erforderlich.'
 log "Gesichertes Produktivdeployment $PM_RELEASE_SHA starten."
+# deploy.sh also accepts GIT_SHA from the environment. Never let an inherited
+# stale value mislabel the deployed release or its last-known-good marker.
+export GIT_SHA="$PM_RELEASE_SHA"
 bash scripts/deploy.sh
 log 'DEPLOY_SCRIPT_COMPLETED=PASS; LIVE_HTTP_ACCEPTANCE_STILL_REQUIRED=YES'
