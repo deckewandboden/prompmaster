@@ -1,0 +1,44 @@
+name: PROMPTFINISHER Release Safety Gates
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: promptfinisher-release-safety-${{ github.event.pull_request.number || github.ref }
+  cancel-in-progress: true
+
+jobs:
+  release-gates:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - name: Checkout exact commit
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+
+      - name: Validate Python and Bash syntax
+        run: |
+          python -m py_compile scripts/staging_readiness.py scripts/test_staging_readiness.py scripts/test_go_live.py
+          bash -n scripts/go_live.sh
+
+      - name: Test staging isolation positive and negative cases
+        run: python -m unittest discover -s scripts -p 'test_staging_readiness.py' -v
+
+      - name: Test safe production activation and all approval guards
+        run: python -m unittest discover -s scripts -p 'test_go_live.py' -v
+
+      - name: Ensure normal CI is not bypassed
+        run: |
+          grep -q 'scripts/deploy.sh' scripts/go_live.sh
+          grep -q -- '--require-go-live' scripts/go_live.sh
+          grep -q 'PM_STAGING_ACCEPTED_SHA' scripts/go_live.sh
+          grep -q 'NO_CHANGES_MADE=YES' scripts/staging_readiness.py
