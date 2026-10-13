@@ -280,6 +280,64 @@ def main() -> None:
         raise SystemExit('I18N FAIL: select options without a stable value must be protected')
     print('I18N RESPONSE STYLE PASS: nine controls x nine locales, stable option values')
 
+    # Availability and completion markers affect user decisions. Machine
+    # translations must never invert inclusion semantics or drop status glyphs.
+    reviewed_states = {
+      "– nicht enthalten": {
+        "en": "– Not included",
+        "es": "– No incluido",
+        "pt": "– Não incluído",
+        "tr": "– Dahil değil",
+        "ru": "– Не включено",
+        "pl": "– Nie uwzględniono",
+        "fr": "– Non inclus",
+        "it": "– Non incluso",
+        "nl": "– Niet inbegrepen"
+      },
+      "✓ enthalten": {
+        "en": "✓ Included",
+        "es": "✓ Incluido",
+        "pt": "✓ Incluído",
+        "tr": "✓ Dahil",
+        "ru": "✓ Включено",
+        "pl": "✓ Uwzględniono",
+        "fr": "✓ Inclus",
+        "it": "✓ Incluso",
+        "nl": "✓ Inbegrepen"
+      },
+      "✓ vollständig": {
+        "en": "✓ Complete",
+        "es": "✓ Completo",
+        "pt": "✓ Completo",
+        "tr": "✓ Tam",
+        "ru": "✓ Полностью",
+        "pl": "✓ W pełni",
+        "fr": "✓ Complet",
+        "it": "✓ Completo",
+        "nl": "✓ Volledig"
+      },
+      "NOCH NICHT VOLLSTÄNDIG": {
+        "en": "NOT YET COMPLETE",
+        "es": "AÚN NO ESTÁ COMPLETO",
+        "pt": "AINDA NÃO ESTÁ COMPLETO",
+        "tr": "HENÜZ TAMAMLANMADI",
+        "ru": "ЕЩЁ НЕ ЗАВЕРШЕНО",
+        "pl": "JESZCZE NIEUKOŃCZONE",
+        "fr": "PAS ENCORE COMPLET",
+        "it": "NON ANCORA COMPLETO",
+        "nl": "NOG NIET VOLLEDIG"
+      }
+    }
+    for source, target_locales in reviewed_states.items():
+        for locale in LOCALES:
+            current = catalog.get(source, {}).get(locale)
+            if current != target_locales[locale]:
+                raise SystemExit(
+                    f'I18N FAIL {locale}: availability/completion label {source!r}: '
+                    f'{current!r} != {target_locales[locale]!r}'
+                )
+    print('I18N AVAILABILITY STATES PASS: 4 status labels x 9 languages')
+
     # License warnings are action-critical: keep both the complete Microsoft
     # product name and an explicit requirement word in every translated label.
     requirement_words = {
