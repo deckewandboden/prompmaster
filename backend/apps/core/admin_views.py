@@ -120,7 +120,7 @@ def _license_admin_queryset(queryset=None):
         )
     )
     owner_name = Case(
-        When(owner_user__isnull=True, then=Value('Frei')),
+        When(owner_user__isnull=True, then=Value(_('Nicht zugewiesen'))),
         When(
             owner_user__first_name='',
             owner_user__last_name='',
@@ -143,7 +143,7 @@ def _license_admin_queryset(queryset=None):
             assigned_email=Subquery(active.values('user__email')[:1]),
         )
         .annotate(
-            license_holder_name=Coalesce('assigned_name', owner_name, Value('Frei')),
+            license_holder_name=Coalesce('assigned_name', owner_name, Value(_('Nicht zugewiesen'))),
             license_holder_email=Coalesce('assigned_email', 'owner_user__email', Value('')),
         )
     )
