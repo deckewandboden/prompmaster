@@ -89,8 +89,9 @@ class StagingGateTests(unittest.TestCase):
             status = gate.main([str(self.root), '--expected-sha', SHA])
         self.assertEqual(status, expected, captured.getvalue())
         self.assertIn('NO_CHANGES_MADE=YES', captured.getvalue())
+        forbidden = {'up', 'down', 'rm', 'build', 'checkout', 'push', 'pull', 'exec', 'stop', 'start'}
         for cmd in self.calls:
-            self.assertNotIn(cmd[1] if len(cmd) > 1 and cmd[1] in ('up', 'down', 'rm', 'build', 'checkout') else '', ('up', 'down', 'rm', 'build', 'checkout'))
+            self.assertFalse(forbidden.intersection(cmd), f'Mutating command in read-only gate: {cmd!r}')
         return captured.getvalue()
 
     def test_fresh_host_passes(self):
@@ -131,6 +132,16 @@ class StagingGateTests(unittest.TestCase):
     def test_remote_context_blocks(self):
         self.docker_context = 'ssh://remote'
         self.check(1)
+        self.assertFalse(any(x[:2] == ('docker', 'compose') for x in self.calls))
+
+    def test_remote_host_override_skips_docker_queries(self):
+        with (patch.object(gate, 'call', side_effect=self.fake),
+              patch.object(gate.shutil, 'which', return_value='/mock'),
+              patch.dict(os.environ, {'DOCKER_HOST': 'ssh://production', 'DOCKER_CONTEXT': '',
+                                      'PM_EXTERNAL_CADDY_NETWORK': ''}),
+              contextlib.redirect_stdout(io.StringIO())):
+            self.assertEqual(gate.main([str(self.root), '--expected-sha', SHA]), 1)
+        self.assertFalse(any(x[0] == 'docker' for x in self.calls))
 
     def test_live_mollie_blocks(self):
         self.env['MOLLIE_API_KEY'] = 'live_unsafe'
