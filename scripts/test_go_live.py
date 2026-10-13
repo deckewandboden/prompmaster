@@ -21,7 +21,7 @@ class GoLiveContractTests(unittest.TestCase):
         shutil.copyfile(SOURCE, root / 'scripts' / 'go_live.sh')
         (root / '.env').write_text('ENVIRONMENT=production\n')
         (root / '.env').chmod(0o600)
-        (root / 'scripts' / 'deploy.sh').write_text('#!/bin/bash\nprintf "MOCK_DEPLOY_INVOKED\\n"\n')
+        (root / 'scripts' / 'deploy.sh').write_text('#!/bin/bash\nprintf "MOCK_DEPLOY_INVOKED GIT_SHA=%s\\n" "$GIT_SHA"\n')
         mocks = {
             'git': '''#!/bin/bash
 case "$*" in
@@ -74,7 +74,7 @@ esac
     def test_explicit_activation_uses_existing_deploy(self):
         response = self.invoke()
         self.assertEqual(response.returncode, 0, response.stderr)
-        self.assertIn('MOCK_DEPLOY_INVOKED', response.stdout)
+        self.assertIn('MOCK_DEPLOY_INVOKED GIT_SHA=' + SHA, response.stdout)
 
     def test_requires_execution_approval(self):
         self.env.pop('PM_EXECUTE_GO_LIVE')
