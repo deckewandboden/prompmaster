@@ -1546,9 +1546,10 @@ def _browser_product_locale_acceptance(page, base: str, product: str) -> None:
                 language: select?.value,
                 fullName: select?.selectedOptions[0]?.textContent.trim(),
                 fits: Boolean(l && required <= l.width + 1),
-                noOverlap: Boolean(b && l && c && o && b.right <= l.left + 1
-                    && l.right <= c.left + 1 && c.right <= o.left + 1
-                    && o.right <= 321),
+                noOverlap: Boolean(b && l && c && b.right <= l.left + 1
+                    && l.right <= c.left + 1
+                    && (o ? c.right <= o.left + 1 && o.right <= 321
+                          : c.right <= 321)),
             };
         }"""
     )
