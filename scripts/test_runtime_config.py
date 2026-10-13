@@ -38,6 +38,23 @@ class RuntimeConfigTests(unittest.TestCase):
             with self.subTest(volume=key):
                 self.assertEqual(self.base['volumes'][key]['name'], physical_name)
 
+    def test_staging_backup_status_mount_matches_runtime(self):
+        """Staging must expose the same status path as production to Django."""
+        staging = yaml.safe_load((ROOT / 'compose.staging.yaml').read_text())
+        web_mounts = staging['services']['web']['volumes']
+        backup_mounts = [
+            mount for mount in web_mounts
+            if isinstance(mount, str) and mount.startswith('backup_status:')
+        ]
+        expected = 'backup_status:/var/run/promptfinisher-backup:ro'
+        self.assertEqual(backup_mounts, [expected])
+        self.assertIn(expected, self.base['services']['web']['volumes'])
+        self.assertNotIn(
+            '/var/run/promptmaster-backup',
+            '\n'.join(web_mounts),
+            'Staging must not mount the obsolete backup status path.',
+        )
+
     def test_promptfinisher_legacy_volume_overlay_is_external_and_complete(self):
         self.assertEqual(validate_legacy_volume_overlay(), [])
         deploy = (ROOT / 'scripts' / 'deploy.sh').read_text()
