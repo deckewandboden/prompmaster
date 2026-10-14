@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 """Independent positive and negative tests; no Docker or production changes."""
 import hashlib
+from datetime import datetime, timezone
 import io
 import json
 from pathlib import Path
@@ -14,6 +15,17 @@ import offline_recovery_drill as drill
 
 
 class OfflineRecoveryTests(unittest.TestCase):
+    def test_archive_filename_has_utc_creation_timestamp(self):
+        name = "PROMPTFINISHER_FULL_20261013T143343Z_9606150d.tar.gz.gpg"
+        self.assertEqual(
+            drill.archive_creation_time(name),
+            datetime(2026, 10, 13, 14, 33, 43, tzinfo=timezone.utc),
+        )
+
+    def test_archive_filename_without_timestamp_blocks(self):
+        with self.assertRaisesRegex(RuntimeError, "Archivname"):
+            drill.archive_creation_time("unknown.tar.gz.gpg")
+
     def test_original_absolute_sha256_path_works(self):
         with tempfile.TemporaryDirectory() as t:
             archive = Path(t) / "PROMPTFINISHER_FULL_test.tar.gz.gpg"
