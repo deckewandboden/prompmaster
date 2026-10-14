@@ -24,8 +24,28 @@ docker compose version >/dev/null 2>&1 || fail 'Docker Compose fehlt.'
 [[ -z "$(git status --porcelain --untracked-files=no 2>/dev/null)" ]] || fail 'Getrackte Dateien sind lokal verändert.'
 [[ -f .env && ! -L .env ]] || fail 'Produktive .env fehlt oder ist ein Symlink.'
 [[ "$(stat -c '%a' .env 2>/dev/null)" == 600 ]] || fail 'Die Rechte von .env müssen 0600 sein.'
-log 'Produktive Umgebung und externes Restic-Backup prüfen.'
-python3 scripts/validate_env.py --environment production --require-go-live || fail 'Go-Live-Environment-Gate nicht bestanden.'
+log 'Produktive Umgebung und Off-Host-Restitution prüfen.'
+# Default S3 gate remains fully strict. The manually-approved offline alternative
+# requires independent restore evidence, an encrypted off-host disk and explicit
+# risk acceptance; an archive copy or a local Restic volume alone is NEVER enough.
+case "${PM_OFFSITE_BACKUP_MODE:-s3}" in
+  s3)
+    python3 scripts/validate_env.py --environment production --require-go-live ||
+      fail 'Externer S3-/Go-Live-Environment-Gate nicht bestanden.'
+    ;;
+  independent-offline)
+    python3 scripts/validate_env.py --environment production ||
+      fail 'Produktions-Environment-Gate nicht bestanden.'
+    python3 scripts/offline_backup_go_live_gate.py \
+      --report "${PM_OFFSITE_RESTORE_REPORT:-}" \
+      --archive-sha256 "${PM_OFFSITE_ARCHIVE_SHA256:-}" \
+      --env-file .env ||
+      fail 'Unabhängiger Offline-Backup-/Restore-Nachweis oder ausdrückliche Risikoakzeptanz fehlt.'
+    ;;
+  *)
+    fail 'Unbekannter PM_OFFSITE_BACKUP_MODE (zulässig s3 oder independent-offline).'
+    ;;
+esac
 if [[ "${1:-}" == --verify-only ]]; then
   log "PRE_DEPLOY_GATES=PASS; RELEASE_SHA=$PM_RELEASE_SHA; NO_DEPLOY=YES"
   exit 0
