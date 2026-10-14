@@ -58,6 +58,15 @@ def verify(report_path: Path, claimed_sha: str, *, now: datetime | None = None,
     age = current.astimezone(timezone.utc) - checked.astimezone(timezone.utc)
     if age < timedelta(minutes=-5) or age > timedelta(hours=max_age_hours):
         raise ValueError('Restore-Evidenz ist veraltet oder liegt in der Zukunft')
+    # A fresh restore of an ancient archive is NOT a fresh backup.
+    archive_created = datetime.fromisoformat(str(payload.get('archive_created_at_utc', '')))
+    if archive_created.tzinfo is None or archive_created.utcoffset() != timedelta(0):
+        raise ValueError('Archiv-Erstellungsdatum muss UTC mit Zeitzone sein')
+    archive_age = current.astimezone(timezone.utc) - archive_created.astimezone(timezone.utc)
+    if archive_age < timedelta(minutes=-5) or archive_age > timedelta(hours=max_age_hours):
+        raise ValueError('Gesichertes Offline-Archiv ist veraltet oder liegt in der Zukunft')
+    if archive_created > checked + timedelta(minutes=5):
+        raise ValueError('Archiv ist neuer als der Restore-Bericht')
     host = payload.get('host')
     if not isinstance(host, str) or not host.strip() or len(host) > 255:
         raise ValueError('Unabhängiger Recovery-Host nicht belegt')
