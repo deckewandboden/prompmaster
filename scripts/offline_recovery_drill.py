@@ -192,8 +192,17 @@ def main(argv=None):
             secret = ""
             head = verify_state(workdir, hashes)
             migrations, tables = restore_database(workdir)
+        match = re.fullmatch(
+            r"PROMPTFINISHER_FULL_(\d{8}T\d{6}Z)_[0-9a-f]{8}\.tar\.gz\.gpg",
+            args.archive.name,
+        )
+        if match is None:
+            blocked("Archivname ohne verifizierbares Erstellungsdatum")
+        archive_created = dt.datetime.strptime(match.group(1), "%Y%m%dT%H%M%SZ")
+        archive_created = archive_created.replace(tzinfo=dt.timezone.utc)
         report = {"result": "PASS", "scope": "isolated_postgresql_restore_and_archive_manifest",
                   "archive_sha256": archive_sha, "original_git_head": head,
+                  "archive_created_at_utc": archive_created.isoformat(),
                   "migrations_count": migrations, "tables_count": tables,
                   "host": socket.gethostname(),
                   "checked_at_utc": dt.datetime.now(dt.timezone.utc).isoformat(),
