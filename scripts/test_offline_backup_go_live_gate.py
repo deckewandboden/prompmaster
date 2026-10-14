@@ -28,6 +28,7 @@ class OfflineBackupGateTests(unittest.TestCase):
             'original_git_head': 'b' * 40, 'tables_count': 43,
             'migrations_count': 74, 'host': 'separate-recovery-host',
             'checked_at_utc': (NOW - timedelta(hours=2)).isoformat(),
+            'archive_created_at_utc': (NOW - timedelta(hours=8)).isoformat(),
             'limitations': 'No full application startup, payment, visual or legal acceptance',
         }
         self.write()
@@ -85,6 +86,21 @@ class OfflineBackupGateTests(unittest.TestCase):
         self.data['checked_at_utc'] = (NOW - timedelta(days=5)).isoformat()
         self.write()
         with self.assertRaisesRegex(ValueError, 'veraltet'): self.check()
+
+    def test_fresh_restore_of_old_archive_blocks(self):
+        self.data['archive_created_at_utc'] = (NOW - timedelta(days=12)).isoformat()
+        self.write()
+        with self.assertRaisesRegex(ValueError, 'Offline-Archiv ist veraltet'): self.check()
+
+    def test_archive_created_after_restore_blocks(self):
+        self.data['archive_created_at_utc'] = (NOW + timedelta(minutes=20)).isoformat()
+        self.write()
+        with self.assertRaisesRegex(ValueError, 'Offline-Archiv'): self.check()
+
+    def test_missing_archive_creation_date_blocks(self):
+        del self.data['archive_created_at_utc']
+        self.write()
+        with self.assertRaises(ValueError): self.check()
 
     def test_production_host_blocks(self):
         self.data['host'] = 'prod'
