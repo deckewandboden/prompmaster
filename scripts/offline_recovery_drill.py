@@ -39,6 +39,18 @@ def blocked(reason):
     raise RuntimeError("BLOCKED: " + reason)
 
 
+def archive_creation_time(filename: str) -> dt.datetime:
+    match = re.fullmatch(
+        r"PROMPTFINISHER_FULL_(\d{8}T\d{6}Z)_[0-9a-f]{8}\.tar\.gz\.gpg",
+        filename,
+    )
+    if match is None:
+        blocked("Archivname ohne verifizierbares Erstellungsdatum")
+    return dt.datetime.strptime(match.group(1), "%Y%m%dT%H%M%SZ").replace(
+        tzinfo=dt.timezone.utc,
+    )
+
+
 def sha_check(archive):
     sidecar = Path(str(archive) + ".sha256")
     if any(p.is_symlink() or not p.is_file() for p in (archive, sidecar)):
@@ -192,14 +204,7 @@ def main(argv=None):
             secret = ""
             head = verify_state(workdir, hashes)
             migrations, tables = restore_database(workdir)
-        match = re.fullmatch(
-            r"PROMPTFINISHER_FULL_(\d{8}T\d{6}Z)_[0-9a-f]{8}\.tar\.gz\.gpg",
-            args.archive.name,
-        )
-        if match is None:
-            blocked("Archivname ohne verifizierbares Erstellungsdatum")
-        archive_created = dt.datetime.strptime(match.group(1), "%Y%m%dT%H%M%SZ")
-        archive_created = archive_created.replace(tzinfo=dt.timezone.utc)
+        archive_created = archive_creation_time(args.archive.name)
         report = {"result": "PASS", "scope": "isolated_postgresql_restore_and_archive_manifest",
                   "archive_sha256": archive_sha, "original_git_head": head,
                   "archive_created_at_utc": archive_created.isoformat(),
