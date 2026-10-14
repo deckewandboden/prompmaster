@@ -34,7 +34,17 @@ case "$*" in
 esac
 ''',
             'docker': '#!/bin/bash\n[[ "$1 $2" == "compose version" ]]\n',
-            'python3': '#!/bin/bash\n[[ "$*" == "scripts/validate_env.py --environment production --require-go-live" ]] && [[ "${PM_TEST_ENV_FAIL:-0}" == 0 ]]\n',
+            'python3': '''#!/bin/bash
+if [[ "$*" == "scripts/validate_env.py --environment production --require-go-live" ]]; then
+  [[ "${PM_TEST_ENV_FAIL:-0}" == 0 ]]
+elif [[ "$*" == "scripts/validate_env.py --environment production" ]]; then
+  [[ "${PM_TEST_ENV_FAIL:-0}" == 0 ]]
+elif [[ "$*" == scripts/offline_backup_go_live_gate.py* ]]; then
+  [[ "${PM_TEST_OFFLINE_EVIDENCE_VALID:-0}" == 1 ]]
+else
+  exit 99
+fi
+''',
         }
         for name, contents in mocks.items():
             file = root / 'bin' / name
@@ -132,6 +142,37 @@ esac
                 self.env[flag] = ''
                 self.blocked()
                 self.env[flag] = 'YES'
+
+
+    def test_offsite_mode_requires_independent_restore_evidence(self):
+        self.env['PM_OFFSITE_BACKUP_MODE'] = 'independent-offline'
+        self.env['PM_TEST_OFFLINE_EVIDENCE_VALID'] = '0'
+        self.blocked('--verify-only')
+
+    def test_offsite_evidence_does_not_override_existing_approvals(self):
+        self.env['PM_OFFSITE_BACKUP_MODE'] = 'independent-offline'
+        self.env['PM_TEST_OFFLINE_EVIDENCE_VALID'] = '1'
+        self.env.pop('PM_STAGING_ACCEPTED_SHA')
+        self.blocked('--verify-only')
+
+    def test_accepted_independent_offsite_mode_verifies_without_deploy(self):
+        self.env['PM_OFFSITE_BACKUP_MODE'] = 'independent-offline'
+        self.env['PM_TEST_OFFLINE_EVIDENCE_VALID'] = '1'
+        self.env['PM_OFFSITE_RESTORE_REPORT'] = '/offhost/report.json'
+        self.env['PM_OFFSITE_ARCHIVE_SHA256'] = 'a' * 64
+        response = self.invoke('--verify-only')
+        self.assertEqual(response.returncode, 0, response.stderr)
+        self.assertIn('NO_DEPLOY=YES', response.stdout)
+
+    def test_offsite_mode_cannot_bypass_base_production_env(self):
+        self.env['PM_OFFSITE_BACKUP_MODE'] = 'independent-offline'
+        self.env['PM_TEST_OFFLINE_EVIDENCE_VALID'] = '1'
+        self.env['PM_TEST_ENV_FAIL'] = '1'
+        self.blocked('--verify-only')
+
+    def test_unknown_offsite_mode_is_rejected(self):
+        self.env['PM_OFFSITE_BACKUP_MODE'] = 'off'
+        self.blocked('--verify-only')
 
 
 if __name__ == '__main__':
