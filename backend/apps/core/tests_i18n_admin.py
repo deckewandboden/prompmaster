@@ -242,6 +242,23 @@ class AdminInternationalizationContractTests(SimpleTestCase):
                 with self.subTest(locale=code, phrase=phrase):
                     self.assertTrue(translations.get(phrase))
 
+    def test_license_detail_unassigned_label_is_precise_in_all_ten_languages(self):
+        source = (ROOT / 'templates/ns_admin/license_detail.html').read_text(encoding='utf-8')
+        assignment_rows = [
+            line for line in source.splitlines()
+            if "{% translate 'Zugewiesen an' %}" in line
+        ]
+        self.assertEqual(len(assignment_rows), 1)
+        row = assignment_rows[0]
+        self.assertIn("{{ active_assignment.user.full_name|default:active_assignment.user.email }}", row)
+        self.assertIn("{{ license.owner_user.full_name|default:license.owner_user.email }}", row)
+        self.assertIn("{% else %}{% translate 'Nicht zugewiesen' %}{% endif %}", row)
+        self.assertNotIn("{% translate 'Frei' %}", row)
+        for code in LOCALES:
+            catalog = catalog_translations(ROOT / 'locale' / code / 'LC_MESSAGES' / 'django.po')
+            with self.subTest(language=code):
+                self.assertTrue(catalog.get('Nicht zugewiesen'))
+
     def test_email_log_statuses_have_translations(self):
         source = (ROOT / 'templates/ns_admin/email_log.html').read_text(encoding='utf-8')
         for phrase in ('Gesendet', 'Fehlgeschlagen', 'Wird gesendet', 'Unterdrückt', 'Warteschlange'):
