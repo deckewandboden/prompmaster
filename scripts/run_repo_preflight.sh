@@ -29,7 +29,7 @@ if [[ -d "$ROOT/.git" && ! -L "$ROOT/.git" ]]; then
   mkdir -p "$npm_diag_parent"
   chmod 700 "$npm_diag_parent"
 else
-  npm_diag_parent="\${TMPDIR:-/tmp}"
+  npm_diag_parent="${TMPDIR:-/tmp}"
 fi
 npm_diag="$(mktemp -d "$npm_diag_parent/validator-XXXXXXXX")"
 chmod 700 "$npm_diag"
@@ -51,15 +51,15 @@ common=(
   --rm
   --user "$uid:$gid"
   -e HOME=/tmp
-  -e "PM_DOMAIN=\${PM_DOMAIN:-}"
-  -e "PM_ADMIN_EMAIL=\${PM_ADMIN_EMAIL:-}"
+  -e "PM_DOMAIN=${PM_DOMAIN:-}"
+  -e "PM_ADMIN_EMAIL=${PM_ADMIN_EMAIL:-}"
   -v "$ROOT:/repo"
   -v "$npm_diag:/npm-diagnostics"
 )
 
 if [[ "$PREPARE" == "--prepare-env" ]]; then
   printf '[PROMPTFINISHER validator] Staging-Umgebung vorbereiten\n'
-  docker run "\${common[@]}" -w /repo "$IMAGE" python scripts/prepare_env.py
+  docker run "${common[@]}" -w /repo "$IMAGE" python scripts/prepare_env.py
 elif [[ -n "$PREPARE" ]]; then
   echo "[FEHLER] Unbekannte Option: $PREPARE" >&2
   exit 2
@@ -69,9 +69,9 @@ fi
 
 npm_install() {
   local attempt="$1"
-  local logfile="$npm_diag/npm-ci-attempt-\${attempt}.log"
-  if docker run "\${common[@]}" \
-    -e "npm_config_cache=/npm-diagnostics/cache-\${attempt}" \
+  local logfile="$npm_diag/npm-ci-attempt-${attempt}.log"
+  if docker run "${common[@]}" \
+    -e "npm_config_cache=/npm-diagnostics/cache-${attempt}" \
     -w /repo/marketing "$IMAGE" sh -lc \
     'umask 077; npm ci --no-audit --no-fund' >"$logfile" 2>&1; then
     cat "$logfile"
@@ -93,7 +93,7 @@ else
 fi
 
 marketing_log="$npm_diag/marketing-tests-and-build.log"
-if docker run "\${common[@]}" -w /repo/marketing "$IMAGE" sh -lc \
+if docker run "${common[@]}" -w /repo/marketing "$IMAGE" sh -lc \
   'umask 077; npm test && npm run build' >"$marketing_log" 2>&1; then
   cat "$marketing_log"
 else
@@ -103,9 +103,9 @@ else
 fi
 
 printf '[PROMPTFINISHER validator] Repository-Preflight\n'
-docker run "\${common[@]}" -w /repo "$IMAGE" python scripts/github_preflight.py
+docker run "${common[@]}" -w /repo "$IMAGE" python scripts/github_preflight.py
 
 printf '[PROMPTFINISHER validator] Environment-Validierung (%s)\n' "$ENVIRONMENT"
-docker run "\${common[@]}" -w /repo "$IMAGE" python scripts/validate_env.py --environment "$ENVIRONMENT"
+docker run "${common[@]}" -w /repo "$IMAGE" python scripts/validate_env.py --environment "$ENVIRONMENT"
 
 printf '[PROMPTFINISHER validator] OK\n'
