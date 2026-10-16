@@ -6,6 +6,10 @@ fail(){ echo "[FAIL] $*" >&2; exit 1; }
 command -v docker >/dev/null 2>&1 || fail "docker fehlt auf diesem Host"; docker compose version >/dev/null 2>&1 || fail "docker compose ist nicht verfügbar"; [[ -f .env ]] || fail ".env fehlt"
 bash scripts/run_repo_preflight.sh staging
 FILES=(-f compose.yaml -f compose.staging.yaml)
+if [[ -n "${PM_STAGING_CA_FILE:-}" ]]; then
+  [[ -n "${PM_STAGING_CA_SHA256:-}" ]] || fail "Staging-TLS-Zertifikat nicht gepinnt"
+  FILES+=(-f compose.staging-local-ca.yaml)
+fi
 docker compose -f compose.yaml -f compose.production.yaml config >/dev/null
 PM_EXTERNAL_CADDY_NETWORK=promptfinisher-ci-external docker compose -f compose.yaml -f compose.production.yaml -f compose.external-caddy.yaml config >/dev/null
 # Exercise production filesystem restrictions with safe staging integrations.
