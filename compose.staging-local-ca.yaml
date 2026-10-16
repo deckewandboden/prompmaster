@@ -1,0 +1,12 @@
+# Opt-in for a *local staging checkout only*. Never add to production compose.
+# The user-owned PEM is passed to Docker BuildKit as a transient secret, not
+# copied into either the build context or the resulting runtime image.
+services:
+  caddy:
+    build:
+      secrets:
+        - pf_staging_ca
+
+secrets:
+  pf_staging_ca:
+    file: ${PM_STAGING_CA_FILE:?PM_STAGING_CA_FILE is required for local staging TLS overlay}
