@@ -1,7 +1,17 @@
 FROM node:22-alpine AS marketing-build
 WORKDIR /src
 COPY marketing/package.json marketing/package-lock.json ./
-RUN npm ci
+# Optional local staging CA is available only to this RUN instruction as a
+# BuildKit secret. The public source checkout and final runtime image stay clean.
+# Without a supplied secret the default production/CI build is unchanged.
+RUN --mount=type=secret,id=pf_staging_ca,required=false \
+    if [ -f /run/secrets/pf_staging_ca ]; then \
+      NODE_EXTRA_CA_CERTS=/run/secrets/pf_staging_ca \
+      npm_config_cafile=/run/secrets/pf_staging_ca \
+      npm_config_strict_ssl=true npm ci; \
+    else \
+      npm ci; \
+    fi
 COPY marketing/ ./
 RUN npm test && npm run build
 
