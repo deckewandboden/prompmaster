@@ -12,6 +12,21 @@ import yaml
 from validate_runtime_config import ROOT, validate, validate_legacy_volume_overlay
 from validate_env import is_external_s3_repository, is_local_restic_repository, main as validate_env_main, normalize_mail_provider
 
+class ComposeStagingLoader(yaml.SafeLoader):
+    """Safe YAML reader for Docker Compose staging !override ports."""
+
+
+def _construct_override_ports(loader, node):
+    if not isinstance(node, yaml.SequenceNode):
+        raise yaml.constructor.ConstructorError(
+            None, None, 'Compose !override must be a ports sequence', node.start_mark,
+        )
+    return loader.construct_sequence(node)
+
+
+ComposeStagingLoader.add_constructor('!override', _construct_override_ports)
+
+
 
 class RuntimeConfigTests(unittest.TestCase):
     def setUp(self):
@@ -40,7 +55,15 @@ class RuntimeConfigTests(unittest.TestCase):
 
     def test_staging_backup_status_mount_matches_runtime(self):
         """Staging must expose the same status path as production to Django."""
-        staging = yaml.safe_load((ROOT / 'compose.staging.yaml').read_text())
+        staging = yaml.load((ROOT / 'compose.staging.yaml').read_text(), Loader=ComposeStagingLoader)
+        self.assertEqual(
+            staging['services']['caddy']['ports'],
+            [
+                '127.0.0.1:${PM_STAGING_HTTP_PORT:-80}:80',
+                '127.0.0.1:${PM_STAGING_HTTPS_PORT:-443}:443',
+            ],
+            'Staging Caddy must publish only the dedicated loopback ports.',
+        )
         web_mounts = staging['services']['web']['volumes']
         backup_mounts = [
             mount for mount in web_mounts
