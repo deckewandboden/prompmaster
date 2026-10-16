@@ -1,4 +1,12 @@
 services:
+  # Dedicated test stacks must never expose Caddy on all host interfaces.
+  # !override replaces base compose.yaml 0.0.0.0:80/443 mappings rather than
+  # merging them alongside the loopback-only bindings.
+  # PM_STAGING_*_PORT are local test-host ports, not container ports.
+  caddy:
+    ports: !override
+      - "127.0.0.1:${PM_STAGING_HTTP_PORT:-80}:80"
+      - "127.0.0.1:${PM_STAGING_HTTPS_PORT:-443}:443"
   mailpit:
     image: axllent/mailpit:v1.31.1
     ports: ["127.0.0.1:8025:8025"]
