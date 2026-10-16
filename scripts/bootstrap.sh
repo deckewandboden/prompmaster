@@ -85,6 +85,11 @@ fi
 export DEPLOYED_AT="${DEPLOYED_AT:-$(date -u +%Y-%m-%dT%H:%M:%SZ)}"
 
 F=(-f compose.yaml -f compose.staging.yaml)
+if [[ -n "${PM_STAGING_CA_FILE:-}" ]]; then
+  [[ -n "${PM_STAGING_CA_SHA256:-}" ]] || fail "Staging-TLS-Zertifikat nicht gepinnt"
+  F+=(-f compose.staging-local-ca.yaml)
+  log "Gepinnte lokale Test-CA als zeitweiliges BuildKit-Secret"
+fi
 EXTERNAL_CADDY_NETWORK="${PM_EXTERNAL_CADDY_NETWORK:-}"
 if [[ -z "$EXTERNAL_CADDY_NETWORK" ]]; then
   EXTERNAL_CADDY_NETWORK="$(awk -F= '$1 == "PM_EXTERNAL_CADDY_NETWORK" {sub(/^[^=]*=/, ""); value=$0} END {print value}' .env | tr -d '\r')"
