@@ -47,6 +47,22 @@ cleanup() {
 }
 trap cleanup EXIT
 
+# Optional corporate TLS trust is allowed ONLY in isolated staging, is
+# explicitly pinned by the caller, and is never installed system-wide.
+staging_ca_mount=()
+if [[ -n "${PM_STAGING_CA_FILE:-}" ]]; then
+  [[ "$ENVIRONMENT" == staging ]] || { echo '[FEHLER] Staging-CA ausserhalb von staging nicht erlaubt' >&2; exit 2; }
+  [[ -f "$PM_STAGING_CA_FILE" && ! -L "$PM_STAGING_CA_FILE" ]] || { echo '[FEHLER] Staging-CA fehlt oder ist Symlink' >&2; exit 2; }
+  [[ "$(stat -c '%u' "$PM_STAGING_CA_FILE")" == "$uid" ]] || { echo '[FEHLER] Staging-CA besitzt falschen Eigentuemer' >&2; exit 2; }
+  [[ "$(stat -c '%a' "$PM_STAGING_CA_FILE")" == 600 ]] || { echo '[FEHLER] Staging-CA muss 0600 sein' >&2; exit 2; }
+  [[ "${PM_STAGING_CA_SHA256:-}" =~ ^[0-9a-f]{64}$ ]] || { echo '[FEHLER] Staging-CA-Pin muss SHA256 sein' >&2; exit 2; }
+  command -v openssl >/dev/null 2>&1 || { echo '[FEHLER] openssl fuer Staging-CA-Pin fehlt' >&2; exit 2; }
+  actual="$(openssl x509 -in "$PM_STAGING_CA_FILE" -outform DER 2>/dev/null | sha256sum | awk '{print $1}')"
+  [[ "$actual" == "$PM_STAGING_CA_SHA256" ]] || { echo '[FEHLER] Staging-CA-Fingerprint stimmt nicht' >&2; exit 2; }
+  staging_ca_mount=(-v "$PM_STAGING_CA_FILE:/run/pf-staging-ca.pem:ro" -e 'NODE_EXTRA_CA_CERTS=/run/pf-staging-ca.pem' -e 'npm_config_cafile=/run/pf-staging-ca.pem' -e 'npm_config_strict_ssl=true')
+  printf '[PROMPTFINISHER validator] Gepinnte Staging-CA fuer Node/npm aktiviert (TLS bleibt strikt)\n'
+fi
+
 common=(
   --rm
   --user "$uid:$gid"
@@ -55,6 +71,7 @@ common=(
   -e "PM_ADMIN_EMAIL=${PM_ADMIN_EMAIL:-}"
   -v "$ROOT:/repo"
   -v "$npm_diag:/npm-diagnostics"
+  "${staging_ca_mount[@]}"
 )
 
 if [[ "$PREPARE" == "--prepare-env" ]]; then
