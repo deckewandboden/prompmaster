@@ -1,4 +1,5 @@
 from datetime import timedelta
+from uuid import UUID
 from functools import wraps
 
 from django.contrib import messages
@@ -12,6 +13,7 @@ from django.db.models.functions import Cast, Coalesce, Concat, Lower, Trim, Trun
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse
 from django.utils import timezone
+from django.utils.translation import get_language, gettext as _, gettext_lazy as _lazy
 from django.views.decorators.http import require_POST
 
 from apps.accounts.models import Role, User, UserRole
@@ -117,8 +119,12 @@ def _license_admin_queryset(queryset=None):
             )
         )
     )
+    # Preserve the established German grid label while using the precise
+    # translated assignment state in every other supported language.
+    language = (get_language() or settings.LANGUAGE_CODE).split('-')[0]
+    unassigned_label = _('Frei') if language == 'de' else _('Nicht zugewiesen')
     owner_name = Case(
-        When(owner_user__isnull=True, then=Value('Frei')),
+        When(owner_user__isnull=True, then=Value(unassigned_label)),
         When(
             owner_user__first_name='',
             owner_user__last_name='',
@@ -141,23 +147,23 @@ def _license_admin_queryset(queryset=None):
             assigned_email=Subquery(active.values('user__email')[:1]),
         )
         .annotate(
-            license_holder_name=Coalesce('assigned_name', owner_name, Value('Frei')),
+            license_holder_name=Coalesce('assigned_name', owner_name, Value(unassigned_label)),
             license_holder_email=Coalesce('assigned_email', 'owner_user__email', Value('')),
         )
     )
 PAYMENT_STATUS_CHOICES = [
-    ('created', 'Erstellt'), ('open', 'Offen'), ('pending', 'Ausstehend'),
-    ('authorized', 'Autorisiert'), ('paid', 'Bezahlt'), ('failed', 'Fehlgeschlagen'),
-    ('canceled', 'Storniert'), ('expired', 'Abgelaufen'),
-    ('refunded_partial', 'Teilweise erstattet'), ('refunded_full', 'Vollständig erstattet'),
-    ('chargeback', 'Chargeback'), ('chargeback_reversed', 'Chargeback zurückgenommen'), ('unknown', 'Unbekannt'),
+    ('created', _lazy('Erstellt')), ('open', _lazy('Offen')), ('pending', _lazy('Ausstehend')),
+    ('authorized', _lazy('Autorisiert')), ('paid', _lazy('Bezahlt')), ('failed', _lazy('Fehlgeschlagen')),
+    ('canceled', _lazy('Storniert')), ('expired', _lazy('Abgelaufen')),
+    ('refunded_partial', _lazy('Teilweise erstattet')), ('refunded_full', _lazy('Vollständig erstattet')),
+    ('chargeback', _lazy('Chargeback')), ('chargeback_reversed', _lazy('Chargeback zurückgenommen')), ('unknown', _lazy('Unbekannt')),
 ]
 EMAIL_STATUS_CHOICES = [
-    ('queued', 'Warteschlange'), ('sending', 'Wird gesendet'),
-    ('sent', 'Gesendet'), ('failed', 'Fehlgeschlagen'),
-    ('suppressed', 'Unterdrückt'),
+    ('queued', _lazy('Warteschlange')), ('sending', _lazy('Wird gesendet')),
+    ('sent', _lazy('Gesendet')), ('failed', _lazy('Fehlgeschlagen')),
+    ('suppressed', _lazy('Unterdrückt')),
 ]
-MOLLIE_STATUS_CHOICES = PAYMENT_STATUS_CHOICES + [('error', 'Verarbeitungsfehler'), ('recovered', 'Fehler behoben')]
+MOLLIE_STATUS_CHOICES = PAYMENT_STATUS_CHOICES + [('error', _lazy('Verarbeitungsfehler')), ('recovered', _lazy('Fehler behoben'))]
 
 
 def _active_superadmin_count():
@@ -355,9 +361,9 @@ def leads(request):
         [
             ('lead_number', 'Lead'),
             ('customer_display', 'Interessent'),
-            ('email', 'E-Mail'),
-            ('status_name', 'Status'),
-            ('assigned_name', 'Zuständig'),
+            ('email', _('E-Mail')),
+            ('status_name', _('Status')),
+            ('assigned_name', _('Zuständig')),
         ],
         'promptmaster-leads.csv',
     )
@@ -367,22 +373,22 @@ def leads(request):
         request,
         'ns_admin/grid.html',
         {
-            'title': 'Leads',
+            'title': _('Leads'),
             'grid': grid,
             'columns': [
                 ('lead_number', 'Lead', 'number'),
                 ('customer_display', 'Interessent', 'customer'),
-                ('email', 'E-Mail', 'email'),
-                ('status_name', 'Status', 'status'),
-                ('priority', 'Priorität', 'priority'),
-                ('assigned_name', 'Zuständig', 'assigned'),
+                ('email', _('E-Mail'), 'email'),
+                ('status_name', _('Status'), 'status'),
+                ('priority', _('Priorität'), 'priority'),
+                ('assigned_name', _('Zuständig'), 'assigned'),
                 ('created_at', 'Erstellt', 'created'),
             ],
             'detail_route': 'ns_admin:lead_detail',
             'filter_options': [
-                ('status', 'Status', Lead.STATUS),
+                ('status', _('Status'), Lead.STATUS),
                 ('source', 'Quelle', Lead.SOURCE),
-                ('priority', 'Priorität', Lead.PRIORITY),
+                ('priority', _('Priorität'), Lead.PRIORITY),
             ],
             'export_enabled': True,
             'primary_action_url': reverse('ns_admin:lead_new') if has_perm(request.user, 'leads.write') else '',
@@ -417,13 +423,13 @@ def lead_new(request):
             },
             request=request,
         )
-        messages.success(request, f'Lead {lead.lead_number} angelegt.')
+        messages.success(request, _('Lead %(lead_number)s angelegt.') % {'lead_number': lead.lead_number})
         return redirect('ns_admin:lead_detail', pk=lead.pk)
     return render(
         request,
         'ns_admin/form.html',
         {
-            'title': 'Lead anlegen',
+            'title': _('Lead anlegen'),
             'form': form,
             'cancel_url': reverse('ns_admin:leads'),
         },
@@ -479,7 +485,7 @@ def lead_detail(request, pk):
                 {'changes': changes},
                 request=request,
             )
-        messages.success(request, 'Lead gespeichert.')
+        messages.success(request, _("Lead gespeichert."))
         return redirect('ns_admin:lead_detail', pk=saved.pk)
 
     return render(
@@ -517,13 +523,13 @@ def lead_assign(request, pk):
             },
             request=request,
         )
-        messages.success(request, 'Lead-Zuständigkeit aktualisiert.')
+        messages.success(request, _("Lead-Zuständigkeit aktualisiert."))
         return redirect('ns_admin:lead_detail', pk=lead.pk)
     return render(
         request,
         'ns_admin/form.html',
         {
-            'title': f'{lead.lead_number} zuweisen',
+            'title': _('Lead %(lead_number)s zuweisen') % {'lead_number': lead.lead_number},
             'form': form,
             'cancel_url': reverse('ns_admin:lead_detail', args=[lead.pk]),
         },
@@ -547,13 +553,13 @@ def lead_delete(request, pk):
             },
             request=request,
         )
-        messages.success(request, f'Lead {lead.lead_number} gelöscht.')
+        messages.success(request, _('Lead %(lead_number)s gelöscht.') % {'lead_number': lead.lead_number})
         return redirect('ns_admin:leads')
     return render(
         request,
         'ns_admin/form.html',
         {
-            'title': f'{lead.lead_number} löschen',
+            'title': _('Lead %(lead_number)s löschen') % {'lead_number': lead.lead_number},
             'form': form,
             'cancel_url': reverse('ns_admin:lead_detail', args=[lead.pk]),
         },
@@ -564,13 +570,12 @@ def lead_delete(request, pk):
 def lead_convert_company(request, pk):
     lead = _lead(pk)
     if lead.converted_company_id:
-        messages.info(request, 'Dieser Lead ist bereits einem Kunden zugeordnet.')
+        messages.info(request, _("Dieser Lead ist bereits einem Kunden zugeordnet."))
         return redirect('ns_admin:customer_detail', pk=lead.converted_company_id)
     if lead.kind != 'company':
         messages.error(
             request,
-            'Privatkunden werden aus rechtlichen Gründen über Registrierung/Checkout angelegt; '
-            'der Lead kann dort anschließend als gewonnen abgeschlossen werden.',
+            _("Privatkunden werden aus rechtlichen Gründen über Registrierung/Checkout angelegt; der Lead kann dort anschließend als gewonnen abgeschlossen werden."),
         )
         return redirect('ns_admin:lead_detail', pk=lead.pk)
 
@@ -644,8 +649,7 @@ def lead_convert_company(request, pk):
 
         messages.success(
             request,
-            'Lead wurde in einen Firmenkunden umgewandelt. '
-            'Der Ansprechpartner hat eine sichere Einladung erhalten.',
+            _("Lead wurde in einen Firmenkunden umgewandelt. Der Ansprechpartner hat eine sichere Einladung erhalten."),
         )
         return redirect('ns_admin:customer_detail', pk=company.pk)
 
@@ -653,7 +657,7 @@ def lead_convert_company(request, pk):
         request,
         'ns_admin/form.html',
         {
-            'title': f'{lead.lead_number} in Kunden umwandeln',
+            'title': _('Lead %(lead_number)s in Kunden umwandeln') % {'lead_number': lead.lead_number},
             'form': form,
             'cancel_url': reverse('ns_admin:lead_detail', args=[lead.pk]),
         },
@@ -673,7 +677,7 @@ def customers(request):
     export = _grid_export(
         request,
         grid,
-        [('customer_number', 'Kundennummer'), ('name', 'Kunde'), ('email', 'E-Mail'), ('status', 'Status')],
+        [('customer_number', _('Kundennummer')), ('name', _('Kunde')), ('email', _('E-Mail')), ('status', _('Status'))],
         'promptmaster-kunden.csv',
     )
     if export:
@@ -682,16 +686,16 @@ def customers(request):
         request,
         'ns_admin/grid.html',
         {
-            'title': 'Kunden',
+            'title': _('Kunden'),
             'grid': grid,
             'columns': [
-                ('customer_number', 'Kundennummer', 'number'),
-                ('name', 'Kunde', 'name'),
-                ('email', 'E-Mail', 'email'),
-                ('status', 'Status', 'status'),
+                ('customer_number', _('Kundennummer'), 'number'),
+                ('name', _('Kunde'), 'name'),
+                ('email', _('E-Mail'), 'email'),
+                ('status', _('Status'), 'status'),
             ],
             'detail_route': 'ns_admin:customer_detail',
-            'filter_options': [('status', 'Status', Company.STATUS), ('country', 'Land', [('DE', 'Deutschland')])],
+            'filter_options': [('status', _('Status'), Company.STATUS), ('country', _('Land'), [('DE', _('Deutschland'))])],
             'export_enabled': True,
             'customer_tabs': True,
             'customer_type': 'company',
@@ -712,7 +716,7 @@ def private_customers(request):
     export = _grid_export(
         request,
         grid,
-        [('customer_number', 'Kundennummer'), ('user.full_name', 'Name'), ('user.email', 'E-Mail'), ('country', 'Land')],
+        [('customer_number', _('Kundennummer')), ('user.full_name', _('Name')), ('user.email', _('E-Mail')), ('country', _('Land'))],
         'promptmaster-privatkunden.csv',
     )
     if export:
@@ -721,16 +725,16 @@ def private_customers(request):
         request,
         'ns_admin/grid.html',
         {
-            'title': 'Privatkunden',
+            'title': _('Privatkunden'),
             'grid': grid,
             'columns': [
-                ('customer_number', 'Kundennummer', 'number'),
-                ('user', 'Kunde', 'name'),
-                ('user.email', 'E-Mail', 'email'),
-                ('country', 'Land', 'country'),
+                ('customer_number', _('Kundennummer'), 'number'),
+                ('user', _('Kunde'), 'name'),
+                ('user.email', _('E-Mail'), 'email'),
+                ('country', _('Land'), 'country'),
             ],
             'detail_route': 'ns_admin:private_customer_detail',
-            'filter_options': [('country', 'Land', [('DE', 'Deutschland')])],
+            'filter_options': [('country', _('Land'), [('DE', _('Deutschland'))])],
             'export_enabled': True,
             'customer_tabs': True,
             'customer_type': 'private',
@@ -782,7 +786,7 @@ def private_customer_portal_preview(request, pk):
         'preview_kind': 'private',
         'preview_section': preview_section,
         'preview_title': user.full_name or user.email,
-        'preview_subtitle': f'{profile.customer_number} · Privatkonto',
+        'preview_subtitle': f'{profile.customer_number} · {_("Privatkonto")}',
         'preview_user': user,
         'preview_company': None,
         'preview_profile': profile,
@@ -806,7 +810,7 @@ def private_customer_portal_preview(request, pk):
 def private_customer_licenses(request, pk):
     profile = _private_customer(request, pk)
     grid = DataGrid(request, _license_admin_queryset(profile.user.owned_licenses.all()), search_fields=('license_number', 'product__name', 'license_holder_name', 'license_holder_email'), sort_fields={'number':'license_number','name':'license_holder_name','product':'product__name','expiry':'valid_until','status':'status'}, default_sort='valid_until', filters={'status':'status'}).build()
-    return render(request, 'ns_admin/private_customer_grid.html', {'profile': profile, 'title':'Lizenzen', 'kind':'licenses', 'grid':grid, 'filter_options':[('status','Status',License.STATUS)]})
+    return render(request, 'ns_admin/private_customer_grid.html', {'profile': profile, 'title':_('Lizenzen'), 'kind':'licenses', 'grid':grid, 'filter_options':[('status',_('Status'),License.STATUS)]})
 
 
 @staff_perm('customers.read')
@@ -824,7 +828,7 @@ def private_customer_devices(request, pk):
         'ns_admin/private_customer_grid.html',
         {
             'profile': profile,
-            'title': 'Geräte',
+            'title': _('Geräte'),
             'kind': 'devices',
             'grid': grid,
             'filter_options': [],
@@ -844,7 +848,7 @@ def private_customer_device_revoke(request, pk, device_id):
         user=profile.user,
     )
     revoke_device(device, request.user, request=request)
-    messages.success(request, 'Gerät wurde widerrufen.')
+    messages.success(request, _("Gerät wurde widerrufen."))
     return redirect('ns_admin:private_customer_devices', pk=profile.pk)
 
 
@@ -852,14 +856,14 @@ def private_customer_device_revoke(request, pk, device_id):
 def private_customer_orders(request, pk):
     profile = _private_customer(request, pk)
     grid = DataGrid(request, profile.user.private_orders.all(), search_fields=('order_number',), sort_fields={'number':'order_number','date':'created_at','amount':'gross_total','status':'status'}, default_sort='-created_at', filters={'status':'status'}).build()
-    return render(request, 'ns_admin/private_customer_grid.html', {'profile': profile, 'title':'Bestellungen', 'kind':'orders', 'grid':grid, 'filter_options':[('status','Status',Order.STATUS)]})
+    return render(request, 'ns_admin/private_customer_grid.html', {'profile': profile, 'title':_('Bestellungen'), 'kind':'orders', 'grid':grid, 'filter_options':[('status',_('Status'),Order.STATUS)]})
 
 
 @staff_perm('customers.read', 'payments.read')
 def private_customer_payments(request, pk):
     profile = _private_customer(request, pk)
     grid = DataGrid(request, Payment.objects.filter(order__private_user=profile.user).select_related('order'), search_fields=('provider_payment_id','order__order_number'), sort_fields={'date':'created_at','payment':'provider_payment_id','order':'order__order_number','amount':'amount','status':'status'}, default_sort='-created_at', filters={'status':'status'}).build()
-    return render(request, 'ns_admin/private_customer_grid.html', {'profile': profile, 'title':'Zahlungen', 'kind':'payments', 'grid':grid, 'filter_options':[('status','Status',PAYMENT_STATUS_CHOICES)]})
+    return render(request, 'ns_admin/private_customer_grid.html', {'profile': profile, 'title':_('Zahlungen'), 'kind':'payments', 'grid':grid, 'filter_options':[('status',_('Status'),PAYMENT_STATUS_CHOICES)]})
 
 
 @staff_perm('customers.read', 'email.read')
@@ -875,7 +879,7 @@ def private_customer_emails(request, pk):
         default_sort='-created_at',
         filters={'status': 'status'},
     ).build()
-    return render(request, 'ns_admin/private_customer_grid.html', {'profile': profile, 'title':'E-Mail-Historie', 'kind':'emails', 'grid':grid, 'filter_options':[('status','Status',EMAIL_STATUS_CHOICES)]})
+    return render(request, 'ns_admin/private_customer_grid.html', {'profile': profile, 'title':_('E-Mail-Historie'), 'kind':'emails', 'grid':grid, 'filter_options':[('status',_('Status'),EMAIL_STATUS_CHOICES)]})
 
 
 @staff_perm('customers.read', 'audit.read')
@@ -921,7 +925,7 @@ def private_customer_audit(request, pk):
         sort_fields={'time': 'created_at', 'actor': 'actor__email', 'action': 'action', 'object': 'object_type'},
         default_sort='-created_at',
     ).build()
-    return render(request, 'ns_admin/private_customer_grid.html', {'profile': profile, 'title':'Audit', 'kind':'audit', 'grid':grid, 'filter_options':[]})
+    return render(request, 'ns_admin/private_customer_grid.html', {'profile': profile, 'title':_('Audit'), 'kind':'audit', 'grid':grid, 'filter_options':[]})
 
 
 def _customer(request, pk):
@@ -976,7 +980,7 @@ def customer_company(request, pk):
                 {'changes': changes},
                 request=request,
             )
-        messages.success(request, 'Unternehmensdaten gespeichert.')
+        messages.success(request, _("Unternehmensdaten gespeichert."))
         return redirect('ns_admin:customer_company', pk=saved.pk)
 
     return render(
@@ -988,58 +992,99 @@ def customer_company(request, pk):
 
 @staff_perm('customers.read')
 def customer_portal_preview(request, pk):
+    """Read-only, tenant-scoped customer portal snapshot for a selected account.
+
+    Mirrors actual customer portal authorization boundaries without logging in
+    as that account. Changes remain in existing audited staff admin endpoints.
+    """
     customer = _customer(request, pk)
     can_licenses = has_perm(request.user, 'licenses.read')
     can_orders = has_perm(request.user, 'orders.read')
-    allowed_sections = {'dashboard', 'team', 'licenses', 'devices', 'orders', 'company', 'more'}
-    preview_section = request.GET.get('section', 'dashboard')
-    if preview_section not in allowed_sections:
-        preview_section = 'dashboard'
-
-    licenses = (
-        customer.licenses.select_related('product').order_by('valid_until', 'license_number')
-        if can_licenses else None
-    )
+    can_write_customer = has_perm(request.user, 'customers.write')
     members = (
         customer.memberships.filter(active=True)
         .select_related('user')
         .order_by('user__last_name', 'user__first_name', 'user__email')
     )
-    devices = (
-        DeviceRegistration.objects.filter(
+    admin_member = members.filter(role='admin').first()
+    selected_member = admin_member or members.first()
+    requested_user = request.GET.get('user', '').strip()
+    if requested_user:
+        try:
+            user_uuid = UUID(requested_user)
+        except (ValueError, AttributeError):
+            user_uuid = None
+        if user_uuid is not None:
+            selected_member = members.filter(user_id=user_uuid).first() or selected_member
+
+    selected_user = selected_member.user if selected_member else None
+    as_company_admin = bool(selected_member and selected_member.role == 'admin')
+    allowed_sections = {'dashboard', 'licenses', 'devices', 'more', 'profile'}
+    if as_company_admin:
+        allowed_sections.update({'team', 'orders', 'company'})
+    preview_section = request.GET.get('section', 'dashboard')
+    if preview_section not in allowed_sections:
+        preview_section = 'dashboard'
+
+    licenses = customer.licenses.select_related('product')
+    if not as_company_admin:
+        licenses = (
+            licenses.filter(
+                assignments__user=selected_user,
+                assignments__ended_at__isnull=True,
+            ).distinct()
+            if selected_user is not None
+            else licenses.none()
+        )
+    if not can_licenses:
+        licenses = licenses.none()
+
+    devices = DeviceRegistration.objects.filter(
+        license__company=customer,
+        revoked_at__isnull=True,
+    )
+    if as_company_admin:
+        devices = devices.filter(
             user__company_memberships__company=customer,
             user__company_memberships__active=True,
-            license__company=customer,
-            revoked_at__isnull=True,
         )
-        .select_related('user', 'license')
-        .distinct()
-        .order_by('-last_seen_at')
-    )
-    orders = (
-        customer.orders.prefetch_related('payments').order_by('-created_at')
-        if can_orders else None
-    )
+    elif selected_user is not None:
+        devices = devices.filter(user=selected_user)
+    else:
+        devices = devices.none()
+    devices = devices.select_related('user', 'license').distinct().order_by('-last_seen_at')
+
+    orders = customer.orders.prefetch_related('payments').order_by('-created_at')
+    if not as_company_admin or not can_orders:
+        orders = orders.none()
     now = timezone.now()
-    admin_membership = members.filter(role='admin').first()
     return render(request, 'ns_admin/customer_portal_preview.html', {
         'preview_kind': 'company',
         'preview_section': preview_section,
         'preview_title': customer.name,
-        'preview_subtitle': f'{customer.customer_number} · Firmenkonto',
-        'preview_user': admin_membership.user if admin_membership else None,
+        'preview_subtitle': f'{customer.customer_number} · {_("Firmenkonto")}',
+        'preview_user': selected_user,
+        'preview_user_id': str(selected_user.pk) if selected_user else '',
+        'preview_selected_role': selected_member.get_role_display() if selected_member else '',
+        'preview_is_company_admin': as_company_admin,
+        'preview_selectable_members': members,
+        'preview_can_write_customer': can_write_customer,
+        'preview_can_view_licenses': can_licenses,
+        'preview_can_view_orders': can_orders and as_company_admin,
         'preview_company': customer,
-        'preview_members': members[:20],
-        'preview_licenses': licenses[:20] if licenses is not None else None,
-        'preview_devices': devices[:20],
-        'preview_orders': orders[:20] if orders is not None else None,
+        'preview_members': customer.memberships.select_related('user').order_by(
+            'user__last_name', 'user__first_name', 'user__email'
+        ) if as_company_admin else customer.memberships.none(),
+        'preview_licenses': licenses.order_by('valid_until', 'license_number')[:100],
+        'preview_devices': devices[:100],
+        'preview_orders': orders[:100],
         'license_total': licenses.count() if can_licenses else None,
         'license_free': licenses.filter(status='free', valid_until__gt=now).count() if can_licenses else None,
         'license_active': licenses.filter(status='active', valid_until__gt=now).count() if can_licenses else None,
         'expiring_30': licenses.filter(valid_until__gt=now, valid_until__lte=now + timedelta(days=30)).count() if can_licenses else None,
         'device_count': devices.count(),
-        'order_count': orders.count() if can_orders else None,
-        'member_count': members.count(),
+        'order_count': orders.count() if can_orders and as_company_admin else None,
+        'member_count': members.count() if as_company_admin else None,
         'back_route': 'ns_admin:customer_detail',
         'back_pk': customer.pk,
     })
@@ -1049,7 +1094,7 @@ def customer_portal_preview(request, pk):
 def customer_admin_invite(request, pk):
     customer = _customer(request, pk)
     if customer.memberships.filter(active=True, role='admin').exists():
-        messages.info(request, 'Für dieses Unternehmen existiert bereits ein aktiver Firmenadministrator.')
+        messages.info(request, _("Für dieses Unternehmen existiert bereits ein aktiver Firmenadministrator."))
         return redirect('ns_admin:customer_users', pk=customer.pk)
 
     pending = (
@@ -1088,7 +1133,7 @@ def customer_admin_invite(request, pk):
                 locked = Company.objects.select_for_update().get(pk=customer.pk)
                 if locked.memberships.filter(active=True, role='admin').exists():
                     raise ValidationError(
-                        'Für dieses Unternehmen existiert bereits ein aktiver Firmenadministrator.'
+                        _("Für dieses Unternehmen existiert bereits ein aktiver Firmenadministrator.")
                     )
                 replaced_invites = 0
                 for pending_invite in pending_admin_invites:
@@ -1128,7 +1173,7 @@ def customer_admin_invite(request, pk):
         else:
             messages.success(
                 request,
-                'Einladung für den Firmenadministrator wurde gesendet.',
+                _("Einladung für den Firmenadministrator wurde gesendet."),
             )
             return redirect('ns_admin:customer_users', pk=customer.pk)
 
@@ -1136,7 +1181,7 @@ def customer_admin_invite(request, pk):
         request,
         'ns_admin/form.html',
         {
-            'title': f'Firmenadministrator einladen · {customer.name}',
+            'title': _('Firmenadministrator einladen · %(company)s') % {'company': customer.name},
             'form': form,
             'cancel_url': reverse('ns_admin:customer_users', args=[customer.pk]),
         },
@@ -1159,12 +1204,12 @@ def customer_users(request, pk):
         'ns_admin/customer_grid.html',
         {
             'customer': customer,
-            'title': 'Benutzer',
+            'title': _('Benutzer'),
             'grid': grid,
             'kind': 'users',
             'filter_options': [
-                ('role', 'Rolle', Membership.ROLE),
-                ('active', 'Status', [('True', 'Aktiv'), ('False', 'Inaktiv')]),
+                ('role', _('Rolle'), Membership.ROLE),
+                ('active', _('Status'), [('True', _('Aktiv')), ('False', _('Inaktiv'))]),
             ],
             'can_manage_users': has_perm(request.user, 'customers.write'),
             'has_active_admin': customer.memberships.filter(active=True, role='admin').exists(),
@@ -1194,7 +1239,7 @@ def customer_admin_transfer(request, pk, user_id):
         active=True,
     )
     if target.pk == current_admin.pk:
-        messages.info(request, 'Dieser Benutzer ist bereits Firmenadministrator.')
+        messages.info(request, _("Dieser Benutzer ist bereits Firmenadministrator."))
         return redirect('ns_admin:customer_users', pk=customer.pk)
 
     form = SupportAdminTransferForm(request.POST or None)
@@ -1216,7 +1261,7 @@ def customer_admin_transfer(request, pk, user_id):
         else:
             messages.success(
                 request,
-                f'Firmenadministrator wurde auf {target.user.email} übertragen.',
+                _('Firmenadministrator wurde auf %(email)s übertragen.') % {'email': target.user.email},
             )
             return redirect('ns_admin:customer_users', pk=customer.pk)
 
@@ -1224,7 +1269,7 @@ def customer_admin_transfer(request, pk, user_id):
         request,
         'ns_admin/form.html',
         {
-            'title': f'Firmenadministrator übertragen · {target.user.email}',
+            'title': _('Firmenadministrator übertragen · %(email)s') % {'email': target.user.email},
             'form': form,
             'cancel_url': reverse('ns_admin:customer_users', args=[customer.pk]),
         },
@@ -1254,7 +1299,7 @@ def customer_user_deactivate(request, pk, user_id):
     else:
         messages.success(
             request,
-            'Benutzer deaktiviert; Lizenz- und Gerätezugänge wurden freigegeben.',
+            _("Benutzer deaktiviert; Lizenz- und Gerätezugänge wurden freigegeben."),
         )
     return redirect('ns_admin:customer_users', pk=customer.pk)
 
@@ -1270,7 +1315,7 @@ def customer_licenses(request, pk):
         default_sort='valid_until',
         filters={'status': 'status'},
     ).build()
-    return render(request, 'ns_admin/customer_grid.html', {'customer': customer, 'title': 'Lizenzen', 'grid': grid, 'kind': 'licenses', 'filter_options': [('status', 'Status', License.STATUS)]})
+    return render(request, 'ns_admin/customer_grid.html', {'customer': customer, 'title': _('Lizenzen'), 'grid': grid, 'kind': 'licenses', 'filter_options': [('status', _('Status'), License.STATUS)]})
 
 
 @staff_perm('customers.read')
@@ -1292,7 +1337,7 @@ def customer_devices(request, pk):
         'ns_admin/customer_grid.html',
         {
             'customer': customer,
-            'title': 'Geräte',
+            'title': _('Geräte'),
             'grid': grid,
             'kind': 'devices',
             'filter_options': [],
@@ -1314,7 +1359,7 @@ def customer_device_revoke(request, pk, device_id):
         license__company=customer,
     )
     revoke_device(device, request.user, request=request)
-    messages.success(request, 'Gerät wurde widerrufen.')
+    messages.success(request, _("Gerät wurde widerrufen."))
     return redirect('ns_admin:customer_devices', pk=customer.pk)
 
 
@@ -1329,7 +1374,7 @@ def customer_orders(request, pk):
         default_sort='-created_at',
         filters={'status': 'status'},
     ).build()
-    return render(request, 'ns_admin/customer_grid.html', {'customer': customer, 'title': 'Bestellungen', 'grid': grid, 'kind': 'orders', 'filter_options': [('status', 'Status', Order.STATUS)]})
+    return render(request, 'ns_admin/customer_grid.html', {'customer': customer, 'title': _('Bestellungen'), 'grid': grid, 'kind': 'orders', 'filter_options': [('status', _('Status'), Order.STATUS)]})
 
 
 @staff_perm('customers.read', 'payments.read')
@@ -1343,7 +1388,7 @@ def customer_payments(request, pk):
         default_sort='-created_at',
         filters={'status': 'status'},
     ).build()
-    return render(request, 'ns_admin/customer_grid.html', {'customer': customer, 'title': 'Zahlungen', 'grid': grid, 'kind': 'payments', 'filter_options': [('status','Status',PAYMENT_STATUS_CHOICES)]})
+    return render(request, 'ns_admin/customer_grid.html', {'customer': customer, 'title': _('Zahlungen'), 'grid': grid, 'kind': 'payments', 'filter_options': [('status',_('Status'),PAYMENT_STATUS_CHOICES)]})
 
 
 @staff_perm('customers.read', 'email.read')
@@ -1359,7 +1404,7 @@ def customer_emails(request, pk):
         default_sort='-created_at',
         filters={'status': 'status'},
     ).build()
-    return render(request, 'ns_admin/customer_grid.html', {'customer': customer, 'title': 'E-Mail-Historie', 'grid': grid, 'kind': 'emails', 'filter_options': [('status','Status',EMAIL_STATUS_CHOICES)]})
+    return render(request, 'ns_admin/customer_grid.html', {'customer': customer, 'title': _('E-Mail-Historie'), 'grid': grid, 'kind': 'emails', 'filter_options': [('status',_('Status'),EMAIL_STATUS_CHOICES)]})
 
 
 @staff_perm('customers.read', 'legal.read')
@@ -1457,7 +1502,7 @@ def customer_audit(request, pk):
         sort_fields={'time': 'created_at', 'actor': 'actor__email', 'action': 'action', 'object': 'object_type'},
         default_sort='-created_at',
     ).build()
-    return render(request, 'ns_admin/customer_grid.html', {'customer': customer, 'title': 'Audit', 'grid': grid, 'kind': 'audit', 'filter_options': []})
+    return render(request, 'ns_admin/customer_grid.html', {'customer': customer, 'title': _('Audit'), 'grid': grid, 'kind': 'audit', 'filter_options': []})
 
 
 @staff_perm('licenses.read')
@@ -1471,10 +1516,10 @@ def licenses(request):
         filters={'status': 'status', 'product': 'product__code'},
     ).build()
     products = [(p.code, p.name) for p in Product.objects.filter(active=True).order_by('name')]
-    export = _grid_export(request, grid, [('license_number', 'Lizenz-ID'), ('license_holder_name', 'Name'), ('company.name', 'Unternehmen'), ('owner_user.email', 'Privatkunde'), ('product.name', 'Produkt'), ('valid_until', 'Ablauf'), ('status', 'Status')], 'promptmaster-lizenzen.csv')
+    export = _grid_export(request, grid, [('license_number', _('Lizenz-ID')), ('license_holder_name', _('Name')), ('company.name', _('Unternehmen')), ('owner_user.email', _('Privatkunde')), ('product.name', _('Produkt')), ('valid_until', _('Ablauf')), ('status', _('Status'))], 'promptmaster-lizenzen.csv')
     if export:
         return export
-    return render(request, 'ns_admin/grid.html', {'title': 'Lizenzen', 'grid': grid, 'columns': [('license_number', 'Lizenz-ID', 'number'), ('license_holder_name', 'Name', 'name'), ('company', 'Kunde', 'company'), ('product', 'Produkt', 'product'), ('valid_until', 'Ablauf', 'expiry'), ('status', 'Status', 'status')], 'detail_route': 'ns_admin:license_detail', 'filter_options': [('status', 'Status', License.STATUS), ('product', 'Produkt', products)], 'export_enabled': True})
+    return render(request, 'ns_admin/grid.html', {'title': _('Lizenzen'), 'grid': grid, 'columns': [('license_number', _('Lizenz-ID'), 'number'), ('license_holder_name', _('Name'), 'name'), ('company', _('Kunde'), 'company'), ('product', _('Produkt'), 'product'), ('valid_until', _('Ablauf'), 'expiry'), ('status', _('Status'), 'status')], 'detail_route': 'ns_admin:license_detail', 'filter_options': [('status', _('Status'), License.STATUS), ('product', _('Produkt'), products)], 'export_enabled': True})
 
 
 @staff_perm('licenses.read')
@@ -1543,7 +1588,7 @@ def license_assign(request, pk):
     except ValidationError as exc:
         messages.error(request, exc.messages[0])
     else:
-        messages.success(request, f'Lizenz wurde {member.user.email} zugewiesen.')
+        messages.success(request, _('Lizenz wurde %(email)s zugewiesen.') % {'email': member.user.email})
     return redirect('ns_admin:license_detail', pk=license_obj.pk)
 
 
@@ -1553,10 +1598,10 @@ def license_release(request, pk):
         raise PermissionDenied
     license_obj = get_object_or_404(License, pk=pk)
     if not license_obj.assignments.filter(ended_at__isnull=True).exists():
-        messages.info(request, 'Die Lizenz ist bereits frei.')
+        messages.info(request, _("Die Lizenz ist bereits frei."))
         return redirect('ns_admin:license_detail', pk=license_obj.pk)
     release_license(license_obj, request.user)
-    messages.success(request, 'Lizenzzuweisung wurde freigegeben.')
+    messages.success(request, _("Lizenzzuweisung wurde freigegeben."))
     return redirect('ns_admin:license_detail', pk=license_obj.pk)
 
 
@@ -1568,10 +1613,10 @@ def license_block_toggle(request, pk):
     try:
         if license_obj.status == 'blocked':
             unblock_license(license_obj, request.user, request=request)
-            messages.success(request, 'Lizenz wurde entsperrt.')
+            messages.success(request, _("Lizenz wurde entsperrt."))
         else:
             block_license(license_obj, request.user, request=request)
-            messages.success(request, 'Lizenz wurde gesperrt; vorhandene Gerätezugänge wurden widerrufen.')
+            messages.success(request, _("Lizenz wurde gesperrt; vorhandene Gerätezugänge wurden widerrufen."))
     except ValidationError as exc:
         messages.error(request, exc.messages[0])
     return redirect('ns_admin:license_detail', pk=pk)
@@ -1591,11 +1636,11 @@ def license_refund(request, pk, term_id):
         except (ValidationError, Exception) as exc:
             # Provider errors are intentionally surfaced as a safe generic UI
             # message while detailed stack traces remain in server logs.
-            messages.error(request, str(exc) if isinstance(exc, ValidationError) else 'Erstattung konnte nicht an Mollie übermittelt werden.')
+            messages.error(request, str(exc) if isinstance(exc, ValidationError) else _('Erstattung konnte nicht an Mollie übermittelt werden.'))
         else:
-            messages.success(request, 'Erstattung wurde an Mollie übermittelt.')
+            messages.success(request, _("Erstattung wurde an Mollie übermittelt."))
     else:
-        messages.error(request, 'Bestätigung für die Erstattung fehlt.')
+        messages.error(request, _("Bestätigung für die Erstattung fehlt."))
     return redirect('ns_admin:license_detail', pk=pk)
 
 
@@ -1622,10 +1667,10 @@ def orders(request):
         default_sort='-created_at',
         filters={'status': 'status'},
     ).build()
-    export = _grid_export(request, grid, [('order_number', 'Bestellung'), ('company.name', 'Unternehmen'), ('private_user.email', 'Privatkunde'), ('gross_total', 'Betrag'), ('status', 'Status'), ('created_at', 'Datum')], 'promptmaster-bestellungen.csv')
+    export = _grid_export(request, grid, [('order_number', _('Bestellung')), ('company.name', _('Unternehmen')), ('private_user.email', _('Privatkunde')), ('gross_total', _('Betrag')), ('status', _('Status')), ('created_at', _('Datum'))], 'promptmaster-bestellungen.csv')
     if export:
         return export
-    return render(request, 'ns_admin/grid.html', {'title': 'Bestellungen', 'grid': grid, 'columns': [('order_number', 'Bestellung', 'number'), ('customer_display', 'Kunde', 'customer'), ('gross_total', 'Betrag', 'amount'), ('status', 'Status', 'status'), ('created_at', 'Datum', 'date')], 'detail_route': 'ns_admin:order_detail', 'filter_options': [('status', 'Status', Order.STATUS)], 'export_enabled': True})
+    return render(request, 'ns_admin/grid.html', {'title': _('Bestellungen'), 'grid': grid, 'columns': [('order_number', _('Bestellung'), 'number'), ('customer_display', _('Kunde'), 'customer'), ('gross_total', _('Betrag'), 'amount'), ('status', _('Status'), 'status'), ('created_at', _('Datum'), 'date')], 'detail_route': 'ns_admin:order_detail', 'filter_options': [('status', _('Status'), Order.STATUS)], 'export_enabled': True})
 
 
 @staff_perm('orders.read')
@@ -1647,7 +1692,7 @@ def payments(request):
         'ns_admin/payments.html',
         {
             'grid': grid,
-            'filter_options': [('status','Status',PAYMENT_STATUS_CHOICES)],
+            'filter_options': [('status',_('Status'),PAYMENT_STATUS_CHOICES)],
             'payment_counts': {
                 'paid': Payment.objects.filter(status='paid').count(),
                 'open': Payment.objects.filter(status__in=['created', 'open', 'pending', 'authorized']).count(),
@@ -1675,9 +1720,9 @@ def product_new(request):
     if request.method == 'POST' and form.is_valid():
         saved = form.save()
         write_audit(request.user, 'product.created', saved, {'code': saved.code}, request=request)
-        messages.success(request, 'Produkt angelegt. Legen Sie anschließend Preisversionen an.')
+        messages.success(request, _("Produkt angelegt. Legen Sie anschließend Preisversionen an."))
         return redirect('ns_admin:product_edit', pk=saved.pk)
-    return render(request, 'ns_admin/form.html', {'title': 'Produkt anlegen', 'form': form, 'cancel_url': reverse('ns_admin:products')})
+    return render(request, 'ns_admin/form.html', {'title': _('Produkt anlegen'), 'form': form, 'cancel_url': reverse('ns_admin:products')})
 
 
 @staff_perm('products.read')
@@ -1693,9 +1738,9 @@ def feature_edit(request, pk=None):
     if request.method == 'POST' and form.is_valid():
         saved = form.save()
         write_audit(request.user, 'feature.saved', saved, {'code': saved.code}, request=request)
-        messages.success(request, 'Feature gespeichert.')
+        messages.success(request, _("Feature gespeichert."))
         return redirect('ns_admin:features')
-    return render(request, 'ns_admin/form.html', {'title':'Feature bearbeiten' if feature else 'Feature anlegen', 'form':form, 'cancel_url': reverse('ns_admin:features')})
+    return render(request, 'ns_admin/form.html', {'title': _('Feature bearbeiten') if feature else _('Feature anlegen'), 'form':form, 'cancel_url': reverse('ns_admin:features')})
 
 
 @staff_perm('products.write')
@@ -1705,7 +1750,7 @@ def product_edit(request, pk):
     if request.method == 'POST' and form.is_valid():
         saved = form.save()
         write_audit(request.user, 'product.updated', saved, {'fields': list(form.changed_data)}, request=request)
-        messages.success(request, 'Produkt gespeichert.')
+        messages.success(request, _("Produkt gespeichert."))
         return redirect('ns_admin:product_edit', pk=pk)
     return render(request, 'ns_admin/product_edit.html', {'product': product, 'form': form, 'prices': product.prices.order_by('-valid_from')})
 
@@ -1721,9 +1766,9 @@ def product_price_add(request, pk):
             form.add_error(None, exc.messages[0])
         else:
             write_audit(request.user, 'product.price_created', price, {'gross_amount': str(price.gross_amount), 'type': price.price_type}, request=request)
-            messages.success(request, 'Neue Preisversion angelegt.')
+            messages.success(request, _("Neue Preisversion angelegt."))
             return redirect('ns_admin:product_edit', pk=pk)
-    return render(request, 'ns_admin/form.html', {'title': f'Preisversion · {product.name}', 'form': form, 'cancel_url': reverse('ns_admin:product_edit', args=[product.pk])})
+    return render(request, 'ns_admin/form.html', {'title': _('Preisversion · %(product)s') % {'product': product.name}, 'form': form, 'cancel_url': reverse('ns_admin:product_edit', args=[product.pk])})
 
 
 @staff_perm('email.read')
@@ -1787,9 +1832,9 @@ def email_template_edit(request, pk):
     if request.method == 'POST' and form.is_valid():
         saved = form.save()
         write_audit(request.user, 'email_template.updated', saved, {'fields': list(form.changed_data)}, request=request)
-        messages.success(request, 'E-Mail-Vorlage gespeichert.')
+        messages.success(request, _("E-Mail-Vorlage gespeichert."))
         return redirect('ns_admin:email')
-    return render(request, 'ns_admin/form.html', {'title': f'E-Mail-Vorlage · {template.code}', 'form': form, 'cancel_url': reverse('ns_admin:email')})
+    return render(request, 'ns_admin/form.html', {'title': _('E-Mail-Vorlage · %(code)s') % {'code': template.code}, 'form': form, 'cancel_url': reverse('ns_admin:email')})
 
 
 @staff_perm('email.read')
@@ -1812,7 +1857,7 @@ def email_log(request):
     return render(
         request,
         'ns_admin/email_log.html',
-        {'grid': grid, 'filter_options': [('status', 'Status', EMAIL_STATUS_CHOICES)]},
+        {'grid': grid, 'filter_options': [('status', _('Status'), EMAIL_STATUS_CHOICES)]},
     )
 
 
@@ -1869,9 +1914,9 @@ def mollie_config(request):
             description='Cleared after Mollie configuration changes.',
         )
         write_audit(request.user, 'mollie.configuration_updated', request.user, {'profile_id': form.cleaned_data['profile_id'], 'api_key': '[REDACTED]' if form.cleaned_data['api_key'] else 'unchanged'}, request=request)
-        messages.success(request, 'Mollie-Konfiguration gespeichert.')
+        messages.success(request, _("Mollie-Konfiguration gespeichert."))
         return redirect('ns_admin:mollie')
-    return render(request, 'ns_admin/form.html', {'title': 'Mollie konfigurieren', 'form': form, 'cancel_url': reverse('ns_admin:mollie')})
+    return render(request, 'ns_admin/form.html', {'title': _('Mollie konfigurieren'), 'form': form, 'cancel_url': reverse('ns_admin:mollie')})
 
 
 @staff_perm('settings.write')
@@ -1889,14 +1934,14 @@ def mollie_checkout_disable(request):
         {'checkout_enabled': False},
         request=request,
     )
-    messages.success(request, 'Mollie-Produktiv-Checkout wurde gesperrt.')
+    messages.success(request, _("Mollie-Produktiv-Checkout wurde gesperrt."))
     return redirect('ns_admin:mollie')
 
 
 @staff_perm('payments.read')
 def mollie_events(request):
     grid = DataGrid(request, MollieEvent.objects.select_related('payment'), search_fields=('event_key', 'payment__provider_payment_id', 'provider_status', 'error'), sort_fields={'date': 'created_at', 'payment': 'payment__provider_payment_id', 'status': 'provider_status', 'processed': 'processed_at', 'retries': 'retry_count', 'error': 'error'}, default_sort='-created_at', filters={'provider_status': 'provider_status'}).build()
-    return render(request, 'ns_admin/mollie_events.html', {'grid': grid, 'filter_options': [('provider_status','Status',MOLLIE_STATUS_CHOICES)]})
+    return render(request, 'ns_admin/mollie_events.html', {'grid': grid, 'filter_options': [('provider_status',_('Status'),MOLLIE_STATUS_CHOICES)], 'mollie_status_labels': dict(MOLLIE_STATUS_CHOICES)})
 
 
 @staff_perm()
@@ -2000,19 +2045,19 @@ def ops_database(request):
 @staff_perm('ops.read')
 def ops_backups(request):
     grid = DataGrid(request, BackupRecord.objects.all(), search_fields=('status', 'provider_ref'), sort_fields={'status': 'status', 'date': 'finished_at', 'size': 'size_bytes', 'reference': 'provider_ref'}, default_sort='-finished_at', filters={'status': 'status'}).build()
-    return render(request, 'ns_admin/ops_grid.html', {'title': 'Backups', 'grid': grid, 'kind': 'backups', 'filter_options': []})
+    return render(request, 'ns_admin/ops_grid.html', {'title': _('Backups'), 'grid': grid, 'kind': 'backups', 'filter_options': []})
 
 
 @staff_perm('ops.read')
 def ops_restore_tests(request):
     grid = DataGrid(request, RestoreTest.objects.all(), search_fields=('status', 'backup_ref'), sort_fields={'status': 'status', 'date': 'started_at', 'finished': 'finished_at', 'backup': 'backup_ref'}, default_sort='-started_at', filters={'status': 'status'}).build()
-    return render(request, 'ns_admin/ops_grid.html', {'title': 'Restore-Tests', 'grid': grid, 'kind': 'restores', 'filter_options': []})
+    return render(request, 'ns_admin/ops_grid.html', {'title': _('Restore-Tests'), 'grid': grid, 'kind': 'restores', 'filter_options': []})
 
 
 @staff_perm('ops.read')
 def ops_alerts(request):
     grid = DataGrid(request, SystemAlert.objects.all(), search_fields=('code', 'message'), sort_fields={'code': 'code', 'date': 'created_at', 'severity': 'severity', 'message': 'message', 'active': 'active'}, default_sort='-created_at', filters={'severity': 'severity', 'active': 'active'}).build()
-    return render(request, 'ns_admin/ops_grid.html', {'title': 'Systemwarnungen', 'grid': grid, 'kind': 'alerts', 'filter_options': [('severity', 'Schweregrad', SystemAlert.SEVERITY), ('active', 'Status', [('True', 'Aktiv'), ('False', 'Erledigt')])]})
+    return render(request, 'ns_admin/ops_grid.html', {'title': _('Systemwarnungen'), 'grid': grid, 'kind': 'alerts', 'filter_options': [('severity', _('Schweregrad'), SystemAlert.SEVERITY), ('active', _('Status'), [('True', _('Aktiv')), ('False', _('Erledigt'))])]})
 
 
 @staff_perm('api.read')
@@ -2044,7 +2089,7 @@ def service_account_create(request):
             'ns_admin/service_account_token.html',
             {'account': account, 'token': raw, 'token_action': 'erstellt'},
         )
-    return render(request, 'ns_admin/form.html', {'title': 'Service Account anlegen', 'form': form, 'cancel_url': reverse('ns_admin:api')})
+    return render(request, 'ns_admin/form.html', {'title': _('Service Account anlegen'), 'form': form, 'cancel_url': reverse('ns_admin:api')})
 
 
 @staff_perm('api.write')
@@ -2054,7 +2099,7 @@ def service_account_rotate(request, pk):
         raise PermissionDenied
     account = get_object_or_404(ServiceAccount.objects.select_for_update(), pk=pk)
     if not account.active:
-        messages.error(request, 'Ein gesperrter Service Account kann nicht rotiert werden.')
+        messages.error(request, _("Ein gesperrter Service Account kann nicht rotiert werden."))
         return redirect('ns_admin:api')
     raw, hashed = token_pair()
     account.token_hash = hashed
@@ -2076,7 +2121,7 @@ def service_account_revoke(request, pk):
     account.active = False
     account.save(update_fields=['active', 'updated_at'])
     write_audit(request.user, 'service_account.revoked', account, {}, request=request)
-    messages.success(request, 'Service Account gesperrt.')
+    messages.success(request, _("Service Account gesperrt."))
     return redirect('ns_admin:api')
 
 
@@ -2117,19 +2162,19 @@ def legal_declarations(request):
         request,
         'ns_admin/grid.html',
         {
-            'title': 'Widerrufe & Kündigungen',
+            'title': _('Widerrufe & Kündigungen'),
             'grid': grid,
             'columns': [
-                ('submitted_at', 'Eingang', 'date'),
-                ('kind', 'Art', 'kind'),
-                ('name', 'Name', 'name'),
-                ('email', 'E-Mail', 'email'),
-                ('contract_reference', 'Vertragsbezug', 'reference'),
-                ('status', 'Status', 'status'),
+                ('submitted_at', _('Eingang'), 'date'),
+                ('kind', _('Art'), 'kind'),
+                ('name', _('Name'), 'name'),
+                ('email', _('E-Mail'), 'email'),
+                ('contract_reference', _('Vertragsbezug'), 'reference'),
+                ('status', _('Status'), 'status'),
             ],
             'filter_options': [
-                ('kind', 'Art', ConsumerContractDeclaration.KIND),
-                ('status', 'Status', ConsumerContractDeclaration.STATUS),
+                ('kind', _('Art'), ConsumerContractDeclaration.KIND),
+                ('status', _('Status'), ConsumerContractDeclaration.STATUS),
             ],
             'detail_route': 'ns_admin:legal_declaration_detail',
         },
@@ -2146,7 +2191,7 @@ def legal_declaration_detail(request, pk):
         status = (request.POST.get('status') or '').strip()
         allowed = {value for value, _label in ConsumerContractDeclaration.STATUS}
         if status not in allowed:
-            messages.error(request, 'Ungültiger Bearbeitungsstatus.')
+            messages.error(request, _("Ungültiger Bearbeitungsstatus."))
             return redirect('ns_admin:legal_declaration_detail', pk=declaration.pk)
         declaration.status = status
         declaration.internal_notes = (request.POST.get('internal_notes') or '').strip()[:10000]
@@ -2163,7 +2208,7 @@ def legal_declaration_detail(request, pk):
             {'kind': declaration.kind, 'status': status},
             request=request,
         )
-        messages.success(request, 'Verbrauchererklärung aktualisiert.')
+        messages.success(request, _("Verbrauchererklärung aktualisiert."))
         return redirect('ns_admin:legal_declaration_detail', pk=declaration.pk)
 
     return render(
@@ -2187,7 +2232,7 @@ def legal_documents(request):
         default_sort='doc_type',
         filters={'doc_type': 'doc_type', 'active': 'active'},
     ).build()
-    return render(request, 'ns_admin/legal_documents.html', {'grid': grid, 'filter_options': [('doc_type', 'Typ', LegalDocument.DOC_TYPES), ('active', 'Status', [('True', 'Aktiv'), ('False', 'Inaktiv')])]})
+    return render(request, 'ns_admin/legal_documents.html', {'grid': grid, 'filter_options': [('doc_type', _('Typ'), LegalDocument.DOC_TYPES), ('active', _('Status'), [('True', _('Aktiv')), ('False', _('Inaktiv'))])]})
 
 
 @staff_perm('legal.write')
@@ -2213,9 +2258,9 @@ def legal_document_edit(request, pk=None):
             saved.save()
             form.save_m2m()
         write_audit(request.user, 'legal_document.saved', saved, {'version': saved.version, 'active': saved.active}, request=request)
-        messages.success(request, 'Rechtsdokument gespeichert.')
+        messages.success(request, _("Rechtsdokument gespeichert."))
         return redirect('ns_admin:legal_documents')
-    return render(request, 'ns_admin/form.html', {'title': 'Rechtsdokument bearbeiten' if document else 'Rechtsdokument anlegen', 'form': form, 'cancel_url': reverse('ns_admin:legal_documents')})
+    return render(request, 'ns_admin/form.html', {'title': _('Rechtsdokument bearbeiten') if document else _('Rechtsdokument anlegen'), 'form': form, 'cancel_url': reverse('ns_admin:legal_documents')})
 
 
 @staff_perm('legal.read')
@@ -2228,7 +2273,7 @@ def retention_policies(request):
         default_sort='data_class',
         filters={'active': 'active'},
     ).build()
-    return render(request, 'ns_admin/legal_retention.html', {'grid': grid, 'filter_options': [('active', 'Status', [('True', 'Aktiv'), ('False', 'Inaktiv')])]})
+    return render(request, 'ns_admin/legal_retention.html', {'grid': grid, 'filter_options': [('active', _('Status'), [('True', _('Aktiv')), ('False', _('Inaktiv'))])]})
 
 
 @staff_perm('legal.write')
@@ -2238,9 +2283,9 @@ def retention_policy_edit(request, pk=None):
     if request.method == 'POST' and form.is_valid():
         saved = form.save()
         write_audit(request.user, 'retention_policy.saved', saved, {'data_class': saved.data_class, 'retain_days': saved.retain_days, 'active': saved.active}, request=request)
-        messages.success(request, 'Retention-Policy gespeichert.')
+        messages.success(request, _("Retention-Policy gespeichert."))
         return redirect('ns_admin:retention_policies')
-    return render(request, 'ns_admin/form.html', {'title': 'Retention-Policy bearbeiten' if policy else 'Retention-Policy anlegen', 'form': form, 'cancel_url': reverse('ns_admin:retention_policies')})
+    return render(request, 'ns_admin/form.html', {'title': _('Retention-Policy bearbeiten') if policy else _('Retention-Policy anlegen'), 'form': form, 'cancel_url': reverse('ns_admin:retention_policies')})
 
 
 @staff_perm('legal.read')
@@ -2253,7 +2298,7 @@ def deletion_requests(request):
         default_sort='-requested_at',
         filters={'status': 'status'},
     ).build()
-    return render(request, 'ns_admin/legal_deletions.html', {'grid': grid, 'filter_options': [('status','Status', DeletionRequest.STATUS)]})
+    return render(request, 'ns_admin/legal_deletions.html', {'grid': grid, 'filter_options': [('status',_('Status'), DeletionRequest.STATUS)]})
 
 
 @staff_perm('legal.write')
@@ -2267,7 +2312,7 @@ def deletion_request_process(request, pk):
     except ValidationError as exc:
         messages.error(request, exc.messages[0])
     else:
-        messages.success(request, 'Löschanfrage verarbeitet und Konto anonymisiert.')
+        messages.success(request, _("Löschanfrage verarbeitet und Konto anonymisiert."))
     return redirect('ns_admin:deletion_requests')
 
 
@@ -2282,9 +2327,9 @@ def deletion_request_reject(request, pk):
         except ValidationError as exc:
             form.add_error(None, exc.messages[0])
         else:
-            messages.success(request, 'Löschanfrage abgelehnt.')
+            messages.success(request, _("Löschanfrage abgelehnt."))
             return redirect('ns_admin:deletion_requests')
-    return render(request, 'ns_admin/form.html', {'title': 'Löschanfrage ablehnen', 'form': form, 'cancel_url': reverse('ns_admin:deletion_requests')})
+    return render(request, 'ns_admin/form.html', {'title': _('Löschanfrage ablehnen'), 'form': form, 'cancel_url': reverse('ns_admin:deletion_requests')})
 
 
 @staff_perm('support.read')
@@ -2316,7 +2361,7 @@ def support_requests(request):
     ).build()
     return render(request, 'ns_admin/support.html', {
         'grid': grid,
-        'filter_options': [('status','Status',SupportRequest.STATUS),('category','Kategorie',SupportRequest.CATEGORY)],
+        'filter_options': [('status',_('Status'),SupportRequest.STATUS),('category',_('Kategorie'),SupportRequest.CATEGORY)],
     })
 
 
@@ -2355,10 +2400,10 @@ def support_request_reply(request, pk):
     )
     body = (request.POST.get('message') or '').strip()
     if not body:
-        messages.error(request, 'Bitte eine Antwort eingeben.')
+        messages.error(request, _("Bitte eine Antwort eingeben."))
         return redirect('ns_admin:support_request_detail', pk=pk)
     if len(body) > 10000:
-        messages.error(request, 'Die Antwort darf höchstens 10.000 Zeichen enthalten.')
+        messages.error(request, _("Die Antwort darf höchstens 10.000 Zeichen enthalten."))
         return redirect('ns_admin:support_request_detail', pk=pk)
 
     result = add_staff_message(
@@ -2372,17 +2417,17 @@ def support_request_reply(request, pk):
     if result['mail_suppressed']:
         messages.success(
             request,
-            'Kundenantwort gespeichert. Für Demo-Adressen wurde keine E-Mail versendet.',
+            _("Kundenantwort gespeichert. Für Demo-Adressen wurde keine E-Mail versendet."),
         )
     elif result['mail_queued']:
         messages.success(
             request,
-            'Kundenantwort gespeichert und E-Mail-Benachrichtigung eingeplant.',
+            _("Kundenantwort gespeichert und E-Mail-Benachrichtigung eingeplant."),
         )
     else:
         messages.warning(
             request,
-            'Kundenantwort gespeichert, E-Mail-Benachrichtigung konnte aber nicht eingeplant werden.',
+            _("Kundenantwort gespeichert, E-Mail-Benachrichtigung konnte aber nicht eingeplant werden."),
         )
 
     if result['mail_error']:
@@ -2408,20 +2453,20 @@ def support_request_status(request, pk):
     status = (request.POST.get('status') or '').strip()
     allowed = {value for value, _label in SupportRequest.STATUS}
     if status not in allowed:
-        messages.error(request, 'Ungültiger Supportstatus.')
+        messages.error(request, _("Ungültiger Supportstatus."))
         return redirect('ns_admin:support_request_detail', pk=pk)
     previous = support_request.status
     support_request.status = status
     support_request.save(update_fields=['status','updated_at'])
     write_audit(request.user, 'support.status_changed', support_request, {'before':previous,'after':status}, request=request)
-    messages.success(request, 'Status aktualisiert.')
+    messages.success(request, _("Status aktualisiert."))
     return redirect('ns_admin:support_request_detail', pk=pk)
 
 
 @staff_perm('audit.read')
 def audit(request):
     grid = DataGrid(request, AuditEvent.objects.select_related('actor').annotate(changes_sort=Cast('changes', CharField())), search_fields=('action', 'object_type', 'object_id', 'actor__email', 'actor_role'), sort_fields={'time': 'created_at', 'user': 'actor__email', 'role': 'actor_role', 'action': 'action', 'object': 'object_type', 'change': 'changes_sort'}, default_sort='-created_at', filters={'action': 'action'}).build()
-    export = _grid_export(request, grid, [('created_at', 'Zeit'), ('actor.email', 'Benutzer'), ('actor_role', 'Rolle'), ('action', 'Aktion'), ('object_type', 'Objekttyp'), ('object_id', 'Objekt-ID')], 'promptmaster-audit.csv')
+    export = _grid_export(request, grid, [('created_at', _('Zeit')), ('actor.email', _('Benutzer')), ('actor_role', _('Rolle')), ('action', _('Aktion')), ('object_type', _('Objekttyp')), ('object_id', _('Objekt-ID'))], 'promptmaster-audit.csv')
     if export:
         return export
     return render(request, 'ns_admin/audit.html', {'grid': grid, 'filter_options': [], 'export_enabled': True})
@@ -2430,16 +2475,16 @@ def audit(request):
 @staff_perm('roles.read')
 def roles(request):
     descriptions = {
-        'superadmin': 'Uneingeschränkte Rechte auf alle PROMPTFINISHER-Verwaltungsbereiche.',
-        'support': 'Kunden, Lizenzen, Geräte, Bestellungen, Zahlungen, E-Mail und Support.',
-        'ops': 'Monitoring, Backups, Operations API, Logs und Systemstatus.',
-        'prompt_manager': 'Prompt Studio, Prompt-Lifecycle, Qualität und zentrale Inhalte.',
+        'superadmin': _('Uneingeschränkte Rechte auf alle PROMPTFINISHER-Verwaltungsbereiche.'),
+        'support': _('Kunden, Lizenzen, Geräte, Bestellungen, Zahlungen, E-Mail und Support.'),
+        'ops': _('Monitoring, Backups, Operations API, Logs und Systemstatus.'),
+        'prompt_manager': _('Prompt Studio, Prompt-Lifecycle, Qualität und zentrale Inhalte.'),
     }
     role_rows = list(Role.objects.prefetch_related('permissions').order_by('name'))
     for role in role_rows:
         role.display_description = descriptions.get(
             role.code,
-            'Berechtigungen werden über die zugewiesenen Capabilities gesteuert.',
+            _('Berechtigungen werden über die zugewiesenen Capabilities gesteuert.'),
         )
     return render(request, 'ns_admin/roles.html', {
         'roles': role_rows,
@@ -2464,9 +2509,9 @@ def staff_user_create(request):
             link = UserRole.objects.create(user=user, role=form.cleaned_data['role'])
             write_audit(request.user, 'staff_user.created', user, {'role': link.role.code}, request=request)
             transaction.on_commit(lambda: _send_staff_setup_email(request, user), robust=True)
-        messages.success(request, 'netstyle Benutzer angelegt; Einrichtungslink wurde per E-Mail versendet.')
+        messages.success(request, _("netstyle Benutzer angelegt; Einrichtungslink wurde per E-Mail versendet."))
         return redirect('ns_admin:roles')
-    return render(request, 'ns_admin/form.html', {'title': 'netstyle Benutzer anlegen', 'form': form, 'cancel_url': reverse('ns_admin:roles')})
+    return render(request, 'ns_admin/form.html', {'title': _('netstyle Benutzer anlegen'), 'form': form, 'cancel_url': reverse('ns_admin:roles')})
 
 
 @staff_perm('roles.write')
@@ -2475,10 +2520,10 @@ def staff_user_toggle(request, pk):
         raise PermissionDenied
     target = get_object_or_404(User, pk=pk, is_staff=True)
     if target.pk == request.user.pk:
-        messages.error(request, 'Das eigene netstyle Konto kann hier nicht deaktiviert werden.')
+        messages.error(request, _("Das eigene netstyle Konto kann hier nicht deaktiviert werden."))
         return redirect('ns_admin:roles')
     if target.is_active and (target.is_superuser or target.role_links.filter(role__code='superadmin', role__active=True).exists()) and _active_superadmin_count() <= 1:
-        messages.error(request, 'Der letzte aktive Superadmin kann nicht deaktiviert werden.')
+        messages.error(request, _("Der letzte aktive Superadmin kann nicht deaktiviert werden."))
         return redirect('ns_admin:roles')
     target.is_active = not target.is_active
     if target.is_active:
@@ -2486,7 +2531,7 @@ def staff_user_toggle(request, pk):
     target.save(update_fields=['is_active', 'two_factor_required', 'updated_at'])
     bump_security_version(target)
     write_audit(request.user, 'staff_user.activated' if target.is_active else 'staff_user.deactivated', target, {}, request=request)
-    messages.success(request, 'Benutzerstatus aktualisiert.')
+    messages.success(request, _("Benutzerstatus aktualisiert."))
     return redirect('ns_admin:roles')
 
 
@@ -2496,7 +2541,7 @@ def staff_user_reset_2fa(request, pk):
         raise PermissionDenied
     target = get_object_or_404(User, pk=pk, is_staff=True)
     if target.pk == request.user.pk:
-        messages.error(request, 'Die eigene 2FA wird nicht über die Admin-Fremdverwaltung zurückgesetzt.')
+        messages.error(request, _("Die eigene 2FA wird nicht über die Admin-Fremdverwaltung zurückgesetzt."))
         return redirect('ns_admin:roles')
     target.totp_secret_enc = ''
     target.two_factor_required = True
@@ -2504,7 +2549,7 @@ def staff_user_reset_2fa(request, pk):
     target.recovery_codes.all().delete()
     bump_security_version(target)
     write_audit(request.user, 'staff_user.2fa_reset', target, {}, request=request)
-    messages.success(request, '2FA zurückgesetzt. Der Benutzer muss sie beim nächsten Login neu einrichten.')
+    messages.success(request, _("2FA zurückgesetzt. Der Benutzer muss sie beim nächsten Login neu einrichten."))
     return redirect('ns_admin:roles')
 
 
@@ -2515,12 +2560,12 @@ def role_edit(request, pk):
     if request.method == 'POST' and form.is_valid():
         if role.code == 'superadmin' and not form.cleaned_data.get('active') and _active_superadmin_count() <= 1:
             form.add_error('active', 'Der letzte aktive Superadmin darf nicht deaktiviert werden.')
-            return render(request, 'ns_admin/form.html', {'title': f'Rolle · {role.name}', 'form': form, 'cancel_url': reverse('ns_admin:roles')})
+            return render(request, 'ns_admin/form.html', {'title': _('Rolle · %(name)s') % {'name': role.name}, 'form': form, 'cancel_url': reverse('ns_admin:roles')})
         saved = form.save()
         write_audit(request.user, 'role.updated', saved, {'fields': list(form.changed_data)}, request=request)
-        messages.success(request, 'Rolle gespeichert.')
+        messages.success(request, _("Rolle gespeichert."))
         return redirect('ns_admin:roles')
-    return render(request, 'ns_admin/form.html', {'title': f'Rolle · {role.name}', 'form': form, 'cancel_url': reverse('ns_admin:roles')})
+    return render(request, 'ns_admin/form.html', {'title': _('Rolle · %(name)s') % {'name': role.name}, 'form': form, 'cancel_url': reverse('ns_admin:roles')})
 
 
 @staff_perm('roles.write')
@@ -2535,9 +2580,9 @@ def user_role_assign(request):
                 target_user.save(update_fields=['two_factor_required', 'updated_at'])
             bump_security_version(target_user)
         write_audit(request.user, 'user_role.assigned', link, {'user': str(link.user_id), 'role': link.role.code}, request=request)
-        messages.success(request, 'Rolle zugewiesen.')
+        messages.success(request, _("Rolle zugewiesen."))
         return redirect('ns_admin:roles')
-    return render(request, 'ns_admin/form.html', {'title': 'netstyle Rolle zuweisen', 'form': form, 'cancel_url': reverse('ns_admin:roles')})
+    return render(request, 'ns_admin/form.html', {'title': _('netstyle Rolle zuweisen'), 'form': form, 'cancel_url': reverse('ns_admin:roles')})
 
 
 @staff_perm('roles.write')
@@ -2546,16 +2591,16 @@ def user_role_remove(request, pk):
         raise PermissionDenied
     link = get_object_or_404(UserRole.objects.select_related('user', 'role'), pk=pk)
     if link.user_id == request.user.id and link.role.code == 'superadmin':
-        messages.error(request, 'Die eigene Superadmin-Rolle kann nicht hier entfernt werden.')
+        messages.error(request, _("Die eigene Superadmin-Rolle kann nicht hier entfernt werden."))
         return redirect('ns_admin:roles')
     if link.role.code == 'superadmin' and link.user.is_active and _active_superadmin_count() <= 1:
-        messages.error(request, 'Die letzte aktive Superadmin-Berechtigung kann nicht entfernt werden.')
+        messages.error(request, _("Die letzte aktive Superadmin-Berechtigung kann nicht entfernt werden."))
         return redirect('ns_admin:roles')
     target_user = link.user
     write_audit(request.user, 'user_role.removed', link, {'user': str(link.user_id), 'role': link.role.code}, request=request)
     link.delete()
     bump_security_version(target_user)
-    messages.success(request, 'Rolle entfernt.')
+    messages.success(request, _("Rolle entfernt."))
     return redirect('ns_admin:roles')
 
 
@@ -2771,7 +2816,7 @@ def settings_view(request):
                 },
                 request=request,
             )
-            messages.success(request, 'Einstellungen gespeichert.')
+            messages.success(request, _("Einstellungen gespeichert."))
             return redirect('ns_admin:settings')
     return render(
         request,

@@ -323,6 +323,11 @@ class UiLanguagePreferenceTests(TestCase):
                 ('es', 'Español'),
                 ('pt', 'Português'),
                 ('tr', 'Türkçe'),
+                ('ru', 'Русский'),
+                ('pl', 'Polski'),
+                ('fr', 'Français'),
+                ('it', 'Italiano'),
+                ('nl', 'Nederlands'),
             ],
         )
         self.assertEqual(settings.LANGUAGE_CODE, 'de')

@@ -115,6 +115,56 @@ class MasterPatchARbacTests(TestCase):
         self.assertIsNone(preview.context['order_count'])
         self.assertContains(preview, '<div>Geräte</div>', html=True)
 
+    def test_customer_preview_employee_perspective_enforces_customer_scope(self):
+        self.grant('licenses.read')
+        self.grant('orders.read')
+        employee = User.objects.create_user(
+            'employee-preview-patch-a@example.test', 'Employee-Preview-Password-42!'
+        )
+        Membership.objects.create(
+            company=self.company, user=employee, role='member', active=True,
+        )
+        url = f'/ns-admin/customers/{self.company.id}/portal-preview/'
+        response = self.client.get(url, {'user': str(employee.id), 'section': 'team'})
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.context['preview_section'], 'dashboard')
+        self.assertEqual(response.context['preview_user'].id, employee.id)
+        self.assertFalse(response.context['preview_is_company_admin'])
+        self.assertEqual(response.context['license_total'], 0)
+        self.assertIsNone(response.context['order_count'])
+        self.assertNotContains(response, '>Mein Team</span></a>', html=False)
+        self.assertNotContains(response, '>Unternehmensdaten bearbeiten</a>', html=False)
+
+    def test_customer_preview_cannot_select_user_from_another_company(self):
+        other_company = Company.objects.create(
+            customer_number='PM-C-OTHER-PREVIEW',
+            name='Other Company GmbH',
+            email='other-preview@example.test',
+        )
+        foreign_user = User.objects.create_user(
+            'foreign-preview@example.test', 'Foreign-Preview-Password-42!',
+        )
+        Membership.objects.create(
+            company=other_company, user=foreign_user, role='admin', active=True,
+        )
+        url = f'/ns-admin/customers/{self.company.id}/portal-preview/'
+        response = self.client.get(url, {'user': str(foreign_user.id)})
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.context['preview_user'].id, self.company_admin.id)
+        self.assertNotContains(response, foreign_user.email)
+        response_invalid = self.client.get(url, {'user': 'not-a-uuid'})
+        self.assertEqual(response_invalid.status_code, 200)
+        self.assertEqual(response_invalid.context['preview_user'].id, self.company_admin.id)
+
+    def test_customer_preview_edit_links_require_customers_write(self):
+        url = f'/ns-admin/customers/{self.company.id}/portal-preview/'
+        response = self.client.get(url)
+        self.assertNotContains(response, 'Unternehmensdaten bearbeiten')
+        self.grant('customers.write')
+        response = self.client.get(url)
+        self.assertContains(response, 'Unternehmensdaten bearbeiten')
+        self.assertContains(response, f'/ns-admin/customers/{self.company.id}/company/')
+
     def test_domain_aggregates_appear_only_after_matching_permissions(self):
         self.grant('licenses.read')
         self.grant('orders.read')

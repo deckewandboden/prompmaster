@@ -85,6 +85,11 @@ fi
 export DEPLOYED_AT="${DEPLOYED_AT:-$(date -u +%Y-%m-%dT%H:%M:%SZ)}"
 
 F=(-f compose.yaml -f compose.staging.yaml)
+if [[ -n "${PM_STAGING_CA_FILE:-}" ]]; then
+  [[ -n "${PM_STAGING_CA_SHA256:-}" ]] || fail "Staging-TLS-Zertifikat nicht gepinnt"
+  F+=(-f compose.staging-local-ca.yaml)
+  log "Gepinnte lokale Test-CA als zeitweiliges BuildKit-Secret"
+fi
 EXTERNAL_CADDY_NETWORK="${PM_EXTERNAL_CADDY_NETWORK:-}"
 if [[ -z "$EXTERNAL_CADDY_NETWORK" ]]; then
   EXTERNAL_CADDY_NETWORK="$(awk -F= '$1 == "PM_EXTERNAL_CADDY_NETWORK" {sub(/^[^=]*=/, ""); value=$0} END {print value}' .env | tr -d '\r')"
@@ -102,6 +107,13 @@ log "Build"; docker compose "${F[@]}" build
 log "Datenservices"; docker compose "${F[@]}" up -d postgres redis mailpit
 wait_healthy postgres 180
 wait_healthy redis 180
+# The staging bind mount ./backend:/app masks .mo catalogs compiled at image
+# build time. Compile them in the mounted checkout with the host user's UID
+# before any runtime tests. Avoid root-owned generated files on developer hosts.
+log "Django-Sprachkataloge im Staging-Bind-Mount kompilieren"
+docker compose "${F[@]}" run --rm --no-deps --user "$(id -u):$(id -g)" web python manage.py compilemessages --verbosity 0
+log "Sprachwechsel in der tatsächlichen Staging-Runtime prüfen"
+docker compose "${F[@]}" run --rm --no-deps web python manage.py shell -c "from django.utils.translation import activate, gettext; activate('en'); source='Der letzte aktive Superadmin kann nicht deaktiviert werden.'; expected='The last active superadmin cannot be deactivated.'; actual=gettext(source); assert actual == expected, f'English .mo catalog missing in mounted runtime: {actual!r}'"
 log "Django Checks vor Migration"; docker compose "${F[@]}" run --rm web python manage.py check
 log "Migrationen prüfen"; docker compose "${F[@]}" run --rm web python manage.py makemigrations --check --dry-run
 log "Migrationen"; docker compose "${F[@]}" run --rm web python manage.py migrate --noinput

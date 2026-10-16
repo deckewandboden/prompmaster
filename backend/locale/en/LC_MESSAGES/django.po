@@ -874,3 +874,2613 @@ msgstr "Pro licenses still free"
 
 msgid "Verlängern"
 msgstr "Extend"
+
+msgid "Geschäft, Handlungsbedarf und Systemstatus auf einen Blick."
+msgstr "Business, action items and system status at a glance."
+
+msgid "PROMPTFINISHER Pro öffnen →"
+msgstr "Open PROMPTFINISHER Pro →"
+
+msgid "PROMPTFINISHER Free öffnen →"
+msgstr "Open PROMPTFINISHER Free →"
+
+msgid "System gesund"
+msgstr "System healthy"
+
+msgid "Prüfung erforderlich"
+msgstr "Review required"
+
+msgid "Kunden gesamt"
+msgstr "Total customers"
+
+msgid "Offene Leads"
+msgstr "Open leads"
+
+msgid "Lead-Pipeline öffnen"
+msgstr "Open lead pipeline"
+
+msgid "Ablauf unter 30 Tagen"
+msgstr "Expires within 30 days"
+
+msgid "laufen in weniger als 60 Tagen ab"
+msgstr "expire within 60 days"
+
+msgid "Umsatz 30 Tage"
+msgstr "Revenue, 30 days"
+
+msgid "Umsatzentwicklung"
+msgstr "Revenue development"
+
+msgid "Umsatzentwicklung der letzten Monate"
+msgstr "Revenue trend over recent months"
+
+msgid "Noch keine bezahlten Bestellungen im Auswertungszeitraum."
+msgstr "No paid orders in the reporting period yet."
+
+msgid "Lizenzen nach Produkt"
+msgstr "Licenses by product"
+
+msgid "Handlungsbedarf"
+msgstr "Action required"
+
+msgid "Lizenzen laufen in weniger als 30 Tagen ab."
+msgstr "Licenses expire in less than 30 days."
+
+msgid "fehlgeschlagene Zahlungen"
+msgstr "failed payments"
+
+msgid "Chargebacks"
+msgstr "Chargebacks"
+
+msgid "offene Kontaktanfragen"
+msgstr "open contact requests"
+
+msgid "Kein aktueller Handlungsbedarf."
+msgstr "No action currently required."
+
+msgid "Letzte Bestellungen"
+msgstr "Recent orders"
+
+msgid "Nächste Lizenzabläufe"
+msgstr "Upcoming license expirations"
+
+msgid "Keine bevorstehenden Abläufe."
+msgstr "No upcoming expirations."
+
+msgid "Alle Lizenzen"
+msgstr "All licenses"
+
+msgid "Kundenportal-Vorschau"
+msgstr "Customer portal preview"
+
+msgid "KUNDENPORTAL · VORSCHAU"
+msgstr "CUSTOMER PORTAL · PREVIEW"
+
+msgid "Read-only Vorschau …"
+msgstr "Read-only preview …"
+
+msgid "Support-Vorschau"
+msgstr "Support preview"
+
+msgid "Zurück zum netstyle Kundendetail"
+msgstr "Back to netstyle customer details"
+
+msgid "Read-only Kundenansicht."
+msgstr "Read-only customer view."
+
+msgid "Die Daten entsprechen dem ausgewählten Kundenkonto und seiner Rolle. Dies ist eine Ansichtsvorschau, keine Kundensitzung: Interaktionen, Zahlungs- und Sicherheitsaktionen sind nicht ausführbar."
+msgstr "Data is scoped to the selected customer account and role. This is a preview, not a customer session: interactions, payments and security actions are disabled."
+
+msgid "Perspektive auswählen"
+msgstr "Select viewing perspective"
+
+msgid "Nur aktive Benutzer dieses Unternehmens. Rollen und Zugriffsrechte werden berücksichtigt."
+msgstr "Only active users from this company. Roles and access rights are respected."
+
+msgid "Kundenbenutzer"
+msgstr "Customer user"
+
+msgid "Keine aktiven Benutzer vorhanden"
+msgstr "No active users available"
+
+msgid "Ansicht wechseln"
+msgstr "Change view"
+
+msgid "Angezeigte Rolle:"
+msgstr "Displayed role:"
+
+msgid "Kundenverwaltung"
+msgstr "Customer administration"
+
+msgid "Änderungen erfolgen ausschließlich in den berechtigungsgeschützten Administrationsmasken mit Auditierung – nicht in der Kundenansicht."
+msgstr "Changes are made only through permission-protected, audited administration forms, not the customer preview."
+
+msgid "Benutzer und Rollen verwalten"
+msgstr "Manage users and roles"
+
+msgid "Lizenzen verwalten"
+msgstr "Manage licenses"
+
+msgid "Geräte verwalten"
+msgstr "Manage devices"
+
+msgid "gesamt"
+msgstr "total"
+
+msgid "frei"
+msgstr "available"
+
+msgid "Ablauf ≤30 Tage"
+msgstr "Expiring within 30 days"
+
+msgid "Konto"
+msgstr "Account"
+
+msgid "Kontotyp"
+msgstr "Account type"
+
+msgid "Portal-Benutzer"
+msgstr "Portal user"
+
+msgid "Aktive Benutzer"
+msgstr "Active users"
+
+msgid "Bestand"
+msgstr "Overview of holdings"
+
+msgid "Freie Lizenzen"
+msgstr "Available licenses"
+
+msgid "Rolle"
+msgstr "Role"
+
+msgid "Hinweis"
+msgstr "Note"
+
+msgid "Keine Benutzer vorhanden."
+msgstr "No users available."
+
+msgid "Keine Lizenzen vorhanden."
+msgstr "No licenses available."
+
+msgid "Keine netstyle-Berechtigung zum Anzeigen der Lizenzdaten."
+msgstr "Your netstyle permissions do not allow viewing license data."
+
+msgid "Keine aktiven Geräte vorhanden."
+msgstr "No active devices available."
+
+msgid "Keine Bestellungen vorhanden."
+msgstr "No orders available."
+
+msgid "Keine netstyle-Berechtigung zum Anzeigen der Bestelldaten."
+msgstr "Your netstyle permissions do not allow viewing order data."
+
+msgid "Rechtsform"
+msgstr "Legal form"
+
+msgid "Telefon"
+msgstr "Phone"
+
+msgid "Rechnungsanschrift"
+msgstr "Billing address"
+
+msgid "Ort"
+msgstr "City"
+
+msgid "Land"
+msgstr "Country"
+
+msgid "USt-IdNr."
+msgstr "VAT ID"
+
+msgid "Mein Profil"
+msgstr "My profile"
+
+msgid "Dies ist eine Leseansicht. Passwort, Zwei-Faktor-Authentifizierung und persönliche Einstellungen kann nur der angemeldete Kundenbenutzer selbst ändern."
+msgstr "This is a read-only view. Only the signed-in customer user can change their password, two-factor authentication and personal settings."
+
+msgid "Benutzerkonto"
+msgstr "User account"
+
+msgid "Teamverwaltung, Bestellungen und Unternehmensdaten sind für diese Rolle nicht freigegeben."
+msgstr "Team management, orders and company details are not available to this role."
+
+msgid "Anschrift"
+msgstr "Postal address"
+
+msgid "Weitere Bereiche"
+msgstr "Additional sections"
+
+msgid "Kontoeinstellungen"
+msgstr "Account settings"
+
+msgid "Read-only"
+msgstr "Read-only"
+
+msgid "Sicherheit / 2FA"
+msgstr "Security / 2FA"
+
+msgid "nicht impersoniert"
+msgstr "no impersonation"
+
+msgid "nicht ausführbar"
+msgstr "unavailable"
+
+msgid "Support-Hinweis"
+msgstr "Support notice"
+
+msgid "Für echte Schreibaktionen oder einen vollständigen Login-Test muss ein eigener Nicht-Staff-Testkunde verwendet werden. Die Vorschau übernimmt niemals die Identität des Kunden."
+msgstr "For real write operations or a full login test, use a dedicated non-staff test customer. This preview never assumes a customer's identity."
+
+msgid "Noch keine Lizenzen."
+msgstr "No licenses yet."
+
+msgid "Alle Bestellungen"
+msgstr "All orders"
+
+msgid "Firmenkonto"
+msgstr "Company account"
+
+msgid "Serverseitige Suche, Filter, Sortierung und Pagination."
+msgstr "Server-side search, filtering, sorting and pagination."
+
+msgid "Neu anlegen"
+msgstr "Create new"
+
+msgid "Privatkunden"
+msgstr "Individual customers"
+
+msgid "aufsteigend"
+msgstr "ascending"
+
+msgid "absteigend"
+msgstr "descending"
+
+msgid "Keine Datensätze für die aktuelle Auswahl."
+msgstr "No records for the current selection."
+
+msgid "Änderungen werden serverseitig validiert und – sofern sicherheits- oder geschäftskritisch – protokolliert."
+msgstr "Changes are validated on the server and logged if security- or business-critical."
+
+msgid "Zusätzliche Sicherheitsfreigabe."
+msgstr "Additional security verification."
+
+msgid "Bestätigen Sie Ihr eigenes Passwort. Die Freigabe gilt anschließend ausschließlich für wenige Minuten und nur für geschützte Admin-Aktionen."
+msgstr "Confirm your own password. Approval then remains valid for only a few minutes and only for protected admin actions."
+
+msgid "Bestätigen"
+msgstr "Confirm"
+
+msgid "Kompakte Geschäftszahlen innerhalb Ihrer Berechtigungen."
+msgstr "Key business figures within your permissions."
+
+msgid "Neue Kunden · 30 Tage"
+msgstr "New customers · 30 days"
+
+msgid "Verlängerungsanteil"
+msgstr "Renewal share"
+
+msgid "Verlängerungsterms"
+msgstr "renewal periods"
+
+msgid "Refund-Quote"
+msgstr "Refund rate"
+
+msgid "Anteil refundierter Lizenzterms"
+msgstr "Share of refunded license periods"
+
+msgid "Ø Lizenzen / Firma"
+msgstr "Avg. licenses / company"
+
+msgid "Firmenkundenbestand"
+msgstr "Business customer base"
+
+msgid "Umsatz letzte 30 Tage"
+msgstr "Revenue in the last 30 days"
+
+msgid "Bestellungen gesamt"
+msgstr "total orders"
+
+msgid "Lizenzen gesamt"
+msgstr "Total licenses"
+
+msgid "inkl. aktiv, frei, abgelaufen und historisch"
+msgstr "including active, available, expired and historical"
+
+msgid "Anfragen aus dem Kundenportal; V1 verwendet bewusst kein Ticketsystem."
+msgstr "Requests from the customer portal; V1 intentionally does not use a ticket system."
+
+msgid "Keine Kontaktanfragen."
+msgstr "No contact requests."
+
+msgid "Globale Suche"
+msgstr "Global search"
+
+msgid "Ergebnisse für"
+msgstr "Results for"
+
+msgid "Keine Treffer."
+msgstr "No matches."
+
+msgid "Append-only Auditlog für administrative und geschäftskritische Änderungen."
+msgstr "Append-only audit log for administrative and business-critical changes."
+
+msgid "Zeit"
+msgstr "Time"
+
+msgid "Objekt"
+msgstr "Object"
+
+msgid "Änderung"
+msgstr "Change"
+
+msgid "Keine Audit-Einträge."
+msgstr "No audit entries."
+
+msgid "Mollie-Zahlungsstatus, Beträge, Refunds und Chargebacks."
+msgstr "Mollie payment statuses, amounts, refunds and chargebacks."
+
+msgid "Bezahlt"
+msgstr "Paid"
+
+msgid "Offen"
+msgstr "Open"
+
+msgid "Fehlgeschlagen"
+msgstr "Failed"
+
+msgid "Payment-ID"
+msgstr "Payment ID"
+
+msgid "Keine Zahlungen gefunden."
+msgstr "No payments found."
+
+msgid "Lead"
+msgstr "Lead"
+
+msgid "Interessent"
+msgstr "Prospect"
+
+msgid "Priorität"
+msgstr "Priority"
+
+msgid "Zuständig"
+msgstr "Assigned to"
+
+msgid "Erstellt"
+msgstr "Created"
+
+msgid "Kundennummer"
+msgstr "Customer number"
+
+msgid "Eingang"
+msgstr "Received"
+
+msgid "Art"
+msgstr "Type"
+
+msgid "Vertragsbezug"
+msgstr "Contract reference"
+
+msgid "Datengetriebene Produkt-, Laufzeit-, Geräte-, Reminder- und Entitlement-Konfiguration."
+msgstr "Data-driven configuration of products, terms, devices, reminders and entitlements."
+
+msgid "Features"
+msgstr "Features"
+
+msgid "Produkt anlegen"
+msgstr "Create product"
+
+msgid "AKTIV"
+msgstr "ACTIVE"
+
+msgid "INAKTIV"
+msgstr "INACTIVE"
+
+msgid "aktueller Neukaufpreis"
+msgstr "current new-purchase price"
+
+msgid "nicht konfiguriert"
+msgstr "not configured"
+
+msgid "Verlängerung"
+msgstr "Renewal"
+
+msgid "Sichtbar / kaufbar"
+msgstr "Visible / purchasable"
+
+msgid "Ja"
+msgstr "Yes"
+
+msgid "Nein"
+msgstr "No"
+
+msgid "Bearbeiten"
+msgstr "Edit"
+
+msgid "Noch keine Produkte."
+msgstr "No products yet."
+
+msgid "Rollenbasierte Rechte; für alle netstyle Benutzer ist 2FA Pflicht."
+msgstr "Role-based permissions; two-factor authentication is mandatory for all netstyle users."
+
+msgid "Rolle zuweisen"
+msgstr "Assign role"
+
+msgid "netstyle Benutzer anlegen"
+msgstr "Create netstyle user"
+
+msgid "Berechtigungen"
+msgstr "Permissions"
+
+msgid "Sicherheitsvorgabe"
+msgstr "Security requirement"
+
+msgid "2FA Pflicht"
+msgstr "2FA mandatory"
+
+msgid "Keine Rolle"
+msgstr "No role"
+
+msgid "2FA aktiv"
+msgstr "2FA enabled"
+
+msgid "2FA einzurichten"
+msgstr "2FA setup required"
+
+msgid "2FA dieses Benutzers zurücksetzen?"
+msgstr "Reset this user's 2FA?"
+
+msgid "2FA zurücksetzen"
+msgstr "Reset 2FA"
+
+msgid "Benutzerstatus wirklich ändern?"
+msgstr "Really change the user's status?"
+
+msgid "Deaktivieren"
+msgstr "Deactivate"
+
+msgid "Aktivieren"
+msgstr "Activate"
+
+msgid "Keine netstyle Benutzer."
+msgstr "No netstyle users."
+
+msgid "Rechtsdokumente, Aufbewahrung und Löschanforderungen."
+msgstr "Legal documents, retention and deletion requests."
+
+msgid "Rechtsdokumente"
+msgstr "Legal documents"
+
+msgid "Noch keine Rechtstexte hinterlegt."
+msgstr "No legal texts have been added yet."
+
+msgid "Rechtsdokumente verwalten"
+msgstr "Manage legal documents"
+
+msgid "Verbrauchererklärungen"
+msgstr "Consumer declarations"
+
+msgid "Offene Widerrufe / Kündigungen"
+msgstr "Pending withdrawals / cancellations"
+
+msgid "Widerrufe & Kündigungen"
+msgstr "Withdrawals & cancellations"
+
+msgid "Retention / Löschung"
+msgstr "Retention / deletion"
+
+msgid "Aktive Retention-Policies"
+msgstr "Active retention policies"
+
+msgid "Offene Löschanfragen"
+msgstr "Pending deletion requests"
+
+msgid "Retention-Policies"
+msgstr "Retention policies"
+
+msgid "Löschanfragen"
+msgstr "Deletion requests"
+
+msgid "Features / Entitlements"
+msgstr "Features / entitlements"
+
+msgid "Wiederverwendbare Funktionsrechte für heutige und zukünftige Produkte."
+msgstr "Reusable feature entitlements for current and future products."
+
+msgid "Feature anlegen"
+msgstr "Create feature"
+
+msgid "Code"
+msgstr "Code"
+
+msgid "Keine Features."
+msgstr "No features."
+
+msgid "Geschützte Operations-Schnittstellen und Service Accounts."
+msgstr "Protected operations interfaces and service accounts."
+
+msgid "Service Account anlegen"
+msgstr "Create service account"
+
+msgid "Operations API"
+msgstr "Operations API"
+
+msgid "Zugriff ausschließlich über aktive Service Accounts mit passendem Scope. Tokens werden nur einmal bei Erstellung bzw. Rotation angezeigt."
+msgstr "Access is restricted to active service accounts with the required scope. Tokens are displayed only once, when created or rotated."
+
+msgid "Service Accounts"
+msgstr "Service accounts"
+
+msgid "Gesperrt"
+msgstr "Blocked"
+
+msgid "Token rotieren"
+msgstr "Rotate token"
+
+msgid "Service Account wirklich sperren?"
+msgstr "Really block this service account?"
+
+msgid "Sperren"
+msgstr "Block"
+
+msgid "Noch keine Service Accounts."
+msgstr "No service accounts yet."
+
+msgid "Dienste"
+msgstr "Services"
+
+msgid "Status der internen Plattformdienste."
+msgstr "Status of internal platform services."
+
+msgid "Systemübersicht"
+msgstr "System overview"
+
+msgid "Host"
+msgstr "Host"
+
+msgid "Hostname"
+msgstr "Hostname"
+
+msgid "Kernel"
+msgstr "Kernel"
+
+msgid "Healthy"
+msgstr "Healthy"
+
+msgid "Nicht erreichbar"
+msgstr "Unreachable"
+
+msgid "Datenbank"
+msgstr "Database"
+
+msgid "Verbindungen"
+msgstr "Connections"
+
+msgid "Größe"
+msgstr "Size"
+
+msgid "Background Jobs"
+msgstr "Background jobs"
+
+msgid "Heartbeat fehlt"
+msgstr "Heartbeat missing"
+
+msgid "Queue"
+msgstr "Queue"
+
+msgid "Fehlgeschlagene Jobs 24 h"
+msgstr "Failed jobs in 24 h"
+
+msgid "Worker"
+msgstr "Worker"
+
+msgid "Antwortende Worker"
+msgstr "Responding workers"
+
+msgid "Worker-Heartbeat"
+msgstr "Worker heartbeat"
+
+msgid "Beat-Heartbeat"
+msgstr "Beat heartbeat"
+
+msgid "Zahlungsprovider, Webhook und letzte Zahlungsereignisse."
+msgstr "Payment provider, webhook and latest payment events."
+
+msgid "Mollie konfigurieren"
+msgstr "Configure Mollie"
+
+msgid "Konfiguration"
+msgstr "Configuration"
+
+msgid "Konfiguriert"
+msgstr "Configured"
+
+msgid "Unvollständig"
+msgstr "Incomplete"
+
+msgid "Produktiv-Checkout"
+msgstr "Live checkout"
+
+msgid "Freigegeben"
+msgstr "Enabled"
+
+msgid "Modus"
+msgstr "Mode"
+
+msgid "Profile ID"
+msgstr "Profile ID"
+
+msgid "API Key"
+msgstr "API key"
+
+msgid "nicht gesetzt"
+msgstr "not set"
+
+msgid "Live-Zugangsdaten sind hinterlegt, der Kunden-Checkout bleibt jedoch gesperrt, bis die Live-Readiness geprüft und ausdrücklich freigegeben wurde."
+msgstr "Live credentials are stored, but customer checkout remains blocked until live readiness has been verified and explicitly approved."
+
+msgid "Basis-URL"
+msgstr "Base URL"
+
+msgid "Endpoint"
+msgstr "Endpoint"
+
+msgid "Letztes Event"
+msgstr "Latest event"
+
+msgid "noch keines"
+msgstr "none yet"
+
+msgid "Webhook-Ereignisse öffnen"
+msgstr "Open webhook events"
+
+msgid "Notabschaltung"
+msgstr "Emergency shutdown"
+
+msgid "Sperrt neue Mollie-Käufe sofort. Bestehende Zahlungen und Webhooks bleiben weiter verarbeitbar."
+msgstr "Immediately blocks new Mollie purchases. Existing payments and webhooks can still be processed."
+
+msgid "Produktiv-Checkout sperren"
+msgstr "Disable live checkout"
+
+msgid "Letzte Zahlungen"
+msgstr "Recent payments"
+
+msgid "Noch keine Zahlungen."
+msgstr "No payments yet."
+
+msgid "Letzte Webhook-Events"
+msgstr "Recent webhook events"
+
+msgid "offen"
+msgstr "open"
+
+msgid "Noch keine Webhook-Ereignisse."
+msgstr "No webhook events yet."
+
+msgid "Vorlagen, Versandstatus, Provider und Fallback-Kette."
+msgstr "Templates, delivery status, providers and failover chain."
+
+msgid "Absender & Provider"
+msgstr "Sender & provider"
+
+msgid "Versandprotokoll öffnen"
+msgstr "Open delivery log"
+
+msgid "Vorlagen"
+msgstr "Templates"
+
+msgid "Keine E-Mail-Vorlagen vorhanden."
+msgstr "No email templates available."
+
+msgid "Mail-System"
+msgstr "Mail system"
+
+msgid "Versandmodus"
+msgstr "Delivery mode"
+
+msgid "Automatischer Fallback"
+msgstr "Automatic failover"
+
+msgid "Manuell"
+msgstr "Manual"
+
+msgid "Primär"
+msgstr "Primary"
+
+msgid "Reihenfolge"
+msgstr "Order"
+
+msgid "Status der Kette"
+msgstr "Chain status"
+
+msgid "Aktiver Absender"
+msgstr "Active sender"
+
+msgid "Anzeigename"
+msgstr "Display name"
+
+msgid "Mail-Domain"
+msgstr "Mail domain"
+
+msgid "Server"
+msgstr "Server"
+
+msgid "Anmeldung"
+msgstr "Authentication"
+
+msgid "Passwort fehlt"
+msgstr "Password missing"
+
+msgid "Ohne Anmeldung"
+msgstr "No authentication"
+
+msgid "Nicht konfiguriert"
+msgstr "Not configured"
+
+msgid "Fehlt"
+msgstr "Missing"
+
+msgid "Graph Absender"
+msgstr "Graph sender"
+
+msgid "Automatischer Fallback erfolgt nur bei eindeutig nicht zugestellten Fehlern. Bei unklaren Fehlern wird nicht automatisch weitergeschaltet, damit dieselbe E-Mail nicht versehentlich doppelt versendet wird."
+msgstr "Automatic failover occurs only after confirmed non-delivery. Ambiguous failures do not trigger automatic switching, to avoid accidentally sending the same email twice."
+
+msgid "SPF/DKIM/DMARC werden unter „Einstellungen“ als DNS-Sollwerte dokumentiert. Änderungen dort aktualisieren nicht automatisch den öffentlichen DNS."
+msgstr "SPF/DKIM/DMARC target DNS records are documented under Settings. Changes there do not automatically update public DNS."
+
+msgid "Letzte Versandvorgänge"
+msgstr "Recent delivery attempts"
+
+msgid "Noch keine Versandvorgänge."
+msgstr "No delivery attempts yet."
+
+msgid "Zur Kundenliste"
+msgstr "Back to customer list"
+
+msgid "Zur Privatkundenliste"
+msgstr "Back to individual customers"
+
+msgid "Kundendaten"
+msgstr "Customer details"
+
+msgid "Stammdaten"
+msgstr "Master data"
+
+msgid "Unternehmensdaten speichern"
+msgstr "Save company details"
+
+msgid "Firma"
+msgstr "Company"
+
+msgid "Steuernummer"
+msgstr "Tax number"
+
+msgid "Änderungen erfolgen serverseitig mit Berechtigungsprüfung und werden im Audit protokolliert. Steuerfelder werden anhand der aktiven Steuerregel für Land und Kundentyp validiert."
+msgstr "Changes are applied on the server with permission checks and recorded in the audit log. Tax fields are validated against the active tax rule for the country and customer type."
+
+msgid "Rechtsakzeptanzen"
+msgstr "Legal document acceptances"
+
+msgid "Version"
+msgstr "Version"
+
+msgid "Keine Rechtsakzeptanzen protokolliert."
+msgstr "No legal document acceptances recorded."
+
+msgid "Keine Löschanfragen."
+msgstr "No deletion requests."
+
+msgid "Alle Löschanfragen"
+msgstr "All deletion requests"
+
+msgid "Bestellung vom"
+msgstr "Order dated"
+
+msgid "Zurück zur Liste"
+msgstr "Back to list"
+
+msgid "Brutto"
+msgstr "Gross"
+
+msgid "Steuer"
+msgstr "Tax"
+
+msgid "Keine Zahlung erfasst."
+msgstr "No payment recorded."
+
+msgid "Positionen"
+msgstr "Line items"
+
+msgid "Menge"
+msgstr "Quantity"
+
+msgid "Einzelpreis"
+msgstr "Unit price"
+
+msgid "Lizenzstatus wirklich ändern?"
+msgstr "Really change this license's status?"
+
+msgid "Lizenz entsperren"
+msgstr "Unblock license"
+
+msgid "Lizenz sperren"
+msgstr "Block license"
+
+msgid "Inhaber & Zuweisung"
+msgstr "Owner & assignment"
+
+msgid "Zugewiesen an"
+msgstr "Assigned to"
+
+msgid "Lizenzzuweisung wirklich freigeben? Aktive Geräte dieser Lizenz werden widerrufen."
+msgstr "Really release this license assignment? Active devices linked to this license will be revoked."
+
+msgid "Zuweisung freigeben"
+msgstr "Release assignment"
+
+msgid "Aktiven Firmenbenutzer auswählen"
+msgstr "Select active company user"
+
+msgid "Bitte auswählen"
+msgstr "Please select"
+
+msgid "Lizenz zuweisen"
+msgstr "Assign license"
+
+msgid "Lizenzperioden"
+msgstr "License periods"
+
+msgid "Von"
+msgstr "From"
+
+msgid "Bis"
+msgstr "Until"
+
+msgid "Erstattung"
+msgstr "Refund"
+
+msgid "Erstattung wirklich verbindlich über Mollie auslösen?"
+msgstr "Really submit a binding refund through Mollie?"
+
+msgid "Erstattung prüfen/auslösen"
+msgstr "Review/issue refund"
+
+msgid "Keine Lizenzperioden vorhanden."
+msgstr "No license periods available."
+
+msgid "E-Mail-Protokoll"
+msgstr "Email log"
+
+msgid "Versandstatus, tatsächlich verwendeter Provider und Fallback-Versuche ohne vertrauliche Nachrichtentexte oder Secrets."
+msgstr "Delivery status, actual provider used and failover attempts, without confidential message contents or secrets."
+
+msgid "Empfänger"
+msgstr "Recipient"
+
+msgid "Vorlage"
+msgstr "Template"
+
+msgid "Provider"
+msgstr "Provider"
+
+msgid "Versuche"
+msgstr "Attempts"
+
+msgid "Gesendet"
+msgstr "Sent"
+
+msgid "Wird gesendet"
+msgstr "Sending"
+
+msgid "Unterdrückt"
+msgstr "Suppressed"
+
+msgid "Warteschlange"
+msgstr "Queued"
+
+msgid "Keine E-Mails gefunden."
+msgstr "No emails found."
+
+msgid "Kundenbereiche"
+msgstr "Customer sections"
+
+msgid "Privatkundenbereiche"
+msgstr "Individual customer sections"
+
+msgid "Audit"
+msgstr "Audit"
+
+msgid "Zuletzt"
+msgstr "Last seen"
+
+msgid "Akteur"
+msgstr "Actor"
+
+msgid "Admin übertragen"
+msgstr "Transfer admin role"
+
+msgid "Benutzer wirklich deaktivieren? Lizenzen und Gerätezugänge werden freigegeben."
+msgstr "Really deactivate this user? Licenses and device access will be released."
+
+msgid "Firmenadmin"
+msgstr "Company admin"
+
+msgid "Gerätezugang wirklich widerrufen?"
+msgstr "Really revoke device access?"
+
+msgid "Mollie Events"
+msgstr "Mollie events"
+
+msgid "Idempotent verarbeitete Provider-Zustandsänderungen."
+msgstr "Idempotently processed provider status changes."
+
+msgid "Providerstatus"
+msgstr "Provider status"
+
+msgid "Verarbeitet"
+msgstr "Processed"
+
+msgid "Retries"
+msgstr "Retries"
+
+msgid "Fehler"
+msgstr "Error"
+
+msgid "Keine Mollie Events gefunden."
+msgstr "No Mollie events found."
+
+msgid "DSGVO-Workflow mit kontrollierter Anonymisierung und Erhalt rechtlich erforderlicher Historie."
+msgstr "GDPR workflow with controlled anonymization while retaining legally required records."
+
+msgid "Angefordert"
+msgstr "Requested"
+
+msgid "Notiz"
+msgstr "Note"
+
+msgid "Konto wirklich anonymisieren?"
+msgstr "Really anonymize this account?"
+
+msgid "Verarbeiten"
+msgstr "Process"
+
+msgid "Retention Policies"
+msgstr "Retention policies"
+
+msgid "Nur freigegebene Datenklassen können automatisiert bereinigt werden."
+msgstr "Only approved data classes can be cleaned up automatically."
+
+msgid "Datenklasse"
+msgstr "Data class"
+
+msgid "Keine Policies."
+msgstr "No policies."
+
+msgid "Versionierte AGB, Datenschutz-, Widerrufs- und Lizenztexte."
+msgstr "Versioned terms and conditions, privacy, withdrawal and license documents."
+
+msgid "Typ"
+msgstr "Type"
+
+msgid "Keine Dokumente."
+msgstr "No documents."
+
+msgid "Read-only PostgreSQL-Betriebsdaten."
+msgstr "Read-only PostgreSQL operational data."
+
+msgid "DB-Größe"
+msgstr "Database size"
+
+msgid "Retention-Policy anlegen"
+msgstr "Create retention policy"
+
+msgid "Rechtsdokument anlegen"
+msgstr "Create legal document"
+
+msgid "Fertig"
+msgstr "Completed"
+
+msgid "Referenz"
+msgstr "Reference"
+
+msgid "Start"
+msgstr "Start"
+
+msgid "Ende"
+msgstr "End"
+
+msgid "Backup"
+msgstr "Backup"
+
+msgid "Schweregrad"
+msgstr "Severity"
+
+msgid "Meldung"
+msgstr "Message"
+
+msgid "Keine Datensätze gefunden."
+msgstr "No records found."
+
+msgid "Benutzer-ID"
+msgstr "User ID"
+
+msgid "Status ändern"
+msgstr "Change status"
+
+msgid "Neu"
+msgstr "New"
+
+msgid "In Bearbeitung"
+msgstr "In progress"
+
+msgid "Abgeschlossen"
+msgstr "Closed"
+
+msgid "Antwort schreiben"
+msgstr "Write reply"
+
+msgid "Die Antwort wird im Verlauf gespeichert und per E-Mail versendet an:"
+msgstr "The reply is saved in the conversation history and sent by email to:"
+
+msgid "Antwort"
+msgstr "Reply"
+
+msgid "Antwort an den Kunden eingeben …"
+msgstr "Enter reply to customer …"
+
+msgid "Antwort senden"
+msgstr "Send reply"
+
+msgid "Anfrage und alle netstyle-Antworten in zeitlicher Reihenfolge."
+msgstr "Request and all netstyle replies in chronological order."
+
+msgid "netstyle Support"
+msgstr "netstyle Support"
+
+msgid "FAQ bearbeiten"
+msgstr "Edit FAQ"
+
+msgid "FAQ anlegen"
+msgstr "Create FAQ"
+
+msgid "Zentraler Content-Baustein."
+msgstr "Central content component."
+
+msgid "FAQ-Verwaltung"
+msgstr "FAQ management"
+
+msgid "Zentrale FAQ-Inhalte für Marketing und Produktoberflächen."
+msgstr "Central FAQ content for marketing and product interfaces."
+
+msgid "Frage suchen …"
+msgstr "Search questions …"
+
+msgid "Alle Zielgruppen"
+msgstr "All audiences"
+
+msgid "Filtern"
+msgstr "Filter"
+
+msgid "Zurücksetzen"
+msgstr "Reset"
+
+msgid "Key"
+msgstr "Key"
+
+msgid "Frage"
+msgstr "Question"
+
+msgid "Zielgruppe"
+msgstr "Audience"
+
+msgid "Keine FAQ-Einträge."
+msgstr "No FAQ entries."
+
+msgid "Service Account Token"
+msgstr "Service account token"
+
+msgid "erstellt"
+msgstr "created"
+
+msgid "Token jetzt sicher speichern."
+msgstr "Save this token securely now."
+
+msgid "Er wird danach nicht erneut im Klartext angezeigt; ein alter Token ist nach einer Rotation sofort ungültig."
+msgstr "It will not be shown again in plaintext; an old token becomes invalid immediately after rotation."
+
+msgid "Zur API-Verwaltung"
+msgstr "Back to API management"
+
+msgid "Produktcode"
+msgstr "Product code"
+
+msgid "Preisversion anlegen"
+msgstr "Create price version"
+
+msgid "Produktkonfiguration"
+msgstr "Product configuration"
+
+msgid "Preisversionen"
+msgstr "Price versions"
+
+msgid "ab"
+msgstr "from"
+
+msgid "Keine Preisversionen."
+msgstr "No price versions."
+
+msgid "Zentrale Prompt-Domain · 34 Apps · 194 PM20-Aufgaben · versioniert und serverseitig komponiert."
+msgstr "Central prompt domain · 34 apps · 194 PM20 tasks · versioned and composed on the server."
+
+msgid "Qualität"
+msgstr "Quality"
+
+msgid "Task-ID, App oder Titel suchen …"
+msgstr "Search task ID, app or title …"
+
+msgid "Task"
+msgstr "Task"
+
+msgid "Anwendung"
+msgstr "Application"
+
+msgid "Veröffentlicht"
+msgstr "Published"
+
+msgid "Offene Versionen"
+msgstr "Open versions"
+
+msgid "keine"
+msgstr "none"
+
+msgid "noch keine Daten"
+msgstr "no data yet"
+
+msgid "Keine Prompt-Aufgaben gefunden."
+msgstr "No prompt tasks found."
+
+msgid "Prompt-Qualität"
+msgstr "Prompt quality"
+
+msgid "1–5-Sterne-Ratings · Recent Average · Drop-Erkennung · Aufgabenliste."
+msgstr "1–5-star ratings · recent average · drop detection · task list."
+
+msgid "Schwellen"
+msgstr "Thresholds"
+
+msgid "Analyse aktualisieren"
+msgstr "Refresh analysis"
+
+msgid "Kritisch"
+msgstr "Critical"
+
+msgid "Warnung"
+msgstr "Warning"
+
+msgid "Beobachten"
+msgstr "Watch"
+
+msgid "OK"
+msgstr "OK"
+
+msgid "App"
+msgstr "App"
+
+msgid "Recent Avg"
+msgstr "Recent avg."
+
+msgid "Previous Avg"
+msgstr "Previous avg."
+
+msgid "Drop"
+msgstr "Drop"
+
+msgid "Produktdefaults, Support, E-Mail-Identität und Betriebswarnschwellen."
+msgstr "Product defaults, support, email identity and operational alert thresholds."
+
+msgid "Lizenz-Defaults"
+msgstr "License defaults"
+
+msgid "Geräte je Benutzer"
+msgstr "Devices per user"
+
+msgid "Einladung"
+msgstr "Invitation"
+
+msgid "Stunden"
+msgstr "hours"
+
+msgid "Kritische Warnung"
+msgstr "Critical warning"
+
+msgid "Produktwerte werden unter „Produkte & Preise“ gepflegt."
+msgstr "Product values are maintained under “Products & Prices”."
+
+msgid "PROMPTFINISHER Pro ist nicht angelegt."
+msgstr "PROMPTFINISHER Pro has not been created."
+
+msgid "Empfänger des Kundenportal-Kontaktformulars."
+msgstr "Recipient of the customer portal contact form."
+
+msgid "E-Mail-Versandweg & Fallback"
+msgstr "Email delivery route & failover"
+
+msgid "Alle Provider bleiben parallel gespeichert. Im manuellen Modus wird nur der primäre Versandweg verwendet. Im automatischen Modus wird bei eindeutig nicht zugestellten Fehlern in der festgelegten Reihenfolge weitergeschaltet; bei unklaren Fehlern erfolgt bewusst kein automatischer Fallback, um Doppelversand zu vermeiden."
+msgstr "All providers remain saved in parallel. Manual mode uses only the primary delivery route. Automatic mode switches to the next provider in the configured order only after confirmed non-delivery; ambiguous errors do not trigger failover, to avoid duplicate messages."
+
+msgid "E-Mail-Absender & Domain"
+msgstr "Email sender & domain"
+
+msgid "Die Absenderadresse wird beim SMTP-Versand direkt aus diesen Einstellungen gelesen. SPF, DKIM und DMARC sind hier als DNS-Sollwerte dokumentiert; das Speichern verändert keine DNS-Zone."
+msgstr "The SMTP sender address is read directly from these settings. SPF, DKIM and DMARC are documented here as target DNS records; saving does not modify any DNS zone."
+
+msgid "Erster SMTP-Transport. Das Passwort wird verschlüsselt gespeichert und niemals wieder im Klartext angezeigt."
+msgstr "Primary SMTP transport. The password is stored encrypted and is never shown in plaintext again."
+
+msgid "Optionaler zweiter SMTP-Transport. Hier können Sie z. B. denselben SMTP-Relay eintragen, den auch Listmonk verwendet, und manuell oder automatisch zwischen SMTP 1 und SMTP 2 wechseln."
+msgstr "Optional secondary SMTP transport. You can use, for example, the same SMTP relay as Listmonk and switch manually or automatically between SMTP 1 and SMTP 2."
+
+msgid "Alternative zu SMTP für Exchange Online. Das Client Secret wird verschlüsselt gespeichert und niemals wieder im Klartext angezeigt."
+msgstr "Alternative to SMTP for Exchange Online. The client secret is stored encrypted and never shown in plaintext again."
+
+msgid "Einstellungen speichern"
+msgstr "Save settings"
+
+msgid "Sie besitzen Leserechte, aber keine Berechtigung zum Ändern dieser Einstellungen."
+msgstr "You have read-only access and cannot change these settings."
+
+msgid "Bewertungen"
+msgstr "Ratings"
+
+msgid "Deterministischer Composer-Test ohne Speicherung des erzeugten Prompttexts."
+msgstr "Deterministic composer test without storing the generated prompt text."
+
+msgid "Draft aus letzter Version"
+msgstr "Create draft from latest version"
+
+msgid "Draft speichern"
+msgstr "Save draft"
+
+msgid "Keine Version vorhanden."
+msgstr "No version available."
+
+msgid "Konfigurierbare Schwellen für Recent Average und Drop-Erkennung."
+msgstr "Configurable thresholds for recent average and decline detection."
+
+msgid "No-Code Editor. Nur DRAFT-Versionen sind inhaltlich veränderbar."
+msgstr "No-code editor. Only DRAFT versions can be modified."
+
+msgid "Noch keine Qualitäts-Snapshots. Analyse ausführen oder Ratings erfassen."
+msgstr "No quality snapshots yet. Run an analysis or record ratings."
+
+msgid "Policy"
+msgstr "Policy"
+
+msgid "Qualität:"
+msgstr "Quality:"
+
+msgid "Qualitätsschwellen"
+msgstr "Quality thresholds"
+
+msgid "Ratings"
+msgstr "Ratings"
+
+msgid "Testfall"
+msgstr "Test case"
+
+msgid "Testfall speichern"
+msgstr "Save test case"
+
+msgid "Tests"
+msgstr "Tests"
+
+msgid "Titel"
+msgstr "Title"
+
+msgid "Zur Übersicht"
+msgstr "Back to overview"
+
+msgid "bearbeiten"
+msgstr "edit"
+
+msgid "zentrale PromptDefinition"
+msgstr "Central PromptDefinition"
+
+msgid "Versionen"
+msgstr "Versions"
+
+msgid "Tests / Ratings"
+msgstr "Tests / ratings"
+
+msgid "Lifecycle"
+msgstr "Lifecycle"
+
+msgid "Archivieren"
+msgstr "Archive"
+
+msgid "Publish ist nur über den Human-in-the-loop-Lifecycle möglich. Tests werden vor REVIEW und PUBLISH erneut ausgeführt."
+msgstr "Publishing is only possible through the human-in-the-loop lifecycle. Tests are rerun before REVIEW and PUBLISH."
+
+msgid "Definition"
+msgstr "Definition"
+
+msgid "Family"
+msgstr "Family"
+
+msgid "Area"
+msgstr "Area"
+
+msgid "Max. Zeichen"
+msgstr "Max. characters"
+
+msgid "Intent"
+msgstr "Intent"
+
+msgid "Kontexttemplate"
+msgstr "Context template"
+
+msgid "Felder & Optionen"
+msgstr "Fields & options"
+
+msgid "Pflichtfelder"
+msgstr "Required fields"
+
+msgid "Keine"
+msgstr "None"
+
+msgid "Optionale Felder"
+msgstr "Optional fields"
+
+msgid "Auswahloptionen"
+msgstr "Selection options"
+
+msgid "Testfälle"
+msgstr "Test cases"
+
+msgid "Tests sind Bestandteil des Release-Gates einer Prompt-Version."
+msgstr "Tests are part of the release gate for a prompt version."
+
+msgid "Alle Tests ausführen"
+msgstr "Run all tests"
+
+msgid "Testen"
+msgstr "Test"
+
+msgid "Löschen"
+msgstr "Delete"
+
+msgid "Noch kein Testfall. Vor Übergang zu TEST muss mindestens einer angelegt werden."
+msgstr "No test case yet. Create at least one before moving to TEST."
+
+msgid "Preview / Test-Komposition"
+msgstr "Preview / test composition"
+
+msgid "Prompt testen"
+msgstr "Test prompt"
+
+msgid "Ergebnis"
+msgstr "Result"
+
+msgid "Deterministischer Feld-Fallback"
+msgstr "Deterministic field fallback"
+
+msgid "10-Min.-Ø:"
+msgstr "10-min avg:"
+
+msgid "Aktive Warnungen"
+msgstr "Active alerts"
+
+msgid "App-Version"
+msgstr "App version"
+
+msgid "Architektur"
+msgstr "Architecture"
+
+msgid "Backup & Restore"
+msgstr "Backup & restore"
+
+msgid "Backups öffnen"
+msgstr "Open backups"
+
+msgid "Betriebszustand, Plattformdienste, Integrationen und Datensicherung."
+msgstr "Operational status, platform services, integrations and backups."
+
+msgid "CPU-Kerne"
+msgstr "CPU cores"
+
+msgid "Caddy"
+msgstr "Caddy"
+
+msgid "Celery Beat"
+msgstr "Celery Beat"
+
+msgid "Celery Worker"
+msgstr "Celery Worker"
+
+msgid "Container-CPU aktuell"
+msgstr "Current container CPU"
+
+msgid "Container-RAM gesamt"
+msgstr "Total container RAM"
+
+msgid "DB-Verbindungen"
+msgstr "Database connections"
+
+msgid "Dateiobjekte (Inodes) belegt"
+msgstr "Inodes used"
+
+msgid "Dateiobjekte (Inodes) verfügbar"
+msgstr "Inodes available"
+
+msgid "Datenbank & Jobs"
+msgstr "Database & jobs"
+
+msgid "Datenbank öffnen"
+msgstr "Open database"
+
+msgid "Datenträger / gesamt"
+msgstr "Disk / total"
+
+msgid "Datenträger / verfügbar"
+msgstr "Disk / available"
+
+msgid "Datenträger / verwendet"
+msgstr "Disk / used"
+
+msgid "Definitionen"
+msgstr "Definitions"
+
+msgid "Dienste & Integrationen"
+msgstr "Services & integrations"
+
+msgid "Dienste öffnen"
+msgstr "Open services"
+
+msgid "Diese Werte stammen aus cAdvisor und beziehen sich auf Docker-Container. Die VM-Werte oben stammen aus node_exporter und beziehen sich auf die gesamte Docker-Host-VM."
+msgstr "These metrics come from cAdvisor and refer to Docker containers. The VM metrics above come from node_exporter and cover the entire Docker host VM."
+
+msgid "Docker"
+msgstr "Docker"
+
+msgid "Docker-Container"
+msgstr "Docker containers"
+
+msgid "Erkannte Container"
+msgstr "Detected containers"
+
+msgid "Fehler / 24 h"
+msgstr "Errors / 24 h"
+
+msgid "Git Commit"
+msgstr "Git commit"
+
+msgid "Host & Release"
+msgstr "Host & release"
+
+msgid "Inodes sind Dateisystem-Einträge für Dateien und Verzeichnisse. Sind sie ausgeschöpft, können trotz freiem Speicher keine neuen Dateien angelegt werden."
+msgstr "Inodes are filesystem entries for files and directories. Once exhausted, no new files can be created even if free disk space remains."
+
+msgid "Keine aktiven Systemwarnungen."
+msgstr "No active system alerts."
+
+msgid "Letzter Restore-Test"
+msgstr "Last restore test"
+
+msgid "Letztes Backup"
+msgstr "Last backup"
+
+msgid "Letztes Deployment"
+msgstr "Last deployment"
+
+msgid "Load:"
+msgstr "Load:"
+
+msgid "Messbereich"
+msgstr "Measurement scope"
+
+msgid "Messquelle"
+msgstr "Measurement source"
+
+msgid "Messwert-Erklärung"
+msgstr "Metric explanation"
+
+msgid "OS / Kernel"
+msgstr "OS / kernel"
+
+msgid "PostgreSQL"
+msgstr "PostgreSQL"
+
+msgid "Prompt MCP"
+msgstr "Prompt MCP"
+
+msgid "RAM gesamt"
+msgstr "Total RAM"
+
+msgid "RAM verfügbar"
+msgstr "Available RAM"
+
+msgid "RAM verwendet"
+msgstr "Used RAM"
+
+msgid "Restore-Tests öffnen"
+msgstr "Open restore tests"
+
+msgid "TLS-Zertifikat"
+msgstr "TLS certificate"
+
+msgid "Umgebung"
+msgstr "Environment"
+
+msgid "Uptime"
+msgstr "Uptime"
+
+msgid "VM-CPU aktuell"
+msgstr "Current VM CPU"
+
+msgid "VM-Datenträger /"
+msgstr "VM disk /"
+
+msgid "VM-RAM"
+msgstr "VM RAM"
+
+msgid "VM-Speicher & Dateisystem"
+msgstr "VM memory & filesystem"
+
+msgid "Verwendetes Backup"
+msgstr "Backup used"
+
+msgid "Warnungen öffnen"
+msgstr "Open alerts"
+
+msgid "geschützt"
+msgstr "protected"
+
+msgid "healthy"
+msgstr "healthy"
+
+msgid "konfiguriert"
+msgstr "configured"
+
+msgid "nicht erreichbar"
+msgstr "unreachable"
+
+msgid "nicht protokolliert"
+msgstr "not logged"
+
+msgid "und ist die für neue Prozesse realistisch nutzbare Speichermenge. „Inodes“ sind Dateisystem-Einträge; ein niedriger Belegungsgrad ist unkritisch."
+msgstr "and represents the amount of memory realistically available to new processes. Inodes are filesystem entries; low inode usage is not a concern."
+
+msgid "verfügbar von"
+msgstr "available out of"
+
+msgid "„RAM verfügbar“ entspricht Linux"
+msgstr "“Available RAM” corresponds to Linux"
+
+msgid "not_configured"
+msgstr "not configured"
+
+msgid "unknown"
+msgstr "unknown"
+
+msgid "ok"
+msgstr "OK"
+
+msgid "warning"
+msgstr "warning"
+
+msgid "unavailable"
+msgstr "unavailable"
+
+msgid "degraded"
+msgstr "degraded"
+
+msgid "success"
+msgstr "successful"
+
+msgid "failed"
+msgstr "failed"
+
+msgid "running"
+msgstr "running"
+
+msgid "critical"
+msgstr "critical"
+
+msgid "passed"
+msgstr "passed"
+
+msgid "error"
+msgstr "error"
+
+msgid "skipped"
+msgstr "skipped"
+
+msgid "in_progress"
+msgstr "in progress"
+
+msgid "no_data"
+msgstr "no data"
+
+msgid "completed"
+msgstr "completed"
+
+msgid "nicht verfügbar"
+msgstr "not available"
+
+msgid "Disk {value}% belegt"
+msgstr "Disk usage: {value}%"
+
+msgid "RAM {value}% belegt"
+msgstr "RAM usage: {value}%"
+
+msgid "CPU 10-Minuten-Mittel {value}%"
+msgstr "CPU 10-minute average: {value}%"
+
+msgid "Kein auswertbarer Backupstatus verfügbar"
+msgstr "No usable backup status available"
+
+msgid "Letztes Backup meldet Status {value}"
+msgstr "Latest backup reports status {value}"
+
+msgid "Backup ist {value} Stunden alt"
+msgstr "Backup is {value} hours old"
+
+msgid "Restore-Statusdatei ist nicht auswertbar"
+msgstr "Restore status file cannot be evaluated"
+
+msgid "Noch kein Restore-Test protokolliert"
+msgstr "No restore test recorded yet"
+
+msgid "Letzter Restore-Test war nicht erfolgreich"
+msgstr "Latest restore test was unsuccessful"
+
+msgid "Letzter Restore-Test ist {value} Tage alt"
+msgstr "Latest restore test was {value} days ago"
+
+msgid "Monitoring-Ziel {value} ist nicht erreichbar"
+msgstr "Monitoring target {value} is unreachable"
+
+msgid "Monitoring-Ziel {value} liefert keinen Status"
+msgstr "Monitoring target {value} provides no status"
+
+msgid "Caddy Healthcheck ist nicht erreichbar"
+msgstr "Caddy health check is unreachable"
+
+msgid "Kein Celery Worker beantwortet den aktiven Ping"
+msgstr "No Celery worker responds to the active ping"
+
+msgid "Celery Beat-Heartbeat älter als {value} Minuten"
+msgstr "Celery Beat heartbeat is more than {value} minutes old"
+
+msgid "Celery Queue-Tiefe kann nicht gelesen werden"
+msgstr "Celery queue depth cannot be read"
+
+msgid "Celery Queue enthält {value} wartende Jobs"
+msgstr "Celery queue contains {value} pending jobs"
+
+msgid "{value} fehlgeschlagene Hintergrundjobs in 24 Stunden"
+msgstr "{value} background jobs failed in 24 hours"
+
+msgid "{value} E-Mail-Fehler in 24 Stunden"
+msgstr "{value} email errors in 24 hours"
+
+msgid "{value} Mollie-Verarbeitungsfehler in 24 Stunden"
+msgstr "{value} Mollie processing errors in 24 hours"
+
+msgid "Backups"
+msgstr "Backups"
+
+msgid "Restore-Tests"
+msgstr "Restore tests"
+
+msgid "Systemwarnungen"
+msgstr "System alerts"
+
+msgid "Erledigt"
+msgstr "Resolved"
+
+msgid "Filter"
+msgstr "Filter"
+
+msgid "Seite"
+msgstr "page"
+
+msgid "AGB akzeptieren"
+msgstr "Accept terms and conditions"
+
+msgid "Anmeldung fehlgeschlagen."
+msgstr "Sign-in failed."
+
+msgid "Anmeldung fehlgeschlagen. Bitte später erneut versuchen."
+msgstr "Sign-in failed. Please try again later."
+
+msgid "Anzahl Lizenzen"
+msgstr "Number of licenses"
+
+msgid "Art der Kündigung"
+msgstr "Type of cancellation"
+
+msgid "Außerordentliche Kündigung"
+msgstr "Extraordinary cancellation"
+
+msgid "Bei einer außerordentlichen Kündigung ist der Kündigungsgrund erforderlich."
+msgstr "A reason is required for extraordinary cancellation."
+
+msgid "Bestellnummer"
+msgstr "Order number"
+
+msgid "Bitte bestätigen Sie den gewünschten Leistungsbeginn vor Ablauf der Widerrufsfrist."
+msgstr "Please confirm your request for service to start before the withdrawal period expires."
+
+msgid "Bitte bestätigen Sie die Widerrufsbelehrung."
+msgstr "Please acknowledge the withdrawal information."
+
+msgid "Datenschutzhinweise zur Kenntnis genommen"
+msgstr "I have read the privacy notice"
+
+msgid "Deutschland"
+msgstr "Germany"
+
+msgid "Die Bestellnummer finden Sie in Ihrer Bestell- bzw. Zahlungsbestätigung."
+msgstr "You can find the order number in your order or payment confirmation."
+
+msgid "E-Mail-Adresse für die Eingangsbestätigung"
+msgstr "Email address for acknowledgement of receipt"
+
+msgid "E-Mail-Adresse für die Kündigungsbestätigung"
+msgstr "Email address for cancellation confirmation"
+
+msgid "Firmenname erforderlich."
+msgstr "Company name is required."
+
+msgid "Gewünschter Beendigungszeitpunkt"
+msgstr "Requested termination date"
+
+msgid "Hausnummer"
+msgstr "House number"
+
+msgid "Kündigungsgrund"
+msgstr "Reason for cancellation"
+
+msgid "Leer lassen für den frühestmöglichen Zeitpunkt."
+msgstr "Leave blank for the earliest possible date."
+
+msgid "Leistungsbeginn vor Ablauf der Widerrufsfrist ausdrücklich verlangt"
+msgstr "I expressly request service to begin before the withdrawal period expires"
+
+msgid "Lizenzbedingungen akzeptieren"
+msgstr "Accept license terms"
+
+msgid "Ordentliche Kündigung"
+msgstr "Ordinary cancellation"
+
+msgid "PLZ"
+msgstr "Postal code"
+
+msgid "Passwörter stimmen nicht überein."
+msgstr "Passwords do not match."
+
+msgid "Steuernummer ist für diese Steuerregel erforderlich."
+msgstr "A tax number is required for this tax rule."
+
+msgid "Straße"
+msgstr "Street"
+
+msgid "USt-IdNr. ist für diese Steuerregel erforderlich."
+msgstr "A VAT ID is required for this tax rule."
+
+msgid "Unternehmensname ist erforderlich."
+msgstr "Company name is required."
+
+msgid "Vertrag / Bestellung / Kundennummer"
+msgstr "Contract / order / customer number"
+
+msgid "Vor- und Nachname"
+msgstr "First and last name"
+
+msgid "Widerrufsinformation zur Kenntnis genommen"
+msgstr "I have read the withdrawal information"
+
+msgid "Zum Beispiel Bestellnummer oder Kundennummer."
+msgstr "For example, an order number or customer number."
+
+msgid "Gerätename"
+msgstr "Device name"
+
+msgid "Keine konkrete Lizenz"
+msgstr "No specific license"
+
+msgid "Lizenz (optional)"
+msgstr "License (optional)"
+
+msgid "Nachricht"
+msgstr "Message"
+
+msgid "Schlüssel"
+msgstr "Key"
+
+msgid "Sonstiges"
+msgstr "Other"
+
+msgid "Sortierung"
+msgstr "Sort order"
+
+msgid "Technisches Problem"
+msgstr "Technical issue"
+
+msgid "Aktuelle Stichprobengröße"
+msgstr "Recent sample size"
+
+msgid "App-Regel-Snapshot"
+msgstr "App rule snapshot"
+
+msgid "Ausgabeformen"
+msgstr "Output formats"
+
+msgid "Beispiel: {\"microsoft_tier\":\"premium\",\"payload\":{\"fields\":{...}}}"
+msgstr "Example: {\"microsoft_tier\":\"premium\",\"payload\":{\"fields\":{...}}}"
+
+msgid "Bereich"
+msgstr "Area"
+
+msgid "Darf nicht enthalten"
+msgstr "Must not contain"
+
+msgid "Ein Feld pro Zeile. Optionales Fragment: Feldname ||| Text mit {value}."
+msgstr "One field per line. Optional fragment: field name ||| text containing {value}."
+
+msgid "Ein Pflichtfeld pro Zeile."
+msgstr "One required field per line."
+
+msgid "Eingabedaten (JSON)"
+msgstr "Input data (JSON)"
+
+msgid "Familie"
+msgstr "Family"
+
+msgid "Feldbezeichnungen müssen innerhalb einer Prompt-Version eindeutig sein."
+msgstr "Field labels must be unique within a prompt version."
+
+msgid "Kontextvorlage"
+msgstr "Context template"
+
+msgid "Kritisch bei Abfall"
+msgstr "Critical drop threshold"
+
+msgid "Kritischer Durchschnitt"
+msgstr "Critical average"
+
+msgid "Maximale Zeichen"
+msgstr "Maximum characters"
+
+msgid "Microsoft-Lizenzstufe"
+msgstr "Microsoft license tier"
+
+msgid "Mindestanzahl Stichproben"
+msgstr "Minimum sample count"
+
+msgid "Mindestdurchschnitt"
+msgstr "Minimum average"
+
+msgid "Muss enthalten"
+msgstr "Must contain"
+
+msgid "Nur DRAFT-Versionen dürfen inhaltlich bearbeitet werden."
+msgstr "Only DRAFT versions may be edited."
+
+msgid "Payload muss ein JSON-Objekt sein."
+msgstr "Payload must be a JSON object."
+
+msgid "Quellen"
+msgstr "Sources"
+
+msgid "Schwerpunkte"
+msgstr "Focus areas"
+
+msgid "Test-Payload (JSON)"
+msgstr "Test payload (JSON)"
+
+msgid "Test-Payload muss ein JSON-Objekt sein."
+msgstr "Test payload must be a JSON object."
+
+msgid "Ungültiges JSON: %(error)s"
+msgstr "Invalid JSON: %(error)s"
+
+msgid "Vorherige Stichprobengröße"
+msgstr "Previous sample size"
+
+msgid "Warnung bei Abfall"
+msgstr "Warning drop threshold"
+
+msgid "Ziel / Intent"
+msgstr "Goal / intent"
+
+msgid "Zielgruppen"
+msgstr "Target audiences"
+
+msgid "API-Schlüssel"
+msgstr "API key"
+
+msgid "Ablauf optional"
+msgstr "Optional expiration"
+
+msgid "Außerhalb der Produktion ist ausschließlich ein Mollie-Test-Key (test_…) zulässig."
+msgstr "Only a Mollie test key (test_…) is permitted outside production."
+
+msgid "Begründung"
+msgstr "Reason"
+
+msgid "Beschreibung"
+msgstr "Description"
+
+msgid "Bruttopreis"
+msgstr "Gross price"
+
+msgid "Der Datensatz wird revisionssicher ausgeblendet und im Audit protokolliert."
+msgstr "The record will be hidden with an audit trail."
+
+msgid "Diese E-Mail-Adresse gehört bereits zu einem PROMPTFINISHER-Konto."
+msgstr "This email address already belongs to a PROMPTFINISHER account."
+
+msgid "Diese E-Mail-Adresse ist bereits einem Firmenkunden zugeordnet."
+msgstr "This email address is already assigned to a business customer."
+
+msgid "Diese E-Mail-Adresse ist bereits registriert."
+msgstr "This email address is already registered."
+
+msgid "Dokumenttyp"
+msgstr "Document type"
+
+msgid "E-Mail des Firmenadministrators"
+msgstr "Company administrator email"
+
+msgid "Eigenes Passwort erneut eingeben"
+msgstr "Re-enter your password"
+
+msgid "Erinnerung 1 · Tage vorher"
+msgstr "Reminder 1 · Days before"
+
+msgid "Erinnerung 2 · Tage vorher"
+msgstr "Reminder 2 · Days before"
+
+msgid "Erstatten"
+msgstr "Refund"
+
+msgid "Für Unternehmens-Leads ist der Unternehmensname erforderlich."
+msgstr "A company name is required for business leads."
+
+msgid "Für diese Datenklasse existiert kein freigegebener Lösch-Handler."
+msgstr "No approved deletion handler exists for this data class."
+
+msgid "Für diese E-Mail-Adresse existiert bereits ein aktiver Lead."
+msgstr "An active lead already exists for this email address."
+
+msgid "Identität und Berechtigung des Ansprechpartners wurden geprüft"
+msgstr "Contact identity and authorization have been verified"
+
+msgid "In Kunde umwandeln"
+msgstr "Convert to customer"
+
+msgid "In Produktion ist ausschließlich ein Mollie-Live-Key (live_…) zulässig."
+msgstr "Only a Mollie live key (live_…) is permitted in production."
+
+msgid "Inhalt"
+msgstr "Content"
+
+msgid "Interne Notiz zur Prüfung (optional)"
+msgstr "Internal verification note (optional)"
+
+msgid "Interne Notizen"
+msgstr "Internal notes"
+
+msgid "Kaufbar"
+msgstr "Purchasable"
+
+msgid "Kritische Warnung · Tage vorher"
+msgstr "Critical warning · Days before"
+
+msgid "Lead in Firmenkunden umwandeln und Einladungslink senden"
+msgstr "Convert lead to business customer and send invitation link"
+
+msgid "Lead wirklich löschen"
+msgstr "Confirm lead deletion"
+
+msgid "Lead-Typ"
+msgstr "Lead type"
+
+msgid "Leer lassen, um den bestehenden Schlüssel unverändert zu lassen."
+msgstr "Leave blank to keep the current key unchanged."
+
+msgid "Lesen"
+msgstr "Read"
+
+msgid "Löschung erst nach dieser Anzahl Tage. Rechtliche Aufbewahrungsfristen separat prüfen."
+msgstr "Delete only after this number of days. Check statutory retention periods separately."
+
+msgid "Neukauf"
+msgstr "New purchase"
+
+msgid "Nicht zugewiesen"
+msgstr "Unassigned"
+
+msgid "Nächste Aktion"
+msgstr "Next action"
+
+msgid "Operations lesen"
+msgstr "Read operations"
+
+msgid "Preistyp"
+msgstr "Price type"
+
+msgid "Prompt-Drafts erzeugen"
+msgstr "Create prompt drafts"
+
+msgid "Prompt-Tests ausführen"
+msgstr "Run prompt tests"
+
+msgid "Prompts erzeugen"
+msgstr "Create prompts"
+
+msgid "Prompts lesen"
+msgstr "Read prompts"
+
+msgid "Qualität verwalten"
+msgstr "Manage quality"
+
+msgid "Quelle"
+msgstr "Source"
+
+msgid "Reminder 1 muss vor Reminder 2 liegen (größere Tageszahl)."
+msgstr "Reminder 1 must occur before Reminder 2 (greater number of days)."
+
+msgid "Reminder 2 muss vor der kritischen Warnphase liegen."
+msgstr "Reminder 2 must occur before the critical warning period."
+
+msgid "Sicherheitsbestätigung des aktuell angemeldeten netstyle Benutzers."
+msgstr "Security confirmation by the currently signed-in netstyle user."
+
+msgid "Sichtbar"
+msgstr "Visible"
+
+msgid "Standard-Laufzeit in Tagen"
+msgstr "Default term in days"
+
+msgid "Unternehmensname"
+msgstr "Company name"
+
+msgid "Unterstützt: expired_invitations, email_messages, revoked_devices, resolved_system_alerts, resolved_task_failures, expired_sessions."
+msgstr "Supported: expired_invitations, email_messages, revoked_devices, resolved_system_alerts, resolved_task_failures, expired_sessions."
+
+msgid "Veröffentlichen"
+msgstr "Publish"
+
+msgid "Währung"
+msgstr "Currency"
+
+msgid "Absender-Anzeigename"
+msgstr "Sender display name"
+
+msgid "Absender-E-Mail"
+msgstr "Sender email"
+
+msgid "Aktive Absenderadresse für SMTP. Änderungen gelten ohne Container-Neustart."
+msgstr "Active SMTP sender address. Changes take effect without restarting containers."
+
+msgid "Antwortadresse"
+msgstr "Reply-to address"
+
+msgid "Anwendungs-/Client-ID der App-Registrierung."
+msgstr "Application/client ID of the app registration."
+
+msgid "Automatisch – bei sicherem Ausfall auf Fallback wechseln"
+msgstr "Automatic – switch to fallback after a confirmed failure"
+
+msgid "Backup kritisch in Stunden"
+msgstr "Critical backup age in hours"
+
+msgid "Backup-Warnung in Stunden"
+msgstr "Backup warning age in hours"
+
+msgid "Begründung optional"
+msgstr "Reason (optional)"
+
+msgid "Bei IONOS normalerweise die vollständige E-Mail-Adresse."
+msgstr "For IONOS, normally use the full email address."
+
+msgid "Bitte eine gültige Domain ohne @ eingeben."
+msgstr "Enter a valid domain without @."
+
+msgid "CPU-Warnung in %"
+msgstr "CPU warning threshold in %"
+
+msgid "DKIM DNS Sollwert"
+msgstr "DKIM DNS target value"
+
+msgid "DKIM-Selector"
+msgstr "DKIM selector"
+
+msgid "DMARC Sollwert"
+msgstr "DMARC target value"
+
+msgid "Datenträger kritisch in %"
+msgstr "Critical disk usage in %"
+
+msgid "Datenträger-Warnung in %"
+msgstr "Disk usage warning in %"
+
+msgid "Der kritische Wert muss über dem Warnwert liegen."
+msgstr "The critical threshold must be higher than the warning threshold."
+
+msgid "Die Mail-Domain muss zur Absender-E-Mail passen."
+msgstr "The mail domain must match the sender email address."
+
+msgid "Dokumentierter DNS-Sollwert für _dmarc.<Domain>."
+msgstr "Documented DNS target value for _dmarc.<Domain>."
+
+msgid "Dokumentierter DNS-Sollwert. Das Speichern ändert den öffentlichen DNS-Eintrag nicht."
+msgstr "Documented DNS target value. Saving does not modify the public DNS record."
+
+msgid "Domain des sichtbaren Absenders, z. B. decke-wand-boden.de oder später promptmaster.ai."
+msgstr "Domain of the visible sender, e.g. decke-wand-boden.de or later promptmaster.ai."
+
+msgid "Ein DMARC-Eintrag muss mit \"v=DMARC1;\" beginnen."
+msgstr "A DMARC record must begin with \"v=DMARC1;\"."
+
+msgid "Ein SPF-Eintrag muss mit \"v=spf1 \" beginnen."
+msgstr "An SPF record must begin with \"v=spf1 \"."
+
+msgid "Ein Versandweg darf in der Kette nur einmal vorkommen."
+msgstr "Each delivery route may appear only once in the chain."
+
+msgid "Eine oder mehrere E-Mail-Adressen, getrennt durch Zeilenumbruch, Komma oder Semikolon."
+msgstr "One or more email addresses separated by a newline, comma or semicolon."
+
+msgid "Entra Client ID"
+msgstr "Entra Client ID"
+
+msgid "Entra Client Secret"
+msgstr "Entra Client Secret"
+
+msgid "Entra Tenant ID"
+msgstr "Entra Tenant ID"
+
+msgid "Erstattung verbindlich über Mollie auslösen"
+msgstr "Confirm refund through Mollie"
+
+msgid "Fallback 1"
+msgstr "Fallback 1"
+
+msgid "Fallback 2"
+msgstr "Fallback 2"
+
+msgid "Für IONOS mit STARTTLS: 587."
+msgstr "For IONOS with STARTTLS: 587."
+
+msgid "Für Microsoft Graph ist dieses Feld erforderlich."
+msgstr "This field is required for Microsoft Graph."
+
+msgid "Für Microsoft Graph ist ein Client Secret erforderlich."
+msgstr "A client secret is required for Microsoft Graph."
+
+msgid "Für SMTP 1 ist dieses Feld erforderlich."
+msgstr "This field is required for SMTP 1."
+
+msgid "Für SMTP 2 ist dieses Feld erforderlich."
+msgstr "This field is required for SMTP 2."
+
+msgid "Für den automatischen Modus muss mindestens ein Fallback gewählt werden."
+msgstr "Select at least one fallback for automatic mode."
+
+msgid "Im automatischen Modus wird nur bei eindeutig nicht zugestellten Fehlern weitergeschaltet."
+msgstr "Automatic mode switches routes only for confirmed non-delivery failures."
+
+msgid "Kein weiterer Fallback"
+msgstr "No additional fallback"
+
+msgid "Leer lassen, um das gespeicherte Passwort unverändert zu lassen."
+msgstr "Leave blank to keep the stored password unchanged."
+
+msgid "Leer lassen, um das gespeicherte Secret unverändert zu lassen."
+msgstr "Leave blank to keep the stored secret unchanged."
+
+msgid "Manuell – nur den primären Versandweg verwenden"
+msgstr "Manual – use primary delivery route only"
+
+msgid "Microsoft-365-Absender"
+msgstr "Microsoft 365 sender"
+
+msgid "Monitoring-Alarmempfänger"
+msgstr "Monitoring alert recipients"
+
+msgid "Neuer Schlüssel"
+msgstr "New key"
+
+msgid "Optional. Leer lassen, wenn Antworten an die Absenderadresse gehen sollen."
+msgstr "Optional. Leave blank to send replies to the sender address."
+
+msgid "Optionaler Selector bzw. Hinweis auf die verwendeten Microsoft-365-DKIM-Selectoren."
+msgstr "Optional selector or note about Microsoft 365 DKIM selectors in use."
+
+msgid "Optionaler zweiter SMTP-Provider, z. B. derselbe Relay-Dienst wie bei Listmonk."
+msgstr "Optional second SMTP provider, e.g. the same relay service used by Listmonk."
+
+msgid "Postfach, über das Microsoft Graph senden soll, z. B. promptmaster@netstyle.de."
+msgstr "Mailbox used by Microsoft Graph for sending, e.g. promptmaster@netstyle.de."
+
+msgid "Primärer Versandweg"
+msgstr "Primary delivery route"
+
+msgid "RAM kritisch in %"
+msgstr "Critical RAM usage in %"
+
+msgid "RAM-Warnung in %"
+msgstr "RAM usage warning in %"
+
+msgid "Restore-Test-Warnung in Tagen"
+msgstr "Restore test warning age in days"
+
+msgid "SMTP 1 – Benutzername"
+msgstr "SMTP 1 – Username"
+
+msgid "SMTP 1 – Passwort"
+msgstr "SMTP 1 – Password"
+
+msgid "SMTP 1 – Port"
+msgstr "SMTP 1 – Port"
+
+msgid "SMTP 1 – STARTTLS verwenden"
+msgstr "SMTP 1 – Use STARTTLS"
+
+msgid "SMTP 1 – Server"
+msgstr "SMTP 1 – Server"
+
+msgid "SMTP 1, SMTP 2 und Microsoft Graph bleiben parallel konfiguriert."
+msgstr "SMTP 1, SMTP 2 and Microsoft Graph remain configured in parallel."
+
+msgid "SMTP 2 – Benutzername"
+msgstr "SMTP 2 – Username"
+
+msgid "SMTP 2 – Passwort"
+msgstr "SMTP 2 – Password"
+
+msgid "SMTP 2 – Port"
+msgstr "SMTP 2 – Port"
+
+msgid "SMTP 2 – STARTTLS verwenden"
+msgstr "SMTP 2 – Use STARTTLS"
+
+msgid "SMTP 2 – Server"
+msgstr "SMTP 2 – Server"
+
+msgid "SPF Sollwert"
+msgstr "SPF target value"
+
+msgid "Support-Empfänger"
+msgstr "Support recipient"
+
+msgid "TXT-/CNAME-Sollwert oder beide Microsoft-365-DKIM-CNAMEs. Reine Dokumentation; DNS wird nicht automatisch verändert."
+msgstr "TXT/CNAME target value or both Microsoft 365 DKIM CNAMEs. For documentation only; DNS is not changed automatically."
+
+msgid "Verzeichnis-/Mandanten-ID des Microsoft-365-Tenants."
+msgstr "Directory/tenant ID of the Microsoft 365 tenant."
+
+msgid "Zum Beispiel PROMPTFINISHER."
+msgstr "For example, PROMPTFINISHER."
+
+msgid "Zum Beispiel smtp.ionos.de."
+msgstr "For example, smtp.ionos.de."
+
+msgid "Das eigene netstyle Konto kann hier nicht deaktiviert werden."
+msgstr "You cannot deactivate your own netstyle account here."
+
+msgid "Der letzte aktive Superadmin kann nicht deaktiviert werden."
+msgstr "The last active superadmin cannot be deactivated."
+
+msgid "Die eigene 2FA wird nicht über die Admin-Fremdverwaltung zurückgesetzt."
+msgstr "You cannot reset your own 2FA through the admin account-management function."
+
+msgid "2FA zurückgesetzt. Der Benutzer muss sie beim nächsten Login neu einrichten."
+msgstr "2FA has been reset. The user must set it up again at the next sign-in."
+
+msgid "Die eigene Superadmin-Rolle kann nicht hier entfernt werden."
+msgstr "You cannot remove your own superadmin role here."
+
+msgid "Die letzte aktive Superadmin-Berechtigung kann nicht entfernt werden."
+msgstr "The last active superadmin authorization cannot be removed."
+
+msgid "Ein gesperrter Service Account kann nicht rotiert werden."
+msgstr "A blocked service account cannot be rotated."
+
+msgid "Mollie-Produktiv-Checkout wurde gesperrt."
+msgstr "Mollie production checkout has been disabled."
+
+msgid "Bestätigung für die Erstattung fehlt."
+msgstr "Refund confirmation is missing."
+
+msgid "Erstattung wurde an Mollie übermittelt."
+msgstr "The refund request was submitted to Mollie."
+
+msgid "Für dieses Unternehmen existiert bereits ein aktiver Firmenadministrator."
+msgstr "This company already has an active company administrator."
+
+msgid "Dieser Benutzer ist bereits Firmenadministrator."
+msgstr "This user is already a company administrator."
+
+msgid "Ungültiger Supportstatus."
+msgstr "Invalid support status."
+
+msgid "Ungültiger Bearbeitungsstatus."
+msgstr "Invalid processing status."
+
+msgid "Bitte eine Antwort eingeben."
+msgstr "Please enter a reply."
+
+msgid "Die Antwort darf höchstens 10.000 Zeichen enthalten."
+msgstr "The reply must not exceed 10,000 characters."
+
+msgid "Status aktualisiert."
+msgstr "Status updated."
+
+msgid "Einstellungen gespeichert."
+msgstr "Settings saved."
+
+msgid "Rolle gespeichert."
+msgstr "Role saved."
+
+msgid "Rolle zugewiesen."
+msgstr "Role assigned."
+
+msgid "Rolle entfernt."
+msgstr "Role removed."
+
+msgid "Benutzerstatus aktualisiert."
+msgstr "User status updated."
+
+msgid "Lead gespeichert."
+msgstr "Lead saved."
+
+msgid "Lead-Zuständigkeit aktualisiert."
+msgstr "Lead assignment updated."
+
+msgid "Gerät wurde widerrufen."
+msgstr "Device access revoked."
+
+msgid "Unternehmensdaten gespeichert."
+msgstr "Company details saved."
+
+msgid "Benutzer deaktiviert; Lizenz- und Gerätezugänge wurden freigegeben."
+msgstr "User deactivated; license and device access released."
+
+msgid "Die Lizenz ist bereits frei."
+msgstr "The license is already unassigned."
+
+msgid "Lizenzzuweisung wurde freigegeben."
+msgstr "License assignment released."
+
+msgid "Lizenz wurde entsperrt."
+msgstr "License unblocked."
+
+msgid "Lizenz wurde gesperrt; vorhandene Gerätezugänge wurden widerrufen."
+msgstr "License blocked; existing device access revoked."
+
+msgid "Produkt angelegt. Legen Sie anschließend Preisversionen an."
+msgstr "Product created. Next, add price versions."
+
+msgid "Feature gespeichert."
+msgstr "Feature saved."
+
+msgid "Produkt gespeichert."
+msgstr "Product saved."
+
+msgid "Neue Preisversion angelegt."
+msgstr "New price version created."
+
+msgid "E-Mail-Vorlage gespeichert."
+msgstr "Email template saved."
+
+msgid "Mollie-Konfiguration gespeichert."
+msgstr "Mollie configuration saved."
+
+msgid "Service Account gesperrt."
+msgstr "Service account blocked."
+
+msgid "Verbrauchererklärung aktualisiert."
+msgstr "Consumer declaration updated."
+
+msgid "Rechtsdokument gespeichert."
+msgstr "Legal document saved."
+
+msgid "Retention-Policy gespeichert."
+msgstr "Retention policy saved."
+
+msgid "Löschanfrage verarbeitet und Konto anonymisiert."
+msgstr "Deletion request processed and account anonymized."
+
+msgid "Löschanfrage abgelehnt."
+msgstr "Deletion request rejected."
+
+msgid "Dieser Lead ist bereits einem Kunden zugeordnet."
+msgstr "This lead is already assigned to a customer."
+
+msgid "Einladung für den Firmenadministrator wurde gesendet."
+msgstr "Company administrator invitation sent."
+
+msgid "Kundenantwort gespeichert. Für Demo-Adressen wurde keine E-Mail versendet."
+msgstr "Customer reply saved. No email was sent to demo addresses."
+
+msgid "Kundenantwort gespeichert und E-Mail-Benachrichtigung eingeplant."
+msgstr "Customer reply saved and email notification queued."
+
+msgid "Kundenantwort gespeichert, E-Mail-Benachrichtigung konnte aber nicht eingeplant werden."
+msgstr "Customer reply saved, but the email notification could not be queued."
+
+msgid "netstyle Benutzer angelegt; Einrichtungslink wurde per E-Mail versendet."
+msgstr "netstyle user created; setup link sent by email."
+
+msgid "Privatkunden werden aus rechtlichen Gründen über Registrierung/Checkout angelegt; der Lead kann dort anschließend als gewonnen abgeschlossen werden."
+msgstr "For legal reasons, private customers are created through registration/checkout; the lead can then be marked as won."
+
+msgid "Lead wurde in einen Firmenkunden umgewandelt. Der Ansprechpartner hat eine sichere Einladung erhalten."
+msgstr "Lead converted to a business customer. The contact received a secure invitation."
+
+msgid "Lead %(lead_number)s angelegt."
+msgstr "Lead %(lead_number)s created."
+
+msgid "Lead %(lead_number)s gelöscht."
+msgstr "Lead %(lead_number)s deleted."
+
+msgid "Firmenadministrator wurde auf %(email)s übertragen."
+msgstr "Company administrator role transferred to %(email)s."
+
+msgid "Lizenz wurde %(email)s zugewiesen."
+msgstr "License assigned to %(email)s."
+
+msgid "Ausstehend"
+msgstr "Pending"
+
+msgid "Autorisiert"
+msgstr "Authorized"
+
+msgid "Storniert"
+msgstr "Canceled"
+
+msgid "Abgelaufen"
+msgstr "Expired"
+
+msgid "Teilweise erstattet"
+msgstr "Partially refunded"
+
+msgid "Vollständig erstattet"
+msgstr "Fully refunded"
+
+msgid "Chargeback"
+msgstr "Chargeback"
+
+msgid "Chargeback zurückgenommen"
+msgstr "Chargeback reversed"
+
+msgid "Unbekannt"
+msgstr "Unknown"
+
+msgid "Verarbeitungsfehler"
+msgstr "Processing error"
+
+msgid "Fehler behoben"
+msgstr "Error resolved"
+
+msgid "E-Mail-Historie"
+msgstr "Email history"
+
+msgid "netstyle Rolle zuweisen"
+msgstr "Assign netstyle role"
+
+msgid "Erstattung konnte nicht an Mollie übermittelt werden."
+msgstr "Refund could not be submitted to Mollie."
+
+msgid "Nachrichtentext"
+msgstr "Message text"
+
+msgid "Rollenname"
+msgstr "Role name"
+
+msgid "Lead %(lead_number)s löschen"
+msgstr "Delete lead %(lead_number)s"
+
+msgid "Lead %(lead_number)s in Kunden umwandeln"
+msgstr "Convert lead %(lead_number)s to customer"
+
+msgid "Firmenadministrator übertragen · %(email)s"
+msgstr "Transfer company administrator · %(email)s"
+
+msgid "E-Mail-Vorlage · %(code)s"
+msgstr "Email template · %(code)s"
+
+msgid "Löschanfrage ablehnen"
+msgstr "Reject deletion request"
+
+msgid "Uneingeschränkte Rechte auf alle PROMPTFINISHER-Verwaltungsbereiche."
+msgstr "Unrestricted access to all PROMPTFINISHER administration areas."
+
+msgid "Kunden, Lizenzen, Geräte, Bestellungen, Zahlungen, E-Mail und Support."
+msgstr "Customers, licenses, devices, orders, payments, email, and support."
+
+msgid "Monitoring, Backups, Operations API, Logs und Systemstatus."
+msgstr "Monitoring, backups, operations API, logs, and system status."
+
+msgid "Prompt Studio, Prompt-Lifecycle, Qualität und zentrale Inhalte."
+msgstr "Prompt Studio, prompt lifecycle, quality, and central content."
+
+msgid "Berechtigungen werden über die zugewiesenen Capabilities gesteuert."
+msgstr "Permissions are controlled by the assigned capabilities."
+
+msgid "Objekttyp"
+msgstr "Object type"
+
+msgid "Objekt-ID"
+msgstr "Object ID"
+
+msgid "Lead anlegen"
+msgstr "Create lead"
+
+msgid "Lead %(lead_number)s zuweisen"
+msgstr "Assign lead %(lead_number)s"
+
+msgid "Firmenadministrator einladen · %(company)s"
+msgstr "Invite company administrator · %(company)s"
+
+msgid "Feature bearbeiten"
+msgstr "Edit feature"
+
+msgid "Preisversion · %(product)s"
+msgstr "Price version · %(product)s"
+
+msgid "Rechtsdokument bearbeiten"
+msgstr "Edit legal document"
+
+msgid "Retention-Policy bearbeiten"
+msgstr "Edit retention policy"
+
+msgid "Rolle · %(name)s"
+msgstr "Role · %(name)s"
+
+msgid "Firmenadministrator"
+msgstr "Company administrator"
+
+msgid "Entwurf"
+msgstr "Draft"
+
+msgid "Zahlung offen"
+msgstr "Payment pending"
+
+msgid "Zahlung prüfen"
+msgstr "Review payment"
+
+msgid "Refundiert"
+msgstr "Refunded"
+
+msgid "Abgelehnt"
+msgstr "Rejected"
+
+msgid "Eingegangen"
+msgstr "Received"
+
+msgid "Kündigung"
+msgstr "Cancellation"
+
+msgid "Für Kunden sichtbar"
+msgstr "Visible to customers"
+
+msgid "Interne Notiz"
+msgstr "Internal note"
+
+msgid "Bitte lesen Sie vor der Registrierung die <a href=\"%(terms_url)s\" target=\"_blank\" rel=\"noopener\">AGB</a> und die <a href=\"%(privacy_url)s\" target=\"_blank\" rel=\"noopener\">Datenschutzerklärung</a>."
+msgstr "Before registering, please read the <a href=\"%(terms_url)s\" target=\"_blank\" rel=\"noopener\">Terms and Conditions</a> and the <a href=\"%(privacy_url)s\" target=\"_blank\" rel=\"noopener\">Privacy Policy</a>."
+
+msgid "Admin-Einladung neu senden"
+msgstr "Resend admin invitation"
+
+msgid "Firmenadministrator einladen"
+msgstr "Invite company administrator"

@@ -9,8 +9,8 @@
   aria-label="{% translate 'Sprache auswählen' %}"
 >
   <label>
-    <span>{% translate "Sprache" %}</span>
-    <select name="language" data-language-select aria-label="{% translate 'Sprache' %}">
+    <span class="language-switcher-label">{% translate "Sprache" %}</span>
+    <select name="language" data-language-select aria-label="{% translate 'Sprache auswählen' %}">
       {% for code,name in available_languages %}
         <option value="{{ code }}" {% if code == current_language %}selected{% endif %}>{{ name }}</option>
       {% endfor %}

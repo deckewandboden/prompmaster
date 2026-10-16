@@ -160,6 +160,43 @@ class LicenseAdminGridContractTests(TestCase):
         self.assertEqual(rows['GRID-LIC-FREE'].license_holder_name, 'Frei')
         self.assertEqual(rows['GRID-LIC-FREE'].license_holder_email, '')
 
+    def test_unassigned_license_localization_survives_search_and_csv(self):
+        """Query annotations must use the active locale in grids and CSV."""
+        from urllib.parse import quote
+        from django.utils.translation import gettext, override
+        from .datagrid import csv_response
+
+        for language in ('de', 'en', 'es', 'pt', 'tr', 'ru', 'pl', 'fr', 'it', 'nl'):
+            with self.subTest(language=language), override(language):
+                expected = 'Frei' if language == 'de' else gettext('Nicht zugewiesen')
+                self.assertTrue(expected)
+                if language != 'de':
+                    self.assertNotEqual(expected, 'Nicht zugewiesen')
+
+                rows = {
+                    row.license_number: row
+                    for row in _license_admin_queryset(
+                        License.objects.filter(company=self.company)
+                    )
+                }
+                self.assertEqual(rows['GRID-LIC-FREE'].license_holder_name, expected)
+                self.assertEqual(rows['GRID-LIC-FREE'].license_holder_email, '')
+                self.assertEqual(rows['GRID-LIC-A'].license_holder_name, 'Anna Becker')
+
+                searched = self.grid('?q=' + quote(expected, safe=''))
+                self.assertEqual(
+                    [row.license_number for row in searched.page.object_list],
+                    ['GRID-LIC-FREE'],
+                )
+                exported = csv_response(
+                    searched.queryset,
+                    [('license_number', 'License'), ('license_holder_name', 'Holder')],
+                    'licenses-test.csv',
+                )
+                csv_text = b''.join(exported.streaming_content).decode('utf-8-sig')
+                self.assertIn('GRID-LIC-FREE;' + expected, csv_text)
+                self.assertNotIn('GRID-LIC-A;', csv_text)
+
     def test_license_name_and_product_are_server_side_sortable_and_searchable(self):
         by_name = self.grid('?sort=name&dir=asc')
         self.assertEqual(
@@ -193,11 +230,11 @@ class LicenseAdminGridContractTests(TestCase):
         for source in (company_grid, private_grid):
             self.assertIn("sort_url request 'name'", source)
             self.assertIn("sort_url request 'product'", source)
-            self.assertIn('data-label="Name"', source)
+            self.assertIn('data-label="{% translate \'Name\' %}"', source)
             self.assertIn('license_holder_name', source)
 
         self.assertIn('Zugewiesen an', detail)
-        self.assertIn('<span>E-Mail</span>', detail)
+        self.assertIn('<span>{% translate \'E-Mail\' %}</span>', detail)
         self.assertIn('class="wrap-anywhere"', detail)
 
 

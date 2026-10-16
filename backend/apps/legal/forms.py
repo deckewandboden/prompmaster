@@ -1,52 +1,53 @@
 from django import forms
+from django.utils.translation import gettext_lazy as _
 
 
 class WithdrawalDeclarationForm(forms.Form):
     name = forms.CharField(
         max_length=240,
-        label='Vor- und Nachname',
+        label=_('Vor- und Nachname'),
     )
     email = forms.EmailField(
-        label='E-Mail-Adresse für die Eingangsbestätigung',
+        label=_('E-Mail-Adresse für die Eingangsbestätigung'),
     )
     contract_reference = forms.CharField(
         max_length=160,
-        label='Bestellnummer',
-        help_text='Die Bestellnummer finden Sie in Ihrer Bestell- bzw. Zahlungsbestätigung.',
+        label=_('Bestellnummer'),
+        help_text=_('Die Bestellnummer finden Sie in Ihrer Bestell- bzw. Zahlungsbestätigung.'),
     )
 
 
 class CancellationDeclarationForm(forms.Form):
     CANCELLATION_KIND = (
-        ('ordinary', 'Ordentliche Kündigung'),
-        ('extraordinary', 'Außerordentliche Kündigung'),
+        ('ordinary', _('Ordentliche Kündigung')),
+        ('extraordinary', _('Außerordentliche Kündigung')),
     )
 
     cancellation_kind = forms.ChoiceField(
         choices=CANCELLATION_KIND,
-        label='Art der Kündigung',
+        label=_('Art der Kündigung'),
     )
     name = forms.CharField(
         max_length=240,
-        label='Vor- und Nachname',
+        label=_('Vor- und Nachname'),
     )
     email = forms.EmailField(
-        label='E-Mail-Adresse für die Kündigungsbestätigung',
+        label=_('E-Mail-Adresse für die Kündigungsbestätigung'),
     )
     contract_reference = forms.CharField(
         max_length=160,
-        label='Vertrag / Bestellung / Kundennummer',
-        help_text='Zum Beispiel Bestellnummer oder Kundennummer.',
+        label=_('Vertrag / Bestellung / Kundennummer'),
+        help_text=_('Zum Beispiel Bestellnummer oder Kundennummer.'),
     )
     requested_end_date = forms.DateField(
         required=False,
-        label='Gewünschter Beendigungszeitpunkt',
+        label=_('Gewünschter Beendigungszeitpunkt'),
         widget=forms.DateInput(attrs={'type': 'date'}),
-        help_text='Leer lassen für den frühestmöglichen Zeitpunkt.',
+        help_text=_('Leer lassen für den frühestmöglichen Zeitpunkt.'),
     )
     reason = forms.CharField(
         required=False,
-        label='Kündigungsgrund',
+        label=_('Kündigungsgrund'),
         widget=forms.Textarea(attrs={'rows': 4}),
     )
 
@@ -58,6 +59,6 @@ class CancellationDeclarationForm(forms.Form):
         ):
             self.add_error(
                 'reason',
-                'Bei einer außerordentlichen Kündigung ist der Kündigungsgrund erforderlich.',
+                _('Bei einer außerordentlichen Kündigung ist der Kündigungsgrund erforderlich.'),
             )
         return cleaned

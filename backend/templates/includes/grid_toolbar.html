@@ -4,18 +4,19 @@
   {% if grid.sort %}<input type="hidden" name="sort" value="{{ grid.sort }}"><input type="hidden" name="dir" value="{{ grid.direction }}">{% endif %}
   <input name="q" value="{{ grid.query }}" placeholder="{% translate 'Suchen …' %}" aria-label="{% translate 'Tabelle durchsuchen' %}" data-grid-search autocomplete="off">
   {% for param,label,choices in filter_options %}
-    <select name="{{ param }}" aria-label="{{ label }} filtern" data-grid-auto-submit>
-      <option value="">{{ label }}: {% translate "Alle" %}</option>
+    {% translate label as translated_filter_label %}
+    <select name="{{ param }}" aria-label="{{ translated_filter_label }} – {% translate 'Filter' %}" data-grid-auto-submit>
+      <option value="">{{ translated_filter_label }}: {% translate "Alle" %}</option>
       {% for value,text in choices %}
-        <option value="{{ value }}" {% if request.GET|get_item:param == value|stringformat:'s' %}selected{% endif %}>{{ text }}</option>
+        <option value="{{ value }}" {% if request.GET|get_item:param == value|stringformat:'s' %}selected{% endif %}>{% translate text %}</option>
       {% endfor %}
     </select>
   {% endfor %}
   <select name="page_size" aria-label="{% translate 'Seitengröße' %}" data-grid-auto-submit>
-    <option value="25" {% if grid.page_size == 25 %}selected{% endif %}>25 / Seite</option>
-    <option value="50" {% if grid.page_size == 50 %}selected{% endif %}>50 / Seite</option>
-    <option value="100" {% if grid.page_size == 100 %}selected{% endif %}>100 / Seite</option>
-    <option value="250" {% if grid.page_size == 250 %}selected{% endif %}>250 / Seite</option>
+    <option value="25" {% if grid.page_size == 25 %}selected{% endif %}>25 / {% translate "Seite" %}</option>
+    <option value="50" {% if grid.page_size == 50 %}selected{% endif %}>50 / {% translate "Seite" %}</option>
+    <option value="100" {% if grid.page_size == 100 %}selected{% endif %}>100 / {% translate "Seite" %}</option>
+    <option value="250" {% if grid.page_size == 250 %}selected{% endif %}>250 / {% translate "Seite" %}</option>
   </select>
   {% if columns %}
   <details class="column-picker">
@@ -23,7 +24,7 @@
     <div class="column-menu">
       {% for key,label,sortkey in columns %}
         {% col_visible request key as visible %}
-        <label><input type="checkbox" name="cols" value="{{ key }}" {% if visible %}checked{% endif %} class="compact-checkbox"> {{ label }}</label>
+        <label><input type="checkbox" name="cols" value="{{ key }}" {% if visible %}checked{% endif %} class="compact-checkbox"> {% translate label %}</label>
       {% endfor %}
     </div>
   </details>
@@ -38,7 +39,7 @@
 <div class="filter-chips" aria-label="{% translate 'Aktive Filter' %}">
   {% if grid.query %}{% url_replace request q=None page=1 as clear_q %}<a class="filter-chip" href="{{ clear_q }}">{% translate "Suche" %}: {{ grid.query }} <span aria-hidden="true">×</span></a>{% endif %}
   {% for param,label,choices in filter_options %}
-    {% if param in grid.filters %}{% filter_display request param choices as display %}{% clear_param_url request param as clear_filter %}<a class="filter-chip" href="{{ clear_filter }}">{{ label }}: {{ display }} <span aria-hidden="true">×</span></a>{% endif %}
+    {% if param in grid.filters %}{% filter_display request param choices as display %}{% clear_param_url request param as clear_filter %}<a class="filter-chip" href="{{ clear_filter }}">{% translate label %}: {% translate display %} <span aria-hidden="true">×</span></a>{% endif %}
   {% endfor %}
 </div>
 {% endif %}

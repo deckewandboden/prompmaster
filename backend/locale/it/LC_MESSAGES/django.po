@@ -1,0 +1,3593 @@
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: PROMPTFINISHER\n"
+"Language: it\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n!=1);\n"
+"X-Translation-Method: Argos offline machine translation - editorial QA pending\n"
+
+msgid "Sprache auswählen"
+msgstr "Seleziona la lingua"
+
+msgid "Sprache"
+msgstr "Lingua"
+
+msgid "Suchen …"
+msgstr "Cerca..."
+
+msgid "Suchen"
+msgstr "Ricerca"
+
+msgid "Lead, Kunde, Benutzer, Lizenz-ID oder E-Mail suchen …"
+msgstr "Ricerca lead, cliente, utente, licenza ID o e-mail ..."
+
+msgid "Superadmin"
+msgstr "Super admin"
+
+msgid "netstyle Benutzer"
+msgstr "netstyle utente"
+
+msgid "netstyle Admin-Backend"
+msgstr "netstyle admin backend"
+
+msgid "Übersicht"
+msgstr "Panoramica"
+
+msgid "Leads"
+msgstr "Contatti potenziali"
+
+msgid "Kunden"
+msgstr "Clienti"
+
+msgid "Lizenzen"
+msgstr "Licenze"
+
+msgid "Bestellungen"
+msgstr "Ordini"
+
+msgid "Zahlungen"
+msgstr "Pagamenti"
+
+msgid "Produkte & Preise"
+msgstr "Prodotti e prezzi"
+
+msgid "Prompt Studio"
+msgstr "Prompt Studio"
+
+msgid "FAQ & Inhalte"
+msgstr "FAQ e contenuti"
+
+msgid "E-Mail"
+msgstr "Email"
+
+msgid "Mollie"
+msgstr "Mollie"
+
+msgid "Statistiken"
+msgstr "Statistiche"
+
+msgid "System & Betrieb"
+msgstr "Sistema e operazioni"
+
+msgid "API & Integrationen"
+msgstr "API & integrazioni"
+
+msgid "Datenschutz & Recht"
+msgstr "Privacy e legalità"
+
+msgid "Kontaktanfragen"
+msgstr "Richieste di contatto"
+
+msgid "Protokolle"
+msgstr "Logs"
+
+msgid "Benutzer & Rollen"
+msgstr "Utenti e ruoli"
+
+msgid "Einstellungen"
+msgstr "Impostazioni impostazioni"
+
+msgid "Abmelden"
+msgstr "Esci"
+
+msgid "Home"
+msgstr "Home"
+
+msgid "System"
+msgstr "Sistema"
+
+msgid "Logs"
+msgstr "Logs"
+
+msgid "Mehr"
+msgstr "Altro"
+
+msgid "Kundenportal"
+msgstr "Portale clienti"
+
+msgid "KUNDENPORTAL"
+msgstr "PORTALE CLIENTI"
+
+msgid "Benutzer, E-Mail oder Lizenz suchen …"
+msgstr "Ricerca utente, email o licenza ..."
+
+msgid "Lizenz suchen …"
+msgstr "Cerca una licenza …"
+
+msgid "Privatkunde"
+msgstr "Cliente privato"
+
+msgid "Dashboard"
+msgstr "Dashboard"
+
+msgid "Mein Team"
+msgstr "La mia squadra"
+
+msgid "Weitere Lizenzen kaufen"
+msgstr "Acquistare più licenze"
+
+msgid "Geräte"
+msgstr "Apparecchi"
+
+msgid "Bestellungen & Zahlungen"
+msgstr "Ordini e pagamenti"
+
+msgid "Unternehmen"
+msgstr "Società"
+
+msgid "Hilfe & Kontakt"
+msgstr "Aiuto &amp; contatto"
+
+msgid "Team"
+msgstr "Team"
+
+msgid "Anmelden"
+msgstr "Accedi"
+
+msgid "Ein Zugang für PROMPTFINISHER, Kundenportal und netstyle Admin"
+msgstr ""
+"Un account per PROMPTFINISHER, portale clienti e amministrazione netstyle"
+
+msgid "Noch kein Konto? Konto erstellen"
+msgstr "Ancora nessun conto? Crea account"
+
+msgid "Passwort vergessen?"
+msgstr "Password dimenticata?"
+
+msgid "Konto anlegen"
+msgstr "Crea account"
+
+msgid "Registrieren"
+msgstr "Registrati"
+
+msgid ""
+"Unternehmensadministratoren richten anschließend verpflichtend 2FA ein."
+msgstr "Gli amministratori delle società devono quindi impostare 2FA."
+
+msgid "Bereits registriert?"
+msgstr "Sei già registrato?"
+
+msgid "Zur Anmeldung"
+msgstr "Vai a firmare"
+
+msgid "E-Mail-Adresse"
+msgstr "Indirizzo email"
+
+msgid "Passwort"
+msgstr "Password"
+
+msgid "Bestätigungscode"
+msgstr "Codice di verifica"
+
+msgid "Kundentyp"
+msgstr "Tipo di cliente"
+
+msgid "Privat"
+msgstr "Privato"
+
+msgid "Vorname"
+msgstr "Nome"
+
+msgid "Nachname"
+msgstr "Cognome"
+
+msgid "Firmenname"
+msgstr "Nome della Società"
+
+msgid "AGB gelesen und akzeptiert"
+msgstr "Termini letti e accettati"
+
+msgid "Datenschutzerklärung zur Kenntnis genommen"
+msgstr "Informativa sulla privacy riconosciuta"
+
+msgid "Passwort zur Bestätigung"
+msgstr "Password per conferma"
+
+msgid "Administratorübertragung verbindlich bestätigen"
+msgstr "Confermare il trasferimento dell'amministratore"
+
+msgid "Neues Passwort"
+msgstr "Nuova password"
+
+msgid "Passwort wiederholen"
+msgstr "Ripeti la password"
+
+msgid "Tabellenfilter"
+msgstr "Filtri da tavolo"
+
+msgid "Tabelle durchsuchen"
+msgstr "Ricerca della tabella"
+
+msgid "Alle"
+msgstr "Tutti"
+
+msgid "Seitengröße"
+msgstr "Dimensione della pagina"
+
+msgid "Spalten"
+msgstr "Colonne"
+
+msgid "Anwenden"
+msgstr "Applicare"
+
+msgid "CSV exportieren"
+msgstr "Esportazione CSV"
+
+msgid "Sortierung zurücksetzen"
+msgstr "Reimposta la selezione"
+
+msgid "Alles zurücksetzen"
+msgstr "Ripristinare tutti"
+
+msgid "Daten werden geladen …"
+msgstr "Caricamento dati ..."
+
+msgid "Aktive Filter"
+msgstr "Filtri attivi"
+
+msgid "Suche"
+msgstr "Ricerca"
+
+msgid "Keine Such- oder Filtertreffer."
+msgstr "Nessun risultato di ricerca o filtro."
+
+msgid "Filter zurücksetzen"
+msgstr "Rimuovere i filtri"
+
+msgid "+ Benutzer hinzufügen"
+msgstr "+ Aggiungi utente"
+
+msgid "AGB"
+msgstr "Termini e condizioni generali"
+
+msgid "Abbrechen"
+msgstr "Annulla"
+
+msgid "Administrator übertragen"
+msgstr "Amministratore di trasferimento"
+
+msgid "Aktiv"
+msgstr "Attivo"
+
+msgid "Aktive Mitglieder"
+msgstr "Membri attivi"
+
+msgid "Anzahl"
+msgstr "Quantità"
+
+msgid "Bestellungen & Zahlungen öffnen"
+msgstr "Ordini e pagamenti aperti"
+
+msgid "Checkout"
+msgstr "Pagamento"
+
+msgid "Datenschutz"
+msgstr "Protezione dei dati"
+
+msgid "Der Link wurde per E-Mail versendet."
+msgstr "Il link è stato inviato via e-mail."
+
+msgid "Firmen-Administrator"
+msgstr "Amministratore aziendale"
+
+msgid "Gerät entfernen"
+msgstr "Rimuovere il dispositivo"
+
+msgid "Geräteslots der aktiven PROMPTFINISHER-Pro-Lizenzen."
+msgstr "Dispositivi slot di PROMPTFINISHER attivo Licenze pro."
+
+msgid "Gerätewechsel"
+msgstr "Cambio di dispositivo"
+
+msgid "Gesamt"
+msgstr "Totale"
+
+msgid "Jetzt verlängern"
+msgstr "Rinnova ora"
+
+msgid "Kein Pro-Zugriff für dieses Benutzerkonto."
+msgstr "Nessun accesso Pro per questo account utente."
+
+msgid "Kein aktiver Firmenadministrator gefunden."
+msgstr "Nessun amministratore aziendale attivo trovato."
+
+msgid "Keine Geräte."
+msgstr "Nessun dispositivo."
+
+msgid "Link zur Kontrolle"
+msgstr "Link per la verifica"
+
+msgid "Lizenz jetzt zuordnen"
+msgstr "Assegna la licenza ora"
+
+msgid "Lizenz verlängern"
+msgstr "Nuova licenza"
+
+msgid "Lizenzbedingungen"
+msgstr "Termini di licenza"
+
+msgid "Lizenzen insgesamt"
+msgstr "Totale licenze"
+
+msgid "Lizenzstatus"
+msgstr "Stato della licenza"
+
+msgid "Lizenzzuordnung bestätigen"
+msgstr "Confermare l'assegnazione della licenza"
+
+msgid "Nächster Ablauf"
+msgstr "Prossima scadenza"
+
+msgid "PROMPTFINISHER PRO"
+msgstr "PROMPTFINISHER PRO"
+
+msgid "PROMPTFINISHER Pro für mich aktivieren"
+msgstr "Attivare PROMPTFINISHER Pro per me"
+
+msgid "PROMPTFINISHER Pro starten →"
+msgstr "Avviare PROMPTFINISHER Pro →"
+
+msgid "Pro anfragen"
+msgstr "Richiesta"
+
+msgid "Sicherer PROMPTFINISHER-Zuordnungslink."
+msgstr "Collegamento di PROMPTFINISHER sicuro."
+
+msgid "Speichern"
+msgstr "Salva"
+
+msgid "Stammdaten, Steuerdaten und Firmen-Administrator."
+msgstr "Dati master, dati fiscali e amministratore aziendale."
+
+msgid "Team öffnen"
+msgstr "Squadra aperta"
+
+msgid "Team- und Lizenzverwaltung"
+msgstr "Team e gestione delle licenze"
+
+msgid "Unternehmensdaten"
+msgstr "Dati aziendali"
+
+msgid "Unternehmensdaten bearbeiten"
+msgstr "Modifica dei dati aziendali"
+
+msgid "Unternehmensdaten unvollständig."
+msgstr "Dati aziendali incompleti."
+
+msgid "Updates während Laufzeit"
+msgstr "Aggiornamenti a termine"
+
+msgid "Widerruf"
+msgstr "Ritiro"
+
+msgid "Widerrufen"
+msgstr "Voto"
+
+msgid "Zahlungen mit Handlungsbedarf"
+msgstr "Pagamenti che richiedono un'azione"
+
+msgid "Zahlungspflichtig kaufen →"
+msgstr "Acquista con obbligo di pagamento →"
+
+msgid "Zuordnungslink erzeugt"
+msgstr "Link di assegnazione creato"
+
+msgid "Zurück zum Benutzer"
+msgstr "Torna all'utente"
+
+msgid "aktiv"
+msgstr "attivo"
+
+msgid "enthalten"
+msgstr "incluso"
+
+msgid "inkl. MwSt."
+msgstr "IVA inclusa"
+
+msgid "registriert"
+msgstr "registrato"
+
+msgid "Änderungen werden erst nach erfolgreicher Validierung gespeichert."
+msgstr "Le modifiche vengono salvate solo dopo la convalida di successo."
+
+msgid "+ Lizenz kaufen"
+msgstr "+ Acquista la licenza"
+
+msgid "Ablauf"
+msgstr "Scadenza"
+
+msgid "Adresse"
+msgstr "Indirizzo"
+
+msgid "Aktion"
+msgstr "Azione"
+
+msgid "Aktive Geräte"
+msgstr "Dispositivi attivi"
+
+msgid "Automatischer Kontext"
+msgstr "Contesto automatico"
+
+msgid "Barrierefreiheit"
+msgstr "Accessibilità"
+
+msgid "Benutzer"
+msgstr "Utente"
+
+msgid "Bestellung"
+msgstr "Ordine"
+
+msgid "Betrag"
+msgstr "Importo"
+
+msgid "Betreff"
+msgstr "Oggetto"
+
+msgid "Browser"
+msgstr "Browser"
+
+msgid "Datenauskunft"
+msgstr "Accesso ai dati"
+
+msgid "Datum"
+msgstr "Data"
+
+msgid "Direkter Kontakt zu netstyle und Verlauf Ihrer Anfragen."
+msgstr "Contatto diretto con netstyle e storia delle vostre richieste."
+
+msgid "Einladungen"
+msgstr "Inviti"
+
+msgid "Einladungen sind 24 Stunden gültig und einmal verwendbar."
+msgstr ""
+"Le inviti sono valide per 24 ore e possono essere utilizzate una volta."
+
+msgid "Frei"
+msgstr "Gratis"
+
+msgid "Gerät"
+msgstr "Dispositivo"
+
+msgid "Gültig ab"
+msgstr "Valido da"
+
+msgid "Gültig bis"
+msgstr "Valido fino a quando"
+
+msgid "Impressum"
+msgstr "Note legali"
+
+msgid "Jeder Seat läuft mit individueller Laufzeit."
+msgstr "Ogni sedile ha un proprio termine individuale."
+
+msgid "Kategorie"
+msgstr "Categoria"
+
+msgid "Keine Bestellungen."
+msgstr "Nessun ordine."
+
+msgid "Keine Einladungen."
+msgstr "Nessun invito."
+
+msgid "Keine Lizenzen."
+msgstr "Nessuna licenza."
+
+msgid "Keine aktiven Geräte."
+msgstr "Nessun dispositivo attivo."
+
+msgid "Kontaktformular"
+msgstr "Modulo di contatto"
+
+msgid "Konto & Hilfe"
+msgstr "Account e aiuto"
+
+msgid "Kontolöschung"
+msgstr "Cancellazione del conto"
+
+msgid "Kontolöschung anfordern"
+msgstr "Richiesta cancellazione del conto"
+
+msgid "Laufzeit"
+msgstr "Termine"
+
+msgid "Lizenz"
+msgstr "Licenza"
+
+msgid "Lizenz-ID"
+msgstr "ID licenza"
+
+msgid "Lizenzdaten"
+msgstr "Dati di licenza"
+
+msgid "Meine Daten exportieren"
+msgstr "Esporta i miei dati"
+
+msgid ""
+"Mollie übernimmt die Zahlungsabwicklung; PROMPTFINISHER erzeugt keine eigene"
+" Rechnungsengine."
+msgstr ""
+"Mollie gestisce l'elaborazione dei pagamenti; PROMPTFINISHER non gestisce il"
+" proprio motore di fatturazione."
+
+msgid "Mollie-Referenz"
+msgstr "Mollie riferimento"
+
+msgid "Nachricht senden"
+msgstr "Invia messaggio"
+
+msgid "Name"
+msgstr "Nome"
+
+msgid "Neu senden"
+msgstr "Invia"
+
+msgid "Nicht eingerichtet"
+msgstr "Non configurato"
+
+msgid "Noch keine Anfragen vorhanden."
+msgstr "Ancora nessuna richiesta."
+
+msgid "Noch keine Reminder für den aktuellen Ablaufzeitpunkt."
+msgstr "Nessun promemoria per la data di scadenza corrente."
+
+msgid "PROMPTFINISHER Pro öffnen"
+msgstr "Open PROMPTFINISHER Pro"
+
+msgid "Produkt"
+msgstr "Prodotto"
+
+msgid "Produkt / Menge"
+msgstr "Prodotto / quantità"
+
+msgid "Profil"
+msgstr "Profilo"
+
+msgid "Profil, Adresse, Kontosicherheit und Datenauskunft."
+msgstr "Profilo, indirizzo, sicurezza degli account e accesso ai dati."
+
+msgid "Rechtliches"
+msgstr "Legale"
+
+msgid "Reminder"
+msgstr "Reminder"
+
+msgid "Resttage"
+msgstr "Giorni rimanenti"
+
+msgid "Sicherheit"
+msgstr "Sicurezza"
+
+msgid "Sicherheit verwalten"
+msgstr "Gestione della sicurezza"
+
+msgid "Status"
+msgstr "Stato"
+
+msgid "Supporthistorie"
+msgstr "Storia del supporto"
+
+msgid "Verbraucherrechte"
+msgstr "Diritti dei consumatori"
+
+msgid "Vertrag widerrufen"
+msgstr "Contratto di prelievo"
+
+msgid "Verträge hier kündigen"
+msgstr "Annullare contratti qui"
+
+msgid "Verwaltung & Abrechnung"
+msgstr "Amministrazione e fatturazione"
+
+msgid "Weitere Bereiche Ihres Kundenportals."
+msgstr "Ulteriori aree del tuo portale clienti."
+
+msgid "Widerrufsbelehrung"
+msgstr "Informativa sul diritto di recesso"
+
+msgid "Zahlung"
+msgstr "Pagamento"
+
+msgid "Zugewiesen"
+msgstr "Assegnato"
+
+msgid "Zuletzt gesehen"
+msgstr "Ultimo accesso"
+
+msgid "Zurück"
+msgstr "Indietro"
+
+msgid "Zuweisung"
+msgstr "Assegnazione"
+
+msgid "Zwei-Faktor-Authentifizierung"
+msgstr "Autenticazione a due fattori"
+
+msgid "Öffnen"
+msgstr "Aperto"
+
+msgid "≤30 Tage"
+msgstr "≤30 giorni"
+
+msgid "2FA einrichten"
+msgstr "Impostare 2FA"
+
+msgid ""
+"2FA schützt den Zugriff mit einem zusätzlichen zeitbasierten Einmalcode."
+msgstr ""
+"2FA protegge l'accesso con un codice una volta basato sul tempo aggiuntivo."
+
+msgid "Ablehnen"
+msgstr "Rifiuti"
+
+msgid "Aktive Lizenzen"
+msgstr "Licenze attive"
+
+msgid "Aktuelles Ende"
+msgstr "Data di scadenza attuale"
+
+msgid "Anfrage"
+msgstr "Richiesta"
+
+msgid "Bearbeitungsstand"
+msgstr "Stato di elaborazione"
+
+msgid "Benutzer deaktivieren"
+msgstr "Disattiva l'utente"
+
+msgid "Benutzer löschen"
+msgstr "Cancella utente"
+
+msgid "Benutzer reaktivieren"
+msgstr "Riattiva l'utente"
+
+msgid "Benutzer, Einladungen, Lizenzen und Geräte verwalten."
+msgstr "Gestisci utenti, inviti, licenze e dispositivi."
+
+msgid ""
+"Die Suche bleibt auf Ihren eigenen Mandanten- und Lizenzbereich begrenzt."
+msgstr ""
+"La ricerca rimane limitata al proprio inquilino e allo scopo di licenza."
+
+msgid ""
+"Ein Passwortwechsel erfolgt über einen zeitlich begrenzten, einmal "
+"verwendbaren Link an Ihre hinterlegte E-Mail-Adresse."
+msgstr ""
+"Una modifica della password viene eseguita tramite un link di uso singolo e "
+"limitato al tuo indirizzo email registrato."
+
+msgid "Free"
+msgstr "Free"
+
+msgid "Freie Lizenz zuweisen"
+msgstr "Assegna licenza gratuita"
+
+msgid "Freigeben"
+msgstr "Comunicato"
+
+msgid "Genehmigen"
+msgstr "Approvo"
+
+msgid ""
+"Hier sehen Sie ausschließlich Nachrichten, die für Sie bzw. Ihr Unternehmen "
+"bestimmt sind. Interne netstyle-Notizen werden nicht im Kundenportal "
+"angezeigt."
+msgstr ""
+"Qui si vedono solo i messaggi destinati a voi o la vostra azienda. Le note "
+"interne netstyle non vengono visualizzate nel portale del cliente."
+
+msgid "Ihre Anfrage und alle für Kunden freigegebenen Antworten."
+msgstr "La vostra richiesta e tutte le risposte rilasciate per i clienti."
+
+msgid "Inaktiv"
+msgstr "Inattivo"
+
+msgid "Keine Benutzer gefunden."
+msgstr "Nessun utente trovato."
+
+msgid "Keine Lizenz zugewiesen."
+msgstr "Nessuna licenza assegnata."
+
+msgid "Keine Lizenzen gefunden."
+msgstr "Nessuna licenza trovata."
+
+msgid "Keine freie Lizenz."
+msgstr "Nessuna licenza gratuita."
+
+msgid "Keine verlängerbare Lizenz vorhanden."
+msgstr "Nessuna licenza rinnovabile disponibile."
+
+msgid "Mitarbeiter"
+msgstr "Dipendenti"
+
+msgid "Noch nie"
+msgstr "Mai"
+
+msgid "Offene Pro-Anfragen"
+msgstr "Le richieste di Open Pro"
+
+msgid "PROMPTFINISHER Free"
+msgstr "PROMPTFINISHER Free"
+
+msgid "PROMPTFINISHER Pro"
+msgstr "PROMPTFINISHER Pro"
+
+msgid "Passwort zurücksetzen"
+msgstr "Reset password"
+
+msgid "Recovery-Codes neu erzeugen"
+msgstr "Rigenerare i codici di recupero"
+
+msgid "Seit"
+msgstr "Da"
+
+msgid "Sicheren Link senden"
+msgstr "Invia il link sicuro"
+
+msgid "Team-Mitglieder"
+msgstr "Membri del team"
+
+msgid "Verlauf"
+msgstr "Storia"
+
+msgid ""
+"Wählen Sie die Lizenz, deren bestehende Restlaufzeit um weitere 365 Tage "
+"verlängert werden soll."
+msgstr ""
+"Selezionare la licenza il cui termine rimanente dovrebbe essere prorogato di"
+" altri 365 giorni."
+
+msgid "Zahlungspflichtig verlängern →"
+msgstr "Rinnovare con obbligo di pagamento →"
+
+msgid "Zuletzt aktiv"
+msgstr "Ultimo attivo"
+
+msgid "Zurück zu Einstellungen"
+msgstr "Torna alle impostazioni"
+
+msgid "Zurück zu Lizenzen"
+msgstr "Ritorno alle licenze"
+
+msgid "Zuweisen"
+msgstr "Assegnazione"
+
+msgid "Zwei-Faktor-Authentifizierung und Recovery-Codes verwalten."
+msgstr "Gestisci i codici di autenticazione e ripristino a due fattori."
+
+msgid "aktive Benutzer"
+msgstr "utenti attivi"
+
+msgid "aktive Benutzer ohne Pro-Zuweisung"
+msgstr "utenti attivi senza l'assegnazione Pro"
+
+msgid "registriert / Kapazität"
+msgstr "registrato / capacità"
+
+msgid ""
+"Die vorbereitete Lizenz wird Ihrem aktuell angemeldeten Benutzerkonto "
+"zugeordnet. Der Link kann anschließend nicht erneut verwendet werden."
+msgstr ""
+"La licenza preparata sarà assegnata al tuo account utente attualmente "
+"firmato. Il link non può essere utilizzato di nuovo dopo."
+
+msgid ""
+"Gültig bis %(expiry)s. Der Link ist tenantgebunden, für genau diesen "
+"Benutzer bestimmt und nur einmal verwendbar."
+msgstr "Valido fino al %(expiry)s. Il link è associato all'organizzazione, destinato solo a questo utente e utilizzabile una sola volta."
+
+msgid ""
+"Jede neue Lizenz startet nach erfolgreicher Zahlung mit eigener 365-Tage-"
+"Laufzeit."
+msgstr ""
+"Ogni nuova licenza inizia il proprio termine 365 giorni dopo il pagamento di"
+" successo."
+
+msgid "inkl. MwSt. · %(days)s Tage"
+msgstr "IVA inclusa · %(days)s giorni"
+
+msgid "%(limit)s Geräte je Benutzer"
+msgstr "%(limit)s dispositivi per utente"
+
+msgid "Preis nicht verfügbar"
+msgstr "Prezzo non disponibile"
+
+msgid ""
+"V1: exakt ein aktiver Firmenadministrator. Eine Übertragung ist nur auf ein "
+"aktives Team-Mitglied möglich."
+msgstr ""
+"V1: esattamente un amministratore aziendale attivo. Il trasferimento è "
+"possibile solo a un membro del team attivo."
+
+msgid "Ihre eigenen Geräteslots können Sie hier selbst verwalten."
+msgstr "È possibile gestire le proprie slot di dispositivo qui."
+
+msgid "Geräteslots werden durch den Firmenadministrator verwaltet."
+msgstr "Le slot per dispositivi sono gestite dall'amministratore aziendale."
+
+msgid "Widerrufene Geräte bleiben als Historie erhalten."
+msgstr "I dispositivi evocati rimangono nella storia."
+
+msgid "Zuletzt %(seen)s"
+msgstr "Ultimo accesso: %(seen)s"
+
+msgid "Gerät wirklich entfernen?"
+msgstr "Davvero rimuovere il dispositivo?"
+
+msgid ""
+"Konto, Unternehmen, Benutzer-ID und Zeitpunkt werden automatisch zugeordnet."
+" Optional kann eine für Ihr Konto sichtbare Lizenz mitgesendet werden. "
+"Passwörter, Tokens oder andere unnötige sensitive Daten werden nicht "
+"übernommen."
+msgstr ""
+"Account, azienda, ID utente e timestamp vengono assegnati automaticamente. "
+"Opzionalmente, una licenza visibile al tuo account può essere inclusa. "
+"Password, gettoni o altri dati sensibili non necessari non sono inclusi."
+
+msgid ""
+"Exportieren Sie die zu Ihrem Benutzer gespeicherten PROMPTFINISHER-Daten als"
+" JSON. Secrets und Daten anderer Benutzer werden nicht exportiert."
+msgstr ""
+"Esporta i dati PROMPTFINISHER memorizzati per l'utente come JSON. I segreti "
+"e i dati di altri utenti non sono esportati."
+
+msgid ""
+"Ihre Löschanfrage vom %(requested)s ist bereits erfasst. Status: %(status)s."
+msgstr "La richiesta di cancellazione del %(requested)s è già stata registrata. Stato: %(status)s."
+
+msgid ""
+"Sie können die Löschung Ihres PROMPTFINISHER-Kontos anfordern. Gesetzlich "
+"erforderliche Geschäfts- und Nachweisdaten werden nur im erforderlichen "
+"Umfang weiter aufbewahrt bzw. anonymisiert. Firmenadministratoren müssen "
+"ihre Administratorrolle vor der Verarbeitung übertragen."
+msgstr ""
+"Puoi richiedere la cancellazione del tuo account PROMPTFINISHER. I dati "
+"aziendali e di prova richiesti legalmente saranno conservati o anonimi nella"
+" misura richiesta. Gli amministratori delle società devono trasferire il "
+"loro ruolo di amministratore prima dell'elaborazione."
+
+msgid "Ich möchte die Löschung meines Kontos verbindlich anfordern."
+msgstr "Voglio fare una richiesta vincolante per eliminare il mio account."
+
+msgid "Guten Morgen, %(first_name)s"
+msgstr "Buongiorno, %(first_name)s"
+
+msgid "Privatkonto"
+msgstr "Conto privato"
+
+msgid "Unternehmensadministrator"
+msgstr "Amministratore aziendale"
+
+msgid "%(assigned)s vergeben · %(free)s verfügbar"
+msgstr "%(assigned)s assegnate · %(free)s disponibili"
+
+msgid "%(free)s frei · %(expiring)s läuft bald ab"
+msgstr "%(free)s libere · %(expiring)s in scadenza"
+
+msgid "Tage"
+msgstr "giorni"
+
+msgid "kein Ablauf"
+msgstr "nessuna scadenza"
+
+msgid "Eine Lizenz läuft in %(days)s Tagen ab."
+msgstr "Una licenza scade tra %(days)s giorni."
+
+msgid "freie Pro-Lizenzen"
+msgstr "licenze Pro gratuite"
+
+msgid "Freie Pro-Lizenzen können Team-Mitgliedern zugewiesen werden."
+msgstr "Le licenze Pro disponibili e non assegnate possono essere attribuite ai membri del team."
+
+msgid "Für Kauf/Abrechnung fehlen: %(fields)s."
+msgstr "Dati mancanti per acquisto/fatturazione: %(fields)s."
+
+msgid "Tage verbleibend"
+msgstr "giorni rimanenti"
+
+msgid "Deine Lizenz läuft am %(expiry)s ab."
+msgstr "La tua licenza scade il %(expiry)s."
+
+msgid "Es ist eine freie Pro-Lizenz verfügbar."
+msgstr "È disponibile una licenza Pro gratuita."
+
+msgid ""
+"Aktuell ist keine freie Pro-Lizenz verfügbar. Kaufen Sie eine weitere Lizenz"
+" oder geben Sie eine bestehende Lizenz frei."
+msgstr ""
+"Attualmente non è disponibile nessuna licenza Pro gratuita. Compra un'altra "
+"licenza o rilascia una esistente."
+
+msgid "Ihre Pro-Anfrage ist bereits offen."
+msgstr "La vostra richiesta Pro è già aperta."
+
+msgid ""
+"Für den Pro-Zugriff benötigen Sie eine aktive PROMPTFINISHER-Pro-Lizenz."
+msgstr ""
+"Hai bisogno di un PROMPTFINISHER attivo Licenza Pro per l'accesso Pro."
+
+msgid "Portal durchsuchen"
+msgstr "Portale di ricerca"
+
+msgid ""
+"Geben Sie einen Suchbegriff ein. Firmenadministratoren können nach "
+"Teammitgliedern, E-Mail-Adressen und Lizenzen suchen; andere Benutzer sehen "
+"ausschließlich ihre eigene Lizenzsicht."
+msgstr ""
+"Inserisci un termine di ricerca. Gli amministratori della società possono "
+"cercare i membri del team, gli indirizzi e-mail e le licenze; altri utenti "
+"vedono solo la loro vista sulla licenza."
+
+msgid "Kunde"
+msgstr "Cliente"
+
+msgid "Pro-Lizenzen noch frei"
+msgstr "Le licenze Pro sono ancora gratuite"
+
+msgid "Verlängern"
+msgstr "Esame"
+
+msgid "Geschäft, Handlungsbedarf und Systemstatus auf einen Blick."
+msgstr "Affari, oggetti di azione e stato di sistema a colpo d'occhio."
+
+msgid "PROMPTFINISHER Pro öffnen →"
+msgstr "Apri PROMPTFINISHER Pro →"
+
+msgid "PROMPTFINISHER Free öffnen →"
+msgstr "Apri PROMPTFINISHER Free →"
+
+msgid "System gesund"
+msgstr "Sistema sano"
+
+msgid "Prüfung erforderlich"
+msgstr "Recensione richiesta"
+
+msgid "Kunden gesamt"
+msgstr "Totale clienti"
+
+msgid "Offene Leads"
+msgstr "Porte aperte"
+
+msgid "Lead-Pipeline öffnen"
+msgstr "Apri la pipeline dei contatti"
+
+msgid "Ablauf unter 30 Tagen"
+msgstr "Scade entro 30 giorni"
+
+msgid "laufen in weniger als 60 Tagen ab"
+msgstr "scadere entro 60 giorni"
+
+msgid "Umsatz 30 Tage"
+msgstr "Entrata, 30 giorni"
+
+msgid "Umsatzentwicklung"
+msgstr "Sviluppo delle entrate"
+
+msgid "Umsatzentwicklung der letzten Monate"
+msgstr "Tendenza delle entrate negli ultimi mesi"
+
+msgid "Noch keine bezahlten Bestellungen im Auswertungszeitraum."
+msgstr "Nessun ordine pagato nel periodo di segnalazione ancora."
+
+msgid "Lizenzen nach Produkt"
+msgstr "Licenze per prodotto"
+
+msgid "Handlungsbedarf"
+msgstr "Azione richiesta"
+
+msgid "Lizenzen laufen in weniger als 30 Tagen ab."
+msgstr "Le licenze scadono in meno di 30 giorni."
+
+msgid "fehlgeschlagene Zahlungen"
+msgstr "pagamenti falliti"
+
+msgid "Chargebacks"
+msgstr "Chargebacks"
+
+msgid "offene Kontaktanfragen"
+msgstr "richieste di contatto aperte"
+
+msgid "Kein aktueller Handlungsbedarf."
+msgstr "Nessuna azione attualmente richiesta."
+
+msgid "Letzte Bestellungen"
+msgstr "Ordini recenti"
+
+msgid "Nächste Lizenzabläufe"
+msgstr "Prossime scadenze delle licenze"
+
+msgid "Keine bevorstehenden Abläufe."
+msgstr "Nessuna prossima espulsione."
+
+msgid "Alle Lizenzen"
+msgstr "Tutte le licenze"
+
+msgid "Kundenportal-Vorschau"
+msgstr "Anteprima del portale clienti"
+
+msgid "KUNDENPORTAL · VORSCHAU"
+msgstr "PORTALE DOGANALE · PREVISTA"
+
+msgid "Read-only Vorschau …"
+msgstr "Anteprima sola lettura ..."
+
+msgid "Support-Vorschau"
+msgstr "Anteprima del supporto"
+
+msgid "Zurück zum netstyle Kundendetail"
+msgstr "Torna ai dettagli del cliente netstyle"
+
+msgid "Read-only Kundenansicht."
+msgstr "Vista del cliente sola lettura."
+
+msgid ""
+"Die Daten entsprechen dem ausgewählten Kundenkonto und seiner Rolle. Dies "
+"ist eine Ansichtsvorschau, keine Kundensitzung: Interaktionen, Zahlungs- und"
+" Sicherheitsaktionen sind nicht ausführbar."
+msgstr ""
+"I dati sono indirizzati all'account e al ruolo del cliente selezionato. "
+"Questa è un'anteprima, non una sessione del cliente: interazioni, pagamenti "
+"e azioni di sicurezza sono disabilitate."
+
+msgid "Perspektive auswählen"
+msgstr "Selezionare la prospettiva di visualizzazione"
+
+msgid ""
+"Nur aktive Benutzer dieses Unternehmens. Rollen und Zugriffsrechte werden "
+"berücksichtigt."
+msgstr ""
+"Solo utenti attivi da questa azienda. I ruoli e i diritti di accesso sono "
+"rispettati."
+
+msgid "Kundenbenutzer"
+msgstr "utente cliente"
+
+msgid "Keine aktiven Benutzer vorhanden"
+msgstr "Nessun utente attivo disponibile"
+
+msgid "Ansicht wechseln"
+msgstr "Cambia la vista"
+
+msgid "Angezeigte Rolle:"
+msgstr "Ruolo visualizzato:"
+
+msgid "Kundenverwaltung"
+msgstr "Amministrazione clienti"
+
+msgid ""
+"Änderungen erfolgen ausschließlich in den berechtigungsgeschützten "
+"Administrationsmasken mit Auditierung – nicht in der Kundenansicht."
+msgstr ""
+"Le modifiche sono effettuate solo attraverso moduli di amministrazione "
+"controllati e protetti da autorizzazioni, non l'anteprima del cliente."
+
+msgid "Benutzer und Rollen verwalten"
+msgstr "Gestione degli utenti e dei ruoli"
+
+msgid "Lizenzen verwalten"
+msgstr "Gestione delle licenze"
+
+msgid "Geräte verwalten"
+msgstr "Gestione dei dispositivi"
+
+msgid "gesamt"
+msgstr "totale"
+
+msgid "frei"
+msgstr "disponibile"
+
+msgid "Ablauf ≤30 Tage"
+msgstr "Scade entro 30 giorni"
+
+msgid "Konto"
+msgstr "Account"
+
+msgid "Kontotyp"
+msgstr "Tipo di conto"
+
+msgid "Portal-Benutzer"
+msgstr "utente del portale"
+
+msgid "Aktive Benutzer"
+msgstr "Utenti attivi"
+
+msgid "Bestand"
+msgstr "Panoramica delle aziende"
+
+msgid "Freie Lizenzen"
+msgstr "Licenze disponibili"
+
+msgid "Rolle"
+msgstr "Role"
+
+msgid "Hinweis"
+msgstr "Nota"
+
+msgid "Keine Benutzer vorhanden."
+msgstr "Nessun utente disponibile."
+
+msgid "Keine Lizenzen vorhanden."
+msgstr "Nessuna licenza disponibile."
+
+msgid "Keine netstyle-Berechtigung zum Anzeigen der Lizenzdaten."
+msgstr ""
+"Le autorizzazioni netstyle non consentono la visualizzazione dei dati della "
+"licenza."
+
+msgid "Keine aktiven Geräte vorhanden."
+msgstr "Nessun dispositivo attivo disponibile."
+
+msgid "Keine Bestellungen vorhanden."
+msgstr "Nessun ordine disponibile."
+
+msgid "Keine netstyle-Berechtigung zum Anzeigen der Bestelldaten."
+msgstr ""
+"Le autorizzazioni netstyle non consentono la visualizzazione dei dati "
+"dell'ordine."
+
+msgid "Rechtsform"
+msgstr "Modulo giuridico"
+
+msgid "Telefon"
+msgstr "Telefono"
+
+msgid "Rechnungsanschrift"
+msgstr "Indirizzo di fatturazione"
+
+msgid "Ort"
+msgstr "Città"
+
+msgid "Land"
+msgstr "Paese"
+
+msgid "USt-IdNr."
+msgstr "ID IVA"
+
+msgid "Mein Profil"
+msgstr "Il mio profilo"
+
+msgid ""
+"Dies ist eine Leseansicht. Passwort, Zwei-Faktor-Authentifizierung und "
+"persönliche Einstellungen kann nur der angemeldete Kundenbenutzer selbst "
+"ändern."
+msgstr ""
+"Questa è una visione di sola lettura. Solo l'utente cliente firmato può "
+"modificare la password, l'autenticazione a due fattori e le impostazioni "
+"personali."
+
+msgid "Benutzerkonto"
+msgstr "Account utente"
+
+msgid ""
+"Teamverwaltung, Bestellungen und Unternehmensdaten sind für diese Rolle "
+"nicht freigegeben."
+msgstr ""
+"Gestione del team, ordini e dettagli aziendali non sono disponibili a questo"
+" ruolo."
+
+msgid "Anschrift"
+msgstr "Indirizzo postale"
+
+msgid "Weitere Bereiche"
+msgstr "Ulteriori sezioni"
+
+msgid "Kontoeinstellungen"
+msgstr "Impostazioni account"
+
+msgid "Read-only"
+msgstr "Solo lettura"
+
+msgid "Sicherheit / 2FA"
+msgstr "Sicurezza / 2FA"
+
+msgid "nicht impersoniert"
+msgstr "nessuna impersonazione"
+
+msgid "nicht ausführbar"
+msgstr "non disponibile"
+
+msgid "Support-Hinweis"
+msgstr "Avviso di supporto"
+
+msgid ""
+"Für echte Schreibaktionen oder einen vollständigen Login-Test muss ein "
+"eigener Nicht-Staff-Testkunde verwendet werden. Die Vorschau übernimmt "
+"niemals die Identität des Kunden."
+msgstr ""
+"Per operazioni di scrittura reali o un test di login completo, utilizzare un"
+" cliente di prova non-staff dedicato. Questa anteprima non assume mai "
+"l'identità di un cliente."
+
+msgid "Noch keine Lizenzen."
+msgstr "Nessuna licenza al momento."
+
+msgid "Alle Bestellungen"
+msgstr "Tutti gli ordini"
+
+msgid "Firmenkonto"
+msgstr "Account aziendale"
+
+msgid "Serverseitige Suche, Filter, Sortierung und Pagination."
+msgstr "Ricerca, filtri, ordinamento e paginazione lato server."
+
+msgid "Neu anlegen"
+msgstr "Crea nuovo"
+
+msgid "Privatkunden"
+msgstr "Clienti privati"
+
+msgid "aufsteigend"
+msgstr "crescente"
+
+msgid "absteigend"
+msgstr "decrescente"
+
+msgid "Keine Datensätze für die aktuelle Auswahl."
+msgstr "Nessun record per la selezione attuale."
+
+msgid "Änderungen werden serverseitig validiert und – sofern sicherheits- oder geschäftskritisch – protokolliert."
+msgstr "Le modifiche sono convalidate sul server e registrate se critiche per la sicurezza o l'attività."
+
+msgid "Zusätzliche Sicherheitsfreigabe."
+msgstr "Verifica di sicurezza aggiuntiva."
+
+msgid "Bestätigen Sie Ihr eigenes Passwort. Die Freigabe gilt anschließend ausschließlich für wenige Minuten und nur für geschützte Admin-Aktionen."
+msgstr "Conferma la tua password. L'autorizzazione vale solo per pochi minuti e solo per le azioni amministrative protette."
+
+msgid "Bestätigen"
+msgstr "Conferma"
+
+msgid "Kompakte Geschäftszahlen innerhalb Ihrer Berechtigungen."
+msgstr "Indicatori aziendali sintetici secondo le tue autorizzazioni."
+
+msgid "Neue Kunden · 30 Tage"
+msgstr "Nuovi clienti · 30 giorni"
+
+msgid "Verlängerungsanteil"
+msgstr "Quota rinnovi"
+
+msgid "Verlängerungsterms"
+msgstr "periodi di rinnovo"
+
+msgid "Refund-Quote"
+msgstr "Tasso di rimborso"
+
+msgid "Anteil refundierter Lizenzterms"
+msgstr "Quota di periodi di licenza rimborsati"
+
+msgid "Ø Lizenzen / Firma"
+msgstr "Media licenze / azienda"
+
+msgid "Firmenkundenbestand"
+msgstr "Clientela aziendale"
+
+msgid "Umsatz letzte 30 Tage"
+msgstr "Ricavi ultimi 30 giorni"
+
+msgid "Bestellungen gesamt"
+msgstr "ordini complessivi"
+
+msgid "Lizenzen gesamt"
+msgstr "Totale licenze"
+
+msgid "inkl. aktiv, frei, abgelaufen und historisch"
+msgstr "incluse attive, disponibili, scadute e storiche"
+
+msgid "Anfragen aus dem Kundenportal; V1 verwendet bewusst kein Ticketsystem."
+msgstr "Richieste dal portale clienti; la V1 non usa volutamente un sistema di ticket."
+
+msgid "Keine Kontaktanfragen."
+msgstr "Nessuna richiesta di contatto."
+
+msgid "Globale Suche"
+msgstr "Ricerca globale"
+
+msgid "Ergebnisse für"
+msgstr "Risultati per"
+
+msgid "Keine Treffer."
+msgstr "Nessun risultato."
+
+msgid "Append-only Auditlog für administrative und geschäftskritische Änderungen."
+msgstr "Registro di audit in sola aggiunta per modifiche amministrative e critiche per l'attività."
+
+msgid "Zeit"
+msgstr "Ora"
+
+msgid "Objekt"
+msgstr "Oggetto"
+
+msgid "Änderung"
+msgstr "Modifica"
+
+msgid "Keine Audit-Einträge."
+msgstr "Nessuna voce di audit."
+
+msgid "Mollie-Zahlungsstatus, Beträge, Refunds und Chargebacks."
+msgstr "Stati dei pagamenti Mollie, importi, rimborsi e storni."
+
+msgid "Bezahlt"
+msgstr "Pagato"
+
+msgid "Offen"
+msgstr "Aperto"
+
+msgid "Fehlgeschlagen"
+msgstr "Non riuscito"
+
+msgid "Payment-ID"
+msgstr "ID pagamento"
+
+msgid "Keine Zahlungen gefunden."
+msgstr "Nessun pagamento trovato."
+
+msgid "Lead"
+msgstr "Potenziale cliente"
+
+msgid "Interessent"
+msgstr "Interessato"
+
+msgid "Priorität"
+msgstr "Priorità"
+
+msgid "Zuständig"
+msgstr "Responsabile"
+
+msgid "Erstellt"
+msgstr "Creato"
+
+msgid "Kundennummer"
+msgstr "Numero cliente"
+
+msgid "Eingang"
+msgstr "Ricevuto"
+
+msgid "Art"
+msgstr "Tipo"
+
+msgid "Vertragsbezug"
+msgstr "Riferimento contrattuale"
+
+msgid "Datengetriebene Produkt-, Laufzeit-, Geräte-, Reminder- und Entitlement-Konfiguration."
+msgstr "Configurazione basata sui dati di prodotti, durate, dispositivi, promemoria e autorizzazioni."
+
+msgid "Features"
+msgstr "Funzionalità"
+
+msgid "Produkt anlegen"
+msgstr "Crea prodotto"
+
+msgid "AKTIV"
+msgstr "ATTIVO"
+
+msgid "INAKTIV"
+msgstr "INATTIVO"
+
+msgid "aktueller Neukaufpreis"
+msgstr "prezzo attuale per un nuovo acquisto"
+
+msgid "nicht konfiguriert"
+msgstr "non configurato"
+
+msgid "Verlängerung"
+msgstr "Rinnovo"
+
+msgid "Sichtbar / kaufbar"
+msgstr "Visibile / acquistabile"
+
+msgid "Ja"
+msgstr "Sì"
+
+msgid "Nein"
+msgstr "No"
+
+msgid "Bearbeiten"
+msgstr "Modifica"
+
+msgid "Noch keine Produkte."
+msgstr "Nessun prodotto per ora."
+
+msgid "Rollenbasierte Rechte; für alle netstyle Benutzer ist 2FA Pflicht."
+msgstr "Permessi basati sui ruoli; l'autenticazione a due fattori è obbligatoria per tutti gli utenti netstyle."
+
+msgid "Rolle zuweisen"
+msgstr "Assegna ruolo"
+
+msgid "netstyle Benutzer anlegen"
+msgstr "Crea utente netstyle"
+
+msgid "Berechtigungen"
+msgstr "Autorizzazioni"
+
+msgid "Sicherheitsvorgabe"
+msgstr "Requisito di sicurezza"
+
+msgid "2FA Pflicht"
+msgstr "2FA obbligatoria"
+
+msgid "Keine Rolle"
+msgstr "Nessun ruolo"
+
+msgid "2FA aktiv"
+msgstr "2FA attiva"
+
+msgid "2FA einzurichten"
+msgstr "Configurazione 2FA necessaria"
+
+msgid "2FA dieses Benutzers zurücksetzen?"
+msgstr "Reimpostare la 2FA di questo utente?"
+
+msgid "2FA zurücksetzen"
+msgstr "Reimposta 2FA"
+
+msgid "Benutzerstatus wirklich ändern?"
+msgstr "Vuoi davvero modificare lo stato dell'utente?"
+
+msgid "Deaktivieren"
+msgstr "Disattiva"
+
+msgid "Aktivieren"
+msgstr "Attiva"
+
+msgid "Keine netstyle Benutzer."
+msgstr "Nessun utente netstyle."
+
+msgid "Rechtsdokumente, Aufbewahrung und Löschanforderungen."
+msgstr "Documenti legali, conservazione e richieste di cancellazione."
+
+msgid "Rechtsdokumente"
+msgstr "Documenti legali"
+
+msgid "Noch keine Rechtstexte hinterlegt."
+msgstr "Non sono ancora stati aggiunti testi legali."
+
+msgid "Rechtsdokumente verwalten"
+msgstr "Gestisci documenti legali"
+
+msgid "Verbrauchererklärungen"
+msgstr "Dichiarazioni dei consumatori"
+
+msgid "Offene Widerrufe / Kündigungen"
+msgstr "Recessi / disdette aperti"
+
+msgid "Widerrufe & Kündigungen"
+msgstr "Recessi e disdette"
+
+msgid "Retention / Löschung"
+msgstr "Conservazione / cancellazione"
+
+msgid "Aktive Retention-Policies"
+msgstr "Criteri di conservazione attivi"
+
+msgid "Offene Löschanfragen"
+msgstr "Richieste di cancellazione aperte"
+
+msgid "Retention-Policies"
+msgstr "Criteri di conservazione"
+
+msgid "Löschanfragen"
+msgstr "Richieste di cancellazione"
+
+msgid "Features / Entitlements"
+msgstr "Funzionalità / diritti"
+
+msgid "Wiederverwendbare Funktionsrechte für heutige und zukünftige Produkte."
+msgstr "Diritti riutilizzabili sulle funzionalità dei prodotti attuali e futuri."
+
+msgid "Feature anlegen"
+msgstr "Crea funzionalità"
+
+msgid "Code"
+msgstr "Codice"
+
+msgid "Keine Features."
+msgstr "Nessuna funzionalità."
+
+msgid "Geschützte Operations-Schnittstellen und Service Accounts."
+msgstr "Interfacce operative protette e account di servizio."
+
+msgid "Service Account anlegen"
+msgstr "Crea account di servizio"
+
+msgid "Operations API"
+msgstr "API operativa"
+
+msgid "Zugriff ausschließlich über aktive Service Accounts mit passendem Scope. Tokens werden nur einmal bei Erstellung bzw. Rotation angezeigt."
+msgstr "Accesso consentito solo agli account di servizio attivi con ambito appropriato. I token vengono mostrati una sola volta, alla creazione o rotazione."
+
+msgid "Service Accounts"
+msgstr "Account di servizio"
+
+msgid "Gesperrt"
+msgstr "Bloccato"
+
+msgid "Token rotieren"
+msgstr "Ruota token"
+
+msgid "Service Account wirklich sperren?"
+msgstr "Vuoi davvero bloccare questo account di servizio?"
+
+msgid "Sperren"
+msgstr "Blocca"
+
+msgid "Noch keine Service Accounts."
+msgstr "Nessun account di servizio."
+
+msgid "Dienste"
+msgstr "Servizi"
+
+msgid "Status der internen Plattformdienste."
+msgstr "Stato dei servizi interni della piattaforma."
+
+msgid "Systemübersicht"
+msgstr "Panoramica del sistema"
+
+msgid "Host"
+msgstr "Host"
+
+msgid "Hostname"
+msgstr "Nome host"
+
+msgid "Kernel"
+msgstr "Kernel"
+
+msgid "Healthy"
+msgstr "Operativo"
+
+msgid "Nicht erreichbar"
+msgstr "Non raggiungibile"
+
+msgid "Datenbank"
+msgstr "Database"
+
+msgid "Verbindungen"
+msgstr "Connessioni"
+
+msgid "Größe"
+msgstr "Dimensione"
+
+msgid "Background Jobs"
+msgstr "Attività in background"
+
+msgid "Heartbeat fehlt"
+msgstr "Heartbeat mancante"
+
+msgid "Queue"
+msgstr "Coda"
+
+msgid "Fehlgeschlagene Jobs 24 h"
+msgstr "Attività non riuscite nelle ultime 24 h"
+
+msgid "Worker"
+msgstr "Worker"
+
+msgid "Antwortende Worker"
+msgstr "Worker che rispondono"
+
+msgid "Worker-Heartbeat"
+msgstr "Heartbeat del worker"
+
+msgid "Beat-Heartbeat"
+msgstr "Heartbeat di Beat"
+
+msgid "Zahlungsprovider, Webhook und letzte Zahlungsereignisse."
+msgstr "Fornitore di pagamenti, webhook e ultimi eventi di pagamento."
+
+msgid "Mollie konfigurieren"
+msgstr "Configura Mollie"
+
+msgid "Konfiguration"
+msgstr "Configurazione"
+
+msgid "Konfiguriert"
+msgstr "Configurato"
+
+msgid "Unvollständig"
+msgstr "Incompleto"
+
+msgid "Produktiv-Checkout"
+msgstr "Checkout in produzione"
+
+msgid "Freigegeben"
+msgstr "Abilitato"
+
+msgid "Modus"
+msgstr "Modalità"
+
+msgid "Profile ID"
+msgstr "ID profilo"
+
+msgid "API Key"
+msgstr "Chiave API"
+
+msgid "nicht gesetzt"
+msgstr "non impostato"
+
+msgid "Live-Zugangsdaten sind hinterlegt, der Kunden-Checkout bleibt jedoch gesperrt, bis die Live-Readiness geprüft und ausdrücklich freigegeben wurde."
+msgstr "Le credenziali di produzione sono salvate, ma il checkout dei clienti resta bloccato fino alla verifica della preparazione e all'autorizzazione esplicita."
+
+msgid "Basis-URL"
+msgstr "URL di base"
+
+msgid "Endpoint"
+msgstr "Endpoint"
+
+msgid "Letztes Event"
+msgstr "Ultimo evento"
+
+msgid "noch keines"
+msgstr "nessuno per ora"
+
+msgid "Webhook-Ereignisse öffnen"
+msgstr "Apri eventi webhook"
+
+msgid "Notabschaltung"
+msgstr "Arresto di emergenza"
+
+msgid "Sperrt neue Mollie-Käufe sofort. Bestehende Zahlungen und Webhooks bleiben weiter verarbeitbar."
+msgstr "Blocca subito i nuovi acquisti Mollie. I pagamenti e i webhook esistenti possono ancora essere elaborati."
+
+msgid "Produktiv-Checkout sperren"
+msgstr "Blocca checkout in produzione"
+
+msgid "Letzte Zahlungen"
+msgstr "Pagamenti recenti"
+
+msgid "Noch keine Zahlungen."
+msgstr "Ancora nessun pagamento."
+
+msgid "Letzte Webhook-Events"
+msgstr "Eventi webhook recenti"
+
+msgid "offen"
+msgstr "in attesa"
+
+msgid "Noch keine Webhook-Ereignisse."
+msgstr "Ancora nessun evento webhook."
+
+msgid "Vorlagen, Versandstatus, Provider und Fallback-Kette."
+msgstr "Modelli, stato dell'invio, provider e catena di failover."
+
+msgid "Absender & Provider"
+msgstr "Mittente e provider"
+
+msgid "Versandprotokoll öffnen"
+msgstr "Apri registro degli invii"
+
+msgid "Vorlagen"
+msgstr "Modelli"
+
+msgid "Keine E-Mail-Vorlagen vorhanden."
+msgstr "Nessun modello e-mail disponibile."
+
+msgid "Mail-System"
+msgstr "Sistema e-mail"
+
+msgid "Versandmodus"
+msgstr "Modalità di invio"
+
+msgid "Automatischer Fallback"
+msgstr "Failover automatico"
+
+msgid "Manuell"
+msgstr "Manuale"
+
+msgid "Primär"
+msgstr "Primario"
+
+msgid "Reihenfolge"
+msgstr "Ordine"
+
+msgid "Status der Kette"
+msgstr "Stato della catena"
+
+msgid "Aktiver Absender"
+msgstr "Mittente attivo"
+
+msgid "Anzeigename"
+msgstr "Nome visualizzato"
+
+msgid "Mail-Domain"
+msgstr "Dominio e-mail"
+
+msgid "Server"
+msgstr "Server"
+
+msgid "Anmeldung"
+msgstr "Autenticazione"
+
+msgid "Passwort fehlt"
+msgstr "Password mancante"
+
+msgid "Ohne Anmeldung"
+msgstr "Senza autenticazione"
+
+msgid "Nicht konfiguriert"
+msgstr "Non configurato"
+
+msgid "Fehlt"
+msgstr "Mancante"
+
+msgid "Graph Absender"
+msgstr "Mittente Graph"
+
+msgid "Automatischer Fallback erfolgt nur bei eindeutig nicht zugestellten Fehlern. Bei unklaren Fehlern wird nicht automatisch weitergeschaltet, damit dieselbe E-Mail nicht versehentlich doppelt versendet wird."
+msgstr "Il failover automatico avviene solo in caso di mancata consegna confermata. Gli errori ambigui non attivano il passaggio automatico, per evitare l'invio duplicato dello stesso messaggio."
+
+msgid "SPF/DKIM/DMARC werden unter „Einstellungen“ als DNS-Sollwerte dokumentiert. Änderungen dort aktualisieren nicht automatisch den öffentlichen DNS."
+msgstr "I record DNS previsti per SPF/DKIM/DMARC sono documentati in Impostazioni. Le modifiche non aggiornano automaticamente il DNS pubblico."
+
+msgid "Letzte Versandvorgänge"
+msgstr "Invii recenti"
+
+msgid "Noch keine Versandvorgänge."
+msgstr "Ancora nessun invio."
+
+msgid "Zur Kundenliste"
+msgstr "Torna all'elenco clienti"
+
+msgid "Zur Privatkundenliste"
+msgstr "Torna ai clienti privati"
+
+msgid "Kundendaten"
+msgstr "Dati del cliente"
+
+msgid "Stammdaten"
+msgstr "Dati anagrafici"
+
+msgid "Unternehmensdaten speichern"
+msgstr "Salva i dati aziendali"
+
+msgid "Firma"
+msgstr "Azienda"
+
+msgid "Steuernummer"
+msgstr "Codice fiscale"
+
+msgid "Änderungen erfolgen serverseitig mit Berechtigungsprüfung und werden im Audit protokolliert. Steuerfelder werden anhand der aktiven Steuerregel für Land und Kundentyp validiert."
+msgstr "Le modifiche vengono applicate sul server previa verifica dei permessi e registrate nel log di audit. I campi fiscali vengono convalidati secondo la regola attiva per Paese e tipo di cliente."
+
+msgid "Rechtsakzeptanzen"
+msgstr "Accettazioni dei documenti legali"
+
+msgid "Version"
+msgstr "Versione"
+
+msgid "Keine Rechtsakzeptanzen protokolliert."
+msgstr "Nessuna accettazione di documenti legali registrata."
+
+msgid "Keine Löschanfragen."
+msgstr "Nessuna richiesta di cancellazione."
+
+msgid "Alle Löschanfragen"
+msgstr "Tutte le richieste di cancellazione"
+
+msgid "Bestellung vom"
+msgstr "Ordine del"
+
+msgid "Zurück zur Liste"
+msgstr "Torna all'elenco"
+
+msgid "Brutto"
+msgstr "Lordo"
+
+msgid "Steuer"
+msgstr "Imposta"
+
+msgid "Keine Zahlung erfasst."
+msgstr "Nessun pagamento registrato."
+
+msgid "Positionen"
+msgstr "Voci"
+
+msgid "Menge"
+msgstr "Quantità"
+
+msgid "Einzelpreis"
+msgstr "Prezzo unitario"
+
+msgid "Lizenzstatus wirklich ändern?"
+msgstr "Modificare davvero lo stato di questa licenza?"
+
+msgid "Lizenz entsperren"
+msgstr "Sblocca licenza"
+
+msgid "Lizenz sperren"
+msgstr "Blocca licenza"
+
+msgid "Inhaber & Zuweisung"
+msgstr "Titolare e assegnazione"
+
+msgid "Zugewiesen an"
+msgstr "Assegnata a"
+
+msgid "Lizenzzuweisung wirklich freigeben? Aktive Geräte dieser Lizenz werden widerrufen."
+msgstr "Rilasciare davvero l'assegnazione della licenza? I dispositivi attivi associati verranno revocati."
+
+msgid "Zuweisung freigeben"
+msgstr "Rilascia assegnazione"
+
+msgid "Aktiven Firmenbenutzer auswählen"
+msgstr "Seleziona utente aziendale attivo"
+
+msgid "Bitte auswählen"
+msgstr "Seleziona"
+
+msgid "Lizenz zuweisen"
+msgstr "Assegna licenza"
+
+msgid "Lizenzperioden"
+msgstr "Periodi di licenza"
+
+msgid "Von"
+msgstr "Da"
+
+msgid "Bis"
+msgstr "A"
+
+msgid "Erstattung"
+msgstr "Rimborso"
+
+msgid "Erstattung wirklich verbindlich über Mollie auslösen?"
+msgstr "Vuoi davvero avviare un rimborso vincolante tramite Mollie?"
+
+msgid "Erstattung prüfen/auslösen"
+msgstr "Verifica/avvia rimborso"
+
+msgid "Keine Lizenzperioden vorhanden."
+msgstr "Nessun periodo di licenza disponibile."
+
+msgid "E-Mail-Protokoll"
+msgstr "Registro e-mail"
+
+msgid "Versandstatus, tatsächlich verwendeter Provider und Fallback-Versuche ohne vertrauliche Nachrichtentexte oder Secrets."
+msgstr "Stato dell'invio, provider effettivamente utilizzato e tentativi di failover, senza contenuti riservati dei messaggi né segreti."
+
+msgid "Empfänger"
+msgstr "Destinatario"
+
+msgid "Vorlage"
+msgstr "Modello"
+
+msgid "Provider"
+msgstr "Provider"
+
+msgid "Versuche"
+msgstr "Tentativi"
+
+msgid "Gesendet"
+msgstr "Inviato"
+
+msgid "Wird gesendet"
+msgstr "Invio in corso"
+
+msgid "Unterdrückt"
+msgstr "Soppresso"
+
+msgid "Warteschlange"
+msgstr "In coda"
+
+msgid "Keine E-Mails gefunden."
+msgstr "Nessuna e-mail trovata."
+
+msgid "Kundenbereiche"
+msgstr "Sezioni clienti"
+
+msgid "Privatkundenbereiche"
+msgstr "Sezioni clienti privati"
+
+msgid "Audit"
+msgstr "Audit"
+
+msgid "Zuletzt"
+msgstr "Ultima attività"
+
+msgid "Akteur"
+msgstr "Autore"
+
+msgid "Admin übertragen"
+msgstr "Trasferisci ruolo amministratore"
+
+msgid "Benutzer wirklich deaktivieren? Lizenzen und Gerätezugänge werden freigegeben."
+msgstr "Disattivare davvero questo utente? Le licenze e gli accessi dei dispositivi verranno rilasciati."
+
+msgid "Firmenadmin"
+msgstr "Amministratore aziendale"
+
+msgid "Gerätezugang wirklich widerrufen?"
+msgstr "Revocare davvero l'accesso del dispositivo?"
+
+msgid "Mollie Events"
+msgstr "Eventi Mollie"
+
+msgid "Idempotent verarbeitete Provider-Zustandsänderungen."
+msgstr "Modifiche di stato del provider elaborate in modo idempotente."
+
+msgid "Providerstatus"
+msgstr "Stato del provider"
+
+msgid "Verarbeitet"
+msgstr "Elaborato"
+
+msgid "Retries"
+msgstr "Nuovi tentativi"
+
+msgid "Fehler"
+msgstr "Errore"
+
+msgid "Keine Mollie Events gefunden."
+msgstr "Nessun evento Mollie trovato."
+
+msgid "DSGVO-Workflow mit kontrollierter Anonymisierung und Erhalt rechtlich erforderlicher Historie."
+msgstr "Procedura GDPR con anonimizzazione controllata e conservazione delle registrazioni richieste dalla legge."
+
+msgid "Angefordert"
+msgstr "Richiesto"
+
+msgid "Notiz"
+msgstr "Nota"
+
+msgid "Konto wirklich anonymisieren?"
+msgstr "Anonimizzare davvero questo account?"
+
+msgid "Verarbeiten"
+msgstr "Elabora"
+
+msgid "Retention Policies"
+msgstr "Politiche di conservazione"
+
+msgid "Nur freigegebene Datenklassen können automatisiert bereinigt werden."
+msgstr "Solo le classi di dati approvate possono essere eliminate automaticamente."
+
+msgid "Datenklasse"
+msgstr "Classe di dati"
+
+msgid "Keine Policies."
+msgstr "Nessuna politica."
+
+msgid "Versionierte AGB, Datenschutz-, Widerrufs- und Lizenztexte."
+msgstr "Testi versionati di condizioni generali, privacy, recesso e licenze."
+
+msgid "Typ"
+msgstr "Tipo"
+
+msgid "Keine Dokumente."
+msgstr "Nessun documento."
+
+msgid "Read-only PostgreSQL-Betriebsdaten."
+msgstr "Dati operativi PostgreSQL in sola lettura."
+
+msgid "DB-Größe"
+msgstr "Dimensione database"
+
+msgid "Retention-Policy anlegen"
+msgstr "Crea criterio di conservazione"
+
+msgid "Rechtsdokument anlegen"
+msgstr "Crea documento legale"
+
+msgid "Fertig"
+msgstr "Completato"
+
+msgid "Referenz"
+msgstr "Riferimento"
+
+msgid "Start"
+msgstr "Inizio"
+
+msgid "Ende"
+msgstr "Fine"
+
+msgid "Backup"
+msgstr "Backup"
+
+msgid "Schweregrad"
+msgstr "Gravità"
+
+msgid "Meldung"
+msgstr "Messaggio"
+
+msgid "Keine Datensätze gefunden."
+msgstr "Nessun record trovato."
+
+msgid "Benutzer-ID"
+msgstr "ID utente"
+
+msgid "Status ändern"
+msgstr "Modifica stato"
+
+msgid "Neu"
+msgstr "Nuovo"
+
+msgid "In Bearbeitung"
+msgstr "In lavorazione"
+
+msgid "Abgeschlossen"
+msgstr "Chiuso"
+
+msgid "Antwort schreiben"
+msgstr "Scrivi una risposta"
+
+msgid "Die Antwort wird im Verlauf gespeichert und per E-Mail versendet an:"
+msgstr "La risposta viene salvata nella cronologia e inviata via e-mail a:"
+
+msgid "Antwort"
+msgstr "Risposta"
+
+msgid "Antwort an den Kunden eingeben …"
+msgstr "Inserisci la risposta al cliente …"
+
+msgid "Antwort senden"
+msgstr "Invia risposta"
+
+msgid "Anfrage und alle netstyle-Antworten in zeitlicher Reihenfolge."
+msgstr "Richiesta e tutte le risposte netstyle in ordine cronologico."
+
+msgid "netstyle Support"
+msgstr "Assistenza netstyle"
+
+msgid "FAQ bearbeiten"
+msgstr "Modifica FAQ"
+
+msgid "FAQ anlegen"
+msgstr "Crea FAQ"
+
+msgid "Zentraler Content-Baustein."
+msgstr "Componente centrale dei contenuti."
+
+msgid "FAQ-Verwaltung"
+msgstr "Gestione FAQ"
+
+msgid "Zentrale FAQ-Inhalte für Marketing und Produktoberflächen."
+msgstr "FAQ centralizzate per marketing e interfacce dei prodotti."
+
+msgid "Frage suchen …"
+msgstr "Cerca domande …"
+
+msgid "Alle Zielgruppen"
+msgstr "Tutti i destinatari"
+
+msgid "Filtern"
+msgstr "Filtra"
+
+msgid "Zurücksetzen"
+msgstr "Ripristina"
+
+msgid "Key"
+msgstr "Chiave"
+
+msgid "Frage"
+msgstr "Domanda"
+
+msgid "Zielgruppe"
+msgstr "Destinatari"
+
+msgid "Keine FAQ-Einträge."
+msgstr "Nessuna voce FAQ."
+
+msgid "Service Account Token"
+msgstr "Token dell'account di servizio"
+
+msgid "erstellt"
+msgstr "creato"
+
+msgid "Token jetzt sicher speichern."
+msgstr "Salva subito questo token in modo sicuro."
+
+msgid "Er wird danach nicht erneut im Klartext angezeigt; ein alter Token ist nach einer Rotation sofort ungültig."
+msgstr "Non verrà più mostrato in chiaro; il vecchio token diventa immediatamente non valido dopo la rotazione."
+
+msgid "Zur API-Verwaltung"
+msgstr "Torna alla gestione API"
+
+msgid "Produktcode"
+msgstr "Codice prodotto"
+
+msgid "Preisversion anlegen"
+msgstr "Crea versione del prezzo"
+
+msgid "Produktkonfiguration"
+msgstr "Configurazione prodotto"
+
+msgid "Preisversionen"
+msgstr "Versioni di prezzo"
+
+msgid "ab"
+msgstr "dal"
+
+msgid "Keine Preisversionen."
+msgstr "Nessuna versione di prezzo."
+
+msgid "Zentrale Prompt-Domain · 34 Apps · 194 PM20-Aufgaben · versioniert und serverseitig komponiert."
+msgstr "Dominio centralizzato dei prompt · 34 app · 194 attività PM20 · versioni e composizione lato server."
+
+msgid "Qualität"
+msgstr "Qualità"
+
+msgid "Task-ID, App oder Titel suchen …"
+msgstr "Cerca ID attività, app o titolo …"
+
+msgid "Task"
+msgstr "Attività"
+
+msgid "Anwendung"
+msgstr "Applicazione"
+
+msgid "Veröffentlicht"
+msgstr "Pubblicato"
+
+msgid "Offene Versionen"
+msgstr "Versioni aperte"
+
+msgid "keine"
+msgstr "nessuna"
+
+msgid "noch keine Daten"
+msgstr "nessun dato disponibile"
+
+msgid "Keine Prompt-Aufgaben gefunden."
+msgstr "Nessuna attività prompt trovata."
+
+msgid "Prompt-Qualität"
+msgstr "Qualità dei prompt"
+
+msgid "1–5-Sterne-Ratings · Recent Average · Drop-Erkennung · Aufgabenliste."
+msgstr "Valutazioni da 1 a 5 stelle · media recente · rilevamento cali · elenco attività."
+
+msgid "Schwellen"
+msgstr "Soglie"
+
+msgid "Analyse aktualisieren"
+msgstr "Aggiorna analisi"
+
+msgid "Kritisch"
+msgstr "Critico"
+
+msgid "Warnung"
+msgstr "Avviso"
+
+msgid "Beobachten"
+msgstr "Monitorare"
+
+msgid "OK"
+msgstr "OK"
+
+msgid "App"
+msgstr "App"
+
+msgid "Recent Avg"
+msgstr "Media recente"
+
+msgid "Previous Avg"
+msgstr "Media precedente"
+
+msgid "Drop"
+msgstr "Calo"
+
+msgid "Lizenz-Defaults"
+msgstr "Impostazioni predefinite licenze"
+
+msgid "Geräte je Benutzer"
+msgstr "Dispositivi per utente"
+
+msgid "Einladung"
+msgstr "Invito"
+
+msgid "Stunden"
+msgstr "ore"
+
+msgid "Kritische Warnung"
+msgstr "Avviso critico"
+
+msgid "Einstellungen speichern"
+msgstr "Salva impostazioni"
+
+msgid "Produktdefaults, Support, E-Mail-Identität und Betriebswarnschwellen."
+msgstr "Impostazioni predefinite del prodotto, supporto, identità e-mail e soglie di avviso operativo."
+
+msgid "Produktwerte werden unter „Produkte & Preise“ gepflegt."
+msgstr "I valori dei prodotti si gestiscono in «Prodotti e prezzi»."
+
+msgid "PROMPTFINISHER Pro ist nicht angelegt."
+msgstr "PROMPTFINISHER Pro non è stato creato."
+
+msgid "Empfänger des Kundenportal-Kontaktformulars."
+msgstr "Destinatario del modulo di contatto del portale clienti."
+
+msgid "E-Mail-Versandweg & Fallback"
+msgstr "Instradamento e-mail e failover"
+
+msgid "Alle Provider bleiben parallel gespeichert. Im manuellen Modus wird nur der primäre Versandweg verwendet. Im automatischen Modus wird bei eindeutig nicht zugestellten Fehlern in der festgelegten Reihenfolge weitergeschaltet; bei unklaren Fehlern erfolgt bewusst kein automatischer Fallback, um Doppelversand zu vermeiden."
+msgstr "Tutti i provider restano memorizzati. La modalità manuale usa solo il canale principale. La modalità automatica passa al provider successivo nell'ordine definito soltanto in caso di mancata consegna confermata; gli errori ambigui non attivano il failover per evitare invii duplicati."
+
+msgid "E-Mail-Absender & Domain"
+msgstr "Mittente e dominio e-mail"
+
+msgid "Die Absenderadresse wird beim SMTP-Versand direkt aus diesen Einstellungen gelesen. SPF, DKIM und DMARC sind hier als DNS-Sollwerte dokumentiert; das Speichern verändert keine DNS-Zone."
+msgstr "L'indirizzo del mittente SMTP viene letto direttamente da queste impostazioni. SPF, DKIM e DMARC sono documentati come record DNS previsti; il salvataggio non modifica alcuna zona DNS."
+
+msgid "Erster SMTP-Transport. Das Passwort wird verschlüsselt gespeichert und niemals wieder im Klartext angezeigt."
+msgstr "Trasporto SMTP principale. La password viene conservata cifrata e non viene mai più mostrata in chiaro."
+
+msgid "Optionaler zweiter SMTP-Transport. Hier können Sie z. B. denselben SMTP-Relay eintragen, den auch Listmonk verwendet, und manuell oder automatisch zwischen SMTP 1 und SMTP 2 wechseln."
+msgstr "Secondo trasporto SMTP facoltativo. È possibile usare, per esempio, lo stesso relay SMTP di Listmonk e passare manualmente o automaticamente tra SMTP 1 e SMTP 2."
+
+msgid "Alternative zu SMTP für Exchange Online. Das Client Secret wird verschlüsselt gespeichert und niemals wieder im Klartext angezeigt."
+msgstr "Alternativa a SMTP per Exchange Online. Il segreto client viene conservato cifrato e non viene mai più mostrato in chiaro."
+
+msgid "Sie besitzen Leserechte, aber keine Berechtigung zum Ändern dieser Einstellungen."
+msgstr "Hai accesso in sola lettura e non puoi modificare queste impostazioni."
+
+msgid "Bewertungen"
+msgstr "Valutazioni"
+
+msgid "Deterministischer Composer-Test ohne Speicherung des erzeugten Prompttexts."
+msgstr "Test deterministico del compositore senza memorizzare il testo del prompt generato."
+
+msgid "Draft aus letzter Version"
+msgstr "Crea una bozza dall'ultima versione"
+
+msgid "Draft speichern"
+msgstr "Salva bozza"
+
+msgid "Keine Version vorhanden."
+msgstr "Nessuna versione disponibile."
+
+msgid "Konfigurierbare Schwellen für Recent Average und Drop-Erkennung."
+msgstr "Soglie configurabili per la media recente e il rilevamento dei cali."
+
+msgid "No-Code Editor. Nur DRAFT-Versionen sind inhaltlich veränderbar."
+msgstr "Editor senza codice. È possibile modificare solo le versioni DRAFT."
+
+msgid "Noch keine Qualitäts-Snapshots. Analyse ausführen oder Ratings erfassen."
+msgstr "Nessuna istantanea della qualità. Esegui un'analisi o registra valutazioni."
+
+msgid "Policy"
+msgstr "Criteri"
+
+msgid "Qualität:"
+msgstr "Qualità:"
+
+msgid "Qualitätsschwellen"
+msgstr "Soglie di qualità"
+
+msgid "Ratings"
+msgstr "Valutazioni"
+
+msgid "Testfall"
+msgstr "Caso di test"
+
+msgid "Testfall speichern"
+msgstr "Salva caso di test"
+
+msgid "Tests"
+msgstr "Test"
+
+msgid "Titel"
+msgstr "Titolo"
+
+msgid "Zur Übersicht"
+msgstr "Torna alla panoramica"
+
+msgid "bearbeiten"
+msgstr "modifica"
+
+msgid "zentrale PromptDefinition"
+msgstr "PromptDefinition centrale"
+
+msgid "Versionen"
+msgstr "Versioni"
+
+msgid "Tests / Ratings"
+msgstr "Test / valutazioni"
+
+msgid "Lifecycle"
+msgstr "Ciclo di vita"
+
+msgid "Archivieren"
+msgstr "Archivia"
+
+msgid "Publish ist nur über den Human-in-the-loop-Lifecycle möglich. Tests werden vor REVIEW und PUBLISH erneut ausgeführt."
+msgstr "La pubblicazione è possibile solo tramite il ciclo di vita con supervisione umana. I test vengono rieseguiti prima di REVIEW e PUBLISH."
+
+msgid "Definition"
+msgstr "Definizione"
+
+msgid "Family"
+msgstr "Famiglia"
+
+msgid "Area"
+msgstr "Ambito"
+
+msgid "Max. Zeichen"
+msgstr "Caratteri max."
+
+msgid "Intent"
+msgstr "Intento"
+
+msgid "Kontexttemplate"
+msgstr "Modello di contesto"
+
+msgid "Felder & Optionen"
+msgstr "Campi e opzioni"
+
+msgid "Pflichtfelder"
+msgstr "Campi obbligatori"
+
+msgid "Keine"
+msgstr "Nessuno"
+
+msgid "Optionale Felder"
+msgstr "Campi facoltativi"
+
+msgid "Auswahloptionen"
+msgstr "Opzioni di selezione"
+
+msgid "Testfälle"
+msgstr "Casi di test"
+
+msgid "Tests sind Bestandteil des Release-Gates einer Prompt-Version."
+msgstr "I test fanno parte dei requisiti per il rilascio di una versione del prompt."
+
+msgid "Alle Tests ausführen"
+msgstr "Esegui tutti i test"
+
+msgid "Testen"
+msgstr "Esegui test"
+
+msgid "Löschen"
+msgstr "Elimina"
+
+msgid "Noch kein Testfall. Vor Übergang zu TEST muss mindestens einer angelegt werden."
+msgstr "Nessun caso di test. Creane almeno uno prima di passare a TEST."
+
+msgid "Preview / Test-Komposition"
+msgstr "Anteprima / composizione di test"
+
+msgid "Prompt testen"
+msgstr "Testa il prompt"
+
+msgid "Ergebnis"
+msgstr "Risultato"
+
+msgid "Deterministischer Feld-Fallback"
+msgstr "Valore di riserva deterministico del campo"
+
+msgid "10-Min.-Ø:"
+msgstr "Media 10 min:"
+
+msgid "Aktive Warnungen"
+msgstr "Avvisi attivi"
+
+msgid "App-Version"
+msgstr "Versione applicazione"
+
+msgid "Architektur"
+msgstr "Architettura"
+
+msgid "Backup & Restore"
+msgstr "Backup e ripristino"
+
+msgid "Backups öffnen"
+msgstr "Apri backup"
+
+msgid "Betriebszustand, Plattformdienste, Integrationen und Datensicherung."
+msgstr "Stato operativo, servizi della piattaforma, integrazioni e backup."
+
+msgid "CPU-Kerne"
+msgstr "Core CPU"
+
+msgid "Caddy"
+msgstr "Caddy"
+
+msgid "Celery Beat"
+msgstr "Celery Beat"
+
+msgid "Celery Worker"
+msgstr "Celery Worker"
+
+msgid "Container-CPU aktuell"
+msgstr "CPU attuale dei container"
+
+msgid "Container-RAM gesamt"
+msgstr "RAM totale dei container"
+
+msgid "DB-Verbindungen"
+msgstr "Connessioni database"
+
+msgid "Dateiobjekte (Inodes) belegt"
+msgstr "Inode utilizzati"
+
+msgid "Dateiobjekte (Inodes) verfügbar"
+msgstr "Inode disponibili"
+
+msgid "Datenbank & Jobs"
+msgstr "Database e processi"
+
+msgid "Datenbank öffnen"
+msgstr "Apri database"
+
+msgid "Datenträger / gesamt"
+msgstr "Disco / totale"
+
+msgid "Datenträger / verfügbar"
+msgstr "Disco / disponibile"
+
+msgid "Datenträger / verwendet"
+msgstr "Disco / utilizzato"
+
+msgid "Definitionen"
+msgstr "Definizioni"
+
+msgid "Dienste & Integrationen"
+msgstr "Servizi e integrazioni"
+
+msgid "Dienste öffnen"
+msgstr "Apri servizi"
+
+msgid "Diese Werte stammen aus cAdvisor und beziehen sich auf Docker-Container. Die VM-Werte oben stammen aus node_exporter und beziehen sich auf die gesamte Docker-Host-VM."
+msgstr "Questi valori provengono da cAdvisor e si riferiscono ai container Docker. I valori della VM sopra provengono da node_exporter e riguardano l'intera VM host Docker."
+
+msgid "Docker"
+msgstr "Docker"
+
+msgid "Docker-Container"
+msgstr "Container Docker"
+
+msgid "Erkannte Container"
+msgstr "Container rilevati"
+
+msgid "Fehler / 24 h"
+msgstr "Errori / 24 h"
+
+msgid "Git Commit"
+msgstr "Commit Git"
+
+msgid "Host & Release"
+msgstr "Host e rilascio"
+
+msgid "Inodes sind Dateisystem-Einträge für Dateien und Verzeichnisse. Sind sie ausgeschöpft, können trotz freiem Speicher keine neuen Dateien angelegt werden."
+msgstr "Gli inode sono voci del file system per file e directory. Se si esauriscono, non è possibile creare nuovi file anche se rimane spazio libero su disco."
+
+msgid "Keine aktiven Systemwarnungen."
+msgstr "Nessun avviso di sistema attivo."
+
+msgid "Letzter Restore-Test"
+msgstr "Ultimo test di ripristino"
+
+msgid "Letztes Backup"
+msgstr "Ultimo backup"
+
+msgid "Letztes Deployment"
+msgstr "Ultimo deployment"
+
+msgid "Load:"
+msgstr "Carico:"
+
+msgid "Messbereich"
+msgstr "Ambito di misurazione"
+
+msgid "Messquelle"
+msgstr "Fonte delle misure"
+
+msgid "Messwert-Erklärung"
+msgstr "Spiegazione delle metriche"
+
+msgid "OS / Kernel"
+msgstr "Sistema operativo / kernel"
+
+msgid "PostgreSQL"
+msgstr "PostgreSQL"
+
+msgid "Prompt MCP"
+msgstr "Prompt MCP"
+
+msgid "RAM gesamt"
+msgstr "RAM totale"
+
+msgid "RAM verfügbar"
+msgstr "RAM disponibile"
+
+msgid "RAM verwendet"
+msgstr "RAM utilizzata"
+
+msgid "Restore-Tests öffnen"
+msgstr "Apri test di ripristino"
+
+msgid "TLS-Zertifikat"
+msgstr "Certificato TLS"
+
+msgid "Umgebung"
+msgstr "Ambiente"
+
+msgid "Uptime"
+msgstr "Tempo di attività"
+
+msgid "VM-CPU aktuell"
+msgstr "CPU attuale della VM"
+
+msgid "VM-Datenträger /"
+msgstr "Disco VM /"
+
+msgid "VM-RAM"
+msgstr "RAM VM"
+
+msgid "VM-Speicher & Dateisystem"
+msgstr "Memoria VM e file system"
+
+msgid "Verwendetes Backup"
+msgstr "Backup utilizzato"
+
+msgid "Warnungen öffnen"
+msgstr "Apri avvisi"
+
+msgid "geschützt"
+msgstr "protetto"
+
+msgid "healthy"
+msgstr "operativo"
+
+msgid "konfiguriert"
+msgstr "configurato"
+
+msgid "nicht erreichbar"
+msgstr "non raggiungibile"
+
+msgid "nicht protokolliert"
+msgstr "non registrato"
+
+msgid "und ist die für neue Prozesse realistisch nutzbare Speichermenge. „Inodes“ sind Dateisystem-Einträge; ein niedriger Belegungsgrad ist unkritisch."
+msgstr "e indica la memoria realisticamente disponibile per nuovi processi. Gli inode sono voci del file system; un basso livello di utilizzo non è problematico."
+
+msgid "verfügbar von"
+msgstr "disponibili su"
+
+msgid "„RAM verfügbar“ entspricht Linux"
+msgstr "«RAM disponibile» corrisponde al valore Linux"
+
+msgid "not_configured"
+msgstr "non configurato"
+
+msgid "unknown"
+msgstr "sconosciuto"
+
+msgid "ok"
+msgstr "OK"
+
+msgid "warning"
+msgstr "avviso"
+
+msgid "unavailable"
+msgstr "non disponibile"
+
+msgid "degraded"
+msgstr "degradato"
+
+msgid "success"
+msgstr "riuscito"
+
+msgid "failed"
+msgstr "non riuscito"
+
+msgid "running"
+msgstr "in esecuzione"
+
+msgid "critical"
+msgstr "critico"
+
+msgid "passed"
+msgstr "superato"
+
+msgid "error"
+msgstr "errore"
+
+msgid "skipped"
+msgstr "saltato"
+
+msgid "in_progress"
+msgstr "in corso"
+
+msgid "no_data"
+msgstr "nessun dato"
+
+msgid "completed"
+msgstr "completato"
+
+msgid "nicht verfügbar"
+msgstr "non disponibile"
+
+msgid "Disk {value}% belegt"
+msgstr "Utilizzo del disco: {value}%"
+
+msgid "RAM {value}% belegt"
+msgstr "Utilizzo RAM: {value}%"
+
+msgid "CPU 10-Minuten-Mittel {value}%"
+msgstr "Media CPU su 10 minuti: {value}%"
+
+msgid "Kein auswertbarer Backupstatus verfügbar"
+msgstr "Nessuno stato di backup valutabile disponibile"
+
+msgid "Letztes Backup meldet Status {value}"
+msgstr "Stato dell'ultimo backup: {value}"
+
+msgid "Backup ist {value} Stunden alt"
+msgstr "Il backup risale a {value} ore fa"
+
+msgid "Restore-Statusdatei ist nicht auswertbar"
+msgstr "Impossibile valutare il file di stato del ripristino"
+
+msgid "Noch kein Restore-Test protokolliert"
+msgstr "Nessun test di ripristino ancora registrato"
+
+msgid "Letzter Restore-Test war nicht erfolgreich"
+msgstr "L'ultimo test di ripristino non è riuscito"
+
+msgid "Letzter Restore-Test ist {value} Tage alt"
+msgstr "L'ultimo test di ripristino risale a {value} giorni fa"
+
+msgid "Monitoring-Ziel {value} ist nicht erreichbar"
+msgstr "La destinazione di monitoraggio {value} non è raggiungibile"
+
+msgid "Monitoring-Ziel {value} liefert keinen Status"
+msgstr "La destinazione di monitoraggio {value} non restituisce alcuno stato"
+
+msgid "Caddy Healthcheck ist nicht erreichbar"
+msgstr "Il controllo dello stato di Caddy non è raggiungibile"
+
+msgid "Kein Celery Worker beantwortet den aktiven Ping"
+msgstr "Nessun worker Celery risponde al ping attivo"
+
+msgid "Celery Beat-Heartbeat älter als {value} Minuten"
+msgstr "L'heartbeat di Celery Beat risale a più di {value} minuti fa"
+
+msgid "Celery Queue-Tiefe kann nicht gelesen werden"
+msgstr "Impossibile leggere la lunghezza della coda Celery"
+
+msgid "Celery Queue enthält {value} wartende Jobs"
+msgstr "La coda Celery contiene {value} processi in attesa"
+
+msgid "{value} fehlgeschlagene Hintergrundjobs in 24 Stunden"
+msgstr "{value} processi in background non riusciti nelle ultime 24 ore"
+
+msgid "{value} E-Mail-Fehler in 24 Stunden"
+msgstr "{value} errori e-mail nelle ultime 24 ore"
+
+msgid "{value} Mollie-Verarbeitungsfehler in 24 Stunden"
+msgstr "{value} errori di elaborazione Mollie nelle ultime 24 ore"
+
+msgid "Backups"
+msgstr "Backup"
+
+msgid "Restore-Tests"
+msgstr "Test di ripristino"
+
+msgid "Systemwarnungen"
+msgstr "Avvisi di sistema"
+
+msgid "Erledigt"
+msgstr "Risolto"
+
+msgid "Filter"
+msgstr "Filtro"
+
+msgid "Seite"
+msgstr "pagina"
+
+msgid "AGB akzeptieren"
+msgstr "Accetta i termini e le condizioni"
+
+msgid "Anmeldung fehlgeschlagen."
+msgstr "Accesso non riuscito."
+
+msgid "Anmeldung fehlgeschlagen. Bitte später erneut versuchen."
+msgstr "Accesso non riuscito. Riprova più tardi."
+
+msgid "Anzahl Lizenzen"
+msgstr "Numero di licenze"
+
+msgid "Art der Kündigung"
+msgstr "Tipo di recesso dal contratto"
+
+msgid "Außerordentliche Kündigung"
+msgstr "Risoluzione straordinaria"
+
+msgid "Bei einer außerordentlichen Kündigung ist der Kündigungsgrund erforderlich."
+msgstr "Per la risoluzione straordinaria è necessario indicare il motivo."
+
+msgid "Bestellnummer"
+msgstr "Numero d'ordine"
+
+msgid "Bitte bestätigen Sie den gewünschten Leistungsbeginn vor Ablauf der Widerrufsfrist."
+msgstr "Conferma di richiedere l'inizio del servizio prima della scadenza del periodo di recesso."
+
+msgid "Bitte bestätigen Sie die Widerrufsbelehrung."
+msgstr "Conferma di aver preso visione delle informazioni sul diritto di recesso."
+
+msgid "Datenschutzhinweise zur Kenntnis genommen"
+msgstr "Ho preso visione dell'informativa sulla privacy"
+
+msgid "Deutschland"
+msgstr "Germania"
+
+msgid "Die Bestellnummer finden Sie in Ihrer Bestell- bzw. Zahlungsbestätigung."
+msgstr "Il numero d'ordine si trova nella conferma dell'ordine o del pagamento."
+
+msgid "E-Mail-Adresse für die Eingangsbestätigung"
+msgstr "Indirizzo e-mail per la conferma di ricezione"
+
+msgid "E-Mail-Adresse für die Kündigungsbestätigung"
+msgstr "Indirizzo e-mail per la conferma di risoluzione"
+
+msgid "Firmenname erforderlich."
+msgstr "Il nome dell'azienda è obbligatorio."
+
+msgid "Gewünschter Beendigungszeitpunkt"
+msgstr "Data di cessazione richiesta"
+
+msgid "Hausnummer"
+msgstr "Numero civico"
+
+msgid "Kündigungsgrund"
+msgstr "Motivo della risoluzione"
+
+msgid "Leer lassen für den frühestmöglichen Zeitpunkt."
+msgstr "Lascia vuoto per la prima data disponibile."
+
+msgid "Leistungsbeginn vor Ablauf der Widerrufsfrist ausdrücklich verlangt"
+msgstr "Richiedo espressamente l'inizio del servizio prima della scadenza del periodo di recesso"
+
+msgid "Lizenzbedingungen akzeptieren"
+msgstr "Accetta le condizioni di licenza"
+
+msgid "Ordentliche Kündigung"
+msgstr "Recesso ordinario"
+
+msgid "PLZ"
+msgstr "Codice postale"
+
+msgid "Passwörter stimmen nicht überein."
+msgstr "Le password non corrispondono."
+
+msgid "Steuernummer ist für diese Steuerregel erforderlich."
+msgstr "Per questa regola fiscale è richiesto un numero fiscale."
+
+msgid "Straße"
+msgstr "Via"
+
+msgid "USt-IdNr. ist für diese Steuerregel erforderlich."
+msgstr "Per questa regola fiscale è richiesta una partita IVA."
+
+msgid "Unternehmensname ist erforderlich."
+msgstr "Il nome dell'azienda è obbligatorio."
+
+msgid "Vertrag / Bestellung / Kundennummer"
+msgstr "Contratto / ordine / numero cliente"
+
+msgid "Vor- und Nachname"
+msgstr "Nome e cognome"
+
+msgid "Widerrufsinformation zur Kenntnis genommen"
+msgstr "Ho preso visione delle informazioni sul diritto di recesso"
+
+msgid "Zum Beispiel Bestellnummer oder Kundennummer."
+msgstr "Ad esempio, numero d'ordine o numero cliente."
+
+msgid "Gerätename"
+msgstr "Nome dispositivo"
+
+msgid "Keine konkrete Lizenz"
+msgstr "Nessuna licenza specifica"
+
+msgid "Lizenz (optional)"
+msgstr "Licenza (facoltativa)"
+
+msgid "Nachricht"
+msgstr "Messaggio"
+
+msgid "Schlüssel"
+msgstr "Chiave"
+
+msgid "Sonstiges"
+msgstr "Altro"
+
+msgid "Sortierung"
+msgstr "Ordinamento"
+
+msgid "Technisches Problem"
+msgstr "Problema tecnico"
+
+msgid "Aktuelle Stichprobengröße"
+msgstr "Dimensione del campione recente"
+
+msgid "App-Regel-Snapshot"
+msgstr "Istantanea regole dell'app"
+
+msgid "Ausgabeformen"
+msgstr "Formati di output"
+
+msgid "Beispiel: {\"microsoft_tier\":\"premium\",\"payload\":{\"fields\":{...}}}"
+msgstr "Esempio: {\"microsoft_tier\":\"premium\",\"payload\":{\"fields\":{...}}}"
+
+msgid "Bereich"
+msgstr "Area"
+
+msgid "Darf nicht enthalten"
+msgstr "Non deve contenere"
+
+msgid "Ein Feld pro Zeile. Optionales Fragment: Feldname ||| Text mit {value}."
+msgstr "Un campo per riga. Frammento facoltativo: nome campo ||| testo con {value}."
+
+msgid "Ein Pflichtfeld pro Zeile."
+msgstr "Un campo obbligatorio per riga."
+
+msgid "Eingabedaten (JSON)"
+msgstr "Dati di input (JSON)"
+
+msgid "Familie"
+msgstr "Famiglia"
+
+msgid "Feldbezeichnungen müssen innerhalb einer Prompt-Version eindeutig sein."
+msgstr "Le etichette dei campi devono essere univoche all'interno di una versione del prompt."
+
+msgid "Kontextvorlage"
+msgstr "Modello di contesto"
+
+msgid "Kritisch bei Abfall"
+msgstr "Soglia di calo critico"
+
+msgid "Kritischer Durchschnitt"
+msgstr "Media critica"
+
+msgid "Maximale Zeichen"
+msgstr "Numero massimo di caratteri"
+
+msgid "Microsoft-Lizenzstufe"
+msgstr "Livello di licenza Microsoft"
+
+msgid "Mindestanzahl Stichproben"
+msgstr "Numero minimo di campioni"
+
+msgid "Mindestdurchschnitt"
+msgstr "Media minima"
+
+msgid "Muss enthalten"
+msgstr "Deve contenere"
+
+msgid "Nur DRAFT-Versionen dürfen inhaltlich bearbeitet werden."
+msgstr "È possibile modificare solo le versioni DRAFT."
+
+msgid "Payload muss ein JSON-Objekt sein."
+msgstr "Il payload deve essere un oggetto JSON."
+
+msgid "Quellen"
+msgstr "Fonti"
+
+msgid "Schwerpunkte"
+msgstr "Aree di interesse"
+
+msgid "Test-Payload (JSON)"
+msgstr "Payload di test (JSON)"
+
+msgid "Test-Payload muss ein JSON-Objekt sein."
+msgstr "Il payload di test deve essere un oggetto JSON."
+
+msgid "Ungültiges JSON: %(error)s"
+msgstr "JSON non valido: %(error)s"
+
+msgid "Vorherige Stichprobengröße"
+msgstr "Dimensione del campione precedente"
+
+msgid "Warnung bei Abfall"
+msgstr "Soglia di avviso per calo"
+
+msgid "Ziel / Intent"
+msgstr "Obiettivo / intento"
+
+msgid "Zielgruppen"
+msgstr "Destinatari"
+
+msgid "API-Schlüssel"
+msgstr "Chiave API"
+
+msgid "Ablauf optional"
+msgstr "Scadenza facoltativa"
+
+msgid "Außerhalb der Produktion ist ausschließlich ein Mollie-Test-Key (test_…) zulässig."
+msgstr "Fuori dalla produzione è consentita solo una chiave di test Mollie (test_…)."
+
+msgid "Begründung"
+msgstr "Motivazione"
+
+msgid "Beschreibung"
+msgstr "Descrizione"
+
+msgid "Bruttopreis"
+msgstr "Prezzo lordo"
+
+msgid "Der Datensatz wird revisionssicher ausgeblendet und im Audit protokolliert."
+msgstr "Il record sarà nascosto con una traccia di audit."
+
+msgid "Diese E-Mail-Adresse gehört bereits zu einem PROMPTFINISHER-Konto."
+msgstr "Questo indirizzo e-mail appartiene già a un account PROMPTFINISHER."
+
+msgid "Diese E-Mail-Adresse ist bereits einem Firmenkunden zugeordnet."
+msgstr "Questo indirizzo e-mail è già associato a un cliente aziendale."
+
+msgid "Diese E-Mail-Adresse ist bereits registriert."
+msgstr "Questo indirizzo e-mail è già registrato."
+
+msgid "Dokumenttyp"
+msgstr "Tipo di documento"
+
+msgid "E-Mail des Firmenadministrators"
+msgstr "E-mail dell'amministratore aziendale"
+
+msgid "Eigenes Passwort erneut eingeben"
+msgstr "Inserisci nuovamente la tua password"
+
+msgid "Erinnerung 1 · Tage vorher"
+msgstr "Promemoria 1 · Giorni prima"
+
+msgid "Erinnerung 2 · Tage vorher"
+msgstr "Promemoria 2 · Giorni prima"
+
+msgid "Erstatten"
+msgstr "Rimborsare"
+
+msgid "Für Unternehmens-Leads ist der Unternehmensname erforderlich."
+msgstr "Per i lead aziendali è richiesto il nome dell'azienda."
+
+msgid "Für diese Datenklasse existiert kein freigegebener Lösch-Handler."
+msgstr "Non esiste un gestore di eliminazione approvato per questa classe di dati."
+
+msgid "Für diese E-Mail-Adresse existiert bereits ein aktiver Lead."
+msgstr "Esiste già un lead attivo per questo indirizzo e-mail."
+
+msgid "Identität und Berechtigung des Ansprechpartners wurden geprüft"
+msgstr "Identità e autorizzazione del referente verificate"
+
+msgid "In Kunde umwandeln"
+msgstr "Converti in cliente"
+
+msgid "In Produktion ist ausschließlich ein Mollie-Live-Key (live_…) zulässig."
+msgstr "In produzione è consentita solo una chiave live Mollie (live_…)."
+
+msgid "Inhalt"
+msgstr "Contenuto"
+
+msgid "Interne Notiz zur Prüfung (optional)"
+msgstr "Nota interna di verifica (facoltativa)"
+
+msgid "Interne Notizen"
+msgstr "Note interne"
+
+msgid "Kaufbar"
+msgstr "Acquistabile"
+
+msgid "Kritische Warnung · Tage vorher"
+msgstr "Avviso critico · Giorni prima"
+
+msgid "Lead in Firmenkunden umwandeln und Einladungslink senden"
+msgstr "Converti il lead in cliente aziendale e invia il link d'invito"
+
+msgid "Lead wirklich löschen"
+msgstr "Conferma l'eliminazione del lead"
+
+msgid "Lead-Typ"
+msgstr "Tipo di lead"
+
+msgid "Leer lassen, um den bestehenden Schlüssel unverändert zu lassen."
+msgstr "Lascia vuoto per mantenere invariata la chiave esistente."
+
+msgid "Lesen"
+msgstr "Lettura"
+
+msgid "Löschung erst nach dieser Anzahl Tage. Rechtliche Aufbewahrungsfristen separat prüfen."
+msgstr "Eliminazione solo dopo questo numero di giorni. Verificare separatamente i termini legali di conservazione."
+
+msgid "Neukauf"
+msgstr "Nuovo acquisto"
+
+msgid "Nicht zugewiesen"
+msgstr "Non assegnato"
+
+msgid "Nächste Aktion"
+msgstr "Prossima azione"
+
+msgid "Operations lesen"
+msgstr "Leggi operazioni"
+
+msgid "Preistyp"
+msgstr "Tipo di prezzo"
+
+msgid "Prompt-Drafts erzeugen"
+msgstr "Crea bozze di prompt"
+
+msgid "Prompt-Tests ausführen"
+msgstr "Esegui test dei prompt"
+
+msgid "Prompts erzeugen"
+msgstr "Crea prompt"
+
+msgid "Prompts lesen"
+msgstr "Leggi i prompt"
+
+msgid "Qualität verwalten"
+msgstr "Gestisci la qualità"
+
+msgid "Quelle"
+msgstr "Fonte"
+
+msgid "Reminder 1 muss vor Reminder 2 liegen (größere Tageszahl)."
+msgstr "Il promemoria 1 deve precedere il promemoria 2 (numero di giorni maggiore)."
+
+msgid "Reminder 2 muss vor der kritischen Warnphase liegen."
+msgstr "Il promemoria 2 deve precedere il periodo di avviso critico."
+
+msgid "Sicherheitsbestätigung des aktuell angemeldeten netstyle Benutzers."
+msgstr "Conferma di sicurezza dell'utente netstyle attualmente connesso."
+
+msgid "Sichtbar"
+msgstr "Visibile"
+
+msgid "Standard-Laufzeit in Tagen"
+msgstr "Durata predefinita in giorni"
+
+msgid "Unternehmensname"
+msgstr "Nome azienda"
+
+msgid "Unterstützt: expired_invitations, email_messages, revoked_devices, resolved_system_alerts, resolved_task_failures, expired_sessions."
+msgstr "Supportati: expired_invitations, email_messages, revoked_devices, resolved_system_alerts, resolved_task_failures, expired_sessions."
+
+msgid "Veröffentlichen"
+msgstr "Pubblica"
+
+msgid "Währung"
+msgstr "Valuta"
+
+msgid "Absender-Anzeigename"
+msgstr "Nome visualizzato del mittente"
+
+msgid "Absender-E-Mail"
+msgstr "E-mail del mittente"
+
+msgid "Aktive Absenderadresse für SMTP. Änderungen gelten ohne Container-Neustart."
+msgstr "Indirizzo SMTP attivo del mittente. Le modifiche si applicano senza riavviare i container."
+
+msgid "Antwortadresse"
+msgstr "Indirizzo per le risposte"
+
+msgid "Anwendungs-/Client-ID der App-Registrierung."
+msgstr "ID applicazione/client della registrazione dell'app."
+
+msgid "Automatisch – bei sicherem Ausfall auf Fallback wechseln"
+msgstr "Automatico – passa al percorso alternativo dopo un errore confermato"
+
+msgid "Backup kritisch in Stunden"
+msgstr "Età critica backup in ore"
+
+msgid "Backup-Warnung in Stunden"
+msgstr "Età di avviso backup in ore"
+
+msgid "Begründung optional"
+msgstr "Motivazione (facoltativa)"
+
+msgid "Bei IONOS normalerweise die vollständige E-Mail-Adresse."
+msgstr "Per IONOS, normalmente l'indirizzo e-mail completo."
+
+msgid "Bitte eine gültige Domain ohne @ eingeben."
+msgstr "Inserisci un dominio valido senza @."
+
+msgid "CPU-Warnung in %"
+msgstr "Soglia di avviso CPU in %"
+
+msgid "DKIM DNS Sollwert"
+msgstr "Valore DNS DKIM previsto"
+
+msgid "DKIM-Selector"
+msgstr "Selettore DKIM"
+
+msgid "DMARC Sollwert"
+msgstr "Valore DMARC previsto"
+
+msgid "Datenträger kritisch in %"
+msgstr "Utilizzo critico del disco in %"
+
+msgid "Datenträger-Warnung in %"
+msgstr "Avviso utilizzo disco in %"
+
+msgid "Der kritische Wert muss über dem Warnwert liegen."
+msgstr "La soglia critica deve superare la soglia di avviso."
+
+msgid "Die Mail-Domain muss zur Absender-E-Mail passen."
+msgstr "Il dominio email deve corrispondere all'indirizzo del mittente."
+
+msgid "Dokumentierter DNS-Sollwert für _dmarc.<Domain>."
+msgstr "Valore DNS previsto documentato per _dmarc.<Domain>."
+
+msgid "Dokumentierter DNS-Sollwert. Das Speichern ändert den öffentlichen DNS-Eintrag nicht."
+msgstr "Valore DNS previsto documentato. Il salvataggio non modifica il record DNS pubblico."
+
+msgid "Domain des sichtbaren Absenders, z. B. decke-wand-boden.de oder später promptmaster.ai."
+msgstr "Dominio del mittente visibile, ad es. decke-wand-boden.de o in seguito promptmaster.ai."
+
+msgid "Ein DMARC-Eintrag muss mit \"v=DMARC1;\" beginnen."
+msgstr "Un record DMARC deve iniziare con \"v=DMARC1;\"."
+
+msgid "Ein SPF-Eintrag muss mit \"v=spf1 \" beginnen."
+msgstr "Un record SPF deve iniziare con \"v=spf1 \"."
+
+msgid "Ein Versandweg darf in der Kette nur einmal vorkommen."
+msgstr "Ogni canale di invio può comparire solo una volta nella catena."
+
+msgid "Eine oder mehrere E-Mail-Adressen, getrennt durch Zeilenumbruch, Komma oder Semikolon."
+msgstr "Uno o più indirizzi email separati da una nuova riga, virgola o punto e virgola."
+
+msgid "Entra Client ID"
+msgstr "ID client Entra"
+
+msgid "Entra Client Secret"
+msgstr "Segreto client Entra"
+
+msgid "Entra Tenant ID"
+msgstr "ID tenant Entra"
+
+msgid "Erstattung verbindlich über Mollie auslösen"
+msgstr "Conferma il rimborso tramite Mollie"
+
+msgid "Fallback 1"
+msgstr "Alternativa 1"
+
+msgid "Fallback 2"
+msgstr "Alternativa 2"
+
+msgid "Für IONOS mit STARTTLS: 587."
+msgstr "Per IONOS con STARTTLS: 587."
+
+msgid "Für Microsoft Graph ist dieses Feld erforderlich."
+msgstr "Questo campo è obbligatorio per Microsoft Graph."
+
+msgid "Für Microsoft Graph ist ein Client Secret erforderlich."
+msgstr "Per Microsoft Graph è necessario un segreto client."
+
+msgid "Für SMTP 1 ist dieses Feld erforderlich."
+msgstr "Questo campo è obbligatorio per SMTP 1."
+
+msgid "Für SMTP 2 ist dieses Feld erforderlich."
+msgstr "Questo campo è obbligatorio per SMTP 2."
+
+msgid "Für den automatischen Modus muss mindestens ein Fallback gewählt werden."
+msgstr "Seleziona almeno un percorso alternativo per la modalità automatica."
+
+msgid "Im automatischen Modus wird nur bei eindeutig nicht zugestellten Fehlern weitergeschaltet."
+msgstr "La modalità automatica cambia canale solo in caso di mancata consegna confermata."
+
+msgid "Kein weiterer Fallback"
+msgstr "Nessuna altra alternativa"
+
+msgid "Leer lassen, um das gespeicherte Passwort unverändert zu lassen."
+msgstr "Lascia vuoto per mantenere la password memorizzata."
+
+msgid "Leer lassen, um das gespeicherte Secret unverändert zu lassen."
+msgstr "Lascia vuoto per mantenere il segreto memorizzato."
+
+msgid "Manuell – nur den primären Versandweg verwenden"
+msgstr "Manuale – usa solo il canale di invio principale"
+
+msgid "Microsoft-365-Absender"
+msgstr "Mittente Microsoft 365"
+
+msgid "Monitoring-Alarmempfänger"
+msgstr "Destinatari degli avvisi di monitoraggio"
+
+msgid "Neuer Schlüssel"
+msgstr "Nuova chiave"
+
+msgid "Optional. Leer lassen, wenn Antworten an die Absenderadresse gehen sollen."
+msgstr "Facoltativo. Lascia vuoto per inviare le risposte all'indirizzo del mittente."
+
+msgid "Optionaler Selector bzw. Hinweis auf die verwendeten Microsoft-365-DKIM-Selectoren."
+msgstr "Selettore facoltativo o nota sui selettori DKIM Microsoft 365 in uso."
+
+msgid "Optionaler zweiter SMTP-Provider, z. B. derselbe Relay-Dienst wie bei Listmonk."
+msgstr "Secondo provider SMTP facoltativo, ad es. lo stesso servizio relay di Listmonk."
+
+msgid "Postfach, über das Microsoft Graph senden soll, z. B. promptmaster@netstyle.de."
+msgstr "Casella di posta usata da Microsoft Graph per l'invio, ad es. promptmaster@netstyle.de."
+
+msgid "Primärer Versandweg"
+msgstr "Canale di invio principale"
+
+msgid "RAM kritisch in %"
+msgstr "Utilizzo critico RAM in %"
+
+msgid "RAM-Warnung in %"
+msgstr "Avviso utilizzo RAM in %"
+
+msgid "Restore-Test-Warnung in Tagen"
+msgstr "Età di avviso test di ripristino in giorni"
+
+msgid "SMTP 1 – Benutzername"
+msgstr "SMTP 1 – Nome utente"
+
+msgid "SMTP 1 – Passwort"
+msgstr "SMTP 1 – Password"
+
+msgid "SMTP 1 – Port"
+msgstr "SMTP 1 – Porta"
+
+msgid "SMTP 1 – STARTTLS verwenden"
+msgstr "SMTP 1 – Usa STARTTLS"
+
+msgid "SMTP 1 – Server"
+msgstr "SMTP 1 – Server"
+
+msgid "SMTP 1, SMTP 2 und Microsoft Graph bleiben parallel konfiguriert."
+msgstr "SMTP 1, SMTP 2 e Microsoft Graph restano configurati in parallelo."
+
+msgid "SMTP 2 – Benutzername"
+msgstr "SMTP 2 – Nome utente"
+
+msgid "SMTP 2 – Passwort"
+msgstr "SMTP 2 – Password"
+
+msgid "SMTP 2 – Port"
+msgstr "SMTP 2 – Porta"
+
+msgid "SMTP 2 – STARTTLS verwenden"
+msgstr "SMTP 2 – Usa STARTTLS"
+
+msgid "SMTP 2 – Server"
+msgstr "SMTP 2 – Server"
+
+msgid "SPF Sollwert"
+msgstr "Valore SPF previsto"
+
+msgid "Support-Empfänger"
+msgstr "Destinatario supporto"
+
+msgid "TXT-/CNAME-Sollwert oder beide Microsoft-365-DKIM-CNAMEs. Reine Dokumentation; DNS wird nicht automatisch verändert."
+msgstr "Valore TXT/CNAME previsto o entrambi i CNAME DKIM Microsoft 365. Solo documentazione; il DNS non viene modificato automaticamente."
+
+msgid "Verzeichnis-/Mandanten-ID des Microsoft-365-Tenants."
+msgstr "ID directory/tenant del tenant Microsoft 365."
+
+msgid "Zum Beispiel PROMPTFINISHER."
+msgstr "Ad esempio, PROMPTFINISHER."
+
+msgid "Zum Beispiel smtp.ionos.de."
+msgstr "Ad esempio, smtp.ionos.de."
+
+msgid "Das eigene netstyle Konto kann hier nicht deaktiviert werden."
+msgstr "Non puoi disattivare qui il tuo account netstyle."
+
+msgid "Der letzte aktive Superadmin kann nicht deaktiviert werden."
+msgstr "L'ultimo superamministratore attivo non può essere disattivato."
+
+msgid "Die eigene 2FA wird nicht über die Admin-Fremdverwaltung zurückgesetzt."
+msgstr "Non puoi reimpostare la tua 2FA dalla gestione amministrativa degli altri account."
+
+msgid "2FA zurückgesetzt. Der Benutzer muss sie beim nächsten Login neu einrichten."
+msgstr "La 2FA è stata reimpostata. L'utente deve configurarla al prossimo accesso."
+
+msgid "Die eigene Superadmin-Rolle kann nicht hier entfernt werden."
+msgstr "Non puoi rimuovere qui il tuo ruolo di superamministratore."
+
+msgid "Die letzte aktive Superadmin-Berechtigung kann nicht entfernt werden."
+msgstr "Non è possibile rimuovere l'ultima autorizzazione attiva da superamministratore."
+
+msgid "Ein gesperrter Service Account kann nicht rotiert werden."
+msgstr "Non è possibile ruotare le credenziali di un account di servizio bloccato."
+
+msgid "Mollie-Produktiv-Checkout wurde gesperrt."
+msgstr "Il checkout Mollie di produzione è stato bloccato."
+
+msgid "Bestätigung für die Erstattung fehlt."
+msgstr "Manca la conferma del rimborso."
+
+msgid "Erstattung wurde an Mollie übermittelt."
+msgstr "La richiesta di rimborso è stata inviata a Mollie."
+
+msgid "Für dieses Unternehmen existiert bereits ein aktiver Firmenadministrator."
+msgstr "Questa azienda dispone già di un amministratore attivo."
+
+msgid "Dieser Benutzer ist bereits Firmenadministrator."
+msgstr "Questo utente è già amministratore aziendale."
+
+msgid "Ungültiger Supportstatus."
+msgstr "Stato dell'assistenza non valido."
+
+msgid "Ungültiger Bearbeitungsstatus."
+msgstr "Stato di elaborazione non valido."
+
+msgid "Bitte eine Antwort eingeben."
+msgstr "Inserisci una risposta."
+
+msgid "Die Antwort darf höchstens 10.000 Zeichen enthalten."
+msgstr "La risposta non deve superare i 10.000 caratteri."
+
+msgid "Status aktualisiert."
+msgstr "Stato aggiornato."
+
+msgid "Einstellungen gespeichert."
+msgstr "Impostazioni salvate."
+
+msgid "Rolle gespeichert."
+msgstr "Ruolo salvato."
+
+msgid "Rolle zugewiesen."
+msgstr "Ruolo assegnato."
+
+msgid "Rolle entfernt."
+msgstr "Ruolo rimosso."
+
+msgid "Benutzerstatus aktualisiert."
+msgstr "Stato utente aggiornato."
+
+msgid "Lead gespeichert."
+msgstr "Lead salvato."
+
+msgid "Lead-Zuständigkeit aktualisiert."
+msgstr "Responsabile del lead aggiornato."
+
+msgid "Gerät wurde widerrufen."
+msgstr "Accesso del dispositivo revocato."
+
+msgid "Unternehmensdaten gespeichert."
+msgstr "Dati aziendali salvati."
+
+msgid "Benutzer deaktiviert; Lizenz- und Gerätezugänge wurden freigegeben."
+msgstr "Utente disattivato; accessi a licenze e dispositivi rilasciati."
+
+msgid "Die Lizenz ist bereits frei."
+msgstr "La licenza è già non assegnata."
+
+msgid "Lizenzzuweisung wurde freigegeben."
+msgstr "Assegnazione della licenza rilasciata."
+
+msgid "Lizenz wurde entsperrt."
+msgstr "Licenza sbloccata."
+
+msgid "Lizenz wurde gesperrt; vorhandene Gerätezugänge wurden widerrufen."
+msgstr "Licenza bloccata; accessi esistenti dei dispositivi revocati."
+
+msgid "Produkt angelegt. Legen Sie anschließend Preisversionen an."
+msgstr "Prodotto creato. Aggiungi poi le versioni dei prezzi."
+
+msgid "Feature gespeichert."
+msgstr "Funzionalità salvata."
+
+msgid "Produkt gespeichert."
+msgstr "Prodotto salvato."
+
+msgid "Neue Preisversion angelegt."
+msgstr "Nuova versione del prezzo creata."
+
+msgid "E-Mail-Vorlage gespeichert."
+msgstr "Modello e-mail salvato."
+
+msgid "Mollie-Konfiguration gespeichert."
+msgstr "Configurazione Mollie salvata."
+
+msgid "Service Account gesperrt."
+msgstr "Account di servizio bloccato."
+
+msgid "Verbrauchererklärung aktualisiert."
+msgstr "Dichiarazione del consumatore aggiornata."
+
+msgid "Rechtsdokument gespeichert."
+msgstr "Documento legale salvato."
+
+msgid "Retention-Policy gespeichert."
+msgstr "Criterio di conservazione salvato."
+
+msgid "Löschanfrage verarbeitet und Konto anonymisiert."
+msgstr "Richiesta di cancellazione elaborata e account anonimizzato."
+
+msgid "Löschanfrage abgelehnt."
+msgstr "Richiesta di cancellazione respinta."
+
+msgid "Dieser Lead ist bereits einem Kunden zugeordnet."
+msgstr "Questo lead è già associato a un cliente."
+
+msgid "Einladung für den Firmenadministrator wurde gesendet."
+msgstr "Invito all'amministratore aziendale inviato."
+
+msgid "Kundenantwort gespeichert. Für Demo-Adressen wurde keine E-Mail versendet."
+msgstr "Risposta al cliente salvata. Nessuna e-mail inviata agli indirizzi demo."
+
+msgid "Kundenantwort gespeichert und E-Mail-Benachrichtigung eingeplant."
+msgstr "Risposta al cliente salvata e notifica e-mail programmata."
+
+msgid "Kundenantwort gespeichert, E-Mail-Benachrichtigung konnte aber nicht eingeplant werden."
+msgstr "Risposta al cliente salvata, ma non è stato possibile programmare la notifica e-mail."
+
+msgid "netstyle Benutzer angelegt; Einrichtungslink wurde per E-Mail versendet."
+msgstr "Utente netstyle creato; link di configurazione inviato via e-mail."
+
+msgid "Privatkunden werden aus rechtlichen Gründen über Registrierung/Checkout angelegt; der Lead kann dort anschließend als gewonnen abgeschlossen werden."
+msgstr "Per motivi legali, i clienti privati vengono creati durante registrazione/checkout; successivamente il lead può essere segnato come acquisito."
+
+msgid "Lead wurde in einen Firmenkunden umgewandelt. Der Ansprechpartner hat eine sichere Einladung erhalten."
+msgstr "Lead convertito in cliente aziendale. Il referente ha ricevuto un invito sicuro."
+
+msgid "Lead %(lead_number)s angelegt."
+msgstr "Lead %(lead_number)s creato."
+
+msgid "Lead %(lead_number)s gelöscht."
+msgstr "Lead %(lead_number)s eliminato."
+
+msgid "Firmenadministrator wurde auf %(email)s übertragen."
+msgstr "Ruolo di amministratore aziendale trasferito a %(email)s."
+
+msgid "Lizenz wurde %(email)s zugewiesen."
+msgstr "Licenza assegnata a %(email)s."
+
+msgid "Ausstehend"
+msgstr "In attesa"
+
+msgid "Autorisiert"
+msgstr "Autorizzato"
+
+msgid "Storniert"
+msgstr "Annullato"
+
+msgid "Abgelaufen"
+msgstr "Scaduto"
+
+msgid "Teilweise erstattet"
+msgstr "Rimborso parziale"
+
+msgid "Vollständig erstattet"
+msgstr "Rimborso completo"
+
+msgid "Chargeback"
+msgstr "Storno di addebito"
+
+msgid "Chargeback zurückgenommen"
+msgstr "Storno di addebito annullato"
+
+msgid "Unbekannt"
+msgstr "Sconosciuto"
+
+msgid "Verarbeitungsfehler"
+msgstr "Errore di elaborazione"
+
+msgid "Fehler behoben"
+msgstr "Errore risolto"
+
+msgid "E-Mail-Historie"
+msgstr "Cronologia e-mail"
+
+msgid "netstyle Rolle zuweisen"
+msgstr "Assegna ruolo netstyle"
+
+msgid "Erstattung konnte nicht an Mollie übermittelt werden."
+msgstr "Impossibile inviare il rimborso a Mollie."
+
+msgid "Nachrichtentext"
+msgstr "Testo del messaggio"
+
+msgid "Rollenname"
+msgstr "Nome del ruolo"
+
+msgid "Lead %(lead_number)s löschen"
+msgstr "Elimina lead %(lead_number)s"
+
+msgid "Lead %(lead_number)s in Kunden umwandeln"
+msgstr "Converti lead %(lead_number)s in cliente"
+
+msgid "Firmenadministrator übertragen · %(email)s"
+msgstr "Trasferisci amministratore aziendale · %(email)s"
+
+msgid "E-Mail-Vorlage · %(code)s"
+msgstr "Modello e-mail · %(code)s"
+
+msgid "Löschanfrage ablehnen"
+msgstr "Rifiuta richiesta di eliminazione"
+
+msgid "Uneingeschränkte Rechte auf alle PROMPTFINISHER-Verwaltungsbereiche."
+msgstr "Accesso illimitato a tutte le aree amministrative di PROMPTFINISHER."
+
+msgid "Kunden, Lizenzen, Geräte, Bestellungen, Zahlungen, E-Mail und Support."
+msgstr "Clienti, licenze, dispositivi, ordini, pagamenti, e-mail e assistenza."
+
+msgid "Monitoring, Backups, Operations API, Logs und Systemstatus."
+msgstr "Monitoraggio, backup, API operativa, registri e stato del sistema."
+
+msgid "Prompt Studio, Prompt-Lifecycle, Qualität und zentrale Inhalte."
+msgstr "Prompt Studio, ciclo di vita dei prompt, qualità e contenuti centralizzati."
+
+msgid "Berechtigungen werden über die zugewiesenen Capabilities gesteuert."
+msgstr "Le autorizzazioni sono gestite dalle capacità assegnate."
+
+msgid "Objekttyp"
+msgstr "Tipo di oggetto"
+
+msgid "Objekt-ID"
+msgstr "ID oggetto"
+
+msgid "Lead anlegen"
+msgstr "Crea lead"
+
+msgid "Lead %(lead_number)s zuweisen"
+msgstr "Assegna lead %(lead_number)s"
+
+msgid "Firmenadministrator einladen · %(company)s"
+msgstr "Invita amministratore aziendale · %(company)s"
+
+msgid "Feature bearbeiten"
+msgstr "Modifica funzionalità"
+
+msgid "Preisversion · %(product)s"
+msgstr "Versione del prezzo · %(product)s"
+
+msgid "Rechtsdokument bearbeiten"
+msgstr "Modifica documento legale"
+
+msgid "Retention-Policy bearbeiten"
+msgstr "Modifica politica di conservazione"
+
+msgid "Rolle · %(name)s"
+msgstr "Ruolo · %(name)s"
+
+msgid "Firmenadministrator"
+msgstr "Amministratore aziendale"
+
+msgid "Entwurf"
+msgstr "Bozza"
+
+msgid "Zahlung offen"
+msgstr "Pagamento in sospeso"
+
+msgid "Zahlung prüfen"
+msgstr "Verifica pagamento"
+
+msgid "Refundiert"
+msgstr "Rimborsato"
+
+msgid "Abgelehnt"
+msgstr "Rifiutato"
+
+msgid "Eingegangen"
+msgstr "Ricevuto"
+
+msgid "Kündigung"
+msgstr "Disdetta del contratto"
+
+msgid "Für Kunden sichtbar"
+msgstr "Visibile ai clienti"
+
+msgid "Interne Notiz"
+msgstr "Nota interna"
+
+msgid "Bitte lesen Sie vor der Registrierung die <a href=\"%(terms_url)s\" target=\"_blank\" rel=\"noopener\">AGB</a> und die <a href=\"%(privacy_url)s\" target=\"_blank\" rel=\"noopener\">Datenschutzerklärung</a>."
+msgstr "Prima di registrarti, leggi i <a href=\"%(terms_url)s\" target=\"_blank\" rel=\"noopener\">Termini e condizioni</a> e l'<a href=\"%(privacy_url)s\" target=\"_blank\" rel=\"noopener\">Informativa sulla privacy</a>."
+
+msgid "Admin-Einladung neu senden"
+msgstr "Invia di nuovo l’invito all’amministratore"
+
+msgid "Firmenadministrator einladen"
+msgstr "Invita l’amministratore aziendale"

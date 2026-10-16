@@ -12,6 +12,21 @@ import yaml
 from validate_runtime_config import ROOT, validate, validate_legacy_volume_overlay
 from validate_env import is_external_s3_repository, is_local_restic_repository, main as validate_env_main, normalize_mail_provider
 
+class ComposeStagingLoader(yaml.SafeLoader):
+    """Safe YAML reader for Docker Compose staging !override ports."""
+
+
+def _construct_override_ports(loader, node):
+    if not isinstance(node, yaml.SequenceNode):
+        raise yaml.constructor.ConstructorError(
+            None, None, 'Compose !override must be a ports sequence', node.start_mark,
+        )
+    return loader.construct_sequence(node)
+
+
+ComposeStagingLoader.add_constructor('!override', _construct_override_ports)
+
+
 
 class RuntimeConfigTests(unittest.TestCase):
     def setUp(self):
@@ -37,6 +52,31 @@ class RuntimeConfigTests(unittest.TestCase):
         for key, physical_name in expected.items():
             with self.subTest(volume=key):
                 self.assertEqual(self.base['volumes'][key]['name'], physical_name)
+
+    def test_staging_backup_status_mount_matches_runtime(self):
+        """Staging must expose the same status path as production to Django."""
+        staging = yaml.load((ROOT / 'compose.staging.yaml').read_text(), Loader=ComposeStagingLoader)
+        self.assertEqual(
+            staging['services']['caddy']['ports'],
+            [
+                '127.0.0.1:${PM_STAGING_HTTP_PORT:-80}:80',
+                '127.0.0.1:${PM_STAGING_HTTPS_PORT:-443}:443',
+            ],
+            'Staging Caddy must publish only the dedicated loopback ports.',
+        )
+        web_mounts = staging['services']['web']['volumes']
+        backup_mounts = [
+            mount for mount in web_mounts
+            if isinstance(mount, str) and mount.startswith('backup_status:')
+        ]
+        expected = 'backup_status:/var/run/promptfinisher-backup:ro'
+        self.assertEqual(backup_mounts, [expected])
+        self.assertIn(expected, self.base['services']['web']['volumes'])
+        self.assertNotIn(
+            '/var/run/promptmaster-backup',
+            '\n'.join(web_mounts),
+            'Staging must not mount the obsolete backup status path.',
+        )
 
     def test_promptfinisher_legacy_volume_overlay_is_external_and_complete(self):
         self.assertEqual(validate_legacy_volume_overlay(), [])
@@ -94,9 +134,11 @@ class RuntimeConfigTests(unittest.TestCase):
             {'context': '.', 'dockerfile': 'Dockerfile.postgres-exporter'},
         )
         dockerfile = (ROOT / 'Dockerfile.postgres-exporter').read_text()
-        self.assertIn('FROM golang:1.26.6-alpine AS build', dockerfile)
+        self.assertIn('FROM golang:1.27.2-alpine3.23 AS build', dockerfile)
         self.assertIn('867fbcac31cd18c143e244190ea9168cca069827', dockerfile)
-        self.assertIn('golang.org/x/crypto@v0.55.0', dockerfile)
+        self.assertIn('golang.org/x/crypto@v0.57.0', dockerfile)
+        self.assertIn('golang.org/x/net@v0.60.0', dockerfile)
+        self.assertIn("go version -m /out/postgres_exporter | grep -F 'go1.27.2'", dockerfile)
         self.assertIn('FROM prometheuscommunity/postgres-exporter:v0.20.1', dockerfile)
 
     def test_node_exporter_runtime_is_rebuilt_with_patched_go_toolchain(self):
@@ -110,16 +152,49 @@ class RuntimeConfigTests(unittest.TestCase):
             {'context': '.', 'dockerfile': 'Dockerfile.node-exporter'},
         )
         dockerfile = (ROOT / 'Dockerfile.node-exporter').read_text()
-        self.assertIn('FROM golang:1.26.6-alpine AS build', dockerfile)
+        self.assertIn('FROM golang:1.27.2-alpine3.23 AS build', dockerfile)
         self.assertIn('6044da783597cc3b57aef7580ddcdcff58a4ee99', dockerfile)
-        self.assertIn('golang.org/x/crypto@v0.55.0', dockerfile)
+        self.assertIn('golang.org/x/crypto@v0.57.0', dockerfile)
+        self.assertIn('golang.org/x/net@v0.60.0', dockerfile)
+        self.assertIn("go version -m /out/node_exporter | grep -F 'go1.27.2'", dockerfile)
+        self.assertIn("grep -F 'golang.org/x/net' | grep -F 'v0.60.0'", dockerfile)
         self.assertIn('FROM scratch', dockerfile)
 
-    def test_prometheus_runtime_is_security_accepted_version(self):
+    def test_prometheus_runtime_is_pinned_and_rebuilt_with_patched_go(self):
+        prometheus = self.base['services']['prometheus']
+        self.assertEqual(prometheus['image'], 'promptfinisher-prometheus:3.15.0-patched')
         self.assertEqual(
-            self.base['services']['prometheus']['image'],
-            'prom/prometheus:v3.15.0',
+            prometheus['build'],
+            {'context': '.', 'dockerfile': 'Dockerfile.prometheus'},
         )
+        dockerfile = (ROOT / 'Dockerfile.prometheus').read_text()
+        for required in (
+            'golang:1.27.2-alpine3.23',
+            'apk add --no-cache bash',
+            'git clone --depth 1 --branch v3.15.0',
+            "grep -Eq '^5241a27'",
+            'sha256sum -c ui.sha256',
+            'golang.org/x/net@v0.60.0',
+            'COPY --from=prometheus-patched-build /src/prometheus /bin/prometheus',
+            'COPY --from=prometheus-patched-build /src/promtool /bin/promtool',
+        ):
+            with self.subTest(requirement=required):
+                self.assertIn(required, dockerfile)
+
+    def test_prometheus_unsafe_runtime_variants_are_rejected(self):
+        variants = (
+            ('image', 'prom/prometheus:v3.15.0'),
+            ('image', 'prom/prometheus:latest'),
+            ('build', {'context': '.', 'dockerfile': 'Dockerfile.caddy'}),
+            ('volumes', ['prometheus_data:/prometheus']),
+            ('networks', ['edge']),
+            ('ports', ['9090:9090']),
+        )
+        for field, value in variants:
+            with self.subTest(field=field, value=str(value)):
+                config = copy.deepcopy(self.base)
+                config['services']['prometheus'][field] = value
+                self.assertTrue(validate(config, self.production))
 
     def test_public_monitoring_network_is_rejected(self):
         self.base['networks']['monitor']['internal'] = False
@@ -136,9 +211,11 @@ class RuntimeConfigTests(unittest.TestCase):
             {'context': '.', 'dockerfile': 'Dockerfile.cadvisor'},
         )
         dockerfile = (ROOT / 'Dockerfile.cadvisor').read_text()
-        self.assertIn('FROM golang:1.26.6-alpine3.23 AS build', dockerfile)
+        self.assertIn('FROM golang:1.27.2-alpine3.23 AS build', dockerfile)
         self.assertIn('5bf5d43ac6f60d7ee36a13b4d5b4a78ad2d0abc7', dockerfile)
-        self.assertIn('golang.org/x/crypto@v0.55.0', dockerfile)
+        self.assertIn('golang.org/x/crypto@v0.57.0', dockerfile)
+        self.assertIn('golang.org/x/net@v0.60.0', dockerfile)
+        self.assertIn("go version -m /src/_output/cadvisor | grep -F 'go1.27.2'", dockerfile)
         self.assertIn('google.golang.org/grpc@v1.83.2', dockerfile)
         self.assertIn('FROM ghcr.io/google/cadvisor:v0.60.6', dockerfile)
         self.assertIn('apk upgrade --no-cache', dockerfile)
@@ -178,9 +255,46 @@ class RuntimeConfigTests(unittest.TestCase):
             's3:http://s3.example.net/promptfinisher',
             's3:https://s3.example.net',
             '/local/repository',
+            's3:https://localhost/promptfinisher',
+            's3:https://LOCALHOST./promptfinisher',
+            's3:https://backup.localhost/promptfinisher',
+            's3:https://minio.local/promptfinisher',
+            's3:https://host.docker.internal/promptfinisher',
+            's3:https://gateway.docker.internal/promptfinisher',
+            's3:https://127.0.0.1:9000/promptfinisher',
+            's3:https://127.9.8.7/promptfinisher',
+            's3:https://0.0.0.0/promptfinisher',
+            's3:https://169.254.1.1/promptfinisher',
+            's3:https://[::1]/promptfinisher',
+            's3:https://[fe80::1]/promptfinisher',
+            's3:https://username:password@s3.example.net/promptfinisher',
+            's3:https://s3.example.net/promptfinisher?token=secret',
+            's3:https://s3.example.net/promptfinisher#fragment',
+            's3:https://s3.example.net:invalid/promptfinisher',
+            's3:https://s3.example.net:99999/promptfinisher',
+            's3:https://[bad-ipv6/promptfinisher',
+            's3:https://s3.example.net/',
         ):
             with self.subTest(value=value):
                 self.assertFalse(is_external_s3_repository(value))
+
+    def test_external_restic_repository_allows_nonlocal_tls_ports_and_ip(self):
+        for value in (
+            's3:https://backup.netstyle.de:9443/offsite',
+            's3:https://192.0.2.17:443/backups',
+            's3:https://s3.example.net/nested/path',
+        ):
+            with self.subTest(value=value):
+                self.assertTrue(is_external_s3_repository(value))
+
+    def test_strict_go_live_rejects_loopback_s3_despite_valid_aws_credentials(self):
+        text = self._production_env_text(
+            repository='s3:https://localhost:9000/promptfinisher',
+            aws_key='AKIA_PROMPTFINISHER_TEST',
+            aws_secret='external-backup-secret-value',
+            region='eu-central-1',
+        )
+        self.assertEqual(self._run_env_validator(text, require_go_live=True), 1)
 
     def _production_env_text(self, *, mollie='', repository='/repository', aws_key='', aws_secret='', region=''):
         fernet = base64.urlsafe_b64encode(b'x' * 32).decode('ascii')

@@ -387,40 +387,66 @@ a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,te
 
 
 /* Global UI language selector: available before login and in both workspaces. */
+/* Language control: never float above the user/avatar or change width per language. */
 .language-switcher{
-  position:fixed;
-  top:10px;
-  right:12px;
-  z-index:12000;
+  position:relative;
+  z-index:12;
   margin:0;
+  width:154px;
+  flex:0 0 154px;
 }
 .language-switcher label{
   display:flex;
   align-items:center;
-  gap:7px;
-  padding:6px 8px;
+  gap:6px;
+  padding:5px;
+  min-width:0;
   border:1px solid rgba(151,174,194,.55);
   border-radius:10px;
-  background:rgba(255,255,255,.94);
-  box-shadow:0 5px 18px rgba(5,32,58,.08);
+  background:#fff;
   color:#50667a;
   font-size:11px;
   font-weight:750;
-  backdrop-filter:blur(8px);
 }
+.language-switcher-label{display:none}
 .language-switcher select{
-  min-width:102px;
-  height:30px;
-  padding:3px 24px 3px 8px;
+  box-sizing:border-box;
+  width:100%;
+  min-width:0;
+  max-width:100%;
+  height:32px;
+  padding:4px 24px 4px 8px;
   border:1px solid var(--line);
   border-radius:8px;
   background:#fff;
   color:var(--text);
   font:inherit;
+  font-size:12px;
   cursor:pointer;
 }
+.topbar{min-width:0}
+.topbar .search{min-width:0}
+.topbar-locale{flex:0 0 154px;display:flex;justify-content:flex-end;min-width:0}
+.topbar .userbox{flex:0 0 auto;min-width:0;margin-left:0}
+.topbar .user-meta{max-width:190px;overflow:hidden}
+.topbar .user-meta strong,.topbar .user-meta .small{display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+body:not(:has(.shell)) > .language-switcher{position:fixed;right:12px;top:10px}
+@media(max-width:1050px){
+  .topbar-locale{flex-basis:140px}
+  .topbar-locale .language-switcher{width:140px;flex-basis:140px}
+  .topbar .user-meta{max-width:110px}
+}
 @media(max-width:700px){
-  .language-switcher{top:6px;right:6px}
-  .language-switcher label>span{display:none}
-  .language-switcher select{min-width:92px}
+  .topbar-locale{flex-basis:112px;margin-left:auto}
+  .topbar-locale .language-switcher{width:112px;flex-basis:112px}
+  .topbar .userbox{margin-left:0}
+  .topbar .user-meta{display:none}
+  body:not(:has(.shell)) > .language-switcher{top:6px;right:6px}
+}
+
+/* PROMPTFINISHER 2026-10-11: the narrow sidebar uses the precise original mark,
+   instead of clipping the full-width logo (which has left-side padding). */
+@media (min-width:701px) and (max-width:1100px) {
+  .sidebar .brand {background-image:url('/static/brand/promptfinisher-mark.png?v=20261011-logo1');background-repeat:no-repeat;background-position:center;background-size:48px 48px}
+  .sidebar .brand img {opacity:0}
 }

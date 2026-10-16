@@ -1,0 +1,3487 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: PROMPTFINISHER\n"
+"Language: ru\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<12 || n%100>14) ? 1 : 2);\n"
+
+msgid "Sprache auswählen"
+msgstr "Выбрать язык"
+
+msgid "Sprache"
+msgstr "Язык"
+
+msgid "Suchen …"
+msgstr "Поиск …"
+
+msgid "Suchen"
+msgstr "Поиск"
+
+msgid "Lead, Kunde, Benutzer, Lizenz-ID oder E-Mail suchen …"
+msgstr "Поиск по лидам, клиентам, пользователям, ID лицензии или эл. почте …"
+
+msgid "Superadmin"
+msgstr "Суперадминистратор"
+
+msgid "netstyle Benutzer"
+msgstr "Пользователь netstyle"
+
+msgid "netstyle Admin-Backend"
+msgstr "Панель администрирования netstyle"
+
+msgid "Übersicht"
+msgstr "Обзор"
+
+msgid "Leads"
+msgstr "Лиды"
+
+msgid "Kunden"
+msgstr "Клиенты"
+
+msgid "Lizenzen"
+msgstr "Лицензии"
+
+msgid "Bestellungen"
+msgstr "Заказы"
+
+msgid "Zahlungen"
+msgstr "Платежи"
+
+msgid "Produkte & Preise"
+msgstr "Продукты и цены"
+
+msgid "Prompt Studio"
+msgstr "Студия промптов"
+
+msgid "FAQ & Inhalte"
+msgstr "FAQ и контент"
+
+msgid "E-Mail"
+msgstr "Эл. почта"
+
+msgid "Mollie"
+msgstr "Mollie"
+
+msgid "Statistiken"
+msgstr "Статистика"
+
+msgid "System & Betrieb"
+msgstr "Система и эксплуатация"
+
+msgid "API & Integrationen"
+msgstr "API и интеграции"
+
+msgid "Datenschutz & Recht"
+msgstr "Конфиденциальность и право"
+
+msgid "Kontaktanfragen"
+msgstr "Обращения"
+
+msgid "Protokolle"
+msgstr "Журналы"
+
+msgid "Benutzer & Rollen"
+msgstr "Пользователи и роли"
+
+msgid "Einstellungen"
+msgstr "Настройки"
+
+msgid "Abmelden"
+msgstr "Выйти"
+
+msgid "Home"
+msgstr "Главная"
+
+msgid "System"
+msgstr "Система"
+
+msgid "Logs"
+msgstr "Журналы"
+
+msgid "Mehr"
+msgstr "Ещё"
+
+msgid "Kundenportal"
+msgstr "Клиентский портал"
+
+msgid "KUNDENPORTAL"
+msgstr "КЛИЕНТСКИЙ ПОРТАЛ"
+
+msgid "Benutzer, E-Mail oder Lizenz suchen …"
+msgstr "Поиск пользователя, электронной почты или лицензии …"
+
+msgid "Lizenz suchen …"
+msgstr "Поиск лицензии …"
+
+msgid "Privatkunde"
+msgstr "Частный клиент"
+
+msgid "Dashboard"
+msgstr "Панель управления"
+
+msgid "Mein Team"
+msgstr "Моя команда"
+
+msgid "Weitere Lizenzen kaufen"
+msgstr "Купить дополнительные лицензии"
+
+msgid "Geräte"
+msgstr "Устройства"
+
+msgid "Bestellungen & Zahlungen"
+msgstr "Заказы и платежи"
+
+msgid "Unternehmen"
+msgstr "Компания"
+
+msgid "Hilfe & Kontakt"
+msgstr "Помощь и связь"
+
+msgid "Team"
+msgstr "Команда"
+
+msgid "Geschäft, Handlungsbedarf und Systemstatus auf einen Blick."
+msgstr "Бизнес, необходимые действия и состояние системы — краткий обзор."
+
+msgid "PROMPTFINISHER Pro öffnen →"
+msgstr "Открыть PROMPTFINISHER Pro →"
+
+msgid "PROMPTFINISHER Free öffnen →"
+msgstr "Открыть PROMPTFINISHER Free →"
+
+msgid "System gesund"
+msgstr "Система работает нормально"
+
+msgid "Prüfung erforderlich"
+msgstr "Требуется проверка"
+
+msgid "Kunden gesamt"
+msgstr "Всего клиентов"
+
+msgid "Offene Leads"
+msgstr "Открытые лиды"
+
+msgid "Lead-Pipeline öffnen"
+msgstr "Открыть воронку лидов"
+
+msgid "Aktive Lizenzen"
+msgstr "Активные лицензии"
+
+msgid "Ablauf unter 30 Tagen"
+msgstr "Истекает менее чем через 30 дней"
+
+msgid "laufen in weniger als 60 Tagen ab"
+msgstr "истекают менее чем через 60 дней"
+
+msgid "Umsatz 30 Tage"
+msgstr "Выручка за 30 дней"
+
+msgid "Umsatzentwicklung"
+msgstr "Динамика выручки"
+
+msgid "Umsatzentwicklung der letzten Monate"
+msgstr "Динамика выручки за последние месяцы"
+
+msgid "Noch keine bezahlten Bestellungen im Auswertungszeitraum."
+msgstr "За отчётный период пока нет оплаченных заказов."
+
+msgid "Lizenzen nach Produkt"
+msgstr "Лицензии по продуктам"
+
+msgid "Noch keine Lizenzen."
+msgstr "Лицензий пока нет."
+
+msgid "Handlungsbedarf"
+msgstr "Требуются действия"
+
+msgid "Lizenzen laufen in weniger als 30 Tagen ab."
+msgstr "Срок действия лицензий истекает менее чем через 30 дней."
+
+msgid "fehlgeschlagene Zahlungen"
+msgstr "неудачные платежи"
+
+msgid "Chargebacks"
+msgstr "Возвратные платежи"
+
+msgid "offene Kontaktanfragen"
+msgstr "открытые обращения"
+
+msgid "Kein aktueller Handlungsbedarf."
+msgstr "Сейчас действий не требуется."
+
+msgid "Letzte Bestellungen"
+msgstr "Последние заказы"
+
+msgid "Keine Bestellungen."
+msgstr "Заказов нет."
+
+msgid "Alle Bestellungen"
+msgstr "Все заказы"
+
+msgid "Nächste Lizenzabläufe"
+msgstr "Ближайшие окончания лицензий"
+
+msgid "Keine bevorstehenden Abläufe."
+msgstr "Ближайших окончаний нет."
+
+msgid "Alle Lizenzen"
+msgstr "Все лицензии"
+
+msgid "Anmelden"
+msgstr "Войти"
+
+msgid "Ein Zugang für PROMPTFINISHER, Kundenportal und netstyle Admin"
+msgstr "Единая учётная запись для PROMPTFINISHER, клиентского портала и администрирования netstyle"
+
+msgid "Noch kein Konto? Konto erstellen"
+msgstr "Нет учётной записи? Зарегистрироваться"
+
+msgid "Passwort vergessen?"
+msgstr "Забыли пароль?"
+
+msgid "Konto anlegen"
+msgstr "Создать учётную запись"
+
+msgid "Registrieren"
+msgstr "Зарегистрироваться"
+
+msgid "Unternehmensadministratoren richten anschließend verpflichtend 2FA ein."
+msgstr "Администраторы компаний затем должны обязательно настроить двухфакторную аутентификацию."
+
+msgid "Bereits registriert?"
+msgstr "Уже зарегистрированы?"
+
+msgid "Zur Anmeldung"
+msgstr "Перейти ко входу"
+
+msgid "E-Mail-Adresse"
+msgstr "Адрес эл. почты"
+
+msgid "Passwort"
+msgstr "Пароль"
+
+msgid "Bestätigungscode"
+msgstr "Код подтверждения"
+
+msgid "Kundentyp"
+msgstr "Тип клиента"
+
+msgid "Privat"
+msgstr "Частное лицо"
+
+msgid "Vorname"
+msgstr "Имя"
+
+msgid "Nachname"
+msgstr "Фамилия"
+
+msgid "Firmenname"
+msgstr "Название компании"
+
+msgid "AGB gelesen und akzeptiert"
+msgstr "Условия использования прочитаны и приняты"
+
+msgid "Datenschutzerklärung zur Kenntnis genommen"
+msgstr "Политика конфиденциальности прочитана"
+
+msgid "Passwort zur Bestätigung"
+msgstr "Пароль для подтверждения"
+
+msgid "Administratorübertragung verbindlich bestätigen"
+msgstr "Подтвердить передачу прав администратора"
+
+msgid "Neues Passwort"
+msgstr "Новый пароль"
+
+msgid "Passwort wiederholen"
+msgstr "Повторите пароль"
+
+msgid "Tabellenfilter"
+msgstr "Фильтры таблицы"
+
+msgid "Tabelle durchsuchen"
+msgstr "Поиск по таблице"
+
+msgid "Alle"
+msgstr "Все"
+
+msgid "Seitengröße"
+msgstr "Размер страницы"
+
+msgid "Spalten"
+msgstr "Столбцы"
+
+msgid "Anwenden"
+msgstr "Применить"
+
+msgid "CSV exportieren"
+msgstr "Экспорт в CSV"
+
+msgid "Sortierung zurücksetzen"
+msgstr "Сбросить сортировку"
+
+msgid "Alles zurücksetzen"
+msgstr "Сбросить всё"
+
+msgid "Daten werden geladen …"
+msgstr "Загрузка данных …"
+
+msgid "Aktive Filter"
+msgstr "Активные фильтры"
+
+msgid "Suche"
+msgstr "Поиск"
+
+msgid "Keine Such- oder Filtertreffer."
+msgstr "По запросу ничего не найдено."
+
+msgid "Filter zurücksetzen"
+msgstr "Сбросить фильтры"
+
+msgid "+ Benutzer hinzufügen"
+msgstr "+ Добавить пользователя"
+
+msgid "AGB"
+msgstr "Условия использования"
+
+msgid "Abbrechen"
+msgstr "Отмена"
+
+msgid "Administrator übertragen"
+msgstr "Передать права администратора"
+
+msgid "Aktiv"
+msgstr "Активна"
+
+msgid "Aktive Mitglieder"
+msgstr "Активные участники"
+
+msgid "Anzahl"
+msgstr "Количество"
+
+msgid "Bestellungen & Zahlungen öffnen"
+msgstr "Открыть заказы и платежи"
+
+msgid "Checkout"
+msgstr "Оформление заказа"
+
+msgid "Datenschutz"
+msgstr "Конфиденциальность"
+
+msgid "Der Link wurde per E-Mail versendet."
+msgstr "Ссылка отправлена по электронной почте."
+
+msgid "Firmen-Administrator"
+msgstr "Администратор компании"
+
+msgid "Gerät entfernen"
+msgstr "Удалить устройство"
+
+msgid "Geräteslots der aktiven PROMPTFINISHER-Pro-Lizenzen."
+msgstr "Слоты устройств для активных лицензий PROMPTFINISHER Pro."
+
+msgid "Gerätewechsel"
+msgstr "Смена устройства"
+
+msgid "Gesamt"
+msgstr "Итого"
+
+msgid "Jetzt verlängern"
+msgstr "Продлить сейчас"
+
+msgid "Kein Pro-Zugriff für dieses Benutzerkonto."
+msgstr "Нет доступа к Pro для этой учётной записи."
+
+msgid "Kein aktiver Firmenadministrator gefunden."
+msgstr "Активный администратор компании не найден."
+
+msgid "Keine Geräte."
+msgstr "Нет устройств."
+
+msgid "Link zur Kontrolle"
+msgstr "Ссылка для проверки"
+
+msgid "Lizenz jetzt zuordnen"
+msgstr "Назначить лицензию сейчас"
+
+msgid "Lizenz verlängern"
+msgstr "Продлить лицензию"
+
+msgid "Lizenzbedingungen"
+msgstr "Лицензионные условия"
+
+msgid "Lizenzen insgesamt"
+msgstr "Всего лицензий"
+
+msgid "Lizenzstatus"
+msgstr "Статус лицензии"
+
+msgid "Lizenzzuordnung bestätigen"
+msgstr "Подтвердить назначение лицензии"
+
+msgid "Nächster Ablauf"
+msgstr "Ближайшее окончание"
+
+msgid "PROMPTFINISHER PRO"
+msgstr "PROMPTFINISHER PRO"
+
+msgid "PROMPTFINISHER Pro für mich aktivieren"
+msgstr "Активировать PROMPTFINISHER Pro для себя"
+
+msgid "PROMPTFINISHER Pro starten →"
+msgstr "Запустить PROMPTFINISHER Pro →"
+
+msgid "Pro anfragen"
+msgstr "Запросить Pro"
+
+msgid "Sicherer PROMPTFINISHER-Zuordnungslink."
+msgstr "Безопасная ссылка назначения PROMPTFINISHER."
+
+msgid "Speichern"
+msgstr "Сохранить"
+
+msgid "Stammdaten, Steuerdaten und Firmen-Administrator."
+msgstr "Реквизиты, налоговые данные и администратор компании."
+
+msgid "Team öffnen"
+msgstr "Открыть команду"
+
+msgid "Team- und Lizenzverwaltung"
+msgstr "Управление командой и лицензиями"
+
+msgid "Unternehmensdaten"
+msgstr "Данные компании"
+
+msgid "Unternehmensdaten bearbeiten"
+msgstr "Редактировать данные компании"
+
+msgid "Unternehmensdaten unvollständig."
+msgstr "Данные компании заполнены не полностью."
+
+msgid "Updates während Laufzeit"
+msgstr "Обновления в течение срока действия"
+
+msgid "Widerruf"
+msgstr "Отказ от договора"
+
+msgid "Widerrufen"
+msgstr "Отозвать"
+
+msgid "Zahlungen mit Handlungsbedarf"
+msgstr "Платежи, требующие внимания"
+
+msgid "Zahlungspflichtig kaufen →"
+msgstr "Купить с обязательством оплаты →"
+
+msgid "Zuordnungslink erzeugt"
+msgstr "Ссылка назначения создана"
+
+msgid "Zurück zum Benutzer"
+msgstr "Назад к пользователю"
+
+msgid "aktiv"
+msgstr "активна"
+
+msgid "enthalten"
+msgstr "включено"
+
+msgid "inkl. MwSt."
+msgstr "вкл. НДС"
+
+msgid "registriert"
+msgstr "зарегистрировано"
+
+msgid "Änderungen werden erst nach erfolgreicher Validierung gespeichert."
+msgstr "Изменения сохраняются только после успешной проверки."
+
+msgid "+ Lizenz kaufen"
+msgstr "+ Купить лицензию"
+
+msgid "Ablauf"
+msgstr "Окончание срока"
+
+msgid "Adresse"
+msgstr "Адрес"
+
+msgid "Aktion"
+msgstr "Действие"
+
+msgid "Aktive Geräte"
+msgstr "Активные устройства"
+
+msgid "Automatischer Kontext"
+msgstr "Автоматический контекст"
+
+msgid "Barrierefreiheit"
+msgstr "Доступность"
+
+msgid "Benutzer"
+msgstr "Пользователь"
+
+msgid "Bestellung"
+msgstr "Заказ"
+
+msgid "Betrag"
+msgstr "Сумма"
+
+msgid "Betreff"
+msgstr "Тема"
+
+msgid "Browser"
+msgstr "Браузер"
+
+msgid "Datenauskunft"
+msgstr "Предоставление персональных данных"
+
+msgid "Datum"
+msgstr "Дата"
+
+msgid "Direkter Kontakt zu netstyle und Verlauf Ihrer Anfragen."
+msgstr "Прямая связь с netstyle и история ваших обращений."
+
+msgid "Einladungen"
+msgstr "Приглашения"
+
+msgid "Einladungen sind 24 Stunden gültig und einmal verwendbar."
+msgstr "Приглашения действительны 24 часа и могут быть использованы только один раз."
+
+msgid "Frei"
+msgstr "Свободна"
+
+msgid "Gerät"
+msgstr "Устройство"
+
+msgid "Gültig ab"
+msgstr "Действует с"
+
+msgid "Gültig bis"
+msgstr "Действует до"
+
+msgid "Impressum"
+msgstr "Выходные данные"
+
+msgid "Jeder Seat läuft mit individueller Laufzeit."
+msgstr "Каждое место имеет индивидуальный срок действия."
+
+msgid "Kategorie"
+msgstr "Категория"
+
+msgid "Keine Einladungen."
+msgstr "Нет приглашений."
+
+msgid "Keine Lizenzen."
+msgstr "Нет лицензий."
+
+msgid "Keine aktiven Geräte."
+msgstr "Нет активных устройств."
+
+msgid "Kontaktformular"
+msgstr "Контактная форма"
+
+msgid "Konto & Hilfe"
+msgstr "Учётная запись и помощь"
+
+msgid "Kontolöschung"
+msgstr "Удаление учётной записи"
+
+msgid "Kontolöschung anfordern"
+msgstr "Запросить удаление учётной записи"
+
+msgid "Laufzeit"
+msgstr "Срок действия"
+
+msgid "Lizenz"
+msgstr "Лицензия"
+
+msgid "Lizenz-ID"
+msgstr "ID лицензии"
+
+msgid "Lizenzdaten"
+msgstr "Данные лицензии"
+
+msgid "Meine Daten exportieren"
+msgstr "Экспортировать мои данные"
+
+msgid "Mollie übernimmt die Zahlungsabwicklung; PROMPTFINISHER erzeugt keine eigene Rechnungsengine."
+msgstr "Платежи обрабатывает Mollie; PROMPTFINISHER не создаёт собственные счета-фактуры."
+
+msgid "Mollie-Referenz"
+msgstr "Ссылка Mollie"
+
+msgid "Nachricht senden"
+msgstr "Отправить сообщение"
+
+msgid "Name"
+msgstr "Имя"
+
+msgid "Neu senden"
+msgstr "Отправить повторно"
+
+msgid "Nicht eingerichtet"
+msgstr "Не настроено"
+
+msgid "Noch keine Anfragen vorhanden."
+msgstr "Обращений пока нет."
+
+msgid "Noch keine Reminder für den aktuellen Ablaufzeitpunkt."
+msgstr "Напоминаний для текущего срока действия пока нет."
+
+msgid "PROMPTFINISHER Pro öffnen"
+msgstr "Открыть PROMPTFINISHER Pro"
+
+msgid "Produkt"
+msgstr "Продукт"
+
+msgid "Produkt / Menge"
+msgstr "Продукт / количество"
+
+msgid "Profil"
+msgstr "Профиль"
+
+msgid "Profil, Adresse, Kontosicherheit und Datenauskunft."
+msgstr "Профиль, адрес, безопасность учётной записи и предоставление данных."
+
+msgid "Rechtliches"
+msgstr "Правовая информация"
+
+msgid "Reminder"
+msgstr "Напоминание"
+
+msgid "Resttage"
+msgstr "Осталось дней"
+
+msgid "Sicherheit"
+msgstr "Безопасность"
+
+msgid "Sicherheit verwalten"
+msgstr "Управление безопасностью"
+
+msgid "Status"
+msgstr "Статус"
+
+msgid "Supporthistorie"
+msgstr "История обращений в поддержку"
+
+msgid "Verbraucherrechte"
+msgstr "Права потребителей"
+
+msgid "Vertrag widerrufen"
+msgstr "Отказаться от договора"
+
+msgid "Verträge hier kündigen"
+msgstr "Расторгнуть договоры здесь"
+
+msgid "Verwaltung & Abrechnung"
+msgstr "Управление и расчёты"
+
+msgid "Weitere Bereiche Ihres Kundenportals."
+msgstr "Другие разделы клиентского портала."
+
+msgid "Widerrufsbelehrung"
+msgstr "Информация о праве отказа"
+
+msgid "Zahlung"
+msgstr "Платёж"
+
+msgid "Zugewiesen"
+msgstr "Назначена"
+
+msgid "Zuletzt gesehen"
+msgstr "Последний контакт"
+
+msgid "Zurück"
+msgstr "Назад"
+
+msgid "Zuweisung"
+msgstr "Назначение"
+
+msgid "Zwei-Faktor-Authentifizierung"
+msgstr "Двухфакторная аутентификация"
+
+msgid "Öffnen"
+msgstr "Открыть"
+
+msgid "≤30 Tage"
+msgstr "≤30 дней"
+
+msgid "2FA einrichten"
+msgstr "Настроить 2FA"
+
+msgid "2FA schützt den Zugriff mit einem zusätzlichen zeitbasierten Einmalcode."
+msgstr "2FA защищает доступ дополнительным одноразовым кодом с ограниченным сроком действия."
+
+msgid "Ablehnen"
+msgstr "Отклонить"
+
+msgid "Aktuelles Ende"
+msgstr "Текущая дата окончания"
+
+msgid "Anfrage"
+msgstr "Обращение"
+
+msgid "Bearbeitungsstand"
+msgstr "Статус обработки"
+
+msgid "Benutzer deaktivieren"
+msgstr "Деактивировать пользователя"
+
+msgid "Benutzer löschen"
+msgstr "Удалить пользователя"
+
+msgid "Benutzer reaktivieren"
+msgstr "Повторно активировать пользователя"
+
+msgid "Benutzer, Einladungen, Lizenzen und Geräte verwalten."
+msgstr "Управление пользователями, приглашениями, лицензиями и устройствами."
+
+msgid "Die Suche bleibt auf Ihren eigenen Mandanten- und Lizenzbereich begrenzt."
+msgstr "Поиск ограничен вашей компанией и вашими лицензиями."
+
+msgid "Ein Passwortwechsel erfolgt über einen zeitlich begrenzten, einmal verwendbaren Link an Ihre hinterlegte E-Mail-Adresse."
+msgstr "Смена пароля осуществляется по одноразовой ссылке с ограниченным сроком действия, отправленной на зарегистрированный адрес эл. почты."
+
+msgid "Free"
+msgstr "Free"
+
+msgid "Freie Lizenz zuweisen"
+msgstr "Назначить свободную лицензию"
+
+msgid "Freigeben"
+msgstr "Освободить"
+
+msgid "Genehmigen"
+msgstr "Одобрить"
+
+msgid "Hier sehen Sie ausschließlich Nachrichten, die für Sie bzw. Ihr Unternehmen bestimmt sind. Interne netstyle-Notizen werden nicht im Kundenportal angezeigt."
+msgstr "Здесь показаны только сообщения, предназначенные вам или вашей компании. Внутренние заметки netstyle не отображаются в клиентском портале."
+
+msgid "Ihre Anfrage und alle für Kunden freigegebenen Antworten."
+msgstr "Ваше обращение и все ответы, доступные клиентам."
+
+msgid "Inaktiv"
+msgstr "Неактивна"
+
+msgid "Keine Benutzer gefunden."
+msgstr "Пользователи не найдены."
+
+msgid "Keine Lizenz zugewiesen."
+msgstr "Лицензия не назначена."
+
+msgid "Keine Lizenzen gefunden."
+msgstr "Лицензии не найдены."
+
+msgid "Keine freie Lizenz."
+msgstr "Свободных лицензий нет."
+
+msgid "Keine verlängerbare Lizenz vorhanden."
+msgstr "Нет лицензий для продления."
+
+msgid "Mitarbeiter"
+msgstr "Сотрудник"
+
+msgid "Noch nie"
+msgstr "Никогда"
+
+msgid "Offene Pro-Anfragen"
+msgstr "Открытые запросы Pro"
+
+msgid "PROMPTFINISHER Free"
+msgstr "PROMPTFINISHER Free"
+
+msgid "PROMPTFINISHER Pro"
+msgstr "PROMPTFINISHER Pro"
+
+msgid "Passwort zurücksetzen"
+msgstr "Сбросить пароль"
+
+msgid "Recovery-Codes neu erzeugen"
+msgstr "Создать новые коды восстановления"
+
+msgid "Seit"
+msgstr "С"
+
+msgid "Sicheren Link senden"
+msgstr "Отправить защищённую ссылку"
+
+msgid "Team-Mitglieder"
+msgstr "Участники команды"
+
+msgid "Verlauf"
+msgstr "История"
+
+msgid "Wählen Sie die Lizenz, deren bestehende Restlaufzeit um weitere 365 Tage verlängert werden soll."
+msgstr "Выберите лицензию, срок которой нужно продлить ещё на 365 дней."
+
+msgid "Zahlungspflichtig verlängern →"
+msgstr "Продлить с обязательством оплаты →"
+
+msgid "Zuletzt aktiv"
+msgstr "Последняя активность"
+
+msgid "Zurück zu Einstellungen"
+msgstr "Назад к настройкам"
+
+msgid "Zurück zu Lizenzen"
+msgstr "Назад к лицензиям"
+
+msgid "Zuweisen"
+msgstr "Назначить"
+
+msgid "Zwei-Faktor-Authentifizierung und Recovery-Codes verwalten."
+msgstr "Управление двухфакторной аутентификацией и кодами восстановления."
+
+msgid "aktive Benutzer"
+msgstr "активные пользователи"
+
+msgid "aktive Benutzer ohne Pro-Zuweisung"
+msgstr "активные пользователи без назначения Pro"
+
+msgid "registriert / Kapazität"
+msgstr "зарегистрировано / вместимость"
+
+msgid "Die vorbereitete Lizenz wird Ihrem aktuell angemeldeten Benutzerkonto zugeordnet. Der Link kann anschließend nicht erneut verwendet werden."
+msgstr "Подготовленная лицензия будет назначена вашей текущей учётной записи. После использования ссылка станет недействительной."
+
+msgid "Gültig bis %(expiry)s. Der Link ist tenantgebunden, für genau diesen Benutzer bestimmt und nur einmal verwendbar."
+msgstr "Действует до %(expiry)s. Ссылка привязана к организации, предназначена только этому пользователю и может быть использована один раз."
+
+msgid "Jede neue Lizenz startet nach erfolgreicher Zahlung mit eigener 365-Tage-Laufzeit."
+msgstr "Каждая новая лицензия начинает собственный срок в 365 дней после успешной оплаты."
+
+msgid "inkl. MwSt. · %(days)s Tage"
+msgstr "вкл. НДС · %(days)s дней"
+
+msgid "%(limit)s Geräte je Benutzer"
+msgstr "%(limit)s устройств на пользователя"
+
+msgid "Preis nicht verfügbar"
+msgstr "Цена недоступна"
+
+msgid "V1: exakt ein aktiver Firmenadministrator. Eine Übertragung ist nur auf ein aktives Team-Mitglied möglich."
+msgstr "V1: только один активный администратор компании. Передача возможна только активному участнику команды."
+
+msgid "Ihre eigenen Geräteslots können Sie hier selbst verwalten."
+msgstr "Здесь можно самостоятельно управлять слотами собственных устройств."
+
+msgid "Geräteslots werden durch den Firmenadministrator verwaltet."
+msgstr "Слотами устройств управляет администратор компании."
+
+msgid "Widerrufene Geräte bleiben als Historie erhalten."
+msgstr "Отозванные устройства сохраняются в истории."
+
+msgid "Zuletzt %(seen)s"
+msgstr "Последний контакт: %(seen)s"
+
+msgid "Gerät wirklich entfernen?"
+msgstr "Вы действительно хотите удалить устройство?"
+
+msgid "Konto, Unternehmen, Benutzer-ID und Zeitpunkt werden automatisch zugeordnet. Optional kann eine für Ihr Konto sichtbare Lizenz mitgesendet werden. Passwörter, Tokens oder andere unnötige sensitive Daten werden nicht übernommen."
+msgstr "Учётная запись, компания, ID пользователя и время определяются автоматически. При необходимости можно добавить лицензию, доступную вашей учётной записи. Пароли, токены и другие ненужные конфиденциальные данные не передаются."
+
+msgid "Exportieren Sie die zu Ihrem Benutzer gespeicherten PROMPTFINISHER-Daten als JSON. Secrets und Daten anderer Benutzer werden nicht exportiert."
+msgstr "Экспортируйте данные PROMPTFINISHER, сохранённые о вас, в формате JSON. Секреты и данные других пользователей не экспортируются."
+
+msgid "Ihre Löschanfrage vom %(requested)s ist bereits erfasst. Status: %(status)s."
+msgstr "Ваш запрос на удаление от %(requested)s уже зарегистрирован. Статус: %(status)s."
+
+msgid "Sie können die Löschung Ihres PROMPTFINISHER-Kontos anfordern. Gesetzlich erforderliche Geschäfts- und Nachweisdaten werden nur im erforderlichen Umfang weiter aufbewahrt bzw. anonymisiert. Firmenadministratoren müssen ihre Administratorrolle vor der Verarbeitung übertragen."
+msgstr "Вы можете запросить удаление учётной записи PROMPTFINISHER. Обязательные по закону деловые и подтверждающие данные будут храниться только в необходимом объёме либо обезличиваться. Администраторы компаний должны сначала передать свою роль."
+
+msgid "Ich möchte die Löschung meines Kontos verbindlich anfordern."
+msgstr "Я подтверждаю запрос на удаление моей учётной записи."
+
+msgid "Guten Morgen, %(first_name)s"
+msgstr "Доброе утро, %(first_name)s"
+
+msgid "Privatkonto"
+msgstr "Личный кабинет"
+
+msgid "Unternehmensadministrator"
+msgstr "Администратор компании"
+
+msgid "%(assigned)s vergeben · %(free)s verfügbar"
+msgstr "%(assigned)s назначено · %(free)s доступно"
+
+msgid "%(free)s frei · %(expiring)s läuft bald ab"
+msgstr "%(free)s свободно · %(expiring)s скоро истекает"
+
+msgid "Tage"
+msgstr "Дней"
+
+msgid "kein Ablauf"
+msgstr "нет окончания срока"
+
+msgid "Eine Lizenz läuft in %(days)s Tagen ab."
+msgstr "Срок действия лицензии истекает через %(days)s дней."
+
+msgid "freie Pro-Lizenzen"
+msgstr "свободные лицензии Pro"
+
+msgid "Freie Pro-Lizenzen können Team-Mitgliedern zugewiesen werden."
+msgstr "Свободные лицензии Pro можно назначить участникам команды."
+
+msgid "Für Kauf/Abrechnung fehlen: %(fields)s."
+msgstr "Для покупки и выставления счёта не хватает следующих данных: %(fields)s."
+
+msgid "Tage verbleibend"
+msgstr "дней осталось"
+
+msgid "Deine Lizenz läuft am %(expiry)s ab."
+msgstr "Срок действия вашей лицензии истекает %(expiry)s."
+
+msgid "Es ist eine freie Pro-Lizenz verfügbar."
+msgstr "Доступна одна свободная лицензия Pro."
+
+msgid "Aktuell ist keine freie Pro-Lizenz verfügbar. Kaufen Sie eine weitere Lizenz oder geben Sie eine bestehende Lizenz frei."
+msgstr "Свободных лицензий Pro сейчас нет. Купите дополнительную лицензию или освободите существующую."
+
+msgid "Ihre Pro-Anfrage ist bereits offen."
+msgstr "Ваш запрос Pro уже открыт."
+
+msgid "Für den Pro-Zugriff benötigen Sie eine aktive PROMPTFINISHER-Pro-Lizenz."
+msgstr "Для доступа к Pro требуется действующая лицензия PROMPTFINISHER Pro."
+
+msgid "Portal durchsuchen"
+msgstr "Поиск по порталу"
+
+msgid "Geben Sie einen Suchbegriff ein. Firmenadministratoren können nach Teammitgliedern, E-Mail-Adressen und Lizenzen suchen; andere Benutzer sehen ausschließlich ihre eigene Lizenzsicht."
+msgstr "Введите поисковый запрос. Администраторы компаний могут искать участников команды, адреса эл. почты и лицензии; другие пользователи видят только собственные лицензии."
+
+msgid "Kunde"
+msgstr "Клиент"
+
+msgid "Pro-Lizenzen noch frei"
+msgstr "Осталось свободных лицензий Pro"
+
+msgid "Verlängern"
+msgstr "Продлить"
+
+msgid "Kundenportal-Vorschau"
+msgstr "Предпросмотр клиентского портала"
+
+msgid "KUNDENPORTAL · VORSCHAU"
+msgstr "КЛИЕНТСКИЙ ПОРТАЛ · ПРЕДПРОСМОТР"
+
+msgid "Read-only Vorschau …"
+msgstr "Предпросмотр только для чтения …"
+
+msgid "Support-Vorschau"
+msgstr "Предпросмотр для поддержки"
+
+msgid "Zurück zum netstyle Kundendetail"
+msgstr "Назад к данным клиента netstyle"
+
+msgid "Read-only Kundenansicht."
+msgstr "Просмотр клиента только для чтения."
+
+msgid "Die Daten entsprechen dem ausgewählten Kundenkonto und seiner Rolle. Dies ist eine Ansichtsvorschau, keine Kundensitzung: Interaktionen, Zahlungs- und Sicherheitsaktionen sind nicht ausführbar."
+msgstr "Данные ограничены выбранной учётной записью клиента и его ролью. Это предпросмотр, а не сеанс клиента: интерактивные действия, платежи и операции безопасности отключены."
+
+msgid "Perspektive auswählen"
+msgstr "Выбрать представление"
+
+msgid "Nur aktive Benutzer dieses Unternehmens. Rollen und Zugriffsrechte werden berücksichtigt."
+msgstr "Только активные пользователи этой компании. Роли и права доступа учитываются."
+
+msgid "Kundenbenutzer"
+msgstr "Пользователь клиента"
+
+msgid "Keine aktiven Benutzer vorhanden"
+msgstr "Нет активных пользователей"
+
+msgid "Ansicht wechseln"
+msgstr "Сменить представление"
+
+msgid "Angezeigte Rolle:"
+msgstr "Отображаемая роль:"
+
+msgid "Kundenverwaltung"
+msgstr "Управление клиентом"
+
+msgid "Änderungen erfolgen ausschließlich in den berechtigungsgeschützten Administrationsmasken mit Auditierung – nicht in der Kundenansicht."
+msgstr "Изменения выполняются только через административные формы с проверкой прав и аудитом, а не в предпросмотре клиента."
+
+msgid "Benutzer und Rollen verwalten"
+msgstr "Управлять пользователями и ролями"
+
+msgid "Lizenzen verwalten"
+msgstr "Управлять лицензиями"
+
+msgid "Geräte verwalten"
+msgstr "Управлять устройствами"
+
+msgid "gesamt"
+msgstr "всего"
+
+msgid "frei"
+msgstr "свободно"
+
+msgid "Ablauf ≤30 Tage"
+msgstr "Истекают в течение 30 дней"
+
+msgid "Konto"
+msgstr "Учётная запись"
+
+msgid "Kontotyp"
+msgstr "Тип учётной записи"
+
+msgid "Portal-Benutzer"
+msgstr "Пользователь портала"
+
+msgid "Aktive Benutzer"
+msgstr "Активные пользователи"
+
+msgid "Bestand"
+msgstr "Ресурсы"
+
+msgid "Freie Lizenzen"
+msgstr "Свободные лицензии"
+
+msgid "Rolle"
+msgstr "Роль"
+
+msgid "Hinweis"
+msgstr "Примечание"
+
+msgid "Keine Benutzer vorhanden."
+msgstr "Пользователей нет."
+
+msgid "Keine Lizenzen vorhanden."
+msgstr "Лицензий нет."
+
+msgid "Keine netstyle-Berechtigung zum Anzeigen der Lizenzdaten."
+msgstr "Ваши права netstyle не позволяют просматривать данные лицензий."
+
+msgid "Keine aktiven Geräte vorhanden."
+msgstr "Нет активных устройств."
+
+msgid "Keine Bestellungen vorhanden."
+msgstr "Заказов нет."
+
+msgid "Keine netstyle-Berechtigung zum Anzeigen der Bestelldaten."
+msgstr "Ваши права netstyle не позволяют просматривать данные заказов."
+
+msgid "Rechtsform"
+msgstr "Организационно-правовая форма"
+
+msgid "Telefon"
+msgstr "Телефон"
+
+msgid "Rechnungsanschrift"
+msgstr "Адрес для выставления счёта"
+
+msgid "Ort"
+msgstr "Город"
+
+msgid "Land"
+msgstr "Страна"
+
+msgid "USt-IdNr."
+msgstr "Номер плательщика НДС"
+
+msgid "Mein Profil"
+msgstr "Мой профиль"
+
+msgid "Dies ist eine Leseansicht. Passwort, Zwei-Faktor-Authentifizierung und persönliche Einstellungen kann nur der angemeldete Kundenbenutzer selbst ändern."
+msgstr "Это представление только для чтения. Пароль, двухфакторную аутентификацию и личные настройки может изменить только сам вошедший пользователь клиента."
+
+msgid "Benutzerkonto"
+msgstr "Учётная запись пользователя"
+
+msgid "Teamverwaltung, Bestellungen und Unternehmensdaten sind für diese Rolle nicht freigegeben."
+msgstr "Для этой роли недоступны управление командой, заказы и данные компании."
+
+msgid "Anschrift"
+msgstr "Почтовый адрес"
+
+msgid "Weitere Bereiche"
+msgstr "Другие разделы"
+
+msgid "Kontoeinstellungen"
+msgstr "Настройки учётной записи"
+
+msgid "Read-only"
+msgstr "Только для чтения"
+
+msgid "Sicherheit / 2FA"
+msgstr "Безопасность / 2FA"
+
+msgid "nicht impersoniert"
+msgstr "без подмены личности"
+
+msgid "nicht ausführbar"
+msgstr "недоступно"
+
+msgid "Support-Hinweis"
+msgstr "Примечание службы поддержки"
+
+msgid "Für echte Schreibaktionen oder einen vollständigen Login-Test muss ein eigener Nicht-Staff-Testkunde verwendet werden. Die Vorschau übernimmt niemals die Identität des Kunden."
+msgstr "Для проверки реальных изменений или полного входа используйте отдельную тестовую учётную запись клиента без прав персонала. Предпросмотр никогда не принимает личность клиента."
+
+msgid "Firmenkonto"
+msgstr "Корпоративная учётная запись"
+
+msgid "Serverseitige Suche, Filter, Sortierung und Pagination."
+msgstr "Поиск, фильтрация, сортировка и разбиение на страницы на сервере."
+
+msgid "Neu anlegen"
+msgstr "Создать"
+
+msgid "Privatkunden"
+msgstr "Частные клиенты"
+
+msgid "aufsteigend"
+msgstr "по возрастанию"
+
+msgid "absteigend"
+msgstr "по убыванию"
+
+msgid "Keine Datensätze für die aktuelle Auswahl."
+msgstr "Для текущего выбора записей нет."
+
+msgid "Änderungen werden serverseitig validiert und – sofern sicherheits- oder geschäftskritisch – protokolliert."
+msgstr "Изменения проверяются на сервере и протоколируются, если критичны для безопасности или бизнеса."
+
+msgid "Zusätzliche Sicherheitsfreigabe."
+msgstr "Дополнительная проверка безопасности."
+
+msgid "Bestätigen Sie Ihr eigenes Passwort. Die Freigabe gilt anschließend ausschließlich für wenige Minuten und nur für geschützte Admin-Aktionen."
+msgstr "Подтвердите свой пароль. Разрешение действует лишь несколько минут и только для защищённых действий администратора."
+
+msgid "Bestätigen"
+msgstr "Подтвердить"
+
+msgid "Kompakte Geschäftszahlen innerhalb Ihrer Berechtigungen."
+msgstr "Основные бизнес-показатели в пределах ваших прав доступа."
+
+msgid "Neue Kunden · 30 Tage"
+msgstr "Новые клиенты · 30 дней"
+
+msgid "Verlängerungsanteil"
+msgstr "Доля продлений"
+
+msgid "Verlängerungsterms"
+msgstr "периодов продления"
+
+msgid "Refund-Quote"
+msgstr "Доля возвратов"
+
+msgid "Anteil refundierter Lizenzterms"
+msgstr "Доля возвращённых лицензионных периодов"
+
+msgid "Ø Lizenzen / Firma"
+msgstr "Среднее число лицензий на компанию"
+
+msgid "Firmenkundenbestand"
+msgstr "База корпоративных клиентов"
+
+msgid "Umsatz letzte 30 Tage"
+msgstr "Выручка за последние 30 дней"
+
+msgid "Bestellungen gesamt"
+msgstr "всего заказов"
+
+msgid "Lizenzen gesamt"
+msgstr "Всего лицензий"
+
+msgid "inkl. aktiv, frei, abgelaufen und historisch"
+msgstr "включая активные, свободные, истёкшие и архивные"
+
+msgid "Anfragen aus dem Kundenportal; V1 verwendet bewusst kein Ticketsystem."
+msgstr "Запросы из клиентского портала; в V1 система заявок намеренно не используется."
+
+msgid "Keine Kontaktanfragen."
+msgstr "Нет обращений."
+
+msgid "Globale Suche"
+msgstr "Глобальный поиск"
+
+msgid "Ergebnisse für"
+msgstr "Результаты для"
+
+msgid "Keine Treffer."
+msgstr "Совпадений нет."
+
+msgid "Append-only Auditlog für administrative und geschäftskritische Änderungen."
+msgstr "Неизменяемый журнал аудита административных и критически важных изменений."
+
+msgid "Zeit"
+msgstr "Время"
+
+msgid "Objekt"
+msgstr "Объект"
+
+msgid "Änderung"
+msgstr "Изменение"
+
+msgid "Keine Audit-Einträge."
+msgstr "Записей аудита нет."
+
+msgid "Mollie-Zahlungsstatus, Beträge, Refunds und Chargebacks."
+msgstr "Статусы платежей Mollie, суммы, возвраты и оспоренные платежи."
+
+msgid "Bezahlt"
+msgstr "Оплачено"
+
+msgid "Offen"
+msgstr "Открыто"
+
+msgid "Fehlgeschlagen"
+msgstr "Не выполнено"
+
+msgid "Payment-ID"
+msgstr "ID платежа"
+
+msgid "Keine Zahlungen gefunden."
+msgstr "Платежи не найдены."
+
+msgid "Lead"
+msgstr "Лид"
+
+msgid "Interessent"
+msgstr "Потенциальный клиент"
+
+msgid "Priorität"
+msgstr "Приоритет"
+
+msgid "Zuständig"
+msgstr "Ответственный"
+
+msgid "Erstellt"
+msgstr "Создано"
+
+msgid "Kundennummer"
+msgstr "Номер клиента"
+
+msgid "Eingang"
+msgstr "Получено"
+
+msgid "Art"
+msgstr "Тип"
+
+msgid "Vertragsbezug"
+msgstr "Ссылка на договор"
+
+msgid "Datengetriebene Produkt-, Laufzeit-, Geräte-, Reminder- und Entitlement-Konfiguration."
+msgstr "Настройка продуктов, сроков, устройств, напоминаний и прав доступа на основе данных."
+
+msgid "Features"
+msgstr "Функции"
+
+msgid "Produkt anlegen"
+msgstr "Создать продукт"
+
+msgid "AKTIV"
+msgstr "АКТИВНО"
+
+msgid "INAKTIV"
+msgstr "НЕАКТИВНО"
+
+msgid "aktueller Neukaufpreis"
+msgstr "текущая цена новой покупки"
+
+msgid "nicht konfiguriert"
+msgstr "не настроено"
+
+msgid "Verlängerung"
+msgstr "Продление"
+
+msgid "Sichtbar / kaufbar"
+msgstr "Видно / доступно для покупки"
+
+msgid "Ja"
+msgstr "Да"
+
+msgid "Nein"
+msgstr "Нет"
+
+msgid "Bearbeiten"
+msgstr "Изменить"
+
+msgid "Noch keine Produkte."
+msgstr "Продуктов пока нет."
+
+msgid "Rollenbasierte Rechte; für alle netstyle Benutzer ist 2FA Pflicht."
+msgstr "Права доступа на основе ролей; двухфакторная аутентификация обязательна для всех пользователей netstyle."
+
+msgid "Rolle zuweisen"
+msgstr "Назначить роль"
+
+msgid "netstyle Benutzer anlegen"
+msgstr "Создать пользователя netstyle"
+
+msgid "Berechtigungen"
+msgstr "Разрешения"
+
+msgid "Sicherheitsvorgabe"
+msgstr "Требование безопасности"
+
+msgid "2FA Pflicht"
+msgstr "2FA обязательна"
+
+msgid "Keine Rolle"
+msgstr "Нет роли"
+
+msgid "2FA aktiv"
+msgstr "2FA включена"
+
+msgid "2FA einzurichten"
+msgstr "Требуется настройка 2FA"
+
+msgid "2FA dieses Benutzers zurücksetzen?"
+msgstr "Сбросить 2FA этого пользователя?"
+
+msgid "2FA zurücksetzen"
+msgstr "Сбросить 2FA"
+
+msgid "Benutzerstatus wirklich ändern?"
+msgstr "Действительно изменить статус пользователя?"
+
+msgid "Deaktivieren"
+msgstr "Деактивировать"
+
+msgid "Aktivieren"
+msgstr "Активировать"
+
+msgid "Keine netstyle Benutzer."
+msgstr "Нет пользователей netstyle."
+
+msgid "Rechtsdokumente, Aufbewahrung und Löschanforderungen."
+msgstr "Юридические документы, хранение и запросы на удаление."
+
+msgid "Rechtsdokumente"
+msgstr "Юридические документы"
+
+msgid "Noch keine Rechtstexte hinterlegt."
+msgstr "Юридические тексты ещё не добавлены."
+
+msgid "Rechtsdokumente verwalten"
+msgstr "Управлять юридическими документами"
+
+msgid "Verbrauchererklärungen"
+msgstr "Заявления потребителей"
+
+msgid "Offene Widerrufe / Kündigungen"
+msgstr "Открытые отказы / расторжения"
+
+msgid "Widerrufe & Kündigungen"
+msgstr "Отказы и расторжения"
+
+msgid "Retention / Löschung"
+msgstr "Хранение / удаление"
+
+msgid "Aktive Retention-Policies"
+msgstr "Активные политики хранения"
+
+msgid "Offene Löschanfragen"
+msgstr "Открытые запросы на удаление"
+
+msgid "Retention-Policies"
+msgstr "Политики хранения"
+
+msgid "Löschanfragen"
+msgstr "Запросы на удаление"
+
+msgid "Features / Entitlements"
+msgstr "Функции / права доступа"
+
+msgid "Wiederverwendbare Funktionsrechte für heutige und zukünftige Produkte."
+msgstr "Повторно используемые права на функции текущих и будущих продуктов."
+
+msgid "Feature anlegen"
+msgstr "Создать функцию"
+
+msgid "Code"
+msgstr "Код"
+
+msgid "Keine Features."
+msgstr "Нет функций."
+
+msgid "Geschützte Operations-Schnittstellen und Service Accounts."
+msgstr "Защищённые интерфейсы управления и сервисные учётные записи."
+
+msgid "Service Account anlegen"
+msgstr "Создать сервисную учётную запись"
+
+msgid "Operations API"
+msgstr "API управления"
+
+msgid "Zugriff ausschließlich über aktive Service Accounts mit passendem Scope. Tokens werden nur einmal bei Erstellung bzw. Rotation angezeigt."
+msgstr "Доступ возможен только через активные сервисные учётные записи с нужной областью прав. Токены показываются один раз при создании или замене."
+
+msgid "Service Accounts"
+msgstr "Сервисные учётные записи"
+
+msgid "Gesperrt"
+msgstr "Заблокировано"
+
+msgid "Token rotieren"
+msgstr "Заменить токен"
+
+msgid "Service Account wirklich sperren?"
+msgstr "Действительно заблокировать сервисную учётную запись?"
+
+msgid "Sperren"
+msgstr "Заблокировать"
+
+msgid "Noch keine Service Accounts."
+msgstr "Сервисных учётных записей пока нет."
+
+msgid "Dienste"
+msgstr "Службы"
+
+msgid "Status der internen Plattformdienste."
+msgstr "Состояние внутренних служб платформы."
+
+msgid "Systemübersicht"
+msgstr "Обзор системы"
+
+msgid "Host"
+msgstr "Хост"
+
+msgid "Hostname"
+msgstr "Имя хоста"
+
+msgid "Kernel"
+msgstr "Ядро"
+
+msgid "Healthy"
+msgstr "Исправно"
+
+msgid "Nicht erreichbar"
+msgstr "Недоступно"
+
+msgid "Datenbank"
+msgstr "База данных"
+
+msgid "Verbindungen"
+msgstr "Подключения"
+
+msgid "Größe"
+msgstr "Размер"
+
+msgid "Background Jobs"
+msgstr "Фоновые задания"
+
+msgid "Heartbeat fehlt"
+msgstr "Нет сигнала активности"
+
+msgid "Queue"
+msgstr "Очередь"
+
+msgid "Fehlgeschlagene Jobs 24 h"
+msgstr "Ошибки заданий за 24 ч"
+
+msgid "Worker"
+msgstr "Обработчик"
+
+msgid "Antwortende Worker"
+msgstr "Отвечающие обработчики"
+
+msgid "Worker-Heartbeat"
+msgstr "Сигнал обработчика"
+
+msgid "Beat-Heartbeat"
+msgstr "Сигнал Beat"
+
+msgid "Zahlungsprovider, Webhook und letzte Zahlungsereignisse."
+msgstr "Платёжный провайдер, вебхук и последние события платежей."
+
+msgid "Mollie konfigurieren"
+msgstr "Настроить Mollie"
+
+msgid "Konfiguration"
+msgstr "Настройка"
+
+msgid "Konfiguriert"
+msgstr "Настроено"
+
+msgid "Unvollständig"
+msgstr "Не завершено"
+
+msgid "Produktiv-Checkout"
+msgstr "Рабочая оплата"
+
+msgid "Freigegeben"
+msgstr "Разрешено"
+
+msgid "Modus"
+msgstr "Режим"
+
+msgid "Profile ID"
+msgstr "ID профиля"
+
+msgid "API Key"
+msgstr "Ключ API"
+
+msgid "nicht gesetzt"
+msgstr "не задано"
+
+msgid "Live-Zugangsdaten sind hinterlegt, der Kunden-Checkout bleibt jedoch gesperrt, bis die Live-Readiness geprüft und ausdrücklich freigegeben wurde."
+msgstr "Рабочие учётные данные сохранены, но оплата клиентами остаётся заблокированной до проверки готовности и явного разрешения."
+
+msgid "Basis-URL"
+msgstr "Базовый URL"
+
+msgid "Endpoint"
+msgstr "Конечная точка"
+
+msgid "Letztes Event"
+msgstr "Последнее событие"
+
+msgid "noch keines"
+msgstr "пока нет"
+
+msgid "Webhook-Ereignisse öffnen"
+msgstr "Открыть события вебхуков"
+
+msgid "Notabschaltung"
+msgstr "Аварийное отключение"
+
+msgid "Sperrt neue Mollie-Käufe sofort. Bestehende Zahlungen und Webhooks bleiben weiter verarbeitbar."
+msgstr "Немедленно блокирует новые покупки через Mollie. Существующие платежи и вебхуки продолжат обрабатываться."
+
+msgid "Produktiv-Checkout sperren"
+msgstr "Заблокировать рабочую оплату"
+
+msgid "Letzte Zahlungen"
+msgstr "Последние платежи"
+
+msgid "Noch keine Zahlungen."
+msgstr "Платежей пока нет."
+
+msgid "Letzte Webhook-Events"
+msgstr "Последние события вебхуков"
+
+msgid "offen"
+msgstr "ожидает обработки"
+
+msgid "Noch keine Webhook-Ereignisse."
+msgstr "Событий вебхуков пока нет."
+
+msgid "Vorlagen, Versandstatus, Provider und Fallback-Kette."
+msgstr "Шаблоны, статус отправки, провайдеры и цепочка резервной доставки."
+
+msgid "Absender & Provider"
+msgstr "Отправитель и провайдер"
+
+msgid "Versandprotokoll öffnen"
+msgstr "Открыть журнал отправки"
+
+msgid "Vorlagen"
+msgstr "Шаблоны"
+
+msgid "Keine E-Mail-Vorlagen vorhanden."
+msgstr "Шаблонов писем нет."
+
+msgid "Mail-System"
+msgstr "Почтовая система"
+
+msgid "Versandmodus"
+msgstr "Режим доставки"
+
+msgid "Automatischer Fallback"
+msgstr "Автоматический резервный переход"
+
+msgid "Manuell"
+msgstr "Вручную"
+
+msgid "Primär"
+msgstr "Основной"
+
+msgid "Reihenfolge"
+msgstr "Порядок"
+
+msgid "Status der Kette"
+msgstr "Состояние цепочки"
+
+msgid "Aktiver Absender"
+msgstr "Активный отправитель"
+
+msgid "Anzeigename"
+msgstr "Отображаемое имя"
+
+msgid "Mail-Domain"
+msgstr "Почтовый домен"
+
+msgid "Server"
+msgstr "Сервер"
+
+msgid "Anmeldung"
+msgstr "Аутентификация"
+
+msgid "Passwort fehlt"
+msgstr "Пароль отсутствует"
+
+msgid "Ohne Anmeldung"
+msgstr "Без аутентификации"
+
+msgid "Nicht konfiguriert"
+msgstr "Не настроено"
+
+msgid "Fehlt"
+msgstr "Отсутствует"
+
+msgid "Graph Absender"
+msgstr "Отправитель Graph"
+
+msgid "Automatischer Fallback erfolgt nur bei eindeutig nicht zugestellten Fehlern. Bei unklaren Fehlern wird nicht automatisch weitergeschaltet, damit dieselbe E-Mail nicht versehentlich doppelt versendet wird."
+msgstr "Автоматический переход на резервного провайдера выполняется только при подтверждённой недоставке. При неоднозначной ошибке переключение не происходит, чтобы случайно не отправить письмо дважды."
+
+msgid "SPF/DKIM/DMARC werden unter „Einstellungen“ als DNS-Sollwerte dokumentiert. Änderungen dort aktualisieren nicht automatisch den öffentlichen DNS."
+msgstr "Ожидаемые DNS-записи SPF/DKIM/DMARC описаны в настройках. Изменения там не обновляют автоматически публичный DNS."
+
+msgid "Letzte Versandvorgänge"
+msgstr "Последние отправки"
+
+msgid "Noch keine Versandvorgänge."
+msgstr "Отправок пока нет."
+
+msgid "Zur Kundenliste"
+msgstr "К списку клиентов"
+
+msgid "Zur Privatkundenliste"
+msgstr "К списку частных клиентов"
+
+msgid "Kundendaten"
+msgstr "Данные клиента"
+
+msgid "Stammdaten"
+msgstr "Основные данные"
+
+msgid "Unternehmensdaten speichern"
+msgstr "Сохранить данные компании"
+
+msgid "Firma"
+msgstr "Компания"
+
+msgid "Steuernummer"
+msgstr "Налоговый номер"
+
+msgid "Änderungen erfolgen serverseitig mit Berechtigungsprüfung und werden im Audit protokolliert. Steuerfelder werden anhand der aktiven Steuerregel für Land und Kundentyp validiert."
+msgstr "Изменения выполняются на сервере с проверкой прав доступа и записываются в журнал аудита. Налоговые поля проверяются по действующим правилам для страны и типа клиента."
+
+msgid "Rechtsakzeptanzen"
+msgstr "Принятие юридических документов"
+
+msgid "Version"
+msgstr "Версия"
+
+msgid "Keine Rechtsakzeptanzen protokolliert."
+msgstr "Подтверждения принятия юридических документов не зарегистрированы."
+
+msgid "Keine Löschanfragen."
+msgstr "Запросов на удаление нет."
+
+msgid "Alle Löschanfragen"
+msgstr "Все запросы на удаление"
+
+msgid "Bestellung vom"
+msgstr "Заказ от"
+
+msgid "Zurück zur Liste"
+msgstr "Вернуться к списку"
+
+msgid "Brutto"
+msgstr "Брутто"
+
+msgid "Steuer"
+msgstr "Налог"
+
+msgid "Keine Zahlung erfasst."
+msgstr "Нет зарегистрированных платежей."
+
+msgid "Positionen"
+msgstr "Позиции"
+
+msgid "Menge"
+msgstr "Количество"
+
+msgid "Einzelpreis"
+msgstr "Цена за единицу"
+
+msgid "Lizenzstatus wirklich ändern?"
+msgstr "Действительно изменить статус этой лицензии?"
+
+msgid "Lizenz entsperren"
+msgstr "Разблокировать лицензию"
+
+msgid "Lizenz sperren"
+msgstr "Заблокировать лицензию"
+
+msgid "Inhaber & Zuweisung"
+msgstr "Владелец и назначение"
+
+msgid "Zugewiesen an"
+msgstr "Назначено"
+
+msgid "Lizenzzuweisung wirklich freigeben? Aktive Geräte dieser Lizenz werden widerrufen."
+msgstr "Действительно снять назначение лицензии? Доступ активных устройств этой лицензии будет отозван."
+
+msgid "Zuweisung freigeben"
+msgstr "Снять назначение"
+
+msgid "Aktiven Firmenbenutzer auswählen"
+msgstr "Выбрать активного пользователя компании"
+
+msgid "Bitte auswählen"
+msgstr "Выберите"
+
+msgid "Lizenz zuweisen"
+msgstr "Назначить лицензию"
+
+msgid "Lizenzperioden"
+msgstr "Периоды действия лицензии"
+
+msgid "Von"
+msgstr "От"
+
+msgid "Bis"
+msgstr "До"
+
+msgid "Erstattung"
+msgstr "Возврат"
+
+msgid "Erstattung wirklich verbindlich über Mollie auslösen?"
+msgstr "Действительно инициировать обязательный к исполнению возврат через Mollie?"
+
+msgid "Erstattung prüfen/auslösen"
+msgstr "Проверить/оформить возврат"
+
+msgid "Keine Lizenzperioden vorhanden."
+msgstr "Периоды действия лицензии отсутствуют."
+
+msgid "E-Mail-Protokoll"
+msgstr "Журнал электронной почты"
+
+msgid "Versandstatus, tatsächlich verwendeter Provider und Fallback-Versuche ohne vertrauliche Nachrichtentexte oder Secrets."
+msgstr "Статус отправки, фактически использованный провайдер и попытки резервной доставки — без конфиденциального содержимого писем и секретов."
+
+msgid "Empfänger"
+msgstr "Получатель"
+
+msgid "Vorlage"
+msgstr "Шаблон"
+
+msgid "Provider"
+msgstr "Провайдер"
+
+msgid "Versuche"
+msgstr "Попытки"
+
+msgid "Gesendet"
+msgstr "Отправлено"
+
+msgid "Wird gesendet"
+msgstr "Отправка"
+
+msgid "Unterdrückt"
+msgstr "Подавлено"
+
+msgid "Warteschlange"
+msgstr "В очереди"
+
+msgid "Keine E-Mails gefunden."
+msgstr "Письма не найдены."
+
+msgid "Kundenbereiche"
+msgstr "Разделы клиентов"
+
+msgid "Privatkundenbereiche"
+msgstr "Разделы частных клиентов"
+
+msgid "Audit"
+msgstr "Аудит"
+
+msgid "Zuletzt"
+msgstr "Последний раз"
+
+msgid "Akteur"
+msgstr "Исполнитель"
+
+msgid "Admin übertragen"
+msgstr "Передать роль администратора"
+
+msgid "Benutzer wirklich deaktivieren? Lizenzen und Gerätezugänge werden freigegeben."
+msgstr "Действительно деактивировать пользователя? Лицензии и доступ устройств будут освобождены."
+
+msgid "Firmenadmin"
+msgstr "Администратор компании"
+
+msgid "Gerätezugang wirklich widerrufen?"
+msgstr "Действительно отозвать доступ устройства?"
+
+msgid "Mollie Events"
+msgstr "События Mollie"
+
+msgid "Idempotent verarbeitete Provider-Zustandsänderungen."
+msgstr "Изменения состояния провайдера, обработанные идемпотентно."
+
+msgid "Providerstatus"
+msgstr "Статус провайдера"
+
+msgid "Verarbeitet"
+msgstr "Обработано"
+
+msgid "Retries"
+msgstr "Повторные попытки"
+
+msgid "Fehler"
+msgstr "Ошибка"
+
+msgid "Keine Mollie Events gefunden."
+msgstr "События Mollie не найдены."
+
+msgid "DSGVO-Workflow mit kontrollierter Anonymisierung und Erhalt rechtlich erforderlicher Historie."
+msgstr "Процедура GDPR с контролируемой анонимизацией и сохранением юридически обязательной истории."
+
+msgid "Angefordert"
+msgstr "Запрошено"
+
+msgid "Notiz"
+msgstr "Примечание"
+
+msgid "Konto wirklich anonymisieren?"
+msgstr "Действительно анонимизировать эту учётную запись?"
+
+msgid "Verarbeiten"
+msgstr "Обработать"
+
+msgid "Retention Policies"
+msgstr "Политики хранения"
+
+msgid "Nur freigegebene Datenklassen können automatisiert bereinigt werden."
+msgstr "Автоматически очищать можно только утверждённые классы данных."
+
+msgid "Datenklasse"
+msgstr "Класс данных"
+
+msgid "Keine Policies."
+msgstr "Политик нет."
+
+msgid "Versionierte AGB, Datenschutz-, Widerrufs- und Lizenztexte."
+msgstr "Версионные условия использования, документы о конфиденциальности, отказе и лицензиях."
+
+msgid "Typ"
+msgstr "Тип"
+
+msgid "Keine Dokumente."
+msgstr "Документов нет."
+
+msgid "Read-only PostgreSQL-Betriebsdaten."
+msgstr "Эксплуатационные данные PostgreSQL только для чтения."
+
+msgid "DB-Größe"
+msgstr "Размер базы данных"
+
+msgid "Retention-Policy anlegen"
+msgstr "Создать политику хранения"
+
+msgid "Rechtsdokument anlegen"
+msgstr "Создать юридический документ"
+
+msgid "Fertig"
+msgstr "Завершено"
+
+msgid "Referenz"
+msgstr "Ссылка"
+
+msgid "Start"
+msgstr "Начало"
+
+msgid "Ende"
+msgstr "Конец"
+
+msgid "Backup"
+msgstr "Резервная копия"
+
+msgid "Schweregrad"
+msgstr "Серьёзность"
+
+msgid "Meldung"
+msgstr "Сообщение"
+
+msgid "Keine Datensätze gefunden."
+msgstr "Записи не найдены."
+
+msgid "Benutzer-ID"
+msgstr "ID пользователя"
+
+msgid "Status ändern"
+msgstr "Изменить статус"
+
+msgid "Neu"
+msgstr "Новый"
+
+msgid "In Bearbeitung"
+msgstr "В обработке"
+
+msgid "Abgeschlossen"
+msgstr "Закрыто"
+
+msgid "Antwort schreiben"
+msgstr "Написать ответ"
+
+msgid "Die Antwort wird im Verlauf gespeichert und per E-Mail versendet an:"
+msgstr "Ответ сохраняется в истории переписки и отправляется по электронной почте:"
+
+msgid "Antwort"
+msgstr "Ответ"
+
+msgid "Antwort an den Kunden eingeben …"
+msgstr "Введите ответ клиенту …"
+
+msgid "Antwort senden"
+msgstr "Отправить ответ"
+
+msgid "Anfrage und alle netstyle-Antworten in zeitlicher Reihenfolge."
+msgstr "Запрос и все ответы netstyle в хронологическом порядке."
+
+msgid "netstyle Support"
+msgstr "Поддержка netstyle"
+
+msgid "FAQ bearbeiten"
+msgstr "Изменить FAQ"
+
+msgid "FAQ anlegen"
+msgstr "Создать FAQ"
+
+msgid "Zentraler Content-Baustein."
+msgstr "Центральный элемент контента."
+
+msgid "FAQ-Verwaltung"
+msgstr "Управление FAQ"
+
+msgid "Zentrale FAQ-Inhalte für Marketing und Produktoberflächen."
+msgstr "Централизованные FAQ для маркетинга и интерфейсов продукта."
+
+msgid "Frage suchen …"
+msgstr "Поиск вопросов …"
+
+msgid "Alle Zielgruppen"
+msgstr "Все аудитории"
+
+msgid "Filtern"
+msgstr "Фильтровать"
+
+msgid "Zurücksetzen"
+msgstr "Сбросить"
+
+msgid "Key"
+msgstr "Ключ"
+
+msgid "Frage"
+msgstr "Вопрос"
+
+msgid "Zielgruppe"
+msgstr "Целевая аудитория"
+
+msgid "Keine FAQ-Einträge."
+msgstr "Записей FAQ нет."
+
+msgid "Service Account Token"
+msgstr "Токен сервисной учётной записи"
+
+msgid "erstellt"
+msgstr "создан"
+
+msgid "Token jetzt sicher speichern."
+msgstr "Сохраните этот токен в безопасном месте прямо сейчас."
+
+msgid "Er wird danach nicht erneut im Klartext angezeigt; ein alter Token ist nach einer Rotation sofort ungültig."
+msgstr "Позже токен больше не будет показан открытым текстом; прежний токен становится недействительным сразу после замены."
+
+msgid "Zur API-Verwaltung"
+msgstr "К управлению API"
+
+msgid "Produktcode"
+msgstr "Код продукта"
+
+msgid "Preisversion anlegen"
+msgstr "Создать версию цены"
+
+msgid "Produktkonfiguration"
+msgstr "Конфигурация продукта"
+
+msgid "Preisversionen"
+msgstr "Версии цен"
+
+msgid "ab"
+msgstr "с"
+
+msgid "Keine Preisversionen."
+msgstr "Версий цен нет."
+
+msgid "Zentrale Prompt-Domain · 34 Apps · 194 PM20-Aufgaben · versioniert und serverseitig komponiert."
+msgstr "Центральная система промптов · 34 приложения · 194 задачи PM20 · версионирование и серверная компоновка."
+
+msgid "Qualität"
+msgstr "Качество"
+
+msgid "Task-ID, App oder Titel suchen …"
+msgstr "Поиск по ID задачи, приложению или названию …"
+
+msgid "Task"
+msgstr "Задача"
+
+msgid "Anwendung"
+msgstr "Приложение"
+
+msgid "Veröffentlicht"
+msgstr "Опубликовано"
+
+msgid "Offene Versionen"
+msgstr "Открытые версии"
+
+msgid "keine"
+msgstr "нет"
+
+msgid "noch keine Daten"
+msgstr "данных пока нет"
+
+msgid "Keine Prompt-Aufgaben gefunden."
+msgstr "Задачи промптов не найдены."
+
+msgid "Prompt-Qualität"
+msgstr "Качество промптов"
+
+msgid "1–5-Sterne-Ratings · Recent Average · Drop-Erkennung · Aufgabenliste."
+msgstr "Оценки от 1 до 5 звёзд · недавнее среднее · выявление снижения · список задач."
+
+msgid "Schwellen"
+msgstr "Пороги"
+
+msgid "Analyse aktualisieren"
+msgstr "Обновить анализ"
+
+msgid "Kritisch"
+msgstr "Критично"
+
+msgid "Warnung"
+msgstr "Предупреждение"
+
+msgid "Beobachten"
+msgstr "Наблюдать"
+
+msgid "OK"
+msgstr "ОК"
+
+msgid "App"
+msgstr "Приложение"
+
+msgid "Recent Avg"
+msgstr "Недавнее среднее"
+
+msgid "Previous Avg"
+msgstr "Предыдущее среднее"
+
+msgid "Drop"
+msgstr "Падение"
+
+msgid "Lizenz-Defaults"
+msgstr "Параметры лицензий по умолчанию"
+
+msgid "Geräte je Benutzer"
+msgstr "Устройств на пользователя"
+
+msgid "Einladung"
+msgstr "Приглашение"
+
+msgid "Stunden"
+msgstr "часов"
+
+msgid "Kritische Warnung"
+msgstr "Критическое предупреждение"
+
+msgid "Einstellungen speichern"
+msgstr "Сохранить настройки"
+
+msgid "Produktdefaults, Support, E-Mail-Identität und Betriebswarnschwellen."
+msgstr "Настройки продукта по умолчанию, поддержка, почтовая идентификация и пороги предупреждений."
+
+msgid "Produktwerte werden unter „Produkte & Preise“ gepflegt."
+msgstr "Параметры продуктов редактируются в разделе «Продукты и цены»."
+
+msgid "PROMPTFINISHER Pro ist nicht angelegt."
+msgstr "PROMPTFINISHER Pro ещё не создан."
+
+msgid "Empfänger des Kundenportal-Kontaktformulars."
+msgstr "Получатель сообщений из контактной формы клиентского портала."
+
+msgid "E-Mail-Versandweg & Fallback"
+msgstr "Маршрут отправки почты и резервный переход"
+
+msgid "Alle Provider bleiben parallel gespeichert. Im manuellen Modus wird nur der primäre Versandweg verwendet. Im automatischen Modus wird bei eindeutig nicht zugestellten Fehlern in der festgelegten Reihenfolge weitergeschaltet; bei unklaren Fehlern erfolgt bewusst kein automatischer Fallback, um Doppelversand zu vermeiden."
+msgstr "Все провайдеры сохраняются параллельно. В ручном режиме используется только основной маршрут. Автоматический режим переключается на следующего провайдера в установленном порядке лишь при подтверждённой недоставке; неоднозначные ошибки не вызывают переключения во избежание повторной отправки."
+
+msgid "E-Mail-Absender & Domain"
+msgstr "Отправитель и домен почты"
+
+msgid "Die Absenderadresse wird beim SMTP-Versand direkt aus diesen Einstellungen gelesen. SPF, DKIM und DMARC sind hier als DNS-Sollwerte dokumentiert; das Speichern verändert keine DNS-Zone."
+msgstr "Адрес отправителя SMTP берётся непосредственно из этих настроек. SPF, DKIM и DMARC указаны здесь как целевые записи DNS; сохранение не изменяет зоны DNS."
+
+msgid "Erster SMTP-Transport. Das Passwort wird verschlüsselt gespeichert und niemals wieder im Klartext angezeigt."
+msgstr "Основной SMTP-транспорт. Пароль хранится в зашифрованном виде и больше никогда не отображается открытым текстом."
+
+msgid "Optionaler zweiter SMTP-Transport. Hier können Sie z. B. denselben SMTP-Relay eintragen, den auch Listmonk verwendet, und manuell oder automatisch zwischen SMTP 1 und SMTP 2 wechseln."
+msgstr "Необязательный второй SMTP-транспорт. Можно указать, например, тот же SMTP-релей, что использует Listmonk, и переключаться между SMTP 1 и SMTP 2 вручную или автоматически."
+
+msgid "Alternative zu SMTP für Exchange Online. Das Client Secret wird verschlüsselt gespeichert und niemals wieder im Klartext angezeigt."
+msgstr "Альтернатива SMTP для Exchange Online. Секрет клиента хранится в зашифрованном виде и больше никогда не показывается открытым текстом."
+
+msgid "Sie besitzen Leserechte, aber keine Berechtigung zum Ändern dieser Einstellungen."
+msgstr "У вас есть доступ только для чтения без права изменять эти настройки."
+
+msgid "Bewertungen"
+msgstr "Оценки"
+
+msgid "Deterministischer Composer-Test ohne Speicherung des erzeugten Prompttexts."
+msgstr "Детерминированный тест компоновщика без сохранения созданного текста промпта."
+
+msgid "Draft aus letzter Version"
+msgstr "Создать черновик из последней версии"
+
+msgid "Draft speichern"
+msgstr "Сохранить черновик"
+
+msgid "Keine Version vorhanden."
+msgstr "Нет доступных версий."
+
+msgid "Konfigurierbare Schwellen für Recent Average und Drop-Erkennung."
+msgstr "Настраиваемые пороги для среднего за последний период и обнаружения падения."
+
+msgid "No-Code Editor. Nur DRAFT-Versionen sind inhaltlich veränderbar."
+msgstr "Редактор без кода. Изменять содержимое можно только у версий DRAFT."
+
+msgid "Noch keine Qualitäts-Snapshots. Analyse ausführen oder Ratings erfassen."
+msgstr "Снимков качества пока нет. Запустите анализ или добавьте оценки."
+
+msgid "Policy"
+msgstr "Политика"
+
+msgid "Qualität:"
+msgstr "Качество:"
+
+msgid "Qualitätsschwellen"
+msgstr "Пороги качества"
+
+msgid "Ratings"
+msgstr "Оценки"
+
+msgid "Testfall"
+msgstr "Тестовый случай"
+
+msgid "Testfall speichern"
+msgstr "Сохранить тестовый случай"
+
+msgid "Tests"
+msgstr "Тесты"
+
+msgid "Titel"
+msgstr "Название"
+
+msgid "Zur Übersicht"
+msgstr "К обзору"
+
+msgid "bearbeiten"
+msgstr "изменить"
+
+msgid "zentrale PromptDefinition"
+msgstr "Центральное определение PromptDefinition"
+
+msgid "Versionen"
+msgstr "Версии"
+
+msgid "Tests / Ratings"
+msgstr "Тесты / оценки"
+
+msgid "Lifecycle"
+msgstr "Жизненный цикл"
+
+msgid "Archivieren"
+msgstr "Архивировать"
+
+msgid "Publish ist nur über den Human-in-the-loop-Lifecycle möglich. Tests werden vor REVIEW und PUBLISH erneut ausgeführt."
+msgstr "Публикация возможна только через жизненный цикл с участием человека. Перед REVIEW и PUBLISH тесты запускаются повторно."
+
+msgid "Definition"
+msgstr "Определение"
+
+msgid "Family"
+msgstr "Семейство"
+
+msgid "Area"
+msgstr "Область"
+
+msgid "Max. Zeichen"
+msgstr "Макс. символов"
+
+msgid "Intent"
+msgstr "Намерение"
+
+msgid "Kontexttemplate"
+msgstr "Шаблон контекста"
+
+msgid "Felder & Optionen"
+msgstr "Поля и параметры"
+
+msgid "Pflichtfelder"
+msgstr "Обязательные поля"
+
+msgid "Keine"
+msgstr "Нет"
+
+msgid "Optionale Felder"
+msgstr "Необязательные поля"
+
+msgid "Auswahloptionen"
+msgstr "Варианты выбора"
+
+msgid "Testfälle"
+msgstr "Тестовые случаи"
+
+msgid "Tests sind Bestandteil des Release-Gates einer Prompt-Version."
+msgstr "Тесты являются обязательной частью допуска к выпуску версии промпта."
+
+msgid "Alle Tests ausführen"
+msgstr "Запустить все тесты"
+
+msgid "Testen"
+msgstr "Тестировать"
+
+msgid "Löschen"
+msgstr "Удалить"
+
+msgid "Noch kein Testfall. Vor Übergang zu TEST muss mindestens einer angelegt werden."
+msgstr "Тестовых случаев пока нет. Создайте хотя бы один перед переходом в TEST."
+
+msgid "Preview / Test-Komposition"
+msgstr "Предпросмотр / тестовая композиция"
+
+msgid "Prompt testen"
+msgstr "Тестировать промпт"
+
+msgid "Ergebnis"
+msgstr "Результат"
+
+msgid "Deterministischer Feld-Fallback"
+msgstr "Детерминированное резервное значение поля"
+
+msgid "10-Min.-Ø:"
+msgstr "Среднее за 10 мин:"
+
+msgid "Aktive Warnungen"
+msgstr "Активные оповещения"
+
+msgid "App-Version"
+msgstr "Версия приложения"
+
+msgid "Architektur"
+msgstr "Архитектура"
+
+msgid "Backup & Restore"
+msgstr "Резервное копирование и восстановление"
+
+msgid "Backups öffnen"
+msgstr "Открыть резервные копии"
+
+msgid "Betriebszustand, Plattformdienste, Integrationen und Datensicherung."
+msgstr "Состояние системы, службы платформы, интеграции и резервное копирование."
+
+msgid "CPU-Kerne"
+msgstr "Ядер ЦП"
+
+msgid "Caddy"
+msgstr "Caddy"
+
+msgid "Celery Beat"
+msgstr "Celery Beat"
+
+msgid "Celery Worker"
+msgstr "Celery Worker"
+
+msgid "Container-CPU aktuell"
+msgstr "Текущая загрузка ЦП контейнеров"
+
+msgid "Container-RAM gesamt"
+msgstr "Общая память контейнеров"
+
+msgid "DB-Verbindungen"
+msgstr "Подключения к базе данных"
+
+msgid "Dateiobjekte (Inodes) belegt"
+msgstr "Использованные inode"
+
+msgid "Dateiobjekte (Inodes) verfügbar"
+msgstr "Доступные inode"
+
+msgid "Datenbank & Jobs"
+msgstr "База данных и задания"
+
+msgid "Datenbank öffnen"
+msgstr "Открыть базу данных"
+
+msgid "Datenträger / gesamt"
+msgstr "Диск / всего"
+
+msgid "Datenträger / verfügbar"
+msgstr "Диск / доступно"
+
+msgid "Datenträger / verwendet"
+msgstr "Диск / использовано"
+
+msgid "Definitionen"
+msgstr "Определения"
+
+msgid "Dienste & Integrationen"
+msgstr "Службы и интеграции"
+
+msgid "Dienste öffnen"
+msgstr "Открыть службы"
+
+msgid "Diese Werte stammen aus cAdvisor und beziehen sich auf Docker-Container. Die VM-Werte oben stammen aus node_exporter und beziehen sich auf die gesamte Docker-Host-VM."
+msgstr "Эти показатели поступают из cAdvisor и относятся к контейнерам Docker. Показатели ВМ выше поступают из node_exporter и охватывают всю виртуальную машину хоста Docker."
+
+msgid "Docker"
+msgstr "Docker"
+
+msgid "Docker-Container"
+msgstr "Контейнеры Docker"
+
+msgid "Erkannte Container"
+msgstr "Обнаруженные контейнеры"
+
+msgid "Fehler / 24 h"
+msgstr "Ошибки / 24 ч"
+
+msgid "Git Commit"
+msgstr "Коммит Git"
+
+msgid "Host & Release"
+msgstr "Хост и выпуск"
+
+msgid "Inodes sind Dateisystem-Einträge für Dateien und Verzeichnisse. Sind sie ausgeschöpft, können trotz freiem Speicher keine neuen Dateien angelegt werden."
+msgstr "Inode — записи файловой системы для файлов и каталогов. При их исчерпании создавать новые файлы нельзя, даже если на диске осталось свободное место."
+
+msgid "Keine aktiven Systemwarnungen."
+msgstr "Нет активных системных оповещений."
+
+msgid "Letzter Restore-Test"
+msgstr "Последний тест восстановления"
+
+msgid "Letztes Backup"
+msgstr "Последняя резервная копия"
+
+msgid "Letztes Deployment"
+msgstr "Последнее развертывание"
+
+msgid "Load:"
+msgstr "Нагрузка:"
+
+msgid "Messbereich"
+msgstr "Область измерения"
+
+msgid "Messquelle"
+msgstr "Источник измерений"
+
+msgid "Messwert-Erklärung"
+msgstr "Пояснения к показателям"
+
+msgid "OS / Kernel"
+msgstr "ОС / ядро"
+
+msgid "PostgreSQL"
+msgstr "PostgreSQL"
+
+msgid "Prompt MCP"
+msgstr "Prompt MCP"
+
+msgid "RAM gesamt"
+msgstr "Всего ОЗУ"
+
+msgid "RAM verfügbar"
+msgstr "Доступно ОЗУ"
+
+msgid "RAM verwendet"
+msgstr "Использовано ОЗУ"
+
+msgid "Restore-Tests öffnen"
+msgstr "Открыть тесты восстановления"
+
+msgid "TLS-Zertifikat"
+msgstr "Сертификат TLS"
+
+msgid "Umgebung"
+msgstr "Среда"
+
+msgid "Uptime"
+msgstr "Время работы"
+
+msgid "VM-CPU aktuell"
+msgstr "Текущая загрузка ЦП ВМ"
+
+msgid "VM-Datenträger /"
+msgstr "Диск ВМ /"
+
+msgid "VM-RAM"
+msgstr "ОЗУ ВМ"
+
+msgid "VM-Speicher & Dateisystem"
+msgstr "Память ВМ и файловая система"
+
+msgid "Verwendetes Backup"
+msgstr "Использованная резервная копия"
+
+msgid "Warnungen öffnen"
+msgstr "Открыть оповещения"
+
+msgid "geschützt"
+msgstr "защищено"
+
+msgid "healthy"
+msgstr "исправно"
+
+msgid "konfiguriert"
+msgstr "настроено"
+
+msgid "nicht erreichbar"
+msgstr "недоступно"
+
+msgid "nicht protokolliert"
+msgstr "не зарегистрировано"
+
+msgid "und ist die für neue Prozesse realistisch nutzbare Speichermenge. „Inodes“ sind Dateisystem-Einträge; ein niedriger Belegungsgrad ist unkritisch."
+msgstr "и обозначает объем памяти, реально доступный новым процессам. Inode — записи файловой системы; низкий уровень их использования не вызывает опасений."
+
+msgid "verfügbar von"
+msgstr "доступно из"
+
+msgid "„RAM verfügbar“ entspricht Linux"
+msgstr "«Доступно ОЗУ» соответствует значению Linux"
+
+msgid "not_configured"
+msgstr "не настроено"
+
+msgid "unknown"
+msgstr "неизвестно"
+
+msgid "ok"
+msgstr "норма"
+
+msgid "warning"
+msgstr "предупреждение"
+
+msgid "unavailable"
+msgstr "недоступно"
+
+msgid "degraded"
+msgstr "работает с ограничениями"
+
+msgid "success"
+msgstr "успешно"
+
+msgid "failed"
+msgstr "ошибка"
+
+msgid "running"
+msgstr "выполняется"
+
+msgid "critical"
+msgstr "критично"
+
+msgid "passed"
+msgstr "пройдено"
+
+msgid "error"
+msgstr "ошибка"
+
+msgid "skipped"
+msgstr "пропущено"
+
+msgid "in_progress"
+msgstr "выполняется"
+
+msgid "no_data"
+msgstr "нет данных"
+
+msgid "completed"
+msgstr "завершено"
+
+msgid "nicht verfügbar"
+msgstr "недоступно"
+
+msgid "Disk {value}% belegt"
+msgstr "Использование диска: {value}%"
+
+msgid "RAM {value}% belegt"
+msgstr "Использование ОЗУ: {value}%"
+
+msgid "CPU 10-Minuten-Mittel {value}%"
+msgstr "Средняя загрузка ЦП за 10 минут: {value}%"
+
+msgid "Kein auswertbarer Backupstatus verfügbar"
+msgstr "Нет пригодных для анализа сведений о состоянии резервного копирования"
+
+msgid "Letztes Backup meldet Status {value}"
+msgstr "Состояние последней резервной копии: {value}"
+
+msgid "Backup ist {value} Stunden alt"
+msgstr "Возраст резервной копии: {value} ч"
+
+msgid "Restore-Statusdatei ist nicht auswertbar"
+msgstr "Не удалось обработать файл состояния восстановления"
+
+msgid "Noch kein Restore-Test protokolliert"
+msgstr "Тест восстановления ещё не зарегистрирован"
+
+msgid "Letzter Restore-Test war nicht erfolgreich"
+msgstr "Последний тест восстановления завершился неудачно"
+
+msgid "Letzter Restore-Test ist {value} Tage alt"
+msgstr "Последний тест восстановления был {value} дн. назад"
+
+msgid "Monitoring-Ziel {value} ist nicht erreichbar"
+msgstr "Цель мониторинга {value} недоступна"
+
+msgid "Monitoring-Ziel {value} liefert keinen Status"
+msgstr "Цель мониторинга {value} не сообщает состояние"
+
+msgid "Caddy Healthcheck ist nicht erreichbar"
+msgstr "Проверка работоспособности Caddy недоступна"
+
+msgid "Kein Celery Worker beantwortet den aktiven Ping"
+msgstr "Ни один обработчик Celery не отвечает на активную проверку"
+
+msgid "Celery Beat-Heartbeat älter als {value} Minuten"
+msgstr "Сигнал Celery Beat старше {value} мин."
+
+msgid "Celery Queue-Tiefe kann nicht gelesen werden"
+msgstr "Не удалось получить длину очереди Celery"
+
+msgid "Celery Queue enthält {value} wartende Jobs"
+msgstr "В очереди Celery ожидают {value} заданий"
+
+msgid "{value} fehlgeschlagene Hintergrundjobs in 24 Stunden"
+msgstr "Ошибок фоновых задач за 24 часа: {value}"
+
+msgid "{value} E-Mail-Fehler in 24 Stunden"
+msgstr "Ошибок электронной почты за 24 часа: {value}"
+
+msgid "{value} Mollie-Verarbeitungsfehler in 24 Stunden"
+msgstr "Ошибок обработки Mollie за 24 часа: {value}"
+
+msgid "Backups"
+msgstr "Резервные копии"
+
+msgid "Restore-Tests"
+msgstr "Тесты восстановления"
+
+msgid "Systemwarnungen"
+msgstr "Системные оповещения"
+
+msgid "Erledigt"
+msgstr "Устранено"
+
+msgid "Filter"
+msgstr "Фильтр"
+
+msgid "Seite"
+msgstr "страница"
+
+msgid "AGB akzeptieren"
+msgstr "Принять условия использования"
+
+msgid "Anmeldung fehlgeschlagen."
+msgstr "Не удалось войти в систему."
+
+msgid "Anmeldung fehlgeschlagen. Bitte später erneut versuchen."
+msgstr "Не удалось войти. Повторите попытку позже."
+
+msgid "Anzahl Lizenzen"
+msgstr "Количество лицензий"
+
+msgid "Art der Kündigung"
+msgstr "Тип расторжения"
+
+msgid "Außerordentliche Kündigung"
+msgstr "Досрочное расторжение по особым основаниям"
+
+msgid "Bei einer außerordentlichen Kündigung ist der Kündigungsgrund erforderlich."
+msgstr "Для расторжения по особым основаниям необходимо указать причину."
+
+msgid "Bestellnummer"
+msgstr "Номер заказа"
+
+msgid "Bitte bestätigen Sie den gewünschten Leistungsbeginn vor Ablauf der Widerrufsfrist."
+msgstr "Подтвердите запрос на начало оказания услуги до окончания срока отказа от договора."
+
+msgid "Bitte bestätigen Sie die Widerrufsbelehrung."
+msgstr "Подтвердите ознакомление с информацией о праве на отказ от договора."
+
+msgid "Datenschutzhinweise zur Kenntnis genommen"
+msgstr "Я ознакомился(-лась) с уведомлением о конфиденциальности"
+
+msgid "Deutschland"
+msgstr "Германия"
+
+msgid "Die Bestellnummer finden Sie in Ihrer Bestell- bzw. Zahlungsbestätigung."
+msgstr "Номер заказа указан в подтверждении заказа или платежа."
+
+msgid "E-Mail-Adresse für die Eingangsbestätigung"
+msgstr "Адрес электронной почты для подтверждения получения"
+
+msgid "E-Mail-Adresse für die Kündigungsbestätigung"
+msgstr "Адрес электронной почты для подтверждения расторжения"
+
+msgid "Firmenname erforderlich."
+msgstr "Необходимо указать название компании."
+
+msgid "Gewünschter Beendigungszeitpunkt"
+msgstr "Желаемая дата прекращения"
+
+msgid "Hausnummer"
+msgstr "Номер дома"
+
+msgid "Kündigungsgrund"
+msgstr "Причина расторжения"
+
+msgid "Leer lassen für den frühestmöglichen Zeitpunkt."
+msgstr "Оставьте пустым, чтобы выбрать самую раннюю возможную дату."
+
+msgid "Leistungsbeginn vor Ablauf der Widerrufsfrist ausdrücklich verlangt"
+msgstr "Я прямо прошу начать оказание услуги до окончания срока отказа от договора"
+
+msgid "Lizenzbedingungen akzeptieren"
+msgstr "Принять условия лицензии"
+
+msgid "Ordentliche Kündigung"
+msgstr "Расторжение в обычном порядке"
+
+msgid "PLZ"
+msgstr "Почтовый индекс"
+
+msgid "Passwörter stimmen nicht überein."
+msgstr "Пароли не совпадают."
+
+msgid "Steuernummer ist für diese Steuerregel erforderlich."
+msgstr "Для этого налогового правила необходим налоговый номер."
+
+msgid "Straße"
+msgstr "Улица"
+
+msgid "USt-IdNr. ist für diese Steuerregel erforderlich."
+msgstr "Для этого налогового правила необходим номер плательщика НДС."
+
+msgid "Unternehmensname ist erforderlich."
+msgstr "Необходимо указать название компании."
+
+msgid "Vertrag / Bestellung / Kundennummer"
+msgstr "Договор / заказ / номер клиента"
+
+msgid "Vor- und Nachname"
+msgstr "Имя и фамилия"
+
+msgid "Widerrufsinformation zur Kenntnis genommen"
+msgstr "Я ознакомился(-лась) с информацией о праве на отказ от договора"
+
+msgid "Zum Beispiel Bestellnummer oder Kundennummer."
+msgstr "Например, номер заказа или номер клиента."
+
+msgid "Gerätename"
+msgstr "Имя устройства"
+
+msgid "Keine konkrete Lizenz"
+msgstr "Без конкретной лицензии"
+
+msgid "Lizenz (optional)"
+msgstr "Лицензия (необязательно)"
+
+msgid "Nachricht"
+msgstr "Сообщение"
+
+msgid "Schlüssel"
+msgstr "Ключ"
+
+msgid "Sonstiges"
+msgstr "Другое"
+
+msgid "Sortierung"
+msgstr "Сортировка"
+
+msgid "Technisches Problem"
+msgstr "Техническая проблема"
+
+msgid "Aktuelle Stichprobengröße"
+msgstr "Размер текущей выборки"
+
+msgid "App-Regel-Snapshot"
+msgstr "Снимок правил приложения"
+
+msgid "Ausgabeformen"
+msgstr "Форматы вывода"
+
+msgid "Beispiel: {\"microsoft_tier\":\"premium\",\"payload\":{\"fields\":{...}}}"
+msgstr "Пример: {\"microsoft_tier\":\"premium\",\"payload\":{\"fields\":{...}}}"
+
+msgid "Bereich"
+msgstr "Область"
+
+msgid "Darf nicht enthalten"
+msgstr "Не должно содержать"
+
+msgid "Ein Feld pro Zeile. Optionales Fragment: Feldname ||| Text mit {value}."
+msgstr "По одному полю на строку. Необязательный фрагмент: имя поля ||| текст с {value}."
+
+msgid "Ein Pflichtfeld pro Zeile."
+msgstr "Одно обязательное поле на строку."
+
+msgid "Eingabedaten (JSON)"
+msgstr "Входные данные (JSON)"
+
+msgid "Familie"
+msgstr "Семейство"
+
+msgid "Feldbezeichnungen müssen innerhalb einer Prompt-Version eindeutig sein."
+msgstr "Названия полей должны быть уникальными в пределах версии промпта."
+
+msgid "Kontextvorlage"
+msgstr "Шаблон контекста"
+
+msgid "Kritisch bei Abfall"
+msgstr "Порог критического снижения"
+
+msgid "Kritischer Durchschnitt"
+msgstr "Критическое среднее"
+
+msgid "Maximale Zeichen"
+msgstr "Максимум символов"
+
+msgid "Microsoft-Lizenzstufe"
+msgstr "Уровень лицензии Microsoft"
+
+msgid "Mindestanzahl Stichproben"
+msgstr "Минимальное количество выборок"
+
+msgid "Mindestdurchschnitt"
+msgstr "Минимальное среднее"
+
+msgid "Muss enthalten"
+msgstr "Должно содержать"
+
+msgid "Nur DRAFT-Versionen dürfen inhaltlich bearbeitet werden."
+msgstr "Редактировать можно только версии DRAFT."
+
+msgid "Payload muss ein JSON-Objekt sein."
+msgstr "Полезная нагрузка должна быть объектом JSON."
+
+msgid "Quellen"
+msgstr "Источники"
+
+msgid "Schwerpunkte"
+msgstr "Направления"
+
+msgid "Test-Payload (JSON)"
+msgstr "Тестовые данные (JSON)"
+
+msgid "Test-Payload muss ein JSON-Objekt sein."
+msgstr "Тестовые данные должны быть объектом JSON."
+
+msgid "Ungültiges JSON: %(error)s"
+msgstr "Некорректный JSON: %(error)s"
+
+msgid "Vorherige Stichprobengröße"
+msgstr "Размер предыдущей выборки"
+
+msgid "Warnung bei Abfall"
+msgstr "Порог предупреждения о снижении"
+
+msgid "Ziel / Intent"
+msgstr "Цель / намерение"
+
+msgid "Zielgruppen"
+msgstr "Целевые аудитории"
+
+msgid "API-Schlüssel"
+msgstr "Ключ API"
+
+msgid "Ablauf optional"
+msgstr "Срок действия (необязательно)"
+
+msgid "Außerhalb der Produktion ist ausschließlich ein Mollie-Test-Key (test_…) zulässig."
+msgstr "Вне производственной среды разрешён только тестовый ключ Mollie (test_…)."
+
+msgid "Begründung"
+msgstr "Обоснование"
+
+msgid "Beschreibung"
+msgstr "Описание"
+
+msgid "Bruttopreis"
+msgstr "Цена с налогом"
+
+msgid "Der Datensatz wird revisionssicher ausgeblendet und im Audit protokolliert."
+msgstr "Запись будет скрыта с сохранением журнала аудита."
+
+msgid "Diese E-Mail-Adresse gehört bereits zu einem PROMPTFINISHER-Konto."
+msgstr "Этот адрес электронной почты уже принадлежит учётной записи PROMPTFINISHER."
+
+msgid "Diese E-Mail-Adresse ist bereits einem Firmenkunden zugeordnet."
+msgstr "Этот адрес электронной почты уже закреплён за корпоративным клиентом."
+
+msgid "Diese E-Mail-Adresse ist bereits registriert."
+msgstr "Этот адрес электронной почты уже зарегистрирован."
+
+msgid "Dokumenttyp"
+msgstr "Тип документа"
+
+msgid "E-Mail des Firmenadministrators"
+msgstr "Эл. почта администратора компании"
+
+msgid "Eigenes Passwort erneut eingeben"
+msgstr "Введите свой пароль повторно"
+
+msgid "Erinnerung 1 · Tage vorher"
+msgstr "Напоминание 1 · За сколько дней"
+
+msgid "Erinnerung 2 · Tage vorher"
+msgstr "Напоминание 2 · За сколько дней"
+
+msgid "Erstatten"
+msgstr "Возместить"
+
+msgid "Für Unternehmens-Leads ist der Unternehmensname erforderlich."
+msgstr "Для корпоративных лидов необходимо название компании."
+
+msgid "Für diese Datenklasse existiert kein freigegebener Lösch-Handler."
+msgstr "Для этого класса данных нет утверждённого обработчика удаления."
+
+msgid "Für diese E-Mail-Adresse existiert bereits ein aktiver Lead."
+msgstr "Для этого адреса электронной почты уже существует активный лид."
+
+msgid "Identität und Berechtigung des Ansprechpartners wurden geprüft"
+msgstr "Личность и полномочия контактного лица проверены"
+
+msgid "In Kunde umwandeln"
+msgstr "Преобразовать в клиента"
+
+msgid "In Produktion ist ausschließlich ein Mollie-Live-Key (live_…) zulässig."
+msgstr "В производственной среде разрешён только рабочий ключ Mollie (live_…)."
+
+msgid "Inhalt"
+msgstr "Содержимое"
+
+msgid "Interne Notiz zur Prüfung (optional)"
+msgstr "Внутренняя заметка о проверке (необязательно)"
+
+msgid "Interne Notizen"
+msgstr "Внутренние заметки"
+
+msgid "Kaufbar"
+msgstr "Доступно к покупке"
+
+msgid "Kritische Warnung · Tage vorher"
+msgstr "Критическое предупреждение · За сколько дней"
+
+msgid "Lead in Firmenkunden umwandeln und Einladungslink senden"
+msgstr "Преобразовать лид в корпоративного клиента и отправить ссылку-приглашение"
+
+msgid "Lead wirklich löschen"
+msgstr "Подтвердить удаление лида"
+
+msgid "Lead-Typ"
+msgstr "Тип лида"
+
+msgid "Leer lassen, um den bestehenden Schlüssel unverändert zu lassen."
+msgstr "Оставьте пустым, чтобы сохранить текущий ключ без изменений."
+
+msgid "Lesen"
+msgstr "Читать"
+
+msgid "Löschung erst nach dieser Anzahl Tage. Rechtliche Aufbewahrungsfristen separat prüfen."
+msgstr "Удалять только по истечении указанного числа дней. Законные сроки хранения проверяйте отдельно."
+
+msgid "Neukauf"
+msgstr "Новая покупка"
+
+msgid "Nicht zugewiesen"
+msgstr "Не назначено"
+
+msgid "Nächste Aktion"
+msgstr "Следующее действие"
+
+msgid "Operations lesen"
+msgstr "Просмотр операций"
+
+msgid "Preistyp"
+msgstr "Тип цены"
+
+msgid "Prompt-Drafts erzeugen"
+msgstr "Создавать черновики промптов"
+
+msgid "Prompt-Tests ausführen"
+msgstr "Запускать тесты промптов"
+
+msgid "Prompts erzeugen"
+msgstr "Создавать промпты"
+
+msgid "Prompts lesen"
+msgstr "Читать промпты"
+
+msgid "Qualität verwalten"
+msgstr "Управлять качеством"
+
+msgid "Quelle"
+msgstr "Источник"
+
+msgid "Reminder 1 muss vor Reminder 2 liegen (größere Tageszahl)."
+msgstr "Напоминание 1 должно быть раньше напоминания 2 (большее число дней)."
+
+msgid "Reminder 2 muss vor der kritischen Warnphase liegen."
+msgstr "Напоминание 2 должно быть до периода критического предупреждения."
+
+msgid "Sicherheitsbestätigung des aktuell angemeldeten netstyle Benutzers."
+msgstr "Подтверждение безопасности текущего пользователя netstyle."
+
+msgid "Sichtbar"
+msgstr "Видимый"
+
+msgid "Standard-Laufzeit in Tagen"
+msgstr "Срок действия по умолчанию (дни)"
+
+msgid "Unternehmensname"
+msgstr "Название компании"
+
+msgid "Unterstützt: expired_invitations, email_messages, revoked_devices, resolved_system_alerts, resolved_task_failures, expired_sessions."
+msgstr "Поддерживаются: expired_invitations, email_messages, revoked_devices, resolved_system_alerts, resolved_task_failures, expired_sessions."
+
+msgid "Veröffentlichen"
+msgstr "Публиковать"
+
+msgid "Währung"
+msgstr "Валюта"
+
+msgid "Absender-Anzeigename"
+msgstr "Отображаемое имя отправителя"
+
+msgid "Absender-E-Mail"
+msgstr "Адрес электронной почты отправителя"
+
+msgid "Aktive Absenderadresse für SMTP. Änderungen gelten ohne Container-Neustart."
+msgstr "Активный адрес отправителя SMTP. Изменения вступают в силу без перезапуска контейнеров."
+
+msgid "Antwortadresse"
+msgstr "Адрес для ответа"
+
+msgid "Anwendungs-/Client-ID der App-Registrierung."
+msgstr "Идентификатор приложения/клиента из регистрации приложения."
+
+msgid "Automatisch – bei sicherem Ausfall auf Fallback wechseln"
+msgstr "Автоматически — переключаться на резервный канал при подтверждённом сбое"
+
+msgid "Backup kritisch in Stunden"
+msgstr "Критический возраст резервной копии (часы)"
+
+msgid "Backup-Warnung in Stunden"
+msgstr "Предупреждение о возрасте резервной копии (часы)"
+
+msgid "Begründung optional"
+msgstr "Причина (необязательно)"
+
+msgid "Bei IONOS normalerweise die vollständige E-Mail-Adresse."
+msgstr "Для IONOS обычно используется полный адрес электронной почты."
+
+msgid "Bitte eine gültige Domain ohne @ eingeben."
+msgstr "Введите действительный домен без @."
+
+msgid "CPU-Warnung in %"
+msgstr "Порог предупреждения CPU в %"
+
+msgid "DKIM DNS Sollwert"
+msgstr "Целевое значение DNS DKIM"
+
+msgid "DKIM-Selector"
+msgstr "Селектор DKIM"
+
+msgid "DMARC Sollwert"
+msgstr "Целевое значение DMARC"
+
+msgid "Datenträger kritisch in %"
+msgstr "Критическая загрузка диска в %"
+
+msgid "Datenträger-Warnung in %"
+msgstr "Предупреждение о загрузке диска в %"
+
+msgid "Der kritische Wert muss über dem Warnwert liegen."
+msgstr "Критический порог должен быть выше порога предупреждения."
+
+msgid "Die Mail-Domain muss zur Absender-E-Mail passen."
+msgstr "Почтовый домен должен совпадать с адресом отправителя."
+
+msgid "Dokumentierter DNS-Sollwert für _dmarc.<Domain>."
+msgstr "Документированное целевое значение DNS для _dmarc.<Domain>."
+
+msgid "Dokumentierter DNS-Sollwert. Das Speichern ändert den öffentlichen DNS-Eintrag nicht."
+msgstr "Документированное целевое значение DNS. Сохранение не изменяет публичную запись DNS."
+
+msgid "Domain des sichtbaren Absenders, z. B. decke-wand-boden.de oder später promptmaster.ai."
+msgstr "Домен видимого отправителя, например decke-wand-boden.de или позднее promptmaster.ai."
+
+msgid "Ein DMARC-Eintrag muss mit \"v=DMARC1;\" beginnen."
+msgstr "Запись DMARC должна начинаться с \"v=DMARC1;\"."
+
+msgid "Ein SPF-Eintrag muss mit \"v=spf1 \" beginnen."
+msgstr "Запись SPF должна начинаться с \"v=spf1 \"."
+
+msgid "Ein Versandweg darf in der Kette nur einmal vorkommen."
+msgstr "Каждый маршрут отправки может встречаться в цепочке только один раз."
+
+msgid "Eine oder mehrere E-Mail-Adressen, getrennt durch Zeilenumbruch, Komma oder Semikolon."
+msgstr "Один или несколько адресов электронной почты через новую строку, запятую или точку с запятой."
+
+msgid "Entra Client ID"
+msgstr "Идентификатор клиента Entra"
+
+msgid "Entra Client Secret"
+msgstr "Секрет клиента Entra"
+
+msgid "Entra Tenant ID"
+msgstr "Идентификатор арендатора Entra"
+
+msgid "Erstattung verbindlich über Mollie auslösen"
+msgstr "Подтвердить возврат через Mollie"
+
+msgid "Fallback 1"
+msgstr "Резервный канал 1"
+
+msgid "Fallback 2"
+msgstr "Резервный канал 2"
+
+msgid "Für IONOS mit STARTTLS: 587."
+msgstr "Для IONOS с STARTTLS: 587."
+
+msgid "Für Microsoft Graph ist dieses Feld erforderlich."
+msgstr "Это поле обязательно для Microsoft Graph."
+
+msgid "Für Microsoft Graph ist ein Client Secret erforderlich."
+msgstr "Для Microsoft Graph необходим секрет клиента."
+
+msgid "Für SMTP 1 ist dieses Feld erforderlich."
+msgstr "Это поле обязательно для SMTP 1."
+
+msgid "Für SMTP 2 ist dieses Feld erforderlich."
+msgstr "Это поле обязательно для SMTP 2."
+
+msgid "Für den automatischen Modus muss mindestens ein Fallback gewählt werden."
+msgstr "Для автоматического режима выберите хотя бы один резервный канал."
+
+msgid "Im automatischen Modus wird nur bei eindeutig nicht zugestellten Fehlern weitergeschaltet."
+msgstr "Автоматический режим переключается только при подтверждённой недоставке."
+
+msgid "Kein weiterer Fallback"
+msgstr "Без дополнительного резерва"
+
+msgid "Leer lassen, um das gespeicherte Passwort unverändert zu lassen."
+msgstr "Оставьте пустым, чтобы сохранить сохранённый пароль."
+
+msgid "Leer lassen, um das gespeicherte Secret unverändert zu lassen."
+msgstr "Оставьте пустым, чтобы сохранить текущий секрет."
+
+msgid "Manuell – nur den primären Versandweg verwenden"
+msgstr "Вручную — только основной канал отправки"
+
+msgid "Microsoft-365-Absender"
+msgstr "Отправитель Microsoft 365"
+
+msgid "Monitoring-Alarmempfänger"
+msgstr "Получатели оповещений мониторинга"
+
+msgid "Neuer Schlüssel"
+msgstr "Новый ключ"
+
+msgid "Optional. Leer lassen, wenn Antworten an die Absenderadresse gehen sollen."
+msgstr "Необязательно. Оставьте пустым, если ответы должны приходить отправителю."
+
+msgid "Optionaler Selector bzw. Hinweis auf die verwendeten Microsoft-365-DKIM-Selectoren."
+msgstr "Необязательный селектор или указание используемых селекторов DKIM Microsoft 365."
+
+msgid "Optionaler zweiter SMTP-Provider, z. B. derselbe Relay-Dienst wie bei Listmonk."
+msgstr "Необязательный второй провайдер SMTP, например тот же ретранслятор, что и у Listmonk."
+
+msgid "Postfach, über das Microsoft Graph senden soll, z. B. promptmaster@netstyle.de."
+msgstr "Почтовый ящик для отправки через Microsoft Graph, например promptmaster@netstyle.de."
+
+msgid "Primärer Versandweg"
+msgstr "Основной канал отправки"
+
+msgid "RAM kritisch in %"
+msgstr "Критическое использование ОЗУ в %"
+
+msgid "RAM-Warnung in %"
+msgstr "Предупреждение об использовании ОЗУ в %"
+
+msgid "Restore-Test-Warnung in Tagen"
+msgstr "Предупреждение о возрасте теста восстановления (дни)"
+
+msgid "SMTP 1 – Benutzername"
+msgstr "SMTP 1 – Имя пользователя"
+
+msgid "SMTP 1 – Passwort"
+msgstr "SMTP 1 – Пароль"
+
+msgid "SMTP 1 – Port"
+msgstr "SMTP 1 – Порт"
+
+msgid "SMTP 1 – STARTTLS verwenden"
+msgstr "SMTP 1 – Использовать STARTTLS"
+
+msgid "SMTP 1 – Server"
+msgstr "SMTP 1 – Сервер"
+
+msgid "SMTP 1, SMTP 2 und Microsoft Graph bleiben parallel konfiguriert."
+msgstr "SMTP 1, SMTP 2 и Microsoft Graph остаются настроенными параллельно."
+
+msgid "SMTP 2 – Benutzername"
+msgstr "SMTP 2 – Имя пользователя"
+
+msgid "SMTP 2 – Passwort"
+msgstr "SMTP 2 – Пароль"
+
+msgid "SMTP 2 – Port"
+msgstr "SMTP 2 – Порт"
+
+msgid "SMTP 2 – STARTTLS verwenden"
+msgstr "SMTP 2 – Использовать STARTTLS"
+
+msgid "SMTP 2 – Server"
+msgstr "SMTP 2 – Сервер"
+
+msgid "SPF Sollwert"
+msgstr "Целевое значение SPF"
+
+msgid "Support-Empfänger"
+msgstr "Получатель запросов поддержки"
+
+msgid "TXT-/CNAME-Sollwert oder beide Microsoft-365-DKIM-CNAMEs. Reine Dokumentation; DNS wird nicht automatisch verändert."
+msgstr "Целевое значение TXT/CNAME или обе CNAME-записи DKIM Microsoft 365. Только документация; DNS не изменяется автоматически."
+
+msgid "Verzeichnis-/Mandanten-ID des Microsoft-365-Tenants."
+msgstr "Идентификатор каталога/арендатора Microsoft 365."
+
+msgid "Zum Beispiel PROMPTFINISHER."
+msgstr "Например, PROMPTFINISHER."
+
+msgid "Zum Beispiel smtp.ionos.de."
+msgstr "Например, smtp.ionos.de."
+
+msgid "Das eigene netstyle Konto kann hier nicht deaktiviert werden."
+msgstr "Здесь нельзя отключить свою учётную запись netstyle."
+
+msgid "Der letzte aktive Superadmin kann nicht deaktiviert werden."
+msgstr "Нельзя отключить последнего активного суперадминистратора."
+
+msgid "Die eigene 2FA wird nicht über die Admin-Fremdverwaltung zurückgesetzt."
+msgstr "Нельзя сбросить собственную 2FA через администрирование других пользователей."
+
+msgid "2FA zurückgesetzt. Der Benutzer muss sie beim nächsten Login neu einrichten."
+msgstr "2FA сброшена. Пользователь должен настроить её при следующем входе."
+
+msgid "Die eigene Superadmin-Rolle kann nicht hier entfernt werden."
+msgstr "Нельзя удалить собственную роль суперадминистратора здесь."
+
+msgid "Die letzte aktive Superadmin-Berechtigung kann nicht entfernt werden."
+msgstr "Нельзя удалить последнее активное право суперадминистратора."
+
+msgid "Ein gesperrter Service Account kann nicht rotiert werden."
+msgstr "Нельзя ротировать ключ заблокированной служебной учётной записи."
+
+msgid "Mollie-Produktiv-Checkout wurde gesperrt."
+msgstr "Рабочая касса Mollie заблокирована."
+
+msgid "Bestätigung für die Erstattung fehlt."
+msgstr "Отсутствует подтверждение возврата средств."
+
+msgid "Erstattung wurde an Mollie übermittelt."
+msgstr "Запрос на возврат отправлен в Mollie."
+
+msgid "Für dieses Unternehmen existiert bereits ein aktiver Firmenadministrator."
+msgstr "У этой компании уже есть активный администратор."
+
+msgid "Dieser Benutzer ist bereits Firmenadministrator."
+msgstr "Этот пользователь уже является администратором компании."
+
+msgid "Ungültiger Supportstatus."
+msgstr "Недопустимый статус обращения в поддержку."
+
+msgid "Ungültiger Bearbeitungsstatus."
+msgstr "Недопустимый статус обработки."
+
+msgid "Bitte eine Antwort eingeben."
+msgstr "Введите ответ."
+
+msgid "Die Antwort darf höchstens 10.000 Zeichen enthalten."
+msgstr "Ответ не должен превышать 10 000 символов."
+
+msgid "Status aktualisiert."
+msgstr "Статус обновлён."
+
+msgid "Einstellungen gespeichert."
+msgstr "Настройки сохранены."
+
+msgid "Rolle gespeichert."
+msgstr "Роль сохранена."
+
+msgid "Rolle zugewiesen."
+msgstr "Роль назначена."
+
+msgid "Rolle entfernt."
+msgstr "Роль удалена."
+
+msgid "Benutzerstatus aktualisiert."
+msgstr "Статус пользователя обновлён."
+
+msgid "Lead gespeichert."
+msgstr "Лид сохранён."
+
+msgid "Lead-Zuständigkeit aktualisiert."
+msgstr "Ответственный за лид обновлён."
+
+msgid "Gerät wurde widerrufen."
+msgstr "Доступ устройства отозван."
+
+msgid "Unternehmensdaten gespeichert."
+msgstr "Данные компании сохранены."
+
+msgid "Benutzer deaktiviert; Lizenz- und Gerätezugänge wurden freigegeben."
+msgstr "Пользователь отключён; доступ к лицензиям и устройствам освобождён."
+
+msgid "Die Lizenz ist bereits frei."
+msgstr "Лицензия уже не назначена."
+
+msgid "Lizenzzuweisung wurde freigegeben."
+msgstr "Назначение лицензии снято."
+
+msgid "Lizenz wurde entsperrt."
+msgstr "Лицензия разблокирована."
+
+msgid "Lizenz wurde gesperrt; vorhandene Gerätezugänge wurden widerrufen."
+msgstr "Лицензия заблокирована; существующий доступ устройств отозван."
+
+msgid "Produkt angelegt. Legen Sie anschließend Preisversionen an."
+msgstr "Продукт создан. Затем добавьте версии цен."
+
+msgid "Feature gespeichert."
+msgstr "Функция сохранена."
+
+msgid "Produkt gespeichert."
+msgstr "Продукт сохранён."
+
+msgid "Neue Preisversion angelegt."
+msgstr "Создана новая версия цены."
+
+msgid "E-Mail-Vorlage gespeichert."
+msgstr "Шаблон письма сохранён."
+
+msgid "Mollie-Konfiguration gespeichert."
+msgstr "Настройки Mollie сохранены."
+
+msgid "Service Account gesperrt."
+msgstr "Служебная учётная запись заблокирована."
+
+msgid "Verbrauchererklärung aktualisiert."
+msgstr "Заявление потребителя обновлено."
+
+msgid "Rechtsdokument gespeichert."
+msgstr "Юридический документ сохранён."
+
+msgid "Retention-Policy gespeichert."
+msgstr "Политика хранения сохранена."
+
+msgid "Löschanfrage verarbeitet und Konto anonymisiert."
+msgstr "Запрос на удаление обработан, учётная запись обезличена."
+
+msgid "Löschanfrage abgelehnt."
+msgstr "Запрос на удаление отклонён."
+
+msgid "Dieser Lead ist bereits einem Kunden zugeordnet."
+msgstr "Этот лид уже связан с клиентом."
+
+msgid "Einladung für den Firmenadministrator wurde gesendet."
+msgstr "Приглашение администратору компании отправлено."
+
+msgid "Kundenantwort gespeichert. Für Demo-Adressen wurde keine E-Mail versendet."
+msgstr "Ответ клиенту сохранён. На демонстрационные адреса письма не отправлялись."
+
+msgid "Kundenantwort gespeichert und E-Mail-Benachrichtigung eingeplant."
+msgstr "Ответ клиенту сохранён, уведомление по электронной почте поставлено в очередь."
+
+msgid "Kundenantwort gespeichert, E-Mail-Benachrichtigung konnte aber nicht eingeplant werden."
+msgstr "Ответ клиенту сохранён, но уведомление по электронной почте не удалось поставить в очередь."
+
+msgid "netstyle Benutzer angelegt; Einrichtungslink wurde per E-Mail versendet."
+msgstr "Пользователь netstyle создан; ссылка настройки отправлена по электронной почте."
+
+msgid "Privatkunden werden aus rechtlichen Gründen über Registrierung/Checkout angelegt; der Lead kann dort anschließend als gewonnen abgeschlossen werden."
+msgstr "По юридическим причинам частные клиенты создаются через регистрацию/оформление заказа; затем лид можно отметить как успешный."
+
+msgid "Lead wurde in einen Firmenkunden umgewandelt. Der Ansprechpartner hat eine sichere Einladung erhalten."
+msgstr "Лид преобразован в корпоративного клиента. Контактному лицу отправлено защищённое приглашение."
+
+msgid "Lead %(lead_number)s angelegt."
+msgstr "Лид %(lead_number)s создан."
+
+msgid "Lead %(lead_number)s gelöscht."
+msgstr "Лид %(lead_number)s удалён."
+
+msgid "Firmenadministrator wurde auf %(email)s übertragen."
+msgstr "Роль администратора компании передана пользователю %(email)s."
+
+msgid "Lizenz wurde %(email)s zugewiesen."
+msgstr "Лицензия назначена пользователю %(email)s."
+
+msgid "Ausstehend"
+msgstr "В ожидании"
+
+msgid "Autorisiert"
+msgstr "Авторизован"
+
+msgid "Storniert"
+msgstr "Отменён"
+
+msgid "Abgelaufen"
+msgstr "Срок истёк"
+
+msgid "Teilweise erstattet"
+msgstr "Частично возмещено"
+
+msgid "Vollständig erstattet"
+msgstr "Полностью возмещено"
+
+msgid "Chargeback"
+msgstr "Возврат платежа (чарджбэк)"
+
+msgid "Chargeback zurückgenommen"
+msgstr "Оспаривание платежа отменено"
+
+msgid "Unbekannt"
+msgstr "Неизвестно"
+
+msgid "Verarbeitungsfehler"
+msgstr "Ошибка обработки"
+
+msgid "Fehler behoben"
+msgstr "Ошибка устранена"
+
+msgid "E-Mail-Historie"
+msgstr "История электронной почты"
+
+msgid "netstyle Rolle zuweisen"
+msgstr "Назначить роль netstyle"
+
+msgid "Erstattung konnte nicht an Mollie übermittelt werden."
+msgstr "Не удалось отправить запрос на возврат средств в Mollie."
+
+msgid "Nachrichtentext"
+msgstr "Текст сообщения"
+
+msgid "Rollenname"
+msgstr "Название роли"
+
+msgid "Lead %(lead_number)s löschen"
+msgstr "Удалить лид %(lead_number)s"
+
+msgid "Lead %(lead_number)s in Kunden umwandeln"
+msgstr "Преобразовать лид %(lead_number)s в клиента"
+
+msgid "Firmenadministrator übertragen · %(email)s"
+msgstr "Передать роль администратора компании · %(email)s"
+
+msgid "E-Mail-Vorlage · %(code)s"
+msgstr "Шаблон письма · %(code)s"
+
+msgid "Löschanfrage ablehnen"
+msgstr "Отклонить запрос на удаление"
+
+msgid "Uneingeschränkte Rechte auf alle PROMPTFINISHER-Verwaltungsbereiche."
+msgstr "Неограниченный доступ ко всем разделам администрирования PROMPTFINISHER."
+
+msgid "Kunden, Lizenzen, Geräte, Bestellungen, Zahlungen, E-Mail und Support."
+msgstr "Клиенты, лицензии, устройства, заказы, платежи, электронная почта и поддержка."
+
+msgid "Monitoring, Backups, Operations API, Logs und Systemstatus."
+msgstr "Мониторинг, резервные копии, API операций, журналы и состояние системы."
+
+msgid "Prompt Studio, Prompt-Lifecycle, Qualität und zentrale Inhalte."
+msgstr "Prompt Studio, жизненный цикл промптов, качество и общий контент."
+
+msgid "Berechtigungen werden über die zugewiesenen Capabilities gesteuert."
+msgstr "Права доступа определяются назначенными разрешениями."
+
+msgid "Objekttyp"
+msgstr "Тип объекта"
+
+msgid "Objekt-ID"
+msgstr "Идентификатор объекта"
+
+msgid "Lead anlegen"
+msgstr "Создать лид"
+
+msgid "Lead %(lead_number)s zuweisen"
+msgstr "Назначить лид %(lead_number)s"
+
+msgid "Firmenadministrator einladen · %(company)s"
+msgstr "Пригласить администратора компании · %(company)s"
+
+msgid "Feature bearbeiten"
+msgstr "Изменить функцию"
+
+msgid "Preisversion · %(product)s"
+msgstr "Версия цены · %(product)s"
+
+msgid "Rechtsdokument bearbeiten"
+msgstr "Изменить юридический документ"
+
+msgid "Retention-Policy bearbeiten"
+msgstr "Изменить политику хранения"
+
+msgid "Rolle · %(name)s"
+msgstr "Роль · %(name)s"
+
+msgid "Firmenadministrator"
+msgstr "Администратор компании"
+
+msgid "Entwurf"
+msgstr "Черновик"
+
+msgid "Zahlung offen"
+msgstr "Ожидается оплата"
+
+msgid "Zahlung prüfen"
+msgstr "Проверить платёж"
+
+msgid "Refundiert"
+msgstr "Возмещено"
+
+msgid "Abgelehnt"
+msgstr "Отклонено"
+
+msgid "Eingegangen"
+msgstr "Получено"
+
+msgid "Kündigung"
+msgstr "Расторжение договора"
+
+msgid "Für Kunden sichtbar"
+msgstr "Видно клиентам"
+
+msgid "Interne Notiz"
+msgstr "Внутренняя заметка"
+
+msgid "Bitte lesen Sie vor der Registrierung die <a href=\"%(terms_url)s\" target=\"_blank\" rel=\"noopener\">AGB</a> und die <a href=\"%(privacy_url)s\" target=\"_blank\" rel=\"noopener\">Datenschutzerklärung</a>."
+msgstr "Перед регистрацией ознакомьтесь с <a href=\"%(terms_url)s\" target=\"_blank\" rel=\"noopener\">Условиями использования</a> и <a href=\"%(privacy_url)s\" target=\"_blank\" rel=\"noopener\">Политикой конфиденциальности</a>."
+
+msgid "Admin-Einladung neu senden"
+msgstr "Повторно отправить приглашение администратору"
+
+msgid "Firmenadministrator einladen"
+msgstr "Пригласить администратора компании"

@@ -1,4 +1,5 @@
-FROM golang:1.26.6-alpine3.23 AS build
+FROM golang:1.27.2-alpine3.23 AS build
+ENV GOTOOLCHAIN=local
 
 ARG CADVISOR_COMMIT=5bf5d43ac6f60d7ee36a13b4d5b4a78ad2d0abc7
 
@@ -19,13 +20,15 @@ RUN wget -q https://sourceforge.net/projects/perfmon2/files/libpfm4/libpfm-4.11.
     && make install -C libpfm-4.11.0
 
 WORKDIR /src
-RUN go get golang.org/x/crypto@v0.55.0 google.golang.org/grpc@v1.83.2 \
+RUN go get golang.org/x/crypto@v0.57.0 golang.org/x/net@v0.60.0 google.golang.org/grpc@v1.83.2 \
     && go mod tidy \
-    && (cd lib && go get golang.org/x/crypto@v0.55.0 google.golang.org/grpc@v1.83.2 && go mod tidy) \
-    && (cd cmd && go get golang.org/x/crypto@v0.55.0 google.golang.org/grpc@v1.83.2 && go mod tidy) \
+    && (cd lib && go get golang.org/x/crypto@v0.57.0 golang.org/x/net@v0.60.0 google.golang.org/grpc@v1.83.2 && go mod tidy) \
+    && (cd cmd && go get golang.org/x/crypto@v0.57.0 golang.org/x/net@v0.60.0 google.golang.org/grpc@v1.83.2 && go mod tidy) \
     && export GO_TAGS="libpfm,netgo" \
     && GO_CGO_ENABLED=1 GO_FLAGS="-tags=$GO_TAGS" ./build/build.sh \
-    && test -x /src/_output/cadvisor
+    && test -x /src/_output/cadvisor \
+    && go version -m /src/_output/cadvisor | grep -F 'go1.27.2' \
+    && go version -m /src/_output/cadvisor | grep -F 'golang.org/x/net' | grep -F 'v0.60.0'
 
 FROM ghcr.io/google/cadvisor:v0.60.6
 USER root
