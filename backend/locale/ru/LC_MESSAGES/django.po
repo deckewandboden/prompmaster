@@ -3485,3 +3485,31 @@ msgstr "Повторно отправить приглашение админи�
 
 msgid "Firmenadministrator einladen"
 msgstr "Пригласить администратора компании"
+
+# Public legal-interface accessibility labels (not the legal document body)
+msgid "PROMPTFINISHER Startseite"
+msgstr "Главная PROMPTFINISHER"
+
+msgid "gültig ab"
+msgstr "действует с"
+
+msgid "Rechtliche Informationen"
+msgstr "Правовая информация"
+
+msgid "Zur PROMPTFINISHER-Startseite"
+msgstr "На главную PROMPTFINISHER"
+
+msgid "Bestätigung"
+msgstr "Подтверждение"
+
+msgid "Kündigungsart"
+msgstr "Тип расторжения"
+
+msgid "Grund"
+msgstr "Причина"
+
+msgid "Vorgangs-ID"
+msgstr "Номер обращения"
+
+msgid "Eine elektronische Eingangsbestätigung wird an die angegebene E-Mail-Adresse versendet. Diese Seite kann zusätzlich gespeichert oder ausgedruckt werden."
+msgstr "Электронное подтверждение получения будет отправлено на указанный адрес электронной почты. Эту страницу также можно сохранить или распечатать."
