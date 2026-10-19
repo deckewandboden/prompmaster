@@ -3513,3 +3513,40 @@ msgstr "Номер обращения"
 
 msgid "Eine elektronische Eingangsbestätigung wird an die angegebene E-Mail-Adresse versendet. Diese Seite kann zusätzlich gespeichert oder ausgedruckt werden."
 msgstr "Электронное подтверждение получения будет отправлено на указанный адрес электронной почты. Эту страницу также можно сохранить или распечатать."
+
+# Public statutory withdrawal and termination UX messages
+msgid "Widerruf eingegangen"
+msgstr "Заявление об отказе получено"
+
+msgid "Ihr Widerruf wurde elektronisch entgegengenommen."
+msgstr "Ваше заявление об отказе получено в электронном виде."
+
+msgid "WIDERRUFSFUNKTION"
+msgstr "ФОРМА ОТКАЗА"
+
+msgid "Mit diesem Formular können Verbraucher einen über PROMPTFINISHER geschlossenen Fernabsatzvertrag widerrufen."
+msgstr "Потребители могут использовать эту форму для отказа от дистанционного договора, заключённого через PROMPTFINISHER."
+
+msgid "Nach dem Absenden erhalten Sie unverzüglich eine elektronische Eingangsbestätigung an die angegebene E-Mail-Adresse."
+msgstr "После отправки вы незамедлительно получите электронное подтверждение на указанный адрес почты."
+
+msgid "Widerruf bestätigen"
+msgstr "Подтвердить отказ"
+
+msgid "Kündigung eingegangen"
+msgstr "Заявление о расторжении получено"
+
+msgid "Ihre Kündigung wurde elektronisch entgegengenommen."
+msgstr "Ваше заявление о расторжении получено в электронном виде."
+
+msgid "KÜNDIGUNGSFUNKTION"
+msgstr "ФОРМА РАСТОРЖЕНИЯ"
+
+msgid "Hier können Verbraucher einen über PROMPTFINISHER geschlossenen Laufzeitvertrag ordentlich oder außerordentlich kündigen."
+msgstr "Потребители могут расторгнуть срочный договор, заключённый через PROMPTFINISHER, в обычном или внеочередном порядке."
+
+msgid "Wenn Sie keinen Beendigungszeitpunkt angeben, behandeln wir die Kündigung als Erklärung zum frühestmöglichen Zeitpunkt."
+msgstr "Если дата окончания не указана, мы рассмотрим расторжение на самую раннюю возможную дату."
+
+msgid "jetzt kündigen"
+msgstr "Расторгнуть сейчас"
