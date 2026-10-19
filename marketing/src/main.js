@@ -1,3 +1,4 @@
+import {setupMarketingLocale} from './locale.js';
 import {renderContent,footer,checkoutPage} from './content.js';
 import {quote,normalizeQuantity,money} from './pricing.js';
 const toggle=document.querySelector('.menu-toggle');
@@ -275,3 +276,4 @@ function setupCheckoutPage(){
 
 setupCheckoutPage();
 void initializePricing();
+setupMarketingLocale();
