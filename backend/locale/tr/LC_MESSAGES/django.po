@@ -3484,3 +3484,31 @@ msgstr "Yönetici davetini yeniden gönder"
 
 msgid "Firmenadministrator einladen"
 msgstr "Şirket yöneticisini davet et"
+
+# Public legal-interface accessibility labels (not the legal document body)
+msgid "PROMPTFINISHER Startseite"
+msgstr "PROMPTFINISHER ana sayfası"
+
+msgid "gültig ab"
+msgstr "yürürlük tarihi"
+
+msgid "Rechtliche Informationen"
+msgstr "Yasal bilgiler"
+
+msgid "Zur PROMPTFINISHER-Startseite"
+msgstr "PROMPTFINISHER ana sayfasına dön"
+
+msgid "Bestätigung"
+msgstr "Onay"
+
+msgid "Kündigungsart"
+msgstr "Fesih türü"
+
+msgid "Grund"
+msgstr "Gerekçe"
+
+msgid "Vorgangs-ID"
+msgstr "İşlem kimliği"
+
+msgid "Eine elektronische Eingangsbestätigung wird an die angegebene E-Mail-Adresse versendet. Diese Seite kann zusätzlich gespeichert oder ausgedruckt werden."
+msgstr "Belirttiğiniz e-posta adresine elektronik alındı onayı gönderilecektir. Bu sayfayı ayrıca kaydedebilir veya yazdırabilirsiniz."
