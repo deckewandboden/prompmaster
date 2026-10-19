@@ -3612,3 +3612,40 @@ msgstr "Dossier-ID"
 
 msgid "Eine elektronische Eingangsbestätigung wird an die angegebene E-Mail-Adresse versendet. Diese Seite kann zusätzlich gespeichert oder ausgedruckt werden."
 msgstr "Een elektronische ontvangstbevestiging wordt naar het opgegeven e-mailadres gestuurd. Je kunt deze pagina ook opslaan of afdrukken."
+
+# Public statutory withdrawal and termination UX messages
+msgid "Widerruf eingegangen"
+msgstr "Herroeping ontvangen"
+
+msgid "Ihr Widerruf wurde elektronisch entgegengenommen."
+msgstr "Je herroepingsverklaring is elektronisch ontvangen."
+
+msgid "WIDERRUFSFUNKTION"
+msgstr "HERROEPINGSFORMULIER"
+
+msgid "Mit diesem Formular können Verbraucher einen über PROMPTFINISHER geschlossenen Fernabsatzvertrag widerrufen."
+msgstr "Consumenten kunnen met dit formulier een via PROMPTFINISHER gesloten overeenkomst op afstand herroepen."
+
+msgid "Nach dem Absenden erhalten Sie unverzüglich eine elektronische Eingangsbestätigung an die angegebene E-Mail-Adresse."
+msgstr "Na verzending ontvang je onverwijld een elektronische ontvangstbevestiging op het opgegeven e-mailadres."
+
+msgid "Widerruf bestätigen"
+msgstr "Herroeping bevestigen"
+
+msgid "Kündigung eingegangen"
+msgstr "Opzegging ontvangen"
+
+msgid "Ihre Kündigung wurde elektronisch entgegengenommen."
+msgstr "Je opzegging is elektronisch ontvangen."
+
+msgid "KÜNDIGUNGSFUNKTION"
+msgstr "OPZEGFORMULIER"
+
+msgid "Hier können Verbraucher einen über PROMPTFINISHER geschlossenen Laufzeitvertrag ordentlich oder außerordentlich kündigen."
+msgstr "Consumenten kunnen een via PROMPTFINISHER gesloten overeenkomst met een looptijd regulier of buitengewoon opzeggen."
+
+msgid "Wenn Sie keinen Beendigungszeitpunkt angeben, behandeln wir die Kündigung als Erklärung zum frühestmöglichen Zeitpunkt."
+msgstr "Als je geen einddatum opgeeft, behandelen we de opzegging voor de vroegst mogelijke datum."
+
+msgid "jetzt kündigen"
+msgstr "Nu opzeggen"
