@@ -188,7 +188,7 @@ class StagingGateTests(unittest.TestCase):
             self.compose['services'][service]['ports'][0]['host_ip'] = '127.0.0.1'
         self.compose['services']['node-exporter']['volumes'] = [
             {'type': 'bind', 'source': '/', 'target': '/host',
-             'read_only': True, 'bind': {'create_host_path': True}}
+             'read_only': True, 'bind': {'create_host_path': True, 'propagation': 'rprivate'}}
         ]
         self.project_names = chr(10).join(('promptfinisher', 'promptmaster'))
         self.volume_names = chr(10).join(('promptmaster_postgres_data', 'promptmaster_backup_repository'))
@@ -207,6 +207,11 @@ class StagingGateTests(unittest.TestCase):
     def test_isolated_wsl_root_mount_readonly_required(self):
         self.enable_parallel_isolation()
         self.compose['services']['node-exporter']['volumes'][0]['read_only'] = False
+        self.check(1)
+
+    def test_isolated_wsl_root_mount_implicit_propagation_forbidden(self):
+        self.enable_parallel_isolation()
+        del self.compose['services']['node-exporter']['volumes'][0]['bind']['propagation']
         self.check(1)
 
     def test_isolated_wsl_root_mount_rslave_forbidden(self):
