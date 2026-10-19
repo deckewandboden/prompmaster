@@ -1296,6 +1296,52 @@ def main() -> int:
             )
             pricing_page.close()
 
+            # Automated 10-language browser acceptance, without asking the user
+            # to inspect the UI. Keep immutable price, FAQ count and Free link.
+            if engine == 'chromium':
+                localized = browser.new_page(
+                    viewport={'width': 390, 'height': 844},
+                    device_scale_factor=1,
+                )
+                expected = {
+                    'de': 'Funktionen', 'en': 'Features',
+                    'es': 'Funciones', 'pt': 'Funcionalidades',
+                    'tr': 'Özellikler', 'ru': 'Возможности',
+                    'pl': 'Funkcje', 'fr': 'Fonctionnalités',
+                    'it': 'Funzionalità', 'nl': 'Functies',
+                }
+                for lang, translated in expected.items():
+                    localized.goto(base, wait_until='networkidle')
+                    localized.evaluate(
+                        "(lang) => {document.cookie = "
+                        "'promptfinisher_language=' + lang + ';path=/;SameSite=Lax';}",
+                        lang,
+                    )
+                    localized.reload(wait_until='networkidle')
+                    localized.wait_for_selector('#pf-marketing-language')
+                    details = localized.evaluate("""() => ({
+                        selected: document.querySelector('#pf-marketing-language')?.value,
+                        htmlLang: document.documentElement.lang,
+                        nav: document.querySelector('nav a[href="/#funktionen"]')?.textContent.trim(),
+                        faq: document.querySelectorAll('#faq details').length,
+                        freeHref: document.querySelector('.product.free a.button')?.getAttribute('href'),
+                        freeTarget: document.querySelector('.product.free a.button')?.getAttribute('target'),
+                        price: document.querySelector('.product.pro .price')?.textContent,
+                        overflow: document.documentElement.scrollWidth > innerWidth + 1,
+                    })""")
+                    if details['selected'] != lang or details['htmlLang'] != lang:
+                        fail(f'{lang}: language selection does not persist: {details}')
+                    if details['nav'] != translated:
+                        fail(f'{lang}: navigation translation missing: {details}')
+                    if details['faq'] != 20 or details['freeHref'] != '/free/' or details['freeTarget'] != '_blank':
+                        fail(f'{lang}: language breaks Free or FAQ contracts: {details}')
+                    if '2,99' not in (details['price'] or ''):
+                        fail(f'{lang}: language changed product price: {details}')
+                    if details['overflow']:
+                        fail(f'{lang}: 390px language selector causes horizontal page overflow')
+                localized.close()
+                print('MARKETING TEN LOCALES BROWSER CONTRACT=PASS')
+
             browser.close()
     finally:
         server.shutdown()
