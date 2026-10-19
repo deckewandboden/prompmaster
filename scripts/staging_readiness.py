@@ -183,6 +183,19 @@ def check(root, expected_sha):
                         if not isinstance(port, dict) or port.get('host_ip') != '127.0.0.1':
                             failures.append('Isoliertes Staging veroeffentlicht Ports ausserhalb 127.0.0.1')
                             break
+                # Under WSL2 the production rslave bind cannot be applied to
+                # the private root mount. QA must use exactly one read-only /
+                # bind at /host without shared/slave propagation.
+                host_mounts = [
+                    m for m in services.get('node-exporter', {}).get('volumes', [])
+                    if isinstance(m, dict) and m.get('target') == '/host'
+                ]
+                if (len(host_mounts) != 1 or
+                        host_mounts[0].get('type') != 'bind' or
+                        host_mounts[0].get('source') != '/' or
+                        host_mounts[0].get('read_only') is not True or
+                        (host_mounts[0].get('bind') or {}).get('propagation', 'rprivate') != 'rprivate'):
+                    failures.append('Node Exporter QA-Root-Mount muss /:/host:ro ohne rslave sein')
         except (ValueError, TypeError, KeyError):
             failures.append('Compose JSON oder veröffentlichte Ports ungültig')
         else:
