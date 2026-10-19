@@ -21,7 +21,15 @@ RUN npm test && npm run build
 FROM golang:1.26.9-alpine3.23 AS caddy-patched-build
 ENV GOTOOLCHAIN=local
 WORKDIR /src
-RUN printf '%s\n' \
+RUN --mount=type=secret,id=pf_staging_ca,required=false \
+    if [ -s /run/secrets/pf_staging_ca ]; then \
+      cat /etc/ssl/cert.pem /run/secrets/pf_staging_ca > /tmp/pf-staging-ca-combined.pem; \
+      export SSL_CERT_FILE=/tmp/pf-staging-ca-combined.pem; \
+      export GIT_SSL_CAINFO=/tmp/pf-staging-ca-combined.pem; \
+      export CURL_CA_BUNDLE=/tmp/pf-staging-ca-combined.pem; \
+      trap 'rm -f /tmp/pf-staging-ca-combined.pem' EXIT; \
+    fi; \
+    printf '%s\n' \
       'package main' \
       'import (' \
       '    caddycmd "github.com/caddyserver/caddy/v2/cmd"' \
