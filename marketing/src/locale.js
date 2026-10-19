@@ -42,14 +42,16 @@ function translateNode(root,lang){
 }
 export function setupMarketingLocale(){
  const header=document.querySelector('header');if(!header)return;
- if(document.getElementById('pf-marketing-language'))return;
- const label=document.createElement('label');label.className='pf-marketing-locale';
- const select=document.createElement('select');select.id='pf-marketing-language';
- select.setAttribute('aria-label','Sprache wählen');
- for(const [code,name] of Object.entries(languageNames))select.add(new Option(name,code));
+ let select=document.getElementById('pf-marketing-language');
+ if(!select){
+  // Progressive enhancement for third-party integrations using this module.
+  const label=document.createElement('label');label.className='pf-marketing-locale';
+  select=document.createElement('select');select.id='pf-marketing-language';
+  for(const [code,name] of Object.entries(languageNames))select.add(new Option(name,code));
+  label.append(select);header.insertBefore(label,header.querySelector('nav'));
+ }
  const lang=currentLanguage();select.value=lang;
- select.setAttribute('aria-label',window.PF_PRODUCT_LOCALE?.t?.('Sprache wählen')||'Sprache wählen');
- label.append(select);header.insertBefore(label,header.querySelector('nav'));
+ select.setAttribute('aria-label',marketingCatalog['Sprache wählen']?.[lang]||'Sprache wählen');
  select.addEventListener('change',()=>{
   const next=location.pathname+location.search+location.hash;
   location.assign('/auth/language/?language='+encodeURIComponent(select.value)+'&next='+encodeURIComponent(next));
