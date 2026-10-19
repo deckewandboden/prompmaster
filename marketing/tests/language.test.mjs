@@ -107,3 +107,14 @@ test('all public rendered marketing/checkout/FAQ text has a translation in nine 
  }
  assert.deepEqual([...new Set(unknown)].sort(),[], 'Unlocalized public text/attributes');
 });
+
+test('localized marketing SEO metadata has all ten-language descriptions',async()=>{
+ const index=await readFile('index.html','utf8');
+ const source=await readFile('src/locale.js','utf8');
+ const match=index.match(/<meta name="description" content="([^"]+)"/);
+ assert.ok(match,'marketing description must be visible in HTML');
+ for(const lang of languages.slice(1)){
+  assert.ok(marketingCatalog[match[1]]?.[lang]?.includes('PROMPTFINISHER'),lang+' missing description translation');
+ }
+ assert.match(source,/description\.setAttribute\('content',translated\)/);
+});
