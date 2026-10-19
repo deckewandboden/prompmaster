@@ -3628,3 +3628,40 @@ msgstr "Identifiant de dossier"
 
 msgid "Eine elektronische Eingangsbestätigung wird an die angegebene E-Mail-Adresse versendet. Diese Seite kann zusätzlich gespeichert oder ausgedruckt werden."
 msgstr "Un accusé de réception électronique sera envoyé à l’adresse e-mail indiquée. Vous pouvez également enregistrer ou imprimer cette page."
+
+# Public statutory withdrawal and termination UX messages
+msgid "Widerruf eingegangen"
+msgstr "Rétractation reçue"
+
+msgid "Ihr Widerruf wurde elektronisch entgegengenommen."
+msgstr "Votre déclaration de rétractation a été reçue par voie électronique."
+
+msgid "WIDERRUFSFUNKTION"
+msgstr "FORMULAIRE DE RÉTRACTATION"
+
+msgid "Mit diesem Formular können Verbraucher einen über PROMPTFINISHER geschlossenen Fernabsatzvertrag widerrufen."
+msgstr "Les consommateurs peuvent utiliser ce formulaire pour se rétracter d'un contrat à distance conclu via PROMPTFINISHER."
+
+msgid "Nach dem Absenden erhalten Sie unverzüglich eine elektronische Eingangsbestätigung an die angegebene E-Mail-Adresse."
+msgstr "Après l'envoi, vous recevrez sans délai un accusé de réception électronique à l'adresse indiquée."
+
+msgid "Widerruf bestätigen"
+msgstr "Confirmer la rétractation"
+
+msgid "Kündigung eingegangen"
+msgstr "Résiliation reçue"
+
+msgid "Ihre Kündigung wurde elektronisch entgegengenommen."
+msgstr "Votre déclaration de résiliation a été reçue par voie électronique."
+
+msgid "KÜNDIGUNGSFUNKTION"
+msgstr "FORMULAIRE DE RÉSILIATION"
+
+msgid "Hier können Verbraucher einen über PROMPTFINISHER geschlossenen Laufzeitvertrag ordentlich oder außerordentlich kündigen."
+msgstr "Les consommateurs peuvent résilier de manière ordinaire ou extraordinaire un contrat à durée déterminée conclu via PROMPTFINISHER."
+
+msgid "Wenn Sie keinen Beendigungszeitpunkt angeben, behandeln wir die Kündigung als Erklärung zum frühestmöglichen Zeitpunkt."
+msgstr "Sans date de fin indiquée, nous traiterons la résiliation pour la première date possible."
+
+msgid "jetzt kündigen"
+msgstr "Résilier maintenant"
