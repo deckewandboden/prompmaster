@@ -34,6 +34,9 @@ jobs:
       - name: Validate complete Free and Pro language dictionaries
         run: python -m unittest discover -s scripts -p 'test_product_locale_coverage.py' -v
 
+      - name: Verify public legal page translations and immutable legal originals
+        run: python -m unittest discover -s scripts -p 'test_public_legal_i18n.py' -v
+
       - name: Test staging isolation positive and negative cases
         run: python -m unittest discover -s scripts -p 'test_staging_readiness.py' -v
 
