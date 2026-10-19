@@ -65,6 +65,12 @@ export function setupMarketingLocale(){
  if(lang==='de')return;
  const title=marketingCatalog['PROMPTFINISHER by netstyle – Bessere Prompts für Microsoft Copilot']?.[lang];
  if(title)document.title=title;
+ const description=document.querySelector('meta[name="description"]');
+ if(description){
+  const original=description.getAttribute('content');
+  const translated=marketingCatalog[original]?.[lang];
+  if(translated)description.setAttribute('content',translated);
+ }
  let busy=false;
  const apply=()=>translateNode(document.body,lang);
  apply();
