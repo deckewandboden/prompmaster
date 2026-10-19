@@ -1,6 +1,7 @@
 from django.db import connection
 from django.http import HttpResponse, JsonResponse
 from django.shortcuts import redirect, render
+from django.utils.translation import gettext as _
 from prometheus_client import CONTENT_TYPE_LATEST, generate_latest
 
 
@@ -130,8 +131,8 @@ def contract_withdrawal(request):
             'legal_action_success.html',
             {
                 'declaration': declaration,
-                'title': 'Widerruf eingegangen',
-                'message': 'Ihr Widerruf wurde elektronisch entgegengenommen.',
+                'title': _('Widerruf eingegangen'),
+                'message': _('Ihr Widerruf wurde elektronisch entgegengenommen.'),
             },
         )
 
@@ -140,17 +141,11 @@ def contract_withdrawal(request):
         'legal_action_form.html',
         {
             'form': form,
-            'page_title': 'Vertrag widerrufen',
-            'eyebrow': 'WIDERRUFSFUNKTION',
-            'intro': (
-                'Mit diesem Formular können Verbraucher einen über PROMPTFINISHER '
-                'geschlossenen Fernabsatzvertrag widerrufen.'
-            ),
-            'notice': (
-                'Nach dem Absenden erhalten Sie unverzüglich eine elektronische '
-                'Eingangsbestätigung an die angegebene E-Mail-Adresse.'
-            ),
-            'submit_label': 'Widerruf bestätigen',
+            'page_title': _('Vertrag widerrufen'),
+            'eyebrow': _('WIDERRUFSFUNKTION'),
+            'intro': _('Mit diesem Formular können Verbraucher einen über PROMPTFINISHER geschlossenen Fernabsatzvertrag widerrufen.'),
+            'notice': _('Nach dem Absenden erhalten Sie unverzüglich eine elektronische Eingangsbestätigung an die angegebene E-Mail-Adresse.'),
+            'submit_label': _('Widerruf bestätigen'),
         },
     )
 
@@ -212,8 +207,8 @@ def contract_cancellation(request):
             'legal_action_success.html',
             {
                 'declaration': declaration,
-                'title': 'Kündigung eingegangen',
-                'message': 'Ihre Kündigung wurde elektronisch entgegengenommen.',
+                'title': _('Kündigung eingegangen'),
+                'message': _('Ihre Kündigung wurde elektronisch entgegengenommen.'),
             },
         )
 
@@ -222,17 +217,11 @@ def contract_cancellation(request):
         'legal_action_form.html',
         {
             'form': form,
-            'page_title': 'Verträge hier kündigen',
-            'eyebrow': 'KÜNDIGUNGSFUNKTION',
-            'intro': (
-                'Hier können Verbraucher einen über PROMPTFINISHER geschlossenen '
-                'Laufzeitvertrag ordentlich oder außerordentlich kündigen.'
-            ),
-            'notice': (
-                'Wenn Sie keinen Beendigungszeitpunkt angeben, behandeln wir die '
-                'Kündigung als Erklärung zum frühestmöglichen Zeitpunkt.'
-            ),
-            'submit_label': 'jetzt kündigen',
+            'page_title': _('Verträge hier kündigen'),
+            'eyebrow': _('KÜNDIGUNGSFUNKTION'),
+            'intro': _('Hier können Verbraucher einen über PROMPTFINISHER geschlossenen Laufzeitvertrag ordentlich oder außerordentlich kündigen.'),
+            'notice': _('Wenn Sie keinen Beendigungszeitpunkt angeben, behandeln wir die Kündigung als Erklärung zum frühestmöglichen Zeitpunkt.'),
+            'submit_label': _('jetzt kündigen'),
         },
     )
 
