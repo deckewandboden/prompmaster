@@ -9,6 +9,11 @@ export function currentLanguage(){
  const lang=(match?decodeURIComponent(match[1]):'de').toLowerCase();
  return Object.hasOwn(languageNames,lang)?lang:'de';
 }
+export function marketingT(key){
+ const code=currentLanguage();
+ return marketingCatalog[key]?.[code] || window.PF_PRODUCT_LOCALE?.t?.(key) || key;
+}
+Object.assign(marketingCatalog,{"jährliche Abrechnung":{"en":"annual billing","es":"facturación anual","pt":"faturação anual","tr":"yıllık faturalandırma","ru":"ежегодная оплата","pl":"rozliczenie roczne","fr":"facturation annuelle","it":"fatturazione annuale","nl":"jaarlijkse facturering"},"PROMPTFINISHER-Pro-Lizenz kaufen ↗":{"en":"Buy PROMPTFINISHER Pro license ↗","es":"Comprar una licencia PROMPTFINISHER Pro ↗","pt":"Comprar uma licença PROMPTFINISHER Pro ↗","tr":"PROMPTFINISHER Pro lisansı satın al ↗","ru":"Купить лицензию PROMPTFINISHER Pro ↗","pl":"Kup licencję PROMPTFINISHER Pro ↗","fr":"Acheter une licence PROMPTFINISHER Pro ↗","it":"Acquista una licenza PROMPTFINISHER Pro ↗","nl":"Koop een PROMPTFINISHER Pro-licentie ↗"},"PROMPTFINISHER-Pro-Lizenzen kaufen ↗":{"en":"Buy PROMPTFINISHER Pro licenses ↗","es":"Comprar licencias PROMPTFINISHER Pro ↗","pt":"Comprar licenças PROMPTFINISHER Pro ↗","tr":"PROMPTFINISHER Pro lisansları satın al ↗","ru":"Купить лицензии PROMPTFINISHER Pro ↗","pl":"Kup licencje PROMPTFINISHER Pro ↗","fr":"Acheter des licences PROMPTFINISHER Pro ↗","it":"Acquista licenze PROMPTFINISHER Pro ↗","nl":"Koop PROMPTFINISHER Pro-licenties ↗"},"Preis nicht verfügbar":{"en":"Price unavailable","es":"Precio no disponible","pt":"Preço indisponível","tr":"Fiyat kullanılamıyor","ru":"Цена недоступна","pl":"Cena niedostępna","fr":"Prix indisponible","it":"Prezzo non disponibile","nl":"Prijs niet beschikbaar"}});
 function translateNode(root,lang){
  const omit='input,textarea,select,option,script,style,[contenteditable],[data-no-i18n],.app-pill';
  const walker=document.createTreeWalker(root,NodeFilter.SHOW_TEXT);
