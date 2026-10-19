@@ -3591,3 +3591,31 @@ msgstr "Invia di nuovo l’invito all’amministratore"
 
 msgid "Firmenadministrator einladen"
 msgstr "Invita l’amministratore aziendale"
+
+# Public legal-interface accessibility labels (not the legal document body)
+msgid "PROMPTFINISHER Startseite"
+msgstr "Pagina iniziale PROMPTFINISHER"
+
+msgid "gültig ab"
+msgstr "valido dal"
+
+msgid "Rechtliche Informationen"
+msgstr "Informazioni legali"
+
+msgid "Zur PROMPTFINISHER-Startseite"
+msgstr "Torna alla pagina iniziale PROMPTFINISHER"
+
+msgid "Bestätigung"
+msgstr "Conferma"
+
+msgid "Kündigungsart"
+msgstr "Tipo di disdetta"
+
+msgid "Grund"
+msgstr "Motivo"
+
+msgid "Vorgangs-ID"
+msgstr "ID pratica"
+
+msgid "Eine elektronische Eingangsbestätigung wird an die angegebene E-Mail-Adresse versendet. Diese Seite kann zusätzlich gespeichert oder ausgedruckt werden."
+msgstr "Una conferma elettronica di ricezione sarà inviata all'indirizzo e-mail indicato. Puoi anche salvare o stampare questa pagina."
