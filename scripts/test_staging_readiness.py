@@ -49,6 +49,7 @@ class StagingGateTests(unittest.TestCase):
         self.compose['services']['caddy']['ports'] = [{'published': '80', 'target': 80}]
         self.compose['services']['mailpit']['ports'] = [{'published': '8025', 'target': 8025}]
         self.calls = []
+        self.isolated_project = ''
 
     def write_env(self):
         p = self.root / '.env'
@@ -84,7 +85,9 @@ class StagingGateTests(unittest.TestCase):
         with (patch.object(gate, 'call', side_effect=self.fake),
               patch.object(gate.shutil, 'which', return_value='/mock'),
               patch.dict(os.environ, {'DOCKER_HOST': '', 'DOCKER_CONTEXT': '',
-                                      'PM_EXTERNAL_CADDY_NETWORK': ''}),
+                                      'PM_EXTERNAL_CADDY_NETWORK': '',
+                                      'PM_STAGING_PROJECT': self.isolated_project,
+                                      'COMPOSE_PROJECT_NAME': ''}),
               contextlib.redirect_stdout(io.StringIO()) as captured):
             status = gate.main([str(self.root), '--expected-sha', SHA])
         self.assertEqual(status, expected, captured.getvalue())
@@ -165,6 +168,76 @@ class StagingGateTests(unittest.TestCase):
     def test_unexpected_external_caddy_blocks(self):
         self.env['PM_EXTERNAL_CADDY_NETWORK'] = 'public_proxy'
         self.write_env()
+        self.check(1)
+
+    def enable_parallel_isolation(self):
+        project = 'pfpr73safety20261019'
+        self.isolated_project = project
+        self.compose['name'] = project
+        self.compose['volumes'] = {
+            k: {'name': project + '_' + k} for k in
+            ('postgres_data', 'redis_data', 'static_data', 'caddy_data',
+             'caddy_config', 'prometheus_data', 'backup_status',
+             'backup_repository', 'export_data', 'staging_backup_repo')
+        }
+        tags = ('postgres', 'redis', 'prometheus', 'node-exporter',
+                'cadvisor', 'postgres-exporter')
+        for service in tags:
+            self.compose['services'].setdefault(service, {})['image'] = project + '-' + service + ':staging'
+        for service in ('caddy', 'mailpit'):
+            self.compose['services'][service]['ports'][0]['host_ip'] = '127.0.0.1'
+        self.project_names = 'promptfinisher\\npromptmaster'
+        self.volume_names = 'promptmaster_postgres_data\\npromptmaster_backup_repository'
+        self.compose['services']['caddy']['ports'][0]['published'] = '28080'
+        self.compose['services']['mailpit']['ports'][0]['published'] = '28025'
+
+    def test_isolated_stack_coexists_with_running_local_default(self):
+        self.enable_parallel_isolation()
+        self.assertIn('PRECHECK_PASS', self.check(0))
+
+    def test_isolated_stack_blocks_physical_volume_overlap(self):
+        self.enable_parallel_isolation()
+        self.compose['volumes']['postgres_data']['name'] = 'promptmaster_postgres_data'
+        self.check(1)
+
+    def test_isolated_stack_blocks_missing_unique_image(self):
+        self.enable_parallel_isolation()
+        self.compose['services']['postgres']['image'] = 'promptfinisher-postgres:production'
+        self.check(1)
+
+    def test_isolated_stack_blocks_public_binding(self):
+        self.enable_parallel_isolation()
+        self.compose['services']['caddy']['ports'][0]['host_ip'] = '0.0.0.0'
+        self.check(1)
+
+    def test_isolated_stack_blocks_project_reuse(self):
+        self.enable_parallel_isolation()
+        self.project_names += '\\n' + self.isolated_project
+        self.check(1)
+
+    def test_isolated_stack_blocks_existing_volume_of_same_project(self):
+        self.enable_parallel_isolation()
+        self.volume_names += '\\n' + self.isolated_project + '_redis_data'
+        self.check(1)
+
+    def test_isolated_stack_blocks_existing_host_port(self):
+        self.enable_parallel_isolation()
+        self.docker_ports = '127.0.0.1:28025->8025/tcp'
+        self.check(1)
+
+    def test_isolated_stack_blocks_external_volume(self):
+        self.enable_parallel_isolation()
+        self.compose['volumes']['redis_data']['external'] = True
+        self.check(1)
+
+    def test_isolated_stack_blocks_external_network(self):
+        self.enable_parallel_isolation()
+        self.compose['networks']['edge']['external'] = True
+        self.check(1)
+
+    def test_isolated_stack_blocks_short_name(self):
+        self.enable_parallel_isolation()
+        self.isolated_project = 'promptfinisher'
         self.check(1)
 
     def test_ports_support_ipv4_ipv6_and_compose(self):
