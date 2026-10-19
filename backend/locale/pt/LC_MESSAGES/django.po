@@ -3512,3 +3512,40 @@ msgstr "ID do processo"
 
 msgid "Eine elektronische Eingangsbestätigung wird an die angegebene E-Mail-Adresse versendet. Diese Seite kann zusätzlich gespeichert oder ausgedruckt werden."
 msgstr "Será enviada uma confirmação eletrónica de receção para o endereço de e-mail indicado. Também pode guardar ou imprimir esta página."
+
+# Public statutory withdrawal and termination UX messages
+msgid "Widerruf eingegangen"
+msgstr "Retratação recebida"
+
+msgid "Ihr Widerruf wurde elektronisch entgegengenommen."
+msgstr "A sua declaração de retratação foi recebida eletronicamente."
+
+msgid "WIDERRUFSFUNKTION"
+msgstr "FORMULÁRIO DE RETRATAÇÃO"
+
+msgid "Mit diesem Formular können Verbraucher einen über PROMPTFINISHER geschlossenen Fernabsatzvertrag widerrufen."
+msgstr "Os consumidores podem utilizar este formulário para se retratarem de um contrato à distância celebrado através do PROMPTFINISHER."
+
+msgid "Nach dem Absenden erhalten Sie unverzüglich eine elektronische Eingangsbestätigung an die angegebene E-Mail-Adresse."
+msgstr "Após o envio, receberá sem demora uma confirmação eletrónica no endereço de e-mail indicado."
+
+msgid "Widerruf bestätigen"
+msgstr "Confirmar retratação"
+
+msgid "Kündigung eingegangen"
+msgstr "Cancelamento recebido"
+
+msgid "Ihre Kündigung wurde elektronisch entgegengenommen."
+msgstr "A sua declaração de cancelamento foi recebida eletronicamente."
+
+msgid "KÜNDIGUNGSFUNKTION"
+msgstr "FORMULÁRIO DE CANCELAMENTO"
+
+msgid "Hier können Verbraucher einen über PROMPTFINISHER geschlossenen Laufzeitvertrag ordentlich oder außerordentlich kündigen."
+msgstr "Os consumidores podem rescindir, de forma normal ou extraordinária, um contrato a prazo celebrado através do PROMPTFINISHER."
+
+msgid "Wenn Sie keinen Beendigungszeitpunkt angeben, behandeln wir die Kündigung als Erklärung zum frühestmöglichen Zeitpunkt."
+msgstr "Se não indicar uma data de fim, trataremos o cancelamento para a data mais próxima possível."
+
+msgid "jetzt kündigen"
+msgstr "Cancelar agora"
