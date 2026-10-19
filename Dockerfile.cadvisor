@@ -3,7 +3,15 @@ ENV GOTOOLCHAIN=local
 
 ARG CADVISOR_COMMIT=5bf5d43ac6f60d7ee36a13b4d5b4a78ad2d0abc7
 
-RUN apk add --no-cache \
+RUN --mount=type=secret,id=pf_staging_ca,required=false \
+    if [ -s /run/secrets/pf_staging_ca ]; then \
+      cat /etc/ssl/cert.pem /run/secrets/pf_staging_ca > /tmp/pf-staging-ca-combined.pem; \
+      export SSL_CERT_FILE=/tmp/pf-staging-ca-combined.pem; \
+      export GIT_SSL_CAINFO=/tmp/pf-staging-ca-combined.pem; \
+      export CURL_CA_BUNDLE=/tmp/pf-staging-ca-combined.pem; \
+      trap 'rm -f /tmp/pf-staging-ca-combined.pem' EXIT; \
+    fi; \
+    apk add --no-cache \
       bash build-base cmake device-mapper findutils git libc6-compat linux-headers \
       ndctl-dev pkgconfig python3 thin-provisioning-tools wget zfs \
     && git clone https://github.com/google/cadvisor.git /src \
@@ -12,7 +20,15 @@ RUN apk add --no-cache \
     && test "$(git rev-parse HEAD)" = "$CADVISOR_COMMIT"
 
 WORKDIR /tmp
-RUN wget -q https://sourceforge.net/projects/perfmon2/files/libpfm4/libpfm-4.11.0.tar.gz \
+RUN --mount=type=secret,id=pf_staging_ca,required=false \
+    if [ -s /run/secrets/pf_staging_ca ]; then \
+      cat /etc/ssl/cert.pem /run/secrets/pf_staging_ca > /tmp/pf-staging-ca-combined.pem; \
+      export SSL_CERT_FILE=/tmp/pf-staging-ca-combined.pem; \
+      export GIT_SSL_CAINFO=/tmp/pf-staging-ca-combined.pem; \
+      export CURL_CA_BUNDLE=/tmp/pf-staging-ca-combined.pem; \
+      trap 'rm -f /tmp/pf-staging-ca-combined.pem' EXIT; \
+    fi; \
+    wget -q https://sourceforge.net/projects/perfmon2/files/libpfm4/libpfm-4.11.0.tar.gz \
     && echo "112bced9a67d565ff0ce6c2bb90452516d1183e5  libpfm-4.11.0.tar.gz" | sha1sum -c - \
     && tar -xzf libpfm-4.11.0.tar.gz \
     && export DBG="-g -Wall" \
@@ -20,7 +36,15 @@ RUN wget -q https://sourceforge.net/projects/perfmon2/files/libpfm4/libpfm-4.11.
     && make install -C libpfm-4.11.0
 
 WORKDIR /src
-RUN go get golang.org/x/crypto@v0.57.0 golang.org/x/net@v0.60.0 google.golang.org/grpc@v1.83.2 \
+RUN --mount=type=secret,id=pf_staging_ca,required=false \
+    if [ -s /run/secrets/pf_staging_ca ]; then \
+      cat /etc/ssl/cert.pem /run/secrets/pf_staging_ca > /tmp/pf-staging-ca-combined.pem; \
+      export SSL_CERT_FILE=/tmp/pf-staging-ca-combined.pem; \
+      export GIT_SSL_CAINFO=/tmp/pf-staging-ca-combined.pem; \
+      export CURL_CA_BUNDLE=/tmp/pf-staging-ca-combined.pem; \
+      trap 'rm -f /tmp/pf-staging-ca-combined.pem' EXIT; \
+    fi; \
+    go get golang.org/x/crypto@v0.57.0 golang.org/x/net@v0.60.0 google.golang.org/grpc@v1.83.2 \
     && go mod tidy \
     && (cd lib && go get golang.org/x/crypto@v0.57.0 golang.org/x/net@v0.60.0 google.golang.org/grpc@v1.83.2 && go mod tidy) \
     && (cd cmd && go get golang.org/x/crypto@v0.57.0 golang.org/x/net@v0.60.0 google.golang.org/grpc@v1.83.2 && go mod tidy) \
@@ -32,6 +56,14 @@ RUN go get golang.org/x/crypto@v0.57.0 golang.org/x/net@v0.60.0 google.golang.or
 
 FROM ghcr.io/google/cadvisor:v0.60.6
 USER root
-RUN apk upgrade --no-cache
+RUN --mount=type=secret,id=pf_staging_ca,required=false \
+    if [ -s /run/secrets/pf_staging_ca ]; then \
+      cat /etc/ssl/cert.pem /run/secrets/pf_staging_ca > /tmp/pf-staging-ca-combined.pem; \
+      export SSL_CERT_FILE=/tmp/pf-staging-ca-combined.pem; \
+      export GIT_SSL_CAINFO=/tmp/pf-staging-ca-combined.pem; \
+      export CURL_CA_BUNDLE=/tmp/pf-staging-ca-combined.pem; \
+      trap 'rm -f /tmp/pf-staging-ca-combined.pem' EXIT; \
+    fi; \
+    apk upgrade --no-cache
 COPY --from=build /src/_output/cadvisor /usr/bin/cadvisor
 RUN /usr/bin/cadvisor --version
