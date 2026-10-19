@@ -3512,3 +3512,40 @@ msgstr "ID de trámite"
 
 msgid "Eine elektronische Eingangsbestätigung wird an die angegebene E-Mail-Adresse versendet. Diese Seite kann zusätzlich gespeichert oder ausgedruckt werden."
 msgstr "Se enviará una confirmación electrónica de recepción a la dirección de correo indicada. También puedes guardar o imprimir esta página."
+
+# Public statutory withdrawal and termination UX messages
+msgid "Widerruf eingegangen"
+msgstr "Desistimiento recibido"
+
+msgid "Ihr Widerruf wurde elektronisch entgegengenommen."
+msgstr "Tu declaración de desistimiento se ha recibido electrónicamente."
+
+msgid "WIDERRUFSFUNKTION"
+msgstr "FUNCIÓN DE DESISTIMIENTO"
+
+msgid "Mit diesem Formular können Verbraucher einen über PROMPTFINISHER geschlossenen Fernabsatzvertrag widerrufen."
+msgstr "Los consumidores pueden utilizar este formulario para desistir de un contrato a distancia celebrado a través de PROMPTFINISHER."
+
+msgid "Nach dem Absenden erhalten Sie unverzüglich eine elektronische Eingangsbestätigung an die angegebene E-Mail-Adresse."
+msgstr "Tras enviarlo, recibirás sin demora una confirmación electrónica en la dirección de correo indicada."
+
+msgid "Widerruf bestätigen"
+msgstr "Confirmar desistimiento"
+
+msgid "Kündigung eingegangen"
+msgstr "Cancelación recibida"
+
+msgid "Ihre Kündigung wurde elektronisch entgegengenommen."
+msgstr "Tu solicitud de cancelación se ha recibido electrónicamente."
+
+msgid "KÜNDIGUNGSFUNKTION"
+msgstr "FORMULARIO DE CANCELACIÓN"
+
+msgid "Hier können Verbraucher einen über PROMPTFINISHER geschlossenen Laufzeitvertrag ordentlich oder außerordentlich kündigen."
+msgstr "Los consumidores pueden cancelar por vía ordinaria o extraordinaria un contrato de duración determinada celebrado a través de PROMPTFINISHER."
+
+msgid "Wenn Sie keinen Beendigungszeitpunkt angeben, behandeln wir die Kündigung als Erklärung zum frühestmöglichen Zeitpunkt."
+msgstr "Si no indicas una fecha de finalización, tramitaremos la cancelación para la fecha más temprana posible."
+
+msgid "jetzt kündigen"
+msgstr "Cancelar ahora"
