@@ -3614,3 +3614,40 @@ msgstr "Identyfikator zgłoszenia"
 
 msgid "Eine elektronische Eingangsbestätigung wird an die angegebene E-Mail-Adresse versendet. Diese Seite kann zusätzlich gespeichert oder ausgedruckt werden."
 msgstr "Elektroniczne potwierdzenie otrzymania zostanie wysłane na podany adres e-mail. Tę stronę można również zapisać lub wydrukować."
+
+# Public statutory withdrawal and termination UX messages
+msgid "Widerruf eingegangen"
+msgstr "Odstąpienie otrzymane"
+
+msgid "Ihr Widerruf wurde elektronisch entgegengenommen."
+msgstr "Twoje oświadczenie o odstąpieniu zostało odebrane elektronicznie."
+
+msgid "WIDERRUFSFUNKTION"
+msgstr "FORMULARZ ODSTĄPIENIA"
+
+msgid "Mit diesem Formular können Verbraucher einen über PROMPTFINISHER geschlossenen Fernabsatzvertrag widerrufen."
+msgstr "Konsumenci mogą użyć tego formularza, aby odstąpić od umowy zawartej na odległość przez PROMPTFINISHER."
+
+msgid "Nach dem Absenden erhalten Sie unverzüglich eine elektronische Eingangsbestätigung an die angegebene E-Mail-Adresse."
+msgstr "Po wysłaniu niezwłocznie otrzymasz elektroniczne potwierdzenie na podany adres e-mail."
+
+msgid "Widerruf bestätigen"
+msgstr "Potwierdź odstąpienie"
+
+msgid "Kündigung eingegangen"
+msgstr "Wypowiedzenie otrzymane"
+
+msgid "Ihre Kündigung wurde elektronisch entgegengenommen."
+msgstr "Twoje wypowiedzenie zostało odebrane elektronicznie."
+
+msgid "KÜNDIGUNGSFUNKTION"
+msgstr "FORMULARZ WYPOWIEDZENIA"
+
+msgid "Hier können Verbraucher einen über PROMPTFINISHER geschlossenen Laufzeitvertrag ordentlich oder außerordentlich kündigen."
+msgstr "Konsumenci mogą wypowiedzieć umowę terminową zawartą przez PROMPTFINISHER w trybie zwykłym lub nadzwyczajnym."
+
+msgid "Wenn Sie keinen Beendigungszeitpunkt angeben, behandeln wir die Kündigung als Erklärung zum frühestmöglichen Zeitpunkt."
+msgstr "Jeżeli nie podasz daty zakończenia, przyjmiemy wypowiedzenie z najwcześniejszym możliwym terminem."
+
+msgid "jetzt kündigen"
+msgstr "Wypowiedz teraz"
