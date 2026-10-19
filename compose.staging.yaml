@@ -18,6 +18,8 @@ services:
         source: /
         target: /host
         read_only: true
+        bind:
+          propagation: rprivate
   cadvisor:
     image: ${PM_STAGING_PROJECT:-promptfinisher}-cadvisor:0.60.6-hardened
   postgres-exporter:
