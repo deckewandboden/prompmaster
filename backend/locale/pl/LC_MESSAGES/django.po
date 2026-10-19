@@ -3586,3 +3586,31 @@ msgstr "Wyślij ponownie zaproszenie administratora"
 
 msgid "Firmenadministrator einladen"
 msgstr "Zaproś administratora firmy"
+
+# Public legal-interface accessibility labels (not the legal document body)
+msgid "PROMPTFINISHER Startseite"
+msgstr "Strona główna PROMPTFINISHER"
+
+msgid "gültig ab"
+msgstr "obowiązuje od"
+
+msgid "Rechtliche Informationen"
+msgstr "Informacje prawne"
+
+msgid "Zur PROMPTFINISHER-Startseite"
+msgstr "Wróć na stronę główną PROMPTFINISHER"
+
+msgid "Bestätigung"
+msgstr "Potwierdzenie"
+
+msgid "Kündigungsart"
+msgstr "Rodzaj wypowiedzenia"
+
+msgid "Grund"
+msgstr "Powód"
+
+msgid "Vorgangs-ID"
+msgstr "Identyfikator zgłoszenia"
+
+msgid "Eine elektronische Eingangsbestätigung wird an die angegebene E-Mail-Adresse versendet. Diese Seite kann zusätzlich gespeichert oder ausgedruckt werden."
+msgstr "Elektroniczne potwierdzenie otrzymania zostanie wysłane na podany adres e-mail. Tę stronę można również zapisać lub wydrukować."
