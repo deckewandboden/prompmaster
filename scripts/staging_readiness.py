@@ -194,7 +194,7 @@ def check(root, expected_sha):
                         host_mounts[0].get('type') != 'bind' or
                         host_mounts[0].get('source') != '/' or
                         host_mounts[0].get('read_only') is not True or
-                        (host_mounts[0].get('bind') or {}).get('propagation', 'rprivate') != 'rprivate'):
+                        (host_mounts[0].get('bind') or {}).get('propagation') != 'rprivate'):
                     failures.append('Node Exporter QA-Root-Mount muss /:/host:ro ohne rslave sein')
         except (ValueError, TypeError, KeyError):
             failures.append('Compose JSON oder veröffentlichte Ports ungültig')
