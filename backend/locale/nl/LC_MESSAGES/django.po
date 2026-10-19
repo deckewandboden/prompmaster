@@ -3584,3 +3584,31 @@ msgstr "Beheerdersuitnodiging opnieuw versturen"
 
 msgid "Firmenadministrator einladen"
 msgstr "Bedrijfsbeheerder uitnodigen"
+
+# Public legal-interface accessibility labels (not the legal document body)
+msgid "PROMPTFINISHER Startseite"
+msgstr "Startpagina PROMPTFINISHER"
+
+msgid "gültig ab"
+msgstr "geldig vanaf"
+
+msgid "Rechtliche Informationen"
+msgstr "Juridische informatie"
+
+msgid "Zur PROMPTFINISHER-Startseite"
+msgstr "Terug naar de startpagina van PROMPTFINISHER"
+
+msgid "Bestätigung"
+msgstr "Bevestiging"
+
+msgid "Kündigungsart"
+msgstr "Type opzegging"
+
+msgid "Grund"
+msgstr "Reden"
+
+msgid "Vorgangs-ID"
+msgstr "Dossier-ID"
+
+msgid "Eine elektronische Eingangsbestätigung wird an die angegebene E-Mail-Adresse versendet. Diese Seite kann zusätzlich gespeichert oder ausgedruckt werden."
+msgstr "Een elektronische ontvangstbevestiging wordt naar het opgegeven e-mailadres gestuurd. Je kunt deze pagina ook opslaan of afdrukken."
