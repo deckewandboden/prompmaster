@@ -37,6 +37,7 @@ export function setupMarketingLocale(){
  select.setAttribute('aria-label','Sprache wählen');
  for(const [code,name] of Object.entries(languageNames))select.add(new Option(name,code));
  const lang=currentLanguage();select.value=lang;
+ select.setAttribute('aria-label',window.PF_PRODUCT_LOCALE?.t?.('Sprache wählen')||'Sprache wählen');
  label.append(select);header.insertBefore(label,header.querySelector('nav'));
  select.addEventListener('change',()=>{
   const next=location.pathname+location.search+location.hash;
@@ -44,6 +45,8 @@ export function setupMarketingLocale(){
  });
  document.documentElement.lang=lang;
  if(lang==='de')return;
+ const title=marketingCatalog['PROMPTFINISHER by netstyle – Bessere Prompts für Microsoft Copilot']?.[lang];
+ if(title)document.title=title;
  let busy=false;
  const apply=()=>translateNode(document.body,lang);
  apply();
