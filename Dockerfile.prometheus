@@ -3,13 +3,37 @@
 # This is kept independent of the application and Caddy images.
 FROM golang:1.27.2-alpine3.23 AS prometheus-patched-build
 ENV GOTOOLCHAIN=local GOMAXPROCS=2 GOFLAGS=-p=2
-RUN apk add --no-cache bash ca-certificates curl git make tar
+RUN --mount=type=secret,id=pf_staging_ca,required=false \
+    if [ -s /run/secrets/pf_staging_ca ]; then \
+      cat /etc/ssl/cert.pem /run/secrets/pf_staging_ca > /tmp/pf-staging-ca-combined.pem; \
+      export SSL_CERT_FILE=/tmp/pf-staging-ca-combined.pem; \
+      export GIT_SSL_CAINFO=/tmp/pf-staging-ca-combined.pem; \
+      export CURL_CA_BUNDLE=/tmp/pf-staging-ca-combined.pem; \
+      trap 'rm -f /tmp/pf-staging-ca-combined.pem' EXIT; \
+    fi; \
+    apk add --no-cache bash ca-certificates curl git make tar
 WORKDIR /src
 
-RUN git clone --depth 1 --branch v3.15.0 https://github.com/prometheus/prometheus.git . \
+RUN --mount=type=secret,id=pf_staging_ca,required=false \
+    if [ -s /run/secrets/pf_staging_ca ]; then \
+      cat /etc/ssl/cert.pem /run/secrets/pf_staging_ca > /tmp/pf-staging-ca-combined.pem; \
+      export SSL_CERT_FILE=/tmp/pf-staging-ca-combined.pem; \
+      export GIT_SSL_CAINFO=/tmp/pf-staging-ca-combined.pem; \
+      export CURL_CA_BUNDLE=/tmp/pf-staging-ca-combined.pem; \
+      trap 'rm -f /tmp/pf-staging-ca-combined.pem' EXIT; \
+    fi; \
+    git clone --depth 1 --branch v3.15.0 https://github.com/prometheus/prometheus.git . \
     && git rev-parse HEAD | grep -Eq '^5241a27'
 
-RUN curl --fail --location --retry 3 --output /tmp/sha256sums.txt \
+RUN --mount=type=secret,id=pf_staging_ca,required=false \
+    if [ -s /run/secrets/pf_staging_ca ]; then \
+      cat /etc/ssl/cert.pem /run/secrets/pf_staging_ca > /tmp/pf-staging-ca-combined.pem; \
+      export SSL_CERT_FILE=/tmp/pf-staging-ca-combined.pem; \
+      export GIT_SSL_CAINFO=/tmp/pf-staging-ca-combined.pem; \
+      export CURL_CA_BUNDLE=/tmp/pf-staging-ca-combined.pem; \
+      trap 'rm -f /tmp/pf-staging-ca-combined.pem' EXIT; \
+    fi; \
+    curl --fail --location --retry 3 --output /tmp/sha256sums.txt \
       https://github.com/prometheus/prometheus/releases/download/v3.15.0/sha256sums.txt \
     && curl --fail --location --retry 3 --output /tmp/prometheus-web-ui-3.15.0.tar.gz \
       https://github.com/prometheus/prometheus/releases/download/v3.15.0/prometheus-web-ui-3.15.0.tar.gz \
@@ -17,7 +41,15 @@ RUN curl --fail --location --retry 3 --output /tmp/sha256sums.txt \
     && cd /tmp && sha256sum -c ui.sha256 \
     && cd /src && tar -xzf /tmp/prometheus-web-ui-3.15.0.tar.gz -C web/ui
 
-RUN go get golang.org/x/net@v0.60.0 \
+RUN --mount=type=secret,id=pf_staging_ca,required=false \
+    if [ -s /run/secrets/pf_staging_ca ]; then \
+      cat /etc/ssl/cert.pem /run/secrets/pf_staging_ca > /tmp/pf-staging-ca-combined.pem; \
+      export SSL_CERT_FILE=/tmp/pf-staging-ca-combined.pem; \
+      export GIT_SSL_CAINFO=/tmp/pf-staging-ca-combined.pem; \
+      export CURL_CA_BUNDLE=/tmp/pf-staging-ca-combined.pem; \
+      trap 'rm -f /tmp/pf-staging-ca-combined.pem' EXIT; \
+    fi; \
+    go get golang.org/x/net@v0.60.0 \
     && go mod tidy \
     && make PREBUILT_ASSETS_STATIC_DIR=web/ui/static build \
     && go version -m /src/prometheus | grep -F 'go1.27.2' \
