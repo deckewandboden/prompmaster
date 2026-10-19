@@ -142,6 +142,7 @@ def contract_withdrawal(request):
             'legal_action_success.html',
             {
                 'declaration': declaration,
+                'kind_label': _('Widerruf'),
                 'title': _('Widerruf eingegangen'),
                 'message': _('Ihr Widerruf wurde elektronisch entgegengenommen.'),
             },
@@ -218,6 +219,8 @@ def contract_cancellation(request):
             'legal_action_success.html',
             {
                 'declaration': declaration,
+                'kind_label': _('Kündigung'),
+                'cancellation_kind_label': (_('Ordentliche Kündigung') if declaration.cancellation_kind == 'ordinary' else _('Außerordentliche Kündigung')),
                 'title': _('Kündigung eingegangen'),
                 'message': _('Ihre Kündigung wurde elektronisch entgegengenommen.'),
             },
