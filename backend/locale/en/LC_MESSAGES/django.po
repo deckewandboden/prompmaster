@@ -3512,3 +3512,40 @@ msgstr "Reference ID"
 
 msgid "Eine elektronische Eingangsbestätigung wird an die angegebene E-Mail-Adresse versendet. Diese Seite kann zusätzlich gespeichert oder ausgedruckt werden."
 msgstr "An electronic receipt confirmation will be sent to the email address provided. You can also save or print this page."
+
+# Public statutory withdrawal and termination UX messages
+msgid "Widerruf eingegangen"
+msgstr "Withdrawal received"
+
+msgid "Ihr Widerruf wurde elektronisch entgegengenommen."
+msgstr "Your withdrawal declaration has been received electronically."
+
+msgid "WIDERRUFSFUNKTION"
+msgstr "WITHDRAWAL FORM"
+
+msgid "Mit diesem Formular können Verbraucher einen über PROMPTFINISHER geschlossenen Fernabsatzvertrag widerrufen."
+msgstr "Consumers can use this form to withdraw from a distance contract concluded through PROMPTFINISHER."
+
+msgid "Nach dem Absenden erhalten Sie unverzüglich eine elektronische Eingangsbestätigung an die angegebene E-Mail-Adresse."
+msgstr "After submitting, you will promptly receive an electronic acknowledgement at the email address provided."
+
+msgid "Widerruf bestätigen"
+msgstr "Confirm withdrawal"
+
+msgid "Kündigung eingegangen"
+msgstr "Cancellation received"
+
+msgid "Ihre Kündigung wurde elektronisch entgegengenommen."
+msgstr "Your cancellation declaration has been received electronically."
+
+msgid "KÜNDIGUNGSFUNKTION"
+msgstr "CONTRACT CANCELLATION FORM"
+
+msgid "Hier können Verbraucher einen über PROMPTFINISHER geschlossenen Laufzeitvertrag ordentlich oder außerordentlich kündigen."
+msgstr "Consumers can use this form to terminate a term contract concluded through PROMPTFINISHER, either ordinarily or for cause."
+
+msgid "Wenn Sie keinen Beendigungszeitpunkt angeben, behandeln wir die Kündigung als Erklärung zum frühestmöglichen Zeitpunkt."
+msgstr "If you do not specify an end date, we will treat your cancellation as effective at the earliest possible date."
+
+msgid "jetzt kündigen"
+msgstr "Cancel now"
