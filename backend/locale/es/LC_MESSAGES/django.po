@@ -3484,3 +3484,31 @@ msgstr "Reenviar invitación de administrador"
 
 msgid "Firmenadministrator einladen"
 msgstr "Invitar al administrador de la empresa"
+
+# Public legal-interface accessibility labels (not the legal document body)
+msgid "PROMPTFINISHER Startseite"
+msgstr "Inicio de PROMPTFINISHER"
+
+msgid "gültig ab"
+msgstr "vigente desde"
+
+msgid "Rechtliche Informationen"
+msgstr "Información legal"
+
+msgid "Zur PROMPTFINISHER-Startseite"
+msgstr "Volver al inicio de PROMPTFINISHER"
+
+msgid "Bestätigung"
+msgstr "Confirmación"
+
+msgid "Kündigungsart"
+msgstr "Tipo de cancelación"
+
+msgid "Grund"
+msgstr "Motivo"
+
+msgid "Vorgangs-ID"
+msgstr "ID de trámite"
+
+msgid "Eine elektronische Eingangsbestätigung wird an die angegebene E-Mail-Adresse versendet. Diese Seite kann zusätzlich gespeichert oder ausgedruckt werden."
+msgstr "Se enviará una confirmación electrónica de recepción a la dirección de correo indicada. También puedes guardar o imprimir esta página."
