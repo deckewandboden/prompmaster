@@ -21,6 +21,11 @@ test('language chooser is visible and tied to backend language cookie',async()=>
  const source=await readFile('src/locale.js','utf8');
  assert.match(main,/setupMarketingLocale\(\);/);
  assert.match(index,/promptfinisher_product_i18n\.20261011\.js/);
+ const selector=index.match(/<select id="pf-marketing-language"[^>]*>([\s\S]*?)<\/select>/);
+ assert.ok(selector,'Selector must render before JavaScript executes');
+ for(const lang of languages)assert.match(selector[1],new RegExp('<option value="'+lang+'">'));
+ assert.match(source,/let select=document\.getElementById\('pf-marketing-language'\)/);
+
  assert.match(source,/pf-marketing-language/);
  assert.match(source,/promptfinisher_language/);
  assert.match(source,/\/auth\/language\/\?language=/);
