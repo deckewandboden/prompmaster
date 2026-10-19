@@ -3512,3 +3512,40 @@ msgstr "İşlem kimliği"
 
 msgid "Eine elektronische Eingangsbestätigung wird an die angegebene E-Mail-Adresse versendet. Diese Seite kann zusätzlich gespeichert oder ausgedruckt werden."
 msgstr "Belirttiğiniz e-posta adresine elektronik alındı onayı gönderilecektir. Bu sayfayı ayrıca kaydedebilir veya yazdırabilirsiniz."
+
+# Public statutory withdrawal and termination UX messages
+msgid "Widerruf eingegangen"
+msgstr "Cayma talebi alındı"
+
+msgid "Ihr Widerruf wurde elektronisch entgegengenommen."
+msgstr "Cayma beyanınız elektronik olarak alınmıştır."
+
+msgid "WIDERRUFSFUNKTION"
+msgstr "CAYMA FORMU"
+
+msgid "Mit diesem Formular können Verbraucher einen über PROMPTFINISHER geschlossenen Fernabsatzvertrag widerrufen."
+msgstr "Tüketiciler bu formu PROMPTFINISHER üzerinden kurulan mesafeli sözleşmeden caymak için kullanabilir."
+
+msgid "Nach dem Absenden erhalten Sie unverzüglich eine elektronische Eingangsbestätigung an die angegebene E-Mail-Adresse."
+msgstr "Gönderdikten sonra belirtilen e-posta adresine gecikmeden elektronik alındı onayı gönderilir."
+
+msgid "Widerruf bestätigen"
+msgstr "Caymayı onayla"
+
+msgid "Kündigung eingegangen"
+msgstr "Fesih talebi alındı"
+
+msgid "Ihre Kündigung wurde elektronisch entgegengenommen."
+msgstr "Fesih beyanınız elektronik olarak alınmıştır."
+
+msgid "KÜNDIGUNGSFUNKTION"
+msgstr "SÖZLEŞME FESİH FORMU"
+
+msgid "Hier können Verbraucher einen über PROMPTFINISHER geschlossenen Laufzeitvertrag ordentlich oder außerordentlich kündigen."
+msgstr "Tüketiciler PROMPTFINISHER üzerinden yapılan süreli sözleşmeleri olağan veya haklı nedenle feshedebilir."
+
+msgid "Wenn Sie keinen Beendigungszeitpunkt angeben, behandeln wir die Kündigung als Erklärung zum frühestmöglichen Zeitpunkt."
+msgstr "Bitiş tarihi belirtmezseniz fesih bildiriminizi mümkün olan en erken tarih için değerlendiririz."
+
+msgid "jetzt kündigen"
+msgstr "Şimdi feshet"
