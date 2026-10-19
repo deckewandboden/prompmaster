@@ -15,9 +15,6 @@ fi
 command -v docker >/dev/null 2>&1 || { echo "[FEHLER] Docker fehlt" >&2; exit 1; }
 docker compose version >/dev/null 2>&1 || { echo "[FEHLER] Docker Compose Plugin fehlt" >&2; exit 1; }
 
-printf '[PROMPTFINISHER validator] Build reproduzierbares Validator-Image\n'
-docker build -q -f Dockerfile.validator -t "$IMAGE" . >/dev/null
-
 uid="$(id -u)"
 gid="$(id -g)"
 
@@ -61,6 +58,13 @@ if [[ -n "${PM_STAGING_CA_FILE:-}" ]]; then
   [[ "$actual" == "$PM_STAGING_CA_SHA256" ]] || { echo '[FEHLER] Staging-CA-Fingerprint stimmt nicht' >&2; exit 2; }
   staging_ca_mount=(-v "$PM_STAGING_CA_FILE:/run/pf-staging-ca.pem:ro" -e 'NODE_EXTRA_CA_CERTS=/run/pf-staging-ca.pem' -e 'npm_config_cafile=/run/pf-staging-ca.pem' -e 'npm_config_strict_ssl=true')
   printf '[PROMPTFINISHER validator] Gepinnte Staging-CA fuer Node/npm aktiviert (TLS bleibt strikt)\n'
+fi
+
+printf '[PROMPTFINISHER validator] Build reproduzierbares Validator-Image\n'
+if [[ -n "${PM_STAGING_CA_FILE:-}" ]]; then
+  docker build --secret "id=pf_staging_ca,src=$PM_STAGING_CA_FILE" -q -f Dockerfile.validator -t "$IMAGE" . >/dev/null
+else
+  docker build -q -f Dockerfile.validator -t "$IMAGE" . >/dev/null
 fi
 
 common=(
