@@ -1,7 +1,7 @@
-{% extends 'base.html' %}{% load static %}{% block title %}{{ page_title }} | PROMPTFINISHER{% endblock %}{% block body %}
+{% extends 'base.html' %}{% load static i18n %}{% block title %}{{ page_title }} | PROMPTFINISHER{% endblock %}{% block body %}
 <div class="legal-page">
   <div class="legal-page-head">
-    <a href="/" aria-label="PROMPTFINISHER Startseite"><img src="{% static 'brand/promptfinisher-logo-hq.png' %}" alt="PROMPTFINISHER"></a>
+    <a href="/" aria-label="{% translate 'PROMPTFINISHER Startseite' %}"><img src="{% static 'brand/promptfinisher-logo-hq.png' %}" alt="PROMPTFINISHER"></a>
   </div>
   <article class="card legal-document">
     <p class="muted">{{ eyebrow }}</p>
@@ -13,7 +13,7 @@
       <p class="muted">{{ notice }}</p>
       <button class="btn primary" type="submit">{{ submit_label }}</button>
     </form>
-    <p><a href="/legal/withdrawal/">Widerrufsbelehrung</a> · <a href="/legal/terms/">AGB</a> · <a href="/legal/privacy/">Datenschutz</a></p>
+    <p><a href="/legal/withdrawal/">{% translate "Widerrufsbelehrung" %}</a> · <a href="/legal/terms/">{% translate "AGB" %}</a> · <a href="/legal/privacy/">{% translate "Datenschutz" %}</a></p>
   </article>
 </div>
 {% endblock %}
