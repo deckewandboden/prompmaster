@@ -186,8 +186,8 @@ class StagingGateTests(unittest.TestCase):
             self.compose['services'].setdefault(service, {})['image'] = project + '-' + service + ':staging'
         for service in ('caddy', 'mailpit'):
             self.compose['services'][service]['ports'][0]['host_ip'] = '127.0.0.1'
-        self.project_names = 'promptfinisher\\npromptmaster'
-        self.volume_names = 'promptmaster_postgres_data\\npromptmaster_backup_repository'
+        self.project_names = chr(10).join(('promptfinisher', 'promptmaster'))
+        self.volume_names = chr(10).join(('promptmaster_postgres_data', 'promptmaster_backup_repository'))
         self.compose['services']['caddy']['ports'][0]['published'] = '28080'
         self.compose['services']['mailpit']['ports'][0]['published'] = '28025'
 
@@ -212,12 +212,12 @@ class StagingGateTests(unittest.TestCase):
 
     def test_isolated_stack_blocks_project_reuse(self):
         self.enable_parallel_isolation()
-        self.project_names += '\\n' + self.isolated_project
+        self.project_names += chr(10) + self.isolated_project
         self.check(1)
 
     def test_isolated_stack_blocks_existing_volume_of_same_project(self):
         self.enable_parallel_isolation()
-        self.volume_names += '\\n' + self.isolated_project + '_redis_data'
+        self.volume_names += chr(10) + self.isolated_project + '_redis_data'
         self.check(1)
 
     def test_isolated_stack_blocks_existing_host_port(self):
