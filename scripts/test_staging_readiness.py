@@ -186,6 +186,10 @@ class StagingGateTests(unittest.TestCase):
             self.compose['services'].setdefault(service, {})['image'] = project + '-' + service + ':staging'
         for service in ('caddy', 'mailpit'):
             self.compose['services'][service]['ports'][0]['host_ip'] = '127.0.0.1'
+        self.compose['services']['node-exporter']['volumes'] = [
+            {'type': 'bind', 'source': '/', 'target': '/host',
+             'read_only': True, 'bind': {'create_host_path': True}}
+        ]
         self.project_names = chr(10).join(('promptfinisher', 'promptmaster'))
         self.volume_names = chr(10).join(('promptmaster_postgres_data', 'promptmaster_backup_repository'))
         self.compose['services']['caddy']['ports'][0]['published'] = '28080'
@@ -198,6 +202,22 @@ class StagingGateTests(unittest.TestCase):
     def test_isolated_stack_blocks_physical_volume_overlap(self):
         self.enable_parallel_isolation()
         self.compose['volumes']['postgres_data']['name'] = 'promptmaster_postgres_data'
+        self.check(1)
+
+    def test_isolated_wsl_root_mount_readonly_required(self):
+        self.enable_parallel_isolation()
+        self.compose['services']['node-exporter']['volumes'][0]['read_only'] = False
+        self.check(1)
+
+    def test_isolated_wsl_root_mount_rslave_forbidden(self):
+        self.enable_parallel_isolation()
+        self.compose['services']['node-exporter']['volumes'][0]['bind']['propagation'] = 'rslave'
+        self.check(1)
+
+    def test_isolated_wsl_root_mount_duplicate_forbidden(self):
+        self.enable_parallel_isolation()
+        self.compose['services']['node-exporter']['volumes'].append(
+            {'type': 'bind', 'source': '/', 'target': '/host', 'read_only': True})
         self.check(1)
 
     def test_isolated_stack_blocks_missing_unique_image(self):
