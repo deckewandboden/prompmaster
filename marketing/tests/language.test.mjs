@@ -71,3 +71,39 @@ test('all visible static marketing German text is translated in every target lan
   }
  }
 });
+
+
+test('all public rendered marketing/checkout/FAQ text has a translation in nine locales',async()=>{
+ const {renderContent,footer,checkoutPage}=await import('../src/content.js');
+ const index=await readFile('index.html','utf8');
+ const catalogSource=await readFile('../backend/static/js/promptfinisher_product_i18n.20261011.js','utf8');
+ const match=catalogSource.match(/const TEXT=(\\{[\\s\\S]*?\\});\\s*const language =/);
+ assert.ok(match,'Free/Pro translation dictionary missing');
+ const shared=JSON.parse(match[1]);
+ const html=index+'\\n'+renderContent()+footer()+checkoutPage(1);
+ const labels=[...html.matchAll(/>([^<>]+)</g)].map(m=>m[1].trim());
+ const attrs=[...html.matchAll(/(?:aria-label|placeholder|title)="([^"]+)"/g)].map(m=>m[1].trim());
+ const knownBrand=new Set([
+  'PROMPTFINISHER','PROMPTFINISHER Free &amp; Pro','PROMPTFINISHER · Free &amp; Pro',
+  'Free','Pro','FREE','PRO','FAQ','netstyle','Deutsch','English',
+  'Español','Português','Türkçe','Русский','Polski','Français','Italiano','Nederlands',
+ ]);
+ const appNames=[...html.matchAll(/class="app-pill">([^<]+)</g)].map(m=>m[1]);
+ for(const app of appNames)knownBrand.add(app);
+ const unknown=[];
+ for(const phrase of [...labels,...attrs]){
+   if(!phrase || knownBrand.has(phrase) || !/[\\p{L}]/u.test(phrase))continue;
+   if(/^\\d+[\\d., ]*\\s*(?:€|\\/.*)?$/.test(phrase))continue;
+   if(/^\\s*(?:✓|−|–)\\s*$/.test(phrase))continue;
+   if(phrase.includes('${') || phrase.includes('\\`'))continue;
+   // Legal attribution CC license names stay verbatim; the leading UI string
+   // is translated by the public locale catalog where applicable.
+   if(phrase.startsWith('© '))continue;
+   const row=marketingCatalog[phrase]||shared[phrase];
+   if(!row){unknown.push(phrase);continue;}
+   for(const lang of languages.slice(1))
+     if(typeof row[lang]!=='string'||!row[lang].trim())
+       unknown.push(lang+':'+phrase);
+ }
+ assert.deepEqual([...new Set(unknown)].sort(),[], 'Unlocalized public text/attributes');
+});
