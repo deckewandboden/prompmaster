@@ -1,4 +1,19 @@
+# The opt-in PM_STAGING_PROJECT isolates a parallel local QA stack.
+# Without this variable existing CI and deployment conventions are unchanged.
+name: ${PM_STAGING_PROJECT:-promptfinisher}
 services:
+  postgres:
+    image: ${PM_STAGING_PROJECT:-promptfinisher}-postgres:18-alpine-hardened
+  redis:
+    image: ${PM_STAGING_PROJECT:-promptfinisher}-redis:7-alpine-hardened
+  prometheus:
+    image: ${PM_STAGING_PROJECT:-promptfinisher}-prometheus:3.15.0-patched
+  node-exporter:
+    image: ${PM_STAGING_PROJECT:-promptfinisher}-node-exporter:1.12.1-hardened
+  cadvisor:
+    image: ${PM_STAGING_PROJECT:-promptfinisher}-cadvisor:0.60.6-hardened
+  postgres-exporter:
+    image: ${PM_STAGING_PROJECT:-promptfinisher}-postgres-exporter:0.20.1-hardened
   # Dedicated test stacks must never expose Caddy on all host interfaces.
   # !override replaces base compose.yaml 0.0.0.0:80/443 mappings rather than
   # merging them alongside the loopback-only bindings.
@@ -9,7 +24,7 @@ services:
       - "127.0.0.1:${PM_STAGING_HTTPS_PORT:-443}:443"
   mailpit:
     image: axllent/mailpit:v1.31.1
-    ports: ["127.0.0.1:8025:8025"]
+    ports: ["127.0.0.1:${PM_STAGING_MAILPIT_PORT:-8025}:8025"]
     networks: [app]
     restart: unless-stopped
   web:
@@ -34,4 +49,22 @@ services:
       - staging_backup_repo:/backup-repo
 
 volumes:
+  postgres_data:
+    name: ${PM_STAGING_PROJECT:-promptmaster}_postgres_data
+  redis_data:
+    name: ${PM_STAGING_PROJECT:-promptmaster}_redis_data
+  static_data:
+    name: ${PM_STAGING_PROJECT:-promptmaster}_static_data
+  caddy_data:
+    name: ${PM_STAGING_PROJECT:-promptmaster}_caddy_data
+  caddy_config:
+    name: ${PM_STAGING_PROJECT:-promptmaster}_caddy_config
+  prometheus_data:
+    name: ${PM_STAGING_PROJECT:-promptmaster}_prometheus_data
+  backup_status:
+    name: ${PM_STAGING_PROJECT:-promptmaster}_backup_status
+  backup_repository:
+    name: ${PM_STAGING_PROJECT:-promptmaster}_backup_repository
+  export_data:
+    name: ${PM_STAGING_PROJECT:-promptmaster}_export_data
   staging_backup_repo:
