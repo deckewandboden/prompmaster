@@ -109,6 +109,16 @@ def env_config(root, failures):
 
 def check(root, expected_sha):
     failures, passed = [], []
+    # An isolated stack may coexist with an unrelated local Compose project,
+    # but only with an explicitly unique project name and exact resource checks.
+    isolated = os.environ.get('PM_STAGING_PROJECT', '')
+    if isolated:
+        if not re.fullmatch(r'pfpr73[a-z0-9]{8,20}', isolated):
+            failures.append('PM_STAGING_PROJECT hat keinen zulaessigen eindeutigen QA-Namen')
+            return failures, passed
+        if os.environ.get('COMPOSE_PROJECT_NAME'):
+            failures.append('COMPOSE_PROJECT_NAME darf isoliertes PM_STAGING_PROJECT nicht ueberschreiben')
+            return failures, passed
     for path in ('compose.yaml', 'compose.staging.yaml', 'scripts/validate_env.py'):
         file = root / path
         if file.is_symlink() or not file.is_file():
@@ -147,7 +157,7 @@ def check(root, expected_sha):
     if config is not None:
         try:
             obj = json.loads(config)
-            if obj['name'] != 'promptfinisher':
+            if obj['name'] != (isolated or 'promptfinisher'):
                 failures.append('Unerwarteter Compose-Projektname')
             services, volumes = obj['services'], obj['volumes']
             if not REQUIRED <= set(services):
@@ -158,6 +168,21 @@ def check(root, expected_sha):
                 failures.append('Externes Docker-Netz in Staging verboten')
             volume_names = {v.get('name') or f"{obj['name']}_{k}" for k, v in volumes.items()}
             requested_ports = compose_ports(services)
+            if isolated:
+                # Merely changing Compose's project name is insufficient when
+                # the base file pins legacy *physical* volume names and images.
+                if not volume_names or any(not n.startswith(isolated + '_') for n in volume_names):
+                    failures.append('Isolierte Volumes haben fremde oder feste physische Namen')
+                image_services = ('postgres', 'redis', 'prometheus', 'node-exporter',
+                                  'cadvisor', 'postgres-exporter')
+                if any(not (services.get(s, {}).get('image') or '').startswith(isolated + '-')
+                       for s in image_services):
+                    failures.append('Isolierte Image-Tags sind unvollstaendig')
+                for service in services.values():
+                    for port in service.get('ports') or []:
+                        if not isinstance(port, dict) or port.get('host_ip') != '127.0.0.1':
+                            failures.append('Isoliertes Staging veroeffentlicht Ports ausserhalb 127.0.0.1')
+                            break
         except (ValueError, TypeError, KeyError):
             failures.append('Compose JSON oder veröffentlichte Ports ungültig')
         else:
@@ -168,8 +193,13 @@ def check(root, expected_sha):
             projects = output(['docker', 'ps', '-a', '--format',
                                '{{.Label "com.docker.compose.project"}}'],
                               failures, 'Container-Inventar nicht lesbar')
-            if projects is not None and CONFLICT_PROJECTS & set(projects.splitlines()):
-                failures.append('Bereits laufendes/angelegtes Produktiv-/Staging-Projekt erkannt')
+            if projects is not None:
+                project_set = set(projects.splitlines())
+                if isolated:
+                    if isolated in project_set:
+                        failures.append('Der ausgewaehlte isolierte QA-Projektname existiert bereits')
+                elif CONFLICT_PROJECTS & project_set:
+                    failures.append('Bereits laufendes/angelegtes Produktiv-/Staging-Projekt erkannt')
             if requested_ports:
                 listeners = output(['ss', '-H', '-ltn'], failures, 'Host-Ports unlesbar')
                 published = output(['docker', 'ps', '--format', '{{.Ports}}'],
