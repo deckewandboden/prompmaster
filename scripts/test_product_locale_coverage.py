@@ -56,7 +56,8 @@ def visible_text_from_markup(path):
     return {
         re.sub(r"\s+", " ", html.unescape(fragment)).strip()
         for fragment in fragments
-        if re.search(r"[A-Za-zÄÖÜäöüß]", fragment)
+        if len(html.unescape(fragment).strip()) >= 3
+        and re.search(r"[A-Za-zÄÖÜäöüß]", fragment)
     }
 
 
