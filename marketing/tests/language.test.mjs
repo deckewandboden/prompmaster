@@ -44,3 +44,30 @@ test('marketing switcher layout does not create stacked actions',async()=>{
  assert.match(css,/header nav\{order:2\}/);
  assert.match(css,/max-width:430px/);
 });
+
+test('all visible static marketing German text is translated in every target language',async()=>{
+ const html=(await readFile('index.html','utf8'))+'\n'+(await readFile('src/content.js','utf8'));
+ const brandTerms=new Set([
+  'PROMPTFINISHER','PROMPTFINISHER Pro','PROMPTFINISHER PRO',
+  'PROMPTFINISHER Free &amp; Pro','PROMPTFINISHER · Free &amp; Pro',
+  'FAQ','FREE','PRO','Free','Pro','netstyle',
+  'Deutsch','English','Español','Português','Türkçe','Русский',
+  'Polski','Français','Italiano','Nederlands',
+  "':b==='–'?'",
+ ]);
+ const hits=[...html.matchAll(/>([^<>{}]+)</g)]
+  .map(m=>m[1].trim())
+  .filter(text=>text.length>2&&/[a-zA-ZÄÖÜäöüß]/.test(text));
+ const missing=[...new Set(hits)].filter(text=>{
+  if(brandTerms.has(text))return false;
+  if(text.startsWith('3D-Modell: Lee Perry-Smith'))return false;
+  return !Object.prototype.hasOwnProperty.call(marketingCatalog,text);
+ });
+ assert.deepEqual(missing,[],'Visible source copy without nine-language marketing translation');
+ for(const source of new Set(hits)){
+  if(brandTerms.has(source)||source.startsWith('3D-Modell: Lee Perry-Smith')||!marketingCatalog[source])continue;
+  for(const lang of languages.slice(1)){
+   assert.ok(marketingCatalog[source][lang]?.trim(),source+' is missing '+lang);
+  }
+ }
+});
