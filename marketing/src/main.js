@@ -1,4 +1,4 @@
-import {setupMarketingLocale} from './locale.js';
+import {setupMarketingLocale,marketingT} from './locale.js';
 import {renderContent,footer,checkoutPage} from './content.js';
 import {quote,normalizeQuantity,money} from './pricing.js';
 const toggle=document.querySelector('.menu-toggle');
@@ -43,7 +43,7 @@ async function initializePricing(){
     const initial=quote(catalog,new URLSearchParams(location.search).get('quantity')||1);
     if(home){
       document.querySelector('.pro .price').innerHTML=money(initial.monthlyGross)+'<span>/ Monat</span>';
-      document.querySelector('.pro .price-detail').textContent='pro Benutzer · inkl. MwSt. · jährliche Abrechnung: '+money(initial.annualUnitGross);
+      document.querySelector('.pro .price-detail').textContent=marketingT('pro Benutzer · inkl. MwSt.')+' · '+marketingT('jährliche Abrechnung')+': '+money(initial.annualUnitGross);
     }
     if(path==='/free'&&catalog.freeUrl){
       const url=new URL(catalog.freeUrl,location.origin);
@@ -74,21 +74,21 @@ async function initializePricing(){
         const checkoutSubmit=document.getElementById('checkout-submit');
         if(checkoutSubmit){
           checkoutSubmit.disabled=false;
-          checkoutSubmit.textContent='Zahlungspflichtig kaufen →';
+          checkoutSubmit.textContent=marketingT('Zahlungspflichtig kaufen →');
         }
         if(buy?.tagName==='A'){
-          buy.textContent='Zahlungspflichtig kaufen →';
+          buy.textContent=marketingT('Zahlungspflichtig kaufen →');
           buy.href='/portal/licenses/buy/?quantity='+q.quantity;
         }
         history.replaceState(null,'','/checkout/?quantity='+q.quantity);
       }else if(catalog.checkoutEnabled===true){
         buy.removeAttribute('aria-disabled');
-        buy.textContent=q.quantity+' PROMPTFINISHER-Pro-'+(q.quantity===1?'Lizenz':'Lizenzen')+' kaufen ↗';
+        buy.textContent=q.quantity+' '+marketingT(q.quantity===1?'PROMPTFINISHER-Pro-Lizenz kaufen ↗':'PROMPTFINISHER-Pro-Lizenzen kaufen ↗');
         buy.href='/checkout/?quantity='+q.quantity;
       }else{
         buy.removeAttribute('href');
         buy.setAttribute('aria-disabled','true');
-        buy.textContent='Kauf vorübergehend nicht verfügbar';
+        buy.textContent=marketingT('Kauf vorübergehend nicht verfügbar');
       }
     }
     input.addEventListener('change',update);
@@ -107,12 +107,12 @@ async function initializePricing(){
       if(buy){
         buy.removeAttribute('href');
         buy.setAttribute('aria-disabled','true');
-        buy.textContent='Preis nicht verfügbar';
+        buy.textContent=marketingT('Preis nicht verfügbar');
       }
       const checkoutSubmit=document.getElementById('checkout-submit');
       if(checkoutSubmit){
         checkoutSubmit.disabled=true;
-        checkoutSubmit.textContent='Preis nicht verfügbar';
+        checkoutSubmit.textContent=marketingT('Preis nicht verfügbar');
       }
       const checkoutStage=document.getElementById('checkout-stage-message');
       if(checkoutStage){
@@ -258,7 +258,7 @@ function setupCheckoutPage(){
     if(!form.reportValidity())return;
     if(submit){
       submit.disabled=true;
-      submit.textContent='Kauf wird vorbereitet …';
+      submit.textContent=marketingT('Kauf wird vorbereitet …');
     }
     try{
       await ensureCsrf();
@@ -268,7 +268,7 @@ function setupCheckoutPage(){
       showStage('Die sichere Kaufverbindung konnte nicht vorbereitet werden. Bitte lade die Seite neu und versuche es erneut.');
       if(submit){
         submit.disabled=false;
-        submit.textContent='Zahlungspflichtig kaufen →';
+        submit.textContent=marketingT('Zahlungspflichtig kaufen →');
       }
     }
   });
