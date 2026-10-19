@@ -186,10 +186,9 @@ class StagingGateTests(unittest.TestCase):
             self.compose['services'].setdefault(service, {})['image'] = project + '-' + service + ':staging'
         for service in ('caddy', 'mailpit'):
             self.compose['services'][service]['ports'][0]['host_ip'] = '127.0.0.1'
-        self.compose['services']['node-exporter']['volumes'] = [
-            {'type': 'bind', 'source': '/', 'target': '/host',
-             'read_only': True, 'bind': {'create_host_path': True, 'propagation': 'rprivate'}}
-        ]
+        self.compose['services']['node-exporter']['volumes'] = []
+        self.compose['services']['node-exporter']['command'] = ['--path.rootfs=/']
+        self.compose['services']['node-exporter']['pid'] = 'host'
         self.project_names = chr(10).join(('promptfinisher', 'promptmaster'))
         self.volume_names = chr(10).join(('promptmaster_postgres_data', 'promptmaster_backup_repository'))
         self.compose['services']['caddy']['ports'][0]['published'] = '28080'
@@ -204,25 +203,48 @@ class StagingGateTests(unittest.TestCase):
         self.compose['volumes']['postgres_data']['name'] = 'promptmaster_postgres_data'
         self.check(1)
 
-    def test_isolated_wsl_root_mount_readonly_required(self):
+    def test_isolated_wsl_no_root_mount_required(self):
         self.enable_parallel_isolation()
-        self.compose['services']['node-exporter']['volumes'][0]['read_only'] = False
+        self.assertIn('PRECHECK_PASS', self.check(0))
+
+    def test_isolated_wsl_rejects_readonly_full_root_bind(self):
+        self.enable_parallel_isolation()
+        self.compose['services']['node-exporter']['volumes'] = [
+            {'type': 'bind', 'source': '/', 'target': '/host',
+             'read_only': True, 'bind': {'propagation': 'rprivate'}}]
         self.check(1)
 
-    def test_isolated_wsl_root_mount_implicit_propagation_forbidden(self):
+    def test_isolated_wsl_rejects_rslave_root_bind(self):
         self.enable_parallel_isolation()
-        del self.compose['services']['node-exporter']['volumes'][0]['bind']['propagation']
+        self.compose['services']['node-exporter']['volumes'] = [
+            {'type': 'bind', 'source': '/', 'target': '/host',
+             'read_only': True, 'bind': {'propagation': 'rslave'}}]
         self.check(1)
 
-    def test_isolated_wsl_root_mount_rslave_forbidden(self):
+    def test_isolated_wsl_rejects_writable_host_bind(self):
         self.enable_parallel_isolation()
-        self.compose['services']['node-exporter']['volumes'][0]['bind']['propagation'] = 'rslave'
+        self.compose['services']['node-exporter']['volumes'] = [
+            {'type': 'bind', 'source': '/proc', 'target': '/host/proc',
+             'read_only': False}]
         self.check(1)
 
-    def test_isolated_wsl_root_mount_duplicate_forbidden(self):
+    def test_isolated_wsl_rejects_override_missing(self):
         self.enable_parallel_isolation()
-        self.compose['services']['node-exporter']['volumes'].append(
-            {'type': 'bind', 'source': '/', 'target': '/host', 'read_only': True})
+        self.compose['services']['node-exporter']['volumes'] = [
+            {'type': 'bind', 'source': '/', 'target': '/host',
+             'read_only': True, 'bind': {'propagation': 'rslave'}},
+            {'type': 'bind', 'source': '/sys', 'target': '/host/sys',
+             'read_only': True}]
+        self.check(1)
+
+    def test_isolated_wsl_requires_container_rootfs_flag(self):
+        self.enable_parallel_isolation()
+        self.compose['services']['node-exporter']['command'] = ['--path.rootfs=/host']
+        self.check(1)
+
+    def test_isolated_wsl_requires_host_pid(self):
+        self.enable_parallel_isolation()
+        self.compose['services']['node-exporter']['pid'] = None
         self.check(1)
 
     def test_isolated_stack_blocks_missing_unique_image(self):
