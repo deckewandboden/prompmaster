@@ -3619,3 +3619,40 @@ msgstr "ID pratica"
 
 msgid "Eine elektronische Eingangsbestätigung wird an die angegebene E-Mail-Adresse versendet. Diese Seite kann zusätzlich gespeichert oder ausgedruckt werden."
 msgstr "Una conferma elettronica di ricezione sarà inviata all'indirizzo e-mail indicato. Puoi anche salvare o stampare questa pagina."
+
+# Public statutory withdrawal and termination UX messages
+msgid "Widerruf eingegangen"
+msgstr "Recesso ricevuto"
+
+msgid "Ihr Widerruf wurde elektronisch entgegengenommen."
+msgstr "La tua dichiarazione di recesso è stata ricevuta elettronicamente."
+
+msgid "WIDERRUFSFUNKTION"
+msgstr "MODULO DI RECESSO"
+
+msgid "Mit diesem Formular können Verbraucher einen über PROMPTFINISHER geschlossenen Fernabsatzvertrag widerrufen."
+msgstr "I consumatori possono usare questo modulo per recedere da un contratto a distanza concluso tramite PROMPTFINISHER."
+
+msgid "Nach dem Absenden erhalten Sie unverzüglich eine elektronische Eingangsbestätigung an die angegebene E-Mail-Adresse."
+msgstr "Dopo l'invio riceverai tempestivamente una conferma elettronica all'indirizzo e-mail indicato."
+
+msgid "Widerruf bestätigen"
+msgstr "Conferma recesso"
+
+msgid "Kündigung eingegangen"
+msgstr "Disdetta ricevuta"
+
+msgid "Ihre Kündigung wurde elektronisch entgegengenommen."
+msgstr "La tua dichiarazione di disdetta è stata ricevuta elettronicamente."
+
+msgid "KÜNDIGUNGSFUNKTION"
+msgstr "MODULO DI DISDETTA"
+
+msgid "Hier können Verbraucher einen über PROMPTFINISHER geschlossenen Laufzeitvertrag ordentlich oder außerordentlich kündigen."
+msgstr "I consumatori possono recedere ordinariamente o straordinariamente da un contratto a termine concluso tramite PROMPTFINISHER."
+
+msgid "Wenn Sie keinen Beendigungszeitpunkt angeben, behandeln wir die Kündigung als Erklärung zum frühestmöglichen Zeitpunkt."
+msgstr "Se non indichi una data di cessazione, considereremo la disdetta per la prima data possibile."
+
+msgid "jetzt kündigen"
+msgstr "Disdici ora"
