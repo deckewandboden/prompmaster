@@ -21,6 +21,10 @@ def translation_keys():
         source = (ROOT / "templates" / name).read_text(encoding="utf-8")
         assert "{% load static i18n %}" in source, name
         keys.update(re.findall(r'{%\s*translate\s+["\']([^"\']+)["\']\s*%}', source))
+    backend = (ROOT / "apps" / "core" / "views.py").read_text(encoding="utf-8")
+    actions = backend.split("def contract_withdrawal(request):", 1)[1]
+    actions = actions.split("def checkout_csrf(request):", 1)[0]
+    keys.update(re.findall(r"_\('([^']+)'\)", actions))
     return keys
 
 
