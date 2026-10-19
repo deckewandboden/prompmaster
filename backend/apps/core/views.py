@@ -51,7 +51,18 @@ def legal_public(request, doc_type):
     )
     if not document:
         raise Http404
-    return render(request, 'legal_public.html', {'document': document})
+    titles = {
+        'terms': _('AGB'),
+        'privacy': _('Datenschutz'),
+        'withdrawal': _('Widerruf'),
+        'license': _('Lizenzbedingungen'),
+        'imprint': _('Impressum'),
+        'accessibility': _('Barrierefreiheit'),
+    }
+    return render(request, 'legal_public.html', {
+        'document': document,
+        'document_title': titles[doc_type],
+    })
 
 
 
