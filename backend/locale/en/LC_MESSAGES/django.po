@@ -3484,3 +3484,31 @@ msgstr "Resend admin invitation"
 
 msgid "Firmenadministrator einladen"
 msgstr "Invite company administrator"
+
+# Public legal-interface accessibility labels (not the legal document body)
+msgid "PROMPTFINISHER Startseite"
+msgstr "PROMPTFINISHER homepage"
+
+msgid "gültig ab"
+msgstr "effective from"
+
+msgid "Rechtliche Informationen"
+msgstr "Legal information"
+
+msgid "Zur PROMPTFINISHER-Startseite"
+msgstr "Back to the PROMPTFINISHER homepage"
+
+msgid "Bestätigung"
+msgstr "Confirmation"
+
+msgid "Kündigungsart"
+msgstr "Cancellation type"
+
+msgid "Grund"
+msgstr "Reason"
+
+msgid "Vorgangs-ID"
+msgstr "Reference ID"
+
+msgid "Eine elektronische Eingangsbestätigung wird an die angegebene E-Mail-Adresse versendet. Diese Seite kann zusätzlich gespeichert oder ausgedruckt werden."
+msgstr "An electronic receipt confirmation will be sent to the email address provided. You can also save or print this page."
