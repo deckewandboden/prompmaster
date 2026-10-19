@@ -10,6 +10,14 @@ services:
     image: ${PM_STAGING_PROJECT:-promptfinisher}-prometheus:3.15.0-patched
   node-exporter:
     image: ${PM_STAGING_PROJECT:-promptfinisher}-node-exporter:1.12.1-hardened
+    # WSL2 / private-root Docker cannot support rslave propagation.
+    # QA remains strictly read-only; production keeps its own bind.
+    # !override prevents inheriting the base volume entry.
+    volumes: !override
+      - type: bind
+        source: /
+        target: /host
+        read_only: true
   cadvisor:
     image: ${PM_STAGING_PROJECT:-promptfinisher}-cadvisor:0.60.6-hardened
   postgres-exporter:
