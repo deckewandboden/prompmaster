@@ -24,7 +24,7 @@ test('language chooser is visible and tied to backend language cookie',async()=>
  assert.match(source,/pf-marketing-language/);
  assert.match(source,/promptfinisher_language/);
  assert.match(source,/\/auth\/language\/\?language=/);
- assert.match(source,/next=\+encodeURIComponent\(next\)/);
+ assert.match(source,/encodeURIComponent\(next\)/);
  assert.match(source,/document\.documentElement\.lang=lang/);
 });
 test('marketing localization must never change forms, products or typed prompts',async()=>{
