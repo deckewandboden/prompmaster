@@ -7,8 +7,8 @@
     <h1>{{ title }}</h1>
     <p>{{ message }}</p>
     <dl>
-      <dt>{% translate "Art" %}</dt><dd>{{ declaration.get_kind_display }}</dd>
-      {% if declaration.kind == 'cancellation' %}<dt>{% translate "Kündigungsart" %}</dt><dd>{{ declaration.get_cancellation_kind_display }}</dd>{% endif %}
+      <dt>{% translate "Art" %}</dt><dd>{{ kind_label }}</dd>
+      {% if declaration.kind == 'cancellation' %}<dt>{% translate "Kündigungsart" %}</dt><dd>{{ cancellation_kind_label }}</dd>{% endif %}
       <dt>{% translate "Name" %}</dt><dd>{{ declaration.name }}</dd>
       <dt>{% translate "E-Mail" %}</dt><dd>{{ declaration.email }}</dd>
       <dt>{% translate "Vertragsbezug" %}</dt><dd>{{ declaration.contract_reference }}</dd>
