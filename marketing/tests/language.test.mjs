@@ -77,10 +77,11 @@ test('all public rendered marketing/checkout/FAQ text has a translation in nine 
  const {renderContent,footer,checkoutPage}=await import('../src/content.js');
  const index=await readFile('index.html','utf8');
  const catalogSource=await readFile('../backend/static/js/promptfinisher_product_i18n.20261011.js','utf8');
- const match=catalogSource.match(/const TEXT=(\\{[\\s\\S]*?\\});\\s*const language =/);
- assert.ok(match,'Free/Pro translation dictionary missing');
- const shared=JSON.parse(match[1]);
- const html=index+'\\n'+renderContent()+footer()+checkoutPage(1);
+ const baseMatch=catalogSource.match(/^\s*const TEXT=(\{.*\});\s*$/m);
+ const extraMatch=catalogSource.match(/^\s*Object\.assign\(TEXT,(\{.*\})\);\s*$/m);
+ assert.ok(baseMatch && extraMatch,'Free/Pro translation dictionaries missing');
+ const shared={...JSON.parse(baseMatch[1]),...JSON.parse(extraMatch[1])};
+ const html=index+'\n'+renderContent()+footer()+checkoutPage(1);
  const labels=[...html.matchAll(/>([^<>]+)</g)].map(m=>m[1].trim());
  const attrs=[...html.matchAll(/(?:aria-label|placeholder|title)="([^"]+)"/g)].map(m=>m[1].trim());
  const knownBrand=new Set([
@@ -92,10 +93,10 @@ test('all public rendered marketing/checkout/FAQ text has a translation in nine 
  for(const app of appNames)knownBrand.add(app);
  const unknown=[];
  for(const phrase of [...labels,...attrs]){
-   if(!phrase || knownBrand.has(phrase) || !/[\\p{L}]/u.test(phrase))continue;
-   if(/^\\d+[\\d., ]*\\s*(?:€|\\/.*)?$/.test(phrase))continue;
-   if(/^\\s*(?:✓|−|–)\\s*$/.test(phrase))continue;
-   if(phrase.includes('${') || phrase.includes('\\`'))continue;
+   if(!phrase || knownBrand.has(phrase) || !/[\p{L}]/u.test(phrase))continue;
+   if(/^\d+[\d., ]*\s*(?:€|\/.*)?$/.test(phrase))continue;
+   if(/^\s*(?:✓|−|–)\s*$/.test(phrase))continue;
+   if(phrase.includes('${') || phrase.includes('`'))continue;
    // Legal attribution CC license names stay verbatim; the leading UI string
    // is translated by the public locale catalog where applicable.
    if(phrase.startsWith('© '))continue;
