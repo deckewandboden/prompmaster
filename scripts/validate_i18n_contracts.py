@@ -89,7 +89,22 @@ def main() -> None:
     # The product dictionary has a canonical JSON literal followed by a
     # separate Object.assign extension. Parse both as independent JSON objects;
     # treating everything up to "const language" as JSON is incorrect.
-    base_parts = re.findall(r'^\\s*const TEXT=(\\{[^\\n]*\\});\\s*
+    lines = bundle.splitlines()
+    bases = [line.strip() for line in lines if line.strip().startswith('const TEXT=')]
+    extras = [line.strip() for line in lines if line.strip().startswith('Object.assign(TEXT,')]
+    if len(bases) != 1 or not extras:
+        raise SystemExit('I18N FAIL: expected base catalog and extensions')
+    if not bases[0].endswith(';') or any(not row.endswith(');') for row in extras):
+        raise SystemExit('I18N FAIL: malformed Free/Pro catalog delimiters')
+    catalog = json.loads(bases[0][len('const TEXT='):-1])
+    for line in extras:
+        extension = json.loads(line[len('Object.assign(TEXT,'):-2])
+        duplicate_keys = set(catalog) & set(extension)
+        if duplicate_keys:
+            raise SystemExit(
+                f'I18N FAIL: duplicate product keys: {sorted(duplicate_keys)!r}'
+            )
+        catalog.update(extension)
     for brand in BRAND_LABELS:
         if brand not in catalog:
             raise SystemExit(f'I18N FAIL: missing protected product label {brand}')
