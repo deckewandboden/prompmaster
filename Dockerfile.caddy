@@ -13,6 +13,10 @@ RUN --mount=type=secret,id=pf_staging_ca,required=false \
       npm ci; \
     fi
 COPY marketing/ ./
+# Build-stage-only test fixture: the public marketing locale falls back to the
+# actual Free/Pro localization asset, which is not part of marketing/.
+# This file is intentionally not copied into the final Caddy image.
+COPY backend/static/js/promptfinisher_product_i18n.20261011.js /backend/static/js/promptfinisher_product_i18n.20261011.js
 RUN npm test && npm run build
 
 # Caddy 2.11.7 includes upstream HTTP/2/streaming repairs. The official
