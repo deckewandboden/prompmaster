@@ -112,3 +112,4 @@ scripts/test_runtime_monitor_ports.py	0	text-not-byte-validated	test
 marketing/src/locale.js	0	text-not-byte-validated	active-marketing
 marketing/tests/language.test.mjs	0	text-not-byte-validated	active-marketing
 scripts/test_product_locale_coverage.py	0	text-not-byte-validated	test
+scripts/test_public_legal_i18n.py	0	text-not-byte-validated	test
