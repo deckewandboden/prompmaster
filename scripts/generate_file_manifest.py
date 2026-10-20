@@ -9,6 +9,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 TSV = ROOT / 'FILE_MANIFEST.tsv'
+AUDIT_TSV = ROOT / 'FILE_MANIFEST_AUDIT.tsv'
 JSON_OUT = ROOT / 'MANIFEST.json'
 MD = ROOT / 'docs' / 'COMPLETE_FILE_INVENTORY.md'
 EXCLUDED = {TSV.resolve(), JSON_OUT.resolve(), MD.resolve()}
@@ -59,9 +60,12 @@ for path in sorted(ROOT.rglob('*')):
     }
     files.append(data)
 
+audit_paths = {line.split('\t', 1)[0] for line in AUDIT_TSV.read_text(encoding='utf-8').splitlines()[1:] if line.strip()} if AUDIT_TSV.is_file() else set()
+primary_files = [f for f in files if f['path'] not in audit_paths]
+
 TSV.write_text(
     'path\tsize_bytes\tsha256\trole\n' + ''.join(
-        f"{f['path']}\t{f['size']}\t{f['sha256']}\t{f['role']}\n" for f in files
+        f"{f['path']}\t{f['size']}\t{f['sha256']}\t{f['role']}\n" for f in primary_files
     ),
     encoding='utf-8',
 )

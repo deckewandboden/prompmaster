@@ -1409,6 +1409,168 @@ def _browser_register_verify_to_buy(
             raise AssertionError(f'checkout legal acceptance missing after registration: {name}')
 
 
+def _browser_product_locale_acceptance(page, base: str, product: str) -> None:
+    """Exercise every supported product language in Chromium with screenshot evidence.
+
+    This is deliberately presentation-only: the composer option value is an
+    immutable contract, while its visible label and header must be localized.
+    Use a narrow viewport to catch long-language header/CTA collisions.
+    """
+    expected = {
+        'de': 'Professionell',
+        'en': 'Professional',
+        'es': 'Profesional',
+        'pt': 'Profissional',
+        'tr': 'Profesyonel',
+        'ru': 'Профессиональный',
+        'pl': 'Profesjonalny',
+        'fr': 'Professionnel',
+        'it': 'Professionale',
+        'nl': 'Professioneel',
+    }
+    route = 'free/' if product == 'free' else 'pro/app/'
+    evidence = ROOT / 'browser-artifacts'
+    evidence.mkdir(parents=True, exist_ok=True)
+    page.set_viewport_size({'width': 390, 'height': 844})
+    response = page.goto(base + route, wait_until='networkidle')
+    if not response or response.status != 200:
+        raise AssertionError(f'{product} locale matrix: {route} not available')
+
+    for code, expected_tone in expected.items():
+        selector = page.locator('select[data-pf-product-language]')
+        selector.wait_for(state='visible', timeout=15000)
+        if selector.input_value() != code:
+            with page.expect_navigation(wait_until='networkidle'):
+                selector.select_option(code)
+
+        page.wait_for_function(
+            """({lang, tone}) => {
+                const option = document.querySelector(
+                    '#toneSelect option[value="professional"]'
+                );
+                return document.documentElement.lang === lang
+                    && window.PF_PRODUCT_LOCALE?.code === lang
+                    && option?.textContent.trim() === tone;
+            }""",
+            arg={'lang': code, 'tone': expected_tone},
+            timeout=15000,
+        )
+        metrics = page.evaluate(
+            """() => {
+                const brand = document.querySelector('.pmv2-brand img');
+                const locale = document.querySelector('.pmv2-language');
+                const select = document.querySelector('select[data-pf-product-language]');
+                const option = document.querySelector('#toneSelect option[value="professional"]');
+                const cta = document.querySelector('.pmv2-header-actions .pmv2-header-cta');
+                const a = brand?.getBoundingClientRect();
+                const b = locale?.getBoundingClientRect();
+                const c = cta?.getBoundingClientRect();
+                const overlap = (left, right) => Boolean(left && right
+                    && Math.min(left.right, right.right) - Math.max(left.left, right.left) > 1
+                    && Math.min(left.bottom, right.bottom) - Math.max(left.top, right.top) > 1);
+                return {
+                    selected: select?.value || '',
+                    lang: document.documentElement.lang,
+                    locale: window.PF_PRODUCT_LOCALE?.code || '',
+                    optionText: option?.textContent.trim() || '',
+                    optionValue: option?.value || '',
+                    optionDisabled: Boolean(option?.disabled),
+                    languageTextFits: (() => {
+                        if (!select || !select.selectedOptions.length) return false;
+                        const css = getComputedStyle(select);
+                        const canvas = document.createElement('canvas');
+                        const context = canvas.getContext('2d');
+                        if (!context) return false;
+                        context.font = css.font;
+                        const required = context.measureText(
+                            select.selectedOptions[0].textContent.trim()
+                        ).width + parseFloat(css.paddingLeft)
+                            + parseFloat(css.paddingRight) + 10;
+                        return required <= select.getBoundingClientRect().width + 1;
+                    })(),
+                    hasHeader: Boolean(a && b),
+                    logoLocaleCollision: overlap(a, b),
+                    localeCtaCollision: overlap(b, c),
+                    languageLeft: b?.left ?? -1,
+                    languageRight: b?.right ?? -1,
+                    viewportWidth: innerWidth,
+                    documentWidth: document.documentElement.scrollWidth,
+                };
+            }"""
+        )
+        if (
+            metrics['selected'] != code
+            or metrics['lang'] != code
+            or metrics['locale'] != code
+            or metrics['optionText'] != expected_tone
+            or metrics['optionValue'] != 'professional'
+            or metrics['optionDisabled']
+            or not metrics['languageTextFits']
+            or not metrics['hasHeader']
+            or metrics['logoLocaleCollision']
+            or metrics['localeCtaCollision']
+            or metrics['languageLeft'] < -1
+            or metrics['languageRight'] > 391
+            or metrics['documentWidth'] > 391
+        ):
+            raise AssertionError(
+                f'{product} locale/responsive contract {code}: {metrics}'
+            )
+        page.screenshot(
+            path=str(evidence / f'{product}-{code}-390.png'),
+            full_page=False,
+            animations='disabled',
+        )
+
+    # Narrowest supported phone width: the longest language name must still
+    # be readable without colliding with the Pro/Portal and logout controls.
+    page.set_viewport_size({'width': 320, 'height': 760})
+    smallest = page.evaluate(
+        """() => {
+            const select = document.querySelector('select[data-pf-product-language]');
+            const brand = document.querySelector('.pmv2-brand img');
+            const cta = document.querySelector('.pmv2-header-actions .pmv2-header-cta');
+            const logout = document.querySelector('.pmv2-logout');
+            const style = select && getComputedStyle(select);
+            const canvas = document.createElement('canvas');
+            const ctx = canvas.getContext('2d');
+            if (ctx && style) ctx.font = style.font;
+            const required = !ctx || !select || !style ? Infinity
+                : ctx.measureText(select.selectedOptions[0]?.textContent.trim() || '').width
+                  + parseFloat(style.paddingLeft) + parseFloat(style.paddingRight) + 10;
+            const b = brand?.getBoundingClientRect();
+            const l = select?.getBoundingClientRect();
+            const c = cta?.getBoundingClientRect();
+            const o = logout?.getBoundingClientRect();
+            return {
+                language: select?.value,
+                fullName: select?.selectedOptions[0]?.textContent.trim(),
+                fits: Boolean(l && required <= l.width + 1),
+                noOverlap: Boolean(b && l && c && b.right <= l.left + 1
+                    && l.right <= c.left + 1
+                    && (o ? c.right <= o.left + 1 && o.right <= 321
+                          : c.right <= 321)),
+            };
+        }"""
+    )
+    if smallest != {'language': 'nl', 'fullName': 'Nederlands',
+                    'fits': True, 'noOverlap': True}:
+        raise AssertionError(f'{product} 320px language-selector contract: {smallest}')
+    page.screenshot(
+        path=str(evidence / f'{product}-nl-320.png'),
+        full_page=False,
+        animations='disabled',
+    )
+
+    # Language preferences persist through auth; never let this acceptance
+    # contaminate existing historical German-language assertions.
+    selector = page.locator('select[data-pf-product-language]')
+    if selector.input_value() != 'de':
+        with page.expect_navigation(wait_until='networkidle'):
+            selector.select_option('de')
+    page.set_viewport_size({'width': 1440, 'height': 1000})
+
+
 def run_backend_ui_smoke(browser, fixture=None) -> None:
     if os.getenv('BACKEND_UI_BROWSER_SMOKE') != '1':
         return
@@ -1439,14 +1601,19 @@ def run_backend_ui_smoke(browser, fixture=None) -> None:
         public_context = browser.new_context(viewport={'width': 1440, 'height': 900})
         public_page = public_context.new_page()
 
-        # Real compiled-catalog acceptance: all five supported UI languages
-        # must change actual rendered copy, not merely cookie/config state.
+        # Compiled-catalog browser acceptance for all ten UI languages.
+        # Check rendered text, html lang and the chosen selector value.
         language_contract = {
             'de': 'Anmelden',
             'en': 'Sign in',
             'es': 'Iniciar sesión',
             'pt': 'Iniciar sessão',
             'tr': 'Giriş yap',
+            'ru': 'Войти',
+            'pl': 'Zaloguj się',
+            'fr': 'Se connecter',
+            'it': 'Accedi',
+            'nl': 'Inloggen',
         }
         for language, expected_heading in language_contract.items():
             response = public_page.goto(base + 'auth/login/', wait_until='networkidle')
@@ -2049,6 +2216,8 @@ def run_backend_ui_smoke(browser, fixture=None) -> None:
             public_page.wait_for_function("document.body.classList.contains('pmv2')")
             _check_product_v2_shell(public_page, 'Free V2 responsive shell', width)
 
+        _browser_product_locale_acceptance(public_page, base, 'free')
+
         public_context.close()
 
         portal_routes = [
@@ -2308,6 +2477,101 @@ def run_backend_ui_smoke(browser, fixture=None) -> None:
             )
 
             if role == 'admin':
+                _browser_product_locale_acceptance(page, base, 'pro')
+                # Verify actual gettext_lazy form labels after login, not
+                # merely the public language selector or navigation menu.
+                # Restore German before historical admin UI assertions.
+                form_locales = {
+                    'en': 'Assigned to',
+                    'ru': 'Ответственный',
+                    'pl': 'Odpowiedzialny',
+                    'nl': 'Verantwoordelijke',
+                }
+                form_response = page.goto(base + 'ns-admin/leads/new/', wait_until='networkidle')
+                if not form_response or form_response.status != 200:
+                    raise AssertionError('admin locale smoke: lead form unavailable')
+                for language, expected_label in form_locales.items():
+                    switcher = page.locator('.language-switcher select[name="language"]')
+                    if not switcher.is_visible():
+                        raise AssertionError('admin locale smoke: language selector missing')
+                    with page.expect_navigation(wait_until='networkidle'):
+                        switcher.select_option(language)
+                    label = page.locator('label[for="id_assigned_to"]')
+                    if label.count() != 1:
+                        raise AssertionError('admin locale smoke: assigned-to field missing')
+                    actual = label.inner_text().strip().rstrip(':').strip()
+                    selected = page.locator('.language-switcher select[name="language"]').input_value()
+                    html_lang = page.locator('html').get_attribute('lang')
+                    if actual != expected_label or selected != language or html_lang != language:
+                        raise AssertionError(
+                            f'admin locale smoke {language}: label={actual!r}, '
+                            f'selected={selected!r}, html={html_lang!r}'
+                        )
+                with page.expect_navigation(wait_until='networkidle'):
+                    page.locator('.language-switcher select[name="language"]').select_option('de')
+                if page.locator('html').get_attribute('lang') != 'de':
+                    raise AssertionError('admin locale smoke: German reset failed')
+
+                # Geometry regression for the original language/PA-avatar collision.
+                # Inspect rendered rectangles at desktop, tablet and narrow mobile
+                # widths; do not infer correctness from fixed CSS widths alone.
+                def _check_admin_language_header(width: int, language: str) -> None:
+                    page.set_viewport_size({'width': width, 'height': 900})
+                    response = page.goto(base + 'ns-admin/leads/new/', wait_until='networkidle')
+                    if not response or response.status != 200:
+                        raise AssertionError(
+                            f'admin header {width}px {language}: lead editor unavailable'
+                        )
+                    if language != 'de':
+                        with page.expect_navigation(wait_until='networkidle'):
+                            page.locator('.language-switcher select[name="language"]').select_option(language)
+                    metrics = page.evaluate(
+                        """() => {
+                            const locale = document.querySelector('.topbar-locale .language-switcher');
+                            const select = document.querySelector('.topbar-locale select[name="language"]');
+                            const avatar = document.querySelector('.topbar .userbox .avatar');
+                            if (!locale || !select || !avatar) return {missing:true};
+                            const a = locale.getBoundingClientRect();
+                            const b = avatar.getBoundingClientRect();
+                            const overlap = Math.min(a.right, b.right) - Math.max(a.left, b.left) > 1
+                              && Math.min(a.bottom, b.bottom) - Math.max(a.top, b.top) > 1;
+                            return {
+                                missing:false,
+                                viewport:innerWidth,
+                                selected:select.value,
+                                htmlLang:document.documentElement.lang,
+                                width:a.width,
+                                left:a.left,
+                                right:a.right,
+                                avatarLeft:b.left,
+                                avatarRight:b.right,
+                                overlap,
+                            };
+                        }"""
+                    )
+                    expected_width = 112 if width <= 700 else (140 if width <= 1050 else 154)
+                    if (
+                        metrics.get('missing')
+                        or metrics.get('selected') != language
+                        or metrics.get('htmlLang') != language
+                        or abs(metrics.get('width', 0) - expected_width) > 4
+                        or metrics.get('left', -1) < -1
+                        or metrics.get('right', width + 10) > width + 1
+                        or metrics.get('avatarRight', width + 10) > width + 1
+                        or metrics.get('overlap')
+                    ):
+                        raise AssertionError(
+                            f'admin header geometry {width}px {language}: {metrics}'
+                        )
+                for header_width in (360, 390, 768, 1440):
+                    _check_admin_language_header(header_width, 'de')
+                # Dutch is long enough to expose selector expansion on mobile.
+                _check_admin_language_header(390, 'nl')
+                with page.expect_navigation(wait_until='networkidle'):
+                    page.locator('.language-switcher select[name="language"]').select_option('de')
+                page.set_viewport_size({'width': 1440, 'height': 1000})
+                page.goto(base + 'ns-admin/', wait_until='networkidle')
+
                 admin_logo = page.locator('.sidebar .brand img')
                 if '/static/brand/promptfinisher-logo-hq.png' not in admin_logo.get_attribute('src'):
                     raise AssertionError('admin shell still uses the low-resolution logo asset')

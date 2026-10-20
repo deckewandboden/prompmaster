@@ -6,6 +6,10 @@ fail(){ echo "[FAIL] $*" >&2; exit 1; }
 command -v docker >/dev/null 2>&1 || fail "docker fehlt auf diesem Host"; docker compose version >/dev/null 2>&1 || fail "docker compose ist nicht verfügbar"; [[ -f .env ]] || fail ".env fehlt"
 bash scripts/run_repo_preflight.sh staging
 FILES=(-f compose.yaml -f compose.staging.yaml)
+if [[ -n "${PM_STAGING_CA_FILE:-}" ]]; then
+  [[ -n "${PM_STAGING_CA_SHA256:-}" ]] || fail "Staging-TLS-Zertifikat nicht gepinnt"
+  FILES+=(-f compose.staging-local-ca.yaml)
+fi
 docker compose -f compose.yaml -f compose.production.yaml config >/dev/null
 PM_EXTERNAL_CADDY_NETWORK=promptfinisher-ci-external docker compose -f compose.yaml -f compose.production.yaml -f compose.external-caddy.yaml config >/dev/null
 # Exercise production filesystem restrictions with safe staging integrations.
@@ -59,12 +63,23 @@ for i in $(seq 1 30); do
   [[ "$i" -lt 30 ]] || fail "Prometheus Monitoring-Targets (node/postgres/cadvisor/django) wurden nicht vollständig UP"
   sleep 2
 done
-# Runtime trust-boundary evidence: do not rely only on Compose source validation.
-for spec in "cadvisor:8080" "prometheus:9090"; do
-  service="${spec%%:*}"; port="${spec##*:}"
-  published="$(docker compose "${FILES[@]}" port "$service" "$port" 2>/dev/null || true)"
-  [[ -z "$published" ]] || fail "$service darf keinen veröffentlichten Host-Port besitzen: $published"
+# Runtime trust-boundary evidence: inspect actual Docker port bindings.
+# docker compose port on some Compose/WSL2 versions returns "invalid IP:0"
+# even for *unpublished* EXPOSEd ports; this is not a usable security check.
+# Read both the requested host bindings and the effective runtime mappings.
+# Docker's Go-template ranges over null/unpublished mappings produce no output.
+assert_monitor_no_host_ports() {
+  local service="$1" cid configured actual
+  cid="$(docker compose "${FILES[@]}" ps -q "$service")" || fail "$service container ID konnte nicht gelesen werden"
+  [[ -n "$cid" ]] || fail "$service Container fehlt bei Portpruefung"
+  configured="$(docker inspect --format '{{range $port, $bindings := .HostConfig.PortBindings}}{{range $bindings}}{{.HostIp}}:{{.HostPort}} {{end}}{{end}}' "$cid")" || fail "$service HostConfig.PortBindings nicht lesbar"
+  actual="$(docker inspect --format '{{range $port, $bindings := .NetworkSettings.Ports}}{{range $bindings}}{{.HostIp}}:{{.HostPort}} {{end}}{{end}}' "$cid")" || fail "$service NetworkSettings.Ports nicht lesbar"
+  [[ -z "$configured" && -z "$actual" ]] || fail "$service darf keinen veroeffentlichten Host-Port besitzen: configured=${configured:-none}, actual=${actual:-none}"
+}
+for service in cadvisor prometheus; do
+  assert_monitor_no_host_ports "$service"
 done
+echo "MONITOR PORT BINDINGS OK: cadvisor/prometheus have no configured or effective published host ports"
 CADVISOR_ID="$(docker compose "${FILES[@]}" ps -q cadvisor)"
 PROMETHEUS_ID="$(docker compose "${FILES[@]}" ps -q prometheus)"
 [[ -n "$CADVISOR_ID" && -n "$PROMETHEUS_ID" ]] || fail "Monitoring-Container fehlen"

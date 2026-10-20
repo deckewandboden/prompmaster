@@ -1,8 +1,17 @@
-FROM golang:1.26.6-alpine AS build
+FROM golang:1.27.2-alpine3.23 AS build
+ENV GOTOOLCHAIN=local
 
 ARG NODE_EXPORTER_COMMIT=6044da783597cc3b57aef7580ddcdcff58a4ee99
 
-RUN apk add --no-cache git ca-certificates \
+RUN --mount=type=secret,id=pf_staging_ca,required=false \
+    if [ -s /run/secrets/pf_staging_ca ]; then \
+      cat /etc/ssl/cert.pem /run/secrets/pf_staging_ca > /tmp/pf-staging-ca-combined.pem; \
+      export SSL_CERT_FILE=/tmp/pf-staging-ca-combined.pem; \
+      export GIT_SSL_CAINFO=/tmp/pf-staging-ca-combined.pem; \
+      export CURL_CA_BUNDLE=/tmp/pf-staging-ca-combined.pem; \
+      trap 'rm -f /tmp/pf-staging-ca-combined.pem' EXIT; \
+    fi; \
+    apk add --no-cache git ca-certificates \
     && git clone https://github.com/prometheus/node_exporter.git /src \
     && cd /src \
     && git checkout "$NODE_EXPORTER_COMMIT" \
@@ -10,12 +19,23 @@ RUN apk add --no-cache git ca-certificates \
 
 WORKDIR /src
 
-RUN go get golang.org/x/crypto@v0.55.0 \
+RUN --mount=type=secret,id=pf_staging_ca,required=false \
+    if [ -s /run/secrets/pf_staging_ca ]; then \
+      cat /etc/ssl/cert.pem /run/secrets/pf_staging_ca > /tmp/pf-staging-ca-combined.pem; \
+      export SSL_CERT_FILE=/tmp/pf-staging-ca-combined.pem; \
+      export GIT_SSL_CAINFO=/tmp/pf-staging-ca-combined.pem; \
+      export CURL_CA_BUNDLE=/tmp/pf-staging-ca-combined.pem; \
+      trap 'rm -f /tmp/pf-staging-ca-combined.pem' EXIT; \
+    fi; \
+    go get golang.org/x/crypto@v0.57.0 \
+    && go get golang.org/x/net@v0.60.0 \
     && go mod tidy \
     && CGO_ENABLED=0 GOOS=linux go build \
        -trimpath \
        -ldflags="-s -w -X github.com/prometheus/common/version.Version=1.12.1 -X github.com/prometheus/common/version.Revision=$NODE_EXPORTER_COMMIT" \
-       -o /out/node_exporter .
+       -o /out/node_exporter . \
+    && go version -m /out/node_exporter | grep -F 'go1.27.2' \
+    && go version -m /out/node_exporter | grep -F 'golang.org/x/net' | grep -F 'v0.60.0'
 
 FROM scratch
 COPY --from=build /out/node_exporter /bin/node_exporter

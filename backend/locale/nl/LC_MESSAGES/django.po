@@ -1,0 +1,3651 @@
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: PROMPTFINISHER\n"
+"Language: nl\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n!=1);\n"
+"X-Translation-Method: Argos offline machine translation - editorial QA pending\n"
+
+msgid "Sprache auswählen"
+msgstr "Taal selecteren"
+
+msgid "Sprache"
+msgstr "Taal"
+
+msgid "Suchen …"
+msgstr "Zoeken ..."
+
+msgid "Suchen"
+msgstr "Zoeken"
+
+msgid "Lead, Kunde, Benutzer, Lizenz-ID oder E-Mail suchen …"
+msgstr "Zoek lood, klant, gebruiker, licentie ID of e-mail ..."
+
+msgid "Superadmin"
+msgstr "Super admin"
+
+msgid "netstyle Benutzer"
+msgstr "netstyle gebruiker"
+
+msgid "netstyle Admin-Backend"
+msgstr "netstyle admin backend"
+
+msgid "Übersicht"
+msgstr "Overzicht"
+
+msgid "Leads"
+msgstr "Leads"
+
+msgid "Kunden"
+msgstr "Klanten"
+
+msgid "Lizenzen"
+msgstr "Licenties"
+
+msgid "Bestellungen"
+msgstr "Beschikkingen"
+
+msgid "Zahlungen"
+msgstr "Betalingen"
+
+msgid "Produkte & Preise"
+msgstr "Producten & prijzen"
+
+msgid "Prompt Studio"
+msgstr "Prompt Studio"
+
+msgid "FAQ & Inhalte"
+msgstr "Veelgestelde vragen & inhoud"
+
+msgid "E-Mail"
+msgstr "E-mail"
+
+msgid "Mollie"
+msgstr "Mollie"
+
+msgid "Statistiken"
+msgstr "Statistieken"
+
+msgid "System & Betrieb"
+msgstr "Systeembewerkingen"
+
+msgid "API & Integrationen"
+msgstr "API & integraties"
+
+msgid "Datenschutz & Recht"
+msgstr "Privacy & legaal"
+
+msgid "Kontaktanfragen"
+msgstr "Contactverzoeken"
+
+msgid "Protokolle"
+msgstr "Logs"
+
+msgid "Benutzer & Rollen"
+msgstr "Gebruikersfuncties"
+
+msgid "Einstellungen"
+msgstr "Instellingen"
+
+msgid "Abmelden"
+msgstr "Afmelden"
+
+msgid "Home"
+msgstr "Begin"
+
+msgid "System"
+msgstr "Systeem"
+
+msgid "Logs"
+msgstr "Logs"
+
+msgid "Mehr"
+msgstr "Meer"
+
+msgid "Kundenportal"
+msgstr "Klantenportaal"
+
+msgid "KUNDENPORTAL"
+msgstr "KLANTENPORTAAL"
+
+msgid "Benutzer, E-Mail oder Lizenz suchen …"
+msgstr "Zoek gebruiker, e-mail of licentie ..."
+
+msgid "Lizenz suchen …"
+msgstr "Licentie zoeken …"
+
+msgid "Privatkunde"
+msgstr "Particuliere klant"
+
+msgid "Dashboard"
+msgstr "Dashboard"
+
+msgid "Mein Team"
+msgstr "Mijn team"
+
+msgid "Weitere Lizenzen kaufen"
+msgstr "Koop meer licenties"
+
+msgid "Geräte"
+msgstr "Apparaten"
+
+msgid "Bestellungen & Zahlungen"
+msgstr "Orders & betalingen"
+
+msgid "Unternehmen"
+msgstr "Onderneming"
+
+msgid "Hilfe & Kontakt"
+msgstr "Hulp & contact"
+
+msgid "Team"
+msgstr "Team"
+
+msgid "Anmelden"
+msgstr "Inloggen"
+
+msgid "Ein Zugang für PROMPTFINISHER, Kundenportal und netstyle Admin"
+msgstr "Een rekening voor PROMPTFINISHER, klantenportaal en netstyle admin"
+
+msgid "Noch kein Konto? Konto erstellen"
+msgstr "Nog geen rekening? Account aanmaken"
+
+msgid "Passwort vergessen?"
+msgstr "Wachtwoord vergeten?"
+
+msgid "Konto anlegen"
+msgstr "Account aanmaken"
+
+msgid "Registrieren"
+msgstr "Registreren"
+
+msgid ""
+"Unternehmensadministratoren richten anschließend verpflichtend 2FA ein."
+msgstr "Bedrijfsbeheerders moeten vervolgens 2FA instellen."
+
+msgid "Bereits registriert?"
+msgstr "Al geregistreerd?"
+
+msgid "Zur Anmeldung"
+msgstr "Ga je aanmelden."
+
+msgid "E-Mail-Adresse"
+msgstr "E-mailadres"
+
+msgid "Passwort"
+msgstr "Wachtwoord"
+
+msgid "Bestätigungscode"
+msgstr "Verificatiecode"
+
+msgid "Kundentyp"
+msgstr "Type klant"
+
+msgid "Privat"
+msgstr "Privé"
+
+msgid "Vorname"
+msgstr "Voornaam"
+
+msgid "Nachname"
+msgstr "Achternaam"
+
+msgid "Firmenname"
+msgstr "Bedrijfsnaam"
+
+msgid "AGB gelesen und akzeptiert"
+msgstr "Voorwaarden gelezen en geaccepteerd"
+
+msgid "Datenschutzerklärung zur Kenntnis genommen"
+msgstr "Privacybeleid erkend"
+
+msgid "Passwort zur Bestätigung"
+msgstr "Wachtwoord voor bevestiging"
+
+msgid "Administratorübertragung verbindlich bestätigen"
+msgstr "Administratoroverdracht bevestigen"
+
+msgid "Neues Passwort"
+msgstr "Nieuw wachtwoord"
+
+msgid "Passwort wiederholen"
+msgstr "Wachtwoord herhalen"
+
+msgid "Tabellenfilter"
+msgstr "Tabelfilters"
+
+msgid "Tabelle durchsuchen"
+msgstr "Zoektabel"
+
+msgid "Alle"
+msgstr "Alles"
+
+msgid "Seitengröße"
+msgstr "Paginagrootte"
+
+msgid "Spalten"
+msgstr "Kolommen"
+
+msgid "Anwenden"
+msgstr "Toepassen"
+
+msgid "CSV exportieren"
+msgstr "CSV exporteren"
+
+msgid "Sortierung zurücksetzen"
+msgstr "Sorteren resetten"
+
+msgid "Alles zurücksetzen"
+msgstr "Alles resetten"
+
+msgid "Daten werden geladen …"
+msgstr "Gegevens laden ..."
+
+msgid "Aktive Filter"
+msgstr "Actieve filters"
+
+msgid "Suche"
+msgstr "Zoeken"
+
+msgid "Keine Such- oder Filtertreffer."
+msgstr "Geen zoek- of filterresultaten."
+
+msgid "Filter zurücksetzen"
+msgstr "Filters resetten"
+
+msgid "+ Benutzer hinzufügen"
+msgstr "+ Gebruiker toevoegen"
+
+msgid "AGB"
+msgstr "Algemene voorwaarden"
+
+msgid "Abbrechen"
+msgstr "Annuleren"
+
+msgid "Administrator übertragen"
+msgstr "Transferbeheerder"
+
+msgid "Aktiv"
+msgstr "Actief"
+
+msgid "Aktive Mitglieder"
+msgstr "Actieve leden"
+
+msgid "Anzahl"
+msgstr "Hoeveelheid"
+
+msgid "Bestellungen & Zahlungen öffnen"
+msgstr "Bestellingen & betalingen openen"
+
+msgid "Checkout"
+msgstr "Afrekenen"
+
+msgid "Datenschutz"
+msgstr "Gegevensbescherming"
+
+msgid "Der Link wurde per E-Mail versendet."
+msgstr "De link werd per e-mail verzonden."
+
+msgid "Firmen-Administrator"
+msgstr "Bedrijfsbeheerder"
+
+msgid "Gerät entfernen"
+msgstr "Apparaat verwijderen"
+
+msgid "Geräteslots der aktiven PROMPTFINISHER-Pro-Lizenzen."
+msgstr "Apparaatslots van actieve PROMPTFINISHER Pro-licenties."
+
+msgid "Gerätewechsel"
+msgstr "Apparaatverandering"
+
+msgid "Gesamt"
+msgstr "Totaal"
+
+msgid "Jetzt verlängern"
+msgstr "Vernieuw nu"
+
+msgid "Kein Pro-Zugriff für dieses Benutzerkonto."
+msgstr "Geen Pro toegang voor dit gebruikersaccount."
+
+msgid "Kein aktiver Firmenadministrator gefunden."
+msgstr "Geen actieve bedrijfsleider gevonden."
+
+msgid "Keine Geräte."
+msgstr "Geen apparaten."
+
+msgid "Link zur Kontrolle"
+msgstr "Link voor verificatie"
+
+msgid "Lizenz jetzt zuordnen"
+msgstr "Licentie nu toewijzen"
+
+msgid "Lizenz verlängern"
+msgstr "Vernieuw licentie"
+
+msgid "Lizenzbedingungen"
+msgstr "Licentievoorwaarden"
+
+msgid "Lizenzen insgesamt"
+msgstr "Totaal vergunningen"
+
+msgid "Lizenzstatus"
+msgstr "Licentiestatus"
+
+msgid "Lizenzzuordnung bestätigen"
+msgstr "Bevestig licentietoewijzing"
+
+msgid "Nächster Ablauf"
+msgstr "Volgende vervaldatum"
+
+msgid "PROMPTFINISHER PRO"
+msgstr "PROMPTFINISHER PRO"
+
+msgid "PROMPTFINISHER Pro für mich aktivieren"
+msgstr "PROMPTFINISHER activeren Pro voor mij"
+
+msgid "PROMPTFINISHER Pro starten →"
+msgstr "PROMPTFINISHER starten →"
+
+msgid "Pro anfragen"
+msgstr "Verzoek Pro"
+
+msgid "Sicherer PROMPTFINISHER-Zuordnungslink."
+msgstr "Veilige PROMPTFINISHER toewijzingslink."
+
+msgid "Speichern"
+msgstr "Opslaan"
+
+msgid "Stammdaten, Steuerdaten und Firmen-Administrator."
+msgstr "Mastergegevens, belastinggegevens en bedrijfsbeheerder."
+
+msgid "Team öffnen"
+msgstr "Open team"
+
+msgid "Team- und Lizenzverwaltung"
+msgstr "Team- en licentiebeheer"
+
+msgid "Unternehmensdaten"
+msgstr "Bedrijfsgegevens"
+
+msgid "Unternehmensdaten bearbeiten"
+msgstr "Bedrijfsgegevens bewerken"
+
+msgid "Unternehmensdaten unvollständig."
+msgstr "Bedrijfsgegevens onvolledig."
+
+msgid "Updates während Laufzeit"
+msgstr "Updates tijdens de looptijd"
+
+msgid "Widerruf"
+msgstr "Intrekking"
+
+msgid "Widerrufen"
+msgstr "Ingetrokken"
+
+msgid "Zahlungen mit Handlungsbedarf"
+msgstr "Betalingen waarvoor actie vereist is"
+
+msgid "Zahlungspflichtig kaufen →"
+msgstr "Bestellen met betalingsverplichting →"
+
+msgid "Zuordnungslink erzeugt"
+msgstr "Opdracht koppeling aangemaakt"
+
+msgid "Zurück zum Benutzer"
+msgstr "Terug naar gebruiker"
+
+msgid "aktiv"
+msgstr "actief"
+
+msgid "enthalten"
+msgstr "inbegrepen"
+
+msgid "inkl. MwSt."
+msgstr "incl. btw"
+
+msgid "registriert"
+msgstr "geregistreerd"
+
+msgid "Änderungen werden erst nach erfolgreicher Validierung gespeichert."
+msgstr "Wijzigingen worden pas opgeslagen na een succesvolle validatie."
+
+msgid "+ Lizenz kaufen"
+msgstr "+ Koop licentie"
+
+msgid "Ablauf"
+msgstr "Einde"
+
+msgid "Adresse"
+msgstr "Adres"
+
+msgid "Aktion"
+msgstr "Actie"
+
+msgid "Aktive Geräte"
+msgstr "Actieve hulpmiddelen"
+
+msgid "Automatischer Kontext"
+msgstr "Automatische context"
+
+msgid "Barrierefreiheit"
+msgstr "Toegankelijkheid"
+
+msgid "Benutzer"
+msgstr "Gebruiker"
+
+msgid "Bestellung"
+msgstr "Beschikking"
+
+msgid "Betrag"
+msgstr "Bedrag"
+
+msgid "Betreff"
+msgstr "Onderwerp"
+
+msgid "Browser"
+msgstr "Browser"
+
+msgid "Datenauskunft"
+msgstr "Toegang tot gegevens"
+
+msgid "Datum"
+msgstr "Datum"
+
+msgid "Direkter Kontakt zu netstyle und Verlauf Ihrer Anfragen."
+msgstr "Direct contact met netstyle en geschiedenis van uw verzoeken."
+
+msgid "Einladungen"
+msgstr "Uitnodigingen"
+
+msgid "Einladungen sind 24 Stunden gültig und einmal verwendbar."
+msgstr "Uitnodigingen zijn 24 uur geldig en kunnen eenmalig worden gebruikt."
+
+msgid "Frei"
+msgstr "Vrij"
+
+msgid "Gerät"
+msgstr "Apparaat"
+
+msgid "Gültig ab"
+msgstr "Geldig vanaf"
+
+msgid "Gültig bis"
+msgstr "Geldig tot"
+
+msgid "Impressum"
+msgstr "Colofon"
+
+msgid "Jeder Seat läuft mit individueller Laufzeit."
+msgstr "Elke zetel heeft zijn eigen individuele term."
+
+msgid "Kategorie"
+msgstr "Categorie"
+
+msgid "Keine Bestellungen."
+msgstr "Geen bestellingen."
+
+msgid "Keine Einladungen."
+msgstr "Geen uitnodigingen."
+
+msgid "Keine Lizenzen."
+msgstr "Geen licenties."
+
+msgid "Keine aktiven Geräte."
+msgstr "Geen actieve apparaten."
+
+msgid "Kontaktformular"
+msgstr "Contactformulier"
+
+msgid "Konto & Hilfe"
+msgstr "Accounthulp"
+
+msgid "Kontolöschung"
+msgstr "Account verwijderen"
+
+msgid "Kontolöschung anfordern"
+msgstr "Verzoek om verwijdering van account"
+
+msgid "Laufzeit"
+msgstr "Termijn"
+
+msgid "Lizenz"
+msgstr "Licentie"
+
+msgid "Lizenz-ID"
+msgstr "Licentie-ID"
+
+msgid "Lizenzdaten"
+msgstr "Licentiegegevens"
+
+msgid "Meine Daten exportieren"
+msgstr "Mijn gegevens exporteren"
+
+msgid ""
+"Mollie übernimmt die Zahlungsabwicklung; PROMPTFINISHER erzeugt keine eigene"
+" Rechnungsengine."
+msgstr ""
+"Mollie verwerkt de verwerking van betalingen; PROMPTFINISHER heeft geen "
+"eigen facturatiemotor."
+
+msgid "Mollie-Referenz"
+msgstr "Mollie-referentie"
+
+msgid "Nachricht senden"
+msgstr "Bericht versturen"
+
+msgid "Name"
+msgstr "Naam"
+
+msgid "Neu senden"
+msgstr "Opnieuw verzenden"
+
+msgid "Nicht eingerichtet"
+msgstr "Niet geconfigureerd"
+
+msgid "Noch keine Anfragen vorhanden."
+msgstr "Nog geen verzoek."
+
+msgid "Noch keine Reminder für den aktuellen Ablaufzeitpunkt."
+msgstr "Nog geen herinneringen voor de huidige vervaldatum."
+
+msgid "PROMPTFINISHER Pro öffnen"
+msgstr "Open PROMPTFINISHER Pro"
+
+msgid "Produkt"
+msgstr "Product"
+
+msgid "Produkt / Menge"
+msgstr "Product / hoeveelheid"
+
+msgid "Profil"
+msgstr "Profiel"
+
+msgid "Profil, Adresse, Kontosicherheit und Datenauskunft."
+msgstr "Profiel, adres, accountbeveiliging en toegang tot gegevens."
+
+msgid "Rechtliches"
+msgstr "Juridisch"
+
+msgid "Reminder"
+msgstr "Herinnering"
+
+msgid "Resttage"
+msgstr "Resterende dagen"
+
+msgid "Sicherheit"
+msgstr "Beveiliging"
+
+msgid "Sicherheit verwalten"
+msgstr "Beveiliging beheren"
+
+msgid "Status"
+msgstr "Status"
+
+msgid "Supporthistorie"
+msgstr "Geschiedenis ondersteunen"
+
+msgid "Verbraucherrechte"
+msgstr "Consumentenrechten"
+
+msgid "Vertrag widerrufen"
+msgstr "Contract intrekken"
+
+msgid "Verträge hier kündigen"
+msgstr "Annuleren contracten hier"
+
+msgid "Verwaltung & Abrechnung"
+msgstr "Administratie & facturering"
+
+msgid "Weitere Bereiche Ihres Kundenportals."
+msgstr "Extra gebieden van uw klantenportaal."
+
+msgid "Widerrufsbelehrung"
+msgstr "Informatie over het herroepingsrecht"
+
+msgid "Zahlung"
+msgstr "Betaling"
+
+msgid "Zugewiesen"
+msgstr "Toegewezen"
+
+msgid "Zuletzt gesehen"
+msgstr "Laatst gezien"
+
+msgid "Zurück"
+msgstr "Terug"
+
+msgid "Zuweisung"
+msgstr "Toewijzing"
+
+msgid "Zwei-Faktor-Authentifizierung"
+msgstr "Two-factor authenticatie"
+
+msgid "Öffnen"
+msgstr "Open"
+
+msgid "≤30 Tage"
+msgstr "≤ 30 dagen"
+
+msgid "2FA einrichten"
+msgstr "2FA instellen"
+
+msgid ""
+"2FA schützt den Zugriff mit einem zusätzlichen zeitbasierten Einmalcode."
+msgstr ""
+"2FA beschermt toegang met een extra op tijd gebaseerde eenmalige code."
+
+msgid "Ablehnen"
+msgstr "Weigeren"
+
+msgid "Aktive Lizenzen"
+msgstr "Actieve licenties"
+
+msgid "Aktuelles Ende"
+msgstr "Huidige einddatum"
+
+msgid "Anfrage"
+msgstr "Verzoek"
+
+msgid "Bearbeitungsstand"
+msgstr "Verwerkingsstatus"
+
+msgid "Benutzer deaktivieren"
+msgstr "Gebruiker uitschakelen"
+
+msgid "Benutzer löschen"
+msgstr "Gebruiker verwijderen"
+
+msgid "Benutzer reaktivieren"
+msgstr "Gebruiker opnieuw activeren"
+
+msgid "Benutzer, Einladungen, Lizenzen und Geräte verwalten."
+msgstr "Beheer gebruikers, uitnodigingen, licenties en apparaten."
+
+msgid ""
+"Die Suche bleibt auf Ihren eigenen Mandanten- und Lizenzbereich begrenzt."
+msgstr "Zoeken blijft beperkt tot uw eigen huurder en licentie scope."
+
+msgid ""
+"Ein Passwortwechsel erfolgt über einen zeitlich begrenzten, einmal "
+"verwendbaren Link an Ihre hinterlegte E-Mail-Adresse."
+msgstr ""
+"Een wachtwoordwijziging wordt uitgevoerd via een tijdelijke, eenmalige link "
+"naar uw geregistreerde e-mailadres."
+
+msgid "Free"
+msgstr "Free"
+
+msgid "Freie Lizenz zuweisen"
+msgstr "Vrije licentie toewijzen"
+
+msgid "Freigeben"
+msgstr "Loslaten"
+
+msgid "Genehmigen"
+msgstr "Goedkeuring"
+
+msgid ""
+"Hier sehen Sie ausschließlich Nachrichten, die für Sie bzw. Ihr Unternehmen "
+"bestimmt sind. Interne netstyle-Notizen werden nicht im Kundenportal "
+"angezeigt."
+msgstr ""
+"Hier zie je alleen berichten voor u of uw bedrijf. Interne netstyle tonen "
+"worden niet getoond in het klantenportaal."
+
+msgid "Ihre Anfrage und alle für Kunden freigegebenen Antworten."
+msgstr "Uw verzoek en alle antwoorden vrijgegeven voor klanten."
+
+msgid "Inaktiv"
+msgstr "Inactief"
+
+msgid "Keine Benutzer gefunden."
+msgstr "Geen gebruikers gevonden."
+
+msgid "Keine Lizenz zugewiesen."
+msgstr "Geen vergunning toegewezen."
+
+msgid "Keine Lizenzen gefunden."
+msgstr "Geen licenties gevonden."
+
+msgid "Keine freie Lizenz."
+msgstr "Geen vrije licentie."
+
+msgid "Keine verlängerbare Lizenz vorhanden."
+msgstr "Geen duurzame licentie beschikbaar."
+
+msgid "Mitarbeiter"
+msgstr "Werknemer"
+
+msgid "Noch nie"
+msgstr "Nooit"
+
+msgid "Offene Pro-Anfragen"
+msgstr "Pro-verzoeken openen"
+
+msgid "PROMPTFINISHER Free"
+msgstr "PROMPTFINISHER Free"
+
+msgid "PROMPTFINISHER Pro"
+msgstr "PROMPTFINISHER Pro"
+
+msgid "Passwort zurücksetzen"
+msgstr "Wachtwoord resetten"
+
+msgid "Recovery-Codes neu erzeugen"
+msgstr "Herstelcodes regenereren"
+
+msgid "Seit"
+msgstr "Sinds"
+
+msgid "Sicheren Link senden"
+msgstr "Stuur beveiligde link"
+
+msgid "Team-Mitglieder"
+msgstr "Teamleden"
+
+msgid "Verlauf"
+msgstr "Historie"
+
+msgid ""
+"Wählen Sie die Lizenz, deren bestehende Restlaufzeit um weitere 365 Tage "
+"verlängert werden soll."
+msgstr ""
+"Selecteer de licentie waarvan de resterende termijn met 365 dagen verlengd "
+"moet worden."
+
+msgid "Zahlungspflichtig verlängern →"
+msgstr "Vernieuwen met betalingsverplichting →"
+
+msgid "Zuletzt aktiv"
+msgstr "Laatst actief"
+
+msgid "Zurück zu Einstellungen"
+msgstr "Terug naar instellingen"
+
+msgid "Zurück zu Lizenzen"
+msgstr "Terug naar licenties"
+
+msgid "Zuweisen"
+msgstr "Toewijzen"
+
+msgid "Zwei-Faktor-Authentifizierung und Recovery-Codes verwalten."
+msgstr "Beheer twee-factor authenticatie en herstel codes."
+
+msgid "aktive Benutzer"
+msgstr "actieve gebruikers"
+
+msgid "aktive Benutzer ohne Pro-Zuweisung"
+msgstr "actieve gebruikers zonder Pro-toewijzing"
+
+msgid "registriert / Kapazität"
+msgstr "geregistreerd / capaciteit"
+
+msgid ""
+"Die vorbereitete Lizenz wird Ihrem aktuell angemeldeten Benutzerkonto "
+"zugeordnet. Der Link kann anschließend nicht erneut verwendet werden."
+msgstr ""
+"De voorbereide licentie wordt toegewezen aan uw momenteel ingelogde "
+"gebruikersaccount. De link kan achteraf niet meer worden gebruikt."
+
+msgid ""
+"Gültig bis %(expiry)s. Der Link ist tenantgebunden, für genau diesen "
+"Benutzer bestimmt und nur einmal verwendbar."
+msgstr "Geldig tot %(expiry)s. De link is gekoppeld aan de organisatie, uitsluitend bedoeld voor deze gebruiker en slechts één keer bruikbaar."
+
+msgid ""
+"Jede neue Lizenz startet nach erfolgreicher Zahlung mit eigener 365-Tage-"
+"Laufzeit."
+msgstr ""
+"Elke nieuwe licentie begint zijn eigen 365-dagen termijn na succesvolle "
+"betaling."
+
+msgid "inkl. MwSt. · %(days)s Tage"
+msgstr "incl. btw · %(days)s dagen"
+
+msgid "%(limit)s Geräte je Benutzer"
+msgstr "%(limit)s apparaten per gebruiker"
+
+msgid "Preis nicht verfügbar"
+msgstr "Prijs niet beschikbaar"
+
+msgid ""
+"V1: exakt ein aktiver Firmenadministrator. Eine Übertragung ist nur auf ein "
+"aktives Team-Mitglied möglich."
+msgstr ""
+"V1: precies één actieve bedrijfsleider. Transfer is alleen mogelijk naar een"
+" actief teamlid."
+
+msgid "Ihre eigenen Geräteslots können Sie hier selbst verwalten."
+msgstr "U kunt hier uw eigen apparaatslots beheren."
+
+msgid "Geräteslots werden durch den Firmenadministrator verwaltet."
+msgstr "Apparaatslots worden beheerd door de beheerder van het bedrijf."
+
+msgid "Widerrufene Geräte bleiben als Historie erhalten."
+msgstr "Ingetrokken apparaten blijven in de geschiedenis."
+
+msgid "Zuletzt %(seen)s"
+msgstr "Laatst gezien: %(seen)s"
+
+msgid "Gerät wirklich entfernen?"
+msgstr "Echt een apparaat verwijderen?"
+
+msgid ""
+"Konto, Unternehmen, Benutzer-ID und Zeitpunkt werden automatisch zugeordnet."
+" Optional kann eine für Ihr Konto sichtbare Lizenz mitgesendet werden. "
+"Passwörter, Tokens oder andere unnötige sensitive Daten werden nicht "
+"übernommen."
+msgstr ""
+"Account, bedrijf, gebruikers-ID en tijdstempel worden automatisch "
+"toegewezen. Optioneel kan een voor uw account zichtbare licentie worden "
+"opgenomen. Wachtwoorden, tokens of andere onnodige gevoelige gegevens zijn "
+"niet inbegrepen."
+
+msgid ""
+"Exportieren Sie die zu Ihrem Benutzer gespeicherten PROMPTFINISHER-Daten als"
+" JSON. Secrets und Daten anderer Benutzer werden nicht exportiert."
+msgstr ""
+"Exporteer de PROMPTFINISHER gegevens die zijn opgeslagen voor uw gebruiker "
+"als JSON. Geheimen en gegevens van andere gebruikers worden niet "
+"geëxporteerd."
+
+msgid ""
+"Ihre Löschanfrage vom %(requested)s ist bereits erfasst. Status: %(status)s."
+msgstr "Uw verwijderingsverzoek van %(requested)s is al geregistreerd. Status: %(status)s."
+
+msgid ""
+"Sie können die Löschung Ihres PROMPTFINISHER-Kontos anfordern. Gesetzlich "
+"erforderliche Geschäfts- und Nachweisdaten werden nur im erforderlichen "
+"Umfang weiter aufbewahrt bzw. anonymisiert. Firmenadministratoren müssen "
+"ihre Administratorrolle vor der Verarbeitung übertragen."
+msgstr ""
+"U kunt verzoeken om verwijdering van uw PROMPTFINISHER-account. Juridisch "
+"vereiste bedrijfs- en bewijsgegevens worden alleen bewaard of geanonimiseerd"
+" voor zover dit vereist is. Bedrijfsbeheerders moeten hun beheerdersrol "
+"overdragen voordat ze worden verwerkt."
+
+msgid "Ich möchte die Löschung meines Kontos verbindlich anfordern."
+msgstr "Ik wil een bindend verzoek indienen om mijn account te verwijderen."
+
+msgid "Guten Morgen, %(first_name)s"
+msgstr "Goedemorgen, %(first_name)s"
+
+msgid "Privatkonto"
+msgstr "Particuliere rekening"
+
+msgid "Unternehmensadministrator"
+msgstr "Bedrijfsbeheerder"
+
+msgid "%(assigned)s vergeben · %(free)s verfügbar"
+msgstr "%(assigned)s toegewezen · %(free)s beschikbaar"
+
+msgid "%(free)s frei · %(expiring)s läuft bald ab"
+msgstr "%(free)s vrij · %(expiring)s verlopen binnenkort"
+
+msgid "Tage"
+msgstr "dagen"
+
+msgid "kein Ablauf"
+msgstr "geen vervaldatum"
+
+msgid "Eine Lizenz läuft in %(days)s Tagen ab."
+msgstr "Een licentie verloopt over %(days)s dagen."
+
+msgid "freie Pro-Lizenzen"
+msgstr "gratis Pro licenties"
+
+msgid "Freie Pro-Lizenzen können Team-Mitgliedern zugewiesen werden."
+msgstr "Beschikbare, nog niet toegewezen Pro-licenties kunnen aan teamleden worden toegewezen."
+
+msgid "Für Kauf/Abrechnung fehlen: %(fields)s."
+msgstr "Ontbrekende gegevens voor aankoop/facturering: %(fields)s."
+
+msgid "Tage verbleibend"
+msgstr "resterende dagen"
+
+msgid "Deine Lizenz läuft am %(expiry)s ab."
+msgstr "Uw licentie verloopt op %(expiry)s."
+
+msgid "Es ist eine freie Pro-Lizenz verfügbar."
+msgstr "Een gratis Pro licentie is beschikbaar."
+
+msgid ""
+"Aktuell ist keine freie Pro-Lizenz verfügbar. Kaufen Sie eine weitere Lizenz"
+" oder geben Sie eine bestehende Lizenz frei."
+msgstr ""
+"Er is momenteel geen gratis Pro-licentie beschikbaar. Koop een andere "
+"licentie of geef een bestaande vrij."
+
+msgid "Ihre Pro-Anfrage ist bereits offen."
+msgstr "Je prof verzoek is al open."
+
+msgid ""
+"Für den Pro-Zugriff benötigen Sie eine aktive PROMPTFINISHER-Pro-Lizenz."
+msgstr ""
+"U heeft een actieve PROMPTFINISHER nodig Pro licentie voor Pro toegang."
+
+msgid "Portal durchsuchen"
+msgstr "Zoekportaal"
+
+msgid ""
+"Geben Sie einen Suchbegriff ein. Firmenadministratoren können nach "
+"Teammitgliedern, E-Mail-Adressen und Lizenzen suchen; andere Benutzer sehen "
+"ausschließlich ihre eigene Lizenzsicht."
+msgstr ""
+"Voer een zoekterm. Bedrijfsbeheerders kunnen teamleden, e-mailadressen en "
+"licenties zoeken; andere gebruikers zien alleen hun eigen licentieweergave."
+
+msgid "Kunde"
+msgstr "Klant"
+
+msgid "Pro-Lizenzen noch frei"
+msgstr "Pro licenties nog steeds gratis"
+
+msgid "Verlängern"
+msgstr "Extenderen"
+
+msgid "Geschäft, Handlungsbedarf und Systemstatus auf einen Blick."
+msgstr "Bedrijfs-, actie- en systeemstatus in één oogopslag."
+
+msgid "PROMPTFINISHER Pro öffnen →"
+msgstr "PROMPTFINISHER Pro openen →"
+
+msgid "PROMPTFINISHER Free öffnen →"
+msgstr "PROMPTFINISHER Free openen →"
+
+msgid "System gesund"
+msgstr "Systeem gezond"
+
+msgid "Prüfung erforderlich"
+msgstr "Evaluatie vereist"
+
+msgid "Kunden gesamt"
+msgstr "Totaal klanten"
+
+msgid "Offene Leads"
+msgstr "Open leads"
+
+msgid "Lead-Pipeline öffnen"
+msgstr "Leadpijplijn openen"
+
+msgid "Ablauf unter 30 Tagen"
+msgstr "Vervalt binnen 30 dagen"
+
+msgid "laufen in weniger als 60 Tagen ab"
+msgstr "vervallen binnen 60 dagen"
+
+msgid "Umsatz 30 Tage"
+msgstr "Ontvangsten, 30 dagen"
+
+msgid "Umsatzentwicklung"
+msgstr "Ontwikkeling van de ontvangsten"
+
+msgid "Umsatzentwicklung der letzten Monate"
+msgstr "Ontwikkeling van de inkomsten in de afgelopen maanden"
+
+msgid "Noch keine bezahlten Bestellungen im Auswertungszeitraum."
+msgstr "Nog geen betaalde orders in de verslagperiode."
+
+msgid "Lizenzen nach Produkt"
+msgstr "Vergunningen per product"
+
+msgid "Handlungsbedarf"
+msgstr "Vereiste actie"
+
+msgid "Lizenzen laufen in weniger als 30 Tagen ab."
+msgstr "Vergunningen verlopen binnen 30 dagen."
+
+msgid "fehlgeschlagene Zahlungen"
+msgstr "mislukte betalingen"
+
+msgid "Chargebacks"
+msgstr "Teruggave"
+
+msgid "offene Kontaktanfragen"
+msgstr "open contactverzoeken"
+
+msgid "Kein aktueller Handlungsbedarf."
+msgstr "Er is momenteel geen actie vereist."
+
+msgid "Letzte Bestellungen"
+msgstr "Recente bestellingen"
+
+msgid "Nächste Lizenzabläufe"
+msgstr "Eerstvolgende licentievervaldatums"
+
+msgid "Keine bevorstehenden Abläufe."
+msgstr "Geen aankomende afloop."
+
+msgid "Alle Lizenzen"
+msgstr "Alle licenties"
+
+msgid "Kundenportal-Vorschau"
+msgstr "Voorbeeld van het klantenportaal"
+
+msgid "KUNDENPORTAL · VORSCHAU"
+msgstr "PORTAL VAN DE KLANT · VOORUITZICHT"
+
+msgid "Read-only Vorschau …"
+msgstr "Alleen-lezen preview ..."
+
+msgid "Support-Vorschau"
+msgstr "Ondersteuningsvoorbeeld"
+
+msgid "Zurück zum netstyle Kundendetail"
+msgstr "Terug naar netstyle klantgegevens"
+
+msgid "Read-only Kundenansicht."
+msgstr "Alleen-lezen klantweergave."
+
+msgid ""
+"Die Daten entsprechen dem ausgewählten Kundenkonto und seiner Rolle. Dies "
+"ist eine Ansichtsvorschau, keine Kundensitzung: Interaktionen, Zahlungs- und"
+" Sicherheitsaktionen sind nicht ausführbar."
+msgstr ""
+"Gegevens zijn toegankelijk voor de geselecteerde klantaccount en rol. Dit is"
+" een preview, geen klantsessie: interacties, betalingen en "
+"beveiligingsmaatregelen zijn uitgeschakeld."
+
+msgid "Perspektive auswählen"
+msgstr "Selecteer weergaveperspectief"
+
+msgid ""
+"Nur aktive Benutzer dieses Unternehmens. Rollen und Zugriffsrechte werden "
+"berücksichtigt."
+msgstr ""
+"Alleen actieve gebruikers van dit bedrijf. Rol en toegangsrechten worden "
+"geëerbiedigd."
+
+msgid "Kundenbenutzer"
+msgstr "Klantgebruiker"
+
+msgid "Keine aktiven Benutzer vorhanden"
+msgstr "Geen actieve gebruikers beschikbaar"
+
+msgid "Ansicht wechseln"
+msgstr "Beeld wijzigen"
+
+msgid "Angezeigte Rolle:"
+msgstr "Getoonde rol:"
+
+msgid "Kundenverwaltung"
+msgstr "Klantadministratie"
+
+msgid ""
+"Änderungen erfolgen ausschließlich in den berechtigungsgeschützten "
+"Administrationsmasken mit Auditierung – nicht in der Kundenansicht."
+msgstr ""
+"Wijzigingen worden alleen doorgevoerd door middel van door toestemming "
+"beschermde, gecontroleerde administratieve formulieren, niet door de klant."
+
+msgid "Benutzer und Rollen verwalten"
+msgstr "Gebruikers en rollen beheren"
+
+msgid "Lizenzen verwalten"
+msgstr "Beheer licenties"
+
+msgid "Geräte verwalten"
+msgstr "Devices beheren"
+
+msgid "gesamt"
+msgstr "Totaal"
+
+msgid "frei"
+msgstr "beschikbaar"
+
+msgid "Ablauf ≤30 Tage"
+msgstr "Verlopen binnen 30 dagen"
+
+msgid "Konto"
+msgstr "Account"
+
+msgid "Kontotyp"
+msgstr "Accounttype"
+
+msgid "Portal-Benutzer"
+msgstr "Portaalgebruiker"
+
+msgid "Aktive Benutzer"
+msgstr "Actieve gebruikers"
+
+msgid "Bestand"
+msgstr "Overzicht van de bedrijven"
+
+msgid "Freie Lizenzen"
+msgstr "Beschikbare licenties"
+
+msgid "Rolle"
+msgstr "Rol"
+
+msgid "Hinweis"
+msgstr "Opmerking"
+
+msgid "Keine Benutzer vorhanden."
+msgstr "Geen gebruikers beschikbaar."
+
+msgid "Keine Lizenzen vorhanden."
+msgstr "Geen licenties beschikbaar."
+
+msgid "Keine netstyle-Berechtigung zum Anzeigen der Lizenzdaten."
+msgstr "Uw netstyle-rechten staan geen licentiegegevens toe."
+
+msgid "Keine aktiven Geräte vorhanden."
+msgstr "Geen actieve apparaten beschikbaar."
+
+msgid "Keine Bestellungen vorhanden."
+msgstr "Geen orders beschikbaar."
+
+msgid "Keine netstyle-Berechtigung zum Anzeigen der Bestelldaten."
+msgstr "Uw netstyle-rechten staan het bekijken van ordergegevens niet toe."
+
+msgid "Rechtsform"
+msgstr "Rechtsvorm"
+
+msgid "Telefon"
+msgstr "Telefoon"
+
+msgid "Rechnungsanschrift"
+msgstr "Factuuradres"
+
+msgid "Ort"
+msgstr "Stad"
+
+msgid "Land"
+msgstr "Land"
+
+msgid "USt-IdNr."
+msgstr "BTW-ID"
+
+msgid "Mein Profil"
+msgstr "Mijn profiel"
+
+msgid ""
+"Dies ist eine Leseansicht. Passwort, Zwei-Faktor-Authentifizierung und "
+"persönliche Einstellungen kann nur der angemeldete Kundenbenutzer selbst "
+"ändern."
+msgstr ""
+"Dit is een alleen-lezen weergave. Alleen de ingelogde klant kan zijn "
+"wachtwoord, twee-factor authenticatie en persoonlijke instellingen wijzigen."
+
+msgid "Benutzerkonto"
+msgstr "Gebruikersaccount"
+
+msgid ""
+"Teamverwaltung, Bestellungen und Unternehmensdaten sind für diese Rolle "
+"nicht freigegeben."
+msgstr ""
+"Teammanagement, orders en bedrijfsgegevens zijn niet beschikbaar voor deze "
+"rol."
+
+msgid "Anschrift"
+msgstr "Postadres"
+
+msgid "Weitere Bereiche"
+msgstr "Aanvullende secties"
+
+msgid "Kontoeinstellungen"
+msgstr "Accountinstellingen"
+
+msgid "Read-only"
+msgstr "Alleen-lezen"
+
+msgid "Sicherheit / 2FA"
+msgstr "Beveiliging / 2FA"
+
+msgid "nicht impersoniert"
+msgstr "geen imitatie"
+
+msgid "nicht ausführbar"
+msgstr "niet beschikbaar"
+
+msgid "Support-Hinweis"
+msgstr "Bericht van ondersteuning"
+
+msgid ""
+"Für echte Schreibaktionen oder einen vollständigen Login-Test muss ein "
+"eigener Nicht-Staff-Testkunde verwendet werden. Die Vorschau übernimmt "
+"niemals die Identität des Kunden."
+msgstr ""
+"Voor echte schrijfbewerkingen of een volledige inlogtest, gebruik een "
+"speciale niet-personeelstestklant. Deze preview gaat nooit uit van de "
+"identiteit van een klant."
+
+msgid "Noch keine Lizenzen."
+msgstr "Nog geen licenties."
+
+msgid "Alle Bestellungen"
+msgstr "Alle bestellingen"
+
+msgid "Firmenkonto"
+msgstr "Bedrijfsrekening"
+
+msgid "Serverseitige Suche, Filter, Sortierung und Pagination."
+msgstr "Zoeken, filteren, sorteren en pagineren op de server."
+
+msgid "Neu anlegen"
+msgstr "Nieuw aanmaken"
+
+msgid "Privatkunden"
+msgstr "Particuliere klanten"
+
+msgid "aufsteigend"
+msgstr "oplopend"
+
+msgid "absteigend"
+msgstr "aflopend"
+
+msgid "Keine Datensätze für die aktuelle Auswahl."
+msgstr "Geen records voor de huidige selectie."
+
+msgid "Änderungen werden serverseitig validiert und – sofern sicherheits- oder geschäftskritisch – protokolliert."
+msgstr "Wijzigingen worden op de server gevalideerd en gelogd als ze beveiligings- of bedrijfskritiek zijn."
+
+msgid "Zusätzliche Sicherheitsfreigabe."
+msgstr "Aanvullende beveiligingscontrole."
+
+msgid "Bestätigen Sie Ihr eigenes Passwort. Die Freigabe gilt anschließend ausschließlich für wenige Minuten und nur für geschützte Admin-Aktionen."
+msgstr "Bevestig je eigen wachtwoord. De toestemming geldt daarna slechts enkele minuten en alleen voor beveiligde beheerdersacties."
+
+msgid "Bestätigen"
+msgstr "Bevestigen"
+
+msgid "Kompakte Geschäftszahlen innerhalb Ihrer Berechtigungen."
+msgstr "Beknopte bedrijfscijfers binnen je toegangsrechten."
+
+msgid "Neue Kunden · 30 Tage"
+msgstr "Nieuwe klanten · 30 dagen"
+
+msgid "Verlängerungsanteil"
+msgstr "Aandeel verlengingen"
+
+msgid "Verlängerungsterms"
+msgstr "verlengingsperioden"
+
+msgid "Refund-Quote"
+msgstr "Terugbetalingspercentage"
+
+msgid "Anteil refundierter Lizenzterms"
+msgstr "Aandeel terugbetaalde licentieperioden"
+
+msgid "Ø Lizenzen / Firma"
+msgstr "Gem. licenties / bedrijf"
+
+msgid "Firmenkundenbestand"
+msgstr "Zakelijk klantenbestand"
+
+msgid "Umsatz letzte 30 Tage"
+msgstr "Omzet afgelopen 30 dagen"
+
+msgid "Bestellungen gesamt"
+msgstr "bestellingen totaal"
+
+msgid "Lizenzen gesamt"
+msgstr "Totaal licenties"
+
+msgid "inkl. aktiv, frei, abgelaufen und historisch"
+msgstr "inclusief actieve, vrije, verlopen en historische"
+
+msgid "Anfragen aus dem Kundenportal; V1 verwendet bewusst kein Ticketsystem."
+msgstr "Verzoeken vanuit het klantenportaal; V1 gebruikt bewust geen ticketsysteem."
+
+msgid "Keine Kontaktanfragen."
+msgstr "Geen contactverzoeken."
+
+msgid "Globale Suche"
+msgstr "Globaal zoeken"
+
+msgid "Ergebnisse für"
+msgstr "Resultaten voor"
+
+msgid "Keine Treffer."
+msgstr "Geen resultaten."
+
+msgid "Append-only Auditlog für administrative und geschäftskritische Änderungen."
+msgstr "Alleen-aanvulbaar auditlogboek voor administratieve en bedrijfskritische wijzigingen."
+
+msgid "Zeit"
+msgstr "Tijd"
+
+msgid "Objekt"
+msgstr "Object"
+
+msgid "Änderung"
+msgstr "Wijziging"
+
+msgid "Keine Audit-Einträge."
+msgstr "Geen auditvermeldingen."
+
+msgid "Mollie-Zahlungsstatus, Beträge, Refunds und Chargebacks."
+msgstr "Mollie-betaalstatussen, bedragen, terugbetalingen en terugboekingen."
+
+msgid "Bezahlt"
+msgstr "Betaald"
+
+msgid "Offen"
+msgstr "Openstaand"
+
+msgid "Fehlgeschlagen"
+msgstr "Mislukt"
+
+msgid "Payment-ID"
+msgstr "Betalings-ID"
+
+msgid "Keine Zahlungen gefunden."
+msgstr "Geen betalingen gevonden."
+
+msgid "Lead"
+msgstr "Lead"
+
+msgid "Interessent"
+msgstr "Geïnteresseerde"
+
+msgid "Priorität"
+msgstr "Prioriteit"
+
+msgid "Zuständig"
+msgstr "Verantwoordelijke"
+
+msgid "Erstellt"
+msgstr "Aangemaakt"
+
+msgid "Kundennummer"
+msgstr "Klantnummer"
+
+msgid "Eingang"
+msgstr "Ontvangen"
+
+msgid "Art"
+msgstr "Soort"
+
+msgid "Vertragsbezug"
+msgstr "Contractreferentie"
+
+msgid "Datengetriebene Produkt-, Laufzeit-, Geräte-, Reminder- und Entitlement-Konfiguration."
+msgstr "Datagestuurde configuratie van producten, looptijden, apparaten, herinneringen en rechten."
+
+msgid "Features"
+msgstr "Functies"
+
+msgid "Produkt anlegen"
+msgstr "Product aanmaken"
+
+msgid "AKTIV"
+msgstr "ACTIEF"
+
+msgid "INAKTIV"
+msgstr "INACTIEF"
+
+msgid "aktueller Neukaufpreis"
+msgstr "huidige prijs voor nieuwe aankoop"
+
+msgid "nicht konfiguriert"
+msgstr "niet ingesteld"
+
+msgid "Verlängerung"
+msgstr "Verlenging"
+
+msgid "Sichtbar / kaufbar"
+msgstr "Zichtbaar / te koop"
+
+msgid "Ja"
+msgstr "Ja"
+
+msgid "Nein"
+msgstr "Nee"
+
+msgid "Bearbeiten"
+msgstr "Bewerken"
+
+msgid "Noch keine Produkte."
+msgstr "Nog geen producten."
+
+msgid "Rollenbasierte Rechte; für alle netstyle Benutzer ist 2FA Pflicht."
+msgstr "Rechten op basis van rollen; tweefactorauthenticatie is verplicht voor alle netstyle-gebruikers."
+
+msgid "Rolle zuweisen"
+msgstr "Rol toewijzen"
+
+msgid "netstyle Benutzer anlegen"
+msgstr "netstyle-gebruiker aanmaken"
+
+msgid "Berechtigungen"
+msgstr "Machtigingen"
+
+msgid "Sicherheitsvorgabe"
+msgstr "Beveiligingseis"
+
+msgid "2FA Pflicht"
+msgstr "2FA verplicht"
+
+msgid "Keine Rolle"
+msgstr "Geen rol"
+
+msgid "2FA aktiv"
+msgstr "2FA ingeschakeld"
+
+msgid "2FA einzurichten"
+msgstr "2FA instellen vereist"
+
+msgid "2FA dieses Benutzers zurücksetzen?"
+msgstr "2FA van deze gebruiker opnieuw instellen?"
+
+msgid "2FA zurücksetzen"
+msgstr "2FA opnieuw instellen"
+
+msgid "Benutzerstatus wirklich ändern?"
+msgstr "De gebruikersstatus echt wijzigen?"
+
+msgid "Deaktivieren"
+msgstr "Deactiveren"
+
+msgid "Aktivieren"
+msgstr "Activeren"
+
+msgid "Keine netstyle Benutzer."
+msgstr "Geen netstyle-gebruikers."
+
+msgid "Rechtsdokumente, Aufbewahrung und Löschanforderungen."
+msgstr "Juridische documenten, bewaartermijnen en verwijderverzoeken."
+
+msgid "Rechtsdokumente"
+msgstr "Juridische documenten"
+
+msgid "Noch keine Rechtstexte hinterlegt."
+msgstr "Er zijn nog geen juridische teksten toegevoegd."
+
+msgid "Rechtsdokumente verwalten"
+msgstr "Juridische documenten beheren"
+
+msgid "Verbrauchererklärungen"
+msgstr "Consumentenverklaringen"
+
+msgid "Offene Widerrufe / Kündigungen"
+msgstr "Openstaande herroepingen / opzeggingen"
+
+msgid "Widerrufe & Kündigungen"
+msgstr "Herroepingen en opzeggingen"
+
+msgid "Retention / Löschung"
+msgstr "Bewaren / verwijderen"
+
+msgid "Aktive Retention-Policies"
+msgstr "Actieve bewaarbeleidsregels"
+
+msgid "Offene Löschanfragen"
+msgstr "Openstaande verwijderverzoeken"
+
+msgid "Retention-Policies"
+msgstr "Bewaarbeleid"
+
+msgid "Löschanfragen"
+msgstr "Verwijderverzoeken"
+
+msgid "Features / Entitlements"
+msgstr "Functies / rechten"
+
+msgid "Wiederverwendbare Funktionsrechte für heutige und zukünftige Produkte."
+msgstr "Herbruikbare functierechten voor huidige en toekomstige producten."
+
+msgid "Feature anlegen"
+msgstr "Functie aanmaken"
+
+msgid "Code"
+msgstr "Code"
+
+msgid "Keine Features."
+msgstr "Geen functies."
+
+msgid "Geschützte Operations-Schnittstellen und Service Accounts."
+msgstr "Beveiligde beheerinterfaces en serviceaccounts."
+
+msgid "Service Account anlegen"
+msgstr "Serviceaccount aanmaken"
+
+msgid "Operations API"
+msgstr "Beheer-API"
+
+msgid "Zugriff ausschließlich über aktive Service Accounts mit passendem Scope. Tokens werden nur einmal bei Erstellung bzw. Rotation angezeigt."
+msgstr "Toegang uitsluitend via actieve serviceaccounts met het juiste bereik. Tokens worden alleen bij aanmaak of rotatie eenmaal getoond."
+
+msgid "Service Accounts"
+msgstr "Serviceaccounts"
+
+msgid "Gesperrt"
+msgstr "Geblokkeerd"
+
+msgid "Token rotieren"
+msgstr "Token roteren"
+
+msgid "Service Account wirklich sperren?"
+msgstr "Dit serviceaccount echt blokkeren?"
+
+msgid "Sperren"
+msgstr "Blokkeren"
+
+msgid "Noch keine Service Accounts."
+msgstr "Nog geen serviceaccounts."
+
+msgid "Dienste"
+msgstr "Diensten"
+
+msgid "Status der internen Plattformdienste."
+msgstr "Status van interne platformdiensten."
+
+msgid "Systemübersicht"
+msgstr "Systeemoverzicht"
+
+msgid "Host"
+msgstr "Host"
+
+msgid "Hostname"
+msgstr "Hostnaam"
+
+msgid "Kernel"
+msgstr "Kernel"
+
+msgid "Healthy"
+msgstr "Gezond"
+
+msgid "Nicht erreichbar"
+msgstr "Niet bereikbaar"
+
+msgid "Datenbank"
+msgstr "Database"
+
+msgid "Verbindungen"
+msgstr "Verbindingen"
+
+msgid "Größe"
+msgstr "Grootte"
+
+msgid "Background Jobs"
+msgstr "Achtergrondtaken"
+
+msgid "Heartbeat fehlt"
+msgstr "Heartbeat ontbreekt"
+
+msgid "Queue"
+msgstr "Wachtrij"
+
+msgid "Fehlgeschlagene Jobs 24 h"
+msgstr "Mislukte taken in 24 uur"
+
+msgid "Worker"
+msgstr "Worker"
+
+msgid "Antwortende Worker"
+msgstr "Reagerende workers"
+
+msgid "Worker-Heartbeat"
+msgstr "Worker-heartbeat"
+
+msgid "Beat-Heartbeat"
+msgstr "Beat-heartbeat"
+
+msgid "Zahlungsprovider, Webhook und letzte Zahlungsereignisse."
+msgstr "Betaalprovider, webhook en recente betaalgebeurtenissen."
+
+msgid "Mollie konfigurieren"
+msgstr "Mollie configureren"
+
+msgid "Konfiguration"
+msgstr "Configuratie"
+
+msgid "Konfiguriert"
+msgstr "Ingesteld"
+
+msgid "Unvollständig"
+msgstr "Onvolledig"
+
+msgid "Produktiv-Checkout"
+msgstr "Live afrekenen"
+
+msgid "Freigegeben"
+msgstr "Vrijgegeven"
+
+msgid "Modus"
+msgstr "Modus"
+
+msgid "Profile ID"
+msgstr "Profiel-ID"
+
+msgid "API Key"
+msgstr "API-sleutel"
+
+msgid "nicht gesetzt"
+msgstr "niet ingesteld"
+
+msgid "Live-Zugangsdaten sind hinterlegt, der Kunden-Checkout bleibt jedoch gesperrt, bis die Live-Readiness geprüft und ausdrücklich freigegeben wurde."
+msgstr "Live-inloggegevens zijn opgeslagen, maar betalen door klanten blijft geblokkeerd totdat productiegeschiktheid is gecontroleerd en expliciet goedgekeurd."
+
+msgid "Basis-URL"
+msgstr "Basis-URL"
+
+msgid "Endpoint"
+msgstr "Eindpunt"
+
+msgid "Letztes Event"
+msgstr "Laatste gebeurtenis"
+
+msgid "noch keines"
+msgstr "nog geen"
+
+msgid "Webhook-Ereignisse öffnen"
+msgstr "Webhookgebeurtenissen openen"
+
+msgid "Notabschaltung"
+msgstr "Nooduitschakeling"
+
+msgid "Sperrt neue Mollie-Käufe sofort. Bestehende Zahlungen und Webhooks bleiben weiter verarbeitbar."
+msgstr "Blokkeert direct nieuwe Mollie-aankopen. Bestaande betalingen en webhooks kunnen nog worden verwerkt."
+
+msgid "Produktiv-Checkout sperren"
+msgstr "Live afrekenen blokkeren"
+
+msgid "Letzte Zahlungen"
+msgstr "Recente betalingen"
+
+msgid "Noch keine Zahlungen."
+msgstr "Nog geen betalingen."
+
+msgid "Letzte Webhook-Events"
+msgstr "Recente webhookgebeurtenissen"
+
+msgid "offen"
+msgstr "open"
+
+msgid "Noch keine Webhook-Ereignisse."
+msgstr "Nog geen webhookgebeurtenissen."
+
+msgid "Vorlagen, Versandstatus, Provider und Fallback-Kette."
+msgstr "Sjablonen, verzendstatus, providers en failoverketen."
+
+msgid "Absender & Provider"
+msgstr "Afzender en provider"
+
+msgid "Versandprotokoll öffnen"
+msgstr "Verzendlog openen"
+
+msgid "Vorlagen"
+msgstr "Sjablonen"
+
+msgid "Keine E-Mail-Vorlagen vorhanden."
+msgstr "Geen e-mailsjablonen beschikbaar."
+
+msgid "Mail-System"
+msgstr "Mailsysteem"
+
+msgid "Versandmodus"
+msgstr "Verzendmodus"
+
+msgid "Automatischer Fallback"
+msgstr "Automatische failover"
+
+msgid "Manuell"
+msgstr "Handmatig"
+
+msgid "Primär"
+msgstr "Primair"
+
+msgid "Reihenfolge"
+msgstr "Volgorde"
+
+msgid "Status der Kette"
+msgstr "Ketenstatus"
+
+msgid "Aktiver Absender"
+msgstr "Actieve afzender"
+
+msgid "Anzeigename"
+msgstr "Weergavenaam"
+
+msgid "Mail-Domain"
+msgstr "Maildomein"
+
+msgid "Server"
+msgstr "Server"
+
+msgid "Anmeldung"
+msgstr "Aanmelding"
+
+msgid "Passwort fehlt"
+msgstr "Wachtwoord ontbreekt"
+
+msgid "Ohne Anmeldung"
+msgstr "Zonder aanmelding"
+
+msgid "Nicht konfiguriert"
+msgstr "Niet geconfigureerd"
+
+msgid "Fehlt"
+msgstr "Ontbreekt"
+
+msgid "Graph Absender"
+msgstr "Graph-afzender"
+
+msgid "Automatischer Fallback erfolgt nur bei eindeutig nicht zugestellten Fehlern. Bei unklaren Fehlern wird nicht automatisch weitergeschaltet, damit dieselbe E-Mail nicht versehentlich doppelt versendet wird."
+msgstr "Automatische failover gebeurt alleen bij bevestigde niet-aflevering. Bij onduidelijke fouten wordt niet automatisch overgeschakeld om te voorkomen dat dezelfde e-mail per ongeluk tweemaal wordt verzonden."
+
+msgid "SPF/DKIM/DMARC werden unter „Einstellungen“ als DNS-Sollwerte dokumentiert. Änderungen dort aktualisieren nicht automatisch den öffentlichen DNS."
+msgstr "De beoogde DNS-records voor SPF/DKIM/DMARC staan onder Instellingen. Wijzigingen daar passen de openbare DNS niet automatisch aan."
+
+msgid "Letzte Versandvorgänge"
+msgstr "Recente verzendpogingen"
+
+msgid "Noch keine Versandvorgänge."
+msgstr "Nog geen verzendpogingen."
+
+msgid "Zur Kundenliste"
+msgstr "Terug naar klantenlijst"
+
+msgid "Zur Privatkundenliste"
+msgstr "Terug naar particuliere klanten"
+
+msgid "Kundendaten"
+msgstr "Klantgegevens"
+
+msgid "Stammdaten"
+msgstr "Stamgegevens"
+
+msgid "Unternehmensdaten speichern"
+msgstr "Bedrijfsgegevens opslaan"
+
+msgid "Firma"
+msgstr "Bedrijf"
+
+msgid "Steuernummer"
+msgstr "Fiscaal nummer"
+
+msgid "Änderungen erfolgen serverseitig mit Berechtigungsprüfung und werden im Audit protokolliert. Steuerfelder werden anhand der aktiven Steuerregel für Land und Kundentyp validiert."
+msgstr "Wijzigingen worden op de server uitgevoerd na controle van rechten en vastgelegd in het auditlogboek. Belastingvelden worden gevalideerd volgens de geldende regel voor het land en klanttype."
+
+msgid "Rechtsakzeptanzen"
+msgstr "Acceptaties van juridische documenten"
+
+msgid "Version"
+msgstr "Versie"
+
+msgid "Keine Rechtsakzeptanzen protokolliert."
+msgstr "Geen acceptaties van juridische documenten vastgelegd."
+
+msgid "Keine Löschanfragen."
+msgstr "Geen verwijderverzoeken."
+
+msgid "Alle Löschanfragen"
+msgstr "Alle verwijderverzoeken"
+
+msgid "Bestellung vom"
+msgstr "Bestelling van"
+
+msgid "Zurück zur Liste"
+msgstr "Terug naar lijst"
+
+msgid "Brutto"
+msgstr "Bruto"
+
+msgid "Steuer"
+msgstr "Belasting"
+
+msgid "Keine Zahlung erfasst."
+msgstr "Geen betaling geregistreerd."
+
+msgid "Positionen"
+msgstr "Orderregels"
+
+msgid "Menge"
+msgstr "Aantal"
+
+msgid "Einzelpreis"
+msgstr "Eenheidsprijs"
+
+msgid "Lizenzstatus wirklich ändern?"
+msgstr "De status van deze licentie echt wijzigen?"
+
+msgid "Lizenz entsperren"
+msgstr "Licentie deblokkeren"
+
+msgid "Lizenz sperren"
+msgstr "Licentie blokkeren"
+
+msgid "Inhaber & Zuweisung"
+msgstr "Eigenaar en toewijzing"
+
+msgid "Zugewiesen an"
+msgstr "Toegewezen aan"
+
+msgid "Lizenzzuweisung wirklich freigeben? Aktive Geräte dieser Lizenz werden widerrufen."
+msgstr "De licentietoewijzing echt vrijgeven? Actieve apparaten die aan deze licentie zijn gekoppeld worden ingetrokken."
+
+msgid "Zuweisung freigeben"
+msgstr "Toewijzing vrijgeven"
+
+msgid "Aktiven Firmenbenutzer auswählen"
+msgstr "Actieve bedrijfsgebruiker selecteren"
+
+msgid "Bitte auswählen"
+msgstr "Maak een keuze"
+
+msgid "Lizenz zuweisen"
+msgstr "Licentie toewijzen"
+
+msgid "Lizenzperioden"
+msgstr "Licentieperioden"
+
+msgid "Von"
+msgstr "Van"
+
+msgid "Bis"
+msgstr "Tot"
+
+msgid "Erstattung"
+msgstr "Terugbetaling"
+
+msgid "Erstattung wirklich verbindlich über Mollie auslösen?"
+msgstr "Definitief een terugbetaling via Mollie starten?"
+
+msgid "Erstattung prüfen/auslösen"
+msgstr "Terugbetaling controleren/starten"
+
+msgid "Keine Lizenzperioden vorhanden."
+msgstr "Geen licentieperioden beschikbaar."
+
+msgid "E-Mail-Protokoll"
+msgstr "E-maillogboek"
+
+msgid "Versandstatus, tatsächlich verwendeter Provider und Fallback-Versuche ohne vertrauliche Nachrichtentexte oder Secrets."
+msgstr "Verzendstatus, daadwerkelijk gebruikte provider en failoverpogingen, zonder vertrouwelijke berichtinhoud of geheimen."
+
+msgid "Empfänger"
+msgstr "Ontvanger"
+
+msgid "Vorlage"
+msgstr "Sjabloon"
+
+msgid "Provider"
+msgstr "Provider"
+
+msgid "Versuche"
+msgstr "Pogingen"
+
+msgid "Gesendet"
+msgstr "Verzonden"
+
+msgid "Wird gesendet"
+msgstr "Wordt verzonden"
+
+msgid "Unterdrückt"
+msgstr "Onderdrukt"
+
+msgid "Warteschlange"
+msgstr "In wachtrij"
+
+msgid "Keine E-Mails gefunden."
+msgstr "Geen e-mails gevonden."
+
+msgid "Kundenbereiche"
+msgstr "Klantonderdelen"
+
+msgid "Privatkundenbereiche"
+msgstr "Onderdelen particuliere klanten"
+
+msgid "Audit"
+msgstr "Audit"
+
+msgid "Zuletzt"
+msgstr "Laatst gezien"
+
+msgid "Akteur"
+msgstr "Actor"
+
+msgid "Admin übertragen"
+msgstr "Beheerdersrol overdragen"
+
+msgid "Benutzer wirklich deaktivieren? Lizenzen und Gerätezugänge werden freigegeben."
+msgstr "Deze gebruiker echt deactiveren? Licenties en apparaattoegang worden vrijgegeven."
+
+msgid "Firmenadmin"
+msgstr "Bedrijfsbeheerder"
+
+msgid "Gerätezugang wirklich widerrufen?"
+msgstr "Apparaattoegang echt intrekken?"
+
+msgid "Mollie Events"
+msgstr "Mollie-gebeurtenissen"
+
+msgid "Idempotent verarbeitete Provider-Zustandsänderungen."
+msgstr "Idempotent verwerkte statuswijzigingen van de provider."
+
+msgid "Providerstatus"
+msgstr "Providerstatus"
+
+msgid "Verarbeitet"
+msgstr "Verwerkt"
+
+msgid "Retries"
+msgstr "Nieuwe pogingen"
+
+msgid "Fehler"
+msgstr "Fout"
+
+msgid "Keine Mollie Events gefunden."
+msgstr "Geen Mollie-gebeurtenissen gevonden."
+
+msgid "DSGVO-Workflow mit kontrollierter Anonymisierung und Erhalt rechtlich erforderlicher Historie."
+msgstr "AVG-proces met gecontroleerde anonimisering en behoud van wettelijk verplichte historie."
+
+msgid "Angefordert"
+msgstr "Aangevraagd"
+
+msgid "Notiz"
+msgstr "Notitie"
+
+msgid "Konto wirklich anonymisieren?"
+msgstr "Dit account echt anonimiseren?"
+
+msgid "Verarbeiten"
+msgstr "Verwerken"
+
+msgid "Retention Policies"
+msgstr "Bewaarbeleid"
+
+msgid "Nur freigegebene Datenklassen können automatisiert bereinigt werden."
+msgstr "Alleen goedgekeurde gegevensklassen kunnen automatisch worden opgeschoond."
+
+msgid "Datenklasse"
+msgstr "Gegevensklasse"
+
+msgid "Keine Policies."
+msgstr "Geen beleidsregels."
+
+msgid "Versionierte AGB, Datenschutz-, Widerrufs- und Lizenztexte."
+msgstr "Versies van algemene voorwaarden, privacyverklaringen, herroepings- en licentieteksten."
+
+msgid "Typ"
+msgstr "Type"
+
+msgid "Keine Dokumente."
+msgstr "Geen documenten."
+
+msgid "Read-only PostgreSQL-Betriebsdaten."
+msgstr "Alleen-lezen PostgreSQL-bedrijfsgegevens."
+
+msgid "DB-Größe"
+msgstr "Databasegrootte"
+
+msgid "Retention-Policy anlegen"
+msgstr "Bewaarbeleid aanmaken"
+
+msgid "Rechtsdokument anlegen"
+msgstr "Juridisch document aanmaken"
+
+msgid "Fertig"
+msgstr "Voltooid"
+
+msgid "Referenz"
+msgstr "Referentie"
+
+msgid "Start"
+msgstr "Start"
+
+msgid "Ende"
+msgstr "Einde"
+
+msgid "Backup"
+msgstr "Back-up"
+
+msgid "Schweregrad"
+msgstr "Ernst"
+
+msgid "Meldung"
+msgstr "Melding"
+
+msgid "Keine Datensätze gefunden."
+msgstr "Geen records gevonden."
+
+msgid "Benutzer-ID"
+msgstr "Gebruikers-ID"
+
+msgid "Status ändern"
+msgstr "Status wijzigen"
+
+msgid "Neu"
+msgstr "Nieuw"
+
+msgid "In Bearbeitung"
+msgstr "In behandeling"
+
+msgid "Abgeschlossen"
+msgstr "Afgesloten"
+
+msgid "Antwort schreiben"
+msgstr "Antwoord schrijven"
+
+msgid "Die Antwort wird im Verlauf gespeichert und per E-Mail versendet an:"
+msgstr "Het antwoord wordt opgeslagen in de conversatiegeschiedenis en per e-mail verzonden naar:"
+
+msgid "Antwort"
+msgstr "Antwoord"
+
+msgid "Antwort an den Kunden eingeben …"
+msgstr "Antwoord aan de klant invoeren …"
+
+msgid "Antwort senden"
+msgstr "Antwoord verzenden"
+
+msgid "Anfrage und alle netstyle-Antworten in zeitlicher Reihenfolge."
+msgstr "Verzoek en alle netstyle-antwoorden in chronologische volgorde."
+
+msgid "netstyle Support"
+msgstr "netstyle Support"
+
+msgid "FAQ bearbeiten"
+msgstr "FAQ bewerken"
+
+msgid "FAQ anlegen"
+msgstr "FAQ aanmaken"
+
+msgid "Zentraler Content-Baustein."
+msgstr "Centrale inhoudscomponent."
+
+msgid "FAQ-Verwaltung"
+msgstr "FAQ-beheer"
+
+msgid "Zentrale FAQ-Inhalte für Marketing und Produktoberflächen."
+msgstr "Centrale FAQ-inhoud voor marketing en productinterfaces."
+
+msgid "Frage suchen …"
+msgstr "Vragen zoeken …"
+
+msgid "Alle Zielgruppen"
+msgstr "Alle doelgroepen"
+
+msgid "Filtern"
+msgstr "Filteren"
+
+msgid "Zurücksetzen"
+msgstr "Resetten"
+
+msgid "Key"
+msgstr "Sleutel"
+
+msgid "Frage"
+msgstr "Vraag"
+
+msgid "Zielgruppe"
+msgstr "Doelgroep"
+
+msgid "Keine FAQ-Einträge."
+msgstr "Geen FAQ-vermeldingen."
+
+msgid "Service Account Token"
+msgstr "Serviceaccount-token"
+
+msgid "erstellt"
+msgstr "aangemaakt"
+
+msgid "Token jetzt sicher speichern."
+msgstr "Sla dit token nu veilig op."
+
+msgid "Er wird danach nicht erneut im Klartext angezeigt; ein alter Token ist nach einer Rotation sofort ungültig."
+msgstr "Het token wordt daarna niet opnieuw als platte tekst getoond; het oude token is na rotatie direct ongeldig."
+
+msgid "Zur API-Verwaltung"
+msgstr "Terug naar API-beheer"
+
+msgid "Produktcode"
+msgstr "Productcode"
+
+msgid "Preisversion anlegen"
+msgstr "Prijsversie aanmaken"
+
+msgid "Produktkonfiguration"
+msgstr "Productconfiguratie"
+
+msgid "Preisversionen"
+msgstr "Prijsversies"
+
+msgid "ab"
+msgstr "vanaf"
+
+msgid "Keine Preisversionen."
+msgstr "Geen prijsversies."
+
+msgid "Zentrale Prompt-Domain · 34 Apps · 194 PM20-Aufgaben · versioniert und serverseitig komponiert."
+msgstr "Centrale promptomgeving · 34 apps · 194 PM20-taken · versiebeheer en samenstelling op de server."
+
+msgid "Qualität"
+msgstr "Kwaliteit"
+
+msgid "Task-ID, App oder Titel suchen …"
+msgstr "Zoek taak-ID, app of titel …"
+
+msgid "Task"
+msgstr "Taak"
+
+msgid "Anwendung"
+msgstr "Toepassing"
+
+msgid "Veröffentlicht"
+msgstr "Gepubliceerd"
+
+msgid "Offene Versionen"
+msgstr "Openstaande versies"
+
+msgid "keine"
+msgstr "geen"
+
+msgid "noch keine Daten"
+msgstr "nog geen gegevens"
+
+msgid "Keine Prompt-Aufgaben gefunden."
+msgstr "Geen prompttaken gevonden."
+
+msgid "Prompt-Qualität"
+msgstr "Promptkwaliteit"
+
+msgid "1–5-Sterne-Ratings · Recent Average · Drop-Erkennung · Aufgabenliste."
+msgstr "Beoordelingen van 1 tot 5 sterren · recent gemiddelde · dalingsdetectie · takenlijst."
+
+msgid "Schwellen"
+msgstr "Drempels"
+
+msgid "Analyse aktualisieren"
+msgstr "Analyse vernieuwen"
+
+msgid "Kritisch"
+msgstr "Kritiek"
+
+msgid "Warnung"
+msgstr "Waarschuwing"
+
+msgid "Beobachten"
+msgstr "Bewaken"
+
+msgid "OK"
+msgstr "OK"
+
+msgid "App"
+msgstr "App"
+
+msgid "Recent Avg"
+msgstr "Recent gemiddelde"
+
+msgid "Previous Avg"
+msgstr "Vorig gemiddelde"
+
+msgid "Drop"
+msgstr "Daling"
+
+msgid "Lizenz-Defaults"
+msgstr "Licentiestandaarden"
+
+msgid "Geräte je Benutzer"
+msgstr "Apparaten per gebruiker"
+
+msgid "Einladung"
+msgstr "Uitnodiging"
+
+msgid "Stunden"
+msgstr "uur"
+
+msgid "Kritische Warnung"
+msgstr "Kritieke waarschuwing"
+
+msgid "Einstellungen speichern"
+msgstr "Instellingen opslaan"
+
+msgid "Produktdefaults, Support, E-Mail-Identität und Betriebswarnschwellen."
+msgstr "Productstandaarden, ondersteuning, e-mailidentiteit en waarschuwingsdrempels."
+
+msgid "Produktwerte werden unter „Produkte & Preise“ gepflegt."
+msgstr "Productwaarden worden beheerd onder 'Producten en prijzen'."
+
+msgid "PROMPTFINISHER Pro ist nicht angelegt."
+msgstr "PROMPTFINISHER Pro is niet aangemaakt."
+
+msgid "Empfänger des Kundenportal-Kontaktformulars."
+msgstr "Ontvanger van het contactformulier in het klantenportaal."
+
+msgid "E-Mail-Versandweg & Fallback"
+msgstr "E-mailverzending en failover"
+
+msgid "Alle Provider bleiben parallel gespeichert. Im manuellen Modus wird nur der primäre Versandweg verwendet. Im automatischen Modus wird bei eindeutig nicht zugestellten Fehlern in der festgelegten Reihenfolge weitergeschaltet; bei unklaren Fehlern erfolgt bewusst kein automatischer Fallback, um Doppelversand zu vermeiden."
+msgstr "Alle providers blijven opgeslagen. De handmatige modus gebruikt alleen de primaire verzendroute. De automatische modus schakelt uitsluitend bij bevestigde niet-aflevering in de ingestelde volgorde door; onduidelijke fouten veroorzaken geen failover om dubbele verzending te voorkomen."
+
+msgid "E-Mail-Absender & Domain"
+msgstr "E-mailafzender en domein"
+
+msgid "Die Absenderadresse wird beim SMTP-Versand direkt aus diesen Einstellungen gelesen. SPF, DKIM und DMARC sind hier als DNS-Sollwerte dokumentiert; das Speichern verändert keine DNS-Zone."
+msgstr "Het SMTP-afzenderadres wordt rechtstreeks uit deze instellingen gelezen. SPF, DKIM en DMARC staan hier als beoogde DNS-records; opslaan wijzigt geen DNS-zone."
+
+msgid "Erster SMTP-Transport. Das Passwort wird verschlüsselt gespeichert und niemals wieder im Klartext angezeigt."
+msgstr "Primair SMTP-transport. Het wachtwoord wordt versleuteld opgeslagen en nooit meer als platte tekst weergegeven."
+
+msgid "Optionaler zweiter SMTP-Transport. Hier können Sie z. B. denselben SMTP-Relay eintragen, den auch Listmonk verwendet, und manuell oder automatisch zwischen SMTP 1 und SMTP 2 wechseln."
+msgstr "Optioneel tweede SMTP-transport. Je kunt bijvoorbeeld dezelfde SMTP-relay gebruiken als Listmonk en handmatig of automatisch tussen SMTP 1 en SMTP 2 wisselen."
+
+msgid "Alternative zu SMTP für Exchange Online. Das Client Secret wird verschlüsselt gespeichert und niemals wieder im Klartext angezeigt."
+msgstr "Alternatief voor SMTP bij Exchange Online. Het clientgeheim wordt versleuteld opgeslagen en nooit meer als platte tekst weergegeven."
+
+msgid "Sie besitzen Leserechte, aber keine Berechtigung zum Ändern dieser Einstellungen."
+msgstr "Je hebt alleen-lezen-toegang en mag deze instellingen niet wijzigen."
+
+msgid "Bewertungen"
+msgstr "Beoordelingen"
+
+msgid "Deterministischer Composer-Test ohne Speicherung des erzeugten Prompttexts."
+msgstr "Deterministische compositortest zonder de gegenereerde prompttekst op te slaan."
+
+msgid "Draft aus letzter Version"
+msgstr "Concept maken van de nieuwste versie"
+
+msgid "Draft speichern"
+msgstr "Concept opslaan"
+
+msgid "Keine Version vorhanden."
+msgstr "Geen versie beschikbaar."
+
+msgid "Konfigurierbare Schwellen für Recent Average und Drop-Erkennung."
+msgstr "Instelbare drempels voor het recente gemiddelde en het detecteren van dalingen."
+
+msgid "No-Code Editor. Nur DRAFT-Versionen sind inhaltlich veränderbar."
+msgstr "No-code-editor. Alleen DRAFT-versies kunnen worden gewijzigd."
+
+msgid "Noch keine Qualitäts-Snapshots. Analyse ausführen oder Ratings erfassen."
+msgstr "Nog geen kwaliteitsmomentopnamen. Voer een analyse uit of registreer beoordelingen."
+
+msgid "Policy"
+msgstr "Beleid"
+
+msgid "Qualität:"
+msgstr "Kwaliteit:"
+
+msgid "Qualitätsschwellen"
+msgstr "Kwaliteitsdrempels"
+
+msgid "Ratings"
+msgstr "Beoordelingen"
+
+msgid "Testfall"
+msgstr "Testgeval"
+
+msgid "Testfall speichern"
+msgstr "Testgeval opslaan"
+
+msgid "Tests"
+msgstr "Tests"
+
+msgid "Titel"
+msgstr "Titel"
+
+msgid "Zur Übersicht"
+msgstr "Terug naar overzicht"
+
+msgid "bearbeiten"
+msgstr "bewerken"
+
+msgid "zentrale PromptDefinition"
+msgstr "Centrale PromptDefinition"
+
+msgid "Versionen"
+msgstr "Versies"
+
+msgid "Tests / Ratings"
+msgstr "Tests / beoordelingen"
+
+msgid "Lifecycle"
+msgstr "Levenscyclus"
+
+msgid "Archivieren"
+msgstr "Archiveren"
+
+msgid "Publish ist nur über den Human-in-the-loop-Lifecycle möglich. Tests werden vor REVIEW und PUBLISH erneut ausgeführt."
+msgstr "Publiceren is alleen mogelijk via de levenscyclus met menselijke controle. Tests worden opnieuw uitgevoerd vóór REVIEW en PUBLISH."
+
+msgid "Definition"
+msgstr "Definitie"
+
+msgid "Family"
+msgstr "Familie"
+
+msgid "Area"
+msgstr "Gebied"
+
+msgid "Max. Zeichen"
+msgstr "Max. tekens"
+
+msgid "Intent"
+msgstr "Intentie"
+
+msgid "Kontexttemplate"
+msgstr "Contextsjabloon"
+
+msgid "Felder & Optionen"
+msgstr "Velden en opties"
+
+msgid "Pflichtfelder"
+msgstr "Verplichte velden"
+
+msgid "Keine"
+msgstr "Geen"
+
+msgid "Optionale Felder"
+msgstr "Optionele velden"
+
+msgid "Auswahloptionen"
+msgstr "Selectieopties"
+
+msgid "Testfälle"
+msgstr "Testgevallen"
+
+msgid "Tests sind Bestandteil des Release-Gates einer Prompt-Version."
+msgstr "Tests maken deel uit van de vrijgavecriteria voor een promptversie."
+
+msgid "Alle Tests ausführen"
+msgstr "Alle tests uitvoeren"
+
+msgid "Testen"
+msgstr "Testen"
+
+msgid "Löschen"
+msgstr "Verwijderen"
+
+msgid "Noch kein Testfall. Vor Übergang zu TEST muss mindestens einer angelegt werden."
+msgstr "Nog geen testgeval. Maak er minimaal één aan voordat u naar TEST gaat."
+
+msgid "Preview / Test-Komposition"
+msgstr "Voorbeeld / testcompositie"
+
+msgid "Prompt testen"
+msgstr "Prompt testen"
+
+msgid "Ergebnis"
+msgstr "Resultaat"
+
+msgid "Deterministischer Feld-Fallback"
+msgstr "Deterministische terugvalwaarde voor het veld"
+
+msgid "10-Min.-Ø:"
+msgstr "Gem. over 10 min:"
+
+msgid "Aktive Warnungen"
+msgstr "Actieve waarschuwingen"
+
+msgid "App-Version"
+msgstr "Appversie"
+
+msgid "Architektur"
+msgstr "Architectuur"
+
+msgid "Backup & Restore"
+msgstr "Back-up en herstel"
+
+msgid "Backups öffnen"
+msgstr "Back-ups openen"
+
+msgid "Betriebszustand, Plattformdienste, Integrationen und Datensicherung."
+msgstr "Bedrijfsstatus, platformdiensten, integraties en back-ups."
+
+msgid "CPU-Kerne"
+msgstr "CPU-kernen"
+
+msgid "Caddy"
+msgstr "Caddy"
+
+msgid "Celery Beat"
+msgstr "Celery Beat"
+
+msgid "Celery Worker"
+msgstr "Celery Worker"
+
+msgid "Container-CPU aktuell"
+msgstr "Huidig CPU-gebruik containers"
+
+msgid "Container-RAM gesamt"
+msgstr "Totaal RAM-gebruik containers"
+
+msgid "DB-Verbindungen"
+msgstr "Databaseverbindingen"
+
+msgid "Dateiobjekte (Inodes) belegt"
+msgstr "Gebruikte inodes"
+
+msgid "Dateiobjekte (Inodes) verfügbar"
+msgstr "Beschikbare inodes"
+
+msgid "Datenbank & Jobs"
+msgstr "Database en taken"
+
+msgid "Datenbank öffnen"
+msgstr "Database openen"
+
+msgid "Datenträger / gesamt"
+msgstr "Schijf / totaal"
+
+msgid "Datenträger / verfügbar"
+msgstr "Schijf / beschikbaar"
+
+msgid "Datenträger / verwendet"
+msgstr "Schijf / gebruikt"
+
+msgid "Definitionen"
+msgstr "Definities"
+
+msgid "Dienste & Integrationen"
+msgstr "Diensten en integraties"
+
+msgid "Dienste öffnen"
+msgstr "Diensten openen"
+
+msgid "Diese Werte stammen aus cAdvisor und beziehen sich auf Docker-Container. Die VM-Werte oben stammen aus node_exporter und beziehen sich auf die gesamte Docker-Host-VM."
+msgstr "Deze waarden komen uit cAdvisor en hebben betrekking op Docker-containers. De VM-waarden hierboven komen uit node_exporter en gelden voor de volledige Docker-host-VM."
+
+msgid "Docker"
+msgstr "Docker"
+
+msgid "Docker-Container"
+msgstr "Docker-containers"
+
+msgid "Erkannte Container"
+msgstr "Gedetecteerde containers"
+
+msgid "Fehler / 24 h"
+msgstr "Fouten / 24 uur"
+
+msgid "Git Commit"
+msgstr "Git-commit"
+
+msgid "Host & Release"
+msgstr "Host en release"
+
+msgid "Inodes sind Dateisystem-Einträge für Dateien und Verzeichnisse. Sind sie ausgeschöpft, können trotz freiem Speicher keine neuen Dateien angelegt werden."
+msgstr "Inodes zijn bestandssysteemvermeldingen voor bestanden en mappen. Als ze opraken, kunnen er geen nieuwe bestanden worden gemaakt, zelfs als er nog schijfruimte vrij is."
+
+msgid "Keine aktiven Systemwarnungen."
+msgstr "Geen actieve systeemwaarschuwingen."
+
+msgid "Letzter Restore-Test"
+msgstr "Laatste hersteltest"
+
+msgid "Letztes Backup"
+msgstr "Laatste back-up"
+
+msgid "Letztes Deployment"
+msgstr "Laatste implementatie"
+
+msgid "Load:"
+msgstr "Belasting:"
+
+msgid "Messbereich"
+msgstr "Meetbereik"
+
+msgid "Messquelle"
+msgstr "Meetbron"
+
+msgid "Messwert-Erklärung"
+msgstr "Toelichting op meetwaarden"
+
+msgid "OS / Kernel"
+msgstr "OS / kernel"
+
+msgid "PostgreSQL"
+msgstr "PostgreSQL"
+
+msgid "Prompt MCP"
+msgstr "Prompt MCP"
+
+msgid "RAM gesamt"
+msgstr "Totaal RAM"
+
+msgid "RAM verfügbar"
+msgstr "Beschikbaar RAM"
+
+msgid "RAM verwendet"
+msgstr "Gebruikt RAM"
+
+msgid "Restore-Tests öffnen"
+msgstr "Hersteltests openen"
+
+msgid "TLS-Zertifikat"
+msgstr "TLS-certificaat"
+
+msgid "Umgebung"
+msgstr "Omgeving"
+
+msgid "Uptime"
+msgstr "Uptime"
+
+msgid "VM-CPU aktuell"
+msgstr "Huidig VM-CPU-gebruik"
+
+msgid "VM-Datenträger /"
+msgstr "VM-schijf /"
+
+msgid "VM-RAM"
+msgstr "VM-RAM"
+
+msgid "VM-Speicher & Dateisystem"
+msgstr "VM-geheugen en bestandssysteem"
+
+msgid "Verwendetes Backup"
+msgstr "Gebruikte back-up"
+
+msgid "Warnungen öffnen"
+msgstr "Waarschuwingen openen"
+
+msgid "geschützt"
+msgstr "beveiligd"
+
+msgid "healthy"
+msgstr "gezond"
+
+msgid "konfiguriert"
+msgstr "geconfigureerd"
+
+msgid "nicht erreichbar"
+msgstr "niet bereikbaar"
+
+msgid "nicht protokolliert"
+msgstr "niet geregistreerd"
+
+msgid "und ist die für neue Prozesse realistisch nutzbare Speichermenge. „Inodes“ sind Dateisystem-Einträge; ein niedriger Belegungsgrad ist unkritisch."
+msgstr "en is de hoeveelheid geheugen die realistisch beschikbaar is voor nieuwe processen. Inodes zijn bestandssysteemvermeldingen; een laag gebruik is geen probleem."
+
+msgid "verfügbar von"
+msgstr "beschikbaar van"
+
+msgid "„RAM verfügbar“ entspricht Linux"
+msgstr "‘Beschikbaar RAM’ komt overeen met Linux"
+
+msgid "not_configured"
+msgstr "niet geconfigureerd"
+
+msgid "unknown"
+msgstr "onbekend"
+
+msgid "ok"
+msgstr "OK"
+
+msgid "warning"
+msgstr "waarschuwing"
+
+msgid "unavailable"
+msgstr "niet beschikbaar"
+
+msgid "degraded"
+msgstr "verminderde werking"
+
+msgid "success"
+msgstr "geslaagd"
+
+msgid "failed"
+msgstr "mislukt"
+
+msgid "running"
+msgstr "wordt uitgevoerd"
+
+msgid "critical"
+msgstr "kritiek"
+
+msgid "passed"
+msgstr "geslaagd"
+
+msgid "error"
+msgstr "fout"
+
+msgid "skipped"
+msgstr "overgeslagen"
+
+msgid "in_progress"
+msgstr "bezig"
+
+msgid "no_data"
+msgstr "geen gegevens"
+
+msgid "completed"
+msgstr "afgerond"
+
+msgid "nicht verfügbar"
+msgstr "niet beschikbaar"
+
+msgid "Disk {value}% belegt"
+msgstr "Schijfgebruik: {value}%"
+
+msgid "RAM {value}% belegt"
+msgstr "RAM-gebruik: {value}%"
+
+msgid "CPU 10-Minuten-Mittel {value}%"
+msgstr "Gemiddeld CPU-gebruik over 10 minuten: {value}%"
+
+msgid "Kein auswertbarer Backupstatus verfügbar"
+msgstr "Geen bruikbare back-upstatus beschikbaar"
+
+msgid "Letztes Backup meldet Status {value}"
+msgstr "Laatste back-up meldt status {value}"
+
+msgid "Backup ist {value} Stunden alt"
+msgstr "De back-up is {value} uur oud"
+
+msgid "Restore-Statusdatei ist nicht auswertbar"
+msgstr "Het herstelstatusbestand kan niet worden uitgelezen"
+
+msgid "Noch kein Restore-Test protokolliert"
+msgstr "Er is nog geen hersteltest geregistreerd"
+
+msgid "Letzter Restore-Test war nicht erfolgreich"
+msgstr "De laatste hersteltest is mislukt"
+
+msgid "Letzter Restore-Test ist {value} Tage alt"
+msgstr "De laatste hersteltest is {value} dagen oud"
+
+msgid "Monitoring-Ziel {value} ist nicht erreichbar"
+msgstr "Monitoringdoel {value} is niet bereikbaar"
+
+msgid "Monitoring-Ziel {value} liefert keinen Status"
+msgstr "Monitoringdoel {value} geeft geen status door"
+
+msgid "Caddy Healthcheck ist nicht erreichbar"
+msgstr "De Caddy-statuscontrole is niet bereikbaar"
+
+msgid "Kein Celery Worker beantwortet den aktiven Ping"
+msgstr "Geen Celery-worker reageert op de actieve ping"
+
+msgid "Celery Beat-Heartbeat älter als {value} Minuten"
+msgstr "Het Celery Beat-heartbeat is ouder dan {value} minuten"
+
+msgid "Celery Queue-Tiefe kann nicht gelesen werden"
+msgstr "De lengte van de Celery-wachtrij kan niet worden gelezen"
+
+msgid "Celery Queue enthält {value} wartende Jobs"
+msgstr "De Celery-wachtrij bevat {value} wachtende taken"
+
+msgid "{value} fehlgeschlagene Hintergrundjobs in 24 Stunden"
+msgstr "{value} achtergrondtaken mislukt in 24 uur"
+
+msgid "{value} E-Mail-Fehler in 24 Stunden"
+msgstr "{value} e-mailfouten in 24 uur"
+
+msgid "{value} Mollie-Verarbeitungsfehler in 24 Stunden"
+msgstr "{value} Mollie-verwerkingsfouten in 24 uur"
+
+msgid "Backups"
+msgstr "Back-ups"
+
+msgid "Restore-Tests"
+msgstr "Hersteltests"
+
+msgid "Systemwarnungen"
+msgstr "Systeemwaarschuwingen"
+
+msgid "Erledigt"
+msgstr "Opgelost"
+
+msgid "Filter"
+msgstr "Filter"
+
+msgid "Seite"
+msgstr "pagina"
+
+msgid "AGB akzeptieren"
+msgstr "Algemene voorwaarden accepteren"
+
+msgid "Anmeldung fehlgeschlagen."
+msgstr "Aanmelden mislukt."
+
+msgid "Anmeldung fehlgeschlagen. Bitte später erneut versuchen."
+msgstr "Aanmelden mislukt. Probeer het later opnieuw."
+
+msgid "Anzahl Lizenzen"
+msgstr "Aantal licenties"
+
+msgid "Art der Kündigung"
+msgstr "Soort opzegging"
+
+msgid "Außerordentliche Kündigung"
+msgstr "Buitengewone opzegging"
+
+msgid "Bei einer außerordentlichen Kündigung ist der Kündigungsgrund erforderlich."
+msgstr "Bij buitengewone opzegging is een reden verplicht."
+
+msgid "Bestellnummer"
+msgstr "Bestelnummer"
+
+msgid "Bitte bestätigen Sie den gewünschten Leistungsbeginn vor Ablauf der Widerrufsfrist."
+msgstr "Bevestig dat u verzoekt om de dienstverlening te starten vóór het einde van de herroepingstermijn."
+
+msgid "Bitte bestätigen Sie die Widerrufsbelehrung."
+msgstr "Bevestig dat u de informatie over het herroepingsrecht hebt gelezen."
+
+msgid "Datenschutzhinweise zur Kenntnis genommen"
+msgstr "Ik heb de privacyverklaring gelezen"
+
+msgid "Deutschland"
+msgstr "Duitsland"
+
+msgid "Die Bestellnummer finden Sie in Ihrer Bestell- bzw. Zahlungsbestätigung."
+msgstr "U vindt het bestelnummer in uw bestel- of betalingsbevestiging."
+
+msgid "E-Mail-Adresse für die Eingangsbestätigung"
+msgstr "E-mailadres voor ontvangstbevestiging"
+
+msgid "E-Mail-Adresse für die Kündigungsbestätigung"
+msgstr "E-mailadres voor opzeggingsbevestiging"
+
+msgid "Firmenname erforderlich."
+msgstr "Bedrijfsnaam is verplicht."
+
+msgid "Gewünschter Beendigungszeitpunkt"
+msgstr "Gewenste einddatum"
+
+msgid "Hausnummer"
+msgstr "Huisnummer"
+
+msgid "Kündigungsgrund"
+msgstr "Reden van opzegging"
+
+msgid "Leer lassen für den frühestmöglichen Zeitpunkt."
+msgstr "Laat leeg voor de eerstmogelijke datum."
+
+msgid "Leistungsbeginn vor Ablauf der Widerrufsfrist ausdrücklich verlangt"
+msgstr "Ik verzoek uitdrukkelijk om de dienstverlening te starten vóór het einde van de herroepingstermijn"
+
+msgid "Lizenzbedingungen akzeptieren"
+msgstr "Licentievoorwaarden accepteren"
+
+msgid "Ordentliche Kündigung"
+msgstr "Reguliere opzegging"
+
+msgid "PLZ"
+msgstr "Postcode"
+
+msgid "Passwörter stimmen nicht überein."
+msgstr "Wachtwoorden komen niet overeen."
+
+msgid "Steuernummer ist für diese Steuerregel erforderlich."
+msgstr "Voor deze belastingregel is een fiscaal nummer verplicht."
+
+msgid "Straße"
+msgstr "Straat"
+
+msgid "USt-IdNr. ist für diese Steuerregel erforderlich."
+msgstr "Voor deze belastingregel is een btw-identificatienummer verplicht."
+
+msgid "Unternehmensname ist erforderlich."
+msgstr "Bedrijfsnaam is verplicht."
+
+msgid "Vertrag / Bestellung / Kundennummer"
+msgstr "Contract / bestelling / klantnummer"
+
+msgid "Vor- und Nachname"
+msgstr "Voor- en achternaam"
+
+msgid "Widerrufsinformation zur Kenntnis genommen"
+msgstr "Ik heb de informatie over het herroepingsrecht gelezen"
+
+msgid "Zum Beispiel Bestellnummer oder Kundennummer."
+msgstr "Bijvoorbeeld een bestelnummer of klantnummer."
+
+msgid "Gerätename"
+msgstr "Apparaatnaam"
+
+msgid "Keine konkrete Lizenz"
+msgstr "Geen specifieke licentie"
+
+msgid "Lizenz (optional)"
+msgstr "Licentie (optioneel)"
+
+msgid "Nachricht"
+msgstr "Bericht"
+
+msgid "Schlüssel"
+msgstr "Sleutel"
+
+msgid "Sonstiges"
+msgstr "Overig"
+
+msgid "Sortierung"
+msgstr "Sorteervolgorde"
+
+msgid "Technisches Problem"
+msgstr "Technisch probleem"
+
+msgid "Aktuelle Stichprobengröße"
+msgstr "Omvang recente steekproef"
+
+msgid "App-Regel-Snapshot"
+msgstr "Momentopname van appregels"
+
+msgid "Ausgabeformen"
+msgstr "Uitvoerformaten"
+
+msgid "Beispiel: {\"microsoft_tier\":\"premium\",\"payload\":{\"fields\":{...}}}"
+msgstr "Voorbeeld: {\"microsoft_tier\":\"premium\",\"payload\":{\"fields\":{...}}}"
+
+msgid "Bereich"
+msgstr "Gebied"
+
+msgid "Darf nicht enthalten"
+msgstr "Mag niet bevatten"
+
+msgid "Ein Feld pro Zeile. Optionales Fragment: Feldname ||| Text mit {value}."
+msgstr "Eén veld per regel. Optioneel fragment: veldnaam ||| tekst met {value}."
+
+msgid "Ein Pflichtfeld pro Zeile."
+msgstr "Eén verplicht veld per regel."
+
+msgid "Eingabedaten (JSON)"
+msgstr "Invoergegevens (JSON)"
+
+msgid "Familie"
+msgstr "Familie"
+
+msgid "Feldbezeichnungen müssen innerhalb einer Prompt-Version eindeutig sein."
+msgstr "Veldnamen moeten uniek zijn binnen een promptversie."
+
+msgid "Kontextvorlage"
+msgstr "Contextsjabloon"
+
+msgid "Kritisch bei Abfall"
+msgstr "Drempel voor kritieke daling"
+
+msgid "Kritischer Durchschnitt"
+msgstr "Kritiek gemiddelde"
+
+msgid "Maximale Zeichen"
+msgstr "Maximumaantal tekens"
+
+msgid "Microsoft-Lizenzstufe"
+msgstr "Microsoft-licentieniveau"
+
+msgid "Mindestanzahl Stichproben"
+msgstr "Minimumaantal steekproeven"
+
+msgid "Mindestdurchschnitt"
+msgstr "Minimaal gemiddelde"
+
+msgid "Muss enthalten"
+msgstr "Moet bevatten"
+
+msgid "Nur DRAFT-Versionen dürfen inhaltlich bearbeitet werden."
+msgstr "Alleen DRAFT-versies mogen worden bewerkt."
+
+msgid "Payload muss ein JSON-Objekt sein."
+msgstr "De payload moet een JSON-object zijn."
+
+msgid "Quellen"
+msgstr "Bronnen"
+
+msgid "Schwerpunkte"
+msgstr "Aandachtsgebieden"
+
+msgid "Test-Payload (JSON)"
+msgstr "Testpayload (JSON)"
+
+msgid "Test-Payload muss ein JSON-Objekt sein."
+msgstr "De testpayload moet een JSON-object zijn."
+
+msgid "Ungültiges JSON: %(error)s"
+msgstr "Ongeldige JSON: %(error)s"
+
+msgid "Vorherige Stichprobengröße"
+msgstr "Omvang vorige steekproef"
+
+msgid "Warnung bei Abfall"
+msgstr "Waarschuwingsdrempel bij daling"
+
+msgid "Ziel / Intent"
+msgstr "Doel / intentie"
+
+msgid "Zielgruppen"
+msgstr "Doelgroepen"
+
+msgid "API-Schlüssel"
+msgstr "API-sleutel"
+
+msgid "Ablauf optional"
+msgstr "Optionele vervaldatum"
+
+msgid "Außerhalb der Produktion ist ausschließlich ein Mollie-Test-Key (test_…) zulässig."
+msgstr "Buiten productie is uitsluitend een Mollie-testsleutel (test_…) toegestaan."
+
+msgid "Begründung"
+msgstr "Motivering"
+
+msgid "Beschreibung"
+msgstr "Beschrijving"
+
+msgid "Bruttopreis"
+msgstr "Brutoprijs"
+
+msgid "Der Datensatz wird revisionssicher ausgeblendet und im Audit protokolliert."
+msgstr "Het record wordt verborgen met behoud van een auditspoor."
+
+msgid "Diese E-Mail-Adresse gehört bereits zu einem PROMPTFINISHER-Konto."
+msgstr "Dit e-mailadres is al gekoppeld aan een PROMPTFINISHER-account."
+
+msgid "Diese E-Mail-Adresse ist bereits einem Firmenkunden zugeordnet."
+msgstr "Dit e-mailadres is al gekoppeld aan een zakelijke klant."
+
+msgid "Diese E-Mail-Adresse ist bereits registriert."
+msgstr "Dit e-mailadres is al geregistreerd."
+
+msgid "Dokumenttyp"
+msgstr "Documenttype"
+
+msgid "E-Mail des Firmenadministrators"
+msgstr "E-mailadres bedrijfsbeheerder"
+
+msgid "Eigenes Passwort erneut eingeben"
+msgstr "Voer uw wachtwoord opnieuw in"
+
+msgid "Erinnerung 1 · Tage vorher"
+msgstr "Herinnering 1 · Dagen vooraf"
+
+msgid "Erinnerung 2 · Tage vorher"
+msgstr "Herinnering 2 · Dagen vooraf"
+
+msgid "Erstatten"
+msgstr "Terugbetalen"
+
+msgid "Für Unternehmens-Leads ist der Unternehmensname erforderlich."
+msgstr "Voor zakelijke leads is een bedrijfsnaam verplicht."
+
+msgid "Für diese Datenklasse existiert kein freigegebener Lösch-Handler."
+msgstr "Er is geen goedgekeurde verwijderhandler voor deze gegevensklasse."
+
+msgid "Für diese E-Mail-Adresse existiert bereits ein aktiver Lead."
+msgstr "Er bestaat al een actieve lead voor dit e-mailadres."
+
+msgid "Identität und Berechtigung des Ansprechpartners wurden geprüft"
+msgstr "Identiteit en bevoegdheid van de contactpersoon zijn gecontroleerd"
+
+msgid "In Kunde umwandeln"
+msgstr "Omzetten naar klant"
+
+msgid "In Produktion ist ausschließlich ein Mollie-Live-Key (live_…) zulässig."
+msgstr "In productie is uitsluitend een Mollie-live-sleutel (live_…) toegestaan."
+
+msgid "Inhalt"
+msgstr "Inhoud"
+
+msgid "Interne Notiz zur Prüfung (optional)"
+msgstr "Interne verificatienotitie (optioneel)"
+
+msgid "Interne Notizen"
+msgstr "Interne notities"
+
+msgid "Kaufbar"
+msgstr "Koopbaar"
+
+msgid "Kritische Warnung · Tage vorher"
+msgstr "Kritieke waarschuwing · Dagen vooraf"
+
+msgid "Lead in Firmenkunden umwandeln und Einladungslink senden"
+msgstr "Lead omzetten naar zakelijke klant en uitnodigingslink versturen"
+
+msgid "Lead wirklich löschen"
+msgstr "Verwijderen van lead bevestigen"
+
+msgid "Lead-Typ"
+msgstr "Leadtype"
+
+msgid "Leer lassen, um den bestehenden Schlüssel unverändert zu lassen."
+msgstr "Laat leeg om de bestaande sleutel ongewijzigd te laten."
+
+msgid "Lesen"
+msgstr "Lezen"
+
+msgid "Löschung erst nach dieser Anzahl Tage. Rechtliche Aufbewahrungsfristen separat prüfen."
+msgstr "Pas verwijderen na dit aantal dagen. Controleer wettelijke bewaartermijnen afzonderlijk."
+
+msgid "Neukauf"
+msgstr "Nieuwe aankoop"
+
+msgid "Nicht zugewiesen"
+msgstr "Niet toegewezen"
+
+msgid "Nächste Aktion"
+msgstr "Volgende actie"
+
+msgid "Operations lesen"
+msgstr "Operations lezen"
+
+msgid "Preistyp"
+msgstr "Prijstype"
+
+msgid "Prompt-Drafts erzeugen"
+msgstr "Promptconcepten maken"
+
+msgid "Prompt-Tests ausführen"
+msgstr "Prompttests uitvoeren"
+
+msgid "Prompts erzeugen"
+msgstr "Prompts maken"
+
+msgid "Prompts lesen"
+msgstr "Prompts lezen"
+
+msgid "Qualität verwalten"
+msgstr "Kwaliteit beheren"
+
+msgid "Quelle"
+msgstr "Bron"
+
+msgid "Reminder 1 muss vor Reminder 2 liegen (größere Tageszahl)."
+msgstr "Herinnering 1 moet vóór herinnering 2 plaatsvinden (groter aantal dagen)."
+
+msgid "Reminder 2 muss vor der kritischen Warnphase liegen."
+msgstr "Herinnering 2 moet vóór de kritieke waarschuwingsperiode plaatsvinden."
+
+msgid "Sicherheitsbestätigung des aktuell angemeldeten netstyle Benutzers."
+msgstr "Beveiligingsbevestiging door de momenteel ingelogde netstyle-gebruiker."
+
+msgid "Sichtbar"
+msgstr "Zichtbaar"
+
+msgid "Standard-Laufzeit in Tagen"
+msgstr "Standaardlooptijd in dagen"
+
+msgid "Unternehmensname"
+msgstr "Bedrijfsnaam"
+
+msgid "Unterstützt: expired_invitations, email_messages, revoked_devices, resolved_system_alerts, resolved_task_failures, expired_sessions."
+msgstr "Ondersteund: expired_invitations, email_messages, revoked_devices, resolved_system_alerts, resolved_task_failures, expired_sessions."
+
+msgid "Veröffentlichen"
+msgstr "Publiceren"
+
+msgid "Währung"
+msgstr "Valuta"
+
+msgid "Absender-Anzeigename"
+msgstr "Weergavenaam afzender"
+
+msgid "Absender-E-Mail"
+msgstr "E-mailadres afzender"
+
+msgid "Aktive Absenderadresse für SMTP. Änderungen gelten ohne Container-Neustart."
+msgstr "Actief SMTP-afzenderadres. Wijzigingen gelden zonder containers opnieuw te starten."
+
+msgid "Antwortadresse"
+msgstr "Antwoordadres"
+
+msgid "Anwendungs-/Client-ID der App-Registrierung."
+msgstr "Toepassings-/client-id van de appregistratie."
+
+msgid "Automatisch – bei sicherem Ausfall auf Fallback wechseln"
+msgstr "Automatisch – naar fallback bij bevestigde storing"
+
+msgid "Backup kritisch in Stunden"
+msgstr "Kritieke back-upleeftijd in uren"
+
+msgid "Backup-Warnung in Stunden"
+msgstr "Back-upwaarschuwing in uren"
+
+msgid "Begründung optional"
+msgstr "Reden (optioneel)"
+
+msgid "Bei IONOS normalerweise die vollständige E-Mail-Adresse."
+msgstr "Bij IONOS normaal gesproken het volledige e-mailadres."
+
+msgid "Bitte eine gültige Domain ohne @ eingeben."
+msgstr "Voer een geldig domein in zonder @."
+
+msgid "CPU-Warnung in %"
+msgstr "CPU-waarschuwing in %"
+
+msgid "DKIM DNS Sollwert"
+msgstr "DKIM DNS-doelwaarde"
+
+msgid "DKIM-Selector"
+msgstr "DKIM-selector"
+
+msgid "DMARC Sollwert"
+msgstr "DMARC-doelwaarde"
+
+msgid "Datenträger kritisch in %"
+msgstr "Kritiek schijfgebruik in %"
+
+msgid "Datenträger-Warnung in %"
+msgstr "Schijfgebruikwaarschuwing in %"
+
+msgid "Der kritische Wert muss über dem Warnwert liegen."
+msgstr "De kritieke drempel moet hoger zijn dan de waarschuwingsdrempel."
+
+msgid "Die Mail-Domain muss zur Absender-E-Mail passen."
+msgstr "Het maildomein moet overeenkomen met het e-mailadres van de afzender."
+
+msgid "Dokumentierter DNS-Sollwert für _dmarc.<Domain>."
+msgstr "Gedocumenteerde DNS-doelwaarde voor _dmarc.<Domain>."
+
+msgid "Dokumentierter DNS-Sollwert. Das Speichern ändert den öffentlichen DNS-Eintrag nicht."
+msgstr "Gedocumenteerde DNS-doelwaarde. Opslaan wijzigt het openbare DNS-record niet."
+
+msgid "Domain des sichtbaren Absenders, z. B. decke-wand-boden.de oder später promptmaster.ai."
+msgstr "Domein van de zichtbare afzender, bijvoorbeeld decke-wand-boden.de of later promptmaster.ai."
+
+msgid "Ein DMARC-Eintrag muss mit \"v=DMARC1;\" beginnen."
+msgstr "Een DMARC-record moet beginnen met \"v=DMARC1;\"."
+
+msgid "Ein SPF-Eintrag muss mit \"v=spf1 \" beginnen."
+msgstr "Een SPF-record moet beginnen met \"v=spf1 \"."
+
+msgid "Ein Versandweg darf in der Kette nur einmal vorkommen."
+msgstr "Een verzendroute mag maar één keer in de keten voorkomen."
+
+msgid "Eine oder mehrere E-Mail-Adressen, getrennt durch Zeilenumbruch, Komma oder Semikolon."
+msgstr "Een of meer e-mailadressen, gescheiden door een nieuwe regel, komma of puntkomma."
+
+msgid "Entra Client ID"
+msgstr "Entra-client-id"
+
+msgid "Entra Client Secret"
+msgstr "Entra-clientgeheim"
+
+msgid "Entra Tenant ID"
+msgstr "Entra-tenant-id"
+
+msgid "Erstattung verbindlich über Mollie auslösen"
+msgstr "Terugbetaling via Mollie bevestigen"
+
+msgid "Fallback 1"
+msgstr "Fallback 1"
+
+msgid "Fallback 2"
+msgstr "Fallback 2"
+
+msgid "Für IONOS mit STARTTLS: 587."
+msgstr "Voor IONOS met STARTTLS: 587."
+
+msgid "Für Microsoft Graph ist dieses Feld erforderlich."
+msgstr "Dit veld is verplicht voor Microsoft Graph."
+
+msgid "Für Microsoft Graph ist ein Client Secret erforderlich."
+msgstr "Voor Microsoft Graph is een clientgeheim vereist."
+
+msgid "Für SMTP 1 ist dieses Feld erforderlich."
+msgstr "Dit veld is verplicht voor SMTP 1."
+
+msgid "Für SMTP 2 ist dieses Feld erforderlich."
+msgstr "Dit veld is verplicht voor SMTP 2."
+
+msgid "Für den automatischen Modus muss mindestens ein Fallback gewählt werden."
+msgstr "Kies ten minste één fallback voor de automatische modus."
+
+msgid "Im automatischen Modus wird nur bei eindeutig nicht zugestellten Fehlern weitergeschaltet."
+msgstr "De automatische modus schakelt alleen over bij bevestigde niet-bezorging."
+
+msgid "Kein weiterer Fallback"
+msgstr "Geen extra fallback"
+
+msgid "Leer lassen, um das gespeicherte Passwort unverändert zu lassen."
+msgstr "Laat leeg om het opgeslagen wachtwoord te behouden."
+
+msgid "Leer lassen, um das gespeicherte Secret unverändert zu lassen."
+msgstr "Laat leeg om het opgeslagen geheim te behouden."
+
+msgid "Manuell – nur den primären Versandweg verwenden"
+msgstr "Handmatig – alleen primaire verzendroute gebruiken"
+
+msgid "Microsoft-365-Absender"
+msgstr "Microsoft 365-afzender"
+
+msgid "Monitoring-Alarmempfänger"
+msgstr "Ontvangers monitoringmeldingen"
+
+msgid "Neuer Schlüssel"
+msgstr "Nieuwe sleutel"
+
+msgid "Optional. Leer lassen, wenn Antworten an die Absenderadresse gehen sollen."
+msgstr "Optioneel. Laat leeg als antwoorden naar het afzenderadres moeten gaan."
+
+msgid "Optionaler Selector bzw. Hinweis auf die verwendeten Microsoft-365-DKIM-Selectoren."
+msgstr "Optionele selector of opmerking over gebruikte Microsoft 365-DKIM-selectors."
+
+msgid "Optionaler zweiter SMTP-Provider, z. B. derselbe Relay-Dienst wie bei Listmonk."
+msgstr "Optionele tweede SMTP-provider, bijvoorbeeld dezelfde relaydienst als Listmonk."
+
+msgid "Postfach, über das Microsoft Graph senden soll, z. B. promptmaster@netstyle.de."
+msgstr "Postvak waarmee Microsoft Graph verzendt, bijvoorbeeld promptmaster@netstyle.de."
+
+msgid "Primärer Versandweg"
+msgstr "Primaire verzendroute"
+
+msgid "RAM kritisch in %"
+msgstr "Kritiek RAM-gebruik in %"
+
+msgid "RAM-Warnung in %"
+msgstr "RAM-waarschuwing in %"
+
+msgid "Restore-Test-Warnung in Tagen"
+msgstr "Hersteltestwaarschuwing in dagen"
+
+msgid "SMTP 1 – Benutzername"
+msgstr "SMTP 1 – Gebruikersnaam"
+
+msgid "SMTP 1 – Passwort"
+msgstr "SMTP 1 – Wachtwoord"
+
+msgid "SMTP 1 – Port"
+msgstr "SMTP 1 – Poort"
+
+msgid "SMTP 1 – STARTTLS verwenden"
+msgstr "SMTP 1 – STARTTLS gebruiken"
+
+msgid "SMTP 1 – Server"
+msgstr "SMTP 1 – Server"
+
+msgid "SMTP 1, SMTP 2 und Microsoft Graph bleiben parallel konfiguriert."
+msgstr "SMTP 1, SMTP 2 en Microsoft Graph blijven parallel geconfigureerd."
+
+msgid "SMTP 2 – Benutzername"
+msgstr "SMTP 2 – Gebruikersnaam"
+
+msgid "SMTP 2 – Passwort"
+msgstr "SMTP 2 – Wachtwoord"
+
+msgid "SMTP 2 – Port"
+msgstr "SMTP 2 – Poort"
+
+msgid "SMTP 2 – STARTTLS verwenden"
+msgstr "SMTP 2 – STARTTLS gebruiken"
+
+msgid "SMTP 2 – Server"
+msgstr "SMTP 2 – Server"
+
+msgid "SPF Sollwert"
+msgstr "SPF-doelwaarde"
+
+msgid "Support-Empfänger"
+msgstr "Supportontvanger"
+
+msgid "TXT-/CNAME-Sollwert oder beide Microsoft-365-DKIM-CNAMEs. Reine Dokumentation; DNS wird nicht automatisch verändert."
+msgstr "TXT/CNAME-doelwaarde of beide Microsoft 365-DKIM-CNAME-records. Alleen documentatie; DNS wordt niet automatisch gewijzigd."
+
+msgid "Verzeichnis-/Mandanten-ID des Microsoft-365-Tenants."
+msgstr "Directory-/tenant-id van de Microsoft 365-tenant."
+
+msgid "Zum Beispiel PROMPTFINISHER."
+msgstr "Bijvoorbeeld PROMPTFINISHER."
+
+msgid "Zum Beispiel smtp.ionos.de."
+msgstr "Bijvoorbeeld smtp.ionos.de."
+
+msgid "Das eigene netstyle Konto kann hier nicht deaktiviert werden."
+msgstr "U kunt hier uw eigen netstyle-account niet deactiveren."
+
+msgid "Der letzte aktive Superadmin kann nicht deaktiviert werden."
+msgstr "De laatste actieve superbeheerder kan niet worden gedeactiveerd."
+
+msgid "Die eigene 2FA wird nicht über die Admin-Fremdverwaltung zurückgesetzt."
+msgstr "U kunt uw eigen 2FA niet resetten via het beheer van andere accounts."
+
+msgid "2FA zurückgesetzt. Der Benutzer muss sie beim nächsten Login neu einrichten."
+msgstr "2FA is gereset. De gebruiker moet dit bij de volgende aanmelding opnieuw instellen."
+
+msgid "Die eigene Superadmin-Rolle kann nicht hier entfernt werden."
+msgstr "U kunt hier uw eigen superbeheerdersrol niet verwijderen."
+
+msgid "Die letzte aktive Superadmin-Berechtigung kann nicht entfernt werden."
+msgstr "De laatste actieve superbeheerdersbevoegdheid kan niet worden verwijderd."
+
+msgid "Ein gesperrter Service Account kann nicht rotiert werden."
+msgstr "Een geblokkeerd serviceaccount kan niet worden geroteerd."
+
+msgid "Mollie-Produktiv-Checkout wurde gesperrt."
+msgstr "De Mollie-productiecheckout is geblokkeerd."
+
+msgid "Bestätigung für die Erstattung fehlt."
+msgstr "Bevestiging voor terugbetaling ontbreekt."
+
+msgid "Erstattung wurde an Mollie übermittelt."
+msgstr "Het terugbetalingsverzoek is naar Mollie verzonden."
+
+msgid "Für dieses Unternehmen existiert bereits ein aktiver Firmenadministrator."
+msgstr "Dit bedrijf heeft al een actieve bedrijfsbeheerder."
+
+msgid "Dieser Benutzer ist bereits Firmenadministrator."
+msgstr "Deze gebruiker is al bedrijfsbeheerder."
+
+msgid "Ungültiger Supportstatus."
+msgstr "Ongeldige supportstatus."
+
+msgid "Ungültiger Bearbeitungsstatus."
+msgstr "Ongeldige verwerkingsstatus."
+
+msgid "Bitte eine Antwort eingeben."
+msgstr "Voer een antwoord in."
+
+msgid "Die Antwort darf höchstens 10.000 Zeichen enthalten."
+msgstr "Het antwoord mag niet langer zijn dan 10.000 tekens."
+
+msgid "Status aktualisiert."
+msgstr "Status bijgewerkt."
+
+msgid "Einstellungen gespeichert."
+msgstr "Instellingen opgeslagen."
+
+msgid "Rolle gespeichert."
+msgstr "Rol opgeslagen."
+
+msgid "Rolle zugewiesen."
+msgstr "Rol toegewezen."
+
+msgid "Rolle entfernt."
+msgstr "Rol verwijderd."
+
+msgid "Benutzerstatus aktualisiert."
+msgstr "Gebruikersstatus bijgewerkt."
+
+msgid "Lead gespeichert."
+msgstr "Lead opgeslagen."
+
+msgid "Lead-Zuständigkeit aktualisiert."
+msgstr "Leadverantwoordelijke bijgewerkt."
+
+msgid "Gerät wurde widerrufen."
+msgstr "Apparaattoegang ingetrokken."
+
+msgid "Unternehmensdaten gespeichert."
+msgstr "Bedrijfsgegevens opgeslagen."
+
+msgid "Benutzer deaktiviert; Lizenz- und Gerätezugänge wurden freigegeben."
+msgstr "Gebruiker gedeactiveerd; licentie- en apparaattoegang vrijgegeven."
+
+msgid "Die Lizenz ist bereits frei."
+msgstr "De licentie is al niet toegewezen."
+
+msgid "Lizenzzuweisung wurde freigegeben."
+msgstr "Licentietoewijzing vrijgegeven."
+
+msgid "Lizenz wurde entsperrt."
+msgstr "Licentie gedeblokkeerd."
+
+msgid "Lizenz wurde gesperrt; vorhandene Gerätezugänge wurden widerrufen."
+msgstr "Licentie geblokkeerd; bestaande apparaattoegang ingetrokken."
+
+msgid "Produkt angelegt. Legen Sie anschließend Preisversionen an."
+msgstr "Product aangemaakt. Voeg vervolgens prijsversies toe."
+
+msgid "Feature gespeichert."
+msgstr "Functie opgeslagen."
+
+msgid "Produkt gespeichert."
+msgstr "Product opgeslagen."
+
+msgid "Neue Preisversion angelegt."
+msgstr "Nieuwe prijsversie aangemaakt."
+
+msgid "E-Mail-Vorlage gespeichert."
+msgstr "E-mailsjabloon opgeslagen."
+
+msgid "Mollie-Konfiguration gespeichert."
+msgstr "Mollie-configuratie opgeslagen."
+
+msgid "Service Account gesperrt."
+msgstr "Serviceaccount geblokkeerd."
+
+msgid "Verbrauchererklärung aktualisiert."
+msgstr "Consumentenverklaring bijgewerkt."
+
+msgid "Rechtsdokument gespeichert."
+msgstr "Juridisch document opgeslagen."
+
+msgid "Retention-Policy gespeichert."
+msgstr "Bewaarbeleid opgeslagen."
+
+msgid "Löschanfrage verarbeitet und Konto anonymisiert."
+msgstr "Verwijderverzoek verwerkt en account geanonimiseerd."
+
+msgid "Löschanfrage abgelehnt."
+msgstr "Verwijderverzoek afgewezen."
+
+msgid "Dieser Lead ist bereits einem Kunden zugeordnet."
+msgstr "Deze lead is al aan een klant gekoppeld."
+
+msgid "Einladung für den Firmenadministrator wurde gesendet."
+msgstr "Uitnodiging voor de bedrijfsbeheerder verzonden."
+
+msgid "Kundenantwort gespeichert. Für Demo-Adressen wurde keine E-Mail versendet."
+msgstr "Klantantwoord opgeslagen. Er is geen e-mail naar demo-adressen verzonden."
+
+msgid "Kundenantwort gespeichert und E-Mail-Benachrichtigung eingeplant."
+msgstr "Klantantwoord opgeslagen en e-mailmelding ingepland."
+
+msgid "Kundenantwort gespeichert, E-Mail-Benachrichtigung konnte aber nicht eingeplant werden."
+msgstr "Klantantwoord opgeslagen, maar e-mailmelding kon niet worden ingepland."
+
+msgid "netstyle Benutzer angelegt; Einrichtungslink wurde per E-Mail versendet."
+msgstr "netstyle-gebruiker aangemaakt; instellink per e-mail verzonden."
+
+msgid "Privatkunden werden aus rechtlichen Gründen über Registrierung/Checkout angelegt; der Lead kann dort anschließend als gewonnen abgeschlossen werden."
+msgstr "Om juridische redenen worden particuliere klanten aangemaakt via registratie/checkout; daarna kan de lead als gewonnen worden afgesloten."
+
+msgid "Lead wurde in einen Firmenkunden umgewandelt. Der Ansprechpartner hat eine sichere Einladung erhalten."
+msgstr "Lead omgezet naar zakelijke klant. De contactpersoon heeft een veilige uitnodiging ontvangen."
+
+msgid "Lead %(lead_number)s angelegt."
+msgstr "Lead %(lead_number)s aangemaakt."
+
+msgid "Lead %(lead_number)s gelöscht."
+msgstr "Lead %(lead_number)s verwijderd."
+
+msgid "Firmenadministrator wurde auf %(email)s übertragen."
+msgstr "Bedrijfsbeheerdersrol overgedragen aan %(email)s."
+
+msgid "Lizenz wurde %(email)s zugewiesen."
+msgstr "Licentie toegewezen aan %(email)s."
+
+msgid "Ausstehend"
+msgstr "In afwachting"
+
+msgid "Autorisiert"
+msgstr "Geautoriseerd"
+
+msgid "Storniert"
+msgstr "Geannuleerd"
+
+msgid "Abgelaufen"
+msgstr "Verlopen"
+
+msgid "Teilweise erstattet"
+msgstr "Gedeeltelijk terugbetaald"
+
+msgid "Vollständig erstattet"
+msgstr "Volledig terugbetaald"
+
+msgid "Chargeback"
+msgstr "Chargeback"
+
+msgid "Chargeback zurückgenommen"
+msgstr "Chargeback teruggedraaid"
+
+msgid "Unbekannt"
+msgstr "Onbekend"
+
+msgid "Verarbeitungsfehler"
+msgstr "Verwerkingsfout"
+
+msgid "Fehler behoben"
+msgstr "Fout opgelost"
+
+msgid "E-Mail-Historie"
+msgstr "E-mailgeschiedenis"
+
+msgid "netstyle Rolle zuweisen"
+msgstr "netstyle-rol toewijzen"
+
+msgid "Erstattung konnte nicht an Mollie übermittelt werden."
+msgstr "Terugbetaling kon niet naar Mollie worden verzonden."
+
+msgid "Nachrichtentext"
+msgstr "Berichttekst"
+
+msgid "Rollenname"
+msgstr "Rolnaam"
+
+msgid "Lead %(lead_number)s löschen"
+msgstr "Lead %(lead_number)s verwijderen"
+
+msgid "Lead %(lead_number)s in Kunden umwandeln"
+msgstr "Lead %(lead_number)s omzetten naar klant"
+
+msgid "Firmenadministrator übertragen · %(email)s"
+msgstr "Bedrijfsbeheerder overdragen · %(email)s"
+
+msgid "E-Mail-Vorlage · %(code)s"
+msgstr "E-mailsjabloon · %(code)s"
+
+msgid "Löschanfrage ablehnen"
+msgstr "Verwijderingsverzoek afwijzen"
+
+msgid "Uneingeschränkte Rechte auf alle PROMPTFINISHER-Verwaltungsbereiche."
+msgstr "Onbeperkte toegang tot alle beheeronderdelen van PROMPTFINISHER."
+
+msgid "Kunden, Lizenzen, Geräte, Bestellungen, Zahlungen, E-Mail und Support."
+msgstr "Klanten, licenties, apparaten, bestellingen, betalingen, e-mail en ondersteuning."
+
+msgid "Monitoring, Backups, Operations API, Logs und Systemstatus."
+msgstr "Bewaking, back-ups, Operations API, logboeken en systeemstatus."
+
+msgid "Prompt Studio, Prompt-Lifecycle, Qualität und zentrale Inhalte."
+msgstr "Prompt Studio, promptlevenscyclus, kwaliteit en centrale inhoud."
+
+msgid "Berechtigungen werden über die zugewiesenen Capabilities gesteuert."
+msgstr "Machtigingen worden beheerd via toegewezen bevoegdheden."
+
+msgid "Objekttyp"
+msgstr "Objecttype"
+
+msgid "Objekt-ID"
+msgstr "Object-ID"
+
+msgid "Lead anlegen"
+msgstr "Lead aanmaken"
+
+msgid "Lead %(lead_number)s zuweisen"
+msgstr "Lead %(lead_number)s toewijzen"
+
+msgid "Firmenadministrator einladen · %(company)s"
+msgstr "Bedrijfsbeheerder uitnodigen · %(company)s"
+
+msgid "Feature bearbeiten"
+msgstr "Functie bewerken"
+
+msgid "Preisversion · %(product)s"
+msgstr "Prijsversie · %(product)s"
+
+msgid "Rechtsdokument bearbeiten"
+msgstr "Juridisch document bewerken"
+
+msgid "Retention-Policy bearbeiten"
+msgstr "Bewaarbeleid bewerken"
+
+msgid "Rolle · %(name)s"
+msgstr "Rol · %(name)s"
+
+msgid "Firmenadministrator"
+msgstr "Bedrijfsbeheerder"
+
+msgid "Entwurf"
+msgstr "Concept"
+
+msgid "Zahlung offen"
+msgstr "Betaling openstaand"
+
+msgid "Zahlung prüfen"
+msgstr "Betaling controleren"
+
+msgid "Refundiert"
+msgstr "Terugbetaald"
+
+msgid "Abgelehnt"
+msgstr "Afgewezen"
+
+msgid "Eingegangen"
+msgstr "Ontvangen"
+
+msgid "Kündigung"
+msgstr "Opzegging van de overeenkomst"
+
+msgid "Für Kunden sichtbar"
+msgstr "Zichtbaar voor klanten"
+
+msgid "Interne Notiz"
+msgstr "Interne notitie"
+
+msgid "Bitte lesen Sie vor der Registrierung die <a href=\"%(terms_url)s\" target=\"_blank\" rel=\"noopener\">AGB</a> und die <a href=\"%(privacy_url)s\" target=\"_blank\" rel=\"noopener\">Datenschutzerklärung</a>."
+msgstr "Lees vóór registratie de <a href=\"%(terms_url)s\" target=\"_blank\" rel=\"noopener\">Algemene voorwaarden</a> en het <a href=\"%(privacy_url)s\" target=\"_blank\" rel=\"noopener\">Privacybeleid</a>."
+
+msgid "Admin-Einladung neu senden"
+msgstr "Beheerdersuitnodiging opnieuw versturen"
+
+msgid "Firmenadministrator einladen"
+msgstr "Bedrijfsbeheerder uitnodigen"
+
+# Public legal-interface accessibility labels (not the legal document body)
+msgid "PROMPTFINISHER Startseite"
+msgstr "Startpagina PROMPTFINISHER"
+
+msgid "gültig ab"
+msgstr "geldig vanaf"
+
+msgid "Rechtliche Informationen"
+msgstr "Juridische informatie"
+
+msgid "Zur PROMPTFINISHER-Startseite"
+msgstr "Terug naar de startpagina van PROMPTFINISHER"
+
+msgid "Bestätigung"
+msgstr "Bevestiging"
+
+msgid "Kündigungsart"
+msgstr "Type opzegging"
+
+msgid "Grund"
+msgstr "Reden"
+
+msgid "Vorgangs-ID"
+msgstr "Dossier-ID"
+
+msgid "Eine elektronische Eingangsbestätigung wird an die angegebene E-Mail-Adresse versendet. Diese Seite kann zusätzlich gespeichert oder ausgedruckt werden."
+msgstr "Een elektronische ontvangstbevestiging wordt naar het opgegeven e-mailadres gestuurd. Je kunt deze pagina ook opslaan of afdrukken."
+
+# Public statutory withdrawal and termination UX messages
+msgid "Widerruf eingegangen"
+msgstr "Herroeping ontvangen"
+
+msgid "Ihr Widerruf wurde elektronisch entgegengenommen."
+msgstr "Je herroepingsverklaring is elektronisch ontvangen."
+
+msgid "WIDERRUFSFUNKTION"
+msgstr "HERROEPINGSFORMULIER"
+
+msgid "Mit diesem Formular können Verbraucher einen über PROMPTFINISHER geschlossenen Fernabsatzvertrag widerrufen."
+msgstr "Consumenten kunnen met dit formulier een via PROMPTFINISHER gesloten overeenkomst op afstand herroepen."
+
+msgid "Nach dem Absenden erhalten Sie unverzüglich eine elektronische Eingangsbestätigung an die angegebene E-Mail-Adresse."
+msgstr "Na verzending ontvang je onverwijld een elektronische ontvangstbevestiging op het opgegeven e-mailadres."
+
+msgid "Widerruf bestätigen"
+msgstr "Herroeping bevestigen"
+
+msgid "Kündigung eingegangen"
+msgstr "Opzegging ontvangen"
+
+msgid "Ihre Kündigung wurde elektronisch entgegengenommen."
+msgstr "Je opzegging is elektronisch ontvangen."
+
+msgid "KÜNDIGUNGSFUNKTION"
+msgstr "OPZEGFORMULIER"
+
+msgid "Hier können Verbraucher einen über PROMPTFINISHER geschlossenen Laufzeitvertrag ordentlich oder außerordentlich kündigen."
+msgstr "Consumenten kunnen een via PROMPTFINISHER gesloten overeenkomst met een looptijd regulier of buitengewoon opzeggen."
+
+msgid "Wenn Sie keinen Beendigungszeitpunkt angeben, behandeln wir die Kündigung als Erklärung zum frühestmöglichen Zeitpunkt."
+msgstr "Als je geen einddatum opgeeft, behandelen we de opzegging voor de vroegst mogelijke datum."
+
+msgid "jetzt kündigen"
+msgstr "Nu opzeggen"

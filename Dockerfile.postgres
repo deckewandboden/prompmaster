@@ -1,6 +1,14 @@
 FROM postgres:18-alpine
 
-RUN apk add --no-cache su-exec \
+RUN --mount=type=secret,id=pf_staging_ca,required=false \
+    if [ -s /run/secrets/pf_staging_ca ]; then \
+      cat /etc/ssl/cert.pem /run/secrets/pf_staging_ca > /tmp/pf-staging-ca-combined.pem; \
+      export SSL_CERT_FILE=/tmp/pf-staging-ca-combined.pem; \
+      export GIT_SSL_CAINFO=/tmp/pf-staging-ca-combined.pem; \
+      export CURL_CA_BUNDLE=/tmp/pf-staging-ca-combined.pem; \
+      trap 'rm -f /tmp/pf-staging-ca-combined.pem' EXIT; \
+    fi; \
+    apk add --no-cache su-exec \
     && grep -Fq 'exec gosu postgres "$BASH_SOURCE" "$@"' /usr/local/bin/docker-entrypoint.sh \
     && sed -i 's/exec gosu postgres "$BASH_SOURCE" "$@"/exec su-exec postgres "$BASH_SOURCE" "$@"/' /usr/local/bin/docker-entrypoint.sh \
     && grep -Fq 'exec su-exec postgres "$BASH_SOURCE" "$@"' /usr/local/bin/docker-entrypoint.sh \

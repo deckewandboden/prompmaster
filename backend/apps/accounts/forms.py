@@ -29,7 +29,7 @@ class LoginForm(forms.Form):
                     {'remaining_seconds': remaining},
                     request=self.request,
                 )
-            raise forms.ValidationError('Anmeldung fehlgeschlagen. Bitte später erneut versuchen.')
+            raise forms.ValidationError(_('Anmeldung fehlgeschlagen. Bitte später erneut versuchen.'))
 
         self.user = authenticate(email=email, password=data.get('password'))
         if not self.user or not self.user.is_active:
@@ -42,7 +42,7 @@ class LoginForm(forms.Form):
                     {'failures': failures, 'locked': locked},
                     request=self.request,
                 )
-            raise forms.ValidationError('Anmeldung fehlgeschlagen.')
+            raise forms.ValidationError(_('Anmeldung fehlgeschlagen.'))
 
         clear_login_failures(email)
         return data
@@ -72,7 +72,7 @@ class RegistrationForm(forms.Form):
             password_validation.validate_password(password)
         if data.get('customer_type') == 'company':
             if not data.get('company_name'):
-                self.add_error('company_name', 'Firmenname erforderlich.')
+                self.add_error('company_name', _('Firmenname erforderlich.'))
         else:
             data['company_name'] = ''
         return data
@@ -110,7 +110,7 @@ class PasswordResetConfirmForm(forms.Form):
     def clean(self):
         data = super().clean()
         if data.get('password') and data.get('password') != data.get('password_repeat'):
-            self.add_error('password_repeat', 'Passwörter stimmen nicht überein.')
+            self.add_error('password_repeat', _('Passwörter stimmen nicht überein.'))
         if data.get('password'):
             password_validation.validate_password(data['password'])
         return data

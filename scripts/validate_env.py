@@ -3,6 +3,7 @@ from __future__ import annotations
 
 import argparse
 import base64
+import ipaddress
 import re
 import sys
 from pathlib import Path
@@ -65,13 +66,34 @@ def is_external_s3_repository(value: str) -> bool:
     """Accept only canonical TLS-protected restic S3 repository forms."""
     repo = (value or '').strip()
     if repo.startswith('s3:https://'):
-        parsed = urlsplit(repo[3:])
-        return bool(
-            parsed.scheme == 'https'
-            and parsed.hostname
-            and parsed.path
-            and parsed.path != '/'
-        )
+        try:
+            parsed = urlsplit(repo[3:])
+            host = (parsed.hostname or '').lower().rstrip('.')
+            # A loopback/container-local endpoint may pass a TLS syntax check
+            # while still writing backups to the production host itself.
+            if (
+                parsed.scheme != 'https'
+                or not host
+                or not parsed.path.strip('/')
+                or parsed.username is not None
+                or parsed.password is not None
+                or parsed.query
+                or parsed.fragment
+                or host in {'localhost', 'host.docker.internal', 'gateway.docker.internal'}
+                or host.endswith(('.localhost', '.local'))
+            ):
+                return False
+            try:
+                address = ipaddress.ip_address(host)
+            except ValueError:
+                pass  # External DNS names still need an operational off-host check.
+            else:
+                if address.is_loopback or address.is_unspecified or address.is_link_local:
+                    return False
+            parsed.port  # Reject malformed non-numeric or out-of-range ports.
+            return True
+        except ValueError:
+            return False
     return bool(
         re.fullmatch(
             r's3:s3(?:\.[a-z0-9-]+)?\.amazonaws\.com/.+',

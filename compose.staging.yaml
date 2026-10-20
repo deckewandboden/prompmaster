@@ -1,14 +1,45 @@
+# The opt-in PM_STAGING_PROJECT isolates a parallel local QA stack.
+# Without this variable existing CI and deployment conventions are unchanged.
+name: ${PM_STAGING_PROJECT:-promptfinisher}
 services:
+  postgres:
+    image: ${PM_STAGING_PROJECT:-promptfinisher}-postgres:18-alpine-hardened
+  redis:
+    image: ${PM_STAGING_PROJECT:-promptfinisher}-redis:7-alpine-hardened
+  prometheus:
+    image: ${PM_STAGING_PROJECT:-promptfinisher}-prometheus:3.15.0-patched
+  node-exporter:
+    image: ${PM_STAGING_PROJECT:-promptfinisher}-node-exporter:1.12.1-hardened
+    # WSL2's / mount does not support rslave, and the Docker daemon
+    # rejects rprivate when / contains its own data-root. For staging
+    # QA, use the container-visible /proc and /sys (pid: host remains
+    # inherited), not a bind-mount of the daemon's entire rootfs.
+    # This verifies the exporter and Prometheus wiring, not exact host
+    # filesystem metrics; production retains the full host mount.
+    command: ["--path.rootfs=/"]
+    volumes: !override []
+  cadvisor:
+    image: ${PM_STAGING_PROJECT:-promptfinisher}-cadvisor:0.60.6-hardened
+  postgres-exporter:
+    image: ${PM_STAGING_PROJECT:-promptfinisher}-postgres-exporter:0.20.1-hardened
+  # Dedicated test stacks must never expose Caddy on all host interfaces.
+  # !override replaces base compose.yaml 0.0.0.0:80/443 mappings rather than
+  # merging them alongside the loopback-only bindings.
+  # PM_STAGING_*_PORT are local test-host ports, not container ports.
+  caddy:
+    ports: !override
+      - "127.0.0.1:${PM_STAGING_HTTP_PORT:-80}:80"
+      - "127.0.0.1:${PM_STAGING_HTTPS_PORT:-443}:443"
   mailpit:
     image: axllent/mailpit:v1.31.1
-    ports: ["127.0.0.1:8025:8025"]
+    ports: ["127.0.0.1:${PM_STAGING_MAILPIT_PORT:-8025}:8025"]
     networks: [app]
     restart: unless-stopped
   web:
     volumes:
       - ./backend:/app
       - static_data:/app/staticfiles
-      - backup_status:/var/run/promptmaster-backup:ro
+      - backup_status:/var/run/promptfinisher-backup:ro
     depends_on:
       mailpit: {condition: service_started}
   worker:
@@ -26,4 +57,22 @@ services:
       - staging_backup_repo:/backup-repo
 
 volumes:
+  postgres_data:
+    name: ${PM_STAGING_PROJECT:-promptmaster}_postgres_data
+  redis_data:
+    name: ${PM_STAGING_PROJECT:-promptmaster}_redis_data
+  static_data:
+    name: ${PM_STAGING_PROJECT:-promptmaster}_static_data
+  caddy_data:
+    name: ${PM_STAGING_PROJECT:-promptmaster}_caddy_data
+  caddy_config:
+    name: ${PM_STAGING_PROJECT:-promptmaster}_caddy_config
+  prometheus_data:
+    name: ${PM_STAGING_PROJECT:-promptmaster}_prometheus_data
+  backup_status:
+    name: ${PM_STAGING_PROJECT:-promptmaster}_backup_status
+  backup_repository:
+    name: ${PM_STAGING_PROJECT:-promptmaster}_backup_repository
+  export_data:
+    name: ${PM_STAGING_PROJECT:-promptmaster}_export_data
   staging_backup_repo:

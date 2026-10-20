@@ -153,35 +153,36 @@ for rel in required:
         fail(f'Missing {rel}')
 
 # 7) PROMPTFINISHER branding regression guards.
-# The 239x47 PNG is retained byte-exactly for legacy rollback routes only.
+# New 2048x305 artwork is the approved original for all active routes.
+# Immutable product Golden Masters are validated separately.
 logo = ROOT/'backend/static/brand/promptfinisher-logo-reference.png'
 if logo.exists():
     data = logo.read_bytes()
-    expected_sha = '5848c7bc83fa903f9eb2de1b8a3c8443a9dca937cf3659494d2db2d5a26ff231'
+    expected_sha = '851c75f6297b7b2a61d45721dbcb70ce6f0a9c66deba86c16c8daf376ab97ec3'
     if hashlib.sha256(data).hexdigest() != expected_sha:
-        fail('Legacy PROMPTFINISHER logo hash differs from approved 239x47 reference')
+        fail('PROMPTFINISHER logo hash differs from approved original 2048x305 artwork')
     try:
         if data[:8] != b'\x89PNG\r\n\x1a\n':
             raise ValueError('not png')
         width, height = struct.unpack('>II', data[16:24])
-        if (width, height) != (239, 47):
-            fail(f'Legacy PROMPTFINISHER logo dimensions are {width}x{height}, expected 239x47')
+        if (width, height) != (2048, 305):
+            fail(f'PROMPTFINISHER logo dimensions are {width}x{height}, expected 2048x305')
     except Exception as exc:
-        fail(f'Legacy logo metadata invalid: {exc}')
+        fail(f'PROMPTFINISHER logo metadata invalid: {exc}')
 
 clean_logo = ROOT/'backend/static/brand/promptfinisher-logo-clean.svg'
 clean_svg = clean_logo.read_text(encoding='utf-8')
-# The approved mark is the recovered 315x62 master artwork, cropped by the SVG
-# viewBox to remove the historic top-edge line. Do not redraw the wordmark with
-# substitute fonts: exact artwork fidelity is more important than pretending
-# the recovered raster master is native vector geometry.
+# SVG embeds the approved 2048x305 PNG without modifying or redrawing the mark.
+# Its SHA256 is pinned to the reviewed original brand package.
 for token in (
-    'width="315"', 'height="55"', 'viewBox="0 7 315 55"',
-    '<image x="0" y="0" width="315" height="62"',
+    'width="2048"', 'height="305"', 'viewBox="0 0 2048 305"',
+    '<image width="2048" height="305"',
     'data:image/png;base64,',
 ):
     if token not in clean_svg:
         fail(f'Clean PROMPTFINISHER logo invariant missing: {token}')
+if hashlib.sha256(clean_logo.read_bytes()).hexdigest() != '93f343364800fb5072d7c4dfce4a7b9f349b77c0d3fa2a919c45d08fc8c49bf2':
+    fail('Clean PROMPTFINISHER logo SVG differs from approved brand package')
 
 active_brand_files = (
     ROOT/'backend/templates/app_shell.html',
@@ -212,7 +213,7 @@ for token in (
     'pmv2-prompt-tall',
     'pmv2LicenseKeyboardBound',
     'pmv2LicenseObserver',
-    'promptfinisher-logo-hq.png?v=20260925-hq1',
+    'promptfinisher-logo-hq.png?v=20261011-logo1',
     'syncRequiredFieldState',
     'PFLICHTFELD',
     "if (mark.textContent !== 'PFLICHTFELD')",
@@ -503,12 +504,30 @@ for caddy_path in (ROOT / 'Caddyfile', ROOT / 'Caddyfile.external'):
         '@mutable_product_static path',
         '/static/css/promptfinisher_v2.20260922.css',
         '/static/js/promptfinisher_ui_v2.20260922.js',
+        '/static/js/promptfinisher_product_i18n.20261011.js',
         '/static/js/free_catalog_bridge.20260918.js',
         '/static/brand/promptfinisher-logo-clean.svg',
         'Cache-Control "no-cache, must-revalidate"',
     ):
         if token not in caddy_text:
             fail(f'{caddy_path.name} mutable product-static cache contract missing: {token}')
+
+# The public and external-Caddy routes must serve the *same* mutable
+# Free/Pro resources with short revalidation. A missing item in either path
+# would silently inherit the one-year immutable fallback.
+mutable_sets = []
+for caddy_path in (ROOT / 'Caddyfile', ROOT / 'Caddyfile.external'):
+    caddy_source = caddy_path.read_text(encoding='utf-8')
+    marker = '@mutable_product_static path '
+    if caddy_source.count(marker) != 1:
+        fail(f'{caddy_path.name} must declare exactly one mutable product matcher')
+    route_line = caddy_source.split(marker, 1)[1].splitlines()[0]
+    route_set = set(route_line.split())
+    if len(route_set) != len(route_line.split()):
+        fail(f'{caddy_path.name} contains duplicate mutable product routes')
+    mutable_sets.append(route_set)
+if mutable_sets[0] != mutable_sets[1]:
+    fail('Caddy mutable product static routes differ between standard and external proxy mode')
 
 pro_asset = ROOT / 'backend/private_assets/promptfinisher_pro.html'
 approved_pro_sha = 'a18375946c7081034cd6b9d70a1f4e3b843c51e03230477cae246b6c4bf0f95f'
@@ -722,7 +741,7 @@ for needle in (
     "customer_sort=Lower(",
     "'customer': 'customer_sort'",
     "customer_display=Coalesce('company__name', 'private_user__email', output_field=CharField())",
-    "('customer_display', 'Kunde', 'customer')",
+    "('customer_display', _('Kunde'), 'customer')",
 ):
     if needle not in admin_views:
         fail(f'Order customer sorting contract missing: {needle}')
@@ -733,16 +752,23 @@ for needle in ('Sortierung zurücksetzen', 'Alles zurücksetzen'):
     if needle not in grid_toolbar:
         fail(f'Datagrid reset action missing: {needle}')
 
-for needle in (
-    "'phone': 'Telefon'",
-    "'street': 'Straße'",
-    "'house_number': 'Hausnummer'",
-    "'postal_code': 'PLZ'",
-    "'city': 'Ort'",
-    "'country': 'Land'",
+# Both historical literal labels and gettext-wrapped source labels are valid.
+# Preserve the exact expected field/label mapping across both forms.
+for field, label in (
+    ('phone', 'Telefon'),
+    ('street', 'Straße'),
+    ('house_number', 'Hausnummer'),
+    ('postal_code', 'PLZ'),
+    ('city', 'Ort'),
+    ('country', 'Land'),
 ):
-    if needle not in company_forms:
-        fail(f'German customer form label missing: {needle}')
+    accepted = (
+        f"'{field}': '{label}'",
+        f"'{field}': _('{label}')",
+        f"""'{field}': _("{label}")""",
+    )
+    if not any(needle in company_forms for needle in accepted):
+        fail(f'German customer form label missing: {field} -> {label}')
 for label in ('Vorname', 'Nachname', 'E-Mail-Adresse', 'Passwort'):
     accepted = (
         f"label='{label}'",

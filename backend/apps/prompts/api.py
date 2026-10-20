@@ -55,6 +55,26 @@ def _require_pro_access(request):
 
 
 @require_GET
+def free_catalog(request):
+    """Public Free-only catalog, independent of the visitor's login/2FA."""
+    response = JsonResponse({'ok': True, 'catalog': catalog_snapshot('FREE')})
+    response['Cache-Control'] = 'no-store'
+    return response
+
+
+@require_POST
+def free_compose(request):
+    """Public Free-only composer; a Pro payload cannot cross this boundary."""
+    try:
+        payload = json.loads(request.body.decode('utf-8') or '{}')
+    except (UnicodeDecodeError, json.JSONDecodeError):
+        return _error(PromptValidationError('Ungültiges JSON.', code='invalid_json'))
+    if not isinstance(payload, dict) or payload.get('product') != 'FREE':
+        return _error(PromptValidationError('Dieser Endpunkt erlaubt ausschließlich Free.', field='product', code='choice'))
+    return compose(request)
+
+
+@require_GET
 def catalog(request):
     product = (request.GET.get('product') or 'PRO').upper()
     if product == 'PRO':

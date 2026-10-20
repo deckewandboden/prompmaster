@@ -151,14 +151,14 @@ test('marketing header uses dedicated approved HQ logo artwork',()=>{
   assert.match(css,/\/brand\/promptfinisher-logo-hq\.png/);
   assert.doesNotMatch(css,/\/brand\/promptfinisher-logo-clean\.svg/);
   assert.doesNotMatch(css,/background-image:url\('\/brand\/design-reference\.jpeg'\)/);
-  assert.equal(gitBlobSha('public/brand/promptfinisher-logo-hq.png'),'87be29848672ddac093e49cae479ec9dcc1e43ff');
+  assert.equal(createHash('sha256').update(file('public/brand/promptfinisher-logo-hq.png')).digest('hex'),'851c75f6297b7b2a61d45721dbcb70ce6f0a9c66deba86c16c8daf376ab97ec3');
 });
 
 test('header and footer use the same HQ logo and share one visible left baseline',()=>{
   const content=read('src/content.js');
   const css=read('src/immersive.css');
   assert.match(content,/footer=.*class="brand"[^]*class="logo-crop"/);
-  assert.match(css,/background-image:url\('\/brand\/promptfinisher-logo-hq\.png'\)/);
+  assert.match(css,/background-image:url\('\/brand\/promptfinisher-logo-hq\.png\?v=20261011-logo1'\)/);
   assert.doesNotMatch(css,/promptfinisher-logo-clean\.svg/);
   assert.match(css,/@media\(min-width:651px\)\{[^]*header\{[^]*padding-left:calc\(6% - 24px\)/);
   assert.match(css,/#footer \.footer-grid>div:first-child \.brand\{[^]*margin-left:-24px/);

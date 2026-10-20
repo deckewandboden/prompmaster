@@ -4,7 +4,16 @@ FROM python:3.13-slim-bookworm
 ENV PYTHONDONTWRITEBYTECODE=1 PYTHONUNBUFFERED=1 PIP_NO_CACHE_DIR=1
 COPY --from=node_runtime /usr/local/bin/node /usr/local/bin/node
 COPY --from=node_runtime /usr/local/lib/node_modules /usr/local/lib/node_modules
-RUN ln -s ../lib/node_modules/npm/bin/npm-cli.js /usr/local/bin/npm \
+RUN --mount=type=secret,id=pf_staging_ca,required=false \
+    if [ -s /run/secrets/pf_staging_ca ]; then \
+      cat /etc/ssl/certs/ca-certificates.crt /run/secrets/pf_staging_ca > /tmp/pf-staging-ca-combined.pem; \
+      printf 'Acquire::https::CaInfo "/tmp/pf-staging-ca-combined.pem";\n' > /tmp/pf-staging-apt.conf; \
+      export APT_CONFIG=/tmp/pf-staging-apt.conf; \
+      export PIP_CERT=/tmp/pf-staging-ca-combined.pem; \
+      export SSL_CERT_FILE=/tmp/pf-staging-ca-combined.pem; \
+      trap 'rm -f /tmp/pf-staging-ca-combined.pem /tmp/pf-staging-apt.conf' EXIT; \
+    fi; \
+    ln -s ../lib/node_modules/npm/bin/npm-cli.js /usr/local/bin/npm \
     && ln -s ../lib/node_modules/npm/bin/npx-cli.js /usr/local/bin/npx \
     && apt-get update \
     && apt-get install -y --no-install-recommends bash git ca-certificates \

@@ -1,0 +1,56 @@
+# Optional, LOCAL isolated staging only; never used by production Compose.
+# An explicitly pinned user-owned Sophos CA is supplied solely as a BuildKit
+# secret to the networked build stages, never baked into a final image layer.
+services:
+  postgres:
+    build:
+      secrets:
+        - pf_staging_ca
+  redis:
+    build:
+      secrets:
+        - pf_staging_ca
+  web:
+    build:
+      context: .
+      secrets:
+        - pf_staging_ca
+  worker:
+    build:
+      context: .
+      secrets:
+        - pf_staging_ca
+  beat:
+    build:
+      context: .
+      secrets:
+        - pf_staging_ca
+  caddy:
+    build:
+      secrets:
+        - pf_staging_ca
+  prometheus:
+    build:
+      secrets:
+        - pf_staging_ca
+  node-exporter:
+    build:
+      secrets:
+        - pf_staging_ca
+  cadvisor:
+    build:
+      secrets:
+        - pf_staging_ca
+  postgres-exporter:
+    build:
+      secrets:
+        - pf_staging_ca
+  backup:
+    build:
+      context: ./backup
+      secrets:
+        - pf_staging_ca
+
+secrets:
+  pf_staging_ca:
+    file: ${PM_STAGING_CA_FILE:?PM_STAGING_CA_FILE is required for local staging TLS overlay}

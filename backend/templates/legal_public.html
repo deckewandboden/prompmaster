@@ -1,25 +1,25 @@
-{% extends 'base.html' %}{% load static %}{% block title %}{{ document.get_doc_type_display }} | PROMPTFINISHER{% endblock %}{% block body %}
+{% extends 'base.html' %}{% load static i18n %}{% block title %}{{ document_title }} | PROMPTFINISHER{% endblock %}{% block body %}
 <div class="legal-page">
   <div class="legal-page-head">
-    <a href="/" aria-label="PROMPTFINISHER Startseite"><img src="{% static 'brand/promptfinisher-logo-hq.png' %}" alt="PROMPTFINISHER"></a>
+    <a href="/" aria-label="{% translate 'PROMPTFINISHER Startseite' %}"><img src="{% static 'brand/promptfinisher-logo-hq.png' %}" alt="PROMPTFINISHER"></a>
   </div>
   <article class="card legal-document">
-    <h1>{{ document.get_doc_type_display }}</h1>
-    <p class="muted">Version {{ document.version }} · gültig ab {{ document.valid_from|date:'d.m.Y' }}</p>
+    <h1>{{ document_title }}</h1>
+    <p class="muted">{% translate "Version" %} {{ document.version }} · {% translate "gültig ab" %} {{ document.valid_from|date:'SHORT_DATE_FORMAT' }}</p>
     <div class="legal-content">{{ document.content|linebreaks }}</div>
     <hr>
-    <nav aria-label="Rechtliche Informationen">
+    <nav aria-label="{% translate 'Rechtliche Informationen' %}">
       <p>
-        <a href="/impressum/">Impressum</a> ·
-        <a href="/datenschutz/">Datenschutz</a> ·
-        <a href="/agb/">AGB</a> ·
-        <a href="/lizenzbedingungen/">Lizenzbedingungen</a> ·
-        <a href="/widerruf/">Widerrufsbelehrung</a> ·
-        <a href="/barrierefreiheit/">Barrierefreiheit</a>
+        <a href="/impressum/">{% translate "Impressum" %}</a> ·
+        <a href="/datenschutz/">{% translate "Datenschutz" %}</a> ·
+        <a href="/agb/">{% translate "AGB" %}</a> ·
+        <a href="/lizenzbedingungen/">{% translate "Lizenzbedingungen" %}</a> ·
+        <a href="/widerruf/">{% translate "Widerrufsbelehrung" %}</a> ·
+        <a href="/barrierefreiheit/">{% translate "Barrierefreiheit" %}</a>
       </p>
-      <p><a href="/vertrag-widerrufen/">Vertrag widerrufen</a> · <a href="/vertraege-kuendigen/">Verträge hier kündigen</a></p>
+      <p><a href="/vertrag-widerrufen/">{% translate "Vertrag widerrufen" %}</a> · <a href="/vertraege-kuendigen/">{% translate "Verträge hier kündigen" %}</a></p>
     </nav>
-    <p><a href="/">← Zur PROMPTFINISHER-Startseite</a></p>
+    <p><a href="/">← {% translate "Zur PROMPTFINISHER-Startseite" %}</a></p>
   </article>
 </div>
 {% endblock %}

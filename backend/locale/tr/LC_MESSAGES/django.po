@@ -874,3 +874,2678 @@ msgstr "Pro lisansı hâlâ boş"
 
 msgid "Verlängern"
 msgstr "Uzat"
+
+msgid "Geschäft, Handlungsbedarf und Systemstatus auf einen Blick."
+msgstr "İş, yapılması gerekenler ve sistem durumu bir bakışta."
+
+msgid "PROMPTFINISHER Pro öffnen →"
+msgstr "PROMPTFINISHER Pro'yu aç →"
+
+msgid "PROMPTFINISHER Free öffnen →"
+msgstr "PROMPTFINISHER Free'yi aç →"
+
+msgid "System gesund"
+msgstr "Sistem sağlıklı"
+
+msgid "Prüfung erforderlich"
+msgstr "Kontrol gerekli"
+
+msgid "Kunden gesamt"
+msgstr "Toplam müşteri"
+
+msgid "Offene Leads"
+msgstr "Açık potansiyel müşteriler"
+
+msgid "Lead-Pipeline öffnen"
+msgstr "Potansiyel müşteri sürecini aç"
+
+msgid "Ablauf unter 30 Tagen"
+msgstr "30 günden kısa sürede sona erer"
+
+msgid "laufen in weniger als 60 Tagen ab"
+msgstr "60 günden kısa sürede sona erecek"
+
+msgid "Umsatz 30 Tage"
+msgstr "30 günlük ciro"
+
+msgid "Umsatzentwicklung"
+msgstr "Ciro gelişimi"
+
+msgid "Umsatzentwicklung der letzten Monate"
+msgstr "Son aylardaki ciro değişimi"
+
+msgid "Noch keine bezahlten Bestellungen im Auswertungszeitraum."
+msgstr "Raporlama döneminde henüz ödenmiş sipariş yok."
+
+msgid "Lizenzen nach Produkt"
+msgstr "Ürüne göre lisanslar"
+
+msgid "Handlungsbedarf"
+msgstr "İşlem gerekli"
+
+msgid "Lizenzen laufen in weniger als 30 Tagen ab."
+msgstr "Lisansların süresi 30 günden kısa sürede doluyor."
+
+msgid "fehlgeschlagene Zahlungen"
+msgstr "başarısız ödemeler"
+
+msgid "Chargebacks"
+msgstr "Ters ibrazlar"
+
+msgid "offene Kontaktanfragen"
+msgstr "açık iletişim talepleri"
+
+msgid "Kein aktueller Handlungsbedarf."
+msgstr "Şu anda yapılması gereken işlem yok."
+
+msgid "Letzte Bestellungen"
+msgstr "Son siparişler"
+
+msgid "Nächste Lizenzabläufe"
+msgstr "Yaklaşan lisans bitişleri"
+
+msgid "Keine bevorstehenden Abläufe."
+msgstr "Yaklaşan sona erme yok."
+
+msgid "Alle Lizenzen"
+msgstr "Tüm lisanslar"
+
+msgid "Kundenportal-Vorschau"
+msgstr "Müşteri portalı önizlemesi"
+
+msgid "KUNDENPORTAL · VORSCHAU"
+msgstr "MÜŞTERİ PORTALI · ÖNİZLEME"
+
+msgid "Read-only Vorschau …"
+msgstr "Salt okunur önizleme …"
+
+msgid "Support-Vorschau"
+msgstr "Destek önizlemesi"
+
+msgid "Zurück zum netstyle Kundendetail"
+msgstr "netstyle müşteri ayrıntılarına dön"
+
+msgid "Read-only Kundenansicht."
+msgstr "Salt okunur müşteri görünümü."
+
+msgid "Die Daten entsprechen dem ausgewählten Kundenkonto und seiner Rolle. Dies ist eine Ansichtsvorschau, keine Kundensitzung: Interaktionen, Zahlungs- und Sicherheitsaktionen sind nicht ausführbar."
+msgstr "Veriler seçilen müşteri hesabına ve rolüne göre sınırlandırılmıştır. Bu bir önizlemedir, müşteri oturumu değildir; etkileşim, ödeme ve güvenlik işlemleri devre dışıdır."
+
+msgid "Perspektive auswählen"
+msgstr "Görünüm seç"
+
+msgid "Nur aktive Benutzer dieses Unternehmens. Rollen und Zugriffsrechte werden berücksichtigt."
+msgstr "Yalnızca bu şirketin aktif kullanıcıları. Roller ve erişim hakları dikkate alınır."
+
+msgid "Kundenbenutzer"
+msgstr "Müşteri kullanıcısı"
+
+msgid "Keine aktiven Benutzer vorhanden"
+msgstr "Aktif kullanıcı bulunmuyor"
+
+msgid "Ansicht wechseln"
+msgstr "Görünümü değiştir"
+
+msgid "Angezeigte Rolle:"
+msgstr "Gösterilen rol:"
+
+msgid "Kundenverwaltung"
+msgstr "Müşteri yönetimi"
+
+msgid "Änderungen erfolgen ausschließlich in den berechtigungsgeschützten Administrationsmasken mit Auditierung – nicht in der Kundenansicht."
+msgstr "Değişiklikler yalnızca yetkilendirilmiş ve denetlenen yönetim ekranlarında yapılır; müşteri görünümünde yapılamaz."
+
+msgid "Benutzer und Rollen verwalten"
+msgstr "Kullanıcıları ve rolleri yönet"
+
+msgid "Lizenzen verwalten"
+msgstr "Lisansları yönet"
+
+msgid "Geräte verwalten"
+msgstr "Cihazları yönet"
+
+msgid "gesamt"
+msgstr "toplam"
+
+msgid "frei"
+msgstr "boş"
+
+msgid "Ablauf ≤30 Tage"
+msgstr "≤30 gün içinde sona eriyor"
+
+msgid "Konto"
+msgstr "Hesap"
+
+msgid "Kontotyp"
+msgstr "Hesap türü"
+
+msgid "Portal-Benutzer"
+msgstr "Portal kullanıcısı"
+
+msgid "Aktive Benutzer"
+msgstr "Aktif kullanıcılar"
+
+msgid "Bestand"
+msgstr "Mevcut durum"
+
+msgid "Freie Lizenzen"
+msgstr "Boş lisanslar"
+
+msgid "Rolle"
+msgstr "Rol"
+
+msgid "Hinweis"
+msgstr "Not"
+
+msgid "Keine Benutzer vorhanden."
+msgstr "Kullanıcı bulunmuyor."
+
+msgid "Keine Lizenzen vorhanden."
+msgstr "Lisans bulunmuyor."
+
+msgid "Keine netstyle-Berechtigung zum Anzeigen der Lizenzdaten."
+msgstr "netstyle yetkileriniz lisans verilerini görüntülemeye izin vermiyor."
+
+msgid "Keine aktiven Geräte vorhanden."
+msgstr "Aktif cihaz bulunmuyor."
+
+msgid "Keine Bestellungen vorhanden."
+msgstr "Sipariş bulunmuyor."
+
+msgid "Keine netstyle-Berechtigung zum Anzeigen der Bestelldaten."
+msgstr "netstyle yetkileriniz sipariş verilerini görüntülemeye izin vermiyor."
+
+msgid "Rechtsform"
+msgstr "Şirket türü"
+
+msgid "Telefon"
+msgstr "Telefon"
+
+msgid "Rechnungsanschrift"
+msgstr "Fatura adresi"
+
+msgid "Ort"
+msgstr "Şehir"
+
+msgid "Land"
+msgstr "Ülke"
+
+msgid "USt-IdNr."
+msgstr "KDV kimlik numarası"
+
+msgid "Mein Profil"
+msgstr "Profilim"
+
+msgid "Dies ist eine Leseansicht. Passwort, Zwei-Faktor-Authentifizierung und persönliche Einstellungen kann nur der angemeldete Kundenbenutzer selbst ändern."
+msgstr "Bu görünüm salt okunurdur. Parola, iki faktörlü kimlik doğrulama ve kişisel ayarlar yalnızca oturum açmış müşteri kullanıcısı tarafından değiştirilebilir."
+
+msgid "Benutzerkonto"
+msgstr "Kullanıcı hesabı"
+
+msgid "Teamverwaltung, Bestellungen und Unternehmensdaten sind für diese Rolle nicht freigegeben."
+msgstr "Bu rol ekip yönetimine, siparişlere ve şirket bilgilerine erişemez."
+
+msgid "Anschrift"
+msgstr "Adres"
+
+msgid "Weitere Bereiche"
+msgstr "Diğer bölümler"
+
+msgid "Kontoeinstellungen"
+msgstr "Hesap ayarları"
+
+msgid "Read-only"
+msgstr "Salt okunur"
+
+msgid "Sicherheit / 2FA"
+msgstr "Güvenlik / 2FA"
+
+msgid "nicht impersoniert"
+msgstr "kimlik taklidi yok"
+
+msgid "nicht ausführbar"
+msgstr "kullanılamaz"
+
+msgid "Support-Hinweis"
+msgstr "Destek notu"
+
+msgid "Für echte Schreibaktionen oder einen vollständigen Login-Test muss ein eigener Nicht-Staff-Testkunde verwendet werden. Die Vorschau übernimmt niemals die Identität des Kunden."
+msgstr "Gerçek değişiklikleri veya tam oturum açmayı test etmek için personel olmayan ayrı bir test müşterisi kullanın. Bu önizleme hiçbir zaman müşteri kimliğini devralmaz."
+
+msgid "Noch keine Lizenzen."
+msgstr "Henüz lisans yok."
+
+msgid "Alle Bestellungen"
+msgstr "Tüm siparişler"
+
+msgid "Firmenkonto"
+msgstr "Şirket hesabı"
+
+msgid "Serverseitige Suche, Filter, Sortierung und Pagination."
+msgstr "Sunucu tarafında arama, filtreleme, sıralama ve sayfalama."
+
+msgid "Neu anlegen"
+msgstr "Yeni oluştur"
+
+msgid "Privatkunden"
+msgstr "Bireysel müşteriler"
+
+msgid "aufsteigend"
+msgstr "artan"
+
+msgid "absteigend"
+msgstr "azalan"
+
+msgid "Keine Datensätze für die aktuelle Auswahl."
+msgstr "Geçerli seçim için kayıt yok."
+
+msgid "Änderungen werden serverseitig validiert und – sofern sicherheits- oder geschäftskritisch – protokolliert."
+msgstr "Değişiklikler sunucuda doğrulanır; güvenlik veya iş açısından kritikse kaydedilir."
+
+msgid "Zusätzliche Sicherheitsfreigabe."
+msgstr "Ek güvenlik doğrulaması."
+
+msgid "Bestätigen Sie Ihr eigenes Passwort. Die Freigabe gilt anschließend ausschließlich für wenige Minuten und nur für geschützte Admin-Aktionen."
+msgstr "Kendi parolanızı doğrulayın. Onay yalnızca birkaç dakika ve korumalı yönetici işlemleri için geçerli olacaktır."
+
+msgid "Bestätigen"
+msgstr "Onayla"
+
+msgid "Kompakte Geschäftszahlen innerhalb Ihrer Berechtigungen."
+msgstr "Yetkileriniz kapsamında özet iş göstergeleri."
+
+msgid "Neue Kunden · 30 Tage"
+msgstr "Yeni müşteriler · 30 gün"
+
+msgid "Verlängerungsanteil"
+msgstr "Yenileme oranı"
+
+msgid "Verlängerungsterms"
+msgstr "yenileme dönemleri"
+
+msgid "Refund-Quote"
+msgstr "İade oranı"
+
+msgid "Anteil refundierter Lizenzterms"
+msgstr "İade edilen lisans dönemlerinin oranı"
+
+msgid "Ø Lizenzen / Firma"
+msgstr "Şirket başına ortalama lisans"
+
+msgid "Firmenkundenbestand"
+msgstr "Kurumsal müşteri tabanı"
+
+msgid "Umsatz letzte 30 Tage"
+msgstr "Son 30 gün geliri"
+
+msgid "Bestellungen gesamt"
+msgstr "toplam sipariş"
+
+msgid "Lizenzen gesamt"
+msgstr "Toplam lisans"
+
+msgid "inkl. aktiv, frei, abgelaufen und historisch"
+msgstr "etkin, boşta, süresi dolmuş ve geçmiş lisanslar dahil"
+
+msgid "Anfragen aus dem Kundenportal; V1 verwendet bewusst kein Ticketsystem."
+msgstr "Müşteri portalından gelen talepler; V1 sürümünde bilerek bilet sistemi kullanılmaz."
+
+msgid "Keine Kontaktanfragen."
+msgstr "İletişim talebi yok."
+
+msgid "Globale Suche"
+msgstr "Genel arama"
+
+msgid "Ergebnisse für"
+msgstr "Sonuçlar:"
+
+msgid "Keine Treffer."
+msgstr "Sonuç bulunamadı."
+
+msgid "Append-only Auditlog für administrative und geschäftskritische Änderungen."
+msgstr "Yönetimsel ve iş açısından kritik değişiklikler için yalnızca eklemeli denetim kaydı."
+
+msgid "Zeit"
+msgstr "Saat"
+
+msgid "Objekt"
+msgstr "Nesne"
+
+msgid "Änderung"
+msgstr "Değişiklik"
+
+msgid "Keine Audit-Einträge."
+msgstr "Denetim kaydı yok."
+
+msgid "Mollie-Zahlungsstatus, Beträge, Refunds und Chargebacks."
+msgstr "Mollie ödeme durumları, tutarlar, iadeler ve ters ibrazlar."
+
+msgid "Bezahlt"
+msgstr "Ödendi"
+
+msgid "Offen"
+msgstr "Açık"
+
+msgid "Fehlgeschlagen"
+msgstr "Başarısız"
+
+msgid "Payment-ID"
+msgstr "Ödeme kimliği"
+
+msgid "Keine Zahlungen gefunden."
+msgstr "Ödeme bulunamadı."
+
+msgid "Lead"
+msgstr "Potansiyel müşteri"
+
+msgid "Interessent"
+msgstr "İlgilenen kişi"
+
+msgid "Priorität"
+msgstr "Öncelik"
+
+msgid "Zuständig"
+msgstr "Sorumlu"
+
+msgid "Erstellt"
+msgstr "Oluşturuldu"
+
+msgid "Kundennummer"
+msgstr "Müşteri numarası"
+
+msgid "Eingang"
+msgstr "Alındı"
+
+msgid "Art"
+msgstr "Tür"
+
+msgid "Vertragsbezug"
+msgstr "Sözleşme referansı"
+
+msgid "Datengetriebene Produkt-, Laufzeit-, Geräte-, Reminder- und Entitlement-Konfiguration."
+msgstr "Ürün, süre, cihaz, hatırlatıcı ve yetkilendirmelerin veri odaklı yapılandırması."
+
+msgid "Features"
+msgstr "Özellikler"
+
+msgid "Produkt anlegen"
+msgstr "Ürün oluştur"
+
+msgid "AKTIV"
+msgstr "AKTİF"
+
+msgid "INAKTIV"
+msgstr "PASİF"
+
+msgid "aktueller Neukaufpreis"
+msgstr "güncel yeni satın alma fiyatı"
+
+msgid "nicht konfiguriert"
+msgstr "yapılandırılmadı"
+
+msgid "Verlängerung"
+msgstr "Yenileme"
+
+msgid "Sichtbar / kaufbar"
+msgstr "Görünür / satın alınabilir"
+
+msgid "Ja"
+msgstr "Evet"
+
+msgid "Nein"
+msgstr "Hayır"
+
+msgid "Bearbeiten"
+msgstr "Düzenle"
+
+msgid "Noch keine Produkte."
+msgstr "Henüz ürün yok."
+
+msgid "Rollenbasierte Rechte; für alle netstyle Benutzer ist 2FA Pflicht."
+msgstr "Rol tabanlı yetkiler; tüm netstyle kullanıcıları için iki faktörlü kimlik doğrulama zorunludur."
+
+msgid "Rolle zuweisen"
+msgstr "Rol ata"
+
+msgid "netstyle Benutzer anlegen"
+msgstr "netstyle kullanıcısı oluştur"
+
+msgid "Berechtigungen"
+msgstr "İzinler"
+
+msgid "Sicherheitsvorgabe"
+msgstr "Güvenlik gereksinimi"
+
+msgid "2FA Pflicht"
+msgstr "2FA zorunlu"
+
+msgid "Keine Rolle"
+msgstr "Rol yok"
+
+msgid "2FA aktiv"
+msgstr "2FA etkin"
+
+msgid "2FA einzurichten"
+msgstr "2FA kurulumu gerekli"
+
+msgid "2FA dieses Benutzers zurücksetzen?"
+msgstr "Bu kullanıcının 2FA'sı sıfırlansın mı?"
+
+msgid "2FA zurücksetzen"
+msgstr "2FA'yı sıfırla"
+
+msgid "Benutzerstatus wirklich ändern?"
+msgstr "Kullanıcı durumu gerçekten değiştirilsin mi?"
+
+msgid "Deaktivieren"
+msgstr "Devre dışı bırak"
+
+msgid "Aktivieren"
+msgstr "Etkinleştir"
+
+msgid "Keine netstyle Benutzer."
+msgstr "netstyle kullanıcısı yok."
+
+msgid "Rechtsdokumente, Aufbewahrung und Löschanforderungen."
+msgstr "Hukuki belgeler, saklama süreleri ve silme talepleri."
+
+msgid "Rechtsdokumente"
+msgstr "Hukuki belgeler"
+
+msgid "Noch keine Rechtstexte hinterlegt."
+msgstr "Henüz hukuki metin eklenmedi."
+
+msgid "Rechtsdokumente verwalten"
+msgstr "Hukuki belgeleri yönet"
+
+msgid "Verbrauchererklärungen"
+msgstr "Tüketici beyanları"
+
+msgid "Offene Widerrufe / Kündigungen"
+msgstr "Bekleyen cayma / fesih talepleri"
+
+msgid "Widerrufe & Kündigungen"
+msgstr "Cayma ve fesihler"
+
+msgid "Retention / Löschung"
+msgstr "Saklama / silme"
+
+msgid "Aktive Retention-Policies"
+msgstr "Etkin saklama politikaları"
+
+msgid "Offene Löschanfragen"
+msgstr "Bekleyen silme talepleri"
+
+msgid "Retention-Policies"
+msgstr "Saklama politikaları"
+
+msgid "Löschanfragen"
+msgstr "Silme talepleri"
+
+msgid "Features / Entitlements"
+msgstr "Özellikler / yetkiler"
+
+msgid "Wiederverwendbare Funktionsrechte für heutige und zukünftige Produkte."
+msgstr "Mevcut ve gelecekteki ürünler için yeniden kullanılabilir özellik yetkileri."
+
+msgid "Feature anlegen"
+msgstr "Özellik oluştur"
+
+msgid "Code"
+msgstr "Kod"
+
+msgid "Keine Features."
+msgstr "Özellik yok."
+
+msgid "Geschützte Operations-Schnittstellen und Service Accounts."
+msgstr "Korumalı operasyon arabirimleri ve hizmet hesapları."
+
+msgid "Service Account anlegen"
+msgstr "Hizmet hesabı oluştur"
+
+msgid "Operations API"
+msgstr "Operasyon API'si"
+
+msgid "Zugriff ausschließlich über aktive Service Accounts mit passendem Scope. Tokens werden nur einmal bei Erstellung bzw. Rotation angezeigt."
+msgstr "Erişim yalnızca uygun kapsama sahip etkin hizmet hesaplarıyla mümkündür. Token'lar oluşturulurken veya yenilenirken yalnızca bir kez gösterilir."
+
+msgid "Service Accounts"
+msgstr "Hizmet hesapları"
+
+msgid "Gesperrt"
+msgstr "Engellendi"
+
+msgid "Token rotieren"
+msgstr "Token'ı yenile"
+
+msgid "Service Account wirklich sperren?"
+msgstr "Bu hizmet hesabı gerçekten engellensin mi?"
+
+msgid "Sperren"
+msgstr "Engelle"
+
+msgid "Noch keine Service Accounts."
+msgstr "Henüz hizmet hesabı yok."
+
+msgid "Dienste"
+msgstr "Hizmetler"
+
+msgid "Status der internen Plattformdienste."
+msgstr "Dahili platform hizmetlerinin durumu."
+
+msgid "Systemübersicht"
+msgstr "Sistem genel görünümü"
+
+msgid "Host"
+msgstr "Ana makine"
+
+msgid "Hostname"
+msgstr "Ana makine adı"
+
+msgid "Kernel"
+msgstr "Çekirdek"
+
+msgid "Healthy"
+msgstr "Sağlıklı"
+
+msgid "Nicht erreichbar"
+msgstr "Erişilemiyor"
+
+msgid "Datenbank"
+msgstr "Veritabanı"
+
+msgid "Verbindungen"
+msgstr "Bağlantılar"
+
+msgid "Größe"
+msgstr "Boyut"
+
+msgid "Background Jobs"
+msgstr "Arka plan işleri"
+
+msgid "Heartbeat fehlt"
+msgstr "Heartbeat yok"
+
+msgid "Queue"
+msgstr "Kuyruk"
+
+msgid "Fehlgeschlagene Jobs 24 h"
+msgstr "Son 24 saatte başarısız işler"
+
+msgid "Worker"
+msgstr "İşleyici"
+
+msgid "Antwortende Worker"
+msgstr "Yanıt veren işleyiciler"
+
+msgid "Worker-Heartbeat"
+msgstr "İşleyici heartbeat"
+
+msgid "Beat-Heartbeat"
+msgstr "Beat heartbeat"
+
+msgid "Zahlungsprovider, Webhook und letzte Zahlungsereignisse."
+msgstr "Ödeme sağlayıcısı, webhook ve son ödeme olayları."
+
+msgid "Mollie konfigurieren"
+msgstr "Mollie'yi yapılandır"
+
+msgid "Konfiguration"
+msgstr "Yapılandırma"
+
+msgid "Konfiguriert"
+msgstr "Yapılandırıldı"
+
+msgid "Unvollständig"
+msgstr "Eksik"
+
+msgid "Produktiv-Checkout"
+msgstr "Canlı ödeme işlemi"
+
+msgid "Freigegeben"
+msgstr "Etkinleştirildi"
+
+msgid "Modus"
+msgstr "Mod"
+
+msgid "Profile ID"
+msgstr "Profil kimliği"
+
+msgid "API Key"
+msgstr "API anahtarı"
+
+msgid "nicht gesetzt"
+msgstr "ayarlanmadı"
+
+msgid "Live-Zugangsdaten sind hinterlegt, der Kunden-Checkout bleibt jedoch gesperrt, bis die Live-Readiness geprüft und ausdrücklich freigegeben wurde."
+msgstr "Canlı erişim bilgileri kayıtlıdır; ancak canlı kullanıma hazırlık doğrulanıp açıkça onaylanana kadar müşteri ödeme işlemleri engelli kalır."
+
+msgid "Basis-URL"
+msgstr "Temel URL"
+
+msgid "Endpoint"
+msgstr "Uç nokta"
+
+msgid "Letztes Event"
+msgstr "Son olay"
+
+msgid "noch keines"
+msgstr "henüz yok"
+
+msgid "Webhook-Ereignisse öffnen"
+msgstr "Webhook olaylarını aç"
+
+msgid "Notabschaltung"
+msgstr "Acil kapatma"
+
+msgid "Sperrt neue Mollie-Käufe sofort. Bestehende Zahlungen und Webhooks bleiben weiter verarbeitbar."
+msgstr "Yeni Mollie satın almalarını hemen engeller. Mevcut ödemeler ve webhook'lar işlenmeye devam edebilir."
+
+msgid "Produktiv-Checkout sperren"
+msgstr "Canlı ödemeyi devre dışı bırak"
+
+msgid "Letzte Zahlungen"
+msgstr "Son ödemeler"
+
+msgid "Noch keine Zahlungen."
+msgstr "Henüz ödeme yok."
+
+msgid "Letzte Webhook-Events"
+msgstr "Son webhook olayları"
+
+msgid "offen"
+msgstr "açık"
+
+msgid "Noch keine Webhook-Ereignisse."
+msgstr "Henüz webhook olayı yok."
+
+msgid "Vorlagen, Versandstatus, Provider und Fallback-Kette."
+msgstr "Şablonlar, gönderim durumu, sağlayıcılar ve yedek yönlendirme zinciri."
+
+msgid "Absender & Provider"
+msgstr "Gönderen ve sağlayıcı"
+
+msgid "Versandprotokoll öffnen"
+msgstr "Gönderim günlüğünü aç"
+
+msgid "Vorlagen"
+msgstr "Şablonlar"
+
+msgid "Keine E-Mail-Vorlagen vorhanden."
+msgstr "E-posta şablonu yok."
+
+msgid "Mail-System"
+msgstr "E-posta sistemi"
+
+msgid "Versandmodus"
+msgstr "Gönderim modu"
+
+msgid "Automatischer Fallback"
+msgstr "Otomatik yedek yönlendirme"
+
+msgid "Manuell"
+msgstr "Manuel"
+
+msgid "Primär"
+msgstr "Birincil"
+
+msgid "Reihenfolge"
+msgstr "Sıra"
+
+msgid "Status der Kette"
+msgstr "Zincir durumu"
+
+msgid "Aktiver Absender"
+msgstr "Etkin gönderen"
+
+msgid "Anzeigename"
+msgstr "Görünen ad"
+
+msgid "Mail-Domain"
+msgstr "E-posta alan adı"
+
+msgid "Server"
+msgstr "Sunucu"
+
+msgid "Anmeldung"
+msgstr "Kimlik doğrulama"
+
+msgid "Passwort fehlt"
+msgstr "Parola eksik"
+
+msgid "Ohne Anmeldung"
+msgstr "Kimlik doğrulamasız"
+
+msgid "Nicht konfiguriert"
+msgstr "Yapılandırılmadı"
+
+msgid "Fehlt"
+msgstr "Eksik"
+
+msgid "Graph Absender"
+msgstr "Graph göndereni"
+
+msgid "Automatischer Fallback erfolgt nur bei eindeutig nicht zugestellten Fehlern. Bei unklaren Fehlern wird nicht automatisch weitergeschaltet, damit dieselbe E-Mail nicht versehentlich doppelt versendet wird."
+msgstr "Otomatik yedek yönlendirme yalnızca teslim edilmediği kesinleşen hatalarda çalışır. Belirsiz hatalarda aynı e-postanın yanlışlıkla iki kez gönderilmemesi için otomatik geçiş yapılmaz."
+
+msgid "SPF/DKIM/DMARC werden unter „Einstellungen“ als DNS-Sollwerte dokumentiert. Änderungen dort aktualisieren nicht automatisch den öffentlichen DNS."
+msgstr "SPF/DKIM/DMARC için hedef DNS kayıtları Ayarlar bölümünde belgelenir. Oradaki değişiklikler genel DNS kayıtlarını otomatik olarak güncellemez."
+
+msgid "Letzte Versandvorgänge"
+msgstr "Son gönderim işlemleri"
+
+msgid "Noch keine Versandvorgänge."
+msgstr "Henüz gönderim işlemi yok."
+
+msgid "Zur Kundenliste"
+msgstr "Müşteri listesine dön"
+
+msgid "Zur Privatkundenliste"
+msgstr "Bireysel müşteri listesine dön"
+
+msgid "Kundendaten"
+msgstr "Müşteri bilgileri"
+
+msgid "Stammdaten"
+msgstr "Ana veriler"
+
+msgid "Unternehmensdaten speichern"
+msgstr "Şirket bilgilerini kaydet"
+
+msgid "Firma"
+msgstr "Şirket"
+
+msgid "Steuernummer"
+msgstr "Vergi numarası"
+
+msgid "Änderungen erfolgen serverseitig mit Berechtigungsprüfung und werden im Audit protokolliert. Steuerfelder werden anhand der aktiven Steuerregel für Land und Kundentyp validiert."
+msgstr "Değişiklikler sunucuda yetki kontrolüyle yapılır ve denetim günlüğüne kaydedilir. Vergi alanları, ülke ve müşteri türü için geçerli vergi kuralına göre doğrulanır."
+
+msgid "Rechtsakzeptanzen"
+msgstr "Hukuki belge onayları"
+
+msgid "Version"
+msgstr "Sürüm"
+
+msgid "Keine Rechtsakzeptanzen protokolliert."
+msgstr "Kayıtlı hukuki belge onayı yok."
+
+msgid "Keine Löschanfragen."
+msgstr "Silme talebi yok."
+
+msgid "Alle Löschanfragen"
+msgstr "Tüm silme talepleri"
+
+msgid "Bestellung vom"
+msgstr "Sipariş tarihi"
+
+msgid "Zurück zur Liste"
+msgstr "Listeye dön"
+
+msgid "Brutto"
+msgstr "Brüt"
+
+msgid "Steuer"
+msgstr "Vergi"
+
+msgid "Keine Zahlung erfasst."
+msgstr "Kayıtlı ödeme yok."
+
+msgid "Positionen"
+msgstr "Kalemler"
+
+msgid "Menge"
+msgstr "Miktar"
+
+msgid "Einzelpreis"
+msgstr "Birim fiyat"
+
+msgid "Lizenzstatus wirklich ändern?"
+msgstr "Bu lisansın durumu gerçekten değiştirilsin mi?"
+
+msgid "Lizenz entsperren"
+msgstr "Lisans engelini kaldır"
+
+msgid "Lizenz sperren"
+msgstr "Lisansı engelle"
+
+msgid "Inhaber & Zuweisung"
+msgstr "Sahip ve atama"
+
+msgid "Zugewiesen an"
+msgstr "Atanan kişi"
+
+msgid "Lizenzzuweisung wirklich freigeben? Aktive Geräte dieser Lizenz werden widerrufen."
+msgstr "Bu lisans ataması gerçekten kaldırılsın mı? Bu lisansa bağlı etkin cihazların erişimi iptal edilecektir."
+
+msgid "Zuweisung freigeben"
+msgstr "Atamayı kaldır"
+
+msgid "Aktiven Firmenbenutzer auswählen"
+msgstr "Etkin şirket kullanıcısı seç"
+
+msgid "Bitte auswählen"
+msgstr "Lütfen seçin"
+
+msgid "Lizenz zuweisen"
+msgstr "Lisans ata"
+
+msgid "Lizenzperioden"
+msgstr "Lisans dönemleri"
+
+msgid "Von"
+msgstr "Başlangıç"
+
+msgid "Bis"
+msgstr "Bitiş"
+
+msgid "Erstattung"
+msgstr "İade"
+
+msgid "Erstattung wirklich verbindlich über Mollie auslösen?"
+msgstr "Mollie üzerinden bağlayıcı iade işlemi gerçekten başlatılsın mı?"
+
+msgid "Erstattung prüfen/auslösen"
+msgstr "İadeyi incele/başlat"
+
+msgid "Keine Lizenzperioden vorhanden."
+msgstr "Lisans dönemi yok."
+
+msgid "E-Mail-Protokoll"
+msgstr "E-posta günlüğü"
+
+msgid "Versandstatus, tatsächlich verwendeter Provider und Fallback-Versuche ohne vertrauliche Nachrichtentexte oder Secrets."
+msgstr "Gönderim durumu, fiilen kullanılan sağlayıcı ve yedek yönlendirme denemeleri; gizli mesaj içeriği veya kimlik bilgileri gösterilmez."
+
+msgid "Empfänger"
+msgstr "Alıcı"
+
+msgid "Vorlage"
+msgstr "Şablon"
+
+msgid "Provider"
+msgstr "Sağlayıcı"
+
+msgid "Versuche"
+msgstr "Denemeler"
+
+msgid "Gesendet"
+msgstr "Gönderildi"
+
+msgid "Wird gesendet"
+msgstr "Gönderiliyor"
+
+msgid "Unterdrückt"
+msgstr "Bastırıldı"
+
+msgid "Warteschlange"
+msgstr "Kuyrukta"
+
+msgid "Keine E-Mails gefunden."
+msgstr "E-posta bulunamadı."
+
+msgid "Kundenbereiche"
+msgstr "Müşteri bölümleri"
+
+msgid "Privatkundenbereiche"
+msgstr "Bireysel müşteri bölümleri"
+
+msgid "Audit"
+msgstr "Denetim"
+
+msgid "Zuletzt"
+msgstr "Son görülme"
+
+msgid "Akteur"
+msgstr "İşlemi yapan"
+
+msgid "Admin übertragen"
+msgstr "Yönetici rolünü devret"
+
+msgid "Benutzer wirklich deaktivieren? Lizenzen und Gerätezugänge werden freigegeben."
+msgstr "Bu kullanıcı gerçekten devre dışı bırakılsın mı? Lisanslar ve cihaz erişimleri serbest bırakılacaktır."
+
+msgid "Firmenadmin"
+msgstr "Şirket yöneticisi"
+
+msgid "Gerätezugang wirklich widerrufen?"
+msgstr "Cihaz erişimi gerçekten iptal edilsin mi?"
+
+msgid "Mollie Events"
+msgstr "Mollie olayları"
+
+msgid "Idempotent verarbeitete Provider-Zustandsänderungen."
+msgstr "İdempotent olarak işlenen sağlayıcı durum değişiklikleri."
+
+msgid "Providerstatus"
+msgstr "Sağlayıcı durumu"
+
+msgid "Verarbeitet"
+msgstr "İşlendi"
+
+msgid "Retries"
+msgstr "Yeniden denemeler"
+
+msgid "Fehler"
+msgstr "Hata"
+
+msgid "Keine Mollie Events gefunden."
+msgstr "Mollie olayı bulunamadı."
+
+msgid "DSGVO-Workflow mit kontrollierter Anonymisierung und Erhalt rechtlich erforderlicher Historie."
+msgstr "Yasal olarak gerekli kayıtlar korunurken kontrollü anonimleştirme sağlayan GDPR süreci."
+
+msgid "Angefordert"
+msgstr "Talep edildi"
+
+msgid "Notiz"
+msgstr "Not"
+
+msgid "Konto wirklich anonymisieren?"
+msgstr "Bu hesap gerçekten anonimleştirilsin mi?"
+
+msgid "Verarbeiten"
+msgstr "İşle"
+
+msgid "Retention Policies"
+msgstr "Saklama politikaları"
+
+msgid "Nur freigegebene Datenklassen können automatisiert bereinigt werden."
+msgstr "Yalnızca onaylı veri sınıfları otomatik olarak temizlenebilir."
+
+msgid "Datenklasse"
+msgstr "Veri sınıfı"
+
+msgid "Keine Policies."
+msgstr "Politika yok."
+
+msgid "Versionierte AGB, Datenschutz-, Widerrufs- und Lizenztexte."
+msgstr "Sürüm kontrollü genel şartlar, gizlilik, cayma ve lisans metinleri."
+
+msgid "Typ"
+msgstr "Tür"
+
+msgid "Keine Dokumente."
+msgstr "Belge yok."
+
+msgid "Read-only PostgreSQL-Betriebsdaten."
+msgstr "Salt okunur PostgreSQL işletim verileri."
+
+msgid "DB-Größe"
+msgstr "Veritabanı boyutu"
+
+msgid "Retention-Policy anlegen"
+msgstr "Saklama politikası oluştur"
+
+msgid "Rechtsdokument anlegen"
+msgstr "Hukuki belge oluştur"
+
+msgid "Fertig"
+msgstr "Tamamlandı"
+
+msgid "Referenz"
+msgstr "Referans"
+
+msgid "Start"
+msgstr "Başlangıç"
+
+msgid "Ende"
+msgstr "Bitiş"
+
+msgid "Backup"
+msgstr "Yedekleme"
+
+msgid "Schweregrad"
+msgstr "Önem derecesi"
+
+msgid "Meldung"
+msgstr "İleti"
+
+msgid "Keine Datensätze gefunden."
+msgstr "Kayıt bulunamadı."
+
+msgid "Benutzer-ID"
+msgstr "Kullanıcı kimliği"
+
+msgid "Status ändern"
+msgstr "Durumu değiştir"
+
+msgid "Neu"
+msgstr "Yeni"
+
+msgid "In Bearbeitung"
+msgstr "İşleniyor"
+
+msgid "Abgeschlossen"
+msgstr "Kapatıldı"
+
+msgid "Antwort schreiben"
+msgstr "Yanıt yaz"
+
+msgid "Die Antwort wird im Verlauf gespeichert und per E-Mail versendet an:"
+msgstr "Yanıt görüşme geçmişine kaydedilir ve şu adrese e-posta ile gönderilir:"
+
+msgid "Antwort"
+msgstr "Yanıt"
+
+msgid "Antwort an den Kunden eingeben …"
+msgstr "Müşteriye yanıt yazın …"
+
+msgid "Antwort senden"
+msgstr "Yanıt gönder"
+
+msgid "Anfrage und alle netstyle-Antworten in zeitlicher Reihenfolge."
+msgstr "Talep ve tüm netstyle yanıtları tarih sırasıyla."
+
+msgid "netstyle Support"
+msgstr "netstyle Destek"
+
+msgid "FAQ bearbeiten"
+msgstr "SSS düzenle"
+
+msgid "FAQ anlegen"
+msgstr "SSS oluştur"
+
+msgid "Zentraler Content-Baustein."
+msgstr "Merkezi içerik bileşeni."
+
+msgid "FAQ-Verwaltung"
+msgstr "SSS yönetimi"
+
+msgid "Zentrale FAQ-Inhalte für Marketing und Produktoberflächen."
+msgstr "Pazarlama ve ürün arayüzleri için merkezi SSS içerikleri."
+
+msgid "Frage suchen …"
+msgstr "Soru ara …"
+
+msgid "Alle Zielgruppen"
+msgstr "Tüm hedef kitleler"
+
+msgid "Filtern"
+msgstr "Filtrele"
+
+msgid "Zurücksetzen"
+msgstr "Sıfırla"
+
+msgid "Key"
+msgstr "Anahtar"
+
+msgid "Frage"
+msgstr "Soru"
+
+msgid "Zielgruppe"
+msgstr "Hedef kitle"
+
+msgid "Keine FAQ-Einträge."
+msgstr "SSS kaydı yok."
+
+msgid "Service Account Token"
+msgstr "Hizmet hesabı token'ı"
+
+msgid "erstellt"
+msgstr "oluşturuldu"
+
+msgid "Token jetzt sicher speichern."
+msgstr "Bu token'ı şimdi güvenli biçimde saklayın."
+
+msgid "Er wird danach nicht erneut im Klartext angezeigt; ein alter Token ist nach einer Rotation sofort ungültig."
+msgstr "Token daha sonra düz metin olarak tekrar gösterilmez; yenilemeden sonra eski token hemen geçersiz olur."
+
+msgid "Zur API-Verwaltung"
+msgstr "API yönetimine dön"
+
+msgid "Produktcode"
+msgstr "Ürün kodu"
+
+msgid "Preisversion anlegen"
+msgstr "Fiyat sürümü oluştur"
+
+msgid "Produktkonfiguration"
+msgstr "Ürün yapılandırması"
+
+msgid "Preisversionen"
+msgstr "Fiyat sürümleri"
+
+msgid "ab"
+msgstr "itibaren"
+
+msgid "Keine Preisversionen."
+msgstr "Fiyat sürümü yok."
+
+msgid "Zentrale Prompt-Domain · 34 Apps · 194 PM20-Aufgaben · versioniert und serverseitig komponiert."
+msgstr "Merkezi prompt alanı · 34 uygulama · 194 PM20 görevi · sürümlü ve sunucuda oluşturulur."
+
+msgid "Qualität"
+msgstr "Kalite"
+
+msgid "Task-ID, App oder Titel suchen …"
+msgstr "Görev kimliği, uygulama veya başlık ara …"
+
+msgid "Task"
+msgstr "Görev"
+
+msgid "Anwendung"
+msgstr "Uygulama"
+
+msgid "Veröffentlicht"
+msgstr "Yayımlandı"
+
+msgid "Offene Versionen"
+msgstr "Açık sürümler"
+
+msgid "keine"
+msgstr "yok"
+
+msgid "noch keine Daten"
+msgstr "henüz veri yok"
+
+msgid "Keine Prompt-Aufgaben gefunden."
+msgstr "Prompt görevi bulunamadı."
+
+msgid "Prompt-Qualität"
+msgstr "Prompt kalitesi"
+
+msgid "1–5-Sterne-Ratings · Recent Average · Drop-Erkennung · Aufgabenliste."
+msgstr "1–5 yıldız değerlendirmesi · güncel ortalama · düşüş algılama · görev listesi."
+
+msgid "Schwellen"
+msgstr "Eşikler"
+
+msgid "Analyse aktualisieren"
+msgstr "Analizi güncelle"
+
+msgid "Kritisch"
+msgstr "Kritik"
+
+msgid "Warnung"
+msgstr "Uyarı"
+
+msgid "Beobachten"
+msgstr "İzle"
+
+msgid "OK"
+msgstr "Tamam"
+
+msgid "App"
+msgstr "Uygulama"
+
+msgid "Recent Avg"
+msgstr "Güncel ort."
+
+msgid "Previous Avg"
+msgstr "Önceki ort."
+
+msgid "Drop"
+msgstr "Düşüş"
+
+msgid "Lizenz-Defaults"
+msgstr "Lisans varsayılanları"
+
+msgid "Geräte je Benutzer"
+msgstr "Kullanıcı başına cihazlar"
+
+msgid "Einladung"
+msgstr "Davet"
+
+msgid "Stunden"
+msgstr "saat"
+
+msgid "Kritische Warnung"
+msgstr "Kritik uyarı"
+
+msgid "Einstellungen speichern"
+msgstr "Ayarları kaydet"
+
+msgid "Produktdefaults, Support, E-Mail-Identität und Betriebswarnschwellen."
+msgstr "Ürün varsayılanları, destek, e-posta kimliği ve sistem uyarı eşikleri."
+
+msgid "Produktwerte werden unter „Produkte & Preise“ gepflegt."
+msgstr "Ürün değerleri “Ürünler ve Fiyatlar” bölümünde yönetilir."
+
+msgid "PROMPTFINISHER Pro ist nicht angelegt."
+msgstr "PROMPTFINISHER Pro henüz oluşturulmadı."
+
+msgid "Empfänger des Kundenportal-Kontaktformulars."
+msgstr "Müşteri portalındaki iletişim formunun alıcısı."
+
+msgid "E-Mail-Versandweg & Fallback"
+msgstr "E-posta gönderim yolu ve yedek yönlendirme"
+
+msgid "Alle Provider bleiben parallel gespeichert. Im manuellen Modus wird nur der primäre Versandweg verwendet. Im automatischen Modus wird bei eindeutig nicht zugestellten Fehlern in der festgelegten Reihenfolge weitergeschaltet; bei unklaren Fehlern erfolgt bewusst kein automatischer Fallback, um Doppelversand zu vermeiden."
+msgstr "Tüm sağlayıcılar kayıtlı kalır. Manuel mod yalnızca birincil gönderim yolunu kullanır. Otomatik modda yalnızca kesin teslim edilmeme durumunda belirtilen sırayla sonraki sağlayıcıya geçilir; belirsiz hatalarda çift gönderimi önlemek için otomatik geçiş yapılmaz."
+
+msgid "E-Mail-Absender & Domain"
+msgstr "E-posta göndereni ve alan adı"
+
+msgid "Die Absenderadresse wird beim SMTP-Versand direkt aus diesen Einstellungen gelesen. SPF, DKIM und DMARC sind hier als DNS-Sollwerte dokumentiert; das Speichern verändert keine DNS-Zone."
+msgstr "SMTP gönderen adresi doğrudan bu ayarlardan okunur. SPF, DKIM ve DMARC burada hedef DNS kayıtları olarak belgelenir; kaydetme hiçbir DNS bölgesini değiştirmez."
+
+msgid "Erster SMTP-Transport. Das Passwort wird verschlüsselt gespeichert und niemals wieder im Klartext angezeigt."
+msgstr "Birincil SMTP aktarımı. Parola şifrelenerek saklanır ve daha sonra düz metin olarak gösterilmez."
+
+msgid "Optionaler zweiter SMTP-Transport. Hier können Sie z. B. denselben SMTP-Relay eintragen, den auch Listmonk verwendet, und manuell oder automatisch zwischen SMTP 1 und SMTP 2 wechseln."
+msgstr "İsteğe bağlı ikinci SMTP aktarımı. Örneğin Listmonk ile aynı SMTP geçiş sunucusunu kullanabilir, SMTP 1 ve SMTP 2 arasında manuel veya otomatik geçiş yapabilirsiniz."
+
+msgid "Alternative zu SMTP für Exchange Online. Das Client Secret wird verschlüsselt gespeichert und niemals wieder im Klartext angezeigt."
+msgstr "Exchange Online için SMTP alternatifi. İstemci gizli anahtarı şifrelenerek saklanır ve daha sonra düz metin olarak gösterilmez."
+
+msgid "Sie besitzen Leserechte, aber keine Berechtigung zum Ändern dieser Einstellungen."
+msgstr "Salt okunur erişiminiz var; bu ayarları değiştirme yetkiniz yok."
+
+msgid "Bewertungen"
+msgstr "Değerlendirmeler"
+
+msgid "Deterministischer Composer-Test ohne Speicherung des erzeugten Prompttexts."
+msgstr "Oluşturulan istem metnini kaydetmeden yapılan deterministik oluşturucu testi."
+
+msgid "Draft aus letzter Version"
+msgstr "Son sürümden taslak oluştur"
+
+msgid "Draft speichern"
+msgstr "Taslağı kaydet"
+
+msgid "Keine Version vorhanden."
+msgstr "Kullanılabilir sürüm yok."
+
+msgid "Konfigurierbare Schwellen für Recent Average und Drop-Erkennung."
+msgstr "Son dönem ortalaması ve düşüş tespiti için yapılandırılabilir eşikler."
+
+msgid "No-Code Editor. Nur DRAFT-Versionen sind inhaltlich veränderbar."
+msgstr "Kodsuz düzenleyici. Yalnızca DRAFT sürümleri düzenlenebilir."
+
+msgid "Noch keine Qualitäts-Snapshots. Analyse ausführen oder Ratings erfassen."
+msgstr "Henüz kalite anlık görüntüsü yok. Analiz çalıştırın veya değerlendirme kaydedin."
+
+msgid "Policy"
+msgstr "Politika"
+
+msgid "Qualität:"
+msgstr "Kalite:"
+
+msgid "Qualitätsschwellen"
+msgstr "Kalite eşikleri"
+
+msgid "Ratings"
+msgstr "Değerlendirmeler"
+
+msgid "Testfall"
+msgstr "Test senaryosu"
+
+msgid "Testfall speichern"
+msgstr "Test senaryosunu kaydet"
+
+msgid "Tests"
+msgstr "Testler"
+
+msgid "Titel"
+msgstr "Başlık"
+
+msgid "Zur Übersicht"
+msgstr "Genel bakışa dön"
+
+msgid "bearbeiten"
+msgstr "düzenle"
+
+msgid "zentrale PromptDefinition"
+msgstr "Merkezi PromptDefinition"
+
+msgid "Versionen"
+msgstr "Sürümler"
+
+msgid "Tests / Ratings"
+msgstr "Testler / değerlendirmeler"
+
+msgid "Lifecycle"
+msgstr "Yaşam döngüsü"
+
+msgid "Archivieren"
+msgstr "Arşivle"
+
+msgid "Publish ist nur über den Human-in-the-loop-Lifecycle möglich. Tests werden vor REVIEW und PUBLISH erneut ausgeführt."
+msgstr "Yayınlama yalnızca insan denetimli yaşam döngüsü üzerinden mümkündür. Testler REVIEW ve PUBLISH öncesinde yeniden çalıştırılır."
+
+msgid "Definition"
+msgstr "Tanım"
+
+msgid "Family"
+msgstr "Aile"
+
+msgid "Area"
+msgstr "Alan"
+
+msgid "Max. Zeichen"
+msgstr "Azami karakter"
+
+msgid "Intent"
+msgstr "Amaç"
+
+msgid "Kontexttemplate"
+msgstr "Bağlam şablonu"
+
+msgid "Felder & Optionen"
+msgstr "Alanlar ve seçenekler"
+
+msgid "Pflichtfelder"
+msgstr "Zorunlu alanlar"
+
+msgid "Keine"
+msgstr "Yok"
+
+msgid "Optionale Felder"
+msgstr "İsteğe bağlı alanlar"
+
+msgid "Auswahloptionen"
+msgstr "Seçim seçenekleri"
+
+msgid "Testfälle"
+msgstr "Test senaryoları"
+
+msgid "Tests sind Bestandteil des Release-Gates einer Prompt-Version."
+msgstr "Testler, bir istem sürümünün yayın onayının parçasıdır."
+
+msgid "Alle Tests ausführen"
+msgstr "Tüm testleri çalıştır"
+
+msgid "Testen"
+msgstr "Test et"
+
+msgid "Löschen"
+msgstr "Sil"
+
+msgid "Noch kein Testfall. Vor Übergang zu TEST muss mindestens einer angelegt werden."
+msgstr "Henüz test senaryosu yok. TEST aşamasına geçmeden önce en az bir tane oluşturun."
+
+msgid "Preview / Test-Komposition"
+msgstr "Önizleme / test bileşimi"
+
+msgid "Prompt testen"
+msgstr "İstemi test et"
+
+msgid "Ergebnis"
+msgstr "Sonuç"
+
+msgid "Deterministischer Feld-Fallback"
+msgstr "Deterministik alan yedeği"
+
+msgid "10-Min.-Ø:"
+msgstr "10 dk. ort.:"
+
+msgid "Aktive Warnungen"
+msgstr "Etkin uyarılar"
+
+msgid "App-Version"
+msgstr "Uygulama sürümü"
+
+msgid "Architektur"
+msgstr "Mimari"
+
+msgid "Backup & Restore"
+msgstr "Yedekleme ve geri yükleme"
+
+msgid "Backups öffnen"
+msgstr "Yedeklemeleri aç"
+
+msgid "Betriebszustand, Plattformdienste, Integrationen und Datensicherung."
+msgstr "Çalışma durumu, platform hizmetleri, entegrasyonlar ve yedeklemeler."
+
+msgid "CPU-Kerne"
+msgstr "CPU çekirdeği"
+
+msgid "Caddy"
+msgstr "Caddy"
+
+msgid "Celery Beat"
+msgstr "Celery Beat"
+
+msgid "Celery Worker"
+msgstr "Celery Worker"
+
+msgid "Container-CPU aktuell"
+msgstr "Güncel konteyner CPU kullanımı"
+
+msgid "Container-RAM gesamt"
+msgstr "Toplam konteyner RAM'i"
+
+msgid "DB-Verbindungen"
+msgstr "Veritabanı bağlantıları"
+
+msgid "Dateiobjekte (Inodes) belegt"
+msgstr "Kullanılan inode'lar"
+
+msgid "Dateiobjekte (Inodes) verfügbar"
+msgstr "Kullanılabilir inode'lar"
+
+msgid "Datenbank & Jobs"
+msgstr "Veritabanı ve işler"
+
+msgid "Datenbank öffnen"
+msgstr "Veritabanını aç"
+
+msgid "Datenträger / gesamt"
+msgstr "Disk / toplam"
+
+msgid "Datenträger / verfügbar"
+msgstr "Disk / kullanılabilir"
+
+msgid "Datenträger / verwendet"
+msgstr "Disk / kullanılan"
+
+msgid "Definitionen"
+msgstr "Tanımlar"
+
+msgid "Dienste & Integrationen"
+msgstr "Hizmetler ve entegrasyonlar"
+
+msgid "Dienste öffnen"
+msgstr "Hizmetleri aç"
+
+msgid "Diese Werte stammen aus cAdvisor und beziehen sich auf Docker-Container. Die VM-Werte oben stammen aus node_exporter und beziehen sich auf die gesamte Docker-Host-VM."
+msgstr "Bu ölçümler cAdvisor'dan gelir ve Docker konteynerlerini kapsar. Yukarıdaki VM ölçümleri node_exporter'dan gelir ve tüm Docker ana makine sanal makinesini kapsar."
+
+msgid "Docker"
+msgstr "Docker"
+
+msgid "Docker-Container"
+msgstr "Docker konteynerleri"
+
+msgid "Erkannte Container"
+msgstr "Algılanan konteynerler"
+
+msgid "Fehler / 24 h"
+msgstr "Hata / 24 sa."
+
+msgid "Git Commit"
+msgstr "Git commit'i"
+
+msgid "Host & Release"
+msgstr "Ana makine ve sürüm"
+
+msgid "Inodes sind Dateisystem-Einträge für Dateien und Verzeichnisse. Sind sie ausgeschöpft, können trotz freiem Speicher keine neuen Dateien angelegt werden."
+msgstr "Inode'lar dosya ve dizinler için dosya sistemi kayıtlarıdır. Tükendiklerinde diskte boş alan bulunsa bile yeni dosya oluşturulamaz."
+
+msgid "Keine aktiven Systemwarnungen."
+msgstr "Etkin sistem uyarısı yok."
+
+msgid "Letzter Restore-Test"
+msgstr "Son geri yükleme testi"
+
+msgid "Letztes Backup"
+msgstr "Son yedekleme"
+
+msgid "Letztes Deployment"
+msgstr "Son dağıtım"
+
+msgid "Load:"
+msgstr "Yük:"
+
+msgid "Messbereich"
+msgstr "Ölçüm kapsamı"
+
+msgid "Messquelle"
+msgstr "Ölçüm kaynağı"
+
+msgid "Messwert-Erklärung"
+msgstr "Ölçüm açıklaması"
+
+msgid "OS / Kernel"
+msgstr "İşletim sistemi / çekirdek"
+
+msgid "PostgreSQL"
+msgstr "PostgreSQL"
+
+msgid "Prompt MCP"
+msgstr "Prompt MCP"
+
+msgid "RAM gesamt"
+msgstr "Toplam RAM"
+
+msgid "RAM verfügbar"
+msgstr "Kullanılabilir RAM"
+
+msgid "RAM verwendet"
+msgstr "Kullanılan RAM"
+
+msgid "Restore-Tests öffnen"
+msgstr "Geri yükleme testlerini aç"
+
+msgid "TLS-Zertifikat"
+msgstr "TLS sertifikası"
+
+msgid "Umgebung"
+msgstr "Ortam"
+
+msgid "Uptime"
+msgstr "Çalışma süresi"
+
+msgid "VM-CPU aktuell"
+msgstr "Güncel VM CPU kullanımı"
+
+msgid "VM-Datenträger /"
+msgstr "VM diski /"
+
+msgid "VM-RAM"
+msgstr "VM RAM"
+
+msgid "VM-Speicher & Dateisystem"
+msgstr "VM belleği ve dosya sistemi"
+
+msgid "Verwendetes Backup"
+msgstr "Kullanılan yedekleme"
+
+msgid "Warnungen öffnen"
+msgstr "Uyarıları aç"
+
+msgid "geschützt"
+msgstr "korumalı"
+
+msgid "healthy"
+msgstr "sağlıklı"
+
+msgid "konfiguriert"
+msgstr "yapılandırıldı"
+
+msgid "nicht erreichbar"
+msgstr "erişilemiyor"
+
+msgid "nicht protokolliert"
+msgstr "kaydedilmedi"
+
+msgid "und ist die für neue Prozesse realistisch nutzbare Speichermenge. „Inodes“ sind Dateisystem-Einträge; ein niedriger Belegungsgrad ist unkritisch."
+msgstr "ve yeni süreçler için gerçekçi olarak kullanılabilir bellek miktarını belirtir. Inode'lar dosya sistemi kayıtlarıdır; düşük kullanım oranı sorun değildir."
+
+msgid "verfügbar von"
+msgstr "toplamın kullanılabilir kısmı:"
+
+msgid "„RAM verfügbar“ entspricht Linux"
+msgstr "“Kullanılabilir RAM” Linux'taki"
+
+msgid "not_configured"
+msgstr "yapılandırılmadı"
+
+msgid "unknown"
+msgstr "bilinmiyor"
+
+msgid "ok"
+msgstr "normal"
+
+msgid "warning"
+msgstr "uyarı"
+
+msgid "unavailable"
+msgstr "kullanılamıyor"
+
+msgid "degraded"
+msgstr "performansı düşmüş"
+
+msgid "success"
+msgstr "başarılı"
+
+msgid "failed"
+msgstr "başarısız"
+
+msgid "running"
+msgstr "çalışıyor"
+
+msgid "critical"
+msgstr "kritik"
+
+msgid "passed"
+msgstr "geçti"
+
+msgid "error"
+msgstr "hata"
+
+msgid "skipped"
+msgstr "atlandı"
+
+msgid "in_progress"
+msgstr "devam ediyor"
+
+msgid "no_data"
+msgstr "veri yok"
+
+msgid "completed"
+msgstr "tamamlandı"
+
+msgid "nicht verfügbar"
+msgstr "kullanılamıyor"
+
+msgid "Disk {value}% belegt"
+msgstr "Disk kullanımı: %{value}"
+
+msgid "RAM {value}% belegt"
+msgstr "RAM kullanımı: %{value}"
+
+msgid "CPU 10-Minuten-Mittel {value}%"
+msgstr "10 dakikalık ortalama CPU kullanımı: %{value}"
+
+msgid "Kein auswertbarer Backupstatus verfügbar"
+msgstr "Değerlendirilebilir yedekleme durumu yok"
+
+msgid "Letztes Backup meldet Status {value}"
+msgstr "Son yedekleme durumu: {value}"
+
+msgid "Backup ist {value} Stunden alt"
+msgstr "Yedekleme {value} saat önce oluşturuldu"
+
+msgid "Restore-Statusdatei ist nicht auswertbar"
+msgstr "Geri yükleme durum dosyası değerlendirilemiyor"
+
+msgid "Noch kein Restore-Test protokolliert"
+msgstr "Henüz geri yükleme testi kaydedilmedi"
+
+msgid "Letzter Restore-Test war nicht erfolgreich"
+msgstr "Son geri yükleme testi başarısız oldu"
+
+msgid "Letzter Restore-Test ist {value} Tage alt"
+msgstr "Son geri yükleme testi {value} gün önce yapıldı"
+
+msgid "Monitoring-Ziel {value} ist nicht erreichbar"
+msgstr "İzleme hedefi {value} erişilemiyor"
+
+msgid "Monitoring-Ziel {value} liefert keinen Status"
+msgstr "İzleme hedefi {value} durum bildirmiyor"
+
+msgid "Caddy Healthcheck ist nicht erreichbar"
+msgstr "Caddy sağlık denetimine erişilemiyor"
+
+msgid "Kein Celery Worker beantwortet den aktiven Ping"
+msgstr "Hiçbir Celery worker etkin ping'e yanıt vermiyor"
+
+msgid "Celery Beat-Heartbeat älter als {value} Minuten"
+msgstr "Celery Beat durum sinyali {value} dakikadan eski"
+
+msgid "Celery Queue-Tiefe kann nicht gelesen werden"
+msgstr "Celery kuyruk uzunluğu okunamıyor"
+
+msgid "Celery Queue enthält {value} wartende Jobs"
+msgstr "Celery kuyruğunda {value} bekleyen iş var"
+
+msgid "{value} fehlgeschlagene Hintergrundjobs in 24 Stunden"
+msgstr "Son 24 saatte {value} arka plan işi başarısız oldu"
+
+msgid "{value} E-Mail-Fehler in 24 Stunden"
+msgstr "Son 24 saatte {value} e-posta hatası"
+
+msgid "{value} Mollie-Verarbeitungsfehler in 24 Stunden"
+msgstr "Son 24 saatte {value} Mollie işleme hatası"
+
+msgid "Backups"
+msgstr "Yedeklemeler"
+
+msgid "Restore-Tests"
+msgstr "Geri yükleme testleri"
+
+msgid "Systemwarnungen"
+msgstr "Sistem uyarıları"
+
+msgid "Erledigt"
+msgstr "Çözüldü"
+
+msgid "Filter"
+msgstr "Filtre"
+
+msgid "Seite"
+msgstr "sayfa"
+
+msgid "AGB akzeptieren"
+msgstr "Şartlar ve koşulları kabul et"
+
+msgid "Anmeldung fehlgeschlagen."
+msgstr "Oturum açma başarısız."
+
+msgid "Anmeldung fehlgeschlagen. Bitte später erneut versuchen."
+msgstr "Oturum açma başarısız. Lütfen daha sonra tekrar deneyin."
+
+msgid "Anzahl Lizenzen"
+msgstr "Lisans sayısı"
+
+msgid "Art der Kündigung"
+msgstr "Fesih türü"
+
+msgid "Außerordentliche Kündigung"
+msgstr "Olağanüstü fesih"
+
+msgid "Bei einer außerordentlichen Kündigung ist der Kündigungsgrund erforderlich."
+msgstr "Olağanüstü fesih için gerekçe belirtilmelidir."
+
+msgid "Bestellnummer"
+msgstr "Sipariş numarası"
+
+msgid "Bitte bestätigen Sie den gewünschten Leistungsbeginn vor Ablauf der Widerrufsfrist."
+msgstr "Lütfen cayma süresi sona ermeden hizmetin başlamasını talep ettiğinizi onaylayın."
+
+msgid "Bitte bestätigen Sie die Widerrufsbelehrung."
+msgstr "Lütfen cayma hakkı bilgilendirmesini okuduğunuzu onaylayın."
+
+msgid "Datenschutzhinweise zur Kenntnis genommen"
+msgstr "Gizlilik bildirimini okudum"
+
+msgid "Deutschland"
+msgstr "Almanya"
+
+msgid "Die Bestellnummer finden Sie in Ihrer Bestell- bzw. Zahlungsbestätigung."
+msgstr "Sipariş numaranızı sipariş veya ödeme onayınızda bulabilirsiniz."
+
+msgid "E-Mail-Adresse für die Eingangsbestätigung"
+msgstr "Alındı onayı için e-posta adresi"
+
+msgid "E-Mail-Adresse für die Kündigungsbestätigung"
+msgstr "Fesih onayı için e-posta adresi"
+
+msgid "Firmenname erforderlich."
+msgstr "Şirket adı zorunludur."
+
+msgid "Gewünschter Beendigungszeitpunkt"
+msgstr "Talep edilen sona erme tarihi"
+
+msgid "Hausnummer"
+msgstr "Bina numarası"
+
+msgid "Kündigungsgrund"
+msgstr "Fesih gerekçesi"
+
+msgid "Leer lassen für den frühestmöglichen Zeitpunkt."
+msgstr "Mümkün olan en erken tarih için boş bırakın."
+
+msgid "Leistungsbeginn vor Ablauf der Widerrufsfrist ausdrücklich verlangt"
+msgstr "Hizmetin cayma süresi bitmeden başlamasını açıkça talep ediyorum"
+
+msgid "Lizenzbedingungen akzeptieren"
+msgstr "Lisans koşullarını kabul et"
+
+msgid "Ordentliche Kündigung"
+msgstr "Olağan fesih"
+
+msgid "PLZ"
+msgstr "Posta kodu"
+
+msgid "Passwörter stimmen nicht überein."
+msgstr "Parolalar eşleşmiyor."
+
+msgid "Steuernummer ist für diese Steuerregel erforderlich."
+msgstr "Bu vergi kuralı için vergi numarası gereklidir."
+
+msgid "Straße"
+msgstr "Sokak"
+
+msgid "USt-IdNr. ist für diese Steuerregel erforderlich."
+msgstr "Bu vergi kuralı için KDV kimlik numarası gereklidir."
+
+msgid "Unternehmensname ist erforderlich."
+msgstr "Şirket adı zorunludur."
+
+msgid "Vertrag / Bestellung / Kundennummer"
+msgstr "Sözleşme / sipariş / müşteri numarası"
+
+msgid "Vor- und Nachname"
+msgstr "Ad ve soyadı"
+
+msgid "Widerrufsinformation zur Kenntnis genommen"
+msgstr "Cayma hakkı bilgilendirmesini okudum"
+
+msgid "Zum Beispiel Bestellnummer oder Kundennummer."
+msgstr "Örneğin sipariş veya müşteri numarası."
+
+msgid "Gerätename"
+msgstr "Cihaz adı"
+
+msgid "Keine konkrete Lizenz"
+msgstr "Belirli bir lisans yok"
+
+msgid "Lizenz (optional)"
+msgstr "Lisans (isteğe bağlı)"
+
+msgid "Nachricht"
+msgstr "Mesaj"
+
+msgid "Schlüssel"
+msgstr "Anahtar"
+
+msgid "Sonstiges"
+msgstr "Diğer"
+
+msgid "Sortierung"
+msgstr "Sıralama"
+
+msgid "Technisches Problem"
+msgstr "Teknik sorun"
+
+msgid "Aktuelle Stichprobengröße"
+msgstr "Güncel örneklem boyutu"
+
+msgid "App-Regel-Snapshot"
+msgstr "Uygulama kuralı anlık görüntüsü"
+
+msgid "Ausgabeformen"
+msgstr "Çıktı biçimleri"
+
+msgid "Beispiel: {\"microsoft_tier\":\"premium\",\"payload\":{\"fields\":{...}}}"
+msgstr "Örnek: {\"microsoft_tier\":\"premium\",\"payload\":{\"fields\":{...}}}"
+
+msgid "Bereich"
+msgstr "Alan"
+
+msgid "Darf nicht enthalten"
+msgstr "İçermemeli"
+
+msgid "Ein Feld pro Zeile. Optionales Fragment: Feldname ||| Text mit {value}."
+msgstr "Her satıra bir alan. İsteğe bağlı parça: alan adı ||| {value} içeren metin."
+
+msgid "Ein Pflichtfeld pro Zeile."
+msgstr "Her satıra bir zorunlu alan."
+
+msgid "Eingabedaten (JSON)"
+msgstr "Girdi verileri (JSON)"
+
+msgid "Familie"
+msgstr "Aile"
+
+msgid "Feldbezeichnungen müssen innerhalb einer Prompt-Version eindeutig sein."
+msgstr "Alan etiketleri aynı prompt sürümünde benzersiz olmalıdır."
+
+msgid "Kontextvorlage"
+msgstr "Bağlam şablonu"
+
+msgid "Kritisch bei Abfall"
+msgstr "Kritik düşüş eşiği"
+
+msgid "Kritischer Durchschnitt"
+msgstr "Kritik ortalama"
+
+msgid "Maximale Zeichen"
+msgstr "Maksimum karakter sayısı"
+
+msgid "Microsoft-Lizenzstufe"
+msgstr "Microsoft lisans düzeyi"
+
+msgid "Mindestanzahl Stichproben"
+msgstr "Asgari örnek sayısı"
+
+msgid "Mindestdurchschnitt"
+msgstr "Minimum ortalama"
+
+msgid "Muss enthalten"
+msgstr "İçermeli"
+
+msgid "Nur DRAFT-Versionen dürfen inhaltlich bearbeitet werden."
+msgstr "Yalnızca DRAFT sürümleri düzenlenebilir."
+
+msgid "Payload muss ein JSON-Objekt sein."
+msgstr "Payload bir JSON nesnesi olmalıdır."
+
+msgid "Quellen"
+msgstr "Kaynaklar"
+
+msgid "Schwerpunkte"
+msgstr "Odak alanları"
+
+msgid "Test-Payload (JSON)"
+msgstr "Test payload'u (JSON)"
+
+msgid "Test-Payload muss ein JSON-Objekt sein."
+msgstr "Test payload'u bir JSON nesnesi olmalıdır."
+
+msgid "Ungültiges JSON: %(error)s"
+msgstr "Geçersiz JSON: %(error)s"
+
+msgid "Vorherige Stichprobengröße"
+msgstr "Önceki örneklem boyutu"
+
+msgid "Warnung bei Abfall"
+msgstr "Uyarı düşüş eşiği"
+
+msgid "Ziel / Intent"
+msgstr "Hedef / amaç"
+
+msgid "Zielgruppen"
+msgstr "Hedef kitleler"
+
+msgid "API-Schlüssel"
+msgstr "API anahtarı"
+
+msgid "Ablauf optional"
+msgstr "İsteğe bağlı sona erme"
+
+msgid "Außerhalb der Produktion ist ausschließlich ein Mollie-Test-Key (test_…) zulässig."
+msgstr "Üretim ortamı dışında yalnızca Mollie test anahtarı (test_…) kullanılabilir."
+
+msgid "Begründung"
+msgstr "Gerekçe"
+
+msgid "Beschreibung"
+msgstr "Açıklama"
+
+msgid "Bruttopreis"
+msgstr "Brüt fiyat"
+
+msgid "Der Datensatz wird revisionssicher ausgeblendet und im Audit protokolliert."
+msgstr "Kayıt, denetim izi korunarak gizlenir."
+
+msgid "Diese E-Mail-Adresse gehört bereits zu einem PROMPTFINISHER-Konto."
+msgstr "Bu e-posta adresi zaten bir PROMPTFINISHER hesabına ait."
+
+msgid "Diese E-Mail-Adresse ist bereits einem Firmenkunden zugeordnet."
+msgstr "Bu e-posta adresi zaten bir kurumsal müşteriye atanmış."
+
+msgid "Diese E-Mail-Adresse ist bereits registriert."
+msgstr "Bu e-posta adresi zaten kayıtlı."
+
+msgid "Dokumenttyp"
+msgstr "Belge türü"
+
+msgid "E-Mail des Firmenadministrators"
+msgstr "Şirket yöneticisinin e-posta adresi"
+
+msgid "Eigenes Passwort erneut eingeben"
+msgstr "Parolanızı yeniden girin"
+
+msgid "Erinnerung 1 · Tage vorher"
+msgstr "Hatırlatma 1 · Gün önce"
+
+msgid "Erinnerung 2 · Tage vorher"
+msgstr "Hatırlatma 2 · Gün önce"
+
+msgid "Erstatten"
+msgstr "İade et"
+
+msgid "Für Unternehmens-Leads ist der Unternehmensname erforderlich."
+msgstr "Kurumsal potansiyel müşteriler için şirket adı gereklidir."
+
+msgid "Für diese Datenklasse existiert kein freigegebener Lösch-Handler."
+msgstr "Bu veri sınıfı için onaylı bir silme işleyicisi yok."
+
+msgid "Für diese E-Mail-Adresse existiert bereits ein aktiver Lead."
+msgstr "Bu e-posta adresi için zaten etkin bir potansiyel müşteri kaydı var."
+
+msgid "Identität und Berechtigung des Ansprechpartners wurden geprüft"
+msgstr "İlgili kişinin kimliği ve yetkisi doğrulandı"
+
+msgid "In Kunde umwandeln"
+msgstr "Müşteriye dönüştür"
+
+msgid "In Produktion ist ausschließlich ein Mollie-Live-Key (live_…) zulässig."
+msgstr "Üretim ortamında yalnızca Mollie canlı anahtarı (live_…) kullanılabilir."
+
+msgid "Inhalt"
+msgstr "İçerik"
+
+msgid "Interne Notiz zur Prüfung (optional)"
+msgstr "Dahili doğrulama notu (isteğe bağlı)"
+
+msgid "Interne Notizen"
+msgstr "Dahili notlar"
+
+msgid "Kaufbar"
+msgstr "Satın alınabilir"
+
+msgid "Kritische Warnung · Tage vorher"
+msgstr "Kritik uyarı · Gün önce"
+
+msgid "Lead in Firmenkunden umwandeln und Einladungslink senden"
+msgstr "Potansiyel müşteriyi kurumsal müşteriye dönüştür ve davet bağlantısı gönder"
+
+msgid "Lead wirklich löschen"
+msgstr "Potansiyel müşteri kaydını silmeyi onayla"
+
+msgid "Lead-Typ"
+msgstr "Potansiyel müşteri türü"
+
+msgid "Leer lassen, um den bestehenden Schlüssel unverändert zu lassen."
+msgstr "Mevcut anahtarı değiştirmemek için boş bırakın."
+
+msgid "Lesen"
+msgstr "Oku"
+
+msgid "Löschung erst nach dieser Anzahl Tage. Rechtliche Aufbewahrungsfristen separat prüfen."
+msgstr "Silme ancak belirtilen gün sayısından sonra yapılır. Yasal saklama sürelerini ayrıca kontrol edin."
+
+msgid "Neukauf"
+msgstr "Yeni satın alma"
+
+msgid "Nicht zugewiesen"
+msgstr "Atanmamış"
+
+msgid "Nächste Aktion"
+msgstr "Sonraki işlem"
+
+msgid "Operations lesen"
+msgstr "Operasyonları oku"
+
+msgid "Preistyp"
+msgstr "Fiyat türü"
+
+msgid "Prompt-Drafts erzeugen"
+msgstr "Prompt taslakları oluştur"
+
+msgid "Prompt-Tests ausführen"
+msgstr "Prompt testlerini çalıştır"
+
+msgid "Prompts erzeugen"
+msgstr "Prompt oluştur"
+
+msgid "Prompts lesen"
+msgstr "Promptları oku"
+
+msgid "Qualität verwalten"
+msgstr "Kaliteyi yönet"
+
+msgid "Quelle"
+msgstr "Kaynak"
+
+msgid "Reminder 1 muss vor Reminder 2 liegen (größere Tageszahl)."
+msgstr "Hatırlatma 1, Hatırlatma 2'den önce olmalıdır (daha büyük gün sayısı)."
+
+msgid "Reminder 2 muss vor der kritischen Warnphase liegen."
+msgstr "Hatırlatma 2, kritik uyarı döneminden önce olmalıdır."
+
+msgid "Sicherheitsbestätigung des aktuell angemeldeten netstyle Benutzers."
+msgstr "Şu anda oturum açmış netstyle kullanıcısının güvenlik onayı."
+
+msgid "Sichtbar"
+msgstr "Görünür"
+
+msgid "Standard-Laufzeit in Tagen"
+msgstr "Varsayılan süre (gün)"
+
+msgid "Unternehmensname"
+msgstr "Şirket adı"
+
+msgid "Unterstützt: expired_invitations, email_messages, revoked_devices, resolved_system_alerts, resolved_task_failures, expired_sessions."
+msgstr "Desteklenenler: expired_invitations, email_messages, revoked_devices, resolved_system_alerts, resolved_task_failures, expired_sessions."
+
+msgid "Veröffentlichen"
+msgstr "Yayımla"
+
+msgid "Währung"
+msgstr "Para birimi"
+
+msgid "Absender-Anzeigename"
+msgstr "Gönderen görünen adı"
+
+msgid "Absender-E-Mail"
+msgstr "Gönderen e-posta adresi"
+
+msgid "Aktive Absenderadresse für SMTP. Änderungen gelten ohne Container-Neustart."
+msgstr "Etkin SMTP gönderici adresi. Değişiklikler konteyner yeniden başlatılmadan geçerlidir."
+
+msgid "Antwortadresse"
+msgstr "Yanıt adresi"
+
+msgid "Anwendungs-/Client-ID der App-Registrierung."
+msgstr "Uygulama kaydının uygulama/istemci kimliği."
+
+msgid "Automatisch – bei sicherem Ausfall auf Fallback wechseln"
+msgstr "Otomatik – kesin arızada yedek yola geç"
+
+msgid "Backup kritisch in Stunden"
+msgstr "Kritik yedekleme yaşı (saat)"
+
+msgid "Backup-Warnung in Stunden"
+msgstr "Yedekleme uyarı yaşı (saat)"
+
+msgid "Begründung optional"
+msgstr "Gerekçe (isteğe bağlı)"
+
+msgid "Bei IONOS normalerweise die vollständige E-Mail-Adresse."
+msgstr "IONOS için genellikle tam e-posta adresini kullanın."
+
+msgid "Bitte eine gültige Domain ohne @ eingeben."
+msgstr "@ içermeyen geçerli bir alan adı girin."
+
+msgid "CPU-Warnung in %"
+msgstr "CPU uyarı eşiği (%)"
+
+msgid "DKIM DNS Sollwert"
+msgstr "DKIM DNS hedef değeri"
+
+msgid "DKIM-Selector"
+msgstr "DKIM seçicisi"
+
+msgid "DMARC Sollwert"
+msgstr "DMARC hedef değeri"
+
+msgid "Datenträger kritisch in %"
+msgstr "Kritik disk kullanımı (%)"
+
+msgid "Datenträger-Warnung in %"
+msgstr "Disk kullanımı uyarısı (%)"
+
+msgid "Der kritische Wert muss über dem Warnwert liegen."
+msgstr "Kritik eşik, uyarı eşiğinden yüksek olmalıdır."
+
+msgid "Die Mail-Domain muss zur Absender-E-Mail passen."
+msgstr "Posta alan adı, gönderen e-posta adresiyle eşleşmelidir."
+
+msgid "Dokumentierter DNS-Sollwert für _dmarc.<Domain>."
+msgstr "_dmarc.<Domain> için belgelenmiş DNS hedef değeri."
+
+msgid "Dokumentierter DNS-Sollwert. Das Speichern ändert den öffentlichen DNS-Eintrag nicht."
+msgstr "Belgelenmiş DNS hedef değeri. Kaydetme, genel DNS kaydını değiştirmez."
+
+msgid "Domain des sichtbaren Absenders, z. B. decke-wand-boden.de oder später promptmaster.ai."
+msgstr "Görünen gönderenin alan adı; örn. decke-wand-boden.de veya daha sonra promptmaster.ai."
+
+msgid "Ein DMARC-Eintrag muss mit \"v=DMARC1;\" beginnen."
+msgstr "DMARC kaydı \"v=DMARC1;\" ile başlamalıdır."
+
+msgid "Ein SPF-Eintrag muss mit \"v=spf1 \" beginnen."
+msgstr "SPF kaydı \"v=spf1 \" ile başlamalıdır."
+
+msgid "Ein Versandweg darf in der Kette nur einmal vorkommen."
+msgstr "Her gönderim yolu zincirde yalnızca bir kez kullanılabilir."
+
+msgid "Eine oder mehrere E-Mail-Adressen, getrennt durch Zeilenumbruch, Komma oder Semikolon."
+msgstr "Satır sonu, virgül veya noktalı virgülle ayrılmış bir veya daha fazla e-posta adresi."
+
+msgid "Entra Client ID"
+msgstr "Entra istemci kimliği"
+
+msgid "Entra Client Secret"
+msgstr "Entra istemci gizli anahtarı"
+
+msgid "Entra Tenant ID"
+msgstr "Entra kiracı kimliği"
+
+msgid "Erstattung verbindlich über Mollie auslösen"
+msgstr "Mollie üzerinden para iadesini onayla"
+
+msgid "Fallback 1"
+msgstr "Yedek yol 1"
+
+msgid "Fallback 2"
+msgstr "Yedek yol 2"
+
+msgid "Für IONOS mit STARTTLS: 587."
+msgstr "STARTTLS kullanan IONOS için: 587."
+
+msgid "Für Microsoft Graph ist dieses Feld erforderlich."
+msgstr "Bu alan Microsoft Graph için zorunludur."
+
+msgid "Für Microsoft Graph ist ein Client Secret erforderlich."
+msgstr "Microsoft Graph için bir istemci gizli anahtarı gereklidir."
+
+msgid "Für SMTP 1 ist dieses Feld erforderlich."
+msgstr "Bu alan SMTP 1 için zorunludur."
+
+msgid "Für SMTP 2 ist dieses Feld erforderlich."
+msgstr "Bu alan SMTP 2 için zorunludur."
+
+msgid "Für den automatischen Modus muss mindestens ein Fallback gewählt werden."
+msgstr "Otomatik mod için en az bir yedek yol seçin."
+
+msgid "Im automatischen Modus wird nur bei eindeutig nicht zugestellten Fehlern weitergeschaltet."
+msgstr "Otomatik mod, yalnızca teslim edilmediği kesinleşen hatalarda diğer yola geçer."
+
+msgid "Kein weiterer Fallback"
+msgstr "Başka yedek yol yok"
+
+msgid "Leer lassen, um das gespeicherte Passwort unverändert zu lassen."
+msgstr "Kayıtlı parolayı değiştirmemek için boş bırakın."
+
+msgid "Leer lassen, um das gespeicherte Secret unverändert zu lassen."
+msgstr "Kayıtlı gizli anahtarı değiştirmemek için boş bırakın."
+
+msgid "Manuell – nur den primären Versandweg verwenden"
+msgstr "Manuel – yalnızca birincil gönderim yolunu kullan"
+
+msgid "Microsoft-365-Absender"
+msgstr "Microsoft 365 göndericisi"
+
+msgid "Monitoring-Alarmempfänger"
+msgstr "İzleme alarmı alıcıları"
+
+msgid "Neuer Schlüssel"
+msgstr "Yeni anahtar"
+
+msgid "Optional. Leer lassen, wenn Antworten an die Absenderadresse gehen sollen."
+msgstr "İsteğe bağlı. Yanıtların gönderen adresine gitmesi için boş bırakın."
+
+msgid "Optionaler Selector bzw. Hinweis auf die verwendeten Microsoft-365-DKIM-Selectoren."
+msgstr "İsteğe bağlı seçici veya kullanılan Microsoft 365 DKIM seçicileri hakkında not."
+
+msgid "Optionaler zweiter SMTP-Provider, z. B. derselbe Relay-Dienst wie bei Listmonk."
+msgstr "İsteğe bağlı ikinci SMTP sağlayıcısı, örn. Listmonk ile aynı aktarma hizmeti."
+
+msgid "Postfach, über das Microsoft Graph senden soll, z. B. promptmaster@netstyle.de."
+msgstr "Microsoft Graph'ın gönderim için kullanacağı posta kutusu, örn. promptmaster@netstyle.de."
+
+msgid "Primärer Versandweg"
+msgstr "Birincil gönderim yolu"
+
+msgid "RAM kritisch in %"
+msgstr "Kritik RAM kullanımı (%)"
+
+msgid "RAM-Warnung in %"
+msgstr "RAM kullanımı uyarısı (%)"
+
+msgid "Restore-Test-Warnung in Tagen"
+msgstr "Geri yükleme testi uyarı yaşı (gün)"
+
+msgid "SMTP 1 – Benutzername"
+msgstr "SMTP 1 – Kullanıcı adı"
+
+msgid "SMTP 1 – Passwort"
+msgstr "SMTP 1 – Parola"
+
+msgid "SMTP 1 – Port"
+msgstr "SMTP 1 – Port"
+
+msgid "SMTP 1 – STARTTLS verwenden"
+msgstr "SMTP 1 – STARTTLS kullan"
+
+msgid "SMTP 1 – Server"
+msgstr "SMTP 1 – Sunucu"
+
+msgid "SMTP 1, SMTP 2 und Microsoft Graph bleiben parallel konfiguriert."
+msgstr "SMTP 1, SMTP 2 ve Microsoft Graph paralel yapılandırılmış kalır."
+
+msgid "SMTP 2 – Benutzername"
+msgstr "SMTP 2 – Kullanıcı adı"
+
+msgid "SMTP 2 – Passwort"
+msgstr "SMTP 2 – Parola"
+
+msgid "SMTP 2 – Port"
+msgstr "SMTP 2 – Port"
+
+msgid "SMTP 2 – STARTTLS verwenden"
+msgstr "SMTP 2 – STARTTLS kullan"
+
+msgid "SMTP 2 – Server"
+msgstr "SMTP 2 – Sunucu"
+
+msgid "SPF Sollwert"
+msgstr "SPF hedef değeri"
+
+msgid "Support-Empfänger"
+msgstr "Destek alıcısı"
+
+msgid "TXT-/CNAME-Sollwert oder beide Microsoft-365-DKIM-CNAMEs. Reine Dokumentation; DNS wird nicht automatisch verändert."
+msgstr "TXT/CNAME hedef değeri veya iki Microsoft 365 DKIM CNAME kaydı. Yalnızca belgelendirme; DNS otomatik değişmez."
+
+msgid "Verzeichnis-/Mandanten-ID des Microsoft-365-Tenants."
+msgstr "Microsoft 365 kiracısının dizin/kiracı kimliği."
+
+msgid "Zum Beispiel PROMPTFINISHER."
+msgstr "Örneğin PROMPTFINISHER."
+
+msgid "Zum Beispiel smtp.ionos.de."
+msgstr "Örneğin smtp.ionos.de."
+
+msgid "Das eigene netstyle Konto kann hier nicht deaktiviert werden."
+msgstr "Kendi netstyle hesabınızı buradan devre dışı bırakamazsınız."
+
+msgid "Der letzte aktive Superadmin kann nicht deaktiviert werden."
+msgstr "Son etkin süper yönetici devre dışı bırakılamaz."
+
+msgid "Die eigene 2FA wird nicht über die Admin-Fremdverwaltung zurückgesetzt."
+msgstr "Kendi 2FA'nızı yönetici kullanıcı yönetimi üzerinden sıfırlayamazsınız."
+
+msgid "2FA zurückgesetzt. Der Benutzer muss sie beim nächsten Login neu einrichten."
+msgstr "2FA sıfırlandı. Kullanıcı bir sonraki girişte yeniden kurmalıdır."
+
+msgid "Die eigene Superadmin-Rolle kann nicht hier entfernt werden."
+msgstr "Kendi süper yönetici rolünüzü buradan kaldıramazsınız."
+
+msgid "Die letzte aktive Superadmin-Berechtigung kann nicht entfernt werden."
+msgstr "Son etkin süper yönetici yetkisi kaldırılamaz."
+
+msgid "Ein gesperrter Service Account kann nicht rotiert werden."
+msgstr "Engellenmiş hizmet hesabının anahtarı yenilenemez."
+
+msgid "Mollie-Produktiv-Checkout wurde gesperrt."
+msgstr "Mollie canlı ödeme akışı engellendi."
+
+msgid "Bestätigung für die Erstattung fehlt."
+msgstr "İade onayı eksik."
+
+msgid "Erstattung wurde an Mollie übermittelt."
+msgstr "İade talebi Mollie'ye iletildi."
+
+msgid "Für dieses Unternehmen existiert bereits ein aktiver Firmenadministrator."
+msgstr "Bu şirketin zaten etkin bir şirket yöneticisi var."
+
+msgid "Dieser Benutzer ist bereits Firmenadministrator."
+msgstr "Bu kullanıcı zaten şirket yöneticisi."
+
+msgid "Ungültiger Supportstatus."
+msgstr "Geçersiz destek durumu."
+
+msgid "Ungültiger Bearbeitungsstatus."
+msgstr "Geçersiz işlem durumu."
+
+msgid "Bitte eine Antwort eingeben."
+msgstr "Lütfen bir yanıt girin."
+
+msgid "Die Antwort darf höchstens 10.000 Zeichen enthalten."
+msgstr "Yanıt en fazla 10.000 karakter olabilir."
+
+msgid "Status aktualisiert."
+msgstr "Durum güncellendi."
+
+msgid "Einstellungen gespeichert."
+msgstr "Ayarlar kaydedildi."
+
+msgid "Rolle gespeichert."
+msgstr "Rol kaydedildi."
+
+msgid "Rolle zugewiesen."
+msgstr "Rol atandı."
+
+msgid "Rolle entfernt."
+msgstr "Rol kaldırıldı."
+
+msgid "Benutzerstatus aktualisiert."
+msgstr "Kullanıcı durumu güncellendi."
+
+msgid "Lead gespeichert."
+msgstr "Potansiyel müşteri kaydedildi."
+
+msgid "Lead-Zuständigkeit aktualisiert."
+msgstr "Potansiyel müşteri sorumlusu güncellendi."
+
+msgid "Gerät wurde widerrufen."
+msgstr "Cihaz erişimi iptal edildi."
+
+msgid "Unternehmensdaten gespeichert."
+msgstr "Şirket bilgileri kaydedildi."
+
+msgid "Benutzer deaktiviert; Lizenz- und Gerätezugänge wurden freigegeben."
+msgstr "Kullanıcı devre dışı bırakıldı; lisans ve cihaz erişimleri serbest bırakıldı."
+
+msgid "Die Lizenz ist bereits frei."
+msgstr "Lisans zaten atanmamış."
+
+msgid "Lizenzzuweisung wurde freigegeben."
+msgstr "Lisans ataması serbest bırakıldı."
+
+msgid "Lizenz wurde entsperrt."
+msgstr "Lisansın engeli kaldırıldı."
+
+msgid "Lizenz wurde gesperrt; vorhandene Gerätezugänge wurden widerrufen."
+msgstr "Lisans engellendi; mevcut cihaz erişimleri iptal edildi."
+
+msgid "Produkt angelegt. Legen Sie anschließend Preisversionen an."
+msgstr "Ürün oluşturuldu. Ardından fiyat sürümleri ekleyin."
+
+msgid "Feature gespeichert."
+msgstr "Özellik kaydedildi."
+
+msgid "Produkt gespeichert."
+msgstr "Ürün kaydedildi."
+
+msgid "Neue Preisversion angelegt."
+msgstr "Yeni fiyat sürümü oluşturuldu."
+
+msgid "E-Mail-Vorlage gespeichert."
+msgstr "E-posta şablonu kaydedildi."
+
+msgid "Mollie-Konfiguration gespeichert."
+msgstr "Mollie yapılandırması kaydedildi."
+
+msgid "Service Account gesperrt."
+msgstr "Hizmet hesabı engellendi."
+
+msgid "Verbrauchererklärung aktualisiert."
+msgstr "Tüketici beyanı güncellendi."
+
+msgid "Rechtsdokument gespeichert."
+msgstr "Hukuki belge kaydedildi."
+
+msgid "Retention-Policy gespeichert."
+msgstr "Saklama politikası kaydedildi."
+
+msgid "Löschanfrage verarbeitet und Konto anonymisiert."
+msgstr "Silme talebi işlendi ve hesap anonimleştirildi."
+
+msgid "Löschanfrage abgelehnt."
+msgstr "Silme talebi reddedildi."
+
+msgid "Dieser Lead ist bereits einem Kunden zugeordnet."
+msgstr "Bu potansiyel müşteri zaten bir müşteriye atanmış."
+
+msgid "Einladung für den Firmenadministrator wurde gesendet."
+msgstr "Şirket yöneticisi davetiyesi gönderildi."
+
+msgid "Kundenantwort gespeichert. Für Demo-Adressen wurde keine E-Mail versendet."
+msgstr "Müşteri yanıtı kaydedildi. Demo adreslerine e-posta gönderilmedi."
+
+msgid "Kundenantwort gespeichert und E-Mail-Benachrichtigung eingeplant."
+msgstr "Müşteri yanıtı kaydedildi ve e-posta bildirimi kuyruğa alındı."
+
+msgid "Kundenantwort gespeichert, E-Mail-Benachrichtigung konnte aber nicht eingeplant werden."
+msgstr "Müşteri yanıtı kaydedildi ancak e-posta bildirimi kuyruğa alınamadı."
+
+msgid "netstyle Benutzer angelegt; Einrichtungslink wurde per E-Mail versendet."
+msgstr "netstyle kullanıcısı oluşturuldu; kurulum bağlantısı e-postayla gönderildi."
+
+msgid "Privatkunden werden aus rechtlichen Gründen über Registrierung/Checkout angelegt; der Lead kann dort anschließend als gewonnen abgeschlossen werden."
+msgstr "Yasal nedenlerle bireysel müşteriler kayıt/ödeme sürecinde oluşturulur; ardından potansiyel müşteri kazanıldı olarak tamamlanabilir."
+
+msgid "Lead wurde in einen Firmenkunden umgewandelt. Der Ansprechpartner hat eine sichere Einladung erhalten."
+msgstr "Potansiyel müşteri kurumsal müşteriye dönüştürüldü. İlgili kişiye güvenli davet gönderildi."
+
+msgid "Lead %(lead_number)s angelegt."
+msgstr "Potansiyel müşteri %(lead_number)s oluşturuldu."
+
+msgid "Lead %(lead_number)s gelöscht."
+msgstr "Potansiyel müşteri %(lead_number)s silindi."
+
+msgid "Firmenadministrator wurde auf %(email)s übertragen."
+msgstr "Şirket yöneticiliği %(email)s adresine devredildi."
+
+msgid "Lizenz wurde %(email)s zugewiesen."
+msgstr "Lisans %(email)s adresine atandı."
+
+msgid "Ausstehend"
+msgstr "Beklemede"
+
+msgid "Autorisiert"
+msgstr "Yetkilendirildi"
+
+msgid "Storniert"
+msgstr "İptal edildi"
+
+msgid "Abgelaufen"
+msgstr "Süresi doldu"
+
+msgid "Teilweise erstattet"
+msgstr "Kısmen iade edildi"
+
+msgid "Vollständig erstattet"
+msgstr "Tamamen iade edildi"
+
+msgid "Chargeback"
+msgstr "Ters ibraz"
+
+msgid "Chargeback zurückgenommen"
+msgstr "Ters ibraz iptal edildi"
+
+msgid "Unbekannt"
+msgstr "Bilinmiyor"
+
+msgid "Verarbeitungsfehler"
+msgstr "İşleme hatası"
+
+msgid "Fehler behoben"
+msgstr "Hata giderildi"
+
+msgid "E-Mail-Historie"
+msgstr "E-posta geçmişi"
+
+msgid "netstyle Rolle zuweisen"
+msgstr "netstyle rolü ata"
+
+msgid "Erstattung konnte nicht an Mollie übermittelt werden."
+msgstr "Geri ödeme Mollie'ye gönderilemedi."
+
+msgid "Nachrichtentext"
+msgstr "Mesaj metni"
+
+msgid "Rollenname"
+msgstr "Rol adı"
+
+msgid "Lead %(lead_number)s löschen"
+msgstr "%(lead_number)s numaralı potansiyel müşteriyi sil"
+
+msgid "Lead %(lead_number)s in Kunden umwandeln"
+msgstr "%(lead_number)s numaralı potansiyel müşteriyi müşteriye dönüştür"
+
+msgid "Firmenadministrator übertragen · %(email)s"
+msgstr "Şirket yöneticisini aktar · %(email)s"
+
+msgid "E-Mail-Vorlage · %(code)s"
+msgstr "E-posta şablonu · %(code)s"
+
+msgid "Löschanfrage ablehnen"
+msgstr "Silme talebini reddet"
+
+msgid "Uneingeschränkte Rechte auf alle PROMPTFINISHER-Verwaltungsbereiche."
+msgstr "Tüm PROMPTFINISHER yönetim alanlarına sınırsız erişim."
+
+msgid "Kunden, Lizenzen, Geräte, Bestellungen, Zahlungen, E-Mail und Support."
+msgstr "Müşteriler, lisanslar, cihazlar, siparişler, ödemeler, e-posta ve destek."
+
+msgid "Monitoring, Backups, Operations API, Logs und Systemstatus."
+msgstr "İzleme, yedekler, operasyon API'si, günlükler ve sistem durumu."
+
+msgid "Prompt Studio, Prompt-Lifecycle, Qualität und zentrale Inhalte."
+msgstr "Prompt Studio, prompt yaşam döngüsü, kalite ve merkezi içerikler."
+
+msgid "Berechtigungen werden über die zugewiesenen Capabilities gesteuert."
+msgstr "İzinler, atanmış yetkinliklere göre yönetilir."
+
+msgid "Objekttyp"
+msgstr "Nesne türü"
+
+msgid "Objekt-ID"
+msgstr "Nesne kimliği"
+
+msgid "Lead anlegen"
+msgstr "Potansiyel müşteri oluştur"
+
+msgid "Lead %(lead_number)s zuweisen"
+msgstr "%(lead_number)s numaralı potansiyel müşteriyi ata"
+
+msgid "Firmenadministrator einladen · %(company)s"
+msgstr "Şirket yöneticisini davet et · %(company)s"
+
+msgid "Feature bearbeiten"
+msgstr "Özelliği düzenle"
+
+msgid "Preisversion · %(product)s"
+msgstr "Fiyat sürümü · %(product)s"
+
+msgid "Rechtsdokument bearbeiten"
+msgstr "Hukuki belgeyi düzenle"
+
+msgid "Retention-Policy bearbeiten"
+msgstr "Saklama politikasını düzenle"
+
+msgid "Rolle · %(name)s"
+msgstr "Rol · %(name)s"
+
+msgid "Firmenadministrator"
+msgstr "Şirket yöneticisi"
+
+msgid "Entwurf"
+msgstr "Taslak"
+
+msgid "Zahlung offen"
+msgstr "Ödeme bekleniyor"
+
+msgid "Zahlung prüfen"
+msgstr "Ödemeyi incele"
+
+msgid "Refundiert"
+msgstr "İade edildi"
+
+msgid "Abgelehnt"
+msgstr "Reddedildi"
+
+msgid "Eingegangen"
+msgstr "Alındı"
+
+msgid "Kündigung"
+msgstr "Sözleşme feshi"
+
+msgid "Für Kunden sichtbar"
+msgstr "Müşterilere görünür"
+
+msgid "Interne Notiz"
+msgstr "Dahili not"
+
+msgid "Bitte lesen Sie vor der Registrierung die <a href=\"%(terms_url)s\" target=\"_blank\" rel=\"noopener\">AGB</a> und die <a href=\"%(privacy_url)s\" target=\"_blank\" rel=\"noopener\">Datenschutzerklärung</a>."
+msgstr "Kaydolmadan önce <a href=\"%(terms_url)s\" target=\"_blank\" rel=\"noopener\">Kullanım Koşulları</a> ve <a href=\"%(privacy_url)s\" target=\"_blank\" rel=\"noopener\">Gizlilik Politikası</a> belgelerini okuyun."
+
+msgid "Admin-Einladung neu senden"
+msgstr "Yönetici davetini yeniden gönder"
+
+msgid "Firmenadministrator einladen"
+msgstr "Şirket yöneticisini davet et"
+
+# Public legal-interface accessibility labels (not the legal document body)
+msgid "PROMPTFINISHER Startseite"
+msgstr "PROMPTFINISHER ana sayfası"
+
+msgid "gültig ab"
+msgstr "yürürlük tarihi"
+
+msgid "Rechtliche Informationen"
+msgstr "Yasal bilgiler"
+
+msgid "Zur PROMPTFINISHER-Startseite"
+msgstr "PROMPTFINISHER ana sayfasına dön"
+
+msgid "Bestätigung"
+msgstr "Onay"
+
+msgid "Kündigungsart"
+msgstr "Fesih türü"
+
+msgid "Grund"
+msgstr "Gerekçe"
+
+msgid "Vorgangs-ID"
+msgstr "İşlem kimliği"
+
+msgid "Eine elektronische Eingangsbestätigung wird an die angegebene E-Mail-Adresse versendet. Diese Seite kann zusätzlich gespeichert oder ausgedruckt werden."
+msgstr "Belirttiğiniz e-posta adresine elektronik alındı onayı gönderilecektir. Bu sayfayı ayrıca kaydedebilir veya yazdırabilirsiniz."
+
+# Public statutory withdrawal and termination UX messages
+msgid "Widerruf eingegangen"
+msgstr "Cayma talebi alındı"
+
+msgid "Ihr Widerruf wurde elektronisch entgegengenommen."
+msgstr "Cayma beyanınız elektronik olarak alınmıştır."
+
+msgid "WIDERRUFSFUNKTION"
+msgstr "CAYMA FORMU"
+
+msgid "Mit diesem Formular können Verbraucher einen über PROMPTFINISHER geschlossenen Fernabsatzvertrag widerrufen."
+msgstr "Tüketiciler bu formu PROMPTFINISHER üzerinden kurulan mesafeli sözleşmeden caymak için kullanabilir."
+
+msgid "Nach dem Absenden erhalten Sie unverzüglich eine elektronische Eingangsbestätigung an die angegebene E-Mail-Adresse."
+msgstr "Gönderdikten sonra belirtilen e-posta adresine gecikmeden elektronik alındı onayı gönderilir."
+
+msgid "Widerruf bestätigen"
+msgstr "Caymayı onayla"
+
+msgid "Kündigung eingegangen"
+msgstr "Fesih talebi alındı"
+
+msgid "Ihre Kündigung wurde elektronisch entgegengenommen."
+msgstr "Fesih beyanınız elektronik olarak alınmıştır."
+
+msgid "KÜNDIGUNGSFUNKTION"
+msgstr "SÖZLEŞME FESİH FORMU"
+
+msgid "Hier können Verbraucher einen über PROMPTFINISHER geschlossenen Laufzeitvertrag ordentlich oder außerordentlich kündigen."
+msgstr "Tüketiciler PROMPTFINISHER üzerinden yapılan süreli sözleşmeleri olağan veya haklı nedenle feshedebilir."
+
+msgid "Wenn Sie keinen Beendigungszeitpunkt angeben, behandeln wir die Kündigung als Erklärung zum frühestmöglichen Zeitpunkt."
+msgstr "Bitiş tarihi belirtmezseniz fesih bildiriminizi mümkün olan en erken tarih için değerlendiririz."
+
+msgid "jetzt kündigen"
+msgstr "Şimdi feshet"

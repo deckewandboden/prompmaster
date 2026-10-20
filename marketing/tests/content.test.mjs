@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {readFile} from 'node:fs/promises';
-import {renderContent,checkoutPage} from '../src/content.js';
+import {renderContent,checkoutPage,footer} from '../src/content.js';
 import faq from '../src/faq.json' with {type:'json'};
 test('Alle 20 FAQ und vereinbarten Inhaltsbereiche vorhanden',()=>{
   assert.equal(faq.length,20);
@@ -79,7 +79,31 @@ test('Hauptnavigation benennt Free und Pro eindeutig',async()=>{
 test('Pro-Kachel verwendet das PROMPTFINISHER-Dreieck statt der Krone',async()=>{
   const index=await readFile('index.html','utf8');
   assert.match(index,/class="brand-triangle-mark"/);
-  assert.match(index,/<image href="\/brand\/promptfinisher-logo-hq\.png"/);
+  assert.match(index,/<image href="\/brand\/promptfinisher-logo-hq\.png\?v=20261011-logo1"/);
   assert.doesNotMatch(index,/m7 15 10 8 7-15 7 15 10-8-6 21H13Z/);
   assert.doesNotMatch(index,/M13 42h22/);
+});
+
+
+test('Alle Links von der Marketingseite zu Free öffnen einen neuen Tab ohne Zugriff auf den Ursprungstab',async()=>{
+  const index=await readFile('index.html','utf8');
+  const main=await readFile('src/main.js','utf8');
+  const pages=[
+    ['Startseite',index,2],
+    ['Marketing-Inhalt',renderContent(),3],
+    ['Footer',footer(),1],
+    ['Free-Fallback',main,1],
+  ];
+  for(const [label,html,expected] of pages){
+    const links=[...html.matchAll(/<a\b[^>]*\bhref="\/free\/"[^>]*>/g)].map(match=>match[0]);
+    assert.equal(links.length,expected,label+': unerwartete Anzahl Free-Links');
+    for(const link of links){
+      assert.match(link,/\btarget="_blank"/,label+': Free muss in neuem Tab öffnen');
+      assert.match(link,/\brel="[^"]*\bnoopener\b[^"]*"/,label+': opener muss isoliert bleiben');
+      assert.match(link,/\brel="[^"]*\bnoreferrer\b[^"]*"/,label+': Referrer-Schutz fehlt');
+    }
+  }
+  const proLink=index.match(/<a\b[^>]*class="button pro-calculator-link"[^>]*>/)?.[0];
+  assert.ok(proLink,'Pro-Rechner-CTA fehlt');
+  assert.doesNotMatch(proLink,/target="_blank"/,'Pro-Rechner bleibt im aktuellen Tab');
 });
