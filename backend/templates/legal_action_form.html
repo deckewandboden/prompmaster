@@ -1,19 +1,16 @@
-{% extends 'base.html' %}{% load static i18n %}{% block title %}{{ page_title }} | PROMPTFINISHER{% endblock %}{% block body %}
-<div class="legal-page">
-  <div class="legal-page-head">
-    <a href="/" aria-label="{% translate 'PROMPTFINISHER Startseite' %}"><img src="{% static 'brand/promptfinisher-logo-hq.png' %}" alt="PROMPTFINISHER"></a>
-  </div>
+{% extends 'legal_base.html' %}{% load i18n %}
+{% block title %}{{ page_title }} | PROMPTFINISHER{% endblock %}
+{% block legal_content %}
   <article class="card legal-document">
     <p class="muted">{{ eyebrow }}</p>
     <h1>{{ page_title }}</h1>
     <p>{{ intro }}</p>
-    <form method="post" novalidate>
+    <form class="legal-action-form" method="post" novalidate>
       {% csrf_token %}
       {{ form.as_p }}
-      <p class="muted">{{ notice }}</p>
-      <button class="btn primary" type="submit">{{ submit_label }}</button>
+      <p class="muted legal-action-note" id="legal-action-notice">{{ notice }}</p>
+      <button class="btn primary legal-action-submit" type="submit">{{ submit_label }}</button>
     </form>
-    <p><a href="/legal/withdrawal/">{% translate "Widerrufsbelehrung" %}</a> · <a href="/legal/terms/">{% translate "AGB" %}</a> · <a href="/legal/privacy/">{% translate "Datenschutz" %}</a></p>
+    <nav class="legal-related-links" aria-label="{% translate 'Rechtliche Informationen' %}"><a href="/legal/withdrawal/">{% translate "Widerrufsbelehrung" %}</a> · <a href="/legal/terms/">{% translate "AGB" %}</a> · <a href="/legal/privacy/">{% translate "Datenschutz" %}</a></nav>
   </article>
-</div>
 {% endblock %}
