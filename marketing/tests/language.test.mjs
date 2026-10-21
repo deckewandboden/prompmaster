@@ -41,7 +41,9 @@ test('marketing localization must never change forms, products or typed prompts'
 test('marketing language chooser is right of FAQ, before login, and accessible on narrow screens',async()=>{
  const index=await readFile('index.html','utf8');
  const css=await readFile('src/immersive.css','utf8');
- const header=index.match(/<header>[\\s\\S]*?<\\/header>/)?.[0];
+ const headerStart=index.indexOf('<header>');
+ const headerEnd=index.indexOf('</header>');
+ const header=headerStart>=0 && headerEnd>headerStart ? index.slice(headerStart,headerEnd+'</header>'.length) : null;
  assert.ok(header,'Marketing header missing');
  assert.ok(header.indexOf('href="/#faq"')<header.indexOf('class="header-actions"'),'FAQ must precede header actions');
  assert.ok(header.indexOf('class="pf-marketing-locale"')<header.indexOf('class="login-link"'),'Language control must precede Login');
