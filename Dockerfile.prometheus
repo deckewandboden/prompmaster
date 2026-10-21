@@ -1,7 +1,7 @@
 # Rebuild the pinned upstream Prometheus 3.15.0 code with security-patched
 # Go, x/net and the official checksum-verified 3.15.0 browser UI.
 # This is kept independent of the application and Caddy images.
-FROM golang:1.27.2-alpine3.23 AS prometheus-patched-build
+FROM golang:1.27.3-alpine3.23 AS prometheus-patched-build
 ENV GOTOOLCHAIN=local GOMAXPROCS=2 GOFLAGS=-p=2
 RUN --mount=type=secret,id=pf_staging_ca,required=false \
     if [ -s /run/secrets/pf_staging_ca ]; then \
@@ -52,9 +52,9 @@ RUN --mount=type=secret,id=pf_staging_ca,required=false \
     go get golang.org/x/net@v0.60.0 \
     && go mod tidy \
     && make PREBUILT_ASSETS_STATIC_DIR=web/ui/static build \
-    && go version -m /src/prometheus | grep -F 'go1.27.2' \
+    && go version -m /src/prometheus | grep -F 'go1.27.3' \
     && go version -m /src/prometheus | grep -F 'golang.org/x/net' | grep -F 'v0.60.0' \
-    && go version -m /src/promtool | grep -F 'go1.27.2'
+    && go version -m /src/promtool | grep -F 'go1.27.3'
 
 # Retain the upstream image's user, ports, config paths and data volume.
 # Both compiled Go binaries are replaced; do not leave vulnerable binaries.
