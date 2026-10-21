@@ -114,7 +114,7 @@ class GitHubBootstrapContractTests(unittest.TestCase):
         self.assertEqual(len(backups), 1)
         backup = backups[0]
         self.assertTrue((backup / "modified-tracked.patch").is_file())
-        self.assertIn("Local original custom branding", (backup / "modified-tracked.patch").read_text())
+        self.assertIn(b"Local original custom branding", (backup / "modified-tracked.patch").read_bytes())
         self.assertTrue((backup / "tracked-edits.bundle").is_file())
         self.assertIn("STASH_SHA=", (backup / "source-info.txt").read_text())
         self.assertEqual(
@@ -124,7 +124,7 @@ class GitHubBootstrapContractTests(unittest.TestCase):
         stashed = git(self.live, "stash", "show", "--format=full", "--stat")
         self.assertIn("branding.txt", stashed)
         self.assertIn("brand.png", stashed)
-        self.assertNotIn("PRIVATE_TEST_SECRET", (backup / "modified-tracked.patch").read_text())
+        self.assertNotIn(b"PRIVATE_TEST_SECRET", (backup / "modified-tracked.patch").read_bytes())
         self.assertNotIn(".env", (backup / "modified-tracked-status.txt").read_text())
 
     def test_clean_source_updates_without_creating_stash(self):
