@@ -149,6 +149,41 @@ class ConsumerContractFunctionTests(TestCase):
         queue.assert_called_once()
         self.assertContains(response, 'Kündigung eingegangen')
 
+
+    def test_public_legal_layout_groups_language_selector_inside_branded_header(self):
+        from pathlib import Path
+        from django.template.loader import render_to_string
+
+        for path in ('/vertrag-widerrufen/', '/vertraege-kuendigen/'):
+            with self.subTest(path=path):
+                response = self.client.get(path)
+                self.assertEqual(response.status_code, 200)
+                html = response.content.decode()
+                self.assertIn('class="legal-page-head"', html)
+                self.assertIn('class="legal-action-form"', html)
+                self.assertIn('class="legal-page-main"', html)
+                self.assertIn('class="language-switcher"', html)
+                self.assertEqual(html.count('data-language-switcher'), 1)
+                self.assertLess(html.index('class="legal-page-head"'), html.index('data-language-switcher'))
+                self.assertLess(html.index('data-language-switcher'), html.index('</header>'))
+                self.assertIn('name="csrfmiddlewaretoken"', html)
+                self.assertIn('method="post"', html)
+        css = (Path(__file__).resolve().parents[2] / 'static/css/app.css').read_text(encoding='utf-8')
+        self.assertIn('.legal-page-head .language-switcher', css)
+        self.assertIn('.legal-page .legal-action-form .helptext', css)
+        self.assertIn('@media(max-width:380px)', css)
+        for name in ('legal_public.html', 'legal_action_success.html'):
+            rendered = render_to_string(name, {
+                'document_title': 'Beispieldokument',
+                'document': {'version': '1', 'valid_from': None, 'content': 'Text'},
+                'title': 'Bestätigung',
+                'message': 'Eingegangen',
+                'declaration': {'kind': 'withdrawal', 'name': 'Person', 'email': 'person@example.test'},
+            })
+            self.assertIn('class="legal-page-head"', rendered)
+            self.assertEqual(rendered.count('data-language-switcher'), 1)
+            self.assertLess(rendered.index('data-language-switcher'), rendered.index('</header>'))
+
     def test_netstyle_admin_can_process_consumer_declaration(self):
         declaration = ConsumerContractDeclaration.objects.create(
             kind='withdrawal',
