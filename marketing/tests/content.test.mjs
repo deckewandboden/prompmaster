@@ -89,7 +89,8 @@ test('Alle Links von der Marketingseite zu Free öffnen einen neuen Tab ohne Zug
   const index=await readFile('index.html','utf8');
   const main=await readFile('src/main.js','utf8');
   const pages=[
-    ['Startseite',index,2],
+    // Desktop CTA, mobile navigation CTA and hero Free CTA.
+    ['Startseite',index,3],
     ['Marketing-Inhalt',renderContent(),3],
     ['Footer',footer(),1],
     ['Free-Fallback',main,1],
