@@ -9,6 +9,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1] / "backend"
 LANGUAGES = ("en", "es", "pt", "tr", "ru", "pl", "fr", "it", "nl")
 TEMPLATES = (
+    "legal_base.html",
     "legal_public.html",
     "legal_action_form.html",
     "legal_action_success.html",
