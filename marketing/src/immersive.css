@@ -522,6 +522,7 @@ header nav>a{white-space:nowrap}
 header nav .mobile-login-link,header nav .mobile-nav-cta{display:none}
 header .header-actions{display:flex;align-items:center;justify-content:flex-end;flex:0 0 auto;gap:clamp(10px,1vw,16px)}
 header .header-actions>.login-link,header .header-actions>.nav-cta{white-space:nowrap}
+header .header-actions>.nav-cta{font-size:13px;padding:9px 20px;min-height:40px}
 .pf-marketing-locale{
   position:relative;display:flex;align-items:center;flex:0 0 146px;
   width:146px;height:40px;min-width:0;margin:0;color:#89c9ee;
