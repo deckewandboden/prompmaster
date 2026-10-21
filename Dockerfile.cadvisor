@@ -44,15 +44,16 @@ RUN --mount=type=secret,id=pf_staging_ca,required=false \
       export CURL_CA_BUNDLE=/tmp/pf-staging-ca-combined.pem; \
       trap 'rm -f /tmp/pf-staging-ca-combined.pem' EXIT; \
     fi; \
-    go get golang.org/x/crypto@v0.57.0 golang.org/x/net@v0.60.0 google.golang.org/grpc@v1.83.2 \
+    go get golang.org/x/crypto@v0.57.0 golang.org/x/net@v0.60.0 google.golang.org/grpc@v1.83.2 github.com/klauspost/compress@v1.18.7 \
     && go mod tidy \
-    && (cd lib && go get golang.org/x/crypto@v0.57.0 golang.org/x/net@v0.60.0 google.golang.org/grpc@v1.83.2 && go mod tidy) \
-    && (cd cmd && go get golang.org/x/crypto@v0.57.0 golang.org/x/net@v0.60.0 google.golang.org/grpc@v1.83.2 && go mod tidy) \
+    && (cd lib && go get golang.org/x/crypto@v0.57.0 golang.org/x/net@v0.60.0 google.golang.org/grpc@v1.83.2 github.com/klauspost/compress@v1.18.7 && go mod tidy) \
+    && (cd cmd && go get golang.org/x/crypto@v0.57.0 golang.org/x/net@v0.60.0 google.golang.org/grpc@v1.83.2 github.com/klauspost/compress@v1.18.7 && go mod tidy) \
     && export GO_TAGS="libpfm,netgo" \
     && GO_CGO_ENABLED=1 GO_FLAGS="-tags=$GO_TAGS" ./build/build.sh \
     && test -x /src/_output/cadvisor \
     && go version -m /src/_output/cadvisor | grep -F 'go1.27.2' \
-    && go version -m /src/_output/cadvisor | grep -F 'golang.org/x/net' | grep -F 'v0.60.0'
+    && go version -m /src/_output/cadvisor | grep -F 'golang.org/x/net' | grep -F 'v0.60.0' \
+    && go version -m /src/_output/cadvisor | grep -F 'github.com/klauspost/compress' | grep -F 'v1.18.7'
 
 FROM ghcr.io/google/cadvisor:v0.60.6
 USER root
