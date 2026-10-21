@@ -27,8 +27,8 @@ jobs:
 
       - name: Validate Python and Bash syntax
         run: |
-          python -m py_compile scripts/staging_readiness.py scripts/test_staging_readiness.py scripts/test_go_live.py scripts/test_release_from_github.py scripts/offline_recovery_drill.py scripts/test_offline_recovery_drill.py scripts/offline_backup_go_live_gate.py scripts/test_offline_backup_go_live_gate.py
-          bash -n scripts/go_live.sh scripts/release_from_github.sh scripts/runtime_validate.sh
+          python -m py_compile scripts/staging_readiness.py scripts/test_staging_readiness.py scripts/test_go_live.py scripts/test_release_from_github.py scripts/test_bootstrap_github_release.py scripts/offline_recovery_drill.py scripts/test_offline_recovery_drill.py scripts/offline_backup_go_live_gate.py scripts/test_offline_backup_go_live_gate.py
+          bash -n scripts/go_live.sh scripts/release_from_github.sh scripts/bootstrap_github_release.sh scripts/runtime_validate.sh
           python -m py_compile scripts/test_runtime_monitor_ports.py
 
       - name: Validate complete Free and Pro language dictionaries
@@ -48,6 +48,9 @@ jobs:
 
       - name: Test one-command GitHub release and rejection paths
         run: python -m unittest discover -s scripts -p 'test_release_from_github.py' -v
+
+      - name: Test public GitHub bootstrap, local binary rescue and branch refusal
+        run: python -m unittest discover -s scripts -p 'test_bootstrap_github_release.py' -v
 
       - name: Test offline recovery archive GPG and production-host rejection
         run: python -m unittest discover -s scripts -p 'test_offline_recovery_drill.py' -v
