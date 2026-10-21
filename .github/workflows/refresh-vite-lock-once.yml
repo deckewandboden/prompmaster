@@ -1,0 +1,41 @@
+name: One-time Vite security lockfile refresh (PR 78)
+on:
+  push:
+    branches:
+      - fix/github-public-origin-local-rescue-20261021
+    paths:
+      - .github/workflows/refresh-vite-lock-once.yml
+permissions:
+  contents: write
+jobs:
+  refresh-lockfile:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+          ref: fix/github-public-origin-local-rescue-20261021
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+          cache: npm
+          cache-dependency-path: marketing/package-lock.json
+      - name: Update exact Vite release and resolved lockfile using npm
+        working-directory: marketing
+        run: |
+          npm install --save-dev --save-exact vite@8.3.5 --package-lock-only --ignore-scripts --no-audit --no-fund
+          npm ci --no-audit --no-fund
+          npm audit --package-lock-only --audit-level=high
+          npm test
+          npm run build
+      - name: Commit only the two audited npm manifests to this PR branch
+        run: |
+          git add marketing/package.json marketing/package-lock.json
+          git diff --cached --quiet && { echo "Expected lockfile upgrade absent"; exit 1; }
+          git diff --cached --name-only | grep -Eq '^marketing/package(-lock)?\.json$'
+          test "$(git diff --cached --name-only | wc -l)" -eq 2
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git commit -m "fix(security): upgrade Vite 8.2.2 to 8.3.5 with npm resolved lockfile"
+          git push origin HEAD:refs/heads/fix/github-public-origin-local-rescue-20261021
