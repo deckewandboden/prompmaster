@@ -9,7 +9,7 @@ fail() { printf '[PROMPTFINISHER GITHUB BOOTSTRAP BLOCKED] %s\n' "$*" >&2; exit 
 log() { printf '[PROMPTFINISHER GITHUB BOOTSTRAP] %s\n' "$*"; }
 
 [[ "$#" -eq 0 ]] || fail 'No arguments supported'
-for name in git bash mktemp sha256sum stat; do
+for name in git bash mktemp sha256sum stat flock; do
   command -v "$name" >/dev/null 2>&1 || fail "Required command missing: $name"
 done
 [[ -z "${DOCKER_HOST:-}" && -z "${DOCKER_CONTEXT:-}" ]] || fail 'Remote Docker context forbidden'
@@ -21,6 +21,8 @@ cd "$ROOT"
 [[ -f .env && ! -L .env && "$(stat -c '%a' .env)" == 600 ]] || fail 'Production .env missing, symlinked or not 0600'
 state_dir="${PM_DEPLOY_STATE_DIR:-artifacts/deploy-state}"
 [[ -s "$state_dir/last-successful-sha" ]] || fail 'No accepted existing deployment marker; initial go-live requires separate approval'
+exec 8>"$state_dir/github-bootstrap.lock"
+flock -n 8 || fail 'Another GitHub bootstrap is running'
 
 origin="$(git config --get remote.origin.url 2>/dev/null)" || fail 'Git origin unavailable'
 case "$origin" in
