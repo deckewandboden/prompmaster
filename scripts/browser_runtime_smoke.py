@@ -719,7 +719,9 @@ def _browser_login_password_only(page, base: str, email: str, password: str, exp
 
 
 def _check_backend_page(page, base: str, path: str, width: int, label: str) -> None:
-    response = page.goto(base + path.lstrip('/'), wait_until='networkidle')
+    # Admin/ops pages can keep background requests in flight; browser readiness
+    # is based on the server-rendered DOM, not the absence of network activity.
+    response = page.goto(base + path.lstrip('/'), wait_until='domcontentloaded', timeout=60000)
     if not response or response.status != 200:
         status = response.status if response else 'no response'
         raise AssertionError(f'{label} {width}px: HTTP {status} for {path}')
