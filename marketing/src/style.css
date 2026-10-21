@@ -74,16 +74,3 @@
 }
 
 @media(max-width:480px){.legal-actions{flex-direction:column}.legal-actions .button{width:100%;justify-content:center}}
-
-/* Stable ten-language control, including 320px screens; no overlapping CTAs. */
-.pf-marketing-locale{display:flex;align-items:center;flex:0 0 132px;min-width:110px;order:1}
-.pf-marketing-locale select{width:100%;min-width:0;box-sizing:border-box;min-height:40px;
- background:#0b1727;color:#f5f7fa;border:1px solid #647b94;border-radius:10px;
- font:600 13px/1.3 "Segoe UI",Arial,sans-serif;padding:8px 6px;cursor:pointer}
-.pf-marketing-locale select:focus-visible{outline:2px solid #7dccff;outline-offset:3px}
-header nav{order:2}
-@media(max-width:1000px){header{gap:10px;flex-wrap:wrap}
-.pf-marketing-locale{margin-left:auto;flex-basis:132px;order:0}
-header nav{order:2;width:100%}}
-@media(max-width:430px){.pf-marketing-locale{flex-basis:120px}
-.pf-marketing-locale select{font-size:12px;padding:8px 4px}}
