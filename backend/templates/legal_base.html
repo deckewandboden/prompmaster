@@ -1,0 +1,15 @@
+{% extends 'base.html' %}{% load static i18n %}
+{% block language_picker %}{% endblock %}
+{% block body %}
+<div class="legal-page">
+  <header class="legal-page-head" aria-label="{% translate 'Rechtliche Informationen' %}">
+    <a class="legal-page-brand" href="/" aria-label="{% translate 'PROMPTFINISHER Startseite' %}">
+      <img src="{% static 'brand/promptfinisher-logo-hq.png' %}" alt="PROMPTFINISHER">
+    </a>
+    {% include 'includes/language_switcher.html' %}
+  </header>
+  <main id="main-content" class="legal-page-main">
+    {% block legal_content %}{% endblock %}
+  </main>
+</div>
+{% endblock %}

@@ -1,12 +1,10 @@
-{% extends 'base.html' %}{% load static i18n %}{% block title %}{% translate "Bestätigung" %} | PROMPTFINISHER{% endblock %}{% block body %}
-<div class="legal-page">
-  <div class="legal-page-head">
-    <a href="/" aria-label="{% translate 'PROMPTFINISHER Startseite' %}"><img src="{% static 'brand/promptfinisher-logo-hq.png' %}" alt="PROMPTFINISHER"></a>
-  </div>
+{% extends 'legal_base.html' %}{% load static i18n %}
+{% block title %}{% translate "Bestätigung" %} | PROMPTFINISHER{% endblock %}
+{% block legal_content %}
   <article class="card legal-document">
     <h1>{{ title }}</h1>
     <p>{{ message }}</p>
-    <dl>
+    <dl class="legal-declaration-details">
       <dt>{% translate "Art" %}</dt><dd>{{ kind_label }}</dd>
       {% if declaration.kind == 'cancellation' %}<dt>{% translate "Kündigungsart" %}</dt><dd>{{ cancellation_kind_label }}</dd>{% endif %}
       <dt>{% translate "Name" %}</dt><dd>{{ declaration.name }}</dd>
@@ -20,5 +18,4 @@
     <p class="muted">{% translate "Eine elektronische Eingangsbestätigung wird an die angegebene E-Mail-Adresse versendet. Diese Seite kann zusätzlich gespeichert oder ausgedruckt werden." %}</p>
     <p><a href="/">{% translate "Zur PROMPTFINISHER-Startseite" %}</a></p>
   </article>
-</div>
 {% endblock %}

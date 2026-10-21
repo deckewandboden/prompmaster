@@ -450,3 +450,62 @@ body:not(:has(.shell)) > .language-switcher{position:fixed;right:12px;top:10px}
   .sidebar .brand {background-image:url('/static/brand/promptfinisher-mark.png?v=20261011-logo1');background-repeat:no-repeat;background-position:center;background-size:48px 48px}
   .sidebar .brand img {opacity:0}
 }
+
+
+/* Public legal, cancellation and withdrawal surfaces. Keep portal/admin isolated. */
+.legal-page{width:min(100%,940px);max-width:940px;margin:0 auto;padding:22px 20px 54px}
+.legal-page-head{display:flex;align-items:center;justify-content:space-between;flex-wrap:nowrap;gap:20px;min-height:78px;padding:12px 24px;margin-bottom:18px;border:1px solid #163a5a;border-radius:15px;background:linear-gradient(110deg,#05162a,#092746 75%,#062039);box-shadow:0 9px 28px rgba(4,25,48,.12)}
+.legal-page-brand{display:flex;align-items:center;flex:0 1 auto;min-width:0}
+.legal-page-head .legal-page-brand img{display:block;width:240px;max-width:100%;height:47px;object-fit:contain;object-position:left center}
+.legal-page-head .language-switcher{position:static;flex:0 0 150px;width:150px;margin:0;padding:4px;border-color:#376182;background:#102943;color:#d9eafa}
+.legal-page-head .language-switcher label{width:100%;min-width:0}
+.legal-page-head .language-switcher select{display:block;min-width:0;min-height:34px;width:100%;max-width:100%;color:#eff8ff;background:#122f4c;border-color:#42698a;font-size:13px;font-weight:650}
+.legal-page-head .language-switcher select option{background:#10243a;color:#fff}
+.legal-page-main{min-width:0}
+.legal-page .legal-document{width:100%;padding:clamp(22px,4vw,38px);border:1px solid #d8e5f0;border-radius:16px;box-shadow:0 14px 42px rgba(5,32,58,.09);background:#fff}
+.legal-page .legal-document>.muted:first-child{margin:0 0 12px;color:#6284a0;font-size:12px;font-weight:800;letter-spacing:.09em;text-transform:uppercase}
+.legal-page .legal-document h1{font-size:clamp(25px,3vw,32px);font-weight:800;line-height:1.2;letter-spacing:-.025em;color:#0c2948;margin:0 0 14px}
+.legal-page .legal-document h1+p{margin:0 0 25px;line-height:1.62;color:#3f546a}
+.legal-page .legal-action-form{display:grid;gap:19px;max-width:100%;min-width:0;padding-top:21px;border-top:1px solid #e3edf5}
+.legal-page .legal-action-form>p{display:flex;flex-direction:column;align-items:stretch;min-width:0;max-width:100%;gap:7px;margin:0}
+.legal-page .legal-action-form>p>label{color:#183a59;font-size:13px;font-weight:750;line-height:1.4}
+.legal-page .legal-action-form input:not([type=checkbox]):not([type=radio]),
+.legal-page .legal-action-form select,
+.legal-page .legal-action-form textarea{display:block;box-sizing:border-box;width:100%;max-width:100%;min-width:0;min-height:46px;padding:11px 13px;margin:0;background:#f9fbff;border:1px solid #bccfde;border-radius:10px;color:#132c46;font:500 15px/1.35 Inter,Segoe UI,Arial,sans-serif;box-shadow:inset 0 1px 2px rgba(4,32,58,.025)}
+.legal-page .legal-action-form textarea{min-height:118px;resize:vertical;line-height:1.5}
+.legal-page .legal-action-form input:hover,
+.legal-page .legal-action-form select:hover,
+.legal-page .legal-action-form textarea:hover{border-color:#84abc9}
+.legal-page .legal-action-form input:focus,
+.legal-page .legal-action-form select:focus,
+.legal-page .legal-action-form textarea:focus{border-color:#1687d5;outline:3px solid #1687d52c;outline-offset:1px;background:#fff}
+.legal-page .legal-action-form .helptext{display:block;margin:0;color:#60788f;font-size:12px;line-height:1.5}
+.legal-page .legal-action-form .errorlist{margin:0;padding:10px 13px 10px 29px;border:1px solid #f1b6c0;border-radius:9px;background:#fff3f4;color:#ad253c;font-size:13px;line-height:1.5}
+.legal-page .legal-action-form .legal-action-note{display:block;margin:3px 0 0;padding:13px 15px;color:#365673;border:1px solid #d6e6f5;border-radius:10px;background:#f1f7fd;font-size:13px;line-height:1.55}
+.legal-page .legal-action-form .legal-action-submit{width:max-content;max-width:100%;min-width:175px;min-height:44px;margin-top:1px;padding:0 19px;font-size:14px}
+.legal-page .legal-related-links{display:flex;align-items:center;gap:5px;flex-wrap:wrap;margin-top:22px;padding-top:17px;border-top:1px solid #e3edf5;font-size:13px;line-height:1.65;color:#6a7e90}
+.legal-page .legal-document a{color:#1464a9;text-underline-offset:3px}
+.legal-page .legal-document a:hover{color:#084e91}
+.legal-page .legal-declaration-details{display:grid;grid-template-columns:minmax(150px,.45fr) minmax(0,1fr);gap:0 16px;margin:22px 0 0;font-size:14px}
+.legal-page .legal-declaration-details dt,
+.legal-page .legal-declaration-details dd{min-width:0;margin:0;padding:12px 0;border-bottom:1px solid #e3edf5;overflow-wrap:anywhere;line-height:1.5}
+.legal-page .legal-declaration-details dt{font-weight:750;color:#546c82}
+.legal-page .legal-declaration-details dd{color:#132c46}
+.legal-page .legal-content{max-width:100%;font-size:15px;line-height:1.7;overflow-wrap:anywhere}
+@media(max-width:600px){
+ .legal-page{padding:12px 12px 32px}
+ .legal-page-head{gap:10px;min-height:66px;padding:10px 13px;border-radius:13px;margin-bottom:12px}
+ .legal-page-head .legal-page-brand img{width:180px;height:38px}
+ .legal-page-head .language-switcher{flex-basis:126px;width:126px}
+ .legal-page-head .language-switcher select{font-size:12px}
+ .legal-page .legal-document{padding:21px 17px}
+ .legal-page .legal-declaration-details{grid-template-columns:1fr;gap:0}
+ .legal-page .legal-declaration-details dt{padding:12px 0 2px;border:0}
+ .legal-page .legal-declaration-details dd{padding:0 0 12px}
+}
+@media(max-width:380px){
+ .legal-page-head .legal-page-brand img{width:140px;height:36px}
+ .legal-page-head .language-switcher{flex-basis:112px;width:112px}
+ .legal-page-head .language-switcher select{font-size:11px}
+ .legal-page .legal-action-form .legal-action-submit{width:100%}
+}

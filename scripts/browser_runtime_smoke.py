@@ -719,7 +719,9 @@ def _browser_login_password_only(page, base: str, email: str, password: str, exp
 
 
 def _check_backend_page(page, base: str, path: str, width: int, label: str) -> None:
-    response = page.goto(base + path.lstrip('/'), wait_until='networkidle')
+    # Admin/ops pages can keep background requests in flight; browser readiness
+    # is based on the server-rendered DOM, not the absence of network activity.
+    response = page.goto(base + path.lstrip('/'), wait_until='domcontentloaded', timeout=60000)
     if not response or response.status != 200:
         status = response.status if response else 'no response'
         raise AssertionError(f'{label} {width}px: HTTP {status} for {path}')
@@ -920,7 +922,30 @@ def _check_public_page(page, base: str, path: str, width: int, label: str) -> No
             .filter(form => !form.querySelector('input[name="csrfmiddlewaretoken"]'))
             .map(form => form.getAttribute('action') || location.pathname);
           const loginLogo = document.querySelector('.login-logo img, .legal-page-head img');
+          const legalHeader = document.querySelector('.legal-page-head');
+          const legalPicker = legalHeader?.querySelector('[data-language-switcher]');
+          const legalBrand = legalHeader?.querySelector('.legal-page-brand img');
+          const controlStyles = [...document.querySelectorAll(
+            '.legal-action-form input:not([type="hidden"]):not([type="checkbox"]),' +
+            '.legal-action-form select,.legal-action-form textarea'
+          )].filter(visible).map(el => {
+            const rect = el.getBoundingClientRect();
+            const style = getComputedStyle(el);
+            return {
+              height: rect.height, radius: parseFloat(style.borderTopLeftRadius) || 0,
+              border: style.borderTopStyle, width: rect.width,
+            };
+          });
+          const legalLayout = legalHeader ? {
+            pickerCount: document.querySelectorAll('[data-language-switcher]').length,
+            pickerInsideHeader: !!legalPicker,
+            pickerBounds: legalPicker?.getBoundingClientRect().toJSON() || null,
+            brandBounds: legalBrand?.getBoundingClientRect().toJSON() || null,
+            headerBounds: legalHeader.getBoundingClientRect().toJSON(),
+            fields: controlStyles,
+          } : null;
           return {
+            legalLayout,
             innerWidth,
             scrollWidth: document.documentElement.scrollWidth,
             h1: (document.querySelector('h1')?.textContent || '').trim(),
@@ -934,6 +959,22 @@ def _check_public_page(page, base: str, path: str, width: int, label: str) -> No
           };
         }"""
     )
+    if metrics['legalLayout']:
+        layout = metrics['legalLayout']
+        if layout['pickerCount'] != 1 or not layout['pickerInsideHeader']:
+            raise AssertionError(f'{label} {width}px: legal language selector escaped header: {layout}')
+        header = layout['headerBounds']
+        picker = layout['pickerBounds']
+        brand = layout['brandBounds']
+        if not picker or not brand:
+            raise AssertionError(f'{label} {width}px: legal brand or language picker missing')
+        if picker['x'] < header['x'] - 1 or picker['right'] > header['right'] + 1:
+            raise AssertionError(f'{label} {width}px: language picker outside branded header: {layout}')
+        if brand['right'] + 4 > picker['left']:
+            raise AssertionError(f'{label} {width}px: logo and language picker overlap: {layout}')
+        for field in layout['fields']:
+            if field['height'] < 40 or field['radius'] < 6 or field['border'] == 'none':
+                raise AssertionError(f'{label} {width}px: browser-default legal form field: {field}')
     if metrics['scrollWidth'] > metrics['innerWidth'] + 1:
         raise AssertionError(
             f'{label} {width}px: horizontal overflow '
@@ -1654,6 +1695,10 @@ def run_backend_ui_smoke(browser, fixture=None) -> None:
         for width in (360, 390, 768, 1440, 1920):
             for route, label in public_routes:
                 _check_public_page(public_page, base, route, width, label)
+        # Cancellation and withdrawal headers must also fit the narrowest phone viewport.
+        for route, label in public_routes:
+            if route.startswith('legal/') or route in ('vertrag-widerrufen/', 'vertraege-kuendigen/'):
+                _check_public_page(public_page, base, route, 320, label)
 
         # Real browser registration acceptance for both supported customer types.
         for registration in (

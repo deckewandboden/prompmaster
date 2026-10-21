@@ -1,8 +1,6 @@
-{% extends 'base.html' %}{% load static i18n %}{% block title %}{{ document_title }} | PROMPTFINISHER{% endblock %}{% block body %}
-<div class="legal-page">
-  <div class="legal-page-head">
-    <a href="/" aria-label="{% translate 'PROMPTFINISHER Startseite' %}"><img src="{% static 'brand/promptfinisher-logo-hq.png' %}" alt="PROMPTFINISHER"></a>
-  </div>
+{% extends 'legal_base.html' %}{% load static i18n %}
+{% block title %}{{ document_title }} | PROMPTFINISHER{% endblock %}
+{% block legal_content %}
   <article class="card legal-document">
     <h1>{{ document_title }}</h1>
     <p class="muted">{% translate "Version" %} {{ document.version }} · {% translate "gültig ab" %} {{ document.valid_from|date:'SHORT_DATE_FORMAT' }}</p>
@@ -21,5 +19,4 @@
     </nav>
     <p><a href="/">← {% translate "Zur PROMPTFINISHER-Startseite" %}</a></p>
   </article>
-</div>
 {% endblock %}
