@@ -38,11 +38,24 @@ test('marketing localization must never change forms, products or typed prompts'
  assert.match(source,/\.app-pill/);
  assert.doesNotMatch(source,/\.value\s*=\s*translated/);
 });
-test('marketing switcher layout does not create stacked actions',async()=>{
- const css=await readFile('src/style.css','utf8');
- assert.match(css,/\.pf-marketing-locale\{/);
- assert.match(css,/header nav\{order:2\}/);
- assert.match(css,/max-width:430px/);
+test('marketing language chooser is right of FAQ, before login, and accessible on narrow screens',async()=>{
+ const index=await readFile('index.html','utf8');
+ const css=await readFile('src/immersive.css','utf8');
+ const headerStart=index.indexOf('<header>');
+ const headerEnd=index.indexOf('</header>');
+ const header=headerStart>=0 && headerEnd>headerStart ? index.slice(headerStart,headerEnd+'</header>'.length) : null;
+ assert.ok(header,'Marketing header missing');
+ assert.ok(header.indexOf('href="/#faq"')<header.indexOf('class="header-actions"'),'FAQ must precede header actions');
+ assert.ok(header.indexOf('class="pf-marketing-locale"')<header.indexOf('class="login-link"'),'Language control must precede Login');
+ assert.equal((header.match(/id="pf-marketing-language"/g)||[]).length,1,'Exactly one synchronized language chooser');
+ assert.match(header,/<svg class="pf-marketing-locale-icon"[^>]*aria-hidden="true">/);
+ assert.match(header,/<a href="\/login\/" class="mobile-login-link">Anmelden<\/a>/);
+ assert.match(header,/<a href="\/free\/"[^>]*class="button mobile-nav-cta">Jetzt starten<\/a>/);
+ assert.match(css,/header \.header-actions\{display:flex/);
+ assert.match(css,/\.pf-marketing-locale:focus-within\{/);
+ assert.match(css,/@media\(max-width:1280px\)/);
+ assert.match(css,/header nav\.open\{display:flex\}/);
+ assert.match(css,/@media\(max-width:360px\)/);
 });
 
 test('all visible static marketing German text is translated in every target language',async()=>{
