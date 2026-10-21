@@ -512,3 +512,79 @@ footer { max-width:none; background:#020919f5; }
     margin-left:-24px;
   }
 }
+
+/* Header alignment: language control belongs to the right-hand action group,
+   directly after FAQ and before Login.  On small screens it remains visible. */
+header{column-gap:clamp(14px,1.5vw,26px)}
+header .brand{margin-right:auto}
+header nav{flex:0 1 auto;min-width:0;gap:clamp(11px,1.3vw,24px)}
+header nav>a{white-space:nowrap}
+header nav .mobile-login-link,header nav .mobile-nav-cta{display:none}
+header .header-actions{display:flex;align-items:center;justify-content:flex-end;flex:0 0 auto;gap:clamp(10px,1vw,16px)}
+header .header-actions>.login-link,header .header-actions>.nav-cta{white-space:nowrap}
+.pf-marketing-locale{
+  position:relative;display:flex;align-items:center;flex:0 0 146px;
+  width:146px;height:40px;min-width:0;margin:0;color:#89c9ee;
+  border:1px solid #39668e;border-radius:9px;
+  background:linear-gradient(120deg,#11263eeb,#071428ec);
+  box-shadow:inset 0 1px 0 #8edcff16,0 0 13px #167fb012;
+  transition:border-color .2s,box-shadow .2s,background .2s;
+}
+.pf-marketing-locale:hover{border-color:#63b6e1;background:linear-gradient(120deg,#16314af0,#09182eec)}
+.pf-marketing-locale:focus-within{outline:2px solid #69d7fc;outline-offset:3px;border-color:#69d7fc}
+.pf-marketing-locale-icon{display:block;flex:0 0 17px;width:17px;height:17px;margin-left:11px;pointer-events:none}
+.pf-marketing-locale select{
+  appearance:none;-webkit-appearance:none;display:block;flex:1 1 auto;
+  width:100%;height:100%;min-width:0;min-height:0;margin:0;
+  padding:0 23px 0 8px;border:0;outline:0;border-radius:inherit;
+  background:transparent;color:#eaf5ff;box-shadow:none;
+  font:600 13px/1.2 "Segoe UI",Arial,sans-serif;cursor:pointer;
+}
+.pf-marketing-locale select:focus-visible{outline:none}
+.pf-marketing-locale select option{color:#eef6ff;background:#0b192b}
+.pf-marketing-locale::after{
+  content:"";position:absolute;right:12px;top:15px;
+  width:6px;height:6px;transform:rotate(45deg);pointer-events:none;
+  border-right:1.5px solid #82bddf;border-bottom:1.5px solid #82bddf;
+}
+@media(max-width:1280px){
+  header{flex-wrap:wrap;min-height:80px;gap:10px 14px}
+  header .brand{order:0;margin-right:auto}
+  header .header-actions{order:1;gap:0}
+  header .header-actions>.login-link,header .header-actions>.nav-cta{display:none}
+  header .menu-toggle{display:inline-flex;align-items:center;justify-content:center;gap:8px;order:2;white-space:nowrap}
+  header nav{
+    display:none;order:3;flex:1 0 100%;width:100%;min-width:0;
+    flex-direction:column;align-items:stretch;gap:3px;margin:0;
+    padding:12px;border:1px solid #2b527b;border-radius:10px;
+    background:linear-gradient(135deg,#06142af8,#0a1830f8);
+    box-shadow:0 12px 36px #000a19a8;
+  }
+  header nav.open{display:flex}
+  header nav>a{display:block;width:100%;padding:9px 13px;white-space:normal}
+  header nav>.mobile-login-link{display:block;border-top:1px solid #2b527b;margin-top:7px;padding-top:13px}
+  header nav>.mobile-nav-cta{display:flex;align-items:center;justify-content:center;min-height:42px;margin-top:4px}
+}
+@media(max-width:650px){
+  header{padding:12px 3.5%;gap:8px}
+  header .logo-crop{width:185px;height:42px}
+  .pf-marketing-locale{flex-basis:125px;width:125px;height:38px}
+  .pf-marketing-locale-icon{width:15px;height:15px;flex-basis:15px;margin-left:9px}
+  .pf-marketing-locale select{font-size:12px;padding-left:6px;padding-right:20px}
+  .pf-marketing-locale::after{right:10px;top:14px}
+}
+@media(max-width:430px){
+  header .logo-crop{width:155px;height:38px}
+  header .menu-toggle{padding:7px 9px;font-size:12px;gap:5px}
+  .pf-marketing-locale{flex-basis:109px;width:109px}
+  .pf-marketing-locale-icon{margin-left:7px;flex-basis:13px;width:13px;height:13px}
+  .pf-marketing-locale select{font-size:11px;padding:0 17px 0 5px}
+  .pf-marketing-locale::after{right:8px}
+}
+@media(max-width:360px){
+  header{gap:6px;padding-left:3%;padding-right:3%}
+  header .logo-crop{width:133px}
+  header .menu-toggle-label{display:none}
+  header .menu-toggle{min-width:38px}
+  .pf-marketing-locale{flex-basis:108px;width:108px}
+}
