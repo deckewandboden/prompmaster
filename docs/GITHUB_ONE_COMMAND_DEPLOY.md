@@ -20,6 +20,18 @@ Vor der Aktualisierung lädt der Starter den öffentlichen GitHub-`main`-Stand �
 
 Das Backup befindet sich mit privaten Dateirechten **außerhalb** des Checkout unter `/root/projekte/docker/.promptfinisher-local-edit-rescue/`. Ignorierte und unversionierte Dateien einschließlich `.env` werden weder gestasht noch in das Bundle/den Patch übernommen. Bei Divergenz des Git-Verlaufs oder fehlendem Backup-Nachweis erfolgt kein Deployment. Danach wird `origin` dauerhaft auf die öffentliche HTTPS-URL gesetzt und `main` ausschließlich per Fast-Forward aktualisiert. Die gesicherten lokalen Anpassungen werden nicht in GitHub übernommen; sie müssen bei Bedarf gesondert gegen den GitHub-Stand verglichen werden.
 
+## Sonderfall: nicht versionierte Logo- und Favicon-Dateien
+
+Beim Serverversuch vom 21.10.2026 wurden die bereits **getrackten** lokalen Anpassungen korrekt als Stash, Binär-Patch und Git-Bundle gesichert. Anschließend stoppte Git bei drei **zusätzlichen ungetrackten** Dateien, die im neuen GitHub-Commit inzwischen versioniert sind. Der Bootstrap erkennt nun genau diese Konfliktdateien:
+
+- `backend/static/brand/promptfinisher-favicon.svg`
+- `backend/static/brand/promptfinisher-mark.png`
+- `marketing/public/favicon.png`
+
+Jede lokale Datei wird im zugriffsgeschützten Verzeichnis `/root/projekte/docker/.promptfinisher-local-edit-rescue/untracked-XXXXXXXX/` in zwei identischen vollständigen Kopien erhalten: `copied/` und `original/`. Vor der Verschiebung werden `cmp` und SHA-256 geprüft; danach wird die Prüfsumme nochmals gegen die verschobene Originaldatei geprüft. Das Manifest `untracked-sha256.tsv` dokumentiert für jede Datei Pfad, SHA-256 und Bytezahl. Erst danach kann das von GitHub versionierte neue Asset installiert werden. **Keine vorhandenen lokalen Logo-Dateien werden ungeprüft gelöscht.**
+
+Andere Konflikte, symbolische Links, Verzeichnisse und Sonderdateien werden **nicht automatisch behandelt**; hier bleibt das Deployment gesperrt. Der erneute Aufruf desselben einzelnen SSH-Befehls ist erlaubt und wurde mit einem bereits vorhandenen Stash geprüft. Alle früher gesicherten Änderungen bleiben erhalten; es erfolgt kein automatisches `stash pop`.
+
 ## Was der Aufruf macht
 
 1. Lädt den GitHub-Bootstrap öffentlich über HTTPS, prüft `main`, vorbestehende Produktionsmarkierung, saubere Rechte und einen Fast-Forward zur GitHub-SHA.

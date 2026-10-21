@@ -59,6 +59,16 @@ class GitHubBootstrapContractTests(unittest.TestCase):
         git(self.writer, "config", "user.name", "CI Test")
         git(self.writer, "config", "user.email", "ci@example.test")
         (self.writer / "remote-version.txt").write_text("New published UI languages\n", encoding="utf-8")
+        # These three paths are already tracked in the new release, not the
+        # live checkout. The production host has legacy untracked equivalents.
+        for relative in (
+            "backend/static/brand/promptfinisher-favicon.svg",
+            "backend/static/brand/promptfinisher-mark.png",
+            "marketing/public/favicon.png",
+        ):
+            remote_path = self.writer / relative
+            remote_path.parent.mkdir(parents=True, exist_ok=True)
+            remote_path.write_bytes(b"GITHUB-TRACKED-NEW-ASSET-" + relative.encode("utf-8"))
         git(self.writer, "add", ".")
         git(self.writer, "commit", "-m", "new GitHub release")
         git(self.writer, "push", "origin", "main")
@@ -178,6 +188,69 @@ class GitHubBootstrapContractTests(unittest.TestCase):
         self.assertEqual(out.returncode, 2)
         self.assertIn("diverged", out.stderr)
         self.assertEqual(git(self.live, "rev-parse", "HEAD"), local_sha)
+        self.assertFalse(self.rescue.exists())
+
+    def test_untracked_brand_collision_preserves_exact_binary_files(self):
+        # Simulate the operator's first failed run: tracked edits were already
+        # safely stashed, but three untracked brand assets still block a merge.
+        self.dirty()
+        git(self.live, "stash", "push", "-m", "PREVIOUS-RECOVERY-STASH")
+        previous_stash = git(self.live, "rev-parse", "refs/stash")
+        local_assets = {
+            "backend/static/brand/promptfinisher-favicon.svg": b"<svg>custom-favicon</svg>\n",
+            "backend/static/brand/promptfinisher-mark.png": b"\x89PNG\r\n\x1a\nold-mark",
+            "marketing/public/favicon.png": b"\x89PNG\r\n\x1a\nold-favicon",
+        }
+        for relative, content in local_assets.items():
+            path = self.live / relative
+            path.parent.mkdir(parents=True, exist_ok=True)
+            path.write_bytes(content)
+
+        result = self.invoke()
+        self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
+        self.assertIn("UNTRACKED_RESCUE=PASS; COUNT=3", result.stdout)
+        self.assertEqual(git(self.live, "rev-parse", "HEAD"), self.target)
+        self.assertEqual(git(self.live, "rev-parse", "refs/stash"), previous_stash)
+        self.assertEqual((self.base / "release-performed").read_text().strip(), self.target)
+        self.assertEqual((self.live / "secret-untracked.txt").read_text(), "Never touch untracked files\n")
+        backups = list(self.rescue.glob("untracked-*"))
+        self.assertEqual(len(backups), 1)
+        rescued = backups[0]
+        manifest = (rescued / "untracked-sha256.tsv").read_text()
+        import hashlib
+        for relative, content in local_assets.items():
+            self.assertEqual((rescued / "copied" / relative).read_bytes(), content)
+            self.assertEqual((rescued / "original" / relative).read_bytes(), content)
+            self.assertIn(f"{relative}\t{hashlib.sha256(content).hexdigest()}\t{len(content)}", manifest)
+            self.assertEqual(
+                (self.live / relative).read_bytes(),
+                b"GITHUB-TRACKED-NEW-ASSET-" + relative.encode("utf-8"),
+            )
+
+        again = self.invoke()
+        self.assertEqual(again.returncode, 0, again.stdout + again.stderr)
+        self.assertIn("No untracked assets collide", again.stdout)
+        self.assertEqual(len(list(self.rescue.glob("untracked-*"))), 1)
+
+    def test_refuses_unexpected_new_github_collision(self):
+        path = self.live / "remote-version.txt"
+        path.write_text("Locally untracked version\n")
+        result = self.invoke()
+        self.assertEqual(result.returncode, 2)
+        self.assertIn("Unexpected untracked file collides", result.stderr)
+        self.assertEqual(path.read_text(), "Locally untracked version\n")
+        self.assertEqual(git(self.live, "rev-parse", "HEAD"), self.initial)
+        self.assertFalse(self.rescue.exists())
+
+    def test_refuses_symlink_brand_collision(self):
+        path = self.live / "marketing/public/favicon.png"
+        path.parent.mkdir(parents=True, exist_ok=True)
+        path.symlink_to(self.live / "branding.txt")
+        result = self.invoke()
+        self.assertEqual(result.returncode, 2)
+        self.assertIn("Refusing to relocate symlink", result.stderr)
+        self.assertTrue(path.is_symlink())
+        self.assertEqual(git(self.live, "rev-parse", "HEAD"), self.initial)
         self.assertFalse(self.rescue.exists())
 
     def test_invalid_argument_rejected_without_touching_files(self):
