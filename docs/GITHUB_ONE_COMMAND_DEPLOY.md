@@ -5,16 +5,26 @@ Diese Prozedur aktualisiert eine **bereits bestehende produktive PROMPTFINISHER-
 ## Einziger Aufruf unter Windows/PowerShell
 
 ```powershell
-ssh root@85.215.172.6 'cd /root/projekte/docker/promptmaster && git switch main && git pull --ff-only origin main && bash scripts/release_from_github.sh'
+ssh root@85.215.172.6 'set -o pipefail; curl -fsSL https://raw.githubusercontent.com/deckewandboden/prompmaster/main/scripts/bootstrap_github_release.sh | bash'
 ```
 
-Die Zugangsdaten und die bestehende Produktions-`.env` verbleiben auf dem Server und werden nicht in Git übertragen. Der Befehl verwendet den vorhandenen GitHub-Checkout und verlangt gültigen SSH-Zugang. Wenn eine Prüfung fehlschlägt, wird mit einem eindeutigen Fehler abgebrochen; es erfolgt **kein** erzwungener Git-Reset.
+Die Zugangsdaten und die bestehende Produktions-`.env` verbleiben auf dem Server und werden nicht in Git übertragen. Das GitHub-Repository ist öffentlich und wird mit HTTPS ohne zusätzliche Deploy-Keys gelesen. Dieser Bootstrap funktioniert deshalb auch, wenn auf dem Server `git@github.com: Permission denied (publickey)` erscheint. Der Starter stammt direkt aus GitHub, wird nur über HTTPS geladen und benötigt gültigen SSH-Zugang **zum Produktionsserver**, nicht zu GitHub. Die Prüfung bricht bei Fehlern ohne `git reset --hard` ab.
+
+## Bestehende Änderungen am Server: automatisch und überprüfbar gesichert
+
+Vor der Aktualisierung lädt der Starter den öffentlichen GitHub-`main`-Stand über HTTPS und prüft, dass ein Fast-Forward überhaupt möglich ist. Bestehende **getrackte** lokale Änderungen (z. B. die am 21.10. gemeldeten 20 Grafik-, CSS-, HTML- und Proxydateien) werden **vor** jeder Aktualisierung erhalten als:
+
+- Git-Stash mit identifizierbarer `STASH_SHA`, ohne automatische Wiederanwendung;
+- vollständiger Binär-Patch mit SHA256-Prüfsumme;
+- eigenständiges Git-Bundle, nach Erstellung mit `git bundle verify` geprüft.
+
+Das Backup befindet sich mit privaten Dateirechten **außerhalb** des Checkout unter `/root/projekte/docker/.promptfinisher-local-edit-rescue/`. Ignorierte und unversionierte Dateien einschließlich `.env` werden weder gestasht noch in das Bundle/den Patch übernommen. Bei Divergenz des Git-Verlaufs oder fehlendem Backup-Nachweis erfolgt kein Deployment. Danach wird `origin` dauerhaft auf die öffentliche HTTPS-URL gesetzt und `main` ausschließlich per Fast-Forward aktualisiert. Die gesicherten lokalen Anpassungen werden nicht in GitHub übernommen; sie müssen bei Bedarf gesondert gegen den GitHub-Stand verglichen werden.
 
 ## Was der Aufruf macht
 
-1. Wechselt auf `main`, zieht ausschließlich Fast-Forward-Commits von `origin` und führt `scripts/release_from_github.sh` aus.
-2. Prüft das erlaubte GitHub-Repository, saubere getrackte Dateien, die lokale Docker-Engine, private `.env`-Dateirechte und die Existenz eines bereits erfolgreich installierten Releases.
-3. Synchronisiert `origin/main` nochmals kontrolliert und protokolliert die **volle Git-Commit-SHA**.
+1. Lädt den GitHub-Bootstrap öffentlich über HTTPS, prüft `main`, vorbestehende Produktionsmarkierung, saubere Rechte und einen Fast-Forward zur GitHub-SHA.
+2. Sichert bei Bedarf die bereits veränderten getrackten Dateien in Stash, Binär-Patch und verifiziertem Bundle. Wechselt `origin` danach sicher von Git-SSH auf öffentliches Git-HTTPS.
+3. Synchronisiert `origin/main` kontrolliert, startet `scripts/release_from_github.sh` aus dem nun aktuellen GitHub-Checkout und protokolliert die **volle Git-Commit-SHA**.
 4. Führt das bestehende `scripts/deploy.sh` mit seinen Preflight-, Test-, Backup-, Migrations-, Health- und Last-known-good-Prüfungen aus. Docker-Volumes werden nicht gelöscht. Eine Mollie-Live-Aktivierung wird nicht aufgerufen.
 5. Kontrolliert über echtes HTTPS mit vollständiger Zertifikatsprüfung Marketing, Free, Login, Pro/Login-Redirect, Django-Health und die aktuelle i18n-Datei. Alle zehn Sprachkennungen sowie die Cache-Header werden überprüft.
 6. Erst nach bestandener externer Abnahme erscheint `DEPLOY=PASS; PUBLIC_HTTPS=PASS; LANGUAGES=10`. Der Nachweis steht im privaten Verzeichnis `artifacts/deploy-state/`.
@@ -37,4 +47,4 @@ Der Modus führt den kontrollierten Git-Fast-Forward und die Host-Vorabprüfung 
 
 ## GitHub-Gates
 
-`scripts/test_release_from_github.py` prüft positive und negative Fälle mit lokalen Git-/Docker-/HTTP-Mocks. Der Workflow `.github/workflows/release-safety.yml` führt die Tests aus; `.github/workflows/shell-syntax.yml` prüft außerdem die Bash-Syntax. Zusätzlich müssen die unveränderten Haupt-CI-, Browser- und Dependency-Security-Gates für den Release-Branch bestehen.
+`scripts/test_bootstrap_github_release.py` überprüft den realen Git-Stash, Binär-Backup, Git-Bundle-Verifikation, HTTPS-Fast-Forward und wichtige Abbruchfälle mit isolierten lokalen Git-Repositories. `scripts/test_release_from_github.py` prüft die verbleibenden positiven und negativen Deployment-Verträge mit lokalen Git-/Docker-/HTTP-Mocks. Der Workflow `.github/workflows/release-safety.yml` führt die Tests aus; `.github/workflows/shell-syntax.yml` prüft außerdem die Bash-Syntax. Zusätzlich müssen die unveränderten Haupt-CI-, Browser- und Dependency-Security-Gates für den Release-Branch bestehen.
