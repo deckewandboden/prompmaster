@@ -116,3 +116,5 @@ scripts/test_public_legal_i18n.py	0	text-not-byte-validated	test
 scripts/release_from_github.sh	0	text-not-byte-validated	active-operations
 scripts/test_release_from_github.py	0	text-not-byte-validated	test
 docs/GITHUB_ONE_COMMAND_DEPLOY.md	0	text-not-byte-validated	documentation
+scripts/bootstrap_github_release.sh	0	text-not-byte-validated	active-operations
+scripts/test_bootstrap_github_release.py	0	text-not-byte-validated	test
