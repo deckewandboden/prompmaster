@@ -819,22 +819,6 @@ def _check_backend_page(page, base: str, path: str, width: int, label: str) -> N
         }"""
     )
 
-    if metrics['legalLayout']:
-        layout = metrics['legalLayout']
-        if layout['pickerCount'] != 1 or not layout['pickerInsideHeader']:
-            raise AssertionError(f'{label} {width}px: legal language selector escaped header: {layout}')
-        header = layout['headerBounds']
-        picker = layout['pickerBounds']
-        brand = layout['brandBounds']
-        if not picker or not brand:
-            raise AssertionError(f'{label} {width}px: legal brand or language picker missing')
-        if picker['x'] < header['x'] - 1 or picker['right'] > header['right'] + 1:
-            raise AssertionError(f'{label} {width}px: language picker outside branded header: {layout}')
-        if brand['right'] + 4 > picker['left']:
-            raise AssertionError(f'{label} {width}px: logo and language picker overlap: {layout}')
-        for field in layout['fields']:
-            if field['height'] < 40 or field['radius'] < 6 or field['border'] == 'none':
-                raise AssertionError(f'{label} {width}px: browser-default legal form field: {field}')
     if metrics['scrollWidth'] > metrics['innerWidth'] + 1:
         raise AssertionError(
             f'{label} {width}px: horizontal overflow '
@@ -973,6 +957,22 @@ def _check_public_page(page, base: str, path: str, width: int, label: str) -> No
           };
         }"""
     )
+    if metrics['legalLayout']:
+        layout = metrics['legalLayout']
+        if layout['pickerCount'] != 1 or not layout['pickerInsideHeader']:
+            raise AssertionError(f'{label} {width}px: legal language selector escaped header: {layout}')
+        header = layout['headerBounds']
+        picker = layout['pickerBounds']
+        brand = layout['brandBounds']
+        if not picker or not brand:
+            raise AssertionError(f'{label} {width}px: legal brand or language picker missing')
+        if picker['x'] < header['x'] - 1 or picker['right'] > header['right'] + 1:
+            raise AssertionError(f'{label} {width}px: language picker outside branded header: {layout}')
+        if brand['right'] + 4 > picker['left']:
+            raise AssertionError(f'{label} {width}px: logo and language picker overlap: {layout}')
+        for field in layout['fields']:
+            if field['height'] < 40 or field['radius'] < 6 or field['border'] == 'none':
+                raise AssertionError(f'{label} {width}px: browser-default legal form field: {field}')
     if metrics['scrollWidth'] > metrics['innerWidth'] + 1:
         raise AssertionError(
             f'{label} {width}px: horizontal overflow '
