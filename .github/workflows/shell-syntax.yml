@@ -20,6 +20,7 @@ jobs:
         run: |
           bash -n scripts/bootstrap.sh
           bash -n scripts/deploy.sh
+          bash -n scripts/bootstrap_github_release.sh
           bash -n scripts/backup.sh
           bash -n scripts/restore-test.sh
           bash -n scripts/diagnose.sh
