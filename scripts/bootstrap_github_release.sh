@@ -76,6 +76,68 @@ else
   log 'Tracked worktree already clean; no local changes require rescue'
 fi
 
+# Three legacy brand assets on the live server were untracked, but are
+# now tracked in GitHub main. Protect them before attempting a fast-forward.
+# Unexpected collisions and non-regular files are never moved automatically.
+approved_collisions=(
+  "backend/static/brand/promptfinisher-favicon.svg"
+  "backend/static/brand/promptfinisher-mark.png"
+  "marketing/public/favicon.png"
+)
+collisions=()
+while IFS= read -r -d '' untracked; do
+  if ! git cat-file -e "$target:$untracked" 2>/dev/null; then
+    continue
+  fi
+  approved=NO
+  for item in "${approved_collisions[@]}"; do
+    if [[ "$item" == "$untracked" ]]; then
+      approved=YES
+      break
+    fi
+  done
+  [[ "$approved" == YES ]] ||
+    fail "Unexpected untracked file collides with GitHub main: $untracked. Nothing was overwritten."
+  [[ -f "$untracked" && ! -L "$untracked" ]] ||
+    fail "Refusing to relocate symlink, directory or special file: $untracked"
+  collisions+=("$untracked")
+done < <(git ls-files --others --exclude-standard -z)
+
+if (( ${#collisions[@]} > 0 )); then
+  rescue_base="${PM_LOCAL_EDIT_RESCUE_DIR:-"$(dirname "$ROOT")/.promptfinisher-local-edit-rescue"}"
+  [[ "$rescue_base" == /* ]] || fail 'Collision rescue directory must be absolute'
+  [[ ! -L "$rescue_base" ]] || fail 'Collision rescue directory is a symlink'
+  mkdir -p "$rescue_base"
+  chmod 700 "$rescue_base"
+  rescue="$(mktemp -d "$rescue_base/untracked-XXXXXXXX")"
+  chmod 700 "$rescue"
+  manifest="$rescue/untracked-sha256.tsv"
+  printf 'path\tsha256\tbytes\n' > "$manifest"
+  for path in "${collisions[@]}"; do
+    backup="$rescue/copied/$path"
+    original="$rescue/original/$path"
+    mkdir -p "$(dirname "$backup")" "$(dirname "$original")"
+    [[ -f "$path" && ! -L "$path" ]] || fail "Collision changed during rescue: $path"
+    cp -- "$path" "$backup" || fail "Could not back up untracked asset: $path"
+    chmod 600 "$backup"
+    cmp -s -- "$path" "$backup" || fail "Untracked asset copy is not byte-identical: $path"
+    digest="$(sha256sum "$path" | cut -d' ' -f1)"
+    [[ "$digest" == "$(sha256sum "$backup" | cut -d' ' -f1)" ]] ||
+      fail "Untracked asset SHA256 mismatch before move: $path"
+    bytes="$(stat -c '%s' "$path")"
+    mv -- "$path" "$original" || fail "Could not relocate untracked asset: $path"
+    [[ "$(sha256sum "$original" | cut -d' ' -f1)" == "$digest" ]] ||
+      fail "Relocated asset SHA256 mismatch: $path"
+    cmp -s -- "$backup" "$original" ||
+      fail "Independent copied and moved asset differ: $path"
+    printf '%s\t%s\t%s\n' "$path" "$digest" "$bytes" >> "$manifest"
+    log "UNTRACKED_ASSET_RESCUED=$path; SHA256=$digest"
+  done
+  log "UNTRACKED_RESCUE=PASS; COUNT=${#collisions[@]}; EVIDENCE=$rescue"
+else
+  log 'No untracked assets collide with GitHub main'
+fi
+
 # Public repository is verified in advance. Replace the unauthenticated SSH
 # remote with its official HTTPS URL; no credentials are stored in remote URL.
 git remote set-url origin "$PUBLIC_HTTPS"
