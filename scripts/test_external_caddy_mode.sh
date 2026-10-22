@@ -188,8 +188,15 @@ free_current="$(
   docker run --rm --network "$NETWORK" curlimages/curl:8.12.1 \
     -fsS -H "Host: $domain" "http://$ALIAS/free/"
 )"
-v2_css_url="/static/css/promptfinisher_v2.20260922.css?v=20261011-logo1"
-v2_js_url="/static/js/promptfinisher_ui_v2.20260922.js?v=20261011-logo1"
+# Always compare the delivered HTML against the release-controlled revision.
+# The revision belongs to the Django injection contract, not this smoke test.
+v2_rev="$(sed -n "s/^V2_ASSET_REV = b'\\([^']*\\)'/\\1/p" backend/apps/proaccess/views.py)"
+[[ "$v2_rev" =~ ^[A-Za-z0-9_-]+$ ]] || {
+  echo "Unable to resolve a safe V2 asset revision from Django views" >&2
+  exit 1
+}
+v2_css_url="/static/css/promptfinisher_v2.20260922.css?v=$v2_rev"
+v2_js_url="/static/js/promptfinisher_ui_v2.20260922.js?v=$v2_rev"
 
 grep -Fq "$v2_css_url" <<<"$free_current" || {
   echo "Free V2 stylesheet is not cache-busted through external Caddy" >&2
@@ -216,7 +223,7 @@ grep -qiE '^cache-control: .*no-cache.*must-revalidate' <<<"$mutable_headers" ||
 }
 
 log "Language bundle cache policy through external Caddy testen"
-i18n_js_url="/static/js/promptfinisher_product_i18n.20261011.js?v=20261011-logo1"
+i18n_js_url="/static/js/promptfinisher_product_i18n.20261011.js?v=$v2_rev"
 if [[ "$free_current" != *"$i18n_js_url"* ]]; then
   echo "Free V2 localization script missing in external Caddy response" >&2
   exit 1
