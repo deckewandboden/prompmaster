@@ -1518,6 +1518,35 @@ def _browser_product_locale_acceptance(page, base: str, product: str) -> None:
             )
             page.locator('[data-close="generalProModal"]').first.click()
 
+            if code == 'en':
+                # The DB-backed, dynamically constructed Pro-locked app dialog
+                # must be localized too, not only the static comparison modal.
+                page.locator('#proApps [data-central-code]').first.wait_for(
+                    state='attached', timeout=15000
+                )
+                page.evaluate(
+                    """() => {
+                        const locked = document.querySelector('#proApps [data-central-code]');
+                        showProModal(locked.dataset.appwrap);
+                    }"""
+                )
+                page.wait_for_function(
+                    """() => {
+                        const modal=document.querySelector('#proModal');
+                        const t=window.PF_PRODUCT_LOCALE?.t;
+                        const items=[...modal?.querySelectorAll('#proModalList li') || []]
+                          .map(x=>x.textContent.trim());
+                        return modal?.classList.contains('open')
+                          && items.length === 3
+                          && items[0] === t('aufgabenspezifische Prompt-Assistenten verwenden')
+                          && items[1] === t('professionelle Ausgabeformate und Schwerpunkte nutzen')
+                          && items[2] === t('den vollständigen, laufend weiterentwickelten Pro-Katalog verwenden')
+                          && !items.some(x => /verwenden|nutzen|Schwerpunkte/.test(x));
+                    }""",
+                    timeout=15000,
+                )
+                page.locator('[data-close="proModal"]').first.click()
+
         metrics = page.evaluate(
             """() => {
                 const brand = document.querySelector('.pmv2-brand img');
