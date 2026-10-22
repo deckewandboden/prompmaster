@@ -17,6 +17,9 @@ COPY marketing/ ./
 # actual Free/Pro localization asset, which is not part of marketing/.
 # This file is intentionally not copied into the final Caddy image.
 COPY backend/static/js/promptfinisher_product_i18n.20261011.js /backend/static/js/promptfinisher_product_i18n.20261011.js
+# Build-stage-only version fixture to prevent stale translation caches.
+# Never copied to the final Caddy runtime image.
+COPY backend/apps/proaccess/views.py /backend/apps/proaccess/views.py
 RUN npm test && npm run build
 
 # Caddy 2.11.7 includes upstream HTTP/2/streaming repairs. The official
