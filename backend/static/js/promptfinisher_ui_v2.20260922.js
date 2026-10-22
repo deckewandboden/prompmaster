@@ -6,6 +6,7 @@
   'use strict';
 
   const $ = (selector, root=document) => root.querySelector(selector);
+  const translateUi = key => window.PF_PRODUCT_LOCALE?.t?.(key) || key;
   const $$ = (selector, root=document) => [...root.querySelectorAll(selector)];
   const free = Boolean($('#freeApps'));
   const edition = free ? 'free' : 'pro';
@@ -570,7 +571,7 @@
     const freeHeading = $('#freeApps')?.previousElementSibling?.querySelector('h3');
     if (freeHeading) freeHeading.textContent = 'PROMPTFINISHER Free';
     const proHeading = $('.pmv2-free-pro-block .catalog-head h3');
-    if (proHeading) proHeading.textContent = 'Weitere Anwendungen mit PROMPTFINISHER Pro';
+    if (proHeading) proHeading.textContent = translateUi('Weitere Anwendungen mit PROMPTFINISHER Pro');
 
     const generalProModal = $('#generalProModal');
     const proModal = $('#proModal');
@@ -579,7 +580,7 @@
 
     const configureProPurchaseCta = cta => {
       if (!cta) return;
-      cta.textContent = 'PROMPTFINISHER Pro kaufen';
+      cta.textContent = translateUi('PROMPTFINISHER Pro kaufen');
       cta.href = '/checkout/?quantity=1';
       cta.removeAttribute('target');
       cta.removeAttribute('rel');
@@ -599,14 +600,14 @@
         const desiredContactText = tierSwitchText.endsWith(' auswählen')
           ? tierSwitchText.replace(/ auswählen$/, ' anfragen')
           : 'Microsoft-Copilot-Lizenz anfragen';
-        if (licenseContact.textContent.trim() !== desiredContactText) {
-          licenseContact.textContent = desiredContactText;
+        if (licenseContact.textContent.trim() !== translateUi(desiredContactText)) {
+          licenseContact.textContent = translateUi(desiredContactText);
         }
       }
       const licenseNote = $('.modal-note', licenseModal);
       const licenseNoteText = 'Microsoft-Copilot-Lizenzen werden separat von PROMPTFINISHER lizenziert. Die gewählte Stufe beschreibt ausschließlich den Microsoft-Copilot-Kontext, für den der Prompt optimiert wird.';
-      if (licenseNote && licenseNote.textContent !== licenseNoteText) {
-        licenseNote.textContent = licenseNoteText;
+      if (licenseNote && licenseNote.textContent !== translateUi(licenseNoteText)) {
+        licenseNote.textContent = translateUi(licenseNoteText);
       }
     };
     normalizeLicenseModal();
@@ -624,8 +625,8 @@
         const title = proModalTitle.textContent.trim();
         if (title.startsWith('CopilotPROMPTFINISHER Pro für ') || title.startsWith('PROMPTFINISHER Pro für ')) {
           const app = title.replace(/^CopilotPROMPTFINISHER Pro für |^PROMPTFINISHER Pro für /,'');
-          proModalTitle.textContent = app + ' mit PROMPTFINISHER Pro nutzen';
-          proModalSubtitle.textContent = 'Nutze den erweiterten Copilot-Katalog und passe Prompts noch genauer an deinen Arbeitsbereich an.';
+          proModalTitle.textContent = app + translateUi(' mit PROMPTFINISHER Pro nutzen');
+          proModalSubtitle.textContent = translateUi('Nutze den erweiterten Copilot-Katalog und passe Prompts noch genauer an deinen Arbeitsbereich an.');
         }
         normalizePROMPTFINISHERBrand(proModal);
         configureProPurchaseCta(proModalCta);
@@ -635,7 +636,7 @@
 
     const freePrivacyNote = $('.legal-footer-note span', footer);
     if (freePrivacyNote) {
-      freePrivacyNote.textContent = 'Die Prompt-Konfiguration wird serverseitig verarbeitet, um den Prompt aus dem gespeicherten Free-Vertrag zu erzeugen. Eingaben und erzeugte Prompts werden dabei nicht als Promptinhalt gespeichert.';
+      freePrivacyNote.textContent = translateUi('Die Prompt-Konfiguration wird serverseitig verarbeitet, um den Prompt aus dem gespeicherten Free-Vertrag zu erzeugen. Eingaben und erzeugte Prompts werden dabei nicht als Promptinhalt gespeichert.');
     }
   } else {
     ensureProCatalogSearch();
