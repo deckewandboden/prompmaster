@@ -1496,6 +1496,28 @@ def _browser_product_locale_acceptance(page, base: str, product: str) -> None:
             arg={'lang': code, 'tone': expected_tone},
             timeout=15000,
         )
+        if product == 'free':
+            page.evaluate("() => document.querySelector('#generalProModal')?.classList.add('open')")
+            page.wait_for_function(
+                """(lang) => {
+                    const modal = document.querySelector('#generalProModal');
+                    const t = window.PF_PRODUCT_LOCALE?.t;
+                    const title = modal?.querySelector('.modal-head h2')?.textContent.trim();
+                    const close = modal?.querySelector('[data-close="generalProModal"]')?.textContent.trim();
+                    const buy = modal?.querySelector('.modal-actions a.btn')?.textContent.trim();
+                    const originalTitle = 'Funktionsvergleich & zusätzliche Anwendungen';
+                    return modal?.classList.contains('open')
+                      && window.PF_PRODUCT_LOCALE?.code === lang
+                      && title === t(originalTitle)
+                      && close === t('Schließen')
+                      && buy === t('PROMPTFINISHER Pro kaufen')
+                      && (lang === 'de' || (title !== originalTitle && close !== 'Schließen'));
+                }""",
+                arg=code,
+                timeout=15000,
+            )
+            page.locator('[data-close="generalProModal"]').first.click()
+
         metrics = page.evaluate(
             """() => {
                 const brand = document.querySelector('.pmv2-brand img');
