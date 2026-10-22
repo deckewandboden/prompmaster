@@ -40,19 +40,19 @@ class PROMPTFINISHERV2RouteIsolationTests(TestCase):
         current_html = current.content.decode('utf-8')
         legacy_html = legacy.content.decode('utf-8')
 
-        self.assertIn('/static/js/free_catalog_bridge.20260918.js?v=20261011-logo1', current_html)
-        self.assertIn('/static/js/free_catalog_bridge.20260918.js?v=20261011-logo1', legacy_html)
+        self.assertIn('/static/js/free_catalog_bridge.20260918.js?v=20261022-info-modal-i18n1', current_html)
+        self.assertIn('/static/js/free_catalog_bridge.20260918.js?v=20261022-info-modal-i18n1', legacy_html)
         self.assertRegex(
             current_html,
             r'<meta name="pm-free-compose" content="server" data-csrf="[A-Za-z0-9]+">',
         )
         self.assertNotIn('name="pm-free-compose"', legacy_html)
 
-        self.assertIn('/static/css/promptfinisher_v2.20260922.css?v=20261011-logo1', current_html)
-        self.assertIn('/static/js/promptfinisher_ui_v2.20260922.js?v=20261011-logo1', current_html)
+        self.assertIn('/static/css/promptfinisher_v2.20260922.css?v=20261022-info-modal-i18n1', current_html)
+        self.assertIn('/static/js/promptfinisher_ui_v2.20260922.js?v=20261022-info-modal-i18n1', current_html)
         self.assertNotIn('/static/css/promptfinisher_v2.20260922.css', legacy_html)
         self.assertNotIn('/static/js/promptfinisher_ui_v2.20260922.js', legacy_html)
-        self.assertIn('/static/js/promptfinisher_product_i18n.20261011.js?v=20261011-logo1', current_html)
+        self.assertIn('/static/js/promptfinisher_product_i18n.20261011.js?v=20261022-info-modal-i18n1', current_html)
         self.assertNotIn('/static/js/promptfinisher_product_i18n.20261011.js', legacy_html)
 
         remote_logo = (
@@ -70,13 +70,13 @@ class PROMPTFINISHERV2RouteIsolationTests(TestCase):
         self.assertIn(free_source_node, legacy_html)
 
         stripped = current_html.replace(
-            '<link rel="stylesheet" href="/static/css/promptfinisher_v2.20260922.css?v=20261011-logo1">',
+            '<link rel="stylesheet" href="/static/css/promptfinisher_v2.20260922.css?v=20261022-info-modal-i18n1">',
             '',
         ).replace(
-            '<script src="/static/js/promptfinisher_ui_v2.20260922.js?v=20261011-logo1" defer></script>',
+            '<script src="/static/js/promptfinisher_ui_v2.20260922.js?v=20261022-info-modal-i18n1" defer></script>',
             '',
         ).replace(
-            '<script src="/static/js/promptfinisher_product_i18n.20261011.js?v=20261011-logo1" defer></script>',
+            '<script src="/static/js/promptfinisher_product_i18n.20261011.js?v=20261022-info-modal-i18n1" defer></script>',
             '',
         ).replace(
             'data:image/gif;base64,R0lGODlhAQABAAAAACw=',
@@ -100,11 +100,11 @@ class PROMPTFINISHERV2RouteIsolationTests(TestCase):
         current_html = current.content.decode('utf-8')
         legacy_html = legacy.content.decode('utf-8')
 
-        self.assertIn('/static/css/promptfinisher_v2.20260922.css?v=20261011-logo1', current_html)
-        self.assertIn('/static/js/promptfinisher_ui_v2.20260922.js?v=20261011-logo1', current_html)
+        self.assertIn('/static/css/promptfinisher_v2.20260922.css?v=20261022-info-modal-i18n1', current_html)
+        self.assertIn('/static/js/promptfinisher_ui_v2.20260922.js?v=20261022-info-modal-i18n1', current_html)
         self.assertNotIn('/static/css/promptfinisher_v2.20260922.css', legacy_html)
         self.assertNotIn('/static/js/promptfinisher_ui_v2.20260922.js', legacy_html)
-        self.assertIn('/static/js/promptfinisher_product_i18n.20261011.js?v=20261011-logo1', current_html)
+        self.assertIn('/static/js/promptfinisher_product_i18n.20261011.js?v=20261022-info-modal-i18n1', current_html)
         self.assertNotIn('/static/js/promptfinisher_product_i18n.20261011.js', legacy_html)
 
         remote_logo = (
