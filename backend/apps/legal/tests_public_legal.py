@@ -55,6 +55,22 @@ class CurrentLegalDocumentSeedTests(TestCase):
             response = self.client.get(f'/legal/{doc_type}/')
             self.assertEqual(response.status_code, 200, doc_type)
 
+    def test_public_legal_footer_uses_grouped_navigation_and_actions(self):
+        call_command('seed_legal_documents_2026', vat_id='DE123456789', stdout=StringIO())
+        for document in ('privacy', 'imprint', 'terms', 'license', 'accessibility'):
+            with self.subTest(document=document):
+                response = self.client.get(f'/legal/{document}/')
+                self.assertEqual(response.status_code, 200)
+                html = response.content.decode()
+                self.assertIn('class="legal-document-footer"', html)
+                self.assertIn('class="legal-footer-nav"', html)
+                self.assertIn('class="legal-footer-actions"', html)
+                self.assertIn('class="legal-footer-home"', html)
+                self.assertEqual(html.count('href="/vertraege-kuendigen/"'), 1)
+                self.assertEqual(html.count('href="/vertrag-widerrufen/"'), 1)
+                self.assertLess(html.index('class="legal-footer-nav"'),
+                                html.index('class="legal-footer-actions"'))
+
     def test_reseed_replaces_active_version_without_duplicates(self):
         call_command('seed_legal_documents_2026', vat_id='DE123456789', stdout=StringIO())
         call_command('seed_legal_documents_2026', stdout=StringIO())
