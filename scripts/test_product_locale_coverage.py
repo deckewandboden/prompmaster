@@ -112,6 +112,35 @@ class ProductLanguageCoverageTests(unittest.TestCase):
                          "Feature comparison & additional applications")
         self.assertIn("id=\"generalProModal\"", (PRODUCTS / "promptfinisher_free_reference.html").read_text(encoding="utf-8"))
 
+    def test_runtime_generated_free_paywall_and_status_labels_are_localized(self):
+        source = LOCALE.read_text(encoding="utf-8")
+        bridge = (ROOT / "backend/static/js/free_catalog_bridge.20260918.js").read_text(encoding="utf-8")
+        catalogue = extract_translations()
+        runtime_labels = (
+            "Weitere PROMPTFINISHER-Pro-Funktionen für diesen Copilot-Bereich.",
+            "Dieser Bereich ist im vollständigen PROMPTFINISHER-Pro-Katalog enthalten.",
+            "aufgabenspezifische Prompt-Assistenten verwenden",
+            "professionelle Ausgabeformate und Schwerpunkte nutzen",
+            "den vollständigen, laufend weiterentwickelten Pro-Katalog verwenden",
+            "Diese Anwendung",
+            ": erforderliche Microsoft-Copilot-Stufe anzeigen",
+            "WIRD AUS DER PROMPT-DATENBANK ERSTELLT",
+            "SERVER-PRÜFUNG FEHLGESCHLAGEN",
+            "Katalog konnte nicht geladen werden.",
+            "Erwarteter 34-App-Katalog ist unvollständig.",
+        )
+        for label in runtime_labels:
+            with self.subTest(label=label):
+                self.assertIn(label, bridge)
+                self.assertIn(label, catalogue)
+                for locale in LANGUAGES:
+                    translated = catalogue[label].get(locale)
+                    self.assertIsInstance(translated, str)
+                    self.assertTrue(translated.strip(), f"{locale}: {label}")
+        self.assertEqual(catalogue["PROMPT BEREIT"]["en"], "PROMPT READY")
+        self.assertIn("element.matches('[data-licenselocked=\"1\"]')", source)
+        self.assertIn("appName + t(': erforderliche Microsoft-Copilot-Stufe anzeigen')", source)
+
     def test_language_switch_is_visible_in_v2_shell(self):
         source = LOCALE.read_text(encoding="utf-8")
         self.assertIn("data-pf-product-language", source)
