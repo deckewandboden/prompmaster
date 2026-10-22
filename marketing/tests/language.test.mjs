@@ -32,6 +32,17 @@ test('language chooser is visible and tied to backend language cookie',async()=>
  assert.match(source,/encodeURIComponent\(next\)/);
  assert.match(source,/document\.documentElement\.lang=lang/);
 });
+test('marketing and Free/Pro ship exactly the same product translation cache revision',async()=>{
+ const index=await readFile('index.html','utf8');
+ const views=await readFile('../backend/apps/proaccess/views.py','utf8');
+ const rev=views.match(/V2_ASSET_REV = b'([^']+)'/);
+ assert.ok(rev,'Django V2_ASSET_REV must exist');
+ const scripts=[...index.matchAll(/<script[^>]+src="([^"]+)"[^>]*>/g)].map(m=>m[1]);
+ const i18n=scripts.filter(s=>s.startsWith('/static/js/promptfinisher_product_i18n.20261011.js?'));
+ assert.equal(i18n.length,1,'Marketing must load the product dictionary exactly once');
+ assert.equal(i18n[0],'/static/js/promptfinisher_product_i18n.20261011.js?v='+rev[1],
+   'Marketing and Django Free/Pro must invalidate old localized JavaScript together');
+});
 test('marketing localization must never change forms, products or typed prompts',async()=>{
  const source=await readFile('src/locale.js','utf8');
  assert.match(source,/input,textarea,select,option,script,style,\[contenteditable\]/);
