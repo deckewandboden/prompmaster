@@ -166,15 +166,37 @@ if(home){
     title=legal[path];
     body='<p>PROMPTFINISHER stellt die jeweils gültigen Rechtstexte versioniert über die Commercial-Plattform bereit.</p><a class="text-link" href="/">← Zurück zur Startseite</a>';
   }else if(path==='/kontakt'||path==='/unternehmen'){
-    title=path==='/kontakt'?'Kontakt zu netstyle.':'PROMPTFINISHER by netstyle.';
-    body='<p>PROMPTFINISHER by netstyle – bessere Prompts für Microsoft Copilot.</p><a class="text-link" href="/">← Zurück zur Startseite</a>';
+    const contact=path==='/kontakt';
+    title=marketingT(contact?'Kontakt zu netstyle':'Über netstyle');
+    const intro=marketingT(contact
+      ?'Fragen zu PROMPTFINISHER? Wir helfen dir bei Produktfragen und Anfragen weiter.'
+      :'PROMPTFINISHER ist ein Produkt der netstyle Informationstechnik GmbH aus Kreuztal.');
+    const details=contact
+      ? marketingT('Du erreichst das Team per E-Mail, telefonisch oder über das Kontaktformular von netstyle.')
+      : marketingT('netstyle ist ein IT-Systemhaus für kleine und mittelständische Unternehmen. Schwerpunkte sind IT-Infrastruktur, ERP-Lösungen rund um Sage 100 und ergänzende Softwarelösungen.');
+    body=`<div class="info-intro"><p>${intro}</p><p>${details}</p></div>
+      <div class="info-grid">
+        <section class="info-card"><span class="info-card-icon" aria-hidden="true">✉</span>
+          <h2>${marketingT('Direkter Kontakt')}</h2>
+          <p><a href="mailto:info@netstyle.de">info@netstyle.de</a></p>
+          <p><a href="tel:+49273259280">+49 2732 59280</a></p>
+          <a class="button secondary" href="mailto:info@netstyle.de">${marketingT('E-Mail schreiben')} →</a>
+        </section>
+        <section class="info-card"><span class="info-card-icon" aria-hidden="true">↗</span>
+          <h2>${marketingT('netstyle Informationstechnik GmbH')}</h2>
+          <p>Am Bühl 2<br>57223 Kreuztal</p>
+          <a class="button" href="https://www.netstyle.de/kontakt/" target="_blank" rel="noopener noreferrer">${marketingT('Kontaktformular öffnen')} ↗</a>
+        </section>
+      </div>
+      <div class="info-bottom"><a class="text-link" href="https://www.netstyle.de/" target="_blank" rel="noopener noreferrer">${marketingT('Mehr über netstyle erfahren')} ↗</a>
+      <a class="text-link" href="/">← ${marketingT('Zurück zur Startseite')}</a></div>`;
   }else{
     title='Diese Seite gibt es nicht.';
     body='<p>Über die Startseite findest du Funktionen, Preise und Antworten auf deine Fragen.</p><a class="button secondary" href="/">Zur Startseite →</a>';
   }
   document.title=title+' | PROMPTFINISHER by netstyle';
   if(body!==null){
-    document.querySelector('main').innerHTML='<section class="route-page"><span class="status-badge">PROMPTFINISHER</span><h1>'+title+'</h1>'+body+'</section>';
+    document.querySelector('main').innerHTML='<section class="route-page'+((path==='/kontakt'||path==='/unternehmen')?' info-route':'')+'"><span class="status-badge">PROMPTFINISHER</span><h1>'+title+'</h1>'+body+'</section>';
   }
 }
 

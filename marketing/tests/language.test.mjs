@@ -132,3 +132,26 @@ test('localized marketing SEO metadata has all ten-language descriptions',async(
  }
  assert.match(source,/description\.setAttribute\('content',translated\)/);
 });
+
+test('company and contact pages have substantive routes and complete locale copy',async()=>{
+ const main=await readFile('src/main.js','utf8');
+ const css=await readFile('src/immersive.css','utf8');
+ const required=[
+  'Kontakt zu netstyle','Über netstyle','Direkter Kontakt',
+  'PROMPTFINISHER ist ein Produkt der netstyle Informationstechnik GmbH aus Kreuztal.',
+  'Fragen zu PROMPTFINISHER? Wir helfen dir bei Produktfragen und Anfragen weiter.',
+  'Kontaktformular öffnen','Mehr über netstyle erfahren','Zurück zur Startseite',
+ ];
+ for(const term of required){
+  const entries=marketingCatalog[term];
+  assert.ok(entries,'Missing company/contact translation: '+term);
+  for(const lang of languages.slice(1))
+   assert.ok(entries[lang]?.trim(),lang+' missing '+term);
+ }
+ for(const route of ['/kontakt','/unternehmen'])assert.ok(main.includes(route));
+ assert.match(main,/href="mailto:info@netstyle\.de"/);
+ assert.match(main,/href="https:\/\/www\.netstyle\.de\/kontakt\/"/);
+ assert.match(css,/\.route-page\.info-route/);
+ assert.match(css,/\.info-route \.info-grid/);
+ assert.match(css,/@media\(max-width:650px\)/);
+});

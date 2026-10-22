@@ -509,3 +509,15 @@ body:not(:has(.shell)) > .language-switcher{position:fixed;right:12px;top:10px}
  .legal-page-head .language-switcher select{font-size:11px}
  .legal-page .legal-action-form .legal-action-submit{width:100%}
 }
+
+/* Legal document footer: organized navigation instead of inline bullet-separated links. */
+.legal-page .legal-document-footer{display:grid;gap:18px;margin-top:34px;padding:24px 0 0;border-top:1px solid #d9e6f2}
+.legal-page .legal-footer-nav{display:flex;align-items:center;flex-wrap:wrap;gap:10px 12px}
+.legal-page .legal-footer-nav a{display:inline-flex;align-items:center;min-height:36px;padding:7px 13px;background:#f2f7fc;border:1px solid #d7e4f0;border-radius:9px;font-size:13px;font-weight:600;text-decoration:none}
+.legal-page .legal-footer-nav a:hover{background:#e5f2fc;border-color:#9ebedc}
+.legal-page .legal-footer-actions{display:flex;align-items:center;flex-wrap:wrap;gap:10px;margin-top:2px}
+.legal-page .legal-footer-actions a{display:inline-flex;align-items:center;justify-content:center;min-height:42px;padding:9px 16px;border-radius:9px;border:1px solid #b7d4ed;background:#eaf5fe;font-size:13px;font-weight:700;text-decoration:none}
+.legal-page .legal-footer-actions a:hover{background:#dbeefa;border-color:#73b1df}
+.legal-page .legal-footer-home{display:inline-flex;align-items:center;justify-self:start;width:max-content;max-width:100%;min-height:36px;margin-top:1px;font-size:13px;font-weight:600;line-height:1.5;text-decoration:none}
+.legal-page .legal-document-footer a:focus-visible{outline:2px solid #1687d5;outline-offset:3px}
+@media(max-width:600px){.legal-page .legal-document-footer{gap:16px;margin-top:26px;padding-top:20px}.legal-page .legal-footer-nav{gap:8px}.legal-page .legal-footer-nav a{font-size:12px;padding:7px 10px}.legal-page .legal-footer-actions{flex-wrap:nowrap;overflow-x:auto;padding-bottom:5px}.legal-page .legal-footer-actions a{flex:0 0 auto;white-space:nowrap}}
