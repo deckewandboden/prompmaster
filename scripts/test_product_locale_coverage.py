@@ -83,6 +83,35 @@ class ProductLanguageCoverageTests(unittest.TestCase):
                             self.assertIsInstance(value, str)
                             self.assertTrue(value.strip(), f"{language}: {source}")
 
+    def test_all_free_pro_modal_dialogs_are_in_live_locale_scope(self):
+        source = LOCALE.read_text(encoding="utf-8")
+        ui = (ROOT / "backend/static/js/promptfinisher_ui_v2.20260922.js").read_text(encoding="utf-8")
+        catalogue = extract_translations()
+        self.assertIn(".pmv2-workspace,.modal-backdrop", source)
+        self.assertIn("roots.forEach(root => observer.observe", source)
+        self.assertIn("const translateUi = key => window.PF_PRODUCT_LOCALE", ui)
+        self.assertIn("translateUi(desiredContactText)", ui)
+        mandatory = (
+            "Funktionsvergleich & zusätzliche Anwendungen",
+            "Schließen",
+            "Mit CopilotPROMPTFINISHER Pro erhalten Sie zusätzliche Microsoft-Anwendungen, erweiterte Business-Prompts und professionelle Ausgabeformate.",
+            "PROMPTFINISHER Pro kaufen",
+            "Weitere Anwendungen mit PROMPTFINISHER Pro",
+            "Microsoft-Copilot-Lizenz anfragen",
+            "Nutze den erweiterten Copilot-Katalog und passe Prompts noch genauer an deinen Arbeitsbereich an.",
+        )
+        for key in mandatory:
+            with self.subTest(key=key):
+                self.assertIn(key, catalogue)
+                for locale in LANGUAGES:
+                    value = catalogue[key].get(locale)
+                    self.assertIsInstance(value, str)
+                    self.assertTrue(value.strip(), f"{locale}: {key}")
+        self.assertEqual(catalogue["Schließen"]["en"], "Close")
+        self.assertEqual(catalogue["Funktionsvergleich & zusätzliche Anwendungen"]["en"],
+                         "Feature comparison & additional applications")
+        self.assertIn("id=\"generalProModal\"", (PRODUCTS / "promptfinisher_free_reference.html").read_text(encoding="utf-8"))
+
     def test_language_switch_is_visible_in_v2_shell(self):
         source = LOCALE.read_text(encoding="utf-8")
         self.assertIn("data-pf-product-language", source)
