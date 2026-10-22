@@ -643,7 +643,7 @@
 
     const note = $('.legal-footer-note span', footer);
     if (note) {
-      note.textContent = 'Die Prompt-Konfiguration wird serverseitig verarbeitet, um den Prompt zu erzeugen. Eingaben und erzeugte Prompts werden dabei nicht als Promptinhalt gespeichert.';
+      note.textContent = translateUi('Die Prompt-Konfiguration wird serverseitig verarbeitet, um den Prompt zu erzeugen. Eingaben und erzeugte Prompts werden dabei nicht als Promptinhalt gespeichert.');
     }
   }
 
