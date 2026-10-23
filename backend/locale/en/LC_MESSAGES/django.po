@@ -3676,3 +3676,48 @@ msgstr "Last page"
 
 msgid "Letzte"
 msgstr "Last"
+
+msgid "Zwei-Faktor-Anmeldung"
+msgstr "Two-factor sign-in"
+
+msgid "Geben Sie den Code aus Ihrer Authenticator-App oder einen gültigen Recovery-Code ein."
+msgstr "Enter the code from your authenticator app or a valid recovery code."
+
+msgid "Recovery-Codes"
+msgstr "Recovery codes"
+
+msgid "Einmalig speichern."
+msgstr "Save these codes now."
+
+msgid "Diese Codes werden später nicht erneut im Klartext angezeigt."
+msgstr "These codes will not be shown again in plain text."
+
+msgid "Schließen Sie die Sicherheitseinrichtung ab, bevor Sie Ihren geschützten PROMPTFINISHER-Bereich verwenden."
+msgstr "Complete the security setup before accessing your protected PROMPTFINISHER area."
+
+msgid "Authenticator-Daten"
+msgstr "Authenticator details"
+
+msgid "Secret kopieren"
+msgstr "Copy secret"
+
+msgid "Hinterlegen Sie das Secret in Microsoft Authenticator, Google Authenticator, 1Password oder einer kompatiblen TOTP-App."
+msgstr "Add the secret to Microsoft Authenticator, Google Authenticator, 1Password or another compatible TOTP app."
+
+msgid "Einrichtungs-URI"
+msgstr "Setup URI"
+
+msgid "URI kopieren"
+msgstr "Copy URI"
+
+msgid "Einrichtung bestätigen"
+msgstr "Confirm setup"
+
+msgid "6-stelliger Code"
+msgstr "6-digit code"
+
+msgid "2FA aktivieren"
+msgstr "Enable 2FA"
+
+msgid "Nach erfolgreicher Aktivierung werden einmalig Recovery-Codes angezeigt."
+msgstr "After successful activation, recovery codes will be displayed once."
