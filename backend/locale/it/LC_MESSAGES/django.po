@@ -3614,3 +3614,81 @@ msgstr "Disdici ora"
 # Customer checkout: legal document list heading.
 msgid "Rechtsdokumente:"
 msgstr "Documenti legali:"
+
+msgid "Alle für Ihr Konto freigegebenen Adminbereiche."
+msgstr "Tutte le sezioni di amministrazione disponibili per il tuo account."
+
+msgid "Geschäft & Inhalte"
+msgstr "Attività e contenuti"
+
+msgid "System & Governance"
+msgstr "Sistema e governance"
+
+msgid "Lead bearbeiten"
+msgstr "Modifica lead"
+
+msgid "Ansprechpartner"
+msgstr "Referente"
+
+msgid "Verlauf & Einordnung"
+msgstr "Cronologia e valutazione"
+
+msgid "Zuletzt geändert"
+msgstr "Ultima modifica"
+
+msgid "Als Firmenkunde konvertiert am"
+msgstr "Convertito in cliente aziendale il"
+
+msgid "Kundenkonto öffnen"
+msgstr "Apri account cliente"
+
+msgid "Privatkunden werden über den öffentlichen Registrierungs-/Checkout-Prozess angelegt, damit AGB und Datenschutz vom Kunden selbst bestätigt werden."
+msgstr "I clienti privati vengono creati tramite registrazione e acquisto pubblici affinché possano accettare personalmente termini e informativa sulla privacy."
+
+msgid "← Zur Übersicht"
+msgstr "← Torna alla panoramica"
+
+msgid "Erklärung"
+msgstr "Dichiarazione"
+
+msgid "Gewünschtes Ende"
+msgstr "Data di fine richiesta"
+
+msgid "Bearbeitet"
+msgstr "Elaborato"
+
+msgid "Bearbeitung"
+msgstr "Elaborazione"
+
+msgid "Status speichern"
+msgstr "Salva stato"
+
+msgid "Sie haben Leserechte, aber keine Berechtigung zur Bearbeitung."
+msgstr "Hai accesso in lettura, ma non il permesso di modificare."
+
+msgid "CSV-Export"
+msgstr "Esportazione CSV"
+
+msgid "angefordert"
+msgstr "richiesto"
+
+msgid "Zeilen"
+msgstr "Righe"
+
+msgid "Verfügbar bis"
+msgstr "Disponibile fino al"
+
+msgid "Dieser Export ist abgelaufen."
+msgstr "Questa esportazione è scaduta."
+
+msgid "CSV herunterladen"
+msgstr "Scarica CSV"
+
+msgid "Der Export konnte nicht erstellt werden. Bitte erneut anfordern."
+msgstr "Impossibile creare l'esportazione. Ripeti la richiesta."
+
+msgid "Der Export wird im Hintergrund erstellt. Diese Seite aktualisiert sich automatisch."
+msgstr "L'esportazione viene creata in background. La pagina si aggiorna automaticamente."
+
+msgid "Der Zahlungsdienst ist derzeit noch nicht verfügbar."
+msgstr "Il servizio di pagamento non è al momento disponibile."
