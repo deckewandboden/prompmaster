@@ -3549,3 +3549,7 @@ msgstr "If you do not specify an end date, we will treat your cancellation as ef
 
 msgid "jetzt kündigen"
 msgstr "Cancel now"
+
+# Customer checkout: legal document list heading.
+msgid "Rechtsdokumente:"
+msgstr "Legal documents:"
