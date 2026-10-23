@@ -3553,3 +3553,81 @@ msgstr "Cancel now"
 # Customer checkout: legal document list heading.
 msgid "Rechtsdokumente:"
 msgstr "Legal documents:"
+
+msgid "Alle für Ihr Konto freigegebenen Adminbereiche."
+msgstr "All administration sections available to your account."
+
+msgid "Geschäft & Inhalte"
+msgstr "Business & content"
+
+msgid "System & Governance"
+msgstr "System & governance"
+
+msgid "Lead bearbeiten"
+msgstr "Edit lead"
+
+msgid "Ansprechpartner"
+msgstr "Contact person"
+
+msgid "Verlauf & Einordnung"
+msgstr "History & assessment"
+
+msgid "Zuletzt geändert"
+msgstr "Last modified"
+
+msgid "Als Firmenkunde konvertiert am"
+msgstr "Converted to a business customer on"
+
+msgid "Kundenkonto öffnen"
+msgstr "Open customer account"
+
+msgid "Privatkunden werden über den öffentlichen Registrierungs-/Checkout-Prozess angelegt, damit AGB und Datenschutz vom Kunden selbst bestätigt werden."
+msgstr "Private customers are created through the public registration and checkout process so they can personally accept the terms and privacy notice."
+
+msgid "← Zur Übersicht"
+msgstr "← Back to overview"
+
+msgid "Erklärung"
+msgstr "Declaration"
+
+msgid "Gewünschtes Ende"
+msgstr "Requested end date"
+
+msgid "Bearbeitet"
+msgstr "Processed"
+
+msgid "Bearbeitung"
+msgstr "Processing"
+
+msgid "Status speichern"
+msgstr "Save status"
+
+msgid "Sie haben Leserechte, aber keine Berechtigung zur Bearbeitung."
+msgstr "You have read access but are not authorized to make changes."
+
+msgid "CSV-Export"
+msgstr "CSV export"
+
+msgid "angefordert"
+msgstr "requested"
+
+msgid "Zeilen"
+msgstr "Rows"
+
+msgid "Verfügbar bis"
+msgstr "Available until"
+
+msgid "Dieser Export ist abgelaufen."
+msgstr "This export has expired."
+
+msgid "CSV herunterladen"
+msgstr "Download CSV"
+
+msgid "Der Export konnte nicht erstellt werden. Bitte erneut anfordern."
+msgstr "The export could not be created. Please request it again."
+
+msgid "Der Export wird im Hintergrund erstellt. Diese Seite aktualisiert sich automatisch."
+msgstr "The export is being generated in the background. This page refreshes automatically."
+
+msgid "Der Zahlungsdienst ist derzeit noch nicht verfügbar."
+msgstr "The payment service is not available at the moment."
