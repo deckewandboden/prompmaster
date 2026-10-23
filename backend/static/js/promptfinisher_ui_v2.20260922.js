@@ -190,8 +190,14 @@
       const cta = document.createElement('a');
       cta.className = 'pmv2-header-cta';
       cta.href = workspaceLink.href;
-      cta.textContent = workspaceLink.label + ' öffnen →';
+      const localizedWorkspaceCta = () => translateUi('%(workspace)s öffnen →')
+        .replace('%(workspace)s', translateUi(workspaceLink.label));
+      cta.textContent = localizedWorkspaceCta();
       headerActions.append(cta);
+      window.addEventListener('pm-product-locale-ready', () => {
+        cta.textContent = localizedWorkspaceCta();
+        cta.setAttribute('aria-label', cta.textContent.trim());
+      });
     }
     if (logoutLink) {
       const logout = document.createElement('a');
@@ -271,10 +277,11 @@
         // This function is called from a childList MutationObserver. Replacing
         // the badge text unconditionally would itself create another childList
         // mutation and can trap Firefox/WebKit in an endless observer loop.
-        if (mark.textContent !== 'PFLICHTFELD') {
-          mark.textContent = 'PFLICHTFELD';
+        const requiredMark = translateUi('PFLICHTFELD');
+        if (mark.textContent !== requiredMark) {
+          mark.textContent = requiredMark;
         }
-        const requiredTitle = 'Dieses Feld muss ausgefüllt werden, bevor der Prompt erzeugt wird.';
+        const requiredTitle = translateUi('Dieses Feld muss ausgefüllt werden, bevor der Prompt erzeugt wird.');
         if (mark.getAttribute('title') !== requiredTitle) {
           mark.setAttribute('title', requiredTitle);
         }
@@ -306,19 +313,20 @@
     if (selectedTask && missing.length) {
       promptGuard.hidden = false;
       promptGuard.innerHTML =
-        '<strong>Prompt noch nicht erstellt.</strong> Pflichtfelder fehlen: '
-        + missing.map(value => value.replace(/[&<>"']/g, char => ({
+        '<strong>' + translateUi('Prompt noch nicht erstellt.') + '</strong> '
+        + translateUi('Pflichtfelder fehlen:') + ' '
+        + missing.map(value => translateUi(value).replace(/[&<>"']/g, char => ({
           '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'
         })[char])).join(', ')
         + '.';
       if (promptOutput && !promptOutput.value) {
-        promptOutput.placeholder = 'Bitte zuerst alle markierten Pflichtfelder ausfüllen.';
+        promptOutput.placeholder = translateUi('Bitte zuerst alle markierten Pflichtfelder ausfüllen.');
       }
     } else {
       promptGuard.hidden = true;
       promptGuard.textContent = '';
       if (promptOutput) {
-        promptOutput.placeholder = 'Dein Prompt wird hier nach vollständiger Eingabe erzeugt.';
+        promptOutput.placeholder = translateUi('Dein Prompt wird hier nach vollständiger Eingabe erzeugt.');
       }
     }
   };
@@ -333,6 +341,7 @@
       {subtree:true,childList:true}
     );
     syncRequiredFieldState();
+    window.addEventListener('pm-product-locale-ready', syncRequiredFieldState);
   }
 
   const syncPromptStickiness = () => {
@@ -807,7 +816,7 @@
   const localReviewValue = value => translateUi(value);
   const selectedAudience = () => {
     if (!free && selectedTaskName() !== 'Noch nicht gewählt' && audienceSection.classList.contains('hidden')) {
-      return 'In der Aufgabe enthalten';
+      return localReviewValue('In der Aufgabe enthalten');
     }
     const input = $('input[name="audience"]:checked');
     return localReviewValue(input?.closest('.option')?.textContent.replace(/\s+/g,' ').trim() || 'Noch nicht gewählt');
@@ -950,11 +959,13 @@
       }
     });
     if (reviewProgressText) reviewProgressText.textContent = raw + ' %';
+    const progressAriaLabel = translateUi('%(percent)s Prozent vollständig')
+      .replace('%(percent)s', String(raw));
     if (reviewProgressBar) {
       reviewProgressBar.style.width = Math.max(0, Math.min(100, raw)) + '%';
-      reviewProgressBar.setAttribute('aria-label', raw + ' Prozent vollständig');
+      reviewProgressBar.setAttribute('aria-label', progressAriaLabel);
     }
-    if (oldProgressBar) oldProgressBar.setAttribute('aria-label', raw + ' Prozent vollständig');
+    if (oldProgressBar) oldProgressBar.setAttribute('aria-label', progressAriaLabel);
   };
   if (oldProgressText) new MutationObserver(updateFlow).observe(oldProgressText,{subtree:true,childList:true,characterData:true});
   if (oldProgressBar) new MutationObserver(updateFlow).observe(oldProgressBar,{attributes:true,attributeFilter:['style']});
