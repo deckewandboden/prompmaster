@@ -3631,3 +3631,48 @@ msgstr "Dışa aktarım arka planda hazırlanıyor. Bu sayfa otomatik yenilenir.
 
 msgid "Der Zahlungsdienst ist derzeit noch nicht verfügbar."
 msgstr "Ödeme hizmeti şu anda kullanılamıyor."
+
+msgid "Zugriff verweigert"
+msgstr "Erişim reddedildi"
+
+msgid "Für diese Ansicht fehlt die erforderliche Berechtigung."
+msgstr "Bu görünüme erişim izniniz yok."
+
+msgid "Zurück zur Übersicht"
+msgstr "Genel bakışa dön"
+
+msgid "Ansicht konnte nicht geladen werden"
+msgstr "Sayfa yüklenemedi"
+
+msgid "Beim Laden der Daten ist ein interner Fehler aufgetreten. Bitte versuchen Sie es erneut."
+msgstr "Veriler yüklenirken dahili hata oluştu. Lütfen yeniden deneyin."
+
+msgid "Erneut laden"
+msgstr "Yeniden yükle"
+
+msgid "Seitennavigation"
+msgstr "Sayfa gezintisi"
+
+msgid "von"
+msgstr "/"
+
+msgid "Datensätze"
+msgstr "Kayıtlar"
+
+msgid "Erste Seite"
+msgstr "İlk sayfa"
+
+msgid "Erste"
+msgstr "İlk"
+
+msgid "Vorherige Seite"
+msgstr "Önceki sayfa"
+
+msgid "Nächste Seite"
+msgstr "Sonraki sayfa"
+
+msgid "Letzte Seite"
+msgstr "Son sayfa"
+
+msgid "Letzte"
+msgstr "Son"
