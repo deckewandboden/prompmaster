@@ -3692,3 +3692,48 @@ msgstr "L'esportazione viene creata in background. La pagina si aggiorna automat
 
 msgid "Der Zahlungsdienst ist derzeit noch nicht verfügbar."
 msgstr "Il servizio di pagamento non è al momento disponibile."
+
+msgid "Zugriff verweigert"
+msgstr "Accesso negato"
+
+msgid "Für diese Ansicht fehlt die erforderliche Berechtigung."
+msgstr "Non hai le autorizzazioni per accedere a questa pagina."
+
+msgid "Zurück zur Übersicht"
+msgstr "Torna alla panoramica"
+
+msgid "Ansicht konnte nicht geladen werden"
+msgstr "Impossibile caricare la pagina"
+
+msgid "Beim Laden der Daten ist ein interner Fehler aufgetreten. Bitte versuchen Sie es erneut."
+msgstr "Si è verificato un errore interno durante il caricamento dei dati. Riprova."
+
+msgid "Erneut laden"
+msgstr "Ricarica"
+
+msgid "Seitennavigation"
+msgstr "Navigazione tra le pagine"
+
+msgid "von"
+msgstr "di"
+
+msgid "Datensätze"
+msgstr "Record"
+
+msgid "Erste Seite"
+msgstr "Prima pagina"
+
+msgid "Erste"
+msgstr "Prima"
+
+msgid "Vorherige Seite"
+msgstr "Pagina precedente"
+
+msgid "Nächste Seite"
+msgstr "Pagina successiva"
+
+msgid "Letzte Seite"
+msgstr "Ultima pagina"
+
+msgid "Letzte"
+msgstr "Ultima"
