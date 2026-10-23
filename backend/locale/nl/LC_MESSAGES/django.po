@@ -3731,3 +3731,48 @@ msgstr "Laatste pagina"
 
 msgid "Letzte"
 msgstr "Laatste"
+
+msgid "Zwei-Faktor-Anmeldung"
+msgstr "Inloggen met twee factoren"
+
+msgid "Geben Sie den Code aus Ihrer Authenticator-App oder einen gültigen Recovery-Code ein."
+msgstr "Voer de code uit je authenticator-app of een geldige herstelcode in."
+
+msgid "Recovery-Codes"
+msgstr "Herstelcodes"
+
+msgid "Einmalig speichern."
+msgstr "Sla deze codes nu op."
+
+msgid "Diese Codes werden später nicht erneut im Klartext angezeigt."
+msgstr "Deze codes worden later niet opnieuw leesbaar weergegeven."
+
+msgid "Schließen Sie die Sicherheitseinrichtung ab, bevor Sie Ihren geschützten PROMPTFINISHER-Bereich verwenden."
+msgstr "Voltooi de beveiligingsinstellingen voordat je het beschermde PROMPTFINISHER-gedeelte gebruikt."
+
+msgid "Authenticator-Daten"
+msgstr "Authenticatorgegevens"
+
+msgid "Secret kopieren"
+msgstr "Geheime sleutel kopiëren"
+
+msgid "Hinterlegen Sie das Secret in Microsoft Authenticator, Google Authenticator, 1Password oder einer kompatiblen TOTP-App."
+msgstr "Voeg de geheime sleutel toe aan Microsoft Authenticator, Google Authenticator, 1Password of een compatibele TOTP-app."
+
+msgid "Einrichtungs-URI"
+msgstr "Configuratie-URI"
+
+msgid "URI kopieren"
+msgstr "URI kopiëren"
+
+msgid "Einrichtung bestätigen"
+msgstr "Configuratie bevestigen"
+
+msgid "6-stelliger Code"
+msgstr "6-cijferige code"
+
+msgid "2FA aktivieren"
+msgstr "2FA inschakelen"
+
+msgid "Nach erfolgreicher Aktivierung werden einmalig Recovery-Codes angezeigt."
+msgstr "Na activering worden de herstelcodes één keer getoond."
