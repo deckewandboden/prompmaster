@@ -2125,6 +2125,188 @@ FOCUS_AUDIENCE_LABELS = {
 }
 
 
+# Exact task intentions reviewed against the 16 unchanged Free contracts.
+# These preserve task-specific requirements beyond the translated task title.
+FREE_INTENTS = {
+ "chat_sum": {
+  "en": "Summarize the supplied content precisely, highlighting the key statements, decisions, unresolved issues and next steps relevant to the stated objective.",
+  "fr": "Résumez précisément le contenu fourni en soulignant les points clés, décisions, questions ouvertes et prochaines étapes pertinentes pour l'objectif.",
+  "it": "Riassumi con precisione i contenuti forniti, evidenziando punti chiave, decisioni, questioni aperte e prossimi passi pertinenti all'obiettivo.",
+  "es": "Resume con precisión el contenido proporcionado, destacando ideas clave, decisiones, asuntos pendientes y próximos pasos pertinentes para el objetivo.",
+  "pt": "Resuma com precisão os conteúdos fornecidos, salientando pontos essenciais, decisões, questões pendentes e próximos passos relevantes para o objetivo.",
+  "nl": "Vat de aangeleverde inhoud nauwkeurig samen en benadruk kernpunten, besluiten, openstaande zaken en vervolgstappen die voor het doel relevant zijn.",
+  "pl": "Precyzyjnie podsumuj przekazaną treść, wskazując kluczowe ustalenia, decyzje, otwarte kwestie i kolejne kroki istotne dla celu.",
+  "tr": "Verilen içeriği doğru biçimde özetleyin; hedefe uygun temel noktaları, kararları, açık konuları ve sonraki adımları vurgulayın.",
+  "ru": "Точно изложите предоставленный материал, выделив ключевые положения, решения, открытые вопросы и следующие шаги, важные для цели."
+ },
+ "chat_write": {
+  "en": "Create a directly usable business text from the provided instructions with a clear main message, logical structure and professional tone.",
+  "fr": "Rédigez à partir des consignes fournies un texte professionnel immédiatement utilisable, avec un message central clair, une structure logique et un ton adapté.",
+  "it": "Crea un testo aziendale subito utilizzabile dalle indicazioni fornite, con messaggio chiave chiaro, struttura logica e tono professionale.",
+  "es": "Redacta un texto empresarial directamente utilizable a partir de las indicaciones, con mensaje central claro, estructura lógica y tono profesional.",
+  "pt": "Crie um texto empresarial diretamente utilizável a partir das indicações, com mensagem central clara, estrutura lógica e tom profissional.",
+  "nl": "Stel op basis van de instructies een direct bruikbare zakelijke tekst op met een duidelijke kernboodschap, logische structuur en professionele toon.",
+  "pl": "Na podstawie wskazówek przygotuj gotowy do użycia tekst biznesowy z jasnym przekazem, logiczną strukturą i profesjonalnym tonem.",
+  "tr": "Verilen yönergelerden açık ana mesajı, mantıklı yapısı ve profesyonel üslubu olan doğrudan kullanılabilir bir iş metni hazırlayın.",
+  "ru": "Подготовьте по предоставленным указаниям готовый деловой текст с ясной основной мыслью, логичной структурой и профессиональным тоном."
+ },
+ "out_reply": {
+  "en": "Draft a send-ready reply to the currently open or clearly selected email. Identify exactly what the sender asks, states or expects and address each point directly.",
+  "fr": "Rédigez une réponse prête à envoyer au courriel ouvert ou clairement sélectionné. Repérez exactement les questions, informations et attentes de l'expéditeur et répondez point par point.",
+  "it": "Prepara una risposta pronta da inviare all'e-mail aperta o selezionata. Individua domande, comunicazioni e aspettative del mittente e rispondi puntualmente.",
+  "es": "Prepara una respuesta lista para enviar al correo abierto o seleccionado. Identifica exactamente preguntas, información y expectativas del remitente y responde a cada punto.",
+  "pt": "Prepare uma resposta pronta a enviar ao e-mail aberto ou selecionado. Identifique perguntas, informações e expectativas do remetente e responda a cada ponto.",
+  "nl": "Stel een verzendklaar antwoord op de geopende of geselecteerde e-mail op. Bepaal wat de afzender vraagt, meldt of verwacht en behandel ieder punt.",
+  "pl": "Przygotuj gotową do wysłania odpowiedź na otwarty lub wybrany e-mail. Ustal pytania, informacje i oczekiwania nadawcy i odpowiedz na każdy punkt.",
+  "tr": "Açık veya seçili e-postaya gönderilmeye hazır bir yanıt hazırlayın. Gönderenin sorularını, bildirimlerini ve beklentilerini belirleyip her birine doğrudan yanıt verin.",
+  "ru": "Подготовьте готовый к отправке ответ на открытое или выбранное письмо. Определите вопросы, сведения и ожидания отправителя и ответьте по каждому пункту."
+ },
+ "out_improve": {
+  "en": "Revise the open or supplied email draft so its meaning, facts and commitments are preserved while the text becomes clearer, more precise, professional and easier to scan.",
+  "fr": "Révisez le brouillon d'e-mail ouvert ou fourni en conservant le sens, les faits et les engagements, tout en améliorant clarté, précision et lisibilité.",
+  "it": "Rivedi la bozza e-mail aperta o fornita conservando significato, fatti e impegni e rendendo il testo più chiaro, preciso, professionale e leggibile.",
+  "es": "Revisa el borrador de correo abierto o facilitado conservando significado, hechos y compromisos, pero mejorando claridad, precisión y legibilidad.",
+  "pt": "Reveja o rascunho de e-mail aberto ou fornecido, preservando sentido, factos e compromissos e melhorando clareza, precisão e legibilidade.",
+  "nl": "Herzie de geopende of aangeleverde e-mail zonder betekenis, feiten of toezeggingen te wijzigen. Maak de tekst duidelijker, nauwkeuriger en beter leesbaar.",
+  "pl": "Popraw otwartą lub przekazaną wersję e-maila, zachowując sens, fakty i zobowiązania, ale zwiększając jasność, precyzję i czytelność.",
+  "tr": "Açık veya sağlanan e-posta taslağını anlamı, olguları ve taahhütleri koruyarak daha açık, kesin, profesyonel ve okunabilir hâle getirin.",
+  "ru": "Переработайте открытый или предоставленный черновик письма, сохранив смысл, факты и обязательства, но повысив ясность, точность и читаемость."
+ },
+ "out_cal_next": {
+  "en": "Find the next future appointment in the available Outlook calendar matching the specified search criterion and clearly report the relevant appointment details.",
+  "fr": "Trouvez dans le calendrier Outlook accessible le prochain rendez-vous futur correspondant au critère indiqué et communiquez clairement les détails pertinents.",
+  "it": "Trova nel calendario Outlook disponibile il prossimo appuntamento futuro che corrisponde al criterio indicato e riportane chiaramente i dettagli.",
+  "es": "Busca en el calendario de Outlook disponible la próxima cita futura que cumpla el criterio indicado y presenta claramente los detalles relevantes.",
+  "pt": "Encontre no calendário Outlook disponível o próximo compromisso futuro que corresponde ao critério indicado e apresente claramente os detalhes.",
+  "nl": "Zoek in de beschikbare Outlook-agenda de eerstvolgende afspraak die aan het opgegeven criterium voldoet en vermeld de relevante gegevens.",
+  "pl": "Znajdź w dostępnym kalendarzu Outlook najbliższe przyszłe spotkanie spełniające kryterium i jasno podaj szczegóły.",
+  "tr": "Mevcut Outlook takviminde belirtilen arama ölçütüne uyan bir sonraki randevuyu bulun ve ilgili ayrıntıları açıkça belirtin.",
+  "ru": "Найдите в доступном календаре Outlook ближайшую будущую встречу, отвечающую заданному критерию, и ясно укажите сведения о ней."
+ },
+ "out_cal_schedule": {
+  "en": "Prepare a specific Outlook appointment from the stated scheduling requirements, taking into account purpose, attendees, time window, duration and any visible conflicts or limitations.",
+  "fr": "Préparez un rendez-vous Outlook concret à partir des exigences, en tenant compte de l'objectif, des participants, de la période, de la durée et des conflits visibles.",
+  "it": "Prepara un appuntamento Outlook concreto in base ai requisiti indicati, considerando scopo, partecipanti, fascia oraria, durata e conflitti visibili.",
+  "es": "Prepara una cita concreta de Outlook según los requisitos, considerando objetivo, asistentes, franja horaria, duración y posibles conflictos.",
+  "pt": "Prepare um compromisso Outlook concreto segundo os requisitos, considerando objetivo, participantes, período, duração e conflitos identificados.",
+  "nl": "Bereid een concrete Outlook-afspraak voor op basis van de eisen, inclusief doel, deelnemers, tijdvenster, duur en zichtbare conflicten.",
+  "pl": "Przygotuj konkretne spotkanie w Outlook według wymagań, uwzględniając cel, uczestników, czas, długość i widoczne konflikty.",
+  "tr": "Belirtilen planlama gereksinimlerine göre amaç, katılımcılar, zaman aralığı, süre ve görünen çakışmaları dikkate alarak Outlook randevusu hazırlayın.",
+  "ru": "Подготовьте конкретную встречу Outlook по заданным требованиям, учитывая цель, участников, интервал, длительность и известные конфликты."
+ },
+ "out_todo_create": {
+  "en": "Create an action-oriented task list from the stated topic or case and derive only next steps that are justified by the information actually available.",
+  "fr": "Créez une liste de tâches concrètes à partir du sujet ou dossier indiqué et ne déduisez que des étapes justifiées par les informations disponibles.",
+  "it": "Crea un elenco operativo di attività dal tema o caso indicato e ricava soltanto passi successivi giustificati dalle informazioni disponibili.",
+  "es": "Crea una lista práctica de tareas a partir del asunto indicado y propone solo pasos siguientes justificados por la información disponible.",
+  "pt": "Crie uma lista prática de tarefas a partir do assunto indicado e derive apenas passos seguintes justificados pela informação disponível.",
+  "nl": "Maak een actiegerichte takenlijst op basis van het onderwerp en leid alleen vervolgstappen af die door beschikbare informatie worden ondersteund.",
+  "pl": "Na podstawie wskazanego tematu przygotuj zadania do wykonania i wyprowadź tylko kroki uzasadnione dostępnymi informacjami.",
+  "tr": "Belirtilen konu veya olaydan eyleme dönük görev listesi oluşturun; yalnızca mevcut bilgilerle gerekçelendirilen sonraki adımları önerin.",
+  "ru": "Составьте практический список задач по указанной теме и предложите только те дальнейшие шаги, которые подтверждены доступными сведениями."
+ },
+ "out_todo_prioritize": {
+  "en": "Prioritize only the specified tasks by urgency, business impact, due dates and visible dependencies, and explain the resulting order clearly.",
+  "fr": "Classez uniquement les tâches indiquées selon l'urgence, l'impact métier, les échéances et les dépendances constatées, et expliquez clairement l'ordre.",
+  "it": "Dai priorità solo alle attività indicate secondo urgenza, impatto aziendale, scadenze e dipendenze note, spiegando chiaramente l'ordine.",
+  "es": "Prioriza solo las tareas indicadas según urgencia, impacto empresarial, fechas límite y dependencias visibles; explica claramente el orden.",
+  "pt": "Priorize apenas as tarefas indicadas por urgência, impacto empresarial, prazos e dependências visíveis, justificando claramente a ordem.",
+  "nl": "Prioriteer uitsluitend de opgegeven taken op urgentie, zakelijke impact, deadlines en bekende afhankelijkheden en licht de volgorde toe.",
+  "pl": "Nadaj priorytety tylko wskazanym zadaniom według pilności, wpływu biznesowego, terminów i znanych zależności, uzasadniając kolejność.",
+  "tr": "Yalnızca belirtilen görevleri aciliyet, iş etkisi, son tarihler ve bilinen bağımlılıklara göre önceliklendirin; sıralamayı açıklayın.",
+  "ru": "Расставьте приоритеты только для указанных задач по срочности, деловому влиянию, срокам и известным зависимостям; объясните порядок."
+ },
+ "teams_notes": {
+  "en": "Create a reliable meeting follow-up from the supplied notes and clearly separate status updates, decisions, tasks, owners, dates and outstanding issues.",
+  "fr": "Rédigez un compte rendu fiable à partir des notes de réunion, en distinguant clairement état d'avancement, décisions, tâches, responsables, dates et questions ouvertes.",
+  "it": "Prepara un resoconto affidabile dalle note della riunione, distinguendo stato, decisioni, attività, responsabili, date e questioni aperte.",
+  "es": "Elabora un seguimiento fiable de las notas de reunión separando estados, decisiones, tareas, responsables, fechas y asuntos pendientes.",
+  "pt": "Prepare um seguimento fiável das notas da reunião, separando estados, decisões, tarefas, responsáveis, datas e questões pendentes.",
+  "nl": "Maak een betrouwbare vergaderopvolging van de aangeleverde notities en scheid status, besluiten, taken, verantwoordelijken, datums en openstaande punten.",
+  "pl": "Przygotuj rzetelne podsumowanie z notatek spotkania, wyraźnie rozdzielając status, decyzje, zadania, osoby odpowiedzialne, terminy i kwestie otwarte.",
+  "tr": "Verilen toplantı notlarından güvenilir bir takip özeti hazırlayın; durumları, kararları, görevleri, sorumluları, tarihleri ve açık konuları ayırın.",
+  "ru": "Подготовьте достоверные итоги по заметкам встречи, отдельно указав состояние, решения, задачи, ответственных, даты и открытые вопросы."
+ },
+ "teams_chat": {
+  "en": "Summarize the supplied or clearly referenced Teams chat so that its progression, outcomes, decisions, open questions and next steps are understandable without rereading it.",
+  "fr": "Résumez le chat Teams fourni ou explicitement cité pour rendre compréhensibles le déroulement, les résultats, les décisions, les questions ouvertes et les suites sans relire les échanges.",
+  "it": "Riassumi la chat Teams fornita o chiaramente indicata in modo che svolgimento, risultati, decisioni, questioni aperte e prossimi passi siano comprensibili senza rileggerla.",
+  "es": "Resume el chat de Teams facilitado o claramente referido para entender secuencia, resultados, decisiones, preguntas abiertas y pasos siguientes sin releerlo.",
+  "pt": "Resuma a conversa Teams fornecida ou claramente referida para compreender sequência, resultados, decisões, questões abertas e passos seguintes sem reler.",
+  "nl": "Vat de aangeleverde of duidelijk genoemde Teams-chat samen zodat verloop, resultaten, besluiten, open vragen en vervolgstappen zonder herlezen begrijpelijk zijn.",
+  "pl": "Podsumuj podany lub wyraźnie wskazany czat Teams tak, aby przebieg, wyniki, decyzje, pytania otwarte i kolejne kroki były jasne bez ponownego czytania.",
+  "tr": "Sağlanan veya açıkça belirtilen Teams sohbetini, akış, sonuçlar, kararlar, açık sorular ve sonraki adımlar yeniden okumadan anlaşılacak şekilde özetleyin.",
+  "ru": "Суммируйте предоставленный или явно указанный чат Teams так, чтобы ход беседы, результаты, решения, вопросы и дальнейшие шаги были понятны без перечитывания."
+ },
+ "word_rewrite": {
+  "en": "Revise the selected or supplied Word text for clarity, structure and linguistic precision without unintentionally changing technical statements, numbers, names or binding content.",
+  "fr": "Améliorez la clarté, la structure et la précision du texte Word sélectionné ou fourni sans modifier involontairement les faits techniques, chiffres, noms ou engagements.",
+  "it": "Rivedi il testo Word selezionato o fornito per chiarezza, struttura e precisione senza alterare involontariamente affermazioni tecniche, numeri, nomi o impegni.",
+  "es": "Revisa el texto de Word seleccionado o proporcionado para mejorar claridad, estructura y precisión sin cambiar por accidente datos técnicos, cifras, nombres ni compromisos.",
+  "pt": "Reveja o texto Word selecionado ou fornecido para melhorar clareza, estrutura e precisão sem alterar involuntariamente factos técnicos, números, nomes ou compromissos.",
+  "nl": "Herzie de geselecteerde of aangeleverde Word-tekst op duidelijkheid, structuur en nauwkeurigheid zonder technische uitspraken, cijfers, namen of toezeggingen onbedoeld te wijzigen.",
+  "pl": "Popraw wybrany lub przekazany tekst Word pod kątem jasności, struktury i precyzji, bez niezamierzonych zmian treści technicznej, liczb, nazw czy zobowiązań.",
+  "tr": "Seçilen veya sağlanan Word metnini teknik ifadeleri, sayıları, isimleri ya da bağlayıcı bilgileri istemeden değiştirmeden açıklık, yapı ve dilsel kesinlik açısından iyileştirin.",
+  "ru": "Улучшите ясность, структуру и точность выбранного текста Word, не изменяя непреднамеренно технические утверждения, числа, имена и обязательства."
+ },
+ "word_sum": {
+  "en": "Summarize the open or supplied Word document so its key content, figures, dates, decisions, risks and unresolved items can be understood without rereading the document.",
+  "fr": "Résumez le document Word ouvert ou fourni de sorte que les points essentiels, chiffres, dates, décisions, risques et questions ouvertes soient clairs sans le relire.",
+  "it": "Riassumi il documento Word aperto o fornito per rendere comprensibili contenuti, cifre, date, decisioni, rischi e punti aperti senza rileggerlo.",
+  "es": "Resume el documento Word abierto o facilitado para comprender contenido clave, cifras, fechas, decisiones, riesgos y pendientes sin releerlo.",
+  "pt": "Resuma o documento Word aberto ou fornecido para compreender conteúdo essencial, números, datas, decisões, riscos e questões abertas sem reler.",
+  "nl": "Vat het geopende of aangeleverde Word-document samen zodat inhoud, cijfers, datums, besluiten, risico's en open punten zonder herlezen duidelijk zijn.",
+  "pl": "Podsumuj otwarty lub dostarczony dokument Word, aby najważniejsze treści, liczby, terminy, decyzje, ryzyka i kwestie otwarte były jasne bez ponownego czytania.",
+  "tr": "Açık veya sağlanan Word belgesini ana içerik, sayılar, tarihler, kararlar, riskler ve açık noktalar yeniden okumadan anlaşılacak şekilde özetleyin.",
+  "ru": "Суммируйте открытый или предоставленный документ Word так, чтобы ключевые сведения, цифры, даты, решения, риски и открытые вопросы были понятны без перечитывания."
+ },
+ "excel_explain": {
+  "en": "Analyze the open or supplied Excel table and explain the key visible metrics, patterns, relationships and anomalies clearly and on the basis of actual data.",
+  "fr": "Analysez le tableau Excel ouvert ou fourni et expliquez clairement les indicateurs, tendances, liens et anomalies visibles sur la base des données disponibles.",
+  "it": "Analizza la tabella Excel aperta o fornita e spiega chiaramente indicatori, schemi, relazioni e anomalie visibili sulla base dei dati reali.",
+  "es": "Analiza la tabla de Excel abierta o facilitada y explica con claridad métricas, patrones, relaciones y anomalías visibles basándote en datos reales.",
+  "pt": "Analise a tabela Excel aberta ou fornecida e explique claramente métricas, padrões, relações e anomalias visíveis com base em dados reais.",
+  "nl": "Analyseer de geopende of aangeleverde Excel-tabel en leg zichtbare cijfers, patronen, verbanden en afwijkingen begrijpelijk uit op basis van echte gegevens.",
+  "pl": "Przeanalizuj otwartą lub przekazaną tabelę Excel i jasno wyjaśnij wskaźniki, wzorce, zależności i odchylenia na podstawie faktycznych danych.",
+  "tr": "Açık veya sağlanan Excel tablosunu analiz edin; görünen metrikleri, kalıpları, ilişkileri ve anormallikleri gerçek verilere dayanarak açıklayın.",
+  "ru": "Проанализируйте открытую или предоставленную таблицу Excel и понятно объясните показатели, закономерности, связи и аномалии на основе реальных данных."
+ },
+ "excel_compare": {
+  "en": "Compare the specified areas or values in the current Excel table systematically, show absolute and mathematically meaningful percentage changes, and distinguish observations from possible explanations.",
+  "fr": "Comparez systématiquement les plages ou valeurs indiquées dans Excel, montrez les variations absolues et les pourcentages pertinents et distinguez résultats et explications possibles.",
+  "it": "Confronta sistematicamente intervalli o valori indicati in Excel, mostra variazioni assolute e percentuali sensate e distingui dati da possibili spiegazioni.",
+  "es": "Compara sistemáticamente rangos o valores indicados de Excel, muestra cambios absolutos y porcentuales cuando proceda y separa hallazgos de posibles explicaciones.",
+  "pt": "Compare sistematicamente os intervalos ou valores indicados do Excel, apresente variações absolutas e percentuais pertinentes e distinga resultados de possíveis explicações.",
+  "nl": "Vergelijk de opgegeven gebieden of waarden in Excel systematisch, toon absolute en zinvolle procentuele veranderingen en scheid bevindingen van mogelijke verklaringen.",
+  "pl": "Porównaj wskazane obszary lub wartości w Excelu, pokaż zmiany bezwzględne i sensowne procentowe oraz oddziel wyniki od możliwych wyjaśnień.",
+  "tr": "Excel'deki belirtilen aralık veya değerleri sistematik karşılaştırın; mutlak ve anlamlı yüzde değişimleri gösterin, gözlemleri olası açıklamalardan ayırın.",
+  "ru": "Систематически сравните указанные области или значения Excel, покажите абсолютные и уместные процентные изменения и отделите факты от возможных объяснений."
+ },
+ "ppt_outline": {
+  "en": "Create a clear PowerPoint outline from the presentation requirements, with a coherent storyline, meaningful slide titles and concise key messages.",
+  "fr": "Élaborez un plan PowerPoint clair à partir du besoin, avec une progression logique, des titres de diapositives pertinents et des messages clés concis.",
+  "it": "Crea una struttura PowerPoint chiara dalle esigenze, con storia logica, titoli significativi e messaggi chiave concisi.",
+  "es": "Crea un esquema claro de PowerPoint según la presentación solicitada, con hilo argumental coherente, títulos significativos y mensajes clave concisos.",
+  "pt": "Crie uma estrutura PowerPoint clara com base no pedido, com narrativa coerente, títulos de diapositivos relevantes e mensagens-chave concisas.",
+  "nl": "Maak op basis van de presentatieopdracht een duidelijke PowerPoint-opzet met logisch verhaal, betekenisvolle diatitels en beknopte kernboodschappen.",
+  "pl": "Na podstawie zadania opracuj przejrzysty plan PowerPoint z logiczną narracją, trafnymi tytułami slajdów i zwięzłymi przekazami.",
+  "tr": "Sunum gereksinimlerinden tutarlı bir hikâye akışı, anlamlı slayt başlıkları ve kısa ana mesajlarla açık bir PowerPoint taslağı oluşturun.",
+  "ru": "Составьте по заданию ясный план PowerPoint с логичной структурой, содержательными заголовками слайдов и краткими ключевыми тезисами."
+ },
+ "ppt_rewrite": {
+  "en": "Revise the selected or supplied PowerPoint material so it is concise, easily understood on slides and suitable for presentation, without accidentally changing verified facts or binding statements.",
+  "fr": "Révisez le contenu PowerPoint fourni pour qu'il soit concis, lisible sur les diapositives et adapté à la présentation, sans modifier les faits vérifiés ou engagements.",
+  "it": "Rivedi il materiale PowerPoint selezionato affinché sia conciso e adatto alle slide, senza alterare fatti verificati o dichiarazioni vincolanti.",
+  "es": "Revisa el contenido PowerPoint seleccionado para que sea breve, legible y apto para diapositivas sin cambiar datos comprobados ni compromisos.",
+  "pt": "Reveja o conteúdo PowerPoint selecionado para ser conciso e adequado aos diapositivos sem alterar factos verificados nem compromissos.",
+  "nl": "Herzie het geselecteerde PowerPoint-materiaal zodat het beknopt, snel leesbaar en geschikt voor dia's is, zonder geverifieerde feiten of toezeggingen te wijzigen.",
+  "pl": "Popraw wybraną treść PowerPoint, by była zwięzła i czytelna na slajdach bez niezamierzonych zmian potwierdzonych faktów lub zobowiązań.",
+  "tr": "Seçilen PowerPoint içeriğini doğrulanmış olguları ve bağlayıcı ifadeleri değiştirmeden slaytlarda hızla anlaşılır, kısa ve sunuma uygun hâle getirin.",
+  "ru": "Переработайте выбранные материалы PowerPoint для краткости и читаемости на слайдах, не изменяя подтверждённые факты и обязательства."
+ }
+}
+
+
 def select_prompt_language(request, body: dict) -> str:
     """Explicit request locale, then the language-picker cookie. Fail closed."""
     value = body.get('language') or request.COOKIES.get('promptfinisher_language') or 'de'
@@ -2395,7 +2577,7 @@ def render_localized_prompt(
     pieces = [
         f"{copy['task']}: {title}",
         f"{copy['app']}: {application}",
-        f"{copy['requirements']}: {copy['intro']} {copy['output']}",
+        f"{copy['requirements']}: {FREE_INTENTS.get(task_id, {}).get(language) or copy['intro']} {copy['output']}",
     ]
     supplied = []
     raw_fields = selections.get('fields') or {}
