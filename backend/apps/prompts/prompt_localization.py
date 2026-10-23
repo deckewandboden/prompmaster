@@ -345,6 +345,352 @@ FREE_TASK_TITLES = {
 }
 
 
+# Selection values are stable API codes; their display text is translated here.
+CHOICE_LABELS = {
+ "Kernaussagen": {
+  "en": "Key points",
+  "fr": "Points essentiels",
+  "it": "Punti chiave",
+  "es": "Puntos clave",
+  "pt": "Pontos principais",
+  "nl": "Kernpunten",
+  "pl": "Najważniejsze informacje",
+  "tr": "Ana noktalar",
+  "ru": "Ключевые положения"
+ },
+ "Entscheidungen": {
+  "en": "Decisions",
+  "fr": "Décisions",
+  "it": "Decisioni",
+  "es": "Decisiones",
+  "pt": "Decisões",
+  "nl": "Besluiten",
+  "pl": "Decyzje",
+  "tr": "Kararlar",
+  "ru": "Решения"
+ },
+ "Aufgaben": {
+  "en": "Tasks",
+  "fr": "Tâches",
+  "it": "Attività",
+  "es": "Tareas",
+  "pt": "Tarefas",
+  "nl": "Taken",
+  "pl": "Zadania",
+  "tr": "Görevler",
+  "ru": "Задачи"
+ },
+ "Nächste Schritte": {
+  "en": "Next steps",
+  "fr": "Prochaines étapes",
+  "it": "Passaggi successivi",
+  "es": "Próximos pasos",
+  "pt": "Próximos passos",
+  "nl": "Volgende stappen",
+  "pl": "Kolejne kroki",
+  "tr": "Sonraki adımlar",
+  "ru": "Следующие шаги"
+ },
+ "Offene Fragen": {
+  "en": "Open questions",
+  "fr": "Questions ouvertes",
+  "it": "Questioni aperte",
+  "es": "Preguntas abiertas",
+  "pt": "Questões em aberto",
+  "nl": "Open vragen",
+  "pl": "Otwarte pytania",
+  "tr": "Açık sorular",
+  "ru": "Открытые вопросы"
+ },
+ "Termine": {
+  "en": "Deadlines",
+  "fr": "Échéances",
+  "it": "Scadenze",
+  "es": "Plazos",
+  "pt": "Prazos",
+  "nl": "Termijnen",
+  "pl": "Terminy",
+  "tr": "Son tarihler",
+  "ru": "Сроки"
+ },
+ "Risiken": {
+  "en": "Risks",
+  "fr": "Risques",
+  "it": "Rischi",
+  "es": "Riesgos",
+  "pt": "Riscos",
+  "nl": "Risico's",
+  "pl": "Ryzyka",
+  "tr": "Riskler",
+  "ru": "Риски"
+ },
+ "Dringlichkeit": {
+  "en": "Urgency",
+  "fr": "Urgence",
+  "it": "Urgenza",
+  "es": "Urgencia",
+  "pt": "Urgência",
+  "nl": "Urgentie",
+  "pl": "Pilność",
+  "tr": "Aciliyet",
+  "ru": "Срочность"
+ },
+ "Auswirkung": {
+  "en": "Impact",
+  "fr": "Impact",
+  "it": "Impatto",
+  "es": "Impacto",
+  "pt": "Impacto",
+  "nl": "Impact",
+  "pl": "Wpływ",
+  "tr": "Etki",
+  "ru": "Влияние"
+ },
+ "Fälligkeit": {
+  "en": "Due date",
+  "fr": "Date d'échéance",
+  "it": "Scadenza",
+  "es": "Fecha límite",
+  "pt": "Prazo",
+  "nl": "Vervaldatum",
+  "pl": "Termin wykonania",
+  "tr": "Son tarih",
+  "ru": "Срок исполнения"
+ },
+ "Abhängigkeiten": {
+  "en": "Dependencies",
+  "fr": "Dépendances",
+  "it": "Dipendenze",
+  "es": "Dependencias",
+  "pt": "Dependências",
+  "nl": "Afhankelijkheden",
+  "pl": "Zależności",
+  "tr": "Bağımlılıklar",
+  "ru": "Зависимости"
+ },
+ "Priorität": {
+  "en": "Priority",
+  "fr": "Priorité",
+  "it": "Priorità",
+  "es": "Prioridad",
+  "pt": "Prioridade",
+  "nl": "Prioriteit",
+  "pl": "Priorytet",
+  "tr": "Öncelik",
+  "ru": "Приоритет"
+ },
+ "Kernaussage": {
+  "en": "Core message",
+  "fr": "Message essentiel",
+  "it": "Messaggio chiave",
+  "es": "Mensaje central",
+  "pt": "Mensagem principal",
+  "nl": "Kernboodschap",
+  "pl": "Główny przekaz",
+  "tr": "Ana mesaj",
+  "ru": "Главная мысль"
+ },
+ "Klarheit": {
+  "en": "Clarity",
+  "fr": "Clarté",
+  "it": "Chiarezza",
+  "es": "Claridad",
+  "pt": "Clareza",
+  "nl": "Helderheid",
+  "pl": "Jasność",
+  "tr": "Açıklık",
+  "ru": "Ясность"
+ },
+ "Struktur": {
+  "en": "Structure",
+  "fr": "Structure",
+  "it": "Struttura",
+  "es": "Estructura",
+  "pt": "Estrutura",
+  "nl": "Structuur",
+  "pl": "Struktura",
+  "tr": "Yapı",
+  "ru": "Структура"
+ },
+ "bullets": {
+  "en": "Bullet points",
+  "fr": "Liste à puces",
+  "it": "Elenco puntato",
+  "es": "Viñetas",
+  "pt": "Lista com marcadores",
+  "nl": "Opsommingstekens",
+  "pl": "Punkty",
+  "tr": "Madde işaretleri",
+  "ru": "Маркированный список"
+ },
+ "meeting_notes": {
+  "en": "Meeting follow-up",
+  "fr": "Compte rendu de réunion",
+  "it": "Resoconto della riunione",
+  "es": "Resumen de reunión",
+  "pt": "Resumo da reunião",
+  "nl": "Vergaderverslag",
+  "pl": "Podsumowanie spotkania",
+  "tr": "Toplantı özeti",
+  "ru": "Итоги встречи"
+ },
+ "prose": {
+  "en": "Continuous text",
+  "fr": "Texte suivi",
+  "it": "Testo continuo",
+  "es": "Texto corrido",
+  "pt": "Texto corrido",
+  "nl": "Doorlopende tekst",
+  "pl": "Tekst ciągły",
+  "tr": "Düz metin",
+  "ru": "Связный текст"
+ },
+ "email": {
+  "en": "Email draft",
+  "fr": "Brouillon d'e-mail",
+  "it": "Bozza e-mail",
+  "es": "Borrador de correo",
+  "pt": "Rascunho de e-mail",
+  "nl": "E-mailconcept",
+  "pl": "Szkic e-maila",
+  "tr": "E-posta taslağı",
+  "ru": "Черновик письма"
+ },
+ "checklist": {
+  "en": "Checklist",
+  "fr": "Liste de vérification",
+  "it": "Lista di controllo",
+  "es": "Lista de verificación",
+  "pt": "Lista de verificação",
+  "nl": "Checklist",
+  "pl": "Lista kontrolna",
+  "tr": "Kontrol listesi",
+  "ru": "Контрольный список"
+ },
+ "priority": {
+  "en": "Prioritized list",
+  "fr": "Liste hiérarchisée",
+  "it": "Elenco per priorità",
+  "es": "Lista priorizada",
+  "pt": "Lista por prioridades",
+  "nl": "Lijst met prioriteiten",
+  "pl": "Lista priorytetowa",
+  "tr": "Öncelik listesi",
+  "ru": "Список приоритетов"
+ },
+ "summary": {
+  "en": "Short summary",
+  "fr": "Résumé succinct",
+  "it": "Riepilogo breve",
+  "es": "Resumen breve",
+  "pt": "Resumo curto",
+  "nl": "Korte samenvatting",
+  "pl": "Krótkie podsumowanie",
+  "tr": "Kısa özet",
+  "ru": "Краткое резюме"
+ },
+ "schedule": {
+  "en": "Appointment proposal",
+  "fr": "Proposition de rendez-vous",
+  "it": "Proposta di appuntamento",
+  "es": "Propuesta de cita",
+  "pt": "Proposta de compromisso",
+  "nl": "Afspraakvoorstel",
+  "pl": "Propozycja spotkania",
+  "tr": "Randevu önerisi",
+  "ru": "Предложение встречи"
+ },
+ "slide_outline": {
+  "en": "Slide outline",
+  "fr": "Plan des diapositives",
+  "it": "Scaletta delle diapositive",
+  "es": "Esquema de diapositivas",
+  "pt": "Esboço de diapositivos",
+  "nl": "Diaoverzicht",
+  "pl": "Konspekt slajdów",
+  "tr": "Slayt taslağı",
+  "ru": "План слайдов"
+ },
+ "slide_text": {
+  "en": "Slide text",
+  "fr": "Texte de diapositive",
+  "it": "Testo delle diapositive",
+  "es": "Texto de diapositivas",
+  "pt": "Texto dos diapositivos",
+  "nl": "Diatekst",
+  "pl": "Tekst slajdów",
+  "tr": "Slayt metni",
+  "ru": "Текст слайдов"
+ },
+ "self": {
+  "en": "Me as the user",
+  "fr": "Moi, l'utilisateur",
+  "it": "Me come utente",
+  "es": "Yo como usuario",
+  "pt": "Eu como utilizador",
+  "nl": "Mij als gebruiker",
+  "pl": "Ja jako użytkownik",
+  "tr": "Kullanıcı olarak ben",
+  "ru": "Я как пользователь"
+ },
+ "customer": {
+  "en": "External customer",
+  "fr": "Client externe",
+  "it": "Cliente esterno",
+  "es": "Cliente externo",
+  "pt": "Cliente externo",
+  "nl": "Externe klant",
+  "pl": "Klient zewnętrzny",
+  "tr": "Harici müşteri",
+  "ru": "Внешний клиент"
+ },
+ "internal": {
+  "en": "Internal colleagues",
+  "fr": "Collègues internes",
+  "it": "Colleghi interni",
+  "es": "Compañeros internos",
+  "pt": "Colegas internos",
+  "nl": "Interne collega's",
+  "pl": "Współpracownicy",
+  "tr": "İç ekip arkadaşları",
+  "ru": "Внутренние коллеги"
+ },
+ "team": {
+  "en": "Internal team",
+  "fr": "Équipe interne",
+  "it": "Team interno",
+  "es": "Equipo interno",
+  "pt": "Equipa interna",
+  "nl": "Intern team",
+  "pl": "Zespół wewnętrzny",
+  "tr": "İç ekip",
+  "ru": "Внутренняя команда"
+ },
+ "participants": {
+  "en": "Meeting participants",
+  "fr": "Participants à la réunion",
+  "it": "Partecipanti alla riunione",
+  "es": "Participantes de la reunión",
+  "pt": "Participantes na reunião",
+  "nl": "Deelnemers aan vergadering",
+  "pl": "Uczestnicy spotkania",
+  "tr": "Toplantı katılımcıları",
+  "ru": "Участники встречи"
+ },
+ "own_tasks": {
+  "en": "Personal task planning",
+  "fr": "Planification personnelle",
+  "it": "Pianificazione personale",
+  "es": "Planificación personal",
+  "pt": "Planeamento pessoal",
+  "nl": "Persoonlijke taakplanning",
+  "pl": "Własny plan zadań",
+  "tr": "Kişisel görev planlama",
+  "ru": "Планирование собственных задач"
+ }
+}
+
+
 def select_prompt_language(request, body: dict) -> str:
     """Explicit request locale, then the language-picker cookie. Fail closed."""
     value = body.get('language') or request.COOKIES.get('promptfinisher_language') or 'de'
@@ -372,7 +718,8 @@ def _translated(source: str, language: str) -> str:
     """No German fallback for generated foreign-language instructions."""
     if not source:
         return ''
-    candidate = _product_dictionary().get(source, {}).get(language)
+    candidate = (_product_dictionary().get(source, {}).get(language)
+                 or CHOICE_LABELS.get(source, {}).get(language))
     return str(candidate).strip() if candidate else ''
 
 
