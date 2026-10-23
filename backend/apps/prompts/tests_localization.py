@@ -144,6 +144,49 @@ class LocalizedPromptRenderingTests(SimpleTestCase):
         self.assertIn(".pmv2-review-value", language)  # preserve user-origin data boundary
         self.assertNotIn("replaceAll('Pflichtangaben fehlen'", source)
 
+    def test_all_194_pro_task_descriptions_and_schema_labels_are_localized(self):
+        # Canonical catalog is authoritative: no loosely maintained sample
+        # lists, no generic 'Field N' substitutes, no silent German fallback.
+        data = json.loads((Path(__file__).resolve().parent
+                           / 'data/pm20_golden_logic.json').read_text(encoding='utf-8'))
+        translations = _product_dictionary()
+        tasks = [task for app in data['APP'].values() for task in app['tasks']]
+        self.assertEqual(len(tasks), 194)
+        categories = {
+            'title': {task['title'] for task in tasks},
+            'intent': {task['intent'] for task in tasks},
+            'area': {task['area'] for task in tasks},
+            'required': {value for task in tasks for value in task.get('required', [])},
+            'optional': {value for task in tasks for value in task.get('optional', [])},
+            'outputs': {value for task in tasks for value in task.get('outputs', [])},
+            'focus': {value for task in tasks for value in task.get('focus', [])},
+            'audiences': {value for task in tasks for value in task.get('audiences', [])},
+        }
+        self.assertEqual(len(categories['intent']), 194)
+        self.assertEqual(len(categories['outputs']), 238)
+        self.assertEqual(len(categories['title']), 192)
+        self.assertEqual(
+            len(categories['required'] | categories['optional'] | categories['outputs']), 769
+        )
+        for category, labels in categories.items():
+            self.assertTrue(labels, category)
+            for label in labels:
+                for language in SUPPORTED - {'de'}:
+                    with self.subTest(category=category, label=label, language=language):
+                        self.assertTrue(
+                            translations.get(label, {}).get(language, '').strip(),
+                            f'Untranslated PM20 {category}: {label!r} ({language})'
+                        )
+
+    def test_implicit_pro_output_option_value_is_preserved_in_translation(self):
+        # The untouched Pro runtime uses <option>Label</option> for output.
+        # Changing option.textContent changes its implicit .value unless the
+        # original value is first pinned as an explicit value attribute.
+        ui = (Path(__file__).resolve().parents[2] / 'static'
+              / 'js/promptfinisher_product_i18n.20261011.js').read_text(encoding='utf-8')
+        self.assertIn("option.setAttribute('value', option.textContent.trim())", ui)
+        self.assertIn("node.nodeValue = original.replace(original.trim(), translated)", ui)
+
     def test_all_pro_task_titles_have_native_language_variants(self):
         data = json.loads((Path(__file__).resolve().parent
                            / 'data/pm20_golden_logic.json').read_text(encoding='utf-8'))
