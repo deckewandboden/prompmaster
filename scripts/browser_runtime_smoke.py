@@ -1684,6 +1684,43 @@ def _browser_product_locale_acceptance(page, base: str, product: str) -> None:
                 timeout=15000,
             )
 
+            # Check the dynamic V2 required-field guard and accessible labels.
+            # These are built from multiple text fragments and were not
+            # covered by exact-text-node dictionary checks.
+            page.wait_for_function(
+                """(lang) => {
+                    const t = window.PF_PRODUCT_LOCALE?.t;
+                    const guard = document.querySelector('.pmv2-prompt-guard');
+                    const mark = document.querySelector(
+                        '#inputGrid .input-card.required .required-mark'
+                    );
+                    const progress = document.querySelector(
+                        '[data-pmv2-review-progress-bar]'
+                    );
+                    const percentage = parseInt(
+                        document.querySelector(
+                            '[data-pmv2-review-progress-text]'
+                        )?.textContent || '', 10
+                    );
+                    const expectedAria = t?.('%(percent)s Prozent vollständig')
+                        .replace('%(percent)s', String(percentage));
+                    const body = guard?.textContent || '';
+                    return !!t && !!guard && !guard.hidden
+                        && guard.querySelector('strong')?.textContent.trim()
+                            === t('Prompt noch nicht erstellt.')
+                        && body.includes(t('Pflichtfelder fehlen:'))
+                        && (lang === 'de' || !body.includes('Pflichtfelder fehlen:'))
+                        && mark?.textContent.trim() === t('PFLICHTFELD')
+                        && mark?.getAttribute('title') === t(
+                            'Dieses Feld muss ausgefüllt werden, bevor der Prompt erzeugt wird.'
+                        )
+                        && !!progress && Number.isFinite(percentage)
+                        && progress.getAttribute('aria-label') === expectedAria;
+                }""",
+                arg=code,
+                timeout=15000,
+            )
+
             # Pro must also return a native-language *prompt body*, not merely
             # translated UI labels. Use a real authenticated compose request.
             localized = page.evaluate(
