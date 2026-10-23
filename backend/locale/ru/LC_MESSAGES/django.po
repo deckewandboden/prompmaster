@@ -3677,3 +3677,48 @@ msgstr "Последняя страница"
 
 msgid "Letzte"
 msgstr "Последняя"
+
+msgid "Zwei-Faktor-Anmeldung"
+msgstr "Вход с двухфакторной аутентификацией"
+
+msgid "Geben Sie den Code aus Ihrer Authenticator-App oder einen gültigen Recovery-Code ein."
+msgstr "Введите код из приложения аутентификации или действующий резервный код."
+
+msgid "Recovery-Codes"
+msgstr "Резервные коды"
+
+msgid "Einmalig speichern."
+msgstr "Сохраните эти коды сейчас."
+
+msgid "Diese Codes werden später nicht erneut im Klartext angezeigt."
+msgstr "Позже эти коды не будут снова показаны в открытом виде."
+
+msgid "Schließen Sie die Sicherheitseinrichtung ab, bevor Sie Ihren geschützten PROMPTFINISHER-Bereich verwenden."
+msgstr "Завершите настройку безопасности перед доступом к защищённому разделу PROMPTFINISHER."
+
+msgid "Authenticator-Daten"
+msgstr "Данные приложения аутентификации"
+
+msgid "Secret kopieren"
+msgstr "Скопировать секретный ключ"
+
+msgid "Hinterlegen Sie das Secret in Microsoft Authenticator, Google Authenticator, 1Password oder einer kompatiblen TOTP-App."
+msgstr "Добавьте секретный ключ в Microsoft Authenticator, Google Authenticator, 1Password или совместимое приложение TOTP."
+
+msgid "Einrichtungs-URI"
+msgstr "URI настройки"
+
+msgid "URI kopieren"
+msgstr "Скопировать URI"
+
+msgid "Einrichtung bestätigen"
+msgstr "Подтвердить настройку"
+
+msgid "6-stelliger Code"
+msgstr "Шестизначный код"
+
+msgid "2FA aktivieren"
+msgstr "Включить 2FA"
+
+msgid "Nach erfolgreicher Aktivierung werden einmalig Recovery-Codes angezeigt."
+msgstr "После активации резервные коды будут показаны только один раз."
