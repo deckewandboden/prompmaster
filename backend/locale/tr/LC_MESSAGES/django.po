@@ -3553,3 +3553,81 @@ msgstr "Şimdi feshet"
 # Customer checkout: legal document list heading.
 msgid "Rechtsdokumente:"
 msgstr "Hukuki belgeler:"
+
+msgid "Alle für Ihr Konto freigegebenen Adminbereiche."
+msgstr "Hesabınızın erişebildiği tüm yönetim bölümleri."
+
+msgid "Geschäft & Inhalte"
+msgstr "İş ve içerik"
+
+msgid "System & Governance"
+msgstr "Sistem ve yönetişim"
+
+msgid "Lead bearbeiten"
+msgstr "Potansiyel müşteriyi düzenle"
+
+msgid "Ansprechpartner"
+msgstr "İlgili kişi"
+
+msgid "Verlauf & Einordnung"
+msgstr "Geçmiş ve değerlendirme"
+
+msgid "Zuletzt geändert"
+msgstr "Son değiştirilme"
+
+msgid "Als Firmenkunde konvertiert am"
+msgstr "Kurumsal müşteriye dönüştürülme tarihi"
+
+msgid "Kundenkonto öffnen"
+msgstr "Müşteri hesabını aç"
+
+msgid "Privatkunden werden über den öffentlichen Registrierungs-/Checkout-Prozess angelegt, damit AGB und Datenschutz vom Kunden selbst bestätigt werden."
+msgstr "Bireysel müşteriler, şartları ve gizlilik bildirimini bizzat kabul edebilmeleri için genel kayıt ve ödeme sürecinden oluşturulur."
+
+msgid "← Zur Übersicht"
+msgstr "← Genel bakışa dön"
+
+msgid "Erklärung"
+msgstr "Beyan"
+
+msgid "Gewünschtes Ende"
+msgstr "İstenen bitiş tarihi"
+
+msgid "Bearbeitet"
+msgstr "İşlendi"
+
+msgid "Bearbeitung"
+msgstr "İşlem"
+
+msgid "Status speichern"
+msgstr "Durumu kaydet"
+
+msgid "Sie haben Leserechte, aber keine Berechtigung zur Bearbeitung."
+msgstr "Okuma erişiminiz var ancak düzenleme yetkiniz yok."
+
+msgid "CSV-Export"
+msgstr "CSV dışa aktarımı"
+
+msgid "angefordert"
+msgstr "talep edildi"
+
+msgid "Zeilen"
+msgstr "Satırlar"
+
+msgid "Verfügbar bis"
+msgstr "Şu tarihe kadar kullanılabilir"
+
+msgid "Dieser Export ist abgelaufen."
+msgstr "Bu dışa aktarımın süresi doldu."
+
+msgid "CSV herunterladen"
+msgstr "CSV indir"
+
+msgid "Der Export konnte nicht erstellt werden. Bitte erneut anfordern."
+msgstr "Dışa aktarım oluşturulamadı. Lütfen yeniden talep edin."
+
+msgid "Der Export wird im Hintergrund erstellt. Diese Seite aktualisiert sich automatisch."
+msgstr "Dışa aktarım arka planda hazırlanıyor. Bu sayfa otomatik yenilenir."
+
+msgid "Der Zahlungsdienst ist derzeit noch nicht verfügbar."
+msgstr "Ödeme hizmeti şu anda kullanılamıyor."
