@@ -121,7 +121,7 @@ def main() -> None:
     # A translation catalog cannot be called complete when any individual
     # visible label silently falls back to German in one of the nine locales.
     # Check all entries, not only the 194 task schemas or reviewed examples.
-    token_pattern = re.compile(r'%\\([A-Za-z_][A-Za-z0-9_]*\\)s')
+    token_pattern = re.compile(r'%\([A-Za-z_][A-Za-z0-9_]*\)s')
     checked_product_variants = 0
     for source, variants in catalog.items():
         expected = sorted(token_pattern.findall(source))
