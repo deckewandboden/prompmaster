@@ -1,6 +1,11 @@
 """Regression checks for server-rendered multilingual prompt output."""
 from django.test import SimpleTestCase, RequestFactory
 
+from .free_surface import FREE_SURFACE_PRO_CONTRACTS
+from .prompt_localization import _product_dictionary, SURFACE_TASK_TITLES, FAMILY_METHODS, STYLE_MODIFIERS
+from pathlib import Path
+import json
+
 from .prompt_localization import (
     FREE_TASK_TITLES, MESSAGES, SUPPORTED, render_localized_prompt,
     select_prompt_language,
@@ -57,6 +62,56 @@ class LocalizedPromptRenderingTests(SimpleTestCase):
         for task_id, texts in FREE_TASK_TITLES.items():
             for lang in SUPPORTED - {'de'}:
                 self.assertTrue(texts[lang].strip(), f'{task_id} {lang}')
+
+    def test_all_pro_task_titles_have_native_language_variants(self):
+        data = json.loads((Path(__file__).resolve().parent
+                           / 'data/pm20_golden_logic.json').read_text(encoding='utf-8'))
+        catalogue = _product_dictionary()
+        tasks = [task for app in data['APP'].values() for task in app['tasks']]
+        self.assertEqual(len(tasks), 194)
+        for task in tasks:
+            for language in SUPPORTED - {'de'}:
+                with self.subTest(task=task['id'], language=language):
+                    self.assertTrue(catalogue.get(task['title'], {}).get(language))
+
+    def test_all_free_surface_pro_task_titles_have_native_language_variants(self):
+        catalogue = _product_dictionary()
+        for task_id, entry in FREE_SURFACE_PRO_CONTRACTS.items():
+            for language in SUPPORTED - {'de'}:
+                with self.subTest(task=task_id, language=language):
+                    title = entry['title']
+                    self.assertTrue(
+                        catalogue.get(title, {}).get(language)
+                        or SURFACE_TASK_TITLES.get(title, {}).get(language),
+                        f'No native task title: {task_id} ({language})',
+                    )
+
+    def test_all_specialized_pro_families_have_native_methodology(self):
+        data = json.loads((Path(__file__).resolve().parent
+                           / 'data/pm20_golden_logic.json').read_text(encoding='utf-8'))
+        common = {'analysis', 'compare', 'summarize', 'draft', 'plan'}
+        families = {task['family'] for app in data['APP'].values() for task in app['tasks']}
+        specialized = families - common
+        self.assertTrue(specialized)
+        for family in specialized:
+            for language in SUPPORTED - {'de'}:
+                with self.subTest(family=family, language=language):
+                    self.assertTrue(FAMILY_METHODS.get(family, {}).get(language))
+
+    def test_locale_specific_style_and_format_are_used(self):
+        base = {'prompt': 'Deutscher Ausgangsprompt', 'ready': True}
+        result = render_localized_prompt(
+            language='en', result=base, product='FREE',
+            task_id='teams_notes', task_title='Nachbereitung formulieren',
+            application='Teams', family='summarize',
+            selections={'primary': 'Private meeting note', 'focus': ['Kernaussagen'],
+                        'output': 'meeting_notes', 'tone': 'professional',
+                        'detail': 'short'},
+        )
+        self.assertIn('Meeting follow-up', result['prompt'])
+        self.assertIn('Key points', result['prompt'])
+        self.assertIn(STYLE_MODIFIERS['professional']['en'], result['prompt'])
+        self.assertIn(STYLE_MODIFIERS['short']['en'], result['prompt'])
 
     def test_cookie_and_explicit_language_selection(self):
         request = RequestFactory().post('/api/v1/prompts/free/compose/')
