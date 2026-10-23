@@ -3612,3 +3612,81 @@ msgstr "Wypowiedz teraz"
 # Customer checkout: legal document list heading.
 msgid "Rechtsdokumente:"
 msgstr "Dokumenty prawne:"
+
+msgid "Alle für Ihr Konto freigegebenen Adminbereiche."
+msgstr "Wszystkie sekcje administracyjne dostępne dla Twojego konta."
+
+msgid "Geschäft & Inhalte"
+msgstr "Biznes i treści"
+
+msgid "System & Governance"
+msgstr "System i nadzór"
+
+msgid "Lead bearbeiten"
+msgstr "Edytuj potencjalnego klienta"
+
+msgid "Ansprechpartner"
+msgstr "Osoba kontaktowa"
+
+msgid "Verlauf & Einordnung"
+msgstr "Historia i ocena"
+
+msgid "Zuletzt geändert"
+msgstr "Ostatnia zmiana"
+
+msgid "Als Firmenkunde konvertiert am"
+msgstr "Przekształcono w klienta firmowego dnia"
+
+msgid "Kundenkonto öffnen"
+msgstr "Otwórz konto klienta"
+
+msgid "Privatkunden werden über den öffentlichen Registrierungs-/Checkout-Prozess angelegt, damit AGB und Datenschutz vom Kunden selbst bestätigt werden."
+msgstr "Klienci indywidualni rejestrują się przez publiczny proces rejestracji i zakupu, aby samodzielnie zaakceptować warunki i zasady prywatności."
+
+msgid "← Zur Übersicht"
+msgstr "← Wróć do przeglądu"
+
+msgid "Erklärung"
+msgstr "Oświadczenie"
+
+msgid "Gewünschtes Ende"
+msgstr "Żądana data zakończenia"
+
+msgid "Bearbeitet"
+msgstr "Przetworzono"
+
+msgid "Bearbeitung"
+msgstr "Przetwarzanie"
+
+msgid "Status speichern"
+msgstr "Zapisz status"
+
+msgid "Sie haben Leserechte, aber keine Berechtigung zur Bearbeitung."
+msgstr "Masz prawo do odczytu, ale nie do edycji."
+
+msgid "CSV-Export"
+msgstr "Eksport CSV"
+
+msgid "angefordert"
+msgstr "zażądano"
+
+msgid "Zeilen"
+msgstr "Wiersze"
+
+msgid "Verfügbar bis"
+msgstr "Dostępne do"
+
+msgid "Dieser Export ist abgelaufen."
+msgstr "Ten eksport wygasł."
+
+msgid "CSV herunterladen"
+msgstr "Pobierz CSV"
+
+msgid "Der Export konnte nicht erstellt werden. Bitte erneut anfordern."
+msgstr "Nie udało się utworzyć eksportu. Spróbuj ponownie."
+
+msgid "Der Export wird im Hintergrund erstellt. Diese Seite aktualisiert sich automatisch."
+msgstr "Eksport jest przygotowywany w tle. Ta strona odświeża się automatycznie."
+
+msgid "Der Zahlungsdienst ist derzeit noch nicht verfügbar."
+msgstr "Usługa płatności jest obecnie niedostępna."
