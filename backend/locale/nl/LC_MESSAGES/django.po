@@ -3776,3 +3776,39 @@ msgstr "2FA inschakelen"
 
 msgid "Nach erfolgreicher Aktivierung werden einmalig Recovery-Codes angezeigt."
 msgstr "Na activering worden de herstelcodes één keer getoond."
+
+msgid "Wir senden einen zeitlich begrenzten Link an die hinterlegte E-Mail-Adresse."
+msgstr "We sturen een tijdelijke link naar je geregistreerde e-mailadres."
+
+msgid "Link anfordern"
+msgstr "Link aanvragen"
+
+msgid "Anfrage verarbeitet"
+msgstr "Verzoek verwerkt"
+
+msgid "Falls ein aktives Konto zu dieser Adresse existiert, wurde ein zeitlich begrenzter Link zum Zurücksetzen versendet."
+msgstr "Als er een actief account bij dit adres bestaat, is een tijdelijke resetlink verstuurd."
+
+msgid "Legen Sie ein neues Passwort für Ihr PROMPTFINISHER-Konto fest."
+msgstr "Stel een nieuw wachtwoord in voor je PROMPTFINISHER-account."
+
+msgid "Passwort speichern"
+msgstr "Wachtwoord opslaan"
+
+msgid "Passwort geändert"
+msgstr "Wachtwoord gewijzigd"
+
+msgid "Link ungültig"
+msgstr "Ongeldige link"
+
+msgid "Sie können sich jetzt mit dem neuen Passwort anmelden."
+msgstr "Je kunt nu inloggen met je nieuwe wachtwoord."
+
+msgid "Der Link ist ungültig, abgelaufen oder wurde bereits verwendet. Fordern Sie bei Bedarf einen neuen Link an."
+msgstr "Deze link is ongeldig, verlopen of al gebruikt. Vraag zo nodig een nieuwe link aan."
+
+msgid "Neuen Link anfordern"
+msgstr "Nieuwe link aanvragen"
+
+msgid "Möchten Sie die aktuelle Sitzung beenden?"
+msgstr "Wil je je huidige sessie beëindigen?"
