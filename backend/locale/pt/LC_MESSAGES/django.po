@@ -3553,3 +3553,81 @@ msgstr "Cancelar agora"
 # Customer checkout: legal document list heading.
 msgid "Rechtsdokumente:"
 msgstr "Documentos legais:"
+
+msgid "Alle für Ihr Konto freigegebenen Adminbereiche."
+msgstr "Todas as áreas de administração disponíveis para a sua conta."
+
+msgid "Geschäft & Inhalte"
+msgstr "Negócio e conteúdos"
+
+msgid "System & Governance"
+msgstr "Sistema e governação"
+
+msgid "Lead bearbeiten"
+msgstr "Editar lead"
+
+msgid "Ansprechpartner"
+msgstr "Pessoa de contacto"
+
+msgid "Verlauf & Einordnung"
+msgstr "Histórico e avaliação"
+
+msgid "Zuletzt geändert"
+msgstr "Última alteração"
+
+msgid "Als Firmenkunde konvertiert am"
+msgstr "Convertido em cliente empresarial em"
+
+msgid "Kundenkonto öffnen"
+msgstr "Abrir conta do cliente"
+
+msgid "Privatkunden werden über den öffentlichen Registrierungs-/Checkout-Prozess angelegt, damit AGB und Datenschutz vom Kunden selbst bestätigt werden."
+msgstr "Os clientes particulares são criados através do registo e processo de compra públicos para que aceitem pessoalmente os termos e a política de privacidade."
+
+msgid "← Zur Übersicht"
+msgstr "← Voltar à visão geral"
+
+msgid "Erklärung"
+msgstr "Declaração"
+
+msgid "Gewünschtes Ende"
+msgstr "Data de fim pretendida"
+
+msgid "Bearbeitet"
+msgstr "Processado"
+
+msgid "Bearbeitung"
+msgstr "Processamento"
+
+msgid "Status speichern"
+msgstr "Guardar estado"
+
+msgid "Sie haben Leserechte, aber keine Berechtigung zur Bearbeitung."
+msgstr "Tem acesso de leitura, mas não autorização para editar."
+
+msgid "CSV-Export"
+msgstr "Exportação CSV"
+
+msgid "angefordert"
+msgstr "solicitado"
+
+msgid "Zeilen"
+msgstr "Linhas"
+
+msgid "Verfügbar bis"
+msgstr "Disponível até"
+
+msgid "Dieser Export ist abgelaufen."
+msgstr "Esta exportação expirou."
+
+msgid "CSV herunterladen"
+msgstr "Transferir CSV"
+
+msgid "Der Export konnte nicht erstellt werden. Bitte erneut anfordern."
+msgstr "Não foi possível criar a exportação. Volte a solicitá-la."
+
+msgid "Der Export wird im Hintergrund erstellt. Diese Seite aktualisiert sich automatisch."
+msgstr "A exportação está a ser criada em segundo plano. Esta página atualiza-se automaticamente."
+
+msgid "Der Zahlungsdienst ist derzeit noch nicht verfügbar."
+msgstr "O serviço de pagamento não está disponível neste momento."
