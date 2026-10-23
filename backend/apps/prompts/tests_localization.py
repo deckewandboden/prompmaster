@@ -187,6 +187,18 @@ class LocalizedPromptRenderingTests(SimpleTestCase):
         self.assertIn("option.setAttribute('value', option.textContent.trim())", ui)
         self.assertIn("node.nodeValue = original.replace(original.trim(), translated)", ui)
 
+    def test_all_pro_application_card_descriptions_are_localized(self):
+        data = json.loads((Path(__file__).resolve().parent
+                           / 'data/pm20_golden_logic.json').read_text(encoding='utf-8'))
+        self.assertEqual(len(data['APP']), 34)
+        translations = _product_dictionary()
+        for app_id, app in data['APP'].items():
+            for field in ('name', 'copy', 'access'):
+                for language in SUPPORTED - {'de'}:
+                    with self.subTest(app=app_id, field=field, language=language):
+                        self.assertTrue(translations.get(app[field], {}).get(language),
+                                        f'Missing app translation: {app_id} / {field} / {language}')
+
     def test_all_pro_task_titles_have_native_language_variants(self):
         data = json.loads((Path(__file__).resolve().parent
                            / 'data/pm20_golden_logic.json').read_text(encoding='utf-8'))
