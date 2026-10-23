@@ -164,6 +164,187 @@ MESSAGES = {
  }
 }
 
+# Reviewed task labels for the 16 unchanged Free legacy contracts.
+FREE_TASK_TITLES = {
+ "chat_sum": {
+  "en": "Summarize content",
+  "fr": "Résumer le contenu",
+  "it": "Riassumere il contenuto",
+  "es": "Resumir contenido",
+  "pt": "Resumir conteúdo",
+  "nl": "Inhoud samenvatten",
+  "pl": "Podsumować treść",
+  "tr": "İçeriği özetle",
+  "ru": "Суммировать содержание"
+ },
+ "chat_write": {
+  "en": "Draft a text",
+  "fr": "Rédiger un texte",
+  "it": "Redigere un testo",
+  "es": "Redactar un texto",
+  "pt": "Redigir um texto",
+  "nl": "Tekst opstellen",
+  "pl": "Przygotować tekst",
+  "tr": "Metin hazırla",
+  "ru": "Составить текст"
+ },
+ "out_reply": {
+  "en": "Prepare an email reply",
+  "fr": "Préparer une réponse par e-mail",
+  "it": "Preparare una risposta e-mail",
+  "es": "Preparar respuesta de correo",
+  "pt": "Preparar resposta por e-mail",
+  "nl": "E-mailantwoord opstellen",
+  "pl": "Przygotować odpowiedź e-mail",
+  "tr": "E-posta yanıtı hazırla",
+  "ru": "Подготовить ответ на письмо"
+ },
+ "out_improve": {
+  "en": "Improve an email",
+  "fr": "Améliorer un e-mail",
+  "it": "Migliorare un'e-mail",
+  "es": "Mejorar correo electrónico",
+  "pt": "Melhorar e-mail",
+  "nl": "E-mail verbeteren",
+  "pl": "Ulepszyć e-mail",
+  "tr": "E-postayı iyileştir",
+  "ru": "Улучшить письмо"
+ },
+ "out_cal_next": {
+  "en": "Find the next appointment",
+  "fr": "Trouver le prochain rendez-vous",
+  "it": "Individuare il prossimo appuntamento",
+  "es": "Buscar la próxima cita",
+  "pt": "Encontrar o próximo compromisso",
+  "nl": "Volgende afspraak vinden",
+  "pl": "Znaleźć następne spotkanie",
+  "tr": "Sonraki randevuyu bul",
+  "ru": "Найти ближайшую встречу"
+ },
+ "out_cal_schedule": {
+  "en": "Plan an appointment",
+  "fr": "Planifier un rendez-vous",
+  "it": "Pianificare un appuntamento",
+  "es": "Planificar una cita",
+  "pt": "Planear um compromisso",
+  "nl": "Afspraak plannen",
+  "pl": "Zaplanować spotkanie",
+  "tr": "Randevu planla",
+  "ru": "Запланировать встречу"
+ },
+ "out_todo_create": {
+  "en": "Create a task list",
+  "fr": "Créer une liste de tâches",
+  "it": "Creare un elenco di attività",
+  "es": "Crear lista de tareas",
+  "pt": "Criar lista de tarefas",
+  "nl": "Takenlijst maken",
+  "pl": "Utworzyć listę zadań",
+  "tr": "Görev listesi oluştur",
+  "ru": "Создать список задач"
+ },
+ "out_todo_prioritize": {
+  "en": "Prioritize tasks",
+  "fr": "Hiérarchiser les tâches",
+  "it": "Dare priorità alle attività",
+  "es": "Priorizar tareas",
+  "pt": "Priorizar tarefas",
+  "nl": "Taken prioriteren",
+  "pl": "Ustalić priorytety zadań",
+  "tr": "Görevleri önceliklendir",
+  "ru": "Расставить приоритеты задач"
+ },
+ "teams_notes": {
+  "en": "Prepare a meeting follow-up",
+  "fr": "Préparer le compte rendu de réunion",
+  "it": "Preparare un resoconto della riunione",
+  "es": "Preparar seguimiento de reunión",
+  "pt": "Preparar o seguimento da reunião",
+  "nl": "Vergaderopvolging opstellen",
+  "pl": "Przygotować podsumowanie spotkania",
+  "tr": "Toplantı sonrası özeti hazırla",
+  "ru": "Подготовить итоги встречи"
+ },
+ "teams_chat": {
+  "en": "Summarize a chat",
+  "fr": "Résumer une conversation",
+  "it": "Riassumere una chat",
+  "es": "Resumir un chat",
+  "pt": "Resumir uma conversa",
+  "nl": "Chat samenvatten",
+  "pl": "Podsumować rozmowę",
+  "tr": "Sohbeti özetle",
+  "ru": "Суммировать чат"
+ },
+ "word_rewrite": {
+  "en": "Improve a text",
+  "fr": "Améliorer un texte",
+  "it": "Migliorare un testo",
+  "es": "Mejorar un texto",
+  "pt": "Melhorar um texto",
+  "nl": "Tekst verbeteren",
+  "pl": "Ulepszyć tekst",
+  "tr": "Metni iyileştir",
+  "ru": "Улучшить текст"
+ },
+ "word_sum": {
+  "en": "Summarize a document",
+  "fr": "Résumer un document",
+  "it": "Riassumere un documento",
+  "es": "Resumir documento",
+  "pt": "Resumir documento",
+  "nl": "Document samenvatten",
+  "pl": "Podsumować dokument",
+  "tr": "Belgeyi özetle",
+  "ru": "Суммировать документ"
+ },
+ "excel_explain": {
+  "en": "Explain data",
+  "fr": "Expliquer les données",
+  "it": "Spiegare i dati",
+  "es": "Explicar datos",
+  "pt": "Explicar dados",
+  "nl": "Gegevens uitleggen",
+  "pl": "Wyjaśnić dane",
+  "tr": "Verileri açıkla",
+  "ru": "Объяснить данные"
+ },
+ "excel_compare": {
+  "en": "Compare values",
+  "fr": "Comparer des valeurs",
+  "it": "Confrontare valori",
+  "es": "Comparar valores",
+  "pt": "Comparar valores",
+  "nl": "Waarden vergelijken",
+  "pl": "Porównać wartości",
+  "tr": "Değerleri karşılaştır",
+  "ru": "Сравнить значения"
+ },
+ "ppt_outline": {
+  "en": "Prepare slide content",
+  "fr": "Préparer le contenu des diapositives",
+  "it": "Preparare il contenuto delle diapositive",
+  "es": "Preparar contenido de diapositivas",
+  "pt": "Preparar conteúdo de diapositivos",
+  "nl": "Dia-inhoud voorbereiden",
+  "pl": "Przygotować treść slajdów",
+  "tr": "Slayt içeriğini hazırla",
+  "ru": "Подготовить содержимое слайдов"
+ },
+ "ppt_rewrite": {
+  "en": "Improve slide text",
+  "fr": "Améliorer le texte des diapositives",
+  "it": "Migliorare il testo delle diapositive",
+  "es": "Mejorar texto de diapositivas",
+  "pt": "Melhorar texto dos diapositivos",
+  "nl": "Diatekst verbeteren",
+  "pl": "Ulepszyć tekst slajdów",
+  "tr": "Slayt metnini iyileştir",
+  "ru": "Улучшить текст слайдов"
+ }
+}
+
+
 def select_prompt_language(request, body: dict) -> str:
     """Explicit request locale, then the language-picker cookie. Fail closed."""
     value = body.get('language') or request.COOKIES.get('promptfinisher_language') or 'de'
@@ -196,7 +377,7 @@ def _translated(source: str, language: str) -> str:
 
 
 def render_localized_prompt(
-    *, language: str, result: dict, product: str, task_title: str,
+    *, language: str, result: dict, product: str, task_title: str, task_id: str,
     application: str, family: str, selections: dict, maximum_chars: int | None = None,
 ) -> dict:
     """Return result with translated instructions, preserving canonical metadata.
@@ -207,7 +388,9 @@ def render_localized_prompt(
     if language == 'de':
         return result
     copy = MESSAGES[language]
-    title = _translated(task_title, language) or copy['fallback']
+    title = (_translated(task_title, language)
+             or FREE_TASK_TITLES.get(task_id, {}).get(language)
+             or copy['fallback'])
     pieces = [
         f"{copy['task']}: {title}",
         f"{copy['app']}: {application}",
