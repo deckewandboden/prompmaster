@@ -3721,3 +3721,39 @@ msgstr "Activar 2FA"
 
 msgid "Nach erfolgreicher Aktivierung werden einmalig Recovery-Codes angezeigt."
 msgstr "Tras la activación se mostrarán una sola vez los códigos de recuperación."
+
+msgid "Wir senden einen zeitlich begrenzten Link an die hinterlegte E-Mail-Adresse."
+msgstr "Enviaremos un enlace temporal a tu dirección de correo registrada."
+
+msgid "Link anfordern"
+msgstr "Solicitar enlace"
+
+msgid "Anfrage verarbeitet"
+msgstr "Solicitud procesada"
+
+msgid "Falls ein aktives Konto zu dieser Adresse existiert, wurde ein zeitlich begrenzter Link zum Zurücksetzen versendet."
+msgstr "Si existe una cuenta activa con esta dirección, se ha enviado un enlace temporal para restablecer la contraseña."
+
+msgid "Legen Sie ein neues Passwort für Ihr PROMPTFINISHER-Konto fest."
+msgstr "Establece una nueva contraseña para tu cuenta de PROMPTFINISHER."
+
+msgid "Passwort speichern"
+msgstr "Guardar contraseña"
+
+msgid "Passwort geändert"
+msgstr "Contraseña cambiada"
+
+msgid "Link ungültig"
+msgstr "Enlace no válido"
+
+msgid "Sie können sich jetzt mit dem neuen Passwort anmelden."
+msgstr "Ahora puedes iniciar sesión con la nueva contraseña."
+
+msgid "Der Link ist ungültig, abgelaufen oder wurde bereits verwendet. Fordern Sie bei Bedarf einen neuen Link an."
+msgstr "Este enlace no es válido, ha caducado o ya se ha utilizado. Solicita otro si es necesario."
+
+msgid "Neuen Link anfordern"
+msgstr "Solicitar otro enlace"
+
+msgid "Möchten Sie die aktuelle Sitzung beenden?"
+msgstr "¿Quieres cerrar la sesión actual?"
