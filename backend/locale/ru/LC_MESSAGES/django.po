@@ -3632,3 +3632,48 @@ msgstr "Экспорт формируется в фоновом режиме. С
 
 msgid "Der Zahlungsdienst ist derzeit noch nicht verfügbar."
 msgstr "Платёжный сервис сейчас недоступен."
+
+msgid "Zugriff verweigert"
+msgstr "Доступ запрещён"
+
+msgid "Für diese Ansicht fehlt die erforderliche Berechtigung."
+msgstr "У вас нет прав для просмотра этой страницы."
+
+msgid "Zurück zur Übersicht"
+msgstr "Вернуться к обзору"
+
+msgid "Ansicht konnte nicht geladen werden"
+msgstr "Не удалось загрузить страницу"
+
+msgid "Beim Laden der Daten ist ein interner Fehler aufgetreten. Bitte versuchen Sie es erneut."
+msgstr "При загрузке данных произошла внутренняя ошибка. Повторите попытку."
+
+msgid "Erneut laden"
+msgstr "Перезагрузить"
+
+msgid "Seitennavigation"
+msgstr "Навигация по страницам"
+
+msgid "von"
+msgstr "из"
+
+msgid "Datensätze"
+msgstr "Записи"
+
+msgid "Erste Seite"
+msgstr "Первая страница"
+
+msgid "Erste"
+msgstr "Первая"
+
+msgid "Vorherige Seite"
+msgstr "Предыдущая страница"
+
+msgid "Nächste Seite"
+msgstr "Следующая страница"
+
+msgid "Letzte Seite"
+msgstr "Последняя страница"
+
+msgid "Letzte"
+msgstr "Последняя"
