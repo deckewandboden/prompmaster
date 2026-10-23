@@ -3549,3 +3549,7 @@ msgstr "Si no indicas una fecha de finalización, tramitaremos la cancelación p
 
 msgid "jetzt kündigen"
 msgstr "Cancelar ahora"
+
+# Customer checkout: legal document list heading.
+msgid "Rechtsdokumente:"
+msgstr "Documentos legales:"
