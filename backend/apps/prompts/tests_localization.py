@@ -200,10 +200,41 @@ class LocalizedPromptRenderingTests(SimpleTestCase):
                                         f'Missing app translation: {app_id} / {field} / {language}')
 
     def test_public_marketing_faq_and_account_paths_have_all_locales(self):
-        import re
         root = Path(__file__).resolve().parents[3] / 'marketing'
         source = (root / 'src/locale.js').read_text(encoding='utf-8')
-        match = re.search(r'^export const marketingCatalog=(\{[^\n]+\});
+        rows = source.splitlines()
+        base = next(line for line in rows if line.startswith('export const marketingCatalog='))
+        catalog = json.loads(base.split('=', 1)[1].removesuffix(';'))
+        prefix = 'Object.assign(marketingCatalog,'
+        for row in rows:
+            if row.startswith(prefix) and row.endswith(');'):
+                catalog.update(json.loads(row[len(prefix):-2]))
+        def collect(node):
+            if isinstance(node, str):
+                return [node]
+            if isinstance(node, list):
+                return [text for item in node for text in collect(item)]
+            if isinstance(node, dict):
+                return [text for item in node.values() for text in collect(item)]
+            return []
+        faq = json.loads((root / 'src/faq.json').read_text(encoding='utf-8'))
+        required = set(collect(faq))
+        required.update({
+            'Zahlung wird bestätigt.', 'Zum Kundenkonto →',
+            'Zur Startseite →', 'Zur Anmeldung →',
+            'Zur Marketingseite →', 'Einfach starten. Kostenlos nutzen.',
+            'PROMPTFINISHER Free starten →', 'Free kennenlernen →',
+            '← Zurück zur Startseite',
+        })
+        for value in required:
+            for language in SUPPORTED - {'de'}:
+                with self.subTest(label=value, language=language):
+                    self.assertTrue(
+                        catalog.get(value, {}).get(language),
+                        f'Missing marketing copy: {value!r} ({language})'
+                    )
+
+    def test_all_pro_task_titles_have_native_language_variants(self):
         data = json.loads((Path(__file__).resolve().parent
                            / 'data/pm20_golden_logic.json').read_text(encoding='utf-8'))
         catalogue = _product_dictionary()
