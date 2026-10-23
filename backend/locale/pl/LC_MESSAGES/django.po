@@ -3690,3 +3690,48 @@ msgstr "Eksport jest przygotowywany w tle. Ta strona odświeża się automatyczn
 
 msgid "Der Zahlungsdienst ist derzeit noch nicht verfügbar."
 msgstr "Usługa płatności jest obecnie niedostępna."
+
+msgid "Zugriff verweigert"
+msgstr "Odmowa dostępu"
+
+msgid "Für diese Ansicht fehlt die erforderliche Berechtigung."
+msgstr "Nie masz uprawnień do wyświetlenia tej strony."
+
+msgid "Zurück zur Übersicht"
+msgstr "Wróć do przeglądu"
+
+msgid "Ansicht konnte nicht geladen werden"
+msgstr "Nie udało się załadować strony"
+
+msgid "Beim Laden der Daten ist ein interner Fehler aufgetreten. Bitte versuchen Sie es erneut."
+msgstr "Podczas wczytywania danych wystąpił błąd wewnętrzny. Spróbuj ponownie."
+
+msgid "Erneut laden"
+msgstr "Załaduj ponownie"
+
+msgid "Seitennavigation"
+msgstr "Nawigacja po stronach"
+
+msgid "von"
+msgstr "z"
+
+msgid "Datensätze"
+msgstr "Rekordy"
+
+msgid "Erste Seite"
+msgstr "Pierwsza strona"
+
+msgid "Erste"
+msgstr "Pierwsza"
+
+msgid "Vorherige Seite"
+msgstr "Poprzednia strona"
+
+msgid "Nächste Seite"
+msgstr "Następna strona"
+
+msgid "Letzte Seite"
+msgstr "Ostatnia strona"
+
+msgid "Letzte"
+msgstr "Ostatnia"
