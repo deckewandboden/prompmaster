@@ -10,6 +10,7 @@ from apps.proaccess.services import active_product_assignment, has_internal_staf
 
 from .composer_core import PromptValidationError
 from .free_legacy import compose_free_legacy
+from .prompt_localization import render_localized_prompt, select_prompt_language
 from .free_surface import FREE_SURFACE_PRO_CONTRACTS
 from .models import PromptLegacyContract
 from .services import (
@@ -160,6 +161,10 @@ def compose(request):
 
     product = str(body.get('product') or 'PRO').upper()
     try:
+        try:
+            prompt_language = select_prompt_language(request, body)
+        except ValueError as exc:
+            raise PromptValidationError(str(exc), field='language', code='choice') from exc
         task_id = str(body.get('task_id') or '').strip()
         if not task_id:
             raise PromptValidationError('task_id fehlt.', field='task_id', code='required')
@@ -248,6 +253,38 @@ def compose(request):
                 'Unbekanntes Produkt.',
                 field='product',
                 code='choice',
+            )
+        # Preserve the authoritative German spec and all business/security
+        # checks. Only the final presentation of the generated prompt changes.
+        if prompt_language != 'de':
+            if product == 'FREE' or (product == 'PRO' and legacy):
+                current = (contract if product == 'FREE' else legacy)
+                runtime = (current.payload or {}).get('runtime_contract') or {}
+                title = current.title
+                family = runtime.get('family') or 'analysis'
+                application_name = runtime.get('app_name') or result_payload['app_code']
+                max_chars = None
+            else:
+                spec = (
+                    build_free_surface_pro_spec(task_id)
+                    if task_id in FREE_SURFACE_PRO_CONTRACTS
+                    else build_spec(task_id)
+                )
+                version = spec['version']
+                title = version['title']
+                family = version['family']
+                application_name = spec['application']['name']
+                max_chars = version.get('max_chars')
+            result_payload = render_localized_prompt(
+                language=prompt_language,
+                result=result_payload,
+                product=product,
+                task_title=title,
+                task_id=task_id,
+                application=application_name,
+                family=family,
+                selections=payload,
+                maximum_chars=max_chars,
             )
     except PromptValidationError as exc:
         status = 403 if exc.code in {'email_verification_required', 'second_factor_required', 'license_required', 'device_required', 'entitlement_required', 'tier_required'} else 400

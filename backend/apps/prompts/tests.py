@@ -481,6 +481,58 @@ class PromptApiTests(TestCase):
         self.assertIn('Was ist neu?', body['result']['prompt'])
         self.assertEqual(response['Cache-Control'], 'no-store')
 
+    def test_free_composer_emits_selected_locale_and_preserves_source_data(self):
+        base = {
+            'product': 'FREE', 'task_id': 'teams_notes',
+            'microsoft_tier': 'chatbasic',
+            'language': 'fr',
+            'input': {
+                'primary': 'Besprechungsnotizen zu Budget und Terminplan',
+                'secondary': '',
+                'audience': 'self',
+                'focus': [], 'output': 'bullets',
+                'tone': 'professional', 'detail': 'short',
+            },
+        }
+        response = self.client.post('/api/v1/prompts/compose/',
+                                    data=json.dumps(base), content_type='application/json')
+        self.assertEqual(response.status_code, 200)
+        result = response.json()['result']
+        self.assertEqual(result['language'], 'fr')
+        self.assertIn('Préparer le compte rendu de réunion', result['prompt'])
+        self.assertIn('Besprechungsnotizen zu Budget und Terminplan', result['prompt'])
+        self.assertIn('Rédigez une réponse', result['prompt'])
+        self.assertNotIn('Arbeite dabei in folgender Reihenfolge', result['prompt'])
+        self.assertEqual(response['Cache-Control'], 'no-store')
+        base.pop('language')
+        default = self.client.post('/api/v1/prompts/compose/',
+                                   data=json.dumps(base), content_type='application/json')
+        self.assertEqual(default.status_code, 200)
+        self.assertIn('Arbeite dabei in folgender Reihenfolge', default.json()['result']['prompt'])
+
+    @patch('apps.prompts.api._require_pro_access')
+    def test_pro_composer_language_from_cookie(self, access):
+        request = {
+            'product': 'PRO',
+            'task_id': 'PM20-001',
+            'microsoft_tier': 'chatbasic',
+            'input': {
+                'fields': {'Fragestellung': 'Was ist neu?', 'Kontext': 'PROMPTFINISHER'},
+                'audience': 'Management', 'focus': ['Primärquellen'],
+                'output': 'Fundierte Antwort', 'source': 'webwork',
+                'tone': 'professional', 'detail': 'standard',
+            },
+        }
+        self.client.cookies['promptfinisher_language'] = 'it'
+        response = self.client.post('/api/v1/prompts/compose/',
+                                    data=json.dumps(request), content_type='application/json')
+        self.assertEqual(response.status_code, 200)
+        result = response.json()['result']
+        self.assertEqual(result['language'], 'it')
+        self.assertIn('Controllo qualità finale', result['prompt'])
+        self.assertIn('Was ist neu?', result['prompt'])
+        self.assertNotIn('Führe abschließend diese Qualitätsprüfung', result['prompt'])
+
     @patch('apps.prompts.api._require_pro_access')
     def test_power_automate_sync_requires_both_systems_then_composes(self, access):
         base = {

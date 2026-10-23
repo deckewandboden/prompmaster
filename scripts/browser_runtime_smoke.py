@@ -718,13 +718,29 @@ def _browser_login_password_only(page, base: str, email: str, password: str, exp
         raise AssertionError(f'password-only login for {email} ended at {page.url}, expected {expected_path}')
 
 
-def _check_backend_page(page, base: str, path: str, width: int, label: str) -> None:
-    # Admin/ops pages can keep background requests in flight; browser readiness
-    # is based on the server-rendered DOM, not the absence of network activity.
-    response = page.goto(base + path.lstrip('/'), wait_until='domcontentloaded', timeout=60000)
-    if not response or response.status != 200:
-        status = response.status if response else 'no response'
-        raise AssertionError(f'{label} {width}px: HTTP {status} for {path}')
+def _check_backend_page(page, base: str, path: str, width: int, label: str, *,
+                        navigate: bool = True) -> None:
+    # The same route can be checked at several viewport widths without
+    # repeatedly invoking expensive admin/ops system queries. Load at least
+    # once in each mobile and desktop initialization mode.
+    expected = base + path.lstrip('/')
+    if navigate:
+        from playwright.sync_api import TimeoutError as PlaywrightTimeoutError
+        # A temporarily saturated test server must not turn into a skipped
+        # assertion: retry a timed-out request only once and still require 200.
+        for attempt in range(2):
+            try:
+                response = page.goto(expected, wait_until='domcontentloaded', timeout=60000)
+                break
+            except PlaywrightTimeoutError:
+                if attempt:
+                    raise
+                page.goto('about:blank', wait_until='commit', timeout=10000)
+        if not response or response.status != 200:
+            status = response.status if response else 'no response'
+            raise AssertionError(f'{label} {width}px: HTTP {status} for {path}')
+    elif page.url != expected:
+        raise AssertionError(f'{label} {width}px: expected responsive route {expected}, got {page.url}')
     if '/auth/login/' in page.url or '/auth/2fa/' in page.url:
         raise AssertionError(f'{label} {width}px: unexpected auth redirect for {path}')
 
@@ -1518,6 +1534,62 @@ def _browser_product_locale_acceptance(page, base: str, product: str) -> None:
             )
             page.locator('[data-close="generalProModal"]').first.click()
 
+            # A translated UI is not sufficient: verify the authoritative
+            # server returns the selected language in the actual prompt body.
+            localized = page.evaluate(
+                """async (lang) => {
+                    const csrf = document.querySelector('meta[name="pm-free-compose"]')?.dataset.csrf;
+                    if (!csrf) return {status:0, error:'missing Free CSRF marker'};
+                    const response = await fetch('/api/v1/prompts/free/compose/', {
+                      method:'POST', credentials:'same-origin',
+                      headers:{'Content-Type':'application/json','X-CSRFToken':csrf},
+                      body:JSON.stringify({
+                        product:'FREE', language:lang, task_id:'teams_notes',
+                        microsoft_tier:'chatbasic',
+                        input:{
+                          primary:'Meeting notes: Alpha decision and deadline 2026',
+                          secondary:'', audience:'self', focus:[],
+                          output:'meeting_notes', detail:'short', tone:'professional'
+                        }
+                      })
+                    });
+                    return {status:response.status, body:await response.json()};
+                }""",
+                code,
+            )
+            if localized['status'] != 200 or not localized['body'].get('ok'):
+                raise AssertionError(f"Free {code}: localized server compose failed: {localized}")
+            localized_result = localized['body']['result']
+            if code == 'de':
+                if 'Arbeite dabei in folgender Reihenfolge' not in localized_result['prompt']:
+                    raise AssertionError('German legacy prompt must remain unchanged')
+            else:
+                if localized_result.get('language') != code:
+                    raise AssertionError(f"Free {code}: server returned wrong prompt locale")
+                if 'Arbeite dabei in folgender Reihenfolge' in localized_result['prompt']:
+                    raise AssertionError(f"Free {code}: German prompt instructions leaked")
+                if 'Meeting notes: Alpha decision and deadline 2026' not in localized_result['prompt']:
+                    raise AssertionError(f"Free {code}: supplied context not preserved")
+
+            if code == 'en':
+                # Exercise the real Free UI-to-server bridge, not just direct API calls.
+                page.locator('[data-appwrap="chat"] .app-card').click()
+                page.locator('[data-task="chat_sum"]').click()
+                page.locator('#goalInput').fill('English Free UI locale check')
+                page.locator('#sourceContextInput').fill('Only these real notes')
+                page.locator(
+                    'label.option:has(input[name="audience"][value="self"]) > span'
+                ).click()
+                page.wait_for_function(
+                    """() => {
+                        const value=document.querySelector('#promptOutput')?.value || '';
+                        return value.includes('English Free UI locale check')
+                          && value.includes('Summarize')
+                          && !value.includes('Arbeite dabei in folgender Reihenfolge');
+                    }""",
+                    timeout=15000,
+                )
+
             if code == 'en':
                 # The DB-backed, dynamically constructed Pro-locked app dialog
                 # must be localized too, not only the static comparison modal.
@@ -1546,6 +1618,68 @@ def _browser_product_locale_acceptance(page, base: str, product: str) -> None:
                     timeout=15000,
                 )
                 page.locator('[data-close="proModal"]').first.click()
+
+        else:
+            # Pro must also return a native-language *prompt body*, not merely
+            # translated UI labels. Use a real authenticated compose request.
+            localized = page.evaluate(
+                """async (lang) => {
+                    const embedded = [...document.scripts].find(s => s.textContent.includes("const PM_CSRF="));
+                    const csrf = embedded?.textContent.match(/const PM_CSRF='([^']+)'/)?.[1] || '';
+                    if (!csrf) return {status:0, error:'missing Pro CSRF token'};
+                    const response = await fetch('/api/v1/prompts/compose/', {
+                      method:'POST', credentials:'same-origin',
+                      headers:{'Content-Type':'application/json','X-CSRFToken':csrf},
+                      body:JSON.stringify({
+                        product:'PRO', language:lang, task_id:'PM20-001',
+                        microsoft_tier:'chatbasic',
+                        input:{
+                          fields:{'Fragestellung':'Check the support quality trends',
+                                  'Kontext':'Reviewed support dataset only'},
+                          audience:'Management',
+                          focus:['Primärquellen'],
+                          output:'Fundierte Antwort',
+                          source:'webwork',
+                          detail:'standard',
+                          tone:'professional'
+                        }
+                      })
+                    });
+                    return {status:response.status, body:await response.json()};
+                }""",
+                code,
+            )
+            if localized['status'] != 200 or not localized['body'].get('ok'):
+                raise AssertionError(f"Pro {code}: localized server compose failed: {localized}")
+            result = localized['body']['result']
+            if code == 'de':
+                if 'Arbeite dabei in folgender Reihenfolge' not in result['prompt']:
+                    raise AssertionError('German Pro composer contract unexpectedly changed')
+            else:
+                if result.get('language') != code:
+                    raise AssertionError(f"Pro {code}: returned wrong prompt locale")
+                if 'Arbeite dabei in folgender Reihenfolge' in result['prompt']:
+                    raise AssertionError(f"Pro {code}: German instructions leaked")
+                if 'Check the support quality trends' not in result['prompt']:
+                    raise AssertionError(f"Pro {code}: supplied task context missing")
+                if 'Reviewed support dataset only' not in result['prompt']:
+                    raise AssertionError(f"Pro {code}: supplied source context missing")
+
+        if product == 'pro' and code == 'it':
+            # Regression for the reported Italian Pro screen: the actual
+            # textarea must show the server-generated Italian prompt.
+            page.locator('[data-app="copilot_chat"]').click()
+            page.locator('[data-task="PM20-001"]').click()
+            page.locator('#inputGrid .task-input').first.fill('Italian Pro UI locale check')
+            page.wait_for_function(
+                """() => {
+                    const value=document.querySelector('#promptOutput')?.value || '';
+                    return value.includes('Italian Pro UI locale check')
+                      && value.includes('Produci una risposta chiara')
+                      && !value.includes('Arbeite dabei in folgender Reihenfolge');
+                }""",
+                timeout=15000,
+            )
 
         metrics = page.evaluate(
             """() => {
@@ -3275,10 +3409,16 @@ def run_backend_ui_smoke(browser, fixture=None) -> None:
                     page.wait_for_function("document.body.dataset.pmv2Ready === '1'", timeout=15000)
                     _check_product_v2_shell(page, 'Pro V2 responsive shell', width)
 
-            for width, height in ((360, 800), (390, 844), (768, 1024), (1440, 1000), (1920, 1080)):
-                page.set_viewport_size({'width': width, 'height': height})
-                for route, label in routes:
-                    _check_backend_page(page, base, route, width, label)
+            for route, label in routes:
+                for width, height in ((360, 800), (390, 844), (768, 1024), (1440, 1000), (1920, 1080)):
+                    page.set_viewport_size({'width': width, 'height': height})
+                    # Exercise actual navigation once on mobile and once on
+                    # desktop; all five breakpoints retain full geometry,
+                    # actions, CSRF, branding and responsive checks.
+                    _check_backend_page(
+                        page, base, route, width, label,
+                        navigate=width in (360, 1440),
+                    )
 
             if page_errors:
                 raise AssertionError(f'{role}: browser JS error: {page_errors[0]}')
