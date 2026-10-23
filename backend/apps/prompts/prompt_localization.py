@@ -3045,18 +3045,24 @@ def render_localized_prompt(
             literal = str(value or '').strip()
             if not literal:
                 continue
-            role = copy['primary'] if key == 'primary' else copy['secondary'] if key == 'secondary' else f"{copy['fields']} {index}"
+            role = (copy['primary'] if key == 'primary' else copy['secondary'] if key == 'secondary' else (_translated(str(key), language) or f"{copy['fields']} {index}"))
             supplied.append(f"{role}: «{literal}»")
     if supplied:
         pieces.append(copy['input'] + ':\n' + '\n'.join(supplied))
     if not maximum_chars:
         focus = selections.get('focus') or []
         if isinstance(focus, list):
-            translated = [_translated(str(x), language) for x in focus]
-            if translated and all(translated):
+            # Never silently drop a selected priority when one custom value
+            # has no reviewed dictionary entry. Preserve its literal as data.
+            translated = [
+                _translated(str(value), language) or f'«{str(value)}»'
+                for value in focus if str(value or '').strip()
+            ]
+            if translated:
                 pieces.append(f"{copy['focus']}: " + ', '.join(translated))
-        audience = _translated(str(selections.get('audience') or ''), language)
-        if audience:
+        audience_raw = str(selections.get('audience') or '').strip()
+        if audience_raw:
+            audience = _translated(audience_raw, language) or f'«{audience_raw}»'
             pieces.append(f"{copy['audience']}: {audience}")
         selected_output = str(selections.get('output') or '').strip()
         if selected_output:
