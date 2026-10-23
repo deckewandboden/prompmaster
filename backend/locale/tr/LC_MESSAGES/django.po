@@ -3721,3 +3721,39 @@ msgstr "2FA'yı etkinleştir"
 
 msgid "Nach erfolgreicher Aktivierung werden einmalig Recovery-Codes angezeigt."
 msgstr "Etkinleştirmeden sonra kurtarma kodları yalnızca bir kez gösterilir."
+
+msgid "Wir senden einen zeitlich begrenzten Link an die hinterlegte E-Mail-Adresse."
+msgstr "Kayıtlı e-posta adresinize süreli bir bağlantı göndereceğiz."
+
+msgid "Link anfordern"
+msgstr "Bağlantı iste"
+
+msgid "Anfrage verarbeitet"
+msgstr "İstek işlendi"
+
+msgid "Falls ein aktives Konto zu dieser Adresse existiert, wurde ein zeitlich begrenzter Link zum Zurücksetzen versendet."
+msgstr "Bu adrese bağlı etkin bir hesap varsa şifre sıfırlama bağlantısı gönderilmiştir."
+
+msgid "Legen Sie ein neues Passwort für Ihr PROMPTFINISHER-Konto fest."
+msgstr "PROMPTFINISHER hesabınız için yeni şifre belirleyin."
+
+msgid "Passwort speichern"
+msgstr "Şifreyi kaydet"
+
+msgid "Passwort geändert"
+msgstr "Şifre değiştirildi"
+
+msgid "Link ungültig"
+msgstr "Geçersiz bağlantı"
+
+msgid "Sie können sich jetzt mit dem neuen Passwort anmelden."
+msgstr "Artık yeni şifrenizle oturum açabilirsiniz."
+
+msgid "Der Link ist ungültig, abgelaufen oder wurde bereits verwendet. Fordern Sie bei Bedarf einen neuen Link an."
+msgstr "Bağlantı geçersiz, süresi dolmuş veya önceden kullanılmış. Gerekirse yeni bağlantı isteyin."
+
+msgid "Neuen Link anfordern"
+msgstr "Yeni bağlantı iste"
+
+msgid "Möchten Sie die aktuelle Sitzung beenden?"
+msgstr "Geçerli oturumu kapatmak istiyor musunuz?"
