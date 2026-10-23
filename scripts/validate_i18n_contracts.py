@@ -118,6 +118,31 @@ def main() -> None:
         if duplicates:
             raise SystemExit(f'I18N FAIL: duplicate product keys: {sorted(duplicates)!r}')
         catalog.update(more)
+    # A translation catalog cannot be called complete when any individual
+    # visible label silently falls back to German in one of the nine locales.
+    # Check all entries, not only the 194 task schemas or reviewed examples.
+    token_pattern = re.compile(r'%\\([A-Za-z_][A-Za-z0-9_]*\\)s')
+    checked_product_variants = 0
+    for source, variants in catalog.items():
+        expected = sorted(token_pattern.findall(source))
+        for code in LOCALES:
+            translated = variants.get(code, '')
+            if not translated.strip():
+                raise SystemExit(
+                    f'I18N FAIL {code}: empty product dictionary value {source!r}'
+                )
+            actual = sorted(token_pattern.findall(translated))
+            if actual != expected:
+                raise SystemExit(
+                    f'I18N FAIL {code}: product placeholders mismatch '
+                    f'{source!r}: {expected} != {actual}'
+                )
+            checked_product_variants += 1
+    print(
+        f'I18N ALL PRODUCT KEYS PASS: {len(catalog)} source strings / '
+        f'{checked_product_variants} localized values'
+    )
+
     for brand in BRAND_LABELS:
         if brand not in catalog:
             raise SystemExit(f'I18N FAIL: missing protected product label {brand}')
@@ -535,6 +560,40 @@ def main() -> None:
     # Composite V2 strings are created after initial translation. They must
     # have complete locale variants and explicit interpolation at their
     # rendering sites; a nonempty dictionary alone cannot verify this.
+    modal_and_rating = (
+        'Diese Anwendung ist mit der aktuell ausgewählten Copilot-Stufe nicht freigeschaltet.',
+        'Die Anwendung ist grundsätzlich verfügbar, aber diese konkrete Aufgabe benötigt eine höhere Copilot-Stufe.',
+        'Wenn Microsoft für Ihr Konto diese Stufe anzeigt, wählen Sie oben die entsprechende Kachel aus.',
+        'Wenn diese Stufe für Ihr Konto bereits vorhanden ist, wählen Sie sie oben aus.',
+        'Wie hilfreich war dieser Prompt?',
+        'Optional: Was sollten wir verbessern?',
+        'Feedback ergänzen', 'Feedback senden',
+        'Bewertung wird gespeichert …',
+        'Bewertung und optionales Feedback wurden gespeichert.',
+        'Feedback wird gespeichert …',
+        'Kopiert ✓',
+    )
+    for phrase in modal_and_rating:
+        if phrase not in catalog:
+            raise SystemExit(f'I18N FAIL: missing Pro modal/rating string {phrase!r}')
+    composite_pro = (
+        '%(tier)s erforderlich', 'Für %(target)s optimiert',
+        '%(stars)s ★ gespeichert.',
+        'Bewertung konnte nicht gespeichert werden: %(error)s',
+        'Feedback konnte nicht gespeichert werden: %(error)s',
+        'Für %(app)s ist in dieser PRO-Version mindestens %(tier)s erforderlich.',
+        'Aufgabe: %(task)s.', 'Erforderliche Copilot-Stufe: %(tier)s.',
+    )
+    for phrase in composite_pro:
+        if phrase not in catalog:
+            raise SystemExit(f'I18N FAIL: missing Pro interpolated text {phrase!r}')
+    browser_script = (ROOT / 'backend/static/js/promptfinisher_product_i18n.20261011.js').read_text(encoding='utf-8')
+    for required in ('const localizeLicenseRows =', "parent?.id === 'licenseModalTitle'",
+                     "parent?.id === 'promptMeta'", "parent?.id === 'pmRatingState'"):
+        if required not in browser_script:
+            raise SystemExit(f'I18N FAIL: composite Pro renderer missing {required}')
+    print('I18N PRO MODALS/RATING PASS: translated statuses and safe interpolations')
+
     composite_v2 = {
         'Pflichtfelder fehlen:': None,
         '%(workspace)s öffnen →': '%(workspace)s',
