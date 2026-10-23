@@ -7,7 +7,8 @@ RUN --mount=type=secret,id=pf_staging_ca,required=false \
       export CURL_CA_BUNDLE=/tmp/pf-staging-ca-combined.pem; \
       trap 'rm -f /tmp/pf-staging-ca-combined.pem' EXIT; \
     fi; \
-    apk add --no-cache bash restic ca-certificates tzdata su-exec \
+    # Fail the image build unless the patched Brotli runtime is available.
+    apk add --no-cache bash restic ca-certificates tzdata su-exec 'brotli-libs>=1.2.1-r0' \
     && rm -f /usr/local/bin/gosu
 COPY backup.sh /usr/local/bin/backup.sh
 RUN chmod 0755 /usr/local/bin/backup.sh
