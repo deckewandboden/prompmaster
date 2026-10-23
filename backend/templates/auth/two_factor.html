@@ -1,10 +1,10 @@
-{% extends 'base.html' %}{% load static %}{% block title %}Zwei-Faktor-Anmeldung · PROMPTFINISHER{% endblock %}{% block body %}
+{% extends 'base.html' %}{% load static i18n %}{% block title %}{% translate 'Zwei-Faktor-Anmeldung' %} · PROMPTFINISHER{% endblock %}{% block body %}
 <div class="login-wrap">
   <div class="login-card auth-login-card">
     <div class="login-logo"><img src="{% static 'brand/promptfinisher-logo-hq.png' %}" width="239" height="47" alt="PROMPTFINISHER by netstyle"></div>
     <div class="auth-heading">
-      <h1>Zwei-Faktor-Anmeldung</h1>
-      <p class="muted">Geben Sie den Code aus Ihrer Authenticator-App oder einen gültigen Recovery-Code ein.</p>
+      <h1>{% translate "Zwei-Faktor-Anmeldung" %}</h1>
+      <p class="muted">{% translate "Geben Sie den Code aus Ihrer Authenticator-App oder einen gültigen Recovery-Code ein." %}</p>
     </div>
     {% if error %}<div class="alert danger auth-error">{{ error }}</div>{% endif %}
     <form method="post" class="form auth-login-form" novalidate>
@@ -14,7 +14,7 @@
         {{ form.code }}
       </label>
       {{ form.code.errors }}
-      <button type="submit" class="btn primary auth-submit">Bestätigen</button>
+      <button type="submit" class="btn primary auth-submit">{% translate "Bestätigen" %}</button>
     </form>
   </div>
 </div>
