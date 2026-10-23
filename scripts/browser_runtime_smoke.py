@@ -1518,6 +1518,43 @@ def _browser_product_locale_acceptance(page, base: str, product: str) -> None:
             )
             page.locator('[data-close="generalProModal"]').first.click()
 
+            # A translated UI is not sufficient: verify the authoritative
+            # server returns the selected language in the actual prompt body.
+            localized = page.evaluate(
+                """async (lang) => {
+                    const csrf = document.querySelector('meta[name="pm-free-compose"]')?.dataset.csrf;
+                    if (!csrf) return {status:0, error:'missing Free CSRF marker'};
+                    const response = await fetch('/api/v1/prompts/free/compose/', {
+                      method:'POST', credentials:'same-origin',
+                      headers:{'Content-Type':'application/json','X-CSRFToken':csrf},
+                      body:JSON.stringify({
+                        product:'FREE', language:lang, task_id:'teams_notes',
+                        microsoft_tier:'chatbasic',
+                        input:{
+                          primary:'Meeting notes: Alpha decision and deadline 2026',
+                          secondary:'', audience:'self', focus:[],
+                          output:'meeting_notes', detail:'short', tone:'professional'
+                        }
+                      })
+                    });
+                    return {status:response.status, body:await response.json()};
+                }""",
+                code,
+            )
+            if localized['status'] != 200 or not localized['body'].get('ok'):
+                raise AssertionError(f"Free {code}: localized server compose failed: {localized}")
+            localized_result = localized['body']['result']
+            if code == 'de':
+                if 'Arbeite dabei in folgender Reihenfolge' not in localized_result['prompt']:
+                    raise AssertionError('German legacy prompt must remain unchanged')
+            else:
+                if localized_result.get('language') != code:
+                    raise AssertionError(f"Free {code}: server returned wrong prompt locale")
+                if 'Arbeite dabei in folgender Reihenfolge' in localized_result['prompt']:
+                    raise AssertionError(f"Free {code}: German prompt instructions leaked")
+                if 'Meeting notes: Alpha decision and deadline 2026' not in localized_result['prompt']:
+                    raise AssertionError(f"Free {code}: supplied context not preserved")
+
             if code == 'en':
                 # The DB-backed, dynamically constructed Pro-locked app dialog
                 # must be localized too, not only the static comparison modal.
