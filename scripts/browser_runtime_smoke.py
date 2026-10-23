@@ -1584,6 +1584,51 @@ def _browser_product_locale_acceptance(page, base: str, product: str) -> None:
                 )
                 page.locator('[data-close="proModal"]').first.click()
 
+        else:
+            # Pro must also return a native-language *prompt body*, not merely
+            # translated UI labels. Use a real authenticated compose request.
+            localized = page.evaluate(
+                """async (lang) => {
+                    const csrf = typeof PM_CSRF === 'string' ? PM_CSRF : '';
+                    if (!csrf) return {status:0, error:'missing Pro CSRF token'};
+                    const response = await fetch('/api/v1/prompts/compose/', {
+                      method:'POST', credentials:'same-origin',
+                      headers:{'Content-Type':'application/json','X-CSRFToken':csrf},
+                      body:JSON.stringify({
+                        product:'PRO', language:lang, task_id:'PM20-001',
+                        microsoft_tier:'chatbasic',
+                        input:{
+                          fields:{'Fragestellung':'Check the support quality trends',
+                                  'Kontext':'Reviewed support dataset only'},
+                          audience:'Management',
+                          focus:['Primärquellen'],
+                          output:'Fundierte Antwort',
+                          source:'webwork',
+                          detail:'standard',
+                          tone:'professional'
+                        }
+                      })
+                    });
+                    return {status:response.status, body:await response.json()};
+                }""",
+                code,
+            )
+            if localized['status'] != 200 or not localized['body'].get('ok'):
+                raise AssertionError(f"Pro {code}: localized server compose failed: {localized}")
+            result = localized['body']['result']
+            if code == 'de':
+                if 'Arbeite dabei in folgender Reihenfolge' not in result['prompt']:
+                    raise AssertionError('German Pro composer contract unexpectedly changed')
+            else:
+                if result.get('language') != code:
+                    raise AssertionError(f"Pro {code}: returned wrong prompt locale")
+                if 'Arbeite dabei in folgender Reihenfolge' in result['prompt']:
+                    raise AssertionError(f"Pro {code}: German instructions leaked")
+                if 'Check the support quality trends' not in result['prompt']:
+                    raise AssertionError(f"Pro {code}: supplied task context missing")
+                if 'Reviewed support dataset only' not in result['prompt']:
+                    raise AssertionError(f"Pro {code}: supplied source context missing")
+
         metrics = page.evaluate(
             """() => {
                 const brand = document.querySelector('.pmv2-brand img');
