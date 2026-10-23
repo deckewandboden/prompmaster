@@ -2,7 +2,7 @@
 from django.test import SimpleTestCase, RequestFactory
 
 from .free_surface import FREE_SURFACE_PRO_CONTRACTS
-from .prompt_localization import _product_dictionary, SURFACE_TASK_TITLES, FAMILY_METHODS, STYLE_MODIFIERS
+from .prompt_localization import _product_dictionary, SURFACE_TASK_TITLES, FAMILY_METHODS, STYLE_MODIFIERS, FREE_INTENTS, SOURCE_RULES, _output_label
 from pathlib import Path
 import json
 
@@ -56,6 +56,40 @@ class LocalizedPromptRenderingTests(SimpleTestCase):
         self.assertIn('Priorisiere Aufgaben Alpha und Beta', result['prompt'])
         self.assertIn('Contrôle qualité final', result['prompt'])
         self.assertNotIn('Original', result['prompt'])
+
+    def test_all_sixteen_free_intents_are_localized_and_task_specific(self):
+        self.assertEqual(len(FREE_INTENTS), 16)
+        for task_id, variants in FREE_INTENTS.items():
+            for lang in SUPPORTED - {'de'}:
+                with self.subTest(task=task_id, lang=lang):
+                    self.assertGreater(len(variants[lang].strip()), 45)
+        example = render_localized_prompt(
+            language='en',
+            result={'prompt': 'German baseline', 'ready': True},
+            product='FREE', task_id='teams_notes',
+            task_title='Nachbereitung formulieren',
+            application='Teams', family='summarize',
+            selections={'primary': 'Internal minutes'},
+        )
+        self.assertIn('owners, dates and outstanding issues', example['prompt'])
+        self.assertIn('Internal minutes', example['prompt'])
+        self.assertNotIn('German baseline', example['prompt'])
+
+    def test_pro_source_and_output_choices_are_not_dropped(self):
+        result = render_localized_prompt(
+            language='it', result={'prompt': 'Original', 'ready': True},
+            product='PRO', task_id='PM20-006', task_title='Neue E-Mail verfassen',
+            application='Outlook', family='draft',
+            selections={
+                'fields': {'Thema / Aussage': 'Customer delivery update'},
+                'output': 'Fertige E-Mail', 'source': 'work',
+                'tone': 'professional', 'detail': 'standard', 'focus': ['Kernaussage'],
+            },
+        )
+        self.assertIn(SOURCE_RULES['work']['it'], result['prompt'])
+        self.assertIn(_output_label('Fertige E-Mail', 'it'), result['prompt'])
+        self.assertIn('Customer delivery update', result['prompt'])
+        self.assertNotIn('Arbeite dabei in folgender Reihenfolge', result['prompt'])
 
     def test_all_sixteen_free_titles_are_localized(self):
         self.assertEqual(len(FREE_TASK_TITLES), 16)
