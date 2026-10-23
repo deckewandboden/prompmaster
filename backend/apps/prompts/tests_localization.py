@@ -113,6 +113,30 @@ class LocalizedPromptRenderingTests(SimpleTestCase):
         self.assertIn(STYLE_MODIFIERS['professional']['en'], result['prompt'])
         self.assertIn(STYLE_MODIFIERS['short']['en'], result['prompt'])
 
+    def test_short_compact_pro_task_keeps_data_and_reports_truncation(self):
+        base = {'prompt': 'Originaler deutscher Prompt', 'ready': True}
+        ordinary = render_localized_prompt(
+            language='en', result=base, product='PRO',
+            task_id='PM20-171', task_title='Website aus Beschreibung erstellen',
+            application='Power Pages', family='build',
+            selections={'fields': {'Beschreibung': 'Blue brochure website'}},
+            maximum_chars=250,
+        )
+        self.assertLessEqual(len(ordinary['prompt']), 250)
+        self.assertIn('Blue brochure website', ordinary['prompt'])
+        self.assertTrue(ordinary['source_values_preserved'])
+        oversized = render_localized_prompt(
+            language='en', result=base, product='PRO',
+            task_id='PM20-171', task_title='Website aus Beschreibung erstellen',
+            application='Power Pages', family='build',
+            selections={'fields': {'Beschreibung': 'A' * 500}},
+            maximum_chars=250,
+        )
+        self.assertLessEqual(len(oversized['prompt']), 250)
+        self.assertIn('A', oversized['prompt'])
+        self.assertFalse(oversized['source_values_preserved'])
+        self.assertTrue(oversized['input_truncated'])
+
     def test_cookie_and_explicit_language_selection(self):
         request = RequestFactory().post('/api/v1/prompts/free/compose/')
         request.COOKIES['promptfinisher_language'] = 'fr'
