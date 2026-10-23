@@ -3780,3 +3780,39 @@ msgstr "Włącz 2FA"
 
 msgid "Nach erfolgreicher Aktivierung werden einmalig Recovery-Codes angezeigt."
 msgstr "Po aktywacji kody odzyskiwania zostaną wyświetlone tylko jeden raz."
+
+msgid "Wir senden einen zeitlich begrenzten Link an die hinterlegte E-Mail-Adresse."
+msgstr "Wyślemy ograniczony czasowo link na zarejestrowany adres e-mail."
+
+msgid "Link anfordern"
+msgstr "Poproś o link"
+
+msgid "Anfrage verarbeitet"
+msgstr "Zgłoszenie przetworzone"
+
+msgid "Falls ein aktives Konto zu dieser Adresse existiert, wurde ein zeitlich begrenzter Link zum Zurücksetzen versendet."
+msgstr "Jeśli dla tego adresu istnieje aktywne konto, wysłano czasowy link do zmiany hasła."
+
+msgid "Legen Sie ein neues Passwort für Ihr PROMPTFINISHER-Konto fest."
+msgstr "Ustaw nowe hasło do konta PROMPTFINISHER."
+
+msgid "Passwort speichern"
+msgstr "Zapisz hasło"
+
+msgid "Passwort geändert"
+msgstr "Hasło zmienione"
+
+msgid "Link ungültig"
+msgstr "Nieprawidłowy link"
+
+msgid "Sie können sich jetzt mit dem neuen Passwort anmelden."
+msgstr "Możesz teraz zalogować się nowym hasłem."
+
+msgid "Der Link ist ungültig, abgelaufen oder wurde bereits verwendet. Fordern Sie bei Bedarf einen neuen Link an."
+msgstr "Link jest nieprawidłowy, wygasł lub został już użyty. W razie potrzeby poproś o nowy."
+
+msgid "Neuen Link anfordern"
+msgstr "Poproś o nowy link"
+
+msgid "Möchten Sie die aktuelle Sitzung beenden?"
+msgstr "Czy chcesz zakończyć bieżącą sesję?"
