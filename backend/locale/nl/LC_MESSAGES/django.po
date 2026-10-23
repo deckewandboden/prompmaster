@@ -3686,3 +3686,48 @@ msgstr "De export wordt op de achtergrond gemaakt. Deze pagina wordt automatisch
 
 msgid "Der Zahlungsdienst ist derzeit noch nicht verfügbar."
 msgstr "De betaalservice is momenteel niet beschikbaar."
+
+msgid "Zugriff verweigert"
+msgstr "Toegang geweigerd"
+
+msgid "Für diese Ansicht fehlt die erforderliche Berechtigung."
+msgstr "Je hebt geen rechten om deze pagina te bekijken."
+
+msgid "Zurück zur Übersicht"
+msgstr "Terug naar overzicht"
+
+msgid "Ansicht konnte nicht geladen werden"
+msgstr "Pagina kon niet worden geladen"
+
+msgid "Beim Laden der Daten ist ein interner Fehler aufgetreten. Bitte versuchen Sie es erneut."
+msgstr "Bij het laden van de gegevens is een interne fout opgetreden. Probeer het opnieuw."
+
+msgid "Erneut laden"
+msgstr "Opnieuw laden"
+
+msgid "Seitennavigation"
+msgstr "Paginanavigatie"
+
+msgid "von"
+msgstr "van"
+
+msgid "Datensätze"
+msgstr "Records"
+
+msgid "Erste Seite"
+msgstr "Eerste pagina"
+
+msgid "Erste"
+msgstr "Eerste"
+
+msgid "Vorherige Seite"
+msgstr "Vorige pagina"
+
+msgid "Nächste Seite"
+msgstr "Volgende pagina"
+
+msgid "Letzte Seite"
+msgstr "Laatste pagina"
+
+msgid "Letzte"
+msgstr "Laatste"
