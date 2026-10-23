@@ -125,6 +125,13 @@
     const trimmed = (text || '').trim();
     if (!trimmed) return null;
     if (Object.hasOwn(TEXT, trimmed)) return t(trimmed);
+    // A server-generated locked-app badge combines the (canonical) licensing
+    // tier with a German status. Translate the suffix without changing the tier.
+    // Exact catalog matches above take precedence for official product names.
+    if (parent?.matches?.('span.tag.business') && trimmed.endsWith(' ERFORDERLICH')) {
+      return interpolate('%(tier)s erforderlich',
+        {tier:trimmed.slice(0, -' ERFORDERLICH'.length)});
+    }
     // Only specific generated UI elements may use interpolation. Never infer
     // patterns from user input, IDs, source data or finished prompt content.
     if (parent?.id === 'licenseModalTitle' && trimmed.endsWith(' erforderlich')) {
