@@ -3656,3 +3656,76 @@ msgstr "Se non indichi una data di cessazione, considereremo la disdetta per la 
 
 msgid "jetzt kündigen"
 msgstr "Disdici ora"
+
+# Portal security, licenses, privacy and customer preview: 24 synced labels.
+msgid "Unternehmensadministratoren richten anschließend verpflichtend 2FA ein."
+msgstr "Gli amministratori aziendali devono quindi configurare obbligatoriamente l'autenticazione a due fattori (2FA)."
+
+msgid "Mollie übernimmt die Zahlungsabwicklung; PROMPTFINISHER erzeugt keine eigene Rechnungsengine."
+msgstr "Mollie gestisce i pagamenti; PROMPTFINISHER non dispone di un motore di fatturazione proprio."
+
+msgid "2FA schützt den Zugriff mit einem zusätzlichen zeitbasierten Einmalcode."
+msgstr "La 2FA protegge l'accesso mediante un codice aggiuntivo monouso a validità temporanea."
+
+msgid "Die Suche bleibt auf Ihren eigenen Mandanten- und Lizenzbereich begrenzt."
+msgstr "La ricerca resta limitata alla propria azienda e all'ambito delle relative licenze."
+
+msgid "Ein Passwortwechsel erfolgt über einen zeitlich begrenzten, einmal verwendbaren Link an Ihre hinterlegte E-Mail-Adresse."
+msgstr "Il cambio della password avviene tramite un link temporaneo utilizzabile una sola volta inviato all'indirizzo e-mail registrato."
+
+msgid "Hier sehen Sie ausschließlich Nachrichten, die für Sie bzw. Ihr Unternehmen bestimmt sind. Interne netstyle-Notizen werden nicht im Kundenportal angezeigt."
+msgstr "Qui sono visibili solo i messaggi destinati a te o alla tua azienda. Le note interne di netstyle non sono visualizzate nel portale clienti."
+
+msgid "Wählen Sie die Lizenz, deren bestehende Restlaufzeit um weitere 365 Tage verlängert werden soll."
+msgstr "Seleziona la licenza la cui validità residua deve essere prorogata di altri 365 giorni."
+
+msgid "Die vorbereitete Lizenz wird Ihrem aktuell angemeldeten Benutzerkonto zugeordnet. Der Link kann anschließend nicht erneut verwendet werden."
+msgstr "La licenza preparata verrà assegnata all'account attualmente connesso. Il link non potrà essere riutilizzato."
+
+msgid "Gültig bis %(expiry)s. Der Link ist tenantgebunden, für genau diesen Benutzer bestimmt und nur einmal verwendbar."
+msgstr "Valido fino al %(expiry)s. Il link è legato all'azienda, destinato esclusivamente a questo utente e utilizzabile una sola volta."
+
+msgid "Jede neue Lizenz startet nach erfolgreicher Zahlung mit eigener 365-Tage-Laufzeit."
+msgstr "Ogni nuova licenza inizia il proprio periodo di validità di 365 giorni dopo il pagamento riuscito."
+
+msgid "V1: exakt ein aktiver Firmenadministrator. Eine Übertragung ist nur auf ein aktives Team-Mitglied möglich."
+msgstr "V1: esattamente un amministratore aziendale attivo. Il ruolo può essere trasferito solo a un membro attivo del team."
+
+msgid "Konto, Unternehmen, Benutzer-ID und Zeitpunkt werden automatisch zugeordnet. Optional kann eine für Ihr Konto sichtbare Lizenz mitgesendet werden. Passwörter, Tokens oder andere unnötige sensitive Daten werden nicht übernommen."
+msgstr "Account, azienda, ID utente e orario vengono associati automaticamente. Facoltativamente puoi includere una licenza visibile al tuo account. Password, token e altri dati sensibili non necessari non vengono trasmessi."
+
+msgid "Exportieren Sie die zu Ihrem Benutzer gespeicherten PROMPTFINISHER-Daten als JSON. Secrets und Daten anderer Benutzer werden nicht exportiert."
+msgstr "Esporta in JSON i dati PROMPTFINISHER registrati per il tuo utente. Non vengono esportati segreti o dati di altri utenti."
+
+msgid "Ihre Löschanfrage vom %(requested)s ist bereits erfasst. Status: %(status)s."
+msgstr "La tua richiesta di cancellazione del %(requested)s è già stata registrata. Stato: %(status)s."
+
+msgid "Sie können die Löschung Ihres PROMPTFINISHER-Kontos anfordern. Gesetzlich erforderliche Geschäfts- und Nachweisdaten werden nur im erforderlichen Umfang weiter aufbewahrt bzw. anonymisiert. Firmenadministratoren müssen ihre Administratorrolle vor der Verarbeitung übertragen."
+msgstr "Puoi richiedere la cancellazione dell'account PROMPTFINISHER. I dati commerciali e probatori richiesti per legge saranno conservati o anonimizzati solo nella misura necessaria. Gli amministratori aziendali devono prima trasferire il proprio ruolo."
+
+msgid "Aktuell ist keine freie Pro-Lizenz verfügbar. Kaufen Sie eine weitere Lizenz oder geben Sie eine bestehende Lizenz frei."
+msgstr "Non è disponibile alcuna licenza Pro libera. Acquista un'altra licenza oppure liberane una esistente."
+
+msgid "Für den Pro-Zugriff benötigen Sie eine aktive PROMPTFINISHER-Pro-Lizenz."
+msgstr "Per accedere a Pro è necessaria una licenza PROMPTFINISHER Pro attiva."
+
+msgid "Geben Sie einen Suchbegriff ein. Firmenadministratoren können nach Teammitgliedern, E-Mail-Adressen und Lizenzen suchen; andere Benutzer sehen ausschließlich ihre eigene Lizenzsicht."
+msgstr "Inserisci un termine di ricerca. Gli amministratori aziendali possono cercare membri del team, indirizzi e-mail e licenze; gli altri utenti vedono solo le proprie licenze."
+
+msgid "Die Daten entsprechen dem ausgewählten Kundenkonto und seiner Rolle. Dies ist eine Ansichtsvorschau, keine Kundensitzung: Interaktionen, Zahlungs- und Sicherheitsaktionen sind nicht ausführbar."
+msgstr "I dati corrispondono all'account cliente selezionato e al suo ruolo. È un'anteprima, non una sessione cliente: interazioni, pagamenti e azioni di sicurezza non sono disponibili."
+
+msgid "Nur aktive Benutzer dieses Unternehmens. Rollen und Zugriffsrechte werden berücksichtigt."
+msgstr "Solo gli utenti attivi di questa azienda. Sono rispettati ruoli e diritti di accesso."
+
+msgid "Änderungen erfolgen ausschließlich in den berechtigungsgeschützten Administrationsmasken mit Auditierung – nicht in der Kundenansicht."
+msgstr "Le modifiche sono possibili solo nelle schermate amministrative protette da autorizzazioni e sottoposte a verifica, non nella vista cliente."
+
+msgid "Dies ist eine Leseansicht. Passwort, Zwei-Faktor-Authentifizierung und persönliche Einstellungen kann nur der angemeldete Kundenbenutzer selbst ändern."
+msgstr "Questa vista è di sola lettura. Solo l'utente cliente connesso può modificare password, autenticazione a due fattori e impostazioni personali."
+
+msgid "Teamverwaltung, Bestellungen und Unternehmensdaten sind für diese Rolle nicht freigegeben."
+msgstr "Gestione del team, ordini e dati aziendali non sono accessibili a questo ruolo."
+
+msgid "Für echte Schreibaktionen oder einen vollständigen Login-Test muss ein eigener Nicht-Staff-Testkunde verwendet werden. Die Vorschau übernimmt niemals die Identität des Kunden."
+msgstr "Per vere operazioni di scrittura o un test completo di accesso occorre un cliente di test separato, senza privilegi di staff. L'anteprima non assume mai l'identità del cliente."
