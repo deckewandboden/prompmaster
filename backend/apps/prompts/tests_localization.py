@@ -176,6 +176,26 @@ class LocalizedPromptRenderingTests(SimpleTestCase):
         self.assertIn(STYLE_MODIFIERS['professional']['en'], result['prompt'])
         self.assertIn(STYLE_MODIFIERS['short']['en'], result['prompt'])
 
+    def test_localized_field_labels_and_mixed_custom_priorities_are_retained(self):
+        result = render_localized_prompt(
+            language='en', result={'prompt': 'German baseline', 'ready': True},
+            product='PRO', task_id='PM20-001',
+            task_title='Frage fundiert beantworten',
+            application='Copilot Chat', family='research',
+            selections={
+                'fields': {'Kontext': 'Board meeting notes'},
+                'focus': ['Primärquellen', 'My special focus'],
+                'audience': 'Our review team',
+            },
+        )
+        prompt = result['prompt']
+        self.assertIn('Context: «Board meeting notes»', prompt)
+        self.assertIn('Primary sources', prompt)
+        self.assertIn('«My special focus»', prompt)
+        self.assertIn('«Our review team»', prompt)
+        self.assertNotIn('German baseline', prompt)
+        self.assertTrue(result['source_values_preserved'])
+
     def test_short_compact_pro_task_keeps_data_and_reports_truncation(self):
         base = {'prompt': 'Originaler deutscher Prompt', 'ready': True}
         ordinary = render_localized_prompt(
