@@ -182,7 +182,75 @@ def _product_dictionary() -> dict:
     if not match:
         raise RuntimeError('Product translation catalog missing')
     translations = json.loads(match.group(1))
-    for match in re.finditer(r'^Object\.assign\(TEXT,(\{[^\n]+\})\);$', source, flags=re.M):
+    for match in re.finditer(r'^\s*Object\.assign\(TEXT,(\{[^\n]+\})\);, source, flags=re.M):
+        translations.update(json.loads(match.group(1)))
+    return translations
+
+
+def _translated(source: str, language: str) -> str:
+    """No German fallback for generated foreign-language instructions."""
+    if not source:
+        return ''
+    candidate = _product_dictionary().get(source, {}).get(language)
+    return str(candidate).strip() if candidate else ''
+
+
+def render_localized_prompt(
+    *, language: str, result: dict, product: str, task_title: str,
+    application: str, family: str, selections: dict, maximum_chars: int | None = None,
+) -> dict:
+    """Return result with translated instructions, preserving canonical metadata.
+
+    Locale-specific text is composed, not translated from arbitrary user data.
+    Missing task-title translations never result in a German instruction.
+    """
+    if language == 'de':
+        return result
+    copy = MESSAGES[language]
+    title = _translated(task_title, language) or copy['fallback']
+    pieces = [
+        f"{copy['task']}: {title}",
+        f"{copy['app']}: {application}",
+        f"{copy['requirements']}: {copy['intro']} {copy['output']}",
+    ]
+    supplied = []
+    raw_fields = selections.get('fields') or {}
+    if product == 'FREE':
+        raw_fields = {'primary': selections.get('primary'), 'secondary': selections.get('secondary')}
+    if isinstance(raw_fields, dict):
+        for index, (key, value) in enumerate(raw_fields.items(), 1):
+            literal = str(value or '').strip()
+            if not literal:
+                continue
+            role = copy['primary'] if key == 'primary' else copy['secondary'] if key == 'secondary' else f"{copy['fields']} {index}"
+            supplied.append(f"{role}: «{literal}»")
+    if supplied:
+        pieces.append(copy['input'] + ':\n' + '\n'.join(supplied))
+    if not maximum_chars:
+        focus = selections.get('focus') or []
+        if isinstance(focus, list):
+            translated = [_translated(str(x), language) for x in focus]
+            if translated and all(translated):
+                pieces.append(f"{copy['focus']}: " + ', '.join(translated))
+        audience = _translated(str(selections.get('audience') or ''), language)
+        if audience:
+            pieces.append(f"{copy['audience']}: {audience}")
+        output = _translated(str(selections.get('output') or ''), language)
+        if output:
+            pieces.append(f"{copy['format']}: {output}")
+        pieces.extend([
+            f"{copy['method']}: {copy.get(family, copy['analysis'])}",
+            copy['scope'],
+            f"{copy['quality']}: {copy['no_fabrication']}",
+        ])
+    prompt = '\n\n'.join(pieces)
+    if maximum_chars and len(prompt) > maximum_chars:
+        # Compact-tasks carry stringent output budgets; do not silently
+        # truncate user data in a way that would change the task.
+        prompt = f"{copy['task']}: {title}"[:maximum_chars]
+    return {**result, 'prompt': prompt, 'language': language,
+            'localization_mode': 'structured', 'source_values_preserved': True}
+, source, flags=re.M):
         translations.update(json.loads(match.group(1)))
     return translations
 
