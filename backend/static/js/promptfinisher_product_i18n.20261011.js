@@ -116,7 +116,7 @@
   const notUi = 'script,style,textarea,input,[contenteditable],'
     + '#promptOutput,#pmv2PromptOutput,.pmv2-review-value,'
     + '.user-supplied,.user-content,[data-pf-untranslated]';
-  const interpolate = (key, values) => t(key).replace(/%\\(([a-z]+)\\)s/g,
+  const interpolate = (key, values) => t(key).replace(/%\(([a-z]+)\)s/g,
     (token, name) => Object.hasOwn(values, name) ? values[name] : token);
   const matches = (text, parent) => {
     const trimmed = (text || '').trim();
@@ -136,7 +136,7 @@
       return trimmed.split(' · ').map(part => t(part)).join(' · ');
     }
     if (parent?.id === 'pmRatingState') {
-      const saved = trimmed.match(/^([1-5]) ★ gespeichert\\.$/);
+      const saved = trimmed.match(/^([1-5]) ★ gespeichert\.$/);
       if (saved) return interpolate('%(stars)s ★ gespeichert.', {stars:saved[1]});
       for (const [prefix, key] of [
         ['Bewertung konnte nicht gespeichert werden: ',
@@ -157,8 +157,8 @@
     const render = (li, template, values) => {
       const text = t(template);
       const fragment = document.createDocumentFragment();
-      for (const piece of text.split(/(%\\([a-z]+\\)s)/g).filter(Boolean)) {
-        const name = piece.match(/^%\\(([a-z]+)\\)s$/)?.[1];
+      for (const piece of text.split(/(%\([a-z]+\)s)/g).filter(Boolean)) {
+        const name = piece.match(/^%\(([a-z]+)\)s$/)?.[1];
         if (name && Object.hasOwn(values, name)) {
           const strong = document.createElement('strong');
           strong.textContent = t(values[name]);
