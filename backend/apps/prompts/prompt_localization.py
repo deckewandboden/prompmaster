@@ -1713,6 +1713,418 @@ SOURCE_RULES = {
 }
 
 
+# Reviewed audience and focus labels that are not in the UI dictionary.
+FOCUS_AUDIENCE_LABELS = {
+ "Primärquellen": {
+  "en": "Primary sources",
+  "fr": "Sources primaires",
+  "it": "Fonti primarie",
+  "es": "Fuentes primarias",
+  "pt": "Fontes primárias",
+  "nl": "Primaire bronnen",
+  "pl": "Źródła pierwotne",
+  "tr": "Birincil kaynaklar",
+  "ru": "Первоисточники"
+ },
+ "Widersprüche": {
+  "en": "Contradictions",
+  "fr": "Contradictions",
+  "it": "Contraddizioni",
+  "es": "Contradicciones",
+  "pt": "Contradições",
+  "nl": "Tegenstrijdigheden",
+  "pl": "Sprzeczności",
+  "tr": "Çelişkiler",
+  "ru": "Противоречия"
+ },
+ "Unterschiede": {
+  "en": "Differences",
+  "fr": "Différences",
+  "it": "Differenze",
+  "es": "Diferencias",
+  "pt": "Diferenças",
+  "nl": "Verschillen",
+  "pl": "Różnice",
+  "tr": "Farklar",
+  "ru": "Различия"
+ },
+ "Trends": {
+  "en": "Trends",
+  "fr": "Tendances",
+  "it": "Tendenze",
+  "es": "Tendencias",
+  "pt": "Tendências",
+  "nl": "Trends",
+  "pl": "Trendy",
+  "tr": "Eğilimler",
+  "ru": "Тенденции"
+ },
+ "Performance": {
+  "en": "Performance",
+  "fr": "Performance",
+  "it": "Prestazioni",
+  "es": "Rendimiento",
+  "pt": "Desempenho",
+  "nl": "Prestaties",
+  "pl": "Wydajność",
+  "tr": "Performans",
+  "ru": "Производительность"
+ },
+ "Sicherheit": {
+  "en": "Security",
+  "fr": "Sécurité",
+  "it": "Sicurezza",
+  "es": "Seguridad",
+  "pt": "Segurança",
+  "nl": "Beveiliging",
+  "pl": "Bezpieczeństwo",
+  "tr": "Güvenlik",
+  "ru": "Безопасность"
+ },
+ "Wartbarkeit": {
+  "en": "Maintainability",
+  "fr": "Maintenabilité",
+  "it": "Manutenibilità",
+  "es": "Mantenibilidad",
+  "pt": "Manutenibilidade",
+  "nl": "Onderhoudbaarheid",
+  "pl": "Utrzymywalność",
+  "tr": "Bakım kolaylığı",
+  "ru": "Сопровождаемость"
+ },
+ "Scope": {
+  "en": "Scope",
+  "fr": "Périmètre",
+  "it": "Ambito",
+  "es": "Alcance",
+  "pt": "Âmbito",
+  "nl": "Reikwijdte",
+  "pl": "Zakres",
+  "tr": "Kapsam",
+  "ru": "Охват"
+ },
+ "Tools": {
+  "en": "Tools",
+  "fr": "Outils",
+  "it": "Strumenti",
+  "es": "Herramientas",
+  "pt": "Ferramentas",
+  "nl": "Hulpmiddelen",
+  "pl": "Narzędzia",
+  "tr": "Araçlar",
+  "ru": "Инструменты"
+ },
+ "Use Cases": {
+  "en": "Use cases",
+  "fr": "Cas d'usage",
+  "it": "Casi d'uso",
+  "es": "Casos de uso",
+  "pt": "Casos de uso",
+  "nl": "Toepassingsgevallen",
+  "pl": "Przypadki użycia",
+  "tr": "Kullanım senaryoları",
+  "ru": "Сценарии использования"
+ },
+ "Prozess": {
+  "en": "Process",
+  "fr": "Processus",
+  "it": "Processo",
+  "es": "Proceso",
+  "pt": "Processo",
+  "nl": "Proces",
+  "pl": "Proces",
+  "tr": "Süreç",
+  "ru": "Процесс"
+ },
+ "Stil": {
+  "en": "Style",
+  "fr": "Style",
+  "it": "Stile",
+  "es": "Estilo",
+  "pt": "Estilo",
+  "nl": "Stijl",
+  "pl": "Styl",
+  "tr": "Üslup",
+  "ru": "Стиль"
+ },
+ "Schritte": {
+  "en": "Steps",
+  "fr": "Étapes",
+  "it": "Passaggi",
+  "es": "Pasos",
+  "pt": "Etapas",
+  "nl": "Stappen",
+  "pl": "Kroki",
+  "tr": "Adımlar",
+  "ru": "Шаги"
+ },
+ "Trigger": {
+  "en": "Triggers",
+  "fr": "Déclencheurs",
+  "it": "Attivatori",
+  "es": "Disparadores",
+  "pt": "Acionadores",
+  "nl": "Triggers",
+  "pl": "Wyzwalacze",
+  "tr": "Tetikleyiciler",
+  "ru": "Триггеры"
+ },
+ "Risiko": {
+  "en": "Risk",
+  "fr": "Risque",
+  "it": "Rischio",
+  "es": "Riesgo",
+  "pt": "Risco",
+  "nl": "Risico",
+  "pl": "Ryzyko",
+  "tr": "Risk",
+  "ru": "Риск"
+ },
+ "Relevanz": {
+  "en": "Relevance",
+  "fr": "Pertinence",
+  "it": "Rilevanza",
+  "es": "Relevancia",
+  "pt": "Relevância",
+  "nl": "Relevantie",
+  "pl": "Istotność",
+  "tr": "Alaka düzeyi",
+  "ru": "Релевантность"
+ },
+ "Quelle": {
+  "en": "Source",
+  "fr": "Source",
+  "it": "Fonte",
+  "es": "Fuente",
+  "pt": "Fonte",
+  "nl": "Bron",
+  "pl": "Źródło",
+  "tr": "Kaynak",
+  "ru": "Источник"
+ },
+ "Zeitraum": {
+  "en": "Time range",
+  "fr": "Période",
+  "it": "Intervallo temporale",
+  "es": "Período",
+  "pt": "Período",
+  "nl": "Periode",
+  "pl": "Okres",
+  "tr": "Zaman aralığı",
+  "ru": "Период"
+ },
+ "Treffergenauigkeit": {
+  "en": "Match accuracy",
+  "fr": "Précision des résultats",
+  "it": "Precisione dei risultati",
+  "es": "Precisión de coincidencia",
+  "pt": "Precisão dos resultados",
+  "nl": "Trefzekerheid",
+  "pl": "Trafność dopasowania",
+  "tr": "Eşleşme doğruluğu",
+  "ru": "Точность совпадений"
+ },
+ "Ziel": {
+  "en": "Goal",
+  "fr": "Objectif",
+  "it": "Obiettivo",
+  "es": "Objetivo",
+  "pt": "Objetivo",
+  "nl": "Doel",
+  "pl": "Cel",
+  "tr": "Hedef",
+  "ru": "Цель"
+ },
+ "Umsetzbarkeit": {
+  "en": "Feasibility",
+  "fr": "Faisabilité",
+  "it": "Fattibilità",
+  "es": "Viabilidad",
+  "pt": "Viabilidade",
+  "nl": "Haalbaarheid",
+  "pl": "Wykonalność",
+  "tr": "Uygulanabilirlik",
+  "ru": "Реализуемость"
+ },
+ "Fachbereich": {
+  "en": "Specialist department",
+  "fr": "Service métier",
+  "it": "Reparto specialistico",
+  "es": "Departamento especializado",
+  "pt": "Departamento especializado",
+  "nl": "Vakafdeling",
+  "pl": "Dział merytoryczny",
+  "tr": "Uzmanlık birimi",
+  "ru": "Профильный отдел"
+ },
+ "Strategie": {
+  "en": "Strategy",
+  "fr": "Stratégie",
+  "it": "Strategia",
+  "es": "Estrategia",
+  "pt": "Estratégia",
+  "nl": "Strategie",
+  "pl": "Strategia",
+  "tr": "Strateji",
+  "ru": "Стратегия"
+ },
+ "Einkauf": {
+  "en": "Procurement",
+  "fr": "Achats",
+  "it": "Acquisti",
+  "es": "Compras",
+  "pt": "Compras",
+  "nl": "Inkoop",
+  "pl": "Zakupy",
+  "tr": "Satın alma",
+  "ru": "Закупки"
+ },
+ "Projektteam": {
+  "en": "Project team",
+  "fr": "Équipe projet",
+  "it": "Team di progetto",
+  "es": "Equipo de proyecto",
+  "pt": "Equipa de projeto",
+  "nl": "Projectteam",
+  "pl": "Zespół projektowy",
+  "tr": "Proje ekibi",
+  "ru": "Проектная команда"
+ },
+ "Kunde": {
+  "en": "Customer",
+  "fr": "Client",
+  "it": "Cliente",
+  "es": "Cliente",
+  "pt": "Cliente",
+  "nl": "Klant",
+  "pl": "Klient",
+  "tr": "Müşteri",
+  "ru": "Клиент"
+ },
+ "intern": {
+  "en": "Internal team",
+  "fr": "Équipe interne",
+  "it": "Team interno",
+  "es": "Equipo interno",
+  "pt": "Equipa interna",
+  "nl": "Intern team",
+  "pl": "Zespół wewnętrzny",
+  "tr": "İç ekip",
+  "ru": "Внутренняя команда"
+ },
+ "Projektleitung": {
+  "en": "Project management",
+  "fr": "Direction de projet",
+  "it": "Direzione di progetto",
+  "es": "Dirección de proyecto",
+  "pt": "Gestão de projeto",
+  "nl": "Projectleiding",
+  "pl": "Kierownictwo projektu",
+  "tr": "Proje yönetimi",
+  "ru": "Руководство проекта"
+ },
+ "Controlling": {
+  "en": "Controlling",
+  "fr": "Contrôle de gestion",
+  "it": "Controllo di gestione",
+  "es": "Control de gestión",
+  "pt": "Controlo de gestão",
+  "nl": "Controlling",
+  "pl": "Kontroling",
+  "tr": "Finansal kontrol",
+  "ru": "Управленческий учёт"
+ },
+ "IT": {
+  "en": "IT",
+  "fr": "Informatique",
+  "it": "IT",
+  "es": "TI",
+  "pt": "TI",
+  "nl": "IT",
+  "pl": "IT",
+  "tr": "BT",
+  "ru": "ИТ"
+ },
+ "Entwicklung": {
+  "en": "Development",
+  "fr": "Développement",
+  "it": "Sviluppo",
+  "es": "Desarrollo",
+  "pt": "Desenvolvimento",
+  "nl": "Ontwikkeling",
+  "pl": "Rozwój",
+  "tr": "Geliştirme",
+  "ru": "Разработка"
+ },
+ "Technische Fachrolle": {
+  "en": "Technical specialist",
+  "fr": "Spécialiste technique",
+  "it": "Specialista tecnico",
+  "es": "Especialista técnico",
+  "pt": "Especialista técnico",
+  "nl": "Technisch specialist",
+  "pl": "Specjalista techniczny",
+  "tr": "Teknik uzman",
+  "ru": "Технический специалист"
+ },
+ "Agent-Owner": {
+  "en": "Agent owner",
+  "fr": "Responsable de l'agent",
+  "it": "Responsabile dell'agente",
+  "es": "Responsable del agente",
+  "pt": "Responsável pelo agente",
+  "nl": "Agentbeheerder",
+  "pl": "Właściciel agenta",
+  "tr": "Ajan sorumlusu",
+  "ru": "Владелец агента"
+ },
+ "Produktteam": {
+  "en": "Product team",
+  "fr": "Équipe produit",
+  "it": "Team di prodotto",
+  "es": "Equipo de producto",
+  "pt": "Equipa de produto",
+  "nl": "Productteam",
+  "pl": "Zespół produktowy",
+  "tr": "Ürün ekibi",
+  "ru": "Команда продукта"
+ },
+ "Marketing": {
+  "en": "Marketing",
+  "fr": "Marketing",
+  "it": "Marketing",
+  "es": "Marketing",
+  "pt": "Marketing",
+  "nl": "Marketing",
+  "pl": "Marketing",
+  "tr": "Pazarlama",
+  "ru": "Маркетинг"
+ },
+ "Prozessmanagement": {
+  "en": "Process management",
+  "fr": "Gestion des processus",
+  "it": "Gestione dei processi",
+  "es": "Gestión de procesos",
+  "pt": "Gestão de processos",
+  "nl": "Procesmanagement",
+  "pl": "Zarządzanie procesami",
+  "tr": "Süreç yönetimi",
+  "ru": "Управление процессами"
+ },
+ "Mitarbeitende": {
+  "en": "Employees",
+  "fr": "Collaborateurs",
+  "it": "Dipendenti",
+  "es": "Empleados",
+  "pt": "Colaboradores",
+  "nl": "Medewerkers",
+  "pl": "Pracownicy",
+  "tr": "Çalışanlar",
+  "ru": "Сотрудники"
+ }
+}
+
+
 def select_prompt_language(request, body: dict) -> str:
     """Explicit request locale, then the language-picker cookie. Fail closed."""
     value = body.get('language') or request.COOKIES.get('promptfinisher_language') or 'de'
@@ -1741,7 +2153,8 @@ def _translated(source: str, language: str) -> str:
     if not source:
         return ''
     candidate = (_product_dictionary().get(source, {}).get(language)
-                 or CHOICE_LABELS.get(source, {}).get(language))
+                 or CHOICE_LABELS.get(source, {}).get(language)
+                 or FOCUS_AUDIENCE_LABELS.get(source, {}).get(language))
     return str(candidate).strip() if candidate else ''
 
 
