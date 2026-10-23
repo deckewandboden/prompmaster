@@ -1252,6 +1252,122 @@ CHOICE_LABELS = {
 }
 
 
+# The Free-to-Pro compatibility tasks have distinct titles not present in the
+# regular product UI dictionary. Never replace them with a generic fallback.
+SURFACE_TASK_TITLES = {
+ "Informationen vergleichen": {
+  "en": "Compare information",
+  "fr": "Comparer des informations",
+  "it": "Confrontare informazioni",
+  "es": "Comparar información",
+  "pt": "Comparar informações",
+  "nl": "Informatie vergelijken",
+  "pl": "Porównać informacje",
+  "tr": "Bilgileri karşılaştır",
+  "ru": "Сравнить сведения"
+ },
+ "Management-Briefing": {
+  "en": "Management briefing",
+  "fr": "Note de synthèse pour la direction",
+  "it": "Briefing per la direzione",
+  "es": "Informe para la dirección",
+  "pt": "Briefing para a direção",
+  "nl": "Managementbriefing",
+  "pl": "Informacja dla kierownictwa",
+  "tr": "Yönetim bilgilendirmesi",
+  "ru": "Справка для руководства"
+ },
+ "Besprechung analysieren": {
+  "en": "Analyze a meeting",
+  "fr": "Analyser une réunion",
+  "it": "Analizzare una riunione",
+  "es": "Analizar una reunión",
+  "pt": "Analisar uma reunião",
+  "nl": "Vergadering analyseren",
+  "pl": "Przeanalizować spotkanie",
+  "tr": "Toplantıyı analiz et",
+  "ru": "Проанализировать встречу"
+ },
+ "Management-Recap": {
+  "en": "Management recap",
+  "fr": "Récapitulatif pour la direction",
+  "it": "Riepilogo per la direzione",
+  "es": "Resumen para la dirección",
+  "pt": "Resumo para a direção",
+  "nl": "Managementsamenvatting",
+  "pl": "Podsumowanie dla kierownictwa",
+  "tr": "Yönetim özeti",
+  "ru": "Сводка для руководства"
+ },
+ "Strukturierten Bericht erstellen": {
+  "en": "Create a structured report",
+  "fr": "Créer un rapport structuré",
+  "it": "Creare un rapporto strutturato",
+  "es": "Crear un informe estructurado",
+  "pt": "Criar um relatório estruturado",
+  "nl": "Gestructureerd rapport opstellen",
+  "pl": "Utworzyć raport strukturalny",
+  "tr": "Yapılandırılmış rapor oluştur",
+  "ru": "Подготовить структурированный отчёт"
+ },
+ "Risiken und Lücken analysieren": {
+  "en": "Analyze risks and gaps",
+  "fr": "Analyser les risques et les lacunes",
+  "it": "Analizzare rischi e lacune",
+  "es": "Analizar riesgos y lagunas",
+  "pt": "Analisar riscos e lacunas",
+  "nl": "Risico's en hiaten analyseren",
+  "pl": "Przeanalizować ryzyka i luki",
+  "tr": "Riskleri ve eksikleri analiz et",
+  "ru": "Проанализировать риски и пробелы"
+ },
+ "Trends und Auffälligkeiten": {
+  "en": "Trends and anomalies",
+  "fr": "Tendances et anomalies",
+  "it": "Tendenze e anomalie",
+  "es": "Tendencias y anomalías",
+  "pt": "Tendências e anomalias",
+  "nl": "Trends en afwijkingen",
+  "pl": "Trendy i nieprawidłowości",
+  "tr": "Eğilimler ve anormallikler",
+  "ru": "Тенденции и отклонения"
+ },
+ "Management-Auswertung": {
+  "en": "Management analysis",
+  "fr": "Analyse pour la direction",
+  "it": "Analisi per la direzione",
+  "es": "Análisis para la dirección",
+  "pt": "Análise para a direção",
+  "nl": "Managementanalyse",
+  "pl": "Analiza dla kierownictwa",
+  "tr": "Yönetim analizi",
+  "ru": "Аналитика для руководства"
+ },
+ "Präsentation analysieren": {
+  "en": "Analyze a presentation",
+  "fr": "Analyser une présentation",
+  "it": "Analizzare una presentazione",
+  "es": "Analizar una presentación",
+  "pt": "Analisar uma apresentação",
+  "nl": "Presentatie analyseren",
+  "pl": "Przeanalizować prezentację",
+  "tr": "Sunumu analiz et",
+  "ru": "Проанализировать презентацию"
+ },
+ "Executive Summary": {
+  "en": "Executive summary",
+  "fr": "Synthèse de direction",
+  "it": "Sintesi direzionale",
+  "es": "Resumen ejecutivo",
+  "pt": "Resumo executivo",
+  "nl": "Managementsamenvatting",
+  "pl": "Streszczenie dla kierownictwa",
+  "tr": "Yönetici özeti",
+  "ru": "Резюме для руководства"
+ }
+}
+
+
 def select_prompt_language(request, body: dict) -> str:
     """Explicit request locale, then the language-picker cookie. Fail closed."""
     value = body.get('language') or request.COOKIES.get('promptfinisher_language') or 'de'
@@ -1298,6 +1414,7 @@ def render_localized_prompt(
     copy = MESSAGES[language]
     title = (_translated(task_title, language)
              or FREE_TASK_TITLES.get(task_id, {}).get(language)
+             or SURFACE_TASK_TITLES.get(task_title, {}).get(language)
              or copy['fallback'])
     pieces = [
         f"{copy['task']}: {title}",
