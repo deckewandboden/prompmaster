@@ -1368,6 +1368,132 @@ SURFACE_TASK_TITLES = {
 }
 
 
+# Context-sensitive native-language methods for all PM20 task families.
+FAMILY_METHODS = {
+ "research": {
+  "en": "Verify the question using available reliable evidence. Cite sources when available, compare conflicting claims, and state uncertainty and currency of the evidence.",
+  "fr": "Vérifiez la question avec des sources fiables disponibles. Citez les sources, confrontez les affirmations contradictoires et signalez les incertitudes et l'actualité des données.",
+  "it": "Verifica la domanda con fonti affidabili disponibili. Cita le fonti, confronta affermazioni contrastanti e indica incertezze e attualità dei dati.",
+  "es": "Verifica la cuestión con fuentes fiables disponibles. Cita las fuentes, compara afirmaciones contradictorias e indica incertidumbres y vigencia de los datos.",
+  "pt": "Verifique a questão com fontes fiáveis disponíveis. Cite as fontes, confronte afirmações divergentes e indique incertezas e atualidade dos dados.",
+  "nl": "Onderzoek de vraag aan de hand van beschikbare betrouwbare bronnen. Vermeld bronnen, vergelijk tegenstrijdige claims en benoem onzekerheden en actualiteit.",
+  "pl": "Zweryfikuj zagadnienie na podstawie dostępnych wiarygodnych źródeł. Cytuj źródła, porównuj sprzeczne twierdzenia i wskaż niepewności oraz aktualność danych.",
+  "tr": "Soruyu mevcut güvenilir kanıtlarla doğrulayın. Kaynakları belirtin, çelişkili iddiaları karşılaştırın ve belirsizlikleri ve bilgilerin güncelliğini açıklayın.",
+  "ru": "Проверьте вопрос по доступным надёжным источникам. Указывайте источники, сопоставляйте противоречивые сведения и отмечайте неопределённость и актуальность данных."
+ },
+ "data": {
+  "en": "Check data scope, types, quality and missing values before calculating. Explain formulas, units, trends and outliers, and distinguish correlation from causation.",
+  "fr": "Vérifiez le périmètre, les types, la qualité et les valeurs manquantes avant tout calcul. Expliquez les formules, unités, tendances et anomalies, sans confondre corrélation et causalité.",
+  "it": "Prima dei calcoli verifica ambito, tipi, qualità e valori mancanti. Spiega formule, unità, tendenze e anomalie, distinguendo correlazione e causalità.",
+  "es": "Comprueba alcance, tipos, calidad y valores ausentes antes de calcular. Explica fórmulas, unidades, tendencias y anomalías; distingue correlación y causalidad.",
+  "pt": "Verifique o âmbito, tipos, qualidade e valores em falta antes de calcular. Explique fórmulas, unidades, tendências e anomalias; distinga correlação de causalidade.",
+  "nl": "Controleer gegevensbereik, typen, kwaliteit en ontbrekende waarden vóór berekeningen. Leg formules, eenheden, trends en afwijkingen uit; onderscheid correlatie van causaliteit.",
+  "pl": "Sprawdź zakres, typy, jakość danych i braki przed obliczeniami. Wyjaśnij wzory, jednostki, trendy i odstępstwa, odróżniając korelację od przyczynowości.",
+  "tr": "Hesaplamadan önce veri kapsamını, türlerini, kalitesini ve eksik değerleri kontrol edin. Formülleri, birimleri, eğilimleri ve aykırı değerleri açıklayın; korelasyonla nedenselliği ayırın.",
+  "ru": "До расчётов проверьте объём, типы, качество и пропущенные значения данных. Объясните формулы, единицы, тенденции и выбросы; отличайте корреляцию от причинности."
+ },
+ "code": {
+  "en": "Clarify the required behaviour, runtime, interfaces and constraints. Propose safe, runnable changes with error handling, tests and explicit assumptions; do not claim execution without evidence.",
+  "fr": "Précisez le comportement attendu, l'environnement, les interfaces et contraintes. Proposez des modifications exécutables, des contrôles d'erreur et des tests ; ne prétendez pas avoir exécuté le code sans preuve.",
+  "it": "Chiarisci il comportamento richiesto, l'ambiente, le interfacce e i vincoli. Proponi modifiche eseguibili, gestione degli errori e test; non dichiarare esecuzioni non verificate.",
+  "es": "Aclara comportamiento, entorno, interfaces y restricciones. Propón cambios ejecutables con manejo de errores y pruebas; no afirmes haberlos ejecutado sin pruebas.",
+  "pt": "Esclareça o comportamento, ambiente, interfaces e restrições. Proponha alterações executáveis, tratamento de erros e testes; não alegue execução sem evidências.",
+  "nl": "Verduidelijk verwacht gedrag, runtime, interfaces en randvoorwaarden. Stel uitvoerbare wijzigingen, foutafhandeling en tests voor; claim geen uitvoering zonder bewijs.",
+  "pl": "Wyjaśnij oczekiwane działanie, środowisko, interfejsy i ograniczenia. Zaproponuj wykonalne zmiany, obsługę błędów i testy; nie deklaruj wykonania bez dowodów.",
+  "tr": "Beklenen davranışı, çalışma ortamını, arayüzleri ve kısıtları netleştirin. Hata yönetimi ve testler içeren çalıştırılabilir değişiklikler önerin; kanıt olmadan çalıştırıldığını söylemeyin.",
+  "ru": "Уточните требуемое поведение, среду, интерфейсы и ограничения. Предложите исполнимые изменения с обработкой ошибок и тестами; не заявляйте об исполнении без доказательств."
+ },
+ "agent": {
+  "en": "Define the agent's objective, permissions, available tools, triggers, stop conditions and approval boundaries. Sequence steps and include human review for consequential actions.",
+  "fr": "Définissez l'objectif de l'agent, ses droits, outils, déclencheurs, conditions d'arrêt et validations requises. Organisez les étapes et prévoyez une revue humaine pour les actions importantes.",
+  "it": "Definisci obiettivo, permessi, strumenti, attivatori, condizioni di arresto e approvazioni dell'agente. Ordina i passaggi e prevedi verifiche umane per le azioni rilevanti.",
+  "es": "Define objetivo, permisos, herramientas, activadores, condiciones de parada y aprobaciones del agente. Ordena los pasos y prevé revisión humana para acciones importantes.",
+  "pt": "Defina objetivo, permissões, ferramentas, acionadores, condições de paragem e aprovações do agente. Ordene os passos e inclua revisão humana para ações importantes.",
+  "nl": "Definieer doel, rechten, tools, triggers, stopvoorwaarden en goedkeuringsgrenzen van de agent. Orden stappen en vereis menselijke controle voor belangrijke acties.",
+  "pl": "Określ cel agenta, uprawnienia, narzędzia, wyzwalacze, warunki zakończenia i zgody. Uporządkuj kroki i uwzględnij kontrolę człowieka przy istotnych działaniach.",
+  "tr": "Ajanın hedefini, izinlerini, araçlarını, tetikleyicilerini, durma koşullarını ve onay sınırlarını belirleyin. Adımları sıralayın; önemli işlemlerde insan denetimi sağlayın.",
+  "ru": "Определите цель агента, разрешения, инструменты, триггеры, условия остановки и границы согласования. Упорядочите шаги и добавьте проверку человеком для значимых действий."
+ },
+ "build": {
+  "en": "Define deliverables, prerequisites and acceptance criteria. Provide reproducible implementation steps, dependencies and validation checks without assuming resources not supplied.",
+  "fr": "Définissez les livrables, prérequis et critères de réception. Donnez des étapes reproductibles, dépendances et contrôles sans supposer de ressources absentes.",
+  "it": "Definisci risultati, prerequisiti e criteri di accettazione. Fornisci passaggi riproducibili, dipendenze e verifiche senza presupporre risorse non disponibili.",
+  "es": "Define entregables, requisitos previos y criterios de aceptación. Detalla pasos reproducibles, dependencias y comprobaciones sin suponer recursos no disponibles.",
+  "pt": "Defina entregáveis, pré-requisitos e critérios de aceitação. Indique etapas reproduzíveis, dependências e verificações sem pressupor recursos indisponíveis.",
+  "nl": "Definieer opleveringen, voorwaarden en acceptatiecriteria. Geef reproduceerbare stappen, afhankelijkheden en controles zonder ontbrekende middelen te veronderstellen.",
+  "pl": "Zdefiniuj wyniki, wymagania wstępne i kryteria akceptacji. Podaj powtarzalne kroki, zależności i testy bez zakładania niedostępnych zasobów.",
+  "tr": "Teslimatları, ön koşulları ve kabul ölçütlerini tanımlayın. Bulunmayan kaynakları varsaymadan tekrarlanabilir adımları, bağımlılıkları ve testleri açıklayın.",
+  "ru": "Определите результаты, предпосылки и критерии приёмки. Укажите воспроизводимые шаги, зависимости и проверки без предположений о недоступных ресурсах."
+ },
+ "design": {
+  "en": "Identify users, goals, constraints and accessibility needs. Explain structure, interaction, alternatives and validation criteria while keeping branding consistent.",
+  "fr": "Identifiez les utilisateurs, objectifs, contraintes et besoins d'accessibilité. Expliquez la structure, les interactions, les options et les critères de vérification en respectant la marque.",
+  "it": "Individua utenti, obiettivi, vincoli e accessibilità. Spiega struttura, interazioni, alternative e criteri di verifica mantenendo il marchio coerente.",
+  "es": "Identifica usuarios, objetivos, restricciones y accesibilidad. Explica estructura, interacción, alternativas y criterios de validación respetando la marca.",
+  "pt": "Identifique utilizadores, objetivos, restrições e acessibilidade. Explique estrutura, interação, alternativas e critérios de validação respeitando a marca.",
+  "nl": "Breng gebruikers, doelen, beperkingen en toegankelijkheid in kaart. Leg structuur, interacties, alternatieven en toetsingscriteria uit met behoud van de huisstijl.",
+  "pl": "Określ użytkowników, cele, ograniczenia i dostępność. Wyjaśnij strukturę, interakcje, warianty i kryteria weryfikacji przy zachowaniu identyfikacji marki.",
+  "tr": "Kullanıcıları, hedefleri, kısıtları ve erişilebilirliği belirleyin. Marka tutarlılığını koruyarak yapıyı, etkileşimleri, seçenekleri ve doğrulama ölçütlerini açıklayın.",
+  "ru": "Определите пользователей, цели, ограничения и доступность. Объясните структуру, взаимодействия, варианты и критерии проверки с учётом бренда."
+ },
+ "operation": {
+  "en": "Review operating state, dependencies and indicators. Separate observed issues from hypotheses, prioritize remediation and specify monitoring and rollback checks.",
+  "fr": "Examinez l'état opérationnel, les dépendances et indicateurs. Distinguez les problèmes observés des hypothèses, hiérarchisez les corrections et prévoyez suivi et retour arrière.",
+  "it": "Esamina stato operativo, dipendenze e indicatori. Distingui problemi osservati da ipotesi, dai priorità agli interventi e definisci monitoraggio e ripristino.",
+  "es": "Revisa estado operativo, dependencias e indicadores. Separa incidencias observadas de hipótesis, prioriza correcciones y establece supervisión y reversión.",
+  "pt": "Analise o estado operacional, dependências e indicadores. Distinga problemas observados de hipóteses, priorize correções e defina monitorização e reversão.",
+  "nl": "Beoordeel operationele status, afhankelijkheden en indicatoren. Scheid waargenomen problemen van aannames, prioriteer herstel en definieer monitoring en terugval.",
+  "pl": "Oceń stan operacyjny, zależności i wskaźniki. Oddziel obserwacje od hipotez, ustal priorytety napraw i zasady monitoringu oraz wycofania zmian.",
+  "tr": "Operasyon durumunu, bağımlılıkları ve göstergeleri inceleyin. Gözlenen sorunları varsayımlardan ayırın, düzeltmeleri önceliklendirin, izleme ve geri alma kontrollerini tanımlayın.",
+  "ru": "Оцените рабочее состояние, зависимости и показатели. Отделите наблюдаемые проблемы от гипотез, расставьте приоритеты исправлений и задайте мониторинг и откат."
+ },
+ "automation": {
+  "en": "Specify triggers, inputs, transformations, outputs, credentials and failure handling. Define idempotency, retries, logging, permissions and safe rollback.",
+  "fr": "Définissez déclencheurs, entrées, traitements, sorties, identifiants et gestion des erreurs. Précisez idempotence, nouvelles tentatives, journaux, droits et retour arrière sécurisé.",
+  "it": "Specifica attivatori, input, trasformazioni, output, credenziali e gestione degli errori. Definisci idempotenza, tentativi, log, permessi e ripristino sicuro.",
+  "es": "Especifica activadores, entradas, transformaciones, salidas, credenciales y manejo de fallos. Define idempotencia, reintentos, registros, permisos y reversión segura.",
+  "pt": "Especifique acionadores, entradas, transformações, saídas, credenciais e tratamento de falhas. Defina idempotência, novas tentativas, registos, permissões e reversão segura.",
+  "nl": "Specificeer triggers, invoer, bewerkingen, uitvoer, inloggegevens en foutafhandeling. Definieer idempotentie, herhaalpogingen, logging, rechten en veilige terugval.",
+  "pl": "Określ wyzwalacze, dane wejściowe, przekształcenia, wyniki, dane dostępowe i obsługę błędów. Uwzględnij idempotencję, ponawianie, logi, prawa i bezpieczne wycofanie.",
+  "tr": "Tetikleyicileri, girdileri, dönüşümleri, çıktıları, kimlik bilgilerini ve hata yönetimini belirtin. Tekrarlanabilirlik, yeniden deneme, günlük, izin ve güvenli geri alma kurallarını tanımlayın.",
+  "ru": "Определите триггеры, входы, преобразования, выходы, учётные данные и обработку ошибок. Укажите идемпотентность, повторы, журналы, права и безопасный откат."
+ },
+ "security": {
+  "en": "Identify assets, threat scenarios and trust boundaries. Prioritize realistic risks, mitigations and verification, and never imply a vulnerability has been fixed without evidence.",
+  "fr": "Identifiez les actifs, menaces et frontières de confiance. Hiérarchisez risques, mesures et vérifications ; ne déclarez pas une faille corrigée sans preuve.",
+  "it": "Individua risorse, minacce e confini di fiducia. Dai priorità a rischi, mitigazioni e verifiche senza dichiarare corretta una vulnerabilità senza prova.",
+  "es": "Identifica activos, amenazas y límites de confianza. Prioriza riesgos, mitigaciones y comprobaciones; no afirmes que una vulnerabilidad se haya corregido sin pruebas.",
+  "pt": "Identifique ativos, ameaças e fronteiras de confiança. Priorize riscos, mitigação e verificação; não afirme correções de vulnerabilidades sem evidência.",
+  "nl": "Inventariseer bedrijfsmiddelen, dreigingen en vertrouwensgrenzen. Prioriteer risico's, maatregelen en controles; claim geen opgelost beveiligingslek zonder bewijs.",
+  "pl": "Określ zasoby, zagrożenia i granice zaufania. Ustal priorytety ryzyk, zabezpieczeń i testów; nie deklaruj usunięcia luki bez dowodu.",
+  "tr": "Varlıkları, tehditleri ve güven sınırlarını belirleyin. Riskleri, önlemleri ve doğrulamayı önceliklendirin; kanıt olmadan açığın giderildiğini iddia etmeyin.",
+  "ru": "Определите активы, угрозы и границы доверия. Расставьте приоритеты рисков, мер защиты и проверок; не заявляйте об устранении уязвимостей без доказательств."
+ },
+ "search": {
+  "en": "Define search terms, scope and filters. Collect relevant available results, identify duplicates, rank by evidence and clearly cite sources.",
+  "fr": "Définissez termes, périmètre et filtres. Recueillez les résultats accessibles, éliminez les doublons, classez les preuves et citez les sources.",
+  "it": "Definisci termini, ambito e filtri. Raccogli i risultati disponibili, elimina duplicati, classifica per rilevanza e cita le fonti.",
+  "es": "Define términos, alcance y filtros. Recopila resultados disponibles, elimina duplicados, ordénalos por evidencia y cita las fuentes.",
+  "pt": "Defina termos, âmbito e filtros. Recolha resultados disponíveis, elimine duplicados, ordene por evidência e cite fontes.",
+  "nl": "Bepaal zoektermen, bereik en filters. Verzamel beschikbare resultaten, verwijder dubbelen, rangschik op bewijs en vermeld bronnen.",
+  "pl": "Określ frazy, zakres i filtry. Zbierz dostępne wyniki, usuń duplikaty, uszereguj według dowodów i podaj źródła.",
+  "tr": "Arama terimlerini, kapsamı ve filtreleri belirleyin. Mevcut sonuçları toplayın, tekrarları kaldırın, kanıta göre sıralayın ve kaynakları belirtin.",
+  "ru": "Определите запросы, охват и фильтры. Соберите доступные результаты, удалите дубликаты, отсортируйте по доказательствам и укажите источники."
+ },
+ "coaching": {
+  "en": "Assess the current skill level and goal. Explain one step at a time, include practical exercises, check comprehension and adapt difficulty without inventing feedback.",
+  "fr": "Évaluez le niveau et l'objectif. Expliquez pas à pas, proposez des exercices, vérifiez la compréhension et adaptez la difficulté sans inventer de retours.",
+  "it": "Valuta livello e obiettivo. Spiega passo dopo passo, proponi esercizi, verifica la comprensione e adatta la difficoltà senza inventare riscontri.",
+  "es": "Evalúa nivel y objetivo. Explica paso a paso, incluye ejercicios, comprueba comprensión y adapta dificultad sin inventar respuestas.",
+  "pt": "Avalie nível e objetivo. Explique por etapas, inclua exercícios, verifique a compreensão e ajuste a dificuldade sem inventar respostas.",
+  "nl": "Beoordeel niveau en doel. Leg stapsgewijs uit, geef oefeningen, controleer begrip en pas moeilijkheid aan zonder feedback te verzinnen.",
+  "pl": "Oceń poziom i cel. Wyjaśniaj krok po kroku, proponuj ćwiczenia, sprawdzaj zrozumienie i dostosuj trudność bez zmyślania informacji zwrotnych.",
+  "tr": "Mevcut seviyeyi ve hedefi değerlendirin. Adım adım açıklayın, uygulama çalışmaları verin, kavrayışı kontrol edin ve geri bildirim uydurmadan zorluğu ayarlayın.",
+  "ru": "Оцените уровень и цель. Объясняйте по шагам, предлагайте упражнения, проверяйте понимание и адаптируйте сложность без выдуманных отзывов."
+ }
+}
+
+
 def select_prompt_language(request, body: dict) -> str:
     """Explicit request locale, then the language-picker cookie. Fail closed."""
     value = body.get('language') or request.COOKIES.get('promptfinisher_language') or 'de'
@@ -1447,7 +1573,7 @@ def render_localized_prompt(
         if output:
             pieces.append(f"{copy['format']}: {output}")
         pieces.extend([
-            f"{copy['method']}: {copy.get(family, copy['analysis'])}",
+            f"{copy['method']}: {FAMILY_METHODS.get(family, {}).get(language) or copy.get(family, copy['analysis'])}",
             copy['scope'],
             f"{copy['quality']}: {copy['no_fabrication']}",
         ])
