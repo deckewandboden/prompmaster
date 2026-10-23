@@ -532,6 +532,45 @@ def main() -> None:
         + ' across nine target locales'
     )
 
+    # Composite V2 strings are created after initial translation. They must
+    # have complete locale variants and explicit interpolation at their
+    # rendering sites; a nonempty dictionary alone cannot verify this.
+    composite_v2 = {
+        'Pflichtfelder fehlen:': None,
+        '%(workspace)s öffnen →': '%(workspace)s',
+        '%(percent)s Prozent vollständig': '%(percent)s',
+    }
+    for source, placeholder in composite_v2.items():
+        variants = catalog.get(source)
+        if not variants:
+            raise SystemExit(f'I18N FAIL: missing composite V2 text {source!r}')
+        for code in LOCALES:
+            translated = variants.get(code, '').strip()
+            if not translated or translated == source:
+                raise SystemExit(f'I18N FAIL {code}: untranslated composite V2 text {source!r}')
+            if placeholder and translated.count(placeholder) != 1:
+                raise SystemExit(
+                    f'I18N FAIL {code}: incorrect composite placeholder '
+                    f'{source!r}: {translated!r}'
+                )
+    v2_shell = (
+        ROOT / 'backend/static/js/promptfinisher_ui_v2.20260922.js'
+    ).read_text(encoding='utf-8')
+    for call in (
+        "translateUi('Pflichtfelder fehlen:')",
+        "translateUi('Prompt noch nicht erstellt.')",
+        "translateUi('PFLICHTFELD')",
+        "translateUi('Dieses Feld muss ausgefüllt werden, bevor der Prompt erzeugt wird.')",
+        "translateUi('%(workspace)s öffnen →')",
+        "translateUi('%(percent)s Prozent vollständig')",
+        "localReviewValue('In der Aufgabe enthalten')",
+    ):
+        if call not in v2_shell:
+            raise SystemExit(f'I18N FAIL: unlocalized V2 render site {call!r}')
+    if "'<strong>Prompt noch nicht erstellt.</strong> Pflichtfelder fehlen: '" in v2_shell:
+        raise SystemExit('I18N FAIL: German dynamic required-field warning returned')
+    print('I18N COMPOSITE V2 PASS: guards, headers, progress and summary in ten locales')
+
     # Marketing is a separate Vite artifact and deliberately absent from the
     # production Django /app image. Audit its translations at repository
     # preflight, where both source trees are available.
