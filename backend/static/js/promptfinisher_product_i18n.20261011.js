@@ -121,13 +121,17 @@
   const updateNode = node => {
     const parent = node.parentElement;
     if (!parent || parent.closest(notUi)) return;
-    // Option text is presentation-only when an explicit value preserves its
-    // stable server/composer contract. Never rewrite value-derived options.
+    // Keep the original canonical German option.value regardless of locale.
+    // Some Pro output options have only an implicit value derived from their
+    // textContent. Pin that value BEFORE localizing the visible text, otherwise
+    // the composer would receive translated labels instead of schema values.
     const option = parent.closest('option');
-    if (option && !option.hasAttribute('value')) return;
     const original = node.nodeValue || '';
     const translated = matches(original);
     if (translated && translated !== original.trim()) {
+      if (option && !option.hasAttribute('value')) {
+        option.setAttribute('value', option.textContent.trim());
+      }
       node.nodeValue = original.replace(original.trim(), translated);
     }
   };
