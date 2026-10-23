@@ -3608,3 +3608,7 @@ msgstr "Jeżeli nie podasz daty zakończenia, przyjmiemy wypowiedzenie z najwcze
 
 msgid "jetzt kündigen"
 msgstr "Wypowiedz teraz"
+
+# Customer checkout: legal document list heading.
+msgid "Rechtsdokumente:"
+msgstr "Dokumenty prawne:"
