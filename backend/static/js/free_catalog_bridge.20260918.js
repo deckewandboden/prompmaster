@@ -203,6 +203,7 @@
           },
           body:JSON.stringify({
             product:'FREE',
+            language:window.PF_PRODUCT_LOCALE?.code || document.documentElement.lang || 'de',
             task_id:taskId,
             microsoft_tier:msLicense(),
             input
