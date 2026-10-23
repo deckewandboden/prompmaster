@@ -3676,3 +3676,48 @@ msgstr "Son sayfa"
 
 msgid "Letzte"
 msgstr "Son"
+
+msgid "Zwei-Faktor-Anmeldung"
+msgstr "İki faktörlü oturum açma"
+
+msgid "Geben Sie den Code aus Ihrer Authenticator-App oder einen gültigen Recovery-Code ein."
+msgstr "Kimlik doğrulama uygulamanızdaki kodu veya geçerli kurtarma kodunu girin."
+
+msgid "Recovery-Codes"
+msgstr "Kurtarma kodları"
+
+msgid "Einmalig speichern."
+msgstr "Kodları şimdi güvenle kaydedin."
+
+msgid "Diese Codes werden später nicht erneut im Klartext angezeigt."
+msgstr "Bu kodlar daha sonra açık metin olarak tekrar gösterilmeyecektir."
+
+msgid "Schließen Sie die Sicherheitseinrichtung ab, bevor Sie Ihren geschützten PROMPTFINISHER-Bereich verwenden."
+msgstr "Korumalı PROMPTFINISHER alanına erişmeden önce güvenlik kurulumunu tamamlayın."
+
+msgid "Authenticator-Daten"
+msgstr "Kimlik doğrulayıcı bilgileri"
+
+msgid "Secret kopieren"
+msgstr "Gizli anahtarı kopyala"
+
+msgid "Hinterlegen Sie das Secret in Microsoft Authenticator, Google Authenticator, 1Password oder einer kompatiblen TOTP-App."
+msgstr "Gizli anahtarı Microsoft Authenticator, Google Authenticator, 1Password veya uyumlu bir TOTP uygulamasına ekleyin."
+
+msgid "Einrichtungs-URI"
+msgstr "Kurulum URI'si"
+
+msgid "URI kopieren"
+msgstr "URI'yi kopyala"
+
+msgid "Einrichtung bestätigen"
+msgstr "Kurulumu onayla"
+
+msgid "6-stelliger Code"
+msgstr "6 haneli kod"
+
+msgid "2FA aktivieren"
+msgstr "2FA'yı etkinleştir"
+
+msgid "Nach erfolgreicher Aktivierung werden einmalig Recovery-Codes angezeigt."
+msgstr "Etkinleştirmeden sonra kurtarma kodları yalnızca bir kez gösterilir."
