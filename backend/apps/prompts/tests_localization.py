@@ -120,6 +120,21 @@ class LocalizedPromptRenderingTests(SimpleTestCase):
                         f'No native task title: {task_id} ({language})',
                     )
 
+    def test_all_pro_focus_choices_have_target_language_labels(self):
+        from .prompt_localization import FOCUS_AUDIENCE_LABELS
+        data = json.loads((Path(__file__).resolve().parent
+                           / 'data/pm20_golden_logic.json').read_text(encoding='utf-8'))
+        catalogue = _product_dictionary()
+        labels = {value for app in data['APP'].values()
+                  for task in app['tasks'] for value in task.get('focus', [])}
+        self.assertGreaterEqual(len(labels), 60)
+        for label in labels:
+            for language in SUPPORTED - {'de'}:
+                with self.subTest(label=label, language=language):
+                    translation = (catalogue.get(label, {}).get(language)
+                                   or FOCUS_AUDIENCE_LABELS.get(label, {}).get(language))
+                    self.assertTrue(translation, f'Untranslated Pro focus choice: {label} ({language})')
+
     def test_all_specialized_pro_families_have_native_methodology(self):
         data = json.loads((Path(__file__).resolve().parent
                            / 'data/pm20_golden_logic.json').read_text(encoding='utf-8'))
