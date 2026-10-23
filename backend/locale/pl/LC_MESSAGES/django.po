@@ -3735,3 +3735,48 @@ msgstr "Ostatnia strona"
 
 msgid "Letzte"
 msgstr "Ostatnia"
+
+msgid "Zwei-Faktor-Anmeldung"
+msgstr "Logowanie dwuskładnikowe"
+
+msgid "Geben Sie den Code aus Ihrer Authenticator-App oder einen gültigen Recovery-Code ein."
+msgstr "Wpisz kod z aplikacji uwierzytelniającej lub ważny kod odzyskiwania."
+
+msgid "Recovery-Codes"
+msgstr "Kody odzyskiwania"
+
+msgid "Einmalig speichern."
+msgstr "Zapisz te kody teraz."
+
+msgid "Diese Codes werden später nicht erneut im Klartext angezeigt."
+msgstr "Te kody nie będą później ponownie wyświetlane w postaci jawnej."
+
+msgid "Schließen Sie die Sicherheitseinrichtung ab, bevor Sie Ihren geschützten PROMPTFINISHER-Bereich verwenden."
+msgstr "Dokończ konfigurację zabezpieczeń, zanim uzyskasz dostęp do chronionej części PROMPTFINISHER."
+
+msgid "Authenticator-Daten"
+msgstr "Dane aplikacji uwierzytelniającej"
+
+msgid "Secret kopieren"
+msgstr "Kopiuj klucz tajny"
+
+msgid "Hinterlegen Sie das Secret in Microsoft Authenticator, Google Authenticator, 1Password oder einer kompatiblen TOTP-App."
+msgstr "Dodaj klucz tajny do Microsoft Authenticator, Google Authenticator, 1Password lub zgodnej aplikacji TOTP."
+
+msgid "Einrichtungs-URI"
+msgstr "URI konfiguracji"
+
+msgid "URI kopieren"
+msgstr "Kopiuj URI"
+
+msgid "Einrichtung bestätigen"
+msgstr "Potwierdź konfigurację"
+
+msgid "6-stelliger Code"
+msgstr "Kod 6-cyfrowy"
+
+msgid "2FA aktivieren"
+msgstr "Włącz 2FA"
+
+msgid "Nach erfolgreicher Aktivierung werden einmalig Recovery-Codes angezeigt."
+msgstr "Po aktywacji kody odzyskiwania zostaną wyświetlone tylko jeden raz."
