@@ -280,6 +280,7 @@ def compose(request):
                 result=result_payload,
                 product=product,
                 task_title=title,
+                task_id=task_id,
                 application=application_name,
                 family=family,
                 selections=payload,
