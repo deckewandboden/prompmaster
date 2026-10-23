@@ -3608,3 +3608,81 @@ msgstr "Nu opzeggen"
 # Customer checkout: legal document list heading.
 msgid "Rechtsdokumente:"
 msgstr "Juridische documenten:"
+
+msgid "Alle für Ihr Konto freigegebenen Adminbereiche."
+msgstr "Alle beheeronderdelen die voor je account beschikbaar zijn."
+
+msgid "Geschäft & Inhalte"
+msgstr "Zakelijk en inhoud"
+
+msgid "System & Governance"
+msgstr "Systeem en governance"
+
+msgid "Lead bearbeiten"
+msgstr "Lead bewerken"
+
+msgid "Ansprechpartner"
+msgstr "Contactpersoon"
+
+msgid "Verlauf & Einordnung"
+msgstr "Historie en beoordeling"
+
+msgid "Zuletzt geändert"
+msgstr "Laatst gewijzigd"
+
+msgid "Als Firmenkunde konvertiert am"
+msgstr "Omgezet naar zakelijke klant op"
+
+msgid "Kundenkonto öffnen"
+msgstr "Klantaccount openen"
+
+msgid "Privatkunden werden über den öffentlichen Registrierungs-/Checkout-Prozess angelegt, damit AGB und Datenschutz vom Kunden selbst bestätigt werden."
+msgstr "Particuliere klanten worden via het openbare registratie- en bestelproces aangemaakt zodat zij zelf de voorwaarden en privacyverklaring accepteren."
+
+msgid "← Zur Übersicht"
+msgstr "← Terug naar overzicht"
+
+msgid "Erklärung"
+msgstr "Verklaring"
+
+msgid "Gewünschtes Ende"
+msgstr "Gewenste einddatum"
+
+msgid "Bearbeitet"
+msgstr "Verwerkt"
+
+msgid "Bearbeitung"
+msgstr "Verwerking"
+
+msgid "Status speichern"
+msgstr "Status opslaan"
+
+msgid "Sie haben Leserechte, aber keine Berechtigung zur Bearbeitung."
+msgstr "Je hebt leestoegang maar geen rechten om wijzigingen aan te brengen."
+
+msgid "CSV-Export"
+msgstr "CSV-export"
+
+msgid "angefordert"
+msgstr "aangevraagd"
+
+msgid "Zeilen"
+msgstr "Rijen"
+
+msgid "Verfügbar bis"
+msgstr "Beschikbaar tot"
+
+msgid "Dieser Export ist abgelaufen."
+msgstr "Deze export is verlopen."
+
+msgid "CSV herunterladen"
+msgstr "CSV downloaden"
+
+msgid "Der Export konnte nicht erstellt werden. Bitte erneut anfordern."
+msgstr "De export kon niet worden gemaakt. Vraag deze opnieuw aan."
+
+msgid "Der Export wird im Hintergrund erstellt. Diese Seite aktualisiert sich automatisch."
+msgstr "De export wordt op de achtergrond gemaakt. Deze pagina wordt automatisch vernieuwd."
+
+msgid "Der Zahlungsdienst ist derzeit noch nicht verfügbar."
+msgstr "De betaalservice is momenteel niet beschikbaar."
