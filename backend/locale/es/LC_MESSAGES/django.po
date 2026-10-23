@@ -3553,3 +3553,81 @@ msgstr "Cancelar ahora"
 # Customer checkout: legal document list heading.
 msgid "Rechtsdokumente:"
 msgstr "Documentos legales:"
+
+msgid "Alle für Ihr Konto freigegebenen Adminbereiche."
+msgstr "Todas las secciones administrativas habilitadas para tu cuenta."
+
+msgid "Geschäft & Inhalte"
+msgstr "Negocio y contenidos"
+
+msgid "System & Governance"
+msgstr "Sistema y gobernanza"
+
+msgid "Lead bearbeiten"
+msgstr "Editar cliente potencial"
+
+msgid "Ansprechpartner"
+msgstr "Persona de contacto"
+
+msgid "Verlauf & Einordnung"
+msgstr "Historial y evaluación"
+
+msgid "Zuletzt geändert"
+msgstr "Última modificación"
+
+msgid "Als Firmenkunde konvertiert am"
+msgstr "Convertido en cliente empresarial el"
+
+msgid "Kundenkonto öffnen"
+msgstr "Abrir cuenta de cliente"
+
+msgid "Privatkunden werden über den öffentlichen Registrierungs-/Checkout-Prozess angelegt, damit AGB und Datenschutz vom Kunden selbst bestätigt werden."
+msgstr "Los clientes particulares se crean mediante el registro y proceso de compra públicos para que acepten personalmente las condiciones y la política de privacidad."
+
+msgid "← Zur Übersicht"
+msgstr "← Volver al resumen"
+
+msgid "Erklärung"
+msgstr "Declaración"
+
+msgid "Gewünschtes Ende"
+msgstr "Fecha de finalización solicitada"
+
+msgid "Bearbeitet"
+msgstr "Tramitado"
+
+msgid "Bearbeitung"
+msgstr "Tramitación"
+
+msgid "Status speichern"
+msgstr "Guardar estado"
+
+msgid "Sie haben Leserechte, aber keine Berechtigung zur Bearbeitung."
+msgstr "Tienes acceso de lectura, pero no permiso para editar."
+
+msgid "CSV-Export"
+msgstr "Exportación CSV"
+
+msgid "angefordert"
+msgstr "solicitado"
+
+msgid "Zeilen"
+msgstr "Filas"
+
+msgid "Verfügbar bis"
+msgstr "Disponible hasta"
+
+msgid "Dieser Export ist abgelaufen."
+msgstr "Esta exportación ha caducado."
+
+msgid "CSV herunterladen"
+msgstr "Descargar CSV"
+
+msgid "Der Export konnte nicht erstellt werden. Bitte erneut anfordern."
+msgstr "No se pudo crear la exportación. Vuelve a solicitarla."
+
+msgid "Der Export wird im Hintergrund erstellt. Diese Seite aktualisiert sich automatisch."
+msgstr "La exportación se está generando en segundo plano. Esta página se actualiza automáticamente."
+
+msgid "Der Zahlungsdienst ist derzeit noch nicht verfügbar."
+msgstr "El servicio de pago no está disponible en este momento."
