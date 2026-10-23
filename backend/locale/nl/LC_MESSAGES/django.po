@@ -3649,3 +3649,76 @@ msgstr "Als je geen einddatum opgeeft, behandelen we de opzegging voor de vroegs
 
 msgid "jetzt kündigen"
 msgstr "Nu opzeggen"
+
+# Portal security, licenses, privacy and customer preview: 24 synced labels.
+msgid "Unternehmensadministratoren richten anschließend verpflichtend 2FA ein."
+msgstr "Bedrijfsbeheerders zijn daarna verplicht tweefactorauthenticatie (2FA) in te stellen."
+
+msgid "Mollie übernimmt die Zahlungsabwicklung; PROMPTFINISHER erzeugt keine eigene Rechnungsengine."
+msgstr "Mollie verzorgt de betalingsverwerking; PROMPTFINISHER heeft geen eigen facturatie-engine."
+
+msgid "2FA schützt den Zugriff mit einem zusätzlichen zeitbasierten Einmalcode."
+msgstr "2FA beveiligt de toegang met een extra, tijdgebonden eenmalige code."
+
+msgid "Die Suche bleibt auf Ihren eigenen Mandanten- und Lizenzbereich begrenzt."
+msgstr "Zoeken blijft beperkt tot je eigen organisatie en haar licentiebereik."
+
+msgid "Ein Passwortwechsel erfolgt über einen zeitlich begrenzten, einmal verwendbaren Link an Ihre hinterlegte E-Mail-Adresse."
+msgstr "Een wachtwoordwijziging verloopt via een tijdelijke, eenmalig te gebruiken link naar je geregistreerde e-mailadres."
+
+msgid "Hier sehen Sie ausschließlich Nachrichten, die für Sie bzw. Ihr Unternehmen bestimmt sind. Interne netstyle-Notizen werden nicht im Kundenportal angezeigt."
+msgstr "Hier zie je uitsluitend berichten die voor jou of je bedrijf bedoeld zijn. Interne notities van netstyle worden niet in het klantenportaal getoond."
+
+msgid "Wählen Sie die Lizenz, deren bestehende Restlaufzeit um weitere 365 Tage verlängert werden soll."
+msgstr "Kies de licentie waarvan de resterende looptijd met nog eens 365 dagen moet worden verlengd."
+
+msgid "Die vorbereitete Lizenz wird Ihrem aktuell angemeldeten Benutzerkonto zugeordnet. Der Link kann anschließend nicht erneut verwendet werden."
+msgstr "De voorbereide licentie wordt toegewezen aan je huidige aangemelde account. De link kan daarna niet opnieuw worden gebruikt."
+
+msgid "Gültig bis %(expiry)s. Der Link ist tenantgebunden, für genau diesen Benutzer bestimmt und nur einmal verwendbar."
+msgstr "Geldig tot %(expiry)s. De link is aan je bedrijf gekoppeld, uitsluitend bedoeld voor deze gebruiker en eenmalig te gebruiken."
+
+msgid "Jede neue Lizenz startet nach erfolgreicher Zahlung mit eigener 365-Tage-Laufzeit."
+msgstr "Elke nieuwe licentie begint na succesvolle betaling met een eigen looptijd van 365 dagen."
+
+msgid "V1: exakt ein aktiver Firmenadministrator. Eine Übertragung ist nur auf ein aktives Team-Mitglied möglich."
+msgstr "V1: precies één actieve bedrijfsbeheerder. Overdracht kan alleen aan een actief teamlid."
+
+msgid "Konto, Unternehmen, Benutzer-ID und Zeitpunkt werden automatisch zugeordnet. Optional kann eine für Ihr Konto sichtbare Lizenz mitgesendet werden. Passwörter, Tokens oder andere unnötige sensitive Daten werden nicht übernommen."
+msgstr "Account, bedrijf, gebruikers-ID en tijdstip worden automatisch gekoppeld. Optioneel kan een licentie worden meegestuurd die zichtbaar is voor je account. Wachtwoorden, tokens en andere onnodige gevoelige gegevens worden niet meegestuurd."
+
+msgid "Exportieren Sie die zu Ihrem Benutzer gespeicherten PROMPTFINISHER-Daten als JSON. Secrets und Daten anderer Benutzer werden nicht exportiert."
+msgstr "Exporteer de voor je gebruiker opgeslagen PROMPTFINISHER-gegevens als JSON. Geheimen en gegevens van andere gebruikers worden niet geëxporteerd."
+
+msgid "Ihre Löschanfrage vom %(requested)s ist bereits erfasst. Status: %(status)s."
+msgstr "Je verwijderingsverzoek van %(requested)s is al geregistreerd. Status: %(status)s."
+
+msgid "Sie können die Löschung Ihres PROMPTFINISHER-Kontos anfordern. Gesetzlich erforderliche Geschäfts- und Nachweisdaten werden nur im erforderlichen Umfang weiter aufbewahrt bzw. anonymisiert. Firmenadministratoren müssen ihre Administratorrolle vor der Verarbeitung übertragen."
+msgstr "Je kunt verwijdering van je PROMPTFINISHER-account aanvragen. Wettelijk vereiste zakelijke gegevens en bewijsstukken worden uitsluitend voor zover noodzakelijk bewaard of geanonimiseerd. Bedrijfsbeheerders moeten eerst hun beheerdersrol overdragen."
+
+msgid "Aktuell ist keine freie Pro-Lizenz verfügbar. Kaufen Sie eine weitere Lizenz oder geben Sie eine bestehende Lizenz frei."
+msgstr "Er is momenteel geen vrije Pro-licentie. Koop een extra licentie of maak een bestaande vrij."
+
+msgid "Für den Pro-Zugriff benötigen Sie eine aktive PROMPTFINISHER-Pro-Lizenz."
+msgstr "Voor Pro-toegang heb je een actieve PROMPTFINISHER Pro-licentie nodig."
+
+msgid "Geben Sie einen Suchbegriff ein. Firmenadministratoren können nach Teammitgliedern, E-Mail-Adressen und Lizenzen suchen; andere Benutzer sehen ausschließlich ihre eigene Lizenzsicht."
+msgstr "Voer een zoekterm in. Bedrijfsbeheerders kunnen zoeken op teamleden, e-mailadressen en licenties; andere gebruikers zien alleen hun eigen licenties."
+
+msgid "Die Daten entsprechen dem ausgewählten Kundenkonto und seiner Rolle. Dies ist eine Ansichtsvorschau, keine Kundensitzung: Interaktionen, Zahlungs- und Sicherheitsaktionen sind nicht ausführbar."
+msgstr "De gegevens komen overeen met het geselecteerde klantaccount en de bijbehorende rol. Dit is een voorbeeldweergave, geen klantsessie: interacties, betalings- en beveiligingsacties zijn niet uitvoerbaar."
+
+msgid "Nur aktive Benutzer dieses Unternehmens. Rollen und Zugriffsrechte werden berücksichtigt."
+msgstr "Alleen actieve gebruikers van dit bedrijf. Rollen en toegangsrechten worden gerespecteerd."
+
+msgid "Änderungen erfolgen ausschließlich in den berechtigungsgeschützten Administrationsmasken mit Auditierung – nicht in der Kundenansicht."
+msgstr "Wijzigingen kunnen uitsluitend plaatsvinden in beveiligde beheerformulieren met auditregistratie, niet in de klantweergave."
+
+msgid "Dies ist eine Leseansicht. Passwort, Zwei-Faktor-Authentifizierung und persönliche Einstellungen kann nur der angemeldete Kundenbenutzer selbst ändern."
+msgstr "Dit is een alleen-lezenweergave. Alleen de aangemelde klantgebruiker kan het wachtwoord, 2FA en persoonlijke instellingen wijzigen."
+
+msgid "Teamverwaltung, Bestellungen und Unternehmensdaten sind für diese Rolle nicht freigegeben."
+msgstr "Teambeheer, bestellingen en bedrijfsgegevens zijn voor deze rol niet toegankelijk."
+
+msgid "Für echte Schreibaktionen oder einen vollständigen Login-Test muss ein eigener Nicht-Staff-Testkunde verwendet werden. Die Vorschau übernimmt niemals die Identität des Kunden."
+msgstr "Voor echte schrijfacties of een volledige inlogtest is een aparte testklant zonder personeelsrechten nodig. De voorbeeldweergave neemt nooit de identiteit van de klant over."
