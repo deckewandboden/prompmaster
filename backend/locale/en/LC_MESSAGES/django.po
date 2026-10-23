@@ -3631,3 +3631,48 @@ msgstr "The export is being generated in the background. This page refreshes aut
 
 msgid "Der Zahlungsdienst ist derzeit noch nicht verfügbar."
 msgstr "The payment service is not available at the moment."
+
+msgid "Zugriff verweigert"
+msgstr "Access denied"
+
+msgid "Für diese Ansicht fehlt die erforderliche Berechtigung."
+msgstr "You do not have permission to access this view."
+
+msgid "Zurück zur Übersicht"
+msgstr "Back to overview"
+
+msgid "Ansicht konnte nicht geladen werden"
+msgstr "Could not load the page"
+
+msgid "Beim Laden der Daten ist ein interner Fehler aufgetreten. Bitte versuchen Sie es erneut."
+msgstr "An internal error occurred while loading the data. Please try again."
+
+msgid "Erneut laden"
+msgstr "Reload"
+
+msgid "Seitennavigation"
+msgstr "Page navigation"
+
+msgid "von"
+msgstr "of"
+
+msgid "Datensätze"
+msgstr "Records"
+
+msgid "Erste Seite"
+msgstr "First page"
+
+msgid "Erste"
+msgstr "First"
+
+msgid "Vorherige Seite"
+msgstr "Previous page"
+
+msgid "Nächste Seite"
+msgstr "Next page"
+
+msgid "Letzte Seite"
+msgstr "Last page"
+
+msgid "Letzte"
+msgstr "Last"
