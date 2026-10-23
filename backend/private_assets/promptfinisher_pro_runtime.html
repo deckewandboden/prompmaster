@@ -1274,6 +1274,7 @@ $('copyBtn').addEventListener('click',async()=>{try{await navigator.clipboard.wr
     try{
       const data=await jsonPost('/api/v1/prompts/compose/',{
         product:'PRO',
+        language:window.PF_PRODUCT_LOCALE?.code || document.documentElement.lang || 'de',
         task_id:taskId,
         microsoft_tier:msLicense(),
         input:inputPayload()
