@@ -116,9 +116,72 @@
   const notUi = 'script,style,textarea,input,[contenteditable],'
     + '#promptOutput,#pmv2PromptOutput,.pmv2-review-value,'
     + '.user-supplied,.user-content,[data-pf-untranslated]';
-  const matches = text => {
+  const interpolate = (key, values) => t(key).replace(/%\\(([a-z]+)\\)s/g,
+    (token, name) => Object.hasOwn(values, name) ? values[name] : token);
+  const matches = (text, parent) => {
     const trimmed = (text || '').trim();
-    return trimmed && Object.hasOwn(TEXT, trimmed) ? t(trimmed) : null;
+    if (!trimmed) return null;
+    if (Object.hasOwn(TEXT, trimmed)) return t(trimmed);
+    // Only specific generated UI elements may use interpolation. Never infer
+    // patterns from user input, IDs, source data or finished prompt content.
+    if (parent?.id === 'licenseModalTitle' && trimmed.endsWith(' erforderlich')) {
+      return interpolate('%(tier)s erforderlich',
+        {tier:trimmed.slice(0, -' erforderlich'.length)});
+    }
+    if (parent?.id === 'promptMode' && /^Für .+ optimiert$/.test(trimmed)) {
+      return interpolate('Für %(target)s optimiert',
+        {target:trimmed.slice(4, -' optimiert'.length)});
+    }
+    if (parent?.id === 'promptMeta' && trimmed.includes(' · ')) {
+      return trimmed.split(' · ').map(part => t(part)).join(' · ');
+    }
+    if (parent?.id === 'pmRatingState') {
+      const saved = trimmed.match(/^([1-5]) ★ gespeichert\\.$/);
+      if (saved) return interpolate('%(stars)s ★ gespeichert.', {stars:saved[1]});
+      for (const [prefix, key] of [
+        ['Bewertung konnte nicht gespeichert werden: ',
+         'Bewertung konnte nicht gespeichert werden: %(error)s'],
+        ['Feedback konnte nicht gespeichert werden: ',
+         'Feedback konnte nicht gespeichert werden: %(error)s'],
+      ]) {
+        if (trimmed.startsWith(prefix)) {
+          return interpolate(key, {error:trimmed.slice(prefix.length)});
+        }
+      }
+    }
+    return null;
+  };
+  const localizeLicenseRows = root => {
+    const list = root.querySelector?.('#licenseModalList');
+    if (!list) return;
+    const render = (li, template, values) => {
+      const text = t(template);
+      const fragment = document.createDocumentFragment();
+      for (const piece of text.split(/(%\\([a-z]+\\)s)/g).filter(Boolean)) {
+        const name = piece.match(/^%\\(([a-z]+)\\)s$/)?.[1];
+        if (name && Object.hasOwn(values, name)) {
+          const strong = document.createElement('strong');
+          strong.textContent = t(values[name]);
+          fragment.append(strong);
+        } else {
+          fragment.append(document.createTextNode(piece));
+        }
+      }
+      li.replaceChildren(fragment);
+    };
+    for (const li of list.querySelectorAll('li')) {
+      const strong = [...li.querySelectorAll('strong')];
+      const current = li.textContent.trim();
+      if (current.startsWith('Für ') && strong.length === 2) {
+        render(li, 'Für %(app)s ist in dieser PRO-Version mindestens %(tier)s erforderlich.',
+          {app:strong[0].textContent, tier:strong[1].textContent});
+      } else if (current.startsWith('Aufgabe: ') && strong.length === 1) {
+        render(li, 'Aufgabe: %(task)s.', {task:strong[0].textContent});
+      } else if (current.startsWith('Erforderliche Copilot-Stufe: ') && strong.length === 1) {
+        render(li, 'Erforderliche Copilot-Stufe: %(tier)s.',
+          {tier:strong[0].textContent});
+      }
+    }
   };
   const updateNode = node => {
     const parent = node.parentElement;
@@ -129,7 +192,7 @@
     // the composer would receive translated labels instead of schema values.
     const option = parent.closest('option');
     const original = node.nodeValue || '';
-    const translated = matches(original);
+    const translated = matches(original, parent);
     if (translated && translated !== original.trim()) {
       if (option && !option.hasAttribute('value')) {
         option.setAttribute('value', option.textContent.trim());
@@ -162,6 +225,7 @@
     const walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT);
     while (walker.nextNode()) updateNode(walker.currentNode);
     updateAttributes(root);
+    localizeLicenseRows(root);
   };
   const roots = [...document.querySelectorAll('.pmv2-header,.pmv2-hero,.pmv2-workspace,.modal-backdrop')];
   roots.forEach(walk);
