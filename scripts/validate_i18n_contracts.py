@@ -289,8 +289,10 @@ def main() -> None:
             )
     if "'script,style,textarea,input,option,[contenteditable],'" in bundle:
         raise SystemExit('I18N FAIL: visible select option labels excluded from translation')
-    if "if (option && !option.hasAttribute('value')) return;" not in bundle:
-        raise SystemExit('I18N FAIL: select options without a stable value must be protected')
+    if "option.setAttribute('value', option.textContent.trim())" not in bundle:
+        raise SystemExit('I18N FAIL: implicit option values must be frozen before display translation')
+    if "if (option && !option.hasAttribute('value')) return;" in bundle:
+        raise SystemExit('I18N FAIL: implicit option text must not remain untranslated')
     print('I18N RESPONSE STYLE PASS: nine controls x nine locales, stable option values')
 
     # Availability and completion markers affect user decisions. Machine
@@ -473,8 +475,31 @@ def main() -> None:
         'task title': {
             task['title'] for app in app_definitions.values() for task in app['tasks']
         },
+        'task description': {
+            task['intent'] for app in app_definitions.values() for task in app['tasks']
+        },
         'task area': {
             task['area'] for app in app_definitions.values() for task in app['tasks']
+        },
+        'required input': {
+            item for app in app_definitions.values() for task in app['tasks']
+            for item in task.get('required', [])
+        },
+        'optional input': {
+            item for app in app_definitions.values() for task in app['tasks']
+            for item in task.get('optional', [])
+        },
+        'task audience': {
+            item for app in app_definitions.values() for task in app['tasks']
+            for item in task.get('audiences', [])
+        },
+        'task focus': {
+            item for app in app_definitions.values() for task in app['tasks']
+            for item in task.get('focus', [])
+        },
+        'output label': {
+            item for app in app_definitions.values() for task in app['tasks']
+            for item in task.get('outputs', [])
         },
     }
     for category, values in categories.items():
