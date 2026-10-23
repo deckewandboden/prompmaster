@@ -532,6 +532,53 @@ def main() -> None:
         + ' across nine target locales'
     )
 
+    # Marketing is a separate Vite artifact and deliberately absent from the
+    # production Django /app image. Audit its translations at repository
+    # preflight, where both source trees are available.
+    marketing_root = ROOT / 'marketing'
+    source = (marketing_root / 'src/locale.js').read_text(encoding='utf-8')
+    marketing_rows = source.splitlines()
+    marketing_base = next(
+        (line for line in marketing_rows if line.startswith('export const marketingCatalog=')),
+        None,
+    )
+    if not marketing_base or not marketing_base.endswith(';'):
+        raise SystemExit('I18N FAIL: missing marketing dictionary')
+    marketing_catalog = json.loads(marketing_base.split('=', 1)[1][:-1])
+    marketing_prefix = 'Object.assign(marketingCatalog,'
+    for row in marketing_rows:
+        if row.startswith(marketing_prefix) and row.endswith(');'):
+            marketing_catalog.update(json.loads(row[len(marketing_prefix):-2]))
+
+    def marketing_text_values(value):
+        if isinstance(value, str):
+            return [value]
+        if isinstance(value, list):
+            return [part for item in value for part in marketing_text_values(item)]
+        if isinstance(value, dict):
+            return [part for item in value.values() for part in marketing_text_values(item)]
+        return []
+
+    faq = json.loads((marketing_root / 'src/faq.json').read_text(encoding='utf-8'))
+    marketing_labels = set(marketing_text_values(faq))
+    marketing_labels.update({
+        'Zahlung wird bestätigt.', 'Zum Kundenkonto →',
+        'Zur Startseite →', 'Zur Anmeldung →', 'Zur Marketingseite →',
+        'Einfach starten. Kostenlos nutzen.',
+        'PROMPTFINISHER Free starten →', 'Free kennenlernen →',
+        '← Zurück zur Startseite',
+    })
+    for phrase in marketing_labels:
+        for code in LOCALES:
+            if not marketing_catalog.get(phrase, {}).get(code, '').strip():
+                raise SystemExit(
+                    f'I18N FAIL {code}: untranslated marketing or FAQ text {phrase!r}'
+                )
+    print(
+        f'I18N MARKETING / FAQ PASS: {len(marketing_labels)} protected public '
+        'texts across nine languages'
+    )
+
     print('I18N CONTRACTS PASS: 10 UI languages incl. DE source')
 
 
