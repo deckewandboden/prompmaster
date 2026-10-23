@@ -363,7 +363,7 @@ def _product_dictionary() -> dict:
     if not match:
         raise RuntimeError('Product translation catalog missing')
     translations = json.loads(match.group(1))
-    for match in re.finditer(r'^\s*Object\.assign\(TEXT,(\{[^\n]+\})\);, flags=re.M):
+    for match in re.finditer(r'^\s*Object\.assign\(TEXT,(\{[^\n]+\})\);$', source, flags=re.M):
         translations.update(json.loads(match.group(1)))
     return translations
 
