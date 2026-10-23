@@ -1657,6 +1657,33 @@ def _browser_product_locale_acceptance(page, base: str, product: str) -> None:
                 page.locator('[data-close="proModal"]').first.click()
 
         else:
+            # Verify the VISIBLE 194-task catalog's dynamic content, not only
+            # marketing headers. Canonical German values must survive rendering.
+            page.locator('[data-app="copilot_chat"]').click()
+            page.locator('[data-task="PM20-001"]').click()
+            page.wait_for_function(
+                """(lang) => {
+                    const t=window.PF_PRODUCT_LOCALE?.t;
+                    if (!t || document.documentElement.lang!==lang) return false;
+                    const task=document.querySelector('#taskGrid [data-task="PM20-001"]');
+                    const title=task?.querySelector('.task-title')?.textContent.trim();
+                    const intent=task?.querySelector('.task-copy')?.textContent.trim();
+                    const label=document.querySelector('#inputGrid .input-card label');
+                    const field=label?.textContent.trim()||'';
+                    const options=[...document.querySelectorAll('#formatSelect option')];
+                    const canonical=['Fundierte Antwort','Research Brief','Management Summary'];
+                    return title===t('Frage fundiert beantworten')
+                        && intent===t('Beantworte die Fragestellung fundiert und trenne bestätigte Fakten, Schlussfolgerungen und Unsicherheiten.')
+                        && field.startsWith(t('Fragestellung'))
+                        && options.length===canonical.length
+                        && canonical.every((name,i)=>
+                            options[i].value===name && options[i].textContent.trim()===t(name))
+                        && document.querySelector('#formatSelect')?.value===canonical[0];
+                }""",
+                arg=code,
+                timeout=15000,
+            )
+
             # Pro must also return a native-language *prompt body*, not merely
             # translated UI labels. Use a real authenticated compose request.
             localized = page.evaluate(
