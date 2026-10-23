@@ -199,6 +199,11 @@ class LocalizedPromptRenderingTests(SimpleTestCase):
         self.assertIn('A', oversized['prompt'])
         self.assertFalse(oversized['source_values_preserved'])
         self.assertTrue(oversized['input_truncated'])
+        # Truncation must never drop the output-language instruction.
+        self.assertIn('response in English', ordinary['prompt'])
+        self.assertIn('response in English', oversized['prompt'])
+        self.assertEqual(ordinary['language'], 'en')
+        self.assertEqual(oversized['language'], 'en')
 
     def test_cookie_and_explicit_language_selection(self):
         request = RequestFactory().post('/api/v1/prompts/free/compose/')
