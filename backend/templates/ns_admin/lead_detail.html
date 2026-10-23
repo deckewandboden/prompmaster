@@ -1,61 +1,61 @@
-{% extends 'ns_admin/base.html' %}
+{% extends 'ns_admin/base.html' %}{% load i18n %}
 {% block content %}
 <div class="page-head">
   <div>
     <h1>{{ lead.lead_number }} · {{ lead.customer_display }}</h1>
     <div class="sub">
       {{ lead.get_kind_display }} · {{ lead.get_source_display }} · {{ lead.get_status_display }}
-      {% if lead.converted_company %} · Kunde {{ lead.converted_company.customer_number }}{% endif %}
+      {% if lead.converted_company %} · {% translate 'Kunde' %} {{ lead.converted_company.customer_number }}{% endif %}
     </div>
   </div>
   <div class="form-actions">
-    <a class="btn secondary" href="{% url 'ns_admin:leads' %}">Zurück</a>
-    {% if can_assign %}<a class="btn secondary" href="{% url 'ns_admin:lead_assign' lead.id %}">Zuweisen</a>{% endif %}
-    {% if can_convert and not lead.converted_company and lead.kind == 'company' %}<a class="btn primary" href="{% url 'ns_admin:lead_convert_company' lead.id %}">In Kunde umwandeln</a>{% endif %}
-    {% if can_delete %}<a class="btn danger" href="{% url 'ns_admin:lead_delete' lead.id %}">Löschen</a>{% endif %}
+    <a class="btn secondary" href="{% url 'ns_admin:leads' %}">{% translate "Zurück" %}</a>
+    {% if can_assign %}<a class="btn secondary" href="{% url 'ns_admin:lead_assign' lead.id %}">{% translate "Zuweisen" %}</a>{% endif %}
+    {% if can_convert and not lead.converted_company and lead.kind == 'company' %}<a class="btn primary" href="{% url 'ns_admin:lead_convert_company' lead.id %}">{% translate "In Kunde umwandeln" %}</a>{% endif %}
+    {% if can_delete %}<a class="btn danger" href="{% url 'ns_admin:lead_delete' lead.id %}">{% translate "Löschen" %}</a>{% endif %}
   </div>
 </div>
 
 <div class="grid two">
   <div class="card form-card">
-    <h2>Lead bearbeiten</h2>
+    <h2>{% translate "Lead bearbeiten" %}</h2>
     {% if can_write %}
     <form method="post" class="form">
       {% csrf_token %}
       {{ form.non_field_errors }}
       {{ form.as_p }}
       <div class="form-actions">
-        <button class="btn primary" type="submit">Speichern</button>
+        <button class="btn primary" type="submit">{% translate "Speichern" %}</button>
       </div>
     </form>
     {% else %}
     <dl class="detail-list">
-      <div><dt>Typ</dt><dd>{{ lead.get_kind_display }}</dd></div>
-      <div><dt>Unternehmen</dt><dd>{{ lead.company_name|default:'–' }}</dd></div>
-      <div><dt>Ansprechpartner</dt><dd>{{ lead.contact_name }}</dd></div>
-      <div><dt>E-Mail</dt><dd>{{ lead.email }}</dd></div>
-      <div><dt>Telefon</dt><dd>{{ lead.phone|default:'–' }}</dd></div>
-      <div><dt>Status</dt><dd>{{ lead.get_status_display }}</dd></div>
-      <div><dt>Priorität</dt><dd>{{ lead.get_priority_display }}</dd></div>
-      <div><dt>Zuständig</dt><dd>{{ lead.assigned_name }}</dd></div>
+      <div><dt>{% translate "Typ" %}</dt><dd>{{ lead.get_kind_display }}</dd></div>
+      <div><dt>{% translate "Unternehmen" %}</dt><dd>{{ lead.company_name|default:'–' }}</dd></div>
+      <div><dt>{% translate "Ansprechpartner" %}</dt><dd>{{ lead.contact_name }}</dd></div>
+      <div><dt>{% translate "E-Mail" %}</dt><dd>{{ lead.email }}</dd></div>
+      <div><dt>{% translate "Telefon" %}</dt><dd>{{ lead.phone|default:'–' }}</dd></div>
+      <div><dt>{% translate "Status" %}</dt><dd>{{ lead.get_status_display }}</dd></div>
+      <div><dt>{% translate "Priorität" %}</dt><dd>{{ lead.get_priority_display }}</dd></div>
+      <div><dt>{% translate "Zuständig" %}</dt><dd>{{ lead.assigned_name }}</dd></div>
     </dl>
     {% endif %}
   </div>
 
   <div class="card">
-    <h2>Verlauf &amp; Einordnung</h2>
-    <div class="statusrow"><span>Erstellt</span><strong>{{ lead.created_at|date:'d.m.Y H:i' }}</strong></div>
-    <div class="statusrow"><span>Zuletzt geändert</span><strong>{{ lead.updated_at|date:'d.m.Y H:i' }}</strong></div>
-    <div class="statusrow"><span>Nächste Aktion</span><strong>{% if lead.next_action_at %}{{ lead.next_action_at|date:'d.m.Y H:i' }}{% else %}–{% endif %}</strong></div>
-    <div class="statusrow"><span>Zuständig</span><strong>{{ lead.assigned_name }}</strong></div>
+    <h2>{% translate "Verlauf & Einordnung" %}</h2>
+    <div class="statusrow"><span>{% translate "Erstellt" %}</span><strong>{{ lead.created_at|date:'d.m.Y H:i' }}</strong></div>
+    <div class="statusrow"><span>{% translate "Zuletzt geändert" %}</span><strong>{{ lead.updated_at|date:'d.m.Y H:i' }}</strong></div>
+    <div class="statusrow"><span>{% translate "Nächste Aktion" %}</span><strong>{% if lead.next_action_at %}{{ lead.next_action_at|date:'d.m.Y H:i' }}{% else %}–{% endif %}</strong></div>
+    <div class="statusrow"><span>{% translate "Zuständig" %}</span><strong>{{ lead.assigned_name }}</strong></div>
     {% if lead.converted_company %}
-      <div class="alert ok">Als Firmenkunde konvertiert am {{ lead.converted_at|date:'d.m.Y H:i' }}.</div>
-      <a class="btn secondary" href="{% url 'ns_admin:customer_detail' lead.converted_company.id %}">Kundenkonto öffnen</a>
+      <div class="alert ok">{% translate 'Als Firmenkunde konvertiert am' %} {{ lead.converted_at|date:'d.m.Y H:i' }}.</div>
+      <a class="btn secondary" href="{% url 'ns_admin:customer_detail' lead.converted_company.id %}">{% translate "Kundenkonto öffnen" %}</a>
     {% elif lead.kind == 'private' %}
-      <div class="alert info">Privatkunden werden über den öffentlichen Registrierungs-/Checkout-Prozess angelegt, damit AGB und Datenschutz vom Kunden selbst bestätigt werden.</div>
+      <div class="alert info">{% translate "Privatkunden werden über den öffentlichen Registrierungs-/Checkout-Prozess angelegt, damit AGB und Datenschutz vom Kunden selbst bestätigt werden." %}</div>
     {% endif %}
     {% if lead.notes %}
-      <h3>Interne Notizen</h3>
+      <h3>{% translate "Interne Notizen" %}</h3>
       <p>{{ lead.notes|linebreaksbr }}</p>
     {% endif %}
   </div>
