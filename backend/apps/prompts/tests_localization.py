@@ -147,6 +147,20 @@ class LocalizedPromptRenderingTests(SimpleTestCase):
                 with self.subTest(family=family, language=language):
                     self.assertTrue(FAMILY_METHODS.get(family, {}).get(language))
 
+    def test_core_microsoft_app_guardrails_are_translated(self):
+        from .prompt_localization import APP_SCOPE_RULES
+        for app in ('copilot_chat', 'outlook', 'teams', 'word', 'excel', 'powerpoint'):
+            for language in SUPPORTED - {'de'}:
+                with self.subTest(app=app, language=language):
+                    self.assertTrue(APP_SCOPE_RULES[app][language].strip())
+        example = render_localized_prompt(
+            language='fr', result={'prompt': 'German', 'ready': True},
+            product='FREE', task_id='teams_notes', task_title='Nachbereitung formulieren',
+            application='Teams', family='summarize',
+            selections={'primary': 'Notes de réunion'},
+        )
+        self.assertIn(APP_SCOPE_RULES['teams']['fr'], example['prompt'])
+
     def test_locale_specific_style_and_format_are_used(self):
         base = {'prompt': 'Deutscher Ausgangsprompt', 'ready': True}
         result = render_localized_prompt(
