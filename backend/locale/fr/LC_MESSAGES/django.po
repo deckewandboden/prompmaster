@@ -3619,3 +3619,81 @@ msgstr "Résilier maintenant"
 # Customer checkout: legal document list heading.
 msgid "Rechtsdokumente:"
 msgstr "Documents juridiques :"
+
+msgid "Alle für Ihr Konto freigegebenen Adminbereiche."
+msgstr "Toutes les sections d'administration accessibles à votre compte."
+
+msgid "Geschäft & Inhalte"
+msgstr "Activité et contenus"
+
+msgid "System & Governance"
+msgstr "Système et gouvernance"
+
+msgid "Lead bearbeiten"
+msgstr "Modifier le prospect"
+
+msgid "Ansprechpartner"
+msgstr "Personne de contact"
+
+msgid "Verlauf & Einordnung"
+msgstr "Historique et évaluation"
+
+msgid "Zuletzt geändert"
+msgstr "Dernière modification"
+
+msgid "Als Firmenkunde konvertiert am"
+msgstr "Converti en client professionnel le"
+
+msgid "Kundenkonto öffnen"
+msgstr "Ouvrir le compte client"
+
+msgid "Privatkunden werden über den öffentlichen Registrierungs-/Checkout-Prozess angelegt, damit AGB und Datenschutz vom Kunden selbst bestätigt werden."
+msgstr "Les clients particuliers sont créés via l'inscription et la commande publiques afin qu'ils acceptent eux-mêmes les conditions et la politique de confidentialité."
+
+msgid "← Zur Übersicht"
+msgstr "← Retour à la vue d'ensemble"
+
+msgid "Erklärung"
+msgstr "Déclaration"
+
+msgid "Gewünschtes Ende"
+msgstr "Date de fin souhaitée"
+
+msgid "Bearbeitet"
+msgstr "Traité"
+
+msgid "Bearbeitung"
+msgstr "Traitement"
+
+msgid "Status speichern"
+msgstr "Enregistrer le statut"
+
+msgid "Sie haben Leserechte, aber keine Berechtigung zur Bearbeitung."
+msgstr "Vous avez accès en lecture, mais n'êtes pas autorisé à modifier."
+
+msgid "CSV-Export"
+msgstr "Export CSV"
+
+msgid "angefordert"
+msgstr "demandé"
+
+msgid "Zeilen"
+msgstr "Lignes"
+
+msgid "Verfügbar bis"
+msgstr "Disponible jusqu'au"
+
+msgid "Dieser Export ist abgelaufen."
+msgstr "Cet export a expiré."
+
+msgid "CSV herunterladen"
+msgstr "Télécharger le CSV"
+
+msgid "Der Export konnte nicht erstellt werden. Bitte erneut anfordern."
+msgstr "Impossible de créer l'export. Veuillez refaire la demande."
+
+msgid "Der Export wird im Hintergrund erstellt. Diese Seite aktualisiert sich automatisch."
+msgstr "L'export est en cours de création en arrière-plan. Cette page s'actualise automatiquement."
+
+msgid "Der Zahlungsdienst ist derzeit noch nicht verfügbar."
+msgstr "Le service de paiement est indisponible pour le moment."
