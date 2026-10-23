@@ -82,6 +82,21 @@ def main() -> None:
                     raise SystemExit(f'I18N FAIL {code}: product branding modified: {product}')
         print(f'I18N PASS {code}: {len(found)} strings, placeholders unchanged')
 
+    # Explicit templates are release critical; gettext fallback to German
+    # must never conceal missing translations on Pro-device and expiry pages.
+    for template_name in (
+        'asset_missing.html', 'register_device.html', 'renewal_warning.html',
+    ):
+        template = (ROOT / 'backend/templates/proaccess' / template_name).read_text(encoding='utf-8')
+        translated = re.findall(r'{%\s*translate\s+(["\x27])(.*?)\1\s*%}', template, re.DOTALL)
+        for _, phrase in translated:
+            if phrase not in base:
+                raise SystemExit(f'I18N FAIL: unregistered Pro template text {template_name}: {phrase!r}')
+    device_limit = 'PROMPTFINISHER Pro erlaubt %(device_limit)s aktive Geräte pro Benutzer.'
+    if device_limit not in base:
+        raise SystemExit('I18N FAIL: untranslated Pro device limit notice')
+    print('I18N PRO TEMPLATES PASS: deployment, device registration, renewal')
+
     # The dynamic Free/Pro UI catalog is separate from Django gettext.
     # Product names must never be translated as ordinary dictionary words.
     bundle = (ROOT / 'backend/static/js/promptfinisher_product_i18n.20261011.js'

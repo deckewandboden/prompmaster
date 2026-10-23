@@ -3758,3 +3758,61 @@ msgstr "Запросить новую ссылку"
 
 msgid "Möchten Sie die aktuelle Sitzung beenden?"
 msgstr "Хотите завершить текущий сеанс?"
+
+# Pro deployment, device registration, and expiration warnings.
+msgid "Die geschützte Pro-Anwendung ist auf diesem System noch nicht bereitgestellt."
+msgstr "Защищённое приложение Pro ещё не развернуто на этой системе."
+
+msgid "Deployment unvollständig."
+msgstr "Развертывание не завершено."
+
+msgid "Der unveränderte PROMPTFINISHER-Pro-Golden-Master muss als private Serverdatei installiert werden."
+msgstr "Неизменённый эталон PROMPTFINISHER Pro необходимо установить как закрытый файл сервера."
+
+msgid "Diese Datei wird niemals öffentlich unter /static/ ausgeliefert."
+msgstr "Этот файл никогда не публикуется по пути /static/."
+
+msgid "Gerät registrieren"
+msgstr "Зарегистрировать устройство"
+
+msgid "PROMPTFINISHER Pro erlaubt %(device_limit)s aktive Geräte pro Benutzer."
+msgstr "PROMPTFINISHER Pro допускает %(device_limit)s активных устройств на пользователя."
+
+msgid "Gerät registrieren und PROMPTFINISHER Pro öffnen"
+msgstr "Зарегистрировать устройство и открыть PROMPTFINISHER Pro"
+
+msgid "Wenn alle Geräteslots belegt sind, muss Ihr Firmenadministrator oder netstyle zuerst ein altes Gerät freigeben."
+msgstr "Если все слоты устройств заняты, администратор вашей компании или netstyle должен сначала освободить старое устройство."
+
+msgid "Lizenz läuft bald ab"
+msgstr "Срок лицензии скоро истечёт"
+
+msgid "PROMPTFINISHER-Pro-Lizenz läuft bald ab"
+msgstr "Срок лицензии PROMPTFINISHER Pro скоро истечёт"
+
+msgid "Dein Pro-Zugriff bleibt bis zum Ablaufdatum aktiv."
+msgstr "Ваш доступ Pro останется активным до окончания срока действия."
+
+msgid "Verbleibende Tage:"
+msgstr "Осталось дней:"
+
+msgid "Lizenz:"
+msgstr "Лицензия:"
+
+msgid "Ablaufdatum:"
+msgstr "Дата окончания:"
+
+msgid "Nach Ablauf wird der Pro-Zugriff ohne Verlängerung automatisch gesperrt."
+msgstr "После окончания срока доступ Pro автоматически блокируется без продления."
+
+msgid "Was möchtest du tun?"
+msgstr "Что вы хотите сделать?"
+
+msgid "Eine Verlängerung vor Ablauf hängt weitere 365 Tage an das bestehende Ablaufdatum an. Die Restlaufzeit geht nicht verloren."
+msgstr "Продление до истечения срока добавит 365 дней к текущей дате окончания. Остаток срока сохранится."
+
+msgid "Lizenzverwaltung / Verlängerung"
+msgstr "Управление лицензией / продление"
+
+msgid "Jetzt trotzdem PROMPTFINISHER Pro starten"
+msgstr "Всё равно открыть PROMPTFINISHER Pro"

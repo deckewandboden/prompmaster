@@ -3812,3 +3812,61 @@ msgstr "Nieuwe link aanvragen"
 
 msgid "Möchten Sie die aktuelle Sitzung beenden?"
 msgstr "Wil je je huidige sessie beëindigen?"
+
+# Pro deployment, device registration, and expiration warnings.
+msgid "Die geschützte Pro-Anwendung ist auf diesem System noch nicht bereitgestellt."
+msgstr "De beveiligde Pro-applicatie is nog niet op dit systeem geïnstalleerd."
+
+msgid "Deployment unvollständig."
+msgstr "Uitrol onvolledig."
+
+msgid "Der unveränderte PROMPTFINISHER-Pro-Golden-Master muss als private Serverdatei installiert werden."
+msgstr "De ongewijzigde referentieversie van PROMPTFINISHER Pro moet als privéserverbestand worden geïnstalleerd."
+
+msgid "Diese Datei wird niemals öffentlich unter /static/ ausgeliefert."
+msgstr "Dit bestand wordt nooit openbaar aangeboden via /static/."
+
+msgid "Gerät registrieren"
+msgstr "Apparaat registreren"
+
+msgid "PROMPTFINISHER Pro erlaubt %(device_limit)s aktive Geräte pro Benutzer."
+msgstr "PROMPTFINISHER Pro staat %(device_limit)s actieve apparaten per gebruiker toe."
+
+msgid "Gerät registrieren und PROMPTFINISHER Pro öffnen"
+msgstr "Apparaat registreren en PROMPTFINISHER Pro openen"
+
+msgid "Wenn alle Geräteslots belegt sind, muss Ihr Firmenadministrator oder netstyle zuerst ein altes Gerät freigeben."
+msgstr "Als alle apparaatplaatsen bezet zijn, moet uw bedrijfsbeheerder of netstyle eerst een oud apparaat vrijgeven."
+
+msgid "Lizenz läuft bald ab"
+msgstr "Licentie verloopt binnenkort"
+
+msgid "PROMPTFINISHER-Pro-Lizenz läuft bald ab"
+msgstr "PROMPTFINISHER Pro-licentie verloopt binnenkort"
+
+msgid "Dein Pro-Zugriff bleibt bis zum Ablaufdatum aktiv."
+msgstr "Je Pro-toegang blijft actief tot de vervaldatum."
+
+msgid "Verbleibende Tage:"
+msgstr "Resterende dagen:"
+
+msgid "Lizenz:"
+msgstr "Licentie:"
+
+msgid "Ablaufdatum:"
+msgstr "Vervaldatum:"
+
+msgid "Nach Ablauf wird der Pro-Zugriff ohne Verlängerung automatisch gesperrt."
+msgstr "Na de vervaldatum wordt Pro-toegang automatisch geblokkeerd zonder verlenging."
+
+msgid "Was möchtest du tun?"
+msgstr "Wat wil je doen?"
+
+msgid "Eine Verlängerung vor Ablauf hängt weitere 365 Tage an das bestehende Ablaufdatum an. Die Restlaufzeit geht nicht verloren."
+msgstr "Verlengen vóór de vervaldatum voegt 365 dagen toe aan de huidige einddatum. De resterende tijd blijft behouden."
+
+msgid "Lizenzverwaltung / Verlängerung"
+msgstr "Licentiebeheer / verlenging"
+
+msgid "Jetzt trotzdem PROMPTFINISHER Pro starten"
+msgstr "PROMPTFINISHER Pro toch openen"

@@ -3757,3 +3757,61 @@ msgstr "Pedir nova ligação"
 
 msgid "Möchten Sie die aktuelle Sitzung beenden?"
 msgstr "Pretende terminar a sessão atual?"
+
+# Pro deployment, device registration, and expiration warnings.
+msgid "Die geschützte Pro-Anwendung ist auf diesem System noch nicht bereitgestellt."
+msgstr "A aplicação Pro protegida ainda não foi instalada neste sistema."
+
+msgid "Deployment unvollständig."
+msgstr "Implementação incompleta."
+
+msgid "Der unveränderte PROMPTFINISHER-Pro-Golden-Master muss als private Serverdatei installiert werden."
+msgstr "O modelo mestre original do PROMPTFINISHER Pro tem de ser instalado como ficheiro privado no servidor."
+
+msgid "Diese Datei wird niemals öffentlich unter /static/ ausgeliefert."
+msgstr "Este ficheiro nunca é disponibilizado publicamente em /static/."
+
+msgid "Gerät registrieren"
+msgstr "Registar dispositivo"
+
+msgid "PROMPTFINISHER Pro erlaubt %(device_limit)s aktive Geräte pro Benutzer."
+msgstr "O PROMPTFINISHER Pro permite %(device_limit)s dispositivos ativos por utilizador."
+
+msgid "Gerät registrieren und PROMPTFINISHER Pro öffnen"
+msgstr "Registar dispositivo e abrir o PROMPTFINISHER Pro"
+
+msgid "Wenn alle Geräteslots belegt sind, muss Ihr Firmenadministrator oder netstyle zuerst ein altes Gerät freigeben."
+msgstr "Se todos os espaços para dispositivos estiverem ocupados, o administrador da empresa ou a netstyle terá de libertar primeiro um dispositivo antigo."
+
+msgid "Lizenz läuft bald ab"
+msgstr "A licença expira em breve"
+
+msgid "PROMPTFINISHER-Pro-Lizenz läuft bald ab"
+msgstr "A licença do PROMPTFINISHER Pro expira em breve"
+
+msgid "Dein Pro-Zugriff bleibt bis zum Ablaufdatum aktiv."
+msgstr "O teu acesso Pro permanece ativo até à data de expiração."
+
+msgid "Verbleibende Tage:"
+msgstr "Dias restantes:"
+
+msgid "Lizenz:"
+msgstr "Licença:"
+
+msgid "Ablaufdatum:"
+msgstr "Data de expiração:"
+
+msgid "Nach Ablauf wird der Pro-Zugriff ohne Verlängerung automatisch gesperrt."
+msgstr "Após a expiração, o acesso Pro será bloqueado automaticamente se não houver renovação."
+
+msgid "Was möchtest du tun?"
+msgstr "O que pretendes fazer?"
+
+msgid "Eine Verlängerung vor Ablauf hängt weitere 365 Tage an das bestehende Ablaufdatum an. Die Restlaufzeit geht nicht verloren."
+msgstr "A renovação antes da expiração acrescenta 365 dias à data de fim atual. O tempo restante não se perde."
+
+msgid "Lizenzverwaltung / Verlängerung"
+msgstr "Gestão de licenças / renovação"
+
+msgid "Jetzt trotzdem PROMPTFINISHER Pro starten"
+msgstr "Abrir o PROMPTFINISHER Pro na mesma"

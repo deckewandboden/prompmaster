@@ -3757,3 +3757,61 @@ msgstr "Yeni bağlantı iste"
 
 msgid "Möchten Sie die aktuelle Sitzung beenden?"
 msgstr "Geçerli oturumu kapatmak istiyor musunuz?"
+
+# Pro deployment, device registration, and expiration warnings.
+msgid "Die geschützte Pro-Anwendung ist auf diesem System noch nicht bereitgestellt."
+msgstr "Korumalı Pro uygulaması bu sistemde henüz dağıtılmadı."
+
+msgid "Deployment unvollständig."
+msgstr "Dağıtım tamamlanmadı."
+
+msgid "Der unveränderte PROMPTFINISHER-Pro-Golden-Master muss als private Serverdatei installiert werden."
+msgstr "Değiştirilmemiş PROMPTFINISHER Pro ana sürümü sunucuya özel dosya olarak yüklenmelidir."
+
+msgid "Diese Datei wird niemals öffentlich unter /static/ ausgeliefert."
+msgstr "Bu dosya hiçbir zaman /static/ altında herkese açık sunulmaz."
+
+msgid "Gerät registrieren"
+msgstr "Cihaz kaydet"
+
+msgid "PROMPTFINISHER Pro erlaubt %(device_limit)s aktive Geräte pro Benutzer."
+msgstr "PROMPTFINISHER Pro kullanıcı başına %(device_limit)s etkin cihaza izin verir."
+
+msgid "Gerät registrieren und PROMPTFINISHER Pro öffnen"
+msgstr "Cihazı kaydet ve PROMPTFINISHER Pro'yu aç"
+
+msgid "Wenn alle Geräteslots belegt sind, muss Ihr Firmenadministrator oder netstyle zuerst ein altes Gerät freigeben."
+msgstr "Tüm cihaz yuvaları doluysa şirket yöneticiniz veya netstyle önce eski bir cihazı serbest bırakmalıdır."
+
+msgid "Lizenz läuft bald ab"
+msgstr "Lisansın süresi yakında doluyor"
+
+msgid "PROMPTFINISHER-Pro-Lizenz läuft bald ab"
+msgstr "PROMPTFINISHER Pro lisansının süresi yakında doluyor"
+
+msgid "Dein Pro-Zugriff bleibt bis zum Ablaufdatum aktiv."
+msgstr "Pro erişiminiz son kullanma tarihine kadar etkin kalır."
+
+msgid "Verbleibende Tage:"
+msgstr "Kalan gün:"
+
+msgid "Lizenz:"
+msgstr "Lisans:"
+
+msgid "Ablaufdatum:"
+msgstr "Son kullanma tarihi:"
+
+msgid "Nach Ablauf wird der Pro-Zugriff ohne Verlängerung automatisch gesperrt."
+msgstr "Yenileme yapılmazsa süre sonunda Pro erişimi otomatik olarak engellenir."
+
+msgid "Was möchtest du tun?"
+msgstr "Ne yapmak istersiniz?"
+
+msgid "Eine Verlängerung vor Ablauf hängt weitere 365 Tage an das bestehende Ablaufdatum an. Die Restlaufzeit geht nicht verloren."
+msgstr "Süre dolmadan yenileme, mevcut bitiş tarihine 365 gün ekler. Kalan süre kaybolmaz."
+
+msgid "Lizenzverwaltung / Verlängerung"
+msgstr "Lisans yönetimi / yenileme"
+
+msgid "Jetzt trotzdem PROMPTFINISHER Pro starten"
+msgstr "Yine de PROMPTFINISHER Pro'yu aç"
