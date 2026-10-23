@@ -2928,6 +2928,78 @@ OUTPUT_CATEGORIES = {
 OUTPUT_CATEGORY_PATTERNS = [["code","DAX|KQL|SQL|Code|Código|Skript|Befehle|Ausdruck|IaC|Refactoring|Patch|Bug"],["prompt","Prompt|Custom Instructions"],["workflow","Flow|Workflow|Prozessfluss|Schrittfolge|Approva"],["questionnaire","Quiz|Fragebogen|Fragenkatalog|Fragenliste|Fragenmatrix"],["presentation","Folie|Folien|Präsentation|Storyboard|Deck|Sprecherhinweise|Videoskript|Voiceover"],["email","E-Mail|Nachricht|Mail|Antwort|Reply"],["summary","Summary|Zusammenfassung|Kurzfassung|Recap|Catch-up|Kurzübersicht|Kurzsummary"],["brief","Briefing|Brief|One-Pager"],["review","Review|Audit|Checkliste|Check|Prüfung|Testmatrix|Abnahme"],["matrix","Matrix|matrix|Architekturmatrix"],["table","Tabelle|Tabelle|Data Table|Analysetabelle"],["report","Bericht|Report|Investigation"],["analysis","Analyse|Analysis|Auswertung|Insight|Trends|Anomalie|Stimmung|Assessment"],["plan","Plan|Roadmap|Zeitlinie|Timeline|Aufgabenstruktur|Aufgabenliste|Maßnahmen"],["guide","Guide|Anleitung|Korrekturschritte|Troubleshooting|Schritt-für-Schritt"],["list","Liste|Übersicht|Inventory|Katalog|Cluster|Treffer|Kriterien"],["concept","Konzept|Design|Architecture|Architektur|Screen|Seitenentwurf|Sitemap|Lösungsvorschlag|Setup|Vorschlag|Strategie"]]
 
 
+
+# Platform guardrails that the canonical task composer enforces per app.
+APP_SCOPE_RULES = {
+ "copilot_chat": {
+  "en": "Use only sources and work data genuinely accessible in the selected Copilot context. Do not invent internal company information.",
+  "fr": "N'utilisez que des sources et données professionnelles réellement accessibles dans le contexte Copilot choisi. N'inventez aucune donnée interne.",
+  "it": "Usa soltanto fonti e dati di lavoro realmente accessibili nel contesto Copilot selezionato. Non inventare dati aziendali interni.",
+  "es": "Utiliza solo fuentes y datos de trabajo realmente accesibles en el contexto Copilot seleccionado. No inventes datos internos de la empresa.",
+  "pt": "Utilize apenas fontes e dados de trabalho realmente acessíveis no contexto Copilot escolhido. Não invente dados internos da empresa.",
+  "nl": "Gebruik alleen bronnen en werkgegevens die daadwerkelijk toegankelijk zijn in de gekozen Copilot-context. Verzin geen interne bedrijfsgegevens.",
+  "pl": "Korzystaj tylko ze źródeł i danych roboczych faktycznie dostępnych w wybranym kontekście Copilot. Nie wymyślaj wewnętrznych danych firmy.",
+  "tr": "Yalnızca seçilen Copilot bağlamında gerçekten erişilebilen kaynakları ve iş verilerini kullanın. Şirket içi verileri uydurmayın.",
+  "ru": "Используйте только источники и рабочие данные, реально доступные в выбранном контексте Copilot. Не выдумывайте внутренние сведения компании."
+ },
+ "outlook": {
+  "en": "Refer only to emails, threads, calendar or meeting information available in the current context. Do not claim a message was sent or an appointment changed unless that action is confirmed.",
+  "fr": "Référez-vous seulement aux e-mails, conversations, calendriers et réunions disponibles dans le contexte actuel. Ne prétendez ni qu'un message a été envoyé ni qu'un rendez-vous a été modifié sans confirmation.",
+  "it": "Fai riferimento solo a e-mail, conversazioni, calendario o riunioni disponibili nel contesto corrente. Non dichiarare invii o modifiche ad appuntamenti senza conferma.",
+  "es": "Usa solo correos, hilos, calendarios o reuniones disponibles en el contexto actual. No afirmes que se envió un mensaje o cambió una cita sin confirmación.",
+  "pt": "Utilize apenas e-mails, conversas, calendários ou reuniões disponíveis no contexto atual. Não indique que uma mensagem foi enviada ou uma reunião alterada sem confirmação.",
+  "nl": "Verwijs alleen naar e-mails, gespreksreeksen, agenda's en vergaderingen die beschikbaar zijn in de huidige context. Claim geen verzonden bericht of gewijzigde afspraak zonder bevestiging.",
+  "pl": "Odwołuj się wyłącznie do wiadomości, wątków, kalendarzy i spotkań dostępnych w bieżącym kontekście. Nie twierdź, że wysłano wiadomość lub zmieniono termin bez potwierdzenia.",
+  "tr": "Yalnızca mevcut bağlamda bulunan e-postaları, yazışmaları, takvim veya toplantı bilgilerini kullanın. Onaylanmadıkça mesaj gönderildiğini veya randevu değiştirildiğini söylemeyin.",
+  "ru": "Ссылайтесь только на письма, переписки, календарь и встречи, доступные в текущем контексте. Не утверждайте, что письмо отправлено или встреча изменена, без подтверждения."
+ },
+ "teams": {
+  "en": "Use only chats, channel messages, transcripts and meeting content actually available. Mark responsibilities, decisions or deadlines as open when the evidence is ambiguous.",
+  "fr": "Utilisez uniquement les conversations, messages de canal, transcriptions et contenus de réunion réellement disponibles. Signalez comme ouverts les responsabilités, décisions ou délais insuffisamment établis.",
+  "it": "Usa solo chat, messaggi di canale, trascrizioni e contenuti delle riunioni realmente disponibili. Indica come aperti responsabilità, decisioni e scadenze non documentate con certezza.",
+  "es": "Utiliza solo chats, mensajes de canal, transcripciones y contenido de reuniones realmente disponibles. Señala como pendientes las responsabilidades, decisiones o fechas no confirmadas.",
+  "pt": "Utilize apenas chats, mensagens de canal, transcrições e conteúdos de reuniões realmente disponíveis. Assinale como pendentes responsabilidades, decisões ou prazos sem comprovação clara.",
+  "nl": "Gebruik alleen werkelijk beschikbare chats, kanaalberichten, transcripties en vergaderinhoud. Markeer verantwoordelijkheden, besluiten en termijnen als open wanneer ze niet eenduidig zijn vastgelegd.",
+  "pl": "Korzystaj tylko z rzeczywiście dostępnych czatów, wiadomości kanałowych, transkrypcji i treści spotkań. Oznacz jako otwarte obowiązki, decyzje i terminy, jeśli nie są jednoznacznie potwierdzone.",
+  "tr": "Yalnızca gerçekten erişilebilir sohbetleri, kanal iletilerini, dökümleri ve toplantı içeriklerini kullanın. Belirsiz sorumluluk, karar veya tarihleri açık konu olarak işaretleyin.",
+  "ru": "Используйте только реально доступные чаты, сообщения каналов, расшифровки и материалы встреч. Помечайте обязанности, решения и сроки как открытые, если они не подтверждены однозначно."
+ },
+ "word": {
+  "en": "Work with the open document and explicitly referenced sources. Preserve established facts, figures, names and requirements unless a change is requested.",
+  "fr": "Travaillez à partir du document ouvert et des sources explicitement citées. Préservez les faits, chiffres, noms et exigences établis sauf demande de modification.",
+  "it": "Lavora sul documento aperto e sulle fonti esplicitamente citate. Conserva fatti, numeri, nomi e requisiti accertati salvo richiesta di modifica.",
+  "es": "Trabaja con el documento abierto y las fuentes indicadas expresamente. Conserva los hechos, cifras, nombres y requisitos establecidos salvo petición de cambio.",
+  "pt": "Trabalhe com o documento aberto e as fontes expressamente referidas. Preserve factos, números, nomes e requisitos confirmados salvo pedido de alteração.",
+  "nl": "Werk met het geopende document en expliciet genoemde bronnen. Behoud vaststaande feiten, cijfers, namen en vereisten tenzij om een wijziging wordt gevraagd.",
+  "pl": "Pracuj na otwartym dokumencie i wyraźnie wskazanych źródłach. Zachowaj potwierdzone fakty, liczby, nazwiska i wymagania, chyba że poproszono o zmianę.",
+  "tr": "Açık belge ve açıkça belirtilen kaynaklarla çalışın. Değişiklik istenmedikçe doğrulanmış olguları, sayıları, adları ve gereksinimleri koruyun.",
+  "ru": "Работайте с открытым документом и явно указанными источниками. Сохраняйте подтверждённые факты, цифры, имена и требования, если не запрошено изменение."
+ },
+ "excel": {
+  "en": "Base calculations on the actually available data range. Identify assumptions, missing values and data-quality problems. Do not fabricate metrics.",
+  "fr": "Fondez les calculs sur les plages de données réellement disponibles. Signalez les hypothèses, valeurs manquantes et problèmes de qualité. N'inventez pas d'indicateurs.",
+  "it": "Basa i calcoli sull'intervallo di dati realmente disponibile. Segnala ipotesi, valori mancanti e problemi di qualità dei dati. Non inventare indicatori.",
+  "es": "Basa los cálculos en el rango de datos realmente disponible. Indica supuestos, valores ausentes y problemas de calidad. No inventes métricas.",
+  "pt": "Baseie os cálculos nos intervalos de dados realmente disponíveis. Identifique pressupostos, valores em falta e problemas de qualidade. Não invente indicadores.",
+  "nl": "Baseer berekeningen op het werkelijk beschikbare gegevensbereik. Benoem aannames, ontbrekende waarden en kwaliteitsproblemen. Verzin geen kengetallen.",
+  "pl": "Opieraj obliczenia na rzeczywiście dostępnych zakresach danych. Wskaż założenia, brakujące wartości i problemy z jakością. Nie wymyślaj wskaźników.",
+  "tr": "Hesaplamaları gerçekten mevcut veri aralığına dayandırın. Varsayımları, eksik değerleri ve veri kalitesi sorunlarını belirtin. Metrik uydurmayın.",
+  "ru": "Основывайте расчёты только на реально доступном диапазоне данных. Укажите допущения, пропуски и проблемы качества данных. Не выдумывайте показатели."
+ },
+ "powerpoint": {
+  "en": "Preserve verified facts from referenced files. Do not invent figures or references. Separate slide content from optional speaker notes.",
+  "fr": "Préservez les faits vérifiés des fichiers de référence. N'inventez ni chiffres ni références. Séparez le contenu des diapositives des notes de présentation facultatives.",
+  "it": "Conserva i fatti verificati dei file citati. Non inventare cifre o riferimenti. Separa il contenuto delle diapositive dalle eventuali note del relatore.",
+  "es": "Conserva los hechos verificados de los archivos citados. No inventes cifras ni referencias. Separa el contenido de las diapositivas de las notas opcionales del presentador.",
+  "pt": "Preserve factos comprovados dos ficheiros referidos. Não invente valores nem referências. Separe o conteúdo dos diapositivos das notas opcionais do apresentador.",
+  "nl": "Behoud geverifieerde feiten uit genoemde bestanden. Verzin geen cijfers of verwijzingen. Houd dia-inhoud gescheiden van optionele sprekersnotities.",
+  "pl": "Zachowaj potwierdzone fakty z przywołanych plików. Nie wymyślaj liczb ani odniesień. Oddziel treść slajdów od opcjonalnych notatek prelegenta.",
+  "tr": "Başvurulan dosyalardaki doğrulanmış bilgileri koruyun. Sayı veya kaynak uydurmayın. Slayt içeriğini isteğe bağlı konuşmacı notlarından ayırın.",
+  "ru": "Сохраняйте проверенные факты из указанных файлов. Не выдумывайте цифры и ссылки. Отделяйте содержимое слайдов от необязательных заметок докладчика."
+ }
+}
+
+
 def _output_label(value: str, language: str) -> str:
     """Best-effort native category fallback for unlocalized PM20 output options.
 
@@ -3001,6 +3073,7 @@ def render_localized_prompt(
             pieces.append(source_rule)
         pieces.extend([
             copy['scope'],
+            APP_SCOPE_RULES.get(str(application).strip().lower().replace(' ', '_'), {}).get(language, ''),
             f"{copy['quality']}: {copy['no_fabrication']}",
         ])
     prompt = '\n\n'.join(pieces)
