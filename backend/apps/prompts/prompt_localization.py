@@ -1655,9 +1655,19 @@ def render_localized_prompt(
             f"{copy['quality']}: {copy['no_fabrication']}",
         ])
     prompt = '\n\n'.join(pieces)
-    if maximum_chars and len(prompt) > maximum_chars:
-        # Compact-tasks carry stringent output budgets; do not silently
-        # truncate user data in a way that would change the task.
-        prompt = f"{copy['task']}: {title}"[:maximum_chars]
+    truncated_input = False
+    if maximum_chars:
+        # Compact PM20 prompts must retain the task and as much of the
+        # selected source context as fits. Signal truncation explicitly.
+        limit = int(maximum_chars)
+        compact = f"{copy['task']}: {title}. " + '; '.join(supplied)
+        if len(compact) + len(copy['output']) + 2 <= limit:
+            compact += '. ' + copy['output']
+        if len(compact) > limit:
+            truncated_input = True
+            compact = compact[:max(0, limit - 1)].rstrip(' ,;.:') + '…'
+        prompt = compact
     return {**result, 'prompt': prompt, 'language': language,
-            'localization_mode': 'structured', 'source_values_preserved': True}
+            'localization_mode': 'structured',
+            'source_values_preserved': not truncated_input,
+            'input_truncated': truncated_input}
