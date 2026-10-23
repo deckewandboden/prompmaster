@@ -3549,3 +3549,7 @@ msgstr "Bitiş tarihi belirtmezseniz fesih bildiriminizi mümkün olan en erken 
 
 msgid "jetzt kündigen"
 msgstr "Şimdi feshet"
+
+# Customer checkout: legal document list heading.
+msgid "Rechtsdokumente:"
+msgstr "Hukuki belgeler:"
