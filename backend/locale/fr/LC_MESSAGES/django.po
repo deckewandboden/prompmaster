@@ -3615,3 +3615,7 @@ msgstr "Sans date de fin indiquée, nous traiterons la résiliation pour la prem
 
 msgid "jetzt kündigen"
 msgstr "Résilier maintenant"
+
+# Customer checkout: legal document list heading.
+msgid "Rechtsdokumente:"
+msgstr "Documents juridiques :"
