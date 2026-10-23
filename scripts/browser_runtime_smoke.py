@@ -1608,7 +1608,7 @@ def _browser_product_locale_acceptance(page, base: str, product: str) -> None:
             # translated UI labels. Use a real authenticated compose request.
             localized = page.evaluate(
                 """async (lang) => {
-                    const csrf = document.cookie.match(/(?:^|;\\s*)csrftoken=([^;]+)/)?.[1] || document.querySelector('input[name="csrfmiddlewaretoken"]')?.value || '';
+                    const csrf = document.cookie.match(/(?:^|;\s*)csrftoken=([^;]+)/)?.[1] || document.querySelector('input[name="csrfmiddlewaretoken"]')?.value || '';
                     if (!csrf) return {status:0, error:'missing Pro CSRF token'};
                     const response = await fetch('/api/v1/prompts/compose/', {
                       method:'POST', credentials:'same-origin',
