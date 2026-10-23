@@ -1745,6 +1745,224 @@ def _translated(source: str, language: str) -> str:
     return str(candidate).strip() if candidate else ''
 
 
+OUTPUT_CATEGORIES = {
+ "email": {
+  "en": "a ready-to-use email or message",
+  "fr": "un e-mail ou message prêt à l'emploi",
+  "it": "un'e-mail o un messaggio pronto all'uso",
+  "es": "un correo o mensaje listo para usar",
+  "pt": "um e-mail ou mensagem pronto a usar",
+  "nl": "een direct bruikbare e-mail of bericht",
+  "pl": "gotowy do użycia e-mail lub wiadomość",
+  "tr": "kullanıma hazır e-posta veya ileti",
+  "ru": "готовое к использованию письмо или сообщение"
+ },
+ "summary": {
+  "en": "a focused, accurate summary",
+  "fr": "une synthèse ciblée et fidèle",
+  "it": "un riepilogo mirato e accurato",
+  "es": "un resumen preciso y centrado",
+  "pt": "um resumo preciso e focado",
+  "nl": "een gerichte, nauwkeurige samenvatting",
+  "pl": "zwięzłe i dokładne podsumowanie",
+  "tr": "odaklı ve doğru bir özet",
+  "ru": "точная и предметная сводка"
+ },
+ "report": {
+  "en": "a structured professional report",
+  "fr": "un rapport professionnel structuré",
+  "it": "un rapporto professionale strutturato",
+  "es": "un informe profesional estructurado",
+  "pt": "um relatório profissional estruturado",
+  "nl": "een gestructureerd professioneel rapport",
+  "pl": "uporządkowany raport profesjonalny",
+  "tr": "yapılandırılmış profesyonel rapor",
+  "ru": "структурированный профессиональный отчёт"
+ },
+ "matrix": {
+  "en": "a structured comparison matrix",
+  "fr": "une matrice de comparaison structurée",
+  "it": "una matrice di confronto strutturata",
+  "es": "una matriz comparativa estructurada",
+  "pt": "uma matriz comparativa estruturada",
+  "nl": "een gestructureerde vergelijkingsmatrix",
+  "pl": "uporządkowana macierz porównawcza",
+  "tr": "yapılandırılmış karşılaştırma matrisi",
+  "ru": "структурированная матрица сравнения"
+ },
+ "table": {
+  "en": "a clearly labeled table",
+  "fr": "un tableau clairement annoté",
+  "it": "una tabella con intestazioni chiare",
+  "es": "una tabla con encabezados claros",
+  "pt": "uma tabela com cabeçalhos claros",
+  "nl": "een duidelijk gelabelde tabel",
+  "pl": "czytelna tabela z nagłówkami",
+  "tr": "açık başlıklı bir tablo",
+  "ru": "таблица с понятными заголовками"
+ },
+ "analysis": {
+  "en": "a detailed, evidence-based analysis",
+  "fr": "une analyse détaillée fondée sur les faits",
+  "it": "un'analisi dettagliata basata sulle prove",
+  "es": "un análisis detallado basado en datos",
+  "pt": "uma análise detalhada baseada em evidências",
+  "nl": "een gedetailleerde, onderbouwde analyse",
+  "pl": "szczegółowa analiza oparta na faktach",
+  "tr": "kanıta dayalı ayrıntılı analiz",
+  "ru": "подробный анализ на основе фактов"
+ },
+ "plan": {
+  "en": "an actionable step-by-step plan",
+  "fr": "un plan d'action par étapes",
+  "it": "un piano operativo passo dopo passo",
+  "es": "un plan de acción paso a paso",
+  "pt": "um plano de ação passo a passo",
+  "nl": "een uitvoerbaar stappenplan",
+  "pl": "wykonalny plan krok po kroku",
+  "tr": "uygulanabilir adım adım plan",
+  "ru": "практический пошаговый план"
+ },
+ "list": {
+  "en": "a clearly organized, prioritized list",
+  "fr": "une liste structurée et hiérarchisée",
+  "it": "un elenco organizzato e prioritizzato",
+  "es": "una lista organizada por prioridades",
+  "pt": "uma lista organizada por prioridades",
+  "nl": "een duidelijk geordende lijst met prioriteiten",
+  "pl": "czytelna lista według priorytetów",
+  "tr": "önceliklendirilmiş düzenli liste",
+  "ru": "структурированный список по приоритетам"
+ },
+ "presentation": {
+  "en": "an outline or slide content ready for presentation",
+  "fr": "un plan ou contenu de diapositives prêt à présenter",
+  "it": "una struttura o contenuto di slide pronto per la presentazione",
+  "es": "un esquema o contenido de diapositivas listo para presentar",
+  "pt": "um esquema ou conteúdo de diapositivos pronto para apresentar",
+  "nl": "een presentatieopzet of direct bruikbare dia-inhoud",
+  "pl": "układ lub treść slajdów gotowa do prezentacji",
+  "tr": "sunuma hazır taslak veya slayt içeriği",
+  "ru": "план или готовый материал для слайдов"
+ },
+ "code": {
+  "en": "runnable code or an expression with a concise explanation",
+  "fr": "du code exécutable ou une expression avec explication concise",
+  "it": "codice eseguibile o un'espressione con breve spiegazione",
+  "es": "código ejecutable o expresión con explicación breve",
+  "pt": "código executável ou expressão com explicação breve",
+  "nl": "uitvoerbare code of een expressie met korte uitleg",
+  "pl": "działający kod lub wyrażenie z krótkim wyjaśnieniem",
+  "tr": "kısa açıklamalı çalıştırılabilir kod veya ifade",
+  "ru": "исполняемый код или выражение с кратким объяснением"
+ },
+ "workflow": {
+  "en": "a clear workflow with triggers, steps and outcomes",
+  "fr": "un flux de travail clair avec déclencheurs, étapes et résultats",
+  "it": "un flusso di lavoro chiaro con trigger, passaggi e risultati",
+  "es": "un flujo de trabajo claro con disparadores, pasos y resultados",
+  "pt": "um fluxo de trabalho claro com acionadores, etapas e resultados",
+  "nl": "een duidelijke workflow met triggers, stappen en resultaten",
+  "pl": "jasny przepływ pracy z wyzwalaczami, krokami i wynikami",
+  "tr": "tetikleyicileri, adımları ve sonuçları belirli iş akışı",
+  "ru": "понятный процесс с триггерами, шагами и результатами"
+ },
+ "brief": {
+  "en": "a concise decision-oriented briefing",
+  "fr": "une note de synthèse concise pour la décision",
+  "it": "un briefing conciso per le decisioni",
+  "es": "un informe breve orientado a decisiones",
+  "pt": "um briefing conciso para apoio à decisão",
+  "nl": "een beknopte beslisgerichte briefing",
+  "pl": "zwięzły briefing wspierający decyzję",
+  "tr": "karar odaklı kısa bilgilendirme",
+  "ru": "краткая справка для принятия решений"
+ },
+ "concept": {
+  "en": "a concrete, structured solution concept",
+  "fr": "un concept de solution concret et structuré",
+  "it": "un concetto di soluzione concreto e strutturato",
+  "es": "un concepto de solución concreto y estructurado",
+  "pt": "um conceito de solução concreto e estruturado",
+  "nl": "een concreet, gestructureerd oplossingsconcept",
+  "pl": "konkretna koncepcja rozwiązania",
+  "tr": "somut ve yapılandırılmış çözüm taslağı",
+  "ru": "конкретная структурированная концепция решения"
+ },
+ "prompt": {
+  "en": "a precise, immediately reusable prompt",
+  "fr": "un prompt précis et directement réutilisable",
+  "it": "un prompt preciso e subito riutilizzabile",
+  "es": "un prompt preciso y reutilizable",
+  "pt": "um prompt preciso e reutilizável",
+  "nl": "een precieze, direct herbruikbare prompt",
+  "pl": "precyzyjny prompt gotowy do użycia",
+  "tr": "hemen kullanılabilir açık bir istem",
+  "ru": "точный промпт, готовый к использованию"
+ },
+ "questionnaire": {
+  "en": "a structured set of questions with clear answer options",
+  "fr": "un questionnaire structuré avec options de réponse claires",
+  "it": "un questionario strutturato con opzioni di risposta chiare",
+  "es": "un cuestionario estructurado con opciones claras",
+  "pt": "um questionário estruturado com opções claras",
+  "nl": "een gestructureerde vragenlijst met duidelijke antwoordopties",
+  "pl": "uporządkowany kwestionariusz z jasnymi odpowiedziami",
+  "tr": "açık yanıt seçenekli yapılandırılmış anket",
+  "ru": "структурированная анкета с ясными вариантами ответа"
+ },
+ "guide": {
+  "en": "clear, verified step-by-step instructions",
+  "fr": "des instructions claires, vérifiables et détaillées par étapes",
+  "it": "istruzioni chiare e verificabili passo dopo passo",
+  "es": "instrucciones claras y verificables paso a paso",
+  "pt": "instruções claras e verificáveis passo a passo",
+  "nl": "duidelijke, controleerbare stapsgewijze instructies",
+  "pl": "jasna, weryfikowalna instrukcja krok po kroku",
+  "tr": "açık ve doğrulanabilir adım adım yönergeler",
+  "ru": "понятные проверяемые пошаговые инструкции"
+ },
+ "review": {
+  "en": "a constructive, evidence-based review with findings and recommendations",
+  "fr": "une revue constructive et factuelle avec constats et recommandations",
+  "it": "una revisione costruttiva basata sui fatti con risultati e raccomandazioni",
+  "es": "una revisión constructiva basada en hechos con hallazgos y recomendaciones",
+  "pt": "uma revisão construtiva baseada em evidências com conclusões e recomendações",
+  "nl": "een constructieve, onderbouwde review met bevindingen en aanbevelingen",
+  "pl": "rzeczowy przegląd z ustaleniami i zaleceniami",
+  "tr": "bulgular ve öneriler içeren yapıcı kanıta dayalı inceleme",
+  "ru": "конструктивный разбор с фактами, выводами и рекомендациями"
+ },
+ "generic": {
+  "en": "a structured, directly usable deliverable for the selected task",
+  "fr": "un livrable structuré et directement utilisable pour cette tâche",
+  "it": "un risultato strutturato e subito utilizzabile per questa attività",
+  "es": "un resultado estructurado y listo para la tarea seleccionada",
+  "pt": "um resultado estruturado e pronto a usar para a tarefa",
+  "nl": "een gestructureerd en direct bruikbaar resultaat voor deze taak",
+  "pl": "uporządkowany wynik gotowy do wykorzystania w tym zadaniu",
+  "tr": "seçilen görev için yapılandırılmış ve kullanılabilir çıktı",
+  "ru": "структурированный готовый результат для выбранной задачи"
+ }
+}
+OUTPUT_CATEGORY_PATTERNS = [["code","DAX|KQL|SQL|Code|Código|Skript|Befehle|Ausdruck|IaC|Refactoring|Patch|Bug"],["prompt","Prompt|Custom Instructions"],["workflow","Flow|Workflow|Prozessfluss|Schrittfolge|Approva"],["questionnaire","Quiz|Fragebogen|Fragenkatalog|Fragenliste|Fragenmatrix"],["presentation","Folie|Folien|Präsentation|Storyboard|Deck|Sprecherhinweise|Videoskript|Voiceover"],["email","E-Mail|Nachricht|Mail|Antwort|Reply"],["summary","Summary|Zusammenfassung|Kurzfassung|Recap|Catch-up|Kurzübersicht|Kurzsummary"],["brief","Briefing|Brief|One-Pager"],["review","Review|Audit|Checkliste|Check|Prüfung|Testmatrix|Abnahme"],["matrix","Matrix|matrix|Architekturmatrix"],["table","Tabelle|Tabelle|Data Table|Analysetabelle"],["report","Bericht|Report|Investigation"],["analysis","Analyse|Analysis|Auswertung|Insight|Trends|Anomalie|Stimmung|Assessment"],["plan","Plan|Roadmap|Zeitlinie|Timeline|Aufgabenstruktur|Aufgabenliste|Maßnahmen"],["guide","Guide|Anleitung|Korrekturschritte|Troubleshooting|Schritt-für-Schritt"],["list","Liste|Übersicht|Inventory|Katalog|Cluster|Treffer|Kriterien"],["concept","Konzept|Design|Architecture|Architektur|Screen|Seitenentwurf|Sitemap|Lösungsvorschlag|Setup|Vorschlag|Strategie"]]
+
+
+def _output_label(value: str, language: str) -> str:
+    """Best-effort native category fallback for unlocalized PM20 output options.
+
+    Categories are only used when the exact reviewed UI translation is absent;
+    avoid presenting an untranslated German output label as foreign-language text.
+    """
+    translated = _translated(str(value or ''), language)
+    if translated:
+        return translated
+    for category, pattern in OUTPUT_CATEGORY_PATTERNS:
+        if re.search(pattern, str(value or ''), re.IGNORECASE):
+            return OUTPUT_CATEGORIES[category][language]
+    return OUTPUT_CATEGORIES['generic'][language]
+
+
 def render_localized_prompt(
     *, language: str, result: dict, product: str, task_title: str, task_id: str,
     application: str, family: str, selections: dict, maximum_chars: int | None = None,
@@ -1788,9 +2006,9 @@ def render_localized_prompt(
         audience = _translated(str(selections.get('audience') or ''), language)
         if audience:
             pieces.append(f"{copy['audience']}: {audience}")
-        output = _translated(str(selections.get('output') or ''), language)
-        if output:
-            pieces.append(f"{copy['format']}: {output}")
+        selected_output = str(selections.get('output') or '').strip()
+        if selected_output:
+            pieces.append(f"{copy['format']}: {_output_label(selected_output, language)}")
         pieces.extend([
             f"{copy['method']}: {FAMILY_METHODS.get(family, {}).get(language) or copy.get(family, copy['analysis'])}",
         ])
