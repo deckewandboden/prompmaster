@@ -572,6 +572,14 @@ def main() -> None:
         'Bewertung und optionales Feedback wurden gespeichert.',
         'Feedback wird gespeichert …',
         'Kopiert ✓',
+        'Microsoft-Copilot-Stufe',
+        'MICROSOFT-LIZENZ ERFORDERLICH',
+        'Optional ergänzen',
+        'BEREIT ZUM KOPIEREN',
+        'Microsoft 365 Anwendungen',
+        'Microsoft-365-Apps und direkte Copilot-Oberflächen',
+        'Weitere Anwendungen',
+        'Zentraler Prompt-Katalog wird geladen.',
     )
     for phrase in modal_and_rating:
         if phrase not in catalog:
@@ -589,7 +597,8 @@ def main() -> None:
             raise SystemExit(f'I18N FAIL: missing Pro interpolated text {phrase!r}')
     browser_script = (ROOT / 'backend/static/js/promptfinisher_product_i18n.20261011.js').read_text(encoding='utf-8')
     for required in ('const localizeLicenseRows =', "parent?.id === 'licenseModalTitle'",
-                     "parent?.id === 'promptMeta'", "parent?.id === 'pmRatingState'"):
+                     "parent?.id === 'promptMeta'", "parent?.id === 'pmRatingState'",
+                     "parent?.matches?.('span.tag.business')"):
         if required not in browser_script:
             raise SystemExit(f'I18N FAIL: composite Pro renderer missing {required}')
     print('I18N PRO MODALS/RATING PASS: translated statuses and safe interpolations')
