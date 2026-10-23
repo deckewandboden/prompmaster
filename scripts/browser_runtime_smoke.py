@@ -1721,6 +1721,35 @@ def _browser_product_locale_acceptance(page, base: str, product: str) -> None:
                 timeout=15000,
             )
 
+            # The license dialog is composed at runtime from a task name,
+            # tier name, status and list labels. Verify the rendered DOM
+            # in all ten locales, including the dynamic requirement title.
+            page.evaluate("() => openTaskLicenseModal('PM20-005')")
+            page.wait_for_function(
+                """(lang) => {
+                  const t=window.PF_PRODUCT_LOCALE?.t;
+                  const modal=document.querySelector('#businessModal');
+                  const rows=[...document.querySelectorAll('#licenseModalList li')];
+                  const tier='Microsoft 365 Copilot Business';
+                  const title=t?.('%(tier)s erforderlich').replace('%(tier)s',tier);
+                  const task=t?.('Projektstand aufholen');
+                  const expectedTask=t?.('Aufgabe: %(task)s.').replace('%(task)s',task);
+                  const expectedTier=t?.('Erforderliche Copilot-Stufe: %(tier)s.')
+                      .replace('%(tier)s',tier);
+                  const visible=modal?.classList.contains('open');
+                  return window.PF_PRODUCT_LOCALE?.code===lang && visible
+                    && document.querySelector('#licenseModalTitle')?.textContent.trim()===title
+                    && rows.length>=2
+                    && rows[0].textContent.trim()===expectedTask
+                    && rows[1].textContent.trim()===expectedTier
+                    && document.querySelector('#licenseModalText')?.textContent.trim()
+                        ===t('Die Anwendung ist grundsätzlich verfügbar, aber diese konkrete Aufgabe benötigt eine höhere Copilot-Stufe.');
+                }""",
+                arg=code,
+                timeout=15000,
+            )
+            page.locator('[data-close="businessModal"]').first.click()
+
             # Pro must also return a native-language *prompt body*, not merely
             # translated UI labels. Use a real authenticated compose request.
             localized = page.evaluate(
