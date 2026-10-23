@@ -639,6 +639,19 @@ def main() -> None:
         raise SystemExit('I18N FAIL: German dynamic required-field warning returned')
     print('I18N COMPOSITE V2 PASS: guards, headers, progress and summary in ten locales')
 
+    # Legal navigation links in the customer portal were previously plain
+    # German HTML despite complete gettext catalogs. Require explicit
+    # translation tags to prevent the same visible regression.
+    portal_more = (
+        ROOT / 'backend/templates/portal/more.html'
+    ).read_text(encoding='utf-8')
+    for legal_label in ('Datenschutz', 'AGB', 'Lizenzbedingungen'):
+        if '{% translate "' + legal_label + '" %}' not in portal_more:
+            raise SystemExit(
+                f'I18N FAIL: untranslated legal link in portal/more.html: {legal_label}'
+            )
+    print('I18N PORTAL LEGAL NAV PASS: three legal links translated')
+
     # Marketing is a separate Vite artifact and deliberately absent from the
     # production Django /app image. Audit its translations at repository
     # preflight, where both source trees are available.
