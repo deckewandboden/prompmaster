@@ -3082,12 +3082,20 @@ def render_localized_prompt(
         # Compact PM20 prompts must retain the task and as much of the
         # selected source context as fits. Signal truncation explicitly.
         limit = int(maximum_chars)
-        compact = f"{copy['task']}: {title}. " + '; '.join(supplied)
-        if len(compact) + len(copy['output']) + 2 <= limit:
-            compact += '. ' + copy['output']
-        if len(compact) > limit:
-            truncated_input = True
-            compact = compact[:max(0, limit - 1)].rstrip(' ,;.:') + '…'
+        # The chosen output language MUST remain present even when long
+        # user-provided source text exhausts a compact task's character cap.
+        # Otherwise Copilot may answer in the source language by accident.
+        prefix = f"{copy['task']}: {title}. {copy['output']}"
+        if len(prefix) >= limit:
+            truncated_input = bool(supplied)
+            compact = prefix[:limit]
+        else:
+            details = '; '.join(supplied)
+            available = max(0, limit - len(prefix) - 2)
+            if len(details) > available:
+                truncated_input = True
+                details = (details[:max(0, available - 1)].rstrip(' ,;.:') + '…') if available else ''
+            compact = prefix + ('. ' + details if details else '')
         prompt = compact
     return {**result, 'prompt': prompt, 'language': language,
             'localization_mode': 'structured',
