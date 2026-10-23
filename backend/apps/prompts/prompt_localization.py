@@ -1494,6 +1494,77 @@ FAMILY_METHODS = {
 }
 
 
+# Style preferences are selected using canonical internal codes.
+STYLE_MODIFIERS = {
+ "professional": {
+  "en": "Use a professional, clear and precise tone.",
+  "fr": "Adoptez un ton professionnel, clair et précis.",
+  "it": "Usa un tono professionale, chiaro e preciso.",
+  "es": "Utiliza un tono profesional, claro y preciso.",
+  "pt": "Utilize um tom profissional, claro e preciso.",
+  "nl": "Gebruik een professionele, heldere en nauwkeurige toon.",
+  "pl": "Stosuj profesjonalny, jasny i precyzyjny styl.",
+  "tr": "Profesyonel, açık ve kesin bir üslup kullanın.",
+  "ru": "Используйте профессиональный, ясный и точный стиль."
+ },
+ "friendly": {
+  "en": "Use a friendly, respectful and professional tone.",
+  "fr": "Adoptez un ton cordial, respectueux et professionnel.",
+  "it": "Usa un tono cordiale, rispettoso e professionale.",
+  "es": "Utiliza un tono cordial, respetuoso y profesional.",
+  "pt": "Utilize um tom cordial, respeitoso e profissional.",
+  "nl": "Gebruik een vriendelijke, respectvolle en professionele toon.",
+  "pl": "Stosuj przyjazny, pełen szacunku i profesjonalny ton.",
+  "tr": "Dostane, saygılı ve profesyonel bir üslup kullanın.",
+  "ru": "Используйте дружелюбный, уважительный и профессиональный тон."
+ },
+ "factual": {
+  "en": "Use a factual, neutral tone without unsupported judgments.",
+  "fr": "Utilisez un ton factuel et neutre, sans jugement non étayé.",
+  "it": "Usa un tono oggettivo e neutro, senza giudizi non supportati.",
+  "es": "Utiliza un tono objetivo y neutral, sin juicios infundados.",
+  "pt": "Utilize um tom factual e neutro, sem juízos sem fundamento.",
+  "nl": "Gebruik een feitelijke, neutrale toon zonder ongefundeerde oordelen.",
+  "pl": "Stosuj rzeczowy, neutralny styl bez nieuzasadnionych ocen.",
+  "tr": "Kanıtsız yargılardan uzak, nesnel ve tarafsız bir üslup kullanın.",
+  "ru": "Используйте фактический, нейтральный стиль без необоснованных оценок."
+ },
+ "short": {
+  "en": "Keep the response very short and include only essential points.",
+  "fr": "Restez très bref et ne conservez que les points essentiels.",
+  "it": "Sii molto breve e includi solo i punti essenziali.",
+  "es": "Sé muy breve e incluye solo lo esencial.",
+  "pt": "Seja muito breve e inclua apenas o essencial.",
+  "nl": "Houd het antwoord zeer kort en beperk het tot het belangrijkste.",
+  "pl": "Odpowiedz bardzo krótko i uwzględnij tylko najważniejsze informacje.",
+  "tr": "Yanıtı çok kısa tutun ve yalnızca temel noktaları ekleyin.",
+  "ru": "Ответьте очень кратко, оставив только самое важное."
+ },
+ "compact": {
+  "en": "Make the response concise but complete, without needless repetition.",
+  "fr": "Soyez concis mais complet, sans répétitions inutiles.",
+  "it": "Sii conciso ma completo, senza ripetizioni inutili.",
+  "es": "Sé conciso pero completo, sin repeticiones innecesarias.",
+  "pt": "Seja conciso mas completo, sem repetições desnecessárias.",
+  "nl": "Wees beknopt maar volledig, zonder onnodige herhaling.",
+  "pl": "Odpowiedz zwięźle, lecz wyczerpująco, bez powtórzeń.",
+  "tr": "Gereksiz tekrar olmadan kısa ama eksiksiz yanıt verin.",
+  "ru": "Отвечайте сжато, но полно, без лишних повторов."
+ },
+ "standard": {
+  "en": "Provide sufficient detail to make the result directly usable.",
+  "fr": "Fournissez assez de détails pour rendre le résultat directement exploitable.",
+  "it": "Fornisci dettagli sufficienti per rendere il risultato subito utilizzabile.",
+  "es": "Incluye detalles suficientes para que el resultado pueda utilizarse directamente.",
+  "pt": "Inclua detalhes suficientes para que o resultado possa ser utilizado diretamente.",
+  "nl": "Geef voldoende details om het resultaat direct bruikbaar te maken.",
+  "pl": "Podaj wystarczające szczegóły, by wynik można było od razu wykorzystać.",
+  "tr": "Sonucu doğrudan kullanılabilir kılacak yeterli ayrıntıyı verin.",
+  "ru": "Дайте достаточно деталей для непосредственного использования результата."
+ }
+}
+
+
 def select_prompt_language(request, body: dict) -> str:
     """Explicit request locale, then the language-picker cookie. Fail closed."""
     value = body.get('language') or request.COOKIES.get('promptfinisher_language') or 'de'
@@ -1574,6 +1645,12 @@ def render_localized_prompt(
             pieces.append(f"{copy['format']}: {output}")
         pieces.extend([
             f"{copy['method']}: {FAMILY_METHODS.get(family, {}).get(language) or copy.get(family, copy['analysis'])}",
+        ])
+        for code in ('tone', 'detail'):
+            text = STYLE_MODIFIERS.get(str(selections.get(code) or ''), {}).get(language)
+            if text:
+                pieces.append(text)
+        pieces.extend([
             copy['scope'],
             f"{copy['quality']}: {copy['no_fabrication']}",
         ])
