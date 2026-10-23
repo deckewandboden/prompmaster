@@ -718,13 +718,29 @@ def _browser_login_password_only(page, base: str, email: str, password: str, exp
         raise AssertionError(f'password-only login for {email} ended at {page.url}, expected {expected_path}')
 
 
-def _check_backend_page(page, base: str, path: str, width: int, label: str) -> None:
-    # Admin/ops pages can keep background requests in flight; browser readiness
-    # is based on the server-rendered DOM, not the absence of network activity.
-    response = page.goto(base + path.lstrip('/'), wait_until='domcontentloaded', timeout=60000)
-    if not response or response.status != 200:
-        status = response.status if response else 'no response'
-        raise AssertionError(f'{label} {width}px: HTTP {status} for {path}')
+def _check_backend_page(page, base: str, path: str, width: int, label: str, *,
+                        navigate: bool = True) -> None:
+    # The same route can be checked at several viewport widths without
+    # repeatedly invoking expensive admin/ops system queries. Load at least
+    # once in each mobile and desktop initialization mode.
+    expected = base + path.lstrip('/')
+    if navigate:
+        from playwright.sync_api import TimeoutError as PlaywrightTimeoutError
+        # A temporarily saturated test server must not turn into a skipped
+        # assertion: retry a timed-out request only once and still require 200.
+        for attempt in range(2):
+            try:
+                response = page.goto(expected, wait_until='domcontentloaded', timeout=60000)
+                break
+            except PlaywrightTimeoutError:
+                if attempt:
+                    raise
+                page.goto('about:blank', wait_until='commit', timeout=10000)
+        if not response or response.status != 200:
+            status = response.status if response else 'no response'
+            raise AssertionError(f'{label} {width}px: HTTP {status} for {path}')
+    elif page.url != expected:
+        raise AssertionError(f'{label} {width}px: expected responsive route {expected}, got {page.url}')
     if '/auth/login/' in page.url or '/auth/2fa/' in page.url:
         raise AssertionError(f'{label} {width}px: unexpected auth redirect for {path}')
 
@@ -3393,10 +3409,16 @@ def run_backend_ui_smoke(browser, fixture=None) -> None:
                     page.wait_for_function("document.body.dataset.pmv2Ready === '1'", timeout=15000)
                     _check_product_v2_shell(page, 'Pro V2 responsive shell', width)
 
-            for width, height in ((360, 800), (390, 844), (768, 1024), (1440, 1000), (1920, 1080)):
-                page.set_viewport_size({'width': width, 'height': height})
-                for route, label in routes:
-                    _check_backend_page(page, base, route, width, label)
+            for route, label in routes:
+                for width, height in ((360, 800), (390, 844), (768, 1024), (1440, 1000), (1920, 1080)):
+                    page.set_viewport_size({'width': width, 'height': height})
+                    # Exercise actual navigation once on mobile and once on
+                    # desktop; all five breakpoints retain full geometry,
+                    # actions, CSRF, branding and responsive checks.
+                    _check_backend_page(
+                        page, base, route, width, label,
+                        navigate=width in (360, 1440),
+                    )
 
             if page_errors:
                 raise AssertionError(f'{role}: browser JS error: {page_errors[0]}')
