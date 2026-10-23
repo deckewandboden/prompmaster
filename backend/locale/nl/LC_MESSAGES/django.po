@@ -3604,3 +3604,7 @@ msgstr "Als je geen einddatum opgeeft, behandelen we de opzegging voor de vroegs
 
 msgid "jetzt kündigen"
 msgstr "Nu opzeggen"
+
+# Customer checkout: legal document list heading.
+msgid "Rechtsdokumente:"
+msgstr "Juridische documenten:"
