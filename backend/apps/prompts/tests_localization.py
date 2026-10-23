@@ -97,6 +97,48 @@ class LocalizedPromptRenderingTests(SimpleTestCase):
             for lang in SUPPORTED - {'de'}:
                 self.assertTrue(texts[lang].strip(), f'{task_id} {lang}')
 
+    def test_free_review_contract_has_no_untranslated_selection_labels(self):
+        # The review renders real DB-backed contract choices, not only static
+        # headers. Each Free label must be available in every product locale.
+        from .free_surface import AUDIENCE_DISPLAY, FREE_INPUT_META
+        from .free_legacy import FREE_RUNTIME_CONTRACTS
+        catalogue = _product_dictionary()
+        data = json.loads((Path(__file__).resolve().parent
+                           / 'data/free_legacy_tasks.json').read_text(encoding='utf-8'))
+        labels = {task['title'] for task in data['tasks']}
+        labels.update(AUDIENCE_DISPLAY.values())
+        for entry in FREE_INPUT_META.values():
+            labels.update(entry.values())
+        for entry in FREE_RUNTIME_CONTRACTS.values():
+            labels.update(entry['focus'])
+        labels.update({
+            'Pflichtangaben fehlen', 'Alle Pflichtangaben vollständig',
+            'Keine zusätzlichen Pflichtangaben', 'Noch keine Aufgabe gewählt',
+            'Pflichtfeld', 'Offen', 'In der Aufgabe enthalten',
+            'Dieser Schritt ist noch nicht vollständig. Klicken zum Bearbeiten.',
+        })
+        for value in labels:
+            for language in SUPPORTED - {'de'}:
+                with self.subTest(label=value, language=language):
+                    translation = catalogue.get(value, {}).get(language)
+                    self.assertTrue(translation, f'Missing review translation: {value} ({language})')
+                    self.assertNotEqual(translation, value)
+
+    def test_v2_review_is_locale_safe_without_mutating_contract_values(self):
+        static_root = Path(__file__).resolve().parents[2] / 'static'
+        source = (static_root / 'js/promptfinisher_ui_v2.20260922.js').read_text(encoding='utf-8')
+        style = (static_root / 'css/promptfinisher_v2.20260922.css').read_text(encoding='utf-8')
+        language = (static_root / 'js/promptfinisher_product_i18n.20261011.js').read_text(encoding='utf-8')
+        self.assertIn(".filter(select => select && select.value)", source)
+        self.assertNotIn("!/^Bitte auswählen/i.test(value)", source)
+        self.assertIn("localReviewValue('Pflichtangaben fehlen')", source)
+        self.assertIn("data-pmv2-missing-label", style)
+        self.assertNotIn('content:"OFFEN"', style)
+        self.assertIn("pm-product-locale-ready", source)
+        self.assertIn("pm-product-locale-ready", language)
+        self.assertIn(".pmv2-review-value", language)  # preserve user-origin data boundary
+        self.assertNotIn("replaceAll('Pflichtangaben fehlen'", source)
+
     def test_all_pro_task_titles_have_native_language_variants(self):
         data = json.loads((Path(__file__).resolve().parent
                            / 'data/pm20_golden_logic.json').read_text(encoding='utf-8'))
