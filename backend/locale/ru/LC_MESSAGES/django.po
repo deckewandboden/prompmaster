@@ -3550,3 +3550,7 @@ msgstr "Если дата окончания не указана, мы расс�
 
 msgid "jetzt kündigen"
 msgstr "Расторгнуть сейчас"
+
+# Customer checkout: legal document list heading.
+msgid "Rechtsdokumente:"
+msgstr "Юридические документы:"
