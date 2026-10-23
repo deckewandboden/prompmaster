@@ -1571,6 +1571,43 @@ def _browser_product_locale_acceptance(page, base: str, product: str) -> None:
                 if 'Meeting notes: Alpha decision and deadline 2026' not in localized_result['prompt']:
                     raise AssertionError(f"Free {code}: supplied context not preserved")
 
+            # Reproduce the actual screenshot fault in ALL ten languages:
+            # dynamically composed review values, missing-field warnings,
+            # an unselected output and the CSS-only OPEN badge.
+            page.locator('[data-appwrap="chat"] .app-card').click()
+            page.locator('[data-task="chat_sum"]').click()
+            page.locator(
+                'label.option:has(input[name="audience"][value="self"]) > span'
+            ).click()
+            page.wait_for_function(
+                """(lang) => {
+                    const t=window.PF_PRODUCT_LOCALE?.t;
+                    if (!t || document.documentElement.lang !== lang) return false;
+                    const value=key => document.querySelector(
+                        '[data-pmv2-review="'+key+'"]'
+                    )?.textContent.trim();
+                    const ctx=t('Pflichtangaben fehlen')+': '
+                        +t('Was soll die Zusammenfassung leisten?');
+                    const incomplete=document.querySelector(
+                        '[data-pmv2-review-card="context"]'
+                    );
+                    const label=incomplete?.querySelector('.pmv2-review-label');
+                    const badge=label ? getComputedStyle(label,'::after').content : '';
+                    return value('task') === t('Inhalt zusammenfassen')
+                        && value('audience') === t('Eigene Verwendung')
+                        && value('context') === ctx
+                        && value('focus') === t('Noch nicht gewählt')
+                        && value('output') === t('Noch nicht vollständig')
+                        && incomplete?.classList.contains('missing')
+                        && badge.includes(t('Offen'))
+                        && document.querySelector('#formatSelect')?.value === ''
+                        && document.querySelector('#detailSelect')?.value === ''
+                        && document.querySelector('#toneSelect')?.value === '';
+                }""",
+                arg=code,
+                timeout=15000,
+            )
+
             if code == 'en':
                 # Exercise the real Free UI-to-server bridge, not just direct API calls.
                 page.locator('[data-appwrap="chat"] .app-card').click()
