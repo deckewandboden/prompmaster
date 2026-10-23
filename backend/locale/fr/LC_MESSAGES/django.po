@@ -3697,3 +3697,48 @@ msgstr "L'export est en cours de création en arrière-plan. Cette page s'actual
 
 msgid "Der Zahlungsdienst ist derzeit noch nicht verfügbar."
 msgstr "Le service de paiement est indisponible pour le moment."
+
+msgid "Zugriff verweigert"
+msgstr "Accès refusé"
+
+msgid "Für diese Ansicht fehlt die erforderliche Berechtigung."
+msgstr "Vous n'avez pas les droits nécessaires pour accéder à cette page."
+
+msgid "Zurück zur Übersicht"
+msgstr "Retour à la vue d'ensemble"
+
+msgid "Ansicht konnte nicht geladen werden"
+msgstr "Impossible de charger la page"
+
+msgid "Beim Laden der Daten ist ein interner Fehler aufgetreten. Bitte versuchen Sie es erneut."
+msgstr "Une erreur interne s'est produite lors du chargement des données. Réessayez."
+
+msgid "Erneut laden"
+msgstr "Recharger"
+
+msgid "Seitennavigation"
+msgstr "Navigation entre les pages"
+
+msgid "von"
+msgstr "sur"
+
+msgid "Datensätze"
+msgstr "Enregistrements"
+
+msgid "Erste Seite"
+msgstr "Première page"
+
+msgid "Erste"
+msgstr "Première"
+
+msgid "Vorherige Seite"
+msgstr "Page précédente"
+
+msgid "Nächste Seite"
+msgstr "Page suivante"
+
+msgid "Letzte Seite"
+msgstr "Dernière page"
+
+msgid "Letzte"
+msgstr "Dernière"
