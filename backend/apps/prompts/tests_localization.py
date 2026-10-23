@@ -105,7 +105,8 @@ class LocalizedPromptRenderingTests(SimpleTestCase):
         catalogue = _product_dictionary()
         data = json.loads((Path(__file__).resolve().parent
                            / 'data/free_legacy_tasks.json').read_text(encoding='utf-8'))
-        labels = {task['title'] for task in data['tasks']}
+        labels = {task[key] for task in data['tasks']
+                  for key in ('title', 'copy', 'output_label', 'area')}
         labels.update(AUDIENCE_DISPLAY.values())
         for entry in FREE_INPUT_META.values():
             labels.update(entry.values())
