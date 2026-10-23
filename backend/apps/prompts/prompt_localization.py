@@ -1565,6 +1565,154 @@ STYLE_MODIFIERS = {
 }
 
 
+# Source constraints are canonical codes; do not turn them into promises of access.
+SOURCE_RULES = {
+ "webwork": {
+  "en": "Use accessible web and work-context sources.",
+  "fr": "Utilisez les sources Web et professionnelles accessibles.",
+  "it": "Usa le fonti web e del contesto lavorativo accessibili.",
+  "es": "Usa fuentes web y del entorno laboral accesibles.",
+  "pt": "Utilize fontes Web e de trabalho acessíveis.",
+  "nl": "Gebruik toegankelijke web- en werkbronnen.",
+  "pl": "Korzystaj z dostępnych źródeł internetowych i służbowych.",
+  "tr": "Erişilebilir web ve iş bağlamı kaynaklarını kullanın.",
+  "ru": "Используйте доступные веб-источники и рабочий контекст."
+ },
+ "web": {
+  "en": "Use accessible, verifiable web sources.",
+  "fr": "Utilisez des sources Web accessibles et vérifiables.",
+  "it": "Usa fonti web accessibili e verificabili.",
+  "es": "Usa fuentes web accesibles y verificables.",
+  "pt": "Utilize fontes Web acessíveis e verificáveis.",
+  "nl": "Gebruik toegankelijke, controleerbare webbronnen.",
+  "pl": "Korzystaj z dostępnych i weryfikowalnych źródeł internetowych.",
+  "tr": "Erişilebilir ve doğrulanabilir web kaynaklarını kullanın.",
+  "ru": "Используйте доступные и проверяемые веб-источники."
+ },
+ "provided": {
+  "en": "Use only information explicitly supplied with this request.",
+  "fr": "Utilisez uniquement les informations fournies dans cette demande.",
+  "it": "Usa soltanto le informazioni esplicitamente fornite nella richiesta.",
+  "es": "Usa solo la información proporcionada en esta solicitud.",
+  "pt": "Utilize apenas as informações fornecidas neste pedido.",
+  "nl": "Gebruik uitsluitend expliciet aangeleverde informatie.",
+  "pl": "Korzystaj wyłącznie z informacji przekazanych w tym zapytaniu.",
+  "tr": "Yalnızca bu istekle açıkça sağlanan bilgileri kullanın.",
+  "ru": "Используйте только сведения, явно предоставленные в запросе."
+ },
+ "work": {
+  "en": "Use the current accessible Microsoft 365 work context.",
+  "fr": "Utilisez le contexte professionnel Microsoft 365 actuellement accessible.",
+  "it": "Usa il contesto di lavoro Microsoft 365 attualmente accessibile.",
+  "es": "Usa el contexto laboral de Microsoft 365 actualmente accesible.",
+  "pt": "Utilize o contexto de trabalho Microsoft 365 atualmente acessível.",
+  "nl": "Gebruik de momenteel toegankelijke Microsoft 365-werkcontext.",
+  "pl": "Korzystaj z obecnie dostępnego kontekstu pracy Microsoft 365.",
+  "tr": "Şu anda erişilebilir Microsoft 365 iş bağlamını kullanın.",
+  "ru": "Используйте доступный рабочий контекст Microsoft 365."
+ },
+ "data": {
+  "en": "Use only the datasets actually provided or accessible.",
+  "fr": "Utilisez uniquement les jeux de données fournis ou accessibles.",
+  "it": "Usa solo i set di dati forniti o accessibili.",
+  "es": "Usa solo los conjuntos de datos proporcionados o accesibles.",
+  "pt": "Utilize apenas os conjuntos de dados fornecidos ou acessíveis.",
+  "nl": "Gebruik alleen daadwerkelijk aangeleverde of toegankelijke datasets.",
+  "pl": "Korzystaj tylko z dostarczonych lub dostępnych zestawów danych.",
+  "tr": "Yalnızca gerçekten sağlanan veya erişilebilir veri kümelerini kullanın.",
+  "ru": "Используйте только предоставленные или доступные наборы данных."
+ },
+ "product": {
+  "en": "Rely on verified product information and accessible technical documentation.",
+  "fr": "Appuyez-vous sur des informations produit vérifiées et la documentation technique accessible.",
+  "it": "Basati su informazioni di prodotto verificate e documentazione tecnica accessibile.",
+  "es": "Básate en información de producto verificada y documentación técnica accesible.",
+  "pt": "Baseie-se em informação de produto verificada e documentação técnica acessível.",
+  "nl": "Gebruik geverifieerde productinformatie en toegankelijke technische documentatie.",
+  "pl": "Opieraj się na sprawdzonych informacjach o produkcie i dostępnej dokumentacji.",
+  "tr": "Doğrulanmış ürün bilgilerine ve erişilebilir teknik belgelere dayanın.",
+  "ru": "Опирайтесь на проверенные сведения о продукте и доступную документацию."
+ },
+ "crm": {
+  "en": "Use only CRM records that are actually accessible in the current context.",
+  "fr": "Utilisez uniquement les dossiers CRM effectivement accessibles.",
+  "it": "Usa solo i record CRM effettivamente accessibili.",
+  "es": "Usa solo los registros CRM realmente accesibles.",
+  "pt": "Utilize apenas os registos CRM efetivamente acessíveis.",
+  "nl": "Gebruik alleen CRM-records die werkelijk toegankelijk zijn.",
+  "pl": "Korzystaj tylko z rekordów CRM faktycznie dostępnych.",
+  "tr": "Yalnızca mevcut bağlamda gerçekten erişilebilir CRM kayıtlarını kullanın.",
+  "ru": "Используйте только реально доступные записи CRM."
+ },
+ "knowledge": {
+  "en": "Use accessible knowledge-base content and explicitly supplied documents.",
+  "fr": "Utilisez la base de connaissances accessible et les documents fournis.",
+  "it": "Usa la base di conoscenza accessibile e i documenti forniti.",
+  "es": "Usa la base de conocimientos accesible y los documentos proporcionados.",
+  "pt": "Utilize a base de conhecimentos acessível e os documentos fornecidos.",
+  "nl": "Gebruik toegankelijke kennisbankinhoud en aangeleverde documenten.",
+  "pl": "Korzystaj z dostępnej bazy wiedzy i przekazanych dokumentów.",
+  "tr": "Erişilebilir bilgi tabanını ve açıkça sağlanan belgeleri kullanın.",
+  "ru": "Используйте доступную базу знаний и переданные документы."
+ },
+ "erp": {
+  "en": "Use only ERP records and business data that can actually be accessed.",
+  "fr": "Utilisez uniquement les données ERP et commerciales réellement accessibles.",
+  "it": "Usa solo i record ERP e i dati aziendali effettivamente accessibili.",
+  "es": "Usa solo registros ERP y datos empresariales realmente accesibles.",
+  "pt": "Utilize apenas registos ERP e dados empresariais efetivamente acessíveis.",
+  "nl": "Gebruik alleen werkelijk toegankelijke ERP-gegevens en bedrijfsdata.",
+  "pl": "Korzystaj tylko z rzeczywiście dostępnych danych ERP i biznesowych.",
+  "tr": "Yalnızca gerçekten erişilebilir ERP kayıtlarını ve iş verilerini kullanın.",
+  "ru": "Используйте только реально доступные записи ERP и бизнес-данные."
+ },
+ "security": {
+  "en": "Use actual security telemetry, logs and verified incident details.",
+  "fr": "Utilisez les journaux, signaux de sécurité et détails d'incident vérifiés.",
+  "it": "Usa log, segnali di sicurezza e dettagli degli incidenti verificati.",
+  "es": "Usa registros, telemetría de seguridad y detalles de incidentes verificados.",
+  "pt": "Utilize registos, telemetria de segurança e detalhes de incidentes verificados.",
+  "nl": "Gebruik echte beveiligingslogboeken, signalen en geverifieerde incidentgegevens.",
+  "pl": "Korzystaj z rzeczywistych logów, telemetrii i potwierdzonych danych incydentów.",
+  "tr": "Gerçek güvenlik günlüklerini, telemetriyi ve doğrulanmış olay bilgilerini kullanın.",
+  "ru": "Используйте реальные журналы, телеметрию и проверенные сведения об инцидентах."
+ },
+ "azure": {
+  "en": "Use only Azure resources and configuration details that are accessible.",
+  "fr": "Utilisez uniquement les ressources Azure et configurations accessibles.",
+  "it": "Usa solo risorse Azure e configurazioni accessibili.",
+  "es": "Usa solo recursos de Azure y configuraciones accesibles.",
+  "pt": "Utilize apenas recursos Azure e configurações acessíveis.",
+  "nl": "Gebruik alleen toegankelijke Azure-resources en configuratiegegevens.",
+  "pl": "Korzystaj tylko z dostępnych zasobów Azure i konfiguracji.",
+  "tr": "Yalnızca erişilebilir Azure kaynaklarını ve yapılandırmalarını kullanın.",
+  "ru": "Используйте только доступные ресурсы Azure и настройки."
+ },
+ "repo": {
+  "en": "Use the actual accessible repository files, code and change history.",
+  "fr": "Utilisez les fichiers, le code et l'historique du dépôt réellement accessibles.",
+  "it": "Usa file, codice e cronologia delle modifiche del repository accessibili.",
+  "es": "Usa archivos, código e historial de cambios del repositorio accesible.",
+  "pt": "Utilize ficheiros, código e histórico de alterações do repositório acessível.",
+  "nl": "Gebruik werkelijk toegankelijke repositorybestanden, code en wijzigingshistorie.",
+  "pl": "Korzystaj z faktycznie dostępnych plików repozytorium, kodu i historii zmian.",
+  "tr": "Erişilebilir depo dosyalarını, kodu ve değişiklik geçmişini kullanın.",
+  "ru": "Используйте доступные файлы репозитория, код и историю изменений."
+ },
+ "notebook": {
+  "en": "Use the current accessible notebook content and its referenced sources.",
+  "fr": "Utilisez le carnet accessible et ses sources référencées.",
+  "it": "Usa il contenuto del taccuino accessibile e le fonti citate.",
+  "es": "Usa el cuaderno accesible y sus fuentes referenciadas.",
+  "pt": "Utilize o bloco de notas acessível e as fontes referenciadas.",
+  "nl": "Gebruik de toegankelijke notitieblokinhoud en bijbehorende bronnen.",
+  "pl": "Korzystaj z dostępnej zawartości notatnika i wskazanych źródeł.",
+  "tr": "Erişilebilir not defteri içeriğini ve belirtilen kaynakları kullanın.",
+  "ru": "Используйте доступное содержимое блокнота и указанные источники."
+ }
+}
+
+
 def select_prompt_language(request, body: dict) -> str:
     """Explicit request locale, then the language-picker cookie. Fail closed."""
     value = body.get('language') or request.COOKIES.get('promptfinisher_language') or 'de'
@@ -1650,6 +1798,9 @@ def render_localized_prompt(
             text = STYLE_MODIFIERS.get(str(selections.get(code) or ''), {}).get(language)
             if text:
                 pieces.append(text)
+        source_rule = SOURCE_RULES.get(str(selections.get('source') or ''), {}).get(language)
+        if source_rule:
+            pieces.append(source_rule)
         pieces.extend([
             copy['scope'],
             f"{copy['quality']}: {copy['no_fabrication']}",
