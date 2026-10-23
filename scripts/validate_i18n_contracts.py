@@ -189,7 +189,7 @@ def main() -> None:
             for match in doubled_word.finditer(value):
                 idiomatic_step_by_step = (
                     code == 'tr'
-                    and 'Schritt für Schritt' in phrase
+                    and re.search(r'Schritt[- ]für[- ]Schritt', phrase)
                     and match.group(0).casefold() == 'adım adım'
                 )
                 if not idiomatic_step_by_step:
