@@ -47,7 +47,7 @@ class LocalizedPromptRenderingTests(SimpleTestCase):
             selections={'fields': {'Fragestellung': 'Priorisiere Aufgaben Alpha und Beta'},
                         'focus': [], 'audience': ''},
         )
-        self.assertIn('Priorise', result['prompt'][:100] if False else MESSAGES['fr']['intro'])
+        self.assertIn(MESSAGES['fr']['intro'], result['prompt'])
         self.assertIn('Priorisiere Aufgaben Alpha und Beta', result['prompt'])
         self.assertIn('Contrôle qualité final', result['prompt'])
         self.assertNotIn('Original', result['prompt'])
