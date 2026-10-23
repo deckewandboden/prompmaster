@@ -3631,3 +3631,48 @@ msgstr "La exportación se está generando en segundo plano. Esta página se act
 
 msgid "Der Zahlungsdienst ist derzeit noch nicht verfügbar."
 msgstr "El servicio de pago no está disponible en este momento."
+
+msgid "Zugriff verweigert"
+msgstr "Acceso denegado"
+
+msgid "Für diese Ansicht fehlt die erforderliche Berechtigung."
+msgstr "No tienes permiso para acceder a esta vista."
+
+msgid "Zurück zur Übersicht"
+msgstr "Volver al resumen"
+
+msgid "Ansicht konnte nicht geladen werden"
+msgstr "No se pudo cargar la página"
+
+msgid "Beim Laden der Daten ist ein interner Fehler aufgetreten. Bitte versuchen Sie es erneut."
+msgstr "Se produjo un error interno al cargar los datos. Vuelve a intentarlo."
+
+msgid "Erneut laden"
+msgstr "Volver a cargar"
+
+msgid "Seitennavigation"
+msgstr "Navegación de páginas"
+
+msgid "von"
+msgstr "de"
+
+msgid "Datensätze"
+msgstr "Registros"
+
+msgid "Erste Seite"
+msgstr "Primera página"
+
+msgid "Erste"
+msgstr "Primera"
+
+msgid "Vorherige Seite"
+msgstr "Página anterior"
+
+msgid "Nächste Seite"
+msgstr "Página siguiente"
+
+msgid "Letzte Seite"
+msgstr "Última página"
+
+msgid "Letzte"
+msgstr "Última"
