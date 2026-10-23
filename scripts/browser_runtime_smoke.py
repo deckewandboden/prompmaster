@@ -1556,6 +1556,25 @@ def _browser_product_locale_acceptance(page, base: str, product: str) -> None:
                     raise AssertionError(f"Free {code}: supplied context not preserved")
 
             if code == 'en':
+                # Exercise the real Free UI-to-server bridge, not just direct API calls.
+                page.locator('[data-appwrap="chat"] .app-card').click()
+                page.locator('[data-task="chat_sum"]').click()
+                page.locator('#goalInput').fill('English Free UI locale check')
+                page.locator('#sourceContextInput').fill('Only these real notes')
+                page.locator(
+                    'label.option:has(input[name="audience"][value="self"]) > span'
+                ).click()
+                page.wait_for_function(
+                    """() => {
+                        const value=document.querySelector('#promptOutput')?.value || '';
+                        return value.includes('English Free UI locale check')
+                          && value.includes('Summarize')
+                          && !value.includes('Arbeite dabei in folgender Reihenfolge');
+                    }""",
+                    timeout=15000,
+                )
+
+            if code == 'en':
                 # The DB-backed, dynamically constructed Pro-locked app dialog
                 # must be localized too, not only the static comparison modal.
                 page.locator('#proApps [data-central-code]').first.wait_for(
@@ -1628,6 +1647,22 @@ def _browser_product_locale_acceptance(page, base: str, product: str) -> None:
                     raise AssertionError(f"Pro {code}: supplied task context missing")
                 if 'Reviewed support dataset only' not in result['prompt']:
                     raise AssertionError(f"Pro {code}: supplied source context missing")
+
+        if product == 'pro' and code == 'it':
+            # Regression for the reported Italian Pro screen: the actual
+            # textarea must show the server-generated Italian prompt.
+            page.locator('[data-app="copilot_chat"]').click()
+            page.locator('[data-task="PM20-001"]').click()
+            page.locator('#inputGrid .task-input').first.fill('Italian Pro UI locale check')
+            page.wait_for_function(
+                """() => {
+                    const value=document.querySelector('#promptOutput')?.value || '';
+                    return value.includes('Italian Pro UI locale check')
+                      && value.includes('Produci una risposta chiara')
+                      && !value.includes('Arbeite dabei in folgender Reihenfolge');
+                }""",
+                timeout=15000,
+            )
 
         metrics = page.evaluate(
             """() => {
