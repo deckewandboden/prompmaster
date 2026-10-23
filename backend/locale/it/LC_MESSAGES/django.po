@@ -3610,3 +3610,7 @@ msgstr "Se non indichi una data di cessazione, considereremo la disdetta per la 
 
 msgid "jetzt kündigen"
 msgstr "Disdici ora"
+
+# Customer checkout: legal document list heading.
+msgid "Rechtsdokumente:"
+msgstr "Documenti legali:"
