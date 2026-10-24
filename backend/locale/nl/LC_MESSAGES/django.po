@@ -163,7 +163,7 @@ msgstr "Registreren"
 
 msgid ""
 "Unternehmensadministratoren richten anschließend verpflichtend 2FA ein."
-msgstr "Bedrijfsbeheerders moeten vervolgens 2FA instellen."
+msgstr "Bedrijfsbeheerders zijn daarna verplicht tweefactorauthenticatie (2FA) in te stellen."
 
 msgid "Bereits registriert?"
 msgstr "Al geregistreerd?"
@@ -525,9 +525,7 @@ msgstr "Mijn gegevens exporteren"
 msgid ""
 "Mollie übernimmt die Zahlungsabwicklung; PROMPTFINISHER erzeugt keine eigene"
 " Rechnungsengine."
-msgstr ""
-"Mollie verwerkt de verwerking van betalingen; PROMPTFINISHER heeft geen "
-"eigen facturatiemotor."
+msgstr "Mollie verzorgt de betalingsverwerking; PROMPTFINISHER heeft geen eigen facturatie-engine."
 
 msgid "Mollie-Referenz"
 msgstr "Mollie-referentie"
@@ -633,8 +631,7 @@ msgstr "2FA instellen"
 
 msgid ""
 "2FA schützt den Zugriff mit einem zusätzlichen zeitbasierten Einmalcode."
-msgstr ""
-"2FA beschermt toegang met een extra op tijd gebaseerde eenmalige code."
+msgstr "2FA beveiligt de toegang met een extra, tijdgebonden eenmalige code."
 
 msgid "Ablehnen"
 msgstr "Weigeren"
@@ -665,14 +662,12 @@ msgstr "Beheer gebruikers, uitnodigingen, licenties en apparaten."
 
 msgid ""
 "Die Suche bleibt auf Ihren eigenen Mandanten- und Lizenzbereich begrenzt."
-msgstr "Zoeken blijft beperkt tot uw eigen huurder en licentie scope."
+msgstr "Zoeken blijft beperkt tot je eigen organisatie en haar licentiebereik."
 
 msgid ""
 "Ein Passwortwechsel erfolgt über einen zeitlich begrenzten, einmal "
 "verwendbaren Link an Ihre hinterlegte E-Mail-Adresse."
-msgstr ""
-"Een wachtwoordwijziging wordt uitgevoerd via een tijdelijke, eenmalige link "
-"naar uw geregistreerde e-mailadres."
+msgstr "Een wachtwoordwijziging verloopt via een tijdelijke, eenmalig te gebruiken link naar je geregistreerde e-mailadres."
 
 msgid "Free"
 msgstr "Free"
@@ -690,9 +685,7 @@ msgid ""
 "Hier sehen Sie ausschließlich Nachrichten, die für Sie bzw. Ihr Unternehmen "
 "bestimmt sind. Interne netstyle-Notizen werden nicht im Kundenportal "
 "angezeigt."
-msgstr ""
-"Hier zie je alleen berichten voor u of uw bedrijf. Interne netstyle tonen "
-"worden niet getoond in het klantenportaal."
+msgstr "Hier zie je uitsluitend berichten die voor jou of je bedrijf bedoeld zijn. Interne notities van netstyle worden niet in het klantenportaal getoond."
 
 msgid "Ihre Anfrage und alle für Kunden freigegebenen Antworten."
 msgstr "Uw verzoek en alle antwoorden vrijgegeven voor klanten."
@@ -751,9 +744,7 @@ msgstr "Historie"
 msgid ""
 "Wählen Sie die Lizenz, deren bestehende Restlaufzeit um weitere 365 Tage "
 "verlängert werden soll."
-msgstr ""
-"Selecteer de licentie waarvan de resterende termijn met 365 dagen verlengd "
-"moet worden."
+msgstr "Kies de licentie waarvan de resterende looptijd met nog eens 365 dagen moet worden verlengd."
 
 msgid "Zahlungspflichtig verlängern →"
 msgstr "Vernieuwen met betalingsverplichting →"
@@ -785,21 +776,17 @@ msgstr "geregistreerd / capaciteit"
 msgid ""
 "Die vorbereitete Lizenz wird Ihrem aktuell angemeldeten Benutzerkonto "
 "zugeordnet. Der Link kann anschließend nicht erneut verwendet werden."
-msgstr ""
-"De voorbereide licentie wordt toegewezen aan uw momenteel ingelogde "
-"gebruikersaccount. De link kan achteraf niet meer worden gebruikt."
+msgstr "De voorbereide licentie wordt toegewezen aan je huidige aangemelde account. De link kan daarna niet opnieuw worden gebruikt."
 
 msgid ""
 "Gültig bis %(expiry)s. Der Link ist tenantgebunden, für genau diesen "
 "Benutzer bestimmt und nur einmal verwendbar."
-msgstr "Geldig tot %(expiry)s. De link is gekoppeld aan de organisatie, uitsluitend bedoeld voor deze gebruiker en slechts één keer bruikbaar."
+msgstr "Geldig tot %(expiry)s. De link is aan je bedrijf gekoppeld, uitsluitend bedoeld voor deze gebruiker en eenmalig te gebruiken."
 
 msgid ""
 "Jede neue Lizenz startet nach erfolgreicher Zahlung mit eigener 365-Tage-"
 "Laufzeit."
-msgstr ""
-"Elke nieuwe licentie begint zijn eigen 365-dagen termijn na succesvolle "
-"betaling."
+msgstr "Elke nieuwe licentie begint na succesvolle betaling met een eigen looptijd van 365 dagen."
 
 msgid "inkl. MwSt. · %(days)s Tage"
 msgstr "incl. btw · %(days)s dagen"
@@ -813,9 +800,7 @@ msgstr "Prijs niet beschikbaar"
 msgid ""
 "V1: exakt ein aktiver Firmenadministrator. Eine Übertragung ist nur auf ein "
 "aktives Team-Mitglied möglich."
-msgstr ""
-"V1: precies één actieve bedrijfsleider. Transfer is alleen mogelijk naar een"
-" actief teamlid."
+msgstr "V1: precies één actieve bedrijfsbeheerder. Overdracht kan alleen aan een actief teamlid."
 
 msgid "Ihre eigenen Geräteslots können Sie hier selbst verwalten."
 msgstr "U kunt hier uw eigen apparaatslots beheren."
@@ -837,34 +822,23 @@ msgid ""
 " Optional kann eine für Ihr Konto sichtbare Lizenz mitgesendet werden. "
 "Passwörter, Tokens oder andere unnötige sensitive Daten werden nicht "
 "übernommen."
-msgstr ""
-"Account, bedrijf, gebruikers-ID en tijdstempel worden automatisch "
-"toegewezen. Optioneel kan een voor uw account zichtbare licentie worden "
-"opgenomen. Wachtwoorden, tokens of andere onnodige gevoelige gegevens zijn "
-"niet inbegrepen."
+msgstr "Account, bedrijf, gebruikers-ID en tijdstip worden automatisch gekoppeld. Optioneel kan een licentie worden meegestuurd die zichtbaar is voor je account. Wachtwoorden, tokens en andere onnodige gevoelige gegevens worden niet meegestuurd."
 
 msgid ""
 "Exportieren Sie die zu Ihrem Benutzer gespeicherten PROMPTFINISHER-Daten als"
 " JSON. Secrets und Daten anderer Benutzer werden nicht exportiert."
-msgstr ""
-"Exporteer de PROMPTFINISHER gegevens die zijn opgeslagen voor uw gebruiker "
-"als JSON. Geheimen en gegevens van andere gebruikers worden niet "
-"geëxporteerd."
+msgstr "Exporteer de voor je gebruiker opgeslagen PROMPTFINISHER-gegevens als JSON. Geheimen en gegevens van andere gebruikers worden niet geëxporteerd."
 
 msgid ""
 "Ihre Löschanfrage vom %(requested)s ist bereits erfasst. Status: %(status)s."
-msgstr "Uw verwijderingsverzoek van %(requested)s is al geregistreerd. Status: %(status)s."
+msgstr "Je verwijderingsverzoek van %(requested)s is al geregistreerd. Status: %(status)s."
 
 msgid ""
 "Sie können die Löschung Ihres PROMPTFINISHER-Kontos anfordern. Gesetzlich "
 "erforderliche Geschäfts- und Nachweisdaten werden nur im erforderlichen "
 "Umfang weiter aufbewahrt bzw. anonymisiert. Firmenadministratoren müssen "
 "ihre Administratorrolle vor der Verarbeitung übertragen."
-msgstr ""
-"U kunt verzoeken om verwijdering van uw PROMPTFINISHER-account. Juridisch "
-"vereiste bedrijfs- en bewijsgegevens worden alleen bewaard of geanonimiseerd"
-" voor zover dit vereist is. Bedrijfsbeheerders moeten hun beheerdersrol "
-"overdragen voordat ze worden verwerkt."
+msgstr "Je kunt verwijdering van je PROMPTFINISHER-account aanvragen. Wettelijk vereiste zakelijke gegevens en bewijsstukken worden uitsluitend voor zover noodzakelijk bewaard of geanonimiseerd. Bedrijfsbeheerders moeten eerst hun beheerdersrol overdragen."
 
 msgid "Ich möchte die Löschung meines Kontos verbindlich anfordern."
 msgstr "Ik wil een bindend verzoek indienen om mijn account te verwijderen."
@@ -914,17 +888,14 @@ msgstr "Een gratis Pro licentie is beschikbaar."
 msgid ""
 "Aktuell ist keine freie Pro-Lizenz verfügbar. Kaufen Sie eine weitere Lizenz"
 " oder geben Sie eine bestehende Lizenz frei."
-msgstr ""
-"Er is momenteel geen gratis Pro-licentie beschikbaar. Koop een andere "
-"licentie of geef een bestaande vrij."
+msgstr "Er is momenteel geen vrije Pro-licentie. Koop een extra licentie of maak een bestaande vrij."
 
 msgid "Ihre Pro-Anfrage ist bereits offen."
 msgstr "Je prof verzoek is al open."
 
 msgid ""
 "Für den Pro-Zugriff benötigen Sie eine aktive PROMPTFINISHER-Pro-Lizenz."
-msgstr ""
-"U heeft een actieve PROMPTFINISHER nodig Pro licentie voor Pro toegang."
+msgstr "Voor Pro-toegang heb je een actieve PROMPTFINISHER Pro-licentie nodig."
 
 msgid "Portal durchsuchen"
 msgstr "Zoekportaal"
@@ -933,9 +904,7 @@ msgid ""
 "Geben Sie einen Suchbegriff ein. Firmenadministratoren können nach "
 "Teammitgliedern, E-Mail-Adressen und Lizenzen suchen; andere Benutzer sehen "
 "ausschließlich ihre eigene Lizenzsicht."
-msgstr ""
-"Voer een zoekterm. Bedrijfsbeheerders kunnen teamleden, e-mailadressen en "
-"licenties zoeken; andere gebruikers zien alleen hun eigen licentieweergave."
+msgstr "Voer een zoekterm in. Bedrijfsbeheerders kunnen zoeken op teamleden, e-mailadressen en licenties; andere gebruikers zien alleen hun eigen licenties."
 
 msgid "Kunde"
 msgstr "Klant"
@@ -1043,10 +1012,7 @@ msgid ""
 "Die Daten entsprechen dem ausgewählten Kundenkonto und seiner Rolle. Dies "
 "ist eine Ansichtsvorschau, keine Kundensitzung: Interaktionen, Zahlungs- und"
 " Sicherheitsaktionen sind nicht ausführbar."
-msgstr ""
-"Gegevens zijn toegankelijk voor de geselecteerde klantaccount en rol. Dit is"
-" een preview, geen klantsessie: interacties, betalingen en "
-"beveiligingsmaatregelen zijn uitgeschakeld."
+msgstr "De gegevens komen overeen met het geselecteerde klantaccount en de bijbehorende rol. Dit is een voorbeeldweergave, geen klantsessie: interacties, betalings- en beveiligingsacties zijn niet uitvoerbaar."
 
 msgid "Perspektive auswählen"
 msgstr "Selecteer weergaveperspectief"
@@ -1054,9 +1020,7 @@ msgstr "Selecteer weergaveperspectief"
 msgid ""
 "Nur aktive Benutzer dieses Unternehmens. Rollen und Zugriffsrechte werden "
 "berücksichtigt."
-msgstr ""
-"Alleen actieve gebruikers van dit bedrijf. Rol en toegangsrechten worden "
-"geëerbiedigd."
+msgstr "Alleen actieve gebruikers van dit bedrijf. Rollen en toegangsrechten worden gerespecteerd."
 
 msgid "Kundenbenutzer"
 msgstr "Klantgebruiker"
@@ -1076,9 +1040,7 @@ msgstr "Klantadministratie"
 msgid ""
 "Änderungen erfolgen ausschließlich in den berechtigungsgeschützten "
 "Administrationsmasken mit Auditierung – nicht in der Kundenansicht."
-msgstr ""
-"Wijzigingen worden alleen doorgevoerd door middel van door toestemming "
-"beschermde, gecontroleerde administratieve formulieren, niet door de klant."
+msgstr "Wijzigingen kunnen uitsluitend plaatsvinden in beveiligde beheerformulieren met auditregistratie, niet in de klantweergave."
 
 msgid "Benutzer und Rollen verwalten"
 msgstr "Gebruikers en rollen beheren"
@@ -1165,9 +1127,7 @@ msgid ""
 "Dies ist eine Leseansicht. Passwort, Zwei-Faktor-Authentifizierung und "
 "persönliche Einstellungen kann nur der angemeldete Kundenbenutzer selbst "
 "ändern."
-msgstr ""
-"Dit is een alleen-lezen weergave. Alleen de ingelogde klant kan zijn "
-"wachtwoord, twee-factor authenticatie en persoonlijke instellingen wijzigen."
+msgstr "Dit is een alleen-lezenweergave. Alleen de aangemelde klantgebruiker kan het wachtwoord, 2FA en persoonlijke instellingen wijzigen."
 
 msgid "Benutzerkonto"
 msgstr "Gebruikersaccount"
@@ -1175,9 +1135,7 @@ msgstr "Gebruikersaccount"
 msgid ""
 "Teamverwaltung, Bestellungen und Unternehmensdaten sind für diese Rolle "
 "nicht freigegeben."
-msgstr ""
-"Teammanagement, orders en bedrijfsgegevens zijn niet beschikbaar voor deze "
-"rol."
+msgstr "Teambeheer, bestellingen en bedrijfsgegevens zijn voor deze rol niet toegankelijk."
 
 msgid "Anschrift"
 msgstr "Postadres"
@@ -1207,10 +1165,7 @@ msgid ""
 "Für echte Schreibaktionen oder einen vollständigen Login-Test muss ein "
 "eigener Nicht-Staff-Testkunde verwendet werden. Die Vorschau übernimmt "
 "niemals die Identität des Kunden."
-msgstr ""
-"Voor echte schrijfbewerkingen of een volledige inlogtest, gebruik een "
-"speciale niet-personeelstestklant. Deze preview gaat nooit uit van de "
-"identiteit van een klant."
+msgstr "Voor echte schrijfacties of een volledige inlogtest is een aparte testklant zonder personeelsrechten nodig. De voorbeeldweergave neemt nooit de identiteit van de klant over."
 
 msgid "Noch keine Lizenzen."
 msgstr "Nog geen licenties."
@@ -3649,3 +3604,269 @@ msgstr "Als je geen einddatum opgeeft, behandelen we de opzegging voor de vroegs
 
 msgid "jetzt kündigen"
 msgstr "Nu opzeggen"
+
+# Customer checkout: legal document list heading.
+msgid "Rechtsdokumente:"
+msgstr "Juridische documenten:"
+
+msgid "Alle für Ihr Konto freigegebenen Adminbereiche."
+msgstr "Alle beheeronderdelen die voor je account beschikbaar zijn."
+
+msgid "Geschäft & Inhalte"
+msgstr "Zakelijk en inhoud"
+
+msgid "System & Governance"
+msgstr "Systeem en governance"
+
+msgid "Lead bearbeiten"
+msgstr "Lead bewerken"
+
+msgid "Ansprechpartner"
+msgstr "Contactpersoon"
+
+msgid "Verlauf & Einordnung"
+msgstr "Historie en beoordeling"
+
+msgid "Zuletzt geändert"
+msgstr "Laatst gewijzigd"
+
+msgid "Als Firmenkunde konvertiert am"
+msgstr "Omgezet naar zakelijke klant op"
+
+msgid "Kundenkonto öffnen"
+msgstr "Klantaccount openen"
+
+msgid "Privatkunden werden über den öffentlichen Registrierungs-/Checkout-Prozess angelegt, damit AGB und Datenschutz vom Kunden selbst bestätigt werden."
+msgstr "Particuliere klanten worden via het openbare registratie- en bestelproces aangemaakt zodat zij zelf de voorwaarden en privacyverklaring accepteren."
+
+msgid "← Zur Übersicht"
+msgstr "← Terug naar overzicht"
+
+msgid "Erklärung"
+msgstr "Verklaring"
+
+msgid "Gewünschtes Ende"
+msgstr "Gewenste einddatum"
+
+msgid "Bearbeitet"
+msgstr "Verwerkt"
+
+msgid "Bearbeitung"
+msgstr "Verwerking"
+
+msgid "Status speichern"
+msgstr "Status opslaan"
+
+msgid "Sie haben Leserechte, aber keine Berechtigung zur Bearbeitung."
+msgstr "Je hebt leestoegang maar geen rechten om wijzigingen aan te brengen."
+
+msgid "CSV-Export"
+msgstr "CSV-export"
+
+msgid "angefordert"
+msgstr "aangevraagd"
+
+msgid "Zeilen"
+msgstr "Rijen"
+
+msgid "Verfügbar bis"
+msgstr "Beschikbaar tot"
+
+msgid "Dieser Export ist abgelaufen."
+msgstr "Deze export is verlopen."
+
+msgid "CSV herunterladen"
+msgstr "CSV downloaden"
+
+msgid "Der Export konnte nicht erstellt werden. Bitte erneut anfordern."
+msgstr "De export kon niet worden gemaakt. Vraag deze opnieuw aan."
+
+msgid "Der Export wird im Hintergrund erstellt. Diese Seite aktualisiert sich automatisch."
+msgstr "De export wordt op de achtergrond gemaakt. Deze pagina wordt automatisch vernieuwd."
+
+msgid "Der Zahlungsdienst ist derzeit noch nicht verfügbar."
+msgstr "De betaalservice is momenteel niet beschikbaar."
+
+msgid "Zugriff verweigert"
+msgstr "Toegang geweigerd"
+
+msgid "Für diese Ansicht fehlt die erforderliche Berechtigung."
+msgstr "Je hebt geen rechten om deze pagina te bekijken."
+
+msgid "Zurück zur Übersicht"
+msgstr "Terug naar overzicht"
+
+msgid "Ansicht konnte nicht geladen werden"
+msgstr "Pagina kon niet worden geladen"
+
+msgid "Beim Laden der Daten ist ein interner Fehler aufgetreten. Bitte versuchen Sie es erneut."
+msgstr "Bij het laden van de gegevens is een interne fout opgetreden. Probeer het opnieuw."
+
+msgid "Erneut laden"
+msgstr "Opnieuw laden"
+
+msgid "Seitennavigation"
+msgstr "Paginanavigatie"
+
+msgid "von"
+msgstr "van"
+
+msgid "Datensätze"
+msgstr "Records"
+
+msgid "Erste Seite"
+msgstr "Eerste pagina"
+
+msgid "Erste"
+msgstr "Eerste"
+
+msgid "Vorherige Seite"
+msgstr "Vorige pagina"
+
+msgid "Nächste Seite"
+msgstr "Volgende pagina"
+
+msgid "Letzte Seite"
+msgstr "Laatste pagina"
+
+msgid "Letzte"
+msgstr "Laatste"
+
+msgid "Zwei-Faktor-Anmeldung"
+msgstr "Inloggen met twee factoren"
+
+msgid "Geben Sie den Code aus Ihrer Authenticator-App oder einen gültigen Recovery-Code ein."
+msgstr "Voer de code uit je authenticator-app of een geldige herstelcode in."
+
+msgid "Recovery-Codes"
+msgstr "Herstelcodes"
+
+msgid "Einmalig speichern."
+msgstr "Sla deze codes nu op."
+
+msgid "Diese Codes werden später nicht erneut im Klartext angezeigt."
+msgstr "Deze codes worden later niet opnieuw leesbaar weergegeven."
+
+msgid "Schließen Sie die Sicherheitseinrichtung ab, bevor Sie Ihren geschützten PROMPTFINISHER-Bereich verwenden."
+msgstr "Voltooi de beveiligingsinstellingen voordat je het beschermde PROMPTFINISHER-gedeelte gebruikt."
+
+msgid "Authenticator-Daten"
+msgstr "Authenticatorgegevens"
+
+msgid "Secret kopieren"
+msgstr "Geheime sleutel kopiëren"
+
+msgid "Hinterlegen Sie das Secret in Microsoft Authenticator, Google Authenticator, 1Password oder einer kompatiblen TOTP-App."
+msgstr "Voeg de geheime sleutel toe aan Microsoft Authenticator, Google Authenticator, 1Password of een compatibele TOTP-app."
+
+msgid "Einrichtungs-URI"
+msgstr "Configuratie-URI"
+
+msgid "URI kopieren"
+msgstr "URI kopiëren"
+
+msgid "Einrichtung bestätigen"
+msgstr "Configuratie bevestigen"
+
+msgid "6-stelliger Code"
+msgstr "6-cijferige code"
+
+msgid "2FA aktivieren"
+msgstr "2FA inschakelen"
+
+msgid "Nach erfolgreicher Aktivierung werden einmalig Recovery-Codes angezeigt."
+msgstr "Na activering worden de herstelcodes één keer getoond."
+
+msgid "Wir senden einen zeitlich begrenzten Link an die hinterlegte E-Mail-Adresse."
+msgstr "We sturen een tijdelijke link naar je geregistreerde e-mailadres."
+
+msgid "Link anfordern"
+msgstr "Link aanvragen"
+
+msgid "Anfrage verarbeitet"
+msgstr "Verzoek verwerkt"
+
+msgid "Falls ein aktives Konto zu dieser Adresse existiert, wurde ein zeitlich begrenzter Link zum Zurücksetzen versendet."
+msgstr "Als er een actief account bij dit adres bestaat, is een tijdelijke resetlink verstuurd."
+
+msgid "Legen Sie ein neues Passwort für Ihr PROMPTFINISHER-Konto fest."
+msgstr "Stel een nieuw wachtwoord in voor je PROMPTFINISHER-account."
+
+msgid "Passwort speichern"
+msgstr "Wachtwoord opslaan"
+
+msgid "Passwort geändert"
+msgstr "Wachtwoord gewijzigd"
+
+msgid "Link ungültig"
+msgstr "Ongeldige link"
+
+msgid "Sie können sich jetzt mit dem neuen Passwort anmelden."
+msgstr "Je kunt nu inloggen met je nieuwe wachtwoord."
+
+msgid "Der Link ist ungültig, abgelaufen oder wurde bereits verwendet. Fordern Sie bei Bedarf einen neuen Link an."
+msgstr "Deze link is ongeldig, verlopen of al gebruikt. Vraag zo nodig een nieuwe link aan."
+
+msgid "Neuen Link anfordern"
+msgstr "Nieuwe link aanvragen"
+
+msgid "Möchten Sie die aktuelle Sitzung beenden?"
+msgstr "Wil je je huidige sessie beëindigen?"
+
+# Pro deployment, device registration, and expiration warnings.
+msgid "Die geschützte Pro-Anwendung ist auf diesem System noch nicht bereitgestellt."
+msgstr "De beveiligde Pro-applicatie is nog niet op dit systeem geïnstalleerd."
+
+msgid "Deployment unvollständig."
+msgstr "Uitrol onvolledig."
+
+msgid "Der unveränderte PROMPTFINISHER-Pro-Golden-Master muss als private Serverdatei installiert werden."
+msgstr "De ongewijzigde referentieversie van PROMPTFINISHER Pro moet als privéserverbestand worden geïnstalleerd."
+
+msgid "Diese Datei wird niemals öffentlich unter /static/ ausgeliefert."
+msgstr "Dit bestand wordt nooit openbaar aangeboden via /static/."
+
+msgid "Gerät registrieren"
+msgstr "Apparaat registreren"
+
+msgid "PROMPTFINISHER Pro erlaubt %(device_limit)s aktive Geräte pro Benutzer."
+msgstr "PROMPTFINISHER Pro staat %(device_limit)s actieve apparaten per gebruiker toe."
+
+msgid "Gerät registrieren und PROMPTFINISHER Pro öffnen"
+msgstr "Apparaat registreren en PROMPTFINISHER Pro openen"
+
+msgid "Wenn alle Geräteslots belegt sind, muss Ihr Firmenadministrator oder netstyle zuerst ein altes Gerät freigeben."
+msgstr "Als alle apparaatplaatsen bezet zijn, moet uw bedrijfsbeheerder of netstyle eerst een oud apparaat vrijgeven."
+
+msgid "Lizenz läuft bald ab"
+msgstr "Licentie verloopt binnenkort"
+
+msgid "PROMPTFINISHER-Pro-Lizenz läuft bald ab"
+msgstr "PROMPTFINISHER Pro-licentie verloopt binnenkort"
+
+msgid "Dein Pro-Zugriff bleibt bis zum Ablaufdatum aktiv."
+msgstr "Je Pro-toegang blijft actief tot de vervaldatum."
+
+msgid "Verbleibende Tage:"
+msgstr "Resterende dagen:"
+
+msgid "Lizenz:"
+msgstr "Licentie:"
+
+msgid "Ablaufdatum:"
+msgstr "Vervaldatum:"
+
+msgid "Nach Ablauf wird der Pro-Zugriff ohne Verlängerung automatisch gesperrt."
+msgstr "Na de vervaldatum wordt Pro-toegang automatisch geblokkeerd zonder verlenging."
+
+msgid "Was möchtest du tun?"
+msgstr "Wat wil je doen?"
+
+msgid "Eine Verlängerung vor Ablauf hängt weitere 365 Tage an das bestehende Ablaufdatum an. Die Restlaufzeit geht nicht verloren."
+msgstr "Verlengen vóór de vervaldatum voegt 365 dagen toe aan de huidige einddatum. De resterende tijd blijft behouden."
+
+msgid "Lizenzverwaltung / Verlängerung"
+msgstr "Licentiebeheer / verlenging"
+
+msgid "Jetzt trotzdem PROMPTFINISHER Pro starten"
+msgstr "PROMPTFINISHER Pro toch openen"

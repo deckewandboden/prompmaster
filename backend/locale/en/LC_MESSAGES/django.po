@@ -3549,3 +3549,269 @@ msgstr "If you do not specify an end date, we will treat your cancellation as ef
 
 msgid "jetzt kündigen"
 msgstr "Cancel now"
+
+# Customer checkout: legal document list heading.
+msgid "Rechtsdokumente:"
+msgstr "Legal documents:"
+
+msgid "Alle für Ihr Konto freigegebenen Adminbereiche."
+msgstr "All administration sections available to your account."
+
+msgid "Geschäft & Inhalte"
+msgstr "Business & content"
+
+msgid "System & Governance"
+msgstr "System & governance"
+
+msgid "Lead bearbeiten"
+msgstr "Edit lead"
+
+msgid "Ansprechpartner"
+msgstr "Contact person"
+
+msgid "Verlauf & Einordnung"
+msgstr "History & assessment"
+
+msgid "Zuletzt geändert"
+msgstr "Last modified"
+
+msgid "Als Firmenkunde konvertiert am"
+msgstr "Converted to a business customer on"
+
+msgid "Kundenkonto öffnen"
+msgstr "Open customer account"
+
+msgid "Privatkunden werden über den öffentlichen Registrierungs-/Checkout-Prozess angelegt, damit AGB und Datenschutz vom Kunden selbst bestätigt werden."
+msgstr "Private customers are created through the public registration and checkout process so they can personally accept the terms and privacy notice."
+
+msgid "← Zur Übersicht"
+msgstr "← Back to overview"
+
+msgid "Erklärung"
+msgstr "Declaration"
+
+msgid "Gewünschtes Ende"
+msgstr "Requested end date"
+
+msgid "Bearbeitet"
+msgstr "Processed"
+
+msgid "Bearbeitung"
+msgstr "Processing"
+
+msgid "Status speichern"
+msgstr "Save status"
+
+msgid "Sie haben Leserechte, aber keine Berechtigung zur Bearbeitung."
+msgstr "You have read access but are not authorized to make changes."
+
+msgid "CSV-Export"
+msgstr "CSV export"
+
+msgid "angefordert"
+msgstr "requested"
+
+msgid "Zeilen"
+msgstr "Rows"
+
+msgid "Verfügbar bis"
+msgstr "Available until"
+
+msgid "Dieser Export ist abgelaufen."
+msgstr "This export has expired."
+
+msgid "CSV herunterladen"
+msgstr "Download CSV"
+
+msgid "Der Export konnte nicht erstellt werden. Bitte erneut anfordern."
+msgstr "The export could not be created. Please request it again."
+
+msgid "Der Export wird im Hintergrund erstellt. Diese Seite aktualisiert sich automatisch."
+msgstr "The export is being generated in the background. This page refreshes automatically."
+
+msgid "Der Zahlungsdienst ist derzeit noch nicht verfügbar."
+msgstr "The payment service is not available at the moment."
+
+msgid "Zugriff verweigert"
+msgstr "Access denied"
+
+msgid "Für diese Ansicht fehlt die erforderliche Berechtigung."
+msgstr "You do not have permission to access this view."
+
+msgid "Zurück zur Übersicht"
+msgstr "Back to overview"
+
+msgid "Ansicht konnte nicht geladen werden"
+msgstr "Could not load the page"
+
+msgid "Beim Laden der Daten ist ein interner Fehler aufgetreten. Bitte versuchen Sie es erneut."
+msgstr "An internal error occurred while loading the data. Please try again."
+
+msgid "Erneut laden"
+msgstr "Reload"
+
+msgid "Seitennavigation"
+msgstr "Page navigation"
+
+msgid "von"
+msgstr "of"
+
+msgid "Datensätze"
+msgstr "Records"
+
+msgid "Erste Seite"
+msgstr "First page"
+
+msgid "Erste"
+msgstr "First"
+
+msgid "Vorherige Seite"
+msgstr "Previous page"
+
+msgid "Nächste Seite"
+msgstr "Next page"
+
+msgid "Letzte Seite"
+msgstr "Last page"
+
+msgid "Letzte"
+msgstr "Last"
+
+msgid "Zwei-Faktor-Anmeldung"
+msgstr "Two-factor sign-in"
+
+msgid "Geben Sie den Code aus Ihrer Authenticator-App oder einen gültigen Recovery-Code ein."
+msgstr "Enter the code from your authenticator app or a valid recovery code."
+
+msgid "Recovery-Codes"
+msgstr "Recovery codes"
+
+msgid "Einmalig speichern."
+msgstr "Save these codes now."
+
+msgid "Diese Codes werden später nicht erneut im Klartext angezeigt."
+msgstr "These codes will not be shown again in plain text."
+
+msgid "Schließen Sie die Sicherheitseinrichtung ab, bevor Sie Ihren geschützten PROMPTFINISHER-Bereich verwenden."
+msgstr "Complete the security setup before accessing your protected PROMPTFINISHER area."
+
+msgid "Authenticator-Daten"
+msgstr "Authenticator details"
+
+msgid "Secret kopieren"
+msgstr "Copy secret"
+
+msgid "Hinterlegen Sie das Secret in Microsoft Authenticator, Google Authenticator, 1Password oder einer kompatiblen TOTP-App."
+msgstr "Add the secret to Microsoft Authenticator, Google Authenticator, 1Password or another compatible TOTP app."
+
+msgid "Einrichtungs-URI"
+msgstr "Setup URI"
+
+msgid "URI kopieren"
+msgstr "Copy URI"
+
+msgid "Einrichtung bestätigen"
+msgstr "Confirm setup"
+
+msgid "6-stelliger Code"
+msgstr "6-digit code"
+
+msgid "2FA aktivieren"
+msgstr "Enable 2FA"
+
+msgid "Nach erfolgreicher Aktivierung werden einmalig Recovery-Codes angezeigt."
+msgstr "After successful activation, recovery codes will be displayed once."
+
+msgid "Wir senden einen zeitlich begrenzten Link an die hinterlegte E-Mail-Adresse."
+msgstr "We will send a time-limited link to your registered email address."
+
+msgid "Link anfordern"
+msgstr "Request link"
+
+msgid "Anfrage verarbeitet"
+msgstr "Request processed"
+
+msgid "Falls ein aktives Konto zu dieser Adresse existiert, wurde ein zeitlich begrenzter Link zum Zurücksetzen versendet."
+msgstr "If an active account exists for this address, a time-limited reset link has been sent."
+
+msgid "Legen Sie ein neues Passwort für Ihr PROMPTFINISHER-Konto fest."
+msgstr "Set a new password for your PROMPTFINISHER account."
+
+msgid "Passwort speichern"
+msgstr "Save password"
+
+msgid "Passwort geändert"
+msgstr "Password changed"
+
+msgid "Link ungültig"
+msgstr "Invalid link"
+
+msgid "Sie können sich jetzt mit dem neuen Passwort anmelden."
+msgstr "You can now sign in using your new password."
+
+msgid "Der Link ist ungültig, abgelaufen oder wurde bereits verwendet. Fordern Sie bei Bedarf einen neuen Link an."
+msgstr "This link is invalid, expired or has already been used. Request a new link if needed."
+
+msgid "Neuen Link anfordern"
+msgstr "Request a new link"
+
+msgid "Möchten Sie die aktuelle Sitzung beenden?"
+msgstr "Do you want to end your current session?"
+
+# Pro deployment, device registration, and expiration warnings.
+msgid "Die geschützte Pro-Anwendung ist auf diesem System noch nicht bereitgestellt."
+msgstr "The protected Pro application has not yet been deployed on this system."
+
+msgid "Deployment unvollständig."
+msgstr "Deployment incomplete."
+
+msgid "Der unveränderte PROMPTFINISHER-Pro-Golden-Master muss als private Serverdatei installiert werden."
+msgstr "The unchanged PROMPTFINISHER Pro golden master must be installed as a private server file."
+
+msgid "Diese Datei wird niemals öffentlich unter /static/ ausgeliefert."
+msgstr "This file is never served publicly under /static/."
+
+msgid "Gerät registrieren"
+msgstr "Register device"
+
+msgid "PROMPTFINISHER Pro erlaubt %(device_limit)s aktive Geräte pro Benutzer."
+msgstr "PROMPTFINISHER Pro allows %(device_limit)s active devices per user."
+
+msgid "Gerät registrieren und PROMPTFINISHER Pro öffnen"
+msgstr "Register device and open PROMPTFINISHER Pro"
+
+msgid "Wenn alle Geräteslots belegt sind, muss Ihr Firmenadministrator oder netstyle zuerst ein altes Gerät freigeben."
+msgstr "If all device slots are occupied, your company administrator or netstyle must first release an old device."
+
+msgid "Lizenz läuft bald ab"
+msgstr "License expires soon"
+
+msgid "PROMPTFINISHER-Pro-Lizenz läuft bald ab"
+msgstr "PROMPTFINISHER Pro license expires soon"
+
+msgid "Dein Pro-Zugriff bleibt bis zum Ablaufdatum aktiv."
+msgstr "Your Pro access remains active until the expiration date."
+
+msgid "Verbleibende Tage:"
+msgstr "Days remaining:"
+
+msgid "Lizenz:"
+msgstr "License:"
+
+msgid "Ablaufdatum:"
+msgstr "Expiration date:"
+
+msgid "Nach Ablauf wird der Pro-Zugriff ohne Verlängerung automatisch gesperrt."
+msgstr "After expiration, Pro access is automatically blocked unless you renew."
+
+msgid "Was möchtest du tun?"
+msgstr "What would you like to do?"
+
+msgid "Eine Verlängerung vor Ablauf hängt weitere 365 Tage an das bestehende Ablaufdatum an. Die Restlaufzeit geht nicht verloren."
+msgstr "Renewing before expiration adds another 365 days to the current end date. You do not lose any remaining time."
+
+msgid "Lizenzverwaltung / Verlängerung"
+msgstr "License management / renewal"
+
+msgid "Jetzt trotzdem PROMPTFINISHER Pro starten"
+msgstr "Open PROMPTFINISHER Pro anyway"

@@ -97,6 +97,108 @@ class LocalizedPromptRenderingTests(SimpleTestCase):
             for lang in SUPPORTED - {'de'}:
                 self.assertTrue(texts[lang].strip(), f'{task_id} {lang}')
 
+    def test_free_review_contract_has_no_untranslated_selection_labels(self):
+        # The review renders real DB-backed contract choices, not only static
+        # headers. Each Free label must be available in every product locale.
+        from .free_surface import AUDIENCE_DISPLAY, FREE_INPUT_META
+        from .free_legacy import FREE_RUNTIME_CONTRACTS
+        catalogue = _product_dictionary()
+        data = json.loads((Path(__file__).resolve().parent
+                           / 'data/free_legacy_tasks.json').read_text(encoding='utf-8'))
+        labels = {task[key] for task in data['tasks']
+                  for key in ('title', 'copy', 'output_label', 'area')}
+        labels.update(AUDIENCE_DISPLAY.values())
+        for entry in FREE_INPUT_META.values():
+            labels.update(entry.values())
+        for entry in FREE_RUNTIME_CONTRACTS.values():
+            labels.update(entry['focus'])
+        labels.update({
+            'Pflichtangaben fehlen', 'Alle Pflichtangaben vollständig',
+            'Keine zusätzlichen Pflichtangaben', 'Noch keine Aufgabe gewählt',
+            'Pflichtfeld', 'Offen', 'In der Aufgabe enthalten',
+            'Dieser Schritt ist noch nicht vollständig. Klicken zum Bearbeiten.',
+        })
+        for value in labels:
+            for language in SUPPORTED - {'de'}:
+                with self.subTest(label=value, language=language):
+                    translation = catalogue.get(value, {}).get(language)
+                    self.assertTrue(translation, f'Missing review translation: {value} ({language})')
+                    # Shared international terms (e.g. 'Agenda') may be
+                    # spelled identically; exact-value coverage still matters.
+                    if value in {'Inhalt zusammenfassen', 'Eigene Verwendung',
+                                 'Pflichtangaben fehlen', 'Was soll die Zusammenfassung leisten?'}:
+                        self.assertNotEqual(translation, value)
+
+    def test_v2_review_is_locale_safe_without_mutating_contract_values(self):
+        static_root = Path(__file__).resolve().parents[2] / 'static'
+        source = (static_root / 'js/promptfinisher_ui_v2.20260922.js').read_text(encoding='utf-8')
+        style = (static_root / 'css/promptfinisher_v2.20260922.css').read_text(encoding='utf-8')
+        language = (static_root / 'js/promptfinisher_product_i18n.20261011.js').read_text(encoding='utf-8')
+        self.assertIn(".filter(select => select && select.value)", source)
+        self.assertNotIn("!/^Bitte auswählen/i.test(value)", source)
+        self.assertIn("localReviewValue('Pflichtangaben fehlen')", source)
+        self.assertIn("data-pmv2-missing-label", style)
+        self.assertNotIn('content:"OFFEN"', style)
+        self.assertIn("pm-product-locale-ready", source)
+        self.assertIn("pm-product-locale-ready", language)
+        self.assertIn(".pmv2-review-value", language)  # preserve user-origin data boundary
+        self.assertNotIn("replaceAll('Pflichtangaben fehlen'", source)
+
+    def test_all_194_pro_task_descriptions_and_schema_labels_are_localized(self):
+        # Canonical catalog is authoritative: no loosely maintained sample
+        # lists, no generic 'Field N' substitutes, no silent German fallback.
+        data = json.loads((Path(__file__).resolve().parent
+                           / 'data/pm20_golden_logic.json').read_text(encoding='utf-8'))
+        translations = _product_dictionary()
+        tasks = [task for app in data['APP'].values() for task in app['tasks']]
+        self.assertEqual(len(tasks), 194)
+        categories = {
+            'title': {task['title'] for task in tasks},
+            'intent': {task['intent'] for task in tasks},
+            'area': {task['area'] for task in tasks},
+            'required': {value for task in tasks for value in task.get('required', [])},
+            'optional': {value for task in tasks for value in task.get('optional', [])},
+            'outputs': {value for task in tasks for value in task.get('outputs', [])},
+            'focus': {value for task in tasks for value in task.get('focus', [])},
+            'audiences': {value for task in tasks for value in task.get('audiences', [])},
+        }
+        self.assertEqual(len(categories['intent']), 194)
+        self.assertEqual(len(categories['outputs']), 238)
+        self.assertEqual(len(categories['title']), 192)
+        self.assertEqual(
+            len(categories['required'] | categories['optional'] | categories['outputs']), 769
+        )
+        for category, labels in categories.items():
+            self.assertTrue(labels, category)
+            for label in labels:
+                for language in SUPPORTED - {'de'}:
+                    with self.subTest(category=category, label=label, language=language):
+                        self.assertTrue(
+                            translations.get(label, {}).get(language, '').strip(),
+                            f'Untranslated PM20 {category}: {label!r} ({language})'
+                        )
+
+    def test_implicit_pro_output_option_value_is_preserved_in_translation(self):
+        # The untouched Pro runtime uses <option>Label</option> for output.
+        # Changing option.textContent changes its implicit .value unless the
+        # original value is first pinned as an explicit value attribute.
+        ui = (Path(__file__).resolve().parents[2] / 'static'
+              / 'js/promptfinisher_product_i18n.20261011.js').read_text(encoding='utf-8')
+        self.assertIn("option.setAttribute('value', option.textContent.trim())", ui)
+        self.assertIn("node.nodeValue = original.replace(original.trim(), translated)", ui)
+
+    def test_all_pro_application_card_descriptions_are_localized(self):
+        data = json.loads((Path(__file__).resolve().parent
+                           / 'data/pm20_golden_logic.json').read_text(encoding='utf-8'))
+        self.assertEqual(len(data['APP']), 34)
+        translations = _product_dictionary()
+        for app_id, app in data['APP'].items():
+            for field in ('name', 'copy', 'access'):
+                for language in SUPPORTED - {'de'}:
+                    with self.subTest(app=app_id, field=field, language=language):
+                        self.assertTrue(translations.get(app[field], {}).get(language),
+                                        f'Missing app translation: {app_id} / {field} / {language}')
+
     def test_all_pro_task_titles_have_native_language_variants(self):
         data = json.loads((Path(__file__).resolve().parent
                            / 'data/pm20_golden_logic.json').read_text(encoding='utf-8'))

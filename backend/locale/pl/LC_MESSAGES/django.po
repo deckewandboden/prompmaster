@@ -165,7 +165,7 @@ msgstr "Zarejestruj się"
 
 msgid ""
 "Unternehmensadministratoren richten anschließend verpflichtend 2FA ein."
-msgstr "Administratorzy firm muszą następnie założyć 2FA."
+msgstr "Administratorzy firmy muszą następnie obowiązkowo skonfigurować uwierzytelnianie dwuskładnikowe (2FA)."
 
 msgid "Bereits registriert?"
 msgstr "Już zarejestrowany?"
@@ -527,9 +527,7 @@ msgstr "Eksportuj moje dane"
 msgid ""
 "Mollie übernimmt die Zahlungsabwicklung; PROMPTFINISHER erzeugt keine eigene"
 " Rechnungsengine."
-msgstr ""
-"Mollie obsługuje przetwarzanie płatności; PROMPTFINISHER nie obsługuje "
-"własnego silnika fakturowania."
+msgstr "Mollie obsługuje płatności; PROMPTFINISHER nie posiada własnego systemu wystawiania faktur."
 
 msgid "Mollie-Referenz"
 msgstr "Mollie reference"
@@ -635,7 +633,7 @@ msgstr "Utwórz 2FA"
 
 msgid ""
 "2FA schützt den Zugriff mit einem zusätzlichen zeitbasierten Einmalcode."
-msgstr "2FA chroni dostęp z dodatkowym kodem czasu."
+msgstr "2FA chroni dostęp za pomocą dodatkowego, jednorazowego kodu ważnego przez określony czas."
 
 msgid "Ablehnen"
 msgstr "Odrzuć"
@@ -666,14 +664,12 @@ msgstr "Zarządzanie użytkownikami, zaproszeniami, licencjami i urządzeniami."
 
 msgid ""
 "Die Suche bleibt auf Ihren eigenen Mandanten- und Lizenzbereich begrenzt."
-msgstr "Wyszukiwanie ogranicza się do własnego najemcy i zakresu licencji."
+msgstr "Wyszukiwanie jest ograniczone do Twojej firmy i zakresu jej licencji."
 
 msgid ""
 "Ein Passwortwechsel erfolgt über einen zeitlich begrenzten, einmal "
 "verwendbaren Link an Ihre hinterlegte E-Mail-Adresse."
-msgstr ""
-"Zmiana hasła jest wykonywana za pomocą ograniczonego czasu, single- use link"
-" wysłanego na zarejestrowany adres e-mail."
+msgstr "Zmiana hasła odbywa się poprzez ograniczony czasowo, jednorazowy link wysyłany na zapisany adres e-mail."
 
 msgid "Free"
 msgstr "Free"
@@ -691,9 +687,7 @@ msgid ""
 "Hier sehen Sie ausschließlich Nachrichten, die für Sie bzw. Ihr Unternehmen "
 "bestimmt sind. Interne netstyle-Notizen werden nicht im Kundenportal "
 "angezeigt."
-msgstr ""
-"Tutaj można zobaczyć tylko wiadomości przeznaczone dla Ciebie lub Twojej "
-"firmy. Wewnętrzne notatki netstyle nie są wyświetlane w portalu klienta."
+msgstr "Tutaj widzisz wyłącznie wiadomości przeznaczone dla Ciebie lub Twojej firmy. Wewnętrzne notatki netstyle nie są wyświetlane w portalu klienta."
 
 msgid "Ihre Anfrage und alle für Kunden freigegebenen Antworten."
 msgstr "Twoja prośba i wszystkie odpowiedzi udostępnione dla klientów."
@@ -752,9 +746,7 @@ msgstr "Historia"
 msgid ""
 "Wählen Sie die Lizenz, deren bestehende Restlaufzeit um weitere 365 Tage "
 "verlängert werden soll."
-msgstr ""
-"Wybierz licencję, której pozostały termin powinien zostać przedłużony o "
-"kolejne 365 dni."
+msgstr "Wybierz licencję, której pozostały okres ważności ma zostać przedłużony o kolejne 365 dni."
 
 msgid "Zahlungspflichtig verlängern →"
 msgstr "Odnawiaj z obowiązkiem płatności →"
@@ -786,21 +778,17 @@ msgstr "zarejestrowana / zdolność przewozowa"
 msgid ""
 "Die vorbereitete Lizenz wird Ihrem aktuell angemeldeten Benutzerkonto "
 "zugeordnet. Der Link kann anschließend nicht erneut verwendet werden."
-msgstr ""
-"Przygotowana licencja zostanie przypisana do Twojego aktualnie podpisanego "
-"konta użytkownika. Link nie może być ponownie użyty."
+msgstr "Przygotowana licencja zostanie przypisana do aktualnie zalogowanego konta użytkownika. Linku nie można użyć ponownie."
 
 msgid ""
 "Gültig bis %(expiry)s. Der Link ist tenantgebunden, für genau diesen "
 "Benutzer bestimmt und nur einmal verwendbar."
-msgstr "Ważne do %(expiry)s. Link jest przypisany do organizacji, przeznaczony wyłącznie dla tego użytkownika i jednorazowy."
+msgstr "Ważny do %(expiry)s. Link jest powiązany z firmą, przeznaczony wyłącznie dla tego użytkownika i można go użyć tylko raz."
 
 msgid ""
 "Jede neue Lizenz startet nach erfolgreicher Zahlung mit eigener 365-Tage-"
 "Laufzeit."
-msgstr ""
-"Każda nowa licencja rozpoczyna swój własny 365-dniowy termin po pomyślnej "
-"płatności."
+msgstr "Każda nowa licencja rozpoczyna własny 365-dniowy okres ważności po pomyślnej płatności."
 
 msgid "inkl. MwSt. · %(days)s Tage"
 msgstr "w tym VAT · %(days)s dni"
@@ -814,9 +802,7 @@ msgstr "Cena niedostępna"
 msgid ""
 "V1: exakt ein aktiver Firmenadministrator. Eine Übertragung ist nur auf ein "
 "aktives Team-Mitglied möglich."
-msgstr ""
-"V1: dokładnie jeden aktywny administrator firmy. Transfer jest możliwy tylko"
-" dla aktywnego członka zespołu."
+msgstr "Wersja 1: dokładnie jeden aktywny administrator firmy. Przeniesienie tej roli jest możliwe tylko na aktywnego członka zespołu."
 
 msgid "Ihre eigenen Geräteslots können Sie hier selbst verwalten."
 msgstr "Tutaj możesz zarządzać własnymi szczelinami urządzeń."
@@ -838,33 +824,23 @@ msgid ""
 " Optional kann eine für Ihr Konto sichtbare Lizenz mitgesendet werden. "
 "Passwörter, Tokens oder andere unnötige sensitive Daten werden nicht "
 "übernommen."
-msgstr ""
-"Konto, firma, identyfikator użytkownika i znacznik czasu są przypisane "
-"automatycznie. Opcjonalnie, licencja widoczna na Twoim koncie może być "
-"włączona. Nie uwzględniono haseł, żetonów lub innych niepotrzebnych danych "
-"wrażliwych."
+msgstr "Konto, firma, identyfikator użytkownika i czas są przypisywane automatycznie. Opcjonalnie można przesłać licencję widoczną dla Twojego konta. Hasła, tokeny ani inne zbędne dane wrażliwe nie są przekazywane."
 
 msgid ""
 "Exportieren Sie die zu Ihrem Benutzer gespeicherten PROMPTFINISHER-Daten als"
 " JSON. Secrets und Daten anderer Benutzer werden nicht exportiert."
-msgstr ""
-"Eksportuj dane PROMPTFINISHER przechowywane dla użytkownika jako JSON. "
-"Tajemnice i dane innych użytkowników nie są eksportowane."
+msgstr "Wyeksportuj dane PROMPTFINISHER zapisane dla Twojego użytkownika jako JSON. Sekrety i dane innych użytkowników nie są eksportowane."
 
 msgid ""
 "Ihre Löschanfrage vom %(requested)s ist bereits erfasst. Status: %(status)s."
-msgstr "Twój wniosek o usunięcie z dnia %(requested)s został już zarejestrowany. Status: %(status)s."
+msgstr "Twoje żądanie usunięcia z dnia %(requested)s zostało już zarejestrowane. Status: %(status)s."
 
 msgid ""
 "Sie können die Löschung Ihres PROMPTFINISHER-Kontos anfordern. Gesetzlich "
 "erforderliche Geschäfts- und Nachweisdaten werden nur im erforderlichen "
 "Umfang weiter aufbewahrt bzw. anonymisiert. Firmenadministratoren müssen "
 "ihre Administratorrolle vor der Verarbeitung übertragen."
-msgstr ""
-"Możesz poprosić o usunięcie swojego konta PROMPTFINISHER. Prawnie wymagane "
-"dane biznesowe i dowodowe będą zatrzymywane lub anonimowane jedynie w "
-"wymaganym zakresie. Administratorzy firmy muszą przenieść swoją rolę "
-"administratora przed przetwarzaniem."
+msgstr "Możesz złożyć wniosek o usunięcie konta PROMPTFINISHER. Dane handlowe i dowodowe wymagane prawem będą przechowywane lub anonimizowane wyłącznie w niezbędnym zakresie. Administrator firmy musi najpierw przekazać swoją rolę."
 
 msgid "Ich möchte die Löschung meines Kontos verbindlich anfordern."
 msgstr "Chcę złożyć wiążącą prośbę o usunięcie mojego konta."
@@ -914,16 +890,14 @@ msgstr "Bezpłatna licencja Pro jest dostępna."
 msgid ""
 "Aktuell ist keine freie Pro-Lizenz verfügbar. Kaufen Sie eine weitere Lizenz"
 " oder geben Sie eine bestehende Lizenz frei."
-msgstr ""
-"Obecnie nie jest dostępna bezpłatna licencja Pro. Kup inną licencję lub "
-"wypuść istniejącą."
+msgstr "Obecnie nie ma wolnej licencji Pro. Kup kolejną licencję lub zwolnij istniejącą."
 
 msgid "Ihre Pro-Anfrage ist bereits offen."
 msgstr "Prośba Pro jest już otwarta."
 
 msgid ""
 "Für den Pro-Zugriff benötigen Sie eine aktive PROMPTFINISHER-Pro-Lizenz."
-msgstr "Potrzebujesz aktywnego PROMPTFINISHER Licencja Pro dla Pro access."
+msgstr "Do dostępu Pro potrzebna jest aktywna licencja PROMPTFINISHER Pro."
 
 msgid "Portal durchsuchen"
 msgstr "Portal wyszukiwania"
@@ -932,10 +906,7 @@ msgid ""
 "Geben Sie einen Suchbegriff ein. Firmenadministratoren können nach "
 "Teammitgliedern, E-Mail-Adressen und Lizenzen suchen; andere Benutzer sehen "
 "ausschließlich ihre eigene Lizenzsicht."
-msgstr ""
-"Wprowadź termin wyszukiwania. Administratorzy firmy mogą przeszukiwać "
-"członków zespołu, adresy e-mail i licencje; inni użytkownicy widzą tylko "
-"własny widok licencji."
+msgstr "Wpisz hasło wyszukiwania. Administratorzy firmy mogą wyszukiwać członków zespołu, adresy e-mail i licencje; pozostali użytkownicy widzą wyłącznie własne licencje."
 
 msgid "Kunde"
 msgstr "Klient"
@@ -1043,10 +1014,7 @@ msgid ""
 "Die Daten entsprechen dem ausgewählten Kundenkonto und seiner Rolle. Dies "
 "ist eine Ansichtsvorschau, keine Kundensitzung: Interaktionen, Zahlungs- und"
 " Sicherheitsaktionen sind nicht ausführbar."
-msgstr ""
-"Dane są analizowane na wybranym koncie klienta i jego roli. Jest to podgląd,"
-" a nie sesja klienta: interakcje, płatności i działania bezpieczeństwa są "
-"wyłączone."
+msgstr "Dane odpowiadają wybranemu kontu klienta i jego roli. To podgląd, a nie sesja klienta: interakcje, płatności i działania zabezpieczające nie są dostępne."
 
 msgid "Perspektive auswählen"
 msgstr "Wybierz perspektywę przeglądania"
@@ -1054,8 +1022,7 @@ msgstr "Wybierz perspektywę przeglądania"
 msgid ""
 "Nur aktive Benutzer dieses Unternehmens. Rollen und Zugriffsrechte werden "
 "berücksichtigt."
-msgstr ""
-"Tylko aktywni użytkownicy z tej firmy. Przestrzega się praw dostępu i ról."
+msgstr "Tylko aktywni użytkownicy tej firmy. Uwzględniane są role i prawa dostępu."
 
 msgid "Kundenbenutzer"
 msgstr "Użytkownik klienta"
@@ -1075,9 +1042,7 @@ msgstr "Administracja klienta"
 msgid ""
 "Änderungen erfolgen ausschließlich in den berechtigungsgeschützten "
 "Administrationsmasken mit Auditierung – nicht in der Kundenansicht."
-msgstr ""
-"Zmiany są dokonywane tylko za pomocą formularzy administracyjnych "
-"chronionych uprawnieniem, a nie podglądu klienta."
+msgstr "Zmiany można wprowadzać wyłącznie w chronionych uprawnieniami formularzach administracyjnych z audytem, a nie w widoku klienta."
 
 msgid "Benutzer und Rollen verwalten"
 msgstr "Zarządzanie użytkownikami i rolami"
@@ -1166,10 +1131,7 @@ msgid ""
 "Dies ist eine Leseansicht. Passwort, Zwei-Faktor-Authentifizierung und "
 "persönliche Einstellungen kann nur der angemeldete Kundenbenutzer selbst "
 "ändern."
-msgstr ""
-"To jest widok tylko do odczytu. Tylko użytkownik-signed- in klienta może "
-"zmienić swoje hasło, uwierzytelnianie dwóch czynników oraz ustawienia "
-"osobiste."
+msgstr "To widok tylko do odczytu. Hasło, uwierzytelnianie dwuskładnikowe i ustawienia osobiste może zmieniać wyłącznie zalogowany użytkownik klienta."
 
 msgid "Benutzerkonto"
 msgstr "Konto użytkowników"
@@ -1177,9 +1139,7 @@ msgstr "Konto użytkowników"
 msgid ""
 "Teamverwaltung, Bestellungen und Unternehmensdaten sind für diese Rolle "
 "nicht freigegeben."
-msgstr ""
-"Zarządzanie zespołami, zamówienia i szczegóły firmy nie są dostępne do tej "
-"roli."
+msgstr "Ta rola nie ma dostępu do zarządzania zespołem, zamówień ani danych firmy."
 
 msgid "Anschrift"
 msgstr "Adres pocztowy"
@@ -1209,10 +1169,7 @@ msgid ""
 "Für echte Schreibaktionen oder einen vollständigen Login-Test muss ein "
 "eigener Nicht-Staff-Testkunde verwendet werden. Die Vorschau übernimmt "
 "niemals die Identität des Kunden."
-msgstr ""
-"Dla prawdziwych operacji zapisu lub pełnego testu logowania, należy użyć "
-"dedykowanego klienta test non-staff. Ten podgląd nigdy nie zakłada "
-"tożsamości klienta."
+msgstr "Do rzeczywistych działań zapisu lub pełnego testu logowania wymagany jest osobny klient testowy bez uprawnień personelu. Podgląd nigdy nie przejmuje tożsamości klienta."
 
 msgid "Noch keine Lizenzen."
 msgstr "Brak licencji."
@@ -3651,3 +3608,269 @@ msgstr "Jeżeli nie podasz daty zakończenia, przyjmiemy wypowiedzenie z najwcze
 
 msgid "jetzt kündigen"
 msgstr "Wypowiedz teraz"
+
+# Customer checkout: legal document list heading.
+msgid "Rechtsdokumente:"
+msgstr "Dokumenty prawne:"
+
+msgid "Alle für Ihr Konto freigegebenen Adminbereiche."
+msgstr "Wszystkie sekcje administracyjne dostępne dla Twojego konta."
+
+msgid "Geschäft & Inhalte"
+msgstr "Biznes i treści"
+
+msgid "System & Governance"
+msgstr "System i nadzór"
+
+msgid "Lead bearbeiten"
+msgstr "Edytuj potencjalnego klienta"
+
+msgid "Ansprechpartner"
+msgstr "Osoba kontaktowa"
+
+msgid "Verlauf & Einordnung"
+msgstr "Historia i ocena"
+
+msgid "Zuletzt geändert"
+msgstr "Ostatnia zmiana"
+
+msgid "Als Firmenkunde konvertiert am"
+msgstr "Przekształcono w klienta firmowego dnia"
+
+msgid "Kundenkonto öffnen"
+msgstr "Otwórz konto klienta"
+
+msgid "Privatkunden werden über den öffentlichen Registrierungs-/Checkout-Prozess angelegt, damit AGB und Datenschutz vom Kunden selbst bestätigt werden."
+msgstr "Klienci indywidualni rejestrują się przez publiczny proces rejestracji i zakupu, aby samodzielnie zaakceptować warunki i zasady prywatności."
+
+msgid "← Zur Übersicht"
+msgstr "← Wróć do przeglądu"
+
+msgid "Erklärung"
+msgstr "Oświadczenie"
+
+msgid "Gewünschtes Ende"
+msgstr "Żądana data zakończenia"
+
+msgid "Bearbeitet"
+msgstr "Przetworzono"
+
+msgid "Bearbeitung"
+msgstr "Przetwarzanie"
+
+msgid "Status speichern"
+msgstr "Zapisz status"
+
+msgid "Sie haben Leserechte, aber keine Berechtigung zur Bearbeitung."
+msgstr "Masz prawo do odczytu, ale nie do edycji."
+
+msgid "CSV-Export"
+msgstr "Eksport CSV"
+
+msgid "angefordert"
+msgstr "zażądano"
+
+msgid "Zeilen"
+msgstr "Wiersze"
+
+msgid "Verfügbar bis"
+msgstr "Dostępne do"
+
+msgid "Dieser Export ist abgelaufen."
+msgstr "Ten eksport wygasł."
+
+msgid "CSV herunterladen"
+msgstr "Pobierz CSV"
+
+msgid "Der Export konnte nicht erstellt werden. Bitte erneut anfordern."
+msgstr "Nie udało się utworzyć eksportu. Spróbuj ponownie."
+
+msgid "Der Export wird im Hintergrund erstellt. Diese Seite aktualisiert sich automatisch."
+msgstr "Eksport jest przygotowywany w tle. Ta strona odświeża się automatycznie."
+
+msgid "Der Zahlungsdienst ist derzeit noch nicht verfügbar."
+msgstr "Usługa płatności jest obecnie niedostępna."
+
+msgid "Zugriff verweigert"
+msgstr "Odmowa dostępu"
+
+msgid "Für diese Ansicht fehlt die erforderliche Berechtigung."
+msgstr "Nie masz uprawnień do wyświetlenia tej strony."
+
+msgid "Zurück zur Übersicht"
+msgstr "Wróć do przeglądu"
+
+msgid "Ansicht konnte nicht geladen werden"
+msgstr "Nie udało się załadować strony"
+
+msgid "Beim Laden der Daten ist ein interner Fehler aufgetreten. Bitte versuchen Sie es erneut."
+msgstr "Podczas wczytywania danych wystąpił błąd wewnętrzny. Spróbuj ponownie."
+
+msgid "Erneut laden"
+msgstr "Załaduj ponownie"
+
+msgid "Seitennavigation"
+msgstr "Nawigacja po stronach"
+
+msgid "von"
+msgstr "z"
+
+msgid "Datensätze"
+msgstr "Rekordy"
+
+msgid "Erste Seite"
+msgstr "Pierwsza strona"
+
+msgid "Erste"
+msgstr "Pierwsza"
+
+msgid "Vorherige Seite"
+msgstr "Poprzednia strona"
+
+msgid "Nächste Seite"
+msgstr "Następna strona"
+
+msgid "Letzte Seite"
+msgstr "Ostatnia strona"
+
+msgid "Letzte"
+msgstr "Ostatnia"
+
+msgid "Zwei-Faktor-Anmeldung"
+msgstr "Logowanie dwuskładnikowe"
+
+msgid "Geben Sie den Code aus Ihrer Authenticator-App oder einen gültigen Recovery-Code ein."
+msgstr "Wpisz kod z aplikacji uwierzytelniającej lub ważny kod odzyskiwania."
+
+msgid "Recovery-Codes"
+msgstr "Kody odzyskiwania"
+
+msgid "Einmalig speichern."
+msgstr "Zapisz te kody teraz."
+
+msgid "Diese Codes werden später nicht erneut im Klartext angezeigt."
+msgstr "Te kody nie będą później ponownie wyświetlane w postaci jawnej."
+
+msgid "Schließen Sie die Sicherheitseinrichtung ab, bevor Sie Ihren geschützten PROMPTFINISHER-Bereich verwenden."
+msgstr "Dokończ konfigurację zabezpieczeń, zanim uzyskasz dostęp do chronionej części PROMPTFINISHER."
+
+msgid "Authenticator-Daten"
+msgstr "Dane aplikacji uwierzytelniającej"
+
+msgid "Secret kopieren"
+msgstr "Kopiuj klucz tajny"
+
+msgid "Hinterlegen Sie das Secret in Microsoft Authenticator, Google Authenticator, 1Password oder einer kompatiblen TOTP-App."
+msgstr "Dodaj klucz tajny do Microsoft Authenticator, Google Authenticator, 1Password lub zgodnej aplikacji TOTP."
+
+msgid "Einrichtungs-URI"
+msgstr "URI konfiguracji"
+
+msgid "URI kopieren"
+msgstr "Kopiuj URI"
+
+msgid "Einrichtung bestätigen"
+msgstr "Potwierdź konfigurację"
+
+msgid "6-stelliger Code"
+msgstr "Kod 6-cyfrowy"
+
+msgid "2FA aktivieren"
+msgstr "Włącz 2FA"
+
+msgid "Nach erfolgreicher Aktivierung werden einmalig Recovery-Codes angezeigt."
+msgstr "Po aktywacji kody odzyskiwania zostaną wyświetlone tylko jeden raz."
+
+msgid "Wir senden einen zeitlich begrenzten Link an die hinterlegte E-Mail-Adresse."
+msgstr "Wyślemy ograniczony czasowo link na zarejestrowany adres e-mail."
+
+msgid "Link anfordern"
+msgstr "Poproś o link"
+
+msgid "Anfrage verarbeitet"
+msgstr "Zgłoszenie przetworzone"
+
+msgid "Falls ein aktives Konto zu dieser Adresse existiert, wurde ein zeitlich begrenzter Link zum Zurücksetzen versendet."
+msgstr "Jeśli dla tego adresu istnieje aktywne konto, wysłano czasowy link do zmiany hasła."
+
+msgid "Legen Sie ein neues Passwort für Ihr PROMPTFINISHER-Konto fest."
+msgstr "Ustaw nowe hasło do konta PROMPTFINISHER."
+
+msgid "Passwort speichern"
+msgstr "Zapisz hasło"
+
+msgid "Passwort geändert"
+msgstr "Hasło zmienione"
+
+msgid "Link ungültig"
+msgstr "Nieprawidłowy link"
+
+msgid "Sie können sich jetzt mit dem neuen Passwort anmelden."
+msgstr "Możesz teraz zalogować się nowym hasłem."
+
+msgid "Der Link ist ungültig, abgelaufen oder wurde bereits verwendet. Fordern Sie bei Bedarf einen neuen Link an."
+msgstr "Link jest nieprawidłowy, wygasł lub został już użyty. W razie potrzeby poproś o nowy."
+
+msgid "Neuen Link anfordern"
+msgstr "Poproś o nowy link"
+
+msgid "Möchten Sie die aktuelle Sitzung beenden?"
+msgstr "Czy chcesz zakończyć bieżącą sesję?"
+
+# Pro deployment, device registration, and expiration warnings.
+msgid "Die geschützte Pro-Anwendung ist auf diesem System noch nicht bereitgestellt."
+msgstr "Chroniona aplikacja Pro nie została jeszcze wdrożona w tym systemie."
+
+msgid "Deployment unvollständig."
+msgstr "Wdrożenie niekompletne."
+
+msgid "Der unveränderte PROMPTFINISHER-Pro-Golden-Master muss als private Serverdatei installiert werden."
+msgstr "Niezmieniony wzorzec PROMPTFINISHER Pro musi zostać zainstalowany jako prywatny plik serwera."
+
+msgid "Diese Datei wird niemals öffentlich unter /static/ ausgeliefert."
+msgstr "Ten plik nigdy nie jest publicznie udostępniany pod /static/."
+
+msgid "Gerät registrieren"
+msgstr "Zarejestruj urządzenie"
+
+msgid "PROMPTFINISHER Pro erlaubt %(device_limit)s aktive Geräte pro Benutzer."
+msgstr "PROMPTFINISHER Pro umożliwia %(device_limit)s aktywnych urządzeń na użytkownika."
+
+msgid "Gerät registrieren und PROMPTFINISHER Pro öffnen"
+msgstr "Zarejestruj urządzenie i otwórz PROMPTFINISHER Pro"
+
+msgid "Wenn alle Geräteslots belegt sind, muss Ihr Firmenadministrator oder netstyle zuerst ein altes Gerät freigeben."
+msgstr "Jeśli wszystkie miejsca na urządzenia są zajęte, administrator firmy lub netstyle musi najpierw zwolnić stare urządzenie."
+
+msgid "Lizenz läuft bald ab"
+msgstr "Licencja wkrótce wygaśnie"
+
+msgid "PROMPTFINISHER-Pro-Lizenz läuft bald ab"
+msgstr "Licencja PROMPTFINISHER Pro wkrótce wygaśnie"
+
+msgid "Dein Pro-Zugriff bleibt bis zum Ablaufdatum aktiv."
+msgstr "Twój dostęp Pro pozostaje aktywny do dnia wygaśnięcia."
+
+msgid "Verbleibende Tage:"
+msgstr "Pozostało dni:"
+
+msgid "Lizenz:"
+msgstr "Licencja:"
+
+msgid "Ablaufdatum:"
+msgstr "Data wygaśnięcia:"
+
+msgid "Nach Ablauf wird der Pro-Zugriff ohne Verlängerung automatisch gesperrt."
+msgstr "Po wygaśnięciu dostęp Pro zostanie automatycznie zablokowany bez odnowienia."
+
+msgid "Was möchtest du tun?"
+msgstr "Co chcesz zrobić?"
+
+msgid "Eine Verlängerung vor Ablauf hängt weitere 365 Tage an das bestehende Ablaufdatum an. Die Restlaufzeit geht nicht verloren."
+msgstr "Odnowienie przed wygaśnięciem dodaje 365 dni do obecnej daty końcowej. Pozostały czas nie przepada."
+
+msgid "Lizenzverwaltung / Verlängerung"
+msgstr "Zarządzanie licencjami / odnowienie"
+
+msgid "Jetzt trotzdem PROMPTFINISHER Pro starten"
+msgstr "Mimo to uruchom PROMPTFINISHER Pro"
