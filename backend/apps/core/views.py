@@ -40,6 +40,9 @@ def legal_public(request, doc_type):
     from django.http import Http404
     from django.utils import timezone
     from apps.legal.models import LegalDocument
+    from django.conf import settings
+    from django.utils.translation import get_language
+    from apps.legal.translation_display import resolve_public_legal_text
 
     allowed = {code for code, _label in LegalDocument.DOC_TYPES}
     if doc_type not in allowed:
@@ -59,9 +62,19 @@ def legal_public(request, doc_type):
         'imprint': _('Impressum'),
         'accessibility': _('Barrierefreiheit'),
     }
+    ui_language = get_language() or 'de'
+    body, body_language, notice, displayed_sha256 = resolve_public_legal_text(
+        document, ui_language,
+        translations_enabled=settings.LEGAL_TRANSLATIONS_PUBLIC_ENABLED,
+    )
     return render(request, 'legal_public.html', {
         'document': document,
         'document_title': titles[doc_type],
+        'legal_document_body': body,
+        'legal_content_language': body_language,
+        'legal_fallback_notice': notice,
+        'legal_ui_language': ui_language,
+        'legal_display_sha256': displayed_sha256,
     })
 
 

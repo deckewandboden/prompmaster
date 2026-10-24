@@ -98,6 +98,10 @@ AUTH_PASSWORD_VALIDATORS = [
     {'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator'},
 ]
 
+# Never publish foreign-language legal document bodies unless this separate,
+# explicit deployment switch is enabled after legal sign-off.
+LEGAL_TRANSLATIONS_PUBLIC_ENABLED = os.getenv('LEGAL_TRANSLATIONS_PUBLIC_ENABLED', '0') == '1'
+
 LANGUAGE_CODE = 'de'
 LANGUAGES = [
     ('de', 'Deutsch'),
