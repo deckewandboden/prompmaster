@@ -40,7 +40,16 @@ class LegalDocumentTranslationAdmin(admin.ModelAdmin):
 
     @admin.action(description='Send legal translation draft for review')
     def submit_for_review(self, request, queryset):
-        count = queryset.filter(status='draft').update(status='review')
+        # A bulk update bypasses save() and would omit the fingerprints of
+        # the exact documents sent to legal review.
+        count = 0
+        for translation in queryset.filter(status='draft').select_related('document'):
+            try:
+                translation.status = 'review'
+                translation.save()
+                count += 1
+            except ValidationError as error:
+                self.message_user(request, f'{translation}: {error}', level=messages.ERROR)
         self.message_user(request, f'{count} translation(s) submitted for review.')
 
     @admin.action(description='Approve reviewed translations with recorded legal sign-off')
