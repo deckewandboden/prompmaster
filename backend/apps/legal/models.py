@@ -87,12 +87,15 @@ class LegalDocumentTranslation(TimeStampedModel):
             raise ValidationError({'language': 'The original German text belongs to LegalDocument.'})
         if not self.content or not self.content.strip():
             raise ValidationError({'content': 'A legal translation cannot be empty.'})
+        if self.status in ('review', 'approved'):
+            # A review binds BOTH the original German source and the translated
+            # body. An edited source/text must go through a new review cycle.
+            if (self.source_sha256 != self.fingerprint(self.document.content)
+                    or self.content_sha256 != self.fingerprint(self.content)):
+                raise ValidationError('The reviewed translation or original source changed.')
         if self.status == 'approved':
             if not self.approved_at or not self.approved_by_id or not self.approval_reference.strip():
                 raise ValidationError('Approval requires a reviewer, timestamp and legal sign-off reference.')
-            if (self.source_sha256 != self.fingerprint(self.document.content)
-                    or self.content_sha256 != self.fingerprint(self.content)):
-                raise ValidationError('The approved text and German source hashes must match.')
 
     def save(self, *args, **kwargs):
         from django.core.exceptions import ValidationError
@@ -108,6 +111,22 @@ class LegalDocumentTranslation(TimeStampedModel):
             )
             if any(previous[field] != getattr(self, field) for field in immutable):
                 raise ValidationError('Approved legal translations are immutable.')
+        if previous and previous['status'] == 'review':
+            # It is never permissible to approve text that changed AFTER the
+            # reviewer received it. Return an unchanged review to draft first.
+            frozen = ('document_id', 'language', 'content')
+            if any(previous[field] != getattr(self, field) for field in frozen):
+                raise ValidationError('Review content is frozen; return to draft before editing.')
+            if self.status == 'draft':
+                self.source_sha256 = ''
+                self.content_sha256 = ''
+            elif (self.source_sha256 != previous['source_sha256']
+                    or self.content_sha256 != previous['content_sha256']):
+                raise ValidationError('The review fingerprint cannot be replaced.')
+        if self.status == 'review' and (not previous or previous['status'] == 'draft'):
+            # Capture source + translation exactly when entering review.
+            self.source_sha256 = self.fingerprint(self.document.content)
+            self.content_sha256 = self.fingerprint(self.content)
         self.full_clean()
         super().save(*args, **kwargs)
 
@@ -126,8 +145,8 @@ class LegalDocumentTranslation(TimeStampedModel):
         self.approved_by = reviewer
         self.approved_at = timezone.now()
         self.approval_reference = reference.strip()
-        self.source_sha256 = self.fingerprint(self.document.content)
-        self.content_sha256 = self.fingerprint(self.content)
+        # Do not recompute fingerprints here: they must match the text that
+        # was frozen at submission for legal review, not today's current text.
         self.status = 'approved'
         self.save()
 
