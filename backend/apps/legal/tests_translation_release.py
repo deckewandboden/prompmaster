@@ -131,6 +131,79 @@ class LegalDocumentLanguageReleaseTests(TestCase):
         self.assertNotContains(response, '<script>alert(')
         self.assertContains(response, '&lt;script&gt;')
 
+    def test_review_freezes_exact_source_and_translation_before_approval(self):
+        translation = self.create_translation()
+        self.assertEqual(translation.source_sha256, '')
+        self.assertEqual(translation.content_sha256, '')
+        translation.status = 'review'
+        translation.save()
+        self.assertEqual(
+            translation.source_sha256,
+            translation.fingerprint(self.document.content),
+        )
+        self.assertEqual(
+            translation.content_sha256,
+            translation.fingerprint(translation.content),
+        )
+        translation.content = 'Changed after review, not independently verified.'
+        with self.assertRaises(ValidationError):
+            translation.save()
+        translation.refresh_from_db()
+        translation.approve(reviewer=self.reviewer, reference='LEGAL-REVIEW-2026-005')
+        self.assertTrue(translation.is_publishable())
+
+    def test_review_detects_german_source_change_before_approval(self):
+        translation = self.create_translation(status='review')
+        original_review_hash = translation.source_sha256
+        LegalDocument.objects.filter(pk=self.document.pk).update(
+            content=self.document.content + '\\nSource changed after review.',
+        )
+        # Refresh to avoid using a stale cached FK copy from setUpTestData.
+        translation.document.refresh_from_db()
+        with self.assertRaises(ValidationError):
+            translation.approve(reviewer=self.reviewer, reference='LEGAL-REVIEW-2026-006')
+        translation.refresh_from_db()
+        self.assertEqual(translation.status, 'review')
+        self.assertEqual(translation.source_sha256, original_review_hash)
+
+    def test_return_to_draft_requires_new_review_fingerprints(self):
+        translation = self.create_translation(status='review')
+        first = translation.content_sha256
+        translation.status = 'draft'
+        translation.save()
+        self.assertFalse(translation.source_sha256)
+        self.assertFalse(translation.content_sha256)
+        translation.content = 'Revised text, needs an entirely new legal review.'
+        translation.save()
+        translation.status = 'review'
+        translation.save()
+        self.assertNotEqual(translation.content_sha256, first)
+        translation.approve(reviewer=self.reviewer, reference='LEGAL-REVIEW-2026-007')
+        self.assertTrue(translation.is_publishable())
+
+    def test_admin_review_action_does_not_bypass_review_fingerprint(self):
+        from unittest.mock import patch
+        from django.contrib.admin.sites import AdminSite
+        from django.test import RequestFactory
+        from apps.legal.admin import LegalDocumentTranslationAdmin
+
+        translation = self.create_translation()
+        admin_view = LegalDocumentTranslationAdmin(
+            LegalDocumentTranslation, AdminSite(),
+        )
+        request = RequestFactory().post('/admin/legal/legaldocumenttranslation/')
+        request.user = self.reviewer
+        with patch.object(admin_view, 'message_user'):
+            admin_view.submit_for_review(
+                request, LegalDocumentTranslation.objects.filter(pk=translation.pk),
+            )
+        translation.refresh_from_db()
+        self.assertEqual(translation.status, 'review')
+        self.assertEqual(
+            translation.content_sha256,
+            translation.fingerprint(translation.content),
+        )
+
     def test_no_german_duplicate_and_unique_language_per_primary_version(self):
         with self.assertRaises(ValidationError):
             self.create_translation(language='de')
