@@ -69,6 +69,50 @@ class LegalDocumentLanguageReleaseTests(TestCase):
             translation.approve(reviewer=None, reference='LEGAL-123')
         self.assertEqual(translation.status, 'review')
 
+    def test_direct_approved_status_assignment_cannot_bypass_permission(self):
+        from django.utils import timezone
+
+        translation = self.create_translation(status='review')
+        translation.status = 'approved'
+        translation.approved_by = self.reviewer
+        translation.approved_at = timezone.now()
+        translation.approval_reference = 'LEGAL-FORGED-DIRECT-APPROVAL'
+        with self.assertRaises(ValidationError):
+            translation.save()
+        translation.refresh_from_db()
+        self.assertEqual(translation.status, 'review')
+        self.assertIsNone(translation.approved_at)
+
+    def test_stale_review_cannot_be_approved_after_return_to_draft(self):
+        translation = self.create_translation(status='review')
+        current = LegalDocumentTranslation.objects.get(pk=translation.pk)
+        current.status = 'draft'
+        current.save()
+        with self.assertRaises(ValidationError):
+            translation.approve(
+                reviewer=self.reviewer, reference='LEGAL-STALE-SIGNOFF',
+            )
+        translation.refresh_from_db()
+        self.assertEqual(translation.status, 'draft')
+        self.assertIsNone(translation.approved_at)
+
+    def test_direct_approved_record_creation_is_not_permitted(self):
+        from django.utils import timezone
+
+        with self.assertRaises(ValidationError):
+            LegalDocumentTranslation.objects.create(
+                document=self.document, language='fr',
+                content='Unauthorized published legal content',
+                status='approved',
+                source_sha256=LegalDocumentTranslation.fingerprint(self.document.content),
+                content_sha256=LegalDocumentTranslation.fingerprint(
+                    'Unauthorized published legal content',
+                ),
+                approved_by=self.reviewer,
+                approved_at=timezone.now(),
+                approval_reference='LEGAL-NO-REVIEW',
+            )
+
     def test_approval_is_immutable_and_not_automatically_published(self):
         translation = self.create_translation(status='review')
         translation.approve(reviewer=self.reviewer, reference='LEGAL-REVIEW-2026-001')
