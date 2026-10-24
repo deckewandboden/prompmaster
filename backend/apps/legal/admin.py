@@ -24,6 +24,11 @@ class LegalDocumentTranslationAdmin(admin.ModelAdmin):
     def get_readonly_fields(self, request, obj=None):
         if obj and obj.status == 'approved':
             return tuple(field.name for field in obj._meta.fields)
+        if obj and obj.status == 'review':
+            # Keep legal sign-off reference editable, but freeze the source
+            # and translation while the actual text is being reviewed.
+            return (*super().get_readonly_fields(request, obj),
+                    'document', 'language', 'content')
         return super().get_readonly_fields(request, obj)
 
     def get_actions(self, request):
