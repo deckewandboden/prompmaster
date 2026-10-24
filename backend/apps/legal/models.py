@@ -79,6 +79,14 @@ class LegalDocumentTranslation(TimeStampedModel):
         import hashlib
         return hashlib.sha256(text.encode('utf-8')).hexdigest()
 
+    def _current_source_fingerprint(self):
+        # Do not trust a cached foreign-key object after the original has
+        # changed in the database since the previous legal review.
+        original = LegalDocument.objects.values_list('content', flat=True).get(
+            pk=self.document_id,
+        )
+        return self.fingerprint(original)
+
     def clean(self):
         from django.core.exceptions import ValidationError
 
@@ -90,7 +98,7 @@ class LegalDocumentTranslation(TimeStampedModel):
         if self.status in ('review', 'approved'):
             # A review binds BOTH the original German source and the translated
             # body. An edited source/text must go through a new review cycle.
-            if (self.source_sha256 != self.fingerprint(self.document.content)
+            if (self.source_sha256 != self._current_source_fingerprint()
                     or self.content_sha256 != self.fingerprint(self.content)):
                 raise ValidationError('The reviewed translation or original source changed.')
         if self.status == 'approved':
@@ -125,7 +133,7 @@ class LegalDocumentTranslation(TimeStampedModel):
                 raise ValidationError('The review fingerprint cannot be replaced.')
         if self.status == 'review' and (not previous or previous['status'] == 'draft'):
             # Capture source + translation exactly when entering review.
-            self.source_sha256 = self.fingerprint(self.document.content)
+            self.source_sha256 = self._current_source_fingerprint()
             self.content_sha256 = self.fingerprint(self.content)
         self.full_clean()
         super().save(*args, **kwargs)
@@ -157,7 +165,7 @@ class LegalDocumentTranslation(TimeStampedModel):
             and self.approved_by_id
             and self.approval_reference.strip()
             and self.content.strip()
-            and self.source_sha256 == self.fingerprint(self.document.content)
+            and self.source_sha256 == self._current_source_fingerprint()
             and self.content_sha256 == self.fingerprint(self.content)
         )
 
