@@ -12,7 +12,7 @@ class LegalDocumentTranslationAdmin(admin.ModelAdmin):
     list_display = ('document', 'language', 'status', 'approved_by', 'approved_at')
     list_filter = ('status', 'language', 'document__doc_type')
     search_fields = ('document__version', 'approval_reference')
-    actions = ('submit_for_review', 'approve_with_recorded_reference')
+    actions = ('submit_for_review', 'return_to_draft', 'approve_with_recorded_reference')
     readonly_fields = (
         'status', 'approved_by', 'approved_at', 'source_sha256', 'content_sha256',
     )
@@ -51,6 +51,18 @@ class LegalDocumentTranslationAdmin(admin.ModelAdmin):
             except ValidationError as error:
                 self.message_user(request, f'{translation}: {error}', level=messages.ERROR)
         self.message_user(request, f'{count} translation(s) submitted for review.')
+
+    @admin.action(description='Return reviewed translations to editable drafts')
+    def return_to_draft(self, request, queryset):
+        count = 0
+        for translation in queryset.filter(status='review').select_related('document'):
+            try:
+                translation.status = 'draft'
+                translation.save()
+                count += 1
+            except ValidationError as error:
+                self.message_user(request, f'{translation}: {error}', level=messages.ERROR)
+        self.message_user(request, f'{count} translation(s) returned to draft.')
 
     @admin.action(description='Approve reviewed translations with recorded legal sign-off')
     def approve_with_recorded_reference(self, request, queryset):
