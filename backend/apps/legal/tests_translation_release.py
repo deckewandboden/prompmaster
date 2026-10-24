@@ -317,6 +317,59 @@ class LegalDocumentLanguageReleaseTests(TestCase):
                 self.assertEqual(response.context['legal_content_language'], 'de')
                 self.assertContains(response, FALLBACK_NOTICES['fr'])
 
+    @override_settings(LEGAL_TRANSLATIONS_PUBLIC_ENABLED=False)
+    def test_all_six_legal_types_in_ten_languages_with_publication_off(self):
+        # Full 6 x 10 negative release matrix: nothing may disclose a
+        # translation merely because the visitor selected a UI language.
+        for document_type, _title in LegalDocument.DOC_TYPES:
+            for language in ('de', *FALLBACK_NOTICES):
+                with self.subTest(doc_type=document_type, language=language):
+                    response = self.client.get(
+                        f'/legal/{document_type}/',
+                        HTTP_ACCEPT_LANGUAGE=language,
+                    )
+                    self.assertEqual(response.status_code, 200)
+                    self.assertEqual(response.context['legal_content_language'], 'de')
+                    self.assertContains(response, 'lang="de"')
+                    if language == 'de':
+                        self.assertNotContains(response, 'data-legal-language-fallback')
+                    else:
+                        self.assertContains(response, FALLBACK_NOTICES[language])
+
+    @override_settings(LEGAL_TRANSLATIONS_PUBLIC_ENABLED=True)
+    def test_approved_translation_is_scoped_to_exact_document_and_language(self):
+        translation = self.create_translation(
+            status='review',
+            body='Approved English privacy document only.',
+        )
+        translation.approve(
+            reviewer=self.reviewer,
+            reference='LEGAL-REVIEW-SCOPE-2026',
+        )
+        for document_type, _title in LegalDocument.DOC_TYPES:
+            for language in ('de', *FALLBACK_NOTICES):
+                with self.subTest(doc_type=document_type, language=language):
+                    response = self.client.get(
+                        f'/legal/{document_type}/',
+                        HTTP_ACCEPT_LANGUAGE=language,
+                    )
+                    expected_translation = (
+                        document_type == 'privacy' and language == 'en'
+                    )
+                    self.assertEqual(
+                        response.context['legal_content_language'],
+                        'en' if expected_translation else 'de',
+                    )
+                    if expected_translation:
+                        self.assertContains(response, translation.content)
+                        self.assertNotContains(
+                            response, 'data-legal-language-fallback',
+                        )
+                    else:
+                        self.assertNotContains(response, translation.content)
+                        if language != 'de':
+                            self.assertContains(response, FALLBACK_NOTICES[language])
+
     def test_all_nine_fallback_languages_have_notices(self):
         for language, notice in FALLBACK_NOTICES.items():
             with self.subTest(language=language):
