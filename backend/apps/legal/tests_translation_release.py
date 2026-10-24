@@ -205,6 +205,28 @@ class LegalDocumentLanguageReleaseTests(TestCase):
             translation.fingerprint(translation.content),
         )
 
+    def test_admin_review_fields_cannot_be_edited_until_draft_reset(self):
+        from django.contrib.admin.sites import AdminSite
+        from django.test import RequestFactory
+        from apps.legal.admin import LegalDocumentTranslationAdmin
+
+        admin_view = LegalDocumentTranslationAdmin(
+            LegalDocumentTranslation, AdminSite(),
+        )
+        request = RequestFactory().get('/admin/legal/legaldocumenttranslation/')
+        request.user = self.reviewer
+        translation = self.create_translation()
+        self.assertNotIn('content', admin_view.get_readonly_fields(request, translation))
+        translation.status = 'review'
+        translation.save()
+        readonly = admin_view.get_readonly_fields(request, translation)
+        for field in ('document', 'language', 'content'):
+            self.assertIn(field, readonly)
+        self.assertNotIn('approval_reference', readonly)
+        translation.status = 'draft'
+        translation.save()
+        self.assertNotIn('content', admin_view.get_readonly_fields(request, translation))
+
     def test_admin_can_return_review_to_draft_and_start_new_review(self):
         from unittest.mock import patch
         from django.contrib.admin.sites import AdminSite
