@@ -118,9 +118,12 @@ class LegalDocumentTranslation(TimeStampedModel):
         # This also rejects approval from a stale review object if another
         # administrator has meanwhile returned the row to draft.
         if self.status == 'approved' and (
-            not previous
-            or previous['status'] != 'review'
-            or not getattr(self, '_approval_via_reviewer_method', False)
+            not previous or (
+                previous['status'] != 'approved' and (
+                    previous['status'] != 'review'
+                    or not getattr(self, '_approval_via_reviewer_method', False)
+                )
+            )
         ):
             raise ValidationError('Legal approval must use the authorized review workflow.')
         if previous and previous['status'] == 'approved':
