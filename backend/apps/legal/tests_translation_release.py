@@ -158,8 +158,9 @@ class LegalDocumentLanguageReleaseTests(TestCase):
         LegalDocument.objects.filter(pk=self.document.pk).update(
             content=self.document.content + '\\nSource changed after review.',
         )
-        # Refresh to avoid using a stale cached FK copy from setUpTestData.
-        translation.document.refresh_from_db()
+        # The in-memory FK intentionally remains stale. Approval MUST read
+        # the real original from the database rather than this cached copy.
+        self.assertEqual(translation.document.content, self.document.content)
         with self.assertRaises(ValidationError):
             translation.approve(reviewer=self.reviewer, reference='LEGAL-REVIEW-2026-006')
         translation.refresh_from_db()
@@ -203,6 +204,33 @@ class LegalDocumentLanguageReleaseTests(TestCase):
             translation.content_sha256,
             translation.fingerprint(translation.content),
         )
+
+    def test_admin_can_return_review_to_draft_and_start_new_review(self):
+        from unittest.mock import patch
+        from django.contrib.admin.sites import AdminSite
+        from django.test import RequestFactory
+        from apps.legal.admin import LegalDocumentTranslationAdmin
+
+        translation = self.create_translation(status='review')
+        before_hash = translation.content_sha256
+        admin_view = LegalDocumentTranslationAdmin(
+            LegalDocumentTranslation, AdminSite(),
+        )
+        request = RequestFactory().post('/admin/legal/legaldocumenttranslation/')
+        request.user = self.reviewer
+        with patch.object(admin_view, 'message_user'):
+            admin_view.return_to_draft(
+                request, LegalDocumentTranslation.objects.filter(pk=translation.pk),
+            )
+        translation.refresh_from_db()
+        self.assertEqual(translation.status, 'draft')
+        self.assertEqual(translation.source_sha256, '')
+        self.assertEqual(translation.content_sha256, '')
+        translation.content = 'Improved translation following legal review feedback.'
+        translation.save()
+        translation.status = 'review'
+        translation.save()
+        self.assertNotEqual(before_hash, translation.content_sha256)
 
     def test_no_german_duplicate_and_unique_language_per_primary_version(self):
         with self.assertRaises(ValidationError):
