@@ -126,6 +126,10 @@ class LegalDocumentLanguageReleaseTests(TestCase):
             translation.save()
         translation.refresh_from_db()
         self.assertTrue(translation.is_publishable())
+        # A no-op save must not undermine the immutable approved state.
+        translation.save()
+        translation.refresh_from_db()
+        self.assertEqual(translation.status, 'approved')
 
     @override_settings(LEGAL_TRANSLATIONS_PUBLIC_ENABLED=True)
     def test_only_matching_approved_translation_is_rendered(self):
