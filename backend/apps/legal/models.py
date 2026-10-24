@@ -112,6 +112,17 @@ class LegalDocumentTranslation(TimeStampedModel):
             'status', 'document_id', 'language', 'content', 'approval_reference',
             'approved_by_id', 'approved_at', 'source_sha256', 'content_sha256',
         ).first()
+        # Approval is a privileged state transition, not an assignable field.
+        # Require the persisted row to be under review and the permission-
+        # checked approve() method to have initiated this exact save.
+        # This also rejects approval from a stale review object if another
+        # administrator has meanwhile returned the row to draft.
+        if self.status == 'approved' and (
+            not previous
+            or previous['status'] != 'review'
+            or not getattr(self, '_approval_via_reviewer_method', False)
+        ):
+            raise ValidationError('Legal approval must use the authorized review workflow.')
         if previous and previous['status'] == 'approved':
             immutable = (
                 'status', 'document_id', 'language', 'content', 'approval_reference',
@@ -156,7 +167,11 @@ class LegalDocumentTranslation(TimeStampedModel):
         # Do not recompute fingerprints here: they must match the text that
         # was frozen at submission for legal review, not today's current text.
         self.status = 'approved'
-        self.save()
+        self._approval_via_reviewer_method = True
+        try:
+            self.save()
+        finally:
+            self._approval_via_reviewer_method = False
 
     def is_publishable(self):
         return bool(
