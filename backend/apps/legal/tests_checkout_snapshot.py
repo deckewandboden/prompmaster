@@ -198,15 +198,28 @@ class SignedCheckoutLegalSnapshotTests(TestCase):
         self.assertEqual(
             evidence['early_performance_clause']['text'], clause['text'],
         )
-        with self.assertRaises(ValidationError):
-            validate_snapshot(
-                self._get_request_with_current_session(),
-                company['token'], 'company',
-            )
+        # A newer offer in another tab must not invalidate this one.
+        company_evidence, _company_documents = validate_snapshot(
+            self._get_request_with_current_session(),
+            company['token'], 'company',
+        )
+        self.assertEqual(company_evidence['ui_language'], 'en')
+        self.assertEqual(self.client.get(company['documents']['terms']['url']).status_code, 200)
         self.assertEqual(
             self.client.get(private['documents']['withdrawal']['url']).status_code,
             200,
         )
+
+    def test_second_tab_does_not_invalidate_first_checkout_offer(self):
+        first_tab = self.snapshot('company')
+        second_tab = self.snapshot('private')
+        for offer, customer_type in ((first_tab, 'company'), (second_tab, 'private')):
+            evidence, _documents = validate_snapshot(
+                self._get_request_with_current_session(), offer['token'], customer_type,
+            )
+            self.assertEqual(evidence['verification'], 'signed_session_bound_document_offer')
+            self.assertEqual(self.client.get(offer['documents']['terms']['url']).status_code, 200)
+        self.assertEqual(self.client.get(second_tab['documents']['withdrawal']['url']).status_code, 200)
 
     @patch('apps.payments.mollie.mollie_runtime_ready', return_value=True)
     def test_unsigned_checkout_fails_closed_before_account_or_order(
@@ -250,3 +263,10 @@ class SignedCheckoutLegalSnapshotTests(TestCase):
                 acceptance.evidence['legal_offer']['verification'],
                 'signed_session_bound_document_offer',
             )
+        # Successful handoff rotates the session nonce and invalidates all old links.
+        with self.assertRaises(ValidationError):
+            validate_snapshot(
+                self._get_request_with_current_session(),
+                snap['token'], 'company',
+            )
+        self.assertEqual(self.client.get(snap['documents']['terms']['url']).status_code, 409)
