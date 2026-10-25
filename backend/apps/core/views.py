@@ -327,7 +327,7 @@ def public_checkout_start(request):
     from apps.core.security import check_rate, client_ip
     from django.conf import settings
     from apps.legal.models import LegalAcceptance, LegalDocument
-    from apps.legal.checkout_snapshot import SESSION_NONCE, validate_snapshot
+    from apps.legal.checkout_snapshot import rotate_session_nonce, validate_snapshot
     from apps.orders.forms import PublicCheckoutForm
     from apps.orders.services import MAX_PURCHASE_QUANTITY, create_order
     from apps.payments.mollie import (
@@ -754,7 +754,7 @@ def public_checkout_start(request):
         )
 
     request.session['public_checkout_key'] = secrets.token_urlsafe(24)
-    request.session[SESSION_NONCE] = secrets.token_urlsafe(24)
+    rotate_session_nonce(request)
     return redirect(checkout_url)
 
 
