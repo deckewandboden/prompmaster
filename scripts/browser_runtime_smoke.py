@@ -1954,6 +1954,103 @@ def run_backend_ui_smoke(browser, fixture=None) -> None:
     try:
         _wait_http(base + 'health/live/', process)
 
+        # Real Chromium two-tab checkout race: two simultaneous initial
+        # snapshot requests must not overwrite each other's signed nonce.
+        # Seed one real DB-backed session with *no* checkout nonce; the
+        # concurrent tabs then share that established cookie.
+        from django.conf import settings
+        from django.contrib.sessions.backends.db import SessionStore
+        from apps.legal.checkout_snapshot import SESSION_NONCE
+
+        seed_session = SessionStore()
+        seed_session['browser_checkout_probe'] = 'established'
+        seed_session.save()
+        if seed_session.get(SESSION_NONCE) is not None:
+            raise AssertionError('two-tab fixture already has a checkout nonce')
+        shared_context = browser.new_context(viewport={'width': 1080, 'height': 800})
+        try:
+            shared_context.add_cookies([{
+                'name': settings.SESSION_COOKIE_NAME,
+                'value': seed_session.session_key,
+                'url': base,
+            }])
+            tab_a = shared_context.new_page()
+            tab_b = shared_context.new_page()
+            for tab in (tab_a, tab_b):
+                response = tab.goto(base + 'auth/login/', wait_until='domcontentloaded')
+                if not response or response.status != 200:
+                    raise AssertionError('two-tab checkout fixture navigation failed')
+            # Start both browser fetches without waiting for the first result.
+            for tab, kind in ((tab_a, 'company'), (tab_b, 'private')):
+                tab.evaluate(
+                    """kind => {
+                      window.__checkoutRace = fetch(
+                        '/api/v1/checkout/legal-snapshot/?customer_type=' + kind,
+                        {credentials:'same-origin',cache:'no-store'}
+                      ).then(async r => ({status:r.status, data:await r.json()}));
+                    }""",
+                    kind,
+                )
+            first = tab_a.evaluate('async () => await window.__checkoutRace')
+            second = tab_b.evaluate('async () => await window.__checkoutRace')
+            if first['status'] != 200 or second['status'] != 200:
+                raise AssertionError(
+                    f'two-tab checkout offer failed: {first["status"]}/{second["status"]}'
+                )
+            company_offer, private_offer = first['data'], second['data']
+            if not company_offer.get('token') or not private_offer.get('token'):
+                raise AssertionError('two-tab checkout offer missing signed token')
+            if 'withdrawal' not in private_offer.get('documents', {}):
+                raise AssertionError('private checkout offer lacks withdrawal document')
+            # Reading one snapshot must never clobber the other one, and the
+            # pinned documents must remain usable in both real browser tabs.
+            for tab, offer, document_type in (
+                (tab_a, company_offer, 'terms'),
+                (tab_b, private_offer, 'withdrawal'),
+            ):
+                url = offer['documents'][document_type]['url']
+                result = tab.goto(base.rstrip('/') + url, wait_until='domcontentloaded')
+                if not result or result.status != 200:
+                    raise AssertionError(
+                        f'two-tab pinned legal link invalidated: {document_type}, '
+                        f'HTTP {result.status if result else "none"}'
+                    )
+            if SessionStore(session_key=seed_session.session_key).get(SESSION_NONCE):
+                raise AssertionError('concurrent snapshots wrote a mutable initial nonce')
+
+            stranger = browser.new_context()
+            try:
+                stranger_page = stranger.new_page()
+                rejected = stranger_page.goto(
+                    base.rstrip('/') + company_offer['documents']['terms']['url'],
+                    wait_until='domcontentloaded',
+                )
+                if not rejected or rejected.status != 409:
+                    raise AssertionError('foreign browser accepted session-bound legal URL')
+            finally:
+                stranger.close()
+
+            # Simulate the server-side nonce rotation performed by a
+            # successful provider handoff, and reject both old tab offers.
+            after_handoff = SessionStore(session_key=seed_session.session_key)
+            after_handoff[SESSION_NONCE] = 'browser-race-payment-handoff-rotation'
+            after_handoff.save()
+            for tab, offer, document_type in (
+                (tab_a, company_offer, 'terms'),
+                (tab_b, private_offer, 'withdrawal'),
+            ):
+                rejected = tab.goto(
+                    base.rstrip('/') + offer['documents'][document_type]['url'],
+                    wait_until='domcontentloaded',
+                )
+                if not rejected or rejected.status != 409:
+                    raise AssertionError(
+                        f'two-tab replay accepted after handoff: {document_type}'
+                    )
+        finally:
+            shared_context.close()
+        print('DJANGO TWO-TAB CHECKOUT BROWSER RACE: PASS')
+
         public_context = browser.new_context(viewport={'width': 1440, 'height': 900})
         public_page = public_context.new_page()
 
