@@ -1,5 +1,6 @@
 from django.urls import path
 from . import admin_views as v
+from . import admin_legal_translation_views as lv
 from . import export_views as ev
 from . import sensitive as sv
 
