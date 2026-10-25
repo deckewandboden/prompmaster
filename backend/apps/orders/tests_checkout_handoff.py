@@ -401,8 +401,8 @@ class PurchaseHandoffTests(TestCase):
         response = self.client.post('/portal/licenses/buy/', {
             **payload, 'legal_snapshot_token': offer['token'],
         })
-        # Failed POST above re-renders a fresh signed session manifest. The
-        # original token is correctly invalidated, so obtain a fresh offer.
+        # Failed POST re-renders a signed offer. The original is still valid
+        # within this session, but the current form submits its refreshed token.
         self.assertEqual(response.status_code, 200)
         renewed_offer = response.context['legal_snapshot']
         paid = self.client.post('/portal/licenses/buy/', {
