@@ -25,7 +25,7 @@ from apps.core.datagrid import DataGrid
 from apps.devices.models import DeviceRegistration
 from apps.devices.services import revoke_device
 from apps.legal.models import DeletionRequest, LegalAcceptance, LegalDocument
-from apps.legal.checkout_snapshot import issue_snapshot, validate_snapshot, SESSION_NONCE
+from apps.legal.checkout_snapshot import issue_snapshot, validate_snapshot, rotate_session_nonce
 from apps.legal.services import process_deletion_request
 from apps.licenses.models import License, LicenseAssignment, LicenseReminder, LicenseUpgradeRequest
 from apps.licenses.services import assign_license, release_license, request_product_upgrade, resolve_product_upgrade, create_assignment_link, consume_assignment_link, has_current_term
@@ -1354,7 +1354,7 @@ def buy(request):
             )
             if response:
                 _rotate_checkout_key(request, checkout_session_key)
-                request.session[SESSION_NONCE] = secrets.token_urlsafe(24)
+                rotate_session_nonce(request)
                 return response
             order.refresh_from_db(fields=['status'])
             if order.status == 'failed':
@@ -1449,7 +1449,7 @@ def renew(request, pk):
             )
             if response:
                 _rotate_checkout_key(request, checkout_session_key)
-                request.session[SESSION_NONCE] = secrets.token_urlsafe(24)
+                rotate_session_nonce(request)
                 return response
             order.refresh_from_db(fields=['status'])
             if order.status == 'failed':
