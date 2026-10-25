@@ -3654,3 +3654,6 @@ msgstr "Language version returned to draft."
 
 msgid "Fachlich geprüfte Sprachfassung freigegeben."
 msgstr "Reviewed language version approved."
+
+msgid "Fachliche Prüfung"
+msgstr "Under review"

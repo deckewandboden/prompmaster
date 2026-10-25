@@ -3654,3 +3654,6 @@ msgstr "Versão linguística devolvida a rascunho."
 
 msgid "Fachlich geprüfte Sprachfassung freigegeben."
 msgstr "Versão linguística revista e aprovada."
+
+msgid "Fachliche Prüfung"
+msgstr "Em revisão"

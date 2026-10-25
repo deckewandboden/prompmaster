@@ -3654,3 +3654,6 @@ msgstr "Dil sürümü taslağa döndürüldü."
 
 msgid "Fachlich geprüfte Sprachfassung freigegeben."
 msgstr "İncelenmiş dil sürümü onaylandı."
+
+msgid "Fachliche Prüfung"
+msgstr "İnceleme aşamasında"

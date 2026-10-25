@@ -3770,3 +3770,6 @@ msgstr "Version linguistique remise en brouillon."
 
 msgid "Fachlich geprüfte Sprachfassung freigegeben."
 msgstr "Version linguistique vérifiée et approuvée."
+
+msgid "Fachliche Prüfung"
+msgstr "En cours de vérification"

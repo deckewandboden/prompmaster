@@ -3761,3 +3761,6 @@ msgstr "Versione linguistica riportata a bozza."
 
 msgid "Fachlich geprüfte Sprachfassung freigegeben."
 msgstr "Versione linguistica revisionata e approvata."
+
+msgid "Fachliche Prüfung"
+msgstr "In fase di revisione"

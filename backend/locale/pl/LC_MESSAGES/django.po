@@ -3756,3 +3756,6 @@ msgstr "Wersję językową przywrócono do projektu."
 
 msgid "Fachlich geprüfte Sprachfassung freigegeben."
 msgstr "Zweryfikowaną wersję językową zatwierdzono."
+
+msgid "Fachliche Prüfung"
+msgstr "W trakcie weryfikacji"

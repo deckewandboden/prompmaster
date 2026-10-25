@@ -3754,3 +3754,6 @@ msgstr "Taalversie teruggezet naar concept."
 
 msgid "Fachlich geprüfte Sprachfassung freigegeben."
 msgstr "Gecontroleerde taalversie goedgekeurd."
+
+msgid "Fachliche Prüfung"
+msgstr "In beoordeling"

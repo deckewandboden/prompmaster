@@ -3655,3 +3655,6 @@ msgstr "Языковая версия возвращена в черновик."
 
 msgid "Fachlich geprüfte Sprachfassung freigegeben."
 msgstr "Проверенная языковая версия утверждена."
+
+msgid "Fachliche Prüfung"
+msgstr "На проверке"

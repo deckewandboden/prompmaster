@@ -3654,3 +3654,6 @@ msgstr "Versión lingüística devuelta a borrador."
 
 msgid "Fachlich geprüfte Sprachfassung freigegeben."
 msgstr "Versión lingüística revisada y aprobada."
+
+msgid "Fachliche Prüfung"
+msgstr "En revisión"

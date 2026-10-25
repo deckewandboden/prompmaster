@@ -15,10 +15,10 @@
     <tbody>
     {% for x in translations %}
     <tr>
-      <td data-label="{% translate 'Dokument' %}">{{ x.document.get_doc_type_display }}</td>
+      <td data-label="{% translate 'Dokument' %}">{% translate x.document.get_doc_type_display %}</td>
       <td data-label="{% translate 'Version' %}">{{ x.document.version }}</td>
       <td data-label="{% translate 'Sprache' %}">{{ x.get_language_display }}</td>
-      <td data-label="{% translate 'Status' %}"><span class="badge {% if x.status == 'approved' %}ok{% elif x.status == 'review' %}warn{% else %}info{% endif %}">{{ x.get_status_display }}</span></td>
+      <td data-label="{% translate 'Status' %}"><span class="badge {% if x.status == 'approved' %}ok{% elif x.status == 'review' %}warn{% else %}info{% endif %}">{% translate x.get_status_display %}</span></td>
       <td data-label="{% translate 'Freigegeben von' %}">{{ x.approved_by|default:'–' }}</td>
       <td data-label="{% translate 'Aktion' %}"><div class="page-actions"><a class="btn secondary sm" href="{% url 'ns_admin:legal_translation_detail' x.pk %}">{% translate 'Details' %}</a></div></td>
     </tr>
