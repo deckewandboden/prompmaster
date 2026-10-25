@@ -666,9 +666,30 @@ def main() -> None:
         raise SystemExit('I18N FAIL: missing marketing dictionary')
     marketing_catalog = json.loads(marketing_base.split('=', 1)[1][:-1])
     marketing_prefix = 'Object.assign(marketingCatalog,'
+    protected_legal_labels = (
+        'AGB', 'Datenschutzerklärung',
+        'Lizenzbedingungen', 'Widerrufsbelehrung',
+    )
     for row in marketing_rows:
         if row.startswith(marketing_prefix) and row.endswith(');'):
-            marketing_catalog.update(json.loads(row[len(marketing_prefix):-2]))
+            additions = json.loads(row[len(marketing_prefix):-2])
+            for legal_label in protected_legal_labels:
+                previous = marketing_catalog.get(legal_label)
+                replacement = additions.get(legal_label)
+                if (previous is not None and replacement is not None
+                        and previous != replacement):
+                    raise SystemExit(
+                        'I18N FAIL: conflicting legal marketing label '
+                        f'{legal_label!r} between catalogue definitions'
+                    )
+            marketing_catalog.update(additions)
+    for legal_label in protected_legal_labels:
+        localized = marketing_catalog.get(legal_label, {})
+        if not all(localized.get(code, '').strip() for code in LOCALES):
+            raise SystemExit(
+                f'I18N FAIL: missing contractual marketing label {legal_label!r}'
+            )
+    print('I18N LEGAL NAV PASS: four consistent labels in nine languages')
 
     def marketing_text_values(value):
         if isinstance(value, str):
