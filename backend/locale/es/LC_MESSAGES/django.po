@@ -3657,3 +3657,6 @@ msgstr "Versión lingüística revisada y aprobada."
 
 msgid "Fachliche Prüfung"
 msgstr "En revisión"
+
+msgid "Rechtstexte freigeben"
+msgstr "Aprobar textos legales"

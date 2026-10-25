@@ -3773,3 +3773,6 @@ msgstr "Version linguistique vérifiée et approuvée."
 
 msgid "Fachliche Prüfung"
 msgstr "En cours de vérification"
+
+msgid "Rechtstexte freigeben"
+msgstr "Approuver les textes juridiques"

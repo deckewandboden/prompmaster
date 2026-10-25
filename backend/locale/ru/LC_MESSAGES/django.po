@@ -3658,3 +3658,6 @@ msgstr "Проверенная языковая версия утвержден�
 
 msgid "Fachliche Prüfung"
 msgstr "На проверке"
+
+msgid "Rechtstexte freigeben"
+msgstr "Утверждать юридические тексты"

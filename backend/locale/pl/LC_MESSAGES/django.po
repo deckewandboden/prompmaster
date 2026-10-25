@@ -3759,3 +3759,6 @@ msgstr "Zweryfikowaną wersję językową zatwierdzono."
 
 msgid "Fachliche Prüfung"
 msgstr "W trakcie weryfikacji"
+
+msgid "Rechtstexte freigeben"
+msgstr "Zatwierdzaj teksty prawne"

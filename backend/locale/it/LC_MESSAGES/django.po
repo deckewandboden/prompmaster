@@ -3764,3 +3764,6 @@ msgstr "Versione linguistica revisionata e approvata."
 
 msgid "Fachliche Prüfung"
 msgstr "In fase di revisione"
+
+msgid "Rechtstexte freigeben"
+msgstr "Approvare i testi legali"

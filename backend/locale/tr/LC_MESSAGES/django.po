@@ -3657,3 +3657,6 @@ msgstr "İncelenmiş dil sürümü onaylandı."
 
 msgid "Fachliche Prüfung"
 msgstr "İnceleme aşamasında"
+
+msgid "Rechtstexte freigeben"
+msgstr "Hukuki metinleri onayla"

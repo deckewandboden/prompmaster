@@ -3757,3 +3757,6 @@ msgstr "Gecontroleerde taalversie goedgekeurd."
 
 msgid "Fachliche Prüfung"
 msgstr "In beoordeling"
+
+msgid "Rechtstexte freigeben"
+msgstr "Juridische teksten goedkeuren"

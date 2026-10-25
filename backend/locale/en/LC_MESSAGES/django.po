@@ -3657,3 +3657,6 @@ msgstr "Reviewed language version approved."
 
 msgid "Fachliche Prüfung"
 msgstr "Under review"
+
+msgid "Rechtstexte freigeben"
+msgstr "Approve legal texts"

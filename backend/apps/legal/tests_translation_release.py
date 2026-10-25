@@ -380,7 +380,7 @@ class LegalDocumentLanguageReleaseTests(TestCase):
         initial_hash = translation.source_identity_sha256
         self.assertEqual(len(initial_hash), 64)
         LegalDocument.objects.filter(pk=self.document.pk).update(
-            version='relabelled-without-content-change',
+            version='relabelled-same-text',
         )
         self.assertFalse(translation.is_publishable())
         self.assertEqual(translation.source_identity_sha256, initial_hash)
