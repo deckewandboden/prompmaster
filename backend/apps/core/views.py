@@ -754,7 +754,15 @@ def public_checkout_start(request):
         )
 
     request.session['public_checkout_key'] = secrets.token_urlsafe(24)
-    rotate_session_nonce(request)
+    # Signed offers always belong to an established session and must be
+    # revoked after handoff. Legacy purchases are still allowed only while
+    # LEGAL_CHECKOUT_SNAPSHOT_REQUIRED is off; a first anonymous legacy POST
+    # has no session/nonce to revoke and must not fail after Mollie starts.
+    if (
+        legal_offer_evidence.get('verification') == 'signed_session_bound_document_offer'
+        or request.session.session_key
+    ):
+        rotate_session_nonce(request)
     return redirect(checkout_url)
 
 
