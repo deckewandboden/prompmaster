@@ -2033,12 +2033,21 @@ def run_backend_ui_smoke(browser, fixture=None) -> None:
             stranger = browser.new_context()
             try:
                 stranger_page = stranger.new_page()
-                rejected = stranger_page.goto(
-                    base.rstrip('/') + company_offer['documents']['terms']['url'],
-                    wait_until='domcontentloaded',
+                stranger_page.goto(base + 'auth/login/', wait_until='domcontentloaded')
+                # Chromium can raise net::ERR_HTTP_RESPONSE_CODE_FAILURE when
+                # navigating a top-level page that deliberately returns 409.
+                # The actual browser fetch still checks the HTTP status and
+                # uses this context's distinct session cookies.
+                rejected_status = stranger_page.evaluate(
+                    """async url => (await fetch(url, {
+                      credentials:'same-origin', cache:'no-store'
+                    })).status""",
+                    company_offer['documents']['terms']['url'],
                 )
-                if not rejected or rejected.status != 409:
-                    raise AssertionError('foreign browser accepted session-bound legal URL')
+                if rejected_status != 409:
+                    raise AssertionError(
+                        f'foreign browser accepted session-bound legal URL: {rejected_status}'
+                    )
             finally:
                 stranger.close()
 
@@ -2055,13 +2064,16 @@ def run_backend_ui_smoke(browser, fixture=None) -> None:
                 (tab_a, company_offer, 'terms'),
                 (tab_b, private_offer, 'withdrawal'),
             ):
-                rejected = tab.goto(
-                    base.rstrip('/') + offer['documents'][document_type]['url'],
-                    wait_until='domcontentloaded',
+                rejected_status = tab.evaluate(
+                    """async url => (await fetch(url, {
+                      credentials:'same-origin', cache:'no-store'
+                    })).status""",
+                    offer['documents'][document_type]['url'],
                 )
-                if not rejected or rejected.status != 409:
+                if rejected_status != 409:
                     raise AssertionError(
-                        f'two-tab replay accepted after handoff: {document_type}'
+                        f'two-tab replay accepted after handoff: '
+                        f'{document_type}, HTTP {rejected_status}'
                     )
         finally:
             shared_context.close()
