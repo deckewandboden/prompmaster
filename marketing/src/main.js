@@ -42,7 +42,7 @@ async function initializePricing(){
     }
     const initial=quote(catalog,new URLSearchParams(location.search).get('quantity')||1);
     if(home){
-      document.querySelector('.pro .price').innerHTML=money(initial.monthlyGross)+'<span>/ Monat</span>';
+      document.querySelector('.pro .price').innerHTML=money(initial.monthlyGross)+'<span>/ '+marketingT('Monat')+'</span>';
       document.querySelector('.pro .price-detail').textContent=marketingT('pro Benutzer · inkl. MwSt.')+' · '+marketingT('jährliche Abrechnung')+': '+money(initial.annualUnitGross);
     }
     if(path==='/free'&&catalog.freeUrl){
@@ -117,7 +117,7 @@ async function initializePricing(){
       const checkoutStage=document.getElementById('checkout-stage-message');
       if(checkoutStage){
         checkoutStage.hidden=false;
-        checkoutStage.textContent='Der aktuelle Preis und Kaufstatus konnten nicht sicher geladen werden. Es wird keine Bestellung gestartet. Bitte lade die Seite neu und versuche es erneut.';
+        checkoutStage.textContent=marketingT('Der aktuelle Preis und Kaufstatus konnten nicht sicher geladen werden. Es wird keine Bestellung gestartet. Bitte lade die Seite neu und versuche es erneut.');
       }
     }
     console.error('Preise konnten nicht geladen werden.',error);
