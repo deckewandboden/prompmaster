@@ -52,6 +52,10 @@ RUN --mount=type=secret,id=pf_staging_ca,required=false \
     && go version -m /out/caddy | grep -F 'golang.org/x/net' | grep -F 'v0.60.0'
 
 FROM caddy:2.11.6-alpine
+# The published Alpine runtime can lag a fixed OS library release.
+# Keep Trivy fail-closed: require the patched Brotli library explicitly,
+# rather than suppressing or ignoring the HIGH CVE in the rootfs scan.
+RUN apk add --no-cache --upgrade 'brotli-libs>=1.2.1-r0'
 COPY --from=caddy-patched-build /out/caddy /usr/bin/caddy
 COPY Caddyfile /etc/caddy/Caddyfile
 COPY --from=marketing-build /src/dist /srv/marketing

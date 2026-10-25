@@ -1,0 +1,35 @@
+{% extends 'ns_admin/base.html' %}{% load i18n %}
+{% block content %}
+<div class="page-head">
+  <div><h1>{% translate 'Rechtstexte · Sprachfassungen' %}</h1><div class="sub">{% translate 'Entwurf, unabhängige Prüfung und dokumentierte Freigabe je Originalversion.' %}</div></div>
+  {% if can_edit %}<a class="btn primary" href="{% url 'ns_admin:legal_translation_new' %}">{% translate 'Sprachfassung anlegen' %}</a>{% endif %}
+</div>
+<div class="card">
+  {% if not publication_enabled %}<p class="muted">{% translate 'Die öffentliche Freigabe fremdsprachiger Rechtsdokumente ist ausgeschaltet.' %}</p>{% endif %}
+  <div class="tablewrap"><table>
+    <thead><tr>
+      <th>{% translate 'Dokument' %}</th><th>{% translate 'Version' %}</th>
+      <th>{% translate 'Sprache' %}</th><th>{% translate 'Status' %}</th>
+      <th>{% translate 'Freigegeben von' %}</th><th>{% translate 'Aktion' %}</th>
+    </tr></thead>
+    <tbody>
+    {% for x in translations %}
+    <tr>
+      <td data-label="{% translate 'Dokument' %}">{% translate x.document.get_doc_type_display %}</td>
+      <td data-label="{% translate 'Version' %}">{{ x.document.version }}</td>
+      <td data-label="{% translate 'Sprache' %}">{{ x.get_language_display }}</td>
+      <td data-label="{% translate 'Status' %}"><span class="badge {% if x.status == 'approved' %}ok{% elif x.status == 'review' %}warn{% else %}info{% endif %}">{% translate x.get_status_display %}</span></td>
+      <td data-label="{% translate 'Freigegeben von' %}">{{ x.approved_by|default:'–' }}</td>
+      <td data-label="{% translate 'Aktion' %}"><div class="page-actions"><a class="btn secondary sm" href="{% url 'ns_admin:legal_translation_detail' x.pk %}">{% translate 'Details' %}</a></div></td>
+    </tr>
+    {% empty %}
+    <tr><td colspan="6">{% translate 'Noch keine geprüften Sprachfassungen vorhanden.' %}</td></tr>
+    {% endfor %}
+    </tbody>
+  </table></div>
+</div>
+<div class="page-actions">
+  <a class="btn secondary" href="{% url 'ns_admin:legal_documents' %}">{% translate 'Deutsche Originalversionen' %}</a>
+  <a class="btn secondary" href="{% url 'ns_admin:legal' %}">{% translate 'Datenschutz & Recht' %}</a>
+</div>
+{% endblock %}

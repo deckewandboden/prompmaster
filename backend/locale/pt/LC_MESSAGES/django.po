@@ -3549,3 +3549,114 @@ msgstr "Se não indicar uma data de fim, trataremos o cancelamento para a data m
 
 msgid "jetzt kündigen"
 msgstr "Cancelar agora"
+
+msgid "Rechtstexte · Sprachfassungen"
+msgstr "Textos jurídicos · Versões linguísticas"
+
+msgid "Entwurf, unabhängige Prüfung und dokumentierte Freigabe je Originalversion."
+msgstr "Rascunho, revisão independente e aprovação documentada para cada versão original."
+
+msgid "Sprachfassung anlegen"
+msgstr "Adicionar versão linguística"
+
+msgid "Die öffentliche Freigabe fremdsprachiger Rechtsdokumente ist ausgeschaltet."
+msgstr "A publicação de documentos jurídicos noutras línguas está desativada."
+
+msgid "Dokument"
+msgstr "Documento"
+
+msgid "Freigegeben von"
+msgstr "Aprovado por"
+
+msgid "Details"
+msgstr "Detalhes"
+
+msgid "Noch keine geprüften Sprachfassungen vorhanden."
+msgstr "Ainda não existem versões linguísticas revistas."
+
+msgid "Deutsche Originalversionen"
+msgstr "Versões originais em alemão"
+
+msgid "Rechtsübersetzung prüfen"
+msgstr "Rever tradução jurídica"
+
+msgid "Deutsche Originalversion"
+msgstr "Versão original em alemão"
+
+msgid "Eingereicht von"
+msgstr "Submetido por"
+
+msgid "Freigegeben am"
+msgstr "Aprovado em"
+
+msgid "Freigabenachweis"
+msgstr "Comprovativo de aprovação"
+
+msgid "SHA-256 Original"
+msgstr "SHA-256 do original"
+
+msgid "SHA-256 Übersetzung"
+msgstr "SHA-256 da tradução"
+
+msgid "Die Integritätsprüfung ist fehlgeschlagen. Diese Sprachfassung wird nicht öffentlich angezeigt."
+msgstr "A verificação de integridade falhou. Esta versão não será apresentada publicamente."
+
+msgid "Übersetzungstext"
+msgstr "Texto traduzido"
+
+msgid "Entwurf bearbeiten"
+msgstr "Editar rascunho"
+
+msgid "Zur Prüfung einreichen"
+msgstr "Submeter para revisão"
+
+msgid "Zurück zum Entwurf"
+msgstr "Voltar ao rascunho"
+
+msgid "Unabhängige Freigabe"
+msgstr "Aprovação independente"
+
+msgid "Nur nach fachlicher und rechtlicher Prüfung mit dokumentiertem Nachweis freigeben."
+msgstr "Aprovar apenas após revisão técnica e jurídica com comprovativo documentado."
+
+msgid "Fachlich freigeben"
+msgstr "Aprovar após revisão"
+
+msgid "Übersetzung (noch nicht freigegeben)"
+msgstr "Tradução (ainda não aprovada)"
+
+msgid "Nur Entwürfe dürfen bearbeitet werden."
+msgstr "Só é possível editar rascunhos."
+
+msgid "Übersetzungsentwurf gespeichert."
+msgstr "Rascunho da tradução guardado."
+
+msgid "Übersetzungsentwurf bearbeiten"
+msgstr "Editar rascunho de tradução"
+
+msgid "Übersetzungsentwurf anlegen"
+msgstr "Criar rascunho de tradução"
+
+msgid "Nur Entwürfe können eingereicht werden."
+msgstr "Só é possível submeter rascunhos."
+
+msgid "Nur Prüfversionen können zurückgesetzt werden."
+msgstr "Só as versões em revisão podem voltar a rascunho."
+
+msgid "Nur geprüfte Fassungen können freigegeben werden."
+msgstr "Só as versões revistas podem ser aprovadas."
+
+msgid "Sprachfassung zur Prüfung eingereicht."
+msgstr "Versão linguística submetida para revisão."
+
+msgid "Sprachfassung wieder als Entwurf markiert."
+msgstr "Versão linguística devolvida a rascunho."
+
+msgid "Fachlich geprüfte Sprachfassung freigegeben."
+msgstr "Versão linguística revista e aprovada."
+
+msgid "Fachliche Prüfung"
+msgstr "Em revisão"
+
+msgid "Rechtstexte freigeben"
+msgstr "Aprovar textos jurídicos"

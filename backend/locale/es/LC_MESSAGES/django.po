@@ -3549,3 +3549,114 @@ msgstr "Si no indicas una fecha de finalización, tramitaremos la cancelación p
 
 msgid "jetzt kündigen"
 msgstr "Cancelar ahora"
+
+msgid "Rechtstexte · Sprachfassungen"
+msgstr "Textos legales · Versiones lingüísticas"
+
+msgid "Entwurf, unabhängige Prüfung und dokumentierte Freigabe je Originalversion."
+msgstr "Borrador, revisión independiente y aprobación documentada para cada versión original."
+
+msgid "Sprachfassung anlegen"
+msgstr "Añadir versión lingüística"
+
+msgid "Die öffentliche Freigabe fremdsprachiger Rechtsdokumente ist ausgeschaltet."
+msgstr "La publicación de documentos legales en otros idiomas está desactivada."
+
+msgid "Dokument"
+msgstr "Documento"
+
+msgid "Freigegeben von"
+msgstr "Aprobado por"
+
+msgid "Details"
+msgstr "Detalles"
+
+msgid "Noch keine geprüften Sprachfassungen vorhanden."
+msgstr "Todavía no hay versiones lingüísticas revisadas."
+
+msgid "Deutsche Originalversionen"
+msgstr "Versiones originales en alemán"
+
+msgid "Rechtsübersetzung prüfen"
+msgstr "Revisar traducción legal"
+
+msgid "Deutsche Originalversion"
+msgstr "Versión original en alemán"
+
+msgid "Eingereicht von"
+msgstr "Enviado por"
+
+msgid "Freigegeben am"
+msgstr "Aprobado el"
+
+msgid "Freigabenachweis"
+msgstr "Justificante de aprobación"
+
+msgid "SHA-256 Original"
+msgstr "SHA-256 del original"
+
+msgid "SHA-256 Übersetzung"
+msgstr "SHA-256 de la traducción"
+
+msgid "Die Integritätsprüfung ist fehlgeschlagen. Diese Sprachfassung wird nicht öffentlich angezeigt."
+msgstr "La verificación de integridad ha fallado. Esta versión no se mostrará públicamente."
+
+msgid "Übersetzungstext"
+msgstr "Texto traducido"
+
+msgid "Entwurf bearbeiten"
+msgstr "Editar borrador"
+
+msgid "Zur Prüfung einreichen"
+msgstr "Enviar a revisión"
+
+msgid "Zurück zum Entwurf"
+msgstr "Volver al borrador"
+
+msgid "Unabhängige Freigabe"
+msgstr "Aprobación independiente"
+
+msgid "Nur nach fachlicher und rechtlicher Prüfung mit dokumentiertem Nachweis freigeben."
+msgstr "Aprobar solo tras una revisión especializada y jurídica con justificante documentado."
+
+msgid "Fachlich freigeben"
+msgstr "Aprobar tras revisión"
+
+msgid "Übersetzung (noch nicht freigegeben)"
+msgstr "Traducción (aún no aprobada)"
+
+msgid "Nur Entwürfe dürfen bearbeitet werden."
+msgstr "Solo se pueden editar borradores."
+
+msgid "Übersetzungsentwurf gespeichert."
+msgstr "Borrador de traducción guardado."
+
+msgid "Übersetzungsentwurf bearbeiten"
+msgstr "Editar borrador de traducción"
+
+msgid "Übersetzungsentwurf anlegen"
+msgstr "Crear borrador de traducción"
+
+msgid "Nur Entwürfe können eingereicht werden."
+msgstr "Solo se pueden enviar borradores."
+
+msgid "Nur Prüfversionen können zurückgesetzt werden."
+msgstr "Solo las versiones en revisión pueden volver a borrador."
+
+msgid "Nur geprüfte Fassungen können freigegeben werden."
+msgstr "Solo se pueden aprobar las versiones revisadas."
+
+msgid "Sprachfassung zur Prüfung eingereicht."
+msgstr "Versión lingüística enviada a revisión."
+
+msgid "Sprachfassung wieder als Entwurf markiert."
+msgstr "Versión lingüística devuelta a borrador."
+
+msgid "Fachlich geprüfte Sprachfassung freigegeben."
+msgstr "Versión lingüística revisada y aprobada."
+
+msgid "Fachliche Prüfung"
+msgstr "En revisión"
+
+msgid "Rechtstexte freigeben"
+msgstr "Aprobar textos legales"

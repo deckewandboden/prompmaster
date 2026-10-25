@@ -4,7 +4,10 @@
   <article class="card legal-document">
     <h1>{{ document_title }}</h1>
     <p class="muted">{% translate "Version" %} {{ document.version }} · {% translate "gültig ab" %} {{ document.valid_from|date:'SHORT_DATE_FORMAT' }}</p>
-    <div class="legal-content">{{ document.content|linebreaks }}</div>
+    {% if legal_fallback_notice %}
+      <p class="muted" role="note" data-legal-language-fallback lang="{{ legal_ui_language }}">{{ legal_fallback_notice }}</p>
+    {% endif %}
+    <div class="legal-content" lang="{{ legal_content_language }}" data-legal-display-sha256="{{ legal_display_sha256 }}">{{ legal_document_body|linebreaks }}</div>
     <footer class="legal-document-footer">
       <nav class="legal-footer-nav" aria-label="{% translate 'Rechtliche Informationen' %}">
         <a href="/impressum/">{% translate "Impressum" %}</a>

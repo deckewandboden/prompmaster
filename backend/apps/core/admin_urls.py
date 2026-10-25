@@ -1,5 +1,6 @@
 from django.urls import path
 from . import admin_views as v
+from . import admin_legal_translation_views as lv
 from . import export_views as ev
 from . import sensitive as sv
 
@@ -81,6 +82,13 @@ urlpatterns = [
     path('legal/', v.legal, name='legal'),
     path('legal/declarations/', v.legal_declarations, name='legal_declarations'),
     path('legal/declarations/<uuid:pk>/', v.legal_declaration_detail, name='legal_declaration_detail'),
+    path('legal/translations/', lv.translation_list, name='legal_translations'),
+    path('legal/translations/new/', lv.translation_edit, name='legal_translation_new'),
+    path('legal/translations/<uuid:pk>/', lv.translation_detail, name='legal_translation_detail'),
+    path('legal/translations/<uuid:pk>/edit/', lv.translation_edit, name='legal_translation_edit'),
+    path('legal/translations/<uuid:pk>/submit/', lv.translation_submit, name='legal_translation_submit'),
+    path('legal/translations/<uuid:pk>/draft/', lv.translation_return_to_draft, name='legal_translation_draft'),
+    path('legal/translations/<uuid:pk>/approve/', lv.translation_approve, name='legal_translation_approve'),
     path('legal/documents/', v.legal_documents, name='legal_documents'),
     path('legal/documents/new/', v.legal_document_edit, name='legal_document_new'),
     path('legal/documents/<uuid:pk>/', v.legal_document_edit, name='legal_document_edit'),

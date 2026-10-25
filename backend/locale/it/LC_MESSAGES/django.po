@@ -3656,3 +3656,114 @@ msgstr "Se non indichi una data di cessazione, considereremo la disdetta per la 
 
 msgid "jetzt kündigen"
 msgstr "Disdici ora"
+
+msgid "Rechtstexte · Sprachfassungen"
+msgstr "Testi legali · Versioni linguistiche"
+
+msgid "Entwurf, unabhängige Prüfung und dokumentierte Freigabe je Originalversion."
+msgstr "Bozza, revisione indipendente e approvazione documentata per ogni versione originale."
+
+msgid "Sprachfassung anlegen"
+msgstr "Aggiungi versione linguistica"
+
+msgid "Die öffentliche Freigabe fremdsprachiger Rechtsdokumente ist ausgeschaltet."
+msgstr "La pubblicazione dei documenti legali in altre lingue è disattivata."
+
+msgid "Dokument"
+msgstr "Documento"
+
+msgid "Freigegeben von"
+msgstr "Approvato da"
+
+msgid "Details"
+msgstr "Dettagli"
+
+msgid "Noch keine geprüften Sprachfassungen vorhanden."
+msgstr "Non sono ancora disponibili versioni linguistiche revisionate."
+
+msgid "Deutsche Originalversionen"
+msgstr "Versioni originali in tedesco"
+
+msgid "Rechtsübersetzung prüfen"
+msgstr "Verifica traduzione legale"
+
+msgid "Deutsche Originalversion"
+msgstr "Versione originale in tedesco"
+
+msgid "Eingereicht von"
+msgstr "Inviato da"
+
+msgid "Freigegeben am"
+msgstr "Approvato il"
+
+msgid "Freigabenachweis"
+msgstr "Prova dell'approvazione"
+
+msgid "SHA-256 Original"
+msgstr "SHA-256 dell'originale"
+
+msgid "SHA-256 Übersetzung"
+msgstr "SHA-256 della traduzione"
+
+msgid "Die Integritätsprüfung ist fehlgeschlagen. Diese Sprachfassung wird nicht öffentlich angezeigt."
+msgstr "Il controllo di integrità non è riuscito. Questa versione non sarà mostrata pubblicamente."
+
+msgid "Übersetzungstext"
+msgstr "Testo tradotto"
+
+msgid "Entwurf bearbeiten"
+msgstr "Modifica bozza"
+
+msgid "Zur Prüfung einreichen"
+msgstr "Invia per revisione"
+
+msgid "Zurück zum Entwurf"
+msgstr "Torna alla bozza"
+
+msgid "Unabhängige Freigabe"
+msgstr "Approvazione indipendente"
+
+msgid "Nur nach fachlicher und rechtlicher Prüfung mit dokumentiertem Nachweis freigeben."
+msgstr "Approvare solo dopo una revisione professionale e legale con prova documentata."
+
+msgid "Fachlich freigeben"
+msgstr "Approva dopo la revisione"
+
+msgid "Übersetzung (noch nicht freigegeben)"
+msgstr "Traduzione (non ancora approvata)"
+
+msgid "Nur Entwürfe dürfen bearbeitet werden."
+msgstr "Solo le bozze possono essere modificate."
+
+msgid "Übersetzungsentwurf gespeichert."
+msgstr "Bozza di traduzione salvata."
+
+msgid "Übersetzungsentwurf bearbeiten"
+msgstr "Modifica bozza di traduzione"
+
+msgid "Übersetzungsentwurf anlegen"
+msgstr "Crea bozza di traduzione"
+
+msgid "Nur Entwürfe können eingereicht werden."
+msgstr "Solo le bozze possono essere inviate."
+
+msgid "Nur Prüfversionen können zurückgesetzt werden."
+msgstr "Solo le versioni in revisione possono tornare a bozza."
+
+msgid "Nur geprüfte Fassungen können freigegeben werden."
+msgstr "Solo le versioni revisionate possono essere approvate."
+
+msgid "Sprachfassung zur Prüfung eingereicht."
+msgstr "Versione linguistica inviata per revisione."
+
+msgid "Sprachfassung wieder als Entwurf markiert."
+msgstr "Versione linguistica riportata a bozza."
+
+msgid "Fachlich geprüfte Sprachfassung freigegeben."
+msgstr "Versione linguistica revisionata e approvata."
+
+msgid "Fachliche Prüfung"
+msgstr "In fase di revisione"
+
+msgid "Rechtstexte freigeben"
+msgstr "Approvare i testi legali"

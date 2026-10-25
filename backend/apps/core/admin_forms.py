@@ -338,6 +338,7 @@ PERMISSION_ACTION_LABELS = {
     'compose': _("Prompts erzeugen"),
     'publish': _("Veröffentlichen"),
     'quality': _("Qualität verwalten"),
+    'approve': _("Rechtstexte freigeben"),
 }
 
 

@@ -3651,3 +3651,114 @@ msgstr "Jeżeli nie podasz daty zakończenia, przyjmiemy wypowiedzenie z najwcze
 
 msgid "jetzt kündigen"
 msgstr "Wypowiedz teraz"
+
+msgid "Rechtstexte · Sprachfassungen"
+msgstr "Teksty prawne · Wersje językowe"
+
+msgid "Entwurf, unabhängige Prüfung und dokumentierte Freigabe je Originalversion."
+msgstr "Projekt, niezależna weryfikacja i udokumentowane zatwierdzenie każdej wersji źródłowej."
+
+msgid "Sprachfassung anlegen"
+msgstr "Dodaj wersję językową"
+
+msgid "Die öffentliche Freigabe fremdsprachiger Rechtsdokumente ist ausgeschaltet."
+msgstr "Publiczne udostępnianie dokumentów prawnych w innych językach jest wyłączone."
+
+msgid "Dokument"
+msgstr "Dokument"
+
+msgid "Freigegeben von"
+msgstr "Zatwierdził"
+
+msgid "Details"
+msgstr "Szczegóły"
+
+msgid "Noch keine geprüften Sprachfassungen vorhanden."
+msgstr "Nie ma jeszcze zweryfikowanych wersji językowych."
+
+msgid "Deutsche Originalversionen"
+msgstr "Niemieckie wersje źródłowe"
+
+msgid "Rechtsübersetzung prüfen"
+msgstr "Sprawdź tłumaczenie prawne"
+
+msgid "Deutsche Originalversion"
+msgstr "Niemiecka wersja źródłowa"
+
+msgid "Eingereicht von"
+msgstr "Przesłane przez"
+
+msgid "Freigegeben am"
+msgstr "Data zatwierdzenia"
+
+msgid "Freigabenachweis"
+msgstr "Potwierdzenie zatwierdzenia"
+
+msgid "SHA-256 Original"
+msgstr "SHA-256 oryginału"
+
+msgid "SHA-256 Übersetzung"
+msgstr "SHA-256 tłumaczenia"
+
+msgid "Die Integritätsprüfung ist fehlgeschlagen. Diese Sprachfassung wird nicht öffentlich angezeigt."
+msgstr "Kontrola integralności nie powiodła się. Ta wersja językowa nie będzie publicznie wyświetlana."
+
+msgid "Übersetzungstext"
+msgstr "Tekst tłumaczenia"
+
+msgid "Entwurf bearbeiten"
+msgstr "Edytuj projekt"
+
+msgid "Zur Prüfung einreichen"
+msgstr "Prześlij do weryfikacji"
+
+msgid "Zurück zum Entwurf"
+msgstr "Przywróć do projektu"
+
+msgid "Unabhängige Freigabe"
+msgstr "Niezależne zatwierdzenie"
+
+msgid "Nur nach fachlicher und rechtlicher Prüfung mit dokumentiertem Nachweis freigeben."
+msgstr "Zatwierdź wyłącznie po merytorycznej i prawnej weryfikacji z udokumentowanym potwierdzeniem."
+
+msgid "Fachlich freigeben"
+msgstr "Zatwierdź po weryfikacji"
+
+msgid "Übersetzung (noch nicht freigegeben)"
+msgstr "Tłumaczenie (jeszcze niezatwierdzone)"
+
+msgid "Nur Entwürfe dürfen bearbeitet werden."
+msgstr "Edytować można tylko projekty."
+
+msgid "Übersetzungsentwurf gespeichert."
+msgstr "Zapisano projekt tłumaczenia."
+
+msgid "Übersetzungsentwurf bearbeiten"
+msgstr "Edytuj projekt tłumaczenia"
+
+msgid "Übersetzungsentwurf anlegen"
+msgstr "Utwórz projekt tłumaczenia"
+
+msgid "Nur Entwürfe können eingereicht werden."
+msgstr "Do weryfikacji można przesyłać tylko projekty."
+
+msgid "Nur Prüfversionen können zurückgesetzt werden."
+msgstr "Do projektu można przywrócić tylko wersje w trakcie weryfikacji."
+
+msgid "Nur geprüfte Fassungen können freigegeben werden."
+msgstr "Zatwierdzić można tylko zweryfikowane wersje."
+
+msgid "Sprachfassung zur Prüfung eingereicht."
+msgstr "Wersję językową przesłano do weryfikacji."
+
+msgid "Sprachfassung wieder als Entwurf markiert."
+msgstr "Wersję językową przywrócono do projektu."
+
+msgid "Fachlich geprüfte Sprachfassung freigegeben."
+msgstr "Zweryfikowaną wersję językową zatwierdzono."
+
+msgid "Fachliche Prüfung"
+msgstr "W trakcie weryfikacji"
+
+msgid "Rechtstexte freigeben"
+msgstr "Zatwierdzaj teksty prawne"

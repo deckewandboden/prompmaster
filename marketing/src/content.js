@@ -17,7 +17,7 @@ export const checkoutPage=(quantity=1)=>`
 
   <div class="checkout-layout">
     <form class="checkout-form" id="public-checkout-form" method="post" action="/api/v1/checkout/start/" novalidate>
-      <input type="hidden" name="quantity" id="checkout-quantity-hidden" value="${quantity}">\n      <input type="hidden" name="csrfmiddlewaretoken" id="checkout-csrf" value="">
+      <input type="hidden" name="quantity" id="checkout-quantity-hidden" value="${quantity}">\n      <input type="hidden" name="csrfmiddlewaretoken" id="checkout-csrf" value="">\n      <input type="hidden" name="legal_snapshot_token" id="checkout-legal-snapshot" value="">
 
       <section class="checkout-card checkout-login-card">
         <div>
@@ -88,7 +88,7 @@ export const checkoutPage=(quantity=1)=>`
         <label class="checkline"><input type="checkbox" name="accept_privacy" required><span>Ich habe die <a href="/legal/privacy/" target="_blank" rel="noopener">Datenschutzerklärung</a> zur Kenntnis genommen.</span></label>
         <label class="checkline"><input type="checkbox" name="accept_license" required><span>Ich akzeptiere die <a href="/legal/license/" target="_blank" rel="noopener">Lizenzbedingungen</a>.</span></label>
         <label class="checkline" data-checkout-private hidden><input type="checkbox" name="accept_withdrawal"><span>Ich habe die <a href="/legal/withdrawal/" target="_blank" rel="noopener">Widerrufsbelehrung</a> zur Kenntnis genommen.</span></label>
-        <label class="checkline" data-checkout-private hidden><input type="checkbox" name="request_early_performance"><span>Ich verlange ausdrücklich, dass PROMPTFINISHER Pro vor Ablauf der Widerrufsfrist bereitgestellt wird. Mir ist bekannt, dass bei einem Widerruf für bis dahin erbrachte Dienstleistungen Wertersatz anfallen kann.</span></label>
+        <label class="checkline" data-checkout-private hidden><input type="checkbox" name="request_early_performance"><span data-legal-early-performance-text>Ich verlange ausdrücklich, dass PROMPTFINISHER Pro vor Ablauf der Widerrufsfrist bereitgestellt wird. Mir ist bekannt, dass bei einem Widerruf für bis dahin erbrachte Dienstleistungen Wertersatz anfallen kann.</span></label>
       </section>
 
       <div class="checkout-submit-row">
