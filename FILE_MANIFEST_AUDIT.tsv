@@ -125,3 +125,8 @@ backend/apps/legal/migrations/0003_legal_document_translation.py	0	text-not-byte
 backend/apps/legal/translation_display.py	0	text-not-byte-validated	active-backend
 backend/apps/legal/tests_translation_release.py	0	text-not-byte-validated	test
 docs/LEGAL_TRANSLATION_RELEASE_ISSUE87.md	0	text-not-byte-validated	documentation
+backend/apps/core/admin_legal_translation_views.py	0	text-not-byte-validated	active-backend
+backend/apps/core/tests_legal_translation_admin.py	0	text-not-byte-validated	test
+backend/apps/legal/migrations/0004_legal_translation_submitted_by.py	0	text-not-byte-validated	active-backend
+backend/templates/ns_admin/legal_translations.html	0	text-not-byte-validated	active-backend
+backend/templates/ns_admin/legal_translation_detail.html	0	text-not-byte-validated	active-backend
