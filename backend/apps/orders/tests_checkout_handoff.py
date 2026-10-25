@@ -161,6 +161,55 @@ class PurchaseHandoffTests(TestCase):
         ))
         create_payment.assert_not_called()
 
+    @override_settings(LEGAL_CHECKOUT_SNAPSHOT_REQUIRED=True)
+    @patch('apps.companies.portal.mollie_runtime_ready', return_value=True)
+    @patch('apps.companies.portal.MollieClient.create_payment')
+    def test_stale_portal_checkout_rotates_terminal_key_without_rewriting_evidence(
+        self, create_payment, _ready,
+    ):
+        from apps.orders.services import create_order
+        from apps.legal.models import LegalAcceptance
+
+        for case in ('paid_order', 'paid_provider'):
+            with self.subTest(case=case):
+                form_response = self.client.get('/portal/licenses/buy/')
+                self.assertEqual(form_response.status_code, 200)
+                offer = form_response.context['legal_snapshot']
+                previous_key = self.client.session['checkout_key:buy:PRO']
+                order = create_order(
+                    user=self.user, product=self.product, quantity=1,
+                    idempotency_key=previous_key,
+                )
+                if case == 'paid_order':
+                    order.status = 'paid'
+                    order.save(update_fields=['status', 'updated_at'])
+                else:
+                    Payment.objects.create(
+                        order=order,
+                        provider_payment_id='tr_terminal_without_webhook',
+                        status='paid',
+                        amount=order.gross_total,
+                        currency=order.currency,
+                    )
+                response = self.client.post('/portal/licenses/buy/', {
+                    'quantity': '1',
+                    'accept_terms': 'on',
+                    'accept_privacy': 'on',
+                    'accept_license': 'on',
+                    'legal_snapshot_token': offer['token'],
+                })
+                self.assertEqual(response.status_code, 200)
+                self.assertNotEqual(
+                    self.client.session['checkout_key:buy:PRO'],
+                    previous_key,
+                )
+                order.refresh_from_db()
+                self.assertNotIn('legal_offer', order.billing_snapshot)
+                self.assertFalse(
+                    LegalAcceptance.objects.filter(order=order).exists()
+                )
+        create_payment.assert_not_called()
+
     def test_marketing_quantity_is_prefilled_and_clamped_to_backend_limit(self):
         response = self.client.get('/portal/licenses/buy/?quantity=7')
         self.assertEqual(response.status_code, 200)

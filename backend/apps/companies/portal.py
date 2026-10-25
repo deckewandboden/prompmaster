@@ -1327,6 +1327,15 @@ def buy(request):
                     quantity=form.cleaned_data['quantity'],
                     idempotency_key=checkout_key,
                 )
+                if (
+                    order.status in {'paid', 'failed', 'canceled'}
+                    or order.payments.filter(status='paid').exists()
+                ):
+                    _rotate_checkout_key(request, checkout_session_key)
+                    raise ValidationError(
+                        'Diese Bestellung ist bereits abgeschlossen oder '
+                        'beendet. Bitte starten Sie den Kauf erneut.'
+                    )
                 _record_legal_acceptances(
                     request,
                     order,
@@ -1413,6 +1422,15 @@ def renew(request, pk):
                     quantity=1, target_license=license_obj,
                     idempotency_key=checkout_key,
                 )
+                if (
+                    order.status in {'paid', 'failed', 'canceled'}
+                    or order.payments.filter(status='paid').exists()
+                ):
+                    _rotate_checkout_key(request, checkout_session_key)
+                    raise ValidationError(
+                        'Diese Bestellung ist bereits abgeschlossen oder '
+                        'beendet. Bitte starten Sie den Kauf erneut.'
+                    )
                 _record_legal_acceptances(
                     request,
                     order,
