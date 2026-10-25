@@ -50,6 +50,7 @@ class LegalDocumentTranslationAdmin(admin.ModelAdmin):
         count = 0
         for translation in queryset.filter(status='draft').select_related('document'):
             try:
+                translation.submitted_by = request.user
                 translation.status = 'review'
                 translation.save()
                 count += 1
@@ -63,6 +64,7 @@ class LegalDocumentTranslationAdmin(admin.ModelAdmin):
         for translation in queryset.filter(status='review').select_related('document'):
             try:
                 translation.status = 'draft'
+                translation.submitted_by = None
                 translation.save()
                 count += 1
             except ValidationError as error:
