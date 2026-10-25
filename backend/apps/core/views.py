@@ -43,17 +43,28 @@ def legal_public(request, doc_type):
     from django.conf import settings
     from django.utils.translation import get_language
     from apps.legal.translation_display import resolve_public_legal_text
+    from apps.legal.checkout_snapshot import pinned_public_document
+    from django.core.exceptions import ValidationError
 
     allowed = {code for code, _label in LegalDocument.DOC_TYPES}
     if doc_type not in allowed:
         raise Http404
-    document = (
-        LegalDocument.objects.filter(doc_type=doc_type, active=True, valid_from__lte=timezone.now())
-        .order_by('-valid_from')
-        .first()
-    )
-    if not document:
-        raise Http404
+    snapshot_token = (request.GET.get('checkout_snapshot') or '').strip()
+    if snapshot_token:
+        try:
+            document, _snapshot_language = pinned_public_document(
+                request, doc_type, snapshot_token,
+            )
+        except ValidationError:
+            return HttpResponse(status=409)
+    else:
+        document = (
+            LegalDocument.objects.filter(doc_type=doc_type, active=True, valid_from__lte=timezone.now())
+            .order_by('-valid_from')
+            .first()
+        )
+        if not document:
+            raise Http404
     titles = {
         'terms': _('AGB'),
         'privacy': _('Datenschutz'),
@@ -62,7 +73,7 @@ def legal_public(request, doc_type):
         'imprint': _('Impressum'),
         'accessibility': _('Barrierefreiheit'),
     }
-    ui_language = get_language() or 'de'
+    ui_language = _snapshot_language if snapshot_token else (get_language() or 'de')
     body, body_language, notice, displayed_sha256 = resolve_public_legal_text(
         document, ui_language,
         translations_enabled=settings.LEGAL_TRANSLATIONS_PUBLIC_ENABLED,
@@ -263,6 +274,23 @@ def checkout_csrf(request):
     return response
 
 
+def checkout_legal_snapshot(request):
+    """Issue a signed, per-session manifest for the static purchase page."""
+    if request.method != 'GET':
+        return HttpResponse(status=405)
+    from django.core.exceptions import ValidationError
+    from apps.legal.checkout_snapshot import issue_snapshot
+
+    customer_type = request.GET.get('customer_type', 'company')
+    try:
+        payload = issue_snapshot(request, customer_type)
+    except ValidationError:
+        return JsonResponse({'error': 'legal_snapshot_unavailable'}, status=503)
+    response = JsonResponse(payload)
+    response['Cache-Control'] = 'no-store'
+    return response
+
+
 def public_checkout_start(request):
     """Create a new customer/order and hand the browser to Mollie.
 
@@ -285,7 +313,9 @@ def public_checkout_start(request):
     from apps.catalog.models import Product
     from apps.companies.models import Company, Membership, PrivateCustomerProfile
     from apps.core.security import check_rate, client_ip
+    from django.conf import settings
     from apps.legal.models import LegalAcceptance, LegalDocument
+    from apps.legal.checkout_snapshot import SESSION_NONCE, validate_snapshot
     from apps.orders.forms import PublicCheckoutForm
     from apps.orders.services import MAX_PURCHASE_QUANTITY, create_order
     from apps.payments.mollie import (
@@ -520,6 +550,7 @@ def public_checkout_start(request):
             f"/checkout/?{urlencode({'quantity': quantity, 'error': 'unavailable'})}"
         )
 
+    legal_token = (request.POST.get('legal_snapshot_token') or '').strip()
     checkout_key = request.session.get('public_checkout_key')
     if not checkout_key:
         checkout_key = secrets.token_urlsafe(24)
@@ -527,6 +558,20 @@ def public_checkout_start(request):
 
     try:
         with transaction.atomic():
+            legal_offer_evidence = {
+                'verification': 'legacy_without_signed_snapshot',
+                'presentation_proof': 'not_recorded',
+            }
+            if legal_token or settings.LEGAL_CHECKOUT_SNAPSHOT_REQUIRED:
+                try:
+                    legal_offer_evidence, verified_documents = validate_snapshot(
+                        request, legal_token, data['customer_type'], lock=True,
+                    )
+                except ValidationError:
+                    return redirect(
+                        f"/checkout/?{urlencode({'quantity': quantity, 'error': 'unavailable'})}"
+                    )
+                documents = verified_documents
             user = User.objects.create_user(
                 email=data['email'],
                 password=None,
@@ -570,6 +615,7 @@ def public_checkout_start(request):
 
             evidence = {
                 'source': 'public_checkout',
+                'legal_offer': legal_offer_evidence,
                 'ip': client_ip(request),
                 'user_agent': (request.META.get('HTTP_USER_AGENT') or '')[:300],
                 'early_performance_requested': bool(
@@ -592,6 +638,7 @@ def public_checkout_start(request):
             )
             snapshot = dict(order.billing_snapshot or {})
             snapshot['source'] = 'public_checkout'
+            snapshot['legal_offer'] = legal_offer_evidence
             snapshot['legal_versions'] = {
                 doc_type: document.version
                 for doc_type, document in documents.items()
@@ -651,6 +698,7 @@ def public_checkout_start(request):
         )
 
     request.session['public_checkout_key'] = secrets.token_urlsafe(24)
+    request.session[SESSION_NONCE] = secrets.token_urlsafe(24)
     return redirect(checkout_url)
 
 

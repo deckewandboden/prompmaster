@@ -1,72 +1,90 @@
-# Issue #87 – Freigabepflichtige Sprachfassungen für Rechtsdokumente
+# Issue #87 – Sprachfassungen juristischer Dokumente
 
-## Architektur und Sicherheitsgrenzen
+## Konzeption und Sicherheitsgrenzen
 
-Die aktive deutsche `LegalDocument`-Version ist und bleibt die Primärfassung.
-Die neuen `LegalDocumentTranslation`-Datensätze sind je Primärdokument-ID und
-Zielsprache (EN/ES/PT/TR/RU/PL/FR/IT/NL) eindeutig zugeordnet.
-Die bestehende Tabelle `LegalAcceptance` und ihre historischen
-Bestell-/Zustimmungsreferenzen werden nicht migriert oder verändert.
+Deutsches `LegalDocument` bleibt die alleinige Primärfassung. Für jede der
+neun anderen UI-Sprachen (EN/ES/PT/TR/RU/PL/FR/IT/NL) kann eine
+`LegalDocumentTranslation` je deutschem Dokument hinterlegt werden.
+Unfreigegebene Texte sind niemals öffentlich. Der Originaltext, seine
+Dokument-ID, sein Typ, seine Version, sein Gültigkeitsbeginn und sein
+Inhalt sind über SHA-256-Prüfsummen an die genehmigte Übersetzung gebunden.
+Wird der Originaltext oder die Originalidentität verändert, wird die
+Übersetzung aus der öffentlichen Auswahl ausgeschlossen.
 
-**Bei Installation sind fremdsprachige Dokumentkörper ausgeschaltet.**
-`LEGAL_TRANSLATIONS_PUBLIC_ENABLED=0` ist Standard.
-Selbst `approved`-Datensätze werden dann niemals öffentlich ausgegeben.
-Für nicht-deutsche UI-Sprachen erscheint eine verständliche, sprachspezifische
-Warnung und der ursprüngliche deutsche Dokumenttext mit `lang="de"`.
-Dies ist kein stillschweigender Englisch-/Französisch-Text.
+**Keine automatische Publikation:** `LEGAL_TRANSLATIONS_PUBLIC_ENABLED=0`
+ist der Installationsstandard und bleibt bis zur juristischen Freigabe
+unverändert. Bei fehlender freigegebener Übersetzung erscheint ausschließlich
+der deutsche Originaltext mit sichtbar lokalisiertem Fallback-Hinweis und
+korrektem `lang="de"`.
 
-## Freigabeprozess
+## Produktive Admin-Governance
 
-1. Zu einer konkreten deutschen Originalversion einen Übersetzungsentwurf mit
-   `language`, `document` und `content` in Django Admin anlegen.
-2. Den Entwurf nach redaktioneller Sichtung auf **review** setzen.
-3. Juristische oder offiziell beauftragte Fachprüfung außerhalb des Systems
-   durchführen; Nachweis unter `approval_reference` dokumentieren.
-4. Ein Benutzer mit der separaten Django-Berechtigung
-   `legal.approve_legal_translation` führt die Admin-Aktion zur Freigabe aus.
-   Der Freigabevorgang speichert Prüfer, Zeitstempel und die SHA-256-Prüfsummen
-   beider konkreter Textversionen.
-5. Freigegebene Übersetzungsdatensätze sind über den ORM-Save und die
-   Standard-Admin-Oberfläche unveränderlich. Ändert sich die deutsche
-   Primärfassung nachträglich, erkennt die Laufzeitauswahl die abweichende
-   Prüfsumme und verwendet sofort wieder das deutsche Original.
-6. Erst nach **separater** fachlicher Produktfreigabe darf in einer kontrollierten
-   Umgebung `LEGAL_TRANSLATIONS_PUBLIC_ENABLED=1` aktiviert werden.
+`/ns-admin/legal/translations/` ist in das bestehende
+PROMPTFINISHER-Rollenmodell eingebunden. `legal.read` berechtigt zur
+Ansicht, `legal.write` zum Entwurf und zur Einreichung, `legal.approve`
+zur Freigabe nach **getrennter** fachlicher Prüfung. Der Einreicher
+`submitted_by` darf nicht selbst freigeben. Änderungen und Freigaben
+werden als Audit-Ereignisse protokolliert. Freigegebene Versionen sind
+schreibgeschützt; eine Änderung erfordert eine neue, separat geprüfte
+deutsche Originalversion bzw. erneute Prüfung.
 
-**Wichtig:** Die technische Berechtigung oder der Freigabestatus ersetzt
-keine juristische Qualifikation der prüfenden Person. Ohne einen belastbaren
-externen Freigabenachweis darf keine Sprachfassung freigegeben werden.
+Der Django-Fallback-Admin steht produktiv **nicht** zur Verfügung.
+Das neue Produkt-Admin ist der maßgebliche Verwaltungsweg. Die Rolle
+`superadmin` erhält bei `seed_defaults` das neue Freigaberecht.
+Für tatsächliche juristische Prüfung ist darüber hinaus eine qualifizierte
+externe Freigabe mit belastbarer Referenz erforderlich.
 
-## Aktueller Umfang und Restarbeiten
+## Öffentlicher Checkout: signierter Rechtsdokument-Snapshot
 
-Umgesetzt in diesem Entwicklungszweig:
-- isoliertes, migrationstaugliches Übersetzungsdatenmodell;
-- Review-/Approval-Aktionen im Django Admin mit getrennten Rechten;
-- public resolver mit geschützter Sprachwahl und Fallback in neun Sprachen;
-- prüfbarer Content-Hash und echtes Sprachattribut des Dokumentkörpers;
-- gezielte Regressionstests (unfreigegeben, Freigabe, Manipulation,
-  Quellversionswechsel, XSS-Escaping, sechs Dokumenttypen).
+Die statische Marketing-Kaufseite ruft
+`GET /api/v1/checkout/legal-snapshot/?customer_type=company|private` auf.
+Der Server erzeugt einen zeitlich begrenzten, signierten und
+sessiongebundenen Snapshot mit den Dokumentversionen, Dokument-IDs,
+SHA-256-Fingerprints, tatsächlichen Textsprachen sowie bei veröffentlichten
+Übersetzungen Freigabezeitpunkt, Referenz und Prüfer-ID. Die Formularlinks
+verwenden `/legal/<typ>/?checkout_snapshot=<token>` und zeigen nur
+die versionierte Fassung. Bei Quellen- oder Übersetzungsdrift werden sie
+mit HTTP 409 abgewiesen, ohne einen aktuelleren Text einzuschieben.
 
-**Noch nicht als abgeschlossen markieren:**
-- Übersetzte Rechtsdokumentkörper existieren noch nicht; sie dürfen erst nach
-  fachlicher Freigabe in neun Sprachen eingepflegt werden.
-- Vertragsschluss-/Checkbox-Consent-Evidenz bei Bestellungen muss die tatsächliche
-  angezeigte Fassung inkl. Originalversion, Sprachcode, Text-Hash und
-  Freigabezeitpunkt dauerhaft protokollieren und gegen Race Conditions absichern.
-  Bestehende `LegalAcceptance`-Verknüpfungen dürfen nicht geändert werden.
-- Bestehende `/ns-admin/`-Rechtsdokumentverwaltung muss die neuen
-  Übersetzungen und den Freigabestatus getrennt und rollenbasiert präsentieren,
-  falls Django Admin im Betriebsmodell nicht zugänglich ist.
-- Die Checkout-Erklärung zum Beginn vor Widerrufsfrist und Wertersatz ist
-  juristisch für alle Sprachen separat zu prüfen, nicht nur technisch zu übersetzen.
-- Vollständiger UI-/Browser-Regressionstest einschließlich Edit-/Approve-Workflows,
-  Release-Flags, Migration und Rollback auf der tatsächlichen Umgebung.
-- Keine Aktivierung, kein Merge und kein Deploy im Rahmen dieser Entwicklung.
+Der Checkout-POST validiert den Snapshot erneut innerhalb der
+Bestelltransaktion unter Datenbanksperre. Erfolgreich validierte
+Metadaten werden mit dem `Order.billing_snapshot` und den
+`LegalAcceptance.evidence`-Datensätzen gespeichert. Bestehende historische
+Akzeptanzdatensätze werden nicht nachträglich überschrieben.
 
-## Betriebsprüfung
+**Beweisgrenze:** Der Nachweis bestätigt die im Kaufprozess **angebotenen,
+per Link abrufbaren** Textfassungen und die angekreuzten Erklärungen.
+Er beweist **nicht**, dass der Käufer die Links geöffnet oder den gesamten
+Text gelesen hat. Es werden daher bewusst keine fingierten
+`viewed`/`read`-Bestätigungen erstellt.
 
-Nach Freigabe muss für alle sechs Dokumenttypen und zehn UI-Sprachen nachgewiesen
-sein, ob tatsächlich eine freigegebene, versionstreue Sprachfassung angezeigt wird.
-Falls keine Freigabe vorliegt, ist der Fallback eindeutig sichtbar.
-Eine vorhandene UI-Übersetzung allein ist **kein** Nachweis für einen
-übersetzten rechtlichen Dokumentkörper.
+`LEGAL_CHECKOUT_SNAPSHOT_REQUIRED=0` ist der Rollout-Standard.
+Die aktualisierte Marketing-Oberfläche benötigt bereits einen Snapshot.
+Bei aktiviertem Gate `LEGAL_CHECKOUT_SNAPSHOT_REQUIRED=1` wird
+jeder Legacy-Checkout ohne gültigen Snapshot zurückgewiesen, bevor Konto,
+Bestellung oder Zahlung erstellt werden. Solange das Gate aus ist,
+werden Legacy-Bestellungen ausdrücklich als
+`legacy_without_signed_snapshot` und `not_recorded` markiert.
+
+## Offene Freigabepunkte
+
+- Vollständige rechtlich geprüfte Übersetzungsfassungen aller benötigten
+  Vertrags-/Widerrufs-/Datenschutz-/Lizenztexte liegen noch nicht vor.
+- Die konkrete Erklärung zum vorzeitigen Leistungsbeginn/Wertersatz
+  einschließlich übersetzter Varianten benötigt eine gesonderte,
+  versionierte und rechtlich geprüfte Evidenzbindung.
+- Die angemeldeten Portal-Kauf- und Verlängerungswege sowie weitere
+  Registrierungs-/Einladungsvorgänge müssen denselben verbindlichen
+  Dokument-Snapshot erhalten. Derzeit ist nur der **öffentliche**
+  Marketing-Checkout durch die neue Signaturstrecke abgedeckt.
+- Browser-/Regressionstests, Migrationsprüfung, Deployment-Freigabe und
+  kontrollierte Gate-Aktivierung auf der Zielumgebung sind erforderlich.
+- Kein Merge und kein Produktivdeployment durch diesen Entwicklungszweig.
+
+## Abnahme
+
+Alle sechs Dokumentarten in zehn Sprachen auf tatsächlichen Inhalt und
+korrektes Fallback prüfen. Echte Browserabläufe für Privat/Geschäftlich,
+Sprachwechsel, gesperrten Altlink, Zeitablauf, Replay, mehrfachen Kauf,
+Mollie-Weiterleitung und Auditdatensätze durchführen. Rechtsfreigabe und
+Betriebsfreigabe bleiben unabhängig von erfolgreichen CI-Tests.

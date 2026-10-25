@@ -17,7 +17,7 @@ export const checkoutPage=(quantity=1)=>`
 
   <div class="checkout-layout">
     <form class="checkout-form" id="public-checkout-form" method="post" action="/api/v1/checkout/start/" novalidate>
-      <input type="hidden" name="quantity" id="checkout-quantity-hidden" value="${quantity}">\n      <input type="hidden" name="csrfmiddlewaretoken" id="checkout-csrf" value="">
+      <input type="hidden" name="quantity" id="checkout-quantity-hidden" value="${quantity}">\n      <input type="hidden" name="csrfmiddlewaretoken" id="checkout-csrf" value="">\n      <input type="hidden" name="legal_snapshot_token" id="checkout-legal-snapshot" value="">
 
       <section class="checkout-card checkout-login-card">
         <div>
