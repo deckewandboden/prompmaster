@@ -1962,16 +1962,24 @@ def run_backend_ui_smoke(browser, fixture=None) -> None:
         from django.contrib.sessions.backends.db import SessionStore
         from apps.legal.checkout_snapshot import SESSION_NONCE, rotate_session_nonce
 
-        seed_session = SessionStore()
-        seed_session['browser_checkout_probe'] = 'established'
-        seed_session.save()
-        if seed_session.get(SESSION_NONCE) is not None:
-            raise AssertionError('two-tab fixture already has a checkout nonce')
+        # Playwright sync API runs inside its own event-loop context.
+        # Django ORM/DB-backed sessions are synchronous: carry those few
+        # operations out in a worker thread, never on the Playwright thread.
+        def seed_checkout_session():
+            session = SessionStore()
+            session['browser_checkout_probe'] = 'established'
+            session.save()
+            if session.get(SESSION_NONCE) is not None:
+                raise AssertionError('two-tab fixture already has a checkout nonce')
+            return session.session_key
+
+        with ThreadPoolExecutor(max_workers=1) as pool:
+            shared_session_key = pool.submit(seed_checkout_session).result()
         shared_context = browser.new_context(viewport={'width': 1080, 'height': 800})
         try:
             shared_context.add_cookies([{
                 'name': settings.SESSION_COOKIE_NAME,
-                'value': seed_session.session_key,
+                'value': shared_session_key,
                 'url': base,
             }])
             tab_a = shared_context.new_page()
@@ -2015,7 +2023,11 @@ def run_backend_ui_smoke(browser, fixture=None) -> None:
                         f'two-tab pinned legal link invalidated: {document_type}, '
                         f'HTTP {result.status if result else "none"}'
                     )
-            if SessionStore(session_key=seed_session.session_key).get(SESSION_NONCE):
+            with ThreadPoolExecutor(max_workers=1) as pool:
+                stored = pool.submit(
+                    lambda: SessionStore(session_key=shared_session_key).get(SESSION_NONCE)
+                ).result()
+            if stored:
                 raise AssertionError('concurrent snapshots wrote a mutable initial nonce')
 
             stranger = browser.new_context()
@@ -2032,10 +2044,13 @@ def run_backend_ui_smoke(browser, fixture=None) -> None:
 
             # Simulate the same atomic Redis rotation used at successful
             # payment-provider handoff, even with a stale session copy.
-            from django.test import RequestFactory
-            after_handoff = RequestFactory().get('/checkout/')
-            after_handoff.session = SessionStore(session_key=seed_session.session_key)
-            rotate_session_nonce(after_handoff)
+            def revoke_checkout_offers():
+                from django.test import RequestFactory
+                after_handoff = RequestFactory().get('/checkout/')
+                after_handoff.session = SessionStore(session_key=shared_session_key)
+                rotate_session_nonce(after_handoff)
+            with ThreadPoolExecutor(max_workers=1) as pool:
+                pool.submit(revoke_checkout_offers).result()
             for tab, offer, document_type in (
                 (tab_a, company_offer, 'terms'),
                 (tab_b, private_offer, 'withdrawal'),
