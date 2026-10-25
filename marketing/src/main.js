@@ -230,7 +230,7 @@ function setupCheckoutPage(){
       unavailable:'Der Kauf ist gerade nicht verfügbar. Bitte versuche es später erneut.',
       payment:'Die Zahlung konnte nicht vorbereitet werden. Es wurde nichts freigeschaltet. Bitte versuche es erneut.',
     };
-    showStage(messages[checkoutError]||'Der Kauf konnte nicht gestartet werden. Bitte versuche es erneut.');
+    showStage(marketingT(messages[checkoutError]||'Der Kauf konnte nicht gestartet werden. Bitte versuche es erneut.'));
   }
 
   const syncCustomerType=()=>{
@@ -348,7 +348,7 @@ function setupCheckoutPage(){
       HTMLFormElement.prototype.submit.call(form);
     }catch(error){
       console.error('Checkout konnte nicht gestartet werden.',error);
-      showStage('Die sichere Kaufverbindung konnte nicht vorbereitet werden. Bitte lade die Seite neu und versuche es erneut.');
+      showStage(marketingT('Die sichere Kaufverbindung konnte nicht vorbereitet werden. Bitte lade die Seite neu und versuche es erneut.'));
       if(submit){
         submit.disabled=false;
         submit.textContent=marketingT('Zahlungspflichtig kaufen →');
