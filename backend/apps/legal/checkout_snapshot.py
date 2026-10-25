@@ -9,6 +9,7 @@ from urllib.parse import urlencode
 
 from django.conf import settings
 from django.core import signing
+from django.core.cache import cache
 from django.core.exceptions import ValidationError
 from django.utils import timezone
 from django.utils.crypto import salted_hmac
@@ -84,35 +85,73 @@ def _body_details(document, language):
     }
 
 
-def _effective_session_nonce(request, *, create=False):
-    """Return an origin nonce without racing to initialize an existing session.
-
-    Separate requests may load the same existing Django session before either
-    finishes. Writing a random nonce in both requests loses one of the
-    signatures (last-write-wins). For an established session without an
-    explicit nonce, derive the same secret nonce from the server signing key
-    and its unguessable session identifier *without modifying the session*.
-    Provider handoff still stores a random rotation nonce, invalidating every
-    earlier signed offer. Existing stored nonce values remain compatible.
-
-    A first-ever visit without any session cookie must create a session; two
-    browsers without a shared cookie cannot be considered a shared session.
-    """
-    stored = request.session.get(SESSION_NONCE)
-    if stored:
-        return stored
+def _nonce_cache_key(request):
+    """Never put a user/session identifier directly in a cache key."""
     session_key = request.session.session_key
-    if session_key:
-        return salted_hmac(
-            'promptfinisher.checkout.legal.initial-session-nonce.v1',
-            session_key,
-            secret=settings.SECRET_KEY,
-        ).hexdigest()
-    if create:
-        fresh = secrets.token_urlsafe(24)
-        request.session[SESSION_NONCE] = fresh
-        return fresh
-    return None
+    if not session_key:
+        return None
+    digest = salted_hmac(
+        'promptfinisher.checkout.legal.nonce-cache-key.v1',
+        session_key,
+        secret=settings.SECRET_KEY,
+    ).hexdigest()
+    return 'promptfinisher:legal-checkout:nonce:' + digest
+
+
+def _nonce_cache_ttl():
+    # Never let a normal cache expiration resurrect an old offer after a
+    # successful provider handoff. A missing entry invalidates old offers.
+    return max(MAX_AGE_SECONDS * 2, settings.SESSION_COOKIE_AGE + MAX_AGE_SECONDS)
+
+
+def _effective_session_nonce(request, *, create=False):
+    """Atomic checkout nonce, independent of mutable Django session payloads.
+
+    On an established browser session, concurrent GETs see one nonce from
+    Redis (cache.add is atomic). Session middleware may independently modify
+    and save a stale session; that cannot revert payment-handoff rotation.
+    On cache unavailability we fail closed instead of creating unsigned or
+    session-only legal evidence.
+    """
+    if not request.session.session_key:
+        if not create:
+            return None
+        # The very first request needs a real session cookie. Unlike two
+        # requests sharing an existing cookie, separate no-cookie requests
+        # cannot be bound together and must remain separate sessions.
+        request.session['checkout_legal_session_initialized'] = True
+        request.session.save()
+    cache_key = _nonce_cache_key(request)
+    if not cache_key:
+        raise ValidationError('Legal checkout session unavailable.')
+    try:
+        nonce = cache.get(cache_key)
+        if not nonce and create:
+            cache.add(cache_key, secrets.token_urlsafe(24), timeout=_nonce_cache_ttl())
+            nonce = cache.get(cache_key)
+    except Exception as exc:
+        raise ValidationError('Legal checkout nonce store unavailable.') from exc
+    return nonce or None
+
+
+def rotate_session_nonce(request):
+    """Revoke all earlier offers across tabs after provider handoff.
+
+    The Redis state is authoritative; stale Django session saves cannot undo
+    this rotation. Do not silently treat cache failures as success.
+    """
+    cache_key = _nonce_cache_key(request)
+    if not cache_key:
+        raise ValidationError('Legal checkout session unavailable.')
+    try:
+        if not cache.set(
+            cache_key, secrets.token_urlsafe(24), timeout=_nonce_cache_ttl(),
+        ):
+            raise ValidationError('Legal checkout nonce rotation failed.')
+    except ValidationError:
+        raise
+    except Exception as exc:
+        raise ValidationError('Legal checkout nonce store unavailable.') from exc
 
 
 def issue_snapshot(request, customer_type):
