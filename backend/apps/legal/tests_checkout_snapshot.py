@@ -290,6 +290,31 @@ class SignedCheckoutLegalSnapshotTests(TestCase):
         self.assertEqual(self.client.get(company['documents']['terms']['url']).status_code, 409)
         self.assertEqual(self.client.get(private['documents']['withdrawal']['url']).status_code, 409)
 
+    def test_nonce_cache_eviction_or_failure_never_authorizes_stale_offer(self):
+        from django.core.cache import cache
+        from apps.legal.checkout_snapshot import _nonce_cache_key
+        snapshot = self.snapshot()
+        link = snapshot['documents']['terms']['url']
+        self.assertEqual(self.client.get(link).status_code, 200)
+
+        from django.test import RequestFactory
+        request = RequestFactory().get('/checkout/')
+        request.session = self.client.session
+        cache.delete(_nonce_cache_key(request))
+        # Do not silently reconstruct a deleted nonce from session contents.
+        self.assertEqual(self.client.get(link).status_code, 409)
+        # New offers may safely allocate a fresh nonce.
+        new_offer = self.snapshot()
+        self.assertEqual(
+            self.client.get(new_offer['documents']['terms']['url']).status_code, 200,
+        )
+        self.assertEqual(self.client.get(link).status_code, 409)
+
+        with patch('apps.legal.checkout_snapshot.cache.get', side_effect=RuntimeError('Redis unavailable')):
+            self.assertEqual(self.client.get(new_offer['documents']['terms']['url']).status_code, 409)
+            failed_issue = self.client.get('/api/v1/checkout/legal-snapshot/')
+            self.assertEqual(failed_issue.status_code, 503)
+
     @patch('apps.payments.mollie.mollie_runtime_ready', return_value=True)
     def test_unsigned_checkout_fails_closed_before_account_or_order(
         self, _ready,
