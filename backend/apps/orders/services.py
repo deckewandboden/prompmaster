@@ -112,6 +112,22 @@ def create_order(*, user, product, quantity=1, target_license=None, idempotency_
             owner_ok = existing.company_id == (company.id if company else None) and existing.private_user_id == (None if company else user.id)
             if not owner_ok:
                 raise ValidationError('Ungültiger Checkout-Schlüssel.')
+            # Idempotency may replay only the *same* order. A changed quantity,
+            # product or renewal target must not silently redirect the buyer
+            # to the earlier payment with different commercial terms.
+            original = list(
+                existing.items.values_list(
+                    'product_id', 'quantity', 'target_license_id',
+                )[:2]
+            )
+            if len(original) != 1 or original[0] != (
+                product.pk, quantity,
+                target_license.pk if target_license else None,
+            ):
+                raise ValidationError(
+                    'Die Kaufdaten haben sich geändert. '
+                    'Bitte starten Sie den Kauf erneut.'
+                )
             return existing
 
     price_type = 'renewal' if target_license else 'new'

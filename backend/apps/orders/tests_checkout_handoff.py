@@ -88,6 +88,42 @@ class PurchaseHandoffTests(TestCase):
         set_secret('mollie_api_key', 'test_checkout_handoff_key')
         set_setting('mollie_profile_id', 'pfl_checkout_handoff')
 
+    def test_idempotent_checkout_key_cannot_change_commercial_terms(self):
+        from django.core.exceptions import ValidationError
+        from apps.orders.services import create_order
+
+        order = create_order(
+            user=self.user, product=self.product, quantity=2,
+            idempotency_key='immutable-company-purchase-key',
+        )
+        replay = create_order(
+            user=self.user, product=self.product, quantity=2,
+            idempotency_key='immutable-company-purchase-key',
+        )
+        self.assertEqual(replay.pk, order.pk)
+
+        alternate = Product.objects.create(
+            code='OTHER-PRO', name='Different Product',
+            default_license_days=365, default_device_limit=1,
+            reminder_1_days=60, reminder_2_days=30,
+            critical_warning_days=7,
+        )
+        for attempted_product, quantity in (
+            (self.product, 3),
+            (alternate, 2),
+        ):
+            with self.subTest(product=attempted_product.code, quantity=quantity):
+                with self.assertRaisesMessage(ValidationError, 'Kaufdaten haben sich geändert'):
+                    create_order(
+                        user=self.user, product=attempted_product,
+                        quantity=quantity,
+                        idempotency_key='immutable-company-purchase-key',
+                    )
+        order.refresh_from_db()
+        self.assertEqual(order.items.get().quantity, 2)
+        self.assertEqual(order.items.get().product_id, self.product.pk)
+        self.assertEqual(Order.objects.filter(company=self.company).count(), 1)
+
     def test_marketing_quantity_is_prefilled_and_clamped_to_backend_limit(self):
         response = self.client.get('/portal/licenses/buy/?quantity=7')
         self.assertEqual(response.status_code, 200)
