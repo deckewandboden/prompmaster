@@ -230,6 +230,56 @@ class SignedCheckoutLegalSnapshotTests(TestCase):
             self.assertEqual(self.client.get(offer['documents']['terms']['url']).status_code, 200)
         self.assertEqual(self.client.get(second_tab['documents']['withdrawal']['url']).status_code, 200)
 
+    def test_simultaneous_first_offers_with_established_session_are_stable(self):
+        """Two stale session reads must not race to install distinct nonces.
+
+        Both requests read the same preexisting database session before either
+        sends its response. The previous random on-missing nonce implementation
+        created two different values and invalidated the losing tab.
+        """
+        from importlib import import_module
+
+        from django.conf import settings
+        from django.core import signing
+        from django.test import RequestFactory
+
+        from apps.legal.checkout_snapshot import (
+            SESSION_NONCE, SIGNING_SALT, issue_snapshot,
+        )
+
+        session = self.client.session
+        session['unrelated_preexisting_data'] = 'persisted'
+        session.save()
+        session_key = session.session_key
+        self.client.cookies[settings.SESSION_COOKIE_NAME] = session_key
+        SessionStore = import_module(settings.SESSION_ENGINE).SessionStore
+
+        # Independent session snapshots: neither request sees writes from
+        # the other request, just as during concurrent GET handling.
+        company_request = RequestFactory().get('/api/v1/checkout/legal-snapshot/')
+        company_request.session = SessionStore(session_key=session_key)
+        private_request = RequestFactory().get('/api/v1/checkout/legal-snapshot/')
+        private_request.session = SessionStore(session_key=session_key)
+        company = issue_snapshot(company_request, 'company')
+        private = issue_snapshot(private_request, 'private')
+        company_nonce = signing.loads(company['token'], salt=SIGNING_SALT)['nonce']
+        private_nonce = signing.loads(private['token'], salt=SIGNING_SALT)['nonce']
+        self.assertEqual(company_nonce, private_nonce)
+        self.assertTrue(company_nonce)
+        self.assertFalse(company_request.session.modified)
+        self.assertFalse(private_request.session.modified)
+        self.assertIsNone(SessionStore(session_key=session_key).get(SESSION_NONCE))
+        self.assertEqual(self.client.get(company['documents']['terms']['url']).status_code, 200)
+        self.assertEqual(self.client.get(private['documents']['withdrawal']['url']).status_code, 200)
+
+        # The provider handoff always takes precedence over the derived
+        # initialization nonce, invalidating BOTH earlier offers.
+        rotated = SessionStore(session_key=session_key)
+        rotated[SESSION_NONCE] = 'explicit-after-payment-handoff'
+        rotated.save()
+        self.assertEqual(self.client.get(company['documents']['terms']['url']).status_code, 409)
+        self.assertEqual(self.client.get(private['documents']['withdrawal']['url']).status_code, 409)
+
     @patch('apps.payments.mollie.mollie_runtime_ready', return_value=True)
     def test_unsigned_checkout_fails_closed_before_account_or_order(
         self, _ready,
