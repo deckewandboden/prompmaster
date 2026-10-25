@@ -37,6 +37,18 @@ def backend_clauses() -> dict[str, str]:
 
 
 class EarlyPerformanceCopySyncTests(unittest.TestCase):
+    def test_checkout_snapshot_fetches_cannot_overlap_on_customer_type_change(self):
+        """Keep the single server-side session nonce aligned with the final UI offer."""
+        source = (ROOT / "marketing/src/main.js").read_text(encoding="utf-8")
+        self.assertIn(
+            "return legalPromise.catch(()=>null).then(()=>ensureLegalSnapshot());",
+            source,
+        )
+        self.assertLess(
+            source.index("if(legalPromise){"),
+            source.index("legalType=customerType;", source.index("if(legalPromise){")),
+        )
+
     def test_marketing_matches_all_backend_clauses_character_for_character(self):
         clauses = backend_clauses()
         self.assertEqual(set(clauses), set(SUPPORTED))
