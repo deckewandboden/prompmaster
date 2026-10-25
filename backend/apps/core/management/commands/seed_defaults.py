@@ -16,7 +16,7 @@ PERMS = [
     'devices.write', 'orders.read', 'payments.read', 'payments.refund',
     'products.read', 'products.write', 'email.read', 'email.write',
     'ops.read', 'api.read', 'api.write', 'roles.read', 'roles.write',
-    'legal.read', 'legal.write', 'support.read', 'support.write',
+    'legal.read', 'legal.write', 'legal.approve', 'support.read', 'support.write',
     'audit.read', 'settings.read', 'settings.write', 'prompts.read',
     'prompts.write', 'prompts.compose', 'prompts.publish', 'prompts.quality',
     'content.read', 'content.write',

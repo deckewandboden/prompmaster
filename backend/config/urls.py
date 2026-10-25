@@ -9,6 +9,7 @@ urlpatterns = [
     path('', core.home, name='home'),
     path('catalog.json', core.public_catalog, name='public_catalog'),
     path('api/v1/checkout/csrf/', core.checkout_csrf, name='checkout_csrf'),
+    path('api/v1/checkout/legal-snapshot/', core.checkout_legal_snapshot, name='checkout_legal_snapshot'),
     path('api/v1/checkout/start/', core.public_checkout_start, name='public_checkout_start'),
     path('free/', product_views.free_content, name='free_product'),
     path('free-old/', product_views.free_old_content, name='free_product_old'),

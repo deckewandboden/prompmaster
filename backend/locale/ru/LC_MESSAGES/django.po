@@ -3816,3 +3816,114 @@ msgstr "Управление лицензией / продление"
 
 msgid "Jetzt trotzdem PROMPTFINISHER Pro starten"
 msgstr "Всё равно открыть PROMPTFINISHER Pro"
+
+msgid "Rechtstexte · Sprachfassungen"
+msgstr "Юридические тексты · Языковые версии"
+
+msgid "Entwurf, unabhängige Prüfung und dokumentierte Freigabe je Originalversion."
+msgstr "Черновик, независимая проверка и документированное утверждение каждой исходной версии."
+
+msgid "Sprachfassung anlegen"
+msgstr "Добавить языковую версию"
+
+msgid "Die öffentliche Freigabe fremdsprachiger Rechtsdokumente ist ausgeschaltet."
+msgstr "Публичная публикация юридических документов на других языках отключена."
+
+msgid "Dokument"
+msgstr "Документ"
+
+msgid "Freigegeben von"
+msgstr "Утвердил"
+
+msgid "Details"
+msgstr "Подробности"
+
+msgid "Noch keine geprüften Sprachfassungen vorhanden."
+msgstr "Проверенных языковых версий пока нет."
+
+msgid "Deutsche Originalversionen"
+msgstr "Исходные версии на немецком"
+
+msgid "Rechtsübersetzung prüfen"
+msgstr "Проверить юридический перевод"
+
+msgid "Deutsche Originalversion"
+msgstr "Исходная версия на немецком"
+
+msgid "Eingereicht von"
+msgstr "Отправил"
+
+msgid "Freigegeben am"
+msgstr "Дата утверждения"
+
+msgid "Freigabenachweis"
+msgstr "Подтверждение утверждения"
+
+msgid "SHA-256 Original"
+msgstr "SHA-256 оригинала"
+
+msgid "SHA-256 Übersetzung"
+msgstr "SHA-256 перевода"
+
+msgid "Die Integritätsprüfung ist fehlgeschlagen. Diese Sprachfassung wird nicht öffentlich angezeigt."
+msgstr "Проверка целостности не пройдена. Эта языковая версия не будет опубликована."
+
+msgid "Übersetzungstext"
+msgstr "Текст перевода"
+
+msgid "Entwurf bearbeiten"
+msgstr "Редактировать черновик"
+
+msgid "Zur Prüfung einreichen"
+msgstr "Отправить на проверку"
+
+msgid "Zurück zum Entwurf"
+msgstr "Вернуть в черновик"
+
+msgid "Unabhängige Freigabe"
+msgstr "Независимое утверждение"
+
+msgid "Nur nach fachlicher und rechtlicher Prüfung mit dokumentiertem Nachweis freigeben."
+msgstr "Утверждать только после профессиональной и юридической проверки с документальным подтверждением."
+
+msgid "Fachlich freigeben"
+msgstr "Утвердить после проверки"
+
+msgid "Übersetzung (noch nicht freigegeben)"
+msgstr "Перевод (ещё не утверждён)"
+
+msgid "Nur Entwürfe dürfen bearbeitet werden."
+msgstr "Редактировать можно только черновики."
+
+msgid "Übersetzungsentwurf gespeichert."
+msgstr "Черновик перевода сохранён."
+
+msgid "Übersetzungsentwurf bearbeiten"
+msgstr "Редактировать черновик перевода"
+
+msgid "Übersetzungsentwurf anlegen"
+msgstr "Создать черновик перевода"
+
+msgid "Nur Entwürfe können eingereicht werden."
+msgstr "На проверку можно отправлять только черновики."
+
+msgid "Nur Prüfversionen können zurückgesetzt werden."
+msgstr "В черновик можно возвращать только версии на проверке."
+
+msgid "Nur geprüfte Fassungen können freigegeben werden."
+msgstr "Утверждать можно только проверенные версии."
+
+msgid "Sprachfassung zur Prüfung eingereicht."
+msgstr "Языковая версия отправлена на проверку."
+
+msgid "Sprachfassung wieder als Entwurf markiert."
+msgstr "Языковая версия возвращена в черновик."
+
+msgid "Fachlich geprüfte Sprachfassung freigegeben."
+msgstr "Проверенная языковая версия утверждена."
+
+msgid "Fachliche Prüfung"
+msgstr "На проверке"
+
+msgid "Rechtstexte freigeben"
+msgstr "Утверждать юридические тексты"

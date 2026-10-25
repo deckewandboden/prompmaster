@@ -368,6 +368,126 @@ class PurchaseHandoffTests(TestCase):
         self.assertEqual(create_payment.call_args.kwargs['amount'], Decimal('251.16'))
 
 
+    @override_settings(LEGAL_CHECKOUT_SNAPSHOT_REQUIRED=True,
+                       LEGAL_TRANSLATIONS_PUBLIC_ENABLED=False)
+    @patch('apps.companies.portal.mollie_runtime_ready', return_value=True)
+    @patch('apps.companies.portal.MollieClient.create_payment')
+    def test_portal_buy_requires_signed_legal_document_offer(
+        self, create_payment, _ready,
+    ):
+        from apps.legal.models import LegalAcceptance
+
+        start = self.client.get('/portal/licenses/buy/')
+        self.assertEqual(start.status_code, 200)
+        offer = start.context['legal_snapshot']
+        self.assertTrue(offer['token'])
+        self.assertIn('checkout_snapshot=', offer['documents']['terms']['url'])
+        self.assertContains(start, 'name="legal_snapshot_token"')
+        self.assertContains(start, 'checkout_snapshot=')
+        payload = {
+            'quantity': '1', 'accept_terms': 'on',
+            'accept_privacy': 'on', 'accept_license': 'on',
+        }
+        missing = self.client.post('/portal/licenses/buy/', payload)
+        self.assertEqual(missing.status_code, 200)
+        self.assertFalse(Order.objects.exists())
+        self.assertTrue(missing.context['form'].non_field_errors())
+
+        create_payment.return_value = {
+            'id': 'tr_signed_portal_new',
+            'status': 'open',
+            '_links': {'checkout': {'href': 'https://checkout.example.test/portal-legal'}},
+        }
+        response = self.client.post('/portal/licenses/buy/', {
+            **payload, 'legal_snapshot_token': offer['token'],
+        })
+        # Failed POST above re-renders a fresh signed session manifest. The
+        # original token is correctly invalidated, so obtain a fresh offer.
+        self.assertEqual(response.status_code, 200)
+        renewed_offer = response.context['legal_snapshot']
+        paid = self.client.post('/portal/licenses/buy/', {
+            **payload, 'legal_snapshot_token': renewed_offer['token'],
+        })
+        self.assertEqual(paid.status_code, 302)
+        self.assertEqual(
+            paid['Location'], 'https://checkout.example.test/portal-legal',
+        )
+        order = Order.objects.get(company=self.company)
+        self.assertEqual(
+            order.billing_snapshot['legal_offer']['verification'],
+            'signed_session_bound_document_offer',
+        )
+        self.assertEqual(
+            LegalAcceptance.objects.filter(order=order).count(), 3,
+        )
+
+    @override_settings(LEGAL_CHECKOUT_SNAPSHOT_REQUIRED=True)
+    @patch('apps.companies.portal.mollie_runtime_ready', return_value=True)
+    def test_portal_buy_rejects_drifted_original_before_order(
+        self, _ready,
+    ):
+        offer = self.client.get('/portal/licenses/buy/').context['legal_snapshot']
+        LegalDocument.objects.filter(doc_type='terms', active=True).update(
+            version='source-v2-drift',
+        )
+        response = self.client.post('/portal/licenses/buy/', {
+            'quantity': '1', 'accept_terms': 'on',
+            'accept_privacy': 'on', 'accept_license': 'on',
+            'legal_snapshot_token': offer['token'],
+        })
+        self.assertEqual(response.status_code, 200)
+        self.assertFalse(Order.objects.exists())
+        self.assertTrue(response.context['form'].non_field_errors())
+
+    @override_settings(LEGAL_CHECKOUT_SNAPSHOT_REQUIRED=True)
+    @patch('apps.companies.portal.mollie_runtime_ready', return_value=True)
+    @patch('apps.companies.portal.MollieClient.create_payment')
+    def test_portal_renewal_records_signed_document_offer(
+        self, create_payment, _ready,
+    ):
+        from apps.legal.models import LegalAcceptance
+
+        now = timezone.now()
+        ProductPrice.objects.create(
+            product=self.product, price_type='renewal',
+            gross_amount=Decimal('35.88'), currency='EUR',
+            valid_from=now - timedelta(minutes=1),
+        )
+        license_obj = License.objects.create(
+            company=self.company, product=self.product, status='active',
+            valid_from=now - timedelta(days=1),
+            valid_until=now + timedelta(days=60),
+        )
+        url = f'/portal/licenses/{license_obj.pk}/renew/'
+        initial = self.client.get(url)
+        self.assertEqual(initial.status_code, 200)
+        offer = initial.context['legal_snapshot']
+        self.assertEqual(
+            set(offer['documents']), {'terms', 'privacy', 'license'},
+        )
+        create_payment.return_value = {
+            'id': 'tr_signed_renew',
+            'status': 'open',
+            '_links': {'checkout': {'href': 'https://checkout.example.test/renew-legal'}},
+        }
+        response = self.client.post(url, {
+            'accept_terms': 'on', 'accept_privacy': 'on',
+            'accept_license': 'on', 'legal_snapshot_token': offer['token'],
+        })
+        self.assertEqual(response.status_code, 302)
+        self.assertEqual(
+            response['Location'], 'https://checkout.example.test/renew-legal',
+        )
+        order = OrderItem.objects.get(target_license=license_obj).order
+        self.assertEqual(
+            order.billing_snapshot['legal_offer']['verification'],
+            'signed_session_bound_document_offer',
+        )
+        self.assertEqual(
+            LegalAcceptance.objects.filter(order=order).count(), 3,
+        )
+
+
 class PublicCheckoutFormValidationTests(TestCase):
     def test_private_early_performance_missing_has_one_clear_error(self):
         form = PublicCheckoutForm(

@@ -3815,3 +3815,114 @@ msgstr "Lisans yönetimi / yenileme"
 
 msgid "Jetzt trotzdem PROMPTFINISHER Pro starten"
 msgstr "Yine de PROMPTFINISHER Pro'yu aç"
+
+msgid "Rechtstexte · Sprachfassungen"
+msgstr "Hukuki metinler · Dil sürümleri"
+
+msgid "Entwurf, unabhängige Prüfung und dokumentierte Freigabe je Originalversion."
+msgstr "Her kaynak sürüm için taslak, bağımsız inceleme ve belgelenmiş onay."
+
+msgid "Sprachfassung anlegen"
+msgstr "Dil sürümü ekle"
+
+msgid "Die öffentliche Freigabe fremdsprachiger Rechtsdokumente ist ausgeschaltet."
+msgstr "Yabancı dildeki hukuki belgelerin herkese açık yayımlanması devre dışı."
+
+msgid "Dokument"
+msgstr "Belge"
+
+msgid "Freigegeben von"
+msgstr "Onaylayan"
+
+msgid "Details"
+msgstr "Ayrıntılar"
+
+msgid "Noch keine geprüften Sprachfassungen vorhanden."
+msgstr "Henüz incelenmiş dil sürümü yok."
+
+msgid "Deutsche Originalversionen"
+msgstr "Almanca kaynak sürümler"
+
+msgid "Rechtsübersetzung prüfen"
+msgstr "Hukuki çeviriyi incele"
+
+msgid "Deutsche Originalversion"
+msgstr "Almanca kaynak sürüm"
+
+msgid "Eingereicht von"
+msgstr "Gönderen"
+
+msgid "Freigegeben am"
+msgstr "Onay tarihi"
+
+msgid "Freigabenachweis"
+msgstr "Onay kanıtı"
+
+msgid "SHA-256 Original"
+msgstr "Kaynak SHA-256"
+
+msgid "SHA-256 Übersetzung"
+msgstr "Çeviri SHA-256"
+
+msgid "Die Integritätsprüfung ist fehlgeschlagen. Diese Sprachfassung wird nicht öffentlich angezeigt."
+msgstr "Bütünlük denetimi başarısız. Bu dil sürümü herkese açık gösterilmeyecek."
+
+msgid "Übersetzungstext"
+msgstr "Çeviri metni"
+
+msgid "Entwurf bearbeiten"
+msgstr "Taslağı düzenle"
+
+msgid "Zur Prüfung einreichen"
+msgstr "İncelemeye gönder"
+
+msgid "Zurück zum Entwurf"
+msgstr "Taslağa geri döndür"
+
+msgid "Unabhängige Freigabe"
+msgstr "Bağımsız onay"
+
+msgid "Nur nach fachlicher und rechtlicher Prüfung mit dokumentiertem Nachweis freigeben."
+msgstr "Yalnızca belgelenmiş uzman ve hukuki incelemeden sonra onaylayın."
+
+msgid "Fachlich freigeben"
+msgstr "İnceleme sonrası onayla"
+
+msgid "Übersetzung (noch nicht freigegeben)"
+msgstr "Çeviri (henüz onaylanmadı)"
+
+msgid "Nur Entwürfe dürfen bearbeitet werden."
+msgstr "Yalnızca taslaklar düzenlenebilir."
+
+msgid "Übersetzungsentwurf gespeichert."
+msgstr "Çeviri taslağı kaydedildi."
+
+msgid "Übersetzungsentwurf bearbeiten"
+msgstr "Çeviri taslağını düzenle"
+
+msgid "Übersetzungsentwurf anlegen"
+msgstr "Çeviri taslağı oluştur"
+
+msgid "Nur Entwürfe können eingereicht werden."
+msgstr "Yalnızca taslaklar gönderilebilir."
+
+msgid "Nur Prüfversionen können zurückgesetzt werden."
+msgstr "Yalnızca incelemedeki sürümler taslağa döndürülebilir."
+
+msgid "Nur geprüfte Fassungen können freigegeben werden."
+msgstr "Yalnızca incelenmiş sürümler onaylanabilir."
+
+msgid "Sprachfassung zur Prüfung eingereicht."
+msgstr "Dil sürümü incelemeye gönderildi."
+
+msgid "Sprachfassung wieder als Entwurf markiert."
+msgstr "Dil sürümü taslağa döndürüldü."
+
+msgid "Fachlich geprüfte Sprachfassung freigegeben."
+msgstr "İncelenmiş dil sürümü onaylandı."
+
+msgid "Fachliche Prüfung"
+msgstr "İnceleme aşamasında"
+
+msgid "Rechtstexte freigeben"
+msgstr "Hukuki metinleri onayla"
