@@ -261,7 +261,12 @@ function setupCheckoutPage(){
     if(legalInput?.value && legalType===customerType){
       return Promise.resolve(legalInput.value);
     }
-    if(legalPromise && legalType===customerType)return legalPromise;
+    // Snapshot nonces are session-bound; concurrent customer-type fetches
+    // could invalidate the response that the browser displays last.
+    if(legalPromise){
+      if(legalType===customerType)return legalPromise;
+      return legalPromise.catch(()=>null).then(()=>ensureLegalSnapshot());
+    }
     legalType=customerType;
     if(legalInput)legalInput.value='';
     const requestedType=customerType;
