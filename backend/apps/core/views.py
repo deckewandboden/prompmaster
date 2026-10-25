@@ -58,6 +58,8 @@ def legal_public(request, doc_type):
         except ValidationError:
             response = HttpResponse(status=409)
             response['Cache-Control'] = 'no-store'
+            response['Referrer-Policy'] = 'no-referrer'
+            response['X-Robots-Tag'] = 'noindex, noarchive'
             return response
     else:
         document = (
@@ -90,7 +92,12 @@ def legal_public(request, doc_type):
         'legal_display_sha256': displayed_sha256,
     })
     if snapshot_token:
+        # The signed offer token appears in the request query string.
+        # Do not leak it via Referer headers to same-origin assets or links,
+        # and do not permit indexing/archiving of per-session legal views.
         response['Cache-Control'] = 'no-store'
+        response['Referrer-Policy'] = 'no-referrer'
+        response['X-Robots-Tag'] = 'noindex, noarchive'
     return response
 
 

@@ -90,6 +90,9 @@ class SignedCheckoutLegalSnapshotTests(TestCase):
         for kind, entry in payload['documents'].items():
             response = self.client.get(entry['url'])
             self.assertEqual(response.status_code, 200)
+            self.assertEqual(response['Cache-Control'], 'no-store')
+            self.assertEqual(response['Referrer-Policy'], 'no-referrer')
+            self.assertEqual(response['X-Robots-Tag'], 'noindex, noarchive')
             self.assertEqual(response.context['legal_content_language'], 'de')
             self.assertEqual(response.context['document'].pk, documents[kind].pk)
             self.assertContains(response, 'lang="de"')
@@ -106,7 +109,11 @@ class SignedCheckoutLegalSnapshotTests(TestCase):
         link = snap['documents']['privacy']['url']
         self.assertEqual(self.client.get(link).status_code, 200)
         other_browser = Client()
-        self.assertEqual(other_browser.get(link).status_code, 409)
+        rejected = other_browser.get(link)
+        self.assertEqual(rejected.status_code, 409)
+        self.assertEqual(rejected['Cache-Control'], 'no-store')
+        self.assertEqual(rejected['Referrer-Policy'], 'no-referrer')
+        self.assertEqual(rejected['X-Robots-Tag'], 'noindex, noarchive')
         broken = ('a' if snap['token'][0] != 'a' else 'b') + snap['token'][1:]
         with self.assertRaises(ValidationError):
             validate_snapshot(
