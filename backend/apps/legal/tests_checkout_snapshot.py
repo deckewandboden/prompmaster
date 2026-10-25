@@ -274,11 +274,19 @@ class SignedCheckoutLegalSnapshotTests(TestCase):
         self.assertEqual(self.client.get(company['documents']['terms']['url']).status_code, 200)
         self.assertEqual(self.client.get(private['documents']['withdrawal']['url']).status_code, 200)
 
+        # Simulate an authenticated middleware request which loaded session
+        # data BEFORE handoff but saves its activity timestamp AFTER handoff.
+        stale_middleware_session = SessionStore(session_key=session_key)
+        self.assertEqual(
+            stale_middleware_session['unrelated_preexisting_data'], 'persisted',
+        )
         # The provider handoff updates the authoritative Redis nonce,
         # invalidating BOTH earlier offers independently of session writes.
         self.assertEqual(cache.get(_nonce_cache_key(company_request)), company_nonce)
         rotate_session_nonce(company_request)
         self.assertNotEqual(cache.get(_nonce_cache_key(company_request)), company_nonce)
+        stale_middleware_session['last_activity_at'] = 'late-middleware-write'
+        stale_middleware_session.save()
         self.assertEqual(self.client.get(company['documents']['terms']['url']).status_code, 409)
         self.assertEqual(self.client.get(private['documents']['withdrawal']['url']).status_code, 409)
 
