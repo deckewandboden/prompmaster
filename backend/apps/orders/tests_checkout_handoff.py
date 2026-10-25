@@ -899,6 +899,44 @@ class PublicCheckoutFlowTests(TestCase):
         self.assertEqual(Order.objects.count(), 1)
         self.assertEqual(Payment.objects.count(), 1)
 
+        # A delayed webhook may have finalized the order but left a
+        # provider payload with "open". Never show the old payment link.
+        order.status = 'paid'
+        order.save(update_fields=['status', 'updated_at'])
+        completed = self.client.post('/api/v1/checkout/start/', payload)
+        self.assertEqual(completed.status_code, 302)
+        self.assertEqual(completed.url, '/checkout/success/?state=paid')
+        create_payment.assert_called_once()
+
+    @patch('apps.payments.mollie.MollieClient.create_payment')
+    def test_cancelled_public_order_does_not_reuse_stale_provider_link(
+        self, create_payment,
+    ):
+        payload = self.company_payload(
+            quantity='1', email='terminated-resume@example.test',
+        )
+        old_checkout = 'https://checkout.example.test/stale-payment'
+        create_payment.return_value = {
+            'id': 'tr_terminated_resume',
+            'status': 'open',
+            '_links': {'checkout': {'href': old_checkout}},
+        }
+        first = self.client.post('/api/v1/checkout/start/', payload)
+        self.assertEqual(first.url, old_checkout)
+        order = Order.objects.get(
+            company__memberships__user__email=payload['email'],
+        )
+        order.status = 'canceled'
+        order.save(update_fields=['status', 'updated_at'])
+
+        second = self.client.post('/api/v1/checkout/start/', payload)
+        self.assertEqual(second.status_code, 302)
+        self.assertNotEqual(second.url, old_checkout)
+        self.assertTrue(
+            second.url.startswith('/auth/password-reset/'), second.url,
+        )
+        create_payment.assert_called_once()
+
     @patch('apps.payments.mollie.MollieClient.create_payment')
     def test_public_checkout_ambiguous_create_replays_exact_same_mollie_request(
         self,

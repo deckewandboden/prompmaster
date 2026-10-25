@@ -463,9 +463,19 @@ def public_checkout_start(request):
         else:
             public_orders = public_orders.filter(company__isnull=False)
         if not existing.has_usable_password() and public_orders.exists():
+            # A webhook can mark the order paid while an older provider
+            # payment payload still says "open". Paid status always takes
+            # priority over handing out a stale checkout link.
+            if (
+                public_orders.filter(status='paid').exists()
+                or Payment.objects.filter(order__in=public_orders, status='paid').exists()
+            ):
+                return redirect('/checkout/success/?state=paid')
+
             resumable = (
                 Payment.objects.filter(
                     order__in=public_orders,
+                    order__status__in={'draft', 'payment_open'},
                     status__in={'created', 'open', 'pending', 'authorized'},
                 )
                 .order_by('-created_at')
@@ -481,15 +491,9 @@ def public_checkout_start(request):
             if checkout_url.startswith('https://'):
                 return redirect(checkout_url)
 
-            if (
-                public_orders.filter(status='paid').exists()
-                or Payment.objects.filter(order__in=public_orders, status='paid').exists()
-            ):
-                return redirect('/checkout/success/?state=paid')
-
             ambiguous_order = None
             ambiguous_started_at = None
-            for candidate in public_orders.order_by('-created_at')[:10]:
+            for candidate in public_orders.filter(status='draft').order_by('-created_at')[:10]:
                 marker = (candidate.billing_snapshot or {}).get(
                     'provider_create_ambiguous_at'
                 )
