@@ -256,9 +256,14 @@ function setupCheckoutPage(){
 
   let legalPromise=null;
   let legalType='';
+  let legalExpiresAt=0;
   const ensureLegalSnapshot=()=>{
     const customerType=form.querySelector('input[name="customer_type"]:checked')?.value||'company';
-    if(legalInput?.value && legalType===customerType){
+    // An open checkout tab may outlive the 30-minute signed document
+    // offer. Refresh it before submitting instead of sending an expired
+    // token (and losing the buyer's filled-in form).
+    if(legalInput?.value && legalType===customerType &&
+       legalExpiresAt>Date.now()+60*1000){
       return Promise.resolve(legalInput.value);
     }
     // Snapshot nonces are session-bound; concurrent customer-type fetches
@@ -269,6 +274,7 @@ function setupCheckoutPage(){
     }
     legalType=customerType;
     if(legalInput)legalInput.value='';
+    legalExpiresAt=0;
     const requestedType=customerType;
     const requestPromise=fetch(
       '/api/v1/checkout/legal-snapshot/?customer_type='+encodeURIComponent(requestedType),
@@ -276,14 +282,19 @@ function setupCheckoutPage(){
     ).then(async response=>{
       if(!response.ok)throw new Error('Legal snapshot unavailable');
       const snapshot=await response.json();
-      if(!snapshot.token || snapshot.customerType!==requestedType){
-        throw new Error('Invalid legal snapshot');
+      if(!snapshot.token || snapshot.customerType!==requestedType ||
+         !Number.isFinite(snapshot.expiresInSeconds) ||
+         snapshot.expiresInSeconds<120){
+        throw new Error('Invalid or expired legal snapshot');
       }
       if(legalType!==requestedType)return ensureLegalSnapshot();
       if(requestedType==='private' && (
         !snapshot.earlyPerformance?.text || !snapshot.earlyPerformance?.sha256 ||
         !snapshot.earlyPerformance?.statement_id
       ))throw new Error('Early performance consent version missing');
+      legalExpiresAt=Date.now()+Math.min(
+        1740,snapshot.expiresInSeconds,
+      )*1000;
       if(legalInput)legalInput.value=snapshot.token;
       if(requestedType==='private'){
         const statement=form.querySelector('[data-legal-early-performance-text]');

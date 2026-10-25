@@ -116,6 +116,9 @@ def issue_snapshot(request, customer_type):
     token = signing.dumps(payload, salt=SIGNING_SALT, compress=True)
     return {
         'token': token,
+        # Client renewal threshold: one minute before the 30-minute signature
+        # limit. Only the server's signed timestamp determines true validity.
+        'expiresInSeconds': MAX_AGE_SECONDS - 60,
         'customerType': customer_type,
         'uiLanguage': language,
         'earlyPerformance': early_performance_statement(language) if customer_type == 'private' else None,

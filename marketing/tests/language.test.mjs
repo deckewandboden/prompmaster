@@ -187,3 +187,12 @@ test('every public checkout failure message is localized in all languages',async
  assert.match(main,/showStage\(marketingT\(messages\[checkoutError\]/);
  assert.match(main,/showStage\(marketingT\('Die sichere Kaufverbindung konnte nicht vorbereitet werden/);
 });
+
+test('checkout replaces expired signed legal offers before payment submission',async()=>{
+ const main=await readFile('src/main.js','utf8');
+ assert.match(main,/let legalExpiresAt=0/);
+ assert.match(main,/legalExpiresAt>Date\.now\(\)\+60\*1000/);
+ assert.match(main,/snapshot\.expiresInSeconds<120/);
+ assert.match(main,/legalExpiresAt=Date\.now\(\)\+Math\.min\(/);
+ assert.match(main,/await Promise\.all\(\[ensureCsrf\(\),ensureLegalSnapshot\(\)\]\)/);
+});

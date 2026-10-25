@@ -64,6 +64,8 @@ class SignedCheckoutLegalSnapshotTests(TestCase):
 
     def test_snapshot_records_exact_language_hashes_and_pinned_links(self):
         payload = self.snapshot()
+        from apps.legal.checkout_snapshot import MAX_AGE_SECONDS
+        self.assertEqual(payload['expiresInSeconds'], MAX_AGE_SECONDS - 60)
         self.assertEqual(payload['customerType'], 'company')
         self.assertEqual(set(payload['documents']), {'terms', 'privacy', 'license'})
         self.assertEqual(payload['documents']['terms']['bodyLanguage'], 'de')
