@@ -127,6 +127,48 @@ class SignedCheckoutLegalSnapshotTests(TestCase):
                 snap['token'], 'company',
             )
 
+    def test_early_performance_wording_matches_marketing_locales(self):
+        import json
+        from pathlib import Path
+        from django.conf import settings
+        from apps.legal.checkout_clause import EARLY_PERFORMANCE_STATEMENTS
+
+        frontend_root = Path(settings.BASE_DIR).parent / 'marketing' / 'src'
+        source = (frontend_root / 'locale.js').read_text(encoding='utf-8')
+        original = EARLY_PERFORMANCE_STATEMENTS['de']
+        marker = json.dumps(original, ensure_ascii=False) + ':'
+        self.assertIn(marker, source)
+        translated, _offset = json.JSONDecoder().raw_decode(
+            source[source.index(marker) + len(marker):],
+        )
+        self.assertEqual(
+            translated,
+            {language: wording for language, wording
+             in EARLY_PERFORMANCE_STATEMENTS.items() if language != 'de'},
+        )
+        rendered_copy = (frontend_root / 'content.js').read_text(encoding='utf-8')
+        self.assertIn(original, rendered_copy)
+
+    def test_early_performance_copy_change_invalidates_private_offer(self):
+        from unittest.mock import patch
+        from apps.legal.checkout_snapshot import validate_snapshot
+
+        offer = self.snapshot('private')
+        original_clause = offer['earlyPerformance']
+        from apps.legal.models import LegalDocumentTranslation
+        new_text = original_clause['text'] + ' Altered.'
+        modified = {**original_clause, 'text': new_text,
+                    'sha256': LegalDocumentTranslation.fingerprint(new_text)}
+        with patch(
+            'apps.legal.checkout_snapshot.early_performance_statement',
+            return_value=modified,
+        ):
+            with self.assertRaises(ValidationError):
+                validate_snapshot(
+                    self._get_request_with_current_session(),
+                    offer['token'], 'private',
+                )
+
     def test_customer_type_change_requires_a_new_snapshot(self):
         company = self.snapshot()
         with self.assertRaises(ValidationError):
@@ -136,6 +178,25 @@ class SignedCheckoutLegalSnapshotTests(TestCase):
             )
         private = self.snapshot('private')
         self.assertIn('withdrawal', private['documents'])
+        clause = private['earlyPerformance']
+        self.assertEqual(clause['statement_id'], 'early-performance-services-2026-v1')
+        self.assertEqual(clause['language'], 'en')
+        self.assertEqual(len(clause['sha256']), 64)
+        self.assertIn('before the withdrawal period ends', clause['text'])
+        from apps.legal.checkout_snapshot import SIGNING_SALT
+        from django.core import signing
+        signed = signing.loads(private['token'], salt=SIGNING_SALT)
+        self.assertEqual(
+            signed['early_performance']['sha256'], clause['sha256'],
+        )
+        self.assertNotIn('text', signed['early_performance'])
+        evidence, _documents = validate_snapshot(
+            self._get_request_with_current_session(),
+            private['token'], 'private',
+        )
+        self.assertEqual(
+            evidence['early_performance_clause']['text'], clause['text'],
+        )
         with self.assertRaises(ValidationError):
             validate_snapshot(
                 self._get_request_with_current_session(),

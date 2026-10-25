@@ -14,6 +14,7 @@ from django.utils import timezone
 from django.utils.translation import get_language
 
 from apps.legal.models import LegalDocument, LegalDocumentTranslation
+from apps.legal.checkout_clause import early_performance_statement
 from apps.legal.translation_display import resolve_public_legal_text
 
 
@@ -102,11 +103,17 @@ def issue_snapshot(request, customer_type):
         'offered_at': timezone.now().isoformat(),
         'documents': details,
     }
+    if customer_type == 'private':
+        clause = early_performance_statement(language)
+        payload['early_performance'] = {
+            key: value for key, value in clause.items() if key != 'text'
+        }
     token = signing.dumps(payload, salt=SIGNING_SALT, compress=True)
     return {
         'token': token,
         'customerType': customer_type,
         'uiLanguage': language,
+        'earlyPerformance': early_performance_statement(language) if customer_type == 'private' else None,
         'documents': {
             kind: {
                 'url': '/legal/' + kind + '/?' + urlencode({'checkout_snapshot': token}),
@@ -150,6 +157,14 @@ def validate_snapshot(request, token, customer_type, *, lock=False):
         raise ValidationError('Legal checkout customer type has changed.')
     if set(payload['documents']) != set(kinds):
         raise ValidationError('Legal checkout document list does not match.')
+    clause_evidence = None
+    if customer_type == 'private':
+        clause_evidence = early_performance_statement(payload['ui_language'])
+        expected_clause = {key: value for key, value in clause_evidence.items() if key != 'text'}
+        if payload.get('early_performance') != expected_clause:
+            raise ValidationError('Early performance consent wording changed; refresh checkout.')
+    elif payload.get('early_performance') is not None:
+        raise ValidationError('Unexpected early performance consent on company order.')
     checked = {}
     documents = {}
     for kind in kinds:
@@ -170,6 +185,7 @@ def validate_snapshot(request, token, customer_type, *, lock=False):
         'accepted_at': timezone.now().isoformat(),
         'ui_language': payload['ui_language'],
         'documents': checked,
+        'early_performance_clause': clause_evidence,
         'presentation_proof': 'links_offered_not_read_receipts',
     }, documents
 

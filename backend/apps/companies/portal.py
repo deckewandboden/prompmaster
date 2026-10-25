@@ -1334,6 +1334,9 @@ def buy(request):
             logger.exception('Checkout failed before provider redirect')
             form.add_error(None, 'Checkout konnte nicht vorbereitet werden.')
     price = current_price(product, 'new')
+    legal_snapshot = _portal_snapshot_for_render(request, private_customer)
+    if private_customer and legal_snapshot and 'request_early_performance' in form.fields:
+        form.fields['request_early_performance'].label = legal_snapshot['earlyPerformance']['text']
     return render(
         request,
         'portal/buy.html',
@@ -1343,7 +1346,7 @@ def buy(request):
             'price': price,
             'unit_price_cents': int(price.gross_amount * 100) if price else None,
             'checkout_available': checkout_available,
-            'legal_snapshot': _portal_snapshot_for_render(request, private_customer),
+            'legal_snapshot': legal_snapshot,
         },
     )
 
@@ -1416,11 +1419,14 @@ def renew(request, pk):
         except Exception:
             logger.exception('Renewal checkout failed')
             form.add_error(None, 'Verlängerung konnte nicht vorbereitet werden.')
+    legal_snapshot = _portal_snapshot_for_render(request, private_customer)
+    if private_customer and legal_snapshot and 'request_early_performance' in form.fields:
+        form.fields['request_early_performance'].label = legal_snapshot['earlyPerformance']['text']
     return render(
         request,
         'portal/renew.html',
         {'form': form, 'license': license_obj, 'checkout_available': checkout_available,
-         'legal_snapshot': _portal_snapshot_for_render(request, private_customer)},
+         'legal_snapshot': legal_snapshot},
     )
 
 

@@ -275,7 +275,15 @@ function setupCheckoutPage(){
         throw new Error('Invalid legal snapshot');
       }
       if(legalType!==requestedType)return ensureLegalSnapshot();
+      if(requestedType==='private' && (
+        !snapshot.earlyPerformance?.text || !snapshot.earlyPerformance?.sha256 ||
+        !snapshot.earlyPerformance?.statement_id
+      ))throw new Error('Early performance consent version missing');
       if(legalInput)legalInput.value=snapshot.token;
+      if(requestedType==='private'){
+        const statement=form.querySelector('[data-legal-early-performance-text]');
+        if(statement)statement.textContent=snapshot.earlyPerformance.text;
+      }
       for(const type of ['terms','privacy','license','withdrawal']){
         const href=snapshot.documents?.[type]?.url;
         if(!href)continue;

@@ -80,6 +80,32 @@ Bestellsnapshot wird beim Idempotenz-Retry nicht durch andere Daten
 überschrieben. Ohne Gate ist weiterhin ein ausdrücklich als
 `legacy_without_signed_snapshot` gekennzeichneter Altweg möglich.
 
+## Einwilligung zum vorzeitigen Leistungsbeginn
+
+Auch die gesonderte Checkbox zur vorzeitigen Bereitstellung vor Ablauf der
+Widerrufsfrist besitzt nun einen versionierten, signierten Text-Nachweis
+(`early-performance-services-2026-v1`). Die bereits vorhandenen
+Formulierungen in DE/EN/ES/PT/TR/RU/PL/FR/IT/NL werden als **unverändert
+vorgefundener UI-Wortlaut**, nicht als juristisch geprüfte Übersetzung,
+gespeichert. Der Snapshot enthält nur Textversion, Sprache und SHA-256;
+die konkret angebotene Formulierung selbst wird serverseitig in
+`legal_offer.early_performance_clause.text` in der Bestellung und in
+`LegalAcceptance.evidence` erhalten.
+
+Die Marketing-Checkout-Seite setzt den private-Checkbox-Wortlaut aus dem
+signierten Serverangebot. Die Portal-Kauf- und Verlängerungsformulare
+verwenden denselben Servertext als Checkbox-Beschriftung. Ein veränderter
+Text oder abweichende Sprachversion invalidiert den früheren Snapshot,
+und ein neuer muss ausgegeben werden. Regressionstests kontrollieren die
+unveränderte Zuordnung der neun Marketing-Übersetzungen zu den
+Backend-Fassungen.
+
+**Freigabegrenze:** Dies dokumentiert nur, was die Checkbox ausdrückt und
+was bestätigt wurde; es ersetzt keine rechtskundige Prüfung der genauen
+Formulierung je Sprache und keine separate Prüfung der konkreten
+Vertrags-/Leistungsart. Das Veröffentlichungs-/Pflicht-Gate bleibt
+unverändert deaktiviert, bis technische und juristische Freigaben vorliegen.
+
 ## Offene Freigabepunkte
 
 - Vollständige rechtlich geprüfte Übersetzungsfassungen aller benötigten

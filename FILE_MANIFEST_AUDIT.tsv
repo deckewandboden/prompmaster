@@ -133,3 +133,4 @@ backend/templates/ns_admin/legal_translation_detail.html	0	text-not-byte-validat
 backend/apps/legal/migrations/0005_legal_source_identity_sha256.py	0	text-not-byte-validated	active-backend
 backend/apps/legal/checkout_snapshot.py	0	text-not-byte-validated	active-backend
 backend/apps/legal/tests_checkout_snapshot.py	0	text-not-byte-validated	test
+backend/apps/legal/checkout_clause.py	0	text-not-byte-validated	active-backend
