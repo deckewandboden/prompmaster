@@ -539,6 +539,19 @@ def public_checkout_start(request):
                 f"{reverse('accounts:password_reset')}?{urlencode({'checkout': 1})}"
             )
 
+        # The account created by the earlier public checkout has no usable
+        # password. A different browser must recover access by email, not
+        # receive the existing payment URL or get stuck on the login page.
+        if not existing.has_usable_password():
+            messages.info(
+                request,
+                'Für diese E-Mail-Adresse ist eine Kontoaktivierung erforderlich. '
+                'Bitte legen Sie über die Passwort-Zurücksetzung einen Zugang fest.',
+            )
+            return redirect(
+                f"{reverse('accounts:password_reset')}?{urlencode({'checkout': 1})}"
+            )
+
         messages.info(
             request,
             'Für diese E-Mail-Adresse besteht bereits ein PROMPTFINISHER-Konto. Bitte anmelden.',

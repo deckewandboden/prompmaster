@@ -864,9 +864,14 @@ class PublicCheckoutFlowTests(TestCase):
         self.assertEqual(unrelated.status_code, 302)
         self.assertNotEqual(unrelated.url, checkout_url)
         self.assertTrue(
-            unrelated.url.startswith('/auth/login/')
-            or unrelated.url.startswith('/auth/password-reset/'),
+            unrelated.url.startswith('/auth/password-reset/'),
             unrelated.url,
+        )
+        # The recovery route must be accessible to the rightful email owner
+        # while the unauthenticated caller receives no provider payment link.
+        self.assertEqual(
+            unrelated_browser.get(unrelated.url).status_code,
+            200,
         )
 
         changed_quantity = self.client.post(
