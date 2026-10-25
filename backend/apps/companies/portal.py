@@ -128,8 +128,18 @@ def _record_legal_acceptances(
     snapshot = dict(order.billing_snapshot or {})
     prior = snapshot.get('legal_offer')
     if prior is not None:
-        if prior.get('documents') != offered.get('documents'):
-            raise ValidationError('Checkout konnte nicht vorbereitet werden.')
+        # Idempotent retries must not silently reuse a previous purchase
+        # acknowledgement for a different language, approval status or
+        # early-performance consent text. Preserve the original evidence.
+        identity_fields = (
+            'verification', 'ui_language', 'documents',
+            'early_performance_clause',
+        )
+        if any(prior.get(key) != offered.get(key) for key in identity_fields):
+            raise ValidationError(
+                'Die Rechtsdokumente oder Einwilligungen haben sich geändert. '
+                'Bitte starten Sie den Kauf erneut.'
+            )
         offered = prior
     else:
         snapshot['legal_offer'] = offered

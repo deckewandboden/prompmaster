@@ -398,13 +398,12 @@ class PurchaseHandoffTests(TestCase):
             'status': 'open',
             '_links': {'checkout': {'href': 'https://checkout.example.test/portal-legal'}},
         }
-        response = self.client.post('/portal/licenses/buy/', {
-            **payload, 'legal_snapshot_token': offer['token'],
-        })
-        # Failed POST re-renders a signed offer. The original is still valid
-        # within this session, but the current form submits its refreshed token.
-        self.assertEqual(response.status_code, 200)
-        renewed_offer = response.context['legal_snapshot']
+        # An invalid POST re-renders the form with a new signed offer. Its
+        # session nonce stays valid; a subsequent valid submission must send
+        # the customer to payment immediately, not render a second form.
+        renewed_offer = missing.context['legal_snapshot']
+        self.assertTrue(renewed_offer['token'])
+        self.assertNotEqual(renewed_offer['token'], offer['token'])
         paid = self.client.post('/portal/licenses/buy/', {
             **payload, 'legal_snapshot_token': renewed_offer['token'],
         })
@@ -420,6 +419,41 @@ class PurchaseHandoffTests(TestCase):
         self.assertEqual(
             LegalAcceptance.objects.filter(order=order).count(), 3,
         )
+
+        # Existing order idempotency must never substitute a new checkbox
+        # wording or a different language for the originally signed offer.
+        from copy import deepcopy
+        from django.core.exceptions import ValidationError
+        from django.test import RequestFactory
+        from apps.companies.portal import _record_legal_acceptances
+
+        authoritative = order.billing_snapshot['legal_offer']
+        request = RequestFactory().post('/portal/licenses/buy/')
+        request.user = self.user
+        docs = {
+            doc.doc_type: doc
+            for doc in LegalDocument.objects.filter(doc_type__in=('terms', 'privacy', 'license'))
+        }
+        mutated_offers = []
+        translated = deepcopy(authoritative)
+        translated['ui_language'] = 'en' if authoritative['ui_language'] != 'en' else 'de'
+        mutated_offers.append(translated)
+        altered_consent = deepcopy(authoritative)
+        altered_consent['early_performance_clause'] = {
+            'statement_id': 'altered-consent-version', 'language': 'de',
+        }
+        mutated_offers.append(altered_consent)
+        legacy_offer = deepcopy(authoritative)
+        legacy_offer['verification'] = 'legacy_without_signed_snapshot'
+        mutated_offers.append(legacy_offer)
+        for alternative in mutated_offers:
+            with self.assertRaises(ValidationError):
+                _record_legal_acceptances(
+                    request, order, docs, legal_offer=alternative,
+                )
+            order.refresh_from_db()
+            self.assertEqual(order.billing_snapshot['legal_offer'], authoritative)
+            self.assertEqual(LegalAcceptance.objects.filter(order=order).count(), 3)
 
     @override_settings(LEGAL_CHECKOUT_SNAPSHOT_REQUIRED=True)
     @patch('apps.companies.portal.mollie_runtime_ready', return_value=True)
