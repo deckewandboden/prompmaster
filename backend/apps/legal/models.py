@@ -55,6 +55,10 @@ class LegalDocumentTranslation(TimeStampedModel):
     content = models.TextField()
     status = models.CharField(max_length=12, choices=STATUSES, default='draft')
     approval_reference = models.CharField(max_length=240, blank=True)
+    submitted_by = models.ForeignKey(
+        settings.AUTH_USER_MODEL, on_delete=models.PROTECT, null=True, blank=True,
+        related_name='legal_translation_submissions',
+    )
     approved_by = models.ForeignKey(
         settings.AUTH_USER_MODEL, on_delete=models.PROTECT,
         null=True, blank=True, related_name='legal_translation_approvals',
@@ -111,6 +115,7 @@ class LegalDocumentTranslation(TimeStampedModel):
         previous = type(self).objects.filter(pk=self.pk).values(
             'status', 'document_id', 'language', 'content', 'approval_reference',
             'approved_by_id', 'approved_at', 'source_sha256', 'content_sha256',
+            'submitted_by_id',
         ).first()
         # Approval is a privileged state transition, not an assignable field.
         # Require the persisted row to be under review and the permission-
@@ -130,6 +135,7 @@ class LegalDocumentTranslation(TimeStampedModel):
             immutable = (
                 'status', 'document_id', 'language', 'content', 'approval_reference',
                 'approved_by_id', 'approved_at', 'source_sha256', 'content_sha256',
+            'submitted_by_id',
             )
             if any(previous[field] != getattr(self, field) for field in immutable):
                 raise ValidationError('Approved legal translations are immutable.')
@@ -142,6 +148,8 @@ class LegalDocumentTranslation(TimeStampedModel):
             if self.status == 'draft':
                 self.source_sha256 = ''
                 self.content_sha256 = ''
+            elif self.submitted_by_id != previous['submitted_by_id']:
+                raise ValidationError('The submitting reviewer is immutable during review.')
             elif (self.source_sha256 != previous['source_sha256']
                     or self.content_sha256 != previous['content_sha256']):
                 raise ValidationError('The review fingerprint cannot be replaced.')
@@ -158,10 +166,14 @@ class LegalDocumentTranslation(TimeStampedModel):
 
         if self.status != 'review':
             raise ValidationError('Only a reviewed legal translation can be approved.')
-        if not reviewer or not reviewer.is_active or not reviewer.has_perm(
-            'legal.approve_legal_translation'
+        from apps.core.permissions import has_perm as role_has_perm
+        if not reviewer or not reviewer.is_active or not (
+            reviewer.has_perm('legal.approve_legal_translation')
+            or role_has_perm(reviewer, 'legal.approve')
         ):
             raise ValidationError('The reviewer lacks legal approval permission.')
+        if self.submitted_by_id and self.submitted_by_id == reviewer.pk:
+            raise ValidationError('A legal reviewer cannot approve their own submission.')
         if not reference or not reference.strip():
             raise ValidationError('An independently verified legal approval reference is required.')
         self.approved_by = reviewer
