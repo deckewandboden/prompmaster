@@ -333,6 +333,13 @@ def public_checkout_start(request):
 
     def start_provider_payment(order):
         """Create or safely replay the exact Mollie payment request for an order."""
+        if (
+            order.status in {'paid', 'failed', 'canceled'}
+            or order.payments.filter(status='paid').exists()
+        ):
+            raise MollieError(
+                'A completed or terminal order cannot create another provider payment'
+            )
         snapshot = dict(order.billing_snapshot or {})
         provider_request = snapshot.get('mollie_create_request')
         if not isinstance(provider_request, dict):
@@ -461,7 +468,10 @@ def public_checkout_start(request):
             if checkout_url.startswith('https://'):
                 return redirect(checkout_url)
 
-            if public_orders.filter(status='paid').exists():
+            if (
+                public_orders.filter(status='paid').exists()
+                or Payment.objects.filter(order__in=public_orders, status='paid').exists()
+            ):
                 return redirect('/checkout/success/?state=paid')
 
             ambiguous_order = None

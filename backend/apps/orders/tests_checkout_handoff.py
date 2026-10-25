@@ -124,6 +124,43 @@ class PurchaseHandoffTests(TestCase):
         self.assertEqual(order.items.get().product_id, self.product.pk)
         self.assertEqual(Order.objects.filter(company=self.company).count(), 1)
 
+    @patch('apps.companies.portal.messages.error')
+    @patch('apps.companies.portal.MollieClient.create_payment')
+    def test_portal_terminal_order_never_creates_another_payment(
+        self, create_payment, _message,
+    ):
+        from django.test import RequestFactory
+        from apps.orders.services import create_order
+        from apps.companies.portal import _start_mollie_checkout
+
+        request = RequestFactory().post('/portal/licenses/buy/')
+        request.user = self.user
+        for status in ('paid', 'failed', 'canceled'):
+            with self.subTest(status=status):
+                order = create_order(
+                    user=self.user, product=self.product, quantity=1,
+                    idempotency_key=f'terminal-payment-{status}',
+                )
+                order.status = status
+                order.save(update_fields=['status', 'updated_at'])
+                self.assertIsNone(_start_mollie_checkout(
+                    request, order, 'Pro purchase', {'order_id': str(order.pk)},
+                ))
+        # A paid provider record takes precedence even if the webhook has
+        # not yet updated the order status.
+        order = create_order(
+            user=self.user, product=self.product, quantity=1,
+            idempotency_key='paid-provider-order-not-yet-synchronized',
+        )
+        Payment.objects.create(
+            order=order, provider_payment_id='tr_paid_not_reconciled',
+            status='paid', amount=order.gross_total, currency=order.currency,
+        )
+        self.assertIsNone(_start_mollie_checkout(
+            request, order, 'Pro purchase', {'order_id': str(order.pk)},
+        ))
+        create_payment.assert_not_called()
+
     def test_marketing_quantity_is_prefilled_and_clamped_to_backend_limit(self):
         response = self.client.get('/portal/licenses/buy/?quantity=7')
         self.assertEqual(response.status_code, 200)
@@ -719,6 +756,32 @@ class PublicCheckoutFlowTests(TestCase):
         self.assertFalse(Order.objects.filter(company__email=email).exists())
         self.assertFalse(Payment.objects.exists())
         self.assertFalse(License.objects.exists())
+
+    @patch('apps.payments.mollie.MollieClient.create_payment')
+    def test_public_retry_never_recharges_a_paid_but_unsynchronized_order(
+        self, create_payment,
+    ):
+        email = 'reconciled-before-webhook@example.test'
+        payload = self.company_payload(quantity='1', email=email)
+        create_payment.side_effect = MollieError('timeout', ambiguous=True)
+        first = self.client.post('/api/v1/checkout/start/', payload)
+        self.assertEqual(first.status_code, 302)
+        self.assertIn('error=payment', first.url)
+        user = User.objects.get(email=email)
+        order = Order.objects.get(company__memberships__user=user)
+        self.assertEqual(order.status, 'draft')
+        Payment.objects.create(
+            order=order, provider_payment_id='tr_public_already_paid',
+            status='paid', amount=order.gross_total, currency=order.currency,
+        )
+
+        second = self.client.post('/api/v1/checkout/start/', payload)
+        self.assertEqual(second.status_code, 302)
+        self.assertEqual(second.url, '/checkout/success/?state=paid')
+        create_payment.assert_called_once()
+        order.refresh_from_db()
+        self.assertEqual(order.status, 'draft')
+        self.assertEqual(Payment.objects.filter(order=order).count(), 1)
 
     @patch('apps.payments.mollie.MollieClient.create_payment')
     def test_public_checkout_ambiguous_create_replays_exact_same_mollie_request(

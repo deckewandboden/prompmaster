@@ -174,6 +174,18 @@ def _rotate_checkout_key(request, session_key):
 
 
 def _start_mollie_checkout(request, order, description, metadata):
+    # Never initiate another provider charge for a settled or terminal order,
+    # even if a stale browser submits a previously valid idempotency key.
+    if (
+        order.status in {'paid', 'failed', 'canceled'}
+        or order.payments.filter(status='paid').exists()
+    ):
+        messages.error(
+            request,
+            'Dieser Kauf ist bereits abgeschlossen oder kann nicht erneut '
+            'gestartet werden. Bitte beginnen Sie einen neuen Kauf.',
+        )
+        return None
     snapshot = dict(order.billing_snapshot or {})
     provider_request = snapshot.get('mollie_create_request')
     if not isinstance(provider_request, dict):
