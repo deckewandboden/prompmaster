@@ -1960,7 +1960,7 @@ def run_backend_ui_smoke(browser, fixture=None) -> None:
         # concurrent tabs then share that established cookie.
         from django.conf import settings
         from django.contrib.sessions.backends.db import SessionStore
-        from apps.legal.checkout_snapshot import SESSION_NONCE
+        from apps.legal.checkout_snapshot import SESSION_NONCE, rotate_session_nonce
 
         seed_session = SessionStore()
         seed_session['browser_checkout_probe'] = 'established'
@@ -2030,11 +2030,12 @@ def run_backend_ui_smoke(browser, fixture=None) -> None:
             finally:
                 stranger.close()
 
-            # Simulate the server-side nonce rotation performed by a
-            # successful provider handoff, and reject both old tab offers.
-            after_handoff = SessionStore(session_key=seed_session.session_key)
-            after_handoff[SESSION_NONCE] = 'browser-race-payment-handoff-rotation'
-            after_handoff.save()
+            # Simulate the same atomic Redis rotation used at successful
+            # payment-provider handoff, even with a stale session copy.
+            from django.test import RequestFactory
+            after_handoff = RequestFactory().get('/checkout/')
+            after_handoff.session = SessionStore(session_key=seed_session.session_key)
+            rotate_session_nonce(after_handoff)
             for tab, offer, document_type in (
                 (tab_a, company_offer, 'terms'),
                 (tab_b, private_offer, 'withdrawal'),
