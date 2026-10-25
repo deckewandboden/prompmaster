@@ -11,6 +11,7 @@ from django.conf import settings
 from django.core import signing
 from django.core.exceptions import ValidationError
 from django.utils import timezone
+from django.utils.crypto import salted_hmac
 from django.utils.translation import get_language
 
 from apps.legal.models import LegalDocument, LegalDocumentTranslation
@@ -83,6 +84,37 @@ def _body_details(document, language):
     }
 
 
+def _effective_session_nonce(request, *, create=False):
+    """Return an origin nonce without racing to initialize an existing session.
+
+    Separate requests may load the same existing Django session before either
+    finishes. Writing a random nonce in both requests loses one of the
+    signatures (last-write-wins). For an established session without an
+    explicit nonce, derive the same secret nonce from the server signing key
+    and its unguessable session identifier *without modifying the session*.
+    Provider handoff still stores a random rotation nonce, invalidating every
+    earlier signed offer. Existing stored nonce values remain compatible.
+
+    A first-ever visit without any session cookie must create a session; two
+    browsers without a shared cookie cannot be considered a shared session.
+    """
+    stored = request.session.get(SESSION_NONCE)
+    if stored:
+        return stored
+    session_key = request.session.session_key
+    if session_key:
+        return salted_hmac(
+            'promptfinisher.checkout.legal.initial-session-nonce.v1',
+            session_key,
+            secret=settings.SECRET_KEY,
+        ).hexdigest()
+    if create:
+        fresh = secrets.token_urlsafe(24)
+        request.session[SESSION_NONCE] = fresh
+        return fresh
+    return None
+
+
 def issue_snapshot(request, customer_type):
     """Create an expiring session-bound signed manifest and pinned legal URLs."""
     required = _required_types(customer_type)
@@ -93,13 +125,9 @@ def issue_snapshot(request, customer_type):
         ).items() if key in OFFER_FIELDS}
         for kind in required
     }
-    # Reuse a session's active nonce across checkout views and browser tabs.
-    # A new signed offer still has its own issue time and 30-minute expiry.
-    # Successful provider handoff rotates the nonce, invalidating all offers.
-    nonce = request.session.get(SESSION_NONCE)
-    if not nonce:
-        nonce = secrets.token_urlsafe(24)
-        request.session[SESSION_NONCE] = nonce
+    # A shared, pre-existing cookie needs no write on its first snapshot.
+    # This also keeps simultaneous first GETs across two tabs equivalent.
+    nonce = _effective_session_nonce(request, create=True)
     payload = {
         'version': 1,
         'nonce': nonce,
@@ -142,11 +170,12 @@ def _decode(request, token):
         )
     except (signing.BadSignature, signing.SignatureExpired) as exc:
         raise ValidationError('Legal checkout snapshot expired or invalid.') from exc
+    expected_nonce = _effective_session_nonce(request)
     if (
         not isinstance(payload, dict)
         or payload.get('version') != 1
-        or not request.session.get(SESSION_NONCE)
-        or payload.get('nonce') != request.session.get(SESSION_NONCE)
+        or not expected_nonce
+        or payload.get('nonce') != expected_nonce
         or payload.get('ui_language') not in SUPPORTED_LANGUAGES
         or not isinstance(payload.get('documents'), dict)
     ):
