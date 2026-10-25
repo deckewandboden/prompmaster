@@ -93,6 +93,7 @@ jobs:
         run: |
           set -o pipefail
           python scripts/github_preflight.py 2>&1 | tee ci-preflight.log
+          python scripts/test_early_performance_locale_sync.py
 
       - name: Upload test diagnostics
         if: failure()

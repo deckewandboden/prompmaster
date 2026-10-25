@@ -96,9 +96,10 @@ Die Marketing-Checkout-Seite setzt den private-Checkbox-Wortlaut aus dem
 signierten Serverangebot. Die Portal-Kauf- und Verlängerungsformulare
 verwenden denselben Servertext als Checkbox-Beschriftung. Ein veränderter
 Text oder abweichende Sprachversion invalidiert den früheren Snapshot,
-und ein neuer muss ausgegeben werden. Regressionstests kontrollieren die
-unveränderte Zuordnung der neun Marketing-Übersetzungen zu den
-Backend-Fassungen.
+und ein neuer muss ausgegeben werden. Ein eigenständiger Repository-Quelltexttest kontrolliert vor dem
+Containerbau die unveränderte Zuordnung aller neun Marketing-Übersetzungen
+zu den Backend-Fassungen. Die Django-Laufzeittests prüfen unabhängig
+von Marketing-Dateien den 10-Sprachen-Vertrag und die Hashes.
 
 **Freigabegrenze:** Dies dokumentiert nur, was die Checkbox ausdrückt und
 was bestätigt wurde; es ersetzt keine rechtskundige Prüfung der genauen

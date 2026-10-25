@@ -127,27 +127,28 @@ class SignedCheckoutLegalSnapshotTests(TestCase):
                 snap['token'], 'company',
             )
 
-    def test_early_performance_wording_matches_marketing_locales(self):
-        import json
-        from pathlib import Path
-        from django.conf import settings
-        from apps.legal.checkout_clause import EARLY_PERFORMANCE_STATEMENTS
+    def test_early_performance_statement_is_versioned_for_every_language(self):
+        from apps.legal.checkout_clause import (
+            CLAUSE_ID, EARLY_PERFORMANCE_STATEMENTS,
+            early_performance_statement,
+        )
+        from apps.legal.models import LegalDocumentTranslation
 
-        frontend_root = Path(settings.BASE_DIR).parent / 'marketing' / 'src'
-        source = (frontend_root / 'locale.js').read_text(encoding='utf-8')
-        original = EARLY_PERFORMANCE_STATEMENTS['de']
-        marker = json.dumps(original, ensure_ascii=False) + ':'
-        self.assertIn(marker, source)
-        translated, _offset = json.JSONDecoder().raw_decode(
-            source[source.index(marker) + len(marker):],
-        )
-        self.assertEqual(
-            translated,
-            {language: wording for language, wording
-             in EARLY_PERFORMANCE_STATEMENTS.items() if language != 'de'},
-        )
-        rendered_copy = (frontend_root / 'content.js').read_text(encoding='utf-8')
-        self.assertIn(original, rendered_copy)
+        languages = {'de', 'en', 'es', 'pt', 'tr', 'ru', 'pl', 'fr', 'it', 'nl'}
+        self.assertEqual(set(EARLY_PERFORMANCE_STATEMENTS), languages)
+        self.assertEqual(CLAUSE_ID, 'early-performance-services-2026-v1')
+        for language in languages:
+            with self.subTest(language=language):
+                statement = early_performance_statement(language)
+                self.assertEqual(statement['statement_id'], CLAUSE_ID)
+                self.assertEqual(statement['language'], language)
+                self.assertEqual(statement['text'], EARLY_PERFORMANCE_STATEMENTS[language])
+                self.assertTrue(statement['text'].strip())
+                self.assertEqual(
+                    statement['sha256'],
+                    LegalDocumentTranslation.fingerprint(statement['text']),
+                )
+        self.assertEqual(early_performance_statement('invalid')['language'], 'de')
 
     def test_early_performance_copy_change_invalidates_private_offer(self):
         from unittest.mock import patch
