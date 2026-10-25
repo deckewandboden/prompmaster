@@ -3665,3 +3665,108 @@ msgstr "Sans date de fin indiquée, nous traiterons la résiliation pour la prem
 
 msgid "jetzt kündigen"
 msgstr "Résilier maintenant"
+
+msgid "Rechtstexte · Sprachfassungen"
+msgstr "Textes juridiques · Versions linguistiques"
+
+msgid "Entwurf, unabhängige Prüfung und dokumentierte Freigabe je Originalversion."
+msgstr "Brouillon, vérification indépendante et approbation documentée pour chaque version source."
+
+msgid "Sprachfassung anlegen"
+msgstr "Ajouter une version linguistique"
+
+msgid "Die öffentliche Freigabe fremdsprachiger Rechtsdokumente ist ausgeschaltet."
+msgstr "La publication des documents juridiques en langues étrangères est désactivée."
+
+msgid "Dokument"
+msgstr "Document"
+
+msgid "Freigegeben von"
+msgstr "Approuvé par"
+
+msgid "Details"
+msgstr "Détails"
+
+msgid "Noch keine geprüften Sprachfassungen vorhanden."
+msgstr "Aucune version linguistique vérifiée pour le moment."
+
+msgid "Deutsche Originalversionen"
+msgstr "Versions sources allemandes"
+
+msgid "Rechtsübersetzung prüfen"
+msgstr "Vérifier la traduction juridique"
+
+msgid "Deutsche Originalversion"
+msgstr "Version source allemande"
+
+msgid "Eingereicht von"
+msgstr "Soumis par"
+
+msgid "Freigegeben am"
+msgstr "Approuvé le"
+
+msgid "Freigabenachweis"
+msgstr "Justificatif d'approbation"
+
+msgid "SHA-256 Original"
+msgstr "SHA-256 de l'original"
+
+msgid "SHA-256 Übersetzung"
+msgstr "SHA-256 de la traduction"
+
+msgid "Die Integritätsprüfung ist fehlgeschlagen. Diese Sprachfassung wird nicht öffentlich angezeigt."
+msgstr "Le contrôle d'intégrité a échoué. Cette version linguistique ne sera pas affichée publiquement."
+
+msgid "Übersetzungstext"
+msgstr "Texte traduit"
+
+msgid "Entwurf bearbeiten"
+msgstr "Modifier le brouillon"
+
+msgid "Zur Prüfung einreichen"
+msgstr "Soumettre à vérification"
+
+msgid "Zurück zum Entwurf"
+msgstr "Revenir au brouillon"
+
+msgid "Unabhängige Freigabe"
+msgstr "Approbation indépendante"
+
+msgid "Nur nach fachlicher und rechtlicher Prüfung mit dokumentiertem Nachweis freigeben."
+msgstr "N'approuver qu'après vérification professionnelle et juridique avec justificatif documenté."
+
+msgid "Fachlich freigeben"
+msgstr "Approuver après vérification"
+
+msgid "Übersetzung (noch nicht freigegeben)"
+msgstr "Traduction (non encore approuvée)"
+
+msgid "Nur Entwürfe dürfen bearbeitet werden."
+msgstr "Seuls les brouillons peuvent être modifiés."
+
+msgid "Übersetzungsentwurf gespeichert."
+msgstr "Brouillon de traduction enregistré."
+
+msgid "Übersetzungsentwurf bearbeiten"
+msgstr "Modifier le brouillon de traduction"
+
+msgid "Übersetzungsentwurf anlegen"
+msgstr "Créer un brouillon de traduction"
+
+msgid "Nur Entwürfe können eingereicht werden."
+msgstr "Seuls les brouillons peuvent être soumis."
+
+msgid "Nur Prüfversionen können zurückgesetzt werden."
+msgstr "Seules les versions en cours de vérification peuvent revenir au brouillon."
+
+msgid "Nur geprüfte Fassungen können freigegeben werden."
+msgstr "Seules les versions vérifiées peuvent être approuvées."
+
+msgid "Sprachfassung zur Prüfung eingereicht."
+msgstr "Version linguistique soumise à vérification."
+
+msgid "Sprachfassung wieder als Entwurf markiert."
+msgstr "Version linguistique remise en brouillon."
+
+msgid "Fachlich geprüfte Sprachfassung freigegeben."
+msgstr "Version linguistique vérifiée et approuvée."

@@ -3649,3 +3649,108 @@ msgstr "Als je geen einddatum opgeeft, behandelen we de opzegging voor de vroegs
 
 msgid "jetzt kündigen"
 msgstr "Nu opzeggen"
+
+msgid "Rechtstexte · Sprachfassungen"
+msgstr "Juridische teksten · Taalversies"
+
+msgid "Entwurf, unabhängige Prüfung und dokumentierte Freigabe je Originalversion."
+msgstr "Concept, onafhankelijke controle en gedocumenteerde goedkeuring per bronversie."
+
+msgid "Sprachfassung anlegen"
+msgstr "Taalversie toevoegen"
+
+msgid "Die öffentliche Freigabe fremdsprachiger Rechtsdokumente ist ausgeschaltet."
+msgstr "Openbare publicatie van juridische documenten in andere talen is uitgeschakeld."
+
+msgid "Dokument"
+msgstr "Document"
+
+msgid "Freigegeben von"
+msgstr "Goedgekeurd door"
+
+msgid "Details"
+msgstr "Details"
+
+msgid "Noch keine geprüften Sprachfassungen vorhanden."
+msgstr "Er zijn nog geen gecontroleerde taalversies beschikbaar."
+
+msgid "Deutsche Originalversionen"
+msgstr "Duitse bronversies"
+
+msgid "Rechtsübersetzung prüfen"
+msgstr "Juridische vertaling controleren"
+
+msgid "Deutsche Originalversion"
+msgstr "Duitse bronversie"
+
+msgid "Eingereicht von"
+msgstr "Ingediend door"
+
+msgid "Freigegeben am"
+msgstr "Goedgekeurd op"
+
+msgid "Freigabenachweis"
+msgstr "Goedkeuringsbewijs"
+
+msgid "SHA-256 Original"
+msgstr "SHA-256 van het origineel"
+
+msgid "SHA-256 Übersetzung"
+msgstr "SHA-256 van de vertaling"
+
+msgid "Die Integritätsprüfung ist fehlgeschlagen. Diese Sprachfassung wird nicht öffentlich angezeigt."
+msgstr "De integriteitscontrole is mislukt. Deze taalversie wordt niet openbaar getoond."
+
+msgid "Übersetzungstext"
+msgstr "Vertaalde tekst"
+
+msgid "Entwurf bearbeiten"
+msgstr "Concept bewerken"
+
+msgid "Zur Prüfung einreichen"
+msgstr "Ter controle indienen"
+
+msgid "Zurück zum Entwurf"
+msgstr "Terug naar concept"
+
+msgid "Unabhängige Freigabe"
+msgstr "Onafhankelijke goedkeuring"
+
+msgid "Nur nach fachlicher und rechtlicher Prüfung mit dokumentiertem Nachweis freigeben."
+msgstr "Alleen goedkeuren na professionele en juridische controle met gedocumenteerd bewijs."
+
+msgid "Fachlich freigeben"
+msgstr "Goedkeuren na controle"
+
+msgid "Übersetzung (noch nicht freigegeben)"
+msgstr "Vertaling (nog niet goedgekeurd)"
+
+msgid "Nur Entwürfe dürfen bearbeitet werden."
+msgstr "Alleen concepten kunnen worden bewerkt."
+
+msgid "Übersetzungsentwurf gespeichert."
+msgstr "Vertaalconcept opgeslagen."
+
+msgid "Übersetzungsentwurf bearbeiten"
+msgstr "Vertaalconcept bewerken"
+
+msgid "Übersetzungsentwurf anlegen"
+msgstr "Vertaalconcept maken"
+
+msgid "Nur Entwürfe können eingereicht werden."
+msgstr "Alleen concepten kunnen worden ingediend."
+
+msgid "Nur Prüfversionen können zurückgesetzt werden."
+msgstr "Alleen versies die worden gecontroleerd kunnen terug naar concept."
+
+msgid "Nur geprüfte Fassungen können freigegeben werden."
+msgstr "Alleen gecontroleerde versies kunnen worden goedgekeurd."
+
+msgid "Sprachfassung zur Prüfung eingereicht."
+msgstr "Taalversie ter controle ingediend."
+
+msgid "Sprachfassung wieder als Entwurf markiert."
+msgstr "Taalversie teruggezet naar concept."
+
+msgid "Fachlich geprüfte Sprachfassung freigegeben."
+msgstr "Gecontroleerde taalversie goedgekeurd."

@@ -3549,3 +3549,108 @@ msgstr "If you do not specify an end date, we will treat your cancellation as ef
 
 msgid "jetzt kündigen"
 msgstr "Cancel now"
+
+msgid "Rechtstexte · Sprachfassungen"
+msgstr "Legal texts · Language versions"
+
+msgid "Entwurf, unabhängige Prüfung und dokumentierte Freigabe je Originalversion."
+msgstr "Draft, independent review and documented approval for each source version."
+
+msgid "Sprachfassung anlegen"
+msgstr "Add language version"
+
+msgid "Die öffentliche Freigabe fremdsprachiger Rechtsdokumente ist ausgeschaltet."
+msgstr "Public release of foreign-language legal documents is disabled."
+
+msgid "Dokument"
+msgstr "Document"
+
+msgid "Freigegeben von"
+msgstr "Approved by"
+
+msgid "Details"
+msgstr "Details"
+
+msgid "Noch keine geprüften Sprachfassungen vorhanden."
+msgstr "No reviewed language versions available yet."
+
+msgid "Deutsche Originalversionen"
+msgstr "German source versions"
+
+msgid "Rechtsübersetzung prüfen"
+msgstr "Review legal translation"
+
+msgid "Deutsche Originalversion"
+msgstr "German source version"
+
+msgid "Eingereicht von"
+msgstr "Submitted by"
+
+msgid "Freigegeben am"
+msgstr "Approved on"
+
+msgid "Freigabenachweis"
+msgstr "Approval evidence"
+
+msgid "SHA-256 Original"
+msgstr "SHA-256 source"
+
+msgid "SHA-256 Übersetzung"
+msgstr "SHA-256 translation"
+
+msgid "Die Integritätsprüfung ist fehlgeschlagen. Diese Sprachfassung wird nicht öffentlich angezeigt."
+msgstr "Integrity check failed. This language version will not be displayed publicly."
+
+msgid "Übersetzungstext"
+msgstr "Translated text"
+
+msgid "Entwurf bearbeiten"
+msgstr "Edit draft"
+
+msgid "Zur Prüfung einreichen"
+msgstr "Submit for review"
+
+msgid "Zurück zum Entwurf"
+msgstr "Return to draft"
+
+msgid "Unabhängige Freigabe"
+msgstr "Independent approval"
+
+msgid "Nur nach fachlicher und rechtlicher Prüfung mit dokumentiertem Nachweis freigeben."
+msgstr "Approve only after professional and legal review with documented evidence."
+
+msgid "Fachlich freigeben"
+msgstr "Approve after review"
+
+msgid "Übersetzung (noch nicht freigegeben)"
+msgstr "Translation (not yet approved)"
+
+msgid "Nur Entwürfe dürfen bearbeitet werden."
+msgstr "Only drafts can be edited."
+
+msgid "Übersetzungsentwurf gespeichert."
+msgstr "Translation draft saved."
+
+msgid "Übersetzungsentwurf bearbeiten"
+msgstr "Edit translation draft"
+
+msgid "Übersetzungsentwurf anlegen"
+msgstr "Create translation draft"
+
+msgid "Nur Entwürfe können eingereicht werden."
+msgstr "Only drafts can be submitted."
+
+msgid "Nur Prüfversionen können zurückgesetzt werden."
+msgstr "Only versions under review can be returned to draft."
+
+msgid "Nur geprüfte Fassungen können freigegeben werden."
+msgstr "Only reviewed versions can be approved."
+
+msgid "Sprachfassung zur Prüfung eingereicht."
+msgstr "Language version submitted for review."
+
+msgid "Sprachfassung wieder als Entwurf markiert."
+msgstr "Language version returned to draft."
+
+msgid "Fachlich geprüfte Sprachfassung freigegeben."
+msgstr "Reviewed language version approved."
