@@ -15,12 +15,12 @@
     <tbody>
     {% for x in translations %}
     <tr>
-      <td>{{ x.document.get_doc_type_display }}</td>
-      <td>{{ x.document.version }}</td>
-      <td>{{ x.get_language_display }}</td>
-      <td><span class="badge {% if x.status == 'approved' %}ok{% elif x.status == 'review' %}warn{% else %}info{% endif %}">{{ x.get_status_display }}</span></td>
-      <td>{{ x.approved_by|default:'–' }}</td>
-      <td><div class="page-actions"><a class="btn secondary sm" href="{% url 'ns_admin:legal_translation_detail' x.pk %}">{% translate 'Details' %}</a></div></td>
+      <td data-label="{% translate 'Dokument' %}">{{ x.document.get_doc_type_display }}</td>
+      <td data-label="{% translate 'Version' %}">{{ x.document.version }}</td>
+      <td data-label="{% translate 'Sprache' %}">{{ x.get_language_display }}</td>
+      <td data-label="{% translate 'Status' %}"><span class="badge {% if x.status == 'approved' %}ok{% elif x.status == 'review' %}warn{% else %}info{% endif %}">{{ x.get_status_display }}</span></td>
+      <td data-label="{% translate 'Freigegeben von' %}">{{ x.approved_by|default:'–' }}</td>
+      <td data-label="{% translate 'Aktion' %}"><div class="page-actions"><a class="btn secondary sm" href="{% url 'ns_admin:legal_translation_detail' x.pk %}">{% translate 'Details' %}</a></div></td>
     </tr>
     {% empty %}
     <tr><td colspan="6">{% translate 'Noch keine geprüften Sprachfassungen vorhanden.' %}</td></tr>
