@@ -140,6 +140,7 @@ def _transition(request, pk, event):
             'from': old_status,
             'to': item.status,
             'source_sha256': item.source_sha256,
+            'source_identity_sha256': item.source_identity_sha256,
             'content_sha256': item.content_sha256,
             'approval_reference': item.approval_reference if event == 'approve' else '',
         }, request=request)

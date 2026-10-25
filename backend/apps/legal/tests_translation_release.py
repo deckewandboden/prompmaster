@@ -370,6 +370,37 @@ class LegalDocumentLanguageReleaseTests(TestCase):
                         if language != 'de':
                             self.assertContains(response, FALLBACK_NOTICES[language])
 
+    @override_settings(LEGAL_TRANSLATIONS_PUBLIC_ENABLED=True)
+    def test_metadata_only_source_change_invalidates_approved_translation(self):
+        translation = self.create_translation(status='review')
+        translation.approve(
+            reviewer=self.reviewer, reference='LEGAL-VERSION-LOCK-001',
+        )
+        self.assertTrue(translation.is_publishable())
+        initial_hash = translation.source_identity_sha256
+        self.assertEqual(len(initial_hash), 64)
+        LegalDocument.objects.filter(pk=self.document.pk).update(
+            version='relabelled-without-content-change',
+        )
+        self.assertFalse(translation.is_publishable())
+        self.assertEqual(translation.source_identity_sha256, initial_hash)
+        response = self.get_english()
+        self.assertEqual(response.context['legal_content_language'], 'de')
+        self.assertNotContains(response, translation.content)
+
+    def test_metadata_change_during_review_blocks_approval(self):
+        translation = self.create_translation(status='review')
+        LegalDocument.objects.filter(pk=self.document.pk).update(
+            version='relabelled-in-review',
+        )
+        with self.assertRaises(ValidationError):
+            translation.approve(
+                reviewer=self.reviewer, reference='LEGAL-VERSION-LOCK-002',
+            )
+        translation.refresh_from_db()
+        self.assertEqual(translation.status, 'review')
+        self.assertIsNone(translation.approved_at)
+
     def test_all_nine_fallback_languages_have_notices(self):
         for language, notice in FALLBACK_NOTICES.items():
             with self.subTest(language=language):

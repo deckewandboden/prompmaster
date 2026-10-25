@@ -65,6 +65,7 @@ class LegalDocumentTranslation(TimeStampedModel):
     )
     approved_at = models.DateTimeField(null=True, blank=True)
     source_sha256 = models.CharField(max_length=64, blank=True)
+    source_identity_sha256 = models.CharField(max_length=64, blank=True)
     content_sha256 = models.CharField(max_length=64, blank=True)
 
     class Meta:
@@ -91,6 +92,19 @@ class LegalDocumentTranslation(TimeStampedModel):
         )
         return self.fingerprint(original)
 
+    def _current_source_identity_fingerprint(self):
+        import json
+        source = LegalDocument.objects.values(
+            'id', 'doc_type', 'version', 'valid_from', 'content',
+        ).get(pk=self.document_id)
+        source_identity = [
+            str(source['id']), source['doc_type'], source['version'],
+            source['valid_from'].isoformat(), source['content'],
+        ]
+        return self.fingerprint(json.dumps(
+            source_identity, ensure_ascii=False, separators=(',', ':'),
+        ))
+
     def clean(self):
         from django.core.exceptions import ValidationError
 
@@ -103,6 +117,7 @@ class LegalDocumentTranslation(TimeStampedModel):
             # A review binds BOTH the original German source and the translated
             # body. An edited source/text must go through a new review cycle.
             if (self.source_sha256 != self._current_source_fingerprint()
+                    or self.source_identity_sha256 != self._current_source_identity_fingerprint()
                     or self.content_sha256 != self.fingerprint(self.content)):
                 raise ValidationError('The reviewed translation or original source changed.')
         if self.status == 'approved':
@@ -115,7 +130,7 @@ class LegalDocumentTranslation(TimeStampedModel):
         previous = type(self).objects.filter(pk=self.pk).values(
             'status', 'document_id', 'language', 'content', 'approval_reference',
             'approved_by_id', 'approved_at', 'source_sha256', 'content_sha256',
-            'submitted_by_id',
+            'submitted_by_id', 'source_identity_sha256',
         ).first()
         # Approval is a privileged state transition, not an assignable field.
         # Require the persisted row to be under review and the permission-
@@ -135,7 +150,7 @@ class LegalDocumentTranslation(TimeStampedModel):
             immutable = (
                 'status', 'document_id', 'language', 'content', 'approval_reference',
                 'approved_by_id', 'approved_at', 'source_sha256', 'content_sha256',
-            'submitted_by_id',
+            'submitted_by_id', 'source_identity_sha256',
             )
             if any(previous[field] != getattr(self, field) for field in immutable):
                 raise ValidationError('Approved legal translations are immutable.')
@@ -147,15 +162,18 @@ class LegalDocumentTranslation(TimeStampedModel):
                 raise ValidationError('Review content is frozen; return to draft before editing.')
             if self.status == 'draft':
                 self.source_sha256 = ''
+                self.source_identity_sha256 = ''
                 self.content_sha256 = ''
             elif self.submitted_by_id != previous['submitted_by_id']:
                 raise ValidationError('The submitting reviewer is immutable during review.')
             elif (self.source_sha256 != previous['source_sha256']
+                    or self.source_identity_sha256 != previous['source_identity_sha256']
                     or self.content_sha256 != previous['content_sha256']):
                 raise ValidationError('The review fingerprint cannot be replaced.')
         if self.status == 'review' and (not previous or previous['status'] == 'draft'):
             # Capture source + translation exactly when entering review.
             self.source_sha256 = self._current_source_fingerprint()
+            self.source_identity_sha256 = self._current_source_identity_fingerprint()
             self.content_sha256 = self.fingerprint(self.content)
         self.full_clean()
         super().save(*args, **kwargs)
@@ -196,6 +214,7 @@ class LegalDocumentTranslation(TimeStampedModel):
             and self.approval_reference.strip()
             and self.content.strip()
             and self.source_sha256 == self._current_source_fingerprint()
+            and self.source_identity_sha256 == self._current_source_identity_fingerprint()
             and self.content_sha256 == self.fingerprint(self.content)
         )
 
