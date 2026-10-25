@@ -144,9 +144,9 @@ def rotate_session_nonce(request):
     if not cache_key:
         raise ValidationError('Legal checkout session unavailable.')
     try:
-        if not cache.set(
-            cache_key, secrets.token_urlsafe(24), timeout=_nonce_cache_ttl(),
-        ):
+        next_nonce = secrets.token_urlsafe(24)
+        cache.set(cache_key, next_nonce, timeout=_nonce_cache_ttl())
+        if cache.get(cache_key) != next_nonce:
             raise ValidationError('Legal checkout nonce rotation failed.')
     except ValidationError:
         raise
