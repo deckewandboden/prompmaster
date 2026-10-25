@@ -39,9 +39,11 @@ externe Freigabe mit belastbarer Referenz erforderlich.
 Die statische Marketing-Kaufseite ruft
 `GET /api/v1/checkout/legal-snapshot/?customer_type=company|private` auf.
 Der Server erzeugt einen zeitlich begrenzten, signierten und
-sessiongebundenen Snapshot mit den Dokumentversionen, Dokument-IDs,
-SHA-256-Fingerprints, tatsächlichen Textsprachen sowie bei veröffentlichten
-Übersetzungen Freigabezeitpunkt, Referenz und Prüfer-ID. Die Formularlinks
+sessiongebundenen Snapshot mit Dokumentversionen, Dokument-IDs,
+SHA-256-Fingerprints und den tatsächlich angebotenen Textsprachen. Interne
+Prüfer-IDs und Freigabereferenzen werden **nicht** in Browser-Links
+transportiert, sondern nur serverseitig bei der Bestellprüfung zugeordnet.
+Die Formularlinks
 verwenden `/legal/<typ>/?checkout_snapshot=<token>` und zeigen nur
 die versionierte Fassung. Bei Quellen- oder Übersetzungsdrift werden sie
 mit HTTP 409 abgewiesen, ohne einen aktuelleren Text einzuschieben.

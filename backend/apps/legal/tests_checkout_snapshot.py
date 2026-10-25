@@ -69,6 +69,18 @@ class SignedCheckoutLegalSnapshotTests(TestCase):
         self.assertEqual(payload['documents']['terms']['bodyLanguage'], 'de')
         token = payload['token']
         self.assertGreater(len(token), 60)
+        from django.core import signing
+        from apps.legal.checkout_snapshot import SIGNING_SALT
+        signed = signing.loads(token, salt=SIGNING_SALT)
+        for offered in signed['documents'].values():
+            self.assertEqual(
+                set(offered), {
+                    'document_id', 'document_type', 'document_version',
+                    'source_identity_sha256', 'body_language', 'body_sha256',
+                },
+            )
+            self.assertNotIn('approved_by_id', offered)
+            self.assertNotIn('approval_reference', offered)
         evidence, documents = validate_snapshot(
             self._get_request_with_current_session(), token, 'company',
         )

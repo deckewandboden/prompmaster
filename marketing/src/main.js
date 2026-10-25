@@ -292,12 +292,12 @@ function setupCheckoutPage(){
   form.querySelectorAll('input[name="customer_type"]').forEach(input=>{
     input.addEventListener('change',()=>{
       void ensureLegalSnapshot().catch(()=>{
-        showStage('Die rechtlichen Dokumentversionen konnten nicht geladen werden. Bitte lade den Kauf erneut.');
+        showStage(marketingT('Die rechtlichen Dokumentversionen konnten nicht geladen werden. Bitte lade den Kauf erneut.'));
       });
     });
   });
   void ensureLegalSnapshot().catch(()=>{
-    showStage('Die rechtlichen Dokumentversionen konnten nicht geladen werden. Bitte lade den Kauf erneut.');
+    showStage(marketingT('Die rechtlichen Dokumentversionen konnten nicht geladen werden. Bitte lade den Kauf erneut.'));
   });
 
   let csrfPromise=null;

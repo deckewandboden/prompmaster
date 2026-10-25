@@ -21,6 +21,11 @@ SIGNING_SALT = 'promptfinisher-public-checkout-legal-snapshot-v1'
 SESSION_NONCE = 'checkout_legal_snapshot_nonce'
 MAX_AGE_SECONDS = 30 * 60
 SUPPORTED_LANGUAGES = frozenset({'de', 'en', 'es', 'pt', 'tr', 'ru', 'pl', 'fr', 'it', 'nl'})
+# Do not expose internal approval references or reviewer user IDs in URL tokens.
+OFFER_FIELDS = frozenset({
+    'document_id', 'document_type', 'document_version',
+    'source_identity_sha256', 'body_language', 'body_sha256',
+})
 
 
 def _required_types(customer_type):
@@ -82,7 +87,9 @@ def issue_snapshot(request, customer_type):
     required = _required_types(customer_type)
     language = _language()
     details = {
-        kind: _body_details(_current_document(kind), language)
+        kind: {key: value for key, value in _body_details(
+            _current_document(kind), language,
+        ).items() if key in OFFER_FIELDS}
         for kind in required
     }
     nonce = secrets.token_urlsafe(24)
@@ -151,7 +158,9 @@ def validate_snapshot(request, token, customer_type, *, lock=False):
             raise ValidationError('Invalid legal checkout document version.')
         current = _current_document(kind, lock=lock)
         actual = _body_details(current, payload['ui_language'])
-        if any(offered.get(key) != actual[key] for key in actual):
+        if (set(offered) != OFFER_FIELDS or any(
+            offered[key] != actual[key] for key in OFFER_FIELDS
+        )):
             raise ValidationError('Legal document was updated; refresh the purchase page.')
         documents[kind] = current
         checked[kind] = actual
@@ -176,6 +185,8 @@ def pinned_public_document(request, doc_type, token):
         raise ValidationError('This legal document is not part of the offer.')
     document = _current_document(doc_type)
     actual = _body_details(document, payload['ui_language'])
-    if any(offered.get(key) != actual[key] for key in actual):
+    if (set(offered) != OFFER_FIELDS or any(
+            offered[key] != actual[key] for key in OFFER_FIELDS
+        )):
         raise ValidationError('The legal document has changed.')
     return document, payload['ui_language']
