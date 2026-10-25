@@ -833,6 +833,68 @@ class PublicCheckoutFlowTests(TestCase):
         self.assertEqual(Payment.objects.filter(order=order).count(), 1)
 
     @patch('apps.payments.mollie.MollieClient.create_payment')
+    def test_public_checkout_resume_requires_original_browser_and_order_details(
+        self, create_payment,
+    ):
+        from django.test import Client
+
+        payload = self.company_payload(
+            quantity='3', email='session-bound-resume@example.test',
+        )
+        checkout_url = 'https://checkout.example.test/original-private-link'
+        create_payment.return_value = {
+            'id': 'tr_original_resume',
+            'status': 'open',
+            '_links': {'checkout': {'href': checkout_url}},
+        }
+        first = self.client.post('/api/v1/checkout/start/', payload)
+        self.assertEqual(first.status_code, 302)
+        self.assertEqual(first.url, checkout_url)
+        self.assertEqual(create_payment.call_count, 1)
+        order = Order.objects.get(
+            company__memberships__user__email=payload['email'],
+        )
+        self.assertEqual(
+            self.client.session['public_checkout_resume_order'],
+            str(order.pk),
+        )
+
+        unrelated_browser = Client()
+        unrelated = unrelated_browser.post('/api/v1/checkout/start/', payload)
+        self.assertEqual(unrelated.status_code, 302)
+        self.assertNotEqual(unrelated.url, checkout_url)
+        self.assertTrue(
+            unrelated.url.startswith('/auth/login/')
+            or unrelated.url.startswith('/auth/password-reset/'),
+            unrelated.url,
+        )
+
+        changed_quantity = self.client.post(
+            '/api/v1/checkout/start/',
+            {**payload, 'quantity': '4'},
+        )
+        self.assertEqual(changed_quantity.status_code, 302)
+        self.assertNotEqual(changed_quantity.url, checkout_url)
+
+        changed_customer_type = self.client.post(
+            '/api/v1/checkout/start/',
+            self.private_payload(
+                quantity='3', email=payload['email'],
+            ),
+        )
+        self.assertEqual(changed_customer_type.status_code, 302)
+        self.assertNotEqual(changed_customer_type.url, checkout_url)
+
+        legitimate_retry = self.client.post(
+            '/api/v1/checkout/start/', payload,
+        )
+        self.assertEqual(legitimate_retry.status_code, 302)
+        self.assertEqual(legitimate_retry.url, checkout_url)
+        create_payment.assert_called_once()
+        self.assertEqual(Order.objects.count(), 1)
+        self.assertEqual(Payment.objects.count(), 1)
+
+    @patch('apps.payments.mollie.MollieClient.create_payment')
     def test_public_checkout_ambiguous_create_replays_exact_same_mollie_request(
         self,
         create_payment,

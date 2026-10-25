@@ -438,6 +438,10 @@ def public_checkout_start(request):
         from django.db.models import Q
         from apps.orders.models import Order
 
+        # Knowing an email address does not authorize access to an earlier
+        # provider payment URL. Resume only the order created in this browser
+        # session, and only when customer type and quantity still match.
+        resume_order_id = request.session.get('public_checkout_resume_order')
         public_orders = (
             Order.objects.filter(billing_snapshot__source='public_checkout')
             .filter(
@@ -447,8 +451,17 @@ def public_checkout_start(request):
                     company__memberships__active=True,
                 )
             )
+            .filter(items__quantity=quantity)
             .distinct()
         )
+        if isinstance(resume_order_id, str) and len(resume_order_id) <= 64:
+            public_orders = public_orders.filter(pk=resume_order_id)
+        else:
+            public_orders = public_orders.none()
+        if data['customer_type'] == 'private':
+            public_orders = public_orders.filter(private_user=existing)
+        else:
+            public_orders = public_orders.filter(company__isnull=False)
         if not existing.has_usable_password() and public_orders.exists():
             resumable = (
                 Payment.objects.filter(
@@ -707,6 +720,10 @@ def public_checkout_start(request):
             f"/checkout/?{urlencode({'quantity': quantity, 'error': 'payment'})}"
         )
 
+    # Preserve only an unguessable server-side session reference to the order
+    # just created here. Another browser submitting the same email cannot see
+    # or restart this provider checkout.
+    request.session['public_checkout_resume_order'] = str(order.pk)
     if not checkout_url:
         return redirect(
             f"/checkout/?{urlencode({'quantity': quantity, 'error': 'payment'})}"
