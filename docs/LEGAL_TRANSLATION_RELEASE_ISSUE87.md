@@ -43,6 +43,14 @@ sessiongebundenen Snapshot mit Dokumentversionen, Dokument-IDs,
 SHA-256-Fingerprints und den tatsächlich angebotenen Textsprachen. Interne
 Prüfer-IDs und Freigabereferenzen werden **nicht** in Browser-Links
 transportiert, sondern nur serverseitig bei der Bestellprüfung zugeordnet.
+Für parallel geöffnete Checkout-Tabs derselben Sitzung bleibt der aktive
+Session-Nonce bis zur erfolgreichen Weiterleitung an den Zahlungsanbieter
+stabil. Jeder Snapshot trägt weiterhin einen eigenen Signaturzeitpunkt
+(30 Minuten maximal gültig), die konkrete Dokumentfassung und die gewählte
+Kundenart. Ein neues GET oder ein zweites Browser-Tab entwertet daher nicht
+mehr ungefragt bestehende Rechtslinks. Nach erfolgreichem Checkout-Handoff
+wird der Nonce rotiert; alle vorherigen Angebote werden ungültig.
+
 Die Formularlinks
 verwenden `/legal/<typ>/?checkout_snapshot=<token>` und zeigen nur
 die versionierte Fassung. Bei Quellen- oder Übersetzungsdrift werden sie
