@@ -56,7 +56,9 @@ def legal_public(request, doc_type):
                 request, doc_type, snapshot_token,
             )
         except ValidationError:
-            return HttpResponse(status=409)
+            response = HttpResponse(status=409)
+            response['Cache-Control'] = 'no-store'
+            return response
     else:
         document = (
             LegalDocument.objects.filter(doc_type=doc_type, active=True, valid_from__lte=timezone.now())
@@ -78,7 +80,7 @@ def legal_public(request, doc_type):
         document, ui_language,
         translations_enabled=settings.LEGAL_TRANSLATIONS_PUBLIC_ENABLED,
     )
-    return render(request, 'legal_public.html', {
+    response = render(request, 'legal_public.html', {
         'document': document,
         'document_title': titles[doc_type],
         'legal_document_body': body,
@@ -87,6 +89,9 @@ def legal_public(request, doc_type):
         'legal_ui_language': ui_language,
         'legal_display_sha256': displayed_sha256,
     })
+    if snapshot_token:
+        response['Cache-Control'] = 'no-store'
+    return response
 
 
 

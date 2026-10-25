@@ -66,6 +66,18 @@ Bestellung oder Zahlung erstellt werden. Solange das Gate aus ist,
 werden Legacy-Bestellungen ausdrücklich als
 `legacy_without_signed_snapshot` und `not_recorded` markiert.
 
+## Angemeldete Portal-Kaufwege
+
+`/portal/licenses/buy/` und `/portal/licenses/<id>/renew/`
+stellen den Snapshot beim Formular-GET serverseitig bereit und verwenden
+ihn in den Rechtstext-Links und als versteckten POST-Parameter. Bei
+aktiviertem Pflicht-Gate werden fehlende, abgelaufene oder abweichende
+Angebote vor Order/Payment abgewiesen. In der Bestelltransaktion werden
+die geprüften Originaldokumente gesperrt; ein bereits bestehender
+Bestellsnapshot wird beim Idempotenz-Retry nicht durch andere Daten
+überschrieben. Ohne Gate ist weiterhin ein ausdrücklich als
+`legacy_without_signed_snapshot` gekennzeichneter Altweg möglich.
+
 ## Offene Freigabepunkte
 
 - Vollständige rechtlich geprüfte Übersetzungsfassungen aller benötigten
@@ -73,10 +85,11 @@ werden Legacy-Bestellungen ausdrücklich als
 - Die konkrete Erklärung zum vorzeitigen Leistungsbeginn/Wertersatz
   einschließlich übersetzter Varianten benötigt eine gesonderte,
   versionierte und rechtlich geprüfte Evidenzbindung.
-- Die angemeldeten Portal-Kauf- und Verlängerungswege sowie weitere
-  Registrierungs-/Einladungsvorgänge müssen denselben verbindlichen
-  Dokument-Snapshot erhalten. Derzeit ist nur der **öffentliche**
-  Marketing-Checkout durch die neue Signaturstrecke abgedeckt.
+- Auch die angemeldeten Portalwege für Lizenzkauf und Verlängerung
+  verwenden versionierte, signierte Formularlinks und bewahren die
+  Dokument-Snapshots in Bestell- und Zustimmungsnachweisen auf.
+  Für Registrierung, Einladungsannahme und weitere Zustimmungswege ist
+  weiterhin eine gesonderte, versionsgebundene Nachweiskette erforderlich.
 - Browser-/Regressionstests, Migrationsprüfung, Deployment-Freigabe und
   kontrollierte Gate-Aktivierung auf der Zielumgebung sind erforderlich.
 - Kein Merge und kein Produktivdeployment durch diesen Entwicklungszweig.
