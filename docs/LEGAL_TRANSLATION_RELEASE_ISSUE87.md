@@ -44,12 +44,29 @@ SHA-256-Fingerprints und den tatsächlich angebotenen Textsprachen. Interne
 Prüfer-IDs und Freigabereferenzen werden **nicht** in Browser-Links
 transportiert, sondern nur serverseitig bei der Bestellprüfung zugeordnet.
 Für parallel geöffnete Checkout-Tabs derselben Sitzung bleibt der aktive
-Session-Nonce bis zur erfolgreichen Weiterleitung an den Zahlungsanbieter
-stabil. Jeder Snapshot trägt weiterhin einen eigenen Signaturzeitpunkt
+Nonce bis zur erfolgreichen Weiterleitung an den Zahlungsanbieter
+stabil. Ein Redis-Cache-Eintrag pro gehashtem Django-Session-Schlüssel wird
+bei der ersten Ausstellung atomar per `cache.add` erstellt; die beiden
+parallel gestarteten ersten GETs erhalten denselben Nonce. Der Cache-Eintrag
+wird unabhängig von der veränderlichen Django-Session gespeichert.
+Insbesondere kann die verzögerte Speicherung eines
+`last_activity_at`-Werts durch die Login-/Portal-Middleware keine bereits
+erfolgte Nonce-Rotation zurücksetzen. Nach erfolgreichem Checkout-Handoff
+rotiert der Nonce im Cache; alle vorherigen Angebote werden ungültig.
+
+Jeder Snapshot trägt weiterhin einen eigenen Signaturzeitpunkt
 (30 Minuten maximal gültig), die konkrete Dokumentfassung und die gewählte
-Kundenart. Ein neues GET oder ein zweites Browser-Tab entwertet daher nicht
-mehr ungefragt bestehende Rechtslinks. Nach erfolgreichem Checkout-Handoff
-wird der Nonce rotiert; alle vorherigen Angebote werden ungültig.
+Kundenart. Redis ist damit eine verpflichtende Verfügbarkeitsschranke für
+signierte Rechtsnachweise: Nicht erreichbarer oder verlorener Cachezustand
+führt zur Ablehnung alter Links, nicht zu einem unsignierten Fallback.
+Die Laufzeit des Cachezustands deckt mindestens Sitzungs- und Angebotslaufzeit
+ab. Zwei Tab-Aufrufe **ohne zuvor gemeinsamen Browser-Session-Cookie**
+lassen sich naturgemäß noch keiner gemeinsamen Sitzung zuordnen.
+
+Die Regression umfasst unabhängige Reads einer bestehenden Sitzung,
+parallel startende reale Browser-Tabs, unberechtigte Fremdsitzungen,
+Replay nach Handoff sowie verspätetes Schreiben einer alten Session-Kopie.
+
 
 Die Formularlinks
 verwenden `/legal/<typ>/?checkout_snapshot=<token>` und zeigen nur
