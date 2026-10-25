@@ -244,8 +244,10 @@ class SignedCheckoutLegalSnapshotTests(TestCase):
         from django.test import RequestFactory
 
         from apps.legal.checkout_snapshot import (
-            SESSION_NONCE, SIGNING_SALT, issue_snapshot,
+            SESSION_NONCE, SIGNING_SALT, _nonce_cache_key,
+            issue_snapshot, rotate_session_nonce,
         )
+        from django.core.cache import cache
 
         session = self.client.session
         session['unrelated_preexisting_data'] = 'persisted'
@@ -272,11 +274,11 @@ class SignedCheckoutLegalSnapshotTests(TestCase):
         self.assertEqual(self.client.get(company['documents']['terms']['url']).status_code, 200)
         self.assertEqual(self.client.get(private['documents']['withdrawal']['url']).status_code, 200)
 
-        # The provider handoff always takes precedence over the derived
-        # initialization nonce, invalidating BOTH earlier offers.
-        rotated = SessionStore(session_key=session_key)
-        rotated[SESSION_NONCE] = 'explicit-after-payment-handoff'
-        rotated.save()
+        # The provider handoff updates the authoritative Redis nonce,
+        # invalidating BOTH earlier offers independently of session writes.
+        self.assertEqual(cache.get(_nonce_cache_key(company_request)), company_nonce)
+        rotate_session_nonce(company_request)
+        self.assertNotEqual(cache.get(_nonce_cache_key(company_request)), company_nonce)
         self.assertEqual(self.client.get(company['documents']['terms']['url']).status_code, 409)
         self.assertEqual(self.client.get(private['documents']['withdrawal']['url']).status_code, 409)
 
