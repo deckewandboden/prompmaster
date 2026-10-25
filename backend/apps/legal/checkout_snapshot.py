@@ -84,7 +84,7 @@ def _body_details(document, language):
 
 
 def issue_snapshot(request, customer_type):
-    """Create a one-time session-bound signed manifest and pinned legal URLs."""
+    """Create an expiring session-bound signed manifest and pinned legal URLs."""
     required = _required_types(customer_type)
     language = _language()
     details = {
@@ -93,8 +93,13 @@ def issue_snapshot(request, customer_type):
         ).items() if key in OFFER_FIELDS}
         for kind in required
     }
-    nonce = secrets.token_urlsafe(24)
-    request.session[SESSION_NONCE] = nonce
+    # Reuse a session's active nonce across checkout views and browser tabs.
+    # A new signed offer still has its own issue time and 30-minute expiry.
+    # Successful provider handoff rotates the nonce, invalidating all offers.
+    nonce = request.session.get(SESSION_NONCE)
+    if not nonce:
+        nonce = secrets.token_urlsafe(24)
+        request.session[SESSION_NONCE] = nonce
     payload = {
         'version': 1,
         'nonce': nonce,
