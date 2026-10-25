@@ -4,6 +4,7 @@ This is deliberately independent of the development-only Django admin.
 The public release flag is never modified from this module.
 """
 from django import forms
+from django.conf import settings
 from django.contrib import messages
 from django.core.exceptions import PermissionDenied, ValidationError
 from django.db import transaction
@@ -41,9 +42,7 @@ def translation_list(request):
     return render(request, 'ns_admin/legal_translations.html', {
         'translations': entries,
         'can_edit': has_perm(request.user, 'legal.write'),
-        'publication_enabled': __import__(
-            'django.conf', fromlist=['settings']
-        ).settings.LEGAL_TRANSLATIONS_PUBLIC_ENABLED,
+        'publication_enabled': settings.LEGAL_TRANSLATIONS_PUBLIC_ENABLED,
     })
 
 
