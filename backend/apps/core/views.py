@@ -44,17 +44,26 @@ def legal_public(request, doc_type):
     from django.utils.translation import get_language
     from apps.legal.translation_display import resolve_public_legal_text
     from apps.legal.checkout_snapshot import pinned_public_document
+    from apps.legal.account_snapshot import pinned_account_document
     from django.core.exceptions import ValidationError
 
     allowed = {code for code, _label in LegalDocument.DOC_TYPES}
     if doc_type not in allowed:
         raise Http404
     snapshot_token = (request.GET.get('checkout_snapshot') or '').strip()
-    if snapshot_token:
+    account_snapshot_token = (request.GET.get('account_snapshot') or '').strip()
+    if snapshot_token or account_snapshot_token:
         try:
-            document, _snapshot_language = pinned_public_document(
-                request, doc_type, snapshot_token,
-            )
+            if snapshot_token and account_snapshot_token:
+                raise ValidationError('Ambiguous signed legal offer.')
+            if snapshot_token:
+                document, _snapshot_language = pinned_public_document(
+                    request, doc_type, snapshot_token,
+                )
+            else:
+                document, _snapshot_language = pinned_account_document(
+                    request, doc_type, account_snapshot_token,
+                )
         except ValidationError:
             response = HttpResponse(status=409)
             response['Cache-Control'] = 'no-store'
@@ -77,7 +86,7 @@ def legal_public(request, doc_type):
         'imprint': _('Impressum'),
         'accessibility': _('Barrierefreiheit'),
     }
-    ui_language = _snapshot_language if snapshot_token else (get_language() or 'de')
+    ui_language = _snapshot_language if (snapshot_token or account_snapshot_token) else (get_language() or 'de')
     body, body_language, notice, displayed_sha256 = resolve_public_legal_text(
         document, ui_language,
         translations_enabled=settings.LEGAL_TRANSLATIONS_PUBLIC_ENABLED,
@@ -91,7 +100,7 @@ def legal_public(request, doc_type):
         'legal_ui_language': ui_language,
         'legal_display_sha256': displayed_sha256,
     })
-    if snapshot_token:
+    if snapshot_token or account_snapshot_token:
         # The signed offer token appears in the request query string.
         # Do not leak it via Referer headers to same-origin assets or links,
         # and do not permit indexing/archiving of per-session legal views.
