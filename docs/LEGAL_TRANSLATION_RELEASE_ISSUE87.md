@@ -155,3 +155,35 @@ korrektes Fallback prüfen. Echte Browserabläufe für Privat/Geschäftlich,
 Sprachwechsel, gesperrten Altlink, Zeitablauf, Replay, mehrfachen Kauf,
 Mollie-Weiterleitung und Auditdatensätze durchführen. Rechtsfreigabe und
 Betriebsfreigabe bleiben unabhängig von erfolgreichen CI-Tests.
+
+## Schreibgeschützter Freigabestatus (Issue #87)
+
+Das Managementkommando `python manage.py audit_legal_locale_readiness --json`
+ermittelt die **54 technischen Pflichtpositionen** aus sechs deutschen
+Primärdokumentarten und neun weiteren Inhaltssprachen. Es prüft ohne
+Datenbankänderungen: gültige aktive DE-Primärversion, Sprachfassung pro
+exakter Primärversion, DRAFT/REVIEW/APPROVED, vorhandene Freigabemetadaten
+sowie die tatsächliche Unversehrtheit von deutschen Quell- und
+Übersetzungs-Hashes. Das Ergebnis enthält ausschließlich Statuswerte,
+Sprachcodes und Dokumentversionen, **keine** Rechtsdokumentkörper,
+persönlichen Prüferdaten oder Freigabereferenzen.
+
+`python manage.py audit_legal_locale_readiness --strict` liefert bei
+fehlender oder veralteter Sprachfassung einen Fehlerstatus. Die
+ausgewiesene Vollständigkeit ist **nur technisch**: Auch bei allen 54
+gültigen Freigabeeinträgen bleibt
+`external_legal_signoff_verified_by_audit=false` und
+`production_deployment_authorized_by_audit=false`. Die tatsächliche
+externe Fachprüfung samt belastbarer Freigabereferenz, vorzeitiger
+Leistungsbeginn/Wertersatz, Geschäftsfreigabe und
+Zielumgebungsabnahme sind gesonderte Sperren. Dieses Kommando setzt
+**niemals** `LEGAL_TRANSLATIONS_PUBLIC_ENABLED` oder
+`LEGAL_CHECKOUT_SNAPSHOT_REQUIRED`, erzeugt keine Fassungen und
+zeichnet keine Zustimmungen auf.
+
+Die dazugehörigen Tests prüfen eine leere 54er-Matrix, die Abgrenzung
+Entwurf/Fachprüfung/Freigabe, die Sperre bei veränderten Originalen bzw.
+Sprachtext-Hashes, fehlende deutsche Primärtexte und gesetzte Featureflags
+ohne freigegebene Inhalte. Releaseverantwortliche können den
+JSON-Bericht vor Freigabe archivieren; er ist kein Ersatz für
+rechtskundige Begutachtung.
