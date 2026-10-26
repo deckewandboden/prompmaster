@@ -3937,3 +3937,46 @@ msgstr "%(company)s приглашает вас в PROMPTFINISHER."
 
 msgid "Konto anlegen und Einladung annehmen"
 msgstr "Создать учётную запись и принять приглашение"
+
+# Account invitation and email-verification result UI.
+msgid "Sie wurden zu %(company)s eingeladen."
+msgstr "Вас пригласили присоединиться к компании %(company)s."
+
+msgid "Der Beitritt erfolgt erst nach Ihrer ausdrücklichen Bestätigung."
+msgstr "Присоединение к компании произойдёт только после вашего явного подтверждения."
+
+msgid "Firma beitreten"
+msgstr "Присоединиться к компании"
+
+msgid "Einladung angenommen"
+msgstr "Приглашение принято"
+
+msgid "Einladung ungültig oder abgelaufen"
+msgstr "Приглашение недействительно или срок его действия истёк"
+
+msgid "Ihr Benutzerkonto ist dem Unternehmen jetzt zugeordnet."
+msgstr "Ваша учётная запись теперь связана с компанией."
+
+msgid "Der Einladungslink kann nicht mehr verwendet werden. Bitte fordern Sie bei Ihrem Firmenadministrator eine neue Einladung an."
+msgstr "Эта ссылка-приглашение больше не действует. Попросите администратора вашей компании отправить новое приглашение."
+
+msgid "Zum Kundenportal"
+msgstr "Перейти в клиентский портал"
+
+msgid "Zur Startseite"
+msgstr "На главную"
+
+msgid "E-Mail bestätigt"
+msgstr "Адрес электронной почты подтверждён"
+
+msgid "Link ungültig oder abgelaufen"
+msgstr "Ссылка недействительна или срок её действия истёк"
+
+msgid "Die E-Mail-Adresse Ihres PROMPTFINISHER-Kontos wurde bestätigt."
+msgstr "Адрес электронной почты вашей учётной записи PROMPTFINISHER подтверждён."
+
+msgid "Dieser Bestätigungslink ist nicht mehr gültig."
+msgstr "Эта ссылка подтверждения больше недействительна."
+
+msgid "Weiter"
+msgstr "Продолжить"
