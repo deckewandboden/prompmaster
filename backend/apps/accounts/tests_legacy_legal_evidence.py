@@ -61,6 +61,23 @@ class LegacyAccountLegalEvidenceTests(TestCase):
         user = User.objects.get(email='evidence-registration@example.test')
         self.assert_legacy_evidence(user, 'registration')
 
+    @patch('apps.accounts.views.queue_email')
+    def test_company_registration_records_legacy_not_signed_evidence(self, _queue_email):
+        response = self.client.post(reverse('accounts:register'), {
+            'customer_type': 'company',
+            'first_name': 'Company',
+            'last_name': 'Creator',
+            'email': 'evidence-company-admin@example.test',
+            'password': 'EvidenceCompanyCreator-2026!',
+            'company_name': 'Evidence Company GmbH',
+            'accept_terms': 'on',
+            'accept_privacy': 'on',
+        })
+        self.assertEqual(response.status_code, 302)
+        self.assertEqual(response.url, reverse('accounts:two_factor_setup'))
+        user = User.objects.get(email='evidence-company-admin@example.test')
+        self.assert_legacy_evidence(user, 'registration')
+
     def test_invitation_records_legacy_not_signed_evidence(self):
         inviter = User.objects.create_user(
             email='evidence-inviter@example.test',
