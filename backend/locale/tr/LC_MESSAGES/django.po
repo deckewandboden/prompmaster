@@ -3979,3 +3979,25 @@ msgstr "Bu doğrulama bağlantısı artık geçerli değil."
 
 msgid "Weiter"
 msgstr "Devam et"
+
+# Read-only legal-language technical readiness UI; not a publication gate.
+msgid "Technischer Status der Rechtsübersetzungen"
+msgstr "Hukuki çevirilerin teknik durumu"
+
+msgid "Keine juristische oder produktive Freigabe. Die Veröffentlichung bleibt separat gesperrt."
+msgstr "Hukuki veya üretim onayı verilmemiştir. Yayınlama ayrı olarak engellenmeye devam eder."
+
+msgid "Technisch geprüft"
+msgstr "Teknik olarak doğrulandı"
+
+msgid "Fehlend"
+msgstr "Eksik"
+
+msgid "In Prüfung"
+msgstr "İncelemede"
+
+msgid "Freigabe veraltet"
+msgstr "Onay güncelliğini yitirdi"
+
+msgid "Deutsche Quelle fehlt"
+msgstr "Almanca kaynak eksik"
