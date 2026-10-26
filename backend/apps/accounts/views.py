@@ -13,6 +13,7 @@ from django.db import IntegrityError, transaction
 from django.shortcuts import redirect, render
 from django.urls import reverse
 from django.utils import timezone, translation
+from django.utils.translation import gettext as _
 from django.views.decorators.http import require_http_methods
 
 from apps.companies.models import Company, Membership, PrivateCustomerProfile
@@ -287,8 +288,8 @@ def register(request):
                         )
             except IntegrityError:
                 form.add_error('email', 'Konto konnte nicht angelegt werden. Bitte erneut versuchen.')
-            except ValidationError as exc:
-                form.add_error(None, str(exc))
+            except ValidationError:
+                form.add_error(None, _('Das Rechtsdokument-Angebot ist ungültig oder nicht mehr aktuell. Bitte prüfen Sie die Dokumente erneut und senden Sie das Formular noch einmal ab.'))
             else:
                 destination = _role_safe_next(user, requested_next) or _default_post_login_url(user)
                 token = signing.dumps(
@@ -666,8 +667,8 @@ def accept_invitation(request, token):
                     request.session['post_2fa_next'] = reverse('portal:dashboard')
                 else:
                     bind_security_session(request, user, two_factor_ok=True)
-        except ValidationError as exc:
-            form.add_error(None, str(exc))
+        except ValidationError:
+            form.add_error(None, _('Das Rechtsdokument-Angebot ist ungültig oder nicht mehr aktuell. Bitte prüfen Sie die Dokumente erneut und senden Sie das Formular noch einmal ab.'))
             return _render_new_invitation(request, form, invitation, legal_documents)
         if invitation.role == 'admin':
             return redirect('accounts:two_factor')
