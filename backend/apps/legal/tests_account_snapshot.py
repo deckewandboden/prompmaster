@@ -172,7 +172,8 @@ class AccountSignedLegalOfferTests(TestCase):
                 self.assertContains(response, snippet)
                 self.assertFalse(User.objects.filter(email=payload['email']).exists())
 
-    def test_other_session_rejected_and_two_tabs_do_not_invalidate_each_other(self):
+    @patch('apps.accounts.views.queue_email')
+    def test_other_session_rejected_and_two_tabs_do_not_invalidate_each_other(self, _queue_email):
         url = reverse('accounts:register')
         first = signed_token(self.client.get(url))
         second = signed_token(self.client.get(url))
