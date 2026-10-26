@@ -3927,3 +3927,13 @@ msgstr "На проверке"
 
 msgid "Rechtstexte freigeben"
 msgstr "Утверждать юридические тексты"
+
+# Invitation-acceptance UI; legal text bodies remain under separate legal approval.
+msgid "Einladung annehmen"
+msgstr "Принять приглашение"
+
+msgid "%(company)s lädt Sie zu PROMPTFINISHER ein."
+msgstr "%(company)s приглашает вас в PROMPTFINISHER."
+
+msgid "Konto anlegen und Einladung annehmen"
+msgstr "Создать учётную запись и принять приглашение"
