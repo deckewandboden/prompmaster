@@ -1,4 +1,6 @@
 FROM postgres:18-alpine
+# Restic and PostgreSQL CLI do not need the inherited libcurl library.
+# Remove vulnerable CVE-2026-92392 instead of mixing in Alpine edge packages.
 # Fail the image build unless the patched Brotli runtime is available.
 RUN --mount=type=secret,id=pf_staging_ca,required=false \
     if [ -s /run/secrets/pf_staging_ca ]; then \
@@ -9,8 +11,6 @@ RUN --mount=type=secret,id=pf_staging_ca,required=false \
       trap 'rm -f /tmp/pf-staging-ca-combined.pem' EXIT; \
     fi; \
     apk add --no-cache bash restic ca-certificates tzdata su-exec 'brotli-libs>=1.2.1-r0' \
-    # Restic and PostgreSQL CLI need no libcurl (CVE-2026-92392).
-    # Remove the inherited library instead of using unstable edge packages.
     && apk del --no-cache libcurl \
     && ! apk info -e libcurl \
     && restic version \
