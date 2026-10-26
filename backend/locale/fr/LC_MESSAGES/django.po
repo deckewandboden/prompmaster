@@ -4002,3 +4002,46 @@ msgstr "%(company)s vous invite à rejoindre PROMPTFINISHER."
 
 msgid "Konto anlegen und Einladung annehmen"
 msgstr "Créer un compte et accepter l’invitation"
+
+# Account invitation and email-verification result UI.
+msgid "Sie wurden zu %(company)s eingeladen."
+msgstr "Vous avez été invité à rejoindre %(company)s."
+
+msgid "Der Beitritt erfolgt erst nach Ihrer ausdrücklichen Bestätigung."
+msgstr "L’adhésion à l’entreprise ne sera effectuée qu’après votre confirmation explicite."
+
+msgid "Firma beitreten"
+msgstr "Rejoindre l’entreprise"
+
+msgid "Einladung angenommen"
+msgstr "Invitation acceptée"
+
+msgid "Einladung ungültig oder abgelaufen"
+msgstr "Invitation non valide ou expirée"
+
+msgid "Ihr Benutzerkonto ist dem Unternehmen jetzt zugeordnet."
+msgstr "Votre compte utilisateur est désormais associé à l’entreprise."
+
+msgid "Der Einladungslink kann nicht mehr verwendet werden. Bitte fordern Sie bei Ihrem Firmenadministrator eine neue Einladung an."
+msgstr "Ce lien d’invitation n’est plus utilisable. Demandez une nouvelle invitation à l’administrateur de votre entreprise."
+
+msgid "Zum Kundenportal"
+msgstr "Accéder au portail client"
+
+msgid "Zur Startseite"
+msgstr "Retour à l’accueil"
+
+msgid "E-Mail bestätigt"
+msgstr "Adresse e-mail confirmée"
+
+msgid "Link ungültig oder abgelaufen"
+msgstr "Lien non valide ou expiré"
+
+msgid "Die E-Mail-Adresse Ihres PROMPTFINISHER-Kontos wurde bestätigt."
+msgstr "L’adresse e-mail de votre compte PROMPTFINISHER a été confirmée."
+
+msgid "Dieser Bestätigungslink ist nicht mehr gültig."
+msgstr "Ce lien de confirmation n’est plus valide."
+
+msgid "Weiter"
+msgstr "Continuer"
