@@ -3985,3 +3985,13 @@ msgstr "W trakcie weryfikacji"
 
 msgid "Rechtstexte freigeben"
 msgstr "Zatwierdzaj teksty prawne"
+
+# Invitation-acceptance UI; legal text bodies remain under separate legal approval.
+msgid "Einladung annehmen"
+msgstr "Przyjmij zaproszenie"
+
+msgid "%(company)s lädt Sie zu PROMPTFINISHER ein."
+msgstr "%(company)s zaprasza Cię do PROMPTFINISHER."
+
+msgid "Konto anlegen und Einladung annehmen"
+msgstr "Utwórz konto i przyjmij zaproszenie"
