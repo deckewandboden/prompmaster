@@ -2021,11 +2021,6 @@ def run_backend_ui_smoke(browser, fixture=None) -> None:
     # Only the isolated Playwright child server enables this staging gate.
     # Live/default settings and the parent test process remain unchanged.
     env['LEGAL_ACCOUNT_SNAPSHOT_REQUIRED'] = '1'
-    # Django's CSRF trusted origins are exact scheme+host+port values.
-    # Permit ONLY this ephemeral local browser server's own origin; never
-    # change production or global settings, disable CSRF, or use wildcards.
-    env['CSRF_TRUSTED_ORIGINS'] = base.rstrip('/')
-
     process = subprocess.Popen(
         [sys.executable, 'manage.py', 'runserver', f'127.0.0.1:{port}', '--noreload'],
         cwd=str(ROOT / 'backend'),

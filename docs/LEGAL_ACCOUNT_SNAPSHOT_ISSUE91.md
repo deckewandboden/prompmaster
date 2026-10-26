@@ -84,12 +84,15 @@ Dokumentnachweis ist keine externe juristische Prüfung von Rechtstexten.
   gemeinsame Session-Cookies und anschließend die erfolgreiche Privat- bzw.
   Firmenregistrierung inklusive bisheriger 2FA- und Verifikationsabläufe.
   Das ersetzt keine separate produktive Freigabe.
-- Die isolierte Browserumgebung muss für HTTP-POSTs die exakte lokale
-  Origin `http://127.0.0.1:<ephemeral-port>` in `CSRF_TRUSTED_ORIGINS`
-  hinterlegen. Der Testserver setzt ausschließlich diesen Wert dynamisch;
-  keine CSRF-Prüfung wird deaktiviert, Wildcards und produktive Trusted-
-  Origin-Konfigurationen werden nicht geändert. Der vorausgegangene
-  reale Browser-403 wurde als `Origin checking failed` diagnostiziert.
+- Der reale Browser-403 wurde als `Origin checking failed` diagnostiziert:
+  `Referrer-Policy: no-referrer` auf einem HTML-POST-Formular verursacht
+  `Origin: null`, was Django-Original-CSRF verwirft. Deshalb nutzen nur
+  die signierten Registrierungs- und Einladungsformular-Antworten
+  `Referrer-Policy: origin` (ohne Pfade, Query-Strings oder Tokens).
+  Die gepinnten AGB-/Datenschutz-GET-Seiten behalten weiterhin
+  `Referrer-Policy: no-referrer`. Der isolierte Browserlauf setzt
+  **keine** zusätzlichen `CSRF_TRUSTED_ORIGINS` und deaktiviert
+  **keine** Sicherheitsprüfung.
 - Für Freischaltung benötigt Issue #91 zusätzlich einen dokumentierten
   isolierten QA-Lauf mit Replay-/Parallel-Tab-/Drift- und
   End-to-End-Tests; Releaseentscheidungen und die rechtliche Prüfung in

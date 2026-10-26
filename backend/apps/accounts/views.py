@@ -181,7 +181,10 @@ def _render_registration(request, form, requested_next):
     response = render(request, 'auth/register.html', context)
     if settings.LEGAL_ACCOUNT_SNAPSHOT_REQUIRED:
         response['Cache-Control'] = 'no-store'
-        response['Referrer-Policy'] = 'no-referrer'
+        # Do NOT use no-referrer on pages that submit HTML POST forms:
+        # browsers then send Origin: null, rejected by Django CSRF.
+        # 'origin' sends neither the invitation bearer path nor signed token.
+        response['Referrer-Policy'] = 'origin'
         response['X-Robots-Tag'] = 'noindex, noarchive'
     return response
 
@@ -201,7 +204,10 @@ def _render_new_invitation(request, form, invitation, legal_documents):
     response = render(request, 'auth/accept_invitation.html', context)
     if settings.LEGAL_ACCOUNT_SNAPSHOT_REQUIRED:
         response['Cache-Control'] = 'no-store'
-        response['Referrer-Policy'] = 'no-referrer'
+        # Do NOT use no-referrer on pages that submit HTML POST forms:
+        # browsers then send Origin: null, rejected by Django CSRF.
+        # 'origin' sends neither the invitation bearer path nor signed token.
+        response['Referrer-Policy'] = 'origin'
         response['X-Robots-Tag'] = 'noindex, noarchive'
     return response
 

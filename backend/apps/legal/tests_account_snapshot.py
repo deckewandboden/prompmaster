@@ -104,7 +104,7 @@ class AccountSignedLegalOfferTests(TestCase):
             response = self.client.get(reverse('accounts:register'))
             token = signed_token(response)
             self.assertEqual(response['Cache-Control'], 'no-store')
-            self.assertEqual(response['Referrer-Policy'], 'no-referrer')
+            self.assertEqual(response['Referrer-Policy'], 'origin')
             self.assertEqual(response['X-Robots-Tag'], 'noindex, noarchive')
             self.assertContains(response, 'account_snapshot=')
             # The linked exact German body is available even under English UI.
@@ -222,7 +222,7 @@ class AccountSignedLegalOfferTests(TestCase):
         invitation, url = self.invitation()
         form_response = self.client.get(url)
         self.assertEqual(form_response['Cache-Control'], 'no-store')
-        self.assertEqual(form_response['Referrer-Policy'], 'no-referrer')
+        self.assertEqual(form_response['Referrer-Policy'], 'origin')
         token = signed_token(form_response)
         # Django signatures are readable; the URL must not expose PII or
         # the invitation's bearer-token hash.
@@ -442,6 +442,7 @@ class AccountSignedLegalOfferTests(TestCase):
         url = reverse('accounts:register')
         response = real_client.get(url, HTTP_HOST='testserver')
         self.assertEqual(response.status_code, 200)
+        self.assertEqual(response['Referrer-Policy'], 'origin')
         token = signed_token(response)
         csrf = re.search(
             r'name="csrfmiddlewaretoken" value="([^"]+)"',
@@ -455,6 +456,7 @@ class AccountSignedLegalOfferTests(TestCase):
                 HTTP_HOST='testserver',
             )
             self.assertEqual(pinned.status_code, 200)
+            self.assertEqual(pinned['Referrer-Policy'], 'no-referrer')
         data = self.registration_data(email='live-csrf-pass@example.test')
         data['account_snapshot'] = token
         data['csrfmiddlewaretoken'] = csrf.group(1)
