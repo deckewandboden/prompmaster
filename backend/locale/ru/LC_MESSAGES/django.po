@@ -4002,3 +4002,7 @@ msgstr "Одобрение устарело"
 
 msgid "Deutsche Quelle fehlt"
 msgstr "Немецкий оригинал отсутствует"
+
+# Account snapshot validation error; generic and safe for public users.
+msgid "Das Rechtsdokument-Angebot ist ungültig oder nicht mehr aktuell. Bitte prüfen Sie die Dokumente erneut und senden Sie das Formular noch einmal ab."
+msgstr "Предложенные юридические документы недействительны или больше не актуальны. Пожалуйста, ознакомьтесь с документами повторно и отправьте форму ещё раз."
