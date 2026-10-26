@@ -14,7 +14,7 @@ from django.utils.translation import override
 from apps.accounts.models import User
 from apps.companies.models import Company, Invitation
 from apps.core.security import token_hash
-from apps.legal.models import LegalAcceptance, LegalDocument
+from apps.legal.models import LegalAcceptance, LegalDocument, LegalDocumentTranslation
 from apps.legal.account_snapshot import SIGNING_SALT, validate_account_offer
 
 
@@ -322,6 +322,140 @@ class AccountSignedLegalOfferTests(TestCase):
         with patch('apps.legal.account_snapshot.cache.add', side_effect=RuntimeError('redis unavailable')):
             with self.assertRaises(ValidationError):
                 validate_account_offer(request, token, flow='registration', lock=True)
+
+
+    def _approved_english_terms(self):
+        reviewer = User.objects.create_superuser(
+            email='issue91-qa-legal-reviewer@example.test',
+            password='Issue91-ApprovedTranslation-QA-2026!',
+            first_name='Issue', last_name='Reviewer',
+            two_factor_required=False,
+        )
+        document = LegalDocument.objects.get(doc_type='terms', active=True)
+        translation = LegalDocumentTranslation.objects.create(
+            document=document, language='en',
+            content='English terms for a controlled security regression test.',
+            status='draft',
+        )
+        translation.status = 'review'
+        translation.save()
+        translation.approve(reviewer=reviewer, reference='QA-ISSUE91-NONPRODUCTION')
+        return translation
+
+    @patch('apps.accounts.views.queue_email')
+    def test_approved_translation_is_pinned_and_saved_as_actual_offered_body(self, _queue):
+        translation = self._approved_english_terms()
+        url = reverse('accounts:register')
+        with override_settings(LEGAL_TRANSLATIONS_PUBLIC_ENABLED=True), override('en'):
+            response = self.client.get(url, HTTP_ACCEPT_LANGUAGE='en')
+            token = signed_token(response)
+            legal = self.client.get(
+                '/legal/terms/?account_snapshot=' + token,
+                HTTP_ACCEPT_LANGUAGE='en',
+            )
+            self.assertEqual(legal.status_code, 200)
+            self.assertEqual(legal.context['legal_content_language'], 'en')
+            self.assertContains(legal, translation.content)
+            payload = self.registration_data('approved-english@example.test')
+            payload['account_snapshot'] = token
+            accepted = self.client.post(url, payload, HTTP_ACCEPT_LANGUAGE='en')
+            self.assertEqual(accepted.status_code, 302)
+        row = LegalAcceptance.objects.get(
+            user__email=payload['email'], document__doc_type='terms',
+        )
+        self.assertEqual(row.evidence['ui_language'], 'en')
+        self.assertEqual(row.evidence['document']['body_language'], 'en')
+        self.assertEqual(
+            row.evidence['document']['body_sha256'], translation.content_sha256,
+        )
+        self.assertEqual(row.evidence['document']['document_id'], str(translation.document_id))
+
+    def test_approved_translation_tampering_invalidates_link_and_account_post(self):
+        translation = self._approved_english_terms()
+        url = reverse('accounts:register')
+        with override_settings(LEGAL_TRANSLATIONS_PUBLIC_ENABLED=True), override('en'):
+            token = signed_token(self.client.get(url, HTTP_ACCEPT_LANGUAGE='en'))
+            # Bypass model save to simulate unauthorized database tampering.
+            LegalDocumentTranslation.objects.filter(pk=translation.pk).update(
+                content='Unreviewed English terms unexpectedly replaced the approved text.',
+            )
+            pinned = self.client.get(
+                '/legal/terms/?account_snapshot=' + token,
+                HTTP_ACCEPT_LANGUAGE='en',
+            )
+            payload = self.registration_data('tampered-english@example.test')
+            payload['account_snapshot'] = token
+            attempted = self.client.post(url, payload, HTTP_ACCEPT_LANGUAGE='en')
+        self.assertEqual(pinned.status_code, 409)
+        self.assertEqual(attempted.status_code, 200)
+        self.assertFalse(User.objects.filter(email=payload['email']).exists())
+        self.assertFalse(LegalAcceptance.objects.exists())
+
+    def test_draft_and_review_translations_remain_german_for_signed_offers(self):
+        original = LegalDocument.objects.get(doc_type='terms', active=True)
+        translation = LegalDocumentTranslation.objects.create(
+            document=original, language='en',
+            content='Never display this unapproved English draft.',
+        )
+        with override_settings(LEGAL_TRANSLATIONS_PUBLIC_ENABLED=True), override('en'):
+            for status in ('draft', 'review'):
+                with self.subTest(status=status):
+                    if status == 'review':
+                        translation.status = 'review'
+                        translation.save()
+                    token = signed_token(self.client.get(
+                        reverse('accounts:register'), HTTP_ACCEPT_LANGUAGE='en',
+                    ))
+                    response = self.client.get(
+                        '/legal/terms/?account_snapshot=' + token,
+                        HTTP_ACCEPT_LANGUAGE='en',
+                    )
+                    self.assertEqual(response.status_code, 200)
+                    self.assertEqual(response.context['legal_content_language'], 'de')
+                    self.assertNotContains(response, translation.content)
+                    self.assertContains(response, 'available only in German')
+
+    def test_expired_invitation_rejects_signed_offer_and_account_creation(self):
+        invite, url = self.invitation('expired-guest@example.test')
+        token = signed_token(self.client.get(url))
+        invite.expires_at = timezone.now() - timedelta(minutes=1)
+        invite.save(update_fields=['expires_at'])
+        response = self.client.post(url, {
+            'first_name': 'Expired', 'last_name': 'Guest',
+            'password': 'Issue91-ExpiredInvitation-QA-2026!',
+            'accept_terms': 'on', 'accept_privacy': 'on',
+            'account_snapshot': token,
+        })
+        pinned = self.client.get('/legal/privacy/?account_snapshot=' + token)
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(pinned.status_code, 409)
+        self.assertFalse(User.objects.filter(email=invite.email).exists())
+        self.assertFalse(LegalAcceptance.objects.exists())
+
+    def test_signed_registration_and_invitation_do_not_bypass_csrf(self):
+        register_client = Client(
+            enforce_csrf_checks=True, REMOTE_ADDR='198.51.100.110',
+        )
+        url = reverse('accounts:register')
+        token = signed_token(register_client.get(url))
+        payload = self.registration_data(email='csrf-guest@example.test')
+        payload['account_snapshot'] = token
+        self.assertEqual(register_client.post(url, payload).status_code, 403)
+        self.assertFalse(User.objects.filter(email=payload['email']).exists())
+
+        invite, invite_url = self.invitation('csrf-invitee@example.test')
+        invite_client = Client(
+            enforce_csrf_checks=True, REMOTE_ADDR='198.51.100.111',
+        )
+        invite_token = signed_token(invite_client.get(invite_url))
+        self.assertEqual(invite_client.post(invite_url, {
+            'first_name': 'CSRF', 'last_name': 'Invitee',
+            'password': 'Issue91-CSRFInvitation-QA-2026!',
+            'accept_terms': 'on', 'accept_privacy': 'on',
+            'account_snapshot': invite_token,
+        }).status_code, 403)
+        self.assertFalse(User.objects.filter(email=invite.email).exists())
+        self.assertFalse(LegalAcceptance.objects.exists())
 
 
 class AccountOfferDefaultOffTests(TestCase):

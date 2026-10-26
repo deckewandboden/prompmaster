@@ -74,6 +74,10 @@ Dokumentnachweis ist keine externe juristische Prüfung von Rechtstexten.
   einschließlich der Tests in
   `apps.legal.tests_account_snapshot` und
   `apps.accounts.tests_legacy_legal_evidence`.
+- Ergänzte CI-Regressionsfälle: veröffentlichungsberechtigte Englischfassung wird
+  mit tatsächlich angezeigtem Body-Hash gespeichert; nachträgliche Manipulation
+  verweigert Link und POST. Entwurf/Review bleibt deutscher Fallback.
+  Abgelaufene Einladungen und fehlende CSRF-Tokens blockieren Benutzeranlage.
 - Für Freischaltung benötigt Issue #91 zusätzlich einen dokumentierten
   isolierten QA-Lauf mit Replay-/Parallel-Tab-/Drift- und
   End-to-End-Tests; Releaseentscheidungen und die rechtliche Prüfung in
