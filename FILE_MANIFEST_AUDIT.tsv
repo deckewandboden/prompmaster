@@ -139,4 +139,5 @@ backend/apps/legal/management/commands/audit_legal_locale_readiness.py	0	text-no
 backend/apps/legal/tests_readiness_audit.py	0	text-not-byte-validated	test
 backend/apps/accounts/tests_invitation_localization.py	0	text-not-byte-validated	test
 backend/apps/legal/readiness.py	0	text-not-byte-validated	active-backend
+backend/apps/legal/account_snapshot.py	0	text-not-byte-validated	active-backend
 backend/apps/accounts/tests_legacy_legal_evidence.py	0	text-not-byte-validated	test
