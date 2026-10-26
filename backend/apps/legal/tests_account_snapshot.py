@@ -432,6 +432,81 @@ class AccountSignedLegalOfferTests(TestCase):
         self.assertFalse(User.objects.filter(email=invite.email).exists())
         self.assertFalse(LegalAcceptance.objects.exists())
 
+    def test_all_ten_languages_pin_actual_german_body_and_localized_fallback(self):
+        # A translated interface must never imply an unapproved legal body.
+        # Check both signed GETs independently in each real session, not just
+        # the error text for an invalid POST.
+        from apps.legal.account_snapshot import SUPPORTED_LANGUAGES
+        from apps.legal.translation_display import FALLBACK_NOTICES
+
+        for index, language in enumerate(sorted(SUPPORTED_LANGUAGES), start=50):
+            with self.subTest(language=language), override(language):
+                browser = Client(REMOTE_ADDR=f'198.51.100.{index}')
+                response = browser.get(
+                    reverse('accounts:register'),
+                    HTTP_ACCEPT_LANGUAGE=language,
+                )
+                self.assertEqual(response.status_code, 200)
+                token = signed_token(response)
+                payload = signing.loads(token, salt=SIGNING_SALT)
+                self.assertEqual(payload['ui_language'], language)
+                self.assertEqual(set(payload['documents']), {'terms', 'privacy'})
+                for kind in ('terms', 'privacy'):
+                    self.assertEqual(
+                        payload['documents'][kind]['body_language'], 'de',
+                    )
+                    legal = browser.get(
+                        f'/legal/{kind}/?account_snapshot={token}',
+                        HTTP_ACCEPT_LANGUAGE=language,
+                    )
+                    self.assertEqual(legal.status_code, 200)
+                    self.assertEqual(legal.context['legal_ui_language'], language)
+                    self.assertEqual(legal.context['legal_content_language'], 'de')
+                    self.assertEqual(
+                        legal.context['legal_fallback_notice'],
+                        '' if language == 'de' else FALLBACK_NOTICES[language],
+                    )
+                    self.assertContains(legal, f'German legal {kind} original.')
+                    self.assertEqual(legal['Referrer-Policy'], 'no-referrer')
+                    self.assertEqual(legal['Cache-Control'], 'no-store')
+
+    @patch('apps.accounts.views.queue_email')
+    def test_signed_invitation_accepts_real_csrf_after_pinned_legal_tabs(self, _queue):
+        invite, url = self.invitation('csrf-valid-invitee@example.test')
+        browser = Client(enforce_csrf_checks=True, REMOTE_ADDR='198.51.100.160')
+        response = browser.get(url, HTTP_HOST='testserver')
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response['Referrer-Policy'], 'origin')
+        token = signed_token(response)
+        csrf = re.search(
+            r'name="csrfmiddlewaretoken" value="([^"]+)"',
+            response.content.decode(),
+        )
+        self.assertIsNotNone(csrf)
+        self.assertIn('csrftoken', browser.cookies)
+        for kind in ('terms', 'privacy'):
+            pinned = browser.get(
+                f'/legal/{kind}/?account_snapshot={token}',
+                HTTP_HOST='testserver',
+            )
+            self.assertEqual(pinned.status_code, 200)
+            self.assertEqual(pinned['Referrer-Policy'], 'no-referrer')
+        accepted = browser.post(
+            url, {
+                'first_name': 'Valid', 'last_name': 'Invitee',
+                'password': 'Issue91-ValidCSRFInvitation-QA-2026!',
+                'accept_terms': 'on', 'accept_privacy': 'on',
+                'account_snapshot': token,
+                'csrfmiddlewaretoken': csrf.group(1),
+            },
+            HTTP_HOST='testserver',
+            HTTP_ORIGIN='http://testserver',
+        )
+        self.assertEqual(accepted.status_code, 302)
+        self.assert_signed_evidence(User.objects.get(email=invite.email), 'invitation')
+        invite.refresh_from_db()
+        self.assertIsNotNone(invite.accepted_at)
+
     @patch('apps.accounts.views.queue_email')
     def test_signed_registration_accepts_real_csrf_after_pinned_legal_tabs(self, _queue):
         # Unlike Django's default Client, enforce real CSRF cookie + form
