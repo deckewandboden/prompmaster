@@ -1,13 +1,20 @@
-{% extends 'base.html' %}{% load static %}{% block body %}
+{% extends 'base.html' %}{% load static i18n %}{% block body %}
 <div class="login-wrap"><div class="login-card">
-<div class="login-logo"><img src="{% static 'brand/promptfinisher-logo-hq.png' %}" width="239" height="47" alt="PROMPTFINISHER by netstyle"></div>
-<h1>Einladung annehmen</h1><p class="muted">{{ invitation.company.name }} lädt Sie zu PROMPTFINISHER ein.</p>
-<form method="post" class="form">{% csrf_token %}
-{{ form.non_field_errors }}
-<label>Vorname{{ form.first_name }}{{ form.first_name.errors }}</label>
-<label>Nachname{{ form.last_name }}{{ form.last_name.errors }}</label>
-<label>Passwort{{ form.password }}{{ form.password.errors }}</label>
-<label class="check-row">{{ form.accept_terms }} <span>Ich akzeptiere die <a href="{% url 'legal_public' 'terms' %}" target="_blank" rel="noopener">AGB</a>.</span></label>{{ form.accept_terms.errors }}
-<label class="check-row">{{ form.accept_privacy }} <span>Ich habe die <a href="{% url 'legal_public' 'privacy' %}" target="_blank" rel="noopener">Datenschutzerklärung</a> zur Kenntnis genommen.</span></label>{{ form.accept_privacy.errors }}
-<button class="btn primary" type="submit">Konto anlegen &amp; beitreten</button>
-</form></div></div>{% endblock %}
+  <div class="login-logo"><img src="{% static 'brand/promptfinisher-logo-hq.png' %}" width="239" height="47" alt="PROMPTFINISHER by netstyle"></div>
+  <h1>{% translate "Einladung annehmen" %}</h1>
+  <p class="muted">{% blocktranslate trimmed with company=invitation.company.name %}{{ company }} lädt Sie zu PROMPTFINISHER ein.{% endblocktranslate %}</p>
+  {% url 'legal_public' 'terms' as terms_url %}
+  {% url 'legal_public' 'privacy' as privacy_url %}
+  <p class="small muted">{% blocktranslate trimmed with terms_url=terms_url privacy_url=privacy_url %}Bitte lesen Sie vor der Registrierung die <a href="{{ terms_url }}" target="_blank" rel="noopener">AGB</a> und die <a href="{{ privacy_url }}" target="_blank" rel="noopener">Datenschutzerklärung</a>.{% endblocktranslate %}</p>
+  <form method="post" class="form">
+    {% csrf_token %}
+    {{ form.non_field_errors }}
+    <label for="{{ form.first_name.id_for_label }}">{{ form.first_name.label }}{{ form.first_name }}{{ form.first_name.errors }}</label>
+    <label for="{{ form.last_name.id_for_label }}">{{ form.last_name.label }}{{ form.last_name }}{{ form.last_name.errors }}</label>
+    <label for="{{ form.password.id_for_label }}">{{ form.password.label }}{{ form.password }}{{ form.password.errors }}</label>
+    <label class="check-row" for="{{ form.accept_terms.id_for_label }}">{{ form.accept_terms }}<span>{{ form.accept_terms.label }}</span>{{ form.accept_terms.errors }}</label>
+    <label class="check-row" for="{{ form.accept_privacy.id_for_label }}">{{ form.accept_privacy }}<span>{{ form.accept_privacy.label }}</span>{{ form.accept_privacy.errors }}</label>
+    <button class="btn primary" type="submit">{% translate "Konto anlegen und Einladung annehmen" %}</button>
+  </form>
+</div></div>
+{% endblock %}
