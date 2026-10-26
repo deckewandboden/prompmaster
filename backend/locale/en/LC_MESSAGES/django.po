@@ -3979,3 +3979,25 @@ msgstr "This verification link is no longer valid."
 
 msgid "Weiter"
 msgstr "Continue"
+
+# Read-only legal-language technical readiness UI; not a publication gate.
+msgid "Technischer Status der Rechtsübersetzungen"
+msgstr "Technical status of legal translations"
+
+msgid "Keine juristische oder produktive Freigabe. Die Veröffentlichung bleibt separat gesperrt."
+msgstr "No legal or production approval. Publication remains separately blocked."
+
+msgid "Technisch geprüft"
+msgstr "Technically verified"
+
+msgid "Fehlend"
+msgstr "Missing"
+
+msgid "In Prüfung"
+msgstr "Under review"
+
+msgid "Freigabe veraltet"
+msgstr "Approval outdated"
+
+msgid "Deutsche Quelle fehlt"
+msgstr "German source missing"
