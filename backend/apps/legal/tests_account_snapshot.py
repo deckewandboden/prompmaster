@@ -4,8 +4,9 @@ from datetime import timedelta
 from unittest.mock import patch
 from urllib.parse import parse_qs, urlsplit
 
-from django.test import Client, TestCase, override_settings
+from django.test import Client, RequestFactory, TestCase, override_settings
 from django.urls import reverse
+from django.core.exceptions import ValidationError
 from django.utils import timezone
 from django.utils.translation import override
 
@@ -13,6 +14,7 @@ from apps.accounts.models import User
 from apps.companies.models import Company, Invitation
 from apps.core.security import token_hash
 from apps.legal.models import LegalAcceptance, LegalDocument
+from apps.legal.account_snapshot import validate_account_offer
 
 
 def signed_token(response):
@@ -173,6 +175,20 @@ class AccountSignedLegalOfferTests(TestCase):
         self.assertNotEqual(first, second)
         self.assertEqual(self.client.post(url, payload).status_code, 302)
         self.assert_signed_evidence(User.objects.get(email=payload['email']), 'registration')
+
+    def test_same_signed_offer_cannot_be_claimed_twice_before_session_rotation(self):
+        token = signed_token(self.client.get(reverse('accounts:register')))
+        request = RequestFactory().post(reverse('accounts:register'))
+        request.session = self.client.session
+        first, documents = validate_account_offer(
+            request, token, flow='registration', lock=True,
+        )
+        self.assertEqual(first['verification'], 'signed_session_bound_document_offer')
+        self.assertEqual(set(documents), {'terms', 'privacy'})
+        with self.assertRaises(ValidationError):
+            validate_account_offer(
+                request, token, flow='registration', lock=True,
+            )
 
     def test_document_change_invalidates_post_and_pinned_links(self):
         url = reverse('accounts:register')
