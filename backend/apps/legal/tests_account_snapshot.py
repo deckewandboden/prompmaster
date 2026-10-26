@@ -176,7 +176,9 @@ class AccountSignedLegalOfferTests(TestCase):
         self.assert_signed_evidence(User.objects.get(email=invitation.email), 'invitation')
         invitation.refresh_from_db()
         self.assertIsNotNone(invitation.accepted_at)
-        self.assertNotEqual(self.client.get(url).status_code, 200)
+        consumed = self.client.get(url)
+        self.assertEqual(consumed.status_code, 200)
+        self.assertFalse(consumed.context['ok'])
 
     def test_invitation_offer_cannot_be_used_for_different_invitation(self):
         invitation_a, url_a = self.invitation('invited-a@example.test')
