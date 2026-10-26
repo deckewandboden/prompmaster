@@ -275,6 +275,9 @@ jobs:
     # Avoid repeated >35-minute Ubuntu font/browser dependency installations.
     container:
       image: mcr.microsoft.com/playwright/python:v1.64.0-noble
+    defaults:
+      run:
+        shell: bash
 
     services:
       postgres:
