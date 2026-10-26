@@ -3981,3 +3981,13 @@ msgstr "In beoordeling"
 
 msgid "Rechtstexte freigeben"
 msgstr "Juridische teksten goedkeuren"
+
+# Invitation-acceptance UI; legal text bodies remain under separate legal approval.
+msgid "Einladung annehmen"
+msgstr "Uitnodiging accepteren"
+
+msgid "%(company)s lädt Sie zu PROMPTFINISHER ein."
+msgstr "%(company)s nodigt u uit voor PROMPTFINISHER."
+
+msgid "Konto anlegen und Einladung annehmen"
+msgstr "Account aanmaken en uitnodiging accepteren"
