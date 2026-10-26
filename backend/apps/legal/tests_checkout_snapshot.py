@@ -228,7 +228,6 @@ class SignedCheckoutLegalSnapshotTests(TestCase):
         import time
 
         from apps.legal.checkout_snapshot import MAX_AGE_SECONDS
-        from django.core import signing
 
         company_offer = self.snapshot('company')
         private_offer = self.snapshot('private')
