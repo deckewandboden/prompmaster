@@ -4062,3 +4062,7 @@ msgstr "Approvazione non più valida"
 
 msgid "Deutsche Quelle fehlt"
 msgstr "Originale tedesco mancante"
+
+# Account snapshot validation error; generic and safe for public users.
+msgid "Das Rechtsdokument-Angebot ist ungültig oder nicht mehr aktuell. Bitte prüfen Sie die Dokumente erneut und senden Sie das Formular noch einmal ab."
+msgstr "I documenti legali presentati non sono validi o non sono più aggiornati. Rileggi i documenti e invia nuovamente il modulo."
