@@ -7,6 +7,7 @@ from urllib.parse import parse_qs, urlsplit
 from django.test import Client, RequestFactory, TestCase, override_settings
 from django.urls import reverse
 from django.core.exceptions import ValidationError
+from django.core import signing
 from django.utils import timezone
 from django.utils.translation import override
 
@@ -14,7 +15,7 @@ from apps.accounts.models import User
 from apps.companies.models import Company, Invitation
 from apps.core.security import token_hash
 from apps.legal.models import LegalAcceptance, LegalDocument
-from apps.legal.account_snapshot import validate_account_offer
+from apps.legal.account_snapshot import SIGNING_SALT, validate_account_offer
 
 
 def signed_token(response):
@@ -213,6 +214,14 @@ class AccountSignedLegalOfferTests(TestCase):
         self.assertEqual(form_response['Cache-Control'], 'no-store')
         self.assertEqual(form_response['Referrer-Policy'], 'no-referrer')
         token = signed_token(form_response)
+        # Django signatures are readable; the URL must not expose PII or
+        # the invitation's bearer-token hash.
+        signed_payload = signing.loads(token, salt=SIGNING_SALT)
+        self.assertIn('identity_hmac', signed_payload['invitation'])
+        self.assertNotIn('email', signed_payload['invitation'])
+        self.assertNotIn('token_hash', signed_payload['invitation'])
+        self.assertNotIn(invitation.email, str(signed_payload))
+        self.assertNotIn(invitation.token_hash, str(signed_payload))
         response = self.client.post(url, {
             'first_name': 'Invitee', 'last_name': 'Signed',
             'password': 'SignedInviteeRegression-2026!',
