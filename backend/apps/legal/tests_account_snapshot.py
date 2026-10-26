@@ -283,6 +283,47 @@ class AccountSignedLegalOfferTests(TestCase):
         )
 
 
+    def test_signed_legal_query_presence_must_never_downgrade_to_public_view(self):
+        token = signed_token(self.client.get(reverse('accounts:register')))
+        # A completely unsigned document view still works as before.
+        self.assertEqual(self.client.get('/legal/terms/').status_code, 200)
+        invalid = (
+            '/legal/terms/?account_snapshot=',
+            '/legal/terms/?checkout_snapshot=',
+            '/legal/terms/?account_snapshot=&checkout_snapshot=',
+            '/legal/terms/?account_snapshot=' + token + '&account_snapshot=' + token,
+            '/legal/terms/?account_snapshot=' + token + '&checkout_snapshot=',
+        )
+        for path in invalid:
+            with self.subTest(path=path):
+                response = self.client.get(path)
+                self.assertEqual(response.status_code, 409)
+                self.assertEqual(response['Cache-Control'], 'no-store')
+                self.assertEqual(response['Referrer-Policy'], 'no-referrer')
+                self.assertEqual(response['X-Robots-Tag'], 'noindex, noarchive')
+
+    def test_expired_offer_rejects_submission_and_pinned_link(self):
+        token = signed_token(self.client.get(reverse('accounts:register')))
+        payload = self.registration_data(email='expired-account@example.test')
+        payload['account_snapshot'] = token
+        expired_time = signing.time.time() + 1802
+        with patch('django.core.signing.time.time', return_value=expired_time):
+            response = self.client.post(reverse('accounts:register'), payload)
+            linked = self.client.get('/legal/terms/?account_snapshot=' + token)
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(linked.status_code, 409)
+        self.assertFalse(User.objects.filter(email=payload['email']).exists())
+        self.assertFalse(LegalAcceptance.objects.exists())
+
+    def test_replay_cache_failure_rejects_claim(self):
+        token = signed_token(self.client.get(reverse('accounts:register')))
+        request = RequestFactory().post(reverse('accounts:register'))
+        request.session = self.client.session
+        with patch('apps.legal.account_snapshot.cache.add', side_effect=RuntimeError('redis unavailable')):
+            with self.assertRaises(ValidationError):
+                validate_account_offer(request, token, flow='registration', lock=True)
+
+
 class AccountOfferDefaultOffTests(TestCase):
     def test_snapshot_inputs_are_absent_when_gate_is_off(self):
         with override_settings(LEGAL_ACCOUNT_SNAPSHOT_REQUIRED=False):

@@ -27,6 +27,8 @@ Dokumentnachweis ist keine externe juristische Prüfung von Rechtstexten.
    Präsentation für diese Sitzung und nur für die angebotenen Dokumente
    erreichbar. Ungültige, veraltete, fremde oder kombinierte Checkout-/Konto-
    Tokens ergeben HTTP 409 mit `no-store`, `no-referrer` und `noindex`.
+   Auch **leere, mehrfach angegebene oder gemischte** Snapshot-Query-Parameter
+   führen zwingend zu HTTP 409 und niemals zur öffentlichen Standardansicht.
 3. Tokenbindung: anhaltender Django-Session-Key (geheim abgeleitete HMAC),
    genau ein Flow (`registration` oder `invitation`), bei Einladung
    zusätzlich einen HMAC-Fingerabdruck der konkreten Einladung aus Firma,

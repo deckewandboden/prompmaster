@@ -50,13 +50,20 @@ def legal_public(request, doc_type):
     allowed = {code for code, _label in LegalDocument.DOC_TYPES}
     if doc_type not in allowed:
         raise Http404
+    has_checkout_snapshot = 'checkout_snapshot' in request.GET
+    has_account_snapshot = 'account_snapshot' in request.GET
     snapshot_token = (request.GET.get('checkout_snapshot') or '').strip()
     account_snapshot_token = (request.GET.get('account_snapshot') or '').strip()
-    if snapshot_token or account_snapshot_token:
+    signed_request = has_checkout_snapshot or has_account_snapshot
+    if signed_request:
         try:
-            if snapshot_token and account_snapshot_token:
+            # Presence, not truthiness: an empty/repeated token is invalid.
+            # Never fall through to the unsigned current-document route.
+            if (has_checkout_snapshot and has_account_snapshot
+                    or len(request.GET.getlist('checkout_snapshot')) > 1
+                    or len(request.GET.getlist('account_snapshot')) > 1):
                 raise ValidationError('Ambiguous signed legal offer.')
-            if snapshot_token:
+            if has_checkout_snapshot:
                 document, _snapshot_language = pinned_public_document(
                     request, doc_type, snapshot_token,
                 )
@@ -86,7 +93,7 @@ def legal_public(request, doc_type):
         'imprint': _('Impressum'),
         'accessibility': _('Barrierefreiheit'),
     }
-    ui_language = _snapshot_language if (snapshot_token or account_snapshot_token) else (get_language() or 'de')
+    ui_language = _snapshot_language if signed_request else (get_language() or 'de')
     body, body_language, notice, displayed_sha256 = resolve_public_legal_text(
         document, ui_language,
         translations_enabled=settings.LEGAL_TRANSLATIONS_PUBLIC_ENABLED,
@@ -100,7 +107,7 @@ def legal_public(request, doc_type):
         'legal_ui_language': ui_language,
         'legal_display_sha256': displayed_sha256,
     })
-    if snapshot_token or account_snapshot_token:
+    if signed_request:
         # The signed offer token appears in the request query string.
         # Do not leak it via Referer headers to same-origin assets or links,
         # and do not permit indexing/archiving of per-session legal views.
