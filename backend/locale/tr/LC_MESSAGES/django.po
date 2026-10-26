@@ -3936,3 +3936,46 @@ msgstr "%(company)s sizi PROMPTFINISHER'a davet ediyor."
 
 msgid "Konto anlegen und Einladung annehmen"
 msgstr "Hesap oluştur ve daveti kabul et"
+
+# Account invitation and email-verification result UI.
+msgid "Sie wurden zu %(company)s eingeladen."
+msgstr "%(company)s şirketine katılmaya davet edildiniz."
+
+msgid "Der Beitritt erfolgt erst nach Ihrer ausdrücklichen Bestätigung."
+msgstr "Şirkete yalnızca açık onayınızın ardından katılacaksınız."
+
+msgid "Firma beitreten"
+msgstr "Şirkete katıl"
+
+msgid "Einladung angenommen"
+msgstr "Davet kabul edildi"
+
+msgid "Einladung ungültig oder abgelaufen"
+msgstr "Davet geçersiz veya süresi dolmuş"
+
+msgid "Ihr Benutzerkonto ist dem Unternehmen jetzt zugeordnet."
+msgstr "Kullanıcı hesabınız artık şirketle ilişkilendirildi."
+
+msgid "Der Einladungslink kann nicht mehr verwendet werden. Bitte fordern Sie bei Ihrem Firmenadministrator eine neue Einladung an."
+msgstr "Bu davet bağlantısı artık kullanılamaz. Lütfen şirket yöneticinizden yeni bir davet isteyin."
+
+msgid "Zum Kundenportal"
+msgstr "Müşteri portalına git"
+
+msgid "Zur Startseite"
+msgstr "Ana sayfaya dön"
+
+msgid "E-Mail bestätigt"
+msgstr "E-posta doğrulandı"
+
+msgid "Link ungültig oder abgelaufen"
+msgstr "Bağlantı geçersiz veya süresi dolmuş"
+
+msgid "Die E-Mail-Adresse Ihres PROMPTFINISHER-Kontos wurde bestätigt."
+msgstr "PROMPTFINISHER hesabınızın e-posta adresi doğrulandı."
+
+msgid "Dieser Bestätigungslink ist nicht mehr gültig."
+msgstr "Bu doğrulama bağlantısı artık geçerli değil."
+
+msgid "Weiter"
+msgstr "Devam et"
