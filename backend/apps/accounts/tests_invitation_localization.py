@@ -66,3 +66,68 @@ class InvitationAcceptanceLanguageTests(SimpleTestCase):
                 if language != 'de':
                     self.assertNotIn('Einladung annehmen</h1>', html)
                     self.assertNotIn('>Konto anlegen und Einladung annehmen</button>', html)
+
+    def test_existing_user_invitation_confirmation_in_all_languages(self):
+        request = RequestFactory().get('/auth/invitation/confirm/')
+        request.user = AnonymousUser()
+        invitation = SimpleNamespace(
+            company=SimpleNamespace(name='Example GmbH'),
+        )
+        for language in self.HEADINGS:
+            with self.subTest(language=language), override(language):
+                html = render_to_string(
+                    'auth/invite_confirm.html',
+                    {'invitation': invitation},
+                    request=request,
+                )
+                self.assertIn('lang="' + language + '"', html)
+                self.assertIn(self.HEADINGS[language], html)
+                self.assertIn('Example GmbH', html)
+                self.assertIn('type="submit"', html)
+                if language != 'de':
+                    self.assertNotIn('>Firma beitreten</button>', html)
+                    self.assertNotIn(
+                        'Der Beitritt erfolgt erst nach Ihrer ausdrücklichen Bestätigung.',
+                        html,
+                    )
+
+    def test_invitation_outcome_pages_in_all_languages(self):
+        request = RequestFactory().get('/auth/invitation/result/')
+        request.user = AnonymousUser()
+        for language in self.HEADINGS:
+            for ok in (True, False):
+                with self.subTest(language=language, ok=ok), override(language):
+                    html = render_to_string(
+                        'auth/invite_result.html', {'ok': ok}, request=request,
+                    )
+                    self.assertIn('lang="' + language + '"', html)
+                    if ok:
+                        self.assertIn('href="/portal/"', html)
+                    else:
+                        self.assertIn('href="/"', html)
+                    if language != 'de':
+                        self.assertNotIn('>Einladung angenommen</h1>', html)
+                        self.assertNotIn(
+                            '>Einladung ungültig oder abgelaufen</h1>',
+                            html,
+                        )
+
+    def test_email_verification_outcome_pages_in_all_languages(self):
+        request = RequestFactory().get('/auth/verify/result/')
+        request.user = AnonymousUser()
+        for language in self.HEADINGS:
+            for ok in (True, False):
+                with self.subTest(language=language, ok=ok), override(language):
+                    html = render_to_string(
+                        'auth/verify_result.html',
+                        {'ok': ok, 'continue_url': '/free/' if ok else None},
+                        request=request,
+                    )
+                    self.assertIn('lang="' + language + '"', html)
+                    if ok:
+                        self.assertIn('href="/free/"', html)
+                    else:
+                        self.assertIn('href="/auth/login/"', html)
+                    if language != 'de':
+                        self.assertNotIn('>E-Mail bestätigt</h1>', html)
+                        self.assertNotIn('>Link ungültig oder abgelaufen</h1>', html)
