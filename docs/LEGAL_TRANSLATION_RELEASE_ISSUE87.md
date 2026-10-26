@@ -187,3 +187,22 @@ Sprachtext-Hashes, fehlende deutsche Primärtexte und gesetzte Featureflags
 ohne freigegebene Inhalte. Releaseverantwortliche können den
 JSON-Bericht vor Freigabe archivieren; er ist kein Ersatz für
 rechtskundige Begutachtung.
+
+## Technische Freigabematrix im Produkt-Admin
+
+Im Produkt-Admin unter `/ns-admin/legal/translations/` erhalten
+ausschließlich mit `legal.read` berechtigte Mitarbeitende eine eingeklappte,
+schreibgeschützte Matrix der sechs deutschen Primärdokumentarten und neun
+fremdsprachigen Fassungen (54 Positionen). Sie zeigt je Version und
+Sprache nur den technischen Status: fehlend, Entwurf, in Prüfung,
+technisch verifiziert, veraltete Freigabe oder fehlende deutsche Quelle.
+
+CLI und Admin verwenden jetzt dieselbe read-only Servicefunktion
+`apps.legal.readiness.build_readiness_report()`; die bisherige
+`audit_legal_locale_readiness --json/--strict`-Schnittstelle bleibt
+unverändert. Der Status kann **weder** eine juristische Freigabe
+bescheinigen **noch** Featureflags setzen, Inhalt freigeben oder ein
+Deployment autorisieren. Statusübersichten werden nicht öffentlich
+ausgegeben; sie zeigen weder Dokumentkörper noch Prüfpersonen oder
+Freigabereferenzen. Die vorhandenen gesonderten Bearbeitungs- und
+Rechteprüfungen bleiben verbindlich.
