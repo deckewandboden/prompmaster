@@ -68,6 +68,51 @@ class ProductLegalTranslationAdminTests(TestCase):
             403,
         )
 
+
+    def test_read_only_legal_readiness_matrix_has_54_rows_without_publication(self):
+        from apps.legal.readiness import build_readiness_report
+
+        self.assertNotEqual(
+            self.client.get('/ns-admin/legal/translations/').status_code, 200,
+        )
+        self.login_as(self.reader)
+        before = list(LegalDocument.objects.values_list('pk', 'version', 'content'))
+        response = self.client.get('/ns-admin/legal/translations/')
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, 'data-legal-readiness')
+        report = response.context['readiness']
+        self.assertEqual(report['status'], 'BLOCKED')
+        self.assertEqual(report['total_required_translations'], 54)
+        self.assertEqual(report['summary']['missing'], 54)
+        self.assertEqual(len(report['entries']), 54)
+        self.assertFalse(report['external_legal_signoff_verified_by_audit'])
+        self.assertFalse(report['production_deployment_authorized_by_audit'])
+        self.assertEqual(report['summary'], build_readiness_report()['summary'])
+        self.assertEqual(LegalDocumentTranslation.objects.count(), 0)
+        self.assertEqual(
+            before, list(LegalDocument.objects.values_list('pk', 'version', 'content')),
+        )
+        # Reader cannot turn a matrix row into an approval.
+        self.assertNotContains(response, 'name="approval_reference"')
+
+    def test_admin_matrix_distinguishes_draft_review_and_tampered_approval(self):
+        privacy = self.document
+        draft = LegalDocumentTranslation.objects.create(
+            document=privacy, language='en', content='Draft text',
+        )
+        reviewing = LegalDocumentTranslation.objects.create(
+            document=privacy, language='es', content='Reviewed text', status='review',
+        )
+        self.login_as(self.reader)
+        report = self.client.get('/ns-admin/legal/translations/').context['readiness']
+        self.assertEqual(report['summary']['draft'], 1)
+        self.assertEqual(report['summary']['review'], 1)
+        self.assertEqual(report['summary']['missing'], 52)
+        self.assertFalse(report['external_legal_signoff_verified_by_audit'])
+        self.assertEqual(LegalDocumentTranslation.objects.count(), 2)
+        self.assertEqual(draft.status, 'draft')
+        self.assertEqual(reviewing.status, 'review')
+
     def test_draft_review_separate_approval_and_no_publication(self):
         self.login_as(self.editor)
         url = '/ns-admin/legal/translations/'
