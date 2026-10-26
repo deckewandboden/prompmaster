@@ -4060,3 +4060,7 @@ msgstr "Zatwierdzenie nieaktualne"
 
 msgid "Deutsche Quelle fehlt"
 msgstr "Brak niemieckiego oryginału"
+
+# Account snapshot validation error; generic and safe for public users.
+msgid "Das Rechtsdokument-Angebot ist ungültig oder nicht mehr aktuell. Bitte prüfen Sie die Dokumente erneut und senden Sie das Formular noch einmal ab."
+msgstr "Przedstawione dokumenty prawne są nieprawidłowe lub nieaktualne. Zapoznaj się ponownie z dokumentami i prześlij formularz jeszcze raz."
