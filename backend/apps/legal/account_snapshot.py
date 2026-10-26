@@ -3,6 +3,7 @@
 Separate from checkout snapshots; default-off until explicitly released.
 These records establish the offered legal links, NOT proof of reading.
 """
+import json
 from urllib.parse import urlencode
 
 from django.conf import settings
@@ -45,12 +46,18 @@ def _session_binding(request, *, initialize=False):
 def _invitation_identity(invitation):
     if invitation is None:
         return None
+    # Signed data is readable: never embed invitee email or bearer-token hash
+    # directly into legal document links that can be copied or logged.
+    identity = json.dumps([
+        str(invitation.pk), str(invitation.company_id),
+        invitation.token_hash, invitation.email.lower(), invitation.role,
+    ], ensure_ascii=False, separators=(',', ':'))
     return {
         'id': str(invitation.pk),
-        'company_id': str(invitation.company_id),
-        'token_hash': invitation.token_hash,
-        'email': invitation.email.lower(),
-        'role': invitation.role,
+        'identity_hmac': salted_hmac(
+            'promptfinisher.account.legal.invitation-identity.v1',
+            identity, secret=settings.SECRET_KEY,
+        ).hexdigest(),
     }
 
 
