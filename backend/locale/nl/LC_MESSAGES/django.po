@@ -4034,3 +4034,25 @@ msgstr "Deze bevestigingslink is niet meer geldig."
 
 msgid "Weiter"
 msgstr "Doorgaan"
+
+# Read-only legal-language technical readiness UI; not a publication gate.
+msgid "Technischer Status der Rechtsübersetzungen"
+msgstr "Technische status van juridische vertalingen"
+
+msgid "Keine juristische oder produktive Freigabe. Die Veröffentlichung bleibt separat gesperrt."
+msgstr "Geen juridische of productiegoedkeuring. Publicatie blijft afzonderlijk geblokkeerd."
+
+msgid "Technisch geprüft"
+msgstr "Technisch geverifieerd"
+
+msgid "Fehlend"
+msgstr "Ontbreekt"
+
+msgid "In Prüfung"
+msgstr "In beoordeling"
+
+msgid "Freigabe veraltet"
+msgstr "Goedkeuring verouderd"
+
+msgid "Deutsche Quelle fehlt"
+msgstr "Duitse brontekst ontbreekt"
