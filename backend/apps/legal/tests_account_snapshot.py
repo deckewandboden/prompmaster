@@ -151,13 +151,14 @@ class AccountSignedLegalOfferTests(TestCase):
             'it': 'I documenti legali presentati non sono validi',
             'nl': 'Het aangeboden juridische document is ongeldig',
         }
-        for language, snippet in expected.items():
+        for index, (language, snippet) in enumerate(expected.items(), start=1):
             with self.subTest(language=language), override(language):
                 payload = self.registration_data(email=language+'-bad-offer@example.test')
                 response = self.client.post(
                     reverse('accounts:register'),
                     payload,
                     HTTP_ACCEPT_LANGUAGE=language,
+                    REMOTE_ADDR=f'198.51.100.{index}',
                 )
                 self.assertEqual(response.status_code, 200)
                 self.assertContains(response, snippet)
