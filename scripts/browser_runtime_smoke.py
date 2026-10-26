@@ -1450,7 +1450,7 @@ def _browser_register_verify_to_buy(
         )
         safe_origin = (
             browser_origin
-            if re.fullmatch(r'https?://(?:127\\.0\\.0\\.1|localhost):[0-9]{2,5}', browser_origin)
+            if re.fullmatch(r'https?://(?:127[.]0[.]0[.]1|localhost):[0-9]{2,5}', browser_origin)
             or browser_origin in ('null', '')
             else '<unexpected-origin>'
         )
