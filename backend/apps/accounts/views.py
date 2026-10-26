@@ -177,7 +177,12 @@ def _render_registration(request, form, requested_next):
             context['account_offer'] = issue_account_offer(request, flow='registration')
         except ValidationError:
             return HttpResponse(status=503)
-    return render(request, 'auth/register.html', context)
+    response = render(request, 'auth/register.html', context)
+    if settings.LEGAL_ACCOUNT_SNAPSHOT_REQUIRED:
+        response['Cache-Control'] = 'no-store'
+        response['Referrer-Policy'] = 'no-referrer'
+        response['X-Robots-Tag'] = 'noindex, noarchive'
+    return response
 
 
 def _render_new_invitation(request, form, invitation, legal_documents):
@@ -192,7 +197,12 @@ def _render_new_invitation(request, form, invitation, legal_documents):
             )
         except ValidationError:
             return HttpResponse(status=503)
-    return render(request, 'auth/accept_invitation.html', context)
+    response = render(request, 'auth/accept_invitation.html', context)
+    if settings.LEGAL_ACCOUNT_SNAPSHOT_REQUIRED:
+        response['Cache-Control'] = 'no-store'
+        response['Referrer-Policy'] = 'no-referrer'
+        response['X-Robots-Tag'] = 'noindex, noarchive'
+    return response
 
 
 @transaction.atomic
