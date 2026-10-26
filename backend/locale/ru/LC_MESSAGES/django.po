@@ -3980,3 +3980,25 @@ msgstr "Эта ссылка подтверждения больше недейс
 
 msgid "Weiter"
 msgstr "Продолжить"
+
+# Read-only legal-language technical readiness UI; not a publication gate.
+msgid "Technischer Status der Rechtsübersetzungen"
+msgstr "Технический статус переводов юридических документов"
+
+msgid "Keine juristische oder produktive Freigabe. Die Veröffentlichung bleibt separat gesperrt."
+msgstr "Юридическое одобрение и разрешение на выпуск отсутствуют. Публикация по-прежнему заблокирована отдельно."
+
+msgid "Technisch geprüft"
+msgstr "Технически проверено"
+
+msgid "Fehlend"
+msgstr "Отсутствует"
+
+msgid "In Prüfung"
+msgstr "На проверке"
+
+msgid "Freigabe veraltet"
+msgstr "Одобрение устарело"
+
+msgid "Deutsche Quelle fehlt"
+msgstr "Немецкий оригинал отсутствует"
