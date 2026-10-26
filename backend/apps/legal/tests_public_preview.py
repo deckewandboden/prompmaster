@@ -40,9 +40,9 @@ class PublicLegalPreviewTests(TestCase):
                     self.assertContains(response, f'Nur die deutsche Originalfassung: {kind}')
                     self.assertContains(response, 'class="legal-content" lang="de"')
                     if language == 'de':
-                        self.assertNotContains(response, 'class="alert warn legal-language-notice"')
+                        self.assertNotContains(response, 'class="alert warn"')
                     else:
-                        self.assertContains(response, 'class="alert warn legal-language-notice"')
+                        self.assertContains(response, 'class="alert warn"')
 
 
 class PreviewSalesLockTests(SimpleTestCase):
