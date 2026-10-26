@@ -8,6 +8,7 @@ from types import SimpleNamespace
 from django.contrib.auth.models import AnonymousUser
 from django.template.loader import render_to_string
 from django.test import RequestFactory, SimpleTestCase
+from django.urls import reverse
 from django.utils.translation import override
 
 from apps.accounts.forms import AcceptInvitationForm
@@ -102,9 +103,9 @@ class InvitationAcceptanceLanguageTests(SimpleTestCase):
                     )
                     self.assertIn('lang="' + language + '"', html)
                     if ok:
-                        self.assertIn('href="/portal/"', html)
+                        self.assertIn('href="' + reverse('portal:dashboard') + '"', html)
                     else:
-                        self.assertIn('href="/"', html)
+                        self.assertIn('href="' + reverse('home') + '"', html)
                     if language != 'de':
                         self.assertNotIn('>Einladung angenommen</h1>', html)
                         self.assertNotIn(
@@ -127,7 +128,7 @@ class InvitationAcceptanceLanguageTests(SimpleTestCase):
                     if ok:
                         self.assertIn('href="/free/"', html)
                     else:
-                        self.assertIn('href="/auth/login/"', html)
+                        self.assertIn('href="' + reverse('accounts:login') + '"', html)
                     if language != 'de':
                         self.assertNotIn('>E-Mail bestätigt</h1>', html)
                         self.assertNotIn('>Link ungültig oder abgelaufen</h1>', html)
