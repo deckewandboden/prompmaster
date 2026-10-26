@@ -3926,3 +3926,13 @@ msgstr "İnceleme aşamasında"
 
 msgid "Rechtstexte freigeben"
 msgstr "Hukuki metinleri onayla"
+
+# Invitation-acceptance UI; legal text bodies remain under separate legal approval.
+msgid "Einladung annehmen"
+msgstr "Daveti kabul et"
+
+msgid "%(company)s lädt Sie zu PROMPTFINISHER ein."
+msgstr "%(company)s sizi PROMPTFINISHER'a davet ediyor."
+
+msgid "Konto anlegen und Einladung annehmen"
+msgstr "Hesap oluştur ve daveti kabul et"
