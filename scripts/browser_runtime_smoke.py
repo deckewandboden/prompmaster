@@ -1430,7 +1430,22 @@ def _browser_register_verify_to_buy(
         page.locator('input[name="company_name"]').fill(company_name)
     page.locator('input[name="accept_terms"]').check()
     page.locator('input[name="accept_privacy"]').check()
-    page.locator('button[type="submit"]').click()
+    with page.expect_navigation(wait_until='domcontentloaded') as submitted:
+        page.locator('button[type="submit"]').click()
+    submitted_response = submitted.value
+    if '/auth/register/' in page.url:
+        # Detect the actual rejected POST immediately. Report only visible
+        # validation errors, never signed offer/CSRF tokens or passwords.
+        error_text = ' | '.join(
+            part.strip() for part in page.locator(
+                'form .errorlist, form [role="alert"], form .invalid-feedback'
+            ).all_inner_texts() if part.strip()
+        )
+        raise AssertionError(
+            f'{customer_type}: signed registration rejected: '
+            f'http={submitted_response.status if submitted_response else "none"}, '
+            f'error={error_text[:600]!r}'
+        )
 
     if customer_type == 'company':
         page.wait_for_url('**/auth/2fa/setup/**')
