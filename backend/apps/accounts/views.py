@@ -7,6 +7,8 @@ from django.contrib.auth import login, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.hashers import make_password
 from django.core import signing
+from django.core.exceptions import ValidationError
+from django.http import HttpResponse
 from django.db import IntegrityError, transaction
 from django.shortcuts import redirect, render
 from django.urls import reverse
@@ -18,6 +20,7 @@ from apps.core.crypto import decrypt, encrypt
 from apps.core.security import check_rate, client_ip, token_hash
 from apps.notifications.services import queue_email
 from apps.legal.models import LegalAcceptance, LegalDocument
+from apps.legal.account_snapshot import issue_account_offer, validate_account_offer
 from .forms import (
     AcceptInvitationForm,
     LoginForm,
@@ -167,6 +170,31 @@ def logout_view(request):
     return redirect('accounts:login')
 
 
+def _render_registration(request, form, requested_next):
+    context = {'form': form, 'next': requested_next}
+    if settings.LEGAL_ACCOUNT_SNAPSHOT_REQUIRED:
+        try:
+            context['account_offer'] = issue_account_offer(request, flow='registration')
+        except ValidationError:
+            return HttpResponse(status=503)
+    return render(request, 'auth/register.html', context)
+
+
+def _render_new_invitation(request, form, invitation, legal_documents):
+    context = {
+        'form': form, 'invitation': invitation,
+        'legal_documents': legal_documents,
+    }
+    if settings.LEGAL_ACCOUNT_SNAPSHOT_REQUIRED:
+        try:
+            context['account_offer'] = issue_account_offer(
+                request, flow='invitation', invitation=invitation,
+            )
+        except ValidationError:
+            return HttpResponse(status=503)
+    return render(request, 'auth/accept_invitation.html', context)
+
+
 @transaction.atomic
 def register(request):
     if request.user.is_authenticated:
@@ -178,25 +206,35 @@ def register(request):
     requested_next = _safe_next(request)
     if request.method == 'POST' and form.is_valid():
         data = form.cleaned_data
-        now = timezone.now()
         legal_documents = {}
-        for doc_type in ('terms', 'privacy'):
-            document = (
-                LegalDocument.objects.filter(doc_type=doc_type, active=True, valid_from__lte=now)
-                .order_by('-valid_from')
-                .first()
-            )
-            if not document:
-                form.add_error(None, f'Registrierung ist vorübergehend nicht möglich: aktives Rechtsdokument fehlt ({doc_type}).')
-                break
-            legal_documents[doc_type] = document
+        if not settings.LEGAL_ACCOUNT_SNAPSHOT_REQUIRED:
+            now = timezone.now()
+            for doc_type in ('terms', 'privacy'):
+                document = (
+                    LegalDocument.objects.filter(
+                        doc_type=doc_type, active=True, valid_from__lte=now,
+                    ).order_by('-valid_from').first()
+                )
+                if not document:
+                    form.add_error(None, (
+                        'Registrierung ist vorübergehend nicht möglich: '
+                        f'aktives Rechtsdokument fehlt ({doc_type}).'
+                    ))
+                    break
+                legal_documents[doc_type] = document
         if form.errors:
-            return render(request, 'auth/register.html', {'form': form, 'next': requested_next})
+            return _render_registration(request, form, requested_next)
         if User.objects.filter(email__iexact=data['email']).exists():
             form.add_error('email', 'E-Mail-Adresse bereits registriert.')
         else:
             try:
                 with transaction.atomic():
+                    offer_evidence = None
+                    if settings.LEGAL_ACCOUNT_SNAPSHOT_REQUIRED:
+                        offer_evidence, legal_documents = validate_account_offer(
+                            request, request.POST.get('account_snapshot', ''),
+                            flow='registration', lock=True,
+                        )
                     user = User.objects.create_user(
                         email=data['email'],
                         password=data['password'],
@@ -227,12 +265,20 @@ def register(request):
                         'verification': 'legacy_without_signed_snapshot',
                         'presentation_proof': 'not_recorded',
                     }
+                    if offer_evidence is not None:
+                        evidence.update(offer_evidence)
                     for document in legal_documents.values():
                         LegalAcceptance.objects.create(
-                            user=user, document=document, order=None, evidence=evidence
+                            user=user, document=document, order=None,
+                            evidence={**evidence, **(
+                                {'document': offer_evidence['documents'][document.doc_type]}
+                                if offer_evidence is not None else {}
+                            )},
                         )
             except IntegrityError:
                 form.add_error('email', 'Konto konnte nicht angelegt werden. Bitte erneut versuchen.')
+            except ValidationError as exc:
+                form.add_error(None, str(exc))
             else:
                 destination = _role_safe_next(user, requested_next) or _default_post_login_url(user)
                 token = signing.dumps(
@@ -249,7 +295,7 @@ def register(request):
                     request.session['post_2fa_next'] = destination
                     return redirect('accounts:two_factor_setup')
                 return redirect(destination)
-    return render(request, 'auth/register.html', {'form': form, 'next': requested_next})
+    return _render_registration(request, form, requested_next)
 
 
 def verify_email(request, token):
