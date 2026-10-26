@@ -1444,8 +1444,20 @@ def _browser_register_verify_to_buy(
         # CSRF middleware rejects POST before the form renders; provide
         # secret-free signals distinguishing it from an account-form error.
         body = page.locator('body').inner_text()
+        browser_origin = (
+            submitted_response.request.headers.get('origin', '')
+            if submitted_response else ''
+        )
+        safe_origin = (
+            browser_origin
+            if re.fullmatch(r'https?://(?:127\\.0\\.0\\.1|localhost):[0-9]{2,5}', browser_origin)
+            or browser_origin in ('null', '')
+            else '<unexpected-origin>'
+        )
         csrf_flags = {
             'csrf_failure_page': 'CSRF verification failed' in body,
+            'posted_origin': safe_origin,
+            'origin_matches_local_server': browser_origin == base.rstrip('/'),
             'csrf_cookie_present': any(
                 cookie['name'] == 'csrftoken'
                 for cookie in page.context.cookies()
@@ -2009,6 +2021,10 @@ def run_backend_ui_smoke(browser, fixture=None) -> None:
     # Only the isolated Playwright child server enables this staging gate.
     # Live/default settings and the parent test process remain unchanged.
     env['LEGAL_ACCOUNT_SNAPSHOT_REQUIRED'] = '1'
+    # Django's CSRF trusted origins are exact scheme+host+port values.
+    # Permit ONLY this ephemeral local browser server's own origin; never
+    # change production or global settings, disable CSRF, or use wildcards.
+    env['CSRF_TRUSTED_ORIGINS'] = base.rstrip('/')
 
     process = subprocess.Popen(
         [sys.executable, 'manage.py', 'runserver', f'127.0.0.1:{port}', '--noreload'],
