@@ -41,7 +41,7 @@
     </tr></thead>
     <tbody>{% for item in readiness.entries %}
     <tr>
-      <td data-label="{% translate 'Dokument' %}">{{ item.document_type }}</td>
+      <td data-label="{% translate 'Dokument' %}">{% if item.document_type == 'terms' %}{% translate 'AGB' %}{% elif item.document_type == 'privacy' %}{% translate 'Datenschutz' %}{% elif item.document_type == 'withdrawal' %}{% translate 'Widerruf' %}{% elif item.document_type == 'license' %}{% translate 'Lizenzbedingungen' %}{% elif item.document_type == 'imprint' %}{% translate 'Impressum' %}{% elif item.document_type == 'accessibility' %}{% translate 'Barrierefreiheit' %}{% else %}{{ item.document_type }}{% endif %}</td>
       <td data-label="{% translate 'Version' %}">{{ item.source_version|default:'–' }}</td>
       <td data-label="{% translate 'Sprache' %}">{{ item.language|upper }}</td>
       <td data-label="{% translate 'Status' %}">
