@@ -32,6 +32,14 @@ def signed_token(response):
     LEGAL_TRANSLATIONS_PUBLIC_ENABLED=False,
 )
 class AccountSignedLegalOfferTests(TestCase):
+    def setUp(self):
+        # Real rate limiting uses IP-scoped Redis keys. Isolate each case so
+        # independent security checks cannot trip another test's quota.
+        names = sorted(
+            name for name in dir(type(self)) if name.startswith('test_')
+        )
+        self.client.defaults['REMOTE_ADDR'] = f'203.0.113.{names.index(self._testMethodName) + 1}'
+
     @classmethod
     def setUpTestData(cls):
         for doc_type in ('terms', 'privacy'):
@@ -168,7 +176,7 @@ class AccountSignedLegalOfferTests(TestCase):
         url = reverse('accounts:register')
         first = signed_token(self.client.get(url))
         second = signed_token(self.client.get(url))
-        another = Client()
+        another = Client(REMOTE_ADDR='203.0.114.1')
         payload = self.registration_data()
         payload['account_snapshot'] = first
         self.assertEqual(another.post(url, payload).status_code, 200)
