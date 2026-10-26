@@ -7,21 +7,21 @@
     <a class="btn secondary" href="{% url 'portal:search' %}">{% translate "Suche" %}</a>
     <a class="btn secondary" href="{% url 'portal:profile' %}">{% translate "Einstellungen" %}</a>
     <a class="btn secondary" href="{% url 'portal:security' %}">{% translate "Sicherheit" %}</a>
-    <a class="btn secondary" href="{% url 'portal:help' %}">Hilfe &amp; Kontakt</a>
+    <a class="btn secondary" href="{% url 'portal:help' %}">{% translate "Hilfe & Kontakt" %}</a>
     <a class="btn secondary" href="{% url 'accounts:logout' %}">{% translate "Abmelden" %}</a>
   </div></div>
   {% if membership and membership.role == 'admin' or not membership %}
   <div class="card"><h2>{% translate "Verwaltung & Abrechnung" %}</h2><div class="list">
     <a class="btn secondary" href="{% url 'portal:buy' %}">{% translate "Weitere Lizenzen kaufen" %}</a>
     <a class="btn secondary" href="{% url 'portal:orders' %}">{% translate "Bestellungen & Zahlungen" %}</a>
-    {% if membership and membership.role == 'admin' %}<a class="btn secondary" href="{% url 'portal:company' %}">Unternehmen</a>{% endif %}
+    {% if membership and membership.role == 'admin' %}<a class="btn secondary" href="{% url 'portal:company' %}">{% translate "Unternehmen" %}</a>{% endif %}
   </div></div>
   {% endif %}
   <div class="card"><h2>{% translate "Rechtliches" %}</h2><div class="list">
     <a class="btn secondary" href="/impressum/">{% translate "Impressum" %}</a>
-    <a class="btn secondary" href="/datenschutz/">Datenschutz</a>
-    <a class="btn secondary" href="/agb/">AGB</a>
-    <a class="btn secondary" href="/lizenzbedingungen/">Lizenzbedingungen</a>
+    <a class="btn secondary" href="/datenschutz/">{% translate "Datenschutz" %}</a>
+    <a class="btn secondary" href="/agb/">{% translate "AGB" %}</a>
+    <a class="btn secondary" href="/lizenzbedingungen/">{% translate "Lizenzbedingungen" %}</a>
     <a class="btn secondary" href="/barrierefreiheit/">{% translate "Barrierefreiheit" %}</a>
   </div></div>
   {% if not membership %}

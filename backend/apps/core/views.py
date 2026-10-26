@@ -40,17 +40,51 @@ def legal_public(request, doc_type):
     from django.http import Http404
     from django.utils import timezone
     from apps.legal.models import LegalDocument
+    from django.conf import settings
+    from django.utils.translation import get_language
+    from apps.legal.translation_display import resolve_public_legal_text
+    from apps.legal.checkout_snapshot import pinned_public_document
+    from apps.legal.account_snapshot import pinned_account_document
+    from django.core.exceptions import ValidationError
 
     allowed = {code for code, _label in LegalDocument.DOC_TYPES}
     if doc_type not in allowed:
         raise Http404
-    document = (
-        LegalDocument.objects.filter(doc_type=doc_type, active=True, valid_from__lte=timezone.now())
-        .order_by('-valid_from')
-        .first()
-    )
-    if not document:
-        raise Http404
+    has_checkout_snapshot = 'checkout_snapshot' in request.GET
+    has_account_snapshot = 'account_snapshot' in request.GET
+    snapshot_token = (request.GET.get('checkout_snapshot') or '').strip()
+    account_snapshot_token = (request.GET.get('account_snapshot') or '').strip()
+    signed_request = has_checkout_snapshot or has_account_snapshot
+    if signed_request:
+        try:
+            # Presence, not truthiness: an empty/repeated token is invalid.
+            # Never fall through to the unsigned current-document route.
+            if (has_checkout_snapshot and has_account_snapshot
+                    or len(request.GET.getlist('checkout_snapshot')) > 1
+                    or len(request.GET.getlist('account_snapshot')) > 1):
+                raise ValidationError('Ambiguous signed legal offer.')
+            if has_checkout_snapshot:
+                document, _snapshot_language = pinned_public_document(
+                    request, doc_type, snapshot_token,
+                )
+            else:
+                document, _snapshot_language = pinned_account_document(
+                    request, doc_type, account_snapshot_token,
+                )
+        except ValidationError:
+            response = HttpResponse(status=409)
+            response['Cache-Control'] = 'no-store'
+            response['Referrer-Policy'] = 'no-referrer'
+            response['X-Robots-Tag'] = 'noindex, noarchive'
+            return response
+    else:
+        document = (
+            LegalDocument.objects.filter(doc_type=doc_type, active=True, valid_from__lte=timezone.now())
+            .order_by('-valid_from')
+            .first()
+        )
+        if not document:
+            raise Http404
     titles = {
         'terms': _('AGB'),
         'privacy': _('Datenschutz'),
@@ -59,10 +93,28 @@ def legal_public(request, doc_type):
         'imprint': _('Impressum'),
         'accessibility': _('Barrierefreiheit'),
     }
-    return render(request, 'legal_public.html', {
+    ui_language = _snapshot_language if signed_request else (get_language() or 'de')
+    body, body_language, notice, displayed_sha256 = resolve_public_legal_text(
+        document, ui_language,
+        translations_enabled=settings.LEGAL_TRANSLATIONS_PUBLIC_ENABLED,
+    )
+    response = render(request, 'legal_public.html', {
         'document': document,
         'document_title': titles[doc_type],
+        'legal_document_body': body,
+        'legal_content_language': body_language,
+        'legal_fallback_notice': notice,
+        'legal_ui_language': ui_language,
+        'legal_display_sha256': displayed_sha256,
     })
+    if signed_request:
+        # The signed offer token appears in the request query string.
+        # Do not leak it via Referer headers to same-origin assets or links,
+        # and do not permit indexing/archiving of per-session legal views.
+        response['Cache-Control'] = 'no-store'
+        response['Referrer-Policy'] = 'no-referrer'
+        response['X-Robots-Tag'] = 'noindex, noarchive'
+    return response
 
 
 
@@ -250,6 +302,23 @@ def checkout_csrf(request):
     return response
 
 
+def checkout_legal_snapshot(request):
+    """Issue a signed, per-session manifest for the static purchase page."""
+    if request.method != 'GET':
+        return HttpResponse(status=405)
+    from django.core.exceptions import ValidationError
+    from apps.legal.checkout_snapshot import issue_snapshot
+
+    customer_type = request.GET.get('customer_type', 'company')
+    try:
+        payload = issue_snapshot(request, customer_type)
+    except ValidationError:
+        return JsonResponse({'error': 'legal_snapshot_unavailable'}, status=503)
+    response = JsonResponse(payload)
+    response['Cache-Control'] = 'no-store'
+    return response
+
+
 def public_checkout_start(request):
     """Create a new customer/order and hand the browser to Mollie.
 
@@ -272,7 +341,9 @@ def public_checkout_start(request):
     from apps.catalog.models import Product
     from apps.companies.models import Company, Membership, PrivateCustomerProfile
     from apps.core.security import check_rate, client_ip
+    from django.conf import settings
     from apps.legal.models import LegalAcceptance, LegalDocument
+    from apps.legal.checkout_snapshot import rotate_session_nonce, validate_snapshot
     from apps.orders.forms import PublicCheckoutForm
     from apps.orders.services import MAX_PURCHASE_QUANTITY, create_order
     from apps.payments.mollie import (
@@ -285,6 +356,13 @@ def public_checkout_start(request):
 
     def start_provider_payment(order):
         """Create or safely replay the exact Mollie payment request for an order."""
+        if (
+            order.status in {'paid', 'failed', 'canceled'}
+            or order.payments.filter(status='paid').exists()
+        ):
+            raise MollieError(
+                'A completed or terminal order cannot create another provider payment'
+            )
         snapshot = dict(order.billing_snapshot or {})
         provider_request = snapshot.get('mollie_create_request')
         if not isinstance(provider_request, dict):
@@ -383,6 +461,10 @@ def public_checkout_start(request):
         from django.db.models import Q
         from apps.orders.models import Order
 
+        # Knowing an email address does not authorize access to an earlier
+        # provider payment URL. Resume only the order created in this browser
+        # session, and only when customer type and quantity still match.
+        resume_order_id = request.session.get('public_checkout_resume_order')
         public_orders = (
             Order.objects.filter(billing_snapshot__source='public_checkout')
             .filter(
@@ -392,12 +474,31 @@ def public_checkout_start(request):
                     company__memberships__active=True,
                 )
             )
+            .filter(items__quantity=quantity)
             .distinct()
         )
+        if isinstance(resume_order_id, str) and len(resume_order_id) <= 64:
+            public_orders = public_orders.filter(pk=resume_order_id)
+        else:
+            public_orders = public_orders.none()
+        if data['customer_type'] == 'private':
+            public_orders = public_orders.filter(private_user=existing)
+        else:
+            public_orders = public_orders.filter(company__isnull=False)
         if not existing.has_usable_password() and public_orders.exists():
+            # A webhook can mark the order paid while an older provider
+            # payment payload still says "open". Paid status always takes
+            # priority over handing out a stale checkout link.
+            if (
+                public_orders.filter(status='paid').exists()
+                or Payment.objects.filter(order__in=public_orders, status='paid').exists()
+            ):
+                return redirect('/checkout/success/?state=paid')
+
             resumable = (
                 Payment.objects.filter(
                     order__in=public_orders,
+                    order__status__in={'draft', 'payment_open'},
                     status__in={'created', 'open', 'pending', 'authorized'},
                 )
                 .order_by('-created_at')
@@ -413,12 +514,9 @@ def public_checkout_start(request):
             if checkout_url.startswith('https://'):
                 return redirect(checkout_url)
 
-            if public_orders.filter(status='paid').exists():
-                return redirect('/checkout/success/?state=paid')
-
             ambiguous_order = None
             ambiguous_started_at = None
-            for candidate in public_orders.order_by('-created_at')[:10]:
+            for candidate in public_orders.filter(status='draft').order_by('-created_at')[:10]:
                 marker = (candidate.billing_snapshot or {}).get(
                     'provider_create_ambiguous_at'
                 )
@@ -468,6 +566,19 @@ def public_checkout_start(request):
                 f"{reverse('accounts:password_reset')}?{urlencode({'checkout': 1})}"
             )
 
+        # The account created by the earlier public checkout has no usable
+        # password. A different browser must recover access by email, not
+        # receive the existing payment URL or get stuck on the login page.
+        if not existing.has_usable_password():
+            messages.info(
+                request,
+                'Für diese E-Mail-Adresse ist eine Kontoaktivierung erforderlich. '
+                'Bitte legen Sie über die Passwort-Zurücksetzung einen Zugang fest.',
+            )
+            return redirect(
+                f"{reverse('accounts:password_reset')}?{urlencode({'checkout': 1})}"
+            )
+
         messages.info(
             request,
             'Für diese E-Mail-Adresse besteht bereits ein PROMPTFINISHER-Konto. Bitte anmelden.',
@@ -507,6 +618,7 @@ def public_checkout_start(request):
             f"/checkout/?{urlencode({'quantity': quantity, 'error': 'unavailable'})}"
         )
 
+    legal_token = (request.POST.get('legal_snapshot_token') or '').strip()
     checkout_key = request.session.get('public_checkout_key')
     if not checkout_key:
         checkout_key = secrets.token_urlsafe(24)
@@ -514,6 +626,20 @@ def public_checkout_start(request):
 
     try:
         with transaction.atomic():
+            legal_offer_evidence = {
+                'verification': 'legacy_without_signed_snapshot',
+                'presentation_proof': 'not_recorded',
+            }
+            if legal_token or settings.LEGAL_CHECKOUT_SNAPSHOT_REQUIRED:
+                try:
+                    legal_offer_evidence, verified_documents = validate_snapshot(
+                        request, legal_token, data['customer_type'], lock=True,
+                    )
+                except ValidationError:
+                    return redirect(
+                        f"/checkout/?{urlencode({'quantity': quantity, 'error': 'unavailable'})}"
+                    )
+                documents = verified_documents
             user = User.objects.create_user(
                 email=data['email'],
                 password=None,
@@ -557,6 +683,7 @@ def public_checkout_start(request):
 
             evidence = {
                 'source': 'public_checkout',
+                'legal_offer': legal_offer_evidence,
                 'ip': client_ip(request),
                 'user_agent': (request.META.get('HTTP_USER_AGENT') or '')[:300],
                 'early_performance_requested': bool(
@@ -579,6 +706,7 @@ def public_checkout_start(request):
             )
             snapshot = dict(order.billing_snapshot or {})
             snapshot['source'] = 'public_checkout'
+            snapshot['legal_offer'] = legal_offer_evidence
             snapshot['legal_versions'] = {
                 doc_type: document.version
                 for doc_type, document in documents.items()
@@ -632,12 +760,25 @@ def public_checkout_start(request):
             f"/checkout/?{urlencode({'quantity': quantity, 'error': 'payment'})}"
         )
 
+    # Preserve only an unguessable server-side session reference to the order
+    # just created here. Another browser submitting the same email cannot see
+    # or restart this provider checkout.
+    request.session['public_checkout_resume_order'] = str(order.pk)
     if not checkout_url:
         return redirect(
             f"/checkout/?{urlencode({'quantity': quantity, 'error': 'payment'})}"
         )
 
     request.session['public_checkout_key'] = secrets.token_urlsafe(24)
+    # Signed offers always belong to an established session and must be
+    # revoked after handoff. Legacy purchases are still allowed only while
+    # LEGAL_CHECKOUT_SNAPSHOT_REQUIRED is off; a first anonymous legacy POST
+    # has no session/nonce to revoke and must not fail after Mollie starts.
+    if (
+        legal_offer_evidence.get('verification') == 'signed_session_bound_document_offer'
+        or request.session.session_key
+    ):
+        rotate_session_nonce(request)
     return redirect(checkout_url)
 
 

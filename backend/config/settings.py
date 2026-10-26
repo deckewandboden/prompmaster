@@ -98,6 +98,14 @@ AUTH_PASSWORD_VALIDATORS = [
     {'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator'},
 ]
 
+# Never publish foreign-language legal document bodies unless this separate,
+# explicit deployment switch is enabled after legal sign-off.
+LEGAL_TRANSLATIONS_PUBLIC_ENABLED = os.getenv('LEGAL_TRANSLATIONS_PUBLIC_ENABLED', '0') == '1'
+# Leave OFF until old checkout clients and legal display evidence are verified.
+LEGAL_CHECKOUT_SNAPSHOT_REQUIRED = os.getenv('LEGAL_CHECKOUT_SNAPSHOT_REQUIRED', '0') == '1'
+# Independent account registration / invitation legal-offer gate (Issue #91).
+LEGAL_ACCOUNT_SNAPSHOT_REQUIRED = os.getenv('LEGAL_ACCOUNT_SNAPSHOT_REQUIRED', '0') == '1'
+
 LANGUAGE_CODE = 'de'
 LANGUAGES = [
     ('de', 'Deutsch'),

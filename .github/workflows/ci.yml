@@ -93,6 +93,7 @@ jobs:
         run: |
           set -o pipefail
           python scripts/github_preflight.py 2>&1 | tee ci-preflight.log
+          python scripts/test_early_performance_locale_sync.py
 
       - name: Upload test diagnostics
         if: failure()
@@ -269,6 +270,14 @@ jobs:
   browser-smoke:
     runs-on: ubuntu-latest
     timeout-minutes: 35
+    # Official Playwright image bundles Chromium/Firefox/WebKit plus their
+    # native OS libraries; pin the Python package to the exact image version.
+    # Avoid repeated >35-minute Ubuntu font/browser dependency installations.
+    container:
+      image: mcr.microsoft.com/playwright/python:v1.64.0-noble
+    defaults:
+      run:
+        shell: bash
 
     services:
       postgres:
@@ -302,8 +311,8 @@ jobs:
       POSTGRES_DB: promptmaster
       POSTGRES_USER: promptmaster
       POSTGRES_PASSWORD: testpass1234567890
-      POSTGRES_HOST: 127.0.0.1
-      REDIS_URL: redis://127.0.0.1:6379/0
+      POSTGRES_HOST: postgres
+      REDIS_URL: redis://redis:6379/0
       ALLOWED_HOSTS: localhost,127.0.0.1
       SECURE_SSL_REDIRECT: 0
       SESSION_COOKIE_SECURE: 0
@@ -332,13 +341,24 @@ jobs:
 
       - name: Install backend dependencies and Playwright
         run: |
-          sudo apt-get update
-          sudo apt-get install -y gettext
+          # The Microsoft image already contains all browser system packages
+          # and the three exact-version browser executables.
+          if ! command -v msgfmt >/dev/null 2>&1; then
+            apt-get -o Acquire::Retries=3 update
+            DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends gettext
+          fi
           python -m pip install --upgrade pip
           pip install -r requirements.txt
-          pip install "playwright>=1.50,<2" "pillow>=11,<13"
+          pip install "playwright==1.64.0" "pillow>=11,<13"
           pip check
-          python -m playwright install --with-deps chromium firefox webkit
+          python -m playwright --version
+
+      - name: Prepare process-owned Firefox home
+        run: |
+          # Firefox requires HOME to be owned by the current container UID.
+          browser_home="$(mktemp -d)"
+          test -O "$browser_home"
+          printf 'HOME=%s\n' "$browser_home" >> "$GITHUB_ENV"
 
       - name: Prepare Django browser fixtures
         working-directory: backend

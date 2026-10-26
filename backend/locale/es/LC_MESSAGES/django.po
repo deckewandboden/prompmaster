@@ -3549,3 +3549,459 @@ msgstr "Si no indicas una fecha de finalización, tramitaremos la cancelación p
 
 msgid "jetzt kündigen"
 msgstr "Cancelar ahora"
+
+# Customer checkout: legal document list heading.
+msgid "Rechtsdokumente:"
+msgstr "Documentos legales:"
+
+msgid "Alle für Ihr Konto freigegebenen Adminbereiche."
+msgstr "Todas las secciones administrativas habilitadas para tu cuenta."
+
+msgid "Geschäft & Inhalte"
+msgstr "Negocio y contenidos"
+
+msgid "System & Governance"
+msgstr "Sistema y gobernanza"
+
+msgid "Lead bearbeiten"
+msgstr "Editar cliente potencial"
+
+msgid "Ansprechpartner"
+msgstr "Persona de contacto"
+
+msgid "Verlauf & Einordnung"
+msgstr "Historial y evaluación"
+
+msgid "Zuletzt geändert"
+msgstr "Última modificación"
+
+msgid "Als Firmenkunde konvertiert am"
+msgstr "Convertido en cliente empresarial el"
+
+msgid "Kundenkonto öffnen"
+msgstr "Abrir cuenta de cliente"
+
+msgid "Privatkunden werden über den öffentlichen Registrierungs-/Checkout-Prozess angelegt, damit AGB und Datenschutz vom Kunden selbst bestätigt werden."
+msgstr "Los clientes particulares se crean mediante el registro y proceso de compra públicos para que acepten personalmente las condiciones y la política de privacidad."
+
+msgid "← Zur Übersicht"
+msgstr "← Volver al resumen"
+
+msgid "Erklärung"
+msgstr "Declaración"
+
+msgid "Gewünschtes Ende"
+msgstr "Fecha de finalización solicitada"
+
+msgid "Bearbeitet"
+msgstr "Tramitado"
+
+msgid "Bearbeitung"
+msgstr "Tramitación"
+
+msgid "Status speichern"
+msgstr "Guardar estado"
+
+msgid "Sie haben Leserechte, aber keine Berechtigung zur Bearbeitung."
+msgstr "Tienes acceso de lectura, pero no permiso para editar."
+
+msgid "CSV-Export"
+msgstr "Exportación CSV"
+
+msgid "angefordert"
+msgstr "solicitado"
+
+msgid "Zeilen"
+msgstr "Filas"
+
+msgid "Verfügbar bis"
+msgstr "Disponible hasta"
+
+msgid "Dieser Export ist abgelaufen."
+msgstr "Esta exportación ha caducado."
+
+msgid "CSV herunterladen"
+msgstr "Descargar CSV"
+
+msgid "Der Export konnte nicht erstellt werden. Bitte erneut anfordern."
+msgstr "No se pudo crear la exportación. Vuelve a solicitarla."
+
+msgid "Der Export wird im Hintergrund erstellt. Diese Seite aktualisiert sich automatisch."
+msgstr "La exportación se está generando en segundo plano. Esta página se actualiza automáticamente."
+
+msgid "Der Zahlungsdienst ist derzeit noch nicht verfügbar."
+msgstr "El servicio de pago no está disponible en este momento."
+
+msgid "Zugriff verweigert"
+msgstr "Acceso denegado"
+
+msgid "Für diese Ansicht fehlt die erforderliche Berechtigung."
+msgstr "No tienes permiso para acceder a esta vista."
+
+msgid "Zurück zur Übersicht"
+msgstr "Volver al resumen"
+
+msgid "Ansicht konnte nicht geladen werden"
+msgstr "No se pudo cargar la página"
+
+msgid "Beim Laden der Daten ist ein interner Fehler aufgetreten. Bitte versuchen Sie es erneut."
+msgstr "Se produjo un error interno al cargar los datos. Vuelve a intentarlo."
+
+msgid "Erneut laden"
+msgstr "Volver a cargar"
+
+msgid "Seitennavigation"
+msgstr "Navegación de páginas"
+
+msgid "von"
+msgstr "de"
+
+msgid "Datensätze"
+msgstr "Registros"
+
+msgid "Erste Seite"
+msgstr "Primera página"
+
+msgid "Erste"
+msgstr "Primera"
+
+msgid "Vorherige Seite"
+msgstr "Página anterior"
+
+msgid "Nächste Seite"
+msgstr "Página siguiente"
+
+msgid "Letzte Seite"
+msgstr "Última página"
+
+msgid "Letzte"
+msgstr "Última"
+
+msgid "Zwei-Faktor-Anmeldung"
+msgstr "Inicio de sesión con dos factores"
+
+msgid "Geben Sie den Code aus Ihrer Authenticator-App oder einen gültigen Recovery-Code ein."
+msgstr "Introduce el código de tu aplicación de autenticación o un código de recuperación válido."
+
+msgid "Recovery-Codes"
+msgstr "Códigos de recuperación"
+
+msgid "Einmalig speichern."
+msgstr "Guarda estos códigos ahora."
+
+msgid "Diese Codes werden später nicht erneut im Klartext angezeigt."
+msgstr "Estos códigos no se volverán a mostrar en texto claro."
+
+msgid "Schließen Sie die Sicherheitseinrichtung ab, bevor Sie Ihren geschützten PROMPTFINISHER-Bereich verwenden."
+msgstr "Completa la configuración de seguridad antes de acceder a tu zona protegida de PROMPTFINISHER."
+
+msgid "Authenticator-Daten"
+msgstr "Datos del autenticador"
+
+msgid "Secret kopieren"
+msgstr "Copiar secreto"
+
+msgid "Hinterlegen Sie das Secret in Microsoft Authenticator, Google Authenticator, 1Password oder einer kompatiblen TOTP-App."
+msgstr "Añade el secreto a Microsoft Authenticator, Google Authenticator, 1Password u otra aplicación TOTP compatible."
+
+msgid "Einrichtungs-URI"
+msgstr "URI de configuración"
+
+msgid "URI kopieren"
+msgstr "Copiar URI"
+
+msgid "Einrichtung bestätigen"
+msgstr "Confirmar configuración"
+
+msgid "6-stelliger Code"
+msgstr "Código de 6 dígitos"
+
+msgid "2FA aktivieren"
+msgstr "Activar 2FA"
+
+msgid "Nach erfolgreicher Aktivierung werden einmalig Recovery-Codes angezeigt."
+msgstr "Tras la activación se mostrarán una sola vez los códigos de recuperación."
+
+msgid "Wir senden einen zeitlich begrenzten Link an die hinterlegte E-Mail-Adresse."
+msgstr "Enviaremos un enlace temporal a tu dirección de correo registrada."
+
+msgid "Link anfordern"
+msgstr "Solicitar enlace"
+
+msgid "Anfrage verarbeitet"
+msgstr "Solicitud procesada"
+
+msgid "Falls ein aktives Konto zu dieser Adresse existiert, wurde ein zeitlich begrenzter Link zum Zurücksetzen versendet."
+msgstr "Si existe una cuenta activa con esta dirección, se ha enviado un enlace temporal para restablecer la contraseña."
+
+msgid "Legen Sie ein neues Passwort für Ihr PROMPTFINISHER-Konto fest."
+msgstr "Establece una nueva contraseña para tu cuenta de PROMPTFINISHER."
+
+msgid "Passwort speichern"
+msgstr "Guardar contraseña"
+
+msgid "Passwort geändert"
+msgstr "Contraseña cambiada"
+
+msgid "Link ungültig"
+msgstr "Enlace no válido"
+
+msgid "Sie können sich jetzt mit dem neuen Passwort anmelden."
+msgstr "Ahora puedes iniciar sesión con la nueva contraseña."
+
+msgid "Der Link ist ungültig, abgelaufen oder wurde bereits verwendet. Fordern Sie bei Bedarf einen neuen Link an."
+msgstr "Este enlace no es válido, ha caducado o ya se ha utilizado. Solicita otro si es necesario."
+
+msgid "Neuen Link anfordern"
+msgstr "Solicitar otro enlace"
+
+msgid "Möchten Sie die aktuelle Sitzung beenden?"
+msgstr "¿Quieres cerrar la sesión actual?"
+
+# Pro deployment, device registration, and expiration warnings.
+msgid "Die geschützte Pro-Anwendung ist auf diesem System noch nicht bereitgestellt."
+msgstr "La aplicación Pro protegida aún no se ha instalado en este sistema."
+
+msgid "Deployment unvollständig."
+msgstr "Despliegue incompleto."
+
+msgid "Der unveränderte PROMPTFINISHER-Pro-Golden-Master muss als private Serverdatei installiert werden."
+msgstr "El modelo maestro original de PROMPTFINISHER Pro debe instalarse como archivo privado del servidor."
+
+msgid "Diese Datei wird niemals öffentlich unter /static/ ausgeliefert."
+msgstr "Este archivo nunca se sirve públicamente en /static/."
+
+msgid "Gerät registrieren"
+msgstr "Registrar dispositivo"
+
+msgid "PROMPTFINISHER Pro erlaubt %(device_limit)s aktive Geräte pro Benutzer."
+msgstr "PROMPTFINISHER Pro permite %(device_limit)s dispositivos activos por usuario."
+
+msgid "Gerät registrieren und PROMPTFINISHER Pro öffnen"
+msgstr "Registrar dispositivo y abrir PROMPTFINISHER Pro"
+
+msgid "Wenn alle Geräteslots belegt sind, muss Ihr Firmenadministrator oder netstyle zuerst ein altes Gerät freigeben."
+msgstr "Si todas las plazas de dispositivos están ocupadas, el administrador de su empresa o netstyle debe liberar primero un dispositivo antiguo."
+
+msgid "Lizenz läuft bald ab"
+msgstr "La licencia caduca pronto"
+
+msgid "PROMPTFINISHER-Pro-Lizenz läuft bald ab"
+msgstr "La licencia de PROMPTFINISHER Pro caduca pronto"
+
+msgid "Dein Pro-Zugriff bleibt bis zum Ablaufdatum aktiv."
+msgstr "Tu acceso Pro seguirá activo hasta la fecha de caducidad."
+
+msgid "Verbleibende Tage:"
+msgstr "Días restantes:"
+
+msgid "Lizenz:"
+msgstr "Licencia:"
+
+msgid "Ablaufdatum:"
+msgstr "Fecha de caducidad:"
+
+msgid "Nach Ablauf wird der Pro-Zugriff ohne Verlängerung automatisch gesperrt."
+msgstr "Tras la caducidad, el acceso Pro se bloquea automáticamente si no se renueva."
+
+msgid "Was möchtest du tun?"
+msgstr "¿Qué quieres hacer?"
+
+msgid "Eine Verlängerung vor Ablauf hängt weitere 365 Tage an das bestehende Ablaufdatum an. Die Restlaufzeit geht nicht verloren."
+msgstr "La renovación antes del vencimiento añade 365 días a la fecha de caducidad actual. No se pierde el tiempo restante."
+
+msgid "Lizenzverwaltung / Verlängerung"
+msgstr "Gestión de licencias / renovación"
+
+msgid "Jetzt trotzdem PROMPTFINISHER Pro starten"
+msgstr "Abrir PROMPTFINISHER Pro de todos modos"
+
+msgid "Rechtstexte · Sprachfassungen"
+msgstr "Textos legales · Versiones lingüísticas"
+
+msgid "Entwurf, unabhängige Prüfung und dokumentierte Freigabe je Originalversion."
+msgstr "Borrador, revisión independiente y aprobación documentada para cada versión original."
+
+msgid "Sprachfassung anlegen"
+msgstr "Añadir versión lingüística"
+
+msgid "Die öffentliche Freigabe fremdsprachiger Rechtsdokumente ist ausgeschaltet."
+msgstr "La publicación de documentos legales en otros idiomas está desactivada."
+
+msgid "Dokument"
+msgstr "Documento"
+
+msgid "Freigegeben von"
+msgstr "Aprobado por"
+
+msgid "Details"
+msgstr "Detalles"
+
+msgid "Noch keine geprüften Sprachfassungen vorhanden."
+msgstr "Todavía no hay versiones lingüísticas revisadas."
+
+msgid "Deutsche Originalversionen"
+msgstr "Versiones originales en alemán"
+
+msgid "Rechtsübersetzung prüfen"
+msgstr "Revisar traducción legal"
+
+msgid "Deutsche Originalversion"
+msgstr "Versión original en alemán"
+
+msgid "Eingereicht von"
+msgstr "Enviado por"
+
+msgid "Freigegeben am"
+msgstr "Aprobado el"
+
+msgid "Freigabenachweis"
+msgstr "Justificante de aprobación"
+
+msgid "SHA-256 Original"
+msgstr "SHA-256 del original"
+
+msgid "SHA-256 Übersetzung"
+msgstr "SHA-256 de la traducción"
+
+msgid "Die Integritätsprüfung ist fehlgeschlagen. Diese Sprachfassung wird nicht öffentlich angezeigt."
+msgstr "La verificación de integridad ha fallado. Esta versión no se mostrará públicamente."
+
+msgid "Übersetzungstext"
+msgstr "Texto traducido"
+
+msgid "Entwurf bearbeiten"
+msgstr "Editar borrador"
+
+msgid "Zur Prüfung einreichen"
+msgstr "Enviar a revisión"
+
+msgid "Zurück zum Entwurf"
+msgstr "Volver al borrador"
+
+msgid "Unabhängige Freigabe"
+msgstr "Aprobación independiente"
+
+msgid "Nur nach fachlicher und rechtlicher Prüfung mit dokumentiertem Nachweis freigeben."
+msgstr "Aprobar solo tras una revisión especializada y jurídica con justificante documentado."
+
+msgid "Fachlich freigeben"
+msgstr "Aprobar tras revisión"
+
+msgid "Übersetzung (noch nicht freigegeben)"
+msgstr "Traducción (aún no aprobada)"
+
+msgid "Nur Entwürfe dürfen bearbeitet werden."
+msgstr "Solo se pueden editar borradores."
+
+msgid "Übersetzungsentwurf gespeichert."
+msgstr "Borrador de traducción guardado."
+
+msgid "Übersetzungsentwurf bearbeiten"
+msgstr "Editar borrador de traducción"
+
+msgid "Übersetzungsentwurf anlegen"
+msgstr "Crear borrador de traducción"
+
+msgid "Nur Entwürfe können eingereicht werden."
+msgstr "Solo se pueden enviar borradores."
+
+msgid "Nur Prüfversionen können zurückgesetzt werden."
+msgstr "Solo las versiones en revisión pueden volver a borrador."
+
+msgid "Nur geprüfte Fassungen können freigegeben werden."
+msgstr "Solo se pueden aprobar las versiones revisadas."
+
+msgid "Sprachfassung zur Prüfung eingereicht."
+msgstr "Versión lingüística enviada a revisión."
+
+msgid "Sprachfassung wieder als Entwurf markiert."
+msgstr "Versión lingüística devuelta a borrador."
+
+msgid "Fachlich geprüfte Sprachfassung freigegeben."
+msgstr "Versión lingüística revisada y aprobada."
+
+msgid "Fachliche Prüfung"
+msgstr "En revisión"
+
+msgid "Rechtstexte freigeben"
+msgstr "Aprobar textos legales"
+
+# Invitation-acceptance UI; legal text bodies remain under separate legal approval.
+msgid "Einladung annehmen"
+msgstr "Aceptar invitación"
+
+msgid "%(company)s lädt Sie zu PROMPTFINISHER ein."
+msgstr "%(company)s le invita a PROMPTFINISHER."
+
+msgid "Konto anlegen und Einladung annehmen"
+msgstr "Crear cuenta y aceptar la invitación"
+
+# Account invitation and email-verification result UI.
+msgid "Sie wurden zu %(company)s eingeladen."
+msgstr "Ha recibido una invitación para unirse a %(company)s."
+
+msgid "Der Beitritt erfolgt erst nach Ihrer ausdrücklichen Bestätigung."
+msgstr "Solo se incorporará a la empresa después de confirmarlo expresamente."
+
+msgid "Firma beitreten"
+msgstr "Unirse a la empresa"
+
+msgid "Einladung angenommen"
+msgstr "Invitación aceptada"
+
+msgid "Einladung ungültig oder abgelaufen"
+msgstr "Invitación no válida o caducada"
+
+msgid "Ihr Benutzerkonto ist dem Unternehmen jetzt zugeordnet."
+msgstr "Su cuenta de usuario ya está vinculada a la empresa."
+
+msgid "Der Einladungslink kann nicht mehr verwendet werden. Bitte fordern Sie bei Ihrem Firmenadministrator eine neue Einladung an."
+msgstr "Este enlace de invitación ya no se puede utilizar. Solicite una nueva invitación al administrador de su empresa."
+
+msgid "Zum Kundenportal"
+msgstr "Ir al portal de clientes"
+
+msgid "Zur Startseite"
+msgstr "Volver a la página de inicio"
+
+msgid "E-Mail bestätigt"
+msgstr "Correo electrónico verificado"
+
+msgid "Link ungültig oder abgelaufen"
+msgstr "Enlace no válido o caducado"
+
+msgid "Die E-Mail-Adresse Ihres PROMPTFINISHER-Kontos wurde bestätigt."
+msgstr "Se ha verificado la dirección de correo electrónico de su cuenta de PROMPTFINISHER."
+
+msgid "Dieser Bestätigungslink ist nicht mehr gültig."
+msgstr "Este enlace de verificación ya no es válido."
+
+msgid "Weiter"
+msgstr "Continuar"
+
+# Read-only legal-language technical readiness UI; not a publication gate.
+msgid "Technischer Status der Rechtsübersetzungen"
+msgstr "Estado técnico de las traducciones legales"
+
+msgid "Keine juristische oder produktive Freigabe. Die Veröffentlichung bleibt separat gesperrt."
+msgstr "Sin aprobación jurídica ni autorización de producción. La publicación continúa bloqueada por separado."
+
+msgid "Technisch geprüft"
+msgstr "Verificado técnicamente"
+
+msgid "Fehlend"
+msgstr "Faltante"
+
+msgid "In Prüfung"
+msgstr "En revisión"
+
+msgid "Freigabe veraltet"
+msgstr "Aprobación obsoleta"
+
+msgid "Deutsche Quelle fehlt"
+msgstr "Falta el original alemán"
+
+# Account snapshot validation error; generic and safe for public users.
+msgid "Das Rechtsdokument-Angebot ist ungültig oder nicht mehr aktuell. Bitte prüfen Sie die Dokumente erneut und senden Sie das Formular noch einmal ab."
+msgstr "La oferta de documentos legales no es válida o ya no está actualizada. Revise de nuevo los documentos y vuelva a enviar el formulario."

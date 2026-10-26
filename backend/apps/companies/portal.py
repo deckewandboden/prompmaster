@@ -4,6 +4,7 @@ from datetime import timedelta
 from apps.core.security import check_rate, client_ip
 
 from django.contrib import messages
+from django.conf import settings
 from django.contrib.auth.decorators import login_required
 from django.core.exceptions import PermissionDenied, ValidationError
 from django.db import transaction
@@ -24,6 +25,7 @@ from apps.core.datagrid import DataGrid
 from apps.devices.models import DeviceRegistration
 from apps.devices.services import revoke_device
 from apps.legal.models import DeletionRequest, LegalAcceptance, LegalDocument
+from apps.legal.checkout_snapshot import issue_snapshot, validate_snapshot, rotate_session_nonce
 from apps.legal.services import process_deletion_request
 from apps.licenses.models import License, LicenseAssignment, LicenseReminder, LicenseUpgradeRequest
 from apps.licenses.services import assign_license, release_license, request_product_upgrade, resolve_product_upgrade, create_assignment_link, consume_assignment_link, has_current_term
@@ -85,17 +87,69 @@ def _active_legal_documents(private_customer=False):
     return documents
 
 
+def _portal_legal_offer(request, private_customer):
+    """Use inside transaction.atomic so source rows are locked at order creation."""
+    token = (request.POST.get('legal_snapshot_token') or '').strip()
+    if token or settings.LEGAL_CHECKOUT_SNAPSHOT_REQUIRED:
+        return validate_snapshot(
+            request, token, 'private' if private_customer else 'company',
+            lock=True,
+        )
+    return (
+        {
+            'verification': 'legacy_without_signed_snapshot',
+            'presentation_proof': 'not_recorded',
+        },
+        _active_legal_documents(private_customer=private_customer),
+    )
+
+
+def _portal_snapshot_for_render(request, private_customer):
+    try:
+        return issue_snapshot(
+            request, 'private' if private_customer else 'company',
+        )
+    except ValidationError:
+        return None
+
+
 def _record_legal_acceptances(
     request,
     order,
     documents,
     *,
     early_performance_requested=False,
+    legal_offer=None,
 ):
+    offered = legal_offer or {
+        'verification': 'legacy_without_signed_snapshot',
+        'presentation_proof': 'not_recorded',
+    }
+    snapshot = dict(order.billing_snapshot or {})
+    prior = snapshot.get('legal_offer')
+    if prior is not None:
+        # Idempotent retries must not silently reuse a previous purchase
+        # acknowledgement for a different language, approval status or
+        # early-performance consent text. Preserve the original evidence.
+        identity_fields = (
+            'verification', 'ui_language', 'documents',
+            'early_performance_clause',
+        )
+        if any(prior.get(key) != offered.get(key) for key in identity_fields):
+            raise ValidationError(
+                'Die Rechtsdokumente oder Einwilligungen haben sich geändert. '
+                'Bitte starten Sie den Kauf erneut.'
+            )
+        offered = prior
+    else:
+        snapshot['legal_offer'] = offered
+        order.billing_snapshot = snapshot
+        order.save(update_fields=['billing_snapshot', 'updated_at'])
     evidence = {
         'ip': client_ip(request),
         'user_agent': request.META.get('HTTP_USER_AGENT', '')[:300],
         'early_performance_requested': bool(early_performance_requested),
+        'legal_offer': offered,
     }
     for document in documents.values():
         LegalAcceptance.objects.get_or_create(
@@ -120,6 +174,18 @@ def _rotate_checkout_key(request, session_key):
 
 
 def _start_mollie_checkout(request, order, description, metadata):
+    # Never initiate another provider charge for a settled or terminal order,
+    # even if a stale browser submits a previously valid idempotency key.
+    if (
+        order.status in {'paid', 'failed', 'canceled'}
+        or order.payments.filter(status='paid').exists()
+    ):
+        messages.error(
+            request,
+            'Dieser Kauf ist bereits abgeschlossen oder kann nicht erneut '
+            'gestartet werden. Bitte beginnen Sie einen neuen Kauf.',
+        )
+        return None
     snapshot = dict(order.billing_snapshot or {})
     provider_request = snapshot.get('mollie_create_request')
     if not isinstance(provider_request, dict):
@@ -1252,17 +1318,34 @@ def buy(request):
 
     if request.method == 'POST' and checkout_available and form_valid:
         try:
-            documents = _active_legal_documents(private_customer=private_customer)
-            order = create_order(user=request.user, product=product, quantity=form.cleaned_data['quantity'], idempotency_key=checkout_key)
-            _record_legal_acceptances(
-                request,
-                order,
-                documents,
-                early_performance_requested=bool(
-                    private_customer
-                    and form.cleaned_data.get('request_early_performance')
-                ),
-            )
+            with transaction.atomic():
+                legal_offer, documents = _portal_legal_offer(
+                    request, private_customer,
+                )
+                order = create_order(
+                    user=request.user, product=product,
+                    quantity=form.cleaned_data['quantity'],
+                    idempotency_key=checkout_key,
+                )
+                if (
+                    order.status in {'paid', 'failed', 'canceled'}
+                    or order.payments.filter(status='paid').exists()
+                ):
+                    _rotate_checkout_key(request, checkout_session_key)
+                    raise ValidationError(
+                        'Diese Bestellung ist bereits abgeschlossen oder '
+                        'beendet. Bitte starten Sie den Kauf erneut.'
+                    )
+                _record_legal_acceptances(
+                    request,
+                    order,
+                    documents,
+                    early_performance_requested=bool(
+                        private_customer
+                        and form.cleaned_data.get('request_early_performance')
+                    ),
+                    legal_offer=legal_offer,
+                )
             response = _start_mollie_checkout(
                 request,
                 order,
@@ -1271,6 +1354,7 @@ def buy(request):
             )
             if response:
                 _rotate_checkout_key(request, checkout_session_key)
+                rotate_session_nonce(request)
                 return response
             order.refresh_from_db(fields=['status'])
             if order.status == 'failed':
@@ -1281,6 +1365,9 @@ def buy(request):
             logger.exception('Checkout failed before provider redirect')
             form.add_error(None, 'Checkout konnte nicht vorbereitet werden.')
     price = current_price(product, 'new')
+    legal_snapshot = _portal_snapshot_for_render(request, private_customer)
+    if private_customer and legal_snapshot and 'request_early_performance' in form.fields:
+        form.fields['request_early_performance'].label = legal_snapshot['earlyPerformance']['text']
     return render(
         request,
         'portal/buy.html',
@@ -1290,6 +1377,7 @@ def buy(request):
             'price': price,
             'unit_price_cents': int(price.gross_amount * 100) if price else None,
             'checkout_available': checkout_available,
+            'legal_snapshot': legal_snapshot,
         },
     )
 
@@ -1325,17 +1413,34 @@ def renew(request, pk):
         )
     if request.method == 'POST' and checkout_available and form_valid:
         try:
-            documents = _active_legal_documents(private_customer=private_customer)
-            order = create_order(user=request.user, product=license_obj.product, quantity=1, target_license=license_obj, idempotency_key=checkout_key)
-            _record_legal_acceptances(
-                request,
-                order,
-                documents,
-                early_performance_requested=bool(
-                    private_customer
-                    and form.cleaned_data.get('request_early_performance')
-                ),
-            )
+            with transaction.atomic():
+                legal_offer, documents = _portal_legal_offer(
+                    request, private_customer,
+                )
+                order = create_order(
+                    user=request.user, product=license_obj.product,
+                    quantity=1, target_license=license_obj,
+                    idempotency_key=checkout_key,
+                )
+                if (
+                    order.status in {'paid', 'failed', 'canceled'}
+                    or order.payments.filter(status='paid').exists()
+                ):
+                    _rotate_checkout_key(request, checkout_session_key)
+                    raise ValidationError(
+                        'Diese Bestellung ist bereits abgeschlossen oder '
+                        'beendet. Bitte starten Sie den Kauf erneut.'
+                    )
+                _record_legal_acceptances(
+                    request,
+                    order,
+                    documents,
+                    early_performance_requested=bool(
+                        private_customer
+                        and form.cleaned_data.get('request_early_performance')
+                    ),
+                    legal_offer=legal_offer,
+                )
             response = _start_mollie_checkout(
                 request,
                 order,
@@ -1344,6 +1449,7 @@ def renew(request, pk):
             )
             if response:
                 _rotate_checkout_key(request, checkout_session_key)
+                rotate_session_nonce(request)
                 return response
             order.refresh_from_db(fields=['status'])
             if order.status == 'failed':
@@ -1353,10 +1459,14 @@ def renew(request, pk):
         except Exception:
             logger.exception('Renewal checkout failed')
             form.add_error(None, 'Verlängerung konnte nicht vorbereitet werden.')
+    legal_snapshot = _portal_snapshot_for_render(request, private_customer)
+    if private_customer and legal_snapshot and 'request_early_performance' in form.fields:
+        form.fields['request_early_performance'].label = legal_snapshot['earlyPerformance']['text']
     return render(
         request,
         'portal/renew.html',
-        {'form': form, 'license': license_obj, 'checkout_available': checkout_available},
+        {'form': form, 'license': license_obj, 'checkout_available': checkout_available,
+         'legal_snapshot': legal_snapshot},
     )
 
 

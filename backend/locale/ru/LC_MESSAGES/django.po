@@ -3550,3 +3550,459 @@ msgstr "Если дата окончания не указана, мы расс�
 
 msgid "jetzt kündigen"
 msgstr "Расторгнуть сейчас"
+
+# Customer checkout: legal document list heading.
+msgid "Rechtsdokumente:"
+msgstr "Юридические документы:"
+
+msgid "Alle für Ihr Konto freigegebenen Adminbereiche."
+msgstr "Все разделы администрирования, доступные вашей учётной записи."
+
+msgid "Geschäft & Inhalte"
+msgstr "Бизнес и контент"
+
+msgid "System & Governance"
+msgstr "Система и управление"
+
+msgid "Lead bearbeiten"
+msgstr "Редактировать лид"
+
+msgid "Ansprechpartner"
+msgstr "Контактное лицо"
+
+msgid "Verlauf & Einordnung"
+msgstr "История и оценка"
+
+msgid "Zuletzt geändert"
+msgstr "Последнее изменение"
+
+msgid "Als Firmenkunde konvertiert am"
+msgstr "Преобразовано в корпоративного клиента"
+
+msgid "Kundenkonto öffnen"
+msgstr "Открыть учётную запись клиента"
+
+msgid "Privatkunden werden über den öffentlichen Registrierungs-/Checkout-Prozess angelegt, damit AGB und Datenschutz vom Kunden selbst bestätigt werden."
+msgstr "Частные клиенты регистрируются через общедоступную форму и оформление заказа, чтобы самостоятельно принять условия и политику конфиденциальности."
+
+msgid "← Zur Übersicht"
+msgstr "← К обзору"
+
+msgid "Erklärung"
+msgstr "Заявление"
+
+msgid "Gewünschtes Ende"
+msgstr "Желаемая дата окончания"
+
+msgid "Bearbeitet"
+msgstr "Обработано"
+
+msgid "Bearbeitung"
+msgstr "Обработка"
+
+msgid "Status speichern"
+msgstr "Сохранить статус"
+
+msgid "Sie haben Leserechte, aber keine Berechtigung zur Bearbeitung."
+msgstr "У вас есть доступ на чтение, но нет прав на изменение."
+
+msgid "CSV-Export"
+msgstr "Экспорт CSV"
+
+msgid "angefordert"
+msgstr "запрошено"
+
+msgid "Zeilen"
+msgstr "Строки"
+
+msgid "Verfügbar bis"
+msgstr "Доступно до"
+
+msgid "Dieser Export ist abgelaufen."
+msgstr "Срок действия экспорта истёк."
+
+msgid "CSV herunterladen"
+msgstr "Скачать CSV"
+
+msgid "Der Export konnte nicht erstellt werden. Bitte erneut anfordern."
+msgstr "Не удалось сформировать экспорт. Повторите запрос."
+
+msgid "Der Export wird im Hintergrund erstellt. Diese Seite aktualisiert sich automatisch."
+msgstr "Экспорт формируется в фоновом режиме. Страница обновляется автоматически."
+
+msgid "Der Zahlungsdienst ist derzeit noch nicht verfügbar."
+msgstr "Платёжный сервис сейчас недоступен."
+
+msgid "Zugriff verweigert"
+msgstr "Доступ запрещён"
+
+msgid "Für diese Ansicht fehlt die erforderliche Berechtigung."
+msgstr "У вас нет прав для просмотра этой страницы."
+
+msgid "Zurück zur Übersicht"
+msgstr "Вернуться к обзору"
+
+msgid "Ansicht konnte nicht geladen werden"
+msgstr "Не удалось загрузить страницу"
+
+msgid "Beim Laden der Daten ist ein interner Fehler aufgetreten. Bitte versuchen Sie es erneut."
+msgstr "При загрузке данных произошла внутренняя ошибка. Повторите попытку."
+
+msgid "Erneut laden"
+msgstr "Перезагрузить"
+
+msgid "Seitennavigation"
+msgstr "Навигация по страницам"
+
+msgid "von"
+msgstr "из"
+
+msgid "Datensätze"
+msgstr "Записи"
+
+msgid "Erste Seite"
+msgstr "Первая страница"
+
+msgid "Erste"
+msgstr "Первая"
+
+msgid "Vorherige Seite"
+msgstr "Предыдущая страница"
+
+msgid "Nächste Seite"
+msgstr "Следующая страница"
+
+msgid "Letzte Seite"
+msgstr "Последняя страница"
+
+msgid "Letzte"
+msgstr "Последняя"
+
+msgid "Zwei-Faktor-Anmeldung"
+msgstr "Вход с двухфакторной аутентификацией"
+
+msgid "Geben Sie den Code aus Ihrer Authenticator-App oder einen gültigen Recovery-Code ein."
+msgstr "Введите код из приложения аутентификации или действующий резервный код."
+
+msgid "Recovery-Codes"
+msgstr "Резервные коды"
+
+msgid "Einmalig speichern."
+msgstr "Сохраните эти коды сейчас."
+
+msgid "Diese Codes werden später nicht erneut im Klartext angezeigt."
+msgstr "Позже эти коды не будут снова показаны в открытом виде."
+
+msgid "Schließen Sie die Sicherheitseinrichtung ab, bevor Sie Ihren geschützten PROMPTFINISHER-Bereich verwenden."
+msgstr "Завершите настройку безопасности перед доступом к защищённому разделу PROMPTFINISHER."
+
+msgid "Authenticator-Daten"
+msgstr "Данные приложения аутентификации"
+
+msgid "Secret kopieren"
+msgstr "Скопировать секретный ключ"
+
+msgid "Hinterlegen Sie das Secret in Microsoft Authenticator, Google Authenticator, 1Password oder einer kompatiblen TOTP-App."
+msgstr "Добавьте секретный ключ в Microsoft Authenticator, Google Authenticator, 1Password или совместимое приложение TOTP."
+
+msgid "Einrichtungs-URI"
+msgstr "URI настройки"
+
+msgid "URI kopieren"
+msgstr "Скопировать URI"
+
+msgid "Einrichtung bestätigen"
+msgstr "Подтвердить настройку"
+
+msgid "6-stelliger Code"
+msgstr "Шестизначный код"
+
+msgid "2FA aktivieren"
+msgstr "Включить 2FA"
+
+msgid "Nach erfolgreicher Aktivierung werden einmalig Recovery-Codes angezeigt."
+msgstr "После активации резервные коды будут показаны только один раз."
+
+msgid "Wir senden einen zeitlich begrenzten Link an die hinterlegte E-Mail-Adresse."
+msgstr "Мы отправим временную ссылку на зарегистрированный адрес электронной почты."
+
+msgid "Link anfordern"
+msgstr "Запросить ссылку"
+
+msgid "Anfrage verarbeitet"
+msgstr "Запрос обработан"
+
+msgid "Falls ein aktives Konto zu dieser Adresse existiert, wurde ein zeitlich begrenzter Link zum Zurücksetzen versendet."
+msgstr "Если с этим адресом связана активная учётная запись, отправлена временная ссылка для сброса пароля."
+
+msgid "Legen Sie ein neues Passwort für Ihr PROMPTFINISHER-Konto fest."
+msgstr "Задайте новый пароль для учётной записи PROMPTFINISHER."
+
+msgid "Passwort speichern"
+msgstr "Сохранить пароль"
+
+msgid "Passwort geändert"
+msgstr "Пароль изменён"
+
+msgid "Link ungültig"
+msgstr "Недействительная ссылка"
+
+msgid "Sie können sich jetzt mit dem neuen Passwort anmelden."
+msgstr "Теперь вы можете войти с новым паролем."
+
+msgid "Der Link ist ungültig, abgelaufen oder wurde bereits verwendet. Fordern Sie bei Bedarf einen neuen Link an."
+msgstr "Ссылка недействительна, истекла или уже использована. При необходимости запросите новую."
+
+msgid "Neuen Link anfordern"
+msgstr "Запросить новую ссылку"
+
+msgid "Möchten Sie die aktuelle Sitzung beenden?"
+msgstr "Хотите завершить текущий сеанс?"
+
+# Pro deployment, device registration, and expiration warnings.
+msgid "Die geschützte Pro-Anwendung ist auf diesem System noch nicht bereitgestellt."
+msgstr "Защищённое приложение Pro ещё не развернуто на этой системе."
+
+msgid "Deployment unvollständig."
+msgstr "Развертывание не завершено."
+
+msgid "Der unveränderte PROMPTFINISHER-Pro-Golden-Master muss als private Serverdatei installiert werden."
+msgstr "Неизменённый эталон PROMPTFINISHER Pro необходимо установить как закрытый файл сервера."
+
+msgid "Diese Datei wird niemals öffentlich unter /static/ ausgeliefert."
+msgstr "Этот файл никогда не публикуется по пути /static/."
+
+msgid "Gerät registrieren"
+msgstr "Зарегистрировать устройство"
+
+msgid "PROMPTFINISHER Pro erlaubt %(device_limit)s aktive Geräte pro Benutzer."
+msgstr "PROMPTFINISHER Pro допускает %(device_limit)s активных устройств на пользователя."
+
+msgid "Gerät registrieren und PROMPTFINISHER Pro öffnen"
+msgstr "Зарегистрировать устройство и открыть PROMPTFINISHER Pro"
+
+msgid "Wenn alle Geräteslots belegt sind, muss Ihr Firmenadministrator oder netstyle zuerst ein altes Gerät freigeben."
+msgstr "Если все слоты устройств заняты, администратор вашей компании или netstyle должен сначала освободить старое устройство."
+
+msgid "Lizenz läuft bald ab"
+msgstr "Срок лицензии скоро истечёт"
+
+msgid "PROMPTFINISHER-Pro-Lizenz läuft bald ab"
+msgstr "Срок лицензии PROMPTFINISHER Pro скоро истечёт"
+
+msgid "Dein Pro-Zugriff bleibt bis zum Ablaufdatum aktiv."
+msgstr "Ваш доступ Pro останется активным до окончания срока действия."
+
+msgid "Verbleibende Tage:"
+msgstr "Осталось дней:"
+
+msgid "Lizenz:"
+msgstr "Лицензия:"
+
+msgid "Ablaufdatum:"
+msgstr "Дата окончания:"
+
+msgid "Nach Ablauf wird der Pro-Zugriff ohne Verlängerung automatisch gesperrt."
+msgstr "После окончания срока доступ Pro автоматически блокируется без продления."
+
+msgid "Was möchtest du tun?"
+msgstr "Что вы хотите сделать?"
+
+msgid "Eine Verlängerung vor Ablauf hängt weitere 365 Tage an das bestehende Ablaufdatum an. Die Restlaufzeit geht nicht verloren."
+msgstr "Продление до истечения срока добавит 365 дней к текущей дате окончания. Остаток срока сохранится."
+
+msgid "Lizenzverwaltung / Verlängerung"
+msgstr "Управление лицензией / продление"
+
+msgid "Jetzt trotzdem PROMPTFINISHER Pro starten"
+msgstr "Всё равно открыть PROMPTFINISHER Pro"
+
+msgid "Rechtstexte · Sprachfassungen"
+msgstr "Юридические тексты · Языковые версии"
+
+msgid "Entwurf, unabhängige Prüfung und dokumentierte Freigabe je Originalversion."
+msgstr "Черновик, независимая проверка и документированное утверждение каждой исходной версии."
+
+msgid "Sprachfassung anlegen"
+msgstr "Добавить языковую версию"
+
+msgid "Die öffentliche Freigabe fremdsprachiger Rechtsdokumente ist ausgeschaltet."
+msgstr "Публичная публикация юридических документов на других языках отключена."
+
+msgid "Dokument"
+msgstr "Документ"
+
+msgid "Freigegeben von"
+msgstr "Утвердил"
+
+msgid "Details"
+msgstr "Подробности"
+
+msgid "Noch keine geprüften Sprachfassungen vorhanden."
+msgstr "Проверенных языковых версий пока нет."
+
+msgid "Deutsche Originalversionen"
+msgstr "Исходные версии на немецком"
+
+msgid "Rechtsübersetzung prüfen"
+msgstr "Проверить юридический перевод"
+
+msgid "Deutsche Originalversion"
+msgstr "Исходная версия на немецком"
+
+msgid "Eingereicht von"
+msgstr "Отправил"
+
+msgid "Freigegeben am"
+msgstr "Дата утверждения"
+
+msgid "Freigabenachweis"
+msgstr "Подтверждение утверждения"
+
+msgid "SHA-256 Original"
+msgstr "SHA-256 оригинала"
+
+msgid "SHA-256 Übersetzung"
+msgstr "SHA-256 перевода"
+
+msgid "Die Integritätsprüfung ist fehlgeschlagen. Diese Sprachfassung wird nicht öffentlich angezeigt."
+msgstr "Проверка целостности не пройдена. Эта языковая версия не будет опубликована."
+
+msgid "Übersetzungstext"
+msgstr "Текст перевода"
+
+msgid "Entwurf bearbeiten"
+msgstr "Редактировать черновик"
+
+msgid "Zur Prüfung einreichen"
+msgstr "Отправить на проверку"
+
+msgid "Zurück zum Entwurf"
+msgstr "Вернуть в черновик"
+
+msgid "Unabhängige Freigabe"
+msgstr "Независимое утверждение"
+
+msgid "Nur nach fachlicher und rechtlicher Prüfung mit dokumentiertem Nachweis freigeben."
+msgstr "Утверждать только после профессиональной и юридической проверки с документальным подтверждением."
+
+msgid "Fachlich freigeben"
+msgstr "Утвердить после проверки"
+
+msgid "Übersetzung (noch nicht freigegeben)"
+msgstr "Перевод (ещё не утверждён)"
+
+msgid "Nur Entwürfe dürfen bearbeitet werden."
+msgstr "Редактировать можно только черновики."
+
+msgid "Übersetzungsentwurf gespeichert."
+msgstr "Черновик перевода сохранён."
+
+msgid "Übersetzungsentwurf bearbeiten"
+msgstr "Редактировать черновик перевода"
+
+msgid "Übersetzungsentwurf anlegen"
+msgstr "Создать черновик перевода"
+
+msgid "Nur Entwürfe können eingereicht werden."
+msgstr "На проверку можно отправлять только черновики."
+
+msgid "Nur Prüfversionen können zurückgesetzt werden."
+msgstr "В черновик можно возвращать только версии на проверке."
+
+msgid "Nur geprüfte Fassungen können freigegeben werden."
+msgstr "Утверждать можно только проверенные версии."
+
+msgid "Sprachfassung zur Prüfung eingereicht."
+msgstr "Языковая версия отправлена на проверку."
+
+msgid "Sprachfassung wieder als Entwurf markiert."
+msgstr "Языковая версия возвращена в черновик."
+
+msgid "Fachlich geprüfte Sprachfassung freigegeben."
+msgstr "Проверенная языковая версия утверждена."
+
+msgid "Fachliche Prüfung"
+msgstr "На проверке"
+
+msgid "Rechtstexte freigeben"
+msgstr "Утверждать юридические тексты"
+
+# Invitation-acceptance UI; legal text bodies remain under separate legal approval.
+msgid "Einladung annehmen"
+msgstr "Принять приглашение"
+
+msgid "%(company)s lädt Sie zu PROMPTFINISHER ein."
+msgstr "%(company)s приглашает вас в PROMPTFINISHER."
+
+msgid "Konto anlegen und Einladung annehmen"
+msgstr "Создать учётную запись и принять приглашение"
+
+# Account invitation and email-verification result UI.
+msgid "Sie wurden zu %(company)s eingeladen."
+msgstr "Вас пригласили присоединиться к компании %(company)s."
+
+msgid "Der Beitritt erfolgt erst nach Ihrer ausdrücklichen Bestätigung."
+msgstr "Присоединение к компании произойдёт только после вашего явного подтверждения."
+
+msgid "Firma beitreten"
+msgstr "Присоединиться к компании"
+
+msgid "Einladung angenommen"
+msgstr "Приглашение принято"
+
+msgid "Einladung ungültig oder abgelaufen"
+msgstr "Приглашение недействительно или срок его действия истёк"
+
+msgid "Ihr Benutzerkonto ist dem Unternehmen jetzt zugeordnet."
+msgstr "Ваша учётная запись теперь связана с компанией."
+
+msgid "Der Einladungslink kann nicht mehr verwendet werden. Bitte fordern Sie bei Ihrem Firmenadministrator eine neue Einladung an."
+msgstr "Эта ссылка-приглашение больше не действует. Попросите администратора вашей компании отправить новое приглашение."
+
+msgid "Zum Kundenportal"
+msgstr "Перейти в клиентский портал"
+
+msgid "Zur Startseite"
+msgstr "На главную"
+
+msgid "E-Mail bestätigt"
+msgstr "Адрес электронной почты подтверждён"
+
+msgid "Link ungültig oder abgelaufen"
+msgstr "Ссылка недействительна или срок её действия истёк"
+
+msgid "Die E-Mail-Adresse Ihres PROMPTFINISHER-Kontos wurde bestätigt."
+msgstr "Адрес электронной почты вашей учётной записи PROMPTFINISHER подтверждён."
+
+msgid "Dieser Bestätigungslink ist nicht mehr gültig."
+msgstr "Эта ссылка подтверждения больше недействительна."
+
+msgid "Weiter"
+msgstr "Продолжить"
+
+# Read-only legal-language technical readiness UI; not a publication gate.
+msgid "Technischer Status der Rechtsübersetzungen"
+msgstr "Технический статус переводов юридических документов"
+
+msgid "Keine juristische oder produktive Freigabe. Die Veröffentlichung bleibt separat gesperrt."
+msgstr "Юридическое одобрение и разрешение на выпуск отсутствуют. Публикация по-прежнему заблокирована отдельно."
+
+msgid "Technisch geprüft"
+msgstr "Технически проверено"
+
+msgid "Fehlend"
+msgstr "Отсутствует"
+
+msgid "In Prüfung"
+msgstr "На проверке"
+
+msgid "Freigabe veraltet"
+msgstr "Одобрение устарело"
+
+msgid "Deutsche Quelle fehlt"
+msgstr "Немецкий оригинал отсутствует"
+
+# Account snapshot validation error; generic and safe for public users.
+msgid "Das Rechtsdokument-Angebot ist ungültig oder nicht mehr aktuell. Bitte prüfen Sie die Dokumente erneut und senden Sie das Formular noch einmal ab."
+msgstr "Предложенные юридические документы недействительны или больше не актуальны. Пожалуйста, ознакомьтесь с документами повторно и отправьте форму ещё раз."

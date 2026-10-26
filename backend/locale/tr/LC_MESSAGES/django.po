@@ -3549,3 +3549,459 @@ msgstr "Bitiş tarihi belirtmezseniz fesih bildiriminizi mümkün olan en erken 
 
 msgid "jetzt kündigen"
 msgstr "Şimdi feshet"
+
+# Customer checkout: legal document list heading.
+msgid "Rechtsdokumente:"
+msgstr "Hukuki belgeler:"
+
+msgid "Alle für Ihr Konto freigegebenen Adminbereiche."
+msgstr "Hesabınızın erişebildiği tüm yönetim bölümleri."
+
+msgid "Geschäft & Inhalte"
+msgstr "İş ve içerik"
+
+msgid "System & Governance"
+msgstr "Sistem ve yönetişim"
+
+msgid "Lead bearbeiten"
+msgstr "Potansiyel müşteriyi düzenle"
+
+msgid "Ansprechpartner"
+msgstr "İlgili kişi"
+
+msgid "Verlauf & Einordnung"
+msgstr "Geçmiş ve değerlendirme"
+
+msgid "Zuletzt geändert"
+msgstr "Son değiştirilme"
+
+msgid "Als Firmenkunde konvertiert am"
+msgstr "Kurumsal müşteriye dönüştürülme tarihi"
+
+msgid "Kundenkonto öffnen"
+msgstr "Müşteri hesabını aç"
+
+msgid "Privatkunden werden über den öffentlichen Registrierungs-/Checkout-Prozess angelegt, damit AGB und Datenschutz vom Kunden selbst bestätigt werden."
+msgstr "Bireysel müşteriler, şartları ve gizlilik bildirimini bizzat kabul edebilmeleri için genel kayıt ve ödeme sürecinden oluşturulur."
+
+msgid "← Zur Übersicht"
+msgstr "← Genel bakışa dön"
+
+msgid "Erklärung"
+msgstr "Beyan"
+
+msgid "Gewünschtes Ende"
+msgstr "İstenen bitiş tarihi"
+
+msgid "Bearbeitet"
+msgstr "İşlendi"
+
+msgid "Bearbeitung"
+msgstr "İşlem"
+
+msgid "Status speichern"
+msgstr "Durumu kaydet"
+
+msgid "Sie haben Leserechte, aber keine Berechtigung zur Bearbeitung."
+msgstr "Okuma erişiminiz var ancak düzenleme yetkiniz yok."
+
+msgid "CSV-Export"
+msgstr "CSV dışa aktarımı"
+
+msgid "angefordert"
+msgstr "talep edildi"
+
+msgid "Zeilen"
+msgstr "Satırlar"
+
+msgid "Verfügbar bis"
+msgstr "Şu tarihe kadar kullanılabilir"
+
+msgid "Dieser Export ist abgelaufen."
+msgstr "Bu dışa aktarımın süresi doldu."
+
+msgid "CSV herunterladen"
+msgstr "CSV indir"
+
+msgid "Der Export konnte nicht erstellt werden. Bitte erneut anfordern."
+msgstr "Dışa aktarım oluşturulamadı. Lütfen yeniden talep edin."
+
+msgid "Der Export wird im Hintergrund erstellt. Diese Seite aktualisiert sich automatisch."
+msgstr "Dışa aktarım arka planda hazırlanıyor. Bu sayfa otomatik yenilenir."
+
+msgid "Der Zahlungsdienst ist derzeit noch nicht verfügbar."
+msgstr "Ödeme hizmeti şu anda kullanılamıyor."
+
+msgid "Zugriff verweigert"
+msgstr "Erişim reddedildi"
+
+msgid "Für diese Ansicht fehlt die erforderliche Berechtigung."
+msgstr "Bu görünüme erişim izniniz yok."
+
+msgid "Zurück zur Übersicht"
+msgstr "Genel bakışa dön"
+
+msgid "Ansicht konnte nicht geladen werden"
+msgstr "Sayfa yüklenemedi"
+
+msgid "Beim Laden der Daten ist ein interner Fehler aufgetreten. Bitte versuchen Sie es erneut."
+msgstr "Veriler yüklenirken dahili hata oluştu. Lütfen yeniden deneyin."
+
+msgid "Erneut laden"
+msgstr "Yeniden yükle"
+
+msgid "Seitennavigation"
+msgstr "Sayfa gezintisi"
+
+msgid "von"
+msgstr "/"
+
+msgid "Datensätze"
+msgstr "Kayıtlar"
+
+msgid "Erste Seite"
+msgstr "İlk sayfa"
+
+msgid "Erste"
+msgstr "İlk"
+
+msgid "Vorherige Seite"
+msgstr "Önceki sayfa"
+
+msgid "Nächste Seite"
+msgstr "Sonraki sayfa"
+
+msgid "Letzte Seite"
+msgstr "Son sayfa"
+
+msgid "Letzte"
+msgstr "Son"
+
+msgid "Zwei-Faktor-Anmeldung"
+msgstr "İki faktörlü oturum açma"
+
+msgid "Geben Sie den Code aus Ihrer Authenticator-App oder einen gültigen Recovery-Code ein."
+msgstr "Kimlik doğrulama uygulamanızdaki kodu veya geçerli kurtarma kodunu girin."
+
+msgid "Recovery-Codes"
+msgstr "Kurtarma kodları"
+
+msgid "Einmalig speichern."
+msgstr "Kodları şimdi güvenle kaydedin."
+
+msgid "Diese Codes werden später nicht erneut im Klartext angezeigt."
+msgstr "Bu kodlar daha sonra açık metin olarak tekrar gösterilmeyecektir."
+
+msgid "Schließen Sie die Sicherheitseinrichtung ab, bevor Sie Ihren geschützten PROMPTFINISHER-Bereich verwenden."
+msgstr "Korumalı PROMPTFINISHER alanına erişmeden önce güvenlik kurulumunu tamamlayın."
+
+msgid "Authenticator-Daten"
+msgstr "Kimlik doğrulayıcı bilgileri"
+
+msgid "Secret kopieren"
+msgstr "Gizli anahtarı kopyala"
+
+msgid "Hinterlegen Sie das Secret in Microsoft Authenticator, Google Authenticator, 1Password oder einer kompatiblen TOTP-App."
+msgstr "Gizli anahtarı Microsoft Authenticator, Google Authenticator, 1Password veya uyumlu bir TOTP uygulamasına ekleyin."
+
+msgid "Einrichtungs-URI"
+msgstr "Kurulum URI'si"
+
+msgid "URI kopieren"
+msgstr "URI'yi kopyala"
+
+msgid "Einrichtung bestätigen"
+msgstr "Kurulumu onayla"
+
+msgid "6-stelliger Code"
+msgstr "6 haneli kod"
+
+msgid "2FA aktivieren"
+msgstr "2FA'yı etkinleştir"
+
+msgid "Nach erfolgreicher Aktivierung werden einmalig Recovery-Codes angezeigt."
+msgstr "Etkinleştirmeden sonra kurtarma kodları yalnızca bir kez gösterilir."
+
+msgid "Wir senden einen zeitlich begrenzten Link an die hinterlegte E-Mail-Adresse."
+msgstr "Kayıtlı e-posta adresinize süreli bir bağlantı göndereceğiz."
+
+msgid "Link anfordern"
+msgstr "Bağlantı iste"
+
+msgid "Anfrage verarbeitet"
+msgstr "İstek işlendi"
+
+msgid "Falls ein aktives Konto zu dieser Adresse existiert, wurde ein zeitlich begrenzter Link zum Zurücksetzen versendet."
+msgstr "Bu adrese bağlı etkin bir hesap varsa şifre sıfırlama bağlantısı gönderilmiştir."
+
+msgid "Legen Sie ein neues Passwort für Ihr PROMPTFINISHER-Konto fest."
+msgstr "PROMPTFINISHER hesabınız için yeni şifre belirleyin."
+
+msgid "Passwort speichern"
+msgstr "Şifreyi kaydet"
+
+msgid "Passwort geändert"
+msgstr "Şifre değiştirildi"
+
+msgid "Link ungültig"
+msgstr "Geçersiz bağlantı"
+
+msgid "Sie können sich jetzt mit dem neuen Passwort anmelden."
+msgstr "Artık yeni şifrenizle oturum açabilirsiniz."
+
+msgid "Der Link ist ungültig, abgelaufen oder wurde bereits verwendet. Fordern Sie bei Bedarf einen neuen Link an."
+msgstr "Bağlantı geçersiz, süresi dolmuş veya önceden kullanılmış. Gerekirse yeni bağlantı isteyin."
+
+msgid "Neuen Link anfordern"
+msgstr "Yeni bağlantı iste"
+
+msgid "Möchten Sie die aktuelle Sitzung beenden?"
+msgstr "Geçerli oturumu kapatmak istiyor musunuz?"
+
+# Pro deployment, device registration, and expiration warnings.
+msgid "Die geschützte Pro-Anwendung ist auf diesem System noch nicht bereitgestellt."
+msgstr "Korumalı Pro uygulaması bu sistemde henüz dağıtılmadı."
+
+msgid "Deployment unvollständig."
+msgstr "Dağıtım tamamlanmadı."
+
+msgid "Der unveränderte PROMPTFINISHER-Pro-Golden-Master muss als private Serverdatei installiert werden."
+msgstr "Değiştirilmemiş PROMPTFINISHER Pro ana sürümü sunucuya özel dosya olarak yüklenmelidir."
+
+msgid "Diese Datei wird niemals öffentlich unter /static/ ausgeliefert."
+msgstr "Bu dosya hiçbir zaman /static/ altında herkese açık sunulmaz."
+
+msgid "Gerät registrieren"
+msgstr "Cihaz kaydet"
+
+msgid "PROMPTFINISHER Pro erlaubt %(device_limit)s aktive Geräte pro Benutzer."
+msgstr "PROMPTFINISHER Pro kullanıcı başına %(device_limit)s etkin cihaza izin verir."
+
+msgid "Gerät registrieren und PROMPTFINISHER Pro öffnen"
+msgstr "Cihazı kaydet ve PROMPTFINISHER Pro'yu aç"
+
+msgid "Wenn alle Geräteslots belegt sind, muss Ihr Firmenadministrator oder netstyle zuerst ein altes Gerät freigeben."
+msgstr "Tüm cihaz yuvaları doluysa şirket yöneticiniz veya netstyle önce eski bir cihazı serbest bırakmalıdır."
+
+msgid "Lizenz läuft bald ab"
+msgstr "Lisansın süresi yakında doluyor"
+
+msgid "PROMPTFINISHER-Pro-Lizenz läuft bald ab"
+msgstr "PROMPTFINISHER Pro lisansının süresi yakında doluyor"
+
+msgid "Dein Pro-Zugriff bleibt bis zum Ablaufdatum aktiv."
+msgstr "Pro erişiminiz son kullanma tarihine kadar etkin kalır."
+
+msgid "Verbleibende Tage:"
+msgstr "Kalan gün:"
+
+msgid "Lizenz:"
+msgstr "Lisans:"
+
+msgid "Ablaufdatum:"
+msgstr "Son kullanma tarihi:"
+
+msgid "Nach Ablauf wird der Pro-Zugriff ohne Verlängerung automatisch gesperrt."
+msgstr "Yenileme yapılmazsa süre sonunda Pro erişimi otomatik olarak engellenir."
+
+msgid "Was möchtest du tun?"
+msgstr "Ne yapmak istersiniz?"
+
+msgid "Eine Verlängerung vor Ablauf hängt weitere 365 Tage an das bestehende Ablaufdatum an. Die Restlaufzeit geht nicht verloren."
+msgstr "Süre dolmadan yenileme, mevcut bitiş tarihine 365 gün ekler. Kalan süre kaybolmaz."
+
+msgid "Lizenzverwaltung / Verlängerung"
+msgstr "Lisans yönetimi / yenileme"
+
+msgid "Jetzt trotzdem PROMPTFINISHER Pro starten"
+msgstr "Yine de PROMPTFINISHER Pro'yu aç"
+
+msgid "Rechtstexte · Sprachfassungen"
+msgstr "Hukuki metinler · Dil sürümleri"
+
+msgid "Entwurf, unabhängige Prüfung und dokumentierte Freigabe je Originalversion."
+msgstr "Her kaynak sürüm için taslak, bağımsız inceleme ve belgelenmiş onay."
+
+msgid "Sprachfassung anlegen"
+msgstr "Dil sürümü ekle"
+
+msgid "Die öffentliche Freigabe fremdsprachiger Rechtsdokumente ist ausgeschaltet."
+msgstr "Yabancı dildeki hukuki belgelerin herkese açık yayımlanması devre dışı."
+
+msgid "Dokument"
+msgstr "Belge"
+
+msgid "Freigegeben von"
+msgstr "Onaylayan"
+
+msgid "Details"
+msgstr "Ayrıntılar"
+
+msgid "Noch keine geprüften Sprachfassungen vorhanden."
+msgstr "Henüz incelenmiş dil sürümü yok."
+
+msgid "Deutsche Originalversionen"
+msgstr "Almanca kaynak sürümler"
+
+msgid "Rechtsübersetzung prüfen"
+msgstr "Hukuki çeviriyi incele"
+
+msgid "Deutsche Originalversion"
+msgstr "Almanca kaynak sürüm"
+
+msgid "Eingereicht von"
+msgstr "Gönderen"
+
+msgid "Freigegeben am"
+msgstr "Onay tarihi"
+
+msgid "Freigabenachweis"
+msgstr "Onay kanıtı"
+
+msgid "SHA-256 Original"
+msgstr "Kaynak SHA-256"
+
+msgid "SHA-256 Übersetzung"
+msgstr "Çeviri SHA-256"
+
+msgid "Die Integritätsprüfung ist fehlgeschlagen. Diese Sprachfassung wird nicht öffentlich angezeigt."
+msgstr "Bütünlük denetimi başarısız. Bu dil sürümü herkese açık gösterilmeyecek."
+
+msgid "Übersetzungstext"
+msgstr "Çeviri metni"
+
+msgid "Entwurf bearbeiten"
+msgstr "Taslağı düzenle"
+
+msgid "Zur Prüfung einreichen"
+msgstr "İncelemeye gönder"
+
+msgid "Zurück zum Entwurf"
+msgstr "Taslağa geri döndür"
+
+msgid "Unabhängige Freigabe"
+msgstr "Bağımsız onay"
+
+msgid "Nur nach fachlicher und rechtlicher Prüfung mit dokumentiertem Nachweis freigeben."
+msgstr "Yalnızca belgelenmiş uzman ve hukuki incelemeden sonra onaylayın."
+
+msgid "Fachlich freigeben"
+msgstr "İnceleme sonrası onayla"
+
+msgid "Übersetzung (noch nicht freigegeben)"
+msgstr "Çeviri (henüz onaylanmadı)"
+
+msgid "Nur Entwürfe dürfen bearbeitet werden."
+msgstr "Yalnızca taslaklar düzenlenebilir."
+
+msgid "Übersetzungsentwurf gespeichert."
+msgstr "Çeviri taslağı kaydedildi."
+
+msgid "Übersetzungsentwurf bearbeiten"
+msgstr "Çeviri taslağını düzenle"
+
+msgid "Übersetzungsentwurf anlegen"
+msgstr "Çeviri taslağı oluştur"
+
+msgid "Nur Entwürfe können eingereicht werden."
+msgstr "Yalnızca taslaklar gönderilebilir."
+
+msgid "Nur Prüfversionen können zurückgesetzt werden."
+msgstr "Yalnızca incelemedeki sürümler taslağa döndürülebilir."
+
+msgid "Nur geprüfte Fassungen können freigegeben werden."
+msgstr "Yalnızca incelenmiş sürümler onaylanabilir."
+
+msgid "Sprachfassung zur Prüfung eingereicht."
+msgstr "Dil sürümü incelemeye gönderildi."
+
+msgid "Sprachfassung wieder als Entwurf markiert."
+msgstr "Dil sürümü taslağa döndürüldü."
+
+msgid "Fachlich geprüfte Sprachfassung freigegeben."
+msgstr "İncelenmiş dil sürümü onaylandı."
+
+msgid "Fachliche Prüfung"
+msgstr "İnceleme aşamasında"
+
+msgid "Rechtstexte freigeben"
+msgstr "Hukuki metinleri onayla"
+
+# Invitation-acceptance UI; legal text bodies remain under separate legal approval.
+msgid "Einladung annehmen"
+msgstr "Daveti kabul et"
+
+msgid "%(company)s lädt Sie zu PROMPTFINISHER ein."
+msgstr "%(company)s sizi PROMPTFINISHER'a davet ediyor."
+
+msgid "Konto anlegen und Einladung annehmen"
+msgstr "Hesap oluştur ve daveti kabul et"
+
+# Account invitation and email-verification result UI.
+msgid "Sie wurden zu %(company)s eingeladen."
+msgstr "%(company)s şirketine katılmaya davet edildiniz."
+
+msgid "Der Beitritt erfolgt erst nach Ihrer ausdrücklichen Bestätigung."
+msgstr "Şirkete yalnızca açık onayınızın ardından katılacaksınız."
+
+msgid "Firma beitreten"
+msgstr "Şirkete katıl"
+
+msgid "Einladung angenommen"
+msgstr "Davet kabul edildi"
+
+msgid "Einladung ungültig oder abgelaufen"
+msgstr "Davet geçersiz veya süresi dolmuş"
+
+msgid "Ihr Benutzerkonto ist dem Unternehmen jetzt zugeordnet."
+msgstr "Kullanıcı hesabınız artık şirketle ilişkilendirildi."
+
+msgid "Der Einladungslink kann nicht mehr verwendet werden. Bitte fordern Sie bei Ihrem Firmenadministrator eine neue Einladung an."
+msgstr "Bu davet bağlantısı artık kullanılamaz. Lütfen şirket yöneticinizden yeni bir davet isteyin."
+
+msgid "Zum Kundenportal"
+msgstr "Müşteri portalına git"
+
+msgid "Zur Startseite"
+msgstr "Ana sayfaya dön"
+
+msgid "E-Mail bestätigt"
+msgstr "E-posta doğrulandı"
+
+msgid "Link ungültig oder abgelaufen"
+msgstr "Bağlantı geçersiz veya süresi dolmuş"
+
+msgid "Die E-Mail-Adresse Ihres PROMPTFINISHER-Kontos wurde bestätigt."
+msgstr "PROMPTFINISHER hesabınızın e-posta adresi doğrulandı."
+
+msgid "Dieser Bestätigungslink ist nicht mehr gültig."
+msgstr "Bu doğrulama bağlantısı artık geçerli değil."
+
+msgid "Weiter"
+msgstr "Devam et"
+
+# Read-only legal-language technical readiness UI; not a publication gate.
+msgid "Technischer Status der Rechtsübersetzungen"
+msgstr "Hukuki çevirilerin teknik durumu"
+
+msgid "Keine juristische oder produktive Freigabe. Die Veröffentlichung bleibt separat gesperrt."
+msgstr "Hukuki veya üretim onayı verilmemiştir. Yayınlama ayrı olarak engellenmeye devam eder."
+
+msgid "Technisch geprüft"
+msgstr "Teknik olarak doğrulandı"
+
+msgid "Fehlend"
+msgstr "Eksik"
+
+msgid "In Prüfung"
+msgstr "İncelemede"
+
+msgid "Freigabe veraltet"
+msgstr "Onay güncelliğini yitirdi"
+
+msgid "Deutsche Quelle fehlt"
+msgstr "Almanca kaynak eksik"
+
+# Account snapshot validation error; generic and safe for public users.
+msgid "Das Rechtsdokument-Angebot ist ungültig oder nicht mehr aktuell. Bitte prüfen Sie die Dokumente erneut und senden Sie das Formular noch einmal ab."
+msgstr "Hukuki belge teklifi geçersiz veya artık güncel değil. Lütfen belgeleri yeniden inceleyip formu tekrar gönderin."

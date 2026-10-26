@@ -52,6 +52,16 @@ RUN --mount=type=secret,id=pf_staging_ca,required=false \
     && go version -m /out/caddy | grep -F 'golang.org/x/net' | grep -F 'v0.60.0'
 
 FROM caddy:2.11.6-alpine
+# The stable Alpine 3.23 repository currently ships curl/libcurl 8.22,
+# vulnerable to CVE-2026-92392; the 8.23 fix is only on Alpine edge.
+# This statically linked Caddy runtime does not use curl/libcurl: the
+# production healthcheck uses BusyBox wget. Remove both unused packages
+# instead of mixing unstable edge packages into a stable runtime.
+# Keep the previously required fixed Brotli version fail-closed.
+RUN apk del --no-cache curl libcurl \
+    && apk add --no-cache --upgrade 'brotli-libs>=1.2.1-r0' \
+    && ! apk info -e curl \
+    && ! apk info -e libcurl
 COPY --from=caddy-patched-build /out/caddy /usr/bin/caddy
 COPY Caddyfile /etc/caddy/Caddyfile
 COPY --from=marketing-build /src/dist /srv/marketing

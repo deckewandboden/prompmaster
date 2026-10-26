@@ -42,7 +42,7 @@ async function initializePricing(){
     }
     const initial=quote(catalog,new URLSearchParams(location.search).get('quantity')||1);
     if(home){
-      document.querySelector('.pro .price').innerHTML=money(initial.monthlyGross)+'<span>/ Monat</span>';
+      document.querySelector('.pro .price').innerHTML=money(initial.monthlyGross)+'<span>/ '+marketingT('Monat')+'</span>';
       document.querySelector('.pro .price-detail').textContent=marketingT('pro Benutzer · inkl. MwSt.')+' · '+marketingT('jährliche Abrechnung')+': '+money(initial.annualUnitGross);
     }
     if(path==='/free'&&catalog.freeUrl){
@@ -117,7 +117,7 @@ async function initializePricing(){
       const checkoutStage=document.getElementById('checkout-stage-message');
       if(checkoutStage){
         checkoutStage.hidden=false;
-        checkoutStage.textContent='Der aktuelle Preis und Kaufstatus konnten nicht sicher geladen werden. Es wird keine Bestellung gestartet. Bitte lade die Seite neu und versuche es erneut.';
+        checkoutStage.textContent=marketingT('Der aktuelle Preis und Kaufstatus konnten nicht sicher geladen werden. Es wird keine Bestellung gestartet. Bitte lade die Seite neu und versuche es erneut.');
       }
     }
     console.error('Preise konnten nicht geladen werden.',error);
@@ -215,6 +215,7 @@ function setupCheckoutPage(){
   const stage=document.getElementById('checkout-stage-message');
   const submit=document.getElementById('checkout-submit');
   const csrfInput=document.getElementById('checkout-csrf');
+  const legalInput=document.getElementById('checkout-legal-snapshot');
 
   const showStage=(message)=>{
     if(!stage)return;
@@ -229,7 +230,7 @@ function setupCheckoutPage(){
       unavailable:'Der Kauf ist gerade nicht verfügbar. Bitte versuche es später erneut.',
       payment:'Die Zahlung konnte nicht vorbereitet werden. Es wurde nichts freigeschaltet. Bitte versuche es erneut.',
     };
-    showStage(messages[checkoutError]||'Der Kauf konnte nicht gestartet werden. Bitte versuche es erneut.');
+    showStage(marketingT(messages[checkoutError]||'Der Kauf konnte nicht gestartet werden. Bitte versuche es erneut.'));
   }
 
   const syncCustomerType=()=>{
@@ -252,6 +253,76 @@ function setupCheckoutPage(){
     input.addEventListener('change',syncCustomerType);
   });
   syncCustomerType();
+
+  let legalPromise=null;
+  let legalType='';
+  let legalExpiresAt=0;
+  const ensureLegalSnapshot=()=>{
+    const customerType=form.querySelector('input[name="customer_type"]:checked')?.value||'company';
+    // An open checkout tab may outlive the 30-minute signed document
+    // offer. Refresh it before submitting instead of sending an expired
+    // token (and losing the buyer's filled-in form).
+    if(legalInput?.value && legalType===customerType &&
+       legalExpiresAt>Date.now()+60*1000){
+      return Promise.resolve(legalInput.value);
+    }
+    // Snapshot nonces are session-bound; concurrent customer-type fetches
+    // could invalidate the response that the browser displays last.
+    if(legalPromise){
+      if(legalType===customerType)return legalPromise;
+      return legalPromise.catch(()=>null).then(()=>ensureLegalSnapshot());
+    }
+    legalType=customerType;
+    if(legalInput)legalInput.value='';
+    legalExpiresAt=0;
+    const requestedType=customerType;
+    const requestPromise=fetch(
+      '/api/v1/checkout/legal-snapshot/?customer_type='+encodeURIComponent(requestedType),
+      {method:'GET',credentials:'same-origin',cache:'no-store',headers:{Accept:'application/json'}},
+    ).then(async response=>{
+      if(!response.ok)throw new Error('Legal snapshot unavailable');
+      const snapshot=await response.json();
+      if(!snapshot.token || snapshot.customerType!==requestedType ||
+         !Number.isFinite(snapshot.expiresInSeconds) ||
+         snapshot.expiresInSeconds<120){
+        throw new Error('Invalid or expired legal snapshot');
+      }
+      if(legalType!==requestedType)return ensureLegalSnapshot();
+      if(requestedType==='private' && (
+        !snapshot.earlyPerformance?.text || !snapshot.earlyPerformance?.sha256 ||
+        !snapshot.earlyPerformance?.statement_id
+      ))throw new Error('Early performance consent version missing');
+      legalExpiresAt=Date.now()+Math.min(
+        1740,snapshot.expiresInSeconds,
+      )*1000;
+      if(legalInput)legalInput.value=snapshot.token;
+      if(requestedType==='private'){
+        const statement=form.querySelector('[data-legal-early-performance-text]');
+        if(statement)statement.textContent=snapshot.earlyPerformance.text;
+      }
+      for(const type of ['terms','privacy','license','withdrawal']){
+        const href=snapshot.documents?.[type]?.url;
+        if(!href)continue;
+        const link=form.querySelector('.checkout-legal a[href^="/legal/'+type+'/"]');
+        if(link)link.href=href;
+      }
+      return snapshot.token;
+    }).finally(()=>{
+      if(legalPromise===requestPromise)legalPromise=null;
+    });
+    legalPromise=requestPromise;
+    return requestPromise;
+  };
+  form.querySelectorAll('input[name="customer_type"]').forEach(input=>{
+    input.addEventListener('change',()=>{
+      void ensureLegalSnapshot().catch(()=>{
+        showStage(marketingT('Die rechtlichen Dokumentversionen konnten nicht geladen werden. Bitte lade den Kauf erneut.'));
+      });
+    });
+  });
+  void ensureLegalSnapshot().catch(()=>{
+    showStage(marketingT('Die rechtlichen Dokumentversionen konnten nicht geladen werden. Bitte lade den Kauf erneut.'));
+  });
 
   let csrfPromise=null;
   const ensureCsrf=()=>{
@@ -283,11 +354,12 @@ function setupCheckoutPage(){
       submit.textContent=marketingT('Kauf wird vorbereitet …');
     }
     try{
-      await ensureCsrf();
+      await Promise.all([ensureCsrf(),ensureLegalSnapshot()]);
+      if(!legalInput?.value)throw new Error('Legal snapshot missing');
       HTMLFormElement.prototype.submit.call(form);
     }catch(error){
       console.error('Checkout konnte nicht gestartet werden.',error);
-      showStage('Die sichere Kaufverbindung konnte nicht vorbereitet werden. Bitte lade die Seite neu und versuche es erneut.');
+      showStage(marketingT('Die sichere Kaufverbindung konnte nicht vorbereitet werden. Bitte lade die Seite neu und versuche es erneut.'));
       if(submit){
         submit.disabled=false;
         submit.textContent=marketingT('Zahlungspflichtig kaufen →');

@@ -7,10 +7,13 @@ from django.contrib.auth import login, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.hashers import make_password
 from django.core import signing
+from django.core.exceptions import ValidationError
+from django.http import HttpResponse
 from django.db import IntegrityError, transaction
 from django.shortcuts import redirect, render
 from django.urls import reverse
 from django.utils import timezone, translation
+from django.utils.translation import gettext as _
 from django.views.decorators.http import require_http_methods
 
 from apps.companies.models import Company, Membership, PrivateCustomerProfile
@@ -18,6 +21,7 @@ from apps.core.crypto import decrypt, encrypt
 from apps.core.security import check_rate, client_ip, token_hash
 from apps.notifications.services import queue_email
 from apps.legal.models import LegalAcceptance, LegalDocument
+from apps.legal.account_snapshot import issue_account_offer, validate_account_offer
 from .forms import (
     AcceptInvitationForm,
     LoginForm,
@@ -167,6 +171,47 @@ def logout_view(request):
     return redirect('accounts:login')
 
 
+def _render_registration(request, form, requested_next):
+    context = {'form': form, 'next': requested_next}
+    if settings.LEGAL_ACCOUNT_SNAPSHOT_REQUIRED:
+        try:
+            context['account_offer'] = issue_account_offer(request, flow='registration')
+        except ValidationError:
+            return HttpResponse(status=503)
+    response = render(request, 'auth/register.html', context)
+    if settings.LEGAL_ACCOUNT_SNAPSHOT_REQUIRED:
+        response['Cache-Control'] = 'no-store'
+        # Do NOT use no-referrer on pages that submit HTML POST forms:
+        # browsers then send Origin: null, rejected by Django CSRF.
+        # 'origin' sends neither the invitation bearer path nor signed token.
+        response['Referrer-Policy'] = 'origin'
+        response['X-Robots-Tag'] = 'noindex, noarchive'
+    return response
+
+
+def _render_new_invitation(request, form, invitation, legal_documents):
+    context = {
+        'form': form, 'invitation': invitation,
+        'legal_documents': legal_documents,
+    }
+    if settings.LEGAL_ACCOUNT_SNAPSHOT_REQUIRED:
+        try:
+            context['account_offer'] = issue_account_offer(
+                request, flow='invitation', invitation=invitation,
+            )
+        except ValidationError:
+            return HttpResponse(status=503)
+    response = render(request, 'auth/accept_invitation.html', context)
+    if settings.LEGAL_ACCOUNT_SNAPSHOT_REQUIRED:
+        response['Cache-Control'] = 'no-store'
+        # Do NOT use no-referrer on pages that submit HTML POST forms:
+        # browsers then send Origin: null, rejected by Django CSRF.
+        # 'origin' sends neither the invitation bearer path nor signed token.
+        response['Referrer-Policy'] = 'origin'
+        response['X-Robots-Tag'] = 'noindex, noarchive'
+    return response
+
+
 @transaction.atomic
 def register(request):
     if request.user.is_authenticated:
@@ -178,25 +223,35 @@ def register(request):
     requested_next = _safe_next(request)
     if request.method == 'POST' and form.is_valid():
         data = form.cleaned_data
-        now = timezone.now()
         legal_documents = {}
-        for doc_type in ('terms', 'privacy'):
-            document = (
-                LegalDocument.objects.filter(doc_type=doc_type, active=True, valid_from__lte=now)
-                .order_by('-valid_from')
-                .first()
-            )
-            if not document:
-                form.add_error(None, f'Registrierung ist vorübergehend nicht möglich: aktives Rechtsdokument fehlt ({doc_type}).')
-                break
-            legal_documents[doc_type] = document
+        if not settings.LEGAL_ACCOUNT_SNAPSHOT_REQUIRED:
+            now = timezone.now()
+            for doc_type in ('terms', 'privacy'):
+                document = (
+                    LegalDocument.objects.filter(
+                        doc_type=doc_type, active=True, valid_from__lte=now,
+                    ).order_by('-valid_from').first()
+                )
+                if not document:
+                    form.add_error(None, (
+                        'Registrierung ist vorübergehend nicht möglich: '
+                        f'aktives Rechtsdokument fehlt ({doc_type}).'
+                    ))
+                    break
+                legal_documents[doc_type] = document
         if form.errors:
-            return render(request, 'auth/register.html', {'form': form, 'next': requested_next})
+            return _render_registration(request, form, requested_next)
         if User.objects.filter(email__iexact=data['email']).exists():
             form.add_error('email', 'E-Mail-Adresse bereits registriert.')
         else:
             try:
                 with transaction.atomic():
+                    offer_evidence = None
+                    if settings.LEGAL_ACCOUNT_SNAPSHOT_REQUIRED:
+                        offer_evidence, legal_documents = validate_account_offer(
+                            request, request.POST.get('account_snapshot', ''),
+                            flow='registration', lock=True,
+                        )
                     user = User.objects.create_user(
                         email=data['email'],
                         password=data['password'],
@@ -220,13 +275,27 @@ def register(request):
                         'ip': client_ip(request),
                         'user_agent': request.META.get('HTTP_USER_AGENT', '')[:300],
                         'source': 'registration',
+                        # No signed GET-time, language or text-version offer is
+                        # captured on this legacy account creation route.
+                        # The document FK alone must never be presented as
+                        # proof that this exact body was offered or read.
+                        'verification': 'legacy_without_signed_snapshot',
+                        'presentation_proof': 'not_recorded',
                     }
+                    if offer_evidence is not None:
+                        evidence.update(offer_evidence)
                     for document in legal_documents.values():
                         LegalAcceptance.objects.create(
-                            user=user, document=document, order=None, evidence=evidence
+                            user=user, document=document, order=None,
+                            evidence={**evidence, **(
+                                {'document': offer_evidence['documents'][document.doc_type]}
+                                if offer_evidence is not None else {}
+                            )},
                         )
             except IntegrityError:
                 form.add_error('email', 'Konto konnte nicht angelegt werden. Bitte erneut versuchen.')
+            except ValidationError:
+                form.add_error(None, _('Das Rechtsdokument-Angebot ist ungültig oder nicht mehr aktuell. Bitte prüfen Sie die Dokumente erneut und senden Sie das Formular noch einmal ab.'))
             else:
                 destination = _role_safe_next(user, requested_next) or _default_post_login_url(user)
                 token = signing.dumps(
@@ -243,7 +312,7 @@ def register(request):
                     request.session['post_2fa_next'] = destination
                     return redirect('accounts:two_factor_setup')
                 return redirect(destination)
-    return render(request, 'auth/register.html', {'form': form, 'next': requested_next})
+    return _render_registration(request, form, requested_next)
 
 
 def verify_email(request, token):
@@ -519,81 +588,95 @@ def accept_invitation(request, token):
             invitation.save(update_fields=['accepted_at', 'updated_at'])
         return render(request, 'auth/invite_result.html', {'ok': True})
 
-    now = timezone.now()
     legal_documents = {}
-    for doc_type in ('terms', 'privacy'):
-        document = (
-            LegalDocument.objects.filter(doc_type=doc_type, active=True, valid_from__lte=now)
-            .order_by('-valid_from')
-            .first()
-        )
-        if document is None:
-            return render(
-                request,
-                'auth/invite_result.html',
-                {'ok': False, 'reason': 'legal_configuration'},
-                status=503,
+    if not settings.LEGAL_ACCOUNT_SNAPSHOT_REQUIRED:
+        now = timezone.now()
+        for doc_type in ('terms', 'privacy'):
+            document = (
+                LegalDocument.objects.filter(
+                    doc_type=doc_type, active=True, valid_from__lte=now,
+                ).order_by('-valid_from').first()
             )
-        legal_documents[doc_type] = document
+            if document is None:
+                return render(
+                    request, 'auth/invite_result.html',
+                    {'ok': False, 'reason': 'legal_configuration'}, status=503,
+                )
+            legal_documents[doc_type] = document
 
     form = AcceptInvitationForm(
         request.POST or None,
         initial={'first_name': invitation.first_name, 'last_name': invitation.last_name},
     )
     if request.method == 'POST' and form.is_valid():
-        with transaction.atomic():
-            invitation = Invitation.objects.select_for_update().get(pk=invitation.pk)
-            if not invitation.is_valid():
-                return render(request, 'auth/invite_result.html', {'ok': False})
-            if User.objects.filter(email__iexact=invitation.email).exists():
-                return render(request, 'auth/invite_result.html', {'ok': False})
-            if invitation.role == 'admin':
-                Company.objects.select_for_update().get(pk=invitation.company_id)
-                if Membership.objects.filter(
-                    company_id=invitation.company_id,
-                    active=True,
-                    role='admin',
-                ).exists():
-                    return render(
-                        request,
-                        'auth/invite_result.html',
-                        {'ok': False, 'reason': 'admin_already_exists'},
+        try:
+            with transaction.atomic():
+                invitation = Invitation.objects.select_for_update().get(pk=invitation.pk)
+                if not invitation.is_valid():
+                    return render(request, 'auth/invite_result.html', {'ok': False})
+                if User.objects.filter(email__iexact=invitation.email).exists():
+                    return render(request, 'auth/invite_result.html', {'ok': False})
+                if invitation.role == 'admin':
+                    Company.objects.select_for_update().get(pk=invitation.company_id)
+                    if Membership.objects.filter(
+                        company_id=invitation.company_id,
+                        active=True,
+                        role='admin',
+                    ).exists():
+                        return render(
+                            request, 'auth/invite_result.html',
+                            {'ok': False, 'reason': 'admin_already_exists'},
+                        )
+                offer_evidence = None
+                if settings.LEGAL_ACCOUNT_SNAPSHOT_REQUIRED:
+                    offer_evidence, legal_documents = validate_account_offer(
+                        request, request.POST.get('account_snapshot', ''),
+                        flow='invitation', invitation=invitation, lock=True,
                     )
-            user = User.objects.create_user(
-                email=invitation.email,
-                password=form.cleaned_data['password'],
-                first_name=form.cleaned_data['first_name'].strip(),
-                last_name=form.cleaned_data['last_name'].strip(),
-                email_verified_at=timezone.now(),
-                two_factor_required=(invitation.role == 'admin'),
-            )
-            Membership.objects.create(
-                company=invitation.company,
-                user=user,
-                role=invitation.role,
-                active=True,
-            )
-            evidence = {
-                'source': 'invitation',
-                'ip': client_ip(request),
-                'user_agent': (request.META.get('HTTP_USER_AGENT') or '')[:500],
-            }
-            for document in legal_documents.values():
-                LegalAcceptance.objects.create(user=user, document=document, evidence=evidence)
-            invitation.accepted_at = timezone.now()
-            invitation.save(update_fields=['accepted_at', 'updated_at'])
-            login(request, user)
-            request.session.cycle_key()
-            if invitation.role == 'admin':
-                bind_security_session(request, user, two_factor_ok=False)
-                request.session['post_2fa_next'] = reverse('portal:dashboard')
-            else:
-                bind_security_session(request, user, two_factor_ok=True)
+                user = User.objects.create_user(
+                    email=invitation.email,
+                    password=form.cleaned_data['password'],
+                    first_name=form.cleaned_data['first_name'].strip(),
+                    last_name=form.cleaned_data['last_name'].strip(),
+                    email_verified_at=timezone.now(),
+                    two_factor_required=(invitation.role == 'admin'),
+                )
+                Membership.objects.create(
+                    company=invitation.company,
+                    user=user,
+                    role=invitation.role,
+                    active=True,
+                )
+                evidence = {
+                    'source': 'invitation',
+                    'verification': 'legacy_without_signed_snapshot',
+                    'presentation_proof': 'not_recorded',
+                    'ip': client_ip(request),
+                    'user_agent': (request.META.get('HTTP_USER_AGENT') or '')[:500],
+                }
+                if offer_evidence is not None:
+                    evidence.update(offer_evidence)
+                for document in legal_documents.values():
+                    LegalAcceptance.objects.create(
+                        user=user, document=document,
+                        evidence={**evidence, **(
+                            {'document': offer_evidence['documents'][document.doc_type]}
+                            if offer_evidence is not None else {}
+                        )},
+                    )
+                invitation.accepted_at = timezone.now()
+                invitation.save(update_fields=['accepted_at', 'updated_at'])
+                login(request, user)
+                request.session.cycle_key()
+                if invitation.role == 'admin':
+                    bind_security_session(request, user, two_factor_ok=False)
+                    request.session['post_2fa_next'] = reverse('portal:dashboard')
+                else:
+                    bind_security_session(request, user, two_factor_ok=True)
+        except ValidationError:
+            form.add_error(None, _('Das Rechtsdokument-Angebot ist ungültig oder nicht mehr aktuell. Bitte prüfen Sie die Dokumente erneut und senden Sie das Formular noch einmal ab.'))
+            return _render_new_invitation(request, form, invitation, legal_documents)
         if invitation.role == 'admin':
             return redirect('accounts:two_factor')
         return redirect('portal:dashboard')
-    return render(
-        request,
-        'auth/accept_invitation.html',
-        {'form': form, 'invitation': invitation, 'legal_documents': legal_documents},
-    )
+    return _render_new_invitation(request, form, invitation, legal_documents)

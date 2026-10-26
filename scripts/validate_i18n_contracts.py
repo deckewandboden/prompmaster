@@ -82,6 +82,21 @@ def main() -> None:
                     raise SystemExit(f'I18N FAIL {code}: product branding modified: {product}')
         print(f'I18N PASS {code}: {len(found)} strings, placeholders unchanged')
 
+    # Explicit templates are release critical; gettext fallback to German
+    # must never conceal missing translations on Pro-device and expiry pages.
+    for template_name in (
+        'asset_missing.html', 'register_device.html', 'renewal_warning.html',
+    ):
+        template = (ROOT / 'backend/templates/proaccess' / template_name).read_text(encoding='utf-8')
+        translated = re.findall(r'{%\s*translate\s+(["\x27])(.*?)\1\s*%}', template, re.DOTALL)
+        for _, phrase in translated:
+            if phrase not in base:
+                raise SystemExit(f'I18N FAIL: unregistered Pro template text {template_name}: {phrase!r}')
+    device_limit = 'PROMPTFINISHER Pro erlaubt %(device_limit)s aktive Geräte pro Benutzer.'
+    if device_limit not in base:
+        raise SystemExit('I18N FAIL: untranslated Pro device limit notice')
+    print('I18N PRO TEMPLATES PASS: deployment, device registration, renewal')
+
     # The dynamic Free/Pro UI catalog is separate from Django gettext.
     # Product names must never be translated as ordinary dictionary words.
     bundle = (ROOT / 'backend/static/js/promptfinisher_product_i18n.20261011.js'
@@ -103,6 +118,31 @@ def main() -> None:
         if duplicates:
             raise SystemExit(f'I18N FAIL: duplicate product keys: {sorted(duplicates)!r}')
         catalog.update(more)
+    # A translation catalog cannot be called complete when any individual
+    # visible label silently falls back to German in one of the nine locales.
+    # Check all entries, not only the 194 task schemas or reviewed examples.
+    token_pattern = re.compile(r'%\([A-Za-z_][A-Za-z0-9_]*\)s')
+    checked_product_variants = 0
+    for source, variants in catalog.items():
+        expected = sorted(token_pattern.findall(source))
+        for code in LOCALES:
+            translated = variants.get(code, '')
+            if not translated.strip():
+                raise SystemExit(
+                    f'I18N FAIL {code}: empty product dictionary value {source!r}'
+                )
+            actual = sorted(token_pattern.findall(translated))
+            if actual != expected:
+                raise SystemExit(
+                    f'I18N FAIL {code}: product placeholders mismatch '
+                    f'{source!r}: {expected} != {actual}'
+                )
+            checked_product_variants += 1
+    print(
+        f'I18N ALL PRODUCT KEYS PASS: {len(catalog)} source strings / '
+        f'{checked_product_variants} localized values'
+    )
+
     for brand in BRAND_LABELS:
         if brand not in catalog:
             raise SystemExit(f'I18N FAIL: missing protected product label {brand}')
@@ -189,7 +229,7 @@ def main() -> None:
             for match in doubled_word.finditer(value):
                 idiomatic_step_by_step = (
                     code == 'tr'
-                    and 'Schritt für Schritt' in phrase
+                    and re.search(r'Schritt[- ]für[- ]Schritt', phrase)
                     and match.group(0).casefold() == 'adım adım'
                 )
                 if not idiomatic_step_by_step:
@@ -289,8 +329,10 @@ def main() -> None:
             )
     if "'script,style,textarea,input,option,[contenteditable],'" in bundle:
         raise SystemExit('I18N FAIL: visible select option labels excluded from translation')
-    if "if (option && !option.hasAttribute('value')) return;" not in bundle:
-        raise SystemExit('I18N FAIL: select options without a stable value must be protected')
+    if "option.setAttribute('value', option.textContent.trim())" not in bundle:
+        raise SystemExit('I18N FAIL: implicit option values must be frozen before display translation')
+    if "if (option && !option.hasAttribute('value')) return;" in bundle:
+        raise SystemExit('I18N FAIL: implicit option text must not remain untranslated')
     print('I18N RESPONSE STYLE PASS: nine controls x nine locales, stable option values')
 
     # Availability and completion markers affect user decisions. Machine
@@ -473,8 +515,31 @@ def main() -> None:
         'task title': {
             task['title'] for app in app_definitions.values() for task in app['tasks']
         },
+        'task description': {
+            task['intent'] for app in app_definitions.values() for task in app['tasks']
+        },
         'task area': {
             task['area'] for app in app_definitions.values() for task in app['tasks']
+        },
+        'required input': {
+            item for app in app_definitions.values() for task in app['tasks']
+            for item in task.get('required', [])
+        },
+        'optional input': {
+            item for app in app_definitions.values() for task in app['tasks']
+            for item in task.get('optional', [])
+        },
+        'task audience': {
+            item for app in app_definitions.values() for task in app['tasks']
+            for item in task.get('audiences', [])
+        },
+        'task focus': {
+            item for app in app_definitions.values() for task in app['tasks']
+            for item in task.get('focus', [])
+        },
+        'output label': {
+            item for app in app_definitions.values() for task in app['tasks']
+            for item in task.get('outputs', [])
         },
     }
     for category, values in categories.items():
@@ -490,6 +555,169 @@ def main() -> None:
         'I18N LIVE APP CATALOG PASS: 34 apps / 194 tasks; '
         + ', '.join(f'{name}={len(values)}' for name, values in categories.items())
         + ' across nine target locales'
+    )
+
+    # Composite V2 strings are created after initial translation. They must
+    # have complete locale variants and explicit interpolation at their
+    # rendering sites; a nonempty dictionary alone cannot verify this.
+    modal_and_rating = (
+        'Diese Anwendung ist mit der aktuell ausgewählten Copilot-Stufe nicht freigeschaltet.',
+        'Die Anwendung ist grundsätzlich verfügbar, aber diese konkrete Aufgabe benötigt eine höhere Copilot-Stufe.',
+        'Wenn Microsoft für Ihr Konto diese Stufe anzeigt, wählen Sie oben die entsprechende Kachel aus.',
+        'Wenn diese Stufe für Ihr Konto bereits vorhanden ist, wählen Sie sie oben aus.',
+        'Wie hilfreich war dieser Prompt?',
+        'Optional: Was sollten wir verbessern?',
+        'Feedback ergänzen', 'Feedback senden',
+        'Bewertung wird gespeichert …',
+        'Bewertung und optionales Feedback wurden gespeichert.',
+        'Feedback wird gespeichert …',
+        'Kopiert ✓',
+        'Microsoft-Copilot-Stufe',
+        'MICROSOFT-LIZENZ ERFORDERLICH',
+        'Optional ergänzen',
+        'BEREIT ZUM KOPIEREN',
+        'Microsoft 365 Anwendungen',
+        'Microsoft-365-Apps und direkte Copilot-Oberflächen',
+        'Weitere Anwendungen',
+        'Zentraler Prompt-Katalog wird geladen.',
+    )
+    for phrase in modal_and_rating:
+        if phrase not in catalog:
+            raise SystemExit(f'I18N FAIL: missing Pro modal/rating string {phrase!r}')
+    composite_pro = (
+        '%(tier)s erforderlich', 'Für %(target)s optimiert',
+        '%(stars)s ★ gespeichert.',
+        'Bewertung konnte nicht gespeichert werden: %(error)s',
+        'Feedback konnte nicht gespeichert werden: %(error)s',
+        'Für %(app)s ist in dieser PRO-Version mindestens %(tier)s erforderlich.',
+        'Aufgabe: %(task)s.', 'Erforderliche Copilot-Stufe: %(tier)s.',
+    )
+    for phrase in composite_pro:
+        if phrase not in catalog:
+            raise SystemExit(f'I18N FAIL: missing Pro interpolated text {phrase!r}')
+    browser_script = (ROOT / 'backend/static/js/promptfinisher_product_i18n.20261011.js').read_text(encoding='utf-8')
+    for required in ('const localizeLicenseRows =', "parent?.id === 'licenseModalTitle'",
+                     "parent?.id === 'promptMeta'", "parent?.id === 'pmRatingState'",
+                     "parent?.matches?.('span.tag.business')"):
+        if required not in browser_script:
+            raise SystemExit(f'I18N FAIL: composite Pro renderer missing {required}')
+    print('I18N PRO MODALS/RATING PASS: translated statuses and safe interpolations')
+
+    composite_v2 = {
+        'Pflichtfelder fehlen:': None,
+        '%(workspace)s öffnen →': '%(workspace)s',
+        '%(percent)s Prozent vollständig': '%(percent)s',
+    }
+    for source, placeholder in composite_v2.items():
+        variants = catalog.get(source)
+        if not variants:
+            raise SystemExit(f'I18N FAIL: missing composite V2 text {source!r}')
+        for code in LOCALES:
+            translated = variants.get(code, '').strip()
+            if not translated or translated == source:
+                raise SystemExit(f'I18N FAIL {code}: untranslated composite V2 text {source!r}')
+            if placeholder and translated.count(placeholder) != 1:
+                raise SystemExit(
+                    f'I18N FAIL {code}: incorrect composite placeholder '
+                    f'{source!r}: {translated!r}'
+                )
+    v2_shell = (
+        ROOT / 'backend/static/js/promptfinisher_ui_v2.20260922.js'
+    ).read_text(encoding='utf-8')
+    for call in (
+        "translateUi('Pflichtfelder fehlen:')",
+        "translateUi('Prompt noch nicht erstellt.')",
+        "translateUi('PFLICHTFELD')",
+        "translateUi('Dieses Feld muss ausgefüllt werden, bevor der Prompt erzeugt wird.')",
+        "translateUi('%(workspace)s öffnen →')",
+        "translateUi('%(percent)s Prozent vollständig')",
+        "localReviewValue('In der Aufgabe enthalten')",
+    ):
+        if call not in v2_shell:
+            raise SystemExit(f'I18N FAIL: unlocalized V2 render site {call!r}')
+    if "'<strong>Prompt noch nicht erstellt.</strong> Pflichtfelder fehlen: '" in v2_shell:
+        raise SystemExit('I18N FAIL: German dynamic required-field warning returned')
+    print('I18N COMPOSITE V2 PASS: guards, headers, progress and summary in ten locales')
+
+    # Legal navigation links in the customer portal were previously plain
+    # German HTML despite complete gettext catalogs. Require explicit
+    # translation tags to prevent the same visible regression.
+    portal_more = (
+        ROOT / 'backend/templates/portal/more.html'
+    ).read_text(encoding='utf-8')
+    for legal_label in ('Datenschutz', 'AGB', 'Lizenzbedingungen'):
+        if '{% translate "' + legal_label + '" %}' not in portal_more:
+            raise SystemExit(
+                f'I18N FAIL: untranslated legal link in portal/more.html: {legal_label}'
+            )
+    print('I18N PORTAL LEGAL NAV PASS: three legal links translated')
+
+    # Marketing is a separate Vite artifact and deliberately absent from the
+    # production Django /app image. Audit its translations at repository
+    # preflight, where both source trees are available.
+    marketing_root = ROOT / 'marketing'
+    source = (marketing_root / 'src/locale.js').read_text(encoding='utf-8')
+    marketing_rows = source.splitlines()
+    marketing_base = next(
+        (line for line in marketing_rows if line.startswith('export const marketingCatalog=')),
+        None,
+    )
+    if not marketing_base or not marketing_base.endswith(';'):
+        raise SystemExit('I18N FAIL: missing marketing dictionary')
+    marketing_catalog = json.loads(marketing_base.split('=', 1)[1][:-1])
+    marketing_prefix = 'Object.assign(marketingCatalog,'
+    protected_legal_labels = (
+        'AGB', 'Datenschutzerklärung',
+        'Lizenzbedingungen', 'Widerrufsbelehrung',
+    )
+    for row in marketing_rows:
+        if row.startswith(marketing_prefix) and row.endswith(');'):
+            additions = json.loads(row[len(marketing_prefix):-2])
+            for legal_label in protected_legal_labels:
+                previous = marketing_catalog.get(legal_label)
+                replacement = additions.get(legal_label)
+                if (previous is not None and replacement is not None
+                        and previous != replacement):
+                    raise SystemExit(
+                        'I18N FAIL: conflicting legal marketing label '
+                        f'{legal_label!r} between catalogue definitions'
+                    )
+            marketing_catalog.update(additions)
+    for legal_label in protected_legal_labels:
+        localized = marketing_catalog.get(legal_label, {})
+        if not all(localized.get(code, '').strip() for code in LOCALES):
+            raise SystemExit(
+                f'I18N FAIL: missing contractual marketing label {legal_label!r}'
+            )
+    print('I18N LEGAL NAV PASS: four consistent labels in nine languages')
+
+    def marketing_text_values(value):
+        if isinstance(value, str):
+            return [value]
+        if isinstance(value, list):
+            return [part for item in value for part in marketing_text_values(item)]
+        if isinstance(value, dict):
+            return [part for item in value.values() for part in marketing_text_values(item)]
+        return []
+
+    faq = json.loads((marketing_root / 'src/faq.json').read_text(encoding='utf-8'))
+    marketing_labels = set(marketing_text_values(faq))
+    marketing_labels.update({
+        'Zahlung wird bestätigt.', 'Zum Kundenkonto →',
+        'Zur Startseite →', 'Zur Anmeldung →', 'Zur Marketingseite →',
+        'Einfach starten. Kostenlos nutzen.',
+        'PROMPTFINISHER Free starten →', 'Free kennenlernen →',
+        '← Zurück zur Startseite',
+    })
+    for phrase in marketing_labels:
+        for code in LOCALES:
+            if not marketing_catalog.get(phrase, {}).get(code, '').strip():
+                raise SystemExit(
+                    f'I18N FAIL {code}: untranslated marketing or FAQ text {phrase!r}'
+                )
+    print(
+        f'I18N MARKETING / FAQ PASS: {len(marketing_labels)} protected public '
+        'texts across nine languages'
     )
 
     print('I18N CONTRACTS PASS: 10 UI languages incl. DE source')

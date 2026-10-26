@@ -571,7 +571,7 @@ body.pmv2 textarea{font-family:inherit}
   color:#ffafc6!important;
 }
 .pmv2 .pmv2-review-card.missing .pmv2-review-label::after{
-  content:"OFFEN";
+  content:attr(data-pmv2-missing-label);
   display:inline-flex;
   align-items:center;
   margin-left:8px;
