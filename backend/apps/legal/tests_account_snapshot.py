@@ -135,6 +135,31 @@ class AccountSignedLegalOfferTests(TestCase):
         self.assertFalse(User.objects.filter(email=bad['email']).exists())
         self.assertFalse(LegalAcceptance.objects.exists())
 
+    def test_invalid_offer_error_is_localized_in_ten_languages(self):
+        expected = {
+            'de': 'Das Rechtsdokument-Angebot ist ungültig',
+            'en': 'The legal document offer is invalid',
+            'es': 'La oferta de documentos legales no es válida',
+            'pt': 'A apresentação dos documentos legais é inválida',
+            'tr': 'Hukuki belge teklifi geçersiz',
+            'ru': 'Предложенные юридические документы недействительны',
+            'pl': 'Przedstawione dokumenty prawne są nieprawidłowe',
+            'fr': 'Les documents juridiques présentés ne sont pas valides',
+            'it': 'I documenti legali presentati non sono validi',
+            'nl': 'Het aangeboden juridische document is ongeldig',
+        }
+        for language, snippet in expected.items():
+            with self.subTest(language=language), override(language):
+                payload = self.registration_data(email=language+'-bad-offer@example.test')
+                response = self.client.post(
+                    reverse('accounts:register'),
+                    payload,
+                    HTTP_ACCEPT_LANGUAGE=language,
+                )
+                self.assertEqual(response.status_code, 200)
+                self.assertContains(response, snippet)
+                self.assertFalse(User.objects.filter(email=payload['email']).exists())
+
     def test_other_session_rejected_and_two_tabs_do_not_invalidate_each_other(self):
         url = reverse('accounts:register')
         first = signed_token(self.client.get(url))
