@@ -78,6 +78,12 @@ Dokumentnachweis ist keine externe juristische Prüfung von Rechtstexten.
   mit tatsächlich angezeigtem Body-Hash gespeichert; nachträgliche Manipulation
   verweigert Link und POST. Entwurf/Review bleibt deutscher Fallback.
   Abgelaufene Einladungen und fehlende CSRF-Tokens blockieren Benutzeranlage.
+- Der isolierte Backend-Playwright-Browserlauf aktiviert den Account-Snapshot-
+  Testschalter **nur im untergeordneten CI-Django-Server**. Er prüft im echten
+  Browser signiertes Formularfeld, gepinnte AGB- und Datenschutzlinks,
+  gemeinsame Session-Cookies und anschließend die erfolgreiche Privat- bzw.
+  Firmenregistrierung inklusive bisheriger 2FA- und Verifikationsabläufe.
+  Das ersetzt keine separate produktive Freigabe.
 - Für Freischaltung benötigt Issue #91 zusätzlich einen dokumentierten
   isolierten QA-Lauf mit Replay-/Parallel-Tab-/Drift- und
   End-to-End-Tests; Releaseentscheidungen und die rechtliche Prüfung in

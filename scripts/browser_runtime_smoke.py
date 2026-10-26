@@ -1378,6 +1378,37 @@ def _browser_register_verify_to_buy(
     if not response or response.status != 200:
         raise AssertionError(f'registration page failed for {customer_type}')
 
+    # Issue #91: exercise the isolated account-legal feature gate with real
+    # Chromium cookies, URLs, CSRF and subsequent registration POST.
+    offered = page.locator('input[name="account_snapshot"]')
+    if offered.count() != 1 or not offered.input_value():
+        raise AssertionError(f'{customer_type}: signed account legal offer missing')
+    for document_type in ('terms', 'privacy'):
+        link = page.locator(
+            f'a[href*="/legal/{document_type}/?account_snapshot="]'
+        )
+        if link.count() != 1:
+            raise AssertionError(
+                f'{customer_type}: pinned {document_type} URL missing'
+            )
+        target = link.get_attribute('href')
+        legal_tab = page.context.new_page()
+        try:
+            linked = legal_tab.goto(
+                base.rstrip('/') + target, wait_until='domcontentloaded',
+            )
+            if not linked or linked.status != 200:
+                raise AssertionError(
+                    f'{customer_type}: pinned {document_type} rejected '
+                    f'within same browser session'
+                )
+            if f'Browser smoke {document_type}' not in legal_tab.locator('body').inner_text():
+                raise AssertionError(
+                    f'{customer_type}: pinned {document_type} body did not render'
+                )
+        finally:
+            legal_tab.close()
+
     page.locator('select[name="customer_type"]').select_option(customer_type)
     company_row = page.locator('[data-company-field]')
     company_input = page.locator('input[name="company_name"]')
@@ -1943,6 +1974,9 @@ def run_backend_ui_smoke(browser, fixture=None) -> None:
     env.setdefault('ALLOWED_HOSTS', '127.0.0.1,localhost')
     env.setdefault('SESSION_COOKIE_SECURE', '0')
     env.setdefault('CSRF_COOKIE_SECURE', '0')
+    # Only the isolated Playwright child server enables this staging gate.
+    # Live/default settings and the parent test process remain unchanged.
+    env['LEGAL_ACCOUNT_SNAPSHOT_REQUIRED'] = '1'
 
     process = subprocess.Popen(
         [sys.executable, 'manage.py', 'runserver', f'127.0.0.1:{port}', '--noreload'],
