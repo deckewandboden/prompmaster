@@ -4056,3 +4056,7 @@ msgstr "Goedkeuring verouderd"
 
 msgid "Deutsche Quelle fehlt"
 msgstr "Duitse brontekst ontbreekt"
+
+# Account snapshot validation error; generic and safe for public users.
+msgid "Das Rechtsdokument-Angebot ist ungültig oder nicht mehr aktuell. Bitte prüfen Sie die Dokumente erneut und senden Sie das Formular noch einmal ab."
+msgstr "Het aangeboden juridische document is ongeldig of niet meer actueel. Controleer de documenten opnieuw en verstuur het formulier nogmaals."
