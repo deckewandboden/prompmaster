@@ -219,6 +219,55 @@ class SignedCheckoutLegalSnapshotTests(TestCase):
             200,
         )
 
+    def test_signed_offers_expire_after_thirty_minutes_across_tabs(self):
+        """Offer and pinned legal links must reject an expired signed token.
+
+        An unexpired offer from the same browser is valid, while expiry must
+        fail closed even when the authoritative Redis nonce is still current.
+        """
+        import time
+
+        from apps.legal.checkout_snapshot import MAX_AGE_SECONDS
+        from django.core import signing
+
+        company_offer = self.snapshot('company')
+        private_offer = self.snapshot('private')
+        self.assertEqual(MAX_AGE_SECONDS, 1800)
+        request = self._get_request_with_current_session()
+        self.assertEqual(
+            validate_snapshot(request, company_offer['token'], 'company')[0][
+                'verification'
+            ],
+            'signed_session_bound_document_offer',
+        )
+        self.assertEqual(
+            self.client.get(private_offer['documents']['withdrawal']['url']).status_code,
+            200,
+        )
+
+        now = time.time()
+        # Django's TimestampSigner validates a token's original signing time;
+        # no mutation of the token or legal document contents is needed.
+        with patch('django.core.signing.time.time', return_value=now + 1790):
+            self.assertEqual(
+                self.client.get(company_offer['documents']['terms']['url']).status_code,
+                200,
+            )
+        with patch('django.core.signing.time.time', return_value=now + 1805):
+            for offer, customer_type, document_type in (
+                (company_offer, 'company', 'terms'),
+                (private_offer, 'private', 'withdrawal'),
+            ):
+                with self.subTest(customer_type=customer_type):
+                    with self.assertRaises(ValidationError):
+                        validate_snapshot(
+                            self._get_request_with_current_session(),
+                            offer['token'], customer_type,
+                        )
+                    response = self.client.get(offer['documents'][document_type]['url'])
+                    self.assertEqual(response.status_code, 409)
+                    self.assertEqual(response['Cache-Control'], 'no-store')
+
     def test_second_tab_does_not_invalidate_first_checkout_offer(self):
         first_tab = self.snapshot('company')
         second_tab = self.snapshot('private')
