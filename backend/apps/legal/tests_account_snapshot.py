@@ -92,6 +92,9 @@ class AccountSignedLegalOfferTests(TestCase):
         with override('en'):
             response = self.client.get(reverse('accounts:register'))
             token = signed_token(response)
+            self.assertEqual(response['Cache-Control'], 'no-store')
+            self.assertEqual(response['Referrer-Policy'], 'no-referrer')
+            self.assertEqual(response['X-Robots-Tag'], 'noindex, noarchive')
             self.assertContains(response, 'account_snapshot=')
             # The linked exact German body is available even under English UI.
             match = re.search(r'href="([^"]+account_snapshot=[^"]+)"', response.content.decode())
@@ -165,7 +168,10 @@ class AccountSignedLegalOfferTests(TestCase):
 
     def test_new_invitation_binds_invitee_and_consumes_capability(self):
         invitation, url = self.invitation()
-        token = signed_token(self.client.get(url))
+        form_response = self.client.get(url)
+        self.assertEqual(form_response['Cache-Control'], 'no-store')
+        self.assertEqual(form_response['Referrer-Policy'], 'no-referrer')
+        token = signed_token(form_response)
         response = self.client.post(url, {
             'first_name': 'Invitee', 'last_name': 'Signed',
             'password': 'SignedInviteeRegression-2026!',
