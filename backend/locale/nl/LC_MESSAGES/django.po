@@ -3991,3 +3991,46 @@ msgstr "%(company)s nodigt u uit voor PROMPTFINISHER."
 
 msgid "Konto anlegen und Einladung annehmen"
 msgstr "Account aanmaken en uitnodiging accepteren"
+
+# Account invitation and email-verification result UI.
+msgid "Sie wurden zu %(company)s eingeladen."
+msgstr "U bent uitgenodigd om deel te nemen aan %(company)s."
+
+msgid "Der Beitritt erfolgt erst nach Ihrer ausdrücklichen Bestätigung."
+msgstr "U wordt pas lid van het bedrijf na uw uitdrukkelijke bevestiging."
+
+msgid "Firma beitreten"
+msgstr "Bij het bedrijf aansluiten"
+
+msgid "Einladung angenommen"
+msgstr "Uitnodiging geaccepteerd"
+
+msgid "Einladung ungültig oder abgelaufen"
+msgstr "Uitnodiging ongeldig of verlopen"
+
+msgid "Ihr Benutzerkonto ist dem Unternehmen jetzt zugeordnet."
+msgstr "Uw gebruikersaccount is nu aan het bedrijf gekoppeld."
+
+msgid "Der Einladungslink kann nicht mehr verwendet werden. Bitte fordern Sie bei Ihrem Firmenadministrator eine neue Einladung an."
+msgstr "Deze uitnodigingslink kan niet meer worden gebruikt. Vraag uw bedrijfsbeheerder om een nieuwe uitnodiging."
+
+msgid "Zum Kundenportal"
+msgstr "Naar het klantportaal"
+
+msgid "Zur Startseite"
+msgstr "Terug naar de startpagina"
+
+msgid "E-Mail bestätigt"
+msgstr "E-mailadres bevestigd"
+
+msgid "Link ungültig oder abgelaufen"
+msgstr "Link ongeldig of verlopen"
+
+msgid "Die E-Mail-Adresse Ihres PROMPTFINISHER-Kontos wurde bestätigt."
+msgstr "Het e-mailadres van uw PROMPTFINISHER-account is bevestigd."
+
+msgid "Dieser Bestätigungslink ist nicht mehr gültig."
+msgstr "Deze bevestigingslink is niet meer geldig."
+
+msgid "Weiter"
+msgstr "Doorgaan"
