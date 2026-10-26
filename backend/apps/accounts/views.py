@@ -571,83 +571,95 @@ def accept_invitation(request, token):
             invitation.save(update_fields=['accepted_at', 'updated_at'])
         return render(request, 'auth/invite_result.html', {'ok': True})
 
-    now = timezone.now()
     legal_documents = {}
-    for doc_type in ('terms', 'privacy'):
-        document = (
-            LegalDocument.objects.filter(doc_type=doc_type, active=True, valid_from__lte=now)
-            .order_by('-valid_from')
-            .first()
-        )
-        if document is None:
-            return render(
-                request,
-                'auth/invite_result.html',
-                {'ok': False, 'reason': 'legal_configuration'},
-                status=503,
+    if not settings.LEGAL_ACCOUNT_SNAPSHOT_REQUIRED:
+        now = timezone.now()
+        for doc_type in ('terms', 'privacy'):
+            document = (
+                LegalDocument.objects.filter(
+                    doc_type=doc_type, active=True, valid_from__lte=now,
+                ).order_by('-valid_from').first()
             )
-        legal_documents[doc_type] = document
+            if document is None:
+                return render(
+                    request, 'auth/invite_result.html',
+                    {'ok': False, 'reason': 'legal_configuration'}, status=503,
+                )
+            legal_documents[doc_type] = document
 
     form = AcceptInvitationForm(
         request.POST or None,
         initial={'first_name': invitation.first_name, 'last_name': invitation.last_name},
     )
     if request.method == 'POST' and form.is_valid():
-        with transaction.atomic():
-            invitation = Invitation.objects.select_for_update().get(pk=invitation.pk)
-            if not invitation.is_valid():
-                return render(request, 'auth/invite_result.html', {'ok': False})
-            if User.objects.filter(email__iexact=invitation.email).exists():
-                return render(request, 'auth/invite_result.html', {'ok': False})
-            if invitation.role == 'admin':
-                Company.objects.select_for_update().get(pk=invitation.company_id)
-                if Membership.objects.filter(
-                    company_id=invitation.company_id,
-                    active=True,
-                    role='admin',
-                ).exists():
-                    return render(
-                        request,
-                        'auth/invite_result.html',
-                        {'ok': False, 'reason': 'admin_already_exists'},
+        try:
+            with transaction.atomic():
+                invitation = Invitation.objects.select_for_update().get(pk=invitation.pk)
+                if not invitation.is_valid():
+                    return render(request, 'auth/invite_result.html', {'ok': False})
+                if User.objects.filter(email__iexact=invitation.email).exists():
+                    return render(request, 'auth/invite_result.html', {'ok': False})
+                if invitation.role == 'admin':
+                    Company.objects.select_for_update().get(pk=invitation.company_id)
+                    if Membership.objects.filter(
+                        company_id=invitation.company_id,
+                        active=True,
+                        role='admin',
+                    ).exists():
+                        return render(
+                            request, 'auth/invite_result.html',
+                            {'ok': False, 'reason': 'admin_already_exists'},
+                        )
+                offer_evidence = None
+                if settings.LEGAL_ACCOUNT_SNAPSHOT_REQUIRED:
+                    offer_evidence, legal_documents = validate_account_offer(
+                        request, request.POST.get('account_snapshot', ''),
+                        flow='invitation', invitation=invitation, lock=True,
                     )
-            user = User.objects.create_user(
-                email=invitation.email,
-                password=form.cleaned_data['password'],
-                first_name=form.cleaned_data['first_name'].strip(),
-                last_name=form.cleaned_data['last_name'].strip(),
-                email_verified_at=timezone.now(),
-                two_factor_required=(invitation.role == 'admin'),
-            )
-            Membership.objects.create(
-                company=invitation.company,
-                user=user,
-                role=invitation.role,
-                active=True,
-            )
-            evidence = {
-                'source': 'invitation',
-                'verification': 'legacy_without_signed_snapshot',
-                'presentation_proof': 'not_recorded',
-                'ip': client_ip(request),
-                'user_agent': (request.META.get('HTTP_USER_AGENT') or '')[:500],
-            }
-            for document in legal_documents.values():
-                LegalAcceptance.objects.create(user=user, document=document, evidence=evidence)
-            invitation.accepted_at = timezone.now()
-            invitation.save(update_fields=['accepted_at', 'updated_at'])
-            login(request, user)
-            request.session.cycle_key()
-            if invitation.role == 'admin':
-                bind_security_session(request, user, two_factor_ok=False)
-                request.session['post_2fa_next'] = reverse('portal:dashboard')
-            else:
-                bind_security_session(request, user, two_factor_ok=True)
+                user = User.objects.create_user(
+                    email=invitation.email,
+                    password=form.cleaned_data['password'],
+                    first_name=form.cleaned_data['first_name'].strip(),
+                    last_name=form.cleaned_data['last_name'].strip(),
+                    email_verified_at=timezone.now(),
+                    two_factor_required=(invitation.role == 'admin'),
+                )
+                Membership.objects.create(
+                    company=invitation.company,
+                    user=user,
+                    role=invitation.role,
+                    active=True,
+                )
+                evidence = {
+                    'source': 'invitation',
+                    'verification': 'legacy_without_signed_snapshot',
+                    'presentation_proof': 'not_recorded',
+                    'ip': client_ip(request),
+                    'user_agent': (request.META.get('HTTP_USER_AGENT') or '')[:500],
+                }
+                if offer_evidence is not None:
+                    evidence.update(offer_evidence)
+                for document in legal_documents.values():
+                    LegalAcceptance.objects.create(
+                        user=user, document=document,
+                        evidence={**evidence, **(
+                            {'document': offer_evidence['documents'][document.doc_type]}
+                            if offer_evidence is not None else {}
+                        )},
+                    )
+                invitation.accepted_at = timezone.now()
+                invitation.save(update_fields=['accepted_at', 'updated_at'])
+                login(request, user)
+                request.session.cycle_key()
+                if invitation.role == 'admin':
+                    bind_security_session(request, user, two_factor_ok=False)
+                    request.session['post_2fa_next'] = reverse('portal:dashboard')
+                else:
+                    bind_security_session(request, user, two_factor_ok=True)
+        except ValidationError as exc:
+            form.add_error(None, str(exc))
+            return _render_new_invitation(request, form, invitation, legal_documents)
         if invitation.role == 'admin':
             return redirect('accounts:two_factor')
         return redirect('portal:dashboard')
-    return render(
-        request,
-        'auth/accept_invitation.html',
-        {'form': form, 'invitation': invitation, 'legal_documents': legal_documents},
-    )
+    return _render_new_invitation(request, form, invitation, legal_documents)
