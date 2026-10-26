@@ -17,6 +17,7 @@ from apps.audit.services import audit as write_audit
 from apps.core.admin_views import staff_perm
 from apps.core.permissions import has_perm
 from apps.legal.models import LegalDocument, LegalDocumentTranslation
+from apps.legal.readiness import build_readiness_report
 
 
 class TranslationDraftForm(forms.ModelForm):
@@ -43,6 +44,7 @@ def translation_list(request):
         'translations': entries,
         'can_edit': has_perm(request.user, 'legal.write'),
         'publication_enabled': settings.LEGAL_TRANSLATIONS_PUBLIC_ENABLED,
+        'readiness': build_readiness_report(),
     })
 
 
