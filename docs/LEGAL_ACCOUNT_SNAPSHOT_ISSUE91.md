@@ -43,7 +43,10 @@ Dokumentnachweis ist keine externe juristische Prüfung von Rechtstexten.
    Datenbanktransaktion **vor** Benutzer- oder Mitgliedschaftserstellung.
    Jeder Drift führt zu Abbruch; eine neue Anzeige muss geholt werden.
    Bereits vorhandene Benutzer durchlaufen einen separaten, unveränderten
-   Mitgliedschaftsprozess.
+   Mitgliedschaftsprozess. Der signierte Token wird vor Kontoerstellung
+   über einen atomaren, serverseitigen Einmalverwendungsnachweis beansprucht;
+   bei Redis-/Cache-Ausfall wird der POST verweigert. Ein nach Datenbank-
+   Rollback verbrauchter Token muss durch ein neues Angebot ersetzt werden.
 6. Tatsächlich angenommene Fassungen werden je Primärdokument in
    `LegalAcceptance` festgehalten. `verification` ist
    `signed_session_bound_document_offer`,
