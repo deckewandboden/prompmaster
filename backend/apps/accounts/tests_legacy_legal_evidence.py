@@ -17,6 +17,13 @@ from apps.legal.models import LegalAcceptance, LegalDocument
 
 
 class LegacyAccountLegalEvidenceTests(TestCase):
+    def setUp(self):
+        # Keep per-IP registration budgets independent across QA cases.
+        names = sorted(name for name in dir(type(self)) if name.startswith('test_'))
+        self.client.defaults['REMOTE_ADDR'] = (
+            f'203.0.115.{names.index(self._testMethodName) + 1}'
+        )
+
     @classmethod
     def setUpTestData(cls):
         for doc_type in ('terms', 'privacy'):
