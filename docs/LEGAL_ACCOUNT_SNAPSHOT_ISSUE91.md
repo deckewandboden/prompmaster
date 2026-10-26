@@ -29,9 +29,10 @@ Dokumentnachweis ist keine externe juristische Prüfung von Rechtstexten.
    Tokens ergeben HTTP 409 mit `no-store`, `no-referrer` und `noindex`.
 3. Tokenbindung: anhaltender Django-Session-Key (geheim abgeleitete HMAC),
    genau ein Flow (`registration` oder `invitation`), bei Einladung
-   zusätzlich die konkrete unveränderliche Einladungsidentität mit Firma,
-   Rolle, E-Mail und Einladungstoken-Hash. Der reine Einladungstoken wird
-   nicht im Snapshot reproduziert.
+   zusätzlich einen HMAC-Fingerabdruck der konkreten Einladung aus Firma,
+   Rolle, E-Mail und Einladungstoken-Hash. E-Mail und Token-Hash werden
+   **nicht im lesbaren signierten URL-Token gespeichert**; die Einladungs-ID
+   ermöglicht nur die serverseitige Nachprüfung.
 4. Rechtsinhalte: zwei aktuell gültige deutsche Primärdokumente. Der
    Snapshot bindet ID, Dokumenttyp, Version, Quellidentitäts-SHA-256,
    tatsächliche Textsprache und Text-SHA-256. Bei ausstehender oder
