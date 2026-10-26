@@ -3926,3 +3926,13 @@ msgstr "En revisión"
 
 msgid "Rechtstexte freigeben"
 msgstr "Aprobar textos legales"
+
+# Invitation-acceptance UI; legal text bodies remain under separate legal approval.
+msgid "Einladung annehmen"
+msgstr "Aceptar invitación"
+
+msgid "%(company)s lädt Sie zu PROMPTFINISHER ein."
+msgstr "%(company)s le invita a PROMPTFINISHER."
+
+msgid "Konto anlegen und Einladung annehmen"
+msgstr "Crear cuenta y aceptar la invitación"
