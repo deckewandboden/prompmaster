@@ -353,6 +353,13 @@ jobs:
           pip check
           python -m playwright --version
 
+      - name: Prepare process-owned Firefox home
+        run: |
+          # Firefox requires HOME to be owned by the current container UID.
+          browser_home="$(mktemp -d)"
+          test -O "$browser_home"
+          printf 'HOME=%s\n' "$browser_home" >> "$GITHUB_ENV"
+
       - name: Prepare Django browser fixtures
         working-directory: backend
         run: |
