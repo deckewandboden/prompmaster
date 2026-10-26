@@ -220,6 +220,12 @@ def register(request):
                         'ip': client_ip(request),
                         'user_agent': request.META.get('HTTP_USER_AGENT', '')[:300],
                         'source': 'registration',
+                        # No signed GET-time, language or text-version offer is
+                        # captured on this legacy account creation route.
+                        # The document FK alone must never be presented as
+                        # proof that this exact body was offered or read.
+                        'verification': 'legacy_without_signed_snapshot',
+                        'presentation_proof': 'not_recorded',
                     }
                     for document in legal_documents.values():
                         LegalAcceptance.objects.create(
@@ -575,6 +581,8 @@ def accept_invitation(request, token):
             )
             evidence = {
                 'source': 'invitation',
+                'verification': 'legacy_without_signed_snapshot',
+                'presentation_proof': 'not_recorded',
                 'ip': client_ip(request),
                 'user_agent': (request.META.get('HTTP_USER_AGENT') or '')[:500],
             }
