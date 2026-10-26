@@ -1441,10 +1441,27 @@ def _browser_register_verify_to_buy(
                 'form .errorlist, form [role="alert"], form .invalid-feedback'
             ).all_inner_texts() if part.strip()
         )
+        # CSRF middleware rejects POST before the form renders; provide
+        # secret-free signals distinguishing it from an account-form error.
+        body = page.locator('body').inner_text()
+        csrf_flags = {
+            'csrf_failure_page': 'CSRF verification failed' in body,
+            'csrf_cookie_present': any(
+                cookie['name'] == 'csrftoken'
+                for cookie in page.context.cookies()
+            ),
+            'csrf_form_present': (
+                page.locator('input[name="csrfmiddlewaretoken"]').count() > 0
+            ),
+            'csrf_cookie_missing': 'CSRF cookie not set' in body,
+            'csrf_token_missing': 'CSRF token missing' in body,
+            'csrf_origin_denied': 'Origin checking failed' in body,
+            'csrf_token_incorrect': 'CSRF token from POST incorrect' in body,
+        }
         raise AssertionError(
             f'{customer_type}: signed registration rejected: '
             f'http={submitted_response.status if submitted_response else "none"}, '
-            f'error={error_text[:600]!r}'
+            f'error={error_text[:300]!r}, csrf={csrf_flags}'
         )
 
     if customer_type == 'company':

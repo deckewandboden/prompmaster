@@ -432,6 +432,47 @@ class AccountSignedLegalOfferTests(TestCase):
         self.assertFalse(User.objects.filter(email=invite.email).exists())
         self.assertFalse(LegalAcceptance.objects.exists())
 
+    @patch('apps.accounts.views.queue_email')
+    def test_signed_registration_accepts_real_csrf_after_pinned_legal_tabs(self, _queue):
+        # Unlike Django's default Client, enforce real CSRF cookie + form
+        # token + same-origin Origin checks after BOTH pinned GET requests.
+        real_client = Client(
+            enforce_csrf_checks=True, REMOTE_ADDR='198.51.100.159',
+        )
+        url = reverse('accounts:register')
+        response = real_client.get(url, HTTP_HOST='testserver')
+        self.assertEqual(response.status_code, 200)
+        token = signed_token(response)
+        csrf = re.search(
+            r'name="csrfmiddlewaretoken" value="([^"]+)"',
+            response.content.decode(),
+        )
+        self.assertIsNotNone(csrf)
+        self.assertIn('csrftoken', real_client.cookies)
+        for kind in ('terms', 'privacy'):
+            pinned = real_client.get(
+                f'/legal/{kind}/?account_snapshot={token}',
+                HTTP_HOST='testserver',
+            )
+            self.assertEqual(pinned.status_code, 200)
+        data = self.registration_data(email='live-csrf-pass@example.test')
+        data['account_snapshot'] = token
+        data['csrfmiddlewaretoken'] = csrf.group(1)
+        accepted = real_client.post(
+            url, data,
+            HTTP_HOST='testserver',
+            HTTP_ORIGIN='http://testserver',
+        )
+        self.assertEqual(
+            accepted.status_code, 302,
+            f'Signed account registration rejected after pinned GETs: {accepted.status_code}',
+        )
+        self.assertTrue(User.objects.filter(email=data['email']).exists())
+        self.assertEqual(
+            LegalAcceptance.objects.filter(user__email=data['email']).count(),
+            2,
+        )
+
     def test_signed_registration_and_invitation_do_not_bypass_csrf(self):
         register_client = Client(
             enforce_csrf_checks=True, REMOTE_ADDR='198.51.100.110',
