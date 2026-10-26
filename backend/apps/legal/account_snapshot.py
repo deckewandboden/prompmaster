@@ -7,6 +7,7 @@ from urllib.parse import urlencode
 
 from django.conf import settings
 from django.core import signing
+from django.core.cache import cache
 from django.core.exceptions import ValidationError
 from django.utils import timezone
 from django.utils.crypto import salted_hmac
@@ -119,6 +120,25 @@ def _decode(request, token):
     return payload
 
 
+def _claim_offer_once(token):
+    """Atomically consume a signed account offer before the user is created.
+
+    A failed database transaction may burn the token, but never makes it
+    reusable. The user must request a fresh offer after an unsuccessful POST.
+    Do not use mutable Django session state as the authoritative replay lock.
+    """
+    key = 'promptfinisher:legal-account:consumed:' + salted_hmac(
+        'promptfinisher.account.legal.consume-once.v1',
+        token, secret=settings.SECRET_KEY,
+    ).hexdigest()
+    try:
+        first_claim = cache.add(key, 'consumed', timeout=MAX_AGE_SECONDS + 60)
+    except Exception as exc:
+        raise ValidationError('Account legal replay store unavailable.') from exc
+    if not first_claim:
+        raise ValidationError('Account legal offer has already been used.')
+
+
 def validate_account_offer(request, token, *, flow, invitation=None, lock=False):
     """Fail closed on source, translation, identity or flow drift.
 
@@ -142,6 +162,10 @@ def validate_account_offer(request, token, *, flow, invitation=None, lock=False)
             raise ValidationError('Account legal document changed; reload the page.')
         documents[kind] = current
         checked[kind] = actual
+    if lock:
+        # The transaction will now create the identity. Claim is atomic across
+        # requests, including two concurrent POSTs with the same session key.
+        _claim_offer_once(token)
     evidence = {
         'verification': 'signed_session_bound_document_offer',
         'presentation_proof': 'links_offered_not_read_receipts',
