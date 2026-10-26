@@ -28,6 +28,33 @@
     </tbody>
   </table></div>
 </div>
+
+<details class="card" data-legal-readiness>
+  <summary><strong>{% translate 'Technischer Status der Rechtsübersetzungen' %}</strong> — {{ readiness.summary.verified_approved }}/{{ readiness.total_required_translations }}</summary>
+  <p class="muted" role="note">{% translate 'Keine juristische oder produktive Freigabe. Die Veröffentlichung bleibt separat gesperrt.' %}</p>
+  <div class="tablewrap"><table>
+    <thead><tr>
+      <th>{% translate 'Dokument' %}</th>
+      <th>{% translate 'Version' %}</th>
+      <th>{% translate 'Sprache' %}</th>
+      <th>{% translate 'Status' %}</th>
+    </tr></thead>
+    <tbody>{% for item in readiness.entries %}
+    <tr>
+      <td data-label="{% translate 'Dokument' %}">{{ item.document_type }}</td>
+      <td data-label="{% translate 'Version' %}">{{ item.source_version|default:'–' }}</td>
+      <td data-label="{% translate 'Sprache' %}">{{ item.language|upper }}</td>
+      <td data-label="{% translate 'Status' %}">
+        {% if item.status == 'verified_approved' %}{% translate 'Technisch geprüft' %}
+        {% elif item.status == 'missing' %}{% translate 'Fehlend' %}
+        {% elif item.status == 'draft' %}{% translate 'Entwurf' %}
+        {% elif item.status == 'review' %}{% translate 'In Prüfung' %}
+        {% elif item.status == 'stale_approved' %}{% translate 'Freigabe veraltet' %}
+        {% else %}{% translate 'Deutsche Quelle fehlt' %}{% endif %}
+      </td>
+    </tr>{% endfor %}</tbody>
+  </table></div>
+</details>
 <div class="page-actions">
   <a class="btn secondary" href="{% url 'ns_admin:legal_documents' %}">{% translate 'Deutsche Originalversionen' %}</a>
   <a class="btn secondary" href="{% url 'ns_admin:legal' %}">{% translate 'Datenschutz & Recht' %}</a>
