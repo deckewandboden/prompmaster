@@ -4001,3 +4001,7 @@ msgstr "Onay güncelliğini yitirdi"
 
 msgid "Deutsche Quelle fehlt"
 msgstr "Almanca kaynak eksik"
+
+# Account snapshot validation error; generic and safe for public users.
+msgid "Das Rechtsdokument-Angebot ist ungültig oder nicht mehr aktuell. Bitte prüfen Sie die Dokumente erneut und senden Sie das Formular noch einmal ab."
+msgstr "Hukuki belge teklifi geçersiz veya artık güncel değil. Lütfen belgeleri yeniden inceleyip formu tekrar gönderin."
