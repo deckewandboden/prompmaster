@@ -74,6 +74,16 @@ for language in de en es pt tr ru pl fr it nl; do
   grep -Fq "\"$language\":" "$tmp/i18n" || fail "Public i18n catalog missing $language"
 done
 grep -Fq 'promptfinisher_product_i18n.20261011.js' "$tmp/free" || fail 'Free page does not load the language bundle'
+# Validate the raw HTTP language before JavaScript starts.  A successful i18n
+# bundle download alone does not prove that the Free document has the right
+# language metadata (caught by the operator's R5 live acceptance).
+for language in de en es pt tr ru pl fr it nl; do
+  status="$(curl -sS -L --connect-timeout 10 --max-time 45 --retry 2 --retry-delay 2 \
+    -H "Cookie: promptfinisher_language=$language" \
+    -o "$tmp/free-$language" -w '%{http_code}' "$base/free/")" || fail "Free language request failed: $language"
+  [[ "$status" == 200 ]] || fail "Free language $language returned HTTP $status"
+  grep -Fq "<html lang=\"$language\">" "$tmp/free-$language" || fail "Free raw HTML lang mismatch: $language"
+done
 # Pro requires authentication; HTTP must resolve to either Pro or a login page.
 fetch /pro/app/ "$tmp/pro"
 [[ -s "$tmp/pro" ]] || fail 'Pro route returned an empty document'

@@ -47,10 +47,14 @@ esac
         self.mock("curl", r'''#!/bin/bash
 file=""
 head=0
+language=de
 args=("$@")
 for ((i=0;i<${#args[@]};i++)); do
   [[ "${args[$i]}" == "-o" ]] && file="${args[$((i+1))]}"
   [[ "${args[$i]}" == "-I" ]] && head=1
+  if [[ "${args[$i]}" == "-H" && "${args[$((i+1))]}" == "Cookie: promptfinisher_language="* ]]; then
+    language="${args[$((i+1))]#Cookie: promptfinisher_language=}"
+  fi
 done
 url="${args[${#args[@]}-1]}"
 if [[ "$head" == 1 ]]; then
@@ -65,7 +69,8 @@ if [[ "$url" == *"/static/js/promptfinisher_product_i18n.20261011.js" ]]; then
   printf 'PROMPTFINISHER "de":{} "en":{} "es":{} "pt":{} "tr":{} "ru":{} "pl":{} "fr":{} "it":{}' > "$file"
   [[ "${PM_TEST_MISSING_LANGUAGE:-0}" == 1 ]] || printf ' "nl":{}' >> "$file"
 elif [[ "$url" == *"/free/" ]]; then
-  printf '<html><script src="promptfinisher_product_i18n.20261011.js"></script></html>' > "$file"
+  if [[ "${PM_TEST_MISMATCH_LANGUAGE:-}" == "$language" ]]; then language=de; fi
+  printf '<html lang="%s"><script src="promptfinisher_product_i18n.20261011.js"></script></html>' "$language" > "$file"
 else
   printf '<html>PROMPTFINISHER</html>' > "$file"
 fi
@@ -169,6 +174,12 @@ fi
         result = self.run_release(PM_TEST_BAD_CACHE=1)
         self.assertNotEqual(result.returncode, 0)
         self.assertIn("stale-cache", result.stderr)
+
+    def test_refuses_raw_free_language_mismatch_without_success_receipt(self):
+        result = self.run_release(PM_TEST_MISMATCH_LANGUAGE='en')
+        self.assertNotEqual(result.returncode, 0)
+        self.assertIn('Free raw HTML lang mismatch: en', result.stderr)
+        self.assertFalse((self.root / f"artifacts/deploy-state/github-release-verified-{SHA}.txt").exists())
 
     def test_invalid_cli_does_not_deploy(self):
         result = self.run_release("--force")

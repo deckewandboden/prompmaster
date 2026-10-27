@@ -23,7 +23,7 @@ V2_SCRIPT = b'<script src="/static/js/promptfinisher_ui_v2.20260922.js?v=' + V2_
 I18N_SCRIPT = b'<script src="/static/js/promptfinisher_product_i18n.20261011.js?v=' + V2_ASSET_REV + b'" defer></script>'
 
 
-def _inject_v2_ui(data: bytes) -> bytes:
+def _inject_v2_ui(data: bytes, *, language_cookie: str = 'de') -> bytes:
     head_marker = b'</head>'
     body_marker = b'</body></html>'
 
@@ -42,6 +42,20 @@ def _inject_v2_ui(data: bytes) -> bytes:
     data = data.replace(remote_logo, transparent_pixel)
     if data.count(head_marker) != 1 or data.count(body_marker) != 1:
         raise GoldenMasterIntegrityError('PROMPTFINISHER V2 injection markers are not unique.')
+
+    # The immutable Golden Masters deliberately start in German.  The V2
+    # translation script switches <html lang> in the browser, but a raw HTTP
+    # response (and crawlers or assistive clients before JS executes) must also
+    # advertise the selected cookie language.  Do not change the legacy routes
+    # or the asset files, and never reflect arbitrary cookie bytes into HTML.
+    html_tag = b'<html lang="de">'
+    if data.count(html_tag) != 1:
+        raise GoldenMasterIntegrityError('PROMPTFINISHER V2 HTML language marker is not unique.')
+    language = (language_cookie or 'de').lower()
+    allowed = {code for code, _label in settings.LANGUAGES}
+    if language not in allowed:
+        language = 'de'
+    data = data.replace(html_tag, b'<html lang="' + language.encode('ascii') + b'">', 1)
     data = data.replace(head_marker, V2_STYLE + head_marker, 1)
     data = data.replace(body_marker, V2_SCRIPT + I18N_SCRIPT + body_marker, 1)
     return data
@@ -243,7 +257,7 @@ def _pro_runtime_response(request, *, ui_v2=False):
     if ui_v2:
         data = _remove_v2_source_status(data)
         try:
-            data = _inject_v2_ui(data)
+            data = _inject_v2_ui(data, language_cookie=request.COOKIES.get(settings.LANGUAGE_COOKIE_NAME, 'de'))
         except GoldenMasterIntegrityError:
             logger.exception('PROMPTFINISHER Pro V2 UI injection failed')
             return render(request, 'proaccess/asset_missing.html', status=503)
@@ -302,7 +316,7 @@ def _free_runtime_response(request, *, ui_v2=False):
         data = data.replace(head_marker, compose_marker + head_marker, 1)
         data = _remove_v2_source_status(data)
         try:
-            data = _inject_v2_ui(data)
+            data = _inject_v2_ui(data, language_cookie=request.COOKIES.get(settings.LANGUAGE_COOKIE_NAME, 'de'))
         except GoldenMasterIntegrityError:
             logger.exception('PROMPTFINISHER Free V2 UI injection failed')
             return HttpResponse('PROMPTFINISHER Free ist vorübergehend nicht verfügbar.', status=503)

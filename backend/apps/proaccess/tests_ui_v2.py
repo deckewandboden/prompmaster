@@ -89,6 +89,47 @@ class PROMPTFINISHERV2RouteIsolationTests(TestCase):
         )
         self.assertEqual(stripped, legacy_html.replace(free_source_node, '', 1))
 
+    def test_free_v2_raw_html_advertises_cookie_locale_without_changing_legacy(self):
+        """R5: raw HTTPS /free/ should expose the selected locale before JS runs."""
+        languages = ('de', 'en', 'es', 'pt', 'tr', 'ru', 'pl', 'fr', 'it', 'nl')
+        for language in languages:
+            with self.subTest(language=language):
+                self.client.cookies['promptfinisher_language'] = language
+                current = self.client.get(reverse('free_product'))
+                legacy = self.client.get(reverse('free_product_old'))
+                self.assertEqual(current.status_code, 200)
+                self.assertEqual(legacy.status_code, 200)
+                self.assertTrue(current.content.startswith(
+                    ('<html lang="' + language + '">').encode('ascii')
+                ))
+                self.assertTrue(legacy.content.startswith(b'<html lang="de">'))
+                self.assertIn(b'promptfinisher_product_i18n.20261011.js', current.content)
+                self.assertNotIn(b'promptfinisher_product_i18n.20261011.js', legacy.content)
+
+    def test_free_v2_invalid_cookie_never_reflects_untrusted_html(self):
+        for language in ('xx', 'pt-br', '<img src=x onerror=alert(1)>', ''):
+            with self.subTest(language=language):
+                self.client.cookies['promptfinisher_language'] = language
+                response = self.client.get(reverse('free_product'))
+                self.assertEqual(response.status_code, 200)
+                self.assertTrue(response.content.startswith(b'<html lang="de">'))
+                self.assertNotIn(b'<img src=x onerror=alert(1)>', response.content)
+
+    def test_pro_v2_raw_html_advertises_cookie_locale_without_changing_legacy(self):
+        self._staff_session()
+        for language in ('de', 'en', 'es', 'pt', 'tr', 'ru', 'pl', 'fr', 'it', 'nl'):
+            with self.subTest(language=language):
+                self.client.cookies['promptfinisher_language'] = language
+                current = self.client.get(reverse('proaccess:content'))
+                legacy = self.client.get(reverse('pro_product_old'))
+                self.assertEqual(current.status_code, 200)
+                self.assertEqual(legacy.status_code, 200)
+                self.assertTrue(current.content.startswith(
+                    ('<html lang="' + language + '">').encode('ascii')
+                ))
+                self.assertTrue(legacy.content.startswith(b'<html lang="de">'))
+                self.assertIn(b'promptfinisher_product_i18n.20261011.js', current.content)
+
     def test_pro_current_route_adds_v2_shell_but_legacy_route_does_not(self):
         self._staff_session()
         current = self.client.get(reverse('proaccess:content'))
