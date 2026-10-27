@@ -9,6 +9,7 @@ from django.middleware.csrf import get_token
 from django.shortcuts import redirect, render
 from django.urls import reverse
 from django.views.decorators.clickjacking import xframe_options_sameorigin
+from django.utils.translation import get_language
 
 from apps.devices.services import register_device, validate_device_token
 from .assets import GoldenMasterIntegrityError, read_verified_asset
@@ -21,6 +22,27 @@ V2_ASSET_REV = b'20261023-review-l10n2'
 V2_STYLE = b'<link rel="stylesheet" href="/static/css/promptfinisher_v2.20260922.css?v=' + V2_ASSET_REV + b'">'
 V2_SCRIPT = b'<script src="/static/js/promptfinisher_ui_v2.20260922.js?v=' + V2_ASSET_REV + b'" defer></script>'
 I18N_SCRIPT = b'<script src="/static/js/promptfinisher_product_i18n.20261011.js?v=' + V2_ASSET_REV + b'" defer></script>'
+
+
+def _localize_v2_html_lang(data: bytes) -> bytes:
+    """Set the initial HTML language on the served V2 response.
+
+    The verified Free/Pro source files are immutable German reference assets;
+    the client locale script already translates the visible UI after load.
+    Serve a matching initial lang attribute for assistive technology and
+    source-level checks, without changing those protected assets or form data.
+    """
+    language = (get_language() or 'de').split('-', 1)[0].lower()
+    supported = {code for code, _label in settings.LANGUAGES}
+    language = language if language in supported else 'de'
+    marker = b'<html lang="de">'
+    if data.count(marker) != 1:
+        raise GoldenMasterIntegrityError(
+            'PROMPTFINISHER V2 HTML root language marker is not unique.'
+        )
+    return data.replace(
+        marker, f'<html lang="{language}">'.encode('ascii'), 1,
+    )
 
 
 def _inject_v2_ui(data: bytes) -> bytes:
@@ -244,6 +266,7 @@ def _pro_runtime_response(request, *, ui_v2=False):
         data = _remove_v2_source_status(data)
         try:
             data = _inject_v2_ui(data)
+            data = _localize_v2_html_lang(data)
         except GoldenMasterIntegrityError:
             logger.exception('PROMPTFINISHER Pro V2 UI injection failed')
             return render(request, 'proaccess/asset_missing.html', status=503)
@@ -303,6 +326,7 @@ def _free_runtime_response(request, *, ui_v2=False):
         data = _remove_v2_source_status(data)
         try:
             data = _inject_v2_ui(data)
+            data = _localize_v2_html_lang(data)
         except GoldenMasterIntegrityError:
             logger.exception('PROMPTFINISHER Free V2 UI injection failed')
             return HttpResponse('PROMPTFINISHER Free ist vorübergehend nicht verfügbar.', status=503)
