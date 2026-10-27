@@ -3550,3 +3550,269 @@ msgstr "Если дата окончания не указана, мы расс�
 
 msgid "jetzt kündigen"
 msgstr "Расторгнуть сейчас"
+
+# Customer checkout: legal document list heading.
+msgid "Rechtsdokumente:"
+msgstr "Юридические документы:"
+
+msgid "Alle für Ihr Konto freigegebenen Adminbereiche."
+msgstr "Все разделы администрирования, доступные вашей учётной записи."
+
+msgid "Geschäft & Inhalte"
+msgstr "Бизнес и контент"
+
+msgid "System & Governance"
+msgstr "Система и управление"
+
+msgid "Lead bearbeiten"
+msgstr "Редактировать лид"
+
+msgid "Ansprechpartner"
+msgstr "Контактное лицо"
+
+msgid "Verlauf & Einordnung"
+msgstr "История и оценка"
+
+msgid "Zuletzt geändert"
+msgstr "Последнее изменение"
+
+msgid "Als Firmenkunde konvertiert am"
+msgstr "Преобразовано в корпоративного клиента"
+
+msgid "Kundenkonto öffnen"
+msgstr "Открыть учётную запись клиента"
+
+msgid "Privatkunden werden über den öffentlichen Registrierungs-/Checkout-Prozess angelegt, damit AGB und Datenschutz vom Kunden selbst bestätigt werden."
+msgstr "Частные клиенты регистрируются через общедоступную форму и оформление заказа, чтобы самостоятельно принять условия и политику конфиденциальности."
+
+msgid "← Zur Übersicht"
+msgstr "← К обзору"
+
+msgid "Erklärung"
+msgstr "Заявление"
+
+msgid "Gewünschtes Ende"
+msgstr "Желаемая дата окончания"
+
+msgid "Bearbeitet"
+msgstr "Обработано"
+
+msgid "Bearbeitung"
+msgstr "Обработка"
+
+msgid "Status speichern"
+msgstr "Сохранить статус"
+
+msgid "Sie haben Leserechte, aber keine Berechtigung zur Bearbeitung."
+msgstr "У вас есть доступ на чтение, но нет прав на изменение."
+
+msgid "CSV-Export"
+msgstr "Экспорт CSV"
+
+msgid "angefordert"
+msgstr "запрошено"
+
+msgid "Zeilen"
+msgstr "Строки"
+
+msgid "Verfügbar bis"
+msgstr "Доступно до"
+
+msgid "Dieser Export ist abgelaufen."
+msgstr "Срок действия экспорта истёк."
+
+msgid "CSV herunterladen"
+msgstr "Скачать CSV"
+
+msgid "Der Export konnte nicht erstellt werden. Bitte erneut anfordern."
+msgstr "Не удалось сформировать экспорт. Повторите запрос."
+
+msgid "Der Export wird im Hintergrund erstellt. Diese Seite aktualisiert sich automatisch."
+msgstr "Экспорт формируется в фоновом режиме. Страница обновляется автоматически."
+
+msgid "Der Zahlungsdienst ist derzeit noch nicht verfügbar."
+msgstr "Платёжный сервис сейчас недоступен."
+
+msgid "Zugriff verweigert"
+msgstr "Доступ запрещён"
+
+msgid "Für diese Ansicht fehlt die erforderliche Berechtigung."
+msgstr "У вас нет прав для просмотра этой страницы."
+
+msgid "Zurück zur Übersicht"
+msgstr "Вернуться к обзору"
+
+msgid "Ansicht konnte nicht geladen werden"
+msgstr "Не удалось загрузить страницу"
+
+msgid "Beim Laden der Daten ist ein interner Fehler aufgetreten. Bitte versuchen Sie es erneut."
+msgstr "При загрузке данных произошла внутренняя ошибка. Повторите попытку."
+
+msgid "Erneut laden"
+msgstr "Перезагрузить"
+
+msgid "Seitennavigation"
+msgstr "Навигация по страницам"
+
+msgid "von"
+msgstr "из"
+
+msgid "Datensätze"
+msgstr "Записи"
+
+msgid "Erste Seite"
+msgstr "Первая страница"
+
+msgid "Erste"
+msgstr "Первая"
+
+msgid "Vorherige Seite"
+msgstr "Предыдущая страница"
+
+msgid "Nächste Seite"
+msgstr "Следующая страница"
+
+msgid "Letzte Seite"
+msgstr "Последняя страница"
+
+msgid "Letzte"
+msgstr "Последняя"
+
+msgid "Zwei-Faktor-Anmeldung"
+msgstr "Вход с двухфакторной аутентификацией"
+
+msgid "Geben Sie den Code aus Ihrer Authenticator-App oder einen gültigen Recovery-Code ein."
+msgstr "Введите код из приложения аутентификации или действующий резервный код."
+
+msgid "Recovery-Codes"
+msgstr "Резервные коды"
+
+msgid "Einmalig speichern."
+msgstr "Сохраните эти коды сейчас."
+
+msgid "Diese Codes werden später nicht erneut im Klartext angezeigt."
+msgstr "Позже эти коды не будут снова показаны в открытом виде."
+
+msgid "Schließen Sie die Sicherheitseinrichtung ab, bevor Sie Ihren geschützten PROMPTFINISHER-Bereich verwenden."
+msgstr "Завершите настройку безопасности перед доступом к защищённому разделу PROMPTFINISHER."
+
+msgid "Authenticator-Daten"
+msgstr "Данные приложения аутентификации"
+
+msgid "Secret kopieren"
+msgstr "Скопировать секретный ключ"
+
+msgid "Hinterlegen Sie das Secret in Microsoft Authenticator, Google Authenticator, 1Password oder einer kompatiblen TOTP-App."
+msgstr "Добавьте секретный ключ в Microsoft Authenticator, Google Authenticator, 1Password или совместимое приложение TOTP."
+
+msgid "Einrichtungs-URI"
+msgstr "URI настройки"
+
+msgid "URI kopieren"
+msgstr "Скопировать URI"
+
+msgid "Einrichtung bestätigen"
+msgstr "Подтвердить настройку"
+
+msgid "6-stelliger Code"
+msgstr "Шестизначный код"
+
+msgid "2FA aktivieren"
+msgstr "Включить 2FA"
+
+msgid "Nach erfolgreicher Aktivierung werden einmalig Recovery-Codes angezeigt."
+msgstr "После активации резервные коды будут показаны только один раз."
+
+msgid "Wir senden einen zeitlich begrenzten Link an die hinterlegte E-Mail-Adresse."
+msgstr "Мы отправим временную ссылку на зарегистрированный адрес электронной почты."
+
+msgid "Link anfordern"
+msgstr "Запросить ссылку"
+
+msgid "Anfrage verarbeitet"
+msgstr "Запрос обработан"
+
+msgid "Falls ein aktives Konto zu dieser Adresse existiert, wurde ein zeitlich begrenzter Link zum Zurücksetzen versendet."
+msgstr "Если с этим адресом связана активная учётная запись, отправлена временная ссылка для сброса пароля."
+
+msgid "Legen Sie ein neues Passwort für Ihr PROMPTFINISHER-Konto fest."
+msgstr "Задайте новый пароль для учётной записи PROMPTFINISHER."
+
+msgid "Passwort speichern"
+msgstr "Сохранить пароль"
+
+msgid "Passwort geändert"
+msgstr "Пароль изменён"
+
+msgid "Link ungültig"
+msgstr "Недействительная ссылка"
+
+msgid "Sie können sich jetzt mit dem neuen Passwort anmelden."
+msgstr "Теперь вы можете войти с новым паролем."
+
+msgid "Der Link ist ungültig, abgelaufen oder wurde bereits verwendet. Fordern Sie bei Bedarf einen neuen Link an."
+msgstr "Ссылка недействительна, истекла или уже использована. При необходимости запросите новую."
+
+msgid "Neuen Link anfordern"
+msgstr "Запросить новую ссылку"
+
+msgid "Möchten Sie die aktuelle Sitzung beenden?"
+msgstr "Хотите завершить текущий сеанс?"
+
+# Pro deployment, device registration, and expiration warnings.
+msgid "Die geschützte Pro-Anwendung ist auf diesem System noch nicht bereitgestellt."
+msgstr "Защищённое приложение Pro ещё не развернуто на этой системе."
+
+msgid "Deployment unvollständig."
+msgstr "Развертывание не завершено."
+
+msgid "Der unveränderte PROMPTFINISHER-Pro-Golden-Master muss als private Serverdatei installiert werden."
+msgstr "Неизменённый эталон PROMPTFINISHER Pro необходимо установить как закрытый файл сервера."
+
+msgid "Diese Datei wird niemals öffentlich unter /static/ ausgeliefert."
+msgstr "Этот файл никогда не публикуется по пути /static/."
+
+msgid "Gerät registrieren"
+msgstr "Зарегистрировать устройство"
+
+msgid "PROMPTFINISHER Pro erlaubt %(device_limit)s aktive Geräte pro Benutzer."
+msgstr "PROMPTFINISHER Pro допускает %(device_limit)s активных устройств на пользователя."
+
+msgid "Gerät registrieren und PROMPTFINISHER Pro öffnen"
+msgstr "Зарегистрировать устройство и открыть PROMPTFINISHER Pro"
+
+msgid "Wenn alle Geräteslots belegt sind, muss Ihr Firmenadministrator oder netstyle zuerst ein altes Gerät freigeben."
+msgstr "Если все слоты устройств заняты, администратор вашей компании или netstyle должен сначала освободить старое устройство."
+
+msgid "Lizenz läuft bald ab"
+msgstr "Срок лицензии скоро истечёт"
+
+msgid "PROMPTFINISHER-Pro-Lizenz läuft bald ab"
+msgstr "Срок лицензии PROMPTFINISHER Pro скоро истечёт"
+
+msgid "Dein Pro-Zugriff bleibt bis zum Ablaufdatum aktiv."
+msgstr "Ваш доступ Pro останется активным до окончания срока действия."
+
+msgid "Verbleibende Tage:"
+msgstr "Осталось дней:"
+
+msgid "Lizenz:"
+msgstr "Лицензия:"
+
+msgid "Ablaufdatum:"
+msgstr "Дата окончания:"
+
+msgid "Nach Ablauf wird der Pro-Zugriff ohne Verlängerung automatisch gesperrt."
+msgstr "После окончания срока доступ Pro автоматически блокируется без продления."
+
+msgid "Was möchtest du tun?"
+msgstr "Что вы хотите сделать?"
+
+msgid "Eine Verlängerung vor Ablauf hängt weitere 365 Tage an das bestehende Ablaufdatum an. Die Restlaufzeit geht nicht verloren."
+msgstr "Продление до истечения срока добавит 365 дней к текущей дате окончания. Остаток срока сохранится."
+
+msgid "Lizenzverwaltung / Verlängerung"
+msgstr "Управление лицензией / продление"
+
+msgid "Jetzt trotzdem PROMPTFINISHER Pro starten"
+msgstr "Всё равно открыть PROMPTFINISHER Pro"

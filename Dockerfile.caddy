@@ -52,6 +52,16 @@ RUN --mount=type=secret,id=pf_staging_ca,required=false \
     && go version -m /out/caddy | grep -F 'golang.org/x/net' | grep -F 'v0.60.0'
 
 FROM caddy:2.11.6-alpine
+# The published Alpine runtime can lag a fixed OS library release.
+# Keep Trivy fail-closed: require the patched Brotli library explicitly,
+# rather than suppressing or ignoring the HIGH CVE in the rootfs scan.
+# Trivy 26 Oct 2026: Alpine 3.23 runtime curl/libcurl 8.22.0-r0 has
+# CVE-2026-92392 (HTTP/2 upload use-after-free); require patched 8.23.0-r0.
+# Do not ignore HIGH findings or relax the full container-security gate.
+RUN apk add --no-cache --upgrade \
+    'brotli-libs>=1.2.1-r0' \
+    'curl>=8.23.0-r0' \
+    'libcurl>=8.23.0-r0'
 COPY --from=caddy-patched-build /out/caddy /usr/bin/caddy
 COPY Caddyfile /etc/caddy/Caddyfile
 COPY --from=marketing-build /src/dist /srv/marketing

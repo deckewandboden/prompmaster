@@ -26,7 +26,13 @@ def mollie_runtime_ready():
 
     Secrets may live encrypted in the database, so this deliberately checks the
     same effective sources as MollieClient rather than only settings/.env.
+
+    PUBLIC PREVIEW RELEASE CANDIDATE: never create new paid checkouts in
+    production, even if live provider credentials already exist in the DB.
+    Only a separately reviewed commercial release may remove this lock.
     """
+    if getattr(settings, 'ENVIRONMENT', '').strip().lower() == 'production':
+        return False
     try:
         from apps.core.settings_store import get_setting
         from apps.integrations.services import get_secret

@@ -3549,3 +3549,269 @@ msgstr "Se não indicar uma data de fim, trataremos o cancelamento para a data m
 
 msgid "jetzt kündigen"
 msgstr "Cancelar agora"
+
+# Customer checkout: legal document list heading.
+msgid "Rechtsdokumente:"
+msgstr "Documentos legais:"
+
+msgid "Alle für Ihr Konto freigegebenen Adminbereiche."
+msgstr "Todas as áreas de administração disponíveis para a sua conta."
+
+msgid "Geschäft & Inhalte"
+msgstr "Negócio e conteúdos"
+
+msgid "System & Governance"
+msgstr "Sistema e governação"
+
+msgid "Lead bearbeiten"
+msgstr "Editar lead"
+
+msgid "Ansprechpartner"
+msgstr "Pessoa de contacto"
+
+msgid "Verlauf & Einordnung"
+msgstr "Histórico e avaliação"
+
+msgid "Zuletzt geändert"
+msgstr "Última alteração"
+
+msgid "Als Firmenkunde konvertiert am"
+msgstr "Convertido em cliente empresarial em"
+
+msgid "Kundenkonto öffnen"
+msgstr "Abrir conta do cliente"
+
+msgid "Privatkunden werden über den öffentlichen Registrierungs-/Checkout-Prozess angelegt, damit AGB und Datenschutz vom Kunden selbst bestätigt werden."
+msgstr "Os clientes particulares são criados através do registo e processo de compra públicos para que aceitem pessoalmente os termos e a política de privacidade."
+
+msgid "← Zur Übersicht"
+msgstr "← Voltar à visão geral"
+
+msgid "Erklärung"
+msgstr "Declaração"
+
+msgid "Gewünschtes Ende"
+msgstr "Data de fim pretendida"
+
+msgid "Bearbeitet"
+msgstr "Processado"
+
+msgid "Bearbeitung"
+msgstr "Processamento"
+
+msgid "Status speichern"
+msgstr "Guardar estado"
+
+msgid "Sie haben Leserechte, aber keine Berechtigung zur Bearbeitung."
+msgstr "Tem acesso de leitura, mas não autorização para editar."
+
+msgid "CSV-Export"
+msgstr "Exportação CSV"
+
+msgid "angefordert"
+msgstr "solicitado"
+
+msgid "Zeilen"
+msgstr "Linhas"
+
+msgid "Verfügbar bis"
+msgstr "Disponível até"
+
+msgid "Dieser Export ist abgelaufen."
+msgstr "Esta exportação expirou."
+
+msgid "CSV herunterladen"
+msgstr "Transferir CSV"
+
+msgid "Der Export konnte nicht erstellt werden. Bitte erneut anfordern."
+msgstr "Não foi possível criar a exportação. Volte a solicitá-la."
+
+msgid "Der Export wird im Hintergrund erstellt. Diese Seite aktualisiert sich automatisch."
+msgstr "A exportação está a ser criada em segundo plano. Esta página atualiza-se automaticamente."
+
+msgid "Der Zahlungsdienst ist derzeit noch nicht verfügbar."
+msgstr "O serviço de pagamento não está disponível neste momento."
+
+msgid "Zugriff verweigert"
+msgstr "Acesso negado"
+
+msgid "Für diese Ansicht fehlt die erforderliche Berechtigung."
+msgstr "Não tem permissão para aceder a esta vista."
+
+msgid "Zurück zur Übersicht"
+msgstr "Voltar à visão geral"
+
+msgid "Ansicht konnte nicht geladen werden"
+msgstr "Não foi possível carregar a página"
+
+msgid "Beim Laden der Daten ist ein interner Fehler aufgetreten. Bitte versuchen Sie es erneut."
+msgstr "Ocorreu um erro interno ao carregar os dados. Tente novamente."
+
+msgid "Erneut laden"
+msgstr "Recarregar"
+
+msgid "Seitennavigation"
+msgstr "Navegação de páginas"
+
+msgid "von"
+msgstr "de"
+
+msgid "Datensätze"
+msgstr "Registos"
+
+msgid "Erste Seite"
+msgstr "Primeira página"
+
+msgid "Erste"
+msgstr "Primeira"
+
+msgid "Vorherige Seite"
+msgstr "Página anterior"
+
+msgid "Nächste Seite"
+msgstr "Página seguinte"
+
+msgid "Letzte Seite"
+msgstr "Última página"
+
+msgid "Letzte"
+msgstr "Última"
+
+msgid "Zwei-Faktor-Anmeldung"
+msgstr "Início de sessão com dois fatores"
+
+msgid "Geben Sie den Code aus Ihrer Authenticator-App oder einen gültigen Recovery-Code ein."
+msgstr "Introduza o código da sua aplicação de autenticação ou um código de recuperação válido."
+
+msgid "Recovery-Codes"
+msgstr "Códigos de recuperação"
+
+msgid "Einmalig speichern."
+msgstr "Guarde estes códigos agora."
+
+msgid "Diese Codes werden später nicht erneut im Klartext angezeigt."
+msgstr "Estes códigos não voltarão a ser apresentados em texto simples."
+
+msgid "Schließen Sie die Sicherheitseinrichtung ab, bevor Sie Ihren geschützten PROMPTFINISHER-Bereich verwenden."
+msgstr "Conclua a configuração de segurança antes de aceder à sua área protegida do PROMPTFINISHER."
+
+msgid "Authenticator-Daten"
+msgstr "Dados do autenticador"
+
+msgid "Secret kopieren"
+msgstr "Copiar segredo"
+
+msgid "Hinterlegen Sie das Secret in Microsoft Authenticator, Google Authenticator, 1Password oder einer kompatiblen TOTP-App."
+msgstr "Adicione o segredo ao Microsoft Authenticator, Google Authenticator, 1Password ou outra aplicação TOTP compatível."
+
+msgid "Einrichtungs-URI"
+msgstr "URI de configuração"
+
+msgid "URI kopieren"
+msgstr "Copiar URI"
+
+msgid "Einrichtung bestätigen"
+msgstr "Confirmar configuração"
+
+msgid "6-stelliger Code"
+msgstr "Código de 6 dígitos"
+
+msgid "2FA aktivieren"
+msgstr "Ativar 2FA"
+
+msgid "Nach erfolgreicher Aktivierung werden einmalig Recovery-Codes angezeigt."
+msgstr "Após a ativação, os códigos de recuperação serão mostrados uma única vez."
+
+msgid "Wir senden einen zeitlich begrenzten Link an die hinterlegte E-Mail-Adresse."
+msgstr "Enviaremos uma ligação temporária para o seu endereço de e-mail registado."
+
+msgid "Link anfordern"
+msgstr "Pedir ligação"
+
+msgid "Anfrage verarbeitet"
+msgstr "Pedido processado"
+
+msgid "Falls ein aktives Konto zu dieser Adresse existiert, wurde ein zeitlich begrenzter Link zum Zurücksetzen versendet."
+msgstr "Se existir uma conta ativa com este endereço, foi enviada uma ligação temporária para redefinir a palavra-passe."
+
+msgid "Legen Sie ein neues Passwort für Ihr PROMPTFINISHER-Konto fest."
+msgstr "Defina uma nova palavra-passe para a sua conta PROMPTFINISHER."
+
+msgid "Passwort speichern"
+msgstr "Guardar palavra-passe"
+
+msgid "Passwort geändert"
+msgstr "Palavra-passe alterada"
+
+msgid "Link ungültig"
+msgstr "Ligação inválida"
+
+msgid "Sie können sich jetzt mit dem neuen Passwort anmelden."
+msgstr "Já pode iniciar sessão com a nova palavra-passe."
+
+msgid "Der Link ist ungültig, abgelaufen oder wurde bereits verwendet. Fordern Sie bei Bedarf einen neuen Link an."
+msgstr "Esta ligação é inválida, expirou ou já foi utilizada. Peça outra se necessário."
+
+msgid "Neuen Link anfordern"
+msgstr "Pedir nova ligação"
+
+msgid "Möchten Sie die aktuelle Sitzung beenden?"
+msgstr "Pretende terminar a sessão atual?"
+
+# Pro deployment, device registration, and expiration warnings.
+msgid "Die geschützte Pro-Anwendung ist auf diesem System noch nicht bereitgestellt."
+msgstr "A aplicação Pro protegida ainda não foi instalada neste sistema."
+
+msgid "Deployment unvollständig."
+msgstr "Implementação incompleta."
+
+msgid "Der unveränderte PROMPTFINISHER-Pro-Golden-Master muss als private Serverdatei installiert werden."
+msgstr "O modelo mestre original do PROMPTFINISHER Pro tem de ser instalado como ficheiro privado no servidor."
+
+msgid "Diese Datei wird niemals öffentlich unter /static/ ausgeliefert."
+msgstr "Este ficheiro nunca é disponibilizado publicamente em /static/."
+
+msgid "Gerät registrieren"
+msgstr "Registar dispositivo"
+
+msgid "PROMPTFINISHER Pro erlaubt %(device_limit)s aktive Geräte pro Benutzer."
+msgstr "O PROMPTFINISHER Pro permite %(device_limit)s dispositivos ativos por utilizador."
+
+msgid "Gerät registrieren und PROMPTFINISHER Pro öffnen"
+msgstr "Registar dispositivo e abrir o PROMPTFINISHER Pro"
+
+msgid "Wenn alle Geräteslots belegt sind, muss Ihr Firmenadministrator oder netstyle zuerst ein altes Gerät freigeben."
+msgstr "Se todos os espaços para dispositivos estiverem ocupados, o administrador da empresa ou a netstyle terá de libertar primeiro um dispositivo antigo."
+
+msgid "Lizenz läuft bald ab"
+msgstr "A licença expira em breve"
+
+msgid "PROMPTFINISHER-Pro-Lizenz läuft bald ab"
+msgstr "A licença do PROMPTFINISHER Pro expira em breve"
+
+msgid "Dein Pro-Zugriff bleibt bis zum Ablaufdatum aktiv."
+msgstr "O teu acesso Pro permanece ativo até à data de expiração."
+
+msgid "Verbleibende Tage:"
+msgstr "Dias restantes:"
+
+msgid "Lizenz:"
+msgstr "Licença:"
+
+msgid "Ablaufdatum:"
+msgstr "Data de expiração:"
+
+msgid "Nach Ablauf wird der Pro-Zugriff ohne Verlängerung automatisch gesperrt."
+msgstr "Após a expiração, o acesso Pro será bloqueado automaticamente se não houver renovação."
+
+msgid "Was möchtest du tun?"
+msgstr "O que pretendes fazer?"
+
+msgid "Eine Verlängerung vor Ablauf hängt weitere 365 Tage an das bestehende Ablaufdatum an. Die Restlaufzeit geht nicht verloren."
+msgstr "A renovação antes da expiração acrescenta 365 dias à data de fim atual. O tempo restante não se perde."
+
+msgid "Lizenzverwaltung / Verlängerung"
+msgstr "Gestão de licenças / renovação"
+
+msgid "Jetzt trotzdem PROMPTFINISHER Pro starten"
+msgstr "Abrir o PROMPTFINISHER Pro na mesma"

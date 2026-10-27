@@ -190,8 +190,14 @@
       const cta = document.createElement('a');
       cta.className = 'pmv2-header-cta';
       cta.href = workspaceLink.href;
-      cta.textContent = workspaceLink.label + ' öffnen →';
+      const localizedWorkspaceCta = () => translateUi('%(workspace)s öffnen →')
+        .replace('%(workspace)s', translateUi(workspaceLink.label));
+      cta.textContent = localizedWorkspaceCta();
       headerActions.append(cta);
+      window.addEventListener('pm-product-locale-ready', () => {
+        cta.textContent = localizedWorkspaceCta();
+        cta.setAttribute('aria-label', cta.textContent.trim());
+      });
     }
     if (logoutLink) {
       const logout = document.createElement('a');
@@ -271,10 +277,11 @@
         // This function is called from a childList MutationObserver. Replacing
         // the badge text unconditionally would itself create another childList
         // mutation and can trap Firefox/WebKit in an endless observer loop.
-        if (mark.textContent !== 'PFLICHTFELD') {
-          mark.textContent = 'PFLICHTFELD';
+        const requiredMark = translateUi('PFLICHTFELD');
+        if (mark.textContent !== requiredMark) {
+          mark.textContent = requiredMark;
         }
-        const requiredTitle = 'Dieses Feld muss ausgefüllt werden, bevor der Prompt erzeugt wird.';
+        const requiredTitle = translateUi('Dieses Feld muss ausgefüllt werden, bevor der Prompt erzeugt wird.');
         if (mark.getAttribute('title') !== requiredTitle) {
           mark.setAttribute('title', requiredTitle);
         }
@@ -306,19 +313,20 @@
     if (selectedTask && missing.length) {
       promptGuard.hidden = false;
       promptGuard.innerHTML =
-        '<strong>Prompt noch nicht erstellt.</strong> Pflichtfelder fehlen: '
-        + missing.map(value => value.replace(/[&<>"']/g, char => ({
+        '<strong>' + translateUi('Prompt noch nicht erstellt.') + '</strong> '
+        + translateUi('Pflichtfelder fehlen:') + ' '
+        + missing.map(value => translateUi(value).replace(/[&<>"']/g, char => ({
           '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'
         })[char])).join(', ')
         + '.';
       if (promptOutput && !promptOutput.value) {
-        promptOutput.placeholder = 'Bitte zuerst alle markierten Pflichtfelder ausfüllen.';
+        promptOutput.placeholder = translateUi('Bitte zuerst alle markierten Pflichtfelder ausfüllen.');
       }
     } else {
       promptGuard.hidden = true;
       promptGuard.textContent = '';
       if (promptOutput) {
-        promptOutput.placeholder = 'Dein Prompt wird hier nach vollständiger Eingabe erzeugt.';
+        promptOutput.placeholder = translateUi('Dein Prompt wird hier nach vollständiger Eingabe erzeugt.');
       }
     }
   };
@@ -333,6 +341,7 @@
       {subtree:true,childList:true}
     );
     syncRequiredFieldState();
+    window.addEventListener('pm-product-locale-ready', syncRequiredFieldState);
   }
 
   const syncPromptStickiness = () => {
@@ -804,18 +813,19 @@
     return $('.app-card.selected .app-name')?.textContent.trim() || 'Noch nicht gewählt';
   };
   const selectedTaskName = () => $('.task.selected .task-title')?.textContent.trim() || 'Noch nicht gewählt';
+  const localReviewValue = value => translateUi(value);
   const selectedAudience = () => {
     if (!free && selectedTaskName() !== 'Noch nicht gewählt' && audienceSection.classList.contains('hidden')) {
-      return 'In der Aufgabe enthalten';
+      return localReviewValue('In der Aufgabe enthalten');
     }
     const input = $('input[name="audience"]:checked');
-    return input?.closest('.option')?.textContent.replace(/\s+/g,' ').trim() || 'Noch nicht gewählt';
+    return localReviewValue(input?.closest('.option')?.textContent.replace(/\s+/g,' ').trim() || 'Noch nicht gewählt');
   };
   const selectedFocus = () => {
     const values = $$('input[name="focus"]:checked', focusSection)
-      .map(input => input.closest('.option')?.textContent.replace(/\s+/g,' ').trim())
+      .map(input => localReviewValue(input.closest('.option')?.textContent.replace(/\s+/g,' ').trim()))
       .filter(Boolean);
-    return values.length ? values.join(' · ') : 'Noch nicht gewählt';
+    return values.length ? values.join(' · ') : localReviewValue('Noch nicht gewählt');
   };
   const requiredContextInputs = () => {
     if (free) {
@@ -845,19 +855,31 @@
     .filter(input => !(input.value || '').trim())
     .map(requiredContextLabel);
   const contextSummary = () => {
-    if (selectedTaskName() === 'Noch nicht gewählt') return 'Noch keine Aufgabe gewählt';
+    if (selectedTaskName() === 'Noch nicht gewählt') return localReviewValue('Noch keine Aufgabe gewählt');
     const requiredInputs = requiredContextInputs();
-    if (!requiredInputs.length) return 'Keine zusätzlichen Pflichtangaben';
+    if (!requiredInputs.length) return localReviewValue('Keine zusätzlichen Pflichtangaben');
     const missing = missingContextLabels();
-    if (missing.length) return 'Pflichtangaben fehlen: ' + missing.join(', ');
-    return 'Alle Pflichtangaben vollständig';
+    if (missing.length) {
+      // Labels are display-only: never modify the source input, stable IDs or
+      // the German contract. An unknown custom label gets a localized field
+      // number instead of leaking a German task-specific instruction.
+      const labels = missing.map((label, index) => {
+        const translated = localReviewValue(label);
+        return translated !== label || document.documentElement.lang === 'de'
+          ? translated : `${localReviewValue('Pflichtfeld')} ${index + 1}`;
+      });
+      return localReviewValue('Pflichtangaben fehlen') + ': ' + labels.join(', ');
+    }
+    return localReviewValue('Alle Pflichtangaben vollständig');
   };
   const outputSummary = () => {
     const values = [$('#formatSelect'), $('#detailSelect'), $('#toneSelect')]
-      .filter(Boolean)
-      .map(select => select.selectedOptions?.[0]?.textContent.trim())
-      .filter(value => value && !/^Bitte auswählen/i.test(value));
-    return values.length ? values.join(' · ') : 'Noch nicht vollständig';
+      .filter(select => select && select.value)
+      .map(select => localReviewValue(select.selectedOptions?.[0]?.textContent.trim() || ''))
+      .filter(Boolean);
+    // Read the stable SELECT values, never the locale-dependent placeholder
+    // text (e.g. 'Please select', 'Veuillez sélectionner', 'Bitte auswählen').
+    return values.length ? values.join(' · ') : localReviewValue('Noch nicht vollständig');
   };
   const outputComplete = () => [$('#formatSelect'), $('#detailSelect'), $('#toneSelect')]
     .filter(Boolean)
@@ -876,8 +898,8 @@
     ];
   };
   const updateReview = () => {
-    $('[data-pmv2-review="app"]', review).textContent = selectedAppName();
-    $('[data-pmv2-review="task"]', review).textContent = selectedTaskName();
+    $('[data-pmv2-review="app"]', review).textContent = localReviewValue(selectedAppName());
+    $('[data-pmv2-review="task"]', review).textContent = localReviewValue(selectedTaskName());
     $('[data-pmv2-review="context"]', review).textContent = contextSummary();
     $('[data-pmv2-review="audience"]', review).textContent = selectedAudience();
     $('[data-pmv2-review="focus"]', review).textContent = selectedFocus();
@@ -892,6 +914,8 @@
       card?.classList.toggle('missing', missing);
       value?.classList.toggle('missing', missing);
       if (card) card.setAttribute('aria-invalid', String(missing));
+      const label = card?.querySelector('.pmv2-review-label');
+      if (label) label.dataset.pmv2MissingLabel = localReviewValue('Offen');
     });
 
     requestAnimationFrame(autoSizePrompt);
@@ -929,21 +953,29 @@
       button.classList.toggle('missing', missing);
       button.setAttribute('aria-invalid', String(missing));
       if (missing) {
-        button.title = 'Dieser Schritt ist noch nicht vollständig. Klicken zum Bearbeiten.';
+        button.title = localReviewValue('Dieser Schritt ist noch nicht vollständig. Klicken zum Bearbeiten.');
       } else {
         button.removeAttribute('title');
       }
     });
     if (reviewProgressText) reviewProgressText.textContent = raw + ' %';
+    const progressAriaLabel = translateUi('%(percent)s Prozent vollständig')
+      .replace('%(percent)s', String(raw));
     if (reviewProgressBar) {
       reviewProgressBar.style.width = Math.max(0, Math.min(100, raw)) + '%';
-      reviewProgressBar.setAttribute('aria-label', raw + ' Prozent vollständig');
+      reviewProgressBar.setAttribute('aria-label', progressAriaLabel);
     }
-    if (oldProgressBar) oldProgressBar.setAttribute('aria-label', raw + ' Prozent vollständig');
+    if (oldProgressBar) oldProgressBar.setAttribute('aria-label', progressAriaLabel);
   };
   if (oldProgressText) new MutationObserver(updateFlow).observe(oldProgressText,{subtree:true,childList:true,characterData:true});
   if (oldProgressBar) new MutationObserver(updateFlow).observe(oldProgressBar,{attributes:true,attributeFilter:['style']});
   updateFlow();
+  // The product language bundle loads after V2 and notifies us once its
+  // translated terms are available. Repaint generated summary/badges then.
+  window.addEventListener('pm-product-locale-ready', () => {
+    updateReview();
+    updateFlow();
+  });
 
   const resetButton = $('#resetBtn');
   const legacyReset = resetButton.onclick;

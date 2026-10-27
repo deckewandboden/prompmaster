@@ -127,7 +127,7 @@ class MollieRuntimeReadinessTests(SimpleTestCase):
             self.assertFalse(mollie_runtime_ready())
 
     @override_settings(ENVIRONMENT='production', MOLLIE_API_KEY='')
-    def test_production_checkout_requires_explicit_credential_bound_gate(self):
+    def test_production_preview_checkout_remains_blocked_with_approved_live_credentials(self):
         fingerprint = mollie_config_fingerprint(
             'live_runtime_key',
             'pfl_runtime',
@@ -152,7 +152,10 @@ class MollieRuntimeReadinessTests(SimpleTestCase):
         ):
             from apps.payments.mollie import mollie_runtime_ready
 
-            self.assertTrue(mollie_runtime_ready())
+            # Preview release is a stricter top-level production lock.
+            # Even an otherwise valid commercial provider approval must not
+            # start sales while this isolated preview branch is deployed.
+            self.assertFalse(mollie_runtime_ready())
 
     @override_settings(ENVIRONMENT='production', MOLLIE_API_KEY='')
     def test_rotated_live_key_invalidates_previous_checkout_approval(self):

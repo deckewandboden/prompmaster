@@ -121,3 +121,6 @@ scripts/test_bootstrap_github_release.py	0	text-not-byte-validated	test
 backend/templates/legal_base.html	0	text-not-byte-validated	active-backend
 backend/apps/prompts/prompt_localization.py	0	text-not-byte-validated	active-backend
 backend/apps/prompts/tests_localization.py	0	text-not-byte-validated	test
+backend/apps/legal/preview_display.py	0	text-not-byte-validated	active-backend
+backend/apps/legal/tests_public_preview.py	0	text-not-byte-validated	test
+docs/PUBLIC_I18N_PREVIEW_RELEASE_20261026.md	0	text-not-byte-validated	documentation

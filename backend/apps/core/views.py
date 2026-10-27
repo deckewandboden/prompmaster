@@ -40,6 +40,8 @@ def legal_public(request, doc_type):
     from django.http import Http404
     from django.utils import timezone
     from apps.legal.models import LegalDocument
+    from apps.legal.preview_display import legal_preview_notice
+    from django.utils.translation import get_language
 
     allowed = {code for code, _label in LegalDocument.DOC_TYPES}
     if doc_type not in allowed:
@@ -62,6 +64,10 @@ def legal_public(request, doc_type):
     return render(request, 'legal_public.html', {
         'document': document,
         'document_title': titles[doc_type],
+        # The only authoritative legal document body in this preview is DE.
+        # Public labels may be localized, but never imply the body is.
+        'legal_content_language': 'de',
+        'legal_fallback_notice': legal_preview_notice(get_language()),
     })
 
 

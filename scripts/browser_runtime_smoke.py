@@ -1571,6 +1571,43 @@ def _browser_product_locale_acceptance(page, base: str, product: str) -> None:
                 if 'Meeting notes: Alpha decision and deadline 2026' not in localized_result['prompt']:
                     raise AssertionError(f"Free {code}: supplied context not preserved")
 
+            # Reproduce the actual screenshot fault in ALL ten languages:
+            # dynamically composed review values, missing-field warnings,
+            # an unselected output and the CSS-only OPEN badge.
+            page.locator('[data-appwrap="chat"] .app-card').click()
+            page.locator('[data-task="chat_sum"]').click()
+            page.locator(
+                'label.option:has(input[name="audience"][value="self"]) > span'
+            ).click()
+            page.wait_for_function(
+                """(lang) => {
+                    const t=window.PF_PRODUCT_LOCALE?.t;
+                    if (!t || document.documentElement.lang !== lang) return false;
+                    const value=key => document.querySelector(
+                        '[data-pmv2-review="'+key+'"]'
+                    )?.textContent.trim();
+                    const ctx=t('Pflichtangaben fehlen')+': '
+                        +t('Was soll die Zusammenfassung leisten?');
+                    const incomplete=document.querySelector(
+                        '[data-pmv2-review-card="context"]'
+                    );
+                    const label=incomplete?.querySelector('.pmv2-review-label');
+                    const badge=label ? getComputedStyle(label,'::after').content : '';
+                    return value('task') === t('Inhalt zusammenfassen')
+                        && value('audience') === t('Eigene Verwendung')
+                        && value('context') === ctx
+                        && value('focus') === t('Noch nicht gewählt')
+                        && value('output') === t('Noch nicht vollständig')
+                        && incomplete?.classList.contains('missing')
+                        && badge.includes(t('Offen'))
+                        && document.querySelector('#formatSelect')?.value === ''
+                        && document.querySelector('#detailSelect')?.value === ''
+                        && document.querySelector('#toneSelect')?.value === '';
+                }""",
+                arg=code,
+                timeout=15000,
+            )
+
             if code == 'en':
                 # Exercise the real Free UI-to-server bridge, not just direct API calls.
                 page.locator('[data-appwrap="chat"] .app-card').click()
@@ -1620,6 +1657,99 @@ def _browser_product_locale_acceptance(page, base: str, product: str) -> None:
                 page.locator('[data-close="proModal"]').first.click()
 
         else:
+            # Verify the VISIBLE 194-task catalog's dynamic content, not only
+            # marketing headers. Canonical German values must survive rendering.
+            page.locator('[data-app="copilot_chat"]').click()
+            page.locator('[data-task="PM20-001"]').click()
+            page.wait_for_function(
+                """(lang) => {
+                    const t=window.PF_PRODUCT_LOCALE?.t;
+                    if (!t || document.documentElement.lang!==lang) return false;
+                    const task=document.querySelector('#taskGrid [data-task="PM20-001"]');
+                    const title=task?.querySelector('.task-title')?.textContent.trim();
+                    const intent=task?.querySelector('.task-copy')?.textContent.trim();
+                    const label=document.querySelector('#inputGrid .input-card label');
+                    const field=label?.textContent.trim()||'';
+                    const options=[...document.querySelectorAll('#formatSelect option')];
+                    const canonical=['Fundierte Antwort','Research Brief','Management Summary'];
+                    return title===t('Frage fundiert beantworten')
+                        && intent===t('Beantworte die Fragestellung fundiert und trenne bestätigte Fakten, Schlussfolgerungen und Unsicherheiten.')
+                        && field.startsWith(t('Fragestellung'))
+                        && options.length===canonical.length
+                        && canonical.every((name,i)=>
+                            options[i].value===name && options[i].textContent.trim()===t(name))
+                        && document.querySelector('#formatSelect')?.value===canonical[0];
+                }""",
+                arg=code,
+                timeout=15000,
+            )
+
+            # Check the dynamic V2 required-field guard and accessible labels.
+            # These are built from multiple text fragments and were not
+            # covered by exact-text-node dictionary checks.
+            page.wait_for_function(
+                """(lang) => {
+                    const t = window.PF_PRODUCT_LOCALE?.t;
+                    const guard = document.querySelector('.pmv2-prompt-guard');
+                    const mark = document.querySelector(
+                        '#inputGrid .input-card.required .required-mark'
+                    );
+                    const progress = document.querySelector(
+                        '[data-pmv2-review-progress-bar]'
+                    );
+                    const percentage = parseInt(
+                        document.querySelector(
+                            '[data-pmv2-review-progress-text]'
+                        )?.textContent || '', 10
+                    );
+                    const expectedAria = t?.('%(percent)s Prozent vollständig')
+                        .replace('%(percent)s', String(percentage));
+                    const body = guard?.textContent || '';
+                    return !!t && !!guard && !guard.hidden
+                        && guard.querySelector('strong')?.textContent.trim()
+                            === t('Prompt noch nicht erstellt.')
+                        && body.includes(t('Pflichtfelder fehlen:'))
+                        && (lang === 'de' || !body.includes('Pflichtfelder fehlen:'))
+                        && mark?.textContent.trim() === t('PFLICHTFELD')
+                        && mark?.getAttribute('title') === t(
+                            'Dieses Feld muss ausgefüllt werden, bevor der Prompt erzeugt wird.'
+                        )
+                        && !!progress && Number.isFinite(percentage)
+                        && progress.getAttribute('aria-label') === expectedAria;
+                }""",
+                arg=code,
+                timeout=15000,
+            )
+
+            # The license dialog is composed at runtime from a task name,
+            # tier name, status and list labels. Verify the rendered DOM
+            # in all ten locales, including the dynamic requirement title.
+            page.evaluate("() => openTaskLicenseModal('PM20-005')")
+            page.wait_for_function(
+                """(lang) => {
+                  const t=window.PF_PRODUCT_LOCALE?.t;
+                  const modal=document.querySelector('#businessModal');
+                  const rows=[...document.querySelectorAll('#licenseModalList li')];
+                  const tier='Microsoft 365 Copilot Business';
+                  const title=t?.('%(tier)s erforderlich').replace('%(tier)s',tier);
+                  const task=t?.('Projektstand aufholen');
+                  const expectedTask=t?.('Aufgabe: %(task)s.').replace('%(task)s',task);
+                  const expectedTier=t?.('Erforderliche Copilot-Stufe: %(tier)s.')
+                      .replace('%(tier)s',tier);
+                  const visible=modal?.classList.contains('open');
+                  return window.PF_PRODUCT_LOCALE?.code===lang && visible
+                    && document.querySelector('#licenseModalTitle')?.textContent.trim()===title
+                    && rows.length>=2
+                    && rows[0].textContent.trim()===expectedTask
+                    && rows[1].textContent.trim()===expectedTier
+                    && document.querySelector('#licenseModalText')?.textContent.trim()
+                        ===t('Die Anwendung ist grundsätzlich verfügbar, aber diese konkrete Aufgabe benötigt eine höhere Copilot-Stufe.');
+                }""",
+                arg=code,
+                timeout=15000,
+            )
+            page.locator('[data-close="businessModal"]').first.click()
+
             # Pro must also return a native-language *prompt body*, not merely
             # translated UI labels. Use a real authenticated compose request.
             localized = page.evaluate(
