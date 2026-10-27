@@ -36,16 +36,24 @@ git fetch --no-tags origin main
 target="$(git rev-parse refs/remotes/origin/main)"
 [[ "$target" =~ ^[a-f0-9]{40}$ ]] || fail 'Invalid GitHub release SHA'
 git merge-base --is-ancestor "$previous" "$target" || fail 'Local main diverged from GitHub; no destructive reset'
+# A verification request must never fast-forward the local worktree. The fetch
+# above refreshes Git metadata only; no application files or containers change.
+if [[ "$mode" == --verify-only ]]; then
+  log "LOCAL_SHA=$previous; GITHUB_MAIN_SHA=$target"
+  if [[ "$previous" == "$target" ]]; then
+    log 'SOURCE_SYNC=PASS; EXISTING_INSTALLATION=PASS; NO_DEPLOY=YES; NO_WORKTREE_WRITE=YES'
+  else
+    log 'SOURCE_SYNC=PENDING; EXISTING_INSTALLATION=PASS; NO_DEPLOY=YES; NO_WORKTREE_WRITE=YES'
+  fi
+  exit 0
+fi
+
 git merge --ff-only refs/remotes/origin/main
 sha="$(git rev-parse HEAD)"
 [[ "$sha" == "$target" ]] || fail 'Release SHA not equal to GitHub main'
 [[ -z "$(git status --porcelain --untracked-files=no)" ]] || fail 'Tracked files changed after Git update'
 [[ -f scripts/deploy.sh ]] || fail 'Repository deploy script missing'
 log "RELEASE_SHA=$sha"
-if [[ "$mode" == --verify-only ]]; then
-  log "SOURCE_SYNC=PASS; EXISTING_INSTALLATION=PASS; NO_DEPLOY=YES"
-  exit 0
-fi
 
 # Production rollout is performed by the EXISTING backup/migration/health guarded
 # deploy script. No --volumes, no reset, no Mollie live-activation commands.
