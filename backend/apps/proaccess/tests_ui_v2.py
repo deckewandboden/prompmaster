@@ -28,6 +28,54 @@ class PROMPTFINISHERV2RouteIsolationTests(TestCase):
         session.save()
         return user
 
+    def test_free_v2_initial_html_language_matches_all_product_locales(self):
+        """Do not rely on deferred JS for initial document language."""
+        from django.conf import settings
+
+        root = reverse('free_product')
+        original = reverse('free_product_old')
+        for language, _label in settings.LANGUAGES:
+            with self.subTest(language=language):
+                self.client.cookies[settings.LANGUAGE_COOKIE_NAME] = language
+                current = self.client.get(root, HTTP_ACCEPT_LANGUAGE='de')
+                legacy = self.client.get(original, HTTP_ACCEPT_LANGUAGE='de')
+                self.assertEqual(current.status_code, 200)
+                self.assertEqual(legacy.status_code, 200)
+                self.assertIn(
+                    f'<html lang="{language}">'.encode('ascii'),
+                    current.content,
+                )
+                self.assertIn(b'<html lang="de">', legacy.content)
+                self.assertEqual(current['Cache-Control'], 'private, no-store')
+                self.assertIn(
+                    b'/static/js/promptfinisher_product_i18n.20261011.js',
+                    current.content,
+                )
+
+    def test_pro_v2_initial_html_language_matches_all_product_locales(self):
+        """Preserve old Pro rollback bytes while localizing the current route."""
+        from django.conf import settings
+
+        self._staff_session()
+        root = reverse('proaccess:content')
+        original = reverse('pro_product_old')
+        for language, _label in settings.LANGUAGES:
+            with self.subTest(language=language):
+                self.client.cookies[settings.LANGUAGE_COOKIE_NAME] = language
+                current = self.client.get(root, HTTP_ACCEPT_LANGUAGE='de')
+                legacy = self.client.get(original, HTTP_ACCEPT_LANGUAGE='de')
+                self.assertEqual(current.status_code, 200)
+                self.assertEqual(legacy.status_code, 200)
+                self.assertIn(
+                    f'<html lang="{language}">'.encode('ascii'),
+                    current.content,
+                )
+                self.assertIn(b'<html lang="de">', legacy.content)
+                self.assertIn(
+                    b'/static/js/promptfinisher_product_i18n.20261011.js',
+                    current.content,
+                )
+
     def test_free_current_route_adds_v2_shell_but_legacy_route_does_not(self):
         current = self.client.get(reverse('free_product'))
         legacy = self.client.get(reverse('free_product_old'))
