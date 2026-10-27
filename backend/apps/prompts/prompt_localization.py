@@ -3126,11 +3126,12 @@ def render_localized_prompt(
             compact = prefix[:limit]
         else:
             details = '; '.join(supplied)
-            available = max(0, limit - len(prefix) - 2)
+            separator = ' ' if prefix.endswith(('.', '!', '?', '…')) else '. '
+            available = max(0, limit - len(prefix) - len(separator))
             if len(details) > available:
                 truncated_input = True
                 details = (details[:max(0, available - 1)].rstrip(' ,;.:') + '…') if available else ''
-            compact = prefix + ('. ' + details if details else '')
+            compact = prefix + (separator + details if details else '')
         prompt = compact
     return {**result, 'prompt': prompt, 'language': language,
             'localization_mode': 'structured',
