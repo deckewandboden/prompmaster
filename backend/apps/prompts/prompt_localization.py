@@ -3015,6 +3015,22 @@ def _output_label(value: str, language: str) -> str:
     return OUTPUT_CATEGORIES['generic'][language]
 
 
+# Compact tasks have strict platform character limits. A short explicit
+# language directive leaves room for the task-specific reviewed instruction
+# and as much of the user's literal context as possible.
+COMPACT_LANGUAGE_DIRECTIVES = {
+    'en': 'Reply in English.',
+    'es': 'Responde en español.',
+    'pt': 'Responda em português.',
+    'tr': 'Türkçe yanıt ver.',
+    'ru': 'Ответьте по-русски.',
+    'pl': 'Odpowiedz po polsku.',
+    'fr': 'Répondez en français.',
+    'it': 'Rispondi in italiano.',
+    'nl': 'Antwoord in het Nederlands.',
+}
+
+
 def render_localized_prompt(
     *, language: str, result: dict, product: str, task_title: str, task_id: str,
     application: str, family: str, selections: dict, maximum_chars: int | None = None,
@@ -3101,7 +3117,10 @@ def render_localized_prompt(
         # The chosen output language MUST remain present even when long
         # user-provided source text exhausts a compact task's character cap.
         # Otherwise Copilot may answer in the source language by accident.
-        prefix = f"{copy['task']}: {title}. {copy['output']}"
+        prefix = (
+            f"{copy['task']}: {title}. "
+            f"{COMPACT_LANGUAGE_DIRECTIVES[language]} {instruction}"
+        )
         if len(prefix) >= limit:
             truncated_input = bool(supplied)
             compact = prefix[:limit]
