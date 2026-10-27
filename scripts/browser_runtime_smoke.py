@@ -19,6 +19,7 @@ BACKEND = ROOT / 'backend'
 sys.path.insert(0, str(BACKEND))
 
 from apps.prompts.free_legacy import FORMAT_LABELS, FREE_RUNTIME_CONTRACTS  # noqa: E402
+from apps.prompts.prompt_localization import _translated  # noqa: E402
 from apps.prompts.free_surface import AUDIENCE_DISPLAY, FREE_INPUT_META, FREE_SURFACE_ALIAS_TITLES, FREE_SURFACE_ALIAS_TO_PRO_ID, FREE_SURFACE_PRO_CONTRACTS, FREE_TO_PRO_APP_CODE  # noqa: E402
 
 RUNTIME = ROOT / 'backend/private_assets/promptfinisher_pro_runtime.html'
@@ -1790,6 +1791,17 @@ def _browser_product_locale_acceptance(page, base: str, product: str) -> None:
                     raise AssertionError(f"Pro {code}: returned wrong prompt locale")
                 if 'Arbeite dabei in folgender Reihenfolge' in result['prompt']:
                     raise AssertionError(f"Pro {code}: German instructions leaked")
+                # A translated title with a generic task prompt is not enough:
+                # the server must include the reviewed PM20-001 intention.
+                pm20_intent = (
+                    'Beantworte die Fragestellung fundiert und trenne '
+                    'bestätigte Fakten, Schlussfolgerungen und Unsicherheiten.'
+                )
+                native_intent = _translated(pm20_intent, code)
+                if not native_intent or native_intent not in result['prompt']:
+                    raise AssertionError(
+                        f"Pro {code}: task-specific native PM20 intent missing"
+                    )
                 if 'Check the support quality trends' not in result['prompt']:
                     raise AssertionError(f"Pro {code}: supplied task context missing")
                 if 'Reviewed support dataset only' not in result['prompt']:
