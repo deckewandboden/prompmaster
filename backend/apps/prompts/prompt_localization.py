@@ -3018,6 +3018,7 @@ def _output_label(value: str, language: str) -> str:
 def render_localized_prompt(
     *, language: str, result: dict, product: str, task_title: str, task_id: str,
     application: str, family: str, selections: dict, maximum_chars: int | None = None,
+    task_intent: str = '',
 ) -> dict:
     """Return result with translated instructions, preserving canonical metadata.
 
@@ -3031,10 +3032,19 @@ def render_localized_prompt(
              or FREE_TASK_TITLES.get(task_id, {}).get(language)
              or SURFACE_TASK_TITLES.get(task_title, {}).get(language)
              or copy['fallback'])
+    # PM20 has a reviewed, translated intention for every canonical task.
+    # The previous generic fallback discarded these distinct instructions in
+    # foreign-language Pro prompts, despite the UI catalog containing them.
+    # Keep the 16 separately reviewed Free intents as the first choice.
+    instruction = (
+        FREE_INTENTS.get(task_id, {}).get(language)
+        or _translated(task_intent, language)
+        or copy['intro']
+    )
     pieces = [
         f"{copy['task']}: {title}",
         f"{copy['app']}: {application}",
-        f"{copy['requirements']}: {FREE_INTENTS.get(task_id, {}).get(language) or copy['intro']} {copy['output']}",
+        f"{copy['requirements']}: {instruction} {copy['output']}",
     ]
     supplied = []
     raw_fields = selections.get('fields') or {}
