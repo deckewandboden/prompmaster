@@ -6,6 +6,7 @@ PostgreSQL, browser tests or the Docker image is built.
 """
 from __future__ import annotations
 
+import ast
 from ast import literal_eval
 import json
 from pathlib import Path
@@ -56,7 +57,51 @@ def parse_po(path: Path) -> dict[str, str]:
     return entries
 
 
+
+def validate_surface_intents() -> None:
+    """Ensure the 17 Free→Pro native intents track the exact source contracts."""
+    source = ROOT / 'backend/apps/prompts/free_surface.py'
+    syntax = ast.parse(source.read_text(encoding='utf-8'), filename=str(source))
+    assignments = [
+        node.value
+        for node in syntax.body
+        if isinstance(node, ast.Assign)
+        and any(
+            isinstance(target, ast.Name)
+            and target.id == 'FREE_SURFACE_PRO_CONTRACTS'
+            for target in node.targets
+        )
+    ]
+    if len(assignments) != 1:
+        raise SystemExit('I18N FAIL: Free→Pro contract source not uniquely defined')
+    contracts = literal_eval(assignments[0])
+    translations = json.loads(
+        (ROOT / 'backend/apps/prompts/data/free_surface_intents_i18n.json')
+        .read_text(encoding='utf-8')
+    )
+    if len(contracts) != 17 or set(translations) != set(contracts):
+        raise SystemExit(
+            'I18N FAIL: Free→Pro native intent IDs are incomplete or outdated'
+        )
+    for task_id, contract in contracts.items():
+        variants = translations[task_id]
+        if not isinstance(variants, dict) or set(variants) != {'de', *LOCALES}:
+            raise SystemExit(f'I18N FAIL {task_id}: incomplete locale matrix')
+        if variants['de'] != contract['intent']:
+            raise SystemExit(
+                f'I18N FAIL {task_id}: source German intent changed; translations require review'
+            )
+        for code in LOCALES:
+            native = variants[code]
+            if not isinstance(native, str) or not native.strip():
+                raise SystemExit(f'I18N FAIL {task_id}/{code}: empty native intent')
+            if native.strip() == variants['de'].strip():
+                raise SystemExit(f'I18N FAIL {task_id}/{code}: untranslated German intent')
+    print('I18N FREE→PRO INTENTS PASS: 17 tasks / 153 native-language sentences')
+
+
 def main() -> None:
+    validate_surface_intents()
     base = parse_po(ROOT / 'backend/locale/en/LC_MESSAGES/django.po')
     assert len(base) >= 370, 'Too few canonical gettext messages'
     for code in LOCALES:
