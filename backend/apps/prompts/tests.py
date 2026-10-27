@@ -72,6 +72,34 @@ class LocalizedPM20IntentTests(SimpleTestCase):
                     self.assertTrue(rendered['source_values_preserved'])
                     self.assertEqual(rendered['language'], language)
 
+    def test_compact_pm20_prompts_keep_task_intent_and_language_under_cap(self):
+        source = Path(__file__).resolve().parent / 'data' / 'pm20_golden_logic.json'
+        catalog = json.loads(source.read_text(encoding='utf-8'))
+        limited = [
+            (app_code, task)
+            for app_code, app in catalog['APP'].items()
+            for task in app['tasks']
+            if task.get('maxChars')
+        ]
+        self.assertEqual(len(limited), 8)
+        for app_code, task in limited:
+            for language in ('en', 'es', 'pt', 'tr', 'ru', 'pl', 'fr', 'it', 'nl'):
+                with self.subTest(task=task['id'], language=language):
+                    native = _translated(task['intent'], language)
+                    self.assertTrue(native)
+                    result = render_localized_prompt(
+                        language=language, result={'prompt': 'GERMAN'},
+                        product='PRO', task_title=task['title'],
+                        task_id=task['id'], task_intent=task['intent'],
+                        application=app_code, family=task.get('family') or 'analysis',
+                        maximum_chars=task['maxChars'],
+                        selections={'fields': {'Kontext': 'Alpha2026'}},
+                    )
+                    self.assertLessEqual(len(result['prompt']), task['maxChars'])
+                    self.assertIn(native, result['prompt'])
+                    self.assertIn('Alpha2026', result['prompt'])
+                    self.assertFalse(result['input_truncated'])
+
     def test_unreviewed_intent_fails_closed_to_native_generic_instruction(self):
         german_unreviewed = 'Führe nur die unbekannte Spezialprüfung durch.'
         rendered = render_localized_prompt(
