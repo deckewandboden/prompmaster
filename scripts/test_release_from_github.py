@@ -111,11 +111,32 @@ fi
             check=False,
         )
 
-    def test_verify_only_never_deploys(self):
+    def test_verify_only_never_deploys_or_changes_worktree(self):
         result = self.run_release("--verify-only")
         self.assertEqual(result.returncode, 0, result.stderr)
+        self.assertIn("SOURCE_SYNC=PASS", result.stdout)
         self.assertIn("NO_DEPLOY=YES", result.stdout)
-        self.assertNotIn("deploy:", (self.root / "actions").read_text())
+        self.assertIn("NO_WORKTREE_WRITE=YES", result.stdout)
+        actions = (self.root / "actions").read_text()
+        self.assertIn("git-fetch", actions)
+        self.assertNotIn("git-fast-forward", actions)
+        self.assertNotIn("deploy:", actions)
+        self.assertEqual(
+            (self.root / "artifacts/deploy-state/last-successful-sha").read_text().strip(),
+            PREVIOUS,
+        )
+
+    def test_verify_only_reports_pending_git_update_without_fast_forward(self):
+        result = self.run_release("--verify-only", PM_TEST_SHA=PREVIOUS, PM_TEST_TARGET=SHA)
+        self.assertEqual(result.returncode, 0, result.stderr)
+        self.assertIn("SOURCE_SYNC=PENDING", result.stdout)
+        self.assertIn("NO_WORKTREE_WRITE=YES", result.stdout)
+        self.assertIn(f"LOCAL_SHA={PREVIOUS}", result.stdout)
+        self.assertIn(f"GITHUB_MAIN_SHA={SHA}", result.stdout)
+        actions = (self.root / "actions").read_text()
+        self.assertIn("git-fetch", actions)
+        self.assertNotIn("git-fast-forward", actions)
+        self.assertNotIn("deploy:", actions)
         self.assertEqual(
             (self.root / "artifacts/deploy-state/last-successful-sha").read_text().strip(),
             PREVIOUS,
