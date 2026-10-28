@@ -2715,6 +2715,22 @@ def _product_dictionary() -> dict:
     return translations
 
 
+@lru_cache(maxsize=1)
+def _free_surface_intent_dictionary() -> dict:
+    """Load source-pinned native instructions for the 17 Free→Pro tasks."""
+    source = Path(__file__).resolve().parent / 'data/free_surface_intents_i18n.json'
+    return json.loads(source.read_text(encoding='utf-8'))
+
+
+def _native_free_surface_intent(task_id: str, task_intent: str, language: str) -> str:
+    """Fail closed if a published German intent no longer matches its translation."""
+    variants = _free_surface_intent_dictionary().get(task_id)
+    if not isinstance(variants, dict) or variants.get('de') != task_intent:
+        return ''
+    native = variants.get(language)
+    return native.strip() if isinstance(native, str) else ''
+
+
 def _translated(source: str, language: str) -> str:
     """No German fallback for generated foreign-language instructions."""
     if not source:
@@ -3052,11 +3068,20 @@ def render_localized_prompt(
     # The previous generic fallback discarded these distinct instructions in
     # foreign-language Pro prompts, despite the UI catalog containing them.
     # Keep the 16 separately reviewed Free intents as the first choice.
-    instruction = (
-        FREE_INTENTS.get(task_id, {}).get(language)
-        or _translated(task_intent, language)
-        or copy['intro']
-    )
+    # The 17 separately published Free→Pro tasks have source-pinned native
+    # intents that are not in the generic PM20 UI dictionary. Never substitute
+    # a native intent for a changed German source; use the safe generic message.
+    if task_id in _free_surface_intent_dictionary():
+        instruction = (
+            _native_free_surface_intent(task_id, task_intent, language)
+            or copy['intro']
+        )
+    else:
+        instruction = (
+            FREE_INTENTS.get(task_id, {}).get(language)
+            or _translated(task_intent, language)
+            or copy['intro']
+        )
     pieces = [
         f"{copy['task']}: {title}",
         f"{copy['app']}: {application}",
