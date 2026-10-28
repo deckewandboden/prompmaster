@@ -100,6 +100,57 @@ class LocalizedPM20IntentTests(SimpleTestCase):
                     self.assertIn('Alpha2026', result['prompt'])
                     self.assertFalse(result['input_truncated'])
 
+
+    def test_all_17_free_surface_pro_tasks_have_native_intents_in_nine_languages(self):
+        """17 distinct Free→Pro intents must not collapse into generic prompts."""
+        from .free_surface import FREE_SURFACE_PRO_CONTRACTS
+        from .prompt_localization import _free_surface_intent_dictionary
+
+        native_table = _free_surface_intent_dictionary()
+        self.assertEqual(set(native_table), set(FREE_SURFACE_PRO_CONTRACTS))
+        source_literal = 'Unveränderte Kundendaten ABC-2026 / Kunde X'
+        checked = 0
+        for task_id, contract in FREE_SURFACE_PRO_CONTRACTS.items():
+            for language in ('en', 'es', 'pt', 'tr', 'ru', 'pl', 'fr', 'it', 'nl'):
+                with self.subTest(task=task_id, language=language):
+                    translated_intent = native_table[task_id][language]
+                    rendered = render_localized_prompt(
+                        language=language,
+                        result={'prompt': 'CANONICAL_DE', 'ready': True},
+                        product='PRO', task_title=contract['title'],
+                        task_id=task_id, task_intent=contract['intent'],
+                        application=contract['app_code'],
+                        family=contract['family'], maximum_chars=None,
+                        selections={'fields': {'Kontext': source_literal}},
+                    )
+                    self.assertIn(translated_intent, rendered['prompt'])
+                    self.assertNotIn(contract['intent'], rendered['prompt'])
+                    self.assertIn(source_literal, rendered['prompt'])
+                    self.assertNotIn('CANONICAL_DE', rendered['prompt'])
+                    self.assertTrue(rendered['source_values_preserved'])
+                    self.assertEqual(rendered['language'], language)
+                    checked += 1
+        self.assertEqual(checked, 153)
+
+    def test_free_surface_intent_drift_fails_closed_to_native_generic(self):
+        from .free_surface import FREE_SURFACE_PRO_CONTRACTS
+        from .prompt_localization import _free_surface_intent_dictionary
+
+        task_id = 'chat_compare'
+        contract = FREE_SURFACE_PRO_CONTRACTS[task_id]
+        native = _free_surface_intent_dictionary()[task_id]['en']
+        rendered = render_localized_prompt(
+            language='en', result={'prompt': 'DEUTSCHE_VORLAGE'},
+            product='PRO', task_title=contract['title'],
+            task_id=task_id, task_intent=contract['intent'] + ' UNREVIEWED',
+            application=contract['app_code'], family=contract['family'],
+            selections={},
+        )
+        self.assertNotIn(native, rendered['prompt'])
+        self.assertNotIn('UNREVIEWED', rendered['prompt'])
+        self.assertIn('Complete the task using only information', rendered['prompt'])
+
+
     def test_unreviewed_intent_fails_closed_to_native_generic_instruction(self):
         german_unreviewed = 'Führe nur die unbekannte Spezialprüfung durch.'
         rendered = render_localized_prompt(
@@ -547,6 +598,48 @@ class PromptApiTests(TestCase):
             self.assertTrue(body['ok'], task['id'])
             self.assertTrue(body['result']['ready'], task['id'])
             self.assertTrue(body['result']['prompt'].strip(), task['id'])
+
+
+    @patch('apps.prompts.api._require_pro_access')
+    def test_all_free_surface_pro_native_intents_reach_real_compose_api(self, access):
+        """Exercise the authenticated API path for all 17 x 9 native intents."""
+        from .prompt_localization import _free_surface_intent_dictionary
+
+        native_table = _free_surface_intent_dictionary()
+        self.assertEqual(len(FREE_SURFACE_PRO_CONTRACTS), 17)
+        checked = 0
+        literal = 'SOURCE-DATA-2026-ALPHA'
+        for task_id, contract in FREE_SURFACE_PRO_CONTRACTS.items():
+            fields = {label: literal for label in contract['required']}
+            for language in ('en', 'es', 'pt', 'tr', 'ru', 'pl', 'fr', 'it', 'nl'):
+                with self.subTest(task=task_id, language=language):
+                    response = self.client.post(
+                        '/api/v1/prompts/compose/',
+                        data=json.dumps({
+                            'product': 'PRO', 'task_id': task_id,
+                            'language': language, 'microsoft_tier': 'premium',
+                            'input': {
+                                'fields': fields,
+                                'audience': contract['audiences'][0],
+                                'focus': contract['focus'][:1],
+                                'output': contract['outputs'][0],
+                                'source': contract['sources'][0],
+                                'tone': 'professional', 'detail': 'standard',
+                            },
+                        }),
+                        content_type='application/json',
+                    )
+                    self.assertEqual(response.status_code, 200, response.content[:400])
+                    result = response.json()['result']
+                    self.assertTrue(result['ready'])
+                    self.assertEqual(result['language'], language)
+                    self.assertIn(native_table[task_id][language], result['prompt'])
+                    self.assertIn(literal, result['prompt'])
+                    self.assertNotIn(contract['intent'], result['prompt'])
+                    self.assertEqual(response['Cache-Control'], 'no-store')
+                    checked += 1
+        self.assertEqual(checked, 153)
+
 
     @patch('apps.prompts.api._require_pro_access')
     def test_compose_api_is_stateless(self, access):
