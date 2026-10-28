@@ -154,5 +154,38 @@ class ProductLanguageCoverageTests(unittest.TestCase):
         self.assertIn("script,style,textarea,input,[contenteditable]", source)
 
 
+    def test_prompt_terms_and_browser_text_are_semantically_safe(self):
+        """Protect official prompt terminology and literal browser text in ten locales."""
+        catalogue = extract_translations()
+        marketing_line = {
+            "en": "Better prompts · better results",
+            "es": "Mejores prompts · mejores resultados",
+            "pt": "Melhores prompts · melhores resultados",
+            "tr": "Daha iyi promptlar · daha iyi sonuçlar",
+            "ru": "Лучшие промпты · лучшие результаты",
+            "pl": "Lepsze prompty · lepsze wyniki",
+            "fr": "De meilleurs prompts · de meilleurs résultats",
+            "it": "Prompt migliori · risultati migliori",
+            "nl": "Betere prompts · betere resultaten",
+        }
+        for locale, phrase in marketing_line.items():
+            with self.subTest(locale=locale):
+                self.assertEqual(catalogue["Bessere Prompts · bessere Ergebnisse"][locale], phrase)
+                self.assertEqual(
+                    catalogue["PRO · Bessere Prompts · bessere Ergebnisse"][locale],
+                    "PRO · " + phrase,
+                )
+                self.assertEqual(
+                    catalogue["AI Builder – Prompt Builder"][locale],
+                    "AI Builder – Prompt Builder",
+                )
+                self.assertIn("Dataverse", catalogue["Dataverse-grounded Prompt erstellen"][locale])
+                self.assertIn("Promptbook", catalogue["Promptbook entwerfen"][locale])
+        for key, locale_map in catalogue.items():
+            for locale, value in locale_map.items():
+                with self.subTest(key=key[:45], locale=locale):
+                    self.assertNotRegex(value, r"&(?:amp|lt|gt|quot|nbsp|#\\d+);")
+
+
 if __name__ == "__main__":
     unittest.main(verbosity=2)
