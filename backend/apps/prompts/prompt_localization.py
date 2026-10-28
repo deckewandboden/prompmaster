@@ -3015,9 +3015,26 @@ def _output_label(value: str, language: str) -> str:
     return OUTPUT_CATEGORIES['generic'][language]
 
 
+# Compact tasks have strict platform character limits. A short explicit
+# language directive leaves room for the task-specific reviewed instruction
+# and as much of the user's literal context as possible.
+COMPACT_LANGUAGE_DIRECTIVES = {
+    'en': 'Reply in English.',
+    'es': 'Responde en español.',
+    'pt': 'Responda em português.',
+    'tr': 'Türkçe yanıt ver.',
+    'ru': 'Ответьте по-русски.',
+    'pl': 'Odpowiedz po polsku.',
+    'fr': 'Répondez en français.',
+    'it': 'Rispondi in italiano.',
+    'nl': 'Antwoord in het Nederlands.',
+}
+
+
 def render_localized_prompt(
     *, language: str, result: dict, product: str, task_title: str, task_id: str,
     application: str, family: str, selections: dict, maximum_chars: int | None = None,
+    task_intent: str = '',
 ) -> dict:
     """Return result with translated instructions, preserving canonical metadata.
 
@@ -3031,10 +3048,19 @@ def render_localized_prompt(
              or FREE_TASK_TITLES.get(task_id, {}).get(language)
              or SURFACE_TASK_TITLES.get(task_title, {}).get(language)
              or copy['fallback'])
+    # PM20 has a reviewed, translated intention for every canonical task.
+    # The previous generic fallback discarded these distinct instructions in
+    # foreign-language Pro prompts, despite the UI catalog containing them.
+    # Keep the 16 separately reviewed Free intents as the first choice.
+    instruction = (
+        FREE_INTENTS.get(task_id, {}).get(language)
+        or _translated(task_intent, language)
+        or copy['intro']
+    )
     pieces = [
         f"{copy['task']}: {title}",
         f"{copy['app']}: {application}",
-        f"{copy['requirements']}: {FREE_INTENTS.get(task_id, {}).get(language) or copy['intro']} {copy['output']}",
+        f"{copy['requirements']}: {instruction} {copy['output']}",
     ]
     supplied = []
     raw_fields = selections.get('fields') or {}
@@ -3091,17 +3117,21 @@ def render_localized_prompt(
         # The chosen output language MUST remain present even when long
         # user-provided source text exhausts a compact task's character cap.
         # Otherwise Copilot may answer in the source language by accident.
-        prefix = f"{copy['task']}: {title}. {copy['output']}"
+        prefix = (
+            f"{copy['task']}: {title}. "
+            f"{COMPACT_LANGUAGE_DIRECTIVES[language]} {instruction}"
+        )
         if len(prefix) >= limit:
             truncated_input = bool(supplied)
             compact = prefix[:limit]
         else:
             details = '; '.join(supplied)
-            available = max(0, limit - len(prefix) - 2)
+            separator = ' ' if prefix.endswith(('.', '!', '?', '…')) else '. '
+            available = max(0, limit - len(prefix) - len(separator))
             if len(details) > available:
                 truncated_input = True
                 details = (details[:max(0, available - 1)].rstrip(' ,;.:') + '…') if available else ''
-            compact = prefix + ('. ' + details if details else '')
+            compact = prefix + (separator + details if details else '')
         prompt = compact
     return {**result, 'prompt': prompt, 'language': language,
             'localization_mode': 'structured',

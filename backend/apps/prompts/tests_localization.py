@@ -321,9 +321,10 @@ class LocalizedPromptRenderingTests(SimpleTestCase):
         self.assertIn('A', oversized['prompt'])
         self.assertFalse(oversized['source_values_preserved'])
         self.assertTrue(oversized['input_truncated'])
-        # Truncation must never drop the output-language instruction.
-        self.assertIn('response in English', ordinary['prompt'])
-        self.assertIn('response in English', oversized['prompt'])
+        # Truncation must never drop the explicit English language directive.
+        self.assertIn('Reply in English.', ordinary['prompt'])
+        self.assertIn('Reply in English.', oversized['prompt'])
+        self.assertNotIn('audience..', ordinary['prompt'])
         self.assertEqual(ordinary['language'], 'en')
         self.assertEqual(oversized['language'], 'en')
 

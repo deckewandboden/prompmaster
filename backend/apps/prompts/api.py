@@ -263,6 +263,7 @@ def compose(request):
                 title = current.title
                 family = runtime.get('family') or 'analysis'
                 application_name = runtime.get('app_name') or result_payload['app_code']
+                task_intent = runtime.get('intent') or ''
                 max_chars = None
             else:
                 spec = (
@@ -274,6 +275,7 @@ def compose(request):
                 title = version['title']
                 family = version['family']
                 application_name = spec['application']['name']
+                task_intent = version.get('intent') or ''
                 max_chars = version.get('max_chars')
             result_payload = render_localized_prompt(
                 language=prompt_language,
@@ -285,6 +287,7 @@ def compose(request):
                 family=family,
                 selections=payload,
                 maximum_chars=max_chars,
+                task_intent=task_intent,
             )
     except PromptValidationError as exc:
         status = 403 if exc.code in {'email_verification_required', 'second_factor_required', 'license_required', 'device_required', 'entitlement_required', 'tier_required'} else 400

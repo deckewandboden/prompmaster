@@ -1,4 +1,5 @@
 import json
+from pathlib import Path
 from unittest.mock import patch
 
 from django.contrib.auth import get_user_model
@@ -30,9 +31,102 @@ from .models import (
     PromptRating,
     PromptQualitySnapshot,
 )
+from .prompt_localization import _translated, render_localized_prompt
 from .services import build_spec, catalog_snapshot, compose_task
 from .lifecycle import clone_as_draft, transition
 from .quality import save_rating
+
+
+class LocalizedPM20IntentTests(SimpleTestCase):
+    """Foreign-language prompts must retain the published task-specific intent."""
+
+    def test_all_194_pm20_intents_survive_in_nine_target_languages(self):
+        source = Path(__file__).resolve().parent / 'data' / 'pm20_golden_logic.json'
+        catalog = json.loads(source.read_text(encoding='utf-8'))
+        tasks = [
+            (app_code, task)
+            for app_code, app in catalog['APP'].items()
+            for task in app['tasks']
+        ]
+        self.assertEqual(len(tasks), 194)
+        for app_code, task in tasks:
+            for language in ('en', 'es', 'pt', 'tr', 'ru', 'pl', 'fr', 'it', 'nl'):
+                with self.subTest(task=task['id'], language=language):
+                    native_intent = _translated(task['intent'], language)
+                    self.assertTrue(native_intent, 'Reviewed intent translation missing')
+                    original = 'Original customer source: ALPHA-2026 / 137'
+                    rendered = render_localized_prompt(
+                        language=language,
+                        result={'prompt': 'CANONICAL_GERMAN_PROMPT', 'ready': True},
+                        product='PRO',
+                        task_title=task['title'],
+                        task_id=task['id'],
+                        task_intent=task['intent'],
+                        application=app_code,
+                        family=task.get('family') or 'analysis',
+                        selections={'fields': {'Kontext': original}},
+                    )
+                    self.assertIn(native_intent, rendered['prompt'])
+                    self.assertIn(original, rendered['prompt'])
+                    self.assertNotIn('CANONICAL_GERMAN_PROMPT', rendered['prompt'])
+                    self.assertTrue(rendered['source_values_preserved'])
+                    self.assertEqual(rendered['language'], language)
+
+    def test_compact_pm20_prompts_keep_task_intent_and_language_under_cap(self):
+        source = Path(__file__).resolve().parent / 'data' / 'pm20_golden_logic.json'
+        catalog = json.loads(source.read_text(encoding='utf-8'))
+        limited = [
+            (app_code, task)
+            for app_code, app in catalog['APP'].items()
+            for task in app['tasks']
+            if task.get('maxChars')
+        ]
+        self.assertEqual(len(limited), 8)
+        for app_code, task in limited:
+            for language in ('en', 'es', 'pt', 'tr', 'ru', 'pl', 'fr', 'it', 'nl'):
+                with self.subTest(task=task['id'], language=language):
+                    native = _translated(task['intent'], language)
+                    self.assertTrue(native)
+                    result = render_localized_prompt(
+                        language=language, result={'prompt': 'GERMAN'},
+                        product='PRO', task_title=task['title'],
+                        task_id=task['id'], task_intent=task['intent'],
+                        application=app_code, family=task.get('family') or 'analysis',
+                        maximum_chars=task['maxChars'],
+                        selections={'fields': {'Kontext': 'Alpha2026'}},
+                    )
+                    self.assertLessEqual(len(result['prompt']), task['maxChars'])
+                    self.assertIn(native, result['prompt'])
+                    self.assertIn('Alpha2026', result['prompt'])
+                    self.assertFalse(result['input_truncated'])
+
+    def test_unreviewed_intent_fails_closed_to_native_generic_instruction(self):
+        german_unreviewed = 'Führe nur die unbekannte Spezialprüfung durch.'
+        rendered = render_localized_prompt(
+            language='en',
+            result={'prompt': german_unreviewed},
+            product='PRO',
+            task_title='Unreviewed internal task',
+            task_id='PM20-UNREVIEWED',
+            task_intent=german_unreviewed,
+            application='copilot_chat',
+            family='analysis',
+            selections={},
+        )
+        self.assertNotIn(german_unreviewed, rendered['prompt'])
+        self.assertIn('Complete the task using only information', rendered['prompt'])
+
+    def test_german_authoritative_result_is_not_rewritten(self):
+        source = {'prompt': 'Deutscher unveränderter Golden-Master-Text', 'ready': True}
+        self.assertIs(
+            render_localized_prompt(
+                language='de', result=source, product='PRO',
+                task_title='Test', task_id='PM20-001',
+                task_intent='Aufgabenabsicht', application='copilot_chat',
+                family='analysis', selections={},
+            ),
+            source,
+        )
 
 
 class ComposerCoreTests(SimpleTestCase):
