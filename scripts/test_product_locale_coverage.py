@@ -153,7 +153,6 @@ class ProductLanguageCoverageTests(unittest.TestCase):
         self.assertIn("#promptOutput,#pmv2PromptOutput", source)
         self.assertIn("script,style,textarea,input,[contenteditable]", source)
 
-
     def test_prompt_terms_and_browser_text_are_semantically_safe(self):
         """Protect official prompt terminology and literal browser text in ten locales."""
         catalogue = extract_translations()
@@ -184,7 +183,7 @@ class ProductLanguageCoverageTests(unittest.TestCase):
         for key, locale_map in catalogue.items():
             for locale, value in locale_map.items():
                 with self.subTest(key=key[:45], locale=locale):
-                    self.assertNotRegex(value, r"&(?:amp|lt|gt|quot|nbsp|#\\d+);")
+                    self.assertNotRegex(value, r"&(?:amp|lt|gt|quot|nbsp|#\d+);")
 
 
 if __name__ == "__main__":
