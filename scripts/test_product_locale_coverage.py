@@ -180,6 +180,42 @@ class ProductLanguageCoverageTests(unittest.TestCase):
                 )
                 self.assertIn("Dataverse", catalogue["Dataverse-grounded Prompt erstellen"][locale])
                 self.assertIn("Promptbook", catalogue["Promptbook entwerfen"][locale])
+        ready_status = {
+            "en": "PROMPT READY", "es": "PROMPT LISTO",
+            "pt": "PROMPT PRONTO", "tr": "PROMPT HAZIR",
+            "ru": "ПРОМПТ ГОТОВ", "pl": "PROMPT GOTOWY",
+            "fr": "PROMPT PRÊT", "it": "PROMPT PRONTO",
+            "nl": "PROMPT GEREED",
+        }
+        for locale, expected in ready_status.items():
+            with self.subTest(locale=locale, key="PROMPT BEREIT"):
+                self.assertEqual(catalogue["PROMPT BEREIT"][locale], expected)
+                self.assertEqual(catalogue["Prompt Builder"][locale], "Prompt Builder")
+                for key in (
+                    "Ihr fertiger Prompt",
+                    "App-spezifische Business-Prompts",
+                    "Custom Prompt erstellen",
+                    "Prompt-Abnahmetest erstellen",
+                ):
+                    translated = catalogue[key][locale].lower()
+                    if locale == "ru":
+                        self.assertTrue(
+                            "промпт" in translated or "prompt" in translated,
+                            f"{locale} {key}: {translated}",
+                        )
+                    else:
+                        self.assertIn("prompt", translated, f"{locale} {key}: {translated}")
+        for locale in ("tr", "ru", "pl", "fr", "it"):
+            with self.subTest(locale=locale, key="Pro hero summary"):
+                source = (
+                    "34 Copilot-Bereiche, präzise Aufgabenführung und professionelle "
+                    "Ausgabeformate – für Prompts, die im Arbeitsalltag sofort weiterhelfen."
+                )
+                self.assertIn(
+                    "prompt",
+                    catalogue[source][locale].lower(),
+                    f"{locale}: the Pro summary must not omit prompt purpose",
+                )
         for key, locale_map in catalogue.items():
             for locale, value in locale_map.items():
                 with self.subTest(key=key[:45], locale=locale):
