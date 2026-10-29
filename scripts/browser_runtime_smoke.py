@@ -1513,6 +1513,64 @@ def _browser_product_locale_acceptance(page, base: str, product: str) -> None:
             arg={'lang': code, 'tone': expected_tone},
             timeout=15000,
         )
+        # R5 regression: do not mistake deliberately hidden Golden-Master
+        # labels for untranslated UI. Check two rendered, visible V2 elements.
+        # The original "Ihre Konfiguration" heading is display:none in V2.
+        visible_locale = page.evaluate(
+            """() => {
+                const source = document.querySelector('.pmv2-hero-copy h1');
+                const progress = document.querySelector(
+                    '.pmv2-progress-host .progress-line span'
+                );
+                const hiddenTitle = document.querySelector(
+                    '.pmv2-progress-host .hero-card-title'
+                );
+                const isVisible = (node) => Boolean(node
+                    && node.getClientRects().length
+                    && getComputedStyle(node).display !== 'none'
+                    && getComputedStyle(node).visibility !== 'hidden');
+                return {
+                    hero: source?.textContent.trim() || '',
+                    heroVisible: isVisible(source),
+                    progress: progress?.textContent.trim() || '',
+                    progressVisible: isVisible(progress),
+                    hiddenTitleVisible: isVisible(hiddenTitle),
+                    hiddenTitleExists: Boolean(hiddenTitle),
+                };
+            }"""
+        )
+        source_hero = (
+            'Sag Copilot genauer, was du brauchst.'
+            if product == 'free'
+            else 'Mehr aus Microsoft Copilot. Mit System.'
+        )
+        expected_hero = page.evaluate(
+            "(key) => window.PF_PRODUCT_LOCALE?.t(key)", source_hero
+        )
+        expected_progress = page.evaluate(
+            "() => window.PF_PRODUCT_LOCALE?.t('Fortschritt')"
+        )
+        if (
+            visible_locale['hero'] != expected_hero
+            or not visible_locale['heroVisible']
+            or visible_locale['progress'] != expected_progress
+            or not visible_locale['progressVisible']
+            or not visible_locale['hiddenTitleExists']
+            or visible_locale['hiddenTitleVisible']
+            or (code != 'de' and (
+                expected_hero == source_hero or expected_progress == 'Fortschritt'
+            ))
+        ):
+            raise AssertionError(
+                f'{product} {code}: R5 visible locale regression: '
+                f'{visible_locale}; expected hero={expected_hero!r}, '
+                f'progress={expected_progress!r}'
+            )
+        print(
+            f'R5_BROWSER_LOCALE={product}/{code}; '
+            'HERO=PASS; PROGRESS=PASS; HIDDEN_TITLE=EXPECTED'
+        )
+
         if product == 'free':
             page.evaluate("() => document.querySelector('#generalProModal')?.classList.add('open')")
             page.wait_for_function(
