@@ -211,9 +211,9 @@ class ProductLanguageCoverageTests(unittest.TestCase):
                     "34 Copilot-Bereiche, präzise Aufgabenführung und professionelle "
                     "Ausgabeformate – für Prompts, die im Arbeitsalltag sofort weiterhelfen."
                 )
-                self.assertIn(
-                    "prompt",
-                    catalogue[source][locale].lower(),
+                summary = catalogue[source][locale].lower()
+                self.assertTrue(
+                    ("промпт" in summary) if locale == "ru" else ("prompt" in summary),
                     f"{locale}: the Pro summary must not omit prompt purpose",
                 )
         for key, locale_map in catalogue.items():
