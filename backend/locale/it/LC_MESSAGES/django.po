@@ -3933,3 +3933,9 @@ msgstr "Riuscito"
 
 msgid "Ausgang unklar"
 msgstr "Esito incerto"
+
+msgid "Öffentlich"
+msgstr "Pubblico"
+
+msgid "Pro"
+msgstr "Pro"
