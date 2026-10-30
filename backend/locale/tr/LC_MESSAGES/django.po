@@ -3872,3 +3872,9 @@ msgstr "Başarılı"
 
 msgid "Ausgang unklar"
 msgstr "Sonuç belirsiz"
+
+msgid "Öffentlich"
+msgstr "Herkese açık"
+
+msgid "Pro"
+msgstr "Pro"
