@@ -146,6 +146,46 @@ class AdminInternationalizationContractTests(SimpleTestCase):
         for key in ('Umsatzentwicklung', 'Lizenzen nach Produkt'):
             self.assertIn("{% translate '" + key + "' %}", dashboard)
 
+    def test_model_choice_texts_have_translations_in_all_nine_locales(self):
+        # Unwrapped get_*_display labels come from model source strings.  Once
+        # wrapped in {% translate %}, every enum needs a catalog entry or the
+        # value silently falls back to German.
+        model_files = (
+            'apps/core/models.py',
+            'apps/support/models.py',
+            'apps/legal/models.py',
+            'apps/licenses/models.py',
+            'apps/companies/models.py',
+            'apps/orders/models.py',
+            'apps/payments/models.py',
+        )
+        choice_names = (
+            'STATUS', 'KIND', 'ROLE', 'SOURCE', 'PRIORITY',
+            'CATEGORY', 'SENDER', 'CANCELLATION_KIND',
+        )
+        values = set()
+        for filename in model_files:
+            source = (ROOT / filename).read_text(encoding='utf-8')
+            for found in re.finditer(
+                r'\b(?:' + '|'.join(choice_names) + r')\s*=\s*\[([\s\S]*?)\]',
+                source,
+            ):
+                values.update(re.findall(
+                    r"\(\s*'[^']+'\s*,\s*'([^']+)'\s*\)",
+                    found.group(1),
+                ))
+        self.assertGreaterEqual(len(values), 70)
+        for locale in LOCALES:
+            translations = catalog_translations(
+                ROOT / 'locale' / locale / 'LC_MESSAGES' / 'django.po'
+            )
+            for value in sorted(values):
+                with self.subTest(locale=locale, enum_label=value):
+                    self.assertTrue(
+                        translations.get(value),
+                        f'{locale} has no model status translation: {value}',
+                    )
+
     def test_admin_primary_pages_have_nine_real_translations(self):
         keys = set()
         for page in PAGES:
