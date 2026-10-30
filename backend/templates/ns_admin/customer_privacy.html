@@ -9,7 +9,7 @@
     <div class="statusrow"><span>{% translate 'Gesamt' %}</span><strong>{{ acceptance_count }}</strong></div>
     {% for row in acceptances %}
       <div class="statusrow">
-        <span>{{ row.user.email }}<div class="tiny muted">{{ row.document.get_doc_type_display }} · {% translate 'Version' %} {{ row.document.version }}</div></span>
+        <span>{{ row.user.email }}<div class="tiny muted">{% translate row.document.get_doc_type_display %} · {% translate 'Version' %} {{ row.document.version }}</div></span>
         <strong>{{ row.accepted_at|date:'d.m.Y H:i' }}</strong>
       </div>
     {% empty %}<p class="muted">{% translate 'Keine Rechtsakzeptanzen protokolliert.' %}</p>{% endfor %}
@@ -19,7 +19,7 @@
     <div class="statusrow"><span>{% translate 'Gesamt' %}</span><strong>{{ deletion_count }}</strong></div>
     {% for row in deletions %}
       <div class="statusrow">
-        <span>{{ row.user.email }}<div class="tiny muted">{{ row.get_status_display }}</div></span>
+        <span>{{ row.user.email }}<div class="tiny muted">{% translate row.get_status_display %}</div></span>
         <strong>{{ row.requested_at|date:'d.m.Y H:i' }}</strong>
       </div>
     {% empty %}<p class="muted">{% translate 'Keine Löschanfragen.' %}</p>{% endfor %}
