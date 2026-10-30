@@ -4,7 +4,7 @@
   <div>
     <h1>{{ lead.lead_number }} · {{ lead.customer_display }}</h1>
     <div class="sub">
-      {{ lead.get_kind_display }} · {{ lead.get_source_display }} · {{ lead.get_status_display }}
+      {% translate lead.get_kind_display %} · {% translate lead.get_source_display %} · {% translate lead.get_status_display %}
       {% if lead.converted_company %} · {% translate 'Kunde' %} {{ lead.converted_company.customer_number }}{% endif %}
     </div>
   </div>
@@ -30,13 +30,13 @@
     </form>
     {% else %}
     <dl class="detail-list">
-      <div><dt>{% translate "Typ" %}</dt><dd>{{ lead.get_kind_display }}</dd></div>
+      <div><dt>{% translate "Typ" %}</dt><dd>{% translate lead.get_kind_display %}</dd></div>
       <div><dt>{% translate "Unternehmen" %}</dt><dd>{{ lead.company_name|default:'–' }}</dd></div>
       <div><dt>{% translate "Ansprechpartner" %}</dt><dd>{{ lead.contact_name }}</dd></div>
       <div><dt>{% translate "E-Mail" %}</dt><dd>{{ lead.email }}</dd></div>
       <div><dt>{% translate "Telefon" %}</dt><dd>{{ lead.phone|default:'–' }}</dd></div>
-      <div><dt>{% translate "Status" %}</dt><dd>{{ lead.get_status_display }}</dd></div>
-      <div><dt>{% translate "Priorität" %}</dt><dd>{{ lead.get_priority_display }}</dd></div>
+      <div><dt>{% translate "Status" %}</dt><dd>{% translate lead.get_status_display %}</dd></div>
+      <div><dt>{% translate "Priorität" %}</dt><dd>{% translate lead.get_priority_display %}</dd></div>
       <div><dt>{% translate "Zuständig" %}</dt><dd>{{ lead.assigned_name }}</dd></div>
     </dl>
     {% endif %}

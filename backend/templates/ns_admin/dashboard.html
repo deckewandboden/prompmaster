@@ -1,7 +1,7 @@
 {% extends 'ns_admin/base.html' %}{% load pm i18n %}{% block content %}
 {% user_has_perm request.user 'payments.read' as can_payments %}
 <div class="page-head">
-  <div><h1>Dashboard</h1><div class="sub">{% translate 'Geschäft, Handlungsbedarf und Systemstatus auf einen Blick.' %}</div></div>
+  <div><h1>{% translate 'Dashboard' %}</h1><div class="sub">{% translate 'Geschäft, Handlungsbedarf und Systemstatus auf einen Blick.' %}</div></div>
   <div class="page-actions">
     <a class="btn primary" href="{% url 'proaccess:launch' %}" target="_blank" rel="noopener">{% translate 'PROMPTFINISHER Pro öffnen →' %}</a><a class="btn secondary" href="{% url 'free_product' %}" target="_blank" rel="noopener">{% translate 'PROMPTFINISHER Free öffnen →' %}</a>
     {% if rights.ops %}<span class="badge {% if system_healthy %}ok{% else %}warn{% endif %}">● {% if system_healthy %}{% translate 'System gesund' %}{% else %}{% translate 'Prüfung erforderlich' %}{% endif %}</span><a class="btn secondary" href="{% url 'ns_admin:ops' %}">{% translate 'System & Betrieb' %}</a>{% endif %}

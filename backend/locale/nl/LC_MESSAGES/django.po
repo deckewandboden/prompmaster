@@ -328,7 +328,7 @@ msgid "Lizenzbedingungen"
 msgstr "Licentievoorwaarden"
 
 msgid "Lizenzen insgesamt"
-msgstr "Totaal vergunningen"
+msgstr "Licenties in totaal"
 
 msgid "Lizenzstatus"
 msgstr "Licentiestatus"
@@ -697,7 +697,7 @@ msgid "Keine Benutzer gefunden."
 msgstr "Geen gebruikers gevonden."
 
 msgid "Keine Lizenz zugewiesen."
-msgstr "Geen vergunning toegewezen."
+msgstr "Geen licentie toegewezen."
 
 msgid "Keine Lizenzen gefunden."
 msgstr "Geen licenties gevonden."
@@ -946,10 +946,10 @@ msgid "laufen in weniger als 60 Tagen ab"
 msgstr "vervallen binnen 60 dagen"
 
 msgid "Umsatz 30 Tage"
-msgstr "Ontvangsten, 30 dagen"
+msgstr "Omzet over 30 dagen"
 
 msgid "Umsatzentwicklung"
-msgstr "Ontwikkeling van de ontvangsten"
+msgstr "Omzetontwikkeling"
 
 msgid "Umsatzentwicklung der letzten Monate"
 msgstr "Ontwikkeling van de inkomsten in de afgelopen maanden"
@@ -958,13 +958,13 @@ msgid "Noch keine bezahlten Bestellungen im Auswertungszeitraum."
 msgstr "Nog geen betaalde orders in de verslagperiode."
 
 msgid "Lizenzen nach Produkt"
-msgstr "Vergunningen per product"
+msgstr "Licenties per product"
 
 msgid "Handlungsbedarf"
 msgstr "Vereiste actie"
 
 msgid "Lizenzen laufen in weniger als 30 Tagen ab."
-msgstr "Vergunningen verlopen binnen 30 dagen."
+msgstr "Licenties verlopen binnen 30 dagen."
 
 msgid "fehlgeschlagene Zahlungen"
 msgstr "mislukte betalingen"
@@ -3870,3 +3870,66 @@ msgstr "Licentiebeheer / verlenging"
 
 msgid "Jetzt trotzdem PROMPTFINISHER Pro starten"
 msgstr "PROMPTFINISHER Pro toch openen"
+
+msgid "Benutzer wirklich löschen/anonymisieren? Zugewiesene Lizenzen und Gerätezugänge werden beendet."
+msgstr "Deze gebruiker echt verwijderen of anonimiseren? Toegewezen licenties en apparaattoegang worden beëindigd."
+
+msgid "Wird erstellt"
+msgstr "Wordt aangemaakt"
+
+msgid "Bereit"
+msgstr "Gereed"
+
+msgid "Kontaktiert"
+msgstr "Benaderd"
+
+msgid "Qualifiziert"
+msgstr "Gekwalificeerd"
+
+msgid "Gewonnen"
+msgstr "Gewonnen"
+
+msgid "Verloren"
+msgstr "Verloren"
+
+msgid "Website"
+msgstr "Website"
+
+msgid "Kontaktanfrage"
+msgstr "Contactverzoek"
+
+msgid "Niedrig"
+msgstr "Laag"
+
+msgid "Normal"
+msgstr "Normaal"
+
+msgid "Hoch"
+msgstr "Hoog"
+
+msgid "T-60"
+msgstr "T-60"
+
+msgid "T-30"
+msgstr "T-30"
+
+msgid "In Warteschlange"
+msgstr "In wachtrij"
+
+msgid "Genehmigt"
+msgstr "Goedgekeurd"
+
+msgid "Übermittelt"
+msgstr "Ingediend"
+
+msgid "Erfolgreich"
+msgstr "Geslaagd"
+
+msgid "Ausgang unklar"
+msgstr "Uitkomst onzeker"
+
+msgid "Öffentlich"
+msgstr "Openbaar"
+
+msgid "Pro"
+msgstr "Pro"

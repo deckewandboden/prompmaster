@@ -18,7 +18,7 @@
       <div class="statusrow"><span>{% translate 'Land' %}</span><strong>{{ customer.country }}</strong></div>
       <div class="statusrow"><span>{% translate 'USt-IdNr.' %}</span><strong>{{ customer.vat_id|default:'–' }}</strong></div>
       <div class="statusrow"><span>{% translate 'Steuernummer' %}</span><strong>{{ customer.tax_number|default:'–' }}</strong></div>
-      <div class="statusrow"><span>{% translate 'Status' %}</span><strong>{{ customer.get_status_display }}</strong></div>
+      <div class="statusrow"><span>{% translate 'Status' %}</span><strong>{% translate customer.get_status_display %}</strong></div>
     {% endif %}
   </div>
   <div class="card">

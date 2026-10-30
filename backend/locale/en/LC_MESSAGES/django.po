@@ -909,7 +909,7 @@ msgid "Umsatz 30 Tage"
 msgstr "Revenue, 30 days"
 
 msgid "Umsatzentwicklung"
-msgstr "Revenue development"
+msgstr "Revenue trend"
 
 msgid "Umsatzentwicklung der letzten Monate"
 msgstr "Revenue trend over recent months"
@@ -3815,3 +3815,66 @@ msgstr "License management / renewal"
 
 msgid "Jetzt trotzdem PROMPTFINISHER Pro starten"
 msgstr "Open PROMPTFINISHER Pro anyway"
+
+msgid "Benutzer wirklich löschen/anonymisieren? Zugewiesene Lizenzen und Gerätezugänge werden beendet."
+msgstr "Really delete or anonymize this user? Assigned licenses and device access will be terminated."
+
+msgid "Wird erstellt"
+msgstr "Being generated"
+
+msgid "Bereit"
+msgstr "Ready"
+
+msgid "Kontaktiert"
+msgstr "Contacted"
+
+msgid "Qualifiziert"
+msgstr "Qualified"
+
+msgid "Gewonnen"
+msgstr "Won"
+
+msgid "Verloren"
+msgstr "Lost"
+
+msgid "Website"
+msgstr "Website"
+
+msgid "Kontaktanfrage"
+msgstr "Contact inquiry"
+
+msgid "Niedrig"
+msgstr "Low"
+
+msgid "Normal"
+msgstr "Normal"
+
+msgid "Hoch"
+msgstr "High"
+
+msgid "T-60"
+msgstr "T-60"
+
+msgid "T-30"
+msgstr "T-30"
+
+msgid "In Warteschlange"
+msgstr "Queued"
+
+msgid "Genehmigt"
+msgstr "Approved"
+
+msgid "Übermittelt"
+msgstr "Submitted"
+
+msgid "Erfolgreich"
+msgstr "Successful"
+
+msgid "Ausgang unklar"
+msgstr "Outcome unclear"
+
+msgid "Öffentlich"
+msgstr "Public"
+
+msgid "Pro"
+msgstr "Pro"
