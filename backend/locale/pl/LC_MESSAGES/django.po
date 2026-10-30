@@ -3877,3 +3877,57 @@ msgstr "Mimo to uruchom PROMPTFINISHER Pro"
 
 msgid "Benutzer wirklich löschen/anonymisieren? Zugewiesene Lizenzen und Gerätezugänge werden beendet."
 msgstr "Czy na pewno usunąć lub zanonimizować tego użytkownika? Przypisane licencje i dostęp do urządzeń zostaną zakończone."
+
+msgid "Wird erstellt"
+msgstr "W trakcie tworzenia"
+
+msgid "Bereit"
+msgstr "Gotowe"
+
+msgid "Kontaktiert"
+msgstr "Nawiązano kontakt"
+
+msgid "Qualifiziert"
+msgstr "Zakwalifikowany"
+
+msgid "Gewonnen"
+msgstr "Wygrany"
+
+msgid "Verloren"
+msgstr "Przegrany"
+
+msgid "Website"
+msgstr "Strona internetowa"
+
+msgid "Kontaktanfrage"
+msgstr "Zapytanie kontaktowe"
+
+msgid "Niedrig"
+msgstr "Niski"
+
+msgid "Normal"
+msgstr "Normalny"
+
+msgid "Hoch"
+msgstr "Wysoki"
+
+msgid "T-60"
+msgstr "T-60"
+
+msgid "T-30"
+msgstr "T-30"
+
+msgid "In Warteschlange"
+msgstr "W kolejce"
+
+msgid "Genehmigt"
+msgstr "Zatwierdzone"
+
+msgid "Übermittelt"
+msgstr "Przesłano"
+
+msgid "Erfolgreich"
+msgstr "Pomyślnie"
+
+msgid "Ausgang unklar"
+msgstr "Wynik niepewny"
