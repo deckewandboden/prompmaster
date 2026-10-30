@@ -3815,3 +3815,6 @@ msgstr "Gestión de licencias / renovación"
 
 msgid "Jetzt trotzdem PROMPTFINISHER Pro starten"
 msgstr "Abrir PROMPTFINISHER Pro de todos modos"
+
+msgid "Benutzer wirklich löschen/anonymisieren? Zugewiesene Lizenzen und Gerätezugänge werden beendet."
+msgstr "¿Realmente desea eliminar o anonimizar a este usuario? Se cancelarán las licencias asignadas y el acceso a los dispositivos."
