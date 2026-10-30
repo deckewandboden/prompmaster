@@ -3872,3 +3872,9 @@ msgstr "Successful"
 
 msgid "Ausgang unklar"
 msgstr "Outcome unclear"
+
+msgid "Öffentlich"
+msgstr "Public"
+
+msgid "Pro"
+msgstr "Pro"
