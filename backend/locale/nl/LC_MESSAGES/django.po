@@ -958,7 +958,7 @@ msgid "Noch keine bezahlten Bestellungen im Auswertungszeitraum."
 msgstr "Nog geen betaalde orders in de verslagperiode."
 
 msgid "Lizenzen nach Produkt"
-msgstr "Vergunningen per product"
+msgstr "Licenties per product"
 
 msgid "Handlungsbedarf"
 msgstr "Vereiste actie"
