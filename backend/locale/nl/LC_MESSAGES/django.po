@@ -3927,3 +3927,9 @@ msgstr "Geslaagd"
 
 msgid "Ausgang unklar"
 msgstr "Uitkomst onzeker"
+
+msgid "Öffentlich"
+msgstr "Openbaar"
+
+msgid "Pro"
+msgstr "Pro"
