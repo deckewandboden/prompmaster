@@ -3884,3 +3884,57 @@ msgstr "Ouvrir quand même PROMPTFINISHER Pro"
 
 msgid "Benutzer wirklich löschen/anonymisieren? Zugewiesene Lizenzen und Gerätezugänge werden beendet."
 msgstr "Voulez-vous vraiment supprimer ou anonymiser cet utilisateur ? Les licences attribuées et l’accès aux appareils seront désactivés."
+
+msgid "Wird erstellt"
+msgstr "En cours de génération"
+
+msgid "Bereit"
+msgstr "Prêt"
+
+msgid "Kontaktiert"
+msgstr "Contacté"
+
+msgid "Qualifiziert"
+msgstr "Qualifié"
+
+msgid "Gewonnen"
+msgstr "Gagné"
+
+msgid "Verloren"
+msgstr "Perdu"
+
+msgid "Website"
+msgstr "Site web"
+
+msgid "Kontaktanfrage"
+msgstr "Demande de contact"
+
+msgid "Niedrig"
+msgstr "Faible"
+
+msgid "Normal"
+msgstr "Normale"
+
+msgid "Hoch"
+msgstr "Élevée"
+
+msgid "T-60"
+msgstr "T-60"
+
+msgid "T-30"
+msgstr "T-30"
+
+msgid "In Warteschlange"
+msgstr "En file d'attente"
+
+msgid "Genehmigt"
+msgstr "Approuvé"
+
+msgid "Übermittelt"
+msgstr "Transmis"
+
+msgid "Erfolgreich"
+msgstr "Réussi"
+
+msgid "Ausgang unklar"
+msgstr "Résultat incertain"
