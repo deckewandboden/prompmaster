@@ -909,7 +909,7 @@ msgid "Umsatz 30 Tage"
 msgstr "Revenue, 30 days"
 
 msgid "Umsatzentwicklung"
-msgstr "Revenue development"
+msgstr "Revenue trend"
 
 msgid "Umsatzentwicklung der letzten Monate"
 msgstr "Revenue trend over recent months"
