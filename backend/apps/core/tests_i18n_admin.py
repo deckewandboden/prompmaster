@@ -18,6 +18,10 @@ ROOT = Path(__file__).resolve().parents[2]
 LOCALES = ('en', 'es', 'pt', 'tr', 'ru', 'pl', 'fr', 'it', 'nl')
 PAGES = (
     'ns_admin/dashboard.html',
+    'ns_admin/export_status.html',
+    'ns_admin/lead_detail.html',
+    'ns_admin/legal_declaration_detail.html',
+    'ns_admin/more.html',
     'ns_admin/customer_portal_preview.html',
     'ns_admin/grid.html',
     'ns_admin/form.html',
@@ -112,6 +116,35 @@ class AdminInternationalizationContractTests(SimpleTestCase):
             {code for code, _ in settings.LANGUAGES},
             {'de', 'en', 'es', 'pt', 'tr', 'ru', 'pl', 'fr', 'it', 'nl'},
         )
+
+    def test_all_admin_templates_are_enrolled_in_locale_coverage(self):
+        directory = ROOT / 'templates' / 'ns_admin'
+        actual = {
+            'ns_admin/' + item.relative_to(directory).as_posix()
+            for item in directory.rglob('*.html')
+        }
+        self.assertEqual(actual, set(PAGES), 'New admin pages must join the locale matrix')
+
+    def test_admin_dynamic_status_labels_never_bypass_translation(self):
+        for page in (
+            'ns_admin/export_status.html',
+            'ns_admin/lead_detail.html',
+            'ns_admin/legal_declaration_detail.html',
+        ):
+            html = (ROOT / 'templates' / page).read_text(encoding='utf-8')
+            self.assertNotRegex(
+                html,
+                r'\{\{\s*\w+\.get_(?:kind|source|status|priority|cancellation_kind)_display\s*\}\}',
+                'Model display methods return German source labels and must use Django translation',
+            )
+            self.assertRegex(
+                html,
+                r'\{%\s*translate\s+\w+\.get_\w+_display\s*%\}',
+            )
+        dashboard = (ROOT / 'templates/ns_admin/dashboard.html').read_text(encoding='utf-8')
+        self.assertIn("<h1>{% translate 'Dashboard' %}</h1>", dashboard)
+        for key in ('Umsatzentwicklung', 'Lizenzen nach Produkt'):
+            self.assertIn("{% translate '" + key + "' %}", dashboard)
 
     def test_admin_primary_pages_have_nine_real_translations(self):
         keys = set()
