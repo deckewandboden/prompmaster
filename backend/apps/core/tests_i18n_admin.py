@@ -126,20 +126,27 @@ class AdminInternationalizationContractTests(SimpleTestCase):
         self.assertEqual(actual, set(PAGES), 'New admin pages must join the locale matrix')
 
     def test_admin_dynamic_status_labels_never_bypass_translation(self):
+        for page in PAGES:
+            html = (ROOT / 'templates' / page).read_text(encoding='utf-8')
+            self.assertNotRegex(
+                html,
+                r'\{\{\s*[\w.]+\.get_\w+_display\s*\}\}',
+                'Model display methods return German source labels and must use Django translation',
+            )
         for page in (
             'ns_admin/export_status.html',
             'ns_admin/lead_detail.html',
             'ns_admin/legal_declaration_detail.html',
+            'ns_admin/search.html',
+            'ns_admin/customer_company.html',
+            'ns_admin/customer_privacy.html',
+            'ns_admin/content/faq_list.html',
+            'ns_admin/product_edit.html',
         ):
             html = (ROOT / 'templates' / page).read_text(encoding='utf-8')
-            self.assertNotRegex(
-                html,
-                r'\{\{\s*\w+\.get_(?:kind|source|status|priority|cancellation_kind)_display\s*\}\}',
-                'Model display methods return German source labels and must use Django translation',
-            )
             self.assertRegex(
                 html,
-                r'\{%\s*translate\s+\w+\.get_\w+_display\s*%\}',
+                r'\{%\s*translate\s+[\w.]+\.get_\w+_display\s*%\}',
             )
         dashboard = (ROOT / 'templates/ns_admin/dashboard.html').read_text(encoding='utf-8')
         self.assertIn("<h1>{% translate 'Dashboard' %}</h1>", dashboard)
@@ -158,10 +165,13 @@ class AdminInternationalizationContractTests(SimpleTestCase):
             'apps/companies/models.py',
             'apps/orders/models.py',
             'apps/payments/models.py',
+            'apps/catalog/models.py',
+            'apps/contenthub/models.py',
         )
         choice_names = (
             'STATUS', 'KIND', 'ROLE', 'SOURCE', 'PRIORITY',
             'CATEGORY', 'SENDER', 'CANCELLATION_KIND',
+            'TYPE', 'AUDIENCE', 'DOC_TYPES',
         )
         values = set()
         for filename in model_files:
@@ -174,7 +184,7 @@ class AdminInternationalizationContractTests(SimpleTestCase):
                     r"\(\s*'[^']+'\s*,\s*'([^']+)'\s*\)",
                     found.group(1),
                 ))
-        self.assertGreaterEqual(len(values), 70)
+        self.assertGreaterEqual(len(values), 75)
         for locale in LOCALES:
             translations = catalog_translations(
                 ROOT / 'locale' / locale / 'LC_MESSAGES' / 'django.po'
