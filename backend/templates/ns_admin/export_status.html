@@ -1,7 +1,7 @@
 {% extends 'ns_admin/base.html' %}{% load i18n %}{% block content %}
-<div class="page-head"><div><h1>{% translate "CSV-Export" %}</h1><div class="sub">{{ job.get_kind_display }} · {% translate 'angefordert' %} {{ job.created_at|date:'d.m.Y H:i' }}</div></div></div>
+<div class="page-head"><div><h1>{% translate "CSV-Export" %}</h1><div class="sub">{% translate job.get_kind_display %} · {% translate 'angefordert' %} {{ job.created_at|date:'d.m.Y H:i' }}</div></div></div>
 <div class="card">
-  <div class="statusrow"><span>{% translate "Status" %}</span><strong>{{ job.get_status_display }}</strong></div>
+  <div class="statusrow"><span>{% translate "Status" %}</span><strong>{% translate job.get_status_display %}</strong></div>
   {% if job.status == 'ready' %}<div class="statusrow"><span>{% translate "Zeilen" %}</span><strong>{{ job.row_count }}</strong></div>{% endif %}
   <div class="statusrow"><span>{% translate "Verfügbar bis" %}</span><strong>{{ job.expires_at|date:'d.m.Y H:i' }}</strong></div>
   {% if job.error %}<div class="alert danger">{{ job.error }}</div>{% endif %}
