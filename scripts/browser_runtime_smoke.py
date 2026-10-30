@@ -1947,15 +1947,15 @@ def _browser_backend_locale_acceptance(page, base: str, role: str) -> None:
     """
     admin_labels = {
         'de': ('Dashboard', 'Umsatzentwicklung', 'Lizenzen nach Produkt'),
-        'en': ('Dashboard', 'Revenue development', 'Licenses by product'),
+        'en': ('Dashboard', 'Revenue trend', 'Licenses by product'),
         'es': ('Panel', 'Evolución de ingresos', 'Licencias por producto'),
         'pt': ('Painel', 'Evolução da receita', 'Licenças por produto'),
-        'tr': ('Kontrol paneli', 'Ciro gelişimi', 'Ürüne göre lisanslar'),
+        'tr': ('Kontrol paneli', 'Ciro eğilimi', 'Ürüne göre lisanslar'),
         'ru': ('Панель управления', 'Динамика выручки', 'Лицензии по продуктам'),
-        'pl': ('Panel główny', 'Rozwój dochodów', 'Licencje według produktów'),
-        'fr': ('Tableau de bord', 'Développement des recettes', 'Licences par produit'),
-        'it': ('Dashboard', 'Sviluppo delle entrate', 'Licenze per prodotto'),
-        'nl': ('Dashboard', 'Ontwikkeling van de ontvangsten', 'Licenties per product'),
+        'pl': ('Panel główny', 'Trend przychodów', 'Licencje według produktów'),
+        'fr': ('Tableau de bord', 'Évolution du chiffre d\'affaires', 'Licences par produit'),
+        'it': ('Dashboard', 'Andamento dei ricavi', 'Licenze per prodotto'),
+        'nl': ('Dashboard', 'Omzetontwikkeling', 'Licenties per product'),
     }
     license_labels = {
         'de': 'Lizenzen',
