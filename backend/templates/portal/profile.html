@@ -7,7 +7,8 @@
 <div class="card mt-14"><h2>{% translate "Datenauskunft" %}</h2><p class="muted">{% translate "Exportieren Sie die zu Ihrem Benutzer gespeicherten PROMPTFINISHER-Daten als JSON. Secrets und Daten anderer Benutzer werden nicht exportiert." %}</p><a class="btn secondary" href="{% url 'portal:privacy_export' %}">{% translate "Meine Daten exportieren" %}</a></div>
 <div class="card mt-14"><h2>{% translate "Kontolöschung" %}</h2>
 {% if pending_deletion %}
-<p class="muted">{% blocktrans with requested=pending_deletion.requested_at status=pending_deletion.get_status_display %}Ihre Löschanfrage vom {{ requested }} ist bereits erfasst. Status: {{ status }}.{% endblocktrans %}</p>
+{% translate pending_deletion.get_status_display as translated_deletion_status %}
+<p class="muted">{% blocktrans with requested=pending_deletion.requested_at status=translated_deletion_status %}Ihre Löschanfrage vom {{ requested }} ist bereits erfasst. Status: {{ status }}.{% endblocktrans %}</p>
 {% else %}
 <p class="muted">{% translate "Sie können die Löschung Ihres PROMPTFINISHER-Kontos anfordern. Gesetzlich erforderliche Geschäfts- und Nachweisdaten werden nur im erforderlichen Umfang weiter aufbewahrt bzw. anonymisiert. Firmenadministratoren müssen ihre Administratorrolle vor der Verarbeitung übertragen." %}</p>
 <form method="post" action="{% url 'portal:privacy_delete_request' %}" class="form">{% csrf_token %}
