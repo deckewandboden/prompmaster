@@ -1,7 +1,7 @@
 {% extends 'ns_admin/base.html' %}{% load i18n %}{% block content %}
 <div class="page-head">
   <div>
-    <h1>{{ declaration.get_kind_display }}</h1>
+    <h1>{% translate declaration.get_kind_display %}</h1>
     <div class="sub">{{ declaration.contract_reference }} · {% translate 'Eingang' %} {{ declaration.submitted_at|date:'d.m.Y H:i:s' }}</div>
   </div>
   <div><a class="btn secondary" href="{% url 'ns_admin:legal_declarations' %}">{% translate "← Zur Übersicht" %}</a></div>
@@ -10,8 +10,8 @@
 <div class="grid two">
   <div class="card">
     <h2>{% translate "Erklärung" %}</h2>
-    <div class="statusrow"><span>{% translate "Status" %}</span><strong>{{ declaration.get_status_display }}</strong></div>
-    {% if declaration.kind == 'cancellation' %}<div class="statusrow"><span>{% translate "Kündigungsart" %}</span><strong>{{ declaration.get_cancellation_kind_display }}</strong></div>{% endif %}
+    <div class="statusrow"><span>{% translate "Status" %}</span><strong>{% translate declaration.get_status_display %}</strong></div>
+    {% if declaration.kind == 'cancellation' %}<div class="statusrow"><span>{% translate "Kündigungsart" %}</span><strong>{% translate declaration.get_cancellation_kind_display %}</strong></div>{% endif %}
     <div class="statusrow"><span>{% translate "Name" %}</span><strong>{{ declaration.name }}</strong></div>
     <div class="statusrow"><span>{% translate "E-Mail" %}</span><strong>{{ declaration.email }}</strong></div>
     <div class="statusrow"><span>{% translate "Vertragsbezug" %}</span><strong>{{ declaration.contract_reference }}</strong></div>
