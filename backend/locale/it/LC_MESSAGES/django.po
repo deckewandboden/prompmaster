@@ -951,7 +951,7 @@ msgid "Umsatz 30 Tage"
 msgstr "Entrata, 30 giorni"
 
 msgid "Umsatzentwicklung"
-msgstr "Sviluppo delle entrate"
+msgstr "Andamento dei ricavi"
 
 msgid "Umsatzentwicklung der letzten Monate"
 msgstr "Tendenza delle entrate negli ultimi mesi"
