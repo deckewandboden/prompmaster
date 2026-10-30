@@ -3931,3 +3931,9 @@ msgstr "Pomyślnie"
 
 msgid "Ausgang unklar"
 msgstr "Wynik niepewny"
+
+msgid "Öffentlich"
+msgstr "Publiczne"
+
+msgid "Pro"
+msgstr "Pro"
