@@ -3816,3 +3816,66 @@ msgstr "Управление лицензией / продление"
 
 msgid "Jetzt trotzdem PROMPTFINISHER Pro starten"
 msgstr "Всё равно открыть PROMPTFINISHER Pro"
+
+msgid "Benutzer wirklich löschen/anonymisieren? Zugewiesene Lizenzen und Gerätezugänge werden beendet."
+msgstr "Действительно удалить или обезличить этого пользователя? Назначенные лицензии и доступ к устройствам будут прекращены."
+
+msgid "Wird erstellt"
+msgstr "Создаётся"
+
+msgid "Bereit"
+msgstr "Готово"
+
+msgid "Kontaktiert"
+msgstr "Связались"
+
+msgid "Qualifiziert"
+msgstr "Квалифицирован"
+
+msgid "Gewonnen"
+msgstr "Выигран"
+
+msgid "Verloren"
+msgstr "Проигран"
+
+msgid "Website"
+msgstr "Веб-сайт"
+
+msgid "Kontaktanfrage"
+msgstr "Запрос на связь"
+
+msgid "Niedrig"
+msgstr "Низкий"
+
+msgid "Normal"
+msgstr "Обычный"
+
+msgid "Hoch"
+msgstr "Высокий"
+
+msgid "T-60"
+msgstr "T-60"
+
+msgid "T-30"
+msgstr "T-30"
+
+msgid "In Warteschlange"
+msgstr "В очереди"
+
+msgid "Genehmigt"
+msgstr "Одобрено"
+
+msgid "Übermittelt"
+msgstr "Отправлено"
+
+msgid "Erfolgreich"
+msgstr "Успешно"
+
+msgid "Ausgang unklar"
+msgstr "Результат неясен"
+
+msgid "Öffentlich"
+msgstr "Публичный"
+
+msgid "Pro"
+msgstr "Pro"

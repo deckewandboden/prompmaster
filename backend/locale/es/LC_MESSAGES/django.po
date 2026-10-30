@@ -3815,3 +3815,66 @@ msgstr "Gestión de licencias / renovación"
 
 msgid "Jetzt trotzdem PROMPTFINISHER Pro starten"
 msgstr "Abrir PROMPTFINISHER Pro de todos modos"
+
+msgid "Benutzer wirklich löschen/anonymisieren? Zugewiesene Lizenzen und Gerätezugänge werden beendet."
+msgstr "¿Realmente desea eliminar o anonimizar a este usuario? Se cancelarán las licencias asignadas y el acceso a los dispositivos."
+
+msgid "Wird erstellt"
+msgstr "Se está generando"
+
+msgid "Bereit"
+msgstr "Listo"
+
+msgid "Kontaktiert"
+msgstr "Contactado"
+
+msgid "Qualifiziert"
+msgstr "Cualificado"
+
+msgid "Gewonnen"
+msgstr "Ganado"
+
+msgid "Verloren"
+msgstr "Perdido"
+
+msgid "Website"
+msgstr "Sitio web"
+
+msgid "Kontaktanfrage"
+msgstr "Solicitud de contacto"
+
+msgid "Niedrig"
+msgstr "Baja"
+
+msgid "Normal"
+msgstr "Normal"
+
+msgid "Hoch"
+msgstr "Alta"
+
+msgid "T-60"
+msgstr "T-60"
+
+msgid "T-30"
+msgstr "T-30"
+
+msgid "In Warteschlange"
+msgstr "En cola"
+
+msgid "Genehmigt"
+msgstr "Aprobado"
+
+msgid "Übermittelt"
+msgstr "Enviado"
+
+msgid "Erfolgreich"
+msgstr "Correcto"
+
+msgid "Ausgang unklar"
+msgstr "Resultado incierto"
+
+msgid "Öffentlich"
+msgstr "Público"
+
+msgid "Pro"
+msgstr "Pro"

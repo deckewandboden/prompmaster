@@ -1939,6 +1939,85 @@ def _browser_product_locale_acceptance(page, base: str, product: str) -> None:
     page.set_viewport_size({'width': 1440, 'height': 1000})
 
 
+def _browser_backend_locale_acceptance(page, base: str, role: str) -> None:
+    """Check authenticated customer/admin headings in all ten real browser languages.
+
+    The old browser suite checked the login picker and German authenticated
+    pages, but not all translated customer/admin dashboard headings.
+    """
+    admin_labels = {
+        'de': ('Dashboard', 'Umsatzentwicklung', 'Lizenzen nach Produkt'),
+        'en': ('Dashboard', 'Revenue trend', 'Licenses by product'),
+        'es': ('Panel', 'Evolución de ingresos', 'Licencias por producto'),
+        'pt': ('Painel', 'Evolução da receita', 'Licenças por produto'),
+        'tr': ('Kontrol paneli', 'Ciro eğilimi', 'Ürüne göre lisanslar'),
+        'ru': ('Панель управления', 'Динамика выручки', 'Лицензии по продуктам'),
+        'pl': ('Panel główny', 'Trend przychodów', 'Licencje według produktów'),
+        'fr': ('Tableau de bord', 'Évolution du chiffre d\'affaires', 'Licences par produit'),
+        'it': ('Dashboard', 'Andamento dei ricavi', 'Licenze per prodotto'),
+        'nl': ('Dashboard', 'Omzetontwikkeling', 'Licenties per product'),
+    }
+    license_labels = {
+        'de': 'Lizenzen',
+        'en': 'Licenses',
+        'es': 'Licencias',
+        'pt': 'Licenças',
+        'tr': 'Lisanslar',
+        'ru': 'Лицензии',
+        'pl': 'Licencje',
+        'fr': 'Licences',
+        'it': 'Licenze',
+        'nl': 'Licenties',
+    }
+    route = 'ns-admin/' if role == 'admin' else 'portal/licenses/'
+    for code in admin_labels:
+        response = page.goto(base + route, wait_until='networkidle')
+        if not response or response.status != 200:
+            raise AssertionError(f'{role}/{code}: locale source route failed')
+        picker = page.locator('.language-switcher select[name="language"]')
+        if not picker.is_visible():
+            raise AssertionError(f'{role}/{code}: missing language picker')
+        if picker.input_value() != code:
+            with page.expect_navigation(wait_until='networkidle'):
+                picker.select_option(code)
+        actual_heading = page.locator('.page-head h1').first.inner_text().strip()
+        expected_heading = (
+            admin_labels[code][0] if role == 'admin' else license_labels[code]
+        )
+        current = page.locator('html').get_attribute('lang')
+        selected = page.locator('.language-switcher select[name="language"]').input_value()
+        if actual_heading != expected_heading or current != code or selected != code:
+            raise AssertionError(
+                f'{role}/{code}: heading={actual_heading!r} expected={expected_heading!r}; '
+                f'html={current!r}, selected={selected!r}'
+            )
+        if role == 'admin':
+            headings = set(page.locator('.grid.three h2').all_inner_texts())
+            for expected in admin_labels[code][1:]:
+                if expected not in headings:
+                    raise AssertionError(
+                        f'admin/{code}: translated revenue/license chart title '
+                        f'{expected!r} missing from {headings!r}'
+                    )
+        else:
+            dashboard = page.goto(base + 'portal/dashboard/', wait_until='networkidle')
+            if not dashboard or dashboard.status != 200:
+                raise AssertionError(f'portal/{code}: dashboard unavailable')
+            if page.locator('.grid.kpis .card').count() < 4:
+                raise AssertionError(f'portal/{code}: customer dashboard KPI cards missing')
+            if page.locator('html').get_attribute('lang') != code:
+                raise AssertionError(f'portal/{code}: dashboard changed language')
+        print(f'R10_BACKEND_LOCALE={role}/{code}; HEADING=PASS; COOKIE=PASS')
+
+    response = page.goto(base + route, wait_until='networkidle')
+    if not response or response.status != 200:
+        raise AssertionError(f'{role}: unable to reset locale')
+    with page.expect_navigation(wait_until='networkidle'):
+        page.locator('.language-switcher select[name="language"]').select_option('de')
+    if page.locator('html').get_attribute('lang') != 'de':
+        raise AssertionError(f'{role}: German locale was not restored')
+
+
 def run_backend_ui_smoke(browser, fixture=None) -> None:
     if os.getenv('BACKEND_UI_BROWSER_SMOKE') != '1':
         return
@@ -2847,6 +2926,8 @@ def run_backend_ui_smoke(browser, fixture=None) -> None:
                 page, base, email, fixture['password'], secret,
                 '/portal/dashboard/' if role == 'portal' else '/ns-admin/',
             )
+
+            _browser_backend_locale_acceptance(page, base, role)
 
             if role == 'admin':
                 _browser_product_locale_acceptance(page, base, 'pro')

@@ -19,11 +19,11 @@
       <tbody>
       {% for row in support_history %}
         <tr>
-          <td data-label="Datum">{{ row.created_at|date:"d.m.Y H:i" }}</td>
-          <td data-label="Kategorie">{{ row.get_category_display }}</td>
-          <td data-label="Betreff"><a href="{% url 'portal:support_detail' row.id %}"><strong>{{ row.subject }}</strong></a></td>
-          <td data-label="Lizenz">{% if row.license %}{{ row.license.license_number }}{% else %}–{% endif %}</td>
-          <td data-label="Status">{{ row.get_status_display }}</td>
+          <td data-label="{% translate 'Datum' %}">{{ row.created_at|date:"d.m.Y H:i" }}</td>
+          <td data-label="{% translate 'Kategorie' %}">{% translate row.get_category_display %}</td>
+          <td data-label="{% translate 'Betreff' %}"><a href="{% url 'portal:support_detail' row.id %}"><strong>{{ row.subject }}</strong></a></td>
+          <td data-label="{% translate 'Lizenz' %}">{% if row.license %}{{ row.license.license_number }}{% else %}–{% endif %}</td>
+          <td data-label="{% translate 'Status' %}">{% translate row.get_status_display %}</td>
         </tr>
       {% empty %}
         <tr><td colspan="5">{% translate "Noch keine Anfragen vorhanden." %}</td></tr>
