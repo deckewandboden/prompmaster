@@ -10,13 +10,13 @@
 </tr></thead><tbody>
 {% for o in grid.page %}
 <tr>
-  <td data-label="Bestellung">{{ o.order_number }}</td>
-  <td data-label="Datum">{{ o.created_at|date:'d.m.Y H:i' }}</td>
-  <td data-label="Produkt / Menge">{% for item in o.items.all %}{{ item.product_name_snapshot }} × {{ item.quantity }}{% if not forloop.last %}<br>{% endif %}{% endfor %}</td>
-  <td data-label="Betrag">{{ o.gross_total }} {{ o.currency }}</td>
-  <td data-label="Zahlung">{% for payment in o.payments.all %}{{ payment.status }}{% if not forloop.last %}<br>{% endif %}{% empty %}{% translate o.get_status_display %}{% endfor %}</td>
-  <td data-label="Mollie-Referenz">{% for payment in o.payments.all %}{{ payment.provider_payment_id }}{% if not forloop.last %}<br>{% endif %}{% empty %}–{% endfor %}</td>
-  <td data-label="Lizenz-ID">{% for item in o.items.all %}{% for term in item.license_terms.all %}{{ term.license.license_number }}{% if not forloop.last %}<br>{% endif %}{% empty %}–{% endfor %}{% if not forloop.last %}<br>{% endif %}{% endfor %}</td>
+  <td data-label="{% translate 'Bestellung' %}">{{ o.order_number }}</td>
+  <td data-label="{% translate 'Datum' %}">{{ o.created_at|date:'d.m.Y H:i' }}</td>
+  <td data-label="{% translate 'Produkt / Menge' %}">{% for item in o.items.all %}{{ item.product_name_snapshot }} × {{ item.quantity }}{% if not forloop.last %}<br>{% endif %}{% endfor %}</td>
+  <td data-label="{% translate 'Betrag' %}">{{ o.gross_total }} {{ o.currency }}</td>
+  <td data-label="{% translate 'Zahlung' %}">{% for payment in o.payments.all %}{{ payment.status }}{% if not forloop.last %}<br>{% endif %}{% empty %}{% translate o.get_status_display %}{% endfor %}</td>
+  <td data-label="{% translate 'Mollie-Referenz' %}">{% for payment in o.payments.all %}{{ payment.provider_payment_id }}{% if not forloop.last %}<br>{% endif %}{% empty %}–{% endfor %}</td>
+  <td data-label="{% translate 'Lizenz-ID' %}">{% for item in o.items.all %}{% for term in item.license_terms.all %}{{ term.license.license_number }}{% if not forloop.last %}<br>{% endif %}{% empty %}–{% endfor %}{% if not forloop.last %}<br>{% endif %}{% endfor %}</td>
 </tr>
 {% empty %}<tr><td colspan="7" class="empty">{% translate "Keine Bestellungen." %}</td></tr>{% endfor %}
 </tbody></table></div>
