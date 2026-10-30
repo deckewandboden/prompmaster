@@ -93,6 +93,34 @@ class PortalInternationalizationContractTests(SimpleTestCase):
         self.assertIn('{% translate payment.get_status_display %}', dashboard)
         self.assertNotIn('{{ payment.status }}', dashboard)
 
+    def test_responsive_table_labels_and_destructive_action_are_translated(self):
+        # data-label is shown by mobile CSS even if the desktop <th> is localized.
+        # Do not accept a German-only mobile customer portal.
+        candidates = (
+            'license_detail.html', 'team.html', 'help.html',
+            'invitations.html', 'orders.html', 'renew_index.html',
+        )
+        for name in candidates:
+            markup = (ROOT / 'templates/portal' / name).read_text(encoding='utf-8')
+            labels = re.findall(r'data-label="([^"]+)"', markup)
+            self.assertTrue(labels, name)
+            for label in labels:
+                with self.subTest(page=name, label=label):
+                    self.assertRegex(label, r"^\{% translate '[^']+' %\}$")
+        source = (ROOT / 'templates/portal/team_member.html').read_text(
+            encoding='utf-8'
+        )
+        warning = (
+            'Benutzer wirklich löschen/anonymisieren? Zugewiesene Lizenzen '
+            'und Gerätezugänge werden beendet.'
+        )
+        self.assertIn("data-confirm=\"{% translate '" + warning + "' %}\"", source)
+        for locale in LOCALES:
+            catalog = catalog_translations(
+                ROOT / 'locale' / locale / 'LC_MESSAGES' / 'django.po'
+            )
+            self.assertTrue(catalog.get(warning), locale)
+
     def test_critical_customer_choice_values_resolve_at_render_time(self):
         sources = (
             'Firmenadministrator', 'Mitarbeiter',
