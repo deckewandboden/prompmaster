@@ -3938,3 +3938,9 @@ msgstr "Réussi"
 
 msgid "Ausgang unklar"
 msgstr "Résultat incertain"
+
+msgid "Öffentlich"
+msgstr "Public"
+
+msgid "Pro"
+msgstr "Pro"
