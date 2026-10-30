@@ -956,7 +956,7 @@ msgid "Umsatz 30 Tage"
 msgstr "Recettes, 30 jours"
 
 msgid "Umsatzentwicklung"
-msgstr "Développement des recettes"
+msgstr "Évolution du chiffre d'affaires"
 
 msgid "Umsatzentwicklung der letzten Monate"
 msgstr "Tendances des revenus au cours des derniers mois"
