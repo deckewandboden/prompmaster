@@ -48,11 +48,11 @@
       <tbody>
       {% for device in devices %}
         <tr>
-          <td data-label="Gerät">{{ device.display_name }}</td>
-          <td data-label="Benutzer">{{ device.user.email }}</td>
-          <td data-label="Browser">{{ device.browser_family|default:'–' }}</td>
-          <td data-label="System">{{ device.os_family|default:'–' }}</td>
-          <td data-label="Zuletzt gesehen">{{ device.last_seen_at|date:'d.m.Y H:i' }}</td>
+          <td data-label="{% translate 'Gerät' %}">{{ device.display_name }}</td>
+          <td data-label="{% translate 'Benutzer' %}">{{ device.user.email }}</td>
+          <td data-label="{% translate 'Browser' %}">{{ device.browser_family|default:'–' }}</td>
+          <td data-label="{% translate 'System' %}">{{ device.os_family|default:'–' }}</td>
+          <td data-label="{% translate 'Zuletzt gesehen' %}">{{ device.last_seen_at|date:'d.m.Y H:i' }}</td>
         </tr>
       {% empty %}
         <tr><td colspan="5" class="empty">{% translate "Keine aktiven Geräte." %}</td></tr>
