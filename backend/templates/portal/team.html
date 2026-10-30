@@ -15,7 +15,7 @@
 <th>{% translate "Aktion" %}</th></tr></thead><tbody>
 {% for m in grid.page %}
 <tr>
-  <td data-label="Benutzer"><span class="person"><span class="mini">{{ m.user.first_name|slice:':1' }}{{ m.user.last_name|slice:':1' }}</span><span><strong>{{ m.user.full_name }}</strong><span class="tiny muted d-block">{{ m.get_role_display }}</span></span></span></td>
+  <td data-label="Benutzer"><span class="person"><span class="mini">{{ m.user.first_name|slice:':1' }}{{ m.user.last_name|slice:':1' }}</span><span><strong>{{ m.user.full_name }}</strong><span class="tiny muted d-block">{% translate m.get_role_display %}</span></span></span></td>
   <td data-label="E-Mail" class="wrap-anywhere">{{ m.user.email }}</td>
   <td data-label="Lizenz">{% if not m.active %}<span class="muted">–</span>{% elif m.active_pro_count %}<span class="badge pro">Pro</span>{% else %}<span class="badge info">{% translate "Free" %}</span>{% endif %}</td>
   <td data-label="Geräte"><strong>{{ m.active_device_count }}</strong>{% if m.active_pro_count %} / 2{% endif %}</td>
