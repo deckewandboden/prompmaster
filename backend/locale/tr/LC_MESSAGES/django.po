@@ -909,7 +909,7 @@ msgid "Umsatz 30 Tage"
 msgstr "30 günlük ciro"
 
 msgid "Umsatzentwicklung"
-msgstr "Ciro gelişimi"
+msgstr "Ciro eğilimi"
 
 msgid "Umsatzentwicklung der letzten Monate"
 msgstr "Son aylardaki ciro değişimi"
