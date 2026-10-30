@@ -3870,3 +3870,6 @@ msgstr "Licentiebeheer / verlenging"
 
 msgid "Jetzt trotzdem PROMPTFINISHER Pro starten"
 msgstr "PROMPTFINISHER Pro toch openen"
+
+msgid "Benutzer wirklich löschen/anonymisieren? Zugewiesene Lizenzen und Gerätezugänge werden beendet."
+msgstr "Deze gebruiker echt verwijderen of anonimiseren? Toegewezen licenties en apparaattoegang worden beëindigd."
