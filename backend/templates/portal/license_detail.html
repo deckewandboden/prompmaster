@@ -18,7 +18,7 @@
     <dl class="detail-list">
       <div><dt>{% translate "Lizenz-ID" %}</dt><dd>{{ license.license_number }}</dd></div>
       <div><dt>{% translate "Produkt" %}</dt><dd>{{ license.product.name }}</dd></div>
-      <div><dt>{% translate "Status" %}</dt><dd><span class="badge info">{{ license.get_status_display }}</span></dd></div>
+      <div><dt>{% translate "Status" %}</dt><dd><span class="badge info">{% translate license.get_status_display %}</span></dd></div>
       <div><dt>{% translate "Gültig ab" %}</dt><dd>{{ license.valid_from|date:'d.m.Y H:i'|default:'–' }}</dd></div>
       <div><dt>{% translate "Gültig bis" %}</dt><dd>{{ license.valid_until|date:'d.m.Y H:i'|default:'–' }}</dd></div>
       <div><dt>{% translate "Resttage" %}</dt><dd>{{ remaining_days }}</dd></div>
@@ -30,8 +30,8 @@
     <h2>{% translate "Reminder" %}</h2>
     {% for reminder in reminders %}
       <div class="row-line">
-        <strong>{{ reminder.get_kind_display }}</strong>
-        <span>{{ reminder.get_status_display }}</span>
+        <strong>{% translate reminder.get_kind_display %}</strong>
+        <span>{% translate reminder.get_status_display %}</span>
         <span>{% if reminder.sent_at %}{{ reminder.sent_at|date:'d.m.Y H:i' }}{% elif reminder.queued_at %}{{ reminder.queued_at|date:'d.m.Y H:i' }}{% else %}–{% endif %}</span>
       </div>
     {% empty %}
