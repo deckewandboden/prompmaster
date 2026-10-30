@@ -14,7 +14,7 @@
       <tr>
         <td data-label="Lizenz-ID"><strong>{{ license.license_number }}</strong></td>
         <td data-label="Produkt">{{ license.product.name }}</td>
-        <td data-label="Status">{{ license.get_status_display }}</td>
+        <td data-label="Status">{% translate license.get_status_display %}</td>
         <td data-label="Gültig bis">{{ license.valid_until|date:'d.m.Y H:i'|default:'–' }}</td>
         <td data-label="Aktion"><a class="btn primary sm" href="{% url 'portal:renew' license.id %}">{% translate "Verlängern" %}</a></td>
       </tr>
