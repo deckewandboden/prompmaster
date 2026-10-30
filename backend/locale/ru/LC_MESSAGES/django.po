@@ -3873,3 +3873,9 @@ msgstr "Успешно"
 
 msgid "Ausgang unklar"
 msgstr "Результат неясен"
+
+msgid "Öffentlich"
+msgstr "Публичный"
+
+msgid "Pro"
+msgstr "Pro"
