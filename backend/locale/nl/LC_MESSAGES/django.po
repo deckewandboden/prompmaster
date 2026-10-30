@@ -328,7 +328,7 @@ msgid "Lizenzbedingungen"
 msgstr "Licentievoorwaarden"
 
 msgid "Lizenzen insgesamt"
-msgstr "Totaal vergunningen"
+msgstr "Licenties in totaal"
 
 msgid "Lizenzstatus"
 msgstr "Licentiestatus"
@@ -697,7 +697,7 @@ msgid "Keine Benutzer gefunden."
 msgstr "Geen gebruikers gevonden."
 
 msgid "Keine Lizenz zugewiesen."
-msgstr "Geen vergunning toegewezen."
+msgstr "Geen licentie toegewezen."
 
 msgid "Keine Lizenzen gefunden."
 msgstr "Geen licenties gevonden."
@@ -946,10 +946,10 @@ msgid "laufen in weniger als 60 Tagen ab"
 msgstr "vervallen binnen 60 dagen"
 
 msgid "Umsatz 30 Tage"
-msgstr "Ontvangsten, 30 dagen"
+msgstr "Omzet over 30 dagen"
 
 msgid "Umsatzentwicklung"
-msgstr "Ontwikkeling van de ontvangsten"
+msgstr "Omzetontwikkeling"
 
 msgid "Umsatzentwicklung der letzten Monate"
 msgstr "Ontwikkeling van de inkomsten in de afgelopen maanden"
@@ -964,7 +964,7 @@ msgid "Handlungsbedarf"
 msgstr "Vereiste actie"
 
 msgid "Lizenzen laufen in weniger als 30 Tagen ab."
-msgstr "Vergunningen verlopen binnen 30 dagen."
+msgstr "Licenties verlopen binnen 30 dagen."
 
 msgid "fehlgeschlagene Zahlungen"
 msgstr "mislukte betalingen"
