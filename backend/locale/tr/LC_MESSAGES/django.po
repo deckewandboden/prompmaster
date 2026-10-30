@@ -3818,3 +3818,57 @@ msgstr "Yine de PROMPTFINISHER Pro'yu aç"
 
 msgid "Benutzer wirklich löschen/anonymisieren? Zugewiesene Lizenzen und Gerätezugänge werden beendet."
 msgstr "Bu kullanıcıyı gerçekten silmek veya anonimleştirmek istiyor musunuz? Atanmış lisanslar ve cihaz erişimi sonlandırılacaktır."
+
+msgid "Wird erstellt"
+msgstr "Oluşturuluyor"
+
+msgid "Bereit"
+msgstr "Hazır"
+
+msgid "Kontaktiert"
+msgstr "İletişime geçildi"
+
+msgid "Qualifiziert"
+msgstr "Nitelikli"
+
+msgid "Gewonnen"
+msgstr "Kazanıldı"
+
+msgid "Verloren"
+msgstr "Kaybedildi"
+
+msgid "Website"
+msgstr "Web sitesi"
+
+msgid "Kontaktanfrage"
+msgstr "İletişim talebi"
+
+msgid "Niedrig"
+msgstr "Düşük"
+
+msgid "Normal"
+msgstr "Normal"
+
+msgid "Hoch"
+msgstr "Yüksek"
+
+msgid "T-60"
+msgstr "T-60"
+
+msgid "T-30"
+msgstr "T-30"
+
+msgid "In Warteschlange"
+msgstr "Kuyrukta"
+
+msgid "Genehmigt"
+msgstr "Onaylandı"
+
+msgid "Übermittelt"
+msgstr "İletildi"
+
+msgid "Erfolgreich"
+msgstr "Başarılı"
+
+msgid "Ausgang unklar"
+msgstr "Sonuç belirsiz"
