@@ -26,8 +26,8 @@ class BrowserTotpSubmitTests(unittest.TestCase):
 
     def test_success_requires_real_navigation_to_expected_destination(self):
         code = self.source()
-        self.assertLess(code.index("el.form.requestSubmit()"), code.index("page.wait_for_url("))
-        self.assertLess(code.index("page.wait_for_url("), code.index("if expected_path not in page.url:"))
+        self.assertLess(code.index("el.form.requestSubmit()"), code.index("page.wait_for_url(lambda url:"))
+        self.assertLess(code.index("page.wait_for_url(lambda url:"), code.index("if expected_path not in page.url:"))
         self.assertIn("wait_until='domcontentloaded'", code)
         self.assertIn("raise AssertionError(f'login for {email} ended", code)
         self.assertLess(
