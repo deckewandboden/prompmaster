@@ -5,6 +5,8 @@ on:
     paths:
       - 'scripts/audit_public_asset_parity.py'
       - 'scripts/test_public_asset_parity.py'
+      - 'scripts/release_from_github.sh'
+      - 'scripts/deploy.sh'
       - '.github/workflows/public-asset-parity.yml'
   push:
     branches: [main]
@@ -12,6 +14,8 @@ on:
       - 'backend/static/js/promptfinisher_product_i18n.20261011.js'
       - 'scripts/audit_public_asset_parity.py'
       - 'scripts/test_public_asset_parity.py'
+      - 'scripts/release_from_github.sh'
+      - 'scripts/deploy.sh'
       - '.github/workflows/public-asset-parity.yml'
   schedule:
     - cron: '17 * * * *'

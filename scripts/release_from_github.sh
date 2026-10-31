@@ -9,7 +9,7 @@ log() { printf '[PROMPTFINISHER GITHUB RELEASE] %s\n' "$*"; }
 
 [[ "$#" -eq 0 || ( "$#" -eq 1 && "$1" == '--verify-only' ) ]] || fail 'Usage: bash scripts/release_from_github.sh [--verify-only]'
 mode="${1:-deploy}"
-for binary in git docker curl flock; do
+for binary in git docker curl flock sha256sum; do
   command -v "$binary" >/dev/null 2>&1 || fail "Required command missing: $binary"
 done
 [[ -z "${DOCKER_HOST:-}" && -z "${DOCKER_CONTEXT:-}" ]] || fail 'Remote Docker daemon/context forbidden'
@@ -77,6 +77,15 @@ fetch /free/ "$tmp/free"
 fetch /auth/login/ "$tmp/login"
 fetch /health/ready/ "$tmp/ready"
 fetch /static/js/promptfinisher_product_i18n.20261011.js "$tmp/i18n"
+# A 200 response or translated labels are not evidence of the CURRENT release.
+# Compare the served bytes with the exact checked-out, approved GitHub asset.
+asset_source="backend/static/js/promptfinisher_product_i18n.20261011.js"
+[[ -f "$asset_source" ]] || fail 'Source product locale asset missing'
+asset_source_sha="$(sha256sum "$asset_source" | awk '{print $1}')"
+asset_live_sha="$(sha256sum "$tmp/i18n" | awk '{print $1}')"
+log "PUBLIC_I18N_SOURCE_SHA256=$asset_source_sha; PUBLIC_I18N_LIVE_SHA256=$asset_live_sha"
+[[ "$asset_live_sha" == "$asset_source_sha" ]] || fail 'PUBLIC_I18N_ASSET_PARITY=FAIL; live static is stale; release must not be accepted'
+log 'PUBLIC_I18N_ASSET_PARITY=PASS'
 grep -Fq 'PROMPTFINISHER' "$tmp/i18n" || fail 'Public i18n script has unexpected content'
 for language in de en es pt tr ru pl fr it nl; do
   grep -Fq "\"$language\":" "$tmp/i18n" || fail "Public i18n catalog missing $language"
