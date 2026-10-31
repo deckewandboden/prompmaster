@@ -1513,6 +1513,64 @@ def _browser_product_locale_acceptance(page, base: str, product: str) -> None:
             arg={'lang': code, 'tone': expected_tone},
             timeout=15000,
         )
+        # R5 regression: do not mistake deliberately hidden Golden-Master
+        # labels for untranslated UI. Check two rendered, visible V2 elements.
+        # The original "Ihre Konfiguration" heading is display:none in V2.
+        visible_locale = page.evaluate(
+            """() => {
+                const source = document.querySelector('.pmv2-hero-copy h1');
+                const progress = document.querySelector(
+                    '.pmv2-progress-host .progress-line span'
+                );
+                const hiddenTitle = document.querySelector(
+                    '.pmv2-progress-host .hero-card-title'
+                );
+                const isVisible = (node) => Boolean(node
+                    && node.getClientRects().length
+                    && getComputedStyle(node).display !== 'none'
+                    && getComputedStyle(node).visibility !== 'hidden');
+                return {
+                    hero: source?.textContent.trim() || '',
+                    heroVisible: isVisible(source),
+                    progress: progress?.textContent.trim() || '',
+                    progressVisible: isVisible(progress),
+                    hiddenTitleVisible: isVisible(hiddenTitle),
+                    hiddenTitleExists: Boolean(hiddenTitle),
+                };
+            }"""
+        )
+        source_hero = (
+            'Sag Copilot genauer, was du brauchst.'
+            if product == 'free'
+            else 'Mehr aus Microsoft Copilot. Mit System.'
+        )
+        expected_hero = page.evaluate(
+            "(key) => window.PF_PRODUCT_LOCALE?.t(key)", source_hero
+        )
+        expected_progress = page.evaluate(
+            "() => window.PF_PRODUCT_LOCALE?.t('Fortschritt')"
+        )
+        if (
+            visible_locale['hero'] != expected_hero
+            or not visible_locale['heroVisible']
+            or visible_locale['progress'] != expected_progress
+            or not visible_locale['progressVisible']
+            or not visible_locale['hiddenTitleExists']
+            or visible_locale['hiddenTitleVisible']
+            or (code != 'de' and (
+                expected_hero == source_hero or expected_progress == 'Fortschritt'
+            ))
+        ):
+            raise AssertionError(
+                f'{product} {code}: R5 visible locale regression: '
+                f'{visible_locale}; expected hero={expected_hero!r}, '
+                f'progress={expected_progress!r}'
+            )
+        print(
+            f'R5_BROWSER_LOCALE={product}/{code}; '
+            'HERO=PASS; PROGRESS=PASS; HIDDEN_TITLE=EXPECTED'
+        )
+
         if product == 'free':
             page.evaluate("() => document.querySelector('#generalProModal')?.classList.add('open')")
             page.wait_for_function(
@@ -2848,15 +2906,64 @@ def run_backend_ui_smoke(browser, fixture=None) -> None:
                 '/portal/dashboard/' if role == 'portal' else '/ns-admin/',
             )
 
+            if role == 'portal':
+                # Exercise the *customer* backend in every supported language.
+                # Real rendered gettext output, not only the locale cookie,
+                # guards against untranslated or editorially incorrect headings.
+                customer_profile_titles = {
+                    'de': 'Einstellungen',
+                    'en': 'Settings',
+                    'es': 'Configuración',
+                    'pt': 'Definições',
+                    'tr': 'Ayarlar',
+                    'ru': 'Настройки',
+                    'pl': 'Ustawienia',
+                    'fr': 'Paramètres',
+                    'it': 'Impostazioni',
+                    'nl': 'Instellingen',
+                }
+                profile_response = page.goto(base + 'portal/profile/', wait_until='networkidle')
+                if not profile_response or profile_response.status != 200:
+                    raise AssertionError('customer locale smoke: profile page unavailable')
+                for language, expected_heading in customer_profile_titles.items():
+                    selector = page.locator('.language-switcher select[name="language"]')
+                    if not selector.is_visible():
+                        raise AssertionError('customer locale smoke: language selector missing')
+                    if selector.input_value() != language:
+                        with page.expect_navigation(wait_until='networkidle'):
+                            selector.select_option(language)
+                    heading = page.locator('.page-head h1').inner_text().strip()
+                    selected = page.locator('.language-switcher select[name="language"]').input_value()
+                    html_lang = page.locator('html').get_attribute('lang')
+                    if (
+                        heading != expected_heading
+                        or selected != language
+                        or html_lang != language
+                    ):
+                        raise AssertionError(
+                            f'customer locale smoke {language}: heading={heading!r}, '
+                            f'selected={selected!r}, html={html_lang!r}'
+                        )
+                    print(f'R5_CUSTOMER_BACKEND_LOCALE={language};HEADING=PASS;SELECT=PASS')
+                if page.locator('.language-switcher select[name="language"]').input_value() != 'de':
+                    with page.expect_navigation(wait_until='networkidle'):
+                        page.locator('.language-switcher select[name="language"]').select_option('de')
+
             if role == 'admin':
                 _browser_product_locale_acceptance(page, base, 'pro')
                 # Verify actual gettext_lazy form labels after login, not
                 # merely the public language selector or navigation menu.
                 # Restore German before historical admin UI assertions.
                 form_locales = {
+                    'de': 'Zuständig',
                     'en': 'Assigned to',
+                    'es': 'Responsable',
+                    'pt': 'Responsável',
+                    'tr': 'Sorumlu',
                     'ru': 'Ответственный',
                     'pl': 'Odpowiedzialny',
+                    'fr': 'Responsable',
+                    'it': 'Responsabile',
                     'nl': 'Verantwoordelijke',
                 }
                 form_response = page.goto(base + 'ns-admin/leads/new/', wait_until='networkidle')

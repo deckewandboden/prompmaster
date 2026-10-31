@@ -87,7 +87,7 @@ msgid "Benutzer & Rollen"
 msgstr "Utenti e ruoli"
 
 msgid "Einstellungen"
-msgstr "Impostazioni impostazioni"
+msgstr "Impostazioni"
 
 msgid "Abmelden"
 msgstr "Esci"
@@ -138,7 +138,7 @@ msgid "Unternehmen"
 msgstr "Società"
 
 msgid "Hilfe & Kontakt"
-msgstr "Aiuto &amp; contatto"
+msgstr "Aiuto e contatti"
 
 msgid "Team"
 msgstr "Team"

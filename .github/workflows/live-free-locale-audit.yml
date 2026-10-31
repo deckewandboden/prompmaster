@@ -1,0 +1,50 @@
+name: PROMPTFINISHER Live Free Locale Read-only
+
+on:
+  pull_request:
+    paths:
+      - 'scripts/audit_live_free_locales.py'
+      - '.github/workflows/live-free-locale-audit.yml'
+      - 'backend/static/js/promptfinisher_product_i18n.20261011.js'
+  push:
+    branches: [main]
+    paths:
+      - 'scripts/audit_live_free_locales.py'
+      - '.github/workflows/live-free-locale-audit.yml'
+      - 'backend/static/js/promptfinisher_product_i18n.20261011.js'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: pf-live-free-locale-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  read-only-public-production:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Checkout exact repository revision
+        uses: actions/checkout@v7
+      - name: Python 3.13
+        uses: actions/setup-python@v7
+        with:
+          python-version: '3.13'
+      - name: Install isolated Chromium browser harness
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install 'playwright==1.56.0'
+          python -m playwright install --with-deps chromium
+      - name: Read-only live DOM acceptance - all ten Free languages
+        run: |
+          python scripts/audit_live_free_locales.py
+      - name: Publish browser evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: promptfinisher-live-free-locales
+          path: browser-artifacts/live-locale/
+          if-no-files-found: warn
+          retention-days: 14
