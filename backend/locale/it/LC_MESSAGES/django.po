@@ -87,7 +87,7 @@ msgid "Benutzer & Rollen"
 msgstr "Utenti e ruoli"
 
 msgid "Einstellungen"
-msgstr "Impostazioni impostazioni"
+msgstr "Impostazioni"
 
 msgid "Abmelden"
 msgstr "Esci"
