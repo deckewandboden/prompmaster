@@ -2912,9 +2912,15 @@ def run_backend_ui_smoke(browser, fixture=None) -> None:
                 # merely the public language selector or navigation menu.
                 # Restore German before historical admin UI assertions.
                 form_locales = {
+                    'de': 'Zuständig',
                     'en': 'Assigned to',
+                    'es': 'Responsable',
+                    'pt': 'Responsável',
+                    'tr': 'Sorumlu',
                     'ru': 'Ответственный',
                     'pl': 'Odpowiedzialny',
+                    'fr': 'Responsable',
+                    'it': 'Responsabile',
                     'nl': 'Verantwoordelijke',
                 }
                 form_response = page.goto(base + 'ns-admin/leads/new/', wait_until='networkidle')
