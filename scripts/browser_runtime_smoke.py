@@ -697,8 +697,12 @@ def _browser_login(page, base: str, email: str, password: str, secret: str, expe
         raise AssertionError(f'2FA layout is unstable: {two_factor_layout}')
     submitted_code = _fresh_browser_totp(email, secret)
     code_input.fill(submitted_code)
-    code_input.press('Enter')
-    page.wait_for_url(lambda url: '/auth/2fa/' not in url and '/auth/login/' not in url)
+    # In WebKit, Locator.press('Enter') can await implicit navigation for 30 s
+    # even after the TOTP form was submitted. Request native validated form
+    # submission directly, then assert the destination explicitly below.
+    # No navigation or authentication success is inferred from requestSubmit().
+    code_input.evaluate("(el) => { if (!el.form) throw new Error('TOTP form missing'); el.form.requestSubmit(); }")
+    page.wait_for_url(lambda url: '/auth/2fa/' not in str(url) and '/auth/login/' not in str(url), wait_until='domcontentloaded', timeout=30000)
     page.wait_for_load_state('networkidle')
     if expected_path not in page.url:
         raise AssertionError(f'login for {email} ended at {page.url}, expected {expected_path}')
