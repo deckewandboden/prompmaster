@@ -61,5 +61,29 @@ class PublicAssetParityTests(unittest.TestCase):
         self.assertGreater(asset.stat().st_size, 100_000)
 
 
+    def test_production_release_requires_public_asset_byte_parity(self):
+        root = Path(__file__).resolve().parents[1]
+        release = (root / "scripts/release_from_github.sh").read_text(encoding="utf-8")
+        self.assertIn('sha256sum "$tmp/i18n"', release)
+        self.assertIn('sha256sum "$asset_source"', release)
+        self.assertIn("PUBLIC_I18N_ASSET_PARITY=FAIL", release)
+        self.assertIn("PUBLIC_I18N_ASSET_PARITY=PASS", release)
+        self.assertLess(
+            release.index("PUBLIC_I18N_ASSET_PARITY=PASS"),
+            release.index('receipt="$state_dir/github-release-verified-'),
+        )
+
+    def test_deployment_requires_caddy_static_volume_byte_parity(self):
+        root = Path(__file__).resolve().parents[1]
+        deploy = (root / "scripts/deploy.sh").read_text(encoding="utf-8")
+        self.assertIn("sha256sum /srv/static/js/" + ASSET_BASENAME, deploy)
+        self.assertIn("PROD_I18N_ASSET_PARITY=FAIL", deploy)
+        self.assertIn("PROD_I18N_ASSET_PARITY=PASS", deploy)
+        self.assertLess(
+            deploy.index("PROD_I18N_ASSET_PARITY=PASS"),
+            deploy.index('> "$LAST_SUCCESS_FILE.tmp"'),
+        )
+
+
 if __name__ == "__main__":
     unittest.main(verbosity=2)
