@@ -1,0 +1,50 @@
+name: PROMPTFINISHER Public Asset Parity
+
+on:
+  pull_request:
+    paths:
+      - 'scripts/audit_public_asset_parity.py'
+      - 'scripts/test_public_asset_parity.py'
+      - '.github/workflows/public-asset-parity.yml'
+  push:
+    branches: [main]
+    paths:
+      - 'backend/static/js/promptfinisher_product_i18n.20261011.js'
+      - 'scripts/audit_public_asset_parity.py'
+      - 'scripts/test_public_asset_parity.py'
+      - '.github/workflows/public-asset-parity.yml'
+  schedule:
+    - cron: '17 * * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: promptfinisher-public-asset-parity-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  verify-deployed-free-javascript:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout exact GitHub source
+        uses: actions/checkout@v7
+      - name: Python 3.13
+        uses: actions/setup-python@v7
+        with:
+          python-version: '3.13'
+      - name: Test strict URL discovery and hashing offline
+        run: python -m unittest discover -s scripts -p test_public_asset_parity.py -v
+      - name: Compare production JS bytes read-only against GitHub source
+        continue-on-error: ${{ github.event_name == 'pull_request' }}
+        run: python scripts/audit_public_asset_parity.py
+      - name: Upload release-parity evidence even on drift/error
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: promptfinisher-production-asset-parity
+          path: browser-artifacts/production-parity/result.json
+          if-no-files-found: warn
+          retention-days: 14

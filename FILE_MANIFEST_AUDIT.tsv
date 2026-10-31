@@ -127,3 +127,6 @@ backend/apps/legal/tests_public_preview.py	0	text-not-byte-validated	test
 docs/PUBLIC_I18N_PREVIEW_RELEASE_20261026.md	0	text-not-byte-validated	documentation
 .github/workflows/live-free-locale-audit.yml	0	text-not-byte-validated	active-ci
 scripts/audit_live_free_locales.py	0	text-not-byte-validated	test
+scripts/audit_public_asset_parity.py	0	text-not-byte-validated	test
+scripts/test_public_asset_parity.py	0	text-not-byte-validated	test
+.github/workflows/public-asset-parity.yml	0	text-not-byte-validated	active-ci
