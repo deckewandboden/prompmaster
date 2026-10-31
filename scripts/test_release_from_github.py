@@ -24,6 +24,15 @@ class ReleaseFromGitHubTests(unittest.TestCase):
         (self.root / ".git").mkdir()
         (self.root / "artifacts/deploy-state").mkdir(parents=True)
         shutil.copyfile(SOURCE, self.root / "scripts/release_from_github.sh")
+        # Public JS mock and approved checked-out source must match byte-for-byte
+        # unless a negative test deliberately introduces a stale asset.
+        self.asset = self.root / "backend/static/js/promptfinisher_product_i18n.20261011.js"
+        self.asset.parent.mkdir(parents=True)
+        self.asset.write_text(
+            'PROMPTFINISHER "de":{} "en":{} "es":{} "pt":{} "tr":{} '
+            '"ru":{} "pl":{} "fr":{} "it":{} "nl":{}',
+            encoding="utf-8",
+        )
         (self.root / ".env").write_text("ENVIRONMENT=production\nCADDY_DOMAIN=example.test\n")
         (self.root / ".env").chmod(0o600)
         (self.root / "artifacts/deploy-state/last-successful-sha").write_text(PREVIOUS + "\n")
@@ -68,6 +77,7 @@ fi
 if [[ "$url" == *"/static/js/promptfinisher_product_i18n.20261011.js" ]]; then
   printf 'PROMPTFINISHER "de":{} "en":{} "es":{} "pt":{} "tr":{} "ru":{} "pl":{} "fr":{} "it":{}' > "$file"
   [[ "${PM_TEST_MISSING_LANGUAGE:-0}" == 1 ]] || printf ' "nl":{}' >> "$file"
+  [[ "${PM_TEST_STALE_JS:-0}" == 1 ]] && printf ' ' >> "$file"
 elif [[ "$url" == *"/free/" ]]; then
   if [[ "${PM_TEST_MISMATCH_LANGUAGE:-}" == "$language" ]]; then language=de; fi
   printf '<html lang="%s"><script src="promptfinisher_product_i18n.20261011.js"></script></html>' "$language" > "$file"
@@ -186,9 +196,16 @@ fi
         self.assertFalse((self.root / f"artifacts/deploy-state/github-release-verified-{SHA}.txt").exists())
 
     def test_refuses_missing_locale_without_success_receipt(self):
+        self.asset.write_text(self.asset.read_text(encoding="utf-8").replace(' "nl":{}', ''), encoding="utf-8")
         result = self.run_release(PM_TEST_MISSING_LANGUAGE=1)
         self.assertNotEqual(result.returncode, 0)
         self.assertIn("missing nl", result.stderr)
+        self.assertFalse((self.root / f"artifacts/deploy-state/github-release-verified-{SHA}.txt").exists())
+
+    def test_refuses_stale_public_js_even_if_language_labels_exist(self):
+        result = self.run_release(PM_TEST_STALE_JS=1)
+        self.assertNotEqual(result.returncode, 0)
+        self.assertIn("PUBLIC_I18N_ASSET_PARITY=FAIL", result.stderr)
         self.assertFalse((self.root / f"artifacts/deploy-state/github-release-verified-{SHA}.txt").exists())
 
     def test_refuses_stale_asset_cache(self):
