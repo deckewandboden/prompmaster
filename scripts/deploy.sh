@@ -314,14 +314,14 @@ assert_external_caddy_ports_closed
 # A successful collectstatic and healthy containers alone do not prove that
 # clients receive the reviewed product translation bundle.
 locale_source="backend/static/js/promptfinisher_product_i18n.20261011.js"
-[[ -f "$locale_source" ]] || { log 'PROD_I18N_ASSET_PARITY=FAIL; source file missing'; exit 1; }
-command -v sha256sum >/dev/null 2>&1 || { log 'PROD_I18N_ASSET_PARITY=FAIL; sha256sum missing'; exit 1; }
+[[ -f "$locale_source" ]] || { log 'PROD_I18N_ASSET_PARITY=FAIL; source file missing'; false; }
+command -v sha256sum >/dev/null 2>&1 || { log 'PROD_I18N_ASSET_PARITY=FAIL; sha256sum missing'; false; }
 locale_source_sha="$(sha256sum "$locale_source" | awk '{print $1}')"
 locale_volume_sha="$(docker compose "${F[@]}" exec -T caddy sha256sum /srv/static/js/promptfinisher_product_i18n.20261011.js | awk '{print $1}')"
 log "PROD_I18N_SOURCE_SHA256=$locale_source_sha; PROD_I18N_VOLUME_SHA256=$locale_volume_sha"
 [[ -n "$locale_volume_sha" && "$locale_volume_sha" == "$locale_source_sha" ]] || {
   log 'PROD_I18N_ASSET_PARITY=FAIL; Caddy static volume is stale; last-successful-sha will NOT be advanced'
-  exit 1
+  false
 }
 log 'PROD_I18N_ASSET_PARITY=PASS'
 log "cAdvisor Runtime-Health abwarten"
