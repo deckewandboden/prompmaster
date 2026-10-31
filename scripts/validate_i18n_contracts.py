@@ -114,6 +114,14 @@ def main() -> None:
         for key, target in found.items():
             if not target.strip():
                 raise SystemExit(f'I18N FAIL {code}: empty translation {key!r}')
+            # gettext strings are automatically escaped by Django templates.
+            # HTML entities in their source would be escaped a second time and
+            # displayed literally (e.g. an Italian "&amp;" help link).
+            if re.search(r'&(?:amp|lt|gt|quot|nbsp|#\\d+);', target):
+                raise SystemExit(
+                    f'I18N FAIL {code}: HTML entity in gettext label '
+                    f'{key!r}: {target!r}'
+                )
             expected_tokens = sorted(PLACEHOLDER.findall(key))
             actual_tokens = sorted(PLACEHOLDER.findall(target))
             if expected_tokens != actual_tokens:
@@ -121,6 +129,8 @@ def main() -> None:
                     f'I18N FAIL {code}: unsafe named placeholders {key!r}: '
                     f'{expected_tokens} != {actual_tokens}'
                 )
+        if code == 'it' and found.get('Einstellungen') != 'Impostazioni':
+            raise SystemExit('I18N FAIL it: invalid customer Settings heading')
         if code in ('pl', 'fr', 'it', 'nl'):
             for product in ('PROMPTFINISHER Free', 'PROMPTFINISHER Pro', 'Free'):
                 if found.get(product) != product:
