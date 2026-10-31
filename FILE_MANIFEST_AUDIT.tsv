@@ -130,3 +130,4 @@ scripts/audit_live_free_locales.py	0	text-not-byte-validated	test
 scripts/audit_public_asset_parity.py	0	text-not-byte-validated	test
 scripts/test_public_asset_parity.py	0	text-not-byte-validated	test
 .github/workflows/public-asset-parity.yml	0	text-not-byte-validated	active-ci
+scripts/test_browser_totp_submit.py	0	text-not-byte-validated	test
