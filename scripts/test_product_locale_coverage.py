@@ -222,5 +222,34 @@ class ProductLanguageCoverageTests(unittest.TestCase):
                     self.assertNotRegex(value, r"&(?:amp|lt|gt|quot|nbsp|#\d+);")
 
 
+    def test_postmerge_terminology_and_speaker_notes_are_semantically_correct(self):
+        """Catch misleading product terms that completeness checks cannot detect.
+
+        'Solution' means a business/software solution, not a chemical
+        solution. Speaker notes belong to a presenter, not loudspeakers.
+        """
+        catalog = extract_translations()
+        expected = {
+            ("Entscheidung", "tr"): "Karar",
+            ("Solution", "tr"): "Çözüm",
+            ("Solution", "pl"): "Rozwiązanie",
+            ("Sprecherhinweise erstellen", "es"): "Crear notas del presentador",
+            ("Sprecherhinweise erstellen", "pl"): "Tworzenie notatek prelegenta",
+            ("Sprecherhinweise erstellen", "it"): "Creare note del relatore",
+        }
+        for (term, locale), target in expected.items():
+            with self.subTest(term=term, locale=locale):
+                self.assertEqual(catalog[term][locale], target)
+        for locale, wrong_term in (
+            ("es", "altavoces"),
+            ("pl", "głośników"),
+            ("it", "altoparlanti"),
+        ):
+            self.assertNotIn(
+                wrong_term,
+                catalog["Sprecherhinweise erstellen"][locale].lower(),
+            )
+
+
 if __name__ == "__main__":
     unittest.main(verbosity=2)
