@@ -117,7 +117,7 @@ def main() -> None:
             # gettext strings are automatically escaped by Django templates.
             # HTML entities in their source would be escaped a second time and
             # displayed literally (e.g. an Italian "&amp;" help link).
-            if re.search(r'&(?:amp|lt|gt|quot|nbsp|#\\d+);', target):
+            if re.search(r'&(?:amp|lt|gt|quot|nbsp|#\d+);', target):
                 raise SystemExit(
                     f'I18N FAIL {code}: HTML entity in gettext label '
                     f'{key!r}: {target!r}'
