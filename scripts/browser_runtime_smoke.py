@@ -2906,6 +2906,49 @@ def run_backend_ui_smoke(browser, fixture=None) -> None:
                 '/portal/dashboard/' if role == 'portal' else '/ns-admin/',
             )
 
+            if role == 'portal':
+                # Exercise the *customer* backend in every supported language.
+                # Real rendered gettext output, not only the locale cookie,
+                # guards against untranslated or editorially incorrect headings.
+                customer_profile_titles = {
+                    'de': 'Einstellungen',
+                    'en': 'Settings',
+                    'es': 'Configuración',
+                    'pt': 'Definições',
+                    'tr': 'Ayarlar',
+                    'ru': 'Настройки',
+                    'pl': 'Ustawienia',
+                    'fr': 'Paramètres',
+                    'it': 'Impostazioni',
+                    'nl': 'Instellingen',
+                }
+                profile_response = page.goto(base + 'portal/profile/', wait_until='networkidle')
+                if not profile_response or profile_response.status != 200:
+                    raise AssertionError('customer locale smoke: profile page unavailable')
+                for language, expected_heading in customer_profile_titles.items():
+                    selector = page.locator('.language-switcher select[name="language"]')
+                    if not selector.is_visible():
+                        raise AssertionError('customer locale smoke: language selector missing')
+                    if selector.input_value() != language:
+                        with page.expect_navigation(wait_until='networkidle'):
+                            selector.select_option(language)
+                    heading = page.locator('.page-head h1').inner_text().strip()
+                    selected = page.locator('.language-switcher select[name="language"]').input_value()
+                    html_lang = page.locator('html').get_attribute('lang')
+                    if (
+                        heading != expected_heading
+                        or selected != language
+                        or html_lang != language
+                    ):
+                        raise AssertionError(
+                            f'customer locale smoke {language}: heading={heading!r}, '
+                            f'selected={selected!r}, html={html_lang!r}'
+                        )
+                    print(f'R5_CUSTOMER_BACKEND_LOCALE={language};HEADING=PASS;SELECT=PASS')
+                if page.locator('.language-switcher select[name="language"]').input_value() != 'de':
+                    with page.expect_navigation(wait_until='networkidle'):
+                        page.locator('.language-switcher select[name="language"]').select_option('de')
+
             if role == 'admin':
                 _browser_product_locale_acceptance(page, base, 'pro')
                 # Verify actual gettext_lazy form labels after login, not
