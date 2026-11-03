@@ -1,6 +1,7 @@
 Django>=5.2.17,<5.3
 psycopg[binary]>=3.2,<3.4
 celery>=5.5,<5.7
+packaging>=25,<27
 redis>=5.2,<7
 msgpack>=1.2.1,<2
 requests>=2.33.0,<3
