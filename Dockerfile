@@ -23,6 +23,8 @@ RUN --mount=type=secret,id=pf_staging_ca,required=false \
     fi; \
     python -m pip install --no-cache-dir --upgrade "setuptools>=78.1.1" \
     && pip install --no-cache-dir -r /tmp/requirements.txt
+# Fail during image build rather than allowing Celery worker/beat to crash after deployment.
+RUN python -c "import packaging; import celery"
 COPY backend /app
 RUN python manage.py compilemessages --verbosity 0
 RUN python -m compileall -q /app
