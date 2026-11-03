@@ -9,7 +9,7 @@ log() { printf '[PROMPTFINISHER GITHUB RELEASE] %s\n' "$*"; }
 
 [[ "$#" -eq 0 || ( "$#" -eq 1 && "$1" == '--verify-only' ) ]] || fail 'Usage: bash scripts/release_from_github.sh [--verify-only]'
 mode="${1:-deploy}"
-for binary in git docker curl flock sha256sum; do
+for binary in git docker curl flock sha256sum python3; do
   command -v "$binary" >/dev/null 2>&1 || fail "Required command missing: $binary"
 done
 [[ -z "${DOCKER_HOST:-}" && -z "${DOCKER_CONTEXT:-}" ]] || fail 'Remote Docker daemon/context forbidden'
@@ -76,7 +76,58 @@ fetch / "$tmp/home"
 fetch /free/ "$tmp/free"
 fetch /auth/login/ "$tmp/login"
 fetch /health/ready/ "$tmp/ready"
-fetch /static/js/promptfinisher_product_i18n.20261011.js "$tmp/i18n"
+# The browser uses the exact URL referenced in Free HTML (including ?v=).
+# A cache may serve different bytes for the versioned and unversioned paths.
+# Resolve the script from the received HTML, not from a guessed static URL.
+asset_public_path="$(
+  python3 - "$base" "$tmp/free" <<'PY'
+from html.parser import HTMLParser
+from pathlib import Path
+import sys
+from urllib.parse import urljoin, urlsplit
+
+EXPECTED_PATH = "/static/js/promptfinisher_product_i18n.20261011.js"
+
+
+class ScriptSources(HTMLParser):
+    def __init__(self):
+        super().__init__(convert_charrefs=True)
+        self.sources = []
+
+    def handle_starttag(self, tag, attrs):
+        if tag.lower() == "script":
+            src = dict(attrs).get("src")
+            if src:
+                self.sources.append(src)
+
+
+origin = sys.argv[1].rstrip("/")
+html = Path(sys.argv[2]).read_text(encoding="utf-8", errors="replace")
+parser = ScriptSources()
+parser.feed(html)
+matches = []
+for src in parser.sources:
+    parsed = urlsplit(urljoin(origin + "/free/", src))
+    if parsed.path != EXPECTED_PATH:
+        continue
+    if (
+        parsed.scheme != "https"
+        or parsed.netloc != urlsplit(origin).netloc
+        or parsed.username is not None
+        or parsed.password is not None
+    ):
+        raise SystemExit("Product locale script outside approved HTTPS origin")
+    matches.append(parsed.path + ("?" + parsed.query if parsed.query else ""))
+
+if len(matches) != 1:
+    raise SystemExit(
+        f"Expected exactly one product locale script on /free/, found {len(matches)}"
+    )
+print(matches[0])
+PY
+)" || fail 'Unable to resolve exact product locale script from public Free HTML'
+log "PUBLIC_I18N_REFERENCED_PATH=$asset_public_path"
+fetch "$asset_public_path" "$tmp/i18n"
 # A 200 response or translated labels are not evidence of the CURRENT release.
 # Compare the served bytes with the exact checked-out, approved GitHub asset.
 asset_source="backend/static/js/promptfinisher_product_i18n.20261011.js"
@@ -105,7 +156,7 @@ done
 fetch /pro/app/ "$tmp/pro"
 [[ -s "$tmp/pro" ]] || fail 'Pro route returned an empty document'
 # The public asset must remain mutable (otherwise users can see stale languages).
-headers="$(curl -sS -I --connect-timeout 10 --max-time 30 "$base/static/js/promptfinisher_product_i18n.20261011.js")" || fail 'Public asset header check failed'
+headers="$(curl -sS -I --connect-timeout 10 --max-time 30 "$base$asset_public_path")" || fail 'Public asset header check failed'
 printf '%s\n' "$headers" | tr -d '\r' | grep -Eiq '^cache-control:.*no-cache' || fail 'Language asset is served with stale-cache policy'
 
 receipt="$state_dir/github-release-verified-$sha.txt"

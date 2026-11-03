@@ -67,20 +67,24 @@ for ((i=0;i<${#args[@]};i++)); do
 done
 url="${args[${#args[@]}-1]}"
 if [[ "$head" == 1 ]]; then
-  if [[ "${PM_TEST_BAD_CACHE:-0}" == 1 ]]; then
+  if [[ "${PM_TEST_BAD_CACHE:-0}" == 1 || ( "${PM_TEST_QUERY_BAD_CACHE:-0}" == 1 && "$url" == *"?v="* ) ]]; then
     printf 'HTTP/2 200\r\ncache-control: public, max-age=31536000, immutable\r\n'
   else
     printf 'HTTP/2 200\r\ncache-control: no-cache, must-revalidate\r\n'
   fi
   exit 0
 fi
-if [[ "$url" == *"/static/js/promptfinisher_product_i18n.20261011.js" ]]; then
+if [[ "$url" == *"/static/js/promptfinisher_product_i18n.20261011.js"* ]]; then
   printf 'PROMPTFINISHER "de":{} "en":{} "es":{} "pt":{} "tr":{} "ru":{} "pl":{} "fr":{} "it":{}' > "$file"
   [[ "${PM_TEST_MISSING_LANGUAGE:-0}" == 1 ]] || printf ' "nl":{}' >> "$file"
   [[ "${PM_TEST_STALE_JS:-0}" == 1 ]] && printf ' ' >> "$file"
+  [[ "${PM_TEST_QUERY_STALE:-0}" == 1 && "$url" == *"?v="* ]] && printf ' ' >> "$file"
 elif [[ "$url" == *"/free/" ]]; then
   if [[ "${PM_TEST_MISMATCH_LANGUAGE:-}" == "$language" ]]; then language=de; fi
-  printf '<html lang="%s"><script src="promptfinisher_product_i18n.20261011.js"></script></html>' "$language" > "$file"
+  script_src="${PM_TEST_SCRIPT_SRC:-/static/js/promptfinisher_product_i18n.20261011.js?v=reviewed123}"
+  printf '<html lang="%s"><script src="%s"></script>' "$language" "$script_src" > "$file"
+  [[ "${PM_TEST_DUPLICATE_SCRIPT:-0}" == 1 ]] && printf '<script src="%s"></script>' "$script_src" >> "$file"
+  printf '</html>' >> "$file"
 else
   printf '<html>PROMPTFINISHER</html>' > "$file"
 fi
@@ -156,6 +160,7 @@ fi
         result = self.run_release()
         self.assertEqual(result.returncode, 0, result.stderr)
         self.assertIn("LANGUAGES=10", result.stdout)
+        self.assertIn("PUBLIC_I18N_REFERENCED_PATH=/static/js/promptfinisher_product_i18n.20261011.js?v=reviewed123", result.stdout)
         actions = (self.root / "actions").read_text()
         self.assertIn(f"deploy:{SHA}", actions)
         self.assertIn("git-fast-forward", actions)
@@ -202,6 +207,39 @@ fi
         self.assertIn("missing nl", result.stderr)
         self.assertFalse((self.root / f"artifacts/deploy-state/github-release-verified-{SHA}.txt").exists())
 
+    def test_refuses_stale_versioned_script_even_if_unversioned_is_fresh(self):
+        # This was a false PASS before the release compared only the bare URL.
+        result = self.run_release(PM_TEST_QUERY_STALE=1)
+        self.assertNotEqual(result.returncode, 0)
+        self.assertIn("PUBLIC_I18N_ASSET_PARITY=FAIL", result.stderr)
+        self.assertIn("?v=reviewed123", result.stdout)
+        self.assertFalse(
+            (self.root / f"artifacts/deploy-state/github-release-verified-{SHA}.txt").exists()
+        )
+
+    def test_refuses_off_origin_referenced_script(self):
+        result = self.run_release(
+            PM_TEST_SCRIPT_SRC="https://untrusted.example/static/js/promptfinisher_product_i18n.20261011.js?v=reviewed123"
+        )
+        self.assertNotEqual(result.returncode, 0)
+        self.assertIn("outside approved HTTPS origin", result.stderr)
+        self.assertFalse(
+            (self.root / f"artifacts/deploy-state/github-release-verified-{SHA}.txt").exists()
+        )
+
+    def test_refuses_absent_or_duplicate_script(self):
+        for options in [
+            {"PM_TEST_SCRIPT_SRC": "/static/js/unrelated.js"},
+            {"PM_TEST_DUPLICATE_SCRIPT": 1},
+        ]:
+            with self.subTest(options=options):
+                result = self.run_release(**options)
+                self.assertNotEqual(result.returncode, 0)
+                self.assertIn("exactly one product locale script", result.stderr)
+                self.assertFalse(
+                    (self.root / f"artifacts/deploy-state/github-release-verified-{SHA}.txt").exists()
+                )
+
     def test_refuses_stale_public_js_even_if_language_labels_exist(self):
         result = self.run_release(PM_TEST_STALE_JS=1)
         self.assertNotEqual(result.returncode, 0)
@@ -212,6 +250,14 @@ fi
         result = self.run_release(PM_TEST_BAD_CACHE=1)
         self.assertNotEqual(result.returncode, 0)
         self.assertIn("stale-cache", result.stderr)
+
+    def test_refuses_stale_cache_policy_on_versioned_asset(self):
+        result = self.run_release(PM_TEST_QUERY_BAD_CACHE=1)
+        self.assertNotEqual(result.returncode, 0)
+        self.assertIn("stale-cache", result.stderr)
+        self.assertFalse(
+            (self.root / f"artifacts/deploy-state/github-release-verified-{SHA}.txt").exists()
+        )
 
     def test_refuses_raw_free_language_mismatch_without_success_receipt(self):
         result = self.run_release(PM_TEST_MISMATCH_LANGUAGE='en')
