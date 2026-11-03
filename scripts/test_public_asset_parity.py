@@ -73,6 +73,21 @@ class PublicAssetParityTests(unittest.TestCase):
             release.index('receipt="$state_dir/github-release-verified-'),
         )
 
+    def test_release_checks_same_versioned_url_used_by_free_page(self):
+        root = Path(__file__).resolve().parents[1]
+        release = (root / "scripts/release_from_github.sh").read_text(encoding="utf-8")
+        self.assertIn('asset_public_path="$(', release)
+        self.assertIn('urlsplit(urljoin(origin + "/free/", src))', release)
+        self.assertIn('fetch "$asset_public_path" "$tmp/i18n"', release)
+        self.assertNotIn(
+            'fetch /static/js/' + ASSET_BASENAME + ' "$tmp/i18n"',
+            release,
+        )
+        self.assertLess(
+            release.index('fetch /free/ "$tmp/free"'),
+            release.index('fetch "$asset_public_path" "$tmp/i18n"'),
+        )
+
     def test_deployment_requires_caddy_static_volume_byte_parity(self):
         root = Path(__file__).resolve().parents[1]
         deploy = (root / "scripts/deploy.sh").read_text(encoding="utf-8")
