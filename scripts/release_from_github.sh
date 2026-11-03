@@ -156,7 +156,7 @@ done
 fetch /pro/app/ "$tmp/pro"
 [[ -s "$tmp/pro" ]] || fail 'Pro route returned an empty document'
 # The public asset must remain mutable (otherwise users can see stale languages).
-headers="$(curl -sS -I --connect-timeout 10 --max-time 30 "$base/static/js/promptfinisher_product_i18n.20261011.js")" || fail 'Public asset header check failed'
+headers="$(curl -sS -I --connect-timeout 10 --max-time 30 "$base$asset_public_path")" || fail 'Public asset header check failed'
 printf '%s\n' "$headers" | tr -d '\r' | grep -Eiq '^cache-control:.*no-cache' || fail 'Language asset is served with stale-cache policy'
 
 receipt="$state_dir/github-release-verified-$sha.txt"
