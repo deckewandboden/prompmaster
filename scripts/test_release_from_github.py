@@ -67,7 +67,7 @@ for ((i=0;i<${#args[@]};i++)); do
 done
 url="${args[${#args[@]}-1]}"
 if [[ "$head" == 1 ]]; then
-  if [[ "${PM_TEST_BAD_CACHE:-0}" == 1 ]]; then
+  if [[ "${PM_TEST_BAD_CACHE:-0}" == 1 || ( "${PM_TEST_QUERY_BAD_CACHE:-0}" == 1 && "$url" == *"?v="* ) ]]; then
     printf 'HTTP/2 200\r\ncache-control: public, max-age=31536000, immutable\r\n'
   else
     printf 'HTTP/2 200\r\ncache-control: no-cache, must-revalidate\r\n'
@@ -250,6 +250,14 @@ fi
         result = self.run_release(PM_TEST_BAD_CACHE=1)
         self.assertNotEqual(result.returncode, 0)
         self.assertIn("stale-cache", result.stderr)
+
+    def test_refuses_stale_cache_policy_on_versioned_asset(self):
+        result = self.run_release(PM_TEST_QUERY_BAD_CACHE=1)
+        self.assertNotEqual(result.returncode, 0)
+        self.assertIn("stale-cache", result.stderr)
+        self.assertFalse(
+            (self.root / f"artifacts/deploy-state/github-release-verified-{SHA}.txt").exists()
+        )
 
     def test_refuses_raw_free_language_mismatch_without_success_receipt(self):
         result = self.run_release(PM_TEST_MISMATCH_LANGUAGE='en')
