@@ -62,6 +62,22 @@ def visible_text_from_markup(path):
 
 
 class ProductLanguageCoverageTests(unittest.TestCase):
+    def test_production_v2_labels_and_rebranded_legal_notice(self):
+        translated = extract_translations()
+        keys = ['28 weitere Pro-Bereiche anzeigen ▾',
+                '28 weitere Pro-Bereiche ausblenden ▴',
+                'Fortschritt der Prompt-Konfiguration',
+                'Ausgewählt', 'Informationen vergleichen', 'Management-Briefing', 'Unterschiede, Gemeinsamkeiten und Entscheidungspunkte herausarbeiten.', 'Kernaussagen, Risiken und nächste Schritte für Entscheider.', 'Stichpunkte', 'Fließtext', 'Beispiel: Die wichtigsten Aussagen, Entscheidungen und nächsten Schritte kompakt zusammenfassen.', 'Beschreiben Sie kurz, was die Zusammenfassung für Sie leisten soll.', 'Fügen Sie hier Text, Notizen oder Informationen ein. Alternativ stellen Sie den Inhalt später im Copilot-Chat bereit.', 'Optional. Ohne Inhalt hier muss die Quelle beim Einfügen des fertigen Prompts in Copilot bereitgestellt oder eindeutig referenziert werden.', 'Offene Fragen', 'Offene Fragen · PRO', 'Termine', 'Termine · PRO', 'Zahlen / Fakten', 'Zahlen / Fakten · PRO']
+        keys += [key.replace('CopilotPROMPTFINISHER', 'PROMPTFINISHER')
+                 for key in translated
+                 if key.startswith('Microsoft, Microsoft 365 und Copilot sind Marken')
+                 and 'CopilotPROMPTFINISHER' in key]
+        for key in keys:
+            for language in LANGUAGES:
+                with self.subTest(key=key, language=language):
+                    self.assertTrue(translated.get(key, {}).get(language))
+                    self.assertNotEqual(translated[key][language], key)
+
     def test_free_and_pro_visible_text_in_all_ten_languages(self):
         translated = extract_translations()
         self.assertGreaterEqual(len(translated), 600)
