@@ -606,8 +606,11 @@
       const tierSwitch = $('#switchBusinessBtn', licenseModal);
       const tierSwitchText = (tierSwitch?.textContent || '').trim();
       if (licenseContact) {
-        const desiredContactText = tierSwitchText.endsWith(' auswählen')
-          ? tierSwitchText.replace(/ auswählen$/, ' anfragen')
+        const requiredTier = tierSwitchText.endsWith(' auswählen')
+          ? tierSwitchText.slice(0, -' auswählen'.length)
+          : tierSwitch?.dataset.requiredTier;
+        const desiredContactText = requiredTier
+          ? translateUi('%(tier)s anfragen').replace('%(tier)s', requiredTier)
           : 'Microsoft-Copilot-Lizenz anfragen';
         if (licenseContact.textContent.trim() !== translateUi(desiredContactText)) {
           licenseContact.textContent = translateUi(desiredContactText);

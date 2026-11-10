@@ -64,7 +64,7 @@ def visible_text_from_markup(path):
 class ProductLanguageCoverageTests(unittest.TestCase):
     def test_production_v2_labels_and_rebranded_legal_notice(self):
         translated = extract_translations()
-        keys = ['28 weitere Pro-Bereiche anzeigen ▾',
+        keys = ['Aktuell ausgewählt: %(tier)s.', 'Erforderlich für %(app)s: %(tier)s.', '%(tier)s auswählen', '%(tier)s anfragen', 'Für %(app)s benötigt PROMPTFINISHER in dieser Konfiguration mindestens %(tier)s.', '28 weitere Pro-Bereiche anzeigen ▾',
                 '28 weitere Pro-Bereiche ausblenden ▴',
                 'Fortschritt der Prompt-Konfiguration',
                 'Ausgewählt', 'Informationen vergleichen', 'Management-Briefing', 'Unterschiede, Gemeinsamkeiten und Entscheidungspunkte herausarbeiten.', 'Kernaussagen, Risiken und nächste Schritte für Entscheider.', 'Stichpunkte', 'Fließtext', 'Beispiel: Die wichtigsten Aussagen, Entscheidungen und nächsten Schritte kompakt zusammenfassen.', 'Beschreiben Sie kurz, was die Zusammenfassung für Sie leisten soll.', 'Fügen Sie hier Text, Notizen oder Informationen ein. Alternativ stellen Sie den Inhalt später im Copilot-Chat bereit.', 'Optional. Ohne Inhalt hier muss die Quelle beim Einfügen des fertigen Prompts in Copilot bereitgestellt oder eindeutig referenziert werden.', 'Offene Fragen', 'Offene Fragen · PRO', 'Termine', 'Termine · PRO', 'Zahlen / Fakten', 'Zahlen / Fakten · PRO']
