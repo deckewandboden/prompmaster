@@ -23,3 +23,7 @@ Verification: Python/static/repository/domain/asset validators; nine-language
 catalogue regression; composer regression across contracts and punctuation.
 Full production acceptance remains open pending authenticated test accounts,
 all task/locale/device combinations, and post-release verification of fixes.
+
+Follow-up 10 November: Free Word license dialog interpolation and stable required-tier metadata avoid untranslated headings, requirements and CTAs. Translate confirmed Word task previews, hints and known PRO-suffixed labels without touching inputs or Golden Masters. Remove duplicated translation entries and register acceptance evidence in the audit manifest.
+
+Container gate remediation: require Alpine musl/musl-utils >=1.2.5-r24 in Caddy; rebuild Go binaries with x/net v0.62.0 and matching x/crypto v0.58.0; explicitly update Debian zlib1g and enforce the scanner-reported fixed version in the web build. No scanner suppression or relaxation. Full stack passed at c4ecac3; new zlib/UI changes require fresh CI and human review. These are build-time corrections only; production remains unchanged.

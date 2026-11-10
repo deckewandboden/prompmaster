@@ -15,8 +15,8 @@ PASS gilt ausschließlich für den beschriebenen tatsächlich geprüften Schritt
 | PUB-02 | Free-Link | PASS | Öffnet Free in neuem Tab. |
 | PUB-03 | Lizenzrechner 1 → 2 → 1 | PASS | Jahresbetrag 35,88 → 71,76 → 35,88 EUR; Minimum 1. |
 | PUB-04 | Kaufen | BLOCKED | Oberfläche meldet Kauf vorübergehend nicht verfügbar. Kommerzielle Freigabe nicht verändert. |
-| PUB-05 | Erste FAQ öffnen | PASS | Antwort sichtbar; übrige 19 nicht ausgeführt. |
-| PUB-06 | Alle FAQ / Anker / übrigen CTAs | BLOCKED | Einzelprüfung noch offen. |
+| PUB-05 | Alle 20 FAQ öffnen/schließen EN | PASS | Am 10.11. alle 20 Antworten geöffnet, Inhalt vorhanden und wieder geschlossen. |
+| PUB-06 | Anker / übrige CTAs | BLOCKED | Einzelprüfung noch offen. |
 | PUB-07 | Preise, Unternehmen, Kontakt | PASS | Seiten navigierbar; keine Kontaktanfrage abgesendet. |
 | PUB-08 | Impressum, Datenschutz, AGB, Lizenz, Widerruf, Barrierefreiheit | PASS | Alle sechs Routen erreichbar. EN weist ausdrücklich auf deutsche freigegebene Rechtstexte hin; keine juristische Abnahme. |
 | PUB-09 | Vertrag widerrufen: Formular anzeigen | PASS | Name, E-Mail, Auftragsreferenz und Bestätigung vorhanden. |
@@ -32,7 +32,11 @@ PASS gilt ausschließlich für den beschriebenen tatsächlich geprüften Schritt
 | FREE-07 | Pro-Vergleich öffnen/schließen | PASS | Vergleich sichtbar; Schließen blendet ihn aus. |
 | FREE-08 | Word-Lizenzdialog öffnen/zurück | PASS | Dialog öffnet und schließt; Lizenzsperre bleibt. |
 | FREE-09 | Word-Lizenzdialog EN | FAIL | Titel, Anforderungssatz, aktuelle/benötigte Stufe und Buttons deutsch. Am 10.11. erneut bestätigt. Fix vorbereitet, Live-Retest offen. |
-| FREE-10 | Lizenzwechsel über Dialog / Excel / PowerPoint | BLOCKED | Einzelprüfung noch nicht abgeschlossen. |
+| FREE-10 | Lizenzwechsel im Word-Dialog | PASS | M365 Copilot (Basic) gewählt, Dialog geschlossen; Word/Excel/PowerPoint anschließend auswählbar. |
+| FREE-12 | Word Textüberarbeitung EN erzeugen/kopieren | PASS | Synthetische Vorgabe und drei erledigte Beispielaufgaben unverändert; Zielgruppe, Fokus, Format, Ton und Quellenregeln englisch enthalten. 100 Prozent und Zwischenablage geprüft. |
+| FREE-13 | Word-UI EN | FAIL | Pro-Vorschauaufgaben Strukturierten Bericht erstellen / Risiken und Lücken analysieren samt Beschreibung, vier Feldhinweise und PRO-Fokuslabels noch deutsch. Katalogkorrekturen und Übersetzung zusammengesetzter PRO-Labels im PR ergänzt; Live-Retest offen. |
+| FREE-14 | Alle 28 zusätzlichen Pro-Kacheln | PASS | Einblenden, jede Kachel einzeln öffnen, Vorschau mit Kaufverweis vorhanden, Zurück schließt. Kein Checkout ausgelöst. |
+| FREE-15 | Pro-Vorschauhinweis EN | FAIL | Satz PROMPTFINISHER Pro erweitert Apps, Rollen und Business-Prompts. Microsoft 365 Copilot wird separat lizenziert. bleibt deutsch. Korrektur im PR ergänzt; Live-Retest offen. |
 | FREE-11 | Alle Auswahlkombinationen, Edit-Sprünge, Fokuslimit, Tastatur, Kopierfehler | BLOCKED | Nur oben genannter Summarize-Ablauf geprüft. |
 | AUTH-01 | Pro anonym öffnen | PASS | Weiterleitung zu Anmeldung mit next=/pro/. |
 | AUTH-02 | Erfolgreiche Anmeldung / Abmeldung | BLOCKED | Keine abgeschlossene sichere Anmeldung mit Testkonto. |
@@ -316,3 +320,7 @@ Jede Zelle bezeichnet die vollständige Einzelabnahme (Felder, Optionen, Validie
 3. Sichere Anmeldung mit dedizierten Testkonten für Pro, Kunde und netstyle, mindestens zwei Testmandanten für negative Berechtigungsprüfungen. Passwörter gehören nicht in Issue oder Bericht.
 4. Authentifizierte UI vollständig inventarisieren; obige Bereichsgruppen in konkrete Formular-/Button-/Rollenfälle aufteilen. Die jetzige Matrix ist ausdrücklich keine Behauptung einer bereits vollständigen geschützten UI-Inventarisierung.
 5. Nur nach Human Review über bestehenden gesicherten Release-Prozess deployen; alle Fehlerfälle am installierten Commit erneut prüfen. Gesamtfreigabe ausschließlich ohne offene FAIL/BLOCKED.
+
+## CI-Fortschreibung
+
+Head c4ecac3fe24264552365092f357b9c3d866f0569: Doppelschlüssel, Manifest und Lizenzdialog im PR korrigiert. Go-Abhängigkeiten x/net v0.62.0 und erforderliches x/crypto v0.58.0; Caddy verlangt musl/musl-utils mindestens 1.2.5-r24. Vollständiger lokaler github_preflight PASS. GitHub CI 42806103550 einschließlich Full Stack erfolgreich; Shell, Release Safety und Live Locale ebenfalls erfolgreich. Full Dependency Security 42806103710 bleibt FAIL: Web-Image zlib1g 1:1.3.dfsg+really1.3.1-1+b1, CVE-2026-76844 und CVE-2026-85091 laut Trivy. Neuester Fix installiert aktualisiertes zlib1g und prüft mindestens 1:1.3.dfsg+really1.3.1-1+deb13u1 im Build. Ein neuer vollständiger Lauf ist erforderlich. Keine Gesamt-CI-Freigabe.
