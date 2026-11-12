@@ -146,3 +146,40 @@ class PublicFreeAccessTests(TestCase):
         self.assertEqual(client.get('/pro/app/').status_code, 302)
         self.assertEqual(client.session.get('two_factor_ok'), False)
 
+    def test_pending_two_factor_can_change_language_on_login_and_2fa(self):
+        """Language choice must not bounce back during an unfinished login."""
+        for destination in (
+            '/auth/2fa/',
+            '/auth/login/?next=/portal/dashboard/',
+            '/auth/2fa/setup/',
+        ):
+            with self.subTest(destination=destination):
+                client = self._pending_session()
+                client.cookies['promptfinisher_language'] = 'fr'
+                selected = client.get(
+                    '/auth/language/',
+                    {'language': 'de', 'next': destination},
+                )
+                self.assertEqual(selected.status_code, 302)
+                self.assertEqual(selected.url, destination)
+                self.assertEqual(
+                    selected.cookies['promptfinisher_language'].value,
+                    'de',
+                )
+                self.assertEqual(client.session.get('two_factor_ok'), False)
+                self.assertEqual(client.get('/portal/dashboard/').status_code, 302)
+                self.assertEqual(client.get('/portal/dashboard/').url, '/auth/2fa/')
+
+    def test_language_endpoint_never_bypasses_invalid_security_session(self):
+        client = self._pending_session()
+        session = client.session
+        session['security_version'] = 'invalid'
+        session.save()
+        response = client.get(
+            '/auth/language/',
+            {'language': 'de', 'next': '/auth/2fa/'},
+        )
+        self.assertEqual(response.status_code, 302)
+        self.assertTrue(response.url.startswith('/auth/login/?next='))
+        self.assertNotIn('promptfinisher_language', response.cookies)
+        self.assertNotIn('_auth_user_id', client.session)
