@@ -11,6 +11,7 @@ from django.db import IntegrityError, transaction
 from django.shortcuts import redirect, render
 from django.urls import reverse
 from django.utils import timezone, translation
+from django.views.decorators.cache import never_cache
 from django.views.decorators.http import require_http_methods
 
 from apps.companies.models import Company, Membership, PrivateCustomerProfile
@@ -110,6 +111,7 @@ def _new_recovery_codes(user):
     return codes
 
 
+@never_cache
 @require_http_methods(['GET', 'POST'])
 def set_ui_language(request):
     params = request.GET if request.method == 'GET' else request.POST
@@ -137,6 +139,7 @@ def set_ui_language(request):
     return response
 
 
+@never_cache
 def login_view(request):
     if request.user.is_authenticated:
         next_url = _role_safe_next(request.user, _safe_next(request))
