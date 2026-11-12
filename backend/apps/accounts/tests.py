@@ -374,3 +374,77 @@ class UiLanguagePreferenceTests(TestCase):
         self.assertEqual(response.status_code, 302)
         self.assertEqual(response.url, '/')
         self.assertEqual(response.cookies['promptfinisher_language'].value, 'de')
+
+    def test_anonymous_login_language_switch_replaces_french_cookie(self):
+        """Switching the login selector must survive the redirect to login."""
+        self.client.cookies['promptfinisher_language'] = 'fr'
+        before = self.client.get(reverse('accounts:login'))
+        self.assertEqual(before.status_code, 200)
+        self.assertIn(b'<html lang="fr">', before.content)
+
+        changed = self.client.get(
+            reverse('accounts:set_ui_language'),
+            {'language': 'de', 'next': '/auth/login/?next=/portal/dashboard/'},
+            follow=True,
+        )
+        self.assertEqual(changed.status_code, 200)
+        self.assertEqual(changed.redirect_chain[0][0], '/auth/login/?next=/portal/dashboard/')
+        self.assertEqual(self.client.cookies['promptfinisher_language'].value, 'de')
+        self.assertIn(b'<html lang="de">', changed.content)
+        self.assertEqual(changed.wsgi_request.LANGUAGE_CODE, 'de')
+
+    def test_login_cookie_is_not_overridden_by_old_account_language(self):
+        """An explicit German selection wins over a stale French user profile."""
+        from django.utils import timezone
+
+        for is_staff in (False, True):
+            with self.subTest(is_staff=is_staff):
+                user = User.objects.create_user(
+                    email=f'login-preference-{is_staff}@example.test',
+                    password='Language-Test-Password-2026!',
+                    first_name='Language',
+                    last_name='Preference',
+                    ui_language='fr',
+                    is_staff=is_staff,
+                )
+                client = self.client_class()
+                client.force_login(user)
+                session = client.session
+                now = timezone.now().timestamp()
+                session['security_version'] = user.security_version
+                session['authenticated_at'] = now
+                session['last_activity_at'] = now
+                session['two_factor_ok'] = True
+                session.save()
+                client.cookies['promptfinisher_language'] = 'de'
+
+                # Shared authenticated page: same middleware for portal and
+                # netstyle staff roles (without mutating real customer data).
+                response = client.get(reverse('accounts:logout'))
+                self.assertEqual(response.status_code, 200)
+                self.assertEqual(response.wsgi_request.LANGUAGE_CODE, 'de')
+                self.assertIn(b'<html lang="de">', response.content)
+
+    def test_saved_account_language_is_used_when_no_valid_cookie_exists(self):
+        from django.utils import timezone
+
+        user = User.objects.create_user(
+            email='no-valid-cookie@example.test',
+            password='Language-Test-Password-2026!',
+            first_name='Language',
+            last_name='Fallback',
+            ui_language='fr',
+        )
+        self.client.force_login(user)
+        session = self.client.session
+        now = timezone.now().timestamp()
+        session['security_version'] = user.security_version
+        session['authenticated_at'] = now
+        session['last_activity_at'] = now
+        session['two_factor_ok'] = True
+        session.save()
+        self.client.cookies['promptfinisher_language'] = 'not-supported'
+        response = self.client.get(reverse('accounts:logout'))
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.wsgi_request.LANGUAGE_CODE, 'fr')
+        self.assertIn(b'<html lang="fr">', response.content)
