@@ -45,12 +45,12 @@ RUN --mount=type=secret,id=pf_staging_ca,required=false \
       'func main() { caddycmd.Main() }' > main.go \
     && go mod init promptfinisher.local/caddy \
     && go get github.com/caddyserver/caddy/v2@v2.11.7 \
-    && go get golang.org/x/net@v0.60.0 \
+    && go get golang.org/x/net@v0.62.0 \
     && go get github.com/go-jose/go-jose/v4@v4.1.6 \
     && go mod tidy \
     && CGO_ENABLED=0 go build -trimpath -ldflags="-s -w" -o /out/caddy . \
     && go version -m /out/caddy | grep -F 'go1.26.10' \
-    && go version -m /out/caddy | grep -F 'golang.org/x/net' | grep -F 'v0.60.0' \
+    && go version -m /out/caddy | grep -F 'golang.org/x/net' | grep -F 'v0.62.0' \
     && go version -m /out/caddy | grep -F 'github.com/go-jose/go-jose/v4' | grep -F 'v4.1.6'
 
 FROM caddy:2.11.6-alpine
@@ -61,6 +61,8 @@ FROM caddy:2.11.6-alpine
 # CVE-2026-92392 (HTTP/2 upload use-after-free); require patched 8.23.0-r0.
 # Do not ignore HIGH findings or relax the full container-security gate.
 RUN apk add --no-cache --upgrade \
+    'musl>=1.2.5-r24' \
+    'musl-utils>=1.2.5-r24' \
     'brotli-libs>=1.2.1-r0' \
     'curl>=8.23.0-r0' \
     'libcurl>=8.23.0-r0'
