@@ -1,11 +1,53 @@
-# Produktionsabnahme #105 – Arbeitsstand 10.11.2026
+# Produktionsabnahme #105 – Arbeitsstand 12.11.2026
 
 **Gesamtstatus: NICHT ABGENOMMEN.** Kein Merge, kein Produktionsdeployment.
 
 Ziel: https://promptmaster.decke-wand-boden.de/ · freigegebene Basis a57468e673d22163ccf55efea9ec28738e2cf0dd.
 Korrekturen: [Draft PR #110](https://github.com/deckewandboden/prompmaster/pull/110).
 
-PASS gilt ausschließlich für den beschriebenen tatsächlich geprüften Schritt. FAIL bedeutet reproduziertes Fehlverhalten oder gescheitertes Gate. BLOCKED bedeutet nicht abgeschlossen; der Grund steht in der Zeile. Codekorrektur ist kein Live-Retest. Browserbefunde vom 06./07.11.; Wiederprüfung Lizenzdialog am 10.11.2026. Chromium Cloud, Desktop; andere Browser und Viewports nicht nachgewiesen. Die aktuelle laufende Server-SHA wurde in dieser Sitzung nicht unabhängig ausgelesen. Keine personenbezogenen Kundendaten, echten Käufe, Löschungen oder Benachrichtigungen erzeugt.
+PASS gilt ausschließlich für den beschriebenen tatsächlich geprüften Schritt. FAIL bedeutet reproduziertes Fehlverhalten oder gescheitertes Gate. BLOCKED bedeutet nicht abgeschlossen; der Grund steht in der Zeile. Codekorrektur ist kein Live-Retest. Browserbefunde vom 06./07.11.; Wiederprüfung Lizenzdialog am 10.11.2026. Chromium Cloud, Desktop; andere Browser und Viewports nicht nachgewiesen. Am 12.11. zeigt /ns-admin/ops/ als laufenden Git-Commit exakt a57468e673d22163ccf55efea9ec28738e2cf0dd (Deployment 04.11.2026 12:27:52Z). Keine personenbezogenen Kundendaten, echten Käufe, Löschungen oder Benachrichtigungen erzeugt.
+
+## Browsernachweise 12.11.2026 – netstyle und Betrieb
+
+Nur lesende Navigation, Suche, Filter und Sortierung. Keine Änderungen an Kunden, Rollen, Konfiguration, Zahlungen oder E-Mail-Versand. Die frühere Browsersitzung war nicht mehr vorhanden; erneute sichere Anmeldung und 2FA erfolgreich.
+
+| ID | Prüfung | Status | Nachweis / Grenze |
+|---|---|---|---|
+| OPS-01 | Produktionsstand | PASS | /ns-admin/ops/ zeigt exakt freigegebene SHA; Version baseline-green-2026-09-13-2470-ga57468e6. |
+| OPS-02 | Systemübersicht und Services | PASS | Beide Seiten erreichbar; PostgreSQL OK, Worker und Beat antworten, Caddy betriebsbereit. Kein unabhängiger Infrastrukturtest. |
+| OPS-03 | Monitoring Django | FAIL | Systemübersicht und aktive Alarmliste bestätigen service.django.down, kritisch. Ursache noch nicht bewiesen; App selbst erreichbar. Nicht als kompletter Anwendungsausfall interpretieren. |
+| OPS-04 | Speicherwarnung | FAIL | Aktiver disk.warning: 83,0 % von 463,9 GB belegt, 79,1 GB verfügbar. Betriebswarnung ungelöst; keine Datenbereinigung durchgeführt. |
+| OPS-05 | Alarmfilter aktiv | PASS | Auswahl Actif ergibt genau disk.warning und service.django.down; URL-State active=True. |
+| OPS-06 | Alarmsortierung | PASS | Code aufsteigend: disk.warning vor service.django.down; sort=code&dir=asc, aktiver Filter bleibt. |
+| OPS-07 | Alarmsuche | PASS | service.django.down liefert genau eine aktive Zeile; Sortierung und Filter erhalten. |
+| OPS-08 | Filterreset und Pagination | PASS | Reset stellt 71 Einträge her; nächste Seite zeigt 51–71 und Rücknavigation. |
+| OPS-09 | Lade-/Sortiertexte FR | FAIL | Daten werden geladen, Code sortieren und deutsche Richtungshinweise im französischen UI. Gemeinsamer JS-Katalog unterstützt bisher nur DE/EN/ES/PT/TR; FR/IT/NL/PL/RU im PR ergänzt, Live-Retest offen. |
+| NS-TRANS-01 | Bestellungen FR | FAIL | Navigation und Überschrift zeigen Ordonnances (Rezepte) statt Commandes. Gettext-Korrektur im PR; Live-Retest offen. |
+| NS-WRITE-01 | Speichern/Deaktivieren/2FA zurücksetzen | BLOCKED | Sichtbare Funktionen inventarisiert, nicht ausgelöst: keine belastbar zugeordneten disponiblen Testobjekte für diese Schreibtests. |
+| NS-ROLE-01 | Negative Rollen-/Mandantenprüfung | BLOCKED | Superadmin-Zugriff belegt keine Trennung; separate Testrollen und zwei Testmandanten noch nicht geprüft. |
+
+Erreichbarkeit der folgenden Hauptseiten ist jeweils PASS, jedoch keine Funktionsabnahme der enthaltenen Aktionen:
+
+| ID | Route unter /ns-admin/ | Ergebnis |
+|---|---|---|
+| NS-NAV-01 | leads/ | PASS – spezifische Überschrift und Inhalte angezeigt. |
+| NS-NAV-02 | customers/ | PASS – spezifische Überschrift und Inhalte angezeigt. |
+| NS-NAV-03 | licenses/ | PASS – spezifische Überschrift und Inhalte angezeigt. |
+| NS-NAV-04 | orders/ | PASS – spezifische Überschrift und Inhalte angezeigt. |
+| NS-NAV-05 | products/ | PASS – spezifische Überschrift und Inhalte angezeigt. |
+| NS-NAV-06 | prompt-studio/ | PASS – spezifische Überschrift und Inhalte angezeigt. |
+| NS-NAV-07 | content/faqs/ | PASS – spezifische Überschrift und Inhalte angezeigt. |
+| NS-NAV-08 | email/ | PASS – spezifische Überschrift und Inhalte angezeigt. |
+| NS-NAV-09 | mollie/ | PASS – spezifische Überschrift und Inhalte angezeigt. |
+| NS-NAV-10 | statistics/ | PASS – spezifische Überschrift und Inhalte angezeigt. |
+| NS-NAV-11 | api/ | PASS – spezifische Überschrift und Inhalte angezeigt. |
+| NS-NAV-12 | legal/ | PASS – spezifische Überschrift und Inhalte angezeigt. |
+| NS-NAV-13 | support/ | PASS – spezifische Überschrift und Inhalte angezeigt. |
+| NS-NAV-14 | audit/ | PASS – spezifische Überschrift und Inhalte angezeigt. |
+| NS-NAV-15 | roles/ | PASS – spezifische Überschrift und Inhalte angezeigt. |
+| NS-NAV-16 | settings/ | PASS – spezifische Überschrift und Inhalte angezeigt. |
+
+Weitere Beobachtungen: Mollie als nicht konfiguriert angezeigt. Letzte Sicherung laut UI 12.11. 07:42 OK; letzter Restore-Test laut UI 03.11. 21:05 OK. Dies sind gelesene Statusanzeigen, keine neu ausgeführten Sicherungs-/Restore-Tests. Keine Zahlungen oder Testmails ausgelöst. Rollenbezeichnungen teils deutsch; mögliche konfigurierbare Namen noch nicht als Übersetzungsfehler klassifiziert.
 
 ## Beobachtete Abläufe und offene Prüfgruppen
 
@@ -39,10 +81,10 @@ PASS gilt ausschließlich für den beschriebenen tatsächlich geprüften Schritt
 | FREE-15 | Pro-Vorschauhinweis EN | FAIL | Satz PROMPTFINISHER Pro erweitert Apps, Rollen und Business-Prompts. Microsoft 365 Copilot wird separat lizenziert. bleibt deutsch. Korrektur im PR ergänzt; Live-Retest offen. |
 | FREE-11 | Alle Auswahlkombinationen, Edit-Sprünge, Fokuslimit, Tastatur, Kopierfehler | BLOCKED | Nur oben genannter Summarize-Ablauf geprüft. |
 | AUTH-01 | Pro anonym öffnen | PASS | Weiterleitung zu Anmeldung mit next=/pro/. |
-| AUTH-02 | Erfolgreiche Anmeldung / Abmeldung | BLOCKED | Keine abgeschlossene sichere Anmeldung mit Testkonto. |
+| AUTH-02 | Erfolgreiche Anmeldung einschließlich 2FA | PASS | Am 11.11. und 12.11. sicher angemeldet; sichtbarer Backendzugriff als PromptMaster Admin / Super administrateur. Abmeldung separat noch offen. |
 | AUTH-03 | Registrierung / Verifikation / Passwort vergessen | BLOCKED | Testpostfach und abgesicherter Mailpfad fehlen; keine Mail ausgelöst. |
-| AUTH-04 | 2FA / Wiederherstellung / Sitzung / Rate Limit | BLOCKED | Testkonten und Authentifizierung fehlen. Keine Sperrversuche auf echten Konten. |
-| PRO-01 | Alle 215 Aufgaben inkl. Quelle, Ausgabe, Kopieren, Rating | BLOCKED | Pro-Testkonto/Entitlement fehlen; Einzelinventar unten. |
+| AUTH-04 | 2FA / Wiederherstellung / Sitzung / Rate Limit | BLOCKED | Positiver 2FA-Ablauf PASS (AUTH-02); Wiederherstellung, Abmeldung, Sitzungsgrenzen und Rate Limit noch offen. Keine Sperrversuche auf echten Konten. |
+| PRO-01 | Alle 215 Aufgaben inkl. Quelle, Ausgabe, Kopieren, Rating | BLOCKED | Authentifizierter Pro-Zugriff am 11.11. vorhanden; Aufgaben-Einzelprüfung noch offen, Einzelinventar unten. |
 | CUSTOMER-01 | Navigation, Profil, Tabellen, Suche, Sortierung, Filter, Seitenwechsel | BLOCKED | Geeignetes Kunden-Testkonto fehlt. |
 | CUSTOMER-02 | Benutzer, Einladungen, Rollen, Lizenzen, Geräte, Deep Links | BLOCKED | Isolierter Testmandant mit mindestens zwei Testidentitäten fehlt. |
 | CUSTOMER-03 | Bestellung, Rechnung, Verlängerung, Rückerstattung | BLOCKED | Kein Sandbox-Kontext; echte Finanzaktionen ausgeschlossen. |
@@ -324,3 +366,16 @@ Jede Zelle bezeichnet die vollständige Einzelabnahme (Felder, Optionen, Validie
 ## CI-Fortschreibung
 
 Head c4ecac3fe24264552365092f357b9c3d866f0569: Doppelschlüssel, Manifest und Lizenzdialog im PR korrigiert. Go-Abhängigkeiten x/net v0.62.0 und erforderliches x/crypto v0.58.0; Caddy verlangt musl/musl-utils mindestens 1.2.5-r24. Vollständiger lokaler github_preflight PASS. GitHub CI 42806103550 einschließlich Full Stack erfolgreich; Shell, Release Safety und Live Locale ebenfalls erfolgreich. Full Dependency Security 42806103710 bleibt FAIL: Web-Image zlib1g 1:1.3.dfsg+really1.3.1-1+b1, CVE-2026-76844 und CVE-2026-85091 laut Trivy. Neuester Fix installiert aktualisiertes zlib1g und prüft mindestens 1:1.3.dfsg+really1.3.1-1+deb13u1 im Build. Ein neuer vollständiger Lauf ist erforderlich. Keine Gesamt-CI-Freigabe.
+
+
+### Verifizierter CI-Stand 12.11.2026
+
+Für d8bfdcbbfd01797932b96af2d12c17b3db8608ca sind alle fünf Workflows completed/success. Damit ist der oben historische zlib-Scanfehler für diesen Head behoben:
+
+- Full Dependency Security: https://github.com/deckewandboden/prompmaster/actions/runs/42857619090
+- CI einschließlich Full Stack: https://github.com/deckewandboden/prompmaster/actions/runs/42857619071
+- Shell Syntax: https://github.com/deckewandboden/prompmaster/actions/runs/42857618794
+- Release Safety Gates: https://github.com/deckewandboden/prompmaster/actions/runs/42857618672
+- Live Free Locale Read-only: https://github.com/deckewandboden/prompmaster/actions/runs/42857619309
+
+Die anschließende Backend-Sprachkorrektur benötigt neue CI. Keine Produktionsfreigabe aus diesen Build-Nachweisen ableiten.

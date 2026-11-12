@@ -7,6 +7,7 @@ catalogue that V2 injects next to them, for every language in use.
 import html
 import json
 import re
+import subprocess
 import unittest
 from pathlib import Path
 
@@ -62,6 +63,24 @@ def visible_text_from_markup(path):
 
 
 class ProductLanguageCoverageTests(unittest.TestCase):
+    def test_shared_backend_controls_cover_all_supported_languages(self):
+        # Execute the shipped catalogue, including functional ARIA labels.
+        source = (ROOT / 'backend/static/js/app.js').read_text(encoding='utf-8')
+        prefix = source.split('  const text = translations[language]', 1)[0]
+        program = "const document = {documentElement: {lang: 'fr'}};\n" + prefix
+        program += "\nconsole.log(JSON.stringify(Object.fromEntries(Object.entries(translations).map(([lang, terms]) => [lang, Object.fromEntries(Object.entries(terms).map(([key, value]) => [key, typeof value === 'function' ? value('QA_COLUMN') : value]))]))));\n})();"
+        result = subprocess.run(['node', '-e', program], check=True, capture_output=True, text=True)
+        catalogues = json.loads(result.stdout)
+        for language in ('de',) + LANGUAGES:
+            with self.subTest(language=language):
+                self.assertEqual(set(catalogues[language]), set(catalogues['de']))
+                self.assertTrue(all(catalogues[language].values()))
+                for key in ('sortAria', 'sortAscAria', 'sortDescAria'):
+                    self.assertIn('QA_COLUMN', catalogues[language][key])
+                if language != 'de':
+                    for key in catalogues['de']:
+                        self.assertNotEqual(catalogues[language][key], catalogues['de'][key])
+
     def test_production_v2_labels_and_rebranded_legal_notice(self):
         translated = extract_translations()
         keys = ['Strukturierten Bericht erstellen', 'Aus Dokumentinhalten einen klar gegliederten Bericht erzeugen.', 'Risiken und Lücken analysieren', 'Unklare Angaben, Widersprüche und Risiken erkennen.', 'Beispiel: Für eine Geschäftsleitung kürzer, klarer und ohne technische Detailtiefe.', 'Optional. Ohne Zusatzangabe verbessert Copilot Sprache und Struktur des aktuellen Textes.', 'Zum Beispiel Zahlen, Namen, Termine oder fachliche Pflichtaussagen.', 'Optional. Kritische Fakten dürfen nicht verändert werden.', 'PROMPTFINISHER Pro erweitert Apps, Rollen und Business-Prompts. Microsoft 365 Copilot wird separat lizenziert.'] + ['Aktuell ausgewählt: %(tier)s.', 'Erforderlich für %(app)s: %(tier)s.', '%(tier)s auswählen', '%(tier)s anfragen', 'Für %(app)s benötigt PROMPTFINISHER in dieser Konfiguration mindestens %(tier)s.', '28 weitere Pro-Bereiche anzeigen ▾',

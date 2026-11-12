@@ -82,6 +82,73 @@
       confirmBinding: 'Bağlayıcı olarak onayla',
     },
   };
+  Object.assign(translations, {
+    fr: {
+      loading: 'Chargement des données …',
+      sortAscAria: (label) => `${label}, tri croissant. Modifier le tri`,
+      sortDescAria: (label) => `${label}, tri décroissant. Modifier le tri`,
+      sortAria: (label) => `Trier par ${label}`,
+      sortAscTitle: 'Tri croissant – cliquer pour décroissant',
+      sortDescTitle: 'Tri décroissant – cliquer pour croissant',
+      sortTitle: 'Trier – cliquer pour croissant',
+      copied: 'Copié ✓', securityCheck: 'Vérification de sécurité',
+      confirmAction: 'Confirmer l’action', cancel: 'Annuler', confirm: 'Confirmer',
+      confirmDefault: 'Voulez-vous vraiment effectuer cette action ?',
+      confirmBinding: 'Confirmer avec engagement',
+    },
+    it: {
+      loading: 'Caricamento dei dati …',
+      sortAscAria: (label) => `${label}, ordine crescente. Cambia ordinamento`,
+      sortDescAria: (label) => `${label}, ordine decrescente. Cambia ordinamento`,
+      sortAria: (label) => `Ordina per ${label}`,
+      sortAscTitle: 'Ordine crescente – clicca per decrescente',
+      sortDescTitle: 'Ordine decrescente – clicca per crescente',
+      sortTitle: 'Ordina – clicca per crescente',
+      copied: 'Copiato ✓', securityCheck: 'Verifica di sicurezza',
+      confirmAction: 'Conferma azione', cancel: 'Annulla', confirm: 'Conferma',
+      confirmDefault: 'Vuoi davvero eseguire questa azione?',
+      confirmBinding: 'Conferma con impegno vincolante',
+    },
+    nl: {
+      loading: 'Gegevens worden geladen …',
+      sortAscAria: (label) => `${label}, oplopend gesorteerd. Sorteervolgorde wijzigen`,
+      sortDescAria: (label) => `${label}, aflopend gesorteerd. Sorteervolgorde wijzigen`,
+      sortAria: (label) => `Sorteren op ${label}`,
+      sortAscTitle: 'Oplopend gesorteerd – klik voor aflopend',
+      sortDescTitle: 'Aflopend gesorteerd – klik voor oplopend',
+      sortTitle: 'Sorteren – klik voor oplopend',
+      copied: 'Gekopieerd ✓', securityCheck: 'Beveiligingscontrole',
+      confirmAction: 'Actie bevestigen', cancel: 'Annuleren', confirm: 'Bevestigen',
+      confirmDefault: 'Wilt u deze actie echt uitvoeren?',
+      confirmBinding: 'Bindend bevestigen',
+    },
+    pl: {
+      loading: 'Ładowanie danych …',
+      sortAscAria: (label) => `${label}, sortowanie rosnące. Zmień kolejność`,
+      sortDescAria: (label) => `${label}, sortowanie malejące. Zmień kolejność`,
+      sortAria: (label) => `Sortuj według ${label}`,
+      sortAscTitle: 'Rosnąco – kliknij, aby sortować malejąco',
+      sortDescTitle: 'Malejąco – kliknij, aby sortować rosnąco',
+      sortTitle: 'Sortuj – kliknij, aby sortować rosnąco',
+      copied: 'Skopiowano ✓', securityCheck: 'Kontrola bezpieczeństwa',
+      confirmAction: 'Potwierdź działanie', cancel: 'Anuluj', confirm: 'Potwierdź',
+      confirmDefault: 'Czy na pewno chcesz wykonać tę czynność?',
+      confirmBinding: 'Potwierdź wiążąco',
+    },
+    ru: {
+      loading: 'Загрузка данных …',
+      sortAscAria: (label) => `${label}, по возрастанию. Изменить порядок`,
+      sortDescAria: (label) => `${label}, по убыванию. Изменить порядок`,
+      sortAria: (label) => `Сортировать по ${label}`,
+      sortAscTitle: 'По возрастанию — нажмите для сортировки по убыванию',
+      sortDescTitle: 'По убыванию — нажмите для сортировки по возрастанию',
+      sortTitle: 'Сортировать — нажмите для сортировки по возрастанию',
+      copied: 'Скопировано ✓', securityCheck: 'Проверка безопасности',
+      confirmAction: 'Подтвердить действие', cancel: 'Отмена', confirm: 'Подтвердить',
+      confirmDefault: 'Вы действительно хотите выполнить это действие?',
+      confirmBinding: 'Подтвердить обязательство',
+    },
+  });
   const text = translations[language] || translations.de;
 
   const initDataGrids = () => {
@@ -142,7 +209,7 @@
     const current = new URL(window.location.href);
     const activeSort = current.searchParams.get('sort') || '';
     const activeDir = (current.searchParams.get('dir') || 'asc').toLowerCase() === 'desc' ? 'desc' : 'asc';
-    const collator = new Intl.Collator('de', {numeric: true, sensitivity: 'base'});
+    const collator = new Intl.Collator(language, {numeric: true, sensitivity: 'base'});
 
     const setSortAccessibility = (control, state) => {
       const header = control.closest('th');
