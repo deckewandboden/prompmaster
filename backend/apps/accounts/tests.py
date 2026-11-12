@@ -448,3 +448,15 @@ class UiLanguagePreferenceTests(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.wsgi_request.LANGUAGE_CODE, 'fr')
         self.assertIn(b'<html lang="fr">', response.content)
+
+    def test_localized_login_and_language_redirect_are_never_cached(self):
+        """A prior French login page must not be replayed after selecting German."""
+        login_response = self.client.get(reverse('accounts:login'))
+        self.assertIn('no-store', login_response.get('Cache-Control', ''))
+
+        language_response = self.client.get(
+            reverse('accounts:set_ui_language'),
+            {'language': 'de', 'next': '/auth/login/'},
+        )
+        self.assertEqual(language_response.status_code, 302)
+        self.assertIn('no-store', language_response.get('Cache-Control', ''))
