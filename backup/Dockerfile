@@ -9,7 +9,7 @@ RUN --mount=type=secret,id=pf_staging_ca,required=false \
       trap 'rm -f /tmp/pf-staging-ca-combined.pem' EXIT; \
     fi; \
     apk add --no-cache --upgrade bash restic ca-certificates tzdata su-exec \
-      'brotli-libs>=1.2.1-r0' 'libcurl>=8.23.0-r0' 'krb5-libs>=1.22.3-r0' \
+      'brotli-libs>=1.2.1-r0' 'libcurl>=8.23.0-r0' 'krb5-libs>=1.22.3-r0' 'libxslt>=1.1.43-r4' \
     && rm -f /usr/local/bin/gosu
 COPY backup.sh /usr/local/bin/backup.sh
 RUN chmod 0755 /usr/local/bin/backup.sh
