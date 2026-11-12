@@ -49,11 +49,11 @@ RUN --mount=type=secret,id=pf_staging_ca,required=false \
       export CURL_CA_BUNDLE=/tmp/pf-staging-ca-combined.pem; \
       trap 'rm -f /tmp/pf-staging-ca-combined.pem' EXIT; \
     fi; \
-    go get golang.org/x/net@v0.60.0 \
+    go get golang.org/x/net@v0.62.0 \
     && go mod tidy \
     && make PREBUILT_ASSETS_STATIC_DIR=web/ui/static build \
     && go version -m /src/prometheus | grep -F 'go1.27.3' \
-    && go version -m /src/prometheus | grep -F 'golang.org/x/net' | grep -F 'v0.60.0' \
+    && go version -m /src/prometheus | grep -F 'golang.org/x/net' | grep -F 'v0.62.0' \
     && go version -m /src/promtool | grep -F 'go1.27.3'
 
 # Retain the upstream image's user, ports, config paths and data volume.
