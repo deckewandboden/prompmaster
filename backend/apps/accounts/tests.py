@@ -227,8 +227,14 @@ class UnifiedLoginAndRegistrationFlowTests(TestCase):
     def test_login_page_offers_registration_and_password_reset(self):
         response = self.client.get(reverse('accounts:login'))
         self.assertEqual(response.status_code, 200)
-        self.assertContains(response, 'Noch kein Konto? Konto erstellen')
+        self.assertContains(response, 'Konto anlegen')
+        self.assertContains(response, 'Passwort vergessen?')
+        self.assertContains(response, 'login-secondary-actions')
+        self.assertContains(response, reverse('accounts:register'))
         self.assertContains(response, reverse('accounts:password_reset'))
+        self.assertNotContains(response, 'Ein Zugang für PROMPTFINISHER, Kundenportal und netstyle Admin')
+        self.assertNotContains(response, 'Noch kein Konto? Konto erstellen')
+        self.assertContains(response, '20261113-login-actions1')
 
     @patch('apps.accounts.views.queue_email')
     def test_company_registration_preserves_checkout_target_through_mfa_setup(self, queue_email_mock):
