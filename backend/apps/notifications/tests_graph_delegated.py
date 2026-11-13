@@ -176,3 +176,112 @@ class DelegatedGraphMailTests(TestCase):
             'login_email': LOGIN,
         })
         self.assertFalse(connection_status()['connected'])
+
+
+@override_settings(APP_ENCRYPTION_KEY=TEST_KEY)
+class DelegatedGraphHttpSecurityTests(TestCase):
+    """Actual Django HTTP route boundary; no live Microsoft request."""
+
+    def setUp(self):
+        from django.utils import timezone
+        from apps.accounts.models import User
+
+        self.admin = User.objects.create_superuser(
+            'graph-superadmin@example.test',
+            'Graph-Test-Strong-Password-2026!',
+            first_name='Graph',
+            last_name='Admin',
+        )
+        self.client.force_login(self.admin)
+        session = self.client.session
+        now = timezone.now().timestamp()
+        session['security_version'] = self.admin.security_version
+        session['two_factor_ok'] = True
+        session['authenticated_at'] = now
+        session['last_activity_at'] = now
+        session.save()
+        set_setting('mail_graph', {
+            'tenant_id': TENANT,
+            'client_id': CLIENT,
+            'sender': SENDER,
+            'auth_mode': 'delegated',
+            'login_email': LOGIN,
+        })
+        set_secret('graph_client_secret', 'confidential-test-secret')
+
+    def test_mfa_connect_requires_post_and_does_not_send_mail(self):
+        from django.urls import reverse
+
+        connect = reverse('ns_admin:graph_mail_connect')
+        self.assertEqual(self.client.get(connect, secure=True).status_code, 405)
+        with patch('apps.notifications.graph_delegated.requests.post') as post:
+            response = self.client.post(connect, secure=True)
+        self.assertEqual(response.status_code, 302)
+        self.assertIn('login.microsoftonline.com/', response.url)
+        self.assertIn('Mail.Send.Shared', response.url)
+        post.assert_not_called()
+
+    def test_callback_invalid_state_does_not_store_credentials(self):
+        from django.urls import reverse
+
+        self.client.post(reverse('ns_admin:graph_mail_connect'), secure=True)
+        response = self.client.get(
+            reverse('ns_admin:graph_mail_callback'),
+            {'state': 'incorrect', 'code': 'invalid'},
+            secure=True,
+        )
+        self.assertRedirects(response, reverse('ns_admin:settings'), fetch_redirect_response=False)
+        self.assertFalse(connection_status()['connected'])
+
+    def test_real_test_send_requires_explicit_confirmation(self):
+        from django.urls import reverse
+
+        set_secret('graph_delegated_refresh_token', 'refresh')
+        set_setting('mail_graph_delegated_connection', {
+            'tenant_id': TENANT, 'client_id': CLIENT, 'login_email': LOGIN,
+        })
+        endpoint = reverse('ns_admin:graph_mail_test')
+        with patch('apps.core.graph_mail_views._send_graph') as send:
+            response = self.client.post(
+                endpoint,
+                {'recipient': 'test-recipient@example.test'},
+                secure=True,
+            )
+            self.assertEqual(response.status_code, 302)
+            send.assert_not_called()
+            response = self.client.post(
+                endpoint,
+                {'recipient': 'test-recipient@example.test', 'confirm': 'send-one-test'},
+                secure=True,
+            )
+            self.assertEqual(response.status_code, 302)
+            self.assertEqual(send.call_count, 1)
+
+    def test_non_staff_cannot_manage_graph_connection(self):
+        from apps.accounts.models import User
+        from django.urls import reverse
+
+        other = User.objects.create_user(
+            'graph-customer@example.test',
+            'Graph-Test-Strong-Password-2026!',
+        )
+        self.client.force_login(other)
+        self.assertEqual(
+            self.client.post(reverse('ns_admin:graph_mail_connect'), secure=True).status_code,
+            403,
+        )
+
+    def test_mfa_settings_never_expose_secret_or_refresh_token(self):
+        from django.urls import reverse
+
+        set_secret('graph_delegated_refresh_token', 'secret-refresh-token')
+        set_setting('mail_graph_delegated_connection', {
+            'tenant_id': TENANT, 'client_id': CLIENT, 'login_email': LOGIN,
+        })
+        response = self.client.get(reverse('ns_admin:settings'), secure=True)
+        self.assertEqual(response.status_code, 200)
+        html = response.content.decode('utf-8')
+        self.assertIn('Mit Microsoft 365 verbinden', html)
+        self.assertIn(reverse('ns_admin:graph_mail_callback'), html)
+        self.assertNotIn('confidential-test-secret', html)
+        self.assertNotIn('secret-refresh-token', html)
