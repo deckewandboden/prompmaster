@@ -131,3 +131,5 @@ scripts/audit_public_asset_parity.py	0	text-not-byte-validated	test
 scripts/test_public_asset_parity.py	0	text-not-byte-validated	test
 .github/workflows/public-asset-parity.yml	0	text-not-byte-validated	active-ci
 scripts/test_browser_totp_submit.py	0	text-not-byte-validated	test
+docs/PRODUCTION_ACCEPTANCE_ISSUE105_20261110.md	42573	bc56927af66c015c6e2a0804b54b0e6a84f0c72a5035fb66558ddb39e368cd8e	documentation
+docs/CHANGE_ISSUE105_LIVE_UI_20261106.md	1496	fa5f616af8df5689dc24bcd5e67e784770da10d8530497f9ab5f99f41a896c3f	documentation

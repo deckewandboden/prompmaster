@@ -414,7 +414,9 @@ def compose_free_legacy(*, contract, microsoft_tier: str, payload: dict) -> dict
         context_parts.append(
             str(runtime.get('primary_prefix') or '')
             + primary
-            + str(runtime.get('primary_suffix') or '')
+            + ('' if str(runtime.get('primary_suffix') or '') == '.'
+               and primary.endswith(('.', '!', '?', '…'))
+               else str(runtime.get('primary_suffix') or ''))
         )
     if secondary:
         context_parts.append(
