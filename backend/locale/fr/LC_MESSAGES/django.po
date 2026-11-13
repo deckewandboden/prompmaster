@@ -3881,3 +3881,78 @@ msgstr "Gestion des licences / renouvellement"
 
 msgid "Jetzt trotzdem PROMPTFINISHER Pro starten"
 msgstr "Ouvrir quand même PROMPTFINISHER Pro"
+
+msgid "Für freigegebene Microsoft-365-Postfächer delegiertes OAuth mit MFA und Mail.Send.Shared verwenden. Die Entra-Anmeldung erfolgt über das persönliche Konto, nicht über das Shared Mailbox Passwort."
+msgstr "Pour les boîtes partagées Microsoft 365, utilisez OAuth délégué avec MFA et Mail.Send.Shared. Connectez-vous à Entra avec votre compte personnel, pas avec le mot de passe de la boîte partagée."
+
+msgid "Microsoft 365 MFA-Verbindung"
+msgstr "Connexion MFA Microsoft 365"
+
+msgid "Zuerst Tenant, App-ID, persönliches Anmeldekonto, freigegebenes Absenderpostfach, Client-Secret und Anmeldemethode speichern. Im Microsoft Entra Admin Center die exakte Callback-Adresse als Web-Redirect registrieren und delegiertes Mail.Send.Shared mit User.Read erlauben."
+msgstr "Enregistrez d'abord le locataire, l'ID d'application, le compte personnel, la boîte expéditrice partagée, le secret client et le mode de connexion. Dans Microsoft Entra, déclarez l'URL de rappel exacte comme redirection web et autorisez Mail.Send.Shared délégué et User.Read."
+
+msgid "Verbindungsstatus"
+msgstr "État de la connexion"
+
+msgid "Mit MFA verbunden"
+msgstr "Connecté avec MFA"
+
+msgid "Nicht verbunden / erneut anmelden"
+msgstr "Non connecté / se reconnecter"
+
+msgid "Angemeldetes Konto"
+msgstr "Compte connecté"
+
+msgid "Verbunden am"
+msgstr "Connecté le"
+
+msgid "Exakte Entra-Redirect-URI"
+msgstr "URI de redirection Entra exacte"
+
+msgid "Für Senden als ein freigegebenes Postfach muss das persönliche Konto in Exchange Online die Berechtigung Send As besitzen. HTTP 202 von Microsoft Graph bedeutet nur angenommen, nicht zugestellt."
+msgstr "Pour envoyer depuis une boîte partagée, le compte personnel doit disposer du droit Envoyer en tant que dans Exchange Online. HTTP 202 signifie accepté par Microsoft Graph, pas livré."
+
+msgid "Mit Microsoft 365 verbinden (MFA)"
+msgstr "Se connecter à Microsoft 365 (MFA)"
+
+msgid "Verbindung trennen"
+msgstr "Déconnecter"
+
+msgid "Testempfänger"
+msgstr "Destinataire du test"
+
+msgid "Eine einzelne echte Test-E-Mail ausdrücklich senden"
+msgstr "Envoyer explicitement un véritable e-mail de test"
+
+msgid "Test-E-Mail senden"
+msgstr "Envoyer un e-mail de test"
+
+msgid "Keine automatische Test-E-Mail bei Installation oder Verbindung. Prüfe nach der Antwort 202 den wirklichen Posteingang separat."
+msgstr "Aucun e-mail de test automatique lors de l'installation ou de la connexion. Après HTTP 202, vérifiez séparément la réception réelle dans la boîte."
+
+msgid "Nur Benutzer mit Berechtigung Einstellungen schreiben dürfen die Microsoft-365-Verbindung verwalten."
+msgstr "Seuls les utilisateurs autorisés à modifier les paramètres peuvent gérer la connexion Microsoft 365."
+
+msgid "Anmeldemethode"
+msgstr "Mode de connexion"
+
+msgid "Delegierte Anmeldung mit MFA"
+msgstr "Connexion déléguée avec MFA"
+
+msgid "Application (Bestandsmodus)"
+msgstr "Application (mode existant)"
+
+msgid "MFA-Verbindung"
+msgstr "Connexion MFA"
+
+msgid "Verbunden"
+msgstr "Connecté"
+
+msgid "Nicht verbunden"
+msgstr "Non connecté"
+
+msgid "Anmeldekonto"
+msgstr "Compte de connexion"
+
+msgid "Für ein freigegebenes Postfach benötigt das Anmeldekonto Exchange Send As. Ein HTTP 202 bestätigt nur die Annahme des Versandauftrags."
+msgstr "Pour envoyer depuis une boîte partagée, le compte doit disposer du droit Envoyer en tant que dans Exchange. HTTP 202 confirme uniquement l'acceptation de la demande."
