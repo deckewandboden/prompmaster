@@ -6,7 +6,7 @@ from html.parser import HTMLParser
 from urllib.parse import urlsplit
 
 from django.core.management import call_command
-from django.test import TestCase, override_settings
+from django.test import SimpleTestCase, TestCase, override_settings
 from django.urls import Resolver404, resolve
 from django.utils import timezone
 
@@ -249,3 +249,25 @@ class RenderedUiActionContractTests(TestCase):
             minimum_pages=7,
             minimum_controls=25,
         )
+
+
+class NetstyleAdminKpiLayoutTests(SimpleTestCase):
+    def test_five_dashboard_metrics_share_one_desktop_grid(self):
+        from django.conf import settings
+
+        template = (
+            settings.BASE_DIR / 'templates' / 'ns_admin' / 'dashboard.html'
+        ).read_text(encoding='utf-8')
+        css = (
+            settings.BASE_DIR / 'static' / 'css' / 'app.css'
+        ).read_text(encoding='utf-8')
+        self.assertIn('class="grid kpis ns-admin-dashboard-kpis"', template)
+        for label in (
+            'Kunden gesamt', 'Offene Leads', 'Aktive Lizenzen',
+            'Ablauf unter 30 Tagen', 'Umsatz 30 Tage',
+        ):
+            self.assertIn(label, template)
+        self.assertIn('@media(min-width:1281px){', css)
+        self.assertIn('grid-template-columns:repeat(5,minmax(0,1fr));', css)
+        self.assertIn('.ns-admin-dashboard-kpis{', css)
+        self.assertIn('@media(max-width:420px){', css)
