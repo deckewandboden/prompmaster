@@ -586,6 +586,20 @@ class GeneralSettingsForm(forms.Form):
         label=_("Entra Client ID"),
         help_text=_("Anwendungs-/Client-ID der App-Registrierung."),
     )
+    graph_auth_mode = forms.ChoiceField(
+        required=True,
+        choices=[
+            ('delegated', _("Microsoft 365 anmelden (delegiert, mit MFA)")),
+            ('application', _("Bestandsmodus: Application-Mail.Send (ohne MFA)")),
+        ],
+        label=_("Graph-Anmeldemethode"),
+        help_text=_("Für freigegebene Postfächer delegiertes OAuth mit Mail.Send.Shared wählen."),
+    )
+    graph_login_email = forms.EmailField(
+        required=False,
+        label=_("Microsoft-365-Anmeldekonto"),
+        help_text=_("Das persönliche Konto, das sich bei Microsoft inklusive MFA anmeldet; nicht das freigegebene Postfach."),
+    )
     graph_sender = forms.EmailField(
         required=False,
         label=_("Microsoft-365-Absender"),
@@ -689,7 +703,10 @@ class GeneralSettingsForm(forms.Form):
                     if not data.get(field):
                         self.add_error(field, _("Für SMTP 2 ist dieses Feld erforderlich."))
             if 'graph' in route:
-                for field in ('graph_tenant_id', 'graph_client_id', 'graph_sender'):
+                required_graph = ['graph_tenant_id', 'graph_client_id', 'graph_sender']
+                if data.get('graph_auth_mode') == 'delegated':
+                    required_graph.append('graph_login_email')
+                for field in required_graph:
                     if not data.get(field):
                         self.add_error(field, _("Für Microsoft Graph ist dieses Feld erforderlich."))
                 if not data.get('graph_client_secret') and not self.graph_secret_configured:
