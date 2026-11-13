@@ -80,6 +80,16 @@ body.pmv2 textarea{font-family:inherit}
 .pmv2-header-spacer{flex:1}
 .pmv2-ms-label{font-size:13px;color:#bbccdb;margin-right:16px;white-space:nowrap}
 .pmv2-header-actions{display:flex;align-items:center;gap:12px}
+@media(min-width:621px){
+  .pmv2-pro .pmv2-header-actions{flex-shrink:0;white-space:nowrap}
+  .pmv2-pro .pmv2-header-actions .pmv2-header-cta{
+    flex:0 0 auto;
+    min-width:max-content;
+    white-space:nowrap;
+    word-break:keep-all;
+    line-height:1;
+  }
+}
 .pmv2-header-cta{
   min-height:44px;
   padding:0 20px;
@@ -102,8 +112,29 @@ body.pmv2 textarea{font-family:inherit}
   box-shadow:0 0 25px rgba(138,69,234,.25);
 }
 .pmv2-header-cta:hover{transform:translateY(-1px);filter:brightness(1.06)}
-.pmv2-logout{color:#9fb2c3!important;text-decoration:none;font-size:12px}
-.pmv2-logout:hover{color:#fff!important}
+.pmv2-logout{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  flex:0 0 auto;
+  min-height:44px;
+  padding:0 16px;
+  border:1px solid rgba(137,178,215,.42);
+  border-radius:10px;
+  background:rgba(15,36,62,.82);
+  color:#e8f2fc!important;
+  text-decoration:none;
+  font-size:13px;
+  font-weight:800;
+  white-space:nowrap;
+  line-height:1;
+  transition:background .16s ease,border-color .16s ease;
+}
+.pmv2-logout:hover,.pmv2-logout:focus-visible{
+  color:#fff!important;
+  background:rgba(31,65,105,.95);
+  border-color:rgba(89,202,246,.74);
+}
 
 .pmv2-hero{
   height:var(--pmv2-hero-h);
@@ -875,7 +906,7 @@ body.pmv2 textarea{font-family:inherit}
   .pmv2-brand img{width:195px}
   .pmv2-edition{display:none}
   .pmv2-header-cta{font-size:11px;padding:0 11px;min-height:40px}
-  .pmv2-logout{display:none}
+  .pmv2-logout{display:inline-flex}
   .pmv2-hero-copy h1{font-size:27px}
   .pmv2-flow-row{grid-template-columns:repeat(2,1fr)}
   .pmv2-flow-step:nth-child(n+3){display:none}
@@ -1862,4 +1893,51 @@ body.pmv2 .pmv2-header-cta{
 .pmv2-pro .pmv2-review-label button.pmv2-review-edit[data-pmv2-edit]:focus-visible{
   color:#02050b!important;
   -webkit-text-fill-color:#02050b!important;
+}
+
+/* Pro header contract: desktop actions stay a single aligned row.
+   Narrow tablets get a second aligned row. On phones the existing locale
+   switcher owns a compact 62px header with accessible icon actions. */
+@media(min-width:621px) and (max-width:740px){
+  body.pmv2-pro .pmv2-header{
+    height:auto!important;
+    min-height:62px!important;
+    padding:9px 10px!important;
+    gap:8px!important;
+    flex-wrap:wrap;
+  }
+  body.pmv2-pro .pmv2-header-actions{
+    flex:1 0 100%;
+    justify-content:flex-end;
+    gap:8px!important;
+    min-width:0;
+  }
+  body.pmv2-pro .pmv2-header-actions .pmv2-header-cta{
+    max-width:none!important;
+    min-width:0!important;
+    min-height:36px!important;
+    padding:0 10px!important;
+    font-size:10.5px!important;
+    white-space:nowrap!important;
+  }
+  body.pmv2-pro .pmv2-logout{
+    display:inline-flex!important;
+    min-height:36px;
+    padding:0 10px;
+    font-size:11px;
+  }
+}
+
+@media(max-width:620px){
+  /* Do not override the product locale switcher's 320–390px layout:
+     128px language + compact admin/logout actions must remain within view. */
+  body.pmv2-pro .pmv2-header-cta{white-space:nowrap}
+  body.pmv2-pro .pmv2-logout{
+    display:inline-flex!important;
+    flex:0 0 30px;
+    width:30px;
+    min-height:34px;
+    padding:0 2px!important;
+    border-radius:8px;
+  }
 }

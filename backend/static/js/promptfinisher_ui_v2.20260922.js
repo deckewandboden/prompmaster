@@ -203,8 +203,13 @@
       const logout = document.createElement('a');
       logout.className = 'pmv2-logout';
       logout.href = logoutLink.href;
-      logout.textContent = 'Abmelden';
+      const localizedLogout = () => translateUi('Abmelden');
+      logout.textContent = localizedLogout();
       headerActions.append(logout);
+      window.addEventListener('pm-product-locale-ready', () => {
+        logout.textContent = localizedLogout();
+        logout.setAttribute('aria-label', logout.textContent.trim());
+      });
     }
   }
 
@@ -667,6 +672,10 @@
     if (node && node !== hero) node.remove();
   });
   if (oldMain.isConnected) oldMain.remove();
+
+  // Only expose the current Pro design after all legacy page chrome is gone.
+  // The head's load fallback keeps an accessible legacy page if V2 never boots.
+  document.getElementById('pmv2-prepaint-guard')?.remove();
 
   let scrollRequestId = 0;
   const phoneFlowQuery = window.matchMedia('(max-width: 620px)');

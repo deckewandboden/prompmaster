@@ -1037,6 +1037,9 @@ def _check_product_v2_shell(page, label: str, width: int) -> None:
         """() => {
           const logo = document.querySelector('.pmv2-brand img');
           const header = document.querySelector('.pmv2-header');
+          const isPro = document.body.classList.contains('pmv2-pro');
+          const workspaceAction = document.querySelector('.pmv2-pro .pmv2-header-actions .pmv2-header-cta');
+          const logoutAction = document.querySelector('.pmv2-pro .pmv2-header-actions .pmv2-logout');
           const left = document.querySelector('#pmv2ConfigScroll');
           const right = document.querySelector('.pmv2-prompt-panel');
           const output = document.querySelector('#promptOutput');
@@ -1129,6 +1132,24 @@ def _check_product_v2_shell(page, label: str, width: int) -> None:
             logoNaturalWidth: logo?.naturalWidth || 0,
             headerLeft: headerRect?.left ?? -1,
             headerRight: headerRect?.right ?? -1,
+            isPro,
+            workspaceAction: workspaceAction ? {
+              text:workspaceAction.textContent.trim(),
+              whiteSpace:getComputedStyle(workspaceAction).whiteSpace,
+              height:workspaceAction.getBoundingClientRect().height,
+              top:workspaceAction.getBoundingClientRect().top,
+              bottom:workspaceAction.getBoundingClientRect().bottom,
+              visible:getComputedStyle(workspaceAction).display !== 'none',
+            } : null,
+            logoutAction: logoutAction ? {
+              text:logoutAction.textContent.trim(),
+              whiteSpace:getComputedStyle(logoutAction).whiteSpace,
+              height:logoutAction.getBoundingClientRect().height,
+              top:logoutAction.getBoundingClientRect().top,
+              bottom:logoutAction.getBoundingClientRect().bottom,
+              visible:getComputedStyle(logoutAction).display !== 'none',
+              borderWidth:parseFloat(getComputedStyle(logoutAction).borderTopWidth),
+            } : null,
             leftOverflowY: left ? getComputedStyle(left).overflowY : '',
             rightOverflowY: right ? getComputedStyle(right).overflowY : '',
             rightPosition: right ? getComputedStyle(right).position : '',
@@ -1187,6 +1208,22 @@ def _check_product_v2_shell(page, label: str, width: int) -> None:
         )
     if metrics['headerLeft'] < -1 or metrics['headerRight'] > metrics['innerWidth'] + 1:
         raise AssertionError(f'{label} {width}px: V2 header leaves viewport: {metrics}')
+    if metrics['isPro']:
+        workspace = metrics['workspaceAction'] or {}
+        logout = metrics['logoutAction'] or {}
+        if (
+            not workspace.get('visible')
+            or not logout.get('visible')
+            or workspace.get('whiteSpace') != 'nowrap'
+            or logout.get('whiteSpace') != 'nowrap'
+            or logout.get('borderWidth', 0) < 1
+            or not workspace.get('text')
+            or not logout.get('text')
+            or abs(workspace.get('top', -100) - logout.get('top', 0)) > 7
+        ):
+            raise AssertionError(
+                f'{label} {width}px: Pro admin/logout buttons are misaligned or wrap: {metrics}'
+            )
     if metrics['logoPath'] != '/static/brand/promptfinisher-logo-hq.png':
         raise AssertionError(f'{label} {width}px: V2 legacy logo active: {metrics["logoPath"]}')
     if metrics['logoNaturalWidth'] < 1000:
@@ -1260,7 +1297,8 @@ def _check_product_v2_shell(page, label: str, width: int) -> None:
             raise AssertionError(
                 f'{label} {width}px: mobile workflow hides steps: {metrics}'
             )
-        if metrics['headerHeight'] > 70:
+        max_header_height = 125 if metrics['isPro'] and 620 < width <= 740 else 70
+        if metrics['headerHeight'] > max_header_height:
             raise AssertionError(
                 f'{label} {width}px: mobile header remains too tall: {metrics}'
             )
@@ -1274,7 +1312,8 @@ def _check_product_v2_shell(page, label: str, width: int) -> None:
             raise AssertionError(
                 f'{label} {width}px: mobile landing hero is too tall: {metrics}'
             )
-        if metrics['firstSectionTop'] > 440:
+        first_section_max = 440
+        if metrics['firstSectionTop'] > first_section_max:
             raise AssertionError(
                 f'{label} {width}px: first configuration step starts too low: {metrics}'
             )
