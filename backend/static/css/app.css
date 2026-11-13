@@ -126,6 +126,9 @@ a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,te
 }
 
 
+/* Give the login form breathing room after the removed explanatory paragraph. */
+.login-main-card > h1{margin-bottom:18px}
+
 /* Login-specific follow-up actions: equal width, aligned, readable in all locales. */
 .login-card .login-secondary-actions{
   display:grid;
