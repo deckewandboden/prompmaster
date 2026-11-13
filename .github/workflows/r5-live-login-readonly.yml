@@ -1,0 +1,30 @@
+name: PROMPTFINISHER Live Login Design Read-only
+on:
+  pull_request:
+    paths:
+      - scripts/audit_live_login_design.py
+      - .github/workflows/r5-live-login-readonly.yml
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: r5-live-login-readonly-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  public-live-login:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - name: Check out audit code
+        uses: actions/checkout@v4
+      - name: Prepare Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+      - name: Validate audit syntax
+        run: python -m py_compile scripts/audit_live_login_design.py
+      - name: GET-only audit against actual deployed login (all ten locales)
+        run: python scripts/audit_live_login_design.py
