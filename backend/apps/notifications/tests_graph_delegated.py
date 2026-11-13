@@ -23,7 +23,7 @@ from .graph_delegated import (
 from .services import _send_graph
 
 
-TEST_KEY = base64.urlsafe_b64encode(b'graph-mfa-test-encryption-key-32!!').decode('ascii')
+TEST_KEY = base64.urlsafe_b64encode(b'0123456789abcdef0123456789abcdef').decode('ascii')
 TENANT = '371c7e08-18ee-4193-9d00-ea433db6319f'
 CLIENT = '299ec43b-54ac-4455-b752-580271c84a0c'
 LOGIN = 'test-operator@example.test'
@@ -85,6 +85,7 @@ class DelegatedGraphMailTests(TestCase):
     def test_verified_mfa_callback_persists_only_encrypted_refresh_token(self):
         req, url = self._authorize()
         query = parse_qs(urlsplit(url).query)
+        verifier = req.session[OAUTH_SESSION_KEY]['verifier']
         req.GET = {'state': query['state'][0], 'code': 'test-code'}
         token_reply = MagicMock(status_code=200)
         token_reply.json.return_value = {
@@ -97,7 +98,8 @@ class DelegatedGraphMailTests(TestCase):
         with patch('apps.notifications.graph_delegated.requests.post', return_value=token_reply) as post, \
              patch('apps.notifications.graph_delegated.requests.get', return_value=account_reply) as get:
             self.assertEqual(complete_authorization(req, CALLBACK), LOGIN)
-        self.assertEqual(post.call_args.kwargs['data']['code_verifier'], req.session.get(OAUTH_SESSION_KEY, {}).get('verifier', post.call_args.kwargs['data']['code_verifier']))
+        self.assertEqual(post.call_args.kwargs['data']['code_verifier'], verifier)
+        self.assertNotIn(OAUTH_SESSION_KEY, req.session)
         self.assertTrue(get.called)
         self.assertTrue(connection_status()['connected'])
         self.assertEqual(connection_status()['account'], LOGIN)
