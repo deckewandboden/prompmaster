@@ -21,6 +21,11 @@ V2_ASSET_REV = b'20261023-review-l10n2'
 V2_STYLE = b'<link rel="stylesheet" href="/static/css/promptfinisher_v2.20260922.css?v=' + V2_ASSET_REV + b'">'
 V2_SCRIPT = b'<script src="/static/js/promptfinisher_ui_v2.20260922.js?v=' + V2_ASSET_REV + b'" defer></script>'
 I18N_SCRIPT = b'<script src="/static/js/promptfinisher_product_i18n.20261011.js?v=' + V2_ASSET_REV + b'" defer></script>'
+# Cache-bust only the changed Pro presentation assets. Free, i18n, legacy
+# Golden Masters and their revisioned URLs keep their existing contract.
+V2_PRO_ASSET_REV = b'20261113-pro-prepaint-header1'
+V2_PRO_STYLE = b'<link rel="stylesheet" href="/static/css/promptfinisher_v2.20260922.css?v=' + V2_PRO_ASSET_REV + b'">'
+V2_PRO_SCRIPT = b'<script src="/static/js/promptfinisher_ui_v2.20260922.js?v=' + V2_PRO_ASSET_REV + b'" defer></script>'
 # The Pro source is a validated legacy Golden Master. Keep it fully invisible
 # before deferred JS replaces its layout, rather than briefly painting it.
 # Recovery on window.load reveals the legacy UI if the V2 script fails to run;
@@ -68,9 +73,12 @@ def _inject_v2_ui(data: bytes, *, language_cookie: str = 'de', prepaint_guard: b
     if language not in allowed:
         language = 'de'
     data = data.replace(html_tag, b'<html lang="' + language.encode('ascii') + b'">', 1)
-    head_assets = V2_STYLE + (V2_PREPAINT_GUARD if prepaint_guard else b'')
+    head_assets = (V2_PRO_STYLE if prepaint_guard else V2_STYLE)
+    if prepaint_guard:
+        head_assets += V2_PREPAINT_GUARD
+    script = V2_PRO_SCRIPT if prepaint_guard else V2_SCRIPT
     data = data.replace(head_marker, head_assets + head_marker, 1)
-    data = data.replace(body_marker, V2_SCRIPT + I18N_SCRIPT + body_marker, 1)
+    data = data.replace(body_marker, script + I18N_SCRIPT + body_marker, 1)
     return data
 
 
