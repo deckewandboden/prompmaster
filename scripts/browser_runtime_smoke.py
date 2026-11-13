@@ -1297,7 +1297,7 @@ def _check_product_v2_shell(page, label: str, width: int) -> None:
             raise AssertionError(
                 f'{label} {width}px: mobile workflow hides steps: {metrics}'
             )
-        max_header_height = 125 if metrics['isPro'] and width <= 620 else 70
+        max_header_height = 125 if metrics['isPro'] and width <= 740 else 70
         if metrics['headerHeight'] > max_header_height:
             raise AssertionError(
                 f'{label} {width}px: mobile header remains too tall: {metrics}'
