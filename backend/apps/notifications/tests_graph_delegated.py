@@ -192,6 +192,8 @@ class DelegatedGraphHttpSecurityTests(TestCase):
             first_name='Graph',
             last_name='Admin',
         )
+        self.admin.totp_secret_enc = 'configured-for-test'
+        self.admin.save(update_fields=['totp_secret_enc', 'updated_at'])
         self.client.force_login(self.admin)
         session = self.client.session
         now = timezone.now().timestamp()
