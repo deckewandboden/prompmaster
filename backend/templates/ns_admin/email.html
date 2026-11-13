@@ -23,6 +23,12 @@
     <div class="statusrow"><span>{% translate 'Anmeldung' %}</span><strong>{% if smtp_transport_2.username and smtp_transport_2.password_configured %}{% translate 'Konfiguriert' %}{% elif smtp_transport_2.username %}{% translate 'Passwort fehlt' %}{% elif smtp_transport_2.host %}{% translate 'Ohne Anmeldung' %}{% else %}{% translate 'Nicht konfiguriert' %}{% endif %}</strong></div>
 
     <h3 class="mt-16">Microsoft 365 / Entra ID</h3>
+    <div class="statusrow"><span>{% translate 'Anmeldemethode' %}</span><strong>{% if graph_transport.auth_mode == 'delegated' %}{% translate 'Delegierte Anmeldung mit MFA' %}{% else %}{% translate 'Application (Bestandsmodus)' %}{% endif %}</strong></div>
+    {% if graph_transport.auth_mode == 'delegated' %}
+      <div class="statusrow"><span>{% translate 'MFA-Verbindung' %}</span><span class="badge {% if graph_connection.connected %}ok{% else %}warn{% endif %}">{% if graph_connection.connected %}{% translate 'Verbunden' %}{% else %}{% translate 'Nicht verbunden' %}{% endif %}</span></div>
+      {% if graph_connection.connected %}<div class="statusrow"><span>{% translate 'Anmeldekonto' %}</span><strong>{{ graph_connection.account }}</strong></div>{% endif %}
+      <p class="small muted">{% translate 'Für ein freigegebenes Postfach benötigt das Anmeldekonto Exchange Send As. Ein HTTP 202 bestätigt nur die Annahme des Versandauftrags.' %}</p>
+    {% endif %}
     <div class="statusrow"><span>Tenant ID</span><strong>{% if graph_transport.tenant_id %}{% translate 'Konfiguriert' %}{% else %}{% translate 'Fehlt' %}{% endif %}</strong></div>
     <div class="statusrow"><span>Client ID</span><strong>{% if graph_transport.client_id %}{% translate 'Konfiguriert' %}{% else %}{% translate 'Fehlt' %}{% endif %}</strong></div>
     <div class="statusrow"><span>Client Secret</span><strong>{% if graph_transport.client_secret_configured %}{% translate 'Konfiguriert' %}{% else %}{% translate 'Fehlt' %}{% endif %}</strong></div>

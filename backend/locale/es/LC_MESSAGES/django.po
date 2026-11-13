@@ -3815,3 +3815,78 @@ msgstr "Gestión de licencias / renovación"
 
 msgid "Jetzt trotzdem PROMPTFINISHER Pro starten"
 msgstr "Abrir PROMPTFINISHER Pro de todos modos"
+
+msgid "Für freigegebene Microsoft-365-Postfächer delegiertes OAuth mit MFA und Mail.Send.Shared verwenden. Die Entra-Anmeldung erfolgt über das persönliche Konto, nicht über das Shared Mailbox Passwort."
+msgstr "Para buzones compartidos de Microsoft 365, use OAuth delegado con MFA y Mail.Send.Shared. Inicie sesión en Entra con su cuenta personal, no con la contraseña del buzón compartido."
+
+msgid "Microsoft 365 MFA-Verbindung"
+msgstr "Conexión MFA de Microsoft 365"
+
+msgid "Zuerst Tenant, App-ID, persönliches Anmeldekonto, freigegebenes Absenderpostfach, Client-Secret und Anmeldemethode speichern. Im Microsoft Entra Admin Center die exakte Callback-Adresse als Web-Redirect registrieren und delegiertes Mail.Send.Shared mit User.Read erlauben."
+msgstr "Guarde primero el inquilino, ID de aplicación, cuenta personal, buzón remitente compartido, secreto de cliente y método de inicio de sesión. En Microsoft Entra registre la URL de retorno exacta como redirección web y permita Mail.Send.Shared delegado y User.Read."
+
+msgid "Verbindungsstatus"
+msgstr "Estado de conexión"
+
+msgid "Mit MFA verbunden"
+msgstr "Conectado con MFA"
+
+msgid "Nicht verbunden / erneut anmelden"
+msgstr "Sin conexión / volver a iniciar sesión"
+
+msgid "Angemeldetes Konto"
+msgstr "Cuenta conectada"
+
+msgid "Verbunden am"
+msgstr "Conectado el"
+
+msgid "Exakte Entra-Redirect-URI"
+msgstr "URI exacta de redirección de Entra"
+
+msgid "Für Senden als ein freigegebenes Postfach muss das persönliche Konto in Exchange Online die Berechtigung Send As besitzen. HTTP 202 von Microsoft Graph bedeutet nur angenommen, nicht zugestellt."
+msgstr "Para enviar como buzón compartido, la cuenta personal necesita permiso Enviar como en Exchange Online. HTTP 202 de Microsoft Graph significa aceptado, no entregado."
+
+msgid "Mit Microsoft 365 verbinden (MFA)"
+msgstr "Conectar a Microsoft 365 (MFA)"
+
+msgid "Verbindung trennen"
+msgstr "Desconectar"
+
+msgid "Testempfänger"
+msgstr "Destinatario de prueba"
+
+msgid "Eine einzelne echte Test-E-Mail ausdrücklich senden"
+msgstr "Enviar expresamente un correo real de prueba"
+
+msgid "Test-E-Mail senden"
+msgstr "Enviar correo de prueba"
+
+msgid "Keine automatische Test-E-Mail bei Installation oder Verbindung. Prüfe nach der Antwort 202 den wirklichen Posteingang separat."
+msgstr "No se envía ningún correo de prueba automático al instalar o conectar. Tras HTTP 202, compruebe por separado la entrega real en la bandeja de entrada."
+
+msgid "Nur Benutzer mit Berechtigung Einstellungen schreiben dürfen die Microsoft-365-Verbindung verwalten."
+msgstr "Solo los usuarios con permiso para editar ajustes pueden administrar la conexión de Microsoft 365."
+
+msgid "Anmeldemethode"
+msgstr "Método de inicio de sesión"
+
+msgid "Delegierte Anmeldung mit MFA"
+msgstr "Inicio de sesión delegado con MFA"
+
+msgid "Application (Bestandsmodus)"
+msgstr "Aplicación (modo heredado)"
+
+msgid "MFA-Verbindung"
+msgstr "Conexión MFA"
+
+msgid "Verbunden"
+msgstr "Conectado"
+
+msgid "Nicht verbunden"
+msgstr "No conectado"
+
+msgid "Anmeldekonto"
+msgstr "Cuenta de inicio de sesión"
+
+msgid "Für ein freigegebenes Postfach benötigt das Anmeldekonto Exchange Send As. Ein HTTP 202 bestätigt nur die Annahme des Versandauftrags."
+msgstr "Para enviar desde un buzón compartido, la cuenta necesita el permiso Enviar como de Exchange. HTTP 202 solo confirma la aceptación de la solicitud."

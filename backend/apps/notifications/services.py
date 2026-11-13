@@ -178,6 +178,8 @@ def get_graph_transport():
         'client_id': str(stored.get('client_id') or settings.GRAPH_CLIENT_ID).strip(),
         'client_secret': secret,
         'sender': str(stored.get('sender') or settings.GRAPH_SENDER).strip(),
+        'auth_mode': str(stored.get('auth_mode') or 'application').strip().lower(),
+        'login_email': str(stored.get('login_email') or '').strip().lower(),
         'client_secret_configured': bool(secret),
     }
 
@@ -607,24 +609,38 @@ def _send_graph(message, body):
     if not all(required):
         raise SafeMailFailoverError('graph', 'Microsoft Graph mail provider is not fully configured')
 
-    try:
-        token_response = requests.post(
-            f"https://login.microsoftonline.com/{graph['tenant_id']}/oauth2/v2.0/token",
-            data={
-                'client_id': graph['client_id'],
-                'client_secret': graph['client_secret'],
-                'scope': 'https://graph.microsoft.com/.default',
-                'grant_type': 'client_credentials',
-            },
-            timeout=(5, 20),
-        )
-        token_response.raise_for_status()
-        access_token = token_response.json().get('access_token')
-    except Exception as exc:
-        # No sendMail request has been made yet, so SMTP failover is safe.
-        raise SafeMailFailoverError('graph', exc) from exc
-    if not access_token:
-        raise SafeMailFailoverError('graph', 'Microsoft Graph did not return an access token')
+    if graph['auth_mode'] == 'delegated':
+        from .graph_delegated import GraphDelegatedError, delegated_access_token
+
+        try:
+            access_token = delegated_access_token()
+        except GraphDelegatedError as exc:
+            # Token/connectivity failures are before any send request.
+            raise SafeMailFailoverError('graph', exc) from None
+        endpoint = 'https://graph.microsoft.com/v1.0/me/sendMail'
+    elif graph['auth_mode'] == 'application':
+        # Compatibility for existing app-only configurations; not the
+        # recommended shared-mailbox + Microsoft 365 MFA migration path.
+        try:
+            token_response = requests.post(
+                f"https://login.microsoftonline.com/{graph['tenant_id']}/oauth2/v2.0/token",
+                data={
+                    'client_id': graph['client_id'],
+                    'client_secret': graph['client_secret'],
+                    'scope': 'https://graph.microsoft.com/.default',
+                    'grant_type': 'client_credentials',
+                },
+                timeout=(5, 20),
+            )
+            token_response.raise_for_status()
+            access_token = token_response.json().get('access_token')
+        except Exception as exc:
+            raise SafeMailFailoverError('graph', 'Microsoft application token unavailable') from None
+        if not access_token:
+            raise SafeMailFailoverError('graph', 'Microsoft Graph did not return an access token')
+        endpoint = f"https://graph.microsoft.com/v1.0/users/{graph['sender']}/sendMail"
+    else:
+        raise SafeMailFailoverError('graph', 'Unknown Microsoft Graph authorization mode')
 
     identity = get_mail_identity()
     graph_message = {
@@ -632,26 +648,26 @@ def _send_graph(message, body):
         'body': {'contentType': 'Text', 'content': body},
         'toRecipients': [{'emailAddress': {'address': message.recipient}}],
     }
+    if graph['auth_mode'] == 'delegated':
+        # Shared sender is explicit; Exchange Send As must be granted to
+        # the delegated account. '/me' does not require Full Access.
+        graph_message['from'] = {'emailAddress': {'address': graph['sender']}}
     if identity['reply_to']:
         graph_message['replyTo'] = [
             {'emailAddress': {'address': identity['reply_to']}}
         ]
 
     response = requests.post(
-        f"https://graph.microsoft.com/v1.0/users/{graph['sender']}/sendMail",
+        endpoint,
         headers={'Authorization': f'Bearer {access_token}', 'Content-Type': 'application/json'},
-        json={
-            'message': graph_message,
-            'saveToSentItems': True,
-        },
+        json={'message': graph_message, 'saveToSentItems': True},
         timeout=(5, 20),
     )
     if 400 <= response.status_code < 500:
-        # A definite Graph rejection means the message was not accepted.
-        try:
-            response.raise_for_status()
-        except Exception as exc:
-            raise SafeMailFailoverError('graph', exc) from exc
+        # A definite rejection is safe for opt-in fallback; a timeout is not.
+        raise SafeMailFailoverError(
+            'graph', f'Microsoft Graph sendMail rejected the request (HTTP {response.status_code}).'
+        )
     response.raise_for_status()
     if response.status_code != 202:
         raise MailProviderError(
