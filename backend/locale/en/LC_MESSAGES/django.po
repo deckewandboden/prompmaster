@@ -3815,3 +3815,78 @@ msgstr "License management / renewal"
 
 msgid "Jetzt trotzdem PROMPTFINISHER Pro starten"
 msgstr "Open PROMPTFINISHER Pro anyway"
+
+msgid "Für freigegebene Microsoft-365-Postfächer delegiertes OAuth mit MFA und Mail.Send.Shared verwenden. Die Entra-Anmeldung erfolgt über das persönliche Konto, nicht über das Shared Mailbox Passwort."
+msgstr "Use delegated OAuth with MFA and Mail.Send.Shared for Microsoft 365 shared mailboxes. Sign in to Entra with your personal account, not a shared-mailbox password."
+
+msgid "Microsoft 365 MFA-Verbindung"
+msgstr "Microsoft 365 MFA connection"
+
+msgid "Zuerst Tenant, App-ID, persönliches Anmeldekonto, freigegebenes Absenderpostfach, Client-Secret und Anmeldemethode speichern. Im Microsoft Entra Admin Center die exakte Callback-Adresse als Web-Redirect registrieren und delegiertes Mail.Send.Shared mit User.Read erlauben."
+msgstr "First save the tenant, app ID, personal sign-in account, shared sender mailbox, client secret and sign-in method. In Microsoft Entra Admin Center register the exact callback address as a web redirect and allow delegated Mail.Send.Shared and User.Read."
+
+msgid "Verbindungsstatus"
+msgstr "Connection status"
+
+msgid "Mit MFA verbunden"
+msgstr "Connected with MFA"
+
+msgid "Nicht verbunden / erneut anmelden"
+msgstr "Not connected / sign in again"
+
+msgid "Angemeldetes Konto"
+msgstr "Signed-in account"
+
+msgid "Verbunden am"
+msgstr "Connected on"
+
+msgid "Exakte Entra-Redirect-URI"
+msgstr "Exact Entra redirect URI"
+
+msgid "Für Senden als ein freigegebenes Postfach muss das persönliche Konto in Exchange Online die Berechtigung Send As besitzen. HTTP 202 von Microsoft Graph bedeutet nur angenommen, nicht zugestellt."
+msgstr "To send as a shared mailbox, the personal account needs Exchange Online Send As permission. Microsoft Graph HTTP 202 means accepted, not delivered."
+
+msgid "Mit Microsoft 365 verbinden (MFA)"
+msgstr "Connect to Microsoft 365 (MFA)"
+
+msgid "Verbindung trennen"
+msgstr "Disconnect"
+
+msgid "Testempfänger"
+msgstr "Test recipient"
+
+msgid "Eine einzelne echte Test-E-Mail ausdrücklich senden"
+msgstr "Explicitly send one real test email"
+
+msgid "Test-E-Mail senden"
+msgstr "Send test email"
+
+msgid "Keine automatische Test-E-Mail bei Installation oder Verbindung. Prüfe nach der Antwort 202 den wirklichen Posteingang separat."
+msgstr "No automatic test email is sent during installation or connection. After HTTP 202, verify actual delivery in the inbox separately."
+
+msgid "Nur Benutzer mit Berechtigung Einstellungen schreiben dürfen die Microsoft-365-Verbindung verwalten."
+msgstr "Only users with permission to edit settings may manage the Microsoft 365 connection."
+
+msgid "Anmeldemethode"
+msgstr "Sign-in method"
+
+msgid "Delegierte Anmeldung mit MFA"
+msgstr "Delegated sign-in with MFA"
+
+msgid "Application (Bestandsmodus)"
+msgstr "Application (legacy mode)"
+
+msgid "MFA-Verbindung"
+msgstr "MFA connection"
+
+msgid "Verbunden"
+msgstr "Connected"
+
+msgid "Nicht verbunden"
+msgstr "Not connected"
+
+msgid "Anmeldekonto"
+msgstr "Sign-in account"
+
+msgid "Für ein freigegebenes Postfach benötigt das Anmeldekonto Exchange Send As. Ein HTTP 202 bestätigt nur die Annahme des Versandauftrags."
+msgstr "To send from a shared mailbox, the sign-in account needs Exchange Send As. HTTP 202 confirms only that the send request was accepted."
