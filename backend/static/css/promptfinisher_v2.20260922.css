@@ -79,8 +79,9 @@ body.pmv2 textarea{font-family:inherit}
 .pmv2-edition-pro{background:rgba(72,37,123,.40);border:1px solid rgba(159,111,241,.78);color:#efe3ff}
 .pmv2-header-spacer{flex:1}
 .pmv2-ms-label{font-size:13px;color:#bbccdb;margin-right:16px;white-space:nowrap}
-.pmv2-header-actions{display:flex;align-items:center;gap:12px;flex-shrink:0;white-space:nowrap}
-.pmv2-header-actions .pmv2-header-cta{
+.pmv2-header-actions{display:flex;align-items:center;gap:12px}
+.pmv2-pro .pmv2-header-actions{flex-shrink:0;white-space:nowrap}
+.pmv2-pro .pmv2-header-actions .pmv2-header-cta{
   flex:0 0 auto;
   min-width:max-content;
   white-space:nowrap;
