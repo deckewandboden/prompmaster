@@ -31,8 +31,8 @@ V2_PRO_SCRIPT = b'<script src="/static/js/promptfinisher_ui_v2.20260922.js?v=' +
 # Recovery on window.load reveals the legacy UI if the V2 script fails to run;
 # JS-disabled visitors also receive a visible fallback.
 V2_PREPAINT_GUARD = (
-    b'<style id="pmv2-prepaint-guard">body{visibility:hidden!important}</style>'
-    b'<noscript><style>body{visibility:visible!important}</style></noscript>'
+    b'<style id="pmv2-prepaint-guard">body{opacity:0!important}</style>'
+    b'<noscript><style>body{opacity:1!important}</style></noscript>'
     b'<script>window.addEventListener("load",function(){'
     b'var guard=document.getElementById("pmv2-prepaint-guard");'
     b'if(guard)guard.remove();'
