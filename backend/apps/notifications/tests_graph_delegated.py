@@ -267,7 +267,15 @@ class DelegatedGraphHttpSecurityTests(TestCase):
             'graph-customer@example.test',
             'Graph-Test-Strong-Password-2026!',
         )
+        from django.utils import timezone
+
         self.client.force_login(other)
+        session = self.client.session
+        current_time = timezone.now().timestamp()
+        session['security_version'] = other.security_version
+        session['authenticated_at'] = current_time
+        session['last_activity_at'] = current_time
+        session.save()
         self.assertEqual(
             self.client.post(reverse('ns_admin:graph_mail_connect'), secure=True).status_code,
             403,
