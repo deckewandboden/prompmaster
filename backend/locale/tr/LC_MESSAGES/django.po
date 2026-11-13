@@ -3815,3 +3815,78 @@ msgstr "Lisans yönetimi / yenileme"
 
 msgid "Jetzt trotzdem PROMPTFINISHER Pro starten"
 msgstr "Yine de PROMPTFINISHER Pro'yu aç"
+
+msgid "Für freigegebene Microsoft-365-Postfächer delegiertes OAuth mit MFA und Mail.Send.Shared verwenden. Die Entra-Anmeldung erfolgt über das persönliche Konto, nicht über das Shared Mailbox Passwort."
+msgstr "Paylaşılan Microsoft 365 posta kutuları için MFA ve Mail.Send.Shared ile yetki devredilmiş OAuth kullanın. Entra oturumunu paylaşılan posta kutusunun parolasıyla değil, kişisel hesapla açın."
+
+msgid "Microsoft 365 MFA-Verbindung"
+msgstr "Microsoft 365 MFA bağlantısı"
+
+msgid "Zuerst Tenant, App-ID, persönliches Anmeldekonto, freigegebenes Absenderpostfach, Client-Secret und Anmeldemethode speichern. Im Microsoft Entra Admin Center die exakte Callback-Adresse als Web-Redirect registrieren und delegiertes Mail.Send.Shared mit User.Read erlauben."
+msgstr "Önce kiracı kimliğini, uygulama kimliğini, kişisel oturum açma hesabını, paylaşılan gönderen posta kutusunu, istemci gizli anahtarını ve oturum açma yöntemini kaydedin. Microsoft Entra yönetim merkezinde tam geri çağırma adresini Web yönlendirmesi olarak kaydedin ve User.Read ile yetki devredilmiş Mail.Send.Shared iznini etkinleştirin."
+
+msgid "Verbindungsstatus"
+msgstr "Bağlantı durumu"
+
+msgid "Mit MFA verbunden"
+msgstr "MFA ile bağlandı"
+
+msgid "Nicht verbunden / erneut anmelden"
+msgstr "Bağlı değil / yeniden oturum açın"
+
+msgid "Angemeldetes Konto"
+msgstr "Oturum açılan hesap"
+
+msgid "Verbunden am"
+msgstr "Bağlantı tarihi"
+
+msgid "Exakte Entra-Redirect-URI"
+msgstr "Tam Entra yönlendirme URI'si"
+
+msgid "Für Senden als ein freigegebenes Postfach muss das persönliche Konto in Exchange Online die Berechtigung Send As besitzen. HTTP 202 von Microsoft Graph bedeutet nur angenommen, nicht zugestellt."
+msgstr "Paylaşılan posta kutusu adına göndermek için kişisel hesapta Exchange Online Send As izni bulunmalıdır. Microsoft Graph HTTP 202 yanıtı teslimi değil, yalnızca kabulü bildirir."
+
+msgid "Mit Microsoft 365 verbinden (MFA)"
+msgstr "Microsoft 365'e bağlan (MFA)"
+
+msgid "Verbindung trennen"
+msgstr "Bağlantıyı kes"
+
+msgid "Testempfänger"
+msgstr "Test alıcısı"
+
+msgid "Eine einzelne echte Test-E-Mail ausdrücklich senden"
+msgstr "Tek bir gerçek test e-postasının gönderimini açıkça onaylıyorum"
+
+msgid "Test-E-Mail senden"
+msgstr "Test e-postası gönder"
+
+msgid "Keine automatische Test-E-Mail bei Installation oder Verbindung. Prüfe nach der Antwort 202 den wirklichen Posteingang separat."
+msgstr "Kurulum veya bağlantı sırasında otomatik test e-postası gönderilmez. 202 yanıtından sonra iletinin gelen kutusuna gerçekten ulaştığını ayrıca doğrulayın."
+
+msgid "Nur Benutzer mit Berechtigung Einstellungen schreiben dürfen die Microsoft-365-Verbindung verwalten."
+msgstr "Microsoft 365 bağlantısını yalnızca ayarları değiştirme yetkisi olan kullanıcılar yönetebilir."
+
+msgid "Anmeldemethode"
+msgstr "Oturum açma yöntemi"
+
+msgid "Delegierte Anmeldung mit MFA"
+msgstr "MFA ile yetki devredilmiş oturum açma"
+
+msgid "Application (Bestandsmodus)"
+msgstr "Uygulama (eski mod)"
+
+msgid "MFA-Verbindung"
+msgstr "MFA bağlantısı"
+
+msgid "Verbunden"
+msgstr "Bağlı"
+
+msgid "Nicht verbunden"
+msgstr "Bağlı değil"
+
+msgid "Anmeldekonto"
+msgstr "Oturum açma hesabı"
+
+msgid "Für ein freigegebenes Postfach benötigt das Anmeldekonto Exchange Send As. Ein HTTP 202 bestätigt nur die Annahme des Versandauftrags."
+msgstr "Paylaşılan posta kutusu için oturum açma hesabının Exchange Send As izni olmalıdır. HTTP 202 yalnızca gönderim isteğinin kabul edildiğini doğrular."
