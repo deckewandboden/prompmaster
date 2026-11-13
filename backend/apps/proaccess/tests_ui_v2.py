@@ -141,8 +141,8 @@ class PROMPTFINISHERV2RouteIsolationTests(TestCase):
         current_html = current.content.decode('utf-8')
         legacy_html = legacy.content.decode('utf-8')
 
-        self.assertIn('/static/css/promptfinisher_v2.20260922.css?v=20261023-review-l10n2', current_html)
-        self.assertIn('/static/js/promptfinisher_ui_v2.20260922.js?v=20261023-review-l10n2', current_html)
+        self.assertIn('/static/css/promptfinisher_v2.20260922.css?v=20261113-pro-prepaint-header1', current_html)
+        self.assertIn('/static/js/promptfinisher_ui_v2.20260922.js?v=20261113-pro-prepaint-header1', current_html)
         self.assertNotIn('/static/css/promptfinisher_v2.20260922.css', legacy_html)
         self.assertNotIn('/static/js/promptfinisher_ui_v2.20260922.js', legacy_html)
         self.assertIn('/static/js/promptfinisher_product_i18n.20261011.js?v=20261023-review-l10n2', current_html)
@@ -193,6 +193,8 @@ class PROMPTFINISHERV2RouteIsolationTests(TestCase):
         old = legacy.content.decode('utf-8')
         guard = '<style id="pmv2-prepaint-guard">body{visibility:hidden!important}</style>'
         self.assertIn(guard, html)
+        self.assertIn('/static/css/promptfinisher_v2.20260922.css?v=20261113-pro-prepaint-header1', html)
+        self.assertIn('/static/js/promptfinisher_ui_v2.20260922.js?v=20261113-pro-prepaint-header1', html)
         self.assertLess(html.index(guard), html.index('</head>'))
         self.assertNotIn('pmv2-prepaint-guard', old)
         self.assertIn('<noscript><style>body{visibility:visible!important}</style></noscript>', html)
