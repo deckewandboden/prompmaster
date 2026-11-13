@@ -1297,7 +1297,7 @@ def _check_product_v2_shell(page, label: str, width: int) -> None:
             raise AssertionError(
                 f'{label} {width}px: mobile workflow hides steps: {metrics}'
             )
-        max_header_height = 125 if metrics['isPro'] and width <= 740 else 70
+        max_header_height = 125 if metrics['isPro'] and 620 < width <= 740 else 70
         if metrics['headerHeight'] > max_header_height:
             raise AssertionError(
                 f'{label} {width}px: mobile header remains too tall: {metrics}'
@@ -1312,7 +1312,7 @@ def _check_product_v2_shell(page, label: str, width: int) -> None:
             raise AssertionError(
                 f'{label} {width}px: mobile landing hero is too tall: {metrics}'
             )
-        first_section_max = 500 if metrics['isPro'] and width <= 620 else 440
+        first_section_max = 440
         if metrics['firstSectionTop'] > first_section_max:
             raise AssertionError(
                 f'{label} {width}px: first configuration step starts too low: {metrics}'
