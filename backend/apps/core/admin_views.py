@@ -33,6 +33,7 @@ from apps.licenses.models import License, LicenseAssignment, LicenseAssignmentLi
 from apps.licenses.services import assign_license, block_license, release_license, unblock_license
 from apps.notifications.models import EmailMessage, EmailTemplate
 from apps.notifications.services import get_graph_transport, get_mail_delivery, get_mail_identity, get_mail_provider, get_smtp_transport, queue_email
+from apps.notifications.graph_delegated import connection_status as graph_connection_status
 from apps.ops.metrics import caddy_health, certificate_status, snapshot
 from apps.ops.models import BackupRecord, RestoreTest, SystemAlert
 from apps.orders.models import Order
@@ -2643,6 +2644,8 @@ def settings_view(request):
         'smtp2_username': smtp_transport_2['username'],
         'graph_tenant_id': graph_transport['tenant_id'],
         'graph_client_id': graph_transport['client_id'],
+        'graph_auth_mode': graph_transport['auth_mode'],
+        'graph_login_email': graph_transport['login_email'],
         'graph_sender': graph_transport['sender'],
         'disk_warning': values.get('disk_warning', 80),
         'disk_critical': values.get('disk_critical', 90),
@@ -2736,6 +2739,8 @@ def settings_view(request):
             mail_graph = {
                 'tenant_id': graph_value('graph_tenant_id', 'tenant_id'),
                 'client_id': graph_value('graph_client_id', 'client_id'),
+                'auth_mode': graph_value('graph_auth_mode', 'auth_mode') or graph_transport['auth_mode'],
+                'login_email': graph_value('graph_login_email', 'login_email'),
                 'sender': graph_value('graph_sender', 'sender'),
             }
             graph_client_secret = data.pop('graph_client_secret')
@@ -2824,6 +2829,8 @@ def settings_view(request):
         {
             'form': form,
             'can_write': has_perm(request.user, 'settings.write'),
+            'graph_connection': graph_connection_status(),
+            'graph_callback_uri': request.build_absolute_uri(reverse('ns_admin:graph_mail_callback')),
             'pro_product': Product.objects.filter(code='PRO').first(),
             'invitation_ttl_hours': INVITATION_TTL_HOURS,
         },
