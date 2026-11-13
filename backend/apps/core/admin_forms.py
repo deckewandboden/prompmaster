@@ -587,7 +587,8 @@ class GeneralSettingsForm(forms.Form):
         help_text=_("Anwendungs-/Client-ID der App-Registrierung."),
     )
     graph_auth_mode = forms.ChoiceField(
-        required=True,
+        required=False,
+        initial='application',
         choices=[
             ('delegated', _("Microsoft 365 anmelden (delegiert, mit MFA)")),
             ('application', _("Bestandsmodus: Application-Mail.Send (ohne MFA)")),
