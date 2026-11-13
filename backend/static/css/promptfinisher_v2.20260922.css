@@ -80,13 +80,15 @@ body.pmv2 textarea{font-family:inherit}
 .pmv2-header-spacer{flex:1}
 .pmv2-ms-label{font-size:13px;color:#bbccdb;margin-right:16px;white-space:nowrap}
 .pmv2-header-actions{display:flex;align-items:center;gap:12px}
-.pmv2-pro .pmv2-header-actions{flex-shrink:0;white-space:nowrap}
-.pmv2-pro .pmv2-header-actions .pmv2-header-cta{
-  flex:0 0 auto;
-  min-width:max-content;
-  white-space:nowrap;
-  word-break:keep-all;
-  line-height:1;
+@media(min-width:621px){
+  .pmv2-pro .pmv2-header-actions{flex-shrink:0;white-space:nowrap}
+  .pmv2-pro .pmv2-header-actions .pmv2-header-cta{
+    flex:0 0 auto;
+    min-width:max-content;
+    white-space:nowrap;
+    word-break:keep-all;
+    line-height:1;
+  }
 }
 .pmv2-header-cta{
   min-height:44px;
@@ -1893,9 +1895,10 @@ body.pmv2 .pmv2-header-cta{
   -webkit-text-fill-color:#02050b!important;
 }
 
-/* Pro header contract: desktop actions stay a single aligned row. Small
-   screens get a second actions row instead of hiding logout or wrapping words. */
-@media(max-width:740px){
+/* Pro header contract: desktop actions stay a single aligned row.
+   Narrow tablets get a second aligned row. On phones the existing locale
+   switcher owns a compact 62px header with accessible icon actions. */
+@media(min-width:621px) and (max-width:740px){
   body.pmv2-pro .pmv2-header{
     height:auto!important;
     min-height:62px!important;
@@ -1922,5 +1925,19 @@ body.pmv2 .pmv2-header-cta{
     min-height:36px;
     padding:0 10px;
     font-size:11px;
+  }
+}
+
+@media(max-width:620px){
+  /* Do not override the product locale switcher's 320–390px layout:
+     128px language + compact admin/logout actions must remain within view. */
+  body.pmv2-pro .pmv2-header-cta{white-space:nowrap}
+  body.pmv2-pro .pmv2-logout{
+    display:inline-flex!important;
+    flex:0 0 30px;
+    width:30px;
+    min-height:34px;
+    padding:0 2px!important;
+    border-radius:8px;
   }
 }
