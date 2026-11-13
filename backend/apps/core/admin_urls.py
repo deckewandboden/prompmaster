@@ -1,5 +1,6 @@
 from django.urls import path
 from . import admin_views as v
+from . import graph_mail_views as graph_mail
 from . import export_views as ev
 from . import sensitive as sv
 
@@ -60,6 +61,10 @@ urlpatterns = [
     path('products/<uuid:pk>/', v.product_edit, name='product_edit'),
     path('products/<uuid:pk>/prices/new/', v.product_price_add, name='product_price_add'),
     path('email/', v.email, name='email'),
+    path('email/graph/connect/', graph_mail.graph_connect, name='graph_mail_connect'),
+    path('email/graph/callback/', graph_mail.graph_callback, name='graph_mail_callback'),
+    path('email/graph/disconnect/', graph_mail.graph_disconnect, name='graph_mail_disconnect'),
+    path('email/graph/test/', graph_mail.graph_test_send, name='graph_mail_test'),
     path('email/templates/', v.email, name='email_templates'),
     path('email/log/', v.email_log, name='email_log'),
     path('email/templates/<uuid:pk>/', v.email_template_edit, name='email_template_edit'),
