@@ -8,7 +8,7 @@
   </div>
 </div>
 
-<div class="grid kpis">
+<div class="grid kpis ns-admin-dashboard-kpis">
   {% if rights.customers %}<div class="card kpi"><div>{% translate 'Kunden gesamt' %}</div><div class="value">{{ customers }}</div></div>{% endif %}
   {% if rights.leads %}<div class="card kpi"><div>{% translate 'Offene Leads' %}</div><div class="value">{{ open_leads }}</div><div class="small muted"><a href="{% url 'ns_admin:leads' %}">{% translate 'Lead-Pipeline öffnen' %}</a></div></div>{% endif %}
   {% if rights.licenses %}<div class="card kpi"><div>{% translate 'Aktive Lizenzen' %}</div><div class="value">{{ licenses }}</div></div>{% endif %}
