@@ -243,7 +243,7 @@ class DelegatedGraphHttpSecurityTests(TestCase):
             'tenant_id': TENANT, 'client_id': CLIENT, 'login_email': LOGIN,
         })
         endpoint = reverse('ns_admin:graph_mail_test')
-        with patch('apps.core.graph_mail_views._send_graph') as send:
+        with patch('apps.core.graph_mail_views._send_graph', return_value='test-graph-request-id') as send:
             response = self.client.post(
                 endpoint,
                 {'recipient': 'test-recipient@example.test'},
