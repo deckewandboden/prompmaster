@@ -3949,3 +3949,75 @@ msgstr "Konto logowania"
 
 msgid "Für ein freigegebenes Postfach benötigt das Anmeldekonto Exchange Send As. Ein HTTP 202 bestätigt nur die Annahme des Versandauftrags."
 msgstr "Dla udostępnionej skrzynki konto logowania wymaga uprawnienia Exchange Send As. HTTP 202 potwierdza jedynie przyjęcie żądania wysyłki."
+
+msgid "Unternehmensadministratoren richten anschließend verpflichtend 2FA ein."
+msgstr "Administratorzy firmowi muszą następnie obowiązkowo skonfigurować uwierzytelnianie dwuskładnikowe (2FA)."
+
+msgid "Mollie übernimmt die Zahlungsabwicklung; PROMPTFINISHER erzeugt keine eigene Rechnungsengine."
+msgstr "Płatności obsługuje Mollie; PROMPTFINISHER nie posiada własnego modułu wystawiania faktur."
+
+msgid "2FA schützt den Zugriff mit einem zusätzlichen zeitbasierten Einmalcode."
+msgstr "2FA chroni dostęp za pomocą dodatkowego jednorazowego kodu zależnego od czasu."
+
+msgid "Die Suche bleibt auf Ihren eigenen Mandanten- und Lizenzbereich begrenzt."
+msgstr "Wyszukiwanie jest ograniczone do Twojej organizacji i przypisanych jej licencji."
+
+msgid "Ein Passwortwechsel erfolgt über einen zeitlich begrenzten, einmal verwendbaren Link an Ihre hinterlegte E-Mail-Adresse."
+msgstr "Zmiana hasła odbywa się za pomocą linku z ograniczonym czasem ważności, przeznaczonego do jednorazowego użycia i wysyłanego na zapisany adres e-mail."
+
+msgid "Hier sehen Sie ausschließlich Nachrichten, die für Sie bzw. Ihr Unternehmen bestimmt sind. Interne netstyle-Notizen werden nicht im Kundenportal angezeigt."
+msgstr "W tym miejscu widoczne są wyłącznie wiadomości przeznaczone dla Ciebie lub Twojej firmy. Wewnętrzne notatki netstyle nie są wyświetlane w portalu klienta."
+
+msgid "Wählen Sie die Lizenz, deren bestehende Restlaufzeit um weitere 365 Tage verlängert werden soll."
+msgstr "Wybierz licencję, której pozostały okres ważności ma zostać przedłużony o kolejne 365 dni."
+
+msgid "Die vorbereitete Lizenz wird Ihrem aktuell angemeldeten Benutzerkonto zugeordnet. Der Link kann anschließend nicht erneut verwendet werden."
+msgstr "Przygotowana licencja zostanie przypisana do aktualnie zalogowanego konta użytkownika. Linku nie można później użyć ponownie."
+
+msgid "Gültig bis %(expiry)s. Der Link ist tenantgebunden, für genau diesen Benutzer bestimmt und nur einmal verwendbar."
+msgstr "Ważne do %(expiry)s. Link jest powiązany z organizacją, przeznaczony wyłącznie dla tego użytkownika i można go użyć tylko raz."
+
+msgid "Jede neue Lizenz startet nach erfolgreicher Zahlung mit eigener 365-Tage-Laufzeit."
+msgstr "Każda nowa licencja po pomyślnej płatności rozpoczyna własny 365-dniowy okres ważności."
+
+msgid "V1: exakt ein aktiver Firmenadministrator. Eine Übertragung ist nur auf ein aktives Team-Mitglied möglich."
+msgstr "V1: dokładnie jeden aktywny administrator firmowy. Przeniesienie uprawnień jest możliwe tylko na aktywnego członka zespołu."
+
+msgid "Konto, Unternehmen, Benutzer-ID und Zeitpunkt werden automatisch zugeordnet. Optional kann eine für Ihr Konto sichtbare Lizenz mitgesendet werden. Passwörter, Tokens oder andere unnötige sensitive Daten werden nicht übernommen."
+msgstr "Konto, firma, identyfikator użytkownika i czas zostają przypisane automatycznie. Opcjonalnie można dołączyć licencję widoczną dla Twojego konta. Hasła, tokeny i inne zbędne dane wrażliwe nie są przekazywane."
+
+msgid "Exportieren Sie die zu Ihrem Benutzer gespeicherten PROMPTFINISHER-Daten als JSON. Secrets und Daten anderer Benutzer werden nicht exportiert."
+msgstr "Wyeksportuj dane PROMPTFINISHER przechowywane dla Twojego użytkownika w formacie JSON. Sekrety i dane innych użytkowników nie są eksportowane."
+
+msgid "Ihre Löschanfrage vom %(requested)s ist bereits erfasst. Status: %(status)s."
+msgstr "Twoje żądanie usunięcia z dnia %(requested)s zostało już zarejestrowane. Status: %(status)s."
+
+msgid "Sie können die Löschung Ihres PROMPTFINISHER-Kontos anfordern. Gesetzlich erforderliche Geschäfts- und Nachweisdaten werden nur im erforderlichen Umfang weiter aufbewahrt bzw. anonymisiert. Firmenadministratoren müssen ihre Administratorrolle vor der Verarbeitung übertragen."
+msgstr "Możesz poprosić o usunięcie konta PROMPTFINISHER. Dane biznesowe i dowodowe wymagane prawem będą przechowywane wyłącznie w niezbędnym zakresie lub zanonimizowane. Administratorzy firmowi muszą przekazać swoją rolę przed realizacją żądania."
+
+msgid "Aktuell ist keine freie Pro-Lizenz verfügbar. Kaufen Sie eine weitere Lizenz oder geben Sie eine bestehende Lizenz frei."
+msgstr "Obecnie nie ma dostępnej wolnej licencji Pro. Kup kolejną licencję lub zwolnij istniejącą."
+
+msgid "Für den Pro-Zugriff benötigen Sie eine aktive PROMPTFINISHER-Pro-Lizenz."
+msgstr "Aby uzyskać dostęp Pro, potrzebujesz aktywnej licencji PROMPTFINISHER Pro."
+
+msgid "Geben Sie einen Suchbegriff ein. Firmenadministratoren können nach Teammitgliedern, E-Mail-Adressen und Lizenzen suchen; andere Benutzer sehen ausschließlich ihre eigene Lizenzsicht."
+msgstr "Wpisz wyszukiwaną frazę. Administratorzy firmowi mogą wyszukiwać członków zespołu, adresy e-mail i licencje; pozostali użytkownicy widzą tylko własne licencje."
+
+msgid "Die Daten entsprechen dem ausgewählten Kundenkonto und seiner Rolle. Dies ist eine Ansichtsvorschau, keine Kundensitzung: Interaktionen, Zahlungs- und Sicherheitsaktionen sind nicht ausführbar."
+msgstr "Dane odpowiadają wybranemu kontu klienta i jego roli. Jest to podgląd, a nie sesja klienta: interakcje, operacje płatnicze i działania zabezpieczające są niedostępne."
+
+msgid "Nur aktive Benutzer dieses Unternehmens. Rollen und Zugriffsrechte werden berücksichtigt."
+msgstr "Wyłącznie aktywni użytkownicy tej firmy. Uwzględniane są role i uprawnienia dostępu."
+
+msgid "Änderungen erfolgen ausschließlich in den berechtigungsgeschützten Administrationsmasken mit Auditierung – nicht in der Kundenansicht."
+msgstr "Zmiany są możliwe tylko w chronionych uprawnieniami formularzach administracyjnych i podlegają audytowi, a nie w widoku klienta."
+
+msgid "Dies ist eine Leseansicht. Passwort, Zwei-Faktor-Authentifizierung und persönliche Einstellungen kann nur der angemeldete Kundenbenutzer selbst ändern."
+msgstr "To widok tylko do odczytu. Hasło, uwierzytelnianie dwuskładnikowe i ustawienia osobiste może zmieniać wyłącznie zalogowany użytkownik klienta."
+
+msgid "Teamverwaltung, Bestellungen und Unternehmensdaten sind für diese Rolle nicht freigegeben."
+msgstr "Zarządzanie zespołem, zamówienia i dane firmy nie są dostępne dla tej roli."
+
+msgid "Für echte Schreibaktionen oder einen vollständigen Login-Test muss ein eigener Nicht-Staff-Testkunde verwendet werden. Die Vorschau übernimmt niemals die Identität des Kunden."
+msgstr "Do rzeczywistych operacji zapisu lub pełnego testu logowania należy użyć osobnego konta klienta bez uprawnień pracowniczych. Podgląd nigdy nie przejmuje tożsamości klienta."
