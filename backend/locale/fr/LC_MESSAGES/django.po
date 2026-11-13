@@ -3956,3 +3956,75 @@ msgstr "Compte de connexion"
 
 msgid "Für ein freigegebenes Postfach benötigt das Anmeldekonto Exchange Send As. Ein HTTP 202 bestätigt nur die Annahme des Versandauftrags."
 msgstr "Pour envoyer depuis une boîte partagée, le compte doit disposer du droit Envoyer en tant que dans Exchange. HTTP 202 confirme uniquement l'acceptation de la demande."
+
+msgid "Unternehmensadministratoren richten anschließend verpflichtend 2FA ein."
+msgstr "Les administrateurs d'entreprise doivent ensuite obligatoirement configurer l'authentification à deux facteurs (2FA)."
+
+msgid "Mollie übernimmt die Zahlungsabwicklung; PROMPTFINISHER erzeugt keine eigene Rechnungsengine."
+msgstr "Mollie assure le traitement des paiements ; PROMPTFINISHER ne dispose pas de son propre moteur de facturation."
+
+msgid "2FA schützt den Zugriff mit einem zusätzlichen zeitbasierten Einmalcode."
+msgstr "La 2FA protège l'accès grâce à un code à usage unique supplémentaire, limité dans le temps."
+
+msgid "Die Suche bleibt auf Ihren eigenen Mandanten- und Lizenzbereich begrenzt."
+msgstr "La recherche reste limitée à votre propre organisation et à votre périmètre de licences."
+
+msgid "Ein Passwortwechsel erfolgt über einen zeitlich begrenzten, einmal verwendbaren Link an Ihre hinterlegte E-Mail-Adresse."
+msgstr "Le changement de mot de passe s'effectue à l'aide d'un lien temporaire, utilisable une seule fois, envoyé à l'adresse e-mail enregistrée."
+
+msgid "Hier sehen Sie ausschließlich Nachrichten, die für Sie bzw. Ihr Unternehmen bestimmt sind. Interne netstyle-Notizen werden nicht im Kundenportal angezeigt."
+msgstr "Vous ne voyez ici que les messages qui vous sont destinés, à vous ou à votre entreprise. Les notes internes de netstyle ne sont pas affichées dans le portail client."
+
+msgid "Wählen Sie die Lizenz, deren bestehende Restlaufzeit um weitere 365 Tage verlängert werden soll."
+msgstr "Sélectionnez la licence dont la durée restante doit être prolongée de 365 jours supplémentaires."
+
+msgid "Die vorbereitete Lizenz wird Ihrem aktuell angemeldeten Benutzerkonto zugeordnet. Der Link kann anschließend nicht erneut verwendet werden."
+msgstr "La licence préparée est attribuée au compte utilisateur actuellement connecté. Le lien ne pourra ensuite plus être réutilisé."
+
+msgid "Gültig bis %(expiry)s. Der Link ist tenantgebunden, für genau diesen Benutzer bestimmt und nur einmal verwendbar."
+msgstr "Valable jusqu'au %(expiry)s. Le lien est lié à l'organisation, réservé à cet utilisateur et utilisable une seule fois."
+
+msgid "Jede neue Lizenz startet nach erfolgreicher Zahlung mit eigener 365-Tage-Laufzeit."
+msgstr "Chaque nouvelle licence démarre, après paiement réussi, sa propre période de validité de 365 jours."
+
+msgid "V1: exakt ein aktiver Firmenadministrator. Eine Übertragung ist nur auf ein aktives Team-Mitglied möglich."
+msgstr "V1 : un seul administrateur d'entreprise actif. Le transfert n'est possible que vers un membre actif de l'équipe."
+
+msgid "Konto, Unternehmen, Benutzer-ID und Zeitpunkt werden automatisch zugeordnet. Optional kann eine für Ihr Konto sichtbare Lizenz mitgesendet werden. Passwörter, Tokens oder andere unnötige sensitive Daten werden nicht übernommen."
+msgstr "Le compte, l'entreprise, l'identifiant utilisateur et l'horodatage sont automatiquement associés. Une licence visible pour votre compte peut éventuellement être jointe. Aucun mot de passe, jeton ni autre donnée sensible inutile n'est transmis."
+
+msgid "Exportieren Sie die zu Ihrem Benutzer gespeicherten PROMPTFINISHER-Daten als JSON. Secrets und Daten anderer Benutzer werden nicht exportiert."
+msgstr "Exportez au format JSON les données PROMPTFINISHER enregistrées pour votre utilisateur. Les secrets et les données d'autres utilisateurs ne sont pas exportés."
+
+msgid "Ihre Löschanfrage vom %(requested)s ist bereits erfasst. Status: %(status)s."
+msgstr "Votre demande de suppression du %(requested)s a déjà été enregistrée. Statut : %(status)s."
+
+msgid "Sie können die Löschung Ihres PROMPTFINISHER-Kontos anfordern. Gesetzlich erforderliche Geschäfts- und Nachweisdaten werden nur im erforderlichen Umfang weiter aufbewahrt bzw. anonymisiert. Firmenadministratoren müssen ihre Administratorrolle vor der Verarbeitung übertragen."
+msgstr "Vous pouvez demander la suppression de votre compte PROMPTFINISHER. Les données commerciales et justificatives exigées par la loi ne sont conservées que dans la mesure nécessaire ou anonymisées. Les administrateurs d'entreprise doivent transférer leur rôle avant le traitement de la demande."
+
+msgid "Aktuell ist keine freie Pro-Lizenz verfügbar. Kaufen Sie eine weitere Lizenz oder geben Sie eine bestehende Lizenz frei."
+msgstr "Aucune licence Pro libre n'est actuellement disponible. Achetez une licence supplémentaire ou libérez une licence existante."
+
+msgid "Für den Pro-Zugriff benötigen Sie eine aktive PROMPTFINISHER-Pro-Lizenz."
+msgstr "Pour accéder à Pro, vous devez disposer d'une licence PROMPTFINISHER Pro active."
+
+msgid "Geben Sie einen Suchbegriff ein. Firmenadministratoren können nach Teammitgliedern, E-Mail-Adressen und Lizenzen suchen; andere Benutzer sehen ausschließlich ihre eigene Lizenzsicht."
+msgstr "Saisissez un terme de recherche. Les administrateurs d'entreprise peuvent rechercher des membres de l'équipe, des adresses e-mail et des licences ; les autres utilisateurs ne voient que leurs propres licences."
+
+msgid "Die Daten entsprechen dem ausgewählten Kundenkonto und seiner Rolle. Dies ist eine Ansichtsvorschau, keine Kundensitzung: Interaktionen, Zahlungs- und Sicherheitsaktionen sind nicht ausführbar."
+msgstr "Les données correspondent au compte client sélectionné et à son rôle. Il s'agit d'un aperçu, pas d'une session client : les interactions, opérations de paiement et actions de sécurité ne sont pas exécutables."
+
+msgid "Nur aktive Benutzer dieses Unternehmens. Rollen und Zugriffsrechte werden berücksichtigt."
+msgstr "Seuls les utilisateurs actifs de cette entreprise sont affichés. Les rôles et droits d'accès sont respectés."
+
+msgid "Änderungen erfolgen ausschließlich in den berechtigungsgeschützten Administrationsmasken mit Auditierung – nicht in der Kundenansicht."
+msgstr "Les modifications se font exclusivement dans les formulaires d'administration protégés par les droits d'accès et font l'objet d'un audit, jamais dans l'aperçu client."
+
+msgid "Dies ist eine Leseansicht. Passwort, Zwei-Faktor-Authentifizierung und persönliche Einstellungen kann nur der angemeldete Kundenbenutzer selbst ändern."
+msgstr "Il s'agit d'une vue en lecture seule. Seul l'utilisateur client connecté peut modifier son mot de passe, son authentification à deux facteurs et ses paramètres personnels."
+
+msgid "Teamverwaltung, Bestellungen und Unternehmensdaten sind für diese Rolle nicht freigegeben."
+msgstr "La gestion d'équipe, les commandes et les données de l'entreprise ne sont pas accessibles à ce rôle."
+
+msgid "Für echte Schreibaktionen oder einen vollständigen Login-Test muss ein eigener Nicht-Staff-Testkunde verwendet werden. Die Vorschau übernimmt niemals die Identität des Kunden."
+msgstr "Pour des opérations d'écriture réelles ou un test de connexion complet, utilisez un compte client de test distinct, sans droits de personnel. L'aperçu n'usurpe jamais l'identité du client."
