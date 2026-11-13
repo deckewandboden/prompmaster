@@ -1894,7 +1894,7 @@ body.pmv2 .pmv2-header-cta{
 
 /* Pro header contract: desktop actions stay a single aligned row. Small
    screens get a second actions row instead of hiding logout or wrapping words. */
-@media(max-width:620px){
+@media(max-width:740px){
   body.pmv2-pro .pmv2-header{
     height:auto!important;
     min-height:62px!important;
