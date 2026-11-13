@@ -1,4 +1,4 @@
-from urllib.parse import urlencode
+from urllib.parse import urlencode, urlsplit
 
 from django.conf import settings
 from django.contrib.auth import logout
@@ -16,20 +16,26 @@ from apps.core.sensitive import (
 
 
 class UserLanguagePreferenceMiddleware:
-    """Apply a persisted authenticated UI language after AuthenticationMiddleware."""
+    """Keep an explicit browser language choice across login, 2FA and both backends.
+
+    LocaleMiddleware already validates/activates the browser language cookie.
+    The saved user profile is a fallback only: overriding a valid cookie with
+    an old profile value would silently undo a language selection at login.
+    """
 
     def __init__(self, get_response):
         self.get_response = get_response
 
     def __call__(self, request):
         user = getattr(request, 'user', None)
-        language = getattr(user, 'ui_language', '') if getattr(user, 'is_authenticated', False) else ''
+        saved = getattr(user, 'ui_language', '') if getattr(user, 'is_authenticated', False) else ''
+        selected = request.COOKIES.get(settings.LANGUAGE_COOKIE_NAME, '')
         supported = {code for code, _label in settings.LANGUAGES}
+        language = selected if selected in supported else saved
         if language in supported:
             translation.activate(language)
             request.LANGUAGE_CODE = language
-        response = self.get_response(request)
-        return response
+        return self.get_response(request)
 
 
 class TwoFactorEnforcementMiddleware:
@@ -180,6 +186,26 @@ class TwoFactorEnforcementMiddleware:
 
         request.session.setdefault('authenticated_at', now)
         request.session['last_activity_at'] = now
+
+        # The language selector must remain usable on login and 2FA screens.
+        # Allow only a read-only navigation to an exact internal auth page;
+        # never exempt Pro, portal or staff destinations from the 2FA gate.
+        if request.path_info == '/auth/language/' and request.method == 'GET':
+            target = request.GET.get('next', '')
+            parts = urlsplit(target)
+            if (
+                target.startswith('/')
+                and not target.startswith('//')
+                and not parts.scheme
+                and not parts.netloc
+                and parts.path in {
+                    '/auth/login/',
+                    '/auth/2fa/',
+                    '/auth/2fa/setup/',
+                    '/auth/password-reset/',
+                }
+            ):
+                return self.get_response(request)
 
         if user.two_factor_required and not user.totp_secret_enc:
             if not request.path.startswith(('/auth/2fa/setup/', '/auth/logout/', '/auth/verify/')):

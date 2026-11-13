@@ -10,7 +10,9 @@ RUN --mount=type=secret,id=pf_staging_ca,required=false \
       export SSL_CERT_FILE=/tmp/pf-staging-ca-combined.pem; \
       trap 'rm -f /tmp/pf-staging-ca-combined.pem /tmp/pf-staging-apt.conf' EXIT; \
     fi; \
-    apt-get update && apt-get install -y --no-install-recommends curl postgresql-client gettext && rm -rf /var/lib/apt/lists/*
+    apt-get update && apt-get install -y --no-install-recommends curl postgresql-client gettext zlib1g \
+    && dpkg --compare-versions "$(dpkg-query -W -f='${Version}' zlib1g)" ge '1:1.3.dfsg+really1.3.1-1+deb13u1' \
+    && rm -rf /var/lib/apt/lists/*
 COPY requirements.txt /tmp/requirements.txt
 RUN --mount=type=secret,id=pf_staging_ca,required=false \
     if [ -s /run/secrets/pf_staging_ca ]; then \
