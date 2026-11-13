@@ -191,13 +191,13 @@ class PROMPTFINISHERV2RouteIsolationTests(TestCase):
 
         html = current.content.decode('utf-8')
         old = legacy.content.decode('utf-8')
-        guard = '<style id="pmv2-prepaint-guard">body{visibility:hidden!important}</style>'
+        guard = '<style id="pmv2-prepaint-guard">body{opacity:0!important}</style>'
         self.assertIn(guard, html)
         self.assertIn('/static/css/promptfinisher_v2.20260922.css?v=20261113-pro-prepaint-header1', html)
         self.assertIn('/static/js/promptfinisher_ui_v2.20260922.js?v=20261113-pro-prepaint-header1', html)
         self.assertLess(html.index(guard), html.index('</head>'))
         self.assertNotIn('pmv2-prepaint-guard', old)
-        self.assertIn('<noscript><style>body{visibility:visible!important}</style></noscript>', html)
+        self.assertIn('<noscript><style>body{opacity:1!important}</style></noscript>', html)
         self.assertIn('window.addEventListener("load",function(){', html)
 
         js = (
