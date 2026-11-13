@@ -3816,3 +3816,78 @@ msgstr "Управление лицензией / продление"
 
 msgid "Jetzt trotzdem PROMPTFINISHER Pro starten"
 msgstr "Всё равно открыть PROMPTFINISHER Pro"
+
+msgid "Für freigegebene Microsoft-365-Postfächer delegiertes OAuth mit MFA und Mail.Send.Shared verwenden. Die Entra-Anmeldung erfolgt über das persönliche Konto, nicht über das Shared Mailbox Passwort."
+msgstr "Для общих почтовых ящиков Microsoft 365 используйте делегированный OAuth с MFA и Mail.Send.Shared. Вход в Entra выполняется через личную учетную запись, а не с паролем общего ящика."
+
+msgid "Microsoft 365 MFA-Verbindung"
+msgstr "Подключение Microsoft 365 с MFA"
+
+msgid "Zuerst Tenant, App-ID, persönliches Anmeldekonto, freigegebenes Absenderpostfach, Client-Secret und Anmeldemethode speichern. Im Microsoft Entra Admin Center die exakte Callback-Adresse als Web-Redirect registrieren und delegiertes Mail.Send.Shared mit User.Read erlauben."
+msgstr "Сначала сохраните идентификатор арендатора, идентификатор приложения, личную учетную запись входа, общий ящик отправителя, секрет клиента и способ входа. В центре администрирования Microsoft Entra зарегистрируйте точный адрес обратного вызова как веб-адрес перенаправления и разрешите делегированное разрешение Mail.Send.Shared вместе с User.Read."
+
+msgid "Verbindungsstatus"
+msgstr "Состояние подключения"
+
+msgid "Mit MFA verbunden"
+msgstr "Подключено с MFA"
+
+msgid "Nicht verbunden / erneut anmelden"
+msgstr "Не подключено / войдите повторно"
+
+msgid "Angemeldetes Konto"
+msgstr "Учетная запись входа"
+
+msgid "Verbunden am"
+msgstr "Дата подключения"
+
+msgid "Exakte Entra-Redirect-URI"
+msgstr "Точный URI перенаправления Entra"
+
+msgid "Für Senden als ein freigegebenes Postfach muss das persönliche Konto in Exchange Online die Berechtigung Send As besitzen. HTTP 202 von Microsoft Graph bedeutet nur angenommen, nicht zugestellt."
+msgstr "Чтобы отправлять письма от имени общего ящика, личной учетной записи требуется разрешение Send As в Exchange Online. HTTP 202 от Microsoft Graph означает только принятие запроса, а не доставку."
+
+msgid "Mit Microsoft 365 verbinden (MFA)"
+msgstr "Подключить Microsoft 365 (MFA)"
+
+msgid "Verbindung trennen"
+msgstr "Отключить соединение"
+
+msgid "Testempfänger"
+msgstr "Получатель тестового письма"
+
+msgid "Eine einzelne echte Test-E-Mail ausdrücklich senden"
+msgstr "Явно отправить одно настоящее тестовое письмо"
+
+msgid "Test-E-Mail senden"
+msgstr "Отправить тестовое письмо"
+
+msgid "Keine automatische Test-E-Mail bei Installation oder Verbindung. Prüfe nach der Antwort 202 den wirklichen Posteingang separat."
+msgstr "При установке или подключении тестовые письма автоматически не отправляются. После ответа 202 отдельно убедитесь, что письмо действительно получено."
+
+msgid "Nur Benutzer mit Berechtigung Einstellungen schreiben dürfen die Microsoft-365-Verbindung verwalten."
+msgstr "Управлять подключением Microsoft 365 могут только пользователи с разрешением изменять настройки."
+
+msgid "Anmeldemethode"
+msgstr "Способ входа"
+
+msgid "Delegierte Anmeldung mit MFA"
+msgstr "Делегированный вход с MFA"
+
+msgid "Application (Bestandsmodus)"
+msgstr "Приложение (прежний режим)"
+
+msgid "MFA-Verbindung"
+msgstr "Подключение MFA"
+
+msgid "Verbunden"
+msgstr "Подключено"
+
+msgid "Nicht verbunden"
+msgstr "Не подключено"
+
+msgid "Anmeldekonto"
+msgstr "Учетная запись входа"
+
+msgid "Für ein freigegebenes Postfach benötigt das Anmeldekonto Exchange Send As. Ein HTTP 202 bestätigt nur die Annahme des Versandauftrags."
+msgstr "Для общего почтового ящика учетной записи входа требуется разрешение Exchange Send As. HTTP 202 подтверждает только принятие запроса на отправку."
