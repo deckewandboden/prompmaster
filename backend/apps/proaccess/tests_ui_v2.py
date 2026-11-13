@@ -179,6 +179,57 @@ class PROMPTFINISHERV2RouteIsolationTests(TestCase):
             self.assertIn('/api/v1/prompts/?product=PRO', html)
             self.assertIn('/api/v1/prompts/compose/', html)
 
+    def test_pro_v2_never_paints_legacy_shell_before_current_ui(self):
+        """Block old-layout flash without modifying verified runtime masters."""
+        from django.conf import settings
+
+        self._staff_session()
+        current = self.client.get(reverse('proaccess:content'))
+        legacy = self.client.get(reverse('pro_product_old'))
+        self.assertEqual(current.status_code, 200)
+        self.assertEqual(legacy.status_code, 200)
+
+        html = current.content.decode('utf-8')
+        old = legacy.content.decode('utf-8')
+        guard = '<style id="pmv2-prepaint-guard">body{visibility:hidden!important}</style>'
+        self.assertIn(guard, html)
+        self.assertLess(html.index(guard), html.index('</head>'))
+        self.assertNotIn('pmv2-prepaint-guard', old)
+        self.assertIn('<noscript><style>body{visibility:visible!important}</style></noscript>', html)
+        self.assertIn('window.addEventListener("load",function(){', html)
+
+        js = (
+            settings.BASE_DIR / 'static' / 'js' / 'promptfinisher_ui_v2.20260922.js'
+        ).read_text(encoding='utf-8')
+        old_removed = js.index('if (oldMain.isConnected) oldMain.remove();')
+        now_visible = js.index("document.getElementById('pmv2-prepaint-guard')?.remove();")
+        self.assertLess(old_removed, now_visible)
+
+        # Free stays unchanged; the source-only legacy routes have no guard.
+        free = self.client.get(reverse('free_product'))
+        self.assertNotIn(b'pmv2-prepaint-guard', free.content)
+
+    def test_pro_navigation_actions_are_real_single_line_buttons(self):
+        """Both right-side links must be aligned and reachable, including mobile."""
+        from django.conf import settings
+
+        js = (
+            settings.BASE_DIR / 'static' / 'js' / 'promptfinisher_ui_v2.20260922.js'
+        ).read_text(encoding='utf-8')
+        css = (
+            settings.BASE_DIR / 'static' / 'css' / 'promptfinisher_v2.20260922.css'
+        ).read_text(encoding='utf-8')
+        self.assertIn("cta.className = 'pmv2-header-cta';", js)
+        self.assertIn("logout.className = 'pmv2-logout';", js)
+        self.assertIn("logout.href = logoutLink.href;", js)
+        self.assertIn("logout.textContent = localizedLogout();", js)
+        self.assertIn('min-width:max-content;', css)
+        self.assertIn('white-space:nowrap;', css)
+        self.assertIn('.pmv2-logout{', css)
+        self.assertIn('min-height:44px;', css)
+        self.assertIn('body.pmv2-pro .pmv2-header-actions{', css)
+        self.assertNotIn('.pmv2-logout{display:none}', css)
+
     def test_pro_v2_tasks_use_one_flat_balanced_grid_with_category_labels(self):
         from django.conf import settings
 
