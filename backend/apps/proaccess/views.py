@@ -21,9 +21,21 @@ V2_ASSET_REV = b'20261023-review-l10n2'
 V2_STYLE = b'<link rel="stylesheet" href="/static/css/promptfinisher_v2.20260922.css?v=' + V2_ASSET_REV + b'">'
 V2_SCRIPT = b'<script src="/static/js/promptfinisher_ui_v2.20260922.js?v=' + V2_ASSET_REV + b'" defer></script>'
 I18N_SCRIPT = b'<script src="/static/js/promptfinisher_product_i18n.20261011.js?v=' + V2_ASSET_REV + b'" defer></script>'
+# The Pro source is a validated legacy Golden Master. Keep it fully invisible
+# before deferred JS replaces its layout, rather than briefly painting it.
+# Recovery on window.load reveals the legacy UI if the V2 script fails to run;
+# JS-disabled visitors also receive a visible fallback.
+V2_PREPAINT_GUARD = (
+    b'<style id="pmv2-prepaint-guard">body{visibility:hidden!important}</style>'
+    b'<noscript><style>body{visibility:visible!important}</style></noscript>'
+    b'<script>window.addEventListener("load",function(){'
+    b'var guard=document.getElementById("pmv2-prepaint-guard");'
+    b'if(guard)guard.remove();'
+    b'},{once:true});</script>'
+)
 
 
-def _inject_v2_ui(data: bytes, *, language_cookie: str = 'de') -> bytes:
+def _inject_v2_ui(data: bytes, *, language_cookie: str = 'de', prepaint_guard: bool = False) -> bytes:
     head_marker = b'</head>'
     body_marker = b'</body></html>'
 
@@ -56,7 +68,8 @@ def _inject_v2_ui(data: bytes, *, language_cookie: str = 'de') -> bytes:
     if language not in allowed:
         language = 'de'
     data = data.replace(html_tag, b'<html lang="' + language.encode('ascii') + b'">', 1)
-    data = data.replace(head_marker, V2_STYLE + head_marker, 1)
+    head_assets = V2_STYLE + (V2_PREPAINT_GUARD if prepaint_guard else b'')
+    data = data.replace(head_marker, head_assets + head_marker, 1)
     data = data.replace(body_marker, V2_SCRIPT + I18N_SCRIPT + body_marker, 1)
     return data
 
@@ -257,7 +270,11 @@ def _pro_runtime_response(request, *, ui_v2=False):
     if ui_v2:
         data = _remove_v2_source_status(data)
         try:
-            data = _inject_v2_ui(data, language_cookie=request.COOKIES.get(settings.LANGUAGE_COOKIE_NAME, 'de'))
+            data = _inject_v2_ui(
+                data,
+                language_cookie=request.COOKIES.get(settings.LANGUAGE_COOKIE_NAME, 'de'),
+                prepaint_guard=True,
+            )
         except GoldenMasterIntegrityError:
             logger.exception('PROMPTFINISHER Pro V2 UI injection failed')
             return render(request, 'proaccess/asset_missing.html', status=503)
