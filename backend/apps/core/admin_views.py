@@ -1779,6 +1779,7 @@ def email(request):
     smtp_transport = get_smtp_transport('smtp1')
     smtp_transport_2 = get_smtp_transport('smtp2')
     graph_transport = get_graph_transport()
+    graph_connection = graph_connection_status()
     graph_configured = all(
         [
             graph_transport['tenant_id'],
@@ -1787,6 +1788,12 @@ def email(request):
             graph_transport['sender'],
         ]
     )
+    if graph_transport['auth_mode'] == 'delegated':
+        graph_configured = bool(
+            graph_configured
+            and graph_transport['login_email']
+            and graph_connection['connected']
+        )
     configured = {
         'smtp1': bool(
             smtp_transport['host']
@@ -1819,6 +1826,7 @@ def email(request):
             'provider_configured_map': configured,
             'graph_sender': graph_transport['sender'],
             'graph_transport': graph_transport,
+            'graph_connection': graph_connection,
             'mail_identity': get_mail_identity(),
             'smtp_transport': smtp_transport,
             'smtp_transport_2': smtp_transport_2,
