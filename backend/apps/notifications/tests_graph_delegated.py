@@ -24,8 +24,8 @@ from .services import _send_graph
 
 
 TEST_KEY = base64.urlsafe_b64encode(b'0123456789abcdef0123456789abcdef').decode('ascii')
-TENANT = '371c7e08-18ee-4193-9d00-ea433db6319f'
-CLIENT = '299ec43b-54ac-4455-b752-580271c84a0c'
+TENANT = '11111111-2222-4333-8444-555555555555'
+CLIENT = '66666666-7777-4888-9999-aaaaaaaaaaaa'
 LOGIN = 'test-operator@example.test'
 SENDER = 'team-shared@example.test'
 CALLBACK = 'https://example.test/ns-admin/email/graph/callback/'
