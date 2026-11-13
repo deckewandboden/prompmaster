@@ -3870,3 +3870,78 @@ msgstr "Licentiebeheer / verlenging"
 
 msgid "Jetzt trotzdem PROMPTFINISHER Pro starten"
 msgstr "PROMPTFINISHER Pro toch openen"
+
+msgid "Für freigegebene Microsoft-365-Postfächer delegiertes OAuth mit MFA und Mail.Send.Shared verwenden. Die Entra-Anmeldung erfolgt über das persönliche Konto, nicht über das Shared Mailbox Passwort."
+msgstr "Gebruik voor gedeelde Microsoft 365-postvakken gedelegeerde OAuth met MFA en Mail.Send.Shared. Meld u bij Entra aan met het persoonlijke account, niet met het wachtwoord van het gedeelde postvak."
+
+msgid "Microsoft 365 MFA-Verbindung"
+msgstr "Microsoft 365 MFA-verbinding"
+
+msgid "Zuerst Tenant, App-ID, persönliches Anmeldekonto, freigegebenes Absenderpostfach, Client-Secret und Anmeldemethode speichern. Im Microsoft Entra Admin Center die exakte Callback-Adresse als Web-Redirect registrieren und delegiertes Mail.Send.Shared mit User.Read erlauben."
+msgstr "Sla eerst de tenant-ID, app-ID, het persoonlijke aanmeldaccount, het gedeelde afzenderpostvak, het clientgeheim en de aanmeldmethode op. Registreer in het Microsoft Entra-beheercentrum het exacte callbackadres als webomleiding en sta gedelegeerde Mail.Send.Shared met User.Read toe."
+
+msgid "Verbindungsstatus"
+msgstr "Verbindingsstatus"
+
+msgid "Mit MFA verbunden"
+msgstr "Verbonden met MFA"
+
+msgid "Nicht verbunden / erneut anmelden"
+msgstr "Niet verbonden / opnieuw aanmelden"
+
+msgid "Angemeldetes Konto"
+msgstr "Aangemeld account"
+
+msgid "Verbunden am"
+msgstr "Verbonden op"
+
+msgid "Exakte Entra-Redirect-URI"
+msgstr "Exacte Entra-omleidings-URI"
+
+msgid "Für Senden als ein freigegebenes Postfach muss das persönliche Konto in Exchange Online die Berechtigung Send As besitzen. HTTP 202 von Microsoft Graph bedeutet nur angenommen, nicht zugestellt."
+msgstr "Om namens een gedeeld postvak te verzenden, moet het persoonlijke account de Exchange Online-machtiging Send As hebben. HTTP 202 van Microsoft Graph betekent alleen geaccepteerd, niet afgeleverd."
+
+msgid "Mit Microsoft 365 verbinden (MFA)"
+msgstr "Verbinden met Microsoft 365 (MFA)"
+
+msgid "Verbindung trennen"
+msgstr "Verbinding verbreken"
+
+msgid "Testempfänger"
+msgstr "Testontvanger"
+
+msgid "Eine einzelne echte Test-E-Mail ausdrücklich senden"
+msgstr "Uitdrukkelijk één echte test-e-mail verzenden"
+
+msgid "Test-E-Mail senden"
+msgstr "Test-e-mail verzenden"
+
+msgid "Keine automatische Test-E-Mail bei Installation oder Verbindung. Prüfe nach der Antwort 202 den wirklichen Posteingang separat."
+msgstr "Tijdens installatie of verbinden wordt niet automatisch een test-e-mail verzonden. Controleer na antwoord 202 afzonderlijk of het bericht daadwerkelijk in het postvak is ontvangen."
+
+msgid "Nur Benutzer mit Berechtigung Einstellungen schreiben dürfen die Microsoft-365-Verbindung verwalten."
+msgstr "Alleen gebruikers met toestemming om instellingen te wijzigen mogen de Microsoft 365-verbinding beheren."
+
+msgid "Anmeldemethode"
+msgstr "Aanmeldmethode"
+
+msgid "Delegierte Anmeldung mit MFA"
+msgstr "Gedelegeerde aanmelding met MFA"
+
+msgid "Application (Bestandsmodus)"
+msgstr "Toepassing (bestaande modus)"
+
+msgid "MFA-Verbindung"
+msgstr "MFA-verbinding"
+
+msgid "Verbunden"
+msgstr "Verbonden"
+
+msgid "Nicht verbunden"
+msgstr "Niet verbonden"
+
+msgid "Anmeldekonto"
+msgstr "Aanmeldaccount"
+
+msgid "Für ein freigegebenes Postfach benötigt das Anmeldekonto Exchange Send As. Ein HTTP 202 bestätigt nur die Annahme des Versandauftrags."
+msgstr "Voor een gedeeld postvak heeft het aanmeldaccount de Exchange-machtiging Send As nodig. HTTP 202 bevestigt alleen de acceptatie van het verzendverzoek."
