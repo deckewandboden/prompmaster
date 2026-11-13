@@ -126,6 +126,42 @@ a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,te
 }
 
 
+/* Login-specific follow-up actions: equal width, aligned, readable in all locales. */
+.login-card .login-secondary-actions{
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:10px;
+  margin-top:16px;
+  width:100%;
+}
+.login-card .login-secondary-actions .btn{
+  display:flex;
+  width:100%;
+  min-width:0;
+  height:44px;
+  padding:0 10px;
+  border:1px solid #cbdcec;
+  border-radius:10px;
+  background:#f7faff;
+  color:#0b2743;
+  font-size:13px;
+  font-weight:750;
+  line-height:1.25;
+  text-align:center;
+  white-space:normal;
+}
+.login-card .login-secondary-actions .btn:hover{
+  background:#e9f4ff;
+  border-color:#1680eb;
+}
+.login-card .login-secondary-actions .btn:focus-visible{
+  outline:3px solid #1680eb;
+  outline-offset:2px;
+}
+@media(max-width:420px){
+  .login-card .login-secondary-actions{grid-template-columns:minmax(0,1fr)}
+}
+
 /* Secondary card/result page primitives */
 .alert.ok{border-color:#caefdf;background:#edfaf4;color:#168756}
 .narrow-card,.form-card{max-width:760px}
