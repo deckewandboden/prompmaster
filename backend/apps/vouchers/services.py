@@ -15,6 +15,7 @@ from django.core.exceptions import ValidationError
 from django.db import transaction
 from django.db.models import F
 from django.utils import timezone
+from django.utils.translation import gettext as _
 
 from apps.audit.services import audit
 from apps.catalog.services import current_price
@@ -35,9 +36,9 @@ def normalize_code(raw: str) -> str:
     raw = str(raw or "").strip().upper()
     compact = "".join(letter for letter in raw if letter not in "- \t\r\n")
     if not compact.startswith("PF") or len(compact) != CODE_LENGTH + 2:
-        raise ValidationError("Gutscheincode ungültig oder nicht verfügbar.")
+        raise ValidationError(_("Gutscheincode ungültig oder nicht verfügbar."))
     if any(letter not in ALPHABET for letter in compact[2:]):
-        raise ValidationError("Gutscheincode ungültig oder nicht verfügbar.")
+        raise ValidationError(_("Gutscheincode ungültig oder nicht verfügbar."))
     return compact
 
 
@@ -53,9 +54,9 @@ def new_code() -> str:
 @transaction.atomic
 def issue_vouchers(*, actor, count=1, **values):
     if not actor.is_active or not actor.is_staff:
-        raise ValidationError("Nur netstyle kann Gutscheine erstellen.")
+        raise ValidationError(_("Nur netstyle kann Gutscheine erstellen."))
     if not (1 <= int(count) <= 100):
-        raise ValidationError("Pro Aktion sind 1 bis 100 Gutscheine zulässig.")
+        raise ValidationError(_("Pro Aktion sind 1 bis 100 Gutscheine zulässig."))
     results = []
     for _ in range(int(count)):
         raw = new_code()
@@ -81,20 +82,20 @@ def _validate(voucher, *, user, company, product, renewal=False, beneficiary=Non
     if not voucher.active or voucher.starts_at > now or (
         voucher.expires_at and voucher.expires_at <= now
     ):
-        raise ValidationError("Gutschein nicht verfügbar oder abgelaufen.")
+        raise ValidationError(_("Gutschein nicht verfügbar oder abgelaufen."))
     if voucher.used_count >= voucher.max_redemptions:
-        raise ValidationError("Dieser Gutschein ist bereits vollständig eingelöst.")
+        raise ValidationError(_("Dieser Gutschein ist bereits vollständig eingelöst."))
     if voucher.product_id != product.pk or product.code != "PRO" or not product.active:
-        raise ValidationError("Dieser Gutschein gilt nicht für das gewählte Produkt.")
+        raise ValidationError(_("Dieser Gutschein gilt nicht für das gewählte Produkt."))
     if company and company.status != "active":
-        raise ValidationError("Deaktivierte Unternehmen können keine Gutscheine einlösen.")
+        raise ValidationError(_("Deaktivierte Unternehmen können keine Gutscheine einlösen."))
     if voucher.bound_company_id and voucher.bound_company_id != getattr(company, "pk", None):
-        raise ValidationError("Gutschein ist für einen anderen Kunden ausgestellt.")
+        raise ValidationError(_("Gutschein ist für einen anderen Kunden ausgestellt."))
     target_user = beneficiary or user
     if voucher.bound_user_id and (target_user is None or voucher.bound_user_id != target_user.pk):
-        raise ValidationError("Gutschein ist für einen anderen Benutzer ausgestellt.")
+        raise ValidationError(_("Gutschein ist für einen anderen Benutzer ausgestellt."))
     if renewal and not voucher.allow_renewal:
-        raise ValidationError("Gutschein gilt nur für neue Pro-Lizenzen.")
+        raise ValidationError(_("Gutschein gilt nur für neue Pro-Lizenzen."))
 
 
 def _check_single_use(voucher, *, user, kind, beneficiary=None):
@@ -104,7 +105,7 @@ def _check_single_use(voucher, *, user, kind, beneficiary=None):
     rows = VoucherRedemption.objects.filter(voucher=voucher).exclude(status="cancelled")
     if kind == "trial":
         if beneficiary and rows.filter(beneficiary=beneficiary).exists():
-            raise ValidationError("Dieser Benutzer hat den Gutschein bereits eingelöst.")
+            raise ValidationError(_("Dieser Benutzer hat den Gutschein bereits eingelöst."))
     elif (
         user is not None
         and not voucher.bound_company_id
@@ -114,7 +115,7 @@ def _check_single_use(voucher, *, user, kind, beneficiary=None):
         # Public promotions are limited to one order per buyer. Explicitly
         # customer-bound campaigns can be used repeatedly up to their
         # deliberately configured campaign quota.
-        raise ValidationError("Dieser Gutschein wurde von diesem Konto bereits genutzt.")
+        raise ValidationError(_("Dieser Gutschein wurde von diesem Konto bereits genutzt."))
 
 
 def _fetch(raw, *, lock=False):
@@ -127,7 +128,7 @@ def _fetch(raw, *, lock=False):
         queryset = queryset.select_for_update()
     voucher = queryset.filter(code_hash=digest).first()
     if voucher is None:
-        raise ValidationError("Gutscheincode ungültig oder nicht verfügbar.")
+        raise ValidationError(_("Gutscheincode ungültig oder nicht verfügbar."))
     return voucher
 
 
@@ -139,7 +140,7 @@ def discount_quote(*, code, user, company, product, unit_gross, quantity, renewa
     """
     voucher = _fetch(code, lock=lock)
     if voucher.kind not in {"percent", "fixed"}:
-        raise ValidationError("Kostenlose Zeitgutscheine bitte im Gutscheinbereich einlösen.")
+        raise ValidationError(_("Kostenlose Zeitgutscheine bitte im Gutscheinbereich einlösen."))
     _validate(voucher, user=user, company=company, product=product, renewal=renewal)
     _check_single_use(voucher, user=user, kind="discount")
 
@@ -150,7 +151,7 @@ def discount_quote(*, code, user, company, product, unit_gross, quantity, renewa
         saving = Decimal(voucher.fixed_gross_off).quantize(CENT)
     after = original - saving
     if saving <= 0 or after < CENT:
-        raise ValidationError("Gutscheinbetrag ist für diesen Lizenzpreis nicht zulässig.")
+        raise ValidationError(_("Gutscheinbetrag ist für diesen Lizenzpreis nicht zulässig."))
     if int(quantity) < 1:
         raise ValidationError("Ungültige Lizenzanzahl.")
     return voucher, after, (saving * int(quantity)).quantize(CENT)
@@ -159,7 +160,7 @@ def discount_quote(*, code, user, company, product, unit_gross, quantity, renewa
 def reserve_discount(*, voucher, order, actor, company, saving):
     """Must run under the locked Voucher row inside create_order transaction."""
     if order.status != "draft" or order.gross_total <= 0:
-        raise ValidationError("Gutschein darf nur für eine zahlungspflichtige Bestellung verwendet werden.")
+        raise ValidationError(_("Gutschein darf nur für eine zahlungspflichtige Bestellung verwendet werden."))
     voucher.used_count = F("used_count") + 1
     voucher.save(update_fields=["used_count", "updated_at"])
     redemption = VoucherRedemption.objects.create(
@@ -220,7 +221,7 @@ def release_terminal_discount_reservation(order):
     ).update(used_count=F("used_count") - 1, updated_at=timezone.now())
     if changed != 1:
         raise ValidationError(
-            "Gutscheinreservierung kann wegen inkonsistentem Kontingent nicht freigegeben werden."
+            _("Gutscheinreservierung kann wegen inkonsistentem Kontingent nicht freigegeben werden.")
         )
     redemption.status = "cancelled"
     redemption.completed_at = timezone.now()
@@ -241,43 +242,43 @@ def redeem_trial(*, code, actor, company, beneficiary=None, request=None):
     It never creates provider payments or converts a draft paid order to paid.
     """
     if not actor.is_active or not actor.email_verified_at or actor.is_staff:
-        raise ValidationError("Bitte ein aktives, bestätigtes Kundenkonto verwenden.")
+        raise ValidationError(_("Bitte ein aktives, bestätigtes Kundenkonto verwenden."))
     from apps.catalog.models import Product
 
     product = Product.objects.filter(code="PRO", active=True).first()
     if product is None:
-        raise ValidationError("Pro ist derzeit nicht verfügbar.")
+        raise ValidationError(_("Pro ist derzeit nicht verfügbar."))
 
     if company is not None:
         membership = Membership.objects.select_for_update().filter(
             company=company, user=actor, active=True, role="admin",
         ).first()
         if membership is None:
-            raise ValidationError("Nur der Firmenadministrator kann Zeitgutscheine einlösen.")
+            raise ValidationError(_("Nur der Firmenadministrator kann Zeitgutscheine einlösen."))
         if beneficiary is not None:
             target_membership = Membership.objects.filter(
                 company=company, user=beneficiary, active=True,
             ).first()
             if not target_membership or not beneficiary.is_active or not beneficiary.email_verified_at:
-                raise ValidationError("Empfänger muss aktives, bestätigtes Firmenmitglied sein.")
+                raise ValidationError(_("Empfänger muss aktives, bestätigtes Firmenmitglied sein."))
     else:
         if beneficiary is not None and beneficiary.pk != actor.pk:
-            raise ValidationError("Privatcodes sind ausschließlich für das eigene Konto.")
+            raise ValidationError(_("Privatcodes sind ausschließlich für das eigene Konto."))
         if not hasattr(actor, "private_customer"):
-            raise ValidationError("Ein Privatkundenkonto ist erforderlich.")
+            raise ValidationError(_("Ein Privatkundenkonto ist erforderlich."))
         beneficiary = actor
 
     voucher = _fetch(code, lock=True)
     if voucher.bound_user_id and beneficiary is None:
-        raise ValidationError("Persönliche Zeitgutscheine müssen direkt dem vorgesehenen Benutzer zugewiesen werden.")
+        raise ValidationError(_("Persönliche Zeitgutscheine müssen direkt dem vorgesehenen Benutzer zugewiesen werden."))
     if voucher.kind != "trial":
-        raise ValidationError("Rabattgutscheine bitte beim Pro-Kauf verwenden.")
+        raise ValidationError(_("Rabattgutscheine bitte beim Pro-Kauf verwenden."))
     _validate(voucher, user=actor, company=company, product=product, beneficiary=beneficiary)
     _check_single_use(voucher, user=actor, kind="trial", beneficiary=beneficiary)
 
     price = current_price(product, "new")
     if price is None:
-        raise ValidationError("Für Pro fehlt die Preisversion; Gutschein kann nicht gebucht werden.")
+        raise ValidationError(_("Für Pro fehlt die Preisversion; Gutschein kann nicht gebucht werden."))
 
     now = timezone.now()
     # A trial must never defeat an existing administrator/payment block.
@@ -298,7 +299,7 @@ def redeem_trial(*, code, actor, company, beneficiary=None, request=None):
             )
         if blocked_seats.exists():
             raise ValidationError(
-                "Für diesen Benutzer besteht eine gesperrte oder zu prüfende Pro-Lizenz."
+                _("Für diesen Benutzer besteht eine gesperrte oder zu prüfende Pro-Lizenz.")
             )
 
     active_license = None
