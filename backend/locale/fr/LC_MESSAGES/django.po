@@ -3956,3 +3956,21 @@ msgstr "Compte de connexion"
 
 msgid "Für ein freigegebenes Postfach benötigt das Anmeldekonto Exchange Send As. Ein HTTP 202 bestätigt nur die Annahme des Versandauftrags."
 msgstr "Pour envoyer depuis une boîte partagée, le compte doit disposer du droit Envoyer en tant que dans Exchange. HTTP 202 confirme uniquement l'acceptation de la demande."
+
+msgid "Microsoft 365 anmelden (delegiert, mit MFA)"
+msgstr "Se connecter à Microsoft 365 (accès délégué, avec MFA)"
+
+msgid "Bestandsmodus: Application-Mail.Send (ohne MFA)"
+msgstr "Mode hérité : Application-Mail.Send (sans MFA)"
+
+msgid "Graph-Anmeldemethode"
+msgstr "Méthode d'authentification Graph"
+
+msgid "Für freigegebene Postfächer delegiertes OAuth mit Mail.Send.Shared wählen."
+msgstr "Pour les boîtes aux lettres partagées, choisissez OAuth délégué avec Mail.Send.Shared."
+
+msgid "Microsoft-365-Anmeldekonto"
+msgstr "Compte de connexion Microsoft 365"
+
+msgid "Das persönliche Konto, das sich bei Microsoft inklusive MFA anmeldet; nicht das freigegebene Postfach."
+msgstr "Le compte personnel qui se connecte à Microsoft avec MFA, et non la boîte aux lettres partagée."
