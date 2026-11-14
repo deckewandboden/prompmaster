@@ -3870,3 +3870,19 @@ msgstr "Licentiebeheer / verlenging"
 
 msgid "Jetzt trotzdem PROMPTFINISHER Pro starten"
 msgstr "PROMPTFINISHER Pro toch openen"
+
+# Voucher campaign and checkout terminology
+msgid "Gutscheine"
+msgstr "Kortingscodes"
+
+msgid "Gutscheine & Aktionen"
+msgstr "Kortingscodes en acties"
+
+msgid "Kostenlose Pro-Laufzeit"
+msgstr "Gratis Pro-gebruiksperiode"
+
+msgid "Rabattcode (optional)"
+msgstr "Kortingscode (optioneel)"
+
+msgid "Kostenlose Pro-Nutzung"
+msgstr "Gratis Pro-gebruik"
