@@ -227,6 +227,37 @@ class VoucherContractsTests(TestCase):
         with self.assertRaises(ValidationError):
             redeem_trial(code=code, actor=self.admin, company=self.company, beneficiary=self.other)
 
+    def test_voucher_permissions_are_separate_from_license_permissions(self):
+        from apps.accounts.models import Permission, Role, UserRole
+
+        operator = User.objects.create_user(
+            "voucher-licensing@example.test", "Secure-Test-2026!",
+            is_staff=True, email_verified_at=self.now,
+        )
+        role = Role.objects.create(code="voucher-licensing", name="Licensing only")
+        UserRole.objects.create(user=operator, role=role)
+        perm, _ = Permission.objects.get_or_create(
+            code="licenses.write", defaults={"name": "licenses.write"},
+        )
+        role.permissions.add(perm)
+        self._login(operator)
+        self.assertEqual(self.client.get("/ns-admin/vouchers/").status_code, 403)
+        self.assertEqual(self.client.get("/ns-admin/vouchers/create/").status_code, 403)
+        self.assertNotContains(
+            self.client.get("/ns-admin/"), 'href="/ns-admin/vouchers/"'
+        )
+        read, _ = Permission.objects.get_or_create(
+            code="vouchers.read", defaults={"name": "vouchers.read"},
+        )
+        role.permissions.add(read)
+        self.assertEqual(self.client.get("/ns-admin/vouchers/").status_code, 200)
+        self.assertEqual(self.client.get("/ns-admin/vouchers/create/").status_code, 403)
+        write, _ = Permission.objects.get_or_create(
+            code="vouchers.write", defaults={"name": "vouchers.write"},
+        )
+        role.permissions.add(write)
+        self.assertEqual(self.client.get("/ns-admin/vouchers/create/").status_code, 200)
+
     def test_staff_and_portal_permissions_and_visibility(self):
         _, raw = self.make(kind="trial", bound_company=self.company)
         self._login(self.member)
