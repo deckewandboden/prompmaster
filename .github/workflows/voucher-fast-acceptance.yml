@@ -71,9 +71,15 @@ jobs:
         run: |
           python manage.py check
           python manage.py makemigrations --check --dry-run
-      - name: Voucher business, RBAC and price tests
+      - name: Compile ten-language Django voucher catalogs
         working-directory: backend
-        run: python manage.py test apps.vouchers.tests --verbosity 2
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y gettext
+          python manage.py compilemessages --verbosity 0
+      - name: Voucher business, RBAC, price and localization tests
+        working-directory: backend
+        run: python manage.py test apps.vouchers.tests apps.vouchers.tests_i18n --verbosity 2
       - uses: actions/setup-node@v7
         with:
           node-version: "22"
