@@ -1,0 +1,410 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: PROMPTFINISHER Vouchers 2026\\n"
+"Language: tr\\n"
+"Content-Type: text/plain; charset=UTF-8\\n"
+"Content-Transfer-Encoding: 8bit\\n"
+"Plural-Forms: nplurals=1; plural=0;\\n"
+
+msgid "Gutscheine & Aktionen"
+msgstr "Kuponlar ve kampanyalar"
+
+msgid "Rabatte und kostenlose Pro-Zeiträume sicher verwalten."
+msgstr "İndirimleri ve ücretsiz Pro kullanım sürelerini güvenle yönetin."
+
+msgid "+ Codes erstellen"
+msgstr "+ Kod oluştur"
+
+msgid "Kampagnencodes"
+msgstr "Kampanya kodları"
+
+msgid "Erfolgreiche Einlösungen"
+msgstr "Başarılı kullanımlar"
+
+msgid "Kampagne, Firma oder letzte vier Zeichen"
+msgstr "Kampanya, şirket veya son dört karakter"
+
+msgid "Prozent"
+msgstr "Yüzde"
+
+msgid "Festbetrag"
+msgstr "Sabit tutar"
+
+msgid "Kostenlose Zeit"
+msgstr "Ücretsiz süre"
+
+msgid "Kampagne"
+msgstr "Kampanya"
+
+msgid "Zielkunde"
+msgstr "Hedef müşteri"
+
+msgid "Verbrauch"
+msgstr "Kullanım"
+
+msgid "Verwalten"
+msgstr "Yönet"
+
+msgid "Keine Gutscheine gefunden."
+msgstr "Kupon bulunamadı."
+
+msgid "Weiter"
+msgstr "İleri"
+
+msgid "Aus Sicherheitsgründen wird jeder vollständige Gutscheincode nur beim Erstellen angezeigt. Es werden ausschließlich Prüfsummen gespeichert."
+msgstr "Güvenlik nedeniyle tam kupon kodu yalnızca oluşturulduğunda gösterilir. Sadece doğrulama özetleri saklanır."
+
+msgid "Alle Codes sind zufällig und werden nach dem Erstellen nur einmal angezeigt."
+msgstr "Tüm kodlar rastgele oluşturulur ve yalnızca bir kez gösterilir."
+
+msgid "Ein Code kann auf einen Kunden beschränkt werden. Ohne Bindung ist er für alle berechtigten Kunden gültig. Pro-Code-Limits gelten unabhängig voneinander."
+msgstr "Bir kod tek müşteriye sınırlandırılabilir. Sınırlandırılmamış kodlar tüm uygun müşteriler için geçerlidir. Her kodun kendi kullanım sınırı vardır."
+
+msgid "Gutscheincodes erzeugen"
+msgstr "Kupon kodları oluştur"
+
+msgid "Einmalige Anzeige"
+msgstr "Yalnızca bir kez gösterilir"
+
+msgid "Diese Codes können später nicht erneut angezeigt werden. Bitte jetzt sicher an die berechtigten Kunden übergeben."
+msgstr "Bu kodlar daha sonra yeniden gösterilemez. Şimdi yetkili müşterilere güvenli biçimde iletin."
+
+msgid "Gutscheincode"
+msgstr "Kupon kodu"
+
+msgid "Verwaltung"
+msgstr "Yönetim"
+
+msgid "In Protokollen und Datenbank werden keine vollständigen Gutscheincodes gespeichert."
+msgstr "Tam kupon kodları kayıtlarda veya veritabanında saklanmaz."
+
+msgid "Alle Gutscheine"
+msgstr "Tüm kuponlar"
+
+msgid "Leistung"
+msgstr "Avantaj"
+
+msgid "je Lizenz"
+msgstr "lisans başına"
+
+msgid "Tage Pro"
+msgstr "Pro günleri"
+
+msgid "Kontingent"
+msgstr "Kota"
+
+msgid "Je Code; laufende Zahlungsreservierungen zählen mit."
+msgstr "Kod başına; bekleyen ödeme rezervasyonları da sınıra dahildir."
+
+msgid "Zielbindung"
+msgstr "Hedef kısıtlaması"
+
+msgid "Alle berechtigten Kunden"
+msgstr "Tüm uygun müşteriler"
+
+msgid "Bereits gewährte Lizenzen werden durch Gutscheinsperrung nicht automatisch entzogen."
+msgstr "Kuponun engellenmesi önceden verilen lisansları otomatik olarak iptal etmez."
+
+msgid "Code für weitere Einlösungen sperren"
+msgstr "Yeni kullanımlar için kodu engelle"
+
+msgid "Code wieder aktivieren"
+msgstr "Kodu yeniden etkinleştir"
+
+msgid "Kampagne bearbeiten"
+msgstr "Kampanyayı düzenle"
+
+msgid "Die wirtschaftlichen Konditionen und Kundenbindung bleiben nach Ausstellung unveränderlich."
+msgstr "Düzenlendikten sonra mali koşullar ve müşteri kapsamı değiştirilemez."
+
+msgid "Einlösehistorie"
+msgstr "Kullanım geçmişi"
+
+msgid "Einlöser"
+msgstr "Kullanan"
+
+msgid "Lizenz/Bestellung"
+msgstr "Lisans/sipariş"
+
+msgid "Noch keine Einlösungen."
+msgstr "Henüz kullanım yok."
+
+msgid "Gutscheine & Gratislaufzeiten"
+msgstr "Kuponlar ve ücretsiz süreler"
+
+msgid "Rabattcodes beim Lizenzkauf nutzen oder Pro-Zeiträume einlösen."
+msgstr "Lisans satın alırken indirim kodu kullanın veya ücretsiz Pro sürelerini etkinleştirin."
+
+msgid "Kostenlose Pro-Laufzeit einlösen"
+msgstr "Ücretsiz Pro süresini etkinleştir"
+
+msgid "Zeitgutscheine können neue Lizenzen erzeugen oder die bestehende Lizenz des Empfängers verlängern. Rabattcodes gehören in das Kaufformular."
+msgstr "Süre kuponları yeni lisans oluşturur veya alıcının mevcut lisansını uzatır. İndirim kodları satın alma formuna girilir."
+
+msgid "Unzugewiesene Lizenz für mein Unternehmen"
+msgstr "Şirketim için atanmamış lisans"
+
+msgid "Zeitgutschein verbindlich einlösen"
+msgstr "Süre kuponunu kullan"
+
+msgid "Für dieses Konto zugeteilte Kampagnen"
+msgstr "Bu hesaba atanmış kampanyalar"
+
+msgid "Vollständige Codes werden nur durch netstyle ausgegeben."
+msgstr "Tam kodlar yalnızca netstyle tarafından verilir."
+
+msgid "Keine ausdrücklich zugeteilten Kampagnen."
+msgstr "Bu hesaba özel atanmış kampanya yok."
+
+msgid "Rabatt bei der Bestellung"
+msgstr "Siparişte indirim"
+
+msgid "Rabattcodes werden beim Kauf oder bei zulässigen Verlängerungen vor der Zahlung geprüft und auf den Bruttopreis angewendet."
+msgstr "Kodlar satın alma veya uygun uzatmada ödemeden önce kontrol edilir ve brüt fiyata uygulanır."
+
+msgid "Zum Lizenzkauf"
+msgstr "Lisans satın al"
+
+msgid "Einlösungen und Lizenzzeiträume"
+msgstr "Kullanımlar ve lisans süreleri"
+
+msgid "Gutschein"
+msgstr "Kupon"
+
+msgid "Laufzeit/Rabatt"
+msgstr "Süre/indirim"
+
+msgid "Kampagnenbezeichnung"
+msgstr "Kampanya adı"
+
+msgid "Interner Hinweis"
+msgstr "Dahili not"
+
+msgid "Rabatt in Prozent"
+msgstr "Yüzde indirim"
+
+msgid "Festbetrag je Lizenz"
+msgstr "Lisans başına sabit tutar"
+
+msgid "Kostenlose Pro-Nutzung"
+msgstr "Ücretsiz Pro erişimi"
+
+msgid "Gutscheinart"
+msgstr "Kupon türü"
+
+msgid "Rabatt je Lizenz in EUR brutto"
+msgstr "Lisans başına EUR brüt indirim"
+
+msgid "Kostenlose Tage"
+msgstr "Ücretsiz günler"
+
+msgid "Maximale Einlösungen je Code"
+msgstr "Kod başına en fazla kullanım"
+
+msgid "Anzahl verschiedener Codes"
+msgstr "Farklı kod sayısı"
+
+msgid "Rabatt auch für Verlängerungen"
+msgstr "İndirim uzatmalar için de geçerli"
+
+msgid "Nur für Unternehmen (optional)"
+msgstr "Yalnızca şirket (isteğe bağlı)"
+
+msgid "Nur für Benutzer (optional)"
+msgstr "Yalnızca kullanıcı (isteğe bağlı)"
+
+msgid "Prozentgutscheine benötigen 1–99 Prozent."
+msgstr "Yüzde kuponları için oran 1–99 olmalıdır."
+
+msgid "Festbetrag muss größer null sein."
+msgstr "Sabit tutar sıfırdan büyük olmalıdır."
+
+msgid "Kostenlose Laufzeit muss 1–1095 Tage betragen."
+msgstr "Ücretsiz kullanım süresi 1–1095 gün olmalıdır."
+
+msgid "Nur für Prozentgutscheine zulässig."
+msgstr "Yalnızca yüzde kuponlarında geçerlidir."
+
+msgid "Nur für Festbetragsgutscheine zulässig."
+msgstr "Yalnızca sabit tutarlı kuponlarda geçerlidir."
+
+msgid "Nur für Zeitgutscheine zulässig."
+msgstr "Yalnızca süre kuponlarında geçerlidir."
+
+msgid "Bei Zeitgutscheinen nicht anwendbar."
+msgstr "Süre kuponlarında uygulanmaz."
+
+msgid "Entweder Unternehmen oder Benutzer binden."
+msgstr "Bir şirket veya bir kullanıcı ile sınırlandırın."
+
+msgid "Das Ende muss nach dem Beginn liegen."
+msgstr "Bitiş başlangıçtan sonra olmalıdır."
+
+msgid "Maximale Einlösungen"
+msgstr "En fazla kullanım"
+
+msgid "Bereits reservierte Einlösungen dürfen nicht abgeschnitten werden."
+msgstr "Sınır mevcut rezervasyon sayısından az olamaz."
+
+msgid "Das Ende muss nach Beginn liegen."
+msgstr "Bitiş başlangıçtan sonra olmalıdır."
+
+msgid "Neue Gutscheincodes"
+msgstr "Yeni kupon kodları"
+
+msgid "Gutscheine erstellen"
+msgstr "Kupon oluştur"
+
+msgid "Gutschein aktualisiert."
+msgstr "Kupon güncellendi."
+
+msgid "Gutscheinstatus geändert. Bestehende Nutzungsrechte bleiben unverändert."
+msgstr "Kupon durumu değişti. Mevcut erişim hakları değişmedi."
+
+#, python-format
+msgid "Gutschein eingelöst. Pro-Lizenz: %(license)s"
+msgstr "Kupon kullanıldı. Pro lisansı: %(license)s"
+
+msgid "Ungültige Lizenzanzahl."
+msgstr "Geçersiz lisans adedi."
+
+msgid "Gutschein oder Preis nicht verfügbar."
+msgstr "Kupon veya fiyat kullanılamıyor."
+
+msgid "Festbetrag ist für diese Währung nicht zulässig."
+msgstr "Sabit indirim bu para biriminde geçerli değildir."
+
+msgid "Bitte den Gutschein im Kundenportal einlösen."
+msgstr "Lütfen kuponu müşteri portalında kullanın."
+
+msgid "Gutschein ungültig oder nicht verfügbar."
+msgstr "Kupon geçersiz veya kullanılamıyor."
+
+msgid "Gutscheincode ungültig oder nicht verfügbar."
+msgstr "Kupon kodu geçersiz veya kullanılamıyor."
+
+msgid "Nur netstyle kann Gutscheine erstellen."
+msgstr "Kuponları yalnızca netstyle oluşturabilir."
+
+msgid "Pro Aktion sind 1 bis 100 Gutscheine zulässig."
+msgstr "Her işlemde 1 ila 100 kupon oluşturulabilir."
+
+msgid "Gutschein nicht verfügbar oder abgelaufen."
+msgstr "Kupon kullanılamıyor veya süresi dolmuş."
+
+msgid "Dieser Gutschein ist bereits vollständig eingelöst."
+msgstr "Bu kuponun tüm kullanım hakkı tükenmiş."
+
+msgid "Dieser Gutschein gilt nicht für das gewählte Produkt."
+msgstr "Bu kupon seçilen ürün için geçerli değil."
+
+msgid "Deaktivierte Unternehmen können keine Gutscheine einlösen."
+msgstr "Devre dışı şirketler kupon kullanamaz."
+
+msgid "Gutschein ist für einen anderen Kunden ausgestellt."
+msgstr "Kupon başka bir müşteri için düzenlenmiş."
+
+msgid "Gutschein ist für einen anderen Benutzer ausgestellt."
+msgstr "Kupon başka bir kullanıcı için düzenlenmiş."
+
+msgid "Gutschein gilt nur für neue Pro-Lizenzen."
+msgstr "Kupon yalnızca yeni Pro lisansları için geçerlidir."
+
+msgid "Dieser Benutzer hat den Gutschein bereits eingelöst."
+msgstr "Bu kullanıcı kuponu zaten kullandı."
+
+msgid "Dieser Gutschein wurde von diesem Konto bereits genutzt."
+msgstr "Bu hesap kuponu zaten kullandı."
+
+msgid "Kostenlose Zeitgutscheine bitte im Gutscheinbereich einlösen."
+msgstr "Ücretsiz süre kuponlarını kupon bölümünde kullanın."
+
+msgid "Gutscheinbetrag ist für diesen Lizenzpreis nicht zulässig."
+msgstr "Kupon tutarı bu lisans fiyatı için geçerli değil."
+
+msgid "Gutschein darf nur für eine zahlungspflichtige Bestellung verwendet werden."
+msgstr "Kupon yalnızca ücretli bir siparişte kullanılabilir."
+
+msgid "Gutscheinreservierung kann wegen inkonsistentem Kontingent nicht freigegeben werden."
+msgstr "Kontenjan tutarsızlığı nedeniyle kupon rezervasyonu serbest bırakılamıyor."
+
+msgid "Bitte ein aktives, bestätigtes Kundenkonto verwenden."
+msgstr "Lütfen etkin ve doğrulanmış müşteri hesabı kullanın."
+
+msgid "Pro ist derzeit nicht verfügbar."
+msgstr "Pro şu anda kullanılamıyor."
+
+msgid "Nur der Firmenadministrator kann Zeitgutscheine einlösen."
+msgstr "Süre kuponlarını yalnızca şirket yöneticisi kullanabilir."
+
+msgid "Empfänger muss aktives, bestätigtes Firmenmitglied sein."
+msgstr "Alıcı etkin ve doğrulanmış bir şirket üyesi olmalıdır."
+
+msgid "Privatcodes sind ausschließlich für das eigene Konto."
+msgstr "Özel kodlar yalnızca kendi hesabında kullanılabilir."
+
+msgid "Ein Privatkundenkonto ist erforderlich."
+msgstr "Bireysel müşteri hesabı gereklidir."
+
+msgid "Persönliche Zeitgutscheine müssen direkt dem vorgesehenen Benutzer zugewiesen werden."
+msgstr "Kişisel süre kuponları doğrudan ilgili kullanıcıya atanmalıdır."
+
+msgid "Rabattgutscheine bitte beim Pro-Kauf verwenden."
+msgstr "İndirim kuponlarını Pro satın alırken kullanın."
+
+msgid "Für Pro fehlt die Preisversion; Gutschein kann nicht gebucht werden."
+msgstr "Pro fiyat sürümü eksik; kupon işlenemiyor."
+
+msgid "Für diesen Benutzer besteht eine gesperrte oder zu prüfende Pro-Lizenz."
+msgstr "Bu kullanıcıya ait engellenmiş veya incelemede olan bir Pro lisansı var."
+
+msgid "Rabattprozente müssen zwischen 1 und 99 liegen."
+msgstr "İndirim yüzdesi 1 ile 99 arasında olmalıdır."
+
+msgid "Ein positiver Festbetrag ist erforderlich."
+msgstr "Pozitif bir sabit tutar gereklidir."
+
+msgid "Kostenlose Laufzeit muss 1 bis 1095 Tage betragen."
+msgstr "Ücretsiz süre 1 ile 1095 gün arasında olmalıdır."
+
+msgid "Rabattcodes dürfen keine freie Laufzeit haben."
+msgstr "İndirim kodları ücretsiz süre veremez."
+
+msgid "Nur Festbetragsrabatte dürfen einen Betrag haben."
+msgstr "Yalnızca sabit tutarlı kuponlarda tutar belirtilebilir."
+
+msgid "Nur Prozentcodes dürfen Rabattprozente haben."
+msgstr "Yalnızca yüzde kuponlarında yüzde belirtilebilir."
+
+msgid "Probezeiträume sind keine Zahlungsrabatte."
+msgstr "Deneme süreleri ödeme indirimi değildir."
+
+msgid "Ein Code kann nur auf Firma oder Benutzer begrenzt sein."
+msgstr "Kod şirket veya kullanıcıyla sınırlandırılabilir; ikisi birden olamaz."
+
+msgid "Ende muss nach Beginn liegen."
+msgstr "Bitiş başlangıçtan sonra olmalıdır."
+
+msgid "Mindestens eine Einlösung erforderlich."
+msgstr "En az bir kullanım gereklidir."
+
+msgid "Prozentualer Rabatt"
+msgstr "Yüzde indirim"
+
+msgid "Fester Rabatt je Lizenz"
+msgstr "Lisans başına sabit indirim"
+
+msgid "Kostenlose Pro-Laufzeit"
+msgstr "Ücretsiz Pro süresi"
+
+msgid "Für Bestellung reserviert"
+msgstr "Sipariş için rezerve edildi"
+
+msgid "Eingelöst"
+msgstr "Kullanıldı"
+
+msgid "Fehlgeschlagen / freigegeben"
+msgstr "Başarısız / serbest bırakıldı"
+
+msgid "Rabattcode (optional)"
+msgstr "İndirim kodu (isteğe bağlı)"
