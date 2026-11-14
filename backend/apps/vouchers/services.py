@@ -91,7 +91,7 @@ def _validate(voucher, *, user, company, product, renewal=False, beneficiary=Non
     if voucher.bound_company_id and voucher.bound_company_id != getattr(company, "pk", None):
         raise ValidationError("Gutschein ist für einen anderen Kunden ausgestellt.")
     target_user = beneficiary or user
-    if voucher.bound_user_id and voucher.bound_user_id != target_user.pk:
+    if voucher.bound_user_id and (target_user is None or voucher.bound_user_id != target_user.pk):
         raise ValidationError("Gutschein ist für einen anderen Benutzer ausgestellt.")
     if renewal and not voucher.allow_renewal:
         raise ValidationError("Gutschein gilt nur für neue Pro-Lizenzen.")
@@ -105,7 +105,7 @@ def _check_single_use(voucher, *, user, kind, beneficiary=None):
     if kind == "trial":
         if beneficiary and rows.filter(beneficiary=beneficiary).exists():
             raise ValidationError("Dieser Benutzer hat den Gutschein bereits eingelöst.")
-    elif rows.filter(redeemed_by=user).exists():
+    elif user is not None and rows.filter(redeemed_by=user).exists():
         raise ValidationError("Dieser Gutschein wurde von diesem Konto bereits genutzt.")
 
 
@@ -215,6 +215,8 @@ def redeem_trial(*, code, actor, company, beneficiary=None, request=None):
         beneficiary = actor
 
     voucher = _fetch(code, lock=True)
+    if voucher.bound_user_id and beneficiary is None:
+        raise ValidationError("Persönliche Zeitgutscheine müssen direkt dem vorgesehenen Benutzer zugewiesen werden.")
     if voucher.kind != "trial":
         raise ValidationError("Rabattgutscheine bitte beim Pro-Kauf verwenden.")
     _validate(voucher, user=actor, company=company, product=product, beneficiary=beneficiary)
