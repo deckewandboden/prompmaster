@@ -4,11 +4,13 @@ from django.urls import include, path
 
 from apps.core import views as core
 from apps.proaccess import views as product_views
+from apps.vouchers import views as voucher_views
 
 urlpatterns = [
     path('', core.home, name='home'),
     path('catalog.json', core.public_catalog, name='public_catalog'),
     path('api/v1/checkout/csrf/', core.checkout_csrf, name='checkout_csrf'),
+    path('api/v1/vouchers/quote/', voucher_views.public_voucher_quote, name='public_voucher_quote'),
     path('api/v1/checkout/start/', core.public_checkout_start, name='public_checkout_start'),
     path('free/', product_views.free_content, name='free_product'),
     path('free-old/', product_views.free_old_content, name='free_product_old'),
