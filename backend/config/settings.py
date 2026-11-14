@@ -29,6 +29,7 @@ INSTALLED_APPS = [
     'apps.orders',
     'apps.payments',
     'apps.licenses',
+    'apps.vouchers',
     'apps.devices',
     'apps.notifications',
     'apps.support',
