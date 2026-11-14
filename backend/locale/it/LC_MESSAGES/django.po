@@ -4058,3 +4058,106 @@ msgstr "Buono"
 
 msgid "Laufzeit/Rabatt"
 msgstr "Durata/sconto"
+
+# Voucher campaign forms, validation and checkout
+msgid "Kampagnenbezeichnung"
+msgstr "Nome della campagna"
+
+msgid "Interner Hinweis"
+msgstr "Nota interna"
+
+msgid "Rabatt in Prozent"
+msgstr "Sconto percentuale"
+
+msgid "Festbetrag je Lizenz"
+msgstr "Importo fisso per licenza"
+
+msgid "Gutscheinart"
+msgstr "Tipo di buono"
+
+msgid "Rabatt je Lizenz in EUR brutto"
+msgstr "Sconto per licenza in EUR IVA inclusa"
+
+msgid "Kostenlose Tage"
+msgstr "Giorni gratuiti"
+
+msgid "Maximale Einlösungen je Code"
+msgstr "Utilizzi massimi per codice"
+
+msgid "Anzahl verschiedener Codes"
+msgstr "Numero di codici distinti"
+
+msgid "Rabatt auch für Verlängerungen"
+msgstr "Sconto valido anche per i rinnovi"
+
+msgid "Nur für Unternehmen (optional)"
+msgstr "Solo per azienda (facoltativo)"
+
+msgid "Nur für Benutzer (optional)"
+msgstr "Solo per utente (facoltativo)"
+
+msgid "Prozentgutscheine benötigen 1–99 Prozent."
+msgstr "Lo sconto deve essere compreso tra 1 e 99 %."
+
+msgid "Festbetrag muss größer null sein."
+msgstr "L’importo fisso deve essere maggiore di zero."
+
+msgid "Kostenlose Laufzeit muss 1–1095 Tage betragen."
+msgstr "Il periodo gratuito deve durare 1–1095 giorni."
+
+msgid "Nur für Prozentgutscheine zulässig."
+msgstr "Consentito solo per buoni percentuali."
+
+msgid "Nur für Festbetragsgutscheine zulässig."
+msgstr "Consentito solo per buoni a importo fisso."
+
+msgid "Nur für Zeitgutscheine zulässig."
+msgstr "Consentito solo per buoni temporali."
+
+msgid "Bei Zeitgutscheinen nicht anwendbar."
+msgstr "Non applicabile ai buoni temporali."
+
+msgid "Entweder Unternehmen oder Benutzer binden."
+msgstr "Vincola a un’azienda o un utente, non entrambi."
+
+msgid "Das Ende muss nach dem Beginn liegen."
+msgstr "La fine deve essere successiva all’inizio."
+
+msgid "Maximale Einlösungen"
+msgstr "Utilizzi massimi"
+
+msgid "Bereits reservierte Einlösungen dürfen nicht abgeschnitten werden."
+msgstr "Il limite non può essere inferiore alle prenotazioni esistenti."
+
+msgid "Das Ende muss nach Beginn liegen."
+msgstr "La fine deve essere dopo l’inizio."
+
+msgid "Neue Gutscheincodes"
+msgstr "Nuovi codici sconto"
+
+msgid "Gutscheine erstellen"
+msgstr "Crea buoni sconto"
+
+msgid "Gutschein aktualisiert."
+msgstr "Buono aggiornato."
+
+msgid "Gutscheinstatus geändert. Bestehende Nutzungsrechte bleiben unverändert."
+msgstr "Stato del buono modificato. I diritti esistenti restano invariati."
+
+msgid "Gutschein eingelöst. Pro-Lizenz: %(license)s"
+msgstr "Buono riscattato. Licenza Pro: %(license)s"
+
+msgid "Ungültige Lizenzanzahl."
+msgstr "Quantità di licenze non valida."
+
+msgid "Gutschein oder Preis nicht verfügbar."
+msgstr "Buono o prezzo non disponibile."
+
+msgid "Festbetrag ist für diese Währung nicht zulässig."
+msgstr "Sconto fisso non disponibile in questa valuta."
+
+msgid "Bitte den Gutschein im Kundenportal einlösen."
+msgstr "Riscatta il buono nel portale clienti."
+
+msgid "Gutschein ungültig oder nicht verfügbar."
+msgstr "Buono non valido o non disponibile."
