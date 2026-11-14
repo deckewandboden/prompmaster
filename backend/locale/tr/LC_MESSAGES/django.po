@@ -3831,3 +3831,169 @@ msgstr "İndirim kodu (isteğe bağlı)"
 
 msgid "Kostenlose Pro-Nutzung"
 msgstr "Ücretsiz Pro kullanımı"
+
+# Voucher campaign user interface
+msgid "Rabatte und kostenlose Pro-Zeiträume sicher verwalten."
+msgstr "İndirimleri ve ücretsiz Pro sürelerini güvenle yönetin."
+
+msgid "+ Codes erstellen"
+msgstr "+ Kod oluştur"
+
+msgid "Kampagnencodes"
+msgstr "Kampanya kodları"
+
+msgid "Erfolgreiche Einlösungen"
+msgstr "Başarılı kullanımlar"
+
+msgid "Kampagne, Firma oder letzte vier Zeichen"
+msgstr "Kampanya, şirket veya son dört karakter"
+
+msgid "Prozent"
+msgstr "Yüzde"
+
+msgid "Festbetrag"
+msgstr "Sabit tutar"
+
+msgid "Kostenlose Zeit"
+msgstr "Ücretsiz süre"
+
+msgid "Kampagne"
+msgstr "Kampanya"
+
+msgid "Zielkunde"
+msgstr "Hedef müşteri"
+
+msgid "Verbrauch"
+msgstr "Kullanım"
+
+msgid "Verwalten"
+msgstr "Yönet"
+
+msgid "Keine Gutscheine gefunden."
+msgstr "Kupon bulunamadı."
+
+msgid "Weiter"
+msgstr "İleri"
+
+msgid "Aus Sicherheitsgründen wird jeder vollständige Gutscheincode nur beim Erstellen angezeigt. Es werden ausschließlich Prüfsummen gespeichert."
+msgstr "Güvenlik için tam kupon kodu yalnızca oluşturulurken gösterilir. Yalnızca özet değerleri saklanır."
+
+msgid "Alle Codes sind zufällig und werden nach dem Erstellen nur einmal angezeigt."
+msgstr "Kodlar rastgele oluşturulur ve yalnızca bir kez gösterilir."
+
+msgid "Ein Code kann auf einen Kunden beschränkt werden. Ohne Bindung ist er für alle berechtigten Kunden gültig. Pro-Code-Limits gelten unabhängig voneinander."
+msgstr "Kod tek müşteriye sınırlandırılabilir. Sınır yoksa tüm uygun müşteriler kullanabilir. Limitler her kod için ayrıdır."
+
+msgid "Gutscheincodes erzeugen"
+msgstr "Kupon kodları oluştur"
+
+msgid "Einmalige Anzeige"
+msgstr "Tek seferlik gösterim"
+
+msgid "Diese Codes können später nicht erneut angezeigt werden. Bitte jetzt sicher an die berechtigten Kunden übergeben."
+msgstr "Bu kodlar daha sonra tekrar gösterilemez. Şimdi yetkili müşterilere güvenli biçimde iletin."
+
+msgid "Gutscheincode"
+msgstr "Kupon kodu"
+
+msgid "Verwaltung"
+msgstr "Yönetim"
+
+msgid "In Protokollen und Datenbank werden keine vollständigen Gutscheincodes gespeichert."
+msgstr "Tam kupon kodları kayıtlarda veya veritabanında saklanmaz."
+
+msgid "Alle Gutscheine"
+msgstr "Tüm kuponlar"
+
+msgid "Leistung"
+msgstr "Avantaj"
+
+msgid "je Lizenz"
+msgstr "lisans başına"
+
+msgid "Tage Pro"
+msgstr "Pro günü"
+
+msgid "Kontingent"
+msgstr "Kota"
+
+msgid "Je Code; laufende Zahlungsreservierungen zählen mit."
+msgstr "Her kod için; bekleyen ödeme rezervasyonları da sayılır."
+
+msgid "Zielbindung"
+msgstr "Alıcı kısıtlaması"
+
+msgid "Alle berechtigten Kunden"
+msgstr "Tüm uygun müşteriler"
+
+msgid "Bereits gewährte Lizenzen werden durch Gutscheinsperrung nicht automatisch entzogen."
+msgstr "Kuponu engellemek verilmiş lisansları otomatik iptal etmez."
+
+msgid "Code für weitere Einlösungen sperren"
+msgstr "Yeni kullanımları engelle"
+
+msgid "Code wieder aktivieren"
+msgstr "Kodu yeniden etkinleştir"
+
+msgid "Kampagne bearbeiten"
+msgstr "Kampanyayı düzenle"
+
+msgid "Die wirtschaftlichen Konditionen und Kundenbindung bleiben nach Ausstellung unveränderlich."
+msgstr "Ticari koşullar ve müşteri kısıtlamaları oluşturulduktan sonra değiştirilemez."
+
+msgid "Einlösehistorie"
+msgstr "Kullanım geçmişi"
+
+msgid "Einlöser"
+msgstr "Kullanan"
+
+msgid "Lizenz/Bestellung"
+msgstr "Lisans/sipariş"
+
+msgid "Noch keine Einlösungen."
+msgstr "Henüz kullanım yok."
+
+msgid "Gutscheine & Gratislaufzeiten"
+msgstr "Kuponlar ve ücretsiz süreler"
+
+msgid "Rabattcodes beim Lizenzkauf nutzen oder Pro-Zeiträume einlösen."
+msgstr "Lisans satın alırken indirim kodu kullanın veya ücretsiz Pro süresi etkinleştirin."
+
+msgid "Kostenlose Pro-Laufzeit einlösen"
+msgstr "Ücretsiz Pro süresi kullan"
+
+msgid "Zeitgutscheine können neue Lizenzen erzeugen oder die bestehende Lizenz des Empfängers verlängern. Rabattcodes gehören in das Kaufformular."
+msgstr "Süre kuponları yeni lisans verebilir veya mevcut lisansı uzatabilir. İndirim kodları satın alma formuna girilir."
+
+msgid "Unzugewiesene Lizenz für mein Unternehmen"
+msgstr "Şirketim için atanmamış lisans"
+
+msgid "Zeitgutschein verbindlich einlösen"
+msgstr "Ücretsiz süre kuponunu kullan"
+
+msgid "Für dieses Konto zugeteilte Kampagnen"
+msgstr "Bu hesaba atanan kampanyalar"
+
+msgid "Vollständige Codes werden nur durch netstyle ausgegeben."
+msgstr "Tam kodları yalnızca netstyle verir."
+
+msgid "Keine ausdrücklich zugeteilten Kampagnen."
+msgstr "Doğrudan atanmış kampanya yok."
+
+msgid "Rabatt bei der Bestellung"
+msgstr "Siparişte indirim"
+
+msgid "Rabattcodes werden beim Kauf oder bei zulässigen Verlängerungen vor der Zahlung geprüft und auf den Bruttopreis angewendet."
+msgstr "İndirimler ödeme öncesinde doğrulanır ve uygun satın alma/yenilemelerde brüt tutara uygulanır."
+
+msgid "Zum Lizenzkauf"
+msgstr "Lisans satın almaya git"
+
+msgid "Einlösungen und Lizenzzeiträume"
+msgstr "Kullanımlar ve lisans süreleri"
+
+msgid "Gutschein"
+msgstr "Kupon"
+
+msgid "Laufzeit/Rabatt"
+msgstr "Süre/indirim"
