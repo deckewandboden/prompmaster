@@ -3,6 +3,7 @@ import uuid
 from decimal import Decimal, ROUND_HALF_UP
 
 from django.core.exceptions import ValidationError
+from django.utils.translation import gettext as _
 from django.db import transaction
 from django.contrib.auth import get_user_model
 
@@ -155,7 +156,7 @@ def create_order(*, user, product, quantity=1, target_license=None, idempotency_
             renewal=bool(target_license), lock=True,
         )
         if voucher.kind == 'fixed' and price.currency != 'EUR':
-            raise ValidationError('Festbetragsgutscheine sind nur in EUR zulässig.')
+            raise ValidationError(_('Festbetrag ist für diese Währung nicht zulässig.'))
 
     rule = _tax_rule_for(user, company)
     divisor = Decimal('1') + (rule.tax_rate / Decimal('100'))
