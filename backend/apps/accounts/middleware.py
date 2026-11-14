@@ -88,6 +88,11 @@ class TwoFactorEnforcementMiddleware:
         'ns_admin:service_account_rotate',
         'ns_admin:service_account_revoke',
         'ns_admin:mollie_config',
+        # Issuing or modifying vouchers can grant free Pro entitlements or
+        # financial discounts, so require fresh staff password + completed 2FA.
+        'ns_admin:voucher_create',
+        'ns_admin:voucher_edit',
+        'ns_admin:voucher_toggle',
         'ns_admin:license_refund',
         'ns_admin:deletion_request_process',
         'ns_admin:customer_user_deactivate',
