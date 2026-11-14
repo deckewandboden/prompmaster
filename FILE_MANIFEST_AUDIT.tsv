@@ -157,3 +157,4 @@ backend/apps/vouchers/locale/fr/LC_MESSAGES/django.po	0	text-not-byte-validated	
 backend/apps/vouchers/locale/it/LC_MESSAGES/django.po	0	text-not-byte-validated	locale
 backend/apps/vouchers/locale/nl/LC_MESSAGES/django.po	0	text-not-byte-validated	locale
 backend/apps/vouchers/tests_i18n.py	0	text-not-byte-validated	test
+backend/apps/vouchers/tasks.py	0	text-not-byte-validated	active-backend
