@@ -4,15 +4,16 @@ from django.core.exceptions import ValidationError
 from django.db import models
 from django.db.models import F, Q
 from django.utils import timezone
+from django.utils.translation import gettext_lazy as _
 
 from apps.core.models import TimeStampedModel
 
 
 class Voucher(TimeStampedModel):
     KIND = [
-        ("percent", "Prozentualer Rabatt"),
-        ("fixed", "Fester Rabatt je Lizenz"),
-        ("trial", "Kostenlose Pro-Laufzeit"),
+        ("percent", _("Prozentualer Rabatt")),
+        ("fixed", _("Fester Rabatt je Lizenz")),
+        ("trial", _("Kostenlose Pro-Laufzeit")),
     ]
     code_hash = models.CharField(max_length=64, unique=True, editable=False)
     code_suffix = models.CharField(max_length=4, editable=False)
@@ -68,25 +69,25 @@ class Voucher(TimeStampedModel):
     def clean(self):
         errors = {}
         if self.kind == "percent" and not (1 <= self.percent_off <= 99):
-            errors["percent_off"] = "Rabattprozente müssen zwischen 1 und 99 liegen."
+            errors["percent_off"] = _("Rabattprozente müssen zwischen 1 und 99 liegen.")
         if self.kind == "fixed" and not (self.fixed_gross_off > 0):
-            errors["fixed_gross_off"] = "Ein positiver Festbetrag ist erforderlich."
+            errors["fixed_gross_off"] = _("Ein positiver Festbetrag ist erforderlich.")
         if self.kind == "trial" and not (1 <= self.trial_days <= 1095):
-            errors["trial_days"] = "Kostenlose Laufzeit muss 1 bis 1095 Tage betragen."
+            errors["trial_days"] = _("Kostenlose Laufzeit muss 1 bis 1095 Tage betragen.")
         if self.kind != "trial" and self.trial_days:
-            errors["trial_days"] = "Rabattcodes dürfen keine freie Laufzeit haben."
+            errors["trial_days"] = _("Rabattcodes dürfen keine freie Laufzeit haben.")
         if self.kind != "fixed" and self.fixed_gross_off:
-            errors["fixed_gross_off"] = "Nur Festbetragsrabatte dürfen einen Betrag haben."
+            errors["fixed_gross_off"] = _("Nur Festbetragsrabatte dürfen einen Betrag haben.")
         if self.kind != "percent" and self.percent_off:
-            errors["percent_off"] = "Nur Prozentcodes dürfen Rabattprozente haben."
+            errors["percent_off"] = _("Nur Prozentcodes dürfen Rabattprozente haben.")
         if self.kind == "trial" and self.allow_renewal:
-            errors["allow_renewal"] = "Probezeiträume sind keine Zahlungsrabatte."
+            errors["allow_renewal"] = _("Probezeiträume sind keine Zahlungsrabatte.")
         if self.bound_company_id and self.bound_user_id:
-            errors["bound_user"] = "Ein Code kann nur auf Firma oder Benutzer begrenzt sein."
+            errors["bound_user"] = _("Ein Code kann nur auf Firma oder Benutzer begrenzt sein.")
         if self.expires_at and self.expires_at <= self.starts_at:
-            errors["expires_at"] = "Ende muss nach Beginn liegen."
+            errors["expires_at"] = _("Ende muss nach Beginn liegen.")
         if self.max_redemptions < 1:
-            errors["max_redemptions"] = "Mindestens eine Einlösung erforderlich."
+            errors["max_redemptions"] = _("Mindestens eine Einlösung erforderlich.")
         if errors:
             raise ValidationError(errors)
 
@@ -96,9 +97,9 @@ class Voucher(TimeStampedModel):
 
 class VoucherRedemption(TimeStampedModel):
     STATUS = [
-        ("reserved", "Für Bestellung reserviert"),
-        ("redeemed", "Eingelöst"),
-        ("cancelled", "Fehlgeschlagen / freigegeben"),
+        ("reserved", _("Für Bestellung reserviert")),
+        ("redeemed", _("Eingelöst")),
+        ("cancelled", _("Fehlgeschlagen / freigegeben")),
     ]
     voucher = models.ForeignKey(Voucher, on_delete=models.PROTECT, related_name="redemptions")
     redeemed_by = models.ForeignKey(
