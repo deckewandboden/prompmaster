@@ -296,7 +296,7 @@ function setupCheckoutPage(){
     const code=String(voucherField?.value||'').trim();
     if(!code){
       clearVoucher();
-      if(voucherFeedback)voucherFeedback.textContent='Bitte Gutscheincode eingeben.';
+      if(voucherFeedback)voucherFeedback.textContent=marketingT('Bitte Gutscheincode eingeben.');
       return;
     }
     clearVoucher();
@@ -312,16 +312,16 @@ function setupCheckoutPage(){
         body:new URLSearchParams({voucher_code:code,quantity:qty}),
       });
       const data=await response.json();
-      if(!response.ok||data.valid!==true)throw new Error('Gutschein ungültig oder nicht verfügbar.');
-      if(currentVoucherKey()!==previewKey)throw new Error('Lizenzanzahl oder Code wurde verändert; bitte erneut prüfen.');
+      if(!response.ok||data.valid!==true)throw new Error(marketingT('Gutschein ungültig oder nicht verfügbar.'));
+      if(currentVoucherKey()!==previewKey)throw new Error(marketingT('Lizenzanzahl oder Code wurde verändert; bitte erneut prüfen.'));
       voucherApproved=previewKey;
       if(displayedTotal)displayedTotal.textContent=money(data.totalGrossCents);
       if(voucherFeedback)voucherFeedback.textContent=
-        'Rabatt geprüft: '+data.title+' · Ersparnis '+money(data.discountGrossCents)+
-        ' · Zahlbetrag '+money(data.totalGrossCents)+'.';
+        marketingT('Rabatt geprüft: ')+data.title+marketingT(' · Ersparnis ')+money(data.discountGrossCents)+
+        marketingT(' · Zahlbetrag ')+money(data.totalGrossCents)+'.';
     }catch(error){
       voucherApproved=null;
-      if(voucherFeedback)voucherFeedback.textContent=error.message||'Gutscheinprüfung fehlgeschlagen.';
+      if(voucherFeedback)voucherFeedback.textContent=error.message||marketingT('Gutscheinprüfung fehlgeschlagen.');
     }finally{
       if(voucherButton)voucherButton.disabled=false;
     }
@@ -331,7 +331,7 @@ function setupCheckoutPage(){
     event.preventDefault();
     if(!form.reportValidity())return;
     if(voucherField?.value?.trim()&&voucherApproved!==currentVoucherKey()){
-      if(voucherFeedback)voucherFeedback.textContent='Bitte den Rabattcode vor der Zahlung erneut prüfen.';
+      if(voucherFeedback)voucherFeedback.textContent=marketingT('Rabattcode bitte vor der Zahlung erneut prüfen.');
       voucherField.focus();
       return;
     }
