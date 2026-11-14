@@ -3890,3 +3890,21 @@ msgstr "Sign-in account"
 
 msgid "Für ein freigegebenes Postfach benötigt das Anmeldekonto Exchange Send As. Ein HTTP 202 bestätigt nur die Annahme des Versandauftrags."
 msgstr "To send from a shared mailbox, the sign-in account needs Exchange Send As. HTTP 202 confirms only that the send request was accepted."
+
+msgid "Microsoft 365 anmelden (delegiert, mit MFA)"
+msgstr "Sign in to Microsoft 365 (delegated, with MFA)"
+
+msgid "Bestandsmodus: Application-Mail.Send (ohne MFA)"
+msgstr "Legacy mode: Application-Mail.Send (without MFA)"
+
+msgid "Graph-Anmeldemethode"
+msgstr "Graph authentication method"
+
+msgid "Für freigegebene Postfächer delegiertes OAuth mit Mail.Send.Shared wählen."
+msgstr "For shared mailboxes, select delegated OAuth with Mail.Send.Shared."
+
+msgid "Microsoft-365-Anmeldekonto"
+msgstr "Microsoft 365 sign-in account"
+
+msgid "Das persönliche Konto, das sich bei Microsoft inklusive MFA anmeldet; nicht das freigegebene Postfach."
+msgstr "The personal account that signs in to Microsoft with MFA, not the shared mailbox."
