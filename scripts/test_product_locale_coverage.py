@@ -63,6 +63,43 @@ def visible_text_from_markup(path):
 
 
 class ProductLanguageCoverageTests(unittest.TestCase):
+    def test_known_english_language_leaks_are_corrected(self):
+        translations = extract_translations()
+        expected = {
+            ('Dateien zusammenfassen, vergleichen und als Entscheidungsgrundlage nutzen', 'tr'): 'Dosyaları özetleyin, karşılaştırın ve kararlar için dayanak olarak kullanın',
+            ('Daten analysieren, Trends erkennen, Formeln erklären und Szenarien vergleichen.', 'tr'): 'Verileri analiz edin, eğilimleri belirleyin, formülleri açıklayın ve senaryoları karşılaştırın.',
+            ('E-Mail-Verlauf analysieren', 'tr'): 'E-posta yazışmalarını analiz et',
+            ('Präsentationen zusammenfassen, verbessern und ergänzen', 'tr'): 'Sunumları özetleyin, iyileştirin ve tamamlayın',
+            ('Terminlage, Engpässe und alternative Zeitfenster bewerten.', 'tr'): 'Tarihleri, darboğazları ve alternatif zaman aralıklarını değerlendirin.',
+            ('Webseiten, PDFs und Browserkontext mit Copilot analysieren', 'tr'): "Web sitelerini, PDF'leri ve tarayıcı bağlamını Copilot ile analiz edin",
+            ('Agent-Instructions erstellen', 'tr'): 'Aracı yönergeleri oluştur',
+            ('Chat oder Kanal zusammenfassen', 'tr'): 'Sohbeti veya kanalı özetle',
+            ('Copilot-Adoption analysieren', 'tr'): "Copilot'un benimsenmesini analiz et",
+            ('Incident analysieren', 'tr'): 'Olayı analiz et',
+            ('Kundenverhalten analysieren', 'tr'): 'Müşteri davranışını analiz et',
+            ('Ressourceninventar analysieren', 'tr'): 'Kaynak envanterini analiz et',
+            ('SharePoint-Inhalte zusammenfassen', 'tr'): 'SharePoint içeriklerini özetle',
+            ('Webseite oder PDF zusammenfassen', 'tr'): "Web sayfasını veya PDF'yi özetle",
+            ('Chat oder Kanal zusammenfassen', 'it'): 'Riassumi la chat o il canale',
+            ('Webseite oder PDF zusammenfassen', 'it'): 'Riassumi il sito web o il PDF',
+            ('Chat oder Kanal zusammenfassen', 'es'): 'Resumir el chat o el canal',
+            ('Dateien vergleichen', 'es'): 'Comparar archivos',
+            ('Mehrere Tabs vergleichen', 'es'): 'Comparar varias pestañas',
+            ('Webseite oder PDF zusammenfassen', 'es'): 'Resumir el sitio web o el PDF',
+        }
+        for (source, language), correct in expected.items():
+            with self.subTest(source=source, language=language):
+                self.assertEqual(translations[source][language], correct)
+        self.assertEqual(len(expected), 20)
+        english_leak = re.compile(r'\\b(?:Summarize|Analyze|Evaluate|Create)\\b', flags=re.IGNORECASE)
+        for source, variants in translations.items():
+            value = variants.get('tr')
+            if value:
+                # Identifiers and placeholder names are not translated as prose.
+                pure_ui = re.sub(r'%\\([a-z]+\\)s', '', value)
+                with self.subTest(source=source, language='tr'):
+                    self.assertIsNone(english_leak.search(pure_ui), source)
+
     def test_shared_backend_controls_cover_all_supported_languages(self):
         # Evaluate the shipped JavaScript catalogue, including ARIA labels.
         source = (ROOT / 'backend/static/js/app.js').read_text(encoding='utf-8')
