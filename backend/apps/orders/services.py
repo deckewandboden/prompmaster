@@ -94,6 +94,7 @@ def _validate_existing_order_coupon(existing, voucher_code, quantity):
             raise ValidationError('Ungültige Anzahl.')
 
 
+@transaction.atomic
 def create_order(*, user, product, quantity=1, target_license=None, idempotency_key=None, voucher_code=''):
     if quantity < 1 or quantity > MAX_PURCHASE_QUANTITY:
         raise ValidationError('Ungültige Anzahl.')
