@@ -127,7 +127,7 @@ class MollieRuntimeReadinessTests(SimpleTestCase):
             self.assertFalse(mollie_runtime_ready())
 
     @override_settings(ENVIRONMENT='production', MOLLIE_API_KEY='')
-    def test_production_preview_checkout_remains_blocked_with_approved_live_credentials(self):
+    def test_production_checkout_requires_and_accepts_matching_explicit_approval(self):
         fingerprint = mollie_config_fingerprint(
             'live_runtime_key',
             'pfl_runtime',
@@ -152,9 +152,38 @@ class MollieRuntimeReadinessTests(SimpleTestCase):
         ):
             from apps.payments.mollie import mollie_runtime_ready
 
-            # Preview release is a stricter top-level production lock.
-            # Even an otherwise valid commercial provider approval must not
-            # start sales while this isolated preview branch is deployed.
+            # A commercial release only allows an explicitly approved
+            # matching live configuration, never credentials alone.
+            self.assertTrue(mollie_runtime_ready())
+
+    @override_settings(ENVIRONMENT='production', MOLLIE_API_KEY='')
+    def test_commercial_gate_rejects_non_live_credential_even_if_fingerprint_approved(self):
+        key, profile_id = 'test_not_a_live_key', 'pfl_runtime'
+        fingerprint = mollie_config_fingerprint(key, profile_id)
+        with (
+            patch('apps.integrations.services.get_secret', return_value=key),
+            patch('apps.core.settings_store.get_setting',
+                  side_effect=lambda name, default=None: {
+                      'mollie_profile_id': profile_id,
+                      'mollie_checkout_enabled': True,
+                      'mollie_checkout_approval_fingerprint': fingerprint,
+                  }.get(name, default)),
+        ):
+            from apps.payments.mollie import mollie_runtime_ready
+            self.assertFalse(mollie_runtime_ready())
+
+    @override_settings(ENVIRONMENT='production', MOLLIE_API_KEY='')
+    def test_commercial_gate_fails_closed_if_approval_store_unavailable(self):
+        with (
+            patch('apps.integrations.services.get_secret',
+                  return_value='live_test_placeholder'),
+            patch('apps.core.settings_store.get_setting') as get_setting,
+        ):
+            get_setting.side_effect = lambda name, default=None: (
+                'pfl_runtime' if name == 'mollie_profile_id'
+                else (_ for _ in ()).throw(RuntimeError('setting store unavailable'))
+            )
+            from apps.payments.mollie import mollie_runtime_ready
             self.assertFalse(mollie_runtime_ready())
 
     @override_settings(ENVIRONMENT='production', MOLLIE_API_KEY='')
