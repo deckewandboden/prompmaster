@@ -3949,3 +3949,21 @@ msgstr "Konto logowania"
 
 msgid "Für ein freigegebenes Postfach benötigt das Anmeldekonto Exchange Send As. Ein HTTP 202 bestätigt nur die Annahme des Versandauftrags."
 msgstr "Dla udostępnionej skrzynki konto logowania wymaga uprawnienia Exchange Send As. HTTP 202 potwierdza jedynie przyjęcie żądania wysyłki."
+
+msgid "Microsoft 365 anmelden (delegiert, mit MFA)"
+msgstr "Zaloguj się do Microsoft 365 (uprawnienia delegowane, z MFA)"
+
+msgid "Bestandsmodus: Application-Mail.Send (ohne MFA)"
+msgstr "Tryb starszej wersji: Application-Mail.Send (bez MFA)"
+
+msgid "Graph-Anmeldemethode"
+msgstr "Metoda uwierzytelniania Graph"
+
+msgid "Für freigegebene Postfächer delegiertes OAuth mit Mail.Send.Shared wählen."
+msgstr "W przypadku udostępnionych skrzynek pocztowych wybierz delegowane OAuth z Mail.Send.Shared."
+
+msgid "Microsoft-365-Anmeldekonto"
+msgstr "Konto logowania Microsoft 365"
+
+msgid "Das persönliche Konto, das sich bei Microsoft inklusive MFA anmeldet; nicht das freigegebene Postfach."
+msgstr "Osobiste konto używane do logowania w Microsoft z MFA, a nie udostępniona skrzynka pocztowa."
