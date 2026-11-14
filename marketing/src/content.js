@@ -79,6 +79,18 @@ export const checkoutPage=(quantity=1)=>`
         </div>
       </section>
 
+      <section class="checkout-card">
+        <div class="checkout-section-head">
+          <span class="checkout-kicker">GUTSCHEIN</span>
+          <div><h2>Gutscheincode (optional)</h2><p>Rabattcode vor dem Kauf überprüfen. Kostenlose Zeitgutscheine werden nach der Anmeldung im Kundenportal eingelöst.</p></div>
+        </div>
+        <div class="checkout-fields">
+          <label>Gutscheincode<input id="checkout-voucher-code" name="voucher_code" maxlength="80" autocomplete="off" placeholder="PF-XXXX-XXXX-XXXX-XXXX-XXXX"></label>
+          <button class="button secondary" id="checkout-voucher-preview" type="button">Rabatt prüfen</button>
+          <p id="checkout-voucher-feedback" role="status" aria-live="polite"></p>
+        </div>
+      </section>
+
       <section class="checkout-card checkout-legal">
         <div class="checkout-section-head">
           <span class="checkout-index">05</span>

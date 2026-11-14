@@ -1,0 +1,7 @@
+{% extends 'ns_admin/base.html' %}{% load i18n %}{% block content %}
+<div class="page-head"><div><h1>{{ title }}</h1><div class="sub">{% translate "Alle Codes sind zufällig und werden nach dem Erstellen nur einmal angezeigt." %}</div></div><a class="btn secondary" href="{% url 'ns_admin:vouchers' %}">{% translate "Zurück" %}</a></div>
+<div class="card"><form method="post" class="form" autocomplete="off">{% csrf_token %}{{ form.non_field_errors }}
+<div class="grid two">{% for field in form %}<label>{{ field.label }}{{ field }}{{ field.errors }}{% if field.help_text %}<span class="tiny muted">{{ field.help_text }}</span>{% endif %}</label>{% endfor %}</div>
+<p class="small muted">{% translate "Ein Code kann auf einen Kunden beschränkt werden. Ohne Bindung ist er für alle berechtigten Kunden gültig. Pro-Code-Limits gelten unabhängig voneinander." %}</p>
+<button class="btn primary" type="submit">{% translate "Gutscheincodes erzeugen" %}</button></form></div>
+{% endblock %}

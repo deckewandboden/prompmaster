@@ -29,6 +29,7 @@ INSTALLED_APPS = [
     'apps.orders',
     'apps.payments',
     'apps.licenses',
+    'apps.vouchers',
     'apps.devices',
     'apps.notifications',
     'apps.support',
@@ -174,6 +175,10 @@ CELERY_BEAT_SCHEDULE = {
     'email-queue-recovery': {'task': 'apps.notifications.tasks.dispatch_queued_emails', 'schedule': 300.0},
     'mollie-unsettled-reconciliation': {
         'task': 'apps.payments.tasks.reconcile_mollie_unsettled_states',
+        'schedule': 900.0,
+    },
+    'voucher-payment-reconciliation': {
+        'task': 'apps.vouchers.tasks.reconcile_reserved_voucher_payments',
         'schedule': 900.0,
     },
     'ops-alerts': {'task': 'apps.ops.tasks.refresh_alerts', 'schedule': 300.0},

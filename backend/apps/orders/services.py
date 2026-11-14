@@ -3,6 +3,7 @@ import uuid
 from decimal import Decimal, ROUND_HALF_UP
 
 from django.core.exceptions import ValidationError
+from django.utils.translation import gettext as _
 from django.db import transaction
 from django.contrib.auth import get_user_model
 
@@ -73,7 +74,29 @@ def _billing_snapshot(user, company, rule):
 
 
 @transaction.atomic
-def create_order(*, user, product, quantity=1, target_license=None, idempotency_key=None):
+def _validate_existing_order_coupon(existing, voucher_code, quantity):
+    """Never silently reuse an existing order with a different voucher quote.
+
+    Applies equally to the idempotency-key path and pending renewals.
+    """
+    from apps.vouchers.services import code_digest
+
+    redemption = (
+        existing.voucher_redemption if hasattr(existing, 'voucher_redemption')
+        else None
+    )
+    actual_digest = redemption.voucher.code_hash if redemption else None
+    supplied_digest = code_digest(voucher_code) if voucher_code else None
+    if actual_digest != supplied_digest:
+        raise ValidationError('Ungültiger Checkout-Schlüssel.')
+    if actual_digest:
+        item = existing.items.order_by('created_at').first()
+        if item is None or item.quantity != quantity:
+            raise ValidationError('Ungültige Anzahl.')
+
+
+@transaction.atomic
+def create_order(*, user, product, quantity=1, target_license=None, idempotency_key=None, voucher_code=''):
     if quantity < 1 or quantity > MAX_PURCHASE_QUANTITY:
         raise ValidationError('Ungültige Anzahl.')
     if not product.active or not product.purchasable:
@@ -104,6 +127,7 @@ def create_order(*, user, product, quantity=1, target_license=None, idempotency_
             order__status__in=['draft', 'payment_open'],
         ).select_related('order').order_by('-created_at').first()
         if pending_renewal:
+            _validate_existing_order_coupon(pending_renewal.order, voucher_code, quantity)
             return pending_renewal.order
 
     if idempotency_key:
@@ -112,6 +136,7 @@ def create_order(*, user, product, quantity=1, target_license=None, idempotency_
             owner_ok = existing.company_id == (company.id if company else None) and existing.private_user_id == (None if company else user.id)
             if not owner_ok:
                 raise ValidationError('Ungültiger Checkout-Schlüssel.')
+            _validate_existing_order_coupon(existing, voucher_code, quantity)
             return existing
 
     price_type = 'renewal' if target_license else 'new'
@@ -119,11 +144,25 @@ def create_order(*, user, product, quantity=1, target_license=None, idempotency_
     if not price:
         raise ValidationError('Kein gültiger Preis konfiguriert.')
 
+    # Price and quota must be derived server-side under one voucher row lock.
+    voucher = None
+    discount_gross = Decimal('0.00')
+    unit_gross = price.gross_amount
+    if voucher_code:
+        from apps.vouchers.services import discount_quote
+        voucher, unit_gross, discount_gross = discount_quote(
+            code=voucher_code, user=user, company=company, product=product,
+            unit_gross=price.gross_amount, quantity=quantity,
+            renewal=bool(target_license), lock=True,
+        )
+        if voucher.kind == 'fixed' and price.currency != 'EUR':
+            raise ValidationError(_('Festbetrag ist für diese Währung nicht zulässig.'))
+
     rule = _tax_rule_for(user, company)
     divisor = Decimal('1') + (rule.tax_rate / Decimal('100'))
-    unit_net = (price.gross_amount / divisor).quantize(CENT, rounding=ROUND_HALF_UP)
-    unit_tax = price.gross_amount - unit_net
-    gross = (price.gross_amount * quantity).quantize(CENT, rounding=ROUND_HALF_UP)
+    unit_net = (unit_gross / divisor).quantize(CENT, rounding=ROUND_HALF_UP)
+    unit_tax = unit_gross - unit_net
+    gross = (unit_gross * quantity).quantize(CENT, rounding=ROUND_HALF_UP)
     tax_total = (unit_tax * quantity).quantize(CENT, rounding=ROUND_HALF_UP)
 
     order = Order.objects.create(
@@ -134,7 +173,15 @@ def create_order(*, user, product, quantity=1, target_license=None, idempotency_
         currency=price.currency,
         gross_total=gross,
         tax_total=tax_total,
-        billing_snapshot=_billing_snapshot(user, company, rule),
+        billing_snapshot={
+            **_billing_snapshot(user, company, rule),
+            **({
+                'voucher_id': str(voucher.pk),
+                'voucher_code_suffix': voucher.code_suffix,
+                'voucher_discount_gross': str(discount_gross),
+                'original_gross_total': str((price.gross_amount * quantity).quantize(CENT)),
+            } if voucher else {}),
+        },
         idempotency_key=idempotency_key or secrets.token_urlsafe(24),
     )
     OrderItem.objects.create(
@@ -142,10 +189,16 @@ def create_order(*, user, product, quantity=1, target_license=None, idempotency_
         product=product,
         price_version=price,
         quantity=quantity,
-        unit_gross=price.gross_amount,
+        unit_gross=unit_gross,
         unit_net=unit_net,
         tax_rate=rule.tax_rate,
         product_name_snapshot=product.name,
         target_license=target_license,
     )
+    if voucher is not None:
+        from apps.vouchers.services import reserve_discount
+        reserve_discount(
+            voucher=voucher, order=order, actor=user,
+            company=company, saving=discount_gross,
+        )
     return order
