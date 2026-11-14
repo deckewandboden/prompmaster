@@ -316,6 +316,27 @@ class VoucherContractsTests(TestCase):
             "voucher_code": private_code, "quantity": 1,
         }).status_code, 400)
 
+    def test_idempotent_order_without_voucher_rejects_changed_seat_count(self):
+        key = "QA-NO-VOUCHER-COUNT-20261114"
+        original = create_order(
+            user=self.admin, product=self.product, quantity=2,
+            idempotency_key=key,
+        )
+        retry = create_order(
+            user=self.admin, product=self.product, quantity=2,
+            idempotency_key=key,
+        )
+        self.assertEqual(retry.pk, original.pk)
+        with self.assertRaises(ValidationError):
+            create_order(
+                user=self.admin, product=self.product, quantity=3,
+                idempotency_key=key,
+            )
+        original.refresh_from_db()
+        self.assertEqual(original.gross_total, Decimal("71.76"))
+        self.assertEqual(original.items.get().quantity, 2)
+        self.assertEqual(Order.objects.count(), 1)
+
     def test_checkout_idempotency_rejects_changed_voucher_without_repricing(self):
         _, code_one = self.make(kind="percent", bound_company=self.company, max_redemptions=2)
         _, code_two = self.make(kind="percent", bound_company=self.company)
@@ -605,3 +626,74 @@ class VoucherTransactionBoundaryTests(TransactionTestCase):
         self.assertEqual(order.voucher_redemption.status, "reserved")
         voucher.refresh_from_db()
         self.assertEqual(voucher.used_count, 1)
+
+    def test_two_simultaneous_buyers_cannot_overredeem_single_use_code(self):
+        from concurrent.futures import ThreadPoolExecutor
+        from threading import Barrier
+
+        from django.db import close_old_connections, connections
+
+        now = timezone.now()
+        staff = User.objects.create_user(
+            "voucher-race-staff@example.test", "Secure-2026!",
+            is_staff=True, email_verified_at=now,
+        )
+        buyers = []
+        for i in range(2):
+            buyer = User.objects.create_user(
+                f"voucher-race-buyer-{i}@example.test", "Secure-2026!",
+                email_verified_at=now,
+            )
+            PrivateCustomerProfile.objects.create(
+                user=buyer, customer_number=f"PV-RACE-{i}",
+                street="Testweg", postal_code="57072", city="Siegen",
+                country="DE",
+            )
+            buyers.append(buyer)
+        product = Product.objects.create(
+            code="PRO", name="PROMPTFINISHER Pro",
+            default_license_days=365, default_device_limit=2,
+            reminder_1_days=60, reminder_2_days=30, critical_warning_days=7,
+        )
+        ProductPrice.objects.create(
+            product=product, price_type="new", gross_amount=Decimal("35.88"),
+            currency="EUR", valid_from=now,
+        )
+        TaxRule.objects.create(
+            country="DE", customer_type="private", tax_rate=Decimal("19.00"),
+            active=True,
+        )
+        (voucher, code), = issue_vouchers(
+            actor=staff, title="Single-use concurrent voucher",
+            kind="percent", product=product, percent_off=25,
+            max_redemptions=1, starts_at=now - timedelta(minutes=1),
+            expires_at=now + timedelta(days=1),
+        )
+        barrier = Barrier(3)
+
+        def try_buy(buyer):
+            close_old_connections()
+            try:
+                barrier.wait(timeout=20)
+                try:
+                    order = create_order(
+                        user=buyer, product=product, voucher_code=code,
+                    )
+                except ValidationError:
+                    return "quota-rejected"
+                return f"created:{order.pk}"
+            finally:
+                connections.close_all()
+
+        with ThreadPoolExecutor(max_workers=2) as pool:
+            attempts = [pool.submit(try_buy, buyer) for buyer in buyers]
+            barrier.wait(timeout=20)
+            outcomes = [attempt.result(timeout=30) for attempt in attempts]
+
+        self.assertEqual(sum(x.startswith("created:") for x in outcomes), 1)
+        self.assertEqual(outcomes.count("quota-rejected"), 1)
+        voucher.refresh_from_db()
+        self.assertEqual(voucher.used_count, 1)
+        self.assertEqual(VoucherRedemption.objects.filter(voucher=voucher).count(), 1)
+        self.assertEqual(Order.objects.count(), 1)
+
