@@ -260,7 +260,11 @@ class VoucherContractsTests(TestCase):
             code="vouchers.write", defaults={"name": "vouchers.write"},
         )
         role.permissions.add(write)
-        self.assertEqual(self.client.get("/ns-admin/vouchers/create/").status_code, 200)
+        # A valid write role still needs a recent sensitive-action reauthentication.
+        from django.urls import reverse
+        guarded = self.client.get("/ns-admin/vouchers/create/")
+        self.assertEqual(guarded.status_code, 302)
+        self.assertEqual(guarded.url, reverse("ns_admin:sensitive_reauth"))
 
     def test_customer_voucher_tab_has_no_cross_company_leak(self):
         self.make(kind="trial", bound_company=self.company)
