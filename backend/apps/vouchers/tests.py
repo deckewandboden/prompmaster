@@ -392,7 +392,7 @@ class VoucherContractsTests(TestCase):
         }
         with patch("apps.vouchers.tasks.MollieClient") as provider:
             provider.return_value.get_payment.return_value = payment_details
-            provider.return_value.list_chargebacks.return_value = []
+            provider.return_value.list_chargebacks.return_value = {"_embedded": {"chargebacks": []}}
             pending = reconcile_reserved_voucher_payments()
         self.assertEqual(pending["scanned"], 1)
         order.refresh_from_db()
@@ -402,7 +402,7 @@ class VoucherContractsTests(TestCase):
         payment_details["status"] = "expired"
         with patch("apps.vouchers.tasks.MollieClient") as provider:
             provider.return_value.get_payment.return_value = payment_details
-            provider.return_value.list_chargebacks.return_value = []
+            provider.return_value.list_chargebacks.return_value = {"_embedded": {"chargebacks": []}}
             closed = reconcile_reserved_voucher_payments()
         self.assertEqual(closed["errors"], 0)
         order.refresh_from_db()
