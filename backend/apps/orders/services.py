@@ -73,6 +73,27 @@ def _billing_snapshot(user, company, rule):
 
 
 @transaction.atomic
+def _validate_existing_order_coupon(existing, voucher_code, quantity):
+    """Never silently reuse an existing order with a different voucher quote.
+
+    Applies equally to the idempotency-key path and pending renewals.
+    """
+    from apps.vouchers.services import code_digest
+
+    redemption = (
+        existing.voucher_redemption if hasattr(existing, 'voucher_redemption')
+        else None
+    )
+    actual_digest = redemption.voucher.code_hash if redemption else None
+    supplied_digest = code_digest(voucher_code) if voucher_code else None
+    if actual_digest != supplied_digest:
+        raise ValidationError('Ungültiger Checkout-Schlüssel.')
+    if actual_digest:
+        item = existing.items.order_by('created_at').first()
+        if item is None or item.quantity != quantity:
+            raise ValidationError('Ungültige Anzahl.')
+
+
 def create_order(*, user, product, quantity=1, target_license=None, idempotency_key=None, voucher_code=''):
     if quantity < 1 or quantity > MAX_PURCHASE_QUANTITY:
         raise ValidationError('Ungültige Anzahl.')
@@ -104,6 +125,7 @@ def create_order(*, user, product, quantity=1, target_license=None, idempotency_
             order__status__in=['draft', 'payment_open'],
         ).select_related('order').order_by('-created_at').first()
         if pending_renewal:
+            _validate_existing_order_coupon(pending_renewal.order, voucher_code, quantity)
             return pending_renewal.order
 
     if idempotency_key:
@@ -112,19 +134,7 @@ def create_order(*, user, product, quantity=1, target_license=None, idempotency_
             owner_ok = existing.company_id == (company.id if company else None) and existing.private_user_id == (None if company else user.id)
             if not owner_ok:
                 raise ValidationError('Ungültiger Checkout-Schlüssel.')
-            # Idempotent requests may retry the SAME voucher, never silently
-            # reuse a previously priced order after the coupon field changes.
-            from apps.vouchers.services import code_digest
-            existing_redemption = existing.voucher_redemption if hasattr(
-                existing, 'voucher_redemption'
-            ) else None
-            existing_digest = (
-                existing_redemption.voucher.code_hash
-                if existing_redemption is not None else None
-            )
-            submitted_digest = code_digest(voucher_code) if voucher_code else None
-            if existing_digest != submitted_digest:
-                raise ValidationError('Ungültiger Checkout-Schlüssel.')
+            _validate_existing_order_coupon(existing, voucher_code, quantity)
             return existing
 
     price_type = 'renewal' if target_license else 'new'
