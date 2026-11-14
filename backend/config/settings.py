@@ -177,6 +177,10 @@ CELERY_BEAT_SCHEDULE = {
         'task': 'apps.payments.tasks.reconcile_mollie_unsettled_states',
         'schedule': 900.0,
     },
+    'voucher-payment-reconciliation': {
+        'task': 'apps.vouchers.tasks.reconcile_reserved_voucher_payments',
+        'schedule': 900.0,
+    },
     'ops-alerts': {'task': 'apps.ops.tasks.refresh_alerts', 'schedule': 300.0},
     'worker-heartbeat': {'task': 'apps.ops.tasks.worker_heartbeat', 'schedule': 60.0},
     'beat-heartbeat': {'task': 'apps.ops.tasks.beat_heartbeat', 'schedule': 60.0},
