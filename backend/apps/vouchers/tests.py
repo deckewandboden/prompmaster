@@ -290,7 +290,7 @@ class VoucherContractsTests(TestCase):
         self.assertFalse(release_terminal_discount_reservation(order))
         voucher.refresh_from_db()
         self.assertEqual(voucher.used_count, 0)
-        self.assertEqual(order.voucher_redemption.status, "cancelled")  # database refresh below
+        self.assertEqual(VoucherRedemption.objects.get(order=order).status, "cancelled")
         order2 = create_order(user=self.admin, product=self.product, voucher_code=raw)
         self.assertEqual(order2.voucher_redemption.status, "reserved")
         voucher.refresh_from_db()
@@ -326,6 +326,12 @@ class VoucherContractsTests(TestCase):
             "quantity": 1,
         }).status_code, 403)
         strict.force_login(self.admin)
+        strict_session = strict.session
+        strict_session["security_version"] = self.admin.security_version
+        strict_session["authenticated_at"] = self.now.timestamp()
+        strict_session["last_activity_at"] = self.now.timestamp()
+        strict_session["two_factor_ok"] = True
+        strict_session.save()
         self.assertEqual(strict.post("/portal/vouchers/redeem/", {
             "voucher_code": "PF-ABCD-EFGH-JKLM-NPQR-STUV",
         }).status_code, 403)
