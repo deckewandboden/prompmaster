@@ -414,13 +414,17 @@ def compose_free_legacy(*, contract, microsoft_tier: str, payload: dict) -> dict
         context_parts.append(
             str(runtime.get('primary_prefix') or '')
             + primary
-            + str(runtime.get('primary_suffix') or '')
+            + ('' if str(runtime.get('primary_suffix') or '') == '.'
+               and primary.endswith(('.', '!', '?', '…'))
+               else str(runtime.get('primary_suffix') or ''))
         )
     if secondary:
         context_parts.append(
             str(runtime.get('secondary_prefix') or '')
             + secondary
-            + str(runtime.get('secondary_suffix') or '')
+            + ('' if str(runtime.get('secondary_suffix') or '') == '.'
+               and secondary.endswith(('.', '!', '?', '…'))
+               else str(runtime.get('secondary_suffix') or ''))
         )
     context = ' '.join(part.strip() for part in context_parts if part.strip())
     if context:

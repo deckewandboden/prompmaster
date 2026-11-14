@@ -6,6 +6,7 @@ from .services import MAX_PURCHASE_QUANTITY
 
 
 class PurchaseForm(forms.Form):
+    voucher_code = forms.CharField(max_length=80, required=False, label=_('Rabattcode (optional)'))
     quantity = forms.IntegerField(min_value=1, max_value=MAX_PURCHASE_QUANTITY, initial=1, label=_('Anzahl Lizenzen'))
     accept_terms = forms.BooleanField(label=_('AGB akzeptieren'))
     accept_privacy = forms.BooleanField(label=_('Datenschutzhinweise zur Kenntnis genommen'))
@@ -30,6 +31,7 @@ class PurchaseForm(forms.Form):
 
 
 class RenewalForm(forms.Form):
+    voucher_code = forms.CharField(max_length=80, required=False, label=_('Rabattcode (optional)'))
     accept_terms = forms.BooleanField(label=_('AGB akzeptieren'))
     accept_privacy = forms.BooleanField(label=_('Datenschutzhinweise zur Kenntnis genommen'))
     accept_license = forms.BooleanField(label=_('Lizenzbedingungen akzeptieren'))
@@ -51,6 +53,7 @@ class RenewalForm(forms.Form):
             self.fields.pop('request_early_performance')
 
 class PublicCheckoutForm(forms.Form):
+    voucher_code = forms.CharField(max_length=80, required=False, label=_('Rabattcode (optional)'))
     CUSTOMER_TYPES = (
         ('company', _('Unternehmen')),
         ('private', _('Privatkunde')),

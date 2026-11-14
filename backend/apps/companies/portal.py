@@ -1243,17 +1243,45 @@ def buy(request):
         require_withdrawal=private_customer,
     )
     checkout_available = mollie_runtime_ready()
-    form_valid = form.is_valid() if request.method == 'POST' else False
-    if request.method == 'POST' and not checkout_available:
+    preview_requested = request.method == 'POST' and 'voucher_preview' in request.POST
+    voucher_preview = None
+    voucher_preview_error = None
+    if preview_requested:
+        from apps.vouchers.services import discount_quote
+        try:
+            raw_quantity = int(request.POST.get('quantity') or 1)
+            if not 1 <= raw_quantity <= MAX_PURCHASE_QUANTITY:
+                raise ValidationError('Ungültige Lizenzanzahl.')
+            code = (request.POST.get('voucher_code') or '').strip()
+            price = current_price(product, 'new')
+            if not price or not code:
+                raise ValidationError('Bitte gültigen Rabattcode und Preis angeben.')
+            voucher, new_unit, saving = discount_quote(
+                code=code, user=request.user, company=company_obj,
+                product=product, unit_gross=price.gross_amount,
+                quantity=raw_quantity, renewal=False,
+            )
+            voucher_preview = {
+                'title': voucher.title, 'kind': voucher.get_kind_display(),
+                'saving': saving, 'total': new_unit * raw_quantity,
+            }
+        except (ValueError, ValidationError) as exc:
+            voucher_preview_error = '; '.join(exc.messages) if isinstance(exc, ValidationError) else 'Ungültige Lizenzanzahl.'
+    form_valid = form.is_valid() if request.method == 'POST' and not preview_requested else False
+    if request.method == 'POST' and not preview_requested and not checkout_available:
         form.add_error(
             None,
             'Der Zahlungsdienst ist derzeit noch nicht verfügbar. Bitte versuchen Sie es später erneut.',
         )
 
-    if request.method == 'POST' and checkout_available and form_valid:
+    if request.method == 'POST' and not preview_requested and checkout_available and form_valid:
         try:
             documents = _active_legal_documents(private_customer=private_customer)
-            order = create_order(user=request.user, product=product, quantity=form.cleaned_data['quantity'], idempotency_key=checkout_key)
+            order = create_order(
+                user=request.user, product=product, quantity=form.cleaned_data['quantity'],
+                idempotency_key=checkout_key,
+                voucher_code=form.cleaned_data.get('voucher_code') or '',
+            )
             _record_legal_acceptances(
                 request,
                 order,
@@ -1290,6 +1318,8 @@ def buy(request):
             'price': price,
             'unit_price_cents': int(price.gross_amount * 100) if price else None,
             'checkout_available': checkout_available,
+            'voucher_preview': voucher_preview,
+            'voucher_preview_error': voucher_preview_error,
         },
     )
 
@@ -1317,16 +1347,42 @@ def renew(request, pk):
         require_withdrawal=private_customer,
     )
     checkout_available = mollie_runtime_ready()
-    form_valid = form.is_valid() if request.method == 'POST' else False
-    if request.method == 'POST' and not checkout_available:
+    preview_requested = request.method == 'POST' and 'voucher_preview' in request.POST
+    voucher_preview = None
+    voucher_preview_error = None
+    if preview_requested:
+        from apps.vouchers.services import discount_quote
+        from apps.catalog.services import current_price
+        try:
+            code = (request.POST.get('voucher_code') or '').strip()
+            price = current_price(license_obj.product, 'renewal')
+            if not price or not code:
+                raise ValidationError('Bitte gültigen Rabattcode und Preis angeben.')
+            voucher, new_unit, saving = discount_quote(
+                code=code, user=request.user, company=company_obj,
+                product=license_obj.product, unit_gross=price.gross_amount,
+                quantity=1, renewal=True,
+            )
+            voucher_preview = {
+                'title': voucher.title, 'kind': voucher.get_kind_display(),
+                'saving': saving, 'total': new_unit,
+            }
+        except ValidationError as exc:
+            voucher_preview_error = '; '.join(exc.messages)
+    form_valid = form.is_valid() if request.method == 'POST' and not preview_requested else False
+    if request.method == 'POST' and not preview_requested and not checkout_available:
         form.add_error(
             None,
             'Der Zahlungsdienst ist derzeit noch nicht verfügbar. Bitte versuchen Sie es später erneut.',
         )
-    if request.method == 'POST' and checkout_available and form_valid:
+    if request.method == 'POST' and not preview_requested and checkout_available and form_valid:
         try:
             documents = _active_legal_documents(private_customer=private_customer)
-            order = create_order(user=request.user, product=license_obj.product, quantity=1, target_license=license_obj, idempotency_key=checkout_key)
+            order = create_order(
+                user=request.user, product=license_obj.product, quantity=1,
+                target_license=license_obj, idempotency_key=checkout_key,
+                voucher_code=form.cleaned_data.get('voucher_code') or '',
+            )
             _record_legal_acceptances(
                 request,
                 order,
@@ -1356,7 +1412,12 @@ def renew(request, pk):
     return render(
         request,
         'portal/renew.html',
-        {'form': form, 'license': license_obj, 'checkout_available': checkout_available},
+        {
+            'form': form, 'license': license_obj,
+            'checkout_available': checkout_available,
+            'voucher_preview': voucher_preview,
+            'voucher_preview_error': voucher_preview_error,
+        },
     )
 
 

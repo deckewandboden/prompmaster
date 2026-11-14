@@ -313,6 +313,7 @@ PERMISSION_DOMAIN_LABELS = {
     'customers': _("Kunden"),
     'leads': _("Leads"),
     'licenses': _("Lizenzen"),
+    'vouchers': _("Gutscheine & Aktionen"),
     'devices': _("Geräte"),
     'orders': _("Bestellungen"),
     'payments': _("Zahlungen"),

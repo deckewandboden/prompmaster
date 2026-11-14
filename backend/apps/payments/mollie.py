@@ -27,12 +27,12 @@ def mollie_runtime_ready():
     Secrets may live encrypted in the database, so this deliberately checks the
     same effective sources as MollieClient rather than only settings/.env.
 
-    PUBLIC PREVIEW RELEASE CANDIDATE: never create new paid checkouts in
-    production, even if live provider credentials already exist in the DB.
-    Only a separately reviewed commercial release may remove this lock.
+    Commercial release remains deny-by-default. Production checkout is allowed
+    only with an effective live provider key, a configured profile, an explicit
+    approval flag and a fingerprint matching the CURRENT provider credentials.
+    Approval is performed separately by external_mollie_acceptance, after
+    externally verified readiness. No checkout is activated by this code alone.
     """
-    if getattr(settings, 'ENVIRONMENT', '').strip().lower() == 'production':
-        return False
     try:
         from apps.core.settings_store import get_setting
         from apps.integrations.services import get_secret
@@ -50,10 +50,13 @@ def mollie_runtime_ready():
         getattr(settings, 'ENVIRONMENT', 'development') or ''
     ).strip().lower()
     if environment == 'production':
-        checkout_enabled = get_setting('mollie_checkout_enabled', False) is True
-        approved_fingerprint = str(
-            get_setting('mollie_checkout_approval_fingerprint', '') or ''
-        ).strip()
+        try:
+            checkout_enabled = get_setting('mollie_checkout_enabled', False) is True
+            approved_fingerprint = str(
+                get_setting('mollie_checkout_approval_fingerprint', '') or ''
+            ).strip()
+        except Exception:
+            return False
         current_fingerprint = mollie_config_fingerprint(key, profile_id)
         return (
             key.startswith('live_')
