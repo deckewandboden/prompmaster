@@ -4052,3 +4052,106 @@ msgstr "Kortingscode"
 
 msgid "Laufzeit/Rabatt"
 msgstr "Periode/korting"
+
+# Voucher campaign forms, validation and checkout
+msgid "Kampagnenbezeichnung"
+msgstr "Actienaam"
+
+msgid "Interner Hinweis"
+msgstr "Interne notitie"
+
+msgid "Rabatt in Prozent"
+msgstr "Procentuele korting"
+
+msgid "Festbetrag je Lizenz"
+msgstr "Vast bedrag per licentie"
+
+msgid "Gutscheinart"
+msgstr "Type kortingscode"
+
+msgid "Rabatt je Lizenz in EUR brutto"
+msgstr "Korting per licentie in EUR incl. btw"
+
+msgid "Kostenlose Tage"
+msgstr "Gratis dagen"
+
+msgid "Maximale Einlösungen je Code"
+msgstr "Maximaal gebruik per code"
+
+msgid "Anzahl verschiedener Codes"
+msgstr "Aantal verschillende codes"
+
+msgid "Rabatt auch für Verlängerungen"
+msgstr "Korting ook bij verlenging"
+
+msgid "Nur für Unternehmen (optional)"
+msgstr "Alleen voor bedrijf (optioneel)"
+
+msgid "Nur für Benutzer (optional)"
+msgstr "Alleen voor gebruiker (optioneel)"
+
+msgid "Prozentgutscheine benötigen 1–99 Prozent."
+msgstr "Procentuele korting moet 1–99% zijn."
+
+msgid "Festbetrag muss größer null sein."
+msgstr "Het vaste bedrag moet groter zijn dan nul."
+
+msgid "Kostenlose Laufzeit muss 1–1095 Tage betragen."
+msgstr "De gratis periode moet 1–1095 dagen duren."
+
+msgid "Nur für Prozentgutscheine zulässig."
+msgstr "Alleen toegestaan voor procentuele kortingscodes."
+
+msgid "Nur für Festbetragsgutscheine zulässig."
+msgstr "Alleen toegestaan voor kortingscodes met vast bedrag."
+
+msgid "Nur für Zeitgutscheine zulässig."
+msgstr "Alleen toegestaan voor tijdcodes."
+
+msgid "Bei Zeitgutscheinen nicht anwendbar."
+msgstr "Niet van toepassing op tijdcodes."
+
+msgid "Entweder Unternehmen oder Benutzer binden."
+msgstr "Koppel aan een bedrijf of gebruiker, niet beide."
+
+msgid "Das Ende muss nach dem Beginn liegen."
+msgstr "Het einde moet na het begin liggen."
+
+msgid "Maximale Einlösungen"
+msgstr "Maximaal aantal verzilveringen"
+
+msgid "Bereits reservierte Einlösungen dürfen nicht abgeschnitten werden."
+msgstr "Limiet mag niet lager zijn dan bestaande reserveringen."
+
+msgid "Das Ende muss nach Beginn liegen."
+msgstr "Het einde moet na het begin liggen."
+
+msgid "Neue Gutscheincodes"
+msgstr "Nieuwe kortingscodes"
+
+msgid "Gutscheine erstellen"
+msgstr "Kortingscodes maken"
+
+msgid "Gutschein aktualisiert."
+msgstr "Kortingscode bijgewerkt."
+
+msgid "Gutscheinstatus geändert. Bestehende Nutzungsrechte bleiben unverändert."
+msgstr "Codestatus gewijzigd. Bestaande toegangsrechten blijven hetzelfde."
+
+msgid "Gutschein eingelöst. Pro-Lizenz: %(license)s"
+msgstr "Code verzilverd. Pro-licentie: %(license)s"
+
+msgid "Ungültige Lizenzanzahl."
+msgstr "Ongeldig aantal licenties."
+
+msgid "Gutschein oder Preis nicht verfügbar."
+msgstr "Kortingscode of prijs niet beschikbaar."
+
+msgid "Festbetrag ist für diese Währung nicht zulässig."
+msgstr "Vaste korting niet toegestaan in deze valuta."
+
+msgid "Bitte den Gutschein im Kundenportal einlösen."
+msgstr "Verzilver de code in het klantenportaal."
+
+msgid "Gutschein ungültig oder nicht verfügbar."
+msgstr "Kortingscode ongeldig of niet beschikbaar."
