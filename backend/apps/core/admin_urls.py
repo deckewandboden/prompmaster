@@ -37,6 +37,7 @@ urlpatterns = [
     path('customers/<uuid:pk>/users/<uuid:user_id>/transfer-admin/', v.customer_admin_transfer, name='customer_admin_transfer'),
     path('customers/<uuid:pk>/users/<uuid:user_id>/deactivate/', v.customer_user_deactivate, name='customer_user_deactivate'),
     path('customers/<uuid:pk>/licenses/', v.customer_licenses, name='customer_licenses'),
+    path('customers/<uuid:pk>/vouchers/', vv.staff_customer_vouchers, name='customer_vouchers'),
     path('customers/<uuid:pk>/devices/', v.customer_devices, name='customer_devices'),
     path('customers/<uuid:pk>/devices/<uuid:device_id>/revoke/', v.customer_device_revoke, name='customer_device_revoke'),
     path('customers/<uuid:pk>/orders/', v.customer_orders, name='customer_orders'),
