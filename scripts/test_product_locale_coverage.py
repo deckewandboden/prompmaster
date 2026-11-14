@@ -7,6 +7,7 @@ catalogue that V2 injects next to them, for every language in use.
 import html
 import json
 import re
+import subprocess
 import unittest
 from pathlib import Path
 
@@ -62,6 +63,24 @@ def visible_text_from_markup(path):
 
 
 class ProductLanguageCoverageTests(unittest.TestCase):
+    def test_shared_backend_controls_cover_all_supported_languages(self):
+        # Evaluate the shipped JavaScript catalogue, including ARIA labels.
+        source = (ROOT / 'backend/static/js/app.js').read_text(encoding='utf-8')
+        prefix = source.split('  const text = translations[language]', 1)[0]
+        program = "const document = {documentElement: {lang: 'fr'}};\n" + prefix
+        program += "\nconsole.log(JSON.stringify(Object.fromEntries(Object.entries(translations).map(([lang, terms]) => [lang, Object.fromEntries(Object.entries(terms).map(([key, value]) => [key, typeof value === 'function' ? value('QA_COLUMN') : value]))]))));\n})();"
+        result = subprocess.run(['node', '-e', program], check=True, capture_output=True, text=True)
+        catalogues = json.loads(result.stdout)
+        for language in ('de',) + LANGUAGES:
+            with self.subTest(language=language):
+                self.assertEqual(set(catalogues[language]), set(catalogues['de']))
+                self.assertTrue(all(catalogues[language].values()))
+                for key in ('sortAria', 'sortAscAria', 'sortDescAria'):
+                    self.assertIn('QA_COLUMN', catalogues[language][key])
+                if language != 'de':
+                    for key in catalogues['de']:
+                        self.assertNotEqual(catalogues[language][key], catalogues['de'][key])
+
     def test_free_and_pro_visible_text_in_all_ten_languages(self):
         translated = extract_translations()
         self.assertGreaterEqual(len(translated), 600)
