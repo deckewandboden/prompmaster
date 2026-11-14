@@ -133,6 +133,16 @@ class TwoFactorEnforcementMiddleware:
 
         if view_name not in self.sensitive_session_views:
             return None
+        # Unauthorized callers must receive the normal 403 permission verdict,
+        # rather than being asked to reauthenticate for an action they cannot do.
+        if view_name in {
+            'ns_admin:voucher_create',
+            'ns_admin:voucher_edit',
+            'ns_admin:voucher_toggle',
+        }:
+            from apps.core.permissions import has_perm
+            if not user.is_staff or not has_perm(user, 'vouchers.write'):
+                return None
         if sensitive_reauth_is_fresh(request, user):
             return None
 
