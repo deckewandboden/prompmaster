@@ -3891,3 +3891,21 @@ msgstr "Учетная запись входа"
 
 msgid "Für ein freigegebenes Postfach benötigt das Anmeldekonto Exchange Send As. Ein HTTP 202 bestätigt nur die Annahme des Versandauftrags."
 msgstr "Для общего почтового ящика учетной записи входа требуется разрешение Exchange Send As. HTTP 202 подтверждает только принятие запроса на отправку."
+
+msgid "Microsoft 365 anmelden (delegiert, mit MFA)"
+msgstr "Вход в Microsoft 365 (делегированный доступ, с MFA)"
+
+msgid "Bestandsmodus: Application-Mail.Send (ohne MFA)"
+msgstr "Устаревший режим: Application-Mail.Send (без MFA)"
+
+msgid "Graph-Anmeldemethode"
+msgstr "Метод аутентификации Graph"
+
+msgid "Für freigegebene Postfächer delegiertes OAuth mit Mail.Send.Shared wählen."
+msgstr "Для общих почтовых ящиков выберите делегированный OAuth с Mail.Send.Shared."
+
+msgid "Microsoft-365-Anmeldekonto"
+msgstr "Учетная запись для входа в Microsoft 365"
+
+msgid "Das persönliche Konto, das sich bei Microsoft inklusive MFA anmeldet; nicht das freigegebene Postfach."
+msgstr "Личная учетная запись, используемая для входа в Microsoft с MFA, а не общий почтовый ящик."
