@@ -4056,3 +4056,106 @@ msgstr "Kupon"
 
 msgid "Laufzeit/Rabatt"
 msgstr "Okres/rabat"
+
+# Voucher campaign forms, validation and checkout
+msgid "Kampagnenbezeichnung"
+msgstr "Nazwa kampanii"
+
+msgid "Interner Hinweis"
+msgstr "Notatka wewnętrzna"
+
+msgid "Rabatt in Prozent"
+msgstr "Rabat procentowy"
+
+msgid "Festbetrag je Lizenz"
+msgstr "Kwota stała na licencję"
+
+msgid "Gutscheinart"
+msgstr "Rodzaj kuponu"
+
+msgid "Rabatt je Lizenz in EUR brutto"
+msgstr "Rabat na licencję w EUR brutto"
+
+msgid "Kostenlose Tage"
+msgstr "Darmowe dni"
+
+msgid "Maximale Einlösungen je Code"
+msgstr "Maksymalna liczba realizacji na kod"
+
+msgid "Anzahl verschiedener Codes"
+msgstr "Liczba różnych kodów"
+
+msgid "Rabatt auch für Verlängerungen"
+msgstr "Rabat także na przedłużenia"
+
+msgid "Nur für Unternehmen (optional)"
+msgstr "Tylko dla firmy (opcjonalnie)"
+
+msgid "Nur für Benutzer (optional)"
+msgstr "Tylko dla użytkownika (opcjonalnie)"
+
+msgid "Prozentgutscheine benötigen 1–99 Prozent."
+msgstr "Kupony procentowe wymagają 1–99%."
+
+msgid "Festbetrag muss größer null sein."
+msgstr "Kwota stała musi być większa od zera."
+
+msgid "Kostenlose Laufzeit muss 1–1095 Tage betragen."
+msgstr "Darmowy okres musi trwać 1–1095 dni."
+
+msgid "Nur für Prozentgutscheine zulässig."
+msgstr "Dozwolone tylko dla kuponów procentowych."
+
+msgid "Nur für Festbetragsgutscheine zulässig."
+msgstr "Dozwolone tylko dla kuponów kwotowych."
+
+msgid "Nur für Zeitgutscheine zulässig."
+msgstr "Dozwolone tylko dla kuponów czasowych."
+
+msgid "Bei Zeitgutscheinen nicht anwendbar."
+msgstr "Nie dotyczy kuponów czasowych."
+
+msgid "Entweder Unternehmen oder Benutzer binden."
+msgstr "Przypisz do firmy albo użytkownika, nie obu."
+
+msgid "Das Ende muss nach dem Beginn liegen."
+msgstr "Koniec musi następować po początku."
+
+msgid "Maximale Einlösungen"
+msgstr "Maksymalna liczba realizacji"
+
+msgid "Bereits reservierte Einlösungen dürfen nicht abgeschnitten werden."
+msgstr "Limit nie może być niższy od istniejących rezerwacji."
+
+msgid "Das Ende muss nach Beginn liegen."
+msgstr "Koniec musi następować po początku."
+
+msgid "Neue Gutscheincodes"
+msgstr "Nowe kody kuponów"
+
+msgid "Gutscheine erstellen"
+msgstr "Utwórz kupony"
+
+msgid "Gutschein aktualisiert."
+msgstr "Kupon zaktualizowany."
+
+msgid "Gutscheinstatus geändert. Bestehende Nutzungsrechte bleiben unverändert."
+msgstr "Status kuponu zmieniony. Istniejące uprawnienia pozostają bez zmian."
+
+msgid "Gutschein eingelöst. Pro-Lizenz: %(license)s"
+msgstr "Kupon zrealizowany. Licencja Pro: %(license)s"
+
+msgid "Ungültige Lizenzanzahl."
+msgstr "Nieprawidłowa liczba licencji."
+
+msgid "Gutschein oder Preis nicht verfügbar."
+msgstr "Kupon lub cena niedostępne."
+
+msgid "Festbetrag ist für diese Währung nicht zulässig."
+msgstr "Rabat kwotowy nie jest dostępny w tej walucie."
+
+msgid "Bitte den Gutschein im Kundenportal einlösen."
+msgstr "Zrealizuj kupon w portalu klienta."
+
+msgid "Gutschein ungültig oder nicht verfügbar."
+msgstr "Kupon jest nieprawidłowy lub niedostępny."
