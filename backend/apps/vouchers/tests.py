@@ -266,6 +266,23 @@ class VoucherContractsTests(TestCase):
         self.assertEqual(guarded.status_code, 302)
         self.assertEqual(guarded.url, reverse("ns_admin:sensitive_reauth"))
 
+    def test_voucher_issuance_and_mutations_require_staff_step_up(self):
+        from django.urls import reverse
+
+        voucher, _ = self.make(kind="trial")
+        self._login(self.staff)
+        guarded = [
+            self.client.get("/ns-admin/vouchers/create/"),
+            self.client.post("/ns-admin/vouchers/create/", {}),
+            self.client.post(f"/ns-admin/vouchers/{voucher.pk}/edit/", {}),
+            self.client.post(f"/ns-admin/vouchers/{voucher.pk}/toggle/"),
+        ]
+        for response in guarded:
+            self.assertEqual(response.status_code, 302)
+            self.assertEqual(response.url, reverse("ns_admin:sensitive_reauth"))
+        voucher.refresh_from_db()
+        self.assertTrue(voucher.active)
+
     def test_customer_voucher_tab_has_no_cross_company_leak(self):
         self.make(kind="trial", bound_company=self.company)
         self.make(kind="trial", bound_company=self.company2, title="SECRET OTHER COMPANY")
