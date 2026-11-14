@@ -4,7 +4,7 @@ from decimal import Decimal
 
 from django.core.exceptions import ValidationError
 from django.db import transaction
-from django.test import TestCase
+from django.test import TestCase, TransactionTestCase
 from django.utils import timezone
 
 from apps.accounts.models import User
@@ -470,3 +470,48 @@ class VoucherContractsTests(TestCase):
         with self.assertRaises(ValidationError):
             redeem_trial(code=raw, actor=self.other, company=self.company2)
         self.assertEqual(License.objects.count(), 0)
+
+
+class VoucherTransactionBoundaryTests(TransactionTestCase):
+    """Exercise real PostgreSQL FOR UPDATE outside Django TestCase wrapping."""
+
+    def test_direct_order_service_call_without_outer_transaction_is_atomic(self):
+        now = timezone.now()
+        self.assertFalse(transaction.get_connection().in_atomic_block)
+        staff = User.objects.create_user(
+            "voucher-tx-staff@example.test", "Secure-2026!",
+            is_staff=True, email_verified_at=now,
+        )
+        buyer = User.objects.create_user(
+            "voucher-tx-buyer@example.test", "Secure-2026!",
+            email_verified_at=now,
+        )
+        PrivateCustomerProfile.objects.create(
+            user=buyer, customer_number="PV-TRIAL-TX-1", street="Testweg",
+            postal_code="57072", city="Siegen", country="DE",
+        )
+        product = Product.objects.create(
+            code="PRO", name="PROMPTFINISHER Pro",
+            default_license_days=365, default_device_limit=2,
+            reminder_1_days=60, reminder_2_days=30, critical_warning_days=7,
+        )
+        ProductPrice.objects.create(
+            product=product, price_type="new", gross_amount=Decimal("35.88"),
+            currency="EUR", valid_from=now,
+        )
+        TaxRule.objects.create(
+            country="DE", customer_type="private", tax_rate=Decimal("19.00"),
+            active=True,
+        )
+        (voucher, raw), = issue_vouchers(
+            actor=staff, count=1, title="Transaction safety voucher",
+            kind="percent", product=product, percent_off=25,
+            max_redemptions=1, starts_at=now - timedelta(minutes=1),
+            expires_at=now + timedelta(days=1),
+        )
+        order = create_order(user=buyer, product=product, voucher_code=raw)
+        self.assertFalse(transaction.get_connection().in_atomic_block)
+        self.assertEqual(order.gross_total, Decimal("26.91"))
+        self.assertEqual(order.voucher_redemption.status, "reserved")
+        voucher.refresh_from_db()
+        self.assertEqual(voucher.used_count, 1)
