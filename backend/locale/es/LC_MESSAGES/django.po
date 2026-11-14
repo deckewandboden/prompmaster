@@ -3831,3 +3831,169 @@ msgstr "Código de descuento (opcional)"
 
 msgid "Kostenlose Pro-Nutzung"
 msgstr "Uso gratuito de Pro"
+
+# Voucher campaign user interface
+msgid "Rabatte und kostenlose Pro-Zeiträume sicher verwalten."
+msgstr "Gestiona descuentos y periodos gratuitos de Pro de forma segura."
+
+msgid "+ Codes erstellen"
+msgstr "+ Crear códigos"
+
+msgid "Kampagnencodes"
+msgstr "Códigos de campaña"
+
+msgid "Erfolgreiche Einlösungen"
+msgstr "Canjes realizados"
+
+msgid "Kampagne, Firma oder letzte vier Zeichen"
+msgstr "Campaña, empresa o últimos cuatro caracteres"
+
+msgid "Prozent"
+msgstr "Porcentaje"
+
+msgid "Festbetrag"
+msgstr "Importe fijo"
+
+msgid "Kostenlose Zeit"
+msgstr "Periodo gratuito"
+
+msgid "Kampagne"
+msgstr "Campaña"
+
+msgid "Zielkunde"
+msgstr "Cliente destinatario"
+
+msgid "Verbrauch"
+msgstr "Uso"
+
+msgid "Verwalten"
+msgstr "Gestionar"
+
+msgid "Keine Gutscheine gefunden."
+msgstr "No se han encontrado cupones."
+
+msgid "Weiter"
+msgstr "Siguiente"
+
+msgid "Aus Sicherheitsgründen wird jeder vollständige Gutscheincode nur beim Erstellen angezeigt. Es werden ausschließlich Prüfsummen gespeichert."
+msgstr "Por seguridad, cada código completo se muestra solo al crearse. Solo se guardan resúmenes criptográficos."
+
+msgid "Alle Codes sind zufällig und werden nach dem Erstellen nur einmal angezeigt."
+msgstr "Los códigos son aleatorios y solo se muestran una vez al crearlos."
+
+msgid "Ein Code kann auf einen Kunden beschränkt werden. Ohne Bindung ist er für alle berechtigten Kunden gültig. Pro-Code-Limits gelten unabhängig voneinander."
+msgstr "Un código puede restringirse a un cliente. Sin restricción, vale para todos los clientes aptos. Los límites se aplican por código."
+
+msgid "Gutscheincodes erzeugen"
+msgstr "Generar códigos de cupón"
+
+msgid "Einmalige Anzeige"
+msgstr "Visualización única"
+
+msgid "Diese Codes können später nicht erneut angezeigt werden. Bitte jetzt sicher an die berechtigten Kunden übergeben."
+msgstr "Estos códigos no podrán mostrarse de nuevo. Entrégalos ahora de forma segura a los clientes autorizados."
+
+msgid "Gutscheincode"
+msgstr "Código de cupón"
+
+msgid "Verwaltung"
+msgstr "Administración"
+
+msgid "In Protokollen und Datenbank werden keine vollständigen Gutscheincodes gespeichert."
+msgstr "Los códigos completos nunca se guardan en registros ni en la base de datos."
+
+msgid "Alle Gutscheine"
+msgstr "Todos los cupones"
+
+msgid "Leistung"
+msgstr "Ventaja"
+
+msgid "je Lizenz"
+msgstr "por licencia"
+
+msgid "Tage Pro"
+msgstr "Días de Pro"
+
+msgid "Kontingent"
+msgstr "Cupo"
+
+msgid "Je Code; laufende Zahlungsreservierungen zählen mit."
+msgstr "Por código; las reservas de pago pendientes cuentan para el límite."
+
+msgid "Zielbindung"
+msgstr "Restricción de destinatario"
+
+msgid "Alle berechtigten Kunden"
+msgstr "Todos los clientes aptos"
+
+msgid "Bereits gewährte Lizenzen werden durch Gutscheinsperrung nicht automatisch entzogen."
+msgstr "Bloquear un cupón no revoca las licencias ya concedidas."
+
+msgid "Code für weitere Einlösungen sperren"
+msgstr "Bloquear nuevos canjes"
+
+msgid "Code wieder aktivieren"
+msgstr "Reactivar código"
+
+msgid "Kampagne bearbeiten"
+msgstr "Editar campaña"
+
+msgid "Die wirtschaftlichen Konditionen und Kundenbindung bleiben nach Ausstellung unveränderlich."
+msgstr "Las condiciones económicas y la vinculación al cliente no pueden cambiarse tras la emisión."
+
+msgid "Einlösehistorie"
+msgstr "Historial de canjes"
+
+msgid "Einlöser"
+msgstr "Canjeado por"
+
+msgid "Lizenz/Bestellung"
+msgstr "Licencia/pedido"
+
+msgid "Noch keine Einlösungen."
+msgstr "Aún no hay canjes."
+
+msgid "Gutscheine & Gratislaufzeiten"
+msgstr "Cupones y periodos gratuitos"
+
+msgid "Rabattcodes beim Lizenzkauf nutzen oder Pro-Zeiträume einlösen."
+msgstr "Usa descuentos al comprar licencias o canjea periodos gratuitos de Pro."
+
+msgid "Kostenlose Pro-Laufzeit einlösen"
+msgstr "Canjear periodo gratuito de Pro"
+
+msgid "Zeitgutscheine können neue Lizenzen erzeugen oder die bestehende Lizenz des Empfängers verlängern. Rabattcodes gehören in das Kaufformular."
+msgstr "Los cupones temporales pueden crear licencias o ampliar una existente. Los descuentos se introducen al comprar."
+
+msgid "Unzugewiesene Lizenz für mein Unternehmen"
+msgstr "Licencia sin asignar para mi empresa"
+
+msgid "Zeitgutschein verbindlich einlösen"
+msgstr "Canjear cupón de periodo gratuito"
+
+msgid "Für dieses Konto zugeteilte Kampagnen"
+msgstr "Campañas asignadas a esta cuenta"
+
+msgid "Vollständige Codes werden nur durch netstyle ausgegeben."
+msgstr "Solo netstyle entrega los códigos completos."
+
+msgid "Keine ausdrücklich zugeteilten Kampagnen."
+msgstr "No hay campañas asignadas directamente."
+
+msgid "Rabatt bei der Bestellung"
+msgstr "Descuento en el pedido"
+
+msgid "Rabattcodes werden beim Kauf oder bei zulässigen Verlängerungen vor der Zahlung geprüft und auf den Bruttopreis angewendet."
+msgstr "Los descuentos se comprueban antes del pago y se aplican al precio bruto de compras y renovaciones válidas."
+
+msgid "Zum Lizenzkauf"
+msgstr "Ir a comprar licencias"
+
+msgid "Einlösungen und Lizenzzeiträume"
+msgstr "Canjes y periodos de licencia"
+
+msgid "Gutschein"
+msgstr "Cupón"
+
+msgid "Laufzeit/Rabatt"
+msgstr "Periodo/descuento"
