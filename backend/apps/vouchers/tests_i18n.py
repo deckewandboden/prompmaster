@@ -66,8 +66,8 @@ class VoucherInternationalizationTests(SimpleTestCase):
         for path in source_paths:
             self.assertTrue(path.is_file(), str(path))
             content = path.read_text(encoding="utf-8")
-            strings.update(re.findall(r"\\{%\\s*translate\\s+[\"'](.+?)[\"']\\s*%\\}", content))
-            strings.update(re.findall(r"_\\(\\s*[\"'](.+?)[\"']\\s*\\)", content))
+            strings.update(re.findall(r"\{%\s*translate\s+[\"'](.+?)[\"']\s*%\}", content))
+            strings.update(re.findall(r"_\(\s*[\"'](.+?)[\"']\s*\)", content))
         self.assertGreaterEqual(len(strings), 145)
         canonical_rows = json.loads((ROOT / "translation_catalog.json").read_text(encoding="utf-8"))
         canonical = {row["de"]: row for row in canonical_rows}
