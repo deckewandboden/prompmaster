@@ -136,19 +136,36 @@ class DelegatedGraphMailTests(TestCase):
         }
         send_reply = MagicMock(status_code=202)
         send_reply.headers = {'request-id': 'test-graph-request-id'}
-        with patch('apps.notifications.graph_delegated.requests.post', return_value=token_reply) as oauth, \
-             patch('apps.notifications.services.requests.post', return_value=send_reply) as transport:
+
+        # Both imports reference the same requests module; one mock must
+        # dispatch to OAuth (200) and Graph sendMail (202) separately.
+        def dispatch_post(url, **kwargs):
+            if url.startswith('https://login.microsoftonline.com/'):
+                return token_reply
+            if url == 'https://graph.microsoft.com/v1.0/me/sendMail':
+                return send_reply
+            raise AssertionError(f'Unexpected external POST: {url}')
+
+        with patch('apps.notifications.graph_delegated.requests.post',
+                   side_effect=dispatch_post) as post:
             reference = _send_graph(
-                SimpleNamespace(subject='one explicitly selected test', recipient='recipient@example.test'),
+                SimpleNamespace(subject='one explicitly selected test',
+                                recipient='recipient@example.test'),
                 'test body',
             )
         self.assertEqual(reference, 'test-graph-request-id')
-        self.assertEqual(oauth.call_args.kwargs['data']['grant_type'], 'refresh_token')
+        oauth = [call for call in post.call_args_list
+                 if '/oauth2/v2.0/token' in call.args[0]]
+        transport = [call for call in post.call_args_list
+                     if call.args[0] == 'https://graph.microsoft.com/v1.0/me/sendMail']
+        self.assertEqual(len(oauth), 1)
+        self.assertEqual(len(transport), 1)
+        self.assertEqual(oauth[0].kwargs['data']['grant_type'], 'refresh_token')
         self.assertEqual(get_secret('graph_delegated_refresh_token'), 'new-refresh')
-        self.assertEqual(transport.call_args.args[0], 'https://graph.microsoft.com/v1.0/me/sendMail')
-        payload = transport.call_args.kwargs['json']['message']
+        payload = transport[0].kwargs['json']['message']
         self.assertEqual(payload['from']['emailAddress']['address'], SENDER)
-        self.assertEqual(payload['toRecipients'][0]['emailAddress']['address'], 'recipient@example.test')
+        self.assertEqual(payload['toRecipients'][0]['emailAddress']['address'],
+                         'recipient@example.test')
 
     def test_disconnection_revokes_local_credential_and_requires_relogin(self):
         set_secret('graph_delegated_refresh_token', 'prior-refresh')
