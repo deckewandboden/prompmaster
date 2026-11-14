@@ -81,6 +81,22 @@ class ProductLanguageCoverageTests(unittest.TestCase):
                     for key in catalogues['de']:
                         self.assertNotEqual(catalogues[language][key], catalogues['de'][key])
 
+    def test_production_v2_labels_and_rebranded_legal_notice(self):
+        translated = extract_translations()
+        keys = ['Strukturierten Bericht erstellen', 'Aus Dokumentinhalten einen klar gegliederten Bericht erzeugen.', 'Risiken und Lücken analysieren', 'Unklare Angaben, Widersprüche und Risiken erkennen.', 'Beispiel: Für eine Geschäftsleitung kürzer, klarer und ohne technische Detailtiefe.', 'Optional. Ohne Zusatzangabe verbessert Copilot Sprache und Struktur des aktuellen Textes.', 'Zum Beispiel Zahlen, Namen, Termine oder fachliche Pflichtaussagen.', 'Optional. Kritische Fakten dürfen nicht verändert werden.', 'PROMPTFINISHER Pro erweitert Apps, Rollen und Business-Prompts. Microsoft 365 Copilot wird separat lizenziert.'] + ['Aktuell ausgewählt: %(tier)s.', 'Erforderlich für %(app)s: %(tier)s.', '%(tier)s auswählen', '%(tier)s anfragen', 'Für %(app)s benötigt PROMPTFINISHER in dieser Konfiguration mindestens %(tier)s.', '28 weitere Pro-Bereiche anzeigen ▾',
+                '28 weitere Pro-Bereiche ausblenden ▴',
+                'Fortschritt der Prompt-Konfiguration',
+                'Ausgewählt', 'Informationen vergleichen', 'Management-Briefing', 'Unterschiede, Gemeinsamkeiten und Entscheidungspunkte herausarbeiten.', 'Kernaussagen, Risiken und nächste Schritte für Entscheider.', 'Stichpunkte', 'Fließtext', 'Beispiel: Die wichtigsten Aussagen, Entscheidungen und nächsten Schritte kompakt zusammenfassen.', 'Beschreiben Sie kurz, was die Zusammenfassung für Sie leisten soll.', 'Fügen Sie hier Text, Notizen oder Informationen ein. Alternativ stellen Sie den Inhalt später im Copilot-Chat bereit.', 'Optional. Ohne Inhalt hier muss die Quelle beim Einfügen des fertigen Prompts in Copilot bereitgestellt oder eindeutig referenziert werden.', 'Offene Fragen', 'Offene Fragen · PRO', 'Termine', 'Termine · PRO', 'Zahlen / Fakten', 'Zahlen / Fakten · PRO']
+        keys += [key.replace('CopilotPROMPTFINISHER', 'PROMPTFINISHER')
+                 for key in translated
+                 if key.startswith('Microsoft, Microsoft 365 und Copilot sind Marken')
+                 and 'CopilotPROMPTFINISHER' in key]
+        for key in keys:
+            for language in LANGUAGES:
+                with self.subTest(key=key, language=language):
+                    self.assertTrue(translated.get(key, {}).get(language))
+                    self.assertNotEqual(translated[key][language], key)
+
     def test_free_and_pro_visible_text_in_all_ten_languages(self):
         translated = extract_translations()
         self.assertGreaterEqual(len(translated), 600)
