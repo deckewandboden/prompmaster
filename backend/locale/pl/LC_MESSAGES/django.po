@@ -3890,3 +3890,169 @@ msgstr "Kod rabatowy (opcjonalnie)"
 
 msgid "Kostenlose Pro-Nutzung"
 msgstr "Bezpłatne korzystanie z Pro"
+
+# Voucher campaign user interface
+msgid "Rabatte und kostenlose Pro-Zeiträume sicher verwalten."
+msgstr "Bezpiecznie zarządzaj rabatami i darmowymi okresami Pro."
+
+msgid "+ Codes erstellen"
+msgstr "+ Utwórz kody"
+
+msgid "Kampagnencodes"
+msgstr "Kody kampanii"
+
+msgid "Erfolgreiche Einlösungen"
+msgstr "Zrealizowane kupony"
+
+msgid "Kampagne, Firma oder letzte vier Zeichen"
+msgstr "Kampania, firma lub ostatnie cztery znaki"
+
+msgid "Prozent"
+msgstr "Procent"
+
+msgid "Festbetrag"
+msgstr "Kwota stała"
+
+msgid "Kostenlose Zeit"
+msgstr "Darmowy okres"
+
+msgid "Kampagne"
+msgstr "Kampania"
+
+msgid "Zielkunde"
+msgstr "Klient docelowy"
+
+msgid "Verbrauch"
+msgstr "Wykorzystanie"
+
+msgid "Verwalten"
+msgstr "Zarządzaj"
+
+msgid "Keine Gutscheine gefunden."
+msgstr "Nie znaleziono kuponów."
+
+msgid "Weiter"
+msgstr "Dalej"
+
+msgid "Aus Sicherheitsgründen wird jeder vollständige Gutscheincode nur beim Erstellen angezeigt. Es werden ausschließlich Prüfsummen gespeichert."
+msgstr "Ze względów bezpieczeństwa pełny kod jest wyświetlany tylko podczas tworzenia. Zapisywane są tylko skróty."
+
+msgid "Alle Codes sind zufällig und werden nach dem Erstellen nur einmal angezeigt."
+msgstr "Kody są losowe i wyświetlane tylko raz po utworzeniu."
+
+msgid "Ein Code kann auf einen Kunden beschränkt werden. Ohne Bindung ist er für alle berechtigten Kunden gültig. Pro-Code-Limits gelten unabhängig voneinander."
+msgstr "Kod można przypisać do klienta. Bez ograniczenia działa dla wszystkich uprawnionych klientów. Limity są osobne dla każdego kodu."
+
+msgid "Gutscheincodes erzeugen"
+msgstr "Wygeneruj kody kuponów"
+
+msgid "Einmalige Anzeige"
+msgstr "Jednorazowe wyświetlenie"
+
+msgid "Diese Codes können später nicht erneut angezeigt werden. Bitte jetzt sicher an die berechtigten Kunden übergeben."
+msgstr "Tych kodów nie będzie można ponownie wyświetlić. Przekaż je teraz bezpiecznie uprawnionym klientom."
+
+msgid "Gutscheincode"
+msgstr "Kod kuponu"
+
+msgid "Verwaltung"
+msgstr "Administracja"
+
+msgid "In Protokollen und Datenbank werden keine vollständigen Gutscheincodes gespeichert."
+msgstr "Pełne kody kuponów nie są zapisywane w dziennikach ani bazie danych."
+
+msgid "Alle Gutscheine"
+msgstr "Wszystkie kupony"
+
+msgid "Leistung"
+msgstr "Korzyść"
+
+msgid "je Lizenz"
+msgstr "na licencję"
+
+msgid "Tage Pro"
+msgstr "Dni Pro"
+
+msgid "Kontingent"
+msgstr "Limit"
+
+msgid "Je Code; laufende Zahlungsreservierungen zählen mit."
+msgstr "Na kod; oczekujące rezerwacje płatności wliczają się do limitu."
+
+msgid "Zielbindung"
+msgstr "Ograniczenie odbiorcy"
+
+msgid "Alle berechtigten Kunden"
+msgstr "Wszyscy uprawnieni klienci"
+
+msgid "Bereits gewährte Lizenzen werden durch Gutscheinsperrung nicht automatisch entzogen."
+msgstr "Zablokowanie kuponu nie odbiera wcześniej przyznanych licencji."
+
+msgid "Code für weitere Einlösungen sperren"
+msgstr "Zablokuj dalsze użycie"
+
+msgid "Code wieder aktivieren"
+msgstr "Aktywuj kod ponownie"
+
+msgid "Kampagne bearbeiten"
+msgstr "Edytuj kampanię"
+
+msgid "Die wirtschaftlichen Konditionen und Kundenbindung bleiben nach Ausstellung unveränderlich."
+msgstr "Warunki finansowe i przypisanie do klienta nie mogą być zmienione po wydaniu."
+
+msgid "Einlösehistorie"
+msgstr "Historia realizacji"
+
+msgid "Einlöser"
+msgstr "Zrealizował"
+
+msgid "Lizenz/Bestellung"
+msgstr "Licencja/zamówienie"
+
+msgid "Noch keine Einlösungen."
+msgstr "Brak realizacji."
+
+msgid "Gutscheine & Gratislaufzeiten"
+msgstr "Kupony i darmowe okresy"
+
+msgid "Rabattcodes beim Lizenzkauf nutzen oder Pro-Zeiträume einlösen."
+msgstr "Używaj kodów rabatowych przy zakupie licencji lub realizuj darmowe okresy Pro."
+
+msgid "Kostenlose Pro-Laufzeit einlösen"
+msgstr "Aktywuj darmowy okres Pro"
+
+msgid "Zeitgutscheine können neue Lizenzen erzeugen oder die bestehende Lizenz des Empfängers verlängern. Rabattcodes gehören in das Kaufformular."
+msgstr "Kupony czasowe tworzą licencje lub przedłużają istniejące. Kody rabatowe wpisz przy zakupie."
+
+msgid "Unzugewiesene Lizenz für mein Unternehmen"
+msgstr "Nieprzypisana licencja dla mojej firmy"
+
+msgid "Zeitgutschein verbindlich einlösen"
+msgstr "Zrealizuj kupon czasowy"
+
+msgid "Für dieses Konto zugeteilte Kampagnen"
+msgstr "Kampanie przypisane do tego konta"
+
+msgid "Vollständige Codes werden nur durch netstyle ausgegeben."
+msgstr "Pełne kody wydaje tylko netstyle."
+
+msgid "Keine ausdrücklich zugeteilten Kampagnen."
+msgstr "Brak bezpośrednio przypisanych kampanii."
+
+msgid "Rabatt bei der Bestellung"
+msgstr "Rabat przy zamówieniu"
+
+msgid "Rabattcodes werden beim Kauf oder bei zulässigen Verlängerungen vor der Zahlung geprüft und auf den Bruttopreis angewendet."
+msgstr "Kody sprawdzamy przed płatnością i naliczamy od kwoty brutto zakupu lub uprawnionego przedłużenia."
+
+msgid "Zum Lizenzkauf"
+msgstr "Przejdź do zakupu licencji"
+
+msgid "Einlösungen und Lizenzzeiträume"
+msgstr "Realizacje i okresy licencji"
+
+msgid "Gutschein"
+msgstr "Kupon"
+
+msgid "Laufzeit/Rabatt"
+msgstr "Okres/rabat"
