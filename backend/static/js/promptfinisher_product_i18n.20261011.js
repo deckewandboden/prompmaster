@@ -130,6 +130,10 @@
     const trimmed = (text || '').trim();
     if (!trimmed) return null;
     if (Object.hasOwn(TEXT, trimmed)) return t(trimmed);
+    // PRO is an entitlement marker. Localize only a known UI catalogue label.
+    if (trimmed.endsWith(' · PRO') && Object.hasOwn(TEXT, trimmed.slice(0, -6))) {
+      return t(trimmed.slice(0, -6)) + ' · PRO';
+    }
     // A server-generated locked-app badge combines the (canonical) licensing
     // tier with a German status. Translate the suffix without changing the tier.
     // Exact catalog matches above take precedence for official product names.
@@ -139,9 +143,19 @@
     }
     // Only specific generated UI elements may use interpolation. Never infer
     // patterns from user input, IDs, source data or finished prompt content.
-    if (parent?.id === 'licenseModalTitle' && trimmed.endsWith(' erforderlich')) {
+    if ((parent?.id === 'licenseModalTitle' || parent?.matches?.('#businessModal .modal-head h2')) && trimmed.endsWith(' erforderlich')) {
       return interpolate('%(tier)s erforderlich',
         {tier:trimmed.slice(0, -' erforderlich'.length)});
+    }
+    if (parent?.matches?.('#businessModal .modal-head p')) {
+      const requirement = trimmed.match(/^Für (.+) benötigt (?:Copilot)?PROMPTFINISHER in dieser Konfiguration mindestens (.+)\.$/);
+      if (requirement) return interpolate('Für %(app)s benötigt PROMPTFINISHER in dieser Konfiguration mindestens %(tier)s.',
+        {app:requirement[1], tier:requirement[2]});
+    }
+    if (parent?.id === 'switchBusinessBtn' && trimmed.endsWith(' auswählen')) {
+      const tier = trimmed.slice(0, -' auswählen'.length);
+      parent.dataset.requiredTier = tier;
+      return interpolate('%(tier)s auswählen', {tier});
     }
     if (parent?.id === 'promptMode' && /^Für .+ optimiert$/.test(trimmed)) {
       return interpolate('Für %(target)s optimiert',
@@ -167,7 +181,7 @@
     return null;
   };
   const localizeLicenseRows = root => {
-    const list = root.querySelector?.('#licenseModalList');
+    const list = root.querySelector?.('#licenseModalList, #businessModal ul');
     if (!list) return;
     const render = (li, template, values) => {
       const text = t(template);
@@ -187,7 +201,12 @@
     for (const li of list.querySelectorAll('li')) {
       const strong = [...li.querySelectorAll('strong')];
       const current = li.textContent.trim();
-      if (current.startsWith('Für ') && strong.length === 2) {
+      if (current.startsWith('Aktuell ausgewählt: ') && strong.length === 1) {
+        render(li, 'Aktuell ausgewählt: %(tier)s.', {tier:strong[0].textContent});
+      } else if (current.startsWith('Erforderlich für ') && strong.length === 2) {
+        render(li, 'Erforderlich für %(app)s: %(tier)s.',
+          {app:strong[0].textContent, tier:strong[1].textContent});
+      } else if (current.startsWith('Für ') && strong.length === 2) {
         render(li, 'Für %(app)s ist in dieser PRO-Version mindestens %(tier)s erforderlich.',
           {app:strong[0].textContent, tier:strong[1].textContent});
       } else if (current.startsWith('Aufgabe: ') && strong.length === 1) {
