@@ -76,7 +76,10 @@ def staff_customer_vouchers(request, pk):
     if not has_perm(request.user, "customers.read"):
         raise PermissionDenied
     customer = get_object_or_404(Company, pk=pk)
-    vouchers = Voucher.objects.filter(bound_company=customer).select_related(
+    customer_vouchers = Voucher.objects.filter(
+        Q(bound_company=customer) | Q(redemptions__company=customer)
+    ).distinct()
+    vouchers = customer_vouchers.select_related(
         "product", "bound_company", "bound_user",
     ).order_by("-created_at")
     search = (request.GET.get("q") or "").strip()[:120]
@@ -89,8 +92,8 @@ def staff_customer_vouchers(request, pk):
         "customer": customer, "page": page, "q": search,
         "selected_state": "", "selected_kind": "",
         "can_write": has_perm(request.user, "vouchers.write"),
-        "voucher_total": Voucher.objects.filter(bound_company=customer).count(),
-        "voucher_active": Voucher.objects.filter(bound_company=customer, active=True).count(),
+        "voucher_total": customer_vouchers.count(),
+        "voucher_active": customer_vouchers.filter(active=True).count(),
         "voucher_redemptions": VoucherRedemption.objects.filter(
             company=customer, status="redeemed"
         ).count(),
