@@ -3831,7 +3831,7 @@ msgid "Rabattcode (optional)"
 msgstr "Промокод (необязательно)"
 
 msgid "Kostenlose Pro-Nutzung"
-msgstr "Бесплатное использование Pro"
+msgstr "Бесплатный доступ Pro"
 
 # Voucher campaign user interface
 msgid "Rabatte und kostenlose Pro-Zeiträume sicher verwalten."
@@ -3841,13 +3841,13 @@ msgid "+ Codes erstellen"
 msgstr "+ Создать коды"
 
 msgid "Kampagnencodes"
-msgstr "Коды акций"
+msgstr "Коды кампаний"
 
 msgid "Erfolgreiche Einlösungen"
 msgstr "Успешные активации"
 
 msgid "Kampagne, Firma oder letzte vier Zeichen"
-msgstr "Акция, компания или последние четыре символа"
+msgstr "Кампания, компания или последние четыре символа"
 
 msgid "Prozent"
 msgstr "Процент"
@@ -3859,16 +3859,16 @@ msgid "Kostenlose Zeit"
 msgstr "Бесплатный период"
 
 msgid "Kampagne"
-msgstr "Акция"
+msgstr "Кампания"
 
 msgid "Zielkunde"
-msgstr "Получатель"
+msgstr "Клиент-получатель"
 
 msgid "Verbrauch"
-msgstr "Использовано"
+msgstr "Использование"
 
 msgid "Verwalten"
-msgstr "Управление"
+msgstr "Управлять"
 
 msgid "Keine Gutscheine gefunden."
 msgstr "Купоны не найдены."
@@ -3877,22 +3877,22 @@ msgid "Weiter"
 msgstr "Далее"
 
 msgid "Aus Sicherheitsgründen wird jeder vollständige Gutscheincode nur beim Erstellen angezeigt. Es werden ausschließlich Prüfsummen gespeichert."
-msgstr "В целях безопасности полный код показывается только при создании. Сохраняются лишь хеши."
+msgstr "Из соображений безопасности полный код показывается только при создании. Хранятся лишь проверочные хеши."
 
 msgid "Alle Codes sind zufällig und werden nach dem Erstellen nur einmal angezeigt."
-msgstr "Коды создаются случайным образом и показываются только один раз."
+msgstr "Все коды генерируются случайно и показываются только один раз после создания."
 
 msgid "Ein Code kann auf einen Kunden beschränkt werden. Ohne Bindung ist er für alle berechtigten Kunden gültig. Pro-Code-Limits gelten unabhängig voneinander."
-msgstr "Код можно привязать к клиенту. Без привязки он действует для всех подходящих клиентов. Лимиты учитываются отдельно по коду."
+msgstr "Код можно ограничить одним клиентом. Без ограничения он действует для всех подходящих клиентов. Для каждого кода установлен собственный лимит."
 
 msgid "Gutscheincodes erzeugen"
 msgstr "Создать коды купонов"
 
 msgid "Einmalige Anzeige"
-msgstr "Однократный показ"
+msgstr "Показать один раз"
 
 msgid "Diese Codes können später nicht erneut angezeigt werden. Bitte jetzt sicher an die berechtigten Kunden übergeben."
-msgstr "Эти коды больше нельзя будет показать. Сейчас безопасно передайте их уполномоченным клиентам."
+msgstr "Позже эти коды нельзя будет просмотреть снова. Сейчас безопасно передайте их нужным клиентам."
 
 msgid "Gutscheincode"
 msgstr "Код купона"
@@ -3901,7 +3901,7 @@ msgid "Verwaltung"
 msgstr "Управление"
 
 msgid "In Protokollen und Datenbank werden keine vollständigen Gutscheincodes gespeichert."
-msgstr "Полные коды купонов не сохраняются в журналах и базе данных."
+msgstr "Полные коды не сохраняются в журналах или базе данных."
 
 msgid "Alle Gutscheine"
 msgstr "Все купоны"
@@ -3910,85 +3910,85 @@ msgid "Leistung"
 msgstr "Преимущество"
 
 msgid "je Lizenz"
-msgstr "за лицензию"
+msgstr "на лицензию"
 
 msgid "Tage Pro"
-msgstr "Дней Pro"
+msgstr "Дни Pro"
 
 msgid "Kontingent"
-msgstr "Лимит"
+msgstr "Квота"
 
 msgid "Je Code; laufende Zahlungsreservierungen zählen mit."
-msgstr "На один код; незавершённые резервы оплаты учитываются."
+msgstr "На один код; ожидающие оплаты резервации входят в лимит."
 
 msgid "Zielbindung"
-msgstr "Привязка к получателю"
+msgstr "Ограничение получателя"
 
 msgid "Alle berechtigten Kunden"
 msgstr "Все подходящие клиенты"
 
 msgid "Bereits gewährte Lizenzen werden durch Gutscheinsperrung nicht automatisch entzogen."
-msgstr "Блокировка купона не отзывает уже выданные лицензии."
+msgstr "Блокировка купона не отзывает автоматически уже выданные лицензии."
 
 msgid "Code für weitere Einlösungen sperren"
-msgstr "Запретить дальнейшее использование"
+msgstr "Запретить дальнейшие активации кода"
 
 msgid "Code wieder aktivieren"
-msgstr "Активировать код снова"
+msgstr "Снова активировать код"
 
 msgid "Kampagne bearbeiten"
-msgstr "Изменить акцию"
+msgstr "Изменить кампанию"
 
 msgid "Die wirtschaftlichen Konditionen und Kundenbindung bleiben nach Ausstellung unveränderlich."
-msgstr "Условия и привязка к клиенту не меняются после выдачи."
+msgstr "После выпуска финансовые условия и привязку к клиенту изменить нельзя."
 
 msgid "Einlösehistorie"
 msgstr "История активаций"
 
 msgid "Einlöser"
-msgstr "Активировал"
+msgstr "Кто активировал"
 
 msgid "Lizenz/Bestellung"
 msgstr "Лицензия/заказ"
 
 msgid "Noch keine Einlösungen."
-msgstr "Пока нет активаций."
+msgstr "Активаций пока нет."
 
 msgid "Gutscheine & Gratislaufzeiten"
 msgstr "Купоны и бесплатные периоды"
 
 msgid "Rabattcodes beim Lizenzkauf nutzen oder Pro-Zeiträume einlösen."
-msgstr "Используйте скидки при покупке лицензий или активируйте бесплатные периоды Pro."
+msgstr "Применяйте скидочные коды при покупке лицензий или активируйте бесплатные периоды Pro."
 
 msgid "Kostenlose Pro-Laufzeit einlösen"
 msgstr "Активировать бесплатный период Pro"
 
 msgid "Zeitgutscheine können neue Lizenzen erzeugen oder die bestehende Lizenz des Empfängers verlängern. Rabattcodes gehören in das Kaufformular."
-msgstr "Купон на срок создаёт новую лицензию или продлевает существующую. Скидочные коды вводятся при покупке."
+msgstr "Купоны на время создают лицензии или продлевают текущую лицензию получателя. Скидочные коды вводятся в форме покупки."
 
 msgid "Unzugewiesene Lizenz für mein Unternehmen"
-msgstr "Неназначенная лицензия для компании"
+msgstr "Неназначенная лицензия для моей компании"
 
 msgid "Zeitgutschein verbindlich einlösen"
-msgstr "Активировать купон на срок"
+msgstr "Активировать купон на время"
 
 msgid "Für dieses Konto zugeteilte Kampagnen"
-msgstr "Акции, назначенные этому аккаунту"
+msgstr "Кампании, назначенные этому аккаунту"
 
 msgid "Vollständige Codes werden nur durch netstyle ausgegeben."
 msgstr "Полные коды выдаёт только netstyle."
 
 msgid "Keine ausdrücklich zugeteilten Kampagnen."
-msgstr "Нет непосредственно назначенных акций."
+msgstr "Для этого аккаунта нет назначенных кампаний."
 
 msgid "Rabatt bei der Bestellung"
 msgstr "Скидка при заказе"
 
 msgid "Rabattcodes werden beim Kauf oder bei zulässigen Verlängerungen vor der Zahlung geprüft und auf den Bruttopreis angewendet."
-msgstr "Скидки проверяются до оплаты и применяются к полной цене покупки или допустимого продления."
+msgstr "Коды проверяются до оплаты при покупке или разрешённом продлении и применяются к цене с налогом."
 
 msgid "Zum Lizenzkauf"
-msgstr "К покупке лицензии"
+msgstr "Купить лицензии"
 
 msgid "Einlösungen und Lizenzzeiträume"
 msgstr "Активации и сроки лицензий"
@@ -4001,7 +4001,7 @@ msgstr "Срок/скидка"
 
 # Voucher campaign forms, validation and checkout
 msgid "Kampagnenbezeichnung"
-msgstr "Название акции"
+msgstr "Название кампании"
 
 msgid "Interner Hinweis"
 msgstr "Внутренняя заметка"
@@ -4016,34 +4016,34 @@ msgid "Gutscheinart"
 msgstr "Тип купона"
 
 msgid "Rabatt je Lizenz in EUR brutto"
-msgstr "Скидка за лицензию в EUR с НДС"
+msgstr "Скидка с налогом на лицензию в EUR"
 
 msgid "Kostenlose Tage"
 msgstr "Бесплатные дни"
 
 msgid "Maximale Einlösungen je Code"
-msgstr "Максимум использований на код"
+msgstr "Максимум активаций на код"
 
 msgid "Anzahl verschiedener Codes"
-msgstr "Число разных кодов"
+msgstr "Количество разных кодов"
 
 msgid "Rabatt auch für Verlängerungen"
-msgstr "Скидка также на продления"
+msgstr "Скидка действует и при продлении"
 
 msgid "Nur für Unternehmen (optional)"
-msgstr "Только для компании (необязательно)"
+msgstr "Только компания (необязательно)"
 
 msgid "Nur für Benutzer (optional)"
-msgstr "Только для пользователя (необязательно)"
+msgstr "Только пользователь (необязательно)"
 
 msgid "Prozentgutscheine benötigen 1–99 Prozent."
-msgstr "Процентная скидка должна быть от 1 до 99 %."
+msgstr "Процентная скидка должна быть от 1 до 99 процентов."
 
 msgid "Festbetrag muss größer null sein."
 msgstr "Фиксированная сумма должна быть больше нуля."
 
 msgid "Kostenlose Laufzeit muss 1–1095 Tage betragen."
-msgstr "Бесплатный период должен быть от 1 до 1095 дней."
+msgstr "Бесплатный срок должен составлять от 1 до 1095 дней."
 
 msgid "Nur für Prozentgutscheine zulässig."
 msgstr "Допустимо только для процентных купонов."
@@ -4055,22 +4055,22 @@ msgid "Nur für Zeitgutscheine zulässig."
 msgstr "Допустимо только для купонов на срок."
 
 msgid "Bei Zeitgutscheinen nicht anwendbar."
-msgstr "Не применяется к купонам на срок."
+msgstr "Для купонов на срок не применяется."
 
 msgid "Entweder Unternehmen oder Benutzer binden."
-msgstr "Ограничьте компанией или пользователем, но не обоими."
+msgstr "Ограничьте код одной компанией или одним пользователем."
 
 msgid "Das Ende muss nach dem Beginn liegen."
-msgstr "Окончание должно быть позже начала."
+msgstr "Конец должен быть позже начала."
 
 msgid "Maximale Einlösungen"
 msgstr "Максимум активаций"
 
 msgid "Bereits reservierte Einlösungen dürfen nicht abgeschnitten werden."
-msgstr "Лимит не может быть меньше числа резервов."
+msgstr "Лимит не может быть меньше числа уже зарезервированных активаций."
 
 msgid "Das Ende muss nach Beginn liegen."
-msgstr "Окончание должно быть позже начала."
+msgstr "Конец должен быть позже начала."
 
 msgid "Neue Gutscheincodes"
 msgstr "Новые коды купонов"
@@ -4082,13 +4082,13 @@ msgid "Gutschein aktualisiert."
 msgstr "Купон обновлён."
 
 msgid "Gutscheinstatus geändert. Bestehende Nutzungsrechte bleiben unverändert."
-msgstr "Статус купона изменён. Действующие права доступа сохраняются."
+msgstr "Статус купона изменён. Существующие права доступа сохранены."
 
 msgid "Gutschein eingelöst. Pro-Lizenz: %(license)s"
 msgstr "Купон активирован. Лицензия Pro: %(license)s"
 
 msgid "Ungültige Lizenzanzahl."
-msgstr "Недопустимое число лицензий."
+msgstr "Недопустимое количество лицензий."
 
 msgid "Gutschein oder Preis nicht verfügbar."
 msgstr "Купон или цена недоступны."
@@ -4107,67 +4107,67 @@ msgid "Prozentualer Rabatt"
 msgstr "Процентная скидка"
 
 msgid "Fester Rabatt je Lizenz"
-msgstr "Фиксированная скидка за лицензию"
+msgstr "Фиксированная скидка на лицензию"
 
 msgid "Rabattprozente müssen zwischen 1 und 99 liegen."
-msgstr "Размер скидки должен быть от 1 до 99 %."
+msgstr "Процент скидки должен быть от 1 до 99."
 
 msgid "Ein positiver Festbetrag ist erforderlich."
-msgstr "Нужна положительная фиксированная сумма."
+msgstr "Необходима положительная фиксированная сумма."
 
 msgid "Kostenlose Laufzeit muss 1 bis 1095 Tage betragen."
 msgstr "Бесплатный срок должен составлять от 1 до 1095 дней."
 
 msgid "Rabattcodes dürfen keine freie Laufzeit haben."
-msgstr "Скидочные коды не предоставляют бесплатный срок."
+msgstr "Скидочные коды не могут предоставлять бесплатный срок."
 
 msgid "Nur Festbetragsrabatte dürfen einen Betrag haben."
-msgstr "Сумма допустима только для фиксированных скидок."
+msgstr "Сумму можно указать только для купонов с фиксированным номиналом."
 
 msgid "Nur Prozentcodes dürfen Rabattprozente haben."
-msgstr "Процент указывается только для процентных кодов."
+msgstr "Процент можно указать только для процентных купонов."
 
 msgid "Probezeiträume sind keine Zahlungsrabatte."
-msgstr "Пробные периоды не являются платёжной скидкой."
+msgstr "Пробные периоды не являются скидкой при оплате."
 
 msgid "Ein Code kann nur auf Firma oder Benutzer begrenzt sein."
-msgstr "Код можно привязать к компании либо пользователю, но не к обоим."
+msgstr "Код может быть привязан к компании или пользователю, но не к обоим."
 
 msgid "Ende muss nach Beginn liegen."
 msgstr "Конец должен быть позже начала."
 
 msgid "Mindestens eine Einlösung erforderlich."
-msgstr "Требуется хотя бы одно использование."
+msgstr "Требуется хотя бы одна активация."
 
 msgid "Für Bestellung reserviert"
-msgstr "Зарезервирован для заказа"
+msgstr "Зарезервировано для заказа"
 
 msgid "Eingelöst"
-msgstr "Активирован"
+msgstr "Активировано"
 
 msgid "Fehlgeschlagen / freigegeben"
-msgstr "Ошибка / освобождён"
+msgstr "Ошибка / освобождено"
 
 msgid "Gutscheincode ungültig oder nicht verfügbar."
 msgstr "Код купона недействителен или недоступен."
 
 msgid "Nur netstyle kann Gutscheine erstellen."
-msgstr "Только netstyle может выпускать купоны."
+msgstr "Создавать купоны может только netstyle."
 
 msgid "Pro Aktion sind 1 bis 100 Gutscheine zulässig."
-msgstr "За один раз можно создать от 1 до 100 купонов."
+msgstr "За одну операцию допускается от 1 до 100 купонов."
 
 msgid "Gutschein nicht verfügbar oder abgelaufen."
-msgstr "Купон недоступен или срок истёк."
+msgstr "Купон недоступен или срок его действия истёк."
 
 msgid "Dieser Gutschein ist bereits vollständig eingelöst."
 msgstr "Лимит использования этого купона исчерпан."
 
 msgid "Dieser Gutschein gilt nicht für das gewählte Produkt."
-msgstr "Купон не действует на выбранный продукт."
+msgstr "Купон не действует для выбранного продукта."
 
 msgid "Deaktivierte Unternehmen können keine Gutscheine einlösen."
-msgstr "Неактивные компании не могут использовать купоны."
+msgstr "Неактивные компании не могут активировать купоны."
 
 msgid "Gutschein ist für einen anderen Kunden ausgestellt."
 msgstr "Купон выдан другому клиенту."
@@ -4176,52 +4176,52 @@ msgid "Gutschein ist für einen anderen Benutzer ausgestellt."
 msgstr "Купон выдан другому пользователю."
 
 msgid "Gutschein gilt nur für neue Pro-Lizenzen."
-msgstr "Купон действует только на новые лицензии Pro."
+msgstr "Купон действует только для новых лицензий Pro."
 
 msgid "Dieser Benutzer hat den Gutschein bereits eingelöst."
-msgstr "Этот пользователь уже использовал купон."
+msgstr "Этот пользователь уже активировал купон."
 
 msgid "Dieser Gutschein wurde von diesem Konto bereits genutzt."
 msgstr "Этот аккаунт уже использовал купон."
 
 msgid "Kostenlose Zeitgutscheine bitte im Gutscheinbereich einlösen."
-msgstr "Купоны на срок активируются в разделе купонов."
+msgstr "Активируйте купоны на бесплатный срок в разделе купонов."
 
 msgid "Gutscheinbetrag ist für diesen Lizenzpreis nicht zulässig."
-msgstr "Размер купона недопустим для этой цены лицензии."
+msgstr "Сумма купона недопустима для этой цены лицензии."
 
 msgid "Gutschein darf nur für eine zahlungspflichtige Bestellung verwendet werden."
-msgstr "Купон можно применять только к платному заказу."
+msgstr "Купон можно применить только к платному заказу."
 
 msgid "Gutscheinreservierung kann wegen inkonsistentem Kontingent nicht freigegeben werden."
-msgstr "Нельзя освободить резерв купона из-за несогласованного лимита."
+msgstr "Невозможно снять резерв из-за несогласованного лимита."
 
 msgid "Bitte ein aktives, bestätigtes Kundenkonto verwenden."
-msgstr "Используйте активный и подтверждённый клиентский аккаунт."
+msgstr "Используйте активный подтверждённый клиентский аккаунт."
 
 msgid "Pro ist derzeit nicht verfügbar."
 msgstr "Pro сейчас недоступен."
 
 msgid "Nur der Firmenadministrator kann Zeitgutscheine einlösen."
-msgstr "Купоны на срок может активировать только администратор компании."
+msgstr "Только администратор компании может активировать купоны на срок."
 
 msgid "Empfänger muss aktives, bestätigtes Firmenmitglied sein."
 msgstr "Получатель должен быть активным подтверждённым участником компании."
 
 msgid "Privatcodes sind ausschließlich für das eigene Konto."
-msgstr "Личные коды предназначены только для собственного аккаунта."
+msgstr "Личные коды можно использовать только в собственном аккаунте."
 
 msgid "Ein Privatkundenkonto ist erforderlich."
-msgstr "Нужен аккаунт частного клиента."
+msgstr "Необходим личный клиентский аккаунт."
 
 msgid "Persönliche Zeitgutscheine müssen direkt dem vorgesehenen Benutzer zugewiesen werden."
-msgstr "Персональные купоны на срок необходимо назначить конкретному пользователю."
+msgstr "Персональные купоны на срок необходимо назначать непосредственно указанному пользователю."
 
 msgid "Rabattgutscheine bitte beim Pro-Kauf verwenden."
-msgstr "Скидочные купоны применяются при покупке Pro."
+msgstr "Используйте скидочные купоны при покупке Pro."
 
 msgid "Für Pro fehlt die Preisversion; Gutschein kann nicht gebucht werden."
-msgstr "Отсутствует версия цены Pro; купон нельзя применить."
+msgstr "Для Pro отсутствует версия цены; применить купон нельзя."
 
 msgid "Für diesen Benutzer besteht eine gesperrte oder zu prüfende Pro-Lizenz."
-msgstr "У этого пользователя есть заблокированная лицензия Pro или лицензия на проверке."
+msgstr "У этого пользователя есть заблокированная или проверяемая лицензия Pro."
