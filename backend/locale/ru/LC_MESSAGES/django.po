@@ -3832,3 +3832,169 @@ msgstr "Промокод (необязательно)"
 
 msgid "Kostenlose Pro-Nutzung"
 msgstr "Бесплатное использование Pro"
+
+# Voucher campaign user interface
+msgid "Rabatte und kostenlose Pro-Zeiträume sicher verwalten."
+msgstr "Безопасное управление скидками и бесплатными периодами Pro."
+
+msgid "+ Codes erstellen"
+msgstr "+ Создать коды"
+
+msgid "Kampagnencodes"
+msgstr "Коды акций"
+
+msgid "Erfolgreiche Einlösungen"
+msgstr "Успешные активации"
+
+msgid "Kampagne, Firma oder letzte vier Zeichen"
+msgstr "Акция, компания или последние четыре символа"
+
+msgid "Prozent"
+msgstr "Процент"
+
+msgid "Festbetrag"
+msgstr "Фиксированная сумма"
+
+msgid "Kostenlose Zeit"
+msgstr "Бесплатный период"
+
+msgid "Kampagne"
+msgstr "Акция"
+
+msgid "Zielkunde"
+msgstr "Получатель"
+
+msgid "Verbrauch"
+msgstr "Использовано"
+
+msgid "Verwalten"
+msgstr "Управление"
+
+msgid "Keine Gutscheine gefunden."
+msgstr "Купоны не найдены."
+
+msgid "Weiter"
+msgstr "Далее"
+
+msgid "Aus Sicherheitsgründen wird jeder vollständige Gutscheincode nur beim Erstellen angezeigt. Es werden ausschließlich Prüfsummen gespeichert."
+msgstr "В целях безопасности полный код показывается только при создании. Сохраняются лишь хеши."
+
+msgid "Alle Codes sind zufällig und werden nach dem Erstellen nur einmal angezeigt."
+msgstr "Коды создаются случайным образом и показываются только один раз."
+
+msgid "Ein Code kann auf einen Kunden beschränkt werden. Ohne Bindung ist er für alle berechtigten Kunden gültig. Pro-Code-Limits gelten unabhängig voneinander."
+msgstr "Код можно привязать к клиенту. Без привязки он действует для всех подходящих клиентов. Лимиты учитываются отдельно по коду."
+
+msgid "Gutscheincodes erzeugen"
+msgstr "Создать коды купонов"
+
+msgid "Einmalige Anzeige"
+msgstr "Однократный показ"
+
+msgid "Diese Codes können später nicht erneut angezeigt werden. Bitte jetzt sicher an die berechtigten Kunden übergeben."
+msgstr "Эти коды больше нельзя будет показать. Сейчас безопасно передайте их уполномоченным клиентам."
+
+msgid "Gutscheincode"
+msgstr "Код купона"
+
+msgid "Verwaltung"
+msgstr "Управление"
+
+msgid "In Protokollen und Datenbank werden keine vollständigen Gutscheincodes gespeichert."
+msgstr "Полные коды купонов не сохраняются в журналах и базе данных."
+
+msgid "Alle Gutscheine"
+msgstr "Все купоны"
+
+msgid "Leistung"
+msgstr "Преимущество"
+
+msgid "je Lizenz"
+msgstr "за лицензию"
+
+msgid "Tage Pro"
+msgstr "Дней Pro"
+
+msgid "Kontingent"
+msgstr "Лимит"
+
+msgid "Je Code; laufende Zahlungsreservierungen zählen mit."
+msgstr "На один код; незавершённые резервы оплаты учитываются."
+
+msgid "Zielbindung"
+msgstr "Привязка к получателю"
+
+msgid "Alle berechtigten Kunden"
+msgstr "Все подходящие клиенты"
+
+msgid "Bereits gewährte Lizenzen werden durch Gutscheinsperrung nicht automatisch entzogen."
+msgstr "Блокировка купона не отзывает уже выданные лицензии."
+
+msgid "Code für weitere Einlösungen sperren"
+msgstr "Запретить дальнейшее использование"
+
+msgid "Code wieder aktivieren"
+msgstr "Активировать код снова"
+
+msgid "Kampagne bearbeiten"
+msgstr "Изменить акцию"
+
+msgid "Die wirtschaftlichen Konditionen und Kundenbindung bleiben nach Ausstellung unveränderlich."
+msgstr "Условия и привязка к клиенту не меняются после выдачи."
+
+msgid "Einlösehistorie"
+msgstr "История активаций"
+
+msgid "Einlöser"
+msgstr "Активировал"
+
+msgid "Lizenz/Bestellung"
+msgstr "Лицензия/заказ"
+
+msgid "Noch keine Einlösungen."
+msgstr "Пока нет активаций."
+
+msgid "Gutscheine & Gratislaufzeiten"
+msgstr "Купоны и бесплатные периоды"
+
+msgid "Rabattcodes beim Lizenzkauf nutzen oder Pro-Zeiträume einlösen."
+msgstr "Используйте скидки при покупке лицензий или активируйте бесплатные периоды Pro."
+
+msgid "Kostenlose Pro-Laufzeit einlösen"
+msgstr "Активировать бесплатный период Pro"
+
+msgid "Zeitgutscheine können neue Lizenzen erzeugen oder die bestehende Lizenz des Empfängers verlängern. Rabattcodes gehören in das Kaufformular."
+msgstr "Купон на срок создаёт новую лицензию или продлевает существующую. Скидочные коды вводятся при покупке."
+
+msgid "Unzugewiesene Lizenz für mein Unternehmen"
+msgstr "Неназначенная лицензия для компании"
+
+msgid "Zeitgutschein verbindlich einlösen"
+msgstr "Активировать купон на срок"
+
+msgid "Für dieses Konto zugeteilte Kampagnen"
+msgstr "Акции, назначенные этому аккаунту"
+
+msgid "Vollständige Codes werden nur durch netstyle ausgegeben."
+msgstr "Полные коды выдаёт только netstyle."
+
+msgid "Keine ausdrücklich zugeteilten Kampagnen."
+msgstr "Нет непосредственно назначенных акций."
+
+msgid "Rabatt bei der Bestellung"
+msgstr "Скидка при заказе"
+
+msgid "Rabattcodes werden beim Kauf oder bei zulässigen Verlängerungen vor der Zahlung geprüft und auf den Bruttopreis angewendet."
+msgstr "Скидки проверяются до оплаты и применяются к полной цене покупки или допустимого продления."
+
+msgid "Zum Lizenzkauf"
+msgstr "К покупке лицензии"
+
+msgid "Einlösungen und Lizenzzeiträume"
+msgstr "Активации и сроки лицензий"
+
+msgid "Gutschein"
+msgstr "Купон"
+
+msgid "Laufzeit/Rabatt"
+msgstr "Срок/скидка"
