@@ -1,0 +1,410 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: PROMPTFINISHER Vouchers 2026\\n"
+"Language: nl\\n"
+"Content-Type: text/plain; charset=UTF-8\\n"
+"Content-Transfer-Encoding: 8bit\\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\\n"
+
+msgid "Gutscheine & Aktionen"
+msgstr "Kortingscodes en acties"
+
+msgid "Rabatte und kostenlose Pro-Zeiträume sicher verwalten."
+msgstr "Beheer kortingen en gratis Pro-periodes veilig."
+
+msgid "+ Codes erstellen"
+msgstr "+ Codes aanmaken"
+
+msgid "Kampagnencodes"
+msgstr "Actiecodes"
+
+msgid "Erfolgreiche Einlösungen"
+msgstr "Geslaagde inwisselingen"
+
+msgid "Kampagne, Firma oder letzte vier Zeichen"
+msgstr "Actie, bedrijf of laatste vier tekens"
+
+msgid "Prozent"
+msgstr "Percentage"
+
+msgid "Festbetrag"
+msgstr "Vast bedrag"
+
+msgid "Kostenlose Zeit"
+msgstr "Gratis periode"
+
+msgid "Kampagne"
+msgstr "Actie"
+
+msgid "Zielkunde"
+msgstr "Doelklant"
+
+msgid "Verbrauch"
+msgstr "Gebruik"
+
+msgid "Verwalten"
+msgstr "Beheren"
+
+msgid "Keine Gutscheine gefunden."
+msgstr "Geen kortingscodes gevonden."
+
+msgid "Weiter"
+msgstr "Verder"
+
+msgid "Aus Sicherheitsgründen wird jeder vollständige Gutscheincode nur beim Erstellen angezeigt. Es werden ausschließlich Prüfsummen gespeichert."
+msgstr "Om veiligheidsredenen wordt de volledige code alleen bij het aanmaken getoond. Alleen controlehashes worden opgeslagen."
+
+msgid "Alle Codes sind zufällig und werden nach dem Erstellen nur einmal angezeigt."
+msgstr "Alle codes zijn willekeurig en worden na het aanmaken slechts één keer getoond."
+
+msgid "Ein Code kann auf einen Kunden beschränkt werden. Ohne Bindung ist er für alle berechtigten Kunden gültig. Pro-Code-Limits gelten unabhängig voneinander."
+msgstr "Een code kan aan één klant worden gekoppeld. Zonder beperking geldt deze voor alle geschikte klanten. Elke code heeft een eigen inwissellimiet."
+
+msgid "Gutscheincodes erzeugen"
+msgstr "Kortingscodes genereren"
+
+msgid "Einmalige Anzeige"
+msgstr "Eenmalige weergave"
+
+msgid "Diese Codes können später nicht erneut angezeigt werden. Bitte jetzt sicher an die berechtigten Kunden übergeben."
+msgstr "Deze codes kunnen later niet meer worden getoond. Draag ze nu veilig over aan de bedoelde klanten."
+
+msgid "Gutscheincode"
+msgstr "Kortingscode"
+
+msgid "Verwaltung"
+msgstr "Beheer"
+
+msgid "In Protokollen und Datenbank werden keine vollständigen Gutscheincodes gespeichert."
+msgstr "Volledige codes worden niet opgeslagen in logboeken of de database."
+
+msgid "Alle Gutscheine"
+msgstr "Alle codes"
+
+msgid "Leistung"
+msgstr "Voordeel"
+
+msgid "je Lizenz"
+msgstr "per licentie"
+
+msgid "Tage Pro"
+msgstr "Pro-dagen"
+
+msgid "Kontingent"
+msgstr "Limiet"
+
+msgid "Je Code; laufende Zahlungsreservierungen zählen mit."
+msgstr "Per code; openstaande betalingsreserveringen tellen mee voor de limiet."
+
+msgid "Zielbindung"
+msgstr "Doelbinding"
+
+msgid "Alle berechtigten Kunden"
+msgstr "Alle in aanmerking komende klanten"
+
+msgid "Bereits gewährte Lizenzen werden durch Gutscheinsperrung nicht automatisch entzogen."
+msgstr "Het blokkeren van een code trekt eerder toegekende licenties niet automatisch in."
+
+msgid "Code für weitere Einlösungen sperren"
+msgstr "Code blokkeren voor verdere inwisseling"
+
+msgid "Code wieder aktivieren"
+msgstr "Code opnieuw activeren"
+
+msgid "Kampagne bearbeiten"
+msgstr "Actie bewerken"
+
+msgid "Die wirtschaftlichen Konditionen und Kundenbindung bleiben nach Ausstellung unveränderlich."
+msgstr "Financiële voorwaarden en klantbinding kunnen na uitgifte niet meer worden gewijzigd."
+
+msgid "Einlösehistorie"
+msgstr "Inwisselgeschiedenis"
+
+msgid "Einlöser"
+msgstr "Ingewisseld door"
+
+msgid "Lizenz/Bestellung"
+msgstr "Licentie/bestelling"
+
+msgid "Noch keine Einlösungen."
+msgstr "Nog geen inwisselingen."
+
+msgid "Gutscheine & Gratislaufzeiten"
+msgstr "Kortingscodes en gratis periodes"
+
+msgid "Rabattcodes beim Lizenzkauf nutzen oder Pro-Zeiträume einlösen."
+msgstr "Gebruik kortingscodes bij de aankoop van licenties of wissel gratis Pro-periodes in."
+
+msgid "Kostenlose Pro-Laufzeit einlösen"
+msgstr "Gratis Pro-periode inwisselen"
+
+msgid "Zeitgutscheine können neue Lizenzen erzeugen oder die bestehende Lizenz des Empfängers verlängern. Rabattcodes gehören in das Kaufformular."
+msgstr "Tijdcodes maken nieuwe licenties aan of verlengen de bestaande licentie van de ontvanger. Vul kortingscodes in bij het afrekenen."
+
+msgid "Unzugewiesene Lizenz für mein Unternehmen"
+msgstr "Niet-toegewezen licentie voor mijn bedrijf"
+
+msgid "Zeitgutschein verbindlich einlösen"
+msgstr "Tijdcode inwisselen"
+
+msgid "Für dieses Konto zugeteilte Kampagnen"
+msgstr "Acties toegewezen aan dit account"
+
+msgid "Vollständige Codes werden nur durch netstyle ausgegeben."
+msgstr "Volledige codes worden uitsluitend door netstyle uitgegeven."
+
+msgid "Keine ausdrücklich zugeteilten Kampagnen."
+msgstr "Geen acties specifiek aan dit account toegewezen."
+
+msgid "Rabatt bei der Bestellung"
+msgstr "Korting op de bestelling"
+
+msgid "Rabattcodes werden beim Kauf oder bei zulässigen Verlängerungen vor der Zahlung geprüft und auf den Bruttopreis angewendet."
+msgstr "Kortingscodes worden vóór betaling gecontroleerd bij aankoop of toegestane verlenging en toegepast op de brutoprijs."
+
+msgid "Zum Lizenzkauf"
+msgstr "Licenties kopen"
+
+msgid "Einlösungen und Lizenzzeiträume"
+msgstr "Inwisselingen en licentieperiodes"
+
+msgid "Gutschein"
+msgstr "Code"
+
+msgid "Laufzeit/Rabatt"
+msgstr "Periode/korting"
+
+msgid "Kampagnenbezeichnung"
+msgstr "Actienaam"
+
+msgid "Interner Hinweis"
+msgstr "Interne notitie"
+
+msgid "Rabatt in Prozent"
+msgstr "Procentuele korting"
+
+msgid "Festbetrag je Lizenz"
+msgstr "Vast bedrag per licentie"
+
+msgid "Kostenlose Pro-Nutzung"
+msgstr "Gratis Pro-toegang"
+
+msgid "Gutscheinart"
+msgstr "Type kortingscode"
+
+msgid "Rabatt je Lizenz in EUR brutto"
+msgstr "Brutokorting per licentie in EUR"
+
+msgid "Kostenlose Tage"
+msgstr "Gratis dagen"
+
+msgid "Maximale Einlösungen je Code"
+msgstr "Maximumaantal inwisselingen per code"
+
+msgid "Anzahl verschiedener Codes"
+msgstr "Aantal verschillende codes"
+
+msgid "Rabatt auch für Verlängerungen"
+msgstr "Korting ook bij verlengingen"
+
+msgid "Nur für Unternehmen (optional)"
+msgstr "Alleen voor bedrijf (optioneel)"
+
+msgid "Nur für Benutzer (optional)"
+msgstr "Alleen voor gebruiker (optioneel)"
+
+msgid "Prozentgutscheine benötigen 1–99 Prozent."
+msgstr "Procentcodes vereisen een percentage van 1 tot 99."
+
+msgid "Festbetrag muss größer null sein."
+msgstr "Het vaste bedrag moet groter zijn dan nul."
+
+msgid "Kostenlose Laufzeit muss 1–1095 Tage betragen."
+msgstr "De gratis periode moet 1 tot 1095 dagen bedragen."
+
+msgid "Nur für Prozentgutscheine zulässig."
+msgstr "Alleen toegestaan voor procentcodes."
+
+msgid "Nur für Festbetragsgutscheine zulässig."
+msgstr "Alleen toegestaan voor codes met vast bedrag."
+
+msgid "Nur für Zeitgutscheine zulässig."
+msgstr "Alleen toegestaan voor tijdcodes."
+
+msgid "Bei Zeitgutscheinen nicht anwendbar."
+msgstr "Niet van toepassing op tijdcodes."
+
+msgid "Entweder Unternehmen oder Benutzer binden."
+msgstr "Beperk tot één bedrijf of één gebruiker."
+
+msgid "Das Ende muss nach dem Beginn liegen."
+msgstr "De einddatum moet na de begindatum liggen."
+
+msgid "Maximale Einlösungen"
+msgstr "Maximumaantal inwisselingen"
+
+msgid "Bereits reservierte Einlösungen dürfen nicht abgeschnitten werden."
+msgstr "De limiet mag niet lager zijn dan het aantal bestaande reserveringen."
+
+msgid "Das Ende muss nach Beginn liegen."
+msgstr "De einddatum moet na de begindatum liggen."
+
+msgid "Neue Gutscheincodes"
+msgstr "Nieuwe kortingscodes"
+
+msgid "Gutscheine erstellen"
+msgstr "Kortingscodes aanmaken"
+
+msgid "Gutschein aktualisiert."
+msgstr "Kortingscode bijgewerkt."
+
+msgid "Gutscheinstatus geändert. Bestehende Nutzungsrechte bleiben unverändert."
+msgstr "Status gewijzigd. Bestaande toegangsrechten blijven ongewijzigd."
+
+#, python-format
+msgid "Gutschein eingelöst. Pro-Lizenz: %(license)s"
+msgstr "Code ingewisseld. Pro-licentie: %(license)s"
+
+msgid "Ungültige Lizenzanzahl."
+msgstr "Ongeldig aantal licenties."
+
+msgid "Gutschein oder Preis nicht verfügbar."
+msgstr "Kortingscode of prijs niet beschikbaar."
+
+msgid "Festbetrag ist für diese Währung nicht zulässig."
+msgstr "Vaste korting is niet toegestaan voor deze valuta."
+
+msgid "Bitte den Gutschein im Kundenportal einlösen."
+msgstr "Wissel de code in via het klantenportaal."
+
+msgid "Gutschein ungültig oder nicht verfügbar."
+msgstr "Code ongeldig of niet beschikbaar."
+
+msgid "Gutscheincode ungültig oder nicht verfügbar."
+msgstr "Kortingscode ongeldig of niet beschikbaar."
+
+msgid "Nur netstyle kann Gutscheine erstellen."
+msgstr "Alleen netstyle mag kortingscodes aanmaken."
+
+msgid "Pro Aktion sind 1 bis 100 Gutscheine zulässig."
+msgstr "Per handeling mogen 1 tot 100 codes worden gemaakt."
+
+msgid "Gutschein nicht verfügbar oder abgelaufen."
+msgstr "Code niet beschikbaar of verlopen."
+
+msgid "Dieser Gutschein ist bereits vollständig eingelöst."
+msgstr "De inwissellimiet van deze code is bereikt."
+
+msgid "Dieser Gutschein gilt nicht für das gewählte Produkt."
+msgstr "Deze code geldt niet voor het gekozen product."
+
+msgid "Deaktivierte Unternehmen können keine Gutscheine einlösen."
+msgstr "Gedeactiveerde bedrijven kunnen geen codes inwisselen."
+
+msgid "Gutschein ist für einen anderen Kunden ausgestellt."
+msgstr "Deze code is aan een andere klant uitgegeven."
+
+msgid "Gutschein ist für einen anderen Benutzer ausgestellt."
+msgstr "Deze code is aan een andere gebruiker uitgegeven."
+
+msgid "Gutschein gilt nur für neue Pro-Lizenzen."
+msgstr "Deze code geldt alleen voor nieuwe Pro-licenties."
+
+msgid "Dieser Benutzer hat den Gutschein bereits eingelöst."
+msgstr "Deze gebruiker heeft de code al ingewisseld."
+
+msgid "Dieser Gutschein wurde von diesem Konto bereits genutzt."
+msgstr "Dit account heeft deze code al gebruikt."
+
+msgid "Kostenlose Zeitgutscheine bitte im Gutscheinbereich einlösen."
+msgstr "Wissel gratis tijdcodes in via het kortingscodegedeelte."
+
+msgid "Gutscheinbetrag ist für diesen Lizenzpreis nicht zulässig."
+msgstr "De waarde van de code is niet toegestaan voor deze licentieprijs."
+
+msgid "Gutschein darf nur für eine zahlungspflichtige Bestellung verwendet werden."
+msgstr "De code kan alleen op een betaalde bestelling worden toegepast."
+
+msgid "Gutscheinreservierung kann wegen inkonsistentem Kontingent nicht freigegeben werden."
+msgstr "De reservering kan niet worden vrijgegeven door een inconsistente limiet."
+
+msgid "Bitte ein aktives, bestätigtes Kundenkonto verwenden."
+msgstr "Gebruik een actief en geverifieerd klantaccount."
+
+msgid "Pro ist derzeit nicht verfügbar."
+msgstr "Pro is momenteel niet beschikbaar."
+
+msgid "Nur der Firmenadministrator kann Zeitgutscheine einlösen."
+msgstr "Alleen de bedrijfsbeheerder mag tijdcodes inwisselen."
+
+msgid "Empfänger muss aktives, bestätigtes Firmenmitglied sein."
+msgstr "De ontvanger moet een actief en geverifieerd bedrijfslid zijn."
+
+msgid "Privatcodes sind ausschließlich für das eigene Konto."
+msgstr "Persoonlijke codes mogen alleen op het eigen account worden gebruikt."
+
+msgid "Ein Privatkundenkonto ist erforderlich."
+msgstr "Een particulier klantaccount is vereist."
+
+msgid "Persönliche Zeitgutscheine müssen direkt dem vorgesehenen Benutzer zugewiesen werden."
+msgstr "Persoonlijke tijdcodes moeten rechtstreeks aan de bedoelde gebruiker worden toegewezen."
+
+msgid "Rabattgutscheine bitte beim Pro-Kauf verwenden."
+msgstr "Gebruik kortingscodes bij de aankoop van Pro."
+
+msgid "Für Pro fehlt die Preisversion; Gutschein kann nicht gebucht werden."
+msgstr "Er is geen Pro-prijsversie; de code kan niet worden verwerkt."
+
+msgid "Für diesen Benutzer besteht eine gesperrte oder zu prüfende Pro-Lizenz."
+msgstr "Deze gebruiker heeft een geblokkeerde of te controleren Pro-licentie."
+
+msgid "Rabattprozente müssen zwischen 1 und 99 liegen."
+msgstr "Het kortingspercentage moet tussen 1 en 99 liggen."
+
+msgid "Ein positiver Festbetrag ist erforderlich."
+msgstr "Een positief vast bedrag is vereist."
+
+msgid "Kostenlose Laufzeit muss 1 bis 1095 Tage betragen."
+msgstr "De gratis periode moet tussen 1 en 1095 dagen liggen."
+
+msgid "Rabattcodes dürfen keine freie Laufzeit haben."
+msgstr "Kortingscodes mogen geen gratis periodes toekennen."
+
+msgid "Nur Festbetragsrabatte dürfen einen Betrag haben."
+msgstr "Alleen codes met een vast bedrag mogen een bedrag hebben."
+
+msgid "Nur Prozentcodes dürfen Rabattprozente haben."
+msgstr "Alleen procentcodes mogen een percentage hebben."
+
+msgid "Probezeiträume sind keine Zahlungsrabatte."
+msgstr "Proefperiodes zijn geen betalingskortingen."
+
+msgid "Ein Code kann nur auf Firma oder Benutzer begrenzt sein."
+msgstr "Een code mag aan een bedrijf of gebruiker worden gekoppeld, niet aan beide."
+
+msgid "Ende muss nach Beginn liegen."
+msgstr "De einddatum moet na de begindatum liggen."
+
+msgid "Mindestens eine Einlösung erforderlich."
+msgstr "Minimaal één inwisseling is vereist."
+
+msgid "Prozentualer Rabatt"
+msgstr "Procentuele korting"
+
+msgid "Fester Rabatt je Lizenz"
+msgstr "Vaste korting per licentie"
+
+msgid "Kostenlose Pro-Laufzeit"
+msgstr "Gratis Pro-periode"
+
+msgid "Für Bestellung reserviert"
+msgstr "Gereserveerd voor bestelling"
+
+msgid "Eingelöst"
+msgstr "Ingewisseld"
+
+msgid "Fehlgeschlagen / freigegeben"
+msgstr "Mislukt / vrijgegeven"
+
+msgid "Rabattcode (optional)"
+msgstr "Kortingscode (optioneel)"
