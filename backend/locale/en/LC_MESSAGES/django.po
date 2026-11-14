@@ -3815,3 +3815,19 @@ msgstr "License management / renewal"
 
 msgid "Jetzt trotzdem PROMPTFINISHER Pro starten"
 msgstr "Open PROMPTFINISHER Pro anyway"
+
+# Voucher campaign and checkout terminology
+msgid "Gutscheine"
+msgstr "Vouchers"
+
+msgid "Gutscheine & Aktionen"
+msgstr "Vouchers & promotions"
+
+msgid "Kostenlose Pro-Laufzeit"
+msgstr "Free Pro access period"
+
+msgid "Rabattcode (optional)"
+msgstr "Discount code (optional)"
+
+msgid "Kostenlose Pro-Nutzung"
+msgstr "Free Pro access"
