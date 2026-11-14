@@ -4155,3 +4155,127 @@ msgstr "Verzilver de code in het klantenportaal."
 
 msgid "Gutschein ungültig oder nicht verfügbar."
 msgstr "Kortingscode ongeldig of niet beschikbaar."
+
+# Voucher model and service validation
+msgid "Prozentualer Rabatt"
+msgstr "Procentuele korting"
+
+msgid "Fester Rabatt je Lizenz"
+msgstr "Vaste korting per licentie"
+
+msgid "Rabattprozente müssen zwischen 1 und 99 liegen."
+msgstr "Het kortingspercentage moet tussen 1 en 99 liggen."
+
+msgid "Ein positiver Festbetrag ist erforderlich."
+msgstr "Een positief vast bedrag is vereist."
+
+msgid "Kostenlose Laufzeit muss 1 bis 1095 Tage betragen."
+msgstr "De gratis periode moet tussen 1 en 1095 dagen duren."
+
+msgid "Rabattcodes dürfen keine freie Laufzeit haben."
+msgstr "Kortingscodes kunnen geen gratis periode geven."
+
+msgid "Nur Festbetragsrabatte dürfen einen Betrag haben."
+msgstr "Alleen vaste kortingen mogen een bedrag hebben."
+
+msgid "Nur Prozentcodes dürfen Rabattprozente haben."
+msgstr "Alleen procentuele codes mogen een kortingspercentage hebben."
+
+msgid "Probezeiträume sind keine Zahlungsrabatte."
+msgstr "Proefperioden zijn geen betalingskorting."
+
+msgid "Ein Code kann nur auf Firma oder Benutzer begrenzt sein."
+msgstr "Een code kan aan een bedrijf of gebruiker worden gekoppeld, niet aan beide."
+
+msgid "Ende muss nach Beginn liegen."
+msgstr "Het einde moet na het begin liggen."
+
+msgid "Mindestens eine Einlösung erforderlich."
+msgstr "Minimaal één verzilvering vereist."
+
+msgid "Für Bestellung reserviert"
+msgstr "Gereserveerd voor bestelling"
+
+msgid "Eingelöst"
+msgstr "Verzilverd"
+
+msgid "Fehlgeschlagen / freigegeben"
+msgstr "Mislukt / vrijgegeven"
+
+msgid "Gutscheincode ungültig oder nicht verfügbar."
+msgstr "Kortingscode ongeldig of niet beschikbaar."
+
+msgid "Nur netstyle kann Gutscheine erstellen."
+msgstr "Alleen netstyle mag kortingscodes uitgeven."
+
+msgid "Pro Aktion sind 1 bis 100 Gutscheine zulässig."
+msgstr "Per actie kun je 1 tot 100 codes aanmaken."
+
+msgid "Gutschein nicht verfügbar oder abgelaufen."
+msgstr "Kortingscode niet beschikbaar of verlopen."
+
+msgid "Dieser Gutschein ist bereits vollständig eingelöst."
+msgstr "Deze code heeft de gebruikslimiet bereikt."
+
+msgid "Dieser Gutschein gilt nicht für das gewählte Produkt."
+msgstr "Deze code geldt niet voor het geselecteerde product."
+
+msgid "Deaktivierte Unternehmen können keine Gutscheine einlösen."
+msgstr "Inactieve bedrijven kunnen geen codes verzilveren."
+
+msgid "Gutschein ist für einen anderen Kunden ausgestellt."
+msgstr "De code is voor een andere klant uitgegeven."
+
+msgid "Gutschein ist für einen anderen Benutzer ausgestellt."
+msgstr "De code is voor een andere gebruiker uitgegeven."
+
+msgid "Gutschein gilt nur für neue Pro-Lizenzen."
+msgstr "De code geldt alleen voor nieuwe Pro-licenties."
+
+msgid "Dieser Benutzer hat den Gutschein bereits eingelöst."
+msgstr "Deze gebruiker heeft de code al verzilverd."
+
+msgid "Dieser Gutschein wurde von diesem Konto bereits genutzt."
+msgstr "Dit account heeft deze code al gebruikt."
+
+msgid "Kostenlose Zeitgutscheine bitte im Gutscheinbereich einlösen."
+msgstr "Wissel tijdcodes in bij het onderdeel kortingscodes."
+
+msgid "Gutscheinbetrag ist für diesen Lizenzpreis nicht zulässig."
+msgstr "De korting is niet toegestaan bij deze licentieprijs."
+
+msgid "Gutschein darf nur für eine zahlungspflichtige Bestellung verwendet werden."
+msgstr "De code mag alleen op een betaalde bestelling worden toegepast."
+
+msgid "Gutscheinreservierung kann wegen inkonsistentem Kontingent nicht freigegeben werden."
+msgstr "Reservering kan niet worden vrijgegeven door een inconsistente limiet."
+
+msgid "Bitte ein aktives, bestätigtes Kundenkonto verwenden."
+msgstr "Gebruik een actief, geverifieerd klantenaccount."
+
+msgid "Pro ist derzeit nicht verfügbar."
+msgstr "Pro is momenteel niet beschikbaar."
+
+msgid "Nur der Firmenadministrator kann Zeitgutscheine einlösen."
+msgstr "Alleen de bedrijfsbeheerder mag tijdcodes verzilveren."
+
+msgid "Empfänger muss aktives, bestätigtes Firmenmitglied sein."
+msgstr "De ontvanger moet actief en geverifieerd bedrijfslid zijn."
+
+msgid "Privatcodes sind ausschließlich für das eigene Konto."
+msgstr "Persoonlijke codes zijn alleen voor het eigen account."
+
+msgid "Ein Privatkundenkonto ist erforderlich."
+msgstr "Een particulier klantenaccount is vereist."
+
+msgid "Persönliche Zeitgutscheine müssen direkt dem vorgesehenen Benutzer zugewiesen werden."
+msgstr "Persoonlijke tijdcodes moeten direct aan de bedoelde gebruiker worden toegewezen."
+
+msgid "Rabattgutscheine bitte beim Pro-Kauf verwenden."
+msgstr "Gebruik kortingscodes bij de aankoop van Pro."
+
+msgid "Für Pro fehlt die Preisversion; Gutschein kann nicht gebucht werden."
+msgstr "De Pro-prijsversie ontbreekt; de code kan niet worden toegepast."
+
+msgid "Für diesen Benutzer besteht eine gesperrte oder zu prüfende Pro-Lizenz."
+msgstr "Deze gebruiker heeft een geblokkeerde Pro-licentie of een licentie in onderzoek."
