@@ -19,6 +19,23 @@ ORIGIN = "https://promptmaster.decke-wand-boden.de"
 LOGIN = ORIGIN + "/auth/login/?next=%2Fns-admin%2F"
 LANGUAGES = ("de", "en", "es", "pt", "tr", "ru", "pl", "fr", "it", "nl")
 CSS_PATH = "/static/css/app.css"
+MAIN_APP_CSS = re.compile(r"^/static/css/app(?:\.[0-9a-fA-F]{12})?\.css$")
+CAPTIONS = {
+    "de": ("Konto anlegen", "Passwort vergessen?"),
+    "en": ("Create account", "Forgot password?"),
+    "es": ("Crear cuenta", "¿Olvidó la contraseña?"),
+    "pt": ("Criar conta", "Esqueceu a palavra-passe?"),
+    "tr": ("Hesap oluştur", "Parolanızı mı unuttunuz?"),
+    "ru": ("Создать учётную запись", "Забыли пароль?"),
+    "pl": ("Utwórz konto", "Zapomniałeś hasła?"),
+    "fr": ("Créer un compte", "Mot de passe oublié ?"),
+    "it": ("Crea account", "Password dimenticata?"),
+    "nl": ("Account aanmaken", "Wachtwoord vergeten?"),
+}
+
+def is_main_app_css(path: str) -> bool:
+    """Allow original or Django ManifestStaticFilesStorage hashed app CSS."""
+    return bool(MAIN_APP_CSS.fullmatch(path))
 CSS_REVISION = "20261113-login-actions1"
 OLD_COPY = "Ein Zugang für PROMPTFINISHER, Kundenportal und netstyle Admin"
 OLD_REGISTER = "Noch kein Konto? Konto erstellen"
@@ -116,18 +133,19 @@ def check_login(language: str) -> tuple[bool, list[str], str | None]:
             checks.append("REGISTER_NEXT_LOST")
         if reset_url.path != RESET_PATH:
             checks.append("RESET_TARGET_CHANGED")
-        if language == "de":
-            if register["text"] != "Konto anlegen":
-                checks.append("REGISTER_CAPTION_NOT_UPDATED")
-            if reset["text"] != "Passwort vergessen?":
-                checks.append("RESET_CAPTION_NOT_UPDATED")
+        expected_register, expected_reset = CAPTIONS[language]
+        if register["text"] != expected_register:
+            checks.append("REGISTER_CAPTION_NOT_LOCALIZED")
+        if reset["text"] != expected_reset:
+            checks.append("RESET_CAPTION_NOT_LOCALIZED")
     css_matches = [
         urljoin(LOGIN, source)
         for source in parsed.stylesheets
-        if urlsplit(urljoin(LOGIN, source)).path == CSS_PATH
+        if is_main_app_css(urlsplit(urljoin(LOGIN, source)).path)
     ]
     if len(css_matches) != 1:
         checks.append(f"EXPECTED_ONE_MAIN_CSS_GOT_{len(css_matches)}")
+        checks.append("CSS_LINK_PATHS=" + ",".join(urlsplit(urljoin(LOGIN, source)).path for source in parsed.stylesheets)[:200])
         css_url = None
     else:
         css_url = css_matches[0]
