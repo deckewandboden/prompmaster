@@ -146,3 +146,13 @@ backend/templates/ns_admin/voucher_issued.html	0	text-not-byte-validated	active-
 backend/templates/ns_admin/voucher_detail.html	0	text-not-byte-validated	active-ui
 backend/templates/portal/vouchers.html	0	text-not-byte-validated	active-ui
 .github/workflows/voucher-fast-acceptance.yml	0	text-not-byte-validated	test
+backend/apps/vouchers/translation_catalog.json	0	text-not-byte-validated	locale
+backend/apps/vouchers/locale/en/LC_MESSAGES/django.po	0	text-not-byte-validated	locale
+backend/apps/vouchers/locale/es/LC_MESSAGES/django.po	0	text-not-byte-validated	locale
+backend/apps/vouchers/locale/pt/LC_MESSAGES/django.po	0	text-not-byte-validated	locale
+backend/apps/vouchers/locale/tr/LC_MESSAGES/django.po	0	text-not-byte-validated	locale
+backend/apps/vouchers/locale/ru/LC_MESSAGES/django.po	0	text-not-byte-validated	locale
+backend/apps/vouchers/locale/pl/LC_MESSAGES/django.po	0	text-not-byte-validated	locale
+backend/apps/vouchers/locale/fr/LC_MESSAGES/django.po	0	text-not-byte-validated	locale
+backend/apps/vouchers/locale/it/LC_MESSAGES/django.po	0	text-not-byte-validated	locale
+backend/apps/vouchers/locale/nl/LC_MESSAGES/django.po	0	text-not-byte-validated	locale
