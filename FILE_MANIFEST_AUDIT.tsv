@@ -131,3 +131,17 @@ scripts/audit_public_asset_parity.py	0	text-not-byte-validated	test
 scripts/test_public_asset_parity.py	0	text-not-byte-validated	test
 .github/workflows/public-asset-parity.yml	0	text-not-byte-validated	active-ci
 scripts/test_browser_totp_submit.py	0	text-not-byte-validated	test
+backend/apps/vouchers/__init__.py	0	text-not-byte-validated	active-backend
+backend/apps/vouchers/apps.py	0	text-not-byte-validated	active-backend
+backend/apps/vouchers/forms.py	0	text-not-byte-validated	active-backend
+backend/apps/vouchers/models.py	0	text-not-byte-validated	active-backend
+backend/apps/vouchers/services.py	0	text-not-byte-validated	active-backend
+backend/apps/vouchers/views.py	0	text-not-byte-validated	active-backend
+backend/apps/vouchers/tests.py	0	text-not-byte-validated	test
+backend/apps/vouchers/migrations/__init__.py	0	text-not-byte-validated	active-backend
+backend/apps/vouchers/migrations/0001_initial.py	0	text-not-byte-validated	active-backend
+backend/templates/ns_admin/vouchers.html	0	text-not-byte-validated	active-ui
+backend/templates/ns_admin/voucher_form.html	0	text-not-byte-validated	active-ui
+backend/templates/ns_admin/voucher_issued.html	0	text-not-byte-validated	active-ui
+backend/templates/ns_admin/voucher_detail.html	0	text-not-byte-validated	active-ui
+backend/templates/portal/vouchers.html	0	text-not-byte-validated	active-ui
