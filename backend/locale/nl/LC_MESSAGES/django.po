@@ -3945,3 +3945,21 @@ msgstr "Aanmeldaccount"
 
 msgid "Für ein freigegebenes Postfach benötigt das Anmeldekonto Exchange Send As. Ein HTTP 202 bestätigt nur die Annahme des Versandauftrags."
 msgstr "Voor een gedeeld postvak heeft het aanmeldaccount de Exchange-machtiging Send As nodig. HTTP 202 bevestigt alleen de acceptatie van het verzendverzoek."
+
+msgid "Microsoft 365 anmelden (delegiert, mit MFA)"
+msgstr "Aanmelden bij Microsoft 365 (gedelegeerd, met MFA)"
+
+msgid "Bestandsmodus: Application-Mail.Send (ohne MFA)"
+msgstr "Verouderde modus: Application-Mail.Send (zonder MFA)"
+
+msgid "Graph-Anmeldemethode"
+msgstr "Graph-verificatiemethode"
+
+msgid "Für freigegebene Postfächer delegiertes OAuth mit Mail.Send.Shared wählen."
+msgstr "Kies voor gedeelde postvakken gedelegeerde OAuth met Mail.Send.Shared."
+
+msgid "Microsoft-365-Anmeldekonto"
+msgstr "Microsoft 365-aanmeldaccount"
+
+msgid "Das persönliche Konto, das sich bei Microsoft inklusive MFA anmeldet; nicht das freigegebene Postfach."
+msgstr "Het persoonlijke account waarmee u zich bij Microsoft aanmeldt met MFA, niet het gedeelde postvak."
