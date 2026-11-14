@@ -4100,3 +4100,127 @@ msgstr "Canjea el cupón en el portal de clientes."
 
 msgid "Gutschein ungültig oder nicht verfügbar."
 msgstr "Cupón no válido o no disponible."
+
+# Voucher model and service validation
+msgid "Prozentualer Rabatt"
+msgstr "Descuento porcentual"
+
+msgid "Fester Rabatt je Lizenz"
+msgstr "Descuento fijo por licencia"
+
+msgid "Rabattprozente müssen zwischen 1 und 99 liegen."
+msgstr "El porcentaje de descuento debe estar entre 1 y 99."
+
+msgid "Ein positiver Festbetrag ist erforderlich."
+msgstr "Se requiere un importe fijo positivo."
+
+msgid "Kostenlose Laufzeit muss 1 bis 1095 Tage betragen."
+msgstr "El periodo gratuito debe ser de 1 a 1095 días."
+
+msgid "Rabattcodes dürfen keine freie Laufzeit haben."
+msgstr "Los códigos de descuento no pueden conceder periodos gratuitos."
+
+msgid "Nur Festbetragsrabatte dürfen einen Betrag haben."
+msgstr "Solo los descuentos fijos pueden tener un importe."
+
+msgid "Nur Prozentcodes dürfen Rabattprozente haben."
+msgstr "Solo los códigos porcentuales pueden indicar un porcentaje."
+
+msgid "Probezeiträume sind keine Zahlungsrabatte."
+msgstr "Los periodos de prueba no son descuentos de pago."
+
+msgid "Ein Code kann nur auf Firma oder Benutzer begrenzt sein."
+msgstr "Un código puede limitarse a una empresa o a un usuario, no a ambos."
+
+msgid "Ende muss nach Beginn liegen."
+msgstr "La fecha final debe ser posterior a la inicial."
+
+msgid "Mindestens eine Einlösung erforderlich."
+msgstr "Se requiere al menos un canje."
+
+msgid "Für Bestellung reserviert"
+msgstr "Reservado para pedido"
+
+msgid "Eingelöst"
+msgstr "Canjeado"
+
+msgid "Fehlgeschlagen / freigegeben"
+msgstr "Fallido / liberado"
+
+msgid "Gutscheincode ungültig oder nicht verfügbar."
+msgstr "Código de cupón no válido o no disponible."
+
+msgid "Nur netstyle kann Gutscheine erstellen."
+msgstr "Solo netstyle puede emitir cupones."
+
+msgid "Pro Aktion sind 1 bis 100 Gutscheine zulässig."
+msgstr "Se pueden crear entre 1 y 100 cupones por acción."
+
+msgid "Gutschein nicht verfügbar oder abgelaufen."
+msgstr "Cupón no disponible o caducado."
+
+msgid "Dieser Gutschein ist bereits vollständig eingelöst."
+msgstr "Este cupón ha alcanzado su límite de usos."
+
+msgid "Dieser Gutschein gilt nicht für das gewählte Produkt."
+msgstr "Este cupón no es válido para el producto seleccionado."
+
+msgid "Deaktivierte Unternehmen können keine Gutscheine einlösen."
+msgstr "Las empresas inactivas no pueden canjear cupones."
+
+msgid "Gutschein ist für einen anderen Kunden ausgestellt."
+msgstr "El cupón está emitido para otro cliente."
+
+msgid "Gutschein ist für einen anderen Benutzer ausgestellt."
+msgstr "El cupón está emitido para otro usuario."
+
+msgid "Gutschein gilt nur für neue Pro-Lizenzen."
+msgstr "El cupón solo vale para licencias Pro nuevas."
+
+msgid "Dieser Benutzer hat den Gutschein bereits eingelöst."
+msgstr "Este usuario ya ha canjeado el cupón."
+
+msgid "Dieser Gutschein wurde von diesem Konto bereits genutzt."
+msgstr "Esta cuenta ya ha utilizado este cupón."
+
+msgid "Kostenlose Zeitgutscheine bitte im Gutscheinbereich einlösen."
+msgstr "Canjea los cupones de tiempo en la sección de cupones."
+
+msgid "Gutscheinbetrag ist für diesen Lizenzpreis nicht zulässig."
+msgstr "El descuento no es válido para este precio de licencia."
+
+msgid "Gutschein darf nur für eine zahlungspflichtige Bestellung verwendet werden."
+msgstr "El cupón solo puede aplicarse a un pedido de pago."
+
+msgid "Gutscheinreservierung kann wegen inkonsistentem Kontingent nicht freigegeben werden."
+msgstr "No se puede liberar la reserva por un cupo incoherente."
+
+msgid "Bitte ein aktives, bestätigtes Kundenkonto verwenden."
+msgstr "Usa una cuenta de cliente activa y verificada."
+
+msgid "Pro ist derzeit nicht verfügbar."
+msgstr "Pro no está disponible actualmente."
+
+msgid "Nur der Firmenadministrator kann Zeitgutscheine einlösen."
+msgstr "Solo el administrador de empresa puede canjear cupones temporales."
+
+msgid "Empfänger muss aktives, bestätigtes Firmenmitglied sein."
+msgstr "El destinatario debe pertenecer a la empresa y estar activo y verificado."
+
+msgid "Privatcodes sind ausschließlich für das eigene Konto."
+msgstr "Los códigos personales son solo para la cuenta propia."
+
+msgid "Ein Privatkundenkonto ist erforderlich."
+msgstr "Se requiere una cuenta de cliente particular."
+
+msgid "Persönliche Zeitgutscheine müssen direkt dem vorgesehenen Benutzer zugewiesen werden."
+msgstr "Los cupones personales de tiempo deben asignarse al usuario previsto."
+
+msgid "Rabattgutscheine bitte beim Pro-Kauf verwenden."
+msgstr "Usa los cupones de descuento al comprar Pro."
+
+msgid "Für Pro fehlt die Preisversion; Gutschein kann nicht gebucht werden."
+msgstr "Falta la versión de precio de Pro; no se puede aplicar el cupón."
+
+msgid "Für diesen Benutzer besteht eine gesperrte oder zu prüfende Pro-Lizenz."
+msgstr "Este usuario tiene una licencia Pro bloqueada o en revisión."
