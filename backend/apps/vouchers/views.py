@@ -37,7 +37,7 @@ def staff_voucher_perm(permission):
     return decorate
 
 
-@staff_voucher_perm("licenses.read")
+@staff_voucher_perm("vouchers.read")
 def staff_vouchers(request):
     vouchers = Voucher.objects.select_related(
         "product", "bound_company", "bound_user"
@@ -61,14 +61,14 @@ def staff_vouchers(request):
     page = Paginator(vouchers, 40).get_page(request.GET.get("page"))
     return render(request, "ns_admin/vouchers.html", {
         "page": page, "q": search, "selected_state": status,
-        "selected_kind": kind, "can_write": has_perm(request.user, "licenses.write"),
+        "selected_kind": kind, "can_write": has_perm(request.user, "vouchers.write"),
         "voucher_total": Voucher.objects.count(),
         "voucher_active": Voucher.objects.filter(active=True).count(),
         "voucher_redemptions": VoucherRedemption.objects.filter(status="redeemed").count(),
     })
 
 
-@staff_voucher_perm("licenses.write")
+@staff_voucher_perm("vouchers.write")
 def staff_voucher_create(request):
     form = VoucherCreateForm(request.POST or None)
     if request.method == "POST" and form.is_valid():
@@ -103,7 +103,7 @@ def staff_voucher_create(request):
     })
 
 
-@staff_voucher_perm("licenses.read")
+@staff_voucher_perm("vouchers.read")
 def staff_voucher_detail(request, pk):
     voucher = get_object_or_404(
         Voucher.objects.select_related("product", "bound_company", "bound_user"), pk=pk,
@@ -114,11 +114,11 @@ def staff_voucher_detail(request, pk):
     ).order_by("-created_at")[:100]
     return render(request, "ns_admin/voucher_detail.html", {
         "voucher": voucher, "form": form, "history": history,
-        "can_write": has_perm(request.user, "licenses.write"),
+        "can_write": has_perm(request.user, "vouchers.write"),
     })
 
 
-@staff_voucher_perm("licenses.write")
+@staff_voucher_perm("vouchers.write")
 @require_POST
 @transaction.atomic
 def staff_voucher_edit(request, pk):
@@ -140,7 +140,7 @@ def staff_voucher_edit(request, pk):
     }, status=400)
 
 
-@staff_voucher_perm("licenses.write")
+@staff_voucher_perm("vouchers.write")
 @require_POST
 @transaction.atomic
 def staff_voucher_toggle(request, pk):
