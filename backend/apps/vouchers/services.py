@@ -227,6 +227,27 @@ def redeem_trial(*, code, actor, company, beneficiary=None, request=None):
         raise ValidationError("Für Pro fehlt die Preisversion; Gutschein kann nicht gebucht werden.")
 
     now = timezone.now()
+    # A trial must never defeat an existing administrator/payment block.
+    # Check the intended recipient rather than only the actor.
+    if beneficiary:
+        barred = {"blocked", "payment_review", "refunded"}
+        if company:
+            blocked_seats = License.objects.filter(
+                company=company, product=product,
+                status__in=barred,
+                assignments__user=beneficiary,
+                assignments__ended_at__isnull=True,
+            )
+        else:
+            blocked_seats = License.objects.filter(
+                owner_user=beneficiary, product=product,
+                status__in=barred,
+            )
+        if blocked_seats.exists():
+            raise ValidationError(
+                "Für diesen Benutzer besteht eine gesperrte oder zu prüfende Pro-Lizenz."
+            )
+
     active_license = None
     if beneficiary:
         if company:
