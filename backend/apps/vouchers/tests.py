@@ -315,6 +315,31 @@ class VoucherContractsTests(TestCase):
             "voucher_code": private_code, "quantity": 1,
         }).status_code, 400)
 
+    def test_checkout_idempotency_rejects_changed_voucher_without_repricing(self):
+        _, code_one = self.make(kind="percent", bound_company=self.company, max_redemptions=2)
+        _, code_two = self.make(kind="percent", bound_company=self.company)
+        token = "QA-VOUCHER-IDEMPOTENCY-20261114"
+        first = create_order(
+            user=self.admin, product=self.product, quantity=2,
+            voucher_code=code_one, idempotency_key=token,
+        )
+        retried = create_order(
+            user=self.admin, product=self.product, quantity=2,
+            voucher_code=code_one, idempotency_key=token,
+        )
+        self.assertEqual(first.pk, retried.pk)
+        self.assertEqual(first.gross_total, Decimal("53.82"))
+        for changed_code in ("", code_two):
+            with self.subTest(changed_code=bool(changed_code)):
+                with self.assertRaises(ValidationError):
+                    create_order(
+                        user=self.admin, product=self.product, quantity=2,
+                        voucher_code=changed_code, idempotency_key=token,
+                    )
+        first.refresh_from_db()
+        self.assertEqual(first.gross_total, Decimal("53.82"))
+        self.assertEqual(VoucherRedemption.objects.filter(order=first).count(), 1)
+
     def test_existing_purchases_without_vouchers_remain_unchanged(self):
         order = create_order(user=self.admin, product=self.product, quantity=2)
         self.assertEqual(order.gross_total, Decimal("71.76"))
