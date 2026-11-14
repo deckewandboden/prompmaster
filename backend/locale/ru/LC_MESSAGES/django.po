@@ -3998,3 +3998,106 @@ msgstr "Купон"
 
 msgid "Laufzeit/Rabatt"
 msgstr "Срок/скидка"
+
+# Voucher campaign forms, validation and checkout
+msgid "Kampagnenbezeichnung"
+msgstr "Название акции"
+
+msgid "Interner Hinweis"
+msgstr "Внутренняя заметка"
+
+msgid "Rabatt in Prozent"
+msgstr "Процентная скидка"
+
+msgid "Festbetrag je Lizenz"
+msgstr "Фиксированная сумма за лицензию"
+
+msgid "Gutscheinart"
+msgstr "Тип купона"
+
+msgid "Rabatt je Lizenz in EUR brutto"
+msgstr "Скидка за лицензию в EUR с НДС"
+
+msgid "Kostenlose Tage"
+msgstr "Бесплатные дни"
+
+msgid "Maximale Einlösungen je Code"
+msgstr "Максимум использований на код"
+
+msgid "Anzahl verschiedener Codes"
+msgstr "Число разных кодов"
+
+msgid "Rabatt auch für Verlängerungen"
+msgstr "Скидка также на продления"
+
+msgid "Nur für Unternehmen (optional)"
+msgstr "Только для компании (необязательно)"
+
+msgid "Nur für Benutzer (optional)"
+msgstr "Только для пользователя (необязательно)"
+
+msgid "Prozentgutscheine benötigen 1–99 Prozent."
+msgstr "Процентная скидка должна быть от 1 до 99 %."
+
+msgid "Festbetrag muss größer null sein."
+msgstr "Фиксированная сумма должна быть больше нуля."
+
+msgid "Kostenlose Laufzeit muss 1–1095 Tage betragen."
+msgstr "Бесплатный период должен быть от 1 до 1095 дней."
+
+msgid "Nur für Prozentgutscheine zulässig."
+msgstr "Допустимо только для процентных купонов."
+
+msgid "Nur für Festbetragsgutscheine zulässig."
+msgstr "Допустимо только для купонов с фиксированной суммой."
+
+msgid "Nur für Zeitgutscheine zulässig."
+msgstr "Допустимо только для купонов на срок."
+
+msgid "Bei Zeitgutscheinen nicht anwendbar."
+msgstr "Не применяется к купонам на срок."
+
+msgid "Entweder Unternehmen oder Benutzer binden."
+msgstr "Ограничьте компанией или пользователем, но не обоими."
+
+msgid "Das Ende muss nach dem Beginn liegen."
+msgstr "Окончание должно быть позже начала."
+
+msgid "Maximale Einlösungen"
+msgstr "Максимум активаций"
+
+msgid "Bereits reservierte Einlösungen dürfen nicht abgeschnitten werden."
+msgstr "Лимит не может быть меньше числа резервов."
+
+msgid "Das Ende muss nach Beginn liegen."
+msgstr "Окончание должно быть позже начала."
+
+msgid "Neue Gutscheincodes"
+msgstr "Новые коды купонов"
+
+msgid "Gutscheine erstellen"
+msgstr "Создать купоны"
+
+msgid "Gutschein aktualisiert."
+msgstr "Купон обновлён."
+
+msgid "Gutscheinstatus geändert. Bestehende Nutzungsrechte bleiben unverändert."
+msgstr "Статус купона изменён. Действующие права доступа сохраняются."
+
+msgid "Gutschein eingelöst. Pro-Lizenz: %(license)s"
+msgstr "Купон активирован. Лицензия Pro: %(license)s"
+
+msgid "Ungültige Lizenzanzahl."
+msgstr "Недопустимое число лицензий."
+
+msgid "Gutschein oder Preis nicht verfügbar."
+msgstr "Купон или цена недоступны."
+
+msgid "Festbetrag ist für diese Währung nicht zulässig."
+msgstr "Фиксированная скидка недоступна для этой валюты."
+
+msgid "Bitte den Gutschein im Kundenportal einlösen."
+msgstr "Активируйте купон в клиентском портале."
+
+msgid "Gutschein ungültig oder nicht verfügbar."
+msgstr "Купон недействителен или недоступен."
