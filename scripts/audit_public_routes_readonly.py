@@ -87,7 +87,16 @@ def run() -> int:
             elif category == "denied":
                 passed = status in (403, 404)
             elif category == "json":
-                passed = status == 200 and isinstance(json.loads(payload), dict)
+                catalog = json.loads(payload)
+                passed = status == 200 and isinstance(catalog, dict)
+                if passed:
+                    row["checkout_enabled"] = bool(catalog.get("checkoutEnabled"))
+                    pro = next((p for p in catalog.get("products", []) if p.get("id") == "PROMPTFINISHER_PRO"), {})
+                    row["pro_purchasable"] = bool(pro.get("purchasable"))
+                    row["pro_application_count"] = catalog.get("proApplicationCount")
+                    print("PF_PROD_CATALOG_CHECKOUT_ENABLED=" + str(row["checkout_enabled"]).upper()
+                        + ";PRO_PURCHASABLE=" + str(row["pro_purchasable"]).upper()
+                        + ";PRO_APPS=" + str(row["pro_application_count"]), flush=True)
             else:
                 passed = status == 200
             row.update(status=status, final=final, result="PASS" if passed else "FAIL")
