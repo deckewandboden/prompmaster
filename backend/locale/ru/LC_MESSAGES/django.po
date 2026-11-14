@@ -4101,3 +4101,127 @@ msgstr "Активируйте купон в клиентском портале
 
 msgid "Gutschein ungültig oder nicht verfügbar."
 msgstr "Купон недействителен или недоступен."
+
+# Voucher model and service validation
+msgid "Prozentualer Rabatt"
+msgstr "Процентная скидка"
+
+msgid "Fester Rabatt je Lizenz"
+msgstr "Фиксированная скидка за лицензию"
+
+msgid "Rabattprozente müssen zwischen 1 und 99 liegen."
+msgstr "Размер скидки должен быть от 1 до 99 %."
+
+msgid "Ein positiver Festbetrag ist erforderlich."
+msgstr "Нужна положительная фиксированная сумма."
+
+msgid "Kostenlose Laufzeit muss 1 bis 1095 Tage betragen."
+msgstr "Бесплатный срок должен составлять от 1 до 1095 дней."
+
+msgid "Rabattcodes dürfen keine freie Laufzeit haben."
+msgstr "Скидочные коды не предоставляют бесплатный срок."
+
+msgid "Nur Festbetragsrabatte dürfen einen Betrag haben."
+msgstr "Сумма допустима только для фиксированных скидок."
+
+msgid "Nur Prozentcodes dürfen Rabattprozente haben."
+msgstr "Процент указывается только для процентных кодов."
+
+msgid "Probezeiträume sind keine Zahlungsrabatte."
+msgstr "Пробные периоды не являются платёжной скидкой."
+
+msgid "Ein Code kann nur auf Firma oder Benutzer begrenzt sein."
+msgstr "Код можно привязать к компании либо пользователю, но не к обоим."
+
+msgid "Ende muss nach Beginn liegen."
+msgstr "Конец должен быть позже начала."
+
+msgid "Mindestens eine Einlösung erforderlich."
+msgstr "Требуется хотя бы одно использование."
+
+msgid "Für Bestellung reserviert"
+msgstr "Зарезервирован для заказа"
+
+msgid "Eingelöst"
+msgstr "Активирован"
+
+msgid "Fehlgeschlagen / freigegeben"
+msgstr "Ошибка / освобождён"
+
+msgid "Gutscheincode ungültig oder nicht verfügbar."
+msgstr "Код купона недействителен или недоступен."
+
+msgid "Nur netstyle kann Gutscheine erstellen."
+msgstr "Только netstyle может выпускать купоны."
+
+msgid "Pro Aktion sind 1 bis 100 Gutscheine zulässig."
+msgstr "За один раз можно создать от 1 до 100 купонов."
+
+msgid "Gutschein nicht verfügbar oder abgelaufen."
+msgstr "Купон недоступен или срок истёк."
+
+msgid "Dieser Gutschein ist bereits vollständig eingelöst."
+msgstr "Лимит использования этого купона исчерпан."
+
+msgid "Dieser Gutschein gilt nicht für das gewählte Produkt."
+msgstr "Купон не действует на выбранный продукт."
+
+msgid "Deaktivierte Unternehmen können keine Gutscheine einlösen."
+msgstr "Неактивные компании не могут использовать купоны."
+
+msgid "Gutschein ist für einen anderen Kunden ausgestellt."
+msgstr "Купон выдан другому клиенту."
+
+msgid "Gutschein ist für einen anderen Benutzer ausgestellt."
+msgstr "Купон выдан другому пользователю."
+
+msgid "Gutschein gilt nur für neue Pro-Lizenzen."
+msgstr "Купон действует только на новые лицензии Pro."
+
+msgid "Dieser Benutzer hat den Gutschein bereits eingelöst."
+msgstr "Этот пользователь уже использовал купон."
+
+msgid "Dieser Gutschein wurde von diesem Konto bereits genutzt."
+msgstr "Этот аккаунт уже использовал купон."
+
+msgid "Kostenlose Zeitgutscheine bitte im Gutscheinbereich einlösen."
+msgstr "Купоны на срок активируются в разделе купонов."
+
+msgid "Gutscheinbetrag ist für diesen Lizenzpreis nicht zulässig."
+msgstr "Размер купона недопустим для этой цены лицензии."
+
+msgid "Gutschein darf nur für eine zahlungspflichtige Bestellung verwendet werden."
+msgstr "Купон можно применять только к платному заказу."
+
+msgid "Gutscheinreservierung kann wegen inkonsistentem Kontingent nicht freigegeben werden."
+msgstr "Нельзя освободить резерв купона из-за несогласованного лимита."
+
+msgid "Bitte ein aktives, bestätigtes Kundenkonto verwenden."
+msgstr "Используйте активный и подтверждённый клиентский аккаунт."
+
+msgid "Pro ist derzeit nicht verfügbar."
+msgstr "Pro сейчас недоступен."
+
+msgid "Nur der Firmenadministrator kann Zeitgutscheine einlösen."
+msgstr "Купоны на срок может активировать только администратор компании."
+
+msgid "Empfänger muss aktives, bestätigtes Firmenmitglied sein."
+msgstr "Получатель должен быть активным подтверждённым участником компании."
+
+msgid "Privatcodes sind ausschließlich für das eigene Konto."
+msgstr "Личные коды предназначены только для собственного аккаунта."
+
+msgid "Ein Privatkundenkonto ist erforderlich."
+msgstr "Нужен аккаунт частного клиента."
+
+msgid "Persönliche Zeitgutscheine müssen direkt dem vorgesehenen Benutzer zugewiesen werden."
+msgstr "Персональные купоны на срок необходимо назначить конкретному пользователю."
+
+msgid "Rabattgutscheine bitte beim Pro-Kauf verwenden."
+msgstr "Скидочные купоны применяются при покупке Pro."
+
+msgid "Für Pro fehlt die Preisversion; Gutschein kann nicht gebucht werden."
+msgstr "Отсутствует версия цены Pro; купон нельзя применить."
+
+msgid "Für diesen Benutzer besteht eine gesperrte oder zu prüfende Pro-Lizenz."
+msgstr "У этого пользователя есть заблокированная лицензия Pro или лицензия на проверке."
