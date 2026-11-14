@@ -437,6 +437,17 @@ class VoucherContractsTests(TestCase):
         self.assertEqual(record.status, "reserved")
         self.assertEqual(record.voucher.used_count, 1)
 
+    def test_customer_order_displays_real_voucher_savings(self):
+        _, raw = self.make(kind="percent", bound_company=self.company)
+        order = create_order(user=self.admin, product=self.product, quantity=2, voucher_code=raw)
+        self._login(self.admin)
+        response = self.client.get("/portal/orders/")
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, order.order_number)
+        self.assertContains(response, "53.82")
+        self.assertContains(response, "17.94")
+        self.assertContains(response, "Gutschein")
+
     def test_existing_purchases_without_vouchers_remain_unchanged(self):
         order = create_order(user=self.admin, product=self.product, quantity=2)
         self.assertEqual(order.gross_total, Decimal("71.76"))
