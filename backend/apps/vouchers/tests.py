@@ -254,6 +254,32 @@ class VoucherContractsTests(TestCase):
         self.assertEqual(order.tax_total, Decimal("11.46"))
         self.assertFalse(VoucherRedemption.objects.exists())
 
+    def test_trial_cannot_bypass_blocked_pro_licenses(self):
+        existing = License.objects.create(
+            owner_user=self.private, product=self.product,
+            status="blocked", valid_from=self.now - timedelta(days=2),
+            valid_until=self.now + timedelta(days=30),
+        )
+        _, code = self.make(bound_user=self.private)
+        with self.assertRaisesMessage(ValidationError, "gesperrte"):
+            redeem_trial(code=code, actor=self.private, company=None)
+        self.assertEqual(License.objects.filter(owner_user=self.private).count(), 1)
+        self.assertEqual(existing.status, "blocked")
+        self.assertFalse(VoucherRedemption.objects.exists())
+
+    def test_corporate_trial_cannot_bypass_payment_review(self):
+        existing = License.objects.create(
+            company=self.company, product=self.product, status="payment_review",
+            valid_from=self.now - timedelta(days=2),
+            valid_until=self.now + timedelta(days=30),
+        )
+        LicenseAssignment.objects.create(license=existing, user=self.member)
+        _, code = self.make(bound_company=self.company)
+        with self.assertRaisesMessage(ValidationError, "gesperrte"):
+            redeem_trial(code=code, actor=self.admin, company=self.company, beneficiary=self.member)
+        self.assertEqual(License.objects.filter(company=self.company).count(), 1)
+        self.assertFalse(VoucherRedemption.objects.exists())
+
     def test_multiple_trial_seats_never_grant_to_other_tenants(self):
         _, raw = self.make(bound_company=self.company)
         with self.assertRaises(ValidationError):
