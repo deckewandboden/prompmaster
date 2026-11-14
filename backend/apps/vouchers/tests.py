@@ -88,7 +88,8 @@ class VoucherContractsTests(TestCase):
             "expires_at": self.now + timedelta(days=10),
         }
         options.update(values)
-        return issue_vouchers(actor=self.staff, count=count, **options)
+        issued = issue_vouchers(actor=self.staff, count=count, **options)
+        return issued[0] if count == 1 else issued
 
     def _login(self, user):
         self.client.force_login(user)
