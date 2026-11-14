@@ -550,6 +550,9 @@ def _activate_order(order, paid_at):
 
     order.status = 'paid'
     order.save(update_fields=['status', 'updated_at'])
+    # Only a verified paid order can finalize the financial voucher.
+    from apps.vouchers.services import complete_discount_order
+    complete_discount_order(order)
 
 
 def calculate_refund(term, now=None):
