@@ -51,6 +51,38 @@ class VoucherInternationalizationTests(SimpleTestCase):
                         sorted(PLACEHOLDER.findall(contents[row["de"]])),
                     )
 
+    def test_source_and_template_catalogs_never_regress(self):
+        """All user-facing voucher strings stay translated in every locale."""
+        source_paths = (
+            ROOT / "forms.py", ROOT / "views.py", ROOT / "models.py",
+            ROOT / "services.py",
+            ROOT.parent.parent.parent / "templates/ns_admin/vouchers.html",
+            ROOT.parent.parent.parent / "templates/ns_admin/voucher_form.html",
+            ROOT.parent.parent.parent / "templates/ns_admin/voucher_issued.html",
+            ROOT.parent.parent.parent / "templates/ns_admin/voucher_detail.html",
+            ROOT.parent.parent.parent / "templates/portal/vouchers.html",
+        )
+        strings = set()
+        for path in source_paths:
+            self.assertTrue(path.is_file(), str(path))
+            content = path.read_text(encoding="utf-8")
+            strings.update(re.findall(r"\\{%\\s*translate\\s+[\"'](.+?)[\"']\\s*%\\}", content))
+            strings.update(re.findall(r"_\\(\\s*[\"'](.+?)[\"']\\s*\\)", content))
+        self.assertGreaterEqual(len(strings), 145)
+        canonical_rows = json.loads((ROOT / "translation_catalog.json").read_text(encoding="utf-8"))
+        canonical = {row["de"]: row for row in canonical_rows}
+        for lang in LANGUAGES:
+            global_entries = read_entries(
+                ROOT.parent.parent.parent / "locale" / lang / "LC_MESSAGES/django.po"
+            )
+            for string in strings:
+                with self.subTest(lang=lang, key=string):
+                    self.assertTrue(global_entries.get(string))
+                    if string in canonical:
+                        self.assertEqual(global_entries[string], canonical[string][lang])
+                    else:
+                        self.assertNotEqual(global_entries[string], string)
+
     def test_gettext_runtime_loads_each_app_level_locale(self):
         rows = json.loads((ROOT / "translation_catalog.json").read_text(encoding="utf-8"))
         sample = next(row for row in rows if row["de"] == "Gutscheine & Aktionen")
