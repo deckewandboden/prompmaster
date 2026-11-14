@@ -112,6 +112,19 @@ def create_order(*, user, product, quantity=1, target_license=None, idempotency_
             owner_ok = existing.company_id == (company.id if company else None) and existing.private_user_id == (None if company else user.id)
             if not owner_ok:
                 raise ValidationError('Ungültiger Checkout-Schlüssel.')
+            # Idempotent requests may retry the SAME voucher, never silently
+            # reuse a previously priced order after the coupon field changes.
+            from apps.vouchers.services import code_digest
+            existing_redemption = existing.voucher_redemption if hasattr(
+                existing, 'voucher_redemption'
+            ) else None
+            existing_digest = (
+                existing_redemption.voucher.code_hash
+                if existing_redemption is not None else None
+            )
+            submitted_digest = code_digest(voucher_code) if voucher_code else None
+            if existing_digest != submitted_digest:
+                raise ValidationError('Ungültiger Checkout-Schlüssel.')
             return existing
 
     price_type = 'renewal' if target_license else 'new'
