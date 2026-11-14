@@ -444,8 +444,8 @@ class VoucherContractsTests(TestCase):
         response = self.client.get("/portal/orders/")
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, order.order_number)
-        self.assertContains(response, "53.82")
-        self.assertContains(response, "17.94")
+        self.assertContains(response, "53,82")
+        self.assertContains(response, "17,94")
         self.assertContains(response, "Gutschein")
 
     def test_existing_purchases_without_vouchers_remain_unchanged(self):
