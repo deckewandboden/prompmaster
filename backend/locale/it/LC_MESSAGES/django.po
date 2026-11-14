@@ -3892,3 +3892,169 @@ msgstr "Codice sconto (facoltativo)"
 
 msgid "Kostenlose Pro-Nutzung"
 msgstr "Utilizzo gratuito di Pro"
+
+# Voucher campaign user interface
+msgid "Rabatte und kostenlose Pro-Zeiträume sicher verwalten."
+msgstr "Gestisci in sicurezza sconti e periodi Pro gratuiti."
+
+msgid "+ Codes erstellen"
+msgstr "+ Crea codici"
+
+msgid "Kampagnencodes"
+msgstr "Codici campagna"
+
+msgid "Erfolgreiche Einlösungen"
+msgstr "Riscatti riusciti"
+
+msgid "Kampagne, Firma oder letzte vier Zeichen"
+msgstr "Campagna, azienda o ultime quattro cifre"
+
+msgid "Prozent"
+msgstr "Percentuale"
+
+msgid "Festbetrag"
+msgstr "Importo fisso"
+
+msgid "Kostenlose Zeit"
+msgstr "Periodo gratuito"
+
+msgid "Kampagne"
+msgstr "Campagna"
+
+msgid "Zielkunde"
+msgstr "Cliente destinatario"
+
+msgid "Verbrauch"
+msgstr "Utilizzi"
+
+msgid "Verwalten"
+msgstr "Gestisci"
+
+msgid "Keine Gutscheine gefunden."
+msgstr "Nessun buono trovato."
+
+msgid "Weiter"
+msgstr "Avanti"
+
+msgid "Aus Sicherheitsgründen wird jeder vollständige Gutscheincode nur beim Erstellen angezeigt. Es werden ausschließlich Prüfsummen gespeichert."
+msgstr "Per sicurezza, il codice completo appare solo alla creazione. Vengono salvati solo gli hash."
+
+msgid "Alle Codes sind zufällig und werden nach dem Erstellen nur einmal angezeigt."
+msgstr "I codici sono casuali e vengono mostrati una sola volta."
+
+msgid "Ein Code kann auf einen Kunden beschränkt werden. Ohne Bindung ist er für alle berechtigten Kunden gültig. Pro-Code-Limits gelten unabhängig voneinander."
+msgstr "Un codice può essere limitato a un cliente. Senza vincoli, è valido per tutti gli aventi diritto. I limiti sono per codice."
+
+msgid "Gutscheincodes erzeugen"
+msgstr "Genera codici sconto"
+
+msgid "Einmalige Anzeige"
+msgstr "Visualizzazione unica"
+
+msgid "Diese Codes können später nicht erneut angezeigt werden. Bitte jetzt sicher an die berechtigten Kunden übergeben."
+msgstr "Questi codici non potranno essere mostrati di nuovo. Condividili ora in modo sicuro con i clienti autorizzati."
+
+msgid "Gutscheincode"
+msgstr "Codice sconto"
+
+msgid "Verwaltung"
+msgstr "Amministrazione"
+
+msgid "In Protokollen und Datenbank werden keine vollständigen Gutscheincodes gespeichert."
+msgstr "I codici completi non vengono salvati nei log né nel database."
+
+msgid "Alle Gutscheine"
+msgstr "Tutti i buoni"
+
+msgid "Leistung"
+msgstr "Vantaggio"
+
+msgid "je Lizenz"
+msgstr "per licenza"
+
+msgid "Tage Pro"
+msgstr "Giorni Pro"
+
+msgid "Kontingent"
+msgstr "Quota"
+
+msgid "Je Code; laufende Zahlungsreservierungen zählen mit."
+msgstr "Per codice; anche le prenotazioni di pagamento in sospeso contano."
+
+msgid "Zielbindung"
+msgstr "Vincolo del destinatario"
+
+msgid "Alle berechtigten Kunden"
+msgstr "Tutti i clienti idonei"
+
+msgid "Bereits gewährte Lizenzen werden durch Gutscheinsperrung nicht automatisch entzogen."
+msgstr "Bloccare un buono non revoca le licenze già concesse."
+
+msgid "Code für weitere Einlösungen sperren"
+msgstr "Blocca ulteriori utilizzi"
+
+msgid "Code wieder aktivieren"
+msgstr "Riattiva il codice"
+
+msgid "Kampagne bearbeiten"
+msgstr "Modifica campagna"
+
+msgid "Die wirtschaftlichen Konditionen und Kundenbindung bleiben nach Ausstellung unveränderlich."
+msgstr "I termini economici e i vincoli del cliente non cambiano dopo l’emissione."
+
+msgid "Einlösehistorie"
+msgstr "Cronologia utilizzi"
+
+msgid "Einlöser"
+msgstr "Riscattato da"
+
+msgid "Lizenz/Bestellung"
+msgstr "Licenza/ordine"
+
+msgid "Noch keine Einlösungen."
+msgstr "Nessun riscatto finora."
+
+msgid "Gutscheine & Gratislaufzeiten"
+msgstr "Buoni e periodi gratuiti"
+
+msgid "Rabattcodes beim Lizenzkauf nutzen oder Pro-Zeiträume einlösen."
+msgstr "Usa codici sconto all’acquisto o riscatta periodi Pro gratuiti."
+
+msgid "Kostenlose Pro-Laufzeit einlösen"
+msgstr "Riscatta un periodo Pro gratuito"
+
+msgid "Zeitgutscheine können neue Lizenzen erzeugen oder die bestehende Lizenz des Empfängers verlängern. Rabattcodes gehören in das Kaufformular."
+msgstr "I buoni temporali creano licenze o estendono quelle esistenti. Inserisci gli sconti nel modulo di acquisto."
+
+msgid "Unzugewiesene Lizenz für mein Unternehmen"
+msgstr "Licenza non assegnata per la mia azienda"
+
+msgid "Zeitgutschein verbindlich einlösen"
+msgstr "Riscatta il buono temporale"
+
+msgid "Für dieses Konto zugeteilte Kampagnen"
+msgstr "Campagne assegnate a questo account"
+
+msgid "Vollständige Codes werden nur durch netstyle ausgegeben."
+msgstr "Solo netstyle emette i codici completi."
+
+msgid "Keine ausdrücklich zugeteilten Kampagnen."
+msgstr "Nessuna campagna assegnata direttamente."
+
+msgid "Rabatt bei der Bestellung"
+msgstr "Sconto sull’ordine"
+
+msgid "Rabattcodes werden beim Kauf oder bei zulässigen Verlängerungen vor der Zahlung geprüft und auf den Bruttopreis angewendet."
+msgstr "I codici vengono verificati prima del pagamento e applicati al lordo degli acquisti e rinnovi ammessi."
+
+msgid "Zum Lizenzkauf"
+msgstr "Acquista licenza"
+
+msgid "Einlösungen und Lizenzzeiträume"
+msgstr "Utilizzi e periodi di licenza"
+
+msgid "Gutschein"
+msgstr "Buono"
+
+msgid "Laufzeit/Rabatt"
+msgstr "Durata/sconto"
