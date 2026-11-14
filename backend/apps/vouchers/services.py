@@ -308,6 +308,9 @@ def redeem_trial(*, code, actor, company, beneficiary=None, request=None):
     if not active_license:
         if company and beneficiary:
             assign_license(license_obj, beneficiary, actor)
+            # assign_license updates a separately locked ORM instance.
+            # Reload so returned redemption and same-request UI reflect ACTIVE.
+            license_obj.refresh_from_db(fields=["status"])
         elif company is None:
             LicenseAssignment.objects.create(license=license_obj, user=actor)
 
