@@ -262,6 +262,11 @@ def redeem_trial(*, code, actor, company, beneficiary=None, request=None):
             if not target_membership or not beneficiary.is_active or not beneficiary.email_verified_at:
                 raise ValidationError(_("Empfänger muss aktives, bestätigtes Firmenmitglied sein."))
     else:
+        # Paid private checkout locks the account row before the license and
+        # voucher. Preserve that ordering for trial grants to avoid a
+        # voucher-versus-license deadlock when two requests race.
+        from django.contrib.auth import get_user_model
+        actor = get_user_model().objects.select_for_update().get(pk=actor.pk)
         if beneficiary is not None and beneficiary.pk != actor.pk:
             raise ValidationError(_("Privatcodes sind ausschließlich für das eigene Konto."))
         if not hasattr(actor, "private_customer"):
