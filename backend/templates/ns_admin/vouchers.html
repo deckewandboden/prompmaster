@@ -1,5 +1,6 @@
 {% extends 'ns_admin/base.html' %}{% load i18n %}{% block content %}
-<div class="page-head"><div><h1>{% translate "Gutscheine & Aktionen" %}</h1><div class="sub">{% translate "Rabatte und kostenlose Pro-Zeiträume sicher verwalten." %}</div></div>
+{% if customer %}{% include 'ns_admin/includes_customer_nav.html' %}{% endif %}
+<div class="page-head"><div><h1>{% translate "Gutscheine & Aktionen" %}{% if customer %} · {{ customer.name }}{% endif %}</h1><div class="sub">{% translate "Rabatte und kostenlose Pro-Zeiträume sicher verwalten." %}</div></div>
 {% if can_write %}<a class="btn primary" href="{% url 'ns_admin:voucher_create' %}">{% translate "+ Codes erstellen" %}</a>{% endif %}</div>
 <div class="grid three"><div class="card kpi"><div>{% translate "Kampagnencodes" %}</div><div class="value">{{ voucher_total }}</div></div><div class="card kpi"><div>{% translate "Aktiv" %}</div><div class="value">{{ voucher_active }}</div></div><div class="card kpi"><div>{% translate "Erfolgreiche Einlösungen" %}</div><div class="value">{{ voucher_redemptions }}</div></div></div>
 <div class="card mt-14"><form method="get" class="form"><div class="grid three"><label>{% translate "Suche" %}<input name="q" value="{{ q }}" maxlength="120" placeholder="{% translate 'Kampagne, Firma oder letzte vier Zeichen' %}"></label>
