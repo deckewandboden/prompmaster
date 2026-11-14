@@ -3890,3 +3890,21 @@ msgstr "Oturum açma hesabı"
 
 msgid "Für ein freigegebenes Postfach benötigt das Anmeldekonto Exchange Send As. Ein HTTP 202 bestätigt nur die Annahme des Versandauftrags."
 msgstr "Paylaşılan posta kutusu için oturum açma hesabının Exchange Send As izni olmalıdır. HTTP 202 yalnızca gönderim isteğinin kabul edildiğini doğrular."
+
+msgid "Microsoft 365 anmelden (delegiert, mit MFA)"
+msgstr "Microsoft 365'te oturum aç (temsilci yetkisiyle, MFA ile)"
+
+msgid "Bestandsmodus: Application-Mail.Send (ohne MFA)"
+msgstr "Eski mod: Application-Mail.Send (MFA olmadan)"
+
+msgid "Graph-Anmeldemethode"
+msgstr "Graph kimlik doğrulama yöntemi"
+
+msgid "Für freigegebene Postfächer delegiertes OAuth mit Mail.Send.Shared wählen."
+msgstr "Paylaşılan posta kutuları için Mail.Send.Shared ile temsilci yetkili OAuth'u seçin."
+
+msgid "Microsoft-365-Anmeldekonto"
+msgstr "Microsoft 365 oturum açma hesabı"
+
+msgid "Das persönliche Konto, das sich bei Microsoft inklusive MFA anmeldet; nicht das freigegebene Postfach."
+msgstr "Microsoft'ta MFA ile oturum açan kişisel hesap; paylaşılan posta kutusu değil."
