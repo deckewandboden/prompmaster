@@ -3881,3 +3881,19 @@ msgstr "Gestion des licences / renouvellement"
 
 msgid "Jetzt trotzdem PROMPTFINISHER Pro starten"
 msgstr "Ouvrir quand même PROMPTFINISHER Pro"
+
+# Voucher campaign and checkout terminology
+msgid "Gutscheine"
+msgstr "Bons de réduction"
+
+msgid "Gutscheine & Aktionen"
+msgstr "Bons et promotions"
+
+msgid "Kostenlose Pro-Laufzeit"
+msgstr "Période Pro gratuite"
+
+msgid "Rabattcode (optional)"
+msgstr "Code de réduction (facultatif)"
+
+msgid "Kostenlose Pro-Nutzung"
+msgstr "Accès gratuit à Pro"
