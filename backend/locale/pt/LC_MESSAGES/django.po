@@ -3890,3 +3890,21 @@ msgstr "Conta de início de sessão"
 
 msgid "Für ein freigegebenes Postfach benötigt das Anmeldekonto Exchange Send As. Ein HTTP 202 bestätigt nur die Annahme des Versandauftrags."
 msgstr "Para uma caixa de correio partilhada, a conta de início de sessão precisa da permissão Exchange Send As. Um HTTP 202 confirma apenas a aceitação do pedido de envio."
+
+msgid "Microsoft 365 anmelden (delegiert, mit MFA)"
+msgstr "Iniciar sessão no Microsoft 365 (delegado, com MFA)"
+
+msgid "Bestandsmodus: Application-Mail.Send (ohne MFA)"
+msgstr "Modo antigo: Application-Mail.Send (sem MFA)"
+
+msgid "Graph-Anmeldemethode"
+msgstr "Método de autenticação do Graph"
+
+msgid "Für freigegebene Postfächer delegiertes OAuth mit Mail.Send.Shared wählen."
+msgstr "Para caixas de correio partilhadas, selecione OAuth delegado com Mail.Send.Shared."
+
+msgid "Microsoft-365-Anmeldekonto"
+msgstr "Conta de início de sessão do Microsoft 365"
+
+msgid "Das persönliche Konto, das sich bei Microsoft inklusive MFA anmeldet; nicht das freigegebene Postfach."
+msgstr "A conta pessoal que inicia sessão na Microsoft com MFA, não a caixa de correio partilhada."
