@@ -3951,3 +3951,21 @@ msgstr "Account di accesso"
 
 msgid "Für ein freigegebenes Postfach benötigt das Anmeldekonto Exchange Send As. Ein HTTP 202 bestätigt nur die Annahme des Versandauftrags."
 msgstr "Per una casella condivisa, l'account di accesso richiede l'autorizzazione Exchange Send As. HTTP 202 conferma soltanto l'accettazione della richiesta di invio."
+
+msgid "Microsoft 365 anmelden (delegiert, mit MFA)"
+msgstr "Accedi a Microsoft 365 (accesso delegato, con MFA)"
+
+msgid "Bestandsmodus: Application-Mail.Send (ohne MFA)"
+msgstr "Modalità legacy: Application-Mail.Send (senza MFA)"
+
+msgid "Graph-Anmeldemethode"
+msgstr "Metodo di autenticazione Graph"
+
+msgid "Für freigegebene Postfächer delegiertes OAuth mit Mail.Send.Shared wählen."
+msgstr "Per le cassette postali condivise, seleziona OAuth delegato con Mail.Send.Shared."
+
+msgid "Microsoft-365-Anmeldekonto"
+msgstr "Account di accesso a Microsoft 365"
+
+msgid "Das persönliche Konto, das sich bei Microsoft inklusive MFA anmeldet; nicht das freigegebene Postfach."
+msgstr "L'account personale usato per accedere a Microsoft con MFA, non la cassetta postale condivisa."
