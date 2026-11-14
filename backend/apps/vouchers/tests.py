@@ -1,6 +1,7 @@
 """End-to-end voucher billing, tenant security, license grants and UI regression."""
 from datetime import timedelta
 from decimal import Decimal
+from unittest.mock import patch
 
 from django.core.exceptions import ValidationError
 from django.db import transaction
@@ -371,6 +372,70 @@ class VoucherContractsTests(TestCase):
             )
         self.assertEqual(first.voucher_redemption.status, "reserved")
         self.assertEqual(VoucherRedemption.objects.filter(order=first).count(), 1)
+
+    def test_voucher_reconciler_requires_provider_terminal_confirmation(self):
+        from .tasks import reconcile_reserved_voucher_payments
+
+        _, raw = self.make(kind="percent", bound_company=self.company)
+        order = create_order(user=self.admin, product=self.product, voucher_code=raw)
+        Payment.objects.create(
+            order=order, provider_payment_id="tr_voucher_terminal_qa",
+            status="open", amount=order.gross_total, currency="EUR",
+        )
+        VoucherRedemption.objects.filter(order=order).update(
+            created_at=self.now - timedelta(hours=2)
+        )
+        payment_details = {
+            "id": "tr_voucher_terminal_qa",
+            "status": "open",
+            "amount": {"value": str(order.gross_total), "currency": "EUR"},
+        }
+        with patch("apps.vouchers.tasks.MollieClient") as provider:
+            provider.return_value.get_payment.return_value = payment_details
+            provider.return_value.list_chargebacks.return_value = []
+            pending = reconcile_reserved_voucher_payments()
+        self.assertEqual(pending["scanned"], 1)
+        order.refresh_from_db()
+        self.assertEqual(order.voucher_redemption.status, "reserved")
+        self.assertEqual(order.voucher_redemption.voucher.used_count, 1)
+
+        payment_details["status"] = "expired"
+        with patch("apps.vouchers.tasks.MollieClient") as provider:
+            provider.return_value.get_payment.return_value = payment_details
+            provider.return_value.list_chargebacks.return_value = []
+            closed = reconcile_reserved_voucher_payments()
+        self.assertEqual(closed["errors"], 0)
+        order.refresh_from_db()
+        self.assertEqual(order.status, "failed")
+        redemption = VoucherRedemption.objects.select_related("voucher").get(order=order)
+        self.assertEqual(redemption.status, "cancelled")
+        self.assertEqual(redemption.voucher.used_count, 0)
+        with patch("apps.vouchers.tasks.MollieClient") as provider:
+            self.assertEqual(reconcile_reserved_voucher_payments()["scanned"], 0)
+            provider.assert_not_called()
+
+    def test_voucher_reconciler_never_releases_quota_on_provider_error(self):
+        from .tasks import reconcile_reserved_voucher_payments
+
+        _, raw = self.make(kind="percent", bound_company=self.company)
+        order = create_order(user=self.admin, product=self.product, voucher_code=raw)
+        Payment.objects.create(
+            order=order, provider_payment_id="tr_voucher_error_qa",
+            status="open", amount=order.gross_total, currency="EUR",
+        )
+        VoucherRedemption.objects.filter(order=order).update(
+            created_at=self.now - timedelta(hours=2)
+        )
+        with patch("apps.vouchers.tasks.MollieClient") as provider, patch(
+            "apps.vouchers.tasks.record_webhook_failure"
+        ) as record_failure:
+            provider.return_value.get_payment.side_effect = RuntimeError("provider unavailable")
+            result = reconcile_reserved_voucher_payments()
+        self.assertEqual(result, {"scanned": 1, "reconciled": 0, "errors": 1})
+        record_failure.assert_called_once()
+        record = VoucherRedemption.objects.select_related("voucher").get(order=order)
+        self.assertEqual(record.status, "reserved")
+        self.assertEqual(record.voucher.used_count, 1)
 
     def test_existing_purchases_without_vouchers_remain_unchanged(self):
         order = create_order(user=self.admin, product=self.product, quantity=2)
