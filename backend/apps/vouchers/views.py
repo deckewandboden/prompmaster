@@ -212,3 +212,47 @@ def portal_voucher_redeem(request):
         label = redemption.license.license_number if redemption.license else _("Lizenz")
         messages.success(request, _("Gutschein eingelöst. Pro-Lizenz: %(license)s") % {"license": label})
     return redirect("portal:vouchers")
+
+
+@require_POST
+def public_voucher_quote(request):
+    """Same-origin, CSRF-protected, GET-free price preview for new customers."""
+    from decimal import Decimal
+    from django.http import JsonResponse
+    from apps.catalog.models import Product
+    from apps.catalog.services import current_price
+    from apps.orders.services import MAX_PURCHASE_QUANTITY
+    from .services import discount_quote
+
+    limited = check_rate(request, "public-voucher-quote", 20, 3600)
+    if limited:
+        return limited
+    try:
+        quantity = int(request.POST.get("quantity") or 1)
+        if quantity < 1 or quantity > MAX_PURCHASE_QUANTITY:
+            raise ValidationError(_("Ungültige Lizenzanzahl."))
+        code = (request.POST.get("voucher_code") or "").strip()
+        product = Product.objects.filter(code="PRO", active=True, purchasable=True).first()
+        price = current_price(product, "new") if product else None
+        if not code or price is None:
+            raise ValidationError(_("Gutschein oder Preis nicht verfügbar."))
+        voucher, new_unit, saving = discount_quote(
+            code=code, user=None, company=None, product=product,
+            unit_gross=price.gross_amount, quantity=quantity, renewal=False,
+        )
+        if voucher.kind == "fixed" and price.currency != "EUR":
+            raise ValidationError(_("Festbetrag ist für diese Währung nicht zulässig."))
+        # Public checkout can only quote unbound campaign codes. Company- or
+        # person-scoped codes require logged-in, tenant-aware customer checkout.
+        if voucher.bound_company_id or voucher.bound_user_id:
+            raise ValidationError(_("Bitte den Gutschein im Kundenportal einlösen."))
+        response = JsonResponse({
+            "valid": True, "title": voucher.title, "currency": price.currency,
+            "discountGrossCents": int(saving * 100),
+            "totalGrossCents": int(new_unit * quantity * 100),
+            "originalGrossCents": int(price.gross_amount * quantity * 100),
+        })
+    except (ValidationError, ValueError):
+        response = JsonResponse({"valid": False, "error": _("Gutschein ungültig oder nicht verfügbar.")}, status=400)
+    response["Cache-Control"] = "no-store"
+    return response
