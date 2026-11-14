@@ -360,7 +360,7 @@ class AdminInternationalizationContractTests(SimpleTestCase):
             'Alle Provider bleiben parallel gespeichert. Im manuellen Modus wird nur der primäre Versandweg verwendet. Im automatischen Modus wird bei eindeutig nicht zugestellten Fehlern in der festgelegten Reihenfolge weitergeschaltet; bei unklaren Fehlern erfolgt bewusst kein automatischer Fallback, um Doppelversand zu vermeiden.',
             'Die Absenderadresse wird beim SMTP-Versand direkt aus diesen Einstellungen gelesen. SPF, DKIM und DMARC sind hier als DNS-Sollwerte dokumentiert; das Speichern verändert keine DNS-Zone.',
             'Erster SMTP-Transport. Das Passwort wird verschlüsselt gespeichert und niemals wieder im Klartext angezeigt.',
-            'Alternative zu SMTP für Exchange Online. Das Client Secret wird verschlüsselt gespeichert und niemals wieder im Klartext angezeigt.',
+            'Für freigegebene Microsoft-365-Postfächer delegiertes OAuth mit MFA und Mail.Send.Shared verwenden. Die Entra-Anmeldung erfolgt über das persönliche Konto, nicht über das Shared Mailbox Passwort.',
             'Sie besitzen Leserechte, aber keine Berechtigung zum Ändern dieser Einstellungen.',
         )
         for phrase in critical:
@@ -844,7 +844,7 @@ class AdminInternationalizationContractTests(SimpleTestCase):
             and isinstance(node.args[0], ast.Constant)
             and isinstance(node.args[0].value, str)
         }
-        self.assertEqual(len(translated), 73)
+        self.assertEqual(len(translated), 79)
         for language in LOCALES:
             catalog = catalog_translations(
                 ROOT / 'locale' / language / 'LC_MESSAGES' / 'django.po'

@@ -5,6 +5,7 @@ from django.core.management.base import BaseCommand, CommandError
 
 from apps.core.models import SystemSetting
 from apps.core.settings_store import set_setting
+from apps.notifications.graph_delegated import connection_status
 from apps.notifications.models import EmailMessage
 from apps.notifications.services import get_graph_transport, get_mail_delivery
 from apps.notifications.tasks import send_email_message
@@ -59,8 +60,14 @@ class Command(BaseCommand):
         missing = sorted(name for name, value in required.items() if not value)
         if missing:
             raise CommandError('Missing Graph configuration: ' + ', '.join(missing))
-        if get_mail_delivery()['primary'] != 'graph':
+        delivery = get_mail_delivery()
+        if delivery['primary'] != 'graph':
             raise CommandError('Primary mail provider must be Microsoft Graph for this gate.')
+        if graph['auth_mode'] == 'delegated':
+            if not connection_status()['connected']:
+                raise CommandError('Delegated Microsoft 365 MFA connection is missing.')
+            if delivery['mode'] != 'manual':
+                raise CommandError('Delegated acceptance requires manual Graph-only routing (no fallback).')
 
         recipient = options['recipient'].strip().lower()
         if '@' not in recipient:
@@ -80,6 +87,29 @@ class Command(BaseCommand):
                 f'result={result!r}, status={success.status!r}.'
             )
 
+        if graph['auth_mode'] == 'delegated':
+            if success.provider_used != 'graph':
+                raise CommandError('Graph was not the provider that accepted the message.')
+            self.stdout.write(
+                json.dumps(
+                    {
+                        'status': 'accepted_not_delivery_proven',
+                        'auth_mode': 'delegated',
+                        'recipient': recipient,
+                        'sender': graph['sender'],
+                        'request_id': success.provider_reference,
+                        'success_message_id': str(success.id),
+                        'provider': success.provider_used,
+                        'note': 'HTTP 202 only; confirm actual Inbox arrival independently.',
+                    },
+                    sort_keys=True,
+                )
+            )
+            return
+
+        # Legacy app-only negative probe is deliberately NOT used for
+        # delegated credentials: it modifies the sender and might silently
+        # switch the OAuth mode or interfere with live token metadata.
         original_sender = graph['sender']
         graph_setting = SystemSetting.objects.filter(key='mail_graph').first()
         original_graph_value = graph_setting.value if graph_setting else None
