@@ -14,7 +14,7 @@ from .models import Voucher, VoucherRedemption
 
 ROOT = Path(__file__).resolve().parent
 LANGUAGES = ("en", "es", "pt", "tr", "ru", "pl", "fr", "it", "nl")
-PLACEHOLDER = re.compile(r"%\\(([a-z_]+)\\)s")
+PLACEHOLDER = re.compile(r"%\(([a-z_]+)\)s")
 
 
 def read_entries(path):
