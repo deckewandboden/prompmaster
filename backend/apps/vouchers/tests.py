@@ -251,12 +251,27 @@ class VoucherContractsTests(TestCase):
         )
         role.permissions.add(read)
         self.assertEqual(self.client.get("/ns-admin/vouchers/").status_code, 200)
+        self.assertEqual(self.client.get(
+            f"/ns-admin/customers/{self.company.pk}/vouchers/"
+        ).status_code, 403)
         self.assertEqual(self.client.get("/ns-admin/vouchers/create/").status_code, 403)
         write, _ = Permission.objects.get_or_create(
             code="vouchers.write", defaults={"name": "vouchers.write"},
         )
         role.permissions.add(write)
         self.assertEqual(self.client.get("/ns-admin/vouchers/create/").status_code, 200)
+
+    def test_customer_voucher_tab_has_no_cross_company_leak(self):
+        self.make(kind="trial", bound_company=self.company)
+        self.make(kind="trial", bound_company=self.company2, title="SECRET OTHER COMPANY")
+        self._login(self.staff)
+        first = self.client.get(f"/ns-admin/customers/{self.company.pk}/vouchers/")
+        self.assertEqual(first.status_code, 200)
+        self.assertContains(first, "Voucher QA")
+        self.assertNotContains(first, "SECRET OTHER COMPANY")
+        second = self.client.get(f"/ns-admin/customers/{self.company2.pk}/vouchers/")
+        self.assertContains(second, "SECRET OTHER COMPANY")
+        self.assertNotContains(second, "Voucher QA")
 
     def test_staff_and_portal_permissions_and_visibility(self):
         _, raw = self.make(kind="trial", bound_company=self.company)
