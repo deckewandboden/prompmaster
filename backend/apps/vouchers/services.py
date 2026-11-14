@@ -180,6 +180,51 @@ def complete_discount_order(order):
 
 
 @transaction.atomic
+def release_terminal_discount_reservation(order):
+    """Release voucher quota only for provider-confirmed terminal non-payments.
+
+    Provider uncertainty is deliberately NOT treated as a terminal failure:
+    no payment, open/unknown/pending payment and ambiguous create attempts
+    must retain their reservation for reconciliation. Repeated calls are safe.
+    """
+    locked = Order.objects.select_for_update().get(pk=order.pk)
+    if locked.status not in {"failed", "canceled"}:
+        return False
+    redemption = (
+        VoucherRedemption.objects.select_for_update()
+        .filter(order=locked, status="reserved")
+        .first()
+    )
+    if redemption is None:
+        return False
+    # Never infer terminal provider status from an application-side exception.
+    payments = locked.payments.all()
+    if not payments.exists():
+        return False
+    if payments.filter(processed_paid=True).exists():
+        return False
+    if payments.exclude(status__in={"failed", "canceled", "expired"}).exists():
+        return False
+
+    voucher = Voucher.objects.select_for_update().get(pk=redemption.voucher_id)
+    changed = Voucher.objects.filter(
+        pk=voucher.pk, used_count__gt=0
+    ).update(used_count=F("used_count") - 1, updated_at=timezone.now())
+    if changed != 1:
+        raise ValidationError(
+            "Gutscheinreservierung kann wegen inkonsistentem Kontingent nicht freigegeben werden."
+        )
+    redemption.status = "cancelled"
+    redemption.completed_at = timezone.now()
+    redemption.save(update_fields=["status", "completed_at", "updated_at"])
+    audit(None, "voucher.discount_terminal_released", redemption, {
+        "order": str(locked.pk), "voucher": str(voucher.pk),
+        "reason": "provider_confirmed_nonpayment",
+    })
+    return True
+
+
+@transaction.atomic
 def redeem_trial(*, code, actor, company, beneficiary=None, request=None):
     """Create/extend a real Pro license with a free, auditable zero-value term.
 
