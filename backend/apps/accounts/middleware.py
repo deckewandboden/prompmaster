@@ -88,6 +88,11 @@ class TwoFactorEnforcementMiddleware:
         'ns_admin:service_account_rotate',
         'ns_admin:service_account_revoke',
         'ns_admin:mollie_config',
+        # Issuing or modifying vouchers can grant free Pro entitlements or
+        # financial discounts, so require fresh staff password + completed 2FA.
+        'ns_admin:voucher_create',
+        'ns_admin:voucher_edit',
+        'ns_admin:voucher_toggle',
         'ns_admin:license_refund',
         'ns_admin:deletion_request_process',
         'ns_admin:customer_user_deactivate',
@@ -128,6 +133,16 @@ class TwoFactorEnforcementMiddleware:
 
         if view_name not in self.sensitive_session_views:
             return None
+        # Unauthorized callers must receive the normal 403 permission verdict,
+        # rather than being asked to reauthenticate for an action they cannot do.
+        if view_name in {
+            'ns_admin:voucher_create',
+            'ns_admin:voucher_edit',
+            'ns_admin:voucher_toggle',
+        }:
+            from apps.core.permissions import has_perm
+            if not user.is_staff or not has_perm(user, 'vouchers.write'):
+                return None
         if sensitive_reauth_is_fresh(request, user):
             return None
 

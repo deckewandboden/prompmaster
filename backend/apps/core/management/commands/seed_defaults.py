@@ -13,6 +13,7 @@ from apps.notifications.services import sanitize_stored_email_contexts
 PERMS = [
     'customers.read', 'customers.write', 'leads.read', 'leads.write',
     'leads.assign', 'leads.convert', 'leads.delete', 'licenses.read', 'licenses.write',
+    'vouchers.read', 'vouchers.write',
     'devices.write', 'orders.read', 'payments.read', 'payments.refund',
     'products.read', 'products.write', 'email.read', 'email.write',
     'ops.read', 'api.read', 'api.write', 'roles.read', 'roles.write',
@@ -37,7 +38,7 @@ class Command(BaseCommand):
                 [
                     'customers.read', 'customers.write', 'leads.read', 'leads.write',
                     'leads.assign', 'leads.convert', 'leads.delete', 'licenses.read',
-                    'licenses.write', 'devices.write', 'orders.read',
+                    'licenses.write', 'vouchers.read', 'devices.write', 'orders.read',
                     'payments.read', 'products.read', 'email.read',
                     'support.read', 'support.write', 'audit.read', 'content.read',
                 ],

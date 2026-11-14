@@ -1,0 +1,410 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: PROMPTFINISHER Vouchers 2026\n"
+"Language: it\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+msgid "Gutscheine & Aktionen"
+msgstr "Buoni sconto e promozioni"
+
+msgid "Rabatte und kostenlose Pro-Zeiträume sicher verwalten."
+msgstr "Gestisci in sicurezza sconti e periodi gratuiti di Pro."
+
+msgid "+ Codes erstellen"
+msgstr "+ Crea codici"
+
+msgid "Kampagnencodes"
+msgstr "Codici campagna"
+
+msgid "Erfolgreiche Einlösungen"
+msgstr "Riscatti completati"
+
+msgid "Kampagne, Firma oder letzte vier Zeichen"
+msgstr "Campagna, azienda o ultime quattro cifre"
+
+msgid "Prozent"
+msgstr "Percentuale"
+
+msgid "Festbetrag"
+msgstr "Importo fisso"
+
+msgid "Kostenlose Zeit"
+msgstr "Periodo gratuito"
+
+msgid "Kampagne"
+msgstr "Campagna"
+
+msgid "Zielkunde"
+msgstr "Cliente destinatario"
+
+msgid "Verbrauch"
+msgstr "Utilizzi"
+
+msgid "Verwalten"
+msgstr "Gestisci"
+
+msgid "Keine Gutscheine gefunden."
+msgstr "Nessun buono trovato."
+
+msgid "Weiter"
+msgstr "Avanti"
+
+msgid "Aus Sicherheitsgründen wird jeder vollständige Gutscheincode nur beim Erstellen angezeigt. Es werden ausschließlich Prüfsummen gespeichert."
+msgstr "Per sicurezza, il codice completo viene mostrato solo al momento della creazione. Si conservano soltanto gli hash di verifica."
+
+msgid "Alle Codes sind zufällig und werden nach dem Erstellen nur einmal angezeigt."
+msgstr "Tutti i codici sono casuali e vengono mostrati una sola volta dopo la creazione."
+
+msgid "Ein Code kann auf einen Kunden beschränkt werden. Ohne Bindung ist er für alle berechtigten Kunden gültig. Pro-Code-Limits gelten unabhängig voneinander."
+msgstr "Un codice può essere riservato a un cliente. Senza vincoli è valido per tutti i clienti idonei. Ogni codice ha il proprio limite di utilizzi."
+
+msgid "Gutscheincodes erzeugen"
+msgstr "Genera codici sconto"
+
+msgid "Einmalige Anzeige"
+msgstr "Visualizzazione unica"
+
+msgid "Diese Codes können später nicht erneut angezeigt werden. Bitte jetzt sicher an die berechtigten Kunden übergeben."
+msgstr "Questi codici non potranno essere mostrati di nuovo. Trasmettili ora in modo sicuro ai clienti interessati."
+
+msgid "Gutscheincode"
+msgstr "Codice sconto"
+
+msgid "Verwaltung"
+msgstr "Gestione"
+
+msgid "In Protokollen und Datenbank werden keine vollständigen Gutscheincodes gespeichert."
+msgstr "I codici completi non vengono salvati nei log né nel database."
+
+msgid "Alle Gutscheine"
+msgstr "Tutti i buoni"
+
+msgid "Leistung"
+msgstr "Vantaggio"
+
+msgid "je Lizenz"
+msgstr "per licenza"
+
+msgid "Tage Pro"
+msgstr "Giorni Pro"
+
+msgid "Kontingent"
+msgstr "Quota"
+
+msgid "Je Code; laufende Zahlungsreservierungen zählen mit."
+msgstr "Per codice; le prenotazioni di pagamento in sospeso contano nel limite."
+
+msgid "Zielbindung"
+msgstr "Vincolo destinatario"
+
+msgid "Alle berechtigten Kunden"
+msgstr "Tutti i clienti idonei"
+
+msgid "Bereits gewährte Lizenzen werden durch Gutscheinsperrung nicht automatisch entzogen."
+msgstr "Bloccare un buono non revoca automaticamente le licenze già concesse."
+
+msgid "Code für weitere Einlösungen sperren"
+msgstr "Blocca il codice per ulteriori utilizzi"
+
+msgid "Code wieder aktivieren"
+msgstr "Riattiva il codice"
+
+msgid "Kampagne bearbeiten"
+msgstr "Modifica campagna"
+
+msgid "Die wirtschaftlichen Konditionen und Kundenbindung bleiben nach Ausstellung unveränderlich."
+msgstr "Le condizioni economiche e i vincoli del cliente non sono modificabili dopo l'emissione."
+
+msgid "Einlösehistorie"
+msgstr "Storico riscatti"
+
+msgid "Einlöser"
+msgstr "Riscattato da"
+
+msgid "Lizenz/Bestellung"
+msgstr "Licenza/ordine"
+
+msgid "Noch keine Einlösungen."
+msgstr "Nessun riscatto al momento."
+
+msgid "Gutscheine & Gratislaufzeiten"
+msgstr "Buoni e periodi gratuiti"
+
+msgid "Rabattcodes beim Lizenzkauf nutzen oder Pro-Zeiträume einlösen."
+msgstr "Usa i codici sconto per acquistare licenze oppure attiva periodi gratuiti di Pro."
+
+msgid "Kostenlose Pro-Laufzeit einlösen"
+msgstr "Attiva periodo gratuito di Pro"
+
+msgid "Zeitgutscheine können neue Lizenzen erzeugen oder die bestehende Lizenz des Empfängers verlängern. Rabattcodes gehören in das Kaufformular."
+msgstr "I buoni a tempo creano nuove licenze o prolungano quella esistente del destinatario. I codici sconto vanno inseriti nel modulo di acquisto."
+
+msgid "Unzugewiesene Lizenz für mein Unternehmen"
+msgstr "Licenza non assegnata per la mia azienda"
+
+msgid "Zeitgutschein verbindlich einlösen"
+msgstr "Riscatta buono a tempo"
+
+msgid "Für dieses Konto zugeteilte Kampagnen"
+msgstr "Campagne assegnate a questo account"
+
+msgid "Vollständige Codes werden nur durch netstyle ausgegeben."
+msgstr "I codici completi sono emessi esclusivamente da netstyle."
+
+msgid "Keine ausdrücklich zugeteilten Kampagnen."
+msgstr "Nessuna campagna assegnata a questo account."
+
+msgid "Rabatt bei der Bestellung"
+msgstr "Sconto sull'ordine"
+
+msgid "Rabattcodes werden beim Kauf oder bei zulässigen Verlängerungen vor der Zahlung geprüft und auf den Bruttopreis angewendet."
+msgstr "I codici sono verificati prima del pagamento per acquisti o rinnovi consentiti e applicati al prezzo lordo."
+
+msgid "Zum Lizenzkauf"
+msgstr "Acquista licenze"
+
+msgid "Einlösungen und Lizenzzeiträume"
+msgstr "Riscatti e periodi di licenza"
+
+msgid "Gutschein"
+msgstr "Buono"
+
+msgid "Laufzeit/Rabatt"
+msgstr "Periodo/sconto"
+
+msgid "Kampagnenbezeichnung"
+msgstr "Nome campagna"
+
+msgid "Interner Hinweis"
+msgstr "Nota interna"
+
+msgid "Rabatt in Prozent"
+msgstr "Sconto percentuale"
+
+msgid "Festbetrag je Lizenz"
+msgstr "Importo fisso per licenza"
+
+msgid "Kostenlose Pro-Nutzung"
+msgstr "Accesso gratuito a Pro"
+
+msgid "Gutscheinart"
+msgstr "Tipo di buono"
+
+msgid "Rabatt je Lizenz in EUR brutto"
+msgstr "Sconto lordo per licenza in EUR"
+
+msgid "Kostenlose Tage"
+msgstr "Giorni gratuiti"
+
+msgid "Maximale Einlösungen je Code"
+msgstr "Numero massimo di utilizzi per codice"
+
+msgid "Anzahl verschiedener Codes"
+msgstr "Numero di codici diversi"
+
+msgid "Rabatt auch für Verlängerungen"
+msgstr "Sconto valido anche sui rinnovi"
+
+msgid "Nur für Unternehmen (optional)"
+msgstr "Solo azienda (facoltativo)"
+
+msgid "Nur für Benutzer (optional)"
+msgstr "Solo utente (facoltativo)"
+
+msgid "Prozentgutscheine benötigen 1–99 Prozent."
+msgstr "I buoni percentuali richiedono un valore tra 1 e 99 per cento."
+
+msgid "Festbetrag muss größer null sein."
+msgstr "L'importo fisso deve essere maggiore di zero."
+
+msgid "Kostenlose Laufzeit muss 1–1095 Tage betragen."
+msgstr "La durata gratuita deve essere compresa tra 1 e 1095 giorni."
+
+msgid "Nur für Prozentgutscheine zulässig."
+msgstr "Consentito solo per buoni percentuali."
+
+msgid "Nur für Festbetragsgutscheine zulässig."
+msgstr "Consentito solo per buoni a importo fisso."
+
+msgid "Nur für Zeitgutscheine zulässig."
+msgstr "Consentito solo per buoni a tempo."
+
+msgid "Bei Zeitgutscheinen nicht anwendbar."
+msgstr "Non applicabile ai buoni a tempo."
+
+msgid "Entweder Unternehmen oder Benutzer binden."
+msgstr "Limita a un'azienda oppure a un utente."
+
+msgid "Das Ende muss nach dem Beginn liegen."
+msgstr "La fine deve essere successiva all'inizio."
+
+msgid "Maximale Einlösungen"
+msgstr "Numero massimo di riscatti"
+
+msgid "Bereits reservierte Einlösungen dürfen nicht abgeschnitten werden."
+msgstr "Il limite non può essere inferiore alle prenotazioni esistenti."
+
+msgid "Das Ende muss nach Beginn liegen."
+msgstr "La fine deve essere successiva all'inizio."
+
+msgid "Neue Gutscheincodes"
+msgstr "Nuovi codici sconto"
+
+msgid "Gutscheine erstellen"
+msgstr "Crea buoni"
+
+msgid "Gutschein aktualisiert."
+msgstr "Buono aggiornato."
+
+msgid "Gutscheinstatus geändert. Bestehende Nutzungsrechte bleiben unverändert."
+msgstr "Stato del buono modificato. I diritti di accesso esistenti rimangono invariati."
+
+#, python-format
+msgid "Gutschein eingelöst. Pro-Lizenz: %(license)s"
+msgstr "Buono riscattato. Licenza Pro: %(license)s"
+
+msgid "Ungültige Lizenzanzahl."
+msgstr "Quantità di licenze non valida."
+
+msgid "Gutschein oder Preis nicht verfügbar."
+msgstr "Buono o prezzo non disponibile."
+
+msgid "Festbetrag ist für diese Währung nicht zulässig."
+msgstr "Lo sconto fisso non è consentito per questa valuta."
+
+msgid "Bitte den Gutschein im Kundenportal einlösen."
+msgstr "Riscatta il buono nel portale clienti."
+
+msgid "Gutschein ungültig oder nicht verfügbar."
+msgstr "Codice non valido o non disponibile."
+
+msgid "Gutscheincode ungültig oder nicht verfügbar."
+msgstr "Codice sconto non valido o non disponibile."
+
+msgid "Nur netstyle kann Gutscheine erstellen."
+msgstr "Solo netstyle può creare buoni."
+
+msgid "Pro Aktion sind 1 bis 100 Gutscheine zulässig."
+msgstr "Per ogni operazione sono consentiti da 1 a 100 buoni."
+
+msgid "Gutschein nicht verfügbar oder abgelaufen."
+msgstr "Buono non disponibile o scaduto."
+
+msgid "Dieser Gutschein ist bereits vollständig eingelöst."
+msgstr "Il limite di utilizzi di questo buono è esaurito."
+
+msgid "Dieser Gutschein gilt nicht für das gewählte Produkt."
+msgstr "Questo buono non vale per il prodotto selezionato."
+
+msgid "Deaktivierte Unternehmen können keine Gutscheine einlösen."
+msgstr "Le aziende disattivate non possono riscattare buoni."
+
+msgid "Gutschein ist für einen anderen Kunden ausgestellt."
+msgstr "Il buono è destinato a un altro cliente."
+
+msgid "Gutschein ist für einen anderen Benutzer ausgestellt."
+msgstr "Il buono è destinato a un altro utente."
+
+msgid "Gutschein gilt nur für neue Pro-Lizenzen."
+msgstr "Il buono vale solo per nuove licenze Pro."
+
+msgid "Dieser Benutzer hat den Gutschein bereits eingelöst."
+msgstr "Questo utente ha già riscattato il buono."
+
+msgid "Dieser Gutschein wurde von diesem Konto bereits genutzt."
+msgstr "Questo account ha già utilizzato il buono."
+
+msgid "Kostenlose Zeitgutscheine bitte im Gutscheinbereich einlösen."
+msgstr "Riscatta i buoni per periodi gratuiti nella sezione buoni."
+
+msgid "Gutscheinbetrag ist für diesen Lizenzpreis nicht zulässig."
+msgstr "L'importo del buono non è valido per questo prezzo di licenza."
+
+msgid "Gutschein darf nur für eine zahlungspflichtige Bestellung verwendet werden."
+msgstr "Il buono può essere applicato solo a un ordine a pagamento."
+
+msgid "Gutscheinreservierung kann wegen inkonsistentem Kontingent nicht freigegeben werden."
+msgstr "Impossibile liberare la prenotazione per incoerenza della quota."
+
+msgid "Bitte ein aktives, bestätigtes Kundenkonto verwenden."
+msgstr "Utilizza un account cliente attivo e verificato."
+
+msgid "Pro ist derzeit nicht verfügbar."
+msgstr "Pro non è attualmente disponibile."
+
+msgid "Nur der Firmenadministrator kann Zeitgutscheine einlösen."
+msgstr "Solo l'amministratore aziendale può riscattare buoni a tempo."
+
+msgid "Empfänger muss aktives, bestätigtes Firmenmitglied sein."
+msgstr "Il destinatario deve essere un membro aziendale attivo e verificato."
+
+msgid "Privatcodes sind ausschließlich für das eigene Konto."
+msgstr "I codici privati si possono usare solo sul proprio account."
+
+msgid "Ein Privatkundenkonto ist erforderlich."
+msgstr "È necessario un account cliente privato."
+
+msgid "Persönliche Zeitgutscheine müssen direkt dem vorgesehenen Benutzer zugewiesen werden."
+msgstr "I buoni personali a tempo devono essere assegnati direttamente all'utente previsto."
+
+msgid "Rabattgutscheine bitte beim Pro-Kauf verwenden."
+msgstr "Usa i buoni sconto durante l'acquisto di Pro."
+
+msgid "Für Pro fehlt die Preisversion; Gutschein kann nicht gebucht werden."
+msgstr "Manca la versione del prezzo di Pro; il buono non può essere registrato."
+
+msgid "Für diesen Benutzer besteht eine gesperrte oder zu prüfende Pro-Lizenz."
+msgstr "Questo utente ha una licenza Pro bloccata o in verifica."
+
+msgid "Rabattprozente müssen zwischen 1 und 99 liegen."
+msgstr "La percentuale di sconto deve essere tra 1 e 99."
+
+msgid "Ein positiver Festbetrag ist erforderlich."
+msgstr "È richiesto un importo fisso positivo."
+
+msgid "Kostenlose Laufzeit muss 1 bis 1095 Tage betragen."
+msgstr "La durata gratuita deve essere compresa tra 1 e 1095 giorni."
+
+msgid "Rabattcodes dürfen keine freie Laufzeit haben."
+msgstr "I codici sconto non possono concedere periodi gratuiti."
+
+msgid "Nur Festbetragsrabatte dürfen einen Betrag haben."
+msgstr "Solo i buoni a importo fisso possono specificare un importo."
+
+msgid "Nur Prozentcodes dürfen Rabattprozente haben."
+msgstr "Solo i buoni percentuali possono specificare una percentuale."
+
+msgid "Probezeiträume sind keine Zahlungsrabatte."
+msgstr "I periodi di prova non sono sconti sul pagamento."
+
+msgid "Ein Code kann nur auf Firma oder Benutzer begrenzt sein."
+msgstr "Un codice può essere vincolato a un'azienda o a un utente, non a entrambi."
+
+msgid "Ende muss nach Beginn liegen."
+msgstr "La fine deve essere successiva all'inizio."
+
+msgid "Mindestens eine Einlösung erforderlich."
+msgstr "È richiesto almeno un riscatto."
+
+msgid "Prozentualer Rabatt"
+msgstr "Sconto percentuale"
+
+msgid "Fester Rabatt je Lizenz"
+msgstr "Sconto fisso per licenza"
+
+msgid "Kostenlose Pro-Laufzeit"
+msgstr "Periodo gratuito di Pro"
+
+msgid "Für Bestellung reserviert"
+msgstr "Riservato per ordine"
+
+msgid "Eingelöst"
+msgstr "Riscattato"
+
+msgid "Fehlgeschlagen / freigegeben"
+msgstr "Fallito / rilasciato"
+
+msgid "Rabattcode (optional)"
+msgstr "Codice sconto (facoltativo)"

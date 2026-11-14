@@ -3881,3 +3881,412 @@ msgstr "Gestion des licences / renouvellement"
 
 msgid "Jetzt trotzdem PROMPTFINISHER Pro starten"
 msgstr "Ouvrir quand même PROMPTFINISHER Pro"
+
+# Voucher campaign and checkout terminology
+msgid "Gutscheine"
+msgstr "Bons de réduction"
+
+msgid "Gutscheine & Aktionen"
+msgstr "Bons de réduction et promotions"
+
+msgid "Kostenlose Pro-Laufzeit"
+msgstr "Période Pro gratuite"
+
+msgid "Rabattcode (optional)"
+msgstr "Code de réduction (facultatif)"
+
+msgid "Kostenlose Pro-Nutzung"
+msgstr "Accès Pro gratuit"
+
+# Voucher campaign user interface
+msgid "Rabatte und kostenlose Pro-Zeiträume sicher verwalten."
+msgstr "Gérez en toute sécurité les remises et les périodes Pro offertes."
+
+msgid "+ Codes erstellen"
+msgstr "+ Créer des codes"
+
+msgid "Kampagnencodes"
+msgstr "Codes de campagne"
+
+msgid "Erfolgreiche Einlösungen"
+msgstr "Utilisations réussies"
+
+msgid "Kampagne, Firma oder letzte vier Zeichen"
+msgstr "Campagne, entreprise ou quatre derniers caractères"
+
+msgid "Prozent"
+msgstr "Pourcentage"
+
+msgid "Festbetrag"
+msgstr "Montant fixe"
+
+msgid "Kostenlose Zeit"
+msgstr "Période gratuite"
+
+msgid "Kampagne"
+msgstr "Campagne"
+
+msgid "Zielkunde"
+msgstr "Client destinataire"
+
+msgid "Verbrauch"
+msgstr "Utilisation"
+
+msgid "Verwalten"
+msgstr "Gérer"
+
+msgid "Keine Gutscheine gefunden."
+msgstr "Aucun bon trouvé."
+
+msgid "Weiter"
+msgstr "Suivant"
+
+msgid "Aus Sicherheitsgründen wird jeder vollständige Gutscheincode nur beim Erstellen angezeigt. Es werden ausschließlich Prüfsummen gespeichert."
+msgstr "Pour des raisons de sécurité, le code complet n'est affiché qu'à sa création. Seuls les hachages de vérification sont conservés."
+
+msgid "Alle Codes sind zufällig und werden nach dem Erstellen nur einmal angezeigt."
+msgstr "Tous les codes sont aléatoires et affichés une seule fois après leur création."
+
+msgid "Ein Code kann auf einen Kunden beschränkt werden. Ohne Bindung ist er für alle berechtigten Kunden gültig. Pro-Code-Limits gelten unabhängig voneinander."
+msgstr "Un code peut être réservé à un client. Sans restriction, il est valable pour tous les clients éligibles. Chaque code possède sa propre limite d'utilisation."
+
+msgid "Gutscheincodes erzeugen"
+msgstr "Générer des codes de réduction"
+
+msgid "Einmalige Anzeige"
+msgstr "Affichage unique"
+
+msgid "Diese Codes können später nicht erneut angezeigt werden. Bitte jetzt sicher an die berechtigten Kunden übergeben."
+msgstr "Ces codes ne pourront plus être affichés. Transmettez-les dès maintenant en toute sécurité aux clients concernés."
+
+msgid "Gutscheincode"
+msgstr "Code de réduction"
+
+msgid "Verwaltung"
+msgstr "Gestion"
+
+msgid "In Protokollen und Datenbank werden keine vollständigen Gutscheincodes gespeichert."
+msgstr "Les codes complets ne sont jamais enregistrés dans les journaux ni dans la base de données."
+
+msgid "Alle Gutscheine"
+msgstr "Tous les bons"
+
+msgid "Leistung"
+msgstr "Avantage"
+
+msgid "je Lizenz"
+msgstr "par licence"
+
+msgid "Tage Pro"
+msgstr "Jours Pro"
+
+msgid "Kontingent"
+msgstr "Quota"
+
+msgid "Je Code; laufende Zahlungsreservierungen zählen mit."
+msgstr "Par code ; les réservations de paiement en attente comptent dans la limite."
+
+msgid "Zielbindung"
+msgstr "Restriction du destinataire"
+
+msgid "Alle berechtigten Kunden"
+msgstr "Tous les clients éligibles"
+
+msgid "Bereits gewährte Lizenzen werden durch Gutscheinsperrung nicht automatisch entzogen."
+msgstr "Le blocage d'un bon ne révoque pas automatiquement les licences déjà accordées."
+
+msgid "Code für weitere Einlösungen sperren"
+msgstr "Bloquer le code pour toute nouvelle utilisation"
+
+msgid "Code wieder aktivieren"
+msgstr "Réactiver le code"
+
+msgid "Kampagne bearbeiten"
+msgstr "Modifier la campagne"
+
+msgid "Die wirtschaftlichen Konditionen und Kundenbindung bleiben nach Ausstellung unveränderlich."
+msgstr "Les conditions financières et la restriction client ne peuvent plus être modifiées après émission."
+
+msgid "Einlösehistorie"
+msgstr "Historique des utilisations"
+
+msgid "Einlöser"
+msgstr "Utilisé par"
+
+msgid "Lizenz/Bestellung"
+msgstr "Licence/commande"
+
+msgid "Noch keine Einlösungen."
+msgstr "Aucune utilisation pour le moment."
+
+msgid "Gutscheine & Gratislaufzeiten"
+msgstr "Bons et périodes gratuites"
+
+msgid "Rabattcodes beim Lizenzkauf nutzen oder Pro-Zeiträume einlösen."
+msgstr "Utilisez un code de réduction lors de l'achat de licences ou activez des périodes Pro offertes."
+
+msgid "Kostenlose Pro-Laufzeit einlösen"
+msgstr "Activer une période Pro gratuite"
+
+msgid "Zeitgutscheine können neue Lizenzen erzeugen oder die bestehende Lizenz des Empfängers verlängern. Rabattcodes gehören in das Kaufformular."
+msgstr "Les bons de durée créent des licences ou prolongent la licence existante du bénéficiaire. Saisissez les codes de réduction dans le formulaire d'achat."
+
+msgid "Unzugewiesene Lizenz für mein Unternehmen"
+msgstr "Licence non attribuée pour mon entreprise"
+
+msgid "Zeitgutschein verbindlich einlösen"
+msgstr "Utiliser un bon de durée"
+
+msgid "Für dieses Konto zugeteilte Kampagnen"
+msgstr "Campagnes attribuées à ce compte"
+
+msgid "Vollständige Codes werden nur durch netstyle ausgegeben."
+msgstr "Les codes complets sont délivrés exclusivement par netstyle."
+
+msgid "Keine ausdrücklich zugeteilten Kampagnen."
+msgstr "Aucune campagne attribuée à ce compte."
+
+msgid "Rabatt bei der Bestellung"
+msgstr "Réduction à la commande"
+
+msgid "Rabattcodes werden beim Kauf oder bei zulässigen Verlängerungen vor der Zahlung geprüft und auf den Bruttopreis angewendet."
+msgstr "Les codes sont vérifiés avant paiement lors d'un achat ou d'un renouvellement admissible et déduits du prix TTC."
+
+msgid "Zum Lizenzkauf"
+msgstr "Acheter des licences"
+
+msgid "Einlösungen und Lizenzzeiträume"
+msgstr "Utilisations et durées de licence"
+
+msgid "Gutschein"
+msgstr "Bon"
+
+msgid "Laufzeit/Rabatt"
+msgstr "Durée/réduction"
+
+# Voucher campaign forms, validation and checkout
+msgid "Kampagnenbezeichnung"
+msgstr "Nom de la campagne"
+
+msgid "Interner Hinweis"
+msgstr "Note interne"
+
+msgid "Rabatt in Prozent"
+msgstr "Remise en pourcentage"
+
+msgid "Festbetrag je Lizenz"
+msgstr "Montant fixe par licence"
+
+msgid "Gutscheinart"
+msgstr "Type de bon"
+
+msgid "Rabatt je Lizenz in EUR brutto"
+msgstr "Réduction TTC par licence en EUR"
+
+msgid "Kostenlose Tage"
+msgstr "Jours gratuits"
+
+msgid "Maximale Einlösungen je Code"
+msgstr "Nombre maximal d'utilisations par code"
+
+msgid "Anzahl verschiedener Codes"
+msgstr "Nombre de codes distincts"
+
+msgid "Rabatt auch für Verlängerungen"
+msgstr "Réduction aussi sur les renouvellements"
+
+msgid "Nur für Unternehmen (optional)"
+msgstr "Entreprise uniquement (facultatif)"
+
+msgid "Nur für Benutzer (optional)"
+msgstr "Utilisateur uniquement (facultatif)"
+
+msgid "Prozentgutscheine benötigen 1–99 Prozent."
+msgstr "Les bons en pourcentage doivent être compris entre 1 et 99 %."
+
+msgid "Festbetrag muss größer null sein."
+msgstr "Le montant fixe doit être supérieur à zéro."
+
+msgid "Kostenlose Laufzeit muss 1–1095 Tage betragen."
+msgstr "La durée gratuite doit être comprise entre 1 et 1095 jours."
+
+msgid "Nur für Prozentgutscheine zulässig."
+msgstr "Autorisé uniquement pour les bons en pourcentage."
+
+msgid "Nur für Festbetragsgutscheine zulässig."
+msgstr "Autorisé uniquement pour les bons à montant fixe."
+
+msgid "Nur für Zeitgutscheine zulässig."
+msgstr "Autorisé uniquement pour les bons de durée."
+
+msgid "Bei Zeitgutscheinen nicht anwendbar."
+msgstr "Non applicable aux bons de durée."
+
+msgid "Entweder Unternehmen oder Benutzer binden."
+msgstr "Restreindre à une entreprise ou à un utilisateur."
+
+msgid "Das Ende muss nach dem Beginn liegen."
+msgstr "La fin doit être postérieure au début."
+
+msgid "Maximale Einlösungen"
+msgstr "Nombre maximal d'utilisations"
+
+msgid "Bereits reservierte Einlösungen dürfen nicht abgeschnitten werden."
+msgstr "La limite ne peut pas être inférieure aux réservations existantes."
+
+msgid "Das Ende muss nach Beginn liegen."
+msgstr "La fin doit être postérieure au début."
+
+msgid "Neue Gutscheincodes"
+msgstr "Nouveaux codes de réduction"
+
+msgid "Gutscheine erstellen"
+msgstr "Créer des bons"
+
+msgid "Gutschein aktualisiert."
+msgstr "Bon mis à jour."
+
+msgid "Gutscheinstatus geändert. Bestehende Nutzungsrechte bleiben unverändert."
+msgstr "Statut du bon modifié. Les droits d'accès existants restent inchangés."
+
+msgid "Gutschein eingelöst. Pro-Lizenz: %(license)s"
+msgstr "Bon utilisé. Licence Pro : %(license)s"
+
+msgid "Ungültige Lizenzanzahl."
+msgstr "Quantité de licences invalide."
+
+msgid "Gutschein oder Preis nicht verfügbar."
+msgstr "Bon ou prix indisponible."
+
+msgid "Festbetrag ist für diese Währung nicht zulässig."
+msgstr "La réduction fixe n'est pas autorisée pour cette devise."
+
+msgid "Bitte den Gutschein im Kundenportal einlösen."
+msgstr "Veuillez utiliser le bon dans le portail client."
+
+msgid "Gutschein ungültig oder nicht verfügbar."
+msgstr "Code invalide ou indisponible."
+
+# Voucher model and service validation
+msgid "Prozentualer Rabatt"
+msgstr "Réduction en pourcentage"
+
+msgid "Fester Rabatt je Lizenz"
+msgstr "Réduction fixe par licence"
+
+msgid "Rabattprozente müssen zwischen 1 und 99 liegen."
+msgstr "Le pourcentage de réduction doit être compris entre 1 et 99."
+
+msgid "Ein positiver Festbetrag ist erforderlich."
+msgstr "Un montant fixe positif est requis."
+
+msgid "Kostenlose Laufzeit muss 1 bis 1095 Tage betragen."
+msgstr "La durée gratuite doit être comprise entre 1 et 1095 jours."
+
+msgid "Rabattcodes dürfen keine freie Laufzeit haben."
+msgstr "Les codes de réduction ne peuvent pas accorder de période gratuite."
+
+msgid "Nur Festbetragsrabatte dürfen einen Betrag haben."
+msgstr "Seuls les bons à montant fixe peuvent avoir un montant."
+
+msgid "Nur Prozentcodes dürfen Rabattprozente haben."
+msgstr "Seuls les bons en pourcentage peuvent définir un pourcentage."
+
+msgid "Probezeiträume sind keine Zahlungsrabatte."
+msgstr "Les périodes d'essai ne sont pas des réductions de paiement."
+
+msgid "Ein Code kann nur auf Firma oder Benutzer begrenzt sein."
+msgstr "Un code peut être réservé à une entreprise ou à un utilisateur, pas aux deux."
+
+msgid "Ende muss nach Beginn liegen."
+msgstr "La fin doit être postérieure au début."
+
+msgid "Mindestens eine Einlösung erforderlich."
+msgstr "Au moins une utilisation est requise."
+
+msgid "Für Bestellung reserviert"
+msgstr "Réservé pour la commande"
+
+msgid "Eingelöst"
+msgstr "Utilisé"
+
+msgid "Fehlgeschlagen / freigegeben"
+msgstr "Échoué / libéré"
+
+msgid "Gutscheincode ungültig oder nicht verfügbar."
+msgstr "Code de réduction invalide ou indisponible."
+
+msgid "Nur netstyle kann Gutscheine erstellen."
+msgstr "Seul netstyle peut créer des bons."
+
+msgid "Pro Aktion sind 1 bis 100 Gutscheine zulässig."
+msgstr "Chaque opération peut créer de 1 à 100 bons."
+
+msgid "Gutschein nicht verfügbar oder abgelaufen."
+msgstr "Bon indisponible ou expiré."
+
+msgid "Dieser Gutschein ist bereits vollständig eingelöst."
+msgstr "Le nombre maximal d'utilisations de ce bon est atteint."
+
+msgid "Dieser Gutschein gilt nicht für das gewählte Produkt."
+msgstr "Ce bon n'est pas valable pour le produit choisi."
+
+msgid "Deaktivierte Unternehmen können keine Gutscheine einlösen."
+msgstr "Les entreprises désactivées ne peuvent pas utiliser de bons."
+
+msgid "Gutschein ist für einen anderen Kunden ausgestellt."
+msgstr "Ce bon est réservé à un autre client."
+
+msgid "Gutschein ist für einen anderen Benutzer ausgestellt."
+msgstr "Ce bon est réservé à un autre utilisateur."
+
+msgid "Gutschein gilt nur für neue Pro-Lizenzen."
+msgstr "Ce bon est réservé aux nouvelles licences Pro."
+
+msgid "Dieser Benutzer hat den Gutschein bereits eingelöst."
+msgstr "Cet utilisateur a déjà utilisé ce bon."
+
+msgid "Dieser Gutschein wurde von diesem Konto bereits genutzt."
+msgstr "Ce compte a déjà utilisé ce bon."
+
+msgid "Kostenlose Zeitgutscheine bitte im Gutscheinbereich einlösen."
+msgstr "Utilisez les bons de durée gratuite dans la section dédiée."
+
+msgid "Gutscheinbetrag ist für diesen Lizenzpreis nicht zulässig."
+msgstr "Le montant du bon ne convient pas à ce prix de licence."
+
+msgid "Gutschein darf nur für eine zahlungspflichtige Bestellung verwendet werden."
+msgstr "Le bon ne peut être utilisé que pour une commande payante."
+
+msgid "Gutscheinreservierung kann wegen inkonsistentem Kontingent nicht freigegeben werden."
+msgstr "Impossible de libérer la réservation en raison d'un quota incohérent."
+
+msgid "Bitte ein aktives, bestätigtes Kundenkonto verwenden."
+msgstr "Utilisez un compte client actif et vérifié."
+
+msgid "Pro ist derzeit nicht verfügbar."
+msgstr "Pro est actuellement indisponible."
+
+msgid "Nur der Firmenadministrator kann Zeitgutscheine einlösen."
+msgstr "Seul l'administrateur de l'entreprise peut utiliser des bons de durée."
+
+msgid "Empfänger muss aktives, bestätigtes Firmenmitglied sein."
+msgstr "Le bénéficiaire doit être un membre actif et vérifié de l'entreprise."
+
+msgid "Privatcodes sind ausschließlich für das eigene Konto."
+msgstr "Les codes privés ne peuvent être utilisés que sur le compte du titulaire."
+
+msgid "Ein Privatkundenkonto ist erforderlich."
+msgstr "Un compte client particulier est nécessaire."
+
+msgid "Persönliche Zeitgutscheine müssen direkt dem vorgesehenen Benutzer zugewiesen werden."
+msgstr "Les bons de durée personnels doivent être attribués directement à l'utilisateur désigné."
+
+msgid "Rabattgutscheine bitte beim Pro-Kauf verwenden."
+msgstr "Utilisez les bons de réduction lors de l'achat de Pro."
+
+msgid "Für Pro fehlt die Preisversion; Gutschein kann nicht gebucht werden."
+msgstr "Il manque la version tarifaire de Pro ; le bon ne peut pas être enregistré."
+
+msgid "Für diesen Benutzer besteht eine gesperrte oder zu prüfende Pro-Lizenz."
+msgstr "Cet utilisateur possède une licence Pro bloquée ou en cours de vérification."
