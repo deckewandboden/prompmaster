@@ -255,6 +255,61 @@ class VoucherContractsTests(TestCase):
         self.assertEqual(order.tax_total, Decimal("11.46"))
         self.assertFalse(VoucherRedemption.objects.exists())
 
+    def test_confirmed_failed_payment_releases_reserved_discount_quota(self):
+        from .services import release_terminal_discount_reservation
+
+        voucher, raw = self.make(kind="percent", bound_company=self.company)
+        order = create_order(user=self.admin, product=self.product, voucher_code=raw)
+        payment = Payment.objects.create(
+            order=order, provider_payment_id="tr_test_failed_voucher_1",
+            status="failed", amount=order.gross_total, currency="EUR",
+        )
+        order.status = "failed"
+        order.save(update_fields=["status", "updated_at"])
+        self.assertTrue(release_terminal_discount_reservation(order))
+        self.assertFalse(release_terminal_discount_reservation(order))
+        voucher.refresh_from_db()
+        self.assertEqual(voucher.used_count, 0)
+        self.assertEqual(order.voucher_redemption.status, "cancelled")  # database refresh below
+        order2 = create_order(user=self.admin, product=self.product, voucher_code=raw)
+        self.assertEqual(order2.voucher_redemption.status, "reserved")
+        voucher.refresh_from_db()
+        self.assertEqual(voucher.used_count, 1)
+
+    def test_nonterminal_provider_status_does_not_release_quota(self):
+        from .services import release_terminal_discount_reservation
+
+        voucher, raw = self.make(kind="percent", bound_company=self.company)
+        order = create_order(user=self.admin, product=self.product, voucher_code=raw)
+        payment = Payment.objects.create(
+            order=order, provider_payment_id="tr_test_pending_voucher_2",
+            status="pending", amount=order.gross_total, currency="EUR",
+        )
+        order.status = "failed"
+        order.save(update_fields=["status", "updated_at"])
+        self.assertFalse(release_terminal_discount_reservation(order))
+        voucher.refresh_from_db()
+        self.assertEqual(voucher.used_count, 1)
+        payment.status = "expired"
+        payment.processed_paid = True
+        payment.save(update_fields=["status", "processed_paid", "updated_at"])
+        self.assertFalse(release_terminal_discount_reservation(order))
+        voucher.refresh_from_db()
+        self.assertEqual(voucher.used_count, 1)
+
+    def test_csrf_protects_public_quote_and_authenticated_redemption(self):
+        from django.test import Client
+
+        strict = Client(enforce_csrf_checks=True)
+        self.assertEqual(strict.post("/api/v1/vouchers/quote/", {
+            "voucher_code": "PF-ABCD-EFGH-JKLM-NPQR-STUV",
+            "quantity": 1,
+        }).status_code, 403)
+        strict.force_login(self.admin)
+        self.assertEqual(strict.post("/portal/vouchers/redeem/", {
+            "voucher_code": "PF-ABCD-EFGH-JKLM-NPQR-STUV",
+        }).status_code, 403)
+
     def test_trial_cannot_bypass_blocked_pro_licenses(self):
         existing = License.objects.create(
             owner_user=self.private, product=self.product,
