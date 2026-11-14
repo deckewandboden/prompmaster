@@ -46,7 +46,7 @@ msgid "Lizenzen"
 msgstr "Licences"
 
 msgid "Bestellungen"
-msgstr "Ordonnances"
+msgstr "Commandes"
 
 msgid "Zahlungen"
 msgstr "Paiements"
