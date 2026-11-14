@@ -105,7 +105,15 @@ def _check_single_use(voucher, *, user, kind, beneficiary=None):
     if kind == "trial":
         if beneficiary and rows.filter(beneficiary=beneficiary).exists():
             raise ValidationError("Dieser Benutzer hat den Gutschein bereits eingelöst.")
-    elif user is not None and rows.filter(redeemed_by=user).exists():
+    elif (
+        user is not None
+        and not voucher.bound_company_id
+        and not voucher.bound_user_id
+        and rows.filter(redeemed_by=user).exists()
+    ):
+        # Public promotions are limited to one order per buyer. Explicitly
+        # customer-bound campaigns can be used repeatedly up to their
+        # deliberately configured campaign quota.
         raise ValidationError("Dieser Gutschein wurde von diesem Konto bereits genutzt.")
 
 
