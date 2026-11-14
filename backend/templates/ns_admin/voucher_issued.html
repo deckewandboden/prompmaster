@@ -1,7 +1,7 @@
 {% extends 'ns_admin/base.html' %}{% load i18n %}{% block content %}
 <div class="page-head"><div><h1>{{ title }}</h1></div><a class="btn secondary" href="{% url 'ns_admin:vouchers' %}">{% translate "Zur Übersicht" %}</a></div>
 <div class="alert warn"><strong>{% translate "Einmalige Anzeige" %}</strong> – {% translate "Diese Codes können später nicht erneut angezeigt werden. Bitte jetzt sicher an die berechtigten Kunden übergeben." %}</div>
-<div class="card"><div class="table-wrap"><table><thead><tr><th>{% translate "Kampagne" %}</th><th>{% translate "Gutscheincode" %}</th><th>{% translate "Verwaltung" %}</th></tr></thead><tbody>
-{% for voucher, raw_code in minted %}<tr><td>{{ voucher.title }}</td><td><code>{{ raw_code }}</code></td><td><a class="btn secondary sm" href="{% url 'ns_admin:voucher_detail' voucher.pk %}">{% translate "Öffnen" %}</a></td></tr>{% endfor %}
+<div class="card"><div class="tablewrap"><table><thead><tr><th>{% translate "Kampagne" %}</th><th>{% translate "Gutscheincode" %}</th><th>{% translate "Verwaltung" %}</th></tr></thead><tbody>
+{% for voucher, raw_code in minted %}<tr><td data-label="Kampagne">{{ voucher.title }}</td><td data-label="Gutscheincode"><code>{{ raw_code }}</code></td><td data-label="Verwaltung"><a class="btn secondary sm" href="{% url 'ns_admin:voucher_detail' voucher.pk %}">{% translate "Öffnen" %}</a></td></tr>{% endfor %}
 </tbody></table></div></div><p class="tiny muted">{% translate "In Protokollen und Datenbank werden keine vollständigen Gutscheincodes gespeichert." %}</p>
 {% endblock %}
