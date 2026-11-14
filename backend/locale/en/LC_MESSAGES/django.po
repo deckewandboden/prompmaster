@@ -4100,3 +4100,127 @@ msgstr "Please redeem the voucher in the customer portal."
 
 msgid "Gutschein ungültig oder nicht verfügbar."
 msgstr "Voucher invalid or unavailable."
+
+# Voucher model and service validation
+msgid "Prozentualer Rabatt"
+msgstr "Percentage discount"
+
+msgid "Fester Rabatt je Lizenz"
+msgstr "Fixed discount per license"
+
+msgid "Rabattprozente müssen zwischen 1 und 99 liegen."
+msgstr "Discount percentage must be between 1 and 99."
+
+msgid "Ein positiver Festbetrag ist erforderlich."
+msgstr "A positive fixed amount is required."
+
+msgid "Kostenlose Laufzeit muss 1 bis 1095 Tage betragen."
+msgstr "Free period must be between 1 and 1095 days."
+
+msgid "Rabattcodes dürfen keine freie Laufzeit haben."
+msgstr "Discount codes cannot grant free time."
+
+msgid "Nur Festbetragsrabatte dürfen einen Betrag haben."
+msgstr "Only fixed discounts may have an amount."
+
+msgid "Nur Prozentcodes dürfen Rabattprozente haben."
+msgstr "Only percentage codes may specify a percentage."
+
+msgid "Probezeiträume sind keine Zahlungsrabatte."
+msgstr "Trial periods are not payment discounts."
+
+msgid "Ein Code kann nur auf Firma oder Benutzer begrenzt sein."
+msgstr "A code may be restricted to a company or a user, not both."
+
+msgid "Ende muss nach Beginn liegen."
+msgstr "End must be later than start."
+
+msgid "Mindestens eine Einlösung erforderlich."
+msgstr "At least one redemption is required."
+
+msgid "Für Bestellung reserviert"
+msgstr "Reserved for order"
+
+msgid "Eingelöst"
+msgstr "Redeemed"
+
+msgid "Fehlgeschlagen / freigegeben"
+msgstr "Failed / released"
+
+msgid "Gutscheincode ungültig oder nicht verfügbar."
+msgstr "Voucher code invalid or unavailable."
+
+msgid "Nur netstyle kann Gutscheine erstellen."
+msgstr "Only netstyle may issue vouchers."
+
+msgid "Pro Aktion sind 1 bis 100 Gutscheine zulässig."
+msgstr "You may generate 1 to 100 vouchers at a time."
+
+msgid "Gutschein nicht verfügbar oder abgelaufen."
+msgstr "Voucher unavailable or expired."
+
+msgid "Dieser Gutschein ist bereits vollständig eingelöst."
+msgstr "This voucher has reached its usage limit."
+
+msgid "Dieser Gutschein gilt nicht für das gewählte Produkt."
+msgstr "This voucher is not valid for the selected product."
+
+msgid "Deaktivierte Unternehmen können keine Gutscheine einlösen."
+msgstr "Inactive companies cannot redeem vouchers."
+
+msgid "Gutschein ist für einen anderen Kunden ausgestellt."
+msgstr "Voucher is issued to another customer."
+
+msgid "Gutschein ist für einen anderen Benutzer ausgestellt."
+msgstr "Voucher is issued to another user."
+
+msgid "Gutschein gilt nur für neue Pro-Lizenzen."
+msgstr "Voucher is valid only for new Pro licenses."
+
+msgid "Dieser Benutzer hat den Gutschein bereits eingelöst."
+msgstr "This user has already redeemed the voucher."
+
+msgid "Dieser Gutschein wurde von diesem Konto bereits genutzt."
+msgstr "This account has already used this voucher."
+
+msgid "Kostenlose Zeitgutscheine bitte im Gutscheinbereich einlösen."
+msgstr "Redeem free-period vouchers in the voucher section."
+
+msgid "Gutscheinbetrag ist für diesen Lizenzpreis nicht zulässig."
+msgstr "Voucher amount is not valid for this license price."
+
+msgid "Gutschein darf nur für eine zahlungspflichtige Bestellung verwendet werden."
+msgstr "Voucher may only be applied to a payable order."
+
+msgid "Gutscheinreservierung kann wegen inkonsistentem Kontingent nicht freigegeben werden."
+msgstr "Voucher reservation cannot be released because the quota is inconsistent."
+
+msgid "Bitte ein aktives, bestätigtes Kundenkonto verwenden."
+msgstr "Use an active, verified customer account."
+
+msgid "Pro ist derzeit nicht verfügbar."
+msgstr "Pro is currently unavailable."
+
+msgid "Nur der Firmenadministrator kann Zeitgutscheine einlösen."
+msgstr "Only the company administrator can redeem free-period vouchers."
+
+msgid "Empfänger muss aktives, bestätigtes Firmenmitglied sein."
+msgstr "Recipient must be an active, verified company member."
+
+msgid "Privatcodes sind ausschließlich für das eigene Konto."
+msgstr "Personal codes are only for your own account."
+
+msgid "Ein Privatkundenkonto ist erforderlich."
+msgstr "A personal customer account is required."
+
+msgid "Persönliche Zeitgutscheine müssen direkt dem vorgesehenen Benutzer zugewiesen werden."
+msgstr "Personal free-period vouchers must be assigned directly to the intended user."
+
+msgid "Rabattgutscheine bitte beim Pro-Kauf verwenden."
+msgstr "Use discount vouchers when purchasing Pro."
+
+msgid "Für Pro fehlt die Preisversion; Gutschein kann nicht gebucht werden."
+msgstr "The Pro price version is missing; the voucher cannot be applied."
+
+msgid "Für diesen Benutzer besteht eine gesperrte oder zu prüfende Pro-Lizenz."
+msgstr "This user has a blocked or under-review Pro license."
