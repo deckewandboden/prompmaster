@@ -30,6 +30,28 @@ class FreeContextPunctuationTests(SimpleTestCase):
                     self.assertNotIn(expected + '.', result['prompt'])
 
 
+    def test_secondary_context_punctuation_is_preserved_without_extra_period(self):
+        from types import SimpleNamespace
+        from .free_legacy import FREE_RUNTIME_CONTRACTS, compose_free_legacy
+        checked = 0
+        for task_id, runtime in FREE_RUNTIME_CONTRACTS.items():
+            if runtime.get('secondary_suffix') != '.':
+                continue
+            contract = SimpleNamespace(legacy_id=task_id, payload={'runtime_contract': runtime})
+            for ending in ('', '.', '!', '?', '…'):
+                with self.subTest(task=task_id, ending=ending):
+                    secondary = 'QA-105 synthetic secondary context' + ending
+                    result = compose_free_legacy(
+                        contract=contract, microsoft_tier='premium',
+                        payload={'primary': 'QA-105 synthetic primary context',
+                                 'secondary': secondary})
+                    expected = runtime['secondary_prefix'] + secondary + ('' if ending else '.')
+                    self.assertIn(expected, result['prompt'])
+                    self.assertNotIn(expected + '.', result['prompt'])
+                    checked += 1
+        self.assertEqual(checked, 10)
+
+
 class LocalizedPromptRenderingTests(SimpleTestCase):
     def test_german_canonical_prompt_is_unchanged(self):
         original = {'prompt': 'Arbeite dabei in folgender Reihenfolge: Test.', 'ready': True}
