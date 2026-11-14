@@ -3997,3 +3997,106 @@ msgstr "Kupon"
 
 msgid "Laufzeit/Rabatt"
 msgstr "Süre/indirim"
+
+# Voucher campaign forms, validation and checkout
+msgid "Kampagnenbezeichnung"
+msgstr "Kampanya adı"
+
+msgid "Interner Hinweis"
+msgstr "Dahili not"
+
+msgid "Rabatt in Prozent"
+msgstr "Yüzdelik indirim"
+
+msgid "Festbetrag je Lizenz"
+msgstr "Lisans başına sabit tutar"
+
+msgid "Gutscheinart"
+msgstr "Kupon türü"
+
+msgid "Rabatt je Lizenz in EUR brutto"
+msgstr "Lisans başına KDV dahil EUR indirimi"
+
+msgid "Kostenlose Tage"
+msgstr "Ücretsiz günler"
+
+msgid "Maximale Einlösungen je Code"
+msgstr "Kod başına kullanım sınırı"
+
+msgid "Anzahl verschiedener Codes"
+msgstr "Farklı kod sayısı"
+
+msgid "Rabatt auch für Verlängerungen"
+msgstr "İndirim yenilemelerde de geçerli"
+
+msgid "Nur für Unternehmen (optional)"
+msgstr "Yalnızca şirket için (isteğe bağlı)"
+
+msgid "Nur für Benutzer (optional)"
+msgstr "Yalnızca kullanıcı için (isteğe bağlı)"
+
+msgid "Prozentgutscheine benötigen 1–99 Prozent."
+msgstr "Yüzde kuponu için oran %1–99 olmalıdır."
+
+msgid "Festbetrag muss größer null sein."
+msgstr "Sabit tutar sıfırdan büyük olmalıdır."
+
+msgid "Kostenlose Laufzeit muss 1–1095 Tage betragen."
+msgstr "Ücretsiz süre 1–1095 gün olmalıdır."
+
+msgid "Nur für Prozentgutscheine zulässig."
+msgstr "Yalnızca yüzde kuponlarında kullanılabilir."
+
+msgid "Nur für Festbetragsgutscheine zulässig."
+msgstr "Yalnızca sabit tutarlı kuponlarda kullanılabilir."
+
+msgid "Nur für Zeitgutscheine zulässig."
+msgstr "Yalnızca süre kuponlarında kullanılabilir."
+
+msgid "Bei Zeitgutscheinen nicht anwendbar."
+msgstr "Süre kuponlarında uygulanamaz."
+
+msgid "Entweder Unternehmen oder Benutzer binden."
+msgstr "Şirkete veya kullanıcıya sınırlandırın; ikisine birden değil."
+
+msgid "Das Ende muss nach dem Beginn liegen."
+msgstr "Bitiş başlangıçtan sonra olmalıdır."
+
+msgid "Maximale Einlösungen"
+msgstr "Azami kullanım"
+
+msgid "Bereits reservierte Einlösungen dürfen nicht abgeschnitten werden."
+msgstr "Limit mevcut rezervasyonlardan az olamaz."
+
+msgid "Das Ende muss nach Beginn liegen."
+msgstr "Bitiş başlangıçtan sonra olmalıdır."
+
+msgid "Neue Gutscheincodes"
+msgstr "Yeni kupon kodları"
+
+msgid "Gutscheine erstellen"
+msgstr "Kupon oluştur"
+
+msgid "Gutschein aktualisiert."
+msgstr "Kupon güncellendi."
+
+msgid "Gutscheinstatus geändert. Bestehende Nutzungsrechte bleiben unverändert."
+msgstr "Kupon durumu değiştirildi. Mevcut erişim hakları değişmez."
+
+msgid "Gutschein eingelöst. Pro-Lizenz: %(license)s"
+msgstr "Kupon kullanıldı. Pro lisansı: %(license)s"
+
+msgid "Ungültige Lizenzanzahl."
+msgstr "Geçersiz lisans sayısı."
+
+msgid "Gutschein oder Preis nicht verfügbar."
+msgstr "Kupon veya fiyat mevcut değil."
+
+msgid "Festbetrag ist für diese Währung nicht zulässig."
+msgstr "Bu para biriminde sabit indirim geçerli değil."
+
+msgid "Bitte den Gutschein im Kundenportal einlösen."
+msgstr "Kuponu müşteri portalında kullanın."
+
+msgid "Gutschein ungültig oder nicht verfügbar."
+msgstr "Kupon geçersiz veya kullanılamıyor."
