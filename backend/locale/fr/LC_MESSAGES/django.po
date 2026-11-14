@@ -4063,3 +4063,106 @@ msgstr "Bon"
 
 msgid "Laufzeit/Rabatt"
 msgstr "Durée/réduction"
+
+# Voucher campaign forms, validation and checkout
+msgid "Kampagnenbezeichnung"
+msgstr "Nom de la campagne"
+
+msgid "Interner Hinweis"
+msgstr "Note interne"
+
+msgid "Rabatt in Prozent"
+msgstr "Réduction en pourcentage"
+
+msgid "Festbetrag je Lizenz"
+msgstr "Montant fixe par licence"
+
+msgid "Gutscheinart"
+msgstr "Type de bon"
+
+msgid "Rabatt je Lizenz in EUR brutto"
+msgstr "Réduction par licence en EUR TTC"
+
+msgid "Kostenlose Tage"
+msgstr "Jours gratuits"
+
+msgid "Maximale Einlösungen je Code"
+msgstr "Nombre maximal d’utilisations par code"
+
+msgid "Anzahl verschiedener Codes"
+msgstr "Nombre de codes différents"
+
+msgid "Rabatt auch für Verlängerungen"
+msgstr "Réduction valable aussi pour les renouvellements"
+
+msgid "Nur für Unternehmen (optional)"
+msgstr "Entreprise uniquement (facultatif)"
+
+msgid "Nur für Benutzer (optional)"
+msgstr "Utilisateur uniquement (facultatif)"
+
+msgid "Prozentgutscheine benötigen 1–99 Prozent."
+msgstr "La réduction doit être comprise entre 1 et 99 %."
+
+msgid "Festbetrag muss größer null sein."
+msgstr "Le montant fixe doit être supérieur à zéro."
+
+msgid "Kostenlose Laufzeit muss 1–1095 Tage betragen."
+msgstr "La période gratuite doit durer de 1 à 1095 jours."
+
+msgid "Nur für Prozentgutscheine zulässig."
+msgstr "Réservé aux bons en pourcentage."
+
+msgid "Nur für Festbetragsgutscheine zulässig."
+msgstr "Réservé aux bons à montant fixe."
+
+msgid "Nur für Zeitgutscheine zulässig."
+msgstr "Réservé aux bons de durée."
+
+msgid "Bei Zeitgutscheinen nicht anwendbar."
+msgstr "Non applicable aux bons de durée."
+
+msgid "Entweder Unternehmen oder Benutzer binden."
+msgstr "Réservez à une entreprise ou un utilisateur, pas les deux."
+
+msgid "Das Ende muss nach dem Beginn liegen."
+msgstr "La fin doit être postérieure au début."
+
+msgid "Maximale Einlösungen"
+msgstr "Utilisations maximales"
+
+msgid "Bereits reservierte Einlösungen dürfen nicht abgeschnitten werden."
+msgstr "La limite ne peut être inférieure aux réservations existantes."
+
+msgid "Das Ende muss nach Beginn liegen."
+msgstr "La fin doit être après le début."
+
+msgid "Neue Gutscheincodes"
+msgstr "Nouveaux codes de réduction"
+
+msgid "Gutscheine erstellen"
+msgstr "Créer des bons"
+
+msgid "Gutschein aktualisiert."
+msgstr "Bon mis à jour."
+
+msgid "Gutscheinstatus geändert. Bestehende Nutzungsrechte bleiben unverändert."
+msgstr "Statut du bon modifié. Les droits d’accès existants restent inchangés."
+
+msgid "Gutschein eingelöst. Pro-Lizenz: %(license)s"
+msgstr "Bon utilisé. Licence Pro : %(license)s"
+
+msgid "Ungültige Lizenzanzahl."
+msgstr "Nombre de licences invalide."
+
+msgid "Gutschein oder Preis nicht verfügbar."
+msgstr "Bon ou tarif indisponible."
+
+msgid "Festbetrag ist für diese Währung nicht zulässig."
+msgstr "Réduction fixe indisponible pour cette devise."
+
+msgid "Bitte den Gutschein im Kundenportal einlösen."
+msgstr "Utilisez ce bon dans le portail client."
+
+msgid "Gutschein ungültig oder nicht verfügbar."
+msgstr "Bon invalide ou indisponible."
