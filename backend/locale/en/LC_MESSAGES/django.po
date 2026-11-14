@@ -3831,3 +3831,169 @@ msgstr "Discount code (optional)"
 
 msgid "Kostenlose Pro-Nutzung"
 msgstr "Free Pro access"
+
+# Voucher campaign user interface
+msgid "Rabatte und kostenlose Pro-Zeiträume sicher verwalten."
+msgstr "Manage discounts and free Pro periods securely."
+
+msgid "+ Codes erstellen"
+msgstr "+ Create codes"
+
+msgid "Kampagnencodes"
+msgstr "Campaign codes"
+
+msgid "Erfolgreiche Einlösungen"
+msgstr "Successful redemptions"
+
+msgid "Kampagne, Firma oder letzte vier Zeichen"
+msgstr "Campaign, company or last four characters"
+
+msgid "Prozent"
+msgstr "Percentage"
+
+msgid "Festbetrag"
+msgstr "Fixed amount"
+
+msgid "Kostenlose Zeit"
+msgstr "Free period"
+
+msgid "Kampagne"
+msgstr "Campaign"
+
+msgid "Zielkunde"
+msgstr "Target customer"
+
+msgid "Verbrauch"
+msgstr "Usage"
+
+msgid "Verwalten"
+msgstr "Manage"
+
+msgid "Keine Gutscheine gefunden."
+msgstr "No vouchers found."
+
+msgid "Weiter"
+msgstr "Next"
+
+msgid "Aus Sicherheitsgründen wird jeder vollständige Gutscheincode nur beim Erstellen angezeigt. Es werden ausschließlich Prüfsummen gespeichert."
+msgstr "For security, each full voucher code is shown only when created. Only hashes are stored."
+
+msgid "Alle Codes sind zufällig und werden nach dem Erstellen nur einmal angezeigt."
+msgstr "Codes are random and displayed only once after creation."
+
+msgid "Ein Code kann auf einen Kunden beschränkt werden. Ohne Bindung ist er für alle berechtigten Kunden gültig. Pro-Code-Limits gelten unabhängig voneinander."
+msgstr "A code may be restricted to one customer. Unrestricted codes work for all eligible customers. Limits apply per code."
+
+msgid "Gutscheincodes erzeugen"
+msgstr "Generate voucher codes"
+
+msgid "Einmalige Anzeige"
+msgstr "One-time display"
+
+msgid "Diese Codes können später nicht erneut angezeigt werden. Bitte jetzt sicher an die berechtigten Kunden übergeben."
+msgstr "These codes cannot be displayed again. Share them securely with authorized customers now."
+
+msgid "Gutscheincode"
+msgstr "Voucher code"
+
+msgid "Verwaltung"
+msgstr "Administration"
+
+msgid "In Protokollen und Datenbank werden keine vollständigen Gutscheincodes gespeichert."
+msgstr "Full voucher codes are never stored in logs or the database."
+
+msgid "Alle Gutscheine"
+msgstr "All vouchers"
+
+msgid "Leistung"
+msgstr "Benefit"
+
+msgid "je Lizenz"
+msgstr "per license"
+
+msgid "Tage Pro"
+msgstr "Pro days"
+
+msgid "Kontingent"
+msgstr "Quota"
+
+msgid "Je Code; laufende Zahlungsreservierungen zählen mit."
+msgstr "Per code; pending payment reservations count toward the limit."
+
+msgid "Zielbindung"
+msgstr "Recipient restriction"
+
+msgid "Alle berechtigten Kunden"
+msgstr "All eligible customers"
+
+msgid "Bereits gewährte Lizenzen werden durch Gutscheinsperrung nicht automatisch entzogen."
+msgstr "Blocking a voucher does not automatically revoke licenses already granted."
+
+msgid "Code für weitere Einlösungen sperren"
+msgstr "Block further redemptions"
+
+msgid "Code wieder aktivieren"
+msgstr "Reactivate code"
+
+msgid "Kampagne bearbeiten"
+msgstr "Edit campaign"
+
+msgid "Die wirtschaftlichen Konditionen und Kundenbindung bleiben nach Ausstellung unveränderlich."
+msgstr "Commercial terms and customer restrictions cannot change after issuance."
+
+msgid "Einlösehistorie"
+msgstr "Redemption history"
+
+msgid "Einlöser"
+msgstr "Redeemed by"
+
+msgid "Lizenz/Bestellung"
+msgstr "License/order"
+
+msgid "Noch keine Einlösungen."
+msgstr "No redemptions yet."
+
+msgid "Gutscheine & Gratislaufzeiten"
+msgstr "Vouchers & free access periods"
+
+msgid "Rabattcodes beim Lizenzkauf nutzen oder Pro-Zeiträume einlösen."
+msgstr "Use discount codes when buying licenses or redeem free Pro periods."
+
+msgid "Kostenlose Pro-Laufzeit einlösen"
+msgstr "Redeem free Pro period"
+
+msgid "Zeitgutscheine können neue Lizenzen erzeugen oder die bestehende Lizenz des Empfängers verlängern. Rabattcodes gehören in das Kaufformular."
+msgstr "Free-period vouchers can grant new licenses or extend an existing license. Enter discount codes in the purchase form."
+
+msgid "Unzugewiesene Lizenz für mein Unternehmen"
+msgstr "Unassigned license for my company"
+
+msgid "Zeitgutschein verbindlich einlösen"
+msgstr "Redeem free-period voucher"
+
+msgid "Für dieses Konto zugeteilte Kampagnen"
+msgstr "Campaigns assigned to this account"
+
+msgid "Vollständige Codes werden nur durch netstyle ausgegeben."
+msgstr "Full codes are issued only by netstyle."
+
+msgid "Keine ausdrücklich zugeteilten Kampagnen."
+msgstr "No campaigns assigned directly."
+
+msgid "Rabatt bei der Bestellung"
+msgstr "Discount on purchase"
+
+msgid "Rabattcodes werden beim Kauf oder bei zulässigen Verlängerungen vor der Zahlung geprüft und auf den Bruttopreis angewendet."
+msgstr "Discount codes are checked before payment and applied to the gross amount on purchases and eligible renewals."
+
+msgid "Zum Lizenzkauf"
+msgstr "Go to license purchase"
+
+msgid "Einlösungen und Lizenzzeiträume"
+msgstr "Redemptions and license periods"
+
+msgid "Gutschein"
+msgstr "Voucher"
+
+msgid "Laufzeit/Rabatt"
+msgstr "Period/discount"
