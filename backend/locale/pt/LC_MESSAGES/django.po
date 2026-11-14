@@ -3824,17 +3824,17 @@ msgid "Gutscheine & Aktionen"
 msgstr "Cupões e promoções"
 
 msgid "Kostenlose Pro-Laufzeit"
-msgstr "Período gratuito do Pro"
+msgstr "Período gratuito de Pro"
 
 msgid "Rabattcode (optional)"
 msgstr "Código de desconto (opcional)"
 
 msgid "Kostenlose Pro-Nutzung"
-msgstr "Utilização gratuita do Pro"
+msgstr "Acesso gratuito ao Pro"
 
 # Voucher campaign user interface
 msgid "Rabatte und kostenlose Pro-Zeiträume sicher verwalten."
-msgstr "Gerir descontos e períodos gratuitos Pro com segurança."
+msgstr "Gira descontos e períodos gratuitos de Pro em segurança."
 
 msgid "+ Codes erstellen"
 msgstr "+ Criar códigos"
@@ -3852,7 +3852,7 @@ msgid "Prozent"
 msgstr "Percentagem"
 
 msgid "Festbetrag"
-msgstr "Montante fixo"
+msgstr "Valor fixo"
 
 msgid "Kostenlose Zeit"
 msgstr "Período gratuito"
@@ -3864,25 +3864,25 @@ msgid "Zielkunde"
 msgstr "Cliente destinatário"
 
 msgid "Verbrauch"
-msgstr "Utilizações"
+msgstr "Utilização"
 
 msgid "Verwalten"
 msgstr "Gerir"
 
 msgid "Keine Gutscheine gefunden."
-msgstr "Não foram encontrados cupões."
+msgstr "Nenhum cupão encontrado."
 
 msgid "Weiter"
 msgstr "Seguinte"
 
 msgid "Aus Sicherheitsgründen wird jeder vollständige Gutscheincode nur beim Erstellen angezeigt. Es werden ausschließlich Prüfsummen gespeichert."
-msgstr "Por segurança, o código completo só aparece na criação. Apenas são guardados códigos hash."
+msgstr "Por segurança, o código completo só é apresentado na criação. Apenas são armazenados hashes de verificação."
 
 msgid "Alle Codes sind zufällig und werden nach dem Erstellen nur einmal angezeigt."
-msgstr "Os códigos são aleatórios e apresentados uma única vez após a criação."
+msgstr "Todos os códigos são aleatórios e só são apresentados uma vez após a criação."
 
 msgid "Ein Code kann auf einen Kunden beschränkt werden. Ohne Bindung ist er für alle berechtigten Kunden gültig. Pro-Code-Limits gelten unabhängig voneinander."
-msgstr "Um código pode ficar limitado a um cliente. Sem restrição, vale para todos os clientes elegíveis. Os limites são por código."
+msgstr "Um código pode ser limitado a um cliente. Sem restrição, é válido para todos os clientes elegíveis. Cada código tem o seu próprio limite de resgates."
 
 msgid "Gutscheincodes erzeugen"
 msgstr "Gerar códigos de cupão"
@@ -3891,16 +3891,16 @@ msgid "Einmalige Anzeige"
 msgstr "Apresentação única"
 
 msgid "Diese Codes können später nicht erneut angezeigt werden. Bitte jetzt sicher an die berechtigten Kunden übergeben."
-msgstr "Estes códigos não voltarão a ser exibidos. Entregue-os agora de forma segura aos clientes autorizados."
+msgstr "Estes códigos não poderão ser apresentados novamente. Entregue-os agora em segurança aos clientes indicados."
 
 msgid "Gutscheincode"
 msgstr "Código de cupão"
 
 msgid "Verwaltung"
-msgstr "Administração"
+msgstr "Gestão"
 
 msgid "In Protokollen und Datenbank werden keine vollständigen Gutscheincodes gespeichert."
-msgstr "Os códigos completos nunca são guardados em registos ou na base de dados."
+msgstr "Os códigos completos não são guardados em registos ou na base de dados."
 
 msgid "Alle Gutscheine"
 msgstr "Todos os cupões"
@@ -3912,10 +3912,10 @@ msgid "je Lizenz"
 msgstr "por licença"
 
 msgid "Tage Pro"
-msgstr "Dias Pro"
+msgstr "Dias de Pro"
 
 msgid "Kontingent"
-msgstr "Quota"
+msgstr "Limite"
 
 msgid "Je Code; laufende Zahlungsreservierungen zählen mit."
 msgstr "Por código; reservas de pagamento pendentes contam para o limite."
@@ -3927,10 +3927,10 @@ msgid "Alle berechtigten Kunden"
 msgstr "Todos os clientes elegíveis"
 
 msgid "Bereits gewährte Lizenzen werden durch Gutscheinsperrung nicht automatisch entzogen."
-msgstr "Bloquear um cupão não revoga licenças já atribuídas."
+msgstr "Bloquear um cupão não revoga automaticamente as licenças já concedidas."
 
 msgid "Code für weitere Einlösungen sperren"
-msgstr "Bloquear novos resgates"
+msgstr "Bloquear código para novos resgates"
 
 msgid "Code wieder aktivieren"
 msgstr "Reativar código"
@@ -3939,7 +3939,7 @@ msgid "Kampagne bearbeiten"
 msgstr "Editar campanha"
 
 msgid "Die wirtschaftlichen Konditionen und Kundenbindung bleiben nach Ausstellung unveränderlich."
-msgstr "As condições comerciais e a atribuição ao cliente não podem mudar após emissão."
+msgstr "As condições comerciais e a vinculação ao cliente não podem ser alteradas após a emissão."
 
 msgid "Einlösehistorie"
 msgstr "Histórico de resgates"
@@ -3951,40 +3951,40 @@ msgid "Lizenz/Bestellung"
 msgstr "Licença/encomenda"
 
 msgid "Noch keine Einlösungen."
-msgstr "Ainda sem resgates."
+msgstr "Ainda não existem resgates."
 
 msgid "Gutscheine & Gratislaufzeiten"
 msgstr "Cupões e períodos gratuitos"
 
 msgid "Rabattcodes beim Lizenzkauf nutzen oder Pro-Zeiträume einlösen."
-msgstr "Use descontos na compra de licenças ou resgate períodos Pro gratuitos."
+msgstr "Utilize códigos de desconto ao comprar licenças ou resgate períodos gratuitos de Pro."
 
 msgid "Kostenlose Pro-Laufzeit einlösen"
 msgstr "Resgatar período gratuito de Pro"
 
 msgid "Zeitgutscheine können neue Lizenzen erzeugen oder die bestehende Lizenz des Empfängers verlängern. Rabattcodes gehören in das Kaufformular."
-msgstr "Os cupões de tempo podem criar licenças ou prolongar as existentes. Introduza descontos no formulário de compra."
+msgstr "Os cupões de tempo criam novas licenças ou prolongam a licença existente do destinatário. Introduza os códigos de desconto no formulário de compra."
 
 msgid "Unzugewiesene Lizenz für mein Unternehmen"
 msgstr "Licença não atribuída para a minha empresa"
 
 msgid "Zeitgutschein verbindlich einlösen"
-msgstr "Resgatar cupão de período gratuito"
+msgstr "Resgatar cupão de tempo"
 
 msgid "Für dieses Konto zugeteilte Kampagnen"
 msgstr "Campanhas atribuídas a esta conta"
 
 msgid "Vollständige Codes werden nur durch netstyle ausgegeben."
-msgstr "Os códigos completos são emitidos apenas pela netstyle."
+msgstr "Os códigos completos são fornecidos exclusivamente pela netstyle."
 
 msgid "Keine ausdrücklich zugeteilten Kampagnen."
-msgstr "Sem campanhas atribuídas diretamente."
+msgstr "Nenhuma campanha especificamente atribuída."
 
 msgid "Rabatt bei der Bestellung"
 msgstr "Desconto na encomenda"
 
 msgid "Rabattcodes werden beim Kauf oder bei zulässigen Verlängerungen vor der Zahlung geprüft und auf den Bruttopreis angewendet."
-msgstr "Os descontos são verificados antes do pagamento e aplicados ao preço bruto em compras e renovações elegíveis."
+msgstr "Os códigos são verificados antes do pagamento em compras ou renovações elegíveis e aplicados ao preço bruto."
 
 msgid "Zum Lizenzkauf"
 msgstr "Comprar licenças"
@@ -4009,61 +4009,61 @@ msgid "Rabatt in Prozent"
 msgstr "Desconto percentual"
 
 msgid "Festbetrag je Lizenz"
-msgstr "Montante fixo por licença"
+msgstr "Valor fixo por licença"
 
 msgid "Gutscheinart"
 msgstr "Tipo de cupão"
 
 msgid "Rabatt je Lizenz in EUR brutto"
-msgstr "Desconto por licença em EUR com IVA"
+msgstr "Desconto bruto por licença em EUR"
 
 msgid "Kostenlose Tage"
 msgstr "Dias gratuitos"
 
 msgid "Maximale Einlösungen je Code"
-msgstr "Utilizações máximas por código"
+msgstr "Máximo de resgates por código"
 
 msgid "Anzahl verschiedener Codes"
-msgstr "Número de códigos diferentes"
+msgstr "Número de códigos distintos"
 
 msgid "Rabatt auch für Verlängerungen"
-msgstr "Desconto válido também para renovações"
+msgstr "Desconto também nas renovações"
 
 msgid "Nur für Unternehmen (optional)"
-msgstr "Apenas para empresa (opcional)"
+msgstr "Apenas empresa (opcional)"
 
 msgid "Nur für Benutzer (optional)"
-msgstr "Apenas para utilizador (opcional)"
+msgstr "Apenas utilizador (opcional)"
 
 msgid "Prozentgutscheine benötigen 1–99 Prozent."
-msgstr "Os cupões percentuais exigem 1–99 %."
+msgstr "Os cupões percentuais exigem 1–99 por cento."
 
 msgid "Festbetrag muss größer null sein."
-msgstr "O montante fixo deve ser superior a zero."
+msgstr "O valor fixo tem de ser superior a zero."
 
 msgid "Kostenlose Laufzeit muss 1–1095 Tage betragen."
-msgstr "O período gratuito deve ser de 1 a 1095 dias."
+msgstr "A duração gratuita deve ser entre 1 e 1095 dias."
 
 msgid "Nur für Prozentgutscheine zulässig."
-msgstr "Permitido apenas para cupões percentuais."
+msgstr "Apenas permitido para cupões percentuais."
 
 msgid "Nur für Festbetragsgutscheine zulässig."
-msgstr "Permitido apenas para cupões de montante fixo."
+msgstr "Apenas permitido para cupões de valor fixo."
 
 msgid "Nur für Zeitgutscheine zulässig."
-msgstr "Permitido apenas para cupões temporais."
+msgstr "Apenas permitido para cupões de tempo."
 
 msgid "Bei Zeitgutscheinen nicht anwendbar."
-msgstr "Não aplicável a cupões temporais."
+msgstr "Não aplicável a cupões de tempo."
 
 msgid "Entweder Unternehmen oder Benutzer binden."
-msgstr "Restringir a empresa ou utilizador, não a ambos."
+msgstr "Restringir a uma empresa ou a um utilizador."
 
 msgid "Das Ende muss nach dem Beginn liegen."
 msgstr "O fim deve ser posterior ao início."
 
 msgid "Maximale Einlösungen"
-msgstr "Resgates máximos"
+msgstr "Máximo de resgates"
 
 msgid "Bereits reservierte Einlösungen dürfen nicht abgeschnitten werden."
 msgstr "O limite não pode ser inferior às reservas existentes."
@@ -4081,7 +4081,7 @@ msgid "Gutschein aktualisiert."
 msgstr "Cupão atualizado."
 
 msgid "Gutscheinstatus geändert. Bestehende Nutzungsrechte bleiben unverändert."
-msgstr "Estado do cupão alterado. Os acessos existentes mantêm-se."
+msgstr "Estado do cupão alterado. Os direitos de acesso existentes mantêm-se."
 
 msgid "Gutschein eingelöst. Pro-Lizenz: %(license)s"
 msgstr "Cupão resgatado. Licença Pro: %(license)s"
@@ -4093,7 +4093,7 @@ msgid "Gutschein oder Preis nicht verfügbar."
 msgstr "Cupão ou preço indisponível."
 
 msgid "Festbetrag ist für diese Währung nicht zulässig."
-msgstr "Desconto fixo não permitido nesta moeda."
+msgstr "O desconto fixo não é permitido nesta moeda."
 
 msgid "Bitte den Gutschein im Kundenportal einlösen."
 msgstr "Resgate o cupão no portal do cliente."
@@ -4109,31 +4109,31 @@ msgid "Fester Rabatt je Lizenz"
 msgstr "Desconto fixo por licença"
 
 msgid "Rabattprozente müssen zwischen 1 und 99 liegen."
-msgstr "A percentagem de desconto deve estar entre 1 e 99."
+msgstr "A percentagem de desconto deve ser entre 1 e 99."
 
 msgid "Ein positiver Festbetrag ist erforderlich."
-msgstr "É necessário um montante fixo positivo."
+msgstr "É necessário um valor fixo positivo."
 
 msgid "Kostenlose Laufzeit muss 1 bis 1095 Tage betragen."
-msgstr "O período gratuito deve ser de 1 a 1095 dias."
+msgstr "A duração gratuita deve ser entre 1 e 1095 dias."
 
 msgid "Rabattcodes dürfen keine freie Laufzeit haben."
 msgstr "Os códigos de desconto não podem conceder períodos gratuitos."
 
 msgid "Nur Festbetragsrabatte dürfen einen Betrag haben."
-msgstr "Só os descontos fixos podem ter um montante."
+msgstr "Apenas cupões de valor fixo podem indicar um montante."
 
 msgid "Nur Prozentcodes dürfen Rabattprozente haben."
-msgstr "Só os códigos percentuais podem indicar uma percentagem."
+msgstr "Apenas cupões percentuais podem indicar uma percentagem."
 
 msgid "Probezeiträume sind keine Zahlungsrabatte."
 msgstr "Períodos de teste não são descontos de pagamento."
 
 msgid "Ein Code kann nur auf Firma oder Benutzer begrenzt sein."
-msgstr "Um código pode ser limitado a uma empresa ou utilizador, não a ambos."
+msgstr "Um código pode ser limitado a uma empresa ou a um utilizador, não a ambos."
 
 msgid "Ende muss nach Beginn liegen."
-msgstr "A data final deve ser posterior à inicial."
+msgstr "O fim deve ser posterior ao início."
 
 msgid "Mindestens eine Einlösung erforderlich."
 msgstr "É necessário pelo menos um resgate."
@@ -4145,37 +4145,37 @@ msgid "Eingelöst"
 msgstr "Resgatado"
 
 msgid "Fehlgeschlagen / freigegeben"
-msgstr "Falhou / libertado"
+msgstr "Falhado / libertado"
 
 msgid "Gutscheincode ungültig oder nicht verfügbar."
 msgstr "Código de cupão inválido ou indisponível."
 
 msgid "Nur netstyle kann Gutscheine erstellen."
-msgstr "Só a netstyle pode emitir cupões."
+msgstr "Apenas a netstyle pode criar cupões."
 
 msgid "Pro Aktion sind 1 bis 100 Gutscheine zulässig."
-msgstr "Pode criar de 1 a 100 cupões de cada vez."
+msgstr "São permitidos 1 a 100 cupões por operação."
 
 msgid "Gutschein nicht verfügbar oder abgelaufen."
 msgstr "Cupão indisponível ou expirado."
 
 msgid "Dieser Gutschein ist bereits vollständig eingelöst."
-msgstr "Este cupão atingiu o limite de utilizações."
+msgstr "Este cupão já foi totalmente resgatado."
 
 msgid "Dieser Gutschein gilt nicht für das gewählte Produkt."
 msgstr "Este cupão não é válido para o produto escolhido."
 
 msgid "Deaktivierte Unternehmen können keine Gutscheine einlösen."
-msgstr "Empresas inativas não podem resgatar cupões."
+msgstr "Empresas desativadas não podem resgatar cupões."
 
 msgid "Gutschein ist für einen anderen Kunden ausgestellt."
-msgstr "O cupão foi emitido para outro cliente."
+msgstr "O cupão pertence a outro cliente."
 
 msgid "Gutschein ist für einen anderen Benutzer ausgestellt."
-msgstr "O cupão foi emitido para outro utilizador."
+msgstr "O cupão pertence a outro utilizador."
 
 msgid "Gutschein gilt nur für neue Pro-Lizenzen."
-msgstr "O cupão só vale para novas licenças Pro."
+msgstr "O cupão só é válido para novas licenças Pro."
 
 msgid "Dieser Benutzer hat den Gutschein bereits eingelöst."
 msgstr "Este utilizador já resgatou o cupão."
@@ -4184,43 +4184,43 @@ msgid "Dieser Gutschein wurde von diesem Konto bereits genutzt."
 msgstr "Esta conta já utilizou este cupão."
 
 msgid "Kostenlose Zeitgutscheine bitte im Gutscheinbereich einlösen."
-msgstr "Resgate os cupões temporais na secção de cupões."
+msgstr "Resgate os cupões de tempo gratuito na secção de cupões."
 
 msgid "Gutscheinbetrag ist für diesen Lizenzpreis nicht zulässig."
-msgstr "O desconto não é válido para este preço de licença."
+msgstr "O valor do cupão não é válido para este preço de licença."
 
 msgid "Gutschein darf nur für eine zahlungspflichtige Bestellung verwendet werden."
-msgstr "O cupão só pode ser aplicado a uma encomenda paga."
+msgstr "O cupão só pode ser usado numa encomenda paga."
 
 msgid "Gutscheinreservierung kann wegen inkonsistentem Kontingent nicht freigegeben werden."
-msgstr "Não é possível libertar a reserva devido a quota inconsistente."
+msgstr "A reserva do cupão não pode ser libertada por inconsistência do limite."
 
 msgid "Bitte ein aktives, bestätigtes Kundenkonto verwenden."
 msgstr "Utilize uma conta de cliente ativa e verificada."
 
 msgid "Pro ist derzeit nicht verfügbar."
-msgstr "Pro está indisponível de momento."
+msgstr "O Pro está temporariamente indisponível."
 
 msgid "Nur der Firmenadministrator kann Zeitgutscheine einlösen."
-msgstr "Só o administrador da empresa pode resgatar cupões temporais."
+msgstr "Só o administrador da empresa pode resgatar cupões de tempo."
 
 msgid "Empfänger muss aktives, bestätigtes Firmenmitglied sein."
-msgstr "O destinatário deve ser membro ativo e verificado da empresa."
+msgstr "O destinatário tem de ser membro ativo e verificado da empresa."
 
 msgid "Privatcodes sind ausschließlich für das eigene Konto."
-msgstr "Os códigos pessoais destinam-se apenas à própria conta."
+msgstr "Os códigos privados só podem ser usados na própria conta."
 
 msgid "Ein Privatkundenkonto ist erforderlich."
 msgstr "É necessária uma conta de cliente particular."
 
 msgid "Persönliche Zeitgutscheine müssen direkt dem vorgesehenen Benutzer zugewiesen werden."
-msgstr "Os cupões temporais pessoais devem ser atribuídos ao utilizador previsto."
+msgstr "Os cupões de tempo pessoais devem ser atribuídos diretamente ao utilizador previsto."
 
 msgid "Rabattgutscheine bitte beim Pro-Kauf verwenden."
-msgstr "Utilize cupões de desconto ao comprar Pro."
+msgstr "Utilize cupões de desconto na compra de Pro."
 
 msgid "Für Pro fehlt die Preisversion; Gutschein kann nicht gebucht werden."
-msgstr "Falta a versão de preço do Pro; o cupão não pode ser aplicado."
+msgstr "Falta a versão de preço do Pro; o cupão não pode ser registado."
 
 msgid "Für diesen Benutzer besteht eine gesperrte oder zu prüfende Pro-Lizenz."
 msgstr "Este utilizador tem uma licença Pro bloqueada ou em análise."
