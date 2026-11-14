@@ -3997,3 +3997,106 @@ msgstr "Cupón"
 
 msgid "Laufzeit/Rabatt"
 msgstr "Periodo/descuento"
+
+# Voucher campaign forms, validation and checkout
+msgid "Kampagnenbezeichnung"
+msgstr "Nombre de la campaña"
+
+msgid "Interner Hinweis"
+msgstr "Nota interna"
+
+msgid "Rabatt in Prozent"
+msgstr "Descuento porcentual"
+
+msgid "Festbetrag je Lizenz"
+msgstr "Importe fijo por licencia"
+
+msgid "Gutscheinart"
+msgstr "Tipo de cupón"
+
+msgid "Rabatt je Lizenz in EUR brutto"
+msgstr "Descuento por licencia en EUR con impuestos"
+
+msgid "Kostenlose Tage"
+msgstr "Días gratuitos"
+
+msgid "Maximale Einlösungen je Code"
+msgstr "Usos máximos por código"
+
+msgid "Anzahl verschiedener Codes"
+msgstr "Número de códigos diferentes"
+
+msgid "Rabatt auch für Verlängerungen"
+msgstr "Descuento válido también para renovaciones"
+
+msgid "Nur für Unternehmen (optional)"
+msgstr "Solo para empresa (opcional)"
+
+msgid "Nur für Benutzer (optional)"
+msgstr "Solo para usuario (opcional)"
+
+msgid "Prozentgutscheine benötigen 1–99 Prozent."
+msgstr "Los cupones porcentuales requieren entre 1 y 99 %."
+
+msgid "Festbetrag muss größer null sein."
+msgstr "El importe fijo debe ser mayor que cero."
+
+msgid "Kostenlose Laufzeit muss 1–1095 Tage betragen."
+msgstr "El periodo gratuito debe ser de 1 a 1095 días."
+
+msgid "Nur für Prozentgutscheine zulässig."
+msgstr "Solo permitido para cupones porcentuales."
+
+msgid "Nur für Festbetragsgutscheine zulässig."
+msgstr "Solo permitido para cupones de importe fijo."
+
+msgid "Nur für Zeitgutscheine zulässig."
+msgstr "Solo permitido para cupones de tiempo."
+
+msgid "Bei Zeitgutscheinen nicht anwendbar."
+msgstr "No aplicable a cupones de tiempo."
+
+msgid "Entweder Unternehmen oder Benutzer binden."
+msgstr "Restringir a empresa o usuario, no a ambos."
+
+msgid "Das Ende muss nach dem Beginn liegen."
+msgstr "La fecha final debe ser posterior al inicio."
+
+msgid "Maximale Einlösungen"
+msgstr "Canjes máximos"
+
+msgid "Bereits reservierte Einlösungen dürfen nicht abgeschnitten werden."
+msgstr "El límite no puede ser inferior a las reservas existentes."
+
+msgid "Das Ende muss nach Beginn liegen."
+msgstr "El fin debe ser posterior al inicio."
+
+msgid "Neue Gutscheincodes"
+msgstr "Nuevos códigos de cupón"
+
+msgid "Gutscheine erstellen"
+msgstr "Crear cupones"
+
+msgid "Gutschein aktualisiert."
+msgstr "Cupón actualizado."
+
+msgid "Gutscheinstatus geändert. Bestehende Nutzungsrechte bleiben unverändert."
+msgstr "Estado del cupón cambiado. Los accesos existentes no cambian."
+
+msgid "Gutschein eingelöst. Pro-Lizenz: %(license)s"
+msgstr "Cupón canjeado. Licencia Pro: %(license)s"
+
+msgid "Ungültige Lizenzanzahl."
+msgstr "Número de licencias no válido."
+
+msgid "Gutschein oder Preis nicht verfügbar."
+msgstr "Cupón o precio no disponible."
+
+msgid "Festbetrag ist für diese Währung nicht zulässig."
+msgstr "Descuento fijo no permitido en esta moneda."
+
+msgid "Bitte den Gutschein im Kundenportal einlösen."
+msgstr "Canjea el cupón en el portal de clientes."
+
+msgid "Gutschein ungültig oder nicht verfügbar."
+msgstr "Cupón no válido o no disponible."
