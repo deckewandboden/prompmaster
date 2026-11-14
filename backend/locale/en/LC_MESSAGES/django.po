@@ -3997,3 +3997,106 @@ msgstr "Voucher"
 
 msgid "Laufzeit/Rabatt"
 msgstr "Period/discount"
+
+# Voucher campaign forms, validation and checkout
+msgid "Kampagnenbezeichnung"
+msgstr "Campaign name"
+
+msgid "Interner Hinweis"
+msgstr "Internal note"
+
+msgid "Rabatt in Prozent"
+msgstr "Percentage discount"
+
+msgid "Festbetrag je Lizenz"
+msgstr "Fixed amount per license"
+
+msgid "Gutscheinart"
+msgstr "Voucher type"
+
+msgid "Rabatt je Lizenz in EUR brutto"
+msgstr "Discount per license in EUR incl. tax"
+
+msgid "Kostenlose Tage"
+msgstr "Free days"
+
+msgid "Maximale Einlösungen je Code"
+msgstr "Maximum uses per code"
+
+msgid "Anzahl verschiedener Codes"
+msgstr "Number of distinct codes"
+
+msgid "Rabatt auch für Verlängerungen"
+msgstr "Discount also valid for renewals"
+
+msgid "Nur für Unternehmen (optional)"
+msgstr "Company restriction (optional)"
+
+msgid "Nur für Benutzer (optional)"
+msgstr "User restriction (optional)"
+
+msgid "Prozentgutscheine benötigen 1–99 Prozent."
+msgstr "Percentage vouchers require 1–99 percent."
+
+msgid "Festbetrag muss größer null sein."
+msgstr "Fixed amount must be greater than zero."
+
+msgid "Kostenlose Laufzeit muss 1–1095 Tage betragen."
+msgstr "Free period must be 1–1095 days."
+
+msgid "Nur für Prozentgutscheine zulässig."
+msgstr "Only allowed for percentage vouchers."
+
+msgid "Nur für Festbetragsgutscheine zulässig."
+msgstr "Only allowed for fixed-amount vouchers."
+
+msgid "Nur für Zeitgutscheine zulässig."
+msgstr "Only allowed for free-period vouchers."
+
+msgid "Bei Zeitgutscheinen nicht anwendbar."
+msgstr "Not applicable to free-period vouchers."
+
+msgid "Entweder Unternehmen oder Benutzer binden."
+msgstr "Restrict to either a company or a user."
+
+msgid "Das Ende muss nach dem Beginn liegen."
+msgstr "End must be after start."
+
+msgid "Maximale Einlösungen"
+msgstr "Maximum redemptions"
+
+msgid "Bereits reservierte Einlösungen dürfen nicht abgeschnitten werden."
+msgstr "The limit cannot be below existing reservations."
+
+msgid "Das Ende muss nach Beginn liegen."
+msgstr "End must be after start."
+
+msgid "Neue Gutscheincodes"
+msgstr "New voucher codes"
+
+msgid "Gutscheine erstellen"
+msgstr "Create vouchers"
+
+msgid "Gutschein aktualisiert."
+msgstr "Voucher updated."
+
+msgid "Gutscheinstatus geändert. Bestehende Nutzungsrechte bleiben unverändert."
+msgstr "Voucher status changed. Existing access rights remain unchanged."
+
+msgid "Gutschein eingelöst. Pro-Lizenz: %(license)s"
+msgstr "Voucher redeemed. Pro license: %(license)s"
+
+msgid "Ungültige Lizenzanzahl."
+msgstr "Invalid license quantity."
+
+msgid "Gutschein oder Preis nicht verfügbar."
+msgstr "Voucher or price unavailable."
+
+msgid "Festbetrag ist für diese Währung nicht zulässig."
+msgstr "Fixed discount is not available in this currency."
+
+msgid "Bitte den Gutschein im Kundenportal einlösen."
+msgstr "Please redeem the voucher in the customer portal."
+
+msgid "Gutschein ungültig oder nicht verfügbar."
+msgstr "Voucher invalid or unavailable."
