@@ -56,11 +56,11 @@ class VoucherInternationalizationTests(SimpleTestCase):
         source_paths = (
             ROOT / "forms.py", ROOT / "views.py", ROOT / "models.py",
             ROOT / "services.py",
-            ROOT.parent.parent.parent / "templates/ns_admin/vouchers.html",
-            ROOT.parent.parent.parent / "templates/ns_admin/voucher_form.html",
-            ROOT.parent.parent.parent / "templates/ns_admin/voucher_issued.html",
-            ROOT.parent.parent.parent / "templates/ns_admin/voucher_detail.html",
-            ROOT.parent.parent.parent / "templates/portal/vouchers.html",
+            ROOT.parent.parent / "templates/ns_admin/vouchers.html",
+            ROOT.parent.parent / "templates/ns_admin/voucher_form.html",
+            ROOT.parent.parent / "templates/ns_admin/voucher_issued.html",
+            ROOT.parent.parent / "templates/ns_admin/voucher_detail.html",
+            ROOT.parent.parent / "templates/portal/vouchers.html",
         )
         strings = set()
         for path in source_paths:
@@ -73,7 +73,7 @@ class VoucherInternationalizationTests(SimpleTestCase):
         canonical = {row["de"]: row for row in canonical_rows}
         for lang in LANGUAGES:
             global_entries = read_entries(
-                ROOT.parent.parent.parent / "locale" / lang / "LC_MESSAGES/django.po"
+                ROOT.parent.parent / "locale" / lang / "LC_MESSAGES/django.po"
             )
             for string in strings:
                 with self.subTest(lang=lang, key=string):
