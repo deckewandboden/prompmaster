@@ -136,6 +136,26 @@ class VoucherContractsTests(TestCase):
         voucher.refresh_from_db()
         self.assertEqual(voucher.used_count, 1)
 
+    def test_customer_bound_multiuse_campaign_respects_global_quota(self):
+        voucher, raw = self.make(
+            kind="percent", bound_company=self.company, max_redemptions=2
+        )
+        first = create_order(user=self.admin, product=self.product, voucher_code=raw)
+        second = create_order(user=self.admin, product=self.product, voucher_code=raw)
+        self.assertNotEqual(first.id, second.id)
+        voucher.refresh_from_db()
+        self.assertEqual(voucher.used_count, 2)
+        with self.assertRaises(ValidationError):
+            create_order(user=self.admin, product=self.product, voucher_code=raw)
+        self.assertEqual(VoucherRedemption.objects.filter(voucher=voucher).count(), 2)
+
+    def test_public_discount_code_allows_one_purchase_per_account(self):
+        voucher, raw = self.make(kind="percent", max_redemptions=10)
+        create_order(user=self.admin, product=self.product, voucher_code=raw)
+        with self.assertRaisesMessage(ValidationError, "bereits genutzt"):
+            create_order(user=self.admin, product=self.product, voucher_code=raw)
+        self.assertEqual(voucher.redemptions.count(), 1)
+
     def test_fixed_gross_discount_per_seat_and_nonzero_floor(self):
         voucher, raw = self.make(kind="fixed", bound_company=self.company)
         order = create_order(user=self.admin, product=self.product, quantity=3, voucher_code=raw)
