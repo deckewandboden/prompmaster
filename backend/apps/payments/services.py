@@ -483,6 +483,9 @@ def process_provider_state(payment_id, payload, *, chargebacks_payload=None):
     MollieEvent.objects.filter(payment=payment, event_key=f'{payment_id}:webhook-error').update(
         error='', processed_at=timezone.now(), provider_status='recovered', updated_at=timezone.now()
     )
+    if status in {'failed', 'canceled', 'expired'} and not payment.processed_paid:
+        from apps.vouchers.services import release_terminal_discount_reservation
+        release_terminal_discount_reservation(payment.order)
     return payment
 
 def record_webhook_failure(payment_id, exc):
