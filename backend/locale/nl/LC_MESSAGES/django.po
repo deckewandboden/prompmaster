@@ -3886,3 +3886,169 @@ msgstr "Kortingscode (optioneel)"
 
 msgid "Kostenlose Pro-Nutzung"
 msgstr "Gratis Pro-gebruik"
+
+# Voucher campaign user interface
+msgid "Rabatte und kostenlose Pro-Zeiträume sicher verwalten."
+msgstr "Beheer kortingen en gratis Pro-perioden veilig."
+
+msgid "+ Codes erstellen"
+msgstr "+ Codes aanmaken"
+
+msgid "Kampagnencodes"
+msgstr "Actiecodes"
+
+msgid "Erfolgreiche Einlösungen"
+msgstr "Succesvolle verzilveringen"
+
+msgid "Kampagne, Firma oder letzte vier Zeichen"
+msgstr "Actie, bedrijf of laatste vier tekens"
+
+msgid "Prozent"
+msgstr "Percentage"
+
+msgid "Festbetrag"
+msgstr "Vast bedrag"
+
+msgid "Kostenlose Zeit"
+msgstr "Gratis periode"
+
+msgid "Kampagne"
+msgstr "Campagne"
+
+msgid "Zielkunde"
+msgstr "Doelklant"
+
+msgid "Verbrauch"
+msgstr "Verbruik"
+
+msgid "Verwalten"
+msgstr "Beheren"
+
+msgid "Keine Gutscheine gefunden."
+msgstr "Geen kortingscodes gevonden."
+
+msgid "Weiter"
+msgstr "Volgende"
+
+msgid "Aus Sicherheitsgründen wird jeder vollständige Gutscheincode nur beim Erstellen angezeigt. Es werden ausschließlich Prüfsummen gespeichert."
+msgstr "Om veiligheidsredenen wordt de volledige code alleen bij aanmaak getoond. Alleen hashes worden bewaard."
+
+msgid "Alle Codes sind zufällig und werden nach dem Erstellen nur einmal angezeigt."
+msgstr "Codes worden willekeurig gemaakt en slechts eenmaal getoond."
+
+msgid "Ein Code kann auf einen Kunden beschränkt werden. Ohne Bindung ist er für alle berechtigten Kunden gültig. Pro-Code-Limits gelten unabhängig voneinander."
+msgstr "Een code kan aan één klant worden gekoppeld. Zonder beperking geldt hij voor alle bevoegde klanten. Limieten gelden per code."
+
+msgid "Gutscheincodes erzeugen"
+msgstr "Kortingscodes genereren"
+
+msgid "Einmalige Anzeige"
+msgstr "Eenmalige weergave"
+
+msgid "Diese Codes können später nicht erneut angezeigt werden. Bitte jetzt sicher an die berechtigten Kunden übergeben."
+msgstr "Deze codes kunnen later niet opnieuw worden getoond. Deel ze nu veilig met bevoegde klanten."
+
+msgid "Gutscheincode"
+msgstr "Kortingscode"
+
+msgid "Verwaltung"
+msgstr "Beheer"
+
+msgid "In Protokollen und Datenbank werden keine vollständigen Gutscheincodes gespeichert."
+msgstr "Volledige codes worden niet in logboeken of de database opgeslagen."
+
+msgid "Alle Gutscheine"
+msgstr "Alle kortingscodes"
+
+msgid "Leistung"
+msgstr "Voordeel"
+
+msgid "je Lizenz"
+msgstr "per licentie"
+
+msgid "Tage Pro"
+msgstr "Pro-dagen"
+
+msgid "Kontingent"
+msgstr "Limiet"
+
+msgid "Je Code; laufende Zahlungsreservierungen zählen mit."
+msgstr "Per code; openstaande betalingsreserveringen tellen mee."
+
+msgid "Zielbindung"
+msgstr "Ontvangerbeperking"
+
+msgid "Alle berechtigten Kunden"
+msgstr "Alle bevoegde klanten"
+
+msgid "Bereits gewährte Lizenzen werden durch Gutscheinsperrung nicht automatisch entzogen."
+msgstr "Het blokkeren van een code trekt eerder toegekende licenties niet in."
+
+msgid "Code für weitere Einlösungen sperren"
+msgstr "Verder verzilveren blokkeren"
+
+msgid "Code wieder aktivieren"
+msgstr "Code opnieuw activeren"
+
+msgid "Kampagne bearbeiten"
+msgstr "Actie bewerken"
+
+msgid "Die wirtschaftlichen Konditionen und Kundenbindung bleiben nach Ausstellung unveränderlich."
+msgstr "Commerciële voorwaarden en klantbeperkingen kunnen na uitgifte niet wijzigen."
+
+msgid "Einlösehistorie"
+msgstr "Verzilvergeschiedenis"
+
+msgid "Einlöser"
+msgstr "Ingewisseld door"
+
+msgid "Lizenz/Bestellung"
+msgstr "Licentie/bestelling"
+
+msgid "Noch keine Einlösungen."
+msgstr "Nog geen verzilveringen."
+
+msgid "Gutscheine & Gratislaufzeiten"
+msgstr "Kortingscodes en gratis perioden"
+
+msgid "Rabattcodes beim Lizenzkauf nutzen oder Pro-Zeiträume einlösen."
+msgstr "Gebruik kortingscodes bij aankoop of wissel gratis Pro-perioden in."
+
+msgid "Kostenlose Pro-Laufzeit einlösen"
+msgstr "Gratis Pro-periode verzilveren"
+
+msgid "Zeitgutscheine können neue Lizenzen erzeugen oder die bestehende Lizenz des Empfängers verlängern. Rabattcodes gehören in das Kaufformular."
+msgstr "Tijdcodes geven nieuwe licenties of verlengen bestaande. Kortingscodes voer je in bij aankoop."
+
+msgid "Unzugewiesene Lizenz für mein Unternehmen"
+msgstr "Niet-toegewezen licentie voor mijn bedrijf"
+
+msgid "Zeitgutschein verbindlich einlösen"
+msgstr "Tijdcode verzilveren"
+
+msgid "Für dieses Konto zugeteilte Kampagnen"
+msgstr "Acties voor dit account"
+
+msgid "Vollständige Codes werden nur durch netstyle ausgegeben."
+msgstr "Volledige codes worden alleen door netstyle verstrekt."
+
+msgid "Keine ausdrücklich zugeteilten Kampagnen."
+msgstr "Geen rechtstreeks toegewezen acties."
+
+msgid "Rabatt bei der Bestellung"
+msgstr "Korting op bestelling"
+
+msgid "Rabattcodes werden beim Kauf oder bei zulässigen Verlängerungen vor der Zahlung geprüft und auf den Bruttopreis angewendet."
+msgstr "Codes worden vóór betaling gecontroleerd en toegepast op de brutoprijs van aankopen en toegestane verlengingen."
+
+msgid "Zum Lizenzkauf"
+msgstr "Naar licentieaankoop"
+
+msgid "Einlösungen und Lizenzzeiträume"
+msgstr "Verzilveringen en licentieperioden"
+
+msgid "Gutschein"
+msgstr "Kortingscode"
+
+msgid "Laufzeit/Rabatt"
+msgstr "Periode/korting"
