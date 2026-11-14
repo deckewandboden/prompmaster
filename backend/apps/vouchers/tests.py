@@ -283,6 +283,39 @@ class VoucherContractsTests(TestCase):
         voucher.refresh_from_db()
         self.assertTrue(voucher.active)
 
+    def test_staff_voucher_creation_edit_and_disable_after_stepup(self):
+        self._login(self.staff)
+        # The middleware separately verifies password and 2FA freshness.
+        # Mock its completed grant here to exercise the authorized UI flow.
+        with patch("apps.accounts.middleware.sensitive_reauth_is_fresh", return_value=True):
+            result = self.client.post("/ns-admin/vouchers/create/", {
+                "title": "Authorized voucher flow",
+                "kind": "trial",
+                "product": str(self.product.pk),
+                "trial_days": "30",
+                "max_redemptions": "1",
+                "code_count": "1",
+            })
+            self.assertEqual(result.status_code, 200)
+            self.assertEqual(result["Cache-Control"], "no-store")
+            voucher = Voucher.objects.get(title="Authorized voucher flow")
+            self.assertEqual(voucher.used_count, 0)
+
+            edited = self.client.post(f"/ns-admin/vouchers/{voucher.pk}/edit/", {
+                "title": "Updated authorized voucher",
+                "note": "Internal QA",
+                "max_redemptions": "2",
+            })
+            self.assertEqual(edited.status_code, 302)
+            voucher.refresh_from_db()
+            self.assertEqual(voucher.title, "Updated authorized voucher")
+            self.assertEqual(voucher.max_redemptions, 2)
+
+            toggled = self.client.post(f"/ns-admin/vouchers/{voucher.pk}/toggle/")
+            self.assertEqual(toggled.status_code, 302)
+            voucher.refresh_from_db()
+            self.assertFalse(voucher.active)
+
     def test_customer_voucher_tab_has_no_cross_company_leak(self):
         self.make(kind="trial", bound_company=self.company)
         self.make(kind="trial", bound_company=self.company2, title="SECRET OTHER COMPANY")
