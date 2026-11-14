@@ -275,9 +275,66 @@ function setupCheckoutPage(){
 
   void ensureCsrf().catch(()=>{});
 
+  // The displayed total is never authoritative; Django recalculates the
+  // discount under a row lock when actually creating the order.
+  const voucherField=form.elements.namedItem('voucher_code');
+  const voucherButton=document.getElementById('checkout-voucher-preview');
+  const voucherFeedback=document.getElementById('checkout-voucher-feedback');
+  const displayedTotal=document.querySelector('[data-price="gross"]');
+  let voucherApproved=null;
+  const currentVoucherKey=()=>String(voucherField?.value||'').trim().toUpperCase()+
+    ':'+String(form.elements.namedItem('quantity')?.value||'1');
+  const clearVoucher=()=>{
+    voucherApproved=null;
+    if(voucherFeedback)voucherFeedback.textContent='';
+  };
+  voucherField?.addEventListener('input',clearVoucher);
+  document.getElementById('quantity')?.addEventListener('input',clearVoucher);
+  document.getElementById('minus')?.addEventListener('click',clearVoucher);
+  document.getElementById('plus')?.addEventListener('click',clearVoucher);
+  voucherButton?.addEventListener('click',async()=>{
+    const code=String(voucherField?.value||'').trim();
+    if(!code){
+      clearVoucher();
+      if(voucherFeedback)voucherFeedback.textContent='Bitte Gutscheincode eingeben.';
+      return;
+    }
+    clearVoucher();
+    if(voucherButton)voucherButton.disabled=true;
+    try{
+      const token=await ensureCsrf();
+      const qty=String(form.elements.namedItem('quantity')?.value||'1');
+      const previewKey=currentVoucherKey();
+      const response=await fetch('/api/v1/vouchers/quote/',{
+        method:'POST',credentials:'same-origin',cache:'no-store',
+        headers:{'Content-Type':'application/x-www-form-urlencoded;charset=UTF-8',
+          'X-CSRFToken':token,Accept:'application/json'},
+        body:new URLSearchParams({voucher_code:code,quantity:qty}),
+      });
+      const data=await response.json();
+      if(!response.ok||data.valid!==true)throw new Error('Gutschein ungültig oder nicht verfügbar.');
+      if(currentVoucherKey()!==previewKey)throw new Error('Lizenzanzahl oder Code wurde verändert; bitte erneut prüfen.');
+      voucherApproved=previewKey;
+      if(displayedTotal)displayedTotal.textContent=money(data.totalGrossCents);
+      if(voucherFeedback)voucherFeedback.textContent=
+        'Rabatt geprüft: '+data.title+' · Ersparnis '+money(data.discountGrossCents)+
+        ' · Zahlbetrag '+money(data.totalGrossCents)+'.';
+    }catch(error){
+      voucherApproved=null;
+      if(voucherFeedback)voucherFeedback.textContent=error.message||'Gutscheinprüfung fehlgeschlagen.';
+    }finally{
+      if(voucherButton)voucherButton.disabled=false;
+    }
+  });
+
   form.addEventListener('submit',async event=>{
     event.preventDefault();
     if(!form.reportValidity())return;
+    if(voucherField?.value?.trim()&&voucherApproved!==currentVoucherKey()){
+      if(voucherFeedback)voucherFeedback.textContent='Bitte den Rabattcode vor der Zahlung erneut prüfen.';
+      voucherField.focus();
+      return;
+    }
     if(submit){
       submit.disabled=true;
       submit.textContent=marketingT('Kauf wird vorbereitet …');
