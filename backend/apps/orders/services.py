@@ -89,10 +89,11 @@ def _validate_existing_order_coupon(existing, voucher_code, quantity):
     supplied_digest = code_digest(voucher_code) if voucher_code else None
     if actual_digest != supplied_digest:
         raise ValidationError('Ungültiger Checkout-Schlüssel.')
-    if actual_digest:
-        item = existing.items.order_by('created_at').first()
-        if item is None or item.quantity != quantity:
-            raise ValidationError('Ungültige Anzahl.')
+    # The idempotency key must never silently reuse a different seat count,
+    # regardless of whether the original order has a discount voucher.
+    item = existing.items.order_by('created_at').first()
+    if item is None or item.quantity != quantity:
+        raise ValidationError('Ungültige Anzahl.')
 
 
 @transaction.atomic
