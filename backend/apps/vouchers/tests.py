@@ -340,6 +340,38 @@ class VoucherContractsTests(TestCase):
         self.assertEqual(first.gross_total, Decimal("53.82"))
         self.assertEqual(VoucherRedemption.objects.filter(order=first).count(), 1)
 
+    def test_pending_renewal_cannot_reuse_another_voucher_price(self):
+        license_obj = License.objects.create(
+            company=self.company, product=self.product,
+            status="free", valid_from=self.now - timedelta(days=1),
+            valid_until=self.now + timedelta(days=40),
+        )
+        _, first_code = self.make(
+            kind="percent", bound_company=self.company,
+            allow_renewal=True,
+        )
+        _, second_code = self.make(
+            kind="percent", bound_company=self.company,
+            allow_renewal=True, percent_off=40,
+        )
+        first = create_order(
+            user=self.admin, product=self.product, target_license=license_obj,
+            voucher_code=first_code,
+        )
+        self.assertEqual(first.gross_total, Decimal("26.91"))
+        with self.assertRaises(ValidationError):
+            create_order(
+                user=self.admin, product=self.product,
+                target_license=license_obj, voucher_code=second_code,
+            )
+        with self.assertRaises(ValidationError):
+            create_order(
+                user=self.admin, product=self.product,
+                target_license=license_obj, voucher_code="",
+            )
+        self.assertEqual(first.voucher_redemption.status, "reserved")
+        self.assertEqual(VoucherRedemption.objects.filter(order=first).count(), 1)
+
     def test_existing_purchases_without_vouchers_remain_unchanged(self):
         order = create_order(user=self.admin, product=self.product, quantity=2)
         self.assertEqual(order.gross_total, Decimal("71.76"))
