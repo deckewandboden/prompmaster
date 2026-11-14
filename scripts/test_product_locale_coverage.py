@@ -72,7 +72,7 @@ class ProductLanguageCoverageTests(unittest.TestCase):
             ('Präsentationen zusammenfassen, verbessern und ergänzen', 'tr'): 'Sunumları özetleyin, iyileştirin ve tamamlayın',
             ('Terminlage, Engpässe und alternative Zeitfenster bewerten.', 'tr'): 'Tarihleri, darboğazları ve alternatif zaman aralıklarını değerlendirin.',
             ('Webseiten, PDFs und Browserkontext mit Copilot analysieren', 'tr'): "Web sitelerini, PDF'leri ve tarayıcı bağlamını Copilot ile analiz edin",
-            ('Agent-Instructions erstellen', 'tr'): 'Aracı yönergeleri oluştur',
+            ('Agent-Instructions erstellen', 'tr'): 'Ajan talimatları oluştur',
             ('Chat oder Kanal zusammenfassen', 'tr'): 'Sohbeti veya kanalı özetle',
             ('Copilot-Adoption analysieren', 'tr'): "Copilot'un benimsenmesini analiz et",
             ('Incident analysieren', 'tr'): 'Olayı analiz et',
