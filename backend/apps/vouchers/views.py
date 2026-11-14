@@ -68,6 +68,35 @@ def staff_vouchers(request):
     })
 
 
+@staff_voucher_perm("vouchers.read")
+def staff_customer_vouchers(request, pk):
+    """Campaigns specifically issued to one company (no cross-tenant data)."""
+    from apps.companies.models import Company
+
+    if not has_perm(request.user, "customers.read"):
+        raise PermissionDenied
+    customer = get_object_or_404(Company, pk=pk)
+    vouchers = Voucher.objects.filter(bound_company=customer).select_related(
+        "product", "bound_company", "bound_user",
+    ).order_by("-created_at")
+    search = (request.GET.get("q") or "").strip()[:120]
+    if search:
+        vouchers = vouchers.filter(
+            Q(title__icontains=search) | Q(code_suffix__icontains=search)
+        )
+    page = Paginator(vouchers, 40).get_page(request.GET.get("page"))
+    return render(request, "ns_admin/vouchers.html", {
+        "customer": customer, "page": page, "q": search,
+        "selected_state": "", "selected_kind": "",
+        "can_write": has_perm(request.user, "vouchers.write"),
+        "voucher_total": Voucher.objects.filter(bound_company=customer).count(),
+        "voucher_active": Voucher.objects.filter(bound_company=customer, active=True).count(),
+        "voucher_redemptions": VoucherRedemption.objects.filter(
+            company=customer, status="redeemed"
+        ).count(),
+    })
+
+
 @staff_voucher_perm("vouchers.write")
 def staff_voucher_create(request):
     form = VoucherCreateForm(request.POST or None)
