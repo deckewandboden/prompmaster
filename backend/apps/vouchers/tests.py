@@ -437,6 +437,20 @@ class VoucherContractsTests(TestCase):
         self.assertEqual(record.status, "reserved")
         self.assertEqual(record.voucher.used_count, 1)
 
+    def test_netstyle_customer_vouchers_include_redeemed_public_promotions(self):
+        _, raw = self.make(
+            kind="percent", title="Public Campaign Alpha Only",
+            max_redemptions=3,
+        )
+        create_order(user=self.admin, product=self.product, voucher_code=raw)
+        self._login(self.staff)
+        first = self.client.get(f"/ns-admin/customers/{self.company.pk}/vouchers/")
+        second = self.client.get(f"/ns-admin/customers/{self.company2.pk}/vouchers/")
+        self.assertEqual(first.status_code, 200)
+        self.assertEqual(second.status_code, 200)
+        self.assertContains(first, "Public Campaign Alpha Only")
+        self.assertNotContains(second, "Public Campaign Alpha Only")
+
     def test_customer_order_displays_real_voucher_savings(self):
         _, raw = self.make(kind="percent", bound_company=self.company)
         order = create_order(user=self.admin, product=self.product, quantity=2, voucher_code=raw)
