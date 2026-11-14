@@ -91,12 +91,12 @@ class ProductLanguageCoverageTests(unittest.TestCase):
             with self.subTest(source=source, language=language):
                 self.assertEqual(translations[source][language], correct)
         self.assertEqual(len(expected), 20)
-        english_leak = re.compile(r'\\b(?:Summarize|Analyze|Evaluate|Create)\\b', flags=re.IGNORECASE)
+        english_leak = re.compile(r'\b(?:Summarize|Analyze|Evaluate|Create)\b', flags=re.IGNORECASE)
         for source, variants in translations.items():
             value = variants.get('tr')
             if value:
                 # Identifiers and placeholder names are not translated as prose.
-                pure_ui = re.sub(r'%\\([a-z]+\\)s', '', value)
+                pure_ui = re.sub(r'%\([a-z]+\)s', '', value)
                 with self.subTest(source=source, language='tr'):
                     self.assertIsNone(english_leak.search(pure_ui), source)
 
