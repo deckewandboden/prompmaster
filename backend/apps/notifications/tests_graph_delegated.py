@@ -230,6 +230,37 @@ class DelegatedGraphHttpSecurityTests(TestCase):
         })
         set_secret('graph_client_secret', 'confidential-test-secret')
 
+    def test_staff_mail_settings_post_requires_stepup_but_get_stays_readable(self):
+        from django.urls import reverse
+
+        url = reverse('ns_admin:settings')
+        session = self.client.session
+        session.pop(SENSITIVE_REAUTH_SESSION_KEY, None)
+        session.save()
+        # Reading existing configuration never requires a second password.
+        self.assertEqual(self.client.get(url, secure=True).status_code, 200)
+
+        # Even a syntactically incomplete settings POST must be intercepted
+        # before running any write-side effect in settings_view.
+        result = self.client.post(url, {'mail_provider': 'graph'}, secure=True)
+        self.assertEqual(result.status_code, 302)
+        self.assertEqual(result.url, reverse('ns_admin:sensitive_reauth'))
+        self.assertEqual(
+            set_setting.__module__.split('.')[0], 'apps',
+        )  # Guard against this test inadvertently substituting the store.
+
+        # Real password + prior TOTP confirmation grants exactly the same
+        # five-minute scope already used for voucher issuance and Graph OAuth.
+        grant = self.client.post(
+            reverse('ns_admin:sensitive_reauth'),
+            {'password': 'Graph-Test-Strong-Password-2026!'},
+            secure=True,
+        )
+        self.assertEqual(grant.status_code, 302)
+        self.assertIn(SENSITIVE_REAUTH_SESSION_KEY, self.client.session)
+        allowed = self.client.post(url, {'mail_provider': 'graph'}, secure=True)
+        self.assertEqual(allowed.status_code, 200)
+
     def test_mail_admin_actions_reject_stale_stepup_without_sending(self):
         from django.urls import reverse
 
@@ -309,6 +340,10 @@ class DelegatedGraphHttpSecurityTests(TestCase):
                          'ns_admin:graph_mail_test'):
                 with self.subTest(name=name):
                     self.assertEqual(self.client.post(reverse(name), secure=True).status_code, 403)
+            self.assertEqual(
+                self.client.post(reverse('ns_admin:settings'), secure=True).status_code,
+                403,
+            )
             send.assert_not_called()
 
     def test_mfa_connect_requires_post_and_does_not_send_mail(self):
