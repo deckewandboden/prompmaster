@@ -1,11 +1,11 @@
-{% extends 'base.html' %}{% load static %}{% block body %}
+{% extends 'base.html' %}{% load static i18n %}{% block body %}
 <div class="login-wrap"><div class="login-card">
   <div class="login-logo"><img src="{% static 'brand/promptfinisher-logo-hq.png' %}" width="239" height="47" alt="PROMPTFINISHER by netstyle"></div>
-  <h1>Einladung annehmen</h1>
-  <p class="muted">Sie wurden zu <strong>{{ invitation.company.name }}</strong> eingeladen.</p>
-  <div class="alert info">Der Beitritt erfolgt erst nach Ihrer ausdrücklichen Bestätigung.</div>
+  <h1>{% translate "Einladung annehmen" %}</h1>
+  <p class="muted">{% blocktranslate trimmed with company=invitation.company.name %}Sie wurden zu {{ company }} eingeladen.{% endblocktranslate %}</p>
+  <div class="alert info">{% translate "Der Beitritt erfolgt erst nach Ihrer ausdrücklichen Bestätigung." %}</div>
   <form method="post" class="form mt-14">{% csrf_token %}
-    <button class="btn primary" type="submit">Firma beitreten</button>
+    <button class="btn primary" type="submit">{% translate "Firma beitreten" %}</button>
   </form>
 </div></div>
 {% endblock %}

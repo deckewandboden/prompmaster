@@ -88,6 +88,128 @@ class PurchaseHandoffTests(TestCase):
         set_secret('mollie_api_key', 'test_checkout_handoff_key')
         set_setting('mollie_profile_id', 'pfl_checkout_handoff')
 
+    def test_idempotent_checkout_key_cannot_change_commercial_terms(self):
+        from django.core.exceptions import ValidationError
+        from apps.orders.services import create_order
+
+        order = create_order(
+            user=self.user, product=self.product, quantity=2,
+            idempotency_key='immutable-company-purchase-key',
+        )
+        replay = create_order(
+            user=self.user, product=self.product, quantity=2,
+            idempotency_key='immutable-company-purchase-key',
+        )
+        self.assertEqual(replay.pk, order.pk)
+
+        alternate = Product.objects.create(
+            code='OTHER-PRO', name='Different Product',
+            default_license_days=365, default_device_limit=1,
+            reminder_1_days=60, reminder_2_days=30,
+            critical_warning_days=7,
+        )
+        for attempted_product, quantity in (
+            (self.product, 3),
+            (alternate, 2),
+        ):
+            with self.subTest(product=attempted_product.code, quantity=quantity):
+                with self.assertRaisesMessage(ValidationError, 'Kaufdaten haben sich geändert'):
+                    create_order(
+                        user=self.user, product=attempted_product,
+                        quantity=quantity,
+                        idempotency_key='immutable-company-purchase-key',
+                    )
+        order.refresh_from_db()
+        self.assertEqual(order.items.get().quantity, 2)
+        self.assertEqual(order.items.get().product_id, self.product.pk)
+        self.assertEqual(Order.objects.filter(company=self.company).count(), 1)
+
+    @patch('apps.companies.portal.messages.error')
+    @patch('apps.companies.portal.MollieClient.create_payment')
+    def test_portal_terminal_order_never_creates_another_payment(
+        self, create_payment, _message,
+    ):
+        from django.test import RequestFactory
+        from apps.orders.services import create_order
+        from apps.companies.portal import _start_mollie_checkout
+
+        request = RequestFactory().post('/portal/licenses/buy/')
+        request.user = self.user
+        for status in ('paid', 'failed', 'canceled'):
+            with self.subTest(status=status):
+                order = create_order(
+                    user=self.user, product=self.product, quantity=1,
+                    idempotency_key=f'terminal-payment-{status}',
+                )
+                order.status = status
+                order.save(update_fields=['status', 'updated_at'])
+                self.assertIsNone(_start_mollie_checkout(
+                    request, order, 'Pro purchase', {'order_id': str(order.pk)},
+                ))
+        # A paid provider record takes precedence even if the webhook has
+        # not yet updated the order status.
+        order = create_order(
+            user=self.user, product=self.product, quantity=1,
+            idempotency_key='paid-provider-order-not-yet-synchronized',
+        )
+        Payment.objects.create(
+            order=order, provider_payment_id='tr_paid_not_reconciled',
+            status='paid', amount=order.gross_total, currency=order.currency,
+        )
+        self.assertIsNone(_start_mollie_checkout(
+            request, order, 'Pro purchase', {'order_id': str(order.pk)},
+        ))
+        create_payment.assert_not_called()
+
+    @override_settings(LEGAL_CHECKOUT_SNAPSHOT_REQUIRED=True)
+    @patch('apps.companies.portal.mollie_runtime_ready', return_value=True)
+    @patch('apps.companies.portal.MollieClient.create_payment')
+    def test_stale_portal_checkout_rotates_terminal_key_without_rewriting_evidence(
+        self, create_payment, _ready,
+    ):
+        from apps.orders.services import create_order
+        from apps.legal.models import LegalAcceptance
+
+        for case in ('paid_order', 'paid_provider'):
+            with self.subTest(case=case):
+                form_response = self.client.get('/portal/licenses/buy/')
+                self.assertEqual(form_response.status_code, 200)
+                offer = form_response.context['legal_snapshot']
+                previous_key = self.client.session['checkout_key:buy:PRO']
+                order = create_order(
+                    user=self.user, product=self.product, quantity=1,
+                    idempotency_key=previous_key,
+                )
+                if case == 'paid_order':
+                    order.status = 'paid'
+                    order.save(update_fields=['status', 'updated_at'])
+                else:
+                    Payment.objects.create(
+                        order=order,
+                        provider_payment_id='tr_terminal_without_webhook',
+                        status='paid',
+                        amount=order.gross_total,
+                        currency=order.currency,
+                    )
+                response = self.client.post('/portal/licenses/buy/', {
+                    'quantity': '1',
+                    'accept_terms': 'on',
+                    'accept_privacy': 'on',
+                    'accept_license': 'on',
+                    'legal_snapshot_token': offer['token'],
+                })
+                self.assertEqual(response.status_code, 200)
+                self.assertNotEqual(
+                    self.client.session['checkout_key:buy:PRO'],
+                    previous_key,
+                )
+                order.refresh_from_db()
+                self.assertNotIn('legal_offer', order.billing_snapshot)
+                self.assertFalse(
+                    LegalAcceptance.objects.filter(order=order).exists()
+                )
+        create_payment.assert_not_called()
+
     def test_marketing_quantity_is_prefilled_and_clamped_to_backend_limit(self):
         response = self.client.get('/portal/licenses/buy/?quantity=7')
         self.assertEqual(response.status_code, 200)
@@ -368,6 +490,160 @@ class PurchaseHandoffTests(TestCase):
         self.assertEqual(create_payment.call_args.kwargs['amount'], Decimal('251.16'))
 
 
+    @override_settings(LEGAL_CHECKOUT_SNAPSHOT_REQUIRED=True,
+                       LEGAL_TRANSLATIONS_PUBLIC_ENABLED=False)
+    @patch('apps.companies.portal.mollie_runtime_ready', return_value=True)
+    @patch('apps.companies.portal.MollieClient.create_payment')
+    def test_portal_buy_requires_signed_legal_document_offer(
+        self, create_payment, _ready,
+    ):
+        from apps.legal.models import LegalAcceptance
+
+        start = self.client.get('/portal/licenses/buy/')
+        self.assertEqual(start.status_code, 200)
+        offer = start.context['legal_snapshot']
+        self.assertTrue(offer['token'])
+        self.assertIn('checkout_snapshot=', offer['documents']['terms']['url'])
+        self.assertContains(start, 'name="legal_snapshot_token"')
+        self.assertContains(start, 'checkout_snapshot=')
+        payload = {
+            'quantity': '1', 'accept_terms': 'on',
+            'accept_privacy': 'on', 'accept_license': 'on',
+        }
+        missing = self.client.post('/portal/licenses/buy/', payload)
+        self.assertEqual(missing.status_code, 200)
+        self.assertFalse(Order.objects.exists())
+        self.assertTrue(missing.context['form'].non_field_errors())
+
+        create_payment.return_value = {
+            'id': 'tr_signed_portal_new',
+            'status': 'open',
+            '_links': {'checkout': {'href': 'https://checkout.example.test/portal-legal'}},
+        }
+        # An invalid POST re-renders the form with a new signed offer. Its
+        # session nonce stays valid; a subsequent valid submission must send
+        # the customer to payment immediately, not render a second form.
+        renewed_offer = missing.context['legal_snapshot']
+        self.assertTrue(renewed_offer['token'])
+        self.assertNotEqual(renewed_offer['token'], offer['token'])
+        paid = self.client.post('/portal/licenses/buy/', {
+            **payload, 'legal_snapshot_token': renewed_offer['token'],
+        })
+        self.assertEqual(paid.status_code, 302)
+        self.assertEqual(
+            paid['Location'], 'https://checkout.example.test/portal-legal',
+        )
+        order = Order.objects.get(company=self.company)
+        self.assertEqual(
+            order.billing_snapshot['legal_offer']['verification'],
+            'signed_session_bound_document_offer',
+        )
+        self.assertEqual(
+            LegalAcceptance.objects.filter(order=order).count(), 3,
+        )
+
+        # Existing order idempotency must never substitute a new checkbox
+        # wording or a different language for the originally signed offer.
+        from copy import deepcopy
+        from django.core.exceptions import ValidationError
+        from django.test import RequestFactory
+        from apps.companies.portal import _record_legal_acceptances
+
+        authoritative = order.billing_snapshot['legal_offer']
+        request = RequestFactory().post('/portal/licenses/buy/')
+        request.user = self.user
+        docs = {
+            doc.doc_type: doc
+            for doc in LegalDocument.objects.filter(doc_type__in=('terms', 'privacy', 'license'))
+        }
+        mutated_offers = []
+        translated = deepcopy(authoritative)
+        translated['ui_language'] = 'en' if authoritative['ui_language'] != 'en' else 'de'
+        mutated_offers.append(translated)
+        altered_consent = deepcopy(authoritative)
+        altered_consent['early_performance_clause'] = {
+            'statement_id': 'altered-consent-version', 'language': 'de',
+        }
+        mutated_offers.append(altered_consent)
+        legacy_offer = deepcopy(authoritative)
+        legacy_offer['verification'] = 'legacy_without_signed_snapshot'
+        mutated_offers.append(legacy_offer)
+        for alternative in mutated_offers:
+            with self.assertRaises(ValidationError):
+                _record_legal_acceptances(
+                    request, order, docs, legal_offer=alternative,
+                )
+            order.refresh_from_db()
+            self.assertEqual(order.billing_snapshot['legal_offer'], authoritative)
+            self.assertEqual(LegalAcceptance.objects.filter(order=order).count(), 3)
+
+    @override_settings(LEGAL_CHECKOUT_SNAPSHOT_REQUIRED=True)
+    @patch('apps.companies.portal.mollie_runtime_ready', return_value=True)
+    def test_portal_buy_rejects_drifted_original_before_order(
+        self, _ready,
+    ):
+        offer = self.client.get('/portal/licenses/buy/').context['legal_snapshot']
+        LegalDocument.objects.filter(doc_type='terms', active=True).update(
+            version='source-v2-drift',
+        )
+        response = self.client.post('/portal/licenses/buy/', {
+            'quantity': '1', 'accept_terms': 'on',
+            'accept_privacy': 'on', 'accept_license': 'on',
+            'legal_snapshot_token': offer['token'],
+        })
+        self.assertEqual(response.status_code, 200)
+        self.assertFalse(Order.objects.exists())
+        self.assertTrue(response.context['form'].non_field_errors())
+
+    @override_settings(LEGAL_CHECKOUT_SNAPSHOT_REQUIRED=True)
+    @patch('apps.companies.portal.mollie_runtime_ready', return_value=True)
+    @patch('apps.companies.portal.MollieClient.create_payment')
+    def test_portal_renewal_records_signed_document_offer(
+        self, create_payment, _ready,
+    ):
+        from apps.legal.models import LegalAcceptance
+
+        now = timezone.now()
+        ProductPrice.objects.create(
+            product=self.product, price_type='renewal',
+            gross_amount=Decimal('35.88'), currency='EUR',
+            valid_from=now - timedelta(minutes=1),
+        )
+        license_obj = License.objects.create(
+            company=self.company, product=self.product, status='active',
+            valid_from=now - timedelta(days=1),
+            valid_until=now + timedelta(days=60),
+        )
+        url = f'/portal/licenses/{license_obj.pk}/renew/'
+        initial = self.client.get(url)
+        self.assertEqual(initial.status_code, 200)
+        offer = initial.context['legal_snapshot']
+        self.assertEqual(
+            set(offer['documents']), {'terms', 'privacy', 'license'},
+        )
+        create_payment.return_value = {
+            'id': 'tr_signed_renew',
+            'status': 'open',
+            '_links': {'checkout': {'href': 'https://checkout.example.test/renew-legal'}},
+        }
+        response = self.client.post(url, {
+            'accept_terms': 'on', 'accept_privacy': 'on',
+            'accept_license': 'on', 'legal_snapshot_token': offer['token'],
+        })
+        self.assertEqual(response.status_code, 302)
+        self.assertEqual(
+            response['Location'], 'https://checkout.example.test/renew-legal',
+        )
+        order = OrderItem.objects.get(target_license=license_obj).order
+        self.assertEqual(
+            order.billing_snapshot['legal_offer']['verification'],
+            'signed_session_bound_document_offer',
+        )
+        self.assertEqual(
+            LegalAcceptance.objects.filter(order=order).count(), 3,
+        )
+
+
 class PublicCheckoutFormValidationTests(TestCase):
     def test_private_early_performance_missing_has_one_clear_error(self):
         form = PublicCheckoutForm(
@@ -529,6 +805,137 @@ class PublicCheckoutFlowTests(TestCase):
         self.assertFalse(Order.objects.filter(company__email=email).exists())
         self.assertFalse(Payment.objects.exists())
         self.assertFalse(License.objects.exists())
+
+    @patch('apps.payments.mollie.MollieClient.create_payment')
+    def test_public_retry_never_recharges_a_paid_but_unsynchronized_order(
+        self, create_payment,
+    ):
+        email = 'reconciled-before-webhook@example.test'
+        payload = self.company_payload(quantity='1', email=email)
+        create_payment.side_effect = MollieError('timeout', ambiguous=True)
+        first = self.client.post('/api/v1/checkout/start/', payload)
+        self.assertEqual(first.status_code, 302)
+        self.assertIn('error=payment', first.url)
+        user = User.objects.get(email=email)
+        order = Order.objects.get(company__memberships__user=user)
+        self.assertEqual(order.status, 'draft')
+        Payment.objects.create(
+            order=order, provider_payment_id='tr_public_already_paid',
+            status='paid', amount=order.gross_total, currency=order.currency,
+        )
+
+        second = self.client.post('/api/v1/checkout/start/', payload)
+        self.assertEqual(second.status_code, 302)
+        self.assertEqual(second.url, '/checkout/success/?state=paid')
+        create_payment.assert_called_once()
+        order.refresh_from_db()
+        self.assertEqual(order.status, 'draft')
+        self.assertEqual(Payment.objects.filter(order=order).count(), 1)
+
+    @patch('apps.payments.mollie.MollieClient.create_payment')
+    def test_public_checkout_resume_requires_original_browser_and_order_details(
+        self, create_payment,
+    ):
+        from django.test import Client
+
+        payload = self.company_payload(
+            quantity='3', email='session-bound-resume@example.test',
+        )
+        checkout_url = 'https://checkout.example.test/original-private-link'
+        create_payment.return_value = {
+            'id': 'tr_original_resume',
+            'status': 'open',
+            '_links': {'checkout': {'href': checkout_url}},
+        }
+        first = self.client.post('/api/v1/checkout/start/', payload)
+        self.assertEqual(first.status_code, 302)
+        self.assertEqual(first.url, checkout_url)
+        self.assertEqual(create_payment.call_count, 1)
+        order = Order.objects.get(
+            company__memberships__user__email=payload['email'],
+        )
+        self.assertEqual(
+            self.client.session['public_checkout_resume_order'],
+            str(order.pk),
+        )
+
+        unrelated_browser = Client()
+        unrelated = unrelated_browser.post('/api/v1/checkout/start/', payload)
+        self.assertEqual(unrelated.status_code, 302)
+        self.assertNotEqual(unrelated.url, checkout_url)
+        self.assertTrue(
+            unrelated.url.startswith('/auth/password-reset/'),
+            unrelated.url,
+        )
+        # The recovery route must be accessible to the rightful email owner
+        # while the unauthenticated caller receives no provider payment link.
+        self.assertEqual(
+            unrelated_browser.get(unrelated.url).status_code,
+            200,
+        )
+
+        changed_quantity = self.client.post(
+            '/api/v1/checkout/start/',
+            {**payload, 'quantity': '4'},
+        )
+        self.assertEqual(changed_quantity.status_code, 302)
+        self.assertNotEqual(changed_quantity.url, checkout_url)
+
+        changed_customer_type = self.client.post(
+            '/api/v1/checkout/start/',
+            self.private_payload(
+                quantity='3', email=payload['email'],
+            ),
+        )
+        self.assertEqual(changed_customer_type.status_code, 302)
+        self.assertNotEqual(changed_customer_type.url, checkout_url)
+
+        legitimate_retry = self.client.post(
+            '/api/v1/checkout/start/', payload,
+        )
+        self.assertEqual(legitimate_retry.status_code, 302)
+        self.assertEqual(legitimate_retry.url, checkout_url)
+        create_payment.assert_called_once()
+        self.assertEqual(Order.objects.count(), 1)
+        self.assertEqual(Payment.objects.count(), 1)
+
+        # A delayed webhook may have finalized the order but left a
+        # provider payload with "open". Never show the old payment link.
+        order.status = 'paid'
+        order.save(update_fields=['status', 'updated_at'])
+        completed = self.client.post('/api/v1/checkout/start/', payload)
+        self.assertEqual(completed.status_code, 302)
+        self.assertEqual(completed.url, '/checkout/success/?state=paid')
+        create_payment.assert_called_once()
+
+    @patch('apps.payments.mollie.MollieClient.create_payment')
+    def test_cancelled_public_order_does_not_reuse_stale_provider_link(
+        self, create_payment,
+    ):
+        payload = self.company_payload(
+            quantity='1', email='terminated-resume@example.test',
+        )
+        old_checkout = 'https://checkout.example.test/stale-payment'
+        create_payment.return_value = {
+            'id': 'tr_terminated_resume',
+            'status': 'open',
+            '_links': {'checkout': {'href': old_checkout}},
+        }
+        first = self.client.post('/api/v1/checkout/start/', payload)
+        self.assertEqual(first.url, old_checkout)
+        order = Order.objects.get(
+            company__memberships__user__email=payload['email'],
+        )
+        order.status = 'canceled'
+        order.save(update_fields=['status', 'updated_at'])
+
+        second = self.client.post('/api/v1/checkout/start/', payload)
+        self.assertEqual(second.status_code, 302)
+        self.assertNotEqual(second.url, old_checkout)
+        self.assertTrue(
+            second.url.startswith('/auth/password-reset/'), second.url,
+        )
+        create_payment.assert_called_once()
 
     @patch('apps.payments.mollie.MollieClient.create_payment')
     def test_public_checkout_ambiguous_create_replays_exact_same_mollie_request(

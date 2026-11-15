@@ -46,8 +46,19 @@ class LegalInterfaceLanguageTests(unittest.TestCase):
 
     def test_legal_original_content_remains_immutable(self):
         page = (ROOT / "templates" / "legal_public.html").read_text(encoding="utf-8")
-        self.assertIn("{{ document.content|linebreaks }}", page)
+        view = (ROOT / "apps" / "core" / "views.py").read_text(encoding="utf-8")
+        resolver = (ROOT / "apps" / "legal" / "translation_display.py").read_text(encoding="utf-8")
+        model = (ROOT / "apps" / "legal" / "models.py").read_text(encoding="utf-8")
+        settings = (ROOT / "config" / "settings.py").read_text(encoding="utf-8")
+        self.assertIn("{{ legal_document_body|linebreaks }}", page)
         self.assertIn("{{ document.version }}", page)
+        self.assertIn('lang="{{ legal_content_language }}"', page)
+        self.assertIn("resolve_public_legal_text(", view)
+        self.assertIn("translations_enabled=settings.LEGAL_TRANSLATIONS_PUBLIC_ENABLED", view)
+        self.assertIn("return document.content, 'de'", resolver)
+        self.assertIn("translation.is_publishable()", resolver)
+        self.assertIn("class LegalDocumentTranslation(TimeStampedModel):", model)
+        self.assertIn("LEGAL_TRANSLATIONS_PUBLIC_ENABLED = os.getenv('LEGAL_TRANSLATIONS_PUBLIC_ENABLED', '0') == '1'", settings)
 
 
 if __name__ == "__main__":
