@@ -74,7 +74,7 @@ def _billing_snapshot(user, company, rule):
 
 
 @transaction.atomic
-def _validate_existing_order_coupon(existing, voucher_code, quantity):
+def _validate_existing_order_coupon(existing, voucher_code, quantity, product, target_license):
     """Never silently reuse an existing order with a different voucher quote.
 
     Applies equally to the idempotency-key path and pending renewals.
@@ -94,6 +94,15 @@ def _validate_existing_order_coupon(existing, voucher_code, quantity):
     item = existing.items.order_by('created_at').first()
     if item is None or item.quantity != quantity:
         raise ValidationError('Ungültige Anzahl.')
+    # A checkout idempotency key also pins product and renewal target.
+    # Reusing it for another license or product must never return a previous
+    # order with different commercial or legal terms.
+    if item.product_id != product.pk or item.target_license_id != (
+        target_license.pk if target_license else None
+    ):
+        raise ValidationError('Die Kaufdaten haben sich geändert. Bitte starten Sie den Kauf erneut.')
+    if existing.items.exclude(pk=item.pk).exists():
+        raise ValidationError('Ungültige Bestellpositionen.')
 
 
 @transaction.atomic
@@ -128,7 +137,7 @@ def create_order(*, user, product, quantity=1, target_license=None, idempotency_
             order__status__in=['draft', 'payment_open'],
         ).select_related('order').order_by('-created_at').first()
         if pending_renewal:
-            _validate_existing_order_coupon(pending_renewal.order, voucher_code, quantity)
+            _validate_existing_order_coupon(pending_renewal.order, voucher_code, quantity, product, target_license)
             return pending_renewal.order
 
     if idempotency_key:
@@ -137,7 +146,7 @@ def create_order(*, user, product, quantity=1, target_license=None, idempotency_
             owner_ok = existing.company_id == (company.id if company else None) and existing.private_user_id == (None if company else user.id)
             if not owner_ok:
                 raise ValidationError('Ungültiger Checkout-Schlüssel.')
-            _validate_existing_order_coupon(existing, voucher_code, quantity)
+            _validate_existing_order_coupon(existing, voucher_code, quantity, product, target_license)
             return existing
 
     price_type = 'renewal' if target_license else 'new'
