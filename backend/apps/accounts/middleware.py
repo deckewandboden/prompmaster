@@ -88,6 +88,11 @@ class TwoFactorEnforcementMiddleware:
         'ns_admin:service_account_rotate',
         'ns_admin:service_account_revoke',
         'ns_admin:mollie_config',
+        # Delegated mail OAuth setup, credential revocation and real test sends
+        # require the same short-lived staff password + 2FA proof.
+        'ns_admin:graph_mail_connect',
+        'ns_admin:graph_mail_disconnect',
+        'ns_admin:graph_mail_test',
         # Issuing or modifying vouchers can grant free Pro entitlements or
         # financial discounts, so require fresh staff password + completed 2FA.
         'ns_admin:voucher_create',
@@ -133,15 +138,26 @@ class TwoFactorEnforcementMiddleware:
 
         if view_name not in self.sensitive_session_views:
             return None
-        # Unauthorized callers must receive the normal 403 permission verdict,
-        # rather than being asked to reauthenticate for an action they cannot do.
-        if view_name in {
+        voucher_actions = {
             'ns_admin:voucher_create',
             'ns_admin:voucher_edit',
             'ns_admin:voucher_toggle',
-        }:
+        }
+        graph_actions = {
+            'ns_admin:graph_mail_connect',
+            'ns_admin:graph_mail_disconnect',
+            'ns_admin:graph_mail_test',
+        }
+        # Do not turn method rejections into security prompts. OAuth callback
+        # remains exempt: it validates a one-time PKCE/state session itself.
+        if view_name in graph_actions and request.method != 'POST':
+            return None
+        # Unauthorized callers must receive the normal 403 permission verdict,
+        # rather than being asked to reauthenticate for forbidden actions.
+        if view_name in voucher_actions or view_name in graph_actions:
             from apps.core.permissions import has_perm
-            if not user.is_staff or not has_perm(user, 'vouchers.write'):
+            needed = 'vouchers.write' if view_name in voucher_actions else 'settings.write'
+            if not user.is_staff or not has_perm(user, needed):
                 return None
         if sensitive_reauth_is_fresh(request, user):
             return None
