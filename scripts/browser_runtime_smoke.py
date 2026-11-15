@@ -2969,6 +2969,8 @@ def run_backend_ui_smoke(browser, fixture=None) -> None:
             ('ns-admin/api/', 'Admin API'),
             ('ns-admin/legal/', 'Admin Recht'),
             ('ns-admin/legal/documents/', 'Admin Rechtsdokumente'),
+            ('ns-admin/legal/translations/', 'Admin Rechtsübersetzungen'),
+            ('ns-admin/legal/translations/new/', 'Admin Übersetzungsentwurf'),
             ('ns-admin/legal/retention/', 'Admin Aufbewahrung'),
             ('ns-admin/legal/deletions/', 'Admin Löschanfragen'),
             ('ns-admin/support/', 'Admin Support'),
