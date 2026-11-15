@@ -108,12 +108,12 @@ class PurchaseHandoffTests(TestCase):
             reminder_1_days=60, reminder_2_days=30,
             critical_warning_days=7,
         )
-        for attempted_product, quantity in (
-            (self.product, 3),
-            (alternate, 2),
+        for attempted_product, quantity, expected_error in (
+            (self.product, 3, 'Ungültige Anzahl.'),
+            (alternate, 2, 'Kaufdaten haben sich geändert'),
         ):
             with self.subTest(product=attempted_product.code, quantity=quantity):
-                with self.assertRaisesMessage(ValidationError, 'Kaufdaten haben sich geändert'):
+                with self.assertRaisesMessage(ValidationError, expected_error):
                     create_order(
                         user=self.user, product=attempted_product,
                         quantity=quantity,
