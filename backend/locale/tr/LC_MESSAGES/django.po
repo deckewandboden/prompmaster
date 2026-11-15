@@ -3978,7 +3978,7 @@ msgid "Dieser Bestätigungslink ist nicht mehr gültig."
 msgstr "Bu doğrulama bağlantısı artık geçerli değil."
 
 msgid "Weiter"
-msgstr "Devam et"
+msgstr "İleri"
 
 # Read-only legal-language technical readiness UI; not a publication gate.
 msgid "Technischer Status der Rechtsübersetzungen"

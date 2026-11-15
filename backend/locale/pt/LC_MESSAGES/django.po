@@ -3978,7 +3978,7 @@ msgid "Dieser Bestätigungslink ist nicht mehr gültig."
 msgstr "Este link de confirmação já não é válido."
 
 msgid "Weiter"
-msgstr "Continuar"
+msgstr "Seguinte"
 
 # Read-only legal-language technical readiness UI; not a publication gate.
 msgid "Technischer Status der Rechtsübersetzungen"
