@@ -1,5 +1,6 @@
 from django.core.management.base import BaseCommand, CommandError
 
+from apps.notifications.graph_delegated import connection_status
 from apps.notifications.services import (
     get_graph_transport,
     get_mail_delivery,
@@ -63,12 +64,18 @@ class Command(BaseCommand):
                     )
                     if not value
                 ]
+                if graph['auth_mode'] == 'delegated':
+                    if not graph['login_email']:
+                        missing.append('Anmeldekonto')
+                    if not connection_status()['connected']:
+                        missing.append('delegierter OAuth/MFA-Zugriff nicht verbunden')
                 if missing:
                     errors.append(
                         'graph: Konfiguration unvollständig: ' + ', '.join(missing)
                     )
                 details.append(
                     f"graph=sender:{graph['sender'] or '-'} "
+                    f"mode={graph['auth_mode']} "
                     f"secret={'ja' if graph['client_secret_configured'] else 'nein'}"
                 )
             else:

@@ -93,8 +93,12 @@
 
 <div class="card mb-14">
   <h2>Microsoft 365 / Entra ID (Graph)</h2>
-  <p class="muted">{% translate 'Alternative zu SMTP für Exchange Online. Das Client Secret wird verschlüsselt gespeichert und niemals wieder im Klartext angezeigt.' %}</p>
+  <p class="muted">{% translate 'Für freigegebene Microsoft-365-Postfächer delegiertes OAuth mit MFA und Mail.Send.Shared verwenden. Die Entra-Anmeldung erfolgt über das persönliche Konto, nicht über das Shared Mailbox Passwort.' %}</p>
   <div class="form">
+    <div class="row">
+      <label>{{ form.graph_auth_mode.label }}{{ form.graph_auth_mode }}{{ form.graph_auth_mode.errors }}{% if form.graph_auth_mode.help_text %}<span class="tiny muted">{{ form.graph_auth_mode.help_text }}</span>{% endif %}</label>
+      <label>{{ form.graph_login_email.label }}{{ form.graph_login_email }}{{ form.graph_login_email.errors }}{% if form.graph_login_email.help_text %}<span class="tiny muted">{{ form.graph_login_email.help_text }}</span>{% endif %}</label>
+    </div>
     <div class="row">
       <label>{{ form.graph_tenant_id.label }}{{ form.graph_tenant_id }}{{ form.graph_tenant_id.errors }}{% if form.graph_tenant_id.help_text %}<span class="tiny muted">{{ form.graph_tenant_id.help_text }}</span>{% endif %}</label>
       <label>{{ form.graph_client_id.label }}{{ form.graph_client_id }}{{ form.graph_client_id.errors }}{% if form.graph_client_id.help_text %}<span class="tiny muted">{{ form.graph_client_id.help_text }}</span>{% endif %}</label>
@@ -116,4 +120,46 @@
 </div></div>
 {% if can_write %}<div class="page-actions mt-14"><button class="btn primary" type="submit">{% translate 'Einstellungen speichern' %}</button></div>{% else %}<div class="alert info mt-14">{% translate 'Sie besitzen Leserechte, aber keine Berechtigung zum Ändern dieser Einstellungen.' %}</div>{% endif %}
 </form>
+
+<div class="card mt-14">
+  <h2>{% translate 'Microsoft 365 MFA-Verbindung' %}</h2>
+  <p class="small muted">{% translate 'Zuerst Tenant, App-ID, persönliches Anmeldekonto, freigegebenes Absenderpostfach, Client-Secret und Anmeldemethode speichern. Im Microsoft Entra Admin Center die exakte Callback-Adresse als Web-Redirect registrieren und delegiertes Mail.Send.Shared mit User.Read erlauben.' %}</p>
+  <div class="statusrow">
+    <span>{% translate 'Verbindungsstatus' %}</span>
+    {% if graph_connection.connected %}
+      <span class="badge ok">{% translate 'Mit MFA verbunden' %}</span>
+    {% else %}
+      <span class="badge warn">{% translate 'Nicht verbunden / erneut anmelden' %}</span>
+    {% endif %}
+  </div>
+  {% if graph_connection.connected %}
+    <div class="statusrow"><span>{% translate 'Angemeldetes Konto' %}</span><strong>{{ graph_connection.account }}</strong></div>
+    <div class="statusrow"><span>{% translate 'Verbunden am' %}</span><strong>{{ graph_connection.connected_at }}</strong></div>
+  {% endif %}
+  <div class="statusrow"><span>{% translate 'Exakte Entra-Redirect-URI' %}</span><code class="wrap-anywhere">{{ graph_callback_uri }}</code></div>
+  <p class="small muted">{% translate 'Für Senden als ein freigegebenes Postfach muss das persönliche Konto in Exchange Online die Berechtigung Send As besitzen. HTTP 202 von Microsoft Graph bedeutet nur angenommen, nicht zugestellt.' %}</p>
+  {% if can_write %}
+    <div class="row mt-12" style="flex-wrap:wrap">
+      <form action="{% url 'ns_admin:graph_mail_connect' %}" method="post">{% csrf_token %}
+        <button type="submit" class="btn primary">{% translate 'Mit Microsoft 365 verbinden (MFA)' %}</button>
+      </form>
+      {% if graph_connection.connected %}
+      <form action="{% url 'ns_admin:graph_mail_disconnect' %}" method="post">{% csrf_token %}
+        <input type="hidden" name="confirm" value="disconnect">
+        <button type="submit" class="btn secondary">{% translate 'Verbindung trennen' %}</button>
+      </form>
+      {% endif %}
+    </div>
+    {% if graph_connection.connected %}
+    <form action="{% url 'ns_admin:graph_mail_test' %}" method="post" class="form mt-14">{% csrf_token %}
+      <label>{% translate 'Testempfänger' %}<input type="email" name="recipient" required autocomplete="off" placeholder="name@example.org"></label>
+      <label><input type="checkbox" name="confirm" value="send-one-test" required> {% translate 'Eine einzelne echte Test-E-Mail ausdrücklich senden' %}</label>
+      <div><button class="btn secondary" type="submit">{% translate 'Test-E-Mail senden' %}</button></div>
+      <p class="small muted">{% translate 'Keine automatische Test-E-Mail bei Installation oder Verbindung. Prüfe nach der Antwort 202 den wirklichen Posteingang separat.' %}</p>
+    </form>
+    {% endif %}
+  {% else %}
+    <p class="small muted">{% translate 'Nur Benutzer mit Berechtigung Einstellungen schreiben dürfen die Microsoft-365-Verbindung verwalten.' %}</p>
+  {% endif %}
+</div>
 {% endblock %}
