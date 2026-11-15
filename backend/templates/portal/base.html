@@ -15,6 +15,7 @@
 <a class="{% nav_class request 'team,invitations,invite,team_member,member_assignment_link,transfer_admin' %}" href="{% url 'portal:team' %}"><span class="ico">♙</span><span class="label">{% translate "Mein Team" %}</span></a>
 {% endif %}
 <a class="{% nav_class request 'licenses,license_detail,renew,renew_index,claim_assignment_link' %}" href="{% url 'portal:licenses' %}"><span class="ico">▣</span><span class="label">{% translate "Lizenzen" %}</span></a>
+<a class="{% nav_class request 'vouchers,voucher_redeem' %}" href="{% url 'portal:vouchers' %}"><span class="ico">◇</span><span class="label">{% translate "Gutscheine" %}</span></a>
 {% if current_membership and current_membership.role == 'admin' or not current_membership %}
 <a class="{% nav_class request 'buy' %}" href="{% url 'portal:buy' %}"><span class="ico">＋</span><span class="label">{% translate "Weitere Lizenzen kaufen" %}</span></a>
 {% endif %}
@@ -34,9 +35,9 @@
 <a class="{% nav_class request 'licenses,license_detail,renew,renew_index,claim_assignment_link' %}" href="{% url 'portal:licenses' %}"><b>▣</b>{% translate "Lizenzen" %}</a>
 <a class="{% nav_class request 'devices,device_revoke' %}" href="{% url 'portal:devices' %}"><b>▤</b>{% translate "Geräte" %}</a>
 {% if current_membership and current_membership.role == 'admin' %}
-<a class="{% nav_class request 'search,buy,orders,company,profile,security,privacy,help,support_detail,more' %}" href="{% url 'portal:more' %}"><b>⋯</b>{% translate "Mehr" %}</a>
+<a class="{% nav_class request 'search,buy,vouchers,voucher_redeem,orders,company,profile,security,privacy,help,support_detail,more' %}" href="{% url 'portal:more' %}"><b>⋯</b>{% translate "Mehr" %}</a>
 {% else %}
-<a class="{% nav_class request 'search,buy,orders,company,help,support_detail,more' %}" href="{% url 'portal:more' %}"><b>⋯</b>{% translate "Mehr" %}</a>
+<a class="{% nav_class request 'search,buy,vouchers,voucher_redeem,orders,company,help,support_detail,more' %}" href="{% url 'portal:more' %}"><b>⋯</b>{% translate "Mehr" %}</a>
 {% endif %}
 </div>
 {% endblock %}

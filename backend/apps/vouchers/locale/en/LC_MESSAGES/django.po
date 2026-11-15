@@ -1,0 +1,410 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: PROMPTFINISHER Vouchers 2026\n"
+"Language: en\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+msgid "Gutscheine & Aktionen"
+msgstr "Vouchers & promotions"
+
+msgid "Rabatte und kostenlose Pro-Zeiträume sicher verwalten."
+msgstr "Manage discounts and complimentary Pro periods securely."
+
+msgid "+ Codes erstellen"
+msgstr "+ Create codes"
+
+msgid "Kampagnencodes"
+msgstr "Campaign codes"
+
+msgid "Erfolgreiche Einlösungen"
+msgstr "Successful redemptions"
+
+msgid "Kampagne, Firma oder letzte vier Zeichen"
+msgstr "Campaign, company, or last four characters"
+
+msgid "Prozent"
+msgstr "Percent"
+
+msgid "Festbetrag"
+msgstr "Fixed amount"
+
+msgid "Kostenlose Zeit"
+msgstr "Free period"
+
+msgid "Kampagne"
+msgstr "Campaign"
+
+msgid "Zielkunde"
+msgstr "Target customer"
+
+msgid "Verbrauch"
+msgstr "Usage"
+
+msgid "Verwalten"
+msgstr "Manage"
+
+msgid "Keine Gutscheine gefunden."
+msgstr "No vouchers found."
+
+msgid "Weiter"
+msgstr "Next"
+
+msgid "Aus Sicherheitsgründen wird jeder vollständige Gutscheincode nur beim Erstellen angezeigt. Es werden ausschließlich Prüfsummen gespeichert."
+msgstr "For security, the full voucher code appears only when it is created. Only verification hashes are stored."
+
+msgid "Alle Codes sind zufällig und werden nach dem Erstellen nur einmal angezeigt."
+msgstr "All codes are random and are shown only once after creation."
+
+msgid "Ein Code kann auf einen Kunden beschränkt werden. Ohne Bindung ist er für alle berechtigten Kunden gültig. Pro-Code-Limits gelten unabhängig voneinander."
+msgstr "A code may be restricted to one customer. Unrestricted codes are valid for all eligible customers. Each code has its own redemption limit."
+
+msgid "Gutscheincodes erzeugen"
+msgstr "Generate voucher codes"
+
+msgid "Einmalige Anzeige"
+msgstr "Shown only once"
+
+msgid "Diese Codes können später nicht erneut angezeigt werden. Bitte jetzt sicher an die berechtigten Kunden übergeben."
+msgstr "These codes cannot be displayed again. Please transfer them securely to the intended customers now."
+
+msgid "Gutscheincode"
+msgstr "Voucher code"
+
+msgid "Verwaltung"
+msgstr "Management"
+
+msgid "In Protokollen und Datenbank werden keine vollständigen Gutscheincodes gespeichert."
+msgstr "Full voucher codes are never stored in logs or the database."
+
+msgid "Alle Gutscheine"
+msgstr "All vouchers"
+
+msgid "Leistung"
+msgstr "Benefit"
+
+msgid "je Lizenz"
+msgstr "per license"
+
+msgid "Tage Pro"
+msgstr "Pro days"
+
+msgid "Kontingent"
+msgstr "Quota"
+
+msgid "Je Code; laufende Zahlungsreservierungen zählen mit."
+msgstr "Per code; pending payment reservations count toward the limit."
+
+msgid "Zielbindung"
+msgstr "Target restriction"
+
+msgid "Alle berechtigten Kunden"
+msgstr "All eligible customers"
+
+msgid "Bereits gewährte Lizenzen werden durch Gutscheinsperrung nicht automatisch entzogen."
+msgstr "Blocking a voucher does not automatically revoke licenses already granted."
+
+msgid "Code für weitere Einlösungen sperren"
+msgstr "Block code for further redemptions"
+
+msgid "Code wieder aktivieren"
+msgstr "Reactivate code"
+
+msgid "Kampagne bearbeiten"
+msgstr "Edit campaign"
+
+msgid "Die wirtschaftlichen Konditionen und Kundenbindung bleiben nach Ausstellung unveränderlich."
+msgstr "Financial terms and customer restrictions cannot be changed after issue."
+
+msgid "Einlösehistorie"
+msgstr "Redemption history"
+
+msgid "Einlöser"
+msgstr "Redeemed by"
+
+msgid "Lizenz/Bestellung"
+msgstr "License/order"
+
+msgid "Noch keine Einlösungen."
+msgstr "No redemptions yet."
+
+msgid "Gutscheine & Gratislaufzeiten"
+msgstr "Vouchers & free periods"
+
+msgid "Rabattcodes beim Lizenzkauf nutzen oder Pro-Zeiträume einlösen."
+msgstr "Use discount codes when buying licenses or redeem free Pro periods."
+
+msgid "Kostenlose Pro-Laufzeit einlösen"
+msgstr "Redeem free Pro period"
+
+msgid "Zeitgutscheine können neue Lizenzen erzeugen oder die bestehende Lizenz des Empfängers verlängern. Rabattcodes gehören in das Kaufformular."
+msgstr "Time vouchers create new licenses or extend the recipient's existing license. Enter discount codes in the purchase form."
+
+msgid "Unzugewiesene Lizenz für mein Unternehmen"
+msgstr "Unassigned license for my company"
+
+msgid "Zeitgutschein verbindlich einlösen"
+msgstr "Redeem time voucher"
+
+msgid "Für dieses Konto zugeteilte Kampagnen"
+msgstr "Campaigns assigned to this account"
+
+msgid "Vollständige Codes werden nur durch netstyle ausgegeben."
+msgstr "Full codes are issued exclusively by netstyle."
+
+msgid "Keine ausdrücklich zugeteilten Kampagnen."
+msgstr "No campaigns assigned to this account."
+
+msgid "Rabatt bei der Bestellung"
+msgstr "Discount at checkout"
+
+msgid "Rabattcodes werden beim Kauf oder bei zulässigen Verlängerungen vor der Zahlung geprüft und auf den Bruttopreis angewendet."
+msgstr "Discount codes are verified before payment when purchasing or eligible renewals and applied to the gross price."
+
+msgid "Zum Lizenzkauf"
+msgstr "Buy licenses"
+
+msgid "Einlösungen und Lizenzzeiträume"
+msgstr "Redemptions and license periods"
+
+msgid "Gutschein"
+msgstr "Voucher"
+
+msgid "Laufzeit/Rabatt"
+msgstr "Period/discount"
+
+msgid "Kampagnenbezeichnung"
+msgstr "Campaign name"
+
+msgid "Interner Hinweis"
+msgstr "Internal note"
+
+msgid "Rabatt in Prozent"
+msgstr "Percentage discount"
+
+msgid "Festbetrag je Lizenz"
+msgstr "Fixed amount per license"
+
+msgid "Kostenlose Pro-Nutzung"
+msgstr "Free Pro access"
+
+msgid "Gutscheinart"
+msgstr "Voucher type"
+
+msgid "Rabatt je Lizenz in EUR brutto"
+msgstr "Gross discount per license in EUR"
+
+msgid "Kostenlose Tage"
+msgstr "Free days"
+
+msgid "Maximale Einlösungen je Code"
+msgstr "Maximum redemptions per code"
+
+msgid "Anzahl verschiedener Codes"
+msgstr "Number of distinct codes"
+
+msgid "Rabatt auch für Verlängerungen"
+msgstr "Discount applies to renewals too"
+
+msgid "Nur für Unternehmen (optional)"
+msgstr "Company only (optional)"
+
+msgid "Nur für Benutzer (optional)"
+msgstr "User only (optional)"
+
+msgid "Prozentgutscheine benötigen 1–99 Prozent."
+msgstr "Percentage vouchers require 1–99 percent."
+
+msgid "Festbetrag muss größer null sein."
+msgstr "Fixed amount must be greater than zero."
+
+msgid "Kostenlose Laufzeit muss 1–1095 Tage betragen."
+msgstr "Free access duration must be 1–1095 days."
+
+msgid "Nur für Prozentgutscheine zulässig."
+msgstr "Allowed only for percentage vouchers."
+
+msgid "Nur für Festbetragsgutscheine zulässig."
+msgstr "Allowed only for fixed-amount vouchers."
+
+msgid "Nur für Zeitgutscheine zulässig."
+msgstr "Allowed only for time vouchers."
+
+msgid "Bei Zeitgutscheinen nicht anwendbar."
+msgstr "Not applicable to time vouchers."
+
+msgid "Entweder Unternehmen oder Benutzer binden."
+msgstr "Restrict to either a company or a user."
+
+msgid "Das Ende muss nach dem Beginn liegen."
+msgstr "End must be after start."
+
+msgid "Maximale Einlösungen"
+msgstr "Maximum redemptions"
+
+msgid "Bereits reservierte Einlösungen dürfen nicht abgeschnitten werden."
+msgstr "The limit cannot be lower than existing reservations."
+
+msgid "Das Ende muss nach Beginn liegen."
+msgstr "End must be after start."
+
+msgid "Neue Gutscheincodes"
+msgstr "New voucher codes"
+
+msgid "Gutscheine erstellen"
+msgstr "Create vouchers"
+
+msgid "Gutschein aktualisiert."
+msgstr "Voucher updated."
+
+msgid "Gutscheinstatus geändert. Bestehende Nutzungsrechte bleiben unverändert."
+msgstr "Voucher status changed. Existing access rights remain unchanged."
+
+#, python-format
+msgid "Gutschein eingelöst. Pro-Lizenz: %(license)s"
+msgstr "Voucher redeemed. Pro license: %(license)s"
+
+msgid "Ungültige Lizenzanzahl."
+msgstr "Invalid license quantity."
+
+msgid "Gutschein oder Preis nicht verfügbar."
+msgstr "Voucher or price unavailable."
+
+msgid "Festbetrag ist für diese Währung nicht zulässig."
+msgstr "Fixed discount is not allowed for this currency."
+
+msgid "Bitte den Gutschein im Kundenportal einlösen."
+msgstr "Please redeem the voucher in the customer portal."
+
+msgid "Gutschein ungültig oder nicht verfügbar."
+msgstr "Voucher invalid or unavailable."
+
+msgid "Gutscheincode ungültig oder nicht verfügbar."
+msgstr "Voucher code invalid or unavailable."
+
+msgid "Nur netstyle kann Gutscheine erstellen."
+msgstr "Only netstyle may create vouchers."
+
+msgid "Pro Aktion sind 1 bis 100 Gutscheine zulässig."
+msgstr "Each action may create 1 to 100 vouchers."
+
+msgid "Gutschein nicht verfügbar oder abgelaufen."
+msgstr "Voucher unavailable or expired."
+
+msgid "Dieser Gutschein ist bereits vollständig eingelöst."
+msgstr "This voucher has already been fully redeemed."
+
+msgid "Dieser Gutschein gilt nicht für das gewählte Produkt."
+msgstr "This voucher is not valid for the selected product."
+
+msgid "Deaktivierte Unternehmen können keine Gutscheine einlösen."
+msgstr "Inactive companies cannot redeem vouchers."
+
+msgid "Gutschein ist für einen anderen Kunden ausgestellt."
+msgstr "Voucher belongs to another customer."
+
+msgid "Gutschein ist für einen anderen Benutzer ausgestellt."
+msgstr "Voucher belongs to another user."
+
+msgid "Gutschein gilt nur für neue Pro-Lizenzen."
+msgstr "Voucher is valid only for new Pro licenses."
+
+msgid "Dieser Benutzer hat den Gutschein bereits eingelöst."
+msgstr "This user has already redeemed the voucher."
+
+msgid "Dieser Gutschein wurde von diesem Konto bereits genutzt."
+msgstr "This account has already used this voucher."
+
+msgid "Kostenlose Zeitgutscheine bitte im Gutscheinbereich einlösen."
+msgstr "Please redeem free time vouchers in the voucher section."
+
+msgid "Gutscheinbetrag ist für diesen Lizenzpreis nicht zulässig."
+msgstr "Voucher amount is not valid for this license price."
+
+msgid "Gutschein darf nur für eine zahlungspflichtige Bestellung verwendet werden."
+msgstr "Voucher can be applied only to a paid order."
+
+msgid "Gutscheinreservierung kann wegen inkonsistentem Kontingent nicht freigegeben werden."
+msgstr "Voucher reservation cannot be released because the quota is inconsistent."
+
+msgid "Bitte ein aktives, bestätigtes Kundenkonto verwenden."
+msgstr "Please use an active, verified customer account."
+
+msgid "Pro ist derzeit nicht verfügbar."
+msgstr "Pro is currently unavailable."
+
+msgid "Nur der Firmenadministrator kann Zeitgutscheine einlösen."
+msgstr "Only the company administrator may redeem time vouchers."
+
+msgid "Empfänger muss aktives, bestätigtes Firmenmitglied sein."
+msgstr "Recipient must be an active, verified company member."
+
+msgid "Privatcodes sind ausschließlich für das eigene Konto."
+msgstr "Private codes may only be used by their owners."
+
+msgid "Ein Privatkundenkonto ist erforderlich."
+msgstr "A private customer account is required."
+
+msgid "Persönliche Zeitgutscheine müssen direkt dem vorgesehenen Benutzer zugewiesen werden."
+msgstr "Personal time vouchers must be assigned directly to the intended user."
+
+msgid "Rabattgutscheine bitte beim Pro-Kauf verwenden."
+msgstr "Please use discount vouchers when purchasing Pro."
+
+msgid "Für Pro fehlt die Preisversion; Gutschein kann nicht gebucht werden."
+msgstr "Pro has no price version; the voucher cannot be posted."
+
+msgid "Für diesen Benutzer besteht eine gesperrte oder zu prüfende Pro-Lizenz."
+msgstr "This user has a blocked or pending-review Pro license."
+
+msgid "Rabattprozente müssen zwischen 1 und 99 liegen."
+msgstr "Percentage discount must be between 1 and 99."
+
+msgid "Ein positiver Festbetrag ist erforderlich."
+msgstr "A positive fixed amount is required."
+
+msgid "Kostenlose Laufzeit muss 1 bis 1095 Tage betragen."
+msgstr "Free access duration must be between 1 and 1095 days."
+
+msgid "Rabattcodes dürfen keine freie Laufzeit haben."
+msgstr "Discount codes cannot grant free access periods."
+
+msgid "Nur Festbetragsrabatte dürfen einen Betrag haben."
+msgstr "Only fixed-amount vouchers may specify an amount."
+
+msgid "Nur Prozentcodes dürfen Rabattprozente haben."
+msgstr "Only percentage vouchers may specify a percentage."
+
+msgid "Probezeiträume sind keine Zahlungsrabatte."
+msgstr "Trial periods are not payment discounts."
+
+msgid "Ein Code kann nur auf Firma oder Benutzer begrenzt sein."
+msgstr "A code may be restricted to a company or a user, not both."
+
+msgid "Ende muss nach Beginn liegen."
+msgstr "End must be after start."
+
+msgid "Mindestens eine Einlösung erforderlich."
+msgstr "At least one redemption is required."
+
+msgid "Prozentualer Rabatt"
+msgstr "Percentage discount"
+
+msgid "Fester Rabatt je Lizenz"
+msgstr "Fixed discount per license"
+
+msgid "Kostenlose Pro-Laufzeit"
+msgstr "Free Pro period"
+
+msgid "Für Bestellung reserviert"
+msgstr "Reserved for order"
+
+msgid "Eingelöst"
+msgstr "Redeemed"
+
+msgid "Fehlgeschlagen / freigegeben"
+msgstr "Failed / released"
+
+msgid "Rabattcode (optional)"
+msgstr "Discount code (optional)"

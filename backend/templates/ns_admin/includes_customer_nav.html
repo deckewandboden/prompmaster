@@ -1,5 +1,6 @@
 {% load pm i18n %}
 {% user_has_perm request.user 'licenses.read' as can_licenses %}
+{% user_has_perm request.user 'vouchers.read' as can_vouchers %}
 {% user_has_perm request.user 'orders.read' as can_orders %}
 {% user_has_perm request.user 'payments.read' as can_payments %}
 {% user_has_perm request.user 'email.read' as can_email %}
@@ -10,6 +11,7 @@
   <a class="{% if request.resolver_match.url_name == 'customer_company' %}active{% endif %}" href="{% url 'ns_admin:customer_company' customer.id %}">{% translate 'Unternehmen' %}</a>
   <a class="{% if request.resolver_match.url_name == 'customer_users' %}active{% endif %}" href="{% url 'ns_admin:customer_users' customer.id %}">{% translate 'Benutzer' %}</a>
   {% if can_licenses %}<a class="{% if request.resolver_match.url_name == 'customer_licenses' %}active{% endif %}" href="{% url 'ns_admin:customer_licenses' customer.id %}">{% translate 'Lizenzen' %}</a>{% endif %}
+  {% if can_vouchers %}<a class="{% if request.resolver_match.url_name == 'customer_vouchers' %}active{% endif %}" href="{% url 'ns_admin:customer_vouchers' customer.id %}">{% translate 'Gutscheine' %}</a>{% endif %}
   <a class="{% if request.resolver_match.url_name == 'customer_devices' %}active{% endif %}" href="{% url 'ns_admin:customer_devices' customer.id %}">{% translate 'Geräte' %}</a>
   {% if can_orders %}<a class="{% if request.resolver_match.url_name == 'customer_orders' %}active{% endif %}" href="{% url 'ns_admin:customer_orders' customer.id %}">{% translate 'Bestellungen' %}</a>{% endif %}
   {% if can_payments %}<a class="{% if request.resolver_match.url_name == 'customer_payments' %}active{% endif %}" href="{% url 'ns_admin:customer_payments' customer.id %}">{% translate 'Zahlungen' %}</a>{% endif %}

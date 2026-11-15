@@ -1,7 +1,9 @@
 from django.urls import path
 from . import admin_views as v
+from . import graph_mail_views as graph_mail
 from . import export_views as ev
 from . import sensitive as sv
+from apps.vouchers import views as vv
 
 app_name = 'ns_admin'
 urlpatterns = [
@@ -36,6 +38,7 @@ urlpatterns = [
     path('customers/<uuid:pk>/users/<uuid:user_id>/transfer-admin/', v.customer_admin_transfer, name='customer_admin_transfer'),
     path('customers/<uuid:pk>/users/<uuid:user_id>/deactivate/', v.customer_user_deactivate, name='customer_user_deactivate'),
     path('customers/<uuid:pk>/licenses/', v.customer_licenses, name='customer_licenses'),
+    path('customers/<uuid:pk>/vouchers/', vv.staff_customer_vouchers, name='customer_vouchers'),
     path('customers/<uuid:pk>/devices/', v.customer_devices, name='customer_devices'),
     path('customers/<uuid:pk>/devices/<uuid:device_id>/revoke/', v.customer_device_revoke, name='customer_device_revoke'),
     path('customers/<uuid:pk>/orders/', v.customer_orders, name='customer_orders'),
@@ -43,6 +46,11 @@ urlpatterns = [
     path('customers/<uuid:pk>/emails/', v.customer_emails, name='customer_emails'),
     path('customers/<uuid:pk>/privacy/', v.customer_privacy, name='customer_privacy'),
     path('customers/<uuid:pk>/audit/', v.customer_audit, name='customer_audit'),
+    path('vouchers/', vv.staff_vouchers, name='vouchers'),
+    path('vouchers/create/', vv.staff_voucher_create, name='voucher_create'),
+    path('vouchers/<uuid:pk>/', vv.staff_voucher_detail, name='voucher_detail'),
+    path('vouchers/<uuid:pk>/edit/', vv.staff_voucher_edit, name='voucher_edit'),
+    path('vouchers/<uuid:pk>/toggle/', vv.staff_voucher_toggle, name='voucher_toggle'),
     path('licenses/', v.licenses, name='licenses'),
     path('licenses/<uuid:pk>/', v.license_detail, name='license_detail'),
     path('licenses/<uuid:pk>/assign/', v.license_assign, name='license_assign'),
@@ -60,6 +68,10 @@ urlpatterns = [
     path('products/<uuid:pk>/', v.product_edit, name='product_edit'),
     path('products/<uuid:pk>/prices/new/', v.product_price_add, name='product_price_add'),
     path('email/', v.email, name='email'),
+    path('email/graph/connect/', graph_mail.graph_connect, name='graph_mail_connect'),
+    path('email/graph/callback/', graph_mail.graph_callback, name='graph_mail_callback'),
+    path('email/graph/disconnect/', graph_mail.graph_disconnect, name='graph_mail_disconnect'),
+    path('email/graph/test/', graph_mail.graph_test_send, name='graph_mail_test'),
     path('email/templates/', v.email, name='email_templates'),
     path('email/log/', v.email_log, name='email_log'),
     path('email/templates/<uuid:pk>/', v.email_template_edit, name='email_template_edit'),

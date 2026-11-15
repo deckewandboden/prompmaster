@@ -88,6 +88,19 @@ class TwoFactorEnforcementMiddleware:
         'ns_admin:service_account_rotate',
         'ns_admin:service_account_revoke',
         'ns_admin:mollie_config',
+        # Settings POST may rotate SMTP / delegated Graph credentials and sender.
+        # Read-only settings GET stays accessible without sensitive step-up.
+        'ns_admin:settings',
+        # Delegated mail OAuth setup, credential revocation and real test sends
+        # require the same short-lived staff password + 2FA proof.
+        'ns_admin:graph_mail_connect',
+        'ns_admin:graph_mail_disconnect',
+        'ns_admin:graph_mail_test',
+        # Issuing or modifying vouchers can grant free Pro entitlements or
+        # financial discounts, so require fresh staff password + completed 2FA.
+        'ns_admin:voucher_create',
+        'ns_admin:voucher_edit',
+        'ns_admin:voucher_toggle',
         'ns_admin:license_refund',
         'ns_admin:deletion_request_process',
         'ns_admin:customer_user_deactivate',
@@ -128,6 +141,29 @@ class TwoFactorEnforcementMiddleware:
 
         if view_name not in self.sensitive_session_views:
             return None
+        voucher_actions = {
+            'ns_admin:voucher_create',
+            'ns_admin:voucher_edit',
+            'ns_admin:voucher_toggle',
+        }
+        graph_actions = {
+            'ns_admin:graph_mail_connect',
+            'ns_admin:graph_mail_disconnect',
+            'ns_admin:graph_mail_test',
+        }
+        settings_mutations = graph_actions | {'ns_admin:settings'}
+        # Never prompt for a GET on the read-only settings page, or on a
+        # method-rejected Graph route. OAuth callback instead validates its
+        # one-time PKCE/state session.
+        if view_name in settings_mutations and request.method != 'POST':
+            return None
+        # Unauthorized callers must receive the normal 403 permission verdict,
+        # rather than being asked to reauthenticate for forbidden actions.
+        if view_name in voucher_actions or view_name in settings_mutations:
+            from apps.core.permissions import has_perm
+            needed = 'vouchers.write' if view_name in voucher_actions else 'settings.write'
+            if not user.is_staff or not has_perm(user, needed):
+                return None
         if sensitive_reauth_is_fresh(request, user):
             return None
 

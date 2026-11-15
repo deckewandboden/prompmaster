@@ -131,13 +131,17 @@ jobs:
           python manage.py check
           python manage.py test --verbosity 2
 
-      - name: 100k DataGrid scalability gate
+      - name: 100k DataGrid scalability and security regression gate
         working-directory: backend
         env:
           RUN_100K_DATAGRID_ACCEPTANCE: '1'
         run: |
+          # The normal Django run deliberately skips all six tests in this
+          # fixture. Run the entire class explicitly, not only the 100k test:
+          # pagination boundaries, filters, sorting, CSV formula injection,
+          # and invalid page sizes must all be release blockers.
           python manage.py test \
-            apps.core.tests.DataGrid100kAcceptanceTests.test_100000_rows_paginate_without_unbounded_result_materialization \
+            apps.core.tests.DataGrid100kAcceptanceTests \
             --verbosity 2
 
       - name: 100k multi-domain performance benchmark

@@ -582,6 +582,7 @@ def public_checkout_start(request):
                 product=product,
                 quantity=quantity,
                 idempotency_key=checkout_key,
+                voucher_code=data.get('voucher_code') or '',
             )
             snapshot = dict(order.billing_snapshot or {})
             snapshot['source'] = 'public_checkout'
