@@ -11,6 +11,7 @@ import uuid
 from datetime import timedelta
 from decimal import Decimal, ROUND_HALF_UP
 
+from django.conf import settings
 from django.core.exceptions import ValidationError
 from django.db import transaction
 from django.db.models import F
@@ -243,6 +244,32 @@ def redeem_trial(*, code, actor, company, beneficiary=None, request=None):
     """
     if not actor.is_active or not actor.email_verified_at or actor.is_staff:
         raise ValidationError(_("Bitte ein aktives, bestätigtes Kundenkonto verwenden."))
+
+    # A zero-EUR Pro trial is still a license grant. Enforce the same signed,
+    # version-pinned legal offer as paid checkout before locking voucher rows.
+    legal_offer = None
+    legal_documents = None
+    if settings.LEGAL_CHECKOUT_SNAPSHOT_REQUIRED:
+        if request is None or request.method != "POST" or not getattr(request, "POST", None):
+            raise ValidationError(_("Lizenzbedingungen akzeptieren"))
+        required = [
+            ("accept_terms", _("AGB akzeptieren")),
+            ("accept_privacy", _("Datenschutzhinweise zur Kenntnis genommen")),
+            ("accept_license", _("Lizenzbedingungen akzeptieren")),
+        ]
+        if company is None:
+            required.extend([
+                ("accept_withdrawal", _("Widerrufsinformation zur Kenntnis genommen")),
+                ("request_early_performance", _("Leistungsbeginn vor Ablauf der Widerrufsfrist ausdrücklich verlangt")),
+            ])
+        for field, label in required:
+            if request.POST.get(field) not in ("on", "1", "true", "yes"):
+                raise ValidationError(label)
+        from apps.legal.checkout_snapshot import validate_snapshot
+        legal_offer, legal_documents = validate_snapshot(
+            request, (request.POST.get("legal_snapshot_token") or "").strip(),
+            "company" if company is not None else "private", lock=True,
+        )
     from apps.catalog.models import Product
 
     product = Product.objects.filter(code="PRO", active=True).first()
@@ -383,6 +410,18 @@ def redeem_trial(*, code, actor, company, beneficiary=None, request=None):
     )
     voucher.used_count = F("used_count") + 1
     voucher.save(update_fields=["used_count", "updated_at"])
+    if legal_offer is not None:
+        # Legal acceptance, voucher quota and license are one DB transaction.
+        # Rotate the Redis-backed offer nonce before commit; rotation failure
+        # rolls back the grant instead of leaving a reusable signed offer.
+        from apps.companies.portal import _record_legal_acceptances
+        from apps.legal.checkout_snapshot import rotate_session_nonce
+        _record_legal_acceptances(
+            request, order, legal_documents,
+            early_performance_requested=(company is None),
+            legal_offer=legal_offer,
+        )
+        rotate_session_nonce(request)
     audit(actor, "voucher.trial_redeemed", redemption, {
         "license": str(license_obj.pk), "days": voucher.trial_days,
         "beneficiary": str(beneficiary.pk) if beneficiary else "unassigned",
