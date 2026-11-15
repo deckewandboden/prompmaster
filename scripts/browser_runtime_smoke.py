@@ -2738,6 +2738,7 @@ def run_backend_ui_smoke(browser, fixture=None) -> None:
             (f'ns-admin/customers/{fixture["company_id"]}/licenses/', 'Admin Kundenlizenzen'),
             (f'ns-admin/customers/{fixture["company_id"]}/devices/', 'Admin Kundengeräte'),
             (f'ns-admin/customers/{fixture["company_id"]}/orders/', 'Admin Kundenbestellungen'),
+            (f'ns-admin/customers/{fixture["company_id"]}/vouchers/', 'Admin Kundengutscheine'),
             (f'ns-admin/customers/{fixture["company_id"]}/payments/', 'Admin Kundenzahlungen'),
             (f'ns-admin/customers/{fixture["company_id"]}/emails/', 'Admin Kunden-E-Mails'),
             (f'ns-admin/customers/{fixture["company_id"]}/privacy/', 'Admin Kundendatenschutz'),
