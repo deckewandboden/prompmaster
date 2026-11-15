@@ -3871,6 +3871,462 @@ msgstr "Licentiebeheer / verlenging"
 msgid "Jetzt trotzdem PROMPTFINISHER Pro starten"
 msgstr "PROMPTFINISHER Pro toch openen"
 
+msgid "Rechtstexte · Sprachfassungen"
+msgstr "Juridische teksten · Taalversies"
+
+msgid "Entwurf, unabhängige Prüfung und dokumentierte Freigabe je Originalversion."
+msgstr "Concept, onafhankelijke controle en gedocumenteerde goedkeuring per bronversie."
+
+msgid "Sprachfassung anlegen"
+msgstr "Taalversie toevoegen"
+
+msgid "Die öffentliche Freigabe fremdsprachiger Rechtsdokumente ist ausgeschaltet."
+msgstr "Openbare publicatie van juridische documenten in andere talen is uitgeschakeld."
+
+msgid "Dokument"
+msgstr "Document"
+
+msgid "Freigegeben von"
+msgstr "Goedgekeurd door"
+
+msgid "Details"
+msgstr "Details"
+
+msgid "Noch keine geprüften Sprachfassungen vorhanden."
+msgstr "Er zijn nog geen gecontroleerde taalversies beschikbaar."
+
+msgid "Deutsche Originalversionen"
+msgstr "Duitse bronversies"
+
+msgid "Rechtsübersetzung prüfen"
+msgstr "Juridische vertaling controleren"
+
+msgid "Deutsche Originalversion"
+msgstr "Duitse bronversie"
+
+msgid "Eingereicht von"
+msgstr "Ingediend door"
+
+msgid "Freigegeben am"
+msgstr "Goedgekeurd op"
+
+msgid "Freigabenachweis"
+msgstr "Goedkeuringsbewijs"
+
+msgid "SHA-256 Original"
+msgstr "SHA-256 van het origineel"
+
+msgid "SHA-256 Übersetzung"
+msgstr "SHA-256 van de vertaling"
+
+msgid "Die Integritätsprüfung ist fehlgeschlagen. Diese Sprachfassung wird nicht öffentlich angezeigt."
+msgstr "De integriteitscontrole is mislukt. Deze taalversie wordt niet openbaar getoond."
+
+msgid "Übersetzungstext"
+msgstr "Vertaalde tekst"
+
+msgid "Entwurf bearbeiten"
+msgstr "Concept bewerken"
+
+msgid "Zur Prüfung einreichen"
+msgstr "Ter controle indienen"
+
+msgid "Zurück zum Entwurf"
+msgstr "Terug naar concept"
+
+msgid "Unabhängige Freigabe"
+msgstr "Onafhankelijke goedkeuring"
+
+msgid "Nur nach fachlicher und rechtlicher Prüfung mit dokumentiertem Nachweis freigeben."
+msgstr "Alleen goedkeuren na professionele en juridische controle met gedocumenteerd bewijs."
+
+msgid "Fachlich freigeben"
+msgstr "Goedkeuren na controle"
+
+msgid "Übersetzung (noch nicht freigegeben)"
+msgstr "Vertaling (nog niet goedgekeurd)"
+
+msgid "Nur Entwürfe dürfen bearbeitet werden."
+msgstr "Alleen concepten kunnen worden bewerkt."
+
+msgid "Übersetzungsentwurf gespeichert."
+msgstr "Vertaalconcept opgeslagen."
+
+msgid "Übersetzungsentwurf bearbeiten"
+msgstr "Vertaalconcept bewerken"
+
+msgid "Übersetzungsentwurf anlegen"
+msgstr "Vertaalconcept maken"
+
+msgid "Nur Entwürfe können eingereicht werden."
+msgstr "Alleen concepten kunnen worden ingediend."
+
+msgid "Nur Prüfversionen können zurückgesetzt werden."
+msgstr "Alleen versies die worden gecontroleerd kunnen terug naar concept."
+
+msgid "Nur geprüfte Fassungen können freigegeben werden."
+msgstr "Alleen gecontroleerde versies kunnen worden goedgekeurd."
+
+msgid "Sprachfassung zur Prüfung eingereicht."
+msgstr "Taalversie ter controle ingediend."
+
+msgid "Sprachfassung wieder als Entwurf markiert."
+msgstr "Taalversie teruggezet naar concept."
+
+msgid "Fachlich geprüfte Sprachfassung freigegeben."
+msgstr "Gecontroleerde taalversie goedgekeurd."
+
+msgid "Fachliche Prüfung"
+msgstr "In beoordeling"
+
+msgid "Rechtstexte freigeben"
+msgstr "Juridische teksten goedkeuren"
+
+# Invitation-acceptance UI; legal text bodies remain under separate legal approval.
+msgid "Einladung annehmen"
+msgstr "Uitnodiging accepteren"
+
+msgid "%(company)s lädt Sie zu PROMPTFINISHER ein."
+msgstr "%(company)s nodigt u uit voor PROMPTFINISHER."
+
+msgid "Konto anlegen und Einladung annehmen"
+msgstr "Account aanmaken en uitnodiging accepteren"
+
+# Account invitation and email-verification result UI.
+msgid "Sie wurden zu %(company)s eingeladen."
+msgstr "U bent uitgenodigd om deel te nemen aan %(company)s."
+
+msgid "Der Beitritt erfolgt erst nach Ihrer ausdrücklichen Bestätigung."
+msgstr "U wordt pas lid van het bedrijf na uw uitdrukkelijke bevestiging."
+
+msgid "Firma beitreten"
+msgstr "Bij het bedrijf aansluiten"
+
+msgid "Einladung angenommen"
+msgstr "Uitnodiging geaccepteerd"
+
+msgid "Einladung ungültig oder abgelaufen"
+msgstr "Uitnodiging ongeldig of verlopen"
+
+msgid "Ihr Benutzerkonto ist dem Unternehmen jetzt zugeordnet."
+msgstr "Uw gebruikersaccount is nu aan het bedrijf gekoppeld."
+
+msgid "Der Einladungslink kann nicht mehr verwendet werden. Bitte fordern Sie bei Ihrem Firmenadministrator eine neue Einladung an."
+msgstr "Deze uitnodigingslink kan niet meer worden gebruikt. Vraag uw bedrijfsbeheerder om een nieuwe uitnodiging."
+
+msgid "Zum Kundenportal"
+msgstr "Naar het klantportaal"
+
+msgid "Zur Startseite"
+msgstr "Terug naar de startpagina"
+
+msgid "E-Mail bestätigt"
+msgstr "E-mailadres bevestigd"
+
+msgid "Link ungültig oder abgelaufen"
+msgstr "Link ongeldig of verlopen"
+
+msgid "Die E-Mail-Adresse Ihres PROMPTFINISHER-Kontos wurde bestätigt."
+msgstr "Het e-mailadres van uw PROMPTFINISHER-account is bevestigd."
+
+msgid "Dieser Bestätigungslink ist nicht mehr gültig."
+msgstr "Deze bevestigingslink is niet meer geldig."
+
+msgid "Weiter"
+msgstr "Doorgaan"
+
+# Read-only legal-language technical readiness UI; not a publication gate.
+msgid "Technischer Status der Rechtsübersetzungen"
+msgstr "Technische status van juridische vertalingen"
+
+msgid "Keine juristische oder produktive Freigabe. Die Veröffentlichung bleibt separat gesperrt."
+msgstr "Geen juridische of productiegoedkeuring. Publicatie blijft afzonderlijk geblokkeerd."
+
+msgid "Technisch geprüft"
+msgstr "Technisch geverifieerd"
+
+msgid "Fehlend"
+msgstr "Ontbreekt"
+
+msgid "In Prüfung"
+msgstr "In beoordeling"
+
+msgid "Freigabe veraltet"
+msgstr "Goedkeuring verouderd"
+
+msgid "Deutsche Quelle fehlt"
+msgstr "Duitse brontekst ontbreekt"
+
+# Account snapshot validation error; generic and safe for public users.
+msgid "Das Rechtsdokument-Angebot ist ungültig oder nicht mehr aktuell. Bitte prüfen Sie die Dokumente erneut und senden Sie das Formular noch einmal ab."
+msgstr "Het aangeboden juridische document is ongeldig of niet meer actueel. Controleer de documenten opnieuw en verstuur het formulier nogmaals."
+
+# Customer checkout: legal document list heading.
+msgid "Rechtsdokumente:"
+msgstr "Juridische documenten:"
+
+msgid "Alle für Ihr Konto freigegebenen Adminbereiche."
+msgstr "Alle beheeronderdelen die voor je account beschikbaar zijn."
+
+msgid "Geschäft & Inhalte"
+msgstr "Zakelijk en inhoud"
+
+msgid "System & Governance"
+msgstr "Systeem en governance"
+
+msgid "Lead bearbeiten"
+msgstr "Lead bewerken"
+
+msgid "Ansprechpartner"
+msgstr "Contactpersoon"
+
+msgid "Verlauf & Einordnung"
+msgstr "Historie en beoordeling"
+
+msgid "Zuletzt geändert"
+msgstr "Laatst gewijzigd"
+
+msgid "Als Firmenkunde konvertiert am"
+msgstr "Omgezet naar zakelijke klant op"
+
+msgid "Kundenkonto öffnen"
+msgstr "Klantaccount openen"
+
+msgid "Privatkunden werden über den öffentlichen Registrierungs-/Checkout-Prozess angelegt, damit AGB und Datenschutz vom Kunden selbst bestätigt werden."
+msgstr "Particuliere klanten worden via het openbare registratie- en bestelproces aangemaakt zodat zij zelf de voorwaarden en privacyverklaring accepteren."
+
+msgid "← Zur Übersicht"
+msgstr "← Terug naar overzicht"
+
+msgid "Erklärung"
+msgstr "Verklaring"
+
+msgid "Gewünschtes Ende"
+msgstr "Gewenste einddatum"
+
+msgid "Bearbeitet"
+msgstr "Verwerkt"
+
+msgid "Bearbeitung"
+msgstr "Verwerking"
+
+msgid "Status speichern"
+msgstr "Status opslaan"
+
+msgid "Sie haben Leserechte, aber keine Berechtigung zur Bearbeitung."
+msgstr "Je hebt leestoegang maar geen rechten om wijzigingen aan te brengen."
+
+msgid "CSV-Export"
+msgstr "CSV-export"
+
+msgid "angefordert"
+msgstr "aangevraagd"
+
+msgid "Zeilen"
+msgstr "Rijen"
+
+msgid "Verfügbar bis"
+msgstr "Beschikbaar tot"
+
+msgid "Dieser Export ist abgelaufen."
+msgstr "Deze export is verlopen."
+
+msgid "CSV herunterladen"
+msgstr "CSV downloaden"
+
+msgid "Der Export konnte nicht erstellt werden. Bitte erneut anfordern."
+msgstr "De export kon niet worden gemaakt. Vraag deze opnieuw aan."
+
+msgid "Der Export wird im Hintergrund erstellt. Diese Seite aktualisiert sich automatisch."
+msgstr "De export wordt op de achtergrond gemaakt. Deze pagina wordt automatisch vernieuwd."
+
+msgid "Der Zahlungsdienst ist derzeit noch nicht verfügbar."
+msgstr "De betaalservice is momenteel niet beschikbaar."
+
+msgid "Zugriff verweigert"
+msgstr "Toegang geweigerd"
+
+msgid "Für diese Ansicht fehlt die erforderliche Berechtigung."
+msgstr "Je hebt geen rechten om deze pagina te bekijken."
+
+msgid "Zurück zur Übersicht"
+msgstr "Terug naar overzicht"
+
+msgid "Ansicht konnte nicht geladen werden"
+msgstr "Pagina kon niet worden geladen"
+
+msgid "Beim Laden der Daten ist ein interner Fehler aufgetreten. Bitte versuchen Sie es erneut."
+msgstr "Bij het laden van de gegevens is een interne fout opgetreden. Probeer het opnieuw."
+
+msgid "Erneut laden"
+msgstr "Opnieuw laden"
+
+msgid "Seitennavigation"
+msgstr "Paginanavigatie"
+
+msgid "von"
+msgstr "van"
+
+msgid "Datensätze"
+msgstr "Records"
+
+msgid "Erste Seite"
+msgstr "Eerste pagina"
+
+msgid "Erste"
+msgstr "Eerste"
+
+msgid "Vorherige Seite"
+msgstr "Vorige pagina"
+
+msgid "Nächste Seite"
+msgstr "Volgende pagina"
+
+msgid "Letzte Seite"
+msgstr "Laatste pagina"
+
+msgid "Letzte"
+msgstr "Laatste"
+
+msgid "Zwei-Faktor-Anmeldung"
+msgstr "Inloggen met twee factoren"
+
+msgid "Geben Sie den Code aus Ihrer Authenticator-App oder einen gültigen Recovery-Code ein."
+msgstr "Voer de code uit je authenticator-app of een geldige herstelcode in."
+
+msgid "Recovery-Codes"
+msgstr "Herstelcodes"
+
+msgid "Einmalig speichern."
+msgstr "Sla deze codes nu op."
+
+msgid "Diese Codes werden später nicht erneut im Klartext angezeigt."
+msgstr "Deze codes worden later niet opnieuw leesbaar weergegeven."
+
+msgid "Schließen Sie die Sicherheitseinrichtung ab, bevor Sie Ihren geschützten PROMPTFINISHER-Bereich verwenden."
+msgstr "Voltooi de beveiligingsinstellingen voordat je het beschermde PROMPTFINISHER-gedeelte gebruikt."
+
+msgid "Authenticator-Daten"
+msgstr "Authenticatorgegevens"
+
+msgid "Secret kopieren"
+msgstr "Geheime sleutel kopiëren"
+
+msgid "Hinterlegen Sie das Secret in Microsoft Authenticator, Google Authenticator, 1Password oder einer kompatiblen TOTP-App."
+msgstr "Voeg de geheime sleutel toe aan Microsoft Authenticator, Google Authenticator, 1Password of een compatibele TOTP-app."
+
+msgid "Einrichtungs-URI"
+msgstr "Configuratie-URI"
+
+msgid "URI kopieren"
+msgstr "URI kopiëren"
+
+msgid "Einrichtung bestätigen"
+msgstr "Configuratie bevestigen"
+
+msgid "6-stelliger Code"
+msgstr "6-cijferige code"
+
+msgid "2FA aktivieren"
+msgstr "2FA inschakelen"
+
+msgid "Nach erfolgreicher Aktivierung werden einmalig Recovery-Codes angezeigt."
+msgstr "Na activering worden de herstelcodes één keer getoond."
+
+msgid "Wir senden einen zeitlich begrenzten Link an die hinterlegte E-Mail-Adresse."
+msgstr "We sturen een tijdelijke link naar je geregistreerde e-mailadres."
+
+msgid "Link anfordern"
+msgstr "Link aanvragen"
+
+msgid "Anfrage verarbeitet"
+msgstr "Verzoek verwerkt"
+
+msgid "Falls ein aktives Konto zu dieser Adresse existiert, wurde ein zeitlich begrenzter Link zum Zurücksetzen versendet."
+msgstr "Als er een actief account bij dit adres bestaat, is een tijdelijke resetlink verstuurd."
+
+msgid "Legen Sie ein neues Passwort für Ihr PROMPTFINISHER-Konto fest."
+msgstr "Stel een nieuw wachtwoord in voor je PROMPTFINISHER-account."
+
+msgid "Passwort speichern"
+msgstr "Wachtwoord opslaan"
+
+msgid "Passwort geändert"
+msgstr "Wachtwoord gewijzigd"
+
+msgid "Link ungültig"
+msgstr "Ongeldige link"
+
+msgid "Sie können sich jetzt mit dem neuen Passwort anmelden."
+msgstr "Je kunt nu inloggen met je nieuwe wachtwoord."
+
+msgid "Der Link ist ungültig, abgelaufen oder wurde bereits verwendet. Fordern Sie bei Bedarf einen neuen Link an."
+msgstr "Deze link is ongeldig, verlopen of al gebruikt. Vraag zo nodig een nieuwe link aan."
+
+msgid "Neuen Link anfordern"
+msgstr "Nieuwe link aanvragen"
+
+msgid "Möchten Sie die aktuelle Sitzung beenden?"
+msgstr "Wil je je huidige sessie beëindigen?"
+
+# Pro deployment, device registration, and expiration warnings.
+msgid "Die geschützte Pro-Anwendung ist auf diesem System noch nicht bereitgestellt."
+msgstr "De beveiligde Pro-applicatie is nog niet op dit systeem geïnstalleerd."
+
+msgid "Deployment unvollständig."
+msgstr "Uitrol onvolledig."
+
+msgid "Der unveränderte PROMPTFINISHER-Pro-Golden-Master muss als private Serverdatei installiert werden."
+msgstr "De ongewijzigde referentieversie van PROMPTFINISHER Pro moet als privéserverbestand worden geïnstalleerd."
+
+msgid "Diese Datei wird niemals öffentlich unter /static/ ausgeliefert."
+msgstr "Dit bestand wordt nooit openbaar aangeboden via /static/."
+
+msgid "Gerät registrieren"
+msgstr "Apparaat registreren"
+
+msgid "PROMPTFINISHER Pro erlaubt %(device_limit)s aktive Geräte pro Benutzer."
+msgstr "PROMPTFINISHER Pro staat %(device_limit)s actieve apparaten per gebruiker toe."
+
+msgid "Gerät registrieren und PROMPTFINISHER Pro öffnen"
+msgstr "Apparaat registreren en PROMPTFINISHER Pro openen"
+
+msgid "Wenn alle Geräteslots belegt sind, muss Ihr Firmenadministrator oder netstyle zuerst ein altes Gerät freigeben."
+msgstr "Als alle apparaatplaatsen bezet zijn, moet uw bedrijfsbeheerder of netstyle eerst een oud apparaat vrijgeven."
+
+msgid "Lizenz läuft bald ab"
+msgstr "Licentie verloopt binnenkort"
+
+msgid "PROMPTFINISHER-Pro-Lizenz läuft bald ab"
+msgstr "PROMPTFINISHER Pro-licentie verloopt binnenkort"
+
+msgid "Dein Pro-Zugriff bleibt bis zum Ablaufdatum aktiv."
+msgstr "Je Pro-toegang blijft actief tot de vervaldatum."
+
+msgid "Verbleibende Tage:"
+msgstr "Resterende dagen:"
+
+msgid "Lizenz:"
+msgstr "Licentie:"
+
+msgid "Ablaufdatum:"
+msgstr "Vervaldatum:"
+
+msgid "Nach Ablauf wird der Pro-Zugriff ohne Verlängerung automatisch gesperrt."
+msgstr "Na de vervaldatum wordt Pro-toegang automatisch geblokkeerd zonder verlenging."
+
+msgid "Was möchtest du tun?"
+msgstr "Wat wil je doen?"
+
+msgid "Eine Verlängerung vor Ablauf hängt weitere 365 Tage an das bestehende Ablaufdatum an. Die Restlaufzeit geht nicht verloren."
+msgstr "Verlengen vóór de vervaldatum voegt 365 dagen toe aan de huidige einddatum. De resterende tijd blijft behouden."
+
+msgid "Lizenzverwaltung / Verlängerung"
+msgstr "Licentiebeheer / verlenging"
+
+msgid "Jetzt trotzdem PROMPTFINISHER Pro starten"
+msgstr "PROMPTFINISHER Pro toch openen"
+
 # Voucher campaign and checkout terminology
 msgid "Gutscheine"
 msgstr "Kortingscodes"

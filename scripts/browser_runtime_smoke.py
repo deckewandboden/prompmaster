@@ -9,6 +9,7 @@ from __future__ import annotations
 
 import json
 import os
+import re
 import shutil
 import sys
 from pathlib import Path
@@ -1422,6 +1423,37 @@ def _browser_register_verify_to_buy(
     if not response or response.status != 200:
         raise AssertionError(f'registration page failed for {customer_type}')
 
+    # Issue #91: exercise the isolated account-legal feature gate with real
+    # Chromium cookies, URLs, CSRF and subsequent registration POST.
+    offered = page.locator('input[name="account_snapshot"]')
+    if offered.count() != 1 or not offered.input_value():
+        raise AssertionError(f'{customer_type}: signed account legal offer missing')
+    for document_type in ('terms', 'privacy'):
+        link = page.locator(
+            f'a[href*="/legal/{document_type}/?account_snapshot="]'
+        )
+        if link.count() != 1:
+            raise AssertionError(
+                f'{customer_type}: pinned {document_type} URL missing'
+            )
+        target = link.get_attribute('href')
+        legal_tab = page.context.new_page()
+        try:
+            linked = legal_tab.goto(
+                base.rstrip('/') + target, wait_until='domcontentloaded',
+            )
+            if not linked or linked.status != 200:
+                raise AssertionError(
+                    f'{customer_type}: pinned {document_type} rejected '
+                    f'within same browser session'
+                )
+            if f'Browser smoke {document_type}' not in legal_tab.locator('body').inner_text():
+                raise AssertionError(
+                    f'{customer_type}: pinned {document_type} body did not render'
+                )
+        finally:
+            legal_tab.close()
+
     page.locator('select[name="customer_type"]').select_option(customer_type)
     company_row = page.locator('[data-company-field]')
     company_input = page.locator('input[name="company_name"]')
@@ -1443,7 +1475,51 @@ def _browser_register_verify_to_buy(
         page.locator('input[name="company_name"]').fill(company_name)
     page.locator('input[name="accept_terms"]').check()
     page.locator('input[name="accept_privacy"]').check()
-    page.locator('button[type="submit"]').click()
+    with page.expect_navigation(wait_until='domcontentloaded') as submitted:
+        page.locator('button[type="submit"]').click()
+    submitted_response = submitted.value
+    if '/auth/register/' in page.url:
+        # Detect the actual rejected POST immediately. Report only visible
+        # validation errors, never signed offer/CSRF tokens or passwords.
+        error_text = ' | '.join(
+            part.strip() for part in page.locator(
+                'form .errorlist, form [role="alert"], form .invalid-feedback'
+            ).all_inner_texts() if part.strip()
+        )
+        # CSRF middleware rejects POST before the form renders; provide
+        # secret-free signals distinguishing it from an account-form error.
+        body = page.locator('body').inner_text()
+        browser_origin = (
+            submitted_response.request.headers.get('origin', '')
+            if submitted_response else ''
+        )
+        safe_origin = (
+            browser_origin
+            if re.fullmatch(r'https?://(?:127[.]0[.]0[.]1|localhost):[0-9]{2,5}', browser_origin)
+            or browser_origin in ('null', '')
+            else '<unexpected-origin>'
+        )
+        csrf_flags = {
+            'csrf_failure_page': 'CSRF verification failed' in body,
+            'posted_origin': safe_origin,
+            'origin_matches_local_server': browser_origin == base.rstrip('/'),
+            'csrf_cookie_present': any(
+                cookie['name'] == 'csrftoken'
+                for cookie in page.context.cookies()
+            ),
+            'csrf_form_present': (
+                page.locator('input[name="csrfmiddlewaretoken"]').count() > 0
+            ),
+            'csrf_cookie_missing': 'CSRF cookie not set' in body,
+            'csrf_token_missing': 'CSRF token missing' in body,
+            'csrf_origin_denied': 'Origin checking failed' in body,
+            'csrf_token_incorrect': 'CSRF token from POST incorrect' in body,
+        }
+        raise AssertionError(
+            f'{customer_type}: signed registration rejected: '
+            f'http={submitted_response.status if submitted_response else "none"}, '
+            f'error={error_text[:300]!r}, csrf={csrf_flags}'
+        )
 
     if customer_type == 'company':
         page.wait_for_url('**/auth/2fa/setup/**')
@@ -2056,7 +2132,9 @@ def run_backend_ui_smoke(browser, fixture=None) -> None:
     env.setdefault('ALLOWED_HOSTS', '127.0.0.1,localhost')
     env.setdefault('SESSION_COOKIE_SECURE', '0')
     env.setdefault('CSRF_COOKIE_SECURE', '0')
-
+    # Only the isolated Playwright child server enables this staging gate.
+    # Live/default settings and the parent test process remain unchanged.
+    env['LEGAL_ACCOUNT_SNAPSHOT_REQUIRED'] = '1'
     process = subprocess.Popen(
         [sys.executable, 'manage.py', 'runserver', f'127.0.0.1:{port}', '--noreload'],
         cwd=str(ROOT / 'backend'),
@@ -2066,6 +2144,131 @@ def run_backend_ui_smoke(browser, fixture=None) -> None:
     )
     try:
         _wait_http(base + 'health/live/', process)
+
+        # Real Chromium two-tab checkout race: two simultaneous initial
+        # snapshot requests must not overwrite each other's signed nonce.
+        # Seed one real DB-backed session with *no* checkout nonce; the
+        # concurrent tabs then share that established cookie.
+        from django.conf import settings
+        from django.contrib.sessions.backends.db import SessionStore
+        from apps.legal.checkout_snapshot import SESSION_NONCE, rotate_session_nonce
+
+        # Playwright sync API runs inside its own event-loop context.
+        # Django ORM/DB-backed sessions are synchronous: carry those few
+        # operations out in a worker thread, never on the Playwright thread.
+        def seed_checkout_session():
+            session = SessionStore()
+            session['browser_checkout_probe'] = 'established'
+            session.save()
+            if session.get(SESSION_NONCE) is not None:
+                raise AssertionError('two-tab fixture already has a checkout nonce')
+            return session.session_key
+
+        with ThreadPoolExecutor(max_workers=1) as pool:
+            shared_session_key = pool.submit(seed_checkout_session).result()
+        shared_context = browser.new_context(viewport={'width': 1080, 'height': 800})
+        try:
+            shared_context.add_cookies([{
+                'name': settings.SESSION_COOKIE_NAME,
+                'value': shared_session_key,
+                'url': base,
+            }])
+            tab_a = shared_context.new_page()
+            tab_b = shared_context.new_page()
+            for tab in (tab_a, tab_b):
+                response = tab.goto(base + 'auth/login/', wait_until='domcontentloaded')
+                if not response or response.status != 200:
+                    raise AssertionError('two-tab checkout fixture navigation failed')
+            # Start both browser fetches without waiting for the first result.
+            for tab, kind in ((tab_a, 'company'), (tab_b, 'private')):
+                tab.evaluate(
+                    """kind => {
+                      window.__checkoutRace = fetch(
+                        '/api/v1/checkout/legal-snapshot/?customer_type=' + kind,
+                        {credentials:'same-origin',cache:'no-store'}
+                      ).then(async r => ({status:r.status, data:await r.json()}));
+                    }""",
+                    kind,
+                )
+            first = tab_a.evaluate('async () => await window.__checkoutRace')
+            second = tab_b.evaluate('async () => await window.__checkoutRace')
+            if first['status'] != 200 or second['status'] != 200:
+                raise AssertionError(
+                    f'two-tab checkout offer failed: {first["status"]}/{second["status"]}'
+                )
+            company_offer, private_offer = first['data'], second['data']
+            if not company_offer.get('token') or not private_offer.get('token'):
+                raise AssertionError('two-tab checkout offer missing signed token')
+            if 'withdrawal' not in private_offer.get('documents', {}):
+                raise AssertionError('private checkout offer lacks withdrawal document')
+            # Reading one snapshot must never clobber the other one, and the
+            # pinned documents must remain usable in both real browser tabs.
+            for tab, offer, document_type in (
+                (tab_a, company_offer, 'terms'),
+                (tab_b, private_offer, 'withdrawal'),
+            ):
+                url = offer['documents'][document_type]['url']
+                result = tab.goto(base.rstrip('/') + url, wait_until='domcontentloaded')
+                if not result or result.status != 200:
+                    raise AssertionError(
+                        f'two-tab pinned legal link invalidated: {document_type}, '
+                        f'HTTP {result.status if result else "none"}'
+                    )
+            with ThreadPoolExecutor(max_workers=1) as pool:
+                stored = pool.submit(
+                    lambda: SessionStore(session_key=shared_session_key).get(SESSION_NONCE)
+                ).result()
+            if stored:
+                raise AssertionError('concurrent snapshots wrote a mutable initial nonce')
+
+            stranger = browser.new_context()
+            try:
+                stranger_page = stranger.new_page()
+                stranger_page.goto(base + 'auth/login/', wait_until='domcontentloaded')
+                # Chromium can raise net::ERR_HTTP_RESPONSE_CODE_FAILURE when
+                # navigating a top-level page that deliberately returns 409.
+                # The actual browser fetch still checks the HTTP status and
+                # uses this context's distinct session cookies.
+                rejected_status = stranger_page.evaluate(
+                    """async url => (await fetch(url, {
+                      credentials:'same-origin', cache:'no-store'
+                    })).status""",
+                    company_offer['documents']['terms']['url'],
+                )
+                if rejected_status != 409:
+                    raise AssertionError(
+                        f'foreign browser accepted session-bound legal URL: {rejected_status}'
+                    )
+            finally:
+                stranger.close()
+
+            # Simulate the same atomic Redis rotation used at successful
+            # payment-provider handoff, even with a stale session copy.
+            def revoke_checkout_offers():
+                from django.test import RequestFactory
+                after_handoff = RequestFactory().get('/checkout/')
+                after_handoff.session = SessionStore(session_key=shared_session_key)
+                rotate_session_nonce(after_handoff)
+            with ThreadPoolExecutor(max_workers=1) as pool:
+                pool.submit(revoke_checkout_offers).result()
+            for tab, offer, document_type in (
+                (tab_a, company_offer, 'terms'),
+                (tab_b, private_offer, 'withdrawal'),
+            ):
+                rejected_status = tab.evaluate(
+                    """async url => (await fetch(url, {
+                      credentials:'same-origin', cache:'no-store'
+                    })).status""",
+                    offer['documents'][document_type]['url'],
+                )
+                if rejected_status != 409:
+                    raise AssertionError(
+                        f'two-tab replay accepted after handoff: '
+                        f'{document_type}, HTTP {rejected_status}'
+                    )
+        finally:
+            shared_context.close()
+        print('DJANGO TWO-TAB CHECKOUT BROWSER RACE: PASS')
 
         public_context = browser.new_context(viewport={'width': 1440, 'height': 900})
         public_page = public_context.new_page()
