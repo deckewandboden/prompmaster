@@ -7,6 +7,7 @@ from urllib.parse import parse_qs, urlsplit
 from django.contrib.sessions.middleware import SessionMiddleware
 from django.test import RequestFactory, TestCase, override_settings
 
+from apps.core.sensitive import SENSITIVE_REAUTH_SESSION_KEY
 from apps.core.settings_store import set_setting
 from apps.integrations.models import IntegrationSecret
 from apps.integrations.services import get_secret, set_secret
@@ -218,6 +219,7 @@ class DelegatedGraphHttpSecurityTests(TestCase):
         session['two_factor_ok'] = True
         session['authenticated_at'] = now
         session['last_activity_at'] = now
+        session[SENSITIVE_REAUTH_SESSION_KEY] = now
         session.save()
         set_setting('mail_graph', {
             'tenant_id': TENANT,
@@ -227,6 +229,87 @@ class DelegatedGraphHttpSecurityTests(TestCase):
             'login_email': LOGIN,
         })
         set_secret('graph_client_secret', 'confidential-test-secret')
+
+    def test_mail_admin_actions_reject_stale_stepup_without_sending(self):
+        from django.urls import reverse
+
+        session = self.client.session
+        session.pop(SENSITIVE_REAUTH_SESSION_KEY, None)
+        session.save()
+        actions = (
+            ('ns_admin:graph_mail_connect', {}),
+            ('ns_admin:graph_mail_disconnect', {'confirm': 'disconnect'}),
+            ('ns_admin:graph_mail_test', {
+                'recipient': 'test-recipient@example.test',
+                'confirm': 'send-one-test',
+            }),
+        )
+        with patch('apps.core.graph_mail_views._send_graph') as send:
+            for action, form in actions:
+                with self.subTest(action=action):
+                    response = self.client.post(reverse(action), form, secure=True)
+                    self.assertEqual(response.status_code, 302)
+                    self.assertEqual(response.url, reverse('ns_admin:sensitive_reauth'))
+            send.assert_not_called()
+
+        # A forbidden GET must remain a 405, not an unsolicited reauth prompt.
+        self.assertEqual(
+            self.client.get(reverse('ns_admin:graph_mail_connect'), secure=True).status_code,
+            405,
+        )
+
+    def test_staff_stepup_password_confirmation_allows_graph_connection(self):
+        from django.urls import reverse
+
+        session = self.client.session
+        session.pop(SENSITIVE_REAUTH_SESSION_KEY, None)
+        session.save()
+        connect = reverse('ns_admin:graph_mail_connect')
+        redirect_result = self.client.post(connect, secure=True)
+        self.assertEqual(redirect_result.status_code, 302)
+        self.assertEqual(redirect_result.url, reverse('ns_admin:sensitive_reauth'))
+
+        grant = self.client.post(
+            reverse('ns_admin:sensitive_reauth'),
+            {'password': 'Graph-Test-Strong-Password-2026!'},
+            secure=True,
+        )
+        self.assertEqual(grant.status_code, 302)
+        self.assertIn(SENSITIVE_REAUTH_SESSION_KEY, self.client.session)
+
+        with patch('apps.notifications.graph_delegated.requests.post') as outbound:
+            result = self.client.post(connect, secure=True)
+        self.assertEqual(result.status_code, 302)
+        self.assertIn('login.microsoftonline.com/', result.url)
+        outbound.assert_not_called()
+
+    def test_staff_without_settings_write_cannot_trigger_mail_stepup(self):
+        from django.urls import reverse
+        from django.utils import timezone
+        from apps.accounts.models import User
+
+        staff = User.objects.create_user(
+            'graph-no-privileges@example.test',
+            'Graph-Test-Strong-Password-2026!',
+        )
+        staff.is_staff = True
+        staff.totp_secret_enc = 'configured-for-test'
+        staff.save(update_fields=['is_staff', 'totp_secret_enc', 'updated_at'])
+        self.client.force_login(staff)
+        session = self.client.session
+        now = timezone.now().timestamp()
+        session['security_version'] = staff.security_version
+        session['authenticated_at'] = now
+        session['last_activity_at'] = now
+        session['two_factor_ok'] = True
+        session.save()
+        with patch('apps.core.graph_mail_views._send_graph') as send:
+            for name in ('ns_admin:graph_mail_connect',
+                         'ns_admin:graph_mail_disconnect',
+                         'ns_admin:graph_mail_test'):
+                with self.subTest(name=name):
+                    self.assertEqual(self.client.post(reverse(name), secure=True).status_code, 403)
+            send.assert_not_called()
 
     def test_mfa_connect_requires_post_and_does_not_send_mail(self):
         from django.urls import reverse
