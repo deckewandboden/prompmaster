@@ -391,6 +391,70 @@ class VoucherContractsTests(TestCase):
         self.assertEqual(original.items.get().quantity, 2)
         self.assertEqual(Order.objects.count(), 1)
 
+    def test_checkout_idempotency_rejects_different_product_with_or_without_voucher(self):
+        other_product = Product.objects.create(
+            code="ALT-TEST", name="Other synthetic test product",
+        )
+        for use_voucher in (False, True):
+            with self.subTest(use_voucher=use_voucher):
+                code = self.make(
+                    kind="percent", bound_company=self.company,
+                )[1] if use_voucher else ""
+                key = f"PRODUCT-SWAP-QA-{int(use_voucher)}"
+                original = create_order(
+                    user=self.admin, product=self.product,
+                    idempotency_key=key, voucher_code=code,
+                )
+                self.assertEqual(
+                    create_order(
+                        user=self.admin, product=self.product,
+                        idempotency_key=key, voucher_code=code,
+                    ).pk,
+                    original.pk,
+                )
+                with self.assertRaises(ValidationError):
+                    create_order(
+                        user=self.admin, product=other_product,
+                        idempotency_key=key, voucher_code=code,
+                    )
+                original.refresh_from_db()
+                self.assertEqual(original.items.get().product_id, self.product.pk)
+        self.assertEqual(Order.objects.count(), 2)
+
+    def test_checkout_idempotency_rejects_different_renewal_target(self):
+        first_license = License.objects.create(
+            company=self.company, product=self.product,
+            status="free", valid_from=self.now - timedelta(days=2),
+            valid_until=self.now + timedelta(days=60),
+        )
+        other_license = License.objects.create(
+            company=self.company, product=self.product,
+            status="free", valid_from=self.now - timedelta(days=2),
+            valid_until=self.now + timedelta(days=60),
+        )
+        key = "RENEWAL-TARGET-SWAP-QA"
+        original = create_order(
+            user=self.admin, product=self.product,
+            target_license=first_license, idempotency_key=key,
+        )
+        self.assertEqual(
+            create_order(
+                user=self.admin, product=self.product,
+                target_license=first_license, idempotency_key=key,
+            ).pk,
+            original.pk,
+        )
+        for changed_target in (other_license, None):
+            with self.subTest(target=changed_target):
+                with self.assertRaises(ValidationError):
+                    create_order(
+                        user=self.admin, product=self.product,
+                        target_license=changed_target, idempotency_key=key,
+                    )
+        original.refresh_from_db()
+        self.assertEqual(original.items.get().target_license_id, first_license.pk)
+        self.assertEqual(Order.objects.count(), 1)
+
     def test_checkout_idempotency_rejects_changed_voucher_without_repricing(self):
         _, code_one = self.make(kind="percent", bound_company=self.company, max_redemptions=2)
         _, code_two = self.make(kind="percent", bound_company=self.company)
