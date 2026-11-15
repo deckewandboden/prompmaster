@@ -6,6 +6,7 @@ from django.test import TestCase, override_settings
 from django.utils import timezone
 
 from apps.accounts.models import Permission, Role, User, UserRole
+from apps.core.sensitive import SENSITIVE_REAUTH_SESSION_KEY
 from apps.audit.models import AuditEvent
 from apps.legal.models import LegalDocument, LegalDocumentTranslation
 
@@ -29,7 +30,8 @@ class ProductLegalTranslationAdminTests(TestCase):
         user = User.objects.create_user(
             email=email, password='Password-2026-test',
             first_name=code, last_name='Tester',
-            is_staff=True, two_factor_required=False,
+            is_staff=True, two_factor_required=True,
+            totp_secret_enc='synthetic-legal-qa-totp-secret',
         )
         role = Role.objects.create(code='legal-'+code, name='Legal '+code)
         for permission in permissions:
@@ -41,8 +43,12 @@ class ProductLegalTranslationAdminTests(TestCase):
     def login_as(self, user):
         self.client.force_login(user)
         session = self.client.session
+        now = timezone.now().timestamp()
         session['security_version'] = user.security_version
+        session['authenticated_at'] = now
+        session['last_activity_at'] = now
         session['two_factor_ok'] = True
+        session[SENSITIVE_REAUTH_SESSION_KEY] = now
         session.save()
 
     def new_draft(self, content='English legal text'):
@@ -68,6 +74,81 @@ class ProductLegalTranslationAdminTests(TestCase):
             403,
         )
 
+
+    def test_legal_admin_mutations_require_recent_password_and_2fa(self):
+        from django.urls import reverse
+
+        base = '/ns-admin/legal/translations/'
+        self.login_as(self.editor)
+        session = self.client.session
+        session.pop(SENSITIVE_REAUTH_SESSION_KEY, None)
+        session.save()
+        self.assertEqual(self.client.get(base + 'new/').status_code, 200)
+        draft_data = {
+            'document': str(self.document.pk),
+            'language': 'en',
+            'content': 'Unapproved security regression text',
+        }
+        blocked_create = self.client.post(base + 'new/', draft_data)
+        self.assertEqual(blocked_create.status_code, 302)
+        self.assertEqual(blocked_create.url, reverse('ns_admin:sensitive_reauth'))
+        self.assertEqual(LegalDocumentTranslation.objects.count(), 0)
+
+        # Normal password confirmation, not a test-only middleware bypass.
+        grant = self.client.post(
+            reverse('ns_admin:sensitive_reauth'),
+            {'password': 'Password-2026-test'},
+        )
+        self.assertEqual(grant.status_code, 302)
+        self.assertIn(SENSITIVE_REAUTH_SESSION_KEY, self.client.session)
+        created = self.client.post(base + 'new/', draft_data)
+        self.assertEqual(created.status_code, 302)
+        item = LegalDocumentTranslation.objects.get(document=self.document, language='en')
+        self.assertEqual(item.status, 'draft')
+
+        session = self.client.session
+        session.pop(SENSITIVE_REAUTH_SESSION_KEY, None)
+        session.save()
+        blocked_submit = self.client.post(base + f'{item.pk}/submit/')
+        self.assertEqual(blocked_submit.status_code, 302)
+        self.assertEqual(blocked_submit.url, reverse('ns_admin:sensitive_reauth'))
+        item.refresh_from_db()
+        self.assertEqual(item.status, 'draft')
+        self.assertFalse(
+            AuditEvent.objects.filter(
+                action='legal.translation_submit', object_id=str(item.pk),
+            ).exists(),
+        )
+
+        # Approved sign-offs must not be possible with a stale editor session,
+        # even when the request carries a syntactically valid reference.
+        self.login_as(self.signer)
+        item.status = 'review'
+        item.submitted_by = self.editor
+        item.save()
+        session = self.client.session
+        session.pop(SENSITIVE_REAUTH_SESSION_KEY, None)
+        session.save()
+        denied = self.client.post(base + f'{item.pk}/approve/', {
+            'approval_reference': 'QA-LEGAL-SIGNOFF-NOT-GRANTED',
+        })
+        self.assertEqual(denied.status_code, 302)
+        self.assertEqual(denied.url, reverse('ns_admin:sensitive_reauth'))
+        item.refresh_from_db()
+        self.assertEqual(item.status, 'review')
+        self.assertIsNone(item.approved_at)
+
+        self.login_as(self.reader)
+        session = self.client.session
+        session.pop(SENSITIVE_REAUTH_SESSION_KEY, None)
+        session.save()
+        self.assertEqual(self.client.post(base + 'new/', draft_data).status_code, 403)
+        self.assertEqual(
+            self.client.post(base + f'{item.pk}/approve/', {
+                'approval_reference': 'ILLEGAL-READER-APPROVAL',
+            }).status_code,
+            403,
+        )
 
     def test_read_only_legal_readiness_matrix_has_54_rows_without_publication(self):
         from apps.legal.readiness import build_readiness_report
