@@ -8,7 +8,7 @@ from django.contrib.sessions.middleware import SessionMiddleware
 from django.test import RequestFactory, TestCase, override_settings
 
 from apps.core.sensitive import SENSITIVE_REAUTH_SESSION_KEY
-from apps.core.settings_store import set_setting
+from apps.core.settings_store import get_setting, set_setting
 from apps.integrations.models import IntegrationSecret
 from apps.integrations.services import get_secret, set_secret
 
@@ -242,12 +242,11 @@ class DelegatedGraphHttpSecurityTests(TestCase):
 
         # Even a syntactically incomplete settings POST must be intercepted
         # before running any write-side effect in settings_view.
+        before_provider = get_setting('mail_provider', '')
         result = self.client.post(url, {'mail_provider': 'graph'}, secure=True)
         self.assertEqual(result.status_code, 302)
         self.assertEqual(result.url, reverse('ns_admin:sensitive_reauth'))
-        self.assertEqual(
-            set_setting.__module__.split('.')[0], 'apps',
-        )  # Guard against this test inadvertently substituting the store.
+        self.assertEqual(get_setting('mail_provider', ''), before_provider)
 
         # Real password + prior TOTP confirmation grants exactly the same
         # five-minute scope already used for voucher issuance and Graph OAuth.
