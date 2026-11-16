@@ -15,6 +15,7 @@ from apps.accounts.models import User
 from apps.catalog.models import Product, ProductPrice, TaxRule
 from apps.companies.models import Company, Membership
 from apps.legal.models import LegalAcceptance
+from apps.licenses.models import License
 from apps.orders.models import Order
 from apps.payments.models import Payment
 from apps.vouchers.models import VoucherRedemption
@@ -163,3 +164,83 @@ class SignedVoucherCheckoutIntegrationTests(TestCase):
                 self.voucher.refresh_from_db()
                 self.assertEqual(self.voucher.used_count, 0)
         client_class.return_value.create_payment.assert_not_called()
+
+    @patch('apps.companies.portal.MollieClient')
+    @patch('apps.companies.portal.mollie_runtime_ready', return_value=True)
+    def test_signed_discounted_renewal_requires_valid_offer(
+        self, _ready, client_class,
+    ):
+        now = timezone.now()
+        ProductPrice.objects.create(
+            product=self.product, price_type='renewal',
+            gross_amount=Decimal('35.88'), currency='EUR',
+            valid_from=now - timedelta(minutes=2),
+        )
+        license_obj = License.objects.create(
+            company=self.company, product=self.product, status='active',
+            valid_from=now - timedelta(days=1),
+            valid_until=now + timedelta(days=60),
+        )
+        voucher, code = issue_vouchers(
+            actor=self.staff, title='Signed renewal and discount QA',
+            kind='percent', product=self.product, percent_off=25,
+            max_redemptions=1, bound_company=self.company,
+            allow_renewal=True, starts_at=now - timedelta(minutes=1),
+            expires_at=now + timedelta(days=2),
+        )[0]
+        url = f'/portal/licenses/{license_obj.pk}/renew/'
+        page = self.client.get(url)
+        self.assertEqual(page.status_code, 200)
+        offer = page.context['legal_snapshot']
+        payload = {
+            'voucher_code': code, 'accept_terms': 'on',
+            'accept_privacy': 'on', 'accept_license': 'on',
+            'legal_snapshot_token': offer['token'],
+        }
+        forged = dict(payload)
+        token = payload['legal_snapshot_token']
+        forged['legal_snapshot_token'] = ('b' if token[0] != 'b' else 'c') + token[1:]
+        for attempt in ({**payload, 'legal_snapshot_token': ''}, forged):
+            with self.subTest(token_present=bool(attempt['legal_snapshot_token'])):
+                blocked = self.client.post(url, attempt)
+                self.assertEqual(blocked.status_code, 200)
+                self.assertFalse(Order.objects.exists())
+                self.assertFalse(VoucherRedemption.objects.exists())
+                self.assertFalse(LegalAcceptance.objects.exists())
+                self.assertFalse(Payment.objects.exists())
+                voucher.refresh_from_db()
+                self.assertEqual(voucher.used_count, 0)
+        client_class.return_value.create_payment.assert_not_called()
+
+        client_class.return_value.create_payment.return_value = {
+            'id': 'tr_signed_renewal_discount_qa', 'status': 'open',
+            '_links': {
+                'checkout': {'href': 'https://checkout.example.test/signed-renewal'}
+            },
+        }
+        result = self.client.post(url, payload)
+        self.assertEqual(result.status_code, 302)
+        self.assertEqual(
+            result['Location'], 'https://checkout.example.test/signed-renewal',
+        )
+        order = Order.objects.get(company=self.company)
+        self.assertEqual(order.gross_total, Decimal('26.91'))
+        self.assertEqual(order.items.get().target_license_id, license_obj.pk)
+        self.assertEqual(order.items.get().quantity, 1)
+        self.assertEqual(order.billing_snapshot['legal_offer']['verification'],
+                         'signed_session_bound_document_offer')
+        self.assertEqual(LegalAcceptance.objects.filter(order=order).count(), 3)
+        self.assertEqual(VoucherRedemption.objects.get(
+            order=order, voucher=voucher,
+        ).status, 'reserved')
+        self.assertEqual(Payment.objects.filter(order=order).count(), 1)
+        self.assertEqual(
+            client_class.return_value.create_payment.call_args.kwargs['amount'],
+            Decimal('26.91'),
+        )
+        voucher.refresh_from_db()
+        self.assertEqual(voucher.used_count, 1)
+        self.assertEqual(
+            self.client.get(offer['documents']['terms']['url']).status_code,
+            409,
+        )
