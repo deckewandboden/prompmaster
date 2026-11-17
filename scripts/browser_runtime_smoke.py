@@ -257,8 +257,8 @@ def _backend_fixture() -> dict:
 
     now = timezone.now()
     password = 'BrowserSmoke!2026-Strong'
-    admin_secret = 'JBSWY3DPEHPK3PXP'
-    customer_secret = 'MFRGGZDFMZTWQ2LK'
+    admin_secret = 'JBSWY3DPEHPK3PXPJBSWY3DPEHPK3PXP'
+    customer_secret = 'MFRGGZDFMZTWQ2LKMFRGGZDFMZTWQ2LK'
 
     def upsert_user(email, first, last, *, secret='', staff=False, superuser=False):
         user, _ = User.objects.get_or_create(
