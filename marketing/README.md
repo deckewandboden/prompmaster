@@ -16,7 +16,7 @@ Die gebaute Website liegt in dist. Die Veröffentlichungsgrenze ist ausschließl
 
 ## Architekturentscheidung
 
-Das von Sites verlangte Startprojekt enthält Vinext/React und Shadcn. Diese Abhängigkeiten bleiben im Lockfile erhalten, sind aber kein Bestandteil des Marketing-Bundles. Der expliziten Vorgabe des Pflichtenhefts folgend wird die eigentliche Seite mit semantischem HTML, CSS, Vanilla JavaScript und Three.js gebaut. vite.marketing.config.js ist der aktive Build. Generierte UI-Komponenten werden nicht in den Marketing-Build importiert.
+Das von Sites verlangte Startprojekt enthält Vinext/React und Shadcn. Diese Abhängigkeiten bleiben im Lockfile erhalten, sind aber kein Bestandteil des Marketing-Bundles. Der expliziten Vorgabe des Pflichtenhefts folgend wird die eigentliche Seite mit semantischem HTML, CSS, Vanilla JavaScript und Three.js gebaut. scripts/build.mjs nutzt Rolldown direkt, ohne Vite und picomatch. Generierte UI-Komponenten werden nicht in den Marketing-Build importiert.
 
 - index.html: Header und Hero
 - src/content.js und src/faq.json: Content Freeze, semantische FAQ
@@ -46,7 +46,7 @@ Free: /free/ bleibt bis zum Vorliegen des Golden Masters eine verständliche Hin
 - Vorschau ist privat und noindex; öffentliche Betriebsfreigabe ist nicht Teil dieses Frontend-Schritts.
 - Referenzgespräch liefert das Pflichtenheft nur als begrenzten Textauszug; die hier umgesetzten Frontend-Anforderungen sind darin enthalten.
 - Automatische Funktions- und Buildprüfungen ersetzen keine visuelle Browser-Abnahme oder FPS-Messung auf Zielgeräten.
-- Der Audit meldet weiterhin 10 Befunde in ungenutzten Starter-Serverabhängigkeiten. Diese werden nicht veröffentlicht. Der aktiv genutzte Vite-Entwicklungsserver wurde auf die korrigierte Version 8.2.2 angehoben. Vor einem künftigen Einsatz der Starter-Serverabhängigkeiten müssen deren Befunde separat behoben werden.
+- Der Audit meldet weiterhin 10 Befunde in ungenutzten Starter-Serverabhängigkeiten. Diese werden nicht veröffentlicht. Der Marketing-Build verwendet Rolldown direkt; der lokale Preview-Server ist auf 127.0.0.1 begrenzt. Vite und die anfällige picomatch-Abhängigkeitskette werden nicht mehr installiert. Vor einem künftigen Einsatz der Starter-Serverabhängigkeiten müssen deren Befunde separat behoben werden.
 
 ## Kopfmodell
 

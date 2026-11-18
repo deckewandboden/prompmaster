@@ -3871,6 +3871,196 @@ msgstr "Licentiebeheer / verlenging"
 msgid "Jetzt trotzdem PROMPTFINISHER Pro starten"
 msgstr "PROMPTFINISHER Pro toch openen"
 
+msgid "Rechtstexte · Sprachfassungen"
+msgstr "Juridische teksten · Taalversies"
+
+msgid "Entwurf, unabhängige Prüfung und dokumentierte Freigabe je Originalversion."
+msgstr "Concept, onafhankelijke controle en gedocumenteerde goedkeuring per bronversie."
+
+msgid "Sprachfassung anlegen"
+msgstr "Taalversie toevoegen"
+
+msgid "Die öffentliche Freigabe fremdsprachiger Rechtsdokumente ist ausgeschaltet."
+msgstr "Openbare publicatie van juridische documenten in andere talen is uitgeschakeld."
+
+msgid "Dokument"
+msgstr "Document"
+
+msgid "Freigegeben von"
+msgstr "Goedgekeurd door"
+
+msgid "Details"
+msgstr "Details"
+
+msgid "Noch keine geprüften Sprachfassungen vorhanden."
+msgstr "Er zijn nog geen gecontroleerde taalversies beschikbaar."
+
+msgid "Deutsche Originalversionen"
+msgstr "Duitse bronversies"
+
+msgid "Rechtsübersetzung prüfen"
+msgstr "Juridische vertaling controleren"
+
+msgid "Deutsche Originalversion"
+msgstr "Duitse bronversie"
+
+msgid "Eingereicht von"
+msgstr "Ingediend door"
+
+msgid "Freigegeben am"
+msgstr "Goedgekeurd op"
+
+msgid "Freigabenachweis"
+msgstr "Goedkeuringsbewijs"
+
+msgid "SHA-256 Original"
+msgstr "SHA-256 van het origineel"
+
+msgid "SHA-256 Übersetzung"
+msgstr "SHA-256 van de vertaling"
+
+msgid "Die Integritätsprüfung ist fehlgeschlagen. Diese Sprachfassung wird nicht öffentlich angezeigt."
+msgstr "De integriteitscontrole is mislukt. Deze taalversie wordt niet openbaar getoond."
+
+msgid "Übersetzungstext"
+msgstr "Vertaalde tekst"
+
+msgid "Entwurf bearbeiten"
+msgstr "Concept bewerken"
+
+msgid "Zur Prüfung einreichen"
+msgstr "Ter controle indienen"
+
+msgid "Zurück zum Entwurf"
+msgstr "Terug naar concept"
+
+msgid "Unabhängige Freigabe"
+msgstr "Onafhankelijke goedkeuring"
+
+msgid "Nur nach fachlicher und rechtlicher Prüfung mit dokumentiertem Nachweis freigeben."
+msgstr "Alleen goedkeuren na professionele en juridische controle met gedocumenteerd bewijs."
+
+msgid "Fachlich freigeben"
+msgstr "Goedkeuren na controle"
+
+msgid "Übersetzung (noch nicht freigegeben)"
+msgstr "Vertaling (nog niet goedgekeurd)"
+
+msgid "Nur Entwürfe dürfen bearbeitet werden."
+msgstr "Alleen concepten kunnen worden bewerkt."
+
+msgid "Übersetzungsentwurf gespeichert."
+msgstr "Vertaalconcept opgeslagen."
+
+msgid "Übersetzungsentwurf bearbeiten"
+msgstr "Vertaalconcept bewerken"
+
+msgid "Übersetzungsentwurf anlegen"
+msgstr "Vertaalconcept maken"
+
+msgid "Nur Entwürfe können eingereicht werden."
+msgstr "Alleen concepten kunnen worden ingediend."
+
+msgid "Nur Prüfversionen können zurückgesetzt werden."
+msgstr "Alleen versies die worden gecontroleerd kunnen terug naar concept."
+
+msgid "Nur geprüfte Fassungen können freigegeben werden."
+msgstr "Alleen gecontroleerde versies kunnen worden goedgekeurd."
+
+msgid "Sprachfassung zur Prüfung eingereicht."
+msgstr "Taalversie ter controle ingediend."
+
+msgid "Sprachfassung wieder als Entwurf markiert."
+msgstr "Taalversie teruggezet naar concept."
+
+msgid "Fachlich geprüfte Sprachfassung freigegeben."
+msgstr "Gecontroleerde taalversie goedgekeurd."
+
+msgid "Fachliche Prüfung"
+msgstr "In beoordeling"
+
+msgid "Rechtstexte freigeben"
+msgstr "Juridische teksten goedkeuren"
+
+# Invitation-acceptance UI; legal text bodies remain under separate legal approval.
+msgid "Einladung annehmen"
+msgstr "Uitnodiging accepteren"
+
+msgid "%(company)s lädt Sie zu PROMPTFINISHER ein."
+msgstr "%(company)s nodigt u uit voor PROMPTFINISHER."
+
+msgid "Konto anlegen und Einladung annehmen"
+msgstr "Account aanmaken en uitnodiging accepteren"
+
+# Account invitation and email-verification result UI.
+msgid "Sie wurden zu %(company)s eingeladen."
+msgstr "U bent uitgenodigd om deel te nemen aan %(company)s."
+
+msgid "Der Beitritt erfolgt erst nach Ihrer ausdrücklichen Bestätigung."
+msgstr "U wordt pas lid van het bedrijf na uw uitdrukkelijke bevestiging."
+
+msgid "Firma beitreten"
+msgstr "Bij het bedrijf aansluiten"
+
+msgid "Einladung angenommen"
+msgstr "Uitnodiging geaccepteerd"
+
+msgid "Einladung ungültig oder abgelaufen"
+msgstr "Uitnodiging ongeldig of verlopen"
+
+msgid "Ihr Benutzerkonto ist dem Unternehmen jetzt zugeordnet."
+msgstr "Uw gebruikersaccount is nu aan het bedrijf gekoppeld."
+
+msgid "Der Einladungslink kann nicht mehr verwendet werden. Bitte fordern Sie bei Ihrem Firmenadministrator eine neue Einladung an."
+msgstr "Deze uitnodigingslink kan niet meer worden gebruikt. Vraag uw bedrijfsbeheerder om een nieuwe uitnodiging."
+
+msgid "Zum Kundenportal"
+msgstr "Naar het klantportaal"
+
+msgid "Zur Startseite"
+msgstr "Terug naar de startpagina"
+
+msgid "E-Mail bestätigt"
+msgstr "E-mailadres bevestigd"
+
+msgid "Link ungültig oder abgelaufen"
+msgstr "Link ongeldig of verlopen"
+
+msgid "Die E-Mail-Adresse Ihres PROMPTFINISHER-Kontos wurde bestätigt."
+msgstr "Het e-mailadres van uw PROMPTFINISHER-account is bevestigd."
+
+msgid "Dieser Bestätigungslink ist nicht mehr gültig."
+msgstr "Deze bevestigingslink is niet meer geldig."
+
+msgid "Weiter"
+msgstr "Verder"
+
+# Read-only legal-language technical readiness UI; not a publication gate.
+msgid "Technischer Status der Rechtsübersetzungen"
+msgstr "Technische status van juridische vertalingen"
+
+msgid "Keine juristische oder produktive Freigabe. Die Veröffentlichung bleibt separat gesperrt."
+msgstr "Geen juridische of productiegoedkeuring. Publicatie blijft afzonderlijk geblokkeerd."
+
+msgid "Technisch geprüft"
+msgstr "Technisch geverifieerd"
+
+msgid "Fehlend"
+msgstr "Ontbreekt"
+
+msgid "In Prüfung"
+msgstr "In beoordeling"
+
+msgid "Freigabe veraltet"
+msgstr "Goedkeuring verouderd"
+
+msgid "Deutsche Quelle fehlt"
+msgstr "Duitse brontekst ontbreekt"
+
+# Account snapshot validation error; generic and safe for public users.
+msgid "Das Rechtsdokument-Angebot ist ungültig oder nicht mehr aktuell. Bitte prüfen Sie die Dokumente erneut und senden Sie das Formular noch einmal ab."
+msgstr "Het aangeboden juridische document is ongeldig of niet meer actueel. Controleer de documenten opnieuw en verstuur het formulier nogmaals."
+
 # Voucher campaign and checkout terminology
 msgid "Gutscheine"
 msgstr "Kortingscodes"
@@ -3926,9 +4116,6 @@ msgstr "Beheren"
 
 msgid "Keine Gutscheine gefunden."
 msgstr "Geen kortingscodes gevonden."
-
-msgid "Weiter"
-msgstr "Verder"
 
 msgid "Aus Sicherheitsgründen wird jeder vollständige Gutscheincode nur beim Erstellen angezeigt. Es werden ausschließlich Prüfsummen gespeichert."
 msgstr "Om veiligheidsredenen wordt de volledige code alleen bij het aanmaken getoond. Alleen controlehashes worden opgeslagen."

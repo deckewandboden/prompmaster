@@ -3816,6 +3816,196 @@ msgstr "Lisans yönetimi / yenileme"
 msgid "Jetzt trotzdem PROMPTFINISHER Pro starten"
 msgstr "Yine de PROMPTFINISHER Pro'yu aç"
 
+msgid "Rechtstexte · Sprachfassungen"
+msgstr "Hukuki metinler · Dil sürümleri"
+
+msgid "Entwurf, unabhängige Prüfung und dokumentierte Freigabe je Originalversion."
+msgstr "Her kaynak sürüm için taslak, bağımsız inceleme ve belgelenmiş onay."
+
+msgid "Sprachfassung anlegen"
+msgstr "Dil sürümü ekle"
+
+msgid "Die öffentliche Freigabe fremdsprachiger Rechtsdokumente ist ausgeschaltet."
+msgstr "Yabancı dildeki hukuki belgelerin herkese açık yayımlanması devre dışı."
+
+msgid "Dokument"
+msgstr "Belge"
+
+msgid "Freigegeben von"
+msgstr "Onaylayan"
+
+msgid "Details"
+msgstr "Ayrıntılar"
+
+msgid "Noch keine geprüften Sprachfassungen vorhanden."
+msgstr "Henüz incelenmiş dil sürümü yok."
+
+msgid "Deutsche Originalversionen"
+msgstr "Almanca kaynak sürümler"
+
+msgid "Rechtsübersetzung prüfen"
+msgstr "Hukuki çeviriyi incele"
+
+msgid "Deutsche Originalversion"
+msgstr "Almanca kaynak sürüm"
+
+msgid "Eingereicht von"
+msgstr "Gönderen"
+
+msgid "Freigegeben am"
+msgstr "Onay tarihi"
+
+msgid "Freigabenachweis"
+msgstr "Onay kanıtı"
+
+msgid "SHA-256 Original"
+msgstr "Kaynak SHA-256"
+
+msgid "SHA-256 Übersetzung"
+msgstr "Çeviri SHA-256"
+
+msgid "Die Integritätsprüfung ist fehlgeschlagen. Diese Sprachfassung wird nicht öffentlich angezeigt."
+msgstr "Bütünlük denetimi başarısız. Bu dil sürümü herkese açık gösterilmeyecek."
+
+msgid "Übersetzungstext"
+msgstr "Çeviri metni"
+
+msgid "Entwurf bearbeiten"
+msgstr "Taslağı düzenle"
+
+msgid "Zur Prüfung einreichen"
+msgstr "İncelemeye gönder"
+
+msgid "Zurück zum Entwurf"
+msgstr "Taslağa geri döndür"
+
+msgid "Unabhängige Freigabe"
+msgstr "Bağımsız onay"
+
+msgid "Nur nach fachlicher und rechtlicher Prüfung mit dokumentiertem Nachweis freigeben."
+msgstr "Yalnızca belgelenmiş uzman ve hukuki incelemeden sonra onaylayın."
+
+msgid "Fachlich freigeben"
+msgstr "İnceleme sonrası onayla"
+
+msgid "Übersetzung (noch nicht freigegeben)"
+msgstr "Çeviri (henüz onaylanmadı)"
+
+msgid "Nur Entwürfe dürfen bearbeitet werden."
+msgstr "Yalnızca taslaklar düzenlenebilir."
+
+msgid "Übersetzungsentwurf gespeichert."
+msgstr "Çeviri taslağı kaydedildi."
+
+msgid "Übersetzungsentwurf bearbeiten"
+msgstr "Çeviri taslağını düzenle"
+
+msgid "Übersetzungsentwurf anlegen"
+msgstr "Çeviri taslağı oluştur"
+
+msgid "Nur Entwürfe können eingereicht werden."
+msgstr "Yalnızca taslaklar gönderilebilir."
+
+msgid "Nur Prüfversionen können zurückgesetzt werden."
+msgstr "Yalnızca incelemedeki sürümler taslağa döndürülebilir."
+
+msgid "Nur geprüfte Fassungen können freigegeben werden."
+msgstr "Yalnızca incelenmiş sürümler onaylanabilir."
+
+msgid "Sprachfassung zur Prüfung eingereicht."
+msgstr "Dil sürümü incelemeye gönderildi."
+
+msgid "Sprachfassung wieder als Entwurf markiert."
+msgstr "Dil sürümü taslağa döndürüldü."
+
+msgid "Fachlich geprüfte Sprachfassung freigegeben."
+msgstr "İncelenmiş dil sürümü onaylandı."
+
+msgid "Fachliche Prüfung"
+msgstr "İnceleme aşamasında"
+
+msgid "Rechtstexte freigeben"
+msgstr "Hukuki metinleri onayla"
+
+# Invitation-acceptance UI; legal text bodies remain under separate legal approval.
+msgid "Einladung annehmen"
+msgstr "Daveti kabul et"
+
+msgid "%(company)s lädt Sie zu PROMPTFINISHER ein."
+msgstr "%(company)s sizi PROMPTFINISHER'a davet ediyor."
+
+msgid "Konto anlegen und Einladung annehmen"
+msgstr "Hesap oluştur ve daveti kabul et"
+
+# Account invitation and email-verification result UI.
+msgid "Sie wurden zu %(company)s eingeladen."
+msgstr "%(company)s şirketine katılmaya davet edildiniz."
+
+msgid "Der Beitritt erfolgt erst nach Ihrer ausdrücklichen Bestätigung."
+msgstr "Şirkete yalnızca açık onayınızın ardından katılacaksınız."
+
+msgid "Firma beitreten"
+msgstr "Şirkete katıl"
+
+msgid "Einladung angenommen"
+msgstr "Davet kabul edildi"
+
+msgid "Einladung ungültig oder abgelaufen"
+msgstr "Davet geçersiz veya süresi dolmuş"
+
+msgid "Ihr Benutzerkonto ist dem Unternehmen jetzt zugeordnet."
+msgstr "Kullanıcı hesabınız artık şirketle ilişkilendirildi."
+
+msgid "Der Einladungslink kann nicht mehr verwendet werden. Bitte fordern Sie bei Ihrem Firmenadministrator eine neue Einladung an."
+msgstr "Bu davet bağlantısı artık kullanılamaz. Lütfen şirket yöneticinizden yeni bir davet isteyin."
+
+msgid "Zum Kundenportal"
+msgstr "Müşteri portalına git"
+
+msgid "Zur Startseite"
+msgstr "Ana sayfaya dön"
+
+msgid "E-Mail bestätigt"
+msgstr "E-posta doğrulandı"
+
+msgid "Link ungültig oder abgelaufen"
+msgstr "Bağlantı geçersiz veya süresi dolmuş"
+
+msgid "Die E-Mail-Adresse Ihres PROMPTFINISHER-Kontos wurde bestätigt."
+msgstr "PROMPTFINISHER hesabınızın e-posta adresi doğrulandı."
+
+msgid "Dieser Bestätigungslink ist nicht mehr gültig."
+msgstr "Bu doğrulama bağlantısı artık geçerli değil."
+
+msgid "Weiter"
+msgstr "İleri"
+
+# Read-only legal-language technical readiness UI; not a publication gate.
+msgid "Technischer Status der Rechtsübersetzungen"
+msgstr "Hukuki çevirilerin teknik durumu"
+
+msgid "Keine juristische oder produktive Freigabe. Die Veröffentlichung bleibt separat gesperrt."
+msgstr "Hukuki veya üretim onayı verilmemiştir. Yayınlama ayrı olarak engellenmeye devam eder."
+
+msgid "Technisch geprüft"
+msgstr "Teknik olarak doğrulandı"
+
+msgid "Fehlend"
+msgstr "Eksik"
+
+msgid "In Prüfung"
+msgstr "İncelemede"
+
+msgid "Freigabe veraltet"
+msgstr "Onay güncelliğini yitirdi"
+
+msgid "Deutsche Quelle fehlt"
+msgstr "Almanca kaynak eksik"
+
+# Account snapshot validation error; generic and safe for public users.
+msgid "Das Rechtsdokument-Angebot ist ungültig oder nicht mehr aktuell. Bitte prüfen Sie die Dokumente erneut und senden Sie das Formular noch einmal ab."
+msgstr "Hukuki belge teklifi geçersiz veya artık güncel değil. Lütfen belgeleri yeniden inceleyip formu tekrar gönderin."
+
 # Voucher campaign and checkout terminology
 msgid "Gutscheine"
 msgstr "Kuponlar"
@@ -3871,9 +4061,6 @@ msgstr "Yönet"
 
 msgid "Keine Gutscheine gefunden."
 msgstr "Kupon bulunamadı."
-
-msgid "Weiter"
-msgstr "İleri"
 
 msgid "Aus Sicherheitsgründen wird jeder vollständige Gutscheincode nur beim Erstellen angezeigt. Es werden ausschließlich Prüfsummen gespeichert."
 msgstr "Güvenlik nedeniyle tam kupon kodu yalnızca oluşturulduğunda gösterilir. Sadece doğrulama özetleri saklanır."

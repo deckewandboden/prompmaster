@@ -3816,6 +3816,196 @@ msgstr "Gestión de licencias / renovación"
 msgid "Jetzt trotzdem PROMPTFINISHER Pro starten"
 msgstr "Abrir PROMPTFINISHER Pro de todos modos"
 
+msgid "Rechtstexte · Sprachfassungen"
+msgstr "Textos legales · Versiones lingüísticas"
+
+msgid "Entwurf, unabhängige Prüfung und dokumentierte Freigabe je Originalversion."
+msgstr "Borrador, revisión independiente y aprobación documentada para cada versión original."
+
+msgid "Sprachfassung anlegen"
+msgstr "Añadir versión lingüística"
+
+msgid "Die öffentliche Freigabe fremdsprachiger Rechtsdokumente ist ausgeschaltet."
+msgstr "La publicación de documentos legales en otros idiomas está desactivada."
+
+msgid "Dokument"
+msgstr "Documento"
+
+msgid "Freigegeben von"
+msgstr "Aprobado por"
+
+msgid "Details"
+msgstr "Detalles"
+
+msgid "Noch keine geprüften Sprachfassungen vorhanden."
+msgstr "Todavía no hay versiones lingüísticas revisadas."
+
+msgid "Deutsche Originalversionen"
+msgstr "Versiones originales en alemán"
+
+msgid "Rechtsübersetzung prüfen"
+msgstr "Revisar traducción legal"
+
+msgid "Deutsche Originalversion"
+msgstr "Versión original en alemán"
+
+msgid "Eingereicht von"
+msgstr "Enviado por"
+
+msgid "Freigegeben am"
+msgstr "Aprobado el"
+
+msgid "Freigabenachweis"
+msgstr "Justificante de aprobación"
+
+msgid "SHA-256 Original"
+msgstr "SHA-256 del original"
+
+msgid "SHA-256 Übersetzung"
+msgstr "SHA-256 de la traducción"
+
+msgid "Die Integritätsprüfung ist fehlgeschlagen. Diese Sprachfassung wird nicht öffentlich angezeigt."
+msgstr "La verificación de integridad ha fallado. Esta versión no se mostrará públicamente."
+
+msgid "Übersetzungstext"
+msgstr "Texto traducido"
+
+msgid "Entwurf bearbeiten"
+msgstr "Editar borrador"
+
+msgid "Zur Prüfung einreichen"
+msgstr "Enviar a revisión"
+
+msgid "Zurück zum Entwurf"
+msgstr "Volver al borrador"
+
+msgid "Unabhängige Freigabe"
+msgstr "Aprobación independiente"
+
+msgid "Nur nach fachlicher und rechtlicher Prüfung mit dokumentiertem Nachweis freigeben."
+msgstr "Aprobar solo tras una revisión especializada y jurídica con justificante documentado."
+
+msgid "Fachlich freigeben"
+msgstr "Aprobar tras revisión"
+
+msgid "Übersetzung (noch nicht freigegeben)"
+msgstr "Traducción (aún no aprobada)"
+
+msgid "Nur Entwürfe dürfen bearbeitet werden."
+msgstr "Solo se pueden editar borradores."
+
+msgid "Übersetzungsentwurf gespeichert."
+msgstr "Borrador de traducción guardado."
+
+msgid "Übersetzungsentwurf bearbeiten"
+msgstr "Editar borrador de traducción"
+
+msgid "Übersetzungsentwurf anlegen"
+msgstr "Crear borrador de traducción"
+
+msgid "Nur Entwürfe können eingereicht werden."
+msgstr "Solo se pueden enviar borradores."
+
+msgid "Nur Prüfversionen können zurückgesetzt werden."
+msgstr "Solo las versiones en revisión pueden volver a borrador."
+
+msgid "Nur geprüfte Fassungen können freigegeben werden."
+msgstr "Solo se pueden aprobar las versiones revisadas."
+
+msgid "Sprachfassung zur Prüfung eingereicht."
+msgstr "Versión lingüística enviada a revisión."
+
+msgid "Sprachfassung wieder als Entwurf markiert."
+msgstr "Versión lingüística devuelta a borrador."
+
+msgid "Fachlich geprüfte Sprachfassung freigegeben."
+msgstr "Versión lingüística revisada y aprobada."
+
+msgid "Fachliche Prüfung"
+msgstr "En revisión"
+
+msgid "Rechtstexte freigeben"
+msgstr "Aprobar textos legales"
+
+# Invitation-acceptance UI; legal text bodies remain under separate legal approval.
+msgid "Einladung annehmen"
+msgstr "Aceptar invitación"
+
+msgid "%(company)s lädt Sie zu PROMPTFINISHER ein."
+msgstr "%(company)s le invita a PROMPTFINISHER."
+
+msgid "Konto anlegen und Einladung annehmen"
+msgstr "Crear cuenta y aceptar la invitación"
+
+# Account invitation and email-verification result UI.
+msgid "Sie wurden zu %(company)s eingeladen."
+msgstr "Ha recibido una invitación para unirse a %(company)s."
+
+msgid "Der Beitritt erfolgt erst nach Ihrer ausdrücklichen Bestätigung."
+msgstr "Solo se incorporará a la empresa después de confirmarlo expresamente."
+
+msgid "Firma beitreten"
+msgstr "Unirse a la empresa"
+
+msgid "Einladung angenommen"
+msgstr "Invitación aceptada"
+
+msgid "Einladung ungültig oder abgelaufen"
+msgstr "Invitación no válida o caducada"
+
+msgid "Ihr Benutzerkonto ist dem Unternehmen jetzt zugeordnet."
+msgstr "Su cuenta de usuario ya está vinculada a la empresa."
+
+msgid "Der Einladungslink kann nicht mehr verwendet werden. Bitte fordern Sie bei Ihrem Firmenadministrator eine neue Einladung an."
+msgstr "Este enlace de invitación ya no se puede utilizar. Solicite una nueva invitación al administrador de su empresa."
+
+msgid "Zum Kundenportal"
+msgstr "Ir al portal de clientes"
+
+msgid "Zur Startseite"
+msgstr "Volver a la página de inicio"
+
+msgid "E-Mail bestätigt"
+msgstr "Correo electrónico verificado"
+
+msgid "Link ungültig oder abgelaufen"
+msgstr "Enlace no válido o caducado"
+
+msgid "Die E-Mail-Adresse Ihres PROMPTFINISHER-Kontos wurde bestätigt."
+msgstr "Se ha verificado la dirección de correo electrónico de su cuenta de PROMPTFINISHER."
+
+msgid "Dieser Bestätigungslink ist nicht mehr gültig."
+msgstr "Este enlace de verificación ya no es válido."
+
+msgid "Weiter"
+msgstr "Siguiente"
+
+# Read-only legal-language technical readiness UI; not a publication gate.
+msgid "Technischer Status der Rechtsübersetzungen"
+msgstr "Estado técnico de las traducciones legales"
+
+msgid "Keine juristische oder produktive Freigabe. Die Veröffentlichung bleibt separat gesperrt."
+msgstr "Sin aprobación jurídica ni autorización de producción. La publicación continúa bloqueada por separado."
+
+msgid "Technisch geprüft"
+msgstr "Verificado técnicamente"
+
+msgid "Fehlend"
+msgstr "Faltante"
+
+msgid "In Prüfung"
+msgstr "En revisión"
+
+msgid "Freigabe veraltet"
+msgstr "Aprobación obsoleta"
+
+msgid "Deutsche Quelle fehlt"
+msgstr "Falta el original alemán"
+
+# Account snapshot validation error; generic and safe for public users.
+msgid "Das Rechtsdokument-Angebot ist ungültig oder nicht mehr aktuell. Bitte prüfen Sie die Dokumente erneut und senden Sie das Formular noch einmal ab."
+msgstr "La oferta de documentos legales no es válida o ya no está actualizada. Revise de nuevo los documentos y vuelva a enviar el formulario."
+
 # Voucher campaign and checkout terminology
 msgid "Gutscheine"
 msgstr "Cupones"
@@ -3871,9 +4061,6 @@ msgstr "Gestionar"
 
 msgid "Keine Gutscheine gefunden."
 msgstr "No se encontraron cupones."
-
-msgid "Weiter"
-msgstr "Siguiente"
 
 msgid "Aus Sicherheitsgründen wird jeder vollständige Gutscheincode nur beim Erstellen angezeigt. Es werden ausschließlich Prüfsummen gespeichert."
 msgstr "Por seguridad, el código completo solo se muestra al crearlo. Solo se almacenan hashes de verificación."

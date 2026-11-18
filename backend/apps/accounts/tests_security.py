@@ -19,7 +19,7 @@ from apps.core.crypto import encrypt
 @override_settings(APP_ENCRYPTION_KEY='3fDltyLLocPcNedSN3wwVTiyNlFCsVyTcdi-pP-WiJY=')
 class SecondFactorTests(TestCase):
     def setUp(self):
-        self.secret = 'JBSWY3DPEHPK3PXP'
+        self.secret = 'JBSWY3DPEHPK3PXPJBSWY3DPEHPK3PXP'
         self.user = User.objects.create_user('security@example.test', 'Secure-Test-Password-42!', totp_secret_enc=encrypt(self.secret), two_factor_required=True)
 
     def test_totp_cannot_be_replayed(self):

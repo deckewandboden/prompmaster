@@ -101,6 +101,13 @@ class TwoFactorEnforcementMiddleware:
         'ns_admin:voucher_create',
         'ns_admin:voucher_edit',
         'ns_admin:voucher_toggle',
+        # Editing and approving legal-language contracts also changes the
+        # evidence offered to customers once the default-off release gate opens.
+        'ns_admin:legal_translation_new',
+        'ns_admin:legal_translation_edit',
+        'ns_admin:legal_translation_submit',
+        'ns_admin:legal_translation_draft',
+        'ns_admin:legal_translation_approve',
         'ns_admin:license_refund',
         'ns_admin:deletion_request_process',
         'ns_admin:customer_user_deactivate',
@@ -152,16 +159,33 @@ class TwoFactorEnforcementMiddleware:
             'ns_admin:graph_mail_test',
         }
         settings_mutations = graph_actions | {'ns_admin:settings'}
+        legal_write_actions = {
+            'ns_admin:legal_translation_new',
+            'ns_admin:legal_translation_edit',
+            'ns_admin:legal_translation_submit',
+            'ns_admin:legal_translation_draft',
+        }
+        legal_approve_actions = {'ns_admin:legal_translation_approve'}
+        legal_actions = legal_write_actions | legal_approve_actions
         # Never prompt for a GET on the read-only settings page, or on a
         # method-rejected Graph route. OAuth callback instead validates its
         # one-time PKCE/state session.
-        if view_name in settings_mutations and request.method != 'POST':
+        if view_name in (settings_mutations | legal_actions) and request.method != 'POST':
             return None
         # Unauthorized callers must receive the normal 403 permission verdict,
         # rather than being asked to reauthenticate for forbidden actions.
-        if view_name in voucher_actions or view_name in settings_mutations:
+        if view_name in voucher_actions or view_name in settings_mutations or view_name in legal_actions:
             from apps.core.permissions import has_perm
-            needed = 'vouchers.write' if view_name in voucher_actions else 'settings.write'
+            if view_name in voucher_actions:
+                needed = 'vouchers.write'
+            elif view_name in settings_mutations:
+                needed = 'settings.write'
+            elif view_name in legal_approve_actions:
+                needed = 'legal.approve'
+            else:
+                needed = 'legal.write'
+            # Keep normal permission-denied responses for unauthorized users;
+            # privileged actions require both RBAC and a fresh second proof.
             if not user.is_staff or not has_perm(user, needed):
                 return None
         if sensitive_reauth_is_fresh(request, user):

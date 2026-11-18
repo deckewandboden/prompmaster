@@ -1294,7 +1294,20 @@ class AdminInternationalizationContractTests(SimpleTestCase):
         get_template('auth/register.html')
         self.assertIn("{% url 'legal_public' 'terms' as terms_url %}", source)
         self.assertIn("{% url 'legal_public' 'privacy' as privacy_url %}", source)
-        self.assertIn('{% blocktranslate trimmed with terms_url=terms_url privacy_url=privacy_url %}', source)
+        self.assertIn(
+            '{% firstof account_offer.links.terms terms_url as offered_terms_url %}',
+            source,
+        )
+        self.assertIn(
+            '{% firstof account_offer.links.privacy privacy_url as offered_privacy_url %}',
+            source,
+        )
+        self.assertIn(
+            '{% blocktranslate trimmed with terms_url=offered_terms_url privacy_url=offered_privacy_url %}',
+            source,
+        )
+        self.assertIn('name="account_snapshot"', source)
+        self.assertIn('{{ account_offer.token }}', source)
         key = "Bitte lesen Sie vor der Registrierung die <a href=\"%(terms_url)s\" target=\"_blank\" rel=\"noopener\">AGB</a> und die <a href=\"%(privacy_url)s\" target=\"_blank\" rel=\"noopener\">Datenschutzerklärung</a>."
         for code in LOCALES:
             catalog = catalog_translations(ROOT / 'locale' / code / 'LC_MESSAGES' / 'django.po')

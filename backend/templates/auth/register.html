@@ -5,9 +5,12 @@
     <h1>{% translate "Konto anlegen" %}</h1>
     {% url 'legal_public' 'terms' as terms_url %}
     {% url 'legal_public' 'privacy' as privacy_url %}
-    <p class="small muted">{% blocktranslate trimmed with terms_url=terms_url privacy_url=privacy_url %}Bitte lesen Sie vor der Registrierung die <a href="{{ terms_url }}" target="_blank" rel="noopener">AGB</a> und die <a href="{{ privacy_url }}" target="_blank" rel="noopener">Datenschutzerklärung</a>.{% endblocktranslate %}</p>
+    {% firstof account_offer.links.terms terms_url as offered_terms_url %}
+    {% firstof account_offer.links.privacy privacy_url as offered_privacy_url %}
+    <p class="small muted">{% blocktranslate trimmed with terms_url=offered_terms_url privacy_url=offered_privacy_url %}Bitte lesen Sie vor der Registrierung die <a href="{{ terms_url }}" target="_blank" rel="noopener">AGB</a> und die <a href="{{ privacy_url }}" target="_blank" rel="noopener">Datenschutzerklärung</a>.{% endblocktranslate %}</p>
     <form method="post" class="form">
       {% csrf_token %}
+      {% if account_offer %}<input type="hidden" name="account_snapshot" value="{{ account_offer.token }}">{% endif %}
       <input type="hidden" name="next" value="{{ next }}">
       {{ form.non_field_errors }}
       <label for="{{ form.customer_type.id_for_label }}">{{ form.customer_type.label }}{{ form.customer_type }}{{ form.customer_type.errors }}</label>

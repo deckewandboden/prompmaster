@@ -166,3 +166,39 @@ test('company and contact pages have substantive routes and complete locale copy
  assert.match(css,/\.info-route \.info-grid/);
  assert.match(css,/@media\(max-width:650px\)/);
 });
+
+test('every public checkout failure message is localized in all languages',async()=>{
+ const messages=[
+  'Bitte prüfe deine Angaben und versuche es erneut.',
+  'Der Kauf ist gerade nicht verfügbar. Bitte versuche es später erneut.',
+  'Die Zahlung konnte nicht vorbereitet werden. Es wurde nichts freigeschaltet. Bitte versuche es erneut.',
+  'Der Kauf konnte nicht gestartet werden. Bitte versuche es erneut.',
+  'Die sichere Kaufverbindung konnte nicht vorbereitet werden. Bitte lade die Seite neu und versuche es erneut.',
+  'Der aktuelle Preis und Kaufstatus konnten nicht sicher geladen werden. Es wird keine Bestellung gestartet. Bitte lade die Seite neu und versuche es erneut.',
+ ];
+ for(const key of messages){
+  const entry=marketingCatalog[key];
+  assert.ok(entry, 'checkout error without translation: '+key);
+  for(const lang of languages.slice(1)){
+   assert.ok(typeof entry[lang]==='string'&&entry[lang].trim(),lang+': '+key);
+   assert.notEqual(entry[lang],key,lang+' still displays German checkout error');
+  }
+ }
+ const main=await readFile('src/main.js','utf8');
+ assert.match(main,/showStage\(marketingT\(messages\[checkoutError\]/);
+ assert.match(main,/showStage\(marketingT\('Die sichere Kaufverbindung konnte nicht vorbereitet werden/);
+ assert.ok(main.includes('checkoutStage.textContent=marketingT('),'Catalog failure must be localized');
+ assert.ok(main.includes("marketingT('Monat')"),'Dynamic billing period must be localized');
+ for(const language of languages.slice(1)){
+  assert.ok(marketingCatalog.Monat?.[language]?.trim(),language+' missing price period translation');
+ }
+});
+
+test('checkout replaces expired signed legal offers before payment submission',async()=>{
+ const main=await readFile('src/main.js','utf8');
+ assert.match(main,/let legalExpiresAt=0/);
+ assert.match(main,/legalExpiresAt>Date\.now\(\)\+60\*1000/);
+ assert.match(main,/snapshot\.expiresInSeconds<120/);
+ assert.match(main,/legalExpiresAt=Date\.now\(\)\+Math\.min\(/);
+ assert.match(main,/await Promise\.all\(\[ensureCsrf\(\),ensureLegalSnapshot\(\)\]\)/);
+});

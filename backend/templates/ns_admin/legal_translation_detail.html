@@ -1,0 +1,46 @@
+{% extends 'ns_admin/base.html' %}{% load i18n %}
+{% block content %}
+<div class="page-head"><div>
+  <h1>{% translate 'Rechtsübersetzung prüfen' %}</h1>
+  <div class="sub">{% translate translation.document.get_doc_type_display %} · {{ translation.document.version }} · {{ translation.get_language_display }}</div>
+</div></div>
+<div class="card">
+  <div class="statusrow"><span>{% translate 'Status' %}</span><strong>{% translate translation.get_status_display %}</strong></div>
+  <div class="statusrow"><span>{% translate 'Deutsche Originalversion' %}</span><strong>{{ translation.document.version }}</strong></div>
+  <div class="statusrow"><span>{% translate 'Eingereicht von' %}</span><strong>{{ translation.submitted_by|default:'–' }}</strong></div>
+  <div class="statusrow"><span>{% translate 'Freigegeben von' %}</span><strong>{{ translation.approved_by|default:'–' }}</strong></div>
+  <div class="statusrow"><span>{% translate 'Freigegeben am' %}</span><strong>{{ translation.approved_at|default:'–' }}</strong></div>
+  <div class="statusrow"><span>{% translate 'Freigabenachweis' %}</span><strong>{{ translation.approval_reference|default:'–' }}</strong></div>
+  <div class="statusrow"><span>{% translate 'SHA-256 Original' %}</span><code>{{ translation.source_sha256|default:'–' }}</code></div>
+  <div class="statusrow"><span>{% translate 'SHA-256 Übersetzung' %}</span><code>{{ translation.content_sha256|default:'–' }}</code></div>
+  {% if translation.status == 'approved' and not is_publishable %}
+    <p class="muted" role="alert">{% translate 'Die Integritätsprüfung ist fehlgeschlagen. Diese Sprachfassung wird nicht öffentlich angezeigt.' %}</p>
+  {% endif %}
+  <h2>{% translate 'Übersetzungstext' %}</h2>
+  <div class="legal-content" lang="{{ translation.language }}">{{ translation.content|linebreaks }}</div>
+</div>
+<div class="page-actions">
+  <a class="btn secondary" href="{% url 'ns_admin:legal_translations' %}">{% translate 'Zur Übersicht' %}</a>
+  {% if can_edit and translation.status == 'draft' %}
+  <a class="btn secondary" href="{% url 'ns_admin:legal_translation_edit' translation.pk %}">{% translate 'Entwurf bearbeiten' %}</a>
+  <form method="post" action="{% url 'ns_admin:legal_translation_submit' translation.pk %}">{% csrf_token %}
+    <button class="btn primary" type="submit">{% translate 'Zur Prüfung einreichen' %}</button>
+  </form>
+  {% elif can_edit and translation.status == 'review' %}
+  <form method="post" action="{% url 'ns_admin:legal_translation_draft' translation.pk %}">{% csrf_token %}
+    <button class="btn secondary" type="submit">{% translate 'Zurück zum Entwurf' %}</button>
+  </form>
+  {% endif %}
+</div>
+{% if can_approve and translation.status == 'review' %}
+<div class="card"><h2>{% translate 'Unabhängige Freigabe' %}</h2>
+  <p class="muted">{% translate 'Nur nach fachlicher und rechtlicher Prüfung mit dokumentiertem Nachweis freigeben.' %}</p>
+  <form method="post" action="{% url 'ns_admin:legal_translation_approve' translation.pk %}">
+    {% csrf_token %}
+    <label for="legal-approval-reference">{% translate 'Freigabenachweis' %}</label>
+    <input id="legal-approval-reference" type="text" name="approval_reference" maxlength="240" required placeholder="LEGAL-REVIEW-..." value="{{ translation.approval_reference }}">
+    <div class="page-actions"><button class="btn primary" type="submit">{% translate 'Fachlich freigeben' %}</button></div>
+  </form>
+</div>
+{% endif %}
+{% endblock %}

@@ -3882,6 +3882,196 @@ msgstr "Gestion des licences / renouvellement"
 msgid "Jetzt trotzdem PROMPTFINISHER Pro starten"
 msgstr "Ouvrir quand même PROMPTFINISHER Pro"
 
+msgid "Rechtstexte · Sprachfassungen"
+msgstr "Textes juridiques · Versions linguistiques"
+
+msgid "Entwurf, unabhängige Prüfung und dokumentierte Freigabe je Originalversion."
+msgstr "Brouillon, vérification indépendante et approbation documentée pour chaque version source."
+
+msgid "Sprachfassung anlegen"
+msgstr "Ajouter une version linguistique"
+
+msgid "Die öffentliche Freigabe fremdsprachiger Rechtsdokumente ist ausgeschaltet."
+msgstr "La publication des documents juridiques en langues étrangères est désactivée."
+
+msgid "Dokument"
+msgstr "Document"
+
+msgid "Freigegeben von"
+msgstr "Approuvé par"
+
+msgid "Details"
+msgstr "Détails"
+
+msgid "Noch keine geprüften Sprachfassungen vorhanden."
+msgstr "Aucune version linguistique vérifiée pour le moment."
+
+msgid "Deutsche Originalversionen"
+msgstr "Versions sources allemandes"
+
+msgid "Rechtsübersetzung prüfen"
+msgstr "Vérifier la traduction juridique"
+
+msgid "Deutsche Originalversion"
+msgstr "Version source allemande"
+
+msgid "Eingereicht von"
+msgstr "Soumis par"
+
+msgid "Freigegeben am"
+msgstr "Approuvé le"
+
+msgid "Freigabenachweis"
+msgstr "Justificatif d'approbation"
+
+msgid "SHA-256 Original"
+msgstr "SHA-256 de l'original"
+
+msgid "SHA-256 Übersetzung"
+msgstr "SHA-256 de la traduction"
+
+msgid "Die Integritätsprüfung ist fehlgeschlagen. Diese Sprachfassung wird nicht öffentlich angezeigt."
+msgstr "Le contrôle d'intégrité a échoué. Cette version linguistique ne sera pas affichée publiquement."
+
+msgid "Übersetzungstext"
+msgstr "Texte traduit"
+
+msgid "Entwurf bearbeiten"
+msgstr "Modifier le brouillon"
+
+msgid "Zur Prüfung einreichen"
+msgstr "Soumettre à vérification"
+
+msgid "Zurück zum Entwurf"
+msgstr "Revenir au brouillon"
+
+msgid "Unabhängige Freigabe"
+msgstr "Approbation indépendante"
+
+msgid "Nur nach fachlicher und rechtlicher Prüfung mit dokumentiertem Nachweis freigeben."
+msgstr "N'approuver qu'après vérification professionnelle et juridique avec justificatif documenté."
+
+msgid "Fachlich freigeben"
+msgstr "Approuver après vérification"
+
+msgid "Übersetzung (noch nicht freigegeben)"
+msgstr "Traduction (non encore approuvée)"
+
+msgid "Nur Entwürfe dürfen bearbeitet werden."
+msgstr "Seuls les brouillons peuvent être modifiés."
+
+msgid "Übersetzungsentwurf gespeichert."
+msgstr "Brouillon de traduction enregistré."
+
+msgid "Übersetzungsentwurf bearbeiten"
+msgstr "Modifier le brouillon de traduction"
+
+msgid "Übersetzungsentwurf anlegen"
+msgstr "Créer un brouillon de traduction"
+
+msgid "Nur Entwürfe können eingereicht werden."
+msgstr "Seuls les brouillons peuvent être soumis."
+
+msgid "Nur Prüfversionen können zurückgesetzt werden."
+msgstr "Seules les versions en cours de vérification peuvent revenir au brouillon."
+
+msgid "Nur geprüfte Fassungen können freigegeben werden."
+msgstr "Seules les versions vérifiées peuvent être approuvées."
+
+msgid "Sprachfassung zur Prüfung eingereicht."
+msgstr "Version linguistique soumise à vérification."
+
+msgid "Sprachfassung wieder als Entwurf markiert."
+msgstr "Version linguistique remise en brouillon."
+
+msgid "Fachlich geprüfte Sprachfassung freigegeben."
+msgstr "Version linguistique vérifiée et approuvée."
+
+msgid "Fachliche Prüfung"
+msgstr "En cours de vérification"
+
+msgid "Rechtstexte freigeben"
+msgstr "Approuver les textes juridiques"
+
+# Invitation-acceptance UI; legal text bodies remain under separate legal approval.
+msgid "Einladung annehmen"
+msgstr "Accepter l’invitation"
+
+msgid "%(company)s lädt Sie zu PROMPTFINISHER ein."
+msgstr "%(company)s vous invite à rejoindre PROMPTFINISHER."
+
+msgid "Konto anlegen und Einladung annehmen"
+msgstr "Créer un compte et accepter l’invitation"
+
+# Account invitation and email-verification result UI.
+msgid "Sie wurden zu %(company)s eingeladen."
+msgstr "Vous avez été invité à rejoindre %(company)s."
+
+msgid "Der Beitritt erfolgt erst nach Ihrer ausdrücklichen Bestätigung."
+msgstr "L’adhésion à l’entreprise ne sera effectuée qu’après votre confirmation explicite."
+
+msgid "Firma beitreten"
+msgstr "Rejoindre l’entreprise"
+
+msgid "Einladung angenommen"
+msgstr "Invitation acceptée"
+
+msgid "Einladung ungültig oder abgelaufen"
+msgstr "Invitation non valide ou expirée"
+
+msgid "Ihr Benutzerkonto ist dem Unternehmen jetzt zugeordnet."
+msgstr "Votre compte utilisateur est désormais associé à l’entreprise."
+
+msgid "Der Einladungslink kann nicht mehr verwendet werden. Bitte fordern Sie bei Ihrem Firmenadministrator eine neue Einladung an."
+msgstr "Ce lien d’invitation n’est plus utilisable. Demandez une nouvelle invitation à l’administrateur de votre entreprise."
+
+msgid "Zum Kundenportal"
+msgstr "Accéder au portail client"
+
+msgid "Zur Startseite"
+msgstr "Retour à l’accueil"
+
+msgid "E-Mail bestätigt"
+msgstr "Adresse e-mail confirmée"
+
+msgid "Link ungültig oder abgelaufen"
+msgstr "Lien non valide ou expiré"
+
+msgid "Die E-Mail-Adresse Ihres PROMPTFINISHER-Kontos wurde bestätigt."
+msgstr "L’adresse e-mail de votre compte PROMPTFINISHER a été confirmée."
+
+msgid "Dieser Bestätigungslink ist nicht mehr gültig."
+msgstr "Ce lien de confirmation n’est plus valide."
+
+msgid "Weiter"
+msgstr "Suivant"
+
+# Read-only legal-language technical readiness UI; not a publication gate.
+msgid "Technischer Status der Rechtsübersetzungen"
+msgstr "État technique des traductions juridiques"
+
+msgid "Keine juristische oder produktive Freigabe. Die Veröffentlichung bleibt separat gesperrt."
+msgstr "Aucune validation juridique ni autorisation de production. La publication reste bloquée séparément."
+
+msgid "Technisch geprüft"
+msgstr "Vérifié techniquement"
+
+msgid "Fehlend"
+msgstr "Manquant"
+
+msgid "In Prüfung"
+msgstr "En cours d’examen"
+
+msgid "Freigabe veraltet"
+msgstr "Validation obsolète"
+
+msgid "Deutsche Quelle fehlt"
+msgstr "Source allemande manquante"
+
+# Account snapshot validation error; generic and safe for public users.
+msgid "Das Rechtsdokument-Angebot ist ungültig oder nicht mehr aktuell. Bitte prüfen Sie die Dokumente erneut und senden Sie das Formular noch einmal ab."
+msgstr "Les documents juridiques présentés ne sont pas valides ou ne sont plus à jour. Veuillez les consulter à nouveau et renvoyer le formulaire."
+
 # Voucher campaign and checkout terminology
 msgid "Gutscheine"
 msgstr "Bons de réduction"
@@ -3937,9 +4127,6 @@ msgstr "Gérer"
 
 msgid "Keine Gutscheine gefunden."
 msgstr "Aucun bon trouvé."
-
-msgid "Weiter"
-msgstr "Suivant"
 
 msgid "Aus Sicherheitsgründen wird jeder vollständige Gutscheincode nur beim Erstellen angezeigt. Es werden ausschließlich Prüfsummen gespeichert."
 msgstr "Pour des raisons de sécurité, le code complet n'est affiché qu'à sa création. Seuls les hachages de vérification sont conservés."

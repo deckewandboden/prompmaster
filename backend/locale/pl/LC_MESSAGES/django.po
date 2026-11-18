@@ -3875,6 +3875,196 @@ msgstr "Zarządzanie licencjami / odnowienie"
 msgid "Jetzt trotzdem PROMPTFINISHER Pro starten"
 msgstr "Mimo to uruchom PROMPTFINISHER Pro"
 
+msgid "Rechtstexte · Sprachfassungen"
+msgstr "Teksty prawne · Wersje językowe"
+
+msgid "Entwurf, unabhängige Prüfung und dokumentierte Freigabe je Originalversion."
+msgstr "Projekt, niezależna weryfikacja i udokumentowane zatwierdzenie każdej wersji źródłowej."
+
+msgid "Sprachfassung anlegen"
+msgstr "Dodaj wersję językową"
+
+msgid "Die öffentliche Freigabe fremdsprachiger Rechtsdokumente ist ausgeschaltet."
+msgstr "Publiczne udostępnianie dokumentów prawnych w innych językach jest wyłączone."
+
+msgid "Dokument"
+msgstr "Dokument"
+
+msgid "Freigegeben von"
+msgstr "Zatwierdził"
+
+msgid "Details"
+msgstr "Szczegóły"
+
+msgid "Noch keine geprüften Sprachfassungen vorhanden."
+msgstr "Nie ma jeszcze zweryfikowanych wersji językowych."
+
+msgid "Deutsche Originalversionen"
+msgstr "Niemieckie wersje źródłowe"
+
+msgid "Rechtsübersetzung prüfen"
+msgstr "Sprawdź tłumaczenie prawne"
+
+msgid "Deutsche Originalversion"
+msgstr "Niemiecka wersja źródłowa"
+
+msgid "Eingereicht von"
+msgstr "Przesłane przez"
+
+msgid "Freigegeben am"
+msgstr "Data zatwierdzenia"
+
+msgid "Freigabenachweis"
+msgstr "Potwierdzenie zatwierdzenia"
+
+msgid "SHA-256 Original"
+msgstr "SHA-256 oryginału"
+
+msgid "SHA-256 Übersetzung"
+msgstr "SHA-256 tłumaczenia"
+
+msgid "Die Integritätsprüfung ist fehlgeschlagen. Diese Sprachfassung wird nicht öffentlich angezeigt."
+msgstr "Kontrola integralności nie powiodła się. Ta wersja językowa nie będzie publicznie wyświetlana."
+
+msgid "Übersetzungstext"
+msgstr "Tekst tłumaczenia"
+
+msgid "Entwurf bearbeiten"
+msgstr "Edytuj projekt"
+
+msgid "Zur Prüfung einreichen"
+msgstr "Prześlij do weryfikacji"
+
+msgid "Zurück zum Entwurf"
+msgstr "Przywróć do projektu"
+
+msgid "Unabhängige Freigabe"
+msgstr "Niezależne zatwierdzenie"
+
+msgid "Nur nach fachlicher und rechtlicher Prüfung mit dokumentiertem Nachweis freigeben."
+msgstr "Zatwierdź wyłącznie po merytorycznej i prawnej weryfikacji z udokumentowanym potwierdzeniem."
+
+msgid "Fachlich freigeben"
+msgstr "Zatwierdź po weryfikacji"
+
+msgid "Übersetzung (noch nicht freigegeben)"
+msgstr "Tłumaczenie (jeszcze niezatwierdzone)"
+
+msgid "Nur Entwürfe dürfen bearbeitet werden."
+msgstr "Edytować można tylko projekty."
+
+msgid "Übersetzungsentwurf gespeichert."
+msgstr "Zapisano projekt tłumaczenia."
+
+msgid "Übersetzungsentwurf bearbeiten"
+msgstr "Edytuj projekt tłumaczenia"
+
+msgid "Übersetzungsentwurf anlegen"
+msgstr "Utwórz projekt tłumaczenia"
+
+msgid "Nur Entwürfe können eingereicht werden."
+msgstr "Do weryfikacji można przesyłać tylko projekty."
+
+msgid "Nur Prüfversionen können zurückgesetzt werden."
+msgstr "Do projektu można przywrócić tylko wersje w trakcie weryfikacji."
+
+msgid "Nur geprüfte Fassungen können freigegeben werden."
+msgstr "Zatwierdzić można tylko zweryfikowane wersje."
+
+msgid "Sprachfassung zur Prüfung eingereicht."
+msgstr "Wersję językową przesłano do weryfikacji."
+
+msgid "Sprachfassung wieder als Entwurf markiert."
+msgstr "Wersję językową przywrócono do projektu."
+
+msgid "Fachlich geprüfte Sprachfassung freigegeben."
+msgstr "Zweryfikowaną wersję językową zatwierdzono."
+
+msgid "Fachliche Prüfung"
+msgstr "W trakcie weryfikacji"
+
+msgid "Rechtstexte freigeben"
+msgstr "Zatwierdzaj teksty prawne"
+
+# Invitation-acceptance UI; legal text bodies remain under separate legal approval.
+msgid "Einladung annehmen"
+msgstr "Przyjmij zaproszenie"
+
+msgid "%(company)s lädt Sie zu PROMPTFINISHER ein."
+msgstr "%(company)s zaprasza Cię do PROMPTFINISHER."
+
+msgid "Konto anlegen und Einladung annehmen"
+msgstr "Utwórz konto i przyjmij zaproszenie"
+
+# Account invitation and email-verification result UI.
+msgid "Sie wurden zu %(company)s eingeladen."
+msgstr "Otrzymano zaproszenie do firmy %(company)s."
+
+msgid "Der Beitritt erfolgt erst nach Ihrer ausdrücklichen Bestätigung."
+msgstr "Dołączenie do firmy nastąpi dopiero po wyraźnym potwierdzeniu."
+
+msgid "Firma beitreten"
+msgstr "Dołącz do firmy"
+
+msgid "Einladung angenommen"
+msgstr "Zaproszenie przyjęte"
+
+msgid "Einladung ungültig oder abgelaufen"
+msgstr "Zaproszenie jest nieprawidłowe lub wygasło"
+
+msgid "Ihr Benutzerkonto ist dem Unternehmen jetzt zugeordnet."
+msgstr "Twoje konto użytkownika zostało przypisane do firmy."
+
+msgid "Der Einladungslink kann nicht mehr verwendet werden. Bitte fordern Sie bei Ihrem Firmenadministrator eine neue Einladung an."
+msgstr "Tego linku zaproszenia nie można już użyć. Poproś administratora firmy o nowe zaproszenie."
+
+msgid "Zum Kundenportal"
+msgstr "Przejdź do portalu klienta"
+
+msgid "Zur Startseite"
+msgstr "Wróć na stronę główną"
+
+msgid "E-Mail bestätigt"
+msgstr "Adres e-mail potwierdzony"
+
+msgid "Link ungültig oder abgelaufen"
+msgstr "Link jest nieprawidłowy lub wygasł"
+
+msgid "Die E-Mail-Adresse Ihres PROMPTFINISHER-Kontos wurde bestätigt."
+msgstr "Adres e-mail Twojego konta PROMPTFINISHER został potwierdzony."
+
+msgid "Dieser Bestätigungslink ist nicht mehr gültig."
+msgstr "Ten link potwierdzający nie jest już ważny."
+
+msgid "Weiter"
+msgstr "Dalej"
+
+# Read-only legal-language technical readiness UI; not a publication gate.
+msgid "Technischer Status der Rechtsübersetzungen"
+msgstr "Status techniczny tłumaczeń dokumentów prawnych"
+
+msgid "Keine juristische oder produktive Freigabe. Die Veröffentlichung bleibt separat gesperrt."
+msgstr "Brak zatwierdzenia prawnego i zgody na wdrożenie produkcyjne. Publikacja pozostaje osobno zablokowana."
+
+msgid "Technisch geprüft"
+msgstr "Sprawdzone technicznie"
+
+msgid "Fehlend"
+msgstr "Brak"
+
+msgid "In Prüfung"
+msgstr "W trakcie weryfikacji"
+
+msgid "Freigabe veraltet"
+msgstr "Zatwierdzenie nieaktualne"
+
+msgid "Deutsche Quelle fehlt"
+msgstr "Brak niemieckiego oryginału"
+
+# Account snapshot validation error; generic and safe for public users.
+msgid "Das Rechtsdokument-Angebot ist ungültig oder nicht mehr aktuell. Bitte prüfen Sie die Dokumente erneut und senden Sie das Formular noch einmal ab."
+msgstr "Przedstawione dokumenty prawne są nieprawidłowe lub nieaktualne. Zapoznaj się ponownie z dokumentami i prześlij formularz jeszcze raz."
+
 # Voucher campaign and checkout terminology
 msgid "Gutscheine"
 msgstr "Kupony"
@@ -3930,9 +4120,6 @@ msgstr "Zarządzaj"
 
 msgid "Keine Gutscheine gefunden."
 msgstr "Nie znaleziono kuponów."
-
-msgid "Weiter"
-msgstr "Dalej"
 
 msgid "Aus Sicherheitsgründen wird jeder vollständige Gutscheincode nur beim Erstellen angezeigt. Es werden ausschließlich Prüfsummen gespeichert."
 msgstr "Ze względów bezpieczeństwa pełny kod kuponu jest widoczny tylko przy utworzeniu. Przechowywane są wyłącznie skróty weryfikacyjne."
