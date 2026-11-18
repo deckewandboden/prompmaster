@@ -3,6 +3,7 @@ from __future__ import annotations
 
 from functools import wraps
 
+from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.core.exceptions import PermissionDenied, ValidationError
@@ -207,10 +208,24 @@ def portal_vouchers(request):
         members = Membership.objects.none()
     records = records.select_related("voucher", "license", "beneficiary", "redeemed_by").order_by("-created_at")[:100]
     assigned = assigned.select_related("product").order_by("-created_at")[:50]
+    legal_required = bool(settings.LEGAL_CHECKOUT_SNAPSHOT_REQUIRED)
+    legal_snapshot = None
+    if can_redeem and legal_required:
+        from apps.legal.checkout_snapshot import issue_snapshot
+        try:
+            legal_snapshot = issue_snapshot(
+                request, "company" if company is not None else "private",
+            )
+        except ValidationError:
+            # Missing required active legal texts -> the redemption button
+            # remains disabled, not a bypass into a free entitlement.
+            legal_snapshot = None
     return render(request, "portal/vouchers.html", {
         "company": company, "membership": membership,
         "can_redeem": can_redeem, "is_company_admin": is_admin,
         "members": members, "assigned": assigned, "records": records,
+        "legal_required": legal_required, "legal_snapshot": legal_snapshot,
+        "private_customer": company is None,
     })
 
 

@@ -244,3 +244,152 @@ class SignedVoucherCheckoutIntegrationTests(TestCase):
             self.client.get(offer['documents']['terms']['url']).status_code,
             409,
         )
+
+    def _trial_code(self, *, days=15):
+        _voucher, code = issue_vouchers(
+            actor=self.staff, title='Contract-bound zero-EUR Pro term',
+            kind='trial', product=self.product, trial_days=days,
+            max_redemptions=2, bound_company=self.company,
+            starts_at=timezone.now() - timedelta(minutes=1),
+            expires_at=timezone.now() + timedelta(days=1),
+        )[0]
+        return code
+
+    def _trial_post(self, code, token):
+        return {
+            'voucher_code': code,
+            'legal_snapshot_token': token,
+            'accept_terms': 'on',
+            'accept_privacy': 'on',
+            'accept_license': 'on',
+        }
+
+    def test_trial_requires_signed_offer_and_persists_0_euro_legal_evidence(self):
+        code = self._trial_code()
+        missing = self.client.post('/portal/vouchers/redeem/', {'voucher_code': code})
+        self.assertEqual(missing.status_code, 302)
+        self.assertFalse(Order.objects.exists())
+        self.assertFalse(VoucherRedemption.objects.exists())
+        self.assertFalse(Payment.objects.exists())
+
+        page = self.client.get('/portal/vouchers/')
+        self.assertEqual(page.status_code, 200)
+        offer = page.context['legal_snapshot']
+        self.assertTrue(offer and offer['token'])
+        data = self._trial_post(code, offer['token'])
+
+        without_license = dict(data)
+        without_license.pop('accept_license')
+        self.assertEqual(
+            self.client.post('/portal/vouchers/redeem/', without_license).status_code,
+            302,
+        )
+        self.assertFalse(Order.objects.exists())
+
+        tampered = dict(data)
+        tampered['legal_snapshot_token'] = 'x' + offer['token'][1:]
+        self.assertEqual(
+            self.client.post('/portal/vouchers/redeem/', tampered).status_code,
+            302,
+        )
+        self.assertFalse(Order.objects.exists())
+
+        with patch('apps.companies.portal.MollieClient') as provider:
+            result = self.client.post('/portal/vouchers/redeem/', data)
+        self.assertEqual(result.status_code, 302)
+        order = Order.objects.get()
+        self.assertEqual(order.status, 'paid')
+        self.assertEqual(order.gross_total, Decimal('0.00'))
+        self.assertEqual(order.tax_total, Decimal('0.00'))
+        self.assertEqual(order.billing_snapshot['source'], 'voucher_trial')
+        evidence = order.billing_snapshot['legal_offer']
+        self.assertEqual(evidence['verification'], 'signed_session_bound_document_offer')
+        self.assertEqual(set(evidence['documents']), {'terms', 'privacy', 'license'})
+        self.assertEqual(LegalAcceptance.objects.filter(order=order).count(), 3)
+        self.assertEqual(VoucherRedemption.objects.get(order=order).status, 'redeemed')
+        self.assertEqual(Payment.objects.count(), 0)
+        provider.assert_not_called()
+        self.assertEqual(
+            self.client.get(offer['documents']['terms']['url']).status_code,
+            409,
+        )
+
+    def test_trial_signed_offer_cannot_be_replayed_for_second_voucher(self):
+        first = self._trial_code(days=14)
+        second = self._trial_code(days=7)
+        page = self.client.get('/portal/vouchers/')
+        token = page.context['legal_snapshot']['token']
+        self.assertEqual(
+            self.client.post('/portal/vouchers/redeem/', self._trial_post(first, token)).status_code,
+            302,
+        )
+        self.assertEqual(Order.objects.count(), 1)
+        self.assertEqual(
+            self.client.post('/portal/vouchers/redeem/', self._trial_post(second, token)).status_code,
+            302,
+        )
+        self.assertEqual(Order.objects.count(), 1)
+        self.assertEqual(VoucherRedemption.objects.count(), 1)
+
+    def test_private_trial_signed_withdrawal_early_performance(self):
+        from apps.companies.models import PrivateCustomerProfile
+
+        buyer = User.objects.create_user(
+            'legal-private-trial@example.test', None,
+            email_verified_at=timezone.now(),
+        )
+        PrivateCustomerProfile.objects.create(
+            user=buyer, customer_number='PRIVATE-SIGNED-QA',
+            street='Testweg', postal_code='57072', city='Siegen',
+            country='DE',
+        )
+        self.client.force_login(buyer)
+        session = self.client.session
+        now = timezone.now().timestamp()
+        session['security_version'] = buyer.security_version
+        session['authenticated_at'] = now
+        session['last_activity_at'] = now
+        session.save()
+        _voucher, code = issue_vouchers(
+            actor=self.staff, title='Private 0 EUR proof',
+            kind='trial', product=self.product, trial_days=21,
+            max_redemptions=1, bound_user=buyer,
+            starts_at=timezone.now() - timedelta(minutes=1),
+            expires_at=timezone.now() + timedelta(days=1),
+        )[0]
+        page = self.client.get('/portal/vouchers/')
+        self.assertEqual(page.status_code, 200)
+        offer = page.context['legal_snapshot']
+        self.assertTrue(offer['earlyPerformance'])
+        data = {
+            **self._trial_post(code, offer['token']),
+            'accept_withdrawal': 'on',
+            'request_early_performance': 'on',
+        }
+        for omitted in ('accept_withdrawal', 'request_early_performance'):
+            invalid = dict(data)
+            invalid.pop(omitted)
+            self.assertEqual(
+                self.client.post('/portal/vouchers/redeem/', invalid).status_code,
+                302,
+            )
+            self.assertFalse(Order.objects.exists())
+
+        self.assertEqual(
+            self.client.post('/portal/vouchers/redeem/', data).status_code,
+            302,
+        )
+        order = Order.objects.get()
+        self.assertEqual(order.private_user_id, buyer.pk)
+        self.assertEqual(order.gross_total, Decimal('0.00'))
+        self.assertEqual(
+            set(order.billing_snapshot['legal_offer']['documents']),
+            {'terms', 'privacy', 'license', 'withdrawal'},
+        )
+        self.assertEqual(LegalAcceptance.objects.filter(order=order).count(), 4)
+        self.assertTrue(
+            LegalAcceptance.objects.filter(
+                order=order, evidence__early_performance_requested=True,
+            ).exists(),
+        )
+        self.assertFalse(Payment.objects.exists())

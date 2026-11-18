@@ -5,7 +5,17 @@
 <form method="post" action="{% url 'portal:voucher_redeem' %}" class="form" autocomplete="off">{% csrf_token %}
 <label>{% translate "Gutscheincode" %}<input name="voucher_code" maxlength="80" required autocomplete="off" placeholder="PF-XXXX-XXXX-XXXX-XXXX-XXXX"></label>
 {% if is_company_admin %}<label>{% translate "Zuweisung" %}<select name="target_user"><option value="">{% translate "Unzugewiesene Lizenz für mein Unternehmen" %}</option>{% for member in members %}<option value="{{ member.user_id }}">{{ member.user.full_name|default:member.user.email }} ({{ member.user.email }})</option>{% endfor %}</select></label>{% endif %}
-<button type="submit" class="btn primary">{% translate "Zeitgutschein verbindlich einlösen" %}</button></form></div>
+{% if legal_required %}
+<input type="hidden" name="legal_snapshot_token" value="{{ legal_snapshot.token|default:'' }}">
+<p class="small muted">{% translate "Rechtsdokumente:" %} <a href="{{ legal_snapshot.documents.terms.url|default:'/legal/terms/' }}" target="_blank" rel="noopener noreferrer">{% translate "AGB" %}</a> · <a href="{{ legal_snapshot.documents.privacy.url|default:'/legal/privacy/' }}" target="_blank" rel="noopener noreferrer">{% translate "Datenschutz" %}</a> · <a href="{{ legal_snapshot.documents.license.url|default:'/legal/license/' }}" target="_blank" rel="noopener noreferrer">{% translate "Lizenzbedingungen" %}</a>{% if private_customer %} · <a href="{{ legal_snapshot.documents.withdrawal.url|default:'/legal/withdrawal/' }}" target="_blank" rel="noopener noreferrer">{% translate "Widerruf" %}</a>{% endif %}</p>
+{% if legal_snapshot %}
+<label><input type="checkbox" name="accept_terms" required> {% translate "AGB akzeptieren" %}</label>
+<label><input type="checkbox" name="accept_privacy" required> {% translate "Datenschutzhinweise zur Kenntnis genommen" %}</label>
+<label><input type="checkbox" name="accept_license" required> {% translate "Lizenzbedingungen akzeptieren" %}</label>
+{% if private_customer %}<label><input type="checkbox" name="accept_withdrawal" required> {% translate "Widerrufsinformation zur Kenntnis genommen" %}</label><label><input type="checkbox" name="request_early_performance" required> {% translate "Leistungsbeginn vor Ablauf der Widerrufsfrist ausdrücklich verlangt" %}</label>{% endif %}
+{% endif %}
+{% endif %}
+<button type="submit" class="btn primary" {% if legal_required and not legal_snapshot %}disabled{% endif %}>{% translate "Zeitgutschein verbindlich einlösen" %}</button></form></div>
 {% endif %}
 <div class="grid two mt-14"><div class="card"><h2>{% translate "Für dieses Konto zugeteilte Kampagnen" %}</h2><p class="tiny muted">{% translate "Vollständige Codes werden nur durch netstyle ausgegeben." %}</p>
 {% for voucher in assigned %}<div class="statusrow"><div><strong>{{ voucher.title }}</strong><div class="tiny muted">••••{{ voucher.code_suffix }} · {{ voucher.get_kind_display }}</div></div><span>{{ voucher.used_count }}/{{ voucher.max_redemptions }}</span></div>{% empty %}<p>{% translate "Keine ausdrücklich zugeteilten Kampagnen." %}</p>{% endfor %}</div>
