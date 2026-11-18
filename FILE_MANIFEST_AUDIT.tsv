@@ -184,3 +184,5 @@ backend/apps/vouchers/tasks.py	0	text-not-byte-validated	active-backend
 backend/apps/core/graph_mail_views.py	0	text-not-byte-validated	active-backend
 backend/apps/notifications/graph_delegated.py	0	text-not-byte-validated	active-backend
 backend/apps/notifications/tests_graph_delegated.py	0	text-not-byte-validated	test
+marketing/scripts/build.mjs	0	text-not-byte-validated	active-ui
+marketing/scripts/preview.mjs	0	text-not-byte-validated	active-ui
